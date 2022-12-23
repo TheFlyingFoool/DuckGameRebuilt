@@ -19,20 +19,12 @@ public class DebugTablet
     public static SpriteMap _cursor = new SpriteMap("cursors", 16, 16);
     private static bool _open;
 
-    private static HashSet<string> LockMovementQueue = new HashSet<string>();
     public static bool Open
     {
         get => _open;
         set
         {
-            if (_open && LockMovementQueue.Remove("tablet"))
-            {
-                _open = value;
-            }
-            else if (!_open && LockMovementQueue.Add("tablet"))
-            {
-                _open = value;
-            }
+            _open = value;
         }
     }
     public static void ReadClipboardText()
@@ -263,7 +255,7 @@ public class DebugTablet
         bool pressed = CheckInput(Keys.NumPad9, CheckInputMethod.Down);
         if (pressed && !prevpress)
         {
-            Open ^= true;
+            Open = !Open;
         }
         prevpress = pressed;
         if (!Open)
@@ -273,8 +265,6 @@ public class DebugTablet
 
         // -- update --
         float scroll = Mouse.scroll;
-        if (scroll != 0 && !DevConsole.open)
-            DevConsole.Log(scroll);
         if (!DevConsole.open)
         {
             try
@@ -299,17 +289,22 @@ public class DebugTablet
         {
             tab.lineoffset = tab.Lines.Count - 1;
         }
-        const float scale = 0.4f;
-        Rectangle drawRect = new(new Vec2(16, 16), new Vec2(Layer.HUD.width - 16, Layer.HUD.height * 0.7f));
-        Vec2 stringDrawPos = new Vec2(drawRect.tl.x + 14f, drawRect.tl.y + 6f);
+        float scale = 1;
+        if (Level.current is Editor)
+        {
+            scale = 2;
+        }
+        float fontscale = 0.4f * scale; // 0.4f;
+        Rectangle drawRect = new(new Vec2(16f * scale, 16f * scale), new Vec2(Layer.HUD.width - 16, Layer.HUD.height * 0.7f));
+        Vec2 stringDrawPos = new Vec2(drawRect.tl.x + (14f * scale), drawRect.tl.y + (6f * scale));
 
-        Vec2 size = Extensions.GetStringSize("0", scale);
+        Vec2 size = Extensions.GetStringSize("0", fontscale);
 
         bool flag = false;
         Vec2 position1 = Mouse.position;
         Keyboard.repeat = true;
         Input._imeAllowed = true;
-        if (new Rectangle(new Vec2(stringDrawPos.x - 2f, stringDrawPos.y - 2f), new Vec2(300f, (stringDrawPos.y) + tab.Lines.Count * (size.y + 1f))).Contains(position1))
+        if (new Rectangle(new Vec2(stringDrawPos.x - 2f, stringDrawPos.y - 2f), new Vec2(300f * scale, (stringDrawPos.y) + tab.Lines.Count * (size.y + 1f))).Contains(position1))
         {
             flag = true;
             Editor.hoverTextBox = true;
@@ -321,6 +316,7 @@ public class DebugTablet
             Editor.hoverTextBox = false;
         }
         Vec2 currentmouseindex = tab.GetLineIndexs(position1,stringDrawPos,size);
+
         if (flag && Mouse.left == InputState.Pressed)
         {
 
@@ -453,31 +449,50 @@ public class DebugTablet
         // -- draw --
 
         // text editor
-        Graphics.DrawRect(drawRect with { height = Layer.HUD.height - 32 }, Color.Black, 1.1f, false, 2.0f);//2
-        Graphics.DrawRect(drawRect, new Color(45, 42, 46), 1f);
+        Graphics.DrawRect(drawRect with { height = Layer.HUD.height - (32f * scale) }, Color.Black, 1.1f, false, 2.0f * scale);//2
+        Graphics.DrawRect(drawRect, new Color(45, 42, 46), 1f );
 
         float offset = 0f;
 
-        foreach (DebugTablet _tab in tabs)
+        for (int i = 0; i < tabs.Count; i++)
         {
+            DebugTablet _tab = tabs[i];
             string tabname = _tab.tabname;
-            tabname += "  "; //extra space
-            Rectangle drawRect2 = new(new Vec2(16 + offset, 8), new Vec2(Layer.HUD.width - 16 + offset, (Layer.HUD.height * 0.7f)));
+            tabname += "  ";
+            if (i != 0)
+                tabname += "X";
+            Rectangle drawRect2 = new(new Vec2((16 * scale) + offset, 8 * scale), new Vec2(Layer.HUD.width - (16f * scale) + offset, (Layer.HUD.height * 0.7f)));
             if (tab == _tab)
             {
-                Graphics.DrawRect(drawRect2 with { height = 8 + 2, width = (tabname.Length * size.x) + 6f }, new Color(61, 61, 61), 1f);
-                Graphics.DrawString(tabname, new Vec2(16 + 3 + offset, 8.0f + 3.5f), new Color(250, 250, 250), 1.2f, scale: scale);
-                Graphics.DrawRect(drawRect2 with { height = 8 + 2, width = (tabname.Length * size.x) + 6f }, Color.Black, 1.1f, false, 2.0f);//2
-
-
+                Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = (tabname.Length * size.x) + (6f * scale) }, new Color(61, 61, 61), 1f );
+                Graphics.DrawString(tabname, new Vec2(((16f + 3f) * scale) + offset, 11.5f * scale), new Color(250, 250, 250), 1.2f, scale: fontscale);
+                Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = (tabname.Length * size.x) + (6f * scale) }, Color.Black, 1.1f, false, 2.0f * scale);//2
             }
             else
             {
-                Graphics.DrawRect(drawRect2 with { height = 8 + 2, width = (tabname.Length * size.x) + 6f }, new Color(46, 46, 46), 1f);
-                Graphics.DrawString(tabname, new Vec2(16 + 3 + offset, 8.0f + 3.5f), new Color(178, 178, 178), 1.2f, scale: scale);
-                Graphics.DrawRect(drawRect2 with { height = 8 + 2, width = (tabname.Length * size.x) + 6f }, Color.Black, 1.1f, false, 2.0f);
+                Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = (tabname.Length * size.x) + (6f * scale) }, new Color(46, 46, 46), 1f);
+                Graphics.DrawString(tabname, new Vec2(((16f + 3f) * scale) + offset, 11.5f * scale), new Color(178, 178, 178), 1.2f, scale: fontscale);
+                Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = (tabname.Length * size.x) + (6f * scale) }, Color.Black, 1.1f, false, 2.0f * scale);
             }
-            offset += (tabname.Length * size.x) + 4;
+            if (Mouse.left == InputState.Pressed)
+            {
+                Rectangle xbox = new(new Vec2((16 * scale) + offset + ((tabname.Length - 2f) * size.x) + (6f * scale), 8 * scale), new Vec2(Layer.HUD.width - (16f * scale) + offset, (Layer.HUD.height * 0.7f)));
+                xbox.height = 10f * scale;
+                xbox.width = (3.5f * scale);
+                Rectangle tabrec = new(new Vec2((16 * scale) + offset, 8 * scale), new Vec2(Layer.HUD.width - (16f * scale) + offset, (Layer.HUD.height * 0.7f)));
+                tabrec.height = 10f * scale;
+                tabrec.width = ((tabname.Length) * size.x) + (6f * scale);
+                if (xbox.Contains(position1) && i != 0) // X
+                {
+                    tabs.Remove(_tab);
+                    break;
+                }
+                else if (tabrec.Contains(position1))
+                {
+                    _tab.Focus();
+                }
+            }
+            offset += (tabname.Length * size.x) + (4f * scale);
 
         }
         // Tab 
@@ -507,10 +522,10 @@ public class DebugTablet
             {
                 continue;
             }
-            Vec2 drawPos = new Vec2(stringDrawPos.x, stringDrawPos.y + (i - tab.lineoffset) * (size.y + 1f));
+            Vec2 drawPos = new Vec2(stringDrawPos.x, stringDrawPos.y + (i - tab.lineoffset) * (size.y + (1f * scale)));
             string numberstring = $"{i + 1}";
-            Graphics.DrawString(numberstring, new Vec2(drawPos.x - 8f - ((numberstring.Length - 1) * size.x) , drawPos.y), new Color(91, 81, 92), 1.2f, scale: scale);
-            Graphics.DrawString(tab.Lines[i], drawPos, Color.White, 1.2f, scale: scale); // DGCommandLanguage.Highlight(Lines[i])
+            Graphics.DrawString(numberstring, new Vec2(drawPos.x - (8f * scale) - ((numberstring.Length - 1) * size.x) , drawPos.y), new Color(91, 81, 92), 1.2f, scale: fontscale);
+            Graphics.DrawString(tab.Lines[i], drawPos, Color.White, 1.2f, scale: fontscale); // DGCommandLanguage.Highlight(Lines[i])
             if (tab.hashighlightedarea)
             {
                 Vec2 _start = tab.Startingposition;
@@ -526,35 +541,35 @@ public class DebugTablet
                     {
                         if ((int)_end.x - (int)_start.x > 0)
                         {
-                            Graphics.DrawRect(new Vec2(drawPos.x + (_start.x * (size.x)), drawPos.y) - new Vec2(0.5f), new Vec2(drawPos.x + (_end.x * (size.x)), drawPos.y + (size.y + 1f)) - new Vec2(0.0f, 0.57f), new Color(38, 79, 120, 108), (Depth)1.2f, true, 1f);
+                            Graphics.DrawRect(new Vec2(drawPos.x + (_start.x * (size.x)), drawPos.y) - (new Vec2(0.5f) * scale), new Vec2(drawPos.x + (_end.x * (size.x)), drawPos.y + (size.y + 1f)) - (new Vec2(0.0f, 0.57f) * scale), new Color(38, 79, 120, 108), (Depth)1.2f, true, 1f);
                         }
                     }
                     else if (i == _start.y)
                     {
-                        Graphics.DrawRect(new Vec2(drawPos.x + (_start.x * (size.x)), drawPos.y) - new Vec2(0.5f), new Vec2(drawPos.x + (tab.Lines[i].Length * (size.x)), drawPos.y + (size.y + 1f)) - new Vec2(-0.5f, 0.57f), new Color(38, 79, 120, 108), (Depth)1.2f, true, 1f);
+                        Graphics.DrawRect(new Vec2(drawPos.x + (_start.x * (size.x)), drawPos.y) - (new Vec2(0.5f) * scale), new Vec2(drawPos.x + (tab.Lines[i].Length * (size.x)), drawPos.y + (size.y + 1f)) - (new Vec2(-0.5f, 0.57f) * scale), new Color(38, 79, 120, 108), (Depth)1.2f, true, 1f);
                       //  Graphics.DrawString(Lines[i].Substring((int)_start.x, (int)Lines[i].Length - (int)_start.x), new Vec2(drawPos.x + ((int)_start.x * (size.x)), drawPos.y), Color.Black, 1.2f, scale: scale);
                     }
                     else if (i == _end.y)
                     {
-                        Graphics.DrawRect(new Vec2(drawPos.x, drawPos.y) - new Vec2(0.5f), new Vec2(drawPos.x + (_end.x * (size.x)), drawPos.y + (size.y + 1f)) - new Vec2(0.5f), new Color(38, 79, 120, 108), (Depth)1.2f, true, 1f);
+                        Graphics.DrawRect(new Vec2(drawPos.x, drawPos.y) - (new Vec2(0.5f) * scale), new Vec2(drawPos.x + (_end.x * (size.x)), drawPos.y + (size.y + (1f * scale))) - (new Vec2(0.5f) * scale), new Color(38, 79, 120, 108), (Depth)1.2f, true, 1f);
 
                       //  Graphics.DrawString(Lines[i].Substring(0, (int)_end.x - (int)0), new Vec2(drawPos.x + (0 * (size.x)), drawPos.y), Color.Black, 1.2f, scale: scale);
                     }
                     else
                     {
-                        Graphics.DrawRect(new Vec2(drawPos.x, drawPos.y) - new Vec2(0.5f), new Vec2(drawPos.x + (tab.Lines[i].Length * (size.x)), drawPos.y + (size.y + 1f)) - new Vec2(-0.5f,0.57f), new Color(38, 79, 120, 108), (Depth)1.2f, true, 1f);
+                        Graphics.DrawRect(new Vec2(drawPos.x, drawPos.y) - (new Vec2(0.5f) * scale), new Vec2(drawPos.x + (tab.Lines[i].Length * (size.x)), drawPos.y + (size.y + (1f * scale))) - (new Vec2(-0.5f,0.57f) * scale), new Color(38, 79, 120, 108), (Depth)1.2f, true, 1f);
                      //  Graphics.DrawString(Lines[i], new Vec2(drawPos.x, drawPos.y), Color.Black, 1.2f, scale: scale);
                     }
                 }
             }
         }
-        Vec2 Currorpos = new Vec2(stringDrawPos.x + (tab.CaretPosition.x -0.5f) * (size.x), stringDrawPos.y + ((tab.CaretPosition.y - tab.lineoffset)- 0.04f) * (size.y + 1f));
+        Vec2 Currorpos = new Vec2(stringDrawPos.x + (tab.CaretPosition.x - 0.5f) * (size.x), stringDrawPos.y + ((tab.CaretPosition.y - tab.lineoffset)- 0.04f) * (size.y + 1f));
         if (showcursor)
         {
             cusorblink -= 0.0166666f;
             if (tab.CaretPosition.y - tab.lineoffset >= 0)
             {
-                Graphics.DrawString("|", Currorpos, Colors.SystemGray, 1.2f, scale: scale);
+                Graphics.DrawString("|", Currorpos, Colors.SystemGray, 1.2f, scale: fontscale);
             }
             if (cusorblink <= 0f)
             {
@@ -571,26 +586,26 @@ public class DebugTablet
         }
 
 
-        Graphics.DrawString($"{tab.CaretPosition.y}:{tab.CaretPosition.x}", drawRect.br - new Vec2(10, 6), Color.Gray, 1.4f, scale: 0.3f);
+        Graphics.DrawString($"{tab.CaretPosition.y}:{tab.CaretPosition.x}", drawRect.br - (new Vec2(10, 6) * scale), Color.Gray, 1.4f, scale: 0.3f * scale);
 
-        tab.DrawCaret(stringDrawPos, scale);
+        tab.DrawCaret(stringDrawPos, fontscale);
 
         // console
-        Rectangle consoleRect = drawRect with { Top = drawRect.Bottom, height = Layer.HUD.height * 0.3f - 16 };
+        Rectangle consoleRect = drawRect with { Top = drawRect.Bottom, height = Layer.HUD.height * 0.3f - (16.0f * scale) };
 
-        stringDrawPos = new Vec2(consoleRect.tl.x + 6f, consoleRect.tl.y + 6f);
+        stringDrawPos = new Vec2(consoleRect.tl.x + (6f * scale), consoleRect.tl.y + (6f * scale));
 
         List<string> drawnOutput = FastTakeFromEnd(tab.Output, 7);
 
         for (int i = 0; i < Math.Min(drawnOutput.Count, 7); i++)
         {
-            Vec2 drawPos = new Vec2(stringDrawPos.x, stringDrawPos.y + i * (size.y + 1f));
+            Vec2 drawPos = new Vec2(stringDrawPos.x, stringDrawPos.y + i * (size.y + (1f * scale)));
 
-            Graphics.DrawString(drawnOutput[i], drawPos, Color.White, 1.2f, scale: scale);
+            Graphics.DrawString(drawnOutput[i], drawPos, Color.White, 1.2f, scale: fontscale);
         }
 
         Graphics.DrawRect(consoleRect, new Color(34, 31, 34), 1f);
-        stringDrawPos = new Vec2(drawRect.tl.x + 14f, drawRect.tl.y + 6f); // new Vec2(28f,20f), Lines.Count * (size.y + 1f)) 300 42
+        stringDrawPos = new Vec2(drawRect.tl.x + (14f * scale), drawRect.tl.y + (6f * scale)); // new Vec2(28f,20f), Lines.Count * (size.y + 1f)) 300 42
       
 
 
@@ -598,14 +613,14 @@ public class DebugTablet
         {
 
             _cursor.depth = (Depth)1.3f;
-            _cursor.scale = new Vec2(0.5f, 0.5f);
+            _cursor.scale = new Vec2(0.5f * scale, 0.5f * scale);
             _cursor.position = Mouse.position;
             _cursor.frame = 0;
             if (Editor.hoverTextBox)
             {
                 _cursor.frame = 7;
                 _cursor.position.y -= 4f;
-                _cursor.scale = new Vec2(0.25f, 0.5f);
+                _cursor.scale = new Vec2(0.25f * scale, 0.5f * scale);
             }
             _cursor.Draw();
         }
