@@ -283,30 +283,31 @@ namespace DuckGame
                             modConfig.error = "!This mod has been officially implemented, Thanks Yupdaniel!";
                             mod = new DisabledMod();
                         }
-                        if (modConfig.workshopID == 1603886916UL)
-                        {
-                            modConfig.Disable();
-                            modConfig.error = "!This mod has been officially implemented, Thanks Yupdaniel || Mr. Potatooh!";
-                            mod = new DisabledMod();
-                        }
-                        if (modConfig.workshopID == 796033146UL)
-                        {
-                            modConfig.Disable();
-                            modConfig.error = "!This mod has been officially implemented, Thanks TheSpicyChef!";
-                            mod = new DisabledMod();
-                        }
-                        if (modConfig.workshopID == 1425615438UL)
-                        {
-                            modConfig.Disable();
-                            modConfig.error = "!This mod has been officially implemented, Thanks EIM64 || Killer-Fackur!";
-                            mod = new DisabledMod();
-                        }
-                        if (modConfig.workshopID == 1704010547UL)
-                        {
-                            modConfig.Disable();
-                            modConfig.error = "!Regrettably, this version of QOL is incompatible with Duck Game 2020!";
-                            mod = new DisabledMod();
-                        }
+                       
+                    }
+                    if (modConfig.workshopID == 1603886916UL)
+                    {
+                        modConfig.Disable();
+                        modConfig.error = "!This mod has been officially implemented, Thanks Yupdaniel || Mr. Potatooh!";
+                        mod = new DisabledMod();
+                    }
+                    else if (modConfig.workshopID == 796033146UL)
+                    {
+                        modConfig.Disable();
+                        modConfig.error = "!This mod has been officially implemented, Thanks TheSpicyChef!";
+                        mod = new DisabledMod();
+                    }
+                    else if (modConfig.workshopID == 1425615438UL)
+                    {
+                        modConfig.Disable();
+                        modConfig.error = "!This mod has been officially implemented, Thanks EIM64 || Killer-Fackur!";
+                        mod = new DisabledMod();
+                    }
+                    else if (modConfig.workshopID == 1704010547UL)
+                    {
+                        modConfig.Disable();
+                        modConfig.error = "!Regrettably, this version of QOL is incompatible with Duck Game 2020!";
+                        mod = new DisabledMod();
                     }
                     else if (modConfig.workshopID == 1657985708UL)
                     {
@@ -327,16 +328,20 @@ namespace DuckGame
                     //    modConfig.error = "!This mod does not currently work on Rebuilt, Patching Issues!";
                     //    mod = new DisabledMod();
                     //}
+                    if (modConfig.workshopID == 2480332949UL) //Delta Duck
+                    {
+                        modConfig.noRecompilation = true;
+                    }
                     else if (modConfig.workshopID == 2758180905UL) // Bug Fixes harmony issue patching menu elements stuff
                     {
                         modConfig.Disable();
                         modConfig.error = "!This mod does not currently work on Rebuilt, Patching Issues!";
                         mod = new DisabledMod();
                     }
-                    else if (modConfig.workshopID == 267491120UL) // BROWSE GAMES+ has a harmony resolve issue with remapper, but also scuffed issues that exist sepreatly
+                    else if (modConfig.workshopID == 2674911202UL) // BROWSE GAMES+ has a harmony resolve issue with remapper, but also scuffed issues that exist sepreatly
                     {
                         modConfig.Disable();
-                        modConfig.error = "!This mod does not currently work on Rebuilt, Patching & Resolving Issues!";
+                        modConfig.error = "!This mod does not currently work on Rebuilt, Patching Issues!";
                         mod = new DisabledMod();
                     }
                     else if (modConfig.workshopID == 1439906266UL && Program.isLinux && !modConfig.linuxFix) // Reskins
@@ -345,6 +350,7 @@ namespace DuckGame
                         modConfig.error = "!This mod does not currently work on Linux!";
                         mod = new DisabledMod();
                     }
+
                     //Patchs in these mods Dont Like the Debugger
                     if (Debugger.IsAttached)
                     {
@@ -370,10 +376,6 @@ namespace DuckGame
                 }
                 if (mod == null)
                 {
-                    if (modConfig.workshopID == 2480332949UL) //Delta Duck
-                    {
-                        modConfig.noRecompilation = true;
-                    }
                     if (modConfig.disabled)
                         mod = new DisabledMod();
                     else if (modConfig.modType == ModConfiguration.Type.Reskin)
