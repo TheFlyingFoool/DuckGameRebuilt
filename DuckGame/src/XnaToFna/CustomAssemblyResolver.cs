@@ -10,14 +10,14 @@ namespace XnaToFna
         {
             ResolveFailure += AssemblyResolveEventHandler;
         }
-        public override AssemblyDefinition Resolve(AssemblyNameReference name)
-        {
-            return base.Resolve(name);
-        }
-        public override AssemblyDefinition Resolve(AssemblyNameReference name, ReaderParameters parameters)
-        {
-            return base.Resolve(name, parameters);
-        }
+        //public override AssemblyDefinition Resolve(AssemblyNameReference name)
+        //{
+        //    return base.Resolve(name);
+        //}
+        //public override AssemblyDefinition Resolve(AssemblyNameReference name, ReaderParameters parameters)
+        //{
+        //    return base.Resolve(name, parameters);
+        //}
         public AssemblyDefinition AssemblyResolveEventHandler(object sender, AssemblyNameReference reference)
         {
             string[] dllmatchs = Directory.GetFiles(searchdirectorpath, reference.Name + ".dll", SearchOption.AllDirectories);
