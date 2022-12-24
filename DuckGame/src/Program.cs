@@ -46,10 +46,11 @@ namespace DuckGame
         // dont change this unless you know what you're doing -Firebreak
         public const string CURRENT_VERSION_ID_FORMATTED = $"v{CURRENT_VERSION_ID}-beta";
         
+        public const bool IS_DEV_BUILD =
         #if AutoUpdater
-        public const bool IS_DEV_BUILD = false;
+            false;
         #else
-        public const bool IS_DEV_BUILD = true;
+            true;
         #endif
         
         public static string StartinEditorLevelName;
@@ -178,10 +179,6 @@ namespace DuckGame
             int tries = 10;
             int p = (int)Environment.OSVersion.Platform;
             IsLinuxD = (p == 4) || (p == 6) || (p == 128);
-            
-            #if AutoUpdater
-            AutoUpdaterNew();
-            #endif
             
             if (fullstop)
             {
