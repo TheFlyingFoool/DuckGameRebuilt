@@ -1,10 +1,12 @@
 ﻿using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Microsoft.CSharp;
 using Microsoft.Xna.Framework.Graphics;
 using SDL2;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static DuckGame.CustomKeyBinds;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
@@ -16,6 +18,17 @@ public class DebugTablet
     {
         this.tabname = tabname;
     }
+    public DebugTablet(string tabname, FieldBinding fieldBinding)
+    {
+        this.tabname = tabname;
+        this.savefield = fieldBinding;
+        codestring = ((string)this.savefield.value).Replace("\r", "");
+        prevcodestring = codestring;
+        this.Lines = codestring.Split('\n').ToList();
+    }
+    private string prevcodestring;
+    private string codestring;
+    public FieldBinding savefield;
     public static SpriteMap _cursor = new SpriteMap("cursors", 16, 16);
     private static bool _open;
 
@@ -39,14 +52,14 @@ public class DebugTablet
     public Vec2 Startingposition;
     public Vec2 Endingposition;
     public bool hashighlightedarea;
-    public Vec2 GetLineIndexs(Vec2 position1, Vec2 stringDrawPos, Vec2 size)
+    public Vec2 GetLineIndexs(Vec2 position1, Vec2 stringDrawPos, Vec2 fontsize, float scale)
     {
         Vec2 dif = (position1 - stringDrawPos) - new Vec2(-0.65f, -.5f);
-        float y = dif.y / (size.y + 1f);
-        float x = dif.x / (size.x);
+        float y = dif.y / (fontsize.y + (1f * scale));
+        float x = dif.x / (fontsize.x);
         Vec2 newcaretpositon = new Vec2(0, 0);
         newcaretpositon.x = (float)Math.Round(x);
-        newcaretpositon.y = (float)Math.Round(y) - 1f + lineoffset;
+        newcaretpositon.y = (float)Math.Round(y - ((1f / scale))) + lineoffset;
         if (newcaretpositon.y < 0)
         {
             newcaretpositon.y = 0;
@@ -250,6 +263,10 @@ public class DebugTablet
         {
             return;
         }
+        if (tabindex >= tabs.Count)
+        {
+            tabindex = tabs.Count - 1;
+        }
         DebugTablet tab = tabs[tabindex];
         Graphics.polyBatcher.BlendState = BlendState.Opaque;
         bool pressed = CheckInput(Keys.NumPad9, CheckInputMethod.Down);
@@ -304,7 +321,7 @@ public class DebugTablet
         Vec2 position1 = Mouse.position;
         Keyboard.repeat = true;
         Input._imeAllowed = true;
-        if (new Rectangle(new Vec2(stringDrawPos.x - 2f, stringDrawPos.y - 2f), new Vec2(300f * scale, (stringDrawPos.y) + tab.Lines.Count * (size.y + 1f))).Contains(position1))
+        if (new Rectangle(new Vec2(stringDrawPos.x - (2f * scale), stringDrawPos.y - (2f * scale)), new Vec2(300f * scale, (stringDrawPos.y) + tab.Lines.Count * (size.y + (1f * scale)))).Contains(position1))
         {
             flag = true;
             Editor.hoverTextBox = true;
@@ -315,7 +332,7 @@ public class DebugTablet
         {
             Editor.hoverTextBox = false;
         }
-        Vec2 currentmouseindex = tab.GetLineIndexs(position1,stringDrawPos,size);
+        Vec2 currentmouseindex = tab.GetLineIndexs(position1,stringDrawPos,size, scale);
 
         if (flag && Mouse.left == InputState.Pressed)
         {
@@ -417,7 +434,7 @@ public class DebugTablet
                 tab.hashighlightedarea = true;
                 tab._highlightDrag = false;
                 tab.Startingposition = new Vec2(0, 0);
-                int i = tab.Lines.Count -1;
+                int i = tab.Lines.Count - 1;
                 tab.Endingposition = new Vec2(tab.Lines[i].Length, i);
             }
             else if ((Keyboard.Pressed(Keys.C) || Keyboard.Pressed(Keys.X)) && tab.hashighlightedarea && tab.Endingposition != tab.Startingposition)
@@ -429,6 +446,12 @@ public class DebugTablet
                 }
                 if (Keyboard.Pressed(Keys.X))
                     tab.DeleteSelected();
+            }
+            else if (Keyboard.Pressed(Keys.S) && tab.savefield != null)
+            {
+                string savecodestring = string.Join("\n", tab.Lines);
+                tab.savefield.value = savecodestring;
+                tab.prevcodestring = savecodestring;
             }
         }
         if (Mouse.left != InputState.Pressed && Mouse.left != InputState.Down)
@@ -457,31 +480,41 @@ public class DebugTablet
         for (int i = 0; i < tabs.Count; i++)
         {
             DebugTablet _tab = tabs[i];
+            _tab.codestring = string.Join("\n", _tab.Lines);
             string tabname = _tab.tabname;
-            tabname += "  ";
+            int lengthmin = 0;
             if (i != 0)
-                tabname += "X";
+            {
+                if (_tab.codestring != _tab.prevcodestring)
+                {
+                    tabname += "*";
+                }
+                tabname += "  |DGRED|X";
+                lengthmin = 7;
+            }
+            else
+                tabname += "  ";
             Rectangle drawRect2 = new(new Vec2((16 * scale) + offset, 8 * scale), new Vec2(Layer.HUD.width - (16f * scale) + offset, (Layer.HUD.height * 0.7f)));
             if (tab == _tab)
             {
-                Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = (tabname.Length * size.x) + (6f * scale) }, new Color(61, 61, 61), 1f );
+                Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = ((tabname.Length - lengthmin) * size.x) + (6f * scale) }, new Color(61, 61, 61), 1f );
                 Graphics.DrawString(tabname, new Vec2(((16f + 3f) * scale) + offset, 11.5f * scale), new Color(250, 250, 250), 1.2f, scale: fontscale);
-                Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = (tabname.Length * size.x) + (6f * scale) }, Color.Black, 1.1f, false, 2.0f * scale);//2
+                Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = ((tabname.Length - lengthmin) * size.x) + (6f * scale) }, Color.Black, 1.1f, false, 2.0f * scale);//2
             }
             else
             {
-                Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = (tabname.Length * size.x) + (6f * scale) }, new Color(46, 46, 46), 1f);
+                Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = ((tabname.Length - lengthmin) * size.x) + (6f * scale) }, new Color(46, 46, 46), 1f);
                 Graphics.DrawString(tabname, new Vec2(((16f + 3f) * scale) + offset, 11.5f * scale), new Color(178, 178, 178), 1.2f, scale: fontscale);
-                Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = (tabname.Length * size.x) + (6f * scale) }, Color.Black, 1.1f, false, 2.0f * scale);
+                Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = ((tabname.Length - lengthmin) * size.x) + (6f * scale) }, Color.Black, 1.1f, false, 2.0f * scale);
             }
             if (Mouse.left == InputState.Pressed)
             {
-                Rectangle xbox = new(new Vec2((16 * scale) + offset + ((tabname.Length - 2f) * size.x) + (6f * scale), 8 * scale), new Vec2(Layer.HUD.width - (16f * scale) + offset, (Layer.HUD.height * 0.7f)));
+                Rectangle xbox = new(new Vec2((16 * scale) + offset + ((tabname.Length - 2f - lengthmin) * size.x) + (6f * scale), 8 * scale), new Vec2(Layer.HUD.width - (16f * scale) + offset, (Layer.HUD.height * 0.7f)));
                 xbox.height = 10f * scale;
                 xbox.width = (3.5f * scale);
                 Rectangle tabrec = new(new Vec2((16 * scale) + offset, 8 * scale), new Vec2(Layer.HUD.width - (16f * scale) + offset, (Layer.HUD.height * 0.7f)));
                 tabrec.height = 10f * scale;
-                tabrec.width = ((tabname.Length) * size.x) + (6f * scale);
+                tabrec.width = ((tabname.Length - lengthmin) * size.x) + (6f * scale);
                 if (xbox.Contains(position1) && i != 0) // X
                 {
                     tabs.Remove(_tab);
@@ -563,7 +596,7 @@ public class DebugTablet
                 }
             }
         }
-        Vec2 Currorpos = new Vec2(stringDrawPos.x + (tab.CaretPosition.x - 0.5f) * (size.x), stringDrawPos.y + ((tab.CaretPosition.y - tab.lineoffset)- 0.04f) * (size.y + 1f));
+        Vec2 Currorpos = new Vec2(stringDrawPos.x + (tab.CaretPosition.x - 0.5f ) * (size.x), stringDrawPos.y + ((tab.CaretPosition.y - tab.lineoffset)- 0.04f ) * (size.y + (1f * scale)));
         if (showcursor)
         {
             cusorblink -= 0.0166666f;
@@ -701,10 +734,19 @@ public class DebugTablet
     private static string prevcompliedstring;
     private static object prevcodething;
     private static MethodInfo targetmethod;
-    private static void RunCode(DebugTablet tab)
+    public static void RunCode(DebugTablet tab, string evalcode = "")
     {
+        string code = "";
+        if (tab == null)
+        {
+            tab = tabs[0];
+            code = evalcode;
+        }
+        else
+        {
+            code = string.Join("\n", tab.Lines);
+        }
         tab.Output.Clear();
-        string code = string.Join("\n", tab.Lines);
         if (prevcompliedstring != code || targetmethod == null)
         {
             prevcodething = null;
@@ -780,6 +822,7 @@ public class DebugTablet
             {
                 prevcodething = Activator.CreateInstance(t2);
             }
+            prevcompliedstring = code;
         }
         object rettype = targetmethod.Invoke(prevcodething, null);
         if (!targetmethod.IsStatic)

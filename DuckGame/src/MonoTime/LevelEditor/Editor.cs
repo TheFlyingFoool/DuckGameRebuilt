@@ -1744,6 +1744,26 @@ namespace DuckGame
                                     _panAnchor = Mouse.position;
                                 if (_procContext != null)
                                     _procContext.Update();
+                                if (DebugTablet.Open)
+                                {
+                                    _selection.Clear();
+                                    _currentDragSelectionHover.Clear();
+                                    UpdateSelection();
+                                    _cursorMode = CursorMode.Normal;
+                                    tookInput = true;
+                                    //OpenMenu(_placementMenu);
+                                    _showPlacementMenu = false;
+                                    if (_placementMenu != null)
+                                    {
+                                        _placementMenu.active = false;
+                                        _placementMenu.visible = false;
+                                       // _placementMenu = null;
+                                    }
+                                   // _placementMode = false;
+                                    _editMode = false;
+                                    clicked = false;
+                                    return;
+                                }
                                 if (tabletMode && clicked)
                                 {
                                     if (Mouse.x < 32.0 && Mouse.y < 32.0)
@@ -3460,7 +3480,7 @@ namespace DuckGame
                     }
 
                     if (_cursorMode == CursorMode.Normal && _hover == null && _placementMode &&
-                        inputMode != EditorInput.Touch && _placementMenu == null && _placementType != null)
+                        inputMode != EditorInput.Touch && _placementMenu == null && _placementType != null && !DebugTablet.Open)
                     {
                         _placementType.depth = 0.9f;
                         _placementType.x = _tilePosition.x;
@@ -3828,9 +3848,9 @@ namespace DuckGame
             {
                 if (layer != _objectMenuLayer)
                     return;
-                if (inputMode == EditorInput.Mouse)
+                if (inputMode == EditorInput.Mouse && !DebugTablet.Open)
                 {
-                    _cursor.depth = 1f;
+                     _cursor.depth = 1f;
                     _cursor.scale = new Vec2(1f, 1f);
                     _cursor.position = Mouse.position;
                     if (_cursorMode == CursorMode.Normal)

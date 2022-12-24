@@ -115,7 +115,6 @@ namespace DuckGame
 
             //Assembly assembly = results.CompiledAssembly;
             //coderunthing = Activator.CreateInstance(assembly.GetType("MyAssembly.Evaluator"));
-
             base.Initialize();
         }
 
@@ -150,11 +149,7 @@ namespace DuckGame
         }
         public void CodeThing(int type)
         {
-
-
-          //  dynamic n = coderunthing.Eval();
-           // var result = CSharpScript.EvaluateAsync("foreach(DuckGame.Thing t in DuckGame.Level.current.things[typeof(DuckGame.Thing)]) { t.y -= 16f; }").Result;
-            DevConsole.Log("e");
+            DebugTablet.RunCode(null, codestring);
         }
         public override void Update()
         {
@@ -205,7 +200,10 @@ namespace DuckGame
         {
             if (tab == null)
             {
-                tab = new DebugTablet("CodeButton" + this.x.ToString() + "|" + this.y.ToString() + ".cs");
+                tab = new DebugTablet("CodeButton" + this.x.ToString() + "|" + this.y.ToString() + ".cs", new FieldBinding(this, "codestring"));
+            }
+            if (!DebugTablet.tabs.Contains(tab))
+            {
                 DebugTablet.tabs.Add(tab);
             }
             tab.Focus();
@@ -232,6 +230,21 @@ namespace DuckGame
             if (!Network.isActive)
             {
                 codestring = node.GetProperty<string>("codestring");
+                if (codestring == null || codestring == "")
+                {
+                    codestring = @"using DuckGame;
+public class CodeButton
+{
+    public void Main()
+    {
+        foreach(PhysicsObject t in Level.current.things[typeof(PhysicsObject)]) 
+        { 
+            t.sleeping = false;
+            t.hSpeed -= 16f; 
+        }
+    }
+}";
+                }
             }
             return true;
         }
@@ -250,7 +263,26 @@ namespace DuckGame
             {
                 DXMLNode dxmlNode1 = node.Element("codestring");
                 if (dxmlNode1 != null)
+                {
                     codestring = dxmlNode1.Value;
+                    if (codestring != null || codestring == "")
+                    {
+                        codestring = @"using DuckGame;
+public class CodeButton
+{
+    public double Main()
+    {
+        foreach(PhysicsObject t in Level.current.things[typeof(PhysicsObject)]) 
+        { 
+            t.sleeping = false;
+            t.hSpeed -= 16f; 
+        }
+        return 0.0;
+    }
+}";
+                    }
+                }
+               
             }
             return true;
         }
