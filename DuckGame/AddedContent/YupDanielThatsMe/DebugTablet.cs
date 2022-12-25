@@ -6,7 +6,6 @@ using System.Reflection;
 using Microsoft.CSharp;
 using Microsoft.Xna.Framework.Graphics;
 using SDL2;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static DuckGame.CustomKeyBinds;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
@@ -261,6 +260,7 @@ public class DebugTablet
     {
         if (!MonoMain.experimental)
         {
+            Open = false;
             return;
         }
         if (tabindex >= tabs.Count)
