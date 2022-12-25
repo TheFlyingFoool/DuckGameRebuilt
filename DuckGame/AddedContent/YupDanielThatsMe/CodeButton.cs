@@ -5,11 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
-using System;
 using System.Linq;
-using Microsoft.CSharp;
-using System.CodeDom.Compiler;
-using System.Reflection;
 
 namespace DuckGame
 {
@@ -198,6 +194,8 @@ namespace DuckGame
         private DebugTablet tab;
         public void OpenCodeWindow()
         {
+            if (!MonoMain.experimental)
+                return;
             if (tab == null)
             {
                 tab = new DebugTablet("CodeButton" + this.x.ToString() + "|" + this.y.ToString() + ".cs", new FieldBinding(this, "codestring"));

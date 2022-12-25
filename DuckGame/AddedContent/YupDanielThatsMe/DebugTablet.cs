@@ -6,7 +6,6 @@ using System.Reflection;
 using Microsoft.CSharp;
 using Microsoft.Xna.Framework.Graphics;
 using SDL2;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static DuckGame.CustomKeyBinds;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
@@ -261,6 +260,7 @@ public class DebugTablet
     {
         if (!MonoMain.experimental)
         {
+            Open = false;
             return;
         }
         if (tabindex >= tabs.Count)
@@ -824,17 +824,18 @@ public class DebugTablet
             }
             prevcompliedstring = code;
         }
-        object rettype = targetmethod.Invoke(prevcodething, null);
-        if (!targetmethod.IsStatic)
+        if (!targetmethod.IsStatic && prevcodething == null)
         {
-            string message = "null";
-            if (rettype != null)
-            {
-                message = rettype.ToString();
-            }
-            tab.LogOutput(message);
+            prevcodething = Activator.CreateInstance(targetmethod.DeclaringType);
         }
-      
+        object rettype = targetmethod.Invoke(prevcodething, null);
+        string message = "null";
+        if (rettype != null)
+        {
+            message = rettype.ToString();
+        }
+        tab.LogOutput(message);
+
     }
     private void UpdateInputs()
     {
