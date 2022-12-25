@@ -1198,6 +1198,10 @@ namespace DuckGame
                     {
                         Slot3D slot = enumerator.Current;
                         slot.follow = false;
+                        if (slot.duck == null || slot.duck.dead) // fix for stalling when a duck dies
+                        {
+                            slot.state = RockThrow.Finished;
+                        }
                         if (allowStateUpdate)
                         {
                             if (slot.state != RockThrow.Finished)
