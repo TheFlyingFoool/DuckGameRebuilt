@@ -824,17 +824,18 @@ public class DebugTablet
             }
             prevcompliedstring = code;
         }
-        object rettype = targetmethod.Invoke(prevcodething, null);
-        if (!targetmethod.IsStatic)
+        if (!targetmethod.IsStatic && prevcodething == null)
         {
-            string message = "null";
-            if (rettype != null)
-            {
-                message = rettype.ToString();
-            }
-            tab.LogOutput(message);
+            prevcodething = Activator.CreateInstance(targetmethod.DeclaringType);
         }
-      
+        object rettype = targetmethod.Invoke(prevcodething, null);
+        string message = "null";
+        if (rettype != null)
+        {
+            message = rettype.ToString();
+        }
+        tab.LogOutput(message);
+
     }
     private void UpdateInputs()
     {

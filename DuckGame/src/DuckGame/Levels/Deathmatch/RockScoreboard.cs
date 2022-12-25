@@ -1191,6 +1191,7 @@ namespace DuckGame
                 {
                     _controlSlide = Lerp.FloatSmooth(_controlSlide, 1f, 0.1f, 1.05f);
                 }
+
                 bool allowStateUpdate = true;
                 using (List<Slot3D>.Enumerator enumerator = _slots.GetEnumerator())
                 {
@@ -1201,6 +1202,38 @@ namespace DuckGame
                         if (slot.duck == null || slot.duck.dead) // fix for stalling when a duck dies
                         {
                             slot.state = RockThrow.Finished;
+                            if (!slot.showScore) // ¯\_(ツ)_/¯ ding.mp3
+                            {
+                                SFX.Play("scoreDing", 1f, 0f, 0f, false);
+                                if (slot.duck != null)
+                                {
+                                    if (slot.duck.profile.team != null && wallMode && slot.duck.profile.team.rockScore > GameMode.winsPerSet)
+                                    {
+                                        slot.duck.profile.team.rockScore = GameMode.winsPerSet;
+                                    }
+                                    if (TeamSelect2.eightPlayersActive)
+                                    {
+                                        _showScoreWait = 0.5f;
+                                    }
+                                    else
+                                    {
+                                        _showScoreWait = 0.6f;
+                                    }
+                                    Crowd.ThrowHats(slot.duck.profile);
+                                    if (!slot.showScore)
+                                    {
+                                        slot.showScore = true;
+                                        Add(new PointBoard(slot.rock, slot.duck.profile.team)
+                                        {
+                                            depth = slot.rock.depth + 1,
+                                            z = slot.rock.z
+                                        });
+                                    }
+                                }
+                            }
+                           
+                           
+
                         }
                         if (allowStateUpdate)
                         {
