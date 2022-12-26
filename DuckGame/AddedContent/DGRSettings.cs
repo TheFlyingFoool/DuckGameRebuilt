@@ -147,5 +147,8 @@ namespace DuckGame
 
         [AutoConfigField]
         public static bool NameTags { get; set; }
+
+        [AutoConfigField]
+        public static bool LobbyData { get; set; }
     }
 }

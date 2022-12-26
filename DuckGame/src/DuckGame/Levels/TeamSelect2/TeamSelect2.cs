@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace DuckGame
 {
@@ -107,6 +108,8 @@ namespace DuckGame
         private float _afkShowTimeout = 241f;
         private int _timeoutBeep;
         private bool _spectatorCountdownStop;
+
+        private List<Profile> _lastKnownProfiles = new List<Profile>();
 
         public override string networkIdentifier => "@TEAMSELECT";
 
@@ -1078,6 +1081,28 @@ namespace DuckGame
                     if (profile.slotType != SlotType.Closed && profile.slotType != SlotType.Spectator && (profile.slotType != SlotType.Invite || profile.connection != null || explicitlyCreated) && num > 3)
                         flag1 = true;
                     ++num;
+                }
+
+                Lobby lobby = Steam.lobby;
+
+                if (Network.isServer && lobby is not null)
+                {
+                    List<Profile> profiles = Profiles.active;
+
+                    if (!Enumerable.SequenceEqual(_lastKnownProfiles, profiles))
+                    {
+                        var builder = new StringBuilder();
+
+                        foreach (Profile profile in profiles)
+                        {
+                            string name = profile.name.Replace("\n", "_");
+
+                            builder.Append(name);
+                            builder.Append("\n");
+                        }
+
+                        lobby.SetLobbyData("players", builder.ToString());
+                    }
                 }
             }
             eightPlayersActive = Profiles.activeNonSpectators.Count > 4;
