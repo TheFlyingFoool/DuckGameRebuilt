@@ -1091,7 +1091,7 @@ namespace DuckGame
 
                     if (!Enumerable.SequenceEqual(_lastKnownProfiles, profiles))
                     {
-                        var builder = new StringBuilder();
+                        StringBuilder builder = new StringBuilder();
 
                         foreach (Profile profile in profiles)
                         {

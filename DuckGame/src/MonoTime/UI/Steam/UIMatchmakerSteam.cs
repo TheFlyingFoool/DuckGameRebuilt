@@ -47,8 +47,8 @@ namespace DuckGame
             for (int i = 0; i < num2; ++i)
             {
                 Lobby searchLobbyAtIndex = Network.activeNetwork.core.GetSearchLobbyAtIndex(i);
-                foreach (User user in searchLobbyAtIndex.users)
-                    ;
+                //foreach (User user in searchLobbyAtIndex.users) empty generated code
+                //    ;
                 if (searchLobbyAtIndex.owner != Steam.user && searchLobbyAtIndex.joinable && !blacklist.Contains(searchLobbyAtIndex.id) && !attempted.Contains(searchLobbyAtIndex.id) && (UIMatchmakingBox.core == null || !UIMatchmakingBox.core.blacklist.Contains(searchLobbyAtIndex.id)))
                 {
                     if (num1 != 0)

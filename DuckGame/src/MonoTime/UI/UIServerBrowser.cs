@@ -700,6 +700,10 @@ namespace DuckGame
                     }
                     _fancyFont.Draw(str + ")", new Vec2(x, y), Colors.DGGreen, (Depth)0.5f);
                 }
+                for (int i = 0; i < _lobbies; ++i)
+                {
+                    _lobbies[i].UpdateUserCount();
+                }
                 _lobbies.Sort();
                 for (int index1 = 0; index1 < _maxLobbiesToShow; ++index1)
                 {
@@ -836,7 +840,7 @@ namespace DuckGame
                             }
                             else
                                 Graphics.Draw(_noImage, x1 + 2f, y + 2f, (Depth)0.5f);
-                            titleString += " (" + Math.Min(lobby.userCount - (lobby.dedicated ? 1 : 0), 8).ToString() + "/" + Math.Min(lobby.numSlots, 8).ToString() + ")";
+                            titleString += " (" + Math.Min(lobby._userCount - (lobby.dedicated ? 1 : 0), 8).ToString() + "/" + Math.Min(lobby.numSlots, 8).ToString() + ")";
                             if (lobby.hasFriends)
                                 titleString += " |DGGREEN|FRIEND";
                             if (lobby.hasPassword)
@@ -869,7 +873,7 @@ namespace DuckGame
                                     {
                                         titleString += "This game is in progress.";
                                     }
-                                    else if (lobby.userCount >= lobby.numSlots)
+                                    else if (lobby._userCount >= lobby.numSlots)
                                     {
                                         titleString += "Lobby is full.";
                                     }
@@ -1072,7 +1076,7 @@ namespace DuckGame
                 get // removed AreParentalControlsActive
                 {
                     return DG.version == version && (Network.gameDataHash == datahash || ModLoader.modHash != modHash) && started == "false" &&
-                        (!hasLocalMods || ModLoader.modHash == modHash) && userCount < numSlots && (type == "2" || lobby == null);
+                        (!hasLocalMods || ModLoader.modHash == modHash) && _userCount < numSlots && (type == "2" || lobby == null);
                 }
             }
 
@@ -1087,7 +1091,10 @@ namespace DuckGame
                     return _userCount;
                 }
             }
-
+            public void UpdateUserCount()
+            {
+                _userCount = userCount;
+            }
             public int CompareTo(LobbyData other)
             {
                 if (isGlobalLobby && !other.isGlobalLobby)
