@@ -700,9 +700,13 @@ namespace DuckGame
                     }
                     _fancyFont.Draw(str + ")", new Vec2(x, y), Colors.DGGreen, (Depth)0.5f);
                 }
-                for (int i = 0; i < _lobbies; ++i)
+                for (int i = 0; i < _lobbies.Count; ++i)
                 {
-                    _lobbies[i].UpdateUserCount();
+                    LobbyData lobby = _lobbies[i];
+                    if (lobby != null)
+                    {
+                        lobby.UpdateUserCount();
+                    }
                 }
                 _lobbies.Sort();
                 for (int index1 = 0; index1 < _maxLobbiesToShow; ++index1)
