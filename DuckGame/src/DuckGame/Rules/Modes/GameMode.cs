@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -829,16 +830,66 @@ namespace DuckGame
                 const float vSpacing = 2f;
                 const float hSpacing = 2f;
                 const float borderWidth = 2f;
-                const float opacity = 0.6f;
+                const float opacity = 1f;
+                const float teamLineWidth = 1f;
+                const bool removeDeadPlayers = true;
                 Rectangle drawBox = new(0, 0, borderWidth * 2, borderWidth * 2);
 
-                float xOffset = drawBox.x + borderWidth;
-                float yOffset = drawBox.y + borderWidth;
+                bool doTeams = Extensions.MultiPlayerTeamsExist() && teamLineWidth > 0;
+                IEnumerable<Profile> profileList = Profiles.activeNonSpectators;
+                Color[] teamColors = { // yoinked from hypixel bedwars teams
+                    Color.Blue,
+                    Color.Red,
+                    Color.Green,
+                    Color.Yellow,
+                    Color.Purple,
+                    Color.Cyan,
+                    Color.Pink,
+                    Color.Orange,
+                };
+
+                if (removeDeadPlayers)
+                    profileList = profileList.Where(x => x?.duck?.dead == false);
                 
-                foreach (Profile prof in Profiles.activeNonSpectators)
+                float xOffset = drawBox.x + borderWidth + hSpacing;
+                float yOffset = drawBox.y + borderWidth + vSpacing;
+                
+                Dictionary<int, int> teamColorMapping = new();
+                Dictionary<int, List<Profile>> profileTeamMembersMapping = new();
+                if (doTeams)
                 {
+                    int index = 0;
+                    foreach (Profile prof in Profiles.activeNonSpectators)
+                    {
+                        int teamHashCode = prof.team.GetHashCode();
+                        
+                        if (!profileTeamMembersMapping.ContainsKey(teamHashCode))
+                            profileTeamMembersMapping.Add(teamHashCode, new List<Profile>());
+                        profileTeamMembersMapping[teamHashCode].Add(prof);
+                        
+                        if (teamColorMapping.ContainsKey(teamHashCode))
+                            continue;
+
+                        teamColorMapping[teamHashCode] = index;
+                        
+                        // increment index by one
+                        // makes sure if teams.length > 8 that colors overflow instead of crashing
+                        index = (index + 1) % teamColors.Length;
+                    }
+                    
+                    profileList = profileList.OrderBy(x => x.team.GetHashCode());
+
+                    xOffset += hSpacing * 2 + teamLineWidth;
+                }
+
+                foreach (Profile prof in profileList)
+                {
+                    int teamHashCode = prof.team.GetHashCode();
+                    
                     (float nameW, float nameH) = Extensions.GetStringSize(prof.name.CleanFormatting(), fontSize);
-                    Color duckColor = prof.persona.colorUsable;
+                    Color duckColor = prof.persona.colorUsable * opacity;
+                    Color teamColor = doTeams ? (teamColors[teamColorMapping[teamHashCode]] * opacity) : Color.Transparent;
+                    Color borderColor = Color.Black * opacity;
                     float addedHeight = nameH + vSpacing;
 
                     float totalprofWidth = nameW + borderWidth * 2 + nameH + hSpacing * 2;
@@ -848,44 +899,58 @@ namespace DuckGame
 
                     drawBox.height += addedHeight;
 
-                    Rectangle colorBox = new(xOffset + hSpacing, yOffset, nameH, nameH - 0.5f);
+                    Graphics.DrawStringOutline(prof.name, new Vec2(xOffset + hSpacing + nameH, yOffset), duckColor, borderColor, 1.1f, scale: fontSize);
+
+                    Rectangle colorBox = new(xOffset, yOffset, nameH, nameH - 0.5f);
+                    Graphics.DrawOutlinedRect(colorBox, duckColor, borderColor, 1.1f, fontSize);
                     
-                    Graphics.DrawStringOutline(prof.name, new Vec2(xOffset + hSpacing * 2 + nameH, yOffset), duckColor, Color.Black, 1.1f, scale: fontSize);
-                    Graphics.DrawOutlinedRect(colorBox, duckColor, Color.Black, 1.1f, fontSize);
+                    if (doTeams)
+                    {
+                        Vec2 lineStartPos = new(xOffset - (hSpacing + teamLineWidth / 2), yOffset);
+                        Vec2 lineEndOffset = new(0, nameH + vSpacing);
+
+                        List<Profile> teamMembers = profileTeamMembersMapping[teamHashCode];
+                        if (teamMembers.IndexOf(prof) == teamMembers.Count - 1)
+                            lineEndOffset.y -= vSpacing;
+                        
+                        Graphics.DrawLine(lineStartPos + lineEndOffset, lineStartPos, teamColor, teamLineWidth, 1.1f);
+                    }
                     
                     yOffset += addedHeight;
                 }
-                
-                // Graphics.DrawRect(drawBox, Color.Black * opacity, 1f);
             }
             
             void drawNameTags()
             {
-                if (Level.current is RockScoreboard) return;
-
-                Profile me = Extensions.GetMe();
-
-                if (me?.duck?.connection == null)
-                    return;
-                
-                bool spectating = (Network.isActive && (me.duck.dead || me.spectator)) || matchOver;
-                
-                foreach (Profile prof in Profiles.activeNonSpectators)
+                try // FIXED !!!!!!!!
                 {
-                    if (prof?.duck?.connection == null)
-                        continue;
+                    if (Level.current is RockScoreboard) return;
 
-                    bool doDraw = spectating || (prof.duck.localSpawnVisible && !started);
-                    
-                    if (!doDraw)
-                        continue;
+                    Profile me = Extensions.GetMe();
 
-                    Vec2 tagPos = prof.duck.position - new Vec2(0, 24);
-                    float depth = prof.connection == DuckNetwork.localConnection ? 2f : 1.95f;
-                    Color duckColor = prof.persona.colorUsable;
+                    if (me?.duck?.connection == null)
+                        return;
+                
+                    bool spectating = (Network.isActive && (me.duck.dead || me.spectator)) || matchOver;
+                
+                    foreach (Profile prof in Profiles.activeNonSpectators)
+                    {
+                        if (prof?.duck?.connection == null)
+                            continue;
+
+                        bool doDraw = spectating || (prof.duck.localSpawnVisible && !started);
                     
-                    Extensions.DrawCenteredOutlinedString(prof.name, tagPos, duckColor, Color.Black, depth, null, 0.7f);
+                        if (!doDraw)
+                            continue;
+
+                        Vec2 tagPos = prof.duck.position - new Vec2(0, 24);
+                        float depth = prof.connection == DuckNetwork.localConnection ? 2f : 1.95f;
+                        Color duckColor = prof.persona.colorUsable;
+                    
+                        Extensions.DrawCenteredOutlinedString(prof.name, tagPos, duckColor, Color.Black, depth, null, 0.7f);
+                    }
                 }
+                catch { /* ignore */ }
             }
 
             frames++;
