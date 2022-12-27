@@ -335,6 +335,7 @@
     <Compile Include="AddedContent\YupDanielThatsMe\RectPackSharp\PackingRectangle.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\RectPackSharp\RectanglePacker.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\TestVerticalDoor.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\DGVersion.cs" />
     <Compile Include="Properties\Resources1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

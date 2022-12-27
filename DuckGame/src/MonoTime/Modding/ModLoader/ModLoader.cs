@@ -277,43 +277,43 @@ namespace DuckGame
                             modConfig.error = "!This mod has been officially implemented, Thanks EIM64!";
                             mod = new DisabledMod();
                         }
-                        if (modConfig.workshopID == 1820667892UL)
+                        else if (modConfig.workshopID == 1820667892UL)
                         {
                             modConfig.Disable();
                             modConfig.error = "!This mod has been officially implemented, Thanks Yupdaniel!";
                             mod = new DisabledMod();
                         }
-                       
-                    }
-                    if (modConfig.workshopID == 1603886916UL)
-                    {
-                        modConfig.Disable();
-                        modConfig.error = "!This mod has been officially implemented, Thanks Yupdaniel || Mr. Potatooh!";
-                        mod = new DisabledMod();
-                    }
-                    else if (modConfig.workshopID == 796033146UL)
-                    {
-                        modConfig.Disable();
-                        modConfig.error = "!This mod has been officially implemented, Thanks TheSpicyChef!";
-                        mod = new DisabledMod();
-                    }
-                    else if (modConfig.workshopID == 1425615438UL)
-                    {
-                        modConfig.Disable();
-                        modConfig.error = "!This mod has been officially implemented, Thanks EIM64 || Killer-Fackur!";
-                        mod = new DisabledMod();
-                    }
-                    else if (modConfig.workshopID == 1704010547UL)
-                    {
-                        modConfig.Disable();
-                        modConfig.error = "!Regrettably, this version of QOL is incompatible with Duck Game 2020!";
-                        mod = new DisabledMod();
-                    }
-                    else if (modConfig.workshopID == 1657985708UL)
-                    {
-                        modConfig.Disable();
-                        modConfig.error = "!This mod has been officially implemented, Thanks Yupdaniel!";
-                        mod = new DisabledMod();
+                        else if (modConfig.workshopID == 1603886916UL)
+                        {
+                            modConfig.Disable();
+                            modConfig.error = "!This mod has been officially implemented, Thanks Yupdaniel || Mr. Potatooh!";
+                            mod = new DisabledMod();
+                        }
+                        else if (modConfig.workshopID == 796033146UL)
+                        {
+                            modConfig.Disable();
+                            modConfig.error = "!This mod has been officially implemented, Thanks TheSpicyChef!";
+                            mod = new DisabledMod();
+                        }
+                        else if (modConfig.workshopID == 1425615438UL)
+                        {
+                            modConfig.Disable();
+                            modConfig.error = "!This mod has been officially implemented, Thanks EIM64 || Killer-Fackur!";
+                            mod = new DisabledMod();
+                        }
+                        else if (modConfig.workshopID == 1704010547UL)
+                        {
+                            modConfig.Disable();
+                            modConfig.error = "!Regrettably, this version of QOL is incompatible with Duck Game 2020!";
+                            mod = new DisabledMod();
+                        }
+                        else if (modConfig.workshopID == 1657985708UL)
+                        {
+                            modConfig.Disable();
+                            modConfig.error = "!This mod has been officially implemented, Thanks Yupdaniel!";
+                            mod = new DisabledMod();
+                        }
+
                     }
                     /* rebuild mod issues */
                     //if (modConfig.workshopID == 2548159573UL) // custom arcade
@@ -329,8 +329,10 @@ namespace DuckGame
                     //    mod = new DisabledMod();
                     //}
                     if (modConfig.workshopID == 2480332949UL) //Delta Duck
-                    {
-                        modConfig.noRecompilation = true;
+                    {                 
+                        modConfig.Disable();
+                        modConfig.error = "!This mod does not currently work on Rebuilt, Just a Mess of Issues! @Tater";
+                        mod = new DisabledMod();
                     }
                     else if (modConfig.workshopID == 2758180905UL) // Bug Fixes harmony issue patching menu elements stuff
                     {
@@ -753,7 +755,7 @@ namespace DuckGame
             loadableMods = new Dictionary<string, ModConfiguration>();
             if (Directory.Exists(modDirectory))
             {
-                if (Steam.IsInitialized() && !Program.temptest1)
+                if (Steam.IsInitialized())
                 {
                     LoadingAction steamLoad = new LoadingAction();
                     steamLoad.action = () =>
