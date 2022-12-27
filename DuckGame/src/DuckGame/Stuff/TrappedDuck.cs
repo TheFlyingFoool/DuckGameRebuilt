@@ -33,7 +33,7 @@ namespace DuckGame
             get => base.visible;
             set
             {
-                if (value && _trapTime < 0.0)
+                if (value && _trapTime < 0f)
                 {
                     _trapTime = 1f;
                     owner = null;
@@ -219,7 +219,7 @@ namespace DuckGame
                     if (_duckOwner.inputProfile.Released(Triggers.Jump) && _duckOwner.HasEquipment(typeof(Jetpack)))
                         _duckOwner.GetEquipment(typeof(Jetpack)).ReleaseAction();
                     _trapTime -= 0.0028f;
-                    if ((_trapTime <= 0.0 || _duckOwner.dead) && !inPipe)
+                    if ((_trapTime <= 0f || _duckOwner.dead) && !inPipe)
                         OnDestroy(null);
                 }
                 _duckOwner.UpdateSkeleton();
@@ -249,9 +249,9 @@ namespace DuckGame
             if (_duckOwner.quack > 0)
             {
                 Vec2 tounge = _duckOwner.tounge;
-                if (!_duckOwner._spriteQuack.flipH && tounge.x < 0.0)
+                if (!_duckOwner._spriteQuack.flipH && tounge.x < 0.0f)
                     tounge.x = 0f;
-                if (_duckOwner._spriteQuack.flipH && tounge.x > 0.0)
+                if (_duckOwner._spriteQuack.flipH && tounge.x > 0.0f)
                     tounge.x = 0f;
                 if (tounge.y < -0.3f)
                     tounge.y = -0.3f;

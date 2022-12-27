@@ -1087,16 +1087,16 @@ namespace DuckGame
             DGVersion LatestPublicVersion = new DGVersion(latestVersionID);
             DGVersion CurrentVersion = new DGVersion(CURRENT_VERSION_ID);
 
-            //if (LatestPublicVersion == CurrentVersion)
-            //{
-            //    DevConsole.Log($"Running latest DGR version: {CURRENT_VERSION_ID_FORMATTED}");
-            //    return;
-            //}
-            //else if (CurrentVersion > LatestPublicVersion)
-            //{
-            //    DevConsole.Log($"Dam Looks like you got an even newer version that release: {CURRENT_VERSION_ID_FORMATTED}");
-            //    return;
-            //}
+            if (LatestPublicVersion == CurrentVersion)
+            {
+                DevConsole.Log($"Running latest DGR version: {CURRENT_VERSION_ID_FORMATTED}");
+                return;
+            }
+            else if (CurrentVersion > LatestPublicVersion)
+            {
+                DevConsole.Log($"Dam Looks like you got an even newer version that release: {CURRENT_VERSION_ID_FORMATTED}");
+                return;
+            }
             const string latestDgrReleaseUrl = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest/download/DuckGameRebuilt.zip";
             FileStream dgrZipStream = DownloadFile(latestDgrReleaseUrl, zipPath);
             using ZipArchive archive = new(dgrZipStream);
