@@ -1002,6 +1002,10 @@ namespace DuckGame
             if (!modsEnabled)
                 modHash = "nomods";
             runningModloadCode = false;
+            if (Program.lateCrash)
+            {
+                throw new Exception("Late crash used!");
+            }
         }
 
         internal static void Start()

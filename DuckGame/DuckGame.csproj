@@ -2074,6 +2074,7 @@
   <ItemGroup>
     <Content Include="DuckGame.ico" />
     <EmbeddedResource Include="version.txt" />
+    <EmbeddedResource Include="SlnPath.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="shaders_source\" />
@@ -2106,6 +2107,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">
     <Exec Command="git describe  --always --dirty --abbrev=40 &gt; &quot;$(ProjectDir)version.txt&quot;" />
+    <Exec Command="echo $(SolutionDir) &gt; $(ProjectDir)SlnPath.txt" />
   </Target>
   <Target Name="AfterBuild">
     <Exec Command="cp -rv $(SolutionDir)deps/* $(SolutionDir)bin/" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'" />

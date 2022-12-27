@@ -5,11 +5,78 @@ using System.Text;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using static DuckGame.CMD;
+using System.Reflection.Emit;
 
 namespace DuckGame
 {
     public static class Extensions
     {
+        static Type PatchProcessorT;
+        static MethodInfo GetPatchInfoM;
+        static FieldInfo DynOwner;
+        static FieldInfo DynTOwner;
+        static FieldInfo prefixes;
+        static FieldInfo postfixes;
+        static FieldInfo transpilers;
+        static FieldInfo Patch;
+        static bool HarmonyActive;
+        static bool HarmonyLoaded()
+        {
+            if (HarmonyActive)
+                return true;
+            Assembly a = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name == "HarmonyLoader");
+            if (a == null)
+                return false;
+            PatchProcessorT = Type.GetType($"Harmony.PatchProcessor, {a.FullName}");
+
+            GetPatchInfoM = PatchProcessorT?.GetMethod("GetPatchInfo");
+            Type ps = Type.GetType($"Harmony.Patches, {a.FullName}");
+            prefixes = ps?.GetField("Prefixes");
+            postfixes = ps?.GetField("Postfixes");
+            transpilers = ps?.GetField("Transpilers");
+
+            Type p = Type.GetType($"Harmony.Patch, {a.FullName}");
+            Patch = p.GetField("patch");
+
+            if (GetPatchInfoM == null)
+                return false;
+
+            Type dt = Type.GetType("System.Reflection.Emit.DynamicMethod+RTDynamicMethod");
+            DynOwner = dt.GetField("m_owner", BindingFlags.Instance | BindingFlags.NonPublic);
+            DynTOwner = typeof(DynamicMethod).GetField("m_typeOwner", BindingFlags.Instance | BindingFlags.NonPublic);
+            return HarmonyActive = true;
+        }
+
+        public static string GetPatches(this MethodBase mb)
+        {
+            if (!HarmonyLoaded()) 
+                return "";
+            if (mb.DeclaringType != null)
+                return "";
+            int i = mb.Name.IndexOf("_Patch");
+            if (i == -1)
+                return "";
+            string name = mb.Name.Substring(0, i);
+            DynamicMethod o = DynOwner.GetValue(mb) as DynamicMethod;
+            Type to = DynTOwner.GetValue(o) as Type;
+            MethodInfo ogmeth = to.GetMethod(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
+            object patches = GetPatchInfoM.Invoke(null, new object[]{ ogmeth });
+            string ret = "     " + ogmeth.GetFullName2() + Environment.NewLine;
+            List<object> patchs = new();
+            IEnumerable<object> pre = (prefixes.GetValue(patches) as IEnumerable).Cast<object>();
+            IEnumerable<object> post = (postfixes.GetValue(patches) as IEnumerable).Cast<object>();
+            IEnumerable<object> tra = (transpilers.GetValue(patches) as IEnumerable).Cast<object>();
+            patchs.InsertRange(0, pre);
+            patchs.InsertRange(patchs.Count, post);
+            patchs.InsertRange(patchs.Count, tra);
+            foreach(MethodBase p in patchs.Select(x => Patch.GetValue(x) as MethodBase))
+            {
+                ret += "     -" + p.GetFullName2() + Environment.NewLine;
+            }
+            return ret;
+        }
+
         public static void TryUse<T1, T2>(this Dictionary<T1, T2> dic, T1 requestedKey, T2 defaultValue, Action<T2> action)
         {
             if (!dic.ContainsKey(requestedKey))
@@ -81,6 +148,20 @@ namespace DuckGame
         }
 
         public static string GetFullName(this MemberInfo mi) => $"{mi.DeclaringType}:{mi.Name}";
+
+        static PropertyInfo InternalFullName = typeof(MethodBase).GetProperty("FullName", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        public static string GetFullName2(this MethodBase mi)
+        {
+            try
+            {
+                return (string)InternalFullName.GetValue(mi);
+            }catch(Exception e)
+            {
+                return mi.Name;
+                //return "";
+            }
+        }
 
         public static bool InheritsFrom(this Type derivedType, Type baseType)
         {

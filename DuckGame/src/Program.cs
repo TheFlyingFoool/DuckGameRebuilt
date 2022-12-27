@@ -97,6 +97,7 @@ namespace DuckGame
         /// <summary>The main entry point for the application.</summary>\
         public static Vec2 StartPos = Vec2.Zero;
         public static string gitVersion = "N/A";
+        public static bool lateCrash;
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
         public static void Main(string[] args)
@@ -108,7 +109,17 @@ namespace DuckGame
             //File.Delete(Path.GetFullPath("DGInput.dll"));
             try
             {
-
+                using (StreamReader st = new(gameAssembly.GetManifestResourceStream("SlnPath.txt")))
+                {
+                    kCleanupString = st.ReadToEnd();
+                }
+                kCleanupString = kCleanupString.Replace(" \r\n", "");
+            }
+            catch
+            {
+            }
+            try
+            {
                 bool isDirty = false;
                 using (StreamReader st = new(gameAssembly.GetManifestResourceStream("version.txt")))
                 {
@@ -370,6 +381,9 @@ namespace DuckGame
                         break;
                     case "-crash":
                         throw new Exception("you threw it idk");
+                        break;
+                    case "-latecrash":
+                        lateCrash = true;
                         break;
                     case "-intro":
                         intro = true;
@@ -691,7 +705,43 @@ namespace DuckGame
                 e = modException.exception;
             }
             else
+            {
                 str1 = e.ToString();
+                string str2 = "";
+                try
+                {
+                    StackTrace st = new StackTrace(e, true);
+                    string msg = e.Message;
+                    string cn = e.GetType().ToString();
+                    string text2 = ((msg != null && msg.Length > 0) ? (cn + ": " + msg) : cn);
+                    if (e.InnerException != null)
+                    {
+                        text2 = text2 + " ---> " + ProcessExceptionString(e.InnerException) + Environment.NewLine + "   " + "--- End of inner exception stack trace ---";
+                    }
+                    text2 += Environment.NewLine;
+                    StackFrame[] fs = st.GetFrames();
+                    foreach (StackFrame f in fs)
+                    {
+                        MethodInfo m = f.GetMethod() as MethodInfo;
+                        int il = f.GetILOffset();
+                        int l = f.GetFileLineNumber();
+                        string ilstr = il == -1 ? "" : $"[{il}] ";
+                        string lstr = l == -1 ? "" : $" L:{l}";
+                        text2 += $"  at {m.GetFullName2()} " + ilstr + f.GetFileName() + lstr + Environment.NewLine;
+                        text2 += m.GetPatches();
+                    }
+
+                    str2 = text2;
+                }
+                catch(Exception ex)
+                {
+                    str2 = null;
+                }
+                if (str2 != null)
+                {
+                    str1 = str2;
+                }
+            }
             try
             {
                 if (e is UnauthorizedAccessException)
