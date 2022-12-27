@@ -1062,15 +1062,18 @@ namespace DuckGame
             string zipPath = parentDirectoryPath + "/DuckGameRebuilt.zip";
 
             const string tempFileExtension = ".tmp";
-
-            foreach (string filePath in Directory.GetFiles(parentDirectoryPath, "*.tmp")) // deletes .tmp files from past updating sequence 
+            try
             {
-                string tempFilePath = filePath + tempFileExtension;
-                if (File.Exists(tempFilePath))
-                    File.Delete(tempFilePath);
+                foreach (string filePath in Directory.GetFiles(parentDirectoryPath, "*.tmp")) // deletes .tmp files from past updating sequence 
+                {
+                    if (File.Exists(filePath))
+                        File.Delete(filePath);
+                }
+                if (File.Exists(zipPath))
+                    File.Delete(zipPath);
             }
-            if (File.Exists(zipPath))
-                File.Delete(zipPath);
+            catch
+            { }
             if (!HasInternet)
             {
                 DevConsole.Log("AutoUpdater check failed: No Internet");
@@ -1084,25 +1087,24 @@ namespace DuckGame
             DGVersion LatestPublicVersion = new DGVersion(latestVersionID);
             DGVersion CurrentVersion = new DGVersion(CURRENT_VERSION_ID);
 
-            if (LatestPublicVersion == CurrentVersion)
-            {
-                DevConsole.Log($"Running latest DGR version: {CURRENT_VERSION_ID_FORMATTED}");
-                return;
-            }
-            else if (CurrentVersion > LatestPublicVersion)
-            {
-                DevConsole.Log($"Dam Looks like you got an even newer version that release: {CURRENT_VERSION_ID_FORMATTED}");
-                return;
-            }
+            //if (LatestPublicVersion == CurrentVersion)
+            //{
+            //    DevConsole.Log($"Running latest DGR version: {CURRENT_VERSION_ID_FORMATTED}");
+            //    return;
+            //}
+            //else if (CurrentVersion > LatestPublicVersion)
+            //{
+            //    DevConsole.Log($"Dam Looks like you got an even newer version that release: {CURRENT_VERSION_ID_FORMATTED}");
+            //    return;
+            //}
             const string latestDgrReleaseUrl = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest/download/DuckGameRebuilt.zip";
             FileStream dgrZipStream = DownloadFile(latestDgrReleaseUrl, zipPath);
             using ZipArchive archive = new(dgrZipStream);
             archive.ExtractToDirectoryOverride(parentDirectoryPath);
-
-            Process.Start(dgrExePath, commandLine);
-
+            Process.Start(dgrExePath, "");
             // tells dg to kill itself
             fullstop = true;
+            Environment.Exit(0); // to kill it self faster :smile:
         }
 
         /// Fetches the latest DGR release from github and returns it's ID
@@ -1169,8 +1171,9 @@ namespace DuckGame
             {
                 if (File.Exists(destinationFileName) && IsFileLocked(ex)) // if file is being used rename and try to copy again
                 {
+                    if (File.Exists(destinationFileName + ".tmp"))
+                        File.Delete(destinationFileName + ".tmp");
                     File.Move(destinationFileName, destinationFileName + ".tmp");
-                    Thread.Sleep(100);
                 }
                 stream = File.Open(destinationFileName, mode, FileAccess.Write, FileShare.None);
             }
