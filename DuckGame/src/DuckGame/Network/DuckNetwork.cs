@@ -223,6 +223,23 @@ namespace DuckGame
 
         public static bool SpectatorSwapFinished(Profile p) => _profilesFinishedBeingSpectatorSwapped.Contains(p);
 
+        public static bool IsEmptySlot(int slot) => profiles[slot].connection == null;
+
+        public static bool IsHostSlot(int slot) => profiles[slot] == hostProfile;
+
+        public static bool IsLocalSlot(int slot) => profiles[slot].connection == localConnection;
+
+        public static string GetSlotGenre(int slot)
+        {
+            if (IsEmptySlot(slot))
+                return "empty";
+            if (IsHostSlot(slot))
+                return "host";
+            if (IsLocalSlot(slot))
+                return "local";
+            return null;
+        }
+
         public static void Initialize()
         {
             _core._builtInChatFont = new FancyBitmapFont("smallFontChat")

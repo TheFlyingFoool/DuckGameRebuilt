@@ -331,8 +331,18 @@ namespace DuckGame
                 }
             }
 
-            if (DuckNetwork.SpectatorSwapFinished(_profile) && !didUpdateNameDueToSwap)
-                UpdateName();
+            if (DuckNetwork.SpectatorSwapFinished(_profile))
+			{
+                if (!didUpdateNameDueToSwap)
+                {
+                    UpdateName();
+                    didUpdateNameDueToSwap = true;
+                }
+            }
+            else if (didUpdateNameDueToSwap == true)
+            {
+                didUpdateNameDueToSwap = false;
+            }
 
             base.Update();
         }
