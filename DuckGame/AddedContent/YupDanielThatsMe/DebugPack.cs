@@ -8,6 +8,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace DuckGame
 {
@@ -85,8 +86,19 @@ namespace DuckGame
             _sprite.frame = (int)(_heat * 7.0);
             if (_equippedDuck != null)
             {
+                float scroll = Mouse.scroll;
+                if (scroll > 0)
+                {
+                    typeindex += (int)(scroll / 120.0f);
+                    UpdateHolding(_equippedDuck);
+                }
+                else if (scroll < 0)
+                {
+                    typeindex += (int)(scroll / 120.0f);
+                    UpdateHolding(_equippedDuck);
+                }
                 _equippedDuck.invincible = true;
-                if (_equippedDuck.inputProfile.Pressed(Triggers.Quack))
+                if (_equippedDuck.inputProfile.Pressed(Triggers.Strafe))
                 {
                     if (_equippedDuck.inputProfile.Down(Triggers.Down))
                     {
