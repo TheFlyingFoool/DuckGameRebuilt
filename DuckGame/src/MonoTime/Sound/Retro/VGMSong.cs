@@ -154,7 +154,7 @@ namespace DuckGame
         private bool OpenVGMFile(string fileName)
         {
             bool flag = fileName.Contains(".vgz");
-            FileStream input = System.IO.File.Open(fileName, FileMode.Open);
+            FileStream input = File.Open(fileName, FileMode.Open);
             uint num1;
             if (flag)
             {
@@ -173,11 +173,11 @@ namespace DuckGame
             if (_vgmReader.ReadUInt32() != 544040790U)
                 return false;
             _VGMDataLen = num1;
-            _VGMHead = VGMSong.ReadVGMHeader(_vgmReader);
+            _VGMHead = ReadVGMHeader(_vgmReader);
             if (flag)
             {
                 _vgmReader.Close();
-                input = System.IO.File.Open(fileName, FileMode.Open);
+                input = File.Open(fileName, FileMode.Open);
                 _vgmReader = new BinaryReader(new GZipStream(input, CompressionMode.Decompress));
             }
             else

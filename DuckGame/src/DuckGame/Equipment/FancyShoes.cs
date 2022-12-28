@@ -23,5 +23,22 @@ namespace DuckGame
             collisionSize = new Vec2(12f, 13f);
             _equippedDepth = 3;
         }
+        public override void Draw()
+        {
+            if (equippedDuck == null)
+            {
+                Vec2 scal = scale;
+                float alph = alpha;
+                scale *= 1.1f + sw * 0.1f;
+                alpha *= 0.5f;
+                y -= 3;
+                base.Draw();
+                y += 3;
+                alpha = alph;
+                scale = scal;
+            }
+            base.Draw();
+        }
+        public SinWave sw = new SinWave(0.1f);
     }
 }

@@ -74,9 +74,9 @@ namespace DuckGame
             Vec2 vec2_5 = vec2_1 + new Vec2(160f, 28f);
             Vec2 vec2_6 = new Vec2(120f, 40f);
             _hoverOk = Mouse.x > vec2_3.x && Mouse.x < vec2_3.x + vec2_4.x && Mouse.y > vec2_3.y && Mouse.y < vec2_3.y + vec2_4.y;
-            if (!Editor.tookInput && Input.Pressed("MENULEFT"))
+            if (!Editor.tookInput && Input.Pressed(Triggers.MenuLeft))
                 --_selectedIndex;
-            else if (!Editor.tookInput && Input.Pressed("MENURIGHT"))
+            else if (!Editor.tookInput && Input.Pressed(Triggers.MenuRight))
                 ++_selectedIndex;
             if (_selectedIndex < 0)
                 _selectedIndex = 0;
@@ -88,7 +88,7 @@ namespace DuckGame
                 if (_selectedIndex == 0)
                     _hoverOk = true;
             }
-            if (Editor.tookInput || !_hoverOk || Mouse.left != InputState.Pressed && !Input.Pressed("SELECT"))
+            if (Editor.tookInput || !_hoverOk || Mouse.left != InputState.Pressed && !Input.Pressed(Triggers.Select))
                 return;
             result = true;
             opened = false;

@@ -22,7 +22,7 @@ namespace DuckGame
             _plasma = new Sprite("arcade/plasma");
             camera = new Camera();
             _plasmaMaterial = new MaterialPlasma();
-            _target = new RenderTarget2D(320, (int)(320.0 * DuckGame.Graphics.aspect));
+            _target = new RenderTarget2D(320, (int)(320.0 * Graphics.aspect));
             visible = false;
         }
 

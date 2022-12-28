@@ -106,12 +106,12 @@ namespace DuckGame
             if (_filterBinding != null && !(bool)_filterBinding.value)
                 num3 = -1;
             bool flag = false;
-            if (trigger == "SELECT" || trigger == "MENURIGHT")
+            if (trigger == Triggers.Select || trigger == Triggers.MenuRight)
             {
                 ++num3;
                 flag = true;
             }
-            else if (trigger == "MENULEFT")
+            else if (trigger == Triggers.MenuLeft)
             {
                 --num3;
                 flag = true;

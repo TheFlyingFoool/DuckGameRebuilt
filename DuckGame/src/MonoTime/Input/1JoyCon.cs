@@ -93,11 +93,11 @@ namespace DuckGame
         public override int numTriggers => 2;
 
         public SwitchJoyConDual(int idx)
-          : base(idx, "Dual Joy-Con", "Joy-Con", SwitchJoyConDual._dualJoyImages)
+          : base(idx, "Dual Joy-Con", "Joy-Con", _dualJoyImages)
         {
         }
 
-        public override extern bool isConnected { [MethodImpl(MethodImplOptions.InternalCall)] get; }
+        public extern override bool isConnected { [MethodImpl(MethodImplOptions.InternalCall)] get; }
 
         public override Vec2 rightStick => ReadRightStick();
     }

@@ -8,7 +8,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace DuckGame
 {
@@ -142,7 +141,7 @@ namespace DuckGame
                             catch (Exception)
                             {
                             }
-                            int networkIndex = DuckNetwork.GetProfiles(DuckNetwork.localConnection).First().networkIndex;
+                            int networkIndex = DuckNetwork.GetProfiles(DuckNetwork.localConnection)[0].networkIndex;
                             if (num == networkIndex)
                             {
                                 string str1 = Deathmatch.RandomLevelString("", "deathmatch", true);

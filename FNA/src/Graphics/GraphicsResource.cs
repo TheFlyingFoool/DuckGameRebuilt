@@ -9,12 +9,11 @@
 
 #region Using Statements
 using System;
-using System.Collections.Generic;
 #endregion
 
 namespace Microsoft.Xna.Framework.Graphics
-{	
-	public abstract class GraphicsResource : IDisposable
+{
+    public abstract class GraphicsResource : IDisposable
 	{
 		#region Public Properties
 
@@ -126,7 +125,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		/// Warning: This may be called after a call to Dispose() up until
 		/// the resource is garbage collected.
 		/// </summary>
-		internal protected virtual void GraphicsDeviceResetting()
+		protected internal virtual void GraphicsDeviceResetting()
 		{
 		}
 

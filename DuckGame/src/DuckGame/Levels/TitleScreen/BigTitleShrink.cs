@@ -24,13 +24,13 @@ namespace DuckGame
             x = vx;
             y = vy;
             scale = new Vec2(vscale, vscale);
-            depth = (Depth)BigTitleShrink._dept;
+            depth = (Depth)_dept;
             layer = Layer.HUD;
             centerx = _sprite.w / 2;
             centery = _sprite.h;
             graphic.color = vfade;
             _black = vfade == Color.Black;
-            BigTitleShrink._dept -= 0.0001f;
+            _dept -= 0.0001f;
             _size = vscale;
         }
 

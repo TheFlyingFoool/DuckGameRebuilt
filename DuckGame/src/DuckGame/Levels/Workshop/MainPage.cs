@@ -31,7 +31,7 @@ namespace DuckGame
         {
             if (!(_pageToOpen.specialText == "Upload Thing"))
                 return;
-            Level.current = new UploadPage(_cards, true);
+            current = new UploadPage(_cards, true);
         }
 
         public void CardSelected(Card card)
@@ -42,13 +42,13 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            Layer.HUD.camera.x = Page.camOffset;
+            Layer.HUD.camera.x = camOffset;
             backgroundColor = new Color(8, 12, 13);
             _font = new BitmapFont("biosFont", 8);
             HUD.AddCornerControl(HUDCorner.BottomLeft, "@SELECT@SELECT");
             HUD.AddCornerControl(HUDCorner.BottomRight, "@CANCEL@BACK");
             CategoryGrid categoryGrid = new CategoryGrid(12f, 20f, null, this);
-            Level.Add(categoryGrid);
+            Add(categoryGrid);
             categoryGrid.AddStrip(new StripInfo(false)
             {
                 cards = {

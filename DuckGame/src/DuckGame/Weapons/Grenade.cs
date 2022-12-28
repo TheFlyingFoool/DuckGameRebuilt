@@ -36,8 +36,10 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 1;
-            _ammoType = new ATShrapnel();
-            _ammoType.penetration = 0.4f;
+            _ammoType = new ATShrapnel
+            {
+                penetration = 0.4f
+            };
             _type = "gun";
             _sprite = new SpriteMap(nameof(grenade), 16, 16);
             graphic = _sprite;
@@ -54,8 +56,8 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            gr = Grenade.grenade;
-            ++Grenade.grenade;
+            gr = grenade;
+            ++grenade;
         }
 
         public override void OnNetworkBulletsFired(Vec2 pos)

@@ -5,11 +5,9 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
-using Microsoft.Xna.Framework;
 using System;
 using System.Diagnostics;
 using System.Globalization;
-using System.Windows.Forms;
 using XnaToFna;
 
 namespace DuckGame
@@ -17,7 +15,7 @@ namespace DuckGame
     public class Main : MonoMain
     {
 
-        //public static bool isDemo = false;
+        public static bool isDemo = false;
         public static DuckGameEditor editor;
         public static string lastLevel = "";
         public static string SpecialCode = "";
@@ -121,31 +119,31 @@ namespace DuckGame
             UIInviteMenu.Initialize();
             LevelGenerator.Initialize();
             DuckFile.InitializeMojis();
-            Main.ResetMatchStuff();
+            ResetMatchStuff();
             DuckFile._flaggedForBackup = false;
             foreach (Profile profile in Profiles.active)
                 profile.RecordPreviousStats();
-            Main.editor = new DuckGameEditor();
+            editor = new DuckGameEditor();
             Input.devicesChanged = false;
             TeamSelect2.ControllerLayoutsChanged();
             //Main.SetPurchaseDetails(9.99f, "USD");
-            if (Main.connectID != 0UL)
+            if (connectID != 0UL)
             {
-                Main.SpecialCode = "Joining lobby on startup (" + Main.connectID.ToString() + ")";
+                SpecialCode = "Joining lobby on startup (" + connectID.ToString() + ")";
                 NCSteam.PrepareProfilesForJoin();
-                NCSteam.inviteLobbyID = Main.connectID;
-                Level.current = new JoinServer(Main.connectID, MonoMain.lobbyPassword);
+                NCSteam.inviteLobbyID = connectID;
+                Level.current = new JoinServer(connectID, lobbyPassword);
             }
             else if (Program.lanjoiner)
             {
-                Main.SpecialCode = "Joining lobby on startup (127.0.0.1:1337)";
+                SpecialCode = "Joining lobby on startup (127.0.0.1:1337)";
                 NCSteam.PrepareProfilesForJoin();
                 //NCSteam.inviteLobbyID = Main.connectID;
                 Level.current = new JoinServer("127.0.0.1:1337");
             }
             else if (Level.current == null)
             {
-                if (MonoMain.networkDebugger)
+                if (networkDebugger)
                 {
                     Level.core.currentLevel = new NetworkDebugger(startLayer: Layer.core);
                     Layer.core = new LayerCore();
@@ -158,21 +156,37 @@ namespace DuckGame
                 {
                     if (startInEditor)
                     {
-                        Level.current = Main.editor;
+                        Level.current = editor;
                     }
                     else if (Program.testServer)
                     {
-                        TitleScreen ts = new TitleScreen();
-                        Level.current = ts;
-                        ts.enterMultiplayer = true;
+                        new TitleScreen().Initialize();
+                        for (int i = 1; i < Teams.all.Count; i++)
+                        {
+                            Teams.all[i].ClearProfiles();
+                        }
+                        Level.current = new TeamSelect2() { sign = true };
                     }
-                    else if (MonoMain.startInLobby)
+                    else if (startInLobby)
                     {
-                        TitleScreen ts = new TitleScreen();
-                        Level.current = ts;
-                        ts.enterMultiplayer = true;
+                        new TitleScreen().Initialize();
+                        for (int i = 1; i < Teams.all.Count; i++)
+                        {
+                            Teams.all[i].ClearProfiles();
+                        }
+                        Level.current = new TeamSelect2() { sign = true };
+
                     }
-                    else if (!Program.intro || MonoMain.noIntro)
+                    else if (startInArcade)
+                    {
+                        new TitleScreen().Initialize();
+                        for (int i = 1; i < Teams.all.Count; i++)
+                        {
+                            Teams.all[i].ClearProfiles();
+                        }
+                        Level.current = new ArcadeLevel(DuckGame.Content.GetLevelID("arcade", LevelLocation.Content)) { sign = true };
+                    }
+                    else if (!Program.intro || noIntro)
                     {
                         Level.current = (new TitleScreen());
                     }
@@ -184,15 +198,31 @@ namespace DuckGame
                 }
             }
             _font = new BitmapFont("biosFont", 8);
+            DiscordRichPresence.whenGameStarted = DateTime.UtcNow;
             if (DGRSettings.S_RPC)
             {
                 DiscordRichPresence.Initialize();
             }
             ModLoader.Start();
         }
-
+        public RainbowConstant rbc = new RainbowConstant();
         protected override void OnUpdate()
         {
+            if (Program.nikogay)
+            {
+                rbc.Update(0.1f);
+                Color c = rbc.value;
+                int st = rbc.stage;
+                Colors.Rainbow = new Color[12];
+                for (int i = 0; i < 12; i++)
+                {
+                    Colors.Rainbow[i] = rbc.value;
+                    rbc.Update(0.2f);
+                }
+                rbc.stage = st;
+                rbc.value = c;
+            }
+
             if (DevConsole.startupCommands.Count > 0)
             {
                 DevConsole.RunCommand(DevConsole.startupCommands[0]);
@@ -206,20 +236,20 @@ namespace DuckGame
             DamageManager.Update();
             if (!Network.isActive)
                 NetRand.generator = Rando.generator;
-            if (joinedLobby || Network.isActive || !Steam.lobbySearchComplete)
-                return;
-            if (Steam.lobbySearchResult != null)
-            {
-                Network.JoinServer("", 0, Steam.lobbySearchResult.id.ToString());
-                joinedLobby = true;
-            }
-            else
-            {
-                User who = Steam.friends.Find(x => x.name == "superjoebob");
-                if (who == null)
-                    return;
-                Steam.SearchForLobby(who);
-            }
+            //if (joinedLobby || Network.isActive || !Steam.lobbySearchComplete)
+            //    return;
+            //if (Steam.lobbySearchResult != null)
+            //{
+            //    Network.JoinServer("", 0, Steam.lobbySearchResult.id.ToString());
+            //    joinedLobby = true;
+            //}
+            //else
+            //{
+            //    User who = Steam.friends.Find(x => x.name == "superjoebob");
+            //    if (who == null)
+            //        return;
+            //    Steam.SearchForLobby(who);
+            //}
         }
         protected override void EndDraw()
         {
@@ -227,7 +257,7 @@ namespace DuckGame
             {
                 base.EndDraw();
             }
-            catch (System.InvalidOperationException Ex) // weird steam overlay sht calls a method it shouldnt doesnt really break anything but does cause a crash, handling it seems fine and FNA discord said the same
+            catch (InvalidOperationException Ex) // weird steam overlay sht calls a method it shouldnt doesnt really break anything but does cause a crash, handling it seems fine and FNA discord said the same
             {
                 /*  DevConsole.Log("error log " + Ex.Message);
                     error log GL_INVALID_ENUM in glMatrixMode

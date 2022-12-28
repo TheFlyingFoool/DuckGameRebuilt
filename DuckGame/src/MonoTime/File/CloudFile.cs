@@ -72,7 +72,7 @@ namespace DuckGame
         public CloudFile(string pCloudPath)
         {
             cloudPath = pCloudPath;
-            localPath = CloudFile.CloudPathToFilePath(pCloudPath);
+            localPath = CloudPathToFilePath(pCloudPath);
             oldCloudPath = pCloudPath.Replace("nq500000_", "nq403216_");
         }
 
@@ -104,20 +104,20 @@ namespace DuckGame
             pLocalPath = pLocalPath.Replace('\\', '/');
             if (pLocalPath[pLocalPath.Length - 1] == '?')
                 return null;
-            foreach (string cloudFolderFilter in CloudFile._cloudFolderFilters)
+            foreach (string cloudFolderFilter in _cloudFolderFilters)
             {
                 if (pLocalPath.StartsWith(cloudFolderFilter))
                     return null;
             }
-            return CloudFile.Get((pLocalPath.EndsWith(".lev") || !flag ? "nq403216_" : "nq500000_") + pLocalPath, pDelete);
+            return Get((pLocalPath.EndsWith(".lev") || !flag ? "nq403216_" : "nq500000_") + pLocalPath, pDelete);
         }
 
         public static CloudFile Get(string pCloudPath, bool pDelete = false)
         {
             if (pDelete)
-                CloudFile._index.Remove(pCloudPath);
+                _index.Remove(pCloudPath);
             CloudFile cloudFile;
-            if (!CloudFile._index.TryGetValue(pCloudPath, out cloudFile))
+            if (!_index.TryGetValue(pCloudPath, out cloudFile))
             {
                 if (!pDelete)
                 {
@@ -134,7 +134,7 @@ namespace DuckGame
                     if (flag1 && !flag2 && Steam.FileExists(pCloudPath.Replace("nq403216_", "nq500000_")))
                         return null;
                 }
-                string filePath = CloudFile.CloudPathToFilePath(pCloudPath);
+                string filePath = CloudPathToFilePath(pCloudPath);
                 cloudFile = new CloudFile(pCloudPath, filePath);
                 if (System.IO.File.Exists(filePath))
                     cloudFile.localDate = System.IO.File.GetLastWriteTime(filePath);

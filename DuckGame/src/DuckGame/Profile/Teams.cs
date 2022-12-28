@@ -19,39 +19,39 @@ namespace DuckGame
 
         public static TeamsCore core
         {
-            get => Teams._core;
-            set => Teams._core = value;
+            get => _core;
+            set => _core = value;
         }
 
-        public static SpriteMap hats => Teams._core.hats;
+        public static SpriteMap hats => _core.hats;
 
-        public static Team Player1 => Teams._core.teams[0];
+        public static Team Player1 => _core.teams[0];
 
-        public static Team Player2 => Teams._core.teams[1];
+        public static Team Player2 => _core.teams[1];
 
-        public static Team Player3 => Teams._core.teams[2];
+        public static Team Player3 => _core.teams[2];
 
-        public static Team Player4 => Teams._core.teams[3];
+        public static Team Player4 => _core.teams[3];
 
-        public static Team Player5 => Teams._core.teams[4];
+        public static Team Player5 => _core.teams[4];
 
-        public static Team Player6 => Teams._core.teams[5];
+        public static Team Player6 => _core.teams[5];
 
-        public static Team Player7 => Teams._core.teams[6];
+        public static Team Player7 => _core.teams[6];
 
-        public static Team Player8 => Teams._core.teams[7];
+        public static Team Player8 => _core.teams[7];
 
-        public static Team NullTeam => Teams._core.nullTeam;
+        public static Team NullTeam => _core.nullTeam;
 
-        public static int numTeams => Teams._core.all.Count;
+        public static int numTeams => _core.all.Count;
 
-        public static Team GetTeam(string name) => Teams._core.all.FirstOrDefault<Team>(x => x.name == name) ?? Teams._core.teams[8];
+        public static Team GetTeam(string name) => _core.all.FirstOrDefault(x => x.name == name) ?? _core.teams[8];
 
         public static int IndexOf(Team t)
         {
-            if (Network.isActive && Teams._core.extraTeams.Contains(t))
-                return DuckNetwork.localProfile.customTeamIndexOffset + Teams._core.extraTeams.IndexOf(t);
-            return t.owner != null ? t.owner.IndexOfCustomTeam(t) : Teams._core.all.IndexOf(t);
+            if (Network.isActive && _core.extraTeams.Contains(t))
+                return DuckNetwork.localProfile.customTeamIndexOffset + _core.extraTeams.IndexOf(t);
+            return t.owner != null ? t.owner.IndexOfCustomTeam(t) : _core.all.IndexOf(t);
         }
 
         public static Team ParseFromIndex(ushort pIndex)
@@ -61,18 +61,18 @@ namespace DuckGame
             {
                 if (pIndex >= 0)
                 {
-                    if (pIndex < Teams.kCustomOffset)
+                    if (pIndex < kCustomOffset)
                     {
-                        fromIndex = Teams.all[pIndex];
+                        fromIndex = all[pIndex];
                     }
                     else
                     {
-                        int index = (pIndex - Teams.kCustomOffset) / Teams.kCustomSpread;
+                        int index = (pIndex - kCustomOffset) / kCustomSpread;
                         if (index >= 0)
                         {
                             if (index < DuckNetwork.profilesFixedOrder.Count)
                             {
-                                int pIndex1 = (pIndex - Teams.kCustomOffset) % Teams.kCustomSpread;
+                                int pIndex1 = (pIndex - kCustomOffset) % kCustomSpread;
                                 fromIndex = DuckNetwork.profilesFixedOrder[index].GetCustomTeam((ushort)pIndex1);
                             }
                         }
@@ -88,7 +88,7 @@ namespace DuckGame
         public static int CurrentGameTeamIndex(Team t)
         {
             List<Team> teamList = new List<Team>();
-            foreach (Team team in Teams.active)
+            foreach (Team team in active)
             {
                 if (team.activeProfiles.Count > 1)
                     teamList.Add(team);
@@ -96,9 +96,9 @@ namespace DuckGame
             return teamList.IndexOf(t);
         }
 
-        public static List<Team> all => Teams._core.all;
+        public static List<Team> all => _core.all;
 
-        public static List<Team> allStock => Teams._core.allStock;
+        public static List<Team> allStock => _core.allStock;
 
         public static List<Team> allRandomized
         {
@@ -122,9 +122,9 @@ namespace DuckGame
             get
             {
                 List<Team> active = new List<Team>();
-                foreach (Team team in Teams.all)
+                foreach (Team team in all)
                 {
-                    if (team.activeProfiles.Where<Profile>(x => x.slotType != SlotType.Spectator).Count<Profile>() > 0)
+                    if (team.activeProfiles.Where(x => x.slotType != SlotType.Spectator).Count() > 0)
                         active.Add(team);
                 }
                 return active;
@@ -136,7 +136,7 @@ namespace DuckGame
             get
             {
                 List<Team> winning = new List<Team>();
-                foreach (Team team in Teams.all)
+                foreach (Team team in all)
                 {
                     if (team.activeProfiles.Count > 0)
                     {
@@ -153,20 +153,20 @@ namespace DuckGame
             }
         }
 
-        public static void AddExtraTeam(Team t) => Teams._core.extraTeams.Add(t);
+        public static void AddExtraTeam(Team t) => _core.extraTeams.Add(t);
 
         public static void Initialize()
         {
-            if (Teams._core != null)
+            if (_core != null)
                 return;
-            Teams._core = new TeamsCore();
-            Teams._core.Initialize();
+            _core = new TeamsCore();
+            _core.Initialize();
         }
 
         public static void PostInitialize()
         {
             foreach (Team deserializedTeam in Team.deserializedTeams)
-                Teams.AddExtraTeam(deserializedTeam);
+                AddExtraTeam(deserializedTeam);
         }
     }
 }

@@ -50,7 +50,7 @@ namespace DuckGame
         public static bool doingTempSave = false;
         public static byte[] generatePreviewBytes;
         public static bool renderingToTarget = false;
-        private static Dictionary<System.Type, string> _extensionList = new Dictionary<System.Type, string>()
+        private static Dictionary<Type, string> _extensionList = new Dictionary<Type, string>()
     {
       {
         typeof (Tex2D),
@@ -89,7 +89,7 @@ namespace DuckGame
         public static LevelData GetLevel(string guid, LevelLocation location = LevelLocation.Any)
         {
             List<LevelData> list;
-            if (guid != null && DuckGame.Content._levels.TryGetValue(guid, out list))
+            if (guid != null && _levels.TryGetValue(guid, out list))
             {
                 foreach (LevelData level in list)
                 {
@@ -103,23 +103,23 @@ namespace DuckGame
         public static List<LevelData> GetAllLevels(string guid)
         {
             List<LevelData> list;
-            return DuckGame.Content._levels.TryGetValue(guid, out list) ? list : new List<LevelData>();
+            return _levels.TryGetValue(guid, out list) ? list : new List<LevelData>();
         }
 
         public static List<LevelData> GetAllLevels()
         {
             List<LevelData> allLevels = new List<LevelData>();
-            foreach (KeyValuePair<string, List<LevelData>> level in (MultiMap<string, LevelData, List<LevelData>>)DuckGame.Content._levels)
+            foreach (KeyValuePair<string, List<LevelData>> level in (MultiMap<string, LevelData, List<LevelData>>)_levels)
                 allLevels.AddRange(level.Value);
             return allLevels;
         }
 
         public static void MapLevel(string lev, LevelData dat, LevelLocation location)
         {
-            lock (DuckGame.Content._levels)
+            lock (_levels)
             {
                 List<LevelData> list;
-                if (DuckGame.Content._levels.TryGetValue(lev, out list))
+                if (_levels.TryGetValue(lev, out list))
                 {
                     LevelData levelData1 = null;
                     foreach (LevelData levelData2 in list)
@@ -134,15 +134,15 @@ namespace DuckGame
                         list.Remove(levelData1);
                 }
                 dat.SetLocation(location);
-                DuckGame.Content._levels.Add(lev, dat);
+                _levels.Add(lev, dat);
             }
         }
 
-        public static List<MTEffect> effectList => DuckGame.Content._effectList;
+        public static List<MTEffect> effectList => _effectList;
 
-        public static Dictionary<string, Tex2D> textures => DuckGame.Content._textures;
+        public static Dictionary<string, Tex2D> textures => _textures;
 
-        public static List<Tex2D> textureList => DuckGame.Content._textureList;
+        public static List<Tex2D> textureList => _textureList;
 
         private static void PreviewThread()
         {
@@ -151,69 +151,69 @@ namespace DuckGame
             LayerCore core = Layer.core;
             try
             {
-                DuckGame.Content.renderingPreview = true;
-                if (!DuckGame.Content._previewBackground)
+                renderingPreview = true;
+                if (!_previewBackground)
                     Thing.skipLayerAdding = true;
                 XMLLevel xmlLevel;
-                if (DuckGame.Content._previewLevelData == null)
+                if (_previewLevelData == null)
                 {
-                    xmlLevel = new XMLLevel(DuckGame.Content._previewPath);
+                    xmlLevel = new XMLLevel(_previewPath);
                 }
                 else
                 {
-                    xmlLevel = new XMLLevel(DuckGame.Content._previewLevelData);
-                    DuckGame.Content._previewLevelData = null;
+                    xmlLevel = new XMLLevel(_previewLevelData);
+                    _previewLevelData = null;
                 }
-                if (DuckGame.Content.cancelPreview)
+                if (cancelPreview)
                     return;
-                DuckGame.Content.previewLevel = xmlLevel;
-                DuckGame.Content.previewLevel.ignoreVisibility = true;
-                Level.skipInitialize = !DuckGame.Content._previewBackground;
-                if (!DuckGame.Content._previewBackground)
-                    DuckGame.Content.previewLevel.isPreview = true;
-                DuckGame.Content._previewLayerCore = null;
-                if (DuckGame.Content._previewBackground)
+                previewLevel = xmlLevel;
+                previewLevel.ignoreVisibility = true;
+                Level.skipInitialize = !_previewBackground;
+                if (!_previewBackground)
+                    previewLevel.isPreview = true;
+                _previewLayerCore = null;
+                if (_previewBackground)
                 {
-                    Layer.core = DuckGame.Content._previewLayerCore = new LayerCore();
+                    Layer.core = _previewLayerCore = new LayerCore();
                     Layer.core.InitializeLayers();
                 }
                 Level.core.currentLevel = previewLevel;
                 Level.activeLevel = previewLevel;
-                DuckGame.Content.previewLevel.Initialize();
+                previewLevel.Initialize();
                 Level.activeLevel = activeLevel;
                 Level.core.currentLevel = currentLevel;
-                if (DuckGame.Content.cancelPreview)
+                if (cancelPreview)
                     return;
                 Thing.skipLayerAdding = false;
                 Level.skipInitialize = false;
-                DuckGame.Content.previewLevel.CalculateBounds();
-                DuckGame.Content._previewCamera = DuckGame.Content.customPreviewWidth == 0 ? new Camera(0f, 0f, 1280f, 1280f * DuckGame.Graphics.aspect) : new Camera(0f, 0f, customPreviewWidth, customPreviewHeight);
-                Vec2 vec2 = (DuckGame.Content.previewLevel.topLeft + DuckGame.Content.previewLevel.bottomRight) / 2f;
-                if (DuckGame.Content.cancelPreview)
+                previewLevel.CalculateBounds();
+                _previewCamera = customPreviewWidth == 0 ? new Camera(0f, 0f, 1280f, 1280f * Graphics.aspect) : new Camera(0f, 0f, customPreviewWidth, customPreviewHeight);
+                Vec2 vec2 = (previewLevel.topLeft + previewLevel.bottomRight) / 2f;
+                if (cancelPreview)
                     return;
-                DuckGame.Content._previewCamera.width /= 2f;
-                DuckGame.Content._previewCamera.height /= 2f;
-                DuckGame.Content._previewCamera.center = !(DuckGame.Content.customPreviewCenter != Vec2.Zero) ? vec2 : DuckGame.Content.customPreviewCenter;
-                DuckGame.Content.readyToRenderPreview = true;
-                if (DuckGame.Content._previewThread != null)
+                _previewCamera.width /= 2f;
+                _previewCamera.height /= 2f;
+                _previewCamera.center = !(customPreviewCenter != Vec2.Zero) ? vec2 : customPreviewCenter;
+                readyToRenderPreview = true;
+                if (_previewThread != null)
                 {
-                    while (DuckGame.Content.readyToRenderPreview)
+                    while (readyToRenderPreview)
                     {
-                        if (DuckGame.Content.cancelPreview)
+                        if (cancelPreview)
                             return;
                     }
                 }
                 //DuckGame.Content.previewRendering = false;
-                DuckGame.Content.renderingPreview = false;
+                renderingPreview = false;
             }
             catch (Exception ex)
             {
                 Program.LogLine(ex.ToString());
-                DuckGame.Content.renderingPreview = false;
+                renderingPreview = false;
                 Thing.skipLayerAdding = false;
                 Level.skipInitialize = false;
             }
-            if (!DuckGame.Content._previewBackground)
+            if (!_previewBackground)
                 return;
             Level.activeLevel = activeLevel;
             Level.core.currentLevel = currentLevel;
@@ -222,12 +222,12 @@ namespace DuckGame
 
         private static void DoPreviewRender(bool pSaveMetadata)
         {
-            MTSpriteBatch screen = DuckGame.Graphics.screen;
-            DuckGame.Graphics.screen = DuckGame.Content._previewBatch;
-            Viewport viewport = DuckGame.Graphics.viewport;
-            RenderTarget2D currentRenderTarget = DuckGame.Graphics.currentRenderTarget;
-            DuckGame.Graphics.SetRenderTarget(DuckGame.Content._currentPreviewTarget);
-            DuckGame.Graphics.viewport = new Viewport(0, 0, DuckGame.Content._currentPreviewTarget.width, DuckGame.Content._currentPreviewTarget.height);
+            MTSpriteBatch screen = Graphics.screen;
+            Graphics.screen = _previewBatch;
+            Viewport viewport = Graphics.viewport;
+            RenderTarget2D currentRenderTarget = Graphics.currentRenderTarget;
+            Graphics.SetRenderTarget(_currentPreviewTarget);
+            Graphics.viewport = new Viewport(0, 0, _currentPreviewTarget.width, _currentPreviewTarget.height);
             string str1 = Custom.data[CustomType.Block][0];
             if (Custom.previewData[CustomType.Block][0] != null)
                 Custom.ApplyCustomData(Custom.previewData[CustomType.Block][0].GetTileData(), 0, CustomType.Block);
@@ -259,26 +259,26 @@ namespace DuckGame
             bool pStrange = true;
             bool pArcade = false;
             Dictionary<string, int> pInvalidData = new Dictionary<string, int>();
-            if (DuckGame.Content._previewBackground)
+            if (_previewBackground)
             {
                 Level activeLevel = Level.activeLevel;
                 Level currentLevel = Level.core.currentLevel;
                 LayerCore core = Layer.core;
-                if (DuckGame.Content._previewLayerCore != null)
-                    Layer.core = DuckGame.Content._previewLayerCore;
+                if (_previewLayerCore != null)
+                    Layer.core = _previewLayerCore;
                 Level.activeLevel = previewLevel;
                 Level.core.currentLevel = previewLevel;
                 try
                 {
-                    DuckGame.Graphics.defaultRenderTarget = DuckGame.Content._currentPreviewTarget;
+                    Graphics.defaultRenderTarget = _currentPreviewTarget;
                     Layer.HUD.visible = false;
-                    DuckGame.Content.previewLevel.camera = DuckGame.Content._previewCamera;
-                    DuckGame.Content.previewLevel.simulatePhysics = false;
-                    DuckGame.Content.previewLevel.DoUpdate();
-                    DuckGame.Content.previewLevel.DoUpdate();
-                    DuckGame.Content.previewLevel.DoDraw();
+                    previewLevel.camera = _previewCamera;
+                    previewLevel.simulatePhysics = false;
+                    previewLevel.DoUpdate();
+                    previewLevel.DoUpdate();
+                    previewLevel.DoDraw();
                     Layer.HUD.visible = true;
-                    DuckGame.Graphics.defaultRenderTarget = null;
+                    Graphics.defaultRenderTarget = null;
                     Level.activeLevel = activeLevel;
                     Level.core.currentLevel = currentLevel;
                     Layer.core = core;
@@ -286,7 +286,7 @@ namespace DuckGame
                 catch (Exception ex)
                 {
                     Layer.HUD.visible = true;
-                    DuckGame.Graphics.defaultRenderTarget = null;
+                    Graphics.defaultRenderTarget = null;
                     Level.activeLevel = activeLevel;
                     Level.core.currentLevel = currentLevel;
                     Layer.core = core;
@@ -295,9 +295,9 @@ namespace DuckGame
             }
             else
             {
-                DuckGame.Graphics.Clear(Color.Black);
-                DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, DuckGame.Content._previewCamera.getMatrix());
-                foreach (Thing thing in DuckGame.Content.previewLevel.things)
+                Graphics.Clear(Color.Black);
+                Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, _previewCamera.getMatrix());
+                foreach (Thing thing in previewLevel.things)
                 {
                     if (thing.layer == Layer.Game || thing.layer == Layer.Blocks || thing.layer == null)
                         thing.Draw();
@@ -323,16 +323,16 @@ namespace DuckGame
                                 ++pInvalidData[thing.editorName];
                         }
                     }
-                    DuckGame.Graphics.material = null;
+                    Graphics.material = null;
                 }
-                if (DuckGame.Content.previewLevel.things.Count == 1)
+                if (previewLevel.things.Count == 1)
                 {
-                    ImportMachine importMachine = DuckGame.Content.previewLevel.things.First<Thing>() as ImportMachine;
+                    ImportMachine importMachine = previewLevel.things.First() as ImportMachine;
                 }
-                DuckGame.Graphics.screen.End();
+                Graphics.screen.End();
             }
-            DuckGame.Graphics.screen = screen;
-            DuckGame.Graphics.SetRenderTarget(currentRenderTarget);
+            Graphics.screen = screen;
+            Graphics.SetRenderTarget(currentRenderTarget);
             Custom.data[CustomType.Block][0] = str1;
             Custom.data[CustomType.Block][1] = str2;
             Custom.data[CustomType.Block][2] = str3;
@@ -342,23 +342,23 @@ namespace DuckGame
             Custom.data[CustomType.Platform][0] = str7;
             Custom.data[CustomType.Platform][1] = str8;
             Custom.data[CustomType.Platform][2] = str9;
-            if (!pSaveMetadata || DuckGame.Content.doingTempSave)
+            if (!pSaveMetadata || doingTempSave)
                 return;
-            LevelMetaData levelMetaData = Editor.ReadLevelMetadata(DuckGame.Content.previewLevel.data);
+            LevelMetaData levelMetaData = Editor.ReadLevelMetadata(previewLevel.data);
             if (levelMetaData == null || levelMetaData.guid == null)
                 return;
-            DuckGame.Content._currentPreviewPair = levelMetaData.SavePreview((Texture2D)_currentPreviewTarget, pInvalidData, pStrange, pChallenge, pArcade);
+            _currentPreviewPair = levelMetaData.SavePreview((Texture2D)_currentPreviewTarget, pInvalidData, pStrange, pChallenge, pArcade);
         }
 
-        public static Thread previewThread => DuckGame.Content._previewThread;
+        public static Thread previewThread => _previewThread;
 
         public static LevelMetaData.PreviewPair GeneratePreview(
           LevelData levelData,
           bool pRefresh = false,
           RenderTarget2D pCustomPreviewTarget = null)
         {
-            DuckGame.Content._previewLevelData = levelData;
-            return DuckGame.Content.GeneratePreview((string)null, pRefresh, pCustomPreviewTarget);
+            _previewLevelData = levelData;
+            return GeneratePreview((string)null, pRefresh, pCustomPreviewTarget);
         }
 
         public static LevelMetaData.PreviewPair GeneratePreview(
@@ -366,17 +366,17 @@ namespace DuckGame
           bool pRefresh = false,
           RenderTarget2D pCustomPreviewTarget = null)
         {
-            if (DuckGame.Content.generatePreviewBytes != null)
+            if (generatePreviewBytes != null)
             {
-                DuckGame.Content._previewLevelData = DuckFile.LoadLevel(DuckGame.Content.generatePreviewBytes);
-                DuckGame.Content.generatePreviewBytes = null;
+                _previewLevelData = DuckFile.LoadLevel(generatePreviewBytes);
+                generatePreviewBytes = null;
             }
             bool flag = false;
             if (pCustomPreviewTarget != null)
                 flag = true;
             else if (!pRefresh && levelPath != null)
             {
-                LevelMetaData levelMetaData = DuckGame.Content._previewLevelData == null ? Editor.ReadLevelMetadata(levelPath) : Editor.ReadLevelMetadata(DuckGame.Content._previewLevelData);
+                LevelMetaData levelMetaData = _previewLevelData == null ? Editor.ReadLevelMetadata(levelPath) : Editor.ReadLevelMetadata(_previewLevelData);
                 if (levelMetaData != null)
                 {
                     LevelMetaData.PreviewPair preview = levelMetaData.LoadPreview();
@@ -385,121 +385,121 @@ namespace DuckGame
                 }
             }
             DevConsole.Log(DCSection.General, "Generating preview data for (" + levelPath + ")...");
-            DuckGame.Content._previewBackground = flag;
-            DuckGame.Content.readyToRenderPreview = false;
-            if (DuckGame.Content._previewThread != null && DuckGame.Content._previewThread.IsAlive)
+            _previewBackground = flag;
+            readyToRenderPreview = false;
+            if (_previewThread != null && _previewThread.IsAlive)
             {
-                DuckGame.Content.cancelPreview = true;
+                cancelPreview = true;
                 int num = 250;
-                while (DuckGame.Content._previewThread.IsAlive)
+                while (_previewThread.IsAlive)
                 {
                     Tasker.RunTasks();
                     Thread.Sleep(2);
                     --num;
                 }
-                DuckGame.Content.readyToRenderPreview = false;
+                readyToRenderPreview = false;
             }
-            DuckGame.Content._previewThread = null;
-            DuckGame.Content.cancelPreview = false;
+            _previewThread = null;
+            cancelPreview = false;
             Thing.skipLayerAdding = false;
             Level.skipInitialize = false;
-            if (DuckGame.Content._previewBatch == null)
-                DuckGame.Content._previewBatch = new MTSpriteBatch(DuckGame.Graphics.device);
-            DuckGame.Content._previewPath = levelPath;
-            DuckGame.Content._currentPreviewTarget = pCustomPreviewTarget == null ? new RenderTarget2D(320, 200) : pCustomPreviewTarget;
-            DuckGame.Content.renderingToTarget = true;
-            DuckGame.Content.renderingPreview = true;
-            DuckGame.Content.readyToRenderPreview = true;
-            DuckGame.Content.PreviewThread();
-            DuckGame.Content.DoPreviewRender(pCustomPreviewTarget == null);
-            DuckGame.Content.renderingPreview = false;
-            DuckGame.Content.readyToRenderPreview = false;
-            DuckGame.Content.renderingToTarget = false;
-            return DuckGame.Content._currentPreviewPair;
+            if (_previewBatch == null)
+                _previewBatch = new MTSpriteBatch(Graphics.device);
+            _previewPath = levelPath;
+            _currentPreviewTarget = pCustomPreviewTarget == null ? new RenderTarget2D(320, 200) : pCustomPreviewTarget;
+            renderingToTarget = true;
+            renderingPreview = true;
+            readyToRenderPreview = true;
+            PreviewThread();
+            DoPreviewRender(pCustomPreviewTarget == null);
+            renderingPreview = false;
+            readyToRenderPreview = false;
+            renderingToTarget = false;
+            return _currentPreviewPair;
         }
 
         public static void SetTextureAtIndex(short index, Tex2D tex)
         {
-            while (index >= DuckGame.Content._textureList.Count)
+            while (index >= _textureList.Count)
             {
-                DuckGame.Content._textureList.Add(null);
-                ++DuckGame.Content._currentTextureIndex;
+                _textureList.Add(null);
+                ++_currentTextureIndex;
             }
-            DuckGame.Content._textureList[index] = tex;
-            DuckGame.Content._texture2DMap[tex.nativeObject] = tex;
-            DuckGame.Content._textures[tex.textureName] = tex;
+            _textureList[index] = tex;
+            _texture2DMap[tex.nativeObject] = tex;
+            _textures[tex.textureName] = tex;
             tex.SetTextureIndex(index);
         }
 
         public static Tex2D AssignTextureIndex(Tex2D tex)
         {
             Tex2D tex2D;
-            DuckGame.Content._texture2DMap.TryGetValue(tex, out tex2D);
+            _texture2DMap.TryGetValue(tex, out tex2D);
             if (tex2D == null)
             {
-                tex.SetTextureIndex(DuckGame.Content._currentTextureIndex);
-                ++DuckGame.Content._currentTextureIndex;
-                DuckGame.Content._textureList.Add(tex);
-                DuckGame.Content._texture2DMap[tex] = tex;
+                tex.SetTextureIndex(_currentTextureIndex);
+                ++_currentTextureIndex;
+                _textureList.Add(tex);
+                _texture2DMap[tex] = tex;
             }
             return tex2D;
         }
 
-        public static Tex2D GetTex2D(object tex) => DuckGame.Content.GetTex2D((Texture2D)tex);
+        public static Tex2D GetTex2D(object tex) => GetTex2D((Texture2D)tex);
 
         public static Tex2D GetTex2D(Texture2D tex)
         {
             if (tex == null)
                 return null;
             Tex2D tex2D;
-            DuckGame.Content._texture2DMap.TryGetValue(tex, out tex2D);
+            _texture2DMap.TryGetValue(tex, out tex2D);
             if (tex2D == null)
             {
-                tex2D = new Tex2D(tex, "", DuckGame.Content._currentTextureIndex);
-                ++DuckGame.Content._currentTextureIndex;
-                DuckGame.Content._textureList.Add(tex2D);
-                DuckGame.Content._texture2DMap[tex] = tex2D;
+                tex2D = new Tex2D(tex, "", _currentTextureIndex);
+                ++_currentTextureIndex;
+                _textureList.Add(tex2D);
+                _texture2DMap[tex] = tex2D;
             }
             return tex2D;
         }
 
         public static void SetEffectAtIndex(short index, MTEffect e)
         {
-            while (index > DuckGame.Content._effectList.Count)
+            while (index > _effectList.Count)
             {
-                DuckGame.Content._effectList.Add(null);
-                ++DuckGame.Content._currentEffectIndex;
+                _effectList.Add(null);
+                ++_currentEffectIndex;
             }
-            DuckGame.Content._effectList[index] = e;
-            DuckGame.Content._effectMap[e.effect] = e;
-            DuckGame.Content._effects[e.effectName] = e;
+            _effectList[index] = e;
+            _effectMap[e.effect] = e;
+            _effects[e.effectName] = e;
             e.SetEffectIndex(index);
         }
 
         public static MTEffect GetMTEffect(Effect e)
         {
             MTEffect mtEffect;
-            DuckGame.Content._effectMap.TryGetValue(e, out mtEffect);
+            _effectMap.TryGetValue(e, out mtEffect);
             if (mtEffect == null)
             {
-                mtEffect = new MTEffect(e, "", DuckGame.Content._currentEffectIndex);
-                ++DuckGame.Content._currentEffectIndex;
-                DuckGame.Content._effectList.Add(mtEffect);
-                DuckGame.Content._effectMap[e] = mtEffect;
+                mtEffect = new MTEffect(e, "", _currentEffectIndex);
+                ++_currentEffectIndex;
+                _effectList.Add(mtEffect);
+                _effectMap[e] = mtEffect;
             }
             return mtEffect;
         }
 
-        public static Tex2D GetTex2DFromIndex(short index) => DuckGame.Content._textureList[index];
+        public static Tex2D GetTex2DFromIndex(short index) => _textureList[index];
 
-        public static MTEffect GetMTEffectFromIndex(short index) => index < 0 ? null : DuckGame.Content._effectList[index];
+        public static MTEffect GetMTEffectFromIndex(short index) => index < 0 ? null : _effectList[index];
 
         public static List<string> GetFiles<T>(string path)
         {
             List<string> files = new List<string>();
             string ext;
-            if (DuckGame.Content._extensionList.TryGetValue(typeof(T), out ext))
-                DuckGame.Content.GetFilesInternal<T>(path, files, ext);
+            if (_extensionList.TryGetValue(typeof(T), out ext))
+                GetFilesInternal<T>(path, files, ext);
             return files;
         }
 
@@ -507,58 +507,58 @@ namespace DuckGame
         {
             foreach (string file in DuckFile.GetFiles(path, ext))
                 files.Add(file);
-            foreach (string directory in DuckGame.Content.GetDirectories(path))
-                DuckGame.Content.GetFilesInternal<T>(directory, files, ext);
+            foreach (string directory in GetDirectories(path))
+                GetFilesInternal<T>(directory, files, ext);
             return files;
         }
 
         private static void SearchDirLevels(string dir, LevelLocation location)
         {
-            foreach (string path in location == LevelLocation.Content ? DuckGame.Content.GetFiles(dir) : DuckFile.GetFiles(dir, "*.*"))
-                DuckGame.Content.ProcessLevel(path, location);
-            foreach (string dir1 in location == LevelLocation.Content ? DuckGame.Content.GetDirectories(dir) : DuckFile.GetDirectories(dir))
-                DuckGame.Content.SearchDirLevels(dir1, location);
+            foreach (string path in location == LevelLocation.Content ? GetFiles(dir) : DuckFile.GetFiles(dir, "*.*"))
+                ProcessLevel(path, location);
+            foreach (string dir1 in location == LevelLocation.Content ? GetDirectories(dir) : DuckFile.GetDirectories(dir))
+                SearchDirLevels(dir1, location);
         }
 
-        public static void ReloadLevels(string s) => DuckGame.Content.SearchDirLevels("Content/levels/" + s, LevelLocation.Content);
+        public static void ReloadLevels(string s) => SearchDirLevels("Content/levels/" + s, LevelLocation.Content);
 
         private static void SearchDirTextures(string dir, bool reverse = false)
         {
             if (reverse)
             {
-                foreach (string path in DG.Reverse<string>(DuckGame.Content.GetFiles(dir)))
-                    DuckGame.Content.ProcessTexture(path);
-                foreach (string dir1 in DG.Reverse<string>(DuckGame.Content.GetDirectories(dir)))
+                foreach (string path in DG.Reverse(GetFiles(dir)))
+                    ProcessTexture(path);
+                foreach (string dir1 in DG.Reverse(GetDirectories(dir)))
                 {
                     if (!dir1.EndsWith("Audio") && !dir1.EndsWith("Shaders"))
-                        DuckGame.Content.SearchDirTextures(dir1, reverse);
+                        SearchDirTextures(dir1, reverse);
                 }
             }
             else
             {
-                foreach (string file in DuckGame.Content.GetFiles(dir))
-                    DuckGame.Content.ProcessTexture(file);
-                foreach (string directory in DuckGame.Content.GetDirectories(dir))
+                foreach (string file in GetFiles(dir))
+                    ProcessTexture(file);
+                foreach (string directory in GetDirectories(dir))
                 {
                     if (!directory.EndsWith("Audio") && !directory.EndsWith("Shaders"))
-                        DuckGame.Content.SearchDirTextures(directory);
+                        SearchDirTextures(directory);
                 }
             }
         }
 
         private static void SearchDirEffects(string dir)
         {
-            foreach (string file in DuckGame.Content.GetFiles(dir))
-                DuckGame.Content.ProcessEffect(file);
-            foreach (string directory in DuckGame.Content.GetDirectories(dir))
-                DuckGame.Content.SearchDirEffects(directory);
+            foreach (string file in GetFiles(dir))
+                ProcessEffect(file);
+            foreach (string directory in GetDirectories(dir))
+                SearchDirEffects(directory);
         }
 
         public static string GetLevelID(string path, LevelLocation loc = LevelLocation.Content)
         {
             if (!path.EndsWith(".lev"))
                 path += ".lev";
-            foreach (KeyValuePair<string, List<LevelData>> level in (MultiMap<string, LevelData, List<LevelData>>)DuckGame.Content._levels)
+            foreach (KeyValuePair<string, List<LevelData>> level in (MultiMap<string, LevelData, List<LevelData>>)_levels)
             {
                 foreach (LevelData levelData in level.Value)
                 {
@@ -566,17 +566,31 @@ namespace DuckGame
                         return levelData.metaData.guid;
                 }
             }
-            string path1 = DuckGame.Content.path + "/levels/" + path;
+            string path1 = Content.path + "/levels/" + path;
             if (!path.EndsWith(".lev"))
                 path += ".lev";
             LevelData dat = DuckFile.LoadLevel(path1);
             if (dat == null)
                 return "";
-            DuckGame.Content.MapLevel(dat.metaData.guid, dat, loc);
+            MapLevel(dat.metaData.guid, dat, loc);
             return dat.metaData.guid;
         }
-
-        public static List<string> GetLevels(string dir, LevelLocation location) => DuckGame.Content.GetLevels(dir, location, true, false, false);
+        public static string ReloadAndGetLevelID(string path, LevelLocation loc = LevelLocation.Content)
+        {
+            if (!path.EndsWith(".lev"))
+                path += ".lev";
+            if (_levels.ContainsKey(path))
+            {
+                _levels.Remove(path);
+            }
+            string path1 = Content.path + "/levels/" + path;
+            LevelData dat = DuckFile.LoadLevel(path1);
+            if (dat == null)
+                return "";
+            MapLevel(dat.metaData.guid, dat, loc);
+            return dat.metaData.guid;
+        }
+        public static List<string> GetLevels(string dir, LevelLocation location) => GetLevels(dir, location, true, false, false);
 
         public static List<string> GetLevels(
           string dir,
@@ -588,7 +602,7 @@ namespace DuckGame
           bool pSkipFilters = false)
         {
             List<string> levels = new List<string>();
-            foreach (KeyValuePair<string, List<LevelData>> level in (MultiMap<string, LevelData, List<LevelData>>)DuckGame.Content._levels)
+            foreach (KeyValuePair<string, List<LevelData>> level in (MultiMap<string, LevelData, List<LevelData>>)_levels)
             {
                 foreach (LevelData levelData in level.Value)
                 {
@@ -611,14 +625,14 @@ namespace DuckGame
                Main.SpecialCode = "Loading Level " + path != null ? path : "null";
                if (!path.EndsWith(".lev"))
                    return;
-               DuckGame.Content.LoadLevelData(path, location);
+               LoadLevelData(path, location);
                ++MonoMain.loadyBits;
            }
            catch (Exception ex)
            {
-               DuckGame.Content.LogLevelFailure(ex.ToString());
+               LogLevelFailure(ex.ToString());
            }
-       }));
+       },null, "Loading Level"));
 
         private static LevelData LoadLevelData(string pPath, LevelLocation pLocation)
         {
@@ -635,7 +649,7 @@ namespace DuckGame
             pPath = pPath.Substring(0, pPath.Length - 4);
             pPath.Substring(pPath.IndexOf("/levels/") + 8);
             if (dat.metaData.guid != null)
-                DuckGame.Content.MapLevel(dat.metaData.guid, dat, pLocation);
+                MapLevel(dat.metaData.guid, dat, pLocation);
             return dat;
         }
 
@@ -658,8 +672,8 @@ namespace DuckGame
             if (path.StartsWith("Content/"))
                 path = path.Substring(8);
             path = path.Substring(0, path.Length - 4);
-            MonoMain.loadMessage = "Loading Textures (" + path + ")";
-            MonoMain.lazyLoadActions.Enqueue(() => DuckGame.Content.Load<Tex2D>(path));
+            MonoMain.NloadMessage = "Loading Textures (" + path + ")";
+            MonoMain.lazyLoadActions.Enqueue(() => Load<Tex2D>(path));
             ++MonoMain.lazyLoadyBits;
         }
 
@@ -673,7 +687,7 @@ namespace DuckGame
                 if (path.StartsWith("Content/"))
                     path = path.Substring(8);
                 path = path.Substring(0, path.Length - 4);
-                DuckGame.Content.Load<MTEffect>(path);
+                Load<MTEffect>(path);
                 ++MonoMain.lazyLoadyBits;
             }
             catch (Exception ex)
@@ -683,19 +697,19 @@ namespace DuckGame
             }
         }
 
-        public static string path => DuckGame.Content._path;
+        public static string path => _path;
 
         public static void InitializeBase(ContentManager manager)
         {
-            DuckGame.Content._base = manager;
-            DuckGame.Content.invalidTexture = DuckGame.Content.Load<Tex2D>("notexture");
-            DuckGame.Content._path = Directory.GetCurrentDirectory() + "/Content/";
+            _base = manager;
+            invalidTexture = Load<Tex2D>("notexture");
+            _path = Directory.GetCurrentDirectory() + "/Content/";
         }
 
         public static void InitializeLevels()
         {
-            MonoMain.loadMessage = "Loading Levels";
-            DuckGame.Content.SearchDirLevels("Content/levels", LevelLocation.Content);
+            MonoMain.NloadMessage = "Loading Levels";
+            SearchDirLevels("Content/levels", LevelLocation.Content);
             if (!Steam.IsInitialized())
                 return;
             //   LoadingAction steamLoad = new LoadingAction();
@@ -726,20 +740,20 @@ namespace DuckGame
         public static Vec2 GetTextureSize(string pName)
         {
             Vec2 zero = Vec2.Zero;
-            return DuckGame.Content._spriteSizeDirectory.TryGetValue(pName, out zero) ? zero : Vec2.Zero;
+            return _spriteSizeDirectory.TryGetValue(pName, out zero) ? zero : Vec2.Zero;
         }
 
         public static void InitializeTextureSizeDictionary()
         {
             try
             {
-                if (!System.IO.File.Exists(DuckFile.contentDirectory + "texture_size_directory.dat"))
+                if (!File.Exists(DuckFile.contentDirectory + "texture_size_directory.dat"))
                     return;
-                foreach (string readAllLine in System.IO.File.ReadAllLines(DuckFile.contentDirectory + "texture_size_directory.dat"))
+                foreach (string readAllLine in File.ReadAllLines(DuckFile.contentDirectory + "texture_size_directory.dat"))
                 {
                     char[] chArray = new char[1] { ',' };
                     string[] strArray = readAllLine.Split(chArray);
-                    DuckGame.Content._spriteSizeDirectory[strArray[0].Trim().Replace('\\', '/')] = new Vec2(Convert.ToSingle(strArray[1]), Convert.ToSingle(strArray[2]));
+                    _spriteSizeDirectory[strArray[0].Trim().Replace('\\', '/')] = new Vec2(Convert.ToSingle(strArray[1]), Convert.ToSingle(strArray[2]));
                 }
             }
             catch (Exception ex)
@@ -750,7 +764,7 @@ namespace DuckGame
         }
         public static Color FromNonPremultiplied(int r, int g, int b, int a)
         {
-            return new Color(r * a / 255, g * a / 255, b * a / 255, a);
+            return new Color((byte)(r * a / 255), (byte)(g * a / 255), (byte)(b * a / 255), (byte)(a));
         }
 
         public static Texture2D SpriteAtlasTextureFromStream(string FilePath, GraphicsDevice device)
@@ -791,17 +805,17 @@ namespace DuckGame
         public static Dictionary<string, Microsoft.Xna.Framework.Rectangle> offests = new Dictionary<string, Microsoft.Xna.Framework.Rectangle>();
         public static void Initialize(bool reverse)
         {
-            MonoMain.loadMessage = "Loading Textures";
+            MonoMain.NloadMessage = "Loading Textures";
 
-            DuckGame.Content.SearchDirTextures("Content/", reverse);
+            SearchDirTextures("Content/", reverse);
         }
 
-        public static void Initialize() => DuckGame.Content.Initialize(false);
+        public static void Initialize() => Initialize(false);
 
         public static void InitializeEffects()
         {
-            MonoMain.loadMessage = "Loading Effects";
-            DuckGame.Content.SearchDirEffects("Content/Shaders");
+            MonoMain.NloadMessage = "Loading Effects";
+            SearchDirEffects("Content/Shaders");
         }
 
         public static string[] GetFiles(string path, string filter = "*.*")
@@ -870,7 +884,7 @@ namespace DuckGame
                 if (!pName.EndsWith(".txt"))
                     pName += ".txt";
                 ParallaxBackground.Definition definition = null;
-                if (DuckGame.Content._parallaxDefinitions.TryGetValue(pName, out definition))
+                if (_parallaxDefinitions.TryGetValue(pName, out definition))
                     return definition;
                 string path = pName;
                 if (!pName.Contains(":"))
@@ -878,8 +892,8 @@ namespace DuckGame
                 string[] strArray1 = null;
                 if (ReskinPack.active.Count > 0)
                     strArray1 = ReskinPack.LoadAsset<string[]>(pName);
-                if (strArray1 == null && System.IO.File.Exists(path))
-                    strArray1 = System.IO.File.ReadAllLines(path);
+                if (strArray1 == null && File.Exists(path))
+                    strArray1 = File.ReadAllLines(path);
                 if (strArray1 != null)
                 {
                     try
@@ -949,21 +963,21 @@ namespace DuckGame
                         Texture2D texture2D = ReskinPack.LoadAsset<Texture2D>(name);
                         if (texture2D != null)
                         {
-                            lock (DuckGame.Content._loadLock)
+                            lock (_loadLock)
                             {
-                                Vec2 textureSize = DuckGame.Content.GetTextureSize(name);
+                                Vec2 textureSize = GetTextureSize(name);
                                 Tex2D tex2D;
                                 if (textureSize != Vec2.Zero && (texture2D.Width != textureSize.x || texture2D.Height != textureSize.y))
-                                    tex2D = new BigBoyTex2D(texture2D, name, DuckGame.Content._currentTextureIndex)
+                                    tex2D = new BigBoyTex2D(texture2D, name, _currentTextureIndex)
                                     {
                                         scaleFactor = (textureSize.x / texture2D.Width)
                                     };
                                 else
-                                    tex2D = new Tex2D(texture2D, name, DuckGame.Content._currentTextureIndex);
-                                ++DuckGame.Content._currentTextureIndex;
-                                DuckGame.Content._textureList.Add(tex2D);
-                                DuckGame.Content._textures[name] = tex2D;
-                                DuckGame.Content._texture2DMap[texture2D] = tex2D;
+                                    tex2D = new Tex2D(texture2D, name, _currentTextureIndex);
+                                ++_currentTextureIndex;
+                                _textureList.Add(tex2D);
+                                _textures[name] = tex2D;
+                                _texture2DMap[texture2D] = tex2D;
                                 return (T)(object)tex2D;
                             }
                         }
@@ -982,24 +996,24 @@ namespace DuckGame
             if (typeof(T) == typeof(Tex2D))
             {
                 Tex2D tex2D = null;
-                lock (DuckGame.Content._textures)
-                    DuckGame.Content._textures.TryGetValue(name, out tex2D);
+                lock (_textures)
+                    _textures.TryGetValue(name, out tex2D);
                 if (tex2D == null)
                 {
                     Texture2D texture2D = null;
                     bool flag = false;
-                    if (MonoMain.moddingEnabled && ModLoader.accessibleMods.Count<Mod>() > 1 && name.Length > 1 && name[1] == ':')
+                    if (MonoMain.moddingEnabled && ModLoader.accessibleMods.Count() > 1 && name.Length > 1 && name[1] == ':')
                         flag = true;
                     if (!flag)
                     {
                         try
                         {
-                            texture2D = DuckGame.Content._base.Load<Texture2D>(name);
+                            texture2D = _base.Load<Texture2D>(name);
                         }
                         catch (Exception ex)
                         {
                             flag = MonoMain.moddingEnabled && ModLoader.modsEnabled;
-                            DuckGame.Content.lastException = ex;
+                            lastException = ex;
                         }
                     }
                     if (flag)
@@ -1020,21 +1034,21 @@ namespace DuckGame
                         }
                         catch (Exception ex)
                         {
-                            DuckGame.Content.lastException = ex;
+                            lastException = ex;
                         }
                     }
                     if (texture2D == null)
                     {
-                        texture2D = (Texture2D)DuckGame.Content.invalidTexture;
+                        texture2D = (Texture2D)invalidTexture;
                         Main.SpecialCode = "Couldn't load texture " + name;
                     }
-                    lock (DuckGame.Content._loadLock)
+                    lock (_loadLock)
                     {
-                        tex2D = new Tex2D(texture2D, name, DuckGame.Content._currentTextureIndex);
-                        ++DuckGame.Content._currentTextureIndex;
-                        DuckGame.Content._textureList.Add(tex2D);
-                        DuckGame.Content._textures[name] = tex2D;
-                        DuckGame.Content._texture2DMap[texture2D] = tex2D;
+                        tex2D = new Tex2D(texture2D, name, _currentTextureIndex);
+                        ++_currentTextureIndex;
+                        _textureList.Add(tex2D);
+                        _textures[name] = tex2D;
+                        _texture2DMap[texture2D] = tex2D;
                     }
                 }
                 return (T)(object)tex2D;
@@ -1042,20 +1056,20 @@ namespace DuckGame
             if (typeof(T) == typeof(MTEffect))
             {
                 MTEffect mtEffect = null;
-                lock (DuckGame.Content._effects)
-                    DuckGame.Content._effects.TryGetValue(name, out mtEffect);
+                lock (_effects)
+                    _effects.TryGetValue(name, out mtEffect);
                 if (mtEffect == null)
                 {
                     Effect effect = null;
-                    lock (DuckGame.Content._loadLock)
-                        effect = DuckGame.Content._base.Load<Effect>(name);
-                    lock (DuckGame.Content._loadLock)
+                    lock (_loadLock)
+                        effect = _base.Load<Effect>(name);
+                    lock (_loadLock)
                     {
-                        mtEffect = new MTEffect(effect, name, DuckGame.Content._currentEffectIndex);
-                        ++DuckGame.Content._currentEffectIndex;
-                        DuckGame.Content._effectList.Add(mtEffect);
-                        DuckGame.Content._effects[name] = mtEffect;
-                        DuckGame.Content._effectMap[effect] = mtEffect;
+                        mtEffect = new MTEffect(effect, name, _currentEffectIndex);
+                        ++_currentEffectIndex;
+                        _effectList.Add(mtEffect);
+                        _effects[name] = mtEffect;
+                        _effectMap[effect] = mtEffect;
                     }
                 }
                 return (T)(object)mtEffect;
@@ -1063,24 +1077,24 @@ namespace DuckGame
             if (typeof(T) == typeof(SoundEffect))
             {
                 SoundEffect soundEffect = null;
-                lock (DuckGame.Content._sounds)
-                    DuckGame.Content._sounds.TryGetValue(name, out soundEffect);
+                lock (_sounds)
+                    _sounds.TryGetValue(name, out soundEffect);
                 if (soundEffect == null)
                 {
                     if (!name.Contains(":") && !name.EndsWith(".wav"))
                     {
-                        lock (DuckGame.Content._loadLock)
+                        lock (_loadLock)
                         {
                             try
                             {
                                 string path = DuckFile.contentDirectory + name + ".wav";
-                                soundEffect = SoundEffect.FromStream(new MemoryStream(System.IO.File.ReadAllBytes(path)));
+                                soundEffect = SoundEffect.FromStream(new MemoryStream(File.ReadAllBytes(path)));
                                 if (soundEffect != null)
                                     soundEffect.file = path;
                             }
                             catch (Exception ex)
                             {
-                                DuckGame.Content.lastException = ex;
+                                lastException = ex;
                             }
                         }
                     }
@@ -1098,7 +1112,7 @@ namespace DuckGame
                 if (soundEffect == null)
                     Main.SpecialCode = "Couldn't load sound (" + soundEffect?.ToString() + ")";
                 else
-                    DuckGame.Content._sounds[name] = soundEffect;
+                    _sounds[name] = soundEffect;
                 return (T)(object)soundEffect;
             }
             if (typeof(T) == typeof(Song))
@@ -1117,7 +1131,7 @@ namespace DuckGame
                 }
                 return default(T);
             }
-            return typeof(T) == typeof(Microsoft.Xna.Framework.Media.Song) ? (T)(object)DuckGame.Content._base.Load<Microsoft.Xna.Framework.Media.Song>(name) : DuckGame.Content._base.Load<T>(name);
+            return typeof(T) == typeof(Microsoft.Xna.Framework.Media.Song) ? (T)(object)_base.Load<Microsoft.Xna.Framework.Media.Song>(name) : _base.Load<T>(name);
         }
     }
 }

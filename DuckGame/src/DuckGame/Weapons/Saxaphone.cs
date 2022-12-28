@@ -1,38 +1,25 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Saxaphone
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
 {
+    // Token: 0x0200052E RID: 1326
     [EditorGroup("Guns|Misc")]
     [BaggedProperty("isFatal", false)]
     [BaggedProperty("previewPriority", true)]
     public class Saxaphone : Gun
     {
-        public StateBinding _notePitchBinding = new StateBinding(nameof(notePitch));
-        public StateBinding _handPitchBinding = new StateBinding(nameof(handPitch));
-        public float notePitch;
-        public float handPitch;
-        private float prevNotePitch;
-        private float hitPitch;
-        private Sound noteSound;
-        private List<InstrumentNote> _notes = new List<InstrumentNote>();
-
-        public Saxaphone(float xval, float yval)
-          : base(xval, yval)
+        // Token: 0x06001E22 RID: 7714 RVA: 0x00142EB8 File Offset: 0x001410B8
+        public Saxaphone(float xval, float yval) : base(xval, yval)
         {
             ammo = 4;
-            _ammoType = new ATLaser();
-            _ammoType.range = 170f;
-            _ammoType.accuracy = 0.8f;
+            _ammoType = new ATLaser
+            {
+                range = 170f,
+                accuracy = 0.8f
+            };
             _type = "gun";
-            graphic = new Sprite("saxaphone");
+            graphic = new Sprite("saxaphone", 0f, 0f);
             center = new Vec2(20f, 18f);
             collisionOffset = new Vec2(-4f, -7f);
             collisionSize = new Vec2(8f, 16f);
@@ -49,21 +36,29 @@ namespace DuckGame
             isFatal = false;
         }
 
-        public override void Initialize() => base.Initialize();
+        // Token: 0x06001E23 RID: 7715 RVA: 0x0001411D File Offset: 0x0001231D
+        public override void Initialize()
+        {
+            base.Initialize();
+        }
 
+        // Token: 0x06001E24 RID: 7716 RVA: 0x0014301C File Offset: 0x0014121C
         public override void Update()
         {
-            if (this.owner is Duck owner)
+            Duck d = owner as Duck;
+            if (d != null)
             {
-                if (isServerForObject && owner.inputProfile != null)
+                if (isServerForObject && d.inputProfile != null)
                 {
-                    handPitch = owner.inputProfile.leftTrigger;
-                    if (owner.inputProfile.hasMotionAxis)
-                        handPitch += owner.inputProfile.motionAxis;
-                    int num = Keyboard.CurrentNote(owner.inputProfile, this);
-                    if (num >= 0)
+                    handPitch = d.inputProfile.leftTrigger;
+                    if (d.inputProfile.hasMotionAxis)
                     {
-                        notePitch = (float)(num / 12.0 + 0.01f);
+                        handPitch += d.inputProfile.motionAxis;
+                    }
+                    int keyboardNote = Keyboard.CurrentNote(d.inputProfile, this);
+                    if (keyboardNote >= 0)
+                    {
+                        notePitch = keyboardNote / 12f + 0.01f;
                         handPitch = notePitch;
                         if (notePitch != prevNotePitch)
                         {
@@ -75,26 +70,39 @@ namespace DuckGame
                             }
                         }
                     }
+                    else if (d.inputProfile.Down(Triggers.Shoot))
+                    {
+                        notePitch = handPitch + 0.01f;
+                    }
                     else
-                        notePitch = !owner.inputProfile.Down("SHOOT") ? 0f : handPitch + 0.01f;
+                    {
+                        notePitch = 0f;
+                    }
                 }
                 if (notePitch != prevNotePitch)
                 {
-                    if (notePitch != 0.0)
+                    if (notePitch != 0f)
                     {
-                        int num = (int)Math.Round(notePitch * 12.0);
-                        if (num < 0)
-                            num = 0;
-                        if (num > 12)
-                            num = 12;
+                        int note = (int)Math.Round((double)(notePitch * 12f));
+                        if (note < 0)
+                        {
+                            note = 0;
+                        }
+                        if (note > 12)
+                        {
+                            note = 12;
+                        }
                         if (noteSound == null)
                         {
                             hitPitch = notePitch;
-                            noteSound = SFX.Play("sax" + Change.ToString(num));
+                            Sound snd = SFX.Play("sax" + Change.ToString(note), 1f, 0f, 0f, false);
+                            noteSound = snd;
                             Level.Add(new MusicNote(barrelPosition.x, barrelPosition.y, barrelVector));
                         }
                         else
-                            noteSound.Pitch = Maths.Clamp((float)((notePitch - hitPitch) * 0.1f), -1f, 1f);
+                        {
+                            noteSound.Pitch = Maths.Clamp((notePitch - hitPitch) * 0.1f, -1f, 1f);
+                        }
                     }
                     else if (noteSound != null)
                     {
@@ -113,9 +121,9 @@ namespace DuckGame
                 }
                 else
                 {
-                    handOffset = new Vec2((float)(5.0 + (1.0 - handPitch) * 2.0), (float)((1.0 - handPitch) * 4.0 - 2.0));
-                    handAngle = (float)((1.0 - handPitch) * 0.04f) * offDir;
-                    _holdOffset = new Vec2((float)(4.0 + handPitch * 2.0), handPitch * 2f);
+                    handOffset = new Vec2(5f + (1f - handPitch) * 2f, -2f + (1f - handPitch) * 4f);
+                    handAngle = (1f - handPitch) * 0.4f * offDir;
+                    _holdOffset = new Vec2(4f + handPitch * 2f, handPitch * 2f);
                     collisionOffset = new Vec2(-1f, -7f);
                     collisionSize = new Vec2(2f, 16f);
                 }
@@ -129,16 +137,43 @@ namespace DuckGame
             base.Update();
         }
 
+        // Token: 0x06001E25 RID: 7717 RVA: 0x00003845 File Offset: 0x00001A45
         public override void OnPressAction()
         {
         }
 
+        // Token: 0x06001E26 RID: 7718 RVA: 0x00003845 File Offset: 0x00001A45
         public override void OnReleaseAction()
         {
         }
 
+        // Token: 0x06001E27 RID: 7719 RVA: 0x00003845 File Offset: 0x00001A45
         public override void Fire()
         {
         }
+
+        // Token: 0x04001DCE RID: 7630
+        public StateBinding _notePitchBinding = new StateBinding("notePitch", -1, false, false);
+
+        // Token: 0x04001DCF RID: 7631
+        public StateBinding _handPitchBinding = new StateBinding("handPitch", -1, false, false);
+
+        // Token: 0x04001DD0 RID: 7632
+        public float notePitch;
+
+        // Token: 0x04001DD1 RID: 7633
+        public float handPitch;
+
+        // Token: 0x04001DD2 RID: 7634
+        private float prevNotePitch;
+
+        // Token: 0x04001DD3 RID: 7635
+        private float hitPitch;
+
+        // Token: 0x04001DD4 RID: 7636
+        private Sound noteSound;
+
+        // Token: 0x04001DD5 RID: 7637
+        private List<InstrumentNote> _notes = new List<InstrumentNote>();
     }
 }

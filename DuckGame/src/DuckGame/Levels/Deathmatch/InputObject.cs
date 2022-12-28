@@ -74,7 +74,7 @@ namespace DuckGame
         public override void Update()
         {
             if (duckProfile != null && duckProfile.connection == DuckNetwork.localConnection)
-                Thing.Fondle(this, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
             if (isServerForObject && inputProfile != null)
             {
                 if (!Network.isServer)

@@ -25,7 +25,7 @@ namespace DuckGame
         {
             for (int index = 0; index < scale.Count; ++index)
             {
-                if (scale[index] == (Note)(Shredder._currentNote % 12))
+                if (scale[index] == (Note)(_currentNote % 12))
                 {
                     if (index < scale.Count - 1)
                     {
@@ -60,7 +60,7 @@ namespace DuckGame
         {
             for (int index = 0; index < scale.Count; ++index)
             {
-                if (scale[index] == (Note)(Shredder._currentNote % 12))
+                if (scale[index] == (Note)(_currentNote % 12))
                 {
                     if (index > 0)
                     {
@@ -100,24 +100,24 @@ namespace DuckGame
             {
                 if (device.MapDown(16384, false))
                 {
-                    Shredder._currentNote = Shredder.GetNextNote(Shredder._currentNote, Shredder._basicScale);
+                    _currentNote = GetNextNote(_currentNote, _basicScale);
                     SFX.Play("guitar/guitar-" + Change.ToString(_currentNote));
-                    Shredder._noteWait = 1f;
+                    _noteWait = 1f;
                 }
                 if (device.MapDown(32768, false))
                 {
-                    Shredder._currentNote = Shredder._currentNote = (int)Shredder._basicScale[0];
+                    _currentNote = _currentNote = (int)_basicScale[0];
                     SFX.Play("guitar/guitar-" + Change.ToString(_currentNote));
-                    Shredder._noteWait = 1f;
+                    _noteWait = 1f;
                 }
                 if (device.MapDown(8192, false))
                 {
-                    Shredder._currentNote = Shredder.GetPrevNote(Shredder._currentNote, Shredder._basicScale);
+                    _currentNote = GetPrevNote(_currentNote, _basicScale);
                     SFX.Play("guitar/guitar-" + Change.ToString(_currentNote));
-                    Shredder._noteWait = 1f;
+                    _noteWait = 1f;
                 }
             }
-            Shredder._noteWait -= 0.15f;
+            _noteWait -= 0.15f;
         }
     }
 }

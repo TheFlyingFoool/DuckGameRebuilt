@@ -62,7 +62,7 @@ namespace DuckGame
 
         public override void OnImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (_stuck || with is Gun || (with.weight < 5f && !(with is Dart) && !(with is RagdollPart)) || with is FeatherVolume || with is Teleporter || base.removeFromLevel || with is Spring || with is SpringUpLeft || with is SpringUpRight)
+            if (_stuck || with is Gun || (with.weight < 5f && !(with is Dart) && !(with is RagdollPart)) || with is FeatherVolume || with is Teleporter || removeFromLevel || with is Spring || with is SpringUpLeft || with is SpringUpRight)
             {
                 if (with is EnergyBlocker && with.solid)
                 {
@@ -75,13 +75,13 @@ namespace DuckGame
                 if (with is PhysicsObject)
                 {
                     Duck duck = with as Duck;
-                    if (duck != null && base.isServerForObject)
+                    if (duck != null && isServerForObject)
                     {
                         if (duck.isServerForObject)
                         {
                             duck.hSpeed += hSpeed * 0.7f;
                             duck.vSpeed -= 1.5f;
-                            Event.Log(new DartHitEvent(base.responsibleProfile, duck.profile));
+                            Event.Log(new DartHitEvent(responsibleProfile, duck.profile));
                             if (duck.holdObject is Grenade)
                             {
                                 duck.forceFire = true;
@@ -98,7 +98,7 @@ namespace DuckGame
                         }
                     }
                     RagdollPart r = with as RagdollPart;
-                    if (r != null && base.isServerForObject && r.doll != null && r.doll.captureDuck != null)
+                    if (r != null && isServerForObject && r.doll != null && r.doll.captureDuck != null)
                     {
                         Duck d = r.doll.captureDuck;
                         if (r.isServerForObject)
@@ -122,7 +122,7 @@ namespace DuckGame
                     }
                     if (with is IPlatform || duck != null || r != null)
                     {
-                        DartShell dartShell = new DartShell(base.x, base.y, -_sprite.flipMultH * Rando.Float(0.6f), _sprite.flipH);
+                        DartShell dartShell = new DartShell(x, y, -_sprite.flipMultH * Rando.Float(0.6f), _sprite.flipH);
                         Level.Add(dartShell);
                         dartShell.hSpeed = -hSpeed / 3f * (0.3f + Rando.Float(0.8f));
                         dartShell.vSpeed = -2f + Rando.Float(4f);
@@ -134,7 +134,7 @@ namespace DuckGame
                         return;
                     }
                 }
-                float deg = -base.angleDegrees % 360f;
+                float deg = -angleDegrees % 360f;
                 if (deg < 0f)
                 {
                     deg += 360f;
@@ -143,22 +143,22 @@ namespace DuckGame
                 if ((with is Block || with is Spikes || with is Saws) && from == ImpactedFrom.Right && (deg < 45f || deg > 315f))
                 {
                     stick = true;
-                    base.angleDegrees = 0f;
+                    angleDegrees = 0f;
                 }
                 else if ((with is Block || with is Spikes || with is Saws) && from == ImpactedFrom.Top && deg > 45f && deg < 135f)
                 {
                     stick = true;
-                    base.angleDegrees = 270f;
+                    angleDegrees = 270f;
                 }
                 else if ((with is Block || with is Spikes || with is Saws) && from == ImpactedFrom.Left && deg > 135f && deg < 225f)
                 {
                     stick = true;
-                    base.angleDegrees = 180f;
+                    angleDegrees = 180f;
                 }
                 else if (from == ImpactedFrom.Bottom && deg > 225f && deg < 315f)
                 {
                     stick = true;
-                    base.angleDegrees = 90f;
+                    angleDegrees = 90f;
                 }
                 if (stick)
                 {
@@ -166,7 +166,7 @@ namespace DuckGame
                     SFX.Play("dartStick", 0.8f, -0.1f + Rando.Float(0.2f), 0f, false);
                     vSpeed = 0f;
                     gravMultiplier = 0f;
-                    base.grounded = true;
+                    grounded = true;
                     _sprite.frame = 1;
                     _stickTime = 1f;
                 }

@@ -53,10 +53,10 @@ namespace Microsoft.Xna.Framework.Design
 			ITypeDescriptorContext context,
 			IDictionary propertyValues
 		) {
-			return (object) new Ray(
-				(Vector3) propertyValues["Position"],
-				(Vector3) propertyValues["Direction"]
-			);
+			return new Ray(
+                (Vector3)propertyValues["Position"],
+                (Vector3)propertyValues["Direction"]
+            );
 		}
 
 		#endregion

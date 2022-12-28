@@ -269,7 +269,7 @@ namespace DuckGame
                     for (int index = 0; index < Profile.defaultProfileMappings.Count; ++index)
                     {
                         if (Profile.defaultProfileMappings[index] == p)
-                            Profile.defaultProfileMappings[index] = Profiles.universalProfileList.ElementAt<Profile>(index);
+                            Profile.defaultProfileMappings[index] = Profiles.universalProfileList.ElementAt(index);
                     }
                     Profile.defaultProfileMappings[_controllerIndex] = p;
                     if (_teamSelect != null)
@@ -492,20 +492,20 @@ namespace DuckGame
                 return;
             if (_duck != null)
             {
-                Thing.Fondle(_duck, DuckNetwork.localConnection);
+                Fondle(_duck, DuckNetwork.localConnection);
                 Level.Remove(_duck);
                 if (!Network.isActive && _duck.ragdoll != null)
                     Level.Remove(_duck.ragdoll);
             }
             if (_gun != null)
             {
-                Thing.Fondle(_gun, DuckNetwork.localConnection);
+                Fondle(_gun, DuckNetwork.localConnection);
                 Level.Remove(_gun);
             }
             foreach (Window t in Level.CheckRectAll<Window>(topLeft, bottomRight))
             {
                 t.lobbyRemoving = true;
-                Thing.Fondle(t, DuckNetwork.localConnection);
+                Fondle(t, DuckNetwork.localConnection);
                 Level.Remove(t);
             }
             _window = null;
@@ -597,26 +597,26 @@ namespace DuckGame
             bool flag1 = false; //  
             if (_teamSelect != null && (!Network.isActive || _hatSelector.connection == DuckNetwork.localConnection) && !Network.isActive)
             {
-                if (!_playerActive && (Program.testServer || Main.startInLobby) && _playerProfile == Profiles.DefaultPlayer1)
+                if (!_playerActive && (Program.testServer || MonoMain.startInLobby) && _playerProfile == Profiles.DefaultPlayer1)
                 {
                     OpenDoor();
                     flag1 = true;
                 }
-                if (_inputProfile.JoinGamePressed() && !_hatSelector.open && (!NetworkDebugger.enabled || NetworkDebugger._instances[NetworkDebugger.currentIndex].hover && (Input.Down("SHOOT") || Keyboard.Down(Keys.LeftShift) || Keyboard.Down(Keys.RightShift)) || NetworkDebugger.letJoin))
+                if (_inputProfile.JoinGamePressed() && !_hatSelector.open && (!NetworkDebugger.enabled || NetworkDebugger._instances[NetworkDebugger.currentIndex].hover && (Input.Down(Triggers.Shoot) || Keyboard.Down(Keys.LeftShift) || Keyboard.Down(Keys.RightShift)) || NetworkDebugger.letJoin))
                 {
                     if (!_playerActive)
                     {
                         OpenDoor();
                         flag1 = true;
                     }
-                    if (NetworkDebugger.letJoin && !Input.Down("SHOOT") && !Keyboard.Down(Keys.LeftShift) && !Keyboard.Down(Keys.RightShift))
+                    if (NetworkDebugger.letJoin && !Input.Down(Triggers.Shoot) && !Keyboard.Down(Keys.LeftShift) && !Keyboard.Down(Keys.RightShift))
                     {
                         NetworkDebugger.letJoin = false;
                         hostFrames = 2;
                     }
                 }
             }
-            if (_teamSelect != null && !ready && !Network.isActive && _inputProfile.Pressed("START") && !flag1)
+            if (_teamSelect != null && !ready && !Network.isActive && _inputProfile.Pressed(Triggers.Start) && !flag1)
                 _teamSelect.OpenPauseMenu(this);
             if (!Network.isActive && _duck != null && !_duck.immobilized)
                 _playerActive = true;
@@ -646,7 +646,7 @@ namespace DuckGame
                 {
                     _currentMessage = 4;
                     _duck.canFire = false;
-                    if (_duck.isServerForObject && doorIsOpen && _inputProfile.Pressed("SHOOT") && !_hatSelector.open && _hatSelector.fade < 0.01f)
+                    if (_duck.isServerForObject && doorIsOpen && _inputProfile.Pressed(Triggers.Shoot) && !_hatSelector.open && _hatSelector.fade < 0.01f)
                     {
                         _duck.immobilized = true;
                         _hatSelector.Open(_playerProfile);
@@ -763,7 +763,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (DGRSettings.S_RebuiltEffect == 0 && profile != null && profile.isUsingRebuilt && profile.duck != null)
+            if (DGRSettings.RebuiltEffect == 0 && profile != null && profile.isUsingRebuilt && profile.duck != null)
             {
                 Vec2 v = profile.duck.position;
                 if (profile.duck.ragdoll != null && profile.duck.ragdoll.part2 != null) v = profile.duck.ragdoll.part2.position;
@@ -832,7 +832,7 @@ namespace DuckGame
                                 _doorIcon.frame = 10;
                                 Graphics.Draw(_doorIcon, (int)x + 57, y + 31f);
                                 _fontSmall.DrawOutline("PRESS", new Vec2(x + 19f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                _fontSmall.DrawOutline("START", new Vec2(x + 85f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                _fontSmall.DrawOutline(Triggers.Start, new Vec2(x + 85f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                             }
                             else if (flag2)
                             {
@@ -887,7 +887,12 @@ namespace DuckGame
                                 Graphics.DrawRect(new Vec2(x, y + 35f), new Vec2(x + num, y + 52f), Color.Black, doorLeftBlank.depth + 20);
                                 string text1 = "WAITING FOR";
                                 _fontSmall.Draw(text1, new Vec2((x + num / 2f - _fontSmall.GetWidth(text1) / 2f), y + 36f), Color.White, doorLeftBlank.depth + 30);
-                                string text2 = profile.nameUI;
+                                string text2 = profile.name;
+
+                                if (profile.muteName)
+                                    text2 = "Player " + (profile.networkIndex + 1).ToString();
+                                if (profile.isUsingRebuilt && DGRSettings.RebuiltEffect == 1) text2 += "|PINK|♥|WHITE|";
+
                                 if (text2.Length > 16)
                                     text2 = text2.Substring(0, 16);
                                 _fontSmall.Draw(text2, new Vec2((x + num / 2f - _fontSmall.GetWidth(text2) / 2f), y + 44f), Color.White, doorLeftBlank.depth + 30);
@@ -934,7 +939,7 @@ namespace DuckGame
                                     _doorIcon.frame = 10;
                                     Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
                                     _fontSmall.DrawOutline("PRESS", new Vec2(x + 20f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                    _fontSmall.DrawOutline("START", new Vec2(x + 86f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                    _fontSmall.DrawOutline(Triggers.Start, new Vec2(x + 86f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                                 }
                                 else if (flag2)
                                 {
@@ -962,7 +967,7 @@ namespace DuckGame
                                         _fontSmall.DrawOutline("PALS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
                                         _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                                     }
-                                   
+
                                 }
                                 else if (flag4)
                                 {
@@ -990,7 +995,11 @@ namespace DuckGame
                                     Graphics.DrawRect(new Vec2(x, y + 35f), new Vec2(x + num, y + 52f), Color.Black, doorLeftBlank.depth + 20);
                                     string text3 = "WAITING FOR";
                                     _fontSmall.Draw(text3, new Vec2((float)(x + num / 2.0 - _fontSmall.GetWidth(text3) / 2.0), y + 36f), Color.White, doorLeftBlank.depth + 30);
-                                    string text4 = profile.nameUI;
+                                    string text4 = profile.name;
+
+                                    if (profile.muteName)
+                                        text4 = "Player " + (profile.networkIndex + 1).ToString();
+                                    if (profile.isUsingRebuilt && DGRSettings.RebuiltEffect == 1) text4 += "|PINK|♥|WHITE|";
                                     if (text4.Length > 16)
                                         text4 = text4.Substring(0, 16);
                                     _fontSmall.Draw(text4, new Vec2((float)(x + num / 2.0 - _fontSmall.GetWidth(text4) / 2.0), y + 44f), Color.White, doorLeftBlank.depth + 30);
@@ -1078,14 +1087,14 @@ namespace DuckGame
                         }
                         if (source1.Count > 0)
                         {
-                            IOrderedEnumerable<FurniturePosition> source2 = source1.OrderBy<FurniturePosition, int>(furni => furni.x + furni.y * 100);
-                            IEnumerable<FurniturePosition> source3 = source1.OrderBy<FurniturePosition, int>(furni => -furni.x + furni.y * 100);
+                            IOrderedEnumerable<FurniturePosition> source2 = source1.OrderBy(furni => furni.x + furni.y * 100);
+                            IEnumerable<FurniturePosition> source3 = source1.OrderBy(furni => -furni.x + furni.y * 100);
                             int index1 = 0;
-                            for (int index2 = 0; index2 < source2.Count<FurniturePosition>(); ++index2)
+                            for (int index2 = 0; index2 < source2.Count(); ++index2)
                             {
-                                FurniturePosition furniturePosition1 = source2.ElementAt<FurniturePosition>(index2);
+                                FurniturePosition furniturePosition1 = source2.ElementAt(index2);
                                 Furniture furniMapping1 = furniturePosition1.furniMapping;
-                                FurniturePosition furniturePosition2 = source3.ElementAt<FurniturePosition>(index1);
+                                FurniturePosition furniturePosition2 = source3.ElementAt(index1);
                                 Furniture furniMapping2 = furniturePosition2.furniMapping;
                                 furniMapping1.sprite.depth = (Depth)(float)(furniMapping2.deep * (1.0 / 1000.0) - 0.56f);
                                 furniMapping1.sprite.frame = furniturePosition1.variation;
@@ -1107,14 +1116,14 @@ namespace DuckGame
                         }
                         if (furniturePositionList.Count > 0)
                         {
-                            IOrderedEnumerable<FurniturePosition> source4 = source1.OrderBy<FurniturePosition, int>(furni => -furni.x + furni.y * 100);
-                            IEnumerable<FurniturePosition> source5 = source1.OrderBy<FurniturePosition, int>(furni => furni.x + furni.y * 100);
+                            IOrderedEnumerable<FurniturePosition> source4 = source1.OrderBy(furni => -furni.x + furni.y * 100);
+                            IEnumerable<FurniturePosition> source5 = source1.OrderBy(furni => furni.x + furni.y * 100);
                             int index3 = 0;
-                            for (int index4 = 0; index4 < source4.Count<FurniturePosition>(); ++index4)
+                            for (int index4 = 0; index4 < source4.Count(); ++index4)
                             {
-                                FurniturePosition furniturePosition3 = source4.ElementAt<FurniturePosition>(index4);
+                                FurniturePosition furniturePosition3 = source4.ElementAt(index4);
                                 Furniture furniMapping3 = furniturePosition3.furniMapping;
-                                FurniturePosition furniturePosition4 = source5.ElementAt<FurniturePosition>(index3);
+                                FurniturePosition furniturePosition4 = source5.ElementAt(index3);
                                 Furniture furniMapping4 = furniturePosition4.furniMapping;
                                 furniMapping3.sprite.depth = (Depth)(float)(furniMapping4.deep * (1.0 / 1000.0) - 0.56f);
                                 furniMapping3.sprite.frame = furniturePosition4.variation;
@@ -1300,7 +1309,7 @@ namespace DuckGame
                             else if (_tutorialMessages.frame == 3)
                             {
                                 _font.Draw("@CANCEL@", new Vec2(x + 45f + num3, y + 17f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
-                                _font.Draw("CANCEL", new Vec2(x + 29f + num3, y + 30f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
+                                _font.Draw(Triggers.Cancel, new Vec2(x + 29f + num3, y + 30f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
                             }
                             else if (_tutorialMessages.frame == 4)
                             {
@@ -1434,7 +1443,7 @@ namespace DuckGame
                             else if (_tutorialMessages.frame == 3)
                             {
                                 _font.Draw("@CANCEL@", new Vec2(x + 45f + num1, y + 17f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
-                                _font.Draw("CANCEL", new Vec2(x + 29f + num1, y + 30f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
+                                _font.Draw(Triggers.Cancel, new Vec2(x + 29f + num1, y + 30f), Color.White * _screenFade, _tutorialTV.depth + 20, _inputProfile);
                             }
                             else if (_tutorialMessages.frame == 4)
                             {

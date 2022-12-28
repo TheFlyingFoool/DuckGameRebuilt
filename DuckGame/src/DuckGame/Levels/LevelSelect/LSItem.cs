@@ -103,12 +103,12 @@ namespace DuckGame
                 if (isWorkshop)
                 {
                     _path = "@WORKSHOP@";
-                    _levelsInside = LSItem.GetLevelsInside(_select, "@WORKSHOP@");
+                    _levelsInside = GetLevelsInside(_select, "@WORKSHOP@");
                 }
                 else if (str1 == "@VANILLA@")
                 {
                     _path = "@VANILLA@";
-                    _levelsInside = LSItem.GetLevelsInside(_select, "@VANILLA@");
+                    _levelsInside = GetLevelsInside(_select, "@VANILLA@");
                 }
                 else
                 {
@@ -117,7 +117,7 @@ namespace DuckGame
                     string str2 = str1.Substring(str1.LastIndexOf("/levels/", StringComparison.InvariantCultureIgnoreCase) + 8);
                     if (isFolder || isPlaylist)
                     {
-                        _levelsInside = LSItem.GetLevelsInside(_select, _path);
+                        _levelsInside = GetLevelsInside(_select, _path);
                         if (!isModPath)
                             _path = "/" + str2;
                     }
@@ -161,7 +161,7 @@ namespace DuckGame
             {
                 string path1 = DuckFile.contentDirectory + "Levels/deathmatch/";
                 foreach (string directory in DuckFile.GetDirectories(path1))
-                    levelsInside.AddRange(LSItem.GetLevelsInside(selector, directory).Where<string>(x => !x.Contains("online") && !x.Contains("holiday")));
+                    levelsInside.AddRange(GetLevelsInside(selector, directory).Where(x => !x.Contains("online") && !x.Contains("holiday")));
                 foreach (string file1 in Content.GetFiles(path1))
                 {
                     string file = file1;
@@ -190,7 +190,7 @@ namespace DuckGame
             else
             {
                 foreach (string directory in DuckFile.GetDirectories(path))
-                    levelsInside.AddRange(LSItem.GetLevelsInside(selector, directory));
+                    levelsInside.AddRange(GetLevelsInside(selector, directory));
                 foreach (string file2 in Content.GetFiles(path))
                 {
                     string file = file2;

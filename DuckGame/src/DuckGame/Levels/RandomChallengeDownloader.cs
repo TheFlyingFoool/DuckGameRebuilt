@@ -7,7 +7,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DuckGame
 {
@@ -25,43 +24,43 @@ namespace DuckGame
 
         public static LevelData GetNextChallenge()
         {
-            if (RandomChallengeDownloader._readyChallenges.Count == 0)
+            if (_readyChallenges.Count == 0)
                 return null;
-            LevelData nextChallenge = RandomChallengeDownloader._readyChallenges.First<LevelData>();
-            RandomChallengeDownloader._readyChallenges.RemoveAt(0);
+            LevelData nextChallenge = _readyChallenges[0];
+            _readyChallenges.RemoveAt(0);
             return nextChallenge;
         }
 
-        public static LevelData PeekNextChallenge() => RandomChallengeDownloader._readyChallenges.Count == 0 ? null : RandomChallengeDownloader._readyChallenges.First<LevelData>();
+        public static LevelData PeekNextChallenge() => _readyChallenges.Count == 0 ? null : _readyChallenges[0];
 
         private static void Fetched(object sender, WorkshopQueryResult result)
         {
-            if (RandomChallengeDownloader._toFetchIndex == -1)
-                RandomChallengeDownloader._toFetchIndex = Rando.Int((int)(sender as WorkshopQueryAll).numResultsFetched);
-            if (RandomChallengeDownloader._toFetchIndex == RandomChallengeDownloader._numFetch && Steam.DownloadWorkshopItem(result.details.publishedFile))
-                RandomChallengeDownloader._downloading = result.details.publishedFile;
-            RandomChallengeDownloader._currentQuery = null;
-            ++RandomChallengeDownloader._numFetch;
+            if (_toFetchIndex == -1)
+                _toFetchIndex = Rando.Int((int)(sender as WorkshopQueryAll)._numResultsFetched);
+            if (_toFetchIndex == _numFetch && Steam.DownloadWorkshopItem(result.details.publishedFile))
+                _downloading = result.details.publishedFile;
+            _currentQuery = null;
+            ++_numFetch;
         }
 
         private static void FinishedTotalQuery(object sender)
         {
             WorkshopQueryAll workshopQueryAll = sender as WorkshopQueryAll;
-            if (workshopQueryAll.numResultsTotal <= 0U)
+            if (workshopQueryAll._numResultsTotal <= 0U)
                 return;
-            int num = Rando.Int((int)(workshopQueryAll.numResultsTotal / 50U)) + 1;
-            if (RandomChallengeDownloader.numSinceLowRating > 3)
-                RandomChallengeDownloader.numSinceLowRating = 0;
+            int num = Rando.Int((int)(workshopQueryAll._numResultsTotal / 50U)) + 1;
+            if (numSinceLowRating > 3)
+                numSinceLowRating = 0;
             else
                 num %= 10;
-            RandomChallengeDownloader._orderMode = RandomChallengeDownloader.numSinceLowRating != 2 ? WorkshopQueryFilterOrder.RankedByVote : WorkshopQueryFilterOrder.RankedByTrend;
+            _orderMode = numSinceLowRating != 2 ? WorkshopQueryFilterOrder.RankedByVote : WorkshopQueryFilterOrder.RankedByTrend;
             if (num == 0)
                 num = 1;
-            ++RandomChallengeDownloader.numSinceLowRating;
-            WorkshopQueryAll queryAll = Steam.CreateQueryAll(RandomChallengeDownloader._orderMode, WorkshopType.Items);
+            ++numSinceLowRating;
+            WorkshopQueryAll queryAll = Steam.CreateQueryAll(_orderMode, WorkshopType.Items);
             queryAll.requiredTags.Add("Arcade Machine");
-            queryAll.ResultFetched += new WorkshopQueryResultFetched(RandomChallengeDownloader.Fetched);
-            queryAll.page = (uint)num;
+            queryAll.ResultFetched += new WorkshopQueryResultFetched(Fetched);
+            queryAll._page = (uint)num;
             queryAll.justOnePage = true;
             queryAll.Request();
         }
@@ -69,9 +68,9 @@ namespace DuckGame
         private static void SearchDirLevels(string dir, LevelLocation location)
         {
             foreach (string path in location == LevelLocation.Content ? Content.GetFiles(dir) : DuckFile.GetFiles(dir, "*.*"))
-                RandomChallengeDownloader.ProcessChallenge(path);
+                ProcessChallenge(path);
             foreach (string dir1 in location == LevelLocation.Content ? Content.GetDirectories(dir) : DuckFile.GetDirectories(dir))
-                RandomChallengeDownloader.SearchDirLevels(dir1, location);
+                SearchDirLevels(dir1, location);
         }
 
         private static void ProcessChallenge(string path) // removed , LevelLocation loation
@@ -109,8 +108,8 @@ namespace DuckGame
                 }
                 if (flag1 && !levelData.modData.hasLocalMods)
                 {
-                    RandomChallengeDownloader._readyChallenges.Add(levelData);
-                    DevConsole.Log(DCSection.Steam, "Downloaded random challenge " + RandomChallengeDownloader._readyChallenges.Count.ToString() + "/" + RandomChallengeDownloader.numToHaveReady.ToString());
+                    _readyChallenges.Add(levelData);
+                    DevConsole.Log(DCSection.Steam, "Downloaded random challenge " + _readyChallenges.Count.ToString() + "/" + numToHaveReady.ToString());
                 }
                 else
                     DevConsole.Log(DCSection.Steam, "Downloaded challenge had incompatible mods, and was ignored!");
@@ -124,25 +123,25 @@ namespace DuckGame
         {
             if (!Steam.IsInitialized() || !Network.isServer)
                 return;
-            if (RandomChallengeDownloader._downloading != null)
+            if (_downloading != null)
             {
-                if (!RandomChallengeDownloader._downloading.finishedProcessing)
+                if (!_downloading.finishedProcessing)
                     return;
-                if (RandomChallengeDownloader._downloading.downloadResult == SteamResult.OK)
-                    RandomChallengeDownloader.SearchDirLevels(RandomChallengeDownloader._downloading.path, LevelLocation.Workshop);
-                RandomChallengeDownloader._downloading = null;
+                if (_downloading.downloadResult == SteamResult.OK)
+                    SearchDirLevels(_downloading.path, LevelLocation.Workshop);
+                _downloading = null;
             }
             else
             {
-                if (RandomChallengeDownloader._currentQuery != null || RandomChallengeDownloader._readyChallenges.Count >= RandomChallengeDownloader.numToHaveReady)
+                if (_currentQuery != null || _readyChallenges.Count >= numToHaveReady)
                     return;
-                RandomChallengeDownloader._toFetchIndex = -1;
-                RandomChallengeDownloader._numFetch = 0;
-                RandomChallengeDownloader._currentQuery = Steam.CreateQueryAll(RandomChallengeDownloader._orderMode, WorkshopType.Items);
-                RandomChallengeDownloader._currentQuery.requiredTags.Add("Arcade Machine");
-                RandomChallengeDownloader._currentQuery.QueryFinished += new WorkshopQueryFinished(RandomChallengeDownloader.FinishedTotalQuery);
-                RandomChallengeDownloader._currentQuery.fetchedData = WorkshopQueryData.TotalOnly;
-                RandomChallengeDownloader._currentQuery.Request();
+                _toFetchIndex = -1;
+                _numFetch = 0;
+                _currentQuery = Steam.CreateQueryAll(_orderMode, WorkshopType.Items);
+                _currentQuery.requiredTags.Add("Arcade Machine");
+                _currentQuery.QueryFinished += new WorkshopQueryFinished(FinishedTotalQuery);
+                _currentQuery._dataToFetch = WorkshopQueryData.TotalOnly;
+                _currentQuery.Request();
                 DevConsole.Log(DCSection.Steam, "Querying for random Challenges.");
             }
         }

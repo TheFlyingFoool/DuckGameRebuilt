@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace DuckGame
@@ -27,11 +26,11 @@ namespace DuckGame
         public static void OnResults(Dictionary<Type, List<(MemberInfo MemberInfo, Attribute Attribute)>> all)
         {
             All = new List<AutoConfigFieldAttribute>();
-            foreach ((MemberInfo MemberInfo, Attribute vAttribute) in all[typeof(AutoConfigFieldAttribute)])
+            foreach ((MemberInfo memberInfo, Attribute vAttribute) in all[typeof(AutoConfigFieldAttribute)])
             {
-                AutoConfigFieldAttribute FireSerializerModule = vAttribute as AutoConfigFieldAttribute;
-                FireSerializerModule.field = MemberInfo;
-                All.Add(FireSerializerModule);
+                AutoConfigFieldAttribute attribute = (AutoConfigFieldAttribute) vAttribute;
+                attribute.field = memberInfo;
+                All.Add(attribute);
             }
         }
         public string? ShortName { get; set; } = null;
@@ -41,7 +40,7 @@ namespace DuckGame
         /// specific config field. In which case the user will be stuck in an
         /// eternal crash loop.
         /// </summary>
-        public bool PotentiallyDangerous { get; set; } = true;
+        public bool PotentiallyDangerous { get; set; } = false;
 
         public string? Id { get; set; } = null;
 

@@ -12,7 +12,7 @@ namespace DuckGame
     internal class MirrorMode : Thing
     {
         private SpriteMap _sprite;
-        public EditorProperty<MirrorMode.Setting> mode;
+        public EditorProperty<Setting> mode;
 
         public override void EditorPropertyChanged(object property)
         {
@@ -25,8 +25,8 @@ namespace DuckGame
         {
             _sprite = new SpriteMap("mirrorMode", 16, 16);
             graphic = _sprite;
-            mode = new EditorProperty<MirrorMode.Setting>(MirrorMode.Setting.Vertical, this, 0f, 1f, 0.1f, null, false, false);
-            mode.value = MirrorMode.Setting.Vertical;
+            mode = new EditorProperty<Setting>(Setting.Vertical, this, 0f, 1f, 0.1f, null, false, false);
+            mode.value = Setting.Vertical;
             collisionSize = new Vec2(8f, 8f);
             collisionOffset = new Vec2(-4f, -4f);
             center = new Vec2(8f, 8f);

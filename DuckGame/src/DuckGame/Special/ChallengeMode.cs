@@ -56,7 +56,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            ChallengeMode.showReticles = true;
+            showReticles = true;
             if (Level.current is Editor)
                 return;
             if (Level.current.camera is FollowCam camera)
@@ -69,7 +69,7 @@ namespace DuckGame
                 else
                     ChallengeLevel.timer.maxTime = new TimeSpan();
             }
-            _startGoodies = Level.current.things[typeof(Goody)].Count<Thing>();
+            _startGoodies = Level.current.things[typeof(Goody)].Count();
         }
 
         public virtual void PrepareCounts()
@@ -199,7 +199,7 @@ namespace DuckGame
             }
             if (Level.current != level || _eligibleTrophies.Count != 0)
                 return;
-            foreach (ChallengeTrophy challengeTrophy in _wonTrophies.ToList<ChallengeTrophy>())
+            foreach (ChallengeTrophy challengeTrophy in _wonTrophies.ToList())
             {
                 if (challengeTrophy.targets != -1 && ChallengeLevel.targetsShot < challengeTrophy.targets)
                     _wonTrophies.Remove(challengeTrophy);

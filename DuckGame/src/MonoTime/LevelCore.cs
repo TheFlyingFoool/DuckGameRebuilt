@@ -56,16 +56,16 @@ namespace DuckGame
         {
             triggers = new List<string>()
           {
-            "UP",
-            "UP",
-            "DOWN",
-            "DOWN",
-            "LEFT",
-            "RIGHT",
-            "LEFT",
-            "RIGHT",
-            "QUACK",
-            "JUMP"
+            Triggers.Up,
+            Triggers.Up,
+            Triggers.Down,
+            Triggers.Down,
+            Triggers.Left,
+            Triggers.Right,
+            Triggers.Left,
+            Triggers.Right,
+            Triggers.Quack,
+            Triggers.Jump
           }
         };
         public InputCode konamiCodeAlternate = new InputCode()
@@ -74,13 +74,13 @@ namespace DuckGame
           {
             "UP|JUMP",
             "UP|JUMP",
-            "DOWN",
-            "DOWN",
-            "LEFT",
-            "RIGHT",
-            "LEFT",
-            "RIGHT",
-            "QUACK",
+            Triggers.Down,
+            Triggers.Down,
+            Triggers.Left,
+            Triggers.Right,
+            Triggers.Left,
+            Triggers.Right,
+            Triggers.Quack,
             "UP|JUMP"
           }
         };

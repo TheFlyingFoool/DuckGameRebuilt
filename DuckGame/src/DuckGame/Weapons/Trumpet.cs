@@ -28,9 +28,11 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 4;
-            _ammoType = new ATLaser();
-            _ammoType.range = 170f;
-            _ammoType.accuracy = 0.8f;
+            _ammoType = new ATLaser
+            {
+                range = 170f,
+                accuracy = 0.8f
+            };
             wideBarrel = true;
             barrelInsertOffset = new Vec2(-4f, -2f);
             _type = "gun";
@@ -60,11 +62,11 @@ namespace DuckGame
                 hideLeftWing = ignoreHands = !raised;
                 if (isServerForObject)
                 {
-                    if (owner.inputProfile.Pressed("SHOOT"))
+                    if (owner.inputProfile.Pressed(Triggers.Shoot))
                         currentPitch = 2;
-                    if (owner.inputProfile.Pressed("STRAFE"))
+                    if (owner.inputProfile.Pressed(Triggers.Strafe))
                         currentPitch = 0;
-                    if (owner.inputProfile.Pressed("RAGDOLL"))
+                    if (owner.inputProfile.Pressed(Triggers.Ragdoll))
                         currentPitch = 1;
                     if (owner.inputProfile.leftTrigger > 0.5 && !leftPressed)
                     {
@@ -76,11 +78,11 @@ namespace DuckGame
                         currentPitch = 3;
                         rightPressed = true;
                     }
-                    if (owner.inputProfile.Released("STRAFE") && currentPitch == 0)
+                    if (owner.inputProfile.Released(Triggers.Strafe) && currentPitch == 0)
                         currentPitch = -1;
-                    if (owner.inputProfile.Released("SHOOT") && currentPitch == 2)
+                    if (owner.inputProfile.Released(Triggers.Shoot) && currentPitch == 2)
                         currentPitch = -1;
-                    if (owner.inputProfile.Released("RAGDOLL") && currentPitch == 1)
+                    if (owner.inputProfile.Released(Triggers.Ragdoll) && currentPitch == 1)
                         currentPitch = -1;
                     if (owner.inputProfile.leftTrigger <= 0.5)
                     {
@@ -176,7 +178,10 @@ namespace DuckGame
                 fingerPositionSprite.flipH = offDir <= 0;
                 fingerPositionSprite.angle = 0f;
                 Vec2 vec2 = Offset(new Vec2(-8f, -2f));
+                Material mat = Graphics.material;
+                Graphics.material = null;
                 Graphics.Draw(fingerPositionSprite, vec2.x, vec2.y);
+                Graphics.material = mat;
             }
             base.Draw();
         }

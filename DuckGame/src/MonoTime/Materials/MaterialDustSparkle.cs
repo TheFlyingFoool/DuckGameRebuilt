@@ -32,13 +32,13 @@ namespace DuckGame
 
         public override void Apply()
         {
-            DuckGame.Graphics.device.Textures[1] = (Texture2D)_cone;
-            DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointClamp;
+            Graphics.device.Textures[1] = (Texture2D)_cone;
+            Graphics.device.SamplerStates[1] = SamplerState.PointClamp;
             SetValue("topLeft", position);
             SetValue("size", size);
             SetValue("fade", Layer.Game.fade * fade);
-            SetValue("viewMatrix", DuckGame.Graphics.screen.viewMatrix);
-            SetValue("projMatrix", DuckGame.Graphics.screen.projMatrix);
+            SetValue("viewMatrix", Graphics.screen.viewMatrix);
+            SetValue("projMatrix", Graphics.screen.projMatrix);
             foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }

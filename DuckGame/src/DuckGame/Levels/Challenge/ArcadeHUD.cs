@@ -62,7 +62,7 @@ namespace DuckGame
             _afterChallenge = false;
         }
 
-        public static float alphaVal => ArcadeHUD._curAlpha;
+        public static float alphaVal => _curAlpha;
 
         public override bool visible
         {
@@ -107,20 +107,25 @@ namespace DuckGame
 
         public void UnlockChallenges(bool animate = false)
         {
-            bool flag1 = true;
-            bool flag2 = false;
+            bool first = true;
+            bool prevWon = false;
             foreach (ChallengeCard card in _cards)
             {
-                if (flag1)
-                    card.unlocked = true;
-                else if (!card.unlocked && flag2)
+                if (FireDebug.Debugging)
                 {
-                    card.unlocked = flag2;
+                    card.unlocked = true;
+                    continue;
+                }
+                if (first)
+                    card.unlocked = true;
+                else if (!card.unlocked && prevWon)
+                {
+                    card.unlocked = prevWon;
                     if (animate)
                         card.UnlockAnimation();
                 }
-                flag2 = Profiles.active[0].GetSaveData(card.challenge.levelID).trophy != 0;
-                flag1 = false;
+                prevWon = Profiles.active[0].GetSaveData(card.challenge.levelID).trophy != 0;
+                first = false;
             }
         }
 
@@ -140,7 +145,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            ArcadeHUD._curAlpha = alpha;
+            _curAlpha = alpha;
             if (launchChallenge)
             {
                 _afterChallenge = true;
@@ -148,14 +153,14 @@ namespace DuckGame
             }
             else
             {
-                ArcadeHUD.open = alpha > 0.95f;
+                open = alpha > 0.95f;
                 if (alpha <= 0.01f)
                     return;
                 if (!_afterChallenge && !_goBack)
                 {
                     if (_viewing == null)
                     {
-                        if (Input.Pressed("MENUDOWN"))
+                        if (Input.Pressed(Triggers.MenuDown))
                         {
                             ++_selected;
                             if (_selected >= _cards.Count)
@@ -163,7 +168,7 @@ namespace DuckGame
                             else
                                 SFX.Play("menuBlip01");
                         }
-                        else if (Input.Pressed("MENUUP"))
+                        else if (Input.Pressed(Triggers.MenuUp))
                         {
                             --_selected;
                             if (_selected < 0)
@@ -171,7 +176,7 @@ namespace DuckGame
                             else
                                 SFX.Play("menuBlip01");
                         }
-                        else if (Input.Pressed("SELECT"))
+                        else if (Input.Pressed(Triggers.Select))
                         {
                             int num1 = 0;
                             bool flag = false;
@@ -213,13 +218,13 @@ namespace DuckGame
                             else
                                 SFX.Play("scanFail");
                         }
-                        else if (Input.Pressed("CANCEL"))
+                        else if (Input.Pressed(Triggers.Cancel))
                         {
                             SFX.Play("menu_back");
                             quitOut = true;
                         }
                     }
-                    else if (Input.Pressed("CANCEL"))
+                    else if (Input.Pressed(Triggers.Cancel))
                     {
                         SFX.Play("menu_back");
                         foreach (ChallengeCard card in _cards)
@@ -229,7 +234,7 @@ namespace DuckGame
                         }
                         _goBack = true;
                     }
-                    else if (Input.Pressed("SELECT"))
+                    else if (Input.Pressed(Triggers.Select))
                     {
                         if (!selected.unlocked)
                         {

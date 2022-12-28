@@ -13,7 +13,7 @@ namespace DuckGame
     {
         public Action<object, object> setAccessor;
         public Func<object, object> getAccessor;
-        public System.Type type;
+        public Type type;
 
         public T Get<T>(object o) => getAccessor != null ? (T)getAccessor(o) : default(T);
 

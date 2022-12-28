@@ -204,7 +204,7 @@ namespace DuckGame
             _concaveLines = new List<ConcaveLine>();
             List<ConcaveLine> concaveLineList1 = new List<ConcaveLine>();
             List<ConcaveLine> concaveLineList2 = new List<ConcaveLine>();
-            List<BlockCorner> list = _structure.corners.Where<BlockCorner>(v => v.wallCorner).ToList<BlockCorner>();
+            List<BlockCorner> list = _structure.corners.Where(v => v.wallCorner).ToList();
             foreach (BlockCorner blockCorner1 in list)
             {
                 foreach (BlockCorner blockCorner2 in list)
@@ -360,13 +360,12 @@ namespace DuckGame
 
         public override void Update()
         {
-            //InitializeNeighbors();
-            //_hit = false;
+            InitializeNeighbors();
+            _hit = false;
         }
 
         public override void DoInitialize()
         {
-            InitializeNeighbors();
             base.DoInitialize();
         }
 

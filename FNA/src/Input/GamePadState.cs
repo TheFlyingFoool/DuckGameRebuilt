@@ -198,7 +198,7 @@ namespace Microsoft.Xna.Framework.Input
 			Buttons down,
 			float DeadZoneSize
 		) {
-			Buttons b = (Buttons) 0;
+			Buttons b = 0;
 
 			if (stick.X > DeadZoneSize)
 			{

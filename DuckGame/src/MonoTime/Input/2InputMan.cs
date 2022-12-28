@@ -15,7 +15,7 @@ namespace Microsoft.Xna.Framework.Input
     {
         private static bool initialized;
         private static IntPtr prevWndProc;
-        private static InputSystem.WndProc hookProcDelegate;
+        private static WndProc hookProcDelegate;
         private static IntPtr hIMC;
         //private const int GWL_WNDPROC = -4;
         //private const int WM_KEYDOWN = 256;
@@ -119,44 +119,44 @@ namespace Microsoft.Xna.Framework.Input
         /// <param name="window">The XNA window to which text input should be linked.</param>
         public static void Initialize(GameWindow window)
         {
-            if (InputSystem.initialized)
+            if (initialized)
                 throw new InvalidOperationException("TextInput.Initialize can only be called once!");
-            InputSystem.hookProcDelegate = new InputSystem.WndProc(InputSystem.HookProc);
-            InputSystem.prevWndProc = (IntPtr)InputSystem.SetWindowLongW(window.Handle, -4, (int)Marshal.GetFunctionPointerForDelegate<InputSystem.WndProc>(InputSystem.hookProcDelegate));
-            InputSystem.hWND = window.Handle;
+            hookProcDelegate = new WndProc(HookProc);
+            prevWndProc = (IntPtr)SetWindowLongW(window.Handle, -4, (int)Marshal.GetFunctionPointerForDelegate(hookProcDelegate));
+            hWND = window.Handle;
         }
 
         public static void InitializeIme(GameWindow window)
         {
-            InputSystem.hIMC = InputSystem.ImmCreateContext();
-            InputSystem.ImmAssociateContext(InputSystem.hWND, InputSystem.hIMC);
+            hIMC = ImmCreateContext();
+            ImmAssociateContext(hWND, hIMC);
         }
 
         public static void Terminate()
         {
-            if (!InputSystem.initialized)
+            if (!initialized)
                 return;
-            InputSystem.ImmReleaseContext(InputSystem.hWND, InputSystem.hIMC);
+            ImmReleaseContext(hWND, hIMC);
         }
 
         public static void StartIME()
         {
-            InputSystem.ImmAssociateContext(InputSystem.hWND, InputSystem.hIMC);
-            InputSystem.ImmSetOpenStatus(InputSystem.hIMC, true);
-            InputSystem.ImmReleaseContext(InputSystem.hWND, InputSystem.hIMC);
+            ImmAssociateContext(hWND, hIMC);
+            ImmSetOpenStatus(hIMC, true);
+            ImmReleaseContext(hWND, hIMC);
         }
 
         public static void EndIME()
         {
-            InputSystem.ImmAssociateContext(InputSystem.hWND, InputSystem.hIMC);
-            InputSystem.ImmSetOpenStatus(InputSystem.hIMC, false);
-            InputSystem.ImmReleaseContext(InputSystem.hWND, InputSystem.hIMC);
+            ImmAssociateContext(hWND, hIMC);
+            ImmSetOpenStatus(hIMC, false);
+            ImmReleaseContext(hWND, hIMC);
         }
 
         private static IntPtr HookProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam)
         {
             MonoMain.ResetInfiniteLoopTimer();
-            IntPtr num = InputSystem.CallWindowProcW(InputSystem.prevWndProc, hWnd, msg, wParam, lParam);
+            IntPtr num = CallWindowProcW(prevWndProc, hWnd, msg, wParam, lParam);
             if (msg == 28U)
                 MonoMain.framesSinceFocusChange = !(wParam == IntPtr.Zero) ? 0 : 0;
             if (msg == 537U && wParam.ToInt32() == 7)
@@ -166,23 +166,23 @@ namespace Microsoft.Xna.Framework.Input
                 switch (msg)
                 {
                     case 81:
-                        InputSystem.ImmAssociateContext(hWnd, InputSystem.hIMC);
+                        ImmAssociateContext(hWnd, hIMC);
                         num = (IntPtr)1;
                         break;
                     case 135:
                         num = (IntPtr)(num.ToInt32() | 4);
                         break;
                     case 256:
-                        if (InputSystem.KeyDown != null)
+                        if (KeyDown != null)
                         {
-                            InputSystem.KeyDown(null, new KeyEventArgs((Keys)(int)wParam));
+                            KeyDown(null, new KeyEventArgs((Keys)(int)wParam));
                             break;
                         }
                         break;
                     case 257:
-                        if (InputSystem.KeyUp != null)
+                        if (KeyUp != null)
                         {
-                            InputSystem.KeyUp(null, new KeyEventArgs((Keys)(int)wParam));
+                            KeyUp(null, new KeyEventArgs((Keys)(int)wParam));
                             break;
                         }
                         break;
@@ -192,16 +192,16 @@ namespace Microsoft.Xna.Framework.Input
                     case 641:
                         if (wParam.ToInt32() == 1 && DuckGame.Input._imeAllowed)
                         {
-                            InputSystem.ImmAssociateContext(hWnd, InputSystem.hIMC);
-                            InputSystem.ImmSetOpenStatus(InputSystem.hIMC, true);
-                            InputSystem.ImmReleaseContext(InputSystem.hWND, InputSystem.hIMC);
+                            ImmAssociateContext(hWnd, hIMC);
+                            ImmSetOpenStatus(hIMC, true);
+                            ImmReleaseContext(hWND, hIMC);
                             break;
                         }
                         break;
                     case 646:
-                        if (InputSystem.IMECharEntered != null)
+                        if (IMECharEntered != null)
                         {
-                            InputSystem.IMECharEntered(null, new CharacterEventArgs((char)(int)wParam, lParam.ToInt32()));
+                            IMECharEntered(null, new CharacterEventArgs((char)(int)wParam, lParam.ToInt32()));
                             break;
                         }
                         break;

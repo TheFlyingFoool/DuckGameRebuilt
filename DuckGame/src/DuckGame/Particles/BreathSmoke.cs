@@ -12,8 +12,8 @@ namespace DuckGame
     public class BreathSmoke : Thing
     {
         public static int kMaxObjects = 64;
-        public static BreathSmoke[] _objects = new BreathSmoke[BreathSmoke.kMaxObjects];
-        private static int _lastActiveObject = 0;
+        public static BreathSmoke[] _objects = new BreathSmoke[kMaxObjects];
+        public static int _lastActiveObject = 0;
         public static bool shortlife = false;
         private float _orbitInc = Rando.Float(5f);
         private SpriteMap _sprite2;
@@ -25,23 +25,25 @@ namespace DuckGame
         private float _distPulse = Rando.Float(5f);
         private float s1 = 1f;
         private float s2 = 1f;
+        private static int colorindex;
+
         //private float lifeTake = 0.05f;
 
         public static BreathSmoke New(float xpos, float ypos, float depth = 0.8f, float scaleMul = 1f)
         {
             BreathSmoke breathSmoke;
-            if (BreathSmoke._objects[BreathSmoke._lastActiveObject] == null)
+            if (_objects[_lastActiveObject] == null)
             {
                 breathSmoke = new BreathSmoke();
-                BreathSmoke._objects[BreathSmoke._lastActiveObject] = breathSmoke;
+                _objects[_lastActiveObject] = breathSmoke;
             }
             else
-                breathSmoke = BreathSmoke._objects[BreathSmoke._lastActiveObject];
-            BreathSmoke._lastActiveObject = (BreathSmoke._lastActiveObject + 1) % BreathSmoke.kMaxObjects;
+                breathSmoke = _objects[_lastActiveObject];
+            _lastActiveObject = (_lastActiveObject + 1) % kMaxObjects;
             breathSmoke.Init(xpos, ypos);
             breathSmoke.ResetProperties();
-            breathSmoke._sprite.globalIndex = Thing.GetGlobalIndex();
-            breathSmoke.globalIndex = Thing.GetGlobalIndex();
+            breathSmoke._sprite.globalIndex = GetGlobalIndex();
+            breathSmoke.globalIndex = GetGlobalIndex();
             breathSmoke.depth = (Depth)depth;
             breathSmoke.s1 *= scaleMul;
             breathSmoke.s2 *= scaleMul;
@@ -53,18 +55,18 @@ namespace DuckGame
         public static BreathSmoke New(float xpos, float ypos)
         {
             BreathSmoke breathSmoke;
-            if (BreathSmoke._objects[BreathSmoke._lastActiveObject] == null)
+            if (_objects[_lastActiveObject] == null)
             {
                 breathSmoke = new BreathSmoke();
-                BreathSmoke._objects[BreathSmoke._lastActiveObject] = breathSmoke;
+                _objects[_lastActiveObject] = breathSmoke;
             }
             else
-                breathSmoke = BreathSmoke._objects[BreathSmoke._lastActiveObject];
-            BreathSmoke._lastActiveObject = (BreathSmoke._lastActiveObject + 1) % BreathSmoke.kMaxObjects;
+                breathSmoke = _objects[_lastActiveObject];
+            _lastActiveObject = (_lastActiveObject + 1) % kMaxObjects;
             breathSmoke.Init(xpos, ypos);
             breathSmoke.ResetProperties();
-            breathSmoke._sprite.globalIndex = Thing.GetGlobalIndex();
-            breathSmoke.globalIndex = Thing.GetGlobalIndex();
+            breathSmoke._sprite.globalIndex = GetGlobalIndex();
+            breathSmoke.globalIndex = GetGlobalIndex();
             breathSmoke.depth = (Depth)0.8f;
             return breathSmoke;
         }
@@ -108,6 +110,15 @@ namespace DuckGame
             vSpeed = Rando.Float(-0.1f, -0.05f);
             //this._life += Rando.Float(0.2f);
             _sprite.color = Color.White;
+            if (Program.gay)
+            {
+                _sprite.color = Colors.Rainbow[colorindex];
+                colorindex += 1;
+                if (colorindex >= Colors.Rainbow.Length)
+                {
+                    colorindex = 0;
+                }
+            }
             depth = (Depth)0.8f;
             alpha = 0.15f;
             layer = Layer.Game;

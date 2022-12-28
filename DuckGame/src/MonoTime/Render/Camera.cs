@@ -15,7 +15,7 @@ namespace DuckGame
         protected Matrix _matrix;
         protected bool _dirty = true;
         protected Vec2 _position;
-        protected Vec2 _size = new Vec2(320f, 320f * DuckGame.Graphics.aspect);
+        protected Vec2 _size = new Vec2(320f, 320f * Graphics.aspect);
         protected Vec2 _zoomPoint = new Vec2(0f, 0f);
         public bool skipUpdate;
         private Rectangle _rectangle;
@@ -170,7 +170,7 @@ namespace DuckGame
             if (wval < 0f)
                 wval = 320f;
             if (hval < 0f)
-                hval = 320f * DuckGame.Graphics.aspect;
+                hval = 320f * Graphics.aspect;
             x = xval;
             y = yval;
             width = wval;
@@ -226,18 +226,18 @@ namespace DuckGame
             Viewport viewport;
             if (!_dirty)
             {
-                viewport = DuckGame.Graphics.viewport;
+                viewport = Graphics.viewport;
                 if (viewport.Width == _viewSize.x)
                 {
-                    viewport = DuckGame.Graphics.viewport;
+                    viewport = Graphics.viewport;
                     if (viewport.Height == _viewSize.y)
                         goto label_4;
                 }
             }
             _rectangle = new Rectangle(left - 16f, top - 16f, size.x + 32f, size.y + 32f);
-            viewport = DuckGame.Graphics.viewport;
+            viewport = Graphics.viewport;
             double width1 = viewport.Width;
-            viewport = DuckGame.Graphics.viewport;
+            viewport = Graphics.viewport;
             double height1 = viewport.Height;
             _viewSize = new Vec2((float)width1, (float)height1);
             Vec2 position = this.position;

@@ -531,7 +531,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			int width, height, levels;
 			bool isCube;
 			SurfaceFormat format;
-			Texture.ParseDDS(
+                ParseDDS(
 				reader,
 				out format,
 				out width,
@@ -560,7 +560,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			{
 				for (int i = 0; i < levels; i += 1)
 				{
-					int levelSize = Texture.CalculateDDSLevelSize(
+					int levelSize = CalculateDDSLevelSize(
 						width >> i,
 						height >> i,
 						format
@@ -582,7 +582,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			{
 				for (int i = 0; i < levels; i += 1)
 				{
-					tex = reader.ReadBytes(Texture.CalculateDDSLevelSize(
+					tex = reader.ReadBytes(CalculateDDSLevelSize(
 						width >> i,
 						height >> i,
 						format

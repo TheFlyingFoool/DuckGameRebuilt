@@ -220,7 +220,7 @@ namespace DuckGame
                 }
                 if (m.priority == NetMessagePriority.ReliableOrdered)
                 {
-                    if (m.order >= _expectedReliableOrder && _orderedPackets.FirstOrDefault<NetMessage>(x => x.order == m.order) == null)
+                    if (m.order >= _expectedReliableOrder && _orderedPackets.FirstOrDefault(x => x.order == m.order) == null)
                     {
                         int index = 0;
                         while (index < _orderedPackets.Count && _orderedPackets[index].order <= m.order)
@@ -598,7 +598,7 @@ namespace DuckGame
                                 DevConsole.Log(DCSection.DuckNet, "@error |DGRED|Large retransmit! (" + currentPacket.data.lengthInBytes.ToString() + ")", connection);
                                 break;
                             }
-                            DevConsole.Log("Sending unacknowledged " + unacknowledgedMessage.GetType().Name);
+                            // DevConsole.Log("Sending unacknowledged " + unacknowledgedMessage.GetType().Name);
                             if (unacknowledgedMessage.priority != NetMessagePriority.Urgent || unacknowledgedMessage.timesRetransmitted >= 2)
                             {
                                 int num = (int)(MathHelper.Clamp(ping, 0.064f, 1f) * 60.0) + 1;

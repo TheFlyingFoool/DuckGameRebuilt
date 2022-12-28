@@ -22,8 +22,9 @@ using System.Security;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.UI.WebControls;
 using System.Windows.Forms;
+using AddedContent.Hyeve;
+using XnaToFna;
 
 namespace DuckGame
 {
@@ -47,6 +48,27 @@ namespace DuckGame
         public static bool _fullScreen = false;
         public static volatile int lazyLoadyBits = 0;
         public static volatile string loadMessage = "HOLD ON...";
+        public static string NloadMessage
+        {
+            get
+            {
+                return loadMessage;
+            }
+            set
+            {
+                string text = value;
+                if (Debugger.IsAttached)
+                {
+                    text = "|16,144,13|" + text;
+                }
+                if (!loadMessages.Contains(text))
+                {
+                    loadMessages.Push(text);
+                }
+                loadMessage = text;
+                lastLoadMessage = text;
+            }
+        }
         private SpriteMap _duckRun;
         private SpriteMap _duckArm;
         public static Thing thing;
@@ -184,11 +206,13 @@ namespace DuckGame
         private bool takingShot;
         public static bool doPauseFade = true;
         public static bool firebreak = false;
+        public static bool experimental = false;
         public static volatile int loadyBits = 0;
         public static volatile int totalLoadyBits = 365;
         private Timer _timeSinceLastLoadFrame = new Timer();
         public static bool logLoading;
         public static bool startInLobby = false;
+        public static bool startInArcade = false;
         //private int deviceLostWait;
 
         public static MonoMainCore core
@@ -264,7 +288,7 @@ namespace DuckGame
                     {
                         if (DevConsole.core.lines.Count - index1 >= 0)
                         {
-                            DCLine dcLine = DevConsole.core.lines.ElementAt<DCLine>(DevConsole.core.lines.Count - index1);
+                            DCLine dcLine = DevConsole.core.lines.ElementAt(DevConsole.core.lines.Count - index1);
                             try
                             {
                                 string line = dcLine.line;
@@ -361,7 +385,7 @@ namespace DuckGame
             return num - (num < 58 ? 48 : 55);
         }
 
-        public static byte[] StringToByteArray(string hex) => Enumerable.Range(0, hex.Length).Where<int>(x => x % 2 == 0).Select<int, byte>(x => Convert.ToByte(hex.Substring(x, 2), 16)).ToArray<byte>();
+        public static byte[] StringToByteArray(string hex) => Enumerable.Range(0, hex.Length).Where(x => x % 2 == 0).Select(x => Convert.ToByte(hex.Substring(x, 2), 16)).ToArray();
 
         public static Texture2D RequestRandomDoodle()
         {
@@ -395,7 +419,7 @@ namespace DuckGame
             return null;
         }
 
-        public static MonoMain.WebCharData RequestRandomCharacter()
+        public static WebCharData RequestRandomCharacter()
         {
             try
             {
@@ -419,7 +443,7 @@ namespace DuckGame
                             Tex2D tex2D = new Tex2D(128, 128);
                             Color[] colorArray = new Color[16384];
                             int index1 = 0;
-                            for (int index2 = 0; index2 < source.Count<byte>() && index1 < colorArray.Count<Color>(); ++index2)
+                            for (int index2 = 0; index2 < source.Count() && index1 < colorArray.Count(); ++index2)
                             {
                                 byte num2 = source[index2];
                                 for (int index3 = 0; index3 < 8; ++index3)
@@ -430,7 +454,7 @@ namespace DuckGame
                                 }
                             }
                             tex2D.SetData(colorArray);
-                            return new MonoMain.WebCharData()
+                            return new WebCharData()
                             {
                                 image = tex2D,
                                 name = str1,
@@ -495,7 +519,7 @@ namespace DuckGame
         {
             mainThread = Thread.CurrentThread;
             cultureCode = CultureInfo.CurrentCulture.LCID;
-            startupAssemblies = AppDomain.CurrentDomain.GetAssemblies().Where<Assembly>(x => !x.IsDynamic).Select<Assembly, string>(assembly => assembly.Location).ToArray<string>();
+            startupAssemblies = AppDomain.CurrentDomain.GetAssemblies().Where(x => !x.IsDynamic).Select(assembly => assembly.Location).ToArray();
             Content = new SynchronizedContentManager(Services);
             DG.SetVersion(Assembly.GetExecutingAssembly().GetName().Version.ToString());
             graphics = new GraphicsDeviceManager(this);
@@ -530,7 +554,7 @@ namespace DuckGame
             Options.Load();
             Cloud.Initialize();
             instance = this;
-            Resolution.Initialize(this.Window.Handle, this.graphics);
+            Resolution.Initialize(Window.Handle, graphics);
             Options.Load();
             Options.PostLoad();
             if (noFullscreen)
@@ -610,15 +634,15 @@ namespace DuckGame
             Resolution.Apply();
             if (Program.doscreentileing)
             {
-                Resolution r = new Resolution()
+                Resolution r = new Resolution
                 {
-                    dimensions = new Vec2(321, 181)
+                    dimensions = new Vec2(321, 181),
+                    mode = ScreenMode.Windowed
                 };
-                r.mode = ScreenMode.Windowed;
                 Resolution.Set(r);
                 Resolution.Apply();
-                SDL.SDL_SetWindowBordered(MonoMain.instance.Window.Handle, SDL.SDL_bool.SDL_FALSE);
-                SDL.SDL_SetWindowPosition(MonoMain.instance.Window.Handle, (int)Program.StartPos.x, (int)Program.StartPos.y);
+                SDL.SDL_SetWindowBordered(instance.Window.Handle, SDL.SDL_bool.SDL_FALSE);
+                SDL.SDL_SetWindowPosition(instance.Window.Handle, (int)Program.StartPos.x, (int)Program.StartPos.y);
             }
             _screenCapture = new RenderTarget2D(Resolution.current.x, Resolution.current.y, true);
             _duckRun = new SpriteMap("duck", 32, 32);
@@ -751,6 +775,10 @@ namespace DuckGame
 
         protected override void OnExiting(object sender, EventArgs args)
         {
+            if (XnaToFnaHelper.fillinform != null)
+            {
+                XnaToFnaHelper.fillinform.Close();
+            }
             InvokeOnGameExitEvent(false);
             KillEverything();
             Process.GetCurrentProcess().Kill();
@@ -789,8 +817,8 @@ namespace DuckGame
             if (result == null || result.details == null)
                 return;
             WorkshopItem publishedFile = result.details.publishedFile;
-            int num1 = DuckFile.GetFiles(publishedFile.path).Count<string>();
-            int num2 = DuckFile.GetDirectories(publishedFile.path).Count<string>();
+            int num1 = DuckFile.GetFiles(publishedFile.path).Count();
+            int num2 = DuckFile.GetDirectories(publishedFile.path).Count();
             if ((num1 != 0 || num2 != 0) && (publishedFile.stateFlags & WorkshopItemState.Installed) != WorkshopItemState.None && (publishedFile.stateFlags & WorkshopItemState.NeedsUpdate) == WorkshopItemState.None)
                 return;
             availableModsToDownload.Add(publishedFile);
@@ -798,77 +826,85 @@ namespace DuckGame
 
         private void DownloadWorkshopItems()
         {
-            loadMessage = "Downloading workshop mods...";
+            NloadMessage = "Downloading workshop mods...";
             if (!Steam.IsInitialized())
                 return;
             LoadingAction steamLoad = new LoadingAction();
             steamLoad.action = () =>
-           {
-               WorkshopQueryUser queryUser = Steam.CreateQueryUser(Steam.user.id, WorkshopList.Subscribed, WorkshopType.UsableInGame, WorkshopSortOrder.TitleAsc);
-               queryUser.requiredTags.Add("Mod");
-               queryUser.onlyQueryIDs = true;
-               queryUser.QueryFinished += sender => steamLoad.flag = true;
-               queryUser.ResultFetched += new WorkshopQueryResultFetched(ResultFetched);
-               queryUser.Request();
-               Steam.Update();
-           };
+            {
+                WorkshopQueryUser queryUser = Steam.CreateQueryUser(Steam.user.id, WorkshopList.Subscribed, WorkshopType.UsableInGame, WorkshopSortOrder.TitleAsc);
+                queryUser.requiredTags.Add("Mod");
+                queryUser.onlyQueryIDs = true;
+                queryUser.QueryFinished += sender => steamLoad.flag = true;
+                queryUser.ResultFetched += new WorkshopQueryResultFetched(ResultFetched);
+                queryUser.Request();
+                Steam.Update();
+            };
             steamLoad.waitAction = () =>
-           {
-               Steam.Update();
-               return steamLoad.flag;
-           };
+            {
+                Steam.Update();
+                return steamLoad.flag;
+            };
+            steamLoad.label = "steamLoad query";
             _thingsToLoad.Enqueue(steamLoad);
             steamLoad = new LoadingAction();
             steamLoad.action = () =>
-           {
-               totalLoadyBits = availableModsToDownload.Count;
-               loadyBits = 0;
-               foreach (WorkshopItem workshopItem in availableModsToDownload)
-               {
-                   WorkshopItem u = workshopItem;
-                   LoadingAction itemDownload = new LoadingAction();
-                   itemDownload.action = () =>
-             {
-                 loadMessage = "Downloading workshop mods (" + loadyBits.ToString() + "/" + totalLoadyBits.ToString() + ")";
-                 if (Steam.DownloadWorkshopItem(u))
-                     itemDownload.context = u;
-                 ++loadyBits;
-             };
-                   itemDownload.waitAction = () =>
-             {
-                 Steam.Update();
-                 return u == null || u.finishedProcessing;
-             };
-                   steamLoad.actions.Enqueue(itemDownload);
-               }
-           };
+            {
+                totalLoadyBits = availableModsToDownload.Count;
+                loadyBits = 0;
+                foreach (WorkshopItem workshopItem in availableModsToDownload)
+                {
+                    WorkshopItem u = workshopItem;
+                    LoadingAction itemDownload = new LoadingAction();
+                    itemDownload.action = () =>
+                    {
+                        NloadMessage = "Downloading workshop mods (" + loadyBits.ToString() + "/" + totalLoadyBits.ToString() + ")";
+                        if (Steam.DownloadWorkshopItem(u))
+                            itemDownload.context = u;
+                        ++loadyBits;
+                    };
+                    itemDownload.waitAction = () =>
+                    {
+                        Steam.Update();
+                        return u == null || u.finishedProcessing;
+                    };
+                    itemDownload.label = "Downloading workshop mods action / Steam.Update finishedProcessing waitAction";
+                    steamLoad.actions.Enqueue(itemDownload);
+                }
+            };
             steamLoad.waitAction = () =>
-           {
-               Steam.Update();
-               return steamLoad.flag;
-           };
+            {
+                Steam.Update();
+                return steamLoad.flag;
+            };
+            steamLoad.label = "setup steam downloading workshop items";
             _thingsToLoad.Enqueue(steamLoad);
         }
         private void AddNamedLoadingAction(Action pAction) => _thingsToLoad.Enqueue((LoadingAction)pAction);
-        private void AddLoadingAction(Action pAction) => _thingsToLoad.Enqueue((LoadingAction)pAction);
-
+        private void AddLoadingAction(Action pAction, string label = "")
+        {
+            LoadingAction Loadaction = (LoadingAction)pAction;
+            Loadaction.label = label;
+            _thingsToLoad.Enqueue(Loadaction);
+        }
+        
         private void StartThreadedLoading()
         {
             _threadedLoadingStarted = true;
             currentActionQueue = _thingsToLoad;
-            AddLoadingAction(ManagedContent.PreInitializeMods);
+            AddLoadingAction(ManagedContent.PreInitializeMods, "ManagedContent PreInitializeMods");
             AddLoadingAction(() =>
-           {
-               DuckGame.Content.InitializeTextureSizeDictionary();
-               Network.Initialize();
-               Teams.Initialize();
-               Chancy.Initialize();
-               // _watermarkEffect = DuckGame.Content.Load<MTEffect>("Shaders/basicWatermark");
-               // _watermarkTexture = DuckGame.Content.Load<Tex2D>("looptex");
-               DuckNetwork.Initialize();
-               Persona.Initialize();
-               DuckRig.Initialize();
-           });
+            {
+                DuckGame.Content.InitializeTextureSizeDictionary();
+                Network.Initialize();
+                Teams.Initialize();
+                Chancy.Initialize();
+                // _watermarkEffect = DuckGame.Content.Load<MTEffect>("Shaders/basicWatermark");
+                // _watermarkTexture = DuckGame.Content.Load<Tex2D>("looptex");
+                DuckNetwork.Initialize();
+                Persona.Initialize();
+                DuckRig.Initialize();
+            }, "Cluster Initialize");
             AddLoadingAction(Input.Initialize);
             if (downloadWorkshopMods)
             {
@@ -876,25 +912,26 @@ namespace DuckGame
                 DownloadWorkshopItems();
             }
 
-            AddLoadingAction(ManagedContent.InitializeMods);
-            AddLoadingAction(Network.InitializeMessageTypes);
-            AddLoadingAction(DeathCrate.InitializeDeathCrateSettings);
-            AddLoadingAction(Editor.InitializeConstructorLists);
-            AddLoadingAction(Team.DeserializeCustomHats);
-            AddLoadingAction(DuckGame.Content.InitializeLevels);
-            AddLoadingAction(DuckGame.Content.InitializeEffects);
-            AddLoadingAction(Input.InitializeGraphics);
-            AddLoadingAction(Music.Initialize);
-            AddLoadingAction(DevConsole.InitializeFont);
-            AddLoadingAction(DevConsole.InitializeCommands);
-            AddLoadingAction(Editor.InitializePlaceableGroup);
-            AddLoadingAction(Challenges.Initialize);
-            AddLoadingAction(Collision.Initialize);
-            AddLoadingAction(Level.InitializeCollisionLists);
-            AddLoadingAction(Keyboard.InitTriggerImages);
-            AddLoadingAction(MapPack.RegeneratePreviewsIfNecessary);
-            AddLoadingAction(StartLazyLoad);
-            AddLoadingAction(SetStarted);
+            if (DGRSettings.PreloadLevels) AddLoadingAction(DGRSettings.PrreloadLevels, "DGRSettings PrreloadLevels");
+            AddLoadingAction(ManagedContent.InitializeMods, "ManagedContent InitializeMods");
+            AddLoadingAction(Network.InitializeMessageTypes, "Network InitializeMessageTypes");
+            AddLoadingAction(DeathCrate.InitializeDeathCrateSettings, "DeathCrate InitializeDeathCrateSettings");
+            AddLoadingAction(Editor.InitializeConstructorLists, "Editor InitializeConstructorLists");
+            AddLoadingAction(Team.DeserializeCustomHats, "Team DeserializeCustomHats");
+            AddLoadingAction(DuckGame.Content.InitializeLevels, "Content InitializeLevels");
+            AddLoadingAction(DuckGame.Content.InitializeEffects, "Content InitializeEffects");
+            AddLoadingAction(Input.InitializeGraphics, "Input InitializeGraphics");
+            AddLoadingAction(Music.Initialize, "Music Initialize");
+            AddLoadingAction(DevConsole.InitializeFont, "DevConsole InitializeFont");
+            AddLoadingAction(DevConsole.InitializeCommands, "DevConsole InitializeCommands");
+            AddLoadingAction(Editor.InitializePlaceableGroup, "Editor InitializePlaceableGroup");
+            AddLoadingAction(Challenges.Initialize, "Challenges Initialize");
+            AddLoadingAction(Collision.Initialize, "Collision Initialize");
+            AddLoadingAction(Level.InitializeCollisionLists, "Level InitializeCollisionLists");
+            AddLoadingAction(Keyboard.InitTriggerImages, "Keyboard InitTriggerImages");
+            AddLoadingAction(MapPack.RegeneratePreviewsIfNecessary, "MapPack RegeneratePreviewsIfNecessary");
+            AddLoadingAction(StartLazyLoad, "StartLazyLoad");
+            AddLoadingAction(SetStarted, "SetStarted");
         }
 
         private void SetStarted()
@@ -926,7 +963,11 @@ namespace DuckGame
             //Program.FirebreakReflectionsht.Wait();
 
             //Program.main.TargetElapsedTime = TimeSpan.FromTicks(166667L);
-            this.IsFixedTimeStep = true; // UNZOOOM
+            if (!(startInLobby || Program.testServer))
+            {
+                IsFixedTimeStep = true; // UNZOOOM
+            }
+           
             Program.SetAccumulatedElapsedTime(Program.main, Program.main.TargetElapsedTime);
 
             foreach (MethodInfo methodInfo in PostInitializeAttribute.All)
@@ -977,7 +1018,7 @@ namespace DuckGame
         }
         public bool IsFocused
         {
-            get => (SDL.SDL_GetWindowFlags(this.Window.Handle) & (uint)SDL.SDL_WindowFlags.SDL_WINDOW_INPUT_FOCUS) > 0;
+            get => (SDL.SDL_GetWindowFlags(Window.Handle) & (uint)SDL.SDL_WindowFlags.SDL_WINDOW_INPUT_FOCUS) > 0;
         }
         [HandleProcessCorruptedStateExceptions, SecurityCritical]
         protected override void Update(GameTime gameTime)
@@ -1107,7 +1148,7 @@ namespace DuckGame
 
         public static void CalculateModMemoryOffendersList()
         {
-            List<ModConfiguration> list = loadedModsWithAssemblies.OrderByDescending<ModConfiguration, long>(x => x.content == null ? -1L : x.content.kilobytesPreAllocated).ToList<ModConfiguration>();
+            List<ModConfiguration> list = loadedModsWithAssemblies.OrderByDescending(x => x.content == null ? -1L : x.content.kilobytesPreAllocated).ToList();
             bool flag = false;
             modMemoryOffendersString = "Mods taking up the most memory:\n";
             foreach (ModConfiguration modConfiguration in list)
@@ -1130,24 +1171,29 @@ namespace DuckGame
             ++Graphics.frame;
             Tasker.RunTasks();
             Graphics.GarbageDisposal(false);
-            if (!disableSteam && !_started)
+            if (!_started)
             {
-                if (Cloud.processing)
+                //Input.Update();
+                //DevConsole.Update();
+                if (!disableSteam)
                 {
-                    Cloud.Update();//return; unneded probly
-                }
-                if (steamConnectionCheckFail)
-                {
-                    if (_loggedConnectionCheckFailure)
+                    if (Cloud.processing)
                     {
-                        _loggedConnectionCheckFailure = true;
-                        DevConsole.Log("|DGRED|Failed to initialize a connection to Steam.");
+                        Cloud.Update();//return; unneded probly
                     }
-                }
-                else if (Steam.IsInitialized() && Steam.IsRunningInitializeProcedures())
-                {
-                    loadMessage = "Loading Steam";
-                    Steam.Update();//  why return lets just roll through itll be fine =);
+                    if (steamConnectionCheckFail)
+                    {
+                        if (_loggedConnectionCheckFailure)
+                        {
+                            _loggedConnectionCheckFailure = true;
+                            DevConsole.Log("|DGRED|Failed to initialize a connection to Steam.");
+                        }
+                    }
+                    else if (Steam.IsInitialized() && Steam.IsRunningInitializeProcedures())
+                    {
+                        NloadMessage = "Loading Steam";
+                        Steam.Update();//  why return lets just roll through itll be fine =);
+                    }
                 }
             }
             if (_canStartLoading && !_threadedLoadingStarted && _didFirstDraw)
@@ -1165,17 +1211,26 @@ namespace DuckGame
                         goto label_19;
                 }
                 _loadTimer.Restart();
+               // MonoMain.loadMessage = "Things To Load " + _thingsToLoad.Count.ToString();
                 while (_thingsToLoad.Count > 0)
                 {
                     elapsed = _loadTimer.elapsed;
                     if (elapsed.TotalMilliseconds < 40.0)
                     {
+ 
                         currentActionQueue = _thingsToLoad;
                         LoadingAction loadingAction = _thingsToLoad.Peek();
+                        NloadMessage = loadingAction.label;
                         if (loadingAction.Invoke())
+                        {
                             _thingsToLoad.Dequeue();
+                            //MonoMain.loadMessage = "Things To Load " + _thingsToLoad.Count.ToString();
+                            //DevConsole.Log("_thingsToLoad left " + _thingsToLoad.Count.ToString());
+                        }
                         else if (loadingAction.waiting)
+                        {
                             break;
+                        }
                     }
                     else
                         break;
@@ -1466,8 +1521,8 @@ namespace DuckGame
             }
         }
 
-        Stack<string> loadMessages = new();
-        string lastLoadMessage = "";
+        static Stack<string> loadMessages = new();
+        public static string lastLoadMessage = "";
 
         protected void RunDraw(GameTime gameTime)
         {
@@ -1476,10 +1531,11 @@ namespace DuckGame
             Graphics.frameFlipFlop = !Graphics.frameFlipFlop;
             if (Graphics.device.IsDisposed)
                 return;
+
             Graphics.SetScissorRectangle(new Rectangle(0f, 0f, Graphics.width, Graphics.height));
             if (Recorder.currentRecording != null)
                 Recorder.currentRecording.NextFrame();
-            if (!_started)
+            if (!_started) 
             {
                 ++_loadingFramesRendered;
                 Graphics.SetRenderTarget(null);
@@ -1490,6 +1546,13 @@ namespace DuckGame
                     _setCulture = true;
                 }
                 Graphics.Clear(new Color(0, 0, 0));
+                //if (Layer.Console != null)
+                //{
+                //    Layer.Console.Begin(true);
+                //    DevConsole.Draw();
+                //    //Level.current.PostDrawLayer(Layer.Console);
+                //    Layer.Console.End(true);
+                //}
                 if (!DuckGame.Content.didsetbigboi && Program.shouldusespriteatlas)
                 {
                     DuckGame.Content.didsetbigboi = true;
@@ -1501,7 +1564,7 @@ namespace DuckGame
                         DuckGame.Content.Thick.Namebase = "SpriteAtlas";
 
                         //RSplit("de mo", ' ', -1);
-                        string[] lines = System.IO.File.ReadAllLines(@"../spriteatlas_offsets.txt");
+                        string[] lines = File.ReadAllLines(@"../spriteatlas_offsets.txt");
                         foreach (string line in lines)
                         {
                             try
@@ -1528,7 +1591,7 @@ namespace DuckGame
                         DuckGame.Content.Thick.Namebase = "SpriteAtlas";
 
                         //RSplit("de mo", ' ', -1);
-                        string[] lines = System.IO.File.ReadAllLines(Program.GameDirectory + "spriteatlas/spriteatlas_offsets.txt");
+                        string[] lines = File.ReadAllLines(Program.GameDirectory + "spriteatlas/spriteatlas_offsets.txt");
                         foreach (string line in lines)
                         {
                             try
@@ -1555,30 +1618,56 @@ namespace DuckGame
                 Vec2 p1 = new Vec2(50f, Graphics.height - 50);
                 Vec2 vec2_1 = new Vec2(Graphics.width - 100, 20f);
                 Graphics.DrawRect(p1, p1 + vec2_1, Color.DarkGray * 0.1f, (Depth)0.5f);
-                float num = loadyBits / (float)totalLoadyBits;
-                if (num > 1.0)
-                    num = 1f;
-                Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * num, vec2_1.y), Color.White * 0.1f, (Depth)0.6f);
-                if (Debugger.IsAttached)
+                float loaded = loadyBits / (float)totalLoadyBits;
+				if (loaded > 1f)
+				{
+					loaded = 1f;
+				}
+                if (loadMessages.Count == 0)
                 {
-                    if (!loadMessage.StartsWith("|16,144,13|"))
+                    NloadMessage = NloadMessage;
+                }
+                if (Program.gay)
+                {
+                    int offset = 0;
+                    for (int i = 0; i < p1.y - p1.y + vec2_1.y; i++)
                     {
-                        loadMessage = "|16,144,13|" + loadMessage;
+                        if (i - offset >= Colors.Rainbow.Length)
+                        {
+                            offset += Colors.Rainbow.Length;
+                            // i = 0;
+                        }
+                        Graphics.DrawLine(new Vec2(p1.x, p1.y + i), p1 + new Vec2(vec2_1.x * loaded, vec2_1.y + i - 20), Colors.Rainbow[i - offset]);
                     }
                 }
-                string text = loadMessage;
-                if (loadMessage != lastLoadMessage)
+                else if (Debugger.IsAttached)
                 {
-                    loadMessages.Push(lastLoadMessage = loadMessage);
+                    Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * loaded, vec2_1.y), Color.Green, (Depth)0.6f);
                 }
-                if (Cloud.processing && Cloud.progress != 0.0 && Cloud.progress != 1.0)
-                    text = "Synchronizing Steam Cloud... (" + ((int)(Cloud.progress * 100.0)).ToString() + "%)";
-                float textPadding = -24f;
-                if (text != loadMessage)
+                else
                 {
-                    Graphics.DrawString(text, p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
+                    Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * loaded, vec2_1.y), Color.Red, (Depth)0.6f);
+                }
+                //string text = loadMessage;
+                //if (loadMessage != lastLoadMessage)
+                //{
+                //    loadMessages.Push(lastLoadMessage = loadMessage);
+                //}
+                float textPadding = -24f;
+                if (Cloud.processing && Cloud.progress != 0.0 && Cloud.progress != 1.0)
+                {
+                    Graphics.DrawString("Synchronizing Steam Cloud... (" + ((int)(Cloud.progress * 100.0)).ToString() + "%)", p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
                     textPadding -= 20;
                 }
+                if (loadMessage != lastLoadMessage)
+                {
+                    NloadMessage = loadMessage;
+                }
+                //if (text != loadMessage)
+                //{
+                //    Graphics.DrawString(text, p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
+                //    textPadding -= 20;
+                //}
                 foreach (string i in loadMessages)
                 {
                     Graphics.DrawString(i, p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
@@ -1599,6 +1688,13 @@ namespace DuckGame
                 Graphics.Draw(_duckArm, vec2_2.x + 20f, vec2_2.y + 56f);
                 Graphics.screen.End();
                 _timeSinceLastLoadFrame.Restart();
+                //if (Layer.Console != null)
+                //{
+                //    Layer.Console.Begin(true);
+                //    DevConsole.Draw();
+                //    //Level.current.PostDrawLayer(Layer.Console);
+                //    Layer.Console.End(true);
+                //}
             }
             else
             {
@@ -1649,6 +1745,8 @@ namespace DuckGame
                 }
                 if (Graphics.screenTarget != null)
                 {
+                    RenderDelegates.BeforeScreen?.Invoke();
+                    
                     int width = Graphics.width;
                     int height = Graphics.height;
                     Graphics.SetRenderTarget(Graphics.screenTarget);
@@ -1665,6 +1763,8 @@ namespace DuckGame
                     Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Matrix.Identity);
                     Graphics.Draw(Graphics.screenTarget, Vec2.Zero, new Rectangle?(), Color.White, 0f, Vec2.Zero, Vec2.One, SpriteEffects.None);
                     Graphics.screen.End();
+                    
+                    RenderDelegates.AfterScreen?.Invoke();
                 }
                 else
                 {

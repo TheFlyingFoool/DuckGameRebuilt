@@ -28,9 +28,9 @@ namespace DuckGame
             if (!_transitioning)
             {
                 IEnumerable<Thing> thing = level.things[typeof(Duck)];
-                if (thing.Count<Thing>() > 0)
+                if (thing.Count() > 0)
                 {
-                    Duck duck = thing.First<Thing>() as Duck;
+                    Duck duck = thing.First() as Duck;
                     if (duck.x < x - 5.0)
                     {
                         duck.x -= 10f;

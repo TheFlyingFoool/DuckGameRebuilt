@@ -37,7 +37,7 @@ namespace DuckGame
                 return null;
             if (num <= 0f)
                 return _impl.OnSendPacket(sendData.buffer, sendData.lengthInBytes, connection.data);
-            connection.debuggerContext.packets.Add(new DataLayerDebug.BadConnection.DelayedPacket()
+            connection.debuggerContext.packets.Add(new BadConnection.DelayedPacket()
             {
                 data = sendData,
                 time = num
@@ -57,7 +57,7 @@ namespace DuckGame
             private float _loss;
             private float _duplicate;
             public NetworkConnection connection;
-            public List<DataLayerDebug.BadConnection.DelayedPacket> packets = new List<DataLayerDebug.BadConnection.DelayedPacket>();
+            public List<DelayedPacket> packets = new List<DelayedPacket>();
             //private int i;
 
             public float latency
@@ -102,8 +102,8 @@ namespace DuckGame
 
             public bool Update(NCNetworkImplementation pNetwork)
             {
-                List<DataLayerDebug.BadConnection.DelayedPacket> delayedPacketList = new List<DataLayerDebug.BadConnection.DelayedPacket>();
-                foreach (DataLayerDebug.BadConnection.DelayedPacket packet in packets)
+                List<DelayedPacket> delayedPacketList = new List<DelayedPacket>();
+                foreach (DelayedPacket packet in packets)
                 {
                     packet.time -= Maths.IncFrameTimer();
                     if (packet.time <= 0.0 && connection.debuggerContext.lagSpike <= 0)
@@ -112,7 +112,7 @@ namespace DuckGame
                         delayedPacketList.Add(packet);
                     }
                 }
-                foreach (DataLayerDebug.BadConnection.DelayedPacket delayedPacket in delayedPacketList)
+                foreach (DelayedPacket delayedPacket in delayedPacketList)
                 {
                     if (Rando.Int(15) == 0)
                         delayedPacket.time = Rando.Float(2f, 5f);

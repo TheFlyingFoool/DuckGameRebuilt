@@ -56,32 +56,32 @@ namespace DuckGame
                 layer = Layer.Background
             };
             _duck = new Duck(730f, 100f, Profiles.active[0]);
-            Level.Add(_background);
-            Level.Add(_duck);
+            Add(_background);
+            Add(_duck);
             _followCam.Add(_duck);
             Chancy.Add("SUP MOTHARFUCKAR :P");
-            Level.Add(new Block(0f, 187f, 295f, 53f));
-            Level.Add(new Block(289f, 195f, 14f, 45f));
-            Level.Add(new Block(290f, 203f, 190f, 37f));
-            Level.Add(new Block(467f, 195f, 17f, 45f));
-            Level.Add(new Block(475f, 187f, 217f, 53f));
-            Level.Add(new Block(639f, 179f, 32f, 16f));
-            Level.Add(new Block(647f, 171f, 32f, 16f));
-            Level.Add(new Block(655f, 163f, 32f, 16f));
-            Level.Add(new Block(663f, 155f, 32f, 16f));
-            Level.Add(new Block(671f, 147f, 32f, 16f));
-            Level.Add(new Block(679f, 139f, 124f, 16f));
-            Level.Add(new Block(787f, 0f, 64f, 300f));
-            Level.Add(new Block(-16f, 0f, 21f, 300f));
-            Level.Add(new Platform(648f, 131f, 12f, 8f));
-            Level.Add(new Platform(640f, 123f, 12f, 8f));
-            Level.Add(new Platform(632f, 115f, 12f, 8f));
-            Level.Add(new Block(624f, 107f, 12f, 8f));
-            Level.Add(new Block(616f, 99f, 12f, 8f));
-            Level.Add(new Block(-100f, 91f, 720f, 14f));
-            Level.Add(new Block(251f, 83f, 268f, 10f));
-            Level.Add(new Block(259f, 75f, 252f, 10f));
-            Level.Add(new Block(254f, 0f, 64f, 300f));
+            Add(new Block(0f, 187f, 295f, 53f));
+            Add(new Block(289f, 195f, 14f, 45f));
+            Add(new Block(290f, 203f, 190f, 37f));
+            Add(new Block(467f, 195f, 17f, 45f));
+            Add(new Block(475f, 187f, 217f, 53f));
+            Add(new Block(639f, 179f, 32f, 16f));
+            Add(new Block(647f, 171f, 32f, 16f));
+            Add(new Block(655f, 163f, 32f, 16f));
+            Add(new Block(663f, 155f, 32f, 16f));
+            Add(new Block(671f, 147f, 32f, 16f));
+            Add(new Block(679f, 139f, 124f, 16f));
+            Add(new Block(787f, 0f, 64f, 300f));
+            Add(new Block(-16f, 0f, 21f, 300f));
+            Add(new Platform(648f, 131f, 12f, 8f));
+            Add(new Platform(640f, 123f, 12f, 8f));
+            Add(new Platform(632f, 115f, 12f, 8f));
+            Add(new Block(624f, 107f, 12f, 8f));
+            Add(new Block(616f, 99f, 12f, 8f));
+            Add(new Block(-100f, 91f, 720f, 14f));
+            Add(new Block(251f, 83f, 268f, 10f));
+            Add(new Block(259f, 75f, 252f, 10f));
+            Add(new Block(254f, 0f, 64f, 300f));
             List<Vec2> vec2List = new List<Vec2>();
             vec2List.Add(new Vec2(380f, 186f));
             vec2List.Add(new Vec2(520f, 170f));
@@ -94,33 +94,33 @@ namespace DuckGame
             {
                 name = "TARGETS",
                 challenges = {
-          "challenge/targets01",
-          "challenge/targets03ouya",
-          "challenge/targets02ouya"
-        },
+                  "challenge/targets01",
+                  "challenge/targets03ouya",
+                  "challenge/targets02ouya"
+                },
                 trophiesRequired = 0
             }, 0)
             {
                 lightColor = 2,
                 unlocked = true
             };
-            Level.Add(arcadeMachine1);
+            Add(arcadeMachine1);
             _challenges.Add(arcadeMachine1);
             Vec2 vec2_3 = vec2List[_challenges.Count];
             ArcadeMachine arcadeMachine2 = new ArcadeMachine(vec2_3.x, vec2_3.y, new ChallengeGroup()
             {
                 name = "VARIETY ZONE",
-                challenges = {
-          "challenge/obstacle",
-          "challenge/shootout02",
-          "challenge/jetpack02"
-        },
+                        challenges = {
+                  "challenge/obstacle",
+                  "challenge/shootout02",
+                  "challenge/jetpack02"
+                },
                 trophiesRequired = 0
             }, 6)
             {
                 lightColor = 1
             };
-            Level.Add(arcadeMachine2);
+            Add(arcadeMachine2);
             _challenges.Add(arcadeMachine2);
             Vec2 vec2_4 = vec2List[_challenges.Count];
             ArcadeMachine arcadeMachine3 = new ArcadeMachine(vec2_4.x, vec2_4.y, new ChallengeGroup()
@@ -136,7 +136,7 @@ namespace DuckGame
             {
                 lightColor = 1
             };
-            Level.Add(arcadeMachine3);
+            Add(arcadeMachine3);
             _challenges.Add(arcadeMachine3);
             Vec2 vec2_5 = vec2List[_challenges.Count];
             ArcadeMachine arcadeMachine4 = new ArcadeMachine(vec2_5.x, vec2_5.y, new ChallengeGroup()
@@ -152,7 +152,7 @@ namespace DuckGame
             {
                 lightColor = 2
             };
-            Level.Add(arcadeMachine4);
+            Add(arcadeMachine4);
             _challenges.Add(arcadeMachine4);
             Vec2 vec2_6 = vec2List[_challenges.Count];
             ArcadeMachine arcadeMachine5 = new ArcadeMachine(vec2_6.x, vec2_6.y, new ChallengeGroup()
@@ -168,10 +168,10 @@ namespace DuckGame
             {
                 lightColor = 1
             };
-            Level.Add(arcadeMachine5);
+            Add(arcadeMachine5);
             _challenges.Add(arcadeMachine5);
             _prizeTable = new PrizeTable(730f, 124f);
-            Level.Add(_prizeTable);
+            Add(_prizeTable);
             _hud = new ArcadeHUD
             {
                 alpha = 0f
@@ -180,7 +180,7 @@ namespace DuckGame
             {
                 alpha = 0f
             };
-            Level.Add(_unlockScreen);
+            Add(_unlockScreen);
             _pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
             _pauseMenu = new UIMenu("@LWING@ARCADE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE  @SELECT@SELECT");
             _confirmMenu = new UIMenu("EXIT ARCADE?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK  @SELECT@SELECT");
@@ -200,7 +200,7 @@ namespace DuckGame
             _pauseGroup.Add(_confirmMenu, false);
             _pauseGroup.Close();
             _pauseGroup.isPauseMenu = true;
-            Level.Add(_pauseGroup);
+            Add(_pauseGroup);
             Music.Play(nameof(Arcade));
             base.Initialize();
         }
@@ -230,7 +230,7 @@ namespace DuckGame
             {
                 if (!_quitting)
                 {
-                    if (Input.Pressed("START"))
+                    if (Input.Pressed(Triggers.Start))
                     {
                         _pauseGroup.Open();
                         _pauseMenu.Open();
@@ -265,7 +265,7 @@ namespace DuckGame
                 {
                     Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.02f);
                     if (Graphics.fade <= 0.01f)
-                        Level.current = new TitleScreen();
+                        current = new TitleScreen();
                 }
             }
             if (_paused)
@@ -382,11 +382,11 @@ namespace DuckGame
                 }
                 else if (_state == ArcadeState.LaunchChallenge)
                 {
-                    Arcade.currentArcade = this;
+                    currentArcade = this;
                     foreach (Thing thing in things[typeof(ChallengeConfetti)])
-                        Level.Remove(thing);
+                        Remove(thing);
                     Music.Stop();
-                    Level.current = new ChallengeLevel(_hud.selected.challenge.fileName);
+                    current = new ChallengeLevel(_hud.selected.challenge.fileName);
                     _desiredState = ArcadeState.ViewChallenge;
                     _hud.launchChallenge = false;
                     _launchedChallenge = false;
@@ -444,7 +444,7 @@ namespace DuckGame
                         if (challenge.hover)
                         {
                             obj = challenge;
-                            if (Input.Pressed("SHOOT"))
+                            if (Input.Pressed(Triggers.Shoot))
                             {
                                 _hud.activeChallengeGroup = challenge.data;
                                 _desiredState = ArcadeState.ViewChallenge;
@@ -460,7 +460,7 @@ namespace DuckGame
                         if (_prizeTable.hover)
                         {
                             obj = _prizeTable;
-                            if (Input.Pressed("SHOOT"))
+                            if (Input.Pressed(Triggers.Shoot))
                             {
                                 _desiredState = ArcadeState.UnlockScreen;
                                 _followCam.manualViewSize = _followCam.viewSize;

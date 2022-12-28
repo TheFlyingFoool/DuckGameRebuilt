@@ -8,13 +8,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.UI.WebControls;
-using System.Windows.Controls.Primitives;
 
 namespace DuckGame
 {
     public class Bullet : Thing
     {
+        public static int bulletcolorindex;
         private new NetworkConnection _connection;
         protected Teleporter _teleporter;
         public AmmoType ammo;
@@ -51,7 +50,7 @@ namespace DuckGame
         public bool trickshot;
         protected int timesRebounded;
         protected int reboundBulletsCreated;
-        private Bullet _reboundedBullet;
+        protected Bullet _reboundedBullet;
         public bool reboundCalled;
         public Vec2 travelDirNormalized;
         public bool reboundOnce;
@@ -194,6 +193,19 @@ namespace DuckGame
                 return;
             double x = travelDirNormalized.x;
         }
+        public override void Initialize()
+        {
+            if (Program.gay)
+            {
+                color = Colors.Rainbow[bulletcolorindex];
+                bulletcolorindex += 1;
+                if (bulletcolorindex >= Colors.Rainbow.Length)
+                {
+                    bulletcolorindex = 0;
+                }
+            }
+            base.Initialize();
+        }
 
         public Bullet ReverseTravel()
         {
@@ -250,16 +262,16 @@ namespace DuckGame
             reboundCalled = false;
             do
             {
-                Bullet.bulletImpactList.Clear();
+                bulletImpactList.Clear();
                 --num1;
                 --_totalSteps;
-                Level.current.CollisionBullet(currentTravel, Bullet.bulletImpactList);
+                Level.current.CollisionBullet(currentTravel, bulletImpactList);
                 if (!_tracer)
                 {
                     for (int index = 0; index < _currentlyImpacting.Count; ++index)
                     {
                         MaterialThing materialThing = _currentlyImpacting[index];
-                        if (!Bullet.bulletImpactList.Contains(materialThing))
+                        if (!bulletImpactList.Contains(materialThing))
                         {
                             if (ammo.deadly)
                                 materialThing.DoExitHit(this, currentTravel);
@@ -271,9 +283,9 @@ namespace DuckGame
                 Duck owner = _owner as Duck;
                 for (int i = 0; i < 2; ++i)
                 {
-                    for (int index2 = 0; index2 < Bullet.bulletImpactList.Count; ++index2)
+                    for (int index2 = 0; index2 < bulletImpactList.Count; ++index2)
                     {
-                        MaterialThing bulletImpact = Bullet.bulletImpactList[index2];
+                        MaterialThing bulletImpact = bulletImpactList[index2];
                         if (i == 1 == bulletImpact is IAmADuck && (bulletImpact != _owner && (!(_owner is Duck) || !(_owner as Duck).ExtendsTo(bulletImpact)) || ammo.immediatelyDeadly) && (owner == null || bulletImpact != owner.holdObject) && bulletImpact != _teleporter && (!(bulletImpact is Teleporter) || !_tracer && ammo.canTeleport) && (ammo.ownerSafety <= 0 || _travelTime / Maths.IncFrameTimer() >= ammo.ownerSafety || firedFrom == null || bulletImpact != firedFrom.owner))
                         {
                             bool shield = false;
@@ -336,47 +348,65 @@ namespace DuckGame
                             if (willBeStopped)
                             {
                                 willBeStopped = true;
-                                if (bulletImpact is Teleporter)
+                                if (bulletImpact is Teleporter t)
                                 {
+                                    WumpTeleporter wt = t as WumpTeleporter;
                                     _teleporter = bulletImpact as Teleporter;
                                     if (_teleporter.link != null)
                                     {
-                                        float rng = _totalLength - (_actualStart - currentTravel).length;
-                                        if (rng > 0f)
+                                        if (wt == null || wt.charge <= 0)
                                         {
-                                            float dir1 = Maths.PointDirection(_actualStart, currentTravel);
-                                            if ((int)_teleporter.teleHeight == 2 && (int)_teleporter._link.teleHeight == 2)
+                                            if (wt != null)
                                             {
-                                                Vec2 vec2 = _teleporter.position - currentTravel;
-                                                _teleporter = _teleporter.link;
-                                                Rebound(_teleporter.position - vec2, dir1, rng);
-                                            }
-                                            else
-                                            {
-                                                Vec2 currentTravel = this.currentTravel;
-                                                if (_teleporter._dir.y == 0f)
-                                                    currentTravel.x = _teleporter._link.x - (_teleporter.x - this.currentTravel.x) + travelDirNormalized.x;
-                                                else if (_teleporter._dir.x == 0f)
-                                                    currentTravel.y = _teleporter._link.y - (_teleporter.y - this.currentTravel.y) + travelDirNormalized.y;
-                                                if ((bool)_teleporter._link.horizontal)
+                                                Fondle(wt);
+                                                wt.charge = wt.chargeTime;
+                                                if (wt._link is WumpTeleporter wtt)
                                                 {
-                                                    if (currentTravel.x < _teleporter._link.left + 2f)
-                                                        currentTravel.x = _teleporter._link.left + 2f;
-                                                    if (currentTravel.x > _teleporter._link.right - 2f)
-                                                        currentTravel.x = _teleporter._link.right - 2f;
+                                                    Fondle(wtt);
+                                                    wtt.charge = wt.chargeTime;
+                                                }
+                                            }
+                                            float rng = _totalLength - (_actualStart - currentTravel).length;
+                                            if (rng > 0f)
+                                            {
+                                                float dir1 = Maths.PointDirection(_actualStart, currentTravel);
+                                                if ((int)_teleporter.teleHeight == 2 && (int)_teleporter._link.teleHeight == 2)
+                                                {
+                                                    Vec2 vec2 = _teleporter.position - currentTravel;
+                                                    _teleporter = _teleporter.link;
+                                                    Rebound(_teleporter.position - vec2, dir1, rng);
                                                 }
                                                 else
                                                 {
-                                                    if (currentTravel.y < _teleporter._link.top + 2f)
-                                                        currentTravel.y = _teleporter._link.top + 2f;
-                                                    if (currentTravel.y > _teleporter._link.bottom - 2f)
-                                                        currentTravel.y = _teleporter._link.bottom - 2f;
+                                                    Vec2 currentTravel = this.currentTravel;
+                                                    if (_teleporter._dir.y == 0f)
+                                                        currentTravel.x = _teleporter._link.x - (_teleporter.x - this.currentTravel.x) + travelDirNormalized.x;
+                                                    else if (_teleporter._dir.x == 0f)
+                                                        currentTravel.y = _teleporter._link.y - (_teleporter.y - this.currentTravel.y) + travelDirNormalized.y;
+                                                    if ((bool)_teleporter._link.horizontal)
+                                                    {
+                                                        if (currentTravel.x < _teleporter._link.left + 2f)
+                                                            currentTravel.x = _teleporter._link.left + 2f;
+                                                        if (currentTravel.x > _teleporter._link.right - 2f)
+                                                            currentTravel.x = _teleporter._link.right - 2f;
+                                                    }
+                                                    else
+                                                    {
+                                                        if (currentTravel.y < _teleporter._link.top + 2f)
+                                                            currentTravel.y = _teleporter._link.top + 2f;
+                                                        if (currentTravel.y > _teleporter._link.bottom - 2f)
+                                                            currentTravel.y = _teleporter._link.bottom - 2f;
+                                                    }
+                                                    _teleporter = _teleporter.link;
+                                                    Rebound(currentTravel, dir1, rng);
                                                 }
-                                                _teleporter = _teleporter.link;
-                                                Rebound(currentTravel, dir1, rng);
                                             }
+                                            flag3 = true;
                                         }
-                                        flag3 = true;
+                                        else if (wt.charge > 0)
+                                        {
+                                            break;
+                                        }
                                     }
                                 }
                                 else if (!flag3 && (rebound && (!ammo.softRebound || bulletImpact.physicsMaterial != PhysicsMaterial.Wood) && bulletImpact is Block || reboundOnce))
@@ -482,7 +512,7 @@ namespace DuckGame
         private void TravelBullet()
         {
             travelDirNormalized = end - start;
-            if (travelDirNormalized.x == double.NaN || travelDirNormalized.y == double.NaN)
+            if ( travelDirNormalized.x == double.NaN || travelDirNormalized.y == double.NaN)
             {
                 travelDirNormalized = Vec2.One;
             }
@@ -589,7 +619,7 @@ namespace DuckGame
         public Vec2 GetPointOnArc(float distanceBack)
         {
             float num1 = 0f;
-            Vec2 pointOnArc = prev.Last<Vec2>();
+            Vec2 pointOnArc = prev.Last();
             for (int index = prev.Count - 1; index > 0; --index)
             {
                 if (index == 0)
@@ -620,13 +650,13 @@ namespace DuckGame
                 //Fixed some shit here no touchy as for it is very fragile <3
                 //-NiK0
                 float num = (int)Math.Ceiling((drawdist - startpoint) / 8f);
-                Vec2 p2 = prev.Last<Vec2>();
+                Vec2 p2 = prev.Last();
                 for (int index = 0; index < num; ++index)
                 {
                     Vec2 pointOnArc = GetPointOnArc(index * 8);
 
                     Graphics.DrawLine(pointOnArc, p2, color * (1f - index / num) * alpha, ammo.bulletThickness, (Depth)0.9f);
-                    if (pointOnArc == prev.First<Vec2>())
+                    if (pointOnArc == prev[0])
                         break;
                     p2 = pointOnArc;
                     if (index == 0 && ammo.sprite != null && !doneTravelling)
@@ -652,23 +682,23 @@ namespace DuckGame
                     Graphics.Draw(ammo.sprite, drawEnd.x, drawEnd.y);
                 }
                 float length = (drawStart - drawEnd).length;
-                float val = 0f;
-                float num1 = (1f / (length / 8f));
-                float num2 = 1f;
-                float num3 = 8f;
+                float dist = 0f;
+                float incs = (1f / (length / 8f));
+                float alph = 1f;
+                float drawLength = 8f;
                 while (true)
                 {
                     bool flag = false;
-                    if (val + num3 > length)
+                    if (dist + drawLength > length)
                     {
-                        num3 = length - Maths.Clamp(val, 0f, 99f);
+                        drawLength = length - Maths.Clamp(dist, 0f, 99f);
                         flag = true;
                     }
-                    num2 -= num1;
+                    alph -= incs;
                     --Graphics.currentDrawIndex;
-                    Graphics.DrawLine(drawStart + travelDirNormalized * length - travelDirNormalized * val, drawStart + travelDirNormalized * length - travelDirNormalized * (val + num3), color * num2, ammo.bulletThickness, depth);
+                    Graphics.DrawLine(drawStart + travelDirNormalized * length - travelDirNormalized * dist, drawStart + travelDirNormalized * length - travelDirNormalized * (dist + drawLength), color * alph, ammo.bulletThickness, depth);
                     if (!flag)
-                        val += 8f;
+                        dist += 8f;
                     else
                         break;
                 }

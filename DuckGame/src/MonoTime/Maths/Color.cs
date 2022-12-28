@@ -207,10 +207,10 @@ namespace DuckGame
         {
         }
 
-        public Color(uint hex, bool newHexSystem)
+        public Color(uint hex, bool fullHex)
           : this()
         {
-            if (hex > 16777215U)
+            if (fullHex)
             {
                 r = (byte)(hex >> 24 & byte.MaxValue);
                 g = (byte)(hex >> 16 & byte.MaxValue);
@@ -247,11 +247,11 @@ namespace DuckGame
                     pString = pString.Substring(1, pString.Length - 1);
                 else if (pString.StartsWith("0x"))
                     pString = pString.Substring(2, pString.Length - 2);
-                return new Color(Convert.ToUInt32("0x" + pString, 16), true);
+                return new Color(Convert.ToUInt32("0x" + pString, 16), pString.Length > 6);
             }
             catch (Exception)
             {
-                return Color.White;
+                return White;
             }
         }
 
@@ -351,6 +351,11 @@ namespace DuckGame
                 (byte)Math.Max(g - diff, 0),
                 (byte)Math.Max(b - diff, 0),
                 a);
+        }
+
+        public string ToHexString()
+        {
+            return $"{r:X2}{g:X2}{b:X2}{a:X2}";
         }
 
         private static Random _random = new Random();

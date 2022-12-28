@@ -16,33 +16,33 @@ namespace XnaToFna.ProxyForms
         public static GameForm Instance;
         private bool _Dirty;
         private bool FakeFullscreenWindow;
-        private Microsoft.Xna.Framework.Rectangle _WindowedBounds;
-        private Microsoft.Xna.Framework.Rectangle _Bounds;
+        private Rectangle _WindowedBounds;
+        private Rectangle _Bounds;
         private FormBorderStyle _FormBorderStyle = FormBorderStyle.FixedDialog;
         private FormWindowState _WindowState;
         private FormStartPosition _StartPosition = FormStartPosition.WindowsDefaultLocation;
 
         private bool Dirty
         {
-            get => this._Dirty;
+            get => _Dirty;
             set
             {
                 if (value)
                 {
-                    this._FormBorderStyle = this.FormBorderStyle;
-                    this._WindowState = this.WindowState;
+                    _FormBorderStyle = FormBorderStyle;
+                    _WindowState = WindowState;
                 }
-                this._Dirty = value;
+                _Dirty = value;
             }
         }
 
-        public override XnaToFna.ProxyDrawing.Rectangle Bounds
+        public override ProxyDrawing.Rectangle Bounds
         {
-            get => new XnaToFna.ProxyDrawing.Rectangle(this._Bounds.X, this._Bounds.Y, this._Bounds.Width, this._Bounds.Height);
-            set => this.SDLBounds = this._Bounds = this._WindowedBounds = new Microsoft.Xna.Framework.Rectangle(value.X, value.Y, value.Width, value.Height);
+            get => new ProxyDrawing.Rectangle(_Bounds.X, _Bounds.Y, _Bounds.Width, _Bounds.Height);
+            set => SDLBounds = _Bounds = _WindowedBounds = new Rectangle(value.X, value.Y, value.Width, value.Height);
         }
 
-        public Microsoft.Xna.Framework.Rectangle SDLBounds
+        public Rectangle SDLBounds
         {
             get => XnaToFnaHelper.Game.Window.ClientBounds;
             set
@@ -53,23 +53,23 @@ namespace XnaToFna.ProxyForms
             }
         }
 
-        protected override XnaToFna.ProxyDrawing.Rectangle _ClientRectangle
+        protected override ProxyDrawing.Rectangle _ClientRectangle
         {
             get
             {
-                Microsoft.Xna.Framework.Rectangle clientBounds = XnaToFnaHelper.Game.Window.ClientBounds;
-                return new XnaToFna.ProxyDrawing.Rectangle(0, 0, clientBounds.Width, clientBounds.Height);
+                Rectangle clientBounds = XnaToFnaHelper.Game.Window.ClientBounds;
+                return new ProxyDrawing.Rectangle(0, 0, clientBounds.Width, clientBounds.Height);
             }
         }
 
-        public override XnaToFna.ProxyDrawing.Point Location
+        public override ProxyDrawing.Point Location
         {
             get
             {
                 int x;
                 int y;
                 SDL.SDL_GetWindowPosition(XnaToFnaHelper.Game.Window.Handle, out x, out y);
-                return new XnaToFna.ProxyDrawing.Point(x, y);
+                return new ProxyDrawing.Point(x, y);
             }
             set => SDL.SDL_SetWindowPosition(XnaToFnaHelper.Game.Window.Handle, value.X, value.Y);
         }
@@ -78,16 +78,16 @@ namespace XnaToFna.ProxyForms
         {
             get
             {
-                if (this.Dirty)
-                    return this._FormBorderStyle;
-                if (XnaToFnaHelper.Game.Window.IsBorderlessEXT || this.FakeFullscreenWindow)
+                if (Dirty)
+                    return _FormBorderStyle;
+                if (XnaToFnaHelper.Game.Window.IsBorderlessEXT || FakeFullscreenWindow)
                     return FormBorderStyle.None;
                 return XnaToFnaHelper.Game.Window.AllowUserResizing ? FormBorderStyle.Sizable : FormBorderStyle.FixedDialog;
             }
             set
             {
-                this.Dirty = true;
-                this._FormBorderStyle = value;
+                Dirty = true;
+                _FormBorderStyle = value;
             }
         }
 
@@ -95,23 +95,23 @@ namespace XnaToFna.ProxyForms
         {
             get
             {
-                if (this.Dirty)
-                    return this._WindowState;
+                if (Dirty)
+                    return _WindowState;
                 uint windowFlags = SDL.SDL_GetWindowFlags(XnaToFnaHelper.Game.Window.Handle);
-                if (((int)windowFlags & 128) != 0 || this.FakeFullscreenWindow)
+                if (((int)windowFlags & 128) != 0 || FakeFullscreenWindow)
                     return FormWindowState.Maximized;
                 return ((int)windowFlags & 64) != 0 ? FormWindowState.Minimized : FormWindowState.Normal;
             }
             set
             {
-                this.Dirty = true;
-                this._WindowState = value;
+                Dirty = true;
+                _WindowState = value;
             }
         }
 
         public override FormStartPosition StartPosition
         {
-            get => this._StartPosition;
+            get => _StartPosition;
             set
             {
                 //if (((int) SDL.SDL_GetWindowFlags(XnaToFnaHelper.Game.Window.Handle) & 8) != 8)// come back to later mabye idk man
@@ -127,7 +127,7 @@ namespace XnaToFna.ProxyForms
                 //    SDL.SDL_SetWindowPosition(XnaToFnaHelper.Game.Window.Handle, 805240832, 805240832);
                 //    break;
                 //}
-                this._StartPosition = value;
+                _StartPosition = value;
             }
         }
 
@@ -139,11 +139,11 @@ namespace XnaToFna.ProxyForms
 
         public void SDLWindowSizeChanged(object sender, EventArgs e)
         {
-            Microsoft.Xna.Framework.Rectangle sdlBounds = this.SDLBounds;
-            this._Bounds = new Microsoft.Xna.Framework.Rectangle(sdlBounds.X, sdlBounds.Y, sdlBounds.Width, sdlBounds.Height);
-            if (((int)SDL.SDL_GetWindowFlags(XnaToFnaHelper.Game.Window.Handle) & 1) != 0 || this.FakeFullscreenWindow)
+            Rectangle sdlBounds = SDLBounds;
+            _Bounds = new Rectangle(sdlBounds.X, sdlBounds.Y, sdlBounds.Width, sdlBounds.Height);
+            if (((int)SDL.SDL_GetWindowFlags(XnaToFnaHelper.Game.Window.Handle) & 1) != 0 || FakeFullscreenWindow)
                 return;
-            this._WindowedBounds = this._Bounds;
+            _WindowedBounds = _Bounds;
         }
 
         public void SDLWindowChanged(
@@ -154,37 +154,37 @@ namespace XnaToFna.ProxyForms
           string screenDeviceName,
           ref string resultDeviceName)
         {
-            this.SDLWindowSizeChanged(null, null);
+            SDLWindowSizeChanged(null, null);
         }
 
         protected override void _Close() => XnaToFnaHelper.Game.Exit();
 
         public void ApplyChanges()
         {
-            if (!this.Dirty || Environment.GetEnvironmentVariable("FNADROID") == "1")
+            if (!Dirty || Environment.GetEnvironmentVariable("FNADROID") == "1")
                 return;
             XnaToFnaGame game = XnaToFnaHelper.Game;
             IntPtr handle = game.Window.Handle;
             GraphicsDeviceManager service = XnaToFnaHelper.GetService<IGraphicsDeviceManager, GraphicsDeviceManager>();
             bool isFullScreen = service.IsFullScreen;
-            bool flag1 = this.FormBorderStyle == FormBorderStyle.None;
-            bool flag2 = this.WindowState == FormWindowState.Maximized;
-            bool fullscreenWindow = this.FakeFullscreenWindow;
-            this.FakeFullscreenWindow = flag2 & flag1;
+            bool flag1 = FormBorderStyle == FormBorderStyle.None;
+            bool flag2 = WindowState == FormWindowState.Maximized;
+            bool fullscreenWindow = FakeFullscreenWindow;
+            FakeFullscreenWindow = flag2 & flag1;
             XnaToFnaHelper.Log("[ProxyForms] Applying changes from ProxyForms.Form to SDL window");
             XnaToFnaHelper.Log(string.Format("[ProxyForms] Currently fullscreen: {0}; Fake fullscreen window: {1}; Border: {2}; State: {3}", isFullScreen, FakeFullscreenWindow, FormBorderStyle, WindowState));
-            if (this.FakeFullscreenWindow)
+            if (FakeFullscreenWindow)
             {
                 XnaToFnaHelper.Log("[ProxyForms] Game expects borderless fullscreen... give it proper fullscreen instead.");
                 if (!isFullScreen)
-                    this._WindowedBounds = this.SDLBounds;
+                    _WindowedBounds = SDLBounds;
                 XnaToFnaHelper.Log(string.Format("[ProxyForms] Last window size: {0} x {1}", _WindowedBounds.Width, _WindowedBounds.Height));
                 DisplayMode displayMode = service.GraphicsDevice.DisplayMode;
                 service.PreferredBackBufferWidth = displayMode.Width;
                 service.PreferredBackBufferHeight = displayMode.Height;
                 service.IsFullScreen = true;
                 service.ApplyChanges();
-                this._Bounds = this.SDLBounds;
+                _Bounds = SDLBounds;
             }
             else
             {
@@ -197,19 +197,19 @@ namespace XnaToFna.ProxyForms
                 if (flag2)
                 {
                     SDL.SDL_MaximizeWindow(handle);
-                    this._Bounds = this.SDLBounds;
+                    _Bounds = SDLBounds;
                 }
                 else
                 {
                     SDL.SDL_RestoreWindow(handle);
-                    this.SDLBounds = this._Bounds = this._WindowedBounds;
+                    SDLBounds = _Bounds = _WindowedBounds;
                 }
                 XnaToFnaHelper.Log(string.Format("[ProxyForms] New window size: {0} x {1}", _Bounds.Width, _Bounds.Height));
-                service.PreferredBackBufferWidth = this._Bounds.Width;
-                service.PreferredBackBufferHeight = this._Bounds.Height;
+                service.PreferredBackBufferWidth = _Bounds.Width;
+                service.PreferredBackBufferHeight = _Bounds.Height;
                 service.ApplyChanges();
             }
-            this.Dirty = false;
+            Dirty = false;
         }
     }
 }

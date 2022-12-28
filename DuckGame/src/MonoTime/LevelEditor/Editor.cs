@@ -602,7 +602,7 @@ namespace DuckGame
             placementTotalCost = 0;
             RecalculateSizeLimits();
             History.Clear();
-            foreach (Nubber nubber in Level.current.things[typeof(Nubber)])
+            foreach (Nubber nubber in current.things[typeof(Nubber)])
             {
                 current.RemoveThing(nubber);
             }
@@ -948,7 +948,7 @@ namespace DuckGame
             });
             _cancelButton = new EditorTouchButton
             {
-                caption = "CANCEL",
+                caption = Triggers.Cancel,
                 explanation = "",
                 state = EditorTouchState.Normal
             };
@@ -1242,11 +1242,11 @@ namespace DuckGame
                     Mouse.middle == InputState.Pressed ||
                     !fakeTouch && (lastMousePos - Mouse.position).length > 3.0)
                     inputMode = fakeTouch ? EditorInput.Touch : EditorInput.Mouse;
-                else if (inputMode != EditorInput.Gamepad && InputProfile.active.Pressed("ANY", true))
+                else if (inputMode != EditorInput.Gamepad && InputProfile.active.Pressed(Triggers.Any, true))
                 {
                     if ((_selection.Count == 0 || !Keyboard.Pressed(Keys.F, true)) &&
-                        !InputProfile.active.Pressed("RSTICK") && !InputProfile.active.Pressed("CANCEL") &&
-                        !InputProfile.active.Pressed("MENU1") && !Keyboard.Down(Keys.LeftShift) &&
+                        !InputProfile.active.Pressed(Triggers.RightStick) && !InputProfile.active.Pressed(Triggers.Cancel) &&
+                        !InputProfile.active.Pressed(Triggers.Menu1) && !Keyboard.Down(Keys.LeftShift) &&
                         !Keyboard.Down(Keys.RightShift) && !Keyboard.Down(Keys.LeftControl) &&
                         !Keyboard.Down(Keys.RightControl))
                     {
@@ -1744,6 +1744,26 @@ namespace DuckGame
                                     _panAnchor = Mouse.position;
                                 if (_procContext != null)
                                     _procContext.Update();
+                                if (DebugTablet.Open)
+                                {
+                                    _selection.Clear();
+                                    _currentDragSelectionHover.Clear();
+                                    UpdateSelection();
+                                    _cursorMode = CursorMode.Normal;
+                                    tookInput = true;
+                                    //OpenMenu(_placementMenu);
+                                    _showPlacementMenu = false;
+                                    if (_placementMenu != null)
+                                    {
+                                        _placementMenu.active = false;
+                                        _placementMenu.visible = false;
+                                       // _placementMenu = null;
+                                    }
+                                   // _placementMode = false;
+                                    _editMode = false;
+                                    clicked = false;
+                                    return;
+                                }
                                 if (tabletMode && clicked)
                                 {
                                     if (Mouse.x < 32.0 && Mouse.y < 32.0)
@@ -1828,7 +1848,7 @@ namespace DuckGame
 
                                 if (inputMode == EditorInput.Gamepad && _placementMenu == null)
                                 {
-                                    if (_input.Pressed("STRAFE"))
+                                    if (_input.Pressed(Triggers.Strafe))
                                     {
                                         History.Undo();
                                         _selection.Clear();
@@ -1837,7 +1857,7 @@ namespace DuckGame
                                             levelThing.EditorObjectsChanged();
                                     }
 
-                                    if (_input.Pressed("RAGDOLL"))
+                                    if (_input.Pressed(Triggers.Ragdoll))
                                     {
                                         History.Redo();
                                         _selection.Clear();
@@ -1847,7 +1867,7 @@ namespace DuckGame
                                     }
                                 }
 
-                                if ((_input.Pressed("MENU2") || _showPlacementMenu) &&
+                                if ((_input.Pressed(Triggers.Menu2) || _showPlacementMenu) &&
                                     _cursorMode == CursorMode.Normal)
                                 {
                                     if (_placementMenu == null)
@@ -1873,7 +1893,7 @@ namespace DuckGame
                                         switch (inputMode)
                                         {
                                             case EditorInput.Gamepad:
-                                                if (_input.Pressed("CANCEL"))
+                                                if (_input.Pressed(Triggers.Cancel))
                                                     _selectionDragStart = _tilePosition;
                                                 if (_selectionDragStart != Vec2.Zero)
                                                 {
@@ -1887,7 +1907,7 @@ namespace DuckGame
                                                     }
                                                 }
 
-                                                if (_input.Released("CANCEL"))
+                                                if (_input.Released(Triggers.Cancel))
                                                 {
                                                     _selectionDragStart = Vec2.Zero;
                                                 }
@@ -1964,19 +1984,19 @@ namespace DuckGame
                                         Thing thing = null;
                                         if (_secondaryHover != null)
                                         {
-                                            if (Input.Released("CANCEL") | flag2)
+                                            if (Input.Released(Triggers.Cancel) | flag2)
                                             {
                                                 copying = true;
                                                 _eyeDropperSerialized = _secondaryHover.Serialize();
                                                 copying = false;
                                                 _placementType = Thing.LoadThing(_eyeDropperSerialized);
                                             }
-                                            else if (Input.Pressed("START"))
+                                            else if (Input.Pressed(Triggers.Start))
                                                 thing = _secondaryHover;
                                         }
                                         else if (_hover != null)
                                         {
-                                            if (_copyMode || Input.Released("CANCEL") | flag2)
+                                            if (_copyMode || Input.Released(Triggers.Cancel) | flag2)
                                             {
                                                 copying = true;
                                                 _eyeDropperSerialized = _hover.Serialize();
@@ -1988,10 +2008,10 @@ namespace DuckGame
                                                     return;
                                                 }
                                             }
-                                            else if (Input.Pressed("START"))
+                                            else if (Input.Pressed(Triggers.Start))
                                                 thing = _hover;
                                         }
-                                        else if (_placementType != null && Input.Pressed("START"))
+                                        else if (_placementType != null && Input.Pressed(Triggers.Start))
                                             thing = _placementType;
 
                                         if (thing != null)
@@ -2015,7 +2035,7 @@ namespace DuckGame
                                                     hoverMiniButton = true;
                                                 tileButton.focus =
                                                     inputMode == EditorInput.Gamepad &&
-                                                    _input.Down("SELECT") ||
+                                                    _input.Down(Triggers.Select) ||
                                                     inputMode == EditorInput.Mouse &&
                                                     (Mouse.left == InputState.Down ||
                                                      Mouse.left == InputState.Pressed) ||
@@ -2040,8 +2060,8 @@ namespace DuckGame
                                     {
                                         if (_hoverMenu != null && !_placingTiles &&
                                             (inputMode == EditorInput.Mouse &&
-                                                Mouse.right == InputState.Released || _input.Pressed("MENU1") &&
-                                                !_input.Down("SELECT")))
+                                                Mouse.right == InputState.Released || _input.Pressed(Triggers.Menu1) &&
+                                                !_input.Down(Triggers.Select)))
                                         {
                                             if (_placementMenu == null)
                                             {
@@ -2088,8 +2108,10 @@ namespace DuckGame
                                                 {
                                                     int frame = _placementType.frame;
                                                     _placementMenu =
-                                                        new ContextBackgroundTile(_placementType, null, false);
-                                                    _placementMenu.opened = true;
+                                                        new ContextBackgroundTile(_placementType, null, false)
+                                                        {
+                                                            opened = true
+                                                        };
                                                     SFX.Play("openClick", 0.4f);
                                                     _placementMenu.x = 16f;
                                                     _placementMenu.y = 16f;
@@ -2111,13 +2133,13 @@ namespace DuckGame
                                     if (_cursorMode == CursorMode.Normal)
                                     {
                                         if (inputMode == EditorInput.Gamepad &&
-                                            _input.Pressed("CANCEL") && _placementMenu != null)
+                                            _input.Pressed(Triggers.Cancel) && _placementMenu != null)
                                             CloseMenu();
                                         if (_placementType != null && _objectMenu != null)
                                         {
                                             rotateValid = _placementType._canFlip ||
                                                           _placementType.editorCycleType != null;
-                                            if (_input.Pressed("RSTICK") || Keyboard.Pressed(Keys.Tab))
+                                            if (_input.Pressed(Triggers.RightStick) || Keyboard.Pressed(Keys.Tab))
                                             {
                                                 if (_placementType.editorCycleType != null)
                                                 {
@@ -2156,9 +2178,9 @@ namespace DuckGame
                                     {
                                         num5 = _input.leftTrigger - _input.rightTrigger;
                                         float num6 = (float)(camera.width / MonoMain.screenWidth * 5.0);
-                                        if (_input.Down("LSTICK"))
+                                        if (_input.Down(Triggers.LeftStick))
                                             num6 *= 2f;
-                                        if (_input.Pressed("LOPTION"))
+                                        if (_input.Pressed(Triggers.LeftOptionButton))
                                             cellSize = cellSize >= 10.0 ? 8f : 16f;
                                         if (num6 < 5.0)
                                             num6 = 5f;
@@ -2257,7 +2279,7 @@ namespace DuckGame
                                          inputMode == EditorInput.Touch) && _placementMenu == null)
                                     {
                                         int num13 = 1;
-                                        if (_input.Down("LSTICK"))
+                                        if (_input.Down(Triggers.LeftStick))
                                             num13 = 4;
                                         _tilePosition = _tilePositionPrev;
                                         if (_tilePosition.x < camera.left)
@@ -2272,13 +2294,13 @@ namespace DuckGame
                                         int num15 = 0;
                                         if (_hoverMode == 0 && (_hoverButton == null || _hoverButton.focus == null))
                                         {
-                                            if (_input.Pressed("MENULEFT"))
+                                            if (_input.Pressed(Triggers.MenuLeft))
                                                 num15 = -1;
-                                            if (_input.Pressed("MENURIGHT"))
+                                            if (_input.Pressed(Triggers.MenuRight))
                                                 num15 = 1;
-                                            if (_input.Pressed("MENUUP"))
+                                            if (_input.Pressed(Triggers.MenuUp))
                                                 num14 = -1;
-                                            if (_input.Pressed("MENUDOWN"))
+                                            if (_input.Pressed(Triggers.MenuDown))
                                                 num14 = 1;
                                         }
 
@@ -2347,7 +2369,7 @@ namespace DuckGame
                                             dragModeInputType = InputType.eMouse;
                                         }
                                         else if (inputMode == EditorInput.Gamepad &&
-                                                 _input.Pressed("SELECT"))
+                                                 _input.Pressed(Triggers.Select))
                                         {
                                             bGamepadInput = true;
                                             dragModeInputType = InputType.eGamepad;
@@ -2392,7 +2414,7 @@ namespace DuckGame
                                             do
                                             {
                                                 Vec2 vec2_9 = Maths.Snap(vec2_7, _cellSize, _cellSize);
-                                                if ((Keyboard.control || Input.Down("SELECT") && Input.Down("MENU1")) &&
+                                                if ((Keyboard.control || Input.Down(Triggers.Select) && Input.Down(Triggers.Menu1)) &&
                                                     _tileDragContext == Vec2.MinValue)
                                                     _tileDragContext = vec2_9;
                                                 if (!(vec2_9 == Maths.Snap(_tileDragDif, _cellSize, _cellSize)) ||
@@ -2497,30 +2519,30 @@ namespace DuckGame
 
                                         if (Mouse.left == InputState.Released &&
                                             dragModeInputType == InputType.eMouse ||
-                                            _input.Released("SELECT") &&
+                                            _input.Released(Triggers.Select) &&
                                             dragModeInputType == InputType.eGamepad ||
                                             TouchScreen.GetRelease() != Touch.None &&
                                             dragModeInputType == InputType.eTouch)
                                             disableDragMode();
                                     }
 
-                                    if (!Keyboard.control && !Input.Down("MENU1"))
+                                    if (!Keyboard.control && !Input.Down(Triggers.Menu1))
                                         _tileDragContext = Vec2.MinValue;
                                     _tileDragDif = _tilePosition;
                                     _placingTiles = false;
                                     if (_placementType is BackgroundTile)
                                         _placingTiles = true;
                                     if (_placingTiles && _placementMenu == null &&
-                                        (_input.Pressed("MENU1") && !_input.Down("SELECT") ||
+                                        (_input.Pressed(Triggers.Menu1) && !_input.Down(Triggers.Select) ||
                                          _openTileSelector) && _cursorMode == CursorMode.Normal)
                                     {
                                         DoMenuClose();
                                         int frame = _placementType.frame;
                                         _placementMenu = new ContextBackgroundTile(_placementType, null, false)
                                         {
-                                            positionCursor = true
+                                            positionCursor = true,
+                                            opened = true
                                         };
-                                        _placementMenu.opened = true;
                                         SFX.Play("openClick", 0.4f);
                                         _placementMenu.x = 16f;
                                         _placementMenu.y = 16f;
@@ -2623,10 +2645,20 @@ namespace DuckGame
                 if (pObjectsChanged)
                     levelThing.EditorObjectsChanged();
                 levelThing.material = null;
+                if (levelThing is Holdable)
+                {
+                    (levelThing as Holdable).UpdateMaterial();
+                }
             }
 
             foreach (Thing thing in current.things)
+            {
                 thing.material = null;
+                if (thing is Holdable)
+                {
+                    (thing as Holdable).UpdateMaterial();
+                }
+            }
             foreach (Thing thing in _selection)
             {
                 switch (thing)
@@ -2677,7 +2709,18 @@ namespace DuckGame
             foreach (Thing thing in _currentDragSelectionHover)
                 thing.material = _selectionMaterial;
             foreach (Thing thing in _currentDragSelectionHoverAdd)
-                thing.material = !_currentDragSelectionHover.Contains(thing) ? _selectionMaterial : (Material)null;
+                if (!_currentDragSelectionHover.Contains(thing))
+                {
+                    thing.material = _selectionMaterial;
+                }
+                else
+                {
+                    thing.material = null;
+                    if (thing is Holdable)
+                    {
+                        (thing as Holdable).UpdateMaterial();
+                    }
+                }
         }
 
         private void RebuildPasteBatch()
@@ -2719,7 +2762,7 @@ namespace DuckGame
                 }
 
                 if (Mouse.right == InputState.Released || Mouse.left == InputState.Released ||
-                    inputMode == EditorInput.Gamepad && _input.Released("CANCEL"))
+                    inputMode == EditorInput.Gamepad && _input.Released(Triggers.Cancel))
                 {
                     if (_dragSelectShiftModifier)
                     {
@@ -2782,7 +2825,7 @@ namespace DuckGame
                     }
                 }
 
-                if (Mouse.left != InputState.Released && !_input.Released("SELECT"))
+                if (Mouse.left != InputState.Released && !_input.Released(Triggers.Select))
                     return;
                 _cursorMode = CursorMode.HasSelection;
                 UpdateSelection();
@@ -2842,11 +2885,11 @@ namespace DuckGame
                     _performCopypaste = false;
                     if (_cursorMode == CursorMode.Pasting)
                     {
-                        if (Mouse.right == InputState.Released || _input.Released("CANCEL") &&
+                        if (Mouse.right == InputState.Released || _input.Released(Triggers.Cancel) &&
                             inputMode == EditorInput.Gamepad)
                             _cursorMode = CursorMode.Normal;
                         if (Mouse.left == InputState.Pressed ||
-                            _input.Pressed("SELECT") && inputMode == EditorInput.Gamepad)
+                            _input.Pressed(Triggers.Select) && inputMode == EditorInput.Gamepad)
                         {
                             History.BeginUndoSection();
                             _selection.Clear();
@@ -2887,7 +2930,7 @@ namespace DuckGame
                     _cursorMode = CursorMode.Normal;
 
                 if (_selection.Count > 0 && _cursorMode != CursorMode.Pasting && (Keyboard.Pressed(Keys.F) ||
-                        _input.Pressed("MENU1") && inputMode == EditorInput.Gamepad))
+                        _input.Pressed(Triggers.Menu1) && inputMode == EditorInput.Gamepad))
                 {
                     Vec2 zero = Vec2.Zero;
                     Vec2 pPosition;
@@ -2912,7 +2955,7 @@ namespace DuckGame
                             thing.SetTranslation(new Vec2((float)(-(thing.position.x - vec2.x) * 2.0), 0f));
                             thing.EditorFlip(false);
                             thing.flipHorizontal = !thing.flipHorizontal;
-                            Level.current.things.UpdateObject(thing);
+                            current.things.UpdateObject(thing);
                         }
                     }
                     else
@@ -2931,7 +2974,7 @@ namespace DuckGame
                                     return;
                                 current.things.quadTree.Remove(t);
                                 current.things.quadTree.Add(t);
-                                Level.current.things.UpdateObject(t);
+                                current.things.UpdateObject(t);
                             }, () =>
                             {
                                 t.SetTranslation(new Vec2(dif * 2f, 0f));
@@ -2941,7 +2984,7 @@ namespace DuckGame
                                     return;
                                 current.things.quadTree.Remove(t);
                                 current.things.quadTree.Add(t);
-                                Level.current.things.UpdateObject(t);
+                                current.things.UpdateObject(t);
                             });
                         }
 
@@ -2989,7 +3032,7 @@ namespace DuckGame
 
                     bool flag = false;
                     if (Keyboard.Pressed(Keys.Delete) ||
-                        _input.Pressed("MENU2") && inputMode == EditorInput.Gamepad)
+                        _input.Pressed(Triggers.Menu2) && inputMode == EditorInput.Gamepad)
                     {
                         History.BeginUndoSection();
                         foreach (Thing thing in _selection)
@@ -3004,7 +3047,7 @@ namespace DuckGame
                     }
 
                     if (Mouse.left == InputState.Pressed ||
-                        _input.Pressed("SELECT") && inputMode == EditorInput.Gamepad)
+                        _input.Pressed(Triggers.Select) && inputMode == EditorInput.Gamepad)
                     {
                         if (_cursorMode == CursorMode.DragHover)
                         {
@@ -3018,7 +3061,7 @@ namespace DuckGame
                             flag = true;
                     }
 
-                    if (_input.Released("CANCEL"))
+                    if (_input.Released(Triggers.Cancel))
                     {
                         if (_cursorMode == CursorMode.DragHover)
                             _performCopypaste = true;
@@ -3058,7 +3101,7 @@ namespace DuckGame
                                 return;
                             current.things.quadTree.Remove(t);
                             current.things.quadTree.Add(t);
-                            Level.current.things.UpdateObject(t);
+                            current.things.UpdateObject(t);
                         }, () =>
                         {
                             t.SetTranslation(-offset);
@@ -3066,7 +3109,7 @@ namespace DuckGame
                                 return;
                             current.things.quadTree.Remove(t);
                             current.things.quadTree.Add(t);
-                            Level.current.things.UpdateObject(t);
+                            current.things.UpdateObject(t);
 
                         });
                     }
@@ -3437,7 +3480,7 @@ namespace DuckGame
                     }
 
                     if (_cursorMode == CursorMode.Normal && _hover == null && _placementMode &&
-                        inputMode != EditorInput.Touch && _placementMenu == null && _placementType != null)
+                        inputMode != EditorInput.Touch && _placementMenu == null && _placementType != null && !DebugTablet.Open)
                     {
                         _placementType.depth = 0.9f;
                         _placementType.x = _tilePosition.x;
@@ -3805,9 +3848,9 @@ namespace DuckGame
             {
                 if (layer != _objectMenuLayer)
                     return;
-                if (inputMode == EditorInput.Mouse)
+                if (inputMode == EditorInput.Mouse && !DebugTablet.Open)
                 {
-                    _cursor.depth = 1f;
+                     _cursor.depth = 1f;
                     _cursor.scale = new Vec2(1f, 1f);
                     _cursor.position = Mouse.position;
                     if (_cursorMode == CursorMode.Normal)
@@ -4701,6 +4744,12 @@ namespace DuckGame
                     _currentLevelData.customData.customPlatform03Data.ignore;
                 saveData.customData.customParallaxData.ignore =
                     _currentLevelData.customData.customParallaxData.ignore;
+
+                if (_saveName == (Program.GameDirectory + "Content\\levels\\devtestlev.lev").Replace("\\", "/") && File.Exists(Program.GameDirectory + "..\\deps\\Content\\levels\\devtestlev.lev")) // to write the devlevel change to deps
+                {
+                    saveData.SetPath(Program.GameDirectory + "..\\deps\\Content\\levels\\devtestlev.lev");
+                    DuckFile.SaveChunk(saveData, Program.GameDirectory + "..\\deps\\Content\\levels\\devtestlev.lev");
+                }
                 saveData.SetPath(_saveName);
                 if (!DuckFile.SaveChunk(saveData, _saveName))
                 {
@@ -5193,10 +5242,10 @@ namespace DuckGame
 
         public static void InitializeConstructorLists()
         {
-            MonoMain.loadMessage = "Loading Constructor Lists";
+            MonoMain.NloadMessage = "Loading Constructor Lists";
             if (MonoMain.moddingEnabled)
             {
-                MonoMain.loadMessage = "Loading Constructor Lists";
+                MonoMain.NloadMessage = "Loading Constructor Lists";
                 ThingTypes = ManagedContent.Things.AllSortedTypes.ToList();
             }
             else
@@ -5316,11 +5365,17 @@ namespace DuckGame
         public static void EnableClientOnlyContent()
         {
             clientonlycontent = true;
+            AmmoType.InitializeTypes();
+            DestroyType.InitializeTypes();
+            DeathCrate.InitializeDeathCrateSettings();
         }
 
         public static void DisableClientOnlyContent()
         {
             clientonlycontent = false;
+            AmmoType.InitializeTypes();
+            DestroyType.InitializeTypes();
+            DeathCrate.InitializeDeathCrateSettings();
         }
 
         public static void InitializePlaceableList()
@@ -5334,7 +5389,7 @@ namespace DuckGame
         public static void InitializePlaceableGroup()
         {
             AutoUpdatables.ignoreAdditions = true;
-            MonoMain.loadMessage = "Loading Editor Groups";
+            MonoMain.NloadMessage = "Loading Editor Groups";
             _placeables = new EditorGroup(null, null);
             AutoUpdatables.ignoreAdditions = false;
             if (!_clearOnce)

@@ -15,30 +15,30 @@ namespace DuckGame
 
         public static Random generator
         {
-            get => ChallengeRando._randomGenerator;
-            set => ChallengeRando._randomGenerator = value;
+            get => _randomGenerator;
+            set => _randomGenerator = value;
         }
 
-        public static void DoInitialize() => ChallengeRando._randomGenerator = new Random();
+        public static void DoInitialize() => _randomGenerator = new Random();
 
         public static long Long(long min = -9223372036854775808, long max = 9223372036854775807)
         {
-            if (ChallengeRando._randomGenerator == null)
-                ChallengeRando.DoInitialize();
+            if (_randomGenerator == null)
+                DoInitialize();
             byte[] buffer = new byte[8];
-            ChallengeRando._randomGenerator.NextBytes(buffer);
+            _randomGenerator.NextBytes(buffer);
             return Math.Abs(BitConverter.ToInt64(buffer, 0) % (max - min)) + min;
         }
 
-        public static double Double() => ChallengeRando._randomGenerator.NextDouble();
+        public static double Double() => _randomGenerator.NextDouble();
 
-        public static float Float(float max) => (float)ChallengeRando._randomGenerator.NextDouble() * max;
+        public static float Float(float max) => (float)_randomGenerator.NextDouble() * max;
 
-        public static float Float(float min, float max) => min + (float)ChallengeRando._randomGenerator.NextDouble() * (max - min);
+        public static float Float(float min, float max) => min + (float)_randomGenerator.NextDouble() * (max - min);
 
-        public static int Int(int _max) => ChallengeRando._randomGenerator.Next(0, _max + 1);
+        public static int Int(int _max) => _randomGenerator.Next(0, _max + 1);
 
-        public static int Int(int min, int max) => ChallengeRando._randomGenerator.Next(min, max + 1);
+        public static int Int(int min, int max) => _randomGenerator.Next(min, max + 1);
 
         public static int ChooseInt(params int[] _ints) => _ints[Rando.Int(_ints.Length - 1)];
 

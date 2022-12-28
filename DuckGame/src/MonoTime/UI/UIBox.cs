@@ -5,10 +5,8 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
-using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.Linq;
-using static DuckGame.CMD;
 
 namespace DuckGame
 {
@@ -71,16 +69,16 @@ namespace DuckGame
             base.Insert(component, position, doAnchor);
         }
 
-        public virtual void AssignDefaultSelection() => _defaultSelection = _components.Where<UIComponent>(val =>
+        public virtual void AssignDefaultSelection() => _defaultSelection = _components.Where(val =>
        {
            if (!(val is UIMenuItem))
                return false;
            return val.condition == null || val.condition();
-       }).ToList<UIComponent>().Count - 1;
+       }).ToList().Count - 1;
         public UIMenu UIParentMenu;
         public override void Open()
         {
-            UIComponent UIComponent = this.parent;
+            UIComponent UIComponent = parent;
             while (UIComponent != null) // IMPROVEME idk man coded a system that pass down the main uimenu i guess
             {
                 UIComponent = UIComponent.parent;
@@ -94,7 +92,7 @@ namespace DuckGame
             {
                 _selection = _defaultSelection;
                 if (_willSelectLast)
-                    _selection = _components.Where<UIComponent>(val => val is UIMenuItem).ToList<UIComponent>().Count - 1;
+                    _selection = _components.Where(val => val is UIMenuItem).ToList().Count - 1;
             }
             base.Open();
         }
@@ -183,7 +181,7 @@ namespace DuckGame
 
         public virtual void SelectLastMenuItem()
         {
-            _selection = _components.Where<UIComponent>(val => val is UIMenuItem).ToList<UIComponent>().Count - 1;
+            _selection = _components.Where(val => val is UIMenuItem).ToList().Count - 1;
             _willSelectLast = true;
         }
 
@@ -213,7 +211,7 @@ namespace DuckGame
             SFX.Play("textLetter", 0.7f);
         }
         public static Keys[] keysOfInterest =
-                        {
+        {
                             Keys.D1,
                             Keys.D2,
                             Keys.D3,
@@ -224,7 +222,7 @@ namespace DuckGame
                             Keys.D8,
                             Keys.D9,
                             Keys.D0
-                        };
+        };
         public override void Update()
         {
             if (UIParentMenu != null && UIParentMenu.domouse && !UIParentMenu.gamepadMode && _currentMenuItemSelection != null && Mouse.available)
@@ -232,7 +230,7 @@ namespace DuckGame
                 for (int i = 0; i < _currentMenuItemSelection.Count; i++)
                 {
                     UIComponent uIComponent = _currentMenuItemSelection[i];
-                    Rectangle r = new Rectangle(uIComponent.position + new Vec2(-(this.width / 2f), uIComponent.height / 2f), uIComponent.position + new Vec2(-(this.width / 2f) + uIComponent.width, -(uIComponent.height / 2f)));
+                    Rectangle r = new Rectangle(uIComponent.position + new Vec2(-(width / 2f), uIComponent.height / 2f), uIComponent.position + new Vec2(-(width / 2f) + uIComponent.width, -(uIComponent.height / 2f)));
                     if (Collision.Point(Mouse.position, r))
                     {
                         if (!_animating && uIComponent is UIMenuItem)
@@ -282,7 +280,7 @@ namespace DuckGame
             }
             if (!UIMenu.globalUILock && !_close && !_inputLock)
             {
-                if (Input.Pressed("CANCEL") && allowBackButton)
+                if (Input.Pressed(Triggers.Cancel) && allowBackButton)
                 {
                     if (_backButton != null || _backFunction != null)
                     {
@@ -290,7 +288,7 @@ namespace DuckGame
                         {
                             MonoMain.dontResetSelection = true;
                             if (_backButton != null)
-                                _backButton.Activate("SELECT");
+                                _backButton.Activate(Triggers.Select);
                             else
                                 _backFunction.Activate();
                             MonoMain.menuOpenedThisFrame = true;
@@ -299,7 +297,7 @@ namespace DuckGame
                     else if (!MonoMain.menuOpenedThisFrame && _isMenu)
                         MonoMain.closeMenus = true;
                 }
-                else if (Input.Pressed("SELECT") && _acceptFunction != null && !_animating)
+                else if (Input.Pressed(Triggers.Select) && _acceptFunction != null && !_animating)
                 {
                     MonoMain.dontResetSelection = true;
                     _acceptFunction.Activate();
@@ -307,37 +305,41 @@ namespace DuckGame
                 }
                 if (_isMenu)
                 {
-                    if (DGRSettings.s_dubberspeed && _currentMenuItemSelection != null)
+                    if (DGRSettings.dubberspeed && _currentMenuItemSelection != null)
                     {
                         int c = _currentMenuItemSelection.Count;
+                        int dubberOffset = -1;
+                        if (Keyboard.Down(Keys.LeftShift)) dubberOffset = 0;
                         for (int i = 0; i < keysOfInterest.Length; i++)
                         {
                             if (Keyboard.Pressed(keysOfInterest[i]) && i < c)
                             {
+                                //optimal -NiK0
+                                if (dubberOffset == -1) dubberOffset = _currentMenuItemSelection.FindAll(ui => ui is UIConnectionInfo).Count();
                                 SFX.Play("rockHitGround");
                                 ((UIMenuItem)_currentMenuItemSelection[i]).Activate(Triggers.Select);
                             }
                         }
                     }
 
-                    _currentMenuItemSelection = _components.Where<UIComponent>(val =>
+                    _currentMenuItemSelection = _components.Where(val =>
                    {
                        if (!(val is UIMenuItem))
                            return false;
                        return val.condition == null || val.condition();
-                   }).ToList<UIComponent>();
+                   }).ToList();
                     if (_vertical)
                     {
-                        if (!_animating && Input.Pressed("MENUUP"))
+                        if (!_animating && Input.Pressed(Triggers.MenuUp))
                             SelectPrevious();
-                        if (!_animating && Input.Pressed("MENUDOWN"))
+                        if (!_animating && Input.Pressed(Triggers.MenuDown))
                             SelectNext();
                     }
                     else
                     {
-                        if (!_animating && Input.Pressed("MENULEFT"))
+                        if (!_animating && Input.Pressed(Triggers.MenuLeft))
                             SelectPrevious();
-                        if (!_animating && Input.Pressed("MENURIGHT"))
+                        if (!_animating && Input.Pressed(Triggers.MenuRight))
                             SelectNext();
                     }
                     _hoverControlString = null;
@@ -350,23 +352,23 @@ namespace DuckGame
                             _hoverControlString = uiMenuItem.controlString;
                             if (uiMenuItem.isEnabled)
                             {
-                                if (!_animating && Input.Pressed("SELECT"))
+                                if (!_animating && Input.Pressed(Triggers.Select))
                                 {
-                                    uiMenuItem.Activate("SELECT");
+                                    uiMenuItem.Activate(Triggers.Select);
                                     SFX.Play("rockHitGround", 0.7f);
                                 }
-                                else if (!_animating && Input.Pressed("MENU1"))
-                                    uiMenuItem.Activate("MENU1");
-                                else if (!_animating && Input.Pressed("MENU2"))
-                                    uiMenuItem.Activate("MENU2");
-                                else if (!_animating && Input.Pressed("RAGDOLL"))
-                                    uiMenuItem.Activate("RAGDOLL");
-                                else if (!_animating && Input.Pressed("STRAFE"))
-                                    uiMenuItem.Activate("STRAFE");
-                                else if (!_animating && Input.Pressed("MENULEFT"))
-                                    uiMenuItem.Activate("MENULEFT");
-                                else if (!_animating && Input.Pressed("MENURIGHT"))
-                                    uiMenuItem.Activate("MENURIGHT");
+                                else if (!_animating && Input.Pressed(Triggers.Menu1))
+                                    uiMenuItem.Activate(Triggers.Menu1);
+                                else if (!_animating && Input.Pressed(Triggers.Menu2))
+                                    uiMenuItem.Activate(Triggers.Menu2);
+                                else if (!_animating && Input.Pressed(Triggers.Ragdoll))
+                                    uiMenuItem.Activate(Triggers.Ragdoll);
+                                else if (!_animating && Input.Pressed(Triggers.Strafe))
+                                    uiMenuItem.Activate(Triggers.Strafe);
+                                else if (!_animating && Input.Pressed(Triggers.MenuLeft))
+                                    uiMenuItem.Activate(Triggers.MenuLeft);
+                                else if (!_animating && Input.Pressed(Triggers.MenuRight))
+                                    uiMenuItem.Activate(Triggers.MenuRight);
                             }
                         }
                     }

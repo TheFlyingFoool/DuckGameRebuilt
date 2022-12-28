@@ -27,7 +27,7 @@ namespace DuckGame
                 return fi.GetValue(null);
             }
 
-            switch (fieldId)
+            switch (fieldId.ToUpper())
             {
                 case "%SAVE":
                     AutoConfigHandler.SaveAll(false);

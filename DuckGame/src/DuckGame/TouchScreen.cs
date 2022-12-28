@@ -23,19 +23,19 @@ namespace DuckGame
 
         private static void System_MapTouch(TSData pTouch)
         {
-            if (!TouchScreen._touches.ContainsKey(pTouch.fingerId))
-                TouchScreen._touches[pTouch.fingerId] = new Touch()
+            if (!_touches.ContainsKey(pTouch.fingerId))
+                _touches[pTouch.fingerId] = new Touch()
                 {
                     state = InputState.Pressed,
-                    touchFrame = TouchScreen._totalFrameCount,
+                    touchFrame = _totalFrameCount,
                     tap = true
                 };
             else
-                TouchScreen._touches[pTouch.fingerId].state = InputState.Down;
-            TouchScreen._touches[pTouch.fingerId].SetData(pTouch);
-            if (TouchScreen._touches.Count <= 1)
+                _touches[pTouch.fingerId].state = InputState.Down;
+            _touches[pTouch.fingerId].SetData(pTouch);
+            if (_touches.Count <= 1)
                 return;
-            foreach (KeyValuePair<int, Touch> touch in TouchScreen._touches)
+            foreach (KeyValuePair<int, Touch> touch in _touches)
             {
                 touch.Value.tap = false;
                 touch.Value.canBeDrag = false;
@@ -48,11 +48,11 @@ namespace DuckGame
         /// <returns>The Touch in question</returns>
         public static Touch GetTap()
         {
-            TouchScreen.System_TryUpdateIfNeeded();
-            if (TouchScreen._touches.Count == 1)
+            System_TryUpdateIfNeeded();
+            if (_touches.Count == 1)
             {
-                Touch tap = TouchScreen._touches.First<KeyValuePair<int, Touch>>().Value;
-                if (tap.state == InputState.Released && tap.tap && TouchScreen._totalFrameCount - tap.touchFrame < 20UL)
+                Touch tap = _touches.First().Value;
+                if (tap.state == InputState.Released && tap.tap && _totalFrameCount - tap.touchFrame < 20UL)
                     return tap;
             }
             return Touch.None;
@@ -64,10 +64,10 @@ namespace DuckGame
         /// <returns>The Touch in question</returns>
         public static Touch GetPress()
         {
-            TouchScreen.System_TryUpdateIfNeeded();
-            if (TouchScreen._touches.Count == 1)
+            System_TryUpdateIfNeeded();
+            if (_touches.Count == 1)
             {
-                Touch press = TouchScreen._touches.First<KeyValuePair<int, Touch>>().Value;
+                Touch press = _touches.First().Value;
                 if (press.state == InputState.Pressed)
                     return press;
             }
@@ -80,10 +80,10 @@ namespace DuckGame
         /// <returns>The Touch in question</returns>
         public static Touch GetDrag()
         {
-            TouchScreen.System_TryUpdateIfNeeded();
-            if (TouchScreen._touches.Count == 1)
+            System_TryUpdateIfNeeded();
+            if (_touches.Count == 1)
             {
-                Touch drag = TouchScreen._touches.First<KeyValuePair<int, Touch>>().Value;
+                Touch drag = _touches.First().Value;
                 if (drag.state == InputState.Down && drag.drag)
                     return drag;
             }
@@ -96,8 +96,8 @@ namespace DuckGame
         /// <returns>The Touch in question</returns>
         public static Touch GetTouch()
         {
-            TouchScreen.System_TryUpdateIfNeeded();
-            return TouchScreen._touches.Count == 1 && (TouchScreen._touches.First<KeyValuePair<int, Touch>>().Value.state == InputState.Pressed || TouchScreen._touches.First<KeyValuePair<int, Touch>>().Value.state == InputState.Down || TouchScreen._touches.First<KeyValuePair<int, Touch>>().Value.state == InputState.Released) ? TouchScreen._touches.First<KeyValuePair<int, Touch>>().Value : Touch.None;
+            System_TryUpdateIfNeeded();
+            return _touches.Count == 1 && (_touches.First().Value.state == InputState.Pressed || _touches.First().Value.state == InputState.Down || _touches.First().Value.state == InputState.Released) ? _touches.First().Value : Touch.None;
         }
 
         /// <summary>
@@ -107,8 +107,8 @@ namespace DuckGame
         /// <returns>The Touch in question</returns>
         public static Touch GetRelease()
         {
-            TouchScreen.System_TryUpdateIfNeeded();
-            return TouchScreen._touches.Count == 1 && TouchScreen._touches.First<KeyValuePair<int, Touch>>().Value.state == InputState.Released ? TouchScreen._touches.First<KeyValuePair<int, Touch>>().Value : Touch.None;
+            System_TryUpdateIfNeeded();
+            return _touches.Count == 1 && _touches.First().Value.state == InputState.Released ? _touches.First().Value : Touch.None;
         }
 
         /// <summary>
@@ -117,9 +117,9 @@ namespace DuckGame
         /// <returns>Touches!</returns>
         public static List<Touch> GetTouches()
         {
-            TouchScreen.System_TryUpdateIfNeeded();
+            System_TryUpdateIfNeeded();
             List<Touch> touches = new List<Touch>();
-            foreach (KeyValuePair<int, Touch> touch in TouchScreen._touches)
+            foreach (KeyValuePair<int, Touch> touch in _touches)
             {
                 if (touch.Value.state != InputState.None)
                     touches.Add(touch.Value);
@@ -133,81 +133,81 @@ namespace DuckGame
         /// <returns></returns>
         public static Touch GetAverageOfTouches()
         {
-            TouchScreen.System_TryUpdateIfNeeded();
-            if (TouchScreen._touches.Count == 0)
+            System_TryUpdateIfNeeded();
+            if (_touches.Count == 0)
                 return Touch.None;
             Touch averageOfTouches = new Touch()
             {
                 data = new TSData(0)
             };
-            foreach (KeyValuePair<int, Touch> touch in TouchScreen._touches)
+            foreach (KeyValuePair<int, Touch> touch in _touches)
                 averageOfTouches.data.touchXY += touch.Value.data.touchXY;
             averageOfTouches.data.touchXY /= _touches.Count;
             return averageOfTouches;
         }
 
-        public static void Update() => TouchScreen.System_DoUpdate(false);
+        public static void Update() => System_DoUpdate(false);
 
         private static void System_TryUpdateIfNeeded()
         {
-            if (TouchScreen._updated)
+            if (_updated)
                 return;
-            TouchScreen.System_DoUpdate(true);
+            System_DoUpdate(true);
         }
 
         private static void System_DoUpdate(bool pForce)
         {
-            if (TouchScreen._touches.Count > 0 | pForce)
+            if (_touches.Count > 0 | pForce)
             {
-                TouchScreen._removeTouches.Clear();
-                foreach (KeyValuePair<int, Touch> touch in TouchScreen._touches)
+                _removeTouches.Clear();
+                foreach (KeyValuePair<int, Touch> touch in _touches)
                 {
                     if (touch.Value.state == InputState.Released)
                     {
-                        TouchScreen._removeTouches.Add(touch.Key);
+                        _removeTouches.Add(touch.Key);
                         touch.Value.state = InputState.None;
                     }
                 }
-                foreach (int removeTouch in TouchScreen._removeTouches)
-                    TouchScreen._touches.Remove(removeTouch);
-                foreach (KeyValuePair<int, Touch> touch in TouchScreen._touches)
+                foreach (int removeTouch in _removeTouches)
+                    _touches.Remove(removeTouch);
+                foreach (KeyValuePair<int, Touch> touch in _touches)
                     touch.Value.state = InputState.Released;
                 if (Editor.fakeTouch)
                 {
                     if (Mouse.left == InputState.Down)
-                        TouchScreen.System_MapTouch(new TSData(0)
+                        System_MapTouch(new TSData(0)
                         {
                             fingerId = 0,
-                            touchXY = new Vec2(Mouse.xConsole - TouchScreen._spoofFingerDistance, Mouse.yConsole) + new Vec2((float)Math.Sin(_spoofFinger1Waver), (float)Math.Cos(_spoofFinger1Waver * 2.0)) * 2f
+                            touchXY = new Vec2(Mouse.xConsole - _spoofFingerDistance, Mouse.yConsole) + new Vec2((float)Math.Sin(_spoofFinger1Waver), (float)Math.Cos(_spoofFinger1Waver * 2.0)) * 2f
                         });
                     if (Mouse.right == InputState.Down)
-                        TouchScreen.System_MapTouch(new TSData(0)
+                        System_MapTouch(new TSData(0)
                         {
                             fingerId = 1,
-                            touchXY = new Vec2(Mouse.xConsole + TouchScreen._spoofFingerDistance, Mouse.yConsole) + new Vec2((float)Math.Sin((double)(TouchScreen._spoofFinger2Waver * 1.5f)), (float)Math.Cos((double)(TouchScreen._spoofFinger2Waver * 0.3f))) * 3f
+                            touchXY = new Vec2(Mouse.xConsole + _spoofFingerDistance, Mouse.yConsole) + new Vec2((float)Math.Sin((double)(_spoofFinger2Waver * 1.5f)), (float)Math.Cos((double)(_spoofFinger2Waver * 0.3f))) * 3f
 
                         });
                     if (Mouse.middle == InputState.Down)
-                        TouchScreen.System_MapTouch(new TSData(0)
+                        System_MapTouch(new TSData(0)
                         {
                             fingerId = 2,
                             touchXY = new Vec2(Mouse.xConsole, Mouse.yConsole)
                         });
-                    TouchScreen._spoofFingerDistance += Mouse.scroll * 0.1f;
+                    _spoofFingerDistance += Mouse.scroll * 0.1f;
                     if (_spoofFingerDistance < 0.0)
-                        TouchScreen._spoofFingerDistance = 0f;
+                        _spoofFingerDistance = 0f;
                 }
-                TouchScreen._updated = true;
+                _updated = true;
             }
             else
-                TouchScreen._updated = false;
-            ++TouchScreen._totalFrameCount;
+                _updated = false;
+            ++_totalFrameCount;
         }
 
         public static bool IsScreenTouched()
         {
-            TouchScreen.System_TryUpdateIfNeeded();
-            return TouchScreen._touches.Count > 0;
+            System_TryUpdateIfNeeded();
+            return _touches.Count > 0;
         }
 
         public static bool IsTouchScreenActive() => false;

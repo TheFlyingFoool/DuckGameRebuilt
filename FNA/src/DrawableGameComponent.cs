@@ -19,7 +19,7 @@ namespace Microsoft.Xna.Framework
 	{
 		#region Public Properties
 
-		public Graphics.GraphicsDevice GraphicsDevice
+		public GraphicsDevice GraphicsDevice
 		{
 			get
 			{

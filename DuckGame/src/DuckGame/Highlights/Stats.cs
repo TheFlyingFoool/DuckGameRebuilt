@@ -15,11 +15,11 @@ namespace DuckGame
         private static float _totalRoundTime;
         private static int _numberOfRounds;
 
-        public static float averageRoundTime => Stats._totalRoundTime / numberOfRounds;
+        public static float averageRoundTime => _totalRoundTime / numberOfRounds;
 
-        public static float totalRoundTime => Stats._averageRoundTime;
+        public static float totalRoundTime => _averageRoundTime;
 
-        public static int numberOfRounds => Stats._numberOfRounds;
+        public static int numberOfRounds => _numberOfRounds;
 
         public static int lastMatchLength
         {
@@ -45,16 +45,16 @@ namespace DuckGame
         public static void CalculateStats()
         {
             DateTime dateTime = DateTime.Now;
-            Stats._totalRoundTime = 0f;
-            Stats._numberOfRounds = 0;
+            _totalRoundTime = 0f;
+            _numberOfRounds = 0;
             foreach (Event @event in Event.events)
             {
                 if (@event is RoundStartEvent)
                     dateTime = @event.timestamp;
                 else if (@event is RoundEndEvent)
                 {
-                    Stats._totalRoundTime += (int)(@event.timestamp - dateTime).TotalSeconds;
-                    ++Stats._numberOfRounds;
+                    _totalRoundTime += (int)(@event.timestamp - dateTime).TotalSeconds;
+                    ++_numberOfRounds;
                 }
             }
         }

@@ -14,7 +14,7 @@ namespace DuckGame
     public class SpikeHelm : Helmet
     {
         public StateBinding _pokedBinding = new StateBinding(nameof(poked));
-        protected List<System.Type> _pokables = new List<System.Type>();
+        protected List<Type> _pokables = new List<Type>();
         public PhysicsObject poked;
         public PhysicsObject oldPoke;
         public float oldPokeCooldown;
@@ -122,7 +122,7 @@ namespace DuckGame
                                     Duck associatedDuck = Duck.GetAssociatedDuck(materialThing2);
                                     if ((associatedDuck == null || associatedDuck != _equippedDuck && (_equippedDuck == null || !_equippedDuck.IsOwnedBy(associatedDuck))) && (associatedDuck != _filteredDuck || throwCooldown <= 0))
                                     {
-                                        Thing.Fondle(materialThing2, DuckNetwork.localConnection);
+                                        Fondle(materialThing2, DuckNetwork.localConnection);
                                         materialThing2.Destroy(new DTImpale(this));
                                         continue;
                                     }

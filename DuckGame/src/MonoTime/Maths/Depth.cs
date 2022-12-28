@@ -15,13 +15,13 @@ namespace DuckGame
         public float value;
         public float span;
 
-        public static void ResetSpan() => Depth._currentSpan = 0f;
+        public static void ResetSpan() => _currentSpan = 0f;
 
         public Depth(float val)
         {
             value = val;
-            span = Depth._currentSpan + Depth.kSpanIncrement * 0.5f;
-            Depth._currentSpan = (Depth._currentSpan + Depth.kSpanIncrement) % Depth.kDepthSpanMax;
+            span = _currentSpan + kSpanIncrement * 0.5f;
+            _currentSpan = (_currentSpan + kSpanIncrement) % kDepthSpanMax;
         }
 
         public Depth(float val, float s)
@@ -33,7 +33,7 @@ namespace DuckGame
         public Depth Add(int val)
         {
             // return ((int)((this.value + Depth.kSpanIncrement / 20f * (float)val) * 1000)) / 1000f; //idk man fck floating points
-            return new Depth(this.value + Depth.kSpanIncrement / 20f * val, this.span);
+            return new Depth(value + kSpanIncrement / 20f * val, span);
         }
 
         public static implicit operator Depth(float val) => new Depth(val);

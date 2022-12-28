@@ -134,7 +134,7 @@ namespace DuckGame
                     _selectedIndex = 0;
                     if (_items.Count > 0)
                     {
-                        while (_selectedIndex < _items.Count<ContextMenu>() - 1 && _items[_selectedIndex].greyOut)
+                        while (_selectedIndex < _items.Count() - 1 && _items[_selectedIndex].greyOut)
                             ++_selectedIndex;
                         if (!_items[_selectedIndex].greyOut)
                             _opening = true;
@@ -456,7 +456,7 @@ namespace DuckGame
                         }
                         if (!waitInputFrame && Editor.inputMode == EditorInput.Gamepad && drawControls)
                         {
-                            if (Input.Pressed("MENU1"))
+                            if (Input.Pressed(Triggers.Menu1))
                             {
                                 if (isPinnable && _root && pinned)
                                 {
@@ -478,7 +478,7 @@ namespace DuckGame
                                     _autoSelectItem = _selectedIndex;
                                 }
                             }
-                            else if (pinned && _owner != null && _owner is ContextMenu && (_owner as ContextMenu).pinOpened && Input.Pressed("MENULEFT"))
+                            else if (pinned && _owner != null && _owner is ContextMenu && (_owner as ContextMenu).pinOpened && Input.Pressed(Triggers.MenuLeft))
                             {
                                 bool flag2 = false;
                                 foreach (ContextMenu contextMenu in _items)
@@ -577,7 +577,7 @@ namespace DuckGame
                     if ((Editor.lockInput == null || IsPartOf(Editor.lockInput)) && !Editor.tookInput && Editor.inputMode == EditorInput.Gamepad)
                     {
                         bool flag4 = HasOpen();
-                        if (flag4 && Input.Pressed("MENULEFT") && _canExpand)
+                        if (flag4 && Input.Pressed(Triggers.MenuLeft) && _canExpand)
                         {
                             bool flag5 = false;
                             foreach (ContextMenu contextMenu in _items)
@@ -601,7 +601,7 @@ namespace DuckGame
                             {
                                 _takingInput = true;
                                 bool flag6 = false;
-                                if (Input.Pressed("MENUUP"))
+                                if (Input.Pressed(Triggers.MenuUp))
                                 {
                                     flag6 = true;
                                     if (_selectedIndex == _items.Count - 1 && _alwaysDrawLast)
@@ -636,7 +636,7 @@ namespace DuckGame
                                             break;
                                     }
                                 }
-                                else if (Input.Pressed("MENUDOWN"))
+                                else if (Input.Pressed(Triggers.MenuDown))
                                 {
                                     flag6 = true;
                                     ++_selectedIndex;
@@ -672,7 +672,7 @@ namespace DuckGame
                                 }
                             }
                             Rectangle rectangle = new Rectangle(x, y, itemSize.x, itemSize.y);
-                            if (_hover && (Input.Pressed("SELECT") || _canExpand && Input.Pressed("MENURIGHT") || scrollButtonDirection != 0))
+                            if (_hover && (Input.Pressed(Triggers.Select) || _canExpand && Input.Pressed(Triggers.MenuRight) || scrollButtonDirection != 0))
                             {
                                 if (this.owner is ContextMenu owner)
                                 {
@@ -766,7 +766,7 @@ namespace DuckGame
                     }
                     if (Editor.inputMode == EditorInput.Mouse && Mouse.x > lastDrawPos.x && Mouse.x < lastDrawPos.x + menuSize.x && Mouse.y > lastDrawPos.y && Mouse.y < lastDrawPos.y + menuSize.y)
                     {
-                        if (Mouse.scroll != 0f && !ContextMenu._didContextScroll)
+                        if (Mouse.scroll != 0f && !_didContextScroll)
                         {
                             _drawIndex += Mouse.scroll > 0f ? 1 : -1;
                             _drawIndex = Maths.Clamp(_drawIndex, 0, _items.Count - _maxNumToDraw);
@@ -778,7 +778,7 @@ namespace DuckGame
                             }
                             PositionItems();
                         }
-                        ContextMenu._didContextScroll = false;
+                        _didContextScroll = false;
                     }
                 }
                 if (!Editor.HasFocus() && _hover && _dragMode && Editor.inputMode == EditorInput.Touch && TouchScreen.GetTouch() != Touch.None && TouchScreen.GetTouch().Check(new Rectangle(x, y, itemSize.x, itemSize.y), layer.camera))
@@ -1140,7 +1140,7 @@ namespace DuckGame
             PositionItems();
         }
 
-        public Thing GetPlacementType(System.Type pType)
+        public Thing GetPlacementType(Type pType)
         {
             if (this is ContextObject && (this as ContextObject).thing.GetType() == pType)
                 return (this as ContextObject).thing;
@@ -1200,11 +1200,11 @@ namespace DuckGame
             return numArray[length1, length2];
         }
 
-        public List<ContextMenu.SearchPair> Search(string pTerm) => Search(pTerm.ToLowerInvariant(), new List<ContextMenu.SearchPair>()).OrderBy<ContextMenu.SearchPair, double>(x => -x.relevance).ToList<ContextMenu.SearchPair>();
+        public List<SearchPair> Search(string pTerm) => Search(pTerm.ToLowerInvariant(), new List<SearchPair>()).OrderBy(x => -x.relevance).ToList();
 
-        private List<ContextMenu.SearchPair> Search(
+        private List<SearchPair> Search(
           string pTerm,
-          List<ContextMenu.SearchPair> pCurrentTerms)
+          List<SearchPair> pCurrentTerms)
         {
             if (this is ContextObject)
             {
@@ -1224,7 +1224,7 @@ namespace DuckGame
                 if (lowerInvariant.Contains(pTerm))
                     similarity += 0.6f;
                 if (similarity > 0.25f)
-                    pCurrentTerms.Add(new ContextMenu.SearchPair()
+                    pCurrentTerms.Add(new SearchPair()
                     {
                         relevance = similarity,
                         thing = this as ContextObject

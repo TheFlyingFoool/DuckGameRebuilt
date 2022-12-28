@@ -37,7 +37,7 @@ namespace DuckGame
         public override void Initialize()
         {
             _tv = new Sprite("bigTV");
-            Vote.OpenVoting("SKIP", "START");
+            Vote.OpenVoting("SKIP", Triggers.Start);
         }
 
         public override void Update()
@@ -51,7 +51,7 @@ namespace DuckGame
             {
                 HighlightLevel.didSkip = true;
                 Vote.CloseVoting();
-                Level.current = new RockScoreboard(RockScoreboard.returnLevel, ScoreBoardMode.ShowWinner, true); //!Main.isDemo ? new RockScoreboard(RockScoreboard.returnLevel, ScoreBoardMode.ShowWinner, true) : new HighlightLevel(true);
+                current = new RockScoreboard(RockScoreboard.returnLevel, ScoreBoardMode.ShowWinner, true); //!Main.isDemo ? new RockScoreboard(RockScoreboard.returnLevel, ScoreBoardMode.ShowWinner, true) : new HighlightLevel(true);
             }
             if (!_showHighlight && Graphics.fade > 0.95f)
             {
@@ -79,14 +79,14 @@ namespace DuckGame
                 return;
             int highlight = _currentHighlight - 1;
             if (_currentHighlight <= 0)
-                Level.current = new HighlightLevel(true);
+                current = new HighlightLevel(true);
             else
-                Level.current = new HighlightPlayback(highlight);
+                current = new HighlightPlayback(highlight);
         }
 
         public override void DoDraw()
         {
-            DuckGame.Graphics.Clear(Color.Black);
+            Graphics.Clear(Color.Black);
             base.DoDraw();
         }
 
@@ -111,15 +111,15 @@ namespace DuckGame
         {
             if (_keepPaused <= 0f || _currentHighlight < 0)
                 return;
-            DuckGame.Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Resolution.getTransformationMatrix());
+            Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Resolution.getTransformationMatrix());
             _font.scale = new Vec2(8f, 8f);
             double width = _font.GetWidth(Change.ToString(_currentHighlight + 1));
             double height = _font.height;
             _numbers.frame = 4 - _currentHighlight;
             _numbers.depth = (Depth)1f;
             _numbers.scale = new Vec2(4f, 4f);
-            DuckGame.Graphics.Draw(_numbers, 32f, 32f);
-            DuckGame.Graphics.screen.End();
+            Graphics.Draw(_numbers, 32f, 32f);
+            Graphics.screen.End();
         }
     }
 }

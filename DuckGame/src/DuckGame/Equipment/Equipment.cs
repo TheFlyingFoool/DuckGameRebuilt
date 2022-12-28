@@ -260,7 +260,7 @@ namespace DuckGame
             if (bullet.isLocal)
             {
                 duck.KnockOffEquipment(this, b: bullet);
-                Thing.Fondle(this, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
             }
             if (bullet.isLocal && Network.isActive)
                 NetSoundEffect.Play("equipmentTing");

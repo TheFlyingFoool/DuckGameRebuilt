@@ -67,10 +67,10 @@ namespace DuckGame
         public override bool allowDirectionalMapping => false;
 
         public SwitchJoyConLeft(int idx)
-          : base(idx, "Left Joy-Con", "Joy-Con (L)", SwitchJoyConLeft._leftJoyImages)
+          : base(idx, "Left Joy-Con", "Joy-Con (L)", _leftJoyImages)
         {
         }
 
-        public override extern bool isConnected { [MethodImpl(MethodImplOptions.InternalCall)] get; }
+        public extern override bool isConnected { [MethodImpl(MethodImplOptions.InternalCall)] get; }
     }
 }

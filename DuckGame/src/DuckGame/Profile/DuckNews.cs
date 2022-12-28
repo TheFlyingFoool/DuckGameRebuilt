@@ -31,22 +31,22 @@ namespace DuckGame
                 Stream s = DuckFile.OpenStream(file);
                 DuckXML duckXml = DuckXML.Load(s);
                 IEnumerable<DXMLNode> source1 = duckXml.Elements("NewsStory");
-                if (duckXml.invalid || s == null || source1.Count<DXMLNode>() == 0)
+                if (duckXml.invalid || s == null || source1.Count() == 0)
                     throw new Exception("Content Exception: Failed to load news story (" + Content.path + "news/" + file + ".news)! Is the file missing, or has it been edited?");
                 if (source1 != null)
                 {
                     if (DG.isHalloween)
                     {
-                        IEnumerable<DXMLNode> source2 = source1.Elements<DXMLNode>("NewsStoryHalloween");
-                        if (source2 != null && source2.Count<DXMLNode>() > 0)
+                        IEnumerable<DXMLNode> source2 = source1.Elements("NewsStoryHalloween");
+                        if (source2 != null && source2.Count() > 0)
                             source1 = source2;
                     }
-                    DuckNews duckNews = DuckNews.Parse(source1.ElementAt<DXMLNode>(0));
+                    DuckNews duckNews = Parse(source1.ElementAt(0));
                     if (duckNews != null)
-                        DuckNews._stories.Add(duckNews);
+                        _stories.Add(duckNews);
                 }
             }
-            DuckNews._stories = DuckNews._stories.OrderBy<DuckNews, int>(x => (int)x._section).ToList<DuckNews>();
+            _stories = _stories.OrderBy(x => (int)x._section).ToList();
         }
 
         public static List<DuckStory> CalculateStories()
@@ -54,7 +54,7 @@ namespace DuckGame
             foreach (Profile profile in Profiles.active)
                 profile.endOfRoundStats = null;
             List<DuckStory> stories = new List<DuckStory>();
-            foreach (DuckNews storey in DuckNews._stories)
+            foreach (DuckNews storey in _stories)
             {
                 List<DuckStory> story = storey.CalculateStory();
                 stories.AddRange(story);
@@ -163,7 +163,7 @@ namespace DuckGame
                     if (!flag)
                     {
                         source.Add(new List<Profile>());
-                        source.Last<List<Profile>>().Add(profile);
+                        source.Last().Add(profile);
                     }
                 }
                 source.Reverse();
@@ -221,14 +221,14 @@ namespace DuckGame
         public static DuckNews Parse(DXMLNode rootElement)
         {
             DuckNews duckNews1 = new DuckNews();
-            DXMLAttribute dxmlAttribute1 = rootElement.Attributes("name").FirstOrDefault<DXMLAttribute>();
+            DXMLAttribute dxmlAttribute1 = rootElement.Attributes("name").FirstOrDefault();
             if (dxmlAttribute1 != null)
                 duckNews1._name = dxmlAttribute1.Value;
             foreach (DXMLNode element in rootElement.Elements())
             {
                 if (element.Name == "Section")
                 {
-                    DXMLAttribute dxmlAttribute2 = element.Attributes("name").FirstOrDefault<DXMLAttribute>();
+                    DXMLAttribute dxmlAttribute2 = element.Attributes("name").FirstOrDefault();
                     if (dxmlAttribute2 != null)
                     {
                         try
@@ -248,7 +248,7 @@ namespace DuckGame
                 }
                 else if (element.Name == "Dialogue")
                 {
-                    DXMLAttribute dxmlAttribute3 = element.Attributes("value").FirstOrDefault<DXMLAttribute>();
+                    DXMLAttribute dxmlAttribute3 = element.Attributes("value").FirstOrDefault();
                     if (dxmlAttribute3 != null)
                         duckNews1._dialogue.Add(dxmlAttribute3.Value);
                 }
@@ -264,13 +264,13 @@ namespace DuckGame
                 }
                 else if (element.Name == "Cycle")
                 {
-                    DXMLAttribute dxmlAttribute4 = element.Attributes("value").FirstOrDefault<DXMLAttribute>();
+                    DXMLAttribute dxmlAttribute4 = element.Attributes("value").FirstOrDefault();
                     if (dxmlAttribute4 != null)
                         duckNews1._cycle = (CycleMode)Enum.Parse(typeof(CycleMode), dxmlAttribute4.Value);
                 }
                 else if (element.Name == "SubStory")
                 {
-                    DuckNews duckNews2 = DuckNews.Parse(element);
+                    DuckNews duckNews2 = Parse(element);
                     duckNews1._subStories.Add(duckNews2);
                 }
             }

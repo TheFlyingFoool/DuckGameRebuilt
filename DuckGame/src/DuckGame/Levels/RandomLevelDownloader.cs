@@ -7,7 +7,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DuckGame
 {
@@ -27,47 +26,47 @@ namespace DuckGame
 
         public static LevelData GetNextLevel()
         {
-            if (RandomLevelDownloader._readyLevels.Count == 0)
+            if (_readyLevels.Count == 0)
                 return null;
-            LevelData nextLevel = RandomLevelDownloader._readyLevels.First<LevelData>();
-            RandomLevelDownloader._readyLevels.RemoveAt(0);
+            LevelData nextLevel = _readyLevels[0];
+            _readyLevels.RemoveAt(0);
             return nextLevel;
         }
 
-        public static LevelData PeekNextLevel() => RandomLevelDownloader._readyLevels.Count == 0 ? null : RandomLevelDownloader._readyLevels.First<LevelData>();
+        public static LevelData PeekNextLevel() => _readyLevels.Count == 0 ? null : _readyLevels[0];
 
         private static void Fetched(object sender, WorkshopQueryResult result)
         {
-            RandomLevelDownloader._fetchDelay = 0f;
-            if (RandomLevelDownloader._currentWorkshopLevelQuery == null || RandomLevelDownloader._currentWorkshopLevelQuery != sender)
+            _fetchDelay = 0f;
+            if (_currentWorkshopLevelQuery == null || _currentWorkshopLevelQuery != sender)
             {
-                RandomLevelDownloader._numFetch = 0;
-                RandomLevelDownloader._toFetchIndex = Rando.Int((int)(sender as WorkshopQueryAll).numResultsFetched - 1);
-                RandomLevelDownloader._currentWorkshopLevelQuery = sender;
+                _numFetch = 0;
+                _toFetchIndex = Rando.Int((int)(sender as WorkshopQueryAll)._numResultsFetched - 1);
+                _currentWorkshopLevelQuery = sender;
             }
-            if (RandomLevelDownloader._toFetchIndex == RandomLevelDownloader._numFetch)
+            if (_toFetchIndex == _numFetch)
             {
                 if (Global.data.blacklist.Contains(result.details.publishedFile.id))
                 {
-                    if (RandomLevelDownloader._numFetch < 49)
-                        ++RandomLevelDownloader._numFetch;
+                    if (_numFetch < 49)
+                        ++_numFetch;
                 }
                 else if (Steam.DownloadWorkshopItem(result.details.publishedFile))
-                    RandomLevelDownloader._downloadingItems.Add(result.details.publishedFile);
+                    _downloadingItems.Add(result.details.publishedFile);
                 else
-                    RandomLevelDownloader.ProcessWorkshopItem(result.details.publishedFile);
+                    ProcessWorkshopItem(result.details.publishedFile);
             }
-            ++RandomLevelDownloader._numFetch;
+            ++_numFetch;
         }
 
-        public static void ProcessWorkshopItem(WorkshopItem pItem) => RandomLevelDownloader.ProcessLevel(pItem.path);
+        public static void ProcessWorkshopItem(WorkshopItem pItem) => ProcessLevel(pItem.path);
 
         public static void DownloadRandomMap()
         {
-            int num = Rando.Int(RandomLevelDownloader._totalMaps / 50) + 1;
-            if (RandomLevelDownloader.numSinceLowRating > 3)
+            int num = Rando.Int(_totalMaps / 50) + 1;
+            if (numSinceLowRating > 3)
             {
-                RandomLevelDownloader.numSinceLowRating = 0;
+                numSinceLowRating = 0;
                 if (Rando.Float(1f) > 0.8f)
                     num %= 100;
             }
@@ -77,41 +76,41 @@ namespace DuckGame
                 if (Rando.Float(1f) > 0.8f)
                     num %= 30;
             }
-            RandomLevelDownloader._orderMode = RandomLevelDownloader.numSinceLowRating != 2 ? WorkshopQueryFilterOrder.RankedByVote : WorkshopQueryFilterOrder.RankedByTrend;
+            _orderMode = numSinceLowRating != 2 ? WorkshopQueryFilterOrder.RankedByVote : WorkshopQueryFilterOrder.RankedByTrend;
             if (Rando.Float(1f) > 0.7f)
             {
                 switch (Rando.Int(5))
                 {
                     case 0:
-                        RandomLevelDownloader._orderMode = WorkshopQueryFilterOrder.FavoritedByFriendsRankedByPublicationDate;
+                        _orderMode = WorkshopQueryFilterOrder.FavoritedByFriendsRankedByPublicationDate;
                         break;
                     case 1:
-                        RandomLevelDownloader._orderMode = WorkshopQueryFilterOrder.CreatedByFriendsRankedByPublicationDate;
+                        _orderMode = WorkshopQueryFilterOrder.CreatedByFriendsRankedByPublicationDate;
                         break;
                     default:
-                        RandomLevelDownloader._orderMode = WorkshopQueryFilterOrder.RankedByTotalUniqueSubscriptions;
+                        _orderMode = WorkshopQueryFilterOrder.RankedByTotalUniqueSubscriptions;
                         break;
                 }
             }
             if (num == 0)
                 num = 1;
-            ++RandomLevelDownloader.numSinceLowRating;
-            WorkshopQueryAll queryAll = Steam.CreateQueryAll(RandomLevelDownloader._orderMode, WorkshopType.Items);
+            ++numSinceLowRating;
+            WorkshopQueryAll queryAll = Steam.CreateQueryAll(_orderMode, WorkshopType.Items);
             queryAll.requiredTags.Add("Deathmatch");
             queryAll.excludedTags.Add("Exclude From Random");
-            queryAll.ResultFetched += new WorkshopQueryResultFetched(RandomLevelDownloader.Fetched);
-            queryAll.page = (uint)num;
+            queryAll.ResultFetched += new WorkshopQueryResultFetched(Fetched);
+            queryAll._page = (uint)num;
             queryAll.justOnePage = true;
             queryAll.Request();
-            RandomLevelDownloader._fetchDelay = 5f;
+            _fetchDelay = 5f;
         }
 
         private static void FinishedTotalQuery(object sender)
         {
             WorkshopQueryAll workshopQueryAll = sender as WorkshopQueryAll;
-            if (workshopQueryAll.numResultsTotal <= 0U)
+            if (workshopQueryAll._numResultsTotal <= 0U)
                 return;
-            RandomLevelDownloader._totalMaps = (int)workshopQueryAll.numResultsTotal;
+            _totalMaps = (int)workshopQueryAll._numResultsTotal;
         }
 
         private static void ProcessLevel(string path)
@@ -149,8 +148,8 @@ namespace DuckGame
                 }
                 if (flag1 && !levelData.modData.hasLocalMods)
                 {
-                    RandomLevelDownloader._readyLevels.Add(levelData);
-                    DevConsole.Log(DCSection.Steam, "Downloaded random level " + RandomLevelDownloader._readyLevels.Count.ToString() + "/" + RandomLevelDownloader.numToHaveReady.ToString());
+                    _readyLevels.Add(levelData);
+                    DevConsole.Log(DCSection.Steam, "Downloaded random level " + _readyLevels.Count.ToString() + "/" + numToHaveReady.ToString());
                 }
                 else
                     DevConsole.Log(DCSection.Steam, "Downloaded level had incompatible mods, and was ignored!");
@@ -167,53 +166,53 @@ namespace DuckGame
             foreach (string file in DuckFile.GetFiles(pItemPath, "*.lev"))
                 pLevels.Add(file);
             foreach (string directory in DuckFile.GetDirectories(pItemPath))
-                RandomLevelDownloader.GetLevelList(pItemPath, pLevels);
+                GetLevelList(pItemPath, pLevels);
             return pLevels;
         }
 
         public static void Update()
         {
-            RandomLevelDownloader._fetchDelay = Lerp.Float(RandomLevelDownloader._fetchDelay, 0f, Maths.IncFrameTimer());
+            _fetchDelay = Lerp.Float(_fetchDelay, 0f, Maths.IncFrameTimer());
             if (!Steam.IsInitialized() || !Network.isServer || TeamSelect2.GetSettingInt("workshopmaps") <= 0)
                 return;
-            if (RandomLevelDownloader._downloadingItems.Count > 0)
+            if (_downloadingItems.Count > 0)
             {
-                for (int index = 0; index < RandomLevelDownloader._downloadingItems.Count; ++index)
+                for (int index = 0; index < _downloadingItems.Count; ++index)
                 {
-                    if (RandomLevelDownloader._downloadingItems[index].finishedProcessing)
+                    if (_downloadingItems[index].finishedProcessing)
                     {
-                        if (RandomLevelDownloader._downloadingItems[index].downloadResult == SteamResult.OK)
+                        if (_downloadingItems[index].downloadResult == SteamResult.OK)
                         {
-                            List<string> levelList = RandomLevelDownloader.GetLevelList(RandomLevelDownloader._downloadingItems[index].path);
-                            RandomLevelDownloader.ProcessLevel(levelList[Rando.Int(levelList.Count - 1)]);
+                            List<string> levelList = GetLevelList(_downloadingItems[index].path);
+                            ProcessLevel(levelList[Rando.Int(levelList.Count - 1)]);
                         }
-                        RandomLevelDownloader._downloadingItems.RemoveAt(index);
+                        _downloadingItems.RemoveAt(index);
                         --index;
                     }
                 }
             }
             else
             {
-                if (RandomLevelDownloader._readyLevels.Count >= RandomLevelDownloader.numToHaveReady)
+                if (_readyLevels.Count >= numToHaveReady)
                     return;
-                if (RandomLevelDownloader._totalMaps == 0)
+                if (_totalMaps == 0)
                 {
-                    RandomLevelDownloader._toFetchIndex = -1;
-                    RandomLevelDownloader._numFetch = 0;
-                    WorkshopQueryAll queryAll = Steam.CreateQueryAll(RandomLevelDownloader._orderMode, WorkshopType.Items);
+                    _toFetchIndex = -1;
+                    _numFetch = 0;
+                    WorkshopQueryAll queryAll = Steam.CreateQueryAll(_orderMode, WorkshopType.Items);
                     queryAll.requiredTags.Add("Deathmatch");
                     queryAll.excludedTags.Add("Exclude From Random");
-                    queryAll.QueryFinished += new WorkshopQueryFinished(RandomLevelDownloader.FinishedTotalQuery);
-                    queryAll.fetchedData = WorkshopQueryData.TotalOnly;
+                    queryAll.QueryFinished += new WorkshopQueryFinished(FinishedTotalQuery);
+                    queryAll._dataToFetch = WorkshopQueryData.TotalOnly;
                     queryAll.Request();
-                    RandomLevelDownloader._totalMaps = -1;
+                    _totalMaps = -1;
                     DevConsole.Log(DCSection.Steam, "Querying for random levels.");
                 }
                 else
                 {
-                    if (RandomLevelDownloader._totalMaps == -1 || _fetchDelay > 0.0)
+                    if (_totalMaps == -1 || _fetchDelay > 0.0)
                         return;
-                    RandomLevelDownloader.DownloadRandomMap();
+                    DownloadRandomMap();
                 }
             }
         }

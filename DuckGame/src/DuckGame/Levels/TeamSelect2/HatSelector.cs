@@ -190,6 +190,14 @@ namespace DuckGame
             set => _secondWord = value;
         }
 
+        public ProfileSelector profileSelector
+        {
+            get
+            {
+                return _profileSelector;
+            }
+        }
+
         public InputProfile profileInput => _profile != null ? _profile.inputProfile : inputProfile;
 
         public InputProfile inputProfile
@@ -240,9 +248,11 @@ namespace DuckGame
                 scale = new Vec2(0.5f, 0.5f)
             };
             _collisionSize = new Vec2(141f, 89f);
-            extraButton = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(ButtonSprite))), "button"));
-            extraButton.center = new Vec2(12.5f, 12);
-            extraButton.Namebase = "nikoextraButton";
+            extraButton = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(ButtonSprite))), "button"))
+            {
+                center = new Vec2(12.5f, 12),
+                Namebase = "nikoextraButton"
+            };
             Content.textures[extraButton.Namebase] = extraButton.texture;
             _oButton = new Sprite("oButton");
             _demoBox = new SpriteMap("demoCrate", 20, 20);
@@ -421,6 +431,10 @@ namespace DuckGame
         public void Reset()
         {
             _netHoveringTeam = null;
+            if (_profile != null)
+            {
+                _profile.hatSelector = null;
+            }
             _open = false;
             _closing = true;
             _selection = HSSelection.Main;
@@ -513,9 +527,9 @@ namespace DuckGame
             bool flag1 = true;
             if (_profileBoxNumber < 0 || inputProfile == null || _box == null || _profile == null)
                 return;
-            if (connection == DuckNetwork.localConnection && inputProfile.Pressed("ANY"))
+            if (connection == DuckNetwork.localConnection && inputProfile.Pressed(Triggers.Any))
             {
-                DuckGame.NetIndex8 authority = this.authority;
+                NetIndex8 authority = this.authority;
                 this.authority = ++authority;
             }
             if (Network.isActive && connection == DuckNetwork.localConnection && Profiles.experienceProfile != null && profile.linkedProfile == Profiles.experienceProfile)
@@ -548,6 +562,10 @@ namespace DuckGame
                 _experienceProfileCheck = null;
                 _gettingXP = false;
                 _open = false;
+                if (_profile != null)
+                {
+                    _profile.hatSelector = null;
+                }
             }
             _fade = Lerp.Float(_fade, !_open || _profileSelector.open || _roomEditor.open ? 0f : 1f, 0.1f);
             _blackFade = Lerp.Float(_blackFade, _open ? 1f : 0f, 0.1f);
@@ -672,7 +690,7 @@ namespace DuckGame
                         if (_desiredTeamSelection == _teamSelection)
                         {
                             bool flag2 = false;
-                            if (inputProfile.Down("MENULEFT"))
+                            if (inputProfile.Down(Triggers.MenuLeft))
                             {
                                 if (_desiredTeamSelection < DG.MaxPlayers)
                                     _desiredTeamSelection = (short)(AllTeams().Count - 1);
@@ -684,7 +702,7 @@ namespace DuckGame
                                 flag2 = true;
                                 SFX.Play("consoleTick", 0.7f);
                             }
-                            if (inputProfile.Down("MENURIGHT"))
+                            if (inputProfile.Down(Triggers.MenuRight))
                             {
                                 if (_desiredTeamSelection >= AllTeams().Count - 1)
                                     _desiredTeamSelection = (short)ControllerNumber();
@@ -696,7 +714,7 @@ namespace DuckGame
                                 flag2 = true;
                                 SFX.Play("consoleTick", 0.7f);
                             }
-                            if (inputProfile.Down("MENUUP"))
+                            if (inputProfile.Down(Triggers.MenuUp))
                             {
                                 if (_desiredTeamSelection < DG.MaxPlayers)
                                     _desiredTeamSelection = 0;
@@ -713,7 +731,7 @@ namespace DuckGame
                                 flag2 = true;
                                 SFX.Play("consoleTick", 0.7f);
                             }
-                            if (inputProfile.Down("MENUDOWN"))
+                            if (inputProfile.Down(Triggers.MenuDown))
                             {
                                 if (_desiredTeamSelection < DG.MaxPlayers)
                                     _desiredTeamSelection = 0;
@@ -730,7 +748,7 @@ namespace DuckGame
                                 flag2 = true;
                                 SFX.Play("consoleTick", 0.7f);
                             }
-                            if (inputProfile.Pressed("SELECT") && !flag2)
+                            if (inputProfile.Pressed(Triggers.Select) && !flag2)
                             {
                                 if (_profile.team.locked)
                                 {
@@ -746,7 +764,7 @@ namespace DuckGame
                                 }
                             }
                             //NiK0's personal hell
-                            if (inputProfile.Pressed("SHOOT") && text1 != "NO TEAM")
+                            if (inputProfile.Pressed(Triggers.Shoot) && text1 != "NO TEAM")
                             {
                                 Team t = FilterTeam();
                                 if (t.locked)
@@ -761,7 +779,7 @@ namespace DuckGame
                                     RoomEditorExtra.ReloadFavHats();
                                 }
                             }
-                            if (inputProfile.Pressed("RAGDOLL"))
+                            if (inputProfile.Pressed(Triggers.Ragdoll))
                             {
                                 if (profile.requestedColor == -1)
                                     profile.requestedColor = profile.currentColor;
@@ -769,7 +787,7 @@ namespace DuckGame
                                 SFX.Play("consoleTick", 0.7f);
                                 profile.UpdatePersona();
                             }
-                            if (inputProfile.Pressed("CANCEL"))
+                            if (inputProfile.Pressed(Triggers.Cancel))
                             {
                                 _desiredTeamSelection = (short)GetTeamIndex(_startingTeam);
                                 _teamSelection = _desiredTeamSelection;
@@ -983,7 +1001,7 @@ namespace DuckGame
                                     HUD.CloseCorner(HUDCorner.BottomLeft);
                                 _experienceProfileCheck = _profile;
                             }
-                            if (_profile == Profiles.experienceProfile && inputProfile.Pressed("MENU2"))
+                            if (_profile == Profiles.experienceProfile && inputProfile.Pressed(Triggers.Menu2))
                             {
                                 UIMenu profileMergeMenu = Options.CreateProfileMergeMenu();
                                 Level.Add(profileMergeMenu);
@@ -991,7 +1009,7 @@ namespace DuckGame
                                 profileMergeMenu.Open();
                             }
                         }
-                        if (inputProfile.Pressed("MENUUP"))
+                        if (inputProfile.Pressed(Triggers.MenuUp))
                         {
                             if (_mainSelection > 0)
                             {
@@ -1001,7 +1019,7 @@ namespace DuckGame
                                     _mainSelection = 1;
                             }
                         }
-                        else if (inputProfile.Pressed("MENUDOWN"))
+                        else if (inputProfile.Pressed(Triggers.MenuDown))
                         {
                             if (_mainSelection < (flag1 ? 3 : 2))
                             {
@@ -1011,7 +1029,7 @@ namespace DuckGame
                             if (_editRoomDisabled && _mainSelection == 2)
                                 _mainSelection = 3;
                         }
-                        else if (inputProfile.Pressed("SELECT"))
+                        else if (inputProfile.Pressed(Triggers.Select))
                         {
                             if (_mainSelection == 1 && (!Network.isActive || !Profiles.IsExperience(_profile)))
                             {
@@ -1028,6 +1046,10 @@ namespace DuckGame
                             }
                             else if (_mainSelection == (flag1 ? 3 : 2))
                             {
+                                if (_profile != null)
+                                {
+                                    _profile.hatSelector = null;
+                                }
                                 _open = false;
                                 _closing = true;
                                 SFX.Play("consoleCancel", 0.4f);
@@ -1042,15 +1064,19 @@ namespace DuckGame
                                 _screen.DoFlashTransition();
                             }
                         }
-                        else if (_mainSelection == 1 && inputProfile.Pressed("MENU1") && !Profiles.IsDefault(_profile))
+                        else if (_mainSelection == 1 && inputProfile.Pressed(Triggers.Menu1) && !Profiles.IsDefault(_profile))
                         {
                             _profileSelector.EditProfile(_profile);
                             SFX.Play("consoleSelect", 0.4f);
                             _fade = 0f;
                             _screen.DoFlashTransition();
                         }
-                        else if (inputProfile.Pressed("CANCEL"))
+                        else if (inputProfile.Pressed(Triggers.Cancel))
                         {
+                            if (_profile != null)
+                            {
+                                _profile.hatSelector = null;
+                            }
                             _open = false;
                             _closing = true;
                             SFX.Play("consoleCancel", 0.4f);
@@ -1095,6 +1121,7 @@ namespace DuckGame
 
         public void Open(Profile p)
         {
+            p.hatSelector = this;
             _profile = p;
             _startingTeam = _profile.team;
             _open = true;
@@ -1118,14 +1145,14 @@ namespace DuckGame
                 {
                     for (int i = 0; i < 8; ++i)
                     {
-                        _blind.yscale = Math.Max(0f, Math.Min(this._blindLerp * 3f - i * 0.05f, 1f));
+                        _blind.yscale = Math.Max(0f, Math.Min(_blindLerp * 3f - i * 0.05f, 1f));
                         _blind.depth = 0.91f + i * 0.008f;
                         _blind.flipH = false;
-                        Graphics.Draw(_blind, base.x - 3f + i * (9f * this._blindLerp), base.y + 1f);
+                        Graphics.Draw(_blind, x - 3f + i * (9f * _blindLerp), y + 1f);
                         _blind.flipH = true;
-                        Graphics.Draw(_blind, base.x + 4f + 140f - i * (9f * this._blindLerp), base.y + 1f);
+                        Graphics.Draw(_blind, x + 4f + 140f - i * (9f * _blindLerp), y + 1f);
                     }
-                    float num = Math.Max((this._blindLerp - 0.5f) * 2f, 0f);
+                    float num = Math.Max((_blindLerp - 0.5f) * 2f, 0f);
                     if (num > 0.01f)
                     {
                         if (_gettingXP)

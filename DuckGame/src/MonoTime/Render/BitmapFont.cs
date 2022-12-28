@@ -5,6 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using System;
 using System.Linq;
 
 namespace DuckGame
@@ -13,326 +14,329 @@ namespace DuckGame
     {
         private SpriteMap _texture;
         public static SpriteMap _japaneseCharacters;
+        public int charcolorindex;
+        public int startingcoloroverride = -1;
+        public int startingcolorindex = -1;
         private static bool _mapInitialized = false;
         public static char[] _characters = new char[317]
         {
-      ' ',
-      '!',
-      '"',
-      '#',
-      '$',
-      '%',
-      '&',
-      '\'',
-      '(',
-      ')',
-      '*',
-      '+',
-      ',',
-      '-',
-      '.',
-      '/',
-      '0',
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      ':',
-      ';',
-      '>',
-      '=',
-      '<',
-      '?',
-      '@',
-      'A',
-      'B',
-      'C',
-      'D',
-      'E',
-      'F',
-      'G',
-      'H',
-      'I',
-      'J',
-      'K',
-      'L',
-      'M',
-      'N',
-      'O',
-      'P',
-      'Q',
-      'R',
-      'S',
-      'T',
-      'U',
-      'V',
-      'W',
-      'X',
-      'Y',
-      'Z',
-      '[',
-      '\\',
-      ']',
-      '^',
-      '_',
-      '`',
-      'a',
-      'b',
-      'c',
-      'd',
-      'e',
-      'f',
-      'g',
-      'h',
-      'i',
-      'j',
-      'k',
-      'l',
-      'm',
-      'n',
-      'o',
-      'p',
-      'q',
-      'r',
-      's',
-      't',
-      'u',
-      'v',
-      'w',
-      'x',
-      'y',
-      'z',
-      '{',
-      '|',
-      '}',
-      '~',
-      '`',
-      'À',
-      'Á',
-      'Â',
-      'Ã',
-      'Ä',
-      'Å',
-      'Æ',
-      'Ç',
-      'È',
-      'É',
-      'Ê',
-      'Ë',
-      'Ì',
-      'Í',
-      'Î',
-      'Ï',
-      'Ð',
-      'Ñ',
-      'Ò',
-      'Ó',
-      'Ô',
-      'Õ',
-      'Ö',
-      'Ø',
-      'Ù',
-      'Ú',
-      'Û',
-      'Ü',
-      'Ý',
-      'Þ',
-      'ß',
-      'à',
-      'á',
-      'â',
-      'ã',
-      'ä',
-      'å',
-      'æ',
-      'ç',
-      'è',
-      'é',
-      'ê',
-      'ë',
-      'ì',
-      'í',
-      'î',
-      'ï',
-      'ð',
-      'ñ',
-      'ò',
-      'ó',
-      'ô',
-      'õ',
-      'ö',
-      'ø',
-      'ù',
-      'ú',
-      'û',
-      'ü',
-      'ý',
-      'þ',
-      'ÿ',
-      'Ā',
-      'ā',
-      'Ă',
-      'ă',
-      'Ą',
-      'ą',
-      'Ć',
-      'ć',
-      'Ċ',
-      'ċ',
-      'Č',
-      'č',
-      'Ď',
-      'ď',
-      'Ē',
-      'ē',
-      'Ę',
-      'ę',
-      'Ě',
-      'ě',
-      'Ğ',
-      'ğ',
-      'Ġ',
-      'ġ',
-      'Ģ',
-      'ģ',
-      'Ħ',
-      'ħ',
-      'Ī',
-      'ī',
-      'Į',
-      'į',
-      'İ',
-      'ı',
-      'Ĳ',
-      'ĳ',
-      'Ķ',
-      'ķ',
-      'Ĺ',
-      'ĺ',
-      'Ļ',
-      'ļ',
-      'Ľ',
-      'ľ',
-      'Ł',
-      'ł',
-      'Ń',
-      'ń',
-      'Ņ',
-      'ņ',
-      'Ň',
-      'ň',
-      'Ō',
-      'ō',
-      'Ő',
-      'ő',
-      'Œ',
-      'œ',
-      'Ŕ',
-      'ŕ',
-      'Ř',
-      'ř',
-      'Ś',
-      'ś',
-      'Ş',
-      'ş',
-      'Š',
-      'š',
-      'Ţ',
-      'ţ',
-      'Ť',
-      'ť',
-      'Ū',
-      'ū',
-      'Ů',
-      'ů',
-      'Ű',
-      'ű',
-      'Ų',
-      'ų',
-      'Ÿ',
-      'Ź',
-      'ź',
-      'Ż',
-      'ż',
-      'Ž',
-      'ž',
-      'ǅ',
-      'ǆ',
-      'ǲ',
-      'ǳ',
-      'А',
-      'Б',
-      'В',
-      'Г',
-      'Д',
-      'Е',
-      'Ж',
-      'З',
-      'И',
-      'Й',
-      'К',
-      'Л',
-      'М',
-      'Н',
-      'О',
-      'П',
-      'Р',
-      'С',
-      'Т',
-      'У',
-      'Ф',
-      'Х',
-      'Ц',
-      'Ч',
-      'Ш',
-      'Щ',
-      'Ъ',
-      'Ы',
-      'Ь',
-      'Э',
-      'Ю',
-      'Я',
-      'а',
-      'б',
-      'в',
-      'г',
-      'д',
-      'е',
-      'ж',
-      'з',
-      'и',
-      'й',
-      'к',
-      'л',
-      'м',
-      'н',
-      'о',
-      'п',
-      'р',
-      'с',
-      'т',
-      'у',
-      'ф',
-      'х',
-      'ц',
-      'ч',
-      'ш',
-      'щ',
-      'ъ',
-      'ы',
-      'ь',
-      'э',
-      'ю',
-      'я',
-      '¡',
-      '¿',
-      'Ё',
-      'ё'
+          ' ',
+          '!',
+          '"',
+          '#',
+          '$',
+          '%',
+          '&',
+          '\'',
+          '(',
+          ')',
+          '*',
+          '+',
+          ',',
+          '-',
+          '.',
+          '/',
+          '0',
+          '1',
+          '2',
+          '3',
+          '4',
+          '5',
+          '6',
+          '7',
+          '8',
+          '9',
+          ':',
+          ';',
+          '>',
+          '=',
+          '<',
+          '?',
+          '@',
+          'A',
+          'B',
+          'C',
+          'D',
+          'E',
+          'F',
+          'G',
+          'H',
+          'I',
+          'J',
+          'K',
+          'L',
+          'M',
+          'N',
+          'O',
+          'P',
+          'Q',
+          'R',
+          'S',
+          'T',
+          'U',
+          'V',
+          'W',
+          'X',
+          'Y',
+          'Z',
+          '[',
+          '\\',
+          ']',
+          '^',
+          '_',
+          '`',
+          'a',
+          'b',
+          'c',
+          'd',
+          'e',
+          'f',
+          'g',
+          'h',
+          'i',
+          'j',
+          'k',
+          'l',
+          'm',
+          'n',
+          'o',
+          'p',
+          'q',
+          'r',
+          's',
+          't',
+          'u',
+          'v',
+          'w',
+          'x',
+          'y',
+          'z',
+          '{',
+          '|',
+          '}',
+          '~',
+          '`',
+          'À',
+          'Á',
+          'Â',
+          'Ã',
+          'Ä',
+          'Å',
+          'Æ',
+          'Ç',
+          'È',
+          'É',
+          'Ê',
+          'Ë',
+          'Ì',
+          'Í',
+          'Î',
+          'Ï',
+          'Ð',
+          'Ñ',
+          'Ò',
+          'Ó',
+          'Ô',
+          'Õ',
+          'Ö',
+          'Ø',
+          'Ù',
+          'Ú',
+          'Û',
+          'Ü',
+          'Ý',
+          'Þ',
+          'ß',
+          'à',
+          'á',
+          'â',
+          'ã',
+          'ä',
+          'å',
+          'æ',
+          'ç',
+          'è',
+          'é',
+          'ê',
+          'ë',
+          'ì',
+          'í',
+          'î',
+          'ï',
+          'ð',
+          'ñ',
+          'ò',
+          'ó',
+          'ô',
+          'õ',
+          'ö',
+          'ø',
+          'ù',
+          'ú',
+          'û',
+          'ü',
+          'ý',
+          'þ',
+          'ÿ',
+          'Ā',
+          'ā',
+          'Ă',
+          'ă',
+          'Ą',
+          'ą',
+          'Ć',
+          'ć',
+          'Ċ',
+          'ċ',
+          'Č',
+          'č',
+          'Ď',
+          'ď',
+          'Ē',
+          'ē',
+          'Ę',
+          'ę',
+          'Ě',
+          'ě',
+          'Ğ',
+          'ğ',
+          'Ġ',
+          'ġ',
+          'Ģ',
+          'ģ',
+          'Ħ',
+          'ħ',
+          'Ī',
+          'ī',
+          'Į',
+          'į',
+          'İ',
+          'ı',
+          'Ĳ',
+          'ĳ',
+          'Ķ',
+          'ķ',
+          'Ĺ',
+          'ĺ',
+          'Ļ',
+          'ļ',
+          'Ľ',
+          'ľ',
+          'Ł',
+          'ł',
+          'Ń',
+          'ń',
+          'Ņ',
+          'ņ',
+          'Ň',
+          'ň',
+          'Ō',
+          'ō',
+          'Ő',
+          'ő',
+          'Œ',
+          'œ',
+          'Ŕ',
+          'ŕ',
+          'Ř',
+          'ř',
+          'Ś',
+          'ś',
+          'Ş',
+          'ş',
+          'Š',
+          'š',
+          'Ţ',
+          'ţ',
+          'Ť',
+          'ť',
+          'Ū',
+          'ū',
+          'Ů',
+          'ů',
+          'Ű',
+          'ű',
+          'Ų',
+          'ų',
+          'Ÿ',
+          'Ź',
+          'ź',
+          'Ż',
+          'ż',
+          'Ž',
+          'ž',
+          'ǅ',
+          'ǆ',
+          'ǲ',
+          'ǳ',
+          'А',
+          'Б',
+          'В',
+          'Г',
+          'Д',
+          'Е',
+          'Ж',
+          'З',
+          'И',
+          'Й',
+          'К',
+          'Л',
+          'М',
+          'Н',
+          'О',
+          'П',
+          'Р',
+          'С',
+          'Т',
+          'У',
+          'Ф',
+          'Х',
+          'Ц',
+          'Ч',
+          'Ш',
+          'Щ',
+          'Ъ',
+          'Ы',
+          'Ь',
+          'Э',
+          'Ю',
+          'Я',
+          'а',
+          'б',
+          'в',
+          'г',
+          'д',
+          'е',
+          'ж',
+          'з',
+          'и',
+          'й',
+          'к',
+          'л',
+          'м',
+          'н',
+          'о',
+          'п',
+          'р',
+          'с',
+          'т',
+          'у',
+          'ф',
+          'х',
+          'ц',
+          'ч',
+          'ш',
+          'щ',
+          'ъ',
+          'ы',
+          'ь',
+          'э',
+          'ю',
+          'я',
+          '¡',
+          '¿',
+          'Ё',
+          'ё'
         };
         private static int[] _characterMap = new int[ushort.MaxValue];
         private const int kTilesPerRow = 16;
@@ -372,14 +376,14 @@ namespace DuckGame
                 ysize = size;
             _texture = new SpriteMap(image, size, ysize);
             _tileSize = size;
-            if (!BitmapFont._mapInitialized)
+            if (!_mapInitialized)
             {
-                for (int index2 = 0; index2 < BitmapFont._characters.Length; ++index2)
+                for (int index2 = 0; index2 < _characters.Length; ++index2)
                 {
-                    char ch = BitmapFont._characters[index2];
-                    BitmapFont._characterMap[ch] = index2;
+                    char ch = _characters[index2];
+                    _characterMap[ch] = index2;
                 }
-                BitmapFont._mapInitialized = true;
+                _mapInitialized = true;
             }
             _titleWing = new Sprite("arcade/titleWing");
         }
@@ -433,8 +437,14 @@ namespace DuckGame
                 else
                 {
                     input = _inputProfile != null ? _inputProfile : Input.lastActiveProfile;
-                    if (_inputProfile == null && Profiles.active.Count > 0 && !Network.isActive)
-                        input = Profiles.GetLastProfileWithInput().inputProfile;
+                    if (_inputProfile == null && !Network.isActive)
+                    {
+                        Profile profileWithInput = Profiles.GetLastProfileWithInput();
+                        if (profileWithInput != null)
+                        {
+                            input = profileWithInput.inputProfile;
+                        }
+                    }
                 }
             }
             float num = 0f;
@@ -482,15 +492,51 @@ namespace DuckGame
 
         public void DrawOutline(string text, Vec2 pos, Color c, Color outline, Depth deep = default(Depth))
         {
-            Draw(text, pos + new Vec2(-1f * scale.x, 0f), outline, deep + 2, colorSymbols: true);
-            Draw(text, pos + new Vec2(1f * scale.x, 0f), outline, deep + 2, colorSymbols: true);
-            Draw(text, pos + new Vec2(0f, -1f * scale.y), outline, deep + 2, colorSymbols: true);
-            Draw(text, pos + new Vec2(0f, 1f * scale.y), outline, deep + 2, colorSymbols: true);
-            Draw(text, pos + new Vec2(-1f * scale.x, -1f * scale.y), outline, deep + 2, colorSymbols: true);
-            Draw(text, pos + new Vec2(1f * scale.x, -1f * scale.y), outline, deep + 2, colorSymbols: true);
-            Draw(text, pos + new Vec2(-1f * scale.x, 1f * scale.y), outline, deep + 2, colorSymbols: true);
-            Draw(text, pos + new Vec2(1f * scale.x, 1f * scale.y), outline, deep + 2, colorSymbols: true);
-            Draw(text, pos, c, deep + 5);
+            if (Program.gay)
+            {
+                Random t = new Random(text.Length + (int)pos.y + (int)pos.x);
+                startingcolorindex = t.Next(0, Color.RainbowColors.Count);
+                //this.startingcoloroverride = startingcolorindex;
+                //if (startingcolorindex == -1)
+                //{
+                //    startingcolorindex = Rando.Int(Color.RainbowColors.Count - 1);
+                //}
+                startingcoloroverride = (Color.RainbowColors.Count - 1) - startingcolorindex;
+                
+                string cleanText = text.CleanFormatting(Extensions.CleanMethod.Color);
+                Draw(cleanText, pos + new Vec2(-1f * scale.x, 0f), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(1f * scale.x, 0f), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(0f, -1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(0f, 1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(-1f * scale.x, -1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(1f * scale.x, -1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(-1f * scale.x, 1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(1f * scale.x, 1f * scale.y), outline, deep + 2, colorSymbols: true);
+                int newcolor = startingcolorindex;
+                if (newcolor == startingcoloroverride)
+                {
+                    newcolor += 2;
+                    if (newcolor >= Colors.Rainbow.Length)
+                    {
+                        newcolor = 0;
+                    }
+                }
+                startingcoloroverride = newcolor;
+                Draw(text, pos, c, deep + 5);
+            }
+            else
+            {
+                string cleanText = text.CleanFormatting(Extensions.CleanMethod.Color);
+                Draw(cleanText, pos + new Vec2(-1f * scale.x, 0f), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(1f * scale.x, 0f), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(0f, -1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(0f, 1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(-1f * scale.x, -1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(1f * scale.x, -1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(-1f * scale.x, 1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(cleanText, pos + new Vec2(1f * scale.x, 1f * scale.y), outline, deep + 2, colorSymbols: true);
+                Draw(text, pos, c, deep + 5);
+            }
         }
 
         public void Draw(
@@ -517,6 +563,23 @@ namespace DuckGame
             //{
             //    LangHandler.drawnstrings.Add(text);
             //}
+            if (Program.gay)
+            {
+                if (startingcoloroverride != -1)
+                {
+                    startingcolorindex = startingcoloroverride;
+                }
+                else
+                {
+                    Random t = new Random(text.Length + (int)ypos + (int)xpos);
+                    startingcolorindex = t.Next(0, Color.RainbowColors.Count);
+                }
+                //if (startingcolorindex == -1)
+                //{
+                //    startingcolorindex = Rando.Int(Color.RainbowColors.Count - 1);
+                //}
+                charcolorindex = startingcolorindex;
+            }
             text = LangHandler.Convert(text);
             if (colorOverride != new Color())
                 c = colorOverride;
@@ -531,8 +594,14 @@ namespace DuckGame
                 else
                 {
                     input = _inputProfile != null ? _inputProfile : Input.lastActiveProfile;
-                    if (_inputProfile == null && Profiles.active.Count > 0 && !Network.isActive)
-                        input = Profiles.GetLastProfileWithInput().inputProfile;
+                    if (_inputProfile == null && !Network.isActive)
+                    {
+                        Profile profileWithInput = Profiles.GetLastProfileWithInput();
+                        if (profileWithInput != null)
+                        {
+                            input = profileWithInput.inputProfile;
+                        }
+                    }
                 }
             }
             float num1 = 0f;
@@ -571,8 +640,21 @@ namespace DuckGame
                                         num3 += 3f * this.scale.y;
                                     }
                                 }
-                                if (colorSymbols)
+                                if (Program.gay)
+                                {
+                                    c = Colors.Rainbow[charcolorindex];
+                                    charcolorindex += 1;
+                                    if (charcolorindex >= Colors.Rainbow.Length)
+                                    {
+                                        charcolorindex = 0;
+                                    }
                                     sprite1.color = c;
+                                }
+                                else
+                                {
+                                    if (colorSymbols)
+                                        sprite1.color = c;
+                                }
                                 Graphics.Draw(sprite1, xpos + num2, ypos + num1 + num3, deep);
                                 num2 += (sprite1.width * sprite1.scale.x + 1f);
                                 sprite1.scale = scale;
@@ -611,14 +693,14 @@ namespace DuckGame
                     {
                         string source = "";
                         int letterIndex = _letterIndex;
-                        while (letterIndex < text.Count<char>() && text[letterIndex] != ' ' && text[letterIndex] != '|' && text[letterIndex] != '@')
+                        while (letterIndex < text.Count() && text[letterIndex] != ' ' && text[letterIndex] != '|' && text[letterIndex] != '@')
                         {
                             source += text[letterIndex].ToString();
                             ++letterIndex;
                             if (!enforceWidthByWord)
                                 break;
                         }
-                        if (num2 + source.Count<char>() * (_tileSize * scale.x) > maxWidth)
+                        if (num2 + source.Count() * (_tileSize * scale.x) > maxWidth)
                         {
                             num1 += _texture.height * scale.y;
                             num2 = 0f;
@@ -633,6 +715,15 @@ namespace DuckGame
                     }
                     else
                     {
+                        if (Program.gay)
+                        {
+                            c = Colors.Rainbow[charcolorindex];
+                            charcolorindex += 1;
+                            if (charcolorindex >= Colors.Rainbow.Length)
+                            {
+                                charcolorindex = 0;
+                            }
+                        }
                         SpriteMap g = _texture;
                         char index = text[_letterIndex];
                         int num4;
@@ -643,7 +734,7 @@ namespace DuckGame
                         }
                         else
                         {
-                            num4 = BitmapFont._characterMap[index];
+                            num4 = _characterMap[index];
                             if (num4 == 0 && index != ' ')
                             {
                                 num4 = 91;

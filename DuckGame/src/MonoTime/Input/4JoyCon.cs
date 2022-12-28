@@ -93,11 +93,11 @@ namespace DuckGame
         public override int numTriggers => 2;
 
         public SwitchProController(int idx)
-          : base(idx, "Pro Controller", "Pro Controller", SwitchProController._proControllerImages)
+          : base(idx, "Pro Controller", "Pro Controller", _proControllerImages)
         {
         }
 
-        public override extern bool isConnected { [MethodImpl(MethodImplOptions.InternalCall)] get; }
+        public extern override bool isConnected { [MethodImpl(MethodImplOptions.InternalCall)] get; }
 
         public override Vec2 rightStick => ReadRightStick();
     }

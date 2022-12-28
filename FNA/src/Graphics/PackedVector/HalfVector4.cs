@@ -185,12 +185,12 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
 		/// <returns>The ulong containing the packed values.</returns>
 		private static ulong Pack(float x, float y, float z, float w)
 		{
-			return (ulong) (
-				((ulong) HalfTypeHelper.Convert(x)) |
-				(((ulong) HalfTypeHelper.Convert(y) << 0x10)) |
-				(((ulong) HalfTypeHelper.Convert(z) << 0x20)) |
-				(((ulong) HalfTypeHelper.Convert(w) << 0x30))
-			);
+			return
+                 HalfTypeHelper.Convert(x) |
+                (((ulong)HalfTypeHelper.Convert(y) << 0x10)) |
+                (((ulong)HalfTypeHelper.Convert(z) << 0x20)) |
+                (((ulong)HalfTypeHelper.Convert(w) << 0x30))
+            ;
 		}
 
 		#endregion

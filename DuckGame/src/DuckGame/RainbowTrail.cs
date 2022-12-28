@@ -127,7 +127,7 @@ namespace DuckGame
             Vec2 t4 = new Vec2(1f, 1f);
             if (_capeTexture == null)
                 return;
-            float depth = DuckGame.Graphics.AdjustDepth(this.depth);
+            float depth = Graphics.AdjustDepth(this.depth);
             for (int index = capePeices.Count - 1; index >= 0; --index)
             {
                 TrailPiece capePeice = capePeices[index];
@@ -150,7 +150,7 @@ namespace DuckGame
                         vec2_5 = vec2_1 + vec2_6 * (length - (num2 - num1));
                         flag2 = true;
                     }
-                    DuckGame.Graphics.screen.DrawQuad(vec2_5 - vec2_3 * (float)(num3 * capePeice.wide / 2.0), vec2_5 + vec2_3 * (float)(num3 * capePeice.wide / 2.0), vec2_1 - vec2_2 * (float)(num3 * capePeice.wide / 2.0), vec2_1 + vec2_2 * (float)(num3 * capePeice.wide / 2.0), t1, t2, t3, t4, depth, _capeTexture, Color.White);
+                    Graphics.screen.DrawQuad(vec2_5 - vec2_3 * (float)(num3 * capePeice.wide / 2.0), vec2_5 + vec2_3 * (float)(num3 * capePeice.wide / 2.0), vec2_1 - vec2_2 * (float)(num3 * capePeice.wide / 2.0), vec2_1 + vec2_2 * (float)(num3 * capePeice.wide / 2.0), t1, t2, t3, t4, depth, _capeTexture, Color.White);
                     if (flag2)
                         break;
                 }

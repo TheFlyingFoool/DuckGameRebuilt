@@ -42,7 +42,7 @@ namespace DuckGame
         {
             _time += 0.016f;
             bool isspritebatch = false;
-            if (this.batchItem != null && this.batchItem.NormalTexture != null && DuckGame.Content.offests.ContainsKey("energyTex") && DuckGame.Content.offests.ContainsKey(this.batchItem.NormalTexture.Namebase))
+            if (batchItem != null && batchItem.NormalTexture != null && batchItem.NormalTexture.Namebase != null && Content.offests.ContainsKey("energyTex") && Content.offests.ContainsKey(batchItem.NormalTexture.Namebase))
             {
                 _effect = _sbeffect;
                 isspritebatch = true;
@@ -51,16 +51,16 @@ namespace DuckGame
             {
                 _effect = _baseeffect;
             }
-            if (DuckGame.Graphics.device.Textures[0] != null)
+            if (Graphics.device.Textures[0] != null)
             {
                 if (isspritebatch)
                 {
                     if (_thing != null)
                     {
-                        Microsoft.Xna.Framework.Rectangle r = DuckGame.Content.offests[this.batchItem.NormalTexture.Namebase];
-                        Microsoft.Xna.Framework.Rectangle r2 = DuckGame.Content.offests["energyTex"]; //_thing2._blade.texture
-                        SetValue("width", this.batchItem.NormalTexture.frameWidth / this.batchItem.NormalTexture.width);
-                        SetValue("height", this.batchItem.NormalTexture.frameHeight / this.batchItem.NormalTexture.height);
+                        Microsoft.Xna.Framework.Rectangle r = Content.offests[batchItem.NormalTexture.Namebase];
+                        Microsoft.Xna.Framework.Rectangle r2 = Content.offests["energyTex"]; //_thing2._blade.texture
+                        SetValue("width", batchItem.NormalTexture.frameWidth / batchItem.NormalTexture.width);
+                        SetValue("height", batchItem.NormalTexture.frameHeight / batchItem.NormalTexture.height);
                         SetValue("xpos", _thing.x);
                         SetValue("ypos", _thing.y);
                         SetValue("time", _time);
@@ -78,10 +78,10 @@ namespace DuckGame
                     }
                     else
                     {
-                        Microsoft.Xna.Framework.Rectangle r = DuckGame.Content.offests[this.batchItem.NormalTexture.Namebase];
-                        Microsoft.Xna.Framework.Rectangle r2 = DuckGame.Content.offests["energyTex"];
-                        SetValue("width", this.batchItem.NormalTexture.frameWidth / this.batchItem.NormalTexture.width);
-                        SetValue("height", this.batchItem.NormalTexture.frameHeight / this.batchItem.NormalTexture.height);
+                        Microsoft.Xna.Framework.Rectangle r = Content.offests[batchItem.NormalTexture.Namebase];
+                        Microsoft.Xna.Framework.Rectangle r2 = Content.offests["energyTex"];
+                        SetValue("width", batchItem.NormalTexture.frameWidth / batchItem.NormalTexture.width);
+                        SetValue("height", batchItem.NormalTexture.frameHeight / batchItem.NormalTexture.height);
                         SetValue("xpos", _thing2.x);
                         SetValue("ypos", _thing2.y);
                         SetValue("time", _time); // _time
@@ -101,28 +101,28 @@ namespace DuckGame
                 else
                 {
                     Tex2D texture = Graphics.device.Textures[0] as Texture2D;
-                    this.SetValue("width", texture.frameWidth / texture.width);
-                    this.SetValue("height", texture.frameHeight / texture.height);
-                    if (this._thing != null)
+                    SetValue("width", texture.frameWidth / texture.width);
+                    SetValue("height", texture.frameHeight / texture.height);
+                    if (_thing != null)
                     {
-                        this.SetValue("xpos", this._thing.x);
-                        this.SetValue("ypos", this._thing.y);
-                        this.SetValue("time", this._time);
-                        this.SetValue("glow", this.glow);
-                        this.SetValue("bladeColor", this._thing.swordColor);
+                        SetValue("xpos", _thing.x);
+                        SetValue("ypos", _thing.y);
+                        SetValue("time", _time);
+                        SetValue("glow", glow);
+                        SetValue("bladeColor", _thing.swordColor);
                     }
                     else
                     {
-                        this.SetValue("xpos", this._thing2.x);
-                        this.SetValue("ypos", this._thing2.y);
-                        this.SetValue("time", this._time);
-                        this.SetValue("glow", this.glow);
-                        this.SetValue("bladeColor", this._thing2.swordColor);
+                        SetValue("xpos", _thing2.x);
+                        SetValue("ypos", _thing2.y);
+                        SetValue("time", _time);
+                        SetValue("glow", glow);
+                        SetValue("bladeColor", _thing2.swordColor);
                     }
                 }
             }
-            DuckGame.Graphics.device.Textures[1] = (Texture2D)_energyTexture;
-            DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
+            Graphics.device.Textures[1] = (Texture2D)_energyTexture;
+            Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
             foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }

@@ -229,14 +229,14 @@ namespace DuckGame
 
         public void OnInviteReceived(User who, Lobby lobby)
         {
-            NCSteam.inviteLobbyID = lobby.id;
+            inviteLobbyID = lobby.id;
             switch (Level.current)
             {
                 case TitleScreen _:
                 case Editor _:
                 case DuckGameTestArea _:
                 label_2:
-                    NCSteam.PrepareProfilesForJoin();
+                    PrepareProfilesForJoin();
                     break;
                 case GameLevel _:
                     if (!(Level.current as GameLevel)._editorTestMode)
@@ -599,11 +599,11 @@ namespace DuckGame
 
         public override void SearchForLobby()
         {
-            if (NCSteam.globalSearch)
+            if (globalSearch)
                 Steam.SearchForLobbyWorldwide();
             else
                 Steam.SearchForLobby(null);
-            NCSteam.globalSearch = false;
+            globalSearch = false;
         }
 
         public override void RequestGlobalStats() => Steam.RequestGlobalStats();

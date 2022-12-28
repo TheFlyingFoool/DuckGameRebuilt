@@ -20,7 +20,7 @@ namespace DuckGame
         public override bool Refresh()
         {
             T newVal;
-            if (binding.Compare<T>(_value, out newVal))
+            if (binding.Compare(_value, out newVal))
                 return false;
             _value = newVal;
             return true;
@@ -37,14 +37,14 @@ namespace DuckGame
                     Vec2 typed = binding.getTyped<Vec2>();
                     Vec2 to = (Vec2)value;
                     if ((typed - to).lengthSq > 1024f)
-                        binding.setTyped<Vec2>(to);
+                        binding.setTyped(to);
                     else
-                        binding.setTyped<Vec2>(Lerp.Vec2Smooth(typed, to, lerp));
+                        binding.setTyped(Lerp.Vec2Smooth(typed, to, lerp));
                 }
                 else if (binding.isRotation)
-                    binding.setTyped<float>(Maths.DegToRad(Maths.PointDirection(Vec2.Zero, BufferedGhostProperty.Slerp(Maths.AngleToVec(binding.getTyped<float>()), Maths.AngleToVec((float)value), lerp))));
+                    binding.setTyped(Maths.DegToRad(Maths.PointDirection(Vec2.Zero, Slerp(Maths.AngleToVec(binding.getTyped<float>()), Maths.AngleToVec((float)value), lerp))));
                 else
-                    binding.setTyped<T>(_value);
+                    binding.setTyped(_value);
             }
             else
             {
@@ -52,7 +52,7 @@ namespace DuckGame
                 {
                     double x = ((Vec2)value).x;
                 }
-                binding.setTyped<T>(_value);
+                binding.setTyped(_value);
             }
         }
     }

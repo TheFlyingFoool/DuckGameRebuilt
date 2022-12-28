@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 namespace DuckGame
 {
@@ -10,11 +9,11 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._core;
+                return _core;
             }
             set
             {
-                InputProfile._core = value;
+                _core = value;
             }
         }
 
@@ -22,7 +21,7 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._defaultPlayerMappingStrings[0];
+                return _defaultPlayerMappingStrings[0];
             }
         }
 
@@ -30,7 +29,7 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._defaultPlayerMappingStrings[1];
+                return _defaultPlayerMappingStrings[1];
             }
         }
 
@@ -38,7 +37,7 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._defaultPlayerMappingStrings[2];
+                return _defaultPlayerMappingStrings[2];
             }
         }
 
@@ -46,7 +45,7 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._defaultPlayerMappingStrings[3];
+                return _defaultPlayerMappingStrings[3];
             }
         }
 
@@ -54,7 +53,7 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._defaultPlayerMappingStrings[4];
+                return _defaultPlayerMappingStrings[4];
             }
         }
 
@@ -62,7 +61,7 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._defaultPlayerMappingStrings[5];
+                return _defaultPlayerMappingStrings[5];
             }
         }
 
@@ -70,7 +69,7 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._defaultPlayerMappingStrings[6];
+                return _defaultPlayerMappingStrings[6];
             }
         }
 
@@ -78,7 +77,7 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._defaultPlayerMappingStrings[7];
+                return _defaultPlayerMappingStrings[7];
             }
         }
 
@@ -86,7 +85,7 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._defaultPlayerMappingStrings;
+                return _defaultPlayerMappingStrings;
             }
         }
 
@@ -94,24 +93,24 @@ namespace DuckGame
         {
             if (fullRemap)
             {
-                Profiles.DefaultPlayer1.inputProfile = InputProfile.Get(InputProfile.MPPlayer1);
-                Profiles.DefaultPlayer2.inputProfile = InputProfile.Get(InputProfile.MPPlayer2);
-                Profiles.DefaultPlayer3.inputProfile = InputProfile.Get(InputProfile.MPPlayer3);
-                Profiles.DefaultPlayer4.inputProfile = InputProfile.Get(InputProfile.MPPlayer4);
-                Profiles.DefaultPlayer5.inputProfile = InputProfile.Get(InputProfile.MPPlayer5);
-                Profiles.DefaultPlayer6.inputProfile = InputProfile.Get(InputProfile.MPPlayer6);
-                Profiles.DefaultPlayer7.inputProfile = InputProfile.Get(InputProfile.MPPlayer7);
-                Profiles.DefaultPlayer8.inputProfile = InputProfile.Get(InputProfile.MPPlayer8);
+                Profiles.DefaultPlayer1.inputProfile = Get(MPPlayer1);
+                Profiles.DefaultPlayer2.inputProfile = Get(MPPlayer2);
+                Profiles.DefaultPlayer3.inputProfile = Get(MPPlayer3);
+                Profiles.DefaultPlayer4.inputProfile = Get(MPPlayer4);
+                Profiles.DefaultPlayer5.inputProfile = Get(MPPlayer5);
+                Profiles.DefaultPlayer6.inputProfile = Get(MPPlayer6);
+                Profiles.DefaultPlayer7.inputProfile = Get(MPPlayer7);
+                Profiles.DefaultPlayer8.inputProfile = Get(MPPlayer8);
                 return;
             }
-            Profiles.DefaultPlayer1.SetInputProfileLink(InputProfile.Get(InputProfile.MPPlayer1));
-            Profiles.DefaultPlayer2.SetInputProfileLink(InputProfile.Get(InputProfile.MPPlayer2));
-            Profiles.DefaultPlayer3.SetInputProfileLink(InputProfile.Get(InputProfile.MPPlayer3));
-            Profiles.DefaultPlayer4.SetInputProfileLink(InputProfile.Get(InputProfile.MPPlayer4));
-            Profiles.DefaultPlayer5.SetInputProfileLink(InputProfile.Get(InputProfile.MPPlayer5));
-            Profiles.DefaultPlayer6.SetInputProfileLink(InputProfile.Get(InputProfile.MPPlayer6));
-            Profiles.DefaultPlayer7.SetInputProfileLink(InputProfile.Get(InputProfile.MPPlayer7));
-            Profiles.DefaultPlayer8.SetInputProfileLink(InputProfile.Get(InputProfile.MPPlayer8));
+            Profiles.DefaultPlayer1.SetInputProfileLink(Get(MPPlayer1));
+            Profiles.DefaultPlayer2.SetInputProfileLink(Get(MPPlayer2));
+            Profiles.DefaultPlayer3.SetInputProfileLink(Get(MPPlayer3));
+            Profiles.DefaultPlayer4.SetInputProfileLink(Get(MPPlayer4));
+            Profiles.DefaultPlayer5.SetInputProfileLink(Get(MPPlayer5));
+            Profiles.DefaultPlayer6.SetInputProfileLink(Get(MPPlayer6));
+            Profiles.DefaultPlayer7.SetInputProfileLink(Get(MPPlayer7));
+            Profiles.DefaultPlayer8.SetInputProfileLink(Get(MPPlayer8));
         }
 
         public static void SwapDefaultInputStrings(string from, string to)
@@ -120,20 +119,20 @@ namespace DuckGame
             int toIdx = -1;
             for (int i = 0; i < DG.MaxPlayers; i++)
             {
-                if (InputProfile._defaultPlayerMappingStrings[i] == from)
+                if (_defaultPlayerMappingStrings[i] == from)
                 {
                     fromIdx = i;
                 }
-                else if (InputProfile._defaultPlayerMappingStrings[i] == to)
+                else if (_defaultPlayerMappingStrings[i] == to)
                 {
                     toIdx = i;
                 }
             }
             if (fromIdx >= 0 && toIdx >= 0)
             {
-                string temp = InputProfile._defaultPlayerMappingStrings[toIdx];
-                InputProfile._defaultPlayerMappingStrings[toIdx] = InputProfile._defaultPlayerMappingStrings[fromIdx];
-                InputProfile._defaultPlayerMappingStrings[fromIdx] = temp;
+                string temp = _defaultPlayerMappingStrings[toIdx];
+                _defaultPlayerMappingStrings[toIdx] = _defaultPlayerMappingStrings[fromIdx];
+                _defaultPlayerMappingStrings[fromIdx] = temp;
             }
         }
 
@@ -141,11 +140,11 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._active;
+                return _active;
             }
             set
             {
-                InputProfile._active = value;
+                _active = value;
             }
         }
 
@@ -153,7 +152,7 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._core.defaultProfiles;
+                return _core.defaultProfiles;
             }
         }
 
@@ -161,14 +160,14 @@ namespace DuckGame
         {
             get
             {
-                foreach (InputProfile p in InputProfile.defaultProfiles)
+                foreach (InputProfile p in defaultProfiles)
                 {
                     if (p.lastActiveDevice != null && p.lastActiveDevice.productName != null)
                     {
                         return p;
                     }
                 }
-                return InputProfile.DefaultPlayer1;
+                return DefaultPlayer1;
             }
         }
 
@@ -176,35 +175,35 @@ namespace DuckGame
         {
             if (idx == 0)
             {
-                InputProfile._core._profiles[InputProfile.MPPlayer1] = p;
+                _core._profiles[MPPlayer1] = p;
             }
             if (idx == 1)
             {
-                InputProfile._core._profiles[InputProfile.MPPlayer2] = p;
+                _core._profiles[MPPlayer2] = p;
             }
             if (idx == 2)
             {
-                InputProfile._core._profiles[InputProfile.MPPlayer3] = p;
+                _core._profiles[MPPlayer3] = p;
             }
             if (idx == 3)
             {
-                InputProfile._core._profiles[InputProfile.MPPlayer4] = p;
+                _core._profiles[MPPlayer4] = p;
             }
             if (idx == 4)
             {
-                InputProfile._core._profiles[InputProfile.MPPlayer5] = p;
+                _core._profiles[MPPlayer5] = p;
             }
             if (idx == 5)
             {
-                InputProfile._core._profiles[InputProfile.MPPlayer6] = p;
+                _core._profiles[MPPlayer6] = p;
             }
             if (idx == 6)
             {
-                InputProfile._core._profiles[InputProfile.MPPlayer7] = p;
+                _core._profiles[MPPlayer7] = p;
             }
             if (idx == 7)
             {
-                InputProfile._core._profiles[InputProfile.MPPlayer8] = p;
+                _core._profiles[MPPlayer8] = p;
             }
         }
 
@@ -212,7 +211,7 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._core.DefaultPlayer1;
+                return _core.DefaultPlayer1;
             }
         }
 
@@ -220,7 +219,7 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._core.DefaultPlayer2;
+                return _core.DefaultPlayer2;
             }
         }
 
@@ -228,7 +227,7 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._core.DefaultPlayer3;
+                return _core.DefaultPlayer3;
             }
         }
 
@@ -236,7 +235,7 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._core.DefaultPlayer4;
+                return _core.DefaultPlayer4;
             }
         }
 
@@ -244,7 +243,7 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._core.DefaultPlayer5;
+                return _core.DefaultPlayer5;
             }
         }
 
@@ -252,7 +251,7 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._core.DefaultPlayer6;
+                return _core.DefaultPlayer6;
             }
         }
 
@@ -260,7 +259,7 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._core.DefaultPlayer7;
+                return _core.DefaultPlayer7;
             }
         }
 
@@ -268,7 +267,7 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._core.DefaultPlayer8;
+                return _core.DefaultPlayer8;
             }
         }
 
@@ -323,38 +322,26 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._core._profiles;
+                return _core._profiles;
             }
         }
 
         public static InputProfile Add(string name)
         {
-            return InputProfile._core.Add(name);
+            return _core.Add(name);
         }
 
         public static void Update()
         {
-            InputProfile._core.Update();
+            _core.Update();
         }
 
         public static InputProfile Get(string name)
         {
-            return InputProfile._core.Get(name);
+            return _core.Get(name);
         }
 
-        private InputDevice _lastActiveDevice
-        {
-            [CompilerGenerated]
-            get
-            {
-                return kBackingField;
-            }
-            [CompilerGenerated]
-            set
-            {
-                kBackingField = value;
-            }
-        }
+        private InputDevice _lastActiveDevice {get; set;}
 
         public InputDevice lastActiveDevice
         {
@@ -367,6 +354,26 @@ namespace DuckGame
                 if (!MonoMain.started)
                 {
                     return new InputDevice(0);
+                }
+                if (_lastActiveDevice != null && !_lastActiveDevice.isConnected)
+                {
+                    InputDevice _locallastActiveDevice = null;
+                    foreach (KeyValuePair<InputDevice, MultiMap<string, int>> pair in _mappings)
+                    {
+                        if (_locallastActiveDevice == null && pair.Key is Keyboard)
+                        {
+                            _locallastActiveDevice = pair.Key;
+                        }
+                        else if (pair.Key is GenericController && (pair.Key as GenericController).device is XInputPad)
+                        {
+                            _locallastActiveDevice = pair.Key;
+                        }
+                    }
+                    if (_locallastActiveDevice == null)
+                    {
+                        return _defaultLastActiveDevice;
+                    }
+                    return _locallastActiveDevice;
                 }
                 if (_lastActiveDevice == null)
                 {
@@ -530,7 +537,7 @@ namespace DuckGame
 
         public static InputProfile GetVirtualInput(int index)
         {
-            return InputProfile._core.GetVirtualInput(index);
+            return _core.GetVirtualInput(index);
         }
 
         public VirtualInput virtualDevice
@@ -656,7 +663,7 @@ namespace DuckGame
 
         public bool JoinGamePressed()
         {
-            return Pressed("START", false);
+            return Pressed(Triggers.Start, false);
         }
 
         public virtual bool Pressed(string trigger, bool any = false)
@@ -665,7 +672,7 @@ namespace DuckGame
             {
                 return false;
             }
-            if (trigger == "ANY")
+            if (trigger == Triggers.Any)
             {
                 any = true;
             }
@@ -676,7 +683,7 @@ namespace DuckGame
             foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in _mappings)
             {
                 InputDevice mapped_device = map.Key;
-                if ((!(mapped_device is Keyboard) || !InputProfile.ignoreKeyboard) && (_virtualInput == null || mapped_device is VirtualInput))
+                if ((!(mapped_device is Keyboard) || !ignoreKeyboard) && (_virtualInput == null || mapped_device is VirtualInput))
                 {
                     List<int> vals;
                     if (any)
@@ -796,7 +803,7 @@ namespace DuckGame
                         if (pad != null)
                         {
                             List<int> mappings;
-                            if (!map.Value.TryGetValue("LTRIGGER", out mappings) || mappings.Count <= 0)
+                            if (!map.Value.TryGetValue(Triggers.LeftTrigger, out mappings) || mappings.Count <= 0)
                             {
                                 return pad.leftTrigger;
                             }
@@ -840,7 +847,7 @@ namespace DuckGame
                         if (pad != null)
                         {
                             List<int> mappings;
-                            if (!map.Value.TryGetValue("RTRIGGER", out mappings) || mappings.Count <= 0)
+                            if (!map.Value.TryGetValue(Triggers.RightTrigger, out mappings) || mappings.Count <= 0)
                             {
                                 return pad.rightTrigger;
                             }
@@ -884,17 +891,29 @@ namespace DuckGame
                         if (pad != null)
                         {
                             List<int> mappings;
-                            if (!map.Value.TryGetValue("LSTICK", out mappings) || mappings.Count <= 0)
+                            if (!map.Value.TryGetValue(Triggers.LeftStick, out mappings) || mappings.Count <= 0)
                             {
+                                if (pad.leftStick != Vec2.Zero)
+                                {
+                                    _lastActiveDevice = map.Key;
+                                }
                                 return pad.leftStick;
                             }
                             int mapping = mappings[0];
                             if (mapping == 64)
                             {
+                                if (pad.leftStick != Vec2.Zero)
+                                {
+                                    _lastActiveDevice = map.Key;
+                                }
                                 return pad.leftStick;
                             }
                             if (mapping == 128)
                             {
+                                if (pad.rightStick != Vec2.Zero)
+                                {
+                                    _lastActiveDevice = map.Key;
+                                }
                                 return pad.rightStick;
                             }
                         }
@@ -950,7 +969,7 @@ namespace DuckGame
                         if (pad != null)
                         {
                             List<int> mappings;
-                            if (!map.Value.TryGetValue("RSTICK", out mappings) || mappings.Count <= 0)
+                            if (!map.Value.TryGetValue(Triggers.RightStick, out mappings) || mappings.Count <= 0)
                             {
                                 return pad.rightStick;
                             }
@@ -1044,20 +1063,20 @@ namespace DuckGame
         {
             get
             {
-                return InputProfile._repeat;
+                return _repeat;
             }
             set
             {
-                InputProfile._repeat = value;
+                _repeat = value;
             }
         }
 
         public void UpdateTriggerStates()
         {
             _repeatList.Clear();
-            if (InputProfile._repeat)
+            if (_repeat)
             {
-                if (Pressed("MENULEFT", false) || Pressed("MENURIGHT", false) || Pressed("MENUUP", false) || Pressed("MENUDOWN", false))
+                if (Pressed(Triggers.MenuLeft, false) || Pressed(Triggers.MenuRight, false) || Pressed(Triggers.MenuUp, false) || Pressed(Triggers.MenuDown, false))
                 {
                     if (!_repeating)
                     {
@@ -1073,35 +1092,35 @@ namespace DuckGame
                 {
                     _repeatTime -= 0.1f;
                     bool down = false;
-                    if (Down("MENULEFT"))
+                    if (Down(Triggers.MenuLeft))
                     {
                         if (_repeatTime <= 0f)
                         {
-                            _repeatList.Add("MENULEFT");
+                            _repeatList.Add(Triggers.MenuLeft);
                         }
                         down = true;
                     }
-                    if (Down("MENURIGHT"))
+                    if (Down(Triggers.MenuRight))
                     {
                         if (_repeatTime <= 0f)
                         {
-                            _repeatList.Add("MENURIGHT");
+                            _repeatList.Add(Triggers.MenuRight);
                         }
                         down = true;
                     }
-                    if (Down("MENUUP"))
+                    if (Down(Triggers.MenuUp))
                     {
                         if (_repeatTime <= 0f)
                         {
-                            _repeatList.Add("MENUUP");
+                            _repeatList.Add(Triggers.MenuUp);
                         }
                         down = true;
                     }
-                    if (Down("MENUDOWN"))
+                    if (Down(Triggers.MenuDown))
                     {
                         if (_repeatTime <= 0f)
                         {
-                            _repeatList.Add("MENUDOWN");
+                            _repeatList.Add(Triggers.MenuDown);
                         }
                         down = true;
                     }
@@ -1164,9 +1183,6 @@ namespace DuckGame
         public InputDevice lastSynchronizedDevice;
 
         private InputDevice _defaultLastActiveDevice = new InputDevice(0);
-
-        [CompilerGenerated]
-        private InputDevice kBackingField;
 
         public InputDevice lastActiveOverride;
 

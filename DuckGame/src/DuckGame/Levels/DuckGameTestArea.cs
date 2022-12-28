@@ -41,13 +41,13 @@ namespace DuckGame
           : base(level)
         {
             _editor = editor;
-            DeathmatchLevel._started = true;
+            _started = true;
             _followCam.lerpMult = 1.1f;
             _seed = seed;
             _center = center;
             _genType = genType;
             _levelValue = level;
-            DuckGameTestArea.currentEditor = editor;
+            currentEditor = editor;
         }
 
         public override void Initialize()
@@ -73,7 +73,7 @@ namespace DuckGame
             _confirmMenu.Close();
             _pauseGroup.Add(_confirmMenu, false);
             _testMode.Add(new UIMenuItemNumber("PLAYERS", field: new FieldBinding(this, "numPlayers", 2f, 8f, 1f)), true);
-            _testMode.Add(new UIMenuItem("START", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _startTestMode)), true);
+            _testMode.Add(new UIMenuItem(Triggers.Start, new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _startTestMode)), true);
             _testMode.SetBackFunction(new UIMenuActionOpenMenu(_testMode, _pauseMenu));
             _testMode.Close();
             _pauseGroup.Add(_testMode, false);
@@ -81,7 +81,7 @@ namespace DuckGame
             _pauseGroup.Close();
             _pauseGroup.Update();
             _pauseGroup.Update();
-            Level.Add(_pauseGroup);
+            Add(_pauseGroup);
             if (_level == "RANDOM")
             {
                 LevelGenerator.MakeLevel(_center, _center.left && _center.right, _seed, _genType, Editor._procTilesWide, Editor._procTilesHigh, Editor._procXPos, Editor._procYPos).LoadParts(0f, 0f, this, _seed);
@@ -93,30 +93,30 @@ namespace DuckGame
                 {
                     if (chosenSpawns.Count == 0)
                     {
-                        chosenSpawns.Add(source1.ElementAt<SpawnPoint>(Rando.Int(source1.Count - 1)));
+                        chosenSpawns.Add(source1.ElementAt(Rando.Int(source1.Count - 1)));
                     }
                     else
                     {
-                        IOrderedEnumerable<SpawnPoint> source2 = source1.OrderByDescending<SpawnPoint, int>(x =>
+                        IOrderedEnumerable<SpawnPoint> source2 = source1.OrderByDescending(x =>
                        {
                            int val2 = 9999999;
                            foreach (Transform transform in chosenSpawns)
                                val2 = (int)Math.Min((transform.position - x.position).length, val2);
                            return val2;
                        });
-                        chosenSpawns.Add(source2.First<SpawnPoint>());
+                        chosenSpawns.Add(source2.First());
                     }
                 }
                 foreach (SpawnPoint spawnPoint in source1)
                 {
                     if (!chosenSpawns.Contains(spawnPoint))
-                        Level.Remove(spawnPoint);
+                        Remove(spawnPoint);
                 }
                 PyramidBackground pyramidBackground = new PyramidBackground(0f, 0f)
                 {
                     visible = false
                 };
-                Level.Add(pyramidBackground);
+                Add(pyramidBackground);
             }
             else
             {
@@ -143,7 +143,7 @@ namespace DuckGame
                     prof.team.Leave(prof);
             }
             int num = 4;
-            if (things[typeof(EightPlayer)].Count<Thing>() > 0)
+            if (things[typeof(EightPlayer)].Count() > 0)
                 num = 8;
             for (int index = 0; index < num; ++index)
             {
@@ -154,14 +154,14 @@ namespace DuckGame
             }
             foreach (Duck spawnPlayer in new Deathmatch(this).SpawnPlayers(false))
             {
-                Level.Add(spawnPlayer);
+                Add(spawnPlayer);
                 followCam.Add(spawnPlayer);
             }
         }
 
         public void PauseLogic()
         {
-            if (Input.Pressed("START"))
+            if (Input.Pressed(Triggers.Start))
             {
                 _pauseGroup.Open();
                 _pauseMenu.Open();
@@ -177,7 +177,7 @@ namespace DuckGame
                     return;
                 _paused = false;
                 SFX.Play("resume", 0.6f);
-                DeathmatchLevel._started = false;
+                _started = false;
             }
         }
 
@@ -232,24 +232,26 @@ namespace DuckGame
                 if (numPlayers > 0)
                     Profiles.experienceProfile.team = Teams.Player1;
                 EditorTestLevel t = null;
-                if (things[typeof(EditorTestLevel)].Count<Thing>() > 0)
-                    t = things[typeof(EditorTestLevel)].First<Thing>() as EditorTestLevel;
-                Level.current = new GameLevel(_levelValue, editorTestMode: true);
+                if (things[typeof(EditorTestLevel)].Count() > 0)
+                    t = things[typeof(EditorTestLevel)].First() as EditorTestLevel;
+                current = new GameLevel(_levelValue, editorTestMode: true);
                 if (t == null)
                     return;
-                Level.current.AddThing(t);
+                current.AddThing(t);
             }
             else if (_restart.value)
             {
                 transitionSpeedMultiplier = 2f;
                 EditorTestLevel t = null;
-                if (things[typeof(EditorTestLevel)].Count<Thing>() > 0)
-                    t = things[typeof(EditorTestLevel)].First<Thing>() as EditorTestLevel;
-                Level.current = new DuckGameTestArea(_editor, _levelValue, _seed, _center, _genType);
-                Level.current.transitionSpeedMultiplier = 2f;
+                if (things[typeof(EditorTestLevel)].Count() > 0)
+                    t = things[typeof(EditorTestLevel)].First() as EditorTestLevel;
+                current = new DuckGameTestArea(_editor, _levelValue, _seed, _center, _genType)
+                {
+                    transitionSpeedMultiplier = 2f
+                };
                 if (t == null)
                     return;
-                Level.current.AddThing(t);
+                current.AddThing(t);
             }
             else
             {
@@ -279,7 +281,7 @@ namespace DuckGame
                 }
                 PauseLogic();
                 if (_quit.value)
-                    Level.current = _editor;
+                    current = _editor;
                 base.Update();
             }
         }

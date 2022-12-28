@@ -30,15 +30,15 @@ namespace DuckGame
         public Vec2 pos = Vec2.Zero;
         public static Dictionary<ScreenMode, List<Resolution>> supportedDisplaySizes;
 
-        public static Resolution adapterResolution => Resolution.GetDefault(ScreenMode.Fullscreen);
+        public static Resolution adapterResolution => GetDefault(ScreenMode.Fullscreen);
 
         public static Resolution current => Options.LocalData.currentResolution;
 
         public static float fontSizeMultiplier => current.x / 1280f;
 
-        public static Resolution lastApplied => Resolution._lastApplied;
+        public static Resolution lastApplied => _lastApplied;
 
-        public static Vec2 size => DuckGame.Graphics._screenViewport.HasValue ? new Vec2(Graphics._screenViewport.Value.Width, Graphics._screenViewport.Value.Height) : Resolution.current.dimensions;
+        public static Vec2 size => Graphics._screenViewport.HasValue ? new Vec2(Graphics._screenViewport.Value.Width, Graphics._screenViewport.Value.Height) : current.dimensions;
 
         private static float GetScreenDPI()
         {
@@ -49,7 +49,7 @@ namespace DuckGame
         }
         public static GraphicsDeviceManager GetGraphics()
         {
-            return Resolution._device;
+            return _device;
         }
         public static void SetWindow(IntPtr windowhandler)
         {
@@ -57,16 +57,16 @@ namespace DuckGame
         }
         public static void Set(Resolution pResolution)
         {
-            Resolution._pendingResolution = pResolution;
+            _pendingResolution = pResolution;
         }
         public static void Apply()
         {
-            DuckGame.Graphics.snap = 4f;
-            if (Resolution._pendingResolution == null || Program.isLinux && !Keyboard.NothingPressed())
+            Graphics.snap = 4f;
+            if (_pendingResolution == null || Program.isLinux && !Keyboard.NothingPressed())
                 return;
-            Resolution._lastApplied = Resolution._pendingResolution;
-            Options.LocalData.currentResolution = Resolution._pendingResolution;
-            DevConsole.Log(DCSection.General, "Applying resolution (" + Resolution._pendingResolution.ToString() + ")");
+            _lastApplied = _pendingResolution;
+            Options.LocalData.currentResolution = _pendingResolution;
+            DevConsole.Log(DCSection.General, "Applying resolution (" + _pendingResolution.ToString() + ")");
             bool flag = false;
             foreach (DisplayMode supportedDisplayMode in GraphicsAdapter.DefaultAdapter.SupportedDisplayModes)
             {
@@ -88,60 +88,60 @@ namespace DuckGame
                 //    break;
                 //}
                 flag = true;
-                if (Resolution._pendingResolution.mode == ScreenMode.Borderless)
+                if (_pendingResolution.mode == ScreenMode.Borderless)
                 {
-                    Resolution._device.PreferredBackBufferWidth = Resolution.adapterResolution.x;
-                    Resolution._device.PreferredBackBufferHeight = Resolution.adapterResolution.y;
+                    _device.PreferredBackBufferWidth = adapterResolution.x;
+                    _device.PreferredBackBufferHeight = adapterResolution.y;
                 }
                 else
                 {
-                    Resolution._device.PreferredBackBufferWidth = Resolution._pendingResolution.x;
-                    Resolution._device.PreferredBackBufferHeight = Resolution._pendingResolution.y;
+                    _device.PreferredBackBufferWidth = _pendingResolution.x;
+                    _device.PreferredBackBufferHeight = _pendingResolution.y;
                 }
-                Resolution._device.IsFullScreen = Resolution._pendingResolution.mode == ScreenMode.Fullscreen;
-                Resolution._device.ApplyChanges();
+                _device.IsFullScreen = _pendingResolution.mode == ScreenMode.Fullscreen;
+                _device.ApplyChanges();
                 break;
             }
             if (!flag)
             {
-                Resolution.RestoreDefaults();
-                Resolution.Apply();
+                RestoreDefaults();
+                Apply();
             }
             else
             {
                 switch (Options.LocalData.currentResolution.mode)
                 {
                     case ScreenMode.Windowed:
-                        DuckGame.Graphics.mouseVisible = false;
-                        DuckGame.Graphics._screenBufferTarget = null;
+                        Graphics.mouseVisible = false;
+                        Graphics._screenBufferTarget = null;
                         SDL.SDL_SetWindowBordered(MonoMain.instance.Window.Handle, false ? SDL.SDL_bool.SDL_FALSE : SDL.SDL_bool.SDL_TRUE);// Resolution._window.FormBorderStyle = FormBorderStyle.FixedSingle;
                         //SDL.SDL_SetWindowPosition(MonoMain.instance.Window.Handle, Resolution.adapterResolution.x / 2 - Options.LocalData.currentResolution.x / 2, Resolution.adapterResolution.y / 2 - Options.LocalData.currentResolution.y / 2 - 16);
                         // Resolution._window.Location = new System.Drawing.Point(Resolution.adapterResolution.x / 2 - Options.LocalData.currentResolution.x / 2, Resolution.adapterResolution.y / 2 - Options.LocalData.currentResolution.y / 2 - 16);
                         // removed window positioning as it seems to auto center on size change atm ¯\_(ツ)_/¯, Dan
                         break;
                     case ScreenMode.Fullscreen:
-                        DuckGame.Graphics.mouseVisible = false;
-                        DuckGame.Graphics._screenBufferTarget = null;
+                        Graphics.mouseVisible = false;
+                        Graphics._screenBufferTarget = null;
                         break;
                     case ScreenMode.Borderless:
-                        DuckGame.Graphics.mouseVisible = false;
-                        DuckGame.Graphics._screenBufferTarget = new RenderTarget2D(Options.LocalData.currentResolution.x, Options.LocalData.currentResolution.y, true, RenderTargetUsage.PreserveContents);
+                        Graphics.mouseVisible = false;
+                        Graphics._screenBufferTarget = new RenderTarget2D(Options.LocalData.currentResolution.x, Options.LocalData.currentResolution.y, true, RenderTargetUsage.PreserveContents);
                         SDL.SDL_SetWindowBordered(MonoMain.instance.Window.Handle, true ? SDL.SDL_bool.SDL_FALSE : SDL.SDL_bool.SDL_TRUE); //  Resolution._window.FormBorderStyle = FormBorderStyle.None;
                         //SDL.SDL_SetWindowPosition(Resolution._window, (int)Options.LocalData.currentResolution.pos.x, (int)Options.LocalData.currentResolution.pos.y); //Resolution._window.Location = new System.Drawing.Point(0, 0);
                         // removed window positioning as it seems to auto center on size change atm ¯\_(ツ)_/¯, Dan
-                        if (DuckGame.Graphics._screenBufferTarget.width < 400)
+                        if (Graphics._screenBufferTarget.width < 400)
                         {
-                            DuckGame.Graphics.snap = 1f;
+                            Graphics.snap = 1f;
                             break;
                         }
-                        if (DuckGame.Graphics._screenBufferTarget.width < 800)
+                        if (Graphics._screenBufferTarget.width < 800)
                         {
-                            DuckGame.Graphics.snap = 2f;
+                            Graphics.snap = 2f;
                             break;
                         }
                         break;
                 }
-                MonoMain._screenCapture = new RenderTarget2D(Resolution.current.x, Resolution.current.y, true);
+                MonoMain._screenCapture = new RenderTarget2D(current.x, current.y, true);
                 MonoMain.RetakePauseCapture();
                 LayerCore.ReinitializeLightingTargets();
                 Options.ResolutionChanged();
@@ -150,25 +150,25 @@ namespace DuckGame
                 if (Layer.Game != null && Layer.Game.camera != null)
                     Layer.Game.camera.DoUpdate();
                 if (Program.isLinux)
-                    Resolution._takeFocus = 10;
-                Resolution._pendingResolution = null;
-                DuckGame.Graphics._screenViewport = new Viewport?();
+                    _takeFocus = 10;
+                _pendingResolution = null;
+                Graphics._screenViewport = new Viewport?();
             }
         }
 
         public static bool Update()
         {
-            if (Resolution._takeFocus > 0)
+            if (_takeFocus > 0)
             {
-                --Resolution._takeFocus;
-                if (Resolution._takeFocus == 0)
+                --_takeFocus;
+                if (_takeFocus == 0)
                     SDL.SDL_RaiseWindow(MonoMain.instance.Window.Handle);
                 SDL.SDL_SetWindowInputFocus(MonoMain.instance.Window.Handle);
                 //Resolution._window.Focus();
             }
-            if (Resolution._pendingResolution == null)
+            if (_pendingResolution == null)
                 return false;
-            Resolution.Apply();
+            Apply();
             return true;
         }
 
@@ -193,118 +193,118 @@ namespace DuckGame
 
         public static void Initialize(object pWindow, GraphicsDeviceManager pDeviceManager)
         {
-            Resolution._window = (IntPtr)pWindow;
-            Resolution._device = pDeviceManager;
-            Resolution.supportedDisplaySizes = new Dictionary<ScreenMode, List<Resolution>>();
-            DevConsole.Log(DCSection.General, "Enumerating display modes (" + GraphicsAdapter.DefaultAdapter.SupportedDisplayModes.Count<DisplayMode>().ToString() + " found...)");
+            _window = (IntPtr)pWindow;
+            _device = pDeviceManager;
+            supportedDisplaySizes = new Dictionary<ScreenMode, List<Resolution>>();
+            DevConsole.Log(DCSection.General, "Enumerating display modes (" + GraphicsAdapter.DefaultAdapter.SupportedDisplayModes.Count().ToString() + " found...)");
             if (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode == null)
                 throw new Exception("No graphics display modes found, your graphics card may not be supported!");
             DevConsole.Log(DCSection.General, "Default adapter size is (" + GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width.ToString() + "x" + GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height.ToString() + ")");
             DevConsole.Log(DCSection.General, "Registered adapter size is (" + MonoMain.instance._adapterW.ToString() + "x" + MonoMain.instance._adapterH.ToString() + ")");
-            Resolution.RegisterDisplaySize(ScreenMode.Fullscreen, new Resolution()
+            RegisterDisplaySize(ScreenMode.Fullscreen, new Resolution()
             {
                 dimensions = new Vec2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height)
             }, false);
-            Resolution.RegisterDisplaySize(ScreenMode.Borderless, new Resolution()
+            RegisterDisplaySize(ScreenMode.Borderless, new Resolution()
             {
                 dimensions = new Vec2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height)
             }, false);
-            Resolution.RegisterDisplaySize(ScreenMode.Windowed, new Resolution()
+            RegisterDisplaySize(ScreenMode.Windowed, new Resolution()
             {
                 dimensions = new Vec2(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height)
             }, false);
             foreach (DisplayMode supportedDisplayMode in GraphicsAdapter.DefaultAdapter.SupportedDisplayModes)
             {
-                Resolution.RegisterDisplaySize(ScreenMode.Fullscreen, new Resolution()
+                RegisterDisplaySize(ScreenMode.Fullscreen, new Resolution()
                 {
                     dimensions = new Vec2(supportedDisplayMode.Width, supportedDisplayMode.Height)
                 }, false);
                 if (supportedDisplayMode.Width <= MonoMain.instance._adapterW && supportedDisplayMode.Height <= MonoMain.instance._adapterH)
                 {
-                    Resolution.RegisterDisplaySize(ScreenMode.Windowed, new Resolution()
+                    RegisterDisplaySize(ScreenMode.Windowed, new Resolution()
                     {
                         dimensions = new Vec2(supportedDisplayMode.Width, supportedDisplayMode.Height)
                     }, false);
-                    Resolution.RegisterDisplaySize(ScreenMode.Borderless, new Resolution()
+                    RegisterDisplaySize(ScreenMode.Borderless, new Resolution()
                     {
                         dimensions = new Vec2(supportedDisplayMode.Width, supportedDisplayMode.Height)
                     }, false);
                 }
             }
-            Resolution.RegisterDisplaySize(ScreenMode.Borderless, new Resolution()
+            RegisterDisplaySize(ScreenMode.Borderless, new Resolution()
             {
                 dimensions = new Vec2(640f, 360f)
             }, false);
-            Resolution.RegisterDisplaySize(ScreenMode.Borderless, new Resolution()
+            RegisterDisplaySize(ScreenMode.Borderless, new Resolution()
             {
                 dimensions = new Vec2(320f, 180f)
             }, false);
-            Resolution.RegisterDisplaySize(ScreenMode.Windowed, new Resolution()
+            RegisterDisplaySize(ScreenMode.Windowed, new Resolution()
             {
                 dimensions = new Vec2(1280f, 720f)
             }, false, true);
-            Resolution.RegisterDisplaySize(ScreenMode.Windowed, new Resolution()
+            RegisterDisplaySize(ScreenMode.Windowed, new Resolution()
             {
                 dimensions = new Vec2(1920f, 1080f)
             }, false, true);
-            Resolution.RegisterDisplaySize(ScreenMode.Windowed, new Resolution()
+            RegisterDisplaySize(ScreenMode.Windowed, new Resolution()
             {
                 dimensions = new Vec2(2560f, 1440f)
             }, false, true);
-            Resolution.RegisterDisplaySize(ScreenMode.Windowed, new Resolution()
+            RegisterDisplaySize(ScreenMode.Windowed, new Resolution()
             {
                 dimensions = new Vec2(2880f, 1620f)
             }, false, true);
-            DevConsole.Log(DCSection.General, "Finished enumerating display modes (F(" + Resolution.supportedDisplaySizes[ScreenMode.Fullscreen].Count.ToString() + ") W(" + Resolution.supportedDisplaySizes[ScreenMode.Windowed].Count.ToString() + ") B(" + Resolution.supportedDisplaySizes[ScreenMode.Borderless].Count.ToString() + "))");
-            Resolution.SortDisplaySizes();
+            DevConsole.Log(DCSection.General, "Finished enumerating display modes (F(" + supportedDisplaySizes[ScreenMode.Fullscreen].Count.ToString() + ") W(" + supportedDisplaySizes[ScreenMode.Windowed].Count.ToString() + ") B(" + supportedDisplaySizes[ScreenMode.Borderless].Count.ToString() + "))");
+            SortDisplaySizes();
             string[] strArray = new string[7]
             {
                 "Finished sorting display modes (F(",
-                Resolution.supportedDisplaySizes[ScreenMode.Fullscreen].Count.ToString(),
+                supportedDisplaySizes[ScreenMode.Fullscreen].Count.ToString(),
                 ") W(",
                 null,
                 null,
                 null,
                 null
             };
-            int count = Resolution.supportedDisplaySizes[ScreenMode.Windowed].Count;
+            int count = supportedDisplaySizes[ScreenMode.Windowed].Count;
             strArray[3] = count.ToString();
             strArray[4] = ") B(";
-            count = Resolution.supportedDisplaySizes[ScreenMode.Borderless].Count;
+            count = supportedDisplaySizes[ScreenMode.Borderless].Count;
             strArray[5] = count.ToString();
             strArray[6] = "))";
             DevConsole.Log(DCSection.General, string.Concat(strArray));
-            if (Resolution.supportedDisplaySizes[ScreenMode.Windowed].Count == 0 && Resolution.supportedDisplaySizes[ScreenMode.Fullscreen].Count > 0)
+            if (supportedDisplaySizes[ScreenMode.Windowed].Count == 0 && supportedDisplaySizes[ScreenMode.Fullscreen].Count > 0)
             {
-                Resolution resolution = Resolution.supportedDisplaySizes[ScreenMode.Fullscreen].LastOrDefault<Resolution>();
-                Resolution.RegisterDisplaySize(ScreenMode.Windowed, new Resolution()
+                Resolution resolution = supportedDisplaySizes[ScreenMode.Fullscreen].LastOrDefault();
+                RegisterDisplaySize(ScreenMode.Windowed, new Resolution()
                 {
                     dimensions = resolution.dimensions
                 }, false, pForce: true);
-                Resolution.RegisterDisplaySize(ScreenMode.Borderless, new Resolution()
+                RegisterDisplaySize(ScreenMode.Borderless, new Resolution()
                 {
                     dimensions = resolution.dimensions
                 }, false, pForce: true);
             }
-            Resolution.FindNearest(ScreenMode.Fullscreen, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height).isDefault = true;
-            Resolution.FindNearest(ScreenMode.Windowed, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, 1.7777f, true).isDefault = true;
-            Resolution.FindNearest(ScreenMode.Borderless, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height).isDefault = true;
-            Resolution.RestoreDefaults();
+            FindNearest(ScreenMode.Fullscreen, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height).isDefault = true;
+            FindNearest(ScreenMode.Windowed, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, 1.7777f, true).isDefault = true;
+            FindNearest(ScreenMode.Borderless, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height).isDefault = true;
+            RestoreDefaults();
             try
             {
-                Resolution._screenDPI = Resolution.GetScreenDPI();
+                _screenDPI = GetScreenDPI();
             }
             catch (Exception)
             {
-                Resolution._screenDPI = 120f;
+                _screenDPI = 120f;
             }
         }
 
         public static void RestoreDefaults()
         {
-            Options.LocalData.fullscreenResolution = Resolution.GetDefault(ScreenMode.Fullscreen);
-            Options.LocalData.windowedResolution = Resolution.GetDefault(ScreenMode.Windowed);
-            Options.LocalData.windowedFullscreenResolution = Resolution.GetDefault(ScreenMode.Borderless);
+            Options.LocalData.fullscreenResolution = GetDefault(ScreenMode.Fullscreen);
+            Options.LocalData.windowedResolution = GetDefault(ScreenMode.Windowed);
+            Options.LocalData.windowedFullscreenResolution = GetDefault(ScreenMode.Borderless);
         }
 
         public override string ToString() => x.ToString() + "x" + y.ToString() + "x" + ((int)mode).ToString();
@@ -320,7 +320,7 @@ namespace DuckGame
 
         public static Resolution Load(string pSize, string pMemberName = null)
         {
-            if (Resolution.supportedDisplaySizes == null)
+            if (supportedDisplaySizes == null)
                 return null;
             try
             {
@@ -338,7 +338,7 @@ namespace DuckGame
                         pMode = ScreenMode.Borderless;
                     else if (pMemberName == "fullscreenResolution")
                         pMode = ScreenMode.Fullscreen;
-                    Resolution nearest = Resolution.FindNearest(pMode, int32_1, int32_2);
+                    Resolution nearest = FindNearest(pMode, int32_1, int32_2);
                     if (nearest != null)
                         return nearest;
                 }
@@ -350,7 +350,7 @@ namespace DuckGame
             return null;
         }
 
-        public static Resolution GetDefault(ScreenMode pMode) => Resolution.supportedDisplaySizes[pMode].FirstOrDefault<Resolution>(x => x.isDefault) ?? Resolution.supportedDisplaySizes[pMode].Last<Resolution>();
+        public static Resolution GetDefault(ScreenMode pMode) => supportedDisplaySizes[pMode].FirstOrDefault(x => x.isDefault) ?? supportedDisplaySizes[pMode].Last();
 
         public static Resolution FindNearest(
           ScreenMode pMode,
@@ -359,12 +359,12 @@ namespace DuckGame
           float pAspect = -1f,
           bool pRecommended = false)
         {
-            Resolution nearestInternal = Resolution.FindNearest_Internal(pMode, pX, pY, pAspect, pRecommended);
+            Resolution nearestInternal = FindNearest_Internal(pMode, pX, pY, pAspect, pRecommended);
             if (nearestInternal == null)
             {
                 ScreenMode pMode1 = (ScreenMode)((int)(pMode + 1) % 3);
                 while (pMode1 != pMode && nearestInternal == null)
-                    nearestInternal = Resolution.FindNearest_Internal(pMode1, pX, pY, pAspect, pRecommended);
+                    nearestInternal = FindNearest_Internal(pMode1, pX, pY, pAspect, pRecommended);
             }
             if (nearestInternal == null)
                 DevConsole.Log(DCSection.General, "Failed to find display mode (" + pMode.ToString() + ", " + pX.ToString() + "x" + pY.ToString() + ")");
@@ -378,8 +378,8 @@ namespace DuckGame
           float pAspect = -1f,
           bool pRecommended = false)
         {
-            Resolution nearestInternal = Resolution.supportedDisplaySizes[pMode].LastOrDefault<Resolution>();
-            foreach (Resolution resolution in Resolution.supportedDisplaySizes[pMode])
+            Resolution nearestInternal = supportedDisplaySizes[pMode].LastOrDefault();
+            foreach (Resolution resolution in supportedDisplaySizes[pMode])
             {
                 float num1 = Math.Abs(resolution.aspect - pAspect);
                 float num2 = Math.Abs(nearestInternal.aspect - pAspect);
@@ -399,8 +399,8 @@ namespace DuckGame
           bool pForce = false)
         {
             List<Resolution> resolutionList = null;
-            if (!Resolution.supportedDisplaySizes.TryGetValue(pMode, out resolutionList))
-                Resolution.supportedDisplaySizes[pMode] = resolutionList = new List<Resolution>();
+            if (!supportedDisplaySizes.TryGetValue(pMode, out resolutionList))
+                supportedDisplaySizes[pMode] = resolutionList = new List<Resolution>();
             if (pResolution.x > GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width || pResolution.y > GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height)
             {
                 DevConsole.Log("Invalid resolution (" + pResolution.ToString() + "): Larger than adapter (" + GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width.ToString() + "x" + GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height.ToString() + ")");
@@ -411,13 +411,13 @@ namespace DuckGame
                 DevConsole.Log("Invalid resolution (" + pResolution.ToString() + "): Windowed resolution must not equal adapter size (" + GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width.ToString() + "x" + GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height.ToString() + ")");
                 return null;
             }
-            Resolution resolution = resolutionList.FirstOrDefault<Resolution>(x => x.x == pResolution.x && x.y == pResolution.y);
+            Resolution resolution = resolutionList.FirstOrDefault(x => x.x == pResolution.x && x.y == pResolution.y);
             if (resolution == null)
                 resolutionList.Add(pResolution);
             else
                 pResolution = resolution;
             if (pSort)
-                Resolution.supportedDisplaySizes[pMode] = Resolution.SortDisplaySizes(resolutionList);
+                supportedDisplaySizes[pMode] = SortDisplaySizes(resolutionList);
             pResolution.mode = pMode;
             pResolution.recommended = pRecommended;
             return pResolution;
@@ -425,11 +425,11 @@ namespace DuckGame
 
         internal static void SortDisplaySizes()
         {
-            Resolution.supportedDisplaySizes[ScreenMode.Windowed] = Resolution.SortDisplaySizes(Resolution.supportedDisplaySizes[ScreenMode.Windowed]);
-            Resolution.supportedDisplaySizes[ScreenMode.Borderless] = Resolution.SortDisplaySizes(Resolution.supportedDisplaySizes[ScreenMode.Borderless]);
-            Resolution.supportedDisplaySizes[ScreenMode.Fullscreen] = Resolution.SortDisplaySizes(Resolution.supportedDisplaySizes[ScreenMode.Fullscreen]);
+            supportedDisplaySizes[ScreenMode.Windowed] = SortDisplaySizes(supportedDisplaySizes[ScreenMode.Windowed]);
+            supportedDisplaySizes[ScreenMode.Borderless] = SortDisplaySizes(supportedDisplaySizes[ScreenMode.Borderless]);
+            supportedDisplaySizes[ScreenMode.Fullscreen] = SortDisplaySizes(supportedDisplaySizes[ScreenMode.Fullscreen]);
         }
 
-        internal static List<Resolution> SortDisplaySizes(List<Resolution> pList) => pList == null ? new List<Resolution>() : pList.OrderBy<Resolution, int>(x => x.x * 100 + x.y).ToList<Resolution>();
+        internal static List<Resolution> SortDisplaySizes(List<Resolution> pList) => pList == null ? new List<Resolution>() : pList.OrderBy(x => x.x * 100 + x.y).ToList();
     }
 }

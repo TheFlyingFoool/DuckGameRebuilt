@@ -42,7 +42,7 @@ namespace DuckGame
         {
             for (int i = 0; i < s_allDynamicLines.Count; i++)
             {
-                var item = s_allDynamicLines[i];
+                DynamicDCLine item = s_allDynamicLines[i];
 
                 string line = item.GetLine(item._iteration++);
 

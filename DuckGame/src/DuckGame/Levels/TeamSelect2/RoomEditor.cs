@@ -116,23 +116,23 @@ namespace DuckGame
 
         public static Furniture GetFurniture(int id)
         {
-            RoomEditor.AllFurnis();
+            AllFurnis();
             Furniture furniture;
-            RoomEditor._furniMap.TryGetValue(id, out furniture);
+            _furniMap.TryGetValue(id, out furniture);
             return furniture;
         }
 
         public static Furniture GetFurniture(string name)
         {
-            RoomEditor.AllFurnis();
-            return Utils.FirstOrDefault<Furniture>(RoomEditor.allFurnis, x => x.name == name);
+            AllFurnis();
+            return Utils.FirstOrDefault(allFurnis, x => x.name == name);
         }
 
         public static List<Furniture> AllFurnis()
         {
-            if (RoomEditor.allFurnis == null)
+            if (allFurnis == null)
             {
-                RoomEditor.allFurnis = new List<Furniture>()
+                allFurnis = new List<Furniture>()
         {
           new Furniture(true, false, "Sensitive to cold.", Rarity.Common, "achimenes", 15, 22, "achimenes", Furniture.Flowers,  null, false, true),
           new Furniture(true, false, "Lily of the Nile.", Rarity.Rare, "agapanthus", 16, 22, "agapanthus", Furniture.Flowers,  null, true),
@@ -377,22 +377,22 @@ namespace DuckGame
           }
         };
                 int key = 0;
-                foreach (Furniture allFurni in RoomEditor.allFurnis)
+                foreach (Furniture allFurni in allFurnis)
                 {
                     List<Furniture> furnitureList = null;
-                    if (!RoomEditor._furniGroupMap.TryGetValue(allFurni.group, out furnitureList))
+                    if (!_furniGroupMap.TryGetValue(allFurni.group, out furnitureList))
                     {
                         furnitureList = new List<Furniture>();
-                        RoomEditor._furniGroupMap[allFurni.group] = furnitureList;
+                        _furniGroupMap[allFurni.group] = furnitureList;
                     }
                     furnitureList.Add(allFurni);
-                    RoomEditor._furniMap[key] = allFurni;
+                    _furniMap[key] = allFurni;
                     allFurni.index = (short)key;
                     ++key;
                 }
-                RoomEditor.allFurnis.Sort((x, y) => (int)(x.group.name.CompareTo(y.group.name) * 100 + x.type));
+                allFurnis.Sort((x, y) => (int)(x.group.name.CompareTo(y.group.name) * 100 + x.type));
             }
-            return RoomEditor.allFurnis;
+            return allFurnis;
         }
 
         private int FurniIndexAdd(int index, int plus)
@@ -451,13 +451,13 @@ namespace DuckGame
                     }
                     if (_desiredFurniSelection == _furniSelection && _slideTo == 0.0 && _upSlideTo == 0.0 && _mode == REMode.Main)
                     {
-                        if (_selector.inputProfile.Down("MENULEFT"))
+                        if (_selector.inputProfile.Down(Triggers.MenuLeft))
                         {
                             _desiredFurniSelection = (short)FurniIndexAdd(_desiredFurniSelection, -1);
                             _slideTo = -1f;
                             SFX.Play("consoleTick");
                         }
-                        if (_selector.inputProfile.Down("MENURIGHT"))
+                        if (_selector.inputProfile.Down(Triggers.MenuRight))
                         {
                             _desiredFurniSelection = (short)FurniIndexAdd(_desiredFurniSelection, 1);
                             _slideTo = 1f;
@@ -468,7 +468,7 @@ namespace DuckGame
                             }
                             SFX.Play("consoleTick");
                         }
-                        if (_selector.inputProfile.Down("MENUUP"))
+                        if (_selector.inputProfile.Down(Triggers.MenuUp))
                         {
                             _desiredFurniSelection = (short)FurniIndexAdd(_desiredFurniSelection, -5);
                             _upSlideTo = -1f;
@@ -479,7 +479,7 @@ namespace DuckGame
                             }
                             SFX.Play("consoleTick");
                         }
-                        if (_selector.inputProfile.Down("MENUDOWN"))
+                        if (_selector.inputProfile.Down(Triggers.MenuDown))
                         {
                             _desiredFurniSelection = (short)FurniIndexAdd(_desiredFurniSelection, 5);
                             _upSlideTo = 1f;
@@ -490,13 +490,13 @@ namespace DuckGame
                             }
                             SFX.Play("consoleTick");
                         }
-                        if (_selector.inputProfile.Pressed("SELECT"))
+                        if (_selector.inputProfile.Pressed(Triggers.Select))
                         {
                             _placementVariation = 0;
                             SFX.Play("consoleSelect", 0.4f);
                             _desiredMode = REMode.Place;
                         }
-                        if (_selector.inputProfile.Pressed("CANCEL"))
+                        if (_selector.inputProfile.Pressed(Triggers.Cancel))
                         {
                             _desiredFurniSelection = 0;
                             _furniSelection = _desiredFurniSelection;
@@ -516,26 +516,26 @@ namespace DuckGame
                         position = _box.position;
                         if (_furniCursor.x < 0.0)
                             _furniCursor = position + new Vec2(30f, 30f);
-                        if (_selector.inputProfile.Down("RAGDOLL"))
+                        if (_selector.inputProfile.Down(Triggers.Ragdoll))
                         {
-                            if (_selector.inputProfile.Pressed("MENULEFT"))
+                            if (_selector.inputProfile.Pressed(Triggers.MenuLeft))
                                 --_furniCursor.x;
-                            if (_selector.inputProfile.Pressed("MENURIGHT"))
+                            if (_selector.inputProfile.Pressed(Triggers.MenuRight))
                                 ++_furniCursor.x;
-                            if (_selector.inputProfile.Pressed("MENUUP"))
+                            if (_selector.inputProfile.Pressed(Triggers.MenuUp))
                                 --_furniCursor.y;
-                            if (_selector.inputProfile.Pressed("MENUDOWN"))
+                            if (_selector.inputProfile.Pressed(Triggers.MenuDown))
                                 ++_furniCursor.y;
                         }
                         else
                         {
-                            if (_selector.inputProfile.Down("MENULEFT"))
+                            if (_selector.inputProfile.Down(Triggers.MenuLeft))
                                 --_furniCursor.x;
-                            if (_selector.inputProfile.Down("MENURIGHT"))
+                            if (_selector.inputProfile.Down(Triggers.MenuRight))
                                 ++_furniCursor.x;
-                            if (_selector.inputProfile.Down("MENUUP"))
+                            if (_selector.inputProfile.Down(Triggers.MenuUp))
                                 --_furniCursor.y;
-                            if (_selector.inputProfile.Down("MENUDOWN"))
+                            if (_selector.inputProfile.Down(Triggers.MenuDown))
                                 ++_furniCursor.y;
                         }
                         Vec2 vec2_1 = new Vec2(x + 6f, y);
@@ -557,7 +557,7 @@ namespace DuckGame
                             List<Rectangle> rectangleList = new List<Rectangle>();
                             foreach (FurniturePosition furniturePosition in _selector.profile.furniturePositions)
                             {
-                                Furniture furniture = RoomEditor.GetFurniture(furniturePosition.id);
+                                Furniture furniture = GetFurniture(furniturePosition.id);
                                 if (furniture != null && furniture.isSurface)
                                 {
                                     Vec2 vec2_3 = new Vec2(furniturePosition.x, furniturePosition.y);
@@ -609,7 +609,7 @@ namespace DuckGame
                         {
                             foreach (FurniturePosition furniturePosition in _selector.profile.furniturePositions)
                             {
-                                Furniture furniture = RoomEditor.GetFurniture(furniturePosition.id);
+                                Furniture furniture = GetFurniture(furniturePosition.id);
                                 if (furniture != null && furniture.type == FurnitureType.Prop)
                                 {
                                     Vec2 vec2_4 = new Vec2(furniturePosition.x, furniturePosition.y);
@@ -621,7 +621,7 @@ namespace DuckGame
                                 }
                             }
                         }
-                        if (_selector.inputProfile.Pressed("MENU2"))
+                        if (_selector.inputProfile.Pressed(Triggers.Menu2))
                         {
                             if (_hover == null)
                             {
@@ -645,7 +645,7 @@ namespace DuckGame
                             else
                             {
                                 _selector.profile.furniturePositions.Remove(_hover);
-                                _desiredFurniSelection = _furniSelection = (short)Profiles.experienceProfile.GetAvailableFurnis().IndexOf(RoomEditor.GetFurniture(_hover.id));
+                                _desiredFurniSelection = _furniSelection = (short)Profiles.experienceProfile.GetAvailableFurnis().IndexOf(GetFurniture(_hover.id));
                                 _placementFlip = _hover.flip;
                                 _placementVariation = _hover.variation;
                                 _hover = null;
@@ -658,7 +658,7 @@ namespace DuckGame
                             invalidPlacement = true;
                             flag1 = true;
                         }
-                        if (_selector.inputProfile.Pressed("MENU2") && availableFurni.name == "CLEAR ROOM")
+                        if (_selector.inputProfile.Pressed(Triggers.Menu2) && availableFurni.name == "CLEAR ROOM")
                         {
                             foreach (FurniturePosition furniturePosition in new List<FurniturePosition>(_selector.profile.furniturePositions))
                             {
@@ -675,7 +675,7 @@ namespace DuckGame
                                 SmallSmoke.shortlife = false;
                             }
                         }
-                        if (_selector.inputProfile.Pressed("SELECT") && availableFurni.name != "CLEAR ROOM")
+                        if (_selector.inputProfile.Pressed(Triggers.Select) && availableFurni.name != "CLEAR ROOM")
                         {
                             if (availableFurni.type == FurnitureType.Prop && _hover != null)
                             {
@@ -686,7 +686,7 @@ namespace DuckGame
                                 int num4 = Profiles.experienceProfile.GetNumFurnitures(availableFurni.index);
                                 int furnituresPlaced = _selector.profile.GetNumFurnituresPlaced(availableFurni.index);
                                 bool flag2 = false;
-                                if (_selector.profile.GetTotalFurnituresPlaced() >= RoomEditor.maxFurnitures && availableFurni.type == FurnitureType.Prop)
+                                if (_selector.profile.GetTotalFurnituresPlaced() >= maxFurnitures && availableFurni.type == FurnitureType.Prop)
                                 {
                                     num4 = 0;
                                     flag2 = true;
@@ -696,13 +696,13 @@ namespace DuckGame
                                 {
                                     if (availableFurni.type == FurnitureType.Theme)
                                     {
-                                        _selector.profile.furniturePositions.RemoveAll(sx => RoomEditor.GetFurniture(sx.id) != null && RoomEditor.GetFurniture(sx.id).type == FurnitureType.Theme);
+                                        _selector.profile.furniturePositions.RemoveAll(sx => GetFurniture(sx.id) != null && GetFurniture(sx.id).type == FurnitureType.Theme);
                                         SFX.Play("consoleSelect", 0.4f);
                                         _desiredMode = REMode.Main;
                                     }
                                     else if (availableFurni.type == FurnitureType.Font)
                                     {
-                                        _selector.profile.furniturePositions.RemoveAll(sx => RoomEditor.GetFurniture(sx.id) != null && RoomEditor.GetFurniture(sx.id).type == FurnitureType.Font);
+                                        _selector.profile.furniturePositions.RemoveAll(sx => GetFurniture(sx.id) != null && GetFurniture(sx.id).type == FurnitureType.Font);
                                         SFX.Play("consoleSelect", 0.4f);
                                         _desiredMode = REMode.Main;
                                     }
@@ -718,7 +718,7 @@ namespace DuckGame
                                             furniturePosition.flip = _selector.box.rightRoom;
                                         if (_selector.box.rightRoom)
                                         {
-                                            furniturePosition.x = (byte)((uint)RoomEditor.roomSize - furniturePosition.x);
+                                            furniturePosition.x = (byte)((uint)roomSize - furniturePosition.x);
                                             --furniturePosition.x;
                                         }
                                         furniturePosition.id = (ushort)availableFurni.index;
@@ -756,7 +756,7 @@ namespace DuckGame
                                 }
                             }
                         }
-                        if (_selector.inputProfile.Pressed("CANCEL"))
+                        if (_selector.inputProfile.Pressed(Triggers.Cancel))
                         {
                             _placementFlip = false;
                             SFX.Play("consoleSelect", 0.4f);
@@ -793,8 +793,8 @@ namespace DuckGame
                     Graphics.DrawRect(new Vec2(x, y + 74f), new Vec2(x + 400f, y + 90f), Color.Black, (Depth)0.98f);
                     float num6 = -18f;
                     int count = Profiles.experienceProfile.GetAvailableFurnis().Count;
-                    int num7 = RoomEditor._furniGroupMap[sel.group].IndexOf(sel);
-                    int num8 = Profiles.experienceProfile.GetAvailableFurnis().Where<Furniture>(v => v.group == sel.group).Count<Furniture>();
+                    int num7 = _furniGroupMap[sel.group].IndexOf(sel);
+                    int num8 = Profiles.experienceProfile.GetAvailableFurnis().Where(v => v.group == sel.group).Count();
                     for (int index1 = 0; index1 < 5; ++index1)
                     {
                         for (int index2 = 0; index2 < 11; ++index2)
@@ -880,7 +880,7 @@ namespace DuckGame
                                     _whiteCircle.color = availableFurni.group.color;
                                     string str = availableFurni.group.name.Substring(0, 1).ToUpper() + availableFurni.group.name.Substring(1) + " Collection ";
                                     string text2;
-                                    if (num8 == RoomEditor._furniGroupMap[availableFurni.group].Count)
+                                    if (num8 == _furniGroupMap[availableFurni.group].Count)
                                     {
                                         text2 = str + "(Complete)";
                                     }
@@ -898,7 +898,7 @@ namespace DuckGame
                                         int num12 = num7 + 1;
                                         strArray[2] = num12.ToString();
                                         strArray[3] = "/";
-                                        num12 = RoomEditor._furniGroupMap[availableFurni.group].Count;
+                                        num12 = _furniGroupMap[availableFurni.group].Count;
                                         strArray[4] = num12.ToString();
                                         strArray[5] = ")";
                                         text2 = string.Concat(strArray);
@@ -1002,7 +1002,7 @@ namespace DuckGame
                 Graphics.DrawRect(position, position + new Vec2(140f, 80f), Color.Black * 0.5f, (Depth)0.08f);
                 if (_hover != null)
                 {
-                    Furniture furniture = RoomEditor.GetFurniture(_hover.id);
+                    Furniture furniture = GetFurniture(_hover.id);
                     if (furniture == null)
                         return;
                     Vec2 vec2 = new Vec2(_hover.x, _hover.y);
@@ -1031,7 +1031,7 @@ namespace DuckGame
                     if (availableFurni.type != FurnitureType.Prop)
                         return;
                     int num = Profiles.experienceProfile.GetNumFurnitures(availableFurni.index);
-                    if (_selector.profile.GetTotalFurnituresPlaced() >= RoomEditor.maxFurnitures)
+                    if (_selector.profile.GetTotalFurnituresPlaced() >= maxFurnitures)
                         num = 0;
                     int furnituresPlaced = _selector.profile.GetNumFurnituresPlaced(availableFurni.index);
                     availableFurni.sprite.depth = (Depth)0.09f;

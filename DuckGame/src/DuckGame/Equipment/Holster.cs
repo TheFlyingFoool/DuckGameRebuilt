@@ -26,7 +26,7 @@ namespace DuckGame
         private Holdable _containedObject;
         private RenderTarget2D _preview;
         private Sprite _previewSprite;
-        private System.Type _contains;
+        private Type _contains;
         private Sprite _chain;
         private Sprite _lock;
         private Vec2 _prevPos = Vec2.Zero;
@@ -70,7 +70,7 @@ namespace DuckGame
             if (contains == null)
                 return null;
             object[] constructorParameters = Editor.GetConstructorParameters(contains);
-            if (constructorParameters.Count<object>() > 1)
+            if (constructorParameters.Count() > 1)
             {
                 constructorParameters[0] = pos.x;
                 constructorParameters[1] = pos.y;
@@ -122,7 +122,7 @@ namespace DuckGame
             SetContainedObject(null);
         }
 
-        public System.Type contains
+        public Type contains
         {
             get => _contains;
             set
@@ -231,7 +231,7 @@ namespace DuckGame
             {
                 Level.Add(containedInstance);
                 SetContainedObject(containedInstance);
-                if (Network.isActive && Thing.loadingLevel != null && _containedObject != null)
+                if (Network.isActive && loadingLevel != null && _containedObject != null)
                     _containedObject.PrepareForHost();
             }
             base.Initialize();
@@ -248,7 +248,7 @@ namespace DuckGame
             if (isServerForObject)
             {
                 netRaise = false;
-                if (_equippedDuck != null && _equippedDuck.inputProfile != null && _equippedDuck.inputProfile.Down("UP"))
+                if (_equippedDuck != null && _equippedDuck.inputProfile != null && _equippedDuck.inputProfile.Down(Triggers.Up))
                     netRaise = true;
                 if (owner == null && equippedDuck == null)
                     angle = 0;

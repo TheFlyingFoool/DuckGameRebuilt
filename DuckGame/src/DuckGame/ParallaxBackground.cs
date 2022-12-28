@@ -19,7 +19,7 @@ namespace DuckGame
         private int _hRepeat = 1;
         public float xmove;
         public Rectangle scissor;
-        public ParallaxBackground.Definition definition;
+        public Definition definition;
         public bool restrictBottom = true;
 
         public ParallaxBackground(string image, float vx, float vdepth, int hRepeat = 1)
@@ -36,9 +36,9 @@ namespace DuckGame
             definition = Content.LoadParallaxDefinition(image);
             if (definition == null)
                 return;
-            foreach (ParallaxBackground.Definition.Zone zone in definition.zones)
+            foreach (Definition.Zone zone in definition.zones)
                 AddZone(zone.index, zone.distance, zone.speed, zone.moving);
-            foreach (ParallaxBackground.Definition.Zone sprite in definition.sprites)
+            foreach (Definition.Zone sprite in definition.sprites)
                 AddZoneSprite(sprite.sprite.Clone(), sprite.index, sprite.distance, sprite.speed, sprite.moving);
         }
 
@@ -107,7 +107,7 @@ namespace DuckGame
                         if (index == 0)
                             zone.RenderSprites(position);
                         if (zone.visible)
-                            DuckGame.Graphics.Draw(_sprite.texture, position + new Vec2(0f, FUCKINGYOFFSET) + new Vec2((zone.scroll % graphic.width - graphic.width + index * graphic.width) * scale.x, key * 8 * scale.y), new Rectangle?(new Rectangle(0f, key * 8, graphic.width, 8f)), color, 0f, new Vec2(), new Vec2(scale.x, scale.y), SpriteEffects.None, depth);
+                            Graphics.Draw(_sprite.texture, position + new Vec2(0f, FUCKINGYOFFSET) + new Vec2((zone.scroll % graphic.width - graphic.width + index * graphic.width) * scale.x, key * 8 * scale.y), new Rectangle?(new Rectangle(0f, key * 8, graphic.width, 8f)), color, 0f, new Vec2(), new Vec2(scale.x, scale.y), SpriteEffects.None, depth);
                     }
                 }
             }
@@ -115,8 +115,8 @@ namespace DuckGame
 
         public class Definition
         {
-            public List<ParallaxBackground.Definition.Zone> zones = new List<ParallaxBackground.Definition.Zone>();
-            public List<ParallaxBackground.Definition.Zone> sprites = new List<ParallaxBackground.Definition.Zone>();
+            public List<Zone> zones = new List<Zone>();
+            public List<Zone> sprites = new List<Zone>();
 
             public struct Zone
             {

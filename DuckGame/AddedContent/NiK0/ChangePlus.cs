@@ -122,33 +122,42 @@ namespace DuckGame
                     float chance = ToSingle(value.Substring(0, value.Length - 1));
                     return chance > Rando.Float(100.00f);
                 }
-                else if (_twoSideOperationRegex.Match(value)
-                         is var m && m.Success)
-                {
-                    float comp1 = ToSingle(m.Groups[1].Value);
-                    float comp2 = ToSingle(m.Groups[3].Value);
-                    string operation = m.Groups[2].Value;
-                    switch (operation)
-                    {
-                        case ">":
-                            return comp1 > comp2;
-                        case "<":
-                            return comp1 < comp2;
-                        case ">=":
-                            return comp1 >= comp2;
-                        case "<=":
-                            return comp1 <= comp2;
-                        case "=":
-                        case "==":
-                            return comp1 == comp2;
-                        case "!=":
-                            return comp1 != comp2;
-                        default:
-                            throw new Exception($"Invalid Operation: {operation}");
-                    }
-                }
+                
+                //* i dont think anyone's gonna literally type "2>3" instead of "false"
+                //* unless it supports variables (it doesnt) then it's pretty useless
+                
+                // else if (_twoSideOperationRegex.Match(value)
+                //          is var m && m.Success)
+                // {
+                //     float comp1 = ToSingle(m.Groups[1].Value);
+                //     float comp2 = ToSingle(m.Groups[3].Value);
+                //     string operation = m.Groups[2].Value;
+                //     switch (operation)
+                //     {
+                //         case ">":
+                //             return comp1 > comp2;
+                //         case "<":
+                //             return comp1 < comp2;
+                //         case ">=":
+                //             return comp1 >= comp2;
+                //         case "<=":
+                //             return comp1 <= comp2;
+                //         case "=":
+                //         case "==":
+                //             return comp1 == comp2;
+                //         case "!=":
+                //             return comp1 != comp2;
+                //         default:
+                //             throw new Exception($"Invalid Operation: {operation}");
+                //     }
+                // }
 
-                return Convert.ToBoolean(value);
+                return value.ToLower() switch
+                {
+                    "y" or "yes" => true,
+                    "n" or "no" => false,
+                    _ => Convert.ToBoolean(value)
+                };
             }
             catch (Exception e)
             {

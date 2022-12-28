@@ -154,14 +154,14 @@ namespace DGWindows
         //private const int ENUM_REGISTRY_SETTINGS = -2;
         //public static int displayRefreshRate;
 
-        public static WindowsPlatformStartup.MachineType GetDllMachineType(
+        public static MachineType GetDllMachineType(
           string dllPath)
         {
             FileStream input = new FileStream(dllPath, FileMode.Open, FileAccess.Read);
             BinaryReader binaryReader = new BinaryReader(input);
             input.Seek(60L, SeekOrigin.Begin);
             input.Seek(binaryReader.ReadInt32(), SeekOrigin.Begin);
-            WindowsPlatformStartup.MachineType dllMachineType = binaryReader.ReadUInt32() == 17744U ? (WindowsPlatformStartup.MachineType)binaryReader.ReadUInt16() : throw new Exception("Can't find PE header");
+            MachineType dllMachineType = binaryReader.ReadUInt32() == 17744U ? (MachineType)binaryReader.ReadUInt16() : throw new Exception("Can't find PE header");
             binaryReader.Close();
             input.Close();
             return dllMachineType;
@@ -191,9 +191,9 @@ namespace DGWindows
 
         public static string CheckLibraryError(string pLibrary)
         {
-            if (WindowsPlatformStartup.LoadLibrary(pLibrary) == IntPtr.Zero)
+            if (LoadLibrary(pLibrary) == IntPtr.Zero)
             {
-                switch (WindowsPlatformStartup.GetLastError())
+                switch (GetLastError())
                 {
                     case 0:
                         break;
@@ -204,7 +204,7 @@ namespace DGWindows
                         {
                             StringBuilder lpBuffer = new StringBuilder(byte.MaxValue);
                             IntPtr lpFilePart = new IntPtr();
-                            int num = (int)WindowsPlatformStartup.SearchPath(null, pLibrary, null, byte.MaxValue, lpBuffer, out lpFilePart);
+                            int num = (int)SearchPath(null, pLibrary, null, byte.MaxValue, lpBuffer, out lpFilePart);
                             return lpBuffer.ToString();
                         }
                         catch (Exception)
@@ -219,9 +219,9 @@ namespace DGWindows
         [DllImport("kernel32", CharSet = CharSet.Ansi, SetLastError = true)]
         private static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
 
-        public static bool isRunningWine => WindowsPlatformStartup.kWineVersion != null;
+        public static bool isRunningWine => kWineVersion != null;
 
-        public static string wineVersion => WindowsPlatformStartup.kWineVersion;
+        public static string wineVersion => kWineVersion;
 
 #pragma warning disable IDE0051 // Remove unused private members
         private static void Main4(string[] args)
@@ -229,41 +229,41 @@ namespace DGWindows
         {
             try
             {
-                IntPtr hModule = WindowsPlatformStartup.LoadLibrary("ntdll.dll");
+                IntPtr hModule = LoadLibrary("ntdll.dll");
                 if (hModule != IntPtr.Zero)
                 {
-                    IntPtr procAddress = WindowsPlatformStartup.GetProcAddress(hModule, "wine_get_version");
+                    IntPtr procAddress = GetProcAddress(hModule, "wine_get_version");
                     if (procAddress != IntPtr.Zero)
                     {
-                        WindowsPlatformStartup.kWineVersion = "unknown";
-                        IntPtr ptr = ((WindowsPlatformStartup.wine_version_delegate)Marshal.GetDelegateForFunctionPointer(procAddress, typeof(WindowsPlatformStartup.wine_version_delegate)))();
+                        kWineVersion = "unknown";
+                        IntPtr ptr = ((wine_version_delegate)Marshal.GetDelegateForFunctionPointer(procAddress, typeof(wine_version_delegate)))();
                         if (ptr != IntPtr.Zero)
-                            WindowsPlatformStartup.kWineVersion = Marshal.PtrToStringAnsi(ptr);
+                            kWineVersion = Marshal.PtrToStringAnsi(ptr);
                     }
                 }
             }
             catch (Exception)
             {
             }
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(WindowsPlatformStartup.UnhandledExceptionTrapper);
-            DuckGame.Program.Main(args);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(UnhandledExceptionTrapper);
+            Program.Main(args);
         }
         [HandleProcessCorruptedStateExceptions, SecurityCritical]
         public static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
         {
-            if (!System.IO.File.Exists("CrashWindow.exe"))
+            if (!File.Exists("CrashWindow.exe"))
                 return;
             try
             {
-                DuckGame.Program.HandleGameCrash(e.ExceptionObject as Exception);
+                Program.HandleGameCrash(e.ExceptionObject as Exception);
             }
             catch (Exception ex)
             {
-                string pLogMessage = WindowsPlatformStartup.ProcessErrorLine(e.ExceptionObject.ToString(), e.ExceptionObject as Exception);
+                string pLogMessage = ProcessErrorLine(e.ExceptionObject.ToString(), e.ExceptionObject as Exception);
                 StreamWriter streamWriter = new StreamWriter("ducklog.txt", true);
                 streamWriter.WriteLine(pLogMessage);
                 streamWriter.Close();
-                Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -modName none -source " + (e.ExceptionObject as Exception).Source + " -commandLine \"none\" -executable \"" + Application.ExecutablePath + "\" " + WindowsPlatformStartup.GetCrashWindowString(ex, null, pLogMessage));
+                Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -modName none -source " + (e.ExceptionObject as Exception).Source + " -commandLine \"none\" -executable \"" + Application.ExecutablePath + "\" " + GetCrashWindowString(ex, null, pLogMessage));
             }
         }
 
@@ -288,7 +288,7 @@ namespace DGWindows
                     string str1 = "";
                     try
                     {
-                        foreach (string str2 in WindowsPlatformStartup.BadFormatExceptionAssembly())
+                        foreach (string str2 in BadFormatExceptionAssembly())
                             str1 = str1 + str2 + "\n";
                     }
                     catch (Exception)
@@ -324,12 +324,12 @@ namespace DGWindows
         public static List<string> BadFormatExceptionAssembly()
         {
             List<string> stringList = new List<string>();
-            int num = (int)WindowsPlatformStartup.SetErrorMode(0U);
-            foreach (string moduleDependency in WindowsPlatformStartup._moduleDependencies)
+            int num = (int)SetErrorMode(0U);
+            foreach (string moduleDependency in _moduleDependencies)
             {
                 try
                 {
-                    string str = WindowsPlatformStartup.CheckLibraryError(moduleDependency);
+                    string str = CheckLibraryError(moduleDependency);
                     if (str != null)
                         stringList.Add(str);
                 }
@@ -343,25 +343,25 @@ namespace DGWindows
             return stringList;
         }
 
-        public static List<WindowsPlatformStartup.Module> CollectModules(
+        public static List<Module> CollectModules(
           Process process)
         {
-            List<WindowsPlatformStartup.Module> moduleList = new List<WindowsPlatformStartup.Module>();
+            List<Module> moduleList = new List<Module>();
             IntPtr[] lphModule1 = new IntPtr[0];
             int lpcbNeeded;
-            if (!WindowsPlatformStartup.Native.EnumProcessModulesEx(process.Handle, lphModule1, 0, out lpcbNeeded, 3U))
+            if (!Native.EnumProcessModulesEx(process.Handle, lphModule1, 0, out lpcbNeeded, 3U))
                 return moduleList;
             int length = lpcbNeeded / IntPtr.Size;
             IntPtr[] lphModule2 = new IntPtr[length];
-            if (WindowsPlatformStartup.Native.EnumProcessModulesEx(process.Handle, lphModule2, lpcbNeeded, out lpcbNeeded, 3U))
+            if (Native.EnumProcessModulesEx(process.Handle, lphModule2, lpcbNeeded, out lpcbNeeded, 3U))
             {
                 for (int index = 0; index < length; ++index)
                 {
                     StringBuilder lpBaseName = new StringBuilder(1024);
-                    int moduleFileNameEx = (int)WindowsPlatformStartup.Native.GetModuleFileNameEx(process.Handle, lphModule2[index], lpBaseName, (uint)lpBaseName.Capacity);
-                    WindowsPlatformStartup.Native.ModuleInformation lpmodinfo = new WindowsPlatformStartup.Native.ModuleInformation();
-                    WindowsPlatformStartup.Native.GetModuleInformation(process.Handle, lphModule2[index], out lpmodinfo, (uint)(IntPtr.Size * lphModule2.Length));
-                    WindowsPlatformStartup.Module module = new WindowsPlatformStartup.Module(lpBaseName.ToString(), lpmodinfo.lpBaseOfDll, lpmodinfo.SizeOfImage);
+                    int moduleFileNameEx = (int)Native.GetModuleFileNameEx(process.Handle, lphModule2[index], lpBaseName, (uint)lpBaseName.Capacity);
+                    Native.ModuleInformation lpmodinfo = new Native.ModuleInformation();
+                    Native.GetModuleInformation(process.Handle, lphModule2[index], out lpmodinfo, (uint)(IntPtr.Size * lphModule2.Length));
+                    Module module = new Module(lpBaseName.ToString(), lpmodinfo.lpBaseOfDll, lpmodinfo.SizeOfImage);
                     moduleList.Add(module);
                 }
             }
@@ -370,7 +370,7 @@ namespace DGWindows
 
         public static void AssemblyLoad(object sender, AssemblyLoadEventArgs args)
         {
-            WindowsPlatformStartup.assemblyLoadStrings.Add(args.LoadedAssembly.FullName + ": " + args.LoadedAssembly.GetName().ProcessorArchitecture.ToString());
+            assemblyLoadStrings.Add(args.LoadedAssembly.FullName + ": " + args.LoadedAssembly.GetName().ProcessorArchitecture.ToString());
             if (!args.LoadedAssembly.FullName.Contains("HarmonySharedState") && !args.LoadedAssembly.FullName.Contains("HarmonyLoader") || ModLoader.loadingOldMod == null)
                 return;
             ModLoader.FailWithHarmonyException();
@@ -380,7 +380,7 @@ namespace DGWindows
         public static extern bool EnumDisplaySettings(
           string deviceName,
           int modeNum,
-          ref WindowsPlatformStartup.DEVMODE devMode);
+          ref DEVMODE devMode);
 
         public enum MachineType : ushort
         {
@@ -429,7 +429,7 @@ namespace DGWindows
             public static extern bool GetModuleInformation(
               IntPtr hProcess,
               IntPtr hModule,
-              out WindowsPlatformStartup.Native.ModuleInformation lpmodinfo,
+              out ModuleInformation lpmodinfo,
               uint cb);
 
             public struct ModuleInformation

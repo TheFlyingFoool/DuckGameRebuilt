@@ -50,11 +50,11 @@ namespace DuckGame
                 if (_disconnected)
                 {
                     if (joinAddress != 0UL)
-                        Level.current = new JoinServer(joinAddress);
+                        current = new JoinServer(joinAddress);
                     else
                         Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.05f);
                     if (Graphics.fade <= 0.0)
-                        Level.current = new TitleScreen();
+                        current = new TitleScreen();
                 }
             }
             base.Update();

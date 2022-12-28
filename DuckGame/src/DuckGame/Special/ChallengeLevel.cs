@@ -89,16 +89,16 @@ namespace DuckGame
             _validityTest = validityTest;
         }
 
-        public static ChallengeTimer timer => ChallengeLevel._timer;
+        public static ChallengeTimer timer => _timer;
 
         public override void Initialize()
         {
             MonoMain.FinishLazyLoad();
-            ChallengeLevel.targetsShot = 0;
-            ChallengeLevel.goodiesGot = 0;
-            ChallengeLevel.allTargetsShot = true;
-            ChallengeLevel.running = false;
-            ChallengeLevel._timer = new ChallengeTimer();
+            targetsShot = 0;
+            goodiesGot = 0;
+            allTargetsShot = true;
+            running = false;
+            _timer = new ChallengeTimer();
             if (DuckNetwork.core.speedrunMode)
                 ChallengeRando.generator = new Random(1337);
             base.Initialize();
@@ -125,7 +125,7 @@ namespace DuckGame
                 }
             }
             _pendingSpawns = new Deathmatch(this).SpawnPlayers(false);
-            _pendingSpawns = _pendingSpawns.OrderBy<Duck, float>(sp => sp.x).ToList<Duck>();
+            _pendingSpawns = _pendingSpawns.OrderBy(sp => sp.x).ToList();
             foreach (Thing pendingSpawn in _pendingSpawns)
                 followCam.Add(pendingSpawn);
             _pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
@@ -140,7 +140,7 @@ namespace DuckGame
             component.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_pauseMenu, Options.optionsMenu), UIAlign.Left), true);
             component.leftSection.Add(new UIText("", Color.White), true);
             component.leftSection.Add(new UIMenuItem("|DGRED|QUIT", new UIMenuActionOpenMenu(_pauseMenu, _confirmMenu), UIAlign.Left), true);
-            if (things[typeof(EditorTestLevel)].Count<Thing>() > 0)
+            if (things[typeof(EditorTestLevel)].Count() > 0)
             {
                 component.leftSection.Add(new UIText("", Color.White), true);
                 component.leftSection.Add(new UIMenuItem("CAPTURE ICON", new UIMenuActionOpenMenu(_pauseMenu, _captureMenu), UIAlign.Left), true);
@@ -157,7 +157,7 @@ namespace DuckGame
             _pauseGroup.Add(_confirmMenu, false);
             _pauseGroup.isPauseMenu = true;
             _pauseGroup.Close();
-            Level.Add(_pauseGroup);
+            Add(_pauseGroup);
             Music.volume = 1f;
             followCam.Adjust();
         }
@@ -187,7 +187,7 @@ namespace DuckGame
 
         public void RestartChallenge() => _doRestart = true;
 
-        public static Duck duck => ChallengeLevel._duck;
+        public static Duck duck => _duck;
 
         private string FormatResultString(
           string captionColor,
@@ -219,27 +219,27 @@ namespace DuckGame
         public override void Update()
         {
             ++MonoMain.timeInArcade;
-            ChallengeLevel._timer.Update();
+            _timer.Update();
             if (_fading)
             {
-                DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, 0f, 0.05f);
+                Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.05f);
                 if (Graphics.fade >= 0.01f)
                     return;
                 if (_validityTest)
                 {
                     ArcadeTestDialogue.success = _challenge.wonTrophies.Count > 0 && _challenge.wonTrophies.Count > 0 && (_challenge.wonTrophies[0].type == TrophyType.Platinum || _challenge.wonTrophies[0].type == TrophyType.Developer);
-                    Level.current = ArcadeTestDialogue.currentEditor;
-                    DuckGame.Graphics.fade = 1f;
+                    current = ArcadeTestDialogue.currentEditor;
+                    Graphics.fade = 1f;
                 }
                 else
                 {
-                    if (things[typeof(EditorTestLevel)].Count<Thing>() > 0)
+                    if (things[typeof(EditorTestLevel)].Count() > 0)
                     {
-                        Level.current = (things[typeof(EditorTestLevel)].First() as EditorTestLevel).editor;
+                        current = (things[typeof(EditorTestLevel)].First() as EditorTestLevel).editor;
                         Music.Stop();
                     }
                     else
-                        Level.current = Arcade.currentArcade == null ? ArcadeLevel.currentArcade : Arcade.currentArcade;
+                        current = Arcade.currentArcade == null ? ArcadeLevel.currentArcade : Arcade.currentArcade;
                     _fading = false;
                 }
             }
@@ -251,27 +251,27 @@ namespace DuckGame
                     HUD.CloseCorner(HUDCorner.TopLeft);
                 if (_doRestart)
                 {
-                    ChallengeLevel.running = false;
+                    running = false;
                     _waitForRestart -= 0.04f;
                     if (_waitForRestart <= 0f)
                         _restarting = true;
                 }
                 _waitFade -= 0.04f;
-                if (!_didFade && _waitFade <= 0f && DuckGame.Graphics.fade < 1f)
-                    DuckGame.Graphics.fade = Lerp.Float(DuckGame.Graphics.fade, 1f, 0.04f);
+                if (!_didFade && _waitFade <= 0f && Graphics.fade < 1f)
+                    Graphics.fade = Lerp.Float(Graphics.fade, 1f, 0.04f);
                 else if (_restarting)
                 {
-                    ChallengeLevel.running = false;
+                    running = false;
                     transitionSpeedMultiplier = 2f;
                     EditorTestLevel t = null;
-                    if (things[typeof(EditorTestLevel)].Count<Thing>() > 0)
-                        t = things[typeof(EditorTestLevel)].First<Thing>() as EditorTestLevel;
-                    Level.current = !(_level != "") ? new ChallengeLevel(_levelData, _validityTest) : (Level)new ChallengeLevel(_level);
-                    Level.current.transitionSpeedMultiplier = 2f;
-                    ((ChallengeLevel)Level.current)._waitSpawn = 0f;
+                    if (things[typeof(EditorTestLevel)].Count() > 0)
+                        t = things[typeof(EditorTestLevel)].First() as EditorTestLevel;
+                    current = !(_level != "") ? new ChallengeLevel(_levelData, _validityTest) : (Level)new ChallengeLevel(_level);
+                    current.transitionSpeedMultiplier = 2f;
+                    ((ChallengeLevel)current)._waitSpawn = 0f;
                     if (t == null)
                         return;
-                    Level.current.AddThing(t);
+                    current.AddThing(t);
                 }
                 else
                 {
@@ -280,7 +280,7 @@ namespace DuckGame
                     _didFade = true;
                     if (_finished)
                     {
-                        ChallengeLevel.running = false;
+                        running = false;
                         PauseLogic();
                         if (_finishWait > 0f)
                         {
@@ -291,7 +291,7 @@ namespace DuckGame
                             if (!_playedEndMusic)
                             {
                                 _playedEndMusic = true;
-                                Level.current.simulatePhysics = false;
+                                current.simulatePhysics = false;
                                 ArcadeFrame arcadeFrame = null;
                                 if (_win)
                                 {
@@ -304,9 +304,9 @@ namespace DuckGame
                                             float renderTargetZoom = arcadeFrame.GetRenderTargetZoom();
                                             if (_captureTarget == null)
                                                 _captureTarget = new RenderTarget2D((int)(renderTargetSize.x * 6f), (int)(renderTargetSize.y * 6f));
-                                            int num = DuckGame.Graphics.width / 320;
+                                            int num = Graphics.width / 320;
                                             Camera camera = new Camera(0f, 0f, _captureTarget.width * renderTargetZoom, _captureTarget.height * renderTargetZoom);
-                                            if (ChallengeLevel._duck != null)
+                                            if (_duck != null)
                                             {
                                                 Layer.HUD.visible = false;
                                                 MonoMain.RenderGame(MonoMain.screenCapture);
@@ -315,9 +315,9 @@ namespace DuckGame
                                                 Matrix.CreateOrthographicOffCenter(0f, MonoMain.screenCapture.width, MonoMain.screenCapture.height, 0f, 0f, -1f, out result);
                                                 result.M41 += -0.5f * result.M11;
                                                 result.M42 += -0.5f * result.M22;
-                                                Matrix matrix = Level.current.camera.getMatrix();
-                                                Vec3 vec3 = (Vec3)DuckGame.Graphics.viewport.Project((Vector3)new Vec3(ChallengeLevel._duck.cameraPosition.x, ChallengeLevel._duck.cameraPosition.y, 0f), (Microsoft.Xna.Framework.Matrix)result, (Microsoft.Xna.Framework.Matrix)matrix, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
-                                                DuckGame.Graphics.SetRenderTarget(_captureTarget);
+                                                Matrix matrix = current.camera.getMatrix();
+                                                Vec3 vec3 = (Vec3)Graphics.viewport.Project((Vector3)new Vec3(_duck.cameraPosition.x, _duck.cameraPosition.y, 0f), (Microsoft.Xna.Framework.Matrix)result, (Microsoft.Xna.Framework.Matrix)matrix, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
+                                                Graphics.SetRenderTarget(_captureTarget);
                                                 camera.center = new Vec2(vec3.x, vec3.y);
                                                 if (camera.bottom > MonoMain.screenCapture.height)
                                                     camera.centerY = MonoMain.screenCapture.height - camera.height / 2f;
@@ -327,11 +327,11 @@ namespace DuckGame
                                                     camera.centerX = MonoMain.screenCapture.width - camera.width / 2f;
                                                 if (camera.left < 0f)
                                                     camera.centerX = camera.width / 2f;
-                                                DuckGame.Graphics.Clear(Color.Black);
-                                                DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, null, camera.getMatrix());
-                                                DuckGame.Graphics.Draw(MonoMain.screenCapture, 0f, 0f);
-                                                DuckGame.Graphics.screen.End();
-                                                DuckGame.Graphics.SetRenderTarget(null);
+                                                Graphics.Clear(Color.Black);
+                                                Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, null, camera.getMatrix());
+                                                Graphics.Draw(MonoMain.screenCapture, 0f, 0f);
+                                                Graphics.screen.End();
+                                                Graphics.SetRenderTarget(null);
                                             }
                                         }
                                     }
@@ -355,7 +355,7 @@ namespace DuckGame
                                 component1.leftSection.borderSize.y = 2f;
                                 bool flag1 = false;
                                 bool flag2 = false;
-                                ChallengeSaveData saveData = ChallengeLevel._duck.profile.GetSaveData(id);
+                                ChallengeSaveData saveData = _duck.profile.GetSaveData(id);
                                 if (_challenge.wonTrophies.Count > 0 && _challenge.wonTrophies[0].type > saveData.trophy)
                                 {
                                     saveData.trophy = _challenge.wonTrophies[0].type;
@@ -376,21 +376,21 @@ namespace DuckGame
                                 TimeSpan elapsed;
                                 if (saveData.bestTime != 0)
                                 {
-                                    elapsed = ChallengeLevel.timer.elapsed;
+                                    elapsed = timer.elapsed;
                                     if ((int)(elapsed.TotalSeconds * 1000f) >= saveData.bestTime)
                                         goto label_64;
                                 }
                                 ChallengeSaveData challengeSaveData = saveData;
-                                elapsed = ChallengeLevel.timer.elapsed;
+                                elapsed = timer.elapsed;
                                 int num1 = (int)(elapsed.TotalSeconds * 1000f);
                                 challengeSaveData.bestTime = num1;
                             label_64:
                                 int targets1 = saveData.targets;
-                                if (ChallengeLevel.targetsShot > saveData.targets)
-                                    saveData.targets = ChallengeLevel.targetsShot;
+                                if (targetsShot > saveData.targets)
+                                    saveData.targets = targetsShot;
                                 int targets2 = saveData.targets;
-                                if (ChallengeLevel.goodiesGot > saveData.goodies)
-                                    saveData.goodies = ChallengeLevel.goodiesGot;
+                                if (goodiesGot > saveData.goodies)
+                                    saveData.goodies = goodiesGot;
                                 bool flag3 = false;
                                 if (_challenge.challenge.hasTimeRequirements)
                                 {
@@ -401,11 +401,11 @@ namespace DuckGame
                                     }
                                     else
                                     {
-                                        elapsed = ChallengeLevel.timer.elapsed;
+                                        elapsed = timer.elapsed;
                                         num2 = elapsed.TotalSeconds * 1000f < bestTime ? 1 : 0;
                                     }
                                     bool flag4 = num2 != 0;
-                                    string textVal = FormatResultString("|WHITE|", "TIME", flag4 ? "|TIMELIME|" : "|DGRED|", MonoMain.TimeString(ChallengeLevel.timer.elapsed, small: true), _challenge.wonTrophies.Count > 0 ? _challenge.wonTrophies[0].colorString : "|DGRED|", _challenge.wonTrophies.Count > 0 ? _challenge.wonTrophies[0].name : "FAILED!");
+                                    string textVal = FormatResultString("|WHITE|", "TIME", flag4 ? "|TIMELIME|" : "|DGRED|", MonoMain.TimeString(timer.elapsed, small: true), _challenge.wonTrophies.Count > 0 ? _challenge.wonTrophies[0].colorString : "|DGRED|", _challenge.wonTrophies.Count > 0 ? _challenge.wonTrophies[0].name : "FAILED!");
                                     component1.leftSection.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
                                     if (flag4)
                                         flag1 = true;
@@ -419,12 +419,12 @@ namespace DuckGame
                                     string caption = "TARGETS";
                                     if (_challenge.challenge.prefix != "" && _challenge.challenge.prefix != null)
                                         caption = _challenge.challenge.prefix;
-                                    string result = ChallengeLevel.targetsShot.ToString();
-                                    if (targets1 < ChallengeLevel.targetsShot)
+                                    string result = targetsShot.ToString();
+                                    if (targets1 < targetsShot)
                                         flag1 = true;
                                     component2.leftSection.Add(new UIText(FormatResultString(captionColor, "BEST", "|WHITE|", saveData.targets.ToString(), null, null, 19), Color.White, UIAlign.Left), true);
                                     component2.leftSection.Add(new UIText("               ", Color.White, UIAlign.Left), true);
-                                    string textVal = FormatResultString("|WHITE|", caption, ChallengeLevel.targetsShot > targets1 ? "|TIMELIME|" : "|DGRED|", result, _challenge.wonTrophies.Count > 0 ? _challenge.wonTrophies[0].colorString : "|DGRED|", _challenge.wonTrophies.Count > 0 ? _challenge.wonTrophies[0].name : "FAILED!");
+                                    string textVal = FormatResultString("|WHITE|", caption, targetsShot > targets1 ? "|TIMELIME|" : "|DGRED|", result, _challenge.wonTrophies.Count > 0 ? _challenge.wonTrophies[0].colorString : "|DGRED|", _challenge.wonTrophies.Count > 0 ? _challenge.wonTrophies[0].name : "FAILED!");
                                     component1.leftSection.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
                                     flag3 = true;
                                 }
@@ -433,18 +433,18 @@ namespace DuckGame
                                     string caption = "NUMBER";
                                     if (_challenge.challenge.prefix != "" && _challenge.challenge.prefix != null)
                                         caption = _challenge.challenge.prefix;
-                                    string result = ChallengeLevel.goodiesGot.ToString();
-                                    if (targets2 < ChallengeLevel.goodiesGot)
+                                    string result = goodiesGot.ToString();
+                                    if (targets2 < goodiesGot)
                                         flag1 = true;
                                     component2.leftSection.Add(new UIText(FormatResultString(captionColor, "BEST", "|WHITE|", saveData.goodies.ToString(), null, null, 19), Color.White, UIAlign.Left), true);
                                     component2.leftSection.Add(new UIText("               ", Color.White, UIAlign.Left), true);
-                                    string textVal = FormatResultString("|WHITE|", caption, ChallengeLevel.goodiesGot > targets2 ? "|TIMELIME|" : "|DGRED|", result, _challenge.wonTrophies.Count > 0 ? _challenge.wonTrophies[0].colorString : "|DGRED|", _challenge.wonTrophies.Count > 0 ? _challenge.wonTrophies[0].name : "FAILED!");
+                                    string textVal = FormatResultString("|WHITE|", caption, goodiesGot > targets2 ? "|TIMELIME|" : "|DGRED|", result, _challenge.wonTrophies.Count > 0 ? _challenge.wonTrophies[0].colorString : "|DGRED|", _challenge.wonTrophies.Count > 0 ? _challenge.wonTrophies[0].name : "FAILED!");
                                     component1.leftSection.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
                                 }
                                 if (saveData.trophy < TrophyType.Gold || !flag2)
                                     flag1 = false;
                                 int wide = 19;
-                                foreach (ChallengeTrophy challengeTrophy in (IEnumerable<ChallengeTrophy>)_challenge.challenge.trophies.OrderBy<ChallengeTrophy, int>(x => -(int)x.type))
+                                foreach (ChallengeTrophy challengeTrophy in (IEnumerable<ChallengeTrophy>)_challenge.challenge.trophies.OrderBy(x => -(int)x.type))
                                 {
                                     if (challengeTrophy.type == TrophyType.Gold || challengeTrophy.type == TrophyType.Silver || challengeTrophy.type == TrophyType.Bronze)
                                     {
@@ -488,14 +488,14 @@ namespace DuckGame
                                 _trophyMenu.Close();
                                 _trophyGroup.Add(_trophyMenu, false);
                                 _trophyGroup.Close();
-                                Level.Add(_trophyGroup);
+                                Add(_trophyGroup);
                                 if (arcadeFrame != null & flag1 && saveData != null)
                                 {
                                     saveData.frameID = arcadeFrame._identifier;
                                     saveData.frameImage = Editor.TextureToString((Texture2D)_captureTarget);
                                     arcadeFrame.saveData = saveData;
                                 }
-                                Profiles.Save(ChallengeLevel._duck.profile);
+                                Profiles.Save(_duck.profile);
                             }
                             if (_showEndTextWait > 0.0)
                             {
@@ -541,18 +541,18 @@ namespace DuckGame
                             AddThing(pendingSpawn);
                             _pendingSpawns.RemoveAt(0);
                             Vec3 color = pendingSpawn.profile.persona.color;
-                            Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 0f, new Color((int)color.x, (int)color.z, (int)color.z), 32f));
-                            Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, -4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
-                            Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
+                            Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 0f, new Color((int)color.x, (int)color.z, (int)color.z), 32f));
+                            Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, -4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
+                            Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
                             SFX.Play("pullPin", 0.7f);
-                            ChallengeLevel._duck = pendingSpawn;
-                            _challenge = things[typeof(ChallengeMode)].First<Thing>() as ChallengeMode;
+                            _duck = pendingSpawn;
+                            _challenge = things[typeof(ChallengeMode)].First() as ChallengeMode;
                             if (_challenge == null)
                                 return;
                             _challenge.PrepareCounts();
-                            ChallengeLevel.random = _challenge.random.value;
+                            random = _challenge.random.value;
                             _challenge.duck = pendingSpawn;
-                            ChallengeLevel._timer.maxTime = TimeSpan.FromSeconds(_challenge.challenge.trophies[0].timeRequirement);
+                            _timer.maxTime = TimeSpan.FromSeconds(_challenge.challenge.trophies[0].timeRequirement);
                             HUD.core._cornerDisplays.Add(new CornerDisplay() { corner = HUDCorner.BottomRight, text = "", timer = _timer, ischallenge = true }); //       HUD.AddCornerTimer(HUDCorner.BottomRight, "", _timer);
                             if (_challenge.challenge.countTargets)
                             {
@@ -569,17 +569,17 @@ namespace DuckGame
                             }
                             if (_challenge.challenge.countGoodies)
                             {
-                                MultiMap<System.Type, ISequenceItem> multiMap = new MultiMap<System.Type, ISequenceItem>();
-                                foreach (ISequenceItem element in Level.current.things[typeof(ISequenceItem)])
+                                MultiMap<Type, ISequenceItem> multiMap = new MultiMap<Type, ISequenceItem>();
+                                foreach (ISequenceItem element in current.things[typeof(ISequenceItem)])
                                 {
-                                    System.Type type = element.GetType();
+                                    Type type = element.GetType();
                                     SequenceItem sequence = (element as Thing).sequence;
                                     if (sequence.isValid && sequence.type == SequenceItemType.Goody)
                                         multiMap.Add(type, element);
                                 }
-                                System.Type key = null;
+                                Type key = null;
                                 int num = 0;
-                                foreach (KeyValuePair<System.Type, List<ISequenceItem>> keyValuePair in (MultiMap<System.Type, ISequenceItem, List<ISequenceItem>>)multiMap)
+                                foreach (KeyValuePair<Type, List<ISequenceItem>> keyValuePair in (MultiMap<Type, ISequenceItem, List<ISequenceItem>>)multiMap)
                                 {
                                     if (keyValuePair.Value.Count > num)
                                     {
@@ -630,13 +630,13 @@ namespace DuckGame
                                             targetDuck.sequence.order = Rando.Int(_max);
                                     }
                                 }
-                                if (things[typeof(RandomControllerNew)].Count<Thing>() == 0)
+                                if (things[typeof(RandomControllerNew)].Count() == 0)
                                 {
-                                    if (ChallengeLevel.random)
+                                    if (random)
                                     {
                                         IEnumerable<Thing> thing = things[typeof(ISequenceItem)];
-                                        if (thing.Count<Thing>() > 0)
-                                            thing.ElementAt<Thing>(ChallengeRando.Int(thing.Count<Thing>() - 1)).sequence.BeginRandomSequence();
+                                        if (thing.Count() > 0)
+                                            thing.ElementAt(ChallengeRando.Int(thing.Count() - 1)).sequence.BeginRandomSequence();
                                     }
                                     else
                                     {
@@ -668,9 +668,9 @@ namespace DuckGame
                             {
                                 _started = true;
                                 simulatePhysics = true;
-                                ChallengeLevel.running = true;
+                                running = true;
                                 SFX.Play("ding");
-                                ChallengeLevel._timer.Start();
+                                _timer.Start();
                                 if (Music.stopped)
                                     Music.PlayLoaded();
                             }
@@ -692,7 +692,7 @@ namespace DuckGame
 
         public void PauseLogic()
         {
-            if (Input.Pressed("START"))
+            if (Input.Pressed(Triggers.Start))
             {
                 _pauseGroup.Open();
                 _pauseMenu.Open();
@@ -700,7 +700,7 @@ namespace DuckGame
                 if (!_paused)
                 {
                     SFX.Play("pause", 0.6f);
-                    ChallengeLevel._timer.Stop();
+                    _timer.Stop();
                     _paused = true;
                 }
                 simulatePhysics = false;

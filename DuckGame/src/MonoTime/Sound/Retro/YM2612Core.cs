@@ -33,22 +33,22 @@ namespace DuckGame
         private const int TL_RES_LEN = 256;
         private static uint[] sl_table = new uint[16]
         {
-      YM2612Core.SC(0),
-      YM2612Core.SC(1),
-      YM2612Core.SC(2),
-      YM2612Core.SC(3),
-      YM2612Core.SC(4),
-      YM2612Core.SC(5),
-      YM2612Core.SC(6),
-      YM2612Core.SC(7),
-      YM2612Core.SC(8),
-      YM2612Core.SC(9),
-      YM2612Core.SC(10),
-      YM2612Core.SC(11),
-      YM2612Core.SC(12),
-      YM2612Core.SC(13),
-      YM2612Core.SC(14),
-      YM2612Core.SC(31)
+      SC(0),
+      SC(1),
+      SC(2),
+      SC(3),
+      SC(4),
+      SC(5),
+      SC(6),
+      SC(7),
+      SC(8),
+      SC(9),
+      SC(10),
+      SC(11),
+      SC(12),
+      SC(13),
+      SC(14),
+      SC(31)
         };
         private const int RATE_STEPS = 8;
         private static byte[] eg_inc = new byte[152]
@@ -208,265 +208,265 @@ namespace DuckGame
         };
         private static byte[] eg_rate_select = new byte[128]
         {
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 18),
-      YM2612Core.eg_rate_selectO( 0),
-      YM2612Core.eg_rate_selectO( 0),
-      YM2612Core.eg_rate_selectO( 0),
-      YM2612Core.eg_rate_selectO( 0),
-      YM2612Core.eg_rate_selectO( 2),
-      YM2612Core.eg_rate_selectO( 2),
-      YM2612Core.eg_rate_selectO( 0),
-      YM2612Core.eg_rate_selectO( 1),
-      YM2612Core.eg_rate_selectO( 2),
-      YM2612Core.eg_rate_selectO( 3),
-      YM2612Core.eg_rate_selectO( 0),
-      YM2612Core.eg_rate_selectO( 1),
-      YM2612Core.eg_rate_selectO( 2),
-      YM2612Core.eg_rate_selectO( 3),
-      YM2612Core.eg_rate_selectO( 0),
-      YM2612Core.eg_rate_selectO( 1),
-      YM2612Core.eg_rate_selectO( 2),
-      YM2612Core.eg_rate_selectO( 3),
-      YM2612Core.eg_rate_selectO( 0),
-      YM2612Core.eg_rate_selectO( 1),
-      YM2612Core.eg_rate_selectO( 2),
-      YM2612Core.eg_rate_selectO( 3),
-      YM2612Core.eg_rate_selectO( 0),
-      YM2612Core.eg_rate_selectO( 1),
-      YM2612Core.eg_rate_selectO( 2),
-      YM2612Core.eg_rate_selectO( 3),
-      YM2612Core.eg_rate_selectO( 0),
-      YM2612Core.eg_rate_selectO( 1),
-      YM2612Core.eg_rate_selectO( 2),
-      YM2612Core.eg_rate_selectO( 3),
-      YM2612Core.eg_rate_selectO( 0),
-      YM2612Core.eg_rate_selectO( 1),
-      YM2612Core.eg_rate_selectO( 2),
-      YM2612Core.eg_rate_selectO( 3),
-      YM2612Core.eg_rate_selectO( 0),
-      YM2612Core.eg_rate_selectO( 1),
-      YM2612Core.eg_rate_selectO( 2),
-      YM2612Core.eg_rate_selectO( 3),
-      YM2612Core.eg_rate_selectO( 0),
-      YM2612Core.eg_rate_selectO( 1),
-      YM2612Core.eg_rate_selectO( 2),
-      YM2612Core.eg_rate_selectO( 3),
-      YM2612Core.eg_rate_selectO( 0),
-      YM2612Core.eg_rate_selectO( 1),
-      YM2612Core.eg_rate_selectO( 2),
-      YM2612Core.eg_rate_selectO( 3),
-      YM2612Core.eg_rate_selectO( 4),
-      YM2612Core.eg_rate_selectO( 5),
-      YM2612Core.eg_rate_selectO( 6),
-      YM2612Core.eg_rate_selectO( 7),
-      YM2612Core.eg_rate_selectO( 8),
-      YM2612Core.eg_rate_selectO( 9),
-      YM2612Core.eg_rate_selectO( 10),
-      YM2612Core.eg_rate_selectO( 11),
-      YM2612Core.eg_rate_selectO( 12),
-      YM2612Core.eg_rate_selectO( 13),
-      YM2612Core.eg_rate_selectO( 14),
-      YM2612Core.eg_rate_selectO( 15),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16),
-      YM2612Core.eg_rate_selectO( 16)
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 18),
+      eg_rate_selectO( 0),
+      eg_rate_selectO( 0),
+      eg_rate_selectO( 0),
+      eg_rate_selectO( 0),
+      eg_rate_selectO( 2),
+      eg_rate_selectO( 2),
+      eg_rate_selectO( 0),
+      eg_rate_selectO( 1),
+      eg_rate_selectO( 2),
+      eg_rate_selectO( 3),
+      eg_rate_selectO( 0),
+      eg_rate_selectO( 1),
+      eg_rate_selectO( 2),
+      eg_rate_selectO( 3),
+      eg_rate_selectO( 0),
+      eg_rate_selectO( 1),
+      eg_rate_selectO( 2),
+      eg_rate_selectO( 3),
+      eg_rate_selectO( 0),
+      eg_rate_selectO( 1),
+      eg_rate_selectO( 2),
+      eg_rate_selectO( 3),
+      eg_rate_selectO( 0),
+      eg_rate_selectO( 1),
+      eg_rate_selectO( 2),
+      eg_rate_selectO( 3),
+      eg_rate_selectO( 0),
+      eg_rate_selectO( 1),
+      eg_rate_selectO( 2),
+      eg_rate_selectO( 3),
+      eg_rate_selectO( 0),
+      eg_rate_selectO( 1),
+      eg_rate_selectO( 2),
+      eg_rate_selectO( 3),
+      eg_rate_selectO( 0),
+      eg_rate_selectO( 1),
+      eg_rate_selectO( 2),
+      eg_rate_selectO( 3),
+      eg_rate_selectO( 0),
+      eg_rate_selectO( 1),
+      eg_rate_selectO( 2),
+      eg_rate_selectO( 3),
+      eg_rate_selectO( 0),
+      eg_rate_selectO( 1),
+      eg_rate_selectO( 2),
+      eg_rate_selectO( 3),
+      eg_rate_selectO( 4),
+      eg_rate_selectO( 5),
+      eg_rate_selectO( 6),
+      eg_rate_selectO( 7),
+      eg_rate_selectO( 8),
+      eg_rate_selectO( 9),
+      eg_rate_selectO( 10),
+      eg_rate_selectO( 11),
+      eg_rate_selectO( 12),
+      eg_rate_selectO( 13),
+      eg_rate_selectO( 14),
+      eg_rate_selectO( 15),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16),
+      eg_rate_selectO( 16)
         };
         private static byte[] eg_rate_shift = new byte[128]
         {
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 11),
-      YM2612Core.eg_rate_shiftO( 10),
-      YM2612Core.eg_rate_shiftO( 10),
-      YM2612Core.eg_rate_shiftO( 10),
-      YM2612Core.eg_rate_shiftO( 10),
-      YM2612Core.eg_rate_shiftO( 9),
-      YM2612Core.eg_rate_shiftO( 9),
-      YM2612Core.eg_rate_shiftO( 9),
-      YM2612Core.eg_rate_shiftO( 9),
-      YM2612Core.eg_rate_shiftO( 8),
-      YM2612Core.eg_rate_shiftO( 8),
-      YM2612Core.eg_rate_shiftO( 8),
-      YM2612Core.eg_rate_shiftO( 8),
-      YM2612Core.eg_rate_shiftO( 7),
-      YM2612Core.eg_rate_shiftO( 7),
-      YM2612Core.eg_rate_shiftO( 7),
-      YM2612Core.eg_rate_shiftO( 7),
-      YM2612Core.eg_rate_shiftO( 6),
-      YM2612Core.eg_rate_shiftO( 6),
-      YM2612Core.eg_rate_shiftO( 6),
-      YM2612Core.eg_rate_shiftO( 6),
-      YM2612Core.eg_rate_shiftO( 5),
-      YM2612Core.eg_rate_shiftO( 5),
-      YM2612Core.eg_rate_shiftO( 5),
-      YM2612Core.eg_rate_shiftO( 5),
-      YM2612Core.eg_rate_shiftO( 4),
-      YM2612Core.eg_rate_shiftO( 4),
-      YM2612Core.eg_rate_shiftO( 4),
-      YM2612Core.eg_rate_shiftO( 4),
-      YM2612Core.eg_rate_shiftO( 3),
-      YM2612Core.eg_rate_shiftO( 3),
-      YM2612Core.eg_rate_shiftO( 3),
-      YM2612Core.eg_rate_shiftO( 3),
-      YM2612Core.eg_rate_shiftO( 2),
-      YM2612Core.eg_rate_shiftO( 2),
-      YM2612Core.eg_rate_shiftO( 2),
-      YM2612Core.eg_rate_shiftO( 2),
-      YM2612Core.eg_rate_shiftO( 1),
-      YM2612Core.eg_rate_shiftO( 1),
-      YM2612Core.eg_rate_shiftO( 1),
-      YM2612Core.eg_rate_shiftO( 1),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0),
-      YM2612Core.eg_rate_shiftO( 0)
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 11),
+      eg_rate_shiftO( 10),
+      eg_rate_shiftO( 10),
+      eg_rate_shiftO( 10),
+      eg_rate_shiftO( 10),
+      eg_rate_shiftO( 9),
+      eg_rate_shiftO( 9),
+      eg_rate_shiftO( 9),
+      eg_rate_shiftO( 9),
+      eg_rate_shiftO( 8),
+      eg_rate_shiftO( 8),
+      eg_rate_shiftO( 8),
+      eg_rate_shiftO( 8),
+      eg_rate_shiftO( 7),
+      eg_rate_shiftO( 7),
+      eg_rate_shiftO( 7),
+      eg_rate_shiftO( 7),
+      eg_rate_shiftO( 6),
+      eg_rate_shiftO( 6),
+      eg_rate_shiftO( 6),
+      eg_rate_shiftO( 6),
+      eg_rate_shiftO( 5),
+      eg_rate_shiftO( 5),
+      eg_rate_shiftO( 5),
+      eg_rate_shiftO( 5),
+      eg_rate_shiftO( 4),
+      eg_rate_shiftO( 4),
+      eg_rate_shiftO( 4),
+      eg_rate_shiftO( 4),
+      eg_rate_shiftO( 3),
+      eg_rate_shiftO( 3),
+      eg_rate_shiftO( 3),
+      eg_rate_shiftO( 3),
+      eg_rate_shiftO( 2),
+      eg_rate_shiftO( 2),
+      eg_rate_shiftO( 2),
+      eg_rate_shiftO( 2),
+      eg_rate_shiftO( 1),
+      eg_rate_shiftO( 1),
+      eg_rate_shiftO( 1),
+      eg_rate_shiftO( 1),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0),
+      eg_rate_shiftO( 0)
         };
         private static byte[] dt_tab = new byte[128]
         {
@@ -1211,7 +1211,7 @@ namespace DuckGame
         private uint[] sin_tab = new uint[1024];
         private long[] lfo_pm_table = new long[32768];
         private t_config config = new t_config();
-        private YM2612Core._YM2612_data ym2612 = new YM2612Core._YM2612_data();
+        private _YM2612_data ym2612 = new _YM2612_data();
         private LongPointer m2 = new LongPointer();
         private LongPointer c1 = new LongPointer();
         private LongPointer c2 = new LongPointer();
@@ -1230,9 +1230,9 @@ namespace DuckGame
                 out_fm[index] = new LongPointer();
         }
 
-        private void FM_KEYON(YM2612Core.FM_CH CH, int s)
+        private void FM_KEYON(FM_CH CH, int s)
         {
-            YM2612Core.FM_SLOT fmSlot = CH.SLOT[s];
+            FM_SLOT fmSlot = CH.SLOT[s];
             if (fmSlot.key == 0 && ym2612.OPN.SL3.key_csm == 0)
             {
                 fmSlot.phase = 0U;
@@ -1251,9 +1251,9 @@ namespace DuckGame
             fmSlot.key = 1;
         }
 
-        private void FM_KEYOFF(YM2612Core.FM_CH CH, int s)
+        private void FM_KEYOFF(FM_CH CH, int s)
         {
-            YM2612Core.FM_SLOT fmSlot = CH.SLOT[s];
+            FM_SLOT fmSlot = CH.SLOT[s];
             if (fmSlot.key > 0 && ym2612.OPN.SL3.key_csm == 0 && fmSlot.state > 1)
             {
                 fmSlot.state = 1;
@@ -1272,9 +1272,9 @@ namespace DuckGame
             fmSlot.key = 0;
         }
 
-        private void FM_KEYON_CSM(YM2612Core.FM_CH CH, int s)
+        private void FM_KEYON_CSM(FM_CH CH, int s)
         {
-            YM2612Core.FM_SLOT fmSlot = CH.SLOT[s];
+            FM_SLOT fmSlot = CH.SLOT[s];
             if (fmSlot.key != 0 || ym2612.OPN.SL3.key_csm != 0)
                 return;
             fmSlot.phase = 0U;
@@ -1294,9 +1294,9 @@ namespace DuckGame
                 fmSlot.vol_out = (uint)fmSlot.volume + fmSlot.tl;
         }
 
-        private void FM_KEYOFF_CSM(YM2612Core.FM_CH CH, int s)
+        private void FM_KEYOFF_CSM(FM_CH CH, int s)
         {
-            YM2612Core.FM_SLOT fmSlot = CH.SLOT[s];
+            FM_SLOT fmSlot = CH.SLOT[s];
             if (fmSlot.key != 0 || fmSlot.state <= 1)
                 return;
             fmSlot.state = 1;
@@ -1312,7 +1312,7 @@ namespace DuckGame
             fmSlot.vol_out = (uint)fmSlot.volume + fmSlot.tl;
         }
 
-        private void CSMKeyControll(YM2612Core.FM_CH CH)
+        private void CSMKeyControll(FM_CH CH)
         {
             FM_KEYON_CSM(CH, 0);
             FM_KEYON_CSM(CH, 2);
@@ -1370,7 +1370,7 @@ namespace DuckGame
             ym2612.OPN.ST.mode = (uint)v;
         }
 
-        private void setup_connection(YM2612Core.FM_CH CH, int ch)
+        private void setup_connection(FM_CH CH, int ch)
         {
             LongPointer longPointer = out_fm[ch];
             switch (CH.ALGO)
@@ -1427,14 +1427,14 @@ namespace DuckGame
             CH.connect4 = longPointer;
         }
 
-        private void set_det_mul(YM2612Core.FM_CH CH, YM2612Core.FM_SLOT SLOT, int v)
+        private void set_det_mul(FM_CH CH, FM_SLOT SLOT, int v)
         {
             SLOT.mul = (v & 15) != 0 ? (uint)((v & 15) * 2) : 1U;
             SLOT.DT = ym2612.OPN.ST.dt_tab[v >> 4 & 7];
             CH.SLOT[0].Incr = -1L;
         }
 
-        private void set_tl(YM2612Core.FM_SLOT SLOT, int v)
+        private void set_tl(FM_SLOT SLOT, int v)
         {
             SLOT.tl = (uint)((v & sbyte.MaxValue) << 3);
             if ((SLOT.ssg & 8) != 0 && (SLOT.ssgn ^ SLOT.ssg & 4) != 0 && SLOT.state > 1)
@@ -1443,7 +1443,7 @@ namespace DuckGame
                 SLOT.vol_out = (uint)SLOT.volume + SLOT.tl;
         }
 
-        private void set_ar_ksr(YM2612Core.FM_CH CH, YM2612Core.FM_SLOT SLOT, int v)
+        private void set_ar_ksr(FM_CH CH, FM_SLOT SLOT, int v)
         {
             byte ksr = SLOT.KSR;
             SLOT.ar = (v & 31) != 0 ? (uint)(32 + ((v & 31) << 1)) : 0U;
@@ -1452,8 +1452,8 @@ namespace DuckGame
                 CH.SLOT[0].Incr = -1L;
             if (SLOT.ar + SLOT.ksr < 94U)
             {
-                SLOT.eg_sh_ar = YM2612Core.eg_rate_shift[(int)SLOT.ar + SLOT.ksr];
-                SLOT.eg_sel_ar = YM2612Core.eg_rate_select[(int)SLOT.ar + SLOT.ksr];
+                SLOT.eg_sh_ar = eg_rate_shift[(int)SLOT.ar + SLOT.ksr];
+                SLOT.eg_sel_ar = eg_rate_select[(int)SLOT.ar + SLOT.ksr];
             }
             else
             {
@@ -1462,28 +1462,28 @@ namespace DuckGame
             }
         }
 
-        private void set_dr(YM2612Core.FM_SLOT SLOT, int v)
+        private void set_dr(FM_SLOT SLOT, int v)
         {
             SLOT.d1r = (v & 31) != 0 ? (uint)(32 + ((v & 31) << 1)) : 0U;
-            SLOT.eg_sh_d1r = YM2612Core.eg_rate_shift[(int)SLOT.d1r + SLOT.ksr];
-            SLOT.eg_sel_d1r = YM2612Core.eg_rate_select[(int)SLOT.d1r + SLOT.ksr];
+            SLOT.eg_sh_d1r = eg_rate_shift[(int)SLOT.d1r + SLOT.ksr];
+            SLOT.eg_sel_d1r = eg_rate_select[(int)SLOT.d1r + SLOT.ksr];
         }
 
-        private void set_sr(YM2612Core.FM_SLOT SLOT, int v)
+        private void set_sr(FM_SLOT SLOT, int v)
         {
             SLOT.d2r = (v & 31) != 0 ? (uint)(32 + ((v & 31) << 1)) : 0U;
-            SLOT.eg_sh_d2r = YM2612Core.eg_rate_shift[(int)SLOT.d2r + SLOT.ksr];
-            SLOT.eg_sel_d2r = YM2612Core.eg_rate_select[(int)SLOT.d2r + SLOT.ksr];
+            SLOT.eg_sh_d2r = eg_rate_shift[(int)SLOT.d2r + SLOT.ksr];
+            SLOT.eg_sel_d2r = eg_rate_select[(int)SLOT.d2r + SLOT.ksr];
         }
 
-        private void set_sl_rr(YM2612Core.FM_SLOT SLOT, int v)
+        private void set_sl_rr(FM_SLOT SLOT, int v)
         {
-            SLOT.sl = YM2612Core.sl_table[v >> 4];
+            SLOT.sl = sl_table[v >> 4];
             if (SLOT.state == 3 && SLOT.volume >= (int)SLOT.sl)
                 SLOT.state = 2;
             SLOT.rr = (uint)(34 + ((v & 15) << 2));
-            SLOT.eg_sh_rr = YM2612Core.eg_rate_shift[(int)SLOT.rr + SLOT.ksr];
-            SLOT.eg_sel_rr = YM2612Core.eg_rate_select[(int)SLOT.rr + SLOT.ksr];
+            SLOT.eg_sh_rr = eg_rate_shift[(int)SLOT.rr + SLOT.ksr];
+            SLOT.eg_sel_rr = eg_rate_select[(int)SLOT.rr + SLOT.ksr];
         }
 
         private void advance_lfo()
@@ -1507,7 +1507,7 @@ namespace DuckGame
             do
             {
                 int index2 = 0;
-                YM2612Core.FM_SLOT fmSlot = ym2612.CH[(int)index1].SLOT[index2];
+                FM_SLOT fmSlot = ym2612.CH[(int)index1].SLOT[index2];
                 uint num = 4;
                 do
                 {
@@ -1519,7 +1519,7 @@ namespace DuckGame
                                 if ((fmSlot.ssg & 8) != 0)
                                 {
                                     if (fmSlot.volume < 512L)
-                                        fmSlot.volume += 4 * YM2612Core.eg_inc[fmSlot.eg_sel_rr + ((int)(egCnt >> fmSlot.eg_sh_rr) & 7)];
+                                        fmSlot.volume += 4 * eg_inc[fmSlot.eg_sel_rr + ((int)(egCnt >> fmSlot.eg_sh_rr) & 7)];
                                     if (fmSlot.volume >= 512L)
                                     {
                                         fmSlot.volume = 1023L;
@@ -1528,7 +1528,7 @@ namespace DuckGame
                                 }
                                 else
                                 {
-                                    fmSlot.volume += YM2612Core.eg_inc[fmSlot.eg_sel_rr + ((int)(egCnt >> fmSlot.eg_sh_rr) & 7)];
+                                    fmSlot.volume += eg_inc[fmSlot.eg_sel_rr + ((int)(egCnt >> fmSlot.eg_sh_rr) & 7)];
                                     if (fmSlot.volume >= 1023L)
                                     {
                                         fmSlot.volume = 1023L;
@@ -1546,13 +1546,13 @@ namespace DuckGame
                                 {
                                     if (fmSlot.volume < 512L)
                                     {
-                                        fmSlot.volume += 4 * YM2612Core.eg_inc[fmSlot.eg_sel_d2r + ((int)(egCnt >> fmSlot.eg_sh_d2r) & 7)];
+                                        fmSlot.volume += 4 * eg_inc[fmSlot.eg_sel_d2r + ((int)(egCnt >> fmSlot.eg_sh_d2r) & 7)];
                                         fmSlot.vol_out = (fmSlot.ssgn ^ fmSlot.ssg & 4) == 0 ? (uint)fmSlot.volume + fmSlot.tl : ((uint)(512UL - (ulong)fmSlot.volume) & 1023U) + fmSlot.tl;
                                         break;
                                     }
                                     break;
                                 }
-                                fmSlot.volume += YM2612Core.eg_inc[fmSlot.eg_sel_d2r + ((int)(egCnt >> fmSlot.eg_sh_d2r) & 7)];
+                                fmSlot.volume += eg_inc[fmSlot.eg_sel_d2r + ((int)(egCnt >> fmSlot.eg_sh_d2r) & 7)];
                                 if (fmSlot.volume >= 1023L)
                                     fmSlot.volume = 1023L;
                                 fmSlot.vol_out = (uint)fmSlot.volume + fmSlot.tl;
@@ -1566,13 +1566,13 @@ namespace DuckGame
                                 {
                                     if (fmSlot.volume < 512L)
                                     {
-                                        fmSlot.volume += 4 * YM2612Core.eg_inc[fmSlot.eg_sel_d1r + ((int)(egCnt >> fmSlot.eg_sh_d1r) & 7)];
+                                        fmSlot.volume += 4 * eg_inc[fmSlot.eg_sel_d1r + ((int)(egCnt >> fmSlot.eg_sh_d1r) & 7)];
                                         fmSlot.vol_out = (fmSlot.ssgn ^ fmSlot.ssg & 4) == 0 ? (uint)fmSlot.volume + fmSlot.tl : ((uint)(512UL - (ulong)fmSlot.volume) & 1023U) + fmSlot.tl;
                                     }
                                 }
                                 else
                                 {
-                                    fmSlot.volume += YM2612Core.eg_inc[fmSlot.eg_sel_d1r + ((int)(egCnt >> fmSlot.eg_sh_d1r) & 7)];
+                                    fmSlot.volume += eg_inc[fmSlot.eg_sel_d1r + ((int)(egCnt >> fmSlot.eg_sh_d1r) & 7)];
                                     fmSlot.vol_out = (uint)fmSlot.volume + fmSlot.tl;
                                 }
                                 if (fmSlot.volume >= (int)fmSlot.sl)
@@ -1586,7 +1586,7 @@ namespace DuckGame
                         case 4:
                             if ((egCnt & (1 << fmSlot.eg_sh_ar) - 1) == 0L)
                             {
-                                fmSlot.volume += ~fmSlot.volume * YM2612Core.eg_inc[fmSlot.eg_sel_ar + ((int)(egCnt >> fmSlot.eg_sh_ar) & 7)] >> 4;
+                                fmSlot.volume += ~fmSlot.volume * eg_inc[fmSlot.eg_sel_ar + ((int)(egCnt >> fmSlot.eg_sh_ar) & 7)] >> 4;
                                 if (fmSlot.volume <= 0L)
                                 {
                                     fmSlot.volume = 0L;
@@ -1598,7 +1598,7 @@ namespace DuckGame
                             break;
                     }
                     ++index2;
-                    if (index2 < ym2612.CH[(int)index1].SLOT.Count<YM2612Core.FM_SLOT>())
+                    if (index2 < ym2612.CH[(int)index1].SLOT.Count())
                         fmSlot = ym2612.CH[(int)index1].SLOT[index2];
                     --num;
                 }
@@ -1608,11 +1608,11 @@ namespace DuckGame
             while (index1 < 6U);
         }
 
-        private void update_ssg_eg_channel(YM2612Core.FM_SLOT[] SLOTS)
+        private void update_ssg_eg_channel(FM_SLOT[] SLOTS)
         {
             uint num = 4;
             int index = 0;
-            YM2612Core.FM_SLOT fmSlot = SLOTS[index];
+            FM_SLOT fmSlot = SLOTS[index];
             do
             {
                 if ((fmSlot.ssg & 8) != 0 && fmSlot.volume >= 512L && fmSlot.state > 1)
@@ -1646,14 +1646,14 @@ namespace DuckGame
                     fmSlot.vol_out = (fmSlot.ssgn ^ fmSlot.ssg & 4) == 0 ? (uint)fmSlot.volume + fmSlot.tl : ((uint)(512UL - (ulong)fmSlot.volume) & 1023U) + fmSlot.tl;
                 }
                 ++index;
-                if (index < SLOTS.Count<YM2612Core.FM_SLOT>())
+                if (index < SLOTS.Count())
                     fmSlot = SLOTS[index];
                 --num;
             }
             while (num != 0U);
         }
 
-        private void update_phase_lfo_slot(YM2612Core.FM_SLOT SLOT, long pms, uint block_fnum)
+        private void update_phase_lfo_slot(FM_SLOT SLOT, long pms, uint block_fnum)
         {
             long num1 = lfo_pm_table[((block_fnum & 2032U) >> 4 << 8) + pms + ym2612.OPN.LFO_PM];
             if (num1 != 0L)
@@ -1661,7 +1661,7 @@ namespace DuckGame
                 block_fnum = (uint)(block_fnum * 2U + (ulong)num1);
                 byte num2 = (byte)((block_fnum & 28672U) >> 12);
                 block_fnum &= 4095U;
-                int index = num2 << 2 | YM2612Core.opn_fktable[(int)(block_fnum >> 8)];
+                int index = num2 << 2 | opn_fktable[(int)(block_fnum >> 8)];
                 int num3 = (int)((ym2612.OPN.fn_table[(int)block_fnum] >> 7 - num2) + SLOT.DT.value[index]);
                 if (num3 < 0)
                     num3 += (int)ym2612.OPN.fn_max;
@@ -1671,7 +1671,7 @@ namespace DuckGame
                 SLOT.phase += (uint)SLOT.Incr;
         }
 
-        private void update_phase_lfo_channel(YM2612Core.FM_CH CH)
+        private void update_phase_lfo_channel(FM_CH CH)
         {
             uint blockFnum = CH.block_fnum;
             long num1 = lfo_pm_table[((blockFnum & 2032U) >> 4 << 8) + CH.pms + ym2612.OPN.LFO_PM];
@@ -1680,7 +1680,7 @@ namespace DuckGame
                 uint num2 = (uint)(blockFnum * 2U + (ulong)num1);
                 byte num3 = (byte)((num2 & 28672U) >> 12);
                 uint index1 = num2 & 4095U;
-                int index2 = num3 << 2 | YM2612Core.opn_fktable[(int)(index1 >> 8)];
+                int index2 = num3 << 2 | opn_fktable[(int)(index1 >> 8)];
                 int num4;
                 int num5 = (int)((num4 = (int)(ym2612.OPN.fn_table[(int)index1] >> 7 - num3)) + CH.SLOT[0].DT.value[index2]);
                 if (num5 < 0)
@@ -1708,7 +1708,7 @@ namespace DuckGame
             }
         }
 
-        private void refresh_fc_eg_slot(YM2612Core.FM_SLOT SLOT, int fc, int kc)
+        private void refresh_fc_eg_slot(FM_SLOT SLOT, int fc, int kc)
         {
             fc += (int)SLOT.DT.value[kc];
             if (fc < 0)
@@ -1720,23 +1720,23 @@ namespace DuckGame
             SLOT.ksr = (byte)kc;
             if (SLOT.ar + kc < 94L)
             {
-                SLOT.eg_sh_ar = YM2612Core.eg_rate_shift[SLOT.ar + kc];
-                SLOT.eg_sel_ar = YM2612Core.eg_rate_select[SLOT.ar + kc];
+                SLOT.eg_sh_ar = eg_rate_shift[SLOT.ar + kc];
+                SLOT.eg_sel_ar = eg_rate_select[SLOT.ar + kc];
             }
             else
             {
                 SLOT.eg_sh_ar = 0;
                 SLOT.eg_sel_ar = 144;
             }
-            SLOT.eg_sh_d1r = YM2612Core.eg_rate_shift[SLOT.d1r + kc];
-            SLOT.eg_sel_d1r = YM2612Core.eg_rate_select[SLOT.d1r + kc];
-            SLOT.eg_sh_d2r = YM2612Core.eg_rate_shift[SLOT.d2r + kc];
-            SLOT.eg_sel_d2r = YM2612Core.eg_rate_select[SLOT.d2r + kc];
-            SLOT.eg_sh_rr = YM2612Core.eg_rate_shift[SLOT.rr + kc];
-            SLOT.eg_sel_rr = YM2612Core.eg_rate_select[SLOT.rr + kc];
+            SLOT.eg_sh_d1r = eg_rate_shift[SLOT.d1r + kc];
+            SLOT.eg_sel_d1r = eg_rate_select[SLOT.d1r + kc];
+            SLOT.eg_sh_d2r = eg_rate_shift[SLOT.d2r + kc];
+            SLOT.eg_sel_d2r = eg_rate_select[SLOT.d2r + kc];
+            SLOT.eg_sh_rr = eg_rate_shift[SLOT.rr + kc];
+            SLOT.eg_sel_rr = eg_rate_select[SLOT.rr + kc];
         }
 
-        private void refresh_fc_eg_chan(YM2612Core.FM_CH CH)
+        private void refresh_fc_eg_chan(FM_CH CH)
         {
             if (CH.SLOT[0].Incr != -1L)
                 return;
@@ -1748,7 +1748,7 @@ namespace DuckGame
             refresh_fc_eg_slot(CH.SLOT[3], fc, kcode);
         }
 
-        private uint volume_calc(YM2612Core.FM_SLOT slot, uint AM) => slot.vol_out + (AM & slot.AMmask);
+        private uint volume_calc(FM_SLOT slot, uint AM) => slot.vol_out + (AM & slot.AMmask);
 
         private int op_calc(uint phase, uint env, int pm)
         {
@@ -1762,7 +1762,7 @@ namespace DuckGame
             return index >= 6656U ? 0 : tl_tab[(int)index];
         }
 
-        private void chan_calc(YM2612Core.FM_CH CH)
+        private void chan_calc(FM_CH CH)
         {
             uint AM = ym2612.OPN.LFO_AM >> CH.ams;
             uint env1 = volume_calc(CH.SLOT[0], AM);
@@ -1826,7 +1826,7 @@ namespace DuckGame
                             ym2612.OPN.LFO_AM = 0U;
                             ym2612.OPN.LFO_PM = 0U;
                         }
-                        ym2612.OPN.lfo_timer_overflow = YM2612Core.lfo_samples_per_step[v & 7] << 24;
+                        ym2612.OPN.lfo_timer_overflow = lfo_samples_per_step[v & 7] << 24;
                         break;
                     }
                     ym2612.OPN.lfo_timer_overflow = 0U;
@@ -1852,7 +1852,7 @@ namespace DuckGame
                         break;
                     if ((v & 4) != 0)
                         index += 3;
-                    YM2612Core.FM_CH CH = ym2612.CH[index];
+                    FM_CH CH = ym2612.CH[index];
                     if ((v & 16) != 0)
                         FM_KEYON(CH, 0);
                     else
@@ -1886,8 +1886,8 @@ namespace DuckGame
                 return;
             if (r >= 256)
                 ch += 3;
-            YM2612Core.FM_CH CH = ym2612.CH[ch];
-            YM2612Core.FM_SLOT SLOT = CH.SLOT[OPN_SLOT(r)];
+            FM_CH CH = ym2612.CH[ch];
+            FM_SLOT SLOT = CH.SLOT[OPN_SLOT(r)];
             switch (r & 240)
             {
                 case 48:
@@ -1926,7 +1926,7 @@ namespace DuckGame
                         case 0:
                             uint num1 = (uint)((uint)((ym2612.OPN.ST.fn_h & 7) << 8) + (ulong)v);
                             byte num2 = (byte)((uint)ym2612.OPN.ST.fn_h >> 3);
-                            CH.kcode = (byte)((uint)num2 << 2 | YM2612Core.opn_fktable[(int)(num1 >> 7)]);
+                            CH.kcode = (byte)((uint)num2 << 2 | opn_fktable[(int)(num1 >> 7)]);
                             CH.fc = ym2612.OPN.fn_table[(int)num1 * 2] >> 7 - num2;
                             CH.block_fnum = (uint)num2 << 11 | num1;
                             CH.SLOT[0].Incr = -1L;
@@ -1939,7 +1939,7 @@ namespace DuckGame
                                 return;
                             uint num3 = (uint)((uint)((ym2612.OPN.SL3.fn_h & 7) << 8) + (ulong)v);
                             byte num4 = (byte)((uint)ym2612.OPN.SL3.fn_h >> 3);
-                            ym2612.OPN.SL3.kcode[ch] = (byte)((uint)num4 << 2 | YM2612Core.opn_fktable[(int)(num3 >> 7)]);
+                            ym2612.OPN.SL3.kcode[ch] = (byte)((uint)num4 << 2 | opn_fktable[(int)(num3 >> 7)]);
                             ym2612.OPN.SL3.fc[ch] = ym2612.OPN.fn_table[(int)num3 * 2] >> 7 - num4;
                             ym2612.OPN.SL3.block_fnum[ch] = (uint)num4 << 11 | num3;
                             ym2612.CH[2].SLOT[0].Incr = -1L;
@@ -1963,7 +1963,7 @@ namespace DuckGame
                             return;
                         case 1:
                             CH.pms = (v & 7) * 32;
-                            CH.ams = YM2612Core.lfo_ams_depth_shift[v >> 4 & 3];
+                            CH.ams = lfo_ams_depth_shift[v >> 4 & 3];
                             ym2612.OPN.pan[ch * 2] = (v & 128) != 0 ? uint.MaxValue : 0U;
                             ym2612.OPN.pan[ch * 2 + 1] = (v & 64) != 0 ? uint.MaxValue : 0U;
                             return;
@@ -1979,7 +1979,7 @@ namespace DuckGame
             {
                 for (int index2 = 0; index2 <= 31; ++index2)
                 {
-                    double num = YM2612Core.dt_tab[index1 * 32 + index2] * freqbase * 64.0;
+                    double num = dt_tab[index1 * 32 + index2] * freqbase * 64.0;
                     ym2612.OPN.ST.dt_tab[index1].value[index2] = (int)num;
                     ym2612.OPN.ST.dt_tab[index1 + 4].value[index2] = -ym2612.OPN.ST.dt_tab[index1].value[index2];
                 }
@@ -2001,7 +2001,7 @@ namespace DuckGame
             init_timetables(freqbase);
         }
 
-        private void reset_channels(YM2612Core.FM_CH[] CH, int num)
+        private void reset_channels(FM_CH[] CH, int num)
         {
             for (int index1 = 0; index1 < num; ++index1)
             {
@@ -2056,7 +2056,7 @@ namespace DuckGame
                             if ((index4 & 1 << (int)index6) != 0)
                             {
                                 uint num9 = index6 * 8U;
-                                num8 += YM2612Core.lfo_pm_output[(int)num9 + (int)num7, index5];
+                                num8 += lfo_pm_output[(int)num9 + (int)num7, index5];
                             }
                         }
                         lfo_pm_table[index4 * 32 * 8 + index3 * 32 + index5] = num8;
@@ -2325,7 +2325,7 @@ namespace DuckGame
 
         public class FM_CH
         {
-            public YM2612Core.FM_SLOT[] SLOT = new YM2612Core.FM_SLOT[4];
+            public FM_SLOT[] SLOT = new FM_SLOT[4];
             public byte ALGO;
             public byte FB;
             public long[] op1_out = new long[2];
@@ -2343,10 +2343,10 @@ namespace DuckGame
 
             public FM_CH()
             {
-                SLOT[0] = new YM2612Core.FM_SLOT();
-                SLOT[1] = new YM2612Core.FM_SLOT();
-                SLOT[2] = new YM2612Core.FM_SLOT();
-                SLOT[3] = new YM2612Core.FM_SLOT();
+                SLOT[0] = new FM_SLOT();
+                SLOT[1] = new FM_SLOT();
+                SLOT[2] = new FM_SLOT();
+                SLOT[3] = new FM_SLOT();
             }
         }
 
@@ -2385,8 +2385,8 @@ namespace DuckGame
 
         public class FM_OPN
         {
-            public YM2612Core.FM_ST ST = new YM2612Core.FM_ST();
-            public YM2612Core.FM_3SLOT SL3 = new YM2612Core.FM_3SLOT();
+            public FM_ST ST = new FM_ST();
+            public FM_3SLOT SL3 = new FM_3SLOT();
             public uint[] pan = new uint[12];
             public uint eg_cnt;
             public uint eg_timer;
@@ -2404,15 +2404,15 @@ namespace DuckGame
 
         public class _YM2612_data
         {
-            public YM2612Core.FM_CH[] CH = new YM2612Core.FM_CH[6];
+            public FM_CH[] CH = new FM_CH[6];
             public byte dacen;
             public long dacout;
-            public YM2612Core.FM_OPN OPN = new YM2612Core.FM_OPN();
+            public FM_OPN OPN = new FM_OPN();
 
             public _YM2612_data()
             {
                 for (int index = 0; index < 6; ++index)
-                    CH[index] = new YM2612Core.FM_CH();
+                    CH[index] = new FM_CH();
             }
         }
     }

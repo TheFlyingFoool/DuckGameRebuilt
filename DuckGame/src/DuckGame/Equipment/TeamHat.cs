@@ -35,7 +35,7 @@ namespace DuckGame
         private float glow;
         private bool _filter;
         //private int _lastParticleFrame;
-        private List<TeamHat.CustomParticle> _addedParticles;
+        private List<CustomParticle> _addedParticles;
         private float _quackWait;
         private float _quackHold;
 
@@ -287,7 +287,7 @@ namespace DuckGame
                 if (team.customParticles.Count <= 0)
                     return;
                 if (_addedParticles == null)
-                    _addedParticles = new List<TeamHat.CustomParticle>();
+                    _addedParticles = new List<CustomParticle>();
                 int num1 = team.metadata.ParticleCount.value;
                 Vec2 vec2_1 = new Vec2((float)(-team.metadata.ParticleEmitShapeSize.value.x / 2.0), (float)(-team.metadata.ParticleEmitShapeSize.value.y / 2.0));
                 Vec2 vec2_2 = new Vec2(team.metadata.ParticleEmitShapeSize.value.x / 2f, team.metadata.ParticleEmitShapeSize.value.y / 2f);
@@ -350,7 +350,7 @@ namespace DuckGame
                             pPosition += vec2_5;
                         }
                     }
-                    TeamHat.CustomParticle customParticle = new TeamHat.CustomParticle(pPosition, this, team.metadata);
+                    CustomParticle customParticle = new CustomParticle(pPosition, this, team.metadata);
                     if (team.metadata.ParticleAnimated.value)
                     {
                         customParticle.animationFrames = team.customParticles;
@@ -480,9 +480,9 @@ namespace DuckGame
             _wave.Update();
             if (_isKatanaHat && !(Level.current is RockScoreboard))
             {
-                DuckGame.Graphics.material = _katanaMaterial;
+                Graphics.material = _katanaMaterial;
                 base.Draw();
-                DuckGame.Graphics.material = null;
+                Graphics.material = null;
             }
             else if (_team != null && _team.metadata != null)
             {
@@ -519,10 +519,10 @@ namespace DuckGame
                         _specialSprite.scale = scale;
                         _specialSprite.depth = depth - 10;
                         _specialSprite.angle += 0.02f;
-                        float num = 0.8f + this._wave.normalized * 0.2f;
+                        float num = 0.8f + _wave.normalized * 0.2f;
                         _specialSprite.scale = new Vec2(num, num);
                         Vec2 vec2 = Offset(new Vec2(2f, 4f));
-                        DuckGame.Graphics.Draw(_specialSprite, vec2.x, vec2.y);
+                        Graphics.Draw(_specialSprite, vec2.x, vec2.y);
                     }
                 }
                 else if (_sprite.frame == 1 && _sprite.texture.textureName == "hats/master")
@@ -539,16 +539,16 @@ namespace DuckGame
                     if (this.offDir < 0)
                     {
                         Vec2 vec2_1 = Offset(new Vec2(1f, 2f));
-                        DuckGame.Graphics.Draw(_specialSprite, vec2_1.x, vec2_1.y);
+                        Graphics.Draw(_specialSprite, vec2_1.x, vec2_1.y);
                         Vec2 vec2_2 = Offset(new Vec2(5f, 2f));
-                        DuckGame.Graphics.Draw(_specialSprite, vec2_2.x, vec2_2.y);
+                        Graphics.Draw(_specialSprite, vec2_2.x, vec2_2.y);
                     }
                     else
                     {
                         Vec2 vec2_3 = Offset(new Vec2(0f, 2f));
-                        DuckGame.Graphics.Draw(_specialSprite, vec2_3.x, vec2_3.y);
+                        Graphics.Draw(_specialSprite, vec2_3.x, vec2_3.y);
                         Vec2 vec2_4 = Offset(new Vec2(4f, 2f));
-                        DuckGame.Graphics.Draw(_specialSprite, vec2_4.x, vec2_4.y);
+                        Graphics.Draw(_specialSprite, vec2_4.x, vec2_4.y);
                     }
                     if (glow > 0.0)
                         glow -= 0.02f;

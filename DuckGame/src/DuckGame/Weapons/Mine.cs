@@ -210,7 +210,7 @@ namespace DuckGame
                     _ducksOnMine.Remove(key);
                 if (addWeight < _holdingWeight & flag1 && flag2)
                 {
-                    Thing.Fondle(this, DuckNetwork.localConnection);
+                    Fondle(this, DuckNetwork.localConnection);
                     if (!_armed)
                         Arm();
                     else
@@ -314,7 +314,7 @@ namespace DuckGame
         {
             if (bullet.isLocal && owner == null && !canPickUp && _timer > 0.0)
             {
-                Thing.Fondle(this, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
                 BlowUp();
             }
             return false;

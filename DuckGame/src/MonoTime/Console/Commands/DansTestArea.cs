@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using RectpackSharp;
 using SDL2;
 using System;
@@ -40,7 +41,7 @@ namespace DuckGame
                     texturename = texs[r.Id].Value;
                     Texture2D tex = texs[r.Id].Key;
                     Color[] data = new Color[tex.Width * tex.Height];
-                    texs[r.Id].Key.GetData<Color>(data);
+                    texs[r.Id].Key.GetData(data);
                     for (int x = 0; x < r.Width; x++)
                     {
                         for (int y = 0; y < r.Height; y++)
@@ -63,7 +64,7 @@ namespace DuckGame
                     DevConsole.Log("Error handling Texture " + texturename + " " + file + " " + ex.Message, Color.Red);
                 }
             }
-            System.IO.File.WriteAllLines(@"..\" + file + "_offsets.txt", strings);
+            File.WriteAllLines(@"..\" + file + "_offsets.txt", strings);
             bigimage.Bitmap.Save(@"..\" + file + ".png", ImageFormat.Png);
             bigimage.Dispose();
         }
@@ -109,8 +110,10 @@ namespace DuckGame
         }
         public static void TextureInit()
         {
-            Tex2D extraButton = new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(HatSelector.ButtonSprite))), "button");
-            extraButton.Namebase = "nikoextraButton";
+            Tex2D extraButton = new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(HatSelector.ButtonSprite))), "button")
+            {
+                Namebase = "nikoextraButton"
+            };
             Content.textures[extraButton.Namebase] = extraButton;
             foreach (Thing thing in Editor.thingMap.Values) // those texures get created on the fly so we just going to make them here to save
             {
@@ -128,40 +131,41 @@ namespace DuckGame
             PackTextures(MTSpriteBatcher.Texidonthave, null, "unsaved"); ;
             PackTextures(Content.textures.Values.ToList(), unneeedtexs, "spriteatlas");
         }
-        public static void drawthething()
+        [DrawingContext(DrawingLayer.Foreground, CustomID = "cells", DoDraw = false)]
+        public static void DrawCells()
         {
             //Buckets.Keys
-            //if (Level.current != null)
-            //{
+            if (Level.current != null)
+            {
 
 
-            //    //Vec2 offset = new Vec2(0f, 0f);
-            //    //for (int x = 0; x < 21; x++)
-            //    //{
-            //    //    for (int y = 0; y < 21; y++)
-            //    //    {
-            //    //        DuckGame.Graphics.DrawRect(new Vec2(bottomright.x * x, bottomright.y * y), new Vec2(bottomright.x * (x + 1), bottomright.y * (y + 1)), Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
-            //    //    }
-            //    //}
-            //    float offset = QuadTreeObjectList.offset / QuadTreeObjectList.cellsize;
-            //    float suboffset = QuadTreeObjectList.cellsize / 4;
-            //    foreach (Vec2 bucket in Level.current.things.Buckets.Keys)
-            //    {
-            //        //foreach (Thing t in Level.current.things.Buckets[bucket][typeof(Thing)])
-            //        //{
-            //        //    DuckGame.Graphics.DrawRect(t.topLeft, t.bottomRight, Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
-            //        //}
-            //        Graphics.DrawString(bucket.x.ToString() + " " + bucket.y.ToString(), new Vec2(((bucket.x - offset) * QuadTreeObjectList.cellsize) + suboffset, ((bucket.y - offset) * QuadTreeObjectList.cellsize) + suboffset), Color.Green, default(Depth), null, 0.8f);
-            //        DuckGame.Graphics.DrawRect(new Vec2((bucket.x - offset) * QuadTreeObjectList.cellsize, (bucket.y - offset) * QuadTreeObjectList.cellsize), new Vec2((bucket.x - offset + 1) * QuadTreeObjectList.cellsize, (bucket.y - offset + 1) * QuadTreeObjectList.cellsize), Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
-            //    }
-            //}
+                //Vec2 offset = new Vec2(0f, 0f);
+                //for (int x = 0; x < 21; x++)
+                //{
+                //    for (int y = 0; y < 21; y++)
+                //    {
+                //        DuckGame.Graphics.DrawRect(new Vec2(bottomright.x * x, bottomright.y * y), new Vec2(bottomright.x * (x + 1), bottomright.y * (y + 1)), Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
+                //    }
+                //}
+                float offset = QuadTreeObjectList.offset / QuadTreeObjectList.cellsize;
+                float suboffset = QuadTreeObjectList.cellsize / 4;
+                foreach (Vec2 bucket in Level.current.things.Buckets.Keys)
+                {
+                    //foreach (Thing t in Level.current.things.Buckets[bucket][typeof(Thing)])
+                    //{
+                    //    DuckGame.Graphics.DrawRect(t.topLeft, t.bottomRight, Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
+                    //}
+                    Graphics.DrawString(bucket.x.ToString() + " " + bucket.y.ToString(), new Vec2(((bucket.x - offset) * QuadTreeObjectList.cellsize) + suboffset, ((bucket.y - offset) * QuadTreeObjectList.cellsize) + suboffset), Color.Green, (Depth)1f, null, 0.8f);
+                    Graphics.DrawRect(new Vec2((bucket.x - offset) * QuadTreeObjectList.cellsize, (bucket.y - offset) * QuadTreeObjectList.cellsize), new Vec2((bucket.x - offset + 1) * QuadTreeObjectList.cellsize, (bucket.y - offset + 1) * QuadTreeObjectList.cellsize), Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
+                }
+            }
 
         }
         [DevConsoleCommand]
         public static void graphiccull()
         {
-            DGRSettings.S_GraphicsCulling = !DGRSettings.S_GraphicsCulling;
-            DevConsole.Log("grahpic culling " + DGRSettings.S_GraphicsCulling.ToString());
+            DGRSettings.GraphicsCulling = !DGRSettings.GraphicsCulling;
+            DevConsole.Log("grahpic culling " + DGRSettings.GraphicsCulling.ToString());
 
         }
         public static bool looking;
@@ -187,37 +191,13 @@ namespace DuckGame
             {
                 looking = false;
             }
-
         }
-        //[DevConsoleCommand(Name = "b3")]
-        //public static void b3()
+        //public static int usedfornonsense = 0;
+        //[DevConsoleCommand(Name = "dividebyzero")]
+        //public static void mathexpection()
         //{
-        //    //GhostMesser.Test();
+        //    usedfornonsense = 1 / usedfornonsense;
         //}
-        [DevConsoleCommand(Name = "b1")]
-        public static void b1()
-        {
-            foreach(Duck duck in Level.current.things[typeof(Duck)])
-            {
-                if (duck != null)
-                {
-                    Level.Add(new Crate(duck.x, duck.y));
-                }
-            }
-        }
-        [DevConsoleCommand(Name = "showowner")]
-        public static void showowner()
-        {
-            drawowner = !drawowner;
-            DevConsole.Log("draw owner " + drawowner.ToString());
-        }
-        public static bool notakeb = false;
-        [DevConsoleCommand(Name = "notake")]
-        public static void notake()
-        {
-            notakeb = !notakeb;
-            DevConsole.Log("notake owner " + notakeb.ToString());
-        }
 
         [DevConsoleCommand(Name = "bettertake")]
         public static void bettertake()
@@ -364,13 +344,26 @@ namespace DuckGame
             DevConsole.Log("Starting Lan Test bud");
         }
         //RandomSkySay();
+
+        public static void SetControllerLightBar(int index, Color color)
+        {
+            GamePadState state = FNAPlatform.GetGamePadState(index, GamePadDeadZone.IndependentAxes);
+            if (state.IsConnected)
+                FNAPlatform.SetGamePadLightBar(index, (Microsoft.Xna.Framework.Color)color);
+        }
+
         [DevConsoleCommand(Name = "dr")]
         public static void debugrandom()
         {
-            if (Level.current == null || !(Level.current.things[typeof(CityBackground)].FirstOrDefault<Thing>() is CityBackground cityBackground))
-                return;
-            cityBackground.RandomSkySay();
-            DevConsole.Log("random test");
+            for (int index = 0; index < MonoMain.MaximumGamepadCount; index++)
+            {
+                SetControllerLightBar(index, Color.Magenta);
+            }
+           
+            //if (Level.current == null || !(Level.current.things[typeof(CityBackground)].FirstOrDefault<Thing>() is CityBackground cityBackground))
+            //    return;
+            //cityBackground.RandomSkySay();
+            //DevConsole.Log("random test");
         }
         [DevConsoleCommand(Name = "savegraphic")]
         public static void seetheunseen()

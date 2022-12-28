@@ -60,32 +60,32 @@ namespace DuckGame
 
         public static int winsPerSet
         {
-            get => Deathmatch._winsPerSet;
-            set => Deathmatch._winsPerSet = value;
+            get => _winsPerSet;
+            set => _winsPerSet = value;
         }
 
         public static int roundsBetweenIntermission
         {
-            get => Deathmatch._roundsBetweenIntermission;
-            set => Deathmatch._roundsBetweenIntermission = value;
+            get => _roundsBetweenIntermission;
+            set => _roundsBetweenIntermission = value;
         }
 
         public static int userMapsPercent
         {
-            get => Deathmatch._userMapsPercent;
-            set => Deathmatch._userMapsPercent = value;
+            get => _userMapsPercent;
+            set => _userMapsPercent = value;
         }
 
         public static bool enableRandom
         {
-            get => Deathmatch._enableRandom;
-            set => Deathmatch._enableRandom = value;
+            get => _enableRandom;
+            set => _enableRandom = value;
         }
 
         public static bool randomMapsOnly
         {
-            get => Deathmatch._randomMapsOnly;
-            set => Deathmatch._randomMapsOnly = value;
+            get => _randomMapsOnly;
+            set => _randomMapsOnly = value;
         }
 
         public Deathmatch(Level l)
@@ -125,24 +125,24 @@ namespace DuckGame
 
         public override void Terminate() => Options.openOnClose = null;
 
-        public static string RandomLevelString(string ignore = "", string folder = "deathmatch") => Deathmatch.RandomLevelString(ignore, folder, false);
+        public static string RandomLevelString(string ignore = "", string folder = "deathmatch") => RandomLevelString(ignore, folder, false);
 
         public static string RandomLevelString(string ignore, string folder, bool forceCustom)
         {
             List<string> stringList1 = new List<string>();
-            if (Deathmatch._fourPlayerLevels == null || Network.isActive != Deathmatch._prevNetworkSetting || TeamSelect2.eightPlayersActive != Deathmatch._prevEightPlayerSetting)
+            if (_fourPlayerLevels == null || Network.isActive != _prevNetworkSetting || TeamSelect2.eightPlayersActive != _prevEightPlayerSetting)
             {
-                Deathmatch._prevNetworkSetting = Network.isActive;
-                Deathmatch._prevEightPlayerSetting = TeamSelect2.eightPlayersActive;
-                Deathmatch._fourPlayerLevels = Content.GetLevels(folder, LevelLocation.Content, false, Network.isActive, false);
-                Deathmatch._eightPlayerNonRestrictedLevels = Content.GetLevels(folder, LevelLocation.Content, false, Network.isActive, true, true);
-                Deathmatch._eightPlayerAllLevels = Content.GetLevels(folder, LevelLocation.Content, false, Network.isActive, true);
-                Deathmatch._rareLevels = Content.GetLevels(folder + "/rare", LevelLocation.Content, false, Network.isActive, TeamSelect2.eightPlayersActive);
+                _prevNetworkSetting = Network.isActive;
+                _prevEightPlayerSetting = TeamSelect2.eightPlayersActive;
+                _fourPlayerLevels = Content.GetLevels(folder, LevelLocation.Content, false, Network.isActive, false);
+                _eightPlayerNonRestrictedLevels = Content.GetLevels(folder, LevelLocation.Content, false, Network.isActive, true, true);
+                _eightPlayerAllLevels = Content.GetLevels(folder, LevelLocation.Content, false, Network.isActive, true);
+                _rareLevels = Content.GetLevels(folder + "/rare", LevelLocation.Content, false, Network.isActive, TeamSelect2.eightPlayersActive);
                 if (Network.isActive)
                 {
-                    Deathmatch._fourPlayerLevels.AddRange(Content.GetLevels(folder + "/online_only", LevelLocation.Content, false, Network.isActive, false));
-                    Deathmatch._eightPlayerNonRestrictedLevels.AddRange(Content.GetLevels(folder + "/online_only", LevelLocation.Content, false, Network.isActive, false, true));
-                    Deathmatch._eightPlayerAllLevels.AddRange(Content.GetLevels(folder + "/online_only", LevelLocation.Content, false, Network.isActive, true));
+                    _fourPlayerLevels.AddRange(Content.GetLevels(folder + "/online_only", LevelLocation.Content, false, Network.isActive, false));
+                    _eightPlayerNonRestrictedLevels.AddRange(Content.GetLevels(folder + "/online_only", LevelLocation.Content, false, Network.isActive, false, true));
+                    _eightPlayerAllLevels.AddRange(Content.GetLevels(folder + "/online_only", LevelLocation.Content, false, Network.isActive, true));
                 }
             }
             if (TeamSelect2.eightPlayersActive)
@@ -182,7 +182,7 @@ namespace DuckGame
                 else
                 {
                     int num = TeamSelect2.randomMapPercent;
-                    if (Deathmatch._lastLevelWasPyramid)
+                    if (_lastLevelWasPyramid)
                         num = (int)(num * 0.5);
                     foreach (MapRollGroup mapRollGroup3 in (IEnumerable<MapRollGroup>)new List<MapRollGroup>()
           {
@@ -199,14 +199,14 @@ namespace DuckGame
             new MapRollGroup()
             {
               type = MapRollType.Custom,
-              chance = Deathmatch.userMapsPercent
+              chance = userMapsPercent
             },
             new MapRollGroup()
             {
               type = MapRollType.Internet,
               chance = TeamSelect2.workshopMapPercent
             }
-          }.OrderBy<MapRollGroup, int>(x => Rando.Int(2147483646)))
+          }.OrderBy(x => Rando.Int(2147483646)))
                     {
                         if ((mapRollGroup3.type != MapRollType.Custom || Editor.customLevelCount != 0) && (mapRollGroup3.type != MapRollType.Internet || RandomLevelDownloader.PeekNextLevel() != null))
                         {
@@ -234,10 +234,10 @@ namespace DuckGame
                         int num = 0;
                         do
                         {
-                            ++Deathmatch.clientLevelRoundRobin;
+                            ++clientLevelRoundRobin;
                             foreach (Profile profile2 in DuckNetwork.profiles)
                             {
-                                if (profile2.connection != null && profile2.slotType != SlotType.Local && profile2.networkIndex == Deathmatch.clientLevelRoundRobin % GameLevel.NumberOfDucks && (profile2.connection != DuckNetwork.localConnection || Editor.activatedLevels.Count != 0) && (profile2.connection == DuckNetwork.localConnection || profile2.numClientCustomLevels != 0))
+                                if (profile2.connection != null && profile2.slotType != SlotType.Local && profile2.networkIndex == clientLevelRoundRobin % GameLevel.NumberOfDucks && (profile2.connection != DuckNetwork.localConnection || Editor.activatedLevels.Count != 0) && (profile2.connection == DuckNetwork.localConnection || profile2.numClientCustomLevels != 0))
                                 {
                                     profile1 = profile2;
                                     break;
@@ -245,7 +245,7 @@ namespace DuckGame
                             }
                             ++num;
                             if (num > 10)
-                                return Deathmatch.RandomLevelString(ignore, folder);
+                                return RandomLevelString(ignore, folder);
                         }
                         while (profile1 == null);
                         if (profile1.connection != DuckNetwork.localConnection)
@@ -258,10 +258,10 @@ namespace DuckGame
                 }
             }
             if (_recentLevels.Count > stringList1.Count * 0.8f)
-                Deathmatch._recentLevels.Clear();
+                _recentLevels.Clear();
             List<string> stringList2 = new List<string>();
             stringList2.AddRange(stringList1);
-            Deathmatch._lastLevelWasPyramid = false;
+            _lastLevelWasPyramid = false;
             string str = "";
             while (str == "")
             {
@@ -270,9 +270,9 @@ namespace DuckGame
                     str = "RANDOM";
                     break;
                 }
-                if (stringList1.Count == 0 && Deathmatch._recentLevels.Count > 0)
+                if (stringList1.Count == 0 && _recentLevels.Count > 0)
                 {
-                    str = Deathmatch._recentLevels.Dequeue();
+                    str = _recentLevels.Dequeue();
                     if (!stringList2.Contains(str))
                         str = "";
                 }
@@ -282,22 +282,22 @@ namespace DuckGame
                 }
                 else
                 {
-                    str = stringList1[Rando.Int(stringList1.Count<string>() - 1)];
+                    str = stringList1[Rando.Int(stringList1.Count() - 1)];
                     if (str == ignore && stringList1.Count > 1)
                     {
                         stringList1.Remove(str);
                         str = "";
                     }
-                    else if (!TeamSelect2.eightPlayersActive && Deathmatch._eightPlayerNonRestrictedLevels.Contains(str) && Rando.Float(1f) > 0.2f)
+                    else if (!TeamSelect2.eightPlayersActive && _eightPlayerNonRestrictedLevels.Contains(str) && Rando.Float(1f) > 0.2f)
                     {
                         stringList1.Remove(str);
                         str = "";
                     }
-                    else if (!Deathmatch._rareLevels.Contains(str) || Rando.Float(1f) > 0.75f)
+                    else if (!_rareLevels.Contains(str) || Rando.Float(1f) > 0.75f)
                     {
-                        if (Deathmatch._recentLevels.Contains(str))
+                        if (_recentLevels.Contains(str))
                         {
-                            if (Deathmatch._recentLevels.LastOrDefault<string>() == str)
+                            if (_recentLevels.LastOrDefault() == str)
                             {
                                 stringList1.Remove(str);
                                 str = "";
@@ -317,9 +317,9 @@ namespace DuckGame
                 }
             }
             if (str != "RANDOM")
-                Deathmatch._recentLevels.Enqueue(str);
+                _recentLevels.Enqueue(str);
             else
-                Deathmatch._lastLevelWasPyramid = true;
+                _lastLevelWasPyramid = true;
             if (str.EndsWith(".custom"))
             {
                 LevelData dat = DuckFile.LoadLevel(str.Substring(0, str.Length - 7));
@@ -335,7 +335,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (Graphics.fade > 0.9f && Input.Pressed("START") && !NetworkDebugger.enabled)
+            if (Graphics.fade > 0.9f && Input.Pressed(Triggers.Start) && !NetworkDebugger.enabled)
             {
                 _pauseGroup.Open();
                 _pauseMenu.Open();
@@ -364,7 +364,7 @@ namespace DuckGame
                 else
                 {
                     if (Music.finished)
-                        Deathmatch._wait -= 0.0006f;
+                        _wait -= 0.0006f;
                     if (!_matchOver)
                     {
                         List<Team> teamList = new List<Team>();
@@ -395,9 +395,9 @@ namespace DuckGame
                         if (teamList.Count <= 1)
                         {
                             _matchOver = true;
-                            ++Deathmatch.numMatches;
-                            if (Deathmatch.numMatches >= Deathmatch.roundsBetweenIntermission || Deathmatch.showdown)
-                                Deathmatch.numMatches = 0;
+                            ++numMatches;
+                            if (numMatches >= roundsBetweenIntermission || showdown)
+                                numMatches = 0;
                         }
                     }
                     if (_matchOver)
@@ -435,7 +435,7 @@ namespace DuckGame
                         if (source.Count <= 1)
                         {
                             Highlights.highlightRatingMultiplier = 0f;
-                            Deathmatch.lastWinners.Clear();
+                            lastWinners.Clear();
                             if (source.Count > 0)
                             {
                                 Event.Log(new RoundEndEvent());
@@ -449,7 +449,7 @@ namespace DuckGame
                                         {
                                             if (activeProfile.duck != null && !activeProfile.duck.dead)
                                             {
-                                                Deathmatch.lastWinners.Add(activeProfile);
+                                                lastWinners.Add(activeProfile);
                                                 activeProfile.stats.lastWon = DateTime.Now;
                                                 ++activeProfile.stats.matchesWon;
                                                 Profile p = activeProfile;
@@ -466,16 +466,16 @@ namespace DuckGame
                                         }
                                     }
                                     if (Network.isActive && Network.isServer)
-                                        Send.Message(new NMAssignWin(Deathmatch.lastWinners, null));
-                                    ++source.First<Team>().score;
+                                        Send.Message(new NMAssignWin(lastWinners, null));
+                                    ++source[0].score;
                                 }
                             }
                         }
                         _addedPoints = true;
                     }
-                    if (_deadTimer < 0.1f && !Deathmatch._endedHighlights)
+                    if (_deadTimer < 0.1f && !_endedHighlights)
                     {
-                        Deathmatch._endedHighlights = true;
+                        _endedHighlights = true;
                         Highlights.FinishRound();
                     }
                     if (_deadTimer >= 0.0 || switched || Network.isActive)
@@ -528,10 +528,10 @@ namespace DuckGame
 
         public void PlayMusic()
         {
-            string music = Music.RandomTrack("InGame", Deathmatch._currentSong);
+            string music = Music.RandomTrack("InGame", _currentSong);
             Music.Play(music, false);
-            Deathmatch._currentSong = music;
-            Deathmatch._wait = 1f;
+            _currentSong = music;
+            _wait = 1f;
         }
 
         //private SpawnPoint AttemptTeamSpawn(

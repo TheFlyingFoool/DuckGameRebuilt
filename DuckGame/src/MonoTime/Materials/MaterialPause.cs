@@ -34,8 +34,8 @@ namespace DuckGame
 
         public override void Apply()
         {
-            DuckGame.Graphics.device.Textures[1] = (Texture2D)_watermark;
-            DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
+            Graphics.device.Textures[1] = (Texture2D)_watermark;
+            Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
             SetValue("fade", _fade);
             SetValue("dim", dim);
             SetValue("scrollX", _scrollX);

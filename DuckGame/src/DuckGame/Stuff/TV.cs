@@ -97,7 +97,7 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             if (bullet.isLocal && owner == null)
-                Thing.Fondle(this, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
             if (!isServerForObject || _ruined || !bullet.isLocal)
                 return base.Hit(bullet, hitPos);
             OnDestroy(new DTShot(bullet));
@@ -163,7 +163,7 @@ namespace DuckGame
             if (!_ruined)
             {
                 channel = !channel;
-                SyncNetworkAction(new PhysicsObject.NetAction(SwitchChannelEffect));
+                SyncNetworkAction(new NetAction(SwitchChannelEffect));
             }
             base.OnPressAction();
         }

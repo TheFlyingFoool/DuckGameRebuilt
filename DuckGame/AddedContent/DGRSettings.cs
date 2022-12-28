@@ -1,43 +1,55 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms.VisualStyles;
 
 namespace DuckGame
 {
     public class DGRSettings
     {
-        [AutoConfigField]
-        public static string PreferredLevel = "";
-        public bool SpriteAtlas
+        public static void PrreloadLevels()
         {
-            get
+            MonoMain.NloadMessage = "Pre-Loading Custom Levels";
+
+            //steal code? we would never do such a thing -NiK0
+            try
             {
-                return S_SpriteAtlas;
+                HUD.hide = true;
+                //someone optimize the code later maybe lol
+                new LevelSelect("", null, null, false).Initialize();
+                HUD.CloseAllCorners();
+                HUD.hide = false;
             }
-            set
+            catch (Exception ex)
             {
-                S_SpriteAtlas = value;
+                DevConsole.Log("Failed to preload levels: " + ex.ToString(), Colors.DGRed);
             }
         }
         [AutoConfigField]
-        public static bool S_SpriteAtlas = true;
+        public static string PreferredLevel = "";
 
-        public bool RPC
+        [AutoConfigField]
+        public static bool PreloadLevels;
+
+        [AutoConfigField]
+        public static bool SpriteAtlas = true;
+
+        [AutoConfigField] 
+        public static bool S_RPC = false;
+        public static bool RPC
         {
-            get
-            {
-                return S_RPC;
-            }
+            get => S_RPC;
+
             set
             {
                 S_RPC = value;
+                if (S_RPC)
+                {
+                    DiscordRichPresence.Initialize();
+                }
+                else
+                {
+                    DiscordRichPresence.Deinitialize();
+                }
             }
         }
-        [AutoConfigField]
-        public static bool S_RPC = false;
         public int ParticleMultiplier
         {
             get
@@ -51,24 +63,31 @@ namespace DuckGame
                 int sixtyd = (int)Maths.Clamp(64f * ActualParticleMultiplier, 64, 5120);
                 BreathSmoke.kMaxObjects = sixtyd;
                 BreathSmoke._objects = new BreathSmoke[sixtyd];
+                BreathSmoke._lastActiveObject = (BreathSmoke._lastActiveObject) % BreathSmoke.kMaxObjects;
 
                 ConfettiParticle.kMaxSparks = sixtyd;
                 ConfettiParticle._sparks = new ConfettiParticle[sixtyd];
+                ConfettiParticle._lastActiveSpark = (ConfettiParticle._lastActiveSpark) % ConfettiParticle.kMaxSparks;
 
                 Feather.kMaxObjects = sixtyd;
                 Feather._objects = new Feather[sixtyd];
+                Feather._lastActiveObject = (Feather._lastActiveObject) % Feather.kMaxObjects;
 
                 MetalRebound.kMaxObjects = sixtyd / 2;
                 MetalRebound._objects = new MetalRebound[MetalRebound.kMaxObjects];
+                MetalRebound._lastActiveObject = (MetalRebound._lastActiveObject) % MetalRebound.kMaxObjects;
 
                 Spark.kMaxSparks = sixtyd;
                 Spark._sparks = new Spark[sixtyd];
+                Spark._lastActiveSpark = (Spark._lastActiveSpark) % Spark.kMaxSparks;
 
                 WagnusChargeParticle.kMaxWagCharge = sixtyd;
                 WagnusChargeParticle._sparks = new WagnusChargeParticle[sixtyd];
+                WagnusChargeParticle._lastActiveWagCharge = (WagnusChargeParticle._lastActiveWagCharge) % WagnusChargeParticle.kMaxWagCharge;
 
                 WoodDebris.kMaxObjects = sixtyd;
                 WoodDebris._objects = new WoodDebris[sixtyd];
+                WoodDebris._lastActiveObject = (WoodDebris._lastActiveObject) % WoodDebris.kMaxObjects;
             }
         }
         [AutoConfigField]
@@ -92,101 +111,44 @@ namespace DuckGame
                 };
             }
         }
-        public float WeatherMultiplier
-        {
-            get
-            {
-                return S_WeatherMultiplier;
-            }
-            set
-            {
-                S_WeatherMultiplier = value;
-            }
-        }
-        [AutoConfigField]
-        public static float S_WeatherMultiplier = 1;
 
-        public bool GraphicsCulling
-        {
-            get
-            {
-                return S_GraphicsCulling;
-            }
-            set
-            {
-                S_GraphicsCulling = value;
-            }
-        }
         [AutoConfigField]
-        public static bool S_GraphicsCulling = true;
+        public static float WeatherMultiplier = 1;
 
-        public bool CameraUnfollow
-        {
-            get
-            {
-                return S_CameraUnfollow;
-            }
-            set
-            {
-                S_CameraUnfollow = value;
-            }
-        }
         [AutoConfigField]
-        public static bool S_CameraUnfollow = true;
+        public static bool GraphicsCulling = true;
 
+        [AutoConfigField]
+        public static int StartIn = 0;
 
-        public bool dubberspeed
-        {
-            get
-            {
-                return s_dubberspeed;
-            }
-            set
-            {
-                s_dubberspeed = value;
-            }
-        }
         [AutoConfigField]
-        public static bool s_dubberspeed = false;
+        public static float WeatherLighting = 1;
 
-        public float RandomWeather
-        {
-            get
-            {
-                return S_RandomWeather;
-            }
-            set
-            {
-                S_RandomWeather = value;
-            }
-        }
         [AutoConfigField]
-        public static float S_RandomWeather = 0.3f;
-        public bool MenuMouse
-        {
-            get
-            {
-                return S_MenuMouse;
-            }
-            set
-            {
-                S_MenuMouse = value;
-            }
-        }
+        public static bool CameraUnfollow = true;
+
         [AutoConfigField]
-        public static bool S_MenuMouse = true;
-        public int RebuiltEffect
-        {
-            get
-            {
-                return S_RebuiltEffect;
-            }
-            set
-            {
-                S_RebuiltEffect = value;
-            }
-        }
+        public static bool dubberspeed = false;
+
         [AutoConfigField]
-        public static int S_RebuiltEffect = 1;
+        public static float RandomWeather = 0.3f;
+
+        [AutoConfigField]
+        public static bool MenuMouse = false;
+
+        [AutoConfigField]
+        public static int RebuiltEffect = 1;
+
+        [AutoConfigField]
+        public static bool StickyHats { get; set; }
+
+        [AutoConfigField]
+        public static bool QOLScoreThingButWithoutScore { get; set; }
+
+        [AutoConfigField]
+        public static bool NameTags { get; set; }
+
+        [AutoConfigField]
+        public static bool LobbyData { get; set; }
     }
 }

@@ -6,6 +6,8 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -21,7 +23,14 @@ namespace DuckGame
         }
         public override void Draw()
         {
-            text = _parent.components[((UIBox)_parent).selection + 2].dgrDescription;
+
+
+            int sel = ((UIBox)_parent).selection;
+
+            List<UIComponent> uis = _parent.components.Where(t => t.dgrDescription != "").ToList();
+
+            if (uis.Count > sel) text = uis[sel].dgrDescription;
+            else text = "";
 
             _font.scale = scale;
             _font.alpha = alpha;

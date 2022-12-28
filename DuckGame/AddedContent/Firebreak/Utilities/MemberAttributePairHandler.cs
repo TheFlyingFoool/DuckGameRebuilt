@@ -35,9 +35,13 @@ namespace DuckGame
             for (int i = 0; i < types.Length; i++)
             {
                 Type type = types[i];
-
-                memberInfos.Add(type);
-                memberInfos.AddRange(type.GetMembers());
+                try
+                {
+                    MemberInfo[] members = type.GetMembers();
+                    memberInfos.Add(type);
+                    memberInfos.AddRange(members);
+                }
+                catch { } //GetMembers crashed for someone one time with a SEHException
             }
             foreach (MemberInfo memberInfo2 in memberInfos)
             {

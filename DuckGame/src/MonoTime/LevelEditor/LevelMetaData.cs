@@ -14,7 +14,7 @@ namespace DuckGame
 {
     public class LevelMetaData : BinaryClassChunk
     {
-        public static List<LevelMetaData.SaveLevelPreviewTask> _completedPreviewTasks = new List<LevelMetaData.SaveLevelPreviewTask>();
+        public static List<SaveLevelPreviewTask> _completedPreviewTasks = new List<SaveLevelPreviewTask>();
         public string guid;
         public LevelType type;
         public LevelSize size;
@@ -27,9 +27,9 @@ namespace DuckGame
         public bool eightPlayer;
         public bool eightPlayerRestricted;
 
-        public LevelMetaData.PreviewPair LoadPreview()
+        public PreviewPair LoadPreview()
         {
-            LevelMetaData.PreviewPair previewPair = null;
+            PreviewPair previewPair = null;
             try
             {
                 string str1 = DuckFile.LoadString(DuckFile.editorPreviewDirectory + guid);
@@ -38,7 +38,7 @@ namespace DuckGame
                     int length = str1.IndexOf('@');
                     string str2 = str1.Substring(0, length);
                     string pTexture = str1.Substring(length + 1);
-                    previewPair = new LevelMetaData.PreviewPair
+                    previewPair = new PreviewPair
                     {
                         strange = str2[0] == '1',
                         challenge = str2[1] == '1',
@@ -74,12 +74,12 @@ namespace DuckGame
             return previewPair;
         }
 
-        private void RunSaveLevelPreviewTask(LevelMetaData.SaveLevelPreviewTask pTask)
+        private void RunSaveLevelPreviewTask(SaveLevelPreviewTask pTask)
         {
             try
             {
                 pTask.ltData = new Color[pTask.levelTexture.Width * pTask.levelTexture.Height];
-                pTask.levelTexture.GetData<Color>(pTask.ltData);
+                pTask.levelTexture.GetData(pTask.ltData);
                 pTask.ltWidth = pTask.levelTexture.Width;
                 pTask.ltHeight = pTask.levelTexture.Height;
                 new Task(() =>
@@ -87,8 +87,8 @@ namespace DuckGame
                    try
                    {
                        pTask.levelString = pTask.levelString + "@" + Editor.TextureToMassiveBitmapString(pTask.ltData, pTask.ltWidth, pTask.ltHeight);
-                       lock (LevelMetaData._completedPreviewTasks)
-                           LevelMetaData._completedPreviewTasks.Add(pTask);
+                       lock (_completedPreviewTasks)
+                           _completedPreviewTasks.Add(pTask);
                    }
                    catch (Exception)
                    {
@@ -100,7 +100,7 @@ namespace DuckGame
             }
         }
 
-        public LevelMetaData.PreviewPair SavePreview(
+        public PreviewPair SavePreview(
           Texture2D pPreview,
           Dictionary<string, int> pInvalidData,
           bool pStrange,
@@ -112,7 +112,7 @@ namespace DuckGame
                 string str = "" + (pStrange ? "1" : "0") + (pChallenge ? "1" : "0") + (pArcade ? "1" : "0");
                 foreach (KeyValuePair<string, int> keyValuePair in pInvalidData)
                     str = str + keyValuePair.Key + "," + keyValuePair.Value.ToString() + "|";
-                RunSaveLevelPreviewTask(new LevelMetaData.SaveLevelPreviewTask()
+                RunSaveLevelPreviewTask(new SaveLevelPreviewTask()
                 {
                     levelString = str,
                     levelTexture = pPreview,
@@ -123,7 +123,7 @@ namespace DuckGame
             {
                 DevConsole.Log(DCSection.General, "Failed to save preview string in metadata for " + guid);
             }
-            return new LevelMetaData.PreviewPair()
+            return new PreviewPair()
             {
                 preview = pPreview,
                 invalid = pInvalidData,

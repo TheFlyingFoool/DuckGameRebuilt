@@ -27,9 +27,9 @@ namespace DuckGame
         private Assembly _assembly;
 
         /// <summary>The type of mod this is.</summary>
-        public ModConfiguration.Type modType { get; internal set; }
+        public Type modType { get; internal set; }
 
-        public void SetModType(ModConfiguration.Type pType) => modType = pType;
+        public void SetModType(Type pType) => modType = pType;
 
         public MapPack mapPack => _mapPack;
 
@@ -170,6 +170,7 @@ namespace DuckGame
         /// <value>
         ///   <c>true</c> if mod will not try to compile itself; otherwise, <c>false</c>.
         /// </value>
+        public bool noRecompilation { get; internal set; }
         public bool noCompilation { get; internal set; }
 
         /// <summary>
@@ -261,16 +262,21 @@ namespace DuckGame
                 XmlElement documentElement = configDocument.DocumentElement;
                 XmlElement xmlElement1 = documentElement["SoftDependencies"];
                 if (xmlElement1 != null)
-                    softDependencies = xmlElement1.InnerText.Split(new char[1]
+                {
+                    softDependencies = xmlElement1.InnerText.Split(new char[]
                     {
-            '|'
+                        '|'
                     }, StringSplitOptions.RemoveEmptyEntries);
+                }
                 XmlElement xmlElement2 = documentElement["HardDependencies"];
                 if (xmlElement2 != null)
+                {
                     hardDependencies = xmlElement2.InnerText.Split(new char[1]
                     {
-            '|'
+                        '|'
                     }, StringSplitOptions.RemoveEmptyEntries);
+                }
+                noRecompilation = documentElement["NoRecompilation"] != null && documentElement["NoRecompilation"].InnerText.ToLower() == "true";
                 noCompilation = documentElement["NoCompilation"] != null && documentElement["NoCompilation"].InnerText.ToLower() == "true";
                 preloadContent = documentElement["PreloadContent"] == null || !(documentElement["PreloadContent"].InnerText.ToLower() == "false");
                 processPinkTransparency = documentElement["PinkTransparency"] == null || !(documentElement["PinkTransparency"].InnerText.ToLower() == "false");

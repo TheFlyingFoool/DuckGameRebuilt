@@ -15,15 +15,15 @@ namespace XnaToFna.ProxyReflection
 {
     public static class FieldInfoHelper
     {
-        private static readonly Dictionary<Type, Dictionary<string, FieldInfoHelper.XnaToFnaFieldInfo>> Map = new Dictionary<Type, Dictionary<string, FieldInfoHelper.XnaToFnaFieldInfo>>()
+        private static readonly Dictionary<Type, Dictionary<string, XnaToFnaFieldInfo>> Map = new Dictionary<Type, Dictionary<string, XnaToFnaFieldInfo>>()
     {
       {
         typeof (StringBuilder),
-        new Dictionary<string, FieldInfoHelper.XnaToFnaFieldInfo>()
+        new Dictionary<string, XnaToFnaFieldInfo>()
         {
           {
             "m_StringValue",
-            new FieldInfoHelper.XnaToFnaFieldInfo(typeof (string),  obj =>  ((StringBuilder) obj).ToString(),  (obj, val) => ((StringBuilder) obj).Clear().Append(val))
+            new XnaToFnaFieldInfo(typeof (string),  obj =>  ((StringBuilder) obj).ToString(),  (obj, val) => ((StringBuilder) obj).Clear().Append(val))
           }
         }
       }
@@ -31,14 +31,14 @@ namespace XnaToFna.ProxyReflection
 
         public static FieldInfo GetField(Type self, string name, BindingFlags bindingAttr)
         {
-            Dictionary<string, FieldInfoHelper.XnaToFnaFieldInfo> dictionary;
-            FieldInfoHelper.XnaToFnaFieldInfo xnaToFnaFieldInfo;
-            return FieldInfoHelper.Map.TryGetValue(self, out dictionary) && dictionary.TryGetValue(name, out xnaToFnaFieldInfo) ? xnaToFnaFieldInfo : self.GetField(name, bindingAttr);
+            Dictionary<string, XnaToFnaFieldInfo> dictionary;
+            XnaToFnaFieldInfo xnaToFnaFieldInfo;
+            return Map.TryGetValue(self, out dictionary) && dictionary.TryGetValue(name, out xnaToFnaFieldInfo) ? xnaToFnaFieldInfo : self.GetField(name, bindingAttr);
         }
 
         public static MethodInfo GetMethod(Type self, string name, BindingFlags bindingAttr)
         {
-            FieldInfoHelper.XnaToFnaFieldInfo xnaToFnaFieldInfo;
+            XnaToFnaFieldInfo xnaToFnaFieldInfo;
             DevConsole.Log("GetMethod " + name);
             if (name == "DuckNetworkUpdate_Transpiler" && self.FullName == "DuckGame.BetterChat.HarmonyPatches")
             {
@@ -50,7 +50,7 @@ namespace XnaToFna.ProxyReflection
 
         public static FieldInfo GetField(Type self, string name)
         {
-            return FieldInfoHelper.GetField(self, name, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
+            return GetField(self, name, BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public);
         }
 
         public class XnaToFnaFieldInfo : FieldInfo
@@ -63,13 +63,13 @@ namespace XnaToFna.ProxyReflection
 
             public override FieldAttributes Attributes => throw new NotSupportedException();
 
-            public override Type DeclaringType => this._DeclaringType;
+            public override Type DeclaringType => _DeclaringType;
 
             public override RuntimeFieldHandle FieldHandle => throw new NotSupportedException();
 
-            public override Type FieldType => this._FieldType;
+            public override Type FieldType => _FieldType;
 
-            public override string Name => this._Name;
+            public override string Name => _Name;
 
             public override Type ReflectedType => throw new NotSupportedException();
 
@@ -78,9 +78,9 @@ namespace XnaToFna.ProxyReflection
               Func<object, object> onGetValue = null,
               Action<object, object> onSetValue = null)
             {
-                this._FieldType = fieldType;
-                this._OnGetValue = onGetValue;
-                this._OnSetValue = onSetValue;
+                _FieldType = fieldType;
+                _OnGetValue = onGetValue;
+                _OnSetValue = onSetValue;
             }
 
             public override object[] GetCustomAttributes(bool inherit) => throw new NotSupportedException();
@@ -91,7 +91,7 @@ namespace XnaToFna.ProxyReflection
 
             public override object GetValue(object obj)
             {
-                Func<object, object> onGetValue = this._OnGetValue;
+                Func<object, object> onGetValue = _OnGetValue;
                 return onGetValue == null ? null : onGetValue(obj);
             }
 
@@ -102,7 +102,7 @@ namespace XnaToFna.ProxyReflection
               Binder binder,
               CultureInfo culture)
             {
-                Action<object, object> onSetValue = this._OnSetValue;
+                Action<object, object> onSetValue = _OnSetValue;
                 if (onSetValue == null)
                     return;
                 onSetValue(obj, value);

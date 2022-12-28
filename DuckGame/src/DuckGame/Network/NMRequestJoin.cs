@@ -13,7 +13,7 @@ namespace DuckGame
     public class NMRequestJoin : NMDuckNetwork
     {
         public string password;
-        public NMRequestJoin.Info info;
+        public Info info;
         public bool wasInvited;
         public ulong localID;
         public List<string> names = new List<string>();
@@ -33,7 +33,7 @@ namespace DuckGame
             wasInvited = pWasInvited;
             localID = pLocalID;
             names = pNames;
-            info = NMRequestJoin.Info.Construct();
+            info = Info.Construct();
             password = pPassword;
             personas = pPersonas;
         }
@@ -54,7 +54,7 @@ namespace DuckGame
 
         public override void OnDeserialize(BitBuffer d)
         {
-            info = NMRequestJoin.Info.Deserialize(d);
+            info = Info.Deserialize(d);
             wasInvited = d.ReadBool();
             int num = d.ReadByte();
             if (num == 0)
@@ -78,7 +78,7 @@ namespace DuckGame
             public bool hasCustomHats;
             public bool parentalControlsActive;
 
-            public static NMRequestJoin.Info Construct() => new NMRequestJoin.Info()
+            public static Info Construct() => new Info()
             {
                 roomFlippers = Profile.CalculateLocalFlippers(),
                 flagIndex = Global.data.flag,
@@ -94,7 +94,7 @@ namespace DuckGame
                 pBuffer.Write(parentalControlsActive);
             }
 
-            public static NMRequestJoin.Info Deserialize(BitBuffer pBuffer) => new NMRequestJoin.Info()
+            public static Info Deserialize(BitBuffer pBuffer) => new Info()
             {
                 roomFlippers = pBuffer.ReadByte(),
                 flagIndex = pBuffer.ReadInt(),

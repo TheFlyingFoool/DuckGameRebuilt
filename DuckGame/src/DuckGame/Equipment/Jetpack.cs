@@ -51,9 +51,9 @@ namespace DuckGame
                 if (_equippedDuck.sliding && _equippedDuck._trapped == null)
                 {
                     if (_equippedDuck.offDir > 0)
-                        angle = -1.570796f;
+                        angle = -(float)(Math.PI / 2.0f);
                     else
-                        angle = 1.570796f;
+                        angle = (float)(Math.PI / 2.0f);
                     _offset.y += 12f;
                     num1 -= 6f;
                 }
@@ -62,11 +62,11 @@ namespace DuckGame
                 collisionOffset = new Vec2(0f, -9999f);
                 collisionSize = new Vec2(0f, 0f);
                 solid = false;
-                PhysicsObject physicsObject1 = _equippedDuck;
+                PhysicsObject propel = _equippedDuck;
                 if (_equippedDuck._trapped != null)
-                    physicsObject1 = _equippedDuck._trapped;
+                    propel = _equippedDuck._trapped;
                 else if (_equippedDuck.ragdoll != null && _equippedDuck.ragdoll.part1 != null)
-                    physicsObject1 = _equippedDuck.ragdoll.part1;
+                    propel = _equippedDuck.ragdoll.part1;
                 _sprite.flipH = _equippedDuck._sprite.flipH;
                 if (_on && _heat < 1.0)
                 {
@@ -75,43 +75,41 @@ namespace DuckGame
                     if (isServerForObject)
                         Global.data.jetFuelUsed.valueFloat += Maths.IncFrameTimer();
                     _heat += 11f / 1000f;
-                    if (physicsObject1 is RagdollPart)
+                    if (propel is RagdollPart)
                     {
                         ++Global.data.timeJetpackedAsRagdoll;
                         float angle = this.angle;
-                        this.angle = physicsObject1.angle;
+                        this.angle = propel.angle;
                         Vec2 vec2_1 = Offset(new Vec2(0f, 8f));
                         Level.Add(new JetpackSmoke(vec2_1.x, vec2_1.y));
                         this.angle = angle;
-                        Vec2 vec2_2 = physicsObject1.velocity;
-                        if (vec2_2.length < 7f)
+                        if (propel.velocity.length < 7f)
                         {
-                            RagdollPart ragdollPart = physicsObject1 as RagdollPart;
+                            RagdollPart ragdollPart = propel as RagdollPart;
                             ragdollPart.addWeight = 0.2f;
                             _equippedDuck.ragdoll.jetting = true;
-                            float num2 = -(physicsObject1.angle - 1.5707964f);
-                            Vec2 vec2_3 = Vec2.Zero;
-                            vec2_2 = _equippedDuck.inputProfile.leftStick;
-                            if (vec2_2.length > 0.1f)
+                            float ang = -(propel.angle - (float)(Math.PI / 2.0f));
+                            Vec2 dir = Vec2.Zero;
+                            if (_equippedDuck.inputProfile.leftStick.length > 0.1f)
                             {
-                                vec2_3 = new Vec2(_equippedDuck.inputProfile.leftStick.x, -_equippedDuck.inputProfile.leftStick.y);
+                                dir = new Vec2(_equippedDuck.inputProfile.leftStick.x, -_equippedDuck.inputProfile.leftStick.y);
                             }
                             else
                             {
-                                vec2_3 = new Vec2(0f, 0f);
-                                if (_equippedDuck.inputProfile.Down("LEFT"))
-                                    --vec2_3.x;
-                                if (_equippedDuck.inputProfile.Down("RIGHT"))
-                                    ++vec2_3.x;
-                                if (_equippedDuck.inputProfile.Down("UP"))
-                                    --vec2_3.y;
-                                if (_equippedDuck.inputProfile.Down("DOWN"))
-                                    ++vec2_3.y;
+                                dir = new Vec2(0f, 0f);
+                                if (_equippedDuck.inputProfile.Down(Triggers.Left))
+                                    --dir.x;
+                                if (_equippedDuck.inputProfile.Down(Triggers.Right))
+                                    ++dir.x;
+                                if (_equippedDuck.inputProfile.Down(Triggers.Up))
+                                    --dir.y;
+                                if (_equippedDuck.inputProfile.Down(Triggers.Down))
+                                    ++dir.y;
                             }
-                            if (vec2_3.length < 0.1f)
-                                vec2_3 = new Vec2((float)Math.Cos(num2), (float)-Math.Sin(num2));
-                            PhysicsObject physicsObject2 = physicsObject1;
-                            physicsObject2.velocity += vec2_3 * 1.5f;
+                            if (dir.length < 0.1f)
+                                dir = new Vec2((float)Math.Cos(ang), (float)-Math.Sin(ang));
+                            PhysicsObject physicsObject2 = propel;
+                            physicsObject2.velocity += dir * 1.5f;
                             if (ragdollPart.doll != null && ragdollPart.doll.part1 != null && ragdollPart.doll.part2 != null && ragdollPart.doll.part3 != null)
                             {
                                 ragdollPart.doll.part1.extraGravMultiplier = 0.4f;
@@ -125,21 +123,21 @@ namespace DuckGame
                         Level.Add(new JetpackSmoke(x, y + 8f + num1));
                         if (angle > 0f)
                         {
-                            if (physicsObject1.hSpeed < 6f)
-                                physicsObject1.hSpeed += 0.9f;
+                            if (propel.hSpeed < 6f)
+                                propel.hSpeed += 0.9f;
                         }
                         else if (angle < 0f)
                         {
-                            if (physicsObject1.hSpeed > -6f)
-                                physicsObject1.hSpeed -= 0.9f;
+                            if (propel.hSpeed > -6f)
+                                propel.hSpeed -= 0.9f;
                         }
-                        else if (physicsObject1.vSpeed > -4.5f)
-                            physicsObject1.vSpeed -= 0.38f;
+                        else if (propel.vSpeed > -4.5f)
+                            propel.vSpeed -= 0.38f;
                     }
                 }
                 if (_heat >= 1f)
                     _on = false;
-                if (!physicsObject1.grounded)
+                if (!propel.grounded)
                     return;
                 if (_heat > 0f)
                     _heat -= 0.25f;

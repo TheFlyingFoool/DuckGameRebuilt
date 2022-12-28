@@ -143,7 +143,7 @@ namespace DuckGame
             if (level == null || level.bareInitialize)
                 return;
             _dust = new DustSparkleEffect(x - 28f, y - 40f, false, (bool)lit);
-            _lighting = !(bool)lit ? new ArcadeScreen(this.x, this.y) : new ArcadeLight(this.x - 1f, this.y - 41f);
+            _lighting = !(bool)lit ? new ArcadeScreen(x, y) : new ArcadeLight(x - 1f, y - 41f);
             if (Content.readyToRenderPreview)
                 _dust.y -= 10f;
             else
@@ -156,6 +156,8 @@ namespace DuckGame
         {
             if (_data == null || ignoreAlreadyUnlocked && _unlocked)
                 return false;
+            // if (FireDebug.Debugging)
+            //     return true;
             if (_data.required.Count > 0)
             {
                 foreach (string name in _data.required)
@@ -188,11 +190,11 @@ namespace DuckGame
             else
             {
                 _machineStyleSprite = new Sprite((Tex2D)Editor.StringToTexture(machineStyle));
-                if (Thing._alphaTestEffect == null)
-                    Thing._alphaTestEffect = (Effect)Content.Load<MTEffect>("Shaders/alphatest");
+                if (_alphaTestEffect == null)
+                    _alphaTestEffect = (Effect)Content.Load<MTEffect>("Shaders/alphatest");
                 RenderTarget2D t = new RenderTarget2D(48, 48, true);
                 Camera camera = new Camera(0f, 0f, 48f, 48f);
-                DuckGame.Graphics.SetRenderTarget(t);
+                Graphics.SetRenderTarget(t);
                 DepthStencilState depthStencilState = new DepthStencilState()
                 {
                     StencilEnable = true,
@@ -201,20 +203,20 @@ namespace DuckGame
                     ReferenceStencil = 1,
                     DepthBufferEnable = false
                 };
-                DuckGame.Graphics.Clear(new Color(0, 0, 0, 0));
-                DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)Thing._alphaTestEffect, camera.getMatrix());
-                DuckGame.Graphics.Draw(_machineStyleSprite, _styleOffsetX, _styleOffsetY, -0.9f);
-                DuckGame.Graphics.Draw(_customMachineOverlayMask, 0f, 0f, (Depth)0.9f);
-                DuckGame.Graphics.screen.End();
-                DuckGame.Graphics.SetRenderTarget(null);
-                Texture2D tex = new Texture2D(DuckGame.Graphics.device, t.width, t.height);
+                Graphics.Clear(new Color(0, 0, 0, 0));
+                Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)_alphaTestEffect, camera.getMatrix());
+                Graphics.Draw(_machineStyleSprite, _styleOffsetX, _styleOffsetY, -0.9f);
+                Graphics.Draw(_customMachineOverlayMask, 0f, 0f, (Depth)0.9f);
+                Graphics.screen.End();
+                Graphics.SetRenderTarget(null);
+                Texture2D tex = new Texture2D(Graphics.device, t.width, t.height);
                 Color[] data = t.GetData();
                 for (int index = 0; index < tex.Width * tex.Height; ++index)
                 {
                     if (data[index].r == 250 && data[index].g == 0 && data[index].b == byte.MaxValue)
                         data[index] = new Color(0, 0, 0, 0);
                 }
-                tex.SetData<Color>(data);
+                tex.SetData(data);
                 _customMachineUnderlay = new Sprite((Tex2D)tex);
             }
             _previousMachineStyle = machineStyle;
@@ -315,8 +317,8 @@ namespace DuckGame
                                 vec2 = new Vec2(x - (float)(texture.width / 8f / 2f), (y + 30f - texture.width / 8f));
                                 break;
                         }
-                        DuckGame.Graphics.DrawRect(new Vec2(vec2.x - 0.5f, vec2.y - 0.5f), new Vec2((vec2.x + texture.width / 8f + 0.5f), (vec2.y + texture.height / 8f + 0.5f)), Color.White, (Depth)(index == 2 ? 0.9f : 0.8f));
-                        DuckGame.Graphics.Draw(texture, vec2.x, vec2.y, 0.125f, 0.125f, (Depth)(index == 2 ? 0.99f : 0.85f));
+                        Graphics.DrawRect(new Vec2(vec2.x - 0.5f, vec2.y - 0.5f), new Vec2((vec2.x + texture.width / 8f + 0.5f), (vec2.y + texture.height / 8f + 0.5f)), Color.White, (Depth)(index == 2 ? 0.9f : 0.8f));
+                        Graphics.Draw(texture, vec2.x, vec2.y, 0.125f, 0.125f, (Depth)(index == 2 ? 0.99f : 0.85f));
                     }
                 }
                 y -= 6f;
@@ -332,21 +334,21 @@ namespace DuckGame
                 {
                     _flashWagnus.depth = depth + 4;
                     if (flipHorizontal)
-                        DuckGame.Graphics.Draw(_flashWagnus, x - 3f, y - 8f);
+                        Graphics.Draw(_flashWagnus, x - 3f, y - 8f);
                     else
-                        DuckGame.Graphics.Draw(_flashWagnus, x - 8f, y - 9f);
+                        Graphics.Draw(_flashWagnus, x - 8f, y - 9f);
                 }
                 else if (style.value == 15)
                 {
                     if (flipHorizontal)
-                        DuckGame.Graphics.Draw(_flashLarge, x - 3f, y - 8f);
+                        Graphics.Draw(_flashLarge, x - 3f, y - 8f);
                     else
-                        DuckGame.Graphics.Draw(_flashLarge, x - 7f, y - 8f);
+                        Graphics.Draw(_flashLarge, x - 7f, y - 8f);
                 }
                 else if (flipHorizontal)
-                    DuckGame.Graphics.Draw(_flash, x - 3f + _screenOffsetX, y - 7f + _screenOffsetY);
+                    Graphics.Draw(_flash, x - 3f + _screenOffsetX, y - 7f + _screenOffsetY);
                 else
-                    DuckGame.Graphics.Draw(_flash, x - 7f + _screenOffsetX, y - 7f + _screenOffsetY);
+                    Graphics.Draw(_flash, x - 7f + _screenOffsetX, y - 7f + _screenOffsetY);
             }
             else
             {
@@ -355,25 +357,25 @@ namespace DuckGame
             }
             if ((bool)lit)
             {
-                DuckGame.Graphics.Draw(_light, x - 28f, y - 40f);
+                Graphics.Draw(_light, x - 28f, y - 40f);
                 _fixture.depth = depth - 1;
-                DuckGame.Graphics.Draw(_fixture, x - 10f, y - 65f);
+                Graphics.Draw(_fixture, x - 10f, y - 65f);
             }
             _sprite.flipH = false;
             if (style.value == 15)
             {
                 _boom.flipH = false;
                 _boom.depth = depth;
-                DuckGame.Graphics.Draw(_boom, x - 17f, y - 36f);
+                Graphics.Draw(_boom, x - 17f, y - 36f);
             }
             else if (style.value == 16)
             {
                 _wagnus.flipH = false;
                 _wagnus.depth = depth;
-                DuckGame.Graphics.Draw(_wagnus, x - 17f, y - 20f);
+                Graphics.Draw(_wagnus, x - 17f, y - 20f);
                 _wagnusOverlay.flipH = false;
                 _wagnusOverlay.depth = depth + 10;
-                DuckGame.Graphics.Draw(_wagnusOverlay, x - 17f, y - 6f);
+                Graphics.Draw(_wagnusOverlay, x - 17f, y - 6f);
             }
             else if (_machineStyleSprite != null)
             {
@@ -381,13 +383,13 @@ namespace DuckGame
                 {
                     _customMachineUnderlay.center = new Vec2(23f, 30f);
                     _customMachineUnderlay.depth = depth;
-                    DuckGame.Graphics.Draw(_customMachineUnderlay, x, y);
+                    Graphics.Draw(_customMachineUnderlay, x, y);
                 }
                 else
                 {
                     _machineStyleSprite.center = new Vec2(23f, 30f);
                     _machineStyleSprite.depth = depth;
-                    DuckGame.Graphics.Draw(_machineStyleSprite, x, y);
+                    Graphics.Draw(_machineStyleSprite, x, y);
                 }
             }
             else
@@ -398,19 +400,19 @@ namespace DuckGame
                 if (flipHorizontal)
                 {
                     _covered.flipH = true;
-                    DuckGame.Graphics.Draw(_covered, x + 19f, y - 19f);
+                    Graphics.Draw(_covered, x + 19f, y - 19f);
                 }
                 else
-                    DuckGame.Graphics.Draw(_covered, x - 18f, y - 19f);
+                    Graphics.Draw(_covered, x - 18f, y - 19f);
             }
             if (_hoverFade <= 0.0)
                 return;
             _outline.alpha = _hoverFade;
             _outline.flipH = flipHorizontal;
             if (flipHorizontal)
-                DuckGame.Graphics.Draw(_outline, x, y);
+                Graphics.Draw(_outline, x, y);
             else
-                DuckGame.Graphics.Draw(_outline, x + 1f, y);
+                Graphics.Draw(_outline, x + 1f, y);
             string name = _data.name;
             _font.alpha = _hoverFade;
         }

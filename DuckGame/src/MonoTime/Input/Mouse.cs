@@ -27,25 +27,25 @@ namespace DuckGame
         {
             if (!Graphics.inFocus)
             {
-                Mouse._outOfFocus = true;
+                _outOfFocus = true;
             }
             else
             {
-                Mouse._prevScrollValue = Mouse.scroll;
-                Mouse._mouseStatePrev = Mouse._mouseState;
-                Mouse._mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
+                _prevScrollValue = scroll;
+                _mouseStatePrev = _mouseState;
+                _mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
                 Vec3 vec3 = new Vec3(_mouseState.X, _mouseState.Y, 0f);
                 if (Graphics._screenViewport.HasValue)
-                    Mouse._mouseScreenPos = new Vec2(vec3.x / Resolution.size.x * Layer.HUD.camera.width, vec3.y / Resolution.size.y * Layer.HUD.camera.height);
-                Mouse._mouseScreenPos.x = (int)Mouse._mouseScreenPos.x;
-                Mouse._mouseScreenPos.y = (int)Mouse._mouseScreenPos.y;
-                Mouse._mousePos = new Vec2(_mouseState.X, _mouseState.Y);
-                if (!Mouse._outOfFocus)
+                    _mouseScreenPos = new Vec2(vec3.x / Resolution.size.x * Layer.HUD.camera.width, vec3.y / Resolution.size.y * Layer.HUD.camera.height);
+                _mouseScreenPos.x = (int)_mouseScreenPos.x;
+                _mouseScreenPos.y = (int)_mouseScreenPos.y;
+                _mousePos = new Vec2(_mouseState.X, _mouseState.Y);
+                if (!_outOfFocus)
                     return;
-                if (Mouse._mouseState.LeftButton == ButtonState.Released && Mouse._mouseState.MiddleButton == ButtonState.Released && Mouse._mouseState.RightButton == ButtonState.Released)
-                    Mouse._outOfFocus = false;
+                if (_mouseState.LeftButton == ButtonState.Released && _mouseState.MiddleButton == ButtonState.Released && _mouseState.RightButton == ButtonState.Released)
+                    _outOfFocus = false;
                 else
-                    Mouse._mouseState = Mouse._mouseStatePrev = new MouseState(Mouse._mouseState.X, Mouse._mouseState.Y, Mouse._mouseState.ScrollWheelValue, ButtonState.Released, ButtonState.Released, ButtonState.Released, ButtonState.Released, ButtonState.Released);
+                    _mouseState = _mouseStatePrev = new MouseState(_mouseState.X, _mouseState.Y, _mouseState.ScrollWheelValue, ButtonState.Released, ButtonState.Released, ButtonState.Released, ButtonState.Released, ButtonState.Released);
             }
         }
 
@@ -53,11 +53,11 @@ namespace DuckGame
         {
             get
             {
-                if (Mouse._mouseState.LeftButton == ButtonState.Pressed && Mouse._mouseStatePrev.LeftButton == ButtonState.Released)
+                if (_mouseState.LeftButton == ButtonState.Pressed && _mouseStatePrev.LeftButton == ButtonState.Released)
                     return InputState.Pressed;
-                if (Mouse._mouseState.LeftButton == ButtonState.Pressed && Mouse._mouseStatePrev.LeftButton == ButtonState.Pressed)
+                if (_mouseState.LeftButton == ButtonState.Pressed && _mouseStatePrev.LeftButton == ButtonState.Pressed)
                     return InputState.Down;
-                return Mouse._mouseState.LeftButton == ButtonState.Released && Mouse._mouseStatePrev.LeftButton == ButtonState.Pressed ? InputState.Released : InputState.None;
+                return _mouseState.LeftButton == ButtonState.Released && _mouseStatePrev.LeftButton == ButtonState.Pressed ? InputState.Released : InputState.None;
             }
         }
 
@@ -65,11 +65,11 @@ namespace DuckGame
         {
             get
             {
-                if (Mouse._mouseState.MiddleButton == ButtonState.Pressed && Mouse._mouseStatePrev.MiddleButton == ButtonState.Released)
+                if (_mouseState.MiddleButton == ButtonState.Pressed && _mouseStatePrev.MiddleButton == ButtonState.Released)
                     return InputState.Pressed;
-                if (Mouse._mouseState.MiddleButton == ButtonState.Pressed && Mouse._mouseStatePrev.MiddleButton == ButtonState.Pressed)
+                if (_mouseState.MiddleButton == ButtonState.Pressed && _mouseStatePrev.MiddleButton == ButtonState.Pressed)
                     return InputState.Down;
-                return Mouse._mouseState.MiddleButton == ButtonState.Released && Mouse._mouseStatePrev.MiddleButton == ButtonState.Pressed ? InputState.Released : InputState.None;
+                return _mouseState.MiddleButton == ButtonState.Released && _mouseStatePrev.MiddleButton == ButtonState.Pressed ? InputState.Released : InputState.None;
             }
         }
 
@@ -77,17 +77,17 @@ namespace DuckGame
         {
             get
             {
-                if (Mouse._mouseState.RightButton == ButtonState.Pressed && Mouse._mouseStatePrev.RightButton == ButtonState.Released)
+                if (_mouseState.RightButton == ButtonState.Pressed && _mouseStatePrev.RightButton == ButtonState.Released)
                     return InputState.Pressed;
-                if (Mouse._mouseState.RightButton == ButtonState.Pressed && Mouse._mouseStatePrev.RightButton == ButtonState.Pressed)
+                if (_mouseState.RightButton == ButtonState.Pressed && _mouseStatePrev.RightButton == ButtonState.Pressed)
                     return InputState.Down;
-                return Mouse._mouseState.RightButton == ButtonState.Released && Mouse._mouseStatePrev.RightButton == ButtonState.Pressed ? InputState.Released : InputState.None;
+                return _mouseState.RightButton == ButtonState.Released && _mouseStatePrev.RightButton == ButtonState.Pressed ? InputState.Released : InputState.None;
             }
         }
 
         public static bool available => true;
 
-        public static float scroll => Mouse._mouseStatePrev.ScrollWheelValue - Mouse._mouseState.ScrollWheelValue;
+        public static float scroll => _mouseStatePrev.ScrollWheelValue - _mouseState.ScrollWheelValue;
         /// <summary>
         /// scrolling but min/maxed so you dont get values that change based on how much you're scrolling
         /// </summary>
@@ -101,30 +101,30 @@ namespace DuckGame
 
         public static bool prevScrollUp => _prevScrollValue < 0.0;
 
-        public static float x => Mouse._mouseScreenPos.x;
+        public static float x => _mouseScreenPos.x;
 
-        public static float y => Mouse._mouseScreenPos.y;
+        public static float y => _mouseScreenPos.y;
 
-        public static float xScreen => Mouse.positionScreen.x;
+        public static float xScreen => positionScreen.x;
 
-        public static float yScreen => Mouse.positionScreen.y;
+        public static float yScreen => positionScreen.y;
 
-        public static float xConsole => Mouse.positionConsole.x;
+        public static float xConsole => positionConsole.x;
 
-        public static float yConsole => Mouse.positionConsole.y;
+        public static float yConsole => positionConsole.y;
 
         public static Vec2 position
         {
-            get => new Vec2(Mouse.x, Mouse.y);
+            get => new Vec2(x, y);
             set
             {
-                Mouse._mouseScreenPos = value;
+                _mouseScreenPos = value;
                 value = new Vec2(value.x / Layer.HUD.camera.width * Resolution.size.x, value.y / Layer.HUD.camera.height * Resolution.size.y);
                 Microsoft.Xna.Framework.Input.Mouse.SetPosition((int)value.x, (int)value.y);
             }
         }
 
-        public static Vec2 mousePos => Mouse._mousePos;
+        public static Vec2 mousePos => _mousePos;
 
         /// <summary>
         /// This mouse position variable is literally transformed to be NOT the screen position, and instead is the current layer in-game position
@@ -138,11 +138,11 @@ namespace DuckGame
                 {
                     return Vec2.Zero;
                 }
-                return Level.current.camera.transformScreenVector(Mouse._mousePos);
+                return Level.current.camera.transformScreenVector(_mousePos);
             }
         }
 
-        public static Vec2 positionConsole => Layer.Console.camera.transformScreenVector(Mouse._mousePos);
+        public static Vec2 positionConsole => Layer.Console.camera.transformScreenVector(_mousePos);
 
         public Mouse()
           : base()

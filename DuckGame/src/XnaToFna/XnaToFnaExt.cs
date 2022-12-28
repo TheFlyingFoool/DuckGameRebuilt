@@ -65,9 +65,11 @@ namespace XnaToFna
                     catch
                     {
                     }
-                });
-                thread.Name = string.Format("STDERR pipe thread for {0}", p.ProcessName);
-                thread.IsBackground = true;
+                })
+                {
+                    Name = string.Format("STDERR pipe thread for {0}", p.ProcessName),
+                    IsBackground = true
+                };
             }
             thread.Start();
             return thread;
@@ -108,9 +110,11 @@ namespace XnaToFna
                     catch
                     {
                     }
-                });
-                thread.Name = string.Format("STDOUT pipe thread for {0}", p.ProcessName);
-                thread.IsBackground = true;
+                })
+                {
+                    Name = string.Format("STDOUT pipe thread for {0}", p.ProcessName),
+                    IsBackground = true
+                };
             }
             thread.Start();
             return thread;

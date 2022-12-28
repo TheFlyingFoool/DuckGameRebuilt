@@ -50,13 +50,13 @@ namespace DuckGame
             }
             else
                 p = Level.core.firePool[Level.core.firePoolIndex];
-            Level.core.firePoolIndex = (Level.core.firePoolIndex + 1) % SmallFire.kMaxObjects;
+            Level.core.firePoolIndex = (Level.core.firePoolIndex + 1) % kMaxObjects;
             if (p != null)
             {
                 p.ResetProperties();
                 p.Init(xpos, ypos, hspeed, vspeed, shortLife, stick, canMultiply);
-                p._sprite.globalIndex = Thing.GetGlobalIndex();
-                p._airFire.globalIndex = Thing.GetGlobalIndex();
+                p._sprite.globalIndex = GetGlobalIndex();
+                p._airFire.globalIndex = GetGlobalIndex();
                 p._firedFrom = firedFrom;
                 p.needsSynchronization = true;
                 p.isLocal = !network;
@@ -193,8 +193,8 @@ namespace DuckGame
             _stick = stick;
             _stickOffset = new Vec2(xpos, ypos);
             UpdateStick();
-            _alternate = SmallFire.kAlternate;
-            SmallFire.kAlternate = !SmallFire.kAlternate;
+            _alternate = kAlternate;
+            kAlternate = !kAlternate;
             _canMultiply = canMultiply;
         }
 
@@ -262,7 +262,7 @@ namespace DuckGame
                 _airFire.angle += hSpeed * _spinSpeed;
                 if (isLocal && _canMultiply && !_multiplied && Rando.Float(310f) < 1.0 && y > level.topLeft.y - 500.0)
                 {
-                    Level.Add(SmallFire.New(x, y, Rando.Float(1f) - 0.5f, (float)-(0.5 + Rando.Float(0.5f))));
+                    Level.Add(New(x, y, Rando.Float(1f) - 0.5f, (float)-(0.5 + Rando.Float(0.5f))));
                     _multiplied = true;
                 }
                 if (_stick == null)

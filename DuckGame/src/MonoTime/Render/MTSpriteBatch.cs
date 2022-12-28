@@ -82,7 +82,7 @@ namespace DuckGame
             {
                 _batcher.depthmod = -1f;
             }
-            DuckGame.Graphics.currentStateIndex = _globalIndex;
+            Graphics.currentStateIndex = _globalIndex;
             if (_beginCalled)
                 throw new InvalidOperationException("Begin cannot be called again until End has been successfully called.");
             base.Begin();
@@ -127,7 +127,7 @@ namespace DuckGame
         {
             _beginCalled = false;
             base.End();
-            if (DuckGame.Graphics.recordOnly)
+            if (Graphics.recordOnly)
                 return;
             if (_batcher.hasSimpleItems)
             {
@@ -387,7 +387,7 @@ namespace DuckGame
           Tex2D texture,
           Color c)
         {
-            ++DuckGame.Graphics.currentDrawIndex;
+            ++Graphics.currentDrawIndex;
             MTSpriteBatchItem batchItem = _batcher.CreateBatchItemDepth(depth);
             batchItem.Depth = depth;
 
@@ -448,7 +448,7 @@ namespace DuckGame
           bool autoFlush,
           Material fx)
         {
-            ++DuckGame.Graphics.currentDrawIndex;
+            ++Graphics.currentDrawIndex;
             MTSpriteBatchItem batchItem = _batcher.CreateBatchItemDepth(depth);
             batchItem.Depth = depth;
 
@@ -472,10 +472,10 @@ namespace DuckGame
                 //offset
                 _tempRect.x += offset.Left;
                 _tempRect.y += offset.Top;
-                _texCoordTL.x = _tempRect.x / Content.Thick.width + MTSpriteBatch.edgeBias;
-                _texCoordTL.y = _tempRect.y / Content.Thick.height + MTSpriteBatch.edgeBias;
-                _texCoordBR.x = (_tempRect.x + _tempRect.width) / Content.Thick.width - MTSpriteBatch.edgeBias;
-                _texCoordBR.y = (_tempRect.y + _tempRect.height) / Content.Thick.height - MTSpriteBatch.edgeBias;
+                _texCoordTL.x = _tempRect.x / Content.Thick.width + edgeBias;
+                _texCoordTL.y = _tempRect.y / Content.Thick.height + edgeBias;
+                _texCoordBR.x = (_tempRect.x + _tempRect.width) / Content.Thick.width - edgeBias;
+                _texCoordBR.y = (_tempRect.y + _tempRect.height) / Content.Thick.height - edgeBias;
                 if ((effect & SpriteEffects.FlipVertically) != SpriteEffects.None)
                 {
                     float y = _texCoordBR.y;
@@ -489,7 +489,7 @@ namespace DuckGame
                     _texCoordTL.x = x;
                 }
                 batchItem.Set(destinationRectangle.x, destinationRectangle.y, -origin.x, -origin.y, destinationRectangle.z, destinationRectangle.w, (float)Math.Sin(rotation), (float)Math.Cos(rotation), color, _texCoordTL, _texCoordBR);
-                if (DuckGame.Graphics.recordMetadata)
+                if (Graphics.recordMetadata)
                 {
                     batchItem.MetaData = new MTSpriteBatchItemMetaData
                     {
@@ -501,7 +501,7 @@ namespace DuckGame
                         depth = depth
                     };
                 }
-                if (!DuckGame.Graphics.skipReplayRender && Recorder.currentRecording != null && DuckGame.Graphics.currentRenderTarget == null)
+                if (!Graphics.skipReplayRender && Recorder.currentRecording != null && Graphics.currentRenderTarget == null)
                     Recorder.currentRecording.LogDraw(Content.Thick.textureIndex, new Vec2(batchItem.vertexTL.Position.X, batchItem.vertexTL.Position.Y), new Vec2(batchItem.vertexBR.Position.X, batchItem.vertexBR.Position.Y), rotation, color, (short)_tempRect.x, (short)_tempRect.y, (short)(_tempRect.width * ((effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1.0 : 1.0)), (short)(_tempRect.height * ((effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1.0 : 1.0)), depth);
                 if (!autoFlush)
                     return;
@@ -512,10 +512,10 @@ namespace DuckGame
             batchItem.NormalTexture = texture;
             batchItem.Texture = texture.Texbase;
             batchItem.Material = fx;
-            _texCoordTL.x = _tempRect.x / texture.width + MTSpriteBatch.edgeBias;
-            _texCoordTL.y = _tempRect.y / texture.height + MTSpriteBatch.edgeBias;
-            _texCoordBR.x = (_tempRect.x + _tempRect.width) / texture.width - MTSpriteBatch.edgeBias;
-            _texCoordBR.y = (_tempRect.y + _tempRect.height) / texture.height - MTSpriteBatch.edgeBias;
+            _texCoordTL.x = _tempRect.x / texture.width + edgeBias;
+            _texCoordTL.y = _tempRect.y / texture.height + edgeBias;
+            _texCoordBR.x = (_tempRect.x + _tempRect.width) / texture.width - edgeBias;
+            _texCoordBR.y = (_tempRect.y + _tempRect.height) / texture.height - edgeBias;
             if ((effect & SpriteEffects.FlipVertically) != SpriteEffects.None)
             {
                 float y = _texCoordBR.y;
@@ -566,7 +566,7 @@ namespace DuckGame
             //    MTSpriteBatcher.Texidonthave.Add(batchItem.Texture);
             //}
             batchItem.Set(destinationRectangle.x, destinationRectangle.y, -origin.x, -origin.y, destinationRectangle.z, destinationRectangle.w, (float)Math.Sin(rotation), (float)Math.Cos(rotation), color, _texCoordTL, _texCoordBR);
-            if (DuckGame.Graphics.recordMetadata)
+            if (Graphics.recordMetadata)
             {
                 batchItem.MetaData = new MTSpriteBatchItemMetaData
                 {
@@ -578,7 +578,7 @@ namespace DuckGame
                     depth = depth
                 };
             }
-            if (!DuckGame.Graphics.skipReplayRender && Recorder.currentRecording != null && DuckGame.Graphics.currentRenderTarget == null)
+            if (!Graphics.skipReplayRender && Recorder.currentRecording != null && Graphics.currentRenderTarget == null)
                 Recorder.currentRecording.LogDraw(texture.textureIndex, new Vec2(batchItem.vertexTL.Position.X, batchItem.vertexTL.Position.Y), new Vec2(batchItem.vertexBR.Position.X, batchItem.vertexBR.Position.Y), rotation, color, (short)_tempRect.x, (short)_tempRect.y, (short)(_tempRect.width * ((effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1.0 : 1.0)), (short)(_tempRect.height * ((effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1.0 : 1.0)), depth);
             if (!autoFlush)
                 return;
@@ -598,7 +598,7 @@ namespace DuckGame
 
         public void DrawExistingBatchItem(MTSpriteBatchItem item)
         {
-            ++DuckGame.Graphics.currentDrawIndex;
+            ++Graphics.currentDrawIndex;
             _batcher.SqueezeInItem(item);
             //if (!MTSpriteBatcher.Texidonthave.Contains(item.Texture) && (item.Texture == null || item.Texture.Name == null || item.Texture.Name != "SpriteAtlas"))
             //{
@@ -619,7 +619,7 @@ namespace DuckGame
             batchItem.Depth = frame.depth;
             if (frame.texture == -1)
             {
-                batchItem.Texture = DuckGame.Graphics.blankWhiteSquare.nativeObject as Texture2D;
+                batchItem.Texture = Graphics.blankWhiteSquare.nativeObject as Texture2D;
             }
             else
             {
@@ -632,10 +632,10 @@ namespace DuckGame
                 return;
             float num1 = Math.Abs(frame.texW);
             float num2 = Math.Abs(frame.texH);
-            _texCoordTL.x = frame.texX / (float)batchItem.Texture.Width + MTSpriteBatch.edgeBias;
-            _texCoordTL.y = frame.texY / (float)batchItem.Texture.Height + MTSpriteBatch.edgeBias;
-            _texCoordBR.x = (frame.texX + num1) / batchItem.Texture.Width - MTSpriteBatch.edgeBias;
-            _texCoordBR.y = (frame.texY + num2) / batchItem.Texture.Height - MTSpriteBatch.edgeBias;
+            _texCoordTL.x = frame.texX / (float)batchItem.Texture.Width + edgeBias;
+            _texCoordTL.y = frame.texY / (float)batchItem.Texture.Height + edgeBias;
+            _texCoordBR.x = (frame.texX + num1) / batchItem.Texture.Width - edgeBias;
+            _texCoordBR.y = (frame.texY + num2) / batchItem.Texture.Height - edgeBias;
             if (frame.texH < 0)
             {
                 float y = _texCoordBR.y;

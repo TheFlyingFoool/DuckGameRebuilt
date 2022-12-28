@@ -70,10 +70,10 @@ namespace DuckGame
         public byte framesSinceGrounded = 99;
         public bool _sleeping;
         public bool doFloat;
-        private static Comparison<MaterialThing> XHspeedPositive = new Comparison<MaterialThing>(PhysicsObject.SortCollisionXHspeedPositive);
-        private static Comparison<MaterialThing> XHspeedNegative = new Comparison<MaterialThing>(PhysicsObject.SortCollisionXHspeedNegative);
-        private static Comparison<MaterialThing> YVspeedPositive = new Comparison<MaterialThing>(PhysicsObject.SortCollisionYVspeedPositive);
-        private static Comparison<MaterialThing> YVspeedNegative = new Comparison<MaterialThing>(PhysicsObject.SortCollisionYVspeedNegative);
+        private static Comparison<MaterialThing> XHspeedPositive = new Comparison<MaterialThing>(SortCollisionXHspeedPositive);
+        private static Comparison<MaterialThing> XHspeedNegative = new Comparison<MaterialThing>(SortCollisionXHspeedNegative);
+        private static Comparison<MaterialThing> YVspeedPositive = new Comparison<MaterialThing>(SortCollisionYVspeedPositive);
+        private static Comparison<MaterialThing> YVspeedNegative = new Comparison<MaterialThing>(SortCollisionYVspeedNegative);
         public bool platformSkip;
         public float specialFrictionMod = 1f;
         private Predicate<MaterialThing> _collisionPred;
@@ -154,7 +154,7 @@ namespace DuckGame
 
         public Thing clipThing
         {
-            get => clip.Count == 0 ? null : (Thing)clip.ElementAt<MaterialThing>(0);
+            get => clip.Count == 0 ? null : (Thing)clip.ElementAt(0);
             set
             {
                 if (value != null && value != this)
@@ -169,7 +169,7 @@ namespace DuckGame
 
         public Thing impactingThing
         {
-            get => impacting.Count == 0 ? null : (Thing)impacting.ElementAt<MaterialThing>(0);
+            get => impacting.Count == 0 ? null : (Thing)impacting.ElementAt(0);
             set
             {
                 if (value != null && value != this)
@@ -192,7 +192,7 @@ namespace DuckGame
 
         public float currentFriction => (friction + frictionMod) * frictionMult;
 
-        public virtual float currentGravity => PhysicsObject.gravity * gravMultiplier * floatMultiplier;
+        public virtual float currentGravity => gravity * gravMultiplier * floatMultiplier;
 
         public MaterialThing collideLeft => _collideLeft;
 
@@ -239,8 +239,8 @@ namespace DuckGame
           : base(xval, yval)
         {
             syncPriority = GhostPriority.Normal;
-            PhysicsObject.gravity = !TeamSelect2.Enabled("MOOGRAV") ? 0.2f : 0.1f;
-            _physicsIndex = Thing.GetGlobalIndex();
+            gravity = !TeamSelect2.Enabled("MOOGRAV") ? 0.2f : 0.1f;
+            _physicsIndex = GetGlobalIndex();
             _ghostType = Editor.IDToType[GetType()];
             _placementCost += 6;
             _hitThings = new List<MaterialThing>();
@@ -345,8 +345,8 @@ namespace DuckGame
                 }
                 if (_sleeping)
                 {//(_collideBottom is PhysicsObject)
-                    if (hSpeed == 0.0 && this.vSpeed == 0.0 && heat <= 0.0 && !_awaken && (!(this._lastrealcollideBottom is PhysicsObject) || (!this._lastrealcollideBottom.removeFromLevel && (this._lastrealcollideBottom.position.x - this._lastrealcollidepos.x) == 0 && (this._lastrealcollideBottom.position.y - this._lastrealcollidepos.y) == 0 && _lastrealcollidesize == _lastrealcollideBottom.collisionSize && _lastrealcollideoffset == _lastrealcollideBottom.collisionOffset
-                        && this._lastrealcollideBottom.grounded && (this._lastrealcollideBottom as PhysicsObject).sleeping)))
+                    if (hSpeed == 0.0 && this.vSpeed == 0.0 && heat <= 0.0 && !_awaken && (!(_lastrealcollideBottom is PhysicsObject) || (!_lastrealcollideBottom.removeFromLevel && (_lastrealcollideBottom.position.x - _lastrealcollidepos.x) == 0 && (_lastrealcollideBottom.position.y - _lastrealcollidepos.y) == 0 && _lastrealcollidesize == _lastrealcollideBottom.collisionSize && _lastrealcollideoffset == _lastrealcollideBottom.collisionOffset
+                        && _lastrealcollideBottom.grounded && (_lastrealcollideBottom as PhysicsObject).sleeping)))
                         return;
                     _sleeping = false;
                     _awaken = false;
@@ -361,7 +361,7 @@ namespace DuckGame
                     gravMultiplier = 1f;
                 if (hSpeed > -num1 && hSpeed < num1)
                     hSpeed = 0f;
-                if (this.duck)
+                if (duck)
                 {
                     if (hSpeed > 0.0)
                         hSpeed -= num1;
@@ -422,11 +422,11 @@ namespace DuckGame
                         p1_1.x += 2f;
                     }
                     _hitThings.Clear();
-                    Level.CheckRectAll<MaterialThing>(p1_1, p2_1, _hitThings);
+                    Level.CheckRectAll(p1_1, p2_1, _hitThings);
                     if (Network.isActive && !isServerForObject && Math.Abs(this.hSpeed) > 0.5)
                     {
                         _hitDucks.Clear();
-                        Level.CheckRectAll<Duck>(p1_1 + new Vec2(this.hSpeed * 2f, 0f), p2_1 + new Vec2(this.hSpeed * 2f, 0f), _hitDucks);
+                        Level.CheckRectAll(p1_1 + new Vec2(this.hSpeed * 2f, 0f), p2_1 + new Vec2(this.hSpeed * 2f, 0f), _hitDucks);
                         foreach (Duck hitDuck in _hitDucks)
                         {
                             if (this.hSpeed > 0.0)
@@ -436,9 +436,9 @@ namespace DuckGame
                         }
                     }
                     if (this.hSpeed > 0.0)
-                        DGList.Sort<MaterialThing>(_hitThings, PhysicsObject.XHspeedPositive);
+                        DGList.Sort(_hitThings, XHspeedPositive);
                     else
-                        DGList.Sort<MaterialThing>(_hitThings, PhysicsObject.XHspeedNegative);
+                        DGList.Sort(_hitThings, XHspeedNegative);
                     for (int index = 0; index < num3; ++index)
                     {
                         float num4 = this.hSpeed / num3;
@@ -530,17 +530,17 @@ namespace DuckGame
                     p1_2.y += 2f;
                 }
                 _hitThings.Clear();
-                Level.CheckRectAll<MaterialThing>(p1_2, p2_2, _hitThings);
+                Level.CheckRectAll(p1_2, p2_2, _hitThings);
                 if (this.vSpeed > 0.0)
-                    DGList.Sort<MaterialThing>(_hitThings, PhysicsObject.YVspeedPositive);
+                    DGList.Sort(_hitThings, YVspeedPositive);
                 else
-                    DGList.Sort<MaterialThing>(_hitThings, PhysicsObject.YVspeedNegative);
+                    DGList.Sort(_hitThings, YVspeedNegative);
                 double top = this.top;
                 double bottom = this.bottom;
                 //Whats the point of this?? -NiK0
                 //if (this is Duck duck)
                 //{
-                //    int num6 = !duck.inputProfile.Down("DOWN") ? 0 : (duck._jumpValid > 0 ? 1 : 0);
+                //    int num6 = !duck.inputProfile.Down(Triggers.Down) ? 0 : (duck._jumpValid > 0 ? 1 : 0);
                 //}
                 int num7 = (int)Math.Ceiling(Math.Abs(this.vSpeed) / 4.0);
                 for (int index1 = 0; index1 < num7; ++index1)
@@ -581,7 +581,7 @@ namespace DuckGame
                                     if (this.vSpeed > 0.0)
                                     {
                                         //EnergyScimitar energyScimitar = this as EnergyScimitar;
-                                        if (!(hitThing is FluidPuddle) || this.buoyancy > 0f)
+                                        if (!(hitThing is FluidPuddle) || buoyancy > 0f)
                                         {
                                             _collideBottom = hitThing;
                                             _lastrealcollidepos = hitThing.position;
@@ -615,7 +615,7 @@ namespace DuckGame
                     //!(this._lastrealcollideBottom as PhysicsObject)._lastrealcollideBottom is PhysicsObject || !((this._lastrealcollideBottom as PhysicsObject)._lastrealcollideBottom as PhysicsObject).modifiedGravForFloat
                     // lastGrounded = DateTime.Now;
                     framesSinceGrounded = 0;// mmmm remove i shall !(_collideBottom is PhysicsObject) // !doFloat &&  !doFloat && 
-                    if ((!doFloat || this.buoyancy <= 0f) && hSpeed == 0.0 && this.vSpeed == 0.0 && (((_collideBottom is Block || _collideBottom is IPlatform) && (!(_collideBottom is ItemBox) || (_collideBottom as ItemBox).canBounce)) || initemspawner) && (!(_collideBottom is PhysicsObject) || ((_collideBottom as PhysicsObject).sleeping))) // !(_collideBottom as PhysicsObject).modifiedGravForFloat && _collideBottom.grounded && 
+                    if ((!doFloat || buoyancy <= 0f) && hSpeed == 0.0 && this.vSpeed == 0.0 && (((_collideBottom is Block || _collideBottom is IPlatform) && (!(_collideBottom is ItemBox) || (_collideBottom as ItemBox).canBounce)) || initemspawner) && (!(_collideBottom is PhysicsObject) || ((_collideBottom as PhysicsObject).sleeping))) // !(_collideBottom as PhysicsObject).modifiedGravForFloat && _collideBottom.grounded && 
                         // (this._lastrealcollideBottom as PhysicsObject)._lastrealcollideBottom is PhysicsObject
                         _sleeping = true;
                 }
@@ -891,7 +891,7 @@ namespace DuckGame
         {
         }
 
-        protected void SyncNetworkAction(PhysicsObject.NetAction pAction)
+        protected void SyncNetworkAction(NetAction pAction)
         {
             if (!Network.isActive)
             {
@@ -1029,7 +1029,7 @@ namespace DuckGame
 
         private void CheckForNetworkActionAttribute(MethodInfo pMethod)
         {
-            if (!pMethod.GetCustomAttributes(typeof(NetworkAction), false).Any<object>())
+            if (!pMethod.GetCustomAttributes(typeof(NetworkAction), false).Any())
                 throw new Exception("SyncNetworkAction can only be used for functions with the [NetworkAction] attribute defined.");
         }
 

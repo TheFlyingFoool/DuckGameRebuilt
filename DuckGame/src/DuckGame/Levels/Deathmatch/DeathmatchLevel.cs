@@ -33,8 +33,8 @@ namespace DuckGame
 
         public static bool started
         {
-            get => DeathmatchLevel._started;
-            set => DeathmatchLevel._started = value;
+            get => _started;
+            set => _started = value;
         }
 
         public FollowCam followCam => _followCam;
@@ -47,7 +47,7 @@ namespace DuckGame
                 lerpMult = 1.2f
             };
             camera = _followCam;
-            DeathmatchLevel._started = false;
+            _started = false;
         }
 
         public override void Terminate()
@@ -59,8 +59,8 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            DeathmatchLevel.firstDead = false;
-            DeathmatchLevel.playedGame = true;
+            firstDead = false;
+            playedGame = true;
             foreach (Profile profile in Profiles.active)
                 profile.duck = null;
             _font = new BitmapFont("biosFont", 8);
@@ -70,7 +70,7 @@ namespace DuckGame
             _deathmatch = new Deathmatch(this);
             AddThing(_deathmatch);
             _pendingSpawns = _deathmatch.SpawnPlayers(true);
-            _pendingSpawns = _pendingSpawns.OrderBy<Duck, float>(sp => sp.x).ToList<Duck>();
+            _pendingSpawns = _pendingSpawns.OrderBy(sp => sp.x).ToList();
             foreach (Thing pendingSpawn in _pendingSpawns)
                 followCam.Add(pendingSpawn);
             followCam.Adjust();
@@ -137,57 +137,57 @@ namespace DuckGame
                 if (Network.isServer && Network.isActive)
                     Send.Message(new NMSpawnDuck(pendingSpawn.netProfileIndex));
                 Vec3 color = pendingSpawn.profile.persona.color;
-                Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 0f, new Color((int)color.x, (int)color.y, (int)color.z), 32f));
-                Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, -4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
-                Level.Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
-                Level.Add(new SpawnAimer(pendingSpawn.x, pendingSpawn.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), pendingSpawn.persona, 4f));
+                Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 0f, new Color((int)color.x, (int)color.y, (int)color.z), 32f));
+                Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, -4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
+                Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
+                Add(new SpawnAimer(pendingSpawn.x, pendingSpawn.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), pendingSpawn.persona, 4f));
                 SFX.Play("pullPin", 0.7f);
                 if (Party.HasPerk(pendingSpawn.profile, PartyPerks.Present) || TeamSelect2.Enabled("WINPRES") && Deathmatch.lastWinners.Contains(pendingSpawn.profile))
                 {
                     Present h = new Present(pendingSpawn.x, pendingSpawn.y);
-                    Level.Add(h);
+                    Add(h);
                     pendingSpawn.GiveHoldable(h);
                 }
                 if (Party.HasPerk(pendingSpawn.profile, PartyPerks.Jetpack) || TeamSelect2.Enabled("JETTY"))
                 {
                     Jetpack e = new Jetpack(pendingSpawn.x, pendingSpawn.y);
-                    Level.Add(e);
+                    Add(e);
                     pendingSpawn.Equip(e);
                 }
                 if (TeamSelect2.Enabled("HELMY"))
                 {
                     Helmet e = new Helmet(pendingSpawn.x, pendingSpawn.y);
-                    Level.Add(e);
+                    Add(e);
                     pendingSpawn.Equip(e);
                 }
                 if (TeamSelect2.Enabled("SHOESTAR"))
                 {
                     Boots e = new Boots(pendingSpawn.x, pendingSpawn.y);
-                    Level.Add(e);
+                    Add(e);
                     pendingSpawn.Equip(e);
                 }
                 if (Party.HasPerk(pendingSpawn.profile, PartyPerks.Armor))
                 {
                     Helmet e1 = new Helmet(pendingSpawn.x, pendingSpawn.y);
-                    Level.Add(e1);
+                    Add(e1);
                     pendingSpawn.Equip(e1);
                     ChestPlate e2 = new ChestPlate(pendingSpawn.x, pendingSpawn.y);
-                    Level.Add(e2);
+                    Add(e2);
                     pendingSpawn.Equip(e2);
                 }
                 if (Party.HasPerk(pendingSpawn.profile, PartyPerks.Pistol))
                 {
                     Pistol h = new Pistol(pendingSpawn.x, pendingSpawn.y);
-                    Level.Add(h);
+                    Add(h);
                     pendingSpawn.GiveHoldable(h);
                 }
                 if (!Party.HasPerk(pendingSpawn.profile, PartyPerks.NetGun))
                     return;
                 NetGun h1 = new NetGun(pendingSpawn.x, pendingSpawn.y);
-                Level.Add(h1);
+                Add(h1);
                 pendingSpawn.GiveHoldable(h1);
             }
-            else if (!DeathmatchLevel._started)
+            else if (!_started)
             {
                 _waitAfterSpawn -= 0.05f;
                 if (_waitAfterSpawn > 0f)
@@ -198,7 +198,7 @@ namespace DuckGame
                 if (_waitAfterSpawnDings > 2)
                 {
                     Party.Clear();
-                    DeathmatchLevel._started = true;
+                    _started = true;
                     SFX.Play("ding");
                     Event.Log(new RoundStartEvent());
                 }

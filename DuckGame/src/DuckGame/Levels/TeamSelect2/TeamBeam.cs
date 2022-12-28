@@ -44,7 +44,7 @@ namespace DuckGame
 
         public void TakeDuck(Duck d)
         {
-            if (_ducks.Any<BeamDuck>(t => t.duck == d))
+            if (_ducks.Any(t => t.duck == d))
                 return;
             float num = d.y >= 100.0 ? (d.y >= 150.0 ? 220f : 130f) : 40f;
             SFX.Play("stepInBeam");
@@ -207,7 +207,7 @@ namespace DuckGame
                         duck.duck.hSpeed = 0f;
                         duck.duck.gravMultiplier = 0f;
                     }
-                    if (duck.duck.inputProfile != null && duck.duck.inputProfile.Pressed("CANCEL") && Math.Abs(duck.duck.position.x - x) < 2.0)
+                    if (duck.duck.inputProfile != null && duck.duck.inputProfile.Pressed(Triggers.Cancel) && Math.Abs(duck.duck.position.x - x) < 2.0)
                         duck.leaving = true;
                     if (duck.duck.profile == null)
                         duck.leaving = true;

@@ -14,8 +14,8 @@ namespace XnaToFna.StubXDK.GamerServices
 
         public event EventHandler<FindServicesCompletedArgs> FindServicesCompleted
         {
-            add => this._FindServicesCompleted += value;
-            remove => this._FindServicesCompleted -= value;
+            add => _FindServicesCompleted += value;
+            remove => _FindServicesCompleted -= value;
         }
 
         public bool IsBusy => false;

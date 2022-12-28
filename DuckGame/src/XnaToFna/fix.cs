@@ -34,23 +34,23 @@ namespace MonoMod.Utils
         public static IntPtr OpenLibrary(string name)
         {
             string mapped;
-            if (name != null && DynDll.DllMap.TryGetValue(name, out mapped))
+            if (name != null && DllMap.TryGetValue(name, out mapped))
             {
                 name = mapped;
             }
             IntPtr lib;
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
-                lib = DynDll.GetModuleHandle(name);
+                lib = GetModuleHandle(name);
                 if (lib == IntPtr.Zero)
                 {
-                    lib = DynDll.LoadLibrary(name);
+                    lib = LoadLibrary(name);
                 }
                 return lib;
             }
             IntPtr e = IntPtr.Zero;
-            lib = DynDll.dlopen(name, 2);
-            if ((e = DynDll.dlerror()) != IntPtr.Zero)
+            lib = dlopen(name, 2);
+            if ((e = dlerror()) != IntPtr.Zero)
             {
                 Console.WriteLine(string.Format("DynDll can't access {0}!", name ?? "entry point"));
                 Console.WriteLine("dlerror: " + Marshal.PtrToStringAnsi(e));
@@ -67,11 +67,11 @@ namespace MonoMod.Utils
             }
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
-                return DynDll.GetProcAddress(lib, name);
+                return GetProcAddress(lib, name);
             }
-            IntPtr s = DynDll.dlsym(lib, name);
+            IntPtr s = dlsym(lib, name);
             IntPtr e;
-            if ((e = DynDll.dlerror()) != IntPtr.Zero)
+            if ((e = dlerror()) != IntPtr.Zero)
             {
                 Console.WriteLine("DynDll can't access " + name + "!");
                 Console.WriteLine("dlerror: " + Marshal.PtrToStringAnsi(e));
@@ -93,7 +93,7 @@ namespace MonoMod.Utils
                 foreach (DynDllImportAttribute attrib in field.GetCustomAttributes(typeof(DynDllImportAttribute), true))
                 {
                     found = false;
-                    IntPtr asm = DynDll.OpenLibrary(attrib.DLL);
+                    IntPtr asm = OpenLibrary(attrib.DLL);
                     if (!(asm == IntPtr.Zero))
                     {
                         foreach (string ep in attrib.EntryPoints)
@@ -141,7 +141,7 @@ namespace MonoMod.Utils
         {
             set
             {
-                this.EntryPoints = new string[]
+                EntryPoints = new string[]
                 {
                     value
                 };
@@ -150,8 +150,8 @@ namespace MonoMod.Utils
 
         public DynDllImportAttribute(string dll, params string[] entryPoints)
         {
-            this.DLL = dll;
-            this.EntryPoints = entryPoints;
+            DLL = dll;
+            EntryPoints = entryPoints;
         }
 
         public string DLL;
@@ -182,45 +182,45 @@ namespace MonoMod.Utils
                 platID = Environment.OSVersion.Platform.ToString();
             }
             platID = platID.ToLowerInvariant();
-            PlatformHelper.Current = Platform.Unknown;
+            Current = Platform.Unknown;
             if (platID.Contains("win"))
             {
-                PlatformHelper.Current = Platform.Windows;
+                Current = Platform.Windows;
             }
             else if (platID.Contains("mac") || platID.Contains("osx"))
             {
-                PlatformHelper.Current = Platform.MacOS;
+                Current = Platform.MacOS;
             }
             else if (platID.Contains("lin") || platID.Contains("unix"))
             {
-                PlatformHelper.Current = Platform.Linux;
+                Current = Platform.Linux;
             }
             if (Directory.Exists("/data") && File.Exists("/system/build.prop"))
             {
-                PlatformHelper.Current = Platform.Android;
+                Current = Platform.Android;
             }
             else if (Directory.Exists("/Applications") && Directory.Exists("/System"))
             {
-                PlatformHelper.Current = Platform.iOS;
+                Current = Platform.iOS;
             }
-            PlatformHelper.Current |= ((IntPtr.Size == 4) ? Platform.X86 : Platform.X64);
+            Current |= ((IntPtr.Size == 4) ? Platform.X86 : Platform.X64);
         }
 
         public static Platform Current
         {
             get
             {
-                return PlatformHelper.k__BackingField;
+                return k__BackingField;
             }
             private set
             {
-                PlatformHelper.k__BackingField = value;
+                k__BackingField = value;
             }
         }
 
         public static bool Is(Platform platform)
         {
-            return (PlatformHelper.Current & platform) == platform;
+            return (Current & platform) == platform;
         }
 
         private static Platform k__BackingField;
@@ -349,7 +349,7 @@ namespace MonoMod.Utils
             CustomAttribute patchAttrib = cap.GetMMAttribute("Patch");
             if (patchAttrib != null)
             {
-                return ((string)patchAttrib.ConstructorArguments[0].Value).Inject(MonoModExt.SharedData);
+                return ((string)patchAttrib.ConstructorArguments[0].Value).Inject(SharedData);
             }
             string name = ((MemberReference)cap).Name;
             if (!name.StartsWith("patch_"))
@@ -640,7 +640,7 @@ namespace MonoMod.Utils
                 {
                     builder.Append(",");
                 }
-                if (Attribute.IsDefined(parameter, MonoModExt.t_ParamArrayAttribute))
+                if (Attribute.IsDefined(parameter, t_ParamArrayAttribute))
                 {
                     builder.Append("...,");
                 }

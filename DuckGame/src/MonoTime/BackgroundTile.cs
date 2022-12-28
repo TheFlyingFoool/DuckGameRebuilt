@@ -29,7 +29,7 @@ namespace DuckGame
         public BackgroundTile(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            this.shouldbeinupdateloop = false;
+            shouldbeinupdateloop = false;
             layer = Layer.Background;
             _canBeGrouped = true;
             _isStatic = true;
@@ -111,7 +111,7 @@ namespace DuckGame
             graphic.depth = depth;
             graphic.alpha = alpha;
             graphic.angle = angle;
-            graphic.cheapmaterial = this.material;
+            graphic.cheapmaterial = material;
             (graphic as SpriteMap).UpdateFrame();
             graphic.UltraCheapStaticDraw(flipHorizontal);
             //  graphic.Draw() FUCK NORMAL DRAWING I AM CHEAP BASTERD 

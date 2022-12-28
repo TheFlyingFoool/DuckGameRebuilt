@@ -42,7 +42,7 @@ namespace DuckGame
         {
             if (rumbleEvent.intensityInitial <= 0.0)
                 return;
-            RumbleManager.ListRumbleEvents.Add(rumbleEvent);
+            ListRumbleEvents.Add(rumbleEvent);
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace DuckGame
         {
             rumbleEvent.position = new Vec2?(positionToSet);
             rumbleEvent.type = RumbleType.Gameplay;
-            RumbleManager.AddRumbleEvent(rumbleEvent);
+            AddRumbleEvent(rumbleEvent);
         }
 
         /// <summary>Add a Rumble for a specific profile.</summary>
@@ -62,16 +62,16 @@ namespace DuckGame
             if (profileToRumble == null || !profileToRumble.localPlayer)
                 return;
             rumbleEvent.profile = profileToRumble;
-            RumbleManager.AddRumbleEvent(rumbleEvent);
+            AddRumbleEvent(rumbleEvent);
         }
 
         /// <summary>Add a rumble for all profiles</summary>
-        public static void AddRumbleEventForAll(RumbleEvent rumbleEvent) => RumbleManager.AddRumbleEvent(rumbleEvent);
+        public static void AddRumbleEventForAll(RumbleEvent rumbleEvent) => AddRumbleEvent(rumbleEvent);
 
         public static void ClearRumbles(RumbleType? rumbleType)
         {
             if (rumbleType.HasValue)
-                RumbleManager.ListRumbleEvents.RemoveAll(rumble =>
+                ListRumbleEvents.RemoveAll(rumble =>
                {
                    int type = (int)rumble.type;
                    RumbleType? nullable = rumbleType;
@@ -79,7 +79,7 @@ namespace DuckGame
                    return type == valueOrDefault & nullable.HasValue;
                });
             else
-                RumbleManager.ListRumbleEvents.Clear();
+                ListRumbleEvents.Clear();
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace DuckGame
         {
             if (!Graphics.inFocus)
             {
-                RumbleManager.ClearRumbles(new RumbleType?());
+                ClearRumbles(new RumbleType?());
             }
             else
             {
@@ -106,9 +106,9 @@ namespace DuckGame
                     if (profile != null && profile.inputProfile != null && profile.inputProfile.lastActiveDevice != null)
                         profile.inputProfile.lastActiveDevice.rumbleIntensity = 0f;
                 }
-                for (int index = RumbleManager.ListRumbleEvents.Count - 1; index >= 0; --index)
+                for (int index = ListRumbleEvents.Count - 1; index >= 0; --index)
                 {
-                    RumbleEvent listRumbleEvent = RumbleManager.ListRumbleEvents[index];
+                    RumbleEvent listRumbleEvent = ListRumbleEvents[index];
                     if (listRumbleEvent.type != RumbleType.Gameplay || !MonoMain.shouldPauseGameplay)
                     {
                         if (listRumbleEvent.position.HasValue)
@@ -126,7 +126,7 @@ namespace DuckGame
                                         else
                                             continue;
                                     }
-                                    RumbleManager.AddIntensityToDevice(profile.inputProfile.lastActiveDevice, listRumbleEvent.intensityCurrent * (num2 * num2));
+                                    AddIntensityToDevice(profile.inputProfile.lastActiveDevice, listRumbleEvent.intensityCurrent * (num2 * num2));
                                 }
                             }
                         }
@@ -135,13 +135,13 @@ namespace DuckGame
                             foreach (Profile profile in active)
                             {
                                 if (profile != null && profile.inputProfile != null && profile.localPlayer && profile.inputProfile.lastActiveDevice != null)
-                                    RumbleManager.AddIntensityToDevice(profile.inputProfile.lastActiveDevice, listRumbleEvent.intensityCurrent);
+                                    AddIntensityToDevice(profile.inputProfile.lastActiveDevice, listRumbleEvent.intensityCurrent);
                             }
                         }
                         else if (listRumbleEvent.profile != null && listRumbleEvent.profile.inputProfile != null && listRumbleEvent.profile.inputProfile.lastActiveDevice != null)
-                            RumbleManager.AddIntensityToDevice(listRumbleEvent.profile.inputProfile.lastActiveDevice, listRumbleEvent.intensityCurrent);
+                            AddIntensityToDevice(listRumbleEvent.profile.inputProfile.lastActiveDevice, listRumbleEvent.intensityCurrent);
                         if (!listRumbleEvent.Update())
-                            RumbleManager.ListRumbleEvents.RemoveAt(index);
+                            ListRumbleEvents.RemoveAt(index);
                     }
                 }
                 if (Options.Data.rumbleIntensity <= 0.0)

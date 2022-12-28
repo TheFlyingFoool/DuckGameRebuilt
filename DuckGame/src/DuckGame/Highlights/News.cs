@@ -18,9 +18,9 @@ namespace DuckGame
 
         public static void Initialize()
         {
-            System.Type newsType = typeof(NewsStory);
-            foreach (System.Type type in Assembly.GetAssembly(typeof(NewsStory)).GetTypes().Where<System.Type>(t => newsType.IsAssignableFrom(t)))
-                News._availableStories.Add(Activator.CreateInstance(type) as NewsStory);
+            Type newsType = typeof(NewsStory);
+            foreach (Type type in Assembly.GetAssembly(typeof(NewsStory)).GetTypes().Where(t => newsType.IsAssignableFrom(t)))
+                _availableStories.Add(Activator.CreateInstance(type) as NewsStory);
         }
 
         public static List<NewsStory> GetStories()
@@ -28,13 +28,13 @@ namespace DuckGame
             Stats.CalculateStats();
             List<Team> active = Teams.active;
             List<NewsStory> stories = new List<NewsStory>();
-            foreach (NewsStory availableStorey in News._availableStories)
+            foreach (NewsStory availableStorey in _availableStories)
             {
                 availableStorey.DoCalculate(active);
                 stories.Add(availableStorey);
             }
-            News.FilterBest(stories, NewsSection.MatchComments, 1);
-            News.FilterBest(stories, NewsSection.PlayerComments, 2);
+            FilterBest(stories, NewsSection.MatchComments, 1);
+            FilterBest(stories, NewsSection.PlayerComments, 2);
             stories.Sort((a, b) =>
            {
                if (a.section == b.section)
@@ -46,8 +46,8 @@ namespace DuckGame
 
         public static void FilterBest(List<NewsStory> stories, NewsSection section, int numToPick)
         {
-            List<NewsStory> list = stories.Where<NewsStory>(x => x.section == section).ToList<NewsStory>();
-            list.OrderBy<NewsStory, float>(x => x.weight * x.importance);
+            List<NewsStory> list = stories.Where(x => x.section == section).ToList();
+            list.OrderBy(x => x.weight * x.importance);
             int num = 0;
             foreach (NewsStory newsStory in list)
             {

@@ -7,7 +7,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Reflection;
 using XnaToFna.ProxyForms;
 
 namespace XnaToFna
@@ -16,22 +15,22 @@ namespace XnaToFna
     {
         public static bool[] IsGamepadConnected = new bool[0];
 
-        public static void DeviceChange(DeviceEvents.Events e, IntPtr data) => PInvoke.CallHooks(Messages.WM_DEVICECHANGE, (IntPtr)(int)e, data, allWindows: true);
+        public static void DeviceChange(Events e, IntPtr data) => PInvoke.CallHooks(Messages.WM_DEVICECHANGE, (IntPtr)(int)e, data, allWindows: true);
 
-        public static void GamepadConnected(int i) => DeviceEvents.DeviceChange(DeviceEvents.Events.DBT_DEVICEARRIVAL, IntPtr.Zero);
+        public static void GamepadConnected(int i) => DeviceChange(Events.DBT_DEVICEARRIVAL, IntPtr.Zero);
 
-        public static void GamepadDisconnected(int i) => DeviceEvents.DeviceChange(DeviceEvents.Events.DBT_DEVICEREMOVECOMPLETE, IntPtr.Zero);
+        public static void GamepadDisconnected(int i) => DeviceChange(Events.DBT_DEVICEREMOVECOMPLETE, IntPtr.Zero);
 
         public static void Update()
         {
-            for (int i = 0; i < DeviceEvents.IsGamepadConnected.Length; ++i)
+            for (int i = 0; i < IsGamepadConnected.Length; ++i)
             {
                 bool isConnected = FNAPlatform.GetGamePadState(i, GamePadDeadZone.IndependentAxes).IsConnected;
-                if (isConnected && !DeviceEvents.IsGamepadConnected[i])
-                    DeviceEvents.GamepadConnected(i);
-                else if (!isConnected && DeviceEvents.IsGamepadConnected[i])
-                    DeviceEvents.GamepadDisconnected(i);
-                DeviceEvents.IsGamepadConnected[i] = isConnected;
+                if (isConnected && !IsGamepadConnected[i])
+                    GamepadConnected(i);
+                else if (!isConnected && IsGamepadConnected[i])
+                    GamepadDisconnected(i);
+                IsGamepadConnected[i] = isConnected;
             }
         }
 

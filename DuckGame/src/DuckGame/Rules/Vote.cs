@@ -21,22 +21,22 @@ namespace DuckGame
         {
             if (openCorners)
             {
-                Vote._voteButton = voteButton;
+                _voteButton = voteButton;
                 HUD.CloseAllCorners();
                 HUD.AddCornerControl(HUDCorner.BottomRight, "@" + voteButton + "@" + voteMessage);
             }
-            Vote._votingOpen = true;
+            _votingOpen = true;
         }
 
-        public static RegisteredVote GetVote(Profile who) => Vote._votes.FirstOrDefault<RegisteredVote>(x => x.who == who);
+        public static RegisteredVote GetVote(Profile who) => _votes.FirstOrDefault(x => x.who == who);
 
         public static void RegisterVote(Profile who, VoteType vote)
         {
-            if (!Vote._votingOpen && Network.isActive && vote != VoteType.None)
+            if (!_votingOpen && Network.isActive && vote != VoteType.None)
                 return;
-            RegisteredVote registeredVote = Vote._votes.FirstOrDefault<RegisteredVote>(x => x.who == who);
+            RegisteredVote registeredVote = _votes.FirstOrDefault(x => x.who == who);
             if (registeredVote == null)
-                Vote._votes.Add(new RegisteredVote()
+                _votes.Add(new RegisteredVote()
                 {
                     who = who,
                     vote = vote
@@ -55,45 +55,45 @@ namespace DuckGame
 
         public static void CloseVoting()
         {
-            foreach (RegisteredVote vote in Vote._votes)
+            foreach (RegisteredVote vote in _votes)
                 vote.doClose = true;
-            Vote._voteButton = "";
-            Vote._votingOpen = false;
+            _voteButton = "";
+            _votingOpen = false;
         }
 
-        public static void ClearVotes() => Vote._votes.Clear();
+        public static void ClearVotes() => _votes.Clear();
 
         public static bool Passed(VoteType type)
         {
             int num = 0;
-            foreach (RegisteredVote vote in Vote._votes)
+            foreach (RegisteredVote vote in _votes)
             {
                 if (vote.open && vote.vote == type && (vote.who == null || vote.who.slotType != SlotType.Spectator))
                     ++num;
             }
-            IEnumerable<Profile> source = Profiles.all.Where<Profile>(x => x.team != null && x.slotType != SlotType.Spectator);
-            return num >= source.Count<Profile>();
+            IEnumerable<Profile> source = Profiles.all.Where(x => x.team != null && x.slotType != SlotType.Spectator);
+            return num >= source.Count();
         }
 
         public static void Update()
         {
-            if (Vote._voteButton != "")
+            if (_voteButton != "")
             {
-                foreach (Profile who in Profiles.all.Where<Profile>(x => x.team != null))
+                foreach (Profile who in Profiles.all.Where(x => x.team != null))
                 {
-                    if (who.inputProfile != null && who.inputProfile.Pressed(Vote._voteButton))
-                        Vote.RegisterVote(who, VoteType.Skip);
+                    if (who.inputProfile != null && who.inputProfile.Pressed(_voteButton))
+                        RegisterVote(who, VoteType.Skip);
                 }
             }
-            if (!Vote._votes.Exists(x => x.open && x.slide < 0.9f))
+            if (!_votes.Exists(x => x.open && x.slide < 0.9f))
             {
-                foreach (RegisteredVote vote in Vote._votes)
+                foreach (RegisteredVote vote in _votes)
                 {
                     if (vote.doClose)
                         vote.open = false;
                 }
             }
-            foreach (RegisteredVote vote in Vote._votes)
+            foreach (RegisteredVote vote in _votes)
             {
                 if (vote.vote == VoteType.None)
                     vote.open = false;
@@ -107,36 +107,38 @@ namespace DuckGame
 
         public static void Draw()
         {
-            int num1 = 0;
-            foreach (RegisteredVote vote in Vote._votes)
+            int index = 0;
+            foreach (RegisteredVote vote in _votes)
             {
                 if (vote.who != null && vote.who.inputProfile != null)
                 {
-                    float num2 = (float)(Math.Sin(vote.wobbleInc) * vote.wobble * 3.0);
-                    Vec2 vec2 = Network.isActive ? vote.leftStick : vote.who.inputProfile.leftStick;
-                    vote.who.persona.skipSprite.angle = (float)(num2 * 0.03f + vec2.y * 0.04f);
-                    float num3 = 0f;
-                    float num4 = 3f;
-                    float num5 = 49f;
+                    float wobbleOffset = (float)Math.Sin(vote.wobbleInc) * vote.wobble * 3f;
+                    Vec2 pos2 = Network.isActive ? vote.leftStick : vote.who.inputProfile.leftStick;
+                    vote.who.persona.skipSprite.angle = wobbleOffset * 0.03f + pos2.y * 0.4f;
+                    float wingXOffset = 0f;
+                    float posMul = 3f;
+                    float wingPlus = 49f;
                     if (vote.vote == VoteType.Skip)
                     {
                         vote.who.persona.skipSprite.frame = 0;
                     }
                     else
                     {
-                        num3 = -50f;
-                        num4 = 20f;
-                        num5 = 68f;
+                        wingXOffset = -50f;
+                        posMul = 20f;
+                        wingPlus = 68f;
                         vote.who.persona.skipSprite.frame = 1;
                     }
-                    Graphics.Draw(vote.who.persona.skipSprite, (float)(Layer.HUD.width + num5 - vote.slide * 48.0 + vec2.x * num4) + num3, (float)(Layer.HUD.height - 28.0 - num1 * 16 - vec2.y * num4), (Depth)0.9f);
+                    Graphics.Draw(vote.who.persona.skipSprite, Layer.HUD.width + wingPlus - vote.slide * 48f + pos2.x * posMul + wingXOffset, Layer.HUD.height - 28f - index * 16 - pos2.y * posMul, 0.9f);
                     vote.who.persona.skipSprite.frame = 1;
-                    Vec2 p2 = Network.isActive ? vote.rightStick : vote.who.inputProfile.rightStick;
+                    Vec2 pos3 = Network.isActive ? vote.rightStick : vote.who.inputProfile.rightStick;
                     if (vote.vote == VoteType.None)
-                        num3 = -50f;
-                    vote.who.persona.skipSprite.angle = num2 * 0.03f + Maths.DegToRad(Maths.PointDirection(Vec2.Zero, p2) - 180f);
-                    Graphics.Draw(vote.who.persona.skipSprite, (float)(Layer.HUD.width + 68.0 - vote.slide * 48.0 + p2.x * 20.0) + num3, (float)(Layer.HUD.height - 32.0 - num1 * 16 - p2.y * 20.0), (Depth)0.9f);
-                    ++num1;
+                    {
+                        wingXOffset = -50f;
+                    }
+                    vote.who.persona.skipSprite.angle = wobbleOffset * 0.03f + Maths.DegToRad(Maths.PointDirection(Vec2.Zero, pos3) - 180f);
+                    Graphics.Draw(vote.who.persona.skipSprite, Layer.HUD.width + 68f - vote.slide * 48f + pos3.x * 20f + wingXOffset, Layer.HUD.height - 32f - index * 16 - pos3.y * 20f, 0.9f);
+                    index++;
                 }
             }
         }

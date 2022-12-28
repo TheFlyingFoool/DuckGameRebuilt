@@ -64,7 +64,10 @@ namespace DuckGame
 
         public string GetNameForDisplay() => name.ToUpperInvariant();
 
-        public bool CheckRequirement(Profile p) => ChallengeData.CheckRequirement(p, requirement);
+        public bool CheckRequirement(Profile p)
+        {
+            return FireDebug.Debugging || CheckRequirement(p, requirement);
+        }
 
         public static bool CheckRequirement(Profile p, string req)
         {

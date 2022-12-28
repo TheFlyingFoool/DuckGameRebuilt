@@ -11,12 +11,12 @@ namespace DuckGame
     {
         private UIComponent _menu;
         private UIComponent _open;
-        private UIMenuActionOpenMenuCallFunction.Function _function;
+        private Function _function;
 
         public UIMenuActionOpenMenuCallFunction(
           UIComponent menu,
           UIComponent open,
-          UIMenuActionOpenMenuCallFunction.Function f)
+          Function f)
         {
             _menu = menu;
             _open = open;

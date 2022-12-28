@@ -37,38 +37,38 @@ namespace DuckGame
 
         public static Profile activeProfile
         {
-            get => Script._activeProfile;
-            set => Script._activeProfile = value;
+            get => _activeProfile;
+            set => _activeProfile = value;
         }
 
         public static int currentPosition
         {
-            get => Script._currentPosition;
-            set => Script._currentPosition = value;
+            get => _currentPosition;
+            set => _currentPosition = value;
         }
 
         public static List<List<Profile>> positions
         {
-            get => Script._positions;
-            set => Script._positions = value;
+            get => _positions;
+            set => _positions = value;
         }
 
         public static DuckNews activeNewsStory
         {
-            get => Script._activeNewsStory;
-            set => Script._activeNewsStory = value;
+            get => _activeNewsStory;
+            set => _activeNewsStory = value;
         }
 
         public static MethodInfo GetMethod(string name)
         {
             MethodInfo method;
-            Script._availableFunctions.TryGetValue(name, out method);
+            _availableFunctions.TryGetValue(name, out method);
             return method;
         }
 
         public static object CallMethod(string name, object value)
         {
-            MethodInfo method = Script.GetMethod(name);
+            MethodInfo method = GetMethod(name);
             if (!(method != null))
                 return null;
             MethodInfo methodInfo = method;
@@ -82,15 +82,15 @@ namespace DuckGame
 
         public static void Initialize()
         {
-            Script._activeProfile = Profiles.DefaultPlayer1;
-            Script._activeProfileProperty = typeof(Script).GetProperty("activeProfile", BindingFlags.Static | BindingFlags.Public);
+            _activeProfile = Profiles.DefaultPlayer1;
+            _activeProfileProperty = typeof(Script).GetProperty("activeProfile", BindingFlags.Static | BindingFlags.Public);
             foreach (MethodInfo method in typeof(Script).GetMethods(BindingFlags.Static | BindingFlags.Public))
-                Script._availableFunctions[method.Name] = method;
+                _availableFunctions[method.Name] = method;
         }
 
-        public static int profileScore() => Script.activeProfile.endOfRoundStats.GetProfileScore();
+        public static int profileScore() => activeProfile.endOfRoundStats.GetProfileScore();
 
-        public static int negProfileScore() => -Script.activeProfile.endOfRoundStats.GetProfileScore();
+        public static int negProfileScore() => -activeProfile.endOfRoundStats.GetProfileScore();
 
         public static ScriptObject stat(string statName)
         {
@@ -117,7 +117,7 @@ namespace DuckGame
             };
         }
 
-        public static string coolnessString() => Script.activeProfile.endOfRoundStats.GetCoolnessString();
+        public static string coolnessString() => activeProfile.endOfRoundStats.GetCoolnessString();
 
         public static ScriptObject prevStat(string statName)
         {
@@ -145,7 +145,7 @@ namespace DuckGame
 
         public static float toFloat(int val) => val;
 
-        public static int place() => Script.currentPosition;
+        public static int place() => currentPosition;
 
         public static float random() => Rando.Float(1f);
 
@@ -163,7 +163,7 @@ namespace DuckGame
                 wow = num2;
             wow -= num1;
             float num3 = wow / (float)(num2 - num1);
-            return Script._highlightRatings[(int)Math.Round(num3 * (Script._highlightRatings.Count - 1))];
+            return _highlightRatings[(int)Math.Round(num3 * (_highlightRatings.Count - 1))];
         }
 
         public static string highlightRating()
@@ -172,14 +172,14 @@ namespace DuckGame
             List<Recording> highlights = Highlights.GetHighlights();
             foreach (Recording recording in highlights)
                 num += recording.highlightScore;
-            return Script.RatingsString((int)(num / highlights.Count * 1.5f));
+            return RatingsString((int)(num / highlights.Count * 1.5f));
         }
 
         public static float floatVALUE()
         {
-            if (Script._activeNewsStory != null && Script._activeNewsStory.valueCalculation != null)
+            if (_activeNewsStory != null && _activeNewsStory.valueCalculation != null)
             {
-                object result = Script._activeNewsStory.valueCalculation.result;
+                object result = _activeNewsStory.valueCalculation.result;
                 if (result != null)
                     return Change.ToSingle(result);
             }
@@ -188,16 +188,16 @@ namespace DuckGame
 
         public static float floatVALUE2()
         {
-            if (Script._activeNewsStory != null && Script._activeNewsStory.valueCalculation != null)
+            if (_activeNewsStory != null && _activeNewsStory.valueCalculation != null)
             {
-                object result = Script._activeNewsStory.valueCalculation2.result;
+                object result = _activeNewsStory.valueCalculation2.result;
                 if (result != null)
                     return Change.ToSingle(result);
             }
             return 0f;
         }
 
-        public static int numInPlace(int p) => Script.positions == null || p < 0 || p >= Script.positions.Count ? 0 : Script.positions[Script.positions.Count - 1 - p].Count;
+        public static int numInPlace(int p) => positions == null || p < 0 || p >= positions.Count ? 0 : positions[positions.Count - 1 - p].Count;
 
         public static bool skippedNewscast() => HighlightLevel.didSkip;
 
@@ -215,7 +215,7 @@ namespace DuckGame
             foreach (Profile profile in Profiles.active)
             {
                 float num2 = -99999f;
-                ScriptObject scriptObject = Script.stat(val);
+                ScriptObject scriptObject = stat(val);
                 if (scriptObject != null)
                     num2 = Change.ToSingle(scriptObject.objectProperty.GetValue(scriptObject.obj, null)) * (scriptObject.negative ? -1f : 1f);
                 if (num2 > num1)
@@ -233,15 +233,15 @@ namespace DuckGame
                 float num2 = -999999f;
                 Profile activeProfile = Script.activeProfile;
                 Script.activeProfile = profile2;
-                if (Script._activeNewsStory != null && val == "VALUE")
+                if (_activeNewsStory != null && val == "VALUE")
                 {
-                    object result = Script._activeNewsStory.valueCalculation.result;
+                    object result = _activeNewsStory.valueCalculation.result;
                     if (result != null)
                         num2 = Change.ToSingle(result);
                 }
                 else if (val != "VALUE")
                 {
-                    ScriptObject scriptObject = Script.stat(val);
+                    ScriptObject scriptObject = stat(val);
                     if (scriptObject != null)
                         num2 = Change.ToSingle(scriptObject.objectProperty.GetValue(scriptObject.obj, null)) * (scriptObject.negative ? -1f : 1f);
                 }
@@ -252,7 +252,7 @@ namespace DuckGame
                     profile1 = profile2;
                 }
             }
-            return profile1 == Script.activeProfile;
+            return profile1 == activeProfile;
         }
     }
 }

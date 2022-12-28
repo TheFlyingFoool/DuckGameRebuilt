@@ -58,12 +58,12 @@ namespace DuckGame
             if (flipHorizontal)
             {
                 lightPos = new Vec2(x, y);
-                Level.Add(new PointLight(lightPos.x, lightPos.y, PyramidWallLight.lightColor, 120f, _occluders, true));
+                Level.Add(new PointLight(lightPos.x, lightPos.y, lightColor, 120f, _occluders, true));
             }
             else
             {
                 lightPos = new Vec2(x, y);
-                Level.Add(new PointLight(lightPos.x, lightPos.y, PyramidWallLight.lightColor, 120f, _occluders, true));
+                Level.Add(new PointLight(lightPos.x, lightPos.y, lightColor, 120f, _occluders, true));
             }
         }
     }

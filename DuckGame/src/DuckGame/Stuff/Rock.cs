@@ -89,19 +89,21 @@ namespace DuckGame
         public override void Update()
         {
             if (isGoldRock && !(material is MaterialGold))
+            {
                 material = new MaterialGold(this);
+            }
             if (isServerForObject)
             {
                 if (isGoldRock)
                 {
                     if (duck != null && !_didKill)
-                        SyncNetworkAction(new PhysicsObject.NetAction(StartRockSong));
+                        SyncNetworkAction(new NetAction(StartRockSong));
                     if (duck == null)
                     {
                         _didKill = false;
                         _killWait = 0;
                         if (_winSound != null)
-                            SyncNetworkAction(new PhysicsObject.NetAction(StopRockSong));
+                            SyncNetworkAction(new NetAction(StopRockSong));
                     }
                 }
                 if (_didKill && duck != null)
@@ -143,7 +145,7 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             if (bullet.isLocal && owner == null)
-                Thing.Fondle(this, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
             if (isServerForObject && bullet.isLocal && TeamSelect2.Enabled("EXPLODEYCRATES"))
             {
                 if (duck != null)

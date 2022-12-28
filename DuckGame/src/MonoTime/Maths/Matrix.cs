@@ -9,7 +9,7 @@ namespace DuckGame
         {
             get
             {
-                return Matrix.identity;
+                return identity;
             }
         }
 
@@ -185,7 +185,7 @@ namespace DuckGame
         public static Matrix CreateWorld(Vec3 position, Vec3 forward, Vec3 up)
         {
             Matrix ret;
-            Matrix.CreateWorld(ref position, ref forward, ref up, out ret);
+            CreateWorld(ref position, ref forward, ref up, out ret);
             return ret;
         }
 
@@ -210,7 +210,7 @@ namespace DuckGame
         public static Matrix CreateShadow(Vec3 lightDirection, Plane plane)
         {
             Matrix ret;
-            Matrix.CreateShadow(ref lightDirection, ref plane, out ret);
+            CreateShadow(ref lightDirection, ref plane, out ret);
             return ret;
         }
 
@@ -260,7 +260,7 @@ namespace DuckGame
         public static Matrix CreateReflection(Plane value)
         {
             Matrix ret;
-            Matrix.CreateReflection(ref value, out ret);
+            CreateReflection(ref value, out ret);
             return ret;
         }
 
@@ -269,7 +269,7 @@ namespace DuckGame
             Quaternion quaternion;
             Quaternion.CreateFromYawPitchRoll(yaw, pitch, roll, out quaternion);
             Matrix matrix;
-            Matrix.CreateFromQuaternion(ref quaternion, out matrix);
+            CreateFromQuaternion(ref quaternion, out matrix);
             return matrix;
         }
 
@@ -277,19 +277,19 @@ namespace DuckGame
         {
             Quaternion quaternion;
             Quaternion.CreateFromYawPitchRoll(yaw, pitch, roll, out quaternion);
-            Matrix.CreateFromQuaternion(ref quaternion, out result);
+            CreateFromQuaternion(ref quaternion, out result);
         }
 
         public static void Transform(ref Matrix value, ref Quaternion rotation, out Matrix result)
         {
-            Matrix matrix = Matrix.CreateFromQuaternion(rotation);
-            Matrix.Multiply(ref value, ref matrix, out result);
+            Matrix matrix = CreateFromQuaternion(rotation);
+            Multiply(ref value, ref matrix, out result);
         }
 
         public static Matrix Transform(Matrix value, Quaternion rotation)
         {
             Matrix ret;
-            Matrix.Transform(ref value, ref rotation, out ret);
+            Transform(ref value, ref rotation, out ret);
             return ret;
         }
 
@@ -406,7 +406,7 @@ namespace DuckGame
         public static Matrix CreateBillboard(Vec3 objectPosition, Vec3 cameraPosition, Vec3 cameraUpVector, Vec3? cameraForwardVector)
         {
             Matrix ret;
-            Matrix.CreateBillboard(ref objectPosition, ref cameraPosition, ref cameraUpVector, cameraForwardVector, out ret);
+            CreateBillboard(ref objectPosition, ref cameraPosition, ref cameraUpVector, cameraForwardVector, out ret);
             return ret;
         }
 
@@ -420,7 +420,7 @@ namespace DuckGame
             Vec3 right;
             Vec3.Cross(ref backwards, ref up, out right);
             Vec3.Cross(ref backwards, ref right, out up);
-            result = Matrix.Identity;
+            result = Identity;
             result.Backward = backwards;
             result.Right = right;
             result.Up = up;
@@ -450,13 +450,13 @@ namespace DuckGame
         public static Matrix CreateFromQuaternion(Quaternion quaternion)
         {
             Matrix ret;
-            Matrix.CreateFromQuaternion(ref quaternion, out ret);
+            CreateFromQuaternion(ref quaternion, out ret);
             return ret;
         }
 
         public static void CreateFromQuaternion(ref Quaternion quaternion, out Matrix result)
         {
-            result = Matrix.Identity;
+            result = Identity;
             result.M11 = 1f - 2f * (quaternion.y * quaternion.y + quaternion.z * quaternion.z);
             result.M12 = 2f * (quaternion.x * quaternion.y + quaternion.w * quaternion.z);
             result.M13 = 2f * (quaternion.x * quaternion.z - quaternion.w * quaternion.y);
@@ -471,7 +471,7 @@ namespace DuckGame
         public static Matrix CreateLookAt(Vec3 cameraPosition, Vec3 cameraTarget, Vec3 cameraUpVector)
         {
             Matrix ret;
-            Matrix.CreateLookAt(ref cameraPosition, ref cameraTarget, ref cameraUpVector, out ret);
+            CreateLookAt(ref cameraPosition, ref cameraTarget, ref cameraUpVector, out ret);
             return ret;
         }
 
@@ -480,7 +480,7 @@ namespace DuckGame
             Vec3 vz = Vec3.Normalize(cameraPosition - cameraTarget);
             Vec3 vx = Vec3.Normalize(Vec3.Cross(cameraUpVector, vz));
             Vec3 vy = Vec3.Cross(vz, vx);
-            result = Matrix.Identity;
+            result = Identity;
             result.M11 = vx.x;
             result.M12 = vy.x;
             result.M13 = vz.x;
@@ -498,7 +498,7 @@ namespace DuckGame
         public static Matrix CreateOrthographic(float width, float height, float zNearPlane, float zFarPlane)
         {
             Matrix ret;
-            Matrix.CreateOrthographic(width, height, zNearPlane, zFarPlane, out ret);
+            CreateOrthographic(width, height, zNearPlane, zFarPlane, out ret);
             return ret;
         }
 
@@ -525,7 +525,7 @@ namespace DuckGame
         public static Matrix CreateOrthographicOffCenter(float left, float right, float bottom, float top, float zNearPlane, float zFarPlane)
         {
             Matrix ret;
-            Matrix.CreateOrthographicOffCenter(left, right, bottom, top, zNearPlane, zFarPlane, out ret);
+            CreateOrthographicOffCenter(left, right, bottom, top, zNearPlane, zFarPlane, out ret);
             return ret;
         }
 
@@ -562,7 +562,7 @@ namespace DuckGame
         public static Matrix CreatePerspectiveFieldOfView(float fieldOfView, float aspectRatio, float nearPlaneDistance, float farPlaneDistance)
         {
             Matrix ret;
-            Matrix.CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlaneDistance, farPlaneDistance, out ret);
+            CreatePerspectiveFieldOfView(fieldOfView, aspectRatio, nearPlaneDistance, farPlaneDistance, out ret);
             return ret;
         }
 
@@ -606,7 +606,7 @@ namespace DuckGame
 
         public static Matrix CreateRotationX(float radians)
         {
-            Matrix returnMatrix = Matrix.Identity;
+            Matrix returnMatrix = Identity;
             returnMatrix.M22 = (float)Math.Cos(radians);
             returnMatrix.M23 = (float)Math.Sin(radians);
             returnMatrix.M32 = -returnMatrix.M23;
@@ -616,7 +616,7 @@ namespace DuckGame
 
         public static void CreateRotationX(float radians, out Matrix result)
         {
-            result = Matrix.Identity;
+            result = Identity;
             result.M22 = (float)Math.Cos(radians);
             result.M23 = (float)Math.Sin(radians);
             result.M32 = -result.M23;
@@ -625,7 +625,7 @@ namespace DuckGame
 
         public static Matrix CreateRotationY(float radians)
         {
-            Matrix returnMatrix = Matrix.Identity;
+            Matrix returnMatrix = Identity;
             returnMatrix.M11 = (float)Math.Cos(radians);
             returnMatrix.M13 = (float)Math.Sin(radians);
             returnMatrix.M31 = -returnMatrix.M13;
@@ -635,7 +635,7 @@ namespace DuckGame
 
         public static void CreateRotationY(float radians, out Matrix result)
         {
-            result = Matrix.Identity;
+            result = Identity;
             result.M11 = (float)Math.Cos(radians);
             result.M13 = (float)Math.Sin(radians);
             result.M31 = -result.M13;
@@ -644,7 +644,7 @@ namespace DuckGame
 
         public static Matrix CreateRotationZ(float radians)
         {
-            Matrix returnMatrix = Matrix.Identity;
+            Matrix returnMatrix = Identity;
             returnMatrix.M11 = (float)Math.Cos(radians);
             returnMatrix.M12 = (float)Math.Sin(radians);
             returnMatrix.M21 = -returnMatrix.M12;
@@ -654,7 +654,7 @@ namespace DuckGame
 
         public static void CreateRotationZ(float radians, out Matrix result)
         {
-            result = Matrix.Identity;
+            result = Identity;
             result.M11 = (float)Math.Cos(radians);
             result.M12 = (float)Math.Sin(radians);
             result.M21 = -result.M12;
@@ -663,7 +663,7 @@ namespace DuckGame
 
         public static Matrix CreateScale(float scale)
         {
-            Matrix returnMatrix = Matrix.Identity;
+            Matrix returnMatrix = Identity;
             returnMatrix.M11 = scale;
             returnMatrix.M22 = scale;
             returnMatrix.M33 = scale;
@@ -672,7 +672,7 @@ namespace DuckGame
 
         public static void CreateScale(float scale, out Matrix result)
         {
-            result = Matrix.Identity;
+            result = Identity;
             result.M11 = scale;
             result.M22 = scale;
             result.M33 = scale;
@@ -680,7 +680,7 @@ namespace DuckGame
 
         public static Matrix CreateScale(float xScale, float yScale, float zScale)
         {
-            Matrix returnMatrix = Matrix.Identity;
+            Matrix returnMatrix = Identity;
             returnMatrix.M11 = xScale;
             returnMatrix.M22 = yScale;
             returnMatrix.M33 = zScale;
@@ -689,7 +689,7 @@ namespace DuckGame
 
         public static void CreateScale(float xScale, float yScale, float zScale, out Matrix result)
         {
-            result = Matrix.Identity;
+            result = Identity;
             result.M11 = xScale;
             result.M22 = yScale;
             result.M33 = zScale;
@@ -697,7 +697,7 @@ namespace DuckGame
 
         public static Matrix CreateScale(Vec3 scales)
         {
-            Matrix returnMatrix = Matrix.Identity;
+            Matrix returnMatrix = Identity;
             returnMatrix.M11 = scales.x;
             returnMatrix.M22 = scales.y;
             returnMatrix.M33 = scales.z;
@@ -706,7 +706,7 @@ namespace DuckGame
 
         public static void CreateScale(ref Vec3 scales, out Matrix result)
         {
-            result = Matrix.Identity;
+            result = Identity;
             result.M11 = scales.x;
             result.M22 = scales.y;
             result.M33 = scales.z;
@@ -714,7 +714,7 @@ namespace DuckGame
 
         public static Matrix CreateTranslation(float xPosition, float yPosition, float zPosition)
         {
-            Matrix returnMatrix = Matrix.Identity;
+            Matrix returnMatrix = Identity;
             returnMatrix.M41 = xPosition;
             returnMatrix.M42 = yPosition;
             returnMatrix.M43 = zPosition;
@@ -723,7 +723,7 @@ namespace DuckGame
 
         public static void CreateTranslation(float xPosition, float yPosition, float zPosition, out Matrix result)
         {
-            result = Matrix.Identity;
+            result = Identity;
             result.M41 = xPosition;
             result.M42 = yPosition;
             result.M43 = zPosition;
@@ -731,7 +731,7 @@ namespace DuckGame
 
         public static Matrix CreateTranslation(Vec3 position)
         {
-            Matrix returnMatrix = Matrix.Identity;
+            Matrix returnMatrix = Identity;
             returnMatrix.M41 = position.x;
             returnMatrix.M42 = position.y;
             returnMatrix.M43 = position.z;
@@ -740,7 +740,7 @@ namespace DuckGame
 
         public static void CreateTranslation(ref Vec3 position, out Matrix result)
         {
-            result = Matrix.Identity;
+            result = Identity;
             result.M41 = position.x;
             result.M42 = position.y;
             result.M43 = position.z;
@@ -748,7 +748,7 @@ namespace DuckGame
 
         public static Matrix Divide(Matrix matrix1, Matrix matrix2)
         {
-            Matrix inverse = Matrix.Invert(matrix2);
+            Matrix inverse = Invert(matrix2);
             Matrix result;
             result.M11 = matrix1.M11 * inverse.M11 + matrix1.M12 * inverse.M21 + matrix1.M13 * inverse.M31 + matrix1.M14 * inverse.M41;
             result.M12 = matrix1.M11 * inverse.M12 + matrix1.M12 * inverse.M22 + matrix1.M13 * inverse.M32 + matrix1.M14 * inverse.M42;
@@ -771,7 +771,7 @@ namespace DuckGame
 
         public static void Divide(ref Matrix matrix1, ref Matrix matrix2, out Matrix result)
         {
-            Matrix inverse = Matrix.Invert(matrix2);
+            Matrix inverse = Invert(matrix2);
             result.M11 = matrix1.M11 * inverse.M11 + matrix1.M12 * inverse.M21 + matrix1.M13 * inverse.M31 + matrix1.M14 * inverse.M41;
             result.M12 = matrix1.M11 * inverse.M12 + matrix1.M12 * inverse.M22 + matrix1.M13 * inverse.M32 + matrix1.M14 * inverse.M42;
             result.M13 = matrix1.M11 * inverse.M13 + matrix1.M12 * inverse.M23 + matrix1.M13 * inverse.M33 + matrix1.M14 * inverse.M43;
@@ -835,7 +835,7 @@ namespace DuckGame
 
         public static Matrix Invert(Matrix matrix)
         {
-            Matrix.Invert(ref matrix, out matrix);
+            Invert(ref matrix, out matrix);
             return matrix;
         }
 
@@ -1131,7 +1131,7 @@ namespace DuckGame
 
         public static Matrix operator /(Matrix matrix1, Matrix matrix2)
         {
-            Matrix inverse = Matrix.Invert(matrix2);
+            Matrix inverse = Invert(matrix2);
             Matrix result;
             result.M11 = matrix1.M11 * inverse.M11 + matrix1.M12 * inverse.M21 + matrix1.M13 * inverse.M31 + matrix1.M14 * inverse.M41;
             result.M12 = matrix1.M11 * inverse.M12 + matrix1.M12 * inverse.M22 + matrix1.M13 * inverse.M32 + matrix1.M14 * inverse.M42;

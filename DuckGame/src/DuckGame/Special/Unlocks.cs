@@ -24,66 +24,71 @@ namespace DuckGame
         {
             ArcadeLevel arcadeLevel = new ArcadeLevel(Content.GetLevelID("arcade"));
             arcadeLevel.InitializeMachines();
-            int num1 = 0;
+            int numChallenges = 0;
             foreach (ArcadeMachine challenge in arcadeLevel._challenges)
-                num1 += challenge.data.challenges.Count;
-            int num2 = num1 + Challenges.GetAllChancyChallenges().Count;
-            int num3 = num2 * Challenges.valueBronze;
-            int num4 = num2 * Challenges.valueSilver;
-            int num5 = num2 * Challenges.valueGold;
-            int num6 = num2 * Challenges.valuePlatinum;
-            int num7 = num3;
-            int num8 = num3 + num4;
-            int num9 = num3 + num4 + num5;
-            int num10 = num3 + num4 + num5 + num6;
-            Unlocks.bronzeTotalTickets = num7;
-            Unlocks.silverTotalTickets = num8;
-            Unlocks.goldTotalTickets = num9;
-            Unlocks.platinumTotalTickets = num10;
-            int num11 = 0;
-            int num12 = 0;
-            int num13 = 0;
-            int num14 = 0;
-            foreach (UnlockData unlock in Unlocks.GetUnlocks(UnlockType.Any))
+                numChallenges += challenge.data.challenges.Count;
+            numChallenges = numChallenges + Challenges.GetAllChancyChallenges().Count;
+            int bronzeValue = numChallenges * Challenges.valueBronze;
+            int silverValue = numChallenges * Challenges.valueSilver;
+            int goldValue = numChallenges * Challenges.valueGold;
+            int platinumValue = numChallenges * Challenges.valuePlatinum;
+            int bronzeTotal = bronzeValue;
+            int silverTotal = bronzeValue + silverValue;
+            int goldTotal = bronzeValue + silverValue + goldValue;
+            int platinumTotal = bronzeValue + silverValue + goldValue + platinumValue;
+            bronzeTotalTickets = bronzeTotal;
+            silverTotalTickets = silverTotal;
+            goldTotalTickets = goldTotal;
+            platinumTotalTickets = platinumTotal;
+            int numCheap = 0;
+            int numNormal = 0;
+            int numHigh = 0;
+            int numRidiculous = 0;
+            foreach (UnlockData unlock in GetUnlocks(UnlockType.Any))
             {
                 if (unlock.priceTier == UnlockPrice.Cheap)
-                    ++num11;
+                    ++numCheap;
                 else if (unlock.priceTier == UnlockPrice.Normal)
-                    ++num12;
+                    ++numNormal;
                 else if (unlock.priceTier == UnlockPrice.High)
-                    ++num13;
+                    ++numHigh;
                 else if (unlock.priceTier == UnlockPrice.Ridiculous)
-                    ++num14;
+                    ++numRidiculous;
             }
-            int num15 = (int)Math.Round((double)(num9 * 0.1f));
-            int num16 = (int)Math.Round((double)(num9 * 0.3f));
-            int num17 = (int)Math.Round((double)(num9 * 0.4f));
-            int num18 = (int)Math.Round((double)(num9 * 0.2f));
-            int num19 = (int)Math.Round((double)(num15 / num11));
-            int num20 = (int)Math.Round((double)(num16 / num12));
-            int num21 = (int)Math.Round((double)(num17 / num13));
-            int num22 = (int)Math.Round((double)(num18 / num14));
-            while (num19 * num11 + num20 * num12 + num21 * num13 + num22 * num14 > num9)
-                --num22;
-            while (num19 * num11 + num20 * num12 + num21 * num13 + num22 * num14 < num9)
-                ++num22;
-            foreach (UnlockData unlock in Unlocks.GetUnlocks(UnlockType.Any))
+            int cheapTickets = (int)Math.Round(goldTotal * 0.1f);
+            int normalTickets = (int)Math.Round(goldTotal * 0.3f);
+            int highTickets = (int)Math.Round(goldTotal * 0.4f);
+            int ridiculousTickets = (int)Math.Round(goldTotal * 0.20f);
+
+            int costPerCheap = (int)Math.Round(cheapTickets / (float)numCheap);
+            int costPerNormal = (int)Math.Round(normalTickets / (float)numNormal);
+            int costPerHigh = (int)Math.Round(highTickets / (float)numHigh);
+            int costPerRidiculous = (int)Math.Round(ridiculousTickets / (float)numRidiculous);
+            while (costPerCheap * numCheap + costPerNormal * numNormal + costPerHigh * numHigh + costPerRidiculous * numRidiculous > goldTotal)
+                --costPerRidiculous;
+            while (costPerCheap * numCheap + costPerNormal * numNormal + costPerHigh * numHigh + costPerRidiculous * numRidiculous < goldTotal)
+                ++costPerRidiculous;
+            foreach (UnlockData unlock in GetUnlocks(UnlockType.Any))
             {
                 if (unlock.priceTier == UnlockPrice.Cheap)
-                    unlock.cost = num19;
+                    unlock.cost = costPerCheap;
                 else if (unlock.priceTier == UnlockPrice.Normal)
-                    unlock.cost = num20;
+                    unlock.cost = costPerNormal;
                 else if (unlock.priceTier == UnlockPrice.High)
-                    unlock.cost = num21;
+                    unlock.cost = costPerHigh;
                 else if (unlock.priceTier == UnlockPrice.Ridiculous)
-                    unlock.cost = num22;
+                    unlock.cost = costPerRidiculous;
                 else if (unlock.priceTier == UnlockPrice.Chancy)
-                    unlock.cost = num6;
+                    unlock.cost = platinumValue;
             }
         }
 
         public static bool IsUnlocked(string unlock, Profile pro = null)
         {
+            if (FireDebug.Debugging)
+            {
+                return true;
+            }
             foreach (Profile profile in Profiles.all)
             {
                 if ((pro == null || profile == pro) && profile.unlocks.Contains(unlock))
@@ -131,7 +136,7 @@ namespace DuckGame
             if (type == UnlockType.Any)
                 return new List<UnlockData>(_allUnlocks);
             List<UnlockData> unlocks = new List<UnlockData>();
-            foreach (UnlockData allUnlock in Unlocks._allUnlocks)
+            foreach (UnlockData allUnlock in _allUnlocks)
             {
                 if (allUnlock.type == type)
                     unlocks.Add(allUnlock);
@@ -141,7 +146,7 @@ namespace DuckGame
 
         public static UnlockData GetUnlock(string id)
         {
-            foreach (UnlockData allUnlock in Unlocks._allUnlocks)
+            foreach (UnlockData allUnlock in _allUnlocks)
             {
                 if (allUnlock.id == id)
                     return allUnlock;
@@ -163,7 +168,7 @@ namespace DuckGame
                 priceTier = UnlockPrice.Ridiculous,
                 layer = 3
             };
-            Unlocks._allUnlocks.Add(child1);
+            _allUnlocks.Add(child1);
             UnlockData unlockData1 = new UnlockData()
             {
                 name = "Moon Gravity",
@@ -175,8 +180,8 @@ namespace DuckGame
                 icon = 3,
                 priceTier = UnlockPrice.Cheap
             };
-            Unlocks._unlocks.Add(unlockData1);
-            Unlocks._allUnlocks.Add(unlockData1);
+            _unlocks.Add(unlockData1);
+            _allUnlocks.Add(unlockData1);
             UnlockData child2 = new UnlockData()
             {
                 name = "Start With Helmet",
@@ -189,7 +194,7 @@ namespace DuckGame
                 priceTier = UnlockPrice.Cheap
             };
             unlockData1.AddChild(child2);
-            Unlocks._allUnlocks.Add(child2);
+            _allUnlocks.Add(child2);
             UnlockData child3 = new UnlockData()
             {
                 name = "Exploding Props",
@@ -202,7 +207,7 @@ namespace DuckGame
                 priceTier = UnlockPrice.Normal
             };
             unlockData1.AddChild(child3);
-            Unlocks._allUnlocks.Add(child3);
+            _allUnlocks.Add(child3);
             UnlockData child4 = new UnlockData()
             {
                 name = "Ammo, Infinite",
@@ -216,7 +221,7 @@ namespace DuckGame
                 priceTier = UnlockPrice.High
             };
             child3.AddChild(child4);
-            Unlocks._allUnlocks.Add(child4);
+            _allUnlocks.Add(child4);
             UnlockData child5 = new UnlockData()
             {
                 name = "Empty Guns Explode",
@@ -229,7 +234,7 @@ namespace DuckGame
                 priceTier = UnlockPrice.Normal
             };
             child1.AddChild(child5);
-            Unlocks._allUnlocks.Add(child5);
+            _allUnlocks.Add(child5);
             UnlockData child6 = new UnlockData()
             {
                 name = "Hat Pack 2",
@@ -241,7 +246,7 @@ namespace DuckGame
                 priceTier = UnlockPrice.High
             };
             child1.AddChild(child6);
-            Unlocks._allUnlocks.Add(child6);
+            _allUnlocks.Add(child6);
             UnlockData unlockData2 = new UnlockData()
             {
                 name = "Hat Pack 1",
@@ -252,8 +257,8 @@ namespace DuckGame
                 icon = 14,
                 priceTier = UnlockPrice.Normal
             };
-            Unlocks._unlocks.Add(unlockData2);
-            Unlocks._allUnlocks.Add(unlockData2);
+            _unlocks.Add(unlockData2);
+            _allUnlocks.Add(unlockData2);
             UnlockData child7 = new UnlockData()
             {
                 name = "Presents for Winners",
@@ -266,7 +271,7 @@ namespace DuckGame
                 priceTier = UnlockPrice.Normal
             };
             unlockData2.AddChild(child7);
-            Unlocks._allUnlocks.Add(child7);
+            _allUnlocks.Add(child7);
             UnlockData child8 = new UnlockData()
             {
                 name = "Start With Shoes",
@@ -279,7 +284,7 @@ namespace DuckGame
                 priceTier = UnlockPrice.Cheap
             };
             unlockData2.AddChild(child8);
-            Unlocks._allUnlocks.Add(child8);
+            _allUnlocks.Add(child8);
             UnlockData child9 = new UnlockData()
             {
                 name = "QWOP Mode",
@@ -293,7 +298,7 @@ namespace DuckGame
                 onlineEnabled = false
             };
             child7.AddChild(child9);
-            Unlocks._allUnlocks.Add(child9);
+            _allUnlocks.Add(child9);
             child4.AddChild(child1);
             child9.AddChild(child1);
             UnlockData child10 = new UnlockData()
@@ -308,7 +313,7 @@ namespace DuckGame
                 priceTier = UnlockPrice.High
             };
             child1.AddChild(child10);
-            Unlocks._allUnlocks.Add(child10);
+            _allUnlocks.Add(child10);
             UnlockData child11 = new UnlockData()
             {
                 name = "Live Grenade On Death",
@@ -322,7 +327,7 @@ namespace DuckGame
                 priceTier = UnlockPrice.Normal
             };
             child1.AddChild(child11);
-            Unlocks._allUnlocks.Add(child11);
+            _allUnlocks.Add(child11);
             UnlockData child12 = new UnlockData()
             {
                 name = "Ultimate Champion",
@@ -338,13 +343,13 @@ namespace DuckGame
             child5.AddChild(child12);
             child6.AddChild(child12);
             child10.AddChild(child12);
-            Unlocks._allUnlocks.Add(child12);
+            _allUnlocks.Add(child12);
             byte num = 0;
-            foreach (UnlockData allUnlock in Unlocks._allUnlocks)
+            foreach (UnlockData allUnlock in _allUnlocks)
             {
                 if (allUnlock.type == UnlockType.Modifier)
                 {
-                    Unlocks.modifierToByte[allUnlock.id] = num;
+                    modifierToByte[allUnlock.id] = num;
                     ++num;
                 }
             }

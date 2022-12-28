@@ -53,7 +53,7 @@ namespace DuckGame
 
         public string Name { get; set; }
 
-        public static SoundEffect FromStream(Stream stream) => SoundEffect.FromStream(stream, "wav");
+        public static SoundEffect FromStream(Stream stream) => FromStream(stream, "wav");
         public SoundEffect(Stream stream)
         {
             soundEffect = Microsoft.Xna.Framework.Audio.SoundEffect.FromStream(stream);
@@ -80,7 +80,7 @@ namespace DuckGame
 
         public static SoundEffect CreateStreaming(string pPath)
         {
-            if (System.IO.File.Exists(pPath))
+            if (File.Exists(pPath))
                 return new SoundEffect()
                 {
                     streaming = true,
@@ -122,13 +122,13 @@ namespace DuckGame
             {
                 try
                 {
-                    if (_decodedSamples + kDecoderChunkSize > SoundEffect._songBuffer.Length)
+                    if (_decodedSamples + kDecoderChunkSize > _songBuffer.Length)
                     {
-                        float[] destinationArray = new float[SoundEffect._songBuffer.Length * 2];
-                        Array.Copy(_songBuffer, destinationArray, SoundEffect._songBuffer.Length);
-                        SoundEffect._songBuffer = destinationArray;
+                        float[] destinationArray = new float[_songBuffer.Length * 2];
+                        Array.Copy(_songBuffer, destinationArray, _songBuffer.Length);
+                        _songBuffer = destinationArray;
                     }
-                    int num = _decoderReader.Read(SoundEffect._songBuffer, _decodedSamples, kDecoderChunkSize);
+                    int num = _decoderReader.Read(_songBuffer, _decodedSamples, kDecoderChunkSize);
                     if (num > 0)
                     {
                         _decodedSamples += num;
@@ -153,11 +153,11 @@ namespace DuckGame
         {
             while (true)
             {
-                lock (SoundEffect.kDecoderHandle)
+                lock (kDecoderHandle)
                 {
                     if (!Decoder_DecodeChunk())
                         break;
-                    if (_decoderIndex != SoundEffect.kDecoderIndex)
+                    if (_decoderIndex != kDecoderIndex)
                         break;
                 }
                 Thread.Sleep(10);
@@ -269,13 +269,13 @@ namespace DuckGame
             {
                 if (!MonoMain.enableThreadedLoading)
                     return;
-                lock (SoundEffect.kDecoderHandle)
+                lock (kDecoderHandle)
                 {
-                    if (SoundEffect._songBuffer == null)
-                        SoundEffect._songBuffer = new float[_totalSamples];
-                    _waveBuffer = SoundEffect._songBuffer;
-                    ++SoundEffect.kDecoderIndex;
-                    _decoderIndex = SoundEffect.kDecoderIndex;
+                    if (_songBuffer == null)
+                        _songBuffer = new float[_totalSamples];
+                    _waveBuffer = _songBuffer;
+                    ++kDecoderIndex;
+                    _decoderIndex = kDecoderIndex;
                     Task.Factory.StartNew(new Action(Thread_Decoder));
                 }
             }
@@ -300,7 +300,7 @@ namespace DuckGame
                 }
                 return;
             }
-            byte[] buffer = System.IO.File.ReadAllBytes(pPath);
+            byte[] buffer = File.ReadAllBytes(pPath);
             if (buffer == null)
             {
                 PrepareReader(new AudioFileReader(pPath), null);

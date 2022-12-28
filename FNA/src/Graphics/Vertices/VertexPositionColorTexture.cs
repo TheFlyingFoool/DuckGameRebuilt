@@ -126,7 +126,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				return false;
 			}
 
-			if (obj.GetType() != base.GetType())
+			if (obj.GetType() != GetType())
 			{
 				return false;
 			}

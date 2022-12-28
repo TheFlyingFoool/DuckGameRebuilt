@@ -35,7 +35,7 @@ namespace DuckGame
         public bool doShake;
         protected WindowFrame _frame;
         public EditorProperty<int> windowHeight;
-        public EditorProperty<int> tint = new EditorProperty<int>(0, max: Window.windowColors.Count - 1, increment: 1f);
+        public EditorProperty<int> tint = new EditorProperty<int>(0, max: windowColors.Count - 1, increment: 1f);
         public EditorProperty<bool> valid;
         public EditorProperty<bool> bars = new EditorProperty<bool>(false);
         public static List<Color> windowColors = new List<Color>()
@@ -199,7 +199,7 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             if (bullet.isLocal)
-                Thing.Fondle(this, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
             if (!_hasGlass)
                 return base.Hit(bullet, hitPos);
             _enter = hitPos + bullet.travelDirNormalized;
@@ -256,7 +256,7 @@ namespace DuckGame
         {
             if (_hasGlass)
                 SFX.Play("glassBump", 0.7f);
-            _shakeVal = 3.1415927f;
+            _shakeVal = (float)Math.PI;
         }
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
@@ -339,7 +339,7 @@ namespace DuckGame
             _barSprite.angle = angle;
             if (_hasGlass)
             {
-                Color windowColor = Window.windowColors[tint.value];
+                Color windowColor = windowColors[tint.value];
                 windowColor.a = 51;
                 _sprite.color = windowColor;
                 alpha = 0.7f;
@@ -359,7 +359,7 @@ namespace DuckGame
                         return;
 
                     Color col = new Color((byte)(windowColor.r * 0.5f), (byte)(windowColor.g * 0.5f), (byte)(windowColor.b * 0.8f), (byte)178);
-                    Graphics.DrawLine(this._hits[index] + zero, this._hits[index + 1] + zero, col, 1f, default(Depth));
+                    Graphics.DrawLine(_hits[index] + zero, _hits[index + 1] + zero, col, 1f, default(Depth));
                 }
             }
             position -= zero;

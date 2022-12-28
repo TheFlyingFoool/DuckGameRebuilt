@@ -28,12 +28,12 @@ namespace DuckGame
             if (!LoadAll())
                 DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD CONFIG FIELDS");
 
-            MonoMain.OnGameExit += SaveAllClosing;
+            MonoMain.OnGameExit += SaveAll;
         }
 
         public static void SaveAll(bool isDangerous)
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new();
             int length = AutoConfigFieldAttribute.All.Count;
             for (int i = 0; i < length; i++)
             {
@@ -94,71 +94,7 @@ namespace DuckGame
             File.WriteAllText(MainSaveFilePath, stringBuilder.ToString());
             DevConsole.Log("|240,164,65|ACFG|DGGREEN| SAVED ALL CUSTOM CONFIG SUCCESSFULLY!");
         }
-        public static void SaveAllClosing(bool isDangerous)
-        {
-            int length = AutoConfigFieldAttribute.All.Count;
-            StringBuilder stringBuilder = new StringBuilder();
-
-            for (int i = 0; i < length; i++)
-            {
-                AutoConfigFieldAttribute attribute = AutoConfigFieldAttribute.All[i];
-                MemberInfo field = attribute.field;
-
-                bool isfield = true;
-                PropertyInfo pi = null;
-                FieldInfo fi = field as FieldInfo;
-                Type fieldType;
-                if (fi == null)
-                {
-                    pi = field as PropertyInfo;
-                    if (pi == null)
-                    {
-                        throw new Exception("Unsupported AutoConfig field type");
-                    }
-                    isfield = false;
-                    fieldType = pi.PropertyType;
-                }
-                else
-                {
-                    fieldType = fi.FieldType;
-                }
-                if (isDangerous && attribute.PotentiallyDangerous)
-                    continue;
-
-                if (!FireSerializer.IsSerializable(fieldType))
-                    continue;
-
-                object fieldValue;
-                if (isfield)
-                {
-                    fieldValue = fi.GetValue(null);
-                }
-                else
-                {
-                    fieldValue = pi.GetMethod?.Invoke(null, null);
-                }
-                string fullName = attribute.Id ?? field.GetFullName();
-
-                string writtenValue = FireSerializer.Serialize(fieldValue);
-
-                if (attribute.External is not null)
-                {
-                    string fileName = attribute.External + FileExtension;
-                    string fullPath = SaveDirPath + fileName;
-                    File.WriteAllText(fullPath, writtenValue);
-
-                    writtenValue = fileName;
-                }
-
-                string dataLine = $"{fullName}={writtenValue}";
-                stringBuilder.Append(dataLine);
-
-                if (i != length)
-                    stringBuilder.Append("\n");
-            }
-            File.WriteAllText(MainSaveFilePath, stringBuilder.ToString());
-            //DevConsole.Log("|240,164,65|ACFG|DGGREEN| SAVED ALL CUSTOM CONFIG SUCCESSFULLY!"); did i make another one just to removed this log to stop and error related to some closing stuff on linux, the answer is yes //
-        }
+        
         public static bool LoadAll()
         {
             IReadOnlyList<AutoConfigFieldAttribute> all = AutoConfigFieldAttribute.All;

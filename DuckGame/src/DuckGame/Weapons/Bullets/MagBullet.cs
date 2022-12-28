@@ -13,6 +13,8 @@ namespace DuckGame
     {
         private Texture2D _beem;
         private float _thickness;
+        private Color color = Color.White;
+        private static int colorindex;
 
         public MagBullet(
           float xval,
@@ -28,6 +30,15 @@ namespace DuckGame
         {
             _thickness = type.bulletThickness;
             _beem = Content.Load<Texture2D>("magBeam");
+            if (Program.gay)
+            {
+                color = Colors.Rainbow[colorindex];
+                colorindex += 1;
+                if (colorindex >= Colors.Rainbow.Length)
+                {
+                    colorindex = 0;
+                }
+            }
         }
 
         public override void Draw()
@@ -39,6 +50,10 @@ namespace DuckGame
             float num1 = (1f / (length / 8f));
             float num2 = 0f;
             float num3 = 8f;
+            if (Program.nikogay)
+            {
+                color = Colors.Rainbow[colorindex];
+            }
             while (true)
             {
                 bool flag = false;
@@ -48,7 +63,7 @@ namespace DuckGame
                     flag = true;
                 }
                 num2 += num1;
-                DuckGame.Graphics.DrawTexturedLine((Tex2D)_beem, drawStart + travelDirNormalized * val, drawStart + travelDirNormalized * (val + num3), Color.White * num2, _thickness, (Depth)0.6f);
+                Graphics.DrawTexturedLine((Tex2D)_beem, drawStart + travelDirNormalized * val, drawStart + travelDirNormalized * (val + num3), color * num2, _thickness, (Depth)0.6f);
                 if (!flag)
                     val += 8f;
                 else
@@ -72,7 +87,7 @@ namespace DuckGame
             {
                 if (t != owner)
                 {
-                    Thing.SuperFondle(t, DuckNetwork.localConnection);
+                    SuperFondle(t, DuckNetwork.localConnection);
                     t.Destroy(new DTShot(this));
                 }
             }

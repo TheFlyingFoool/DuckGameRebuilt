@@ -24,8 +24,8 @@ namespace DuckGame
 
         public override void Apply()
         {
-            DuckGame.Graphics.device.Textures[1] = (Texture2D)_lighting;
-            DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
+            Graphics.device.Textures[1] = (Texture2D)_lighting;
+            Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
             SetValue("xpos", _hat.position.x - 32f);
             SetValue("ypos", _hat.position.y - 32f);
             if (_hat.graphic != null)

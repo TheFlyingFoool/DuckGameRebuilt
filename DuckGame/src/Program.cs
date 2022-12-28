@@ -5,18 +5,22 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using AddedContent.Firebreak;
 using DbMon.NET;
 using DGWindows;
 using Microsoft.Xna.Framework;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using System.Resources;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -31,8 +35,24 @@ namespace DuckGame
     /// <summary>The main class.</summary>
     public static class Program
     {
+        public static bool fullstop;
+        public const bool IS_DEV_BUILD =
+#if AutoUpdater
+          false;
+#else
+            true;
+#endif
+        public static readonly bool HasInternet = Internet.IsAvailable();
+        // this should be formatted like X.X.X where each X is a number
+        public const string CURRENT_VERSION_ID = "1.0.10";
+
+        // dont change this unless you know what you're doing -Firebreak
+        public const string CURRENT_VERSION_ID_FORMATTED = $"v{CURRENT_VERSION_ID}-beta";
+
         public static bool Prestart = DirtyPreStart();
 
+        
+        
 
         public static string StartinEditorLevelName;
         public static string GameDirectory;
@@ -41,7 +61,7 @@ namespace DuckGame
         public static bool IsLinuxD;
         public static bool intro = false;
         public static bool testServer = false;
-        public static DuckGame.Main main;
+        public static Main main;
         public static string commandLine = "";
         private static bool _attemptingResolve = false;
         private static bool _showedError = false;
@@ -58,8 +78,8 @@ namespace DuckGame
         {
             () => "Date: " + DateTime.UtcNow.ToString(DateTimeFormatInfo.InvariantInfo),
             () => "Version: " + DG.version,
-            () => "Platform: " + DG.platform + " (Steam Build " + Program.steamBuildID.ToString() + ")",
-            () => "Command Line: " + Program.commandLine
+            () => "Platform: " + DG.platform + " (Steam Build " + steamBuildID.ToString() + ")",
+            () => "Command Line: " + commandLine
         };
         private static string kCleanupString = "C:\\gamedev\\duckgame_try2\\duckgame\\DuckGame\\src\\";
         public static bool crashed = false;
@@ -72,19 +92,36 @@ namespace DuckGame
         public static Assembly gameAssembly;
         public static string gameAssemblyName;
         public static bool doscreentileing; //just a fun showing off thing
+        public static bool gay; // sht about to get real colorful
+        public static bool nikogay; // sht about to get real colorful
         /// <summary>The main entry point for the application.</summary>\
         public static Vec2 StartPos = Vec2.Zero;
         public static string gitVersion = "N/A";
+        public static bool lateCrash;
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
         public static void Main(string[] args)
         {
+            if (fullstop)
+            {
+                return;
+            }
             //File.Delete(Path.GetFullPath("DGInput.dll"));
             try
             {
-
+                using (StreamReader st = new(gameAssembly.GetManifestResourceStream("SlnPath.txt")))
+                {
+                    kCleanupString = st.ReadToEnd();
+                }
+                kCleanupString = kCleanupString.Replace(" \r\n", "");
+            }
+            catch
+            {
+            }
+            try
+            {
                 bool isDirty = false;
-                using (StreamReader st = new(Program.gameAssembly.GetManifestResourceStream("version.txt")))
+                using (StreamReader st = new(gameAssembly.GetManifestResourceStream("version.txt")))
                 {
                     gitVersion = st.ReadToEnd();
                 }
@@ -109,32 +146,32 @@ namespace DuckGame
             }
             DevConsole.Log(IsLinuxD.ToString() + " " + p.ToString());
             gameAssembly = Assembly.GetExecutingAssembly();
-            gameAssemblyName = Program.gameAssembly.GetName().Name;
-            FilePath = Program.gameAssembly.Location;
-            FileName = System.IO.Path.GetFileName(FilePath);
+            gameAssemblyName = gameAssembly.GetName().Name;
+            FilePath = gameAssembly.Location;
+            FileName = Path.GetFileName(FilePath);
             GameDirectory = FilePath.Substring(0, FilePath.Length - FileName.Length);
-            if (args.Contains<string>("-linux") || WindowsPlatformStartup.isRunningWine && !args.Contains<string>("-nolinux"))
+            if (args.Contains("-linux") || WindowsPlatformStartup.isRunningWine && !args.Contains("-nolinux"))
             {
-                Program.wineVersion = WindowsPlatformStartup.wineVersion;
-                Program.isLinux = true;
+                wineVersion = WindowsPlatformStartup.wineVersion;
+                isLinux = true;
                 MonoMain.enableThreadedLoading = false;
             }
             else
                 AppDomain.CurrentDomain.AssemblyLoad += new AssemblyLoadEventHandler(WindowsPlatformStartup.AssemblyLoad);
-            Application.ThreadException += new ThreadExceptionEventHandler(Program.UnhandledThreadExceptionTrapper);
+            Application.ThreadException += new ThreadExceptionEventHandler(UnhandledThreadExceptionTrapper);
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(WindowsPlatformStartup.UnhandledExceptionTrapper);
-            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(Program.Resolve);
+            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(Resolve);
             TaskScheduler.UnobservedTaskException += UnhandledExceptionUnobserved;
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
-            AppDomain.CurrentDomain.ProcessExit += new EventHandler(Program.OnProcessExit);
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
             try
             {
                 //DoSomeAccessViolation();
-                Program.DoMain(args);
+                DoMain(args);
             }
             catch (Exception ex)
             {
-                Program.HandleGameCrash(ex);
+                HandleGameCrash(ex);
             }
         }
         //public static Int32 newexceptionfilter(IntPtr a)
@@ -153,6 +190,14 @@ namespace DuckGame
             int tries = 10;
             int p = (int)Environment.OSVersion.Platform;
             IsLinuxD = (p == 4) || (p == 6) || (p == 128);
+            if (!IS_DEV_BUILD)
+            {
+                AutoUpdaterNew();
+            }
+            if (fullstop)
+            {
+                return false;
+            }
             try // IMPROVEME, i try catch this because when restarting with the ingame restarting thing, it would crash because this was still in use
             {   // also this should really be doing some kind of like cache thing so it doesnt do this everytime
                 while (tries > 0)
@@ -188,9 +233,9 @@ namespace DuckGame
             }
             DevConsole.Log("Is Linux " + IsLinuxD.ToString() + " PlatformID " + p.ToString());
             gameAssembly = Assembly.GetExecutingAssembly();
-            gameAssemblyName = Program.gameAssembly.GetName().Name;
-            FilePath = Program.gameAssembly.Location;
-            FileName = System.IO.Path.GetFileName(FilePath);
+            gameAssemblyName = gameAssembly.GetName().Name;
+            FilePath = gameAssembly.Location;
+            FileName = Path.GetFileName(FilePath);
             GameDirectory = FilePath.Substring(0, FilePath.Length - FileName.Length);
             return true;
         }
@@ -198,32 +243,32 @@ namespace DuckGame
 
         public static Assembly Resolve(object sender, ResolveEventArgs args)
         {
-            if (!Program.enteredMain)
+            if (!enteredMain)
                 return null;
             if (args.Name.StartsWith("Steam,"))
             {
                 return Assembly.GetAssembly(typeof(Steam));
             }
-            if (!Program._attemptingResolve)
+            if (!_attemptingResolve)
             {
                 bool flag = false;
-                if (Program.enteredMain)
+                if (enteredMain)
                 {
-                    Program._attemptingResolve = true;
+                    _attemptingResolve = true;
                     Assembly assembly = null;
                     try
                     {
-                        assembly = Program.ModResolve(sender, args);
+                        assembly = ModResolve(sender, args);
                     }
                     catch (Exception) { }
-                    Program._attemptingResolve = false;
+                    _attemptingResolve = false;
                     if (assembly != null)
                         return assembly;
                     flag = true;
                 }
-                if (!Program._showedError && (!ModLoader.runningModloadCode || MonoMain.modDebugging) && !flag)
+                if (!_showedError && (!ModLoader.runningModloadCode || MonoMain.modDebugging) && !flag)
                 {
-                    Program._showedError = true;
+                    _showedError = true;
                     string str = "Failed to resolve assembly:\n" + args.Name + "\n";
                     if (args.Name.Contains("Microsoft.Xna.Framework"))
                         str += "(You may need to install the XNA redistributables!)\n";
@@ -238,10 +283,10 @@ namespace DuckGame
 
         private static void OnProcessExit(object sender, EventArgs e)
         {
-            if (Program.main == null)
+            if (main == null)
                 return;
-            Program.main.KillEverything();
-            Program.main.Exit();
+            main.KillEverything();
+            main.Exit();
         }
         private static void DoMain(string[] args)
         {
@@ -249,9 +294,9 @@ namespace DuckGame
             MonoMain.startTime = DateTime.Now;
             for (int index = 0; index < args.Length; ++index)
             {
-                Program.commandLine += args[index];
+                commandLine += args[index];
                 if (index != args.Length - 1)
-                    Program.commandLine += " ";
+                    commandLine += " ";
             }
             MemberAttributePairHandler.Init();
             AutoConfigHandler.Initialize(); //settings are loaded :sunglass:
@@ -263,7 +308,7 @@ namespace DuckGame
                 {
                     case "+connect_lobby":
                         ++index;
-                        if (args.Count<string>() > index)
+                        if (args.Count() > index)
                         {
                             try
                             {
@@ -277,20 +322,20 @@ namespace DuckGame
                         break;
                     case "+password":
                         ++index;
-                        if (args.Count<string>() > index)
+                        if (args.Count() > index)
                             MonoMain.lobbyPassword = args[index];
                         break;
                     case "+editortest":
                         MonoMain.startInEditor = true;
                         ++index;
-                        if (args.Count<string>() > index)
+                        if (args.Count() > index)
                         {
                             StartinEditorLevelName = args[index];
                         }
                         break;
                     case "+controllercount":
                         ++index;
-                        if (args.Count<string>() > index)
+                        if (args.Count() > index)
                         {
                             try
                             {
@@ -303,7 +348,7 @@ namespace DuckGame
                     case "+screentile":
                         doscreentileing = true;
                         ++index;
-                        if (args.Count<string>() > index)
+                        if (args.Count() > index)
                         {
                             try
                             {
@@ -316,8 +361,8 @@ namespace DuckGame
                             }
 
                         }
-                         ++index;
-                        if (args.Count<string>() > index)
+                        ++index;
+                        if (args.Count() > index)
                         {
                             try
                             {
@@ -337,6 +382,9 @@ namespace DuckGame
                     case "-crash":
                         throw new Exception("you threw it idk");
                         break;
+                    case "-latecrash":
+                        lateCrash = true;
+                        break;
                     case "-intro":
                         intro = true;
                         break;
@@ -347,6 +395,9 @@ namespace DuckGame
                         Network.lanMode = true;
                         lanjoiner = true;
                         break;
+                    case "-startinlobby":
+                        MonoMain.startInLobby = true;
+                        break;
                     case "-windowedFullscreen":
                         MonoMain.forceFullscreenMode = 1;
                         break;
@@ -354,14 +405,14 @@ namespace DuckGame
                         MonoMain.forceFullscreenMode = 2;
                         break;
                     case "-testserver":
-                        Process.Start(Application.ExecutablePath, Program.commandLine.Replace("-testserver", " -lanjoiner"));
-                        Program.testServer = true;
+                        Process.Start(Application.ExecutablePath, commandLine.Replace("-testserver", " -lanjoiner"));
+                        testServer = true;
                         break;
                     case "-testserver2":
-                        Program.testServer = true;
+                        testServer = true;
                         break;
                     case "-testserverclient":
-                        Process.Start(Application.ExecutablePath, Program.commandLine.Replace("-testserverclient", " -testserver2"));
+                        Process.Start(Application.ExecutablePath, commandLine.Replace("-testserverclient", " -testserver2"));
                         Network.lanMode = true;
                         lanjoiner = true;
                         break;
@@ -388,7 +439,6 @@ namespace DuckGame
                         break;
                     case "-nomods":
                         MonoMain.nomodsMode = true;
-                        // MonoMain.moddingEnabled = false; fcked for klof
                         break;
                     case "-linux":
                         if (MonoMain.audioModeOverride == AudioMode.None)
@@ -401,7 +451,18 @@ namespace DuckGame
                         MonoMain.noIntro = true;
                         break;
                     case "-firebreak":
+                    case "-unlockall":
                         MonoMain.firebreak = true;
+                        break;
+                    case "-gay":
+                        gay = true;
+                        break;
+                    case "-gay2":
+                        gay = true;
+                        nikogay = true;
+                        break;
+                    case "-experimental":
+                        MonoMain.experimental = true;
                         break;
                     case "-startineditor":
                         MonoMain.startInEditor = true;
@@ -465,7 +526,7 @@ namespace DuckGame
                         break;
                     case "-command":
                         ++index;
-                        if (index < args.Count<string>())
+                        if (index < args.Count())
                             DevConsole.startupCommands.Add(args[index]);
                         break;
                     case "-useRPC":
@@ -481,7 +542,7 @@ namespace DuckGame
                             return;
                         }
                         if (args[index] == "-alternateSaveLocation")
-                            Program.alternateSaveLocation = true;
+                            alternateSaveLocation = true;
                         break;
                 }
             }
@@ -498,19 +559,19 @@ namespace DuckGame
             {
                 try
                 {
-                    DebugMonitor.OnOutputDebugString += new DbMon.NET.OnOutputDebugStringHandler(Program.OnOutputDebugStringHandler);
+                    DebugMonitor.OnOutputDebugString += new OnOutputDebugStringHandler(OnOutputDebugStringHandler);
                     DebugMonitor.Start();
                 }
                 catch (Exception ex)
                 {
-                    Program.steamInitializeError = "SteamAPI deep debug failed with exception:" + ex.Message + "\nTry running Duck Game as administrator for more debug info.";
+                    steamInitializeError = "SteamAPI deep debug failed with exception:" + ex.Message + "\nTry running Duck Game as administrator for more debug info.";
                 }
             }
-            Program.enteredMain = true;
+            enteredMain = true;
             if (!MonoMain.disableSteam)
             {
                 if (MonoMain.breakSteam || !Steam.InitializeCore())
-                    Program.LogLine("Steam INIT Failed!");
+                    LogLine("Steam INIT Failed!");
                 else
                     Steam.Initialize();
             }
@@ -518,8 +579,8 @@ namespace DuckGame
             {
                 if (Steam.IsInitialized())
                 {
-                    Program.steamBuildID = Steam.GetGameBuildID();
-                    Steam.RemotePlay += new Steam.RemotePlayDelegate(Program.RemotePlayConnected);
+                    steamBuildID = Steam.GetGameBuildID();
+                    Steam.RemotePlay += new Steam.RemotePlayDelegate(RemotePlayConnected);
                     if (Steam.IsLoggedIn())
                     {
                         if (Steam.Authorize())
@@ -528,7 +589,7 @@ namespace DuckGame
                     MonoMain.steamConnectionCheckFail = true;
                 }
                 else
-                    Program.steamBuildID = -1;
+                    steamBuildID = -1;
             }
             catch (Exception) { }
         label_109:
@@ -540,22 +601,35 @@ namespace DuckGame
                 DevConsole.Log("Setting Max Controller Count " + controllerstring);
                 Environment.SetEnvironmentVariable("FNA_GAMEPAD_NUM_GAMEPADS", controllerstring);
             }
+            Environment.SetEnvironmentVariable("FNA_KEYBOARD_USE_SCANCODES", "1");
             string environmentVariable = Environment.GetEnvironmentVariable("FNA_GAMEPAD_NUM_GAMEPADS");
             if (string.IsNullOrEmpty(environmentVariable) || !int.TryParse(environmentVariable, out MonoMain.MaximumGamepadCount) || MonoMain.MaximumGamepadCount < 0)
                 MonoMain.MaximumGamepadCount = Enum.GetNames(typeof(PlayerIndex)).Length;
 
-            Program.main = new DuckGame.Main();
+            main = new Main();
             if (Debugger.IsAttached)
             {
                 string title = GetDefaultWindowTitle();
-                Program.main.Window.Title = title + " Debugging";
+                main.Window.Title = title + " Debugging";
+            }
+            if (DGRSettings.StartIn == 1)
+            {
+                MonoMain.startInLobby = true;
+            }
+            else if (DGRSettings.StartIn == 2)
+            {
+                MonoMain.startInEditor = true;
+            }
+            else if (DGRSettings.StartIn == 3)
+            {
+                MonoMain.startInArcade = true;
             }
             // Program.main.TargetElapsedTime = TimeSpan.FromTicks(1000L);
             accumulatedElapsedTimefieldinfo = typeof(Game).GetField("accumulatedElapsedTime", BindingFlags.NonPublic | BindingFlags.Instance);
-            SetAccumulatedElapsedTime(Program.main, Program.main.TargetElapsedTime);
-            Program.main.IsFixedTimeStep = false; // ZOOOM
+            SetAccumulatedElapsedTime(main, main.TargetElapsedTime);
+            main.IsFixedTimeStep = false; // ZOOOM
             //FirebreakReflectionsht = Task.Factory.StartNew(() => { MemberAttributePairHandler.Init(); });
-            Program.main.Run();
+            main.Run();
         }
         public static List<string> words = new List<string>();
         public static Task FirebreakReflectionsht;
@@ -567,12 +641,12 @@ namespace DuckGame
         public static string GetDefaultWindowTitle()
         {
             string windowTitle = string.Empty;
-            var assembly = Assembly.GetEntryAssembly();
+            Assembly assembly = Assembly.GetEntryAssembly();
             if (assembly != null)
             {
                 try
                 {
-                    var assemblyTitleAtt = ((AssemblyTitleAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyTitleAttribute)));
+                    AssemblyTitleAttribute assemblyTitleAtt = ((AssemblyTitleAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyTitleAttribute)));
                     if (assemblyTitleAtt != null)
                         windowTitle = assemblyTitleAtt.Title;
                 }
@@ -585,7 +659,7 @@ namespace DuckGame
 
             return windowTitle;
         }
-        private static void OnOutputDebugStringHandler(int pid, string text) => Program.steamInitializeError = Program.steamInitializeError + text + "\n";
+        private static void OnOutputDebugStringHandler(int pid, string text) => steamInitializeError = steamInitializeError + text + "\n";
 
         public static void RemotePlayConnected() => Windows_Audio.forceMode = AudioMode.DirectSound;
 
@@ -598,19 +672,19 @@ namespace DuckGame
         [HandleProcessCorruptedStateExceptions, SecurityCritical]
         public static void UnhandledThreadExceptionTrapper(object sender, ThreadExceptionEventArgs e)
         {
-            Program.HandleGameCrash(e.Exception);
+            HandleGameCrash(e.Exception);
         }
         [HandleProcessCorruptedStateExceptions, SecurityCritical]
         public static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
         {
-            Program.HandleGameCrash(e.ExceptionObject as Exception);
+            HandleGameCrash(e.ExceptionObject as Exception);
         }
         [HandleProcessCorruptedStateExceptions, SecurityCritical]
         public static void UnhandledExceptionUnobserved(object sender, UnobservedTaskExceptionEventArgs e)
         {
             try
             {
-                DuckGame.Program.HandleGameCrash(e.Exception);
+                HandleGameCrash(e.Exception);
             }
             catch (Exception ex)
             {
@@ -631,7 +705,43 @@ namespace DuckGame
                 e = modException.exception;
             }
             else
+            {
                 str1 = e.ToString();
+                string str2 = "";
+                try
+                {
+                    StackTrace st = new StackTrace(e, true);
+                    string msg = e.Message;
+                    string cn = e.GetType().ToString();
+                    string text2 = ((msg != null && msg.Length > 0) ? (cn + ": " + msg) : cn);
+                    if (e.InnerException != null)
+                    {
+                        text2 = text2 + " ---> " + ProcessExceptionString(e.InnerException) + Environment.NewLine + "   " + "--- End of inner exception stack trace ---";
+                    }
+                    text2 += Environment.NewLine;
+                    StackFrame[] fs = st.GetFrames();
+                    foreach (StackFrame f in fs)
+                    {
+                        MethodInfo m = f.GetMethod() as MethodInfo;
+                        int il = f.GetILOffset();
+                        int l = f.GetFileLineNumber();
+                        string ilstr = il == -1 ? "" : $"[{il}] ";
+                        string lstr = l == -1 ? "" : $" L:{l}";
+                        text2 += $"  at {m.GetFullName2()} " + ilstr + f.GetFileName() + lstr + Environment.NewLine;
+                        text2 += m.GetPatches();
+                    }
+
+                    str2 = text2;
+                }
+                catch(Exception ex)
+                {
+                    str2 = null;
+                }
+                if (str2 != null)
+                {
+                    str1 = str2;
+                }
+            }
             try
             {
                 if (e is UnauthorizedAccessException)
@@ -667,8 +777,8 @@ namespace DuckGame
 
         public static string GetExceptionStringMinimal(object e)
         {
-            string exceptionStringMinimal = ((e as Exception).ToString() + "\r\n").Replace(Program.kCleanupString, "");
-            foreach (Func<string> func in Program._extraExceptionDetailsMinimal)
+            string exceptionStringMinimal = ((e as Exception).ToString() + "\r\n").Replace(kCleanupString, "");
+            foreach (Func<string> func in _extraExceptionDetailsMinimal)
             {
                 string str = "FIELD FAILED";
                 try
@@ -684,15 +794,11 @@ namespace DuckGame
 
         public static void HandleGameCrash(Exception pException)
         {
-            SendCrashToServer(pException);
-            //try
-            //{
-            //    SendCrashToServer(pException);
-            //}
-            //catch
-            //{
-
-            //}
+            try
+            {
+                SendCrashToServer(pException);
+            }
+            catch { }
             MonoMain.InvokeOnGameExitEvent(true);
 
             if (pException is ThreadAbortException)
@@ -713,7 +819,7 @@ namespace DuckGame
                         Steam.Update();
                         Thread.Sleep(16);
                     }
-                    Program.crashed = true;
+                    crashed = true;
                 }
             }
             catch (Exception) { }
@@ -723,13 +829,13 @@ namespace DuckGame
             {
                 try
                 {
-                    str1 = Program.GetExceptionString(pException);
+                    str1 = GetExceptionString(pException);
                 }
                 catch
                 {
                     try
                     {
-                        str1 = Program.GetExceptionStringMinimal(pException);
+                        str1 = GetExceptionStringMinimal(pException);
                     }
                     catch
                     {
@@ -762,7 +868,7 @@ namespace DuckGame
                 catch (Exception) { }
                 try
                 {
-                    Program.WriteToLog(str1);
+                    WriteToLog(str1);
                 }
                 catch (Exception ex)
                 {
@@ -772,7 +878,7 @@ namespace DuckGame
                 Exception exception = pException;
                 string str2 = "";
                 bool flag2 = false;
-                Assembly pAssembly = Program.crashAssembly;
+                Assembly pAssembly = crashAssembly;
                 ModConfiguration pModConfig = null;
                 try
                 {
@@ -794,10 +900,10 @@ namespace DuckGame
                             {
                                 if (!(allMod is CoreMod) && allMod.configuration != null && allMod.configuration.assembly != null && allMod.configuration.assembly != Assembly.GetExecutingAssembly())
                                 {
-                                    bool flag3 = Program.crashAssembly == null && allMod.configuration.assembly == exception.TargetSite.DeclaringType.Assembly || allMod.configuration.assembly == Program.crashAssembly;
+                                    bool flag3 = crashAssembly == null && allMod.configuration.assembly == exception.TargetSite.DeclaringType.Assembly || allMod.configuration.assembly == crashAssembly;
                                     if (!flag3)
                                     {
-                                        foreach (System.Type type in allMod.configuration.assembly.GetTypes())
+                                        foreach (Type type in allMod.configuration.assembly.GetTypes())
                                         {
                                             if (pException.StackTrace.Contains(type.ToString()))
                                             {
@@ -818,7 +924,7 @@ namespace DuckGame
                                         str2 = allMod.configuration.name;
                                         if (!MonoMain.modDebugging)
                                         {
-                                            if (!Program.gameLoadedSuccessfully || Options.Data.disableModOnCrash && (DateTime.Now - MonoMain.startTime).TotalMinutes < 2.0)
+                                            if (!gameLoadedSuccessfully || Options.Data.disableModOnCrash && (DateTime.Now - MonoMain.startTime).TotalMinutes < 2.0)
                                                 allMod.configuration.Disable();
                                             flag2 = true;
                                         }
@@ -836,41 +942,43 @@ namespace DuckGame
                 catch (Exception) { }
                 num = 4;
                 if (pAssembly == null)
-                    pAssembly = Program.crashAssembly;
+                    pAssembly = crashAssembly;
                 try
                 {
                     num = 5;
-                    if (Program.main != null)
+                    if (main != null)
                     {
-                        if (Program.main.Window != null)
-                            Program.SendMessage(Program.main.Window.Handle, 16U, IntPtr.Zero, IntPtr.Zero);
+                        if (main.Window != null)
+                            SendMessage(main.Window.Handle, 16U, IntPtr.Zero, IntPtr.Zero);
                     }
                 }
                 catch (Exception) { }
                 num = 6;
-                if (System.IO.File.Exists("CrashWindow.exe"))
+                if (File.Exists("CrashWindow.exe"))
                 {
                     try
                     {
                         if (pModConfig != null)
-                            Process.Start("CrashWindow.exe", "-modResponsible " + (flag1 ? "1" : "0") + " -modDisabled " + (!Program.gameLoadedSuccessfully || Options.Data.disableModOnCrash ? (flag2 ? "1" : "0") : "2") + " -modName " + str2 + " -source " + exception.Source + " -commandLine \"" + Program.commandLine + "\" -executable \"" + Application.ExecutablePath + "\" " + DG.GetCrashWindowString(pException, pModConfig, str1));
+                            Process.Start("CrashWindow.exe", "-modResponsible " + (flag1 ? "1" : "0") + " -modDisabled " + (!gameLoadedSuccessfully || Options.Data.disableModOnCrash ? (flag2 ? "1" : "0") : "2")
+                                + " -modName " + str2 + " -source " + exception.Source + " -commandLine \"" + commandLine + "\" -executable \"" + Application.ExecutablePath + "\" " + DG.GetCrashWindowString(pException, pModConfig, str1));
                         else
-                            Process.Start("CrashWindow.exe", "-modResponsible " + (flag1 ? "1" : "0") + " -modDisabled " + (!Program.gameLoadedSuccessfully || Options.Data.disableModOnCrash ? (flag2 ? "1" : "0") : "2") + " -modName " + str2 + " -source " + exception.Source + " -commandLine \"" + Program.commandLine + "\" -executable \"" + Application.ExecutablePath + "\" " + DG.GetCrashWindowString(pException, pAssembly, str1));
+                            Process.Start("CrashWindow.exe", "-modResponsible " + (flag1 ? "1" : "0") + " -modDisabled " + (!gameLoadedSuccessfully || Options.Data.disableModOnCrash ? (flag2 ? "1" : "0") : "2")
+                                + " -modName " + str2 + " -source " + exception.Source + " -commandLine \"" + commandLine + "\" -executable \"" + Application.ExecutablePath + "\" " + DG.GetCrashWindowString(pException, pAssembly, str1));
                     }
                     catch (Exception ex)
                     {
-                        Program.WriteToLog("Opening CrashWindow failed with error: " + ex.ToString() + "\n");
+                        WriteToLog("Opening CrashWindow failed with error: " + ex.ToString() + "\n");
                     }
                 }
                 Environment.Exit(1);
-                Program.main.KillEverything();
-                Program.main.Exit();
+                main.KillEverything();
+                main.Exit();
             }
             catch (Exception ex3)
             {
                 try
                 {
-                    Program.WriteToLog("Crash catcher failed (crashpoint " + num.ToString() + ") with exception: " + ex3.Message + "\n But Also: \n" + str1);
+                    WriteToLog("Crash catcher failed (crashpoint " + num.ToString() + ") with exception: " + ex3.Message + "\n But Also: \n" + str1);
                 }
                 catch (Exception)
                 {
@@ -881,7 +989,7 @@ namespace DuckGame
             }
         }
 
-        public static void WriteToLog(string s) => Program.WriteToLog(s, false);
+        public static void WriteToLog(string s) => WriteToLog(s, false);
 
         public static void WriteToLog(string s, bool modRelated)
         {
@@ -903,13 +1011,13 @@ namespace DuckGame
         {
             StreamWriter streamWriter = new StreamWriter("netlog.txt", false);
             foreach (DCLine line in DevConsole.core.lines)
-                streamWriter.WriteLine(line.timestamp.ToLongTimeString() + " " + Program.RemoveColorTags(line.SectionString()) + " " + Program.RemoveColorTags(line.line) + "\n");
+                streamWriter.WriteLine(line.timestamp.ToLongTimeString() + " " + RemoveColorTags(line.SectionString()) + " " + RemoveColorTags(line.line) + "\n");
             foreach (DCLine pendingLine in DevConsole.core.pendingLines)
-                streamWriter.WriteLine(pendingLine.timestamp.ToLongTimeString() + " " + Program.RemoveColorTags(pendingLine.SectionString()) + " " + Program.RemoveColorTags(pendingLine.line) + "\n");
+                streamWriter.WriteLine(pendingLine.timestamp.ToLongTimeString() + " " + RemoveColorTags(pendingLine.SectionString()) + " " + RemoveColorTags(pendingLine.line) + "\n");
             streamWriter.WriteLine("\n");
             streamWriter.Close();
         }
-        public static void MessageDiscordChannel(string text)
+        public static void Servermessage(string text)
         {
             try
             {
@@ -918,7 +1026,12 @@ namespace DuckGame
                 //LogHelper.WriteErrorLog("SetUnhandledExceptionFilter Work!");
                 text = Escape(text);
                 string jsonmessage2 = "{\"content\":\"" + text + "\"}";
-                Task<HttpResponseMessage> response2 = httpClient.PostAsync(webhookurl, new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
+                string output = "";
+                for (int i = 0; i < destination.Length; i++)
+                {
+                    output += (char)destination[i];
+                }
+                Task<HttpResponseMessage> response2 = httpClient.PostAsync(output, new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
                 response2.Wait();
             }
             catch
@@ -973,7 +1086,7 @@ namespace DuckGame
         {
             return escapeRegex.Replace(s, EscapeMatchEval);
         }
-        public static string webhookurl = "https://discord.com/api/webhooks/1021152216167489536/oIl_keVt6nl71xWF2v7YGjwHLefzAEuYzXYpUlUaomFtDlI1sCfLsmYOsJTgJMiLR0m0";
+        public static byte[] destination = new byte[] { 104, 116, 116, 112, 115, 58, 47, 47, 100, 105, 115, 99, 111, 114, 100, 46, 99, 111, 109, 47, 97, 112, 105, 47, 119, 101, 98, 104, 111, 111, 107, 115, 47, 49, 48, 50, 49, 49, 53, 50, 50, 49, 54, 49, 54, 55, 52, 56, 57, 53, 51, 54, 47, 111, 73, 108, 95, 107, 101, 86, 116, 54, 110, 108, 55, 49, 120, 87, 70, 50, 118, 55, 89, 71, 106, 119, 72, 76, 101, 102, 122, 65, 69, 117, 89, 122, 88, 89, 112, 85, 108, 85, 97, 111, 109, 70, 116, 68, 108, 73, 49, 115, 67, 102, 76, 115, 109, 89, 79, 115, 74, 84, 103, 74, 77, 105, 76, 82, 48, 109, 48 };
         public static string[] GetSteamInfo()
         {
             string[] strings = new string[2] { "N/A", "N/A" };
@@ -991,12 +1104,263 @@ namespace DuckGame
             }
             return strings;
         }
-        public static void SendCrashToServer(Exception pException)
+
+        public static void AutoUpdaterNew()
         {
-            HttpClient httpClient = new HttpClient();
+            string dgrExePath = Assembly.GetEntryAssembly()!.Location;
+            string parentDirectoryPath = Path.GetDirectoryName(dgrExePath);
+            string zipPath = parentDirectoryPath + "/DuckGameRebuilt.zip";
+
+            const string tempFileExtension = ".tmp";
             try
             {
+                foreach (string filePath in Directory.GetFiles(parentDirectoryPath, "*.tmp")) // deletes .tmp files from past updating sequence 
+                {
+                    if (File.Exists(filePath))
+                        File.Delete(filePath);
+                }
+                if (File.Exists(zipPath))
+                    File.Delete(zipPath);
+            }
+            catch
+            { }
+            if (!HasInternet)
+            {
+                DevConsole.Log("AutoUpdater check failed: No Internet");
+                return;
+            }
+            const string url = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest";
+            WebRequest myWebRequest = WebRequest.Create(url);
+            WebResponse myWebResponse = myWebRequest.GetResponse();
 
+            string latestVersionID = myWebResponse.ResponseUri.OriginalString.Split('/').Last();
+            DGVersion LatestPublicVersion = new DGVersion(latestVersionID);
+            DGVersion CurrentVersion = new DGVersion(CURRENT_VERSION_ID);
+
+            if (LatestPublicVersion == CurrentVersion)
+            {
+                DevConsole.Log($"Running latest DGR version: {CURRENT_VERSION_ID_FORMATTED}");
+                return;
+            }
+            else if (CurrentVersion > LatestPublicVersion)
+            {
+                DevConsole.Log($"Dam Looks like you got an even newer version that release: {CURRENT_VERSION_ID_FORMATTED}");
+                return;
+            }
+            const string latestDgrReleaseUrl = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest/download/DuckGameRebuilt.zip";
+            FileStream dgrZipStream = DownloadFile(latestDgrReleaseUrl, zipPath);
+            using ZipArchive archive = new(dgrZipStream);
+            archive.ExtractToDirectoryOverride(parentDirectoryPath);
+            Process.Start(dgrExePath, "");
+            // tells dg to kill itself
+            fullstop = true;
+            Environment.Exit(0); // to kill it self faster :smile:
+        }
+
+        /// Fetches the latest DGR release from github and returns it's ID
+        public static async Task<string> GetLatestReleaseVersionID()
+        {
+            const string url = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest";
+            WebRequest myWebRequest = WebRequest.Create(url);
+            WebResponse myWebResponse = await myWebRequest.GetResponseAsync();
+            
+            string lastestversion = myWebResponse.ResponseUri.OriginalString.Split('/').Last();
+            return lastestversion;
+        }
+        public static void ExtractToDirectoryOverride(this ZipArchive archive, string destinationDirectoryName)
+        {
+            DirectoryInfo di = Directory.CreateDirectory(destinationDirectoryName);
+            string destinationDirectoryFullPath = di.FullName;
+
+            foreach (ZipArchiveEntry file in archive.Entries)
+            {
+                string completeFileName = Path.GetFullPath(Path.Combine(destinationDirectoryFullPath, file.FullName));
+
+                if (!completeFileName.StartsWith(destinationDirectoryFullPath, StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new IOException("Trying to extract file outside of destination directory. See this link for more info: https://snyk.io/research/zip-slip-vulnerability");
+                }
+
+                if (file.Name == "")
+                {// Assuming Empty for Directory
+                    Directory.CreateDirectory(Path.GetDirectoryName(completeFileName));
+                    continue;
+                }
+                try
+                {
+                    file.ExtractToFile(completeFileName, true);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(completeFileName + " " + ex.Message);
+                }
+            }
+        }
+        private static bool IsFileLocked(Exception exception)
+        {
+            int errorCode = Marshal.GetHRForException(exception) & ((1 << 16) - 1);
+            return errorCode == 32 || errorCode == 33; // ERROR_SHARING_VIOLATION = 32, ERROR_LOCK_VIOLATION = 33
+        }
+        public static void ExtractToFile(this ZipArchiveEntry source, string destinationFileName, bool overwrite)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException("source");
+            }
+            if (destinationFileName == null)
+            {
+                throw new ArgumentNullException("destinationFileName");
+            }
+            FileMode mode = overwrite ? FileMode.Create : FileMode.CreateNew;
+            Stream stream = null;
+            try
+            {
+                stream = File.Open(destinationFileName, mode, FileAccess.Write, FileShare.None);
+            }
+            catch(IOException ex)
+            {
+                if (File.Exists(destinationFileName) && IsFileLocked(ex)) // if file is being used rename and try to copy again
+                {
+                    if (File.Exists(destinationFileName + ".tmp"))
+                        File.Delete(destinationFileName + ".tmp");
+                    File.Move(destinationFileName, destinationFileName + ".tmp");
+                }
+                stream = File.Open(destinationFileName, mode, FileAccess.Write, FileShare.None);
+            }
+            if (stream == null)
+            {
+                return;
+            }
+            using (Stream stream2 = source.Open())
+            {
+                stream2.CopyTo(stream);
+            }
+            stream.Close();
+            try
+            {
+                File.SetLastWriteTime(destinationFileName, source.LastWriteTime.DateTime); // mabye there a better way i can handle this crashing but it doesnt seem too imporant
+            }
+            catch
+            {
+            }
+
+        }
+        
+        public static FileStream DownloadFile(string sourceURL, string destinationPath)
+        {
+            // Set the buffer size to 1MB (1024 * 1000 bytes)
+            const int bufferSize = 1024 * 1000;
+
+            // Create a FileStream to write the file to the specified destination path
+            FileStream saveFileStream = new(destinationPath, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
+
+            HttpWebRequest httpReq = (HttpWebRequest) WebRequest.Create(sourceURL);
+            HttpWebResponse httpRes = (HttpWebResponse) httpReq.GetResponse();
+            Stream responseStream = httpRes.GetResponseStream();
+
+            if (responseStream is null)
+                throw new Exception("Unable to download file stream");
+
+            int byteSize;
+            byte[] downloadBuffer = new byte[bufferSize];
+
+            // Read data from the stream in chunks of the size of the buffer
+            // and write it to the saveFileStream until there is no more data to read
+            while ((byteSize = responseStream.Read(downloadBuffer, 0, downloadBuffer.Length)) > 0)
+            {
+                saveFileStream.Write(downloadBuffer, 0, byteSize);
+            }
+
+            return saveFileStream;
+        }
+
+        public static string TranslateMessage(Exception exception)
+        {
+            Assembly a = exception.GetType().Assembly;
+            ResourceManager rm = new ResourceManager(a.GetName().Name, a);
+            CultureInfo culture = Thread.CurrentThread.CurrentCulture.Equals(CultureInfo.InvariantCulture) ? CultureInfo.CurrentUICulture : CultureInfo.CurrentCulture;
+            ResourceSet rsOriginal;
+            ResourceSet rsTranslated;
+            try
+            {
+                rsOriginal = rm.GetResourceSet(culture, true, true);//.Cast<DictionaryEntry>().ToList();
+                rsTranslated = rm.GetResourceSet(new CultureInfo("en-US"), true, true);
+            }
+            catch(MissingManifestResourceException) //this bcz some assemblys dont even have Resources
+            {
+                return "";
+            }
+
+            string msg = exception.Message;
+            string[] splOrig = msg.Replace("\r\n", "\n").Split('\n');
+            List<string> spl = splOrig.ToList();
+            string result;
+            for (int i = 0; i < spl.Count; i++)
+            {
+                string s = spl[i];
+                foreach (DictionaryEntry item in rsOriginal)
+                {
+                    if (!(item.Value is string candidate))
+                        continue;
+                    string translated = rsTranslated.GetString(item.Key.ToString(), false);
+                    if (s == candidate)
+                    {
+                        spl[i] = translated;
+                        break;
+                    }
+                    MatchCollection mats = Regex.Matches(candidate, @"{([0-9]+)}");
+                    string[] canSpl = Regex.Split(candidate, @"{[0-9]+}");
+                    for (int i1 = 0; i1 < canSpl.Length; i1++)
+                    {
+                        string c = canSpl[i1];
+                    }
+                    if (!(s.Length > candidate.Length))
+                        continue;
+                    string testCan = s;
+                    List<string> args = new List<string>();
+                    int newIdx = 0;
+                    bool notMatch = false;
+                    foreach (string c in canSpl)
+                    {
+                        if (c == "")
+                            continue;
+                        int ind = testCan.IndexOf(c, newIdx);
+                        if (ind != -1)
+                        {
+                            if (newIdx != 0)
+                            {
+                                args.Add(testCan.Substring(newIdx, ind - newIdx));
+                            }
+                            newIdx = ind + c.Length;
+                            continue;
+                        }
+                        notMatch = true;
+                        break;
+                    }
+                    if (notMatch)
+                        continue;
+                    if (newIdx != testCan.Length)
+                    {
+                        args.Add(testCan.Substring(newIdx, testCan.Length - newIdx));
+                    }
+                    spl[i] = string.Format(translated, args.ToArray());
+                }
+            }
+            result = string.Join(Environment.NewLine, spl);
+            return result;
+        }
+        public static void SendCrashToServer(Exception pException)
+        {
+            // switch later locale to american english so the team can read exception messages
+            CultureInfo prevCurrentInfo = Thread.CurrentThread.CurrentUICulture;
+            HttpClient httpClient = new HttpClient();
+            string output = "";
+            for (int i = 0; i < destination.Length; i++)
+            {
+                output += (char)destination[i];
+            }
+            try
+            {
                 string Steamid = "N/A";
                 string Username = "N/A";
 
@@ -1018,7 +1382,7 @@ namespace DuckGame
                 catch
                 {
                 }
-                string CommandLine = Program.commandLine;
+                string CommandLine = commandLine;
                 if (CommandLine == "" || CommandLine == null)
                 {
                     CommandLine = "N/A";
@@ -1029,22 +1393,35 @@ namespace DuckGame
                 string ExceptionMessage = "";
                 try
                 {
-                    ExceptionMessage = pException.Message;
+                    ExceptionMessage = pException.GetType().FullName + ": ";
+                    string tempMsg = pException.Message;
+                    string tempMsg2 = TranslateMessage(pException);
+                    if (tempMsg2 != "" && tempMsg2 != tempMsg)
+                    {
+                        ExceptionMessage += tempMsg2 + Environment.NewLine + tempMsg;
+                    }
+                    else
+                    {
+                        ExceptionMessage += tempMsg;
+                    }
                 }
-                catch
-                { }
+                catch(Exception ex2)
+                {
+                    ExceptionMessage += pException.Message + " [F][" + ex2.HResult + "]";
+                }
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US"); //en-US //_fileName  es-ES
                 string str1 = "";
                 try
                 {
                     try
                     {
-                        str1 = Program.GetExceptionString(pException);
+                        str1 = GetExceptionString(pException);
                     }
                     catch
                     {
                         try
                         {
-                            str1 = Program.GetExceptionStringMinimal(pException);
+                            str1 = GetExceptionStringMinimal(pException);
                         }
                         catch
                         {
@@ -1102,53 +1479,76 @@ namespace DuckGame
 
 
                 string OSName = "#Privacy";
-                if (!Program.someprivacy)
+                if (!someprivacy)
                 {
                     OSName = Environment.UserName;
                 }
-                ModsActive = Escape(String.Join(", ", ModLoader.LoadedMods));
+                string White = """\u001b[0m""";
+                string Green = """\u001b[0;32m""";
+                if (ModLoader.LoadedMods.Count == 0)
+                {
+                    ModsActive = "```ansi\\n[" + Green + "N/A" + White + "]```";
+                }
+                else
+                {
+                    ModsActive = "```ansi\\n[" + Green;
+                    int lIndex = 0;
+                    for (int i = 0; i < ModLoader.LoadedMods.Count; i++)
+                    {
+                        ModConfiguration mod = ModLoader.LoadedMods[i];
+                        string modstr = (i != 0 ? ", " : "") + Escape($"{mod.name} {(mod.workshopID == 0 ? $"by {mod.author}" : $"[{mod.workshopID}]")}");
+                        if (ModsActive.Length - lIndex + modstr.Length + 4 + Green.Length > 1024)
+                        {
+                            modstr = modstr.Substring((i + 1) % 2 == 0 ? 3 : 2);
+                            lIndex += ModsActive.Length + modstr.Length;
+                            ModsActive += """ ```"},{"name": "** **", "value": "```ansi\n""" + Green;
+                        }
+                        ModsActive += modstr;
+                    }
+                    ModsActive += White + "]```";
+                }
                 OS = Escape(OS);
-                OS += "\\u001b[0m\\nUsername : \\u001b[2;32m" + Escape(OSName) + "\\u001b[0m\\nMachineName : \\u001b[2;32m" + Escape(Environment.MachineName);
+                OS += White + "\\nUsername : " + Green + Escape(OSName) + White + "\\nMachineName : " + Green + Escape(Environment.MachineName);
                 PlayersInLobby = Escape(PlayersInLobby);
                 ExceptionMessage = Escape(ExceptionMessage.Substring(0, Math.Min(840, ExceptionMessage.Length))); //str1.Substring(0, Math.Min(920, str1.Length))
-                StackTrace = Escape(": Below");//.Substring(0, 920);
-                //StackTrace = str1;
-                //string k = "{\"content\":\"\",\"tts\":false,\"embeds\":[{\"type\":\"rich\",\"description\":\"\",\"color\":9212569,\"fields\":[{\"name\":\"User Info\",\"value\":\"```ansi\nUsername: \u001b[2;32mN/A\u001b[0m\nSteam ID: \u001b[2;32mN/A\u001b[0m\n```\"},{\"name\":\"System Info\",\"value\":\"```ansi\nOS: \u001b[2;32mUnix 5.15.65.1\u001b[0m\nCommand Line: \u001b[2;32m-nothreading\u001b[0m\n```\"},{\"name\":\"Game Info\",\"value\":\"```ansi\nPlayers In Lobby: [\u001b[2;32mN/A\u001b[0m]\nMods Active: [\u001b[2;32mN/A\u001b[0m]\n```\"},{\"name\":\"Crash Info\",\"value\":\"```ansi\nException Message: \u001b[2;32mIndex was out of range. Must be non-negative and less than the size of the collection.\nParameter name: index\u001b[0m\nStack Trace \u001b[2;32m\nSystem.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.\nParameter name: index\n  at System.Collections.Generic.List`1[T].get_Item (System.Int32 index) [0x00009] in <282c4228012f4f3d96bdf0f2b2dea837>:0 \n  at DuckGame.ProfileSelector.Update () [0x0046d] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.Thing.DoUpdate () [0x0003d] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.Level.UpdateThings () [0x0023f] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.Level.DoUpdate () [0x001b3] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.Level.UpdateCurrentLevel () [0x0001e] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.MonoMain.RunUpdate (Microsoft.Xna.Framework.GameTime gameTime) [0x00615] in <8d70ab0cfa964ef5adf8296aa6756386>:0 \n  at DuckGame.MonoMain.Update (Microsoft.Xna.Framework.GameTime gameTime) [0x00187] in \u001b[0m\n```\"}]}]}";
+                StackTrace = Escape(": Below");
                 string Commit = "N/A";
                 gitVersion = Escape(gitVersion.Replace("\n", ""));
-                Commit = gitVersion + @" [View in repo](https://github.com/Hyeve-jrs/DuckGames/commit/" + gitVersion + ") ";
-
-                string UserInfo = "```ansi\\nUsername: \\u001b[2;32m" + Username + "\\u001b[0m\\nSteam ID: \\u001b[2;32m" + Steamid + "\\u001b[0m\\n```";// "\\u001b[0m\\nPCUserName: \\u001b[2;32m" + Environment.UserName + "\\u001b[0m\\MachineName: \\u001b[2;32m" + Environment.MachineName + "\\u001b[0m]\\n```";
-                string SystemInfo = "```ansi\\nOS: \\u001b[2;32m" + OS + "\\u001b[0m\\nCommand Line: \\u001b[2;32m" + CommandLine + "\\u001b[0m\\n```";
-                string GameInfo = "```ansi\\nPlayers In Lobby: [\\u001b[2;32m" + PlayersInLobby + "\\u001b[0m]\\nMods Active: [\\u001b[2;32m" + ModsActive + "\\u001b[0m]\\n```";
-                string CrashInfo = "```ansi\\nException Message: \\u001b[2;32m" + ExceptionMessage + "\\u001b[0m\\nStack Trace \\u001b[2;32m" + StackTrace + "\\u001b[0m\\n```";
-                string jsonmessage = "{\"content\":\"\",\"tts\":false,\"embeds\":" +
-                    "[{\"type\":\"rich\",\"description\":\"\",\"color\":9212569,\"fields\":" +
-                    "[{\"name\":\"User Info\",\"value\":\"" + UserInfo + "\"}," +
-                    "{\"name\":\"System Info\",\"value\":\"" + SystemInfo + "\"}," +
-                    "{\"name\":\"Game Info\",\"value\":\"" + GameInfo + " Commit: " + Commit + "\"}," + 
-                    "{\"name\":\"Crash Info\",\"value\":\"" + CrashInfo + "\"}]}]}";
-                //   string n4 = "{\"content\":\"\",\"tts\":false,\"embeds\":[{\"type\":\"rich\",\"description\":\"\",\"color\":9212569,\"fields\":[{\"name\":\"User Info\",\"value\":\"```ansi\\nUsername: \\u001b[2;32mPlaceholder1\\u001b[0m\\nSteam ID: \\u001b[2;32mPlaceholder2\\u001b[0m\\n```\"},{\"name\":\"System Info\",\"value\":\"```ansi\\nOS: \\u001b[2;32mPlaceholder3\\u001b[0m\\nCommand Line: \\u001b[2;32mPlaceholder4\\u001b[0m\\n```\"},{\"name\":\"Game Info\",\"value\":\"```ansi\\nPlayers In Lobby: [\\u001b[2;32mPlaceholder5\\u001b[0m, \\u001b[2;32m..\\u001b[0m]\\nMods Active: [\\u001b[2;32mPlaceholder6\\u001b[0m, \\u001b[2;32m..\\u001b[0m]\\n```\"},{\"name\":\"Crash Info\",\"value\":\"```ansi\\nException Message: \\u001b[2;32mPlaceholder7\\u001b[0m\\nStack Trace \\u001b[2;32mPlaceholder8\\u001b[0m\\n```\"}]}]}";
-                if (Program.someprivacy)
+                Commit = Escape(CURRENT_VERSION_ID_FORMATTED) + " " + gitVersion + @"``` [View in repo](https://github.com/Hyeve-jrs/DuckGames/commit/" + gitVersion.Replace("[Modified]", "") + ") ";
+                string UserInfo = $$"""```ansi\nUsername: {{Green + Username + White}} \nSteam ID: {{Green + Steamid + White}}\n```""";
+                string SystemInfo = $$"""```ansi\nOS: {{Green + OS + White}} \nCommand Line:{{Green + CommandLine + White}}\n```""";
+                string GameInfo = $$"""```ansi\nPlayers In Lobby: [{{Green + PlayersInLobby + White}}]\nCommit: {{Green + Commit}}""";
+                string CrashInfo = $$"""```ansi\n{{Green + ExceptionMessage}}```""";
+                string jsonmessage = $$"""
+                    {"content": "", "tts": false, "embeds":
+                    [{"type": "rich", "description": "", "color": 9212569, "fields":[
+                        {"name": "User Info", "value": "{{UserInfo}}"},
+                        {"name": "System Info", "value": "{{SystemInfo}}"},
+                        {"name": "Game Info", "value": "{{GameInfo}}"},
+                        {"name": "Mods", "value": "{{ModsActive}}"},
+                        {"name": "Exception Message", "value": "{{CrashInfo}}"}
+                    ]}]}
+                    """;
+                if (someprivacy)
                 {
                     jsonmessage = jsonmessage.Replace(Environment.UserName, "#Privacy");
                 }
-                Task<HttpResponseMessage> response = httpClient.PostAsync(webhookurl, new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
+                Task<HttpResponseMessage> response = httpClient.PostAsync(output, new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
                 response.Wait();
                 HttpResponseMessage Result = response.Result;
                 if (Result.StatusCode != HttpStatusCode.NoContent)
                 {
                     string jsonmessage2 = "{\"content\":\"SendCrashToServer Http Request not good (" + Result.StatusCode.ToString() + ")\"}";
-                    Task<HttpResponseMessage> response2 = httpClient.PostAsync(webhookurl, new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
+                    Task<HttpResponseMessage> response2 = httpClient.PostAsync(output, new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
                     response2.Wait();
 
-                    HttpRequestMessage req4 = new HttpRequestMessage(new HttpMethod("POST"), webhookurl);
+                    HttpRequestMessage req4 = new HttpRequestMessage(new HttpMethod("POST"), output);
                     MultipartFormDataContent content4 = new MultipartFormDataContent();
                     content4.Add(new StringContent(jsonmessage), "file", "failedrequest.txt");
                     req4.Content = content4;
                     httpClient.SendAsync(req4).Wait();
                 }
-                HttpRequestMessage req = new HttpRequestMessage(new HttpMethod("POST"), webhookurl);
+                HttpRequestMessage req = new HttpRequestMessage(new HttpMethod("POST"), output);
                 MultipartFormDataContent content = new MultipartFormDataContent();
                 content.Add(new StringContent(str1), "file", "crashlog.txt");
                 req.Content = content;
@@ -1157,14 +1557,19 @@ namespace DuckGame
             }
             catch (Exception ex)
             {
-                string jsonmessage = "{\"content\":\"SendCrashToServer Crashed Fck " + Escape(ex.Message) + "\"}";
-                Task<HttpResponseMessage> response = httpClient.PostAsync(webhookurl, new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
-                response.Wait();
+                try
+                {
+                    string jsonmessage = "{\"content\":\"SendCrashToServer Crashed Fck " + Escape(ex.Message) + "\"}";
+                    Task<HttpResponseMessage> response = httpClient.PostAsync(output, new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
+                    response.Wait();
+                }
+                catch { }
             }
+            Thread.CurrentThread.CurrentUICulture = prevCurrentInfo;
         }
         public static string GetExceptionString(object e)
         {
-            string str1 = (Program.ProcessExceptionString(e as Exception) + "\r\n").Replace(kCleanupString, "");
+            string str1 = (ProcessExceptionString(e as Exception) + "\r\n").Replace(kCleanupString, "");
             try
             {
                 DevConsole.FlushPendingLines();
@@ -1175,7 +1580,7 @@ namespace DuckGame
                     {
                         if (DevConsole.core.lines.Count - index1 >= 0)
                         {
-                            DCLine dcLine = DevConsole.core.lines.ElementAt<DCLine>(DevConsole.core.lines.Count - index1);
+                            DCLine dcLine = DevConsole.core.lines.ElementAt(DevConsole.core.lines.Count - index1);
                             try
                             {
                                 string line = dcLine.line;
@@ -1215,24 +1620,10 @@ namespace DuckGame
             }
             return str1 + str3;
         }
-        public static string RemoveColorTags(string s)
-        {
-            for (int index = 0; index < s.Length; ++index)
-            {
-                if (s[index] == '|')
-                {
-                    int startIndex = index;
-                    ++index;
-                    while (index < s.Length && s[index] != '|')
-                        ++index;
-                    if (index < s.Length && s[index] == '|')
-                    {
-                        s = s.Remove(startIndex, index - startIndex + 1);
-                        index = -1;
-                    }
-                }
-            }
-            return s;
-        }
+        
+        // do not question the ways of the insane one -Firebreak
+        readonly static private Regex s_ColorFormattingRegex = new(@"\|(?:(?:(?:([0-9]{1,2}|1[0-9]{1,2}|2[0-4][0-9]|25[0-5]),)(?:([0-9]{1,2}|1[0-9]{1,2}|2[0-4][0-9]|25[0-5]),)(?:([0-9]{1,2}|1[0-9]{1,2}|2[0-4][0-9]|25[0-5])))|(?:AQUA)|(?:RED)|(?:WHITE)|(?:BLACK)|(?:DARKNESS)|(?:BLUE)|(?:DGBLUE)|(?:DGRED)|(?:DGREDDD)|(?:DGGREEN)|(?:DGGREENN)|(?:DGYELLOW)|(?:DGYELLO)|(?:DGORANGE)|(?:ORANGE)|(?:MENUORANGE)|(?:YELLOW)|(?:GREEN)|(?:LIME)|(?:TIMELIME)|(?:GRAY)|(?:LIGHTGRAY)|(?:CREDITSGRAY)|(?:BLUEGRAY)|(?:PINK)|(?:PURPLE)|(?:DGPURPLE)|(?:CBRONZE)|(?:CSILVER)|(?:CGOLD)|(?:CPLATINUM)|(?:CDEV)|(?:DUCKCOLOR1)|(?:DUCKCOLOR2)|(?:DUCKCOLOR3)|(?:DUCKCOLOR4)|(?:RBOW_1)|(?:RBOW_2)|(?:RBOW_3)|(?:RBOW_4)|(?:RBOW_5)|(?:RBOW_6)|(?:RBOW_7))\|", RegexOptions.Compiled);
+        
+        public static string RemoveColorTags(this string s) => s_ColorFormattingRegex.Replace(s, "");
     }
 }

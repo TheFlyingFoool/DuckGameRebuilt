@@ -41,19 +41,19 @@ namespace DuckGame
                 if (prev.Count < 1)
                     return;
                 int num = (int)Math.Ceiling((drawdist - startpoint) / 8f);
-                Vec2 p2 = prev.Last<Vec2>();
+                Vec2 p2 = prev.Last();
                 for (int index = 0; index < num; ++index)
                 {
                     Vec2 pointOnArc = GetPointOnArc(index * 8);
-                    DuckGame.Graphics.DrawTexturedLine((Tex2D)_beem, pointOnArc, p2, color * (1f - index / num) * alpha, ammo.bulletThickness, (Depth)0.9f);
-                    if (pointOnArc == prev.First<Vec2>())
+                    Graphics.DrawTexturedLine((Tex2D)_beem, pointOnArc, p2, color * (1f - index / num) * alpha, ammo.bulletThickness, (Depth)0.9f);
+                    if (pointOnArc == prev[0])
                         break;
                     p2 = pointOnArc;
                     if (index == 0 && ammo.sprite != null && !doneTravelling)
                     {
                         ammo.sprite.depth = (Depth)1f;
                         ammo.sprite.angleDegrees = -Maths.PointDirection(Vec2.Zero, travelDirNormalized);
-                        DuckGame.Graphics.Draw(ammo.sprite, p2.x, p2.y);
+                        Graphics.Draw(ammo.sprite, p2.x, p2.y);
                     }
                 }
             }
@@ -73,7 +73,7 @@ namespace DuckGame
                         flag = true;
                     }
                     num2 += num1;
-                    DuckGame.Graphics.DrawTexturedLine((Tex2D)_beem, drawStart + travelDirNormalized * val, drawStart + travelDirNormalized * (val + num3), Color.White * num2, _thickness, (Depth)0.6f);
+                    Graphics.DrawTexturedLine((Tex2D)_beem, drawStart + travelDirNormalized * val, drawStart + travelDirNormalized * (val + num3), Color.White * num2, _thickness, (Depth)0.6f);
                     if (!flag)
                         val += 8f;
                     else
@@ -85,9 +85,9 @@ namespace DuckGame
         protected override void Rebound(Vec2 pos, float dir, float rng)
         {
             ++reboundBulletsCreated;
-            Bullet.isRebound = true;
+            isRebound = true;
             LaserBullet t = new LaserBullet(pos.x, pos.y, ammo, dir, rbound: rebound, distance: rng);
-            Bullet.isRebound = false;
+            isRebound = false;
             t._teleporter = _teleporter;
             t.firedFrom = firedFrom;
             t.timesRebounded = timesRebounded + 1;

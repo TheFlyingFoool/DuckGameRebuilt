@@ -35,7 +35,7 @@ namespace DuckGame
             return debugString;
         }
 
-        public override System.Type type => typeof(ushort);
+        public override Type type => typeof(ushort);
 
         public override object classValue
         {
@@ -104,7 +104,7 @@ namespace DuckGame
         {
             _bits = 0;
             _thing = t;
-            System.Type type = t.GetType();
+            Type type = t.GetType();
             _accessors.Clear();
             foreach (string field in _fields)
             {

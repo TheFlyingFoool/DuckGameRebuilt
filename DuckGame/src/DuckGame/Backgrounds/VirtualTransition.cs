@@ -13,24 +13,24 @@ namespace DuckGame
 
         public static VirtualTransitionCore core
         {
-            get => VirtualTransition._core;
-            set => VirtualTransition._core = value;
+            get => _core;
+            set => _core = value;
         }
 
-        public static void Initialize() => VirtualTransition._core.Initialize();
+        public static void Initialize() => _core.Initialize();
 
-        public static void Update() => VirtualTransition._core.Update();
+        public static void Update() => _core.Update();
 
-        public static void Draw() => VirtualTransition._core.Draw();
+        public static void Draw() => _core.Draw();
 
-        public static bool doingVirtualTransition => VirtualTransition._core.doingVirtualTransition;
+        public static bool doingVirtualTransition => _core.doingVirtualTransition;
 
-        public static bool isVirtual => VirtualTransition._core._virtualMode;
+        public static bool isVirtual => _core._virtualMode;
 
-        public static void GoVirtual() => VirtualTransition._core.GoVirtual();
+        public static void GoVirtual() => _core.GoVirtual();
 
-        public static void GoUnVirtual() => VirtualTransition._core.GoUnVirtual();
+        public static void GoUnVirtual() => _core.GoUnVirtual();
 
-        public static bool active => VirtualTransition._core.active;
+        public static bool active => _core.active;
     }
 }

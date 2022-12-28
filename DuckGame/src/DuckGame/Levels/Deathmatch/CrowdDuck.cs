@@ -138,6 +138,7 @@ namespace DuckGame
           int varColor = -1)
           : base(xpos, ypos)
         {
+            shouldbegraphicculled = false;
             distVal = dist;
             z = zpos;
             int totalFans = Crowd.totalFans;
@@ -153,7 +154,7 @@ namespace DuckGame
             ++Crowd.fansUsed;
             Rando.Int(1);
             duckColor = varColor > -1 ? varColor : Rando.Int(3);
-            _originalSprite = Persona.all.ElementAt<DuckPersona>(duckColor).crowdSprite;
+            _originalSprite = Persona.all.ElementAt(duckColor).crowdSprite;
             SpriteMap spriteMap = _originalSprite.CloneMap();
             if (empty == 0 || empty == -1 && Rando.Int(_max) < 1)
             {

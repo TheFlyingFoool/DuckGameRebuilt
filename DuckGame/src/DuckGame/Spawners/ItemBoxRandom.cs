@@ -29,7 +29,7 @@ namespace DuckGame
 
         public static PhysicsObject GetRandomItem()
         {
-            List<System.Type> physicsObjects = ItemBox.GetPhysicsObjects(Editor.Placeables);
+            List<System.Type> physicsObjects = GetPhysicsObjects(Editor.Placeables);
             physicsObjects.RemoveAll(t => t == typeof(LavaBarrel) || t == typeof(Grapple) || t == typeof(Slag) || t == typeof(Holster));
             System.Type t1;
             if (Rando.Int(10000) == 0)
@@ -60,7 +60,7 @@ namespace DuckGame
 
         public override PhysicsObject GetSpawnItem()
         {
-            PhysicsObject randomItem = ItemBoxRandom.GetRandomItem();
+            PhysicsObject randomItem = GetRandomItem();
             contains = randomItem.GetType();
             return randomItem;
         }

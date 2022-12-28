@@ -41,7 +41,7 @@ namespace DuckGame
                     }
                 }
             }
-            return source.AsEnumerable<MaterialThing>();
+            return source.AsEnumerable();
         }
 
         public List<PortalDoor> GetDoors() => _doors;
@@ -117,12 +117,12 @@ namespace DuckGame
             foreach (PortalDoor door in _doors)
             {
                 IEnumerable<ITeleport> second = door.horizontal ? Level.CheckRectAll<ITeleport>(door.point1 + new Vec2(0f, -8f), door.point2 + new Vec2(0f, 8f)) : Level.CheckRectAll<ITeleport>(door.point1 + new Vec2(-8f, 0f), door.point2 + new Vec2(8f, 0f));
-                teleports = teleports != null ? teleports.Concat<ITeleport>(second) : second;
+                teleports = teleports != null ? teleports.Concat(second) : second;
             }
             List<PortalDrawTransformer> portalDrawTransformerList = new List<PortalDrawTransformer>();
             foreach (PortalDrawTransformer portalDrawTransformer in _inPortal)
             {
-                if (!teleports.Contains<ITeleport>(portalDrawTransformer.thing as ITeleport))
+                if (!teleports.Contains(portalDrawTransformer.thing as ITeleport))
                     portalDrawTransformerList.Add(portalDrawTransformer);
             }
             foreach (PortalDrawTransformer portalDrawTransformer in portalDrawTransformerList)
@@ -136,7 +136,7 @@ namespace DuckGame
             foreach (ITeleport teleport in teleports)
             {
                 ITeleport t = teleport;
-                if (_inPortal.FirstOrDefault<PortalDrawTransformer>(v => v.thing == t) == null)
+                if (_inPortal.FirstOrDefault(v => v.thing == t) == null)
                 {
                     PortalDrawTransformer portalDrawTransformer = new PortalDrawTransformer(t as Thing, this);
                     _inPortal.Add(portalDrawTransformer);

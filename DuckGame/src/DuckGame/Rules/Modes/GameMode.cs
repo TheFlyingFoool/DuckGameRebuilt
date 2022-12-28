@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -47,76 +48,76 @@ namespace DuckGame
 
         public static GameModeCore core
         {
-            get => GameMode._core;
-            set => GameMode._core = value;
+            get => _core;
+            set => _core = value;
         }
 
         public static int roundsBetweenIntermission
         {
-            get => GameMode._core.roundsBetweenIntermission;
-            set => GameMode._core.roundsBetweenIntermission = value;
+            get => _core.roundsBetweenIntermission;
+            set => _core.roundsBetweenIntermission = value;
         }
 
         public static int winsPerSet
         {
-            get => GameMode._core.winsPerSet;
-            set => GameMode._core.winsPerSet = value;
+            get => _core.winsPerSet;
+            set => _core.winsPerSet = value;
         }
 
         protected static bool _started
         {
-            get => GameMode._core._started;
-            set => GameMode._core._started = value;
+            get => _core._started;
+            set => _core._started = value;
         }
 
-        public static bool started => GameMode._started;
+        public static bool started => _started;
 
         public static bool getReady
         {
-            get => GameMode._core.getReady;
-            set => GameMode._core.getReady = value;
+            get => _core.getReady;
+            set => _core.getReady = value;
         }
 
         protected static int _numMatchesPlayed
         {
-            get => GameMode._core._numMatchesPlayed;
-            set => GameMode._core._numMatchesPlayed = value;
+            get => _core._numMatchesPlayed;
+            set => _core._numMatchesPlayed = value;
         }
 
         public static int numMatchesPlayed
         {
-            get => GameMode._numMatchesPlayed;
-            set => GameMode._numMatchesPlayed = value;
+            get => _numMatchesPlayed;
+            set => _numMatchesPlayed = value;
         }
 
         public static bool showdown
         {
-            get => GameMode._core.showdown;
-            set => GameMode._core.showdown = value;
+            get => _core.showdown;
+            set => _core.showdown = value;
         }
 
         public static string previousLevel
         {
-            get => GameMode._core.previousLevel;
-            set => GameMode._core.previousLevel = value;
+            get => _core.previousLevel;
+            set => _core.previousLevel = value;
         }
 
         protected static string _currentMusic
         {
-            get => GameMode._core._currentMusic;
-            set => GameMode._core._currentMusic = value;
+            get => _core._currentMusic;
+            set => _core._currentMusic = value;
         }
 
         public static bool firstDead
         {
-            get => GameMode._core.firstDead;
-            set => GameMode._core.firstDead = value;
+            get => _core.firstDead;
+            set => _core.firstDead = value;
         }
 
         public static bool playedGame
         {
-            get => GameMode._core.playedGame;
-            set => GameMode._core.playedGame = value;
+            get => _core.playedGame;
+            set => _core.playedGame = value;
         }
 
         public bool matchOver => _matchOver;
@@ -155,7 +156,7 @@ namespace DuckGame
         {
             if (Level.current is GameLevel && (Level.current as GameLevel).data != null && (Level.current as GameLevel).data.metaData.workshopID != 0UL)
                 Global.data.blacklist.Add((Level.current as GameLevel).data.metaData.workshopID);
-            GameMode.Skip();
+            Skip();
         }
 
         public static void Skip()
@@ -167,9 +168,9 @@ namespace DuckGame
 
         public void DoInitialize()
         {
-            GameMode._started = false;
-            GameMode.firstDead = false;
-            GameMode.playedGame = true;
+            _started = false;
+            firstDead = false;
+            playedGame = true;
             if (!_editorTestMode)
                 Highlights.StartRound();
             _font = new BitmapFont("biosFont", 8);
@@ -183,9 +184,9 @@ namespace DuckGame
             }
             Initialize();
             if (Network.isActive)
-                GameMode.getReady = false;
+                getReady = false;
             else
-                GameMode.getReady = true;
+                getReady = true;
         }
 
         private void CreatePauseGroup()
@@ -246,20 +247,20 @@ namespace DuckGame
                         WorkshopItem workshopItem = WorkshopItem.GetItem((Level.current as GameLevel).data.metaData.workshopID);
                         if (workshopItem != null)
                         {
-                            component1.leftSection.Add(new UIMenuItem("@STEAMICON@|DGGREEN|VIEW", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(GameMode.View)), UIAlign.Left), true);
+                            component1.leftSection.Add(new UIMenuItem("@STEAMICON@|DGGREEN|VIEW", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(View)), UIAlign.Left), true);
                             if ((workshopItem.stateFlags & WorkshopItemState.Subscribed) != WorkshopItemState.None)
                             {
-                                component1.leftSection.Add(new UIMenuItem("@STEAMICON@|DGRED|UNSUBSCRIBE", new UIMenuActionCloseMenuCallFunction(_pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Subscribe)), UIAlign.Left), true);
+                                component1.leftSection.Add(new UIMenuItem("@STEAMICON@|DGRED|UNSUBSCRIBE", new UIMenuActionCloseMenuCallFunction(_pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(Subscribe)), UIAlign.Left), true);
                             }
                             else
                             {
-                                component1.leftSection.Add(new UIMenuItem("@STEAMICON@|DGGREEN|SUBSCRIBE", new UIMenuActionCloseMenuCallFunction(_pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Subscribe)), UIAlign.Left), true);
+                                component1.leftSection.Add(new UIMenuItem("@STEAMICON@|DGGREEN|SUBSCRIBE", new UIMenuActionCloseMenuCallFunction(_pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(Subscribe)), UIAlign.Left), true);
                                 component1.leftSection.Add(new UIMenuItem("@blacklist@|DGRED|NEVER AGAIN", new UIMenuActionOpenMenu(_pauseMenu, _confirmBlacklistMenu), UIAlign.Left), true);
                             }
                         }
                     }
                     if (!_matchOver && Network.isServer)
-                        component1.leftSection.Add(new UIMenuItem("@SKIPSPIN@|DGRED|SKIP", new UIMenuActionCloseMenuCallFunction(_pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Skip)), UIAlign.Left), true);
+                        component1.leftSection.Add(new UIMenuItem("@SKIPSPIN@|DGRED|SKIP", new UIMenuActionCloseMenuCallFunction(_pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(Skip)), UIAlign.Left), true);
                 }
                 component1.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
                 _pauseMenu.Add(component1, true);
@@ -295,7 +296,7 @@ namespace DuckGame
                     scale = new Vec2(0.5f)
                 };
                 confirmBlacklistMenu4.Add(component5, true);
-                _confirmBlacklistMenu.Add(new UIMenuItem("|DGRED|@blacklist@YES!", new UIMenuActionCloseMenuCallFunction(_pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Blacklist))), true);
+                _confirmBlacklistMenu.Add(new UIMenuItem("|DGRED|@blacklist@YES!", new UIMenuActionCloseMenuCallFunction(_pauseGroup, new UIMenuActionCloseMenuCallFunction.Function(Blacklist))), true);
                 _confirmBlacklistMenu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(_confirmBlacklistMenu, _pauseMenu), backButton: true), true);
                 _confirmBlacklistMenu.Close();
                 _pauseGroup.Add(_confirmBlacklistMenu, false);
@@ -326,7 +327,7 @@ namespace DuckGame
                 ++Global.data.timesSpawned.valueInt;
             }
             Start();
-            GameMode._started = true;
+            _started = true;
         }
 
         protected virtual void Start()
@@ -341,7 +342,7 @@ namespace DuckGame
                     _watch = new Stopwatch();
                 _watch.Start();
             }
-            if (Graphics.fade > 0.9f && Input.Pressed("START") && !Network.isActive)
+            if (Graphics.fade > 0.9f && Input.Pressed(Triggers.Start) && !Network.isActive)
             {
                 if (_watch != null)
                     _watch.Stop();
@@ -405,7 +406,7 @@ namespace DuckGame
                     if (Music.finished)
                         _wait -= 0.0006f;
                     _waitFade -= 0.04f;
-                    if (_waitFade > 0.0 || !GameMode.getReady || Network.isActive && Network.isClient && !Level.current.transferCompleteCalled)
+                    if (_waitFade > 0.0 || !getReady || Network.isActive && Network.isClient && !Level.current.transferCompleteCalled)
                         return;
                     _waitSpawn -= 0.06f;
                     if (_waitSpawn <= 0.0)
@@ -439,7 +440,7 @@ namespace DuckGame
                                     ragdoll.RunInit();
                                     ragdoll.MakeZekeBear();
                                 }
-                                if (Party.HasPerk(pendingSpawn.profile, PartyPerks.Present) || TeamSelect2.Enabled("WINPRES") && GameMode.lastWinners.Contains(pendingSpawn.profile))
+                                if (Party.HasPerk(pendingSpawn.profile, PartyPerks.Present) || TeamSelect2.Enabled("WINPRES") && lastWinners.Contains(pendingSpawn.profile))
                                 {
                                     Present h = new Present(pendingSpawn.x, pendingSpawn.y);
                                     Level.Add(h);
@@ -527,7 +528,7 @@ namespace DuckGame
                                 }
                             }
                         }
-                        else if (!GameMode._started)
+                        else if (!_started)
                         {
                             _waitAfterSpawn -= 0.05f;
                             if (_waitAfterSpawn <= 0.0)
@@ -539,7 +540,7 @@ namespace DuckGame
                                     DoStart();
                                     SFX.Play("ding");
                                     Event.Log(new RoundStartEvent());
-                                    GameMode.lastWinners.Clear();
+                                    lastWinners.Clear();
                                     if (Level.current is GameLevel)
                                         (Level.current as GameLevel).MatchStart();
                                     foreach (Duck duck in Level.current.things[typeof(Duck)])
@@ -563,7 +564,7 @@ namespace DuckGame
                     }
                     if (Network.isClient)
                         return;
-                    if (GameMode._started)
+                    if (_started)
                         Update();
                     if (_matchOver)
                         _roundEndWait -= 0.005f;
@@ -632,7 +633,7 @@ namespace DuckGame
                         }
                     }
                     Level nextLevel = GetNextLevel();
-                    GameMode.previousLevel = nextLevel.level;
+                    previousLevel = nextLevel.level;
                     if (!skippedLevel)
                     {
                         if (Teams.active.Count > 1)
@@ -663,7 +664,7 @@ namespace DuckGame
                                     scrs.Add(0);
                             }
                             Send.Message(new NMTransferScores(scrs));
-                            GameMode.RunPostRound(_editorTestMode);
+                            RunPostRound(_editorTestMode);
                         }
                     }
                     if (_validityTest && _watch != null)
@@ -695,11 +696,11 @@ namespace DuckGame
                             if (_doScore && !skippedLevel)
                             {
                                 _doScore = false;
-                                if (GameMode.showdown)
+                                if (showdown)
                                 {
                                     if (_roundHadWinner)
                                     {
-                                        GameMode.showdown = false;
+                                        showdown = false;
                                         Level.current = new RockScoreboard(nextLevel, ScoreBoardMode.ShowWinner);
                                         if (!_editorTestMode)
                                             ++Global.data.drawsPlayed.valueInt;
@@ -785,12 +786,12 @@ namespace DuckGame
         {
             if (_validityTest)
                 return;
-            string music = Music.RandomTrack("InGame", GameMode._currentMusic);
+            string music = Music.RandomTrack("InGame", _currentMusic);
             Music.Play(music, false);
-            GameMode._currentMusic = music;
+            _currentMusic = music;
         }
 
-        protected virtual Level GetNextLevel() => _editorTestMode ? new GameLevel((Level.current as GameLevel).levelInputString, editorTestMode: true) : (Level)new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel));
+        protected virtual Level GetNextLevel() => _editorTestMode ? new GameLevel((Level.current as GameLevel).levelInputString, editorTestMode: true) : (Level)new GameLevel(Deathmatch.RandomLevelString(previousLevel));
 
         protected void DoAddPoints()
         {
@@ -804,10 +805,10 @@ namespace DuckGame
             }
             if (skippedLevel || _editorTestMode)
                 return;
-            ++GameMode._numMatchesPlayed;
-            if (GameMode._numMatchesPlayed < GameMode.roundsBetweenIntermission && !GameMode.showdown)
+            ++_numMatchesPlayed;
+            if (_numMatchesPlayed < roundsBetweenIntermission && !showdown)
                 return;
-            GameMode._numMatchesPlayed = 0;
+            _numMatchesPlayed = 0;
             _doScore = true;
         }
 
@@ -823,9 +824,25 @@ namespace DuckGame
 
         public virtual void PostDrawLayer(Layer layer)
         {
-            ++frames;
-            if (layer != Layer.HUD)
+
+
+            frames++;
+            
+            if (layer == Layer.Foreground && DGRSettings.NameTags)
+            {
+                drawNameTags();
                 return;
+            }
+            else if (layer != Layer.HUD)
+            {
+                return;
+            }
+            
+            if (DGRSettings.QOLScoreThingButWithoutScore)
+            {
+                drawNameDisplay();
+            }
+
             if (_waitAfterSpawnDings > 0 && _fontFade > 0.01f)
             {
                 _font.scale = new Vec2(2f, 2f);
@@ -845,6 +862,138 @@ namespace DuckGame
             float width1 = _font.GetWidth(text1);
             _font.alpha = (float)((Math.Sin(_pulse) + 1.0) / 2.0);
             _font.Draw(text1, (float)(Layer.HUD.camera.width / 2.0 - width1 / 2.0), (float)(Layer.HUD.camera.height - _font.height - 16.0), Color.Red);
+        }
+
+        private void drawNameDisplay()
+        {
+            const float fontSize = 0.5f;
+            const float vSpacing = 2f;
+            const float hSpacing = 2f;
+            const float borderWidth = 2f;
+            const float opacity = 1f;
+            const float teamLineWidth = 1f;
+            const bool removeDeadPlayers = true;
+            Rectangle drawBox = new(0, 0, borderWidth * 2, borderWidth * 2);
+
+            bool doTeams = Extensions.MultiPlayerTeamsExist() && teamLineWidth > 0;
+            IEnumerable<Profile> profileList = Profiles.activeNonSpectators;
+            Color[] teamColors = { // yoinked from hypixel bedwars teams
+                    Color.Blue,
+                    Color.Red,
+                    Color.Green,
+                    Color.Yellow,
+                    Color.Purple,
+                    Color.Cyan,
+                    Color.Pink,
+                    Color.Orange,
+                };
+
+            if (removeDeadPlayers)
+                profileList = profileList.Where(x => x?.duck?.dead == false);
+
+            float xOffset = drawBox.x + borderWidth + hSpacing;
+            float yOffset = drawBox.y + borderWidth + vSpacing;
+
+            Dictionary<int, int> teamColorMapping = new();
+            Dictionary<int, List<Profile>> profileTeamMembersMapping = new();
+            if (doTeams)
+            {
+                int index = 0;
+                foreach (Profile prof in Profiles.activeNonSpectators)
+                {
+                    int teamHashCode = prof.team.GetHashCode();
+
+                    if (!profileTeamMembersMapping.ContainsKey(teamHashCode))
+                        profileTeamMembersMapping.Add(teamHashCode, new List<Profile>());
+                    profileTeamMembersMapping[teamHashCode].Add(prof);
+
+                    if (teamColorMapping.ContainsKey(teamHashCode))
+                        continue;
+
+                    teamColorMapping[teamHashCode] = index;
+
+                    // increment index by one
+                    // makes sure if teams.length > 8 that colors overflow instead of crashing
+                    index = (index + 1) % teamColors.Length;
+                }
+
+                profileList = profileList.OrderBy(x => x.team.GetHashCode());
+
+                xOffset += hSpacing * 2 + teamLineWidth;
+            }
+
+            foreach (Profile prof in profileList)
+            {
+                int teamHashCode = prof.team.GetHashCode();
+
+                (float nameW, float nameH) = Extensions.GetStringSize(prof.name.CleanFormatting(), fontSize);
+                Color duckColor = prof.persona.colorUsable * opacity;
+                Color teamColor = doTeams ? (teamColors[teamColorMapping[teamHashCode]] * opacity) : Color.Transparent;
+                Color borderColor = Color.Black * opacity;
+                float addedHeight = nameH + vSpacing;
+
+                float totalprofWidth = nameW + borderWidth * 2 + nameH + hSpacing * 2;
+
+                if (totalprofWidth > drawBox.width)
+                    drawBox.width = totalprofWidth;
+
+                drawBox.height += addedHeight;
+
+                Graphics.DrawStringOutline(prof.name, new Vec2(xOffset + hSpacing + nameH, yOffset), duckColor, borderColor, 1.1f, scale: fontSize);
+
+                Rectangle colorBox = new(xOffset, yOffset, nameH, nameH - 0.5f);
+                Graphics.DrawOutlinedRect(colorBox, duckColor, borderColor, 1.1f, fontSize);
+
+                if (doTeams)
+                {
+                    Vec2 lineStartPos = new(xOffset - (hSpacing + teamLineWidth / 2), yOffset);
+                    Vec2 lineEndOffset = new(0, nameH + vSpacing);
+
+                    List<Profile> teamMembers = profileTeamMembersMapping[teamHashCode];
+                    if (teamMembers.IndexOf(prof) == teamMembers.Count - 1)
+                        lineEndOffset.y -= vSpacing;
+
+                    Graphics.DrawLine(lineStartPos + lineEndOffset, lineStartPos, teamColor, teamLineWidth, 1.1f);
+                }
+
+                yOffset += addedHeight;
+            }
+        }
+
+        private void drawNameTags()
+        {
+            try // FIXED !!!!!!!!
+            {
+                if (Level.current is RockScoreboard) return;
+
+                Profile me = Extensions.GetMe();
+
+                if (me?.duck?.connection == null)
+                    return;
+
+                bool spectating = (Network.isActive && (me.duck.dead || me.spectator)) || matchOver;
+
+                foreach (Profile prof in Profiles.activeNonSpectators)
+                {
+                    if (prof?.duck?.connection == null)
+                        continue;
+
+                    bool doDraw = spectating || (prof.duck.localSpawnVisible && !started);
+
+                    if (!doDraw)
+                        continue;
+
+                    Vec2 tagPos = prof.duck.position - new Vec2(0, 24);
+                    float depth = prof.connection == DuckNetwork.localConnection ? 2f : 1.95f;
+                    Color duckColor = prof.persona.colorUsable;
+
+                    Extensions.DrawCenteredOutlinedString(prof.name, tagPos, duckColor, Color.Black, depth, null, 0.7f);
+                }
+            }
+            catch(Exception e)
+            {
+                DevConsole.Log(e.Message);
+            }
         }
     }
 }

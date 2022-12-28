@@ -19,7 +19,7 @@ namespace DuckGame
         {
             SFX.Play("explode");
             PinkBox.ExplodeEffect(v);
-            List<IAmADuck> physicsObjects = Level.CheckCircleAll<IAmADuck>(v, 128).ToList();
+            List<IAmADuck> physicsObjects = Level.CheckCircleAll<IAmADuck>(v, 64).ToList();
             for (int i = 0; i < physicsObjects.Count; i++)
             {
                 MaterialThing po = (MaterialThing)physicsObjects[i];

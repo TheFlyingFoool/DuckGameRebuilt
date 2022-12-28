@@ -42,7 +42,7 @@ namespace DuckGame
             if (isServerForObject)
             {
                 if (_equippedDuck != null && _equippedDuck.inputProfile != null)
-                    trigger = _equippedDuck.inputProfile.Down("QUACK");
+                    trigger = _equippedDuck.inputProfile.Down(Triggers.Quack);
                 if (containedObject != null && (!trigger || !containedObject.HolsterActivate(this)))
                 {
                     containedObject.triggerAction = trigger;

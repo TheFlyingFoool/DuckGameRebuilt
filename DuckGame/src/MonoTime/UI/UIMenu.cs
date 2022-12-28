@@ -21,7 +21,7 @@ namespace DuckGame
         {
             get
             {
-                if (!DGRSettings.S_MenuMouse) return false;
+                if (!DGRSettings.MenuMouse) return false;
                 return _domouse;
             }
             set
@@ -122,7 +122,7 @@ namespace DuckGame
             previnputState = storeinputState;
             if (domouse)
             {
-                if (Input.Pressed("ANY"))
+                if (Input.Pressed(Triggers.Any))
                 {
                     gamepadMode = true;
                     _oldPos = Mouse.positionScreen;

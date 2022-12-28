@@ -30,17 +30,17 @@ namespace DuckGame
         {
             if (MonoMain.moddingEnabled)
             {
-                foreach (System.Type sortedType in ManagedContent.DeathCrateSettings.SortedTypes)
-                    DeathCrate._settings.Add(Activator.CreateInstance(sortedType) as DeathCrateSetting);
+                foreach (Type sortedType in ManagedContent.DeathCrateSettings.SortedTypes)
+                    _settings.Add(Activator.CreateInstance(sortedType) as DeathCrateSetting);
             }
             else
             {
-                foreach (System.Type type in (IEnumerable<System.Type>)Editor.GetSubclasses(typeof(DeathCrateSetting)).ToList<System.Type>())
-                    DeathCrate._settings.Add(Activator.CreateInstance(type) as DeathCrateSetting);
+                foreach (Type type in (IEnumerable<Type>)Editor.GetSubclasses(typeof(DeathCrateSetting)).ToList())
+                    _settings.Add(Activator.CreateInstance(type) as DeathCrateSetting);
             }
         }
 
-        public DeathCrateSetting setting => settingIndex < DeathCrate._settings.Count ? DeathCrate._settings[settingIndex] : new DCSwordAdventure();
+        public DeathCrateSetting setting => settingIndex < _settings.Count ? _settings[settingIndex] : new DCSwordAdventure();
 
         public DeathCrate(float xpos, float ypos)
           : base(xpos, ypos)
@@ -65,7 +65,7 @@ namespace DuckGame
             collideSounds.Add("crateHit");
             for (int index = 0; index < 100; ++index)
             {
-                settingIndex = (byte)Rando.Int(DeathCrate._settings.Count - 1);
+                settingIndex = (byte)Rando.Int(_settings.Count - 1);
                 if (_settings[settingIndex].likelyhood == 1.0 || Rando.Float(1f) < _settings[settingIndex].likelyhood)
                     break;
             }

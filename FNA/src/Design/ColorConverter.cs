@@ -77,12 +77,12 @@ namespace Microsoft.Xna.Framework.Design
 			ITypeDescriptorContext context,
 			IDictionary propertyValues
 		) {
-			return (object) new Color(
-				(int) propertyValues["R"],
-				(int) propertyValues["G"],
-				(int) propertyValues["B"],
-				(int) propertyValues["A"]
-			);
+			return new Color(
+                (int)propertyValues["R"],
+                (int)propertyValues["G"],
+                (int)propertyValues["B"],
+                (int)propertyValues["A"]
+            );
 		}
 
 		#endregion

@@ -26,7 +26,7 @@ namespace DuckGame
 
         public override void Apply()
         {
-            if (DuckGame.Graphics.device.Textures[0] != null)
+            if (Graphics.device.Textures[0] != null)
             {
                 //Tex2D texture = (Tex2D)(DuckGame.Graphics.device.Textures[0] as Texture2D);
                 SetValue("width", _thing.graphic.texture.frameWidth / _thing.graphic.texture.width);
@@ -37,8 +37,8 @@ namespace DuckGame
                 SetValue("xpos", _thing.x);
                 SetValue("ypos", _thing.y);
             }
-            DuckGame.Graphics.device.Textures[1] = (Texture2D)_goldTexture;
-            DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
+            Graphics.device.Textures[1] = (Texture2D)_goldTexture;
+            Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
             foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
             if (lockframes > 0)

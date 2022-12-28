@@ -27,7 +27,7 @@ namespace DuckGame
             string s5 = SyntaxColorComments.ToDGColorString();
 
             string fullHelpString = string.Join("\n",
-                DevConsole.commands.Values.Select(x => generateHelpString(x.First())));
+                DevConsole.commands.Values.Select(x => generateHelpString(x[0])));
 
             DevConsole.LogComplexMessage(fullHelpString, Color.White);
 

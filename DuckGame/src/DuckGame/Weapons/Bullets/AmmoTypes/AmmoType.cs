@@ -38,31 +38,31 @@ namespace DuckGame
         public bool canTeleport = true;
         public int ownerSafety;
         public bool complexSync;
-        private static Dictionary<System.Type, AmmoType.ComplexDiffData> _complexDiff = new Dictionary<System.Type, AmmoType.ComplexDiffData>();
-        private static Map<byte, System.Type> _types = new Map<byte, System.Type>();
+        private static Dictionary<Type, ComplexDiffData> _complexDiff = new Dictionary<Type, ComplexDiffData>();
+        private static Map<byte, Type> _types = new Map<byte, Type>();
         public Sprite sprite;
-        public System.Type bulletType = typeof(Bullet);
+        public Type bulletType = typeof(Bullet);
 
-        public static Map<byte, System.Type> indexTypeMap => AmmoType._types;
+        public static Map<byte, Type> indexTypeMap => _types;
 
         public static void InitializeTypes()
         {
             if (MonoMain.moddingEnabled)
             {
                 byte key = 0;
-                foreach (System.Type sortedType in ManagedContent.AmmoTypes.SortedTypes)
+                foreach (Type sortedType in ManagedContent.AmmoTypes.SortedTypes)
                 {
-                    AmmoType._types[key] = sortedType;
+                    _types[key] = sortedType;
                     ++key;
                 }
             }
             else
             {
-                List<System.Type> list = Editor.GetSubclasses(typeof(AmmoType)).ToList<System.Type>();
+                List<Type> list = Editor.GetSubclasses(typeof(AmmoType)).ToList();
                 byte key = 0;
-                foreach (System.Type type in list)
+                foreach (Type type in list)
                 {
-                    AmmoType._types[key] = type;
+                    _types[key] = type;
                     ++key;
                 }
             }
@@ -73,12 +73,12 @@ namespace DuckGame
             if (!complexSync)
                 return;
             ComplexDiffData complexDiffData;
-            if (!AmmoType._complexDiff.TryGetValue(GetType(), out complexDiffData))
-                AmmoType._complexDiff[GetType()] = complexDiffData = new AmmoType.ComplexDiffData(GetType());
+            if (!_complexDiff.TryGetValue(GetType(), out complexDiffData))
+                _complexDiff[GetType()] = complexDiffData = new ComplexDiffData(GetType());
             foreach (ClassMember binding in complexDiffData.bindings)
             {
                 object objB = binding.GetValue(this);
-                if (!object.Equals(binding.GetValue(complexDiffData.original), objB))
+                if (!Equals(binding.GetValue(complexDiffData.original), objB))
                 {
                     pBuffer.Write(true);
                     pBuffer.Write(objB);
@@ -93,8 +93,8 @@ namespace DuckGame
             if (!complexSync)
                 return;
             ComplexDiffData complexDiffData;
-            if (!AmmoType._complexDiff.TryGetValue(GetType(), out complexDiffData))
-                AmmoType._complexDiff[GetType()] = complexDiffData = new AmmoType.ComplexDiffData(GetType());
+            if (!_complexDiff.TryGetValue(GetType(), out complexDiffData))
+                _complexDiff[GetType()] = complexDiffData = new ComplexDiffData(GetType());
             foreach (ClassMember binding in complexDiffData.bindings)
             {
                 if (pBuffer.ReadBool())
@@ -155,7 +155,7 @@ namespace DuckGame
             public AmmoType original;
             public List<ClassMember> bindings;
 
-            public ComplexDiffData(System.Type pType)
+            public ComplexDiffData(Type pType)
             {
                 original = Activator.CreateInstance(pType) as AmmoType;
                 List<ClassMember> members = Editor.GetMembers(pType);

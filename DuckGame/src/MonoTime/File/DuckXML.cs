@@ -26,10 +26,10 @@ namespace DuckGame
         public static DuckXML Load(Stream s)
         {
             s.Position = 0L;
-            return DuckXML.FromString(new StreamReader(s).ReadToEnd());
+            return FromString(new StreamReader(s).ReadToEnd());
         }
 
-        public static DuckXML Load(byte[] data) => DuckXML.FromString(Encoding.UTF8.GetString(data));
+        public static DuckXML Load(byte[] data) => FromString(Encoding.UTF8.GetString(data));
 
         public static DuckXML Load(string file)
         {
@@ -39,7 +39,7 @@ namespace DuckGame
                 //you then have to process the string
             }
 
-            return DuckXML.FromString(System.IO.File.ReadAllText(file, Encoding.UTF8)); /*DuckXML.FromString(File.OpenText(file).ReadToEnd());*/
+            return FromString(File.ReadAllText(file, Encoding.UTF8)); /*DuckXML.FromString(File.OpenText(file).ReadToEnd());*/
         }
 
         public static DuckXML FromString(string text)
@@ -50,7 +50,7 @@ namespace DuckGame
             int index = 0;
             while (true)
             {
-                DXMLNode node = DXMLNode.ReadNode(text, ref index);
+                DXMLNode node = ReadNode(text, ref index);
                 if (node != null)
                     duckXml.Add(node);
                 else

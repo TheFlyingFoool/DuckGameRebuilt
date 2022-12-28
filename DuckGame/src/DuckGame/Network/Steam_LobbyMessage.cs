@@ -21,7 +21,7 @@ namespace DuckGame
         public static void Send(string pMessage, User pContext)
         {
             BitBuffer bitBuffer = new BitBuffer(false);
-            bitBuffer.Write(Steam_LobbyMessage.kLobbyMessageID);
+            bitBuffer.Write(kLobbyMessageID);
             if (pContext != null)
                 bitBuffer.Write(pContext.id);
             else
@@ -36,7 +36,7 @@ namespace DuckGame
             {
                 Steam_LobbyMessage steamLobbyMessage = new Steam_LobbyMessage();
                 BitBuffer bitBuffer = new BitBuffer(pData, false);
-                if (bitBuffer.ReadLong() == Steam_LobbyMessage.kLobbyMessageID)
+                if (bitBuffer.ReadLong() == kLobbyMessageID)
                 {
                     steamLobbyMessage.from = pFrom;
                     ulong id = bitBuffer.ReadULong();

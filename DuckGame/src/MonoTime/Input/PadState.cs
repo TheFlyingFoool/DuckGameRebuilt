@@ -11,8 +11,8 @@ namespace DuckGame
     public struct PadState
     {
         public PadButton buttons;
-        public PadState.TriggerStates triggers;
-        public PadState.StickStates sticks;
+        public TriggerStates triggers;
+        public StickStates sticks;
 
         public bool IsButtonDown(PadButton butt) => (buttons & butt) != 0;
 

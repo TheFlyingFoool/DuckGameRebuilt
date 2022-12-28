@@ -1,24 +1,19 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [ClientOnly]
     [EditorGroup("Rebuilt|Wump|Rifles")]
     public class WumpSniper : Gun
     {
-        public const string wumpsniper = "iVBORw0KGgoAAAANSUhEUgAAAB0AAAAOCAMAAADkD+cIAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAhUExURQAAAABXhLLc752dnTGi8v///2B3fC9IThsmMkk8KwAAAAwpv/QAAAALdFJOU/////////////8ASk8B8gAAAAlwSFlzAAAOwwAADsMBx2+oZAAAAH5JREFUKFN9jtEWwyAIQ4M4df7/By9B2vKw7Z7WIwkRsG9wyCqorjW3/tP9myVRlaZvrlvLAcU9mYsjxRloKzfjd5LZVjHLC9BeOnpA2X34CCb4Um90u/oUmWLNtSRIk9PBIPB+5sQWOdcIBanw8WyJRSHIupp0+Odd3G3J3h8BtwkTsyWw+AAAAABJRU5ErkJggg==";
         public WumpSniper(float xval, float yval) : base(xval, yval)
         {
             ammo = 3;
-            _ammoType = new ATSniper();
-            _ammoType.range = 500;
-            _ammoType.penetration = 10;
+            _ammoType = new ATSniper
+            {
+                range = 500,
+                penetration = 10
+            };
             _type = "gun";
-            graphic = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(wumpsniper))), "wumpsniper"));
-            graphic.Namebase = "wumpsniper";
-            Content.textures[graphic.Namebase] = graphic.texture;
+            graphic = new Sprite("wumpsniper");
             center = new Vec2(16f, 8f);
             collisionOffset = new Vec2(-8f, -4f);
             collisionSize = new Vec2(16f, 8f);
@@ -49,7 +44,7 @@ namespace DuckGame
             else lastCrouch = false;
             if (awesome)
             {
-                _ammoType.range = infiniteAmmoVal ? 400 : 200;
+                _ammoType.range = infiniteAmmoVal ? 400 : 150;
                 _ammoType.penetration = 10;
                 _ammoType.bulletThickness = 3;
                 _ammoType.bulletSpeed = 96;
@@ -58,7 +53,7 @@ namespace DuckGame
             else
             {
                 _ammoType.bulletThickness = 1;
-                _ammoType.range = infiniteAmmoVal ? 800 : 400;
+                _ammoType.range = infiniteAmmoVal ? 800 : 300;
                 _ammoType.penetration = 5;
                 _ammoType.bulletSpeed = 48;
                 _kickForce = 3;
@@ -184,16 +179,6 @@ namespace DuckGame
             }
         }
         public SinWave sinner = new SinWave(0.1f);
-        public override void DoUpdate()
-        {
-            if (laserSight && _laserTex == null)
-            {
-                _laserTex = Content.Load<Tex2D>("pointerLaser");
-            }
-            base.DoUpdate();
-        }
-        public bool _laserInit;
-        private Tex2D _laserTex;
 
         public override void Draw()
         {

@@ -65,7 +65,7 @@ namespace DuckGame
         protected float _smokeFlatten;
         private SinWave _accuracyWave = (SinWave)0.3f;
         private SpriteMap _clickPuff;
-        private Tex2D _laserTex;
+        protected Tex2D _laserTex;
         public bool isFatal = true;
         protected Vec2 _wallPoint;
         protected Sprite _sightHit;

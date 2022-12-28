@@ -14,9 +14,11 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 30;
-            _ammoType = new AT9mm();
-            _ammoType.range = 110f;
-            _ammoType.accuracy = 0.6f;
+            _ammoType = new AT9mm
+            {
+                range = 110f,
+                accuracy = 0.6f
+            };
             _type = "gun";
             graphic = new Sprite("smg");
             center = new Vec2(8f, 4f);

@@ -157,12 +157,14 @@ namespace Microsoft.Xna.Framework.Audio
 			IntPtr bufferLen;
 			IntPtr buffer = TitleContainer.ReadToPointer(settingsFile, out bufferLen);
 
-			// Generate engine parameters
-			FAudio.FACTRuntimeParameters settings = new FAudio.FACTRuntimeParameters();
-			settings.pGlobalSettingsBuffer = buffer;
-			settings.globalSettingsBufferSize = (uint) bufferLen;
-			settings.globalSettingsFlags = FAudio.FACT_FLAG_MANAGEDATA;
-			xactNotificationFunc = OnXACTNotification;
+            // Generate engine parameters
+            FAudio.FACTRuntimeParameters settings = new FAudio.FACTRuntimeParameters
+            {
+                pGlobalSettingsBuffer = buffer,
+                globalSettingsBufferSize = (uint)bufferLen,
+                globalSettingsFlags = FAudio.FACT_FLAG_MANAGEDATA
+            };
+            xactNotificationFunc = OnXACTNotification;
 			settings.fnNotificationCallback = Marshal.GetFunctionPointerForDelegate(
 				xactNotificationFunc
 			);
@@ -204,11 +206,13 @@ namespace Microsoft.Xna.Framework.Audio
 			);
 			channels = mixFormat.Format.nChannels;
 
-			// All XACT references have to go through here...
-			notificationDesc = new FAudio.FACTNotificationDescription();
-			notificationDesc.flags = FAudio.FACT_FLAG_NOTIFICATION_PERSIST;
-			notificationDesc.type = FAudio.FACTNOTIFICATIONTYPE_WAVEBANKDESTROYED;
-			FAudio.FACTAudioEngine_RegisterNotification(
+            // All XACT references have to go through here...
+            notificationDesc = new FAudio.FACTNotificationDescription
+            {
+                flags = FAudio.FACT_FLAG_NOTIFICATION_PERSIST,
+                type = FAudio.FACTNOTIFICATIONTYPE_WAVEBANKDESTROYED
+            };
+            FAudio.FACTAudioEngine_RegisterNotification(
 				handle,
 				ref notificationDesc
 			);

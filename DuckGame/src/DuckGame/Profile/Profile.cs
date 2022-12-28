@@ -22,7 +22,7 @@ namespace DuckGame
                 return netData.Get("REBUILT", false);
             }
         }
-
+        public HatSelector hatSelector;
         public int prevXPsave;
         public string prevFurniPositionData;
         public Dictionary<NetworkConnection, int> connectionTrouble = new Dictionary<NetworkConnection, int>();
@@ -148,7 +148,7 @@ namespace DuckGame
 
         public Team networkDefaultTeam => _networkIndex < DG.MaxPlayers ? Teams.all[_networkIndex] : Teams.all[Rando.Int(7)];
 
-        public DuckPersona networkDefaultPersona => _networkIndex < DG.MaxPlayers ? Persona.all.ElementAt<DuckPersona>(_networkIndex) : Persona.Duck1;
+        public DuckPersona networkDefaultPersona => _networkIndex < DG.MaxPlayers ? Persona.all.ElementAt(_networkIndex) : Persona.Duck1;
 
         public Dictionary<string, ChallengeSaveData> challengeData => _challengeData;
 
@@ -287,9 +287,9 @@ namespace DuckGame
         {
             get
             {
-                if (Profile._defaultFont == null)
-                    Profile._defaultFont = new BitmapFont("biosFont", 8);
-                BitmapFont font = Profile._defaultFont;
+                if (_defaultFont == null)
+                    _defaultFont = new BitmapFont("biosFont", 8);
+                BitmapFont font = _defaultFont;
                 foreach (FurniturePosition furniturePosition in _furniturePositions)
                 {
                     if (furniturePosition != null)
@@ -508,7 +508,7 @@ namespace DuckGame
             return str;
         }
 
-        private static string AvailFurniSortKey(Furniture x) => x.group.name + Profile.Stringlonger(RoomEditor._furniGroupMap[x.group].IndexOf(x));
+        private static string AvailFurniSortKey(Furniture x) => x.group.name + Stringlonger(RoomEditor._furniGroupMap[x.group].IndexOf(x));
 
         public List<Furniture> GetAvailableFurnis()
         {
@@ -529,7 +529,7 @@ namespace DuckGame
                     if (allFurni.alwaysHave)
                         _availableList.Add(allFurni);
                 }
-                _availableList.Sort((x, y) => Profile.AvailFurniSortKey(x).CompareTo(Profile.AvailFurniSortKey(y)));
+                _availableList.Sort((x, y) => AvailFurniSortKey(x).CompareTo(AvailFurniSortKey(y)));
             }
             return _availableList;
         }
@@ -642,7 +642,19 @@ namespace DuckGame
                 string nameUi = name;
                 if (muteName)
                     nameUi = "Player " + (networkIndex + 1).ToString();
-                if (isUsingRebuilt && DGRSettings.S_RebuiltEffect == 1) nameUi += "|PINK|♥";
+                if (isUsingRebuilt && DGRSettings.RebuiltEffect == 1) nameUi += "@DGR@";
+                return nameUi;
+            }
+        }
+        //alright so hear me out, DUCK GAME FUCKING SUCKS
+        public string nameUIBodge
+        {
+            get
+            {
+                string nameUi = name;
+                if (muteName)
+                    nameUi = "Player " + (networkIndex + 1).ToString();
+                if (isUsingRebuilt && DGRSettings.RebuiltEffect == 1) nameUi += "@DGRBIG@";
                 return nameUi;
             }
         }
@@ -683,9 +695,9 @@ namespace DuckGame
 
         private static Color PickColor()
         {
-            int index = Rando.Int(Profile._allowedColors.Count - 1);
-            Color allowedColor = Profile._allowedColors[index];
-            Profile._allowedColors.RemoveAt(index);
+            int index = Rando.Int(_allowedColors.Count - 1);
+            Color allowedColor = _allowedColors[index];
+            _allowedColors.RemoveAt(index);
             return allowedColor;
         }
 
@@ -715,31 +727,31 @@ namespace DuckGame
             if (seed == 0UL && Profiles.experienceProfile != null)
                 seed = Profiles.experienceProfile.steamID;
             Sprite s = new Sprite();
-            DuckGame.Graphics.AddRenderTask(() => s.texture = Profile.GetEggTexture(index, seed));
+            Graphics.AddRenderTask(() => s.texture = GetEggTexture(index, seed));
             return s;
         }
 
         public static Tex2D GetEggTexture(int index, ulong seed)
         {
             RenderTarget2D t = new RenderTarget2D(16, 16, false, RenderTargetUsage.PreserveContents);
-            if (Profile._egg == null)
+            if (_egg == null)
             {
-                Profile._batch = new MTSpriteBatch(DuckGame.Graphics.device);
-                Profile._egg = new SpriteMap("online/eggWhite", 16, 16);
-                Profile._eggShine = new SpriteMap("online/eggShine", 16, 16);
-                Profile._eggBorder = new SpriteMap("online/eggBorder", 16, 16);
-                Profile._eggOuter = new SpriteMap("online/eggOuter", 16, 16);
-                Profile._eggSymbols = new SpriteMap("online/eggSymbols", 16, 16);
+                _batch = new MTSpriteBatch(Graphics.device);
+                _egg = new SpriteMap("online/eggWhite", 16, 16);
+                _eggShine = new SpriteMap("online/eggShine", 16, 16);
+                _eggBorder = new SpriteMap("online/eggBorder", 16, 16);
+                _eggOuter = new SpriteMap("online/eggOuter", 16, 16);
+                _eggSymbols = new SpriteMap("online/eggSymbols", 16, 16);
             }
             Random generator = Rando.generator;
-            Rando.generator = Profile.GetLongGenerator(seed);
+            Rando.generator = GetLongGenerator(seed);
             for (int index1 = 0; index1 < index; ++index1)
                 Rando.Int(100);
             bool flag1 = Rando.Float(1f) > 0.02f;
             bool flag2 = Rando.Float(1f) > 0.9f;
             bool flag3 = Rando.Float(1f) > 0.4f;
             bool flag4 = Rando.Int(8) == 1;
-            Profile._allowedColors = new List<Color>()
+            _allowedColors = new List<Color>()
       {
         Colors.DGBlue,
         Colors.DGYellow,
@@ -748,29 +760,29 @@ namespace DuckGame
         new Color(48, 224, 242),
         new Color(199, 234, 96)
       };
-            Profile._allowedColors.Add(Colors.DGPink);
-            Profile._allowedColors.Add(new Color((byte)(54 + Rando.Int(200)), (byte)(54 + Rando.Int(200)), (byte)(54 + Rando.Int(200))));
+            _allowedColors.Add(Colors.DGPink);
+            _allowedColors.Add(new Color((byte)(54 + Rando.Int(200)), (byte)(54 + Rando.Int(200)), (byte)(54 + Rando.Int(200))));
             if (Rando.Int(6) == 1)
             {
-                Profile._allowedColors.Add(Colors.DGPurple);
-                Profile._allowedColors.Add(Colors.DGEgg);
+                _allowedColors.Add(Colors.DGPurple);
+                _allowedColors.Add(Colors.DGEgg);
             }
             else if (Rando.Int(100) == 1)
             {
-                Profile._allowedColors.Add(Colors.SuperDarkBlueGray);
-                Profile._allowedColors.Add(Colors.BlueGray);
-                Profile._allowedColors.Add(Colors.DGOrange);
-                Profile._allowedColors.Add(new Color((byte)(54 + Rando.Int(200)), (byte)(54 + Rando.Int(200)), (byte)(54 + Rando.Int(200))));
+                _allowedColors.Add(Colors.SuperDarkBlueGray);
+                _allowedColors.Add(Colors.BlueGray);
+                _allowedColors.Add(Colors.DGOrange);
+                _allowedColors.Add(new Color((byte)(54 + Rando.Int(200)), (byte)(54 + Rando.Int(200)), (byte)(54 + Rando.Int(200))));
             }
             else if (Rando.Int(1200) == 1)
-                Profile._allowedColors.Add(Colors.Platinum);
+                _allowedColors.Add(Colors.Platinum);
             else if (Rando.Int(100000) == 1)
-                Profile._allowedColors.Add(new Color(250, 10, 250));
+                _allowedColors.Add(new Color(250, 10, 250));
             else if (Rando.Int(1000000) == 1)
-                Profile._allowedColors.Add(new Color(229, 245, 181));
-            DuckGame.Graphics.SetRenderTarget(t);
-            DuckGame.Graphics.Clear(Color.Black);
-            Profile._batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
+                _allowedColors.Add(new Color(229, 245, 181));
+            Graphics.SetRenderTarget(t);
+            Graphics.Clear(Color.Black);
+            _batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
             //int num1 = 0;
             int num2 = 8 + Rando.Int(12);
             Rando.Int(100);
@@ -791,9 +803,9 @@ namespace DuckGame
             else if (Rando.Int(1000000) == 1)
                 num2 = 6;
             bool flag5 = Rando.Int(300) == 1;
-            MTSpriteBatch screen = DuckGame.Graphics.screen;
-            DuckGame.Graphics.screen = Profile._batch;
-            Profile._batch.Draw(Profile._egg.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num3 * 16, 0f, 16f, 16f)), Color.White, 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 1f);
+            MTSpriteBatch screen = Graphics.screen;
+            Graphics.screen = _batch;
+            _batch.Draw(_egg.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num3 * 16, 0f, 16f, 16f)), Color.White, 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 1f);
             if (flag3)
             {
                 if (flag5)
@@ -803,21 +815,21 @@ namespace DuckGame
                         character = BitmapFont._characters[Rando.Int(16, 26)];
                     else if (Rando.Int(50) == 1)
                         character = BitmapFont._characters[Rando.Int(BitmapFont._characters.Length - 1)];
-                    DuckGame.Graphics.DrawString(character.ToString() ?? "", new Vec2(4f, 6f), new Color(60, 60, 60, 200), (Depth)0.9f);
+                    Graphics.DrawString(character.ToString() ?? "", new Vec2(4f, 6f), new Color(60, 60, 60, 200), (Depth)0.9f);
                 }
                 else
-                    Profile._batch.Draw(Profile._eggSymbols.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num2 * 16, 0f, 16f, 16f)), new Color(60, 60, 60, 200), 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 0.9f);
+                    _batch.Draw(_eggSymbols.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num2 * 16, 0f, 16f, 16f)), new Color(60, 60, 60, 200), 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 0.9f);
             }
-            Profile._batch.Draw(Profile._eggOuter.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num3 * 16, 0f, 16f, 16f)), Color.White, 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 1f);
-            Profile._batch.End();
-            DuckGame.Graphics.screen = screen;
-            DuckGame.Graphics.SetRenderTarget(null);
+            _batch.Draw(_eggOuter.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num3 * 16, 0f, 16f, 16f)), Color.White, 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 1f);
+            _batch.End();
+            Graphics.screen = screen;
+            Graphics.SetRenderTarget(null);
             Color[] data = t.GetData();
             float num4 = 0.09999999f;
-            Color color1 = Profile.PickColor();
-            Color color2 = Profile.PickColor();
-            Profile.PickColor();
-            Color color3 = Profile.PickColor();
+            Color color1 = PickColor();
+            Color color2 = PickColor();
+            PickColor();
+            Color color3 = PickColor();
             float num5 = Rando.Float(100000f);
             float num6 = Rando.Float(100000f);
             for (int index2 = 0; index2 < t.height; ++index2)
@@ -881,10 +893,10 @@ namespace DuckGame
             }
             t.SetData(data);
             Graphics.SetRenderTarget(t);
-            Profile._batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
-            Profile._batch.Draw(Profile._eggShine.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num3 * 16, 0f, 16f, 16f)), Color.White, 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 1f);
-            Profile._batch.Draw(Profile._eggBorder.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num3 * 16, 0f, 16f, 16f)), Color.White, 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 1f);
-            Profile._batch.End();
+            _batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
+            _batch.Draw(_eggShine.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num3 * 16, 0f, 16f, 16f)), Color.White, 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 1f);
+            _batch.Draw(_eggBorder.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num3 * 16, 0f, 16f, 16f)), Color.White, 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 1f);
+            _batch.End();
             Graphics.SetRenderTarget(null);
             Rando.generator = generator;
             Tex2D eggTexture = new Tex2D(t.width, t.height);
@@ -898,31 +910,31 @@ namespace DuckGame
             if (seed == 0UL && Profiles.experienceProfile != null)
                 seed = Profiles.experienceProfile.steamID;
             Sprite s = new Sprite();
-            Graphics.AddRenderTask(() => Profile.GetPainting(index, seed, s));
+            Graphics.AddRenderTask(() => GetPainting(index, seed, s));
             return s;
         }
 
         public static void GetPainting(int index, ulong seed, Sprite spr)
         {
             Tex2D t = new RenderTarget2D(19, 12, false, RenderTargetUsage.PreserveContents);
-            if (Profile._easel == null)
+            if (_easel == null)
             {
-                Profile._batch = new MTSpriteBatch(DuckGame.Graphics.device);
-                Profile._easel = new SpriteMap("online/easelWhite", 19, 12);
-                Profile._eggShine = new SpriteMap("online/eggShine", 16, 16);
-                Profile._eggBorder = new SpriteMap("online/eggBorder", 16, 16);
-                Profile._eggOuter = new SpriteMap("online/eggOuter", 16, 16);
-                Profile._easelSymbols = new SpriteMap("online/easelPic", 19, 12);
+                _batch = new MTSpriteBatch(Graphics.device);
+                _easel = new SpriteMap("online/easelWhite", 19, 12);
+                _eggShine = new SpriteMap("online/eggShine", 16, 16);
+                _eggBorder = new SpriteMap("online/eggBorder", 16, 16);
+                _eggOuter = new SpriteMap("online/eggOuter", 16, 16);
+                _easelSymbols = new SpriteMap("online/easelPic", 19, 12);
             }
             Random generator = Rando.generator;
-            Rando.generator = Profile.GetLongGenerator(seed);
+            Rando.generator = GetLongGenerator(seed);
             for (int index1 = 0; index1 < index; ++index1)
                 Rando.Int(100);
             bool flag1 = Rando.Float(1f) > 0.03f;
             bool flag2 = Rando.Float(1f) > 0.8f;
             double num1 = Rando.Float(1f);
             bool flag3 = Rando.Int(6) == 1;
-            Profile._allowedColors = new List<Color>()
+            _allowedColors = new List<Color>()
       {
         Colors.DGBlue,
         Colors.DGYellow,
@@ -931,46 +943,46 @@ namespace DuckGame
         new Color(48, 224, 242),
         new Color(199, 234, 96)
       };
-            Profile._allowedColors.Add(Colors.DGPink);
-            Profile._allowedColors.Add(new Color((byte)(54 + Rando.Int(200)), (byte)(54 + Rando.Int(200)), (byte)(54 + Rando.Int(200))));
+            _allowedColors.Add(Colors.DGPink);
+            _allowedColors.Add(new Color((byte)(54 + Rando.Int(200)), (byte)(54 + Rando.Int(200)), (byte)(54 + Rando.Int(200))));
             if (Rando.Int(6) == 1)
             {
-                Profile._allowedColors.Add(Colors.DGPurple);
-                Profile._allowedColors.Add(Colors.DGEgg);
+                _allowedColors.Add(Colors.DGPurple);
+                _allowedColors.Add(Colors.DGEgg);
             }
             else if (Rando.Int(100) == 1)
             {
-                Profile._allowedColors.Add(Colors.SuperDarkBlueGray);
-                Profile._allowedColors.Add(Colors.BlueGray);
-                Profile._allowedColors.Add(Colors.DGOrange);
-                Profile._allowedColors.Add(new Color((byte)(54 + Rando.Int(200)), (byte)(54 + Rando.Int(200)), (byte)(54 + Rando.Int(200))));
+                _allowedColors.Add(Colors.SuperDarkBlueGray);
+                _allowedColors.Add(Colors.BlueGray);
+                _allowedColors.Add(Colors.DGOrange);
+                _allowedColors.Add(new Color((byte)(54 + Rando.Int(200)), (byte)(54 + Rando.Int(200)), (byte)(54 + Rando.Int(200))));
             }
             else if (Rando.Int(1200) == 1)
-                Profile._allowedColors.Add(Colors.Platinum);
+                _allowedColors.Add(Colors.Platinum);
             else if (Rando.Int(100000) == 1)
-                Profile._allowedColors.Add(new Color(250, 10, 250));
+                _allowedColors.Add(new Color(250, 10, 250));
             else if (Rando.Int(1000000) == 1)
-                Profile._allowedColors.Add(new Color(229, 245, 181));
+                _allowedColors.Add(new Color(229, 245, 181));
             Graphics.SetRenderTarget(t as RenderTarget2D);
             Graphics.Clear(Color.Black);
-            Profile._batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
+            _batch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
             int num2 = 8 + Rando.Int(12);
             Rando.Int(100);
             Rando.Int(15);
             Rando.Int(300);
             MTSpriteBatch screen = Graphics.screen;
-            Graphics.screen = Profile._batch;
-            Profile._batch.Draw(Profile._easel.texture, new Vec2(0f, 0f), new Rectangle?(), Color.White, 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 1f);
-            Profile._batch.Draw(Profile._easelSymbols.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num2 * 19, 0f, 19f, 12f)), new Color(60, 60, 60, 200), 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 0.9f);
-            Profile._batch.End();
+            Graphics.screen = _batch;
+            _batch.Draw(_easel.texture, new Vec2(0f, 0f), new Rectangle?(), Color.White, 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 1f);
+            _batch.Draw(_easelSymbols.texture, new Vec2(0f, 0f), new Rectangle?(new Rectangle(num2 * 19, 0f, 19f, 12f)), new Color(60, 60, 60, 200), 0f, new Vec2(0f, 0f), 1f, SpriteEffects.None, 0.9f);
+            _batch.End();
             Graphics.screen = screen;
             Graphics.SetRenderTarget(null);
             Color[] data = t.GetData();
             float num3 = 0.09999999f;
-            Color color1 = Profile.PickColor();
-            Color color2 = Profile.PickColor();
-            Profile.PickColor();
-            Color color3 = Profile.PickColor();
+            Color color1 = PickColor();
+            Color color2 = PickColor();
+            PickColor();
+            Color color3 = PickColor();
             float num4 = Rando.Float(100000f);
             float num5 = Rando.Float(100000f);
             for (int index2 = 0; index2 < t.height; ++index2)
@@ -1218,7 +1230,7 @@ namespace DuckGame
             {
                 if (index >= DG.MaxPlayers)
                     index = 0;
-                DuckPersona duckPersona = Persona.all.ElementAt<DuckPersona>(index);
+                DuckPersona duckPersona = Persona.all.ElementAt(index);
                 bool flag = false;
                 foreach (Profile profile in Profiles.active)
                 {
@@ -1238,7 +1250,7 @@ namespace DuckGame
         {
             get
             {
-                if (!Profile.logStats)
+                if (!logStats)
                 {
                     if (_junkStats == null)
                     {
@@ -1337,15 +1349,15 @@ namespace DuckGame
             get => _networkStatus;
             set
             {
-                if (!isRemoteLocalDuck && !Profile._networkStatusLooping && connection != null)
+                if (!isRemoteLocalDuck && !_networkStatusLooping && connection != null)
                 {
-                    Profile._networkStatusLooping = true;
+                    _networkStatusLooping = true;
                     foreach (Profile profile in DuckNetwork.profiles)
                     {
                         if (profile.connection == connection)
                             profile.networkStatus = value;
                     }
-                    Profile._networkStatusLooping = false;
+                    _networkStatusLooping = false;
                 }
                 else
                 {
@@ -1401,7 +1413,7 @@ namespace DuckGame
             set
             {
                 _remoteSpectatorChangeIndex = value;
-                _spectatorChangeCooldown = 120;
+                _spectatorChangeCooldown = 60;
             }
         }
 
@@ -1448,12 +1460,15 @@ namespace DuckGame
             get
             {
                 if (requestedColor >= 0 && requestedColor < DG.MaxPlayers)
-                    return Persona.all.ElementAt<DuckPersona>(requestedColor);
-                return preferredColor >= 0 && preferredColor < DG.MaxPlayers ? Persona.all.ElementAt<DuckPersona>(preferredColor) : fallbackPersona;
+                    return Persona.all.ElementAt(requestedColor);
+                return preferredColor >= 0 && preferredColor < DG.MaxPlayers ? Persona.all.ElementAt(preferredColor) : fallbackPersona;
             }
         }
 
-        public void UpdatePersona() => DuckNetwork.RequestPersona(this, desiredPersona);
+        public void UpdatePersona()
+        {
+            DuckNetwork.RequestPersona(this, desiredPersona);
+        }
 
         public void PersonaRequestResult(DuckPersona pPersona) => persona = pPersona;
 
@@ -1471,7 +1486,7 @@ namespace DuckGame
                 {
                     sbyte index = netData.Get<sbyte>("spectatorPersona", -1);
                     if (index >= 0 && index < 8)
-                        return Persona.all.ElementAt<DuckPersona>(index);
+                        return Persona.all.ElementAt(index);
                 }
                 if (_persona == null)
                     _persona = this != Profiles.DefaultPlayer1 ? (this != Profiles.DefaultPlayer2 ? (this != Profiles.DefaultPlayer3 ? (this != Profiles.DefaultPlayer4 ? Persona.Duck1 : Persona.Duck4) : Persona.Duck3) : Persona.Duck2) : Persona.Duck1;

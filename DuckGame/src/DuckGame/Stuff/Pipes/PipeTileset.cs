@@ -15,7 +15,7 @@ namespace DuckGame
     {
         public EditorProperty<bool> trapdoor = new EditorProperty<bool>(false);
         public EditorProperty<bool> background = new EditorProperty<bool>(false);
-        private Dictionary<PipeTileset.Direction, PipeTileset> connections = new Dictionary<PipeTileset.Direction, PipeTileset>();
+        private Dictionary<Direction, PipeTileset> connections = new Dictionary<Direction, PipeTileset>();
         public SpriteMap _sprite;
         public float pipeDepth;
         private bool searchUp;
@@ -30,7 +30,7 @@ namespace DuckGame
         private PipeTileset _oppositeEnd;
         public float travelLength;
         private HashSet<ITeleport> _objectsInPipes = new HashSet<ITeleport>();
-        private List<PipeTileset.PipeBundle> _transporting = new List<PipeTileset.PipeBundle>();
+        private List<PipeBundle> _transporting = new List<PipeBundle>();
         private HashSet<PhysicsObject> _pipingOut = new HashSet<PhysicsObject>();
         private List<ITeleport> _removeFromPipe = new List<ITeleport>();
         private List<MaterialThing> _colliding;
@@ -45,7 +45,7 @@ namespace DuckGame
         public bool hasKinks;
         public bool _foregroundDraw;
         private bool _drawBlockOverlay;
-        private List<PipeTileset.PipeParticle> _particles = new List<PipeTileset.PipeParticle>();
+        private List<PipeParticle> _particles = new List<PipeParticle>();
         private float partRot;
         private int partWait = -100;
         public float _flapLerp;
@@ -274,7 +274,7 @@ namespace DuckGame
             if (_colliding != null)
                 return;
             _colliding = new List<MaterialThing>();
-            foreach (IPlatform platform in _pipeUp != null || _pipeDown != null ? Level.CheckRectAll<IPlatform>(topLeft + new Vec2(0f, -16f), bottomRight + new Vec2(0f, 16f)).ToList<IPlatform>() : (IEnumerable<IPlatform>)Level.CheckLineAll<IPlatform>(topLeft + new Vec2(-16f, 0f), bottomRight + new Vec2(16f, 0f)).ToList<IPlatform>())
+            foreach (IPlatform platform in _pipeUp != null || _pipeDown != null ? Level.CheckRectAll<IPlatform>(topLeft + new Vec2(0f, -16f), bottomRight + new Vec2(0f, 16f)).ToList() : (IEnumerable<IPlatform>)Level.CheckLineAll<IPlatform>(topLeft + new Vec2(-16f, 0f), bottomRight + new Vec2(16f, 0f)).ToList())
             {
                 if (platform is MaterialThing && !(platform is PhysicsObject))
                     _colliding.Add(platform as MaterialThing);
@@ -285,7 +285,7 @@ namespace DuckGame
         {
             foreach (PhysicsObject physicsObject in _pipingOut)
             {
-                Thing.Fondle(physicsObject, DuckNetwork.localConnection);
+                Fondle(physicsObject, DuckNetwork.localConnection);
                 Clip(physicsObject);
                 physicsObject.skipClip = true;
                 physicsObject.grounded = false;
@@ -309,17 +309,17 @@ namespace DuckGame
                 Ragdoll doll = (pThing as RagdollPart).doll;
                 if (doll == null)
                     return;
-                _transporting.Add(new PipeTileset.PipeBundle()
+                _transporting.Add(new PipeBundle()
                 {
                     thing = doll.part1,
                     cameraPosition = doll.part1.position
                 });
-                _transporting.Add(new PipeTileset.PipeBundle()
+                _transporting.Add(new PipeBundle()
                 {
                     thing = doll.part2,
                     cameraPosition = doll.part1.position
                 });
-                _transporting.Add(new PipeTileset.PipeBundle()
+                _transporting.Add(new PipeBundle()
                 {
                     thing = doll.part3,
                     cameraPosition = doll.part1.position
@@ -330,7 +330,7 @@ namespace DuckGame
             }
             else
             {
-                _transporting.Add(new PipeTileset.PipeBundle()
+                _transporting.Add(new PipeBundle()
                 {
                     thing = pThing,
                     cameraPosition = pThing.position
@@ -476,7 +476,7 @@ namespace DuckGame
                                     (physicsObject as Duck).sliding = true;
                                 }
                             }
-                            Thing.Fondle(physicsObject, DuckNetwork.localConnection);
+                            Fondle(physicsObject, DuckNetwork.localConnection);
                             Clip(physicsObject);
                             physicsObject.skipClip = true;
                             physicsObject.grounded = false;
@@ -551,7 +551,7 @@ namespace DuckGame
             }
             for (_transportingIndex = 0; _transportingIndex < _transporting.Count; ++_transportingIndex)
             {
-                PipeTileset.PipeBundle bundle = _transporting[_transportingIndex];
+                PipeBundle bundle = _transporting[_transportingIndex];
                 Thing thing = bundle.thing;
                 if (thing is PhysicsObject)
                 {
@@ -573,7 +573,7 @@ namespace DuckGame
 
         private void FinishTransporting(
           PhysicsObject o,
-          PipeTileset.PipeBundle bundle,
+          PipeBundle bundle,
           bool pDoingRagthing = false)
         {
             o.updatePhysics = true;
@@ -592,9 +592,9 @@ namespace DuckGame
                 Ragdoll r = (o as RagdollPart).doll;
                 if (r != null)
                 {
-                    FinishTransporting(r.part1, _transporting.FirstOrDefault<PipeTileset.PipeBundle>(x => x.thing == r.part1), true);
-                    FinishTransporting(r.part2, _transporting.FirstOrDefault<PipeTileset.PipeBundle>(x => x.thing == r.part2), true);
-                    FinishTransporting(r.part3, _transporting.FirstOrDefault<PipeTileset.PipeBundle>(x => x.thing == r.part3), true);
+                    FinishTransporting(r.part1, _transporting.FirstOrDefault(x => x.thing == r.part1), true);
+                    FinishTransporting(r.part2, _transporting.FirstOrDefault(x => x.thing == r.part2), true);
+                    FinishTransporting(r.part3, _transporting.FirstOrDefault(x => x.thing == r.part3), true);
                     r.part1.position = new Vec2(r.part2.x + Rando.Float(-4f, 4f), r.part2.y + Rando.Float(-4f, 4f));
                     r.part3.position = new Vec2(r.part2.x + Rando.Float(-4f, 4f), r.part2.y + Rando.Float(-4f, 4f));
                     return;
@@ -614,16 +614,16 @@ namespace DuckGame
 
         public override void EditorAdded()
         {
-            Dictionary<PipeTileset.Direction, PipeTileset> neighbors = GetNeighbors();
-            if (!AttemptObviousConnection(neighbors) && PipeTileset._lastAdd != null)
+            Dictionary<Direction, PipeTileset> neighbors = GetNeighbors();
+            if (!AttemptObviousConnection(neighbors) && _lastAdd != null)
             {
-                if (Up(neighbors) == PipeTileset._lastAdd && Up(neighbors).ReadyForConnection())
+                if (Up(neighbors) == _lastAdd && Up(neighbors).ReadyForConnection())
                     MakeConnection(Up(neighbors));
-                else if (Down(neighbors) == PipeTileset._lastAdd && Down(neighbors).ReadyForConnection())
+                else if (Down(neighbors) == _lastAdd && Down(neighbors).ReadyForConnection())
                     MakeConnection(Down(neighbors));
-                else if (Left(neighbors) == PipeTileset._lastAdd && Left(neighbors).ReadyForConnection())
+                else if (Left(neighbors) == _lastAdd && Left(neighbors).ReadyForConnection())
                     MakeConnection(Left(neighbors));
-                else if (Right(neighbors) == PipeTileset._lastAdd && Right(neighbors).ReadyForConnection())
+                else if (Right(neighbors) == _lastAdd && Right(neighbors).ReadyForConnection())
                     MakeConnection(Right(neighbors));
             }
             searchUp = searchDown = searchLeft = searchRight = false;
@@ -648,7 +648,7 @@ namespace DuckGame
                 Right().searchLeft = true;
             }
             TestValidity();
-            PipeTileset._lastAdd = this;
+            _lastAdd = this;
         }
 
         public override void EditorFlip(bool pVertical)
@@ -694,7 +694,7 @@ namespace DuckGame
                 pipeTileset.TestValidity();
             }
             TestValidity();
-            PipeTileset._lastAdd = null;
+            _lastAdd = null;
         }
 
         public override void EditorObjectsChanged()
@@ -865,7 +865,7 @@ namespace DuckGame
             _pipeRight = null;
             _pipeUp = null;
             _pipeDown = null;
-            Dictionary<PipeTileset.Direction, PipeTileset> neighbors = GetNeighbors();
+            Dictionary<Direction, PipeTileset> neighbors = GetNeighbors();
             if (searchUp && Up(neighbors) != null)
                 MakeConnection(Up(neighbors));
             if (searchDown && Down(neighbors) != null)
@@ -878,60 +878,60 @@ namespace DuckGame
         }
 
         public PipeTileset Up(
-          Dictionary<PipeTileset.Direction, PipeTileset> pNeighbors = null)
+          Dictionary<Direction, PipeTileset> pNeighbors = null)
         {
             if (pNeighbors == null)
                 return _pipeUp;
             PipeTileset pipeTileset;
-            pNeighbors.TryGetValue(PipeTileset.Direction.Up, out pipeTileset);
+            pNeighbors.TryGetValue(Direction.Up, out pipeTileset);
             return pipeTileset;
         }
 
         public PipeTileset Down(
-          Dictionary<PipeTileset.Direction, PipeTileset> pNeighbors = null)
+          Dictionary<Direction, PipeTileset> pNeighbors = null)
         {
             if (pNeighbors == null)
                 return _pipeDown;
             PipeTileset pipeTileset;
-            pNeighbors.TryGetValue(PipeTileset.Direction.Down, out pipeTileset);
+            pNeighbors.TryGetValue(Direction.Down, out pipeTileset);
             return pipeTileset;
         }
 
         public PipeTileset Left(
-          Dictionary<PipeTileset.Direction, PipeTileset> pNeighbors = null)
+          Dictionary<Direction, PipeTileset> pNeighbors = null)
         {
             if (pNeighbors == null)
                 return _pipeLeft;
             PipeTileset pipeTileset;
-            pNeighbors.TryGetValue(PipeTileset.Direction.Left, out pipeTileset);
+            pNeighbors.TryGetValue(Direction.Left, out pipeTileset);
             return pipeTileset;
         }
 
         public PipeTileset Right(
-          Dictionary<PipeTileset.Direction, PipeTileset> pNeighbors = null)
+          Dictionary<Direction, PipeTileset> pNeighbors = null)
         {
             if (pNeighbors == null)
                 return _pipeRight;
             PipeTileset pipeTileset;
-            pNeighbors.TryGetValue(PipeTileset.Direction.Right, out pipeTileset);
+            pNeighbors.TryGetValue(Direction.Right, out pipeTileset);
             return pipeTileset;
         }
 
-        protected virtual Dictionary<PipeTileset.Direction, PipeTileset> GetNeighbors()
+        protected virtual Dictionary<Direction, PipeTileset> GetNeighbors()
         {
-            Dictionary<PipeTileset.Direction, PipeTileset> neighbors = new Dictionary<PipeTileset.Direction, PipeTileset>();
-            PipeTileset pipeTileset1 = Level.CheckPointAll<PipeTileset>(x, y - 16f).Where<PipeTileset>(x => x.group == group).FirstOrDefault<PipeTileset>();
+            Dictionary<Direction, PipeTileset> neighbors = new Dictionary<Direction, PipeTileset>();
+            PipeTileset pipeTileset1 = Level.CheckPointAll<PipeTileset>(x, y - 16f).Where(x => x.group == group).FirstOrDefault();
             if (pipeTileset1 != null)
-                neighbors[PipeTileset.Direction.Up] = pipeTileset1;
-            PipeTileset pipeTileset2 = Level.CheckPointAll<PipeTileset>(x, y + 16f).Where<PipeTileset>(x => x.group == group).FirstOrDefault<PipeTileset>();
+                neighbors[Direction.Up] = pipeTileset1;
+            PipeTileset pipeTileset2 = Level.CheckPointAll<PipeTileset>(x, y + 16f).Where(x => x.group == group).FirstOrDefault();
             if (pipeTileset2 != null)
-                neighbors[PipeTileset.Direction.Down] = pipeTileset2;
-            PipeTileset pipeTileset3 = Level.CheckPointAll<PipeTileset>(x - 16f, y).Where<PipeTileset>(x => x.group == group).FirstOrDefault<PipeTileset>();
+                neighbors[Direction.Down] = pipeTileset2;
+            PipeTileset pipeTileset3 = Level.CheckPointAll<PipeTileset>(x - 16f, y).Where(x => x.group == group).FirstOrDefault();
             if (pipeTileset3 != null)
-                neighbors[PipeTileset.Direction.Left] = pipeTileset3;
-            PipeTileset pipeTileset4 = Level.CheckPointAll<PipeTileset>(x + 16f, y).Where<PipeTileset>(x => x.group == group).FirstOrDefault<PipeTileset>();
+                neighbors[Direction.Left] = pipeTileset3;
+            PipeTileset pipeTileset4 = Level.CheckPointAll<PipeTileset>(x + 16f, y).Where(x => x.group == group).FirstOrDefault();
             if (pipeTileset4 != null)
-                neighbors[PipeTileset.Direction.Right] = pipeTileset4;
+                neighbors[Direction.Right] = pipeTileset4;
             return neighbors;
         }
 
@@ -985,16 +985,16 @@ namespace DuckGame
             {
                 if (pWith.x > x)
                 {
-                    pWith.connections[PipeTileset.Direction.Left] = this;
+                    pWith.connections[Direction.Left] = this;
                     pWith._pipeLeft = this;
-                    connections[PipeTileset.Direction.Right] = pWith;
+                    connections[Direction.Right] = pWith;
                     _pipeRight = pWith;
                 }
                 if (pWith.x < x)
                 {
-                    pWith.connections[PipeTileset.Direction.Right] = this;
+                    pWith.connections[Direction.Right] = this;
                     pWith._pipeRight = this;
-                    connections[PipeTileset.Direction.Left] = pWith;
+                    connections[Direction.Left] = pWith;
                     _pipeLeft = pWith;
                 }
             }
@@ -1002,16 +1002,16 @@ namespace DuckGame
             {
                 if (pWith.y > y)
                 {
-                    pWith.connections[PipeTileset.Direction.Up] = this;
+                    pWith.connections[Direction.Up] = this;
                     pWith._pipeUp = this;
-                    connections[PipeTileset.Direction.Down] = pWith;
+                    connections[Direction.Down] = pWith;
                     _pipeDown = pWith;
                 }
                 if (pWith.y < y)
                 {
-                    pWith.connections[PipeTileset.Direction.Down] = this;
+                    pWith.connections[Direction.Down] = this;
                     pWith._pipeDown = this;
-                    connections[PipeTileset.Direction.Up] = pWith;
+                    connections[Direction.Up] = pWith;
                     _pipeUp = pWith;
                 }
             }
@@ -1025,17 +1025,17 @@ namespace DuckGame
             {
                 if (pWith.x > x)
                 {
-                    pWith.connections.Remove(PipeTileset.Direction.Left);
+                    pWith.connections.Remove(Direction.Left);
                     pWith.searchLeft = false;
-                    connections.Remove(PipeTileset.Direction.Right);
+                    connections.Remove(Direction.Right);
                     _pipeRight = null;
                 }
                 if (pWith.x < x)
                 {
-                    pWith.connections.Remove(PipeTileset.Direction.Right);
+                    pWith.connections.Remove(Direction.Right);
                     pWith._pipeRight = null;
                     pWith.searchRight = false;
-                    connections.Remove(PipeTileset.Direction.Left);
+                    connections.Remove(Direction.Left);
                     _pipeLeft = null;
                 }
             }
@@ -1043,18 +1043,18 @@ namespace DuckGame
             {
                 if (pWith.y > y)
                 {
-                    pWith.connections.Remove(PipeTileset.Direction.Up);
+                    pWith.connections.Remove(Direction.Up);
                     pWith._pipeUp = null;
                     pWith.searchUp = false;
-                    connections.Remove(PipeTileset.Direction.Down);
+                    connections.Remove(Direction.Down);
                     _pipeDown = null;
                 }
                 if (pWith.y < y)
                 {
-                    pWith.connections.Remove(PipeTileset.Direction.Down);
+                    pWith.connections.Remove(Direction.Down);
                     pWith._pipeDown = null;
                     pWith.searchDown = false;
-                    connections.Remove(PipeTileset.Direction.Up);
+                    connections.Remove(Direction.Up);
                     _pipeUp = null;
                 }
             }
@@ -1175,7 +1175,7 @@ namespace DuckGame
         }
 
         private bool AttemptObviousConnection(
-          Dictionary<PipeTileset.Direction, PipeTileset> pNeighbors)
+          Dictionary<Direction, PipeTileset> pNeighbors)
         {
             bool flag = false;
             if (Up(pNeighbors) == null && Down(pNeighbors) == null)
@@ -1207,7 +1207,7 @@ namespace DuckGame
             if (!flag)
             {
                 List<PipeTileset> pipeTilesetList = new List<PipeTileset>();
-                foreach (KeyValuePair<PipeTileset.Direction, PipeTileset> pNeighbor in pNeighbors)
+                foreach (KeyValuePair<Direction, PipeTileset> pNeighbor in pNeighbors)
                 {
                     if (pNeighbor.Value.ReadyForConnection())
                         pipeTilesetList.Add(pNeighbor.Value);
@@ -1215,9 +1215,9 @@ namespace DuckGame
                 if (pipeTilesetList.Count <= 0 || pipeTilesetList.Count > 2)
                     return false;
                 flag = true;
-                if (PipeTileset._lastAdd != null && (pipeTilesetList[0] == PipeTileset._lastAdd || pipeTilesetList.Count > 1 && pipeTilesetList[1] == PipeTileset._lastAdd))
+                if (_lastAdd != null && (pipeTilesetList[0] == _lastAdd || pipeTilesetList.Count > 1 && pipeTilesetList[1] == _lastAdd))
                 {
-                    MakeConnection(PipeTileset._lastAdd);
+                    MakeConnection(_lastAdd);
                 }
                 else
                 {
@@ -1359,8 +1359,8 @@ namespace DuckGame
             --partWait;
             if (partWait <= 0)
             {
-                PipeTileset.PipeParticle pipeParticle = null;
-                foreach (PipeTileset.PipeParticle particle in _particles)
+                PipeParticle pipeParticle = null;
+                foreach (PipeParticle particle in _particles)
                 {
                     if (particle.alpha >= 1.0)
                     {
@@ -1370,7 +1370,7 @@ namespace DuckGame
                 }
                 if (pipeParticle == null)
                 {
-                    pipeParticle = new PipeTileset.PipeParticle();
+                    pipeParticle = new PipeParticle();
                     _particles.Add(pipeParticle);
                 }
                 pipeParticle.position = position + endNormal * 20f + Maths.AngleToVec(partRot) * (10f + Rando.Float(24f)) * vec2_2;

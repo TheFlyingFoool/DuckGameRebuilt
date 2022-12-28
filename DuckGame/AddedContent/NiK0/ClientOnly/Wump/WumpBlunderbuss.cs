@@ -1,27 +1,23 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.IO;
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [ClientOnly]
     [EditorGroup("Rebuilt|Wump|Shotguns")]
     public class WumpBlunderbuss : TampingWeapon
     {
-        public const string wumpblunderbuss = "iVBORw0KGgoAAAANSUhEUgAAACIAAAAOCAMAAAB99z69AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAhUExURQAAALLc7zGi8kk8KwBXhJ2dnWB3fP///6RkIhsmMgAAAF36UEkAAAALdFJOU/////////////8ASk8B8gAAAAlwSFlzAAAOwwAADsMBx2+oZAAAAJ9JREFUKFN9kVkSgzAMQ+XgmCb3P3AlmxTCR8UyjvzGC2Au4Q53lc807C+CZjA+6eyiJxtmjYg6vSkcrJ9BAs5T3xjwfKwZOYkYWk/F2bsQxVlITA9iSwQSQWvqAncEQsJnKS6Es/J2N/XaFWSyipm5D1483Bu27F7jchsSY1Q+x9eC9ZVqaYhQATn5plXlFMrknFfmp/1nMP3KSw9rzi+10Qq4R1ULpwAAAABJRU5ErkJggg==";
         public WumpBlunderbuss(float xval, float yval) : base(xval, yval)
         {
             wideBarrel = true;
             ammo = 99;
-            _ammoType = new ATShrapnel();
-            _ammoType.range = 180f;
-            _ammoType.rangeVariation = 40f;
-            _ammoType.accuracy = 0.01f;
+            _ammoType = new ATShrapnel
+            {
+                range = 180f,
+                rangeVariation = 40f,
+                accuracy = 0.01f
+            };
             _numBulletsPerFire = 6;
             _ammoType.penetration = 1;
             _type = "gun";
-            graphic = new Sprite(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(wumpblunderbuss))), "wumpblunderbuss"));
-            graphic.Namebase = "wumpblunderbuss";
+            graphic = new Sprite("wumpblunderbuss");
             Content.textures[graphic.Namebase] = graphic.texture;
             center = new Vec2(19f, 8f);
             collisionOffset = new Vec2(-8f, -3f);
@@ -50,8 +46,10 @@ namespace DuckGame
                 ApplyKick();
                 for (int i = 0; i < _numBulletsPerFire; i++)
                 {
-                    IceSpike ss = new IceSpike(barrelPosition.x, barrelPosition.y);
-                    ss.velocity = barrelVector.Rotate(Rando.Float(-0.3f, 0.3f), Vec2.Zero) * Rando.Float(7, 10);
+                    IceSpike ss = new IceSpike(barrelPosition.x, barrelPosition.y)
+                    {
+                        velocity = barrelVector.Rotate(Rando.Float(-0.3f, 0.3f), Vec2.Zero) * Rando.Float(7, 10)
+                    };
                     if (duck != null) ss.velocity += duck.velocity;
                     Level.Add(ss);
                 }
@@ -94,8 +92,10 @@ namespace DuckGame
                 int num = 0;
                 for (int i = 0; i < 18; i++)
                 {
-                    FreezeSmoke smoke = new FreezeSmoke(barrelPosition.x - 16f + Rando.Float(32f), barrelPosition.y - 16f + Rando.Float(32f));
-                    smoke.depth = 0.9f + i * 0.001f;
+                    FreezeSmoke smoke = new FreezeSmoke(barrelPosition.x - 16f + Rando.Float(32f), barrelPosition.y - 16f + Rando.Float(32f))
+                    {
+                        depth = 0.9f + i * 0.001f
+                    };
                     smoke.graphic.color = Color.LightBlue;
                     if (num < 6)
                     {

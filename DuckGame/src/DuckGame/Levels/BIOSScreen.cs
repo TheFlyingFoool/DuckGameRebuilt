@@ -50,7 +50,7 @@ namespace DuckGame
             _shiftText += 3.5f;
             if (_shiftText <= 300.0)
                 return;
-            Level.current = new CorptronLogo();
+            current = new CorptronLogo();
         }
 
         public override void PostDrawLayer(Layer layer)

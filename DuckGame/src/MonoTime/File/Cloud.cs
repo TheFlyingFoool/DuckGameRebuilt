@@ -19,39 +19,39 @@ namespace DuckGame
         public static bool nocloud;
         public static HashSet<string> deletedFiles = new HashSet<string>();
         private static Dictionary<string, DateTime> _indexTable = new Dictionary<string, DateTime>();
-        private static Queue<Cloud.CloudOperation> _operations = new Queue<Cloud.CloudOperation>();
+        private static Queue<CloudOperation> _operations = new Queue<CloudOperation>();
         private static int _totalOperations;
         private static bool _initializedCloud;
         public static bool loaded = false;
 
-        public static bool enabled => Cloud._initializedCloud && !Cloud.nocloud && Steam.IsInitialized() && Steam.CloudEnabled();
+        public static bool enabled => _initializedCloud && !nocloud && Steam.IsInitialized() && Steam.CloudEnabled();
 
-        public static bool hasPendingDeletions => Cloud.deletedFiles.Count > 0;
+        public static bool hasPendingDeletions => deletedFiles.Count > 0;
 
-        public static bool processing => Cloud._operations.Count > 0;
+        public static bool processing => _operations.Count > 0;
 
-        public static float progress => Cloud._totalOperations != 0 && Cloud._operations.Count != 0 ? Math.Max((1f - _operations.Count / Cloud._totalOperations), 0f) : 1f;
+        public static float progress => _totalOperations != 0 && _operations.Count != 0 ? Math.Max((1f - _operations.Count / _totalOperations), 0f) : 1f;
 
         public static void Initialize()
         {
             if (!Steam.IsInitialized())
                 return;
-            Cloud.DownloadLatestData();
+            DownloadLatestData();
         }
 
         public static void Update()
         {
-            if (Cloud._operations.Count <= 0)
+            if (_operations.Count <= 0)
                 return;
-            if (Cloud._operations.Count > Cloud._totalOperations)
-                Cloud._totalOperations = Cloud._operations.Count;
+            if (_operations.Count > _totalOperations)
+                _totalOperations = _operations.Count;
             int num = 10;
-            while (Cloud._operations.Count > 0)
+            while (_operations.Count > 0)
             {
-                Cloud._operations.Dequeue().Execute();
-                if (Cloud._operations.Count == 0)
+                _operations.Dequeue().Execute();
+                if (_operations.Count == 0)
                 {
-                    Cloud._totalOperations = 0;
+                    _totalOperations = 0;
                     break;
                 }
                 --num;
@@ -62,7 +62,7 @@ namespace DuckGame
 
         public static void Delete(string pPath)
         {
-            if (!Cloud.uploadEnabled)
+            if (!uploadEnabled)
             {
                 if (!MonoMain.logFileOperations)
                     return;
@@ -86,7 +86,7 @@ namespace DuckGame
 
         public static void Write(string path)
         {
-            if (!Cloud.uploadEnabled)
+            if (!uploadEnabled)
             {
                 if (!MonoMain.logFileOperations)
                     return;
@@ -101,13 +101,19 @@ namespace DuckGame
                 CloudFile local = CloudFile.GetLocal(path);
                 if (local == null || local.isOld)
                     return;
-                byte[] data = System.IO.File.ReadAllBytes(local.localPath);
+                byte[] data = File.ReadAllBytes(local.localPath);
                 Steam.FileWrite(local.cloudPath, data, data.Length);
                 if (MonoMain.logFileOperations)
                     DevConsole.Log(DCSection.General, "Steam.FileWrite(" + local.cloudPath + ")");
                 local.localDate = DateTime.Now;
                 local.cloudDate = DateTime.Now;
-                System.IO.File.SetLastWriteTime(local.localPath, DateTime.Now);
+                try
+                {
+                    File.SetLastWriteTime(local.localPath, DateTime.Now); // mabye there a better way i can handle this crashing but it doesnt seem too imporant
+                }
+                catch
+                { 
+                }
             }
         }
 
@@ -124,15 +130,15 @@ namespace DuckGame
                 pLocalPath = DuckFile.PreparePath(pLocalPath);
                 if (!Steam.IsInitialized())
                     return;
-                Cloud.ReplaceLocalFileWithCloudFile(CloudFile.GetLocal(pLocalPath));
+                ReplaceLocalFileWithCloudFile(CloudFile.GetLocal(pLocalPath));
             }
         }
 
         public static void ReplaceLocalFileWithCloudFile(CloudFile pFile)
         {
-            if (!Cloud.enabled)
+            if (!enabled)
                 return;
-            if (!Cloud.downloadEnabled)
+            if (!downloadEnabled)
             {
                 if (!MonoMain.logFileOperations)
                     return;
@@ -156,10 +162,10 @@ namespace DuckGame
                 DuckFile.TryFileOperation(() =>
                {
                    DuckFile.TryClearAttributes(pFile.localPath);
-                   if (System.IO.File.Exists(pFile.localPath))
-                       System.IO.File.Delete(pFile.localPath);
+                   if (File.Exists(pFile.localPath))
+                       File.Delete(pFile.localPath);
                    DuckFile.CreatePath(pFile.localPath, true);
-                   FileStream fileStream = System.IO.File.Create(pFile.localPath);
+                   FileStream fileStream = File.Create(pFile.localPath);
                    fileStream.Write(data, 0, data.Length);
                    fileStream.Close();
                    pFile.localDate = DateTime.Now;
@@ -194,7 +200,7 @@ namespace DuckGame
         {
             if (MonoMain.logFileOperations)
                 DevConsole.Log(DCSection.General, "Cloud.DeleteAllCloudData(" + pNewDataOnly.ToString() + ")");
-            Cloud.UICloudProcess uiCloudProcess = new Cloud.UICloudProcess("DELETING CLOUD", MonoMain.pauseMenu);
+            UICloudProcess uiCloudProcess = new UICloudProcess("DELETING CLOUD", MonoMain.pauseMenu);
             Level.Add(uiCloudProcess);
             uiCloudProcess.Open();
             MonoMain.pauseMenu = uiCloudProcess;
@@ -203,23 +209,23 @@ namespace DuckGame
             {
                 CloudFile cloudFile = CloudFile.Get(Steam.FileGetName(file));
                 if (cloudFile != null && (!pNewDataOnly || cloudFile.cloudPath.StartsWith("nq500000_")))
-                    Cloud._operations.Enqueue(new Cloud.CloudOperation()
+                    _operations.Enqueue(new CloudOperation()
                     {
-                        type = Cloud.CloudOperation.Type.Delete,
+                        type = CloudOperation.Type.Delete,
                         file = cloudFile
                     });
             }
-            Cloud._operations.Enqueue(new Cloud.CloudOperation()
+            _operations.Enqueue(new CloudOperation()
             {
-                type = Cloud.CloudOperation.Type.FinishDeletingCloud
+                type = CloudOperation.Type.FinishDeletingCloud
             });
         }
 
         private static void DownloadLatestData()
         {
-            Cloud._initializedCloud = true;
+            _initializedCloud = true;
             CloudFile.Initialize();
-            if (!Cloud.enabled)
+            if (!enabled)
                 return;
             int count = Steam.FileGetCount();
             for (int file = 0; file < count; ++file)
@@ -227,19 +233,19 @@ namespace DuckGame
                 CloudFile cloudFile = CloudFile.Get(Steam.FileGetName(file));
                 if (cloudFile != null)
                 {
-                    Cloud.CloudOperation cloudOperation = null;
+                    CloudOperation cloudOperation = null;
                     if (MonoMain.recoversave && cloudFile.cloudPath.StartsWith("nq500000_"))
-                        cloudOperation = new Cloud.CloudOperation()
+                        cloudOperation = new CloudOperation()
                         {
-                            type = Cloud.CloudOperation.Type.WriteToCloud,
+                            type = CloudOperation.Type.WriteToCloud,
                             file = cloudFile
                         };
                     else if (count > 100 && cloudFile.cloudPath.StartsWith("nq403216_") && (cloudFile.cloudPath.Contains("nq403216_Levels/Btooom Mod/") || cloudFile.cloudPath.Contains("nq403216_Levels/Basket/") || cloudFile.cloudPath.Contains("nq403216_Levels/Dorito/") || cloudFile.cloudPath.Contains("nq403216_Levels/DWEP levels") || cloudFile.cloudPath.Contains("nq403216_Levels/DWEPdev levels") || cloudFile.cloudPath.Contains("nq403216_Levels/EDMP/") || cloudFile.cloudPath.Contains("nq403216_Levels/Fair_Spawn_Maps/") || cloudFile.cloudPath.Contains("nq403216_Levels/NDC_1v1") || cloudFile.cloudPath.Contains("nq403216_Levels/QC 1V1/") || cloudFile.cloudPath.Contains("nq403216_Levels/Random Stuff/") || cloudFile.cloudPath.Contains("nq403216_Levels/SD 1v1 Pack/") || cloudFile.cloudPath.Contains("nq403216_Levels/UFF/") || cloudFile.cloudPath.Contains("nq403216_Levels/TMG/") || cloudFile.cloudPath.Contains("nq403216_Levels/C44PMaps/") || cloudFile.cloudPath.Contains("nq403216_Levels/DuckUnbreakable/") || cloudFile.cloudPath.Contains("nq403216_Levels/DWEP levels 1point3 edition/") || cloudFile.cloudPath.Contains("nq403216_Levels/antikore/")))
                         continue;
                     if (cloudOperation == null && cloudFile.localDate == DateTime.MinValue)
-                        cloudOperation = new Cloud.CloudOperation()
+                        cloudOperation = new CloudOperation()
                         {
-                            type = Cloud.CloudOperation.Type.ReadFromCloud,
+                            type = CloudOperation.Type.ReadFromCloud,
                             file = cloudFile
                         };
                     if (cloudOperation != null)
@@ -247,15 +253,15 @@ namespace DuckGame
                         if (cloudFile.localPath.EndsWith("options.dat") || cloudFile.localPath.EndsWith("localsettings.dat") || cloudFile.localPath.EndsWith("global.dat"))
                             cloudOperation.Execute();
                         else
-                            Cloud._operations.Enqueue(cloudOperation);
+                            _operations.Enqueue(cloudOperation);
                     }
                     if (cloudFile.cloudDate == DateTime.MinValue)
                         cloudFile.cloudDate = DateTime.Now;
                 }
             }
-            Cloud._operations.Enqueue(new Cloud.CloudOperation()
+            _operations.Enqueue(new CloudOperation()
             {
-                type = Cloud.CloudOperation.Type.UploadNewFiles
+                type = CloudOperation.Type.UploadNewFiles
             });
         }
 
@@ -291,11 +297,11 @@ namespace DuckGame
             {
                 if (open)
                 {
-                    string text = "" + "Working... (" + ((int)(Cloud.progress * 100f)).ToString() + "%)";
+                    string text = "" + "Working... (" + ((int)(progress * 100f)).ToString() + "%)";
                     Graphics.DrawRect(new Rectangle((_box.x - _box.halfWidth + 8f), _box.y, _box.width - 16f, 10f), Color.LightGray, (Depth)0.8f);
-                    Graphics.DrawRect(new Rectangle((_box.x - _box.halfWidth + 8f), _box.y, Lerp.FloatSmooth(0f, _box.width - 16f, Cloud.progress), 10f), Color.White, (Depth)0.8f);
+                    Graphics.DrawRect(new Rectangle((_box.x - _box.halfWidth + 8f), _box.y, Lerp.FloatSmooth(0f, _box.width - 16f, progress), 10f), Color.White, (Depth)0.8f);
                     Graphics.DrawString(text, new Vec2(_box.x - Graphics.GetStringWidth(text) / 2f, _box.y - 10f), Color.White, (Depth)0.8f);
-                    if (!Cloud.processing)
+                    if (!processing)
                         Close();
                 }
                 base.Draw();
@@ -304,22 +310,22 @@ namespace DuckGame
 
         private class CloudOperation
         {
-            public Cloud.CloudOperation.Type type;
+            public Type type;
             public CloudFile file;
             //private static BitBuffer _backupBuffer;
             //private static int _backupPart;
 
             public void Execute()
             {
-                if (type == Cloud.CloudOperation.Type.FinishDeletingCloud)
+                if (type == Type.FinishDeletingCloud)
                     HUD.AddPlayerChangeDisplay("@PLUG@|LIME|Cloud data cleared!");
-                else if (type == Cloud.CloudOperation.Type.FinishDeletingFiles)
+                else if (type == Type.FinishDeletingFiles)
                     HUD.AddPlayerChangeDisplay("@PLUG@|LIME|Local deletions applied!");
-                else if (type == Cloud.CloudOperation.Type.FinishRecoveringFiles)
+                else if (type == Type.FinishRecoveringFiles)
                     HUD.AddPlayerChangeDisplay("@PLUG@|LIME|Local files recovered!");
-                else if (type == Cloud.CloudOperation.Type.Delete)
+                else if (type == Type.Delete)
                 {
-                    if (!Cloud.uploadEnabled)
+                    if (!uploadEnabled)
                     {
                         if (!MonoMain.logFileOperations)
                             return;
@@ -333,20 +339,20 @@ namespace DuckGame
                         file.cloudDate = DateTime.MinValue;
                     }
                 }
-                else if (type == Cloud.CloudOperation.Type.ReadFromCloud)
+                else if (type == Type.ReadFromCloud)
                 {
-                    if (!Cloud.downloadEnabled)
+                    if (!downloadEnabled)
                     {
                         if (!MonoMain.logFileOperations)
                             return;
                         DevConsole.Log(DCSection.General, "Cloud.Execute.ReadFromCloud(" + file?.ToString() + ") skipped (downloadEnabled == false)");
                     }
                     else
-                        Cloud.ReplaceLocalFileWithCloudFile(file);
+                        ReplaceLocalFileWithCloudFile(file);
                 }
-                else if (type == Cloud.CloudOperation.Type.WriteToCloud)
+                else if (type == Type.WriteToCloud)
                 {
-                    if (!Cloud.uploadEnabled)
+                    if (!uploadEnabled)
                     {
                         if (!MonoMain.logFileOperations)
                             return;
@@ -354,7 +360,7 @@ namespace DuckGame
                     }
                     else
                     {
-                        byte[] data = System.IO.File.ReadAllBytes(file.localPath);
+                        byte[] data = File.ReadAllBytes(file.localPath);
                         Steam.FileWrite(file.cloudPath, data, data.Length);
                         if (MonoMain.logFileOperations)
                             DevConsole.Log(DCSection.General, "Cloud.Execute.WriteToCloud(" + file.cloudPath + ")");
@@ -363,9 +369,9 @@ namespace DuckGame
                 }
                 else
                 {
-                    if (type != Cloud.CloudOperation.Type.UploadNewFiles)
+                    if (type != Type.UploadNewFiles)
                         return;
-                    Cloud.loaded = true;
+                    loaded = true;
                 }
             }
 

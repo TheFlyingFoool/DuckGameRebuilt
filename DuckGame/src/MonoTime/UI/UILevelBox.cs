@@ -340,8 +340,8 @@ namespace DuckGame
                 }
             }
             _newGrowthLevel = Profiles.experienceProfile.littleManLevel;
-            UILevelBox.gachas = 0;
-            UILevelBox.rareGachas = 0;
+            gachas = 0;
+            rareGachas = 0;
             _roundsPlayed = Profiles.experienceProfile.roundsSinceXP;
             _startRoundsPlayed = _roundsPlayed;
             Profiles.experienceProfile.roundsSinceXP = 0;
@@ -356,7 +356,7 @@ namespace DuckGame
             HUD.AddCornerControl(HUDCorner.BottomLeft, "@START@SKIP XP");
         }
 
-        public static bool menuOpen => UILevelBox._confirmMenu != null && UILevelBox._confirmMenu.open;
+        public static bool menuOpen => _confirmMenu != null && _confirmMenu.open;
 
         public override void Close()
         {
@@ -376,8 +376,8 @@ namespace DuckGame
             Graphics.fadeAdd = 0f;
             Graphics.flashAdd = 0f;
             if (Unlockables.HasPendingUnlocks())
-                uiMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList<Unlockable>(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
-            if (UILevelBox.rareGachas > 0 || UILevelBox.gachas > 0)
+                uiMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
+            if (rareGachas > 0 || gachas > 0)
             {
                 UIGachaBoxNew.skipping = skipping;
                 UIGachaBoxNew uiGachaBoxNew = new UIGachaBoxNew(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, rare: true, openOnClose: uiMenu);
@@ -503,30 +503,36 @@ namespace DuckGame
         public override void UpdateParts()
         {
             if (!FurniShopScreen.open && _prevShopOpen)
-                Music.Play("CharacterSelect");
+            {
+                Music.Play("CharacterSelect", true, 0f);
+            }
             _prevShopOpen = FurniShopScreen.open;
             InputProfile.repeat = false;
             Keyboard.repeat = false;
             base.UpdateParts();
             _sound.Update();
-            UILevelBox.currentLevel = _currentLevel;
-            if (UILevelBox._confirmMenu != null)
-                UILevelBox._confirmMenu.DoUpdate();
-            while (littleEggs.Count < Math.Min(Profiles.experienceProfile.numLittleMen, 8))
-                littleEggs.Add(Profile.GetEggSprite(Math.Max(0, Profiles.experienceProfile.numLittleMen - 9) + littleEggs.Count));
-            if ((Input.Pressed("SELECT") || !FurniShopScreen.open && Input.Pressed("START") && Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0) && _finned)
+            currentLevel = _currentLevel;
+            if (_confirmMenu != null)
             {
-                if (Input.Pressed("START") && Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && (!skipping || _finned))
+                _confirmMenu.DoUpdate();
+            }
+            while (littleEggs.Count < Math.Min(Profiles.experienceProfile.numLittleMen, 8))
+            {
+                littleEggs.Add(Profile.GetEggSprite(Math.Max(0, Profiles.experienceProfile.numLittleMen - 9) + littleEggs.Count, 0UL));
+            }
+            if ((Input.Pressed(Triggers.Select, "Any") || (!FurniShopScreen.open && Input.Pressed(Triggers.Start, "Any") && Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0)) && _finned)
+            {
+                if (Input.Pressed(Triggers.Start, "Any") && Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && (!skipping || _finned))
                 {
                     SFX.skip = false;
-                    SFX.Play("dacBang");
+                    SFX.Play("dacBang", 1f, 0f, 0f, false);
                     skipping = true;
                 }
                 FurniShopScreen.open = false;
                 Vincent.Clear();
                 Close();
                 _finned = false;
-                SFX.Play("resume");
+                SFX.Play("resume", 1f, 0f, 0f, false);
             }
             if (queryVisitShop && _menuBool.value)
             {
@@ -537,7 +543,9 @@ namespace DuckGame
             if (FurniShopScreen.open && !Vincent.showingDay)
             {
                 if (skipping)
+                {
                     FurniShopScreen.close = true;
+                }
                 if (FurniShopScreen.close)
                 {
                     FurniShopScreen.close = false;
@@ -552,13 +560,15 @@ namespace DuckGame
                     {
                         HUD.CloseAllCorners();
                         _menuBool.value = false;
-                        UILevelBox._confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("YOYO"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
-                        UILevelBox._confirmMenu.depth = (Depth)0.98f;
+                        _confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("YOYO"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, -1f)
+                        {
+                            depth = 0.98f
+                        };
                         _attemptingGive = true;
                     }
-                    if (_attemptingGive && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
+                    if (_attemptingGive && _confirmMenu != null && !_confirmMenu.open)
                     {
-                        UILevelBox._confirmMenu = null;
+                        _confirmMenu = null;
                         _attemptingGive = false;
                         FurniShopScreen.giveYoYo = false;
                     }
@@ -569,13 +579,15 @@ namespace DuckGame
                     {
                         HUD.CloseAllCorners();
                         _menuBool.value = false;
-                        UILevelBox._confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("VOODOO VINCENT"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
-                        UILevelBox._confirmMenu.depth = (Depth)0.98f;
+                        _confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("VOODOO VINCENT"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, -1f)
+                        {
+                            depth = 0.98f
+                        };
                         _attemptingGive = true;
                     }
-                    if (_attemptingGive && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
+                    if (_attemptingGive && _confirmMenu != null && !_confirmMenu.open)
                     {
-                        UILevelBox._confirmMenu = null;
+                        _confirmMenu = null;
                         _attemptingGive = false;
                         FurniShopScreen.giveVooDoo = false;
                     }
@@ -586,13 +598,15 @@ namespace DuckGame
                     {
                         HUD.CloseAllCorners();
                         _menuBool.value = false;
-                        UILevelBox._confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("PERIMETER DEFENCE"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
-                        UILevelBox._confirmMenu.depth = (Depth)0.98f;
+                        _confirmMenu = new UIPresentBox(RoomEditor.GetFurniture("PERIMETER DEFENCE"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, -1f)
+                        {
+                            depth = 0.98f
+                        };
                         _attemptingGive = true;
                     }
-                    if (_attemptingGive && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
+                    if (_attemptingGive && _confirmMenu != null && !_confirmMenu.open)
                     {
-                        UILevelBox._confirmMenu = null;
+                        _confirmMenu = null;
                         _attemptingGive = false;
                         FurniShopScreen.givePerimeterDefence = false;
                     }
@@ -602,54 +616,50 @@ namespace DuckGame
                     if (!_attemptingBuy)
                     {
                         _menuBool.value = false;
-                        UILevelBox._confirmMenu = new UIMenu(Vincent.type == DayType.PawnDay ? "SELL TO VINCENT?" : "BUY FROM VINCENT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 230f, conString: (Vincent.type == DayType.PawnDay ? "@CANCEL@CANCEL @SELECT@SELECT" : "@CANCEL@CANCEL @SELECT@SELECT"));
-                        UILevelBox._confirmMenu.Add(new UIText(FurniShopScreen.attemptBuy.name, Color.Green), true);
-                        UILevelBox._confirmMenu.Add(new UIText(" ", Color.White), true);
-                        UILevelBox._confirmMenu.Add(new UIText(" ", Color.White), true);
-                        UILevelBox._confirmMenu.Add(new UIMenuItem(Vincent.type == DayType.PawnDay ? "SELL |WHITE|(|LIME|$" + FurniShopScreen.attemptBuy.cost.ToString() + "|WHITE|)" : "BUY |WHITE|(|LIME|$" + FurniShopScreen.attemptBuy.cost.ToString() + "|WHITE|)", new UIMenuActionCloseMenuSetBoolean(_confirmMenu, _menuBool)), true);
-                        UILevelBox._confirmMenu.Add(new UIMenuItem("CANCEL", new UIMenuActionCloseMenu(_confirmMenu), c: Colors.MenuOption, backButton: true), true);
-                        UILevelBox._confirmMenu.depth = (Depth)0.98f;
-                        UILevelBox._confirmMenu.DoInitialize();
-                        UILevelBox._confirmMenu.Close();
-                        for (int index = 0; index < 10; ++index)
-                            UILevelBox._confirmMenu.DoUpdate();
-                        UILevelBox._confirmMenu.Open();
+                        _confirmMenu = new UIMenu((Vincent.type == DayType.PawnDay) ? "SELL TO VINCENT?" : "BUY FROM VINCENT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 230f, -1f, (Vincent.type == DayType.PawnDay) ? "@CANCEL@CANCEL @SELECT@SELECT" : "@CANCEL@CANCEL @SELECT@SELECT", null, false);
+                        _confirmMenu.Add(new UIText(FurniShopScreen.attemptBuy.name, Color.Green, UIAlign.Center, 0f, null), true);
+                        _confirmMenu.Add(new UIText(" ", Color.White, UIAlign.Center, 0f, null), true);
+                        _confirmMenu.Add(new UIText(" ", Color.White, UIAlign.Center, 0f, null), true);
+                        _confirmMenu.Add(new UIMenuItem((Vincent.type == DayType.PawnDay) ? ("SELL |WHITE|(|LIME|$" + FurniShopScreen.attemptBuy.cost.ToString() + "|WHITE|)") : ("BUY |WHITE|(|LIME|$" + FurniShopScreen.attemptBuy.cost.ToString() + "|WHITE|)"), new UIMenuActionCloseMenuSetBoolean(_confirmMenu, _menuBool), UIAlign.Center, default(Color), false), true);
+                        _confirmMenu.Add(new UIMenuItem(Triggers.Cancel, new UIMenuActionCloseMenu(_confirmMenu), UIAlign.Center, Colors.MenuOption, true), true);
+                        _confirmMenu.depth = 0.98f;
+                        _confirmMenu.DoInitialize();
+                        _confirmMenu.Close();
+                        for (int i = 0; i < 10; i++)
+                        {
+                            _confirmMenu.DoUpdate();
+                        }
+                        _confirmMenu.Open();
                         _attemptingBuy = true;
                     }
-                    if (_attemptingBuy && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
+                    if (_attemptingBuy && _confirmMenu != null && !_confirmMenu.open)
                     {
                         if (_menuBool.value)
                         {
                             _attemptingBuy = false;
-                            UILevelBox._confirmMenu = null;
-                            SFX.Play("ching");
+                            _confirmMenu = null;
+                            SFX.Play("ching", 1f, 0f, 0f, false);
                             if (Vincent.type == DayType.PawnDay)
                             {
                                 Profiles.experienceProfile.littleManBucks += FurniShopScreen.attemptBuy.cost;
                                 Profiles.experienceProfile.SetNumFurnitures(FurniShopScreen.attemptBuy.furnitureData.index, Profiles.experienceProfile.GetNumFurnitures(FurniShopScreen.attemptBuy.furnitureData.index) - 1);
-                                using (IEnumerator<Profile> enumerator = Profiles.all.GetEnumerator())
+                                foreach (Profile p in Profiles.all)
                                 {
-                                label_52:
-                                    if (enumerator.MoveNext())
+                                    FurniturePosition remove;
+                                    do
                                     {
-                                        Profile current = enumerator.Current;
-                                        FurniturePosition furniturePosition1;
-                                        do
+                                        remove = null;
+                                        foreach (FurniturePosition pos in p.furniturePositions)
                                         {
-                                            furniturePosition1 = null;
-                                            foreach (FurniturePosition furniturePosition2 in current.furniturePositions)
+                                            if (p.GetNumFurnituresPlaced(pos.id) > Profiles.experienceProfile.GetNumFurnitures(pos.id))
                                             {
-                                                if (current.GetNumFurnituresPlaced(furniturePosition2.id) > Profiles.experienceProfile.GetNumFurnitures(furniturePosition2.id))
-                                                {
-                                                    furniturePosition1 = furniturePosition2;
-                                                    break;
-                                                }
+                                                remove = pos;
+                                                break;
                                             }
-                                            current.furniturePositions.Remove(furniturePosition1);
                                         }
-                                        while (furniturePosition1 != null);
-                                        goto label_52;
+                                        p.furniturePositions.Remove(remove);
                                     }
+                                    while (remove != null);
                                 }
                                 Vincent.Clear();
                                 Vincent.Add("|POINT|THANKS! |CONCERNED|I DON'T REGRET BUYING THIS AT ALL...");
@@ -658,9 +668,13 @@ namespace DuckGame
                             {
                                 Profiles.experienceProfile.littleManBucks -= FurniShopScreen.attemptBuy.cost;
                                 if (FurniShopScreen.attemptBuy.furnitureData != null)
+                                {
                                     Profiles.experienceProfile.SetNumFurnitures(FurniShopScreen.attemptBuy.furnitureData.index, Profiles.experienceProfile.GetNumFurnitures(FurniShopScreen.attemptBuy.furnitureData.index) + 1);
+                                }
                                 else if (FurniShopScreen.attemptBuy.teamData != null)
+                                {
                                     Global.boughtHats.Add(FurniShopScreen.attemptBuy.teamData.name);
+                                }
                             }
                             Vincent.Sold();
                             if (Vincent.products.Count == 1 && Vincent.type != DayType.PawnDay)
@@ -674,7 +688,7 @@ namespace DuckGame
                         else
                         {
                             _attemptingBuy = false;
-                            UILevelBox._confirmMenu = null;
+                            _confirmMenu = null;
                             if (Vincent.type == DayType.PawnDay)
                             {
                                 Vincent.Clear();
@@ -687,23 +701,25 @@ namespace DuckGame
                 }
                 else
                 {
-                    if (!_attemptingVincentClose && Input.Pressed("CANCEL") && !Vincent._willGiveVooDoo && !Vincent._willGiveYoYo && !Vincent._willGivePerimeterDefence)
+                    if (!_attemptingVincentClose && Input.Pressed(Triggers.Cancel, "Any") && !Vincent._willGiveVooDoo && !Vincent._willGiveYoYo && !Vincent._willGivePerimeterDefence)
                     {
                         _menuBool.value = false;
-                        UILevelBox._confirmMenu = new UIMenu("LEAVE VINCENT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@SELECT@SELECT")
+                        _confirmMenu = new UIMenu("LEAVE VINCENT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, -1f, "@SELECT@SELECT", null, false)
                         {
-                            depth = (Depth)0.98f
+                            depth = 0.98f
                         };
-                        UILevelBox._confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(_confirmMenu, _menuBool)), true);
-                        UILevelBox._confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionCloseMenu(_confirmMenu), backButton: true), true);
-                        UILevelBox._confirmMenu.DoInitialize();
-                        UILevelBox._confirmMenu.Close();
-                        for (int index = 0; index < 10; ++index)
-                            UILevelBox._confirmMenu.DoUpdate();
-                        UILevelBox._confirmMenu.Open();
+                        _confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(_confirmMenu, _menuBool), UIAlign.Center, default(Color), false), true);
+                        _confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionCloseMenu(_confirmMenu), UIAlign.Center, default(Color), true), true);
+                        _confirmMenu.DoInitialize();
+                        _confirmMenu.Close();
+                        for (int j = 0; j < 10; j++)
+                        {
+                            _confirmMenu.DoUpdate();
+                        }
+                        _confirmMenu.Open();
                         _attemptingVincentClose = true;
                     }
-                    if (_attemptingVincentClose && UILevelBox._confirmMenu != null && !UILevelBox._confirmMenu.open)
+                    if (_attemptingVincentClose && _confirmMenu != null && !_confirmMenu.open)
                     {
                         if (_menuBool.value)
                         {
@@ -715,35 +731,43 @@ namespace DuckGame
                         else
                         {
                             _attemptingVincentClose = false;
-                            UILevelBox._confirmMenu = null;
+                            _confirmMenu = null;
                         }
                     }
                 }
             }
             if (FurniShopScreen.open && !skipUpdate)
+            {
                 Vincent.Update();
+            }
             skipUpdate = false;
-            if (FurniShopScreen.open && !Vincent.showingDay || UILevelBox._confirmMenu != null && UILevelBox._confirmMenu.open)
+            if ((FurniShopScreen.open && !Vincent.showingDay) || (_confirmMenu != null && _confirmMenu.open))
+            {
                 return;
-            if (!doubleUpdating && Input.Down("SELECT"))
+            }
+            if (!doubleUpdating && Input.Down(Triggers.Select, "Any"))
             {
                 doubleUpdating = true;
                 UpdateParts();
                 UpdateParts();
                 doubleUpdating = false;
             }
-            if (Input.Pressed("START") && !_littleManLeave && Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && !FurniShopScreen.open)
+            if (Input.Pressed(Triggers.Start, "Any") && !_littleManLeave && Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && !FurniShopScreen.open)
+            {
                 skipping = true;
+            }
             if (!doubleUpdating && skipping)
             {
                 doubleUpdating = true;
-                for (int index = 0; index < 200; ++index)
+                for (int k = 0; k < 200; k++)
                 {
                     SFX.skip = true;
                     UpdateParts();
                     SFX.skip = false;
                     if (_littleManLeave || !skipping)
+                    {
                         break;
+                    }
                 }
                 doubleUpdating = false;
                 if (_finned)
@@ -751,206 +775,233 @@ namespace DuckGame
                     Graphics.fadeAdd = 1f;
                     skipping = false;
                     SFX.skip = false;
-                    SFX.Play("dacBang");
+                    SFX.Play("dacBang", 1f, 0f, 0f, false);
                 }
             }
-            if (_genericWait > 0.0)
+            if (_genericWait > 0f)
             {
                 _genericWait -= Maths.IncFrameTimer();
+                return;
             }
-            else
+            _overrideSlide = null;
+            if (_desiredLevel != _currentLevel || _newGrowthLevel != Profiles.experienceProfile.littleManLevel)
             {
-                _overrideSlide = null;
-                if (_desiredLevel != _currentLevel || _newGrowthLevel != Profiles.experienceProfile.littleManLevel)
+                if (!_didSlide)
                 {
-                    if (!_didSlide)
+                    _levelSlideWait += 0.08f;
+                    if (_levelSlideWait >= 1f)
                     {
-                        _levelSlideWait += 0.08f;
-                        if (_levelSlideWait < 1.0)
-                            return;
-                        int num = _currentLevel;
+                        int curLev = _currentLevel;
                         if (Profiles.experienceProfile.numLittleMen > 0)
-                            num = Profiles.experienceProfile.littleManLevel;
+                        {
+                            curLev = Profiles.experienceProfile.littleManLevel;
+                        }
                         if (!_unSlide && !playedSound)
                         {
-                            SFX.Play("dukget");
+                            SFX.Play("dukget", 1f, 0f, 0f, false);
                             playedSound = true;
                         }
                         _overrideSlide = "GROWING UP";
-                        if (num == 1)
+                        if (curLev == 1)
                         {
                             _overrideSlide = "EGG GET";
                             _gotEgg = true;
                         }
-                        if (num == 2)
+                        if (curLev == 2)
+                        {
                             _overrideSlide = "EGG HATCH";
-                        if (num == 6)
+                        }
+                        if (curLev == 6)
+                        {
                             _overrideSlide = "GROWN UP";
-                        if (num == 7)
+                        }
+                        if (curLev == 7)
+                        {
                             _overrideSlide = "MAX OUT!";
+                        }
                         if (_unSlide)
                         {
-                            _intermissionSlide = Lerp.FloatSmooth(_intermissionSlide, 0f, 0.45f);
-                            if (_intermissionSlide > 0.01f)
+                            _intermissionSlide = Lerp.FloatSmooth(_intermissionSlide, 0f, 0.45f, 1f);
+                            if (_intermissionSlide <= 0.01f)
+                            {
+                                playedSound = false;
+                                _unSlide = false;
+                                _didSlide = true;
+                                _intermissionSlide = 0f;
+                                SFX.Play("levelUp", 1f, 0f, 0f, false);
                                 return;
-                            playedSound = false;
-                            _unSlide = false;
-                            _didSlide = true;
-                            _intermissionSlide = 0f;
-                            SFX.Play("levelUp");
-                            return;
+                            }
                         }
-                        _intermissionSlide = Lerp.FloatSmooth(_intermissionSlide, 1f, 0.21f, 1.05f);
-                        if (_intermissionSlide < 1.0)
-                            return;
-                        _slideWait += 0.08f;
-                        if (_slideWait < 1.0)
-                            return;
-                        _unSlide = true;
-                        _slideWait = 0f;
-                        return;
+                        else
+                        {
+                            _intermissionSlide = Lerp.FloatSmooth(_intermissionSlide, 1f, 0.21f, 1.05f);
+                            if (_intermissionSlide >= 1f)
+                            {
+                                _slideWait += 0.08f;
+                                if (_slideWait >= 1f)
+                                {
+                                    _unSlide = true;
+                                    _slideWait = 0f;
+                                }
+                            }
+                        }
                     }
-                    _levelSlideWait = 0f;
-                    Graphics.fadeAdd = Lerp.Float(Graphics.fadeAdd, 1f, 0.1f);
-                    if (Graphics.fadeAdd < 1.0)
-                        return;
-                    _didSlide = false;
-                    _currentLevel = _desiredLevel;
-                    _talkLine = "";
-                    _feedLine = "I AM A HUNGRY\nLITTLE MAN.";
-                    _startFeedLine = _feedLine;
-                    Profiles.experienceProfile.littleManLevel = _newGrowthLevel;
-                    int num1 = _currentLevel;
-                    if (Profiles.experienceProfile.numLittleMen > 0)
-                        num1 = Profiles.experienceProfile.littleManLevel;
-                    if (_currentLevel == 3)
-                    {
-                        _oldGachaValue = _gachaValue;
-                        _newGachaValue = _gachaValue + (_newXPValue - _xpValue);
-                    }
-                    if (_currentLevel == 4)
-                    {
-                        _oldSandwichValue = _sandwichValue;
-                        _newSandwichValue = _sandwichValue + (_newXPValue - _xpValue);
-                    }
-                    if (_currentLevel >= 7)
-                    {
-                        _oldMilkValue = _milkValue;
-                        _newMilkValue = _milkValue + (_newXPValue - _xpValue);
-                    }
-                    int currentLevel = _currentLevel;
-                    if (num1 >= 7)
-                    {
-                        _littleManLeave = true;
-                        HUD.CloseAllCorners();
-                    }
+                    return;
                 }
-                else
+                _levelSlideWait = 0f;
+                Graphics.fadeAdd = Lerp.Float(Graphics.fadeAdd, 1f, 0.1f);
+                if (Graphics.fadeAdd < 1f)
                 {
-                    Graphics.fadeAdd = Lerp.Float(Graphics.fadeAdd, 0f, 0.1f);
-                    if (Graphics.fadeAdd > 0.01f)
-                        return;
+                    return;
                 }
-                if (!_talking)
+                _didSlide = false;
+                _currentLevel = _desiredLevel;
+                _talkLine = "";
+                _feedLine = "I AM A HUNGRY\nLITTLE MAN.";
+                _startFeedLine = _feedLine;
+                Profiles.experienceProfile.littleManLevel = _newGrowthLevel;
+                int curLev2 = _currentLevel;
+                if (Profiles.experienceProfile.numLittleMen > 0)
+                {
+                    curLev2 = Profiles.experienceProfile.littleManLevel;
+                }
+                if (_currentLevel == 3)
+                {
+                    _oldGachaValue = _gachaValue;
+                    _newGachaValue = _gachaValue + (_newXPValue - _xpValue);
+                }
+                if (_currentLevel == 4)
+                {
+                    _oldSandwichValue = _sandwichValue;
+                    _newSandwichValue = _sandwichValue + (_newXPValue - _xpValue);
+                }
+                if (_currentLevel >= 7)
+                {
+                    _oldMilkValue = _milkValue;
+                    _newMilkValue = _milkValue + (_newXPValue - _xpValue);
+                }
+                int num = _currentLevel;
+                if (curLev2 >= 7)
+                {
+                    _littleManLeave = true;
+                    HUD.CloseAllCorners();
+                }
+            }
+            else
+            {
+                Graphics.fadeAdd = Lerp.Float(Graphics.fadeAdd, 0f, 0.1f);
+                if (Graphics.fadeAdd > 0.01f)
+                {
+                    return;
+                }
+            }
+            if (!_talking)
+            {
+                _talk = 0f;
+            }
+            else
+            {
+                _talkWait += 0.2f;
+                if (_talkWait >= 1f)
+                {
+                    _talkWait = 0f;
+                    if (_feedLine.Length > 0)
+                    {
+                        _talkLine += _feedLine[0].ToString();
+                        if (_feedLine[0] == '.' || _feedLine[0] == '!' || _feedLine[0] == '?')
+                        {
+                            SFX.Play("tinyTick", 1f, Rando.Float(-0.1f, 0.1f), 0f, false);
+                            _talkWait = -2f;
+                        }
+                        else
+                        {
+                            SFX.Play("tinyNoise1", 1f, Rando.Float(-0.1f, 0.1f), 0f, false);
+                        }
+                        _feedLine = _feedLine.Remove(0, 1);
+                    }
+                }
+                _alwaysClose = false;
+                if (_talking && _talkLine == _startFeedLine)
+                {
+                    _alwaysClose = true;
+                    _finishTalkWait += 0.1f;
+                    if (_finishTalkWait > 6f && !eggTalk)
+                    {
+                        _talking = false;
+                        _talkLine = "";
+                        _finishTalkWait = 0f;
+                    }
+                }
+                if (_talkLine.Length > 0 && _talkLine[_talkLine.Length - 1] == '.')
+                {
+                    _alwaysClose = true;
+                }
+                _talk += ((!close) ? 0.2f : -0.2f);
+                if (_talk > 2f)
+                {
+                    _talk = 2f;
+                    close = true;
+                }
+                if (_talk < 0f)
                 {
                     _talk = 0f;
-                }
-                else
-                {
-                    _talkWait += 0.2f;
-                    if (_talkWait >= 1.0)
+                    if (!_alwaysClose)
                     {
-                        _talkWait = 0f;
-                        if (_feedLine.Length > 0)
-                        {
-                            _talkLine += _feedLine[0].ToString();
-                            if (_feedLine[0] == '.' || _feedLine[0] == '!' || _feedLine[0] == '?')
-                            {
-                                SFX.Play("tinyTick", pitch: Rando.Float(-0.1f, 0.1f));
-                                _talkWait = -2f;
-                            }
-                            else
-                                SFX.Play("tinyNoise1", pitch: Rando.Float(-0.1f, 0.1f));
-                            _feedLine = _feedLine.Remove(0, 1);
-                        }
-                    }
-                    _alwaysClose = false;
-                    if (_talking && _talkLine == _startFeedLine)
-                    {
-                        _alwaysClose = true;
-                        _finishTalkWait += 0.1f;
-                        if (_finishTalkWait > 6.0 && !eggTalk)
-                        {
-                            _talking = false;
-                            _talkLine = "";
-                            _finishTalkWait = 0f;
-                        }
-                    }
-                    if (_talkLine.Length > 0 && _talkLine[_talkLine.Length - 1] == '.')
-                        _alwaysClose = true;
-                    _talk += !close ? 0.2f : -0.2f;
-                    if (_talk > 2.0)
-                    {
-                        _talk = 2f;
-                        close = true;
-                    }
-                    if (_talk < 0.0)
-                    {
-                        _talk = 0f;
-                        if (!_alwaysClose)
-                            close = false;
+                        close = false;
                     }
                 }
-                if (sayQueue.Count > 0 && !_talking)
+            }
+            if (sayQueue.Count > 0 && !_talking)
+            {
+                _talking = true;
+                _talkLine = "";
+                _feedLine = sayQueue.First();
+                sayQueue.RemoveAt(0);
+                _startFeedLine = _feedLine;
+            }
+            if (_littleManLeave)
+            {
+                if (skipping)
                 {
-                    _talking = true;
-                    _talkLine = "";
-                    _feedLine = sayQueue.First<string>();
-                    sayQueue.RemoveAt(0);
-                    _startFeedLine = _feedLine;
+                    skipping = false;
+                    SFX.skip = false;
+                    SFX.Play("dacBang", 1f, 0f, 0f, false);
+                    Graphics.fadeAdd = 1f;
                 }
-                if (_littleManLeave)
+                _littleManStartWait += 0.02f;
+                if (_littleManStartWait >= 1f)
                 {
-                    if (skipping)
-                    {
-                        skipping = false;
-                        SFX.skip = false;
-                        SFX.Play("dacBang");
-                        Graphics.fadeAdd = 1f;
-                    }
-                    _littleManStartWait += 0.02f;
-                    if (_littleManStartWait < 1.0)
-                        return;
                     if (_driveAway)
                     {
                         _sound.lerpVolume = 1f;
                         _taxiDrive = Lerp.Float(_taxiDrive, 1f, 0.03f);
-                        if (_taxiDrive < 1.0)
+                        if (_taxiDrive >= 1f)
+                        {
+                            SFX.Play("doorOpen", 1f, 0f, 0f, false);
+                            _driveAway = false;
+                            _genericWait = 0.5f;
+                            _sound.volume = (_sound.lerpVolume = 0f);
                             return;
-                        SFX.Play("doorOpen");
-                        _driveAway = false;
-                        _genericWait = 0.5f;
-                        _sound.volume = _sound.lerpVolume = 0f;
+                        }
                     }
-                    else if (_taxiDrive > 0.0)
+                    else if (_taxiDrive > 0f)
                     {
                         if (!_inTaxi)
                         {
-                            SFX.Play("doorClose");
+                            SFX.Play("doorClose", 1f, 0f, 0f, false);
                             _inTaxi = true;
                             _genericWait = 0.5f;
+                            return;
                         }
-                        else
+                        _sound.lerpVolume = 1f;
+                        _taxiDrive = Lerp.Float(_taxiDrive, 2f, 0.03f);
+                        if (_taxiDrive >= 2f)
                         {
-                            _sound.lerpVolume = 1f;
-                            _taxiDrive = Lerp.Float(_taxiDrive, 2f, 0.03f);
-                            if (_taxiDrive < 2.0)
-                                return;
                             _sound.lerpVolume = 0f;
-                            ++Profiles.experienceProfile.numLittleMen;
+                            Profiles.experienceProfile.numLittleMen++;
                             Profiles.experienceProfile.littleManLevel = 1;
                             _newGrowthLevel = Profiles.experienceProfile.littleManLevel + 1;
-                            _egg = Profile.GetEggSprite(Profiles.experienceProfile.numLittleMen);
+                            _egg = Profile.GetEggSprite(Profiles.experienceProfile.numLittleMen, 0UL);
                             _littleManStartWait = 0f;
                             _littleManLeave = false;
                             _driveAway = false;
@@ -958,639 +1009,761 @@ namespace DuckGame
                             _inTaxi = false;
                             _startedLittleManLeave = false;
                             littleEggs.Clear();
+                            return;
                         }
-                    }
-                    else if (!_startedLittleManLeave)
-                    {
-                        if (Profiles.experienceProfile.numLittleMen == 0)
-                        {
-                            Say("I AM A FULL\nLITTLE MAN.");
-                            Say("THANK YOU FOR\nRAISING ME.");
-                            Say("I MUST LEAVE\nNOW.");
-                            Say("I LOVE MY\nPARENT.");
-                            Say("...");
-                            Say("PLEASE ACCEPT\nTHIS GIFT.");
-                        }
-                        else
-                        {
-                            Say("I LOVE MY\nPARENT.");
-                            Say("...");
-                            Say("PLEASE ACCEPT\nTHIS GIFT.");
-                        }
-                        _startedLittleManLeave = true;
                     }
                     else
                     {
-                        if (_talking)
-                            return;
-                        UILevelBox._confirmMenu = new UIPresentBox(Profiles.experienceProfile.numLittleMen != 0 ? (Profiles.experienceProfile.numLittleMen != 1 ? (Profiles.experienceProfile.numLittleMen != 2 ? (Profiles.experienceProfile.numLittleMen != 3 ? (Profiles.experienceProfile.numLittleMen != 4 ? (Profiles.experienceProfile.numLittleMen != 5 ? (Profiles.experienceProfile.numLittleMen != 6 ? (Profiles.experienceProfile.numLittleMen != 7 ? UIGachaBox.GetRandomFurniture(Rarity.VeryRare, 1, 0.75f)[0] : RoomEditor.GetFurniture("JUKEBOX")) : RoomEditor.GetFurniture("EASEL")) : RoomEditor.GetFurniture("JUNK")) : RoomEditor.GetFurniture("WINE")) : RoomEditor.GetFurniture("GIFT BASKET")) : RoomEditor.GetFurniture("PLATE")) : RoomEditor.GetFurniture("PHOTO")) : RoomEditor.GetFurniture("EGG"), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
-                        UILevelBox._confirmMenu.depth = (Depth)0.98f;
-                        UILevelBox._confirmMenu.DoInitialize();
-                        UILevelBox._confirmMenu.Open();
-                        _genericWait = 0.5f;
-                        _driveAway = true;
-                    }
-                }
-                else
-                {
-                    _inTaxi = false;
-                    _stampWobbleSin += 0.8f;
-                    if (_showCard)
-                        _stampCardLerp = Lerp.FloatSmooth(_stampCardLerp, _stampCard ? 1f : 0f, 0.18f, 1.05f);
-                    foreach (LittleHeart heart in _hearts)
-                    {
-                        heart.position += heart.velocity;
-                        heart.alpha -= 0.02f;
-                    }
-                    _hearts.RemoveAll(t => t.alpha <= 0.0);
-                    _coinLerp2 = Lerp.Float(_coinLerp2, 1f, 0.08f);
-                    _stampWobble = Lerp.Float(_stampWobble, 0f, 0.08f);
-                    if (_stampCard || _stampCardLerp > 0.01f)
-                    {
-                        if (!_showCard)
+                        if (!_startedLittleManLeave)
                         {
-                            if (!_sandwichShift)
+                            if (Profiles.experienceProfile.numLittleMen == 0)
                             {
-                                _sandwichLerp = Lerp.Float(_sandwichLerp, 1f, 0.12f);
-                                if (_sandwichLerp >= 1.0)
-                                    _sandwichShift = true;
-                            }
-                            else if (_burp)
-                            {
-                                _extraMouthOpen = Lerp.FloatSmooth(_extraMouthOpen, 0f, 0.17f, 1.05f);
-                                _finalWait += 0.1f;
-                                if (_finalWait >= 1.0)
-                                {
-                                    _finalWait = 0f;
-                                    _finishEat = false;
-                                    _afterEatWait = 0f;
-                                    _burp = false;
-                                    _sandwichLerp = 0f;
-                                    _extraMouthOpen = 0f;
-                                    _sandwichShift = false;
-                                    _eatWait = 0f;
-                                    _openWait = 0f;
-                                    _showCard = true;
-                                    _sandwichEat = 0f;
-                                    _finishingNewStamp = false;
-                                }
-                            }
-                            else if (_finishEat)
-                            {
-                                _extraMouthOpen = Lerp.FloatSmooth(_extraMouthOpen, 0f, 0.17f, 1.05f);
-                                _afterEatWait += 0.08f;
-                                if (_afterEatWait >= 1.0)
-                                {
-                                    SFX.Play("healthyEat");
-                                    for (int index = 0; index < 8; ++index)
-                                        _hearts.Add(new LittleHeart()
-                                        {
-                                            position = littleManPos + new Vec2(8f + Rando.Float(-4f, 4f), 8f + Rando.Float(-6f, 6f)),
-                                            velocity = new Vec2(0f, Rando.Float(-0.2f, -0.4f))
-                                        });
-                                    _burp = true;
-                                }
+                                Say("I AM A FULL\nLITTLE MAN.");
+                                Say("THANK YOU FOR\nRAISING ME.");
+                                Say("I MUST LEAVE\nNOW.");
+                                Say("I LOVE MY\nPARENT.");
+                                Say("...");
+                                Say("PLEASE ACCEPT\nTHIS GIFT.");
                             }
                             else
                             {
-                                _sandwichLerp = Lerp.Float(_sandwichLerp, 0f, 0.12f);
-                                if (_sandwichLerp <= 0.0)
-                                {
-                                    _extraMouthOpen = Lerp.FloatSmooth(_extraMouthOpen, 15f, 0.18f, 1.05f);
-                                    if (_extraMouthOpen >= 1.0)
-                                    {
-                                        _openWait += 0.08f;
-                                        if (_openWait >= 1.0)
-                                        {
-                                            _sandwichEat = Lerp.Float(_sandwichEat, 1f, 0.08f);
-                                            if (_sandwichEat >= 1.0)
-                                            {
-                                                if (_eatWait == 0.0)
-                                                    SFX.Play("swallow");
-                                                _eatWait += 0.08f;
-                                                if (_eatWait >= 1.0)
-                                                    _finishEat = true;
-                                            }
-                                        }
-                                    }
-                                }
+                                Say("I LOVE MY\nPARENT.");
+                                Say("...");
+                                Say("PLEASE ACCEPT\nTHIS GIFT.");
                             }
+                            _startedLittleManLeave = true;
+                            return;
                         }
-                        if (_stampCardLerp < 0.99f)
-                            return;
-                        _stampWait += 0.2f;
-                        if (_stampWait < 1.0)
-                            return;
-                        if (_stampWait2 == 0.0)
+                        if (!_talking)
                         {
-                            ++Profiles.experienceProfile.numSandwiches;
-                            _finishingNewStamp = true;
-                            _stampWobble = 1f;
-                            SFX.Play("dacBang");
+                            Furniture specialGift;
+                            if (Profiles.experienceProfile.numLittleMen == 0)
+                            {
+                                specialGift = RoomEditor.GetFurniture("EGG");
+                            }
+                            else if (Profiles.experienceProfile.numLittleMen == 1)
+                            {
+                                specialGift = RoomEditor.GetFurniture("PHOTO");
+                            }
+                            else if (Profiles.experienceProfile.numLittleMen == 2)
+                            {
+                                specialGift = RoomEditor.GetFurniture("PLATE");
+                            }
+                            else if (Profiles.experienceProfile.numLittleMen == 3)
+                            {
+                                specialGift = RoomEditor.GetFurniture("GIFT BASKET");
+                            }
+                            else if (Profiles.experienceProfile.numLittleMen == 4)
+                            {
+                                specialGift = RoomEditor.GetFurniture("WINE");
+                            }
+                            else if (Profiles.experienceProfile.numLittleMen == 5)
+                            {
+                                specialGift = RoomEditor.GetFurniture("JUNK");
+                            }
+                            else if (Profiles.experienceProfile.numLittleMen == 6)
+                            {
+                                specialGift = RoomEditor.GetFurniture("EASEL");
+                            }
+                            else if (Profiles.experienceProfile.numLittleMen == 7)
+                            {
+                                specialGift = RoomEditor.GetFurniture("JUKEBOX");
+                            }
+                            else
+                            {
+                                specialGift = UIGachaBox.GetRandomFurniture(Rarity.VeryRare, 1, 0.75f, false, 0, false, false)[0];
+                            }
+                            _confirmMenu = new UIPresentBox(specialGift, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, -1f)
+                            {
+                                depth = 0.98f
+                            };
+                            _confirmMenu.DoInitialize();
+                            _confirmMenu.Open();
+                            _genericWait = 0.5f;
+                            _driveAway = true;
                         }
-                        _stampWait2 += 0.06f;
-                        if (_stampWait2 < 1.0)
-                            return;
-                        if (Profiles.experienceProfile.numSandwiches > 0 && Profiles.experienceProfile.numSandwiches % 6 == 0 && _coin2Wait == 0.0)
+                    }
+                }
+                return;
+            }
+            _inTaxi = false;
+            _stampWobbleSin += 0.8f;
+            if (_showCard)
+            {
+                _stampCardLerp = Lerp.FloatSmooth(_stampCardLerp, _stampCard ? 1f : 0f, 0.18f, 1.05f);
+            }
+            foreach (LittleHeart heart in _hearts)
+            {
+                heart.position += heart.velocity;
+                heart.alpha -= 0.02f;
+            }
+            _hearts.RemoveAll((LittleHeart t) => t.alpha <= 0f);
+            _coinLerp2 = Lerp.Float(_coinLerp2, 1f, 0.08f);
+            _stampWobble = Lerp.Float(_stampWobble, 0f, 0.08f);
+            if (_stampCard || _stampCardLerp > 0.01f)
+            {
+                if (!_showCard)
+                {
+                    if (!_sandwichShift)
+                    {
+                        _sandwichLerp = Lerp.Float(_sandwichLerp, 1f, 0.12f);
+                        if (_sandwichLerp >= 1f)
                         {
-                            _coinLerp2 = 0f;
-                            _coin2Wait = 1f;
-                            SFX.Play("ching", pitch: 0.2f);
-                            ++UILevelBox.rareGachas;
+                            _sandwichShift = true;
                         }
-                        _coin2Wait -= 0.08f;
-                        if (_coin2Wait > 0.0)
-                            return;
-                        _stampCard = false;
-                        _stampWait2 = 0f;
-                        _stampWait = 0f;
-                        _coin2Wait = 0f;
+                    }
+                    else if (_burp)
+                    {
+                        _extraMouthOpen = Lerp.FloatSmooth(_extraMouthOpen, 0f, 0.17f, 1.05f);
+                        _finalWait += 0.1f;
+                        if (_finalWait >= 1f)
+                        {
+                            _finalWait = 0f;
+                            _finishEat = false;
+                            _afterEatWait = 0f;
+                            _burp = false;
+                            _sandwichLerp = 0f;
+                            _extraMouthOpen = 0f;
+                            _sandwichShift = false;
+                            _eatWait = 0f;
+                            _openWait = 0f;
+                            _showCard = true;
+                            _sandwichEat = 0f;
+                            _finishingNewStamp = false;
+                        }
+                    }
+                    else if (_finishEat)
+                    {
+                        _extraMouthOpen = Lerp.FloatSmooth(_extraMouthOpen, 0f, 0.17f, 1.05f);
+                        _afterEatWait += 0.08f;
+                        if (_afterEatWait >= 1f)
+                        {
+                            SFX.Play("healthyEat", 1f, 0f, 0f, false);
+                            for (int l = 0; l < 8; l++)
+                            {
+                                _hearts.Add(new LittleHeart
+                                {
+                                    position = littleManPos + new Vec2(8f + Rando.Float(-4f, 4f), 8f + Rando.Float(-6f, 6f)),
+                                    velocity = new Vec2(0f, Rando.Float(-0.2f, -0.4f))
+                                });
+                            }
+                            _burp = true;
+                        }
                     }
                     else
                     {
-                        _showCard = false;
-                        Vec2 vec2 = new Vec2(x - 80f, y - 10f);
-                        if (!open)
-                            return;
-                        if (_currentLevel == _desiredLevel)
+                        _sandwichLerp = Lerp.Float(_sandwichLerp, 0f, 0.12f);
+                        if (_sandwichLerp <= 0f)
                         {
-                            if (_currentLevel > 3 && _finned && Input.Pressed("MENU2"))
+                            _extraMouthOpen = Lerp.FloatSmooth(_extraMouthOpen, 15f, 0.18f, 1.05f);
+                            if (_extraMouthOpen >= 1f)
                             {
-                                _talking = true;
-                                _finishTalkWait = 0f;
-                                _talkLine = "";
-                                if (Profiles.experienceProfile.littleManLevel <= 2 && _currentLevel > 6)
+                                _openWait += 0.08f;
+                                if (_openWait >= 1f)
                                 {
-                                    _feedLine = "";
-                                    if (!Global.data.hadTalk)
+                                    _sandwichEat = Lerp.Float(_sandwichEat, 1f, 0.08f);
+                                    if (_sandwichEat >= 1f)
                                     {
-                                        if (_eggFeedIndex < _eggFeedLines.Count)
+                                        if (_eatWait == 0f)
                                         {
-                                            if (_eggFeedIndex > 2)
-                                                eggTalk = true;
-                                            _feedLine = _eggFeedLines[_eggFeedIndex];
-                                            ++_eggFeedIndex;
-                                            if (_eggFeedIndex >= _eggFeedLines.Count)
+                                            SFX.Play("swallow", 1f, 0f, 0f, false);
+                                        }
+                                        _eatWait += 0.08f;
+                                        if (_eatWait >= 1f)
+                                        {
+                                            _finishEat = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (_stampCardLerp >= 0.99f)
+                {
+                    _stampWait += 0.2f;
+                    if (_stampWait >= 1f)
+                    {
+                        if (_stampWait2 == 0f)
+                        {
+                            Profiles.experienceProfile.numSandwiches++;
+                            _finishingNewStamp = true;
+                            _stampWobble = 1f;
+                            SFX.Play("dacBang", 1f, 0f, 0f, false);
+                        }
+                        _stampWait2 += 0.06f;
+                        if (_stampWait2 >= 1f)
+                        {
+                            if (Profiles.experienceProfile.numSandwiches > 0 && Profiles.experienceProfile.numSandwiches % 6 == 0 && _coin2Wait == 0f)
+                            {
+                                _coinLerp2 = 0f;
+                                _coin2Wait = 1f;
+                                SFX.Play("ching", 1f, 0.2f, 0f, false);
+                                rareGachas++;
+                            }
+                            _coin2Wait -= 0.08f;
+                            if (_coin2Wait <= 0f)
+                            {
+                                _stampCard = false;
+                                _stampWait2 = 0f;
+                                _stampWait = 0f;
+                                _coin2Wait = 0f;
+                            }
+                        }
+                    }
+                }
+                return;
+            }
+            _showCard = false;
+            Vec2 target = new Vec2(x - 80f, y - 10f);
+            if (open)
+            {
+                if (_currentLevel == _desiredLevel)
+                {
+                    if (_currentLevel > 3 && _finned && Input.Pressed(Triggers.Menu2, "Any"))
+                    {
+                        _talking = true;
+                        _finishTalkWait = 0f;
+                        _talkLine = "";
+                        if (Profiles.experienceProfile.littleManLevel <= 2 && _currentLevel > 6)
+                        {
+                            _feedLine = "";
+                            if (!Global.data.hadTalk)
+                            {
+                                if (_eggFeedIndex < _eggFeedLines.Count)
+                                {
+                                    if (_eggFeedIndex > 2)
+                                    {
+                                        eggTalk = true;
+                                    }
+                                    _feedLine = _eggFeedLines[_eggFeedIndex];
+                                    _eggFeedIndex++;
+                                    if (_eggFeedIndex >= _eggFeedLines.Count)
+                                    {
+                                        Global.data.hadTalk = true;
+                                        HUD.CloseAllCorners();
+                                        eggTalk = false;
+                                        _finned = false;
+                                    }
+                                }
+                                else
+                                {
+                                    _feedLine = "...";
+                                }
+                            }
+                        }
+                        else
+                        {
+                            _feedLine = "I AM A HUNGRY\nLITTLE MAN.";
+                            if (Rando.Int(1000) == 1)
+                            {
+                                _feedLine = "I... AM A HUNGRY\nLITTLE MAN.";
+                            }
+                            DateTime now = MonoMain.GetLocalTime();
+                            if (!saidSpecial)
+                            {
+                                if (now.Month == 4 && now.Day == 20)
+                                {
+                                    _feedLine = "HAPPY BIRTHDAY!";
+                                }
+                                else if (now.Month == 3 && now.Day == 9)
+                                {
+                                    _feedLine = "HAPPY BIRTHDAY!!";
+                                }
+                                else if (now.Month == 1 && now.Day == 1)
+                                {
+                                    _feedLine = "HAPPY NEW YEAR!";
+                                }
+                                else if (now.Month == 6 && now.Day == 4)
+                                {
+                                    _feedLine = "HAPPY BIRTHDAY\nDUCK GAME!";
+                                }
+                                else if (Rando.Int(190000) == 1)
+                                {
+                                    _feedLine = "LET'S DANCE!";
+                                }
+                                else if (Rando.Int(80000) == 1)
+                                {
+                                    _feedLine = "HAPPY BIRTHDAY!";
+                                }
+                                saidSpecial = true;
+                            }
+                            if (Rando.Int(100000) == 1)
+                            {
+                                _feedLine = "I AM A HANGRY\nLITTLE MAN.";
+                            }
+                            else if (Rando.Int(150000) == 1)
+                            {
+                                _feedLine = "I AM A HAPPY\nLITTLE MAN.";
+                            }
+                        }
+                        _startFeedLine = _feedLine;
+                    }
+                    if (_state == UILevelBoxState.LogWinLoss)
+                    {
+                        if (Input.Pressed(Triggers.Select, "Any"))
+                        {
+                            if (Profiles.experienceProfile != null)
+                            {
+                                Profiles.experienceProfile.xp = _xpValue;
+                            }
+                            SFX.Play("rockHitGround2", 1f, 0.5f, 0f, false);
+                            Close();
+                        }
+                    }
+                    else if (_state == UILevelBoxState.Wait)
+                    {
+                        _startWait -= 0.09f;
+                        if (_startWait < 0f)
+                        {
+                            _startWait = 1f;
+                            _state = UILevelBoxState.ShowXPBar;
+                            SFX.Play("rockHitGround2", 1f, 0.5f, 0f, false);
+                        }
+                    }
+                    else if (_state == UILevelBoxState.UpdateTime)
+                    {
+                        _advancedDay = false;
+                        _fallVel = 0f;
+                        _finned = false;
+                        //this._updateTime = false;
+                        _markedNewDay = false;
+                        _advanceDayWait = 0f;
+                        _dayFallAway = 0f;
+                        _dayScroll = 0f;
+                        _newCircleLerp = 0f;
+                        _popDay = false;
+                        _slideWait = 0f;
+                        _unSlide = false;
+                        _intermissionSlide = 0f;
+                        _intermissionWait = 0f;
+                        _gaveToy = false;
+                        if (_roundsPlayed > 0)
+                        {
+                            _updateTimeWait += 0.08f;
+                            if (_updateTimeWait >= 1f)
+                            {
+                                _dayTake += 0.8f;
+                                if (_dayTake >= 1f)
+                                {
+                                    _dayTake = 0f;
+                                    _roundsPlayed--;
+                                }
+                                _dayProgress = 1f - _roundsPlayed / (float)_startRoundsPlayed;
+                                time += 0.08f;
+                            }
+                            if (time >= 1f)
+                            {
+                                time -= 1f;
+                                _state = UILevelBoxState.AdvanceDay;
+                                _updateTimeWait = 0f;
+                                _dayTake = 0f;
+                            }
+                        }
+                        else
+                        {
+                            _state = UILevelBoxState.Finished;
+                        }
+                    }
+                    else if (_state == UILevelBoxState.RunDay)
+                    {
+                        DayType t4 = GetDay(Profiles.experienceProfile.currentDay);
+                        if (t4 == DayType.Allowance)
+                        {
+                            if (_giveMoney == 0)
+                            {
+                                _giveMoney = 200;
+                                Profiles.experienceProfile.littleManBucks += _giveMoney;
+                                SFX.Play("ching", 1f, 0f, 0f, false);
+                            }
+                            _giveMoneyRise = Lerp.Float(_giveMoneyRise, 1f, 0.05f);
+                            _finishDayWait += 0.04f;
+                            if (_finishDayWait >= 1f)
+                            {
+                                _giveMoneyRise = 1f;
+                                _giveMoney = 0;
+                                _state = UILevelBoxState.UpdateTime;
+                            }
+                        }
+                        else if (t4 == DayType.PayDay)
+                        {
+                            if (_giveMoney == 0)
+                            {
+                                int wage = 75;
+                                if (_currentLevel > 5)
+                                {
+                                    wage = 100;
+                                }
+                                if (_currentLevel > 6)
+                                {
+                                    wage = 125;
+                                }
+                                _giveMoney = wage + Profiles.experienceProfile.numLittleMen * 25;
+                                Profiles.experienceProfile.littleManBucks += _giveMoney;
+                                SFX.Play("ching", 1f, 0f, 0f, false);
+                            }
+                            _giveMoneyRise = Lerp.Float(_giveMoneyRise, 1f, 0.05f);
+                            _finishDayWait += 0.04f;
+                            if (_finishDayWait >= 1f)
+                            {
+                                _giveMoneyRise = 1f;
+                                _giveMoney = 0;
+                                _state = UILevelBoxState.UpdateTime;
+                            }
+                        }
+                        else if (t4 == DayType.ToyDay)
+                        {
+                            if (!_gaveToy)
+                            {
+                                _gaveToy = true;
+                                gachas++;
+                                _coinLerp = 0f;
+                                SFX.Play("ching", 1f, 0.2f, 0f, false);
+                            }
+                            _finishDayWait += 0.04f;
+                            if (_finishDayWait >= 1f)
+                            {
+                                _state = UILevelBoxState.UpdateTime;
+                            }
+                        }
+                        else if (t4 == DayType.Sandwich)
+                        {
+                            if (!_gaveToy)
+                            {
+                                _stampCard = true;
+                                _state = UILevelBoxState.UpdateTime;
+                            }
+                        }
+                        else if (t4 == DayType.FreeXP)
+                        {
+                           // this._didXPDay = true;
+                            DuckNetwork.GiveXP("FREE XP DAY", 0, 75, 4, 9999999, 9999999, 9999999);
+                            _state = UILevelBoxState.Wait;
+                        }
+                        else if (t4 == DayType.Empty)
+                        {
+                            _state = UILevelBoxState.UpdateTime;
+                        }
+                        else if (IsVinceDay(t4) && !Input.Down(Triggers.Select, "Any"))
+                        {
+                            _state = UILevelBoxState.UpdateTime;
+                            Vincent.showingDay = false;
+                            FurniShopScreen.close = true;
+                        }
+                    }
+                    else if (_state == UILevelBoxState.AdvanceDay)
+                    {
+                        if (!_advancedDay)
+                        {
+                            if (!_popDay)
+                            {
+                                _popDay = true;
+                                _fallVel = -0.025f;
+                                _ranRot = Rando.Float(-0.3f, 0.3f);
+                            }
+                            if (_dayFallAway < 1f)
+                            {
+                                _dayFallAway += _fallVel;
+                                _fallVel += 0.005f;
+                            }
+                            else if (_dayScroll < 1f)
+                            {
+                                _dayScroll = Lerp.Float(_dayScroll, 1f, 0.1f);
+                            }
+                            else
+                            {
+                                _advancedDay = true;
+                                Profiles.experienceProfile.currentDay++;
+                                _dayFallAway = 0f;
+                                _dayScroll = 0f;
+                            }
+                        }
+                        else
+                        {
+                            _advanceDayWait += 0.1f;
+                            if (_advanceDayWait >= 1f)
+                            {
+                                if (!_markedNewDay)
+                                {
+                                    SFX.Play("chalk", 1f, 0f, 0f, false);
+                                    _currentDay = Profiles.experienceProfile.currentDay;
+                                    _markedNewDay = true;
+                                    DayType t2 = GetDay(Profiles.experienceProfile.currentDay);
+                                    if (IsVinceDay(t2))
+                                    {
+                                        skipping = false;
+                                        SFX.skip = false;
+                                        SFX.Play("dacBang", 1f, 0f, 0f, false);
+                                        Graphics.fadeAdd = 1f;
+                                    }
+                                }
+                                if (_markedNewDay)
+                                {
+                                    _intermissionWait += 0.15f;
+                                    if (_intermissionWait >= 1f)
+                                    {
+                                        if (_unSlide)
+                                        {
+                                            _intermissionSlide = Lerp.FloatSmooth(_intermissionSlide, 0f, 0.42f, 1f);
+                                            if (_intermissionSlide <= 0.02f)
                                             {
-                                                Global.data.hadTalk = true;
-                                                HUD.CloseAllCorners();
-                                                eggTalk = false;
-                                                _finned = false;
+                                                _intermissionSlide = 0f;
+                                                _dayStartWait += 0.11f;
+                                                if (_dayStartWait >= 1f)
+                                                {
+                                                    AdvanceDay();
+                                                    _state = UILevelBoxState.RunDay;
+                                                }
+                                                if (IsVinceDay(GetDay(Profiles.experienceProfile.currentDay)))
+                                                {
+                                                    Vincent.showingDay = false;
+                                                }
                                             }
                                         }
                                         else
-                                            _feedLine = "...";
-                                    }
-                                }
-                                else
-                                {
-                                    _feedLine = "I AM A HUNGRY\nLITTLE MAN.";
-                                    if (Rando.Int(1000) == 1)
-                                        _feedLine = "I... AM A HUNGRY\nLITTLE MAN.";
-                                    DateTime localTime = MonoMain.GetLocalTime();
-                                    if (!UILevelBox.saidSpecial)
-                                    {
-                                        if (localTime.Month == 4 && localTime.Day == 20)
-                                            _feedLine = "HAPPY BIRTHDAY!";
-                                        else if (localTime.Month == 3 && localTime.Day == 9)
-                                            _feedLine = "HAPPY BIRTHDAY!!";
-                                        else if (localTime.Month == 1 && localTime.Day == 1)
-                                            _feedLine = "HAPPY NEW YEAR!";
-                                        else if (localTime.Month == 6 && localTime.Day == 4)
-                                            _feedLine = "HAPPY BIRTHDAY\nDUCK GAME!";
-                                        else if (Rando.Int(190000) == 1)
-                                            _feedLine = "LET'S DANCE!";
-                                        else if (Rando.Int(80000) == 1)
-                                            _feedLine = "HAPPY BIRTHDAY!";
-                                        UILevelBox.saidSpecial = true;
-                                    }
-                                    if (Rando.Int(100000) == 1)
-                                        _feedLine = "I AM A HANGRY\nLITTLE MAN.";
-                                    else if (Rando.Int(150000) == 1)
-                                        _feedLine = "I AM A HAPPY\nLITTLE MAN.";
-                                }
-                                _startFeedLine = _feedLine;
-                            }
-                            if (_state == UILevelBoxState.LogWinLoss)
-                            {
-                                if (Input.Pressed("SELECT"))
-                                {
-                                    if (Profiles.experienceProfile != null)
-                                        Profiles.experienceProfile.xp = _xpValue;
-                                    SFX.Play("rockHitGround2", pitch: 0.5f);
-                                    Close();
-                                }
-                            }
-                            else if (_state == UILevelBoxState.Wait)
-                            {
-                                _startWait -= 0.09f;
-                                if (_startWait < 0.0)
-                                {
-                                    _startWait = 1f;
-                                    _state = UILevelBoxState.ShowXPBar;
-                                    SFX.Play("rockHitGround2", pitch: 0.5f);
-                                }
-                            }
-                            else if (_state == UILevelBoxState.UpdateTime)
-                            {
-                                _advancedDay = false;
-                                _fallVel = 0f;
-                                _finned = false;
-                                //this._updateTime = false;
-                                _markedNewDay = false;
-                                _advanceDayWait = 0f;
-                                _dayFallAway = 0f;
-                                _dayScroll = 0f;
-                                _newCircleLerp = 0f;
-                                _popDay = false;
-                                _slideWait = 0f;
-                                _unSlide = false;
-                                _intermissionSlide = 0f;
-                                _intermissionWait = 0f;
-                                _gaveToy = false;
-                                if (_roundsPlayed > 0)
-                                {
-                                    _updateTimeWait += 0.08f;
-                                    if (_updateTimeWait >= 1.0)
-                                    {
-                                        _dayTake += 0.8f;
-                                        if (_dayTake >= 1.0)
                                         {
-                                            _dayTake = 0f;
-                                            --_roundsPlayed;
-                                        }
-                                        _dayProgress = (float)(1.0 - _roundsPlayed / _startRoundsPlayed);
-                                        time += 0.08f;
-                                    }
-                                    if (time >= 1.0)
-                                    {
-                                        --time;
-                                        _state = UILevelBoxState.AdvanceDay;
-                                        _updateTimeWait = 0f;
-                                        _dayTake = 0f;
-                                    }
-                                }
-                                else
-                                    _state = UILevelBoxState.Finished;
-                            }
-                            else if (_state == UILevelBoxState.RunDay)
-                            {
-                                DayType day = GetDay(Profiles.experienceProfile.currentDay);
-                                switch (day)
-                                {
-                                    case DayType.Empty:
-                                        _state = UILevelBoxState.UpdateTime;
-                                        break;
-                                    case DayType.Sandwich:
-                                        if (!_gaveToy)
-                                        {
-                                            _stampCard = true;
-                                            _state = UILevelBoxState.UpdateTime;
-                                            break;
-                                        }
-                                        break;
-                                    case DayType.FreeXP:
-                                        //this._didXPDay = true;
-                                        DuckNetwork.GiveXP("FREE XP DAY", 0, 75);
-                                        _state = UILevelBoxState.Wait;
-                                        break;
-                                    case DayType.ToyDay:
-                                        if (!_gaveToy)
-                                        {
-                                            _gaveToy = true;
-                                            ++UILevelBox.gachas;
-                                            _coinLerp = 0f;
-                                            SFX.Play("ching", pitch: 0.2f);
-                                        }
-                                        _finishDayWait += 0.04f;
-                                        if (_finishDayWait >= 1.0)
-                                        {
-                                            _state = UILevelBoxState.UpdateTime;
-                                            break;
-                                        }
-                                        break;
-                                    case DayType.PayDay:
-                                        if (_giveMoney == 0)
-                                        {
-                                            int num = 75;
-                                            if (_currentLevel > 5)
-                                                num = 100;
-                                            if (_currentLevel > 6)
-                                                num = 125;
-                                            _giveMoney = num + Profiles.experienceProfile.numLittleMen * 25;
-                                            Profiles.experienceProfile.littleManBucks += _giveMoney;
-                                            SFX.Play("ching");
-                                        }
-                                        _giveMoneyRise = Lerp.Float(_giveMoneyRise, 1f, 0.05f);
-                                        _finishDayWait += 0.04f;
-                                        if (_finishDayWait >= 1.0)
-                                        {
-                                            _giveMoneyRise = 1f;
-                                            _giveMoney = 0;
-                                            _state = UILevelBoxState.UpdateTime;
-                                            break;
-                                        }
-                                        break;
-                                    case DayType.Allowance:
-                                        if (_giveMoney == 0)
-                                        {
-                                            _giveMoney = 200;
-                                            Profiles.experienceProfile.littleManBucks += _giveMoney;
-                                            SFX.Play("ching");
-                                        }
-                                        _giveMoneyRise = Lerp.Float(_giveMoneyRise, 1f, 0.05f);
-                                        _finishDayWait += 0.04f;
-                                        if (_finishDayWait >= 1.0)
-                                        {
-                                            _giveMoneyRise = 1f;
-                                            _giveMoney = 0;
-                                            _state = UILevelBoxState.UpdateTime;
-                                            break;
-                                        }
-                                        break;
-                                    default:
-                                        if (IsVinceDay(day) && !Input.Down("SELECT"))
-                                        {
-                                            _state = UILevelBoxState.UpdateTime;
-                                            Vincent.showingDay = false;
-                                            FurniShopScreen.close = true;
-                                            break;
-                                        }
-                                        break;
-                                }
-                            }
-                            else if (_state == UILevelBoxState.AdvanceDay)
-                            {
-                                if (!_advancedDay)
-                                {
-                                    if (!_popDay)
-                                    {
-                                        _popDay = true;
-                                        _fallVel = -0.025f;
-                                        _ranRot = Rando.Float(-0.3f, 0.3f);
-                                    }
-                                    if (_dayFallAway < 1.0)
-                                    {
-                                        _dayFallAway += _fallVel;
-                                        _fallVel += 0.005f;
-                                    }
-                                    else if (_dayScroll < 1.0)
-                                    {
-                                        _dayScroll = Lerp.Float(_dayScroll, 1f, 0.1f);
-                                    }
-                                    else
-                                    {
-                                        _advancedDay = true;
-                                        ++Profiles.experienceProfile.currentDay;
-                                        _dayFallAway = 0f;
-                                        _dayScroll = 0f;
-                                    }
-                                }
-                                else
-                                {
-                                    _advanceDayWait += 0.1f;
-                                    if (_advanceDayWait >= 1.0)
-                                    {
-                                        if (!_markedNewDay)
-                                        {
-                                            SFX.Play("chalk");
-                                            _currentDay = Profiles.experienceProfile.currentDay;
-                                            _markedNewDay = true;
-                                            if (IsVinceDay(GetDay(Profiles.experienceProfile.currentDay)))
+                                            _intermissionSlide = Lerp.FloatSmooth(_intermissionSlide, 1f, 0.2f, 1.05f);
+                                            if (_intermissionSlide >= 1f)
                                             {
-                                                skipping = false;
-                                                SFX.skip = false;
-                                                SFX.Play("dacBang");
-                                                Graphics.fadeAdd = 1f;
-                                            }
-                                        }
-                                        if (_markedNewDay)
-                                        {
-                                            _intermissionWait += 0.15f;
-                                            if (_intermissionWait >= 1.0)
-                                            {
-                                                if (_unSlide)
+                                                DayType t3 = GetDay(Profiles.experienceProfile.currentDay);
+                                                if (IsVinceDay(t3) && !Vincent.showingDay)
                                                 {
-                                                    _intermissionSlide = Lerp.FloatSmooth(_intermissionSlide, 0f, 0.42f);
-                                                    if (_intermissionSlide <= 0.02f)
-                                                    {
-                                                        _intermissionSlide = 0f;
-                                                        _dayStartWait += 0.11f;
-                                                        if (_dayStartWait >= 1.0)
-                                                        {
-                                                            AdvanceDay();
-                                                            _state = UILevelBoxState.RunDay;
-                                                        }
-                                                        if (IsVinceDay(GetDay(Profiles.experienceProfile.currentDay)))
-                                                            Vincent.showingDay = false;
-                                                    }
+                                                    Vincent.Clear();
+                                                    Vincent.showingDay = true;
+                                                    Vincent.Open(t3);
+                                                    FurniShopScreen.open = true;
+                                                    _roundsPlayed = 0;
                                                 }
-                                                else
+                                                _slideWait += 0.11f;
+                                                if (_slideWait >= 1.8f)
                                                 {
-                                                    _intermissionSlide = Lerp.FloatSmooth(_intermissionSlide, 1f, 0.2f, 1.05f);
-                                                    if (_intermissionSlide >= 1.0)
-                                                    {
-                                                        DayType day = GetDay(Profiles.experienceProfile.currentDay);
-                                                        if (IsVinceDay(day) && !Vincent.showingDay)
-                                                        {
-                                                            Vincent.Clear();
-                                                            Vincent.showingDay = true;
-                                                            Vincent.Open(day);
-                                                            FurniShopScreen.open = true;
-                                                            _roundsPlayed = 0;
-                                                        }
-                                                        _slideWait += 0.11f;
-                                                        if (_slideWait >= 1.8f)
-                                                            _unSlide = true;
-                                                    }
+                                                    _unSlide = true;
                                                 }
                                             }
                                         }
-                                        _newCircleLerp = Lerp.Float(_newCircleLerp, 1f, 0.2f);
                                     }
                                 }
+                                _newCircleLerp = Lerp.Float(_newCircleLerp, 1f, 0.2f);
                             }
-                            else if (_state == UILevelBoxState.Finished)
+                        }
+                    }
+                    else if (_state == UILevelBoxState.Finished)
+                    {
+                        if (!_finned)
+                        {
+                            HUD.CloseAllCorners();
+                            HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@CONTINUE", null, false);
+                            if (_currentLevel > 3 && (!Global.data.hadTalk || Profiles.experienceProfile.littleManLevel > 2))
                             {
-                                if (!_finned)
-                                {
-                                    HUD.CloseAllCorners();
-                                    HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@CONTINUE");
-                                    if (_currentLevel > 3 && (!Global.data.hadTalk || Profiles.experienceProfile.littleManLevel > 2))
-                                        HUD.AddCornerControl(HUDCorner.TopRight, "@MENU2@TALK");
-                                    if (Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && (UILevelBox.rareGachas > 0 || UILevelBox.gachas > 0))
-                                        HUD.AddCornerControl(HUDCorner.BottomLeft, "@START@AUTO TOYS");
-                                    _finned = true;
-                                }
+                                HUD.AddCornerControl(HUDCorner.TopRight, "@MENU2@TALK", null, false);
                             }
-                            else if (_state == UILevelBoxState.ShowXPBar)
+                            if (Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && (rareGachas > 0 || gachas > 0))
                             {
-                                _firstParticleIn = false;
-                                _drain = 1f;
-                                if (_currentStat.Key == null)
-                                    _currentStat = DuckNetwork.TakeXPStat();
-                                if (_currentStat.Key == null)
+                                HUD.AddCornerControl(HUDCorner.BottomLeft, "@START@AUTO TOYS", null, false);
+                            }
+                            _finned = true;
+                        }
+                    }
+                    else if (_state == UILevelBoxState.ShowXPBar)
+                    {
+                        _firstParticleIn = false;
+                        _drain = 1f;
+                        if (_currentStat.Key == null)
+                        {
+                            _currentStat = DuckNetwork.TakeXPStat();
+                        }
+                        if (_currentStat.Key == null)
+                        {
+                            if (_roundsPlayed > 0 && _currentLevel >= 4)
+                            {
+                                _state = UILevelBoxState.UpdateTime;
+                            }
+                            else
+                            {
+                                _state = UILevelBoxState.Finished;
+                            }
+                        }
+                        else
+                        {
+                            _slideXPBar = Lerp.FloatSmooth(_slideXPBar, 1f, 0.18f, 1.1f);
+                            if (_slideXPBar >= 1f)
+                            {
+                                _oldXPValue = _xpValue;
+                                _newXPValue = _xpValue + _currentStat.Value.xp;
+                                if (_currentLevel > 2)
                                 {
-                                    _state = _roundsPlayed <= 0 || _currentLevel < 4 ? UILevelBoxState.Finished : UILevelBoxState.UpdateTime;
-                                }
-                                else
-                                {
-                                    _slideXPBar = Lerp.FloatSmooth(_slideXPBar, 1f, 0.18f, 1.1f);
-                                    if (_slideXPBar >= 1.0)
+                                    _oldGachaValue = _gachaValue;
+                                    _newGachaValue = _gachaValue + _currentStat.Value.xp;
+                                    if (_currentLevel > 3)
                                     {
-                                        _oldXPValue = _xpValue;
-                                        _newXPValue = _xpValue + _currentStat.Value.xp;
-                                        if (_currentLevel > 2)
-                                        {
-                                            _oldGachaValue = _gachaValue;
-                                            _newGachaValue = _gachaValue + _currentStat.Value.xp;
-                                            if (_currentLevel > 3)
-                                            {
-                                                _oldSandwichValue = _sandwichValue;
-                                                _newSandwichValue = _sandwichValue + _currentStat.Value.xp;
-                                                if (_currentLevel >= 7)
-                                                {
-                                                    _oldMilkValue = _milkValue;
-                                                    _newMilkValue = _milkValue + _currentStat.Value.xp;
-                                                }
-                                            }
-                                        }
-                                        _state = UILevelBoxState.WaitXPBar;
-                                        SFX.Play("scoreDing", pitch: 0.5f);
-                                    }
-                                }
-                            }
-                            else if (_state == UILevelBoxState.WaitXPBar)
-                            {
-                                _startWait -= 0.15f;
-                                if (_startWait < 0.0)
-                                {
-                                    _startWait = 1f;
-                                    _state = UILevelBoxState.DrainXPBar;
-                                }
-                            }
-                            else if (_state == UILevelBoxState.DrainXPBar)
-                            {
-                                _drain -= 0.04f;
-                                if (_drain > 0.0)
-                                {
-                                    _particleWait -= 0.4f;
-                                    if (_particleWait < 0.0)
-                                    {
-                                        float y = 30f;
-                                        if (_currentLevel == 3)
-                                            y = 25f;
-                                        if (_currentLevel >= 4)
-                                            y = 20f;
-                                        if (_currentLevel >= 4)
-                                            y = 0f;
+                                        _oldSandwichValue = _sandwichValue;
+                                        _newSandwichValue = _sandwichValue + _currentStat.Value.xp;
                                         if (_currentLevel >= 7)
-                                            y = -12f;
-                                        if (_currentStat.Value.type == 0 || _currentStat.Value.type == 4)
-                                            _particles.Add(new XPPlus()
-                                            {
-                                                position = new Vec2(x - 72f, this.y - 58f),
-                                                velocity = new Vec2(-Rando.Float(3f, 6f), -Rando.Float(1f, 4f)),
-                                                target = vec2 + new Vec2(0f, y),
-                                                color = Colors.DGGreen
-                                            });
-                                        if (_currentLevel >= 3 && (_currentStat.Value.type == 1 || _currentStat.Value.type == 4))
-                                            _particles.Add(new XPPlus()
-                                            {
-                                                position = new Vec2(x - 72f, this.y - 58f),
-                                                velocity = new Vec2(-Rando.Float(3f, 6f), -Rando.Float(1f, 4f)),
-                                                target = vec2 + new Vec2(0f, 10f + y),
-                                                color = Colors.DGRed
-                                            });
-                                        if (_currentLevel >= 4 && (_currentStat.Value.type == 2 || _currentStat.Value.type == 4))
-                                            _particles.Add(new XPPlus()
-                                            {
-                                                position = new Vec2(x - 72f, this.y - 58f),
-                                                velocity = new Vec2(-Rando.Float(3f, 6f), -Rando.Float(1f, 4f)),
-                                                target = vec2 + new Vec2(0f, 20f + y),
-                                                color = Colors.DGBlue
-                                            });
-                                        ++_xpLost;
-                                        SFX.Play("tinyTick");
-                                        _particleWait = 1f;
+                                        {
+                                            _oldMilkValue = _milkValue;
+                                            _newMilkValue = _milkValue + _currentStat.Value.xp;
+                                        }
                                     }
                                 }
-                                if (_firstParticleIn)
-                                {
-                                    _addLerp += 0.04f;
-                                    _xpValue = (int)Lerp.FloatSmooth(_oldXPValue, _newXPValue, _addLerp);
-                                    _gachaValue = (int)Lerp.FloatSmooth(_oldGachaValue, _newGachaValue, _addLerp);
-                                    _sandwichValue = (int)Lerp.FloatSmooth(_oldSandwichValue, _newSandwichValue, _addLerp);
-                                    _milkValue = (int)Lerp.FloatSmooth(_oldMilkValue, _newMilkValue, _addLerp);
-                                    _xpProgress = (_xpValue - _originalXP) / (float)_totalXP;
-                                }
-                                if (_drain < 0.0)
-                                    _drain = 0f;
-                                if (_drain <= 0.0 && _addLerp >= 1.0)
-                                {
-                                    _drain = 0f;
-                                    _addLerp = 0f;
-                                    _state = UILevelBoxState.HideXPBar;
-                                }
+                                _state = UILevelBoxState.WaitXPBar;
+                                SFX.Play("scoreDing", 1f, 0.5f, 0f, false);
                             }
-                            else if (_state == UILevelBoxState.HideXPBar)
+                        }
+                    }
+                    else if (_state == UILevelBoxState.WaitXPBar)
+                    {
+                        _startWait -= 0.15f;
+                        if (_startWait < 0f)
+                        {
+                            _startWait = 1f;
+                            _state = UILevelBoxState.DrainXPBar;
+                        }
+                    }
+                    else if (_state == UILevelBoxState.DrainXPBar)
+                    {
+                        _drain -= 0.04f;
+                        if (_drain > 0f)
+                        {
+                            _particleWait -= 0.4f;
+                            if (_particleWait < 0f)
                             {
-                                _slideXPBar = Lerp.FloatSmooth(_slideXPBar, 0f, 0.2f, 1.1f);
-                                if (_slideXPBar <= 0.02f)
+                                float fullYOffset = 30f;
+                                if (_currentLevel == 3)
                                 {
-                                    _currentStat = new KeyValuePair<string, XPPair>();
-                                    _state = UILevelBoxState.ShowXPBar;
-                                    SFX.Play("rockHitGround2", pitch: 0.5f);
-                                    _slideXPBar = 0f;
+                                    fullYOffset = 25f;
                                 }
+                                if (_currentLevel >= 4)
+                                {
+                                    fullYOffset = 20f;
+                                }
+                                if (_currentLevel >= 4)
+                                {
+                                    fullYOffset = 0f;
+                                }
+                                if (_currentLevel >= 7)
+                                {
+                                    fullYOffset = -12f;
+                                }
+                                if (_currentStat.Value.type == 0 || _currentStat.Value.type == 4)
+                                {
+                                    _particles.Add(new XPPlus
+                                    {
+                                        position = new Vec2(x - 72f, y - 58f),
+                                        velocity = new Vec2(-Rando.Float(3f, 6f), -Rando.Float(1f, 4f)),
+                                        target = target + new Vec2(0f, fullYOffset),
+                                        color = Colors.DGGreen
+                                    });
+                                }
+                                if (_currentLevel >= 3 && (_currentStat.Value.type == 1 || _currentStat.Value.type == 4))
+                                {
+                                    _particles.Add(new XPPlus
+                                    {
+                                        position = new Vec2(x - 72f, y - 58f),
+                                        velocity = new Vec2(-Rando.Float(3f, 6f), -Rando.Float(1f, 4f)),
+                                        target = target + new Vec2(0f, 10f + fullYOffset),
+                                        color = Colors.DGRed
+                                    });
+                                }
+                                if (_currentLevel >= 4 && (_currentStat.Value.type == 2 || _currentStat.Value.type == 4))
+                                {
+                                    _particles.Add(new XPPlus
+                                    {
+                                        position = new Vec2(x - 72f, y - 58f),
+                                        velocity = new Vec2(-Rando.Float(3f, 6f), -Rando.Float(1f, 4f)),
+                                        target = target + new Vec2(0f, 20f + fullYOffset),
+                                        color = Colors.DGBlue
+                                    });
+                                }
+                                _xpLost += 1f;
+                                SFX.Play("tinyTick", 1f, 0f, 0f, false);
+                                _particleWait = 1f;
                             }
                         }
-                        if (_currentLevel == _desiredLevel)
+                        if (_firstParticleIn)
                         {
-                            _coinLerp = Lerp.Float(_coinLerp, 1f, 0.1f);
-                            foreach (XPPlus particle in _particles)
-                            {
-                                particle.position += particle.velocity;
-                                if (!particle.splash)
-                                {
-                                    particle.position = Lerp.Vec2Smooth(particle.position, particle.target, particle.time);
-                                    particle.time += 0.01f;
-                                }
-                                else
-                                {
-                                    particle.velocity.y += 0.2f;
-                                    particle.alpha -= 0.05f;
-                                }
-                            }
+                            _addLerp += 0.04f;
+                            _xpValue = (int)Lerp.FloatSmooth(_oldXPValue, _newXPValue, _addLerp, 1f);
+                            _gachaValue = (int)Lerp.FloatSmooth(_oldGachaValue, _newGachaValue, _addLerp, 1f);
+                            _sandwichValue = (int)Lerp.FloatSmooth(_oldSandwichValue, _newSandwichValue, _addLerp, 1f);
+                            _milkValue = (int)Lerp.FloatSmooth(_oldMilkValue, _newMilkValue, _addLerp, 1f);
+                            _xpProgress = (_xpValue - _originalXP) / (float)_totalXP;
                         }
-                        int count = _particles.Count;
-                        _particles.RemoveAll(part => (part.position - part.target).lengthSq < 64.0);
-                        if (_particles.Count != count)
-                            _firstParticleIn = true;
-                        if (_xpValue >= DuckNetwork.GetLevel(_desiredLevel + 1).xpRequired && _currentLevel != 20)
-                            ++_desiredLevel;
-                        if (_currentLevel <= 2)
-                            return;
-                        if (_gachaValue >= gachaNeed)
+                        if (_drain < 0f)
                         {
-                            _gachaValue -= gachaNeed;
-                            _newGachaValue -= gachaNeed;
-                            _oldGachaValue -= gachaNeed;
-                            ++UILevelBox.gachas;
-                            _coinLerp = 0f;
-                            SFX.Play("ching", pitch: 0.2f);
+                            _drain = 0f;
                         }
-                        if (_milkValue >= milkNeed)
+                        if (_drain <= 0f && _addLerp >= 1f)
                         {
-                            _milkValue -= milkNeed;
-                            _newMilkValue -= milkNeed;
-                            _oldMilkValue -= milkNeed;
-                            _newGrowthLevel = Profiles.experienceProfile.littleManLevel + 1;
-                            if (_newGrowthLevel > 7)
-                                _newGrowthLevel = 7;
+                            _drain = 0f;
+                            _addLerp = 0f;
+                            _state = UILevelBoxState.HideXPBar;
                         }
-                        if (_currentLevel <= 3 || _sandwichValue < sandwichNeed)
-                            return;
+                    }
+                    else if (_state == UILevelBoxState.HideXPBar)
+                    {
+                        _slideXPBar = Lerp.FloatSmooth(_slideXPBar, 0f, 0.2f, 1.1f);
+                        if (_slideXPBar <= 0.02f)
+                        {
+                            _currentStat = default(KeyValuePair<string, XPPair>);
+                            _state = UILevelBoxState.ShowXPBar;
+                            SFX.Play("rockHitGround2", 1f, 0.5f, 0f, false);
+                            _slideXPBar = 0f;
+                        }
+                    }
+                }
+                if (_currentLevel == _desiredLevel)
+                {
+                    _coinLerp = Lerp.Float(_coinLerp, 1f, 0.1f);
+                    foreach (XPPlus particle in _particles)
+                    {
+                        particle.position += particle.velocity;
+                        if (!particle.splash)
+                        {
+                            particle.position = Lerp.Vec2Smooth(particle.position, particle.target, particle.time);
+                            particle.time += 0.01f;
+                        }
+                        else
+                        {
+                            XPPlus xpplus = particle;
+                            xpplus.velocity.y = xpplus.velocity.y + 0.2f;
+                            particle.alpha -= 0.05f;
+                        }
+                    }
+                }
+                int c = _particles.Count;
+                _particles.RemoveAll((XPPlus part) => (part.position - part.target).lengthSq < 64f);
+                if (_particles.Count != c)
+                {
+                    _firstParticleIn = true;
+                }
+                if (_xpValue >= DuckNetwork.GetLevel(_desiredLevel + 1).xpRequired && _currentLevel != 20)
+                {
+                    _desiredLevel++;
+                }
+                if (_currentLevel > 2)
+                {
+                    if (_gachaValue >= gachaNeed)
+                    {
+                        _gachaValue -= gachaNeed;
+                        _newGachaValue -= gachaNeed;
+                        _oldGachaValue -= gachaNeed;
+                        gachas++;
+                        _coinLerp = 0f;
+                        SFX.Play("ching", 1f, 0.2f, 0f, false);
+                    }
+                    if (_milkValue >= milkNeed)
+                    {
+                        _milkValue -= milkNeed;
+                        _newMilkValue -= milkNeed;
+                        _oldMilkValue -= milkNeed;
+                        _newGrowthLevel = Profiles.experienceProfile.littleManLevel + 1;
+                        if (_newGrowthLevel > 7)
+                        {
+                            _newGrowthLevel = 7;
+                        }
+                    }
+                    if (_currentLevel > 3 && _sandwichValue >= sandwichNeed)
+                    {
                         _sandwichValue -= sandwichNeed;
                         _newSandwichValue -= sandwichNeed;
                         _oldSandwichValue -= sandwichNeed;
@@ -1671,7 +1844,10 @@ namespace DuckGame
             int num5 = 0;
             if (_currentLevel > 0)
                 num5 = DuckNetwork.GetLevel(_currentLevel).xpRequired;
-            int num6 = (int)Math.Round((double)(xpRequired1 * (_xpValue / xpRequired1)));
+
+            //keep these casts the same or else the math goes south and returns only 0
+            //-NiK0
+            int num6 = (int)Math.Round((double)(xpRequired1 * (_xpValue / (float)xpRequired1)));
             int xpRequired2 = DuckNetwork.GetLevel(9999).xpRequired;
             if (num6 > xpRequired2)
                 num6 = xpRequired2;
@@ -1837,7 +2013,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    _littleMan.frame = UILevelBox.LittleManFrame(Profiles.experienceProfile.numLittleMen, curLev);
+                    _littleMan.frame = LittleManFrame(Profiles.experienceProfile.numLittleMen, curLev);
                     _littleMan.depth = (Depth)0.85f;
                     _littleMan.yscale = 1f;
                     littleManPos = new Vec2(x + num8, (float)(y - 29.0 + num3 + 4.0) + num21);
@@ -1912,7 +2088,7 @@ namespace DuckGame
                 {
                     littleEgg.depth = (Depth)0.85f;
                     Graphics.Draw(littleEgg, (float)(vec2_9.x + (num28 * 23) - 3.0), vec2_9.y - 3f);
-                    _littleMan.frame = UILevelBox.LittleManFrame(Math.Max(Profiles.experienceProfile.numLittleMen - 8, 0) + num28, -1, bottomBar: true);
+                    _littleMan.frame = LittleManFrame(Math.Max(Profiles.experienceProfile.numLittleMen - 8, 0) + num28, -1, bottomBar: true);
                     _littleMan.depth = (Depth)0.9f;
                     _littleMan.yscale = 1f;
                     Graphics.Draw(_littleMan, (float)(vec2_9.x + (num28 * 23) + 3.0), vec2_9.y + 1f);
@@ -1922,34 +2098,36 @@ namespace DuckGame
             float num29 = 0f;
             if (_currentLevel >= 7)
                 num29 = -12f;
-            Vec2 vec2_10 = position + new Vec2(75.5f, 33f + num29);
-            Vec2 p1_1 = vec2_10 + new Vec2(0f, -7f);
+            Vec2 clockPos = position + new Vec2(75.5f, 33f + num29);
+            Vec2 clockPos2 = clockPos + new Vec2(0f, -7f);
             if (_currentLevel >= 4)
             {
                 int littleManBucks = Profiles.experienceProfile.littleManBucks;
                 string str2 = "|DGGREEN|$";
                 string text4 = littleManBucks <= 9999 ? str2 + littleManBucks.ToString() : str2 + (littleManBucks / 1000).ToString() + "K";
-                Graphics.DrawRect(vec2_10 + new Vec2(-16f, 9f), vec2_10 + new Vec2(15f, 18f), Color.Black, (Depth)0.89f);
-                _fancyFont.Draw(text4, vec2_10 + new Vec2(-16f, 9f) + new Vec2(30f - _fancyFont.GetWidth(text4), 0f), Color.White, (Depth)0.9f);
+                Graphics.DrawRect(clockPos + new Vec2(-16f, 9f), clockPos + new Vec2(15f, 18f), Color.Black, (Depth)0.89f);
+                _fancyFont.Draw(text4, clockPos + new Vec2(-16f, 9f) + new Vec2(30f - _fancyFont.GetWidth(text4), 0f), Color.White, (Depth)0.9f);
                 if (_giveMoney > 0 && _giveMoneyRise < 0.95f)
                 {
                     string text5 = "+" + _giveMoney.ToString();
                     Color dgGreen = Colors.DGGreen;
                     Color black = Color.Black;
-                    _fancyFont.DrawOutline(text5, vec2_10 + new Vec2(-16f, 9f) + new Vec2(30f - _fancyFont.GetWidth(text5), (float)-(10.0 + _giveMoneyRise * 10.0)), dgGreen, black, (Depth)0.97f);
+                    _fancyFont.DrawOutline(text5, clockPos + new Vec2(-16f, 9f) + new Vec2(30f - _fancyFont.GetWidth(text5), (float)-(10.0 + _giveMoneyRise * 10.0)), dgGreen, black, (Depth)0.97f);
                 }
-                Vec2 vec2_11 = new Vec2
+                Vec2 minuteHand = new Vec2
                 {
-                    x = (float)(-Math.Sin(time * 12.0 * 6.2831855f - 3.1415927f) * 8.0),
-                    y = (float)Math.Cos(time * 12.0 * 6.2831855f - 3.1415927f) * 8f
+                    x = -(float)Math.Sin(((time * 12) * ((float)Math.PI * 2)) - (float)Math.PI) * 8,
+                    y = (float)Math.Cos(((time * 12) * ((float)Math.PI * 2)) - (float)Math.PI) * 8
                 };
-                Vec2 vec2_12 = new Vec2
+
+                Vec2 hourHand = new Vec2
                 {
-                    x = (float)(-Math.Sin(time * 6.2831855f - 3.1415927f) * 5.0),
-                    y = (float)Math.Cos(time * 6.2831855f - 3.1415927f) * 5f
+                    x = -(float)Math.Sin((time * ((float)Math.PI * 2)) - (float)Math.PI) * 5,
+                    y = (float)Math.Cos((time * ((float)Math.PI * 2)) - (float)Math.PI) * 5
                 };
-                Graphics.DrawLine(p1_1, p1_1 + vec2_11, Color.Black, depth: ((Depth)0.9f));
-                Graphics.DrawLine(p1_1, p1_1 + vec2_12, Color.Black, 1.5f, (Depth)0.9f);
+
+                Graphics.DrawLine(clockPos2, clockPos2 + minuteHand, Color.Black, depth: ((Depth)0.9f));
+                Graphics.DrawLine(clockPos2, clockPos2 + hourHand, Color.Black, 1.5f, (Depth)0.9f);
                 Random random = new Random(0);
                 Random generator = Rando.generator;
                 Rando.generator = random;
@@ -2001,7 +2179,7 @@ namespace DuckGame
                 }
                 Rando.generator = generator;
             }
-            if (UILevelBox._confirmMenu != null && UILevelBox._confirmMenu.open)
+            if (_confirmMenu != null && _confirmMenu.open)
                 Graphics.DrawRect(new Vec2(-1000f, -1000f), new Vec2(1000f, 1000f), Color.Black * 0.5f, (Depth)(275f * (float)Math.PI / 887f));
             if (FurniShopScreen.open)
             {
@@ -2016,7 +2194,7 @@ namespace DuckGame
                 Graphics.Draw(_taxi, vec2_13.x, vec2_13.y);
                 if (_inTaxi)
                 {
-                    _littleMan.frame = UILevelBox.LittleManFrame(Profiles.experienceProfile.numLittleMen, curLev);
+                    _littleMan.frame = LittleManFrame(Profiles.experienceProfile.numLittleMen, curLev);
                     Graphics.Draw(_littleMan, vec2_13.x - 16f, vec2_13.y - 8f, new Rectangle(0f, 0f, 16f, 6f));
                 }
             }
@@ -2070,9 +2248,9 @@ namespace DuckGame
                 _bigFont.Draw(text6, new Vec2((float)(_intermissionSlide * (320.0 + Layer.HUD.width / 2.0 - _bigFont.GetWidth(text6) / 2.0) - 320.0), num36 + 18f), Color.White, (Depth)0.99f);
             }
             _lastFill = num7;
-            if (UILevelBox._confirmMenu == null)
+            if (_confirmMenu == null)
                 return;
-            UILevelBox._confirmMenu.DoDraw();
+            _confirmMenu.DoDraw();
         }
     }
 }

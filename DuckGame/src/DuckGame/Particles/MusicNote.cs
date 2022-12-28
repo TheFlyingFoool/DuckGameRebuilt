@@ -5,6 +5,8 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using System;
+
 namespace DuckGame
 {
     public class MusicNote : Thing
@@ -24,20 +26,20 @@ namespace DuckGame
                 frame = Rando.Int(1)
             };
             _sprite.CenterOrigin();
-            int num1 = Rando.ChooseInt(0, 1, 2, 3);
-            if (num1 == 0)
+            int val = Rando.ChooseInt(0, 1, 2, 3);
+            if (val == 0)
                 _color = Color.Violet;
-            if (num1 == 1)
+            else if (val == 1)
                 _color = Color.SkyBlue;
-            if (num1 == 2)
+            else if(val == 2)
                 _color = Color.Wheat;
-            if (num1 == 4)
+            else if(val == 4)
                 _color = Color.GreenYellow;
             _dir = dir;
-            float num2 = 1f;
+            float mul = 1f;
             if (Rando.Float(1f) <= 0.5f)
-                num2 = -1f;
-            _sin = new SinWaveManualUpdate(0.03f + Rando.Float(0.1f), num2 * 6.283185f);
+                mul = -1f;
+            _sin = new SinWaveManualUpdate(0.03f + (Rando.Float(0.1f)), mul * ((float)Math.PI * 2.0f));
             _size = 3f + Rando.Float(6f);
             _speed = 0.8f + Rando.Float(1.4f);
             depth = (Depth)0.95f;

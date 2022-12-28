@@ -42,13 +42,13 @@ namespace DuckGame
                 path = pDir
             };
             reskinPack.Initialize();
-            ReskinPack._reskins.Add(reskinPack);
+            _reskins.Add(reskinPack);
             if (pExistingMod == null && pExistingConfig == null)
             {
                 if (!DuckFile.FileExists(pDir + "/screenshot.png"))
-                    System.IO.File.Copy(DuckFile.contentDirectory + "/reskin_screenshot.pngfile", pDir + "/screenshot.png");
+                    File.Copy(DuckFile.contentDirectory + "/reskin_screenshot.pngfile", pDir + "/screenshot.png");
                 if (!DuckFile.FileExists(pDir + "/preview.png"))
-                    System.IO.File.Copy(DuckFile.contentDirectory + "/reskin_preview.pngfile", pDir + "/preview.png");
+                    File.Copy(DuckFile.contentDirectory + "/reskin_preview.pngfile", pDir + "/preview.png");
                 if (!DuckFile.FileExists(pDir + "/info.txt"))
                     DuckFile.SaveString("My DG Textures(" + reskinPack.name + ")\nDan Rando\nEdit info.txt to change this information!\n<replace this line with the two letters 'hd' to tell DG that this is a high definition texture pack>", pDir + "/info.txt");
                 if (!DuckFile.DirectoryExists(pDir + "/Content"))
@@ -89,7 +89,7 @@ namespace DuckGame
                 reskinPack.contentPath = reskinPack.path;
             mod.SetPriority(Priority.Reskin);
             if (!mod.configuration.disabled)
-                ReskinPack.active.Add(reskinPack);
+                active.Add(reskinPack);
             if (mod.configuration.content == null)
                 mod.configuration.content = new ContentPack(mod.configuration);
             return mod;
@@ -98,11 +98,11 @@ namespace DuckGame
         public static void InitializeReskins()
         {
             foreach (string directory in DuckFile.GetDirectories(DuckFile.skinsDirectory))
-                ReskinPack.LoadReskin(directory);
+                LoadReskin(directory);
             if (Steam.user == null)
                 return;
             foreach (string directory in DuckFile.GetDirectories(DuckFile.globalSkinsDirectory))
-                ReskinPack.LoadReskin(directory);
+                LoadReskin(directory);
         }
 
         public static void FinalizeReskins()
@@ -118,9 +118,9 @@ namespace DuckGame
                     dictionary[lowerInvariant] = classMember;
                 }
             }
-            for (int index = ReskinPack.active.Count - 1; index >= 0; --index)
+            for (int index = active.Count - 1; index >= 0; --index)
             {
-                foreach (KeyValuePair<string, Color> recolor in ReskinPack.active[index].recolors)
+                foreach (KeyValuePair<string, Color> recolor in active[index].recolors)
                 {
                     ClassMember classMember = null;
                     if (dictionary.TryGetValue(recolor.Key, out classMember))
@@ -133,8 +133,8 @@ namespace DuckGame
 
         public static T LoadAsset<T>(string pName, bool pMusic = false)
         {
-            ReskinPack._loadingMusic = pMusic;
-            foreach (ReskinPack reskinPack in ReskinPack.active)
+            _loadingMusic = pMusic;
+            foreach (ReskinPack reskinPack in active)
             {
                 T obj = reskinPack.Load<T>(pName);
                 if (obj != null)
@@ -149,8 +149,8 @@ namespace DuckGame
                 return default(T);
             if (typeof(T) == typeof(string[]))
             {
-                if (System.IO.File.Exists(contentPath + "/" + name))
-                    return (T)(object)System.IO.File.ReadAllLines(contentPath + "/" + name);
+                if (File.Exists(contentPath + "/" + name))
+                    return (T)(object)File.ReadAllLines(contentPath + "/" + name);
             }
             else
             {
@@ -159,19 +159,19 @@ namespace DuckGame
                     Texture2D texture2D1;
                     if (_textures.TryGetValue(name, out texture2D1))
                         return (T)(object)texture2D1;
-                    Texture2D texture2D2 = ContentPack.LoadTexture2D(contentPath + "/" + name, _modConfig == null || _modConfig.processPinkTransparency);
+                    Texture2D texture2D2 = LoadTexture2D(contentPath + "/" + name, _modConfig == null || _modConfig.processPinkTransparency);
                     _textures[name] = texture2D2;
                     return (T)(object)texture2D2;
                 }
                 if (typeof(T) == typeof(SoundEffect))
                 {
                     SoundEffect soundEffect1;
-                    if (!ReskinPack._loadingMusic && _sounds.TryGetValue(name, out soundEffect1))
+                    if (!_loadingMusic && _sounds.TryGetValue(name, out soundEffect1))
                         return (T)(object)soundEffect1;
-                    if (ReskinPack._loadingMusic && _currentMusic != null)
+                    if (_loadingMusic && _currentMusic != null)
                         _currentMusic.Dispose();
                     SoundEffect soundEffect2 = LoadSoundEffect(contentPath + "/" + name);
-                    if (ReskinPack._loadingMusic)
+                    if (_loadingMusic)
                         _currentMusic = soundEffect2;
                     else
                         _sounds[name] = soundEffect2;

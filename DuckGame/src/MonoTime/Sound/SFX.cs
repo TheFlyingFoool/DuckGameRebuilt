@@ -34,14 +34,14 @@ namespace DuckGame
             {
                 if (Program.IsLinuxD || Program.isLinux)
                     return null;
-                if (SFX._speech == null)
+                if (_speech == null)
                 {
-                    SFX._speech = new Speech();
-                    SFX._speech.Initialize();
-                    SFX._speech.SetOutputToDefaultAudioDevice();
-                    SFX._speech.ApplyTTSSettings();
+                    _speech = new Speech();
+                    _speech.Initialize();
+                    _speech.SetOutputToDefaultAudioDevice();
+                    _speech.ApplyTTSSettings();
                 }
-                return SFX._speech;
+                return _speech;
             }
         }
 
@@ -49,33 +49,33 @@ namespace DuckGame
         {
             get
             {
-                return !Program.IsLinuxD && !Program.isLinux && SFX.speech != null && SFX.speech.GetSayVoices().Count > 0;
+                return !Program.IsLinuxD && !Program.isLinux && speech != null && speech.GetSayVoices().Count > 0;
             }
         }
 
         public static void Say(string pString)
         {
-            if (Program.IsLinuxD || Program.isLinux || SFX.speech == null)
+            if (Program.IsLinuxD || Program.isLinux || speech == null)
                 return;
-            SFX.speech.Say(pString);
+            speech.Say(pString);
         }
 
         public static void StopSaying()
         {
-            if (Program.IsLinuxD || Program.isLinux || SFX.speech == null)
+            if (Program.IsLinuxD || Program.isLinux || speech == null)
                 return;
-            SFX.speech.StopSaying();
+            speech.StopSaying();
         }
 
         public static void SetSayVoice(string pName)
         {
             if (Program.IsLinuxD || Program.isLinux)
                 return;
-            if (SFX.speech == null)
+            if (speech == null)
                 return;
             try
             {
-                SFX.speech.SetSayVoice(pName);
+                speech.SetSayVoice(pName);
             }
             catch (Exception ex)
             {
@@ -83,36 +83,36 @@ namespace DuckGame
             }
         }
 
-        public static List<string> GetSayVoices() => Program.isLinux || SFX.speech == null ? new List<string>() : SFX.speech.GetSayVoices();
+        public static List<string> GetSayVoices() => Program.isLinux || speech == null ? new List<string>() : speech.GetSayVoices();
 
         public static void ApplyTTSSettings()
         {
-            if (Program.IsLinuxD || Program.isLinux || SFX.speech == null)
+            if (Program.IsLinuxD || Program.isLinux || speech == null)
                 return;
-            SFX.speech.ApplyTTSSettings();
+            speech.ApplyTTSSettings();
         }
 
         public static int RegisterSound(string pSound, SoundEffect pEffect)
         {
             int hashCode = pSound.GetHashCode();
-            lock (SFX._sounds)
+            lock (_sounds)
             {
-                SFX._soundHashmap[pSound] = hashCode;
-                SFX._sounds[pSound] = pEffect;
+                _soundHashmap[pSound] = hashCode;
+                _sounds[pSound] = pEffect;
             }
             return hashCode;
         }
 
         public static bool PoolSound(Sound s)
         {
-            if (SFX._soundPool.Count > 32)
+            if (_soundPool.Count > 32)
             {
                 bool flag = false;
-                for (int index = 0; index < SFX._soundPool.Count; ++index)
+                for (int index = 0; index < _soundPool.Count; ++index)
                 {
-                    if (!SFX._soundPool[index].cannotBeCancelled)
+                    if (!_soundPool[index].cannotBeCancelled)
                     {
-                        SFX.UnpoolSound(SFX._soundPool[index]);
+                        UnpoolSound(_soundPool[index]);
                         flag = true;
                         break;
                     }
@@ -120,55 +120,55 @@ namespace DuckGame
                 if (!flag)
                     return false;
             }
-            SFX._soundPool.Add(s);
+            _soundPool.Add(s);
             return true;
         }
 
         public static void UnpoolSound(Sound s)
         {
-            SFX._soundPool.Remove(s);
+            _soundPool.Remove(s);
             s.Unpooled();
         }
 
         public static void Initialize()
         {
-            SFX._audio = new Windows_Audio();
-            SFX._audio.Platform_Initialize();
+            _audio = new Windows_Audio();
+            _audio.Platform_Initialize();
             if (!Windows_Audio.initialized)
             {
-                SFX.NoSoundcard = true;
+                NoSoundcard = true;
             }
             else
             {
-                MonoMain.loadMessage = "Loading SFX";
-                SFX.SearchDir("Content/Audio/SFX");
+                MonoMain.NloadMessage = "Loading SFX";
+                SearchDir("Content/Audio/SFX");
                 NetSoundEffect.Initialize();
             }
 
         }
 
-        public static void Terminate() => SFX._audio.Dispose();
+        public static void Terminate() => _audio.Dispose();
 
         public static void Update()
         {
-            SFX._playedThisFrame.Clear();
-            for (int index = 0; index < SFX._soundPool.Count; ++index)
+            _playedThisFrame.Clear();
+            for (int index = 0; index < _soundPool.Count; ++index)
             {
-                if (SFX._soundPool[index].State != SoundState.Playing)
+                if (_soundPool[index].State != SoundState.Playing)
                 {
-                    SFX._soundPool[index].Stop();
+                    _soundPool[index].Stop();
                     --index;
                 }
             }
-            foreach (KeyValuePair<string, MultiSoundUpdater> multiSound in SFX._multiSounds)
+            foreach (KeyValuePair<string, MultiSoundUpdater> multiSound in _multiSounds)
                 multiSound.Value.Update();
-            SFX._audio.Update();
+            _audio.Update();
         }
 
         public static float volume
         {
-            get => Math.Min(1f, Math.Max(0f, SFX._volume * SFX._volume)) * 0.9f;
-            set => SFX._volume = Math.Min(1f, Math.Max(0f, value));
+            get => Math.Min(1f, Math.Max(0f, _volume * _volume)) * 0.9f;
+            set => _volume = Math.Min(1f, Math.Max(0f, value));
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace DuckGame
           float pan = 0f,
           bool looped = false)
         {
-            return SFX.PlaySynchronized(sound, vol, pitch, pan, looped, false);
+            return PlaySynchronized(sound, vol, pitch, pan, looped, false);
         }
 
         /// <summary>
@@ -195,32 +195,32 @@ namespace DuckGame
           bool looped,
           bool louderForMe)
         {
-            if (!SFX.enabled)
+            if (!enabled)
                 return new InvalidSound(sound, vol, pitch, pan, looped);
             if (Network.isActive)
                 Send.Message(new NMSoundEffect(sound, louderForMe ? vol * 0.7f : vol, pitch));
-            return SFX.Play(sound, vol, pitch, pan, looped);
+            return Play(sound, vol, pitch, pan, looped);
         }
 
         public static Sound Play(string sound, float vol = 1f, float pitch = 0f, float pan = 0f, bool looped = false)
         {
-            if (!SFX.enabled || SFX.skip)
+            if (!enabled || skip)
                 return new InvalidSound(sound, vol, pitch, pan, looped);
-            Sound sound1 = SFX._playedThisFrame.FirstOrDefault<Sound>(x => x.name == sound);
+            Sound sound1 = _playedThisFrame.FirstOrDefault(x => x.name == sound);
             if (sound1 == null)
             {
                 try
                 {
-                    sound1 = SFX.Get(sound, vol, pitch, pan, looped);
+                    sound1 = Get(sound, vol, pitch, pan, looped);
                     if (sound1 != null)
                     {
                         sound1.Play();
-                        SFX._playedThisFrame.Add(sound1);
+                        _playedThisFrame.Add(sound1);
                     }
                 }
                 catch (Exception)
                 {
-                    return new Sound(SFX._sounds.FirstOrDefault<KeyValuePair<string, SoundEffect>>().Key, 0f, 0f, 0f, false);
+                    return new Sound(_sounds.FirstOrDefault().Key, 0f, 0f, 0f, false);
                 }
             }
             return sound1;
@@ -229,32 +229,32 @@ namespace DuckGame
         public static Sound Play(int sound, float vol = 1f, float pitch = 0f, float pan = 0f, bool looped = false)
         {
             string key;
-            if (SFX.NoSoundcard)
+            if (NoSoundcard)
             {
                 return new InvalidSound("", vol, pitch, pan, looped);
             }
-            return SFX._soundHashmap.TryGetKey(sound, out key) ? SFX.Play(key, vol, pitch, pan, looped) : new Sound(SFX._sounds.FirstOrDefault<KeyValuePair<string, SoundEffect>>().Key, 0f, 0f, 0f, false);
+            return _soundHashmap.TryGetKey(sound, out key) ? Play(key, vol, pitch, pan, looped) : new Sound(_sounds.FirstOrDefault().Key, 0f, 0f, 0f, false);
         }
 
         public static int SoundHash(string pSound)
         {
             int num;
-            SFX._soundHashmap.TryGetValue(pSound, out num);
+            _soundHashmap.TryGetValue(pSound, out num);
             return num;
         }
 
         public static bool HasSound(string sound)
         {
-            if (SFX.NoSoundcard)
+            if (NoSoundcard)
                 return false;
             SoundEffect pEffect;
-            if (!SFX._sounds.TryGetValue(sound, out pEffect))
+            if (!_sounds.TryGetValue(sound, out pEffect))
             {
                 if (!sound.Contains(":"))
                     pEffect = Content.Load<SoundEffect>("Audio/SFX/" + sound);
                 if (pEffect == null && MonoMain.moddingEnabled && ModLoader.modsEnabled)
                     pEffect = Content.Load<SoundEffect>(sound);
-                SFX.RegisterSound(sound, pEffect);
+                RegisterSound(sound, pEffect);
             }
             return pEffect != null;
         }
@@ -264,7 +264,7 @@ namespace DuckGame
             try
             {
                 float vol1 = Math.Min(1f, Math.Max(0f, vol));
-                return SFX.HasSound(sound) ? new Sound(sound, vol1, pitch, pan, looped) : new InvalidSound(sound, vol1, pitch, pan, looped);
+                return HasSound(sound) ? new Sound(sound, vol1, pitch, pan, looped) : new InvalidSound(sound, vol1, pitch, pan, looped);
             }
             catch (Exception)
             {
@@ -274,16 +274,16 @@ namespace DuckGame
 
         public static MultiSound GetMultiSound(string single, string multi)
         {
-            if (SFX._multiSounds.ContainsKey(single + multi))
-                return SFX._multiSounds[single + multi].GetInstance();
-            if (SFX.HasSound(single) && SFX.HasSound(multi))
+            if (_multiSounds.ContainsKey(single + multi))
+                return _multiSounds[single + multi].GetInstance();
+            if (HasSound(single) && HasSound(multi))
             {
                 MultiSoundUpdater multiSoundUpdater = new MultiSoundUpdater(single + multi, single, multi);
-                SFX._multiSounds[single + multi] = multiSoundUpdater;
+                _multiSounds[single + multi] = multiSoundUpdater;
                 return multiSoundUpdater.GetInstance();
             }
             MultiSoundUpdater multiSoundUpdater1 = new MultiSoundUpdater("", "", "");
-            SFX._multiSounds[single + multi] = multiSoundUpdater1;
+            _multiSounds[single + multi] = multiSoundUpdater1;
             return multiSoundUpdater1.GetInstance();
         }
 
@@ -295,7 +295,7 @@ namespace DuckGame
           bool looped = false)
         {
             float num = Math.Min(1f, Math.Max(0f, vol));
-            SoundEffectInstance instance = SFX._sounds[sound].CreateInstance();
+            SoundEffectInstance instance = _sounds[sound].CreateInstance();
             instance.Volume = num;
             instance.Pitch = pitch;
             instance.Pan = pan;
@@ -306,26 +306,26 @@ namespace DuckGame
         private static void SearchDir(string dir)
         {
             foreach (string file in Content.GetFiles(dir))
-                SFX.ProcessSoundEffect(file);
+                ProcessSoundEffect(file);
             foreach (string directory in Content.GetDirectories(dir))
-                SFX.SearchDir(directory);
+                SearchDir(directory);
         }
 
         public static void StopAllSounds()
         {
-            while (SFX._soundPool.Count > 0)
-                SFX._soundPool[0].Stop();
+            while (_soundPool.Count > 0)
+                _soundPool[0].Stop();
         }
 
         public static void KillAllSounds()
         {
-            while (SFX._soundPool.Count > 0)
-                SFX._soundPool[0].Stop();
+            while (_soundPool.Count > 0)
+                _soundPool[0].Stop();
         }
 
         private static void ProcessSoundEffect(string path)
         {
-            ++SFX._numProcessed;
+            ++_numProcessed;
             path = path.Replace('\\', '/');
             int num = path.IndexOf("Content/Audio/", 0);
             string fileName = path.Substring(num + 8);
@@ -335,7 +335,7 @@ namespace DuckGame
                SoundEffect pEffect = Content.Load<SoundEffect>(fileName);
                if (pEffect == null)
                    return;
-               SFX.RegisterSound(fileName.Substring(fileName.IndexOf("/SFX/") + 5), pEffect);
+               RegisterSound(fileName.Substring(fileName.IndexOf("/SFX/") + 5), pEffect);
            });
             ++MonoMain.lazyLoadyBits;
         }

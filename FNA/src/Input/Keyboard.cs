@@ -8,16 +8,15 @@
 #endregion
 
 #region Using Statements
-using System;
 using System.Collections.Generic;
 #endregion
 
 namespace Microsoft.Xna.Framework.Input
 {
-	/// <summary>
-	/// Allows getting keystrokes from keyboard.
-	/// </summary>
-	public static class Keyboard
+    /// <summary>
+    /// Allows getting keystrokes from keyboard.
+    /// </summary>
+    public static class Keyboard
 	{
 		#region Public Static Methods
 

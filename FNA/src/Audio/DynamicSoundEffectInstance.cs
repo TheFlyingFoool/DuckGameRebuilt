@@ -80,12 +80,14 @@ namespace Microsoft.Xna.Framework.Audio
 			this.channels = channels;
 			isDynamic = true;
 
-			format = new FAudio.FAudioWaveFormatEx();
-			format.wFormatTag = 1;
-			format.nChannels = (ushort) channels;
-			format.nSamplesPerSec = (uint) sampleRate;
-			format.wBitsPerSample = 16;
-			format.nBlockAlign = (ushort) (2 * format.nChannels);
+            format = new FAudio.FAudioWaveFormatEx
+            {
+                wFormatTag = 1,
+                nChannels = (ushort)channels,
+                nSamplesPerSec = (uint)sampleRate,
+                wBitsPerSample = 16
+            };
+            format.nBlockAlign = (ushort) (2 * format.nChannels);
 			format.nAvgBytesPerSec = format.nBlockAlign * format.nSamplesPerSec;
 			format.cbSize = 0;
 
@@ -157,10 +159,12 @@ namespace Microsoft.Xna.Framework.Audio
 				queuedBuffers.Add(next);
 				if (State != SoundState.Stopped)
 				{
-					FAudio.FAudioBuffer buf = new FAudio.FAudioBuffer();
-					buf.AudioBytes = (uint) count;
-					buf.pAudioData = next;
-					buf.PlayLength = (
+                    FAudio.FAudioBuffer buf = new FAudio.FAudioBuffer
+                    {
+                        AudioBytes = (uint)count,
+                        pAudioData = next
+                    };
+                    buf.PlayLength = (
 						buf.AudioBytes /
 						(uint) channels /
 						(uint) (format.wBitsPerSample / 8)
@@ -207,10 +211,12 @@ namespace Microsoft.Xna.Framework.Audio
 				queuedBuffers.Add(next);
 				if (State != SoundState.Stopped)
 				{
-					FAudio.FAudioBuffer buf = new FAudio.FAudioBuffer();
-					buf.AudioBytes = (uint) count * sizeof(float);
-					buf.pAudioData = next;
-					buf.PlayLength = (
+                    FAudio.FAudioBuffer buf = new FAudio.FAudioBuffer
+                    {
+                        AudioBytes = (uint)count * sizeof(float),
+                        pAudioData = next
+                    };
+                    buf.PlayLength = (
 						buf.AudioBytes /
 						(uint) channels /
 						(uint) (format.wBitsPerSample / 8)

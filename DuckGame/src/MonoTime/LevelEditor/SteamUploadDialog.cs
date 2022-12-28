@@ -99,7 +99,7 @@ namespace DuckGame
 
         public void Open(LevelData pData)
         {
-            SteamUploadDialog._editingMod = false;
+            _editingMod = false;
             _publishItem = null;
             Editor.lockInput = this;
             SFX.Play("openClick", 0.4f);
@@ -117,7 +117,7 @@ namespace DuckGame
 
         public void Open(Mod pData)
         {
-            SteamUploadDialog._editingMod = true;
+            _editingMod = true;
             _publishItem = null;
             Editor.lockInput = this;
             SFX.Play("openClick", 0.4f);
@@ -162,7 +162,7 @@ namespace DuckGame
         {
         }
 
-        public static List<string> possibleTags => SteamUploadDialog._editingMod ? SteamUploadDialog._possibleTagsMod : SteamUploadDialog._possibleTagsLevel;
+        public static List<string> possibleTags => _editingMod ? _possibleTagsMod : _possibleTagsLevel;
 
         private void Publish()
         {
@@ -248,12 +248,12 @@ namespace DuckGame
                 else if (ArcadeTestDialogue.success)
                 {
                     if (_arcadeTestIndex > 0 && _arcadeTestIndex < 3)
-                        _publishItem.subItems.ElementAt<EditorWorkshopItem>(_arcadeTestIndex).challengeTestSuccess = true;
+                        _publishItem.subItems.ElementAt(_arcadeTestIndex).challengeTestSuccess = true;
                     do
                     {
                         ++_arcadeTestIndex;
                     }
-                    while (_arcadeTestIndex <= 2 && _publishItem.subItems.ElementAt<EditorWorkshopItem>(_arcadeTestIndex).challengeTestSuccess);
+                    while (_arcadeTestIndex <= 2 && _publishItem.subItems.ElementAt(_arcadeTestIndex).challengeTestSuccess);
                     _arcadeTestIndex = 3;
                     if (_arcadeTestIndex != 3)
                     {
@@ -297,7 +297,7 @@ namespace DuckGame
                     DeathmatchTestDialogue.success = false;
                     DeathmatchTestDialogue.currentEditor = Level.current as Editor;
                     int num = 4;
-                    if (Level.current is Editor && (Level.current as Editor).things[typeof(EightPlayer)].Count<Thing>() > 0)
+                    if (Level.current is Editor && (Level.current as Editor).things[typeof(EightPlayer)].Count() > 0)
                         num = 8;
                     for (int index = 0; index < num; ++index)
                     {
@@ -337,7 +337,7 @@ namespace DuckGame
                         return;
                     }
                 }
-                if (tagPositions.Count != SteamUploadDialog.possibleTags.Count)
+                if (tagPositions.Count != possibleTags.Count)
                 {
                     bool flag = false;
                     if (Mouse.x > _plusPosition.x && Mouse.x < _plusPosition.x + 8.0 && Mouse.y > _plusPosition.y && Mouse.y < _plusPosition.y + 8.0)
@@ -352,9 +352,9 @@ namespace DuckGame
                             depth = depth + 20
                         };
                         int num = 0;
-                        foreach (string possibleTag in SteamUploadDialog.possibleTags)
+                        foreach (string possibleTag in possibleTags)
                         {
-                            if (!_publishItem.tags.Contains<string>(possibleTag))
+                            if (!_publishItem.tags.Contains(possibleTag))
                             {
                                 contextMenu.AddItem(new ContextMenu(this)
                                 {
@@ -431,7 +431,7 @@ namespace DuckGame
             tagPositions.Clear();
             foreach (string tag in _publishItem.tags)
             {
-                int num5 = SteamUploadDialog.possibleTags.Contains(tag) ? 1 : 0;
+                int num5 = possibleTags.Contains(tag) ? 1 : 0;
                 _workshopTag.depth = depth + 8;
                 _workshopTag.frame = 0;
                 Graphics.Draw(_workshopTag, vec2.x, vec2.y);
@@ -454,7 +454,7 @@ namespace DuckGame
                 vec2.x += stringWidth + 11f + num6;
                 ++num3;
             }
-            if (num4 < SteamUploadDialog.possibleTags.Count)
+            if (num4 < possibleTags.Count)
             {
                 _tagPlus.depth = depth + 8;
                 vec2.x += 2f;

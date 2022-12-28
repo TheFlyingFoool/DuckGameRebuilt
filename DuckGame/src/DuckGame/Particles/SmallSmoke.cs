@@ -12,7 +12,7 @@ namespace DuckGame
     public class SmallSmoke : Thing
     {
         private static int kMaxObjects = 64;
-        private static SmallSmoke[] _objects = new SmallSmoke[SmallSmoke.kMaxObjects];
+        private static SmallSmoke[] _objects = new SmallSmoke[kMaxObjects];
         private static int _lastActiveObject = 0;
         public static bool shortlife = false;
         private float _orbitInc = Rando.Float(5f);
@@ -32,22 +32,22 @@ namespace DuckGame
             SmallSmoke smallSmoke;
             if (NetworkDebugger.enabled)
                 smallSmoke = new SmallSmoke();
-            else if (SmallSmoke._objects[SmallSmoke._lastActiveObject] == null)
+            else if (_objects[_lastActiveObject] == null)
             {
                 smallSmoke = new SmallSmoke();
-                SmallSmoke._objects[SmallSmoke._lastActiveObject] = smallSmoke;
+                _objects[_lastActiveObject] = smallSmoke;
             }
             else
-                smallSmoke = SmallSmoke._objects[SmallSmoke._lastActiveObject];
-            SmallSmoke._lastActiveObject = (SmallSmoke._lastActiveObject + 1) % SmallSmoke.kMaxObjects;
+                smallSmoke = _objects[_lastActiveObject];
+            _lastActiveObject = (_lastActiveObject + 1) % kMaxObjects;
             smallSmoke.Init(xpos, ypos);
             smallSmoke.ResetProperties();
-            smallSmoke._sprite.globalIndex = Thing.GetGlobalIndex();
-            smallSmoke.globalIndex = Thing.GetGlobalIndex();
+            smallSmoke._sprite.globalIndex = GetGlobalIndex();
+            smallSmoke.globalIndex = GetGlobalIndex();
             smallSmoke.depth = (Depth)depth;
             smallSmoke.s1 *= scaleMul;
             smallSmoke.s2 *= scaleMul;
-            if (SmallSmoke.shortlife)
+            if (shortlife)
                 smallSmoke.lifeTake = 0.14f;
             return smallSmoke;
         }
@@ -55,18 +55,18 @@ namespace DuckGame
         public static SmallSmoke New(float xpos, float ypos)
         {
             SmallSmoke smallSmoke;
-            if (SmallSmoke._objects[SmallSmoke._lastActiveObject] == null)
+            if (_objects[_lastActiveObject] == null)
             {
                 smallSmoke = new SmallSmoke();
-                SmallSmoke._objects[SmallSmoke._lastActiveObject] = smallSmoke;
+                _objects[_lastActiveObject] = smallSmoke;
             }
             else
-                smallSmoke = SmallSmoke._objects[SmallSmoke._lastActiveObject];
-            SmallSmoke._lastActiveObject = (SmallSmoke._lastActiveObject + 1) % SmallSmoke.kMaxObjects;
+                smallSmoke = _objects[_lastActiveObject];
+            _lastActiveObject = (_lastActiveObject + 1) % kMaxObjects;
             smallSmoke.Init(xpos, ypos);
             smallSmoke.ResetProperties();
-            smallSmoke._sprite.globalIndex = Thing.GetGlobalIndex();
-            smallSmoke.globalIndex = Thing.GetGlobalIndex();
+            smallSmoke._sprite.globalIndex = GetGlobalIndex();
+            smallSmoke.globalIndex = GetGlobalIndex();
             smallSmoke.depth = (Depth)0.8f;
             return smallSmoke;
         }

@@ -151,7 +151,7 @@ namespace DuckGame
             for (int index = 0; index < numGenerateRare; ++index)
             {
                 UIGachaBox.useNumGachas = true;
-                Furniture furniture = UIGachaBox.GetRandomFurniture(Rarity.VeryVeryRare, 1, 0.4f, true).OrderBy<Furniture, int>(x => -x.rarity).ElementAt<Furniture>(0);
+                Furniture furniture = UIGachaBox.GetRandomFurniture(Rarity.VeryVeryRare, 1, 0.4f, true).OrderBy(x => -x.rarity).ElementAt(0);
                 UIGachaBox.useNumGachas = false;
                 ++Global.data.numGachas;
                 furniture.ballRot = Rando.Float(360f);
@@ -168,7 +168,7 @@ namespace DuckGame
                 furniture.rareGen = false;
                 prizes.Add(furniture);
             }
-            if (UIGachaBoxNew.skipping)
+            if (skipping)
             {
                 while (prizes.Count > 3)
                 {
@@ -177,7 +177,7 @@ namespace DuckGame
                     prizes.RemoveAt(0);
                 }
                 SFX.Play("harp");
-                UIGachaBoxNew.skipping = false;
+                skipping = false;
             }
             LoadNextPrize();
             _gachaEgg.CenterOrigin();
@@ -192,7 +192,7 @@ namespace DuckGame
 
         public void LoadNextPrize()
         {
-            _contains = prizes.ElementAt<Furniture>(0);
+            _contains = prizes.ElementAt(0);
             _capsule.frame = FigureFrame(_contains);
         }
 
@@ -212,12 +212,12 @@ namespace DuckGame
 
         public override void UpdateParts()
         {
-            if (Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && Input.Pressed("START"))
+            if (Profiles.experienceProfile.GetNumFurnituresPlaced(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0 && Input.Pressed(Triggers.Start))
             {
-                UIGachaBoxNew.skipping = true;
+                skipping = true;
                 SFX.Play("dacBang");
             }
-            if (UIGachaBoxNew.skipping)
+            if (skipping)
             {
                 while (prizes.Count > 3)
                 {
@@ -225,7 +225,7 @@ namespace DuckGame
                     Profiles.experienceProfile.SetNumFurnitures(_contains.index, Profiles.experienceProfile.GetNumFurnitures(_contains.index) + 1);
                     prizes.RemoveAt(0);
                 }
-                UIGachaBoxNew.skipping = false;
+                skipping = false;
                 finished = true;
                 Close();
                 HUD.CloseAllCorners();
@@ -238,7 +238,7 @@ namespace DuckGame
                         HUD.AddCornerControl(HUDCorner.BottomLeft, "@START@SKIP");
                     didSkipPrompt = true;
                 }
-                if (!doubleUpdating && Input.Down("SELECT"))
+                if (!doubleUpdating && Input.Down(Triggers.Select))
                 {
                     doubleUpdating = true;
                     UpdateParts();
@@ -308,13 +308,13 @@ namespace DuckGame
                                 Vec2 leftStick = InputProfile.active.leftStick;
                                 if (InputProfile.active.lastActiveDevice is Keyboard)
                                 {
-                                    if (InputProfile.active.Down("LEFT"))
+                                    if (InputProfile.active.Down(Triggers.Left))
                                         leftStick.x = -1f;
-                                    if (InputProfile.active.Down("RIGHT"))
+                                    if (InputProfile.active.Down(Triggers.Right))
                                         leftStick.x = 1f;
-                                    if (InputProfile.active.Down("UP"))
+                                    if (InputProfile.active.Down(Triggers.Up))
                                         leftStick.y = 1f;
-                                    if (InputProfile.active.Down("DOWN"))
+                                    if (InputProfile.active.Down(Triggers.Down))
                                         leftStick.y = -1f;
                                 }
                                 _toyVelocity += (_lastStick - leftStick) * new Vec2(2f, -2f);
@@ -341,7 +341,7 @@ namespace DuckGame
                                         HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@OPEN TOY");
                                         didOpenToyCorner = true;
                                     }
-                                    if (Input.Pressed("SELECT") && !opened)
+                                    if (Input.Pressed(Triggers.Select) && !opened)
                                     {
                                         opened = true;
                                         SFX.Play("gachaOpen", pitch: Rando.Float(0.1f, 0.3f));
@@ -387,7 +387,7 @@ namespace DuckGame
                         }
                     }
                 }
-                if (!down && _swapped && Input.Pressed("SELECT"))
+                if (!down && _swapped && Input.Pressed(Triggers.Select))
                 {
                     played = false;
                     _gachaWait = 0f;

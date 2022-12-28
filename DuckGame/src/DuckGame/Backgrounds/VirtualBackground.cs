@@ -53,39 +53,39 @@ namespace DuckGame
 
         public static void InitializeBack()
         {
-            VirtualBackground._para = new ParallaxBackground("background/virtual", 0f, 0f, 3);
+            _para = new ParallaxBackground("background/virtual", 0f, 0f, 3);
             float speed1 = 0.4f;
             float distance1 = 0.8f;
-            VirtualBackground._para.AddZone(0, distance1, speed1);
-            VirtualBackground._para.AddZone(1, distance1, speed1);
-            VirtualBackground._para.AddZone(2, distance1, speed1);
-            VirtualBackground._para.AddZone(3, distance1, speed1);
+            _para.AddZone(0, distance1, speed1);
+            _para.AddZone(1, distance1, speed1);
+            _para.AddZone(2, distance1, speed1);
+            _para.AddZone(3, distance1, speed1);
             float distance2 = 0.6f;
             float num = (float)((distance1 - distance2) / 4.0);
             float speed2 = 1f;
-            VirtualBackground._para.AddZone(4, distance1 - num * 1f, speed2, true);
-            VirtualBackground._para.AddZone(5, distance1 - num * 2f, -speed2, true);
-            VirtualBackground._para.AddZone(6, distance1 - num * 3f, speed2, true);
-            VirtualBackground._para.AddZone(7, distance2, speed1);
-            VirtualBackground._para.AddZone(8, distance2, speed1);
-            VirtualBackground._para.AddZone(19, distance2, speed1);
-            VirtualBackground._para.AddZone(20, distance2, speed1);
-            VirtualBackground._para.AddZone(21, distance1 - num * 3f, -speed2, true);
-            VirtualBackground._para.AddZone(22, distance1 - num * 2f, speed2, true);
-            VirtualBackground._para.AddZone(23, distance1 - num * 1f, -speed2, true);
-            VirtualBackground._para.AddZone(24, distance1, speed1);
-            VirtualBackground._para.AddZone(25, distance1, speed1);
-            VirtualBackground._para.AddZone(26, distance1, speed1);
-            VirtualBackground._para.AddZone(27, distance1, speed1);
-            VirtualBackground._para.AddZone(28, distance1, speed1);
-            VirtualBackground._para.AddZone(29, distance1, speed1);
-            VirtualBackground._para.AddZone(30, distance1, speed1);
-            VirtualBackground._para.AddZone(31, distance1, speed1);
-            VirtualBackground._para.AddZone(32, distance1, speed1);
-            VirtualBackground._para.AddZone(33, distance1, speed1);
-            VirtualBackground._para.AddZone(34, distance1, speed1);
-            VirtualBackground._para.restrictBottom = false;
-            VirtualBackground._para.layer = new Layer("VIRTUALPARALLAX", 95, new Camera(0f, 0f, 320f, 320f * Graphics.aspect));
+            _para.AddZone(4, distance1 - num * 1f, speed2, true);
+            _para.AddZone(5, distance1 - num * 2f, -speed2, true);
+            _para.AddZone(6, distance1 - num * 3f, speed2, true);
+            _para.AddZone(7, distance2, speed1);
+            _para.AddZone(8, distance2, speed1);
+            _para.AddZone(19, distance2, speed1);
+            _para.AddZone(20, distance2, speed1);
+            _para.AddZone(21, distance1 - num * 3f, -speed2, true);
+            _para.AddZone(22, distance1 - num * 2f, speed2, true);
+            _para.AddZone(23, distance1 - num * 1f, -speed2, true);
+            _para.AddZone(24, distance1, speed1);
+            _para.AddZone(25, distance1, speed1);
+            _para.AddZone(26, distance1, speed1);
+            _para.AddZone(27, distance1, speed1);
+            _para.AddZone(28, distance1, speed1);
+            _para.AddZone(29, distance1, speed1);
+            _para.AddZone(30, distance1, speed1);
+            _para.AddZone(31, distance1, speed1);
+            _para.AddZone(32, distance1, speed1);
+            _para.AddZone(33, distance1, speed1);
+            _para.AddZone(34, distance1, speed1);
+            _para.restrictBottom = false;
+            _para.layer = new Layer("VIRTUALPARALLAX", 95, new Camera(0f, 0f, 320f, 320f * Graphics.aspect));
         }
 
         public override void Initialize()
@@ -98,7 +98,7 @@ namespace DuckGame
             needsWireframe = true;
             backgroundColor = new Color(0, 0, 0);
             Level.current.backgroundColor = backgroundColor;
-            _parallax = VirtualBackground._para;
+            _parallax = _para;
             Layer.Add(_parallax.layer);
             _parallax.layer.Clear();
             Level.Add(_parallax);

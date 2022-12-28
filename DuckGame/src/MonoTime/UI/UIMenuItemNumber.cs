@@ -48,8 +48,10 @@ namespace DuckGame
             component1.leftSection.Add(component2, true);
             if (field == null)
             {
-                _textItem = new UIChangingText(-1f, -1f, field, null);
-                _textItem.align = UIAlign.Right;
+                _textItem = new UIChangingText(-1f, -1f, field, null)
+                {
+                    align = UIAlign.Right
+                };
                 component1.rightSection.Add(_textItem, true);
             }
             else if (_valueStrings != null)
@@ -139,33 +141,33 @@ namespace DuckGame
             {
                 if (_filterField != null)
                 {
-                    if (!(bool)_filterField.value && (trigger == "MENURIGHT" || trigger == "SELECT"))
+                    if (!(bool)_filterField.value && (trigger == Triggers.MenuRight || trigger == Triggers.Select))
                     {
                         SFX.Play("textLetter", 0.7f);
                         _filterField.value = true;
                         _field.value = (int)_field.min;
                         return;
                     }
-                    if (!(bool)_filterField.value && trigger == "MENULEFT")
+                    if (!(bool)_filterField.value && trigger == Triggers.MenuLeft)
                     {
                         SFX.Play("textLetter", 0.7f);
                         _filterField.value = true;
                         _field.value = (int)_field.max;
                         return;
                     }
-                    if ((bool)_filterField.value && trigger == "MENULEFT" && (int)_field.value == _field.min)
+                    if ((bool)_filterField.value && trigger == Triggers.MenuLeft && (int)_field.value == _field.min)
                     {
                         SFX.Play("textLetter", 0.7f);
                         _filterField.value = false;
                         return;
                     }
-                    if ((bool)_filterField.value && (trigger == "MENURIGHT" || trigger == "SELECT") && (int)_field.value == _field.max)
+                    if ((bool)_filterField.value && (trigger == Triggers.MenuRight || trigger == Triggers.Select) && (int)_field.value == _field.max)
                     {
                         SFX.Play("textLetter", 0.7f);
                         _filterField.value = false;
                         return;
                     }
-                    if (_setting != null && trigger == "MENU2")
+                    if (_setting != null && trigger == Triggers.Menu2)
                     {
                         SFX.Play("textLetter", 0.7f);
                         if (_setting.filterMode == FilterMode.GreaterThan)
@@ -185,9 +187,9 @@ namespace DuckGame
                     }
                 }
                 int num1 = (int)_field.value;
-                if (trigger == "MENULEFT")
+                if (trigger == Triggers.MenuLeft)
                     _field.value = (int)_field.value - GetStep((int)_field.value, false);
-                else if (trigger == "MENURIGHT" || trigger == "SELECT")
+                else if (trigger == Triggers.MenuRight || trigger == Triggers.Select)
                     _field.value = (int)_field.value + GetStep((int)_field.value, true);
                 int index = (int)Maths.Clamp((int)_field.value, _field.min, _field.max);
                 if (_upperBoundField != null && index > (int)_upperBoundField.value)

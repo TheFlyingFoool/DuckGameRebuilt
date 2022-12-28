@@ -16,7 +16,7 @@ namespace DuckGame
 {
     public class UIServerBrowser : UIMenu
     {
-        private Queue<UIServerBrowser.SearchMode> _modeQueue = new Queue<UIServerBrowser.SearchMode>();
+        private Queue<SearchMode> _modeQueue = new Queue<SearchMode>();
         private UIMenu _openOnClose;
         private Sprite _moreArrow;
         private Sprite _noImage;
@@ -55,11 +55,11 @@ namespace DuckGame
         private bool _showingMenu;
         private bool _draggingScrollbar;
         private Vec2 _oldPos;
-        public static UIServerBrowser.LobbyData _selectedLobby;
-        private static UIServerBrowser.LobbyData _joiningLobby;
+        public static LobbyData _selectedLobby;
+        private static LobbyData _joiningLobby;
         private bool _searching;
-        private List<UIServerBrowser.LobbyData> _lobbies = new List<UIServerBrowser.LobbyData>();
-        private UIServerBrowser.LobbyData _passwordLobby;
+        private List<LobbyData> _lobbies = new List<LobbyData>();
+        private LobbyData _passwordLobby;
         private bool fixView = true;
         //private const int boxHeight = 36;
         //private const int scrollWidth = 12;
@@ -74,7 +74,22 @@ namespace DuckGame
         private static Dictionary<ulong, Tex2D> _previewMap = new Dictionary<ulong, Tex2D>();
         private static Dictionary<object, ulong> _clientMap = new Dictionary<object, ulong>();
 
-        public UIServerBrowser.SearchMode mode => _modeQueue.Count > 0 ? _modeQueue.Peek() : UIServerBrowser.SearchMode.None;
+        private readonly FancyBitmapFont _smallFont = new FancyBitmapFont("smallFont")
+        {
+            scale = new Vec2(0.8f),
+            maxWidth = 55,
+            singleLine = true
+        };
+
+        private readonly Sprite[] _mapSprites;
+        private readonly Func<Lobby, int>[] _percentageFunctions;
+
+        private readonly Vec2 _mapsOffset = new Vec2(410f, -0.5f);
+        private readonly Vec2 _namesOffset = new Vec2(277f, 1f);
+
+        private readonly int _nicknameRows = 4;
+
+        public SearchMode mode => _modeQueue.Count > 0 ? _modeQueue.Peek() : SearchMode.None;
 
         public override void Close()
         {
@@ -107,7 +122,7 @@ namespace DuckGame
                 allMod.configuration.disabled = true;
             if (ConnectionError.joinLobby != null)
             {
-                UIServerBrowser._joiningLobby = new UIServerBrowser.LobbyData
+                _joiningLobby = new LobbyData
                 {
                     lobby = ConnectionError.joinLobby
                 };
@@ -127,7 +142,7 @@ namespace DuckGame
                                 try
                                 {
                                     WorkshopItem workshopItem = WorkshopItem.GetItem(Convert.ToUInt64(str3));
-                                    UIServerBrowser._joiningLobby.workshopItems.Add(workshopItem);
+                                    _joiningLobby.workshopItems.Add(workshopItem);
                                 }
                                 catch (Exception)
                                 {
@@ -138,15 +153,15 @@ namespace DuckGame
                     }
                 }
             }
-            foreach (WorkshopItem workshopItem in UIServerBrowser._joiningLobby.workshopItems)
+            foreach (WorkshopItem workshopItem in _joiningLobby.workshopItems)
             {
                 WorkshopItem w = workshopItem;
-                Mod mod = ModLoader.allMods.FirstOrDefault<Mod>(x => (long)x.configuration.workshopID == (long)w.id);
+                Mod mod = ModLoader.allMods.FirstOrDefault(x => (long)x.configuration.workshopID == (long)w.id);
                 if (mod != null)
                     mod.configuration.disabled = false;
                 Steam.WorkshopSubscribe(w.id);
             }
-            Program.commandLine = Program.commandLine + " -downloadmods +connect_lobby " + UIServerBrowser._joiningLobby.lobby.id.ToString();
+            Program.commandLine = Program.commandLine + " -downloadmods +connect_lobby " + _joiningLobby.lobby.id.ToString();
             if (MonoMain.lobbyPassword != "")
                 Program.commandLine = Program.commandLine + " +password " + MonoMain.lobbyPassword;
             ModLoader.DisabledModsChanged();
@@ -217,15 +232,16 @@ namespace DuckGame
             //    depth = (Depth)0.9f,
             //    maxLength = 5000
             //};
-            _downloadModsMenu = new UIMenu("MODS REQUIRED!", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 290f, conString: "@SELECT@SELECT");
-            _downloadModsMenu.Add(new UIText("You're missing the mods required", Colors.DGBlue), true);
-            _downloadModsMenu.Add(new UIText("to join this game. Would you", Colors.DGBlue), true);
-            _downloadModsMenu.Add(new UIText("like to automatically subscribe to", Colors.DGBlue), true);
-            _downloadModsMenu.Add(new UIText("all required mods, restart and", Colors.DGBlue), true);
-            _downloadModsMenu.Add(new UIText("join the game?", Colors.DGBlue), true);
+            _downloadModsMenu = new UIMenu("MOD LIST INCOMPATIBLE!", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 274f, conString: "@SELECT@SELECT");
+            _downloadModsMenu.Add(new UIText("Your mods don't match with", Colors.DGBlue), true);
+            _downloadModsMenu.Add(new UIText("this game. Would you like to", Colors.DGBlue), true);
+            _downloadModsMenu.Add(new UIText("automatically subscribe to all", Colors.DGBlue), true);
+            _downloadModsMenu.Add(new UIText("missing mods, disable all", Colors.DGBlue), true);
+            _downloadModsMenu.Add(new UIText("unneeded mods (excl. clients),", Colors.DGBlue), true);
+            _downloadModsMenu.Add(new UIText("restart and join the game?", Colors.DGBlue), true);
             _downloadModsMenu.Add(new UIText("", Colors.DGBlue), true);
             _downloadModsMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_downloadModsMenu, this)), true);
-            _downloadModsMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuCallFunction(_downloadModsMenu, new UIMenuActionCloseMenuCallFunction.Function(UIServerBrowser.SubscribeAndRestart))), true);
+            _downloadModsMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuCallFunction(_downloadModsMenu, new UIMenuActionCloseMenuCallFunction.Function(SubscribeAndRestart))), true);
             _downloadModsMenu.Close();
             if (!Network.available)
                 _controlString = "@WASD@@SELECT@JOIN @MENU1@REFRESH @CANCEL@BACK";
@@ -237,43 +253,59 @@ namespace DuckGame
             _portEntryMenu.Close();
             _passwordEntryMenu.SetBackFunction(new UIMenuActionOpenMenu(_passwordEntryMenu, this));
             _passwordEntryMenu.Close();
+
+            _mapSprites = new Sprite[]
+            {
+                CreateMapSprite("normalIcon"),
+                CreateMapSprite("randomIcons"),
+                CreateMapSprite("customIcon"),
+                CreateMapSprite("rainbowIcon")
+            };
+
+            _percentageFunctions = new Func<Lobby, int>[]
+            {
+                GetNormalMapsPercentage,
+                GetRandomMapsPercentage,
+                GetCustomMapsPercentage,
+                GetInternetMapsPercentage
+            };
         }
 
         public override void Open()
         {
-            UIServerBrowser._selectedLobby = null;
+            _selectedLobby = null;
             _pressWait = 30;
             base.Open();
             DevConsole.SuppressDevConsole();
             _oldPos = Mouse.positionScreen;
             _hoverIndex = -1;
             if (!_enteringPort)
-                RefreshLobbySearch(UIServerBrowser.SearchMode.Near, UIServerBrowser.SearchMode.Global, UIServerBrowser.SearchMode.LAN);
+                RefreshLobbySearch(SearchMode.Near, SearchMode.Global, SearchMode.LAN);
             _enteringPort = false;
         }
 
-        public void RefreshLobbySearch() => RefreshLobbySearch(UIServerBrowser.SearchMode.Near, UIServerBrowser.SearchMode.Global, UIServerBrowser.SearchMode.LAN);
+        public void RefreshLobbySearch() => RefreshLobbySearch(SearchMode.Near, SearchMode.Global, SearchMode.LAN);
 
-        public void RefreshLobbySearch(params UIServerBrowser.SearchMode[] pParts)
+        public void RefreshLobbySearch(params SearchMode[] pParts)
         {
             _modeQueue.Clear();
             bool SteamIsInitialized = Steam.IsInitialized();
-            foreach (UIServerBrowser.SearchMode pPart in pParts)
+            foreach (SearchMode pPart in pParts)
             {
-                if (!SteamIsInitialized && pPart != UIServerBrowser.SearchMode.LAN)
+                if (!SteamIsInitialized && pPart != SearchMode.LAN)
                 {
                     continue;
                 }
                 _modeQueue.Enqueue(pPart);
             }
             _lobbies.Clear();
-            UIServerBrowser._selectedLobby = null;
+            _selectedLobby = null;
         }
 
-        private void TryJoiningLobby(UIServerBrowser.LobbyData pLobby)
+        private void TryJoiningLobby(LobbyData pLobby)
         {
-            UIServerBrowser._joiningLobby = pLobby;
-            if (ModLoader.modHash == UIServerBrowser._joiningLobby.modHash)
+            _joiningLobby = pLobby;
+            if (ModLoader.modHash == _joiningLobby.modHash)
             {
                 Close();
                 _attemptConnection = UIMatchmakerMark2.Platform_GetMatchkmaker(pLobby, this);
@@ -293,25 +325,25 @@ namespace DuckGame
 
         private void UpdateLobbySearch()
         {
-            if (!_searching && mode != UIServerBrowser.SearchMode.None && DuckGame.Graphics.frame >= _lobbySearchCooldownNextAvailable)
+            if (!_searching && mode != SearchMode.None && Graphics.frame >= _lobbySearchCooldownNextAvailable)
             {
-                _lobbySearchCooldownNextAvailable = DuckGame.Graphics.frame;
-                Network.lanMode = mode == UIServerBrowser.SearchMode.LAN;
+                _lobbySearchCooldownNextAvailable = Graphics.frame;
+                Network.lanMode = mode == SearchMode.LAN;
                 NCBasic.lobbySearchPort = lanSearchPort;
-                if (mode == UIServerBrowser.SearchMode.Global)
+                if (mode == SearchMode.Global)
                     NCSteam.globalSearch = true;
-                UIServerBrowser._selectedLobby = null;
+                _selectedLobby = null;
                 Network.activeNetwork.core.SearchForLobby();
                 _searching = true;
             }
-            if (!_searching || mode == UIServerBrowser.SearchMode.None || !Network.activeNetwork.core.IsLobbySearchComplete())
+            if (!_searching || mode == SearchMode.None || !Network.activeNetwork.core.IsLobbySearchComplete())
                 return;
             _searching = false;
             int num1 = Network.activeNetwork.core.NumLobbiesFound();
             List<WorkshopItem> items = new List<WorkshopItem>();
             if (Network.lanMode)
             {
-                foreach (UIServerBrowser.LobbyData foundLobby in (Network.activeNetwork.core as NCBasic)._foundLobbies)
+                foreach (LobbyData foundLobby in (Network.activeNetwork.core as NCBasic)._foundLobbies)
                     _lobbies.Add(foundLobby);
             }
             else
@@ -319,12 +351,12 @@ namespace DuckGame
                 for (int i = 0; i < num1; ++i)
                 {
                     Lobby lobby = Network.activeNetwork.core.GetSearchLobbyAtIndex(i);
-                    if (_lobbies.FirstOrDefault<UIServerBrowser.LobbyData>(x => x.lobby != null && (long)x.lobby.id == (long)lobby.id) == null)
+                    if (_lobbies.FirstOrDefault(x => x.lobby != null && (long)x.lobby.id == (long)lobby.id) == null)
                     {
                         string lobbyData1 = lobby.GetLobbyData("name");
                         if (!string.IsNullOrEmpty(lobbyData1))
                         {
-                            UIServerBrowser.LobbyData lobbyData2 = new UIServerBrowser.LobbyData
+                            LobbyData lobbyData2 = new LobbyData
                             {
                                 lobby = lobby,
                                 name = DuckNetwork.core.FilterText(lobbyData1, null),
@@ -359,7 +391,7 @@ namespace DuckGame
                             catch (Exception)
                             {
                             }
-                            lobbyData2.isGlobalLobby = mode == UIServerBrowser.SearchMode.Global;
+                            lobbyData2.isGlobalLobby = mode == SearchMode.Global;
                             lobbyData2.hasFriends = false;
                             foreach (User user in lobby.users)
                             {
@@ -436,7 +468,7 @@ namespace DuckGame
             if (_downloadModsMenu.open)
             {
                 _downloadModsMenu.DoUpdate();
-                if (!UIMenu.globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.Escape)))
+                if (!globalUILock && (Input.Pressed(Triggers.Cancel) || Keyboard.Pressed(Keys.Escape)))
                 {
                     _downloadModsMenu.Close();
                     Open();
@@ -465,12 +497,12 @@ namespace DuckGame
                 }
                 if (_hoverIndex != -1)
                 {
-                    if (Input.Pressed("MENU1"))
+                    if (Input.Pressed(Triggers.Menu1))
                     {
-                        RefreshLobbySearch(UIServerBrowser.SearchMode.Near, UIServerBrowser.SearchMode.Global, UIServerBrowser.SearchMode.LAN);
+                        RefreshLobbySearch(SearchMode.Near, SearchMode.Global, SearchMode.LAN);
                         SFX.Play("rockHitGround", 0.8f);
                     }
-                    else if (Input.Pressed("MENU2") || enteredPort != "")
+                    else if (Input.Pressed(Triggers.Menu2) || enteredPort != "")
                     {
                         if (enteredPort == "")
                         {
@@ -488,30 +520,30 @@ namespace DuckGame
                             {
                             }
                             enteredPort = "";
-                            RefreshLobbySearch(UIServerBrowser.SearchMode.LAN);
+                            RefreshLobbySearch(SearchMode.LAN);
                             SFX.Play("rockHitGround", 0.8f);
                         }
                     }
                     if (_lobbies.Count > 0 && _hoverIndex < _lobbies.Count)
                     {
-                        UIServerBrowser._selectedLobby = _lobbies[_hoverIndex];
-                        if (Input.Pressed("SELECT") && _pressWait == 0 && _gamepadMode || !_gamepadMode && Mouse.left == InputState.Pressed || enteredPassword != "")
+                        _selectedLobby = _lobbies[_hoverIndex];
+                        if (Input.Pressed(Triggers.Select) && _pressWait == 0 && _gamepadMode || !_gamepadMode && Mouse.left == InputState.Pressed || enteredPassword != "")
                         {
-                            if (!UIServerBrowser._selectedLobby.canJoin)
+                            if (!_selectedLobby.canJoin)
                             {
                                 SFX.Play("consoleError");
                             }
                             else
                             {
                                 SFX.Play("consoleSelect");
-                                if (UIServerBrowser._selectedLobby.hasPassword && enteredPassword == "")
+                                if (_selectedLobby.hasPassword && enteredPassword == "")
                                 {
-                                    _passwordLobby = UIServerBrowser._selectedLobby;
+                                    _passwordLobby = _selectedLobby;
                                     new UIMenuActionOpenMenu(this, _passwordEntryMenu).Activate();
                                 }
                                 else
                                 {
-                                    TryJoiningLobby(UIServerBrowser._selectedLobby);
+                                    TryJoiningLobby(_selectedLobby);
                                     return;
                                 }
                             }
@@ -519,17 +551,17 @@ namespace DuckGame
                     }
                 }
                 else
-                    UIServerBrowser._selectedLobby = null;
+                    _selectedLobby = null;
                 if (_gamepadMode)
                 {
                     _draggingScrollbar = false;
-                    if (Input.Pressed("MENUDOWN"))
+                    if (Input.Pressed(Triggers.MenuDown))
                         ++_hoverIndex;
-                    else if (Input.Pressed("MENUUP"))
+                    else if (Input.Pressed(Triggers.MenuUp))
                         --_hoverIndex;
-                    if (Input.Pressed("STRAFE"))
+                    if (Input.Pressed(Triggers.Strafe))
                         _hoverIndex -= 10;
-                    else if (Input.Pressed("RAGDOLL"))
+                    else if (Input.Pressed(Triggers.Ragdoll))
                         _hoverIndex += 10;
                     if (_hoverIndex < 0)
                         _hoverIndex = 0;
@@ -573,7 +605,7 @@ namespace DuckGame
                             scrollBarOffset = 0;
                         _scrollItemOffset = (int)((_lobbies.Count - _maxLobbiesToShow) * (scrollBarOffset / (float)scrollBarScrollableHeight));
                     }
-                    if (Input.Pressed("ANY"))
+                    if (Input.Pressed(Triggers.Any))
                     {
                         _gamepadMode = true;
                         _oldPos = Mouse.positionScreen;
@@ -590,7 +622,7 @@ namespace DuckGame
                 else if (_hoverIndex >= 0 && _hoverIndex < _scrollItemOffset)
                     _scrollItemOffset -= _scrollItemOffset - _hoverIndex;
                 scrollBarOffset = _scrollItemOffset == 0 ? 0 : (int)Lerp.FloatSmooth(0f, scrollBarScrollableHeight, _scrollItemOffset / (float)(_lobbies.Count - _maxLobbiesToShow));
-                if (!Editor.hoverTextBox && !UIMenu.globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.Escape)))
+                if (!Editor.hoverTextBox && !globalUILock && (Input.Pressed(Triggers.Cancel) || Keyboard.Pressed(Keys.Escape)))
                 {
                     new UIMenuActionOpenMenu(this, _openOnClose).Activate();
                     return;
@@ -608,19 +640,19 @@ namespace DuckGame
 
         private void Completed(object sender, AsyncCompletedEventArgs e)
         {
-            if (!UIServerBrowser._clientMap.ContainsKey(sender))
+            if (!_clientMap.ContainsKey(sender))
                 return;
-            ulong client = UIServerBrowser._clientMap[sender];
-            UIServerBrowser._clientMap.Remove(sender);
-            if (!UIServerBrowser._previewMap.ContainsKey(client))
+            ulong client = _clientMap[sender];
+            _clientMap.Remove(sender);
+            if (!_previewMap.ContainsKey(client))
                 return;
-            Texture2D texture2D = ContentPack.LoadTexture2D(UIServerBrowser.PreviewPathForWorkshopItem(client), false);
+            Texture2D texture2D = ContentPack.LoadTexture2D(PreviewPathForWorkshopItem(client), false);
             if (texture2D == null)
                 return;
             Tex2D tex2D = (Tex2D)texture2D;
             if (tex2D == null)
                 return;
-            UIServerBrowser._previewMap[client] = tex2D;
+            _previewMap[client] = tex2D;
         }
 
         public static string PreviewPathForWorkshopItem(ulong id) => DuckFile.workshopDirectory + "/modPreview" + id.ToString() + "preview.png";
@@ -640,20 +672,20 @@ namespace DuckGame
                     Layer.HUD.camera.height *= 2f;
                     fixView = false;
                 }
-                DuckGame.Graphics.DrawRect(new Vec2(_box.x - _box.halfWidth, _box.y - _box.halfHeight), new Vec2((float)(_box.x + _box.halfWidth - 12.0 - 2.0), _box.y + _box.halfHeight), Color.Black, (Depth)0.4f);
-                DuckGame.Graphics.DrawRect(new Vec2((float)(_box.x + _box.halfWidth - 12.0), _box.y - _box.halfHeight), new Vec2(_box.x + _box.halfWidth, _box.y + _box.halfHeight), Color.Black, (Depth)0.4f);
+                Graphics.DrawRect(new Vec2(_box.x - _box.halfWidth, _box.y - _box.halfHeight), new Vec2((float)(_box.x + _box.halfWidth - 12.0 - 2.0), _box.y + _box.halfHeight), Color.Black, (Depth)0.4f);
+                Graphics.DrawRect(new Vec2((float)(_box.x + _box.halfWidth - 12.0), _box.y - _box.halfHeight), new Vec2(_box.x + _box.halfWidth, _box.y + _box.halfHeight), Color.Black, (Depth)0.4f);
                 Rectangle r = ScrollBarBox();
-                DuckGame.Graphics.DrawRect(r, _draggingScrollbar || r.Contains(Mouse.position) ? Color.LightGray : Color.Gray, (Depth)0.5f);
+                Graphics.DrawRect(r, _draggingScrollbar || r.Contains(Mouse.position) ? Color.LightGray : Color.Gray, (Depth)0.5f);
                 if (_lobbies.Count == 0)
                 {
                     float num1 = _box.x - _box.halfWidth;
                     float num2 = _box.y - _box.halfHeight;
-                    if (mode == UIServerBrowser.SearchMode.None)
+                    if (mode == SearchMode.None)
                         _fancyFont.Draw("No games found!", new Vec2(num1 + 10f, num2 + 2f), Color.Yellow, (Depth)0.5f);
                     else
                         _fancyFont.Draw("Waiting for game list.", new Vec2(num1 + 10f, num2 + 2f), Colors.DGGreen, (Depth)0.5f);
                 }
-                if (mode != UIServerBrowser.SearchMode.None)
+                if (mode != SearchMode.None)
                 {
                     float x = (float)(_box.x - _box.halfWidth + 116.0);
                     float y = _splitter.topSection.y - 5f;
@@ -668,6 +700,14 @@ namespace DuckGame
                     }
                     _fancyFont.Draw(str + ")", new Vec2(x, y), Colors.DGGreen, (Depth)0.5f);
                 }
+                for (int i = 0; i < _lobbies.Count; ++i)
+                {
+                    LobbyData lobby = _lobbies[i];
+                    if (lobby != null)
+                    {
+                        lobby.UpdateUserCount();
+                    }
+                }
                 _lobbies.Sort();
                 for (int index1 = 0; index1 < _maxLobbiesToShow; ++index1)
                 {
@@ -677,10 +717,10 @@ namespace DuckGame
                         float x1 = _box.x - _box.halfWidth;
                         float y = _box.y - _box.halfHeight + 36 * index1;
                         if (_hoverIndex == index2)
-                            DuckGame.Graphics.DrawRect(new Vec2(x1, y), new Vec2((float)(x1 + _box.width - 14.0), y + 36f), Color.White * 0.6f, (Depth)0.4f);
+                            Graphics.DrawRect(new Vec2(x1, y), new Vec2((float)(x1 + _box.width - 14.0), y + 36f), Color.White * 0.6f, (Depth)0.4f);
                         else if ((index2 & 1) != 0)
-                            DuckGame.Graphics.DrawRect(new Vec2(x1, y), new Vec2((float)(x1 + _box.width - 14.0), y + 36f), Color.White * 0.1f, (Depth)0.4f);
-                        UIServerBrowser.LobbyData lobby = _lobbies[index2];
+                            Graphics.DrawRect(new Vec2(x1, y), new Vec2((float)(x1 + _box.width - 14.0), y + 36f), Color.White * 0.1f, (Depth)0.4f);
+                        LobbyData lobby = _lobbies[index2];
                         if (lobby != null)
                         {
                             _noImage.texture = defaultImage;
@@ -699,7 +739,7 @@ namespace DuckGame
                                 WorkshopItem workshopItem1 = lobby.workshopItems[0];
                                 if (workshopItem1.data != null)
                                 {
-                                    lobby.workshopItems = lobby.workshopItems.OrderByDescending<WorkshopItem, int>(x => x.data == null ? 0 : x.data.votesUp).ToList<WorkshopItem>();
+                                    lobby.workshopItems = lobby.workshopItems.OrderByDescending(x => x.data == null ? 0 : x.data.votesUp).ToList();
                                     if (!lobby.downloadedWorkshopItems)
                                     {
                                         lobby.hasFirstMod = true;
@@ -708,7 +748,7 @@ namespace DuckGame
                                         foreach (WorkshopItem workshopItem2 in lobby.workshopItems)
                                         {
                                             ulong id = workshopItem2.id;
-                                            if (ModLoader.accessibleMods.FirstOrDefault<Mod>(x => (long)x.configuration.workshopID == (long)id) == null)
+                                            if (ModLoader.accessibleMods.FirstOrDefault(x => (long)x.configuration.workshopID == (long)id) == null)
                                             {
                                                 if (flag)
                                                     lobby.hasFirstMod = false;
@@ -726,7 +766,7 @@ namespace DuckGame
                                     else if (lobby.workshopItems.Count > 2)
                                         str2 = str2 + str3 + " +" + (lobby.workshopItems.Count - 1).ToString() + " other mods.";
                                     text1 = str2 + "\n|GRAY|";
-                                    if (!UIServerBrowser._previewMap.ContainsKey(workshopItem1.id))
+                                    if (!_previewMap.ContainsKey(workshopItem1.id))
                                     {
                                         if (workshopItem1.data.previewPath != null)
                                         {
@@ -735,24 +775,24 @@ namespace DuckGame
                                                 try
                                                 {
                                                     WebClient key = new WebClient();
-                                                    string str4 = UIServerBrowser.PreviewPathForWorkshopItem(workshopItem1.id);
+                                                    string str4 = PreviewPathForWorkshopItem(workshopItem1.id);
                                                     DuckFile.CreatePath(str4);
                                                     if (System.IO.File.Exists(str4))
                                                         DuckFile.Delete(str4);
                                                     key.DownloadFileAsync(new Uri(workshopItem1.data.previewPath), str4);
                                                     key.DownloadFileCompleted += new AsyncCompletedEventHandler(Completed);
-                                                    UIServerBrowser._clientMap[key] = workshopItem1.id;
+                                                    _clientMap[key] = workshopItem1.id;
                                                 }
                                                 catch (Exception)
                                                 {
                                                 }
                                             }
                                         }
-                                        UIServerBrowser._previewMap[workshopItem1.id] = null;
+                                        _previewMap[workshopItem1.id] = null;
                                     }
                                     else
                                     {
-                                        Tex2D preview = UIServerBrowser._previewMap[workshopItem1.id];
+                                        Tex2D preview = _previewMap[workshopItem1.id];
                                         if (preview != null)
                                             tex2DList.Add(preview);
                                     }
@@ -768,7 +808,7 @@ namespace DuckGame
                                 text1 = text1 + "Custom Levels: " + lobby.customLevels.ToString() + ". ";
                             if (!string.IsNullOrWhiteSpace(lobby.hasModifiers) && lobby.hasModifiers != "false")
                                 text1 += "Modifiers: ACTIVE.";
-                            DuckGame.Graphics.DrawRect(new Vec2(x1 + 2f, y + 2f), new Vec2((float)(x1 + 36.0 - 2.0), (float)(y + 36.0 - 2.0)), Color.Gray, (Depth)0.5f, false, 2f);
+                            Graphics.DrawRect(new Vec2(x1 + 2f, y + 2f), new Vec2((float)(x1 + 36.0 - 2.0), (float)(y + 36.0 - 2.0)), Color.Gray, (Depth)0.5f, false, 2f);
                             if (tex2DList.Count > 0)
                             {
                                 Vec2 zero = Vec2.Zero;
@@ -786,13 +826,13 @@ namespace DuckGame
                                             if (_noImage.texture.width > _noImage.texture.height)
                                             {
                                                 _noImage.scale = new Vec2(32f / _noImage.texture.height);
-                                                DuckGame.Graphics.Draw(_noImage, x1 + 2f + zero.x, y + 2f + zero.y, new Rectangle(_noImage.texture.width / 2 - _noImage.texture.height / 2, 0f, _noImage.texture.height, _noImage.texture.height), (Depth)0.5f);
+                                                Graphics.Draw(_noImage, x1 + 2f + zero.x, y + 2f + zero.y, new Rectangle(_noImage.texture.width / 2 - _noImage.texture.height / 2, 0f, _noImage.texture.height, _noImage.texture.height), (Depth)0.5f);
                                             }
                                             else
-                                                DuckGame.Graphics.Draw(_noImage, x1 + 2f + zero.x, y + 2f + zero.y, new Rectangle(0f, 0f, _noImage.texture.width, _noImage.texture.width), (Depth)0.5f);
+                                                Graphics.Draw(_noImage, x1 + 2f + zero.x, y + 2f + zero.y, new Rectangle(0f, 0f, _noImage.texture.width, _noImage.texture.width), (Depth)0.5f);
                                         }
                                         else
-                                            DuckGame.Graphics.Draw(_noImage, x1 + 2f + zero.x, y + 2f + zero.y, (Depth)0.5f);
+                                            Graphics.Draw(_noImage, x1 + 2f + zero.x, y + 2f + zero.y, (Depth)0.5f);
                                         zero.x += 16f;
                                         if (zero.x >= 32.0)
                                         {
@@ -803,8 +843,8 @@ namespace DuckGame
                                 }
                             }
                             else
-                                DuckGame.Graphics.Draw(_noImage, x1 + 2f, y + 2f, (Depth)0.5f);
-                            titleString += " (" + Math.Min(lobby.userCount - (lobby.dedicated ? 1 : 0), 8).ToString() + "/" + Math.Min(lobby.numSlots, 8).ToString() + ")";
+                                Graphics.Draw(_noImage, x1 + 2f, y + 2f, (Depth)0.5f);
+                            titleString += " (" + Math.Min(lobby._userCount - (lobby.dedicated ? 1 : 0), 8).ToString() + "/" + Math.Min(lobby.numSlots, 8).ToString() + ")";
                             if (lobby.hasFriends)
                                 titleString += " |DGGREEN|FRIEND";
                             if (lobby.hasPassword)
@@ -837,7 +877,7 @@ namespace DuckGame
                                     {
                                         titleString += "This game is in progress.";
                                     }
-                                    else if (lobby.userCount >= lobby.numSlots)
+                                    else if (lobby._userCount >= lobby.numSlots)
                                     {
                                         titleString += "Lobby is full.";
                                     }
@@ -855,23 +895,23 @@ namespace DuckGame
                                     }
                                 } //removed  ParentalControls.AreParentalControlsActive and unpacked
                                 titleString += ")";
-                                DuckGame.Graphics.DrawRect(new Vec2(x1, y), new Vec2((float)(x1 + _box.width - 14.0), y + 36f), Color.Black * 0.5f, (Depth)0.99f);
+                                Graphics.DrawRect(new Vec2(x1, y), new Vec2((float)(x1 + _box.width - 14.0), y + 36f), Color.Black * 0.5f, (Depth)0.99f);
                             }
                             _fancyFont.maxWidth = 1000;
                             float num = 0f;
                             if (lobby.hasPassword)
                             {
-                                DuckGame.Graphics.Draw(_lockedServer, (float)(x1 + 36.0 + 10.0), y + 2.5f, (Depth)0.5f);
+                                Graphics.Draw(_lockedServer, (float)(x1 + 36.0 + 10.0), y + 2.5f, (Depth)0.5f);
                                 num += 10f;
                             }
                             if (lobby.hasCustomName)
                             {
-                                DuckGame.Graphics.Draw(_namedServer, (float)(x1 + num + 36.0 + 10.0), y + 2.5f, (Depth)0.5f);
+                                Graphics.Draw(_namedServer, (float)(x1 + num + 36.0 + 10.0), y + 2.5f, (Depth)0.5f);
                                 num += 10f;
                             }
                             if (lobby.isGlobalLobby)
                             {
-                                DuckGame.Graphics.Draw(_globeIcon, (float)(x1 + num + 36.0 + 10.0), y + 2.5f, (Depth)0.5f);
+                                Graphics.Draw(_globeIcon, (float)(x1 + num + 36.0 + 10.0), y + 2.5f, (Depth)0.5f);
                                 num += 10f;
                             }
                             _fancyFont.Draw(titleString, new Vec2((float)(x1 + 36.0 + num + 10.0), y + 2f), Color.Yellow, (Depth)0.5f);
@@ -898,10 +938,46 @@ namespace DuckGame
                             else
                                 _fancyFont.Draw("????ms", new Vec2(x1 + 470f, y + 26f), Colors.DGRed * 0.45f, (Depth)0.5f);
                             if (lobby.lobby != null)
-                                DuckGame.Graphics.Draw(_steamIcon, x1 + 36f, y + 2.5f, (Depth)0.5f);
+                                Graphics.Draw(_steamIcon, x1 + 36f, y + 2.5f, (Depth)0.5f);
                             else
-                                DuckGame.Graphics.Draw(_lanIcon, x1 + 36f, y + 2.5f, (Depth)0.5f);
+                                Graphics.Draw(_lanIcon, x1 + 36f, y + 2.5f, (Depth)0.5f);
                             _fancyFont.Draw(text1, new Vec2(x1 + 36f, y + 6f + _fancyFont.characterHeight), Color.LightGray, (Depth)0.5f);
+
+                            Lobby steamLobby = lobby.lobby;
+
+                            if (steamLobby is null)
+                                continue;
+
+                            if (DGRSettings.LobbyData)
+                            {
+                                Vec2 position = new Vec2(x1, y);
+
+                                for (int i = 0; i < _percentageFunctions.Length; i++)
+                                {
+                                    float mapX = position.x + _mapsOffset.x;
+                                    float mapY = position.y + _mapsOffset.y + 9f * i;
+
+                                    int percentage = _percentageFunctions[i](steamLobby);
+
+                                    Graphics.Draw(_mapSprites[i], mapX, mapY, 0.5f);
+                                    _smallFont.Draw(percentage.ToString() + "%", new Vec2(mapX + 10f, mapY + 1f), Color.White, 0.5f);
+                                }
+
+                                string names = steamLobby.GetLobbyData("players");
+
+                                if (names is null)
+                                    continue;
+
+                                string[] namesSplit = names.Split('\n');
+
+                                for (int i = 0; i < namesSplit.Length; i++)
+                                {
+                                    float nameOffsetX = (_smallFont.maxWidth + 8f) * (i / _nicknameRows);
+                                    float nameOffsetY = 9f * (i % _nicknameRows);
+
+                                    _smallFont.Draw(namesSplit[i], position + _namesOffset + new Vec2(nameOffsetX, nameOffsetY), Color.White, 0.5f);
+                                }
+                            }
                         }
                     }
                     else
@@ -925,6 +1001,39 @@ namespace DuckGame
             base.Draw();
         }
 
+        private int GetNormalMapsPercentage(Lobby lobby)
+        {
+            return GetLobbyData(lobby, "normalmaps");
+        }
+
+        private int GetRandomMapsPercentage(Lobby lobby)
+        {
+            return GetLobbyData(lobby, "randommaps");
+        }
+
+        private int GetCustomMapsPercentage(Lobby lobby)
+        {
+            return GetLobbyData(lobby, "custommaps");
+        }
+
+        private int GetInternetMapsPercentage(Lobby lobby)
+        {
+            return 100 - GetNormalMapsPercentage(lobby) - GetRandomMapsPercentage(lobby) - GetCustomMapsPercentage(lobby);
+        }
+
+        private int GetLobbyData(Lobby lobby, string name)
+        {
+            return int.Parse(lobby.GetLobbyData(name));
+        }
+
+        private Sprite CreateMapSprite(string name)
+        {
+            return new Sprite(name)
+            {
+                scale = new Vec2(1.1f)
+            };
+        }
+
         public enum SearchMode
         {
             None,
@@ -933,7 +1042,7 @@ namespace DuckGame
             LAN,
         }
 
-        public class LobbyData : IComparable<UIServerBrowser.LobbyData>
+        public class LobbyData : IComparable<LobbyData>
         {
             public int _userCount;
             public string name;
@@ -971,7 +1080,7 @@ namespace DuckGame
                 get // removed AreParentalControlsActive
                 {
                     return DG.version == version && (Network.gameDataHash == datahash || ModLoader.modHash != modHash) && started == "false" &&
-                        (!hasLocalMods || ModLoader.modHash == modHash) && userCount < numSlots && (type == "2" || lobby == null);
+                        (!hasLocalMods || ModLoader.modHash == modHash) && _userCount < numSlots && (type == "2" || lobby == null);
                 }
             }
 
@@ -986,8 +1095,11 @@ namespace DuckGame
                     return _userCount;
                 }
             }
-
-            public int CompareTo(UIServerBrowser.LobbyData other)
+            public void UpdateUserCount()
+            {
+                _userCount = userCount;
+            }
+            public int CompareTo(LobbyData other)
             {
                 if (isGlobalLobby && !other.isGlobalLobby)
                     return 10000;

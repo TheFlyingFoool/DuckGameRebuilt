@@ -35,9 +35,11 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 4;
-            _ammoType = new ATLaser();
-            _ammoType.range = 170f;
-            _ammoType.accuracy = 0.8f;
+            _ammoType = new ATLaser
+            {
+                range = 170f,
+                accuracy = 0.8f
+            };
             _type = "gun";
             _sprite = new SpriteMap("sledgeHammer", 32, 32);
             _sledgeSwing = new SpriteMap("sledgeSwing", 32, 32);
@@ -67,7 +69,7 @@ namespace DuckGame
             if (!(with is IPlatform))
                 return;
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
-                Level.Add(Spark.New(barrelPosition.x + Rando.Float(-6f, 6f), barrelPosition.y + Rando.Float(-3f, 3f), -MaterialThing.ImpactVector(from)));
+                Level.Add(Spark.New(barrelPosition.x + Rando.Float(-6f, 6f), barrelPosition.y + Rando.Float(-3f, 3f), -ImpactVector(from)));
         }
 
         public override void CheckIfHoldObstructed()

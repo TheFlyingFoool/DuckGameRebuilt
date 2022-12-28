@@ -29,8 +29,8 @@ namespace DuckGame
 
         public override void Apply()
         {
-            Tex2D texture = (Tex2D)(DuckGame.Graphics.device.Textures[0] as Texture2D);
-            DuckGame.Graphics.device.Textures[1] = (Texture2D)_burnTexture;
+            Tex2D texture = (Tex2D)(Graphics.device.Textures[0] as Texture2D);
+            Graphics.device.Textures[1] = (Texture2D)_burnTexture;
             SetValue("width", texture.frameWidth / texture.width);
             SetValue("height", texture.frameHeight / texture.height);
             SetValue("burn", _burnVal);

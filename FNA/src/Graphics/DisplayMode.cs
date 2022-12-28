@@ -13,12 +13,11 @@
 
 #region Using Statements
 using System;
-using System.Globalization;
 #endregion
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-	[Serializable]
+    [Serializable]
 	public class DisplayMode
 	{
 		#region Public Properties
@@ -27,7 +26,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
 			get
 			{
-				return (float) Width / (float) Height;
+				return Width / (float) Height;
 			}
 		}
 

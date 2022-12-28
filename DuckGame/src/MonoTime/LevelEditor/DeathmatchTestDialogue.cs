@@ -43,7 +43,7 @@ namespace DuckGame
 
         public void Open(string text)
         {
-            DeathmatchTestDialogue.tooSlow = false;
+            tooSlow = false;
             opened = true;
             _text = text;
             _caption = "Deathmatch Validity Test!";
@@ -98,13 +98,13 @@ namespace DuckGame
                 if (_selectedIndex == 0)
                     _hoverOk = true;
             }
-            if (!Editor.tookInput && _hoverOk && (Mouse.left == InputState.Pressed || Input.Pressed("SELECT")))
+            if (!Editor.tookInput && _hoverOk && (Mouse.left == InputState.Pressed || Input.Pressed(Triggers.Select)))
             {
                 result = 0;
                 opened = false;
                 Editor.tookInput = true;
             }
-            else if (!Editor.tookInput && _hoverCancel && (Mouse.left == InputState.Pressed || Input.Pressed("SELECT")))
+            else if (!Editor.tookInput && _hoverCancel && (Mouse.left == InputState.Pressed || Input.Pressed(Triggers.Select)))
             {
                 result = 1;
                 opened = false;
@@ -112,7 +112,7 @@ namespace DuckGame
             }
             else
             {
-                if (Editor.tookInput || !_hoverBack || Mouse.left != InputState.Pressed && !Input.Pressed("SELECT"))
+                if (Editor.tookInput || !_hoverBack || Mouse.left != InputState.Pressed && !Input.Pressed(Triggers.Select))
                     return;
                 result = 2;
                 opened = false;
@@ -150,7 +150,7 @@ namespace DuckGame
             string text2 = "NOPE!";
             _font.Draw(text2, (float)(p1_3.x + vec2_2.x / 2.0 - _font.GetWidth(text2) / 2.0), p1_2.y + 8f, Color.White, depth + 3);
             Graphics.DrawRect(p1_4, p1_4 + vec2_3, _hoverBack ? new Color(80, 80, 80) : new Color(30, 30, 30), depth + 2);
-            _font.Draw("CANCEL", (float)(p1_4.x + vec2_3.x / 2.0 - _font.GetWidth(text2) / 2.0 - 4.0), p1_4.y + 8f, Color.White, depth + 3);
+            _font.Draw(Triggers.Cancel, (float)(p1_4.x + vec2_3.x / 2.0 - _font.GetWidth(text2) / 2.0 - 4.0), p1_4.y + 8f, Color.White, depth + 3);
         }
     }
 }

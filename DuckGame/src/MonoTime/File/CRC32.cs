@@ -277,7 +277,7 @@ namespace DuckGame
         public unsafe void ProcessBlock(byte* block, int blockLen)
         {
             for (int index = 0; index < blockLen; ++index)
-                _crc = _crc >> 8 ^ CRC32.table[((int)_crc ^ block[index]) & byte.MaxValue];
+                _crc = _crc >> 8 ^ table[((int)_crc ^ block[index]) & byte.MaxValue];
         }
 
         public void Initialize() => _crc = uint.MaxValue;
@@ -344,10 +344,10 @@ namespace DuckGame
             return crC32.Finalize();
         }
 
-        public static uint Generate(Stream stream) => CRC32.Generate(stream, 2048);
+        public static uint Generate(Stream stream) => Generate(stream, 2048);
 
-        public static uint Generate(string str, Encoding encoding) => CRC32.Generate(encoding.GetBytes(str));
+        public static uint Generate(string str, Encoding encoding) => Generate(encoding.GetBytes(str));
 
-        public static uint Generate(string str) => CRC32.Generate(str, Encoding.Default);
+        public static uint Generate(string str) => Generate(str, Encoding.Default);
     }
 }

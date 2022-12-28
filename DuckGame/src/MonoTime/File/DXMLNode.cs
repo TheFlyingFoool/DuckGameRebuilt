@@ -26,7 +26,7 @@ namespace DuckGame
         {
             string str1 = "";
             string str2 = "";
-            for (int index = 0; index < DXMLNode.toStringDeep; ++index)
+            for (int index = 0; index < toStringDeep; ++index)
                 str2 += "  ";
             if (Name != "")
             {
@@ -45,13 +45,13 @@ namespace DuckGame
                     if (Name != "")
                     {
                         str1 += ">\r\n";
-                        ++DXMLNode.toStringDeep;
+                        ++toStringDeep;
                     }
                     foreach (DXMLNode element in Elements())
                         str1 += element.ToString();
                     if (Name != "")
                     {
-                        --DXMLNode.toStringDeep;
+                        --toStringDeep;
                         str1 = str1 + str2 + "</" + Name + ">\r\n";
                     }
                 }
@@ -136,7 +136,7 @@ namespace DuckGame
                         index = index2;
                         return dxmlNode;
                     }
-                    DXMLNode node = DXMLNode.ReadNode(text, ref index);
+                    DXMLNode node = ReadNode(text, ref index);
                     dxmlNode.Add(node);
                 }
             }
@@ -147,7 +147,7 @@ namespace DuckGame
 
         public void Add(DXMLAttribute attribute) => _attributes.Add(attribute);
 
-        public IEnumerable<DXMLNode> Elements() => _elements.AsEnumerable<DXMLNode>();
+        public IEnumerable<DXMLNode> Elements() => _elements.AsEnumerable();
 
         public IEnumerable<DXMLNode> Elements(string varName)
         {
@@ -182,6 +182,6 @@ namespace DuckGame
             return dxmlAttributeList;
         }
 
-        public IEnumerable<DXMLAttribute> Attributes() => _attributes.AsEnumerable<DXMLAttribute>();
+        public IEnumerable<DXMLAttribute> Attributes() => _attributes.AsEnumerable();
     }
 }

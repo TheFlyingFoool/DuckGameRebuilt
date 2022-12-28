@@ -9,9 +9,10 @@ namespace DuckGame
 {
     public class Spark : PhysicsParticle, IFactory
     {
+        public static int sparkcolorindex;
         public static int kMaxSparks = 64;
-        public static Spark[] _sparks = new Spark[Spark.kMaxSparks];
-        private static int _lastActiveSpark = 0;
+        public static Spark[] _sparks = new Spark[kMaxSparks];
+        public static int _lastActiveSpark = 0;
         private float _killSpeed = 0.03f;
         public Color _color;
         public float _width = 0.5f;
@@ -19,17 +20,17 @@ namespace DuckGame
         public static Spark New(float xpos, float ypos, Vec2 hitAngle, float killSpeed = 0.02f)
         {
             Spark spark;
-            if (Spark._sparks[Spark._lastActiveSpark] == null)
+            if (_sparks[_lastActiveSpark] == null)
             {
                 spark = new Spark();
-                Spark._sparks[Spark._lastActiveSpark] = spark;
+                _sparks[_lastActiveSpark] = spark;
             }
             else
-                spark = Spark._sparks[Spark._lastActiveSpark];
-            Spark._lastActiveSpark = (Spark._lastActiveSpark + 1) % Spark.kMaxSparks;
+                spark = _sparks[_lastActiveSpark];
+            _lastActiveSpark = (_lastActiveSpark + 1) % kMaxSparks;
             spark.ResetProperties();
             spark.Init(xpos, ypos, hitAngle, killSpeed);
-            spark.globalIndex = Thing.GetGlobalIndex();
+            spark.globalIndex = GetGlobalIndex();
             return spark;
         }
 
@@ -48,6 +49,15 @@ namespace DuckGame
             depth = 0.9f;
             _killSpeed = killSpeed;
             _color = new Color(byte.MaxValue, (byte)Rando.Int(180, byte.MaxValue), (byte)0);
+            if (Program.gay)
+            {
+                _color = Colors.Rainbow[sparkcolorindex];
+                sparkcolorindex += 1;
+                if (sparkcolorindex >= Colors.Rainbow.Length)
+                {
+                    sparkcolorindex = 0;
+                }
+            }
             _width = 0.5f;
         }
 

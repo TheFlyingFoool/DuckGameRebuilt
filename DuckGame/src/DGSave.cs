@@ -26,25 +26,25 @@ namespace DuckGame
                 }
                 if (!Directory.Exists(DuckFile.userDirectory) | pForce)
                 {
-                    DGSave.upgradingFromVanilla = true;
+                    upgradingFromVanilla = true;
                     DevConsole.Log(DCSection.General, "DGSave.Initialize(Steam, No User Directory):");
                     DevConsole.Log(DCSection.General, DuckFile.userDirectory);
-                    DGSave.Copy(DuckFile.globalOptionsDirectory, DuckFile.optionsDirectory, "options.dat");
-                    DGSave.Copy(DuckFile.globalOptionsDirectory, DuckFile.optionsDirectory, "global.dat");
-                    DGSave.Copy(DuckFile.globalOptionsDirectory, DuckFile.optionsDirectory, "input.dat");
-                    DGSave.Copy(DuckFile.globalModsDirectory, DuckFile.modsDirectory, "mods.conf");
-                    DGSave.Copy(DuckFile.globalProfileDirectory, DuckFile.profileDirectory, Steam.user.id.ToString() + ".pro");
+                    Copy(DuckFile.globalOptionsDirectory, DuckFile.optionsDirectory, "options.dat");
+                    Copy(DuckFile.globalOptionsDirectory, DuckFile.optionsDirectory, "global.dat");
+                    Copy(DuckFile.globalOptionsDirectory, DuckFile.optionsDirectory, "input.dat");
+                    Copy(DuckFile.globalModsDirectory, DuckFile.modsDirectory, "mods.conf");
+                    Copy(DuckFile.globalProfileDirectory, DuckFile.profileDirectory, Steam.user.id.ToString() + ".pro");
                     if (Directory.Exists(DuckFile.globalProfileDirectory))
                     {
                         foreach (string file in Directory.GetFiles(DuckFile.globalProfileDirectory))
                         {
                             string fileName = Path.GetFileName(file);
                             if (fileName.Length < 14)
-                                DGSave.Copy(DuckFile.globalProfileDirectory, DuckFile.profileDirectory, fileName);
+                                Copy(DuckFile.globalProfileDirectory, DuckFile.profileDirectory, fileName);
                         }
                     }
                     string str = DuckFile.saveDirectory + "read_before_editing_save.txt";
-                    if (!System.IO.File.Exists(str))
+                    if (!File.Exists(str))
                         DuckFile.SaveString("Hello, fellow savegame file editors! The new version of Duck Game has introduced some file system changes. \r\nAll Profile/Options data for a Steam account is now located in (SteamID)/Profile or (SteamID)/Options.\r\n\r\nNote that the DuckGame/Profiles and DuckGame/Options folders are LEGACY, and remain only for compatibility\r\nwith older versions of Duck Game. So If you modify DuckGame/Options/options.dat, nothing will happen! You need to\r\nmodify (DuckGame/4290354908354069823/Options/options.dat). Thanks for understanding.", str);
                 }
                 else
@@ -55,7 +55,7 @@ namespace DuckGame
                 if (!Directory.Exists(DuckFile.cloudLevelDirectory) || Directory.Exists(DuckFile.levelDirectory + "CopiedAlphaLevels"))
                     return;
                 foreach (string file in DuckFile.GetFiles(DuckFile.cloudLevelDirectory))
-                    DGSave.Move(DuckFile.cloudLevelDirectory, DuckFile.levelDirectory + "CopiedAlphaLevels/", Path.GetFileName(file));
+                    Move(DuckFile.cloudLevelDirectory, DuckFile.levelDirectory + "CopiedAlphaLevels/", Path.GetFileName(file));
             }
             else
                 DevConsole.Log(DCSection.General, "DGSave.Initialize(No Steam)");
@@ -72,15 +72,15 @@ namespace DuckGame
                 DevConsole.Log(DCSection.General, "DGSave.Move(" + pFromFolder + ", " + pToFolder + ", " + pFilename + ", " + (pToFilename == null ? "" : pToFilename) + ", " + pCopy.ToString() + ")");
             if (pToFilename == null)
                 pToFilename = pFilename;
-            if (!System.IO.File.Exists(pFromFolder + pFilename))
+            if (!File.Exists(pFromFolder + pFilename))
                 return;
             DuckFile.CreatePath(pToFolder);
-            if (System.IO.File.Exists(pToFolder + pToFilename))
-                System.IO.File.Delete(pToFolder + pToFilename);
+            if (File.Exists(pToFolder + pToFilename))
+                File.Delete(pToFolder + pToFilename);
             if (pCopy)
-                System.IO.File.Copy(pFromFolder + pFilename, pToFolder + pToFilename);
+                File.Copy(pFromFolder + pFilename, pToFolder + pToFilename);
             else
-                System.IO.File.Move(pFromFolder + pFilename, pToFolder + pToFilename);
+                File.Move(pFromFolder + pFilename, pToFolder + pToFilename);
         }
 
         internal static void Copy(
@@ -89,14 +89,14 @@ namespace DuckGame
           string pFilename,
           string pToFilename = null)
         {
-            DGSave.Move(pFromFolder, pToFolder, pFilename, pToFilename, true);
+            Move(pFromFolder, pToFolder, pFilename, pToFilename, true);
         }
 
         internal static void CopyIfMissing(string pFromFolder, string pToFolder, string pFilename)
         {
-            if (!System.IO.File.Exists(pFromFolder + pFilename) || System.IO.File.Exists(pToFolder + pFilename))
+            if (!File.Exists(pFromFolder + pFilename) || File.Exists(pToFolder + pFilename))
                 return;
-            DGSave.Copy(pFromFolder, pToFolder, pFilename);
+            Copy(pFromFolder, pToFolder, pFilename);
         }
     }
 }

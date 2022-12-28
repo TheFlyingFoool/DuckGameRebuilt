@@ -275,7 +275,7 @@ namespace DuckGame
                 b.Write(lastWrittenMask);
         }
 
-        public static long ReadMinimalStateMask(System.Type t, BitBuffer b) => b.ReadBits<long>(Editor.AllStateFields[t].Length);
+        public static long ReadMinimalStateMask(Type t, BitBuffer b) => b.ReadBits<long>(Editor.AllStateFields[t].Length);
 
         //private object GetMinimalStateMask(NetworkConnection c)
         //{
@@ -288,7 +288,7 @@ namespace DuckGame
         //    return count <= 32 ? (object)(int)connectionStateMask : (object)connectionStateMask;
         //}
 
-        public static long ReadMask(System.Type t, BitBuffer b)
+        public static long ReadMask(Type t, BitBuffer b)
         {
             int length = Editor.AllStateFields[t].Length;
             if (length <= 8)
@@ -298,7 +298,7 @@ namespace DuckGame
             return length <= 32 ? b.ReadUInt() : b.ReadLong();
         }
 
-        public static bool MaskIsMaxValue(System.Type t, long mask)
+        public static bool MaskIsMaxValue(Type t, long mask)
         {
             int length = Editor.AllStateFields[t].Length;
             if (length <= 8)
@@ -517,7 +517,7 @@ namespace DuckGame
                 long num = 1L << index1;
                 if ((ghostState.mask & num) != 0L)
                 {
-                    pState.properties.Add(GhostObject.MakeBufferedProperty(field, field.ReadNetValue(ghostState.data), index1, pState.tick));
+                    pState.properties.Add(MakeBufferedProperty(field, field.ReadNetValue(ghostState.data), index1, pState.tick));
                     field.initialized = true;
                 }
                 else
@@ -590,7 +590,7 @@ namespace DuckGame
             for (int index = 0; index < count; ++index)
             {
                 StateBinding field = _fields[index];
-                BufferedGhostProperty bufferedGhostProperty = GhostObject.MakeBufferedProperty(field, field.classValue);
+                BufferedGhostProperty bufferedGhostProperty = MakeBufferedProperty(field, field.classValue);
                 bufferedGhostProperty.initialized = thing.connection == DuckNetwork.localConnection;
                 bufferedGhostProperty.isNetworkStateValue = true;
                 currentState.properties.Add(bufferedGhostProperty);
@@ -727,11 +727,11 @@ namespace DuckGame
             return null;
         }
 
-        private BufferedGhostState GetStateToProcess() => _stateTimelineIndex < _stateTimeline.Count ? _stateTimeline[_stateTimelineIndex] : _stateTimeline.LastOrDefault<BufferedGhostState>();
+        private BufferedGhostState GetStateToProcess() => _stateTimelineIndex < _stateTimeline.Count ? _stateTimeline[_stateTimelineIndex] : _stateTimeline.LastOrDefault();
 
         public void ReapplyStates()
         {
-            GhostObject.applyContext = this;
+            applyContext = this;
             for (int index = 0; index < _stateTimeline.Count; ++index)
             {
                 if (index < _stateTimelineIndex)
@@ -740,7 +740,7 @@ namespace DuckGame
                     _stateTimeline[index].Apply(1f, _networkState);
                 }
             }
-            GhostObject.applyContext = null;
+            applyContext = null;
         }
 
         private void ApplyState(
@@ -748,10 +748,10 @@ namespace DuckGame
           float pLerp,
           BufferedGhostState pNetworkState)
         {
-            GhostObject.applyContext = this;
+            applyContext = this;
             pState.Apply(pLerp, pNetworkState);
             ApplyStateInput(pState);
-            GhostObject.applyContext = null;
+            applyContext = null;
         }
 
         public void ReleaseReferences(bool pFull = true)
@@ -814,7 +814,7 @@ namespace DuckGame
                         }
                         if (_stateTimeline.Count > 0)
                         {
-                            BufferedGhostState bufferedGhostState = _stateTimeline.ElementAt<BufferedGhostState>(0);
+                            BufferedGhostState bufferedGhostState = _stateTimeline.ElementAt(0);
                             bufferedGhostState.previousState = null;
                             bufferedGhostState.nextState = null;
                             _stateTimeline.RemoveAt(0);

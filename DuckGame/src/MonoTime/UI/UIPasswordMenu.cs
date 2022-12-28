@@ -76,16 +76,16 @@ namespace DuckGame
                 {
                     if (password.Length < 6)
                     {
-                        if (Input.Pressed("LEFT"))
+                        if (Input.Pressed(Triggers.Left))
                             password += "L";
-                        else if (Input.Pressed("RIGHT"))
+                        else if (Input.Pressed(Triggers.Right))
                             password += "R";
-                        else if (Input.Pressed("UP"))
+                        else if (Input.Pressed(Triggers.Up))
                             password += "U";
-                        else if (Input.Pressed("DOWN"))
+                        else if (Input.Pressed(Triggers.Down))
                             password += "D";
                     }
-                    if (Input.Pressed("SELECT"))
+                    if (Input.Pressed(Triggers.Select))
                     {
                         _binding.value = password;
                         _cancelled = false;
@@ -94,7 +94,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    UIMenu.globalUILock = true;
+                    globalUILock = true;
                     if (Keyboard.keyString.Length > _maxLength)
                         Keyboard.keyString = Keyboard.keyString.Substring(0, _maxLength);
                     if (_numeric)
@@ -129,15 +129,15 @@ namespace DuckGame
                         }
                         if (!flag)
                         {
-                            UIMenu.globalUILock = false;
+                            globalUILock = false;
                             _binding.value = password;
                             _cancelled = false;
                             _backFunction.Activate();
                         }
                     }
-                    else if (Keyboard.Pressed(Keys.Escape) || Input.Pressed("CANCEL"))
+                    else if (Keyboard.Pressed(Keys.Escape) || Input.Pressed(Triggers.Cancel))
                     {
-                        UIMenu.globalUILock = false;
+                        globalUILock = false;
                         _cancelled = true;
                         _backFunction.Activate();
                     }

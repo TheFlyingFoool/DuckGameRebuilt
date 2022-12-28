@@ -142,7 +142,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void GetData<T>(T[] data) where T : struct
 		{
-			GetData<T>(
+            GetData(
 				0,
 				data,
 				0,
@@ -155,7 +155,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			int startIndex,
 			int elementCount
 		) where T : struct {
-			GetData<T>(
+            GetData(
 				0,
 				data,
 				startIndex,
@@ -301,7 +301,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		/// <summary>
 		/// The GraphicsDevice is resetting, so GPU resources must be recreated.
 		/// </summary>
-		internal protected override void GraphicsDeviceResetting()
+		protected internal override void GraphicsDeviceResetting()
 		{
 			// FIXME: Do we even want to bother with DeviceResetting for GL? -flibit
 		}

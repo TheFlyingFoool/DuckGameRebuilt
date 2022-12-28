@@ -45,6 +45,8 @@ namespace DuckGame
       "Name"
     };
 
+        public bool didUpdateNameDueToSwap = false;
+
         public UIConnectionInfo(
           Profile p,
           UIMenu rootMenu,
@@ -65,45 +67,53 @@ namespace DuckGame
 
         private void UpdateName()
         {
+            if (_profile.connection == null)
+                return;
             Profile profile = _profile;
-            string str1 = "|" + profile.persona.colorUsable.r.ToString() + "," + profile.persona.colorUsable.g.ToString() + "," + profile.persona.colorUsable.b.ToString() + "|";
-            if (profile.slotType == SlotType.Spectator)
-                str1 = "|DGPURPLE|";
-            string source1 = profile.nameUI;
-            int num1 = source1.Count<char>();
-            bool flag = false;
+            string colorPrefixString = "|" + profile.persona.colorUsable.r.ToString() + "," + profile.persona.colorUsable.g.ToString() + "," + profile.persona.colorUsable.b.ToString() + "|";
+            bool isSpectator = profile.slotType == SlotType.Spectator;
+            if (isSpectator)
+                colorPrefixString = "|DGPURPLE|";
+            string profileName = profile.nameUI;
+
+            int colorTagsLength = profileName.Length - Program.RemoveColorTags(profileName).Length;
+            
+            int nameLength = profileName.Length - colorTagsLength;
+            bool isHost = false;
             if (profile.connection != null && profile.connection.isHost)
             {
-                flag = true;
-                ++num1;
+                isHost = true;
+                ++nameLength;
             }
-            int num2 = 17;
-            if (flag)
-                num2 = 16;
-            if (num1 > num2)
+
+            int nameLengthLimit = 17;
+            if (isHost)
+                nameLengthLimit--;
+            if (nameLength > nameLengthLimit)
             {
-                source1 = source1.Substring(0, num2 - 1) + ".";
-                num1 = num2;
+                profileName = profileName.Substring(0, nameLengthLimit - 1 + colorTagsLength) + $"{colorPrefixString}.";
+                nameLength = nameLengthLimit;
             }
-            for (; num1 < num2 + 2; ++num1)
-                source1 += " ";
-            if (flag)
-                source1 = "@HOSTCROWN@" + source1;
-            if (profile.slotType == SlotType.Spectator)
-                source1 = "@SPECTATOR@" + source1;
+            for (; nameLength < nameLengthLimit + 2; ++nameLength)
+                profileName += " ";
+
+            if (isHost)
+                profileName = "@HOSTCROWN@" + profileName;
+            if (isSpectator)
+                profileName = "@SPECTATOR@" + profileName;
             if (_profile.muteChat || _profile.muteHat || _profile.muteName || _profile.muteRoom)
-                source1 = "@MUTEICON@" + source1;
+                profileName = "@MUTEICON@" + profileName;
             if (_profile.blocked)
-                source1 = "@BLOCKICON@" + source1;
-            _nameTextWithoutColor = source1;
-            _nameText = str1 + source1;
+                profileName = "@BLOCKICON@" + profileName;
+            _nameTextWithoutColor = profileName;
+            _nameText = colorPrefixString + profileName;
             int ping = GetPing();
             string source2 = ping.ToString() + "|WHITE|MS";
-            int num3 = source2.Count<char>();
+            int num3 = source2.Count();
             string str2 = ping >= 150 ? (ping >= 250 ? (_profile.connection == null ? "|DGRED|" + source2 + "@SIGNALDEAD@" : "|DGRED|" + source2 + "@SIGNALBAD@") : "|DGYELLOW|" + source2 + "@SIGNALNORMAL@") : "|DGGREEN|" + source2 + "@SIGNALGOOD@";
             for (; num3 < 5; ++num3)
                 str2 = " " + str2;
-            _textElement.text = str1 + source1 + str2;
+            _textElement.text = colorPrefixString + profileName + str2;
             controlString = "";
             if (profile.connection != DuckNetwork.localConnection)
             {
@@ -170,7 +180,7 @@ namespace DuckGame
                 return;
             if (_profile.connection != null)
             {
-                if (_profile.connection != DuckNetwork.localConnection && trigger == "MENU2")
+                if (_profile.connection != DuckNetwork.localConnection && trigger == Triggers.Menu2)
                 {
                     _additionalOptionIndex = 0;
                     _showKickMenu = true;
@@ -179,22 +189,19 @@ namespace DuckGame
                     HUD.AddCornerControl(HUDCorner.BottomLeft, "@SELECT@SELECT");
                     HUD.AddCornerControl(HUDCorner.BottomRight, "@CANCEL@BACK");
                 }
-                else if (Network.isServer && trigger == "MENU1" && Network.canSetObservers && _profile.readyForSpectatorChange)
+                else if (Network.isServer && trigger == Triggers.Menu1 && Network.canSetObservers && _profile.readyForSpectatorChange)
                 {
                     if (_profile.slotType != SlotType.Spectator)
                     {
                         DuckNetwork.MakeSpectator(_profile);
-                        SFX.Play("menuBlip01");
-                        UpdateName();
                     }
                     else
                     {
                         DuckNetwork.MakePlayer(_profile);
-                        SFX.Play("menuBlip01");
-                        UpdateName();
                     }
+                    SFX.Play("menuBlip01");
                 }
-                if (trigger == "SELECT")
+                if (trigger == Triggers.Select)
                 {
                     if (_profile.connection.data is User)
                         Steam.OverlayOpenURL("http://steamcommunity.com/profiles/" + (_profile.connection.data as User).id.ToString());
@@ -222,9 +229,9 @@ namespace DuckGame
         {
             if (_showMuteMenu)
             {
-                if (Input.Pressed("CANCEL"))
+                if (Input.Pressed(Triggers.Cancel))
                     _showMuteMenu = false;
-                else if (Input.Pressed("UP"))
+                else if (Input.Pressed(Triggers.Up))
                 {
                     if (_muteOptionIndex > 0)
                     {
@@ -232,7 +239,7 @@ namespace DuckGame
                         SFX.Play("textLetter", 0.7f);
                     }
                 }
-                else if (Input.Pressed("DOWN"))
+                else if (Input.Pressed(Triggers.Down))
                 {
                     if (_muteOptionIndex < _muteOptions.Count - 1)
                     {
@@ -240,7 +247,7 @@ namespace DuckGame
                         SFX.Play("textLetter", 0.7f);
                     }
                 }
-                else if (Input.Pressed("SELECT"))
+                else if (Input.Pressed(Triggers.Select))
                 {
                     if (_muteOptionIndex == 0)
                         _profile.muteChat = !_profile.muteChat;
@@ -256,14 +263,14 @@ namespace DuckGame
             }
             else if (_showKickMenu)
             {
-                if (Input.Pressed("CANCEL"))
+                if (Input.Pressed(Triggers.Cancel))
                 {
                     HUD.ClearCorners();
                     _showKickMenu = false;
                     UIMenu.globalUILock = false;
                     Options.Save();
                 }
-                else if (Input.Pressed("SELECT"))
+                else if (Input.Pressed(Triggers.Select))
                 {
                     DuckNetwork.core.kickContext = _profile;
                     bool flag = true;
@@ -309,7 +316,7 @@ namespace DuckGame
                         UIMenu.globalUILock = false;
                     }
                 }
-                else if (Input.Pressed("UP"))
+                else if (Input.Pressed(Triggers.Up))
                 {
                     if (_additionalOptionIndex > 0)
                     {
@@ -317,12 +324,16 @@ namespace DuckGame
                         SFX.Play("textLetter", 0.7f);
                     }
                 }
-                else if (Input.Pressed("DOWN") && _additionalOptionIndex < _additionalOptions.Count - 1)
+                else if (Input.Pressed(Triggers.Down) && _additionalOptionIndex < _additionalOptions.Count - 1)
                 {
                     ++_additionalOptionIndex;
                     SFX.Play("textLetter", 0.7f);
                 }
             }
+
+            if (DuckNetwork.SpectatorSwapFinished(_profile) && !didUpdateNameDueToSwap)
+                UpdateName();
+
             base.Update();
         }
 
@@ -332,7 +343,7 @@ namespace DuckGame
             _littleFont.Draw(_nameText, position + new Vec2(-88f, -3f), Color.White, depth + 10);
             int ping = GetPing();
             string source = ping.ToString() + "|WHITE|MS";
-            source.Count<char>();
+            source.Count();
             string text = ping >= 150 ? (ping >= 250 ? (_profile.connection == null ? "|DGRED|" + source + "@SIGNALDEAD@" : "|DGRED|" + source + "@SIGNALBAD@") : "|DGYELLOW|" + source + "@SIGNALNORMAL@") : "|DGGREEN|" + source + "@SIGNALGOOD@";
             _littleFont.Draw(text, position + new Vec2(90f - _littleFont.GetWidth(text), -3f), Color.White, depth + 10);
             if (_showKickMenu)

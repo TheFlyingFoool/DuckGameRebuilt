@@ -56,7 +56,7 @@ namespace DuckGame
             contains = MysteryGun.PickType(chanceGroup, possible);
         }
 
-        public System.Type contains { get; set; }
+        public Type contains { get; set; }
 
         public Holdable _hoverItem
         {
@@ -64,7 +64,7 @@ namespace DuckGame
             set => SetHoverItem(value);
         }
 
-        public ItemSpawner(float xpos, float ypos, System.Type c = null)
+        public ItemSpawner(float xpos, float ypos, Type c = null)
           : base(xpos, ypos)
         {
             _sprite = new SpriteMap("gunSpawner", 14, 10);
@@ -95,7 +95,7 @@ namespace DuckGame
                 return;
             if (randomSpawn && keepRandom)
             {
-                List<System.Type> physicsObjects = ItemBox.GetPhysicsObjects(Editor.Placeables);
+                List<Type> physicsObjects = ItemBox.GetPhysicsObjects(Editor.Placeables);
                 contains = physicsObjects[Rando.Int(physicsObjects.Count - 1)];
                 randomSpawn = false;
             }
@@ -174,7 +174,7 @@ namespace DuckGame
                 previewThing = Editor.GetThing(contains);
                 if (previewThing != null)
                 {
-                    this.previewSprite = this.previewThing.GeneratePreview(32, 32, true);
+                    previewSprite = previewThing.GeneratePreview(32, 32, true);
                 }
             }
             collisionSize = new Vec2(14f, 8f);
@@ -225,7 +225,7 @@ namespace DuckGame
             {
                 if (randomSpawn)
                 {
-                    List<System.Type> physicsObjects = ItemBox.GetPhysicsObjects(Editor.Placeables);
+                    List<Type> physicsObjects = ItemBox.GetPhysicsObjects(Editor.Placeables);
                     contains = physicsObjects[Rando.Int(physicsObjects.Count - 1)];
                 }
                 ++_numSpawned;

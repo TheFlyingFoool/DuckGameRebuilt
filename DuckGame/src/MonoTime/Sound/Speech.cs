@@ -62,7 +62,7 @@ namespace DuckGame
             List<string> sayVoices = new List<string>();
             try
             {
-                foreach (InstalledVoice installedVoice in (speech as SpeechSynthesizer).GetInstalledVoices().ToList<InstalledVoice>())
+                foreach (InstalledVoice installedVoice in (speech as SpeechSynthesizer).GetInstalledVoices().ToList())
                     sayVoices.Add(installedVoice.VoiceInfo.Name);
             }
             catch (Exception ex)
@@ -81,7 +81,7 @@ namespace DuckGame
                 if (Program.IsLinuxD || Program.isLinux || !Options.Data.textToSpeech)
                     return;
                 (speech as SpeechSynthesizer).SpeakAsyncCancelAll();
-                List<InstalledVoice> list = (speech as SpeechSynthesizer).GetInstalledVoices().ToList<InstalledVoice>();
+                List<InstalledVoice> list = (speech as SpeechSynthesizer).GetInstalledVoices().ToList();
                 if (Options.Data.textToSpeechVoice >= 0 && Options.Data.textToSpeechVoice < list.Count)
                     (speech as SpeechSynthesizer).SelectVoice(list[Options.Data.textToSpeechVoice].VoiceInfo.Name);
                 (speech as SpeechSynthesizer).Volume = Maths.Clamp((int)(Options.Data.textToSpeechVolume * 100.0), 0, 100);

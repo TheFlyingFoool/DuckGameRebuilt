@@ -5,25 +5,25 @@
 //// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 //// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
-//namespace DuckGame
-//{
-//    public class AIStateDeathmatchBot : AIState
-//    {
-//        public override AIState Update(Duck duck, DuckAI ai)
-//        {
-//            if (Network.InLobby() && !duck.pickedHat)
-//            {
-//                duck.pickedHat = true;
-//                this._state.Push(new AIStatePickHat());
-//                return this;
-//            }
-//            if (duck.holdObject == null || !(duck.holdObject is Gun))
-//            {
-//                this._state.Push(new AIStateFindGun());
-//                return this;
-//            }
-//            this._state.Push(new AIStateFindTarget());
-//            return this;
-//        }
-//    }
-//}
+namespace DuckGame
+{
+    public class AIStateDeathmatchBot : AIState
+    {
+        public override AIState Update(Duck duck, DuckAI ai)
+        {
+            if (Network.InLobby() && !duck.pickedHat)
+            {
+                duck.pickedHat = true;
+                _state.Push(new AIStatePickHat());
+                return this;
+            }
+            if (duck.holdObject == null || !(duck.holdObject is Gun))
+            {
+                _state.Push(new AIStateFindGun());
+                return this;
+            }
+            _state.Push(new AIStateFindTarget());
+            return this;
+        }
+    }
+}

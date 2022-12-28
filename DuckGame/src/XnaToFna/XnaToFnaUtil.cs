@@ -24,8 +24,8 @@ namespace XnaToFna
 {
     public class XnaToFnaUtil : IDisposable
     {
-        public static ConstructorInfo m_UnverifiableCodeAttribute_ctor = typeof(UnverifiableCodeAttribute).GetConstructor(System.Type.EmptyTypes);
-        public static ConstructorInfo m_XmlIgnore_ctor = typeof(XmlIgnoreAttribute).GetConstructor(System.Type.EmptyTypes);
+        public static ConstructorInfo m_UnverifiableCodeAttribute_ctor = typeof(UnverifiableCodeAttribute).GetConstructor(Type.EmptyTypes);
+        public static ConstructorInfo m_XmlIgnore_ctor = typeof(XmlIgnoreAttribute).GetConstructor(Type.EmptyTypes);
         public static MethodInfo m_XnaToFnaHelper_PreUpdate = typeof(XnaToFnaHelper).GetMethod("PreUpdate");
         public static MethodInfo m_XnaToFnaHelper_MainHook = typeof(XnaToFnaHelper).GetMethod("MainHook");
         public static MethodInfo m_FileSystemHelper_FixPath = typeof(FileSystemHelper).GetMethod("FixPath");
@@ -43,12 +43,12 @@ namespace XnaToFna
         public static readonly Version DotNetFramework2Version = new Version(2, 0, 0, 0);
         public static readonly Version DotNetX360Version = new Version(2, 0, 5, 0);
         public static readonly Assembly ThisAssembly = Assembly.GetExecutingAssembly();
-        public static readonly string ThisAssemblyName = XnaToFnaUtil.ThisAssembly.GetName().Name;
-        public static readonly Version Version = XnaToFnaUtil.ThisAssembly.GetName().Version;
+        public static readonly string ThisAssemblyName = ThisAssembly.GetName().Name;
+        public static readonly Version Version = ThisAssembly.GetName().Version;
         public readonly ModuleDefinition ThisModule;
         public List<XnaToFnaMapping> Mappings;
         public XnaToFnaModder Modder;
-        public DefaultAssemblyResolver AssemblyResolver;
+        public CustomAssemblyResolver AssemblyResolver;
         public List<string> Directories;
         public List<string> ContentDirectoryNames;
         public List<string> ContentDirectories;
@@ -72,30 +72,30 @@ namespace XnaToFna
         public List<string> FixPathsFor;
         public ILPlatform PreferredPlatform;
         public static Assembly Aassembly;
-        public static int RemapVersion = 1;
+        public static int RemapVersion = 16;
         public void Stub(ModuleDefinition mod)
         {
-            this.Log(string.Format("[Stub] Stubbing {0}", mod.Assembly.Name.Name));
-            this.Modder.Module = mod;
-            this.ApplyCommonChanges(mod, nameof(Stub));
-            this.Log("[Stub] Mapping dependencies for MonoMod");
-            this.Modder.MapDependencies(mod);
-            this.Log("[Stub] Stubbing");
+            Log(string.Format("[Stub] Stubbing {0}", mod.Assembly.Name.Name));
+            Modder.Module = mod;
+            ApplyCommonChanges(mod, nameof(Stub));
+            Log("[Stub] Mapping dependencies for MonoMod");
+            Modder.MapDependencies(mod);
+            Log("[Stub] Stubbing");
             foreach (TypeDefinition type in mod.Types)
-                this.StubType(type);
-            this.Log("[Stub] Pre-processing");
+                StubType(type);
+            Log("[Stub] Pre-processing");
             foreach (TypeDefinition type in mod.Types)
-                this.PreProcessType(type);
-            this.Log("[Stub] Relinking (MonoMod PatchRefs pass)");
-            this.Modder.PatchRefs();
-            this.Log("[Stub] Post-processing");
+                PreProcessType(type);
+            Log("[Stub] Relinking (MonoMod PatchRefs pass)");
+            Modder.PatchRefs();
+            Log("[Stub] Post-processing");
             foreach (TypeDefinition type in mod.Types)
-                this.PostProcessType(type);
-            this.Log("[Stub] Rewriting and disposing module\n");
-            this.Modder.Module.Write(this.Modder.WriterParameters);
-            this.Modder.Module.Dispose();
-            this.Modder.Module = null;
-            this.Modder.ClearCaches(moduleSpecific: true);
+                PostProcessType(type);
+            Log("[Stub] Rewriting and disposing module\n");
+            Modder.Module.Write(Modder.WriterParameters);
+            Modder.Module.Dispose();
+            Modder.Module = null;
+            Modder.ClearCaches(moduleSpecific: true);
         }
 
         public void StubType(TypeDefinition type)
@@ -129,94 +129,97 @@ namespace XnaToFna
                 ilProcessor.Emit(OpCodes.Ret);
             }
             foreach (TypeDefinition nestedType in type.NestedTypes)
-                this.StubType(nestedType);
+                StubType(nestedType);
         }
 
         public void SetupHelperRelinker()
         {
-            this.Modder.RelinkMap["System.Void Microsoft.Xna.Framework.Game::.ctor()"] = new RelinkMapEntry("XnaToFna.XnaToFnaGame", "System.Void .ctor()");
+            Modder.RelinkMap["System.Void Microsoft.Xna.Framework.Game::.ctor()"] = new RelinkMapEntry("XnaToFna.XnaToFnaGame", "System.Void .ctor()");
             foreach (MethodInfo method in typeof(XnaToFnaGame).GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
-                this.Modder.RelinkMap[method.GetFindableID(type: "Microsoft.Xna.Framework.Game")] = new RelinkMapEntry("XnaToFna.XnaToFnaGame", method.GetFindableID(withType: false));
-            this.Modder.RelinkMap["System.IntPtr Microsoft.Xna.Framework.GameWindow::get_Handle()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.IntPtr GetProxyFormHandle(Microsoft.Xna.Framework.GameWindow)");
-            this.Modder.RelinkMap["System.Void Microsoft.Xna.Framework.GraphicsDeviceManager::ApplyChanges()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void ApplyChanges(Microsoft.Xna.Framework.GraphicsDeviceManager)");
-            foreach (System.Type type in typeof(Form).Assembly.GetTypes())
+                Modder.RelinkMap[method.GetFindableID(type: "Microsoft.Xna.Framework.Game")] = new RelinkMapEntry("XnaToFna.XnaToFnaGame", method.GetFindableID(withType: false));
+            Modder.RelinkMap["System.IntPtr Microsoft.Xna.Framework.GameWindow::get_Handle()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.IntPtr GetProxyFormHandle(Microsoft.Xna.Framework.GameWindow)");
+            Modder.RelinkMap["System.Void Microsoft.Xna.Framework.GraphicsDeviceManager::ApplyChanges()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void ApplyChanges(Microsoft.Xna.Framework.GraphicsDeviceManager)");
+            foreach (Type type in typeof(Form).Assembly.GetTypes())
             {
                  //else if (fullName.StartsWith("XnaToFna.ProxyDrawing."))
                  //   this.Modder.RelinkMap["System.Drawing." + fullName.Substring(22)] = fullName;
                 string fullName = type.FullName;
-                if (fullName.StartsWith("XnaToFna.ProxyForms."))
-                    this.Modder.RelinkMap["System.Windows.Forms." + fullName.Substring(20)] = fullName;
-                else if (fullName.StartsWith("XnaToFna.ProxyDInput."))
-                    this.Modder.RelinkMap[fullName.Substring(21)] = fullName;
-                else if (fullName.StartsWith("XnaToFna.StubXDK."))
+                //if (fullName.StartsWith("XnaToFna.ProxyForms."))
+                //    this.Modder.RelinkMap["System.Windows.Forms." + fullName.Substring(20)] = fullName;
+                //else if (fullName.StartsWith("XnaToFna.ProxyDInput."))
+                //    this.Modder.RelinkMap[fullName.Substring(21)] = fullName;
+                if (fullName.StartsWith("XnaToFna.StubXDK."))
                 {
-                    this.Modder.RelinkMap["Microsoft.Xna.Framework." + fullName.Substring(17)] = fullName;
+                    Modder.RelinkMap["Microsoft.Xna.Framework." + fullName.Substring(17)] = fullName;
                     foreach (MethodInfo method in type.GetMethods(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
                     {
                         MonoModHook customAttribute = method.GetCustomAttribute<MonoModHook>();
                         if (customAttribute != null)
-                            this.Modder.RelinkMap[customAttribute.FindableID] = new RelinkMapEntry(fullName, method.GetFindableID(withType: false));
+                            Modder.RelinkMap[customAttribute.FindableID] = new RelinkMapEntry(fullName, method.GetFindableID(withType: false));
                     }
                     foreach (ConstructorInfo constructor in type.GetConstructors(BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic))
                     {
                         MonoModHook customAttribute = constructor.GetCustomAttribute<MonoModHook>();
                         if (customAttribute != null)
-                            this.Modder.RelinkMap[customAttribute.FindableID] = new RelinkMapEntry(fullName, constructor.GetFindableID(withType: false));
+                            Modder.RelinkMap[customAttribute.FindableID] = new RelinkMapEntry(fullName, constructor.GetFindableID(withType: false));
                     }
                 }
             }
+            //this.Modder.RelinkMap["System.Windows.Forms.FormClosingEventHandler"] = "XnaToFna.ProxyForms.FormClosingEventHandler";
+            //this.Modder.RelinkMap["System.Windows.Forms.Form"] = "XnaToFna.ProxyForms.Form";
+            //this.Modder.RelinkMap["System.Windows.Forms.Control System.Windows.Forms.Control::FromHandle(System.IntPtr)"] = new RelinkMapEntry("XnaToFna.ProxyForms.Forms", "XnaToFna.ProxyForms.Forms.Control FromHandle(System.IntPtr)");
+            //// this.Modder.RelinkMap["System.Windows.Forms.Control"] = "XnaToFna.ProxyForms.Control";
             //Dans thing ReadAllLines 
+            Modder.RelinkMap["System.IO.DirectoryInfo System.IO.Directory::CreateDirectory(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.IO.DirectoryInfo DirectoryCreateDirectory(System.String)");
+            Modder.RelinkMap["System.Boolean System.IO.Directory::Exists(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Boolean DirectoryExists(System.String)");
+            Modder.RelinkMap["System.String[] System.IO.Directory::GetFiles(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String[] DirectoryGetFiles(System.String)");
+            Modder.RelinkMap["System.Void System.IO.Directory::Delete(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void DirectoryDelete(System.String)");
 
-            this.Modder.RelinkMap["System.IO.DirectoryInfo System.IO.Directory::CreateDirectory(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.IO.DirectoryInfo DirectoryCreateDirectory(System.String)");
-            this.Modder.RelinkMap["System.Boolean System.IO.Directory::Exists(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Boolean DirectoryExists(System.String)");
-            this.Modder.RelinkMap["System.String[] System.IO.Directory::GetFiles(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String[] DirectoryGetFiles(System.String)");
-            this.Modder.RelinkMap["System.Void System.IO.Directory::Delete(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void DirectoryDelete(System.String)");
+            Modder.RelinkMap["System.Void System.IO.File::SetAttributes(System.String,System.IO.FileAttributes)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void FileSetAttributes(System.String,System.IO.FileAttributes)");
+            Modder.RelinkMap["System.String System.IO.File::ReadAllText(System.String,System.Text.Encoding)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void FileReadAllText(System.String,System.Text.Encoding)");
 
-            this.Modder.RelinkMap["System.Void System.IO.File::SetAttributes(System.String,System.IO.FileAttributes)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void FileSetAttributes(System.String,System.IO.FileAttributes)");
-            this.Modder.RelinkMap["System.String System.IO.File::ReadAllText(System.String,System.Text.Encoding)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void FileReadAllText(System.String,System.Text.Encoding)");
-
-            this.Modder.RelinkMap["System.Void System.IO.File::Delete(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void FileDelete(System.String)");
-            this.Modder.RelinkMap["System.Void System.IO.File::WriteAllText(System.String,System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void FileWriteAllText(System.String,System.String)");
-            this.Modder.RelinkMap["System.Void System.IO.File::WriteAllLines(System.String,System.String[])"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void FileWriteAllLines(System.String,System.String[])");
-            this.Modder.RelinkMap["System.String[] System.IO.File::ReadAllLines(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String[] FileReadAllLines(System.String)");
-            this.Modder.RelinkMap["System.Boolean System.IO.File::Exists(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Boolean FileExists(System.String)");
-            this.Modder.RelinkMap["System.Void System.IO.File::Copy(System.String,System.String,System.Boolean)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void FileCopy(System.String,System.String,System.Boolean)");
-            this.Modder.RelinkMap["System.Byte[] System.IO.File::ReadAllBytes(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Byte[] FileReadAllBytes(System.String)"); //idk
-            this.Modder.RelinkMap["System.String System.IO.File::ReadAllText(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String FileReadAllText(System.String)");
-            this.Modder.RelinkMap["System.String System.IO.File::ReadAllText(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String FileReadAllText(System.String)");
-
-
-            this.Modder.RelinkMap["System.Reflection.MethodInfo System.Type::GetMethod(System.String,System.Reflection.BindingFlags)"] = new RelinkMapEntry("XnaToFna.ProxyReflection.FieldInfoHelper", "System.Reflection.MethodInfo GetMethod(System.Type,System.String,System.Reflection.BindingFlags)");
-
-            this.Modder.RelinkMap["System.Reflection.FieldInfo System.Type::GetField(System.String,System.Reflection.BindingFlags)"] = new RelinkMapEntry("XnaToFna.ProxyReflection.FieldInfoHelper", "System.Reflection.FieldInfo GetField(System.Type,System.String,System.Reflection.BindingFlags)");
+            Modder.RelinkMap["System.Void System.IO.File::Delete(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void FileDelete(System.String)");
+            Modder.RelinkMap["System.Void System.IO.File::WriteAllText(System.String,System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void FileWriteAllText(System.String,System.String)");
+            Modder.RelinkMap["System.Void System.IO.File::WriteAllLines(System.String,System.String[])"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void FileWriteAllLines(System.String,System.String[])");
+            Modder.RelinkMap["System.String[] System.IO.File::ReadAllLines(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String[] FileReadAllLines(System.String)");
+            Modder.RelinkMap["System.Boolean System.IO.File::Exists(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Boolean FileExists(System.String)");
+            Modder.RelinkMap["System.Void System.IO.File::Copy(System.String,System.String,System.Boolean)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void FileCopy(System.String,System.String,System.Boolean)");
+            Modder.RelinkMap["System.Byte[] System.IO.File::ReadAllBytes(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Byte[] FileReadAllBytes(System.String)"); //idk
+            Modder.RelinkMap["System.String System.IO.File::ReadAllText(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String FileReadAllText(System.String)");
+            Modder.RelinkMap["System.String System.IO.File::ReadAllText(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String FileReadAllText(System.String)");
 
 
+            Modder.RelinkMap["System.Reflection.MethodInfo System.Type::GetMethod(System.String,System.Reflection.BindingFlags)"] = new RelinkMapEntry("XnaToFna.ProxyReflection.FieldInfoHelper", "System.Reflection.MethodInfo GetMethod(System.Type,System.String,System.Reflection.BindingFlags)");
 
-            if (this.HookIsTrialMode)
-                this.Modder.RelinkMap["System.Boolean Microsoft.Xna.Framework.GamerServices.Guide::get_IsTrialMode()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.IntPtr get_IsTrialMode()");
-            if (this.HookBinaryFormatter)
+            Modder.RelinkMap["System.Reflection.FieldInfo System.Type::GetField(System.String,System.Reflection.BindingFlags)"] = new RelinkMapEntry("XnaToFna.ProxyReflection.FieldInfoHelper", "System.Reflection.FieldInfo GetField(System.Type,System.String,System.Reflection.BindingFlags)");
+
+
+
+            if (HookIsTrialMode)
+                Modder.RelinkMap["System.Boolean Microsoft.Xna.Framework.GamerServices.Guide::get_IsTrialMode()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.IntPtr get_IsTrialMode()");
+            if (HookBinaryFormatter)
             {
-                this.Modder.RelinkMap["System.Void System.Runtime.Serialization.Formatters.Binary.BinaryFormatter::.ctor()"] = new RelinkMapEntry("XnaToFna.BinaryFormatterHelper", "System.Runtime.Serialization.Formatters.Binary.BinaryFormatter Create()");
-                this.Modder.RelinkMap["System.Void System.Runtime.Serialization.Formatters.Binary.BinaryFormatter::.ctor(System.Runtime.Serialization.ISurrogateSelector,System.Runtime.Serialization.StreamingContext)"] = new RelinkMapEntry("XnaToFna.BinaryFormatterHelper", "System.Runtime.Serialization.Formatters.Binary.BinaryFormatter Create(System.Runtime.Serialization.ISurrogateSelector,System.Runtime.Serialization.StreamingContext)");
-                this.Modder.RelinkMap["System.Runtime.Serialization.SerializationBinder System.Runtime.Serialization.Formatters.Binary.BinaryFormatter::get_Binder()"] = new RelinkMapEntry("XnaToFna.BinaryFormatterHelper", "System.Runtime.Serialization.SerializationBinder get_Binder(System.Runtime.Serialization.Formatters.Binary.BinaryFormatter)");
-                this.Modder.RelinkMap["System.Void System.Runtime.Serialization.Formatters.Binary.BinaryFormatter::set_Binder(System.Runtime.Serialization.SerializationBinder)"] = new RelinkMapEntry("XnaToFna.BinaryFormatterHelper", "System.Void set_Binder(System.Runtime.Serialization.Formatters.Binary.BinaryFormatter,System.Runtime.Serialization.SerializationBinder)");
+                Modder.RelinkMap["System.Void System.Runtime.Serialization.Formatters.Binary.BinaryFormatter::.ctor()"] = new RelinkMapEntry("XnaToFna.BinaryFormatterHelper", "System.Runtime.Serialization.Formatters.Binary.BinaryFormatter Create()");
+                Modder.RelinkMap["System.Void System.Runtime.Serialization.Formatters.Binary.BinaryFormatter::.ctor(System.Runtime.Serialization.ISurrogateSelector,System.Runtime.Serialization.StreamingContext)"] = new RelinkMapEntry("XnaToFna.BinaryFormatterHelper", "System.Runtime.Serialization.Formatters.Binary.BinaryFormatter Create(System.Runtime.Serialization.ISurrogateSelector,System.Runtime.Serialization.StreamingContext)");
+                Modder.RelinkMap["System.Runtime.Serialization.SerializationBinder System.Runtime.Serialization.Formatters.Binary.BinaryFormatter::get_Binder()"] = new RelinkMapEntry("XnaToFna.BinaryFormatterHelper", "System.Runtime.Serialization.SerializationBinder get_Binder(System.Runtime.Serialization.Formatters.Binary.BinaryFormatter)");
+                Modder.RelinkMap["System.Void System.Runtime.Serialization.Formatters.Binary.BinaryFormatter::set_Binder(System.Runtime.Serialization.SerializationBinder)"] = new RelinkMapEntry("XnaToFna.BinaryFormatterHelper", "System.Void set_Binder(System.Runtime.Serialization.Formatters.Binary.BinaryFormatter,System.Runtime.Serialization.SerializationBinder)");
             }
-            this.Modder.RelinkMap["System.Reflection.FieldInfo System.Type::GetField(System.String,System.Reflection.BindingFlags)"] = new RelinkMapEntry("XnaToFna.ProxyReflection.FieldInfoHelper", "System.Reflection.FieldInfo GetField(System.Type,System.String,System.Reflection.BindingFlags)");
+            Modder.RelinkMap["System.Reflection.FieldInfo System.Type::GetField(System.String,System.Reflection.BindingFlags)"] = new RelinkMapEntry("XnaToFna.ProxyReflection.FieldInfoHelper", "System.Reflection.FieldInfo GetField(System.Type,System.String,System.Reflection.BindingFlags)");
 
-            if (this.HookReflection)
+            if (HookReflection)
             {
-                this.Modder.RelinkMap["System.Reflection.FieldInfo System.Type::GetField(System.String,System.Reflection.BindingFlags)"] = new RelinkMapEntry("XnaToFna.ProxyReflection.FieldInfoHelper", "System.Reflection.FieldInfo GetField(System.Type,System.String,System.Reflection.BindingFlags)");
-                this.Modder.RelinkMap["System.Reflection.FieldInfo System.Type::GetField(System.String)"] = new RelinkMapEntry("XnaToFna.ProxyReflection.FieldInfoHelper", "System.Reflection.FieldInfo GetField(System.Type,System.String)");
+                Modder.RelinkMap["System.Reflection.FieldInfo System.Type::GetField(System.String,System.Reflection.BindingFlags)"] = new RelinkMapEntry("XnaToFna.ProxyReflection.FieldInfoHelper", "System.Reflection.FieldInfo GetField(System.Type,System.String,System.Reflection.BindingFlags)");
+                Modder.RelinkMap["System.Reflection.FieldInfo System.Type::GetField(System.String)"] = new RelinkMapEntry("XnaToFna.ProxyReflection.FieldInfoHelper", "System.Reflection.FieldInfo GetField(System.Type,System.String)");
             }
-            this.Modder.RelinkMap["System.Void System.Threading.Thread::SetProcessorAffinity(System.Int32[])"] = new RelinkMapEntry("XnaToFna.X360Helper", "System.Void SetProcessorAffinity(System.Threading.Thread,System.Int32[])");
-            foreach (XnaToFnaMapping mapping in this.Mappings)
+            Modder.RelinkMap["System.Void System.Threading.Thread::SetProcessorAffinity(System.Int32[])"] = new RelinkMapEntry("XnaToFna.X360Helper", "System.Void SetProcessorAffinity(System.Threading.Thread,System.Int32[])");
+            foreach (XnaToFnaMapping mapping in Mappings)
             {
                 if (mapping.IsActive && mapping.Setup != null)
                     mapping.Setup(this, mapping);
             }
         }
 
-        public static void SetupGSRelinkMap(XnaToFnaUtil xtf, XnaToFnaMapping mapping) => XnaToFnaUtil.SetupDirectRelinkMap(xtf, mapping, (_, type) =>
+        public static void SetupGSRelinkMap(XnaToFnaUtil xtf, XnaToFnaMapping mapping) => SetupDirectRelinkMap(xtf, mapping, (_, type) =>
         {
             xtf.Modder.RelinkMap[type.FullName] = type;
             if (!type.FullName.Contains(".Net."))
@@ -224,14 +227,14 @@ namespace XnaToFna
             xtf.Modder.RelinkMap[type.FullName.Replace(".Net.", ".GamerServices.")] = type;
         });
 
-        public static void SetupGSRelinkMap2(XnaToFnaUtil xtf, XnaToFnaMapping mapping) => XnaToFnaUtil.SetupDirectRelinkMap(xtf, mapping, (_, type) =>
+        public static void SetupGSRelinkMap2(XnaToFnaUtil xtf, XnaToFnaMapping mapping) => SetupDirectRelinkMap(xtf, mapping, (_, type) =>
         {
             xtf.Modder.RelinkMap[type.FullName] = type;
             if (!type.FullName.Contains(".Net."))
                 return;
             xtf.Modder.RelinkMap[type.FullName.Replace(".Net.", ".GamerServices.")] = type;
         });
-        public static void SetupDirectRelinkMap(XnaToFnaUtil xtf, XnaToFnaMapping mapping) => XnaToFnaUtil.SetupDirectRelinkMap(xtf, mapping, null);
+        public static void SetupDirectRelinkMap(XnaToFnaUtil xtf, XnaToFnaMapping mapping) => SetupDirectRelinkMap(xtf, mapping, null);
 
         public static void SetupDirectRelinkMap(
           XnaToFnaUtil xtf,
@@ -239,7 +242,7 @@ namespace XnaToFna
           Action<XnaToFnaUtil, TypeDefinition> action)
         {
             foreach (TypeDefinition type in mapping.Module.Types)
-                XnaToFnaUtil.SetupDirectRelinkMapType(xtf, type, action);
+                SetupDirectRelinkMapType(xtf, type, action);
         }
 
         public static void SetupDirectRelinkMapType(
@@ -252,7 +255,7 @@ namespace XnaToFna
             else
                 xtf.Modder.RelinkMap[type.FullName] = type;
             foreach (TypeDefinition nestedType in type.NestedTypes)
-                XnaToFnaUtil.SetupDirectRelinkMapType(xtf, nestedType, action);
+                SetupDirectRelinkMapType(xtf, nestedType, action);
         }
 
         public void PreProcessType(TypeDefinition type)
@@ -264,11 +267,11 @@ namespace XnaToFna
                     string str = method.PInvokeInfo.EntryPoint ?? method.Name;
                     if (typeof(PInvokeHooks).GetMethod(str) != null)
                     {
-                        this.Log(string.Format("[PreProcess] [PInvokeHooks] Remapping call to {0} ({1})", str, method.GetFindableID()));
-                        this.Modder.RelinkMap[method.GetFindableID(simple: true)] = new RelinkMapEntry("XnaToFna.PInvokeHooks", str);
+                        Log(string.Format("[PreProcess] [PInvokeHooks] Remapping call to {0} ({1})", str, method.GetFindableID()));
+                        Modder.RelinkMap[method.GetFindableID(simple: true)] = new RelinkMapEntry("XnaToFna.PInvokeHooks", str);
                     }
                     else
-                        this.Log(string.Format("[PreProcess] [PInvokeHooks] Found unhooked call to {0} ({1})", str, method.GetFindableID()));
+                        Log(string.Format("[PreProcess] [PInvokeHooks] Found unhooked call to {0} ({1})", str, method.GetFindableID()));
                 }
             }
             Stack<TypeDefinition> source = new Stack<TypeDefinition>();
@@ -281,15 +284,15 @@ namespace XnaToFna
             foreach (FieldDefinition field in type.Fields)
             {
                 string name = field.Name;
-                if (this.FixOldMonoXML && source.Any<TypeDefinition>(baseType => baseType.FindField(name) != null || baseType.FindProperty(name) != null))
+                if (FixOldMonoXML && source.Any(baseType => baseType.FindField(name) != null || baseType.FindProperty(name) != null))
                 {
-                    this.Log(string.Format("[PreProcess] Renaming field name collison {0} in {1}", name, type.FullName));
+                    Log(string.Format("[PreProcess] Renaming field name collison {0} in {1}", name, type.FullName));
                     field.Name = string.Format("{0}_{1}", name, type.Name);
-                    this.Modder.RelinkMap[string.Format("{0}::{1}", type.FullName, name)] = field.FullName;
+                    Modder.RelinkMap[string.Format("{0}::{1}", type.FullName, name)] = field.FullName;
                 }
             }
             foreach (TypeDefinition nestedType in type.NestedTypes)
-                this.PreProcessType(nestedType);
+                PreProcessType(nestedType);
         }
 
         public void PostProcessType(TypeDefinition type)
@@ -297,7 +300,7 @@ namespace XnaToFna
             bool flag = false;
             if (type.BaseType?.FullName == "Microsoft.Xna.Framework.Game")
             {
-                this.Log(string.Format("[PostProcess] Found type overriding Game: {0})", type.FullName));
+                Log(string.Format("[PostProcess] Found type overriding Game: {0})", type.FullName));
                 type.BaseType = type.Module.ImportReference(typeof(XnaToFnaGame));
                 flag = true;
             }
@@ -308,7 +311,7 @@ namespace XnaToFna
                     string findableId = method.GetFindableID(withType: false);
                     if (flag && findableId == "System.Void Update(Microsoft.Xna.Framework.GameTime)")
                     {
-                        this.Log("[PostProcess] Injecting call to XnaToFnaHelper.PreUpdate into game Update");
+                        Log("[PostProcess] Injecting call to XnaToFnaHelper.PreUpdate into game Update");
                         ILProcessor ilProcessor = method.Body.GetILProcessor();
                         ilProcessor.InsertBefore(method.Body.Instructions[0], ilProcessor.Create(OpCodes.Ldarg_1));
                         ilProcessor.InsertAfter(method.Body.Instructions[0], ilProcessor.Create(OpCodes.Callvirt, method.Module.ImportReference(m_XnaToFnaHelper_PreUpdate)));
@@ -319,10 +322,10 @@ namespace XnaToFna
                         Instruction instruction = method.Body.Instructions[instri];
                         if (instruction.OpCode == OpCodes.Callvirt && ((MemberReference)instruction.Operand).DeclaringType.FullName == "XnaToFna.XnaToFnaHelper")
                             instruction.OpCode = OpCodes.Call;
-                        if (this.DestroyLocks)
-                            this.CheckAndDestroyLock(method, instri);
-                        if (this.FixPathsFor.Count != 0)
-                            this.CheckAndInjectFixPath(method, ref instri);
+                        if (DestroyLocks)
+                            CheckAndDestroyLock(method, instri);
+                        if (FixPathsFor.Count != 0)
+                            CheckAndInjectFixPath(method, ref instri);
                     }
                     int num1 = 0;
                     for (int index = 0; index < method.Body.Instructions.Count; ++index)
@@ -337,13 +340,13 @@ namespace XnaToFna
                         if (instruction.Operand is Instruction)
                         {
                             int num2 = ((Instruction)instruction.Operand).Offset - instruction.Offset;
-                            instruction.OpCode = num2 <= -127 || num2 >= sbyte.MaxValue ? this.ShortToLongOp(instruction.OpCode) : this.LongToShortOp(instruction.OpCode);
+                            instruction.OpCode = num2 <= -127 || num2 >= sbyte.MaxValue ? ShortToLongOp(instruction.OpCode) : LongToShortOp(instruction.OpCode);
                         }
                     }
                 }
             }
             foreach (TypeDefinition nestedType in type.NestedTypes)
-                this.PostProcessType(nestedType);
+                PostProcessType(nestedType);
         }
 
         public OpCode ShortToLongOp(OpCode op)
@@ -366,7 +369,7 @@ namespace XnaToFna
                 string lowerInvariant = ((instruction.Previous.Operand is FieldReference operand1 ? operand1.Name : null) ?? (instruction.Previous.Operand is MethodReference operand2 ? operand2.Name : null) ?? instruction.Previous.Operand.ToString()).ToLowerInvariant();
                 if (instri - method.Body.Instructions.IndexOf((Instruction)instruction.Operand) <= 3 && lowerInvariant != null && (lowerInvariant.Contains("load") || lowerInvariant.Contains("content")))
                 {
-                    this.Log(string.Format("[PostProcess] [HACK!!!] NOPing possible content loading waiting loop in {0}", method.GetFindableID()));
+                    Log(string.Format("[PostProcess] [HACK!!!] NOPing possible content loading waiting loop in {0}", method.GetFindableID()));
                     OpCode? opCode1 = instruction.Previous?.Previous.OpCode;
                     OpCode opCode2 = OpCodes.Volatile;
                     if ((opCode1.HasValue ? (opCode1.HasValue ? (opCode1.GetValueOrDefault() == opCode2 ? 1 : 0) : 1) : 0) != 0)
@@ -381,8 +384,8 @@ namespace XnaToFna
                 return;
             if (method.DeclaringType.FullName.ToLowerInvariant().Contains("content") || method.Name.ToLowerInvariant().Contains("load") || method.Name.ToLowerInvariant().Contains("content"))
             {
-                this.Log(string.Format("[PostProcess] [HACK!!!] Destroying possible content loading lock in {0}", method.GetFindableID()));
-                this.DestroyMonitorLock(method, instri);
+                Log(string.Format("[PostProcess] [HACK!!!] Destroying possible content loading lock in {0}", method.GetFindableID()));
+                DestroyMonitorLock(method, instri);
             }
             else
             {
@@ -391,8 +394,8 @@ namespace XnaToFna
                     string lowerInvariant = ((method.Body.Instructions[index].Operand is FieldReference operand3 ? operand3.Name : null) ?? (method.Body.Instructions[index].Operand is MethodReference operand4 ? operand4.Name : null) ?? method.Body.Instructions[index].Operand?.ToString())?.ToLowerInvariant();
                     if (lowerInvariant != null && (lowerInvariant.Contains("load") || lowerInvariant.Contains("content")))
                     {
-                        this.Log(string.Format("[PostProcess] [HACK!!!] Destroying possible content loading lock in {0}", method.GetFindableID()));
-                        this.DestroyMonitorLock(method, instri);
+                        Log(string.Format("[PostProcess] [HACK!!!] Destroying possible content loading lock in {0}", method.GetFindableID()));
+                        DestroyMonitorLock(method, instri);
                         break;
                     }
                 }
@@ -402,7 +405,7 @@ namespace XnaToFna
         public void DestroyMonitorLock(MethodDefinition method, int instri)
         {
             Instruction instruction = method.Body.Instructions[instri];
-            instruction.Operand = this.Modder.Module.ImportReference(this.Modder.FindTypeDeep("XnaToFna.FakeMonitor").Resolve().FindMethod("System.Void Enter(System.Object,System.Boolean&)"));
+            instruction.Operand = Modder.Module.ImportReference(Modder.FindTypeDeep("XnaToFna.FakeMonitor").Resolve().FindMethod("System.Void Enter(System.Object,System.Boolean&)"));
             int num;
             for (num = 1; instri < method.Body.Instructions.Count && num > 0; ++instri)
             {
@@ -418,7 +421,7 @@ namespace XnaToFna
             }
             if (num != 0)
                 return;
-            instruction.Operand = this.Modder.Module.ImportReference(this.Modder.FindTypeDeep("XnaToFna.FakeMonitor").Resolve().FindMethod("System.Void Exit(System.Object)"));
+            instruction.Operand = Modder.Module.ImportReference(Modder.FindTypeDeep("XnaToFna.FakeMonitor").Resolve().FindMethod("System.Void Exit(System.Object)"));
         }
 
         public void CheckAndInjectFixPath(MethodDefinition method, ref int instri)
@@ -428,7 +431,7 @@ namespace XnaToFna
             if (instruction.OpCode != OpCodes.Call && instruction.OpCode != OpCodes.Callvirt && instruction.OpCode != OpCodes.Newobj)
                 return;
             MethodReference operand = (MethodReference)instruction.Operand;
-            if (!this.FixPathsFor.Contains(operand.GetFindableID()) && !this.FixPathsFor.Contains(operand.GetFindableID(withType: false)) && !this.FixPathsFor.Contains(operand.GetFindableID(simple: true)) && !this.FixPathsFor.Contains(operand.GetFindableID(withType: false, simple: true)))
+            if (!FixPathsFor.Contains(operand.GetFindableID()) && !FixPathsFor.Contains(operand.GetFindableID(withType: false)) && !FixPathsFor.Contains(operand.GetFindableID(simple: true)) && !FixPathsFor.Contains(operand.GetFindableID(withType: false, simple: true)))
                 return;
             MethodReference method1 = method.Module.ImportReference(StackOpHelper.m_Push);
             MethodReference method2 = method.Module.ImportReference(StackOpHelper.m_Pop);
@@ -468,18 +471,10 @@ namespace XnaToFna
             }
             return ModuleDefinition.ReadModule(file, parameters).Assembly;
         }
-        public static AssemblyDefinition AssemblyResolveEventHandler(object sender, AssemblyNameReference reference)
-        {
-            if (reference != null && reference.FullName != null && reference.FullName.StartsWith("Steam,") || reference.FullName.StartsWith("Steam.Debug,"))
-            {
-                string path = DuckGame.Program.GameDirectory + "DGSteam.dll";
-                return GetAssembly(sender as IAssemblyResolver, path, new ReaderParameters()); //MonoModExt.ReadModule(path, (sender as DefaultAssemblyResolver).GetAssembly(path, new ReaderParameters()));
-            }
-            return null;
-        }
+
         public XnaToFnaUtil()
         {
-            this.Mappings = new List<XnaToFnaMapping>() {
+            Mappings = new List<XnaToFnaMapping>() {
             new XnaToFnaMapping("System", new string[1] {
                 "System.Net"
           }),
@@ -498,69 +493,74 @@ namespace XnaToFna
             "Microsoft.Xna.Framework.GamerServices",
             "Microsoft.Xna.Framework.Net",
             "Microsoft.Xna.Framework.Xdk"
-          }, new XnaToFnaMapping.SetupDelegate(XnaToFnaUtil.SetupGSRelinkMap)),
+          }, new XnaToFnaMapping.SetupDelegate(SetupGSRelinkMap)),
           new XnaToFnaMapping("FNA.Steamworks", new string[4] {
             "FNA.Steamworks",
             "Microsoft.Xna.Framework.GamerServices",
             "Microsoft.Xna.Framework.Net",
             "Microsoft.Xna.Framework.Xdk"
-          }, new XnaToFnaMapping.SetupDelegate(XnaToFnaUtil.SetupGSRelinkMap)),
+          }, new XnaToFnaMapping.SetupDelegate(SetupGSRelinkMap)),
           new XnaToFnaMapping("Steam", new string[2] {
             "Steam",
             "DGSteam"
 
-          }, new XnaToFnaMapping.SetupDelegate(XnaToFnaUtil.SetupGSRelinkMap2))
+          }, new XnaToFnaMapping.SetupDelegate(SetupGSRelinkMap2))
       };
-            this.AssemblyResolver = new DefaultAssemblyResolver();
-            this.Directories = new List<string>();
-            this.ContentDirectoryNames = new List<string>() {
-        "Content"
-      };
-            this.ContentDirectories = new List<string>();
-            this.Modules = new List<ModuleDefinition>();
-            this.ModulePaths = new Dictionary<ModuleDefinition, string>();
-            this.RemoveDeps = new HashSet<string>() {
-         null,
-        "",
-        "Microsoft.DirectX.DirectInput",
-        "Microsoft.VisualC"
-      };
-            this.ModulesToStub = new List<ModuleDefinition>();
-            this.ExtractedXEX = new List<string>();
-            this.HookEntryPoint = true;
-            this.PatchXNB = true;
-            this.PatchXACT = true;
-            this.PatchWindowsMedia = true;
-            this.DestroyLocks = true;
-            this.StubMixedDeps = true;
-            this.HookBinaryFormatter = true;
-            this.HookReflection = true;
-            this.DestroyPublicKeyTokens = new List<string>();
-            this.FixPathsFor = new List<string>();
-            this.PreferredPlatform = ILPlatform.AnyCPU;
-            this.Modder = new XnaToFnaModder(this);
-            string path = DuckGame.Program.FilePath;
+            AssemblyResolver = new CustomAssemblyResolver();
+            Directories = new List<string>();
+            ContentDirectoryNames = new List<string>() {
+                "Content"
+            };
+            ContentDirectories = new List<string>();
+            Modules = new List<ModuleDefinition>();
+            ModulePaths = new Dictionary<ModuleDefinition, string>();
+            RemoveDeps = new HashSet<string>() 
+            {
+                null,
+                "",
+                "Microsoft.DirectX.DirectInput",
+                "Microsoft.VisualC"
+            };
+            ModulesToStub = new List<ModuleDefinition>();
+            ExtractedXEX = new List<string>();
+            HookEntryPoint = true;
+            PatchXNB = true;
+            PatchXACT = true;
+            PatchWindowsMedia = true;
+            DestroyLocks = true;
+            StubMixedDeps = true;
+            HookBinaryFormatter = true;
+            HookReflection = true;
+            DestroyPublicKeyTokens = new List<string>();
+            FixPathsFor = new List<string>();
+            PreferredPlatform = ILPlatform.AnyCPU;
+            Modder = new XnaToFnaModder(this);
+            string path = Program.FilePath;
 
-            this.Modder.ReadingMode = ReadingMode.Immediate;
-            this.Modder.Strict = false;
-            this.Modder.DependencyCache.Add("DuckGame", MonoModExt.ReadModule(path, this.Modder.GenReaderParameters(false, path)));
-            this.AssemblyResolver.ResolveFailure += AssemblyResolveEventHandler;
-            this.Modder.AssemblyResolver = AssemblyResolver;
-            this.Modder.DependencyDirs = this.Directories;
-            this.Modder.MissingDependencyResolver = new MonoMod.MissingDependencyResolver(this.MissingDependencyResolver);
+            Modder.ReadingMode = ReadingMode.Immediate;
+            Modder.Strict = false;
+            Modder.AssemblyResolver = AssemblyResolver;
+            Modder.DependencyDirs = Directories;
+            Modder.MissingDependencyResolver = new MissingDependencyResolver(MissingDependencyResolver);
+
             using (FileStream fileStream = new FileStream(Assembly.GetExecutingAssembly().Location, FileMode.Open, FileAccess.Read))
             {
-                this.ThisModule = MonoModExt.ReadModule(fileStream, new ReaderParameters(ReadingMode.Immediate));
+                ThisModule = MonoModExt.ReadModule(fileStream, new ReaderParameters(ReadingMode.Immediate));
             }
-            this.Modder.DependencyCache[this.ThisModule.Assembly.Name.Name] = this.ThisModule;
-            this.Modder.DependencyCache[this.ThisModule.Assembly.Name.FullName] = this.ThisModule;
+            Modder.DependencyCache[ThisModule.Assembly.Name.Name] = ThisModule;
+            Modder.DependencyCache[ThisModule.Assembly.Name.FullName] = ThisModule;
+            //this.Modder.DependencyCache.Add("DuckGame", MonoModExt.ReadModule(path, this.Modder.GenReaderParameters(false, path)));
         }
-
-        public XnaToFnaUtil(params string[] paths) : this()
+        public string modpath = "";
+        public XnaToFnaUtil(string[] paths) : this()
         {
-            this.ScanPaths(paths);
+            //this.ScanPaths(paths);
         }
-
+        public XnaToFnaUtil(string path) : this()
+        {
+            CustomAssemblyResolver.searchdirectorpath = path;
+           // this.ScanPaths(path);
+        }
         public void Log(string txt)
         {
             Console.Write("[XnaToFna] ");
@@ -573,60 +573,60 @@ namespace XnaToFna
           string name,
           string fullName)
         {
-            this.Modder.Log(string.Format("Cannot map dependency {0} -> (({1}), ({2})) - not found", main.Name, fullName, name));
+            Modder.Log(string.Format("Cannot map dependency {0} -> (({1}), ({2})) - not found", main.Name, fullName, name));
             return null;
         }
 
         public void ScanPaths(params string[] paths)
         {
             foreach (string path in paths)
-                this.ScanPath(path);
+                ScanPath(path);
         }
 
         public void ScanPath(string path)
         {
             if (Directory.Exists(path))
             {
-                if (this.Directories.Contains(path))
+                if (Directories.Contains(path))
                     return;
-                this.RestoreBackup(path);
-                this.Log(string.Format("[ScanPath] Scanning directory {0}", path));
-                this.Directories.Add(path);
-                this.AssemblyResolver.AddSearchDirectory(path);
-                foreach (string contentDirectoryName in this.ContentDirectoryNames)
+                RestoreBackup(path);
+                Log(string.Format("[ScanPath] Scanning directory {0}", path));
+                Directories.Add(path);
+                AssemblyResolver.AddSearchDirectory(path);
+                foreach (string contentDirectoryName in ContentDirectoryNames)
                 {
                     string str1;
                     if (Directory.Exists(str1 = Path.Combine(path, contentDirectoryName)))
                     {
-                        if (this.ContentDirectories.Count == 0)
+                        if (ContentDirectories.Count == 0)
                         {
-                            string str2 = Path.Combine(path, Path.GetFileName(XnaToFnaUtil.ThisAssembly.Location));
-                            if (Path.GetDirectoryName(XnaToFnaUtil.ThisAssembly.Location) != path)
+                            string str2 = Path.Combine(path, Path.GetFileName(ThisAssembly.Location));
+                            if (Path.GetDirectoryName(ThisAssembly.Location) != path)
                             {
-                                this.Log("[ScanPath] Found separate game directory - copying XnaToFna.exe and FNA.dll");
-                                File.Copy(XnaToFnaUtil.ThisAssembly.Location, str2, true);
+                                Log("[ScanPath] Found separate game directory - copying XnaToFna.exe and FNA.dll");
+                                File.Copy(ThisAssembly.Location, str2, true);
                                 string extension = null;
-                                if (File.Exists(Path.ChangeExtension(XnaToFnaUtil.ThisAssembly.Location, "pdb")))
+                                if (File.Exists(Path.ChangeExtension(ThisAssembly.Location, "pdb")))
                                     extension = "pdb";
-                                if (File.Exists(Path.ChangeExtension(XnaToFnaUtil.ThisAssembly.Location, "mdb")))
+                                if (File.Exists(Path.ChangeExtension(ThisAssembly.Location, "mdb")))
                                     extension = "mdb";
                                 if (extension != null)
-                                    File.Copy(Path.ChangeExtension(XnaToFnaUtil.ThisAssembly.Location, extension), Path.ChangeExtension(str2, extension), true);
-                                if (File.Exists(Path.Combine(Path.GetDirectoryName(XnaToFnaUtil.ThisAssembly.Location), "FNA.dll")))
-                                    File.Copy(Path.Combine(Path.GetDirectoryName(XnaToFnaUtil.ThisAssembly.Location), "FNA.dll"), Path.Combine(path, "FNA.dll"), true);
-                                else if (File.Exists(Path.Combine(Path.GetDirectoryName(XnaToFnaUtil.ThisAssembly.Location), "FNA.dll.tmp")))
-                                    File.Copy(Path.Combine(Path.GetDirectoryName(XnaToFnaUtil.ThisAssembly.Location), "FNA.dll.tmp"), Path.Combine(path, "FNA.dll"), true);
+                                    File.Copy(Path.ChangeExtension(ThisAssembly.Location, extension), Path.ChangeExtension(str2, extension), true);
+                                if (File.Exists(Path.Combine(Path.GetDirectoryName(ThisAssembly.Location), "FNA.dll")))
+                                    File.Copy(Path.Combine(Path.GetDirectoryName(ThisAssembly.Location), "FNA.dll"), Path.Combine(path, "FNA.dll"), true);
+                                else if (File.Exists(Path.Combine(Path.GetDirectoryName(ThisAssembly.Location), "FNA.dll.tmp")))
+                                    File.Copy(Path.Combine(Path.GetDirectoryName(ThisAssembly.Location), "FNA.dll.tmp"), Path.Combine(path, "FNA.dll"), true);
                             }
                         }
-                        this.Log(string.Format("[ScanPath] Found Content directory: {0}", str1));
-                        this.ContentDirectories.Add(str1);
+                        Log(string.Format("[ScanPath] Found Content directory: {0}", str1));
+                        ContentDirectories.Add(str1);
                     }
                 }
-                this.ScanPaths(Directory.GetFiles(path));
+                ScanPaths(Directory.GetFiles(path));
             }
             else if (File.Exists(path + ".xex"))
             {
-                if (this.ExtractedXEX.Contains(path))
+                if (ExtractedXEX.Contains(path))
                     return;
                 File.Delete(path);
             }
@@ -684,11 +684,11 @@ namespace XnaToFna
                 {
                     return;
                 }
-                ReaderParameters rp = this.Modder.GenReaderParameters(false);
-                rp.ReadWrite = path != XnaToFnaUtil.ThisAssembly.Location && !this.Mappings.Exists(mappings => name.Name == mappings.Target);
+                ReaderParameters rp = Modder.GenReaderParameters(false);
+                rp.ReadWrite = path != ThisAssembly.Location && !Mappings.Exists(mappings => name.Name == mappings.Target);
                 if (!File.Exists(path + ".mdb") && !File.Exists(Path.ChangeExtension(path, "pdb")))
                     rp.ReadSymbols = false;
-                this.Log(string.Format("[ScanPath] Checking assembly {0} ({1})", name.Name, rp.ReadWrite ?
+                Log(string.Format("[ScanPath] Checking assembly {0} ({1})", name.Name, rp.ReadWrite ?
                   "rw" : (object)
                   "r-"));
                 ModuleDefinition key;
@@ -698,29 +698,29 @@ namespace XnaToFna
                 }
                 catch (Exception ex)
                 {
-                    this.Log(string.Format("[ScanPath] WARNING: Cannot load assembly: {0}", ex));
+                    Log(string.Format("[ScanPath] WARNING: Cannot load assembly: {0}", ex));
                     return;
                 }
-                bool flag = !rp.ReadWrite || name.Name == XnaToFnaUtil.ThisAssemblyName;
+                bool flag = !rp.ReadWrite || name.Name == ThisAssemblyName;
                 if ((key.Attributes & ModuleAttributes.ILOnly) != ModuleAttributes.ILOnly)
                 {
-                    this.Log(string.Format("[ScanPath] WARNING: Cannot handle mixed mode assembly {0}", name.Name));
-                    if (this.StubMixedDeps)
+                    Log(string.Format("[ScanPath] WARNING: Cannot handle mixed mode assembly {0}", name.Name));
+                    if (StubMixedDeps)
                     {
-                        this.ModulesToStub.Add(key);
+                        ModulesToStub.Add(key);
                         flag = true;
                     }
                     else
                     {
-                        if (this.DestroyMixedDeps)
-                            this.RemoveDeps.Add(name.Name);
+                        if (DestroyMixedDeps)
+                            RemoveDeps.Add(name.Name);
                         key.Dispose();
                         return;
                     }
                 }
                 if (flag && !rp.ReadWrite)
                 {
-                    foreach (XnaToFnaMapping mapping in this.Mappings)
+                    foreach (XnaToFnaMapping mapping in Mappings)
                     {
                         if (name.Name == mapping.Target)
                         {
@@ -728,29 +728,29 @@ namespace XnaToFna
                             mapping.Module = key;
                             foreach (string source in mapping.Sources)
                             {
-                                this.Log(string.Format("[ScanPath] Mapping {0} -> {1}", source, name.Name));
-                                this.Modder.RelinkModuleMap[source] = key;
+                                Log(string.Format("[ScanPath] Mapping {0} -> {1}", source, name.Name));
+                                Modder.RelinkModuleMap[source] = key;
                             }
                         }
                     }
                 }
                 else if (!flag)
                 {
-                    foreach (XnaToFnaMapping mapping1 in this.Mappings)
+                    foreach (XnaToFnaMapping mapping1 in Mappings)
                     {
                         XnaToFnaMapping mapping = mapping1;
-                        if (key.AssemblyReferences.Any<AssemblyNameReference>(dep => mapping.Sources.Contains<string>(dep.Name)))
+                        if (key.AssemblyReferences.Any(dep => mapping.Sources.Contains(dep.Name)))
                         {
                             flag = true;
-                            this.Log(string.Format("[ScanPath] XnaToFna-ing {0}", name.Name));
+                            Log(string.Format("[ScanPath] XnaToFna-ing {0}", name.Name));
                             break;
                         }
                     }
                 }
                 if (flag)
                 {
-                    this.Modules.Add(key);
-                    this.ModulePaths[key] = path;
+                    Modules.Add(key);
+                    ModulePaths[key] = path;
                 }
                 else
                     key.Dispose();
@@ -762,12 +762,12 @@ namespace XnaToFna
             string str = Path.Combine(root, "orig");
             if (!Directory.Exists(str))
                 return;
-            this.RestoreBackup(root, str);
+            RestoreBackup(root, str);
         }
 
         public void RestoreBackup(string root, string origRoot)
         {
-            this.Log(string.Format("[RestoreBackup] Restoring from {0} to {1}", origRoot, root));
+            Log(string.Format("[RestoreBackup] Restoring from {0} to {1}", origRoot, root));
             foreach (string enumerateFile in Directory.EnumerateFiles(origRoot, "*", SearchOption.AllDirectories))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(root + enumerateFile.Substring(origRoot.Length)));
@@ -779,32 +779,34 @@ namespace XnaToFna
         {
             // ISSUE: object of a compiler-generated type is created
             // ISSUE: variable of a compiler-generated type
-            XnaToFnaUtil.fuller fuller = new XnaToFnaUtil.fuller();
+            fuller fuller = new fuller();
             List<ModuleDefinition> moduleDefinitionList = new List<ModuleDefinition>(Modules);
-            this.Log("[OrderModules] Unordered: ");
-            for (int index = 0; index < this.Modules.Count; ++index)
-                this.Log(string.Format("[OrderModules] #{0}: {1}", index + 1, Modules[index].Assembly.Name.Name));
+            Log("[OrderModules] Unordered: ");
+            for (int index = 0; index < Modules.Count; ++index)
+                Log(string.Format("[OrderModules] #{0}: {1}", index + 1, Modules[index].Assembly.Name.Name));
             // ISSUE: reference to a compiler-generated field
             fuller.dep = null;
-            foreach (ModuleDefinition module in this.Modules)
+            foreach (ModuleDefinition module in Modules)
             {
                 foreach (AssemblyNameReference assemblyReference in module.AssemblyReferences)
                 {
                     // ISSUE: object of a compiler-generated type is created
                     // ISSUE: variable of a compiler-generated type
-                    XnaToFnaUtil.filler2 filler2 = new XnaToFnaUtil.filler2();
-                    // ISSUE: reference to a compiler-generated field
-                    filler2.filler = fuller;
-                    // ISSUE: reference to a compiler-generated field
-                    filler2.depName = assemblyReference;
+                    filler2 filler2 = new filler2
+                    {
+                        // ISSUE: reference to a compiler-generated field
+                        filler = fuller,
+                        // ISSUE: reference to a compiler-generated field
+                        depName = assemblyReference
+                    };
                     // ISSUE: reference to a compiler-generated method
                     // ISSUE: reference to a compiler-generated field
                     // ISSUE: reference to a compiler-generated field
-                    if (this.Modules.Exists(new Predicate<ModuleDefinition>(filler2.OrderModules)) && moduleDefinitionList.IndexOf(filler2.filler.dep) > moduleDefinitionList.IndexOf(module))
+                    if (Modules.Exists(new Predicate<ModuleDefinition>(filler2.OrderModules)) && moduleDefinitionList.IndexOf(filler2.filler.dep) > moduleDefinitionList.IndexOf(module))
                     {
                         // ISSUE: reference to a compiler-generated field
                         // ISSUE: reference to a compiler-generated field
-                        this.Log(string.Format("[OrderModules] Reordering {0} dependency {1}", module.Assembly.Name.Name, filler2.filler.dep.Name));
+                        Log(string.Format("[OrderModules] Reordering {0} dependency {1}", module.Assembly.Name.Name, filler2.filler.dep.Name));
                         moduleDefinitionList.Remove(module);
                         // ISSUE: reference to a compiler-generated field
                         // ISSUE: reference to a compiler-generated field
@@ -812,67 +814,67 @@ namespace XnaToFna
                     }
                 }
             }
-            this.Modules = moduleDefinitionList;
-            this.Log("[OrderModules] Reordered: ");
-            for (int index = 0; index < this.Modules.Count; ++index)
-                this.Log(string.Format("[OrderModules] #{0}: {1}", index + 1, Modules[index].Assembly.Name.Name));
+            Modules = moduleDefinitionList;
+            Log("[OrderModules] Reordered: ");
+            for (int index = 0; index < Modules.Count; ++index)
+                Log(string.Format("[OrderModules] #{0}: {1}", index + 1, Modules[index].Assembly.Name.Name));
         }
 
         public void RelinkAll()
         {
-            this.SetupHelperRelinker();
-            foreach (ModuleDefinition module in this.Modules)
-                this.Modder.DependencyCache[module.Assembly.Name.Name] = module;
-            foreach (ModuleDefinition mod in this.ModulesToStub)
-                this.Stub(mod);
-            foreach (ModuleDefinition module in this.Modules)
-                this.Relink(module);
+            SetupHelperRelinker();
+            foreach (ModuleDefinition module in Modules)
+                Modder.DependencyCache[module.Assembly.Name.Name] = module;
+            foreach (ModuleDefinition mod in ModulesToStub)
+                Stub(mod);
+            foreach (ModuleDefinition module in Modules)
+                Relink(module);
         }
 
         public void Relink(ModuleDefinition mod)
         {
-            if (this.Mappings.Exists(new Predicate<XnaToFnaMapping>(mm => mod.Assembly.Name.Name == mm.Target)) || this.ModulesToStub.Contains(mod) || mod.Assembly.Name.Name == XnaToFnaUtil.ThisAssemblyName)
+            if (Mappings.Exists(new Predicate<XnaToFnaMapping>(mm => mod.Assembly.Name.Name == mm.Target)) || ModulesToStub.Contains(mod) || mod.Assembly.Name.Name == ThisAssemblyName)
                 return;
-            this.Log(string.Format("[Relink] Relinking {0}", mod.Assembly.Name.Name));
-            this.Modder.Module = mod;
-            this.ApplyCommonChanges(mod);
-            this.Log("[Relink] Pre-processing");
+            Log(string.Format("[Relink] Relinking {0}", mod.Assembly.Name.Name));
+            Modder.Module = mod;
+            ApplyCommonChanges(mod);
+            Log("[Relink] Pre-processing");
             foreach (TypeDefinition type in mod.Types)
-                this.PreProcessType(type);
-            this.Log("[Relink] Relinking (MonoMod PatchRefs pass)");
-            this.Modder.PatchRefs();
-            this.Log("[Relink] Post-processing");
+                PreProcessType(type);
+            Log("[Relink] Relinking (MonoMod PatchRefs pass)");
+            Modder.PatchRefs();
+            Log("[Relink] Post-processing");
             foreach (TypeDefinition type in mod.Types)
-                this.PostProcessType(type);
-            if (this.HookEntryPoint && mod.EntryPoint != null)
+                PostProcessType(type);
+            if (HookEntryPoint && mod.EntryPoint != null)
             {
-                this.Log("[Relink] Injecting XnaToFna entry point hook");
+                Log("[Relink] Injecting XnaToFna entry point hook");
                 ILProcessor ilProcessor = mod.EntryPoint.Body.GetILProcessor();
                 Instruction instruction = ilProcessor.Create(OpCodes.Call, mod.ImportReference(m_XnaToFnaHelper_MainHook));
                 ilProcessor.InsertBefore(mod.EntryPoint.Body.Instructions[0], instruction);
                 ilProcessor.InsertBefore(instruction, ilProcessor.Create(OpCodes.Ldarg_0));
             }
-            this.Log("[Relink] Rewriting and disposing module\n");
+            Log("[Relink] Rewriting and disposing module\n");
         }
 
         public void ApplyCommonChanges(ModuleDefinition mod, string tag = "Relink")
         {
-            if (this.DestroyPublicKeyTokens.Contains(mod.Assembly.Name.Name))
+            if (DestroyPublicKeyTokens.Contains(mod.Assembly.Name.Name))
             {
-                this.Log(string.Format("[{0}] Destroying public key token for module {1}", tag, mod.Assembly.Name.Name));
+                Log(string.Format("[{0}] Destroying public key token for module {1}", tag, mod.Assembly.Name.Name));
                 mod.Assembly.Name.PublicKeyToken = new byte[0];
             }
-            this.Log(string.Format("[{0}] Updating dependencies", tag));
+            Log(string.Format("[{0}] Updating dependencies", tag));
         label_20:
             for (int index = 0; index < mod.AssemblyReferences.Count; ++index)
             {
                 AssemblyNameReference dep = mod.AssemblyReferences[index];
-                foreach (XnaToFnaMapping mapping1 in this.Mappings)
+                foreach (XnaToFnaMapping mapping1 in Mappings)
                 {
                     XnaToFnaMapping mapping = mapping1;
-                    if (mapping.Sources.Contains<string>(dep.Name) && this.Modder.DependencyCache.ContainsKey(mapping.Target))
+                    if (mapping.Sources.Contains(dep.Name) && Modder.DependencyCache.ContainsKey(mapping.Target))
                     {
-                        if (mod.AssemblyReferences.Any<AssemblyNameReference>(existingDep => existingDep.Name == mapping.Target))
+                        if (mod.AssemblyReferences.Any(existingDep => existingDep.Name == mapping.Target))
                         {
                             mod.AssemblyReferences.RemoveAt(index);
                             --index;
@@ -880,52 +882,52 @@ namespace XnaToFna
                         }
                         else
                         {
-                            this.Log(string.Format("[{0}] Replacing dependency {1} -> {2}", tag, dep.Name, mapping.Target));
+                            Log(string.Format("[{0}] Replacing dependency {1} -> {2}", tag, dep.Name, mapping.Target));
                             mod.AssemblyReferences[index] = Modder.DependencyCache[mapping.Target].Assembly.Name;
                             goto label_20;
                         }
                     }
                 }
-                if (this.RemoveDeps.Contains(dep.Name))
+                if (RemoveDeps.Contains(dep.Name))
                 {
-                    this.Log(string.Format("[{0}] Removing unwanted dependency {1}", tag, dep.Name));
+                    Log(string.Format("[{0}] Removing unwanted dependency {1}", tag, dep.Name));
                     mod.AssemblyReferences.RemoveAt(index);
                     --index;
                 }
                 else
                 {
-                    if (this.DestroyPublicKeyTokens.Contains(dep.Name))
+                    if (DestroyPublicKeyTokens.Contains(dep.Name))
                     {
-                        this.Log(string.Format("[{0}] Destroying public key token for dependency {1}", tag, dep.Name));
+                        Log(string.Format("[{0}] Destroying public key token for dependency {1}", tag, dep.Name));
                         dep.PublicKeyToken = new byte[0];
                     }
-                    if (this.ModulesToStub.Any<ModuleDefinition>(stub => stub.Assembly.Name.Name == dep.Name))
+                    if (ModulesToStub.Any(stub => stub.Assembly.Name.Name == dep.Name))
                     {
-                        this.Log(string.Format("[{0}] Fixing stubbed dependency {1}", tag, dep.Name));
+                        Log(string.Format("[{0}] Fixing stubbed dependency {1}", tag, dep.Name));
                         dep.IsWindowsRuntime = false;
                         dep.HasPublicKey = false;
                     }
-                    if (dep.Version == XnaToFnaUtil.DotNetX360Version)
+                    if (dep.Version == DotNetX360Version)
                     {
-                        dep.PublicKeyToken = XnaToFnaUtil.DotNetFrameworkKeyToken;
-                        dep.Version = XnaToFnaUtil.DotNetFramework4Version;
+                        dep.PublicKeyToken = DotNetFrameworkKeyToken;
+                        dep.Version = DotNetFramework4Version;
                     }
                 }
             }
-            if (!mod.AssemblyReferences.Any<AssemblyNameReference>(dep => dep.Name == XnaToFnaUtil.ThisAssemblyName))
+            if (!mod.AssemblyReferences.Any(dep => dep.Name == ThisAssemblyName))
             {
-                this.Log(string.Format("[{0}] Adding dependency XnaToFna", tag));
+                Log(string.Format("[{0}] Adding dependency XnaToFna", tag));
                 mod.AssemblyReferences.Add(Modder.DependencyCache[ThisAssemblyName].Assembly.Name);
             }
             if (mod.Runtime < TargetRuntime.Net_4_0)
                 mod.Runtime = TargetRuntime.Net_4_0;
-            this.Log(string.Format("[{0}] Updating module attributes", tag));
+            Log(string.Format("[{0}] Updating module attributes", tag));
             mod.Attributes &= ~ModuleAttributes.StrongNameSigned;
-            if (this.PreferredPlatform != ILPlatform.Keep)
+            if (PreferredPlatform != ILPlatform.Keep)
             {
                 mod.Architecture = TargetArchitecture.I386;
                 mod.Attributes &= ~(ModuleAttributes.Required32Bit | ModuleAttributes.Preferred32Bit);
-                switch (this.PreferredPlatform)
+                switch (PreferredPlatform)
                 {
                     case ILPlatform.x86:
                         mod.Architecture = TargetArchitecture.I386;
@@ -940,9 +942,9 @@ namespace XnaToFna
                         break;
                 }
             }
-            if (this.ModulesToStub.Count != 0 | (mod.Attributes & ModuleAttributes.ILOnly) != ModuleAttributes.ILOnly)
+            if (ModulesToStub.Count != 0 | (mod.Attributes & ModuleAttributes.ILOnly) != ModuleAttributes.ILOnly)
             {
-                this.Log(string.Format("[{0}] Making assembly unsafe", tag));
+                Log(string.Format("[{0}] Making assembly unsafe", tag));
                 mod.Attributes |= ModuleAttributes.ILOnly;
                 for (int index = 0; index < mod.Assembly.CustomAttributes.Count; ++index)
                 {
@@ -952,33 +954,35 @@ namespace XnaToFna
                         --index;
                     }
                 }
-                if (!mod.CustomAttributes.Any<Mono.Cecil.CustomAttribute>(ca => ca.AttributeType.FullName == "System.Security.UnverifiableCodeAttribute"))
+                if (!mod.CustomAttributes.Any(ca => ca.AttributeType.FullName == "System.Security.UnverifiableCodeAttribute"))
                     mod.AddAttribute(mod.ImportReference(m_UnverifiableCodeAttribute_ctor));
             }
-            this.Log(string.Format("[{0}] Mapping dependencies for MonoMod", tag));
-            this.Modder.MapDependencies(mod);
+            Log(string.Format("[{0}] Mapping dependencies for MonoMod", tag));
+            Modder.MapDependencies(mod);
         }
 
         public void LoadModules()
         {
-            foreach (ModuleDefinition module in this.Modules)
+            foreach (ModuleDefinition module in Modules)
             {
                 // ISSUE: object of a compiler-generated type is created
                 // ISSUE: variable of a compiler-generated type
-                XnaToFnaUtil.ugh ugh = new XnaToFnaUtil.ugh();
-                // ISSUE: reference to a compiler-generated field
-                ugh.mod = module;
+                ugh ugh = new ugh
+                {
+                    // ISSUE: reference to a compiler-generated field
+                    mod = module
+                };
                 // ISSUE: object of a compiler-generated type is created
                 // ISSUE: variable of a compiler-generated type
-                XnaToFnaUtil.thing thing = new XnaToFnaUtil.thing();
+                thing thing = new thing();
                 // ISSUE: reference to a compiler-generated method
                 // ISSUE: reference to a compiler-generated field
                 // ISSUE: reference to a compiler-generated field
-                if (!this.Mappings.Exists(new Predicate<XnaToFnaMapping>(ugh.ifnamenot)) && !(ugh.mod.Assembly.Name.Name == XnaToFnaUtil.ThisAssemblyName) && !this.ModulesToStub.Contains(ugh.mod))
+                if (!Mappings.Exists(new Predicate<XnaToFnaMapping>(ugh.ifnamenot)) && !(ugh.mod.Assembly.Name.Name == ThisAssemblyName) && !ModulesToStub.Contains(ugh.mod))
                 {
                     // ISSUE: reference to a compiler-generated field
                     // ISSUE: reference to a compiler-generated field
-                    thing.asm = Assembly.LoadFile(this.ModulePaths[ugh.mod]);
+                    thing.asm = Assembly.LoadFile(ModulePaths[ugh.mod]);
                     // ISSUE: reference to a compiler-generated method
                     AppDomain.CurrentDomain.TypeResolve += new ResolveEventHandler(thing.TypeResolve);
                     // ISSUE: reference to a compiler-generated method
@@ -1013,47 +1017,47 @@ namespace XnaToFna
 
         public void Dispose()
         {
-            this.Modder?.Dispose();
-            foreach (ModuleDefinition module in this.Modules)
+            Modder?.Dispose();
+            foreach (ModuleDefinition module in Modules)
                 module.Dispose();
-            this.Modules.Clear();
-            this.ModulesToStub.Clear();
-            this.Directories.Clear();
+            Modules.Clear();
+            ModulesToStub.Clear();
+            Directories.Clear();
         }
 
         public Assembly RelinkToAssemblyInMemory(ModuleDefinition mod)
         {
-            if (this.Mappings.Exists(new Predicate<XnaToFnaMapping>(mappings => mod.Assembly.Name.Name == mappings.Target)))
+            if (Mappings.Exists(new Predicate<XnaToFnaMapping>(mappings => mod.Assembly.Name.Name == mappings.Target)))
                 return null;
-            if (this.ModulesToStub.Contains(mod))
+            if (ModulesToStub.Contains(mod))
                 return null;
-            if (mod.Assembly.Name.Name == XnaToFnaUtil.ThisAssemblyName)
+            if (mod.Assembly.Name.Name == ThisAssemblyName)
                 return null;
-            this.Log(string.Format("[Relink] Relinking {0}", mod.Assembly.Name.Name));
-            this.Modder.Module = mod;
-            this.ApplyCommonChanges(mod);
-            this.Log("[Relink] Pre-processing");
+            Log(string.Format("[Relink] Relinking {0}", mod.Assembly.Name.Name));
+            Modder.Module = mod;
+            ApplyCommonChanges(mod);
+            Log("[Relink] Pre-processing");
             foreach (TypeDefinition type in mod.Types)
-                this.PreProcessType(type);
-            this.Log("[Relink] Relinking (MonoMod PatchRefs pass)");
-            this.Modder.PatchRefs();
-            this.Log("[Relink] Post-processing");
+                PreProcessType(type);
+            Log("[Relink] Relinking (MonoMod PatchRefs pass)");
+            Modder.PatchRefs();
+            Log("[Relink] Post-processing");
             foreach (TypeDefinition type in mod.Types)
-                this.PostProcessType(type);
-            if (this.HookEntryPoint && mod.EntryPoint != null)
+                PostProcessType(type);
+            if (HookEntryPoint && mod.EntryPoint != null)
             {
-                this.Log("[Relink] Injecting XnaToFna entry point hook");
+                Log("[Relink] Injecting XnaToFna entry point hook");
                 ILProcessor ilProcessor = mod.EntryPoint.Body.GetILProcessor();
                 Instruction instruction = ilProcessor.Create(OpCodes.Call, mod.ImportReference(m_XnaToFnaHelper_MainHook));
                 ilProcessor.InsertBefore(mod.EntryPoint.Body.Instructions[0], instruction);
                 ilProcessor.InsertBefore(instruction, ilProcessor.Create(OpCodes.Ldarg_0));
             }
-            this.Log("[Relink] Rewriting and disposing module\n");
+            Log("[Relink] Rewriting and disposing module\n");
             byte[] assemblybytes;
             using (MemoryStream memStream = new MemoryStream())
             {
                 FieldInfo ImageField = typeof(ModuleDefinition).GetField("Image", BindingFlags.NonPublic | BindingFlags.Instance);
-                this.Modder.Module.Write(memStream, this.Modder.WriterParameters, this.Modder.Module.Image.Stream.value.GetFileName());//this.Modder.Module.Image.Stream.value.GetFileName()
+                Modder.Module.Write(memStream, Modder.WriterParameters, Modder.Module.Image.Stream.value.GetFileName());//this.Modder.Module.Image.Stream.value.GetFileName()
                 //mod.Assembly.MainModule.Name
                 assemblybytes = memStream.ToArray();
             }
@@ -1066,41 +1070,41 @@ namespace XnaToFna
         }
         public Assembly RelinkToAssemblyToFile(ModuleDefinition mod, string path)
         {
-            if (this.Mappings.Exists(new Predicate<XnaToFnaMapping>(mappings => mod.Assembly.Name.Name == mappings.Target)))
+            if (Mappings.Exists(new Predicate<XnaToFnaMapping>(mappings => mod.Assembly.Name.Name == mappings.Target)))
                 return null;
-            if (this.ModulesToStub.Contains(mod))
+            if (ModulesToStub.Contains(mod))
                 return null;
-            if (mod.Assembly.Name.Name == XnaToFnaUtil.ThisAssemblyName)
+            if (mod.Assembly.Name.Name == ThisAssemblyName)
                 return null;
             if (File.Exists(path))
             {
                 File.Delete(path);
             }
-            this.Log(string.Format("[Relink] Relinking {0}", mod.Assembly.Name.Name));
-            this.Modder.Module = mod;
-            this.ApplyCommonChanges(mod);
-            this.Log("[Relink] Pre-processing");
+            Log(string.Format("[Relink] Relinking {0}", mod.Assembly.Name.Name));
+            Modder.Module = mod;
+            ApplyCommonChanges(mod);
+            Log("[Relink] Pre-processing");
             foreach (TypeDefinition type in mod.Types)
-                this.PreProcessType(type);
-            this.Log("[Relink] Relinking (MonoMod PatchRefs pass)");
-            this.Modder.PatchRefs();
-            this.Log("[Relink] Post-processing");
+                PreProcessType(type);
+            Log("[Relink] Relinking (MonoMod PatchRefs pass)");
+            Modder.PatchRefs();
+            Log("[Relink] Post-processing");
             foreach (TypeDefinition type in mod.Types)
-                this.PostProcessType(type);
-            if (this.HookEntryPoint && mod.EntryPoint != null)
+                PostProcessType(type);
+            if (HookEntryPoint && mod.EntryPoint != null)
             {
-                this.Log("[Relink] Injecting XnaToFna entry point hook");
+                Log("[Relink] Injecting XnaToFna entry point hook");
                 ILProcessor ilProcessor = mod.EntryPoint.Body.GetILProcessor();
                 Instruction instruction = ilProcessor.Create(OpCodes.Call, mod.ImportReference(m_XnaToFnaHelper_MainHook));
                 ilProcessor.InsertBefore(mod.EntryPoint.Body.Instructions[0], instruction);
                 ilProcessor.InsertBefore(instruction, ilProcessor.Create(OpCodes.Ldarg_0));
             }
-            this.Log("[Relink] Rewriting and disposing module\n");
+            Log("[Relink] Rewriting and disposing module\n");
             byte[] assemblybytes;
             using (FileStream fs = File.Create(path))
             {
                 //FieldInfo ImageField = typeof(ModuleDefinition).GetField("Image", BindingFlags.NonPublic | BindingFlags.Instance);
-                this.Modder.Module.Write(fs, this.Modder.WriterParameters);//this.Modder.Module.Image.Stream.value.GetFileName()
+                Modder.Module.Write(fs, Modder.WriterParameters);//this.Modder.Module.Image.Stream.value.GetFileName()
                 //mod.Assembly.MainModule.Name
                 //assemblybytes = memStream.ToArray();
             }
@@ -1136,13 +1140,13 @@ namespace XnaToFna
 
             internal bool OrderModules(ModuleDefinition other)
             {
-                this.filler.dep = other;
-                return other.Assembly.Name.Name == this.depName.Name;
+                filler.dep = other;
+                return other.Assembly.Name.Name == depName.Name;
             }
 
             public AssemblyNameReference depName;
 
-            public XnaToFnaUtil.fuller filler;
+            public fuller filler;
         }
         private sealed class thing
         {
@@ -1150,22 +1154,22 @@ namespace XnaToFna
 
             internal Assembly TypeResolve(object sender, ResolveEventArgs args)
             {
-                if (!(this.asm.GetType(args.Name) != null))
+                if (!(asm.GetType(args.Name) != null))
                 {
                     DevConsole.Log("fckk122kty" + args.Name + "fckk122kty");
                     return null;
                 }
-                return this.asm;
+                return asm;
             }
 
             internal Assembly AssemblyResolve(object sender, ResolveEventArgs args)
             {
-                if (!(args.Name == this.asm.FullName) && !(args.Name == this.asm.GetName().Name))
+                if (!(args.Name == asm.FullName) && !(args.Name == asm.GetName().Name))
                 {
                     DevConsole.Log("fckk122k" + args.Name + "fckk122k");
                     return null;
                 }
-                return this.asm;
+                return asm;
             }
 
             public Assembly asm;
@@ -1176,7 +1180,7 @@ namespace XnaToFna
 
             internal bool ifnamenot(XnaToFnaMapping mappings)
             {
-                return this.mod.Assembly.Name.Name == mappings.Target;
+                return mod.Assembly.Name.Name == mappings.Target;
             }
 
             public ModuleDefinition mod;
@@ -1185,7 +1189,7 @@ namespace XnaToFna
         {
             public ModuleDefinition mod;
 
-            internal bool Relinkthing(XnaToFnaMapping mappings) => this.mod.Assembly.Name.Name == mappings.Target;
+            internal bool Relinkthing(XnaToFnaMapping mappings) => mod.Assembly.Name.Name == mappings.Target;
         }
     }
 

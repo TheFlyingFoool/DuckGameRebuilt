@@ -6,7 +6,6 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DuckGame
 {
@@ -38,7 +37,7 @@ namespace DuckGame
             _font = new BitmapFont("biosFontUI", 8, 7);
             _fancyFont = new FancyBitmapFont("smallFont");
             _unlocks = unlocks;
-            _unlock = _unlocks.First<Unlockable>();
+            _unlock = _unlocks[0];
         }
 
         public override void Open() => base.Open();
@@ -64,7 +63,7 @@ namespace DuckGame
                         _openWait = 1f;
                         _wrapped = true;
                         _downWait = 1f;
-                        _unlock = _unlocks.First<Unlockable>();
+                        _unlock = _unlocks[0];
                         _unlocks.RemoveAt(0);
                         down = false;
                         SFX.Play("pause", 0.6f);
@@ -98,7 +97,7 @@ namespace DuckGame
                 }
                 else
                     Graphics.flashAdd = Lerp.Float(Graphics.flashAdd, 0f, 0.2f);
-                if (!_wrapped && Input.Pressed("SELECT"))
+                if (!_wrapped && Input.Pressed(Triggers.Select))
                 {
                     HUD.CloseAllCorners();
                     SFX.Play("resume", 0.6f);

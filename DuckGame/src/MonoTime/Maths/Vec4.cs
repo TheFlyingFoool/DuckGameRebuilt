@@ -25,17 +25,17 @@ namespace DuckGame
         public float z;
         public float w;
 
-        public static Vec4 Zero => Vec4.zeroVector;
+        public static Vec4 Zero => zeroVector;
 
-        public static Vec4 One => Vec4.unitVector;
+        public static Vec4 One => unitVector;
 
-        public static Vec4 UnitX => Vec4.unitXVector;
+        public static Vec4 UnitX => unitXVector;
 
-        public static Vec4 UnitY => Vec4.unitYVector;
+        public static Vec4 UnitY => unitYVector;
 
-        public static Vec4 UnitZ => Vec4.unitZVector;
+        public static Vec4 UnitZ => unitZVector;
 
-        public static Vec4 UnitW => Vec4.unitWVector;
+        public static Vec4 UnitW => unitWVector;
 
         public Vec4(float x, float y, float z, float w)
         {
@@ -333,7 +333,7 @@ namespace DuckGame
         public static Vec4 Transform(Vec2 position, Matrix matrix)
         {
             Vec4 result;
-            Vec4.Transform(ref position, ref matrix, out result);
+            Transform(ref position, ref matrix, out result);
             return result;
         }
 
@@ -384,13 +384,13 @@ namespace DuckGame
         public static Vec4 Transform(Vec3 position, Matrix matrix)
         {
             Vec4 result;
-            Vec4.Transform(ref position, ref matrix, out result);
+            Transform(ref position, ref matrix, out result);
             return result;
         }
 
         public static Vec4 Transform(Vec4 vector, Matrix matrix)
         {
-            Vec4.Transform(ref vector, ref matrix, out vector);
+            Transform(ref vector, ref matrix, out vector);
             return vector;
         }
 

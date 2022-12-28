@@ -41,7 +41,7 @@ namespace CrashWindow// this is a replacement for the class DG used to use insid
 
         public static void SendBugReport(string pVersion, string pMods, string pAssembly, string pException, string pLogMessage, string pComment)
         {
-            CrashWindow.SendBugReportBase64(pVersion, CrashWindow.Base64SQLEncode(pMods), CrashWindow.Base64SQLEncode(pAssembly), CrashWindow.Base64SQLEncode(pException), CrashWindow.Base64SQLEncode(pLogMessage), CrashWindow.Base64SQLEncode(pComment));
+            SendBugReportBase64(pVersion, Base64SQLEncode(pMods), Base64SQLEncode(pAssembly), Base64SQLEncode(pException), Base64SQLEncode(pLogMessage), Base64SQLEncode(pComment));
         }
 
         public static void SendBugReportBase64(string pVersionNonB64, string pModsB64, string pAssemblyB64, string pExceptionB64, string pLogMessageB64, string pCommentB64)
@@ -57,7 +57,7 @@ namespace CrashWindow// this is a replacement for the class DG used to use insid
             data = data + "&comment=" + pCommentB64;
             byte[] byteArray = Encoding.UTF8.GetBytes(data);
             httpWebRequest.ContentType = "application/x-www-form-urlencoded;charset=utf-8";
-            httpWebRequest.ContentLength = (long)byteArray.Length;
+            httpWebRequest.ContentLength = byteArray.Length;
             Stream requestStream = httpWebRequest.GetRequestStream();
             requestStream.Write(byteArray, 0, byteArray.Length);
             requestStream.Close();

@@ -26,16 +26,16 @@ namespace XnaToFna
 
         public static void Initialize(XnaToFnaGame game)
         {
-            XnaToFnaHelper.Game = game;
+            Game = game;
             TextInputEXT.TextInput += new Action<char>(KeyboardEvents.CharEntered);
             if (Environment.GetEnvironmentVariable("FNADROID") != "1")
                 TextInputEXT.StartTextInput();
-            game.Window.ClientSizeChanged += new EventHandler<EventArgs>(XnaToFnaHelper.SDLWindowSizeChanged);
+            game.Window.ClientSizeChanged += new EventHandler<EventArgs>(SDLWindowSizeChanged);
             string environmentVariable = Environment.GetEnvironmentVariable("FNA_GAMEPAD_NUM_GAMEPADS");
-            if (string.IsNullOrEmpty(environmentVariable) || !int.TryParse(environmentVariable, out XnaToFnaHelper.MaximumGamepadCount) || XnaToFnaHelper.MaximumGamepadCount < 0)
-                XnaToFnaHelper.MaximumGamepadCount = Enum.GetNames(typeof(PlayerIndex)).Length;
-            DeviceEvents.IsGamepadConnected = new bool[XnaToFnaHelper.MaximumGamepadCount];
-            XnaToFnaHelper.PlatformHook("ApplyWindowChanges");
+            if (string.IsNullOrEmpty(environmentVariable) || !int.TryParse(environmentVariable, out MaximumGamepadCount) || MaximumGamepadCount < 0)
+                MaximumGamepadCount = Enum.GetNames(typeof(PlayerIndex)).Length;
+            DeviceEvents.IsGamepadConnected = new bool[MaximumGamepadCount];
+            PlatformHook("ApplyWindowChanges");
         }
 
         public static void Log(string s)
@@ -43,15 +43,16 @@ namespace XnaToFna
             Console.Write("[XnaToFnaHelper] ");
             Console.WriteLine(s);
         }
-
+        public static System.Windows.Forms.Form fillinform;
         public static IntPtr GetProxyFormHandle(this GameWindow window)
         {
             if (GameForm.Instance == null)
             {
-                XnaToFnaHelper.Log("[ProxyForms] Creating game ProxyForms.GameForm");
+                fillinform = new System.Windows.Forms.Form();
+                Log("[ProxyForms] Creating game ProxyForms.GameForm");
                 GameForm.Instance = new GameForm();
             }
-            return GameForm.Instance.Handle;
+            return fillinform.Handle;//GameForm.Instance.Handle;
         }
         public static DirectoryInfo DirectoryCreateDirectory(string path)
         {
@@ -269,19 +270,19 @@ namespace XnaToFna
             DeviceEvents.Update();
         }
 
-        public static T GetService<T>() where T : class => (T)XnaToFnaHelper.Game.Services.GetService(typeof(T));
+        public static T GetService<T>() where T : class => (T)Game.Services.GetService(typeof(T));
 
         public static B GetService<A, B>()
         where A : class
         where B : class, A
         {
-            return XnaToFnaHelper.Game.Services.GetService(typeof(A)) as B;
+            return Game.Services.GetService(typeof(A)) as B;
         }
 
         public static void PlatformHook(string name)
         {
             Type type = typeof(XnaToFnaHelper);
-            Assembly assembly = Assembly.GetAssembly(typeof(Microsoft.Xna.Framework.Game));
+            Assembly assembly = Assembly.GetAssembly(typeof(Game));
             FieldInfo field = assembly.GetType("Microsoft.Xna.Framework.FNAPlatform").GetField(name);
             type.GetField(string.Format("fna_{0}", name)).SetValue(null, field.GetValue(null));
             field.SetValue(null, Delegate.CreateDelegate(assembly.GetType(string.Format("Microsoft.Xna.Framework.FNAPlatform+{0}Func", name)), type.GetMethod(name)));
@@ -355,7 +356,7 @@ namespace XnaToFna
          screenDeviceName,
          resultDeviceName
       };
-            XnaToFnaHelper.fna_ApplyWindowChanges.DynamicInvoke(objArray);
+            fna_ApplyWindowChanges.DynamicInvoke(objArray);
             resultDeviceName = (string)objArray[5];
             GameForm.Instance?.SDLWindowChanged(window, clientWidth, clientHeight, wantsFullscreen, screenDeviceName, ref resultDeviceName);
             int num = resultDeviceName != screenDeviceName ? 1 : 0;

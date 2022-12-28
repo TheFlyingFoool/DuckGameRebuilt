@@ -13,7 +13,7 @@ namespace DuckGame
     {
         private float _range = 1f;
 
-        public override System.Type type => typeof(int);
+        public override Type type => typeof(int);
 
         public int GetCompressedFloat(float val)
         {
@@ -39,15 +39,15 @@ namespace DuckGame
         public override object ReadNetValue(object val)
         {
             float num = (int)val;
-            long num2 = BitBuffer.GetMaxValue(this._bits) / 2L;
-            return num / num2 * this._range;
+            long num2 = BitBuffer.GetMaxValue(_bits) / 2L;
+            return num / num2 * _range;
         }
 
         public override object ReadNetValue(BitBuffer pData)
         {
-            float num = (int)pData.ReadBits(this.type, this.bits);
-            long num2 = BitBuffer.GetMaxValue(this._bits) / 2L;
-            return num / num2 * this._range;
+            float num = (int)pData.ReadBits(type, bits);
+            long num2 = BitBuffer.GetMaxValue(_bits) / 2L;
+            return num / num2 * _range;
         }
 
         public CompressedFloatBinding(string field, float range = 1f, int bits = 16, bool isRot = false, bool doLerp = false)
@@ -55,7 +55,7 @@ namespace DuckGame
         {
             _range = range;
             if (isRot)
-                _range = 6.2831855f;
+                _range = (float)(Math.PI * 2.0f);
             _lerp = doLerp;
         }
 
@@ -65,7 +65,7 @@ namespace DuckGame
             _range = range;
             if (!isRot)
                 return;
-            _range = 6.2831855f;
+            _range = (float)(Math.PI * 2.0f);
         }
 
         public CompressedFloatBinding(
@@ -79,7 +79,7 @@ namespace DuckGame
         {
             _range = range;
             if (isRot)
-                _range = 6.2831855f;
+                _range = (float)(Math.PI * 2.0f);
             _priority = p;
             _lerp = doLerp;
         }

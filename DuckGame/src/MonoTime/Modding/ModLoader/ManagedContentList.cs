@@ -21,9 +21,9 @@ namespace DuckGame
             _types.Add(type);
         }
 
-        internal IEnumerable<System.Type> AllSortedTypes => _types.OrderBy<System.Type, string>(t => t.FullName).OrderBy(type => type.IsDefined(typeof(ClientOnlyAttribute), false) ? 1 : 0); // Dan
+        internal IEnumerable<System.Type> AllSortedTypes => _types.OrderBy(t => t.FullName).OrderBy(type => type.IsDefined(typeof(ClientOnlyAttribute), false) ? 1 : 0); // Dan
         //(type.IsSubclassOf(parentType) && (Editor.clientonlycontent || !type.IsDefined(typeof(ClientOnlyAttribute), false)))
-        internal IEnumerable<System.Type> SortedTypes => _types.Where<System.Type>(type => (Editor.clientonlycontent || !type.IsDefined(typeof(ClientOnlyAttribute), false))).OrderBy<System.Type, string>(t => t.FullName).OrderBy(type => type.IsDefined(typeof(ClientOnlyAttribute), false) ? 1 : 0);
+        internal IEnumerable<System.Type> SortedTypes => _types.Where(type => (Editor.clientonlycontent || !type.IsDefined(typeof(ClientOnlyAttribute), false))).OrderBy(t => t.FullName).OrderBy(type => type.IsDefined(typeof(ClientOnlyAttribute), false) ? 1 : 0);
 
         /// <summary>Gets the registered types.</summary>
         /// <value>The types registered.</value>

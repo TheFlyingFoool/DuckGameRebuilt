@@ -44,27 +44,27 @@ namespace DuckGame
                     break;
                 }
             }
-            if (Input._dinputEnabled)
-            {
-                List<string> stringList = new List<string>();
-                for (int index = 0; index < 8; ++index)
-                {
-                    if (DInput.GetState(index) != null)
-                    {
-                        string productName = DInput.GetProductName(index);
-                        string productGuid = DInput.GetProductGUID(index);
-                        string str = productName + productGuid;
-                        if (!stringList.Contains(str))
-                        {
-                            stringList.Add(str);
-                            inputMaps.Add(Input.GetDefaultMapping(productName, productGuid).Clone());
-                            if (productName.Length > 24)
-                                productName = productName.Substring(0, 24);
-                            inputTypes.Add(productName);
-                        }
-                    }
-                }
-            }
+            //if (Input._dinputEnabled)
+            //{
+            //    List<string> stringList = new List<string>();
+            //    for (int index = 0; index < 8; ++index)
+            //    {
+            //        if (DInput.GetState(index) != null)
+            //        {
+            //            string productName = DInput.GetProductName(index);
+            //            string productGuid = DInput.GetProductGUID(index);
+            //            string str = productName + productGuid;
+            //            if (!stringList.Contains(str))
+            //            {
+            //                stringList.Add(str);
+            //                inputMaps.Add(Input.GetDefaultMapping(productName, productGuid).Clone());
+            //                if (productName.Length > 24)
+            //                    productName = productName.Substring(0, 24);
+            //                inputTypes.Add(productName);
+            //            }
+            //        }
+            //    }
+            //}
             inputTypes.Add("KEYBOARD P1");
             inputMaps.Add(Input.GetDefaultMapping("KEYBOARD P1", "").Clone());
             inputTypes.Add("KEYBOARD P2");
@@ -145,53 +145,53 @@ namespace DuckGame
             _configuringToggle = new UIMenuItemToggle("", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(SwitchConfigType)), new FieldBinding(this, nameof(inputConfigType)), multi: inputTypes, compressedMulti: true, tiny: true);
             uiBox.Add(_configuringToggle, true);
             UIText uiText = new UIText(" ", Color.White);
-            _controlElements.Add(new UIControlElement("|DGBLUE|{LEFT", "LEFT", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            _controlElements.Add(new UIControlElement("|DGBLUE|{LEFT", Triggers.Left, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
             uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            _controlElements.Add(new UIControlElement("|DGBLUE|/RIGHT", "RIGHT", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            _controlElements.Add(new UIControlElement("|DGBLUE|/RIGHT", Triggers.Right, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
             uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            _controlElements.Add(new UIControlElement("|DGBLUE|}UP", "UP", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            _controlElements.Add(new UIControlElement("|DGBLUE|}UP", Triggers.Up, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
             uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            _controlElements.Add(new UIControlElement("|DGBLUE|~DOWN", "DOWN", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            _controlElements.Add(new UIControlElement("|DGBLUE|~DOWN", Triggers.Down, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
             uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            _controlElements.Add(new UIControlElement("|DGBLUE|JUMP", "JUMP", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            _controlElements.Add(new UIControlElement("|DGBLUE|JUMP", Triggers.Jump, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
             uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            _controlElements.Add(new UIControlElement("|DGBLUE|FIRE", "SHOOT", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            _controlElements.Add(new UIControlElement("|DGBLUE|FIRE", Triggers.Shoot, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
             uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            _controlElements.Add(new UIControlElement("|DGBLUE|GRAB", "GRAB", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            _controlElements.Add(new UIControlElement("|DGBLUE|GRAB", Triggers.Grab, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
             uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            _controlElements.Add(new UIControlElement("|DGBLUE|QUACK", "QUACK", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            _controlElements.Add(new UIControlElement("|DGBLUE|QUACK", Triggers.Quack, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
             uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            _controlElements.Add(new UIControlElement("|DGBLUE|STRAFE", "STRAFE", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            _controlElements.Add(new UIControlElement("|DGBLUE|STRAFE", Triggers.Strafe, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
             uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            _controlElements.Add(new UIControlElement("|DGBLUE|RAGDOLL", "RAGDOLL", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
-            uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            uiBox.Add(new UIText(" ", Color.White, heightAdd: -6f), true);
-            _controlElements.Add(new UIControlElement("|DGPURPLE|{MENU LEFT", "MENULEFT", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
-            uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            _controlElements.Add(new UIControlElement("|DGPURPLE|/MENU RIGHT", "MENURIGHT", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
-            uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            _controlElements.Add(new UIControlElement("|DGPURPLE|}MENU UP", "MENUUP", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
-            uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            _controlElements.Add(new UIControlElement("|DGPURPLE|~MENU DOWN", "MENUDOWN", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
-            uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            _controlElements.Add(new UIControlElement("|DGPURPLE|ACCEPT", "SELECT", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
-            uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            _controlElements.Add(new UIControlElement("|DGPURPLE|MENU 1", "MENU1", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
-            uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            _controlElements.Add(new UIControlElement("|DGPURPLE|MENU 2", "MENU2", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
-            uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            _controlElements.Add(new UIControlElement("|DGPURPLE|CANCEL", "CANCEL", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
-            uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            _controlElements.Add(new UIControlElement("|DGPURPLE|START", "START", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            _controlElements.Add(new UIControlElement("|DGBLUE|RAGDOLL", Triggers.Ragdoll, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
             uiBox.Add(_controlElements[_controlElements.Count - 1], true);
             uiBox.Add(new UIText(" ", Color.White, heightAdd: -6f), true);
-            _controlElements.Add(new UIControlElement("|DGGREEN|MOVE STICK", "LSTICK", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            _controlElements.Add(new UIControlElement("|DGPURPLE|{MENU LEFT", Triggers.MenuLeft, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
             uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            _controlElements.Add(new UIControlElement("|DGGREEN|LICK STICK", "RSTICK", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            _controlElements.Add(new UIControlElement("|DGPURPLE|/MENU RIGHT", Triggers.MenuRight, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
             uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            _controlElements.Add(new UIControlElement("|DGGREEN|QUACK PITCH", "LTRIGGER", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            _controlElements.Add(new UIControlElement("|DGPURPLE|}MENU UP", Triggers.MenuUp, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
             uiBox.Add(_controlElements[_controlElements.Count - 1], true);
-            _controlElements.Add(new UIControlElement("|DGGREEN|ZOOM   ", "RTRIGGER", new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            _controlElements.Add(new UIControlElement("|DGPURPLE|~MENU DOWN", Triggers.MenuDown, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(_controlElements[_controlElements.Count - 1], true);
+            _controlElements.Add(new UIControlElement("|DGPURPLE|ACCEPT", Triggers.Select, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(_controlElements[_controlElements.Count - 1], true);
+            _controlElements.Add(new UIControlElement("|DGPURPLE|MENU 1", Triggers.Menu1, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(_controlElements[_controlElements.Count - 1], true);
+            _controlElements.Add(new UIControlElement("|DGPURPLE|MENU 2", Triggers.Menu2, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(_controlElements[_controlElements.Count - 1], true);
+            _controlElements.Add(new UIControlElement("|DGPURPLE|CANCEL", Triggers.Cancel, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(_controlElements[_controlElements.Count - 1], true);
+            _controlElements.Add(new UIControlElement("|DGPURPLE|START", Triggers.Start, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(_controlElements[_controlElements.Count - 1], true);
+            uiBox.Add(new UIText(" ", Color.White, heightAdd: -6f), true);
+            _controlElements.Add(new UIControlElement("|DGGREEN|MOVE STICK", Triggers.LeftStick, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(_controlElements[_controlElements.Count - 1], true);
+            _controlElements.Add(new UIControlElement("|DGGREEN|LICK STICK", Triggers.RightStick, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(_controlElements[_controlElements.Count - 1], true);
+            _controlElements.Add(new UIControlElement("|DGGREEN|QUACK PITCH", Triggers.LeftTrigger, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(_controlElements[_controlElements.Count - 1], true);
+            _controlElements.Add(new UIControlElement("|DGGREEN|ZOOM   ", Triggers.RightTrigger, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
             uiBox.Add(_controlElements[_controlElements.Count - 1], true);
             UIMenuItem component1 = new UIMenuItem("|RED|REVERT TO DEFAULT", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(ResetToDefault)));
             component1.SetFont(bitmapFont);
@@ -293,12 +293,12 @@ namespace DuckGame
 
         public static void ResetWarning()
         {
-            UIControlConfig.showWarning = false;
+            showWarning = false;
             foreach (Profile profile in Profiles.active)
             {
                 if (profile.inputMappingOverrides != null && profile.inputMappingOverrides.Count > 0)
                 {
-                    UIControlConfig.showWarning = true;
+                    showWarning = true;
                     break;
                 }
             }
@@ -314,13 +314,13 @@ namespace DuckGame
         {
             if (open)
             {
-                if (!UIMenu.globalUILock && UIControlConfig.showWarning)
+                if (!globalUILock && showWarning)
                 {
                     new UIMenuActionOpenMenu(this, _warningMenu).Activate();
-                    UIControlConfig.showWarning = false;
+                    showWarning = false;
                     return;
                 }
-                if (!UIMenu.globalUILock && (Input.Pressed("CANCEL") || Keyboard.Pressed(Keys.OemTilde)))
+                if (!globalUILock && (Input.Pressed(Triggers.Cancel) || Keyboard.Pressed(Keys.OemTilde)))
                 {
                     new UIMenuActionOpenMenu(this, _confirmMenu).Activate();
                     return;

@@ -17,7 +17,7 @@ namespace XnaToFna.ProxyForms
         public Form Form;
         protected bool _IsDisposed;
 
-        public IntPtr Handle => (IntPtr)this.GlobalIndex;
+        public IntPtr Handle => (IntPtr)GlobalIndex;
 
         public static Point MousePosition => Cursor.Position;
 
@@ -25,7 +25,7 @@ namespace XnaToFna.ProxyForms
 
         protected virtual Rectangle _ClientRectangle { get; set; }
 
-        public Rectangle ClientRectangle => this._ClientRectangle;
+        public Rectangle ClientRectangle => _ClientRectangle;
 
         public virtual Point Location { get; set; }
 
@@ -47,31 +47,31 @@ namespace XnaToFna.ProxyForms
 
         public event EventHandler MouseLeave;
 
-        public bool IsDisposed => this._IsDisposed;
+        public bool IsDisposed => _IsDisposed;
 
         public Control()
         {
-            this.GlobalIndex = Control.AllControls.Count + 1;
+            GlobalIndex = AllControls.Count + 1;
             XnaToFnaHelper.Log(string.Format("[ProxyForms] Creating control {0}, globally #{1}", GetType().Name, GlobalIndex));
-            Control.AllControls.Add(new WeakReference<Control>(this));
+            AllControls.Add(new WeakReference<Control>(this));
         }
 
         public static Control FromHandle(IntPtr ptr)
         {
             int index = (int)ptr - 1;
-            if (index < 0 || Control.AllControls.Count <= index)
+            if (index < 0 || AllControls.Count <= index)
                 return null;
-            WeakReference<Control> allControl = Control.AllControls[index];
+            WeakReference<Control> allControl = AllControls[index];
             Control target;
             if (allControl != null && allControl.TryGetTarget(out target))
                 return target;
-            Control.AllControls[index] = null;
+            AllControls[index] = null;
             return null;
         }
 
-        public Form FindForm() => this.Form ?? GameForm.Instance;
+        public Form FindForm() => Form ?? GameForm.Instance;
 
-        public void SetBounds(int x, int y, int w, int h) => this.Bounds = new Rectangle(x, y, w, h);
+        public void SetBounds(int x, int y, int w, int h) => Bounds = new Rectangle(x, y, w, h);
 
         protected virtual void CreateHandle()
         {
@@ -89,23 +89,23 @@ namespace XnaToFna.ProxyForms
 
         public Rectangle RectangleToScreen(Rectangle r)
         {
-            Rectangle bounds = this.Bounds;
+            Rectangle bounds = Bounds;
             return new Rectangle(r.X + bounds.X, r.Y + bounds.Y, r.Width, r.Height);
         }
 
         public Rectangle RectangleToClient(Rectangle r)
         {
-            Rectangle bounds = this.Bounds;
+            Rectangle bounds = Bounds;
             return new Rectangle(r.X - bounds.X, r.Y - bounds.Y, r.Width, r.Height);
         }
 
-        public void Dispose() => this.Dispose(true);
+        public void Dispose() => Dispose(true);
 
         protected virtual void Dispose(bool disposing)
         {
-            if (this._IsDisposed)
+            if (_IsDisposed)
                 return;
-            this._IsDisposed = true;
+            _IsDisposed = true;
         }
 
         protected virtual void SetVisibleCore(bool visible)

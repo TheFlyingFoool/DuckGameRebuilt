@@ -19,8 +19,8 @@ namespace DuckGame
         private bool Cache(string lev, bool result)
         {
             Dictionary<bool, bool> dictionary;
-            if (!LSFilterMods._filters.TryGetValue(lev, out dictionary))
-                LSFilterMods._filters[lev] = dictionary = new Dictionary<bool, bool>();
+            if (!_filters.TryGetValue(lev, out dictionary))
+                _filters[lev] = dictionary = new Dictionary<bool, bool>();
             dictionary[_isOnline] = result;
             return result;
         }
@@ -31,7 +31,7 @@ namespace DuckGame
             {
                 Dictionary<bool, bool> dictionary = null;
                 bool flag;
-                if (LSFilterMods._filters.TryGetValue(lev, out dictionary) && dictionary.TryGetValue(_isOnline, out flag))
+                if (_filters.TryGetValue(lev, out dictionary) && dictionary.TryGetValue(_isOnline, out flag))
                     return flag;
                 LevelData levelData = DuckFile.LoadLevelHeaderCached(lev);
                 if (levelData == null)

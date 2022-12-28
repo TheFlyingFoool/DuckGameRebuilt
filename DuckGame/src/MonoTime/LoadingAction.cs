@@ -13,6 +13,7 @@ namespace DuckGame
     public class LoadingAction
     {
         private bool actionInvoked;
+        public string label = "";
         public bool flag;
         public bool waiting;
         public object context;
@@ -24,10 +25,11 @@ namespace DuckGame
         {
         }
 
-        public LoadingAction(Action pAction, Func<bool> pWaitAction = null)
+        public LoadingAction(Action pAction, Func<bool> pWaitAction = null, string label = "")
         {
             action = pAction;
             waitAction = pWaitAction;
+            this.label = label;
         }
 
         public bool Invoke()
@@ -54,21 +56,28 @@ namespace DuckGame
                 if (loadingAction.Invoke())
                 {
                     actions.Dequeue();
+                    MonoMain.NloadMessage = "invoke load action " + loadingAction.label;
                     return false;
                 }
                 if (loadingAction.waiting)
                 {
                     waiting = true;
+                    MonoMain.NloadMessage = "invoke Load action waiting " + loadingAction.label; ;
                     return false;
                 }
             }
             if (actions.Count > 0)
+            {
+                MonoMain.NloadMessage = "actions count " + actions.Count.ToString();
                 return false;
+            }
             if (waitAction != null)
             {
+                MonoMain.NloadMessage = "invoke waitAction";
                 waiting = true;
                 return waitAction();
             }
+            MonoMain.NloadMessage = "5 invoke";
             waiting = false;
             return true;
         }

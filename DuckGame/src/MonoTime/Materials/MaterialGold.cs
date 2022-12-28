@@ -26,14 +26,14 @@ namespace DuckGame
         }
         public override void Apply()
         {
-            if (this.batchItem != null && this.batchItem.NormalTexture != null && DuckGame.Content.offests.ContainsKey("bigGold") && DuckGame.Content.offests.ContainsKey(this.batchItem.NormalTexture.Namebase))
+            if (batchItem != null && batchItem.NormalTexture != null && batchItem.NormalTexture.Namebase != null && Content.offests.ContainsKey("bigGold") && Content.offests.ContainsKey(batchItem.NormalTexture.Namebase))
             {
                 _effect = _spritebatcheffect;
-                Microsoft.Xna.Framework.Rectangle r = DuckGame.Content.offests[this.batchItem.NormalTexture.Namebase];
-                Microsoft.Xna.Framework.Rectangle r2 = DuckGame.Content.offests["bigGold"];
+                Microsoft.Xna.Framework.Rectangle r = Content.offests[batchItem.NormalTexture.Namebase];
+                Microsoft.Xna.Framework.Rectangle r2 = Content.offests["bigGold"];
                 //bigGold
-                SetValue("width", this.batchItem.NormalTexture.frameWidth / batchItem.NormalTexture.width);
-                SetValue("height", this.batchItem.NormalTexture.frameHeight / batchItem.NormalTexture.height);
+                SetValue("width", batchItem.NormalTexture.frameWidth / batchItem.NormalTexture.width);
+                SetValue("height", batchItem.NormalTexture.frameHeight / batchItem.NormalTexture.height);
                 SetValue("xpos", _thing.x);
                 SetValue("ypos", _thing.y);
 
@@ -52,13 +52,13 @@ namespace DuckGame
             {
                 _effect = _baseeffect;
                 Tex2D texture = Graphics.device.Textures[0] as Texture2D;
-                this.SetValue("width", texture.frameWidth / texture.width);
-                this.SetValue("height", texture.frameHeight / texture.height);
-                this.SetValue("xpos", this._thing.x);
-                this.SetValue("ypos", this._thing.y);
+                SetValue("width", texture.frameWidth / texture.width);
+                SetValue("height", texture.frameHeight / texture.height);
+                SetValue("xpos", _thing.x);
+                SetValue("ypos", _thing.y);
             }
-            DuckGame.Graphics.device.Textures[1] = (Texture2D)_goldTexture;
-            DuckGame.Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
+            Graphics.device.Textures[1] = (Texture2D)_goldTexture;
+            Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
             foreach (EffectPass pass in effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }

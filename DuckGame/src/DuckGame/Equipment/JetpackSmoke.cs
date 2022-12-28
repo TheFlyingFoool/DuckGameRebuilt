@@ -22,6 +22,7 @@ namespace DuckGame
         private float s1 = 1f;
         private float s2 = 1f;
         private float lifeTake = 0.05f;
+        private static int colorindex;
 
         public SpriteMap sprite => _sprite;
 
@@ -56,9 +57,18 @@ namespace DuckGame
             hSpeed = Rando.Float(0.8f) - 0.4f;
             vSpeed = 0.1f + Rando.Float(0.4f);
             _life += Rando.Float(0.2f);
-            float num1 = 0.6f - Rando.Float(0.2f);
-            float num2 = 1f;
-            _sprite.color = new Color(num2, num2, num2);
+            //float num1 = 0.6f - Rando.Float(0.2f);
+            float lightness = 1f;
+            _sprite.color = new Color(lightness, lightness, lightness);
+            if (Program.gay) //Program.gay
+            {
+                _sprite.color = Colors.Rainbow[colorindex];
+                colorindex += 1;
+                if (colorindex >= Colors.Rainbow.Length)
+                {
+                    colorindex = 0;
+                }
+            }
             depth = -0.4f;
             alpha = 1f;
             layer = Layer.Game;

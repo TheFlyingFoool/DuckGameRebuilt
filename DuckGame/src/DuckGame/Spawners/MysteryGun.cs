@@ -15,7 +15,7 @@ namespace DuckGame
     public class MysteryGun : Thing, IContainPossibleThings
     {
         private SpriteMap _sprite;
-        public System.Type containedType;
+        public Type containedType;
         private Thing _addedThing;
         public List<TypeProbPair> contains = new List<TypeProbPair>();
 
@@ -33,16 +33,16 @@ namespace DuckGame
             _placementCost += 4;
         }
 
-        public void PreparePossibilities() => containedType = MysteryGun.PickType(chanceGroup, contains);
+        public void PreparePossibilities() => containedType = PickType(chanceGroup, contains);
 
-        public static System.Type PickType(int chanceGroup, List<TypeProbPair> contains)
+        public static Type PickType(int chanceGroup, List<TypeProbPair> contains)
         {
             ItemBox.GetPhysicsObjects(Editor.Placeables);
             Random random = new Random((int)(Level.GetChanceGroup2(chanceGroup) * 2147483648.0 - 1.0));
             Random generator = Rando.generator;
             Rando.generator = random;
-            List<TypeProbPair> typeProbPairList = Utils.Shuffle<TypeProbPair>(contains);
-            System.Type type = null;
+            List<TypeProbPair> typeProbPairList = Utils.Shuffle(contains);
+            Type type = null;
             float num = 0f;
             foreach (TypeProbPair typeProbPair in typeProbPairList)
             {
@@ -66,7 +66,7 @@ namespace DuckGame
             if (Level.current is Editor)
                 return;
             ReplaceSelfWithThing();
-            if (!Network.isActive || _addedThing == null || Thing.loadingLevel == null)
+            if (!Network.isActive || _addedThing == null || loadingLevel == null)
                 return;
             _addedThing.PrepareForHost();
         }
@@ -75,7 +75,7 @@ namespace DuckGame
         {
             if (this.containedType == null)
                 PreparePossibilities();
-            System.Type containedType = this.containedType;
+            Type containedType = this.containedType;
             if (containedType != null)
             {
                 _addedThing = Editor.CreateObject(containedType) as Thing;
@@ -98,14 +98,14 @@ namespace DuckGame
         public override BinaryClassChunk Serialize()
         {
             BinaryClassChunk binaryClassChunk = base.Serialize();
-            binaryClassChunk.AddProperty("contains", MysteryGun.SerializeTypeProb(contains));
+            binaryClassChunk.AddProperty("contains", SerializeTypeProb(contains));
             return binaryClassChunk;
         }
 
         public override bool Deserialize(BinaryClassChunk node)
         {
             base.Deserialize(node);
-            contains = MysteryGun.DeserializeTypeProb(node.GetProperty<string>("contains"));
+            contains = DeserializeTypeProb(node.GetProperty<string>("contains"));
             return true;
         }
 

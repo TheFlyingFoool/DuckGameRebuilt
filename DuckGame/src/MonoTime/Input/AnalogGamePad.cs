@@ -6,7 +6,6 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 
@@ -71,6 +70,10 @@ namespace DuckGame
                     return;
                 _highestRumble.y = _rumble.y;
             }
+        }
+        public override void SetLightBar(Color color)
+        {
+            FNAPlatform.SetGamePadLightBar(index, (Microsoft.Xna.Framework.Color)color);
         }
 
         private void RumbleNow(float pLeft, float pRight)
@@ -154,7 +157,7 @@ namespace DuckGame
         {
             if (any)
             {
-                foreach (PadButton xboxButton in AnalogGamePad._xboxButtons)
+                foreach (PadButton xboxButton in _xboxButtons)
                 {
                     if (_state.IsButtonDown(xboxButton))
                         return true;

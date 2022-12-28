@@ -73,7 +73,7 @@ namespace DuckGame
         {
             if (!overrideBaseScissorCall)
             {
-                Vec2 wallScissor = BackgroundUpdater.GetWallScissor();
+                Vec2 wallScissor = GetWallScissor();
                 if (wallScissor != Vec2.Zero)
                     scissor = new Rectangle((int)wallScissor.x, 0f, (int)wallScissor.y, Resolution.current.y);
             }

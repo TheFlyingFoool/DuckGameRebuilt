@@ -51,7 +51,7 @@ namespace DuckGame
             _confirmMenu.Close();
             _confirmGroup.Add(_confirmMenu, false);
             _confirmGroup.Close();
-            Level.Add(_confirmGroup);
+            Add(_confirmGroup);
             Profile profile = _profile;
             _stats.Add(new LockerStat("", Color.Red));
             _stats.Add(new LockerStat("QUACKS: " + Change.ToString(profile.stats.quacks), Color.Orange));
@@ -124,7 +124,7 @@ namespace DuckGame
                     else if (_screen == LockerScreen.Exit)
                     {
                         Graphics.fade = 0f;
-                        Level.current = new DoorRoom(_profile);
+                        current = new DoorRoom(_profile);
                     }
                 }
             }
@@ -133,20 +133,20 @@ namespace DuckGame
                 _fade = Lerp.Float(_fade, 1f, 0.06f);
                 if (_screen == LockerScreen.Locker)
                 {
-                    if (InputProfile.active.Pressed("MENULEFT"))
+                    if (InputProfile.active.Pressed(Triggers.MenuLeft))
                     {
                         --num;
                         if (num < 0)
                             num = 1;
                     }
-                    if (InputProfile.active.Pressed("MENURIGHT"))
+                    if (InputProfile.active.Pressed(Triggers.MenuRight))
                     {
                         ++num;
                         if (num >= 2)
                             num = 0;
                     }
                     _selection = (LockerSelection)num;
-                    if (InputProfile.active.Pressed("SELECT"))
+                    if (InputProfile.active.Pressed(Triggers.Select))
                     {
                         if (_selection == LockerSelection.Stats)
                         {
@@ -159,7 +159,7 @@ namespace DuckGame
                             HUD.CloseAllCorners();
                         }
                     }
-                    if (InputProfile.active.Pressed("CANCEL"))
+                    if (InputProfile.active.Pressed(Triggers.Cancel))
                     {
                         _desiredScreen = LockerScreen.Exit;
                         HUD.CloseAllCorners();
@@ -167,19 +167,19 @@ namespace DuckGame
                 }
                 else if (_screen == LockerScreen.Stats)
                 {
-                    if (InputProfile.active.Down("MENUUP"))
+                    if (InputProfile.active.Down(Triggers.MenuUp))
                     {
                         _statScroll -= 0.02f;
                         if (_statScroll < 0f)
                             _statScroll = 0f;
                     }
-                    if (InputProfile.active.Down("MENUDOWN"))
+                    if (InputProfile.active.Down(Triggers.MenuDown))
                     {
                         _statScroll += 0.02f;
                         if (_statScroll > 1f)
                             _statScroll = 1f;
                     }
-                    if (InputProfile.active.Pressed("CANCEL"))
+                    if (InputProfile.active.Pressed(Triggers.Cancel))
                     {
                         _desiredScreen = LockerScreen.Exit;
                         HUD.CloseAllCorners();
@@ -189,16 +189,16 @@ namespace DuckGame
                         _clearStats.value = false;
                         _profile.stats = new ProfileStats();
                         Profiles.Save(_profile);
-                        Level.current = new LockerRoom(_profile);
+                        current = new LockerRoom(_profile);
                     }
-                    if (InputProfile.active.Pressed("MENU2"))
+                    if (InputProfile.active.Pressed(Triggers.Menu2))
                     {
                         MonoMain.pauseMenu = _confirmGroup;
                         _confirmGroup.Open();
                         _confirmMenu.Open();
                     }
                 }
-                else if (_screen == LockerScreen.Trophies && InputProfile.active.Pressed("CANCEL"))
+                else if (_screen == LockerScreen.Trophies && InputProfile.active.Pressed(Triggers.Cancel))
                 {
                     _desiredScreen = LockerScreen.Locker;
                     HUD.CloseAllCorners();

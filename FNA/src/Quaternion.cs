@@ -50,7 +50,7 @@ namespace Microsoft.Xna.Framework
 		{
 			get
 			{
-				if (this == Quaternion.Identity)
+				if (this == Identity)
 				{
 					return "Identity";
 				}

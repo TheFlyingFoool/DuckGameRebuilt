@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,7 +20,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Microsoft.Xna.Framework.Content
 {
-	public partial class ContentManager : IDisposable
+    public partial class ContentManager : IDisposable
 	{
 		#region Public ServiceProvider Property
 
@@ -392,9 +391,11 @@ namespace Microsoft.Xna.Framework.Content
 				{
 					byte[] data = new byte[stream.Length];
 					stream.Read(data, 0, (int) stream.Length);
-					Effect effect = new Effect(GetGraphicsDevice(), data);
-					effect.Name = assetName;
-					result = effect;
+                    Effect effect = new Effect(GetGraphicsDevice(), data)
+                    {
+                        Name = assetName
+                    };
+                    result = effect;
 				}
 				else if (typeof(T) == typeof(Song))
 				{

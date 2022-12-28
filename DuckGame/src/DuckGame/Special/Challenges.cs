@@ -21,14 +21,14 @@ namespace DuckGame
         private static Dictionary<string, ChallengeData> _challenges = new Dictionary<string, ChallengeData>();
         private static List<ChallengeData> _challengesInArcade;
 
-        public static Dictionary<string, ChallengeData> challenges => Challenges._challenges;
+        public static Dictionary<string, ChallengeData> challenges => _challenges;
 
         public static ChallengeData LoadChallengeData(string pLevel)
         {
             if (pLevel == null)
                 return null;
             ChallengeData challengeData;
-            if (Challenges._challenges.TryGetValue(pLevel, out challengeData))
+            if (_challenges.TryGetValue(pLevel, out challengeData))
                 return challengeData;
             LevelData levelData = Content.GetLevel(pLevel) ?? DuckFile.LoadLevel(pLevel);
             if (levelData != null)
@@ -49,7 +49,7 @@ namespace DuckGame
                             challengeMode.challenge.fileName = pLevel;
                             challengeMode.challenge.levelID = guid;
                             challengeMode.challenge.preview = levelData.previewData.preview;
-                            Challenges._challenges.Add(levelData.metaData.guid, challengeMode.challenge);
+                            _challenges.Add(levelData.metaData.guid, challengeMode.challenge);
                             return challengeMode.challenge;
                         }
                     }
@@ -66,7 +66,7 @@ namespace DuckGame
             foreach (string level in Content.GetLevels("challenge", LevelLocation.Content, true, false, false))
             {
                 string challenge = level;
-                MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => Challenges.LoadChallengeData(challenge)));
+                MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => LoadChallengeData(challenge),null, "Challenges LoadChallengeData"));
             }
         }
 
@@ -98,7 +98,7 @@ namespace DuckGame
                     string withoutExtension = Path.GetFileNameWithoutExtension(file);
                     DXMLNode pNode = duckXml.Element("Data");
                     if (pNode != null)
-                        Challenges.LoadElementsFromNode(withoutExtension, pNode);
+                        LoadElementsFromNode(withoutExtension, pNode);
                 }
             }
         }
@@ -106,7 +106,7 @@ namespace DuckGame
         public static int GetNumTrophies(Profile p)
         {
             int numTrophies = 0;
-            foreach (KeyValuePair<string, ChallengeData> challenge in Challenges._challenges)
+            foreach (KeyValuePair<string, ChallengeData> challenge in _challenges)
             {
                 ChallengeSaveData saveData = p.GetSaveData(challenge.Value.levelID, true);
                 if (saveData != null && saveData.trophy != TrophyType.Baseline)
@@ -145,21 +145,21 @@ namespace DuckGame
         public static ChallengeData GetChallenge(string name)
         {
             ChallengeData challengeData;
-            return !Challenges._challenges.TryGetValue(name, out challengeData) ? Challenges.LoadChallengeData(name) : challengeData;
+            return !_challenges.TryGetValue(name, out challengeData) ? LoadChallengeData(name) : challengeData;
         }
 
         public static List<ChallengeData> GetEligibleChancyChallenges(Profile p)
         {
             List<ChallengeData> chancyChallenges = new List<ChallengeData>();
-            foreach (KeyValuePair<string, ChallengeData> challenge1 in Challenges.challenges)
+            foreach (KeyValuePair<string, ChallengeData> challenge1 in challenges)
             {
                 if (challenge1.Value.requirement != "" && challenge1.Value.CheckRequirement(p))
                 {
                     if (challenge1.Value.prevchal != "")
                     {
-                        ChallengeData challenge2 = Challenges.GetChallenge(challenge1.Value.prevchal);
+                        ChallengeData challenge2 = GetChallenge(challenge1.Value.prevchal);
                         ChallengeSaveData saveData = p.GetSaveData(challenge2.levelID, true);
-                        if (saveData != null && saveData.trophy > TrophyType.Baseline)
+                        if (saveData != null && (FireDebug.Debugging || saveData.trophy > TrophyType.Baseline))
                             chancyChallenges.Add(challenge1.Value);
                     }
                     else
@@ -173,10 +173,10 @@ namespace DuckGame
           List<ChallengeData> available = null)
         {
             List<ChallengeData> chancyChallenges = new List<ChallengeData>();
-            foreach (KeyValuePair<string, ChallengeData> challenge in Challenges.challenges)
+            foreach (KeyValuePair<string, ChallengeData> challenge in challenges)
             {
                 KeyValuePair<string, ChallengeData> d = challenge;
-                if (d.Value.requirement != "" && (d.Value.prevchal == null || d.Value.prevchal == "" || available == null || available.FirstOrDefault<ChallengeData>(x => x != null && x.fileName == d.Value.prevchal) != null))
+                if (d.Value.requirement != "" && (d.Value.prevchal == null || d.Value.prevchal == "" || available == null || available.FirstOrDefault(x => x != null && x.fileName == d.Value.prevchal) != null))
                     chancyChallenges.Add(d.Value);
             }
             return chancyChallenges;
@@ -185,7 +185,7 @@ namespace DuckGame
         public static List<ChallengeData> GetEligibleIncompleteChancyChallenges(
           Profile p)
         {
-            List<ChallengeData> chancyChallenges1 = Challenges.GetEligibleChancyChallenges(p);
+            List<ChallengeData> chancyChallenges1 = GetEligibleChancyChallenges(p);
             List<ChallengeData> chancyChallenges2 = new List<ChallengeData>();
             foreach (ChallengeData challengeData in chancyChallenges1)
             {
@@ -208,11 +208,11 @@ namespace DuckGame
             foreach (ArcadeMachine challenge1 in arcadeLevel._challenges)
             {
                 foreach (string challenge2 in challenge1.data.challenges)
-                    available.Add(Challenges.GetChallenge(challenge2));
+                    available.Add(GetChallenge(challenge2));
             }
-            foreach (ChallengeData allChancyChallenge in Challenges.GetAllChancyChallenges(available))
+            foreach (ChallengeData allChancyChallenge in GetAllChancyChallenges(available))
                 available.Add(allChancyChallenge);
-            foreach (KeyValuePair<string, ChallengeData> challenge in Challenges._challenges)
+            foreach (KeyValuePair<string, ChallengeData> challenge in _challenges)
             {
                 if (available.Contains(challenge.Value))
                 {
@@ -229,9 +229,9 @@ namespace DuckGame
         {
             get
             {
-                if (Challenges._challengesInArcade == null)
+                if (_challengesInArcade == null)
                 {
-                    Challenges._challengesInArcade = new List<ChallengeData>();
+                    _challengesInArcade = new List<ChallengeData>();
                     ArcadeLevel arcadeLevel = new ArcadeLevel(Content.GetLevelID("arcade"))
                     {
                         bareInitialize = true
@@ -245,38 +245,38 @@ namespace DuckGame
                             {
                                 foreach (string challenge2 in challenge1.data.challenges)
                                 {
-                                    ChallengeData challenge3 = Challenges.GetChallenge(challenge2);
+                                    ChallengeData challenge3 = GetChallenge(challenge2);
                                     if (challenge3 != null)
-                                        Challenges.challengesInArcade.Add(challenge3);
+                                        challengesInArcade.Add(challenge3);
                                 }
                             }
                         }
-                        foreach (ChallengeData allChancyChallenge in Challenges.GetAllChancyChallenges(Challenges._challengesInArcade))
-                            Challenges._challengesInArcade.Add(allChancyChallenge);
+                        foreach (ChallengeData allChancyChallenge in GetAllChancyChallenges(_challengesInArcade))
+                            _challengesInArcade.Add(allChancyChallenge);
                     }
                 }
-                return Challenges._challengesInArcade;
+                return _challengesInArcade;
             }
         }
 
         public static int GetTicketCount(Profile p)
         {
             int ticketCount = 0;
-            foreach (KeyValuePair<string, ChallengeData> challenge in Challenges._challenges)
+            foreach (KeyValuePair<string, ChallengeData> challenge in _challenges)
             {
-                if (Challenges.challengesInArcade.Contains(challenge.Value))
+                if (challengesInArcade.Contains(challenge.Value))
                 {
                     ChallengeSaveData saveData = p.GetSaveData(challenge.Value.levelID, true);
                     if (saveData != null)
                     {
                         if (saveData.trophy >= TrophyType.Bronze)
-                            ticketCount += Challenges.valueBronze;
+                            ticketCount += valueBronze;
                         if (saveData.trophy >= TrophyType.Silver)
-                            ticketCount += Challenges.valueSilver;
+                            ticketCount += valueSilver;
                         if (saveData.trophy >= TrophyType.Gold)
-                            ticketCount += Challenges.valueGold;
+                            ticketCount += valueGold;
                         if (saveData.trophy >= TrophyType.Platinum)
-                            ticketCount += Challenges.valuePlatinum;
+                            ticketCount += valuePlatinum;
                     }
                 }
             }

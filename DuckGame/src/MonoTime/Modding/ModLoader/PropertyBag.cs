@@ -85,7 +85,7 @@ namespace DuckGame
         public void Set(IDictionary<string, object> properties)
         {
             foreach (KeyValuePair<string, object> property in (IEnumerable<KeyValuePair<string, object>>)properties)
-                Set<object>(property.Key, property.Value);
+                Set(property.Key, property.Value);
         }
 
         /// <summary>

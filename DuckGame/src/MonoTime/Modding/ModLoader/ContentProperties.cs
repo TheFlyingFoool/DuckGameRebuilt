@@ -17,16 +17,16 @@ namespace DuckGame
     {
         internal static bool EditingAllowed = true;
         private static readonly Dictionary<System.Type, PropertyBag> _propertyBags = new Dictionary<System.Type, PropertyBag>();
-        private static readonly ContentProperties.EmptyBag _emptyBag = new ContentProperties.EmptyBag();
+        private static readonly EmptyBag _emptyBag = new EmptyBag();
 
         /// <summary>Initializes the bag of a single type.</summary>
         /// <param name="type">The type.</param>
         internal static void InitializeBag(System.Type type)
         {
             PropertyBag propertyBag = new PropertyBag();
-            foreach (BaggedPropertyAttribute propertyAttribute in DG.Reverse<BaggedPropertyAttribute>(type.GetCustomAttributes(typeof(BaggedPropertyAttribute), true).Select<object, BaggedPropertyAttribute>(attrib => (BaggedPropertyAttribute)attrib).ToList<BaggedPropertyAttribute>().ToArray()))
-                propertyBag.Set<object>(propertyAttribute.Property, propertyAttribute.Value);
-            ContentProperties._propertyBags[type] = propertyBag;
+            foreach (BaggedPropertyAttribute propertyAttribute in DG.Reverse(type.GetCustomAttributes(typeof(BaggedPropertyAttribute), true).Select(attrib => (BaggedPropertyAttribute)attrib).ToList().ToArray()))
+                propertyBag.Set(propertyAttribute.Property, propertyAttribute.Value);
+            _propertyBags[type] = propertyBag;
         }
 
         /// <summary>Initializes the bags of multiple types.</summary>
@@ -34,7 +34,7 @@ namespace DuckGame
         internal static void InitializeBags(IEnumerable<System.Type> types)
         {
             foreach (System.Type type in types)
-                ContentProperties.InitializeBag(type);
+                InitializeBag(type);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace DuckGame
         public static IReadOnlyPropertyBag GetBag(System.Type t)
         {
             PropertyBag propertyBag;
-            return ContentProperties._propertyBags.TryGetValue(t, out propertyBag) ? propertyBag : ContentProperties._emptyBag;
+            return _propertyBags.TryGetValue(t, out propertyBag) ? propertyBag : ContentProperties._emptyBag;
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace DuckGame
         /// </summary>
         /// <typeparam name="T">The type to get the bag from</typeparam>
         /// <returns>The property bag</returns>
-        public static IReadOnlyPropertyBag GetBag<T>() => ContentProperties.GetBag(typeof(T));
+        public static IReadOnlyPropertyBag GetBag<T>() => GetBag(typeof(T));
 
         public class EmptyBag : IReadOnlyPropertyBag
         {

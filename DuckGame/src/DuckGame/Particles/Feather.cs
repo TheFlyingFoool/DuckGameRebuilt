@@ -10,8 +10,8 @@ namespace DuckGame
     public class Feather : Thing
     {
         public static int kMaxObjects = 64;
-        public static Feather[] _objects = new Feather[Feather.kMaxObjects];
-        private static int _lastActiveObject = 0;
+        public static Feather[] _objects = new Feather[kMaxObjects];
+        public static int _lastActiveObject = 0;
         private SpriteMap _sprite;
         private bool _rested;
 
@@ -22,19 +22,19 @@ namespace DuckGame
             Feather feather;
             if (NetworkDebugger.enabled)
                 feather = new Feather();
-            else if (Feather._objects[Feather._lastActiveObject] == null)
+            else if (_objects[_lastActiveObject] == null)
             {
                 feather = new Feather();
-                Feather._objects[Feather._lastActiveObject] = feather;
+                _objects[_lastActiveObject] = feather;
             }
             else
-                feather = Feather._objects[Feather._lastActiveObject];
+                feather = _objects[_lastActiveObject];
             Level.Remove(feather);
-            Feather._lastActiveObject = (Feather._lastActiveObject + 1) % Feather.kMaxObjects;
+            _lastActiveObject = (_lastActiveObject + 1) % kMaxObjects;
             feather.Init(xpos, ypos, who);
             feather.ResetProperties();
-            feather._sprite.globalIndex = Thing.GetGlobalIndex();
-            feather.globalIndex = Thing.GetGlobalIndex();
+            feather._sprite.globalIndex = GetGlobalIndex();
+            feather.globalIndex = GetGlobalIndex();
             return feather;
         }
 
@@ -70,7 +70,7 @@ namespace DuckGame
         private Thing lastthing;
         public override void Update()
         {
-            if (_rested && this.lastthing != null & !this.lastthing.removeFromLevel)
+            if (_rested && lastthing != null & !lastthing.removeFromLevel)
                 return;
             if (hSpeed > 0f)
                 hSpeed -= 0.1f;
@@ -83,13 +83,13 @@ namespace DuckGame
             if (vSpeed < 0f)
             {
                 _sprite.speed = 0f;
-                if (Level.CheckPoint<Block>(x, y - 7f) is Thing thing && thing.solid && thing.y >= this.top)
+                if (Level.CheckPoint<Block>(x, y - 7f) is Thing thing && thing.solid && thing.y >= top)
                 {
                     vSpeed = 0f;
                     lastthing = thing;
                 }
             }
-            else if (Level.CheckPoint<IPlatform>(x, y + 3f) is Thing thing && thing.solid && thing.y >= this.top)
+            else if (Level.CheckPoint<IPlatform>(x, y + 3f) is Thing thing && thing.solid && thing.y >= top)
             {
                 lastthing = thing;
                 vSpeed = 0f;

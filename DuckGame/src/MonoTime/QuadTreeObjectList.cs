@@ -19,9 +19,9 @@ namespace DuckGame
         private HashSet<Thing> _bigList = new HashSet<Thing>();
         private HashSet<Thing> _addThings = new HashSet<Thing>();
         private HashSet<Thing> _removeThings = new HashSet<Thing>();
-        private MultiMap<System.Type, Thing, HashSet<Thing>> _objectsByType = new MultiMap<System.Type, Thing, HashSet<Thing>>();
-        private MultiMap<System.Type, Thing, HashSet<Thing>> _staticObjectsByType = new MultiMap<System.Type, Thing, HashSet<Thing>>();
-        private MultiMap<System.Type, Thing, HashSet<Thing>> _allObjectsByType = new MultiMap<System.Type, Thing, HashSet<Thing>>();
+        private MultiMap<Type, Thing, HashSet<Thing>> _objectsByType = new MultiMap<Type, Thing, HashSet<Thing>>();
+        private MultiMap<Type, Thing, HashSet<Thing>> _staticObjectsByType = new MultiMap<Type, Thing, HashSet<Thing>>();
+        private MultiMap<Type, Thing, HashSet<Thing>> _allObjectsByType = new MultiMap<Type, Thing, HashSet<Thing>>();
         private QuadTree _quadTree = new QuadTree(4, new Vec2(-2304f, -2304f), 4608f, 64);
         private List<CollisionIsland> _islands = new List<CollisionIsland>();
         private bool _autoRefresh;
@@ -31,7 +31,7 @@ namespace DuckGame
         public HashSet<Thing> RealupdateList = new HashSet<Thing>();
         public HashSet<Thing> updateList => _bigList;
 
-        public void RandomizeObjectOrder() => _bigList = new HashSet<Thing>(_bigList.OrderBy<Thing, int>(x => Rando.Int(999999)).ToList<Thing>());
+        public void RandomizeObjectOrder() => _bigList = new HashSet<Thing>(_bigList.OrderBy(x => Rando.Int(999999)).ToList());
 
         public QuadTree quadTree => _quadTree;
 
@@ -73,10 +73,10 @@ namespace DuckGame
         {
             if (i.things.Count != 0)
             {
-                i.owner = i.things.First<MaterialThing>();
+                i.owner = i.things.First();
                 for (int index = 0; index < i.things.Count; ++index)
                 {
-                    MaterialThing materialThing = i.things.ElementAt<MaterialThing>(index);
+                    MaterialThing materialThing = i.things.ElementAt(index);
                     if (materialThing != i.owner)
                     {
                         int count = i.things.Count;
@@ -113,7 +113,7 @@ namespace DuckGame
             return list;
         }
 
-        public IEnumerable<Thing> this[System.Type key]
+        public IEnumerable<Thing> this[Type key]
         {
             get
             {
@@ -130,7 +130,7 @@ namespace DuckGame
             return _allObjectsByType.TryGetValue(typeof(T), out list) ? list.Count : 0;
         }
 
-        public HashSet<Thing> GetDynamicObjects(System.Type key)
+        public HashSet<Thing> GetDynamicObjects(Type key)
         {
             if (key == typeof(Thing))
                 return _bigList;
@@ -138,7 +138,7 @@ namespace DuckGame
             return _objectsByType.TryGetValue(key, out list) ? list : _emptyList;
         }
 
-        public HashSet<Thing> GetStaticObjects(System.Type key)
+        public HashSet<Thing> GetStaticObjects(Type key)
         {
             if (key == typeof(Thing))
                 return _bigList;
@@ -157,7 +157,7 @@ namespace DuckGame
         //    return first;
         //}
 
-        public bool HasStaticObjects(System.Type key) => key == typeof(Thing) || _staticObjectsByType.ContainsKey(key);
+        public bool HasStaticObjects(Type key) => key == typeof(Thing) || _staticObjectsByType.ContainsKey(key);
 
         public int Count => _bigList.Count;
 
@@ -366,7 +366,7 @@ namespace DuckGame
             {
                 if (Buckets.TryGetValue(item, out Dictionary<int, List<Thing>> output))
                 {
-                    foreach (System.Type key in Editor.AllBaseTypes[thing.GetType()])
+                    foreach (Type key in Editor.AllBaseTypes[thing.GetType()])
                     {
                         //output[key].Add(thing);
                         int hashcode = key.GetHashCode();
@@ -409,7 +409,7 @@ namespace DuckGame
             {
                 if (Buckets.TryGetValue(item, out Dictionary<int, List<Thing>> output))
                 {
-                    foreach (System.Type key in Editor.AllBaseTypes[thing.GetType()])
+                    foreach (Type key in Editor.AllBaseTypes[thing.GetType()])
                     {
                         //output[key].Add(thing);
                         int hashcode = key.GetHashCode();
@@ -429,7 +429,7 @@ namespace DuckGame
                 }
                 output = new Dictionary<int, List<Thing>>();
                 output[typeof(Thing).GetHashCode()] = new List<Thing>() { thing };
-                foreach (System.Type key in Editor.AllBaseTypes[thing.GetType()])
+                foreach (Type key in Editor.AllBaseTypes[thing.GetType()])
                 {
                     //output[key].Add(thing);
                     int hashcode = key.GetHashCode();
@@ -466,7 +466,7 @@ namespace DuckGame
             {
                 if (Buckets.TryGetValue(item, out Dictionary<int, List<Thing>> TypeList))
                 {
-                    foreach (System.Type key in Editor.AllBaseTypes[thing.GetType()])
+                    foreach (Type key in Editor.AllBaseTypes[thing.GetType()])
                     {
                         //output[key].Add(thing);
                         int hashcode = key.GetHashCode();
@@ -485,7 +485,7 @@ namespace DuckGame
                 }
                 TypeList = new Dictionary<int, List<Thing>>();
                 TypeList[typeof(Thing).GetHashCode()] = new List<Thing>() { thing };
-                foreach (System.Type key in Editor.AllBaseTypes[thing.GetType()])
+                foreach (Type key in Editor.AllBaseTypes[thing.GetType()])
                 {
                     //output[key].Add(thing);
                     int hashcode = key.GetHashCode();
@@ -515,6 +515,8 @@ namespace DuckGame
             float Height = p1.y - p2.y;
             Width = Width > 0 ? Width : -Width;
             Height = Height > 0 ? Height : -Height;
+            Width += cellsize * 2;
+            Height += cellsize * 2;
             Vec2 position = new Vec2(p1.x + (Width / 2), p1.y + (Height / 2));
             return GetThings(position, Width, Height, t);
         }
@@ -597,7 +599,7 @@ namespace DuckGame
             {
                 if (Buckets.TryGetValue(item, out Dictionary<int, List<Thing>> output))
                 {
-                    foreach (System.Type key in Editor.AllBaseTypes[thing.GetType()])
+                    foreach (Type key in Editor.AllBaseTypes[thing.GetType()])
                     {
 
                         if (output.TryGetValue(key.GetHashCode(), out List<Thing> output2))
@@ -665,18 +667,18 @@ namespace DuckGame
             _addThings.Clear();
         }
 
-        private void addItem(MultiMap<System.Type, Thing, HashSet<Thing>> list, Thing obj)
+        private void addItem(MultiMap<Type, Thing, HashSet<Thing>> list, Thing obj)
         {
-            foreach (System.Type key in Editor.AllBaseTypes[obj.GetType()])
+            foreach (Type key in Editor.AllBaseTypes[obj.GetType()])
             {
                 list.Add(key, obj);
                 _allObjectsByType.Add(key, obj);
             }
         }
 
-        private void removeItem(MultiMap<System.Type, Thing, HashSet<Thing>> list, Thing obj)
+        private void removeItem(MultiMap<Type, Thing, HashSet<Thing>> list, Thing obj)
         {
-            foreach (System.Type key in Editor.AllBaseTypes[obj.GetType()])
+            foreach (Type key in Editor.AllBaseTypes[obj.GetType()])
             {
                 list.Remove(key, obj);
                 _allObjectsByType.Remove(key, obj);

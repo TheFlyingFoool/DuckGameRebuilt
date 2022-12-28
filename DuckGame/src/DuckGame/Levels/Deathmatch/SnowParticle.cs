@@ -26,7 +26,7 @@ namespace DuckGame
             this.position = new Vec2(vec3.x, vec3.y);
             float num1 = z / 200f;
             float num2 = (float)(0.3f + num1 * 0.3f);
-            DuckGame.Graphics.DrawRect(this.position + new Vec2(-num2, -num2), this.position + new Vec2(num2, num2), Color.White * alpha, (Depth)(float)(num1 * 0.1f - 0.02f));
+            Graphics.DrawRect(this.position + new Vec2(-num2, -num2), this.position + new Vec2(num2, num2), Color.White * alpha, (Depth)(float)(num1 * 0.1f - 0.02f));
             this.position = position;
         }
 

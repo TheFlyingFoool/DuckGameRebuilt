@@ -14,7 +14,7 @@ namespace DuckGame
     public class NetworkInstance
     {
         public NetDebugInterface debugInterface;
-        public List<NetworkInstance.Core> extraCores = new List<NetworkInstance.Core>();
+        public List<Core> extraCores = new List<Core>();
         public Rectangle rect;
         public bool canReconnect;
         public Network network;

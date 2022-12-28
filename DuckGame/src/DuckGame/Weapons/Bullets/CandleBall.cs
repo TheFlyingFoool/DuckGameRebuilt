@@ -41,7 +41,7 @@ namespace DuckGame
         Color.Blue,
         Color.Orange
             };
-            _sprite.color = source[Rando.Int(source.Count<Color>() - 1)];
+            _sprite.color = source[Rando.Int(source.Count() - 1)];
             xscale = yscale = Rando.Float(0.4f, 0.8f);
         }
 

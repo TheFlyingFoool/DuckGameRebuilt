@@ -31,7 +31,7 @@ namespace DuckGame
         {
             _index = index;
             _zeroSpecial = false;
-            max = NetIndex8.MaxForBits(8);
+            max = MaxForBits(8);
         }
 
         public void Increment() => _index = Mod(_index + 1);

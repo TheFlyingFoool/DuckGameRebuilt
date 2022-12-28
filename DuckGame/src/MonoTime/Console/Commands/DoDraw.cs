@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using DuckGame.AddedContent.Drake.PolyRender;
+﻿using AddedContent.Hyeve.PolyRender;
 
 namespace DuckGame
 {
@@ -10,7 +8,7 @@ namespace DuckGame
         [DevConsoleCommand(Description = "Toggle the activity of a Drawing Context from it's ID")]
         public static string DoDraw(string id)
         {
-            foreach (DrawingContextAttribute Attribute in AllDrawingContexts)
+            foreach (DrawingContextAttribute Attribute in DrawingContextAttribute.AllDrawingContexts)
             {
                 string lookupName = Attribute.CustomID ?? Attribute.Name;
 
@@ -43,7 +41,5 @@ namespace DuckGame
             PolyRenderer.Tri(center, new Vec2(center.x, center.y), new Vec2(center.x, center.y - length), colors[2]);
             PolyRenderer.Tri(center, new Vec2(center.x - length, center.y), new Vec2(center.x, center.y - length), colors[3]);
         }
-
-        private static List<DrawingContextAttribute> AllDrawingContexts = new List<DrawingContextAttribute>();
     }
 }

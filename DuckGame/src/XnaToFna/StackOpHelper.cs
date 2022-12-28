@@ -19,11 +19,11 @@ namespace XnaToFna
 
         public static void Push<T>(T value)
         {
-            if (StackOpHelper.Current == null)
-                StackOpHelper.Current = new Stack<object>();
-            StackOpHelper.Current.Push(value);
+            if (Current == null)
+                Current = new Stack<object>();
+            Current.Push(value);
         }
 
-        public static T Pop<T>() => (T)StackOpHelper.Current.Pop();
+        public static T Pop<T>() => (T)Current.Pop();
     }
 }

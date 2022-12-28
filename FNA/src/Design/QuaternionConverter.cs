@@ -77,12 +77,12 @@ namespace Microsoft.Xna.Framework.Design
 			ITypeDescriptorContext context,
 			IDictionary propertyValues
 		) {
-			return (object) new Quaternion(
-				(float) propertyValues["X"],
-				(float) propertyValues["Y"],
-				(float) propertyValues["Z"],
-				(float) propertyValues["W"]
-			);
+			return new Quaternion(
+                (float)propertyValues["X"],
+                (float)propertyValues["Y"],
+                (float)propertyValues["Z"],
+                (float)propertyValues["W"]
+            );
 		}
 
 		#endregion

@@ -9,28 +9,30 @@ namespace DuckGame
     {
         public Trombone(float xval, float yval) : base(xval, yval)
         {
-            this.ammo = 4;
-            this._ammoType = new ATLaser();
-            this._ammoType.range = 170f;
-            this._ammoType.accuracy = 0.8f;
-            this.wideBarrel = true;
-            this.barrelInsertOffset = new Vec2(-1f, -3f);
-            this._type = "gun";
-            this.graphic = new Sprite("tromboneBody", 0f, 0f);
-            this.center = new Vec2(10f, 16f);
-            this.collisionOffset = new Vec2(-4f, -5f);
-            this.collisionSize = new Vec2(8f, 11f);
-            this._barrelOffsetTL = new Vec2(19f, 14f);
-            this._fireSound = "smg";
-            this._fullAuto = true;
-            this._fireWait = 1f;
-            this._kickForce = 3f;
-            this._holdOffset = new Vec2(6f, 2f);
-            this._slide = new Sprite("tromboneSlide", 0f, 0f);
-            this._slide.CenterOrigin();
-            this._notePitchBinding.skipLerp = true;
-            this.editorTooltip = "Just look at this thing. It's amazing. The instrument of kings.";
-            this.isFatal = false;
+            ammo = 4;
+            _ammoType = new ATLaser
+            {
+                range = 170f,
+                accuracy = 0.8f
+            };
+            wideBarrel = true;
+            barrelInsertOffset = new Vec2(-1f, -3f);
+            _type = "gun";
+            graphic = new Sprite("tromboneBody", 0f, 0f);
+            center = new Vec2(10f, 16f);
+            collisionOffset = new Vec2(-4f, -5f);
+            collisionSize = new Vec2(8f, 11f);
+            _barrelOffsetTL = new Vec2(19f, 14f);
+            _fireSound = "smg";
+            _fullAuto = true;
+            _fireWait = 1f;
+            _kickForce = 3f;
+            _holdOffset = new Vec2(6f, 2f);
+            _slide = new Sprite("tromboneSlide", 0f, 0f);
+            _slide.CenterOrigin();
+            _notePitchBinding.skipLerp = true;
+            editorTooltip = "Just look at this thing. It's amazing. The instrument of kings.";
+            isFatal = false;
         }
 
         public override void Initialize()
@@ -45,45 +47,45 @@ namespace DuckGame
 
         public override void Update()
         {
-            Duck d = this.owner as Duck;
+            Duck d = owner as Duck;
             if (d != null)
             {
-                if (base.isServerForObject && d.inputProfile != null)
+                if (isServerForObject && d.inputProfile != null)
                 {
-                    this.handPitch = d.inputProfile.leftTrigger;
+                    handPitch = d.inputProfile.leftTrigger;
                     if (d.inputProfile.hasMotionAxis)
                     {
-                        this.handPitch += d.inputProfile.motionAxis;
+                        handPitch += d.inputProfile.motionAxis;
                     }
                     int keyboardNote = Keyboard.CurrentNote(d.inputProfile, this);
                     if (keyboardNote >= 0)
                     {
-                        this.notePitch = keyboardNote / 12f + 0.01f;
-                        this.handPitch = this.notePitch;
-                        if (this.notePitch != this.prevNotePitch)
+                        notePitch = keyboardNote / 12f + 0.01f;
+                        handPitch = notePitch;
+                        if (notePitch != prevNotePitch)
                         {
-                            this.prevNotePitch = 0f;
-                            if (this.noteSound != null)
+                            prevNotePitch = 0f;
+                            if (noteSound != null)
                             {
-                                this.noteSound.Stop();
-                                this.noteSound = null;
+                                noteSound.Stop();
+                                noteSound = null;
                             }
                         }
                     }
-                    else if (d.inputProfile.Down("SHOOT"))
+                    else if (d.inputProfile.Down(Triggers.Shoot))
                     {
-                        this.notePitch = this.handPitch + 0.01f;
+                        notePitch = handPitch + 0.01f;
                     }
                     else
                     {
-                        this.notePitch = 0f;
+                        notePitch = 0f;
                     }
                 }
-                if (this.notePitch != this.prevNotePitch)
+                if (notePitch != prevNotePitch)
                 {
-                    if (this.notePitch != 0f)
+                    if (notePitch != 0f)
                     {
-                        int note = (int)Math.Round((double)(this.notePitch * 12f));
+                        int note = (int)Math.Round((double)(notePitch * 12f));
                         if (note < 0)
                         {
                             note = 0;
@@ -92,48 +94,48 @@ namespace DuckGame
                         {
                             note = 12;
                         }
-                        if (this.noteSound == null)
+                        if (noteSound == null)
                         {
-                            this.hitPitch = this.notePitch;
+                            hitPitch = notePitch;
                             Sound snd = SFX.Play("trombone" + Change.ToString(note), 1f, 0f, 0f, false);
-                            this.noteSound = snd;
-                            Level.Add(new MusicNote(base.barrelPosition.x, base.barrelPosition.y, base.barrelVector));
+                            noteSound = snd;
+                            Level.Add(new MusicNote(barrelPosition.x, barrelPosition.y, barrelVector));
                         }
                         else
                         {
-                            this.noteSound.Pitch = Maths.Clamp(this.notePitch - this.hitPitch, -1f, 1f);
+                            noteSound.Pitch = Maths.Clamp(notePitch - hitPitch, -1f, 1f);
                         }
                     }
-                    else if (this.noteSound != null)
+                    else if (noteSound != null)
                     {
-                        this.noteSound.Stop();
-                        this.noteSound = null;
+                        noteSound.Stop();
+                        noteSound = null;
                     }
                 }
-                if (this._raised)
+                if (_raised)
                 {
-                    this.handAngle = 0f;
-                    this.handOffset = new Vec2(0f, 0f);
-                    this._holdOffset = new Vec2(0f, 2f);
-                    this.collisionOffset = new Vec2(-4f, -7f);
-                    this.collisionSize = new Vec2(8f, 16f);
+                    handAngle = 0f;
+                    handOffset = new Vec2(0f, 0f);
+                    _holdOffset = new Vec2(0f, 2f);
+                    collisionOffset = new Vec2(-4f, -7f);
+                    collisionSize = new Vec2(8f, 16f);
                 }
                 else
                 {
-                    this.handOffset = new Vec2(6f + (1f - this.handPitch) * 4f, -4f + (1f - this.handPitch) * 4f);
-                    this.handAngle = (1f - this.handPitch) * 0.4f * offDir;
-                    this._holdOffset = new Vec2(5f + this.handPitch * 2f, -9f + this.handPitch * 2f);
-                    this.collisionOffset = new Vec2(-4f, -7f);
-                    this.collisionSize = new Vec2(2f, 16f);
-                    this._slideVal = 1f - this.handPitch;
+                    handOffset = new Vec2(6f + (1f - handPitch) * 4f, -4f + (1f - handPitch) * 4f);
+                    handAngle = (1f - handPitch) * 0.4f * offDir;
+                    _holdOffset = new Vec2(5f + handPitch * 2f, -9f + handPitch * 2f);
+                    collisionOffset = new Vec2(-4f, -7f);
+                    collisionSize = new Vec2(2f, 16f);
+                    _slideVal = 1f - handPitch;
                 }
             }
             else
             {
-                this.collisionOffset = new Vec2(-4f, -5f);
-                this.collisionSize = new Vec2(8f, 11f);
+                collisionOffset = new Vec2(-4f, -5f);
+                collisionSize = new Vec2(8f, 11f);
             }
-            this.prevNotePitch = this.notePitch;
+            prevNotePitch = notePitch;
             base.Update();
         }
 
@@ -154,7 +156,7 @@ namespace DuckGame
             base.Draw();
             Material material = Graphics.material;
             Graphics.material = base.material;
-            base.Draw(this._slide, new Vec2(6f + this._slideVal * 8f, 0f), -1);
+            Draw(_slide, new Vec2(6f + _slideVal * 8f, 0f), -1);
             Graphics.material = material;
         }
 

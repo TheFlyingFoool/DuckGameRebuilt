@@ -19,341 +19,341 @@ namespace DuckGame
         private int _controlPage;
         private ControlSetting _selectedSetting;
         private List<List<ControlSetting>> _controlSettingPages = new List<List<ControlSetting>>()
-    {
-      new List<ControlSetting>()
-      {
-        new ControlSetting()
         {
-          name = "{",
-          trigger = "LEFT",
-          position = new Vec2(0f, 0f),
-          column = 0,
-          condition =  x => x.allowDirectionalMapping
-        },
-        new ControlSetting()
-        {
-          name = "/",
-          trigger = "RIGHT",
-          position = new Vec2(35f, 0f),
-          column = 0,
-          condition =  x => x.allowDirectionalMapping
-        },
-        new ControlSetting()
-        {
-          name = "}",
-          trigger = "UP",
-          position = new Vec2(70f, 0f),
-          column = 1,
-          condition =  x => x.allowDirectionalMapping
-        },
-        new ControlSetting()
-        {
-          name = "~",
-          trigger = "DOWN",
-          position = new Vec2(105f, 0f),
-          column = 1,
-          condition =  x => x.allowDirectionalMapping
-        },
-        new ControlSetting()
-        {
-          name = "JUMP  ",
-          trigger = "JUMP",
-          position = new Vec2(0f, 12f),
-          column = 0
-        },
-        new ControlSetting()
-        {
-          name = "GRAB  ",
-          trigger = "GRAB",
-          position = new Vec2(0f, 24f),
-          column = 0
-        },
-        new ControlSetting()
-        {
-          name = "STRAFE",
-          trigger = "STRAFE",
-          position = new Vec2(0f, 36f),
-          column = 0
-        },
-        new ControlSetting()
-        {
-          name = "USE   ",
-          trigger = "SHOOT",
-          position = new Vec2(70f, 12f),
-          column = 1
-        },
-        new ControlSetting()
-        {
-          name = "QUACK ",
-          trigger = "QUACK",
-          position = new Vec2(70f, 24f),
-          column = 1
-        },
-        new ControlSetting()
-        {
-          name = "FALL  ",
-          trigger = "RAGDOLL",
-          position = new Vec2(70f, 36f),
-          column = 1
-        },
-        new ControlSetting()
-        {
-          name = "START ",
-          trigger = "START",
-          position = new Vec2(0f, 48f),
-          column = 0,
-          condition =  x => x.allowStartRemap
-        },
-        new ControlSetting()
-        {
-          name = "PAGE 2>",
-          trigger = "ANY",
-          position = new Vec2(70f, 48f),
-          column = 1,
-          condition =  x => !(x is Keyboard),
-          action =  x =>
+          new List<ControlSetting>()
           {
-            ++x._controlPage;
-            x._selectedSetting =  null;
-            SFX.Play("page");
-          }
-        },
-        new ControlSetting()
-        {
-          name = "PAGE 2>",
-          trigger = "ANY",
-          position = new Vec2(70f, 48f),
-          column = 1,
-          condition =  x => x is Keyboard,
-          action =  x =>
+            new ControlSetting()
+            {
+              name = "{",
+              trigger = Triggers.Left,
+              position = new Vec2(0f, 0f),
+              column = 0,
+              condition =  x => x.allowDirectionalMapping
+            },
+            new ControlSetting()
+            {
+              name = "/",
+              trigger = Triggers.Right,
+              position = new Vec2(35f, 0f),
+              column = 0,
+              condition =  x => x.allowDirectionalMapping
+            },
+            new ControlSetting()
+            {
+              name = "}",
+              trigger = Triggers.Up,
+              position = new Vec2(70f, 0f),
+              column = 1,
+              condition =  x => x.allowDirectionalMapping
+            },
+            new ControlSetting()
+            {
+              name = "~",
+              trigger = Triggers.Down,
+              position = new Vec2(105f, 0f),
+              column = 1,
+              condition =  x => x.allowDirectionalMapping
+            },
+            new ControlSetting()
+            {
+              name = "JUMP  ",
+              trigger = Triggers.Jump,
+              position = new Vec2(0f, 12f),
+              column = 0
+            },
+            new ControlSetting()
+            {
+              name = "GRAB  ",
+              trigger = Triggers.Grab,
+              position = new Vec2(0f, 24f),
+              column = 0
+            },
+            new ControlSetting()
+            {
+              name = Triggers.Strafe,
+              trigger = Triggers.Strafe,
+              position = new Vec2(0f, 36f),
+              column = 0
+            },
+            new ControlSetting()
+            {
+              name = "USE   ",
+              trigger = Triggers.Shoot,
+              position = new Vec2(70f, 12f),
+              column = 1
+            },
+            new ControlSetting()
+            {
+              name = "QUACK ",
+              trigger = Triggers.Quack,
+              position = new Vec2(70f, 24f),
+              column = 1
+            },
+            new ControlSetting()
+            {
+              name = "FALL  ",
+              trigger = Triggers.Ragdoll,
+              position = new Vec2(70f, 36f),
+              column = 1
+            },
+            new ControlSetting()
+            {
+              name = "START ",
+              trigger = Triggers.Start,
+              position = new Vec2(0f, 48f),
+              column = 0,
+              condition =  x => x.allowStartRemap
+            },
+            new ControlSetting()
+            {
+              name = "PAGE 2>",
+              trigger = Triggers.Any,
+              position = new Vec2(70f, 48f),
+              column = 1,
+              condition =  x => !(x is Keyboard),
+              action =  x =>
+              {
+                ++x._controlPage;
+                x._selectedSetting =  null;
+                SFX.Play("page");
+              }
+            },
+            new ControlSetting()
+            {
+              name = "PAGE 2>",
+              trigger = Triggers.Any,
+              position = new Vec2(70f, 48f),
+              column = 1,
+              condition =  x => x is Keyboard,
+              action =  x =>
+              {
+                x._controlPage += 2;
+                x._selectedSetting =  null;
+                SFX.Play("page");
+              }
+            }
+          },
+          new List<ControlSetting>()
           {
-            x._controlPage += 2;
-            x._selectedSetting =  null;
-            SFX.Play("page");
-          }
-        }
-      },
-      new List<ControlSetting>()
-      {
-        new ControlSetting()
-        {
-          name = "MOVE  ",
-          trigger = "LSTICK",
-          position = new Vec2(0f, 12f),
-          column = 0,
-          condition =  x => x.numSticks > 1
-        },
-        new ControlSetting()
-        {
-          name = "PITCH ",
-          trigger = "LTRIGGER",
-          position = new Vec2(0f, 24f),
-          column = 0,
-          condition =  x => x.numTriggers > 1
-        },
-        new ControlSetting()
-        {
-          name = "LICK  ",
-          trigger = "RSTICK",
-          position = new Vec2(70f, 12f),
-          column = 1,
-          condition =  x => x.numSticks > 1
-        },
-        new ControlSetting()
-        {
-          name = "ZOOM  ",
-          trigger = "RTRIGGER",
-          position = new Vec2(70f, 24f),
-          column = 1,
-          condition =  x => x.numTriggers > 1
-        },
-        new ControlSetting()
-        {
-          name = "<PAGE 1",
-          trigger = "ANY",
-          position = new Vec2(0f, 60f),
-          column = 0,
-          action =  x =>
+            new ControlSetting()
+            {
+              name = "MOVE  ",
+              trigger = Triggers.LeftStick,
+              position = new Vec2(0f, 12f),
+              column = 0,
+              condition =  x => x.numSticks > 1
+            },
+            new ControlSetting()
+            {
+              name = "PITCH ",
+              trigger = Triggers.LeftTrigger,
+              position = new Vec2(0f, 24f),
+              column = 0,
+              condition =  x => x.numTriggers > 1
+            },
+            new ControlSetting()
+            {
+              name = "LICK  ",
+              trigger = Triggers.RightStick,
+              position = new Vec2(70f, 12f),
+              column = 1,
+              condition =  x => x.numSticks > 1
+            },
+            new ControlSetting()
+            {
+              name = "ZOOM  ",
+              trigger = Triggers.RightTrigger,
+              position = new Vec2(70f, 24f),
+              column = 1,
+              condition =  x => x.numTriggers > 1
+            },
+            new ControlSetting()
+            {
+              name = "<PAGE 1",
+              trigger = Triggers.Any,
+              position = new Vec2(0f, 60f),
+              column = 0,
+              action =  x =>
+              {
+                --x._controlPage;
+                x._selectedSetting =  null;
+                SFX.Play("page");
+              }
+            },
+            new ControlSetting()
+            {
+              name = "PAGE 3>",
+              trigger = Triggers.Any,
+              position = new Vec2(70f, 60f),
+              column = 1,
+              action =  x =>
+              {
+                ++x._controlPage;
+                x._selectedSetting =  null;
+                SFX.Play("page");
+              }
+            }
+          },
+          new List<ControlSetting>()
           {
-            --x._controlPage;
-            x._selectedSetting =  null;
-            SFX.Play("page");
+            new ControlSetting()
+            {
+              name = "UI CONTROLS...",
+              trigger = Triggers.Any,
+              position = new Vec2(0f, 0f),
+              column = 0,
+              caption = true
+            },
+            new ControlSetting()
+            {
+              name = "{",
+              trigger = Triggers.MenuLeft,
+              position = new Vec2(0f, 12f),
+              column = 0,
+              condition =  x => x.allowDirectionalMapping
+            },
+            new ControlSetting()
+            {
+              name = "/",
+              trigger = Triggers.MenuRight,
+              position = new Vec2(35f, 12f),
+              column = 0,
+              condition =  x => x.allowDirectionalMapping
+            },
+            new ControlSetting()
+            {
+              name = "}",
+              trigger = Triggers.MenuUp,
+              position = new Vec2(70f, 12f),
+              column = 1,
+              condition =  x => x.allowDirectionalMapping
+            },
+            new ControlSetting()
+            {
+              name = "~",
+              trigger = Triggers.MenuDown,
+              position = new Vec2(105f, 12f),
+              column = 1,
+              condition =  x => x.allowDirectionalMapping
+            },
+            new ControlSetting()
+            {
+              name = Triggers.Select,
+              trigger = Triggers.Select,
+              position = new Vec2(0f, 24f),
+              column = 0
+            },
+            new ControlSetting()
+            {
+              name = "MENU 1",
+              trigger = Triggers.Menu1,
+              position = new Vec2(0f, 36f),
+              column = 0
+            },
+            new ControlSetting()
+            {
+              name = Triggers.Cancel,
+              trigger = Triggers.Cancel,
+              position = new Vec2(70f, 24f),
+              column = 1
+            },
+            new ControlSetting()
+            {
+              name = "MENU 2",
+              trigger = Triggers.Menu2,
+              position = new Vec2(70f, 36f),
+              column = 1
+            },
+            new ControlSetting()
+            {
+              name = "<PAGE 2",
+              trigger = Triggers.Any,
+              position = new Vec2(0f, 48f),
+              column = 0,
+              condition =  x => !(x is Keyboard),
+              action =  x =>
+              {
+                --x._controlPage;
+                x._selectedSetting =  null;
+                SFX.Play("page");
+              }
+            },
+            new ControlSetting()
+            {
+              name = "<PAGE 1",
+              trigger = Triggers.Any,
+              position = new Vec2(0f, 48f),
+              column = 0,
+              condition =  x => x is Keyboard,
+              action =  x =>
+              {
+                x._controlPage -= 2;
+                x._selectedSetting =  null;
+                SFX.Play("page");
+              }
+            },
+            new ControlSetting()
+            {
+              name = "RESET ",
+              trigger = Triggers.Any,
+              position = new Vec2(70f, 48f),
+              column = 1,
+              action =  x =>
+              {
+                _madeControlChanges = true;
+                x._configInputMapping = Input.GetDefaultMapping(x._inputProfile.lastActiveDevice.productName, x._inputProfile.lastActiveDevice.productGUID).Clone();
+                SFX.Play("consoleSelect");
+              }
+            }
           }
-        },
-        new ControlSetting()
-        {
-          name = "PAGE 3>",
-          trigger = "ANY",
-          position = new Vec2(70f, 60f),
-          column = 1,
-          action =  x =>
-          {
-            ++x._controlPage;
-            x._selectedSetting =  null;
-            SFX.Play("page");
-          }
-        }
-      },
-      new List<ControlSetting>()
-      {
-        new ControlSetting()
-        {
-          name = "UI CONTROLS...",
-          trigger = "ANY",
-          position = new Vec2(0f, 0f),
-          column = 0,
-          caption = true
-        },
-        new ControlSetting()
-        {
-          name = "{",
-          trigger = "MENULEFT",
-          position = new Vec2(0f, 12f),
-          column = 0,
-          condition =  x => x.allowDirectionalMapping
-        },
-        new ControlSetting()
-        {
-          name = "/",
-          trigger = "MENURIGHT",
-          position = new Vec2(35f, 12f),
-          column = 0,
-          condition =  x => x.allowDirectionalMapping
-        },
-        new ControlSetting()
-        {
-          name = "}",
-          trigger = "MENUUP",
-          position = new Vec2(70f, 12f),
-          column = 1,
-          condition =  x => x.allowDirectionalMapping
-        },
-        new ControlSetting()
-        {
-          name = "~",
-          trigger = "MENUDOWN",
-          position = new Vec2(105f, 12f),
-          column = 1,
-          condition =  x => x.allowDirectionalMapping
-        },
-        new ControlSetting()
-        {
-          name = "SELECT",
-          trigger = "SELECT",
-          position = new Vec2(0f, 24f),
-          column = 0
-        },
-        new ControlSetting()
-        {
-          name = "MENU 1",
-          trigger = "MENU1",
-          position = new Vec2(0f, 36f),
-          column = 0
-        },
-        new ControlSetting()
-        {
-          name = "CANCEL",
-          trigger = "CANCEL",
-          position = new Vec2(70f, 24f),
-          column = 1
-        },
-        new ControlSetting()
-        {
-          name = "MENU 2",
-          trigger = "MENU2",
-          position = new Vec2(70f, 36f),
-          column = 1
-        },
-        new ControlSetting()
-        {
-          name = "<PAGE 2",
-          trigger = "ANY",
-          position = new Vec2(0f, 48f),
-          column = 0,
-          condition =  x => !(x is Keyboard),
-          action =  x =>
-          {
-            --x._controlPage;
-            x._selectedSetting =  null;
-            SFX.Play("page");
-          }
-        },
-        new ControlSetting()
-        {
-          name = "<PAGE 1",
-          trigger = "ANY",
-          position = new Vec2(0f, 48f),
-          column = 0,
-          condition =  x => x is Keyboard,
-          action =  x =>
-          {
-            x._controlPage -= 2;
-            x._selectedSetting =  null;
-            SFX.Play("page");
-          }
-        },
-        new ControlSetting()
-        {
-          name = "RESET ",
-          trigger = "ANY",
-          position = new Vec2(70f, 48f),
-          column = 1,
-          action =  x =>
-          {
-            ProfileSelector._madeControlChanges = true;
-            x._configInputMapping = Input.GetDefaultMapping(x._inputProfile.lastActiveDevice.productName, x._inputProfile.lastActiveDevice.productGUID).Clone();
-            SFX.Play("consoleSelect");
-          }
-        }
-      }
-    };
+        };
         private float _takenFlash;
         private string _name = "";
         private string _maskName = "aaaaaaaaa";
         private List<char> _characters = new List<char>()
-    {
-      'a',
-      'b',
-      'c',
-      'd',
-      'e',
-      'f',
-      'g',
-      'h',
-      'i',
-      'j',
-      'k',
-      'l',
-      'm',
-      'n',
-      'o',
-      'p',
-      'q',
-      'r',
-      's',
-      't',
-      'u',
-      'v',
-      'w',
-      'x',
-      'y',
-      'z',
-      '0',
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      '{',
-      '}',
-      ' ',
-      '-',
-      '!'
-    };
+        {
+          'a',
+          'b',
+          'c',
+          'd',
+          'e',
+          'f',
+          'g',
+          'h',
+          'i',
+          'j',
+          'k',
+          'l',
+          'm',
+          'n',
+          'o',
+          'p',
+          'q',
+          'r',
+          's',
+          't',
+          'u',
+          'v',
+          'w',
+          'x',
+          'y',
+          'z',
+          '0',
+          '1',
+          '2',
+          '3',
+          '4',
+          '5',
+          '6',
+          '7',
+          '8',
+          '9',
+          '{',
+          '}',
+          ' ',
+          '-',
+          '!'
+        };
         private float _slide;
         private float _slideTo;
         private int _editControlSelection;
@@ -390,6 +390,7 @@ namespace DuckGame
         private float _moodVal = 0.5f;
         private int _preferredColor;
 
+        public int preferredColor => _preferredColor;
         public float fade => _fade;
 
         public bool open => _open;
@@ -417,6 +418,10 @@ namespace DuckGame
             {
                 scale = new Vec2(1f)
             };
+            if (sel.profile != null)
+            {
+                _preferredColor = sel.profile.preferredColor;
+            }
         }
 
         public override void Initialize()
@@ -495,7 +500,7 @@ namespace DuckGame
         {
             _profiles = Profiles.allCustomProfiles;
             if (_box.controllerIndex != 0 || !Options.Data.defaultAccountMerged)
-                _profiles.Add(Profiles.universalProfileList.ElementAt<Profile>(_box.controllerIndex));
+                _profiles.Add(Profiles.universalProfileList.ElementAt(_box.controllerIndex));
             if (!Network.isActive)
                 return;
             _profiles.Remove(Profiles.experienceProfile);
@@ -576,21 +581,21 @@ namespace DuckGame
                 }
                 if (_fade > 0.9f && _mode != PSMode.CreateProfile && _mode != PSMode.EditProfile && _mode != PSMode.EditControls && _mode != PSMode.EditControlsConfirm && _desiredSelectorPosition == _selectorPosition)
                 {
-                    if (_inputProfile.Down("MENUUP"))
+                    if (_inputProfile.Down(Triggers.MenuUp))
                     {
                         SelectUp();
                         _wasDown = false;
                         if (_profiles.Count > 0)
                             SFX.Play("consoleTick");
                     }
-                    if (_inputProfile.Down("MENUDOWN"))
+                    if (_inputProfile.Down(Triggers.MenuDown))
                     {
                         SelectDown();
                         _wasDown = true;
                         if (_profiles.Count > 0)
                             SFX.Play("consoleTick");
                     }
-                    if (HoveredProfileIsCustom() && MonoMain.pauseMenu == null && _inputProfile.Pressed("MENU2"))
+                    if (HoveredProfileIsCustom() && MonoMain.pauseMenu == null && _inputProfile.Pressed(Triggers.Menu2))
                     {
                         _deleteContext = _profiles[_selectorPosition];
                         MonoMain.pauseMenu = _confirmMenu;
@@ -609,7 +614,7 @@ namespace DuckGame
                             _deleteContext = null;
                         }
                     }
-                    if (_inputProfile.Pressed("CANCEL"))
+                    if (_inputProfile.Pressed(Triggers.Cancel))
                     {
                         if (Profiles.IsDefault(_starterProfile) || !(Level.current is TeamSelect2))
                             _box.ChangeProfile(_starterProfile);
@@ -620,7 +625,7 @@ namespace DuckGame
                         SFX.Play("consoleCancel", 0.4f);
                         return;
                     }
-                    if (_inputProfile.Pressed("SELECT") || _autoSelect)
+                    if (_inputProfile.Pressed(Triggers.Select) || _autoSelect)
                     {
                         _autoSelect = false;
                         if (_profiles.Count == 0 || _selectorPosition < -1 || _selectorPosition >= _profiles.Count)
@@ -671,25 +676,25 @@ namespace DuckGame
                 }
                 else if (_mode == PSMode.EditControlsConfirm)
                 {
-                    if (_inputProfile.Pressed("MENUUP"))
+                    if (_inputProfile.Pressed(Triggers.MenuUp))
                     {
                         SFX.Play("consoleTick");
                         --_editControlSelection;
                     }
-                    else if (_inputProfile.Pressed("MENUDOWN"))
+                    else if (_inputProfile.Pressed(Triggers.MenuDown))
                     {
                         SFX.Play("consoleTick");
                         ++_editControlSelection;
                     }
                     else
                     {
-                        if (_inputProfile.Pressed("CANCEL"))
+                        if (_inputProfile.Pressed(Triggers.Cancel))
                         {
                             _desiredMode = PSMode.EditControls;
                             SFX.Play("consoleError");
                             return;
                         }
-                        if (_inputProfile.Pressed("SELECT"))
+                        if (_inputProfile.Pressed(Triggers.Select))
                         {
                             SFX.Play("consoleSelect");
                             if (_editControlSelection == 0)
@@ -717,13 +722,13 @@ namespace DuckGame
                         if (_selectedSetting == null)
                             _selectedSetting = _controlSettingPages[_controlPage].Find(x => (x.condition == null || x.condition(d)) && !x.caption);
                         Vec2 zero = Vec2.Zero;
-                        if (_inputProfile.Pressed("MENUUP"))
+                        if (_inputProfile.Pressed(Triggers.MenuUp))
                             zero += new Vec2(0f, -8f);
-                        else if (_inputProfile.Pressed("MENUDOWN"))
+                        else if (_inputProfile.Pressed(Triggers.MenuDown))
                             zero += new Vec2(0f, 8f);
-                        else if (_inputProfile.Pressed("MENULEFT"))
+                        else if (_inputProfile.Pressed(Triggers.MenuLeft))
                             zero += new Vec2(-30f, 0f);
-                        else if (_inputProfile.Pressed("MENURIGHT"))
+                        else if (_inputProfile.Pressed(Triggers.MenuRight))
                             zero += new Vec2(30f, 0f);
                         if (zero != Vec2.Zero)
                         {
@@ -761,7 +766,7 @@ namespace DuckGame
                                 _selectedSetting = controlSetting1;
                             SFX.Play("consoleTick");
                         }
-                        if (_inputProfile.Pressed("SELECT"))
+                        if (_inputProfile.Pressed(Triggers.Select))
                         {
                             if (_selectedSetting.action != null)
                             {
@@ -775,9 +780,9 @@ namespace DuckGame
                         }
                         else
                         {
-                            if (_inputProfile.Pressed("CANCEL"))
+                            if (_inputProfile.Pressed(Triggers.Cancel))
                             {
-                                if (ProfileSelector._madeControlChanges)
+                                if (_madeControlChanges)
                                 {
                                     _editControlSelection = 0;
                                     _desiredMode = PSMode.EditControlsConfirm;
@@ -788,7 +793,7 @@ namespace DuckGame
                                 SFX.Play("consoleError");
                                 return;
                             }
-                            if (_inputProfile.Pressed("START"))
+                            if (_inputProfile.Pressed(Triggers.Start))
                             {
                                 _pendingMaps.Add(_configInputMapping);
                                 ApplyInputSettings(_profile);
@@ -798,7 +803,7 @@ namespace DuckGame
                             }
                         }
                     }
-                    else if (_inputProfile.Pressed("START"))
+                    else if (_inputProfile.Pressed(Triggers.Start))
                     {
                         _editControl = false;
                         SFX.Play("consoleError");
@@ -808,11 +813,11 @@ namespace DuckGame
                         _configInputMapping.deviceOverride = _inputProfile.lastActiveDevice;
                         if (_configInputMapping.deviceOverride is GenericController)
                             _configInputMapping.deviceOverride = (_configInputMapping.deviceOverride as GenericController).device;
-                        if (_selectedSetting.trigger != "ANY" && _configInputMapping.RunMappingUpdate(_selectedSetting.trigger, false))
+                        if (_selectedSetting.trigger != Triggers.Any && _configInputMapping.RunMappingUpdate(_selectedSetting.trigger, false))
                         {
                             _editControl = false;
                             SFX.Play("consoleSelect");
-                            ProfileSelector._madeControlChanges = true;
+                            _madeControlChanges = true;
                             _configInputMapping.deviceOverride = null;
                             return;
                         }
@@ -823,24 +828,24 @@ namespace DuckGame
                 {
                     if (!_changeName)
                     {
-                        if (_createSelection == PSCreateSelection.Controls && _inputProfile.Pressed("SELECT"))
+                        if (_createSelection == PSCreateSelection.Controls && _inputProfile.Pressed(Triggers.Select))
                         {
                             _desiredMode = PSMode.EditControls;
                             _selectedSetting = null;
                             _controlPage = 0;
-                            ProfileSelector._madeControlChanges = false;
+                            _madeControlChanges = false;
                             if (_configInputMapping == null)
                                 _configInputMapping = Input.GetDefaultMapping(_inputProfile.lastActiveDevice.productName, _inputProfile.lastActiveDevice.productGUID, p: (isEditing ? _profile : null)).Clone();
                             SFX.Play("consoleTick");
                         }
                         if (_createSelection == PSCreateSelection.Mood)
                         {
-                            if (_inputProfile.Pressed("MENULEFT"))
+                            if (_inputProfile.Pressed(Triggers.MenuLeft))
                             {
                                 _moodVal = Maths.Clamp(_moodVal - 0.25f, 0f, 1f);
                                 SFX.Play("consoleTick");
                             }
-                            if (_inputProfile.Pressed("MENURIGHT"))
+                            if (_inputProfile.Pressed(Triggers.MenuRight))
                             {
                                 _moodVal = Maths.Clamp(_moodVal + 0.25f, 0f, 1f);
                                 SFX.Play("consoleTick");
@@ -848,28 +853,36 @@ namespace DuckGame
                         }
                         if (_createSelection == PSCreateSelection.Color)
                         {
-                            if (_inputProfile.Pressed("MENULEFT"))
+                            if (_inputProfile.Pressed(Triggers.MenuLeft))
                             {
+                                if (_preferredColor == -1)
+                                {
+                                    _preferredColor = DG.MaxPlayers;
+                                }
                                 _preferredColor = Maths.Clamp(_preferredColor - 1, -1, DG.MaxPlayers - 1);
                                 SFX.Play("consoleTick");
                             }
-                            if (_inputProfile.Pressed("MENURIGHT"))
+                            if (_inputProfile.Pressed(Triggers.MenuRight))
                             {
+                                if (_preferredColor == DG.MaxPlayers - 1)
+                                {
+                                    _preferredColor = -2;
+                                }
                                 _preferredColor = Maths.Clamp(_preferredColor + 1, -1, DG.MaxPlayers - 1);
                                 SFX.Play("consoleTick");
                             }
                         }
-                        if (_inputProfile.Pressed("MENUDOWN") && _name != "" && _createSelection < PSCreateSelection.Accept)
+                        if (_inputProfile.Pressed(Triggers.MenuDown) && _name != "" && _createSelection < PSCreateSelection.Accept)
                         {
                             ++_createSelection;
                             SFX.Play("consoleTick");
                         }
-                        if (_inputProfile.Pressed("MENUUP") && _name != "" && _createSelection > (isEditing ? PSCreateSelection.Mood : PSCreateSelection.ChangeName))
+                        if (_inputProfile.Pressed(Triggers.MenuUp) && _name != "" && _createSelection > (isEditing ? PSCreateSelection.Mood : PSCreateSelection.ChangeName))
                         {
                             --_createSelection;
                             SFX.Play("consoleTick");
                         }
-                        if (_inputProfile.Pressed("SELECT"))
+                        if (_inputProfile.Pressed(Triggers.Select))
                         {
                             if (_createSelection == PSCreateSelection.ChangeName)
                             {
@@ -889,7 +902,7 @@ namespace DuckGame
                                 SFX.Play("consoleSelect", 0.4f);
                             }
                         }
-                        if (_inputProfile.Pressed("CANCEL"))
+                        if (_inputProfile.Pressed(Triggers.Cancel))
                         {
                             SaveSettings(isEditing, false);
                             if (!isEditing)
@@ -912,7 +925,7 @@ namespace DuckGame
                     {
                         InputProfile.repeat = true;
                         Keyboard.repeat = true;
-                        if (_inputProfile.Pressed("SELECT"))
+                        if (_inputProfile.Pressed(Triggers.Select))
                         {
                             string str = _name.Replace(" ", "");
                             if (str == "")
@@ -940,7 +953,7 @@ namespace DuckGame
                                 _changeName = false;
                             SFX.Play("consoleTick");
                         }
-                        if (_inputProfile.Pressed("MENULEFT"))
+                        if (_inputProfile.Pressed(Triggers.MenuLeft))
                         {
                             --_currentLetter;
                             if (_currentLetter < 0)
@@ -954,7 +967,7 @@ namespace DuckGame
                             }
                             SFX.Play("consoleTick");
                         }
-                        if (_inputProfile.Pressed("MENURIGHT"))
+                        if (_inputProfile.Pressed(Triggers.MenuRight))
                         {
                             ++_currentLetter;
                             if (_currentLetter > 8)
@@ -969,7 +982,7 @@ namespace DuckGame
                             }
                             SFX.Play("consoleTick");
                         }
-                        if (_inputProfile.Pressed("MENUUP"))
+                        if (_inputProfile.Pressed(Triggers.MenuUp))
                         {
                             int index = GetCharIndex(_name[_currentLetter]) + 1;
                             if (index >= _characters.Count)
@@ -981,7 +994,7 @@ namespace DuckGame
                             _maskName = _maskName.Insert(_currentLetter, character.ToString() ?? "");
                             SFX.Play("consoleTick");
                         }
-                        if (_inputProfile.Pressed("MENUDOWN"))
+                        if (_inputProfile.Pressed(Triggers.MenuDown))
                         {
                             int index = GetCharIndex(_name[_currentLetter]) - 1;
                             if (index < 0)
@@ -993,7 +1006,7 @@ namespace DuckGame
                             _maskName = _maskName.Insert(_currentLetter, character.ToString() ?? "");
                             SFX.Play("consoleTick");
                         }
-                        if (_inputProfile.Pressed("CANCEL"))
+                        if (_inputProfile.Pressed(Triggers.Cancel))
                         {
                             _desiredMode = PSMode.SelectProfile;
                             SFX.Play("consoleCancel", 0.4f);
@@ -1088,7 +1101,7 @@ namespace DuckGame
                                     flag = true;
                                 else if (!flag && (_controlPage != 0 || controlSetting != _controlSettingPages[_controlPage][_controlSettingPages[_controlPage].Count - 1]))
                                     position2.y -= 12f;
-                                if (controlSetting.trigger != "ANY")
+                                if (controlSetting.trigger != Triggers.Any)
                                 {
                                     name += ":|DGBLUE|";
                                     if (!_editControl || _selectedSetting != controlSetting)
@@ -1150,7 +1163,7 @@ namespace DuckGame
                         float num5 = 0.2f;
                         float num6 = Maths.Clamp(num3 >= 0.3f ? (num3 >= 0.8f ? Maths.NormalizeSection(num3, 0.8f, 1f) + num5 : num5) : Maths.NormalizeSection(num3, 0f, 0.3f) * num5, 0f, 1f);
                         bool flag3 = false;
-                        if ((_selector == null || !_selector.isArcadeHatSelector) && index != -1 && (Profiles.active.Contains(_profiles[index]) || Profiles.active.FirstOrDefault<Profile>(x => x.linkedProfile == _profiles[index]) != null))
+                        if ((_selector == null || !_selector.isArcadeHatSelector) && index != -1 && (Profiles.active.Contains(_profiles[index]) || Profiles.active.FirstOrDefault(x => x.linkedProfile == _profiles[index]) != null))
                             flag3 = true;
                         if (flag3)
                             text2 = text2.Replace("|DGBLUE|", "");
@@ -1245,8 +1258,8 @@ namespace DuckGame
                         text7 = "< " + text7 + " >";
                     if (_preferredColor >= 0)
                     {
-                        Graphics.DrawRect(new Vec2(x + 20f, pos.y - 2f), new Vec2(x + (width - 20f), pos.y + 9f), Persona.all.ElementAt<DuckPersona>(_preferredColor).colorDark.ToColor() * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.93f, false);
-                        _font.Draw(text7, Maths.RoundToPixel(new Vec2((float)(x + 2.0 + width / 2.0 - _font.GetWidth(text7) / 2.0), pos.y)), Persona.all.ElementAt<DuckPersona>(_preferredColor).color.ToColor() * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.95f);
+                        Graphics.DrawRect(new Vec2(x + 20f, pos.y - 2f), new Vec2(x + (width - 20f), pos.y + 9f), Persona.all.ElementAt(_preferredColor).colorDark.ToColor() * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.93f, false);
+                        _font.Draw(text7, Maths.RoundToPixel(new Vec2((float)(x + 2.0 + width / 2.0 - _font.GetWidth(text7) / 2.0), pos.y)), Persona.all.ElementAt(_preferredColor).color.ToColor() * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.95f);
                     }
                     else
                     {
@@ -1327,7 +1340,7 @@ namespace DuckGame
             _fade = 1f;
         }
 
-        private bool ProfileAlreadySelected(Profile p) => _profile.linkedProfile != null ? p != null && Profiles.active.FirstOrDefault<Profile>(x => x.linkedProfile == p) != null && p != _profile.linkedProfile : p != null && Profiles.active.Contains(p) && p != _profile;
+        private bool ProfileAlreadySelected(Profile p) => _profile.linkedProfile != null ? p != null && Profiles.active.FirstOrDefault(x => x.linkedProfile == p) != null && p != _profile.linkedProfile : p != null && Profiles.active.Contains(p) && p != _profile;
 
         public void EditProfile(Profile p)
         {

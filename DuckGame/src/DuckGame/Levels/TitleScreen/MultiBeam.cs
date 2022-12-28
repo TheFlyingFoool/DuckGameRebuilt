@@ -57,7 +57,7 @@ namespace DuckGame
             foreach (Duck duck in Level.CheckRectAll<Duck>(position - center, position - center + new Vec2(_collisionSize.x, _collisionSize.y)))
             {
                 Duck d = duck;
-                if (!_ducks.Any<BeamDuck>(t => t.duck == d))
+                if (!_ducks.Any(t => t.duck == d))
                 {
                     float num = d.y >= 100.0 ? 130f : 40f;
                     SFX.Play("stepInBeam");
@@ -115,14 +115,14 @@ namespace DuckGame
                 }
                 if (duck.duck.inputProfile != null)
                 {
-                    if (!TitleScreen.hasMenusOpen && duck.duck.inputProfile.Pressed("LEFT"))
+                    if (!TitleScreen.hasMenusOpen && duck.duck.inputProfile.Pressed(Triggers.Left))
                     {
                         duck.leaving = true;
                         _leaveLeft = true;
                         duck.duck.offDir = -1;
                         entered = false;
                     }
-                    else if (!TitleScreen.hasMenusOpen && duck.duck.inputProfile.Pressed("RIGHT"))
+                    else if (!TitleScreen.hasMenusOpen && duck.duck.inputProfile.Pressed(Triggers.Right))
                     {
                         duck.leaving = true;
                         _leaveLeft = false;

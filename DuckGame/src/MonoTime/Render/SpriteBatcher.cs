@@ -57,15 +57,15 @@ namespace DuckGame
         private VertexPositionColor[] _geometryVertexArray;
         private VertexPositionColorTexture[] _geometryVertexArrayTextured;
         private MTSpriteBatch _batch;
-        private Comparison<MTSpriteBatchItem> CompareTexture = new Comparison<MTSpriteBatchItem>(MTSpriteBatcher.CompareTextureFunc);
-        private static Comparison<MTSpriteBatchItem> CompareDepth = new Comparison<MTSpriteBatchItem>(MTSpriteBatcher.CompareDepthFunc);
-        private static Comparison<MTSimpleSpriteBatchItem> CompareSimpleDepth = new Comparison<MTSimpleSpriteBatchItem>(MTSpriteBatcher.CompareSimpleDepthFunc);
-        private static Comparison<GeometryItem> CompareGeometryDepth = new Comparison<GeometryItem>(MTSpriteBatcher.CompareGeometryDepthFunc);
-        private static Comparison<GeometryItemTexture> CompareTexturedGeometryDepth = new Comparison<GeometryItemTexture>(MTSpriteBatcher.CompareTexturedGeometryDepthFunc);
-        private static Comparison<MTSpriteBatchItem> CompareReverseDepth = new Comparison<MTSpriteBatchItem>(MTSpriteBatcher.CompareReverseDepthFunc);
-        private static Comparison<MTSimpleSpriteBatchItem> CompareSimpleReverseDepth = new Comparison<MTSimpleSpriteBatchItem>(MTSpriteBatcher.CompareSimpleReverseDepthFunc);
-        private static Comparison<GeometryItem> CompareGeometryReverseDepth = new Comparison<GeometryItem>(MTSpriteBatcher.CompareGeometryReverseDepthFunc);
-        private static Comparison<GeometryItemTexture> CompareTexturedGeometryReverseDepth = new Comparison<GeometryItemTexture>(MTSpriteBatcher.CompareTexturedGeometryReverseDepthFunc);
+        private Comparison<MTSpriteBatchItem> CompareTexture = new Comparison<MTSpriteBatchItem>(CompareTextureFunc);
+        private static Comparison<MTSpriteBatchItem> CompareDepth = new Comparison<MTSpriteBatchItem>(CompareDepthFunc);
+        private static Comparison<MTSimpleSpriteBatchItem> CompareSimpleDepth = new Comparison<MTSimpleSpriteBatchItem>(CompareSimpleDepthFunc);
+        private static Comparison<GeometryItem> CompareGeometryDepth = new Comparison<GeometryItem>(CompareGeometryDepthFunc);
+        private static Comparison<GeometryItemTexture> CompareTexturedGeometryDepth = new Comparison<GeometryItemTexture>(CompareTexturedGeometryDepthFunc);
+        private static Comparison<MTSpriteBatchItem> CompareReverseDepth = new Comparison<MTSpriteBatchItem>(CompareReverseDepthFunc);
+        private static Comparison<MTSimpleSpriteBatchItem> CompareSimpleReverseDepth = new Comparison<MTSimpleSpriteBatchItem>(CompareSimpleReverseDepthFunc);
+        private static Comparison<GeometryItem> CompareGeometryReverseDepth = new Comparison<GeometryItem>(CompareGeometryReverseDepthFunc);
+        private static Comparison<GeometryItemTexture> CompareTexturedGeometryReverseDepth = new Comparison<GeometryItemTexture>(CompareTexturedGeometryReverseDepthFunc);
         public MTSpriteBatcher(GraphicsDevice device, MTSpriteBatch batch)
         {
 
@@ -712,10 +712,10 @@ namespace DuckGame
             switch (sortMode)
             {
                 case SpriteSortMode.BackToFront:
-                    DGList.Sort<MTSimpleSpriteBatchItem>(_simpleBatchItemList, MTSpriteBatcher.CompareSimpleReverseDepth);
+                    DGList.Sort(_simpleBatchItemList, CompareSimpleReverseDepth);
                     break;
                 case SpriteSortMode.FrontToBack:
-                    DGList.Sort<MTSimpleSpriteBatchItem>(_simpleBatchItemList, MTSpriteBatcher.CompareSimpleDepth);
+                    DGList.Sort(_simpleBatchItemList, CompareSimpleDepth);
                     break;
             }
             int index1 = 0;
@@ -769,10 +769,10 @@ namespace DuckGame
             switch (sortMode)
             {
                 case SpriteSortMode.BackToFront:
-                    DGList.Sort<GeometryItem>(_geometryBatch, MTSpriteBatcher.CompareGeometryReverseDepth);
+                    DGList.Sort(_geometryBatch, CompareGeometryReverseDepth);
                     break;
                 case SpriteSortMode.FrontToBack:
-                    DGList.Sort<GeometryItem>(_geometryBatch, MTSpriteBatcher.CompareGeometryDepth);
+                    DGList.Sort(_geometryBatch, CompareGeometryDepth);
                     break;
             }
             int num = 0;
@@ -812,10 +812,10 @@ namespace DuckGame
             switch (sortMode)
             {
                 case SpriteSortMode.BackToFront:
-                    DGList.Sort<GeometryItemTexture>(_geometryBatchTextured, MTSpriteBatcher.CompareTexturedGeometryReverseDepth);
+                    DGList.Sort(_geometryBatchTextured, CompareTexturedGeometryReverseDepth);
                     break;
                 case SpriteSortMode.FrontToBack:
-                    DGList.Sort<GeometryItemTexture>(_geometryBatchTextured, MTSpriteBatcher.CompareTexturedGeometryDepth);
+                    DGList.Sort(_geometryBatchTextured, CompareTexturedGeometryDepth);
                     break;
             }
             int num1 = 0;
@@ -870,7 +870,7 @@ namespace DuckGame
             if (start == end)
                 return;
             int numVertices = end - start;
-            _device.DrawUserIndexedPrimitives<VertexPositionColorTexture>(PrimitiveType.TriangleList, _vertexArray, 0, numVertices, _index, 0, numVertices / 4 * 2, VertexPositionColorTexture.VertexDeclaration);
+            _device.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, _vertexArray, 0, numVertices, _index, 0, numVertices / 4 * 2, VertexPositionColorTexture.VertexDeclaration);
         }
 
         private void FlushSimpleVertexArray(int start, int end)
@@ -878,7 +878,7 @@ namespace DuckGame
             if (start == end)
                 return;
             int numVertices = end - start;
-            _device.DrawUserIndexedPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, _simpleVertexArray, 0, numVertices, _simpleIndex, 0, numVertices / 4 * 2, VertexPositionColor.VertexDeclaration);
+            _device.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, _simpleVertexArray, 0, numVertices, _simpleIndex, 0, numVertices / 4 * 2, VertexPositionColor.VertexDeclaration);
         }
 
         private void FlushGeometryVertexArray(int start, int end)
@@ -886,7 +886,7 @@ namespace DuckGame
             if (start == end)
                 return;
             int numVertices = end - start;
-            _device.DrawUserIndexedPrimitives<VertexPositionColor>(PrimitiveType.TriangleList, _geometryVertexArray, 0, numVertices, _geometryIndex, 0, numVertices / 3, VertexPositionColor.VertexDeclaration);
+            _device.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, _geometryVertexArray, 0, numVertices, _geometryIndex, 0, numVertices / 3, VertexPositionColor.VertexDeclaration);
         }
 
         private void FlushTexturedGeometryVertexArray(int start, int end)
@@ -894,7 +894,7 @@ namespace DuckGame
             if (start == end)
                 return;
             int numVertices = end - start;
-            _device.DrawUserIndexedPrimitives<VertexPositionColorTexture>(PrimitiveType.TriangleList, _geometryVertexArrayTextured, 0, numVertices, _texturedGeometryIndex, 0, numVertices / 3, VertexPositionColorTexture.VertexDeclaration);
+            _device.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, _geometryVertexArrayTextured, 0, numVertices, _texturedGeometryIndex, 0, numVertices / 3, VertexPositionColorTexture.VertexDeclaration);
         }
     }
 }

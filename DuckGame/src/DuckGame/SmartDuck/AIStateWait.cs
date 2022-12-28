@@ -5,18 +5,18 @@
 //// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 //// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
-//namespace DuckGame
-//{
-//    public class AIStateWait : AIState
-//    {
-//        private float _wait;
+namespace DuckGame
+{
+    public class AIStateWait : AIState
+    {
+        private float _wait;
 
-//        public AIStateWait(float wait) => this._wait = wait;
+        public AIStateWait(float wait) => _wait = wait;
 
-//        public override AIState Update(Duck duck, DuckAI ai)
-//        {
-//            this._wait -= 0.016f;
-//            return _wait <= 0.0 ? null : (AIState)this;
-//        }
-//    }
-//}
+        public override AIState Update(Duck duck, DuckAI ai)
+        {
+            _wait -= 0.016f;
+            return _wait <= 0.0 ? null : (AIState)this;
+        }
+    }
+}

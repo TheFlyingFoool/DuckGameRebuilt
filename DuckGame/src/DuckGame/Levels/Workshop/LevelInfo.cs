@@ -66,13 +66,13 @@ namespace DuckGame
                 Graphics.DrawRect(position + new Vec2(-1f, 0f), position + new Vec2(width + 1f, height), Color.White * alpha, (Depth)0.97f, false);
             if (_specialText != null)
             {
-                LevelInfo._font.scale = new Vec2(0.5f, 0.5f);
-                LevelInfo._font.Draw(_specialText, (float)(position.x + width / 2.0 - LevelInfo._font.GetWidth(_specialText) / 2.0), (float)(position.y + height / 2.0 - 3.0), Color.White * alpha, (Depth)0.95f);
+                _font.scale = new Vec2(0.5f, 0.5f);
+                _font.Draw(_specialText, (float)(position.x + width / 2.0 - _font.GetWidth(_specialText) / 2.0), (float)(position.y + height / 2.0 - 3.0), Color.White * alpha, (Depth)0.95f);
             }
             else
             {
-                LevelInfo._font.scale = new Vec2(0.5f, 0.5f);
-                LevelInfo._font.Draw(_name, position.x + 3f, (float)(position.y + height - 6.0), Color.White * alpha, (Depth)0.95f);
+                _font.scale = new Vec2(0.5f, 0.5f);
+                _font.Draw(_name, position.x + 3f, (float)(position.y + height - 6.0), Color.White * alpha, (Depth)0.95f);
                 _sprite.xscale = _sprite.yscale = width / _sprite.width;
                 _sprite.depth = (Depth)0.95f;
                 _sprite.alpha = alpha;

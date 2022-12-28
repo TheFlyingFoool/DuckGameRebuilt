@@ -10,25 +10,25 @@ namespace DuckGame
     public class WoodDebris : PhysicsParticle
     {
         public static int kMaxObjects = 64;
-        public static WoodDebris[] _objects = new WoodDebris[WoodDebris.kMaxObjects];
-        private static int _lastActiveObject = 0;
+        public static WoodDebris[] _objects = new WoodDebris[kMaxObjects];
+        public static int _lastActiveObject = 0;
         private SpriteMap _sprite;
 
         public static WoodDebris New(float xpos, float ypos)
         {
             WoodDebris woodDebris;
-            if (WoodDebris._objects[WoodDebris._lastActiveObject] == null)
+            if (_objects[_lastActiveObject] == null)
             {
                 woodDebris = new WoodDebris();
-                WoodDebris._objects[WoodDebris._lastActiveObject] = woodDebris;
+                _objects[_lastActiveObject] = woodDebris;
             }
             else
-                woodDebris = WoodDebris._objects[WoodDebris._lastActiveObject];
-            WoodDebris._lastActiveObject = (WoodDebris._lastActiveObject + 1) % WoodDebris.kMaxObjects;
+                woodDebris = _objects[_lastActiveObject];
+            _lastActiveObject = (_lastActiveObject + 1) % kMaxObjects;
             woodDebris.ResetProperties();
             woodDebris.Init(xpos, ypos);
-            woodDebris._sprite.globalIndex = Thing.GetGlobalIndex();
-            woodDebris.globalIndex = Thing.GetGlobalIndex();
+            woodDebris._sprite.globalIndex = GetGlobalIndex();
+            woodDebris.globalIndex = GetGlobalIndex();
             return woodDebris;
         }
 

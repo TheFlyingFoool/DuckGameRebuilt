@@ -71,9 +71,9 @@ namespace DuckGame
             if (_slideWait < 0.0)
                 position = Vec2.Lerp(position, _end, 0.15f);
             _slideWait -= 0.4f;
-            DuckGame.Graphics.SetRenderTarget(_faceTarget);
-            DuckGame.Graphics.Clear(Color.Transparent);
-            DuckGame.Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, null, Matrix.Identity);
+            Graphics.SetRenderTarget(_faceTarget);
+            Graphics.Clear(Color.Transparent);
+            Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, RasterizerState.CullNone, null, Matrix.Identity);
             _gradient.depth = -0.6f;
             _gradient.alpha = 0.5f;
             if (_team.activeProfiles.Count == 1)
@@ -97,10 +97,10 @@ namespace DuckGame
             }
             if (_smallMode)
                 _gradient.yscale = 0.5f;
-            DuckGame.Graphics.Draw(_gradient, 0f, 0f);
+            Graphics.Draw(_gradient, 0f, 0f);
             _edgeOverlay.depth = (Depth)0.9f;
             _edgeOverlay.alpha = 0.5f;
-            DuckGame.Graphics.Draw(_edgeOverlay, 0f, 0f);
+            Graphics.Draw(_edgeOverlay, 0f, 0f);
             int num = 0;
             foreach (Profile activeProfile in _team.activeProfiles)
             {
@@ -109,9 +109,9 @@ namespace DuckGame
                 activeProfile.persona.quackSprite.depth = (Depth)0.7f;
                 activeProfile.persona.quackSprite.scale = new Vec2(2f, 2f);
                 if (_smallMode)
-                    DuckGame.Graphics.Draw(activeProfile.persona.quackSprite, 0, x - 8f, y - 8f);
+                    Graphics.Draw(activeProfile.persona.quackSprite, 0, x - 8f, y - 8f);
                 else
-                    DuckGame.Graphics.Draw(activeProfile.persona.quackSprite, 0, x, y, 2f, 2f);
+                    Graphics.Draw(activeProfile.persona.quackSprite, 0, x, y, 2f, 2f);
                 activeProfile.persona.quackSprite.color = Color.White;
                 activeProfile.persona.quackSprite.scale = new Vec2(1f, 1f);
                 Vec2 hatPoint = DuckRig.GetHatPoint(activeProfile.persona.sprite.imageIndex);
@@ -122,28 +122,29 @@ namespace DuckGame
                 if (hat.texture.width > 16.0)
                     hat.frame = 1;
                 if (_smallMode)
-                    DuckGame.Graphics.Draw(hat, hat.frame, (float)(x + hatPoint.x - 8.0), (float)(y + hatPoint.y - 8.0));
+                    Graphics.Draw(hat, hat.frame, (float)(x + hatPoint.x - 8.0), (float)(y + hatPoint.y - 8.0));
                 else
-                    DuckGame.Graphics.Draw(hat, hat.frame, x + hatPoint.x * 2f, y + hatPoint.y * 2f, 2f, 2f);
+                    Graphics.Draw(hat, hat.frame, x + hatPoint.x * 2f, y + hatPoint.y * 2f, 2f, 2f);
                 hat.color = Color.White;
                 hat.scale = new Vec2(1f, 1f);
                 hat.frame = 0;
                 ++num;
             }
-            DuckGame.Graphics.screen.End();
-            DuckGame.Graphics.SetRenderTarget(null);
+            Graphics.screen.End();
+            Graphics.SetRenderTarget(null);
             base.Update();
         }
 
         public override void Draw()
         {
             _font.scale = new Vec2(1f, 1f);
-            string str = _team.currentDisplayName;
+            string name = _team.currentDisplayName;
             float num1 = 0f;
             float num2 = 0f;
-            if (str.Length > 16)
-                str = str.Substring(0, 16);
-            string text1 = "@ICONGRADIENT@" + str;
+            int coloredTagsLength = name.Length - Program.RemoveColorTags(name).Length;
+            if (name.Length - coloredTagsLength > 16)
+                name = name.Substring(0, 16 + coloredTagsLength);
+            string text1 = "@ICONGRADIENT@" + name;
             if (_team != null && _team.activeProfiles != null && _team.activeProfiles.Count > 0)
             {
                 BitmapFont bitmapFont = _team.activeProfiles.Count <= 1 ? _team.activeProfiles[0].font : Profiles.EnvironmentProfile.font;
@@ -152,7 +153,7 @@ namespace DuckGame
             }
             _font.scale = new Vec2(1f, 1f);
             _targetSprite.scale = new Vec2(1f, 1f);
-            DuckGame.Graphics.Draw(_targetSprite, x, y);
+            Graphics.Draw(_targetSprite, x, y);
             if (_mode == BoardMode.Points)
             {
                 string text2 = Change.ToString(_team.score);
@@ -177,12 +178,12 @@ namespace DuckGame
                     if (_smallMode)
                     {
                         _trophy.depth = (Depth)(0.8f + index * 0.01f);
-                        DuckGame.Graphics.Draw(_trophy, x + 24f + index * 6, y + 6f);
+                        Graphics.Draw(_trophy, x + 24f + index * 6, y + 6f);
                     }
                     else
                     {
                         _trophy.depth = (Depth)(0.8f - index * 0.01f);
-                        DuckGame.Graphics.Draw(_trophy, x + 175f - index * 8, y + 18f);
+                        Graphics.Draw(_trophy, x + 175f - index * 8, y + 18f);
                     }
                 }
             }

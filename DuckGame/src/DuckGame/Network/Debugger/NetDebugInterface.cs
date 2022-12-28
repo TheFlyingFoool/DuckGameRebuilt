@@ -73,8 +73,10 @@ namespace DuckGame
              for (int index = 0; index < 5; ++index)
                  Send.ImmediateUnreliableBroadcast(new NMClientClosedGame());
              netDebugInterface._instance = NetworkDebugger.Reboot(netDebugInterface._instance);
-         });
-            connectionDropdown.right.right.right = new NetDebugButton(this, "Reboot", null, () => netDebugInterface._instance = NetworkDebugger.Reboot(netDebugInterface._instance));
+         })
+            {
+                right = new NetDebugButton(this, "Reboot", null, () => netDebugInterface._instance = NetworkDebugger.Reboot(netDebugInterface._instance))
+            };
             List<NetDebugElement> elements1 = _elements;
             NetDebugSlider netDebugSlider1 = new NetDebugSlider(this, "Latency: ", () =>
            {

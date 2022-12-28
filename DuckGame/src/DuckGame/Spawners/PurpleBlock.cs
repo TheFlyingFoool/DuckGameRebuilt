@@ -37,7 +37,7 @@ namespace DuckGame
         private Holdable _hoverItem;
         private float hitWait;
 
-        public static void Reset() => PurpleBlock._storedItems.Clear();
+        public static void Reset() => _storedItems.Clear();
 
         private static Dictionary<Profile, StoredItem> _storedItems => Level.core._storedItems;
 
@@ -83,8 +83,8 @@ namespace DuckGame
         public static StoredItem GetStoredItem(Profile p)
         {
             StoredItem storedItem;
-            if (!PurpleBlock._storedItems.TryGetValue(p, out storedItem))
-                storedItem = PurpleBlock._storedItems[p] = new StoredItem();
+            if (!_storedItems.TryGetValue(p, out storedItem))
+                storedItem = _storedItems[p] = new StoredItem();
             return storedItem;
         }
 
@@ -100,16 +100,16 @@ namespace DuckGame
                     t = (t as WeightBall).collar;
                     break;
             }
-            StoredItem storedItem = PurpleBlock.GetStoredItem(p);
+            StoredItem storedItem = GetStoredItem(p);
             t.GetType();
             try
             {
                 storedItem.serializedData = t.Serialize();
-                storedItem.thing = Thing.LoadThing(storedItem.serializedData);
+                storedItem.thing = LoadThing(storedItem.serializedData);
             }
             catch (Exception)
             {
-                PurpleBlock._storedItems.Clear();
+                _storedItems.Clear();
             }
             SFX.Play("scanBeep");
             if (!Network.isActive || p.connection != DuckNetwork.localConnection || p.duck == null)
@@ -164,7 +164,7 @@ namespace DuckGame
             Vec2 vec2;
             if (_hoverItem == null)
             {
-                Holdable holdable = Level.Nearest<Holdable>(this.position, 24f);
+                Holdable holdable = Level.Nearest<Holdable>(position, 24f);
                 if (holdable != null && holdable.owner == null && holdable != null && holdable.canPickUp && holdable.bottom <= top && Math.Abs(holdable.hSpeed) + Math.Abs(holdable.vSpeed) < 2.0)
                 {
                     float num = 999f;
@@ -237,7 +237,7 @@ namespace DuckGame
             }
             else
             {
-                _currentProjection = PurpleBlock.GetStoredItem(_close[_closeIndex]).thing;
+                _currentProjection = GetStoredItem(_close[_closeIndex]).thing;
                 _projectorAlpha = Maths.CountUp(_projectorAlpha, 0.1f);
             }
             _projectorGlitch.alpha = _glitch * _projectorAlpha;
@@ -261,7 +261,7 @@ namespace DuckGame
                 {
                     Duck.renderingIcon = true;
                     Material material = Graphics.material;
-                    Graphics.material = PurpleBlock._grayscale;
+                    Graphics.material = _grayscale;
                     _currentProjection.depth = depth - 5;
                     _currentProjection.x = x - _double * 2f;
                     _currentProjection.y = y - 16f - num;
@@ -283,7 +283,7 @@ namespace DuckGame
             {
                 Duck.renderingIcon = true;
                 Material material = Graphics.material;
-                Graphics.material = PurpleBlock._grayscale;
+                Graphics.material = _grayscale;
                 _currentProjection.depth = depth - 5;
                 _currentProjection.x = x;
                 _currentProjection.y = y - 16f - num;
@@ -317,16 +317,16 @@ namespace DuckGame
                     if (holdable is RagdollPart)
                         break;
                     if (lastThrownBy != null)
-                        PurpleBlock.StoreItem(lastThrownBy.profile, with);
+                        StoreItem(lastThrownBy.profile, with);
                     Bounce();
                     break;
                 case Duck pDuck:
                     RumbleManager.AddRumbleEvent(pDuck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.None));
-                    StoredItem storedItem = PurpleBlock.GetStoredItem(pDuck.profile);
+                    StoredItem storedItem = GetStoredItem(pDuck.profile);
                     if (storedItem.thing != null && !_served.Contains(pDuck.profile))
                     {
                         containContext = storedItem.thing as PhysicsObject;
-                        storedItem.thing = Thing.LoadThing(storedItem.serializedData);
+                        storedItem.thing = LoadThing(storedItem.serializedData);
                         _hit = false;
                         Pop();
                         _served.Add(pDuck.profile);
@@ -344,7 +344,7 @@ namespace DuckGame
                     Holdable holdObject = pDuck.holdObject;
                     if (holdObject == null)
                         break;
-                    PurpleBlock.StoreItem(pDuck.profile, holdObject);
+                    StoreItem(pDuck.profile, holdObject);
                     break;
             }
         }

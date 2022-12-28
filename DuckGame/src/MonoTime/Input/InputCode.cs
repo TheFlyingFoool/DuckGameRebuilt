@@ -16,19 +16,19 @@ namespace DuckGame
         public string description = "";
         public string chancyComment = "";
         public Action action;
-        private Dictionary<string, InputCode.InputCodeProfileStatus> status = new Dictionary<string, InputCode.InputCodeProfileStatus>();
+        private Dictionary<string, InputCodeProfileStatus> status = new Dictionary<string, InputCodeProfileStatus>();
         public List<string> triggers = new List<string>();
         public float breakSpeed = 0.04f;
         private bool hasDoubleInputs;
         private bool _initializedDoubleInputs;
         private static Dictionary<string, InputCode> _codes = new Dictionary<string, InputCode>();
 
-        public InputCode.InputCodeProfileStatus GetStatus(InputProfile p)
+        public InputCodeProfileStatus GetStatus(InputProfile p)
         {
             InputCodeProfileStatus status;
             if (!this.status.TryGetValue(p.name, out status))
             {
-                status = new InputCode.InputCodeProfileStatus();
+                status = new InputCodeProfileStatus();
                 this.status[p.name] = status;
             }
             return status;
@@ -50,7 +50,7 @@ namespace DuckGame
                     }
                 }
             }
-            InputCode.InputCodeProfileStatus status = GetStatus(p);
+            InputCodeProfileStatus status = GetStatus(p);
             if (status.lastUpdateFrame == Graphics.frame)
                 return status.lastResult;
             status.lastUpdateFrame = Graphics.frame;
@@ -101,13 +101,13 @@ namespace DuckGame
         public static implicit operator InputCode(string s)
         {
             InputCode inputCode;
-            if (!InputCode._codes.TryGetValue(s, out inputCode))
+            if (!_codes.TryGetValue(s, out inputCode))
             {
                 inputCode = new InputCode
                 {
                     triggers = new List<string>(s.Split('|'))
                 };
-                InputCode._codes[s] = inputCode;
+                _codes[s] = inputCode;
             }
             return inputCode;
         }

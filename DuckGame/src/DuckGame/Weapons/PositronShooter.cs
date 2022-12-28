@@ -82,8 +82,10 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 999999;
-            _ammoType = new ATLaserOrange();
-            _ammoType.affectedByGravity = true;
+            _ammoType = new ATLaserOrange
+            {
+                affectedByGravity = true
+            };
             _type = "gun";
             graphic = new Sprite("positronShooter");
             center = new Vec2(10f, 4f);
@@ -117,9 +119,9 @@ namespace DuckGame
                     _burstWait = 1f;
                     if (isServerForObject)
                     {
-                        PositronShooter.inFire = true;
+                        inFire = true;
                         Fire();
-                        PositronShooter.inFire = false;
+                        inFire = false;
                         if (Network.isActive)
                             Send.Message(new NMFireGun(this, firedBullets, bulletFireIndex, false, duck != null ? duck.netProfileIndex : (byte)4, true), NetMessagePriority.Urgent);
                         firedBullets.Clear();
@@ -156,13 +158,13 @@ namespace DuckGame
             }
             else
                 _noteIndex = _notes.Count + 1;
-            _winding = duck != null && duck.inputProfile.Down("UP");
+            _winding = duck != null && duck.inputProfile.Down(Triggers.Up);
             base.Update();
         }
 
         public override void CheckIfHoldObstructed()
         {
-            if (duck != null && duck.inputProfile.Down("UP"))
+            if (duck != null && duck.inputProfile.Down(Triggers.Up))
                 duck.holdObstructed = true;
             else
                 base.CheckIfHoldObstructed();

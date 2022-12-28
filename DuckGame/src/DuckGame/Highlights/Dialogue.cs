@@ -18,14 +18,14 @@ namespace DuckGame
             IEnumerable<DXMLNode> source = DuckXML.Load(DuckFile.OpenStream("Content/dialogue/sportscaster.tlk")).Elements(nameof(Dialogue));
             if (source == null)
                 return;
-            foreach (DXMLNode element1 in source.Elements<DXMLNode>())
+            foreach (DXMLNode element1 in source.Elements())
             {
                 foreach (DXMLNode element2 in element1.Elements("Line"))
-                    Dialogue._speechLines.Add(element1.Name, element2.Value);
+                    _speechLines.Add(element1.Name, element2.Value);
             }
         }
 
-        public static string GetLine(string type) => !Dialogue._speechLines.ContainsKey(type) ? null : Dialogue._speechLines[type][Rando.Int(Dialogue._speechLines[type].Count - 1)];
+        public static string GetLine(string type) => !_speechLines.ContainsKey(type) ? null : _speechLines[type][Rando.Int(_speechLines[type].Count - 1)];
 
         public static string GetRemark(
           string type,
@@ -34,7 +34,7 @@ namespace DuckGame
           string extra01 = null,
           string extra02 = null)
         {
-            string remark = Dialogue.GetLine(type);
+            string remark = GetLine(type);
             if (remark != null)
             {
                 if (name != null)
@@ -49,43 +49,43 @@ namespace DuckGame
             return remark;
         }
 
-        public static string GetRemark(string type, ResultData data) => data.multi ? Dialogue.GetTeamRemark(type, data.name) : Dialogue.GetIndividualRemark(type, data.name);
+        public static string GetRemark(string type, ResultData data) => data.multi ? GetTeamRemark(type, data.name) : GetIndividualRemark(type, data.name);
 
-        public static string GetWinnerRemark(ResultData data) => data.multi ? Dialogue.GetLine("WinnerTeamRemark").Replace("%NAME%", data.name) : Dialogue.GetLine("WinnerIndividualRemark").Replace("%NAME%", data.name);
+        public static string GetWinnerRemark(ResultData data) => data.multi ? GetLine("WinnerTeamRemark").Replace("%NAME%", data.name) : GetLine("WinnerIndividualRemark").Replace("%NAME%", data.name);
 
         public static string GetRunnerUpRemark(string type, ResultData data)
         {
             if (data.multi)
             {
                 if (type.Contains("Positive"))
-                    return Dialogue.GetLine("PositiveRunnerUpTeamRemark").Replace("%NAME%", data.name);
+                    return GetLine("PositiveRunnerUpTeamRemark").Replace("%NAME%", data.name);
                 if (type.Contains("Neutral"))
-                    return Dialogue.GetLine("NeutralRunnerUpTeamRemark").Replace("%NAME%", data.name);
-                return type.Contains("Negative") ? Dialogue.GetLine("NegativeRunnerUpTeamRemark").Replace("%NAME%", data.name) : "I don't know what to say!";
+                    return GetLine("NeutralRunnerUpTeamRemark").Replace("%NAME%", data.name);
+                return type.Contains("Negative") ? GetLine("NegativeRunnerUpTeamRemark").Replace("%NAME%", data.name) : "I don't know what to say!";
             }
             if (type.Contains("Positive"))
-                return Dialogue.GetLine("PositiveRunnerUpIndividualRemark").Replace("%NAME%", data.name);
+                return GetLine("PositiveRunnerUpIndividualRemark").Replace("%NAME%", data.name);
             if (type.Contains("Neutral"))
-                return Dialogue.GetLine("NeutralRunnerUpIndividualRemark").Replace("%NAME%", data.name);
-            return type.Contains("Negative") ? Dialogue.GetLine("NegativeRunnerUpIndividualRemark").Replace("%NAME%", data.name) : "I don't know what to say!";
+                return GetLine("NeutralRunnerUpIndividualRemark").Replace("%NAME%", data.name);
+            return type.Contains("Negative") ? GetLine("NegativeRunnerUpIndividualRemark").Replace("%NAME%", data.name) : "I don't know what to say!";
         }
 
         public static string GetTeamRemark(string type, string name)
         {
             if (type.Contains("Positive"))
-                return Dialogue.GetLine("PositiveTeamRemark").Replace("%NAME%", name);
+                return GetLine("PositiveTeamRemark").Replace("%NAME%", name);
             if (type.Contains("Neutral"))
-                return Dialogue.GetLine("NeutralTeamRemark").Replace("%NAME%", name);
-            return type.Contains("Negative") ? Dialogue.GetLine("NegativeTeamRemark").Replace("%NAME%", name) : "I don't know what to say!";
+                return GetLine("NeutralTeamRemark").Replace("%NAME%", name);
+            return type.Contains("Negative") ? GetLine("NegativeTeamRemark").Replace("%NAME%", name) : "I don't know what to say!";
         }
 
         public static string GetIndividualRemark(string type, string name)
         {
             if (type.Contains("Positive"))
-                return Dialogue.GetLine("PositiveIndividualRemark").Replace("%NAME%", name);
+                return GetLine("PositiveIndividualRemark").Replace("%NAME%", name);
             if (type.Contains("Neutral"))
-                return Dialogue.GetLine("NeutralIndividualRemark").Replace("%NAME%", name);
-            return type.Contains("Negative") ? Dialogue.GetLine("NegativeIndividualRemark").Replace("%NAME%", name) : "I don't know what to say!";
+                return GetLine("NeutralIndividualRemark").Replace("%NAME%", name);
+            return type.Contains("Negative") ? GetLine("NegativeIndividualRemark").Replace("%NAME%", name) : "I don't know what to say!";
         }
     }
 }

@@ -31,56 +31,56 @@ namespace DuckGame
         private static string _alternateSong = "";
         private static HashSet<string> _processedSongs = new HashSet<string>();
 
-        public static Dictionary<string, MemoryStream> songs => Music._songs;
+        public static Dictionary<string, MemoryStream> songs => _songs;
 
-        public static void Reset() => Music._recentSongs.Clear();
+        public static void Reset() => _recentSongs.Clear();
 
-        public static bool stopped => Music._musicPlayer.State == SoundState.Stopped || Music._musicPlayer.State == SoundState.Paused;
+        public static bool stopped => _musicPlayer.State == SoundState.Stopped || _musicPlayer.State == SoundState.Paused;
 
         public static float volumeMult
         {
-            get => Music._volumeMult;
+            get => _volumeMult;
             set
             {
-                Music._volumeMult = value;
-                Music.volume = Music._volume;
+                _volumeMult = value;
+                volume = _volume;
             }
         }
 
         public static float volume
         {
-            get => Music._volume;
+            get => _volume;
             set
             {
-                Music._volume = value;
-                if (Music._musicPlayer == null)
+                _volume = value;
+                if (_musicPlayer == null)
                     return;
-                Music._musicPlayer.Volume = Music._volume * (Music._masterVolume * Music._masterVolume) * Music._volumeMult;
+                _musicPlayer.Volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
             }
         }
 
         public static float masterVolume
         {
-            get => Music._masterVolume;
+            get => _masterVolume;
             set
             {
-                Music._masterVolume = value;
-                Music.volume = Music._volume;
+                _masterVolume = value;
+                volume = _volume;
             }
         }
 
-        public static string currentSong => Music._currentSong;
+        public static string currentSong => _currentSong;
 
-        public static string pendingSong => Music._pendingSong;
+        public static string pendingSong => _pendingSong;
 
-        public static TimeSpan position => new TimeSpan(0, 0, 0, 0, (int)(Music._musicPlayer.Platform_GetProgress() * Music._musicPlayer.Platform_GetLengthInMilliseconds()));
+        public static TimeSpan position => new TimeSpan(0, 0, 0, 0, (int)(_musicPlayer.Platform_GetProgress() * _musicPlayer.Platform_GetLengthInMilliseconds()));
 
-        public static bool finished => Music._musicPlayer.State == SoundState.Stopped;
+        public static bool finished => _musicPlayer.State == SoundState.Stopped;
 
         public static void Initialize()
         {
-            Music._musicPlayer = new MusicInstance(null);
-            Music._songList = Content.GetFiles("Content/Audio/Music/InGame");
+            _musicPlayer = new MusicInstance(null);
+            _songList = Content.GetFiles("Content/Audio/Music/InGame");
         }
 
         public static void PreloadSongs()
@@ -89,7 +89,7 @@ namespace DuckGame
 
         public static void Terminate()
         {
-            foreach (KeyValuePair<string, MemoryStream> song in Music._songs)
+            foreach (KeyValuePair<string, MemoryStream> song in _songs)
                 song.Value.Close();
         }
 
@@ -97,7 +97,7 @@ namespace DuckGame
         {
             if (DevConsole.rhythmMode)
                 return "InGame/comic.ogg";
-            string[] strArray = Music._songList;
+            string[] strArray = _songList;
             if (ReskinPack.active.Count > 0)
             {
                 List<string> stringList = new List<string>();
@@ -109,7 +109,7 @@ namespace DuckGame
             if (strArray.Length == 0)
                 return "";
             Random generator = Rando.generator;
-            Rando.generator = Music._musicPickGen;
+            Rando.generator = _musicPickGen;
             List<string> stringList1 = new List<string>();
             foreach (string path in strArray)
             {
@@ -120,10 +120,10 @@ namespace DuckGame
             if (stringList1.Count == 0)
                 stringList1.Add(folder + "/" + Path.GetFileNameWithoutExtension(strArray[0]));
             Queue<string> stringQueue;
-            if (!Music._recentSongs.TryGetValue(folder, out stringQueue))
+            if (!_recentSongs.TryGetValue(folder, out stringQueue))
             {
                 stringQueue = new Queue<string>();
-                Music._recentSongs[folder] = stringQueue;
+                _recentSongs[folder] = stringQueue;
             }
             if (stringQueue.Count > 0 && stringQueue.Count > stringList1.Count - 5)
                 stringQueue.Dequeue();
@@ -144,7 +144,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    str1 = stringList1[Rando.Int(stringList1.Count<string>() - 1)];
+                    str1 = stringList1[Rando.Int(stringList1.Count() - 1)];
                     if (str1 == ignore && stringList1.Count > 1)
                     {
                         stringList1.Remove(str1);
@@ -170,7 +170,7 @@ namespace DuckGame
 
         public static string FindSong(string song)
         {
-            foreach (string song1 in Music._songList)
+            foreach (string song1 in _songList)
             {
                 string withoutExtension = Path.GetFileNameWithoutExtension(song1);
                 if (withoutExtension.ToLower() == song.ToLower())
@@ -181,10 +181,10 @@ namespace DuckGame
 
         public static void Play(string music, bool looping = true, float crossFadeTime = 0f)
         {
-            if (!Music.Load(music))
+            if (!Load(music))
                 return;
-            Music._musicPlayer.Play();
-            Music._musicPlayer.IsLooped = looping;
+            _musicPlayer.Play();
+            _musicPlayer.IsLooped = looping;
         }
 
         public static void Play(Song music, bool looping = true)
@@ -193,8 +193,8 @@ namespace DuckGame
 
         public static bool Load(string music, bool looping = true, float crossFadeTime = 0f)
         {
-            Music._currentSong = music;
-            Music._musicPlayer.Stop();
+            _currentSong = music;
+            _musicPlayer.Stop();
             if (!music.Contains(":"))
             {
                 if (!music.EndsWith(".wav"))
@@ -204,16 +204,16 @@ namespace DuckGame
                         string str = "Audio/Music/" + music;
                         try
                         {
-                            Music._currentMusic = ReskinPack.LoadAsset<SoundEffect>(str + ".ogg", true);
-                            if (Music._currentMusic == null)
-                                Music._currentMusic = ReskinPack.LoadAsset<SoundEffect>(str + ".mp3", true);
+                            _currentMusic = ReskinPack.LoadAsset<SoundEffect>(str + ".ogg", true);
+                            if (_currentMusic == null)
+                                _currentMusic = ReskinPack.LoadAsset<SoundEffect>(str + ".mp3", true);
                         }
                         catch (Exception)
                         {
                         }
-                        if (Music._currentMusic == null)
+                        if (_currentMusic == null)
                         {
-                            Music._currentMusic = new SoundEffect(DuckFile.contentDirectory + str + ".ogg");
+                            _currentMusic = new SoundEffect(DuckFile.contentDirectory + str + ".ogg");
                             goto label_10;
                         }
                         else
@@ -227,43 +227,43 @@ namespace DuckGame
                     }
                 }
             }
-            Music._currentMusic = new SoundEffect(music);
+            _currentMusic = new SoundEffect(music);
         label_10:
-            Music._musicPlayer.SetData(Music._currentMusic);
+            _musicPlayer.SetData(_currentMusic);
             return true;
         }
 
-        public static void PlayLoaded() => Music._musicPlayer.Play();
+        public static void PlayLoaded() => _musicPlayer.Play();
 
-        public static void CancelLooping() => Music._musicPlayer.IsLooped = false;
+        public static void CancelLooping() => _musicPlayer.IsLooped = false;
 
         public static void LoadAlternateSong(string music, bool looping = true, float crossFadeTime = 0f)
         {
-            Music._alternateLoop = looping;
-            Music._pendingSong = music;
-            Music._alternateSong = music;
+            _alternateLoop = looping;
+            _pendingSong = music;
+            _alternateSong = music;
         }
 
         public static void SwitchSongs()
         {
             try
             {
-                Music.Play(Music._pendingSong, Music._alternateLoop);
+                Play(_pendingSong, _alternateLoop);
             }
             catch
             {
             }
-            Music._pendingSong = null;
+            _pendingSong = null;
         }
 
-        public static void Pause() => Music._musicPlayer.Pause();
+        public static void Pause() => _musicPlayer.Pause();
 
-        public static void Resume() => Music._musicPlayer.Resume();
+        public static void Resume() => _musicPlayer.Resume();
 
         public static void Stop()
         {
-            Music._musicPlayer.Stop();
-            Music._currentSong = "";
+            _musicPlayer.Stop();
+            _currentSong = "";
         }
 
         //public static void FadeOut(float duration) => Music._fadeSpeed = duration / 60f;
@@ -273,9 +273,9 @@ namespace DuckGame
         private static void SearchDir(string dir)
         {
             foreach (string file in Content.GetFiles(dir))
-                Music.ProcessSong(file);
+                ProcessSong(file);
             foreach (string directory in Content.GetDirectories(dir))
-                Music.SearchDir(directory);
+                SearchDir(directory);
         }
 
         private static void ProcessSong(string path)
@@ -292,15 +292,15 @@ namespace DuckGame
                     path = pPath;
             }
             path = path.Replace('\\', '/');
-            if (Music._processedSongs.Contains(path))
+            if (_processedSongs.Contains(path))
                 return;
-            Music._processedSongs.Add(path);
+            _processedSongs.Add(path);
             try
             {
                 MemoryStream memoryStream = OggSong.Load(path, !path.Contains(":"));
                 path = path.Substring(0, path.Length - 4);
                 string key = path.Substring(path.IndexOf("/Music/") + 7);
-                Music._songs[key] = memoryStream;
+                _songs[key] = memoryStream;
             }
             catch (Exception)
             {

@@ -40,7 +40,7 @@ namespace DuckGame
             else
             {
                 Graphics.fade = 0f;
-                Level.current = new AdultSwimLogo();
+                current = new AdultSwimLogo();
             }
             _wait -= 0.06f;
             if (_wait >= 0f)

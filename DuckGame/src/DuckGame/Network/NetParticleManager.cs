@@ -17,7 +17,7 @@ namespace DuckGame
         private Dictionary<NetworkConnection, ushort> _lastPacketNumbers = new Dictionary<NetworkConnection, ushort>();
         public HashSet<ushort> removedParticleIndexes = new HashSet<ushort>();
         private Queue<List<PhysicsParticle>> _pendingParticles = new Queue<List<PhysicsParticle>>();
-        private Dictionary<System.Type, List<PhysicsParticle>> _inProgressParticleLists = new Dictionary<System.Type, List<PhysicsParticle>>();
+        private Dictionary<Type, List<PhysicsParticle>> _inProgressParticleLists = new Dictionary<Type, List<PhysicsParticle>>();
         public static int _particleSyncSpread = 2;
         public static int _syncWait = 4;
         private byte updateOrder;
@@ -70,7 +70,7 @@ namespace DuckGame
                     byte pNetType = nmParticles.data.ReadByte();
                     if (pNetType == byte.MaxValue)
                         break;
-                    System.Type typeIndex = PhysicsParticle.NetTypeToTypeIndex(pNetType);
+                    Type typeIndex = PhysicsParticle.NetTypeToTypeIndex(pNetType);
                     byte num2 = nmParticles.data.ReadByte();
                     for (int index1 = 0; index1 < num2; ++index1)
                     {
@@ -141,7 +141,7 @@ namespace DuckGame
             updateOrder = 0;
         }
 
-        public List<PhysicsParticle> GetParticleList(System.Type t)
+        public List<PhysicsParticle> GetParticleList(Type t)
         {
             List<PhysicsParticle> particleList;
             if (!_inProgressParticleLists.TryGetValue(t, out particleList) || particleList.Count >= 20)

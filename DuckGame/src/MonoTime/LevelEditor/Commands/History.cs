@@ -19,18 +19,18 @@ namespace DuckGame
 
         public static void BeginUndoSection()
         {
-            if (History._performingAction)
+            if (_performingAction)
                 return;
-            History._currentAction = new UndoData();
+            _currentAction = new UndoData();
         }
 
-        public static bool hasUndo => History._actionIndex != -1;
+        public static bool hasUndo => _actionIndex != -1;
 
-        public static bool hasRedo => History._actionIndex != History._actions.Count;
+        public static bool hasRedo => _actionIndex != _actions.Count;
 
         public static void Add(UndoData pData)
         {
-            if (History._performingAction)
+            if (_performingAction)
             {
                 if (pData == null || pData.apply == null)
                     return;
@@ -38,21 +38,21 @@ namespace DuckGame
             }
             else
             {
-                if (History._currentAction != null)
+                if (_currentAction != null)
                 {
-                    History._currentAction.actions.Add(pData);
+                    _currentAction.actions.Add(pData);
                 }
                 else
                 {
-                    if (History._actions.Count - 1 > History._actionIndex)
+                    if (_actions.Count - 1 > _actionIndex)
                     {
-                        if (History._actionIndex == -1)
-                            History._actions.Clear();
+                        if (_actionIndex == -1)
+                            _actions.Clear();
                         else
-                            History._actions = History._actions.GetRange(0, History._actionIndex + 1);
+                            _actions = _actions.GetRange(0, _actionIndex + 1);
                     }
-                    History._actions.Add(pData);
-                    ++History._actionIndex;
+                    _actions.Add(pData);
+                    ++_actionIndex;
                 }
                 if (pData.apply == null)
                     return;
@@ -60,7 +60,7 @@ namespace DuckGame
             }
         }
 
-        public static void Add(Action pDo, Action pUndo) => History.Add(new UndoData()
+        public static void Add(Action pDo, Action pUndo) => Add(new UndoData()
         {
             apply = pDo,
             revert = pUndo
@@ -68,61 +68,61 @@ namespace DuckGame
 
         public static void EndUndoSection()
         {
-            if (History._performingAction)
+            if (_performingAction)
                 return;
-            if (History._currentAction != null)
+            if (_currentAction != null)
             {
-                if (History._currentAction.actions.Count > 0)
+                if (_currentAction.actions.Count > 0)
                 {
-                    UndoData currentAction = History._currentAction;
-                    History._currentAction = null;
-                    History.Add(currentAction);
+                    UndoData currentAction = _currentAction;
+                    _currentAction = null;
+                    Add(currentAction);
                 }
                 else
-                    History._currentAction = null;
+                    _currentAction = null;
             }
-            History._currentAction = null;
+            _currentAction = null;
         }
 
         public static void Undo()
         {
-            if (History._performingAction)
+            if (_performingAction)
                 return;
-            History._performingAction = true;
-            if (History._actionIndex >= 0)
+            _performingAction = true;
+            if (_actionIndex >= 0)
             {
-                if (History._actions[History._actionIndex].actions.Count > 0)
+                if (_actions[_actionIndex].actions.Count > 0)
                 {
-                    for (int index = History._actions[History._actionIndex].actions.Count - 1; index >= 0; --index)
-                        History._actions[History._actionIndex].actions[index].revert();
+                    for (int index = _actions[_actionIndex].actions.Count - 1; index >= 0; --index)
+                        _actions[_actionIndex].actions[index].revert();
                 }
-                if (History._actions[History._actionIndex].revert != null)
-                    History._actions[History._actionIndex].revert();
-                --History._actionIndex;
+                if (_actions[_actionIndex].revert != null)
+                    _actions[_actionIndex].revert();
+                --_actionIndex;
             }
-            History._performingAction = false;
+            _performingAction = false;
         }
 
         public static void Redo()
         {
-            if (History._performingAction)
+            if (_performingAction)
                 return;
-            History._performingAction = true;
-            if (History._actionIndex < History._actions.Count - 1)
+            _performingAction = true;
+            if (_actionIndex < _actions.Count - 1)
             {
-                ++History._actionIndex;
-                foreach (UndoData action in History._actions[History._actionIndex].actions)
+                ++_actionIndex;
+                foreach (UndoData action in _actions[_actionIndex].actions)
                     action.apply();
-                if (History._actions[History._actionIndex].apply != null)
-                    History._actions[History._actionIndex].apply();
+                if (_actions[_actionIndex].apply != null)
+                    _actions[_actionIndex].apply();
             }
-            History._performingAction = false;
+            _performingAction = false;
         }
 
         public static void Clear()
         {
-            History._actions.Clear();
-            History._actionIndex = -1;
+            _actions.Clear();
+            _actionIndex = -1;
         }
     }
 }

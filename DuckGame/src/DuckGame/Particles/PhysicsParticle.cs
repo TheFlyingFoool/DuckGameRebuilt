@@ -32,7 +32,7 @@ namespace DuckGame
         protected float _life = 1f;
         public Vec2 lerpPos = Vec2.Zero;
         public Vec2 lerpSpeed = Vec2.Zero;
-        private static Map<byte, System.Type> _netParticleTypes = new Map<byte, System.Type>();
+        private static Map<byte, Type> _netParticleTypes = new Map<byte, Type>();
         private static byte _netParticleTypeIndex = 0;
         protected Vec2 netLerpPosition = Vec2.Zero;
         public bool customGravity;
@@ -59,21 +59,21 @@ namespace DuckGame
 
         public void LerpSpeed(Vec2 speed) => lerpSpeed = speed;
 
-        public static void RegisterNetParticleType(System.Type pType)
+        public static void RegisterNetParticleType(Type pType)
         {
-            if (PhysicsParticle._netParticleTypes.ContainsValue(pType))
+            if (_netParticleTypes.ContainsValue(pType))
                 return;
-            PhysicsParticle._netParticleTypes[PhysicsParticle._netParticleTypeIndex] = pType;
-            ++PhysicsParticle._netParticleTypeIndex;
+            _netParticleTypes[_netParticleTypeIndex] = pType;
+            ++_netParticleTypeIndex;
         }
 
-        public static byte TypeToNetTypeIndex(System.Type pType) => PhysicsParticle._netParticleTypes.ContainsValue(pType) ? PhysicsParticle._netParticleTypes.Get(pType) : byte.MaxValue;
+        public static byte TypeToNetTypeIndex(Type pType) => _netParticleTypes.ContainsValue(pType) ? _netParticleTypes.Get(pType) : byte.MaxValue;
 
-        public static System.Type NetTypeToTypeIndex(byte pNetType)
+        public static Type NetTypeToTypeIndex(byte pNetType)
         {
             if (pNetType >= 254)
                 return null;
-            return PhysicsParticle._netParticleTypes.ContainsKey(pNetType) ? PhysicsParticle._netParticleTypes.Get(pNetType) : null;
+            return _netParticleTypes.ContainsKey(pNetType) ? _netParticleTypes.Get(pNetType) : null;
         }
 
         public virtual void NetSerialize(BitBuffer b)
@@ -96,7 +96,7 @@ namespace DuckGame
             hSpeed = 0f;
             _framesAlive = 0f;
             _waitForNoCollide = false;
-            globalIndex = Thing.GetGlobalIndex();
+            globalIndex = GetGlobalIndex();
             gotMessage = false;
             isLocal = true;
             netIndex = 0;

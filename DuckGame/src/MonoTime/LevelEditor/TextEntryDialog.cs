@@ -124,7 +124,7 @@ namespace DuckGame
                 Editor.PopFocus();
                 Editor.enteringText = false;
             }
-            if (!Keyboard.Pressed(Keys.Escape) && Mouse.right != InputState.Pressed && !Input.Pressed("CANCEL"))
+            if (!Keyboard.Pressed(Keys.Escape) && Mouse.right != InputState.Pressed && !Input.Pressed(Triggers.Cancel))
                 return;
             result = _default;
             opened = false;

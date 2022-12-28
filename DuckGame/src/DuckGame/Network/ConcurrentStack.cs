@@ -18,7 +18,7 @@ namespace System.Collections.Concurrent
     IEnumerable,
     ICollection
     {
-        private ConcurrentStack<T>.Node head;
+        private Node head;
         private int count;
         private object syncRoot = new object();
 
@@ -40,7 +40,7 @@ namespace System.Collections.Concurrent
 
         public void Push(T item)
         {
-            ConcurrentStack<T>.Node node = new ConcurrentStack<T>.Node
+            Node node = new Node
             {
                 Value = item
             };
@@ -48,7 +48,7 @@ namespace System.Collections.Concurrent
             {
                 node.Next = head;
             }
-            while (Interlocked.CompareExchange<ConcurrentStack<T>.Node>(ref head, node, node.Next) != node.Next);
+            while (Interlocked.CompareExchange(ref head, node, node.Next) != node.Next);
             Interlocked.Increment(ref count);
         }
 
@@ -56,11 +56,11 @@ namespace System.Collections.Concurrent
 
         public void PushRange(T[] items, int startIndex, int count)
         {
-            ConcurrentStack<T>.Node node1 = null;
-            ConcurrentStack<T>.Node node2 = null;
+            Node node1 = null;
+            Node node2 = null;
             for (int index = startIndex; index < count; ++index)
             {
-                ConcurrentStack<T>.Node node3 = new ConcurrentStack<T>.Node
+                Node node3 = new Node
                 {
                     Value = items[index],
                     Next = node1
@@ -73,13 +73,13 @@ namespace System.Collections.Concurrent
             {
                 node2.Next = head;
             }
-            while (Interlocked.CompareExchange<ConcurrentStack<T>.Node>(ref head, node1, node2.Next) != node2.Next);
+            while (Interlocked.CompareExchange(ref head, node1, node2.Next) != node2.Next);
             Interlocked.Add(ref count, count);
         }
 
         public bool TryPop(out T result)
         {
-            ConcurrentStack<T>.Node head;
+            Node head;
             do
             {
                 head = this.head;
@@ -89,7 +89,7 @@ namespace System.Collections.Concurrent
                     return false;
                 }
             }
-            while (Interlocked.CompareExchange<ConcurrentStack<T>.Node>(ref this.head, head.Next, head) != head);
+            while (Interlocked.CompareExchange(ref this.head, head.Next, head) != head);
             Interlocked.Decrement(ref count);
             result = head.Value;
             return true;
@@ -99,8 +99,8 @@ namespace System.Collections.Concurrent
 
         public int TryPopRange(T[] items, int startIndex, int count)
         {
-            ConcurrentStack<T>.Node comparand;
-            ConcurrentStack<T>.Node node;
+            Node comparand;
+            Node node;
             do
             {
                 comparand = head;
@@ -114,7 +114,7 @@ namespace System.Collections.Concurrent
                         break;
                 }
             }
-            while (Interlocked.CompareExchange<ConcurrentStack<T>.Node>(ref head, node, comparand) != comparand);
+            while (Interlocked.CompareExchange(ref head, node, comparand) != comparand);
             int index1;
             for (index1 = startIndex; index1 < count && comparand != null; ++index1)
             {
@@ -126,7 +126,7 @@ namespace System.Collections.Concurrent
 
         public bool TryPeek(out T result)
         {
-            ConcurrentStack<T>.Node head = this.head;
+            Node head = this.head;
             if (head == null)
             {
                 result = default(T);
@@ -148,7 +148,7 @@ namespace System.Collections.Concurrent
 
         private IEnumerator<T> InternalGetEnumerator()
         {
-            ConcurrentStack<T>.Node my_head = head;
+            Node my_head = head;
             if (my_head != null)
             {
                 do
@@ -194,7 +194,7 @@ namespace System.Collections.Concurrent
         private class Node
         {
             public T Value;
-            public ConcurrentStack<T>.Node Next;
+            public Node Next;
         }
     }
 }

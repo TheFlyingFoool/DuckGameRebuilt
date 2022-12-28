@@ -81,12 +81,12 @@ namespace DuckGame
                 {
                     if (!_shown)
                     {
-                        UIFuneral.oldSong = Music.currentSong;
+                        oldSong = Music.currentSong;
                         Music.Play("littlesad", false);
                         HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@CONTINUE");
                         _shown = true;
                     }
-                    if (Input.Pressed("SELECT"))
+                    if (Input.Pressed(Triggers.Select))
                     {
                         HUD.CloseAllCorners();
                         SFX.Play("resume", 0.6f);

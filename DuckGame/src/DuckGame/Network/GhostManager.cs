@@ -33,7 +33,7 @@ namespace DuckGame
         public List<GhostObject> _destroyedGhosts = new List<GhostObject>();
         public List<NetIndex16> _destroyResends = new List<NetIndex16>();
         private Dictionary<ushort, Thing> _specialSyncMap = new Dictionary<ushort, Thing>();
-        private static GhostManager.HelperPhysicsIndexSorter helperPhysicsIndexSorter = new GhostManager.HelperPhysicsIndexSorter();
+        private static HelperPhysicsIndexSorter helperPhysicsIndexSorter = new HelperPhysicsIndexSorter();
         private HashSet<GhostObject> _removeList = new HashSet<GhostObject>();
 
         public void UpdateSynchronizedEvents()
@@ -68,7 +68,7 @@ namespace DuckGame
 
         public static GhostManager context => Network.activeNetwork.core.ghostManager;
 
-        public GhostManager() => globalID = GhostManager.kglobalID++;
+        public GhostManager() => globalID = kglobalID++;
 
         public NetIndex16 currentGhostIndex => ghostObjectIndex;
 
@@ -80,17 +80,17 @@ namespace DuckGame
             if (levelInit)
                 fixedGhostIndex = DuckNetwork.hostProfile.fixedGhostIndex;
             NetIndex16 ghostObjectIndex1 = ghostObjectIndex;
-            while (_ghostIndexMap.ContainsKey(ghostObjectIndex + fixedGhostIndex * GhostManager.kGhostIndexMax))
+            while (_ghostIndexMap.ContainsKey(ghostObjectIndex + fixedGhostIndex * kGhostIndexMax))
             {
                 ++ghostObjectIndex;
-                if (ghostObjectIndex > GhostManager.kGhostIndexMax - 10)
+                if (ghostObjectIndex > kGhostIndexMax - 10)
                     ghostObjectIndex = (NetIndex16)32;
                 if (ghostObjectIndex == ghostObjectIndex1 || ghostObjectIndex1 < 32)
                     break;
             }
             NetIndex16 ghostObjectIndex2 = ghostObjectIndex;
             ++ghostObjectIndex;
-            return ghostObjectIndex2 + fixedGhostIndex * GhostManager.kGhostIndexMax;
+            return ghostObjectIndex2 + fixedGhostIndex * kGhostIndexMax;
         }
 
         public void SetGhostIndex(NetIndex16 idx)
@@ -101,7 +101,7 @@ namespace DuckGame
 
         public void ResetGhostIndex(byte levelIndex)
         {
-            ghostObjectIndex = levelIndex != 0 ? (levelIndex % 2 != 1 ? (NetIndex16)300 : (NetIndex16)(GhostManager.kGhostIndexMax / 2 + 100)) : (DuckNetwork.localProfile == null ? (NetIndex16)(Rando.Int(GhostManager.kGhostIndexMax - 500) + 5) : (NetIndex16)((ushort)(int)DuckNetwork.localProfile.latestGhostIndex + 25));
+            ghostObjectIndex = levelIndex != 0 ? (levelIndex % 2 != 1 ? (NetIndex16)300 : (NetIndex16)(kGhostIndexMax / 2 + 100)) : (DuckNetwork.localProfile == null ? (NetIndex16)(Rando.Int(kGhostIndexMax - 500) + 5) : (NetIndex16)((ushort)(int)DuckNetwork.localProfile.latestGhostIndex + 25));
             Clear();
         }
 
@@ -150,7 +150,7 @@ namespace DuckGame
         {
             GhostObject ghostObject = null;
             _ghostIndexMap.TryGetValue(id, out ghostObject);
-            return ghostObject == null && pendingBitBufferGhosts.Count > 0 ? pendingBitBufferGhosts.FirstOrDefault<GhostObject>(x => x.ghostObjectIndex == id) : ghostObject;
+            return ghostObject == null && pendingBitBufferGhosts.Count > 0 ? pendingBitBufferGhosts.FirstOrDefault(x => x.ghostObjectIndex == id) : ghostObject;
         }
 
         public GhostObject GetGhost(Thing thing) => thing.ghostObject;
@@ -189,7 +189,7 @@ namespace DuckGame
                         NMRemoveGhosts nmRemoveGhosts = m as NMRemoveGhosts;
                         if (nmRemoveGhosts.levelIndex != DuckNetwork.levelIndex)
                             break;
-                        GhostManager.receivingDestroyMessage = true;
+                        receivingDestroyMessage = true;
                         foreach (NetIndex16 id in nmRemoveGhosts.remove)
                         {
                             GhostObject ghost = GetGhost(id);
@@ -199,7 +199,7 @@ namespace DuckGame
                                 RemoveGhost(ghost);
                             }
                         }
-                        GhostManager.receivingDestroyMessage = false;
+                        receivingDestroyMessage = false;
                         break;
                     case NMGhostData _:
                         NMGhostData nmGhostData = m as NMGhostData;
@@ -223,7 +223,7 @@ namespace DuckGame
             {
                 DevConsole.Log(DCSection.GhostMan, "@error !! GHOST MANAGER UPDATE EXCEPTION", m.connection);
                 DevConsole.Log(DCSection.GhostMan, ex.ToString(), m.connection);
-                GhostManager.receivingDestroyMessage = false;
+                receivingDestroyMessage = false;
             }
         }
         private bool CheckCreationKill(GhostObject obj, Vec2 position, Type t, NMGhostState pState)
@@ -792,7 +792,7 @@ namespace DuckGame
 
         public void RemoveLater(GhostObject g)
         {
-            if (GhostManager.receivingDestroyMessage)
+            if (receivingDestroyMessage)
                 return;
             _removeList.Add(g);
         }
@@ -879,10 +879,10 @@ namespace DuckGame
             _ghosts.Remove(ghost);
             if (ghost.thing != null && !ghost.thing.removeFromLevel)
                 Level.Remove(ghost.thing);
-            if (!GhostManager.receivingDestroyMessage && ghost.thing != null && ghost.thing.isServerForObject)
+            if (!receivingDestroyMessage && ghost.thing != null && ghost.thing.isServerForObject)
                 _destroyedGhosts.Add(ghost);
             _ghostIndexMap.Remove(ghost.ghostObjectIndex);
-            if (!GhostManager.changingGhostType && _framesSinceClear > 60)
+            if (!changingGhostType && _framesSinceClear > 60)
             {
                 Profile profile = GhostObject.IndexToProfile(ghost.ghostObjectIndex);
                 if (profile != null && profile.connection != null)
@@ -899,7 +899,7 @@ namespace DuckGame
             Thing specialSync = null;
             if (!_specialSyncMap.TryGetValue(index, out specialSync))
             {
-                specialSync = Level.current.things.First<Thing>(x => x.specialSyncIndex == index);
+                specialSync = Level.current.things.First(x => x.specialSyncIndex == index);
                 if (specialSync != null)
                     _specialSyncMap[index] = specialSync;
             }
@@ -949,10 +949,10 @@ namespace DuckGame
             {
                 Thing[] thingArray = new Thing[lev.things.updateList.Count];
                 lev.things.updateList.CopyTo(thingArray);
-                Array.Sort<Thing>(thingArray, helperPhysicsIndexSorter);
+                Array.Sort(thingArray, helperPhysicsIndexSorter);
                 if (thingArray != null)
                 {
-                    int num = thingArray.Count<Thing>();
+                    int num = thingArray.Count();
                     for (int index = 0; index < num; ++index)
                     {
                         Thing thing = thingArray[index];

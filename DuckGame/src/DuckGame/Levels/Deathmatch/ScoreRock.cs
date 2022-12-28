@@ -5,8 +5,6 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
-using System.Linq;
-
 namespace DuckGame
 {
     [BaggedProperty("canSpawn", false)]

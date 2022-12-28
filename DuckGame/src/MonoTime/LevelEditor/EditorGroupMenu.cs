@@ -60,7 +60,7 @@ namespace DuckGame
           EditorGroup scriptingGroup = null,
           bool setPinnable = false)
         {
-            ++EditorGroupMenu.deep;
+            ++deep;
             _text = group.Name;
             itemSize.x = Graphics.GetFancyStringWidth(_text) + 16f;
             foreach (EditorGroup subGroup in group.SubGroups)
@@ -154,8 +154,8 @@ namespace DuckGame
                         continue;
                 }
             }
-            --EditorGroupMenu.deep;
-            if (EditorGroupMenu.deep != 0)
+            --deep;
+            if (deep != 0)
                 return;
             UpdateGrayout();
         }

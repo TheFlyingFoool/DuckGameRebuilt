@@ -17,7 +17,7 @@ namespace DuckGame
         private LevelCore _fakeLevelCore;
         public static bool loop;
         private List<Profile> spectators = new List<Profile>();
-        private Dictionary<Profile, HostTable.MemberData> _data = new Dictionary<Profile, HostTable.MemberData>();
+        private Dictionary<Profile, MemberData> _data = new Dictionary<Profile, MemberData>();
         private List<Profile> remove = new List<Profile>();
 
         public HostTable(float pX, float pY)
@@ -39,8 +39,8 @@ namespace DuckGame
 
         public override void Update()
         {
-            Thing.skipLayerAdding = true;
-            HostTable.loop = true;
+            skipLayerAdding = true;
+            loop = true;
             bool networkActive = Network.activeNetwork._networkActive;
             Network.activeNetwork._networkActive = false;
             LevelCore core = Level.core;
@@ -58,7 +58,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    HostTable.MemberData data = GetData(spectator);
+                    MemberData data = GetData(spectator);
                     if (data.duck == null)
                     {
                         InputProfile inputProfile = spectator.inputProfile;
@@ -76,15 +76,15 @@ namespace DuckGame
                         spectator.duck = null;
                         spectator.inputProfile = inputProfile;
                     }
-                    bool flag = spectator.netData.Get<bool>("quack", false);
+                    bool flag = spectator.netData.Get("quack", false);
                     if (flag && !data.quack)
-                        data.ai.Press("QUACK");
+                        data.ai.Press(Triggers.Quack);
                     else if (flag && data.quack)
-                        data.ai.HoldDown("QUACK");
+                        data.ai.HoldDown(Triggers.Quack);
                     else if (!flag && data.quack)
-                        data.ai.Release("QUACK");
-                    data.ai.virtualDevice.rightStick = spectator.netData.Get<Vec2>("spectatorTongue", Vec2.Zero);
-                    data.ai.virtualDevice.leftTrigger = spectator.netData.Get<float>("quackPitch", 0f);
+                        data.ai.Release(Triggers.Quack);
+                    data.ai.virtualDevice.rightStick = spectator.netData.Get("spectatorTongue", Vec2.Zero);
+                    data.ai.virtualDevice.leftTrigger = spectator.netData.Get("quackPitch", 0f);
                     if (spectator.team.hasHat && data.duck.hat == null)
                     {
                         TeamHat e = new TeamHat(0f, 0f, spectator.team);
@@ -96,7 +96,7 @@ namespace DuckGame
             }
             foreach (Profile profile in remove)
             {
-                HostTable.MemberData data = GetData(profile);
+                MemberData data = GetData(profile);
                 if (data.duck != null)
                 {
                     if (data.duck.hat != null)
@@ -111,15 +111,15 @@ namespace DuckGame
             Level.current.UpdateThings();
             Level.core = core;
             Network.activeNetwork._networkActive = networkActive;
-            HostTable.loop = false;
-            Thing.skipLayerAdding = false;
+            loop = false;
+            skipLayerAdding = false;
         }
 
-        private HostTable.MemberData GetData(Profile pProfile)
+        private MemberData GetData(Profile pProfile)
         {
             MemberData data;
             if (!_data.TryGetValue(pProfile, out data))
-                _data[pProfile] = data = new HostTable.MemberData();
+                _data[pProfile] = data = new MemberData();
             return data;
         }
 
@@ -143,7 +143,7 @@ namespace DuckGame
             int num2 = 0;
             foreach (Profile spectator in spectators)
             {
-                HostTable.MemberData data = GetData(spectator);
+                MemberData data = GetData(spectator);
                 sbyte num3 = spectator.netData.Get<sbyte>("spectatorBeverage", -1);
                 if (data.beverage != num3)
                 {
@@ -158,7 +158,7 @@ namespace DuckGame
                         data.beverageLerp = 0f;
                 }
                 bool flag = num2 >= spectators.Count / 2;
-                if (spectator.netData.Get<bool>("spectatorFlip", false))
+                if (spectator.netData.Get("spectatorFlip", false))
                     flag = !flag;
                 if (data.beverage != -1)
                 {
@@ -178,9 +178,9 @@ namespace DuckGame
                 if (bob.y < 0f)
                     bob.y *= 1.6f;
                 Vec2 vec2_3 = vec2_2 + new Vec2(bob.x, (float)(-bob.y * 1.5)) * 4f;
-                data.tilt = Lerp.Vec2Smooth(data.tilt, spectator.netData.Get<Vec2>("spectatorTilt", Vec2.Zero), 0.15f);
-                data.bob = Lerp.Vec2Smooth(data.bob, spectator.netData.Get<Vec2>("spectatorBob", Vec2.Zero), 0.15f);
-                spectator.netData.Get<bool>("quack", false);
+                data.tilt = Lerp.Vec2Smooth(data.tilt, spectator.netData.Get("spectatorTilt", Vec2.Zero), 0.15f);
+                data.bob = Lerp.Vec2Smooth(data.bob, spectator.netData.Get("spectatorBob", Vec2.Zero), 0.15f);
+                spectator.netData.Get("quack", false);
                 if (data.duck != null)
                 {
                     data.duck.position = vec2_3 + new Vec2(0f, -5f);

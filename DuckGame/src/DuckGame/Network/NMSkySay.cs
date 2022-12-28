@@ -28,7 +28,7 @@ namespace DuckGame
 
         public override void Activate()
         {
-            if (Level.current == null || !(Level.current.things[typeof(CityBackground)].FirstOrDefault<Thing>() is CityBackground cityBackground))
+            if (Level.current == null || !(Level.current.things[typeof(CityBackground)].FirstOrDefault() is CityBackground cityBackground))
                 return;
             cityBackground.SkySay(_text, _spawn, _flyLeft);
         }

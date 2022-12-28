@@ -7,6 +7,7 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -46,7 +47,7 @@ namespace DuckGame
         {
             _fx = (Effect)Content.Load<MTEffect>("Shaders/fieldFadeAdd");
             _view = Matrix.CreateLookAt(new Vec3(0f, 0f, -5f), new Vec3(0f, 0f, 0f), Vec3.Up);
-            _proj = Matrix.CreatePerspectiveFieldOfView(0.7853982f, 1.777778f, 0.01f, 100000f);
+            _proj = Matrix.CreatePerspectiveFieldOfView(((float)Math.PI / 4.0f), (float)320 / (float)180, 0.01f, 100000);
         }
 
         public override void Update()
@@ -59,8 +60,8 @@ namespace DuckGame
 
         public override void Begin(bool transparent, bool isTargetDraw = false)
         {
-            Vec3 vec3_1 = new Vec3((float)(DuckGame.Graphics.fade * _fade * (1.0 - _darken))) * colorMul;
-            Vec3 vec3_2 = _colorAdd + new Vec3(_fadeAdd) + new Vec3(DuckGame.Graphics.flashAddRenderValue) + new Vec3(DuckGame.Graphics.fadeAddRenderValue) - new Vec3(darken);
+            Vec3 vec3_1 = new Vec3((float)(Graphics.fade * _fade * (1.0 - _darken))) * colorMul;
+            Vec3 vec3_2 = _colorAdd + new Vec3(_fadeAdd) + new Vec3(Graphics.flashAddRenderValue) + new Vec3(Graphics.fadeAddRenderValue) - new Vec3(darken);
             vec3_2 = new Vec3(Maths.Clamp(vec3_2.x, -1f, 1f), Maths.Clamp(vec3_2.y, -1f, 1f), Maths.Clamp(vec3_2.z, -1f, 1f));
             if (!Options.Data.flashing)
                 vec3_2 = new Vec3(0f, 0f, 0f);
@@ -73,22 +74,22 @@ namespace DuckGame
                 _fx.Parameters["fade"]?.SetValue((Vector3)vec3_1);
                 _fx.Parameters["add"]?.SetValue((Vector3)vec3_2);
             }
-            DuckGame.Graphics.screen = _batch;
+            Graphics.screen = _batch;
             if (_state.ScissorTestEnable)
-                DuckGame.Graphics.SetScissorRectangle(_scissor);
+                Graphics.SetScissorRectangle(_scissor);
             _batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, _state, (MTEffect)_fx, camera.getMatrix());
         }
 
         public override void Draw(bool transparent, bool isTargetDraw = false)
         {
-            DuckGame.Graphics.currentLayer = this;
+            Graphics.currentLayer = this;
             _fx.Parameters["WVP"].SetValue((Microsoft.Xna.Framework.Matrix)(_view * _proj));
             Begin(transparent, false);
             foreach (Sprite sprite in _sprites)
-                DuckGame.Graphics.Draw(sprite, sprite.x, sprite.y);
+                Graphics.Draw(sprite, sprite.x, sprite.y);
             _batch.End();
-            DuckGame.Graphics.screen = null;
-            DuckGame.Graphics.currentLayer = null;
+            Graphics.screen = null;
+            Graphics.currentLayer = null;
         }
     }
 }

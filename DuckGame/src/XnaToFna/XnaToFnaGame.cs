@@ -16,7 +16,7 @@ namespace XnaToFna
         protected override void Initialize()
         {
             base.Initialize();
-            XnaToFnaHelper.ApplyChanges((GraphicsDeviceManager)this.Services.GetService(typeof(IGraphicsDeviceManager)));
+            XnaToFnaHelper.ApplyChanges((GraphicsDeviceManager)Services.GetService(typeof(IGraphicsDeviceManager)));
         }
 
         protected override void EndDraw()

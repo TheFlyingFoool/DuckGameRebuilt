@@ -94,7 +94,7 @@ namespace DuckGame
             if (textVal.Length > 0)
                 _confirmMenu.Add(new UIText(textVal, Color.White, UIAlign.Left), true);
             _confirmMenu.Add(new UIText(" ", Color.White), true);
-            _confirmMenu.Add(new UIMenuItem("CANCEL", new UIMenuActionCloseMenu(_pauseGroup), c: Colors.MenuOption, backButton: true), true);
+            _confirmMenu.Add(new UIMenuItem(Triggers.Cancel, new UIMenuActionCloseMenu(_pauseGroup), c: Colors.MenuOption, backButton: true), true);
             _confirmMenu.Add(new UIMenuItem("BUY UNLOCK |WHITE|(|LIME|" + unlock.cost.ToString() + "|WHITE| TICKETS)", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _confirm)), true);
             _confirmMenu.Close();
             _pauseGroup.Add(_confirmMenu, false);
@@ -212,14 +212,14 @@ namespace DuckGame
             _tree.alpha = alpha;
             if (alpha > 0.9f)
             {
-                UnlockScreen.open = true;
-                if (!Input.Pressed("CANCEL"))
+                open = true;
+                if (!Input.Pressed(Triggers.Cancel))
                     return;
                 SFX.Play("menu_back");
                 quitOut = true;
             }
             else
-                UnlockScreen.open = false;
+                open = false;
         }
 
         public override void Draw()

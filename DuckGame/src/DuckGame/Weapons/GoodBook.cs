@@ -149,9 +149,11 @@ namespace DuckGame
           : base(xval, yval)
         {
             ammo = 1;
-            _ammoType = new ATShrapnel();
-            _ammoType.penetration = 0.4f;
-            _ammoType.range = 40f;
+            _ammoType = new ATShrapnel
+            {
+                penetration = 0.4f,
+                range = 40f
+            };
             _type = "gun";
             _sprite = new SpriteMap("goodBook", 17, 12);
             graphic = _sprite;
@@ -283,7 +285,7 @@ namespace DuckGame
                 _ringPulse = 1f;
                 if (Rando.Int(1) == 0)
                     _raiseArm = Rando.Float(1.2f, 2f);
-                Ragdoll t3 = Level.Nearest<Ragdoll>(this.position, _ammoType.range);
+                Ragdoll t3 = Level.Nearest<Ragdoll>(position, _ammoType.range);
                 Vec2 vec2;
                 if (t3 != null && t3.captureDuck != null && t3.captureDuck.dead && Level.CheckLine<Block>(duck.position, t3.position) == null)
                 {
@@ -381,6 +383,8 @@ namespace DuckGame
         {
             if (duck != null && !_raised && _raiseArm > 0.0)
             {
+                Material mat = Graphics.material;
+                Graphics.material = null;
                 SpriteMap spriteArms = duck._spriteArms;
                 bool flipH = spriteArms.flipH;
                 float angle = spriteArms.angle;
@@ -390,6 +394,7 @@ namespace DuckGame
                 spriteArms.angle = angle;
                 spriteArms.flipH = flipH;
                 handOffset = new Vec2(9999f, 9999f);
+                Graphics.material = mat;
             }
             else
                 handOffset = new Vec2(1f, 1f);

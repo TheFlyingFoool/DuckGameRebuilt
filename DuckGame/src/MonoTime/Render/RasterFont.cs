@@ -13,7 +13,7 @@ namespace DuckGame
     public class RasterFont : FancyBitmapFont
     {
         public static readonly RasterFont None = new RasterFont(null, 0f);
-        public RasterFont.Data data;
+        public Data data;
 
         public static float fontScaleFactor => Resolution.current.y / 72 / 10f;
 
@@ -38,7 +38,7 @@ namespace DuckGame
                 {
                     Tex2D tex = new Tex2D(data.colorsWidth, data.colorsHeight);
                     if (data.colors != null)
-                        tex.SetData<uint>(data.colors);
+                        tex.SetData(data.colors);
                     _textureInternal = new Sprite(tex);
                 }
                 return _textureInternal;
@@ -69,7 +69,7 @@ namespace DuckGame
                 _rasterData = data;
             }
             else
-                data = new RasterFont.Data()
+                data = new Data()
                 {
                     name = "NULLDUCKFONTDATA",
                     fontSize = pSize
@@ -97,7 +97,7 @@ namespace DuckGame
             catch (Exception)
             {
             }
-            return RasterFont.None;
+            return None;
         }
 
         public class Data

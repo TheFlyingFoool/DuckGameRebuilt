@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.Reflection;
-using System.Threading;
-using System.Net;
 using System.IO;
 using System.Diagnostics;
 
@@ -33,7 +25,7 @@ namespace DuckGame.src.MonoTime.Console
         public ExceptionForm()
         {
            // this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(571, 424);
+            this.ClientSize = new Size(571, 424);
             InitializeComponent();
 
             // Program is linux

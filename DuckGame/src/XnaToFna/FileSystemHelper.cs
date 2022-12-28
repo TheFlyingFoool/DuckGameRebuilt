@@ -26,7 +26,7 @@ namespace XnaToFna
         public static string[] GetDirectories(string path)
         {
             string[] directories1;
-            if (FileSystemHelper._CachedDirectories.TryGetValue(path, out directories1))
+            if (_CachedDirectories.TryGetValue(path, out directories1))
                 return directories1;
             string[] directories2;
             try
@@ -37,14 +37,14 @@ namespace XnaToFna
             {
                 directories2 = null;
             }
-            FileSystemHelper._CachedDirectories[path] = directories2;
+            _CachedDirectories[path] = directories2;
             return directories2;
         }
 
         public static string[] GetTargets(string path)
         {
             string[] targets1;
-            if (FileSystemHelper._CachedTargets.TryGetValue(path, out targets1))
+            if (_CachedTargets.TryGetValue(path, out targets1))
                 return targets1;
             string[] targets2;
             try
@@ -55,13 +55,13 @@ namespace XnaToFna
             {
                 targets2 = null;
             }
-            FileSystemHelper._CachedTargets[path] = targets2;
+            _CachedTargets[path] = targets2;
             return targets2;
         }
 
-        public static string GetDirectory(string path, string next) => FileSystemHelper.GetNext(FileSystemHelper.GetDirectories(path), next);
+        public static string GetDirectory(string path, string next) => GetNext(GetDirectories(path), next);
 
-        public static string GetTarget(string path, string next) => FileSystemHelper.GetNext(FileSystemHelper.GetTargets(path), next);
+        public static string GetTarget(string path, string next) => GetNext(GetTargets(path), next);
 
         public static string GetNext(string[] possible, string next)
         {
@@ -76,13 +76,13 @@ namespace XnaToFna
             return null;
         }
 
-        public static string FixPath(string path) => FileSystemHelper.ChangePath(path, Path.DirectorySeparatorChar);
+        public static string FixPath(string path) => ChangePath(path, Path.DirectorySeparatorChar);
 
-        public static string BreakPath(string path) => FileSystemHelper.ChangePath(path, '\\');
+        public static string BreakPath(string path) => ChangePath(path, '\\');
 
         public static string ChangePath(string path, char separator)
         {
-            if (!FileSystemHelper.MONO_IOMAP_ALL)
+            if (!MONO_IOMAP_ALL)
             {
                 string str = path;
                 if (Directory.Exists(path) || File.Exists(path))
@@ -92,12 +92,12 @@ namespace XnaToFna
                     return path1;
             }
             Dictionary<string, string> dictionary;
-            if (!FileSystemHelper._CachedChanges.TryGetValue(separator, out dictionary))
-                FileSystemHelper._CachedChanges[separator] = dictionary = new Dictionary<string, string>();
+            if (!_CachedChanges.TryGetValue(separator, out dictionary))
+                _CachedChanges[separator] = dictionary = new Dictionary<string, string>();
             string str1;
             if (dictionary.TryGetValue(path, out str1))
                 return str1;
-            string[] strArray = path.Split(FileSystemHelper.DirectorySeparatorChars);
+            string[] strArray = path.Split(DirectorySeparatorChars);
             StringBuilder stringBuilder = new StringBuilder();
             bool flag = false;
             if (Path.IsPathRooted(path))
@@ -109,7 +109,7 @@ namespace XnaToFna
             }
             for (int index = 1; index < strArray.Length; ++index)
             {
-                string str2 = (index >= strArray.Length - 1 ? FileSystemHelper.GetTarget(stringBuilder.ToString(), strArray[index]) : FileSystemHelper.GetDirectory(stringBuilder.ToString(), strArray[index])) ?? strArray[index];
+                string str2 = (index >= strArray.Length - 1 ? GetTarget(stringBuilder.ToString(), strArray[index]) : GetDirectory(stringBuilder.ToString(), strArray[index])) ?? strArray[index];
                 if (index != 1 || !flag)
                     stringBuilder.Append(separator);
                 stringBuilder.Append(str2);

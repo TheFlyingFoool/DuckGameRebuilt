@@ -35,7 +35,7 @@ namespace DuckGame
         {
             if (!(t is Block & willBeStopped) || !(this.owner is PortalGun owner))
                 return;
-            if (!(Level.current.things[typeof(Portal)].FirstOrDefault<Thing>(p => (p as Portal).gun == this.owner) is Portal portal))
+            if (!(Level.current.things[typeof(Portal)].FirstOrDefault(p => (p as Portal).gun == this.owner) is Portal portal))
             {
                 portal = new Portal(owner);
                 Level.Add(portal);
@@ -90,7 +90,7 @@ namespace DuckGame
                     flag = true;
                 }
                 num2 += num1;
-                DuckGame.Graphics.DrawTexturedLine((Tex2D)_beem, drawStart + travelDirNormalized * val, drawStart + travelDirNormalized * (val + num3), Color.White * num2, _thickness, (Depth)0.6f);
+                Graphics.DrawTexturedLine((Tex2D)_beem, drawStart + travelDirNormalized * val, drawStart + travelDirNormalized * (val + num3), Color.White * num2, _thickness, (Depth)0.6f);
                 if (!flag)
                     val += 8f;
                 else

@@ -35,7 +35,7 @@ namespace DuckGame
             w = scalarPart;
         }
 
-        public static Quaternion Identity => Quaternion.identity;
+        public static Quaternion Identity => identity;
 
         public static Quaternion Add(Quaternion quaternion1, Quaternion quaternion2)
         {

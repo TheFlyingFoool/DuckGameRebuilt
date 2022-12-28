@@ -5,9 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
-using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.IO;
 
 namespace DuckGame
 {
@@ -64,7 +62,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            this.position = new Vec2(this.x + 12.16f, this.y + 1.5f);
+            position = new Vec2(x + 12.16f, y + 1.5f);
         }
 
         public override void Draw()

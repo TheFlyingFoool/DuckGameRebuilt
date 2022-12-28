@@ -13,20 +13,20 @@ namespace DuckGame
 {
     public class NetDebugDropdown : NetDebugElement
     {
-        private Func<List<NetDebugDropdown.Element>> _elements;
-        public NetDebugDropdown.Element selected;
+        private Func<List<Element>> _elements;
+        public Element selected;
         private Sprite _downArrow;
         private bool _dropped;
 
         public NetDebugDropdown(
           NetDebugInterface pInterface,
           string pName,
-          Func<List<NetDebugDropdown.Element>> pElements)
+          Func<List<Element>> pElements)
           : base(pInterface)
         {
             _name = pName;
             _elements = pElements;
-            selected = _elements().FirstOrDefault<NetDebugDropdown.Element>();
+            selected = _elements().FirstOrDefault();
             _downArrow = new Sprite("cloudDown");
             _downArrow.CenterOrigin();
         }
@@ -40,7 +40,7 @@ namespace DuckGame
             position.x += 100f;
             position.y -= 2f;
             width = 280f;
-            List<NetDebugDropdown.Element> elementList = _elements();
+            List<Element> elementList = _elements();
             Rectangle r1 = new Rectangle(position.x + (vec2.x - vec2.y), position.y, vec2.y, vec2.y);
             Rectangle rectangle = new Rectangle(position.x, position.y, vec2.x, vec2.y);
             if (_dropped)
@@ -49,7 +49,7 @@ namespace DuckGame
                 Rectangle r2 = new Rectangle(position.x, (float)(position.y + vec2.y + 4.0), vec2.x, vec2.y * elementList.Count);
                 Graphics.DrawRect(r2, Color.White, depth + 2, false);
                 Graphics.DrawRect(r2, Color.Black * 0.8f, depth + 1);
-                foreach (NetDebugDropdown.Element element in elementList)
+                foreach (Element element in elementList)
                 {
                     Rectangle r3 = new Rectangle(r2.x, r2.y, vec2.x, vec2.y);
                     if (r3.Contains(Mouse.positionConsole))

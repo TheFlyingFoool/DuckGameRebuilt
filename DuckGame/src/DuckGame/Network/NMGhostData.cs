@@ -16,7 +16,7 @@ namespace DuckGame
         private List<GhostObject> _ghostSelection;
         private int _startIndex;
         private const int kMaxDataSize = 512;
-        public List<NMGhostData.GhostMaskPair> ghostMaskPairs = new List<NMGhostData.GhostMaskPair>();
+        public List<GhostMaskPair> ghostMaskPairs = new List<GhostMaskPair>();
 
         public static NMGhostData GetSerializedGhostData(
           List<GhostObject> pGhosts,
@@ -52,7 +52,7 @@ namespace DuckGame
                     }
                     else
                         _serializedData.Write(false);
-                    ghostMaskPairs.Add(new NMGhostData.GhostMaskPair()
+                    ghostMaskPairs.Add(new GhostMaskPair()
                     {
                         ghost = ghostObject,
                         mask = ghostObject.lastWrittenMask

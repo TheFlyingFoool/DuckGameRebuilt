@@ -2,12 +2,13 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!--Project was exported from assembly: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe-->
   <PropertyGroup>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <UseNETCoreGenerator>true</UseNETCoreGenerator>
     <CodeAnalysisRuleSet>emptyfind.ruleset</CodeAnalysisRuleSet>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <LangVersion>default</LangVersion>
+    <LangVersion>preview</LangVersion>
     <WarningLevel>4</WarningLevel>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -29,6 +30,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{A63C7222-EEE1-4BCD-844D-F6AC1501A655}</ProjectGuid>
@@ -38,18 +40,20 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <AssemblyName>DuckGame</AssemblyName>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\bin\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;Debug</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <AssemblyName>DuckGame</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\bin\</OutputPath>
@@ -61,6 +65,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <AssemblyName>DuckGame</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\bin\</OutputPath>
@@ -72,6 +77,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <AssemblyName>DuckGame</AssemblyName>
     <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DuckGame</DefineConstants>
@@ -88,6 +94,7 @@
     <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <AssemblyName>DuckGame</AssemblyName>
     <OutputPath>..\bin\</OutputPath>
     <DefineConstants>TRACE;DuckGame</DefineConstants>
@@ -101,6 +108,7 @@
     </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <AssemblyName>DuckGame</AssemblyName>
     <OutputPath>..\bin\</OutputPath>
     <DefineConstants>TRACE;DuckGame</DefineConstants>
@@ -113,6 +121,7 @@
     </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <ApplicationIcon>DuckGame.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
@@ -120,6 +129,45 @@
   </PropertyGroup>
   <PropertyGroup>
     <RunPostBuildEvent>Always</RunPostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseAutoUpdater|AnyCPU'">
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>AutoUpdater</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>default</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+    <CodeAnalysisRuleSet>emptyfind.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseAutoUpdater|x64'">
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>TRACE;DuckGame</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>default</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>emptyfind.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseAutoUpdater|x86'">
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>TRACE;DuckGame</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>default</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>emptyfind.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DGInput">
@@ -155,6 +203,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
+    <!--    <Reference Include="System.Memory">-->
+    <!--      <HintPath>lib\System.Memory.dll</HintPath>-->
+    <!--    </Reference>-->
     <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\deps\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
@@ -175,19 +226,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddedContent\DGRSettings.cs" />
-    <Compile Include="AddedContent\Drake\DebugUI\IAmUi.cs" />
-    <Compile Include="AddedContent\Drake\DebugUI\UiBasic.cs" />
-    <Compile Include="AddedContent\Drake\DebugUI\UiGroup.cs" />
-    <Compile Include="AddedContent\Drake\DebugUI\UiList.cs" />
-    <Compile Include="AddedContent\Drake\DebugUI\UiTabber.cs" />
-    <Compile Include="AddedContent\Drake\DrakeTests.cs" />
-    <Compile Include="AddedContent\Drake\FixedCommandHistory.cs" />
-    <Compile Include="AddedContent\Drake\PolyRender\AtlasedFont.cs" />
-    <Compile Include="AddedContent\Drake\PolyRender\PolygonBatcher.cs" />
-    <Compile Include="AddedContent\Drake\PolyRender\PolyRenderer.cs" />
-    <Compile Include="AddedContent\Drake\PolyRender\StaticFont.cs" />
-    <Compile Include="AddedContent\Drake\Utils\InputData.cs" />
-    <Compile Include="AddedContent\Drake\Utils\VectorMath.cs" />
+    <Compile Include="AddedContent\Firebreak\Internet.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\Basic\IAmUi.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\Basic\UiBasic.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\Basic\UiGroup.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\Basic\UiSeamless.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\Components\UiColourHolder.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\Groups\UiList.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\Groups\UiTabber.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\ReflectionValues\UiReflectionNumberBar.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\ReflectionValues\UiReflectionToggleButton.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\ReflectionValues\UiReflectionVector2Bar.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\UiManager.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\Values\UiNumberBar.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\Values\UiToggleButton.cs" />
+    <Compile Include="AddedContent\Hyeve\DebugUI\Values\UiVector2Bar.cs" />
+    <Compile Include="AddedContent\Hyeve\HyeveTests.cs" />
+    <Compile Include="AddedContent\Hyeve\FixedCommandHistory.cs" />
+    <Compile Include="AddedContent\Hyeve\PolyRender\AtlasedFont.cs" />
+    <Compile Include="AddedContent\Hyeve\PolyRender\PolygonBatcher.cs" />
+    <Compile Include="AddedContent\Hyeve\PolyRender\PolyRenderer.cs" />
+    <Compile Include="AddedContent\Hyeve\PolyRender\FontDatabase.cs" />
+    <Compile Include="AddedContent\Hyeve\RenderDelegates.cs" />
+    <Compile Include="AddedContent\Hyeve\Utils\InputData.cs" />
+    <Compile Include="AddedContent\Hyeve\Utils\VectorMath.cs" />
     <Compile Include="AddedContent\Extensions.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AutoConfigFieldAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AutoConfigHandler.cs" />
@@ -220,36 +282,61 @@
     <Compile Include="AddedContent\klof44\DiscordRichPresence.cs" />
     <Compile Include="AddedContent\NiK0\BGLightning.cs" />
     <Compile Include="AddedContent\NiK0\ChangePlus.cs" />
-    <Compile Include="AddedContent\NiK0\ClientOnly\Bubble.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\NMPush.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigDuck.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigRagdollPart.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigRagdoll.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigTrapped.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATDeathCaliber.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATWumpMagnum.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\Bubble.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\NMDuckShatter.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\NMPinkCollision.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\NMPinkExplode.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\NMSetScale.cs" />
-    <Compile Include="AddedContent\NiK0\ClientOnly\PinkBox.cs" />
-    <Compile Include="AddedContent\NiK0\ClientOnly\PizzaLauncher.cs" />
-    <Compile Include="AddedContent\NiK0\ClientOnly\ShatterDuck.cs" />
-    <Compile Include="AddedContent\NiK0\ClientOnly\TheDishes.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\PinkBox.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\PizzaLauncher.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\ShatterDuck.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\TheDishes.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\VersionSign.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATWumpMissile.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\DeathCaliber.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpSharpshot.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpMagnum.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpBazooka.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\FreezeSmoke.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\IceSpike.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpAK47.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpBlunderbuss.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpHugeLaser.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpLaser.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpMagnumbullet.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpMissile.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpPistol.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpQuadLaser.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpQuadLaserBullet.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpSniper.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpTeleporter.cs" />
     <Compile Include="AddedContent\NiK0\MathParser.cs" />
+    <Compile Include="AddedContent\NiK0\RainbowConstant.cs" />
     <Compile Include="AddedContent\NiK0\RainParticel.cs" />
     <Compile Include="AddedContent\NiK0\RoomEditorExtra.cs" />
-    <Compile Include="AddedContent\YupDanielThatsMe\bat.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\ClientOnlyAttribute.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\CodeButton.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\ContextButton.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\CrashWindow.cs" />
-    <Compile Include="AddedContent\YupDanielThatsMe\PistolTwo.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\DebugMount.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\DebugPack.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\DebugTablet.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\DevTestLevel.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\FunctionBinding.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\TestingTileset.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\RectPackSharp\HashCode.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\RectPackSharp\PackingHints.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\RectPackSharp\PackingRectangle.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\RectPackSharp\RectanglePacker.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\TestVerticalDoor.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\DGVersion.cs" />
     <Compile Include="Properties\Resources1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -297,6 +384,7 @@
     <Compile Include="src\MonoTime\Console\Commands\Default\XpSkip.cs" />
     <Compile Include="src\MonoTime\Console\Commands\DoDraw.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Exit.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Filter.cs" />
     <Compile Include="src\MonoTime\Console\Commands\For.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Help.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Rep.cs" />
@@ -1894,6 +1982,7 @@
     <Compile Include="src\XnaToFna\Control.cs" />
     <Compile Include="src\XnaToFna\CopyingStream.cs" />
     <Compile Include="src\XnaToFna\Cursor.cs" />
+    <Compile Include="src\XnaToFna\CustomAssemblyResolver.cs" />
     <Compile Include="src\XnaToFna\DeviceEvents.cs" />
     <Compile Include="src\XnaToFna\DInput.cs" />
     <Compile Include="src\XnaToFna\DInputState.cs" />
@@ -1977,6 +2066,7 @@
     <None Include=".editorconfig" />
     <None Include="app.config" />
     <None Include="app.manifest" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -1985,6 +2075,7 @@
   <ItemGroup>
     <Content Include="DuckGame.ico" />
     <EmbeddedResource Include="version.txt" />
+    <EmbeddedResource Include="SlnPath.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="shaders_source\" />
@@ -2015,14 +2106,23 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <DepsFolder Include="$(SolutionDir)\deps\**\*.*" />
+    <DepsFolder Include="$(SolutionDir)\deps\**\*.*"/>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">
     <Exec Command="git describe  --always --dirty --abbrev=40 &gt; &quot;$(ProjectDir)version.txt&quot;" />
+    <Exec Command="echo $(SolutionDir) &gt; $(ProjectDir)SlnPath.txt" />
   </Target>
   <Target Name="AfterBuild">
-    <Copy SourceFiles="@(DepsFolder)" DestinationFolder="$(SolutionDir)\bin" />
+    <Exec Command="cp -rv $(SolutionDir)deps/* $(SolutionDir)bin/" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'" />
+    <Exec Command="Xcopy &quot;$(SolutionDir)\deps&quot; &quot;$(SolutionDir)\bin&quot; /E /H /C /I /Y" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'" />
     <Exec Command="call &quot;$(SolutionDir)shaders_source\buildshaders.bat&quot;" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'" />
+  </Target>
+  <Import Project="..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net48.targets" Condition="Exists('..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net48.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net48.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NETFramework.ReferenceAssemblies.net48.1.0.3\build\Microsoft.NETFramework.ReferenceAssemblies.net48.targets'))" />
   </Target>
 </Project>

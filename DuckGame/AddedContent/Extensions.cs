@@ -6,11 +6,81 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using static DuckGame.CMD;
+using System.Reflection.Emit;
 
 namespace DuckGame
 {
     public static class Extensions
     {
+        static Type PatchProcessorT;
+        static MethodInfo GetPatchInfoM;
+        static FieldInfo DynOwner;
+        static FieldInfo DynTOwner;
+        static FieldInfo prefixes;
+        static FieldInfo postfixes;
+        static FieldInfo transpilers;
+        static FieldInfo Patch;
+        static bool HarmonyActive;
+        static bool HarmonyLoaded()
+        {
+            if (HarmonyActive)
+                return true;
+            Assembly a = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(x => x.GetName().Name == "HarmonyLoader");
+            if (a == null)
+                return false;
+            PatchProcessorT = Type.GetType($"Harmony.PatchProcessor, {a.FullName}");
+
+            GetPatchInfoM = PatchProcessorT?.GetMethod("GetPatchInfo");
+            Type ps = Type.GetType($"Harmony.Patches, {a.FullName}");
+            prefixes = ps?.GetField("Prefixes");
+            postfixes = ps?.GetField("Postfixes");
+            transpilers = ps?.GetField("Transpilers");
+
+            Type p = Type.GetType($"Harmony.Patch, {a.FullName}");
+            if ( p == null )
+            {
+                return false;
+            }
+            Patch = p.GetField("patch");
+
+            if (GetPatchInfoM == null)
+                return false;
+
+            Type dt = Type.GetType("System.Reflection.Emit.DynamicMethod+RTDynamicMethod");
+            DynOwner = dt.GetField("m_owner", BindingFlags.Instance | BindingFlags.NonPublic);
+            DynTOwner = typeof(DynamicMethod).GetField("m_typeOwner", BindingFlags.Instance | BindingFlags.NonPublic);
+            return HarmonyActive = true;
+        }
+
+        public static string GetPatches(this MethodBase mb)
+        {
+            if (!HarmonyLoaded()) 
+                return "";
+            if (mb.DeclaringType != null)
+                return "";
+            int i = mb.Name.IndexOf("_Patch");
+            if (i == -1)
+                return "";
+            string name = mb.Name.Substring(0, i);
+            DynamicMethod o = DynOwner.GetValue(mb) as DynamicMethod;
+            Type to = DynTOwner.GetValue(o) as Type;
+            MethodInfo ogmeth = to.GetMethod(name, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
+            object patches = GetPatchInfoM.Invoke(null, new object[]{ ogmeth });
+            string ret = "     " + ogmeth.GetFullName2() + Environment.NewLine;
+            List<object> patchs = new();
+            IEnumerable<object> pre = (prefixes.GetValue(patches) as IEnumerable).Cast<object>();
+            IEnumerable<object> post = (postfixes.GetValue(patches) as IEnumerable).Cast<object>();
+            IEnumerable<object> tra = (transpilers.GetValue(patches) as IEnumerable).Cast<object>();
+            patchs.InsertRange(0, pre);
+            patchs.InsertRange(patchs.Count, post);
+            patchs.InsertRange(patchs.Count, tra);
+            foreach(MethodBase p in patchs.Select(x => Patch.GetValue(x) as MethodBase))
+            {
+                ret += "     -" + p.GetFullName2() + Environment.NewLine;
+            }
+            return ret;
+        }
+
         public static void TryUse<T1, T2>(this Dictionary<T1, T2> dic, T1 requestedKey, T2 defaultValue, Action<T2> action)
         {
             if (!dic.ContainsKey(requestedKey))
@@ -83,9 +153,56 @@ namespace DuckGame
 
         public static string GetFullName(this MemberInfo mi) => $"{mi.DeclaringType}:{mi.Name}";
 
-        public static bool InheritsFrom(this Type t1, Type t2) => t2.IsAssignableFrom(t1);
+        static PropertyInfo InternalFullName = typeof(MethodBase).GetProperty("FullName", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        public static string GetFullName2(this MethodBase mi)
+        {
+            try
+            {
+                return (string)InternalFullName.GetValue(mi);
+            }catch(Exception e)
+            {
+                return mi.Name;
+                //return "";
+            }
+        }
+
+        public static bool InheritsFrom(this Type derivedType, Type baseType)
+        {
+            return baseType.IsAssignableFrom(derivedType);
+        }
+
+        /// ChatGPT generated this beauty :D
+        public static bool IsGenericallyApplicableTo(this Type derivedType, Type baseType)
+        {
+            return derivedType.IsGenericType && baseType.IsAssignableFrom(derivedType.GetGenericTypeDefinition());
+        }
+        
         public static bool CaselessEquals(this string str, string str2) =>
             string.Equals(str, str2, StringComparison.CurrentCultureIgnoreCase);
+
+        public static List<T> WhereExcess<T>(
+            this IEnumerable<T> collection, 
+            Predicate<T> comparer,
+            out List<T> excess)
+        {
+            excess = new List<T>();
+            List<T> wanted = new();
+
+            foreach (T item in collection)
+            {
+                if (comparer(item))
+                {
+                    wanted.Add(item);
+                }
+                else
+                {
+                    excess.Add(item);
+                }
+            }
+
+            return wanted;
+        }
 
         public static string ToReadableString(this IEnumerable<object> collection, int indentationLevel = 0, bool doIndent = true)
         {
@@ -113,6 +230,11 @@ namespace DuckGame
 
             void indentedAppend(string s) =>
                 stringBuilder.Append($"{(doIndent ? new string(' ', indentationLevel * 2) : "")}{s}");
+        }
+        
+        public static void DrawCenteredOutlinedString(string text, Vec2 position, Color color, Color outline, Depth depth = default, InputProfile pro = null, float scale = 1f)
+        {
+            Graphics.DrawStringOutline(text, new Vec2(position.x - ((Graphics.GetStringWidth(text) / 2) * scale), position.y), color, outline, depth, pro, scale);
         }
 
         public static bool Try(Action action)
@@ -337,6 +459,26 @@ namespace DuckGame
             _ => throw new NotImplementedException()
         };
 
-        public static string CleanFormatting(this string String, CleanMethod cleanMethod = CleanMethod.Both) => CleanStringFormatting(String, cleanMethod);
+        public static string CleanFormatting(this string str, CleanMethod cleanMethod = CleanMethod.Both) => CleanStringFormatting(str, cleanMethod);
+
+        public static Vec2 GetStringSize(string text, float fontSize = 1f) => new(0, 0)
+        {
+            x = Graphics.GetStringWidth(text, false, fontSize),
+            y = Graphics.GetStringHeight(text) * fontSize
+        };
+
+        public static bool MultiPlayerTeamsExist()
+        {
+            HashSet<int> hashedTeams = new();
+
+            foreach (Profile prof in Profiles.activeNonSpectators)
+            {
+                int hashCode = prof.team.GetHashCode();
+                if (!hashedTeams.Add(hashCode)) // hashsets return false if adding duplicates
+                    return true;
+            }
+
+            return false;
+        }
     }
 }

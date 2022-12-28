@@ -9,13 +9,12 @@
 
 #region Using Statements
 using System;
-using System.Runtime.InteropServices;
 #endregion
 
 namespace Microsoft.Xna.Framework.Audio
 {
-	// http://msdn.microsoft.com/en-us/library/microsoft.xna.framework.audio.cue.aspx
-	public sealed class Cue : IDisposable
+    // http://msdn.microsoft.com/en-us/library/microsoft.xna.framework.audio.cue.aspx
+    public sealed class Cue : IDisposable
 	{
 		#region Public Properties
 

@@ -151,8 +151,8 @@ namespace DuckGame
                     t.visible = true;
                     t.active = true;
                     t.solid = true;
-                    Thing.Fondle(this, DuckNetwork.localConnection);
-                    Thing.Fondle(t, DuckNetwork.localConnection);
+                    Fondle(this, DuckNetwork.localConnection);
+                    Fondle(t, DuckNetwork.localConnection);
                 }
             }
             else
@@ -183,7 +183,7 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             if (bullet.isLocal)
-                Thing.Fondle(this, DuckNetwork.localConnection);
+                Fondle(this, DuckNetwork.localConnection);
             if (_hitPoints <= 0.0)
                 return base.Hit(bullet, hitPos);
             hitPos -= bullet.travelDirNormalized;
@@ -233,7 +233,7 @@ namespace DuckGame
                 return;
             if (Network.isActive)
             {
-                Thing.ExtraFondle(this, with.connection);
+                ExtraFondle(this, with.connection);
                 Send.Message(new NMUnlockDoor(this));
                 networkUnlockMessage = true;
             }
@@ -356,7 +356,7 @@ namespace DuckGame
                     if (thing.x < x)
                     {
                         _coll.Clear();
-                        Level.CheckRectAll<PhysicsObject>(_topRight, _bottomRight + new Vec2(10f, 0f), _coll);
+                        Level.CheckRectAll(_topRight, _bottomRight + new Vec2(10f, 0f), _coll);
                         bool flag3 = true;
                         _jam = 1f;
                         foreach (PhysicsObject t2 in _coll)
@@ -410,7 +410,7 @@ namespace DuckGame
                     else
                     {
                         _coll.Clear();
-                        Level.CheckRectAll<PhysicsObject>(_topLeft - new Vec2(10f, 0f), _bottomLeft, _coll);
+                        Level.CheckRectAll(_topLeft - new Vec2(10f, 0f), _bottomLeft, _coll);
                         bool flag4 = true;
                         _jam = -1f;
                         foreach (PhysicsObject t3 in _coll)
@@ -468,7 +468,7 @@ namespace DuckGame
             if (_open < -0.0 || _open > 0.0)
             {
                 _coll.Clear();
-                Level.CheckRectAll<PhysicsObject>(_topLeft - new Vec2(18f, 0f), _bottomRight + new Vec2(18f, 0f), _coll);
+                Level.CheckRectAll(_topLeft - new Vec2(18f, 0f), _bottomRight + new Vec2(18f, 0f), _coll);
                 foreach (PhysicsObject t4 in _coll)
                 {
                     if (!(t4 is TeamHat) && (t4 is Duck || !_jammed) && (!(t4 is Holdable) || t4 is Mine || (t4 as Holdable).canPickUp) && t4.solid)

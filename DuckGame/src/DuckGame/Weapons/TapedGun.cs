@@ -91,14 +91,14 @@ namespace DuckGame
             BinaryClassChunk property1 = node.GetProperty<BinaryClassChunk>("gun1");
             if (property1 != null)
             {
-                gun1 = Thing.LoadThing(property1, false) as Holdable;
+                gun1 = LoadThing(property1, false) as Holdable;
                 if (gun1 != null)
                     gun1.tape = this;
             }
             BinaryClassChunk property2 = node.GetProperty<BinaryClassChunk>("gun2");
             if (property2 != null)
             {
-                gun2 = Thing.LoadThing(property2, false) as Holdable;
+                gun2 = LoadThing(property2, false) as Holdable;
                 if (gun2 != null)
                     gun2.tape = this;
             }
@@ -366,7 +366,7 @@ namespace DuckGame
                         {
                             if (duck.inputProfile != null)
                             {
-                                if (duck.inputProfile.Pressed("SHOOT"))
+                                if (duck.inputProfile.Pressed(Triggers.Shoot))
                                 {
                                     Holdable holdable1 = Level.current.NearestThingFilter<Holdable>(position, t =>
                                    {
@@ -394,7 +394,7 @@ namespace DuckGame
                                             Level.Add(SmallSmoke.New(position.x, position.y));
                                         }
                                         SFX.PlaySynchronized("equip", 0.8f);
-                                        Thing.ExtraFondle(holdable1, connection);
+                                        ExtraFondle(holdable1, connection);
                                         gun2 = holdable1;
                                         gun2.owner = duck;
                                         taping = false;
@@ -403,14 +403,14 @@ namespace DuckGame
                                         Holdable holdable2 = gun1.BecomeTapedMonster(this);
                                         if (holdable2 != null)
                                         {
-                                            Thing.Fondle(holdable2, DuckNetwork.localConnection);
+                                            Fondle(holdable2, DuckNetwork.localConnection);
                                             holdable2.position = position;
                                             Level.Add(holdable2);
                                             if (duck != null)
                                                 duck.GiveHoldable(holdable2);
-                                            Thing.Fondle(this, DuckNetwork.localConnection);
-                                            Thing.Fondle(gun1, DuckNetwork.localConnection);
-                                            Thing.Fondle(gun2, DuckNetwork.localConnection);
+                                            Fondle(this, DuckNetwork.localConnection);
+                                            Fondle(gun1, DuckNetwork.localConnection);
+                                            Fondle(gun2, DuckNetwork.localConnection);
                                             Level.Remove(gun1);
                                             Level.Remove(gun2);
                                             Level.Remove(this);

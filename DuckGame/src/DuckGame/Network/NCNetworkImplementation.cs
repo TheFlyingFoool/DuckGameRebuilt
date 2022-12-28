@@ -294,7 +294,7 @@ namespace DuckGame
         protected NetworkConnection GetOrAddConnection(object context)
         {
             string id = GetConnectionIdentifier(context);
-            NetworkConnection c = allConnections.FirstOrDefault<NetworkConnection>(x => x.identifier == id);
+            NetworkConnection c = allConnections.FirstOrDefault(x => x.identifier == id);
             if (c == null)
             {
                 c = new NetworkConnection(context);
@@ -306,7 +306,7 @@ namespace DuckGame
         protected NetworkConnection GetConnection(object context)
         {
             string id = GetConnectionIdentifier(context);
-            return allConnections.FirstOrDefault<NetworkConnection>(x => x.identifier == id);
+            return allConnections.FirstOrDefault(x => x.identifier == id);
         }
 
         public void DisconnectClient(NetworkConnection connection, DuckNetErrorInfo error, bool kicked = false)
@@ -324,19 +324,19 @@ namespace DuckGame
             {
                 if (connection.status == ConnectionStatus.Disconnecting)
                     return;
-                NCNetworkImplementation.currentError = error;
+                currentError = error;
                 connection.BeginDisconnecting(error);
                 if (Level.current != null)
                     Level.current.OnDisconnect(connection);
                 DuckNetwork.OnDisconnect(connection, reason, kicked || error != null && (error.error == DuckNetError.Kicked || error.error == DuckNetError.Banned));
-                NCNetworkImplementation.currentError = null;
+                currentError = null;
                 if (connection.data == null)
                     DevConsole.Log(DCSection.NetCore, "@disconnect You (LOCAL) are disconnecting...|DGRED|(" + reason + ")", _networkIndex);
                 else
                     DevConsole.Log(DCSection.NetCore, "@disconnect Player Disconnecting...|DGRED|(" + reason + ")", connection, _networkIndex);
                 if (connection == DuckNetwork.localConnection)
                 {
-                    NCNetworkImplementation.currentMainDisconnectError = error;
+                    currentMainDisconnectError = error;
                     foreach (NetworkConnection sessionConnection in sessionConnections)
                     {
                         if (sessionConnection != connection)
@@ -360,12 +360,12 @@ namespace DuckGame
                     GhostManager.context.OnDisconnect(connection);
                 Disconnect(connection);
                 connection.Reset("Client Disconnected.");
-                if (NCNetworkImplementation.currentMainDisconnectError != null && NCNetworkImplementation.currentMainDisconnectError.error == DuckNetError.EveryoneDisconnected)
-                    NCNetworkImplementation.currentMainDisconnectError = error;
+                if (currentMainDisconnectError != null && currentMainDisconnectError.error == DuckNetError.EveryoneDisconnected)
+                    currentMainDisconnectError = error;
                 if (sessionConnections.Count != 0 && (sessionConnections.Count != 1 || sessionConnections[0] != DuckNetwork.localConnection || Network.InLobby()))
                     return;
                 if (!Network.isServer || sessionConnections.Count == 0)
-                    OnSessionEnded(NCNetworkImplementation.currentMainDisconnectError != null ? NCNetworkImplementation.currentMainDisconnectError : error);
+                    OnSessionEnded(currentMainDisconnectError != null ? currentMainDisconnectError : error);
                 else
                     DuckNetwork.TryPeacefulResolution();
             }
@@ -406,7 +406,7 @@ namespace DuckGame
                 Level.current = error == null ? new ConnectionError("|RED|Disconnected from game.") : (Level)new ConnectionError(error.message);
             if (UIMatchmakerMark2.instance != null)
                 UIMatchmakerMark2.instance.Hook_OnSessionEnded(error);
-            NCNetworkImplementation.currentMainDisconnectError = null;
+            currentMainDisconnectError = null;
             _hardDisconnectTimeout = -1;
             lock (_connectionHistory)
             {

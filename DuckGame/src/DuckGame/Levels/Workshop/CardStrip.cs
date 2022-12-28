@@ -91,15 +91,15 @@ namespace DuckGame
         {
             if (_selected)
             {
-                if (InputProfile.active.Pressed("MENULEFT"))
+                if (InputProfile.active.Pressed(Triggers.MenuLeft))
                     --_selectedCardIndex;
-                else if (InputProfile.active.Pressed("MENURIGHT"))
+                else if (InputProfile.active.Pressed(Triggers.MenuRight))
                     ++_selectedCardIndex;
-                else if (InputProfile.active.Pressed("SELECT"))
+                else if (InputProfile.active.Pressed(Triggers.Select))
                     _listener.CardSelected(_cards[_selectedCardIndex]);
             }
-            if (_selectedCardIndex >= _cards.Count<Card>())
-                _selectedCardIndex = _cards.Count<Card>() - 1;
+            if (_selectedCardIndex >= _cards.Count())
+                _selectedCardIndex = _cards.Count() - 1;
             else if (_selectedCardIndex < 0)
                 _selectedCardIndex = 0;
             if (_levelIndex + (_numCardsPerScreen - 1) < _selectedCardIndex)
@@ -127,8 +127,8 @@ namespace DuckGame
             float y = this.y;
             if (_heading != null && _heading != "")
             {
-                CardStrip._font.scale = new Vec2(0.75f, 0.75f);
-                CardStrip._font.Draw(_heading, x + 4f, this.y, Color.White, (Depth)0.95f);
+                _font.scale = new Vec2(0.75f, 0.75f);
+                _font.Draw(_heading, x + 4f, this.y, Color.White, (Depth)0.95f);
                 y += 10f;
             }
             Vec2 vec2_1 = Vec2.Zero;

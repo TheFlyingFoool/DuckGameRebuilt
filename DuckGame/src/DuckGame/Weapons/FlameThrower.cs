@@ -25,8 +25,10 @@ namespace DuckGame
             barrelInsertOffset = new Vec2(0f, -2f);
             wideBarrel = true;
             ammo = _maxAmmo;
-            _ammoType = new AT9mm();
-            _ammoType.combustable = true;
+            _ammoType = new AT9mm
+            {
+                combustable = true
+            };
             _type = "gun";
             graphic = new Sprite("flamethrower");
             center = new Vec2(16f, 15f);

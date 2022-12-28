@@ -121,7 +121,7 @@ namespace DuckGame
         {
             if (_shutter != null)
                 Level.Remove(_shutter);
-            _shutter = !fallthrough.value ? new WireTrapDoorShutterSolid(this.x + 4 * this.offDir, this.y - 5f, this) : new WireTrapDoorShutter(this.x + 4 * this.offDir, this.y - 5f, this);
+            _shutter = !fallthrough.value ? new WireTrapDoorShutterSolid(x + 4 * offDir, y - 5f, this) : new WireTrapDoorShutter(x + 4 * offDir, y - 5f, this);
             _shutter.depth = depth + 5;
             _shutter.offDir = offDir;
             Level.Add(_shutter);
@@ -149,7 +149,7 @@ namespace DuckGame
 
         public void Pulse(int type, WireTileset wire)
         {
-            Thing.Fondle(this, DuckNetwork.localConnection);
+            Fondle(this, DuckNetwork.localConnection);
             _open = !_open;
             SFX.Play("click");
         }

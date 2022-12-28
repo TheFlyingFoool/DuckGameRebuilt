@@ -34,7 +34,7 @@ namespace DuckGame
                 IEnumerable<DXMLNode> source = DuckXML.Load(_level).Element("Level").Elements("Objects");
                 if (source == null)
                     return;
-                foreach (DXMLNode element in source.Elements<DXMLNode>("Object"))
+                foreach (DXMLNode element in source.Elements("Object"))
                 {
                     Thing t = Thing.LegacyLoadThing(element);
                     if (t != null)
