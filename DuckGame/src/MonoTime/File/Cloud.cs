@@ -107,7 +107,13 @@ namespace DuckGame
                     DevConsole.Log(DCSection.General, "Steam.FileWrite(" + local.cloudPath + ")");
                 local.localDate = DateTime.Now;
                 local.cloudDate = DateTime.Now;
-                File.SetLastWriteTime(local.localPath, DateTime.Now);
+                try
+                {
+                    File.SetLastWriteTime(local.localPath, DateTime.Now); // mabye there a better way i can handle this crashing but it doesnt seem too imporant
+                }
+                catch
+                { 
+                }
             }
         }
 

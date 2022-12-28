@@ -326,6 +326,7 @@
     <Compile Include="AddedContent\YupDanielThatsMe\ContextButton.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\CrashWindow.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\DebugMount.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\DebugPack.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\DebugTablet.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\DevTestLevel.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\FunctionBinding.cs" />

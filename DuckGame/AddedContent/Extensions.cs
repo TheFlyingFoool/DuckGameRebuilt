@@ -37,6 +37,10 @@ namespace DuckGame
             transpilers = ps?.GetField("Transpilers");
 
             Type p = Type.GetType($"Harmony.Patch, {a.FullName}");
+            if ( p == null )
+            {
+                return false;
+            }
             Patch = p.GetField("patch");
 
             if (GetPatchInfoM == null)

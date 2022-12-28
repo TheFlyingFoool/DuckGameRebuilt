@@ -1236,7 +1236,13 @@ namespace DuckGame
                 stream2.CopyTo(stream);
             }
             stream.Close();
-            File.SetLastWriteTime(destinationFileName, source.LastWriteTime.DateTime);
+            try
+            {
+                File.SetLastWriteTime(destinationFileName, source.LastWriteTime.DateTime); // mabye there a better way i can handle this crashing but it doesnt seem too imporant
+            }
+            catch
+            {
+            }
 
         }
         
