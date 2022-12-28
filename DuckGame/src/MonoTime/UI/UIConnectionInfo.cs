@@ -45,6 +45,8 @@ namespace DuckGame
       "Name"
     };
 
+        public bool didUpdateNameDueToSwap = false;
+
         public UIConnectionInfo(
           Profile p,
           UIMenu rootMenu,
@@ -65,9 +67,12 @@ namespace DuckGame
 
         private void UpdateName()
         {
+            if (_profile.connection == null)
+                return;
             Profile profile = _profile;
             string colorPrefixString = "|" + profile.persona.colorUsable.r.ToString() + "," + profile.persona.colorUsable.g.ToString() + "," + profile.persona.colorUsable.b.ToString() + "|";
-            if (profile.slotType == SlotType.Spectator)
+            bool isSpectator = profile.slotType == SlotType.Spectator;
+            if (isSpectator)
                 colorPrefixString = "|DGPURPLE|";
             string profileName = profile.nameUI;
 
@@ -94,7 +99,7 @@ namespace DuckGame
 
             if (isHost)
                 profileName = "@HOSTCROWN@" + profileName;
-            if (profile.slotType == SlotType.Spectator)
+            if (isSpectator)
                 profileName = "@SPECTATOR@" + profileName;
             if (_profile.muteChat || _profile.muteHat || _profile.muteName || _profile.muteRoom)
                 profileName = "@MUTEICON@" + profileName;
@@ -189,15 +194,12 @@ namespace DuckGame
                     if (_profile.slotType != SlotType.Spectator)
                     {
                         DuckNetwork.MakeSpectator(_profile);
-                        SFX.Play("menuBlip01");
-                        UpdateName();
                     }
                     else
                     {
                         DuckNetwork.MakePlayer(_profile);
-                        SFX.Play("menuBlip01");
-                        UpdateName();
                     }
+                    SFX.Play("menuBlip01");
                 }
                 if (trigger == Triggers.Select)
                 {
@@ -328,6 +330,10 @@ namespace DuckGame
                     SFX.Play("textLetter", 0.7f);
                 }
             }
+
+            if (DuckNetwork.SpectatorSwapFinished(_profile) && !didUpdateNameDueToSwap)
+                UpdateName();
+
             base.Update();
         }
 

@@ -158,6 +158,7 @@ namespace DuckGame
         {
             InputProfile.repeat = true;
             Keyboard.repeat = true;
+            HUD.CloseCorner(HUDCorner.BottomLeft); // close FORCE START tip
             SetCurrentFolder(_rootDirectory);
             isInitialized = true;
             _dialog.DoInitialize();

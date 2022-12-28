@@ -20,7 +20,10 @@ namespace DuckGame
         public static bool editingSlots = false;
         public bool finished;
         private bool _selectionChanged = true;
+        private bool _selectionChangedDueToSpectatorSwap = false;
         private bool _showWarning;
+        private bool _justOpened;
+        private Profile _profileThatJustStartedBeingSpectatorSwapped = null;
         //private bool _showedWarning;
         public static int[,] kIndexMap = new int[3, 3]
         {
@@ -45,7 +48,7 @@ namespace DuckGame
         public UISlotEditor(UIMenu closeMenu, float xpos, float ypos, float wide = -1f, float high = -1f)
           : base("", xpos, ypos, wide, high)
         {
-            float num = 38f;
+            // float num = 38f;
             //this._captureRectangle = new Rectangle((float)(int)(Layer.HUD.camera.width / 2.0 - num / 2.0), (float)(int)(Layer.HUD.camera.height / 2.0 - num / 2.0), (float)(int)num, (float)(int)num);
             _closeMenu = closeMenu;
             //this._littleFont = new BitmapFont("smallBiosFontUI", 7, 5);
@@ -57,8 +60,9 @@ namespace DuckGame
             HUD.CloseAllCorners();
             editingSlots = true;
             //this._showedWarning = false;
+            _justOpened = true;
             _showWarning = false;
-            HUD.AddCornerControl(HUDCorner.BottomLeft, "@CANCEL@EXIT");
+            HUD.AddCornerControl(HUDCorner.TopRight, "@CANCEL@DONE");
             MonoMain.doPauseFade = false;
             base.Open();
         }
@@ -144,52 +148,89 @@ namespace DuckGame
                     _slot = kIndexMap[_indexY, _indexX];
                     hoveringSlot = _slot;
                     if (_slot != slot)
+                    {
                         _selectionChanged = true;
+                    }
+                        
                     if (_slot >= 0)
                     {
-                        if (_selectionChanged)
+                        if (_selectionChanged || _justOpened || (DuckNetwork.SpectatorSwapFinished(_profileThatJustStartedBeingSpectatorSwapped) && _selectionChangedDueToSpectatorSwap))
                         {
-                            if (DuckNetwork.profiles[_slot].connection != null && DuckNetwork.profiles[_slot] != DuckNetwork.hostProfile)
-                            {
-                                HUD.CloseCorner(HUDCorner.BottomMiddle);
-                                if (DuckNetwork.profiles[_slot].connection == DuckNetwork.localConnection)
-                                    HUD.AddCornerControl(HUDCorner.BottomMiddle, "@MENU2@KICK");
-                                else
-                                    HUD.AddCornerControl(HUDCorner.BottomMiddle, "@MENU2@KICK @RAGDOLL@BAN");
-                                HUD.CloseCorner(HUDCorner.TopRight);
-                                if (Network.canSetObservers)
-                                    HUD.AddCornerControl(HUDCorner.TopRight, "@MENU1@MAKE SPECTATOR");
-                            }
-                            else
-                            {
-                                HUD.CloseCorner(HUDCorner.BottomMiddle);
-                                HUD.CloseCorner(HUDCorner.TopRight);
-                            }
-                            if (DuckNetwork.profiles[_slot].connection == null)
-                            {
-                                HUD.CloseCorner(HUDCorner.BottomRight);
-                                HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@TOGGLE");
-                            }
-                            else
-                                HUD.CloseCorner(HUDCorner.BottomRight);
                             _selectionChanged = false;
+                            _justOpened = false;
+                            _selectionChangedDueToSpectatorSwap = false;
+                            if (DuckNetwork.profiles[_slot].connection != null)
+                            {
+                                HUD.CloseCorner(HUDCorner.BottomRight); // close "TOGGLE"
+                                HUD.CloseCorner(HUDCorner.BottomLeft); // close "APPLY TO ALL"
+                                if (Network.canSetObservers)
+                                    HUD.AddCornerControl(HUDCorner.BottomMiddle, "@MENU1@MAKE SPECTATOR");
+                                if (DuckNetwork.profiles[_slot] != DuckNetwork.hostProfile)
+                                    if (DuckNetwork.profiles[_slot].connection == DuckNetwork.localConnection)
+                                        HUD.AddCornerControl(HUDCorner.BottomMiddle, "@MENU2@KICK", allowStacking: true);
+                                    else
+                                        HUD.AddCornerControl(HUDCorner.BottomMiddle, "@MENU2@KICK @RAGDOLL@BAN", allowStacking: true);
+                                else
+                                {
+                                    HUD.CloseCorner(HUDCorner.BottomMiddle); // close "MAKE SPECTATOR" and stuff
+                                    if (Network.canSetObservers)
+                                        HUD.AddCornerControl(HUDCorner.BottomMiddle, "@MENU1@MAKE SPECTATOR");
+                                }
+                            }
+                            else
+                            {
+                                HUD.CloseCorner(HUDCorner.BottomMiddle); // close "MAKE SPECTATOR" and stuff
+                                HUD.AddCornerControl(HUDCorner.BottomLeft, "@GRAB@APPLY TO ALL");
+                                HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@TOGGLE", allowStacking: true);
+                            }
                         }
+
                         if (DuckNetwork.profiles[_slot].readyForSpectatorChange && Network.canSetObservers && Input.Pressed(Triggers.Menu1) && DuckNetwork.profiles[_slot].connection != null)
                         {
-                            _selectionChanged = true;
-                            DuckNetwork.MakeSpectator(DuckNetwork.profiles[_slot]);
+                            _selectionChangedDueToSpectatorSwap = true;
+                            _profileThatJustStartedBeingSpectatorSwapped = DuckNetwork.profiles[_slot];
+                            DuckNetwork.MakeSpectator(_profileThatJustStartedBeingSpectatorSwapped);
                             SFX.Play("menuBlip01");
                         }
-                        else if (Input.Pressed(Triggers.Select) && DuckNetwork.profiles[_slot].connection == null)
+                        else if (DuckNetwork.profiles[_slot].connection == null)
                         {
-                            int num = (int)(DuckNetwork.profiles[_slot].slotType + 1);
-                            if (DuckNetwork.profiles[_slot].reservedUser != null && num == 5)
-                                ++num;
-                            if (DuckNetwork.profiles[_slot].reservedUser == null && num >= 5 || DuckNetwork.profiles[_slot].reservedUser != null && num > 6)
-                                num = 0;
-                            DuckNetwork.profiles[_slot].slotType = (SlotType)num;
-                            DuckNetwork.ChangeSlotSettings();
-                            SFX.Play("menuBlip01");
+                            if (Input.Pressed(Triggers.Select))
+                            {
+                                int num = (int)(DuckNetwork.profiles[_slot].slotType + 1);
+                                if (DuckNetwork.profiles[_slot].reservedUser != null && num == 5)
+                                    ++num;
+                                if (DuckNetwork.profiles[_slot].reservedUser == null && num >= 5 || DuckNetwork.profiles[_slot].reservedUser != null && num > 6)
+                                    num = 0;
+                                DuckNetwork.profiles[_slot].slotType = (SlotType)num;
+                                DuckNetwork.ChangeSlotSettings();
+                                SFX.Play("menuBlip01");
+                            }
+                            else if (Input.Pressed(Triggers.Grab))
+                            {
+                                SlotType currentSlotType = DuckNetwork.profiles[_slot].slotType;
+                                for (int x = 0; x < 3; x++)
+                                    for (int y = 0; y < 3; y++)
+                                        if (!(x == 1 && y == 2))
+                                        {
+                                            int sl = kIndexMap[y, x];
+                                            if (sl != _slot && DuckNetwork.profiles[sl].connection == null)
+                                                DuckNetwork.profiles[sl].slotType = currentSlotType;
+                                        }
+                                SFX.Play("menuBlip01");
+                            }
+                            else if (DGRSettings.dubberspeed)
+                            {
+                                for (int i = 0; i < 5; i++)
+                                {
+                                    if (Keyboard.Pressed(Keys.D1 + i) && DuckNetwork.profiles[_slot].slotType != (SlotType)i)
+                                    {
+                                        DuckNetwork.profiles[_slot].slotType = (SlotType)i;
+                                        DuckNetwork.ChangeSlotSettings();
+                                        SFX.Play("menuBlip01");
+                                        break;
+                                    }
+                                }
+                            }
                         }
                         else if (Input.Pressed(Triggers.Menu2))
                             DuckNetwork.Kick(DuckNetwork.profiles[_slot]);

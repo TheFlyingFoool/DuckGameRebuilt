@@ -1405,7 +1405,7 @@ namespace DuckGame
             set
             {
                 _remoteSpectatorChangeIndex = value;
-                _spectatorChangeCooldown = 120;
+                _spectatorChangeCooldown = 60;
             }
         }
 

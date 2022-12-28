@@ -188,20 +188,7 @@ namespace DuckGame
             }
         }
 
-        public static bool canSetObservers
-        {
-            get
-            {
-                if (DuckNetwork.isDedicatedServer)
-                    return false;
-                bool canSetObservers = isServer && lanMode;
-                if (isServer && Steam.lobby != null && Steam.lobby.type != SteamLobbyType.Public)
-                    canSetObservers = true;
-                if (!InLobby())
-                    canSetObservers = false;
-                return canSetObservers;
-            }
-        }
+        public static bool canSetObservers => InLobby() && isServer && !DuckNetwork.isDedicatedServer;
 
         public static bool isServer
         {
