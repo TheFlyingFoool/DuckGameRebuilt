@@ -211,6 +211,18 @@ namespace DuckGame
 
         public static UIComponent duckNetUIGroup => _ducknetUIGroup;
 
+        private static List<Profile> _profilesFinishedBeingSpectatorSwapped = new List<Profile>();
+
+        private static List<UIConnectionInfo> _listUIConnectionInfo = new List<UIConnectionInfo>();
+
+        private static void MakeUIConnectInfosUpdateNameDueToSwapAgain()
+        {
+            foreach (UIConnectionInfo info in _listUIConnectionInfo)
+                info.didUpdateNameDueToSwap = false;
+        }
+
+        public static bool SpectatorSwapFinished(Profile p) => _profilesFinishedBeingSpectatorSwapped.Contains(p);
+
         public static void Initialize()
         {
             _core._builtInChatFont = new FancyBitmapFont("smallFontChat")
@@ -902,10 +914,15 @@ namespace DuckGame
             _optionsMenu = core._optionsMenu;
             _core._settingsBeforeOpen = TeamSelect2.GetMatchSettingString();
             Main.SpecialCode = "men0";
+            _listUIConnectionInfo.Clear();
             foreach (Profile p in (IEnumerable<Profile>)profiles.OrderBy(x => x.slotType == SlotType.Spectator))
             {
                 if (p.connection != null)
-                    core._ducknetMenu.Add(new UIConnectionInfo(p, core._ducknetMenu, core._confirmKick, core._confirmBan, core._confirmBlock), true);
+                {
+                    UIConnectionInfo info = new UIConnectionInfo(p, core._ducknetMenu, core._confirmKick, core._confirmBan, core._confirmBlock);
+                    core._ducknetMenu.Add(info, true);
+                    _listUIConnectionInfo.Add(info);
+                }
             }
             Main.SpecialCode = "men1";
             core._ducknetMenu.Add(new UIText("", Color.White), true);
@@ -1148,9 +1165,9 @@ namespace DuckGame
             _core._ducknetMenu.Open();
             MonoMain.pauseMenu = _ducknetUIGroup;
             HUD.AddCornerControl(HUDCorner.BottomRight, "@CHAT@CHAT");
-            if (Level.current is GameLevel)
+            if (Network.InGameLevel())
                 HUD.AddCornerControl(HUDCorner.BottomLeft, "@F1@PING");
-            else if (Network.isServer && (Level.current is TeamSelect2) && !TryPeacefulResolution(false))
+            else if (Network.isServer && Network.InLobby() && !TryPeacefulResolution(false))
                 HUD.AddCornerControl(HUDCorner.BottomLeft, "@F1@+@SELECT@FORCE START");
             _core._pauseOpen = true;
             SFX.Play("pause", 0.6f);
@@ -1894,7 +1911,7 @@ namespace DuckGame
                     }
                     _core._menuClosed.value = false;
                 }
-                if (Keyboard.Pressed(Keys.F1) && !(Level.current is TeamSelect2))
+                if (Keyboard.Pressed(Keys.F1) && Network.InGameLevel())
                     ConnectionStatusUI.Show();
                 if (core.logTransferSize > 0)
                     ConnectionStatusUI.core.tempShow = 2;
@@ -2135,6 +2152,8 @@ namespace DuckGame
                                 MakePlayer_Swap(spectatorSwap, pReplacementSlot);
                         }
                         spectatorSwap.pendingSpectatorMode = SlotType.Max;
+                        if (!_profilesFinishedBeingSpectatorSwapped.Contains(spectatorSwap))
+                            _profilesFinishedBeingSpectatorSwapped.Add(spectatorSwap);
                     }
                     TryPeacefulResolution();
                 }
@@ -2313,7 +2332,11 @@ namespace DuckGame
             Send.Message(new NMEndOfDuckNetworkData(), pJoinedProfiles[0].connection);
         }
 
-        public static void MakeSpectator(Profile pProfile) => pProfile.pendingSpectatorMode = SlotType.Spectator;
+        public static void MakeSpectator(Profile pProfile)
+        {
+            _profilesFinishedBeingSpectatorSwapped.Remove(pProfile);
+            pProfile.pendingSpectatorMode = SlotType.Spectator;
+        }
 
         public static void MakeSpectator_Swap(Profile pProfile, Profile pReplacementSlot)
         {
@@ -2341,7 +2364,11 @@ namespace DuckGame
             pProfile.duck = null;
         }
 
-        public static void MakePlayer(Profile pProfile) => pProfile.pendingSpectatorMode = SlotType.Open;
+        public static void MakePlayer(Profile pProfile)
+        {
+            _profilesFinishedBeingSpectatorSwapped.Remove(pProfile);
+            pProfile.pendingSpectatorMode = SlotType.Open;
+        }
 
         public static void MakePlayer_Swap(Profile pProfile, Profile pReplacementSlot)
         {
@@ -2852,6 +2879,7 @@ namespace DuckGame
                     return;
                 Send.Message(new NMRequestPersona(pProfile, pPersona), hostProfile.connection);
             }
+            MakeUIConnectInfosUpdateNameDueToSwapAgain();
         }
 
         public static void OnMessage(NetMessage m)
