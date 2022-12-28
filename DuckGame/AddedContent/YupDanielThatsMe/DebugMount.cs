@@ -16,6 +16,7 @@ namespace DuckGame
         public StateBinding _containedThingBinding = new StateBinding(nameof(_containedThing));
         public StateBinding _actionBinding = new WireMountFlagBinding();
         public Thing _containedThing;
+        public EditorProperty<bool> enabled = new EditorProperty<bool>(false);
         public EditorProperty<bool> infinite = new EditorProperty<bool>(false);
         public EditorProperty<bool> triggeraction = new EditorProperty<bool>(false);
         private System.Type _contains;
@@ -140,15 +141,6 @@ namespace DuckGame
 
         public override void Update()
         {
-            mountAngle.value += rotation;
-            if (mountAngle.value > 360f)
-            {
-                mountAngle.value -= 360f;
-            }
-            else if (mountAngle.value < -360f)
-            {
-                mountAngle.value += 360f;
-            }
             if (_containedThing != null)
             {
                 _containedThing.owner = this;
@@ -176,6 +168,17 @@ namespace DuckGame
                 }
             }
             base.Update();
+            if (!enabled)
+                return;
+            mountAngle.value += rotation;
+            if (mountAngle.value > 360f)
+            {
+                mountAngle.value -= 360f;
+            }
+            else if (mountAngle.value < -360f)
+            {
+                mountAngle.value += 360f;
+            }
             if (_containedThing is Holdable containedThing)
             {
                 framedelaycounter += 1;

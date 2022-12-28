@@ -373,11 +373,11 @@ public class DebugTablet
                     else
                     {
                         _start = tab.CaretPosition;
-                        _end = tab.CaretPosition;
+                        _end = tab.CaretPosition;   
                     }
                     string carryover = "";
                     int line = (int)_start.y;
-                    string[] words = _clipboardText.Replace("\t", "      ").Replace("\r", "").Split('\n');
+                    string[] words = _clipboardText.Replace("\t", new string(' ', TAB_SPACE_WIDTH)).Replace("\r", "").Split('\n');
                     foreach (string n in words)
                     {
                         if (n == "")
