@@ -9,7 +9,7 @@ namespace DuckGame
 {
     public class InputObject : Thing, ITakeInput
     {
-        public StateBinding _profileNumberBinding = new StateBinding(nameof(profileNumber));
+        public StateBinding _profileNumberBinding = new StateBinding(nameof(profileNumber), 0, DG.MaxPlayers);
         public StateBinding _votedBinding = new StateBinding(nameof(voted));
         public StateBinding _inputChangeIndexBinding = new StateBinding(nameof(_inputChangeIndex));
         public StateBinding _leftStickBinding = new StateBinding(true, nameof(leftStick));

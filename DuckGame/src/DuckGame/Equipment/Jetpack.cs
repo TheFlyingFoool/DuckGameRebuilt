@@ -42,7 +42,7 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            _sprite.frame = (int)(_heat * 7.0);
+            _sprite.frame = (int)(_heat * 7f);
             if (_equippedDuck != null)
             {
                 float num1 = 0f;

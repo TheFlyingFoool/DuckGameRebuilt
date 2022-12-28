@@ -12,16 +12,16 @@ namespace DuckGame
     public class VirtualInput : InputDevice
     {
         public static List<VirtualInput> debuggerInputs = new List<VirtualInput>()
-    {
-      new VirtualInput(0),
-      new VirtualInput(0),
-      new VirtualInput(0),
-      new VirtualInput(0),
-      new VirtualInput(0),
-      new VirtualInput(0),
-      new VirtualInput(0),
-      new VirtualInput(0)
-    };
+        {
+          new VirtualInput(0),
+          new VirtualInput(0),
+          new VirtualInput(0),
+          new VirtualInput(0),
+          new VirtualInput(0),
+          new VirtualInput(0),
+          new VirtualInput(0),
+          new VirtualInput(0)
+        };
         public int pdraw;
         private ushort _state;
         private ushort _prevState;

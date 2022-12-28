@@ -2106,7 +2106,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <DepsFolder Include="$(SolutionDir)\deps\**\*.*"/>
+    <DepsFolder Include="$(SolutionDir)\deps\**\*.*" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">

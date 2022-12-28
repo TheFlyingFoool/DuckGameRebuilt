@@ -6,6 +6,7 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using System;
+using static DuckGame.Ease;
 
 namespace DuckGame
 {
@@ -15,6 +16,8 @@ namespace DuckGame
     /// </summary>
     public class StateBinding
     {
+        public object minvalue;
+        public object maxvalue;
         public int bitIndex;
         protected GhostPriority _priority;
         public bool valid = true;
@@ -184,6 +187,63 @@ namespace DuckGame
         }
 
         public StateBinding(string field, int bits, bool rot)
+        {
+            _fieldName = field;
+            _previousValue = null;
+            _bits = bits;
+            _isRotation = rot;
+            _isVelocity = false;
+        }
+
+
+
+        // min max
+        public StateBinding(string field, object min, object max, int bits = -1, bool rot = false, bool vel = false)
+        {
+            maxvalue = max;
+            minvalue = min;
+            _fieldName = field;
+            _previousValue = null;
+            _bits = bits;
+            _isRotation = rot;
+            _isVelocity = vel;
+        }
+
+        public StateBinding(bool doLerp, object min, object max, string field, int bits = -1, bool rot = false, bool vel = false)
+        {
+            maxvalue = max;
+            minvalue = min;
+            _fieldName = field;
+            _previousValue = null;
+            _bits = bits;
+            _isRotation = rot;
+            _isVelocity = vel;
+            _lerp = doLerp;
+            if (!_lerp)
+                return;
+            _priority = GhostPriority.Normal;
+        }
+
+        public StateBinding(
+          GhostPriority p,
+          string field, object min, object max,
+          int bits = -1,
+          bool rot = false,
+          bool vel = false,
+          bool doLerp = false)
+        {
+            maxvalue = max;
+            minvalue = min;
+            _fieldName = field;
+            _previousValue = null;
+            _bits = bits;
+            _isRotation = rot;
+            _isVelocity = vel;
+            _priority = p;
+            _lerp = doLerp;
+        }
+
+        public StateBinding(string field, object min, object max, int bits, bool rot)
         {
             _fieldName = field;
             _previousValue = null;

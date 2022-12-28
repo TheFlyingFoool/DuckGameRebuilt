@@ -17,7 +17,7 @@ namespace DuckGame
         public const string ButtonSprite = "iVBORw0KGgoAAAANSUhEUgAAABkAAAAYCAMAAAA4a6b0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAPUExURQAAANkCAoMBARsmMgAAAJo1rnoAAAAFdFJOU/////8A+7YOUwAAAAlwSFlzAAAOwwAADsMBx2+oZAAAAGBJREFUKFOtjlsKwEAIA7Np73/mJtY+FUphZz8EZ41iFUCUJ25hDFaljkSnIEG/amKincHQ/spulgIUESb/nchQxSajExvv+GvmptmwNfOv7vd83/biSiscMw1pMv4GSGw7tAWYP02v3wAAAABJRU5ErkJggg==";
         public Sprite extraButton;
 
-        public StateBinding _profileBoxNumberBinding = new StateBinding(nameof(profileBoxNumber));
+        public StateBinding _profileBoxNumberBinding = new StateBinding(nameof(profileBoxNumber), 0, DG.MaxPlayers - 1);
         private sbyte _profileBoxNumber = -1;
         public StateBinding _positionBinding = new StateBinding(nameof(netPosition));
         public StateBinding _openBinding = new StateBinding(nameof(_open));

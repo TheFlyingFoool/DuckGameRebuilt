@@ -22,7 +22,10 @@ namespace DuckGame
             set => _hatOffset = value;
         }
 
-        public virtual void SetQuack(int pValue) => frame = pValue;
+        public virtual void SetQuack(int pValue)
+        {
+            frame = pValue;
+        }
 
         public SpriteMap sprite
         {

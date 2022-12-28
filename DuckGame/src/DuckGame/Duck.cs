@@ -14,9 +14,9 @@ namespace DuckGame
 {
     public class Duck : PhysicsObject, IReflect, ITakeInput, IAmADuck, IDrawToDifferentLayers
     {
-        public StateBinding _profileIndexBinding = new StateBinding(GhostPriority.Normal, nameof(netProfileIndex), 4);
-        public StateBinding _disarmIndexBinding = new StateBinding(GhostPriority.Normal, nameof(disarmIndex), 4);
-        public StateBinding _animationIndexBinding = new StateBinding(GhostPriority.Normal, nameof(netAnimationIndex), 4);
+        public StateBinding _profileIndexBinding = new StateBinding(GhostPriority.Normal,nameof(netProfileIndex), 0, DG.MaxPlayers - 1, 4);
+        public StateBinding _disarmIndexBinding = new StateBinding(GhostPriority.Normal, nameof(disarmIndex), 0, DG.MaxPlayers + 1, 4);
+        public StateBinding _animationIndexBinding = new StateBinding(GhostPriority.Normal, nameof(netAnimationIndex),0, 8, 4);
         public StateBinding _holdObjectBinding = new StateBinding(GhostPriority.High, nameof(holdObject));
         public StateBinding _ragdollBinding = new StateBinding(GhostPriority.High, nameof(ragdoll));
         public StateBinding _cookedBinding = new StateBinding(GhostPriority.High, nameof(_cooked));
@@ -351,7 +351,11 @@ namespace DuckGame
 
         public byte netProfileIndex
         {
-            get => _netProfileIndex < 0 || _netProfileIndex > DG.MaxPlayers - 1 ? (byte)0 : (byte)_netProfileIndex;
+            get
+            {
+                return (byte)(_netProfileIndex < 0 || _netProfileIndex > DG.MaxPlayers - 1 ? 0 : _netProfileIndex);
+            }
+
             set
             {
                 if (_netProfileIndex == value)

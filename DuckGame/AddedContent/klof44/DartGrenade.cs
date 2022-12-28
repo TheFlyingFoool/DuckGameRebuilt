@@ -6,7 +6,7 @@ namespace DuckGame
     [EditorGroup("Rebuilt|Guns")]
     internal class DartGrenade : Gun // All this code is taken from normal grenades but changed as to not create shrapnel
     {//RRAHHHH SHUT THE FUKC UP RRAHHHHHH
-        public StateBinding _timerBinding = new StateBinding(nameof(_timer));
+        public StateBinding _timerBinding = new StateBinding(nameof(_timer), -1f, 1.2f);
         public StateBinding _pinBinding = new StateBinding(nameof(_pin));
         private SpriteMap _sprite;
         public bool _pin = true;
