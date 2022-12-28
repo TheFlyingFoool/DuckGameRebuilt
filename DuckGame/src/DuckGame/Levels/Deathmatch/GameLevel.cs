@@ -321,7 +321,7 @@ namespace DuckGame
         {
             if (Raining)
             {
-                if (Rando.Int(60000) == 0 && DGRSettings.RandomWeather < 0.49f)
+                if (Rando.Int(600000) == 0 && DGRSettings.RandomWeather < 0.49f)
                 {
                     if (heavyRain && Rando.Int(4) != 4)
                     {
@@ -337,7 +337,7 @@ namespace DuckGame
                     }
                 }
                 rainwind = Lerp.Float(rainwind, rainwindto, 0.1f);
-                if (Rando.Int(6000) == 0)
+                if (Rando.Int(60000) == 0)
                 {
                     if (!heavyRain && Rando.Int(1) == 0)
                     {
@@ -386,7 +386,7 @@ namespace DuckGame
             else if (cityRaining)
             {
                 rainwind = Lerp.Float(rainwind, rainwindto, 0.1f);
-                if (Rando.Int(100000) == 0 && !acider)
+                if (Rando.Int(10000000) == 0 && !acider)
                 {
                     CityBackground cbg = First<CityBackground>();
                     if (cbg != null)
@@ -407,7 +407,7 @@ namespace DuckGame
                         rainwindto *= 1.01f;
                     }
                 }
-                if (Rando.Int(10000) == 0)
+                if (Rando.Int(100000) == 0)
                 {
                     if (!heavyRain && Rando.Int(1) == 0)
                     {

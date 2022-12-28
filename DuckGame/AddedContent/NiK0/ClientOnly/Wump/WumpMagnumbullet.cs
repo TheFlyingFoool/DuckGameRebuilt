@@ -20,15 +20,18 @@
             }
             SFX.Play("ting");
             ++reboundBulletsCreated;
-            ammo.bulletThickness = 3;
-            ammo.range *= 2;
-            WumpMagnumbullet bullet = ammo.GetBullet(pos.x, pos.y, angle: (-dir), firedFrom: firedFrom, distance: rng, tracer: _tracer) as WumpMagnumbullet;
+            ATWumpMagnum ammor = new ATWumpMagnum();
+            ammor.range = ammo.range * 2;
+            ammor.rebound = false;
+            WumpMagnumbullet bullet = ammor.GetBullet(pos.x, pos.y, angle: (-dir), firedFrom: firedFrom, distance: rng, tracer: _tracer) as WumpMagnumbullet;
             bullet._teleporter = _teleporter;
             bullet.timesRebounded = timesRebounded + 1;
             bullet.lastReboundSource = lastReboundSource;
             bullet.isLocal = isLocal;
             bullet.rebound = false;
+            _reboundedBullet = bullet;
             reboundCalled = true;
+
 
             Level.Add(bullet);
         }

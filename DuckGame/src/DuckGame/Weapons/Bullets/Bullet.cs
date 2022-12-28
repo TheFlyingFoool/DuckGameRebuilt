@@ -50,7 +50,7 @@ namespace DuckGame
         public bool trickshot;
         protected int timesRebounded;
         protected int reboundBulletsCreated;
-        private Bullet _reboundedBullet;
+        protected Bullet _reboundedBullet;
         public bool reboundCalled;
         public Vec2 travelDirNormalized;
         public bool reboundOnce;
