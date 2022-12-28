@@ -11,6 +11,7 @@
             color = Color.Red;
             base.Initialize();
         }
+        private float prev;
         protected override void Rebound(Vec2 pos, float dir, float rng)
         {
             if (_teleporter != null)
@@ -20,10 +21,10 @@
             }
             SFX.Play("ting");
             ++reboundBulletsCreated;
-            ATWumpMagnum ammor = new ATWumpMagnum();
-            ammor.range = ammo.range * 2;
-            ammor.rebound = false;
-            WumpMagnumbullet bullet = ammor.GetBullet(pos.x, pos.y, angle: (-dir), firedFrom: firedFrom, distance: rng, tracer: _tracer) as WumpMagnumbullet;
+            ammo.bulletThickness = 3;
+            prev = ammo.range;
+            ammo.range *= 2;
+            WumpMagnumbullet bullet = ammo.GetBullet(pos.x, pos.y, angle: (-dir), firedFrom: firedFrom, distance: rng, tracer: _tracer) as WumpMagnumbullet;
             bullet._teleporter = _teleporter;
             bullet.timesRebounded = timesRebounded + 1;
             bullet.lastReboundSource = lastReboundSource;
@@ -31,9 +32,8 @@
             bullet.rebound = false;
             _reboundedBullet = bullet;
             reboundCalled = true;
-
-
             Level.Add(bullet);
+            ammo.range = prev;
         }
         public override void Update()
         {

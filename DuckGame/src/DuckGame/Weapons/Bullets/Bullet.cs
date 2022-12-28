@@ -512,7 +512,7 @@ namespace DuckGame
         private void TravelBullet()
         {
             travelDirNormalized = end - start;
-            if (travelDirNormalized.x == double.NaN || travelDirNormalized.y == double.NaN)
+            if ( travelDirNormalized.x == double.NaN || travelDirNormalized.y == double.NaN)
             {
                 travelDirNormalized = Vec2.One;
             }
@@ -682,23 +682,23 @@ namespace DuckGame
                     Graphics.Draw(ammo.sprite, drawEnd.x, drawEnd.y);
                 }
                 float length = (drawStart - drawEnd).length;
-                float val = 0f;
-                float num1 = (1f / (length / 8f));
-                float num2 = 1f;
-                float num3 = 8f;
+                float dist = 0f;
+                float incs = (1f / (length / 8f));
+                float alph = 1f;
+                float drawLength = 8f;
                 while (true)
                 {
                     bool flag = false;
-                    if (val + num3 > length)
+                    if (dist + drawLength > length)
                     {
-                        num3 = length - Maths.Clamp(val, 0f, 99f);
+                        drawLength = length - Maths.Clamp(dist, 0f, 99f);
                         flag = true;
                     }
-                    num2 -= num1;
+                    alph -= incs;
                     --Graphics.currentDrawIndex;
-                    Graphics.DrawLine(drawStart + travelDirNormalized * length - travelDirNormalized * val, drawStart + travelDirNormalized * length - travelDirNormalized * (val + num3), color * num2, ammo.bulletThickness, depth);
+                    Graphics.DrawLine(drawStart + travelDirNormalized * length - travelDirNormalized * dist, drawStart + travelDirNormalized * length - travelDirNormalized * (dist + drawLength), color * alph, ammo.bulletThickness, depth);
                     if (!flag)
-                        val += 8f;
+                        dist += 8f;
                     else
                         break;
                 }

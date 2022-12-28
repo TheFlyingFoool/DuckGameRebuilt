@@ -6,6 +6,7 @@ using System.Reflection;
 using Microsoft.CSharp;
 using Microsoft.Xna.Framework.Graphics;
 using SDL2;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static DuckGame.CustomKeyBinds;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
@@ -238,6 +239,8 @@ public class DebugTablet
         _highlightDrag = false;
         CaretPosition = _start;
     }
+    public int prevlineindex;
+    public List<Tuple<Vec2, List<string>>> prevlines = new List<Tuple<Vec2, List<string>>>() { new Tuple<Vec2, List<string>>(new Vec2(0f, 0f), new List<string>() { "" })};
     public static int tabindex = 0;
     public static List<DebugTablet> tabs = new List<DebugTablet>() { new DebugTablet("Debug")};
     public static bool prevpress;
@@ -362,7 +365,7 @@ public class DebugTablet
                     }
                     cusorblink = 0.6f;
                     bool didselectthing = false;
-                    if (tab.hashighlightedarea && tab.Endingposition != tab.Startingposition) // Make case for mutliline select
+                    if (tab.hashighlightedarea && tab.Endingposition != tab.Startingposition)
                     {
                         didselectthing = true;
                         tab.DeleteSelected(true);
@@ -402,9 +405,11 @@ public class DebugTablet
                     }
                     if (didselectthing)
                     {
-                        carryover = tab.Lines[(int)_start.y + 1];
-                        tab.Lines[line] += carryover;
-                        tab.Lines.RemoveAt((int)_start.y + 1);
+                        //carryover = tab.Lines[(int)_start.y + 1];
+                        //tab.Lines[line] += carryover;
+                        //tab.Lines.RemoveAt((int)_start.y + 1);
+                        tab.Lines[line - 1] += tab.Lines[line];
+                        tab.Lines.RemoveAt(line);
                     }
                     else
                     {
@@ -425,7 +430,14 @@ public class DebugTablet
                     {
                         tab.CaretPosition.x += words[0].Length;
                     }
-                }
+                    int listcount = tab.prevlines.Count -1;
+                    for (int i = 0; i < tab.prevlineindex; i++)
+                    {
+                        tab.prevlines.RemoveAt(listcount - i);
+                    }
+                    tab.prevlines.Add(new Tuple<Vec2, List<string>>(tab.CaretPosition, new List<string>(tab.Lines)));
+                    tab.prevlineindex = 0;
+                } 
                 tab.hashighlightedarea = false;
                 tab._highlightDrag = false;
             }
@@ -445,13 +457,52 @@ public class DebugTablet
                     SDL.SDL_SetClipboardText(copyText);
                 }
                 if (Keyboard.Pressed(Keys.X))
+                {
                     tab.DeleteSelected();
+                    for (int i = 0; i < tab.prevlineindex; i++)
+                    {
+                        tab.prevlines.RemoveAt(tab.prevlineindex - i);
+                    }
+                    tab.prevlines.Add(new Tuple<Vec2, List<string>>(tab.CaretPosition, new List<string>(tab.Lines)));
+                    tab.prevlineindex = 0;
+                }
             }
             else if (Keyboard.Pressed(Keys.S) && tab.savefield != null)
             {
                 string savecodestring = string.Join("\n", tab.Lines);
                 tab.savefield.value = savecodestring;
                 tab.prevcodestring = savecodestring;
+            }
+            else if (Keyboard.Pressed(Keys.Z))
+            {
+                if (Keyboard.Down(Keys.LeftShift))
+                {
+                    tab.prevlineindex -= 1;
+                    if (tab.prevlineindex < 0)
+                    {
+                        tab.prevlineindex = 0;
+                    }
+                    else if (tab.prevlineindex >= tab.prevlines.Count)
+                    {
+                        tab.prevlineindex = tab.prevlines.Count - 1;
+                    }
+                    int index = tab.prevlines.Count - (tab.prevlineindex + 1);
+                    Tuple<Vec2, List<string>> list = tab.prevlines[index];
+                    tab.Lines = new List<string>(list.Item2);
+                    tab.CaretPosition = list.Item1;
+                }
+                else
+                {
+                    tab.prevlineindex += 1;
+                    if (tab.prevlineindex >= tab.prevlines.Count)
+                    {
+                        tab.prevlineindex = tab.prevlines.Count - 1;
+                    }
+                    int index = tab.prevlines.Count - (tab.prevlineindex + 1);
+                    Tuple<Vec2, List<string>> list = tab.prevlines[index];
+                    tab.Lines = new List<string>(list.Item2);
+                    tab.CaretPosition = list.Item1;
+                }
             }
         }
         if (Mouse.left != InputState.Pressed && Mouse.left != InputState.Down)
@@ -499,13 +550,13 @@ public class DebugTablet
             {
                 Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = ((tabname.Length - lengthmin) * size.x) + (6f * scale) }, new Color(61, 61, 61), 1f );
                 Graphics.DrawString(tabname, new Vec2(((16f + 3f) * scale) + offset, 11.5f * scale), new Color(250, 250, 250), 1.2f, scale: fontscale);
-                Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = ((tabname.Length - lengthmin) * size.x) + (6f * scale) }, Color.Black, 1.1f, false, 2.0f * scale);//2
+                Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = ((tabname.Length - lengthmin) * size.x) + (6f * scale) + 0.1f}, Color.Black, 1.1f, false, 2.0f * scale);//2
             }
             else
             {
-                Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = ((tabname.Length - lengthmin) * size.x) + (6f * scale) }, new Color(46, 46, 46), 1f);
+                Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = ((tabname.Length - lengthmin) * size.x) + (6f * scale)}, new Color(46, 46, 46), 1f);
                 Graphics.DrawString(tabname, new Vec2(((16f + 3f) * scale) + offset, 11.5f * scale), new Color(178, 178, 178), 1.2f, scale: fontscale);
-                Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = ((tabname.Length - lengthmin) * size.x) + (6f * scale) }, Color.Black, 1.1f, false, 2.0f * scale);
+                Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = ((tabname.Length - lengthmin) * size.x) + (6f * scale) + 0.1f }, Color.Black, 1.1f, false, 2.0f * scale);
             }
             if (Mouse.left == InputState.Pressed)
             {
@@ -525,29 +576,9 @@ public class DebugTablet
                     _tab.Focus();
                 }
             }
-            offset += (tabname.Length * size.x) + (4f * scale);
+            offset += ((tabname.Length - lengthmin) * size.x) + (4f * scale);
 
         }
-        // Tab 
-        //float offset = 0f;
-        //string tabname = "DebugTablet.cs";
-        //tabname += "  "; //extra space
-        //Rectangle drawRect2 = new(new Vec2(16, 8 + offset), new Vec2(Layer.HUD.width - 16, (Layer.HUD.height * 0.7f) + offset));
-        //Graphics.DrawRect(drawRect2 with { height = 8 + 2, width = (tabname.Length * size.x) + 6f }, new Color(61, 61, 61), 1f);
-        //Graphics.DrawString(tabname, new Vec2(16 + 3, 8.0f + 3.5f), new Color(250, 250, 250), 1.2f, scale: scale);
-
-        //Graphics.DrawRect(drawRect2 with { height = 8 + 2,width = (tabname.Length * size.x) + 6f}, Color.Black, 1.1f, false, 2.0f);//2
-        //offset += (tabname.Length * size.x) + 4;
-
-
-        //tabname = "CodeButton.cs";
-        //tabname += "  ";
-        //drawRect2 = new(new Vec2(16 + offset, 8), new Vec2(Layer.HUD.width - 16 + offset, (Layer.HUD.height * 0.7f)));
-        //Graphics.DrawRect(drawRect2 with { height = 8 + 2, width = (tabname.Length * size.x) + 6f}, new Color(46, 46, 46), 1f);
-        //Graphics.DrawString(tabname, new Vec2(16 + 3 + offset, 8.0f + 3.5f), new Color(178, 178, 178), 1.2f, scale: scale);
-
-        //Graphics.DrawRect(drawRect2 with { height = 8 + 2, width = (tabname.Length * size.x) + 6f }, Color.Black, 1.1f, false, 2.0f);//2
-
 
         for (int i = 0; i < tab.Lines.Count; i++)
         {
@@ -580,18 +611,14 @@ public class DebugTablet
                     else if (i == _start.y)
                     {
                         Graphics.DrawRect(new Vec2(drawPos.x + (_start.x * (size.x)), drawPos.y) - (new Vec2(0.5f) * scale), new Vec2(drawPos.x + (tab.Lines[i].Length * (size.x)), drawPos.y + (size.y + 1f)) - (new Vec2(-0.5f, 0.57f) * scale), new Color(38, 79, 120, 108), (Depth)1.2f, true, 1f);
-                      //  Graphics.DrawString(Lines[i].Substring((int)_start.x, (int)Lines[i].Length - (int)_start.x), new Vec2(drawPos.x + ((int)_start.x * (size.x)), drawPos.y), Color.Black, 1.2f, scale: scale);
-                    }
+                                     }
                     else if (i == _end.y)
                     {
                         Graphics.DrawRect(new Vec2(drawPos.x, drawPos.y) - (new Vec2(0.5f) * scale), new Vec2(drawPos.x + (_end.x * (size.x)), drawPos.y + (size.y + (1f * scale))) - (new Vec2(0.5f) * scale), new Color(38, 79, 120, 108), (Depth)1.2f, true, 1f);
-
-                      //  Graphics.DrawString(Lines[i].Substring(0, (int)_end.x - (int)0), new Vec2(drawPos.x + (0 * (size.x)), drawPos.y), Color.Black, 1.2f, scale: scale);
                     }
                     else
                     {
                         Graphics.DrawRect(new Vec2(drawPos.x, drawPos.y) - (new Vec2(0.5f) * scale), new Vec2(drawPos.x + (tab.Lines[i].Length * (size.x)), drawPos.y + (size.y + (1f * scale))) - (new Vec2(-0.5f,0.57f) * scale), new Color(38, 79, 120, 108), (Depth)1.2f, true, 1f);
-                     //  Graphics.DrawString(Lines[i], new Vec2(drawPos.x, drawPos.y), Color.Black, 1.2f, scale: scale);
                     }
                 }
             }
@@ -638,7 +665,7 @@ public class DebugTablet
         }
 
         Graphics.DrawRect(consoleRect, new Color(34, 31, 34), 1f);
-        stringDrawPos = new Vec2(drawRect.tl.x + (14f * scale), drawRect.tl.y + (6f * scale)); // new Vec2(28f,20f), Lines.Count * (size.y + 1f)) 300 42
+       // stringDrawPos = new Vec2(drawRect.tl.x + (14f * scale), drawRect.tl.y + (6f * scale)); // new Vec2(28f,20f), Lines.Count * (size.y + 1f)) 300 42
       
 
 
@@ -880,6 +907,13 @@ public class DebugTablet
                         }
                         Lines[(int)CaretPosition.y] = Lines[(int)CaretPosition.y].Insert((int)CaretPosition.x, " ");
                         CaretPosition.x++;
+                        int listcount = prevlines.Count -1;
+                        for (int i = 0; i < prevlineindex; i++)
+                        {
+                            prevlines.RemoveAt(listcount - i);
+                        }
+                        prevlines.Add(new Tuple<Vec2, List<string>>(CaretPosition, new List<string>(Lines)));
+                        prevlineindex = 0;
                         break;
                     }
                 case Microsoft.Xna.Framework.Input.Keys.Tab:
@@ -891,6 +925,13 @@ public class DebugTablet
                         }
                         Lines[(int)CaretPosition.y] = Lines[(int)CaretPosition.y].Insert((int)CaretPosition.x, new string(' ', TAB_SPACE_WIDTH));
                         CaretPosition.x += TAB_SPACE_WIDTH;
+                        int listcount = prevlines.Count -1;
+                        for (int i = 0; i < prevlineindex; i++)
+                        {
+                            prevlines.RemoveAt(listcount - i);
+                        }
+                        prevlines.Add(new Tuple<Vec2, List<string>>(CaretPosition, new List<string>(Lines)));
+                        prevlineindex = 0;
                         break;
                     }
                 case Microsoft.Xna.Framework.Input.Keys.Enter:
@@ -908,6 +949,13 @@ public class DebugTablet
                         CaretPosition.y += 1f;
                         Lines.Insert((int)CaretPosition.y, newLine);
                         CaretPosition.x = 0;
+                        int listcount = prevlines.Count -1;
+                        for (int i = 0; i < prevlineindex; i++)
+                        {
+                            prevlines.RemoveAt(listcount - i);
+                        }
+                        prevlines.Add(new Tuple<Vec2, List<string>>(CaretPosition, new List<string>(Lines)));
+                        prevlineindex = 0;
                         break;
                     }
                 case Microsoft.Xna.Framework.Input.Keys.Back:
@@ -931,6 +979,13 @@ public class DebugTablet
                             CaretPosition.x = Lines[(int)CaretPosition.y].Length;
                             Lines[(int)CaretPosition.y] = Lines[(int)CaretPosition.y].Insert((int)CaretPosition.x, line);
                         }
+                        int listcount = prevlines.Count -1;
+                        for (int i = 0; i < prevlineindex; i++)
+                        {
+                            prevlines.RemoveAt(listcount - i);
+                        }
+                        prevlines.Add(new Tuple<Vec2, List<string>>(CaretPosition, new List<string>(Lines)));
+                        prevlineindex = 0;
                         break;
                     }
                 case Microsoft.Xna.Framework.Input.Keys.Delete:
@@ -951,6 +1006,13 @@ public class DebugTablet
                             Lines.RemoveAt((int)CaretPosition.y + 1);
                             Lines[(int)CaretPosition.y] += line;
                         }
+                        int listcount = prevlines.Count -1;
+                        for (int i = 0; i < prevlineindex; i++)
+                        {
+                            prevlines.RemoveAt(listcount - i);
+                        }
+                        prevlines.Add(new Tuple<Vec2, List<string>>(CaretPosition, new List<string>(Lines)));
+                        prevlineindex = 0;
                         break;
                     }
                 case Microsoft.Xna.Framework.Input.Keys.Up:
@@ -1024,7 +1086,13 @@ public class DebugTablet
                 default:
                     {
                         char charFromKey = Keyboard.GetCharFromKey((Keys)keys);
-
+                        if (Keyboard.Down(Keys.LeftControl) || Keyboard.Down(Keys.RightControl))
+                        {
+                            if (keys == Microsoft.Xna.Framework.Input.Keys.Z || keys == Microsoft.Xna.Framework.Input.Keys.V || keys == Microsoft.Xna.Framework.Input.Keys.C || keys == Microsoft.Xna.Framework.Input.Keys.X )
+                            {
+                                break;
+                            }
+                        }
                         if ((int)charFromKey > 31 && charFromKey != ' ')
                         {
                             cusorblink = 0.6f;
@@ -1034,6 +1102,13 @@ public class DebugTablet
                             }
                             Lines[(int)CaretPosition.y] = Lines[(int)CaretPosition.y].Insert((int)CaretPosition.x, charFromKey.ToString());
                             CaretPosition.x++;
+                            int listcount = prevlines.Count -1;
+                            for (int i = 0; i < prevlineindex; i++)
+                            {
+                                prevlines.RemoveAt(listcount - i);
+                            }
+                            prevlines.Add(new Tuple<Vec2,List<string>>(CaretPosition, new List<string>(Lines)));
+                            prevlineindex = 0;
                         }
                         break;
                     }
