@@ -1036,13 +1036,13 @@ namespace DuckGame
                 Furniture furniture1 = null;
                 if (Profiles.experienceProfile != null)
                 {
-                    bool flag7 = true;
+                    bool shouldDisplayFurniture = true;
                     if (Network.isActive && profile.connection != DuckNetwork.localConnection && (profile.ParentalControlsActive || profile.muteRoom)) // || ParentalControls.AreParentalControlsActive() || 
-                        flag7 = false;
-                    if (flag7)
+                        shouldDisplayFurniture = false;
+                    if (shouldDisplayFurniture)
                     {
                         List<FurniturePosition> furniturePositionList = new List<FurniturePosition>();
-                        List<FurniturePosition> source1 = new List<FurniturePosition>();
+                        List<FurniturePosition> letterMapRight = new List<FurniturePosition>();
                         foreach (FurniturePosition furniturePosition in profile.furniturePositions)
                         {
                             Furniture furniture2 = RoomEditor.GetFurniture(furniturePosition.id);
@@ -1053,7 +1053,7 @@ namespace DuckGame
                                     if (!furniturePosition.flip && rightRoom)
                                     {
                                         furniturePosition.furniMapping = furniture2;
-                                        source1.Add(furniturePosition);
+                                        letterMapRight.Add(furniturePosition);
                                         continue;
                                     }
                                     if (furniturePosition.flip && !rightRoom)
@@ -1067,7 +1067,7 @@ namespace DuckGame
                                     furniture1 = furniture2;
                                 else if (furniture2.type != FurnitureType.Font)
                                 {
-                                    furniture2.sprite.depth = (Depth)(furniture2.deep * (1f / 1000f) - 0.56f);
+                                    furniture2.sprite.depth = -0.56f + (furniture2.deep * 0.001f);
                                     furniture2.sprite.frame = furniturePosition.variation;
                                     Vec2 pos = new Vec2(furniturePosition.x, furniturePosition.y);
                                     furniture2.sprite.flipH = furniturePosition.flip;
@@ -1085,61 +1085,61 @@ namespace DuckGame
                                 }
                             }
                         }
-                        if (source1.Count > 0)
+                        if (letterMapRight.Count > 0)
                         {
-                            IOrderedEnumerable<FurniturePosition> source2 = source1.OrderBy(furni => furni.x + furni.y * 100);
-                            IEnumerable<FurniturePosition> source3 = source1.OrderBy(furni => -furni.x + furni.y * 100);
+                            IOrderedEnumerable<FurniturePosition> letters = letterMapRight.OrderBy(furni => furni.x + furni.y * 100);
+                            IEnumerable<FurniturePosition> lettersReverse = letterMapRight.OrderBy(furni => -furni.x + furni.y * 100);
                             int index1 = 0;
-                            for (int index2 = 0; index2 < source2.Count(); ++index2)
+                            for (int index2 = 0; index2 < letters.Count(); ++index2)
                             {
-                                FurniturePosition furniturePosition1 = source2.ElementAt(index2);
-                                Furniture furniMapping1 = furniturePosition1.furniMapping;
-                                FurniturePosition furniturePosition2 = source3.ElementAt(index1);
-                                Furniture furniMapping2 = furniturePosition2.furniMapping;
-                                furniMapping1.sprite.depth = (Depth)(float)(furniMapping2.deep * (1.0 / 1000.0) - 0.56f);
-                                furniMapping1.sprite.frame = furniturePosition1.variation;
-                                Vec2 pos = new Vec2(furniturePosition2.x, furniturePosition2.y);
-                                furniMapping1.sprite.flipH = furniturePosition1.flip;
+                                FurniturePosition p = letters.ElementAt(index2);
+                                Furniture f = p.furniMapping;
+                                FurniturePosition opposite = lettersReverse.ElementAt(index1);
+                                Furniture fOpposite = opposite.furniMapping;
+                                f.sprite.depth = -0.56f + (fOpposite.deep * 0.001f);
+                                f.sprite.frame = p.variation;
+                                Vec2 pos = new Vec2(opposite.x, opposite.y);
+                                f.sprite.flipH = p.flip;
                                 if (rightRoom)
                                 {
                                     pos.x = RoomEditor.roomSize - pos.x;
-                                    furniMapping1.sprite.flipH = !furniMapping1.sprite.flipH;
+                                    f.sprite.flipH = !f.sprite.flipH;
                                     --pos.x;
                                 }
                                 pos += position;
-                                if (furniMapping1.visible)
-                                    furniMapping1.Draw(pos, furniMapping1.sprite.depth, furniMapping1.sprite.frame, profile);
-                                furniMapping1.sprite.frame = 0;
-                                furniMapping1.sprite.flipH = false;
+                                if (f.visible)
+                                    f.Draw(pos, f.sprite.depth, f.sprite.frame, profile);
+                                f.sprite.frame = 0;
+                                f.sprite.flipH = false;
                                 ++index1;
                             }
                         }
                         if (furniturePositionList.Count > 0)
                         {
-                            IOrderedEnumerable<FurniturePosition> source4 = source1.OrderBy(furni => -furni.x + furni.y * 100);
-                            IEnumerable<FurniturePosition> source5 = source1.OrderBy(furni => furni.x + furni.y * 100);
+                            IOrderedEnumerable<FurniturePosition> letters = letterMapRight.OrderBy(furni => -furni.x + furni.y * 100);
+                            IEnumerable<FurniturePosition> lettersReverse = letterMapRight.OrderBy(furni => furni.x + furni.y * 100);
                             int index3 = 0;
-                            for (int index4 = 0; index4 < source4.Count(); ++index4)
+                            for (int index4 = 0; index4 < letters.Count(); ++index4)
                             {
-                                FurniturePosition furniturePosition3 = source4.ElementAt(index4);
-                                Furniture furniMapping3 = furniturePosition3.furniMapping;
-                                FurniturePosition furniturePosition4 = source5.ElementAt(index3);
-                                Furniture furniMapping4 = furniturePosition4.furniMapping;
-                                furniMapping3.sprite.depth = (Depth)(float)(furniMapping4.deep * (1.0 / 1000.0) - 0.56f);
-                                furniMapping3.sprite.frame = furniturePosition4.variation;
-                                Vec2 pos = new Vec2(furniturePosition3.x, furniturePosition3.y);
-                                furniMapping3.sprite.flipH = furniturePosition3.flip;
+                                FurniturePosition p = letters.ElementAt(index4);
+                                Furniture f = p.furniMapping;
+                                FurniturePosition opposite = lettersReverse.ElementAt(index3);
+                                Furniture fOpposite = opposite.furniMapping;
+                                f.sprite.depth = -0.56f + (fOpposite.deep * 0.001f);
+                                f.sprite.frame = opposite.variation;
+                                Vec2 pos = new Vec2(p.x, p.y);
+                                f.sprite.flipH = p.flip;
                                 if (rightRoom)
                                 {
                                     pos.x = RoomEditor.roomSize - pos.x;
-                                    furniMapping3.sprite.flipH = !furniMapping3.sprite.flipH;
+                                    f.sprite.flipH = !f.sprite.flipH;
                                     --pos.x;
                                 }
                                 pos += position;
-                                if (furniMapping3.visible)
-                                    furniMapping3.Draw(pos, furniMapping3.sprite.depth, furniMapping3.sprite.frame, profile);
-                                furniMapping3.sprite.frame = 0;
-                                furniMapping3.sprite.flipH = false;
+                                if (f.visible)
+                                    f.Draw(pos, f.sprite.depth, f.sprite.frame, profile);
+                                f.sprite.frame = 0;
+                                f.sprite.flipH = false;
                                 ++index3;
                             }
                         }

@@ -364,7 +364,7 @@ namespace DuckGame
             else if (_sprite.texture.textureName == "hats/burgers")
             {
                 FluidData ketchup = Fluid.Ketchup;
-                ketchup.amount = Rando.Float(0.0005f, 1f / 1000f);
+                ketchup.amount = Rando.Float(0.0005f, 0.001f);
                 int num = Rando.Int(4) + 1;
                 for (int index = 0; index < num; ++index)
                 {
@@ -434,7 +434,7 @@ namespace DuckGame
                 if (_timeOpen <= 1.0)
                     return;
                 FluidData ketchup = Fluid.Ketchup;
-                ketchup.amount = Rando.Float(0.0005f, 1f / 1000f);
+                ketchup.amount = Rando.Float(0.0005f, 0.001f);
                 int num = Rando.Int(3) + 1;
                 for (int index = 0; index < num; ++index)
                 {

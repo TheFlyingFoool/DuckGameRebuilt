@@ -2973,7 +2973,19 @@ namespace DuckGame
                                             Team.deserializeInto = null;
                                         }
                                         else
-                                            Team.Deserialize(nmSpecialHat.GetData()).customConnection = nmSpecialHat.connection;
+                                        {
+                                            Team loadteam = Team.Deserialize(nmSpecialHat.GetData());
+                                            if (loadteam != null)
+                                            {
+                                                loadteam.customConnection = nmSpecialHat.connection;
+                                            }
+                                            else
+                                            {
+                                                DevConsole.Log("|DGRED|NMSpecialHat was unable to load Hat Data");
+                                                Team.networkDeserialize = false;
+                                                break;
+                                            }
+                                        }
                                         Team.networkDeserialize = false;
                                     }
                                 }
