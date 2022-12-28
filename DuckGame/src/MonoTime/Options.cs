@@ -413,6 +413,10 @@ namespace DuckGame
                 dgrDescription = "Vanity hats no longer fall off when ragdolling"
             }, true);
 
+            menu.Add(new UIMenuItemToggle("Lobby data", field: new FieldBinding(dGRSettings, nameof(DGRSettings.LobbyData)))
+            {
+                dgrDescription = "Shows the percentage of maps and the list of people in the lobby if host uses Rebuilt",
+            });
 
             menu.Add(new UIText(" ", Color.White), true);
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true), true);

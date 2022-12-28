@@ -74,6 +74,21 @@ namespace DuckGame
         private static Dictionary<ulong, Tex2D> _previewMap = new Dictionary<ulong, Tex2D>();
         private static Dictionary<object, ulong> _clientMap = new Dictionary<object, ulong>();
 
+        private readonly FancyBitmapFont _smallFont = new FancyBitmapFont("smallFont")
+        {
+            scale = new Vec2(0.8f),
+            maxWidth = 55,
+            singleLine = true
+        };
+
+        private readonly Sprite[] _mapSprites;
+        private readonly Func<Lobby, int>[] _percentageFunctions;
+
+        private readonly Vec2 _mapsOffset = new Vec2(410f, -0.5f);
+        private readonly Vec2 _namesOffset = new Vec2(277f, 1f);
+
+        private readonly int _nicknameRows = 4;
+
         public SearchMode mode => _modeQueue.Count > 0 ? _modeQueue.Peek() : SearchMode.None;
 
         public override void Close()
@@ -238,6 +253,22 @@ namespace DuckGame
             _portEntryMenu.Close();
             _passwordEntryMenu.SetBackFunction(new UIMenuActionOpenMenu(_passwordEntryMenu, this));
             _passwordEntryMenu.Close();
+
+            _mapSprites = new Sprite[]
+            {
+                CreateMapSprite("normalIcon"),
+                CreateMapSprite("randomIcons"),
+                CreateMapSprite("customIcon"),
+                CreateMapSprite("rainbowIcon")
+            };
+
+            _percentageFunctions = new Func<Lobby, int>[]
+            {
+                GetNormalMapsPercentage,
+                GetRandomMapsPercentage,
+                GetCustomMapsPercentage,
+                GetInternetMapsPercentage
+            };
         }
 
         public override void Open()
@@ -669,6 +700,14 @@ namespace DuckGame
                     }
                     _fancyFont.Draw(str + ")", new Vec2(x, y), Colors.DGGreen, (Depth)0.5f);
                 }
+                for (int i = 0; i < _lobbies.Count; ++i)
+                {
+                    LobbyData lobby = _lobbies[i];
+                    if (lobby != null)
+                    {
+                        lobby.UpdateUserCount();
+                    }
+                }
                 _lobbies.Sort();
                 for (int index1 = 0; index1 < _maxLobbiesToShow; ++index1)
                 {
@@ -805,7 +844,7 @@ namespace DuckGame
                             }
                             else
                                 Graphics.Draw(_noImage, x1 + 2f, y + 2f, (Depth)0.5f);
-                            titleString += " (" + Math.Min(lobby.userCount - (lobby.dedicated ? 1 : 0), 8).ToString() + "/" + Math.Min(lobby.numSlots, 8).ToString() + ")";
+                            titleString += " (" + Math.Min(lobby._userCount - (lobby.dedicated ? 1 : 0), 8).ToString() + "/" + Math.Min(lobby.numSlots, 8).ToString() + ")";
                             if (lobby.hasFriends)
                                 titleString += " |DGGREEN|FRIEND";
                             if (lobby.hasPassword)
@@ -838,7 +877,7 @@ namespace DuckGame
                                     {
                                         titleString += "This game is in progress.";
                                     }
-                                    else if (lobby.userCount >= lobby.numSlots)
+                                    else if (lobby._userCount >= lobby.numSlots)
                                     {
                                         titleString += "Lobby is full.";
                                     }
@@ -903,6 +942,42 @@ namespace DuckGame
                             else
                                 Graphics.Draw(_lanIcon, x1 + 36f, y + 2.5f, (Depth)0.5f);
                             _fancyFont.Draw(text1, new Vec2(x1 + 36f, y + 6f + _fancyFont.characterHeight), Color.LightGray, (Depth)0.5f);
+
+                            Lobby steamLobby = lobby.lobby;
+
+                            if (steamLobby is null)
+                                continue;
+
+                            if (DGRSettings.LobbyData)
+                            {
+                                Vec2 position = new Vec2(x1, y);
+
+                                for (int i = 0; i < _percentageFunctions.Length; i++)
+                                {
+                                    float mapX = position.x + _mapsOffset.x;
+                                    float mapY = position.y + _mapsOffset.y + 9f * i;
+
+                                    int percentage = _percentageFunctions[i](steamLobby);
+
+                                    Graphics.Draw(_mapSprites[i], mapX, mapY, 0.5f);
+                                    _smallFont.Draw(percentage.ToString() + "%", new Vec2(mapX + 10f, mapY + 1f), Color.White, 0.5f);
+                                }
+
+                                string names = steamLobby.GetLobbyData("players");
+
+                                if (names is null)
+                                    continue;
+
+                                string[] namesSplit = names.Split('\n');
+
+                                for (int i = 0; i < namesSplit.Length; i++)
+                                {
+                                    float nameOffsetX = (_smallFont.maxWidth + 8f) * (i / _nicknameRows);
+                                    float nameOffsetY = 9f * (i % _nicknameRows);
+
+                                    _smallFont.Draw(namesSplit[i], position + _namesOffset + new Vec2(nameOffsetX, nameOffsetY), Color.White, 0.5f);
+                                }
+                            }
                         }
                     }
                     else
@@ -924,6 +999,39 @@ namespace DuckGame
                 }
             }
             base.Draw();
+        }
+
+        private int GetNormalMapsPercentage(Lobby lobby)
+        {
+            return GetLobbyData(lobby, "normalmaps");
+        }
+
+        private int GetRandomMapsPercentage(Lobby lobby)
+        {
+            return GetLobbyData(lobby, "randommaps");
+        }
+
+        private int GetCustomMapsPercentage(Lobby lobby)
+        {
+            return GetLobbyData(lobby, "custommaps");
+        }
+
+        private int GetInternetMapsPercentage(Lobby lobby)
+        {
+            return 100 - GetNormalMapsPercentage(lobby) - GetRandomMapsPercentage(lobby) - GetCustomMapsPercentage(lobby);
+        }
+
+        private int GetLobbyData(Lobby lobby, string name)
+        {
+            return int.Parse(lobby.GetLobbyData(name));
+        }
+
+        private Sprite CreateMapSprite(string name)
+        {
+            return new Sprite(name)
+            {
+                scale = new Vec2(1.1f)
+            };
         }
 
         public enum SearchMode
@@ -972,7 +1080,7 @@ namespace DuckGame
                 get // removed AreParentalControlsActive
                 {
                     return DG.version == version && (Network.gameDataHash == datahash || ModLoader.modHash != modHash) && started == "false" &&
-                        (!hasLocalMods || ModLoader.modHash == modHash) && userCount < numSlots && (type == "2" || lobby == null);
+                        (!hasLocalMods || ModLoader.modHash == modHash) && _userCount < numSlots && (type == "2" || lobby == null);
                 }
             }
 
@@ -987,7 +1095,10 @@ namespace DuckGame
                     return _userCount;
                 }
             }
-
+            public void UpdateUserCount()
+            {
+                _userCount = userCount;
+            }
             public int CompareTo(LobbyData other)
             {
                 if (isGlobalLobby && !other.isGlobalLobby)

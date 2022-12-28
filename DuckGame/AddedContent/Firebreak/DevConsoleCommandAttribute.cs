@@ -42,8 +42,8 @@ namespace DuckGame
         {
             foreach ((MemberInfo memberInfo, Attribute attr) in all[typeof(DevConsoleCommandAttribute)])
             {
-                var attribute = (DevConsoleCommandAttribute) attr;
-                var method = (MethodInfo) memberInfo;
+                DevConsoleCommandAttribute attribute = (DevConsoleCommandAttribute) attr;
+                MethodInfo method = (MethodInfo) memberInfo;
                 
                 ParameterInfo[] parameters = method.GetParameters();
                 

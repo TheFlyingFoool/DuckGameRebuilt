@@ -20,6 +20,7 @@ using System.Threading;
 using System.Windows.Forms;
 using SDL2;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 
 namespace DuckGame
 {
@@ -2183,7 +2184,13 @@ namespace DuckGame
                     {
                         RunCommand(_core.Typing);
                     }
-                    
+                    for (int i = _core.previousLines.Count - 1; i >= 0; i--)
+                    {
+                        if (_core.previousLines[i] == _core.Typing)
+                        {
+                            _core.previousLines.RemoveAt(i);
+                        }
+                    }
                     _core.previousLines.Add(_core.Typing);
                     _core.Typing = "";
                     Keyboard.keyString = "";
@@ -2252,9 +2259,7 @@ namespace DuckGame
                     ++_core.lastCommandIndex;
                     if (_core.lastCommandIndex >= _core.previousLines.Count)
                         _core.lastCommandIndex = _core.previousLines.Count - 1;
-                    _core.Typing =
-                        _core.previousLines[
-                            _core.previousLines.Count - 1 - _core.lastCommandIndex];
+                    _core.Typing = _core.previousLines[_core.previousLines.Count - 1 - _core.lastCommandIndex];
                     _core.cursorPosition = _core.Typing.Length;
                 }
 
@@ -2263,9 +2268,7 @@ namespace DuckGame
                 if (_core.previousLines.Count > 0 && _core.lastCommandIndex > 0)
                 {
                     --_core.lastCommandIndex;
-                    _core.Typing =
-                        _core.previousLines[
-                            _core.previousLines.Count - 1 - _core.lastCommandIndex];
+                    _core.Typing =_core.previousLines[_core.previousLines.Count - 1 - _core.lastCommandIndex];
                     _core.cursorPosition = _core.Typing.Length;
                 }
                 else if (_core.lastCommandIndex == 0)

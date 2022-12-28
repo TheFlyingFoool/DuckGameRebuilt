@@ -36,23 +36,24 @@ namespace DuckGame
     public static class Program
     {
         public static bool fullstop;
-        public static bool Prestart = DirtyPreStart();
-
-        public static bool temptest1;
-        
+        public const bool IS_DEV_BUILD =
+#if AutoUpdater
+          false;
+#else
+            true;
+#endif
+        public static readonly bool HasInternet = Internet.IsAvailable();
         // this should be formatted like X.X.X where each X is a number
         public const string CURRENT_VERSION_ID = "1.0.10";
-        
+
         // dont change this unless you know what you're doing -Firebreak
         public const string CURRENT_VERSION_ID_FORMATTED = $"v{CURRENT_VERSION_ID}-beta";
+
+        public static bool Prestart = DirtyPreStart();
+
         
-        public const bool IS_DEV_BUILD =
-        #if AutoUpdater
-            false;
-        #else
-            true;
-        #endif
         
+
         public static string StartinEditorLevelName;
         public static string GameDirectory;
         public static string FileName;
@@ -96,7 +97,7 @@ namespace DuckGame
         /// <summary>The main entry point for the application.</summary>\
         public static Vec2 StartPos = Vec2.Zero;
         public static string gitVersion = "N/A";
-        public static readonly bool HasInternet = Internet.IsAvailable();
+        public static bool lateCrash;
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
         public static void Main(string[] args)
@@ -108,7 +109,17 @@ namespace DuckGame
             //File.Delete(Path.GetFullPath("DGInput.dll"));
             try
             {
-
+                using (StreamReader st = new(gameAssembly.GetManifestResourceStream("SlnPath.txt")))
+                {
+                    kCleanupString = st.ReadToEnd();
+                }
+                kCleanupString = kCleanupString.Replace(" \r\n", "");
+            }
+            catch
+            {
+            }
+            try
+            {
                 bool isDirty = false;
                 using (StreamReader st = new(gameAssembly.GetManifestResourceStream("version.txt")))
                 {
@@ -179,7 +190,10 @@ namespace DuckGame
             int tries = 10;
             int p = (int)Environment.OSVersion.Platform;
             IsLinuxD = (p == 4) || (p == 6) || (p == 128);
-            
+            if (!IS_DEV_BUILD)
+            {
+                AutoUpdaterNew();
+            }
             if (fullstop)
             {
                 return false;
@@ -368,6 +382,9 @@ namespace DuckGame
                     case "-crash":
                         throw new Exception("you threw it idk");
                         break;
+                    case "-latecrash":
+                        lateCrash = true;
+                        break;
                     case "-intro":
                         intro = true;
                         break;
@@ -452,9 +469,6 @@ namespace DuckGame
                         break;
                     case "-moddebug":
                         MonoMain.modDebugging = true;
-                        break;
-                    case "-tempf1":
-                        temptest1 = true;
                         break;
                     case "-downloadmods":
                         MonoMain.downloadWorkshopMods = true;
@@ -691,7 +705,43 @@ namespace DuckGame
                 e = modException.exception;
             }
             else
+            {
                 str1 = e.ToString();
+                string str2 = "";
+                try
+                {
+                    StackTrace st = new StackTrace(e, true);
+                    string msg = e.Message;
+                    string cn = e.GetType().ToString();
+                    string text2 = ((msg != null && msg.Length > 0) ? (cn + ": " + msg) : cn);
+                    if (e.InnerException != null)
+                    {
+                        text2 = text2 + " ---> " + ProcessExceptionString(e.InnerException) + Environment.NewLine + "   " + "--- End of inner exception stack trace ---";
+                    }
+                    text2 += Environment.NewLine;
+                    StackFrame[] fs = st.GetFrames();
+                    foreach (StackFrame f in fs)
+                    {
+                        MethodInfo m = f.GetMethod() as MethodInfo;
+                        int il = f.GetILOffset();
+                        int l = f.GetFileLineNumber();
+                        string ilstr = il == -1 ? "" : $"[{il}] ";
+                        string lstr = l == -1 ? "" : $" L:{l}";
+                        text2 += $"  at {m.GetFullName2()} " + ilstr + f.GetFileName() + lstr + Environment.NewLine;
+                        text2 += m.GetPatches();
+                    }
+
+                    str2 = text2;
+                }
+                catch(Exception ex)
+                {
+                    str2 = null;
+                }
+                if (str2 != null)
+                {
+                    str1 = str2;
+                }
+            }
             try
             {
                 if (e is UnauthorizedAccessException)
@@ -1061,58 +1111,50 @@ namespace DuckGame
             string parentDirectoryPath = Path.GetDirectoryName(dgrExePath);
             string zipPath = parentDirectoryPath + "/DuckGameRebuilt.zip";
 
-            string[] filesInUse = {
-                dgrExePath,
-                parentDirectoryPath + "/FNA.dll",
-                parentDirectoryPath + "/DGSteam.dll",
-            };
-
             const string tempFileExtension = ".tmp";
-            const string tempFilesDeletionArg = "-deletetempfiles";
-
-            if (commandLine.Contains(tempFilesDeletionArg))
+            try
             {
-                // delete temporary files after follow-up DGR run
-                foreach (string filePath in filesInUse)
+                foreach (string filePath in Directory.GetFiles(parentDirectoryPath, "*.tmp")) // deletes .tmp files from past updating sequence 
                 {
-                    string tempFilePath = filePath + tempFileExtension;
-
-                    File.Delete(tempFilePath);
+                    if (File.Exists(filePath))
+                        File.Delete(filePath);
                 }
-                
-                File.Delete(zipPath);
+                if (File.Exists(zipPath))
+                    File.Delete(zipPath);
             }
-
+            catch
+            { }
             if (!HasInternet)
             {
                 DevConsole.Log("AutoUpdater check failed: No Internet");
                 return;
             }
+            const string url = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest";
+            WebRequest myWebRequest = WebRequest.Create(url);
+            WebResponse myWebResponse = myWebRequest.GetResponse();
 
-            string latestVersionID = GetLatestReleaseVersionID().GetAwaiter().GetResult();
-            if (latestVersionID == CURRENT_VERSION_ID)
+            string latestVersionID = myWebResponse.ResponseUri.OriginalString.Split('/').Last();
+            DGVersion LatestPublicVersion = new DGVersion(latestVersionID);
+            DGVersion CurrentVersion = new DGVersion(CURRENT_VERSION_ID);
+
+            if (LatestPublicVersion == CurrentVersion)
             {
-                DevConsole.Log($"Running latest DGR version: {CURRENT_VERSION_ID}");
+                DevConsole.Log($"Running latest DGR version: {CURRENT_VERSION_ID_FORMATTED}");
                 return;
             }
-
-            // rename real files to temp files for next DGR run so they get deleted
-            foreach (string filePath in filesInUse)
+            else if (CurrentVersion > LatestPublicVersion)
             {
-                if (File.Exists(filePath))
-                    File.Move(filePath, filePath + tempFileExtension);
+                DevConsole.Log($"Dam Looks like you got an even newer version that release: {CURRENT_VERSION_ID_FORMATTED}");
+                return;
             }
-
             const string latestDgrReleaseUrl = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest/download/DuckGameRebuilt.zip";
             FileStream dgrZipStream = DownloadFile(latestDgrReleaseUrl, zipPath);
             using ZipArchive archive = new(dgrZipStream);
             archive.ExtractToDirectoryOverride(parentDirectoryPath);
-
-            string newDgrCommandline = $"{commandLine} {tempFilesDeletionArg}";
-            Process.Start(dgrExePath, newDgrCommandline);
-
+            Process.Start(dgrExePath, "");
             // tells dg to kill itself
             fullstop = true;
+            Environment.Exit(0); // to kill it self faster :smile:
         }
 
         /// Fetches the latest DGR release from github and returns it's ID
@@ -1124,59 +1166,6 @@ namespace DuckGame
             
             string lastestversion = myWebResponse.ResponseUri.OriginalString.Split('/').Last();
             return lastestversion;
-        }
-        
-        public static void AutoUpdater()
-        {
-            string path = Assembly.GetEntryAssembly().Location;
-            string DGdirectory = Path.GetDirectoryName(path);
-            string[] rename_and_delete_tmp = new string[] { path, DGdirectory + "//" + "FNA.dll", DGdirectory + "//" + "DGSteam.dll" };//files that need to be renamed because still inuse
-            foreach (string filepath in rename_and_delete_tmp)
-            {
-                if (File.Exists(path + ".tmp"))
-                {
-                    File.Delete(path + ".tmp");
-                }
-            }
-            string url = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest";
-            WebRequest myWebRequest = WebRequest.Create(url);
-            WebResponse myWebResponse;
-            try
-            {
-                myWebResponse = myWebRequest.GetResponse();
-            }
-            catch (Exception e)
-            {
-                return;
-            }
-            string lastestversion = myWebResponse.ResponseUri.OriginalString.Split('/').Last();
-            string currentversion = "";
-            if (File.Exists("buildversion.txt"))
-            {
-                currentversion = File.ReadAllText("buildversion.txt").Replace("\n", "");
-            }
-            if (lastestversion == currentversion)
-            {
-                DevConsole.Log("up to date Verison : " + lastestversion);
-                return;
-            }
-            fullstop = true;
-            string zippath = DGdirectory + "//DuckGameRebuilt.zip";
-            FileStream saveFileStream = DownloadFile("https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest/download/DuckGameRebuilt.zip", zippath);
-            foreach (string filepath in rename_and_delete_tmp)
-            {
-                if (File.Exists(path))
-                {
-                    File.Move(path, path + ".tmp");
-                }
-            }
-            using (ZipArchive archive = new ZipArchive(saveFileStream))
-            {
-                archive.ExtractToDirectoryOverride(Path.GetDirectoryName(path));
-            }
-            File.Delete(zippath);
-            Thread.Sleep(2000);
-            Process.Start(Application.ExecutablePath, commandLine);
         }
         public static void ExtractToDirectoryOverride(this ZipArchive archive, string destinationDirectoryName)
         {
@@ -1207,6 +1196,11 @@ namespace DuckGame
                 }
             }
         }
+        private static bool IsFileLocked(Exception exception)
+        {
+            int errorCode = Marshal.GetHRForException(exception) & ((1 << 16) - 1);
+            return errorCode == 32 || errorCode == 33; // ERROR_SHARING_VIOLATION = 32, ERROR_LOCK_VIOLATION = 33
+        }
         public static void ExtractToFile(this ZipArchiveEntry source, string destinationFileName, bool overwrite)
         {
             if (source == null)
@@ -1218,14 +1212,32 @@ namespace DuckGame
                 throw new ArgumentNullException("destinationFileName");
             }
             FileMode mode = overwrite ? FileMode.Create : FileMode.CreateNew;
-            using (Stream stream = File.Open(destinationFileName, mode, FileAccess.Write, FileShare.None))
+            Stream stream = null;
+            try
             {
-                using (Stream stream2 = source.Open())
-                {
-                    stream2.CopyTo(stream);
-                }
+                stream = File.Open(destinationFileName, mode, FileAccess.Write, FileShare.None);
             }
+            catch(IOException ex)
+            {
+                if (File.Exists(destinationFileName) && IsFileLocked(ex)) // if file is being used rename and try to copy again
+                {
+                    if (File.Exists(destinationFileName + ".tmp"))
+                        File.Delete(destinationFileName + ".tmp");
+                    File.Move(destinationFileName, destinationFileName + ".tmp");
+                }
+                stream = File.Open(destinationFileName, mode, FileAccess.Write, FileShare.None);
+            }
+            if (stream == null)
+            {
+                return;
+            }
+            using (Stream stream2 = source.Open())
+            {
+                stream2.CopyTo(stream);
+            }
+            stream.Close();
             File.SetLastWriteTime(destinationFileName, source.LastWriteTime.DateTime);
+
         }
         
         public static FileStream DownloadFile(string sourceURL, string destinationPath)
@@ -1496,7 +1508,7 @@ namespace DuckGame
                 StackTrace = Escape(": Below");
                 string Commit = "N/A";
                 gitVersion = Escape(gitVersion.Replace("\n", ""));
-                Commit = Escape(CURRENT_VERSION_ID) + " " + gitVersion + @"``` [View in repo](https://github.com/Hyeve-jrs/DuckGames/commit/" + gitVersion.Replace("[Modified]", "") + ") ";
+                Commit = Escape(CURRENT_VERSION_ID_FORMATTED) + " " + gitVersion + @"``` [View in repo](https://github.com/Hyeve-jrs/DuckGames/commit/" + gitVersion.Replace("[Modified]", "") + ") ";
                 string UserInfo = $$"""```ansi\nUsername: {{Green + Username + White}} \nSteam ID: {{Green + Steamid + White}}\n```""";
                 string SystemInfo = $$"""```ansi\nOS: {{Green + OS + White}} \nCommand Line:{{Green + CommandLine + White}}\n```""";
                 string GameInfo = $$"""```ansi\nPlayers In Lobby: [{{Green + PlayersInLobby + White}}]\nCommit: {{Green + Commit}}""";
