@@ -34,7 +34,7 @@ namespace DuckGame
             collisionSize = new Vec2(11f, 12f);
             _offset = new Vec2(-3f, 3f);
             _equippedDepth = -15;
-            _jumpMod = true;
+            //_jumpMod = true;
             thickness = 0.1f;
             _wearOffset = new Vec2(-2f, 0f);
             editorTooltip = "Allows you to fly like some kind of soaring bird.";
@@ -76,14 +76,20 @@ namespace DuckGame
         {
             if (d != null)
             {
+                d.protectedFromFire = true;
+                d.KillOverride = KillOverrideFunc;
                 UpdateHolding(d);
             }
             base.Equip(d);
         }
+        public bool KillOverrideFunc(Duck d)
+        {
+            return true;
+        }
         public override void Update()
         {
             base.Update();
-            _sprite.frame = (int)(_heat * 7.0);
+            _sprite.frame = (int)(_heat * 7f);
             if (_equippedDuck != null)
             {
                 float scroll = Mouse.scroll;
@@ -98,6 +104,16 @@ namespace DuckGame
                     UpdateHolding(_equippedDuck);
                 }
                 _equippedDuck.invincible = true;
+                if (Mouse.left == InputState.Down)
+                {
+                    if (_equippedDuck.holdObject != null)
+                        _equippedDuck.holdObject.triggerAction = true;
+                }
+                else if (Mouse.left != InputState.Down)
+                {
+                    if (_equippedDuck.holdObject != null)
+                        _equippedDuck.holdObject.triggerAction = false;
+                }
                 if (_equippedDuck.inputProfile.Pressed(Triggers.Strafe))
                 {
                     if (_equippedDuck.inputProfile.Down(Triggers.Down))
@@ -133,7 +149,7 @@ namespace DuckGame
                 else if (_equippedDuck.ragdoll != null && _equippedDuck.ragdoll.part1 != null)
                     propel = _equippedDuck.ragdoll.part1;
                 _sprite.flipH = _equippedDuck._sprite.flipH;
-                if (_on && _heat < 1.0)
+                if (_on && _heat < 1.0f)
                 {
                     if (_equippedDuck._trapped == null && _equippedDuck.crouch)
                         _equippedDuck.sliding = true;

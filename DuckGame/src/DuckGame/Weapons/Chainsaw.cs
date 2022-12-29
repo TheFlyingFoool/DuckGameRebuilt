@@ -62,7 +62,7 @@ namespace DuckGame
 
         public override float angle
         {
-            get => (base.angle + _hold * offDir + _animRot * offDir + _rotSway * offDir);
+            get => base.angle + _hold * offDir + _animRot * offDir + _rotSway * offDir;
             set => _angle = value;
         }
 
@@ -281,7 +281,7 @@ namespace DuckGame
                 RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent((float)(_engineSpin / 4f / 12f + (_started ? 0.02f : 0f)), 0.05f, 0f));
             if (_started)
             {
-                _warmUp += 1f / 1000f;
+                _warmUp += 0.001f;
                 if (_warmUp > 1f)
                     _warmUp = 1f;
                 if (!_puffClick && _idleWave > 0.9f)
@@ -299,19 +299,19 @@ namespace DuckGame
                     _puffClick = false;
                 if (_pullState < 0)
                 {
-                    float num2 = (1f + Maths.NormalizeSection(_engineSpin, 1f, 2f) * 2f);
-                    float num3 = _idleWave;
-                    if (num2 > 1f)
-                        num3 = (float)_spinWave;
-                    handOffset = Lerp.Vec2Smooth(handOffset, new Vec2(0f, (2f + num3 * num2)), 0.23f);
-                    _holdOffset = Lerp.Vec2Smooth(_holdOffset, new Vec2(1f, (2f + num3 * num2)), 0.23f);
-                    _rotSway = (_idleWave.normalized * (Maths.NormalizeSection(_engineSpin, 1f, 2f) * 3f) * 0.03f);
+                    float extraShake = 1f + Maths.NormalizeSection(_engineSpin, 1f, 2f) * 2f;
+                    float wave = _idleWave;
+                    if (extraShake > 1f)
+                        wave = (float)_spinWave;
+                    handOffset = Lerp.Vec2Smooth(handOffset, new Vec2(0f, 2f + wave * extraShake), 0.23f);
+                    _holdOffset = Lerp.Vec2Smooth(_holdOffset, new Vec2(1f, 2f + wave * extraShake), 0.23f);
+                    _rotSway = _idleWave.normalized * (Maths.NormalizeSection(_engineSpin, 1f, 2f) * 3f) * 0.03f;
                 }
                 else
                     _rotSway = 0f;
                 if (!infinite.value)
                 {
-                    _gas -= 3E-05f;
+                    _gas -= 0.00003f;
                     if (_throttle)
                         _gas -= 0.0002f;
                     if (_gas < 0f)
@@ -347,7 +347,7 @@ namespace DuckGame
             }
             else
             {
-                _warmUp -= 1f / 1000f;
+                _warmUp -= 0.001f;
                 if (_warmUp < 0f)
                     _warmUp = 0f;
                 _releasedSincePull = false;
@@ -358,7 +358,7 @@ namespace DuckGame
             _bladeSound.lerpVolume = _throttleWait > 0.96f ? 0.6f : 0f;
             if (_struggling)
                 _bladeSound.lerpVolume = 0f;
-            _bladeSoundLow.lerpVolume = ((_throttleWait > 0.96f && _struggling) ? 0.6f : 0f);
+            _bladeSoundLow.lerpVolume = (_throttleWait > 0.96f && _struggling) ? 0.6f : 0f;
             _bladeSound.pitch = pitch;
             _bladeSoundLow.pitch = pitch;
             if (owner == null)
@@ -488,9 +488,9 @@ namespace DuckGame
                     if (!flag2 && !_grounded && Level.CheckPoint<IPlatform>(position + new Vec2(0f, 8f)) == null)
                     {
                         if (offDir > 0)
-                            _throwSpin += ((Math.Abs(hSpeed) + Math.Abs(vSpeed)) * 1f + 5f);
+                            _throwSpin += (Math.Abs(hSpeed) + Math.Abs(vSpeed)) * 1f + 5f;
                         else
-                            _throwSpin -= ((Math.Abs(hSpeed) + Math.Abs(vSpeed)) * 1f + 5f);
+                            _throwSpin -= (Math.Abs(hSpeed) + Math.Abs(vSpeed)) * 1f + 5f;
                         flag1 = true;
                     }
                 }
@@ -530,20 +530,20 @@ namespace DuckGame
                 if (_gas > 0f && _flooded && _gasDripFrames > 2)
                 {
                     FluidData gas = Fluid.Gas;
-                    gas.amount = 3f / 1000f;
+                    gas.amount = 0.003f;
                     _gas -= 0.005f;
                     if (_gas < 0.0)
                         _gas = 0f;
                     Level.Add(new Fluid(x, y, Vec2.Zero, gas));
                     _gasDripFrames = 0;
                 }
-                if (_gas <= 0.0 && isServerForObject)
+                if (_gas <= 0f && isServerForObject)
                     _started = false;
             }
             else if (isServerForObject)
             {
                 _flood -= 0.008f;
-                if (_flood < 0.0)
+                if (_flood < 0f)
                     _flood = 0f;
             }
             if (duck != null)
@@ -887,7 +887,7 @@ namespace DuckGame
                 _swordSwing.Draw();
             }
             if (duck != null && (_pullState == 1 || _pullState == 2))
-                Graphics.DrawLine(Offset(new Vec2(-2f, -2f)), duck.armPosition + new Vec2(handOffset.x * offDir, handOffset.y), Color.White, depth: (duck.depth + 11 - 1));
+                Graphics.DrawLine(Offset(new Vec2(-2f, -2f)), duck.armPosition + new Vec2(handOffset.x * offDir, handOffset.y), Color.White, depth: duck.depth + 11 - 1);
             _idleOffset = duck != null && tape == null || !_started ? Vec2.Zero : Lerp.Vec2Smooth(handOffset, new Vec2(0f, 2f + _idleWave.normalized), 0.23f);
             position += _idleOffset;
             base.Draw();
