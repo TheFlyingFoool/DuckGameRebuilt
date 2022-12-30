@@ -106,14 +106,19 @@ namespace DuckGame
                 _equippedDuck.invincible = true;
                 if (Mouse.left == InputState.Down)
                 {
-                    if (_equippedDuck.holdObject != null)
-                        _equippedDuck.holdObject.triggerAction = true;
+                    if (_equippedDuck.inputProfile != null)
+                        _equippedDuck.inputProfile.doInputs.Add(Triggers.Shoot);
                 }
-                else if (Mouse.left != InputState.Down)
+                else
                 {
-                    if (_equippedDuck.holdObject != null)
-                        _equippedDuck.holdObject.triggerAction = false;
+                    if (_equippedDuck.inputProfile != null)
+                        _equippedDuck.inputProfile.doInputs.Clear();
                 }
+                //else if (Mouse.left != InputState.Down)
+                //{
+                //    if (_equippedDuck.holdObject != null)
+                //        _equippedDuck.holdObject.triggerAction = false;
+                //}
                 if (_equippedDuck.inputProfile.Pressed(Triggers.Strafe))
                 {
                     if (_equippedDuck.inputProfile.Down(Triggers.Down))

@@ -672,6 +672,10 @@ namespace DuckGame
             {
                 return false;
             }
+            if (doInputs.Contains(trigger))
+            {
+                return true;
+            }
             if (trigger == Triggers.Any)
             {
                 any = true;
@@ -749,6 +753,10 @@ namespace DuckGame
             if (Input.ignoreInput && _virtualInput == null)
             {
                 return false;
+            }
+            if (doInputs.Contains(trigger))
+            {
+                return true;
             }
             foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in _mappings)
             {
@@ -1148,7 +1156,7 @@ namespace DuckGame
                 _state = (ushort)(_state << 1);
             }
         }
-
+        public List<string> doInputs = new List<string>();
         // Note: this type is marked as 'beforefieldinit'.
         static InputProfile()
         {

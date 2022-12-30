@@ -6,6 +6,7 @@ using System.Reflection;
 using Microsoft.CSharp;
 using Microsoft.Xna.Framework.Graphics;
 using SDL2;
+using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static DuckGame.CustomKeyBinds;
 
@@ -30,6 +31,7 @@ public class DebugTablet
     private string codestring;
     public FieldBinding savefield;
     public static SpriteMap _cursor = new SpriteMap("cursors", 16, 16);
+    public static BitmapFont _danbiosFont = new BitmapFont("danbiosFont", 8);
     private static bool _open;
 
     public static bool Open
@@ -309,12 +311,13 @@ public class DebugTablet
         {
             tab.lineoffset = tab.Lines.Count - 1;
         }
-        float scale = 1;
-        if (Level.current is Editor)
-        {
-            scale = 2;
-        }
-        float fontscale = 0.4f * scale; // 0.4f;
+        //float scale = 1;
+        //if (Level.current is Editor)
+        //{
+        //    scale = 2;
+        //}
+        float scale = (((Layer.HUD.width / 320f) + (Layer.HUD.height / 180f)) / 2f); // auto scaler
+        float fontscale = 0.4f * scale; // 0.4f * scale;
         Rectangle drawRect = new(new Vec2(16f * scale, 16f * scale), new Vec2(Layer.HUD.width - 16, Layer.HUD.height * 0.7f));
         Vec2 stringDrawPos = new Vec2(drawRect.tl.x + (14f * scale), drawRect.tl.y + (6f * scale));
 
@@ -579,7 +582,10 @@ public class DebugTablet
             offset += ((tabname.Length - lengthmin) * size.x) + (4f * scale);
 
         }
-
+        char _spritechar = _danbiosFont.spritechar;
+        char _colorchar = _danbiosFont.colorchar;
+        _danbiosFont.spritechar = '\n';
+        _danbiosFont.colorchar = '\n';
         for (int i = 0; i < tab.Lines.Count; i++)
         {
             if (i - tab.lineoffset < 0 || i - tab.lineoffset > 40)
@@ -589,7 +595,10 @@ public class DebugTablet
             Vec2 drawPos = new Vec2(stringDrawPos.x, stringDrawPos.y + (i - tab.lineoffset) * (size.y + (1f * scale)));
             string numberstring = $"{i + 1}";
             Graphics.DrawString(numberstring, new Vec2(drawPos.x - (8f * scale) - ((numberstring.Length - 1) * size.x) , drawPos.y), new Color(91, 81, 92), 1.2f, scale: fontscale);
-            Graphics.DrawString(tab.Lines[i], drawPos, Color.White, 1.2f, scale: fontscale); // DGCommandLanguage.Highlight(Lines[i])
+            //Graphics.DrawString(tab.Lines[i], drawPos, Color.White, 1.2f, scale: fontscale); // DGCommandLanguage.Highlight(Lines[i])
+            _danbiosFont.scale = new Vec2(fontscale);
+            _danbiosFont.Draw(tab.Lines[i], drawPos.x, drawPos.y, Color.White, 1.2f, null);
+            _danbiosFont.scale = new Vec2(1f);
             if (tab.hashighlightedarea)
             {
                 Vec2 _start = tab.Startingposition;
@@ -623,6 +632,8 @@ public class DebugTablet
                 }
             }
         }
+        _danbiosFont.spritechar = _spritechar;
+        _danbiosFont.colorchar = _colorchar;
         Vec2 Currorpos = new Vec2(stringDrawPos.x + (tab.CaretPosition.x - 0.5f ) * (size.x), stringDrawPos.y + ((tab.CaretPosition.y - tab.lineoffset)- 0.04f ) * (size.y + (1f * scale)));
         if (showcursor)
         {
