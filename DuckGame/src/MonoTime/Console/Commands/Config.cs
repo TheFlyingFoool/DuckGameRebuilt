@@ -13,21 +13,15 @@ namespace DuckGame
         {
             object getValue(MemberInfo mi)
             {
-                PropertyInfo pi = null;
-                FieldInfo fi = mi as FieldInfo;
-                if (fi == null)
+                return mi switch
                 {
-                    pi = mi as PropertyInfo;
-                    if (pi == null)
-                    {
-                        throw new Exception("Unsupported AutoConfig field type");
-                    }
-                    return pi.GetMethod?.Invoke(null, null);
-                }
-                return fi.GetValue(null);
+                    FieldInfo fi => fi.GetValue(null),
+                    PropertyInfo pi => pi.GetMethod?.Invoke(null, null),
+                    _ => throw new Exception("Unsupported AutoConfig field type")
+                };
             }
 
-            switch (fieldId.ToUpper())
+            switch (fieldId)
             {
                 case "%SAVE":
                     AutoConfigHandler.SaveAll(false);
@@ -40,34 +34,39 @@ namespace DuckGame
                         .Select(x => $"{x.field.Name}: |DGBLUE|{getValue(x.field)}|PREV|");
             }
 
-            IReadOnlyList<AutoConfigFieldAttribute> all = AutoConfigFieldAttribute.All;
+            List<AutoConfigFieldAttribute> all = AutoConfigFieldAttribute.All;
 
-            if (!all.TryFirst(x => (x.ShortName ?? x.Id ?? x.field.Name).CaselessEquals(fieldId), out AutoConfigFieldAttribute AutoConfigField))
+            if (!all.TryFirst(x => (x.ShortName ?? x.Id ?? x.field.Name).CaselessEquals(fieldId), out AutoConfigFieldAttribute attribute))
                 throw new Exception($"No configuration field found with ID: {fieldId}");
 
-            object val = getValue(AutoConfigField.field);
+            object val = getValue(attribute.field);
 
             if (serializedValue is null)
                 return val;
 
-            object newVal = FireSerializer.Deserialize((Type) AutoConfigField.field, serializedValue); ;
-            PropertyInfo pi = null;
-            FieldInfo fi = AutoConfigField.field as FieldInfo;
-            if (fi == null)
+            object newVal = FireSerializer.Deserialize(attribute.field switch
             {
-                pi = AutoConfigField.field as PropertyInfo;
-                if (pi == null)
-                {
-                    throw new Exception("Unsupported AutoConfig field type");
-                }
-                pi.SetMethod?.Invoke(null, new[] { val });
-            }
-            else
-            {
+                FieldInfo fi => fi.FieldType,
+                PropertyInfo pi => pi.PropertyType,
+                _ => throw new Exception("Unsupported AutoConfig field type")
+            }, serializedValue);
 
-                fi.SetValue(null, val);
+            switch (attribute.field)
+            {
+                case FieldInfo fi:
+                    {
+                        fi.SetValue(null, val);
+                        break;
+                    }
+                case PropertyInfo pi:
+                    {
+                        pi.SetMethod?.Invoke(null, new[] { val });
+                        break;
+                    }
+                default:
+                    throw new Exception("Unsupported AutoConfig field type");
             }
-            return $"|DGBLUE|Modified value of field [|PINK|{AutoConfigField.field.Name}|DGBLUE|] from [|GREEN|{val}|DGBLUE|] to [|GREEN|{newVal}|DGBLUE|]";
+            return $"|DGBLUE|Modified value of field [|PINK|{attribute.field.Name}|DGBLUE|] from [|GREEN|{val}|DGBLUE|] to [|GREEN|{newVal}|DGBLUE|]";
         }
     }
 }
