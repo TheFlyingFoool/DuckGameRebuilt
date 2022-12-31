@@ -317,7 +317,7 @@ namespace DuckGame
                                 //optimal -NiK0
                                 if (dubberOffset == -1) dubberOffset = _currentMenuItemSelection.FindAll(ui => ui is UIConnectionInfo).Count();
                                 SFX.Play("rockHitGround");
-                                ((UIMenuItem)_currentMenuItemSelection[i]).Activate(Triggers.Select);
+                                ((UIMenuItem)_currentMenuItemSelection[i + dubberOffset]).Activate(Triggers.Select);
                             }
                         }
                     }
