@@ -1603,7 +1603,8 @@ namespace DuckGame
                                 int height = Int32.Parse(texturedetails[3]);
                                 int width = Int32.Parse(texturedetails[4]);
 
-                                DuckGame.Content.offests.Add(texturename, new Microsoft.Xna.Framework.Rectangle(x, y, width, height));
+                                if (!DuckGame.Content.offests.ContainsKey(texturename))
+                                    DuckGame.Content.offests.Add(texturename, new Microsoft.Xna.Framework.Rectangle(x, y, width, height));
                             }
                             catch
                             {

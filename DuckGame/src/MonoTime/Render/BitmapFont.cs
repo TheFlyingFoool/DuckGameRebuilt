@@ -354,7 +354,8 @@ namespace DuckGame
         public int characterYOffset;
         public Vec2 spriteScale = new Vec2(1f, 1f);
         public Color colorOverride;
-
+        public char spritechar = '@';
+        public char colorchar = '|';
         public float height => _texture.height * scale.y;
 
         public InputProfile inputProfile
@@ -394,7 +395,7 @@ namespace DuckGame
                 return null;
             ++_letterIndex;
             string str = "";
-            for (; _letterIndex != text.Length && text[_letterIndex] != ' ' && text[_letterIndex] != '@'; ++_letterIndex)
+            for (; _letterIndex != text.Length && text[_letterIndex] != ' ' && text[_letterIndex] != spritechar; ++_letterIndex)
                 str += text[_letterIndex].ToString();
             Sprite sprite = null;
             if (input != null)
@@ -412,7 +413,7 @@ namespace DuckGame
         {
             ++_letterIndex;
             string color = "";
-            for (; _letterIndex != text.Length && text[_letterIndex] != ' ' && text[_letterIndex] != '|'; ++_letterIndex)
+            for (; _letterIndex != text.Length && text[_letterIndex] != ' ' && text[_letterIndex] != colorchar; ++_letterIndex)
                 color += text[_letterIndex].ToString();
             return color == "PREV" ? new Color(_previousColor.r, _previousColor.g, _previousColor.b) : Colors.ParseColor(color);
         }
@@ -452,7 +453,7 @@ namespace DuckGame
             for (_letterIndex = 0; _letterIndex < text.Length; ++_letterIndex)
             {
                 bool flag2 = false;
-                if (text[_letterIndex] == '@')
+                if (text[_letterIndex] == spritechar)
                 {
                     int letterIndex = _letterIndex;
                     Sprite sprite = ParseSprite(text, input);
@@ -468,7 +469,7 @@ namespace DuckGame
                     else
                         _letterIndex = letterIndex;
                 }
-                else if (text[_letterIndex] == '|')
+                else if (text[_letterIndex] == colorchar)
                 {
                     int letterIndex = _letterIndex;
                     if (ParseColor(text) != Colors.Transparent)
@@ -609,7 +610,7 @@ namespace DuckGame
             for (_letterIndex = 0; _letterIndex < text.Length; ++_letterIndex)
             {
                 bool flag = false;
-                if (text[_letterIndex] == '@')
+                if (text[_letterIndex] == spritechar)
                 {
                     int letterIndex = _letterIndex;
                     Sprite sprite1 = ParseSprite(text, input);
@@ -667,7 +668,7 @@ namespace DuckGame
                     else
                         _letterIndex = letterIndex;
                 }
-                else if (text[_letterIndex] == '|')
+                else if (text[_letterIndex] == colorchar)
                 {
                     int letterIndex = _letterIndex;
                     if (color != Colors.Transparent)
@@ -693,7 +694,7 @@ namespace DuckGame
                     {
                         string source = "";
                         int letterIndex = _letterIndex;
-                        while (letterIndex < text.Count() && text[letterIndex] != ' ' && text[letterIndex] != '|' && text[letterIndex] != '@')
+                        while (letterIndex < text.Count() && text[letterIndex] != ' ' && text[letterIndex] != colorchar && text[letterIndex] != spritechar)
                         {
                             source += text[letterIndex].ToString();
                             ++letterIndex;
