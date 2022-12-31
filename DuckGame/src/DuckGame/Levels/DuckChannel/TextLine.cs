@@ -68,8 +68,10 @@ namespace DuckGame
                     if (segment.text[index] == '@')
                     {
                         ++index;
-                        while (segment.text[index] != '@')
+                        while (index < segment.text.Length && segment.text[index] != '@') // added index < segment.text.Length to prevent crash
+                        {
                             ++index;
+                        }
                     }
                     else
                         ++num2;
