@@ -50,7 +50,7 @@ namespace DuckGame
             if (serializedValue is null)
                 return val;
 
-            object newVal = FireSerializer.Deserialize((Type)AutoConfigField.field, serializedValue); ;
+            object newVal = FireSerializer.Deserialize((Type) AutoConfigField.field, serializedValue); ;
             PropertyInfo pi = null;
             FieldInfo fi = AutoConfigField.field as FieldInfo;
             if (fi == null)

@@ -226,6 +226,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddedContent\DGRSettings.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\AdvancedConfigAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ConfigClasses\NameDisplayConfig.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\IAdvancedConfig.cs" />
     <Compile Include="AddedContent\Firebreak\Internet.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\IAmUi.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\UiBasic.cs" />
