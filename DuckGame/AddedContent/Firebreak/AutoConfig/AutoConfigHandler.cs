@@ -38,7 +38,7 @@ namespace DuckGame
             for (int i = 0; i < length; i++)
             {
                 AutoConfigFieldAttribute attribute = AutoConfigFieldAttribute.All[i];
-                MemberInfo field = attribute.field;
+                MemberInfo field = attribute.MemberInfo;
                 bool isfield = true;
                 Type fieldType;
                 PropertyInfo pi = null;
@@ -130,11 +130,11 @@ namespace DuckGame
                 {
                     AutoConfigFieldAttribute _ = all[i];
                     PropertyInfo pi = null;
-                    FieldInfo fi = _.field as FieldInfo;
+                    FieldInfo fi = _.MemberInfo as FieldInfo;
                     Type type;
                     if (fi == null)
                     {
-                        pi = _.field as PropertyInfo;
+                        pi = _.MemberInfo as PropertyInfo;
                         if (pi == null)
                         {
                             throw new Exception("Unsupported AutoConfig field type");
@@ -170,7 +170,7 @@ namespace DuckGame
                 for (int i = 0; i < all.Count; i++)
                 {
                     AutoConfigFieldAttribute attribute = all[i];
-                    string fullName = attribute.Id ?? attribute.field.GetFullName();
+                    string fullName = attribute.Id ?? attribute.MemberInfo.GetFullName();
 
                     if (!lines.TryFirst(x => fullName == x.Split('=')[0], out string line))
                         continue;
@@ -191,7 +191,7 @@ namespace DuckGame
 
         private static void SetFieldValue(AutoConfigFieldAttribute pair, string newValue)
         {
-            MemberInfo field = pair.field;
+            MemberInfo field = pair.MemberInfo;
             Type type;
             PropertyInfo pi = null;
             FieldInfo fi = field as FieldInfo;

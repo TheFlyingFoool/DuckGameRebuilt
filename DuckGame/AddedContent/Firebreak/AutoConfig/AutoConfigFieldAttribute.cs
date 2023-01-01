@@ -18,18 +18,14 @@ namespace DuckGame
     public sealed class AutoConfigFieldAttribute : Attribute
     {
         public static List<AutoConfigFieldAttribute> All;
-        public MemberInfo field;
-        static AutoConfigFieldAttribute()
-        {
-            // MemberAttribute<AutoConfigFieldAttribute>.RequestSearch(all => All = all);
-        }
+
         public static void OnResults(Dictionary<Type, List<(MemberInfo MemberInfo, Attribute Attribute)>> all)
         {
             All = new List<AutoConfigFieldAttribute>();
             foreach ((MemberInfo memberInfo, Attribute vAttribute) in all[typeof(AutoConfigFieldAttribute)])
             {
                 AutoConfigFieldAttribute attribute = (AutoConfigFieldAttribute) vAttribute;
-                attribute.field = memberInfo;
+                attribute.MemberInfo = memberInfo;
                 All.Add(attribute);
             }
         }
@@ -53,5 +49,10 @@ namespace DuckGame
         /// the main file as usual
         /// </remarks>
         public string? External { get; set; } = null;
+        
+        /// <summary>
+        /// The <see cref="MemberInfo"/> the attribute is applied to
+        /// </summary>
+        public MemberInfo MemberInfo;
     }
 }
