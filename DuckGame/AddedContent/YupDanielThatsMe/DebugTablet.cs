@@ -524,11 +524,14 @@ namespace DuckGame
 		        }
 		        tab._highlightDrag = false;
 		    }
-		    // -- draw --
+            // -- draw --
 
-		    // text editor
-		    Graphics.DrawRect(drawRect with { height = Layer.HUD.height - (32f * scale) }, Color.Black, 1.1f, false, 2.0f * scale);//2
-		    Graphics.DrawRect(drawRect, new Color(45, 42, 46), 1f );
+            // text editor
+            float oldheight = drawRect.height;
+            drawRect.height = Layer.HUD.height - (32f * scale);
+            Graphics.DrawRect(drawRect, Color.Black, 1.1f, false, 2.0f * scale);//2
+            drawRect.height = oldheight;
+            Graphics.DrawRect(drawRect, new Color(45, 42, 46), 1f );
 
 		    float offset = 0f;
 
@@ -550,17 +553,26 @@ namespace DuckGame
 		        else
 		            tabname += "  ";
 		        Rectangle drawRect2 = new(new Vec2((16 * scale) + offset, 8 * scale), new Vec2(Layer.HUD.width - (16f * scale) + offset, (Layer.HUD.height * 0.7f)));
-		        if (tab == _tab)
+                if (tab == _tab)
 		        {
-		            Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = ((tabname.Length - lengthmin) * size.x) + (6f * scale) }, new Color(61, 61, 61), 1f );
+                    drawRect2.height = 10f * scale;
+                    drawRect2.width = ((tabname.Length - lengthmin) * size.x) + (6f * scale);
+                    Graphics.DrawRect(drawRect2, new Color(61, 61, 61), 1f );
 		            Graphics.DrawString(tabname, new Vec2(((16f + 3f) * scale) + offset, 11.5f * scale), new Color(250, 250, 250), 1.2f, scale: fontscale);
-		            Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = ((tabname.Length - lengthmin) * size.x) + (6f * scale) + 0.1f}, Color.Black, 1.1f, false, 2.0f * scale);//2
+                    drawRect2.height = 10f * scale;
+                    drawRect2.width = ((tabname.Length - lengthmin) * size.x) + (6f * scale) + 0.1f;
+
+                    Graphics.DrawRect(drawRect2, Color.Black, 1.1f, false, 2.0f * scale);//2
 		        }
 		        else
 		        {
-		            Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = ((tabname.Length - lengthmin) * size.x) + (6f * scale)}, new Color(46, 46, 46), 1f);
+                    drawRect2.height = 10f * scale;
+                    drawRect2.width = ((tabname.Length - lengthmin) * size.x) + (6f * scale);
+                    Graphics.DrawRect(drawRect2, new Color(46, 46, 46), 1f);
 		            Graphics.DrawString(tabname, new Vec2(((16f + 3f) * scale) + offset, 11.5f * scale), new Color(178, 178, 178), 1.2f, scale: fontscale);
-		            Graphics.DrawRect(drawRect2 with { height = 10f * scale, width = ((tabname.Length - lengthmin) * size.x) + (6f * scale) + 0.1f }, Color.Black, 1.1f, false, 2.0f * scale);
+                    drawRect2.width = ((tabname.Length - lengthmin) * size.x) + (6f * scale) + 0.1f;
+
+                    Graphics.DrawRect(drawRect2, Color.Black, 1.1f, false, 2.0f * scale);
 		        }
 		        if (Mouse.left == InputState.Pressed)
 		        {
@@ -662,8 +674,10 @@ namespace DuckGame
 
 		    tab.DrawCaret(stringDrawPos, fontscale);
 
-		    // console
-		    Rectangle consoleRect = drawRect with { Top = drawRect.Bottom, height = Layer.HUD.height * 0.3f - (16.0f * scale) };
+            // console
+            drawRect.Top = drawRect.Bottom;
+            drawRect.height = Layer.HUD.height * 0.3f - (16.0f * scale);
+            Rectangle consoleRect = drawRect;
 
 		    stringDrawPos = new Vec2(consoleRect.tl.x + (6f * scale), consoleRect.tl.y + (6f * scale));
 
