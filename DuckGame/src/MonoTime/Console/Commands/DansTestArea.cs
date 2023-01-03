@@ -274,6 +274,11 @@ namespace DuckGame
             Program.main.KillEverything();
             Program.main.Exit();
         }
+        [DevConsoleCommand(Name = "crashtest", CanCrash = true)]
+        public static void crashtest()
+        {
+            DuckNetwork.CheckVersion(null);
+        }
         // SDL.SDL_SetWindowBordered(Resolution._window, true ? SDL.SDL_bool.SDL_FALSE : SDL.SDL_bool.SDL_TRUE); 
         [DevConsoleCommand(Name = "rlevel")]
         public static void randomnesstest2()

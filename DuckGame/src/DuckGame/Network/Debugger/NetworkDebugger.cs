@@ -248,50 +248,50 @@ namespace DuckGame
             base.Initialize();
             switch (init)
             {
-                case 0:
-                    networkInstance.debugInterface = new NetDebugInterface(_instances[init]);
-                    UnlockInstance(_instances[init]);
-                    using (List<NetworkInstance.Core>.Enumerator enumerator = _registeredCores.GetEnumerator())
-                    {
-                        while (enumerator.MoveNext())
-                        {
-                            NetworkInstance.Core current = enumerator.Current;
-                            _instances[init].extraCores.Add(new NetworkInstance.Core()
-                            {
-                                member = current.member,
-                                originalInstance = current.originalInstance,
-                                instance = Activator.CreateInstance(current.member.FieldType, null),
-                                firstLockAction = current.firstLockAction
-                            });
-                        }
-                        break;
-                    }
                 case 1:
                     Profiles.experienceProfile.name = "DAN RANDO";
-                    goto default;
+                    break;
                 case 2:
                     Profiles.experienceProfile.name = "Zoo Tycoon 2";
                     Profiles.experienceProfile.preferredColor = 7;
-                    goto default;
+                    break;
                 case 3:
                     Profiles.experienceProfile.name = "xXspandeXx";
-                    goto default;
+                    break;
                 case 4:
                     Profiles.experienceProfile.name = "boloBoy";
-                    goto default;
+                    break;
                 case 5:
                     Profiles.experienceProfile.name = "MINTY TASTE";
-                    goto default;
+                    break;
                 case 6:
                     Profiles.experienceProfile.name = "r_b_sprinkles";
-                    goto default;
+                    break;
                 case 7:
                     Profiles.experienceProfile.name = "darren";
-                    goto default;
-                default:
-                    Profiles.experienceProfile.keepSetName = true;
-                    Profiles.experienceProfile.furniturePositions.Clear();
-                    goto case 0;
+                    break;
+
+            }
+            if (init != 0)
+            {
+                Profiles.experienceProfile.keepSetName = true;
+                Profiles.experienceProfile.furniturePositions.Clear();
+            }
+            networkInstance.debugInterface = new NetDebugInterface(_instances[init]);
+            UnlockInstance(_instances[init]);
+            using (List<NetworkInstance.Core>.Enumerator enumerator = _registeredCores.GetEnumerator())
+            {
+                while (enumerator.MoveNext())
+                {
+                    NetworkInstance.Core current = enumerator.Current;
+                    _instances[init].extraCores.Add(new NetworkInstance.Core()
+                    {
+                        member = current.member,
+                        originalInstance = current.originalInstance,
+                        instance = Activator.CreateInstance(current.member.FieldType, null),
+                        firstLockAction = current.firstLockAction
+                    });
+                }
             }
         }
 

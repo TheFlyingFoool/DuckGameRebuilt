@@ -50,18 +50,22 @@ namespace DuckGame
                 }
                 catch (Exception e)
                 {
-                    throw new Exception($"Failed to write Advanced Config of class [{type.Name}]", e);
+                    //throw new Exception($"Failed to write Advanced Config of class [{type.Name}]", e);
                 }
             }
-
-            if (!TryLoad())
+            try
             {
-                DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD ADVANCED CONFIG");
+                if (!TryLoad())
+                {
+                    DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD ADVANCED CONFIG");
+                }
+                else
+                {
+                    SaveToFile();
+                }
             }
-            else
-            {
-                SaveToFile();
-            }
+            catch
+            { }
         }
 
         private static bool TryLoad()

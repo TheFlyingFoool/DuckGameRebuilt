@@ -231,7 +231,7 @@ namespace DuckGame
                 {
                     viewport = Graphics.viewport;
                     if (viewport.Height == _viewSize.y)
-                        goto label_4;
+                        return _matrix;
                 }
             }
             _rectangle = new Rectangle(left - 16f, top - 16f, size.x + 32f, size.y + 32f);
@@ -245,7 +245,6 @@ namespace DuckGame
             float height2 = height;
             _matrix = Matrix.CreateTranslation(new Vec3(-position.x, -position.y, 0f)) * Matrix.CreateScale(_viewSize.x / width2, _viewSize.y / height2, 1f);
             _dirty = false;
-        label_4:
             return _matrix;
         }
     }

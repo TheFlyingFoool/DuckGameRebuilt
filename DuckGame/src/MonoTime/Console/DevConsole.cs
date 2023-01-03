@@ -1487,7 +1487,7 @@ namespace DuckGame
                         case ArcadeLevel _:
                             break;
                         default:
-                            goto label_8;
+                            return false;
                     }
                 }
 
@@ -1498,8 +1498,6 @@ namespace DuckGame
                 });
                 return true;
             }
-
-        label_8:
             return false;
         }
 

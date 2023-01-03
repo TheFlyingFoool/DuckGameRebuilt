@@ -2189,7 +2189,7 @@ namespace DuckGame
                         case TeamSelect2 _:
                         case IConnectionScreen _:
                         case TitleScreen _:
-                            goto label_26;
+                            return false;
                     }
                 }
                 int num = 0;
@@ -2222,7 +2222,6 @@ namespace DuckGame
                     return true;
                 }
             }
-        label_26:
             return false;
         }
 
@@ -2437,22 +2436,26 @@ namespace DuckGame
 
         public static NMVersionMismatch.Type CheckVersion(string id)
         {
+            if (id == null)
+            {
+                return NMVersionMismatch.Type.Error;
+            }
             string[] strArray = id.Split('.');
             NMVersionMismatch.Type type = NMVersionMismatch.Type.Match;
             if (strArray.Length == 4)
             {
                 try
                 {
-                    int int32_1 = Convert.ToInt32(strArray[3]);
-                    int int32_2 = Convert.ToInt32(strArray[2]);
-                    int int32_3 = Convert.ToInt32(strArray[1]);
-                    if (int32_2 < DG.versionHigh || int32_3 < DG.versionMajor)
+                    int versionLow = Convert.ToInt32(strArray[3]);
+                    int versionHigh = Convert.ToInt32(strArray[2]);
+                    int versionMajor = Convert.ToInt32(strArray[1]);
+                    if (versionHigh < DG.versionHigh || versionMajor < DG.versionMajor)
                         type = NMVersionMismatch.Type.Older;
-                    else if (int32_2 > DG.versionHigh || int32_3 > DG.versionMajor)
+                    else if (versionHigh > DG.versionHigh || versionMajor > DG.versionMajor)
                         type = NMVersionMismatch.Type.Newer;
-                    else if (int32_1 < DG.versionLow)
+                    else if (versionLow < DG.versionLow)
                         type = NMVersionMismatch.Type.Older;
-                    else if (int32_1 > DG.versionLow)
+                    else if (versionLow > DG.versionLow)
                         type = NMVersionMismatch.Type.Newer;
                 }
                 catch

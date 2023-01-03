@@ -16,6 +16,7 @@ namespace DuckGame
     {
         public int commandQueueWait;
         public Func<bool> commandQueueWaitFunction;
+        public bool cancrash;
         public bool hidden;
         public bool cheat;
         public string keyword;
@@ -153,18 +154,27 @@ namespace DuckGame
                     ++index1;
                 }
             }
-
-            try
+            if (this.cancrash)
             {
                 if (action != null)
                     action(this);
                 else if (alternateAction != null)
                     alternateAction();
             }
-            catch (Exception ex)
+            else
             {
-                FinishExecution();
-                return Error($"|DGRED|Error: {ex.Message}");
+                try
+                {
+                    if (action != null)
+                        action(this);
+                    else if (alternateAction != null)
+                        alternateAction();
+                }
+                catch (Exception ex)
+                {
+                    FinishExecution();
+                    return Error($"|DGRED|Error: {ex.Message}");
+                }
             }
 
             FinishExecution();
