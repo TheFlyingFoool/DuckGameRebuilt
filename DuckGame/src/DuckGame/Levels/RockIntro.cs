@@ -65,7 +65,7 @@ namespace DuckGame
             _panWait -= 0.04f;
             if (_panWait >= 0.0)
                 return;
-            _yScrollVel += _yScroll < 0.04f ? -0.0001f : 0.0008f;
+            _yScrollVel += _yScroll < 0.4f ? -0.0001f : 0.0008f;
             if (_yScrollVel > 0.01f)
                 _yScrollVel = 0.01f;
             if (_yScrollVel < 0.0)
@@ -111,7 +111,7 @@ namespace DuckGame
                         _smallDome.depth = (Depth)0.6f;
                     else
                         _smallDome.depth = (Depth)0.4f;
-                    Vec2 vec2_1 = new Vec2((float)Math.Cos(rad2 + index * rad1), (float)(-Math.Sin(rad2 + index * rad1) * (0.04f * (1.0 - num2 / num1))));
+                    Vec2 vec2_1 = new Vec2((float)Math.Cos(rad2 + index * rad1), (float)(-Math.Sin(rad2 + index * rad1) * (0.4f * (1.0 - num2 / num1))));
                     Vec2 vec2_2 = new Vec2(160f, 130f + num2) + vec2_1 * 100f;
                     Graphics.Draw(_smallDome, vec2_2.x, vec2_2.y - 30f);
                     _smallPillar.depth = _smallDome.depth;
