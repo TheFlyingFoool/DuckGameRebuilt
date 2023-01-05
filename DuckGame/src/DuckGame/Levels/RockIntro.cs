@@ -60,31 +60,31 @@ namespace DuckGame
         public override void Update()
         {
             Music.volume = Lerp.Float(Music.volume, 0f, 0.008f);
-            if (Music.volume <= 0.0)
+            if (Music.volume <= 0f)
                 Music.Stop();
             _panWait -= 0.04f;
-            if (_panWait >= 0.0)
+            if (_panWait >= 0f)
                 return;
             _yScrollVel += _yScroll < 0.4f ? -0.0001f : 0.0008f;
             if (_yScrollVel > 0.01f)
                 _yScrollVel = 0.01f;
-            if (_yScrollVel < 0.0)
+            if (_yScrollVel < 0f)
                 _yScrollVel = 0f;
             _yScroll -= _yScrollVel;
             _virtualBackground.layer.fade = Lerp.Float(_virtualBackground.layer.fade, 0.5f, 0.01f);
             if (_yScroll >= 0.04f)
                 return;
             _afterDownWait -= 0.05f;
-            if (_afterDownWait >= 0.0)
+            if (_afterDownWait >= 0.0f)
                 return;
             _intermissionSlide = Lerp.FloatSmooth(_intermissionSlide, 1f, 0.1f, 1.1f);
             _subHUD.fade -= 0.02f;
-            if (_subHUD.fade < 0.0)
+            if (_subHUD.fade < 0f)
                 _subHUD.fade = 0f;
             _virtualBackground.layer.fade -= 0.02f;
-            if (_virtualBackground.layer.fade < 0.0)
+            if (_virtualBackground.layer.fade < 0f)
                 _virtualBackground.layer.fade = 0f;
-            if (!Network.isServer || _subHUD.fade > 0.0 || _intermissionSlide < 0.99f || !ready)
+            if (!Network.isServer || _subHUD.fade > 0f || _intermissionSlide < 0.99f || !ready)
                 return;
             Music.volume = 1f;
             current = new RockScoreboard(_next);
@@ -94,11 +94,11 @@ namespace DuckGame
         {
             if (l == _subHUD)
             {
-                float num1 = 160f;
-                float num2 = _yScroll * num1;
-                _virtualBackground.parallax.y = (float)(-num1 * (1.0 - num2 / num1));
+                float maxYPos = 160f;
+                float ypos = _yScroll * maxYPos;
+                _virtualBackground.parallax.y = ypos - maxYPos;
                 _bigDome.depth = (Depth)0.5f;
-                Graphics.Draw(_bigDome, 160f, 130f + num2);
+                Graphics.Draw(_bigDome, 160f, 130f + ypos);
                 float deg = 45f;
                 float rad1 = Maths.DegToRad(deg);
                 float rad2 = Maths.DegToRad(25f + rotter);
@@ -111,14 +111,14 @@ namespace DuckGame
                         _smallDome.depth = (Depth)0.6f;
                     else
                         _smallDome.depth = (Depth)0.4f;
-                    Vec2 vec2_1 = new Vec2((float)Math.Cos(rad2 + index * rad1), (float)(-Math.Sin(rad2 + index * rad1) * (0.4f * (1.0 - num2 / num1))));
-                    Vec2 vec2_2 = new Vec2(160f, 130f + num2) + vec2_1 * 100f;
-                    Graphics.Draw(_smallDome, vec2_2.x, vec2_2.y - 30f);
+                    Vec2 pos = new Vec2((float)Math.Cos(rad2 + index * rad1), (float)(-Math.Sin(rad2 + index * rad1) * (0.4f * (1f - ypos / maxYPos))));
+                    Vec2 drawPos = new Vec2(160f, 130f + ypos) + pos * 100f;
+                    Graphics.Draw(_smallDome, drawPos.x, drawPos.y - 30f);
                     _smallPillar.depth = _smallDome.depth;
-                    Graphics.Draw(_smallPillar, vec2_2.x, vec2_2.y - 11f);
+                    Graphics.Draw(_smallPillar, drawPos.x, drawPos.y - 11f);
                     _domeBleachers.depth = _smallDome.depth + 1;
                     _domeBleachers.frame = 7 - (index + 5) % 8;
-                    Graphics.Draw(_domeBleachers, vec2_2.x, vec2_2.y - 30f);
+                    Graphics.Draw(_domeBleachers, drawPos.x, drawPos.y - 30f);
                 }
             }
             else if (l == Layer.HUD)
@@ -127,13 +127,13 @@ namespace DuckGame
                 _cornerWedge.depth = (Depth)0.7f;
                 if (_intermissionSlide > 0.01f)
                 {
-                    float x1 = (float)(_intermissionSlide * 320.0 - 320.0);
+                    float x = _intermissionSlide * 320f - 320f;
                     float y = 60f;
-                    Graphics.DrawRect(new Vec2(x1, y), new Vec2(x1 + 320f, y + 30f), Color.Black, (Depth)0.9f);
-                    float x2 = (float)(320.0 - _intermissionSlide * 320.0);
-                    float num = 60f;
-                    Graphics.DrawRect(new Vec2(x2, num + 30f), new Vec2(x2 + 320f, num + 60f), Color.Black, (Depth)0.9f);
-                    Graphics.Draw(_intermissionText, (float)(_intermissionSlide * 336.0 - 320.0), num + 18f);
+                    Graphics.DrawRect(new Vec2(x, y), new Vec2(x + 320f, y + 30f), Color.Black, (Depth)0.9f);
+                    x = 320f - _intermissionSlide * 320f;
+                    y = 60f;
+                    Graphics.DrawRect(new Vec2(x, y + 30f), new Vec2(x + 320f, y + 60f), Color.Black, (Depth)0.9f);
+                    Graphics.Draw(_intermissionText, _intermissionSlide * 336f - 320f, y + 18f);
                     _intermissionText.depth = (Depth)0.91f;
                 }
             }
