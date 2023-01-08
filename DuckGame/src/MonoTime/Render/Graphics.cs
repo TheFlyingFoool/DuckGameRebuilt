@@ -745,7 +745,7 @@ namespace DuckGame
             Material material = new MaterialRecolor(new Vec3(color.x / byte.MaxValue, color.y / byte.MaxValue, color.z / byte.MaxValue));
             RenderTarget2D t = new RenderTarget2D(sprite.w, sprite.h);
             SetRenderTarget(t);
-            Clear(new Color(0, 0, 0, 0));
+            Clear(Color.Transparent);
             material.Apply();
             screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, material.effect, Matrix.Identity);
             Draw(sprite, new Vec2(), new Rectangle?(), Color.White, 0f, new Vec2(), new Vec2(1f, 1f), SpriteEffects.None, (Depth)0.5f);
@@ -764,7 +764,7 @@ namespace DuckGame
             Material material = new MaterialRecolor(new Vec3(color.x / byte.MaxValue, color.y / byte.MaxValue, color.z / byte.MaxValue));
             RenderTarget2D t = new RenderTarget2D(sprite.w, sprite.h);
             SetRenderTarget(t);
-            Clear(new Color(0, 0, 0, 0));
+            Clear(Color.Transparent);
             material.Apply();
             screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, material.effect, Matrix.Identity);
             Draw(sprite, new Vec2(), new Rectangle?(), Color.White, 0f, new Vec2(), new Vec2(1f, 1f), SpriteEffects.None, (Depth)0.5f);

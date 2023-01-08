@@ -108,6 +108,9 @@ namespace DuckGame
 
         public static implicit operator Texture2D(Tex2D tex) => tex._base;
 
-        public static implicit operator Tex2D(Texture2D tex) => Content.GetTex2D(tex);
+        public static implicit operator Tex2D(Texture2D tex)
+        {
+            return Content.GetTex2D(tex);
+        }
     }
 }

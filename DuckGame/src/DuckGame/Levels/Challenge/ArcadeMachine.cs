@@ -203,7 +203,7 @@ namespace DuckGame
                     ReferenceStencil = 1,
                     DepthBufferEnable = false
                 };
-                Graphics.Clear(new Color(0, 0, 0, 0));
+                Graphics.Clear(Color.Transparent);
                 Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)_alphaTestEffect, camera.getMatrix());
                 Graphics.Draw(_machineStyleSprite, _styleOffsetX, _styleOffsetY, -0.9f);
                 Graphics.Draw(_customMachineOverlayMask, 0f, 0f, (Depth)0.9f);
@@ -214,7 +214,7 @@ namespace DuckGame
                 for (int index = 0; index < tex.Width * tex.Height; ++index)
                 {
                     if (data[index].r == 250 && data[index].g == 0 && data[index].b == byte.MaxValue)
-                        data[index] = new Color(0, 0, 0, 0);
+                        data[index] = Color.Transparent;
                 }
                 tex.SetData(data);
                 _customMachineUnderlay = new Sprite((Tex2D)tex);

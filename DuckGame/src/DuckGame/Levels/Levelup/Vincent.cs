@@ -1320,7 +1320,7 @@ namespace DuckGame
                         ReferenceStencil = 1,
                         DepthBufferEnable = false
                     };
-                    Graphics.Clear(new Color(0, 0, 0, 0));
+                    Graphics.Clear(Color.Transparent);
                     Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, null, camera.getMatrix());
                     num1 = Math.Min(Math.Max(products[index].cost, 0), 9999);
                     string text = "$" + num1.ToString();

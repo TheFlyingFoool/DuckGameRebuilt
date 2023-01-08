@@ -847,7 +847,7 @@ namespace DuckGame
                     if (num12 > 0f)
                         num13 = 0.9f;
                     if (color4.r == 0)
-                        data[index3 + index2 * t.width] = new Color(0, 0, 0, 0);
+                        data[index3 + index2 * t.width] = Color.Transparent;
                     else if (color4.r < 110)
                     {
                         if (flag4)
@@ -1000,7 +1000,7 @@ namespace DuckGame
                     if (num11 > 0f)
                         num12 = 0.9f;
                     if (color4.r == 0)
-                        data[index3 + index2 * t.width] = new Color(0, 0, 0, 0);
+                        data[index3 + index2 * t.width] = Color.Transparent;
                     else if (color4.r < 110)
                     {
                         if (flag3)

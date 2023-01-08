@@ -1671,7 +1671,7 @@ namespace DuckGame
                                         _procContext.ApplyStates();
                                         level = new Level
                                         {
-                                            backgroundColor = new Color(0, 0, 0, 0)
+                                            backgroundColor = Color.Transparent
                                         };
                                         core.currentLevel = level;
                                         RandomLevelNode.editorLoad = true;

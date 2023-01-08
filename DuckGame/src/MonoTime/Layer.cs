@@ -29,7 +29,7 @@ namespace DuckGame
         private bool _perspective;
         private BlendState _blend = BlendState.AlphaBlend;
         private BlendState _targetBlend = BlendState.AlphaBlend;
-        private Color _targetClearColor = new Color(0, 0, 0, 0);
+        private Color _targetClearColor = Color.Transparent;
         private DepthStencilState _targetDepthStencil = DepthStencilState.Default;
         private RenderTarget2D _slaveTarget;
         private float _targetFade = 1f;
