@@ -19,7 +19,6 @@ namespace DuckGame
         public static Vec2 bottomright = new Vec2(100f, 100f);
         //private static float offset = 4000000.0f;
         //public static float cellsize = 100f;
-
         static void SaveAsImage(List<KeyValuePair<Texture2D, string>> texs, PackingRectangle[] rectangles, in PackingRectangle bounds, string file)
         {
             int size = Math.Max((int)bounds.Width, (int)bounds.Height);
