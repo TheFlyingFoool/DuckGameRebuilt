@@ -279,7 +279,7 @@ namespace DuckGame
         //private static Material kGhostMaterial;
         public int waitGhost;
         private ConnectionIndicators _indicators;
-
+        private bool _protectedFromFire;
         public override bool destroyed => _destroyed || forceDead;
 
         public byte quackPitch
@@ -366,7 +366,7 @@ namespace DuckGame
 
         private void AssignNetProfileIndex(byte pIndex)
         {
-            DevConsole.Log(DCSection.General, "Assigning net profile index (" + pIndex.ToString() + "\\" + Profiles.alllist.Count().ToString() + ")");
+            DevConsole.Log(DCSection.General, "Assigning net profile index (" + pIndex.ToString() + "\\" + Profiles.alllist.Count.ToString() + ")");
             _netProfileIndex = pIndex;
             Profile profile = Profiles.alllist[_netProfileIndex];
             if (Network.isClient && Network.InLobby())
@@ -4025,12 +4025,19 @@ namespace DuckGame
         {
             get
             {
+                if (_protectedFromFire)
+                {
+                    return true;
+                }
                 if (holdObject != null && holdObject.heat < -0.05f || holstered != null && holstered.heat < -0.05f)
                     return true;
                 return skewered != null && skewered.heat < -0.05f;
             }
+            set
+            {
+                _protectedFromFire = value;
+            }
         }
-
         public override void HeatUp(Vec2 location)
         {
             if (holdObject != null && holdObject.heat < -0.05f)

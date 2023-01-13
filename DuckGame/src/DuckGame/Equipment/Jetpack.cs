@@ -45,7 +45,7 @@ namespace DuckGame
             _sprite.frame = (int)(_heat * 7f);
             if (_equippedDuck != null)
             {
-                float num1 = 0f;
+                float smokeOff = 0f;
                 _offset = new Vec2(-3f, 3f);
                 angle = 0f;
                 if (_equippedDuck.sliding && _equippedDuck._trapped == null)
@@ -55,7 +55,7 @@ namespace DuckGame
                     else
                         angle = (float)(Math.PI / 2.0f);
                     _offset.y += 12f;
-                    num1 -= 6f;
+                    smokeOff -= 6f;
                 }
                 if (_equippedDuck.crouch && !_equippedDuck.sliding)
                     _offset.y += 4f;
@@ -68,20 +68,20 @@ namespace DuckGame
                 else if (_equippedDuck.ragdoll != null && _equippedDuck.ragdoll.part1 != null)
                     propel = _equippedDuck.ragdoll.part1;
                 _sprite.flipH = _equippedDuck._sprite.flipH;
-                if (_on && _heat < 1.0)
+                if (_on && _heat < 1f)
                 {
                     if (_equippedDuck._trapped == null && _equippedDuck.crouch)
                         _equippedDuck.sliding = true;
                     if (isServerForObject)
                         Global.data.jetFuelUsed.valueFloat += Maths.IncFrameTimer();
-                    _heat += 11f / 1000f;
+                    _heat += 0.011f;
                     if (propel is RagdollPart)
                     {
                         ++Global.data.timeJetpackedAsRagdoll;
                         float angle = this.angle;
                         this.angle = propel.angle;
-                        Vec2 vec2_1 = Offset(new Vec2(0f, 8f));
-                        Level.Add(new JetpackSmoke(vec2_1.x, vec2_1.y));
+                        Vec2 offset = Offset(new Vec2(0f, 8f));
+                        Level.Add(new JetpackSmoke(offset.x, offset.y));
                         this.angle = angle;
                         if (propel.velocity.length < 7f)
                         {
@@ -120,7 +120,7 @@ namespace DuckGame
                     }
                     else
                     {
-                        Level.Add(new JetpackSmoke(x, y + 8f + num1));
+                        Level.Add(new JetpackSmoke(x, y + 8f + smokeOff));
                         if (angle > 0f)
                         {
                             if (propel.hSpeed < 6f)

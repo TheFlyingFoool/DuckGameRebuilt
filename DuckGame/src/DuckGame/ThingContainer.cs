@@ -80,7 +80,7 @@ namespace DuckGame
                             bitBuffer3.Write(blockGroup.collisionOffset.y);
                             bitBuffer3.Write(blockGroup.collisionSize.x);
                             bitBuffer3.Write(blockGroup.collisionSize.y);
-                            bitBuffer3.Write(blockGroup.blocks.Count());
+                            bitBuffer3.Write(blockGroup.blocks.Count);
                             foreach (Block block in blockGroup.blocks)
                                 bitBuffer3.Write((short)_things.IndexOf(block));
                             ++val;
@@ -380,7 +380,7 @@ namespace DuckGame
                         str2 = str2 + Change.ToString(blockGroup.collisionOffset.y) + ",";
                         str2 = str2 + Change.ToString(blockGroup.collisionSize.x) + ",";
                         str2 = str2 + Change.ToString(blockGroup.collisionSize.y) + ",";
-                        str2 = str2 + Change.ToString(blockGroup.blocks.Count()) + ",";
+                        str2 = str2 + Change.ToString(blockGroup.blocks.Count) + ",";
                         foreach (Block block in blockGroup.blocks)
                             str2 = str2 + Change.ToString(_things.IndexOf(block)) + ",";
                     }
@@ -421,7 +421,7 @@ namespace DuckGame
             if (num1 == 0)
                 flag1 = false;
             List<AutoBlock> autoBlockList = new List<AutoBlock>();
-            for (int index = num1 != 0 ? 1 : 0; index < source1.Count(); index += 3)
+            for (int index = num1 != 0 ? 1 : 0; index < source1.Length; index += 3)
             {
                 float num2 = Change.ToSingle(source1[index]);
                 float single = Change.ToSingle(source1[index + 1]);
@@ -495,7 +495,7 @@ namespace DuckGame
                 {
                     string[] source2 = dxmlNode.Value.Split(',');
                     int num3;
-                    for (int index1 = 0; index1 < source2.Count(); index1 = num3 + 7)
+                    for (int index1 = 0; index1 < source2.Length; index1 = num3 + 7)
                     {
                         BlockGroup blockGroup = new BlockGroup
                         {

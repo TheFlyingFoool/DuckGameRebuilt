@@ -225,7 +225,7 @@ namespace DuckGame
         public override bool Deserialize(BinaryClassChunk node)
         {
             base.Deserialize(node);
-            if (!Network.isActive)
+            if (!Network.isActive && MonoMain.experimental)
             {
                 codestring = node.GetProperty<string>("codestring");
                 if (codestring == null || codestring == "")
@@ -257,7 +257,7 @@ public class CodeButton
         public override bool LegacyDeserialize(DXMLNode node)
         {
             base.LegacyDeserialize(node);
-            if (!Network.isActive)
+            if (!Network.isActive && MonoMain.experimental)
             {
                 DXMLNode dxmlNode1 = node.Element("codestring");
                 if (dxmlNode1 != null)

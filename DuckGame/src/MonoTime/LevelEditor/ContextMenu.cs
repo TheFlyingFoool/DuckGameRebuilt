@@ -134,7 +134,7 @@ namespace DuckGame
                     _selectedIndex = 0;
                     if (_items.Count > 0)
                     {
-                        while (_selectedIndex < _items.Count() - 1 && _items[_selectedIndex].greyOut)
+                        while (_selectedIndex < _items.Count - 1 && _items[_selectedIndex].greyOut)
                             ++_selectedIndex;
                         if (!_items[_selectedIndex].greyOut)
                             _opening = true;

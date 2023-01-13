@@ -336,9 +336,9 @@ namespace DuckGame
                     Thread_Decoder_LoadNewSong();
                     if (volume == 0.0 || !_valid || _decoderSong == null)
                     {
-                        for (int index = 0; index < _buffer.Count(); ++index)
+                        for (int index = 0; index < _buffer.Length; ++index)
                             _buffer[index] = 0;
-                        _instance.SubmitBuffer(_buffer, 0, _buffer.Count());
+                        _instance.SubmitBuffer(_buffer, 0, _buffer.Length);
                         return;
                     }
                     do

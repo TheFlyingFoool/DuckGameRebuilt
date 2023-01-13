@@ -1671,7 +1671,7 @@ namespace DuckGame
                                         _procContext.ApplyStates();
                                         level = new Level
                                         {
-                                            backgroundColor = new Color(0, 0, 0, 0)
+                                            backgroundColor = Color.Transparent
                                         };
                                         core.currentLevel = level;
                                         RandomLevelNode.editorLoad = true;
@@ -4119,7 +4119,7 @@ namespace DuckGame
             {
                 string[] source = dxmlNode8.Value.Split('|');
                 _currentLevelData.workshopData.tags = new List<string>();
-                if (source.Count() != 0 && source[0] != "")
+                if (source.Length != 0 && source[0] != "")
                     _currentLevelData.workshopData.tags = source.ToList();
             }
 
@@ -5272,7 +5272,7 @@ namespace DuckGame
                     .ToArray();
                 AllStateFields[thingType] = fields.Where(val => val.FieldType == stateFieldType)
                     .ToArray();
-                if (AllStateFields[thingType].Count() > 0)
+                if (AllStateFields[thingType].Length > 0)
                 {
                     IDToType[key] = thingType;
                     if (thingType.Assembly == executingAssembly &&

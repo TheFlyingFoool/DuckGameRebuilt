@@ -20,6 +20,7 @@ namespace DuckGame
             List<Type> TargetCustomAttributes = new List<Type>()
             {
                 typeof(AutoConfigFieldAttribute),
+                typeof(AdvancedConfigAttribute),
                 typeof(FireSerializerModuleAttribute),
                 typeof(DevConsoleCommandAttribute),
                 typeof(DrawingContextAttribute),
@@ -76,6 +77,7 @@ namespace DuckGame
             }
             //GlobalOnSearchComplete.Invoke(LookupTable);
             AutoConfigFieldAttribute.OnResults(LookupTable);
+            AdvancedConfigAttribute.OnResults(LookupTable);
             FireSerializerModuleAttribute.OnResults(LookupTable);
             DevConsoleCommandAttribute.OnResults(LookupTable);
             DrawingContextAttribute.OnResults(LookupTable);

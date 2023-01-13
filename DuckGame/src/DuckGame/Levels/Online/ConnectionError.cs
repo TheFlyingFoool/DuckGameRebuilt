@@ -38,15 +38,11 @@ namespace DuckGame
             if (joinLobby != null)
             {
                 string lobbyData = joinLobby.GetLobbyData("mods");
-                if (lobbyData != null && lobbyData != "")
+                if (lobbyData != null && lobbyData != "" && lobbyData.Split('|').Contains("LOCAL"))
                 {
-                    if (lobbyData.Split('|').Contains("LOCAL"))
-                    {
-                        _text = "Host has non-workshop mods enabled!";
-                        goto label_6;
-                    }
+                    _text = "Host has non-workshop mods enabled!";
                 }
-                if (_text == "Host has different Mods enabled!")
+                else if (_text == "Host has different Mods enabled!")
                 {
                     _downloadModsMenu = new UIMenu("MOD LIST INCOMPATIBLE!", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 274f, conString: "@SELECT@SELECT");
                     _downloadModsMenu.Add(new UIText("Your mods don't match with", Colors.DGBlue), true);
@@ -63,7 +59,6 @@ namespace DuckGame
                     MonoMain.pauseMenu = _downloadModsMenu;
                 }
             }
-        label_6:
             core.gameFinished = true;
             _startCalled = true;
             HUD.AddCornerMessage(HUDCorner.BottomRight, "@START@CONTINUE");
@@ -83,7 +78,7 @@ namespace DuckGame
         public override void Draw()
         {
             string[] source = _text.Split('{');
-            float num = -(source.Count() - 1) * 8;
+            float num = -(source.Length - 1) * 8;
             foreach (string text in source)
             {
                 float stringHeight = Graphics.GetStringHeight(text);

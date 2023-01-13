@@ -301,50 +301,53 @@ namespace DuckGame
 
         public static FanNum GetFan()
         {
-            if (extraFans > 0 && Rando.Float(1f) > 0.5)
+            if (Crowd.extraFans > 0 && Rando.Float(1f) > 0.5f)
             {
-                --extraFans;
+                Crowd.extraFans--;
                 return null;
             }
             List<FanNum> fanNumList = new List<FanNum>();
-            foreach (KeyValuePair<Profile, FanNum> fan in fanList)
+            foreach (KeyValuePair<Profile, FanNum> pair in Crowd.fanList)
             {
-                if (fan.Value.totalFans > 0)
-                    fanNumList.Add(fan.Value);
+                if (pair.Value.totalFans > 0)
+                {
+                    fanNumList.Add(pair.Value);
+                }
             }
             if (fanNumList.Count == 0)
+            {
                 return null;
+            }
             FanNum fanNum;
             while (true)
             {
-                do
+                fanNum = fanNumList[Rando.Int(fanNumList.Count - 1)];
+                if (fanNumList.Count == 1)
                 {
-                    fanNum = fanNumList[Rando.Int(fanNumList.Count - 1)];
-                    if (fanNumList.Count == 1)
-                        goto label_14;
+                    break;
                 }
-                while (Math.Min(fanNum.loyalFans, 100) / 100f * 0.5f + Rando.Float(0.5f) >= Rando.Float(1f));
-                fanNumList.Remove(fanNum);
+                if (Math.Min(fanNum.loyalFans, 100) / 100f * 0.5f + Rando.Float(0.5f) < Rando.Float(1f))
+                {
+                    fanNumList.Remove(fanNum);
+                }
             }
-        label_14:
             Profile profile = fanNum.profile;
-            if (fanNum.loyalFans > 0 && fanNum.unloyalFans == 0 | Rando.Float(1f) > 0.3f)
+            if (fanNum.loyalFans > 0 && ((fanNum.unloyalFans == 0) | (Rando.Float(1f) > 0.3f)))
             {
-                --fanNum.loyalFans;
-                return new FanNum()
+                fanNum.loyalFans--;
+                return new FanNum
                 {
                     profile = profile,
                     loyalFans = 1
                 };
             }
-            --fanNum.unloyalFans;
-            return new FanNum()
+            fanNum.unloyalFans--;
+            return new FanNum
             {
                 profile = profile,
                 unloyalFans = 1
             };
         }
-
         public static int totalFans
         {
             get

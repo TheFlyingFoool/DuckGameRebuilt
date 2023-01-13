@@ -727,7 +727,7 @@ namespace DuckGame
                 _keyStatePrev = _keyState;
                 _keyState = Microsoft.Xna.Framework.Input.Keyboard.GetState();
                 _keyboardPress = false;
-                int num = _keyState.GetPressedKeys().Count();
+                int num = _keyState.GetPressedKeys().Length;
                 if (num != _lastKeyCount && num != 0)
                     _keyboardPress = true;
                 _lastKeyCount = num;
@@ -882,7 +882,6 @@ namespace DuckGame
             {
                 case -1:
                 case 0:
-                label_7:
                     return charFromKey;
                 case 1:
                     charFromKey = pwszBuff[0];
@@ -890,13 +889,12 @@ namespace DuckGame
                     {
                         case 'ª':
                             charFromKey = '~';
-                            goto label_7;
+                            break;
                         case 'º':
                             charFromKey = '`';
-                            goto label_7;
-                        default:
-                            goto label_7;
+                            break;
                     }
+                    return charFromKey;
                 default:
                     charFromKey = pwszBuff[0];
                     goto case -1;

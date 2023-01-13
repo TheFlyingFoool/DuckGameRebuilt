@@ -136,7 +136,7 @@ namespace DuckGame
                 }
                 foreach (string str in directories)
                 {
-                    if (DuckFile.GetFiles(str, "*.lev", SearchOption.AllDirectories).Count() > 0)
+                    if (DuckFile.GetFiles(str, "*.lev", SearchOption.AllDirectories).Length > 0)
                         AddItem(new LSItem(0f, 0f, this, str, pIsModPath: isModPath));
                 }
                 List<string> stringList = new List<string>();
@@ -339,7 +339,7 @@ namespace DuckGame
                         if (_selectedItem > 0)
                             --_selectedItem;
                         else
-                            _selectedItem = _items.Count() - 1;
+                            _selectedItem = _items.Count - 1;
                         if (_selectedItem < _topIndex)
                             _topIndex = _selectedItem;
                         if (_selectedItem >= _topIndex + _maxItems)
@@ -347,7 +347,7 @@ namespace DuckGame
                     }
                     else if (Input.Pressed(Triggers.MenuDown))
                     {
-                        if (_selectedItem < _items.Count() - 1)
+                        if (_selectedItem < _items.Count - 1)
                             ++_selectedItem;
                         else
                             _selectedItem = 0;
@@ -367,8 +367,8 @@ namespace DuckGame
                     else if (Input.Pressed(Triggers.MenuRight))
                     {
                         _selectedItem += _maxItems - 1;
-                        if (_selectedItem > _items.Count() - 1)
-                            _selectedItem = _items.Count() - 1;
+                        if (_selectedItem > _items.Count - 1)
+                            _selectedItem = _items.Count - 1;
                         if (_selectedItem >= _topIndex + _maxItems)
                             _topIndex = _selectedItem + 1 - _maxItems;
                     }

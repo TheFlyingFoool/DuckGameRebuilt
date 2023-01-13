@@ -1136,7 +1136,7 @@ namespace DuckGame
                 ReferenceStencil = 1,
                 DepthBufferEnable = false
             };
-            Graphics.Clear(transparentBack ? new Color(0, 0, 0, 0) : new Color(15, 4, 16));
+            Graphics.Clear(transparentBack ? Color.Transparent : new Color(15, 4, 16));
             Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)(effect == null ? _alphaTestEffect : effect), camera.getMatrix());
             Draw();
             Graphics.screen.End();
@@ -1189,7 +1189,7 @@ namespace DuckGame
                 ReferenceStencil = 1,
                 DepthBufferEnable = false
             };
-            Graphics.Clear(transparentBack ? new Color(0, 0, 0, 0) : new Color(30, 30, 30));
+            Graphics.Clear(transparentBack ? Color.Transparent : new Color(30, 30, 30));
             Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)(effect == null ? _alphaTestEffect : effect), camera.getMatrix());
             Draw();
             Graphics.screen.End();

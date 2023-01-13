@@ -662,7 +662,7 @@ namespace DuckGame
                     if (!_searchingIsOver)
                     {
                         string str3 = ".";
-                        if (str1.Count() > 0 && str1.Last() == '!' || str1.Last() == '.' || str1.Last() == '?')
+                        if (str1.Length > 0 && str1.Last() == '!' || str1.Last() == '.' || str1.Last() == '?')
                         {
                             str3 = str1.Last().ToString() ?? "";
                             str1 = str1.Substring(0, str1.Length - 1);

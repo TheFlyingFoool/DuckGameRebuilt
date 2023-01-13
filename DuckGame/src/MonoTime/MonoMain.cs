@@ -443,7 +443,7 @@ namespace DuckGame
                             Tex2D tex2D = new Tex2D(128, 128);
                             Color[] colorArray = new Color[16384];
                             int index1 = 0;
-                            for (int index2 = 0; index2 < source.Count() && index1 < colorArray.Count(); ++index2)
+                            for (int index2 = 0; index2 < source.Length && index1 < colorArray.Length; ++index2)
                             {
                                 byte num2 = source[index2];
                                 for (int index3 = 0; index3 < 8; ++index3)
@@ -817,8 +817,8 @@ namespace DuckGame
             if (result == null || result.details == null)
                 return;
             WorkshopItem publishedFile = result.details.publishedFile;
-            int num1 = DuckFile.GetFiles(publishedFile.path).Count();
-            int num2 = DuckFile.GetDirectories(publishedFile.path).Count();
+            int num1 = DuckFile.GetFiles(publishedFile.path).Length;
+            int num2 = DuckFile.GetDirectories(publishedFile.path).Length;
             if ((num1 != 0 || num2 != 0) && (publishedFile.stateFlags & WorkshopItemState.Installed) != WorkshopItemState.None && (publishedFile.stateFlags & WorkshopItemState.NeedsUpdate) == WorkshopItemState.None)
                 return;
             availableModsToDownload.Add(publishedFile);
@@ -1603,7 +1603,8 @@ namespace DuckGame
                                 int height = Int32.Parse(texturedetails[3]);
                                 int width = Int32.Parse(texturedetails[4]);
 
-                                DuckGame.Content.offests.Add(texturename, new Microsoft.Xna.Framework.Rectangle(x, y, width, height));
+                                if (!DuckGame.Content.offests.ContainsKey(texturename))
+                                    DuckGame.Content.offests.Add(texturename, new Microsoft.Xna.Framework.Rectangle(x, y, width, height));
                             }
                             catch
                             {

@@ -29,6 +29,7 @@ namespace DuckGame
         public string? Name { get; set; } = null;
         public string? Description { get; set; } = null;
         public bool IsCheat { get; set; }
+        public bool CanCrash { get; set; }
         public string[] Aliases { get; set; } = Array.Empty<string>();
 
         static DevConsoleCommandAttribute()
@@ -51,11 +52,11 @@ namespace DuckGame
 
                 if (!parameters.Any())
                 {
-                    DevConsole.AddCommand(new CMD(realName, delegate () { method.Invoke(null, null); }));
+                    DevConsole.AddCommand(new CMD(realName, delegate () { method.Invoke(null, null); }) { cancrash = attribute.CanCrash});
                     continue;
                 }
 
-                int parameterLength = parameters.Count();
+                int parameterLength = parameters.Length;
                 CMD.Argument[] arguments = new CMD.Argument[parameterLength];
                 for (int i = 0; i < arguments.Length; i++)
                 {
@@ -88,6 +89,7 @@ namespace DuckGame
                     }
                 })
                 {
+                    cancrash = attribute.CanCrash,
                     description = attribute.Description ?? "",
                     cheat = attribute.IsCheat,
                     aliases = attribute.Aliases.ToList()

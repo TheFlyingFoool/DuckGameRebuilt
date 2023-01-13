@@ -136,7 +136,7 @@ namespace DuckGame
                     if (Network.isActive)
                         NetSoundEffect.Play("equipmentTing");
                 }
-                _equipmentHealth = Lerp.Float(_equipmentHealth, 1f, 3f / 1000f);
+                _equipmentHealth = Lerp.Float(_equipmentHealth, 1f, 0.003f);
             }
             UpdateEquippedCollision();
             if (destroyed)

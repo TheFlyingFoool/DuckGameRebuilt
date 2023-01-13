@@ -98,8 +98,8 @@ namespace DuckGame
                 else if (InputProfile.active.Pressed(Triggers.Select))
                     _listener.CardSelected(_cards[_selectedCardIndex]);
             }
-            if (_selectedCardIndex >= _cards.Count())
-                _selectedCardIndex = _cards.Count() - 1;
+            if (_selectedCardIndex >= _cards.Count)
+                _selectedCardIndex = _cards.Count - 1;
             else if (_selectedCardIndex < 0)
                 _selectedCardIndex = 0;
             if (_levelIndex + (_numCardsPerScreen - 1) < _selectedCardIndex)

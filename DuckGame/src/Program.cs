@@ -44,10 +44,10 @@ namespace DuckGame
 #endif
         public static readonly bool HasInternet = Internet.IsAvailable();
         // this should be formatted like X.X.X where each X is a number
-        public const string CURRENT_VERSION_ID = "1.0.10";
+        public static string CURRENT_VERSION_ID = "1.0.10";
 
         // dont change this unless you know what you're doing -Firebreak
-        public const string CURRENT_VERSION_ID_FORMATTED = $"v{CURRENT_VERSION_ID}-beta";
+        public static string CURRENT_VERSION_ID_FORMATTED = $"v{CURRENT_VERSION_ID}-beta";
 
         public static bool Prestart = DirtyPreStart();
 
@@ -308,7 +308,7 @@ namespace DuckGame
                 {
                     case "+connect_lobby":
                         ++index;
-                        if (args.Count() > index)
+                        if (args.Length > index)
                         {
                             try
                             {
@@ -322,20 +322,20 @@ namespace DuckGame
                         break;
                     case "+password":
                         ++index;
-                        if (args.Count() > index)
+                        if (args.Length > index)
                             MonoMain.lobbyPassword = args[index];
                         break;
                     case "+editortest":
                         MonoMain.startInEditor = true;
                         ++index;
-                        if (args.Count() > index)
+                        if (args.Length > index)
                         {
                             StartinEditorLevelName = args[index];
                         }
                         break;
                     case "+controllercount":
                         ++index;
-                        if (args.Count() > index)
+                        if (args.Length > index)
                         {
                             try
                             {
@@ -348,7 +348,7 @@ namespace DuckGame
                     case "+screentile":
                         doscreentileing = true;
                         ++index;
-                        if (args.Count() > index)
+                        if (args.Length > index)
                         {
                             try
                             {
@@ -362,7 +362,7 @@ namespace DuckGame
 
                         }
                         ++index;
-                        if (args.Count() > index)
+                        if (args.Length > index)
                         {
                             try
                             {
@@ -526,7 +526,7 @@ namespace DuckGame
                         break;
                     case "-command":
                         ++index;
-                        if (index < args.Count())
+                        if (index < args.Length)
                             DevConsole.startupCommands.Add(args[index]);
                         break;
                     case "-useRPC":
@@ -1110,8 +1110,6 @@ namespace DuckGame
             string dgrExePath = Assembly.GetEntryAssembly()!.Location;
             string parentDirectoryPath = Path.GetDirectoryName(dgrExePath);
             string zipPath = parentDirectoryPath + "/DuckGameRebuilt.zip";
-
-            const string tempFileExtension = ".tmp";
             try
             {
                 foreach (string filePath in Directory.GetFiles(parentDirectoryPath, "*.tmp")) // deletes .tmp files from past updating sequence 
@@ -1151,7 +1149,13 @@ namespace DuckGame
             FileStream dgrZipStream = DownloadFile(latestDgrReleaseUrl, zipPath);
             using ZipArchive archive = new(dgrZipStream);
             archive.ExtractToDirectoryOverride(parentDirectoryPath);
-            Process.Start(dgrExePath, "");
+            string[] args = Environment.GetCommandLineArgs();
+            string argstring = "";
+            for (int i = 1; i < args.Length; i++)
+            {
+                argstring += args[i] + " ";
+            }
+            Process.Start(dgrExePath, argstring);
             // tells dg to kill itself
             fullstop = true;
             Environment.Exit(0); // to kill it self faster :smile:
@@ -1483,8 +1487,8 @@ namespace DuckGame
                 {
                     OSName = Environment.UserName;
                 }
-                string White = """\u001b[0m""";
-                string Green = """\u001b[0;32m""";
+                string White = "\\u001b[0m";
+                string Green = "\\u001b[0;32m";
                 if (ModLoader.LoadedMods.Count == 0)
                 {
                     ModsActive = "```ansi\\n[" + Green + "N/A" + White + "]```";
@@ -1501,7 +1505,7 @@ namespace DuckGame
                         {
                             modstr = modstr.Substring((i + 1) % 2 == 0 ? 3 : 2);
                             lIndex += ModsActive.Length + modstr.Length;
-                            ModsActive += """ ```"},{"name": "** **", "value": "```ansi\n""" + Green;
+                            ModsActive += " ```\"},{\"name\": \"** **\", \"value\": \"```ansi\\n" + Green;
                         }
                         ModsActive += modstr;
                     }
@@ -1515,20 +1519,11 @@ namespace DuckGame
                 string Commit = "N/A";
                 gitVersion = Escape(gitVersion.Replace("\n", ""));
                 Commit = Escape(CURRENT_VERSION_ID_FORMATTED) + " " + gitVersion + @"``` [View in repo](https://github.com/Hyeve-jrs/DuckGames/commit/" + gitVersion.Replace("[Modified]", "") + ") ";
-                string UserInfo = $$"""```ansi\nUsername: {{Green + Username + White}} \nSteam ID: {{Green + Steamid + White}}\n```""";
-                string SystemInfo = $$"""```ansi\nOS: {{Green + OS + White}} \nCommand Line:{{Green + CommandLine + White}}\n```""";
-                string GameInfo = $$"""```ansi\nPlayers In Lobby: [{{Green + PlayersInLobby + White}}]\nCommit: {{Green + Commit}}""";
-                string CrashInfo = $$"""```ansi\n{{Green + ExceptionMessage}}```""";
-                string jsonmessage = $$"""
-                    {"content": "", "tts": false, "embeds":
-                    [{"type": "rich", "description": "", "color": 9212569, "fields":[
-                        {"name": "User Info", "value": "{{UserInfo}}"},
-                        {"name": "System Info", "value": "{{SystemInfo}}"},
-                        {"name": "Game Info", "value": "{{GameInfo}}"},
-                        {"name": "Mods", "value": "{{ModsActive}}"},
-                        {"name": "Exception Message", "value": "{{CrashInfo}}"}
-                    ]}]}
-                    """;
+                string UserInfo = "```ansi\\nUsername: " + Green + Username + White + " \\nSteam ID: " + Green + Steamid + White + "\\n```";
+                string SystemInfo = "```ansi\\nOS: " + Green + OS + White + " \\nCommand Line:" + Green + CommandLine + White + "\\n```";
+                string GameInfo = "```ansi\\nPlayers In Lobby: [" + Green + PlayersInLobby + White + "]\\nCommit: " + Green + Commit;
+                string CrashInfo = "```ansi\\n" + Green + ExceptionMessage + "```";
+                string jsonmessage = "{ \"content\": \"\", \"tts\": false, \"embeds\": [{ \"type\": \"rich\", \"description\": \"\", \"color\": 9212569, \"fields\":[ { \"name\": \"User Info\", \"value\": \"" + UserInfo + "\"}, { \"name\": \"System Info\", \"value\": \"" + SystemInfo + "\"}, { \"name\": \"Game Info\", \"value\": \""+ GameInfo + "\"}, { \"name\": \"Mods\", \"value\": \""+ ModsActive + "\"}, { \"name\": \"Exception Message\", \"value\": \"" + CrashInfo + "\"} ]}]}";
                 if (someprivacy)
                 {
                     jsonmessage = jsonmessage.Replace(Environment.UserName, "#Privacy");

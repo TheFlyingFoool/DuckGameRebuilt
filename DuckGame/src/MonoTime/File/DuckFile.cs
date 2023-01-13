@@ -630,9 +630,9 @@ namespace DuckGame
             {
                 str = "/";
             }
-            for (int index = 0; index < source.Count(); ++index)
+            for (int index = 0; index < source.Length; ++index)
             {
-                if (!(source[index] == "") && !(source[index] == "/") && (!(source[index].Contains('.') | ignoreLast) || index != source.Count() - 1))
+                if (!(source[index] == "") && !(source[index] == "/") && (!(source[index].Contains('.') | ignoreLast) || index != source.Length - 1))
                 {
                     string path = str + source[index];
                     if (!Directory.Exists(path))

@@ -162,20 +162,20 @@ namespace DuckGame
             int num1 = 0;
             foreach (Team team in teamList1)
             {
-                if (team.activeProfiles.Count() != 0)
+                if (team.activeProfiles.Count != 0)
                     ++num1;
             }
             GameLevel.NumberOfDucks = num1;
             foreach (Team team in teamList1)
             {
-                if (team.activeProfiles.Count() != 0)
+                if (team.activeProfiles.Count != 0)
                 {
                     if (recordStats)
                     {
                         foreach (Profile activeProfile in team.activeProfiles)
                             ++activeProfile.stats.timesSpawned;
                     }
-                    if (team.activeProfiles.Count() == 1)
+                    if (team.activeProfiles.Count == 1)
                     {
                         SpawnPoint spawnPoint = AttemptFreeSpawn(team.activeProfiles[0], usedSpawns, duckList1);
                         if (spawnPoint == null)
@@ -235,7 +235,7 @@ namespace DuckGame
             int num = 0;
             foreach (Team team in all)
             {
-                if (team.activeProfiles.Count() != 0)
+                if (team.activeProfiles.Count != 0)
                 {
                     foreach (Profile activeProfile in team.activeProfiles)
                         ++activeProfile.stats.timesSpawned;

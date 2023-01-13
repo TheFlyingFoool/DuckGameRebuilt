@@ -15,7 +15,7 @@ namespace DuckGame
         public StateBinding _netLoadBinding = new NetSoundBinding(nameof(_netLoad));
         public NetSoundEffect _netLoad = new NetSoundEffect(new string[1]
         {
-      "loadSniper"
+            "loadSniper"
         });
         public int _loadState = -1;
         public int _loadAnimation = -1;

@@ -251,7 +251,7 @@ namespace DuckGame
                         Add("|POINT|So!");
                     }
                     List<Furniture> list1 = Profiles.experienceProfile.GetAvailableFurnis().Where(x => Profiles.experienceProfile.GetNumFurnitures(x.index) > Profiles.experienceProfile.GetNumFurnituresPlaced(x.index) && x.group != Furniture.Momento && x.group != Furniture.Default).ToList();
-                    if (list1.Count() > 0)
+                    if (list1.Count > 0)
                     {
                         List<Furniture> list2 = list1.OrderBy(x => Rando.Float(1f) - Math.Min(Profiles.experienceProfile.GetNumFurnitures(x.index) / 10f, 1f) * 0.5f).ToList();
                         int num = Rando.Int(3);
@@ -1320,7 +1320,7 @@ namespace DuckGame
                         ReferenceStencil = 1,
                         DepthBufferEnable = false
                     };
-                    Graphics.Clear(new Color(0, 0, 0, 0));
+                    Graphics.Clear(Color.Transparent);
                     Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, null, camera.getMatrix());
                     num1 = Math.Min(Math.Max(products[index].cost, 0), 9999);
                     string text = "$" + num1.ToString();

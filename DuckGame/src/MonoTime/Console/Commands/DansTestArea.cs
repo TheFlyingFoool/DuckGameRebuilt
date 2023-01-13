@@ -131,6 +131,15 @@ namespace DuckGame
             PackTextures(MTSpriteBatcher.Texidonthave, null, "unsaved"); ;
             PackTextures(Content.textures.Values.ToList(), unneeedtexs, "spriteatlas");
         }
+        //[DrawingContext(DrawingLayer.Foreground, CustomID = "test")]
+        //public static void DrawTest()
+        //{
+        //    if (Level.current != null || Level.current.camera != null)
+        //    {
+        //        Vec2 ingamepos = Level.current.camera.transformScreenVector(Mouse.mousePos);
+        //        Graphics.DrawRect(ingamepos, ingamepos + new Vec2(10f), Color.Green);
+        //    }
+        //}
         [DrawingContext(DrawingLayer.Foreground, CustomID = "cells", DoDraw = false)]
         public static void DrawCells()
         {
@@ -354,6 +363,11 @@ namespace DuckGame
             Program.main.KillEverything();
             Program.main.Exit();
         }
+        [DevConsoleCommand(Name = "crashtest", CanCrash = true)]
+        public static void crashtest()
+        {
+            DuckNetwork.CheckVersion(null);
+        }
         // SDL.SDL_SetWindowBordered(Resolution._window, true ? SDL.SDL_bool.SDL_FALSE : SDL.SDL_bool.SDL_TRUE); 
         [DevConsoleCommand(Name = "rlevel")]
         public static void randomnesstest2()
@@ -391,6 +405,7 @@ namespace DuckGame
         [DevConsoleCommand(Name = "dr")]
         public static void debugrandom()
         {
+            SetControllerLightBar(Persona.alllist[0].index, Color.Magenta);
             for (int index = 0; index < MonoMain.MaximumGamepadCount; index++)
             {
                 SetControllerLightBar(index, Color.Magenta);

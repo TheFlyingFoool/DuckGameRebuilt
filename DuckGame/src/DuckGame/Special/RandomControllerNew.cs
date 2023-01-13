@@ -176,7 +176,7 @@ namespace DuckGame
                 List<SequenceItem> sequenceItemList = new List<SequenceItem>();
                 List<Thing> list = source2.ToList();
                 bool flag2 = false;
-                while (list.Count() > 0)
+                while (list.Count > 0)
                 {
                     Thing thing = list[ChallengeRando.Int(0, list.Count - 1)];
                     list.Remove(thing);

@@ -32,7 +32,8 @@ namespace DuckGame
         public static bool SpriteAtlas = true;
 
         [AutoConfigField] 
-        public static bool S_RPC = false;
+        public static bool S_RPC = true;
+        
         public static bool RPC
         {
             get => S_RPC;

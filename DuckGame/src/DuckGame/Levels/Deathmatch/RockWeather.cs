@@ -561,7 +561,7 @@ namespace DuckGame
                 _lastAppliedState = rockWeatherState1.Copy();
             if (lerp)
             {
-                float amount = 1f / 1000f;
+                float amount = 0.001f;
                 weatherState.add = Lerp.Vec3(_lastAppliedState.add, rockWeatherState1.add + (rockWeatherState2.add - rockWeatherState1.add) * num2, amount);
                 weatherState.multiply = Lerp.Vec3(_lastAppliedState.multiply, rockWeatherState1.multiply + (rockWeatherState2.multiply - rockWeatherState1.multiply) * num2, amount);
                 weatherState.sky = Lerp.Vec3(_lastAppliedState.sky, rockWeatherState1.sky + (rockWeatherState2.sky - rockWeatherState1.sky) * num2, amount);
@@ -662,16 +662,16 @@ namespace DuckGame
                 snowChance = 0.1f;
                 if (localTime.Month < 2)
                     snowChance = 0.05f;
-                rainChance = 3f / 500f;
+                rainChance = 0.006f;
                 if (localTime.Month < 2)
-                    rainChance = 3f / 1000f;
+                    rainChance = 0.003f;
             }
             else if (localTime.Month > 6)
             {
                 snowChance = 0.0001f;
                 if (localTime.Month > 7)
                 {
-                    snowChance = 1f / 1000f;
+                    snowChance = 0.001f;
                     if (localTime.Month > 8)
                     {
                         snowChance = 0.01f;
@@ -696,7 +696,7 @@ namespace DuckGame
                 if (localTime.Month > 7)
                     rainChance = 0.005f;
                 if (localTime.Month > 8)
-                    rainChance = 1f / 1000f;
+                    rainChance = 0.001f;
                 if (localTime.Month > 10)
                     rainChance = 0f;
             }
@@ -786,7 +786,7 @@ namespace DuckGame
             _prevWeatherLerp = Lerp.Float(_prevWeatherLerp, 0f, 0.05f);
             if (Network.isServer)
             {
-                wait += 3f / 1000f;
+                wait += 0.003f;
                 if (wait > 1.0)
                 {
                     wait = 0f;

@@ -866,14 +866,16 @@ namespace DuckGame
 
         private void drawNameDisplay()
         {
-            const float fontSize = 0.5f;
-            const float vSpacing = 2f;
-            const float hSpacing = 2f;
-            const float borderWidth = 2f;
-            const float opacity = 1f;
-            const float teamLineWidth = 1f;
-            const bool removeDeadPlayers = true;
-            Rectangle drawBox = new(0, 0, borderWidth * 2, borderWidth * 2);
+            NameDisplayConfig config = AdvancedConfigAttribute.Get<NameDisplayConfig>();
+
+            float fontSize = config.FontSize;
+            float vSpacing = config.VerticalSpacing;
+            float hSpacing = config.HorizontalSpacing;
+            float opacity = config.Opacity;
+            float teamLineWidth = config.TeamLineWidth;
+            bool removeDeadPlayers = config.RemoveDeadPlayers;
+            float xOffset = config.XOffset;
+            float yOffset = config.YOffset;
 
             bool doTeams = Extensions.MultiPlayerTeamsExist() && teamLineWidth > 0;
             IEnumerable<Profile> profileList = Profiles.activeNonSpectators;
@@ -891,8 +893,8 @@ namespace DuckGame
             if (removeDeadPlayers)
                 profileList = profileList.Where(x => x?.duck?.dead == false);
 
-            float xOffset = drawBox.x + borderWidth + hSpacing;
-            float yOffset = drawBox.y + borderWidth + vSpacing;
+            float xPos = xOffset + hSpacing;
+            float yPos = yOffset + vSpacing;
 
             Dictionary<int, int> teamColorMapping = new();
             Dictionary<int, List<Profile>> profileTeamMembersMapping = new();
@@ -919,7 +921,7 @@ namespace DuckGame
 
                 profileList = profileList.OrderBy(x => x.team.GetHashCode());
 
-                xOffset += hSpacing * 2 + teamLineWidth;
+                xPos += hSpacing * 2 + teamLineWidth;
             }
 
             foreach (Profile prof in profileList)
@@ -932,21 +934,14 @@ namespace DuckGame
                 Color borderColor = Color.Black * opacity;
                 float addedHeight = nameH + vSpacing;
 
-                float totalprofWidth = nameW + borderWidth * 2 + nameH + hSpacing * 2;
+                Graphics.DrawStringOutline(prof.name, new Vec2(xPos + hSpacing + nameH, yPos), duckColor, borderColor, 1.1f, scale: fontSize);
 
-                if (totalprofWidth > drawBox.width)
-                    drawBox.width = totalprofWidth;
-
-                drawBox.height += addedHeight;
-
-                Graphics.DrawStringOutline(prof.name, new Vec2(xOffset + hSpacing + nameH, yOffset), duckColor, borderColor, 1.1f, scale: fontSize);
-
-                Rectangle colorBox = new(xOffset, yOffset, nameH, nameH - 0.5f);
+                Rectangle colorBox = new(xPos, yPos, nameH, nameH - 0.5f);
                 Graphics.DrawOutlinedRect(colorBox, duckColor, borderColor, 1.1f, fontSize);
 
                 if (doTeams)
                 {
-                    Vec2 lineStartPos = new(xOffset - (hSpacing + teamLineWidth / 2), yOffset);
+                    Vec2 lineStartPos = new(xPos - (hSpacing + teamLineWidth / 2), yPos);
                     Vec2 lineEndOffset = new(0, nameH + vSpacing);
 
                     List<Profile> teamMembers = profileTeamMembersMapping[teamHashCode];
@@ -956,7 +951,7 @@ namespace DuckGame
                     Graphics.DrawLine(lineStartPos + lineEndOffset, lineStartPos, teamColor, teamLineWidth, 1.1f);
                 }
 
-                yOffset += addedHeight;
+                yPos += addedHeight;
             }
         }
 

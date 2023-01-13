@@ -293,7 +293,16 @@ namespace DuckGame
 
         public Vec3 ToVector3() => new Vec3(r / (float)byte.MaxValue, g / (float)byte.MaxValue, b / (float)byte.MaxValue);
 
-        public static implicit operator Microsoft.Xna.Framework.Color(Color c) => new Microsoft.Xna.Framework.Color(c.r, c.g, c.b, c.a);
+        // public static implicit operator Microsoft.Xna.Framework.Color(Color c) => new Microsoft.Xna.Framework.Color(c.r, c.g, c.b, c.a); old way
+        public static implicit operator Microsoft.Xna.Framework.Color(Color c) // faster, the old way used to convert the existing byte to int then do some checks to make them bytes again, this is called alot so i make faster
+        {
+            Microsoft.Xna.Framework.Color color = new Microsoft.Xna.Framework.Color();
+            color.R = c.r;
+            color.G = c.g;
+            color.B = c.b;
+            color.A = c.a;
+            return color;
+        }
 
         public static implicit operator Color(Microsoft.Xna.Framework.Color c) => new Color(c.R, c.G, c.B, c.A);
 

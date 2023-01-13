@@ -330,7 +330,7 @@ namespace DuckGame
                 UpdateFrame();
                 Graphics.recordMetadata = true;
                 _texture.currentObjectIndex = _globalIndex;
-                Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth);
+                Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, _depth);
                 if (_waitFrames == 1)
                 {
                     _batchItem = Graphics.screen.StealLastSpriteBatchItem();

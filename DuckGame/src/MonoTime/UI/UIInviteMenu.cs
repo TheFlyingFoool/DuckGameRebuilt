@@ -129,7 +129,7 @@ namespace DuckGame
                 {
                     User u = source1.ElementAt(index);
                     string source2 = u.name;
-                    if (source2.Count() > 17)
+                    if (source2.Length > 17)
                         source2 = source2.Substring(0, 16) + ".";
                     UserInfo info = u.info;
                     if (info.relationship == FriendRelationship.Friend)

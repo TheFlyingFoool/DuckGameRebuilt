@@ -8,7 +8,7 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <LangVersion>preview</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <WarningLevel>4</WarningLevel>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -138,7 +138,7 @@
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <LangVersion>default</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
     <CodeAnalysisRuleSet>emptyfind.ruleset</CodeAnalysisRuleSet>
@@ -152,7 +152,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>default</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>emptyfind.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
@@ -164,7 +164,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>default</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>emptyfind.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
@@ -226,6 +226,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddedContent\DGRSettings.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\AdvancedConfigAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ConfigClasses\NameDisplayConfig.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\IAdvancedConfig.cs" />
     <Compile Include="AddedContent\Firebreak\Internet.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\IAmUi.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\UiBasic.cs" />

@@ -33,66 +33,71 @@ namespace DuckGame
 
         public static void SaveAll(bool isDangerous)
         {
-            StringBuilder stringBuilder = new();
-            int length = AutoConfigFieldAttribute.All.Count;
-            for (int i = 0; i < length; i++)
+            try
             {
-                AutoConfigFieldAttribute attribute = AutoConfigFieldAttribute.All[i];
-                MemberInfo field = attribute.field;
-                bool isfield = true;
-                Type fieldType;
-                PropertyInfo pi = null;
-                FieldInfo fi = field as FieldInfo;
-                if (fi == null)
+                StringBuilder stringBuilder = new();
+                int length = AutoConfigFieldAttribute.All.Count;
+                for (int i = 0; i < length; i++)
                 {
-                    pi = field as PropertyInfo;
-                    if (pi == null)
+                    AutoConfigFieldAttribute attribute = AutoConfigFieldAttribute.All[i];
+                    MemberInfo field = attribute.MemberInfo;
+                    bool isfield = true;
+                    Type fieldType;
+                    PropertyInfo pi = null;
+                    FieldInfo fi = field as FieldInfo;
+                    if (fi == null)
                     {
-                        throw new Exception("Unsupported AutoConfig field type");
+                        pi = field as PropertyInfo;
+                        if (pi == null)
+                        {
+                            throw new Exception("Unsupported AutoConfig field type");
+                        }
+                        isfield = false;
+                        fieldType = pi.PropertyType;
                     }
-                    isfield = false;
-                    fieldType = pi.PropertyType;
+                    else
+                    {
+                        fieldType = fi.FieldType;
+                    }
+
+                    if (isDangerous && attribute.PotentiallyDangerous)
+                        continue;
+
+                    if (!FireSerializer.IsSerializable(fieldType))
+                        continue;
+                    object fieldValue;
+                    if (isfield)
+                    {
+                        fieldValue = fi.GetValue(null);
+                    }
+                    else
+                    {
+                        fieldValue = pi.GetMethod?.Invoke(null, null);
+                    }
+                    string fullName = attribute.Id ?? field.GetFullName();
+
+                    string writtenValue = FireSerializer.Serialize(fieldValue);
+
+                    if (attribute.External is not null)
+                    {
+                        string fileName = attribute.External + FileExtension;
+                        string fullPath = SaveDirPath + fileName;
+                        File.WriteAllText(fullPath, writtenValue);
+
+                        writtenValue = fileName;
+                    }
+
+                    string dataLine = $"{fullName}={writtenValue}";
+                    stringBuilder.Append(dataLine);
+
+                    if (i != length)
+                        stringBuilder.Append("\n");
                 }
-                else
-                {
-                    fieldType = fi.FieldType;
-                }
-
-                if (isDangerous && attribute.PotentiallyDangerous)
-                    continue;
-
-                if (!FireSerializer.IsSerializable(fieldType))
-                    continue;
-                object fieldValue;
-                if (isfield)
-                {
-                    fieldValue = fi.GetValue(null);
-                }
-                else
-                {
-                    fieldValue = pi.GetMethod?.Invoke(null, null);
-                }
-                string fullName = attribute.Id ?? field.GetFullName();
-
-                string writtenValue = FireSerializer.Serialize(fieldValue);
-
-                if (attribute.External is not null)
-                {
-                    string fileName = attribute.External + FileExtension;
-                    string fullPath = SaveDirPath + fileName;
-                    File.WriteAllText(fullPath, writtenValue);
-
-                    writtenValue = fileName;
-                }
-
-                string dataLine = $"{fullName}={writtenValue}";
-                stringBuilder.Append(dataLine);
-
-                if (i != length)
-                    stringBuilder.Append("\n");
+                File.WriteAllText(MainSaveFilePath, stringBuilder.ToString());
+                DevConsole.Log("|240,164,65|ACFG|DGGREEN| SAVED ALL CUSTOM CONFIG SUCCESSFULLY!");
             }
-            File.WriteAllText(MainSaveFilePath, stringBuilder.ToString());
-            DevConsole.Log("|240,164,65|ACFG|DGGREEN| SAVED ALL CUSTOM CONFIG SUCCESSFULLY!");
+            catch
+            { }
         }
         
         public static bool LoadAll()
@@ -130,11 +135,11 @@ namespace DuckGame
                 {
                     AutoConfigFieldAttribute _ = all[i];
                     PropertyInfo pi = null;
-                    FieldInfo fi = _.field as FieldInfo;
+                    FieldInfo fi = _.MemberInfo as FieldInfo;
                     Type type;
                     if (fi == null)
                     {
-                        pi = _.field as PropertyInfo;
+                        pi = _.MemberInfo as PropertyInfo;
                         if (pi == null)
                         {
                             throw new Exception("Unsupported AutoConfig field type");
@@ -170,7 +175,7 @@ namespace DuckGame
                 for (int i = 0; i < all.Count; i++)
                 {
                     AutoConfigFieldAttribute attribute = all[i];
-                    string fullName = attribute.Id ?? attribute.field.GetFullName();
+                    string fullName = attribute.Id ?? attribute.MemberInfo.GetFullName();
 
                     if (!lines.TryFirst(x => fullName == x.Split('=')[0], out string line))
                         continue;
@@ -191,7 +196,7 @@ namespace DuckGame
 
         private static void SetFieldValue(AutoConfigFieldAttribute pair, string newValue)
         {
-            MemberInfo field = pair.field;
+            MemberInfo field = pair.MemberInfo;
             Type type;
             PropertyInfo pi = null;
             FieldInfo fi = field as FieldInfo;
