@@ -90,7 +90,7 @@ namespace DuckGame
                     SubGroups.Add(editorGroup);
                 }
                 string str = group;
-                string group1 = groupName.Count() <= 1 ? str.Remove(0, groupName[0].Length) : str.Remove(0, groupName[0].Length + 1);
+                string group1 = groupName.Length <= 1 ? str.Remove(0, groupName[0].Length) : str.Remove(0, groupName[0].Length + 1);
                 editorGroup.AddType(t, group1);
             }
         }

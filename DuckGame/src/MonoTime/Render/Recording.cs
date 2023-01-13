@@ -44,7 +44,7 @@ namespace DuckGame
 
         public void Initialize()
         {
-            for (int index = 0; index < _frames.Count(); ++index)
+            for (int index = 0; index < _frames.Length; ++index)
                 _frames[index].Initialize();
         }
 

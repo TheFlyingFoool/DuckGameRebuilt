@@ -133,7 +133,7 @@ namespace DuckGame
             DevConsole.Log(DCSection.General, "Loading profiles from (" + DuckFile.profileDirectory + ")");
             string[] files = DuckFile.GetFiles(DuckFile.profileDirectory, "*.pro"); // NO YOU NICE GUY NIKO, I JUST DID IT WRONG AND FORGOT THE * -Dan
             //string[] files = DuckFile.GetFiles(DuckFile.profileDirectory, ".pro"); // added ".pro" so it doesnt just loop over all files
-            DevConsole.Log(DCSection.General, "Found (" + files.Count().ToString() + ") profiles.");
+            DevConsole.Log(DCSection.General, "Found (" + files.Length.ToString() + ") profiles.");
             List<Profile> profileList = new List<Profile>();
             foreach (string path in files)
             {

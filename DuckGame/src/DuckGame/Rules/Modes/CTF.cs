@@ -36,7 +36,7 @@ namespace DuckGame
                 int num = 0;
                 foreach (Team team in Teams.all)
                 {
-                    if (team.activeProfiles.Count() != 0)
+                    if (team.activeProfiles.Count != 0)
                     {
                         foreach (Profile activeProfile in team.activeProfiles)
                         {
@@ -105,7 +105,7 @@ namespace DuckGame
             int num2 = 0;
             foreach (Team team in Teams.all)
             {
-                if (team.activeProfiles.Count() != 0)
+                if (team.activeProfiles.Count != 0)
                 {
                     foreach (Profile activeProfile in team.activeProfiles)
                     {

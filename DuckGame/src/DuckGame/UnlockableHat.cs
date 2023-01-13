@@ -41,7 +41,7 @@ namespace DuckGame
         {
             allowHints = canHint;
             _team = t;
-            _persona = Persona.all.ElementAt(Rando.Int(3));
+            _persona = Persona.alllist[Rando.Int(3)];
             _showScreen = true;
         }
 

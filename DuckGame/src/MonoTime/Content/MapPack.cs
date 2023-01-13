@@ -146,7 +146,7 @@ namespace DuckGame
             Graphics.Draw(sprite.texture, 0f, 0f, 4f, 4f, (Depth)0.1f);
             string[] files = Directory.GetFiles(_mod.configuration.directory, "*.lev", SearchOption.AllDirectories);
             int num3 = 0;
-            int num4 = (int)Math.Ceiling(Math.Sqrt(files.Count()));
+            int num4 = (int)Math.Ceiling(Math.Sqrt(files.Length));
             float num5 = (float)(1280.0 / num4 / 1280.0 * 4.0);
             Vec2 zero = Vec2.Zero;
             foreach (string levelPath in files)

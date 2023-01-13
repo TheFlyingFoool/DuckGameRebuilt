@@ -576,11 +576,11 @@ namespace DuckGame
             modConfiguration.contentDirectory = modConfiguration.directory + "/content/";
             if (File.Exists(modConfiguration.contentDirectory + "/New Text Document.tpconf"))
                 modConfiguration.isExistingReskinMod = true;
-            else if (File.Exists(folder + "/info.txt") && DuckFile.GetFiles(folder, "*.dll").Count() == 0)
+            else if (File.Exists(folder + "/info.txt") && DuckFile.GetFiles(folder, "*.dll").Length == 0)
                 modConfiguration.SetModType(ModConfiguration.Type.Reskin);
-            else if (File.Exists(folder + "/mappack_info.txt") && DuckFile.GetFiles(folder, "*.dll").Count() == 0)
+            else if (File.Exists(folder + "/mappack_info.txt") && DuckFile.GetFiles(folder, "*.dll").Length == 0)
                 modConfiguration.SetModType(ModConfiguration.Type.MapPack);
-            else if (File.Exists(folder + "/hatpack_info.txt") && DuckFile.GetFiles(folder, "*.dll").Count() == 0)
+            else if (File.Exists(folder + "/hatpack_info.txt") && DuckFile.GetFiles(folder, "*.dll").Length == 0)
                 modConfiguration.SetModType(ModConfiguration.Type.HatPack);
             modConfiguration.name = Path.GetFileNameWithoutExtension(folder);
             modConfiguration.content = new ContentPack(modConfiguration);
@@ -784,7 +784,7 @@ namespace DuckGame
                     runningModloadCode = true;
                     List<string> directoriesNoCloud = DuckFile.GetDirectoriesNoCloud(modDirectory);
                     directoriesNoCloud.AddRange(DuckFile.GetDirectoriesNoCloud(DuckFile.globalModsDirectory));
-                    MonoMain.totalLoadyBits += directoriesNoCloud.Count() * 2;
+                    MonoMain.totalLoadyBits += directoriesNoCloud.Count * 2;
                     foreach (string str in directoriesNoCloud)
                     {
                         string folder = str;

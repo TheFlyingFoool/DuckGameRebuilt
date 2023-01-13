@@ -349,7 +349,7 @@ namespace DuckGame
             for (int index = 0; index < DG.MaxPlayers; ++index)
             {
                 num = index + 1;
-                Profile profile = new Profile("Netduck" + num.ToString(), InputProfile.GetVirtualInput(index), varDefaultPersona: Persona.all.ElementAt(index), network: true);
+                Profile profile = new Profile("Netduck" + num.ToString(), InputProfile.GetVirtualInput(index), varDefaultPersona: Persona.alllist[index], network: true);
                 profile.SetNetworkIndex((byte)index);
                 profile.SetFixedGhostIndex((byte)index);
                 if (index > 3)
@@ -360,7 +360,7 @@ namespace DuckGame
             for (int index = 0; index < DG.MaxSpectators; ++index)
             {
                 num = index + 1;
-                Profile profile = new Profile("Observer" + num.ToString(), InputProfile.GetVirtualInput(index + DG.MaxPlayers), varDefaultPersona: Persona.all.ElementAt(0), network: true);
+                Profile profile = new Profile("Observer" + num.ToString(), InputProfile.GetVirtualInput(index + DG.MaxPlayers), varDefaultPersona: Persona.alllist[0], network: true);
                 profile.SetNetworkIndex((byte)(index + DG.MaxPlayers));
                 profile.SetFixedGhostIndex((byte)(index + DG.MaxPlayers));
                 profile.slotType = SlotType.Spectator;

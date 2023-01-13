@@ -282,7 +282,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    str = stringList1[Rando.Int(stringList1.Count() - 1)];
+                    str = stringList1[Rando.Int(stringList1.Count - 1)];
                     if (str == ignore && stringList1.Count > 1)
                     {
                         stringList1.Remove(str);

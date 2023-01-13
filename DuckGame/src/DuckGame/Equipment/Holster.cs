@@ -70,7 +70,7 @@ namespace DuckGame
             if (contains == null)
                 return null;
             object[] constructorParameters = Editor.GetConstructorParameters(contains);
-            if (constructorParameters.Count() > 1)
+            if (constructorParameters.Length > 1)
             {
                 constructorParameters[0] = pos.x;
                 constructorParameters[1] = pos.y;

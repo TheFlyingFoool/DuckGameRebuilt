@@ -78,7 +78,7 @@ namespace DuckGame
         public override void Draw()
         {
             string[] source = _text.Split('{');
-            float num = -(source.Count() - 1) * 8;
+            float num = -(source.Length - 1) * 8;
             foreach (string text in source)
             {
                 float stringHeight = Graphics.GetStringHeight(text);

@@ -727,7 +727,7 @@ namespace DuckGame
                 _keyStatePrev = _keyState;
                 _keyState = Microsoft.Xna.Framework.Input.Keyboard.GetState();
                 _keyboardPress = false;
-                int num = _keyState.GetPressedKeys().Count();
+                int num = _keyState.GetPressedKeys().Length;
                 if (num != _lastKeyCount && num != 0)
                     _keyboardPress = true;
                 _lastKeyCount = num;

@@ -39,19 +39,21 @@ namespace DuckGame
             {
                 if (_index < 0)
                 {
-                    DuckPersona duckPersona1 = Persona.all.FirstOrDefault(x => x.color == color);
-                    if (duckPersona1 != null)
+                    DuckPersona duckPersona1 = null;
+                    foreach (DuckPersona duckPersona2 in Persona.alllist)
                     {
                         ++_index;
-                        foreach (DuckPersona duckPersona2 in Persona.all)
+                        if (duckPersona2.color == color)
                         {
-                            if (duckPersona2 != duckPersona1)
-                                ++_index;
-                            else
-                                break;
+                            duckPersona1 = duckPersona2;
+                            if (_index > Persona.alllist.Count)
+                                _index = 0;
+                            break;
                         }
-                        if (_index > Persona.all.Count())
-                            _index = 0;
+                    }
+                    if (duckPersona1 == null)
+                    {
+                        _index = -1;
                     }
                 }
                 return _index;

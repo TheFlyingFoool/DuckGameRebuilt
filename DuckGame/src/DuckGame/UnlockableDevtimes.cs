@@ -17,7 +17,7 @@ namespace DuckGame
         public UnlockableDevtimes(string identifier, Func<bool> condition, string nam, string desc)
           : base(identifier, condition, nam, desc)
         {
-            _persona = Persona.all.ElementAt(Rando.Int(3));
+            _persona = Persona.alllist[Rando.Int(3)];
             _showScreen = true;
         }
 

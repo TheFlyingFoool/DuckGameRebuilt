@@ -362,7 +362,7 @@ namespace DuckGame
 
         private void AssignNetProfileIndex(byte pIndex)
         {
-            DevConsole.Log(DCSection.General, "Assigning net profile index (" + pIndex.ToString() + "\\" + Profiles.alllist.Count().ToString() + ")");
+            DevConsole.Log(DCSection.General, "Assigning net profile index (" + pIndex.ToString() + "\\" + Profiles.alllist.Count.ToString() + ")");
             _netProfileIndex = pIndex;
             Profile profile = Profiles.alllist[_netProfileIndex];
             if (Network.isClient && Network.InLobby())

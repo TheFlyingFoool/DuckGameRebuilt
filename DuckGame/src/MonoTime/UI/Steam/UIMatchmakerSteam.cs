@@ -89,7 +89,7 @@ namespace DuckGame
 
         private Lobby PeekLobby() => HasLobby() ? lobbies[_takeIndex] : null;
 
-        private bool HasLobby() => lobbies.Count() > 0 && _takeIndex < lobbies.Count;
+        private bool HasLobby() => lobbies.Count > 0 && _takeIndex < lobbies.Count;
 
         private void GetDesparate()
         {

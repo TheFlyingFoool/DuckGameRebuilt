@@ -542,7 +542,7 @@ namespace DuckGame
                 Array.Sort(thingArray, helperPhysicsIndexSorter);
                 if (thingArray != null)
                 {
-                    int num = thingArray.Count();
+                    int num = thingArray.Length;
                     for (int index = 0; index < num; ++index)
                     {
                         Thing thing = thingArray[index];

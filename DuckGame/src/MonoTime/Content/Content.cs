@@ -1002,7 +1002,7 @@ namespace DuckGame
                 {
                     Texture2D texture2D = null;
                     bool flag = false;
-                    if (MonoMain.moddingEnabled && ModLoader.accessibleMods.Count() > 1 && name.Length > 1 && name[1] == ':')
+                    if (MonoMain.moddingEnabled && ModLoader.accessibleMods.Count > 1 && name.Length > 1 && name[1] == ':')
                         flag = true;
                     if (!flag)
                     {

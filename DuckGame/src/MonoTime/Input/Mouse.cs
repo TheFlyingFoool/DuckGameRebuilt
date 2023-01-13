@@ -142,7 +142,13 @@ namespace DuckGame
             }
         }
 
-        public static Vec2 positionConsole => Layer.Console.camera.transformScreenVector(_mousePos);
+        public static Vec2 positionConsole
+        {
+            get
+            {
+                return Layer.Console.camera.transformScreenVector(_mousePos);
+            }
+        }
 
         public Mouse()
           : base()
