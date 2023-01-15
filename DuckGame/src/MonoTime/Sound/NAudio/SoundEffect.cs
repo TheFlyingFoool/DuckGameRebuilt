@@ -276,7 +276,7 @@ namespace DuckGame
                     _waveBuffer = _songBuffer;
                     ++kDecoderIndex;
                     _decoderIndex = kDecoderIndex;
-                    Task.Factory.StartNew(new Action(Thread_Decoder));
+                    //Task.Factory.StartNew(new Action(Thread_Decoder));
                 }
             }
         }

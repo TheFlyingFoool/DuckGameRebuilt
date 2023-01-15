@@ -963,23 +963,20 @@ namespace DuckGame
                         Texture2D texture2D = ReskinPack.LoadAsset<Texture2D>(name);
                         if (texture2D != null)
                         {
-                            lock (_loadLock)
-                            {
-                                Vec2 textureSize = GetTextureSize(name);
-                                Tex2D tex2D;
-                                if (textureSize != Vec2.Zero && (texture2D.Width != textureSize.x || texture2D.Height != textureSize.y))
-                                    tex2D = new BigBoyTex2D(texture2D, name, _currentTextureIndex)
-                                    {
-                                        scaleFactor = (textureSize.x / texture2D.Width)
-                                    };
-                                else
-                                    tex2D = new Tex2D(texture2D, name, _currentTextureIndex);
-                                ++_currentTextureIndex;
-                                _textureList.Add(tex2D);
-                                _textures[name] = tex2D;
-                                _texture2DMap[texture2D] = tex2D;
-                                return (T)(object)tex2D;
-                            }
+                            Vec2 textureSize = GetTextureSize(name);
+                            Tex2D tex2D;
+                            if (textureSize != Vec2.Zero && (texture2D.Width != textureSize.x || texture2D.Height != textureSize.y))
+                                tex2D = new BigBoyTex2D(texture2D, name, _currentTextureIndex)
+                                {
+                                    scaleFactor = (textureSize.x / texture2D.Width)
+                                };
+                            else
+                                tex2D = new Tex2D(texture2D, name, _currentTextureIndex);
+                            ++_currentTextureIndex;
+                            _textureList.Add(tex2D);
+                            _textures[name] = tex2D;
+                            _texture2DMap[texture2D] = tex2D;
+                            return (T)(object)tex2D;
                         }
                     }
                     else
@@ -1042,14 +1039,11 @@ namespace DuckGame
                         texture2D = (Texture2D)invalidTexture;
                         Main.SpecialCode = "Couldn't load texture " + name;
                     }
-                    lock (_loadLock)
-                    {
-                        tex2D = new Tex2D(texture2D, name, _currentTextureIndex);
-                        ++_currentTextureIndex;
-                        _textureList.Add(tex2D);
-                        _textures[name] = tex2D;
-                        _texture2DMap[texture2D] = tex2D;
-                    }
+                    tex2D = new Tex2D(texture2D, name, _currentTextureIndex);
+                    ++_currentTextureIndex;
+                    _textureList.Add(tex2D);
+                    _textures[name] = tex2D;
+                    _texture2DMap[texture2D] = tex2D;
                 }
                 return (T)(object)tex2D;
             }
@@ -1061,16 +1055,12 @@ namespace DuckGame
                 if (mtEffect == null)
                 {
                     Effect effect = null;
-                    lock (_loadLock)
-                        effect = _base.Load<Effect>(name);
-                    lock (_loadLock)
-                    {
-                        mtEffect = new MTEffect(effect, name, _currentEffectIndex);
-                        ++_currentEffectIndex;
-                        _effectList.Add(mtEffect);
-                        _effects[name] = mtEffect;
-                        _effectMap[effect] = mtEffect;
-                    }
+                    effect = _base.Load<Effect>(name);
+                    mtEffect = new MTEffect(effect, name, _currentEffectIndex);
+                    ++_currentEffectIndex;
+                    _effectList.Add(mtEffect);
+                    _effects[name] = mtEffect;
+                    _effectMap[effect] = mtEffect;
                 }
                 return (T)(object)mtEffect;
             }
@@ -1083,19 +1073,16 @@ namespace DuckGame
                 {
                     if (!name.Contains(":") && !name.EndsWith(".wav"))
                     {
-                        lock (_loadLock)
+                        try
                         {
-                            try
-                            {
-                                string path = DuckFile.contentDirectory + name + ".wav";
-                                soundEffect = SoundEffect.FromStream(new MemoryStream(File.ReadAllBytes(path)));
-                                if (soundEffect != null)
-                                    soundEffect.file = path;
-                            }
-                            catch (Exception ex)
-                            {
-                                lastException = ex;
-                            }
+                            string path = DuckFile.contentDirectory + name + ".wav";
+                            soundEffect = SoundEffect.FromStream(new MemoryStream(File.ReadAllBytes(path)));
+                            if (soundEffect != null)
+                                soundEffect.file = path;
+                        }
+                        catch (Exception ex)
+                        {
+                            lastException = ex;
                         }
                     }
                     if (soundEffect == null && MonoMain.moddingEnabled && ModLoader.modsEnabled)

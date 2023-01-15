@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -49,7 +50,8 @@ namespace DuckGame
                 // dont worry about the casting, it was casted to IEnumerable<Attribute>
                 // from a Attribute[] in the first place, so im just utilizing that
                 // var attributes = (Attribute[]) memberInfo.GetCustomAttributes();
-                if (memberInfo2.CustomAttributes.Count() == 0)
+
+                if ((memberInfo2.CustomAttributes as IList).Count == 0)
                     continue;
                 //  if (attributes.Length == 0)
                 //     continue;

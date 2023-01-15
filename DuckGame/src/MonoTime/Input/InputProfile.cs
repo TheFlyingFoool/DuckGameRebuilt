@@ -333,7 +333,7 @@ namespace DuckGame
 
         public static void Update()
         {
-            _core.Update();
+            //_core.Update();
         }
 
         public static InputProfile Get(string name)

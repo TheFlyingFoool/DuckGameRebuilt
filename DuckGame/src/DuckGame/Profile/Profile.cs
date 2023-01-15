@@ -1158,32 +1158,32 @@ namespace DuckGame
 
         public static byte CalculateLocalFlippers()
         {
-            bool flag1 = true;
-            bool flag2 = true;
-            foreach (ChallengeData challengeData in Challenges.challengesInArcade)
-            {
-                bool flag3 = false;
-                bool flag4 = false;
-                foreach (Profile universalProfile in Profiles.universalProfileList)
-                {
-                    ChallengeSaveData saveData = universalProfile.GetSaveData(challengeData.levelID, true);
-                    if (saveData != null && saveData.trophy > TrophyType.Baseline)
-                    {
-                        flag4 = true;
-                        if (saveData.trophy == TrophyType.Developer)
-                        {
-                            flag3 = true;
-                            break;
-                        }
-                    }
-                }
-                if (!flag3)
-                    flag1 = false;
-                if (!flag4)
-                    flag2 = false;
-                if (!flag2)
-                    break;
-            }
+            bool flag1 = false;//bool flag1 = true;
+            bool flag2 = false;//bool flag2 = true;
+            //foreach (ChallengeData challengeData in Challenges.challengesInArcade)
+            //{
+            //    bool flag3 = false;
+            //    bool flag4 = false;
+            //    foreach (Profile universalProfile in Profiles.universalProfileList)
+            //    {
+            //        ChallengeSaveData saveData = universalProfile.GetSaveData(challengeData.levelID, true);
+            //        if (saveData != null && saveData.trophy > TrophyType.Baseline)
+            //        {
+            //            flag4 = true;
+            //            if (saveData.trophy == TrophyType.Developer)
+            //            {
+            //                flag3 = true;
+            //                break;
+            //            }
+            //        }
+            //    }
+            //    if (!flag3)
+            //        flag1 = false;
+            //    if (!flag4)
+            //        flag2 = false;
+            //    if (!flag2)
+            //        break;
+            //}
             return (byte)((byte)((byte)((uint)(byte)((byte)((uint)(byte)((byte)((uint)(byte)((byte)((uint)(byte)(0 | (flag1 ? 1 : 0)) << 1) | ((int)Global.data.onlineWins >= 50 ? 1 : 0)) << 1) | ((int)Global.data.matchesPlayed >= 100 ? 1 : 0)) << 1) | (flag2 ? 1 : 0)) << 1) | (Options.Data.shennanigans ? 1 : 0)) | (Options.Data.rumbleIntensity > 0.0 ? 1 : 0));
         }
 

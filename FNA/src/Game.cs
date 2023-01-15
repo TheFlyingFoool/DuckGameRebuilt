@@ -133,7 +133,7 @@ namespace Microsoft.Xna.Framework
 				if (INTERNAL_isMouseVisible != value)
 				{
 					INTERNAL_isMouseVisible = value;
-					FNAPlatform.OnIsMouseVisibleChanged(value);
+					//FNAPlatform.OnIsMouseVisibleChanged(value);
 				}
 			}
 		}
@@ -426,7 +426,7 @@ namespace Microsoft.Xna.Framework
 			 * any change fully in both the fixed and variable timestep
 			 * modes across multiple devices and platforms.
 			 */
-
+			//IsFixedTimeStep = false;
 			AdvanceElapsedTime();
 
 			if (IsFixedTimeStep)

@@ -27,31 +27,25 @@ namespace DuckGame
         {
             while (blockLoading > 0 && Thread.CurrentThread != MonoMain.mainThread)
                 Thread.Sleep(2);
-            lock (Content._loadLock)
+            try
             {
-                try
-                {
-                    return base.Load<T>(assetName);
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                return base.Load<T>(assetName);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
         public Texture2D FromStream(Stream stream)
         {
-            lock (Content._loadLock)
+            try
             {
-                try
-                {
-                    return Texture2D.FromStream(((IGraphicsDeviceService)ServiceProvider.GetService(typeof(IGraphicsDeviceService))).GraphicsDevice, stream);
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                return Texture2D.FromStream(((IGraphicsDeviceService)ServiceProvider.GetService(typeof(IGraphicsDeviceService))).GraphicsDevice, stream);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

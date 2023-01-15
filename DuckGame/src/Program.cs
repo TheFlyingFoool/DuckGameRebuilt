@@ -405,7 +405,7 @@ namespace DuckGame
                         MonoMain.forceFullscreenMode = 2;
                         break;
                     case "-testserver":
-                        Process.Start(Application.ExecutablePath, commandLine.Replace("-testserver", " -lanjoiner"));
+                        Process.Start("D:\\Program Files (x86)\\Steam\\steamapps\\common\\Duck Game\\DuckGame.exe", commandLine.Replace(" - testserver", " -lanjoiner"));
                         testServer = true;
                         break;
                     case "-testserver2":

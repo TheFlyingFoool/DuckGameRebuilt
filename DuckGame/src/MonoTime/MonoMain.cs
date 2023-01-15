@@ -63,6 +63,7 @@ namespace DuckGame
                 }
                 if (!loadMessages.Contains(text))
                 {
+                    Console.WriteLine(text);
                     loadMessages.Push(text);
                 }
                 loadMessage = text;
@@ -1196,7 +1197,7 @@ namespace DuckGame
                     }
                 }
             }
-            if (_canStartLoading && !_threadedLoadingStarted && _didFirstDraw)
+            if (_canStartLoading && !_threadedLoadingStarted)//&& _didFirstDraw
             {
                 PostCloudLogic();
                 StartThreadedLoading();
@@ -1465,6 +1466,7 @@ namespace DuckGame
         [HandleProcessCorruptedStateExceptions, SecurityCritical]
         protected override void Draw(GameTime gameTime)
         {
+            return;
             int num = started ? 1 : 0;
             ++framesSinceFocusChange;
             if (loseDevice > 0)
@@ -1824,10 +1826,10 @@ namespace DuckGame
                             Layer.HUD.End(true);
                         }
                     }
-                    if (!DevConsole.showFPS)
-                        return;
-                    FPSCounter.Render(Graphics.device, index: 0, label: "UPS");
-                    FPSCounter.Render(Graphics.device, 100f, index: 1);
+                    //if (!DevConsole.showFPS)
+                    //    return;
+                    //FPSCounter.Render(Graphics.device, index: 0, label: "UPS");
+                    //FPSCounter.Render(Graphics.device, 100f, index: 1);
                 }
             }
         }

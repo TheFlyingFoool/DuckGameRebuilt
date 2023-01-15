@@ -141,7 +141,7 @@ namespace DuckGame
             else
             {
                 MonoMain.NloadMessage = "Loading SFX";
-                SearchDir("Content/Audio/SFX");
+                //SearchDir("Content/Audio/SFX");
                 NetSoundEffect.Initialize();
             }
 

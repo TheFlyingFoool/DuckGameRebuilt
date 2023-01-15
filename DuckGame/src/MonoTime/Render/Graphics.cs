@@ -294,9 +294,9 @@ namespace DuckGame
           InputProfile pro = null,
           float scale = 1f)
         {
-            _biosFont.scale = new Vec2(scale);
-            _biosFont.Draw(text, position.x, position.y, color, depth, pro);
-            _biosFont.scale = new Vec2(1f);
+            //_biosFont.scale = new Vec2(scale);
+            //_biosFont.Draw(text, position.x, position.y, color, depth, pro);
+            //_biosFont.scale = new Vec2(1f);
         }
 
         public static Texture2D Texture2DFromBase64String(string base64String, GraphicsDevice? graphicsDevice = null)

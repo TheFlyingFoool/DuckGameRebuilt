@@ -394,10 +394,10 @@ namespace Microsoft.Xna.Framework
 			//INTERNAL_SetIcon(window, title);
 
 			// Disable the screensaver.
-			SDL.SDL_DisableScreenSaver();
+			//SDL.SDL_DisableScreenSaver();
 
 			// We hide the mouse cursor by default.
-			OnIsMouseVisibleChanged(false);
+			//OnIsMouseVisibleChanged(false);
 
 			/* If high DPI is not found, unset the HIGHDPI var.
 			 * This is our way to communicate that it failed...

@@ -593,11 +593,11 @@ namespace DuckGame
                         ++_retransmitCycle;
                         foreach (NetMessage unacknowledgedMessage in _unacknowledgedMessages)
                         {
-                            if (currentPacket.data.lengthInBytes > 400)
-                            {
-                                DevConsole.Log(DCSection.DuckNet, "@error |DGRED|Large retransmit! (" + currentPacket.data.lengthInBytes.ToString() + ")", connection);
-                                break;
-                            }
+                            //if (currentPacket.data.lengthInBytes > 400)
+                            //{
+                            //    DevConsole.Log(DCSection.DuckNet, "@error |DGRED|Large retransmit! (" + currentPacket.data.lengthInBytes.ToString() + ")", connection);
+                            //    break;
+                            //}
                             // DevConsole.Log("Sending unacknowledged " + unacknowledgedMessage.GetType().Name);
                             if (unacknowledgedMessage.priority != NetMessagePriority.Urgent || unacknowledgedMessage.timesRetransmitted >= 2)
                             {

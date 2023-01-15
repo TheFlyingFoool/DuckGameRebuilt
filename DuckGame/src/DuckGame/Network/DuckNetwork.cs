@@ -1368,7 +1368,7 @@ namespace DuckGame
 
         public static bool isDedicatedServer
         {
-            get => _core.isDedicatedServer;
+            get => true;//_core.isDedicatedServer;
             set => _core.isDedicatedServer = value;
         }
 
