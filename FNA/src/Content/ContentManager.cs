@@ -16,6 +16,8 @@ using System.IO;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
+using static System.Net.Mime.MediaTypeNames;
+
 #endregion
 
 namespace Microsoft.Xna.Framework.Content
@@ -187,7 +189,18 @@ namespace Microsoft.Xna.Framework.Content
 			{
 				throw new ObjectDisposedException("ContentManager");
 			}
+			if (typeof(T) == typeof(Texture2D))
+			{
+				Texture2D texture2D = new Texture2D();
+				texture2D.Name = assetName;
+				return (T)(object)texture2D;
+			}
+			else if (typeof(T) == typeof(Effect))
+			{
+				return (T)(object)new Effect();
+			}
 			T result = default(T);
+			return result;
 
 			/* On some platforms, name and slash direction matter.
 			 * We store the asset by a /-separating key rather than

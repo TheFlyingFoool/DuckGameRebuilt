@@ -172,23 +172,23 @@ namespace Microsoft.Xna.Framework.Graphics
 			preferredFormat
 		) {
 			DepthStencilFormat = preferredDepthFormat;
-			MultiSampleCount = FNA3D.FNA3D_GetMaxMultiSampleCount(
-				graphicsDevice.GLDevice,
-				Format,
-				MathHelper.ClosestMSAAPower(preferredMultiSampleCount)
-			);
+			//MultiSampleCount = FNA3D.FNA3D_GetMaxMultiSampleCount(
+			//	graphicsDevice.GLDevice,
+			//	Format,
+			//	MathHelper.ClosestMSAAPower(preferredMultiSampleCount)
+			//);
 			RenderTargetUsage = usage;
 
 			if (MultiSampleCount > 0)
 			{
-				glColorBuffer = FNA3D.FNA3D_GenColorRenderbuffer(
-					graphicsDevice.GLDevice,
-					Size,
-					Size,
-					Format,
-					MultiSampleCount,
-					texture
-				);
+				//glColorBuffer = FNA3D.FNA3D_GenColorRenderbuffer(
+				//	graphicsDevice.GLDevice,
+				//	Size,
+				//	Size,
+				//	Format,
+				//	MultiSampleCount,
+				//	texture
+				//);
 			}
 
 			// If we don't need a depth buffer then we're done.
@@ -197,13 +197,13 @@ namespace Microsoft.Xna.Framework.Graphics
 				return;
 			}
 
-			glDepthStencilBuffer = FNA3D.FNA3D_GenDepthStencilRenderbuffer(
-				graphicsDevice.GLDevice,
-				Size,
-				Size,
-				DepthStencilFormat,
-				MultiSampleCount
-			);
+			//glDepthStencilBuffer = FNA3D.FNA3D_GenDepthStencilRenderbuffer(
+			//	graphicsDevice.GLDevice,
+			//	Size,
+			//	Size,
+			//	DepthStencilFormat,
+			//	MultiSampleCount
+			//);
 		}
 
 		#endregion
@@ -225,18 +225,18 @@ namespace Microsoft.Xna.Framework.Graphics
 			{
 				if (glColorBuffer != IntPtr.Zero)
 				{
-					FNA3D.FNA3D_AddDisposeRenderbuffer(
-						GraphicsDevice.GLDevice,
-						glColorBuffer
-					);
+					//FNA3D.FNA3D_AddDisposeRenderbuffer(
+					//	GraphicsDevice.GLDevice,
+					//	glColorBuffer
+					//);
 				}
 
 				if (glDepthStencilBuffer != IntPtr.Zero)
 				{
-					FNA3D.FNA3D_AddDisposeRenderbuffer(
-						GraphicsDevice.GLDevice,
-						glDepthStencilBuffer
-					);
+					//FNA3D.FNA3D_AddDisposeRenderbuffer(
+					//	GraphicsDevice.GLDevice,
+					//	glDepthStencilBuffer
+					//);
 				}
 			}
 			base.Dispose(disposing);

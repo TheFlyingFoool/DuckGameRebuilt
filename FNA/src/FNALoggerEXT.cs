@@ -32,9 +32,9 @@ namespace Microsoft.Xna.Framework
 
 		#region Private Static Variables
 
-		private static FNA3D.FNA3D_LogFunc LogInfoFunc = FNA3DLogInfo;
-		private static FNA3D.FNA3D_LogFunc LogWarnFunc = FNA3DLogWarn;
-		private static FNA3D.FNA3D_LogFunc LogErrorFunc = FNA3DLogError;
+		//private static FNA3D.FNA3D_LogFunc LogInfoFunc = FNA3DLogInfo;
+		//private static FNA3D.FNA3D_LogFunc LogWarnFunc = FNA3DLogWarn;
+		//private static FNA3D.FNA3D_LogFunc LogErrorFunc = FNA3DLogError;
 
 		#endregion
 
@@ -62,11 +62,11 @@ namespace Microsoft.Xna.Framework
 			/* Try to hook into the FNA3D logging system */
 			try
 			{
-				FNA3D.FNA3D_HookLogFunctions(
-					LogInfoFunc,
-					LogWarnFunc,
-					LogErrorFunc
-				);
+				//FNA3D.FNA3D_HookLogFunctions(
+				//	LogInfoFunc,
+				//	LogWarnFunc,
+				//	LogErrorFunc
+				//);
 			}
 			catch (DllNotFoundException)
 			{
@@ -78,25 +78,25 @@ namespace Microsoft.Xna.Framework
 
 		#region Private Static Functions
 
-		[ObjCRuntime.MonoPInvokeCallback(typeof(FNA3D.FNA3D_LogFunc))]
-		private static void FNA3DLogInfo(IntPtr msg)
-		{
-			LogInfo(UTF8_ToManaged(msg));
-		}
+		//[ObjCRuntime.MonoPInvokeCallback(typeof(FNA3D.FNA3D_LogFunc))]
+		//private static void FNA3DLogInfo(IntPtr msg)
+		//{
+		//	LogInfo(UTF8_ToManaged(msg));
+		//}
 
-		[ObjCRuntime.MonoPInvokeCallback(typeof(FNA3D.FNA3D_LogFunc))]
-		private static void FNA3DLogWarn(IntPtr msg)
-		{
-			LogWarn(UTF8_ToManaged(msg));
-		}
+		//[ObjCRuntime.MonoPInvokeCallback(typeof(FNA3D.FNA3D_LogFunc))]
+		//private static void FNA3DLogWarn(IntPtr msg)
+		//{
+		//	LogWarn(UTF8_ToManaged(msg));
+		//}
 
-		[ObjCRuntime.MonoPInvokeCallback(typeof(FNA3D.FNA3D_LogFunc))]
-		private static void FNA3DLogError(IntPtr msg)
-		{
-			string err = UTF8_ToManaged(msg);
-			LogError(err);
-			throw new InvalidOperationException(err);
-		}
+		//[ObjCRuntime.MonoPInvokeCallback(typeof(FNA3D.FNA3D_LogFunc))]
+		//private static void FNA3DLogError(IntPtr msg)
+		//{
+		//	string err = UTF8_ToManaged(msg);
+		//	LogError(err);
+		//	throw new InvalidOperationException(err);
+		//}
 
 		private static unsafe string UTF8_ToManaged(IntPtr s)
 		{

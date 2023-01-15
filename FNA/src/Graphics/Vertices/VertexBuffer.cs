@@ -101,12 +101,12 @@ namespace Microsoft.Xna.Framework.Graphics
 				vertexDeclaration.GraphicsDevice = graphicsDevice;
 			}
 
-			buffer = FNA3D.FNA3D_GenVertexBuffer(
-				GraphicsDevice.GLDevice,
-				(byte) (dynamic ? 1 : 0),
-				bufferUsage,
-				VertexCount * VertexDeclaration.VertexStride
-			);
+			//buffer = FNA3D.FNA3D_GenVertexBuffer(
+			//	GraphicsDevice.GLDevice,
+			//	(byte) (dynamic ? 1 : 0),
+			//	bufferUsage,
+			//	VertexCount * VertexDeclaration.VertexStride
+			//);
 		}
 
 		#endregion
@@ -117,10 +117,10 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
 			if (!IsDisposed)
 			{
-				FNA3D.FNA3D_AddDisposeVertexBuffer(
-					GraphicsDevice.GLDevice,
-					buffer
-				);
+				//FNA3D.FNA3D_AddDisposeVertexBuffer(
+				//	GraphicsDevice.GLDevice,
+				//	buffer
+				//);
 			}
 			base.Dispose(disposing);
 		}
@@ -195,17 +195,17 @@ namespace Microsoft.Xna.Framework.Graphics
 				throw new InvalidOperationException("The array is not the correct size for the amount of data requested.");
 			}
 
-			GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-			FNA3D.FNA3D_GetVertexBufferData(
-				GraphicsDevice.GLDevice,
-				buffer,
-				offsetInBytes,
-				handle.AddrOfPinnedObject() + (startIndex * elementSizeInBytes),
-				elementCount,
-				elementSizeInBytes,
-				vertexStride
-			);
-			handle.Free();
+			//GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+			//FNA3D.FNA3D_GetVertexBufferData(
+			//	GraphicsDevice.GLDevice,
+			//	buffer,
+			//	offsetInBytes,
+			//	handle.AddrOfPinnedObject() + (startIndex * elementSizeInBytes),
+			//	elementCount,
+			//	elementSizeInBytes,
+			//	vertexStride
+			//);
+			//handle.Free();
 		}
 
 		#endregion
@@ -244,21 +244,21 @@ namespace Microsoft.Xna.Framework.Graphics
 			int elementCount,
 			int vertexStride
 		) where T : struct {
-			ErrorCheck(data, startIndex, elementCount, vertexStride);
+			//ErrorCheck(data, startIndex, elementCount, vertexStride);
 
-			int elementSizeInBytes = Marshal.SizeOf(typeof(T));
-			GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-			FNA3D.FNA3D_SetVertexBufferData(
-				GraphicsDevice.GLDevice,
-				buffer,
-				offsetInBytes,
-				handle.AddrOfPinnedObject() + (startIndex * elementSizeInBytes),
-				elementCount,
-				elementSizeInBytes,
-				vertexStride,
-				SetDataOptions.None
-			);
-			handle.Free();
+			//int elementSizeInBytes = Marshal.SizeOf(typeof(T));
+			//GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+			//FNA3D.FNA3D_SetVertexBufferData(
+			//	GraphicsDevice.GLDevice,
+			//	buffer,
+			//	offsetInBytes,
+			//	handle.AddrOfPinnedObject() + (startIndex * elementSizeInBytes),
+			//	elementCount,
+			//	elementSizeInBytes,
+			//	vertexStride,
+			//	SetDataOptions.None
+			//);
+			//handle.Free();
 		}
 
 		#endregion
@@ -271,16 +271,16 @@ namespace Microsoft.Xna.Framework.Graphics
 			int dataLength,
 			SetDataOptions options
 		) {
-			FNA3D.FNA3D_SetVertexBufferData(
-				GraphicsDevice.GLDevice,
-				buffer,
-				offsetInBytes,
-				data,
-				dataLength,
-				1,
-				1,
-				options
-			);
+			//FNA3D.FNA3D_SetVertexBufferData(
+			//	GraphicsDevice.GLDevice,
+			//	buffer,
+			//	offsetInBytes,
+			//	data,
+			//	dataLength,
+			//	1,
+			//	1,
+			//	options
+			//);
 		}
 
 		#endregion

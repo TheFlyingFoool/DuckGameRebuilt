@@ -176,14 +176,14 @@ namespace Microsoft.Xna.Framework.Graphics
 				graphicsDevice,
 				spriteEffectCode
 			);
-			spriteMatrixTransform = spriteEffect.Parameters["MatrixTransform"].values;
-			spriteEffectPass = spriteEffect.CurrentTechnique.Passes[0];
+			//spriteMatrixTransform = spriteEffect.Parameters["MatrixTransform"].values;
+			//spriteEffectPass = spriteEffect.CurrentTechnique.Passes[0];
 
 			beginCalled = false;
 			numSprites = 0;
-			supportsNoOverwrite = FNA3D.FNA3D_SupportsNoOverwrite(
-				GraphicsDevice.GLDevice
-			) == 1;
+			//supportsNoOverwrite = FNA3D.FNA3D_SupportsNoOverwrite(
+			//	GraphicsDevice.GLDevice
+			//) == 1;
 		}
 
 		#endregion
@@ -1433,31 +1433,31 @@ namespace Microsoft.Xna.Framework.Graphics
 			Viewport viewport = GraphicsDevice.Viewport;
 
 			// Inlined CreateOrthographicOffCenter * transformMatrix
-			float tfWidth = (float) (2.0 / viewport.Width);
-			float tfHeight = (float) (-2.0 / viewport.Height);
-			unsafe
-			{
-				float* dstPtr = (float*) spriteMatrixTransform;
-				dstPtr[0] = (tfWidth * transformMatrix.M11) - transformMatrix.M14;
-				dstPtr[1] = (tfWidth * transformMatrix.M21) - transformMatrix.M24;
-				dstPtr[2] = (tfWidth * transformMatrix.M31) - transformMatrix.M34;
-				dstPtr[3] = (tfWidth * transformMatrix.M41) - transformMatrix.M44;
-				dstPtr[4] = (tfHeight * transformMatrix.M12) + transformMatrix.M14;
-				dstPtr[5] = (tfHeight * transformMatrix.M22) + transformMatrix.M24;
-				dstPtr[6] = (tfHeight * transformMatrix.M32) + transformMatrix.M34;
-				dstPtr[7] = (tfHeight * transformMatrix.M42) + transformMatrix.M44;
-				dstPtr[8] = transformMatrix.M13;
-				dstPtr[9] = transformMatrix.M23;
-				dstPtr[10] = transformMatrix.M33;
-				dstPtr[11] = transformMatrix.M43;
-				dstPtr[12] = transformMatrix.M14;
-				dstPtr[13] = transformMatrix.M24;
-				dstPtr[14] = transformMatrix.M34;
-				dstPtr[15] = transformMatrix.M44;
-			}
+			//float tfWidth = (float) (2.0 / viewport.Width);
+			//float tfHeight = (float) (-2.0 / viewport.Height);
+			//unsafe
+			//{
+			//	float* dstPtr = (float*) spriteMatrixTransform;
+			//	dstPtr[0] = (tfWidth * transformMatrix.M11) - transformMatrix.M14;
+			//	dstPtr[1] = (tfWidth * transformMatrix.M21) - transformMatrix.M24;
+			//	dstPtr[2] = (tfWidth * transformMatrix.M31) - transformMatrix.M34;
+			//	dstPtr[3] = (tfWidth * transformMatrix.M41) - transformMatrix.M44;
+			//	dstPtr[4] = (tfHeight * transformMatrix.M12) + transformMatrix.M14;
+			//	dstPtr[5] = (tfHeight * transformMatrix.M22) + transformMatrix.M24;
+			//	dstPtr[6] = (tfHeight * transformMatrix.M32) + transformMatrix.M34;
+			//	dstPtr[7] = (tfHeight * transformMatrix.M42) + transformMatrix.M44;
+			//	dstPtr[8] = transformMatrix.M13;
+			//	dstPtr[9] = transformMatrix.M23;
+			//	dstPtr[10] = transformMatrix.M33;
+			//	dstPtr[11] = transformMatrix.M43;
+			//	dstPtr[12] = transformMatrix.M14;
+			//	dstPtr[13] = transformMatrix.M24;
+			//	dstPtr[14] = transformMatrix.M34;
+			//	dstPtr[15] = transformMatrix.M44;
+			//}
 
 			// FIXME: When is this actually applied? -flibit
-			spriteEffectPass.Apply();
+			//spriteEffectPass.Apply();
 		}
 
 		private void DrawPrimitives(Texture texture, int baseSprite, int batchSize)

@@ -85,7 +85,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		#endregion
 
 		#region Internal Constructor
-
+		internal EffectParameter() { }
 		internal EffectParameter(
 			string name,
 			string semantic,
@@ -507,6 +507,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(bool value)
 		{
+			return;
 			unsafe
 			{
 				int* dstPtr = (int*) values;
@@ -517,6 +518,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(bool[] value)
 		{
+			return;
 			unsafe
 			{
 				int* dstPtr = (int*) values;
@@ -533,6 +535,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(int value)
 		{
+			return;
 			if (ParameterType == EffectParameterType.Single)
 			{
 				unsafe
@@ -553,6 +556,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(int[] value)
 		{
+			return;
 			for (int i = 0, j = 0; i < value.Length; i += ColumnCount, j += 16)
 			{
 				Marshal.Copy(value, i, values + j, ColumnCount);
@@ -561,6 +565,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValueTranspose(Matrix value)
 		{
+			return;
 			// FIXME: All Matrix sizes... this will get ugly. -flibit
 #if DEBUG
 			value.CheckForNaNs();
@@ -649,6 +654,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValueTranspose(Matrix[] value)
 		{
+			return;
 			// FIXME: All Matrix sizes... this will get ugly. -flibit
 			unsafe
 			{
@@ -764,6 +770,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(Matrix value)
 		{
+			return;
 			// FIXME: All Matrix sizes... this will get ugly. -flibit
 #if DEBUG
 			value.CheckForNaNs();
@@ -852,6 +859,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(Matrix[] value)
 		{
+			return;
 			// FIXME: All Matrix sizes... this will get ugly. -flibit
 			unsafe
 			{
@@ -967,6 +975,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(Quaternion value)
 		{
+			return;
 #if DEBUG
 			value.CheckForNaNs();
 #endif
@@ -982,6 +991,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(Quaternion[] value)
 		{
+			return;
 			unsafe
 			{
 				float* dstPtr = (float*) values;
@@ -1000,6 +1010,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(float value)
 		{
+			return;
 #if DEBUG
 			if (float.IsNaN(value))
 			{
@@ -1015,6 +1026,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(float[] value)
 		{
+			return;
 #if DEBUG
 			foreach (float f in value)
 			{
@@ -1046,6 +1058,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(Vector2 value)
 		{
+			return;
 #if DEBUG
 			value.CheckForNaNs();
 #endif
@@ -1059,6 +1072,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(Vector2[] value)
 		{
+			return;
 			unsafe
 			{
 				float* dstPtr = (float*) values;
@@ -1075,6 +1089,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(Vector3 value)
 		{
+			return;
 #if DEBUG
 			value.CheckForNaNs();
 #endif
@@ -1106,6 +1121,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(Vector4 value)
 		{
+			return;
 #if DEBUG
 			value.CheckForNaNs();
 #endif
@@ -1121,6 +1137,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(Vector4[] value)
 		{
+			return;
 			unsafe
 			{
 				float* dstPtr = (float*) values;

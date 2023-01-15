@@ -21,6 +21,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			}
 			set
 			{
+				return;
 				samplers[index] = value;
 				modifiedSamplers[index] = true;
 			}

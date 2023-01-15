@@ -42,7 +42,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		#endregion
 
 		#region Public Constructors
-
+		public Texture2D() { }
 		public Texture2D(
 			GraphicsDevice graphicsDevice,
 			int width,
@@ -63,64 +63,61 @@ namespace Microsoft.Xna.Framework.Graphics
 			bool mipMap,
 			SurfaceFormat format
 		) {
-			if (graphicsDevice == null)
-			{
-				throw new ArgumentNullException("graphicsDevice");
-			}
+		
 
 			GraphicsDevice = graphicsDevice;
 			Width = width;
 			Height = height;
 			LevelCount = mipMap ? CalculateMipLevels(width, height) : 1;
+			return;
+			//// TODO: Use QueryRenderTargetFormat!
+			//if (this is IRenderTarget)
+			//{
+			//	if (format == SurfaceFormat.ColorSrgbEXT)
+			//	{
+			//		if (FNA3D.FNA3D_SupportsSRGBRenderTargets(GraphicsDevice.GLDevice) == 0)
+			//		{
+			//			// Renderable but not on this device
+			//			Format = SurfaceFormat.Color;
+			//		}
+			//		else
+			//		{
+			//			Format = format;
+			//		}
+			//	}
+			//	else if (	format != SurfaceFormat.Color &&
+			//			format != SurfaceFormat.Rgba1010102 &&
+			//			format != SurfaceFormat.Rg32 &&
+			//			format != SurfaceFormat.Rgba64 &&
+			//			format != SurfaceFormat.Single &&
+			//			format != SurfaceFormat.Vector2 &&
+			//			format != SurfaceFormat.Vector4 &&
+			//			format != SurfaceFormat.HalfSingle &&
+			//			format != SurfaceFormat.HalfVector2 &&
+			//			format != SurfaceFormat.HalfVector4 &&
+			//			format != SurfaceFormat.HdrBlendable	)
+			//	{
+			//		// Not a renderable format period
+			//		Format = SurfaceFormat.Color;
+			//	}
+			//	else
+			//	{
+			//		Format = format;
+			//	}
+			//}
+			//else
+			//{
+			//	Format = format;
+			//}
 
-			// TODO: Use QueryRenderTargetFormat!
-			if (this is IRenderTarget)
-			{
-				if (format == SurfaceFormat.ColorSrgbEXT)
-				{
-					if (FNA3D.FNA3D_SupportsSRGBRenderTargets(GraphicsDevice.GLDevice) == 0)
-					{
-						// Renderable but not on this device
-						Format = SurfaceFormat.Color;
-					}
-					else
-					{
-						Format = format;
-					}
-				}
-				else if (	format != SurfaceFormat.Color &&
-						format != SurfaceFormat.Rgba1010102 &&
-						format != SurfaceFormat.Rg32 &&
-						format != SurfaceFormat.Rgba64 &&
-						format != SurfaceFormat.Single &&
-						format != SurfaceFormat.Vector2 &&
-						format != SurfaceFormat.Vector4 &&
-						format != SurfaceFormat.HalfSingle &&
-						format != SurfaceFormat.HalfVector2 &&
-						format != SurfaceFormat.HalfVector4 &&
-						format != SurfaceFormat.HdrBlendable	)
-				{
-					// Not a renderable format period
-					Format = SurfaceFormat.Color;
-				}
-				else
-				{
-					Format = format;
-				}
-			}
-			else
-			{
-				Format = format;
-			}
-
-			texture = FNA3D.FNA3D_CreateTexture2D(
-				GraphicsDevice.GLDevice,
-				Format,
-				Width,
-				Height,
-				LevelCount,
-				(byte) ((this is IRenderTarget) ? 1 : 0)
-			);
+			//texture = FNA3D.FNA3D_CreateTexture2D(
+			//	GraphicsDevice.GLDevice,
+			//	Format,
+			//	Width,
+			//	Height,
+			//	LevelCount,
+			//	(byte) ((this is IRenderTarget) ? 1 : 0)
+			//);
 		}
 
 		#endregion
@@ -159,55 +156,56 @@ namespace Microsoft.Xna.Framework.Graphics
 			int startIndex,
 			int elementCount
 		) where T : struct {
-			if (data == null)
-			{
-				throw new ArgumentNullException("data");
-			}
-			if (startIndex < 0)
-			{
-				throw new ArgumentOutOfRangeException("startIndex");
-			}
-			if (data.Length < (elementCount + startIndex))
-			{
-				throw new ArgumentOutOfRangeException("elementCount");
-			}
+			return;
+			//if (data == null)
+			//{
+			//	throw new ArgumentNullException("data");
+			//}
+			//if (startIndex < 0)
+			//{
+			//	throw new ArgumentOutOfRangeException("startIndex");
+			//}
+			//if (data.Length < (elementCount + startIndex))
+			//{
+			//	throw new ArgumentOutOfRangeException("elementCount");
+			//}
 
-			int x, y, w, h;
-			if (rect.HasValue)
-			{
-				x = rect.Value.X;
-				y = rect.Value.Y;
-				w = rect.Value.Width;
-				h = rect.Value.Height;
-			}
-			else
-			{
-				x = 0;
-				y = 0;
-				w = Math.Max(Width >> level, 1);
-				h = Math.Max(Height >> level, 1);
-			}
-			int elementSize = Marshal.SizeOf(typeof(T));
-			int requiredBytes = (w * h * GetFormatSize(Format)) / GetBlockSizeSquared(Format);
-			int availableBytes = elementCount * elementSize;
-			if (requiredBytes > availableBytes)
-			{
-				throw new ArgumentOutOfRangeException("rect", "The region you are trying to upload is larger than the amount of data you provided.");
-			}
+			//int x, y, w, h;
+			//if (rect.HasValue)
+			//{
+			//	x = rect.Value.X;
+			//	y = rect.Value.Y;
+			//	w = rect.Value.Width;
+			//	h = rect.Value.Height;
+			//}
+			//else
+			//{
+			//	x = 0;
+			//	y = 0;
+			//	w = Math.Max(Width >> level, 1);
+			//	h = Math.Max(Height >> level, 1);
+			//}
+			//int elementSize = Marshal.SizeOf(typeof(T));
+			//int requiredBytes = (w * h * GetFormatSize(Format)) / GetBlockSizeSquared(Format);
+			//int availableBytes = elementCount * elementSize;
+			//if (requiredBytes > availableBytes)
+			//{
+			//	throw new ArgumentOutOfRangeException("rect", "The region you are trying to upload is larger than the amount of data you provided.");
+			//}
 
-			GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-			FNA3D.FNA3D_SetTextureData2D(
-				GraphicsDevice.GLDevice,
-				texture,
-				x,
-				y,
-				w,
-				h,
-				level,
-				handle.AddrOfPinnedObject() + startIndex * elementSize,
-				elementCount * elementSize
-			);
-			handle.Free();
+			//GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+			//FNA3D.FNA3D_SetTextureData2D(
+			//	GraphicsDevice.GLDevice,
+			//	texture,
+			//	x,
+			//	y,
+			//	w,
+			//	h,
+			//	level,
+			//	handle.AddrOfPinnedObject() + startIndex * elementSize,
+			//	elementCount * elementSize
+			//);
+			//handle.Free();
 		}
 
 		public void SetDataPointerEXT(
@@ -216,38 +214,38 @@ namespace Microsoft.Xna.Framework.Graphics
 			IntPtr data,
 			int dataLength
 		) {
-			if (data == IntPtr.Zero)
-			{
-				throw new ArgumentNullException("data");
-			}
+			//if (data == IntPtr.Zero)
+			//{
+			//	throw new ArgumentNullException("data");
+			//}
 
-			int x, y, w, h;
-			if (rect.HasValue)
-			{
-				x = rect.Value.X;
-				y = rect.Value.Y;
-				w = rect.Value.Width;
-				h = rect.Value.Height;
-			}
-			else
-			{
-				x = 0;
-				y = 0;
-				w = Math.Max(Width >> level, 1);
-				h = Math.Max(Height >> level, 1);
-			}
+			//int x, y, w, h;
+			//if (rect.HasValue)
+			//{
+			//	x = rect.Value.X;
+			//	y = rect.Value.Y;
+			//	w = rect.Value.Width;
+			//	h = rect.Value.Height;
+			//}
+			//else
+			//{
+			//	x = 0;
+			//	y = 0;
+			//	w = Math.Max(Width >> level, 1);
+			//	h = Math.Max(Height >> level, 1);
+			//}
 
-			FNA3D.FNA3D_SetTextureData2D(
-				GraphicsDevice.GLDevice,
-				texture,
-				x,
-				y,
-				w,
-				h,
-				level,
-				data,
-				dataLength
-			);
+			//FNA3D.FNA3D_SetTextureData2D(
+			//	GraphicsDevice.GLDevice,
+			//	texture,
+			//	x,
+			//	y,
+			//	w,
+			//	h,
+			//	level,
+			//	data,
+			//	dataLength
+			//);
 		}
 
 		#endregion
@@ -286,6 +284,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			int startIndex,
 			int elementCount
 		) where T : struct {
+			return;
 			if (data == null || data.Length == 0)
 			{
 				throw new ArgumentException("data cannot be null");
@@ -317,19 +316,19 @@ namespace Microsoft.Xna.Framework.Graphics
 			int elementSizeInBytes = Marshal.SizeOf(typeof(T));
 			ValidateGetDataFormat(Format, elementSizeInBytes);
 
-			GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-			FNA3D.FNA3D_GetTextureData2D(
-				GraphicsDevice.GLDevice,
-				texture,
-				subX,
-				subY,
-				subW,
-				subH,
-				level,
-				handle.AddrOfPinnedObject() + (startIndex * elementSizeInBytes),
-				elementCount * elementSizeInBytes
-			);
-			handle.Free();
+			//GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+			//FNA3D.FNA3D_GetTextureData2D(
+			//	GraphicsDevice.GLDevice,
+			//	texture,
+			//	subX,
+			//	subY,
+			//	subW,
+			//	subH,
+			//	level,
+			//	handle.AddrOfPinnedObject() + (startIndex * elementSizeInBytes),
+			//	elementCount * elementSizeInBytes
+			//);
+			//handle.Free();
 		}
 
 		#endregion
@@ -338,60 +337,60 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SaveAsJpeg(Stream stream, int width, int height)
 		{
-			int len = Width * Height * GetFormatSize(Format);
-			IntPtr data = Marshal.AllocHGlobal(len);
-			FNA3D.FNA3D_GetTextureData2D(
-				GraphicsDevice.GLDevice,
-				texture,
-				0,
-				0,
-				Width,
-				height,
-				0,
-				data,
-				len
-			);
+			//int len = Width * Height * GetFormatSize(Format);
+			//IntPtr data = Marshal.AllocHGlobal(len);
+			//FNA3D.FNA3D_GetTextureData2D(
+			//	GraphicsDevice.GLDevice,
+			//	texture,
+			//	0,
+			//	0,
+			//	Width,
+			//	height,
+			//	0,
+			//	data,
+			//	len
+			//);
 
-			FNA3D.WriteJPGStream(
-				stream,
-				Width,
-				Height,
-				width,
-				height,
-				data,
-				100 // FIXME: What does XNA pick for quality? -flibit
-			);
+			//FNA3D.WriteJPGStream(
+			//	stream,
+			//	Width,
+			//	Height,
+			//	width,
+			//	height,
+			//	data,
+			//	100 // FIXME: What does XNA pick for quality? -flibit
+			//);
 
-			Marshal.FreeHGlobal(data);
+			//Marshal.FreeHGlobal(data);
 		}
 
 		public void SaveAsPng(Stream stream, int width, int height)
 		{
-			int len = Width * Height * GetFormatSize(Format);
-			IntPtr data = Marshal.AllocHGlobal(len);
-			FNA3D.FNA3D_GetTextureData2D(
-				GraphicsDevice.GLDevice,
-				texture,
-				0,
-				0,
-				Width,
-				height,
-				0,
-				data,
-				len
-			);
+			//int len = Width * Height * GetFormatSize(Format);
+			//IntPtr data = Marshal.AllocHGlobal(len);
+			//FNA3D.FNA3D_GetTextureData2D(
+			//	GraphicsDevice.GLDevice,
+			//	texture,
+			//	0,
+			//	0,
+			//	Width,
+			//	height,
+			//	0,
+			//	data,
+			//	len
+			//);
 
 
-			FNA3D.WritePNGStream(
-				stream,
-				Width,
-				Height,
-				width,
-				height,
-				data
-			);
+			//FNA3D.WritePNGStream(
+			//	stream,
+			//	Width,
+			//	Height,
+			//	width,
+			//	height,
+			//	data
+			//);
 
-			Marshal.FreeHGlobal(data);
+			//Marshal.FreeHGlobal(data);
 		}
 
 		#endregion
@@ -425,7 +424,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				len
 			);
 
-			FNA3D.FNA3D_Image_Free(pixels);
+			//FNA3D.FNA3D_Image_Free(pixels);
 			return result;
 		}
 
@@ -464,7 +463,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				len
 			);
 
-			FNA3D.FNA3D_Image_Free(pixels);
+			//FNA3D.FNA3D_Image_Free(pixels);
 			return result;
 		}
 
@@ -515,7 +514,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			pixels = new byte[len];
 			Marshal.Copy(pixPtr, pixels, 0, len);
 
-			FNA3D.FNA3D_Image_Free(pixPtr);
+			//FNA3D.FNA3D_Image_Free(pixPtr);
 		}
 
 		public static Texture2D DDSFromStreamEXT(

@@ -39,62 +39,62 @@ namespace Microsoft.Xna.Framework.Graphics
 			bool mipMap,
 			SurfaceFormat format
 		) {
-			if (graphicsDevice == null)
-			{
-				throw new ArgumentNullException("graphicsDevice");
-			}
+			//if (graphicsDevice == null)
+			//{
+			//	throw new ArgumentNullException("graphicsDevice");
+			//}
 
-			GraphicsDevice = graphicsDevice;
-			Size = size;
-			LevelCount = mipMap ? CalculateMipLevels(size) : 1;
+			//GraphicsDevice = graphicsDevice;
+			//Size = size;
+			//LevelCount = mipMap ? CalculateMipLevels(size) : 1;
 
-			// TODO: Use QueryRenderTargetFormat!
-			if (this is IRenderTarget)
-			{
-				if (format == SurfaceFormat.ColorSrgbEXT)
-				{
-					if (FNA3D.FNA3D_SupportsSRGBRenderTargets(GraphicsDevice.GLDevice) == 0)
-					{
-						// Renderable but not on this device
-						Format = SurfaceFormat.Color;
-					}
-					else
-					{
-						Format = format;
-					}
-				}
-				else if (	format != SurfaceFormat.Color &&
-						format != SurfaceFormat.Rgba1010102 &&
-						format != SurfaceFormat.Rg32 &&
-						format != SurfaceFormat.Rgba64 &&
-						format != SurfaceFormat.Single &&
-						format != SurfaceFormat.Vector2 &&
-						format != SurfaceFormat.Vector4 &&
-						format != SurfaceFormat.HalfSingle &&
-						format != SurfaceFormat.HalfVector2 &&
-						format != SurfaceFormat.HalfVector4 &&
-						format != SurfaceFormat.HdrBlendable	)
-				{
-					// Not a renderable format period
-					Format = SurfaceFormat.Color;
-				}
-				else
-				{
-					Format = format;
-				}
-			}
-			else
-			{
-				Format = format;
-			}
+			//// TODO: Use QueryRenderTargetFormat!
+			//if (this is IRenderTarget)
+			//{
+			//	if (format == SurfaceFormat.ColorSrgbEXT)
+			//	{
+			//		if (FNA3D.FNA3D_SupportsSRGBRenderTargets(GraphicsDevice.GLDevice) == 0)
+			//		{
+			//			// Renderable but not on this device
+			//			Format = SurfaceFormat.Color;
+			//		}
+			//		else
+			//		{
+			//			Format = format;
+			//		}
+			//	}
+			//	else if (	format != SurfaceFormat.Color &&
+			//			format != SurfaceFormat.Rgba1010102 &&
+			//			format != SurfaceFormat.Rg32 &&
+			//			format != SurfaceFormat.Rgba64 &&
+			//			format != SurfaceFormat.Single &&
+			//			format != SurfaceFormat.Vector2 &&
+			//			format != SurfaceFormat.Vector4 &&
+			//			format != SurfaceFormat.HalfSingle &&
+			//			format != SurfaceFormat.HalfVector2 &&
+			//			format != SurfaceFormat.HalfVector4 &&
+			//			format != SurfaceFormat.HdrBlendable	)
+			//	{
+			//		// Not a renderable format period
+			//		Format = SurfaceFormat.Color;
+			//	}
+			//	else
+			//	{
+			//		Format = format;
+			//	}
+			//}
+			//else
+			//{
+			//	Format = format;
+			//}
 
-			texture = FNA3D.FNA3D_CreateTextureCube(
-				GraphicsDevice.GLDevice,
-				Format,
-				Size,
-				LevelCount,
-				(byte) ((this is IRenderTarget) ? 1 : 0)
-			);
+			//texture = FNA3D.FNA3D_CreateTextureCube(
+			//	GraphicsDevice.GLDevice,
+			//	Format,
+			//	Size,
+			//	LevelCount,
+			//	(byte) ((this is IRenderTarget) ? 1 : 0)
+			//);
 		}
 
 		#endregion
@@ -139,42 +139,42 @@ namespace Microsoft.Xna.Framework.Graphics
 			int startIndex,
 			int elementCount
 		) where T : struct {
-			if (data == null)
-			{
-				throw new ArgumentNullException("data");
-			}
+			//if (data == null)
+			//{
+			//	throw new ArgumentNullException("data");
+			//}
 
-			int xOffset, yOffset, width, height;
-			if (rect.HasValue)
-			{
-				xOffset = rect.Value.X;
-				yOffset = rect.Value.Y;
-				width = rect.Value.Width;
-				height = rect.Value.Height;
-			}
-			else
-			{
-				xOffset = 0;
-				yOffset = 0;
-				width = Math.Max(1, Size >> level);
-				height = Math.Max(1, Size >> level);
-			}
+			//int xOffset, yOffset, width, height;
+			//if (rect.HasValue)
+			//{
+			//	xOffset = rect.Value.X;
+			//	yOffset = rect.Value.Y;
+			//	width = rect.Value.Width;
+			//	height = rect.Value.Height;
+			//}
+			//else
+			//{
+			//	xOffset = 0;
+			//	yOffset = 0;
+			//	width = Math.Max(1, Size >> level);
+			//	height = Math.Max(1, Size >> level);
+			//}
 
-			int elementSizeInBytes = Marshal.SizeOf(typeof(T));
-			GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-			FNA3D.FNA3D_SetTextureDataCube(
-				GraphicsDevice.GLDevice,
-				texture,
-				xOffset,
-				yOffset,
-				width,
-				height,
-				cubeMapFace,
-				level,
-				handle.AddrOfPinnedObject() + startIndex * elementSizeInBytes,
-				elementCount * elementSizeInBytes
-			);
-			handle.Free();
+			//int elementSizeInBytes = Marshal.SizeOf(typeof(T));
+			//GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+			//FNA3D.FNA3D_SetTextureDataCube(
+			//	GraphicsDevice.GLDevice,
+			//	texture,
+			//	xOffset,
+			//	yOffset,
+			//	width,
+			//	height,
+			//	cubeMapFace,
+			//	level,
+			//	handle.AddrOfPinnedObject() + startIndex * elementSizeInBytes,
+			//	elementCount * elementSizeInBytes
+			//);
+			//handle.Free();
 		}
 
 		public void SetDataPointerEXT(
@@ -184,39 +184,39 @@ namespace Microsoft.Xna.Framework.Graphics
 			IntPtr data,
 			int dataLength
 		) {
-			if (data == IntPtr.Zero)
-			{
-				throw new ArgumentNullException("data");
-			}
+			//if (data == IntPtr.Zero)
+			//{
+			//	throw new ArgumentNullException("data");
+			//}
 
-			int xOffset, yOffset, width, height;
-			if (rect.HasValue)
-			{
-				xOffset = rect.Value.X;
-				yOffset = rect.Value.Y;
-				width = rect.Value.Width;
-				height = rect.Value.Height;
-			}
-			else
-			{
-				xOffset = 0;
-				yOffset = 0;
-				width = Math.Max(1, Size >> level);
-				height = Math.Max(1, Size >> level);
-			}
+			//int xOffset, yOffset, width, height;
+			//if (rect.HasValue)
+			//{
+			//	xOffset = rect.Value.X;
+			//	yOffset = rect.Value.Y;
+			//	width = rect.Value.Width;
+			//	height = rect.Value.Height;
+			//}
+			//else
+			//{
+			//	xOffset = 0;
+			//	yOffset = 0;
+			//	width = Math.Max(1, Size >> level);
+			//	height = Math.Max(1, Size >> level);
+			//}
 
-			FNA3D.FNA3D_SetTextureDataCube(
-				GraphicsDevice.GLDevice,
-				texture,
-				xOffset,
-				yOffset,
-				width,
-				height,
-				cubeMapFace,
-				level,
-				data,
-				dataLength
-			);
+			//FNA3D.FNA3D_SetTextureDataCube(
+			//	GraphicsDevice.GLDevice,
+			//	texture,
+			//	xOffset,
+			//	yOffset,
+			//	width,
+			//	height,
+			//	cubeMapFace,
+			//	level,
+			//	data,
+			//	dataLength
+			//);
 		}
 		#endregion
 
@@ -260,51 +260,51 @@ namespace Microsoft.Xna.Framework.Graphics
 			int startIndex,
 			int elementCount
 		) where T : struct {
-			if (data == null || data.Length == 0)
-			{
-				throw new ArgumentException("data cannot be null");
-			}
-			if (data.Length < startIndex + elementCount)
-			{
-				throw new ArgumentException(
-					"The data passed has a length of " + data.Length.ToString() +
-					" but " + elementCount.ToString() + " pixels have been requested."
-				);
-			}
+			//if (data == null || data.Length == 0)
+			//{
+			//	throw new ArgumentException("data cannot be null");
+			//}
+			//if (data.Length < startIndex + elementCount)
+			//{
+			//	throw new ArgumentException(
+			//		"The data passed has a length of " + data.Length.ToString() +
+			//		" but " + elementCount.ToString() + " pixels have been requested."
+			//	);
+			//}
 
-			int subX, subY, subW, subH;
-			if (rect == null)
-			{
-				subX = 0;
-				subY = 0;
-				subW = Size >> level;
-				subH = Size >> level;
-			}
-			else
-			{
-				subX = rect.Value.X;
-				subY = rect.Value.Y;
-				subW = rect.Value.Width;
-				subH = rect.Value.Height;
-			}
+			//int subX, subY, subW, subH;
+			//if (rect == null)
+			//{
+			//	subX = 0;
+			//	subY = 0;
+			//	subW = Size >> level;
+			//	subH = Size >> level;
+			//}
+			//else
+			//{
+			//	subX = rect.Value.X;
+			//	subY = rect.Value.Y;
+			//	subW = rect.Value.Width;
+			//	subH = rect.Value.Height;
+			//}
 
-			int elementSizeInBytes = Marshal.SizeOf(typeof(T));
-			ValidateGetDataFormat(Format, elementSizeInBytes);
+			//int elementSizeInBytes = Marshal.SizeOf(typeof(T));
+			//ValidateGetDataFormat(Format, elementSizeInBytes);
 
-			GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-			FNA3D.FNA3D_GetTextureDataCube(
-				GraphicsDevice.GLDevice,
-				texture,
-				subX,
-				subY,
-				subW,
-				subH,
-				cubeMapFace,
-				level,
-				handle.AddrOfPinnedObject() + (startIndex * elementSizeInBytes),
-				elementCount * elementSizeInBytes
-			);
-			handle.Free();
+			//GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+			//FNA3D.FNA3D_GetTextureDataCube(
+			//	GraphicsDevice.GLDevice,
+			//	texture,
+			//	subX,
+			//	subY,
+			//	subW,
+			//	subH,
+			//	cubeMapFace,
+			//	level,
+			//	handle.AddrOfPinnedObject() + (startIndex * elementSizeInBytes),
+			//	elementCount * elementSizeInBytes
+			//);
+			//handle.Free();
 		}
 
 		#endregion

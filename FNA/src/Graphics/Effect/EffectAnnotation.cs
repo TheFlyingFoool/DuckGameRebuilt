@@ -62,7 +62,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		#endregion
 
 		#region Internal Constructor
-
+		internal EffectAnnotation() { }
 		internal EffectAnnotation(
 			string name,
 			string semantic,

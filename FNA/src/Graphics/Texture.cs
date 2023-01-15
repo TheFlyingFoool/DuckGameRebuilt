@@ -46,10 +46,10 @@ namespace Microsoft.Xna.Framework.Graphics
 			{
 				GraphicsDevice.Textures.RemoveDisposedTexture(this);
 				GraphicsDevice.VertexTextures.RemoveDisposedTexture(this);
-				FNA3D.FNA3D_AddDisposeTexture(
-					GraphicsDevice.GLDevice,
-					texture
-				);
+				//FNA3D.FNA3D_AddDisposeTexture(
+				//	GraphicsDevice.GLDevice,
+				//	texture
+				//);
 			}
 			base.Dispose(disposing);
 		}

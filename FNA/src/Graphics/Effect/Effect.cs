@@ -10,7 +10,10 @@
 #region Using Statements
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+
 #endregion
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -28,11 +31,11 @@ namespace Microsoft.Xna.Framework.Graphics
 			}
 			set
 			{
-				FNA3D.FNA3D_SetEffectTechnique(
-					GraphicsDevice.GLDevice,
-					glEffect,
-					value.TechniquePointer
-				);
+				//FNA3D.FNA3D_SetEffectTechnique(
+				//	GraphicsDevice.GLDevice,
+				//	glEffect,
+				//	value.TechniquePointer
+				//);
 				INTERNAL_currentTechnique = value;
 			}
 		}
@@ -212,39 +215,48 @@ namespace Microsoft.Xna.Framework.Graphics
 		#endregion
 
 		#region Public Constructor
-
+		public Effect()
+		{
+			Parameters = new EffectParameterCollection();
+			Techniques = new EffectTechniqueCollection(new List<EffectTechnique>() { new EffectTechnique("placeholder", (IntPtr)0, new EffectPassCollection(new List<EffectPass>() { new EffectPass() }), new EffectAnnotationCollection(new List<EffectAnnotation>() { new EffectAnnotation() })) });
+			CurrentTechnique = Techniques[0];
+		}
 		public Effect(GraphicsDevice graphicsDevice, byte[] effectCode)
 		{
-			GraphicsDevice = graphicsDevice;
-
-			// Send the blob to the GLDevice to be parsed/compiled
-			IntPtr effectData;
-			FNA3D.FNA3D_CreateEffect(
-				graphicsDevice.GLDevice,
-				effectCode,
-				effectCode.Length,
-				out glEffect,
-				out effectData
-			);
-
-			// This is where it gets ugly...
-			INTERNAL_parseEffectStruct(effectData);
-
-			// The default technique is the first technique.
+			Parameters = new EffectParameterCollection();
+			Techniques = new EffectTechniqueCollection(new List<EffectTechnique>() { new EffectTechnique("placeholder",(IntPtr)0, new EffectPassCollection( new List<EffectPass>() { new EffectPass()}),new EffectAnnotationCollection(new List<EffectAnnotation>() { new EffectAnnotation()})) });
 			CurrentTechnique = Techniques[0];
+			return;
+			//GraphicsDevice = graphicsDevice;
 
-			// Use native memory for changes, .NET loves moving this around
-			unsafe
-			{
-				stateChangesPtr = Marshal.AllocHGlobal(
-					sizeof(MOJOSHADER_effectStateChanges)
-				);
-				MOJOSHADER_effectStateChanges *stateChanges =
-					(MOJOSHADER_effectStateChanges*) stateChangesPtr;
-				stateChanges->render_state_change_count = 0;
-				stateChanges->sampler_state_change_count = 0;
-				stateChanges->vertex_sampler_state_change_count = 0;
-			}
+			//// Send the blob to the GLDevice to be parsed/compiled
+			//IntPtr effectData;
+			////FNA3D.FNA3D_CreateEffect(
+			////	graphicsDevice.GLDevice,
+			////	effectCode,
+			////	effectCode.Length,
+			////	out glEffect,
+			////	out effectData
+			////);
+
+			//// This is where it gets ugly...
+			//INTERNAL_parseEffectStruct(effectData);
+
+			//// The default technique is the first technique.
+			//CurrentTechnique = Techniques[0];
+
+			//// Use native memory for changes, .NET loves moving this around
+			//unsafe
+			//{
+			//	stateChangesPtr = Marshal.AllocHGlobal(
+			//		sizeof(MOJOSHADER_effectStateChanges)
+			//	);
+			//	MOJOSHADER_effectStateChanges *stateChanges =
+			//		(MOJOSHADER_effectStateChanges*) stateChangesPtr;
+			//	stateChanges->render_state_change_count = 0;
+			//	stateChanges->sampler_state_change_count = 0;
+			//	stateChanges->vertex_sampler_state_change_count = 0;
+			//}
 		}
 
 		#endregion
@@ -253,16 +265,20 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		protected Effect(Effect cloneSource)
 		{
+			Parameters = new EffectParameterCollection();
+			Techniques = new EffectTechniqueCollection(new List<EffectTechnique>() { new EffectTechnique("placeholder", (IntPtr)0, new EffectPassCollection(new List<EffectPass>() { new EffectPass() }), new EffectAnnotationCollection(new List<EffectAnnotation>() { new EffectAnnotation() })) });
+			CurrentTechnique = Techniques[0];
+			return;
 			GraphicsDevice = cloneSource.GraphicsDevice;
 
 			// Send the parsed data to be cloned and recompiled by MojoShader
 			IntPtr effectData;
-			FNA3D.FNA3D_CloneEffect(
-				GraphicsDevice.GLDevice,
-				cloneSource.glEffect,
-				out glEffect,
-				out effectData
-			);
+			//FNA3D.FNA3D_CloneEffect(
+			//	GraphicsDevice.GLDevice,
+			//	cloneSource.glEffect,
+			//	out glEffect,
+			//	out effectData
+			//);
 
 			// Double the ugly, double the fun!
 			INTERNAL_parseEffectStruct(effectData);
@@ -315,10 +331,10 @@ namespace Microsoft.Xna.Framework.Graphics
 			{
 				if (glEffect != IntPtr.Zero)
 				{
-					FNA3D.FNA3D_AddDisposeEffect(
-						GraphicsDevice.GLDevice,
-						glEffect
-					);
+					//FNA3D.FNA3D_AddDisposeEffect(
+					//	GraphicsDevice.GLDevice,
+					//	glEffect
+					//);
 				}
 				if (stateChangesPtr != IntPtr.Zero)
 				{
@@ -339,12 +355,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		internal unsafe void INTERNAL_applyEffect(uint pass)
 		{
-			FNA3D.FNA3D_ApplyEffect(
-				GraphicsDevice.GLDevice,
-				glEffect,
-				pass,
-				stateChangesPtr
-			);
+			//FNA3D.FNA3D_ApplyEffect(
+			//	GraphicsDevice.GLDevice,
+			//	glEffect,
+			//	pass,
+			//	stateChangesPtr
+			//);
 			MOJOSHADER_effectStateChanges *stateChanges =
 				(MOJOSHADER_effectStateChanges*) stateChangesPtr;
 			if (stateChanges->render_state_change_count > 0)
@@ -879,6 +895,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		private unsafe void INTERNAL_parseEffectStruct(IntPtr effectData)
 		{
+			return;
 			MOJOSHADER_effect* effectPtr = (MOJOSHADER_effect*) effectData;
 
 			// Set up Parameters

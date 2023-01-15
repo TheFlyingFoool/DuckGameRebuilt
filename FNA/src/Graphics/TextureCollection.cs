@@ -21,10 +21,12 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
 			get
 			{
+				return new Texture2D(null, 0,0);
 				return textures[index];
 			}
 			set
 			{
+				return;
 #if DEBUG
 				// XNA checks for disposed textures here! -flibit
 				if (value != null)

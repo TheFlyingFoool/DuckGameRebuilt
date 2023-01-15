@@ -63,6 +63,10 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
 			elements = value;
 		}
+		internal EffectTechniqueCollection()
+		{
+			elements = new List<EffectTechnique>();
+		}
 
 		#endregion
 

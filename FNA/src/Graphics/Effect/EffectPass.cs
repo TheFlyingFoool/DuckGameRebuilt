@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		#endregion
 
 		#region Internal Constructor
-
+		internal EffectPass() { }
 		internal EffectPass(
 			string name,
 			EffectAnnotationCollection annotations,
@@ -61,6 +61,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void Apply()
 		{
+			return;
 			if (parentTechnique != parentEffect.CurrentTechnique.TechniquePointer)
 			{
 				throw new InvalidOperationException(

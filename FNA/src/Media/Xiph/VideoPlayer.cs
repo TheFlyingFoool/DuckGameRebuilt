@@ -57,10 +57,10 @@ namespace Microsoft.Xna.Framework.Media
 		private DepthStencilState prevDepthStencil;
 		private RasterizerState prevRasterizer;
 		private Viewport prevViewport;
-		private FNA3D.FNA3D_RenderTargetBinding[] nativeVideoTexture =
-			new FNA3D.FNA3D_RenderTargetBinding[3];
-		private FNA3D.FNA3D_RenderTargetBinding[] nativeOldTargets =
-			new FNA3D.FNA3D_RenderTargetBinding[GraphicsDevice.MAX_RENDERTARGET_BINDINGS];
+		//private FNA3D.FNA3D_RenderTargetBinding[] nativeVideoTexture =
+		//	new FNA3D.FNA3D_RenderTargetBinding[3];
+		//private FNA3D.FNA3D_RenderTargetBinding[] nativeOldTargets =
+		//	new FNA3D.FNA3D_RenderTargetBinding[GraphicsDevice.MAX_RENDERTARGET_BINDINGS];
 
 		private void GL_initialize()
 		{
@@ -166,11 +166,11 @@ namespace Microsoft.Xna.Framework.Media
 		private void GL_pushState()
 		{
 			// Begin the effect, flagging to restore previous state on end
-			FNA3D.FNA3D_BeginPassRestore(
-				currentDevice.GLDevice,
-				shaderProgram.glEffect,
-				stateChangesPtr
-			);
+			//FNA3D.FNA3D_BeginPassRestore(
+			//	currentDevice.GLDevice,
+			//	shaderProgram.glEffect,
+			//	stateChangesPtr
+			//);
 
 			// Prep our samplers
 			for (int i = 0; i < 3; i += 1)
@@ -188,24 +188,24 @@ namespace Microsoft.Xna.Framework.Media
 			// Prep target bindings
 			oldTargets = currentDevice.GetRenderTargets();
 
-			unsafe
-			{
-				fixed (FNA3D.FNA3D_RenderTargetBinding* rt = &nativeVideoTexture[0])
-				{
-					GraphicsDevice.PrepareRenderTargetBindings(
-						rt,
-						videoTexture
-					);
-					FNA3D.FNA3D_SetRenderTargets(
-						currentDevice.GLDevice,
-						rt,
-						videoTexture.Length,
-						IntPtr.Zero,
-						DepthFormat.None,
-						0
-					);
-				}
-			}
+			//unsafe
+			//{
+			//	//fixed (FNA3D.FNA3D_RenderTargetBinding* rt = &nativeVideoTexture[0])
+			//	//{
+			//	//	GraphicsDevice.PrepareRenderTargetBindings(
+			//	//		rt,
+			//	//		videoTexture
+			//	//	);
+			//	//	FNA3D.FNA3D_SetRenderTargets(
+			//	//		currentDevice.GLDevice,
+			//	//		rt,
+			//	//		videoTexture.Length,
+			//	//		IntPtr.Zero,
+			//	//		DepthFormat.None,
+			//	//		0
+			//	//	);
+			//	//}
+			//}
 
 			// Prep render state
 			prevBlend = currentDevice.BlendState;
@@ -217,19 +217,19 @@ namespace Microsoft.Xna.Framework.Media
 
 			// Prep viewport
 			prevViewport = currentDevice.Viewport;
-			FNA3D.FNA3D_SetViewport(
-				currentDevice.GLDevice,
-				ref viewport.viewport
-			);
+			//FNA3D.FNA3D_SetViewport(
+			//	currentDevice.GLDevice,
+			//	ref viewport.viewport
+			//);
 		}
 
 		private void GL_popState()
 		{
 			// End the effect, restoring the previous shader state
-			FNA3D.FNA3D_EndPassRestore(
-				currentDevice.GLDevice,
-				shaderProgram.glEffect
-			);
+			//FNA3D.FNA3D_EndPassRestore(
+			//	currentDevice.GLDevice,
+			//	shaderProgram.glEffect
+			//);
 
 			// Restore GL state
 			currentDevice.BlendState = prevBlend;
@@ -244,45 +244,45 @@ namespace Microsoft.Xna.Framework.Media
 			 */
 			if (oldTargets == null || oldTargets.Length == 0)
 			{
-				FNA3D.FNA3D_SetRenderTargets(
-					currentDevice.GLDevice,
-					IntPtr.Zero,
-					0,
-					IntPtr.Zero,
-					DepthFormat.None,
-					0
-				);
+				//FNA3D.FNA3D_SetRenderTargets(
+				//	currentDevice.GLDevice,
+				//	IntPtr.Zero,
+				//	0,
+				//	IntPtr.Zero,
+				//	DepthFormat.None,
+				//	0
+				//);
 			}
 			else
 			{
 				IRenderTarget oldTarget = oldTargets[0].RenderTarget as IRenderTarget;
 
-				unsafe
-				{
-					fixed (FNA3D.FNA3D_RenderTargetBinding* rt = &nativeOldTargets[0])
-					{
-						GraphicsDevice.PrepareRenderTargetBindings(
-							rt,
-							oldTargets
-						);
-						FNA3D.FNA3D_SetRenderTargets(
-							currentDevice.GLDevice,
-							rt,
-							oldTargets.Length,
-							oldTarget.DepthStencilBuffer,
-							oldTarget.DepthStencilFormat,
-							(byte) (oldTarget.RenderTargetUsage != RenderTargetUsage.DiscardContents ? 1 : 0) /* lol c# */
-						);
-					}
-				}
+				//unsafe
+				//{
+				//	fixed (FNA3D.FNA3D_RenderTargetBinding* rt = &nativeOldTargets[0])
+				//	{
+				//		GraphicsDevice.PrepareRenderTargetBindings(
+				//			rt,
+				//			oldTargets
+				//		);
+				//		FNA3D.FNA3D_SetRenderTargets(
+				//			currentDevice.GLDevice,
+				//			rt,
+				//			oldTargets.Length,
+				//			oldTarget.DepthStencilBuffer,
+				//			oldTarget.DepthStencilFormat,
+				//			(byte) (oldTarget.RenderTargetUsage != RenderTargetUsage.DiscardContents ? 1 : 0) /* lol c# */
+				//		);
+				//	}
+				//}
 			}
 			oldTargets = null;
 
 			// Set viewport AFTER setting targets!
-			FNA3D.FNA3D_SetViewport(
-				currentDevice.GLDevice,
-				ref prevViewport.viewport
-			);
+			//FNA3D.FNA3D_SetViewport(
+			//	currentDevice.GLDevice,
+			//	ref prevViewport.viewport
+			//);
 
 			// Restore buffers
 			currentDevice.SetVertexBuffers(oldBuffers);
@@ -770,18 +770,18 @@ namespace Microsoft.Xna.Framework.Media
 		private void UpdateTexture()
 		{
 			// Prepare YUV GL textures with our current frame data
-			FNA3D.FNA3D_SetTextureDataYUV(
-				currentDevice.GLDevice,
-				yuvTextures[0].texture,
-				yuvTextures[1].texture,
-				yuvTextures[2].texture,
-				Video.yWidth,
-				Video.yHeight,
-				Video.uvWidth,
-				Video.uvHeight,
-				yuvData,
-				yuvDataLen
-			);
+			//FNA3D.FNA3D_SetTextureDataYUV(
+			//	currentDevice.GLDevice,
+			//	yuvTextures[0].texture,
+			//	yuvTextures[1].texture,
+			//	yuvTextures[2].texture,
+			//	Video.yWidth,
+			//	Video.yHeight,
+			//	Video.uvWidth,
+			//	Video.uvHeight,
+			//	yuvData,
+			//	yuvDataLen
+			//);
 
 			// Draw the YUV textures to the framebuffer with our shader.
 			GL_pushState();

@@ -45,7 +45,7 @@ namespace Microsoft.Xna.Framework.Graphics
 						return elem;
 					}
 				}
-				return null; // FIXME: ArrayIndexOutOfBounds? -flibit
+				return new EffectParameter(); // FIXME: ArrayIndexOutOfBounds? -flibit
 			}
 		}
 
@@ -58,7 +58,10 @@ namespace Microsoft.Xna.Framework.Graphics
 		#endregion
 
 		#region Internal Constructor
-
+		internal EffectParameterCollection()
+		{
+			elements = new List<EffectParameter>();
+		}
 		internal EffectParameterCollection(List<EffectParameter> value)
 		{
 			elements = value;

@@ -57,7 +57,7 @@ namespace DuckGame
         public MTSpriteBatch(GraphicsDevice graphicsDevice)
           : base(graphicsDevice)
         {
-            if (graphicsDevice == null)
+         if (graphicsDevice == null)
                 throw new ArgumentException(nameof(graphicsDevice));
             _spriteEffect = Content.Load<MTEffect>("Shaders/SpriteEffect");
             _matrixTransformSprite = _spriteEffect.effect.Parameters["MatrixTransform"];

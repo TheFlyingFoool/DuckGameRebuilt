@@ -48,7 +48,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		#endregion
 
 		#region Internal Constructor
-
+		internal EffectTechnique() { }
 		internal EffectTechnique(
 			string name,
 			IntPtr pointer,

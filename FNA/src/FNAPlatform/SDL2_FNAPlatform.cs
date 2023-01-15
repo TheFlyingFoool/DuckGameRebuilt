@@ -20,6 +20,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using System.Security.Cryptography;
+
 #endregion
 
 namespace Microsoft.Xna.Framework
@@ -319,7 +321,7 @@ namespace Microsoft.Xna.Framework
 				SDL.SDL_WindowFlags.SDL_WINDOW_HIDDEN |
 				SDL.SDL_WindowFlags.SDL_WINDOW_INPUT_FOCUS |
 				SDL.SDL_WindowFlags.SDL_WINDOW_MOUSE_FOCUS
-			) | (SDL.SDL_WindowFlags) FNA3D.FNA3D_PrepareWindowAttributes();
+			) | (SDL.SDL_WindowFlags)0; // FNA3D.FNA3D_PrepareWindowAttributes() 0
 
 			if ((initFlags & SDL.SDL_WindowFlags.SDL_WINDOW_VULKAN) == SDL.SDL_WindowFlags.SDL_WINDOW_VULKAN)
 			{
@@ -371,25 +373,25 @@ namespace Microsoft.Xna.Framework
 			}
 
 			string title = MonoGame.Utilities.AssemblyHelper.GetDefaultWindowTitle();
-			IntPtr window = SDL.SDL_CreateWindow(
-				title,
-				SDL.SDL_WINDOWPOS_CENTERED,
-				SDL.SDL_WINDOWPOS_CENTERED,
-				GraphicsDeviceManager.DefaultBackBufferWidth,
-				GraphicsDeviceManager.DefaultBackBufferHeight,
-				initFlags
-			);
-			if (window == IntPtr.Zero)
-			{
-				/* If this happens, the GL attributes were
-				 * rejected by the platform. This is EXTREMELY
-				 * rare (unless you're on Android, of course).
-				 */
-				throw new NoSuitableGraphicsDeviceException(
-					SDL.SDL_GetError()
-				);
-			}
-			INTERNAL_SetIcon(window, title);
+			//IntPtr window = SDL.SDL_CreateWindow(
+			//	title,
+			//	SDL.SDL_WINDOWPOS_CENTERED,
+			//	SDL.SDL_WINDOWPOS_CENTERED,
+			//	GraphicsDeviceManager.DefaultBackBufferWidth,
+			//	GraphicsDeviceManager.DefaultBackBufferHeight,
+			//	initFlags
+			//);
+			//if (window == IntPtr.Zero)
+			//{
+			//	/* If this happens, the GL attributes were
+			//	 * rejected by the platform. This is EXTREMELY
+			//	 * rare (unless you're on Android, of course).
+			//	 */
+			//	throw new NoSuitableGraphicsDeviceException(
+			//		SDL.SDL_GetError()
+			//	);
+			//}
+			//INTERNAL_SetIcon(window, title);
 
 			// Disable the screensaver.
 			SDL.SDL_DisableScreenSaver();
@@ -401,16 +403,15 @@ namespace Microsoft.Xna.Framework
 			 * This is our way to communicate that it failed...
 			 * -flibit
 			 */
-			initFlags = (SDL.SDL_WindowFlags) SDL.SDL_GetWindowFlags(window);
-			if ((initFlags & SDL.SDL_WindowFlags.SDL_WINDOW_ALLOW_HIGHDPI) == 0)
-			{
-				Environment.SetEnvironmentVariable("FNA_GRAPHICS_ENABLE_HIGHDPI", "0");
-			}
+			//initFlags = (SDL.SDL_WindowFlags) SDL.SDL_GetWindowFlags(window);
+			//if ((initFlags & SDL.SDL_WindowFlags.SDL_WINDOW_ALLOW_HIGHDPI) == 0)
+			//{
+			//	Environment.SetEnvironmentVariable("FNA_GRAPHICS_ENABLE_HIGHDPI", "0");
+			//}
 
 			return new FNAWindow(
-				window,
-				@"\\.\DISPLAY" + (
-					SDL.SDL_GetWindowDisplayIndex(window) + 1
+				(IntPtr)0,
+				@"\\.\DISPLAY" + (1
 				).ToString()
 			);
 		}
@@ -455,8 +456,9 @@ namespace Microsoft.Xna.Framework
 			 * the window needs to accommodate the GL viewport.
 			 * -flibit
 			 */
-			ScaleForWindow(window, false, ref clientWidth, ref clientHeight);
-
+			//ScaleForWindow(window, false, ref clientWidth, ref clientHeight); // 800, 480
+			clientWidth = 800;
+			clientHeight = 480;
 			// When windowed, set the size before moving
 			if (!wantsFullscreen)
 			{
@@ -548,26 +550,26 @@ namespace Microsoft.Xna.Framework
 
 		public static void ScaleForWindow(IntPtr window, bool invert, ref int w, ref int h)
 		{
-			int ww, wh, dw, dh;
-			SDL.SDL_GetWindowSize(window, out ww, out wh);
-			FNA3D.FNA3D_GetDrawableSize(window, out dw, out dh);
-			if (	ww != 0 &&
-				wh != 0 &&
-				dw != 0 &&
-				dh != 0 &&
-				(ww != dw || wh != dh)	)
-			{
-				if (invert)
-				{
-					w = (int) (w * (dw / (float) ww));
-					h = (int) (h * (dh / (float) wh));
-				}
-				else
-				{
-					w = (int) (w / (dw / (float) ww));
-					h = (int) (h / (dh / (float) wh));
-				}
-			}
+			//int ww, wh, dw, dh;
+			//SDL.SDL_GetWindowSize(window, out ww, out wh);
+			////FNA3D.FNA3D_GetDrawableSize(window, out dw, out dh);
+			//if (	ww != 0 &&
+			//	wh != 0 &&
+			//	dw != 0 &&
+			//	dh != 0 &&
+			//	(ww != dw || wh != dh)	)
+			//{
+			//	if (invert)
+			//	{
+			//		w = (int) (w * (dw / (float) ww));
+			//		h = (int) (h * (dh / (float) wh));
+			//	}
+			//	else
+			//	{
+			//		w = (int) (w / (dw / (float) ww));
+			//		h = (int) (h / (dh / (float) wh));
+			//	}
+			//}
 		}
 
 		public static Rectangle GetWindowBounds(IntPtr window)
@@ -578,9 +580,7 @@ namespace Microsoft.Xna.Framework
 				/* It's easier/safer to just use the display mode here */
 				SDL.SDL_DisplayMode mode;
 				SDL.SDL_GetCurrentDisplayMode(
-					SDL.SDL_GetWindowDisplayIndex(
-						window
-					),
+					0,
 					out mode
 				);
 				result.X = 0;
@@ -679,7 +679,7 @@ namespace Microsoft.Xna.Framework
 					}
 					SDL.SDL_SetWindowIcon(window, icon);
 					SDL.SDL_FreeSurface(icon);
-					FNA3D.FNA3D_Image_Free(pixels);
+					//FNA3D.FNA3D_Image_Free(pixels);
 					return;
 				}
 			}
@@ -835,11 +835,9 @@ namespace Microsoft.Xna.Framework
 			activeGames.Add(game);
 
 			// Which display did we end up on?
-			int displayIndex = SDL.SDL_GetWindowDisplayIndex(
-				game.Window.Handle
-			);
+			int displayIndex = 0;
 			return GraphicsAdapter.Adapters[displayIndex];
-		}
+		}							
 
 		public static void UnregisterGame(Game game)
 		{
@@ -1028,9 +1026,7 @@ namespace Microsoft.Xna.Framework
 						 * display, a GraphicsDevice Reset occurs.
 						 * -flibit
 						 */
-						int newIndex = SDL.SDL_GetWindowDisplayIndex(
-							game.Window.Handle
-						);
+						int newIndex = 0;
 						if (GraphicsAdapter.Adapters[newIndex] != currentAdapter)
 						{
 							currentAdapter = GraphicsAdapter.Adapters[newIndex];
@@ -1217,42 +1213,44 @@ namespace Microsoft.Xna.Framework
 
 		public static GraphicsAdapter[] GetGraphicsAdapters()
 		{
-			SDL.SDL_DisplayMode filler = new SDL.SDL_DisplayMode();
-			GraphicsAdapter[] adapters = new GraphicsAdapter[SDL.SDL_GetNumVideoDisplays()];
-			for (int i = 0; i < adapters.Length; i += 1)
-			{
-				List<DisplayMode> modes = new List<DisplayMode>();
-				int numModes = SDL.SDL_GetNumDisplayModes(i);
-				for (int j = numModes - 1; j >= 0; j -= 1)
-				{
-					SDL.SDL_GetDisplayMode(i, j, out filler);
+			GraphicsAdapter[] adapters = new GraphicsAdapter[1];
+			adapters[0] = new GraphicsAdapter(new DisplayModeCollection(new List<DisplayMode>() { new DisplayMode(1280, 720, SurfaceFormat.Color) }), @"\\.\DISPLAY" + (0 + 1).ToString(),"Generic PnP Monitor");
 
-					// Check for dupes caused by varying refresh rates.
-					bool dupe = false;
-					foreach (DisplayMode mode in modes)
-					{
-						if (filler.w == mode.Width && filler.h == mode.Height)
-						{
-							dupe = true;
-						}
-					}
-					if (!dupe)
-					{
-						modes.Add(
-							new DisplayMode(
-								filler.w,
-								filler.h,
-								SurfaceFormat.Color // FIXME: Assumption!
-							)
-						);
-					}
-				}
-				adapters[i] = new GraphicsAdapter(
-					new DisplayModeCollection(modes),
-					@"\\.\DISPLAY" + (i + 1).ToString(),
-					SDL.SDL_GetDisplayName(i)
-				);
-			}
+
+			//for (int i = 0; i < adapters.Length; i += 1)
+			//{
+			//	List<DisplayMode> modes = new List<DisplayMode>();
+			//	int numModes = SDL.SDL_GetNumDisplayModes(i);
+			//	for (int j = numModes - 1; j >= 0; j -= 1)
+			//	{
+			//		SDL.SDL_GetDisplayMode(i, j, out filler);
+
+			//		// Check for dupes caused by varying refresh rates.
+			//		bool dupe = false;
+			//		foreach (DisplayMode mode in modes)
+			//		{
+			//			if (filler.w == mode.Width && filler.h == mode.Height)
+			//			{
+			//				dupe = true;
+			//			}
+			//		}
+			//		if (!dupe)
+			//		{
+			//			modes.Add(
+			//				new DisplayMode(
+			//					filler.w,
+			//					filler.h,
+			//					SurfaceFormat.Color // FIXME: Assumption!
+			//				)
+			//			);
+			//		}
+			//	}
+			//	adapters[i] = new GraphicsAdapter(
+			//		new DisplayModeCollection(modes),
+			//		@"\\.\DISPLAY" + (i + 1).ToString(),
+			//		SDL.SDL_GetDisplayName(i)
+			//	);
+			//}
 			return adapters;
 		}
 

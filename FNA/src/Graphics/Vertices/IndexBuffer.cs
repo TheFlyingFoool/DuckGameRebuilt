@@ -112,12 +112,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
 			int stride = (indexElementSize == IndexElementSize.ThirtyTwoBits) ? 4 : 2;
 
-			buffer = FNA3D.FNA3D_GenIndexBuffer(
-				GraphicsDevice.GLDevice,
-				(byte) (dynamic ? 1 : 0),
-				usage,
-				IndexCount * stride
-			);
+			//buffer = FNA3D.FNA3D_GenIndexBuffer(
+			//	GraphicsDevice.GLDevice,
+			//	(byte) (dynamic ? 1 : 0),
+			//	usage,
+			//	IndexCount * stride
+			//);
 		}
 
 		#endregion
@@ -128,10 +128,10 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
 			if (!IsDisposed)
 			{
-				FNA3D.FNA3D_AddDisposeIndexBuffer(
-					GraphicsDevice.GLDevice,
-					buffer
-				);
+				//FNA3D.FNA3D_AddDisposeIndexBuffer(
+				//	GraphicsDevice.GLDevice,
+				//	buffer
+				//);
 			}
 			base.Dispose(disposing);
 		}
@@ -169,32 +169,32 @@ namespace Microsoft.Xna.Framework.Graphics
 			int startIndex,
 			int elementCount
 		) where T : struct {
-			if (data == null)
-			{
-				throw new ArgumentNullException("data");
-			}
-			if (data.Length < (startIndex + elementCount))
-			{
-				throw new InvalidOperationException("The array specified in the data parameter is not the correct size for the amount of data requested.");
-			}
-			if (BufferUsage == BufferUsage.WriteOnly)
-			{
-				throw new NotSupportedException(
-					"This IndexBuffer was created with a usage type of BufferUsage.WriteOnly. " +
-					"Calling GetData on a resource that was created with BufferUsage.WriteOnly is not supported."
-				);
-			}
+			//if (data == null)
+			//{
+			//	throw new ArgumentNullException("data");
+			//}
+			//if (data.Length < (startIndex + elementCount))
+			//{
+			//	throw new InvalidOperationException("The array specified in the data parameter is not the correct size for the amount of data requested.");
+			//}
+			//if (BufferUsage == BufferUsage.WriteOnly)
+			//{
+			//	throw new NotSupportedException(
+			//		"This IndexBuffer was created with a usage type of BufferUsage.WriteOnly. " +
+			//		"Calling GetData on a resource that was created with BufferUsage.WriteOnly is not supported."
+			//	);
+			//}
 
-			int elementSizeInBytes = Marshal.SizeOf(typeof(T));
-			GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-			FNA3D.FNA3D_GetIndexBufferData(
-				GraphicsDevice.GLDevice,
-				buffer,
-				offsetInBytes,
-				handle.AddrOfPinnedObject() + (startIndex * elementSizeInBytes),
-				elementCount * elementSizeInBytes
-			);
-			handle.Free();
+			//int elementSizeInBytes = Marshal.SizeOf(typeof(T));
+			//GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+			//FNA3D.FNA3D_GetIndexBufferData(
+			//	GraphicsDevice.GLDevice,
+			//	buffer,
+			//	offsetInBytes,
+			//	handle.AddrOfPinnedObject() + (startIndex * elementSizeInBytes),
+			//	elementCount * elementSizeInBytes
+			//);
+			//handle.Free();
 		}
 
 		#endregion
@@ -203,16 +203,16 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetData<T>(T[] data) where T : struct
 		{
-			GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-			FNA3D.FNA3D_SetIndexBufferData(
-				GraphicsDevice.GLDevice,
-				buffer,
-				0,
-				handle.AddrOfPinnedObject(),
-				data.Length * Marshal.SizeOf(typeof(T)),
-				SetDataOptions.None
-			);
-			handle.Free();
+			//GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+			//FNA3D.FNA3D_SetIndexBufferData(
+			//	GraphicsDevice.GLDevice,
+			//	buffer,
+			//	0,
+			//	handle.AddrOfPinnedObject(),
+			//	data.Length * Marshal.SizeOf(typeof(T)),
+			//	SetDataOptions.None
+			//);
+			//handle.Free();
 		}
 
 		public void SetData<T>(
@@ -222,16 +222,16 @@ namespace Microsoft.Xna.Framework.Graphics
 		) where T : struct {
 			ErrorCheck(data, startIndex, elementCount);
 
-			GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-			FNA3D.FNA3D_SetIndexBufferData(
-				GraphicsDevice.GLDevice,
-				buffer,
-				0,
-				handle.AddrOfPinnedObject() + (startIndex * Marshal.SizeOf(typeof(T))),
-				elementCount * Marshal.SizeOf(typeof(T)),
-				SetDataOptions.None
-			);
-			handle.Free();
+			//GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+			//FNA3D.FNA3D_SetIndexBufferData(
+			//	GraphicsDevice.GLDevice,
+			//	buffer,
+			//	0,
+			//	handle.AddrOfPinnedObject() + (startIndex * Marshal.SizeOf(typeof(T))),
+			//	elementCount * Marshal.SizeOf(typeof(T)),
+			//	SetDataOptions.None
+			//);
+			//handle.Free();
 		}
 
 		public void SetData<T>(
@@ -242,16 +242,16 @@ namespace Microsoft.Xna.Framework.Graphics
 		) where T : struct {
 			ErrorCheck(data, startIndex, elementCount);
 
-			GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-			FNA3D.FNA3D_SetIndexBufferData(
-				GraphicsDevice.GLDevice,
-				buffer,
-				offsetInBytes,
-				handle.AddrOfPinnedObject() + (startIndex * Marshal.SizeOf(typeof(T))),
-				elementCount * Marshal.SizeOf(typeof(T)),
-				SetDataOptions.None
-			);
-			handle.Free();
+			//GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+			//FNA3D.FNA3D_SetIndexBufferData(
+			//	GraphicsDevice.GLDevice,
+			//	buffer,
+			//	offsetInBytes,
+			//	handle.AddrOfPinnedObject() + (startIndex * Marshal.SizeOf(typeof(T))),
+			//	elementCount * Marshal.SizeOf(typeof(T)),
+			//	SetDataOptions.None
+			//);
+			//handle.Free();
 		}
 
 		#endregion
@@ -264,14 +264,14 @@ namespace Microsoft.Xna.Framework.Graphics
 			int dataLength,
 			SetDataOptions options
 		) {
-			FNA3D.FNA3D_SetIndexBufferData(
-				GraphicsDevice.GLDevice,
-				buffer,
-				offsetInBytes,
-				data,
-				dataLength,
-				options
-			);
+			//FNA3D.FNA3D_SetIndexBufferData(
+			//	GraphicsDevice.GLDevice,
+			//	buffer,
+			//	offsetInBytes,
+			//	data,
+			//	dataLength,
+			//	options
+			//);
 		}
 
 		#endregion

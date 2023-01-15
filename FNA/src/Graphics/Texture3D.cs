@@ -60,14 +60,14 @@ namespace Microsoft.Xna.Framework.Graphics
 			LevelCount = mipMap ? CalculateMipLevels(width, height) : 1;
 			Format = format;
 
-			texture = FNA3D.FNA3D_CreateTexture3D(
-				GraphicsDevice.GLDevice,
-				Format,
-				Width,
-				Height,
-				Depth,
-				LevelCount
-			);
+			//texture = FNA3D.FNA3D_CreateTexture3D(
+			//	GraphicsDevice.GLDevice,
+			//	Format,
+			//	Width,
+			//	Height,
+			//	Depth,
+			//	LevelCount
+			//);
 		}
 
 		#endregion
@@ -114,27 +114,27 @@ namespace Microsoft.Xna.Framework.Graphics
 			int startIndex,
 			int elementCount
 		) where T : struct {
-			if (data == null)
-			{
-				throw new ArgumentNullException("data");
-			}
+			//if (data == null)
+			//{
+			//	throw new ArgumentNullException("data");
+			//}
 
-			int elementSizeInBytes = Marshal.SizeOf(typeof(T));
-			GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-			FNA3D.FNA3D_SetTextureData3D(
-				GraphicsDevice.GLDevice,
-				texture,
-				left,
-				top,
-				front,
-				right - left,
-				bottom - top,
-				back - front,
-				level,
-				handle.AddrOfPinnedObject() + startIndex * elementSizeInBytes,
-				elementCount * elementSizeInBytes
-			);
-			handle.Free();
+			//int elementSizeInBytes = Marshal.SizeOf(typeof(T));
+			//GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+			//FNA3D.FNA3D_SetTextureData3D(
+			//	GraphicsDevice.GLDevice,
+			//	texture,
+			//	left,
+			//	top,
+			//	front,
+			//	right - left,
+			//	bottom - top,
+			//	back - front,
+			//	level,
+			//	handle.AddrOfPinnedObject() + startIndex * elementSizeInBytes,
+			//	elementCount * elementSizeInBytes
+			//);
+			//handle.Free();
 		}
 
 		public void SetDataPointerEXT(
@@ -148,24 +148,24 @@ namespace Microsoft.Xna.Framework.Graphics
 			IntPtr data,
 			int dataLength
 		) {
-			if (data == IntPtr.Zero)
-			{
-				throw new ArgumentNullException("data");
-			}
+			//if (data == IntPtr.Zero)
+			//{
+			//	throw new ArgumentNullException("data");
+			//}
 
-			FNA3D.FNA3D_SetTextureData3D(
-				GraphicsDevice.GLDevice,
-				texture,
-				left,
-				top,
-				front,
-				right - left,
-				bottom - top,
-				back - front,
-				level,
-				data,
-				dataLength
-			);
+			//FNA3D.FNA3D_SetTextureData3D(
+			//	GraphicsDevice.GLDevice,
+			//	texture,
+			//	left,
+			//	top,
+			//	front,
+			//	right - left,
+			//	bottom - top,
+			//	back - front,
+			//	level,
+			//	data,
+			//	dataLength
+			//);
 		}
 
 		#endregion
@@ -259,21 +259,21 @@ namespace Microsoft.Xna.Framework.Graphics
 			int elementSizeInBytes = Marshal.SizeOf(typeof(T));
 			ValidateGetDataFormat(Format, elementSizeInBytes);
 
-			GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-			FNA3D.FNA3D_GetTextureData3D(
-				GraphicsDevice.GLDevice,
-				texture,
-				left,
-				top,
-				front,
-				right - left,
-				bottom - top,
-				back - front,
-				level,
-				handle.AddrOfPinnedObject() + (startIndex * elementSizeInBytes),
-				elementCount * elementSizeInBytes
-			);
-			handle.Free();
+			//GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+			//FNA3D.FNA3D_GetTextureData3D(
+			//	GraphicsDevice.GLDevice,
+			//	texture,
+			//	left,
+			//	top,
+			//	front,
+			//	right - left,
+			//	bottom - top,
+			//	back - front,
+			//	level,
+			//	handle.AddrOfPinnedObject() + (startIndex * elementSizeInBytes),
+			//	elementCount * elementSizeInBytes
+			//);
+			//handle.Free();
 		}
 
 		#endregion
