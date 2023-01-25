@@ -56,7 +56,7 @@ namespace DuckGame
                     continue;
                 }
 
-                int parameterLength = parameters.Count();
+                int parameterLength = parameters.Length;
                 CMD.Argument[] arguments = new CMD.Argument[parameterLength];
                 for (int i = 0; i < arguments.Length; i++)
                 {

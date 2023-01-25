@@ -148,7 +148,7 @@ namespace DuckGame
 
         public Team networkDefaultTeam => _networkIndex < DG.MaxPlayers ? Teams.all[_networkIndex] : Teams.all[Rando.Int(7)];
 
-        public DuckPersona networkDefaultPersona => _networkIndex < DG.MaxPlayers ? Persona.all.ElementAt(_networkIndex) : Persona.Duck1;
+        public DuckPersona networkDefaultPersona => _networkIndex < DG.MaxPlayers ? Persona.alllist[_networkIndex] : Persona.Duck1;
 
         public Dictionary<string, ChallengeSaveData> challengeData => _challengeData;
 
@@ -1222,7 +1222,7 @@ namespace DuckGame
             {
                 if (index >= DG.MaxPlayers)
                     index = 0;
-                DuckPersona duckPersona = Persona.all.ElementAt(index);
+                DuckPersona duckPersona = Persona.alllist[index];
                 bool flag = false;
                 foreach (Profile profile in Profiles.active)
                 {
@@ -1452,8 +1452,8 @@ namespace DuckGame
             get
             {
                 if (requestedColor >= 0 && requestedColor < DG.MaxPlayers)
-                    return Persona.all.ElementAt(requestedColor);
-                return preferredColor >= 0 && preferredColor < DG.MaxPlayers ? Persona.all.ElementAt(preferredColor) : fallbackPersona;
+                    return Persona.alllist[requestedColor];
+                return preferredColor >= 0 && preferredColor < DG.MaxPlayers ? Persona.alllist[preferredColor] : fallbackPersona;
             }
         }
 
@@ -1478,7 +1478,7 @@ namespace DuckGame
                 {
                     sbyte index = netData.Get<sbyte>("spectatorPersona", -1);
                     if (index >= 0 && index < 8)
-                        return Persona.all.ElementAt(index);
+                        return Persona.alllist[index];
                 }
                 if (_persona == null)
                     _persona = this != Profiles.DefaultPlayer1 ? (this != Profiles.DefaultPlayer2 ? (this != Profiles.DefaultPlayer3 ? (this != Profiles.DefaultPlayer4 ? Persona.Duck1 : Persona.Duck4) : Persona.Duck3) : Persona.Duck2) : Persona.Duck1;

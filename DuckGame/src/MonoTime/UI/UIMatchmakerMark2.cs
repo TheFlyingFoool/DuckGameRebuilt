@@ -463,7 +463,7 @@ namespace DuckGame
                     {
                         string source = message.Substring(0, message.Length - 3);
                         string str2 = ".";
-                        if (source.Count() > 0 && source.Last() == '!' || source.Last() == '.' || source.Last() == '?')
+                        if (source.Length > 0 && source.Last() == '!' || source.Last() == '.' || source.Last() == '?')
                         {
                             str2 = source.Last().ToString() ?? "";
                             source = source.Substring(0, source.Length - 1);

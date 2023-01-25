@@ -308,7 +308,7 @@ namespace DuckGame
                 {
                     case "+connect_lobby":
                         ++index;
-                        if (args.Count() > index)
+                        if (args.Length > index)
                         {
                             try
                             {
@@ -322,20 +322,20 @@ namespace DuckGame
                         break;
                     case "+password":
                         ++index;
-                        if (args.Count() > index)
+                        if (args.Length > index)
                             MonoMain.lobbyPassword = args[index];
                         break;
                     case "+editortest":
                         MonoMain.startInEditor = true;
                         ++index;
-                        if (args.Count() > index)
+                        if (args.Length > index)
                         {
                             StartinEditorLevelName = args[index];
                         }
                         break;
                     case "+controllercount":
                         ++index;
-                        if (args.Count() > index)
+                        if (args.Length > index)
                         {
                             try
                             {
@@ -348,7 +348,7 @@ namespace DuckGame
                     case "+screentile":
                         doscreentileing = true;
                         ++index;
-                        if (args.Count() > index)
+                        if (args.Length > index)
                         {
                             try
                             {
@@ -362,7 +362,7 @@ namespace DuckGame
 
                         }
                         ++index;
-                        if (args.Count() > index)
+                        if (args.Length > index)
                         {
                             try
                             {
@@ -526,7 +526,7 @@ namespace DuckGame
                         break;
                     case "-command":
                         ++index;
-                        if (index < args.Count())
+                        if (index < args.Length)
                             DevConsole.startupCommands.Add(args[index]);
                         break;
                     case "-useRPC":

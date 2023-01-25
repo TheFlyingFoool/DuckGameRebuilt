@@ -367,7 +367,7 @@ namespace DuckGame
             return (float)width;
         }
 
-        public static float GetStringHeight(string text) => text.Split('\n').Count() * _biosFont.height;
+        public static float GetStringHeight(string text) => text.Split('\n').Length * _biosFont.height;
 
         public static void DrawFancyString(
           string text,

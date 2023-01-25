@@ -710,7 +710,7 @@ namespace DuckGame
             if (matchSetting4.minString != null && matchSetting4.value is int && (int)matchSetting4.value == matchSetting4.min)
                 str5 = matchSetting4.minString;
             int startIndex1 = matchSetting4.name.LastIndexOf('|');
-            for (string str6 = matchSetting4.name.Substring(startIndex1, matchSetting4.name.Count() - startIndex1); str6.Length < num1; str6 += " ")
+            for (string str6 = matchSetting4.name.Substring(startIndex1, matchSetting4.name.Length - startIndex1); str6.Length < num1; str6 += " ")
                 name5 += " ";
             while (str5.Length < num2)
                 str5 = " " + str5;
@@ -723,7 +723,7 @@ namespace DuckGame
             string name6 = matchSetting5.name;
             string str7 = matchSetting5.value.ToString() + "%";
             int startIndex2 = matchSetting5.name.LastIndexOf('|');
-            for (string str8 = matchSetting5.name.Substring(startIndex2, matchSetting5.name.Count() - startIndex2); str8.Length < num1; str8 += " ")
+            for (string str8 = matchSetting5.name.Substring(startIndex2, matchSetting5.name.Length - startIndex2); str8.Length < num1; str8 += " ")
                 name6 += " ";
             while (str7.Length < num2)
                 str7 = " " + str7;
@@ -738,7 +738,7 @@ namespace DuckGame
             if (matchSetting6.minString != null && matchSetting6.value is int && (int)matchSetting6.value == matchSetting6.min)
                 str9 = matchSetting6.minString;
             int startIndex3 = matchSetting6.name.LastIndexOf('|');
-            for (string str10 = matchSetting6.name.Substring(startIndex3, matchSetting6.name.Count() - startIndex3); str10.Length < num1; str10 += " ")
+            for (string str10 = matchSetting6.name.Substring(startIndex3, matchSetting6.name.Length - startIndex3); str10.Length < num1; str10 += " ")
                 name7 += " ";
             while (str9.Length < num2)
                 str9 = " " + str9;
@@ -751,7 +751,7 @@ namespace DuckGame
             string name8 = matchSetting7.name;
             string str11 = matchSetting7.value.ToString() + "%";
             int startIndex4 = matchSetting7.name.LastIndexOf('|');
-            for (string str12 = matchSetting7.name.Substring(startIndex4, matchSetting7.name.Count() - startIndex4); str12.Length < num1; str12 += " ")
+            for (string str12 = matchSetting7.name.Substring(startIndex4, matchSetting7.name.Length - startIndex4); str12.Length < num1; str12 += " ")
                 name8 += " ";
             while (str11.Length < num2)
                 str11 = " " + str11;
@@ -1995,7 +1995,7 @@ namespace DuckGame
                                     if (currentEnterText.StartsWith("/steal"))
                                     {
                                         string[] source = currentEnterText.Split(':');
-                                        if (source.Count() == 3)
+                                        if (source.Length == 3)
                                             DuckFile.StealMoji(source[1]);
                                     }
                                     else
@@ -2506,10 +2506,10 @@ namespace DuckGame
                                         if (nmRequestJoin.personas.Count > index)
                                         {
                                             byte persona = nmRequestJoin.personas[index];
-                                            if (persona >= 0 && persona < Persona.all.Count())
+                                            if (persona >= 0 && persona < Persona.alllist.Count)
                                             {
                                                 profile.preferredColor = persona;
-                                                RequestPersona(profile, Persona.all.ElementAt(persona), false);
+                                                RequestPersona(profile, Persona.alllist[persona], false);
                                             }
                                         }
                                         _core.status = DuckNetStatus.Connected;
@@ -2849,7 +2849,7 @@ namespace DuckGame
             int index = pRequested.index;
             do
             {
-                DuckPersona duckPersona = Persona.all.ElementAt(index);
+                DuckPersona duckPersona = Persona.alllist[index];
                 bool flag = false;
                 foreach (Profile profile in Profiles.active)
                 {
@@ -2862,14 +2862,14 @@ namespace DuckGame
                 if (flag)
                 {
                     ++index;
-                    if (index > Persona.all.Count() - 1)
+                    if (index > Persona.alllist.Count - 1)
                         index = 0;
                 }
                 else
                     break;
             }
             while (index != pRequested.index);
-            return Persona.all.ElementAt(index);
+            return Persona.alllist[index];
         }
 
         public static void RequestPersona(Profile pProfile, DuckPersona pPersona, bool pSendMessages = true)
@@ -3100,7 +3100,7 @@ namespace DuckGame
                                         profile1.networkStatus = DuckNetStatus.Connected;
                                         profile1.isRemoteLocalDuck = duckNetConnection.identifier == "SERVERLOCAL";
                                         profile1.latestGhostIndex = duckNetConnection.latestGhostIndex;
-                                        profile1.persona = Persona.all.ElementAt(duckNetConnection.persona);
+                                        profile1.persona = Persona.alllist[duckNetConnection.persona];
                                         DevConsole.Log(DCSection.DuckNet, "Queuing up join message payload for " + networkConnection.ToString());
                                         if (networkConnection.status != ConnectionStatus.Connected)
                                             DevConsole.Log(DCSection.DuckNet, "|DGBLUE|This Payload will be sent when a connection is established.");

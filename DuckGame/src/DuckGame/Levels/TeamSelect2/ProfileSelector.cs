@@ -1258,8 +1258,8 @@ namespace DuckGame
                         text7 = "< " + text7 + " >";
                     if (_preferredColor >= 0)
                     {
-                        Graphics.DrawRect(new Vec2(x + 20f, pos.y - 2f), new Vec2(x + (width - 20f), pos.y + 9f), Persona.all.ElementAt(_preferredColor).colorDark.ToColor() * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.93f, false);
-                        _font.Draw(text7, Maths.RoundToPixel(new Vec2((float)(x + 2.0 + width / 2.0 - _font.GetWidth(text7) / 2.0), pos.y)), Persona.all.ElementAt(_preferredColor).color.ToColor() * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.95f);
+                        Graphics.DrawRect(new Vec2(x + 20f, pos.y - 2f), new Vec2(x + (width - 20f), pos.y + 9f), Persona.alllist[_preferredColor].colorDark.ToColor() * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.93f, false);
+                        _font.Draw(text7, Maths.RoundToPixel(new Vec2((float)(x + 2.0 + width / 2.0 - _font.GetWidth(text7) / 2.0), pos.y)), Persona.alllist[_preferredColor].color.ToColor() * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.95f);
                     }
                     else
                     {

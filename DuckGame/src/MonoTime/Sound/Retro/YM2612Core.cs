@@ -1598,7 +1598,7 @@ namespace DuckGame
                             break;
                     }
                     ++index2;
-                    if (index2 < ym2612.CH[(int)index1].SLOT.Count())
+                    if (index2 < ym2612.CH[(int)index1].SLOT.Length)
                         fmSlot = ym2612.CH[(int)index1].SLOT[index2];
                     --num;
                 }
@@ -1646,7 +1646,7 @@ namespace DuckGame
                     fmSlot.vol_out = (fmSlot.ssgn ^ fmSlot.ssg & 4) == 0 ? (uint)fmSlot.volume + fmSlot.tl : ((uint)(512UL - (ulong)fmSlot.volume) & 1023U) + fmSlot.tl;
                 }
                 ++index;
-                if (index < SLOTS.Count())
+                if (index < SLOTS.Length)
                     fmSlot = SLOTS[index];
                 --num;
             }

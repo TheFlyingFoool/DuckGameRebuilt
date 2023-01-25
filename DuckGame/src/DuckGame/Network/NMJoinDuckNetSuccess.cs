@@ -47,8 +47,8 @@ namespace DuckGame
                 sbyte num2 = msg.ReadSByte();
                 profiles[index1].reservedSpectatorPersona = num2;
                 sbyte index2 = msg.ReadSByte();
-                if (index2 >= 0 && index2 < Persona.all.Count())
-                    profiles[index1].persona = Persona.all.ElementAt(index2);
+                if (index2 >= 0 && index2 < Persona.alllist.Count)
+                    profiles[index1].persona = Persona.alllist.ElementAt(index2);
             }
         }
     }

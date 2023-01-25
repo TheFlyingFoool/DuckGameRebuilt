@@ -727,7 +727,7 @@ namespace DuckGame
                         {
                             int index1 = _letterIndex + 1;
                             float num5 = 0f;
-                            for (; index1 < text.Count() && text[index1] != ' ' && text[index1] != '|' && text[index1] != '@'; ++index1)
+                            for (; index1 < text.Length && text[index1] != ' ' && text[index1] != '|' && text[index1] != '@'; ++index1)
                             {
                                 char index2 = (char)Maths.Clamp(text[index1], 0, _characterMap.Length - 1);
                                 int character = _characterMap[index2];
@@ -859,7 +859,7 @@ namespace DuckGame
                         {
                             int index1 = _letterIndex + 1;
                             float num2 = 0f;
-                            for (; index1 < text.Count() && text[index1] != ' ' && text[index1] != '|' && text[index1] != '@'; ++index1)
+                            for (; index1 < text.Length && text[index1] != ' ' && text[index1] != '|' && text[index1] != '@'; ++index1)
                             {
                                 char index2 = (char)Maths.Clamp(text[index1], 0, _characterMap.Length - 1);
                                 int character = _characterMap[index2];
@@ -1077,7 +1077,7 @@ namespace DuckGame
                             {
                                 char index2 = ' ';
                                 float width1 = _widths[_characterMap[(byte)index2]].width;
-                                for (; index1 < text.Count() && text[index1] != ' ' && text[index1] != '|' && text[index1] != '@'; ++index1)
+                                for (; index1 < text.Length && text[index1] != ' ' && text[index1] != '|' && text[index1] != '@'; ++index1)
                                 {
                                     byte index3 = (byte)Maths.Clamp(text[index1], 0, 254);
                                     Rectangle width2 = _widths[_characterMap[index3]];

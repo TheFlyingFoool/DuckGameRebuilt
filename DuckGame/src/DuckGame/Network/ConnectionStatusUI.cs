@@ -197,7 +197,6 @@ namespace DuckGame
                         if (bar.profile.connection == DuckNetwork.localConnection)
                             num8 = 0;
                         string source = num8.ToString() + "|WHITE|MS";
-                        source.Count();
                         string text2 = num8 >= 150 ? (num8 >= 250 ? (bar.profile.connection.status != ConnectionStatus.Connected ? "|DGRED|" + source + "@SIGNALDEAD@" : "|DGRED|" + source + "@SIGNALBAD@") : "|DGYELLOW|" + source + "@SIGNALNORMAL@") : "|DGGREEN|" + source + "@SIGNALGOOD@";
                         _smallBios.Draw(text2, new Vec2((float)(vec2_2.x + _bar.width - 3f) - _smallBios.GetWidth(text2), vec2_2.y + 3f), Color.White, (Depth)0.9f);
                     }

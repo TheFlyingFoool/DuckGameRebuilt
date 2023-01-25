@@ -263,7 +263,7 @@ namespace DuckGame
                         6.28318530717959
                     }
                 };
-                for (int i = 0; i < Profiles.alllist.Count(); i++)
+                for (int i = 0; i < Profiles.alllist.Count; i++)
                 {
                     Duck d = Profiles.alllist[i].duck;
                     if (d != null)

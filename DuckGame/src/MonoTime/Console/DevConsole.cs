@@ -849,7 +849,7 @@ namespace DuckGame
                                             }
                                             else
                                             {
-                                                if (consoleCommand1.Remainder().Count() > 0)
+                                                if (consoleCommand1.Remainder().Length > 0)
                                                     pFont = $"{pFont} {consoleCommand1.Remainder()}";
                                                 if (pFont is "clear" or "default" or "none")
                                                 {
@@ -1012,7 +1012,7 @@ namespace DuckGame
                                                     if (methodInfo.Name.ToLower(currentCulture) == str8)
                                                     {
                                                         flag5 = true;
-                                                        if (methodInfo.GetParameters().Count() > 0)
+                                                        if (methodInfo.GetParameters().Length > 0)
                                                         {
                                                             _core.lines.Enqueue(new DCLine
                                                             {
