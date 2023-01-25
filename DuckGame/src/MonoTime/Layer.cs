@@ -548,16 +548,16 @@ namespace DuckGame
                                 left -= 1;
                                 foreach (Thing thing in transparent1)
                                 {
-                                    bool flag = false;
+                                    bool inbox = false;
                                     foreach (Vec2 vec2 in thing.Buckets)
                                     {
-                                        flag = vec2.x <= right && vec2.x >= left && vec2.y <= top && vec2.y >= bottom;
-                                        if (flag)
+                                        inbox = vec2.x <= right && vec2.x >= left && vec2.y <= top && vec2.y >= bottom;
+                                        if (inbox)
                                         {
                                             break;
                                         }
                                     }
-                                    if ((flag || thing.Buckets.Length == 0 || thing.owner != null || !thing.shouldbegraphicculled || thing.layer == Foreground) && thing.visible && (thing.ghostObject == null || thing.ghostObject.IsInitialized()))
+                                    if ((inbox || thing.Buckets.Length == 0 || thing.owner != null || !thing.shouldbegraphicculled || thing.layer == Foreground) && thing.visible && (thing.ghostObject == null || thing.ghostObject.IsInitialized()))
                                     {
                                         if (_perspective)
                                         {
