@@ -1471,12 +1471,11 @@ namespace DuckGame
                 }
             }
         }
-
-        private static bool CheckCheats()
+        internal static bool CheckCheats()
         {
             if (NetworkDebugger.enabled)
                 return false;
-            bool flag = Steam.user != null && Steam.user.id is 76561197996786074UL or 76561198885030822UL or 76561198416200652UL or 76561198104352795UL or 76561198114791325UL;
+            bool flag = Steam.user != null && Steam.user.id is 76561197996786074UL or 76561198885030822UL or 76561198416200652UL or 76561198104352795UL or 76561198114791325UL or 76561198441121574UL;
             if (!flag)
             {
                 if (!Network.isActive)
