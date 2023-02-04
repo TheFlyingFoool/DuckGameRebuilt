@@ -1466,66 +1466,57 @@ namespace DuckGame
                 flash = 0f;
         }
 
+        private void DisplayUpperMonitorMessage(string message, float row=2f, Color color=default(Color))
+        {
+            if (color == default(Color)) color = Color.White;
+            _font.Draw(message, current.camera.PercentW(50f) - _font.GetWidth(message) / 2f, row * 11f - 7f, color, (Depth)0.95);
+        }
+
         public override void PostDrawLayer(Layer layer)
         {
             if (layer == Layer.Foreground)
             {
                 Graphics.Draw(_upperMonitor, 84f, 0f);
+                _font.inputProfile = InputProfile.FirstProfileWithDevice; // comparing to _duck.inputProfile
                 if (_fadeInFull)
                 {
                     _font.alpha = _selectionFade;
-                    _font.inputProfile = _duck.inputProfile;
                     if (_selection == TitleMenuSelection.None)
                     {
-                        string text = "@WASD@MOVE @JUMP@JUMP";
-                        _font.Draw(text, current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
+                        DisplayUpperMonitorMessage("@WASD@MOVE @JUMP@JUMP");
                     }
                     else if (_selection == TitleMenuSelection.Play)
                     {
-                        string text = "@SELECT@PLAY GAME";
-                        _font.Draw(text, current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
+                        DisplayUpperMonitorMessage("@SELECT@/@SHOOT@PLAY", 1.4f);
+                        DisplayUpperMonitorMessage("@GRAB@EDITOR", 2.6f);
                     }
                     else if (_selection == TitleMenuSelection.Stats)
                     {
                         if (Profiles.allCustomProfiles.Count > 0)
-                        {
-                            string text = "@SELECT@LIBRARY";
-                            _font.Draw(text, current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
-                        }
+                            DisplayUpperMonitorMessage("@SELECT@LIBRARY");
                     }
                     else if (_selection == TitleMenuSelection.Options)
                     {
-                        string text = "@SELECT@OPTIONS";
-                        _font.Draw(text, current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
+                        DisplayUpperMonitorMessage("@SELECT@OPTIONS");
                     }
                     else if (_selection == TitleMenuSelection.Editor)
                     {
-                        string text = "@SELECT@EDITOR";
-                        _font.Draw(text, current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
+                        DisplayUpperMonitorMessage("@SELECT@EDITOR");
                     }
-                    //Graphics.Draw(_editorBenchPaint, 45f, 168f);
                 }
                 else
                 {
-                    string text = "PRESS START";
-                    string text2 = "@GRAB@";
-                    string text3 = "@SHOOT@";
-
-                    InputProfile profileWithDevice = InputProfile.FirstProfileWithDevice;
-
                     if (_pressStartBlink >= 0.5)
                     {
-                        _font.Draw(text, current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 15f, Color.White, (Depth)0.95f);
-                        text2 = "GO TO EDITOR";
-                        text3 = "GO TO LOBBY";
-                        _font.Draw(text2, current.camera.PercentW(50f) - _font.GetWidth(text2) / 2f, 4f, Color.White, (Depth)0.95f, profileWithDevice);
-                        _font.Draw(text3, current.camera.PercentW(50f) - _font.GetWidth(text3) / 2f, 26f, Color.White, (Depth)0.95f, profileWithDevice);
+                        DisplayUpperMonitorMessage("GO TO EDITOR", 1);
+                        DisplayUpperMonitorMessage("PRESS START", 2);
+                        DisplayUpperMonitorMessage("GO TO LOBBY", 3);
                     }
                     else
                     {
-                        Graphics.DrawString("@START@", new Vec2(current.camera.PercentW(50f) - (_font.GetWidth("@START@", false, profileWithDevice) - 1f) / 2f, 15f), Color.White, (Depth)0.9f, profileWithDevice);
-                        _font.Draw(text2, current.camera.PercentW(50f) - (_font.GetWidth(text2, false, profileWithDevice) - 1f) / 2f, 3f, Color.White, (Depth)0.95f, profileWithDevice);
-                        _font.Draw(text3, current.camera.PercentW(50f) - (_font.GetWidth(text3, false, profileWithDevice) - 1f) / 2f, 27f, Color.White, (Depth)0.95f, profileWithDevice);
+                        DisplayUpperMonitorMessage("@GRAB@", 1);
+                        DisplayUpperMonitorMessage("@START@", 2);
+                        DisplayUpperMonitorMessage("@SHOOT@", 3);
                     }
                 }
             }
