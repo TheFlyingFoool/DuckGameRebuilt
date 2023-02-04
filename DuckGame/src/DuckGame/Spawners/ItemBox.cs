@@ -256,7 +256,10 @@ namespace DuckGame
                 t.clip.Add(above);
             t.x = x;
             t.bottom = bottom;
-            t.y -= 12f;
+            if (this is PurpleBlock)
+                t.y -= 16f;
+            else
+                t.y -= 12f;
             t.vSpeed = -3.5f;
             t.clip.Add(this);
             if (t is Gun)
