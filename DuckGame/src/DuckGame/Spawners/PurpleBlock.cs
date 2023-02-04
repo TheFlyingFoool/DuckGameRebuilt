@@ -235,7 +235,8 @@ namespace DuckGame
             }
             else
             {
-                _currentProjection = GetStoredItem(_close[_closeIndex]).thing;
+                Thing storedThing = GetStoredItem(_close[_closeIndex]).thing;
+                _currentProjection = storedThing is null ? null : storedThing.Clone();
                 _projectorAlpha = Maths.CountUp(_projectorAlpha, 0.1f);
             }
             _projectorGlitch.alpha = _glitch * _projectorAlpha;

@@ -1735,5 +1735,10 @@ namespace DuckGame
         public virtual void OnSequenceActivate()
         {
         }
+
+        public Thing Clone()
+        {
+            return (Thing)MemberwiseClone();
+        }
     }
 }
