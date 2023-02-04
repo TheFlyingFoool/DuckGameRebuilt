@@ -19,6 +19,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using SDL2;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 
@@ -1576,6 +1577,29 @@ namespace DuckGame
                     _core.pendingLines.Add(dcLine);
                 }
             }
+        }
+
+        /// <summary>
+        /// Log the expression and it's value in this format
+        /// <code>
+        /// {expression}: {value}
+        /// </code>
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// DevConsole.DebugLog(2 + 2);         // '2 + 2: 4'
+        /// DevConsole.DebugLog(true == false); // 'true == false: false'
+        /// DevConsole.DebugLog(someVariable);  // 'someVariable: 69'
+        /// </code>
+        /// </example>
+        /// <param name="expression">what's gonna be logged</param>
+        /// <param name="compileTimeExpression">
+        /// do NOT use this parameter.
+        /// it's gonna modify the compile time expression
+        /// </param>
+        public static void DebugLog(object? expression, [CallerArgumentExpression(nameof(expression))] string compileTimeExpression = default!)
+        {
+            Log($"{compileTimeExpression}: {expression}");
         }
 
         public static void RefreshConsoleFont()
