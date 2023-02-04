@@ -1017,7 +1017,7 @@ namespace DuckGame
                 MonoMain.pauseMenu = _pauseGroup;
             }
 
-            if ((_multiBeam.entered || !_fadeInFull))
+            if ((_multiBeam.entered || !_fadeInFull) && !_enterCredits)
             {
                 if (Input.Pressed(Triggers.Grab))
                 {

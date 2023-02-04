@@ -164,16 +164,14 @@ namespace DuckGame
             Vec2 vec2;
             if (_hoverItem == null)
             {
-                Holdable holdable = Level.Nearest<Holdable>(position, 24f);
+                float maxDist = 24f;
+                Holdable holdable = Level.Nearest<Holdable>(position, maxDist);
                 if (holdable != null && holdable.owner == null && holdable != null && holdable.canPickUp && holdable.bottom <= top && Math.Abs(holdable.hSpeed) + Math.Abs(holdable.vSpeed) < 2.0)
                 {
-                    float num = 999f;
+                    float dist = 999f;
                     if (holdable != null)
-                    {
-                        vec2 = position - holdable.position;
-                        num = vec2.length;
-                    }
-                    if (num < 24f)
+                        dist = (position - holdable.position).length;
+                    if (dist < maxDist)
                         _hoverItem = holdable;
                 }
             }
