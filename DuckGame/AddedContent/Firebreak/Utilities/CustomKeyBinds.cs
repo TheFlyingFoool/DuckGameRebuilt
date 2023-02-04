@@ -161,5 +161,10 @@ namespace DuckGame
             Released,
             Down
         }
+
+        public static bool IsValidInput(string input)
+        {
+            return KeyDict.ContainsKey(input.ToLower());
+        }
     }
 }
