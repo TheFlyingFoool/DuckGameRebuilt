@@ -14,7 +14,7 @@ namespace DuckGame
 
         private static System.Timers.Timer tryReconnect;
 
-        public static DiscordRpcClient client;
+        public static DiscordRpcClient client { get; private set;}
 
         public static bool connected;
 
@@ -30,7 +30,7 @@ namespace DuckGame
             {
                 AutoReset = true
             };
-            
+
             client.OnReady += (sender, e) =>
             {
                 tryReconnect.Enabled = false;
