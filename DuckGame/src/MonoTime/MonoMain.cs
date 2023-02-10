@@ -1298,7 +1298,7 @@ namespace DuckGame
                 SFX.Update();
                 Options.Update();
                 InputProfile.repeat = Level.current is Editor || _pauseMenu != null || Editor.selectingLevel;
-                Keyboard.repeat = Level.current is Editor || _pauseMenu != null || DevConsole.open || DuckNetwork.core.enteringText || Editor.enteringText;
+                Keyboard.repeat = Level.current is Editor || _pauseMenu != null || DevConsole.open || DuckNetwork.core.enteringText || Editor.enteringText || !LockMovementQueue.Empty;
                 bool hasFocus = true;
                 if (!NetworkDebugger.enabled)
                     UpdatePauseMenu(hasFocus);

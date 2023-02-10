@@ -111,7 +111,7 @@ namespace DuckGame
         public void GainFocus()
         {
             _inFocus = true;
-            Keyboard.keyString = "";
+            Keyboard.KeyString = "";
             Editor.PushFocus(this);
         }
 
@@ -130,7 +130,7 @@ namespace DuckGame
                         Editor.PopFocusNow();
                     }
                     _inFocus = true;
-                    Keyboard.keyString = "";
+                    Keyboard.KeyString = "";
                     Editor.PushFocus(this);
                 }
             }
@@ -170,11 +170,11 @@ namespace DuckGame
                         if (Keyboard.Pressed(Keys.X))
                             DeleteHighlight();
                     }
-                    Keyboard.keyString = "";
+                    Keyboard.KeyString = "";
                 }
-                if (Keyboard.keyString.Length > 0 && _font._highlightStart != _font._highlightEnd)
+                if (Keyboard.KeyString.Length > 0 && _font._highlightStart != _font._highlightEnd)
                     DeleteHighlight();
-                text = text.Insert(_cursorPosition, Keyboard.keyString);
+                text = text.Insert(_cursorPosition, Keyboard.KeyString);
                 if (Keyboard.Pressed(Keys.Back) && text.Length > 0)
                 {
                     if (_font._highlightStart != _font._highlightEnd)
@@ -200,8 +200,8 @@ namespace DuckGame
                     ++_cursorPosition;
                 }
                 int length2 = text.Length;
-                _cursorPosition += Keyboard.keyString.Length;
-                Keyboard.keyString = "";
+                _cursorPosition += Keyboard.KeyString.Length;
+                Keyboard.KeyString = "";
                 if (Keyboard.Pressed(Keys.Left))
                 {
                     --_cursorPosition;
