@@ -30,7 +30,8 @@ namespace DuckGame
         private static int _lastKeyCount = 0;
         private static int _flipper = 0;
 
-        public static string KeyString = "";
+        public static string KeyString { get => keyString; set => keyString = value; }
+        public static string keyString = "";
         private bool _fakeDisconnect;
         private Dictionary<int, string> _triggerNames;
         private static Dictionary<int, Sprite> _triggerImages;

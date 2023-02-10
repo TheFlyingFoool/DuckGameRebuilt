@@ -10,7 +10,6 @@ using System.Reflection.Emit;
 
 namespace DuckGame
 {
-    public record struct IntVec2(int X, int Y);
     public static class Extensions
     {
         static Type PatchProcessorT;
@@ -121,12 +120,6 @@ namespace DuckGame
             return split;
         }
         
-        public static Vec2 GetStringSize(string text, float fontSize = 1f) => new()
-        {
-            x = Graphics.GetStringWidth(text, false, fontSize),
-            y = Graphics.GetStringHeight(text) * fontSize
-        };
-
         private static readonly Regex _defaultWordLineBreakRegex = new(@"(.{0,30})(?:\s+|$)", RegexOptions.Compiled);
 
         public static string[] SplitByLength(this string str, int maxLength = 30, bool breakAtWordEnding = true)

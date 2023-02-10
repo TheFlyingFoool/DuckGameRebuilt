@@ -333,7 +333,7 @@ namespace DuckGame
 		        flag = true;
 		        Editor.hoverTextBox = true;
 		        if (Mouse.left == InputState.Pressed)
-		            Keyboard.keyString = "";
+		            Keyboard.KeyString = "";
 		    }
 		    else
 		    {
