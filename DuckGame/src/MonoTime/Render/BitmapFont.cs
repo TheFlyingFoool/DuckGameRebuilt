@@ -406,6 +406,10 @@ namespace DuckGame
             }
             if (sprite == null)
                 sprite = Input.GetTriggerSprite(str);
+
+            if (sprite is not null)
+                sprite.scale = scale;
+            
             return sprite;
         }
 
