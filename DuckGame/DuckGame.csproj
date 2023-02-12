@@ -353,63 +353,6 @@
     </Compile>
     <Compile Include="src\DuckGame\DirectBitmap.cs" />
     <Compile Include="src\DuckGame\LangHandler.cs" />
-    <Compile Include="DuckGame\AddedContent\Drake\DrakeTests.cs" />
-    <Compile Include="DuckGame\AddedContent\Drake\FixedCommandHistory.cs" />
-    <Compile Include="DuckGame\AddedContent\Drake\PolyRender\PolygonBatcher.cs" />
-    <Compile Include="DuckGame\AddedContent\Drake\PolyRender\PolyRenderer.cs" />
-    <Compile Include="DuckGame\AddedContent\Drake\Utils\VectorMath.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\AutoConfigFieldAttribute.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\AutoConfigHandler.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\ConfigTest.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\FireSerializer.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\FireSerializerModuleAttribute.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\IFireSerializerModule.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\ColorSerializerModule.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\ConsoleBindSerializerModule.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\DateTimeSerializeModule.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\StringSerializerModule.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\AutoConfig\SerializerModules\Vec2SerializerModule.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Content\SinkingBlock.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Cursor\CursorHandler.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Cursor\GameCursor.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Cursor\OpalCursor.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\FireDebug.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Levels\TestLev.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Levels\TestLev.FireBlock.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Levels\TestLev.SelectionPad.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Zinc\DebugTablet\DebugTablet.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Zinc\DGCL\DGCLSyntaxHighlighter.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Zinc\DGCL\DGCLSyntaxRunner.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Zinc\DGCL\DGCommandLanguage.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Zinc\DGCL\SyntaxToken.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Zinc\DGCL\TokenId.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DebuggerTools\Zinc\DGCL\TokenType.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DevConsoleCommandAttribute.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\DrawingContextAttribute.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\LockMovementQueue.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\PostInitializeAttribute.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\CustomKeyBinds.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\EasingHelper.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\MemberAttributePair.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\MemberAttributePairHandler.cs" />
-    <Compile Include="DuckGame\AddedContent\Firebreak\Utilities\ProgressValue.cs" />
-    <Compile Include="DuckGame\AddedContent\klof44\DartGrenade.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\Bubble.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ChangePlus.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\MathParser.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\PizzaLauncher.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\RoomEditorExtra.cs" />
-    <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\ClientOnlyAttribute.cs" />
-    <Compile Include="DuckGame\AddedContent\Extensions.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\NMDuckShatter.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\NMPinkCollision.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\NMPinkExplode.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\PinkBox.cs" />
-    <Compile Include="DuckGame\AddedContent\YupDanielThatsMe\PistolTwo.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\NMSetScale.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\ShatterDuck.cs" />
-    <Compile Include="DuckGame\AddedContent\NiK0\TheDishes.cs" />
-    <Compile Include="DuckGame\AddedContent\klof44\DiscordRichPresence.cs" />
     <Compile Include="src\DuckGame\Network\ConcurrentStack.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Bind.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Clear.cs" />
@@ -2137,9 +2080,6 @@
     <Content Include="DuckGame.ico" />
     <EmbeddedResource Include="version.txt" />
     <EmbeddedResource Include="SlnPath.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="shaders_source\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DuckGame.ico" />
