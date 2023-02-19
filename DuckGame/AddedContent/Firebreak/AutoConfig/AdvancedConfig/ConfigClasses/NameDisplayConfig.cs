@@ -10,9 +10,10 @@ namespace DuckGame
         public float HorizontalSpacing;
         public float Opacity;
         public float TeamLineWidth;
-        public bool RemoveDeadPlayers;
+        public DeadPlayerRemoval RemoveDeadPlayers;
         public float XOffset;
         public float YOffset; 
+        public ScoreShowing ShowScores;
         
         public void RevertToDefaults()
         {
@@ -21,9 +22,24 @@ namespace DuckGame
             HorizontalSpacing = 2f;
             Opacity = 1f;
             TeamLineWidth = 1f;
-            RemoveDeadPlayers = true;
+            RemoveDeadPlayers = DeadPlayerRemoval.Ghost;
             XOffset = 0;
             YOffset = 0;
+            ShowScores = ScoreShowing.False;
+        }
+
+        public enum ScoreShowing
+        {
+            False,
+            Value,
+            Bar
+        }
+
+        public enum DeadPlayerRemoval
+        {
+            False,
+            True,
+            Ghost
         }
     }
 }

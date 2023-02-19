@@ -873,9 +873,10 @@ namespace DuckGame
             float hSpacing = config.HorizontalSpacing;
             float opacity = config.Opacity;
             float teamLineWidth = config.TeamLineWidth;
-            bool removeDeadPlayers = config.RemoveDeadPlayers;
+            NameDisplayConfig.DeadPlayerRemoval removeDeadPlayers = config.RemoveDeadPlayers;
             float xOffset = config.XOffset;
             float yOffset = config.YOffset;
+            NameDisplayConfig.ScoreShowing showScore = config.ShowScores;
 
             bool doTeams = Extensions.MultiPlayerTeamsExist() && teamLineWidth > 0;
             IEnumerable<Profile> profileList = Profiles.activeNonSpectators;
@@ -890,8 +891,14 @@ namespace DuckGame
                     Color.Orange,
                 };
 
-            if (removeDeadPlayers)
+            if (showScore != NameDisplayConfig.ScoreShowing.False)
+                profileList = profileList.OrderByDescending(x => x?.team.score);
+
+            if (removeDeadPlayers == NameDisplayConfig.DeadPlayerRemoval.True)
                 profileList = profileList.Where(x => x?.duck?.dead == false);
+
+            if (removeDeadPlayers == NameDisplayConfig.DeadPlayerRemoval.Ghost)
+                profileList = profileList.OrderByDescending(x => x?.duck?.dead == false);
 
             float xPos = xOffset + hSpacing;
             float yPos = yOffset + vSpacing;
@@ -924,20 +931,55 @@ namespace DuckGame
                 xPos += hSpacing * 2 + teamLineWidth;
             }
 
+            float longestNameWidth = 0f;
+            int highestScore = 0;
+            
+            Dictionary<Profile, Vec2> profileNameSizeMapping = new();
+            foreach (Profile prof in profileList)
+            {
+                Vec2 size = Extensions.GetStringSize(prof.name.CleanFormatting(), fontSize);
+                profileNameSizeMapping[prof] = size;
+
+                if (size.x > longestNameWidth)
+                    longestNameWidth = size.x;
+
+                if (prof.team.score > highestScore)
+                    highestScore = prof.team.score;
+            }
+
             foreach (Profile prof in profileList)
             {
                 int teamHashCode = prof.team.GetHashCode();
 
-                (float nameW, float nameH) = Extensions.GetStringSize(prof.name.CleanFormatting(), fontSize);
+                (float nameW, float nameH) = profileNameSizeMapping[prof];
                 Color duckColor = prof.persona.colorUsable * opacity;
                 Color teamColor = doTeams ? (teamColors[teamColorMapping[teamHashCode]] * opacity) : Color.Transparent;
                 Color borderColor = Color.Black * opacity;
                 float addedHeight = nameH + vSpacing;
-
-                Graphics.DrawStringOutline(prof.name, new Vec2(xPos + hSpacing + nameH, yPos), duckColor, borderColor, 1.1f, scale: fontSize);
+                bool isGhost = removeDeadPlayers == NameDisplayConfig.DeadPlayerRemoval.Ghost &&
+                               prof?.duck?.dead == true;
+                
+                Graphics.DrawStringOutline(prof.name, new Vec2(xPos + hSpacing + nameH, yPos), isGhost ? Color.DarkRed * 0.6f * opacity : duckColor, borderColor, 1.1f, scale: fontSize);
 
                 Rectangle colorBox = new(xPos, yPos, nameH, nameH - 0.5f);
                 Graphics.DrawOutlinedRect(colorBox, duckColor, borderColor, 1.1f, fontSize);
+
+                if (showScore == NameDisplayConfig.ScoreShowing.Bar)
+                {
+                    for (int i = 0; i < prof.team.score; i++)
+                    {
+                        float barPartX = xPos + nameH / 2 * (i + 1) - fontSize * (i + 1) + longestNameWidth + hSpacing * 3;
+                        float barPartY = yPos - 0.5f;
+                        Graphics.DrawOutlinedRect(new Rectangle(barPartX, barPartY, nameH / 2, nameH + 0.5f), duckColor, borderColor, 1.1f, fontSize);
+                    }
+                }
+                else if (showScore == NameDisplayConfig.ScoreShowing.Value)
+                {
+                    float scoreTextPos = xPos + hSpacing * 3 + nameH + longestNameWidth;
+                    string scoreText = $"{prof.team.score}";
+                    
+                    Graphics.DrawStringOutline(scoreText, new Vec2(scoreTextPos, yPos), duckColor, borderColor, 1.1f, scale: fontSize);
+                }
 
                 if (doTeams)
                 {
