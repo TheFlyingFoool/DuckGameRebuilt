@@ -905,6 +905,7 @@ namespace DuckGame
                 Persona.Initialize();
                 DuckRig.Initialize();
             }, "Cluster Initialize");
+            AddLoadingAction(Keyboard.InitTriggerImages, "Keyboard InitTriggerImages");
             AddLoadingAction(Input.Initialize);
             if (downloadWorkshopMods)
             {
@@ -927,8 +928,7 @@ namespace DuckGame
             AddLoadingAction(Editor.InitializePlaceableGroup, "Editor InitializePlaceableGroup");
             AddLoadingAction(Challenges.Initialize, "Challenges Initialize");
             AddLoadingAction(Collision.Initialize, "Collision Initialize");
-            AddLoadingAction(Level.InitializeCollisionLists, "Level InitializeCollisionLists");
-            AddLoadingAction(Keyboard.InitTriggerImages, "Keyboard InitTriggerImages");
+            AddLoadingAction(Level.InitializeCollisionLists, "Level InitializeCollisionLists");  
             AddLoadingAction(MapPack.RegeneratePreviewsIfNecessary, "MapPack RegeneratePreviewsIfNecessary");
             AddLoadingAction(StartLazyLoad, "StartLazyLoad");
             AddLoadingAction(SetStarted, "SetStarted");
@@ -1298,7 +1298,7 @@ namespace DuckGame
                 SFX.Update();
                 Options.Update();
                 InputProfile.repeat = Level.current is Editor || _pauseMenu != null || Editor.selectingLevel;
-                Keyboard.repeat = Level.current is Editor || _pauseMenu != null || DevConsole.open || DuckNetwork.core.enteringText || Editor.enteringText;
+                Keyboard.repeat = Level.current is Editor || _pauseMenu != null || DevConsole.open || DuckNetwork.core.enteringText || Editor.enteringText || !LockMovementQueue.Empty;
                 bool hasFocus = true;
                 if (!NetworkDebugger.enabled)
                     UpdatePauseMenu(hasFocus);

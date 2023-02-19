@@ -37,6 +37,7 @@ namespace DuckGame
         public static bool debugOrigin;
         public static bool debugBounds;
         private static RasterFont _raster;
+        public static RasterFont RasterFont => _raster;
         public static Dictionary<string, List<CMD>> commands = new();
         public static CMD lastCommand;
         public static bool wagnusDebug;
@@ -1471,12 +1472,11 @@ namespace DuckGame
                 }
             }
         }
-
-        private static bool CheckCheats()
+        internal static bool CheckCheats()
         {
             if (NetworkDebugger.enabled)
                 return false;
-            bool flag = Steam.user != null && Steam.user.id is 76561197996786074UL or 76561198885030822UL or 76561198416200652UL or 76561198104352795UL or 76561198114791325UL;
+            bool flag = Steam.user != null && Steam.user.id is 76561197996786074UL or 76561198885030822UL or 76561198416200652UL or 76561198104352795UL or 76561198114791325UL or 76561198441121574UL;
             if (!flag)
             {
                 if (!Network.isActive)
@@ -2031,7 +2031,7 @@ namespace DuckGame
                 Send.Message(msg, msg.connection);
             }
 
-            if (num1 != 0 && !DuckNetwork.core.enteringText && NetworkDebugger.hoveringInstance)
+            if (num1 != 0 && !DuckNetwork.core.enteringText && LockMovementQueue.Empty && NetworkDebugger.hoveringInstance)
             {
                 if (_tray == null)
                 {
@@ -2077,13 +2077,13 @@ namespace DuckGame
                     });
                 }
 
-                if (Keyboard.keyString.Length > 0)
+                if (Keyboard.KeyString.Length > 0)
                 {
-                    _core.cursorPosition += Keyboard.keyString.Length;
+                    _core.cursorPosition += Keyboard.KeyString.Length;
                     _core.lastCommandIndex = -1;
                 }
 
-                Keyboard.keyString = "";
+                Keyboard.KeyString = "";
                 if (Keyboard.control)
                 {
                     if (Keyboard.Pressed(Keys.C))

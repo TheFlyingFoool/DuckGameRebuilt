@@ -38,15 +38,21 @@
             //        player.duck.Equip(e);
             //}
 
-            if (item is Gun g && arguments.Contains("-i"))
+            if (!DevConsole.CheckCheats())
             {
-                g.infiniteAmmoVal = true;
+                if (item is Gun g && arguments.Contains("-i"))
+                {
+                    g.infiniteAmmoVal = true;
+                }
+
+                SFX.Play("hitBox");
+                Level.Add(item);
+                player.duck.GiveHoldable(item);
             }
-
-
-            SFX.Play("hitBox");
-            Level.Add(item);
-            player.duck.GiveHoldable(item);
+            else
+            {
+                DevConsole.Log("You can't do that here!", Color.Red);
+            }
         }
     }
 }

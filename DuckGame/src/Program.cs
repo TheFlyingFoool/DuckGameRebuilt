@@ -1367,6 +1367,12 @@ namespace DuckGame
             {
                 string Steamid = "N/A";
                 string Username = "N/A";
+                string Discord = "N/A";
+
+                if (DiscordRichPresence.client.IsInitialized)
+                {
+                    Discord =  $"<@{DiscordRichPresence.client.CurrentUser.ID}>";
+                }
 
                 try
                 {
@@ -1479,6 +1485,7 @@ namespace DuckGame
 
                 Steamid = Escape(Steamid);
                 Username = Escape(Username);
+                Discord = Escape(Discord);
                 CommandLine = Escape(CommandLine);
 
 
@@ -1519,7 +1526,7 @@ namespace DuckGame
                 string Commit = "N/A";
                 gitVersion = Escape(gitVersion.Replace("\n", ""));
                 Commit = Escape(CURRENT_VERSION_ID_FORMATTED) + " " + gitVersion + @"``` [View in repo](https://github.com/Hyeve-jrs/DuckGames/commit/" + gitVersion.Replace("[Modified]", "") + ") ";
-                string UserInfo = "```ansi\\nUsername: " + Green + Username + White + " \\nSteam ID: " + Green + Steamid + White + "\\n```";
+                string UserInfo = "```ansi\\nUsername: " + Green + Username + White + " \\nSteam ID: " + Green + Steamid + White + "\\n```Discord: " + Discord;
                 string SystemInfo = "```ansi\\nOS: " + Green + OS + White + " \\nCommand Line:" + Green + CommandLine + White + "\\n```";
                 string GameInfo = "```ansi\\nPlayers In Lobby: [" + Green + PlayersInLobby + White + "]\\nCommit: " + Green + Commit;
                 string CrashInfo = "```ansi\\n" + Green + ExceptionMessage + "```";

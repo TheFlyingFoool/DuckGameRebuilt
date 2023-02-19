@@ -119,7 +119,7 @@ namespace DuckGame
 
             return split;
         }
-
+        
         private static readonly Regex _defaultWordLineBreakRegex = new(@"(.{0,30})(?:\s+|$)", RegexOptions.Compiled);
 
         public static string[] SplitByLength(this string str, int maxLength = 30, bool breakAtWordEnding = true)

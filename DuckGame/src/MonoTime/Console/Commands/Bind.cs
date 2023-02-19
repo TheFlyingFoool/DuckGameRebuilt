@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace DuckGame
@@ -26,6 +27,9 @@ namespace DuckGame
                         if (command is null)
                             throw new Exception("No command provided");
 
+                        if (!CustomKeyBinds.IsValidInput(hotkey))
+                            return $"|DGRED|Key [{hotkey}] does not exist. Try running `bind keys` for a list of usable keys";
+                        
                         Binds.Add(new ConsoleBind(hotkey, command));
                         return $"|DGBLUE|Added new binding at index [{Binds.Count - 1}] with hotkey [{hotkey}]";
                     }
@@ -47,6 +51,22 @@ namespace DuckGame
                         int numWidth = Binds.Count.ToString().Length;
                         return Binds.Select((x, i) => $"{i.ToString().PadLeft(numWidth, ' ')} | {x.hotkey}: {x.command}");
                     }
+                case BindAction.Keys:
+                    {
+                        StringBuilder builder = new();
+                        string[] keyNames = Enum.GetNames(typeof(Keys));
+                        
+                        for (int i = 0; i < keyNames.Length; i++)
+                        {
+                            string keyName = keyNames[i];
+                            
+                            if (i > 0)
+                                builder.Append('\n');
+                            builder.Append(keyName);
+                        }
+
+                        return builder.ToString();
+                    }
                 default:
                     throw new Exception($"Invalid action [{action.ToString()}]");
             }
@@ -56,7 +76,8 @@ namespace DuckGame
         {
             Add,
             Remove,
-            List
+            List,
+            Keys
         }
 
         public record ConsoleBind(string hotkey, string command)
@@ -84,8 +105,16 @@ namespace DuckGame
 
             public bool TryExecute()
             {
-                if (!Activated)
+                try
+                {
+                    if (!Activated)
+                        return false;
+                }
+                catch (Exception e)
+                {
+                    DevConsole.Log($"|DGRED|Error running bind: {e.Message}");
                     return false;
+                }
 
                 DevConsole.core.writeExecutedCommand = false;
                 DevConsole.RunCommand(command);

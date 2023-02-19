@@ -50,7 +50,7 @@ namespace DuckGame
             if (_directional)
                 password = "";
             _originalValue = password;
-            Keyboard.keyString = password;
+            Keyboard.KeyString = password;
             _cancelled = true;
             base.Open();
         }
@@ -94,13 +94,13 @@ namespace DuckGame
                 }
                 else
                 {
-                    globalUILock = true;
-                    if (Keyboard.keyString.Length > _maxLength)
-                        Keyboard.keyString = Keyboard.keyString.Substring(0, _maxLength);
+                    UIMenu.globalUILock = true;
+                    if (Keyboard.KeyString.Length > _maxLength)
+                        Keyboard.KeyString = Keyboard.KeyString.Substring(0, _maxLength);
                     if (_numeric)
-                        Keyboard.keyString = Regex.Replace(Keyboard.keyString, "[^0-9]", "");
+                        Keyboard.KeyString = Regex.Replace(Keyboard.KeyString, "[^0-9]", "");
                     InputProfile.ignoreKeyboard = true;
-                    password = Keyboard.keyString;
+                    password = Keyboard.KeyString;
                     if (Keyboard.Pressed(Keys.Enter))
                     {
                         bool flag = false;
@@ -108,7 +108,7 @@ namespace DuckGame
                         {
                             try
                             {
-                                int num = Convert.ToInt32(Keyboard.keyString);
+                                int num = Convert.ToInt32(Keyboard.KeyString);
                                 if (num < _minNumber)
                                 {
                                     num = _minNumber;
@@ -119,11 +119,11 @@ namespace DuckGame
                                     num = _maxNumber;
                                     flag = true;
                                 }
-                                Keyboard.keyString = num.ToString();
+                                Keyboard.KeyString = num.ToString();
                             }
                             catch (Exception)
                             {
-                                Keyboard.keyString = "";
+                                Keyboard.KeyString = "";
                                 flag = true;
                             }
                         }

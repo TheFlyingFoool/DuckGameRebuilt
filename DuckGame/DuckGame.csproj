@@ -230,6 +230,7 @@
     <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ConfigClasses\NameDisplayConfig.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\IAdvancedConfig.cs" />
     <Compile Include="AddedContent\Firebreak\Internet.cs" />
+    <Compile Include="AddedContent\Firebreak\LockMovementQueue.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\IAmUi.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\UiBasic.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\UiGroup.cs" />
@@ -353,6 +354,7 @@
     <Compile Include="src\DuckGame\DirectBitmap.cs" />
     <Compile Include="src\DuckGame\LangHandler.cs" />
     <Compile Include="src\DuckGame\Network\ConcurrentStack.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\AdvancedConfig.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Bind.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Clear.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Config.cs" />
@@ -2079,9 +2081,6 @@
     <Content Include="DuckGame.ico" />
     <EmbeddedResource Include="version.txt" />
     <EmbeddedResource Include="SlnPath.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="shaders_source\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DuckGame.ico" />
