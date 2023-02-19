@@ -18,12 +18,14 @@ namespace DuckGame
         {
             _target = target;
             _blastOwner = blastOwner;
+            shouldbegraphicculled = false;
         }
 
         public DeathBeam(Vec2 pos, Vec2 target)
           : base(pos.x, pos.y)
         {
             _target = target;
+            shouldbegraphicculled = false;
         }
 
         public override void Initialize()

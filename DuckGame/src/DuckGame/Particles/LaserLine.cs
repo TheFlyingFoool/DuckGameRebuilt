@@ -32,6 +32,7 @@ namespace DuckGame
             _move = moveVector;
             _target = target;
             fade = f;
+            shouldbegraphicculled = false;
         }
 
         public override void Update()

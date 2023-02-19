@@ -19,6 +19,7 @@ namespace DuckGame
           : base(pos.x, pos.y)
         {
             _target = target;
+            shouldbegraphicculled = false;
         }
 
         public override void Initialize()

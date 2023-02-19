@@ -88,6 +88,7 @@ namespace DuckGame
             _editorName = "Death Ray";
             editorTooltip = "Hold the trigger to charge a beam of pure death and destruction. You know, for kids!";
             _bio = "Invented by Dr.Death for scanning items at your local super market. Also has some military application.";
+            shouldbegraphicculled = false;
         }
 
         public override void Initialize()
