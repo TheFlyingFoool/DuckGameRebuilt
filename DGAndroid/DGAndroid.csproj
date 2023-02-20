@@ -1,0 +1,1433 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{14FEE0EE-3F0B-43E9-AAA0-51D1B93A5166}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DuckGame</RootNamespace>
+    <AssemblyName>DuckGame</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <AndroidApplication>true</AndroidApplication>
+    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
+    <AndroidResgenClass>Resource</AndroidResgenClass>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AndroidStoreUncompressedFileExtensions>.m4a</AndroidStoreUncompressedFileExtensions>
+    <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
+    <LangVersion>10.0</LangVersion>
+    <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
+    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
+    <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
+    <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
+    <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
+    <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\$(MonoGamePlatform)\$(Platform)\$(Configuration)\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;ANDROID</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>0</WarningLevel>
+    <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <AotAssemblies>false</AotAssemblies>
+    <EnableLLVM>false</EnableLLVM>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <BundleAssemblies>false</BundleAssemblies>
+    <MandroidI18n />
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\$(MonoGamePlatform)\$(Platform)\$(Configuration)\</OutputPath>
+    <DefineConstants>TRACE;ANDROID</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
+    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>..\..\..\..\repos3\AssemblyReRef\packages\Lib.Harmony.2.2.2\lib\net48\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="DGSteam">
+      <HintPath>..\bin\DGSteam.dll</HintPath>
+    </Reference>
+    <Reference Include="DiscordRPC">
+      <HintPath>..\DuckGame\lib\DiscordRPC.dll</HintPath>
+    </Reference>
+    <Reference Include="FNA">
+      <HintPath>deps\FNA.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil">
+      <HintPath>..\deps\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Mdb">
+      <HintPath>..\deps\Mono.Cecil.Mdb.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil.Pdb">
+      <HintPath>..\deps\Mono.Cecil.Pdb.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoMod">
+      <HintPath>deps\MonoMod.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\DuckGame\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SDL2Droid-CS-JBindings">
+      <HintPath>deps\SDL2Droid-CS-JBindings.dll</HintPath>
+    </Reference>
+    <Reference Include="Steamworks.NET">
+      <HintPath>deps\Steamworks.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Mono.Android">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="KeyListener.cs" />
+    <Compile Include="MainActivity.cs" />
+    <Compile Include="AndroidAudio.cs" />
+    <Compile Include="AndroidInput.cs" />
+    <AndroidNativeLibrary Include="libs\arm64-v8a\libbass.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\armeabi-v7a\libbass.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\x86\libbass.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\x86_64\libbass.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\arm64-v8a\libbassmix.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\armeabi-v7a\libbassmix.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\x86\libbassmix.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\x86_64\libbassmix.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <Compile Include="SoundEffect.cs" />
+    <Compile Include="SoundEffectInstance.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\Icon.png" />
+    <AndroidResource Include="Resources\Values\Strings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\genesis\a.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\genesis\b.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\genesis\c.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\genesis\start.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\alt.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\arrows.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\back.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\control.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\delete.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\downKey.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\end.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\enter.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\escape.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\f1.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\f10.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\f11.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\f12.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\f2.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\f3.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\f4.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\f5.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\f6.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\f7.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\f8.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\f9.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\home.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\insert.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\key.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\leftKey.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\pgdown.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\pgup.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\rightKey.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\shift.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\space.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\tab.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\tilde.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\upKey.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\keyboard\wasd.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\playstation\blank.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\playstation\leftBumper.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\playstation\leftTrigger.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\playstation\o.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\playstation\rightBumper.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\playstation\rightTrigger.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\playstation\selectButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\playstation\square.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\playstation\startButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\playstation\triangle.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\playstation\x.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\ps4\circle.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\ps4\dPad.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\ps4\dPadDown.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\ps4\dPadLeft.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\ps4\dPadRight.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\ps4\dPadUp.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\ps4\leftBumper.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\ps4\leftStick.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\ps4\leftTrigger.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\ps4\rightBumper.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\ps4\rightStick.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\ps4\rightTrigger.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\ps4\square.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\ps4\startButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\ps4\triangle.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\ps4\x.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\SNES\a.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\SNES\aFami.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\SNES\b.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\SNES\bFami.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\SNES\blankSNESPink.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\SNES\leftTrigger.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\SNES\rightTrigger.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\SNES\selectButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\SNES\startButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\SNES\x.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\SNES\xFami.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\SNES\y.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\SNES\yFami.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\dual" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\genericStick.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\joyconButtonDown.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\joyconButtonLeft.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\joyconButtonRight.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\joyconButtonUp.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\left" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\pro" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\right" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\sl.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\sr.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\dual\aButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\dual\dPad.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\dual\dPadDown.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\dual\dPadLeft.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\dual\dPadRight.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\dual\dPadUp.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\dual\leftBumper.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\dual\leftStick.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\dual\leftTrigger.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\dual\oButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\dual\rightBumper.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\dual\rightStick.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\dual\rightTrigger.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\dual\selectButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\dual\startButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\dual\uButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\dual\yButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\left\aButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\left\leftBumper.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\left\leftStick.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\left\leftTrigger.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\left\oButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\left\rightBumper.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\left\rightTrigger.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\left\startButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\left\uButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\left\yButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\pro\aButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\pro\dPad.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\pro\dPadDown.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\pro\dPadLeft.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\pro\dPadRight.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\pro\dPadUp.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\pro\leftBumper.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\pro\leftStick.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\pro\leftTrigger.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\pro\oButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\pro\rightBumper.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\pro\rightStick.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\pro\rightTrigger.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\pro\selectButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\pro\startButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\pro\uButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\pro\yButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\right\aButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\right\leftBumper.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\right\leftStick.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\right\leftTrigger.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\right\oButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\right\rightBumper.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\right\rightTrigger.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\right\startButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\right\uButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\switch\right\yButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\xbox\aButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\xbox\dPad.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\xbox\dPadDown.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\xbox\dPadLeft.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\xbox\dPadRight.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\xbox\dPadUp.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\xbox\leftBumper.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\xbox\leftStick.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\xbox\leftTrigger.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\xbox\oButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\xbox\rightBumper.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\xbox\rightStick.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\xbox\rightTrigger.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\xbox\selectButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\xbox\startButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\xbox\uButton.xnb" />
+    <AndroidAsset Include="Content\bin\Android\Content\buttons\xbox\yButton.xnb" />
+    <AndroidNativeLibrary Include="libs\arm64-v8a\libbass_fx.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\armeabi-v7a\libbass_fx.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\x86\libbass_fx.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\x86_64\libbass_fx.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\armeabi-v7a\libSDL2.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\armeabi-v7a\libSDL2_image.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\x86\libSDL2.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\x86\libSDL2_image.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\armeabi-v7a\libfnadroid-ext.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\armeabi-v7a\libmain.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\x86\libfnadroid-ext.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\x86\libmain.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\armeabi-v7a\libhidapi.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\x86\libhidapi.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\armeabi-v7a\libmojoshader.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <AndroidNativeLibrary Include="libs\x86\libmojoshader.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidNativeLibrary>
+    <None Include="Content\bin\Android\Content\aButton.xnb" />
+    <None Include="Content\bin\Android\Content\accessIcon.xnb" />
+    <None Include="Content\bin\Android\Content\activatorBlock.xnb" />
+    <None Include="Content\bin\Android\Content\adjusterHand.xnb" />
+    <None Include="Content\bin\Android\Content\airFire.xnb" />
+    <None Include="Content\bin\Android\Content\ak47.xnb" />
+    <None Include="Content\bin\Android\Content\album.xnb" />
+    <None Include="Content\bin\Android\Content\albumpic.xnb" />
+    <None Include="Content\bin\Android\Content\altar.xnb" />
+    <None Include="Content\bin\Android\Content\angryFace.xnb" />
+    <None Include="Content\bin\Android\Content\arcadeBackground.xnb" />
+    <None Include="Content\bin\Android\Content\arcadeFrame01.xnb" />
+    <None Include="Content\bin\Android\Content\arcadeIcon.xnb" />
+    <None Include="Content\bin\Android\Content\arcadeLight.xnb" />
+    <None Include="Content\bin\Android\Content\arrowHead.xnb" />
+    <None Include="Content\bin\Android\Content\aslogo.xnb" />
+    <None Include="Content\bin\Android\Content\aslogopix.xnb" />
+    <None Include="Content\bin\Android\Content\backgroundIcons.xnb" />
+    <None Include="Content\bin\Android\Content\backgroundTiles01.xnb" />
+    <None Include="Content\bin\Android\Content\badArcade.xnb" />
+    <None Include="Content\bin\Android\Content\badParallax.xnb" />
+    <None Include="Content\bin\Android\Content\badTileset.xnb" />
+    <None Include="Content\bin\Android\Content\ball.xnb" />
+    <None Include="Content\bin\Android\Content\banana.xnb" />
+    <None Include="Content\bin\Android\Content\barback.xnb" />
+    <None Include="Content\bin\Android\Content\barrelSmoke.xnb" />
+    <None Include="Content\bin\Android\Content\basketBall.xnb" />
+    <None Include="Content\bin\Android\Content\bathroom.xnb" />
+    <None Include="Content\bin\Android\Content\bazooka.xnb" />
+    <None Include="Content\bin\Android\Content\bdaycake.xnb" />
+    <None Include="Content\bin\Android\Content\beverages.xnb" />
+    <None Include="Content\bin\Android\Content\bigBanner.xnb" />
+    <None Include="Content\bin\Android\Content\bigDrift.xnb" />
+    <None Include="Content\bin\Android\Content\bigFolder.xnb" />
+    <None Include="Content\bin\Android\Content\bigGlob.xnb" />
+    <None Include="Content\bin\Android\Content\bigGold.xnb" />
+    <None Include="Content\bin\Android\Content\bigItemCrate.xnb" />
+    <None Include="Content\bin\Android\Content\bigLaserCone.xnb" />
+    <None Include="Content\bin\Android\Content\bigLaserTip.xnb" />
+    <None Include="Content\bin\Android\Content\bigTV.xnb" />
+    <None Include="Content\bin\Android\Content\billboard.gal" />
+    <None Include="Content\bin\Android\Content\billboard.xnb" />
+    <None Include="Content\bin\Android\Content\bionicArm.xnb" />
+    <None Include="Content\bin\Android\Content\bionicArmHook.xnb" />
+    <None Include="Content\bin\Android\Content\biosFont.xnb" />
+    <None Include="Content\bin\Android\Content\biosFontCaseSensitive.xnb" />
+    <None Include="Content\bin\Android\Content\biosFontDegree.xnb" />
+    <None Include="Content\bin\Android\Content\biosFontDescriptions.xnb" />
+    <None Include="Content\bin\Android\Content\biosFontSideways.xnb" />
+    <None Include="Content\bin\Android\Content\biosFontSidewaysCrossout.xnb" />
+    <None Include="Content\bin\Android\Content\biosFontUI.xnb" />
+    <None Include="Content\bin\Android\Content\biosFontUIArrows.xnb" />
+    <None Include="Content\bin\Android\Content\blacklistX.xnb" />
+    <None Include="Content\bin\Android\Content\blackSquare.xnb" />
+    <None Include="Content\bin\Android\Content\blank_door.xnb" />
+    <None Include="Content\bin\Android\Content\bleacherBack.xnb" />
+    <None Include="Content\bin\Android\Content\bleacherBackSnow.xnb" />
+    <None Include="Content\bin\Android\Content\bleacherSeat.xnb" />
+    <None Include="Content\bin\Android\Content\bleacherSeats.xnb" />
+    <None Include="Content\bin\Android\Content\blind.xnb" />
+    <None Include="Content\bin\Android\Content\blockIcon.xnb" />
+    <None Include="Content\bin\Android\Content\blueBarrel.xnb" />
+    <None Include="Content\bin\Android\Content\blueBarrelMelting.xnb" />
+    <None Include="Content\bin\Android\Content\blueBarrelToreUp.xnb" />
+    <None Include="Content\bin\Android\Content\blueprintTileset.xnb" />
+    <None Include="Content\bin\Android\Content\blunderbuss.xnb" />
+    <None Include="Content\bin\Android\Content\boardHighlight.xnb" />
+    <None Include="Content\bin\Android\Content\boardLoader.xnb" />
+    <None Include="Content\bin\Android\Content\boots.xnb" />
+    <None Include="Content\bin\Android\Content\bootsPickup.xnb" />
+    <None Include="Content\bin\Android\Content\bottomWedge.xnb" />
+    <None Include="Content\bin\Android\Content\boxingGlove.xnb" />
+    <None Include="Content\bin\Android\Content\brokeEdge.xnb" />
+    <None Include="Content\bin\Android\Content\buildingFrame.xnb" />
+    <None Include="Content\bin\Android\Content\bulb.xnb" />
+    <None Include="Content\bin\Android\Content\bulletGlow.xnb" />
+    <None Include="Content\bin\Android\Content\bulletHoles.xnb" />
+    <None Include="Content\bin\Android\Content\bulletHoles2.xnb" />
+    <None Include="Content\bin\Android\Content\burn.xnb" />
+    <None Include="Content\bin\Android\Content\buttons.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\aButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\dPad.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\dPadDown.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\dPadLeft.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\dPadRight.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\dPadUp.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\genericButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\genesis\a.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\genesis\b.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\genesis\c.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\genesis\start.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\alt.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\arrows.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\back.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\control.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\delete.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\downKey.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\end.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\enter.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\escape.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\f1.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\f10.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\f11.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\f12.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\f2.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\f3.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\f4.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\f5.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\f6.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\f7.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\f8.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\f9.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\home.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\insert.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\key.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\leftKey.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\pgdown.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\pgup.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\rightKey.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\shift.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\space.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\tab.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\tilde.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\upKey.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\keyboard\wasd.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\lb.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\mouse.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\mousewheel.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\oButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\playstation\blank.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\playstation\leftBumper.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\playstation\leftTrigger.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\playstation\o.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\playstation\rightBumper.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\playstation\rightTrigger.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\playstation\selectButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\playstation\square.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\playstation\startButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\playstation\triangle.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\playstation\x.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\ps4\circle.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\ps4\dPad.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\ps4\dPadDown.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\ps4\dPadLeft.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\ps4\dPadRight.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\ps4\dPadUp.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\ps4\leftBumper.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\ps4\leftStick.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\ps4\leftTrigger.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\ps4\rightBumper.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\ps4\rightStick.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\ps4\rightTrigger.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\ps4\square.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\ps4\startButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\ps4\triangle.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\ps4\x.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\rb.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\SNES\a.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\SNES\aFami.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\SNES\b.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\SNES\bFami.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\SNES\blankSNESPink.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\SNES\leftTrigger.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\SNES\rightTrigger.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\SNES\selectButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\SNES\startButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\SNES\x.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\SNES\xFami.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\SNES\y.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\SNES\yFami.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\startButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\styleBubble.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\styleTray.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\dual\aButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\dual\dPad.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\dual\dPadDown.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\dual\dPadLeft.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\dual\dPadRight.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\dual\dPadUp.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\dual\leftBumper.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\dual\leftStick.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\dual\leftTrigger.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\dual\oButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\dual\rightBumper.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\dual\rightStick.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\dual\rightTrigger.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\dual\selectButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\dual\startButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\dual\uButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\dual\yButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\genericStick.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\joyconButtonDown.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\joyconButtonLeft.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\joyconButtonRight.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\joyconButtonUp.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\left\aButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\left\leftBumper.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\left\leftStick.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\left\leftTrigger.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\left\oButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\left\rightBumper.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\left\rightTrigger.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\left\startButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\left\uButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\left\yButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\pro\aButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\pro\dPad.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\pro\dPadDown.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\pro\dPadLeft.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\pro\dPadRight.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\pro\dPadUp.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\pro\leftBumper.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\pro\leftStick.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\pro\leftTrigger.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\pro\oButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\pro\rightBumper.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\pro\rightStick.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\pro\rightTrigger.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\pro\selectButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\pro\startButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\pro\uButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\pro\yButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\right\aButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\right\leftBumper.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\right\leftStick.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\right\leftTrigger.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\right\oButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\right\rightBumper.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\right\rightTrigger.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\right\startButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\right\uButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\right\yButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\sl.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\switch\sr.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\uButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\wheelDown.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\wheelUp.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\xbox\aButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\xbox\dPad.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\xbox\dPadDown.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\xbox\dPadLeft.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\xbox\dPadRight.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\xbox\dPadUp.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\xbox\leftBumper.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\xbox\leftStick.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\xbox\leftTrigger.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\xbox\oButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\xbox\rightBumper.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\xbox\rightStick.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\xbox\rightTrigger.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\xbox\selectButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\xbox\startButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\xbox\uButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\xbox\yButton.xnb" />
+    <None Include="Content\bin\Android\Content\buttons\yButton.xnb" />
+    <None Include="Content\bin\Android\Content\calanderDays.xnb" />
+    <None Include="Content\bin\Android\Content\cameraIcon.xnb" />
+    <None Include="Content\bin\Android\Content\cameraMover.xnb" />
+    <None Include="Content\bin\Android\Content\campduck.xnb" />
+    <None Include="Content\bin\Android\Content\camping.xnb" />
+    <None Include="Content\bin\Android\Content\campingMelted.xnb" />
+    <None Include="Content\bin\Android\Content\camping_ball.xnb" />
+    <None Include="Content\bin\Android\Content\camping_loader.xnb" />
+    <None Include="Content\bin\Android\Content\candleBall.xnb" />
+    <None Include="Content\bin\Android\Content\cannon.xnb" />
+    <None Include="Content\bin\Android\Content\cannonMount.xnb" />
+    <None Include="Content\bin\Android\Content\cannonTimer.xnb" />
+    <None Include="Content\bin\Android\Content\cantPlace.xnb" />
+    <None Include="Content\bin\Android\Content\cantPlaceLarge.xnb" />
+    <None Include="Content\bin\Android\Content\cape.xnb" />
+    <None Include="Content\bin\Android\Content\castle.xnb" />
+    <None Include="Content\bin\Android\Content\castleBackground.xnb" />
+    <None Include="Content\bin\Android\Content\castleTorch.xnb" />
+    <None Include="Content\bin\Android\Content\caveTileset.xnb" />
+    <None Include="Content\bin\Android\Content\chain.xnb" />
+    <None Include="Content\bin\Android\Content\chainBullet.xnb" />
+    <None Include="Content\bin\Android\Content\chaingun.xnb" />
+    <None Include="Content\bin\Android\Content\chaingunTip.xnb" />
+    <None Include="Content\bin\Android\Content\chaingunTip2.xnb" />
+    <None Include="Content\bin\Android\Content\chainLink.xnb" />
+    <None Include="Content\bin\Android\Content\chainsaw.xnb" />
+    <None Include="Content\bin\Android\Content\chainStretch.xnb" />
+    <None Include="Content\bin\Android\Content\chainStretchEnd.xnb" />
+    <None Include="Content\bin\Android\Content\challengeIcon.xnb" />
+    <None Include="Content\bin\Android\Content\challengeTrophy.xnb" />
+    <None Include="Content\bin\Android\Content\challengeTrophyIcons.xnb" />
+    <None Include="Content\bin\Android\Content\chanceIcon.xnb" />
+    <None Include="Content\bin\Android\Content\channels.xnb" />
+    <None Include="Content\bin\Android\Content\chatBust.xnb" />
+    <None Include="Content\bin\Android\Content\chatBust_m.xnb" />
+    <None Include="Content\bin\Android\Content\cheapTape.xnb" />
+    <None Include="Content\bin\Android\Content\checkIcon.xnb" />
+    <None Include="Content\bin\Android\Content\chestPlate.xnb" />
+    <None Include="Content\bin\Android\Content\chestPlateAnim.xnb" />
+    <None Include="Content\bin\Android\Content\chestPlateAnimOver.xnb" />
+    <None Include="Content\bin\Android\Content\chestPlatePickup.xnb" />
+    <None Include="Content\bin\Android\Content\chokeCollar.xnb" />
+    <None Include="Content\bin\Android\Content\circle.xnb" />
+    <None Include="Content\bin\Android\Content\cityBackground.xnb" />
+    <None Include="Content\bin\Android\Content\cityTileset.xnb" />
+    <None Include="Content\bin\Android\Content\cityTree.xnb" />
+    <None Include="Content\bin\Android\Content\citywall.xnb" />
+    <None Include="Content\bin\Android\Content\cityWedge.xnb" />
+    <None Include="Content\bin\Android\Content\clickPuff.xnb" />
+    <None Include="Content\bin\Android\Content\clipcopy.xnb" />
+    <None Include="Content\bin\Android\Content\cloudDown.xnb" />
+    <None Include="Content\bin\Android\Content\cloudIcon.xnb" />
+    <None Include="Content\bin\Android\Content\cloudTileset.xnb" />
+    <None Include="Content\bin\Android\Content\coilGun.xnb" />
+    <None Include="Content\bin\Android\Content\colorableLiquid.xnb" />
+    <None Include="Content\bin\Android\Content\colorStar.xnb" />
+    <None Include="Content\bin\Android\Content\colorStarLarge.xnb" />
+    <None Include="Content\bin\Android\Content\combatShotgun.xnb" />
+    <None Include="Content\bin\Android\Content\combatShotgunAmmo.xnb" />
+    <None Include="Content\bin\Android\Content\combatShotgunLoader.xnb" />
+    <None Include="Content\bin\Android\Content\concrete.xnb" />
+    <None Include="Content\bin\Android\Content\connectionArrow.xnb" />
+    <None Include="Content\bin\Android\Content\connectionWall.xnb" />
+    <None Include="Content\bin\Android\Content\connectionX.xnb" />
+    <None Include="Content\bin\Android\Content\consoleFlash.xnb" />
+    <None Include="Content\bin\Android\Content\consoleHighlight.xnb" />
+    <None Include="Content\bin\Android\Content\contextArrowRight.xnb" />
+    <None Include="Content\bin\Android\Content\controlledDuck.xnb" />
+    <None Include="Content\bin\Android\Content\controlledDuck_m.xnb" />
+    <None Include="Content\bin\Android\Content\controlWave.xnb" />
+    <None Include="Content\bin\Android\Content\cookedDuck.xnb" />
+    <None Include="Content\bin\Android\Content\cork.xnb" />
+    <None Include="Content\bin\Android\Content\corkGun.xnb" />
+    <None Include="Content\bin\Android\Content\corpseLeft.xnb" />
+    <None Include="Content\bin\Android\Content\corpseRight.xnb" />
+    <None Include="Content\bin\Android\Content\corptron.xnb" />
+    <None Include="Content\bin\Android\Content\corptronConsoleText.xnb" />
+    <None Include="Content\bin\Android\Content\countdown.xnb" />
+    <None Include="Content\bin\Android\Content\cowboyPistol.xnb" />
+    <None Include="Content\bin\Android\Content\crate.xnb" />
+    <None Include="Content\bin\Android\Content\crowdDuck.xnb" />
+    <None Include="Content\bin\Android\Content\crownIcon.xnb" />
+    <None Include="Content\bin\Android\Content\cursors.xnb" />
+    <None Include="Content\bin\Android\Content\customIcon.xnb" />
+    <None Include="Content\bin\Android\Content\dandiSpring.xnb" />
+    <None Include="Content\bin\Android\Content\dangerSign.xnb" />
+    <None Include="Content\bin\Android\Content\dart.xnb" />
+    <None Include="Content\bin\Android\Content\dartchain.xnb" />
+    <None Include="Content\bin\Android\Content\dartchain_burned.xnb" />
+    <None Include="Content\bin\Android\Content\dartchain_tip.xnb" />
+    <None Include="Content\bin\Android\Content\dartgun.xnb" />
+    <None Include="Content\bin\Android\Content\dc5.xnb" />
+    <None Include="Content\bin\Android\Content\deathcrate.xnb" />
+    <None Include="Content\bin\Android\Content\deathFrame.xnb" />
+    <None Include="Content\bin\Android\Content\defaultMod.xnb" />
+    <None Include="Content\bin\Android\Content\default_mappack_icon.xnb" />
+    <None Include="Content\bin\Android\Content\deleteFlag.xnb" />
+    <None Include="Content\bin\Android\Content\demoBlaster.xnb" />
+    <None Include="Content\bin\Android\Content\demoCrate.xnb" />
+    <None Include="Content\bin\Android\Content\demoPro.xnb" />
+    <None Include="Content\bin\Android\Content\desk.xnb" />
+    <None Include="Content\bin\Android\Content\devScan.xnb" />
+    <None Include="Content\bin\Android\Content\devTray.xnb" />
+    <None Include="Content\bin\Android\Content\die.xnb" />
+    <None Include="Content\bin\Android\Content\dieHover.xnb" />
+    <None Include="Content\bin\Android\Content\directionSign.xnb" />
+    <None Include="Content\bin\Android\Content\discordIcon.xnb" />
+    <None Include="Content\bin\Android\Content\distanceSign.xnb" />
+    <None Include="Content\bin\Android\Content\dizzyStar.xnb" />
+    <None Include="Content\bin\Android\Content\dome.xnb" />
+    <None Include="Content\bin\Android\Content\domeBleachers.xnb" />
+    <None Include="Content\bin\Android\Content\domePillar.xnb" />
+    <None Include="Content\bin\Android\Content\domeSmall.xnb" />
+    <None Include="Content\bin\Android\Content\donutTileset.xnb" />
+    <None Include="Content\bin\Android\Content\door.xnb" />
+    <None Include="Content\bin\Android\Content\doorFrame.xnb" />
+    <None Include="Content\bin\Android\Content\doorFucked.xnb" />
+    <None Include="Content\bin\Android\Content\doorSpinner.xnb" />
+    <None Include="Content\bin\Android\Content\drifts.xnb" />
+    <None Include="Content\bin\Android\Content\drinks.xnb" />
+    <None Include="Content\bin\Android\Content\dropShadow.xnb" />
+    <None Include="Content\bin\Android\Content\drumsIcon.xnb" />
+    <None Include="Content\bin\Android\Content\drumz.xnb" />
+    <None Include="Content\bin\Android\Content\duck.xnb" />
+    <None Include="Content\bin\Android\Content\duckArms.xnb" />
+    <None Include="Content\bin\Android\Content\duckArms_m.xnb" />
+    <None Include="Content\bin\Android\Content\duckChannelBackground.xnb" />
+    <None Include="Content\bin\Android\Content\duckCoin.xnb" />
+    <None Include="Content\bin\Android\Content\duckFont.xnb" />
+    <None Include="Content\bin\Android\Content\duckGame01.pal" />
+    <None Include="Content\bin\Android\Content\duckGameTitle - Copy.xnb" />
+    <None Include="Content\bin\Android\Content\duckGameTitle.xnb" />
+    <None Include="Content\bin\Android\Content\duckGameTitle2.xnb" />
+    <None Include="Content\bin\Android\Content\duckGameTitleOutline - Copy.xnb" />
+    <None Include="Content\bin\Android\Content\duckGameTitleOutline.xnb" />
+    <None Include="Content\bin\Android\Content\duckGameTitleOutlineBlack.xnb" />
+    <None Include="Content\bin\Android\Content\duckGame_japanese.xnb" />
+    <None Include="Content\bin\Android\Content\duckSpawn.xnb" />
+    <None Include="Content\bin\Android\Content\duck_m.xnb" />
+    <None Include="Content\bin\Android\Content\easyLeft.xnb" />
+    <None Include="Content\bin\Android\Content\easyRight.xnb" />
+    <None Include="Content\bin\Android\Content\easySign.xnb" />
+    <None Include="Content\bin\Android\Content\eCrate.gal" />
+    <None Include="Content\bin\Android\Content\eCrate.xnb" />
+    <None Include="Content\bin\Android\Content\eCrateLight.xnb" />
+    <None Include="Content\bin\Android\Content\editingRoom.xnb" />
+    <None Include="Content\bin\Android\Content\editorButtons.xnb" />
+    <None Include="Content\bin\Android\Content\editorCurrency.xnb" />
+    <None Include="Content\bin\Android\Content\eight_player.xnb" />
+    <None Include="Content\bin\Android\Content\elevator.xnb" />
+    <None Include="Content\bin\Android\Content\energyScimiBlade.xnb" />
+    <None Include="Content\bin\Android\Content\energyScimiBladeTrail.xnb" />
+    <None Include="Content\bin\Android\Content\energyScimiHilt.xnb" />
+    <None Include="Content\bin\Android\Content\energyTex.xnb" />
+    <None Include="Content\bin\Android\Content\equipper.xnb" />
+    <None Include="Content\bin\Android\Content\exBox.xnb" />
+    <None Include="Content\bin\Android\Content\exclamationMoji.xnb" />
+    <None Include="Content\bin\Android\Content\explode.xnb" />
+    <None Include="Content\bin\Android\Content\explosion.xnb" />
+    <None Include="Content\bin\Android\Content\explosiveBarrel.xnb" />
+    <None Include="Content\bin\Android\Content\extinguisher.xnb" />
+    <None Include="Content\bin\Android\Content\fancyBanner.xnb" />
+    <None Include="Content\bin\Android\Content\feather.xnb" />
+    <None Include="Content\bin\Android\Content\feather_m.xnb" />
+    <None Include="Content\bin\Android\Content\fieldNoise.xnb" />
+    <None Include="Content\bin\Android\Content\fieldNoiseRain.xnb" />
+    <None Include="Content\bin\Android\Content\fieldNoiseSnow.xnb" />
+    <None Include="Content\bin\Android\Content\fieldWall.xnb" />
+    <None Include="Content\bin\Android\Content\fileBrowserScrollArrow.xnb" />
+    <None Include="Content\bin\Android\Content\filterOff.xnb" />
+    <None Include="Content\bin\Android\Content\filterOn.xnb" />
+    <None Include="Content\bin\Android\Content\fingerPositions.xnb" />
+    <None Include="Content\bin\Android\Content\fingerPositions_m.xnb" />
+    <None Include="Content\bin\Android\Content\fireCracker.xnb" />
+    <None Include="Content\bin\Android\Content\fireCrackers.xnb" />
+    <None Include="Content\bin\Android\Content\flameBurst.xnb" />
+    <None Include="Content\bin\Android\Content\flamethrower.xnb" />
+    <None Include="Content\bin\Android\Content\flamethrowerCan.xnb" />
+    <None Include="Content\bin\Android\Content\flareGun.xnb" />
+    <None Include="Content\bin\Android\Content\flavourLines.xnb" />
+    <None Include="Content\bin\Android\Content\flimsyDoor.xnb" />
+    <None Include="Content\bin\Android\Content\flimsyDoorDamaged.xnb" />
+    <None Include="Content\bin\Android\Content\flower.xnb" />
+    <None Include="Content\bin\Android\Content\flower_burned.xnb" />
+    <None Include="Content\bin\Android\Content\fluid.xnb" />
+    <None Include="Content\bin\Android\Content\folder_preview.pngfile" />
+    <None Include="Content\bin\Android\Content\foregroundNature.xnb" />
+    <None Include="Content\bin\Android\Content\frozen.xnb" />
+    <None Include="Content\bin\Android\Content\funBeam.xnb" />
+    <None Include="Content\bin\Android\Content\funBeamer.xnb" />
+    <None Include="Content\bin\Android\Content\funeralPic.xnb" />
+    <None Include="Content\bin\Android\Content\furni.xnb" />
+    <None Include="Content\bin\Android\Content\furniFill.xnb" />
+    <None Include="Content\bin\Android\Content\furniFrame.xnb" />
+    <None Include="Content\bin\Android\Content\furniHov.xnb" />
+    <None Include="Content\bin\Android\Content\furniTag.xnb" />
+    <None Include="Content\bin\Android\Content\g18.xnb" />
+    <None Include="Content\bin\Android\Content\gachaEgg.xnb" />
+    <None Include="Content\bin\Android\Content\gameServerOnline.xnb" />
+    <None Include="Content\bin\Android\Content\gameServerWireless.xnb" />
+    <None Include="Content\bin\Android\Content\gas.xnb" />
+    <None Include="Content\bin\Android\Content\gasSplash.xnb" />
+    <None Include="Content\bin\Android\Content\genderIcons.xnb" />
+    <None Include="Content\bin\Android\Content\gereCape.xnb" />
+    <None Include="Content\bin\Android\Content\gettingXP.xnb" />
+    <None Include="Content\bin\Android\Content\ghost.xnb" />
+    <None Include="Content\bin\Android\Content\ginormoScore.xnb" />
+    <None Include="Content\bin\Android\Content\glitchMap.xnb" />
+    <None Include="Content\bin\Android\Content\glitchMap2.xnb" />
+    <None Include="Content\bin\Android\Content\glitchMap3.xnb" />
+    <None Include="Content\bin\Android\Content\gold.xnb" />
+    <None Include="Content\bin\Android\Content\goneFishin.xnb" />
+    <None Include="Content\bin\Android\Content\goodBook.xnb" />
+    <None Include="Content\bin\Android\Content\gradientLine.xnb" />
+    <None Include="Content\bin\Android\Content\grappleArm.xnb" />
+    <None Include="Content\bin\Android\Content\grappleWire.xnb" />
+    <None Include="Content\bin\Android\Content\grave.xnb" />
+    <None Include="Content\bin\Android\Content\grenade.xnb" />
+    <None Include="Content\bin\Android\Content\grenadecannon.xnb" />
+    <None Include="Content\bin\Android\Content\grenadeLauncher.xnb" />
+    <None Include="Content\bin\Android\Content\grenadePin.xnb" />
+    <None Include="Content\bin\Android\Content\greyBlock.xnb" />
+    <None Include="Content\bin\Android\Content\grid.xnb" />
+    <None Include="Content\bin\Android\Content\gunSpawner.xnb" />
+    <None Include="Content\bin\Android\Content\gym.xnb" />
+    <None Include="Content\bin\Android\Content\halo.xnb" />
+    <None Include="Content\bin\Android\Content\hangingCityLight.xnb" />
+    <None Include="Content\bin\Android\Content\happyFace.xnb" />
+    <None Include="Content\bin\Android\Content\happyman.xnb" />
+    <None Include="Content\bin\Android\Content\hardLeft.xnb" />
+    <None Include="Content\bin\Android\Content\hardRight.xnb" />
+    <None Include="Content\bin\Android\Content\hardSign.xnb" />
+    <None Include="Content\bin\Android\Content\harpoon.xnb" />
+    <None Include="Content\bin\Android\Content\harpoonGun.xnb" />
+    <None Include="Content\bin\Android\Content\hatCollection.xnb" />
+    <None Include="Content\bin\Android\Content\hatConsoleBase.xnb" />
+    <None Include="Content\bin\Android\Content\hatpack_preview.pngfile" />
+    <None Include="Content\bin\Android\Content\hatpack_screenshot.pngfile" />
+    <None Include="Content\bin\Android\Content\heart.xnb" />
+    <None Include="Content\bin\Android\Content\heartpuff.xnb" />
+    <None Include="Content\bin\Android\Content\helmet.xnb" />
+    <None Include="Content\bin\Android\Content\helmetPickup.xnb" />
+    <None Include="Content\bin\Android\Content\highPowerRifle.xnb" />
+    <None Include="Content\bin\Android\Content\holster.xnb" />
+    <None Include="Content\bin\Android\Content\holsterChain.xnb" />
+    <None Include="Content\bin\Android\Content\holsterLock.xnb" />
+    <None Include="Content\bin\Android\Content\holster_over.xnb" />
+    <None Include="Content\bin\Android\Content\holster_under.xnb" />
+    <None Include="Content\bin\Android\Content\hook.xnb" />
+    <None Include="Content\bin\Android\Content\hostChair.xnb" />
+    <None Include="Content\bin\Android\Content\hostCrown.xnb" />
+    <None Include="Content\bin\Android\Content\hostTable.xnb" />
+    <None Include="Content\bin\Android\Content\hugeBeam.xnb" />
+    <None Include="Content\bin\Android\Content\hugeLaser.xnb" />
+    <None Include="Content\bin\Android\Content\iceBlock.xnb" />
+    <None Include="Content\bin\Android\Content\iceSculpture.xnb" />
+    <None Include="Content\bin\Android\Content\iceWedge.xnb" />
+    <None Include="Content\bin\Android\Content\icicleBig.xnb" />
+    <None Include="Content\bin\Android\Content\icicles.xnb" />
+    <None Include="Content\bin\Android\Content\iconEight.xnb" />
+    <None Include="Content\bin\Android\Content\iconGradient.xnb" />
+    <None Include="Content\bin\Android\Content\iconSheet.xnb" />
+    <None Include="Content\bin\Android\Content\Image13.xnb" />
+    <None Include="Content\bin\Android\Content\Image4.xnb" />
+    <None Include="Content\bin\Android\Content\Image41.xnb" />
+    <None Include="Content\bin\Android\Content\Image5.xnb" />
+    <None Include="Content\bin\Android\Content\industrialBackground.xnb" />
+    <None Include="Content\bin\Android\Content\industrialTileset.xnb" />
+    <None Include="Content\bin\Android\Content\intermissionFont.xnb" />
+    <None Include="Content\bin\Android\Content\interviewBox.xnb" />
+    <None Include="Content\bin\Android\Content\interviewDuck.xnb" />
+    <None Include="Content\bin\Android\Content\itemBox.xnb" />
+    <None Include="Content\bin\Android\Content\itemBoxRandom.xnb" />
+    <None Include="Content\bin\Android\Content\itemCrate.xnb" />
+    <None Include="Content\bin\Android\Content\japaneseFont.xnb" />
+    <None Include="Content\bin\Android\Content\jet.xnb" />
+    <None Include="Content\bin\Android\Content\jetpack.xnb" />
+    <None Include="Content\bin\Android\Content\jimduck.xnb" />
+    <None Include="Content\bin\Android\Content\joyousman.xnb" />
+    <None Include="Content\bin\Android\Content\kanji_font.xnb" />
+    <None Include="Content\bin\Android\Content\key.xnb" />
+    <None Include="Content\bin\Android\Content\keyboard.xnb" />
+    <None Include="Content\bin\Android\Content\keyInDoor.xnb" />
+    <None Include="Content\bin\Android\Content\keytar.xnb" />
+    <None Include="Content\bin\Android\Content\keytarKeybed.xnb" />
+    <None Include="Content\bin\Android\Content\keytarKeybedBlue.xnb" />
+    <None Include="Content\bin\Android\Content\keytarSettingStrip.xnb" />
+    <None Include="Content\bin\Android\Content\knightHelmet.xnb" />
+    <None Include="Content\bin\Android\Content\knightHelmetPickup.xnb" />
+    <None Include="Content\bin\Android\Content\lagturtle.xnb" />
+    <None Include="Content\bin\Android\Content\lamp.xnb" />
+    <None Include="Content\bin\Android\Content\lampLight.xnb" />
+    <None Include="Content\bin\Android\Content\lampLight2.xnb" />
+    <None Include="Content\bin\Android\Content\lampShade.xnb" />
+    <None Include="Content\bin\Android\Content\lanIconSmall.xnb" />
+    <None Include="Content\bin\Android\Content\laserBeam.xnb" />
+    <None Include="Content\bin\Android\Content\laserBeamPurple.xnb" />
+    <None Include="Content\bin\Android\Content\laserBeemOrange.xnb" />
+    <None Include="Content\bin\Android\Content\laserCharge.xnb" />
+    <None Include="Content\bin\Android\Content\laserFlare.xnb" />
+    <None Include="Content\bin\Android\Content\laserFlareOrange.xnb" />
+    <None Include="Content\bin\Android\Content\laserRebound.xnb" />
+    <None Include="Content\bin\Android\Content\laserRifle.xnb" />
+    <None Include="Content\bin\Android\Content\laserSightHit.xnb" />
+    <None Include="Content\bin\Android\Content\laserSpawner.xnb" />
+    <None Include="Content\bin\Android\Content\launcherGrenade.xnb" />
+    <None Include="Content\bin\Android\Content\lava.xnb" />
+    <None Include="Content\bin\Android\Content\lavaBarrel.xnb" />
+    <None Include="Content\bin\Android\Content\lavaGlowEdge.xnb" />
+    <None Include="Content\bin\Android\Content\lavaGlowEdgeVert.xnb" />
+    <None Include="Content\bin\Android\Content\lavaGlowLine.xnb" />
+    <None Include="Content\bin\Android\Content\lavaLight.xnb" />
+    <None Include="Content\bin\Android\Content\lavaSplash.xnb" />
+    <None Include="Content\bin\Android\Content\leftRoomBackground.xnb" />
+    <None Include="Content\bin\Android\Content\leftRoomForeground.xnb" />
+    <None Include="Content\bin\Android\Content\letterSign.xnb" />
+    <None Include="Content\bin\Android\Content\levelBrowserArrow.xnb" />
+    <None Include="Content\bin\Android\Content\levelJet.xnb" />
+    <None Include="Content\bin\Android\Content\levelJetIdle.xnb" />
+    <None Include="Content\bin\Android\Content\levelUpArrow.xnb" />
+    <None Include="Content\bin\Android\Content\levs.xnb" />
+    <None Include="Content\bin\Android\Content\levWindow.xnb" />
+    <None Include="Content\bin\Android\Content\levWindow_lev0.xnb" />
+    <None Include="Content\bin\Android\Content\levWindow_lev1.xnb" />
+    <None Include="Content\bin\Android\Content\levWindow_lev2.xnb" />
+    <None Include="Content\bin\Android\Content\levWindow_lev3.xnb" />
+    <None Include="Content\bin\Android\Content\levWindow_lev4.xnb" />
+    <None Include="Content\bin\Android\Content\levWindow_lev5.xnb" />
+    <None Include="Content\bin\Android\Content\levWindow_lev6.xnb" />
+    <None Include="Content\bin\Android\Content\lightBar.xnb" />
+    <None Include="Content\bin\Android\Content\lightFlash.xnb" />
+    <None Include="Content\bin\Android\Content\lightningBeem.xnb" />
+    <None Include="Content\bin\Android\Content\lightSpring.xnb" />
+    <None Include="Content\bin\Android\Content\litDoor.xnb" />
+    <None Include="Content\bin\Android\Content\littleContextArrowRight.xnb" />
+    <None Include="Content\bin\Android\Content\littleMan.xnb" />
+    <None Include="Content\bin\Android\Content\littleTeleBottom.xnb" />
+    <None Include="Content\bin\Android\Content\littleTeleTop.xnb" />
+    <None Include="Content\bin\Android\Content\littleTrophy.xnb" />
+    <None Include="Content\bin\Android\Content\lock.xnb" />
+    <None Include="Content\bin\Android\Content\lockDoor.xnb" />
+    <None Include="Content\bin\Android\Content\lockedServer.xnb" />
+    <None Include="Content\bin\Android\Content\logEvent.xnb" />
+    <None Include="Content\bin\Android\Content\logo_armature.xnb" />
+    <None Include="Content\bin\Android\Content\looptex.xnb" />
+    <None Include="Content\bin\Android\Content\loveSign.xnb" />
+    <None Include="Content\bin\Android\Content\maceBall.xnb" />
+    <None Include="Content\bin\Android\Content\magBeam.xnb" />
+    <None Include="Content\bin\Android\Content\magBlaster.xnb" />
+    <None Include="Content\bin\Android\Content\magnet.xnb" />
+    <None Include="Content\bin\Android\Content\magnetGun.xnb" />
+    <None Include="Content\bin\Android\Content\magnum.xnb" />
+    <None Include="Content\bin\Android\Content\magnumShell.xnb" />
+    <None Include="Content\bin\Android\Content\mainBackground.gal" />
+    <None Include="Content\bin\Android\Content\mainBackground.xnb" />
+    <None Include="Content\bin\Android\Content\mallards.xnb" />
+    <None Include="Content\bin\Android\Content\mapp.gal" />
+    <None Include="Content\bin\Android\Content\mappack_icon.pngfile" />
+    <None Include="Content\bin\Android\Content\mappack_preview.pngfile" />
+    <None Include="Content\bin\Android\Content\mappack_screenshot.pngfile" />
+    <None Include="Content\bin\Android\Content\matchbox.xnb" />
+    <None Include="Content\bin\Android\Content\menuBox.xnb" />
+    <None Include="Content\bin\Android\Content\message.xnb" />
+    <None Include="Content\bin\Android\Content\metalRebound.xnb" />
+    <None Include="Content\bin\Android\Content\milk.xnb" />
+    <None Include="Content\bin\Android\Content\mindBolt.xnb" />
+    <None Include="Content\bin\Android\Content\mindControlGun.xnb" />
+    <None Include="Content\bin\Android\Content\mindControlHelmet.xnb" />
+    <None Include="Content\bin\Android\Content\mine.xnb" />
+    <None Include="Content\bin\Android\Content\mineFlash.xnb" />
+    <None Include="Content\bin\Android\Content\mirrorMode.xnb" />
+    <None Include="Content\bin\Android\Content\missile.xnb" />
+    <None Include="Content\bin\Android\Content\modloadError.xnb" />
+    <None Include="Content\bin\Android\Content\moji.xnb" />
+    <None Include="Content\bin\Android\Content\moneyFont.xnb" />
+    <None Include="Content\bin\Android\Content\moneyTypes.xnb" />
+    <None Include="Content\bin\Android\Content\moreArrow.xnb" />
+    <None Include="Content\bin\Android\Content\moveArrow.xnb" />
+    <None Include="Content\bin\Android\Content\movingSpikes.xnb" />
+    <None Include="Content\bin\Android\Content\musket.xnb" />
+    <None Include="Content\bin\Android\Content\muteIcon.xnb" />
+    <None Include="Content\bin\Android\Content\mysteryGun.xnb" />
+    <None Include="Content\bin\Android\Content\namedServer.xnb" />
+    <None Include="Content\bin\Android\Content\natureBackground.xnb" />
+    <None Include="Content\bin\Android\Content\natureTileset.xnb" />
+    <None Include="Content\bin\Android\Content\necro.xnb" />
+    <None Include="Content\bin\Android\Content\net.xnb" />
+    <None Include="Content\bin\Android\Content\netGun.xnb" />
+    <None Include="Content\bin\Android\Content\netGunGuage.xnb" />
+    <None Include="Content\bin\Android\Content\networkDisconnect.xnb" />
+    <None Include="Content\bin\Android\Content\networkDrop.xnb" />
+    <None Include="Content\bin\Android\Content\networkReceived.xnb" />
+    <None Include="Content\bin\Android\Content\networkSent.xnb" />
+    <None Include="Content\bin\Android\Content\newcolors.xnb" />
+    <None Include="Content\bin\Android\Content\newsCaster.gal" />
+    <None Include="Content\bin\Android\Content\newsDuck.gal" />
+    <None Include="Content\bin\Android\Content\newsDuck.xnb" />
+    <None Include="Content\bin\Android\Content\newsDuckBeak.xnb" />
+    <None Include="Content\bin\Android\Content\newsTable.xnb" />
+    <None Include="Content\bin\Android\Content\newSticker.xnb" />
+    <None Include="Content\bin\Android\Content\newsTitle5.xnb" />
+    <None Include="Content\bin\Android\Content\newsTitleChannel.xnb" />
+    <None Include="Content\bin\Android\Content\newsTitleDuck.xnb" />
+    <None Include="Content\bin\Android\Content\newWaterFlow.xnb" />
+    <None Include="Content\bin\Android\Content\noAvatar.xnb" />
+    <None Include="Content\bin\Android\Content\noClippingSign.xnb" />
+    <None Include="Content\bin\Android\Content\none.xnb" />
+    <None Include="Content\bin\Android\Content\normalIcon.xnb" />
+    <None Include="Content\bin\Android\Content\notes.xnb" />
+    <None Include="Content\bin\Android\Content\notexture.xnb" />
+    <None Include="Content\bin\Android\Content\nublessIceTileset.xnb" />
+    <None Include="Content\bin\Android\Content\nublessSnow.xnb" />
+    <None Include="Content\bin\Android\Content\numbers.xnb" />
+    <None Include="Content\bin\Android\Content\oButton.xnb" />
+    <None Include="Content\bin\Android\Content\officeBackground.xnb" />
+    <None Include="Content\bin\Android\Content\officeLight.xnb" />
+    <None Include="Content\bin\Android\Content\officeSubBackground.xnb" />
+    <None Include="Content\bin\Android\Content\officeTileset2.xnb" />
+    <None Include="Content\bin\Android\Content\oldPistol.xnb" />
+    <None Include="Content\bin\Android\Content\onlineStatusIcons.xnb" />
+    <None Include="Content\bin\Android\Content\ornateFont.xnb" />
+    <None Include="Content\bin\Android\Content\outPipe.xnb" />
+    <None Include="Content\bin\Android\Content\passwordFont.xnb" />
+    <None Include="Content\bin\Android\Content\pauseIcons.xnb" />
+    <None Include="Content\bin\Android\Content\payScreen.xnb" />
+    <None Include="Content\bin\Android\Content\pellet.xnb" />
+    <None Include="Content\bin\Android\Content\pelletGun.xnb" />
+    <None Include="Content\bin\Android\Content\pewpewLaser.xnb" />
+    <None Include="Content\bin\Android\Content\phaser.xnb" />
+    <None Include="Content\bin\Android\Content\phaserCharge.xnb" />
+    <None Include="Content\bin\Android\Content\pineTileset.xnb" />
+    <None Include="Content\bin\Android\Content\pineTilesetSnow.xnb" />
+    <None Include="Content\bin\Android\Content\pineTreeTileset.xnb" />
+    <None Include="Content\bin\Android\Content\pinIcon.xnb" />
+    <None Include="Content\bin\Android\Content\pinIconPinned.xnb" />
+    <None Include="Content\bin\Android\Content\pistol.xnb" />
+    <None Include="Content\bin\Android\Content\pistolShell.xnb" />
+    <None Include="Content\bin\Android\Content\plainCape.xnb" />
+    <None Include="Content\bin\Android\Content\plainWedge.xnb" />
+    <None Include="Content\bin\Android\Content\plane.xnb" />
+    <None Include="Content\bin\Android\Content\plaque.xnb" />
+    <None Include="Content\bin\Android\Content\plasma2.xnb" />
+    <None Include="Content\bin\Android\Content\plasmaBlaster.xnb" />
+    <None Include="Content\bin\Android\Content\plasmaFlare.xnb" />
+    <None Include="Content\bin\Android\Content\playBook.xnb" />
+    <None Include="Content\bin\Android\Content\playBookPageOffset.xnb" />
+    <None Include="Content\bin\Android\Content\plugRect.xnb" />
+    <None Include="Content\bin\Android\Content\pointerLaser.xnb" />
+    <None Include="Content\bin\Android\Content\popEffect.xnb" />
+    <None Include="Content\bin\Android\Content\popLine.xnb" />
+    <None Include="Content\bin\Android\Content\popupPad.xnb" />
+    <None Include="Content\bin\Android\Content\positronShooter.xnb" />
+    <None Include="Content\bin\Android\Content\positronWinder.xnb" />
+    <None Include="Content\bin\Android\Content\powerHolster.xnb" />
+    <None Include="Content\bin\Android\Content\powerHolsterOver.gal" />
+    <None Include="Content\bin\Android\Content\powerHolsterOver.xnb" />
+    <None Include="Content\bin\Android\Content\powerHolsterUnder.xnb" />
+    <None Include="Content\bin\Android\Content\pp.pal" />
+    <None Include="Content\bin\Android\Content\presents.xnb" />
+    <None Include="Content\bin\Android\Content\pressStart.xnb" />
+    <None Include="Content\bin\Android\Content\prettyStar.xnb" />
+    <None Include="Content\bin\Android\Content\priceFontRightways.xnb" />
+    <None Include="Content\bin\Android\Content\projectorGlitch.xnb" />
+    <None Include="Content\bin\Android\Content\pump.xnb" />
+    <None Include="Content\bin\Android\Content\purpleBlock.xnb" />
+    <None Include="Content\bin\Android\Content\purpleProjector.xnb" />
+    <None Include="Content\bin\Android\Content\purpleScanner.xnb" />
+    <None Include="Content\bin\Android\Content\pyramidBackground.xnb" />
+    <None Include="Content\bin\Android\Content\pyramidBackgroundLight.xnb" />
+    <None Include="Content\bin\Android\Content\pyramidBrick.xnb" />
+    <None Include="Content\bin\Android\Content\pyramidDoor.xnb" />
+    <None Include="Content\bin\Android\Content\pyramidDoorBottom.xnb" />
+    <None Include="Content\bin\Android\Content\pyramidDoorFrame.xnb" />
+    <None Include="Content\bin\Android\Content\pyramidDoorTop.xnb" />
+    <None Include="Content\bin\Android\Content\pyramidEdge.xnb" />
+    <None Include="Content\bin\Android\Content\pyramidRoofLight.xnb" />
+    <None Include="Content\bin\Android\Content\pyramidRoofLightShade.xnb" />
+    <None Include="Content\bin\Android\Content\pyramidTileset.xnb" />
+    <None Include="Content\bin\Android\Content\pyramidWallLight.xnb" />
+    <None Include="Content\bin\Android\Content\pyWallCorner.xnb" />
+    <None Include="Content\bin\Android\Content\pyWallCorner2.xnb" />
+    <None Include="Content\bin\Android\Content\quackduck.xnb" />
+    <None Include="Content\bin\Android\Content\quackduckOverlay.xnb" />
+    <None Include="Content\bin\Android\Content\quackduck_m.xnb" />
+    <None Include="Content\bin\Android\Content\quackLoader.xnb" />
+    <None Include="Content\bin\Android\Content\quadLaser.xnb" />
+    <None Include="Content\bin\Android\Content\raceSign.xnb" />
+    <None Include="Content\bin\Android\Content\rainbow.xnb" />
+    <None Include="Content\bin\Android\Content\rainbowCape.xnb" />
+    <None Include="Content\bin\Android\Content\rainbowCarp.xnb" />
+    <None Include="Content\bin\Android\Content\rainbowGradient.xnb" />
+    <None Include="Content\bin\Android\Content\rainbowIcon.xnb" />
+    <None Include="Content\bin\Android\Content\rainSplash.xnb" />
+    <None Include="Content\bin\Android\Content\randomIcons.xnb" />
+    <None Include="Content\bin\Android\Content\rareSticker.xnb" />
+    <None Include="Content\bin\Android\Content\rcBody.xnb" />
+    <None Include="Content\bin\Android\Content\rcBolt.xnb" />
+    <None Include="Content\bin\Android\Content\rcController.xnb" />
+    <None Include="Content\bin\Android\Content\rcWheel.xnb" />
+    <None Include="Content\bin\Android\Content\ready.xnb" />
+    <None Include="Content\bin\Android\Content\readyLeft.xnb" />
+    <None Include="Content\bin\Android\Content\readyRight.xnb" />
+    <None Include="Content\bin\Android\Content\redBarrel.xnb" />
+    <None Include="Content\bin\Android\Content\redEight.xnb" />
+    <None Include="Content\bin\Android\Content\redGlow.xnb" />
+    <None Include="Content\bin\Android\Content\redGlowWide.xnb" />
+    <None Include="Content\bin\Android\Content\redGlowWideLeft.xnb" />
+    <None Include="Content\bin\Android\Content\redGlowWideRight.xnb" />
+    <None Include="Content\bin\Android\Content\redGlowWideSharp.xnb" />
+    <None Include="Content\bin\Android\Content\redHot.xnb" />
+    <None Include="Content\bin\Android\Content\redHotGlow.xnb" />
+    <None Include="Content\bin\Android\Content\reskin_preview.pngfile" />
+    <None Include="Content\bin\Android\Content\reskin_screenshot.pngfile" />
+    <None Include="Content\bin\Android\Content\respawner.xnb" />
+    <None Include="Content\bin\Android\Content\returnFolder.xnb" />
+    <None Include="Content\bin\Android\Content\rhythmBall.xnb" />
+    <None Include="Content\bin\Android\Content\rhythmBar.xnb" />
+    <None Include="Content\bin\Android\Content\rightRoomBackground.xnb" />
+    <None Include="Content\bin\Android\Content\rightRoomForeground.xnb" />
+    <None Include="Content\bin\Android\Content\rig_duckRig.rig" />
+    <None Include="Content\bin\Android\Content\rock01.xnb" />
+    <None Include="Content\bin\Android\Content\rockWall.xnb" />
+    <None Include="Content\bin\Android\Content\romanCandle.xnb" />
+    <None Include="Content\bin\Android\Content\roomSwitch.xnb" />
+    <None Include="Content\bin\Android\Content\roomSwitchRight.xnb" />
+    <None Include="Content\bin\Android\Content\sandwich.xnb" />
+    <None Include="Content\bin\Android\Content\sandwichCard.xnb" />
+    <None Include="Content\bin\Android\Content\sandwichStamp.xnb" />
+    <None Include="Content\bin\Android\Content\saws.xnb" />
+    <None Include="Content\bin\Android\Content\saxaphone.xnb" />
+    <None Include="Content\bin\Android\Content\scaffolding.xnb" />
+    <None Include="Content\bin\Android\Content\schoolySports.xnb" />
+    <None Include="Content\bin\Android\Content\scoreRock.xnb" />
+    <None Include="Content\bin\Android\Content\scratch.xnb" />
+    <None Include="Content\bin\Android\Content\scratches.xnb" />
+    <None Include="Content\bin\Android\Content\screen05.xnb" />
+    <None Include="Content\bin\Android\Content\scribble.xnb" />
+    <None Include="Content\bin\Android\Content\searchicon.xnb" />
+    <None Include="Content\bin\Android\Content\searchiconwhite.xnb" />
+    <None Include="Content\bin\Android\Content\seatDuck.xnb" />
+    <None Include="Content\bin\Android\Content\seatDuck_m.xnb" />
+    <None Include="Content\bin\Android\Content\selectBeam.xnb" />
+    <None Include="Content\bin\Android\Content\selectBorder.xnb" />
+    <None Include="Content\bin\Android\Content\selectBorder2.xnb" />
+    <None Include="Content\bin\Android\Content\selectButton.xnb" />
+    <None Include="Content\bin\Android\Content\selectButtonAssembly.xnb" />
+    <None Include="Content\bin\Android\Content\selectConsole.xnb" />
+    <None Include="Content\bin\Android\Content\selectDoorLeft.xnb" />
+    <None Include="Content\bin\Android\Content\selectDoorLeftBlank.xnb" />
+    <None Include="Content\bin\Android\Content\selectDoorLeftPC.xnb" />
+    <None Include="Content\bin\Android\Content\selectDoorRight.xnb" />
+    <None Include="Content\bin\Android\Content\selectDoorRightBlank.xnb" />
+    <None Include="Content\bin\Android\Content\selectMockup.gal" />
+    <None Include="Content\bin\Android\Content\selectPlatform.xnb" />
+    <None Include="Content\bin\Android\Content\selectProjector.xnb" />
+    <None Include="Content\bin\Android\Content\server_default.xnb" />
+    <None Include="Content\bin\Android\Content\server_default_lan.xnb" />
+    <None Include="Content\bin\Android\Content\settingsWrench.xnb" />
+    <None Include="Content\bin\Android\Content\sheeld.xnb" />
+    <None Include="Content\bin\Android\Content\shiny.xnb" />
+    <None Include="Content\bin\Android\Content\shittyCorptron.xnb" />
+    <None Include="Content\bin\Android\Content\shot01.xnb" />
+    <None Include="Content\bin\Android\Content\shotgun.xnb" />
+    <None Include="Content\bin\Android\Content\shotgunLoader.xnb" />
+    <None Include="Content\bin\Android\Content\shotgunShell.xnb" />
+    <None Include="Content\bin\Android\Content\shrug.xnb" />
+    <None Include="Content\bin\Android\Content\signal.xnb" />
+    <None Include="Content\bin\Android\Content\singleDuck.xnb" />
+    <None Include="Content\bin\Android\Content\skipIcon.xnb" />
+    <None Include="Content\bin\Android\Content\skipSign.xnb" />
+    <None Include="Content\bin\Android\Content\skipSign_m.xnb" />
+    <None Include="Content\bin\Android\Content\skipSpin.xnb" />
+    <None Include="Content\bin\Android\Content\slag.xnb" />
+    <None Include="Content\bin\Android\Content\sledgeForce.xnb" />
+    <None Include="Content\bin\Android\Content\sledgeHammer.xnb" />
+    <None Include="Content\bin\Android\Content\sledgeSwing.xnb" />
+    <None Include="Content\bin\Android\Content\slip.xnb" />
+    <None Include="Content\bin\Android\Content\smallArena.xnb" />
+    <None Include="Content\bin\Android\Content\smallBiosFont.xnb" />
+    <None Include="Content\bin\Android\Content\smallBiosFontUI.xnb" />
+    <None Include="Content\bin\Android\Content\smallBiosFontUI_m.xnb" />
+    <None Include="Content\bin\Android\Content\smallBiosFont_m.xnb" />
+    <None Include="Content\bin\Android\Content\smallEarth.xnb" />
+    <None Include="Content\bin\Android\Content\smallFire.xnb" />
+    <None Include="Content\bin\Android\Content\smallFlare.xnb" />
+    <None Include="Content\bin\Android\Content\smallFont.xnb" />
+    <None Include="Content\bin\Android\Content\smallFontChat.xnb" />
+    <None Include="Content\bin\Android\Content\smallFontGacha.xnb" />
+    <None Include="Content\bin\Android\Content\smallMoon.xnb" />
+    <None Include="Content\bin\Android\Content\smallSmokeAnim.xnb" />
+    <None Include="Content\bin\Android\Content\smallSmokeFront.xnb" />
+    <None Include="Content\bin\Android\Content\smallSmokeTestBack.xnb" />
+    <None Include="Content\bin\Android\Content\smallSmokeTestFront.xnb" />
+    <None Include="Content\bin\Android\Content\smg.xnb" />
+    <None Include="Content\bin\Android\Content\smoke.xnb" />
+    <None Include="Content\bin\Android\Content\smokeBack.xnb" />
+    <None Include="Content\bin\Android\Content\smokeBacks.xnb" />
+    <None Include="Content\bin\Android\Content\smokeFronts.xnb" />
+    <None Include="Content\bin\Android\Content\sniper.xnb" />
+    <None Include="Content\bin\Android\Content\sniperShell.xnb" />
+    <None Include="Content\bin\Android\Content\snowFall.xnb" />
+    <None Include="Content\bin\Android\Content\snowGenerator.xnb" />
+    <None Include="Content\bin\Android\Content\snowIceTileset.xnb" />
+    <None Include="Content\bin\Android\Content\snowTileset.xnb" />
+    <None Include="Content\bin\Android\Content\snubby.xnb" />
+    <None Include="Content\bin\Android\Content\soldStamp.xnb" />
+    <None Include="Content\bin\Android\Content\spaceBackground.xnb" />
+    <None Include="Content\bin\Android\Content\spaceTileset.xnb" />
+    <None Include="Content\bin\Android\Content\sparkLine.xnb" />
+    <None Include="Content\bin\Android\Content\spawnerBall.xnb" />
+    <None Include="Content\bin\Android\Content\spawnSheet.xnb" />
+    <None Include="Content\bin\Android\Content\spectatorCrown.xnb" />
+    <None Include="Content\bin\Android\Content\spectatorIcon.xnb" />
+    <None Include="Content\bin\Android\Content\speedrunClock.xnb" />
+    <None Include="Content\bin\Android\Content\spikehelm.xnb" />
+    <None Include="Content\bin\Android\Content\spikehelmWorn.xnb" />
+    <None Include="Content\bin\Android\Content\spikeRing.xnb" />
+    <None Include="Content\bin\Android\Content\spikes.xnb" />
+    <None Include="Content\bin\Android\Content\spinnerArrows.xnb" />
+    <None Include="Content\bin\Android\Content\spookyTileset.xnb" />
+    <None Include="Content\bin\Android\Content\spring.xnb" />
+    <None Include="Content\bin\Android\Content\springAngle.xnb" />
+    <None Include="Content\bin\Android\Content\springAnglePurple.xnb" />
+    <None Include="Content\bin\Android\Content\sprite0_strip36.xnb" />
+    <None Include="Content\bin\Android\Content\standingFluidIcon.xnb" />
+    <None Include="Content\bin\Android\Content\startArrow.xnb" />
+    <None Include="Content\bin\Android\Content\startArrow_m.xnb" />
+    <None Include="Content\bin\Android\Content\statusBar.xnb" />
+    <None Include="Content\bin\Android\Content\steamIcon.xnb" />
+    <None Include="Content\bin\Android\Content\steamIconSmall.xnb" />
+    <None Include="Content\bin\Android\Content\steamPuff.xnb" />
+    <None Include="Content\bin\Android\Content\streetLight.xnb" />
+    <None Include="Content\bin\Android\Content\subPlus.xnb" />
+    <None Include="Content\bin\Android\Content\suckSign.xnb" />
+    <None Include="Content\bin\Android\Content\sucksSign.xnb" />
+    <None Include="Content\bin\Android\Content\suicidePistol.xnb" />
+    <None Include="Content\bin\Android\Content\sumsnow.gal" />
+    <None Include="Content\bin\Android\Content\sumsnow.xnb" />
+    <None Include="Content\bin\Android\Content\sun.xnb" />
+    <None Include="Content\bin\Android\Content\surfaceFire.xnb" />
+    <None Include="Content\bin\Android\Content\swirl.xnb" />
+    <None Include="Content\bin\Android\Content\sword.xnb" />
+    <None Include="Content\bin\Android\Content\swordSwipe.xnb" />
+    <None Include="Content\bin\Android\Content\tagPlus.xnb" />
+    <None Include="Content\bin\Android\Content\talkBubble.xnb" />
+    <None Include="Content\bin\Android\Content\tampingHand.xnb" />
+    <None Include="Content\bin\Android\Content\tape.xnb" />
+    <None Include="Content\bin\Android\Content\tapedSword.xnb" />
+    <None Include="Content\bin\Android\Content\tapePiece.xnb" />
+    <None Include="Content\bin\Android\Content\taxi.xnb" />
+    <None Include="Content\bin\Android\Content\teddy.xnb" />
+    <None Include="Content\bin\Android\Content\teevee.xnb" />
+    <None Include="Content\bin\Android\Content\teleporterBottom.xnb" />
+    <None Include="Content\bin\Android\Content\teleporterIcon.xnb" />
+    <None Include="Content\bin\Android\Content\teleporterTop.xnb" />
+    <None Include="Content\bin\Android\Content\texture_size_directory.dat" />
+    <None Include="Content\bin\Android\Content\thickBiosNum.xnb" />
+    <None Include="Content\bin\Android\Content\ties.xnb" />
+    <None Include="Content\bin\Android\Content\timeCubeFrame.xnb" />
+    <None Include="Content\bin\Android\Content\tinfoilHat.xnb" />
+    <None Include="Content\bin\Android\Content\tinfoilHatPickup.xnb" />
+    <None Include="Content\bin\Android\Content\tinyBlueBubbles.xnb" />
+    <None Include="Content\bin\Android\Content\tinyBubbles.xnb" />
+    <None Include="Content\bin\Android\Content\tinyGun.xnb" />
+    <None Include="Content\bin\Android\Content\tinyIcons.xnb" />
+    <None Include="Content\bin\Android\Content\tinyLock.xnb" />
+    <None Include="Content\bin\Android\Content\tinyNumbers.xnb" />
+    <None Include="Content\bin\Android\Content\tinySmokeTestBack.xnb" />
+    <None Include="Content\bin\Android\Content\tinySmokeTestFront.xnb" />
+    <None Include="Content\bin\Android\Content\tinyTrophy.xnb" />
+    <None Include="Content\bin\Android\Content\tinyUpArrow.xnb" />
+    <None Include="Content\bin\Android\Content\titleScrewdriver.xnb" />
+    <None Include="Content\bin\Android\Content\titleWrench.xnb" />
+    <None Include="Content\bin\Android\Content\title\airlock.xnb" />
+    <None Include="Content\bin\Android\Content\title\background.xnb" />
+    <None Include="Content\bin\Android\Content\title\beamPlatform.xnb" />
+    <None Include="Content\bin\Android\Content\title\bigStartButtonSwitch.xnb" />
+    <None Include="Content\bin\Android\Content\title\bigUButton.xnb" />
+    <None Include="Content\bin\Android\Content\title\bigUButtonPC.xnb" />
+    <None Include="Content\bin\Android\Content\title\controls.xnb" />
+    <None Include="Content\bin\Android\Content\title\controlsPC.xnb" />
+    <None Include="Content\bin\Android\Content\title\editorBench.xnb" />
+    <None Include="Content\bin\Android\Content\title\editorBenchPaint.xnb" />
+    <None Include="Content\bin\Android\Content\title\leftPlatform.xnb" />
+    <None Include="Content\bin\Android\Content\title\libraryBookcase.xnb" />
+    <None Include="Content\bin\Android\Content\title\libraryPlatform.xnb" />
+    <None Include="Content\bin\Android\Content\title\optionsPlatform.xnb" />
+    <None Include="Content\bin\Android\Content\title\optionsTV.xnb" />
+    <None Include="Content\bin\Android\Content\title\rightPlatform.xnb" />
+    <None Include="Content\bin\Android\Content\title\upperMonitor.xnb" />
+    <None Include="Content\bin\Android\Content\title\wideScreen.xnb" />
+    <None Include="Content\bin\Android\Content\tounge.xnb" />
+    <None Include="Content\bin\Android\Content\trafficLight.xnb" />
+    <None Include="Content\bin\Android\Content\travelPipes.xnb" />
+    <None Include="Content\bin\Android\Content\travelPipesBlue.xnb" />
+    <None Include="Content\bin\Android\Content\travelPipesGreen.xnb" />
+    <None Include="Content\bin\Android\Content\treeTileset.xnb" />
+    <None Include="Content\bin\Android\Content\treeTop.xnb" />
+    <None Include="Content\bin\Android\Content\treeTopDead.xnb" />
+    <None Include="Content\bin\Android\Content\treeTopInside.xnb" />
+    <None Include="Content\bin\Android\Content\treeTopInsideDead.xnb" />
+    <None Include="Content\bin\Android\Content\treeTopOutside.xnb" />
+    <None Include="Content\bin\Android\Content\treeTopOutsideDead.xnb" />
+    <None Include="Content\bin\Android\Content\tromboneBody.xnb" />
+    <None Include="Content\bin\Android\Content\tromboneSlide.xnb" />
+    <None Include="Content\bin\Android\Content\trophiesHighlight.xnb" />
+    <None Include="Content\bin\Android\Content\trophy.xnb" />
+    <None Include="Content\bin\Android\Content\troubleLight.xnb" />
+    <None Include="Content\bin\Android\Content\trumpet.xnb" />
+    <None Include="Content\bin\Android\Content\turbochainsaw.xnb" />
+    <None Include="Content\bin\Android\Content\turretBase.xnb" />
+    <None Include="Content\bin\Android\Content\turretHead.xnb" />
+    <None Include="Content\bin\Android\Content\tutorialScreens.xnb" />
+    <None Include="Content\bin\Android\Content\tutorialScreensPC.xnb" />
+    <None Include="Content\bin\Android\Content\tutorialTV.xnb" />
+    <None Include="Content\bin\Android\Content\tv.xnb" />
+    <None Include="Content\bin\Android\Content\tv2.xnb" />
+    <None Include="Content\bin\Android\Content\tvBroken.xnb" />
+    <None Include="Content\bin\Android\Content\tvnoise.xnb" />
+    <None Include="Content\bin\Android\Content\uiBox.xnb" />
+    <None Include="Content\bin\Android\Content\undergroundTileset.xnb" />
+    <None Include="Content\bin\Android\Content\unlitDoor.xnb" />
+    <None Include="Content\bin\Android\Content\unlockFrame.xnb" />
+    <None Include="Content\bin\Android\Content\unlockFrameWrapped.xnb" />
+    <None Include="Content\bin\Android\Content\unplugRect.xnb" />
+    <None Include="Content\bin\Android\Content\upArrow.xnb" />
+    <None Include="Content\bin\Android\Content\upSign.xnb" />
+    <None Include="Content\bin\Android\Content\vanillaIcon.xnb" />
+    <None Include="Content\bin\Android\Content\verticalDoor.xnb" />
+    <None Include="Content\bin\Android\Content\verticalDoorBottom.xnb" />
+    <None Include="Content\bin\Android\Content\verticalDoorNoSensor.xnb" />
+    <None Include="Content\bin\Android\Content\verticalDoorTop.xnb" />
+    <None Include="Content\bin\Android\Content\veryHardSign.xnb" />
+    <None Include="Content\bin\Android\Content\vincent.xnb" />
+    <None Include="Content\bin\Android\Content\vincentNoYo.xnb" />
+    <None Include="Content\bin\Android\Content\vincentwip.xnb" />
+    <None Include="Content\bin\Android\Content\vine.xnb" />
+    <None Include="Content\bin\Android\Content\vineEnd.xnb" />
+    <None Include="Content\bin\Android\Content\vineStretch.xnb" />
+    <None Include="Content\bin\Android\Content\vineStretchEnd.xnb" />
+    <None Include="Content\bin\Android\Content\virtualShotgun.xnb" />
+    <None Include="Content\bin\Android\Content\virtualShotgunLoader.xnb" />
+    <None Include="Content\bin\Android\Content\wallDoor.xnb" />
+    <None Include="Content\bin\Android\Content\walljumpBoots.xnb" />
+    <None Include="Content\bin\Android\Content\walljumpBootsPickup.xnb" />
+    <None Include="Content\bin\Android\Content\wallLight.xnb" />
+    <None Include="Content\bin\Android\Content\warpgun.xnb" />
+    <None Include="Content\bin\Android\Content\warpLine.xnb" />
+    <None Include="Content\bin\Android\Content\warpLine2.xnb" />
+    <None Include="Content\bin\Android\Content\water.xnb" />
+    <None Include="Content\bin\Android\Content\waterCoolerBottom.xnb" />
+    <None Include="Content\bin\Android\Content\waterCoolerJug.xnb" />
+    <None Include="Content\bin\Android\Content\waterCoolerJugLine.xnb" />
+    <None Include="Content\bin\Android\Content\waterFall.xnb" />
+    <None Include="Content\bin\Android\Content\waterFallEdge.xnb" />
+    <None Include="Content\bin\Android\Content\waterFallEdgeTop.xnb" />
+    <None Include="Content\bin\Android\Content\waterFallTile.xnb" />
+    <None Include="Content\bin\Android\Content\waterFlow.xnb" />
+    <None Include="Content\bin\Android\Content\waterGun.xnb" />
+    <None Include="Content\bin\Android\Content\waterLighting.xnb" />
+    <None Include="Content\bin\Android\Content\waterSplash.xnb" />
+    <None Include="Content\bin\Android\Content\weekDays.xnb" />
+    <None Include="Content\bin\Android\Content\weightBall.xnb" />
+    <None Include="Content\bin\Android\Content\wetEnter.xnb" />
+    <None Include="Content\bin\Android\Content\wetParticle.xnb" />
+    <None Include="Content\bin\Android\Content\whiteGlow.xnb" />
+    <None Include="Content\bin\Android\Content\whiteSplash.xnb" />
+    <None Include="Content\bin\Android\Content\window.xnb" />
+    <None Include="Content\bin\Android\Content\window32.xnb" />
+    <None Include="Content\bin\Android\Content\window32border.xnb" />
+    <None Include="Content\bin\Android\Content\windowBars.xnb" />
+    <None Include="Content\bin\Android\Content\windowDebris.xnb" />
+    <None Include="Content\bin\Android\Content\windowFrame.xnb" />
+    <None Include="Content\bin\Android\Content\windowIconHorizontal.xnb" />
+    <None Include="Content\bin\Android\Content\windowIconVertical.xnb" />
+    <None Include="Content\bin\Android\Content\wireBlock.xnb" />
+    <None Include="Content\bin\Android\Content\wireBulge.xnb" />
+    <None Include="Content\bin\Android\Content\wireButton.xnb" />
+    <None Include="Content\bin\Android\Content\wireFlipper.xnb" />
+    <None Include="Content\bin\Android\Content\wireMount.xnb" />
+    <None Include="Content\bin\Android\Content\wireTileset.xnb" />
+    <None Include="Content\bin\Android\Content\wireTrapDoorArm.xnb" />
+    <None Include="Content\bin\Android\Content\wireTrapDoorArmBig.xnb" />
+    <None Include="Content\bin\Android\Content\woodDebris.xnb" />
+    <None Include="Content\bin\Android\Content\woodDuck.xnb" />
+    <None Include="Content\bin\Android\Content\woodScaffolding.xnb" />
+    <None Include="Content\bin\Android\Content\woodWing.xnb" />
+    <None Include="Content\bin\Android\Content\workshopTag.xnb" />
+    <None Include="Content\bin\Android\Content\workshopTagMiddle.xnb" />
+    <None Include="Content\bin\Android\Content\wrenchRect.xnb" />
+    <None Include="Content\bin\Android\Content\wumpNet.xnb" />
+    <None Include="Content\bin\Android\Content\xboxController.xnb" />
+    <None Include="Content\bin\Android\Content\yellowBarrel.xnb" />
+    <None Include="Content\bin\Android\Content\yellowBarrelMelting.xnb" />
+    <None Include="Content\bin\Android\Content\yellowBarrelToreUp.xnb" />
+    <None Include="Content\bin\Android\Content\_tempPlayLevel.lev" />
+    <None Include="Properties\AndroidManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AsmResolver.DotNet">
+      <Version>5.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="ManagedBass.Fx">
+      <Version>3.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="ManagedBass.Mix">
+      <Version>3.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CSharp">
+      <Version>4.7.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.CodeDom">
+      <Version>7.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Android.Support.Compat">
+      <Version>28.0.0.3</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bin\Android\Content\devnumbers.txt" />
+    <Content Include="Content\bin\Android\Content\dirlist.txt" />
+    <Content Include="Content\bin\Android\Content\duckgame.ico" />
+    <Content Include="Content\bin\Android\Content\kanji_map.txt" />
+    <Content Include="Content\bin\Android\Content\spriteatlas.png" />
+    <Content Include="Content\bin\Android\Content\spriteatlas_offsets.txt" />
+    <Content Include="Content\bin\Android\Content\title\logo.png" />
+  </ItemGroup>
+  <Import Project="..\DGShared\DGShared.projitems" Label="Shared" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+</Project>
