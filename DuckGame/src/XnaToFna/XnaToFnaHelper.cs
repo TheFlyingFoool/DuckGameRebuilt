@@ -13,6 +13,8 @@ using System.IO;
 using System.Reflection;
 using XnaToFna.ProxyForms;
 using System.Text;
+using DGShared;
+using SDL2;
 
 namespace XnaToFna
 {

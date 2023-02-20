@@ -92,5 +92,6 @@ namespace XnaToFna.ProxyDInput
         public static string GetProductName(int player) => player >= States.Length ? string.Empty : string.Format("ProxyDInput #{0}", player + 1);
 
         public static string GetProductGUID(int player) => player < States.Length ? FNAPlatform.GetGamePadGUID(player) : string.Empty;
+
     }
 }

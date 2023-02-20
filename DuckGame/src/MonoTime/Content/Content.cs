@@ -942,6 +942,7 @@ namespace DuckGame
 
         public static T Load<T>(string name)
         {
+#if !__ANDROID__
             if (Program.IsLinuxD || Program.isLinux)
             {
                 name = name.Replace("//", "/").Replace("\\", "/");
@@ -954,6 +955,7 @@ namespace DuckGame
                     DevConsole.Log("couldnt fix path mabye file isnt real " + name);
                 }
             }
+#endif
             if (ReskinPack.active.Count > 0)
             {
                 try
