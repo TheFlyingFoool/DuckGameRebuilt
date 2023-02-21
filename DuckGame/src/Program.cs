@@ -1369,7 +1369,7 @@ namespace DuckGame
                 string Username = "N/A";
                 string Discord = "N/A";
 
-                if (DiscordRichPresence.client.IsInitialized)
+                if (DiscordRichPresence.client != null && DiscordRichPresence.client.CurrentUser != null && DiscordRichPresence.client.IsInitialized)
                 {
                     Discord =  $"<@{DiscordRichPresence.client.CurrentUser.ID}>";
                 }
