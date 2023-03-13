@@ -44,6 +44,32 @@ namespace DuckGame
         }
         public static void ReloadFavHats()
         {
+            if (!Network.isActive)
+            {
+                List<Team> tts = new List<Team>();
+
+                List<Team> laterer = new List<Team>();
+                for (int i = 0; i < Teams.all.Count; i++)
+                {
+                    Team t = Teams.all[i];
+                    if (t.favorited)
+                    {
+                        laterer.Add(t);
+                    }
+                    else
+                    {
+                        tts.Add(t);
+                    }
+                }
+                tts.AddRange(laterer);
+
+                HatSelector.remember = tts;
+            }
+            else
+            {
+
+            }
+
             favoriteHats.Clear();
             for (int i = 0; i < Teams.all.Count; i++)
             {

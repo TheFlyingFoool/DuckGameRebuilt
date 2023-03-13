@@ -427,6 +427,7 @@ namespace DuckGame
             _roomEditor.Reset();
         }
 
+        public static List<Team> remember;
         public List<Team> AllTeams()
         {
             if (!Network.isActive)
@@ -435,24 +436,29 @@ namespace DuckGame
                 {
                     return Teams.all;
                 }
-                List<Team> tts = new List<Team>();
-
-                List<Team> laterer = new List<Team>();
-                for (int i = 0; i < Teams.all.Count; i++)
+                if (remember == null)
                 {
-                    Team t = Teams.all[i];
-                    if (t.favorited)
-                    {
-                        laterer.Add(t);
-                    }
-                    else
-                    {
-                        tts.Add(t);
-                    }
-                }
-                tts.AddRange(laterer);
+                    List<Team> tts = new List<Team>();
 
-                return tts;
+                    List<Team> laterer = new List<Team>();
+                    for (int i = 0; i < Teams.all.Count; i++)
+                    {
+                        Team t = Teams.all[i];
+                        if (t.favorited)
+                        {
+                            laterer.Add(t);
+                        }
+                        else
+                        {
+                            tts.Add(t);
+                        }
+                    }
+                    tts.AddRange(laterer);
+
+                    remember = tts;
+                    return tts;
+                }
+                else return remember;
             }
             if (_profile == null)
                 return Teams.core.teams;
@@ -758,6 +764,7 @@ namespace DuckGame
                                 {
                                     SFX.Play("click");
                                     t.favorited = !t.favorited;
+
                                     RoomEditorExtra.ReloadFavHats();
                                 }
                             }
