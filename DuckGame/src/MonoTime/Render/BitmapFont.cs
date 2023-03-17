@@ -18,6 +18,11 @@ namespace DuckGame
         public int startingcoloroverride = -1;
         public int startingcolorindex = -1;
         private static bool _mapInitialized = false;
+        
+        // !! THIS IS A BANDAID FIX TO MOJI SCALING BEING RETARDED
+        // TODO: MAKE IT WORK WITHOUT NEEDING TO FLIP THIS ON AND OFF EVERYTIME YOU USE MOJIS
+        public static bool useAltMojiFontScaling = false;
+        
         public static char[] _characters = new char[317]
         {
           ' ',
@@ -407,7 +412,7 @@ namespace DuckGame
             if (sprite == null)
                 sprite = Input.GetTriggerSprite(str);
 
-            if (sprite is not null)
+            if (sprite is not null && useAltMojiFontScaling)
                 sprite.scale = scale;
             
             return sprite;
