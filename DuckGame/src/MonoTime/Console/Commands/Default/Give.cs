@@ -40,7 +40,7 @@
 
             if (!DevConsole.CheckCheats())
             {
-                if (item is Gun g && arguments.Contains("-i"))
+                if (!string.IsNullOrEmpty(arguments) && item is Gun g && arguments.Contains("-i"))
                 {
                     g.infiniteAmmoVal = true;
                 }
