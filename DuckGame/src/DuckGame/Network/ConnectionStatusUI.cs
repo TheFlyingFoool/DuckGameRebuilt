@@ -167,7 +167,7 @@ namespace DuckGame
                             _smallBios.Draw("@ONLINEGOOD@|DGGREEN|READY!", new Vec2(vec2_2.x + 3f, vec2_2.y + 3f), Color.White, (Depth)0.9f);
                         _smallBios.scale = new Vec2(1f, 1f);
                         
-                        string profName = bar.profile.nameUI;
+                        string name = bar.profile.nameUI;
                         string[] strArray = new string[7];
                         strArray[0] = "|";
                         Color colorUsable = bar.profile.persona.colorUsable;
@@ -179,26 +179,26 @@ namespace DuckGame
                         colorUsable = bar.profile.persona.colorUsable;
                         strArray[5] = colorUsable.b.ToString();
                         strArray[6] = "|";
-                        string str3 = string.Concat(strArray);
+                        string colorString = string.Concat(strArray);
                         const int lim = 14;
-                        int coloredTagsLength = profName.Length - Program.RemoveColorTags(profName).Length;
-                        if (profName.Length - coloredTagsLength > lim)
-                            profName = profName.Substring(0, lim + coloredTagsLength) + $"{str3}..";
+                        int coloredTagsLength = name.Length - Program.RemoveColorTags(name).Length;
+                        if (name.Length - coloredTagsLength > lim)
+                            name = name.Substring(0, lim + coloredTagsLength) + $"{colorString}..";
                         if (bar.profile.connection != null && bar.profile.connection.isHost)
-                            profName = "@HOSTCROWN@" + profName;
+                            name = "@HOSTCROWN@" + name;
                         if (bar.profile.slotType == SlotType.Spectator || bar.profile.pendingSpectatorMode == SlotType.Spectator)
                         {
-                            profName = "@SPECTATOR@" + profName;
-                            str3 = "|DGPURPLE|";
+                            name = "@SPECTATOR@" + name;
+                            colorString = "|DGPURPLE|";
                         }
-                        string text1 = str3 + profName;
-                        _smallBios.Draw(text1, new Vec2((float)(vec2_2.x + _bar.width - 3f - _smallBios.GetWidth(text1) - 60f), vec2_2.y + 3f), Color.White, (Depth)0.9f);
-                        int num8 = (int)Math.Round(bar.profile.connection.manager.ping * 1000f);
+                        name = colorString + name;
+                        _smallBios.Draw(name, new Vec2((float)(vec2_2.x + _bar.width - 3f - _smallBios.GetWidth(name) - 60f), vec2_2.y + 3f), Color.White, (Depth)0.9f);
+                        int pingval = (int)Math.Round(bar.profile.connection.manager.ping * 1000f);
                         if (bar.profile.connection == DuckNetwork.localConnection)
-                            num8 = 0;
-                        string source = num8.ToString() + "|WHITE|MS";
-                        string text2 = num8 >= 150 ? (num8 >= 250 ? (bar.profile.connection.status != ConnectionStatus.Connected ? "|DGRED|" + source + "@SIGNALDEAD@" : "|DGRED|" + source + "@SIGNALBAD@") : "|DGYELLOW|" + source + "@SIGNALNORMAL@") : "|DGGREEN|" + source + "@SIGNALGOOD@";
-                        _smallBios.Draw(text2, new Vec2((float)(vec2_2.x + _bar.width - 3f) - _smallBios.GetWidth(text2), vec2_2.y + 3f), Color.White, (Depth)0.9f);
+                            pingval = 0;
+                        string source = pingval.ToString() + "|WHITE|MS";
+                        string ping = pingval >= 150 ? (pingval >= 250 ? (bar.profile.connection.status != ConnectionStatus.Connected ? "|DGRED|" + source + "@SIGNALDEAD@" : "|DGRED|" + source + "@SIGNALBAD@") : "|DGYELLOW|" + source + "@SIGNALNORMAL@") : "|DGGREEN|" + source + "@SIGNALGOOD@";
+                        _smallBios.Draw(ping, new Vec2((float)(vec2_2.x + _bar.width - 3f) - _smallBios.GetWidth(ping), vec2_2.y + 3f), Color.White, (Depth)0.9f);
                     }
                     ++num2;
                 }

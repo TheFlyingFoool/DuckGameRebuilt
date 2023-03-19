@@ -474,13 +474,13 @@ namespace DuckGame
             if (text.StartsWith("_!"))
                 return null;
             ++_letterIndex;
-            string str = "";
-            bool flag = false;
+            string trigger = "";
+            bool brokeWithAt = false;
             for (; _letterIndex != text.Length; ++_letterIndex)
             {
                 if (text[_letterIndex] == '@' || chatFont && text[_letterIndex] == ':')
                 {
-                    flag = true;
+                    brokeWithAt = true;
                     break;
                 }
                 if (text[_letterIndex] == ' ' || text[_letterIndex] == '\n')
@@ -488,22 +488,31 @@ namespace DuckGame
                     --_letterIndex;
                     break;
                 }
-                str += text[_letterIndex].ToString();
+                trigger += text[_letterIndex].ToString();
             }
-            if (chatFont && !flag)
+            if (chatFont && !brokeWithAt)
                 return null;
             Sprite sprite = null;
             if (input != null)
-                sprite = input.GetTriggerImage(str);
+                sprite = input.GetTriggerImage(trigger);
             if (sprite == null)
-                sprite = Input.GetTriggerSprite(str);
+                sprite = Input.GetTriggerSprite(trigger);
             if (sprite == null && Options.Data.mojiFilter != 0)
             {
-                sprite = DuckFile.GetMoji(str, _currentConnection);
-                if (sprite == null && str.Contains("!"))
+                sprite = DuckFile.GetMoji(trigger, _currentConnection);
+                if (sprite == null && trigger.Contains("!"))
                     return Input.GetTriggerSprite("blankface");
             }
-            return sprite;
+
+            Sprite spriteClone = null;
+            if (sprite is not null)
+            {
+                spriteClone = sprite.Clone();
+                spriteClone.xscale = sprite.xscale * xscale;
+                spriteClone.yscale = sprite.yscale * yscale;
+            }
+
+            return spriteClone;
         }
 
         public Color ParseColor(string text)

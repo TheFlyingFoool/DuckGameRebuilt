@@ -878,8 +878,6 @@ namespace DuckGame
             float yOffset = config.YOffset;
             NameDisplayConfig.ScoreShowing showScore = config.ShowScores;
 
-            BitmapFont.useAltMojiFontScaling = true;
-
             bool doTeams = Extensions.MultiPlayerTeamsExist() && teamLineWidth > 0;
             IEnumerable<Profile> profileList = Profiles.activeNonSpectators;
             Color[] teamColors = { // yoinked from hypixel bedwars teams
@@ -997,8 +995,6 @@ namespace DuckGame
 
                 yPos += addedHeight;
             }
-
-            BitmapFont.useAltMojiFontScaling = false;
         }
 
         private void drawNameTags()

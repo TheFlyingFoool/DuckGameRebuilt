@@ -19,10 +19,6 @@ namespace DuckGame
         public int startingcolorindex = -1;
         private static bool _mapInitialized = false;
         
-        // !! THIS IS A BANDAID FIX TO MOJI SCALING BEING RETARDED
-        // TODO: MAKE IT WORK WITHOUT NEEDING TO FLIP THIS ON AND OFF EVERYTIME YOU USE MOJIS
-        public static bool useAltMojiFontScaling = false;
-        
         public static char[] _characters = new char[317]
         {
           ' ',
@@ -399,23 +395,29 @@ namespace DuckGame
             if (!allowBigSprites && text.StartsWith("_!"))
                 return null;
             ++_letterIndex;
-            string str = "";
+            string trigger = "";
             for (; _letterIndex != text.Length && text[_letterIndex] != ' ' && text[_letterIndex] != spritechar; ++_letterIndex)
-                str += text[_letterIndex].ToString();
+                trigger += text[_letterIndex].ToString();
             Sprite sprite = null;
             if (input != null)
             {
-                sprite = input.GetTriggerImage(str);
-                if (sprite == null && Triggers.IsTrigger(str))
+                sprite = input.GetTriggerImage(trigger);
+                if (sprite == null && Triggers.IsTrigger(trigger))
                     return new Sprite();
             }
-            if (sprite == null)
-                sprite = Input.GetTriggerSprite(str);
 
-            if (sprite is not null && useAltMojiFontScaling)
-                sprite.scale = scale;
+            if (sprite == null)
+                sprite = Input.GetTriggerSprite(trigger);
+
+            Sprite spriteClone = null;
+            if (sprite is not null)
+            {
+                spriteClone = sprite.Clone();
+                spriteClone.xscale = sprite.xscale * xscale;
+                spriteClone.yscale = sprite.yscale * yscale;
+            }
             
-            return sprite;
+            return spriteClone;
         }
 
         public Color ParseColor(string text)

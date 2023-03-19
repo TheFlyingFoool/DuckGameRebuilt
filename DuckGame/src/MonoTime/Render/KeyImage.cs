@@ -11,12 +11,14 @@ namespace DuckGame
     {
         private FancyBitmapFont _font;
         private Sprite _keySprite;
+        private char _keyChar;
         private string _keyString;
 
         public KeyImage(char key)
         {
             _font = new FancyBitmapFont("smallFont");
             _keySprite = new Sprite("buttons/keyboard/key");
+            _keyChar = key;
             _keyString = key.ToString() ?? "";
             _texture = _keySprite.texture;
         }
@@ -31,6 +33,12 @@ namespace DuckGame
             _keySprite.Draw();
             _font.scale = scale;
             _font.Draw(_keyString, position + new Vec2((float)(_keySprite.width * _keySprite.scale.x / 2.0 - _font.GetWidth(_keyString) / 2.0 - 0.5f), 2f * _keySprite.scale.y), new Color(20, 32, 34), depth + 2);
+        }
+
+        public override Sprite Clone()
+        {
+            KeyImage keyImage = new KeyImage(_keyChar);
+            return keyImage;
         }
     }
 }
