@@ -117,10 +117,26 @@ namespace DuckGame
                 horizontal.value = !horizontal.value;
             }
             else
-                ++direction;
-            if (direction <= 3)
-                return;
-            direction = 0;
+            {
+                switch (direction)
+                {
+                    case 0:
+                        direction = 3;
+                        break;
+                    case 1:
+                        direction = 2;
+                        break;
+                    case 2:
+                        direction = 0;
+                        break;
+                    case 3:
+                        direction = 1;
+                        break;
+                    default:
+                        direction = 0;
+                        break;
+                }
+            }
         }
 
         public void InitLinks()
