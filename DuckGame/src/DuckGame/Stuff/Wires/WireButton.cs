@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.WireButton
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Linq;
+﻿using System.Linq;
 
 namespace DuckGame
 {
@@ -59,10 +52,8 @@ namespace DuckGame
         {
             if (flipHorizontal)
             {
-                if (orientation.value == 1)
-                    orientation.value = 3;
-                else if (orientation.value == 3)
-                    orientation.value = 1;
+                if ((orientation.value & 1) == 1) // If odd, flip the bit. 1 -> 3, 3 -> 1
+                    orientation.value ^= 2;
             }
             angleDegrees = orientation.value * 90f;
             if (!(Level.current is Editor))
@@ -156,7 +147,7 @@ namespace DuckGame
             if (Level.current is Editor)
             {
                 angleDegrees = orientation.value * 90f;
-                if (flipHorizontal)
+                if (flipHorizontal && (orientation.value & 1) != 0)  // make consistent with actual outcome on play
                     angleDegrees -= 180f;
             }
             else

@@ -359,11 +359,11 @@ namespace DuckGame
                 if (direction == 0)
                     _arrow.angleDegrees = 0f;
                 else if (direction == 1)
-                    _arrow.angleDegrees = 180f;
-                else if (direction == 2)
-                    _arrow.angleDegrees = -90f;
-                else if (direction == 3)
                     _arrow.angleDegrees = 90f;
+                else if (direction == 2)
+                    _arrow.angleDegrees = 180f;
+                else if (direction == 3)
+                    _arrow.angleDegrees = -90f;
                 Graphics.Draw(_arrow, (float)(x - 8.0 + (int)teleHeight * 16 / 2 + (float)_float * 2.0), y);
             }
             else
@@ -384,11 +384,11 @@ namespace DuckGame
                 if (direction == 0)
                     _arrow.angleDegrees = 0f;
                 else if (direction == 1)
-                    _arrow.angleDegrees = 180f;
-                else if (direction == 2)
-                    _arrow.angleDegrees = -90f;
-                else if (direction == 3)
                     _arrow.angleDegrees = 90f;
+                else if (direction == 2)
+                    _arrow.angleDegrees = 180f;
+                else if (direction == 3)
+                    _arrow.angleDegrees = -90f;
                 Graphics.Draw(_arrow, x, (float)(y + 8.0 - (int)teleHeight * 16 / 2 + (float)_float * 2.0));
             }
         }
@@ -433,9 +433,9 @@ namespace DuckGame
         {
             EditorGroupMenu contextMenu = base.GetContextMenu() as EditorGroupMenu;
             contextMenu.AddItem(new ContextRadio("Up", direction == 0, 0, null, new FieldBinding(this, "direction")));
-            contextMenu.AddItem(new ContextRadio("Down", direction == 1, 1, null, new FieldBinding(this, "direction")));
-            contextMenu.AddItem(new ContextRadio("Left", direction == 2, 2, null, new FieldBinding(this, "direction")));
-            contextMenu.AddItem(new ContextRadio("Right", direction == 3, 3, null, new FieldBinding(this, "direction")));
+            contextMenu.AddItem(new ContextRadio("Down", direction == 2, 2, null, new FieldBinding(this, "direction")));
+            contextMenu.AddItem(new ContextRadio("Left", direction == 3, 3, null, new FieldBinding(this, "direction")));
+            contextMenu.AddItem(new ContextRadio("Right", direction == 1, 1, null, new FieldBinding(this, "direction")));
             return contextMenu;
         }
 
