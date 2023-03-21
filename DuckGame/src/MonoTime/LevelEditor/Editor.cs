@@ -2141,6 +2141,13 @@ namespace DuckGame
                                                           _placementType.editorCycleType != null;
                                             if (_input.Pressed(Triggers.RightStick) || Keyboard.Pressed(Keys.Tab))
                                             {
+                                                Thing thing = _eyeDropperSerialized != null
+                                                ? Thing.LoadThing(_eyeDropperSerialized)
+                                                : CreateThing(_placementType.GetType());
+                                                if (Keyboard.control)
+                                                    _placementType.editorCycleType = thing.TabRotate(true);
+                                                else
+                                                    _placementType.editorCycleType = thing.TabRotate(false);
                                                 if (_placementType.editorCycleType != null)
                                                 {
                                                     _placementType =
@@ -2149,10 +2156,6 @@ namespace DuckGame
                                                 }
                                                 else
                                                 {
-                                                    Thing thing = _eyeDropperSerialized != null
-                                                        ? Thing.LoadThing(_eyeDropperSerialized)
-                                                        : CreateThing(_placementType.GetType());
-                                                    thing.TabRotate();
                                                     _placementType = thing;
                                                     _eyeDropperSerialized = thing.Serialize();
                                                 }

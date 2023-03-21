@@ -45,6 +45,7 @@ namespace DuckGame
             (graphic as SpriteMap).frame = 3;
             collisionOffset = new Vec2(-4f, -4f);
             collisionSize = new Vec2(8f, 8f);
+            editorCycleType = typeof(GoodyNew);
             _contextMenuFilter.Add("Sequence");
             _editorName = "Trigger Volume";
             editorTooltip = "Pretty much an invisible Goody that you can resize.";

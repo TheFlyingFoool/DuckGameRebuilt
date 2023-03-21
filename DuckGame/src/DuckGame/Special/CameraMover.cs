@@ -22,6 +22,7 @@ namespace DuckGame
             center = new Vec2(8f, 8f);
             collisionSize = new Vec2(8f, 8f);
             collisionOffset = new Vec2(-4f, -4f);
+            editorCycleType = typeof(CameraZoomNew);
         }
 
         public override void Initialize()

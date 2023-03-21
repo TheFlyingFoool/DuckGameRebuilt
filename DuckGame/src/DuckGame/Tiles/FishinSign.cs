@@ -5,6 +5,8 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using System;
+
 namespace DuckGame
 {
     [EditorGroup("Details|Signs")]
@@ -24,6 +26,13 @@ namespace DuckGame
             _editorName = "Fishin Sign";
             editorTooltip = "It really explains itself, doesn't it?";
             hugWalls = WallHug.Floor;
+        }
+
+        public override Type TabRotate(bool control)
+        {
+            if (control)
+                return typeof(HardLeft);
+            return base.TabRotate(control);
         }
 
         public override void Draw()

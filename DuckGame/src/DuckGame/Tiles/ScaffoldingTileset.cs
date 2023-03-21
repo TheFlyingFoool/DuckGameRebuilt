@@ -20,6 +20,7 @@ namespace DuckGame
             verticalWidthThick = 15f;
             horizontalHeight = 8f;
             _collideBottom = true;
+            editorCycleType = typeof(WoodScaffoldingTileset);
         }
     }
 }

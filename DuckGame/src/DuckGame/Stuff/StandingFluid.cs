@@ -50,6 +50,14 @@ namespace DuckGame
             }
         }
 
+        public override void TabRotate()
+        {
+            if (fluidType >= 3)
+                fluidType = 0;
+            else
+                ++fluidType;
+        }
+
         public override void Update()
         {
             ++w8;

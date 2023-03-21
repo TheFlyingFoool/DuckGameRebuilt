@@ -26,6 +26,7 @@ namespace DuckGame
             depth = (Depth)0.9f;
             hugWalls = WallHug.Ceiling;
             layer = Layer.Game;
+            editorCycleType = typeof(StreetLight);
         }
 
         public override void Initialize()

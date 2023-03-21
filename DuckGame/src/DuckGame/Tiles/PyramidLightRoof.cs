@@ -29,6 +29,7 @@ namespace DuckGame
             depth = (Depth)0.9f;
             hugWalls = WallHug.Ceiling;
             layer = Layer.Game;
+            editorCycleType = typeof(PyramidWallLight);
         }
 
         public override void Initialize()

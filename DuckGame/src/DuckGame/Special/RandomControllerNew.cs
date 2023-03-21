@@ -41,6 +41,7 @@ namespace DuckGame
             collisionOffset = new Vec2(-8f, -8f);
             _canFlip = false;
             _visibleInGame = false;
+            editorCycleType = typeof(TargetDuckNew);
             _editorName = "Random Controller";
             editorTooltip = "Allows you to make it so Targets/Goodies appear randomly.";
             Max_Up._tooltip = "How many Targets/Goodies can be active at once.";

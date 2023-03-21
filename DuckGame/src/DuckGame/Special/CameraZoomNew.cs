@@ -24,6 +24,7 @@ namespace DuckGame
             Allow_Warps._tooltip = "If enabled, the camera will instantly move to follow Faster-Than-Light ducks";
             Overfollow._tooltip = "If enabled, the camera will keep a tighter focus on fast moving Ducks (think Chainsaw challenges!)";
             graphic = new Sprite("cameraIcon");
+            editorCycleType = typeof(CameraBoundsNew);
         }
 
         public override void Initialize()

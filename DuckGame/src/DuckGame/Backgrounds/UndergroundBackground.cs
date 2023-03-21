@@ -32,6 +32,7 @@ namespace DuckGame
             _moving = moving;
             _editorName = "Bunker BG";
             _yParallax = false;
+            editorCycleType = typeof(CityBackground);
         }
 
         public override void Initialize()

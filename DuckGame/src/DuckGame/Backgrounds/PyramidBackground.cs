@@ -24,6 +24,7 @@ namespace DuckGame
             layer = Layer.Foreground;
             _visibleInGame = false;
             _editorName = "Pyramid BG";
+            editorCycleType = typeof(SnowBackground);
         }
 
         public override void Initialize()

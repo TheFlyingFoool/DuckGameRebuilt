@@ -34,6 +34,7 @@ namespace DuckGame
             layer = Layer.Game;
             placementLayerOverride = Layer.Blocks;
             hugWalls = WallHug.Left | WallHug.Right;
+            editorCycleType = typeof(PyramidBLight);
         }
 
         public override void Draw()

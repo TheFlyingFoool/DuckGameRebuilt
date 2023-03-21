@@ -58,6 +58,7 @@ namespace DuckGame
             _canFlip = false;
             _placementCost += 4;
             editorTooltip = "Spawns a copy of the contained item any time it's used. Recharges after a short duration.";
+            editorCycleType = typeof(ItemBoxOneTime);
         }
 
         public override void Initialize()

@@ -30,6 +30,7 @@ namespace DuckGame
             _editorName = "Goody";
             _contextMenuFilter.Add("Sequence");
             sequence._resetLikelyhood = false;
+            editorCycleType = typeof(RandomControllerNew);
         }
 
         public void UpdateFrame()

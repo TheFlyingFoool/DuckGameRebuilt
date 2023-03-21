@@ -13,6 +13,7 @@ namespace DuckGame
         public TutorialSign01(float xpos, float ypos)
           : base(xpos, ypos, "tutorial/groundPound", "Ground Pound")
         {
+            editorCycleType = typeof(TutorialGunCrouchJump);
         }
 
         public override void Draw()

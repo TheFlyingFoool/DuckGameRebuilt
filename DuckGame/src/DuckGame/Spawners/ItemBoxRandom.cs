@@ -18,6 +18,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             editorTooltip = "Spawns a random object each time it's used. Recharges after a short duration.";
+            editorCycleType = typeof(ItemBox);
         }
 
         public override void Draw()

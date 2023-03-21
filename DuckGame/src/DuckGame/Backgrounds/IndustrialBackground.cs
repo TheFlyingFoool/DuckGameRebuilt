@@ -25,6 +25,7 @@ namespace DuckGame
             layer = Layer.Foreground;
             _visibleInGame = false;
             _editorName = "Industrial BG";
+            editorCycleType = typeof(KingdomBackground);
         }
 
         public override void Initialize()
