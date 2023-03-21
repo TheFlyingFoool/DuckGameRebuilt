@@ -26,6 +26,7 @@ namespace DuckGame
             depth = (Depth)0.9f;
             hugWalls = WallHug.Floor;
             layer = Layer.Game;
+            editorCycleType = typeof(Bulb);
         }
 
         public override void Initialize()

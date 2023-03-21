@@ -31,6 +31,7 @@ namespace DuckGame
             alpha = 0.7f;
             layer = Layer.Game;
             placementLayerOverride = Layer.Blocks;
+            editorCycleType = typeof(PyramidLightRoof);
         }
 
         public override void Initialize()

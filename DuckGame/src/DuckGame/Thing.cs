@@ -705,6 +705,12 @@ namespace DuckGame
             flipHorizontal = !flipHorizontal;
         }
 
+        public virtual Type TabRotate(bool control) // Hack: overloaded function to have dynamicly changing editor types on pressing tab
+        {
+            this.TabRotate();
+            return this.editorCycleType;
+        }
+
         public Layer placementLayer => placementLayerOverride != null ? placementLayerOverride : layer;
 
         public float likelyhoodToExist

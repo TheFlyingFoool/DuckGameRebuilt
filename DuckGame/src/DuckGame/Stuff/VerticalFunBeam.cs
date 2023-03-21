@@ -22,6 +22,7 @@ namespace DuckGame
             collisionOffset = new Vec2(-5f, -2f);
             collisionSize = new Vec2(10f, 4f);
             _placementCost += 2;
+            editorCycleType = typeof(FunBeam);
         }
 
         public override void Draw()

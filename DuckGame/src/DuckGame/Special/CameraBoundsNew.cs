@@ -21,6 +21,7 @@ namespace DuckGame
             editorTooltip = "A boundary that keeps moving cameras locked within it!";
             Wide._tooltip = "Width of the boundary area (in Pixels)";
             High._tooltip = "Height of the boundary area (in Pixels)";
+            editorCycleType = typeof(CameraFixed);
         }
 
         public override void Initialize()

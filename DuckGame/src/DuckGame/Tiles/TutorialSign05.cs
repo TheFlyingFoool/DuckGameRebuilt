@@ -13,6 +13,7 @@ namespace DuckGame
         public TutorialSign05(float xpos, float ypos)
           : base(xpos, ypos, "tutorial/fly", "Fly")
         {
+            editorCycleType = typeof(TutorialSign01);
         }
 
         public override void Draw()

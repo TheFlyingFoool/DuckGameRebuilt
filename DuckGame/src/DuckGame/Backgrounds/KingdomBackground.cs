@@ -30,6 +30,7 @@ namespace DuckGame
             _speedMult = speedMult;
             _moving = moving;
             _editorName = "Kingdom BG";
+            editorCycleType = typeof(NatureBackground);
         }
 
         public override void Initialize()

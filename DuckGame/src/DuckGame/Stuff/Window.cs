@@ -87,6 +87,22 @@ namespace DuckGame
             base.SetTranslation(translation);
         }
 
+        public override Type TabRotate(bool control)
+        {
+            Window windowtype = this;
+            if (control)
+                bars = !bars;
+            else
+            {
+                if (windowtype.floor)
+                    editorCycleType = typeof(Window);
+                else
+                    editorCycleType = typeof(FloorWindow);
+
+            }
+            return editorCycleType;
+        }
+
         public virtual void UpdateHeight()
         {
             float num = windowHeight.value * 16f;

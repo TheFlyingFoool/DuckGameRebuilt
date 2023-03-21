@@ -20,6 +20,7 @@ namespace DuckGame
             horizontalHeight = 8f;
             _hasNubs = false;
             _collideBottom = true;
+            editorCycleType = typeof(TreeTileset);
         }
     }
 }

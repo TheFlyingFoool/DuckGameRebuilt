@@ -36,6 +36,7 @@ namespace DuckGame
             _editorName = "Fun Beam";
             editorTooltip = "Place 2 generators near each other to create a beam that triggers weapons passing through.";
             hugWalls = WallHug.Left;
+            editorCycleType = typeof(VerticalFunBeam);
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)

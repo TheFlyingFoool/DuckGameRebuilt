@@ -30,6 +30,7 @@ namespace DuckGame
             collisionSize = new Vec2(8f, 8f);
             collisionOffset = new Vec2(-4f, -4f);
             _visibleInGame = false;
+            editorCycleType = typeof(CameraMover);
         }
 
         public override void Initialize()

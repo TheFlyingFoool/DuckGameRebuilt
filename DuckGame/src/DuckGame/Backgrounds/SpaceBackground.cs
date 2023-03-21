@@ -30,6 +30,7 @@ namespace DuckGame
             _speedMult = speedMult;
             _moving = moving;
             _editorName = "Space BG";
+            editorCycleType = typeof(VirtualBackground);
         }
 
         public override void Initialize()

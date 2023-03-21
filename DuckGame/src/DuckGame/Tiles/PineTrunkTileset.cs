@@ -5,6 +5,8 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using System;
+
 namespace DuckGame
 {
     [EditorGroup("Blocks|Snow")]
@@ -32,6 +34,13 @@ namespace DuckGame
                 Level.CheckPoint<PineTree>(x, y - 16f)?.KnockOffSnow(with.velocity, true);
             }
             OnSoftImpact(with, from);
+        }
+
+        public override Type TabRotate(bool control)
+        {
+            if (control)
+                return typeof(TreeTileset);
+            return null;
         }
     }
 }

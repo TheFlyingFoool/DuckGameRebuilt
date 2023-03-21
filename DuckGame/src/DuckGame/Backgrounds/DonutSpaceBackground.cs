@@ -29,6 +29,7 @@ namespace DuckGame
             _speedMult = speedMult;
             _moving = moving;
             _editorName = "Donut BG";
+            editorCycleType = typeof(IndustrialBackground);
         }
 
         public override void Initialize()

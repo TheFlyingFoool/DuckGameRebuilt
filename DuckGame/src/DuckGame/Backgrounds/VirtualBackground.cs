@@ -49,6 +49,7 @@ namespace DuckGame
             _editorName = "Virtual";
             _realBackground = realBackground;
             _foreground = fore;
+            editorCycleType = typeof(UndergroundBackground);
         }
 
         public static void InitializeBack()

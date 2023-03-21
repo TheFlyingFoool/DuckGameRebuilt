@@ -33,6 +33,7 @@ namespace DuckGame
             layer = Layer.Foreground;
             _visibleInGame = false;
             _editorName = "City BG";
+            editorCycleType = typeof(DonutSpaceBackground);
         }
 
         public override void Initialize()

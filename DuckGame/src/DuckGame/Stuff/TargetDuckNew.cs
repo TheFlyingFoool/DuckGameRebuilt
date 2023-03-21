@@ -42,6 +42,7 @@ namespace DuckGame
             _contextMenuFilter.Add("speediness");
             _contextMenuFilter.Add("Sequence");
             sequence._resetLikelyhood = false;
+            editorCycleType = typeof(TriggerVolume);
         }
 
         public override void OnSequenceActivate()

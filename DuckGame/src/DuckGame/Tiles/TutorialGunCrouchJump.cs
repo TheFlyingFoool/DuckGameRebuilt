@@ -13,6 +13,7 @@ namespace DuckGame
         public TutorialGunCrouchJump(float xpos, float ypos)
           : base(xpos, ypos, "tutorial/guncrouchjump", "Gun Crouch Jump")
         {
+            editorCycleType = typeof(TutorialGunJump);
         }
 
         public override void Draw()

@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace DuckGame
 {
@@ -134,6 +135,31 @@ namespace DuckGame
             searchRight = node.GetProperty<bool>("right");
             _sprite.frame = node.GetProperty<int>("pipeFrame");
             return true;
+        }
+
+        public override Type TabRotate(bool control)
+        {
+            Thing pipetype = this;
+            if (control)
+            {
+                background = !background;
+            }
+            else
+            {
+                switch (pipetype)
+                {
+                    case DuckGame.PipeBlue:
+                        editorCycleType = typeof(PipeRed);
+                        break;
+                    case DuckGame.PipeRed:
+                        editorCycleType = typeof(PipeGreen);
+                        break;
+                    case PipeGreen:
+                        editorCycleType = typeof(PipeBlue);
+                        break;
+                }
+            }
+            return editorCycleType;
         }
 
         public bool isEntryPipe => _validPipe && connections.Count == 1 && !(bool)trapdoor;

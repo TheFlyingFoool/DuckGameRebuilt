@@ -25,6 +25,7 @@ namespace DuckGame
             layer = Layer.Foreground;
             _visibleInGame = false;
             _editorName = "Nature BG Night";
+            editorCycleType = typeof(OfficeBackground);
         }
 
         public override void Initialize()

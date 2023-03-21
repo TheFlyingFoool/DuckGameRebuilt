@@ -16,6 +16,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             editorTooltip = "Spawns the contained item one time when it's used.";
+            editorCycleType = typeof(ItemBoxRandom);
         }
 
         public override void UpdateCharging() => charging = 500;
