@@ -4,6 +4,12 @@
     {
         public static bool Debugging => MonoMain.firebreak;
 
+        [DevConsoleCommand]
+        public static bool KFP()
+        {
+            return TeamSelect2.KillsForPoints ^= true;
+        }
+
         [PostInitialize]
         public static void OnPostInitialize()
         {
