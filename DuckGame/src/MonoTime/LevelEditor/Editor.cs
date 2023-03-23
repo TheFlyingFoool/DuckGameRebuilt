@@ -3081,15 +3081,19 @@ namespace DuckGame
                         UpdateSelection(false);
                     }
 
+                    float nudgeDistance = Keyboard.alt
+                        ? 1
+                        : cellSize;
+
                     Vec2 offset = new Vec2(0f, 0f);
                     if (Keyboard.Pressed(Keys.Up))
-                        offset.y -= cellSize;
+                        offset.y -= nudgeDistance;
                     if (Keyboard.Pressed(Keys.Down))
-                        offset.y += cellSize;
+                        offset.y += nudgeDistance;
                     if (Keyboard.Pressed(Keys.Left))
-                        offset.x -= cellSize;
+                        offset.x -= nudgeDistance;
                     if (Keyboard.Pressed(Keys.Right))
-                        offset.x += cellSize;
+                        offset.x += nudgeDistance;
                     if (!(offset != Vec2.Zero))
                         return;
                     hasUnsavedChanges = true;
@@ -3260,6 +3264,7 @@ namespace DuckGame
             if (layer == _procLayer && _procTarget != null && _procContext != null)
                 Graphics.Draw(_procTarget, new Vec2(0f, 0f), new Rectangle?(), Color.White * 0.5f, 0f,
                     Vec2.Zero, new Vec2(1f, 1f), SpriteEffects.None);
+            float size = Keyboard.alt ? 1 : _cellSize;
             if (layer == _gridLayer)
             {
                 backgroundColor = new Color(20, 20, 20);
@@ -3271,73 +3276,76 @@ namespace DuckGame
                 }
                 else
                 {
-                    float x = (float)(-_cellSize / 2.0);
-                    float y = (float)(-_cellSize / 2.0);
+                    float x = (float)(-size / 2.0);
+                    float y = (float)(-size / 2.0);
                     if (_sizeRestriction.x > 0.0)
                     {
-                        Vec2 vec2 = -new Vec2((float)(_gridW * _cellSize / 2.0),
-                            (float)((_gridH - 1) * _cellSize / 2.0)) + new Vec2(8f, 0f);
-                        x += (int)(vec2.x / _cellSize) * _cellSize;
-                        y += (int)(vec2.y / _cellSize) * _cellSize;
+                        Vec2 vec2 = -new Vec2((float)(_gridW * size / 2.0),
+                            (float)((_gridH - 1) * size / 2.0)) + new Vec2(8f, 0f);
+                        x += (int)(vec2.x / size) * size;
+                        y += (int)(vec2.y / size) * size;
                     }
 
-                    int num1 = _gridW;
-                    int num2 = _gridH;
+                    int gridWidth = _gridW;
+                    int gridHeight = _gridH;
                     if (_miniMode)
                     {
-                        num1 = 12;
-                        num2 = 9;
+                        gridWidth = 12;
+                        gridHeight = 9;
                     }
 
                     if (x < _ultimateBounds.x)
                     {
-                        int num3 = (int)((_ultimateBounds.x - x) / _cellSize) + 1;
-                        x = (int)(_ultimateBounds.x / _cellSize * _cellSize) + _cellSize / 2f;
-                        num1 -= num3;
+                        int num3 = (int)((_ultimateBounds.x - x) / size) + 1;
+                        x = (int)(_ultimateBounds.x / size * size) + size / 2f;
+                        gridWidth -= num3;
                     }
 
                     if (y < _ultimateBounds.y)
                     {
-                        int num4 = (int)((_ultimateBounds.y - y) / _cellSize) + 1;
-                        y = (int)(_ultimateBounds.y / _cellSize * _cellSize) + _cellSize / 2f;
-                        num2 -= num4;
+                        int num4 = (int)((_ultimateBounds.y - y) / size) + 1;
+                        y = (int)(_ultimateBounds.y / size * size) + size / 2f;
+                        gridHeight -= num4;
                     }
 
-                    float num5 = x + num1 * _cellSize;
+                    float num5 = x + gridWidth * size;
                     if (num5 > _ultimateBounds.Right)
                     {
-                        int num6 = (int)((num5 - _ultimateBounds.Right) / _cellSize) + 1;
-                        num1 -= num6;
-                        x = (int)((_ultimateBounds.Right - num1 * _cellSize) / _cellSize * _cellSize) - _cellSize / 2f;
+                        int num6 = (int)((num5 - _ultimateBounds.Right) / size) + 1;
+                        gridWidth -= num6;
+                        x = (int)((_ultimateBounds.Right - gridWidth * size) / size * size) - size / 2f;
                     }
 
-                    float num7 = y + num2 * _cellSize;
-                    if (y + num2 * _cellSize > _ultimateBounds.Bottom)
+                    float num7 = y + gridHeight * size;
+                    if (y + gridHeight * size > _ultimateBounds.Bottom)
                     {
-                        int num8 = (int)((num7 - _ultimateBounds.Bottom) / _cellSize) + 1;
-                        num2 -= num8;
-                        y = (int)((_ultimateBounds.Bottom - num2 * _cellSize) / _cellSize * _cellSize) -
-                            _cellSize / 2f;
+                        int num8 = (int)((num7 - _ultimateBounds.Bottom) / size) + 1;
+                        gridHeight -= num8;
+                        y = (int)((_ultimateBounds.Bottom - gridHeight * size) / size * size) -
+                            size / 2f;
                     }
 
-                    int num9 = num1 * (int)_cellSize;
-                    int num10 = num2 * (int)_cellSize;
-                    int num11 = (int)(num9 / _cellSize);
-                    int num12 = (int)(num10 / _cellSize);
+                    int num9 = gridWidth * (int)size;
+                    int num10 = gridHeight * (int)size;
+                    int num11 = (int)(num9 / size);
+                    int num12 = (int)(num10 / size);
+
+                    float lineThickness = size / 8;
+                    
                     for (int index = 0; index < num11 + 1; ++index)
-                        Graphics.DrawLine(new Vec2(x + index * _cellSize, y),
-                            new Vec2(x + index * _cellSize, y + num12 * _cellSize), col, 2f, -0.9f);
+                        Graphics.DrawLine(new Vec2(x + index * size, y),
+                            new Vec2(x + index * size, y + num12 * size), col, lineThickness, -0.9f);
                     for (int index = 0; index < num12 + 1; ++index)
-                        Graphics.DrawLine(new Vec2(x, y + index * _cellSize),
-                            new Vec2(x + num11 * _cellSize, y + index * _cellSize), col, 2f, -0.9f);
+                        Graphics.DrawLine(new Vec2(x, y + index * size),
+                            new Vec2(x + num11 * size, y + index * size), col, lineThickness, -0.9f);
                     Graphics.DrawLine(new Vec2(_ultimateBounds.Left, _ultimateBounds.Top),
-                        new Vec2(_ultimateBounds.Right, _ultimateBounds.Top), col, 2f, -0.9f);
+                        new Vec2(_ultimateBounds.Right, _ultimateBounds.Top), col, lineThickness, -0.9f);
                     Graphics.DrawLine(new Vec2(_ultimateBounds.Right, _ultimateBounds.Top),
-                        new Vec2(_ultimateBounds.Right, _ultimateBounds.Bottom), col, 2f, -0.9f);
+                        new Vec2(_ultimateBounds.Right, _ultimateBounds.Bottom), col, lineThickness, -0.9f);
                     Graphics.DrawLine(new Vec2(_ultimateBounds.Right, _ultimateBounds.Bottom),
-                        new Vec2(_ultimateBounds.Left, _ultimateBounds.Bottom), col, 2f, -0.9f);
+                        new Vec2(_ultimateBounds.Left, _ultimateBounds.Bottom), col, lineThickness, -0.9f);
                     Graphics.DrawLine(new Vec2(_ultimateBounds.Left, _ultimateBounds.Bottom),
-                        new Vec2(_ultimateBounds.Left, _ultimateBounds.Top), col, 2f, -0.9f);
+                        new Vec2(_ultimateBounds.Left, _ultimateBounds.Top), col, lineThickness, -0.9f);
                     if (_miniMode)
                     {
                         int num13 = 0;
@@ -3398,8 +3406,8 @@ namespace DuckGame
 
             if (layer == Layer.Foreground)
             {
-                float num14 = (float)(-_cellSize / 2.0);
-                float num15 = (float)(-_cellSize / 2.0);
+                float num14 = (float)(-size / 2.0);
+                float num15 = (float)(-size / 2.0);
                 int num16 = _gridW;
                 int num17 = _gridH;
                 if (_miniMode)
@@ -3477,8 +3485,8 @@ namespace DuckGame
                             _cursor.Draw();
                         }
                         else if (_placementMenu == null)
-                            Graphics.DrawRect(_tilePosition - new Vec2(_cellSize / 2f, _cellSize / 2f),
-                                _tilePosition + new Vec2(_cellSize / 2f, _cellSize / 2f), Color.White * 0.5f,
+                            Graphics.DrawRect(_tilePosition - new Vec2(size / 2f, size / 2f),
+                                _tilePosition + new Vec2(size / 2f, size / 2f), Color.White * 0.5f,
                                 1f, false);
                     }
 
