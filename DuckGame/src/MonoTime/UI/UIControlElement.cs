@@ -56,18 +56,18 @@ namespace DuckGame
             if (c == new Color())
                 c = Colors.MenuOption;
             BitmapFont f = new BitmapFont("smallBiosFontUI", 7, 5);
-            UIDivider component1 = new UIDivider(true, 0f);
+            UIDivider splitter = new UIDivider(true, 0f);
             _uiText = new UIText(text, c);
             _uiText.SetFont(f);
             _uiText.align = UIAlign.Left;
-            _uiText.specialScale = 0.5f;
-            component1.leftSection.Add(_uiText, true);
-            UIMultiToggle component2 = new UIMultiToggle(-1f, -1f, new FieldBinding(this, nameof(randomAssIntField)), _captionList, true);
-            component2.SetFont(f);
-            component2.align = UIAlign.Right;
-            component1.rightSection.Add(component2, true);
-            rightSection.Add(component1, true);
-            component2.specialScale = 0.5f;
+            _uiText.scale = new Vec2(0.5f);
+            splitter.leftSection.Add(_uiText, true);
+            UIMultiToggle multiToggle = new UIMultiToggle(-1f, -1f, new FieldBinding(this, nameof(randomAssIntField)), _captionList, true);
+            multiToggle.SetFont(f);
+            multiToggle.align = UIAlign.Right;
+            splitter.rightSection.Add(multiToggle, true);
+            rightSection.Add(splitter, true);
+            multiToggle.scale = new Vec2(0.5f);
             _arrow = new UIImage("littleContextArrowRight")
             {
                 scale = new Vec2(0.5f, 0.5f),

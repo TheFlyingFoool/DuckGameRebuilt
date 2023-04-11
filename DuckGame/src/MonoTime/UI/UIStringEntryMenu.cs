@@ -12,7 +12,7 @@ namespace DuckGame
 {
     public class UIStringEntryMenu : UIMenu
     {
-        public string password = "";
+        public string text = "";
         public bool _directional;
         private FieldBinding _binding;
         private int _maxLength = 24;
@@ -43,14 +43,14 @@ namespace DuckGame
             _maxNumber = pMaxNumber;
         }
 
-        public void SetValue(string pValue) => password = pValue;
+        public void SetValue(string pValue) => text = pValue;
 
         public override void Open()
         {
             if (_directional)
-                password = "";
-            _originalValue = password;
-            Keyboard.KeyString = password;
+                text = "";
+            _originalValue = text;
+            Keyboard.KeyString = text;
             _cancelled = true;
             base.Open();
         }
@@ -74,20 +74,20 @@ namespace DuckGame
                 blink += 0.02f;
                 if (_directional)
                 {
-                    if (password.Length < 6)
+                    if (text.Length < 6)
                     {
                         if (Input.Pressed(Triggers.Left))
-                            password += "L";
+                            text += "L";
                         else if (Input.Pressed(Triggers.Right))
-                            password += "R";
+                            text += "R";
                         else if (Input.Pressed(Triggers.Up))
-                            password += "U";
+                            text += "U";
                         else if (Input.Pressed(Triggers.Down))
-                            password += "D";
+                            text += "D";
                     }
                     if (Input.Pressed(Triggers.Select))
                     {
-                        _binding.value = password;
+                        _binding.value = text;
                         _cancelled = false;
                         _backFunction.Activate();
                     }
@@ -100,10 +100,10 @@ namespace DuckGame
                     if (_numeric)
                         Keyboard.KeyString = Regex.Replace(Keyboard.KeyString, "[^0-9]", "");
                     InputProfile.ignoreKeyboard = true;
-                    password = Keyboard.KeyString;
+                    text = Keyboard.KeyString;
                     if (Keyboard.Pressed(Keys.Enter))
                     {
-                        bool flag = false;
+                        bool invalid = false;
                         if (_numeric)
                         {
                             try
@@ -112,25 +112,25 @@ namespace DuckGame
                                 if (num < _minNumber)
                                 {
                                     num = _minNumber;
-                                    flag = true;
+                                    invalid = true;
                                 }
                                 else if (num > _maxNumber)
                                 {
                                     num = _maxNumber;
-                                    flag = true;
+                                    invalid = true;
                                 }
                                 Keyboard.KeyString = num.ToString();
                             }
                             catch (Exception)
                             {
                                 Keyboard.KeyString = "";
-                                flag = true;
+                                invalid = true;
                             }
                         }
-                        if (!flag)
+                        if (!invalid)
                         {
                             globalUILock = false;
-                            _binding.value = password;
+                            _binding.value = text;
                             _cancelled = false;
                             _backFunction.Activate();
                         }
@@ -150,9 +150,9 @@ namespace DuckGame
         public override void Draw()
         {
             if (_directional)
-                Graphics.DrawPassword(password, new Vec2(x - password.Length * 8 / 2, y - 6f), Color.White, depth + 10);
+                Graphics.DrawPassword(text, new Vec2(x - text.Length * 8 / 2, y - 6f), Color.White, depth + 10);
             else
-                Graphics.DrawString(password + (blink % 1.0 > 0.5 ? "_" : ""), new Vec2(x - password.Length * 8 / 2, y - 6f), Color.White, depth + 10);
+                Graphics.DrawString(text + (blink % 1.0 > 0.5 ? "_" : ""), new Vec2(x - text.Length * 8 / 2, y - 6f), Color.White, depth + 10);
             base.Draw();
         }
     }

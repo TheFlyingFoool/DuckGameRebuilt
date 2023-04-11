@@ -23,29 +23,15 @@ namespace DuckGame
         }
         public override void Draw()
         {
-
-
             int sel = ((UIBox)_parent).selection;
 
             List<UIComponent> uis = _parent.components.Where(t => t.dgrDescription != "").ToList();
 
-            if (uis.Count > sel) text = uis[sel].dgrDescription;
-            else text = "";
-
-            _font.scale = scale;
-            _font.alpha = alpha;
-            float width = _font.GetWidth(text);
-            float num1 = (align & UIAlign.Left) <= UIAlign.Center ? ((align & UIAlign.Right) <= UIAlign.Center ? (float)(-width / 2.0) : this.width / 2f - width) : (float)-(this.width / 2.0);
-            float num2 = (align & UIAlign.Top) <= UIAlign.Center ? ((align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-_font.height / 2.0) : height / 2f - _font.height) : (float)-(height / 2.0);
-            if (specialScale != 0.0)
-            {
-                Vec2 scale = _font.scale;
-                _font.scale = new Vec2(specialScale);
-                _font.Draw(text, x + num1, y + num2, UIMenu.disabledDraw ? Colors.BlueGray : _color, depth, _controlProfile);
-                _font.scale = scale;
-            }
+            if (uis.Count > sel)
+                text = uis[sel].dgrDescription;
             else
-                _font.Draw(text, x + num1, y + num2, UIMenu.disabledDraw ? Colors.BlueGray : _color, depth, _controlProfile);
+                text = "";
+
             base.Draw();
         }
     }

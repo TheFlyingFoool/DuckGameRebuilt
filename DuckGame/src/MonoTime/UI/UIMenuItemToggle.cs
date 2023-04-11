@@ -41,14 +41,14 @@ namespace DuckGame
             BitmapFont f = null;
             if (tiny)
                 f = new BitmapFont("smallBiosFontUI", 7, 5);
-            UIDivider component1 = new UIDivider(true, 0f);
+            UIDivider splitter = new UIDivider(true, 0f);
             if (text != "")
             {
-                UIText component2 = new UIText(text, c);
+                UIText t = new UIText(text, c);
                 if (tiny)
-                    component2.SetFont(f);
-                component2.align = UIAlign.Left;
-                component1.leftSection.Add(component2, true);
+                    t.SetFont(f);
+                t.align = UIAlign.Left;
+                splitter.leftSection.Add(t, true);
             }
             if (multi != null)
             {
@@ -58,11 +58,11 @@ namespace DuckGame
                 };
                 if (text != "")
                 {
-                    component1.rightSection.Add(_multiToggleElement, true);
+                    splitter.rightSection.Add(_multiToggleElement, true);
                 }
                 else
                 {
-                    component1.leftSection.Add(_multiToggleElement, true);
+                    splitter.leftSection.Add(_multiToggleElement, true);
                     _multiToggleElement.align = UIAlign.Left;
                 }
                 if (tiny)
@@ -72,13 +72,13 @@ namespace DuckGame
             }
             else
             {
-                UIOnOff component3 = new UIOnOff(-1f, -1f, field, filterBinding);
+                UIOnOff onOff = new UIOnOff(-1f, -1f, field, filterBinding);
                 if (tiny)
-                    component3.SetFont(f);
-                component3.align = UIAlign.Right;
-                component1.rightSection.Add(component3, true);
+                    onOff.SetFont(f);
+                onOff.align = UIAlign.Right;
+                splitter.rightSection.Add(onOff, true);
             }
-            rightSection.Add(component1, true);
+            rightSection.Add(splitter, true);
             if (tiny)
                 _arrow = new UIImage("littleContextArrowRight");
             else

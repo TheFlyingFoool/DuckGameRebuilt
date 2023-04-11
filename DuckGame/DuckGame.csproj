@@ -1920,7 +1920,7 @@
     <Compile Include="src\MonoTime\UI\UIMatchmakerMark2.cs" />
     <Compile Include="src\MonoTime\UI\UIMenuItemResolution.cs" />
     <Compile Include="src\MonoTime\UI\UIMenuItemStringPicker.cs" />
-    <Compile Include="src\MonoTime\UI\UIPasswordMenu.cs" />
+    <Compile Include="src\MonoTime\UI\UIStringEntryMenu.cs" />
     <Compile Include="src\MonoTime\UI\CompareUsers.cs" />
     <Compile Include="src\MonoTime\Windows\UIInviteUser.cs" />
     <Compile Include="src\MonoTime\UI\UIInviteMenu.cs" />
@@ -1951,7 +1951,7 @@
     <Compile Include="src\MonoTime\UI\UIMenuItem.cs" />
     <Compile Include="src\MonoTime\UI\UIMenuItemNumber.cs" />
     <Compile Include="src\MonoTime\UI\UIMenuItemSlider.cs" />
-    <Compile Include="src\MonoTime\UI\UIMenuItemPassword.cs" />
+    <Compile Include="src\MonoTime\UI\UIMenuItemString.cs" />
     <Compile Include="src\MonoTime\UI\UIMenuItemToggle.cs" />
     <Compile Include="src\MonoTime\UI\UIModifierMenuItem.cs" />
     <Compile Include="src\MonoTime\UI\UIFlagSelection.cs" />
@@ -1963,7 +1963,7 @@
     <Compile Include="src\MonoTime\UI\UIProgressBar.cs" />
     <Compile Include="src\MonoTime\UI\UIServerBrowser.cs" />
     <Compile Include="src\MonoTime\UI\UISlotEditor.cs" />
-    <Compile Include="src\MonoTime\UI\UIPassword.cs" />
+    <Compile Include="src\MonoTime\UI\UIStringEntry.cs" />
     <Compile Include="src\MonoTime\UI\UIText.cs" />
     <Compile Include="src\MonoTime\UI\UIUnlockBox.cs" />
     <Compile Include="src\MonoTime\UI\UIWillBox.cs" />

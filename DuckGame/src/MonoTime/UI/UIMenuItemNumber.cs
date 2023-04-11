@@ -40,26 +40,26 @@ namespace DuckGame
             if (c == new Color())
                 c = Colors.MenuOption;
             _valueStrings = valStrings;
-            UIDivider component1 = new UIDivider(true, _valueStrings != null ? 0f : 0.8f);
-            UIText component2 = new UIText(text, c)
+            UIDivider splitter = new UIDivider(true, _valueStrings != null ? 0f : 0.8f);
+            UIText t = new UIText(text, c)
             {
                 align = UIAlign.Left
             };
-            component1.leftSection.Add(component2, true);
+            splitter.leftSection.Add(t, true);
             if (field == null)
             {
                 _textItem = new UIChangingText(-1f, -1f, field, null)
                 {
                     align = UIAlign.Right
                 };
-                component1.rightSection.Add(_textItem, true);
+                splitter.rightSection.Add(_textItem, true);
             }
             else if (_valueStrings != null)
             {
                 if (text == "" || text == null)
                 {
-                    component1.leftSection.align = UIAlign.Left;
-                    _textItem = component2;
+                    splitter.leftSection.align = UIAlign.Left;
+                    _textItem = t;
                     int index = (int)field.value;
                     if (index >= 0 && index < _valueStrings.Count)
                         _textItem.text = _valueStrings[index];
@@ -71,16 +71,16 @@ namespace DuckGame
                     if (index >= 0 && index < _valueStrings.Count)
                         _textItem.text = _valueStrings[index];
                     _textItem.align = UIAlign.Right;
-                    component1.rightSection.Add(_textItem, true);
+                    splitter.rightSection.Add(_textItem, true);
                 }
             }
             else
             {
-                UINumber component3 = new UINumber(-1f, -1f, field, append, filterField, _setting)
+                UINumber number = new UINumber(-1f, -1f, field, append, filterField, _setting)
                 {
                     align = UIAlign.Right
                 };
-                component1.rightSection.Add(component3, true);
+                splitter.rightSection.Add(number, true);
             }
             if (_valueStrings != null)
             {
@@ -94,7 +94,7 @@ namespace DuckGame
                 _textItem.minLength = str.Length + 3;
                 _textItem.text = _textItem.text;
             }
-            rightSection.Add(component1, true);
+            rightSection.Add(splitter, true);
             _arrow = new UIImage("contextArrowRight")
             {
                 align = UIAlign.Right,

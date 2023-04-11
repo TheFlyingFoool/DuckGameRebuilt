@@ -527,10 +527,8 @@ namespace DuckGame
 
         private void BuildHostMatchSettingsMenu()
         {
-            float num1 = 320f;
-            float num2 = 180f;
             _hostMatchSettingsMenu = new UIMenu("@LWING@MATCH SETTINGS@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            _hostLevelSelectMenu = new LevelSelectCompanionMenu(num1 / 2f, num2 / 2f, _hostMatchSettingsMenu);
+            _hostLevelSelectMenu = new LevelSelectCompanionMenu(160f, 90f, _hostMatchSettingsMenu);
             _playOnlineGroup.Add(_hostLevelSelectMenu, false);
             _hostModifiersMenu = new UIMenu("MODIFIERS", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
             foreach (UnlockData unlock in Unlocks.GetUnlocks(UnlockType.Modifier))
@@ -737,7 +735,7 @@ namespace DuckGame
             _hostGameMenu = new UIMenu("@LWING@CREATE GAME@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
             _hostSettingsMenu = new UIMenu("@LWING@HOST SETTINGS@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
             int pMinLength = 50;
-            float num2 = 3f;
+            float heightAdd = 3f;
             _playOnlineBumper = new UIMenu("PLAYING ONLINE", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 220f, conString: "@SELECT@OK!");
             UIMenu playOnlineBumper1 = _playOnlineBumper;
             UIText component1 = new UIText("", Color.White, heightAdd: -3f)
@@ -782,37 +780,37 @@ namespace DuckGame
             };
             playOnlineBumper7.Add(component7, true);
             UIMenu playOnlineBumper8 = _playOnlineBumper;
-            UIText component8 = new UIText("-Trolling and hate appear exactly the same online.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2))
+            UIText component8 = new UIText("-Trolling and hate appear exactly the same online.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
             playOnlineBumper8.Add(component8, true);
             UIMenu playOnlineBumper9 = _playOnlineBumper;
-            UIText component9 = new UIText("-Please! be kind to one another.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2))
+            UIText component9 = new UIText("-Please! be kind to one another.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
             playOnlineBumper9.Add(component9, true);
             UIMenu playOnlineBumper10 = _playOnlineBumper;
-            UIText component10 = new UIText("-Please! don't use hate speech or strong words.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2))
+            UIText component10 = new UIText("-Please! don't use hate speech or strong words.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
             playOnlineBumper10.Add(component10, true);
             UIMenu playOnlineBumper11 = _playOnlineBumper;
-            UIText component11 = new UIText("-Please! don't use hacks in public lobbies.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2))
+            UIText component11 = new UIText("-Please! don't use hacks in public lobbies.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
             playOnlineBumper11.Add(component11, true);
             UIMenu playOnlineBumper12 = _playOnlineBumper;
-            UIText component12 = new UIText("-Please! keep custom content tasteful.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2))
+            UIText component12 = new UIText("-Please! keep custom content tasteful.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
             playOnlineBumper12.Add(component12, true);
             UIMenu playOnlineBumper13 = _playOnlineBumper;
-            UIText component13 = new UIText("-Angle shots are neat (and are not hacks).".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2))
+            UIText component13 = new UIText("-Angle shots are neat (and are not hacks).".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };

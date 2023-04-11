@@ -5,6 +5,8 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using System;
+
 namespace DuckGame
 {
     public class UIMenuItemString : UIMenuItem
@@ -14,8 +16,9 @@ namespace DuckGame
         private UIStringEntryMenu _enterStringMenu;
         private string _text;
         private string _id;
-        private UIStringEntry _passwordItem;
+        private UIStringEntry _stringEntry;
         private UIMenuActionOpenMenu _activateFunction;
+        private Action _extraActivateAction = null;
 
         public void SetFieldBinding(FieldBinding f) => _field = f;
 
@@ -36,21 +39,17 @@ namespace DuckGame
             BitmapFont f = null;
             if (tiny)
                 f = new BitmapFont("smallBiosFontUI", 7, 5);
-            UIDivider component1 = new UIDivider(true, 0f);
+            UIDivider splitter = new UIDivider(true, 0f);
             if (text != "")
             {
-                UIText component2 = new UIText(text, c);
+                UIText t = new UIText(text, c, al: UIAlign.Left);
                 if (tiny)
-                    component2.SetFont(f);
-                component2.align = UIAlign.Left;
-                component1.leftSection.Add(component2, true);
+                    t.SetFont(f);
+                splitter.leftSection.Add(t, true);
             }
-            _passwordItem = new UIStringEntry(false, "", Color.White)
-            {
-                align = UIAlign.Right
-            };
-            component1.rightSection.Add(_passwordItem, true);
-            rightSection.Add(component1, true);
+            _stringEntry = new UIStringEntry(false, "", Color.White, al: UIAlign.Right);
+            splitter.rightSection.Add(_stringEntry, true);
+            rightSection.Add(splitter, true);
             if (tiny)
                 _arrow = new UIImage("littleContextArrowRight");
             else
@@ -70,13 +69,13 @@ namespace DuckGame
                 if (open && _id == "name" && Profiles.active.Count > 0)
                 {
                     _field.value = TeamSelect2.DefaultGameName();
-                    _passwordItem.text = (string)_field.value;
+                    _stringEntry.text = (string)_field.value;
                 }
                 else
-                    _passwordItem.text = "NONE";
+                    _stringEntry.text = "NONE";
             }
             else
-                _passwordItem.text = (string)_field.value;
+                _stringEntry.text = (string)_field.value;
             base.Update();
         }
 
@@ -89,12 +88,20 @@ namespace DuckGame
             _activateFunction = new UIMenuActionOpenMenu(pReturn, _enterStringMenu);
         }
 
+        public void InitializeEntryMenu(UIComponent pGroup, UIMenu pReturn, Action pExtraActivateAction)
+        {
+            InitializeEntryMenu(pGroup, pReturn);
+            _extraActivateAction = pExtraActivateAction;
+        }
+
         public override void Activate(string trigger)
         {
             if (!(trigger == Triggers.Select))
                 return;
             _enterStringMenu.SetValue((string)_field.value);
             _activateFunction.Activate();
+            if (_extraActivateAction is not null)
+                _extraActivateAction();
         }
     }
 }
