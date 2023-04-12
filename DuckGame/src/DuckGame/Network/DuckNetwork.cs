@@ -949,6 +949,7 @@ namespace DuckGame
             if (whoOpen.slotType != SlotType.Local && Network.isServer)
             {
                 _core._lobbySettingMenu = new UIMenu("@LWING@LOBBY SETTINGS@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK");
+                _core._lobbySettingMenu.SetBackFunction(new UIMenuActionOpenMenu(_core._lobbySettingMenu, _core._ducknetMenu));
                 _core._lobbySettingMenu.Close();
                 UIMenuItemString nameSetting = _core._lobbySettingMenu.AddMatchSetting(TeamSelect2.GetOnlineSetting("name"), false) as UIMenuItemString;
                 nameSetting.InitializeEntryMenu(_core.ducknetUIGroup, _core._lobbySettingMenu);

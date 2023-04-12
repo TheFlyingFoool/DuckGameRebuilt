@@ -5,8 +5,6 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
-using System;
-
 namespace DuckGame
 {
     public class UIMenuItemString : UIMenuItem
@@ -18,7 +16,6 @@ namespace DuckGame
         private string _id;
         private UIStringEntry _stringEntry;
         private UIMenuActionOpenMenu _activateFunction;
-        private Action _extraActivateAction = null;
 
         public void SetFieldBinding(FieldBinding f) => _field = f;
 
@@ -88,20 +85,12 @@ namespace DuckGame
             _activateFunction = new UIMenuActionOpenMenu(pReturn, _enterStringMenu);
         }
 
-        public void InitializeEntryMenu(UIComponent pGroup, UIMenu pReturn, Action pExtraActivateAction)
-        {
-            InitializeEntryMenu(pGroup, pReturn);
-            _extraActivateAction = pExtraActivateAction;
-        }
-
         public override void Activate(string trigger)
         {
             if (!(trigger == Triggers.Select))
                 return;
             _enterStringMenu.SetValue((string)_field.value);
             _activateFunction.Activate();
-            if (_extraActivateAction is not null)
-                _extraActivateAction();
         }
     }
 }

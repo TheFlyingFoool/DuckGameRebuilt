@@ -15,7 +15,7 @@ namespace DuckGame
         public string text = "";
         public bool _directional;
         private FieldBinding _binding;
-        private int _maxLength = 24;
+        private int _maxLength;
         private int _minNumber;
         private int _maxNumber;
         private bool _numeric;
@@ -28,7 +28,7 @@ namespace DuckGame
           bool directional,
           string title,
           FieldBinding pBinding,
-          int pMaxLength = 24,
+          int pMaxLength = 50,
           bool pNumeric = false,
           int pMinNumber = -2147483648,
           int pMaxNumber = 2147483647)
@@ -95,8 +95,8 @@ namespace DuckGame
                 else
                 {
                     UIMenu.globalUILock = true;
-                    if (Keyboard.KeyString.Length > _maxLength)
-                        Keyboard.KeyString = Keyboard.KeyString.Substring(0, _maxLength);
+                    if (Program.RemoveColorTags(Keyboard.KeyString).Length > _maxLength)
+                        Keyboard.KeyString = Keyboard.KeyString.Substring(0, _maxLength + Keyboard.KeyString.Length - Program.RemoveColorTags(Keyboard.KeyString).Length);
                     if (_numeric)
                         Keyboard.KeyString = Regex.Replace(Keyboard.KeyString, "[^0-9]", "");
                     InputProfile.ignoreKeyboard = true;
@@ -149,10 +149,17 @@ namespace DuckGame
 
         public override void Draw()
         {
+            float textScale = 1f;
+            float len = Program.RemoveColorTags(text).Length;
+            if (len > 34)
+                textScale = 0.5f;
+            else if (len > 24)
+                textScale = 0.75f;
+
             if (_directional)
-                Graphics.DrawPassword(text, new Vec2(x - text.Length * 8 / 2, y - 6f), Color.White, depth + 10);
+                Graphics.DrawPassword(text, new Vec2(x - len * 8 / 2 * textScale, y - 6f * textScale), Color.White, depth + 10);
             else
-                Graphics.DrawString(text + (blink % 1.0 > 0.5 ? "_" : ""), new Vec2(x - text.Length * 8 / 2, y - 6f), Color.White, depth + 10);
+                Graphics.DrawString(text + (blink % 1.0 > 0.5 ? "_" : ""), new Vec2(x - len * 8 / 2 * textScale, y - 6f * textScale), Color.White, depth + 10, scale: textScale);
             base.Draw();
         }
     }
