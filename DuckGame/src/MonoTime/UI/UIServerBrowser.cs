@@ -339,7 +339,7 @@ namespace DuckGame
             if (!_searching || mode == SearchMode.None || !Network.activeNetwork.core.IsLobbySearchComplete())
                 return;
             _searching = false;
-            int num1 = Network.activeNetwork.core.NumLobbiesFound();
+            int numLobbiesFound = Network.activeNetwork.core.NumLobbiesFound();
             List<WorkshopItem> items = new List<WorkshopItem>();
             if (Network.lanMode)
             {
@@ -348,7 +348,7 @@ namespace DuckGame
             }
             else
             {
-                for (int i = 0; i < num1; ++i)
+                for (int i = 0; i < numLobbiesFound; ++i)
                 {
                     Lobby lobby = Network.activeNetwork.core.GetSearchLobbyAtIndex(i);
                     if (_lobbies.FirstOrDefault(x => x.lobby != null && (long)x.lobby.id == (long)lobby.id) == null)
