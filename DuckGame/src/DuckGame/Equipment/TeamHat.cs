@@ -210,7 +210,7 @@ namespace DuckGame
                     _networkCape = !duck.profile.localPlayer ? duck.profile.flagIndex : Global.data.flag;
                     UpdateCape();
                 }
-                if (Network.InLobby() && _team != null && (sprite == null || sprite != null && sprite.globalIndex != _team.hat.globalIndex))
+                if (Network.inLobby && _team != null && (sprite == null || sprite != null && sprite.globalIndex != _team.hat.globalIndex))
                     _shouldUpdateSprite = true;
             }
             else if (Level.current is TeamSelect2 && _equippedDuck != null && team != null && team.customHatPath != null && Keyboard.Pressed(Keys.F5) && !Network.isActive)

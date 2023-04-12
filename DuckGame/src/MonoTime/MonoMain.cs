@@ -1110,7 +1110,7 @@ namespace DuckGame
         public static void UpdatePauseMenu(bool hasFocus = true)
         {
             shouldPauseGameplay = true;
-            if (Network.isActive && UIMatchmakerMark2.instance == null && (!Network.InLobby() || !(Level.current as TeamSelect2).MatchmakerOpen()))
+            if (Network.isActive && UIMatchmakerMark2.instance == null && (!Network.inLobby || !(Level.current as TeamSelect2).MatchmakerOpen()))
                 shouldPauseGameplay = false;
             if (_pauseMenu != null)
             {

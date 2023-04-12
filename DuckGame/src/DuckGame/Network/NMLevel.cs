@@ -201,7 +201,7 @@ namespace DuckGame
                     if (_level != null && _level is XMLLevel)
                         (_level as XMLLevel).seed = seed;
                 }
-                if (Network.InLobby() || Level.current is RockScoreboard && !(_level is RockScoreboard))
+                if (Network.inLobby || Level.current is RockScoreboard && !(_level is RockScoreboard))
                     Music.Stop();
                 Level.current = _level;
                 _level.transferCompleteCalled = false;

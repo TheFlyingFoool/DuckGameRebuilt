@@ -362,7 +362,7 @@ namespace DuckGame
                 connection.Reset("Client Disconnected.");
                 if (currentMainDisconnectError != null && currentMainDisconnectError.error == DuckNetError.EveryoneDisconnected)
                     currentMainDisconnectError = error;
-                if (sessionConnections.Count != 0 && (sessionConnections.Count != 1 || sessionConnections[0] != DuckNetwork.localConnection || Network.InLobby()))
+                if (sessionConnections.Count != 0 && (sessionConnections.Count != 1 || sessionConnections[0] != DuckNetwork.localConnection || Network.inLobby))
                     return;
                 if (!Network.isServer || sessionConnections.Count == 0)
                     OnSessionEnded(currentMainDisconnectError != null ? currentMainDisconnectError : error);

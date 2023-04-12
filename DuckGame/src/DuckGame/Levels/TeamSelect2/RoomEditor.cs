@@ -973,7 +973,7 @@ namespace DuckGame
 
         public void Open(Profile p)
         {
-            if (_box == null && Network.InLobby())
+            if (_box == null && Network.inLobby)
                 _box = (Level.current as TeamSelect2).GetBox(p.networkIndex);
             if (_box == null)
                 return;

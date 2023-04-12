@@ -210,7 +210,7 @@ namespace DuckGame
                 InitChanceGroups();
                 Rando.generator = generator;
                 Initialize();
-                if (!Network.isActive || Network.InLobby())
+                if (!Network.isActive || Network.inLobby)
                     DoStart();
                 _things.RefreshState();
                 CalculateBounds();

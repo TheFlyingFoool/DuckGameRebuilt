@@ -188,7 +188,7 @@ namespace DuckGame
             }
         }
 
-        public static bool canSetObservers => InLobby() && isServer && !DuckNetwork.isDedicatedServer;
+        public static bool canSetObservers => inLobby && isServer && !DuckNetwork.isDedicatedServer;
 
         public static bool isServer
         {
@@ -370,19 +370,22 @@ namespace DuckGame
             QueueMessageForAllBut(msg, who);
         }
 
-        public static bool InLobby() => Level.current is TeamSelect2;
+        public static bool inLobby => Level.current is TeamSelect2;
 
-        public static bool InGameLevel() => Level.current is GameLevel;
+        public static bool inGameLevel => Level.current is GameLevel;
 
-        public static bool InMatch()
+        public static bool inMatch
         {
-            switch (Level.current)
+            get
             {
-                case GameLevel _:
-                case RockScoreboard _:
-                    return true;
-                default:
-                    return Level.current is RockIntro;
+                switch (Level.current)
+                {
+                    case GameLevel _:
+                    case RockScoreboard _:
+                        return true;
+                    default:
+                        return Level.current is RockIntro;
+                }
             }
         }
 

@@ -365,7 +365,7 @@ namespace DuckGame
             DevConsole.Log(DCSection.General, "Assigning net profile index (" + pIndex.ToString() + "\\" + Profiles.alllist.Count.ToString() + ")");
             _netProfileIndex = pIndex;
             Profile profile = Profiles.alllist[_netProfileIndex];
-            if (Network.isClient && Network.InLobby())
+            if (Network.isClient && Network.inLobby)
                 (Level.current as TeamSelect2).OpenDoor(_netProfileIndex, this);
             this.profile = profile;
             if (profile.team == null)
@@ -675,7 +675,7 @@ namespace DuckGame
             get => base.connection;
             set
             {
-                if (Network.isServer && connection != null && connection.status == ConnectionStatus.Disconnected && Network.InGameLevel())
+                if (Network.isServer && connection != null && connection.status == ConnectionStatus.Disconnected && Network.inGameLevel)
                     Kill(new DTDisconnect(this));
                 if (_profile != null)
                 {

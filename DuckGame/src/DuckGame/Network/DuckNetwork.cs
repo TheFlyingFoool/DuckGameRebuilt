@@ -909,24 +909,23 @@ namespace DuckGame
         {
             if (_ducknetUIGroup != null)
                 Level.Remove(_ducknetUIGroup);
-            bool flag = Network.InLobby();
             _core._menuOpenProfile = whoOpen;
-            float num1 = 320f;
-            float num2 = 180f;
-            _ducknetUIGroup = new UIComponent(num1 / 2f, num2 / 2f, 0f, 0f)
+            float wide = 320f;
+            float high = 180f;
+            _ducknetUIGroup = new UIComponent(wide / 2f, high / 2f, 0f, 0f)
             {
                 isPauseMenu = true
             };
-            core._ducknetMenu = new UIMenu("@LWING@MULTIPLAYER@RWING@", num1 / 2f, num2 / 2f, 210f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
+            core._ducknetMenu = new UIMenu("@LWING@MULTIPLAYER@RWING@", wide / 2f, high / 2f, 210f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
             _ducknetMenu = core._ducknetMenu;
-            core._confirmMenu = whoOpen.slotType != SlotType.Local ? new UIMenu("REALLY QUIT?", num1 / 2f, num2 / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT") : new UIMenu("REALLY BACK OUT?", num1 / 2f, num2 / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            core._confirmBlacklistMenu = new UIMenu("AVOID LEVEL?", num1 / 2f, num2 / 2f, 10f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            core._confirmKick = new UIMenu("REALLY KICK?", num1 / 2f, num2 / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            core._confirmBan = new UIMenu("REALLY BAN?", num1 / 2f, num2 / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            core._confirmBlock = new UIMenu("BLOCK PLAYER?", num1 / 2f, num2 / 2f, 280f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            core._confirmReturnToLobby = new UIMenu("RETURN TO LOBBY?", num1 / 2f, num2 / 2f, 230f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            core._confirmMatchSettings = new UIMenu("CHANGING SETTINGS", num1 / 2f, num2 / 2f, 230f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            core._confirmEditSlots = new UIMenu("CHANGING SETTINGS", num1 / 2f, num2 / 2f, 230f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            core._confirmMenu = whoOpen.slotType != SlotType.Local ? new UIMenu("REALLY QUIT?", wide / 2f, high / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT") : new UIMenu("REALLY BACK OUT?", wide / 2f, high / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            core._confirmBlacklistMenu = new UIMenu("AVOID LEVEL?", wide / 2f, high / 2f, 10f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            core._confirmKick = new UIMenu("REALLY KICK?", wide / 2f, high / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            core._confirmBan = new UIMenu("REALLY BAN?", wide / 2f, high / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            core._confirmBlock = new UIMenu("BLOCK PLAYER?", wide / 2f, high / 2f, 280f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            core._confirmReturnToLobby = new UIMenu("RETURN TO LOBBY?", wide / 2f, high / 2f, 230f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            core._confirmMatchSettings = new UIMenu("CHANGING SETTINGS", wide / 2f, high / 2f, 230f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            core._confirmEditSlots = new UIMenu("CHANGING SETTINGS", wide / 2f, high / 2f, 230f, conString: "@CANCEL@BACK @SELECT@SELECT");
             core._optionsMenu = Options.CreateOptionsMenu();
             _optionsMenu = core._optionsMenu;
             _core._settingsBeforeOpen = TeamSelect2.GetMatchSettingString();
@@ -947,14 +946,25 @@ namespace DuckGame
             core._ducknetMenu.AssignDefaultSelection();
             if (whoOpen.slotType != SlotType.Local)
                 core._ducknetMenu.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(core._ducknetMenu, core._optionsMenu), UIAlign.Left), true);
-            if (whoOpen.slotType != SlotType.Local & flag && Network.isServer)
+            if (whoOpen.slotType != SlotType.Local && Network.isServer)
+            {
+                _core._lobbySettingMenu = new UIMenu("@LWING@LOBBY SETTINGS@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK");
+                _core._lobbySettingMenu.Close();
+                UIMenuItemString nameSetting = _core._lobbySettingMenu.AddMatchSetting(TeamSelect2.GetOnlineSetting("name"), false) as UIMenuItemString;
+                nameSetting.InitializeEntryMenu(_core.ducknetUIGroup, _core._lobbySettingMenu);
+                UIMenuItemString passwordSetting = _core._lobbySettingMenu.AddMatchSetting(TeamSelect2.GetOnlineSetting("password"), false) as UIMenuItemString;
+                passwordSetting.InitializeEntryMenu(_core.ducknetUIGroup, _core._lobbySettingMenu);
+                _ducknetUIGroup.Add(_core._lobbySettingMenu, false);
+                _core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|LOBBY SETTINGS", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._lobbySettingMenu), UIAlign.Left), true);
+            }
+            if (whoOpen.slotType != SlotType.Local && Network.inLobby && Network.isServer)
             {
                 _core._slotEditor = new UISlotEditor(core._ducknetMenu, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
                 _core._slotEditor.Close();
                 _ducknetUIGroup.Add(_core._slotEditor, false);
                 _core._matchSettingMenu = new UIMenu("@LWING@MATCH SETTINGS@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
                 _core._matchModifierMenu = new UIMenu("MODIFIERS", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
-                _core._levelSelectMenu = new LevelSelectCompanionMenu(num1 / 2f, num2 / 2f, _core._matchSettingMenu);
+                _core._levelSelectMenu = new LevelSelectCompanionMenu(wide / 2f, high / 2f, _core._matchSettingMenu);
                 foreach (UnlockData unlock in Unlocks.GetUnlocks(UnlockType.Modifier))
                 {
                     if (unlock.onlineEnabled)
@@ -1007,22 +1017,22 @@ namespace DuckGame
                 }
             }
             Main.SpecialCode = "men5";
-            if (Network.isClient && whoOpen.slotType != SlotType.Local || Network.isServer && !Network.InLobby())
+            if (Network.isClient && whoOpen.slotType != SlotType.Local || Network.isServer && !Network.inLobby)
             {
                 UIMenu settingsInfoWindow = CreateMatchSettingsInfoWindow(_core._ducknetMenu);
                 _ducknetUIGroup.Add(settingsInfoWindow, false);
                 _core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|VIEW MATCH SETTINGS", new UIMenuActionOpenMenu(_core._ducknetMenu, settingsInfoWindow), UIAlign.Left), true);
                 Main.SpecialCode = "men6";
-                if ((bool)TeamSelect2.GetMatchSetting("clientlevelsenabled").value && Network.InLobby()) // removed && !ParentalControls.AreParentalControlsActive()
+                if ((bool)TeamSelect2.GetMatchSetting("clientlevelsenabled").value && Network.inLobby) // removed && !ParentalControls.AreParentalControlsActive()
                 {
-                    _core._levelSelectMenu = new LevelSelectCompanionMenu(num1 / 2f, num2 / 2f, _core._ducknetMenu);
+                    _core._levelSelectMenu = new LevelSelectCompanionMenu(wide / 2f, high / 2f, _core._ducknetMenu);
                     _core._ducknetMenu.Add(new UICustomLevelMenu(new UIMenuActionOpenMenu(_core._ducknetMenu, _core._levelSelectMenu)), true);
                     _ducknetUIGroup.Add(_core._levelSelectMenu, false);
                 }
             }
             Main.SpecialCode = "men7";
             _core._ducknetMenu.Add(new UIText("", Color.White), true);
-            if (flag && whoOpen.slotType != SlotType.Local && Network.available)
+            if (Network.inLobby && whoOpen.slotType != SlotType.Local && Network.available)
             {
                 Main.SpecialCode = "men8";
                 _core._inviteMenu = new UIInviteMenu("INVITE FRIENDS", null, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
@@ -1066,7 +1076,7 @@ namespace DuckGame
                 }
             }
             Main.SpecialCode = "men13";
-            if (whoOpen.slotType != SlotType.Local || Network.InLobby())
+            if (whoOpen.slotType != SlotType.Local || Network.inLobby)
             {
                 if (whoOpen.slotType == SlotType.Local)
                     _core._ducknetMenu.Add(new UIMenuItem("|DGRED|BACK OUT", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmMenu), UIAlign.Left), true);
@@ -1182,9 +1192,9 @@ namespace DuckGame
             _core._ducknetMenu.Open();
             MonoMain.pauseMenu = _ducknetUIGroup;
             HUD.AddCornerControl(HUDCorner.BottomRight, "@CHAT@CHAT");
-            if (Network.InGameLevel())
+            if (Network.inGameLevel)
                 HUD.AddCornerControl(HUDCorner.BottomLeft, "@F1@PING");
-            else if (Network.isServer && Network.InLobby() && !TryPeacefulResolution(false))
+            else if (Network.isServer && Network.inLobby && !TryPeacefulResolution(false))
                 HUD.AddCornerControl(HUDCorner.BottomLeft, "@F1@+@SELECT@FORCE START");
             _core._pauseOpen = true;
             SFX.Play("pause", 0.6f);
@@ -1729,7 +1739,7 @@ namespace DuckGame
                                 SendToEveryone(new NMClientDisconnect(profile.connection.identifier, profile));
                         }
                         bool reserve = false;
-                        if (Network.InMatch())
+                        if (Network.inMatch)
                         {
                             if (reason == "CRASH")
                                 HUD.AddPlayerChangeDisplay("@UNPLUG@|RED|" + profile.nameUI + " Crashed!");
@@ -1748,7 +1758,7 @@ namespace DuckGame
                             profile.slotType = SlotType.Reserved;
                             ChangeSlotSettings();
                         }
-                        if (Level.core.gameInProgress && Network.InLobby())
+                        if (Level.core.gameInProgress && Network.inLobby)
                         {
                             if (profile.slotType != SlotType.Spectator)
                                 profile.slotType = SlotType.Closed;
@@ -1928,7 +1938,7 @@ namespace DuckGame
                     }
                     _core._menuClosed.value = false;
                 }
-                if (Keyboard.Pressed(Keys.F1) && Network.InGameLevel())
+                if (Keyboard.Pressed(Keys.F1) && Network.inGameLevel)
                     ConnectionStatusUI.Show();
                 if (core.logTransferSize > 0)
                     ConnectionStatusUI.core.tempShow = 2;
@@ -2132,7 +2142,7 @@ namespace DuckGame
                         profile2.netData.Set("gameInFocus", Graphics.inFocus);
                         profile2.netData.SetFiltered("chatting", _core.enteringText);
                         profile2.netData.Set("consoleOpen", DevConsole.open);
-                        if (MonoMain.pauseMenu == null && (_ducknetUIGroup == null || !_ducknetUIGroup.open) && profile2.inputProfile.Pressed(Triggers.Start) && !flag2 && !flag3 && (Network.InLobby() || Network.InGameLevel()) && (!(Level.current is TeamSelect2) || !(Level.current as TeamSelect2).HasBoxOpen(profile2)))
+                        if (MonoMain.pauseMenu == null && (_ducknetUIGroup == null || !_ducknetUIGroup.open) && profile2.inputProfile.Pressed(Triggers.Start) && !flag2 && !flag3 && (Network.inLobby || Network.inGameLevel) && (!(Level.current is TeamSelect2) || !(Level.current as TeamSelect2).HasBoxOpen(profile2)))
                         {
                             OpenMenu(profile2);
                             flag3 = true;

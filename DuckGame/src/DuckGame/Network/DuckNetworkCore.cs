@@ -325,6 +325,7 @@ namespace DuckGame
         public MenuBoolean _inviteFriends = new MenuBoolean();
         public UIMenu _inviteMenu;
         public UIMenu _slotEditor;
+        public UIMenu _lobbySettingMenu;
         public UIMenu _matchSettingMenu;
         public UIMenu _matchModifierMenu;
         public UIComponent _noModsUIGroup;

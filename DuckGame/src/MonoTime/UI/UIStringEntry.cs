@@ -23,14 +23,19 @@ namespace DuckGame
             _directionalPassword = directional;
         }
 
-        public override void Draw()
+        public override void Update()
         {
             if (_text.Length > 10)
             {
                 _text = _text.Substring(0, 8) + "..";
             }
+            _collisionSize.x = _font.GetWidth(_text);
+            base.Update();
+        }
 
-                if (_directionalPassword && _text != "  NONE")
+        public override void Draw()
+        {
+            if (_directionalPassword && _text != "  NONE")
             {
                 Vec2 alignOffset = calcAlignOffset();
                 Graphics.DrawPassword(_text, new Vec2(x + alignOffset.x, y + alignOffset.y), _color, depth);

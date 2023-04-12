@@ -20,7 +20,7 @@ namespace DuckGame
             set
             {
                 _roomIndex = value;
-                if (!Network.isClient || !Network.InLobby() || _roomIndex >= 4)
+                if (!Network.isClient || !Network.inLobby || _roomIndex >= 4)
                     return;
                 (Level.current as TeamSelect2).GetBox(_roomIndex).gun = this;
             }

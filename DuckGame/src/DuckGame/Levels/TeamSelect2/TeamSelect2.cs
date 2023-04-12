@@ -256,7 +256,7 @@ namespace DuckGame
 
         public static bool Enabled(string id, bool ignoreTeamSelect = false)
         {
-            if (!ignoreTeamSelect && !Network.InGameLevel())
+            if (!ignoreTeamSelect && !Network.inGameLevel)
                 return false;
             UnlockData unlock = Unlocks.GetUnlock(id);
             if (unlock == null || Network.isActive && !unlock.onlineEnabled)
@@ -1037,7 +1037,7 @@ namespace DuckGame
 
         public static void InvitedFriend(User u)
         {
-            if (!Network.InLobby() || u == null)
+            if (!Network.inLobby || u == null)
                 return;
             _invitedUsers.Add(u);
             DuckNetwork.core._invitedFriends.Add(u.id);

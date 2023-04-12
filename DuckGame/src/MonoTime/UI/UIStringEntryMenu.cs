@@ -32,7 +32,7 @@ namespace DuckGame
           bool pNumeric = false,
           int pMinNumber = -2147483648,
           int pMaxNumber = 2147483647)
-          : base(title, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, directional ? 160f : 220f, 60f, directional ? "@WASD@SET @SELECT@ACCEPT" : "@ENTERKEY@ACCEPT @ESCAPEKEY@")
+          : base(title, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, directional ? 160f : 220f, 60f, directional ? "@WASD@SET @SELECT@ACCEPT" : "@ENTERKEY@ACCEPT @ESCAPEKEY@CANCEL")
         {
             Add(new UIBox(0f, 0f, 100f, 16f, isVisible: false), true);
             _binding = pBinding;
