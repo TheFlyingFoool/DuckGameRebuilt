@@ -36,6 +36,7 @@ namespace DuckGame
                     while (_text.Length < minLength)
                         _text = " " + _text;
                 }
+                _font.scale = new Vec2(1f);
                 _collisionSize = new Vec2(_font.GetWidth(_text), _font.height + _heightAdd);
             }
         }

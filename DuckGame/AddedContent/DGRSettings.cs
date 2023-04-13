@@ -151,5 +151,8 @@ namespace DuckGame
 
         [AutoConfigField]
         public static bool LobbyData { get; set; }
+
+        [AutoConfigField]
+        public static bool LobbyNameOnPause = true;
     }
 }

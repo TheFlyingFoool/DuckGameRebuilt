@@ -65,21 +65,21 @@ namespace DuckGame
           float high = -1f,
           string conString = "",
           InputProfile conProfile = null,
-          bool tiny = false)
+          bool tinyTitle = false)
           : base(xpos, ypos, wide, high)
         {
             _cursor = new SpriteMap("cursors", 16, 16);
             _controlProfile = conProfile;
             _splitter = new UIDivider(false, 0f, 4f);
             _section = _splitter.rightSection;
-            UIText component1 = new UIText(title, Color.White);
-            if (tiny)
+            UIText titleComponent = new UIText(title, Color.White);
+            if (tinyTitle)
             {
                 BitmapFont f = new BitmapFont("smallBiosFontUI", 7, 5);
-                component1.SetFont(f);
+                titleComponent.SetFont(f);
             }
-            component1.align |= UIAlign.Top;
-            _splitter.topSection.Add(component1, true);
+            titleComponent.align |= UIAlign.Center;
+            _splitter.topSection.Add(titleComponent, true);
             _controlString = conString;
             if (_controlString != "" && _controlString != null)
             {
@@ -90,12 +90,29 @@ namespace DuckGame
                 _section = component2.topSection;
             }
             base.Add(_splitter, true);
+            AdjustTitleScale();
         }
 
         public string title
         {
             get => ((UIText)_splitter.topSection.components[0]).text;
-            set => ((UIText)_splitter.topSection.components[0]).text = value;
+            set
+            {
+                ((UIText)_splitter.topSection.components[0]).text = value;
+                AdjustTitleScale();
+            }
+        }
+
+        protected void AdjustTitleScale()
+        {
+            UIText titleComponent = (UIText)_splitter.topSection.components[0];
+            titleComponent.scale = new Vec2(1f);
+            titleComponent._font.scale = new Vec2(1f);
+            for (int i = 0; i < 3; i++)
+                if (titleComponent.width > width - borderSize.x * 2f)
+                    titleComponent.scale -= new Vec2(0.25f);
+                else
+                    break;
         }
 
         public override void SelectLastMenuItem() => _section.SelectLastMenuItem();

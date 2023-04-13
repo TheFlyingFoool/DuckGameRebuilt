@@ -88,8 +88,12 @@ namespace DuckGame
                 {
                     Network.activeNetwork.core.lobby.SetLobbyData(_id, (string)_field.value);
                     if (_id == "name")
+                    {
                         Network.activeNetwork.core.lobby.SetLobbyData("customName", (string)_field.value != TeamSelect2.DefaultGameName() ? "true" : "false");
-                } 
+                        if (DGRSettings.LobbyNameOnPause)
+                            DuckNetwork.core._ducknetMenu.title = (string)_field.value;
+                    }
+                }
             }));
             _enterStringMenu.Close();
             pGroup.Add(_enterStringMenu, false);

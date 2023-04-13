@@ -916,7 +916,18 @@ namespace DuckGame
             {
                 isPauseMenu = true
             };
-            core._ducknetMenu = new UIMenu("@LWING@MULTIPLAYER@RWING@", wide / 2f, high / 2f, 210f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
+            string title = "@LWING@MULTIPLAYER@RWING@";
+            bool tiny = false;
+            if (DGRSettings.LobbyNameOnPause)
+            {
+                Lobby lobby = Network.activeNetwork.core.lobby;
+                if (lobby is not null)
+                {
+                    title = lobby.GetLobbyData("name");
+                    tiny = true;
+                }
+            }
+            core._ducknetMenu = new UIMenu(title, wide / 2f, high / 2f, 210f, conString: "@CANCEL@CLOSE @SELECT@SELECT", tinyTitle: tiny);
             _ducknetMenu = core._ducknetMenu;
             core._confirmMenu = whoOpen.slotType != SlotType.Local ? new UIMenu("REALLY QUIT?", wide / 2f, high / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT") : new UIMenu("REALLY BACK OUT?", wide / 2f, high / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
             core._confirmBlacklistMenu = new UIMenu("AVOID LEVEL?", wide / 2f, high / 2f, 10f, conString: "@CANCEL@BACK @SELECT@SELECT");
@@ -946,7 +957,7 @@ namespace DuckGame
             core._ducknetMenu.AssignDefaultSelection();
             if (whoOpen.slotType != SlotType.Local)
                 core._ducknetMenu.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(core._ducknetMenu, core._optionsMenu), UIAlign.Left), true);
-            if (whoOpen.slotType != SlotType.Local && Network.isServer)
+            if (whoOpen.slotType != SlotType.Local && Network.isServer && !Network.lanMode)
             {
                 _core._lobbySettingMenu = new UIMenu("@LWING@LOBBY SETTINGS@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK");
                 _core._lobbySettingMenu.SetBackFunction(new UIMenuActionOpenMenu(_core._lobbySettingMenu, _core._ducknetMenu));
@@ -1192,6 +1203,7 @@ namespace DuckGame
             _ducknetUIGroup.Open();
             _core._ducknetMenu.Open();
             MonoMain.pauseMenu = _ducknetUIGroup;
+
             HUD.AddCornerControl(HUDCorner.BottomRight, "@CHAT@CHAT");
             if (Network.inGameLevel)
                 HUD.AddCornerControl(HUDCorner.BottomLeft, "@F1@PING");
