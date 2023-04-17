@@ -62,16 +62,12 @@ namespace DuckGame
                     bitmap = bitmap1;
                 }
             }
-            DirectBitmap DB = new DirectBitmap(bitmap.Width, bitmap.Height)
-            {
-                Bitmap = bitmap
-            };
             if (process)
-                DB.UnPink();
+                bitmap.MakeTransparent(System.Drawing.Color.Magenta);
             Texture2D Tex;
             using (MemoryStream ms = new MemoryStream())
             {
-                DB.Bitmap.Save(ms, ImageFormat.Png);
+                bitmap.Save(ms, ImageFormat.Png);
                 ms.Seek(0, SeekOrigin.Begin);
                 Tex = Texture2D.FromStream(device, ms);
                 Color[] buffer = new Color[Tex.Width * Tex.Height];
