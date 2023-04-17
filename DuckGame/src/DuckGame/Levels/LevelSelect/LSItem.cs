@@ -24,6 +24,7 @@ namespace DuckGame
         private SpriteMap _icons;
         private BitmapFont _font;
         private Sprite _steamIcon;
+        private Sprite _vanillaIcon;
         private List<string> _levelsInside = new List<string>();
         private LevelSelect _select;
         public bool isModPath;
@@ -264,12 +265,17 @@ namespace DuckGame
             }
             if (_itemType == LSItemType.Vanilla)
             {
-                text = "@VANILLAICON@Vanilla";
+                if (_vanillaIcon == null)
+                    _vanillaIcon = new Sprite("vanillaIcon");
+                _vanillaIcon.scale = new Vec2(0.5f, 0.5f);
+                Graphics.Draw(_vanillaIcon, xDraw, y);
+                xDraw += 10f;
+                text = "Vanilla";
                 makeVanilla = true;
             }
             if (_itemType == LSItemType.MapPack)
             {
-                Graphics.Draw(_customIcon, xDraw, y);
+                Graphics.Draw(_customIcon, xDraw, y, 8f / _customIcon.w, 8f / _customIcon.h);
                 xDraw += 10f;
                 makeBlue = true;
             }
