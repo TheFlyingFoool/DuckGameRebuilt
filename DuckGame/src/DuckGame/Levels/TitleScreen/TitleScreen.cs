@@ -1487,8 +1487,7 @@ namespace DuckGame
                     }
                     else if (_selection == TitleMenuSelection.Play)
                     {
-                        DisplayUpperMonitorMessage("@SELECT@PLAY", 1.4f);
-                        DisplayUpperMonitorMessage("@GRAB@EDITOR", 2.6f);
+                        DisplayUpperMonitorMessage("@SELECT@PLAY");
                     }
                     else if (_selection == TitleMenuSelection.Stats)
                     {
