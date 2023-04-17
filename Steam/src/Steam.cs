@@ -296,8 +296,11 @@ public class Steam : IDisposable {
         if (!_initialized)
             return 0f;
         float val;
-        SteamUserStats.GetStat(id, out val);
-        return val;
+        if (SteamUserStats.GetStat(id, out val))
+        {
+            return val;
+        }
+        return -999999.0f;
     }
 
     public static unsafe void SetStat(string id, float val) {
