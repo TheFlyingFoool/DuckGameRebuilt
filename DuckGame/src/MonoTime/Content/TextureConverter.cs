@@ -66,7 +66,8 @@ namespace DuckGame
             {
                 Bitmap = bitmap
             };
-            DB.UnPink();
+            if (process)
+                DB.UnPink();
             Texture2D Tex;
             using (MemoryStream ms = new MemoryStream())
             {

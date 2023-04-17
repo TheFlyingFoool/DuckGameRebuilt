@@ -213,11 +213,11 @@ namespace DuckGame
 
         public override void Draw()
         {
-            float x = this.x;
+            float xDraw = this.x;
             if (_selected)
             {
                 _icons.frame = 3;
-                Graphics.Draw(_icons, x - 8f, y);
+                Graphics.Draw(_icons, xDraw - 8f, y);
             }
             string text = _name;
             if (text.Length > 15)
@@ -225,64 +225,64 @@ namespace DuckGame
             if (_itemType != LSItemType.UpFolder)
             {
                 _icons.frame = _partiallyEnabled ? 4 : (_enabled ? 1 : 0);
-                Graphics.Draw(_icons, x, y);
-                x += 10f;
+                Graphics.Draw(_icons, xDraw, y);
+                xDraw += 10f;
             }
-            bool flag1 = false;
-            bool flag2 = false;
+            bool makeBlue = false;
+            bool makeVanilla = false;
             if (_itemType == LSItemType.Folder || _itemType == LSItemType.UpFolder)
             {
                 _icons.frame = 2;
                 if (isModRoot)
                 {
                     _icons.frame = 6;
-                    flag1 = true;
+                    makeBlue = true;
                 }
                 if (isCloudFolder)
                 {
                     _icons.frame = 7;
-                    flag1 = true;
+                    makeBlue = true;
                 }
-                Graphics.Draw(_icons, x, y);
-                x += 10f;
+                Graphics.Draw(_icons, xDraw, y);
+                xDraw += 10f;
             }
             if (_itemType == LSItemType.Playlist)
             {
                 _icons.frame = 5;
-                Graphics.Draw(_icons, x, y);
-                x += 10f;
-                flag1 = true;
+                Graphics.Draw(_icons, xDraw, y);
+                xDraw += 10f;
+                makeBlue = true;
             }
             if (_itemType == LSItemType.Workshop)
             {
                 if (_steamIcon == null)
                     _steamIcon = new Sprite("steamIcon");
                 _steamIcon.scale = new Vec2(0.25f, 0.25f);
-                Graphics.Draw(_steamIcon, x, y);
-                x += 10f;
+                Graphics.Draw(_steamIcon, xDraw, y);
+                xDraw += 10f;
                 text = "Workshop";
             }
             if (_itemType == LSItemType.Vanilla)
             {
                 text = "@VANILLAICON@Vanilla";
-                flag2 = true;
+                makeVanilla = true;
             }
             if (_itemType == LSItemType.MapPack)
             {
-                Graphics.Draw(_customIcon, x, y);
-                x += 10f;
-                flag1 = true;
+                Graphics.Draw(_customIcon, xDraw, y);
+                xDraw += 10f;
+                makeBlue = true;
             }
             if (data != null && data.metaData.eightPlayer)
                 text = "|DGPURPLE|(8)|PREV|" + text;
             if (text.EndsWith("_8"))
                 text = text.Substring(0, text.Length - 2);
-            if (flag2)
-                _font.Draw(text, x, y, _selected ? Colors.DGVanilla : Colors.DGVanilla * 0.75f, (Depth)0.8f);
-            else if (flag1)
-                _font.Draw(text, x, y, _selected ? Colors.DGBlue : Colors.DGBlue * 0.75f, (Depth)0.8f);
+            if (makeVanilla)
+                _font.Draw(text, xDraw, y, _selected ? Colors.DGVanilla : Colors.DGVanilla * 0.75f, (Depth)0.8f);
+            else if (makeBlue)
+                _font.Draw(text, xDraw, y, _selected ? Colors.DGBlue : Colors.DGBlue * 0.75f, (Depth)0.8f);
             else
-                _font.Draw(text, x, y, _selected ? Color.White : Color.Gray, (Depth)0.8f);
+                _font.Draw(text, xDraw, y, _selected ? Color.White : Color.Gray, (Depth)0.8f);
         }
     }
 }

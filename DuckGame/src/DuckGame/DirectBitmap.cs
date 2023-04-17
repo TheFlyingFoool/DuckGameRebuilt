@@ -70,15 +70,7 @@ namespace DuckGame
         }
         public void UnPink()
         {
-            for (int y = 0; y < Height; y++)
-                for (int x = 0; x < Width; x++)
-                {
-                    System.Drawing.Color PixelColor = GetPixel(x, y);
-                    if (PixelColor.R == 255 && PixelColor.B == 255 && PixelColor.G == 0 && PixelColor.A == 255)
-                    {
-                        Bitmap.SetPixel(x, y, System.Drawing.Color.Transparent);
-                    }
-                }
+            Bitmap.MakeTransparent(System.Drawing.Color.Magenta);
         }
     }
 }

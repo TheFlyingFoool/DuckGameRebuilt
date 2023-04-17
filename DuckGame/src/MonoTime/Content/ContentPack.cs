@@ -155,7 +155,7 @@ namespace DuckGame
             {
                 try
                 {
-                    texture2D = LoadTexture2DInternal(name);
+                    texture2D = LoadTexture2DInternal(name, processPink);
                 }
                 catch (Exception ex)
                 {
