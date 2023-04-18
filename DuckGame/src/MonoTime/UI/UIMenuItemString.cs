@@ -84,7 +84,7 @@ namespace DuckGame
             {
                 if (_id == "name" && (string)_field.value == "")
                     _field.value = TeamSelect2.DefaultGameName();
-                if (Network.activeNetwork.core.lobby is not null)
+                if (Network.activeNetwork.core.lobby != null)
                 {
                     Network.activeNetwork.core.lobby.SetLobbyData(_id, (string)_field.value);
                     if (_id == "name")

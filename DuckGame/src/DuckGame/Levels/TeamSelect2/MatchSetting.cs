@@ -25,6 +25,7 @@ namespace DuckGame
         public int max = 10;
         public string minString;
         public int step = 1;
+        public int altStep;
         public string maxSyncID = "";
         public string minSyncID = "";
         public bool filtered;

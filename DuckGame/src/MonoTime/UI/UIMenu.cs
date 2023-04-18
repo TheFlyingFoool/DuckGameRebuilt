@@ -51,6 +51,12 @@ namespace DuckGame
             _acceptFunction = pAction;
         }
 
+        public void SetOpenFunction(UIMenuAction pAction)
+        {
+            _section._openFunction = pAction;
+            _openFunction = pAction;
+        }
+
         public void RunBackFunction()
         {
             if (_section._backFunction == null)

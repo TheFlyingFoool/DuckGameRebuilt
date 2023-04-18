@@ -24,7 +24,7 @@ namespace DuckGame
         {
             string line = GetLine(_iteration--);
             
-            if (line is not null)
+            if (line != null)
             {
                 LineIndex = DevConsole.core.lines.Count;
                 DevConsole.Log(line);
@@ -46,7 +46,7 @@ namespace DuckGame
 
                 string line = item.GetLine(item._iteration++);
 
-                if (line is not null && item._iteration > 0)
+                if (line != null && item._iteration > 0)
                     DevConsole.core.lines.ElementAt(item.LineIndex).line = line;
                 else if (item._iteration != 0)
                     item.Done();

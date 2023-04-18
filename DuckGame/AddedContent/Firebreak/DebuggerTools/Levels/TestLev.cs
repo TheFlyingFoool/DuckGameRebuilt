@@ -26,7 +26,7 @@
 
         public override void Update()
         {
-            if (_transitionLevel is not null)
+            if (_transitionLevel != null)
             {
                 if ((Graphics.fade -= 0.05f) <= 0)
                 {

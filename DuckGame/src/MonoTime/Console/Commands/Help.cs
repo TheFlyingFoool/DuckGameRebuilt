@@ -38,7 +38,7 @@ namespace DuckGame
                 builder.Append(cmd.keyword);
                 builder.Append(s1);
                 builder.Append('(');
-                if (cmd.arguments is not null)
+                if (cmd.arguments != null)
                     builder.Append(string.Join(", ",
                         cmd.arguments.Select(x =>
                         {

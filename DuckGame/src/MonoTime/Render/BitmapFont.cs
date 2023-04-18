@@ -410,7 +410,7 @@ namespace DuckGame
                 sprite = Input.GetTriggerSprite(trigger);
 
             Sprite spriteClone = null;
-            if (sprite is not null)
+            if (sprite != null)
             {
                 spriteClone = sprite.Clone();
                 spriteClone.xscale = sprite.xscale * xscale;

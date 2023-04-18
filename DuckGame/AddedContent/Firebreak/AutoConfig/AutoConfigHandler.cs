@@ -78,7 +78,7 @@ namespace DuckGame
 
                     string writtenValue = FireSerializer.Serialize(fieldValue);
 
-                    if (attribute.External is not null)
+                    if (attribute.External != null)
                     {
                         string fileName = attribute.External + FileExtension;
                         string fullPath = SaveDirPath + fileName;
@@ -215,7 +215,7 @@ namespace DuckGame
             {
                 type = fi.FieldType;
             }
-            object val = FireSerializer.Deserialize(type, pair.External is not null ? File.ReadAllText(SaveDirPath + newValue) : newValue);
+            object val = FireSerializer.Deserialize(type, pair.External != null ? File.ReadAllText(SaveDirPath + newValue) : newValue);
             if (isfield)
             {
                 fi.SetValue(null, val);

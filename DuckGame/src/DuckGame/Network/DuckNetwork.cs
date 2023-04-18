@@ -921,7 +921,7 @@ namespace DuckGame
             if (DGRSettings.LobbyNameOnPause)
             {
                 Lobby lobby = Network.activeNetwork.core.lobby;
-                if (lobby is not null)
+                if (lobby != null)
                 {
                     title = lobby.GetLobbyData("name");
                     tiny = true;
@@ -1010,7 +1010,12 @@ namespace DuckGame
 
                 _core._matchSettingMenu.Add(new UICustomLevelMenu(new UIMenuActionOpenMenu(_core._matchSettingMenu, _core._levelSelectMenu)), true); // ParentalControls.AreParentalControlsActive()
                 _core._matchSettingMenu.Add(new UIModifierMenuItem(new UIMenuActionOpenMenu(_core._matchSettingMenu, _core._matchModifierMenu)), true);
-                _core._matchSettingMenu.SetBackFunction(new UIMenuActionOpenMenu(_core._matchSettingMenu, core._ducknetMenu));
+                _core._matchSettingMenu.SetBackFunction(new UIMenuActionOpenMenu(_core._matchSettingMenu, _core._ducknetMenu));
+                _core._matchSettingMenu.SetOpenFunction(new UIMenuActionCallFunction(() =>
+                {
+                    HUD.CloseAllCorners();
+                    HUD.AddCornerControl(HUDCorner.BottomRight, "@ALT@FINE ADJUST");
+                }));
                 _core._matchSettingMenu.Close();
                 _ducknetUIGroup.Add(_core._matchSettingMenu, false);
                 _ducknetUIGroup.Add(_core._matchModifierMenu, false);
@@ -1081,9 +1086,10 @@ namespace DuckGame
                     }
                 }
                 Main.SpecialCode = "men12";
-                if (!gameLevel.matchOver && Network.isServer)
+                if (!gameLevel.matchOver)
                 {
-                    _core._ducknetMenu.Add(new UIMenuItem("@SKIPSPIN@|DGRED|SKIP", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Skip)), UIAlign.Left), true);
+                    if (Network.isServer)
+                        _core._ducknetMenu.Add(new UIMenuItem("@SKIPSPIN@|DGRED|SKIP", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Skip)), UIAlign.Left), true);
                     _core._ducknetMenu.Add(new UIText(" ", Color.White), true);
                 }
             }
@@ -1099,6 +1105,14 @@ namespace DuckGame
             if (Network.isServer && Level.current is GameLevel)
                 _core._ducknetMenu.Add(new UIMenuItem("|DGRED|BACK TO LOBBY", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmReturnToLobby), UIAlign.Left), true);
             _ducknetUIGroup._closeFunction = new UIMenuActionCloseMenuSetBoolean(_ducknetUIGroup, _core._menuClosed);
+            _core._ducknetMenu.SetOpenFunction(new UIMenuActionCallFunction(() =>
+            {
+                HUD.AddCornerControl(HUDCorner.BottomRight, "@CHAT@CHAT");
+                if (Network.inGameLevel)
+                    HUD.AddCornerControl(HUDCorner.BottomLeft, "@F1@PING");
+                else if (Network.isServer && Network.inLobby && !TryPeacefulResolution(false))
+                    HUD.AddCornerControl(HUDCorner.BottomLeft, "@F1@+@SELECT@FORCE START");
+            }));
             _core._ducknetMenu.Close();
             _ducknetUIGroup.Add(_core._ducknetMenu, false);
             Options.AddMenus(_ducknetUIGroup);
@@ -1204,11 +1218,6 @@ namespace DuckGame
             _core._ducknetMenu.Open();
             MonoMain.pauseMenu = _ducknetUIGroup;
 
-            HUD.AddCornerControl(HUDCorner.BottomRight, "@CHAT@CHAT");
-            if (Network.inGameLevel)
-                HUD.AddCornerControl(HUDCorner.BottomLeft, "@F1@PING");
-            else if (Network.isServer && Network.inLobby && !TryPeacefulResolution(false))
-                HUD.AddCornerControl(HUDCorner.BottomLeft, "@F1@+@SELECT@FORCE START");
             _core._pauseOpen = true;
             SFX.Play("pause", 0.6f);
         }

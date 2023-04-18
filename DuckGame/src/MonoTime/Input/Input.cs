@@ -580,6 +580,7 @@ namespace DuckGame
             _triggerImageMap.Add("TICKET", new Sprite("arcade/ticket"));
             _triggerImageMap.Add("CHECK", new Sprite("checkIcon"));
             _triggerImageMap.Add("F1", new Sprite("buttons/keyboard/f1"));
+            _triggerImageMap.Add("ALT", new Sprite("buttons/keyboard/alt"));
             _triggerImageMap.Add("DGR", new Sprite("DGR") { center = new Vec2(0, 0.75f) });
             _triggerImageMap.Add("DGRBIG", new Sprite("DGRBIG"));
             Dictionary<string, Sprite> triggerImageMap = _triggerImageMap;

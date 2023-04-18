@@ -66,6 +66,7 @@ namespace DuckGame
         public UIMenuAction _backFunction;
         public UIMenuAction _closeFunction;
         public UIMenuAction _acceptFunction;
+        public UIMenuAction _openFunction;
         private bool _isPauseMenu;
 
         public UIComponent parent => _parent;
@@ -164,6 +165,9 @@ namespace DuckGame
                     component.Open();
             }
             _initialSizingComplete = false;
+
+            if (_openFunction != null)
+                _openFunction.Activate();
         }
 
         public virtual void Close()

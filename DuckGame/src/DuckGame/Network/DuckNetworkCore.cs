@@ -23,9 +23,10 @@ namespace DuckGame
                 id = "requiredwins",
                 name = "Required Wins",
                 value = 10,
-                min = kWinsMin,
-                max = 100,
+                min = 1,
+                max = 255,
                 step = kWinsStep,
+                altStep = 1,
                 stepMap = new Dictionary<int, int>()
                 {
                     {
@@ -35,14 +36,6 @@ namespace DuckGame
                     {
                         100,
                         10
-                    },
-                    {
-                        500,
-                        50
-                    },
-                    {
-                        1000,
-                        100
                     }
                 }
             },
@@ -51,9 +44,10 @@ namespace DuckGame
                 id = "restsevery",
                 name = "Rests Every",
                 value = 10,
-                min = kWinsMin,
-                max = 100,
+                min = 1,
+                max = 255,
                 step = kWinsStep,
+                altStep = 1,
                 stepMap = new Dictionary<int, int>()
                 {
                     {
@@ -63,14 +57,6 @@ namespace DuckGame
                     {
                         100,
                         10
-                    },
-                    {
-                        500,
-                        50
-                    },
-                    {
-                        1000,
-                        100
                     }
                 }
             },
@@ -79,9 +65,9 @@ namespace DuckGame
                 id = "wallmode",
                 name = "Wall Mode",
                 value = false
-                },
-                new MatchSetting()
-                {
+            },
+            new MatchSetting()
+            {
                 id = "normalmaps",
                 name = "@NORMALICON@|DGBLUE|Normal Levels",
                 value = 90,
@@ -89,11 +75,16 @@ namespace DuckGame
                 min = 0,
                 max = 100,
                 step = 5,
+                altStep = 1,
                 percentageLinks = new List<string>()
                 {
                     "randommaps",
                     "custommaps",
                     "workshopmaps"
+                },
+                stepMap = new Dictionary<int, int>()
+                {
+                    { 100, 5 }
                 }
             },
             new MatchSetting()
@@ -105,15 +96,20 @@ namespace DuckGame
                 min = 0,
                 max = 100,
                 step = 5,
+                altStep = 1,
                 percentageLinks = new List<string>()
                 {
                     "normalmaps",
                     "workshopmaps",
                     "custommaps"
-                }
                 },
-                new MatchSetting()
+                stepMap = new Dictionary<int, int>()
                 {
+                    { 100, 5 }
+                }
+            },
+            new MatchSetting()
+            {
                 id = "custommaps",
                 name = "@CUSTOMICON@|DGBLUE|Custom Levels",
                 value = 0,
@@ -121,11 +117,16 @@ namespace DuckGame
                 min = 0,
                 max = 100,
                 step = 5,
+                altStep = 1,
                 percentageLinks = new List<string>()
                 {
                     "normalmaps",
                     "randommaps",
                     "workshopmaps"
+                },
+                stepMap = new Dictionary<int, int>()
+                {
+                    { 100, 5 }
                 }
             },
             new MatchSetting()
@@ -137,20 +138,25 @@ namespace DuckGame
                 min = 0,
                 max = 100,
                 step = 5,
+                altStep = 1,
                 percentageLinks = new List<string>()
                 {
                     "normalmaps",
                     "custommaps",
                     "randommaps"
-                }
                 },
-                new MatchSetting()
+                stepMap = new Dictionary<int, int>()
                 {
+                    { 100, 5 }
+                }
+            },
+            new MatchSetting()
+            {
                 id = "clientlevelsenabled",
                 name = "Client Maps",
                 value = false
-                }
-            };
+            }
+        };
         public List<MatchSetting> onlineSettings = new List<MatchSetting>()
         {
             new MatchSetting()

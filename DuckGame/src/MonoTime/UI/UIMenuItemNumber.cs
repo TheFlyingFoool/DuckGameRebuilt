@@ -22,6 +22,8 @@ namespace DuckGame
         private MatchSetting _setting;
         protected bool _useBaseActivationLogic;
 
+        private bool altKeyDown => Keyboard.Down(Keys.LeftAlt) || Keyboard.Down(Keys.RightAlt);
+
         public UIMenuItemNumber(
           string text,
           UIMenuAction action = null,
@@ -113,6 +115,8 @@ namespace DuckGame
         {
             if (_setting == null || _setting.stepMap == null)
                 return _step;
+            if (altKeyDown && _setting.altStep != null)
+                return _setting.altStep;
             int step1 = 0;
             foreach (KeyValuePair<int, int> step2 in _setting.stepMap)
             {
@@ -186,38 +190,42 @@ namespace DuckGame
                         return;
                     }
                 }
-                int num1 = (int)_field.value;
+                int prev = (int)_field.value;
                 if (trigger == Triggers.MenuLeft)
                     _field.value = (int)_field.value - GetStep((int)_field.value, false);
                 else if (trigger == Triggers.MenuRight || trigger == Triggers.Select)
                     _field.value = (int)_field.value + GetStep((int)_field.value, true);
-                int index = (int)Maths.Clamp((int)_field.value, _field.min, _field.max);
-                if (_upperBoundField != null && index > (int)_upperBoundField.value)
-                    _upperBoundField.value = index;
-                if (_lowerBoundField != null && index < (int)_lowerBoundField.value)
-                    _lowerBoundField.value = index;
-                if (num1 != index && _action != null)
+                int newVal = (int)Maths.Clamp((int)_field.value, _field.min, _field.max);
+                if (_upperBoundField != null && newVal > (int)_upperBoundField.value)
+                    _upperBoundField.value = newVal;
+                if (_lowerBoundField != null && newVal < (int)_lowerBoundField.value)
+                    _lowerBoundField.value = newVal;
+                if (prev != newVal && _action != null)
                     _action.Activate();
-                if (num1 != (int)_field.value)
+                if (prev != (int)_field.value)
                     SFX.Play("textLetter", 0.7f);
-                int num2 = index - num1;
-                _field.value = index;
-                if (num2 > 0)
+                int dif = newVal - prev;
+                _field.value = newVal;
+                if (dif > 0)
                 {
-                    int num3 = num2;
+                    int totalPercent = dif;
                     using (List<FieldBinding>.Enumerator enumerator = percentageGroup.GetEnumerator())
                     {
                     label_37:
                         while (enumerator.MoveNext())
                         {
                             FieldBinding current = enumerator.Current;
+                            int step = GetStep((int)_field.value, false);
+                            int dec = (int)MathHelper.Min(totalPercent, step);
+                            dec = (int)MathHelper.Min(dec, (int)current.value);
+                            DevConsole.Log(dec);
                             while (true)
                             {
-                                if ((int)current.value > current.min && num3 > 0)
+                                if ((int)current.value > 0 && totalPercent > 0)
                                 {
-                                    int num4 = (int)current.value - (int)current.inc;
-                                    current.value = num4;
-                                    num3 -= (int)current.inc;
+                                    int newPVal = (int)current.value - dec;
+                                    current.value = newPVal;
+                                    totalPercent -= dec;
                                 }
                                 else
                                     goto label_37;
@@ -225,22 +233,25 @@ namespace DuckGame
                         }
                     }
                 }
-                else if (num2 < 0)
+                else if (dif < 0)
                 {
-                    int num5 = num2;
+                    int totalPercent2 = dif;
                     using (List<FieldBinding>.Enumerator enumerator = percentageGroup.GetEnumerator())
                     {
                     label_45:
                         while (enumerator.MoveNext())
                         {
                             FieldBinding current = enumerator.Current;
+                            int step = GetStep((int)_field.value, true);
+                            int inc = (int)MathHelper.Min(-totalPercent2, step);
+                            inc = (int)MathHelper.Min(inc, (int)current.max - (int)current.value);
                             while (true)
                             {
-                                if ((int)current.value < current.max && num5 < 0)
+                                if ((int)current.value < (int)current.max && totalPercent2 < 0)
                                 {
-                                    int num6 = (int)current.value + (int)current.inc;
-                                    current.value = num6;
-                                    num5 += (int)current.inc;
+                                    int newPVal2 = (int)current.value + inc;
+                                    current.value = newPVal2;
+                                    totalPercent2 += inc;
                                 }
                                 else
                                     goto label_45;
@@ -248,9 +259,9 @@ namespace DuckGame
                         }
                     }
                 }
-                if (_textItem == null || index < 0 || index >= _valueStrings.Count)
+                if (_textItem == null || newVal < 0 || newVal >= _valueStrings.Count)
                     return;
-                _textItem.text = _valueStrings[index];
+                _textItem.text = _valueStrings[newVal];
             }
         }
     }

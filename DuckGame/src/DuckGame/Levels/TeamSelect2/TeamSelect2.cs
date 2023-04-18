@@ -522,7 +522,7 @@ namespace DuckGame
         private void SetMatchSettingsOpenedFromHostGame()
         {
             _hostGameEditedMatchSettings = true;
-            _hostMatchSettingsMenu.SetBackFunction(new UIMenuActionOpenMenu(_hostMatchSettingsMenu, _hostSettingsMenu));
+            _hostMatchSettingsMenu.SetBackFunction(new UIMenuActionOpenMenuCallFunction(_hostMatchSettingsMenu, _hostSettingsMenu, HUD.CloseAllCorners));
         }
 
         private void BuildHostMatchSettingsMenu()
@@ -559,7 +559,12 @@ namespace DuckGame
             //if (!ParentalControls.AreParentalControlsActive()) and move the below block back into place
             _hostMatchSettingsMenu.Add(new UICustomLevelMenu(new UIMenuActionOpenMenu(_hostMatchSettingsMenu, _hostLevelSelectMenu)), true);
             _hostMatchSettingsMenu.Add(new UIModifierMenuItem(new UIMenuActionOpenMenu(_hostMatchSettingsMenu, _hostModifiersMenu)), true);
-            _hostMatchSettingsMenu.SetBackFunction(new UIMenuActionOpenMenu(_hostMatchSettingsMenu, _hostSettingsMenu));
+            _hostMatchSettingsMenu.SetBackFunction(new UIMenuActionOpenMenuCallFunction(_hostMatchSettingsMenu, _hostSettingsMenu, HUD.CloseAllCorners));
+            _hostMatchSettingsMenu.SetOpenFunction(new UIMenuActionCallFunction(() =>
+            {
+                HUD.CloseAllCorners();
+                HUD.AddCornerControl(HUDCorner.BottomRight, "@ALT@FINE ADJUST");
+            }));
             _hostMatchSettingsMenu.Close();
             _playOnlineGroup.Add(_hostMatchSettingsMenu, false);
         }
@@ -1083,7 +1088,7 @@ namespace DuckGame
 
                 Lobby lobby = Steam.lobby;
 
-                if (Network.isServer && lobby is not null)
+                if (Network.isServer && lobby != null)
                 {
                     List<Profile> profiles = Profiles.active;
 
