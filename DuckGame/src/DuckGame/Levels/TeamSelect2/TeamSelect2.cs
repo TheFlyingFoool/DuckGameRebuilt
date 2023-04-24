@@ -141,7 +141,12 @@ namespace DuckGame
                     matchSetting.value = matchSetting.defaultValue;
             }
             foreach (MatchSetting onlineSetting in onlineSettings)
-                onlineSetting.value = onlineSetting.defaultValue;
+            {
+                if (onlineSetting.id == "name")
+                    onlineSetting.value = DefaultGameName();
+                else
+                    onlineSetting.value = onlineSetting.defaultValue;
+            }
             if (resetMatchSettings)
             {
                 foreach (UnlockData unlock in Unlocks.GetUnlocks(UnlockType.Modifier))
