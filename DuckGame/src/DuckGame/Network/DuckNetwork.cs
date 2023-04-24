@@ -924,6 +924,12 @@ namespace DuckGame
                 if (lobby != null)
                 {
                     title = lobby.GetLobbyData("name");
+                    if (title == "")
+                    {
+                        title = TeamSelect2.DefaultGameName();
+                        TeamSelect2.GetOnlineSetting("name").value = title;
+                        lobby.SetLobbyData("name", title);
+                    }
                     tiny = true;
                 }
             }
