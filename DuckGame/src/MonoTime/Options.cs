@@ -440,9 +440,16 @@ namespace DuckGame
                 dgrDescription = "Before the round starts or when you're dead/spectating, display the name of every duck above their heads"
             }, true);
 
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+
             menu.Add(new UIMenuItemToggle("In-Game Lobby Name", field: new FieldBinding(dGRSettings, "LobbyNameOnPause"))
             {
-                dgrDescription = "Display lobby name on pause screen (currently doesn't support LAN lobbies)"
+                dgrDescription = "Displays lobby name on pause screen (not supporting LAN lobbies)"
+            }, true);
+
+            menu.Add(new UIMenuItemToggle("Editor Instructions", field: new FieldBinding(dGRSettings, "EditorInstructions"))
+            {
+                dgrDescription = "Displays real-time instructions in the editor. You might not need it anymore if you're already used to it"
             }, true);
 
 
