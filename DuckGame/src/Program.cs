@@ -44,15 +44,12 @@ namespace DuckGame
 #endif
         public static readonly bool HasInternet = Internet.IsAvailable();
         // this should be formatted like X.X.X where each X is a number
-        public static string CURRENT_VERSION_ID = "1.0.11";
+        public const string CURRENT_VERSION_ID = "1.0.11";
 
         // dont change this unless you know what you're doing -Firebreak
-        public static string CURRENT_VERSION_ID_FORMATTED = $"v{CURRENT_VERSION_ID}-beta";
+        public const string CURRENT_VERSION_ID_FORMATTED = $"v{CURRENT_VERSION_ID}-beta";
 
         public static bool Prestart = DirtyPreStart();
-
-        
-        
 
         public static string StartinEditorLevelName;
         public static string GameDirectory;

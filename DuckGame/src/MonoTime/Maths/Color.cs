@@ -254,6 +254,8 @@ namespace DuckGame
                 return White;
             }
         }
+        
+        public static explicit operator Color(string colorHex) => FromHexString(colorHex);
 
         public static explicit operator int(Color color) => color.r | color.g >> 8 | color.b >> 16 | color.a >> 24;
 

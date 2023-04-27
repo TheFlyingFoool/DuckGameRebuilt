@@ -101,7 +101,7 @@ namespace DuckGame
                     : null;
             }
 
-            public bool Activated => CustomKeyBinds.CheckInput(hotkey, CustomKeyBinds.CheckInputMethod.Pressed);
+            public bool Activated => CustomKeyBinds.CheckInput(hotkey, CustomKeyBinds.CheckInputMethod.Down);
 
             public bool TryExecute()
             {

@@ -522,5 +522,8 @@ namespace DuckGame
         public static implicit operator Vector2(Vec2 vec) => new Vector2(vec.x, vec.y);
 
         public static implicit operator Vec2(Vector2 vec) => new Vec2(vec.X, vec.Y);
+
+        // allows `Vec2 vector = (0, 1);`
+        public static implicit operator Vec2(ValueTuple<float, float> vec) => new(vec.Item1, vec.Item2);
     }
 }

@@ -30,7 +30,7 @@ namespace DuckGame
             span = s;
         }
 
-        public Depth Add(int val)
+        public Depth Add(float val)
         {
             // return ((int)((this.value + Depth.kSpanIncrement / 20f * (float)val) * 1000)) / 1000f; //idk man fck floating points
             return new Depth(value + kSpanIncrement / 20f * val, span);
@@ -41,6 +41,10 @@ namespace DuckGame
         public static Depth operator +(Depth c1, int c2) => c1.Add(c2);
 
         public static Depth operator -(Depth c1, int c2) => c1.Add(-c2);
+
+        public static Depth operator +(Depth c1, float c2) => c1.Add(c2);
+
+        public static Depth operator -(Depth c1, float c2) => c1.Add(-c2);
 
         public static bool operator <(Depth c1, float c2) => c1.value < c2;
 

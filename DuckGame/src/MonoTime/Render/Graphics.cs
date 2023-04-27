@@ -78,6 +78,7 @@ namespace DuckGame
         private static Stack<Rectangle> _scissorStack = new Stack<Rectangle>();
 
         public static PolygonBatcher polyBatcher;
+        private static List<TimedDraw> s_timedDrawCalls = new();
 
         public static void GarbageDisposal(bool pLevelTransition)
         {
@@ -92,7 +93,66 @@ namespace DuckGame
                 disposingObjects = false;
             }
         }
+        
+        public static void DrawOverTime(TimeSpan duration, Action<double> drawFunction)
+        {
+            s_timedDrawCalls.Add(new TimedDraw()
+            {
+                Begin = DateTime.Now,
+                Duration = duration,
+                Draw = drawFunction,
+                DrawingLayer = _currentLayer
+            });
+        }
 
+        private class TimedDraw
+        {
+            public DateTime Begin;
+            public TimeSpan Duration;
+
+            public Action<double> Draw;
+
+            public Layer DrawingLayer;
+
+            public ProgressValue GetCompletionProgress()
+            {
+                DateTime now = DateTime.Now;
+                TimeSpan timePassed = now - Begin;
+
+                return (double) timePassed.Ticks / Duration.Ticks;
+            }
+        }
+        
+
+        [DrawingContext(DrawingLayer.Parallax |
+                        DrawingLayer.Virtual |
+                        DrawingLayer.Background |
+                        DrawingLayer.Game |
+                        DrawingLayer.Blocks |
+                        DrawingLayer.Glow |
+                        DrawingLayer.Lighting |
+                        DrawingLayer.Foreground |
+                        DrawingLayer.HUD |
+                        DrawingLayer.Console,
+            CustomID = "Graphics/TimedDrawDoDraw")]
+        public static void TimedDrawDoDraw()
+        {
+            for (int i = 0; i < s_timedDrawCalls.Count; i++)
+            {
+                TimedDraw drawCall = s_timedDrawCalls[i];
+                ProgressValue completionProgress = drawCall.GetCompletionProgress();
+
+                if (completionProgress.Completed)
+                {
+                    s_timedDrawCalls.Remove(drawCall);
+                    continue;
+                }
+
+                if (_currentLayer == drawCall.DrawingLayer)
+                    drawCall.Draw(completionProgress);
+            }
+        }
+        
         public static void GarbageDisposal() => GarbageDisposal(true);
 
         public void Transition(TransitionDirection pDirection, Level pTarget)
@@ -711,6 +771,19 @@ namespace DuckGame
         {
             DrawRect(rect, col, depth, true, 0);
             DrawRect(rect, outlineCol, depth.value + 0.05f, false, borderwidth);
+        }
+        
+        public static void DrawExternallyOutlinedRect(Rectangle rect, Color col, Color outlineCol, Depth depth = default, float borderwidth = 1f)
+        {
+            DrawRect(rect, col, depth, true, 0);
+
+            Rectangle outlineRect = new(
+                rect.x - borderwidth,
+                rect.y - borderwidth,
+                rect.width + borderwidth * 2,
+                rect.height + borderwidth * 2);
+            
+            DrawRect(outlineRect, outlineCol, depth.value + 0.05f, false, borderwidth);
         }
 
         public static void DrawDottedRect(

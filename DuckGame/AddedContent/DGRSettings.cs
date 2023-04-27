@@ -143,7 +143,7 @@ namespace DuckGame
         [AutoConfigField]
         public static bool StickyHats { get; set; }
 
-        [AutoConfigField]
+        [AutoConfigField] // now with more score!
         public static bool QOLScoreThingButWithoutScore { get; set; }
 
         [AutoConfigField]

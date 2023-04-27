@@ -3,7 +3,7 @@
 namespace DuckGame
 {
 
-    public class ProgressValue
+    public struct ProgressValue
     {
         public double Value = 0;
 
@@ -32,6 +32,11 @@ namespace DuckGame
             MaximumValue = max;
             MinimumValue = min;
             IncrementSize = incrementSize;
+        }
+
+        public static ProgressValue FromTime(DateTime startTime, DateTime endTime, TimeSpan duration)
+        {
+            return !new ProgressValue((startTime + duration).Ticks, endTime.Ticks / startTime.Ticks, startTime.Ticks, endTime.Ticks);
         }
 
         public string GenerateBar(int characterCount = 30, char filled = '#', char empty = '-')
@@ -66,7 +71,6 @@ namespace DuckGame
         public static ProgressValue operator -(ProgressValue f) => f * -1;
 
         // Arithmetic
-
         public static ProgressValue operator +(ProgressValue a, ProgressValue b)
         {
             a.Value = a.Value + b.Value;

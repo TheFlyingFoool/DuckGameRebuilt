@@ -866,9 +866,9 @@ namespace DuckGame
 
         private void drawNameDisplay()
         {
-            NameDisplayConfig config = AdvancedConfigAttribute.Get<NameDisplayConfig>();
+            NameDisplayConfig config = AdvancedConfig.Get<NameDisplayConfig>();
 
-            float fontSize = config.FontSize;
+            float fontSize = config.Size;
             float vSpacing = config.VerticalSpacing;
             float hSpacing = config.HorizontalSpacing;
             float opacity = config.Opacity;
@@ -891,13 +891,13 @@ namespace DuckGame
                     Color.Orange,
                 };
 
-            if (showScore != NameDisplayConfig.ScoreShowing.False)
+            if (showScore != NameDisplayConfig.ScoreShowing.DontShow)
                 profileList = profileList.OrderByDescending(x => x?.team.score);
 
-            if (removeDeadPlayers == NameDisplayConfig.DeadPlayerRemoval.True)
+            if (removeDeadPlayers == NameDisplayConfig.DeadPlayerRemoval.RemoveDead)
                 profileList = profileList.Where(x => x?.duck?.dead == false);
 
-            if (removeDeadPlayers == NameDisplayConfig.DeadPlayerRemoval.Ghost)
+            if (removeDeadPlayers == NameDisplayConfig.DeadPlayerRemoval.ShowAsGhosts)
                 profileList = profileList.OrderByDescending(x => x?.duck?.dead == false);
 
             float xPos = xOffset + hSpacing;
@@ -956,7 +956,7 @@ namespace DuckGame
                 Color teamColor = doTeams ? (teamColors[teamColorMapping[teamHashCode]] * opacity) : Color.Transparent;
                 Color borderColor = Color.Black * opacity;
                 float addedHeight = nameH + vSpacing;
-                bool isGhost = removeDeadPlayers == NameDisplayConfig.DeadPlayerRemoval.Ghost &&
+                bool isGhost = removeDeadPlayers == NameDisplayConfig.DeadPlayerRemoval.ShowAsGhosts &&
                                prof?.duck?.dead == true;
                 
                 Graphics.DrawStringOutline(prof.name, new Vec2(xPos + hSpacing + nameH, yPos), isGhost ? Color.DarkRed * 0.6f * opacity : duckColor, borderColor, 1.1f, scale: fontSize);
@@ -964,7 +964,7 @@ namespace DuckGame
                 Rectangle colorBox = new(xPos, yPos, nameH, nameH - 0.5f);
                 Graphics.DrawOutlinedRect(colorBox, duckColor, borderColor, 1.1f, fontSize);
 
-                if (showScore == NameDisplayConfig.ScoreShowing.Bar)
+                if (showScore == NameDisplayConfig.ScoreShowing.ShowBar)
                 {
                     for (int i = 0; i < prof.team.score; i++)
                     {
@@ -973,7 +973,7 @@ namespace DuckGame
                         Graphics.DrawOutlinedRect(new Rectangle(barPartX, barPartY, nameH / 2, nameH + 0.5f), duckColor, borderColor, 1.1f, fontSize);
                     }
                 }
-                else if (showScore == NameDisplayConfig.ScoreShowing.Value)
+                else if (showScore == NameDisplayConfig.ScoreShowing.ShowValue)
                 {
                     float scoreTextPos = xPos + hSpacing * 3 + nameH + longestNameWidth;
                     string scoreText = $"{prof.team.score}";

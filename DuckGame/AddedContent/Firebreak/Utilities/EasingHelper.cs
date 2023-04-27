@@ -30,13 +30,13 @@ namespace DuckGame
             public static ProgressValue Quart(ProgressValue x)
             {
                 x = ~x;
-                return x * x * x;
+                return x * x * x * x;
             }
 
             public static ProgressValue Quint(ProgressValue x)
             {
                 x = ~x;
-                return x * x * x;
+                return x * x * x * x * x;
             }
 
             public static ProgressValue Exponential(ProgressValue x)

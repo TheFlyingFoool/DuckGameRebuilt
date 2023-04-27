@@ -18,26 +18,26 @@ namespace DuckGame
     /// The class has to inherit from <see cref="IAdvancedConfig"/>
     /// </remarks>
     [AttributeUsage(AttributeTargets.Class)]
-    public sealed class AdvancedConfigAttribute : Attribute
+    public sealed class AdvancedConfig : Attribute
     {
-        private static IEnumerable<(TypeInfo Class, AdvancedConfigAttribute Attribute)> s_all;
+        public static IEnumerable<(TypeInfo Class, AdvancedConfig Attribute)> All;
         private static Dictionary<Type, IAdvancedConfig> s_configs = new();
         public static string SaveDirPath = AutoConfigHandler.SaveDirPath + "/Advanced";
         public string FileName;
         
         public static void OnResults(Dictionary<Type,List<(MemberInfo MemberInfo, Attribute Attribute)>> lookupTable)
         {
-            s_all = lookupTable[typeof(AdvancedConfigAttribute)]
-                .Select(x => ((TypeInfo)x.MemberInfo, (AdvancedConfigAttribute)x.Attribute));
+            All = lookupTable[typeof(AdvancedConfig)]
+                .Select(x => ((TypeInfo)x.MemberInfo, (AdvancedConfig)x.Attribute));
 
             if (!Directory.Exists(SaveDirPath))
                 Directory.CreateDirectory(SaveDirPath);
             
             string[] existingFiles = Directory.GetFileSystemEntries(SaveDirPath);
 
-            foreach ((TypeInfo type, AdvancedConfigAttribute attribute) in s_all)
+            foreach ((TypeInfo type, AdvancedConfig attribute) in All)
             {
-                if (existingFiles.Contains(attribute.FileName))
+                if (existingFiles.Any(x => new FileInfo(x).Name == $"{attribute.FileName}.json"))
                     continue;
 
                 IAdvancedConfig configData = (IAdvancedConfig)Activator.CreateInstance(type.AsType());
@@ -50,12 +50,14 @@ namespace DuckGame
                 }
                 catch (Exception e)
                 {
-                    //throw new Exception($"Failed to write Advanced Config of class [{type.Name}]", e);
+                    throw new Exception($"Failed to write Advanced Config of class [{type.Name}]", e);
                 }
             }
             try
             {
-                if (!TryLoad())
+                bool loadResult = TryLoad();
+                
+                if (!loadResult)
                 {
                     DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD ADVANCED CONFIG");
                 }
@@ -70,7 +72,7 @@ namespace DuckGame
 
         private static bool TryLoad()
         {
-            foreach ((TypeInfo type, AdvancedConfigAttribute attribute) in s_all)
+            foreach ((TypeInfo type, AdvancedConfig attribute) in All)
             {
                 try
                 {
@@ -83,6 +85,7 @@ namespace DuckGame
                 catch
                 {
                     DevConsole.Log($"|240,164,65|ACFG|DGRED| FAILED TO LOAD AdvancedConfig FILE [{attribute.FileName}] FOR CLASS [{type.Name}]");
+                    return false;
                 }
             }
             
@@ -91,7 +94,7 @@ namespace DuckGame
 
         public static void SaveToFile()
         {
-            foreach ((TypeInfo type, AdvancedConfigAttribute attribute) in s_all)
+            foreach ((TypeInfo type, AdvancedConfig attribute) in All)
             {
                 IAdvancedConfig configData = s_configs[type.AsType()];
                 string jsonData = JsonConvert.SerializeObject(configData, Formatting.Indented);
@@ -106,19 +109,24 @@ namespace DuckGame
         {
             return (TConfigClass) s_configs[typeof(TConfigClass)];
         }
+        
+        public static object Get(Type configClassType)
+        {
+            return s_configs[configClassType];
+        }
 
         [DrawingContext]
         public static void AdvancedConfigReloadUpdate()
         {
-            if (!Keyboard.Pressed(Keys.F5))
-                return;
-
-            DevConsole.Log(TryLoad() // calls tryload and logs a different message based on the result
-                ? "|240,164,65|ACFG|DGGREEN| RELOADED AdvancedConfig SUCCESSFULLY!"
-                : "|240,164,65|ACFG|DGRED| FAILED TO RELOAD AdvancedConfig");
+            if (Keyboard.Pressed(Keys.F5))
+            {
+                DevConsole.Log(TryLoad()
+                    ? "|240,164,65|ACFG|DGGREEN| RELOADED AdvancedConfig SUCCESSFULLY!"
+                    : "|240,164,65|ACFG|DGRED| FAILED TO RELOAD AdvancedConfig");
+            }
         }
         
-        public AdvancedConfigAttribute(string fileName)
+        public AdvancedConfig(string fileName)
         {
             FileName = fileName;
         }

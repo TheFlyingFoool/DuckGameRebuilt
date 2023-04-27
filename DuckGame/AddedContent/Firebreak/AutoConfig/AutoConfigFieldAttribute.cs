@@ -22,7 +22,8 @@ namespace DuckGame
         public static void OnResults(Dictionary<Type, List<(MemberInfo MemberInfo, Attribute Attribute)>> all)
         {
             All = new List<AutoConfigFieldAttribute>();
-            foreach ((MemberInfo memberInfo, Attribute vAttribute) in all[typeof(AutoConfigFieldAttribute)])
+            var allAutoConfig = all[typeof(AutoConfigFieldAttribute)];
+            foreach ((MemberInfo memberInfo, Attribute vAttribute) in allAutoConfig)
             {
                 AutoConfigFieldAttribute attribute = (AutoConfigFieldAttribute) vAttribute;
                 attribute.MemberInfo = memberInfo;
@@ -54,5 +55,25 @@ namespace DuckGame
         /// The <see cref="MemberInfo"/> the attribute is applied to
         /// </summary>
         public MemberInfo MemberInfo;
+
+        public object GetMemberValue()
+        {
+            return MemberInfo switch
+            {
+                FieldInfo fi => fi.GetValue(null),
+                PropertyInfo pi => pi.GetMethod?.Invoke(null, null),
+                _ => throw new Exception("Unsupported AutoConfig field type")
+            };
+        }
+
+        public Type GetMemberType()
+        {
+            return MemberInfo switch
+            {
+                FieldInfo fi => fi.FieldType,
+                PropertyInfo pi => pi.PropertyType,
+                _ => throw new Exception("Unsupported AutoConfig field type")
+            };
+        }
     }
 }

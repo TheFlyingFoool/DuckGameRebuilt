@@ -1,11 +1,11 @@
-﻿using System;
+﻿using DuckGame.ConsoleEngine;
+using System;
 using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using static DuckGame.CMD;
 using System.Reflection.Emit;
 
 namespace DuckGame
@@ -170,6 +170,11 @@ namespace DuckGame
         public static bool InheritsFrom(this Type derivedType, Type baseType)
         {
             return baseType.IsAssignableFrom(derivedType);
+        }
+
+        public static bool InheritsFrom<TBase>(this Type derivedType)
+        {
+            return typeof(TBase).IsAssignableFrom(derivedType);
         }
 
         /// ChatGPT generated this beauty :D
@@ -479,6 +484,45 @@ namespace DuckGame
             }
 
             return false;
+        }
+        
+        public static void AppendResult(this ValueOrException<string> @this, ValueOrException<string> addedResult)
+        {
+            if (addedResult.Failed)
+            {
+                @this.Failed = true;
+                @this.Error = addedResult.Error;
+                @this.Value = null!;
+            }
+        
+            if (@this.Failed)
+                return;
+
+            if (string.IsNullOrWhiteSpace(@this.Value))
+                @this.Value = addedResult.Value;
+            else if (!string.IsNullOrWhiteSpace(addedResult.Value)) 
+                @this.Value += $"\n{addedResult.Value}";
+        }
+        
+        public static bool TryGet<T>(this IEnumerable<T> collection, Func<T, bool> condition, out T value)
+        {
+            value = default!;
+
+            foreach (T item in collection)
+            {
+                if (!condition(item))
+                    continue;
+
+                value = item;
+                return true;
+            }
+
+            return false;
+        }
+
+        public static TIn But<TIn>(this TIn o, Func<TIn, TIn> postProcessingAction)
+        {
+            return postProcessingAction(o);
         }
     }
 }

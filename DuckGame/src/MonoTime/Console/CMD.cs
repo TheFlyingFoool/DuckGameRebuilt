@@ -430,6 +430,8 @@ namespace DuckGame
                         return Error($"dev level was not found.");
                     case "title":
                         return new TitleScreen();
+                    case "lobby":
+                        return new TeamSelect2();
                     case "rockintro":
                         return new RockIntro(new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel)));
                     case "rockthrow":

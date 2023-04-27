@@ -275,7 +275,7 @@ namespace DuckGame
 		    }
 		    DebugTablet tab = tabs[tabindex];
 		    Graphics.polyBatcher.BlendState = BlendState.Opaque;
-		    bool pressed = CheckInput(Keys.NumPad9, CheckInputMethod.Down);
+		    bool pressed = Keyboard.Down(Keys.NumPad9);
 		    if (pressed && !prevpress)
 		    {
 		        Open = !Open;

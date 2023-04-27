@@ -1,4 +1,5 @@
 ﻿using AddedContent.Hyeve.PolyRender;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -21,6 +22,16 @@ namespace DuckGame
             }
 
             return $"|DGRED|No Drawing Context matches id of [{id}]";
+        }
+        
+        [DevConsoleCommand(Description = "Lists all the current drawing contexts (debug shenanigans)")]
+        public static void DrawingContexts()
+        {
+            DevConsole.Log();
+            foreach (string s in DrawingContextAttribute.AllDrawingContexts.Select(x => $"{x.CustomID ?? x.Name}: {(x.DoDraw ? "|LIME|Active" : "|RED|Inactive")}"))
+            {
+                DevConsole.Log(s);
+            }
         }
 
         [DrawingContext(DoDraw = false)]

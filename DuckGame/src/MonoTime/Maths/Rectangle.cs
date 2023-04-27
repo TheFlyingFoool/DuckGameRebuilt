@@ -6,6 +6,7 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using System;
+using System.Drawing;
 
 namespace DuckGame
 {
@@ -68,6 +69,20 @@ namespace DuckGame
             this.width = width;
             this.height = height;
         }
+        
+        public Rectangle(Vec2 tl, float width, float height)
+            : this(tl.x, tl.y, width, height)
+        {
+        }
+        
+        public Rectangle(Vec2 tl, SizeF size)
+            : this(tl.x, tl.y, size.Width, size.Height)
+        {
+        }
+
+        public Rectangle(float x, float y, SizeF size)
+            : this(x, y, size.Width, size.Height)
+        { }
 
         public Rectangle(Vec2 tl, Vec2 br)
         {

@@ -35,6 +35,16 @@ namespace RectpackSharp
             num5 = QueueRound(num5, queuedValue);
             return (int)MixFinal(num5);
         }
+        public static int Combine<T1, T2>(T1 value1, T2 value2)
+        {
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 31 + value1.GetHashCode();
+                hash = hash * 31 + value2.GetHashCode();
+                return hash;
+            }
+        }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint Round(uint hash, uint input)
         {

@@ -28,8 +28,6 @@ namespace DuckGame
         public const string Menu1 = "MENU1";
         public const string Menu2 = "MENU2";
         public const string Chat = "CHAT";
-
-
         public const string MenuLeft = "MENULEFT";
         public const string MenuRight = "MENURIGHT";
         public const string MenuUp = "MENUUP";
@@ -40,13 +38,13 @@ namespace DuckGame
         public const string RightTrigger = "RTRIGGER";
         public const string LeftStick = "LSTICK";
         public const string RightStick = "RSTICK";
-        public const string VoiceRegister = "VOICEREG";
-        public const string Any = "ANY";
-
         public const string LeftBumper = "LBUMPER";
         public const string RightBumper = "RBUMPER";
-
+        
+        public const string VoiceRegister = "VOICEREG";
+        public const string Any = "ANY";
         public const string KeyboardF = "KBDF";
+
         public static List<string> SimpleTriggerList = new List<string>()
         {
             Left,

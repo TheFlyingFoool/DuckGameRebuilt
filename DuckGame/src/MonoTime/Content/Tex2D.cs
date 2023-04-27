@@ -6,6 +6,8 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Drawing;
 using System.IO;
 
 namespace DuckGame
@@ -92,6 +94,23 @@ namespace DuckGame
             if (_base == null)
                 return;
             _base.SetData(colors);
+        }
+
+        public void Transform(Func<Point, Color, Color> transformFunction)
+        {
+            Color[] data = GetData();
+            
+            for (int y = 0; y < height; y++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    int pixelPositionIndex = (y * width) + x;
+                    
+                    data[pixelPositionIndex] = transformFunction(new Point(x, y), data[pixelPositionIndex]);
+                }
+            }
+            
+            SetData(data);
         }
 
         protected override void DisposeNative()

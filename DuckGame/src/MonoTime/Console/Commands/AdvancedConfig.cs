@@ -9,7 +9,7 @@ namespace DuckGame
             Aliases = new[] {"advconf"})]
         public static void AdvancedConfig()
         {
-            Process.Start(AdvancedConfigAttribute.SaveDirPath);
+            Process.Start(DuckGame.AdvancedConfig.SaveDirPath);
             DevConsole.Log("Opened AdvancedConfig folder");
         }
     }

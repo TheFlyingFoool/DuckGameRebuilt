@@ -1571,6 +1571,10 @@ namespace DuckGame
                             {
                                 List<string> texturedetails = DuckGame.Content.RSplit(line, ' ', 4);
                                 string texturename = texturedetails[0];
+                                
+                                if (DuckGame.Content.offests.ContainsKey(texturename))
+                                    continue;
+                                
                                 int x = Int32.Parse(texturedetails[1]);
                                 int y = Int32.Parse(texturedetails[2]);
                                 int height = Int32.Parse(texturedetails[3]);

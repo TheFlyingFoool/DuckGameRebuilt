@@ -5,10 +5,14 @@ namespace DuckGame
     [AdvancedConfig("nameDisplay")]
     public class NameDisplayConfig : IAdvancedConfig
     {
-        public float FontSize;
+        public bool randomfuckingboolean = false;
+        [ACMin(0)]
+        public float Size;
         public float VerticalSpacing;
         public float HorizontalSpacing;
+        [ACMin(0)] [ACMax(1)] [ACIncrementValue(0.05)]
         public float Opacity;
+        [ACMin(0)]
         public float TeamLineWidth;
         public DeadPlayerRemoval RemoveDeadPlayers;
         public float XOffset;
@@ -17,29 +21,29 @@ namespace DuckGame
         
         public void RevertToDefaults()
         {
-            FontSize = 0.5f;
+            Size = 0.5f;
             VerticalSpacing = 2f;
             HorizontalSpacing = 2f;
             Opacity = 1f;
             TeamLineWidth = 1f;
-            RemoveDeadPlayers = DeadPlayerRemoval.Ghost;
+            RemoveDeadPlayers = DeadPlayerRemoval.ShowAsGhosts;
             XOffset = 0;
             YOffset = 0;
-            ShowScores = ScoreShowing.False;
+            ShowScores = ScoreShowing.DontShow;
         }
 
         public enum ScoreShowing
         {
-            False,
-            Value,
-            Bar
+            DontShow,
+            ShowValue,
+            ShowBar
         }
 
         public enum DeadPlayerRemoval
         {
-            False,
-            True,
-            Ghost
+            NeverRemove,
+            RemoveDead,
+            ShowAsGhosts
         }
     }
 }

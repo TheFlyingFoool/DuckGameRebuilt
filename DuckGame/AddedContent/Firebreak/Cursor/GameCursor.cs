@@ -2,16 +2,40 @@
 {
     public abstract class GameCursor
     {
-        public abstract string Id { get; }
-        public abstract void DrawCursor();
+        public static GameCursor? CurrentCursor = null;
 
-        public virtual void LeftPressed(Vec2 position) { }
-        public virtual void LeftReleased(Vec2 position) { }
+        protected abstract void DrawCursor();
+        protected virtual void LeftPressed(Vec2 position) { }
+        protected virtual void LeftReleased(Vec2 position) { }
+        protected virtual void RightPressed(Vec2 position) { }
+        protected virtual void RightReleased(Vec2 position) { }
+        protected virtual void MiddlePressed(Vec2 position) { }
+        protected virtual void MiddleReleased(Vec2 position) { }
+        
+        [DrawingContext(DrawingLayer.Console, CustomID = "CursorDraw")]
+        public static void Draw()
+        {
+            CurrentCursor?.DrawCursor();
+        }
 
-        public virtual void RightPressed(Vec2 position) { }
-        public virtual void RightReleased(Vec2 position) { }
+        // im too lazy to hook this to an update method, so change this later
+        [DrawingContext(CustomID = "CursorUpdate")]
+        public static void Update()
+        {
+            if (Mouse.left == InputState.Pressed)
+                CurrentCursor?.LeftPressed(Mouse.positionConsole);
+            if (Mouse.left == InputState.Released)
+                CurrentCursor?.LeftReleased(Mouse.positionConsole);
 
-        public virtual void MiddlePressed(Vec2 position) { }
-        public virtual void MiddleReleased(Vec2 position) { }
+            if (Mouse.right == InputState.Pressed)
+                CurrentCursor?.RightPressed(Mouse.positionConsole);
+            if (Mouse.right == InputState.Released)
+                CurrentCursor?.RightReleased(Mouse.positionConsole);
+
+            if (Mouse.middle == InputState.Pressed)
+                CurrentCursor?.MiddlePressed(Mouse.positionConsole);
+            if (Mouse.middle == InputState.Released)
+                CurrentCursor?.MiddleReleased(Mouse.positionConsole);
+        }
     }
 }

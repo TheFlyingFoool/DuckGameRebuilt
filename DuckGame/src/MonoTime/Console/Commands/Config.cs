@@ -11,16 +11,6 @@ namespace DuckGame
         [DevConsoleCommand(Description = "Get or Modify config fields from the console")]
         public static object Config(string fieldId, string serializedValue = null)
         {
-            object getValue(MemberInfo mi)
-            {
-                return mi switch
-                {
-                    FieldInfo fi => fi.GetValue(null),
-                    PropertyInfo pi => pi.GetMethod?.Invoke(null, null),
-                    _ => throw new Exception("Unsupported AutoConfig field type")
-                };
-            }
-
             switch (fieldId.ToUpper())
             {
                 case "%SAVE":
@@ -31,7 +21,7 @@ namespace DuckGame
                     return null;
                 case "%LIST":
                     return AutoConfigFieldAttribute.All
-                        .Select(x => $"{x.MemberInfo.Name}: |DGBLUE|{getValue(x.MemberInfo)}|PREV|");
+                        .Select(x => $"{x.MemberInfo.Name}: |DGBLUE|{x.GetMemberValue()}|PREV|");
             }
 
             List<AutoConfigFieldAttribute> all = AutoConfigFieldAttribute.All;
@@ -39,7 +29,7 @@ namespace DuckGame
             if (!all.TryFirst(x => (x.ShortName ?? x.Id ?? x.MemberInfo.Name).CaselessEquals(fieldId), out AutoConfigFieldAttribute attribute))
                 throw new Exception($"No configuration field found with ID: {fieldId}");
 
-            object oldVal = getValue(attribute.MemberInfo);
+            object oldVal = attribute.GetMemberValue();
 
             if (serializedValue is null)
                 return oldVal;

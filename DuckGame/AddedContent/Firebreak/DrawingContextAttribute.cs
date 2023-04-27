@@ -41,10 +41,12 @@ namespace DuckGame
         /// You can draw to multiple layers by using flags
         /// </remarks>
         public DrawingLayer Layer { get; }
+
         /// <summary>
         /// Dictates the order of when this context is drawn
         /// </summary>
         public int Priority = 0;
+
         /// <remarks>
         /// This will default to using the assigned method's name
         /// </remarks>
@@ -76,6 +78,7 @@ namespace DuckGame
         {
 
         }
+
         public static void OnResults(Dictionary<Type, List<(MemberInfo MemberInfo, Attribute Attribute)>> all)
         {
             foreach ((MemberInfo vMemberInfo, Attribute vAttribute) in all[typeof(DrawingContextAttribute)])
@@ -95,16 +98,19 @@ namespace DuckGame
                     {
                         item.CustomID = item.method.Name;
                     }
+
                     item.action = precompiled;
                     item.Name = item.method.Name;
                     AllDrawingContexts.Add(item);
                 }
             }
+
             AllDrawingContexts = AllDrawingContexts.OrderByDescending(x => x.Priority).ToList();
         }
+
         public static DrawingLayer? DrawingLayerFromLayer(Layer layer)
         {
-            switch(layer.name)
+            switch (layer.name)
             {
                 case "PREDRAW":
                     return DrawingLayer.PreDrawLayer;
@@ -137,27 +143,28 @@ namespace DuckGame
         {
             if (layer is null)
                 return;
+            
             foreach (DrawingContextAttribute pair in AllDrawingContexts)
             {
-                if (pair.DoDraw && pair.Layer.HasFlag(layer))
+                if (!pair.DoDraw || !pair.Layer.HasFlag(layer))
+                    continue;
+
+                if (pair.action != null)
                 {
-                    if (pair.method != null)
-                    {
-                        pair.method.Invoke(null, null);
-                    }
-                    else if (pair.action != null)
-                    {
-                        pair.action();
-                    }
+                    pair.action();
+                }
+                else if (pair.method != null)
+                {
+                    pair.method.Invoke(null, null);
                 }
             }
         }
     }
 
-    //[Flags] no thanks :)))) 
+    [Flags]
     public enum DrawingLayer
     {
-        PreDrawLayer = 1, //[Obsolete]  yea why
+        [Obsolete] PreDrawLayer = 1,
         Parallax = 2,
         Virtual = 4,
         Background = 8,

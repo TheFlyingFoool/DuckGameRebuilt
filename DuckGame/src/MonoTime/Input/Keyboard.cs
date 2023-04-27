@@ -22,9 +22,15 @@ namespace DuckGame
             if (Environment.GetEnvironmentVariable("FNADROID") != "1")
                 TextInputEXT.StartTextInput();
         }
+
+        public static KeyboardState KeyState
+        {
+            get => _keyState;
+            set => _keyState = value;
+        }
+        
         private static KeyboardState _keyState;
         private static KeyboardState _keyStatePrev;
-        public static KeyboardState KeyState => _keyState;
         public static KeyboardState KeyStatePrev => _keyStatePrev;
         private static bool _keyboardPress = false;
         private static int _lastKeyCount = 0;
