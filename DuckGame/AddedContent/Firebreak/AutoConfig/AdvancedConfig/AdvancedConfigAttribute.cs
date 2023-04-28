@@ -37,8 +37,16 @@ namespace DuckGame
 
             foreach ((TypeInfo type, AdvancedConfigAttribute attribute) in s_all)
             {
-                if (existingFiles.Contains(attribute.FileName))
+                if (existingFiles.Any(x =>
+                    {
+                        FileInfo fileInfo = new(x);
+                        string configName = fileInfo.Name.Substring(0, fileInfo.Name.Length - 5);
+                        
+                        return configName == attribute.FileName;
+                    }))
+                {
                     continue;
+                }
 
                 IAdvancedConfig configData = (IAdvancedConfig)Activator.CreateInstance(type.AsType());
                 configData.RevertToDefaults();
