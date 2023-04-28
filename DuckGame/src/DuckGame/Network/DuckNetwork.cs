@@ -892,17 +892,13 @@ namespace DuckGame
             if (Steam.user == null || Steam.lobby == null)
                 return;
             Thread thread = new Thread(() =>
-           {
-               ulong id = Steam.lobby.id;
-               string str1 = id.ToString();
-               id = Steam.user.id;
-               string str2 = id.ToString();
-               SDL.SDL_SetClipboardText("steam://joinlobby/312530/" + str1 + "/" + str2);
-           });
+            {
+               SDL.SDL_SetClipboardText("steam://joinlobby/312530/" + Steam.lobby.id.ToString() + "/" + Steam.user.id.ToString());
+               HUD.AddPlayerChangeDisplay("@CLIPCOPY@Invite Link Copied!");
+            });
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
-            thread.Join();
-            HUD.AddPlayerChangeDisplay("@CLIPCOPY@Invite Link Copied!");
+            // thread.Join();
         }
 
         private static void OpenMenu(Profile whoOpen)
@@ -924,6 +920,12 @@ namespace DuckGame
                 if (lobby != null)
                 {
                     title = lobby.GetLobbyData("name");
+                    if (title == "")
+                    {
+                        title = TeamSelect2.DefaultGameName();
+                        TeamSelect2.GetOnlineSetting("name").value = title;
+                        lobby.SetLobbyData("name", title);
+                    }
                     tiny = true;
                 }
             }

@@ -131,6 +131,12 @@ namespace DuckGame
                     current.SaveAs();
                     current.CloseMenu();
                 }
+                if (item.text == "4x4")
+                {
+                    Editor current = Level.current as Editor;
+                    current.cellSize = 4f;
+                    current.CloseMenu();
+                }
                 if (item.text == "8x8")
                 {
                     Editor current = Level.current as Editor;
@@ -428,22 +434,29 @@ namespace DuckGame
                 _gridMenu.AddItem(new ContextMenu(this)
                 {
                     itemSize = {
-            x = 60f
-          },
+                        x = 60f
+                    },
+                    text = "4x4"
+                });
+                _gridMenu.AddItem(new ContextMenu(this)
+                {
+                    itemSize = {
+                        x = 60f
+                    },
                     text = "8x8"
                 });
                 _gridMenu.AddItem(new ContextMenu(this)
                 {
                     itemSize = {
-            x = 60f
-          },
+                        x = 60f
+                    },
                     text = "16x16"
                 });
                 _gridMenu.AddItem(new ContextMenu(this)
                 {
                     itemSize = {
-            x = 60f
-          },
+                        x = 60f
+                    },
                     text = "32x32"
                 });
                 Level.Add(_gridMenu);
