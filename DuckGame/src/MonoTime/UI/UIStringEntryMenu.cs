@@ -133,7 +133,8 @@ namespace DuckGame
                             _binding.value = text;
                             _cancelled = false;
                             _backFunction.Activate();
-                            _acceptFunction.Activate();
+                            if (_acceptFunction != null)
+                                _acceptFunction.Activate();
                         }
                     }
                     else if (Keyboard.Pressed(Keys.Escape) || Input.Pressed(Triggers.Cancel))

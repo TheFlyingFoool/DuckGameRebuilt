@@ -1886,8 +1886,10 @@ namespace DuckGame
                                 }
                                 else
                                 {
+                                    /*
                                     if (_placementType is AutoBlock || _placementType is PipeTileset)
                                         cellSize = 16f;
+                                    */
                                     if (_cursorMode != CursorMode.Selection && _placementMenu == null)
                                     {
                                         switch (inputMode)
@@ -3264,7 +3266,7 @@ namespace DuckGame
             if (layer == _procLayer && _procTarget != null && _procContext != null)
                 Graphics.Draw(_procTarget, new Vec2(0f, 0f), new Rectangle?(), Color.White * 0.5f, 0f,
                     Vec2.Zero, new Vec2(1f, 1f), SpriteEffects.None);
-            float size = Keyboard.alt ? 1 : _cellSize;
+            float size = _cellSize;
             if (layer == _gridLayer)
             {
                 backgroundColor = new Color(20, 20, 20);
@@ -3296,59 +3298,61 @@ namespace DuckGame
 
                     if (x < _ultimateBounds.x)
                     {
-                        int num3 = (int)((_ultimateBounds.x - x) / size) + 1;
+                        int dif = (int)((_ultimateBounds.x - x) / size) + 1;
                         x = (int)(_ultimateBounds.x / size * size) + size / 2f;
-                        gridWidth -= num3;
+                        gridWidth -= dif;
                     }
 
                     if (y < _ultimateBounds.y)
                     {
-                        int num4 = (int)((_ultimateBounds.y - y) / size) + 1;
+                        int dif2 = (int)((_ultimateBounds.y - y) / size) + 1;
                         y = (int)(_ultimateBounds.y / size * size) + size / 2f;
-                        gridHeight -= num4;
+                        gridHeight -= dif2;
                     }
 
-                    float num5 = x + gridWidth * size;
-                    if (num5 > _ultimateBounds.Right)
+                    float limitX = x + gridWidth * size;
+                    if (limitX > _ultimateBounds.Right)
                     {
-                        int num6 = (int)((num5 - _ultimateBounds.Right) / size) + 1;
-                        gridWidth -= num6;
+                        int dif3 = (int)((limitX - _ultimateBounds.Right) / size) + 1;
+                        gridWidth -= dif3;
                         x = (int)((_ultimateBounds.Right - gridWidth * size) / size * size) - size / 2f;
                     }
 
-                    float num7 = y + gridHeight * size;
+                    float limitY = y + gridHeight * size;
                     if (y + gridHeight * size > _ultimateBounds.Bottom)
                     {
-                        int num8 = (int)((num7 - _ultimateBounds.Bottom) / size) + 1;
-                        gridHeight -= num8;
+                        int dif4 = (int)((limitY - _ultimateBounds.Bottom) / size) + 1;
+                        gridHeight -= dif4;
                         y = (int)((_ultimateBounds.Bottom - gridHeight * size) / size * size) -
                             size / 2f;
                     }
 
-                    int num9 = gridWidth * (int)size;
-                    int num10 = gridHeight * (int)size;
-                    int num11 = (int)(num9 / size);
-                    int num12 = (int)(num10 / size);
+                    int reqW = gridWidth * (int)size;
+                    int reqH = gridHeight * (int)size;
+                    int numHor = (int)(_ultimateBounds.width / size);
+                    int numVer = (int)(_ultimateBounds.height / size);
 
                     float lineThickness = size / 8;
-                    
-                    for (int index = 0; index < num11 + 1; ++index)
-                        Graphics.DrawLine(new Vec2(x + index * size, y),
-                            new Vec2(x + index * size, y + num12 * size), col, lineThickness, -0.9f);
-                    for (int index = 0; index < num12 + 1; ++index)
-                        Graphics.DrawLine(new Vec2(x, y + index * size),
-                            new Vec2(x + num11 * size, y + index * size), col, lineThickness, -0.9f);
+                    float ultimateBoundThickness = 4f;
+                    Color ultimateBoundCol = new Color(80, 80, 80);
+
+                    for (int index = 1; index < numHor + 1; ++index)
+                        Graphics.DrawLine(new Vec2(_ultimateBounds.Left + index * size - size / 2f, _ultimateBounds.Top),
+                            new Vec2(_ultimateBounds.Left + index * size - size / 2f, _ultimateBounds.Bottom), col, lineThickness, -0.9f);
+                    for (int index = 1; index < numVer + 1; ++index)
+                        Graphics.DrawLine(new Vec2(_ultimateBounds.Left, _ultimateBounds.Top + index * size - size / 2f),
+                            new Vec2(_ultimateBounds.Right, _ultimateBounds.Top + index * size - size / 2f), col, lineThickness, -0.9f);
                     Graphics.DrawLine(new Vec2(_ultimateBounds.Left, _ultimateBounds.Top),
-                        new Vec2(_ultimateBounds.Right, _ultimateBounds.Top), col, lineThickness, -0.9f);
+                        new Vec2(_ultimateBounds.Right, _ultimateBounds.Top), ultimateBoundCol, ultimateBoundThickness, -0.8f);
                     Graphics.DrawLine(new Vec2(_ultimateBounds.Right, _ultimateBounds.Top),
-                        new Vec2(_ultimateBounds.Right, _ultimateBounds.Bottom), col, lineThickness, -0.9f);
+                        new Vec2(_ultimateBounds.Right, _ultimateBounds.Bottom), ultimateBoundCol, ultimateBoundThickness, -0.8f);
                     Graphics.DrawLine(new Vec2(_ultimateBounds.Right, _ultimateBounds.Bottom),
-                        new Vec2(_ultimateBounds.Left, _ultimateBounds.Bottom), col, lineThickness, -0.9f);
+                        new Vec2(_ultimateBounds.Left, _ultimateBounds.Bottom), ultimateBoundCol, ultimateBoundThickness, -0.8f);
                     Graphics.DrawLine(new Vec2(_ultimateBounds.Left, _ultimateBounds.Bottom),
-                        new Vec2(_ultimateBounds.Left, _ultimateBounds.Top), col, lineThickness, -0.9f);
+                        new Vec2(_ultimateBounds.Left, _ultimateBounds.Top), ultimateBoundCol, ultimateBoundThickness, -0.8f);
                     if (_miniMode)
                     {
-                        int num13 = 0;
+                        int sides = 0;
                         if (!_pathNorth)
                         {
                             _sideArrow.color = new Color(80, 80, 80);
@@ -3356,9 +3360,9 @@ namespace DuckGame
                         else
                         {
                             _sideArrow.color = new Color(100, 200, 100);
-                            Graphics.DrawLine(new Vec2(x + num9 / 2, y - 10f),
-                                new Vec2(x + num9 / 2, (float)(y + num10 / 2 - 8.0)), Color.Lime * 0.06f, 16f);
-                            ++num13;
+                            Graphics.DrawLine(new Vec2(x + reqW / 2, y - 10f),
+                                new Vec2(x + reqW / 2, (float)(y + reqH / 2 - 8.0)), Color.Lime * 0.06f, 16f);
+                            ++sides;
                         }
 
                         if (!_pathWest)
@@ -3368,9 +3372,9 @@ namespace DuckGame
                         else
                         {
                             _sideArrow.color = new Color(100, 200, 100);
-                            Graphics.DrawLine(new Vec2(x - 10f, y + num10 / 2),
-                                new Vec2((float)(x + num9 / 2 - 8.0), y + num10 / 2), Color.Lime * 0.06f, 16f);
-                            ++num13;
+                            Graphics.DrawLine(new Vec2(x - 10f, y + reqH / 2),
+                                new Vec2((float)(x + reqW / 2 - 8.0), y + reqH / 2), Color.Lime * 0.06f, 16f);
+                            ++sides;
                         }
 
                         if (!_pathEast)
@@ -3380,9 +3384,9 @@ namespace DuckGame
                         else
                         {
                             _sideArrow.color = new Color(100, 200, 100);
-                            Graphics.DrawLine(new Vec2((float)(x + num9 / 2 + 8.0), y + num10 / 2),
-                                new Vec2((float)(x + num9 + 10.0), y + num10 / 2), Color.Lime * 0.06f, 16f);
-                            ++num13;
+                            Graphics.DrawLine(new Vec2((float)(x + reqW / 2 + 8.0), y + reqH / 2),
+                                new Vec2((float)(x + reqW + 10.0), y + reqH / 2), Color.Lime * 0.06f, 16f);
+                            ++sides;
                         }
 
                         if (!_pathSouth)
@@ -3392,14 +3396,14 @@ namespace DuckGame
                         else
                         {
                             _sideArrow.color = new Color(100, 200, 100);
-                            Graphics.DrawLine(new Vec2(x + num9 / 2, (float)(y + num10 / 2 + 8.0)),
-                                new Vec2(x + num9 / 2, (float)(y + num10 + 10.0)), Color.Lime * 0.06f, 16f);
-                            ++num13;
+                            Graphics.DrawLine(new Vec2(x + reqW / 2, (float)(y + reqH / 2 + 8.0)),
+                                new Vec2(x + reqW / 2, (float)(y + reqH + 10.0)), Color.Lime * 0.06f, 16f);
+                            ++sides;
                         }
 
-                        if (num13 > 0)
-                            Graphics.DrawLine(new Vec2((float)(x + num9 / 2 - 8.0), y + num10 / 2),
-                                new Vec2((float)(x + num9 / 2 + 8.0), y + num10 / 2), Color.Lime * 0.06f, 16f);
+                        if (sides > 0)
+                            Graphics.DrawLine(new Vec2((float)(x + reqW / 2 - 8.0), y + reqH / 2),
+                                new Vec2((float)(x + reqW / 2 + 8.0), y + reqH / 2), Color.Lime * 0.06f, 16f);
                     }
                 }
             }
@@ -3596,8 +3600,11 @@ namespace DuckGame
                     }
                 }
 
-                if (hasUnsavedChanges)
-                    Graphics.DrawFancyString("*", new Vec2(4f, 4f), Color.White * 0.6f, 0.99f);
+                string levelName = Path.GetFileNameWithoutExtension(_saveName);
+                if (levelName == "")
+                    levelName = "Untitled";
+                Graphics.DrawFancyString(levelName + (hasUnsavedChanges ? "*" : ""), new Vec2(4f, 4f), Color.White * 0.6f, 0.99f);
+
                 if (tooltip != null)
                 {
                     Graphics.DrawRect(new Vec2(16f, Layer.HUD.height - 14f),
@@ -3607,23 +3614,23 @@ namespace DuckGame
                         Color.White, 0.99f);
                 }
 
-                bool flag1 = _input.lastActiveDevice is Keyboard;
+                bool showMouseControls = _input.lastActiveDevice is Keyboard;
                 if (_hoverMode == 0 && _hoverButton == null)
                 {
-                    string text1 = "";
-                    string str1 = "@CANCEL@";
-                    string str2 = "@SELECT@";
-                    string str3 = "@CANCEL@";
-                    string str4 = "@MENU2@";
-                    string str5 = "@START@";
-                    string str6 = "@STRAFE@";
-                    string str7 = "@RAGDOLL@";
-                    if (flag1)
+                    string instructionText = "";
+                    string cancelText = "@CANCEL@";
+                    string selectText = "@SELECT@";
+                    string copyText = "@CANCEL@";
+                    string menuText = "@MENU2@";
+                    string searchText = "@START@";
+                    string undoText = "@STRAFE@";
+                    string redoText = "@RAGDOLL@";
+                    if (showMouseControls)
                     {
-                        str1 = "@RIGHTMOUSE@" + str1;
-                        str2 = "@LEFTMOUSE@" + str2;
-                        str3 = "@MIDDLEMOUSE@" + str3;
-                        str4 = "@RIGHTMOUSE@" + str4;
+                        cancelText = "@RIGHTMOUSE@" + cancelText;
+                        selectText = "@LEFTMOUSE@" + selectText;
+                        copyText = "@MIDDLEMOUSE@" + copyText;
+                        menuText = "@RIGHTMOUSE@" + menuText;
                     }
 
                     if (_cursorMode == CursorMode.HasSelection || _cursorMode == CursorMode.Drag ||
@@ -3632,76 +3639,76 @@ namespace DuckGame
                         if (inputMode == EditorInput.Gamepad)
                         {
                             if (_cursorMode == CursorMode.DragHover || _cursorMode == CursorMode.Drag)
-                                text1 += "@SELECT@DRAG  ";
+                                instructionText += "@SELECT@DRAG  ";
                             if (_cursorMode == CursorMode.HasSelection || _cursorMode == CursorMode.DragHover)
-                                text1 = text1 + "@CANCEL@DRAG ADD  " + "@MENU1@FLIP  " + "@MENU2@DELETE  ";
-                            text1 += _cursorMode == CursorMode.DragHover ? "@CANCEL@COPY  " : "@CANCEL@DESELECT  ";
+                                instructionText = instructionText + "@CANCEL@DRAG ADD  " + "@MENU1@FLIP  " + "@MENU2@DELETE  ";
+                            instructionText += _cursorMode == CursorMode.DragHover ? "@CANCEL@COPY  " : "@CANCEL@DESELECT  ";
                         }
                         else
                         {
-                            string str8 = "@KBDARROWS@NUDGE  ";
+                            string nudgeText = "@KBDARROWS@NUDGE  @ALT@+@KBDARROWS@PIXEL NUDGE  ";
                             if (_cursorMode == CursorMode.DragHover)
-                                str8 += "@LEFTMOUSE@DRAG  ";
-                            text1 = str8 + "@RIGHTMOUSE@DESELECT  ";
+                                nudgeText += "@LEFTMOUSE@DRAG  ";
+                            instructionText = nudgeText + "@RIGHTMOUSE@DESELECT  ";
                             if (_cursorMode == CursorMode.HasSelection || _cursorMode == CursorMode.DragHover)
-                                text1 = text1 + "@KBDSHIFT@ADD SELECTION  " + "@KBDF@FLIP  ";
+                                instructionText = instructionText + "@KBDSHIFT@ADD SELECTION  " + "@KBDF@FLIP  ";
                         }
                     }
                     else if (_cursorMode == CursorMode.Pasting)
-                        text1 = inputMode != EditorInput.Gamepad
-                            ? text1 + "@LEFTMOUSE@PASTE  " + "@RIGHTMOUSE@CANCEL  "
-                            : text1 + "@SELECT@PASTE  " + "@CANCEL@CANCEL  ";
+                        instructionText = inputMode != EditorInput.Gamepad
+                            ? instructionText + "@LEFTMOUSE@PASTE  " + "@RIGHTMOUSE@CANCEL  "
+                            : instructionText + "@SELECT@PASTE  " + "@CANCEL@CANCEL  ";
                     else if (_fileDialog.opened)
-                        text1 = "@SHOOT@SET DEFAULT  @WASD@MOVE  " + str2 + "SELECT  @MENU2@DELETE  " + str1 +
+                        instructionText = "@SHOOT@SET DEFAULT  @WASD@MOVE  " + selectText + "SELECT  @MENU2@DELETE  " + cancelText +
                                 "CANCEL  @STRAFE@+@RAGDOLL@BROWSE..";
                     else if (_menuOpen && inputMode == EditorInput.Gamepad)
-                        text1 = "@SHOOT@SET DEFAULT  @WASD@MOVE  " + str2 + "SELECT  @RIGHT@EXPAND  " + str1 + "CLOSE";
+                        instructionText = "@SHOOT@SET DEFAULT  @WASD@MOVE  " + selectText + "SELECT  @RIGHT@EXPAND  " + cancelText + "CLOSE";
                     else if (inputMode == EditorInput.Gamepad || inputMode == EditorInput.Mouse)
                     {
                         int num = _secondaryHover != null ? 1 : (_hover != null ? 1 : 0);
                         bool flag2 = num != 0 || _placingTiles || _placementType != null;
                         if (_placementType != null && _hover != null &&
                             GetLayerOrOverride(_placementType) == GetLayerOrOverride(_hover))
-                            text1 = text1 + str2 + "ERASE  ";
+                            instructionText = instructionText + selectText + "ERASE  ";
                         else if (_placementType != null)
                         {
-                            text1 = text1 + str2 + "PLACE  ";
+                            instructionText = instructionText + selectText + "PLACE  ";
                             if (rotateValid)
-                                text1 += "@RSTICK@ROTATE  ";
+                                instructionText += "@RSTICK@ROTATE  ";
                         }
 
                         if (num != 0)
-                            text1 = text1 + str3 + "COPY  ";
+                            instructionText = instructionText + copyText + "COPY  ";
                         if (_hover != null && !_placingTiles && _hoverMenu != null)
-                            text1 += "@MENU1@EDIT  ";
+                            instructionText += "@MENU1@EDIT  ";
                         if (inputMode == EditorInput.Gamepad)
                         {
                             if (History.hasUndo)
-                                text1 = text1 + str6 + "UNDO  ";
+                                instructionText = instructionText + undoText + "UNDO  ";
                             if (History.hasRedo)
-                                text1 = text1 + str7 + "REDO  ";
-                            text1 += "@CANCEL@DRAG SELECT  ";
+                                instructionText = instructionText + redoText + "REDO  ";
+                            instructionText += "@CANCEL@DRAG SELECT  ";
                         }
 
                         if (_placingTiles)
-                            text1 += "@MENU1@TILES  ";
+                            instructionText += "@MENU1@TILES  ";
                         if (flag2)
-                            text1 = text1 + str5 + "BROWSE  ";
-                        text1 = text1 + str4 + "MENU";
-                        if (_font.GetWidth(text1) < 397.0)
-                            text1 = "@WASD@MOVE  " + text1;
+                            instructionText = instructionText + searchText + "BROWSE  ";
+                        instructionText = instructionText + menuText + "MENU";
+                        if (_font.GetWidth(instructionText) < 397.0)
+                            instructionText = "@WASD@MOVE  " + instructionText;
                         if (inputMode == EditorInput.Mouse)
-                            text1 += "  @RIGHTMOUSE@DRAG SELECT";
+                            instructionText += "  @RIGHTMOUSE@DRAG SELECT";
                     }
 
                     if (inputMode == EditorInput.Touch)
-                        text1 = "";
-                    if (text1 != "")
+                        instructionText = "";
+                    if (instructionText != "" && DGRSettings.EditorInstructions)
                     {
-                        float width = _font.GetWidth(text1);
+                        float width = _font.GetWidth(instructionText);
                         Vec2 vec2 = new Vec2(layer.width - 22f - width, layer.height - 28f);
                         _font.depth = 0.8f;
-                        _font.Draw(text1, vec2.x, vec2.y, Color.White, 0.7f, _input);
+                        _font.Draw(instructionText, vec2.x, vec2.y, Color.White, 0.7f, _input);
                     }
 
                     _font.scale = new Vec2(0.5f, 0.5f);

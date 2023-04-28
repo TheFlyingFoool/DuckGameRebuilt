@@ -123,7 +123,8 @@ namespace DuckGame
             _users.Clear();
             if (Steam.IsInitialized())
             {
-                IOrderedEnumerable<User> source1 = Steam.friends.OrderBy(u => _sortDictionary[(int)u.state]);
+                IOrderedEnumerable<User> source1 = Steam.friends.OrderBy(u => _sortDictionary[(int)u.state])
+                                                                .ThenBy(u => u.name);
                 int num = source1.Count();
                 for (int index = 0; index < num; ++index)
                 {

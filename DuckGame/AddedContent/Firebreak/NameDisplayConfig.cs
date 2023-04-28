@@ -29,7 +29,7 @@ namespace DuckGame
             RemoveDeadPlayers = DeadPlayerRemoval.ShowAsGhosts;
             XOffset = 0;
             YOffset = 0;
-            ShowScores = ScoreShowing.DontShow;
+            ShowScores = ScoreShowing.ShowValue;
         }
 
         public enum ScoreShowing

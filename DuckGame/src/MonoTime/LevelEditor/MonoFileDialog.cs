@@ -279,10 +279,12 @@ namespace DuckGame
             int num3 = 0;
             List<string> _files = new List<string>(files);
             string devfilepath = Program.GameDirectory + "Content\\levels\\devtestlev.lev";
+            /*
             if (File.Exists(devfilepath))
             {
                 _files.Insert(0, devfilepath);
             }
+            */
             foreach (string path3 in _files)
             {
                 bool _pIsModPath = pIsModPath;

@@ -154,5 +154,8 @@ namespace DuckGame
 
         [AutoConfigField]
         public static bool LobbyNameOnPause = true;
+
+        [AutoConfigField]
+        public static bool EditorInstructions = true;
     }
 }
