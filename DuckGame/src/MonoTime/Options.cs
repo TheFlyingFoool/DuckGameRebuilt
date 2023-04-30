@@ -337,7 +337,12 @@ namespace DuckGame
 
             menu.Add(new UIMenuItemToggle("Instructions", field: new FieldBinding(dGRSettings, "EditorInstructions"))
             {
-                dgrDescription = "Displays real-time instructions in the editor. You might not need it anymore if you're already used to it"
+                dgrDescription = "Displays real-time instructions on how to operate the editor. You might not need it anymore if you're already used to it"
+            }, true);
+
+            menu.Add(new UIMenuItemToggle("Level Name", field: new FieldBinding(dGRSettings, "EditorLevelName"))
+            {
+                dgrDescription = "Displays current level name at top left of the screen"
             }, true);
 
             menu.Add(new UIText(" ", Color.White), true);

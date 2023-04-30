@@ -3600,10 +3600,18 @@ namespace DuckGame
                     }
                 }
 
-                string levelName = Path.GetFileNameWithoutExtension(_saveName);
-                if (levelName == "")
-                    levelName = "Untitled";
-                Graphics.DrawFancyString(levelName + (hasUnsavedChanges ? "*" : ""), new Vec2(4f, 4f), Color.White * 0.6f, 0.99f);
+                string topLeftText = "";
+                if (DGRSettings.EditorLevelName)
+                {
+                    string levelName = Path.GetFileNameWithoutExtension(_saveName);
+                    if (levelName == "")
+                        levelName = "Untitled";
+                    topLeftText = levelName;
+                }
+                if (hasUnsavedChanges)
+                    topLeftText += "*";
+                
+                Graphics.DrawFancyString(topLeftText, new Vec2(4f, 4f), Color.White * 0.6f, 0.99f);
 
                 if (tooltip != null)
                 {

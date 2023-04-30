@@ -157,5 +157,8 @@ namespace DuckGame
 
         [AutoConfigField]
         public static bool EditorInstructions = true;
+
+        [AutoConfigField]
+        public static bool EditorLevelName = true;
     }
 }
