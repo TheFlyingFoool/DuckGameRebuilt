@@ -330,7 +330,7 @@ namespace DuckGame
 
         public static UIMenu CreateDGREditorMenu(UIMenu pPrev)
         {
-            UIMenu menu = new UIMenu("|PINK|♥|WHITE|Editor|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            UIMenu menu = new UIMenu("|PINK|♥|WHITE|EDITOR|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
 
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
