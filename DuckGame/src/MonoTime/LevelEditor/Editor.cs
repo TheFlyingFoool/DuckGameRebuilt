@@ -3703,7 +3703,7 @@ namespace DuckGame
 
                     if (inputMode == EditorInput.Touch)
                         instructionText = "";
-                    if (instructionText != "" && DGRSettings.EditorInstructions)
+                    if ((instructionText != "" && DGRSettings.EditorInstructions) || _fileDialog.opened)
                     {
                         float width = _font.GetWidth(instructionText);
                         Vec2 vec2 = new Vec2(layer.width - 22f - width, layer.height - 28f);
