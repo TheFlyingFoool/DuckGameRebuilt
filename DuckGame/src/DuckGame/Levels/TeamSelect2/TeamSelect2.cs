@@ -121,16 +121,23 @@ namespace DuckGame
 
         public static string DefaultGameName()
         {
-            if (GetSettingInt("type") >= 3)
+            List<Profile> activep = Profiles.active;
+            if (Network.lanMode)
             {
-                List<Profile> activep = Profiles.active;
                 if (activep.Count > 0)
                 {
                     return activep[0].name + "'s LAN Game";
                 }
             }
+            string hostName = "";
+            activep.ForEach((profile) =>
+            {
+                if (profile.isHost)
+                    hostName = profile.name;
+            });
+            if (hostName != "")
+                return hostName + "'s Game";
             return Profiles.experienceProfile.name + "'s Game";
-            
         }
 
         public static void DefaultSettings(bool resetMatchSettings = true)
