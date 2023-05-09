@@ -67,6 +67,10 @@ namespace DuckGame
 
         public int keyboard2PlayerIndex { get; set; }
 
+        public int keyboard3PlayerIndex { get; set; }
+
+        public int keyboard4PlayerIndex { get; set; }
+
         public int windowScale { get; set; }
 
         public bool imeSupport { get; set; }
@@ -219,6 +223,8 @@ namespace DuckGame
             fillBackground = true;
             keyboard1PlayerIndex = 0;
             keyboard2PlayerIndex = 1;
+            keyboard3PlayerIndex = 2;
+            keyboard3PlayerIndex = 3;
             rumbleIntensity = 1f;
             powerUser = true; //set to true
             mojiFilter = 2;

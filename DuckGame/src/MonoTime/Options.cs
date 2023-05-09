@@ -1000,6 +1000,8 @@ namespace DuckGame
                 return;
             Data.keyboard1PlayerIndex = 0;
             Data.keyboard2PlayerIndex = 1;
+            Data.keyboard3PlayerIndex = 2;
+            Data.keyboard4PlayerIndex = 3;
         }
 
         public static void Update()

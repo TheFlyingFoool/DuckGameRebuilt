@@ -38,6 +38,8 @@ namespace DuckGame
         private MultiMap<string, int> _controlsMapGamepad;
         private MultiMap<string, int> _controlsMapKeyboard;
         private MultiMap<string, int> _controlsMapKeyboard2;
+        private MultiMap<string, int> _controlsMapKeyboard3;
+        private MultiMap<string, int> _controlsMapKeyboard4;
         //private InputProfile _defaultInput;
         public static NetworkDebugger instance;
         private static int _lastRect = 0;
@@ -302,6 +304,8 @@ namespace DuckGame
             _controlsMapGamepad = InputProfile.DefaultPlayer1.GetControllerMap<GenericController>();
             _controlsMapKeyboard = InputProfile.defaultProfiles[Options.Data.keyboard1PlayerIndex].GetControllerMap<Keyboard>();
             _controlsMapKeyboard2 = InputProfile.defaultProfiles[Options.Data.keyboard2PlayerIndex].GetControllerMap<Keyboard>();
+            _controlsMapKeyboard3 = InputProfile.defaultProfiles[Options.Data.keyboard3PlayerIndex].GetControllerMap<Keyboard>();
+            _controlsMapKeyboard4 = InputProfile.defaultProfiles[Options.Data.keyboard4PlayerIndex].GetControllerMap<Keyboard>();
             for (int init = 0; init < 4; ++init)
                 CreateInstance(init, true);
             activeLevel = this;
@@ -367,6 +371,10 @@ namespace DuckGame
                     InputProfile.Get(InputProfile.MPPlayers[Options.Data.keyboard1PlayerIndex]).SetGenericControllerMapIndex<Keyboard>(0, _controlsMapKeyboard);
                     InputProfile.defaultProfiles[Options.Data.keyboard2PlayerIndex].SetGenericControllerMapIndex<Keyboard>(1, _controlsMapKeyboard2);
                     InputProfile.Get(InputProfile.MPPlayers[Options.Data.keyboard2PlayerIndex]).SetGenericControllerMapIndex<Keyboard>(1, _controlsMapKeyboard2);
+                    InputProfile.defaultProfiles[Options.Data.keyboard3PlayerIndex].SetGenericControllerMapIndex<Keyboard>(2, _controlsMapKeyboard3);
+                    InputProfile.Get(InputProfile.MPPlayers[Options.Data.keyboard3PlayerIndex]).SetGenericControllerMapIndex<Keyboard>(2, _controlsMapKeyboard3);
+                    InputProfile.defaultProfiles[Options.Data.keyboard4PlayerIndex].SetGenericControllerMapIndex<Keyboard>(3, _controlsMapKeyboard4);
+                    InputProfile.Get(InputProfile.MPPlayers[Options.Data.keyboard4PlayerIndex]).SetGenericControllerMapIndex<Keyboard>(3, _controlsMapKeyboard4);
                     hoveringInstance = true;
                     flag1 = true;
                 }

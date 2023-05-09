@@ -538,15 +538,33 @@ namespace DuckGame
                     foreach (KeyValuePair<string, int> keyValuePair in deviceInputMapping.map)
                         p.Map(GetDevice<Keyboard>(), keyValuePair.Key, keyValuePair.Value);
                 }
-                else
+                else if (p == InputProfile.defaultProfiles[Options.Data.keyboard2PlayerIndex])
                 {
-                    if (p != InputProfile.defaultProfiles[Options.Data.keyboard2PlayerIndex])
-                        return;
                     DeviceInputMapping deviceInputMapping = GetDefaultMapping("KEYBOARD P2", "", p: duckProfile) ?? GetDefaultMapping("KEYBOARD P2", "");
                     if (deviceInputMapping == null)
                         return;
                     foreach (KeyValuePair<string, int> keyValuePair in deviceInputMapping.map)
                         p.Map(GetDevice<Keyboard>(1), keyValuePair.Key, keyValuePair.Value);
+                }
+                else if (p == InputProfile.defaultProfiles[Options.Data.keyboard3PlayerIndex])
+                {
+                    DeviceInputMapping deviceInputMapping = GetDefaultMapping("KEYBOARD P3", "", p: duckProfile) ?? GetDefaultMapping("KEYBOARD P3", "");
+                    if (deviceInputMapping == null)
+                        return;
+                    foreach (KeyValuePair<string, int> keyValuePair in deviceInputMapping.map)
+                        p.Map(GetDevice<Keyboard>(2), keyValuePair.Key, keyValuePair.Value);
+                }
+                else if (p == InputProfile.defaultProfiles[Options.Data.keyboard4PlayerIndex])
+                {
+                    DeviceInputMapping deviceInputMapping = GetDefaultMapping("KEYBOARD P4", "", p: duckProfile) ?? GetDefaultMapping("KEYBOARD P4", "");
+                    if (deviceInputMapping == null)
+                        return;
+                    foreach (KeyValuePair<string, int> keyValuePair in deviceInputMapping.map)
+                        p.Map(GetDevice<Keyboard>(3), keyValuePair.Key, keyValuePair.Value);
+                }
+                else
+                {
+                    return;
                 }
             }
         }
