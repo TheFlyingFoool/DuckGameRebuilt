@@ -566,6 +566,11 @@ namespace DuckGame
 
         public virtual void Map(InputDevice device, string trigger, int mapping, bool clearExisting = false)
         {
+            if (device == null)
+            {
+                Console.WriteLine("AAAAAAAAAAAAHHHHHHHH");
+                return;
+            }
             if (!_mappings.ContainsKey(device))
             {
                 _mappings[device] = new MultiMap<string, int>();

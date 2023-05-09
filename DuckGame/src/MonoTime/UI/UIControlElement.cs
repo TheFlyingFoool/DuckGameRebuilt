@@ -367,7 +367,8 @@ namespace DuckGame
             }
             else
             {
-                if (!(trigger == Triggers.Menu2) || !(inputMapping.deviceName != "KEYBOARD P1") || !(inputMapping.deviceName != "KEYBOARD P2"))
+                if (!(trigger == Triggers.Menu2) || !(inputMapping.deviceName != "KEYBOARD P1") || !(inputMapping.deviceName != "KEYBOARD P2")
+                                                 || !(inputMapping.deviceName != "KEYBOARD P3") || !(inputMapping.deviceName != "KEYBOARD P4"))
                     return;
                 _selectStyle = true;
                 UIMenu.globalUILock = true;

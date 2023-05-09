@@ -1403,7 +1403,7 @@ namespace DuckGame
                 {
                     ExceptionMessage = pException.GetType().FullName + ": ";
                     string tempMsg = pException.Message;
-                    string tempMsg2 = TranslateMessage(pException);
+                    string tempMsg2 = ""; //TranslateMessage(pException);
                     if (tempMsg2 != "" && tempMsg2 != tempMsg)
                     {
                         ExceptionMessage += tempMsg2 + Environment.NewLine + tempMsg;

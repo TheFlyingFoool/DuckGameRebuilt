@@ -1117,6 +1117,10 @@ namespace DuckGame
             _devices.Add(device);
             InputDevice inputDevice1 = new Keyboard("KEYBOARD P2", 1);
             _devices.Add(inputDevice1);
+            InputDevice inputDevice3 = new Keyboard("KEYBOARD P3", 2);
+            _devices.Add(inputDevice3);
+            InputDevice inputDevice4 = new Keyboard("KEYBOARD P4", 3);
+            _devices.Add(inputDevice4);
             InputDevice inputDevice2 = new Mouse();
             _devices.Add(inputDevice2);
 
