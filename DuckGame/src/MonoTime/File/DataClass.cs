@@ -251,7 +251,7 @@ namespace DuckGame
                         {
                             if (Steam.IsInitialized())
                             {
-                                if (Steam.GetStat(property.Name) >= -99999.0f)
+                                if (Steam.GetStat(property.Name) >= -99999f)
                                     continue;
                             }
                             if (property.GetValue(output, null) is StatBinding statBinding)

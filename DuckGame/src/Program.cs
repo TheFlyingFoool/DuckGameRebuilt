@@ -44,7 +44,7 @@ namespace DuckGame
 #endif
         public static readonly bool HasInternet = Internet.IsAvailable();
         // this should be formatted like X.X.X where each X is a number
-        public static string CURRENT_VERSION_ID = "1.0.12";
+        public static string CURRENT_VERSION_ID = "1.0.13";
 
         // do change this you know what you're doing -NiK0
         public static string CURRENT_VERSION_ID_FORMATTED = $"v{CURRENT_VERSION_ID}-beta";

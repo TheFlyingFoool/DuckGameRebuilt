@@ -514,6 +514,7 @@ namespace DuckGame
             _optionsGroup.Add(_dgrMenu, false);
             _optionsGroup.Add(Options._DGRGraphicsMenu, false);
             _optionsGroup.Add(Options._DGRHudMenu, false);
+            _optionsGroup.Add(Options._DGREditorMenu, false);
             _optionsGroup.Add(Options._DGRMiscMenu, false);
             _optionsGroup.Add(Options._DGROptimMenu, false);
             _optionsGroup.Add(_audioMenu, false);
