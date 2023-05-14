@@ -117,22 +117,22 @@ namespace DuckGame
                 return _step;
             if (altKeyDown && _setting.altStep != null)
                 return _setting.altStep;
-            int step1 = 0;
-            foreach (KeyValuePair<int, int> step2 in _setting.stepMap)
+            int step = 0;
+            foreach (KeyValuePair<int, int> pair in _setting.stepMap)
             {
-                step1 = step2.Value;
+                step = pair.Value;
                 if (up)
                 {
-                    if (step2.Key > current)
+                    if (pair.Key > current)
                         break;
                 }
                 if (!up)
                 {
-                    if (step2.Key >= current)
+                    if (pair.Key >= current)
                         break;
                 }
             }
-            return step1;
+            return step;
         }
 
         public override void Activate(string trigger)
