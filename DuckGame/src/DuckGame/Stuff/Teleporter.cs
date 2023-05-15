@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Teleporter
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -159,7 +152,7 @@ namespace DuckGame
             }
             else
             {
-                Vec2 vec2_2 = position + new Vec2(0f, (float)-((int)teleHeight * 16.0 / 2.0 - 8.0));
+                Vec2 vec2_2 = position + new Vec2(0f, (float)-((int)teleHeight * 16f / 2f - 8f));
                 Teleporter teleporter = Level.CheckRay<Teleporter>(vec2_2 + vec2_1 * 20f, vec2_2 + vec2_1 * 5000f, this, out hitPos);
                 if (teleporter != null)
                     _link = teleporter;
@@ -175,7 +168,7 @@ namespace DuckGame
                 InitLinks();
             if (_link == null)
                 return;
-            IEnumerable<ITeleport> source = Level.CheckRectAll<ITeleport>(topLeft, bottomRight);
+            IEnumerable<ITeleport> source = Level.CheckRectAllNiK0<ITeleport>(topLeft, bottomRight);
             for (int index = 0; index < _teleported.Count; ++index)
             {
                 ITeleport teleport = _teleported[index];
@@ -216,14 +209,14 @@ namespace DuckGame
                 _link._teleported.Add(thing1 as ITeleport);
                 if ((int)teleHeight != 2 || (int)_link.teleHeight != 2)
                 {
-                    if (_dir.y == 0.0)
+                    if (_dir.y == 0)
                     {
                         thing1.x = _link.x - (x - thing1.x);
                         if (!horizontal.value)
                         {
                             if (thing1 is PhysicsObject)
                             {
-                                if (thing1.hSpeed > 0.0)
+                                if (thing1.hSpeed > 0)
                                     thing1.position.x = _link.position.x + 8f;
                                 else
                                     thing1.position.x = _link.position.x - 8f;
@@ -231,10 +224,10 @@ namespace DuckGame
                         }
                         else if (thing1 is PhysicsObject)
                         {
-                            if (thing1.vSpeed > 0.0)
-                                thing1.position.y = _link.position.y + ((float)(thing1.height / 2.0 + 6.0) + num2);
+                            if (thing1.vSpeed > 0)
+                                thing1.position.y = _link.position.y + ((float)(thing1.height / 2 + 6) + num2);
                             else
-                                thing1.position.y = _link.position.y - ((float)(thing1.height / 2.0 + 6.0) + num2);
+                                thing1.position.y = _link.position.y - ((float)(thing1.height / 2 + 6) + num2);
                         }
                     }
                     else
@@ -244,7 +237,7 @@ namespace DuckGame
                         {
                             if (thing1 is PhysicsObject)
                             {
-                                if (thing1.hSpeed > 0.0)
+                                if (thing1.hSpeed > 0)
                                     thing1.position.x = _link.position.x + 8f;
                                 else
                                     thing1.position.x = _link.position.x - 8f;
@@ -252,10 +245,10 @@ namespace DuckGame
                         }
                         else if (thing1 is PhysicsObject)
                         {
-                            if (thing1.vSpeed > 0.0)
-                                thing1.position.y = _link.position.y + ((float)(thing1.height / 2.0 + 6.0) + num2);
+                            if (thing1.vSpeed > 0)
+                                thing1.position.y = _link.position.y + ((float)(thing1.height / 2 + 6) + num2);
                             else
-                                thing1.position.y = _link.position.y - ((float)(thing1.height / 2.0 + 6.0) + num2);
+                                thing1.position.y = _link.position.y - ((float)(thing1.height / 2 + 6) + num2);
                         }
                     }
                     if (!horizontal.value)
@@ -288,7 +281,7 @@ namespace DuckGame
                             thing1.position.y = _link.position.y;
                         if (thing1 is PhysicsObject)
                         {
-                            if (thing1.hSpeed > 0.0)
+                            if (thing1.hSpeed > 0)
                                 thing1.position.x = _link.position.x + 8f;
                             else
                                 thing1.position.x = _link.position.x - 8f;
@@ -300,7 +293,7 @@ namespace DuckGame
                             thing1.position.x = _link.position.x;
                         if (thing1 is PhysicsObject)
                         {
-                            if (thing1.vSpeed > 0.0)
+                            if (thing1.vSpeed > 0)
                                 thing1.position.y = _link.position.y + 8f;
                             else
                                 thing1.position.y = _link.position.y - 8f;
@@ -317,12 +310,12 @@ namespace DuckGame
                     vec2.y += 9f;
                     position2.y += 9f;
                 }
-                if (_dir.y != 0.0 && !horizontal.value)
+                if (_dir.y != 0 && !horizontal.value)
                 {
                     vec2.x = position.x;
                     position2.x = _link.position.x;
                 }
-                float num3 = Math.Max(_dir.x != 0.0 ? thing1.height : thing1.width, 8f);
+                float num3 = Math.Max(_dir.x != 0 ? thing1.height : thing1.width, 8f);
                 warpLines.Add(new WarpLine()
                 {
                     start = vec2,
@@ -347,7 +340,7 @@ namespace DuckGame
                 Graphics.DrawTexturedLine(_warpLine.texture, warpLine.start + vec2_2 * warpLine.lerp, warpLine.start, color * 0.8f, warpLine.wide / 32f, (Depth)0.9f);
                 warpLine.lerp += 0.1f;
             }
-            warpLines.RemoveAll(v => v.lerp >= 1.0);
+            warpLines.RemoveAll(v => v.lerp >= 1);
         }
         //REBUILT STUFF
         public void BasedDraw()
@@ -380,7 +373,7 @@ namespace DuckGame
                     _arrow.angleDegrees = -90f;
                 else if (direction == 3)
                     _arrow.angleDegrees = 90f;
-                Graphics.Draw(_arrow, (float)(x - 8.0 + (int)teleHeight * 16 / 2 + (float)_float * 2.0), y);
+                Graphics.Draw(_arrow, (float)(x - 8 + (int)teleHeight * 16 / 2 + (float)_float * 2), y);
             }
             else
             {
@@ -405,7 +398,7 @@ namespace DuckGame
                     _arrow.angleDegrees = -90f;
                 else if (direction == 3)
                     _arrow.angleDegrees = 90f;
-                Graphics.Draw(_arrow, x, (float)(y + 8.0 - (int)teleHeight * 16 / 2 + (float)_float * 2.0));
+                Graphics.Draw(_arrow, x, (float)(y + 8 - (int)teleHeight * 16 / 2 + (float)_float * 2));
             }
         }
 

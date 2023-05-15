@@ -1060,6 +1060,10 @@ namespace DuckGame
         {
             return current.CollisionRectAllDan<T>(p1, p2, null);
         }
+        public static IEnumerable<T> CheckRectAllNiK0<T>(Vec2 p1, Vec2 p2)
+        {
+            return current.CollisionRectAllNiK0<T>(p1, p2, null);
+        }
 
         public T CollisionRect<T>(float p1x, float p1y, float p2x, float p2y, Thing ignore) => CollisionRect<T>(new Vec2(p1x, p1y), new Vec2(p2x, p2y), ignore);
 
@@ -1600,6 +1604,23 @@ namespace DuckGame
             if (_things.HasStaticObjects(key))
                 _things.quadTree.CheckRectangleAll(p1, p2, outList1);
             return outList1;
+        }
+        public List<T> CollisionRectAllNiK0<T>(Vec2 p1, Vec2 p2, List<T> outList)
+        {
+            List<T> list = (outList == null) ? new List<T>() : outList;
+            Type t = typeof(T);
+            foreach (Thing thing in this._things.GetDynamicObjects(t))
+            {
+                if (!thing.removeFromLevel && Collision.Rect(p1, p2, thing))
+                {
+                    list.Add((T)((object)thing));
+                }
+            }
+            if (this._things.HasStaticObjects(t))
+            {
+                this._things.quadTree.CheckRectangleAll<T>(p1, p2, list);
+            }
+            return list;
         }
         public List<T> CollisionRectAllDan<T>(Vec2 p1, Vec2 p2, List<T> outList)
         {
