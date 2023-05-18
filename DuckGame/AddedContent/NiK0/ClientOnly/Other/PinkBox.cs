@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Stuff")]
+    //[EditorGroup("Rebuilt|Stuff")]
     public class PinkBox : Block
     {
         public bool canBounce

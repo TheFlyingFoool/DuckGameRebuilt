@@ -5,7 +5,7 @@ using System.Linq;
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Wump|Pistols")]
+    //[EditorGroup("Rebuilt|Wump|Pistols")]
     public class WumpPistol : Gun
     {
         public WumpPistol(float xval, float yval) : base(xval, yval)

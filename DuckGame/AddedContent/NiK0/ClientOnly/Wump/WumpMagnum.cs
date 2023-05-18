@@ -8,7 +8,7 @@
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Wump|Pistols")]
+    //[EditorGroup("Rebuilt|Wump|Pistols")]
     public class WumpMagnum : Gun
     {
         public StateBinding _angleOffsetBinding = new StateBinding(nameof(_angleOffset));

@@ -1,7 +1,7 @@
 ﻿namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Wump|Machine Guns")]
+    //[EditorGroup("Rebuilt|Wump|Machine Guns")]
     public class WumpAK47 : Gun
     {
         public StateBinding _firesBinding = new StateBinding("fires");

@@ -12,7 +12,7 @@ using System.Linq;
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Stuff")]
+    //[EditorGroup("Rebuilt|Stuff")]
     public class WumpTeleporter : Teleporter
     {
         public EditorProperty<float> chargeTime = new EditorProperty<float>(1, null, 0, 60, 0.1f);

@@ -23,6 +23,9 @@ namespace DuckGame
             }
         }
         [AutoConfigField]
+        public static bool skipOnlineBumper = false;
+
+        [AutoConfigField]
         public static string PreferredLevel = "";
 
         [AutoConfigField]

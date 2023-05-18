@@ -101,7 +101,6 @@ namespace DuckGame
         private float _waitToShow = 1f;
         private static bool _showedPS4Warning = false;
         private float _afkTimeout;
-        private static bool _showedOnlineBumper = false;
         private float _timeoutFade;
         private float _topScroll;
         private float _afkMaxTimeout = 300f;
@@ -754,116 +753,100 @@ namespace DuckGame
             int pMinLength = 50;
             float heightAdd = 3f;
             _playOnlineBumper = new UIMenu("PLAYING ONLINE", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 220f, conString: "@SELECT@OK!");
-            UIMenu playOnlineBumper1 = _playOnlineBumper;
             UIText component1 = new UIText("", Color.White, heightAdd: -3f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper1.Add(component1, true);
-            UIMenu playOnlineBumper2 = _playOnlineBumper;
+            _playOnlineBumper.Add(component1, true);
             UIText component2 = new UIText("There are many tools of expression", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper2.Add(component2, true);
-            UIMenu playOnlineBumper3 = _playOnlineBumper;
+            _playOnlineBumper.Add(component2, true);
             UIText component3 = new UIText("in Duck Game. Please use them for", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper3.Add(component3, true);
-            UIMenu playOnlineBumper4 = _playOnlineBumper;
+            _playOnlineBumper.Add(component3, true);
             UIText component4 = new UIText("|PINK|love|WHITE| and not for |DGRED|hate...|WHITE|", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper4.Add(component4, true);
-            UIMenu playOnlineBumper5 = _playOnlineBumper;
+            _playOnlineBumper.Add(component4, true);
             UIText component5 = new UIText("", Color.White, heightAdd: -3f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper5.Add(component5, true);
-            UIMenu playOnlineBumper6 = _playOnlineBumper;
+            _playOnlineBumper.Add(component5, true);
             UIText component6 = new UIText("Things every Duck aught to remember:", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper6.Add(component6, true);
-            UIMenu playOnlineBumper7 = _playOnlineBumper;
+            _playOnlineBumper.Add(component6, true);
             UIText component7 = new UIText("", Color.White, heightAdd: -3f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper7.Add(component7, true);
-            UIMenu playOnlineBumper8 = _playOnlineBumper;
+            _playOnlineBumper.Add(component7, true);
             UIText component8 = new UIText("-Trolling and hate appear exactly the same online.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper8.Add(component8, true);
-            UIMenu playOnlineBumper9 = _playOnlineBumper;
+            _playOnlineBumper.Add(component8, true);
             UIText component9 = new UIText("-Please! be kind to one another.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper9.Add(component9, true);
-            UIMenu playOnlineBumper10 = _playOnlineBumper;
+            _playOnlineBumper.Add(component9, true);
             UIText component10 = new UIText("-Please! don't use hate speech or strong words.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper10.Add(component10, true);
-            UIMenu playOnlineBumper11 = _playOnlineBumper;
+            _playOnlineBumper.Add(component10, true);
             UIText component11 = new UIText("-Please! don't use hacks in public lobbies.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper11.Add(component11, true);
-            UIMenu playOnlineBumper12 = _playOnlineBumper;
+            _playOnlineBumper.Add(component11, true);
             UIText component12 = new UIText("-Please! keep custom content tasteful.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper12.Add(component12, true);
-            UIMenu playOnlineBumper13 = _playOnlineBumper;
+            _playOnlineBumper.Add(component12, true);
             UIText component13 = new UIText("-Angle shots are neat (and are not hacks).".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper13.Add(component13, true);
-            UIMenu playOnlineBumper14 = _playOnlineBumper;
+            _playOnlineBumper.Add(component13, true);
             UIText component14 = new UIText("", Color.White, heightAdd: -3f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper14.Add(component14, true);
-            UIMenu playOnlineBumper15 = _playOnlineBumper;
+            _playOnlineBumper.Add(component14, true);
             UIText component15 = new UIText("If anyone is hacking or being unkind, please", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper15.Add(component15, true);
-            UIMenu playOnlineBumper16 = _playOnlineBumper;
+            _playOnlineBumper.Add(component15, true);
             UIText component16 = new UIText("hover their name in the pause menu", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper16.Add(component16, true);
-            UIMenu playOnlineBumper17 = _playOnlineBumper;
+            _playOnlineBumper.Add(component16, true);
             UIText component17 = new UIText("and go 'Mute -> Block'.", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper17.Add(component17, true);
-            UIMenu playOnlineBumper18 = _playOnlineBumper;
+            _playOnlineBumper.Add(component17, true);
             UIText component18 = new UIText("", Color.White, heightAdd: -3f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper18.Add(component18, true);
+            _playOnlineBumper.Add(component18, true);
             _playOnlineBumper.SetAcceptFunction(new UIMenuActionOpenMenu(_playOnlineBumper, _playOnlineMenu));
             _playOnlineBumper.SetBackFunction(new UIMenuActionOpenMenu(_playOnlineBumper, _playOnlineMenu));
+
+
             _browseGamesMenu = new UIServerBrowser(_playOnlineMenu, "SERVER BROWSER", Layer.HUD.camera.width, Layer.HUD.camera.height, 550f);
             if (Network.available)
             {
@@ -1468,13 +1451,12 @@ namespace DuckGame
         {
             FillMatchmakingProfiles();
             _playOnlineGroup.Open();
-            if (!_showedOnlineBumper)
+            if (!DGRSettings.skipOnlineBumper)
             {
-                _showedOnlineBumper = true;
+                DGRSettings.skipOnlineBumper = true;
                 _playOnlineBumper.Open();
             }
-            else
-                _playOnlineMenu.Open();
+            else _playOnlineMenu.Open();
             MonoMain.pauseMenu = _playOnlineGroup;
         }
 
