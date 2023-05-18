@@ -1349,41 +1349,48 @@ namespace DuckGame
                         string text = "PLAYER 1";
                         float num8 = 47f;
                         x += num8;
+                        string realText = "";
+                        float cenX = x + 48f;
+                        float cenY = y + 80f;
                         Furniture furniture5 = _hatSelector._roomEditor.CurFurni();
                         if (furniture5.type == FurnitureType.Font)
                         {
                             furniture5.font.scale = new Vec2(0.5f, 0.5f);
-                            furniture5.font.spriteScale = new Vec2(0.5f, 0.5f);
-                            furniture5.font.Draw("@SELECT@ACCEPT @CANCEL@CANCEL", (float)(x + 24.0 - furniture5.font.GetWidth(text) / 2.0) - num6, y + 75f + num7, Color.White, (Depth)0.7f, profile.inputProfile);
+                            furniture5.font.spriteScale = new Vec2(1f, 1f);
+                            realText = "@SELECT@ACCEPT @CANCEL@CANCEL";
+                            furniture5.font.Draw(realText, cenX - furniture5.font.GetWidth(realText) / 2f, cenY - furniture5.font.height / 2f, Color.White, (Depth)0.7f, profile.inputProfile);
                             furniture5.font.scale = new Vec2(1f, 1f);
                         }
                         else if (furniture5.type == FurnitureType.Theme)
                         {
                             profile.font.scale = new Vec2(0.5f, 0.5f);
-                            profile.font.spriteScale = new Vec2(0.5f, 0.5f);
-                            profile.font.Draw("@SELECT@ACCEPT @CANCEL@CANCEL", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num6, y + 75f + num7, Color.White, (Depth)0.7f, profile.inputProfile);
+                            profile.font.spriteScale = new Vec2(1f, 1f);
+                            realText = "@SELECT@ACCEPT @CANCEL@CANCEL";
+                            profile.font.Draw(realText, cenX - profile.font.GetWidth(realText) / 2f, cenY - 1f - profile.font.height / 2f, Color.White, (Depth)0.7f, profile.inputProfile);
                         }
                         else if (furniture5.name == "CLEAR ROOM")
                         {
                             profile.font.scale = new Vec2(0.5f, 0.5f);
-                            profile.font.spriteScale = new Vec2(0.5f, 0.5f);
-                            profile.font.Draw("@MENU2@CLEAR @CANCEL@BACK", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num6, y + 75f + num7, Color.White, (Depth)0.7f, profile.inputProfile);
+                            profile.font.spriteScale = new Vec2(1f, 1f);
+                            realText = "@MENU2@CLEAR @CANCEL@BACK";
+                            profile.font.Draw(realText, cenX - profile.font.GetWidth(realText) / 2f, cenY - profile.font.height / 2f, Color.White, (Depth)0.7f, profile.inputProfile);
                         }
                         else
                         {
                             profile.font.scale = new Vec2(0.5f, 0.5f);
-                            profile.font.spriteScale = new Vec2(0.5f, 0.5f);
+                            profile.font.spriteScale = new Vec2(0.8f, 0.8f);
                             if (_hatSelector._roomEditor._hover != null)
-                                profile.font.Draw("@SELECT@DEL @MENU2@GRAB @CANCEL@DONE", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num6, y + 75f + num7, Color.White, (Depth)0.7f, profile.inputProfile);
+                                realText = "@SELECT@DEL @MENU2@GRAB @CANCEL@DONE";
                             else
-                                profile.font.Draw("@SELECT@ADD @MENU2@MOD @CANCEL@DONE", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num6, y + 75f + num7, Color.White, (Depth)0.7f, profile.inputProfile);
+                                realText = "@SELECT@ADD @MENU2@MOD @CANCEL@DONE";
+                            profile.font.Draw(realText, cenX + 2f - profile.font.GetWidth(realText) / 2f, cenY - 4f, Color.White, (Depth)0.7f, profile.inputProfile);
                             profile.font.scale = new Vec2(0.25f, 0.25f);
                             int num9 = Profiles.experienceProfile.GetNumFurnitures(furniture5.index) - profile.GetNumFurnituresPlaced(furniture5.index);
-                            profile.font.Draw(furniture5.name + (num9 > 0 ? " |DGGREEN|" : " |DGRED|") + "x" + num9.ToString(), (float)(x + 17.0 - profile.font.GetWidth(text) / 2.0) - num6, (float)(y + 75.0 + 6.5) + num7, Color.White, (Depth)0.7f);
+                            profile.font.Draw(furniture5.name + (num9 > 0 ? " |DGGREEN|" : " |DGRED|") + "x" + num9.ToString(), (float)(x + 15f - profile.font.GetWidth(text) / 2.0) - num6, (float)(y + 75.0 + 6.5) + num7, Color.White, (Depth)0.7f);
                             int furnituresPlaced = profile.GetTotalFurnituresPlaced();
                             float num10 = furnituresPlaced / (float)RoomEditor.maxFurnitures;
-                            profile.font.Draw(furnituresPlaced.ToString() + "/" + RoomEditor.maxFurnitures.ToString(), (float)(x + 68.0 - profile.font.GetWidth(text) / 2.0) - num6, (float)(y + 75.0 + 6.5) + num7, Color.Black, (Depth)0.7f);
-                            Vec2 p1 = new Vec2((float)(x + 56.0 - profile.font.GetWidth(text) / 2.0) - num6, (float)(y + 75.0 + 6.0) + num7);
+                            profile.font.Draw(furnituresPlaced.ToString() + "/" + RoomEditor.maxFurnitures.ToString(), (float)(x + 66f - profile.font.GetWidth(text) / 2.0) - num6, (float)(y + 75.0 + 6.5) + num7, Color.Black, (Depth)0.7f);
+                            Vec2 p1 = new Vec2((float)(x + 52f - profile.font.GetWidth(text) / 2.0) - num6, (float)(y + 75.0 + 6.0) + num7);
                             Graphics.DrawRect(p1, p1 + new Vec2(37f, 3f), Colors.BlueGray, (Depth)0.66f, borderWidth: 0.5f);
                             Graphics.DrawRect(p1, p1 + new Vec2(37f * num10, 3f), num10 < 0.04f ? Colors.DGGreen : (num10 < 0.8f ? Colors.DGYellow : Colors.DGRed), (Depth)0.68f, borderWidth: 0.5f);
                         }
@@ -1481,41 +1488,48 @@ namespace DuckGame
                         string text = "PLAYER 1";
                         float num14 = 0f;
                         float num15 = 0f;
+                        string realText = "";
+                        float cenX = x + 48f;
+                        float cenY = y + 80f;
                         Furniture furniture6 = _hatSelector._roomEditor.CurFurni();
                         if (furniture6.type == FurnitureType.Font)
                         {
                             furniture6.font.scale = new Vec2(0.5f, 0.5f);
-                            furniture6.font.spriteScale = new Vec2(0.5f, 0.5f);
-                            furniture6.font.Draw("@SELECT@ACCEPT @CANCEL@CANCEL", (float)(x + 24.0 - furniture6.font.GetWidth(text) / 2.0) - num14, y + 75f + num15, Color.White, (Depth)0.7f, profile.inputProfile);
+                            furniture6.font.spriteScale = new Vec2(1f, 1f);
+                            realText = "@SELECT@ACCEPT @CANCEL@CANCEL";
+                            furniture6.font.Draw(realText, cenX - furniture6.font.GetWidth(realText) / 2f, cenY - furniture6.font.height / 2f, Color.White, (Depth)0.7f, profile.inputProfile);
                             furniture6.font.scale = new Vec2(1f, 1f);
                         }
                         else if (furniture6.type == FurnitureType.Theme)
                         {
                             profile.font.scale = new Vec2(0.5f, 0.5f);
-                            profile.font.spriteScale = new Vec2(0.5f, 0.5f);
-                            profile.font.Draw("@SELECT@ACCEPT @CANCEL@CANCEL", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num14, y + 75f + num15, Color.White, (Depth)0.7f, profile.inputProfile);
+                            profile.font.spriteScale = new Vec2(1f, 1f);
+                            realText = "@SELECT@ACCEPT @CANCEL@CANCEL";
+                            profile.font.Draw(realText, cenX - profile.font.GetWidth(realText) / 2f, cenY - 1f - profile.font.height / 2f, Color.White, (Depth)0.7f, profile.inputProfile);
                         }
                         else if (furniture6.name == "CLEAR ROOM")
                         {
                             profile.font.scale = new Vec2(0.5f, 0.5f);
-                            profile.font.spriteScale = new Vec2(0.5f, 0.5f);
-                            profile.font.Draw("@MENU2@CLEAR @CANCEL@BACK", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num14, y + 75f + num15, Color.White, (Depth)0.7f, profile.inputProfile);
+                            profile.font.spriteScale = new Vec2(1f, 1f);
+                            realText = "@MENU2@CLEAR @CANCEL@BACK";
+                            profile.font.Draw(realText, cenX - profile.font.GetWidth(realText) / 2f, cenY - profile.font.height / 2f, Color.White, (Depth)0.7f, profile.inputProfile);
                         }
                         else
                         {
                             profile.font.scale = new Vec2(0.5f, 0.5f);
-                            profile.font.spriteScale = new Vec2(0.5f, 0.5f);
+                            profile.font.spriteScale = new Vec2(0.8f, 0.8f);
                             if (_hatSelector._roomEditor._hover != null)
-                                profile.font.Draw("@SELECT@DEL @MENU2@GRAB @CANCEL@DONE", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num14, y + 75f + num15, Color.White, (Depth)0.7f, profile.inputProfile);
+                                realText = "@SELECT@DEL @MENU2@GRAB @CANCEL@DONE";
                             else
-                                profile.font.Draw("@SELECT@ADD @MENU2@MOD @CANCEL@DONE", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num14, y + 75f + num15, Color.White, (Depth)0.7f, profile.inputProfile);
+                                realText = "@SELECT@ADD @MENU2@MOD @CANCEL@DONE";
+                            profile.font.Draw(realText, cenX + 2f - profile.font.GetWidth(realText) / 2f, cenY - 4f, Color.White, (Depth)0.7f, profile.inputProfile);
                             profile.font.scale = new Vec2(0.25f, 0.25f);
                             int num16 = Profiles.experienceProfile.GetNumFurnitures(furniture6.index) - profile.GetNumFurnituresPlaced(furniture6.index);
-                            profile.font.Draw(furniture6.name + (num16 > 0 ? " |DGGREEN|" : " |DGRED|") + "x" + num16.ToString(), (float)(x + 17.0 - profile.font.GetWidth(text) / 2.0) - num14, (float)(y + 75.0 + 6.5) + num15, Color.White, (Depth)0.7f);
+                            profile.font.Draw(furniture6.name + (num16 > 0 ? " |DGGREEN|" : " |DGRED|") + "x" + num16.ToString(), (float)(x + 15f) - num14, (float)(y + 75.0 + 6.5) + num15, Color.White, (Depth)0.7f);
                             int furnituresPlaced = profile.GetTotalFurnituresPlaced();
                             float num17 = furnituresPlaced / (float)RoomEditor.maxFurnitures;
-                            profile.font.Draw(furnituresPlaced.ToString() + "/" + RoomEditor.maxFurnitures.ToString(), (float)(x + 68.0 - profile.font.GetWidth(text) / 2.0) - num14, (float)(y + 75.0 + 6.5) + num15, Color.Black, (Depth)0.7f);
-                            Vec2 p1 = new Vec2((float)(x + 56.0 - profile.font.GetWidth(text) / 2.0) - num14, (float)(y + 75.0 + 6.0) + num15);
+                            profile.font.Draw(furnituresPlaced.ToString() + "/" + RoomEditor.maxFurnitures.ToString(), (float)(x + 66f - profile.font.GetWidth(text) / 2.0) - num14, (float)(y + 75.0 + 6.5) + num15, Color.Black, (Depth)0.7f);
+                            Vec2 p1 = new Vec2((float)(x + 52f - profile.font.GetWidth(text) / 2.0) - num14, (float)(y + 75.0 + 6.0) + num15);
                             Graphics.DrawRect(p1, p1 + new Vec2(37f, 3f), Colors.BlueGray, (Depth)0.66f, borderWidth: 0.5f);
                             Graphics.DrawRect(p1, p1 + new Vec2(37f * num17, 3f), num17 < 0.04f ? Colors.DGGreen : (num17 < 0.8f ? Colors.DGYellow : Colors.DGRed), (Depth)0.68f, borderWidth: 0.5f);
                         }
