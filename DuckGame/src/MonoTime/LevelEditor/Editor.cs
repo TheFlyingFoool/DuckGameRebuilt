@@ -3667,10 +3667,10 @@ namespace DuckGame
                             ? instructionText + "@LEFTMOUSE@PASTE  " + "@RIGHTMOUSE@CANCEL  "
                             : instructionText + "@SELECT@PASTE  " + "@CANCEL@CANCEL  ";
                     else if (_fileDialog.opened)
-                        instructionText = "@SHOOT@SET DEFAULT  @WASD@MOVE  " + selectText + "SELECT  @MENU2@DELETE  " + cancelText +
+                        instructionText = "@SHOOT@FAVORITE@DGR@  @WASD@MOVE  " + selectText + "SELECT  @MENU2@DELETE  " + cancelText +
                                 "CANCEL  @STRAFE@+@RAGDOLL@BROWSE..";
                     else if (_menuOpen && inputMode == EditorInput.Gamepad)
-                        instructionText = "@SHOOT@SET DEFAULT  @WASD@MOVE  " + selectText + "SELECT  @RIGHT@EXPAND  " + cancelText + "CLOSE";
+                        instructionText = "@SHOOT@FAVORITE@DGR@  @WASD@MOVE  " + selectText + "SELECT  @RIGHT@EXPAND  " + cancelText + "CLOSE";
                     else if (inputMode == EditorInput.Gamepad || inputMode == EditorInput.Mouse)
                     {
                         int num = _secondaryHover != null ? 1 : (_hover != null ? 1 : 0);

@@ -8,7 +8,7 @@
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Stuff|Doors")]
+    //[EditorGroup("Stuff|Doors")]
     public class TestVerticalDoor : Block, IPlatform
     {
         protected SpriteMap _sprite;

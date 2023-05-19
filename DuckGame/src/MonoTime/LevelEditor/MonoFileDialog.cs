@@ -176,14 +176,11 @@ namespace DuckGame
                 modRootPath = null;
                 isModPath = false;
             }
-            if (dir.Length < _rootFolder.Length && !pIsModPath)
-                dir = _rootFolder;
+            if (dir.Length < _rootFolder.Length && !pIsModPath) dir = _rootFolder;
             int num1 = 0;
             _currentDirectory = dir;
-            if (_currentDirectory != _rootFolder)
-                ++num1;
-            if (_save)
-                ++num1;
+            if (_currentDirectory != _rootFolder) num1++;
+            if (_save) num1++;
             prevDirectory = dir;
             string[] directories = DuckFile.GetDirectories(_currentDirectory);
             string[] files = DuckFile.GetFiles(_currentDirectory);
@@ -300,25 +297,20 @@ namespace DuckGame
                 if (DGRSettings.PreferredLevel != "" && path == DGRSettings.PreferredLevel)
                 {
                     heart33 = true;
-                    DevConsole.Log(fileName);
-                    DevConsole.Log(path);
                 }
                 if (!_selectLevels)
                 {
                     if (fileName.EndsWith(TypeExtension()))
                     {
-                        string TOXT = fileName;
-                        if (heart33)
-                        {
-                            TOXT = TOXT.Insert(0, "|PINK|♥|WHITE|");
-                        }
+                        string text = fileName;
+                        if (heart33) text = text.Insert(0, "|PINK|♥|WHITE|");
                         ContextMenu contextMenu = new ContextMenu(this)
                         {
                             layer = layer,
                             fancy = true,
-                            text = TOXT
+                            text = text
                         };
-                        contextMenu.text = TOXT.Substring(0, TOXT.Length - 4);
+                        contextMenu.text = text.Substring(0, text.Length - 4);
                         contextMenu.data = !_pIsModPath ? fileName : path;
                         contextMenu.itemSize = new Vec2(x, 16f);
                         contextMenu.isModPath = _pIsModPath;
@@ -340,22 +332,22 @@ namespace DuckGame
                     };
                     AddItem(contextCheckBox);
                 }
-                ++num3;
+                num3++;
             }
             int num4 = (int)Math.Round((_items.Count - 1 - _maxItems) * _scrollPosition);
-            int num5 = 0;
-            for (int index = 0; index < _items.Count; ++index)
+            int n = 0;
+            for (int i = 0; i < _items.Count; i++)
             {
-                ContextMenu cm = _items[index];
-                if (index < num4 || index > num4 + _maxItems)
+                ContextMenu cm = _items[i];
+                if (i < num4 || i > num4 + _maxItems)
                 {
                     cm.visible = false;
                 }
                 else
                 {
                     cm.visible = true;
-                    cm.position = new Vec2(_items[index].position.x, (float)(y + 3.0 + num5 * (_items[index].itemSize.y + 1.0)));
-                    ++num5;
+                    cm.position = new Vec2(_items[i].position.x, (float)(y + 3.0 + n * (_items[i].itemSize.y + 1.0)));
+                    n++;
                 }
             }
             menuSize.y = _fdHeight;
@@ -661,9 +653,7 @@ namespace DuckGame
                                 if (cl != null) cl.text = cl.text.Remove(0, 14);
                             }
                             SFX.Play("preach3", 0.5f, Rando.Float(0.2f));
-                            DevConsole.Log(cm.text);
                             cm.text = cm.text.Insert(0, "|PINK|♥|WHITE|");
-                            DevConsole.Log(cm.text);
                             DGRSettings.PreferredLevel = _currentDirectory + cm.data;
                         }
                     }

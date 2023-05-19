@@ -8,7 +8,7 @@
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Stuff|Wires")]
+    //[EditorGroup("Stuff|Wires")]
     [BaggedProperty("isOnlineCapable", true)]
     public class DebugMount : Thing
     {

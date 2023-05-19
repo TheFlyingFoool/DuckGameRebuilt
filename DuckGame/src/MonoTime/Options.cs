@@ -416,7 +416,7 @@ namespace DuckGame
             }, true);
             menu.Add(new UIMenuItemToggle("Discord RPC", field: new FieldBinding(dGRSettings, "RPC"))
             {
-                dgrDescription = "Toggles discord rich presence showing current level, if you're in the editor, etc\n(May take a few seconds to connect)"
+                dgrDescription = "Toggles discord rich presence displaying the current level, if you're in the editor, etc\n(May take a few seconds to connect)"
             }, true);
             menu.Add(new UIMenuItemToggle("Menu Mouse", field: new FieldBinding(dGRSettings, "MenuMouse"))
             {

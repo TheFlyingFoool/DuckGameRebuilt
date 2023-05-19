@@ -10,7 +10,7 @@ using System.Linq;
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Stuff|Wires")]
+    //[EditorGroup("Stuff|Wires")]
     [BaggedProperty("isInDemo", true)]
     public class CodeButton : Block, IWirePeripheral
     {
