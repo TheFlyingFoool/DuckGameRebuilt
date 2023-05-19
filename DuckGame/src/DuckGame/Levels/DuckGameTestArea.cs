@@ -155,6 +155,11 @@ namespace DuckGame
             foreach (Duck spawnPlayer in new Deathmatch(this).SpawnPlayers(false))
             {
                 Add(spawnPlayer);
+                if (spawnPlayer.inputProfile == null && DGRSettings.EditorOnlinePhysics)
+                {
+                    current = _editor;
+                    _editor.needInputRefresh = true;
+                }
                 followCam.Add(spawnPlayer);
             }
         }

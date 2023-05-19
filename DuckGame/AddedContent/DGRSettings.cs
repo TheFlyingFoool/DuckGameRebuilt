@@ -159,6 +159,9 @@ namespace DuckGame
         public static bool LobbyNameOnPause = true;
 
         [AutoConfigField]
+        public static bool EditorOnlinePhysics = false; //for the love of god be off by default jesus christ -NiK0
+
+        [AutoConfigField]
         public static bool EditorInstructions = true;
 
         [AutoConfigField]

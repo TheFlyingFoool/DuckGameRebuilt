@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.GhostObject
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -837,19 +830,26 @@ namespace DuckGame
                 }
                 _networkState = GetCurrentState();
                 _manager = manager;
-                if (ghostIndex != -1)
+                //THIS IS A MASSIVE HACK IT MIGHT CAUSE A TON OF ISSUES WHEN USING ONLINE PHYSICS OFFLINE BUT I DONT CARE ! ! !
+                //-NiK0
+                if (!Network.isFakeActive)
                 {
-                    _ghostObjectIndex = new NetIndex16(ghostIndex);
-                    _thing.ghostType = Editor.IDToType[_thing.GetType()];
+                    if (ghostIndex != -1)
+                    {
+                        _ghostObjectIndex = new NetIndex16(ghostIndex);
+                        _thing.ghostType = Editor.IDToType[_thing.GetType()];
+                    }
+                    else
+                    {
+                        _ghostObjectIndex = _manager.GetGhostIndex(levelInit);
+
+                        if (!levelInit || Network.isServer)
+                            _thing.connection = DuckNetwork.localConnection;
+                    }
+                    DevConsole.Log(DCSection.GhostMan, "|DGBLUE|Creating|PREV| ghost (" + ghostObjectIndex.ToString() + "|PREV|)");
+
+                    manager._ghostIndexMap[_ghostObjectIndex] = this;
                 }
-                else
-                {
-                    _ghostObjectIndex = _manager.GetGhostIndex(levelInit);
-                    if (!levelInit || Network.isServer)
-                        _thing.connection = DuckNetwork.localConnection;
-                }
-                DevConsole.Log(DCSection.GhostMan, "|DGBLUE|Creating|PREV| ghost (" + ghostObjectIndex.ToString() + "|PREV|)");
-                manager._ghostIndexMap[_ghostObjectIndex] = this;
             }
             catch (Exception ex)
             {

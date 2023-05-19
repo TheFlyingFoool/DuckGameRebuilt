@@ -192,7 +192,7 @@ namespace DuckGame
 
         public static bool isServer
         {
-            get => activeNetwork.core.isServer;
+            get => activeNetwork.core.isServer || (Network.isFakeActive);
             set => activeNetwork.core.isServer = value;
         }
 
@@ -202,7 +202,8 @@ namespace DuckGame
 
         public static void MakeInactive() => activeNetwork._networkActive = false;
 
-        public static bool isActive => activeNetwork._networkActive;
+        public static bool isActive => activeNetwork._networkActive || (Level.current is DuckGameTestArea && DGRSettings.EditorOnlinePhysics);
+        public static bool isFakeActive => Level.current is DuckGameTestArea && DGRSettings.EditorOnlinePhysics;
 
         public static bool connected => connections.Count > 0;
 

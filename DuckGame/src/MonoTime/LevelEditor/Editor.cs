@@ -19,6 +19,7 @@ namespace DuckGame
 {
     public class Editor : Level
     {
+        public bool needInputRefresh;
         public static bool editingContent = false;
         private static Stack<object> focusStack = new Stack<object>();
         private static int numPops;
@@ -1200,6 +1201,14 @@ namespace DuckGame
 
         public override void Update()
         {
+            //if we dont do this the player1 duck will get permastuck until a restart when using online physics offline
+            //so we just automatically force the game to restart the editor, this might cause a softlock but idc
+            //-NiK0
+            if (needInputRefresh)
+            {
+                needInputRefresh = false;
+                Play();
+            }
             if (shoulddo)
             {
                 if (DGRSettings.PreferredLevel != "" && _currentLevelData.objects.objects.Count == 0)

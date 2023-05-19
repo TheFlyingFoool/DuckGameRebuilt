@@ -335,6 +335,11 @@ namespace DuckGame
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
 
+            menu.Add(new UIMenuItemToggle("Online Physics", field: new FieldBinding(dGRSettings, "EditorOnlinePhysics"))
+            {
+                dgrDescription = "WARNING This may be highly unstable but it'll make it so online physics apply while testing levels in the editor (Ragdoll rng, etc)"
+            }, true);
+
             menu.Add(new UIMenuItemToggle("Instructions", field: new FieldBinding(dGRSettings, "EditorInstructions"))
             {
                 dgrDescription = "Displays real-time instructions on how to operate the editor. You might not need it anymore if you're already used to it"
