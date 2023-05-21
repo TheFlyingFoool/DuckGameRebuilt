@@ -1,15 +1,8 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.UIControlElement
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
-    public class UIControlElement : UIMenuItem
+    public class LUIControlElement : UIMenuItem
     {
         private FieldBinding _field;
         private List<string> _captionList = new List<string>();
@@ -22,7 +15,7 @@ namespace DuckGame
         private string _realTrigger;
         private bool _selectStyle;
         private int _selectionIndex;
-        private UIText _uiText;
+        private LUIText _uiText;
 
         public override Vec2 collisionSize
         {
@@ -43,7 +36,7 @@ namespace DuckGame
             }
         }
 
-        public UIControlElement(
+        public LUIControlElement(
           string text,
           string trigger,
           DeviceInputMapping map,
@@ -56,18 +49,18 @@ namespace DuckGame
             if (c == new Color())
                 c = Colors.MenuOption;
             BitmapFont f = new BitmapFont("smallBiosFontUI", 7, 5);
-            UIDivider component1 = new UIDivider(true, 0f);
-            _uiText = new UIText(text, c);
+            UIDivider splitter = new UIDivider(true, 0f);
+            _uiText = new LUIText(text, c);
             _uiText.SetFont(f);
             _uiText.align = UIAlign.Left;
-            _uiText.specialScale = 0.5f;
-            component1.leftSection.Add(_uiText, true);
-            UIMultiToggle component2 = new UIMultiToggle(-1f, -1f, new FieldBinding(this, nameof(randomAssIntField)), _captionList, true);
-            component2.SetFont(f);
-            component2.align = UIAlign.Right;
-            component1.rightSection.Add(component2, true);
-            rightSection.Add(component1, true);
-            component2.specialScale = 0.5f;
+            _uiText.scale = new Vec2(0.5f);
+            splitter.leftSection.Add(_uiText, true);
+            LUIMultiToggle multiToggle = new LUIMultiToggle(-1f, -1f, new FieldBinding(this, nameof(randomAssIntField)), _captionList, true);
+            multiToggle.SetFont(f);
+            multiToggle.align = UIAlign.Right;
+            splitter.rightSection.Add(multiToggle, true);
+            rightSection.Add(splitter, true);
+            multiToggle.scale = new Vec2(0.5f);
             _arrow = new UIImage("littleContextArrowRight")
             {
                 scale = new Vec2(0.5f, 0.5f),

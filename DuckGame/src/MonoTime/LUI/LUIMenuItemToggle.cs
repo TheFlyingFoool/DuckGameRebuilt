@@ -1,21 +1,14 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.UIMenuItemToggle
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
-    public class UIMenuItemToggle : UIMenuItem
+    public class LUIMenuItemToggle : UIMenuItem
     {
         private FieldBinding _field;
         private FieldBinding _filterBinding;
         private bool _compressed;
         private List<string> _multiToggle;
-        private UIMultiToggle _multiToggleElement;
+        private LUIMultiToggle _multiToggleElement;
 
         public void SetFieldBinding(FieldBinding f)
         {
@@ -25,7 +18,7 @@ namespace DuckGame
             _multiToggleElement.SetFieldBinding(f);
         }
 
-        public UIMenuItemToggle(
+        public LUIMenuItemToggle(
           string text,
           UIMenuAction action = null,
           FieldBinding field = null,
@@ -41,28 +34,28 @@ namespace DuckGame
             BitmapFont f = null;
             if (tiny)
                 f = new BitmapFont("smallBiosFontUI", 7, 5);
-            UIDivider component1 = new UIDivider(true, 0f);
+            UIDivider splitter = new UIDivider(true, 0f);
             if (text != "")
             {
-                UIText component2 = new UIText(text, c);
+                LUIText t = new LUIText(text, c);
                 if (tiny)
-                    component2.SetFont(f);
-                component2.align = UIAlign.Left;
-                component1.leftSection.Add(component2, true);
+                    t.SetFont(f);
+                t.align = UIAlign.Left;
+                splitter.leftSection.Add(t, true);
             }
             if (multi != null)
             {
-                _multiToggleElement = new UIMultiToggle(-1f, -1f, field, multi, compressedMulti)
+                _multiToggleElement = new LUIMultiToggle(-1f, -1f, field, multi, compressedMulti)
                 {
                     align = compressedMulti ? UIAlign.Right : UIAlign.Right
                 };
                 if (text != "")
                 {
-                    component1.rightSection.Add(_multiToggleElement, true);
+                    splitter.rightSection.Add(_multiToggleElement, true);
                 }
                 else
                 {
-                    component1.leftSection.Add(_multiToggleElement, true);
+                    splitter.leftSection.Add(_multiToggleElement, true);
                     _multiToggleElement.align = UIAlign.Left;
                 }
                 if (tiny)
@@ -72,13 +65,13 @@ namespace DuckGame
             }
             else
             {
-                UIOnOff component3 = new UIOnOff(-1f, -1f, field, filterBinding);
+                LUIOnOff onOff = new LUIOnOff(-1f, -1f, field, filterBinding);
                 if (tiny)
-                    component3.SetFont(f);
-                component3.align = UIAlign.Right;
-                component1.rightSection.Add(component3, true);
+                    onOff.SetFont(f);
+                onOff.align = UIAlign.Right;
+                splitter.rightSection.Add(onOff, true);
             }
-            rightSection.Add(component1, true);
+            rightSection.Add(splitter, true);
             if (tiny)
                 _arrow = new UIImage("littleContextArrowRight");
             else

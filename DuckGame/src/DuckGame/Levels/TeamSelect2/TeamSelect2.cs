@@ -147,12 +147,7 @@ namespace DuckGame
                     matchSetting.value = matchSetting.defaultValue;
             }
             foreach (MatchSetting onlineSetting in onlineSettings)
-            {
-                if (onlineSetting.id == "name")
-                    onlineSetting.value = DefaultGameName();
-                else
-                    onlineSetting.value = onlineSetting.defaultValue;
-            }
+                onlineSetting.value = onlineSetting.defaultValue;
             if (resetMatchSettings)
             {
                 foreach (UnlockData unlock in Unlocks.GetUnlocks(UnlockType.Modifier))
@@ -561,7 +556,7 @@ namespace DuckGame
                 if (!(matchSetting.id == "workshopmaps") || Network.available) //if ((!(matchSetting.id == "workshopmaps") || Network.available) && (!(matchSetting.id == "custommaps") || !ParentalControls.AreParentalControlsActive()))
                 {
                     if (matchSetting.id != "partymode")
-                        _hostMatchSettingsMenu.AddMatchSetting(matchSetting, false);
+                        _hostMatchSettingsMenu.AddMatchSettingL(matchSetting, false);
                     if (matchSetting.id == "wallmode")
                         _hostMatchSettingsMenu.Add(new UIText(" ", Color.White), true);
                 }

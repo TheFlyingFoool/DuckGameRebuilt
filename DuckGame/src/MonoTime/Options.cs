@@ -380,13 +380,13 @@ namespace DuckGame
 
             menu.Add(new UIMenuItemNumber("Particle Level", field: new FieldBinding(dGRSettings, "ParticleMultiplier", 0, 7, 1), valStrings: new List<string>()
             {
-                "None",
-                "Minimum",
-                "Low",
-                "Default",
-                "Many",
-                "EXTREME",
-                "WUMBO",
+                "None     ",
+                "Minimum     ",
+                "Low     ",
+                "Default     ",
+                "Many     ",
+                "EXTREME     ",
+                "WUMBO     ",
                 "|RED|UNCOUNTABLE"
             })
             {

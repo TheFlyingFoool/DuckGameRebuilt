@@ -921,12 +921,11 @@ namespace DuckGame
                 {
                     title = lobby.GetLobbyData("name");
                     if (title == "")
+                    {
                         title = TeamSelect2.DefaultGameName();
-                    tiny = true;
-                }
-                else if (Network.lanMode)
-                {
-                    title = TeamSelect2.DefaultGameName();
+                        TeamSelect2.GetOnlineSetting("name").value = title;
+                        lobby.SetLobbyData("name", title);
+                    }
                     tiny = true;
                 }
             }
@@ -965,10 +964,12 @@ namespace DuckGame
                 _core._lobbySettingMenu = new UIMenu("@LWING@LOBBY SETTINGS@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK");
                 _core._lobbySettingMenu.SetBackFunction(new UIMenuActionOpenMenu(_core._lobbySettingMenu, _core._ducknetMenu));
                 _core._lobbySettingMenu.Close();
-                UIMenuItemString nameSetting = _core._lobbySettingMenu.AddMatchSetting(TeamSelect2.GetOnlineSetting("name"), false) as UIMenuItemString;
-                nameSetting.InitializeEntryMenu(_core.ducknetUIGroup, _core._lobbySettingMenu);
-                UIMenuItemString passwordSetting = _core._lobbySettingMenu.AddMatchSetting(TeamSelect2.GetOnlineSetting("password"), false) as UIMenuItemString;
-                passwordSetting.InitializeEntryMenu(_core.ducknetUIGroup, _core._lobbySettingMenu);
+                MatchSetting nameSetting = TeamSelect2.GetOnlineSetting("name");
+                LUIMenuItemString nameSettingLUI = _core._lobbySettingMenu.AddMatchSettingL(nameSetting, false) as LUIMenuItemString;
+                nameSettingLUI.InitializeEntryMenu(_core.ducknetUIGroup, _core._lobbySettingMenu);
+                MatchSetting passwordSetting = TeamSelect2.GetOnlineSetting("password");
+                LUIMenuItemString passwordSettingLUI = _core._lobbySettingMenu.AddMatchSettingL(passwordSetting, false) as LUIMenuItemString;
+                passwordSettingLUI.InitializeEntryMenu(_core.ducknetUIGroup, _core._lobbySettingMenu);
                 _ducknetUIGroup.Add(_core._lobbySettingMenu, false);
                 _core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|LOBBY SETTINGS", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._lobbySettingMenu), UIAlign.Left), true);
             }
@@ -1000,7 +1001,7 @@ namespace DuckGame
                     {
                         if (matchSetting.id != "partymode")
                         {
-                            _core._matchSettingMenu.AddMatchSetting(matchSetting, false, true);
+                            _core._matchSettingMenu.AddMatchSettingL(matchSetting, false, true);
                         }
                         if (matchSetting.id == "wallmode")
                         {

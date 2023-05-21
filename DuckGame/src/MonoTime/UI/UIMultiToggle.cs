@@ -32,11 +32,13 @@ namespace DuckGame
 
         public override void Draw()
         {
-            int val = (int)_field.value;
-            string drawText = "";
-            if (_compressed && val < _captions.Count)
+            _font.scale = this.scale;
+            _font.alpha = alpha;
+            int index = (int)_field.value;
+            string text = "";
+            if (_compressed && index < _captions.Count)
             {
-                drawText = _captions[val];
+                text = _captions[index];
             }
             else
             {
@@ -44,15 +46,20 @@ namespace DuckGame
                 foreach (string caption in _captions)
                 {
                     if (num != 0)
-                        drawText += " ";
-                    drawText = num != val ? drawText + "|GRAY|" : drawText + "|WHITE|";
-                    drawText += caption;
+                        text += " ";
+                    text = num != index ? text + "|GRAY|" : text + "|WHITE|";
+                    text += caption;
                     ++num;
                 }
             }
-
-            text = drawText;
-            base.Draw();
+            Vec2 scale = _font.scale;
+            if (specialScale != 0.0)
+                _font.scale = new Vec2(specialScale);
+            float width = _font.GetWidth(text);
+            float num1 = (align & UIAlign.Left) <= UIAlign.Center ? ((align & UIAlign.Right) <= UIAlign.Center ? (float)(-width / 2.0) : this.width / 2f - width) : (float)-(this.width / 2.0);
+            float num2 = (align & UIAlign.Top) <= UIAlign.Center ? ((align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-_font.height / 2.0) : height / 2f - _font.height) : (float)-(height / 2.0);
+            _font.Draw(text, x + num1, y + num2, Color.White, depth);
+            _font.scale = scale;
         }
     }
 }
