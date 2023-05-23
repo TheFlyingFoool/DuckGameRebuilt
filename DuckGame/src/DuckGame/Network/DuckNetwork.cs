@@ -1052,10 +1052,10 @@ namespace DuckGame
                 }
             }
             Main.SpecialCode = "men7";
-            _core._ducknetMenu.Add(new UIText("", Color.White), true);
             if (Network.inLobby && whoOpen.slotType != SlotType.Local && Network.available)
             {
                 Main.SpecialCode = "men8";
+                _core._ducknetMenu.Add(new UIText("", Color.White), true);
                 _core._inviteMenu = new UIInviteMenu("INVITE FRIENDS", null, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
                 ((UIInviteMenu)_core._inviteMenu).SetAction(new UIMenuActionOpenMenu(_core._inviteMenu, _core._ducknetMenu));
                 _core._inviteMenu.Close();
@@ -1068,6 +1068,7 @@ namespace DuckGame
             if (Level.current is GameLevel)
 			{
                 GameLevel gameLevel = (Level.current as GameLevel);
+                bool blankAdded = false;
                 if (Level.current.isCustomLevel)
                 {
                     if (gameLevel.data != null && gameLevel.data.metaData != null && gameLevel.data.metaData.workshopID != 0UL && Steam.IsInitialized())
@@ -1076,6 +1077,8 @@ namespace DuckGame
                         WorkshopItem workshopItem = WorkshopItem.GetItem((Level.current as GameLevel).data.metaData.workshopID);
                         if (workshopItem != null)
                         {
+                            _core._ducknetMenu.Add(new UIText("", Color.White), true);
+                            blankAdded = true;
                             _core._ducknetMenu.Add(new UIMenuItem("@STEAMICON@|DGGREEN|VIEW", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(GameMode.View)), UIAlign.Left), true);
                             if ((workshopItem.stateFlags & WorkshopItemState.Subscribed) != WorkshopItemState.None)
                             {
@@ -1093,13 +1096,17 @@ namespace DuckGame
                 if (!gameLevel.matchOver)
                 {
                     if (Network.isServer)
+                    {
+                        if (!blankAdded)
+                            _core._ducknetMenu.Add(new UIText("", Color.White), true);
                         _core._ducknetMenu.Add(new UIMenuItem("@SKIPSPIN@|DGRED|SKIP", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Skip)), UIAlign.Left), true);
-                    _core._ducknetMenu.Add(new UIText(" ", Color.White), true);
+                    }
                 }
             }
             Main.SpecialCode = "men13";
             if (whoOpen.slotType != SlotType.Local || Network.inLobby)
             {
+                _core._ducknetMenu.Add(new UIText(" ", Color.White), true);
                 if (whoOpen.slotType == SlotType.Local)
                     _core._ducknetMenu.Add(new UIMenuItem("|DGRED|BACK OUT", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmMenu), UIAlign.Left), true);
                 else
