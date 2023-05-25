@@ -140,7 +140,7 @@ namespace DuckGame
                     if (MonoMain.started)
                     {
                         SFX.StopSaying();
-                        SFX.Say("Volume " + ((int)(value * 100.0)).ToString());
+                        SFX.Say("Volume " + ((int)(value * 100)).ToString());
                     }
                 }
                 _textToSpeechVolume = value;
@@ -160,7 +160,7 @@ namespace DuckGame
                     if (MonoMain.started)
                     {
                         SFX.StopSaying();
-                        SFX.Say("Speed " + ((int)Math.Round((value - 0.5) * 20.0)).ToString());
+                        SFX.Say("Speed " + ((int)Math.Round((value - 0.5f) * 20)).ToString());
                     }
                 }
                 _textToSpeechRate = value;

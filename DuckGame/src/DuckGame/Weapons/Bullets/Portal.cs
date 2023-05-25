@@ -72,7 +72,7 @@ namespace DuckGame
                 if (topLeft.y < door.bottom)
                     topLeft.y = door.bottom;
                 float hi = autoBlock1.bottom - topLeft.y;
-                if (hi < 8.0)
+                if (hi < 8f)
                     hi = 8f;
                 door.collision.Add(new Block(topLeft.x, topLeft.y, autoBlock1.width, hi));
             }
@@ -83,7 +83,7 @@ namespace DuckGame
                 if (bottomLeft.y > door.top)
                     bottomLeft.y = door.top;
                 float hi = bottomLeft.y - autoBlock2.top;
-                if (hi < 8.0)
+                if (hi < 8f)
                     hi = 8f;
                 door.collision.Add(new Block(bottomLeft.x, bottomLeft.y - hi, autoBlock2.width, hi));
             }

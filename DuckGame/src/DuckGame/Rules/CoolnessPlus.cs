@@ -45,7 +45,7 @@ namespace DuckGame
         public override void Update()
         {
             _wait -= 0.01f;
-            if (_wait >= 0.0)
+            if (_wait >= 0)
                 return;
             Level.Remove(this);
         }

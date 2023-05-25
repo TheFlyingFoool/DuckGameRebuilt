@@ -427,7 +427,7 @@ namespace DuckGame
                 active = false;
                 visible = false;
                 owner = null;
-                if (y > -1000.0)
+                if (y > -1000)
                 {
                     y = -9999f;
                     _part1.y = -9999f;
@@ -574,9 +574,9 @@ namespace DuckGame
             thing1.vSpeed = vec2_6.y;
             thing2.hSpeed = vec2_4.x;
             thing2.vSpeed = vec2_4.y;
-            if (thing1 is ChainLink && (thing2.position - thing1.position).length > num1 * 12.0)
+            if (thing1 is ChainLink && (thing2.position - thing1.position).length > num1 * 12)
                 thing1.position = position;
-            if (thing2 is ChainLink && (thing2.position - thing1.position).length > num1 * 12.0)
+            if (thing2 is ChainLink && (thing2.position - thing1.position).length > num1 * 12)
                 thing2.position = position;
             return num8;
         }
@@ -623,7 +623,7 @@ namespace DuckGame
             _timeSinceNudge += 0.07f;
             if (_part1 == null || _part2 == null || _part3 == null)
                 return;
-            if (_zap > 0.0)
+            if (_zap > 0)
             {
                 _part1.vSpeed += Rando.Float(-1f, 0.5f);
                 _part1.hSpeed += Rando.Float(-0.5f, 0.5f);
@@ -665,7 +665,7 @@ namespace DuckGame
             if (_zekeBear)
                 partSep = 4f;
             Vec2 vec2_1 = _part1.position - _part3.position;
-            if (vec2_1.length > partSep * 5.0)
+            if (vec2_1.length > partSep * 5)
             {
                 if (_part1.owner != null)
                 {
@@ -705,7 +705,7 @@ namespace DuckGame
             if (tongueStuck != Vec2.Zero && captureDuck != null)
             {
                 Vec2 vec2_5 = tongueStuck + new Vec2(captureDuck.offDir * -4, -6f);
-                if (_part1.owner is Duck)
+                if (_part1.owner is Duck)//this looks really weird but its probably needed so keep it -NiK0
                 {
                     double num3 = SpecialSolve(_part3, _part1.owner as Duck, 16f);
                     double num4 = SpecialSolve(_part1, vec2_5, 16f);
@@ -716,18 +716,18 @@ namespace DuckGame
                     double num6 = SpecialSolve(_part3, vec2_5, 16f);
                 }
                 vec2_1 = part1.position - vec2_5;
-                if (vec2_1.length > 4.0)
+                if (vec2_1.length > 4)
                 {
                     double num = SpecialSolve(_part1, vec2_5, 4f);
                     vec2_1 = vec2_5 - part1.position;
                     Vec2 normalized = vec2_1.normalized;
                     vec2_1 = part1.position - vec2_5;
-                    if (vec2_1.length > 12.0)
+                    if (vec2_1.length > 12)
                         part1.position = Lerp.Vec2Smooth(part1.position, vec2_5, 0.2f);
                 }
             }
             position = (_part1.position + _part2.position + _part3.position) / 3f;
-            if (_duck == null || _zap > 0.0)
+            if (_duck == null || _zap > 0)
                 return;
             if (_duck.eyesClosed)
                 _part1.frame = 20;
@@ -763,7 +763,7 @@ namespace DuckGame
         public void UpdateInput()
         {
             sleepingBagTimer -= Maths.IncFrameTimer();
-            if (sleepingBagTimer < 0.0 && sleepingBagHealth > 20)
+            if (sleepingBagTimer < 0 && sleepingBagHealth > 20)
             {
                 sleepingBagHealth -= 4;
                 sleepingBagTimer = 1f;
@@ -793,7 +793,7 @@ namespace DuckGame
                         part3.velocity += velVec * -0.2f;
                     }
                 }
-                else if (_timeSinceNudge > 1.0 && !jetting)
+                else if (_timeSinceNudge > 1 && !jetting)
                 {
                     if (captureDuck.inputProfile.Pressed(Triggers.Left))
                     {
@@ -824,7 +824,7 @@ namespace DuckGame
                 }
             }
             bool flag = false;
-            if (captureDuck.HasEquipment(typeof(FancyShoes)) && Math.Abs(_part1.x - _part3.x) < 9.0 && _part1.y < _part3.y)
+            if (captureDuck.HasEquipment(typeof(FancyShoes)) && Math.Abs(_part1.x - _part3.x) < 9 && _part1.y < _part3.y)
                 flag = true;
             if (tongueStuckThing != null && tongueStuckThing.removeFromLevel)
             {
@@ -837,7 +837,7 @@ namespace DuckGame
                 return;
             if (inSleepingBag)
             {
-                if (_timeSinceNudge <= 1.0)
+                if (_timeSinceNudge <= 1)
                     return;
                 _part1.vSpeed += NetRand.Float(-2f, 1f);
                 _part3.vSpeed += NetRand.Float(-2f, 1f);

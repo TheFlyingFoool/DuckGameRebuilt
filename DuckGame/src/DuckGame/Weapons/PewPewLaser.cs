@@ -46,7 +46,7 @@ namespace DuckGame
             if (_bursting)
             {
                 _burstWait = Maths.CountDown(_burstWait, 0.16f);
-                if (_burstWait <= 0.0)
+                if (_burstWait <= 0)
                 {
                     _burstWait = 1f;
                     if (isServerForObject)
@@ -80,7 +80,7 @@ namespace DuckGame
                 Fire();
                 inFire = false;
             }
-            if (_bursting || _wait != 0.0)
+            if (_bursting || _wait != 0)
                 return;
             _bursting = true;
         }

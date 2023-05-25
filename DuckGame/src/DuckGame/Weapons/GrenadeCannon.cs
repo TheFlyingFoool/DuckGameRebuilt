@@ -82,7 +82,7 @@ namespace DuckGame
             }
             if (_doneLoad)
                 _timer -= 0.01f;
-            if (_timer <= 0.0)
+            if (_timer <= 0)
             {
                 _timer = 1.2f;
                 _doneLoad = false;
@@ -117,11 +117,11 @@ namespace DuckGame
             }
             if (_doneLoad && _aiming)
                 laserSight = true;
-            if (_aiming && _aimWait <= 0.0 && _fireAngle < 90.0)
+            if (_aiming && _aimWait <= 0 && _fireAngle < 90)
                 _fireAngle += 3f;
-            if (_aimWait > 0.0)
+            if (_aimWait > 0)
                 _aimWait -= 0.9f;
-            if (_cooldown > 0.0)
+            if (_cooldown > 0)
                 _cooldown -= 0.1f;
             else
                 _cooldown = 0f;
@@ -150,7 +150,7 @@ namespace DuckGame
                 _sprite.SetAnimation("load" + Math.Min(ammo, 4).ToString());
                 _doLoad = true;
             }
-            if (!_doneLoad || _cooldown != 0.0)
+            if (!_doneLoad || _cooldown != 0)
                 return;
             if (ammo > 0)
             {
@@ -163,7 +163,7 @@ namespace DuckGame
 
         public override void OnReleaseAction()
         {
-            if (!_doneLoad || _cooldown != 0.0 || !_aiming || ammo <= 0)
+            if (!_doneLoad || _cooldown != 0 || !_aiming || ammo <= 0)
                 return;
             _aiming = false;
             --ammo;

@@ -208,8 +208,8 @@ namespace DuckGame
                 Layer hybrid = _hybridList[_layerMap[index].index];
                 if (hybrid.visible && hybrid.isTargetLayer && (Layer.lighting && !NetworkDebugger.enabled || hybrid != _lighting))
                 {
-                    double num2 = 2.0 / _hybridList.Count * index / 2.0;
-                    double num3 = 2.0 / _hybridList.Count * (index + 1) / 2.0;
+                    //double num2 = 2 / _hybridList.Count * index / 2; what -NiK0
+                    //double num3 = 2 / _hybridList.Count * (index + 1) / 2;
                     hybrid.Draw(true, true);
                     ++num1;
                 }
@@ -230,8 +230,8 @@ namespace DuckGame
                     int num2 = 1;
                     if (hybrid == Layer.Game)
                         num2 = 3;
-                    double num3 = 2.0 / _lastDrawIndexCount * num1 / 2.0;
-                    double num4 = 2.0 / _lastDrawIndexCount * (num1 + num2) / 2.0;
+                    //double num3 = 2 / _lastDrawIndexCount * num1 / 2; what -NiK0
+                    //double num4 = 2 / _lastDrawIndexCount * (num1 + num2) / 2;
                     hybrid.Draw(true);
                     num1 += num2;
                 }

@@ -93,12 +93,12 @@ namespace DuckGame
         public bool MovingIntoPipe(Vec2 pPosition, Vec2 pVelocity, float pThresh = 2f)
         {
             bool flag = false;
-            if (endNormal.x != 0.0 && pVelocity.x != 0.0)
+            if (endNormal.x != 0 && pVelocity.x != 0)
             {
                 if (Math.Sign(pVelocity.x) != Math.Sign(endNormal.x))
                     flag = true;
             }
-            else if (endNormal.y != 0.0 && pVelocity.y != 0.0 && Math.Sign(pVelocity.y) != Math.Sign(endNormal.y))
+            else if (endNormal.y != 0 && pVelocity.y != 0 && Math.Sign(pVelocity.y) != Math.Sign(endNormal.y))
                 flag = true;
             return flag && (Left() != null && pPosition.x < right + pThresh && pPosition.y <= bottom + pThresh && pPosition.y >= top - pThresh || Right() != null && pPosition.x < left - pThresh && pPosition.y <= bottom + pThresh && pPosition.y >= top - pThresh || Up() != null && pPosition.y < bottom + pThresh && pPosition.x <= right + pThresh && pPosition.x >= left - pThresh || Down() != null && pPosition.y > top - pThresh && pPosition.x <= right + pThresh && pPosition.x >= left - pThresh);
         }
@@ -382,24 +382,24 @@ namespace DuckGame
                 {
                     bool flag1 = false;
                     if (Down() != null)
-                        flag1 = physicsObject.bottom + physicsObject.vSpeed > top - 6.0 && physicsObject.width <= 16.0 && (!(physicsObject is Duck) || !(physicsObject as Duck).sliding);
+                        flag1 = physicsObject.bottom + physicsObject.vSpeed > top - 6 && physicsObject.width <= 16 && (!(physicsObject is Duck) || !(physicsObject as Duck).sliding);
                     else if (Up() != null)
-                        flag1 = physicsObject.top + physicsObject.vSpeed < bottom + 6.0 && physicsObject.width <= 16.0 && (!(physicsObject is Duck) || !(physicsObject as Duck).sliding);
+                        flag1 = physicsObject.top + physicsObject.vSpeed < bottom + 6 && physicsObject.width <= 16 && (!(physicsObject is Duck) || !(physicsObject as Duck).sliding);
                     else if (Left() != null)
-                        flag1 = physicsObject.left + physicsObject.hSpeed < right + 2.0 && physicsObject.height <= 16.0;
+                        flag1 = physicsObject.left + physicsObject.hSpeed < right + 2 && physicsObject.height <= 16;
                     else if (Right() != null)
-                        flag1 = physicsObject.right + physicsObject.hSpeed > left - 2.0 && physicsObject.height <= 16.0;
+                        flag1 = physicsObject.right + physicsObject.hSpeed > left - 2 && physicsObject.height <= 16;
                     if (flag1 && physicsObject != null && physicsObject.isServerForObject)
                     {
                         bool flag2 = false;
                         if (Down() != null)
-                            flag2 = physicsObject.vSpeed > -0.1f && physicsObject.bottom < top + 4.0 && Math.Abs(physicsObject.hSpeed) < 10.0;
+                            flag2 = physicsObject.vSpeed > -0.1f && physicsObject.bottom < top + 4 && Math.Abs(physicsObject.hSpeed) < 10;
                         else if (Up() != null)
-                            flag2 = physicsObject.vSpeed < -2.0 && physicsObject.top > bottom - 4.0 && Math.Abs(physicsObject.hSpeed) < 10.0;
+                            flag2 = physicsObject.vSpeed < -2 && physicsObject.top > bottom - 4 && Math.Abs(physicsObject.hSpeed) < 10;
                         else if (Left() != null)
-                            flag2 = physicsObject.hSpeed < -0.2f && physicsObject.left > right - 4.0 && Math.Abs(physicsObject.vSpeed) < 4.0;
+                            flag2 = physicsObject.hSpeed < -0.2f && physicsObject.left > right - 4 && Math.Abs(physicsObject.vSpeed) < 4;
                         else if (Right() != null)
-                            flag2 = physicsObject.hSpeed > 0.2f && physicsObject.right < left + 4.0 && Math.Abs(physicsObject.vSpeed) < 4.0;
+                            flag2 = physicsObject.hSpeed > 0.2f && physicsObject.right < left + 4 && Math.Abs(physicsObject.vSpeed) < 4;
                         if (flag2 && !_pipingOut.Contains(physicsObject))
                         {
                             if (physicsObject is RagdollPart)
@@ -457,7 +457,7 @@ namespace DuckGame
                             QuadLaserBullet quadLaserBullet1 = objectsInPipe as QuadLaserBullet;
                             quadLaserBullet1.position = Lerp.Vec2Smooth(quadLaserBullet1.position, position, 0.2f);
                             vec2_1 = position - quadLaserBullet1.position;
-                            if (vec2_1.length < 6.0)
+                            if (vec2_1.length < 6)
                             {
                                 quadLaserBullet1.position = oppositeEnd.position + oppositeEnd.endNormal * 4f;
                                 QuadLaserBullet quadLaserBullet2 = quadLaserBullet1;
@@ -478,7 +478,7 @@ namespace DuckGame
                             physicsParticle.hSpeed *= 0.9f;
                             physicsParticle.vSpeed *= 0.9f;
                             vec2_1 = position - physicsParticle.position;
-                            if (vec2_1.length < 6.0)
+                            if (vec2_1.length < 6)
                             {
                                 physicsParticle.position = oppositeEnd.endOffset + new Vec2(Rando.Float(-5f, 5f) * Math.Abs(oppositeEnd.endNormal.y), Rando.Float(-5f, 5f) * Math.Abs(oppositeEnd.endNormal.x));
                                 physicsParticle.velocity = oppositeEnd.endNormal * Rando.Float(1f, 2f);
@@ -545,23 +545,23 @@ namespace DuckGame
                                 }
                             }
                             vec2_1 = physicsObject.position - position;
-                            if (vec2_1.length > 32.0 || physicsObject.owner != null)
+                            if (vec2_1.length > 32 || physicsObject.owner != null)
                             {
                                 physicsObject.inPipe = false;
                                 BreakPipeLink(physicsObject);
                                 continue;
                             }
-                            if (flag3 && Math.Abs(physicsObject.position.x - x) < 4.0 || !flag3 && (physicsObject is Duck && Math.Abs(physicsObject.position.y - (y - 10f)) < 4.0 || !(physicsObject is Duck) && Math.Abs(physicsObject.position.y - y) < 4.0))
+                            if (flag3 && Math.Abs(physicsObject.position.x - x) < 4 || !flag3 && (physicsObject is Duck && Math.Abs(physicsObject.position.y - (y - 10f)) < 4 || !(physicsObject is Duck) && Math.Abs(physicsObject.position.y - y) < 4))
                             {
                                 bool flag4 = false;
                                 if (Down() != null)
-                                    flag4 = physicsObject.position.y > top + 6.0;
+                                    flag4 = physicsObject.position.y > top + 6;
                                 else if (Up() != null)
-                                    flag4 = physicsObject.position.y < bottom - 6.0;
+                                    flag4 = physicsObject.position.y < bottom - 6;
                                 else if (Left() != null)
-                                    flag4 = physicsObject.position.x < right - 6.0;
+                                    flag4 = physicsObject.position.x < right - 6;
                                 else if (Right() != null)
-                                    flag4 = physicsObject.position.x > left + 6.0;
+                                    flag4 = physicsObject.position.x > left + 6;
                                 if (flag4)
                                 {
                                     StartTransporting(physicsObject);
@@ -587,7 +587,7 @@ namespace DuckGame
                     o.position = new Vec2(-5000f, -1000f);
                     o.cameraPositionOverride = bundle.cameraPosition;
                     bundle.cameraPosition = Lerp.Vec2(bundle.cameraPosition, _oppositeEnd.position, travelLength / 10f);
-                    if ((bundle.cameraPosition - _oppositeEnd.position).length < 4.0)
+                    if ((bundle.cameraPosition - _oppositeEnd.position).length < 4)
                     {
                         FinishTransporting(o, bundle);
                         SFX.Play("pipeOut", pitch: Rando.Float(-0.1f, 0.1f));
@@ -845,11 +845,11 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             entered = false;
-            if (connections.Count == 1 && (!(bool)trapdoor || bullet.ammo.penetration >= thickness) && ((hitPos.x - 8.0 < left && Right() != null && bullet.travelDirNormalized.x > 0.3f || hitPos.x + 8.0 > right && Left() != null && bullet.travelDirNormalized.x < -0.3f) && hitPos.y > top && hitPos.y < bottom || (hitPos.y - 8.0 < top && Down() != null && bullet.travelDirNormalized.y > 0.3f || hitPos.y + 8.0 > bottom && Up() != null && bullet.travelDirNormalized.y < -0.3f) && hitPos.x > left && hitPos.x < right) && oppositeEnd != null)
+            if (connections.Count == 1 && (!(bool)trapdoor || bullet.ammo.penetration >= thickness) && ((hitPos.x - 8 < left && Right() != null && bullet.travelDirNormalized.x > 0.3f || hitPos.x + 8 > right && Left() != null && bullet.travelDirNormalized.x < -0.3f) && hitPos.y > top && hitPos.y < bottom || (hitPos.y - 8 < top && Down() != null && bullet.travelDirNormalized.y > 0.3f || hitPos.y + 8 > bottom && Up() != null && bullet.travelDirNormalized.y < -0.3f) && hitPos.x > left && hitPos.x < right) && oppositeEnd != null)
             {
                 float rng = bullet._totalLength - (bullet._actualStart - hitPos).length;
                 float num = 0f;
-                if (rng > 0.0)
+                if (rng > 0)
                 {
                     bool flag1 = false;
                     bool flag2 = bullet.ammo is ATMissile;
@@ -1388,7 +1388,7 @@ namespace DuckGame
                 PipeParticle pipeParticle = null;
                 foreach (PipeParticle particle in _particles)
                 {
-                    if (particle.alpha >= 1.0)
+                    if (particle.alpha >= 1)
                     {
                         pipeParticle = particle;
                         break;
@@ -1407,7 +1407,7 @@ namespace DuckGame
             }
             for (int index = 0; index < _particles.Count; ++index)
             {
-                if (_particles[index].alpha < 1.0)
+                if (_particles[index].alpha < 1)
                 {
                     Vec2 vec2_3 = position - _particles[index].position;
                     _particles[index].velocity -= endNormal * 0.03f;
@@ -1416,7 +1416,7 @@ namespace DuckGame
                     _particles[index].position += _particles[index].velocity;
                     _particles[index].alpha += 0.016f;
                     vec2_1 = _particles[index].position * endNormal - position * endNormal;
-                    if (vec2_1.length < 2.0)
+                    if (vec2_1.length < 2)
                         _particles[index].alpha = 1f;
                 }
             }
@@ -1442,7 +1442,7 @@ namespace DuckGame
                 if (Left() != null)
                 {
                     _sprite.center = new Vec2(2f, 0f);
-                    _sprite.angleDegrees = (float)(0.0 - _flapLerp * 90.0);
+                    _sprite.angleDegrees = (float)(0 - _flapLerp * 90);
                     Graphics.Draw(_sprite, position.x + num, position.y - 9f, (Depth)0.5f);
                     _sprite.center = new Vec2(9f, 9f);
                     _sprite.angleDegrees = 0f;
@@ -1452,7 +1452,7 @@ namespace DuckGame
                 else if (Right() != null)
                 {
                     _sprite.center = new Vec2(2f, 18f);
-                    _sprite.angleDegrees = (float)(180.0 + _flapLerp * 90.0);
+                    _sprite.angleDegrees = (float)(180 + _flapLerp * 90);
                     _sprite.flipV = true;
                     Graphics.Draw(_sprite, position.x - num, position.y - 9f, (Depth)0.5f);
                     _sprite.center = new Vec2(9f, 9f);
@@ -1464,7 +1464,7 @@ namespace DuckGame
                 else if (Up() != null)
                 {
                     _sprite.center = new Vec2(2f, 0f);
-                    _sprite.angleDegrees = (float)(90.0 - _flapLerp * 90.0);
+                    _sprite.angleDegrees = (float)(90 - _flapLerp * 90);
                     Graphics.Draw(_sprite, position.x + 9f, position.y + num, (Depth)0.5f);
                     _sprite.center = new Vec2(9f, 9f);
                     _sprite.angleDegrees = 90f;
@@ -1474,7 +1474,7 @@ namespace DuckGame
                 else if (Down() != null)
                 {
                     _sprite.center = new Vec2(2f, 18f);
-                    _sprite.angleDegrees = (float)(270.0 + _flapLerp * 90.0);
+                    _sprite.angleDegrees = (float)(270 + _flapLerp * 90);
                     _sprite.flipV = true;
                     Graphics.Draw(_sprite, position.x + 9f, position.y - num, (Depth)0.5f);
                     _sprite.center = new Vec2(9f, 9f);

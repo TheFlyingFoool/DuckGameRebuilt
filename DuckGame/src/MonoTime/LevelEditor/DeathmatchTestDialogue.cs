@@ -32,8 +32,8 @@ namespace DuckGame
             depth = (Depth)0.97f;
             float num1 = 300f;
             float num2 = 40f;
-            Vec2 vec2_1 = new Vec2((float)(layer.width / 2.0 - num1 / 2.0), (float)(layer.height / 2.0 - num2 / 2.0));
-            Vec2 vec2_2 = new Vec2((float)(layer.width / 2.0 + num1 / 2.0), (float)(layer.height / 2.0 + num2 / 2.0));
+            Vec2 vec2_1 = new Vec2((float)(layer.width / 2f - num1 / 2f), (float)(layer.height / 2f - num2 / 2f));
+            //Vec2 vec2_2 = new Vec2((float)(layer.width / 2f + num1 / 2f), (float)(layer.height / 2f + num2 / 2f)); what -NiK0
             position = vec2_1 + new Vec2(4f, 20f);
             itemSize = new Vec2(490f, 16f);
             _root = true;
@@ -77,8 +77,8 @@ namespace DuckGame
             }
             float num1 = 316f;
             float num2 = 155f;
-            Vec2 vec2_1 = new Vec2((float)(layer.width / 2.0 - num1 / 2.0), (float)(layer.height / 2.0 - num2 / 2.0));
-            Vec2 vec2_2 = new Vec2((float)(layer.width / 2.0 + num1 / 2.0), (float)(layer.height / 2.0 + num2 / 2.0));
+            Vec2 vec2_1 = new Vec2((float)(layer.width / 2f - num1 / 2f), (float)(layer.height / 2f - num2 / 2f));
+            Vec2 vec2_2 = new Vec2((float)(layer.width / 2f + num1 / 2f), (float)(layer.height / 2f + num2 / 2f));
             Vec2 vec2_3 = new Vec2(vec2_1.x - 5f, vec2_2.y - 100f) + new Vec2(18f, 28f);
             Vec2 vec2_4 = new Vec2(180f, 30f);
             Vec2 vec2_5 = new Vec2(vec2_1.x + 185f, vec2_2.y - 100f) + new Vec2(18f, 28f);
@@ -127,8 +127,8 @@ namespace DuckGame
             base.Draw();
             float num1 = 316f;
             float num2 = 155f;
-            Vec2 p1_1 = new Vec2((float)(layer.width / 2.0 - num1 / 2.0), (float)(layer.height / 2.0 - num2 / 2.0));
-            Vec2 p2 = new Vec2((float)(layer.width / 2.0 + num1 / 2.0), (float)(layer.height / 2.0 + num2 / 2.0));
+            Vec2 p1_1 = new Vec2((float)(layer.width / 2f - num1 / 2f), (float)(layer.height / 2f - num2 / 2f));
+            Vec2 p2 = new Vec2((float)(layer.width / 2f + num1 / 2f), (float)(layer.height / 2f + num2 / 2f));
             Graphics.DrawRect(p1_1, p2, new Color(70, 70, 70), depth, false);
             Graphics.DrawRect(p1_1, p2, new Color(30, 30, 30), depth - 1);
             Graphics.DrawRect(p1_1 + new Vec2(4f, 20f), p2 + new Vec2(-4f, -4f), new Color(10, 10, 10), depth + 1);
@@ -145,12 +145,12 @@ namespace DuckGame
             Vec2 vec2_3 = new Vec2(290f, 30f);
             Graphics.DrawRect(p1_2, p1_2 + vec2_1, _hoverOk ? new Color(80, 80, 80) : new Color(30, 30, 30), depth + 2);
             string text1 = "LETS DO IT!";
-            _font.Draw(text1, (float)(p1_2.x + vec2_1.x / 2.0 - _font.GetWidth(text1) / 2.0), p1_2.y + 8f, Color.White, depth + 3);
+            _font.Draw(text1, (float)(p1_2.x + vec2_1.x / 2f - _font.GetWidth(text1) / 2f), p1_2.y + 8f, Color.White, depth + 3);
             Graphics.DrawRect(p1_3, p1_3 + vec2_2, _hoverCancel ? new Color(80, 80, 80) : new Color(30, 30, 30), depth + 2);
             string text2 = "NOPE!";
-            _font.Draw(text2, (float)(p1_3.x + vec2_2.x / 2.0 - _font.GetWidth(text2) / 2.0), p1_2.y + 8f, Color.White, depth + 3);
+            _font.Draw(text2, (float)(p1_3.x + vec2_2.x / 2f - _font.GetWidth(text2) / 2f), p1_2.y + 8f, Color.White, depth + 3);
             Graphics.DrawRect(p1_4, p1_4 + vec2_3, _hoverBack ? new Color(80, 80, 80) : new Color(30, 30, 30), depth + 2);
-            _font.Draw(Triggers.Cancel, (float)(p1_4.x + vec2_3.x / 2.0 - _font.GetWidth(text2) / 2.0 - 4.0), p1_4.y + 8f, Color.White, depth + 3);
+            _font.Draw(Triggers.Cancel, (float)(p1_4.x + vec2_3.x / 2f - _font.GetWidth(text2) / 2f - 4f), p1_4.y + 8f, Color.White, depth + 3);
         }
     }
 }

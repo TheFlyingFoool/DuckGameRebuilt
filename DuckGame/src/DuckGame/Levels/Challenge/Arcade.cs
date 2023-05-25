@@ -305,7 +305,7 @@ namespace DuckGame
                     Layer.Background.fade = Lerp.Float(Layer.Game.fade, 1f, 0.05f);
                     _hud.alpha = Lerp.Float(_hud.alpha, 0f, 0.08f);
                     _unlockScreen.alpha = Lerp.Float(_unlockScreen.alpha, 0f, 0.08f);
-                    if ((_followCam.manualViewSize < 0.0 || _followCam.manualViewSize == _followCam.viewSize) && _hud.alpha == 0f && Layer.Game.fade == 1f)
+                    if ((_followCam.manualViewSize < 0f || _followCam.manualViewSize == _followCam.viewSize) && _hud.alpha == 0f && Layer.Game.fade == 1f)
                     {
                         flag = true;
                         _followCam.manualViewSize = -1f;
@@ -328,7 +328,7 @@ namespace DuckGame
                     _hud.alpha = Lerp.Float(_hud.alpha, 0f, 0.08f);
                     _unlockScreen.alpha = Lerp.Float(_unlockScreen.alpha, 0f, 0.08f);
                     _unlockMachineWait = 1f;
-                    if ((_followCam.manualViewSize < 0.0 || _followCam.manualViewSize == _followCam.viewSize) && _hud.alpha == 0f && Layer.Game.fade == 1f)
+                    if ((_followCam.manualViewSize < 0f || _followCam.manualViewSize == _followCam.viewSize) && _hud.alpha == 0f && Layer.Game.fade == 1f)
                     {
                         flag = true;
                         _followCam.manualViewSize = -1f;
@@ -349,7 +349,7 @@ namespace DuckGame
                 {
                     _duck.alpha = Lerp.FloatSmooth(_duck.alpha, 0f, 0.1f);
                     _followCam.manualViewSize = Lerp.FloatSmooth(_followCam.manualViewSize, 2f, 0.16f);
-                    if (_followCam.manualViewSize < 30.0)
+                    if (_followCam.manualViewSize < 30f)
                     {
                         Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
                         Layer.Background.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
@@ -485,36 +485,27 @@ namespace DuckGame
                         foreach (string challenge in _hoverMachine.data.challenges)
                         {
                             ChallengeSaveData saveData = _duck.profile.GetSaveData(Challenges.GetChallenge(challenge).levelID);
-                            if (saveData.trophy == TrophyType.Baseline)
-                                text += "@BASELINE@";
-                            else if (saveData.trophy == TrophyType.Bronze)
-                                text += "@BRONZE@";
-                            else if (saveData.trophy == TrophyType.Silver)
-                                text += "@SILVER@";
-                            else if (saveData.trophy == TrophyType.Gold)
-                                text += "@GOLD@";
-                            else if (saveData.trophy == TrophyType.Platinum)
-                                text += "@PLATINUM@";
-                            else if (saveData.trophy == TrophyType.Developer)
-                                text += "@DEVELOPER@";
+                            if (saveData.trophy == TrophyType.Baseline) text += "@BASELINE@";
+                            else if (saveData.trophy == TrophyType.Bronze) text += "@BRONZE@";
+                            else if (saveData.trophy == TrophyType.Silver) text += "@SILVER@";
+                            else if (saveData.trophy == TrophyType.Gold) text += "@GOLD@";
+                            else if (saveData.trophy == TrophyType.Platinum) text += "@PLATINUM@";
+                            else if (saveData.trophy == TrophyType.Developer) text += "@DEVELOPER@";
                         }
                         HUD.AddCornerMessage(HUDCorner.TopRight, text);
                     }
                     else
                     {
-                        if (!_prizeTable.hover)
-                            return;
+                        if (!_prizeTable.hover) return;
                         HUD.AddCornerControl(HUDCorner.BottomRight, "@SHOOT@CHANCY", _duck.inputProfile);
                         HUD.AddCornerCounter(HUDCorner.BottomMiddle, "@TICKET@ ", new FieldBinding(Profiles.active[0], "ticketCount"), animateCount: true);
                     }
                 }
                 else
                 {
-                    if (_state != ArcadeState.UnlockMachine)
-                        return;
+                    if (_state != ArcadeState.UnlockMachine) return;
                     _unlockMachineWait -= 0.02f;
-                    if (_unlockMachineWait >= 0.0)
-                        return;
+                    if (_unlockMachineWait >= 0f) return;
                     if (_unlockingMachine)
                     {
                         _unlockingMachine = false;

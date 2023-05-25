@@ -46,24 +46,20 @@ namespace DuckGame
                 sparkle.position += sparkle.velocity;
                 sparkle.position.y += (float)Math.Sin(sparkle.sin) * 0.01f;
                 sparkle.sin += 0.01f;
-                if (sparkle.alpha < 1.0)
-                    sparkle.alpha += 0.01f;
+                if (sparkle.alpha < 1f) sparkle.alpha += 0.01f;
                 bool flag = false;
-                if (sparkle.position.x > x + _light.width + 2.0 || sparkle.position.x < x - 2.0 || sparkle.position.y < y + 1.0 || sparkle.position.y > y + _light.height)
-                    flag = true;
+                if (sparkle.position.x > x + _light.width + 2f || sparkle.position.x < x - 2f || sparkle.position.y < y + 1f || sparkle.position.y > y + _light.height) flag = true;
                 if (flag)
                 {
                     _sparkles.RemoveAt(index);
-                    --index;
+                    index--;
                 }
             }
-            ++_sparkleWait;
-            if (_sparkleWait <= 10)
-                return;
+            _sparkleWait++;
+            if (_sparkleWait <= 10) return;
             _sparkleWait = 0;
             int num = 1;
-            if (Rando.Float(1f) > 0.5)
-                num = -1;
+            if (Rando.Float(1f) > 0.5) num = -1;
             _sparkles.Add(new DustSparkle(new Vec2(x + Rando.Float(_light.width), y + Rando.Float(_light.height)), new Vec2(Rando.Float(0.15f, 0.25f) * num, Rando.Float(-0.05f, 0.05f))));
         }
 

@@ -42,9 +42,9 @@ namespace DuckGame
                 angleDegrees += 2f;
             else
                 angleDegrees -= 2f;
-            if (_move > 4.0)
+            if (_move > 4)
                 _closer.eyesClosed = true;
-            if (_move <= 8.0)
+            if (_move <= 8)
                 return;
             Level.Remove(this);
             (_owner as Duck).closingEyes = false;

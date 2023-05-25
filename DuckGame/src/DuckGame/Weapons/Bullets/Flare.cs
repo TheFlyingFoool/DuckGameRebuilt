@@ -67,7 +67,7 @@ namespace DuckGame
 
         public override void OnImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (!isServerForObject || with == _owner || with is Gun || with.weight < 5.0)
+            if (!isServerForObject || with == _owner || with is Gun || with.weight < 5)
                 return;
             if (with is PhysicsObject)
             {

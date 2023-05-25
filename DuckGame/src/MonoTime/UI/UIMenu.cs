@@ -153,7 +153,7 @@ namespace DuckGame
                 }
                 if (gamepadMode)
                 {
-                    if ((_oldPos - Mouse.positionScreen).lengthSq > 120.0)
+                    if ((_oldPos - Mouse.positionScreen).lengthSq > 120)
                     {
                         storeinputState = Mouse.left;
                         gamepadMode = false;

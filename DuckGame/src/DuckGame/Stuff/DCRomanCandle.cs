@@ -40,7 +40,7 @@ namespace DuckGame
                         (thing as Gun).PressAction();
                     }
                     float num3 = index / 2f;
-                    thing.hSpeed = (float)(num3 * 30.0 - 15.0) * Rando.Float(0.5f, 1f);
+                    thing.hSpeed = (float)(num3 * 30 - 15) * Rando.Float(0.5f, 1f);
                     thing.vSpeed = Rando.Float(-3f, -11f);
                     Level.Add(thing);
                 }

@@ -255,7 +255,7 @@ namespace DuckGame
                 if (_barrelSmoke.speed > 0f && _barrelSmoke.currentAnimation == "loop" && _barrelSmoke.frame == 5 && _barrelHeat < 0.1f)
                     _barrelSmoke.SetAnimation("finish");
             }
-            if (_smokeWait > 0.0 && _barrelSmoke.speed > 0.0)
+            if (_smokeWait > 0 && _barrelSmoke.speed > 0)
                 _barrelSmoke.SetAnimation("finish");
             if (_barrelSmoke.currentAnimation == "finish" && _barrelSmoke.finished)
                 _barrelSmoke.speed = 0f;
@@ -309,15 +309,15 @@ namespace DuckGame
                         else
                             angleDegrees = Lerp.Float(-90f, 0f, 16f);
                     }
-                    else if (angleDegrees > 90.0 && angleDegrees < 270.0)
+                    else if (angleDegrees > 90 && angleDegrees < 270)
                     {
                         angleDegrees = Lerp.Float(angleDegrees, 180f, 14f);
                     }
                     else
                     {
-                        if (angleDegrees > 180.0)
+                        if (angleDegrees > 180)
                             angleDegrees -= 360f;
-                        else if (angleDegrees < -180.0)
+                        else if (angleDegrees < -180)
                             angleDegrees += 360f;
                         angleDegrees = Lerp.Float(angleDegrees, 0f, 14f);
                     }
@@ -447,7 +447,7 @@ namespace DuckGame
         {
             if (owner == null || !isServerForObject)
                 return;
-            if (_kickForce != 0.0)
+            if (_kickForce != 0)
             {
                 Duck owner = this.owner as Duck;
                 Thing thing = this.owner;
@@ -485,7 +485,7 @@ namespace DuckGame
         {
             if (!loaded)
                 return;
-            if (ammo > 0 && _wait == 0.0)
+            if (ammo > 0 && _wait == 0)
             {
                 firedBullets.Clear();
                 if (duck != null)
@@ -507,7 +507,7 @@ namespace DuckGame
                                 Vec2 vec2 = Offset(barrelOffset);
                                 Dart dart = new Dart(vec2.x, vec2.y, owner as Duck, -angle);
                                 Fondle(dart);
-                                if (onFire || _barrelHeat > 6.0)
+                                if (onFire || _barrelHeat > 6)
                                 {
                                     Level.Add(SmallFire.New(0f, 0f, 0f, 0f, stick: dart, firedFrom: this));
                                     dart.burning = true;
@@ -569,7 +569,7 @@ namespace DuckGame
             }
             else
             {
-                if (ammo > 0 || _wait != 0.0)
+                if (ammo > 0 || _wait != 0)
                     return;
                 firedBullets.Clear();
                 DoAmmoClick();
@@ -637,16 +637,16 @@ namespace DuckGame
                 Graphics.material = this.material;
             base.Draw();
             Graphics.material = null;
-            if (_flareAlpha > 0.0)
+            if (_flareAlpha > 0)
                 Draw(_flare, barrelOffset);
-            if (_barrelSmoke.speed > 0.0 && !raised)
+            if (_barrelSmoke.speed > 0 && !raised)
             {
                 _barrelSmoke.alpha = 0.7f;
                 _barrelSmoke.angle = _smokeAngle;
                 _barrelSmoke.flipH = offDir < 0;
-                if (offDir > 0 && angleDegrees > 90.0 && angleDegrees < 270.0)
+                if (offDir > 0 && angleDegrees > 90 && angleDegrees < 270)
                     _barrelSmoke.flipH = true;
-                if (offDir < 0 && angleDegrees > 90.0 && angleDegrees < 270.0)
+                if (offDir < 0 && angleDegrees > 90 && angleDegrees < 270)
                     _barrelSmoke.flipH = false;
                 _barrelSmoke.yscale = 1f - _smokeFlatten;
                 DrawIgnoreAngle(_barrelSmoke, barrelOffset);

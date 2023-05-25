@@ -66,7 +66,7 @@ namespace DuckGame
                 if (down)
                 {
                     _downWait -= 0.06f;
-                    if (_downWait <= 0.0)
+                    if (_downWait <= 0f)
                     {
                         if (_doneDown)
                         {
@@ -84,7 +84,7 @@ namespace DuckGame
                 else
                 {
                     _openWait -= 0.06f;
-                    if (_openWait <= 0.0 && _wrapped && !_flash)
+                    if (_openWait <= 0f && _wrapped && !_flash)
                         _flash = true;
                     if (_flash)
                     {
@@ -129,15 +129,15 @@ namespace DuckGame
                 _frame.depth = depth;
                 Graphics.Draw(_frame, x, y);
                 string text1 = "LAST WISH";
-                Vec2 vec2_1 = new Vec2((float)-(_font.GetWidth(text1) / 2.0), -42f);
+                Vec2 vec2_1 = new Vec2((float)-(_font.GetWidth(text1) / 2f), -42f);
                 _font.DrawOutline(text1, position + vec2_1, Color.White, Color.Black, depth + 2);
                 string text2 = "} " + _furni.name + " }";
                 _fancyFont.scale = new Vec2(1f, 1f);
-                Vec2 vec2_2 = new Vec2((float)-(_fancyFont.GetWidth(text2) / 2.0), -25f);
+                Vec2 vec2_2 = new Vec2((float)-(_fancyFont.GetWidth(text2) / 2f), -25f);
                 _fancyFont.DrawOutline(text2, position + vec2_2, Colors.DGYellow, Color.Black, depth + 2);
                 _fancyFont.scale = new Vec2(0.5f, 0.5f);
                 string text3 = "Your little man wanted you to have this.";
-                Vec2 vec2_3 = new Vec2((float)-(_fancyFont.GetWidth(text3) / 2.0), 38f);
+                Vec2 vec2_3 = new Vec2((float)-(_fancyFont.GetWidth(text3) / 2f), 38f);
                 _fancyFont.DrawOutline(text3, position + vec2_3, Colors.DGGreen, Color.Black, depth + 2, 0.5f);
                 _furni.Draw(position + new Vec2(0f, 10f), depth + 4, _furni.name == "PHOTO" ? 1 : (_furni.name == "EASEL" ? 6 : 0));
             }

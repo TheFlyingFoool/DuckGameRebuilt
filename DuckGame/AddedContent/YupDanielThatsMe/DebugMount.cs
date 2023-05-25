@@ -126,7 +126,7 @@ namespace DuckGame
             string text = "EMPTY";
             if (contains != null)
                 text = contains.Name;
-            Graphics.DrawString(text, position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
+            Graphics.DrawString(text, position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2f), -16f), Color.White, (Depth)0.9f);
         }
 
         public override void Initialize()

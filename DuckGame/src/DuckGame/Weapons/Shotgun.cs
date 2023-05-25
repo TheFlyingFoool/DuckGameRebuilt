@@ -44,16 +44,16 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            if (_loadAnimation == -1.0)
+            if (_loadAnimation == -1)
             {
                 SFX.Play("shotgunLoad");
                 _loadAnimation = 0f;
             }
-            if (_loadAnimation >= 0.0)
+            if (_loadAnimation >= 0)
             {
                 if (_loadAnimation == 0.5 && ammo != 0)
                     PopShell();
-                if (_loadAnimation < 1.0)
+                if (_loadAnimation < 1)
                     _loadAnimation += 0.1f;
                 else
                     _loadAnimation = 1f;

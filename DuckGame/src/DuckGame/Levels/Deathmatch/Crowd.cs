@@ -441,11 +441,9 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (_core._newMood == _core._mood)
-                return;
+            if (_core._newMood == _core._mood) return;
             _core._moodWait -= 0.15f;
-            if (_core._moodWait >= 0.0)
-                return;
+            if (_core._moodWait >= 0f) return;
             _core._mood = _core._newMood;
             _core._moodWait = 1f;
         }

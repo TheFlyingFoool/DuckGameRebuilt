@@ -478,7 +478,7 @@ namespace DuckGame
                         _endedHighlights = true;
                         Highlights.FinishRound();
                     }
-                    if (_deadTimer >= 0.0 || switched || Network.isActive)
+                    if (_deadTimer >= 0f || switched || Network.isActive)
                         return;
                     foreach (Team team in Teams.all)
                     {
@@ -556,12 +556,12 @@ namespace DuckGame
         //        if (team.numMembers == 2)
         //        {
         //            float num = 18.82353f;
-        //            position.x = (float)(teamSpawn1.position.x - 16.0 + num * index);
+        //            position.x = (float)(teamSpawn1.position.x - 16 + num * index);
         //        }
         //        else if (team.numMembers == 3)
         //        {
         //            float num = 9.411764f;
-        //            position.x = (float)(teamSpawn1.position.x - 16.0 + num * index);
+        //            position.x = (float)(teamSpawn1.position.x - 16 + num * index);
         //        }
         //        Duck duck = new Duck(position.x, position.y - 7f, team.activeProfiles[index]);
         //        duck.offDir = teamSpawn1.offDir;

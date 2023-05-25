@@ -40,7 +40,7 @@ namespace DuckGame
         /// </summary>
         public static void AddRumbleEvent(RumbleEvent rumbleEvent)
         {
-            if (rumbleEvent.intensityInitial <= 0.0)
+            if (rumbleEvent.intensityInitial <= 0)
                 return;
             ListRumbleEvents.Add(rumbleEvent);
         }
@@ -119,10 +119,10 @@ namespace DuckGame
                                 {
                                     float num1 = Vec2.Distance(listRumbleEvent.position.Value, profile.duck.cameraPosition);
                                     float num2 = 1f;
-                                    if (num1 > 32.0)
+                                    if (num1 > 32f)
                                     {
-                                        if (num1 <= 512.0)
-                                            num2 = (float)(1.0 - (num1 - 32.0 > 0.0 ? num1 - 32.0 : 0.0) / 512.0);
+                                        if (num1 <= 512f)
+                                            num2 = (float)(1f - (num1 - 32f > 0 ? num1 - 32f : 0) / 512f);
                                         else
                                             continue;
                                     }
@@ -144,7 +144,7 @@ namespace DuckGame
                             ListRumbleEvents.RemoveAt(index);
                     }
                 }
-                if (Options.Data.rumbleIntensity <= 0.0)
+                if (Options.Data.rumbleIntensity <= 0)
                     return;
                 foreach (Profile profile in active)
                 {

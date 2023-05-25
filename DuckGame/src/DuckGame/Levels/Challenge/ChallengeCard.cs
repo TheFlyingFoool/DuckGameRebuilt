@@ -71,7 +71,7 @@ namespace DuckGame
             }
             _size = Lerp.Float(_size, contract ? 1f : (expand ? 130f : 42f), 8f);
             _alphaMul = Lerp.Float(_alphaMul, contract ? 0f : 1f, 0.1f);
-            _dataAlpha = Lerp.Float(_dataAlpha, _size <= 126.0 || !expand ? 0f : 1f, !expand ? 1f : 0.2f);
+            _dataAlpha = Lerp.Float(_dataAlpha, _size <= 126f || !expand ? 0f : 1f, !expand ? 1f : 0.2f);
         }
 
         public string MakeQuestionMarks(string val)

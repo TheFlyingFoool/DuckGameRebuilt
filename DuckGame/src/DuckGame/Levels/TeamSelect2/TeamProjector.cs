@@ -57,10 +57,10 @@ namespace DuckGame
             else
             {
                 _swapFade += 0.1f;
-                if (_swapFade > 1.0)
+                if (_swapFade > 1f)
                     _swapFade = 1f;
             }
-            if (_swapFade > 0.0 || !_swap)
+            if (_swapFade > 0f || !_swap)
                 return;
             _swap = false;
             _swapFade = 0f;
@@ -90,11 +90,11 @@ namespace DuckGame
                 profile.persona.sprite.scale = new Vec2(1f, 1f);
                 profile.persona.armSprite.scale = new Vec2(1f, 1f);
                 float num3 = 12f;
-                float num4 = (float)(x - (count - 1) * num3 / 2.0 + num2 * num3);
-                profile.persona.sprite.depth = (Depth)(float)(num1 + 0.01f + num2 * (1.0 / 1000.0));
-                profile.persona.armSprite.depth = (Depth)(float)(num1 + 0.02f + num2 * (1.0 / 1000.0));
+                float num4 = (float)(x - (count - 1) * num3 / 2f + num2 * num3);
+                profile.persona.sprite.depth = (Depth)(float)(num1 + 0.01f + num2 * (1f / 1000f));
+                profile.persona.armSprite.depth = (Depth)(float)(num1 + 0.02f + num2 * (1f / 1000f));
                 Graphics.Draw(profile.persona.sprite, num4 + 1f, y - 17f);
-                Graphics.Draw(profile.persona.armSprite, (float)(num4 + 1.0 - 3.0), (float)(y - 17.0 + 6.0));
+                Graphics.Draw(profile.persona.armSprite, (float)(num4 + 1f - 3f), (float)(y - 17f + 6f));
                 Team team = profile.team;
                 if (team != null)
                 {
@@ -105,7 +105,7 @@ namespace DuckGame
                     hat.color = profile.persona.sprite.color;
                     hat.center = new Vec2(16f, 16f) + team.hatOffset;
                     hat.flipH = false;
-                    Graphics.Draw(hat, (float)(num4 + hatPoint.x + 1.0), y - 17f + hatPoint.y);
+                    Graphics.Draw(hat, (float)(num4 + hatPoint.x + 1f), y - 17f + hatPoint.y);
                     hat.color = Color.White;
                 }
                 _profile.persona.sprite.color = Color.White;

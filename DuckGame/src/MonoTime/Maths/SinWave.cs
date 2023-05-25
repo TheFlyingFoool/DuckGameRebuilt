@@ -21,7 +21,7 @@ namespace DuckGame
             set => _value = value;
         }
 
-        public float normalized => (float)((_value + 1.0) / 2.0);
+        public float normalized => (float)((_value + 1) / 2);
 
         public SinWave(float inc, float start = 0f)
         {

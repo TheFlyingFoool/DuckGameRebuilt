@@ -31,7 +31,7 @@ namespace DuckGame
                 {
                     Grenade grenade = new Grenade(c.x, c.y)
                     {
-                        hSpeed = (float)((index / 9f) * 40.0 - 20.0) * Rando.Float(0.5f, 1f),
+                        hSpeed = (float)((index / 9f) * 40 - 20) * Rando.Float(0.5f, 1f),
                         vSpeed = Rando.Float(-3f, -11f),
                         pullOnImpact = true
                     };

@@ -88,7 +88,7 @@ namespace DuckGame
                             RagdollPart ragdollPart = propel as RagdollPart;
                             ragdollPart.addWeight = 0.2f;
                             _equippedDuck.ragdoll.jetting = true;
-                            float ang = -(propel.angle - (float)(Math.PI / 2.0f));
+                            float ang = -(propel.angle - (float)(Math.PI / 2f));
                             Vec2 dir = Vec2.Zero;
                             if (_equippedDuck.inputProfile.leftStick.length > 0.1f)
                             {

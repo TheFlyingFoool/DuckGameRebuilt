@@ -54,7 +54,7 @@ namespace DuckGame
             depth = owner.depth - 1;
             hSpeed = 0f;
             vSpeed = 0f;
-            graphic.flipH = owner.offDir < 0.0;
+            graphic.flipH = owner.offDir < 0;
         }
 
         public void Latch(Vec2 point)

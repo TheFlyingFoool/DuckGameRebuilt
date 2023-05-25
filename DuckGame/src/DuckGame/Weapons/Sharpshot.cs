@@ -72,7 +72,7 @@ namespace DuckGame
                 else if (_loadState == 2)
                 {
                     handOffset.x += 0.8f;
-                    if (handOffset.x > 4.0)
+                    if (handOffset.x > 4)
                     {
                         ++_loadState;
                         Reload();
@@ -82,7 +82,7 @@ namespace DuckGame
                 else if (_loadState == 3)
                 {
                     handOffset.x -= 0.8f;
-                    if (handOffset.x <= 0.0)
+                    if (handOffset.x <= 0)
                     {
                         ++_loadState;
                         handOffset.x = 0f;

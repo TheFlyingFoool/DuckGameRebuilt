@@ -156,11 +156,11 @@ namespace DuckGame
             _containedObjects[3] = _containedObject4;
             if (isServerForObject)
             {
-                if (damageMultiplier > 1.0)
+                if (damageMultiplier > 1)
                     damageMultiplier -= 0.2f;
                 else
                     damageMultiplier = 1f;
-                if (_hitPoints <= 0.0 && !_destroyed)
+                if (_hitPoints <= 0 && !_destroyed)
                     Destroy(new DTImpact(this));
                 if (_onFire)
                     _hitPoints = Math.Min(_hitPoints, (1f - burnt) * _maxHealth);
@@ -194,7 +194,7 @@ namespace DuckGame
             }
             else
                 _sprite.frame = 0;
-            _sprite.frame += (int)((1.0 - _hitPoints / _maxHealth) * 3.5);
+            _sprite.frame += (int)((1 - _hitPoints / _maxHealth) * 3.5F);
             base.Draw();
         }
 

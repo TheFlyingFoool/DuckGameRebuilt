@@ -124,7 +124,7 @@ namespace DuckGame
             vSpeed -= 0.01f;
             hSpeed *= 0.95f;
             _life -= lifeTake;
-            if (_life < 0.0 && _sprite.currentAnimation != "puff")
+            if (_life < 0 && _sprite.currentAnimation != "puff")
                 _sprite.SetAnimation("puff");
             if (_sprite.currentAnimation == "puff" && _sprite.finished)
                 Level.Remove(this);

@@ -79,18 +79,21 @@ namespace DuckGame
             base.Initialize();
         }
 
+        public bool playedBroken;
         protected override bool OnDestroy(DestroyType type = null)
         {
-            if (!isServerForObject || type.thing != null && type.thing is Duck || _ruined)
-                return false;
-            _ruined = true;
-            graphic = _damaged;
-            SFX.Play("breakTV");
-            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 8; ++index)
-                Level.Add(new GlassParticle(x + Rando.Float(-8f, 8f), y + Rando.Float(-8f, 8f), new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
-            collideSounds.Clear();
-            collideSounds.Add("deadTVLand");
-            _sendDestroyMessage = true;
+            if (!isServerForObject || (type.thing != null && type.thing is Duck)) return false;
+            if (!_ruined)
+            {
+                _ruined = true;
+                graphic = _damaged;
+                playedBroken = true;
+                SFX.Play("breakTV", 1f, 0f, 0f, false);
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 8; ++index) Level.Add(new GlassParticle(x + Rando.Float(-8f, 8f), y + Rando.Float(-8f, 8f), new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
+                collideSounds.Clear();
+                collideSounds.Add("deadTVLand");
+                _sendDestroyMessage = true;
+            }
             return false;
         }
 
@@ -106,6 +109,13 @@ namespace DuckGame
 
         public override void Update()
         {
+            if (_ruined && !playedBroken)
+            {
+                playedBroken = true;
+                SFX.Play("breakTV", 1f, 0f, 0f, false);
+                collideSounds.Clear();
+                collideSounds.Add("deadTVLand");
+            }
             if (_switchFrames > 0)
                 --_switchFrames;
             if (_ruined)
@@ -116,7 +126,7 @@ namespace DuckGame
                     _cape = null;
                 }
                 graphic = _damaged;
-                if (_ghostWait > 0.0)
+                if (_ghostWait > 0)
                 {
                     _ghostWait -= 0.4f;
                 }
@@ -136,7 +146,7 @@ namespace DuckGame
                 duck = _owner.owner as Duck;
             if (duck != null)
             {
-                if (duck.vSpeed < -1.0 && prevVSpeed > 0.0 && !duck.tvJumped)
+                if (duck.vSpeed < -1 && prevVSpeed > 0 && !duck.tvJumped)
                     fakeGrounded = true;
                 jumpReady = jumpReady || duck.grounded || fakeGrounded || duck._vine != null;
                 prevVSpeed = duck.vSpeed;

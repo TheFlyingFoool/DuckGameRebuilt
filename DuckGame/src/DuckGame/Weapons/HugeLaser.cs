@@ -133,26 +133,26 @@ namespace DuckGame
                     _chargeSoundShort.Volume = _chargeVolumeShort;
                     _unchargeSound.Volume = _unchargeVolume;
                     _unchargeSoundShort.Volume = _unchargeVolumeShort;
-                    if (_chargeVolume > 0.0 && _chargeSound.State != SoundState.Playing)
+                    if (_chargeVolume > 0 && _chargeSound.State != SoundState.Playing)
                         _chargeSound.Play();
-                    else if (_chargeVolume <= 0.0)
+                    else if (_chargeVolume <= 0)
                         _chargeSound.Stop();
-                    if (_chargeVolumeShort > 0.0 && _chargeSoundShort.State != SoundState.Playing)
+                    if (_chargeVolumeShort > 0 && _chargeSoundShort.State != SoundState.Playing)
                         _chargeSoundShort.Play();
-                    else if (_chargeVolumeShort <= 0.0)
+                    else if (_chargeVolumeShort <= 0)
                         _chargeSoundShort.Stop();
-                    if (_unchargeVolume > 0.0 && _unchargeSound.State != SoundState.Playing)
+                    if (_unchargeVolume > 0 && _unchargeSound.State != SoundState.Playing)
                         _unchargeSound.Play();
-                    else if (_unchargeVolume <= 0.0)
+                    else if (_unchargeVolume <= 0)
                         _unchargeSound.Stop();
-                    if (_unchargeVolumeShort > 0.0 && _unchargeSoundShort.State != SoundState.Playing)
+                    if (_unchargeVolumeShort > 0 && _unchargeSoundShort.State != SoundState.Playing)
                         _unchargeSoundShort.Play();
-                    else if (_unchargeVolumeShort <= 0.0)
+                    else if (_unchargeVolumeShort <= 0)
                         _unchargeSoundShort.Stop();
                 }
             }
             base.Update();
-            if (_charge > 0.0)
+            if (_charge > 0)
                 _charge -= 0.1f;
             else
                 _charge = 0f;
@@ -187,7 +187,7 @@ namespace DuckGame
                 {
                     Vec2 barrelVector = this.barrelVector;
                     hSpeed -= barrelVector.x * 9f;
-                    vSpeed -= (float)(barrelVector.y * 9.0 + 3.0);
+                    vSpeed -= (float)(barrelVector.y * 9 + 3);
                 }
                 Vec2 vec2_1 = Offset(barrelOffset);
                 Vec2 vec2_2 = Offset(barrelOffset + new Vec2(1200f, 0f)) - vec2_1;
@@ -241,7 +241,7 @@ namespace DuckGame
             float num3 = Maths.NormalizeSection(_tip.alpha, 0.75f, 1f);
             float num4 = Maths.NormalizeSection(_tip.alpha, 0.9f, 1f);
             float num5 = Maths.NormalizeSection(_tip.alpha, 0.8f, 1f) * 0.5f;
-            if (num1 <= 0.0)
+            if (num1 <= 0)
                 return;
             Vec2 p1 = Offset(barrelOffset);
             Vec2 p2 = Offset(barrelOffset + new Vec2(num1 * 1200f, 0f));

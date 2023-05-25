@@ -58,7 +58,7 @@ namespace DuckGame
         {
             Vec2 vec2 = position - _target.position;
             float lengthSq = vec2.lengthSq;
-            if (lengthSq < 64.0 || lengthSq > 4096.0)
+            if (lengthSq < 64 || lengthSq > 4096)
                 alpha -= 0.08f;
             hSpeed = Lerp.Float(hSpeed, (float)(-vec2.x * 0.7f), 0.15f);
             vSpeed = Lerp.Float(vSpeed, (float)(-vec2.y * 0.7f), 0.15f);
@@ -66,12 +66,12 @@ namespace DuckGame
             position.y += vSpeed;
             position.x = Lerp.Float(position.x, _target.x, 0.16f);
             position.y = Lerp.Float(position.y, _target.y, 0.16f);
-            hSpeed *= Math.Min(1f, (float)(lengthSq / 128.0 + 0.25));
-            vSpeed *= Math.Min(1f, (float)(lengthSq / 128.0 + 0.25));
+            hSpeed *= Math.Min(1f, (float)(lengthSq / 128 + 0.25f));
+            vSpeed *= Math.Min(1f, (float)(lengthSq / 128 + 0.25f));
             life -= 0.02f;
-            if (life < 0.0)
+            if (life < 0)
                 alpha -= 0.08f;
-            if (alpha < 0.0)
+            if (alpha < 0)
                 Level.Remove(this);
             base.Update();
         }

@@ -226,12 +226,12 @@ namespace DuckGame
                 if (basicConnection.status != NCBasicStatus.Disconnected)
                 {
                     TimeSpan elapsed = basicConnection.heartbeat.elapsed;
-                    if (elapsed.TotalSeconds > 1.0 || basicConnection.status == NCBasicStatus.TryingToConnect)
+                    if (elapsed.TotalSeconds > 1 || basicConnection.status == NCBasicStatus.TryingToConnect)
                     {
                         if (basicConnection.status == NCBasicStatus.Disconnecting)
                         {
                             elapsed = basicConnection.heartbeat.elapsed;
-                            if (elapsed.TotalSeconds > 3.0)
+                            if (elapsed.TotalSeconds > 3)
                             {
                                 basicConnection.status = NCBasicStatus.Disconnected;
                                 basicConnection.packets = 0;

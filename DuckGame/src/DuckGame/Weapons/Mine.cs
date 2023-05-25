@@ -164,7 +164,7 @@ namespace DuckGame
                 previousThings.Clear();
                 foreach (PhysicsObject physicsObject in physicsObjects)
                 {
-                    if (physicsObject != this && physicsObject.owner == null && (!(physicsObject is Holdable) || (physicsObject as Holdable).canPickUp && (physicsObject as Holdable).hoverSpawner == null) && Math.Abs(physicsObject.bottom - bottom) <= 6.0)
+                    if (physicsObject != this && physicsObject.owner == null && (!(physicsObject is Holdable) || (physicsObject as Holdable).canPickUp && (physicsObject as Holdable).hoverSpawner == null) && Math.Abs(physicsObject.bottom - bottom) <= 6)
                     {
                         if (physicsObject.isServerForObject)
                             flag1 = true;
@@ -225,7 +225,7 @@ namespace DuckGame
                 }
                 _holdingWeight = addWeight;
             }
-            if (_timer < 0.0 && isServerForObject)
+            if (_timer < 0 && isServerForObject)
             {
                 _timer = 1f;
                 BlowUp();
@@ -246,7 +246,7 @@ namespace DuckGame
                 if (t != this)
                 {
                     Vec2 vec2 = t.position - position;
-                    float num1 = (float)(1.0 - Math.Min(vec2.length, 22f) / 22.0);
+                    float num1 = (float)(1 - Math.Min(vec2.length, 22f) / 22);
                     float num2 = num1 * 4f;
                     vec2.Normalize();
                     t.hSpeed += num2 * vec2.x;
@@ -259,7 +259,7 @@ namespace DuckGame
             float y = position.y;
             for (int index = 0; index < 20; ++index)
             {
-                float ang = (float)(index * 18.0 - 5.0) + Rando.Float(10f);
+                float ang = (float)(index * 18 - 5) + Rando.Float(10f);
                 ATShrapnel type = new ATShrapnel
                 {
                     range = 60f + Rando.Float(18f)
@@ -312,7 +312,7 @@ namespace DuckGame
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (bullet.isLocal && owner == null && !canPickUp && _timer > 0.0)
+            if (bullet.isLocal && owner == null && !canPickUp && _timer > 0)
             {
                 Fondle(this, DuckNetwork.localConnection);
                 BlowUp();

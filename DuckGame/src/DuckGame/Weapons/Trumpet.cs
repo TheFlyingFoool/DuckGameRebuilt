@@ -96,18 +96,18 @@ namespace DuckGame
                             currentPitch = -1;
                         rightPressed = false;
                     }
-                    notePitch = currentPitch < 0 || _raised ? 0f : (float)(currentPitch / 3.0 + 0.01f);
+                    notePitch = currentPitch < 0 || _raised ? 0f : (float)(currentPitch / 3f + 0.01f);
                 }
                 if (notePitch != prevNotePitch)
                 {
-                    if (notePitch != 0.0)
+                    if (notePitch != 0)
                     {
                         if (noteSound != null)
                         {
                             noteSound.Stop();
                             noteSound = null;
                         }
-                        int num = (int)Math.Round(notePitch * 3.0);
+                        int num = (int)Math.Round(notePitch * 3f);
                         if (num < 0)
                             num = 0;
                         if (num > 12)

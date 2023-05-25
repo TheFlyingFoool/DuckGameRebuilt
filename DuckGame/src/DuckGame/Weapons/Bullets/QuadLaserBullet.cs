@@ -38,7 +38,7 @@ namespace DuckGame
             _wave2.Update();
             timeAlive += 0.016f;
             position += _travel * 0.5f;
-            if (isServerForObject && (x > Level.current.bottomRight.x + 200.0 || x < Level.current.topLeft.x - 200.0))
+            if (isServerForObject && (x > Level.current.bottomRight.x + 200 || x < Level.current.topLeft.x - 200))
                 Level.Remove(this);
             foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(topLeft, bottomRight))
             {
@@ -62,8 +62,8 @@ namespace DuckGame
 
         public override void Draw()
         {
-            Graphics.DrawRect(position + new Vec2(-4f, -4f), position + new Vec2(4f, 4f), new Color(byte.MaxValue - (int)(_wave.normalized * 90.0), 137 + (int)(_wave.normalized * 50.0), 31 + (int)(_wave.normalized * 30.0)), depth);
-            Graphics.DrawRect(position + new Vec2(-4f, -4f), position + new Vec2(4f, 4f), new Color(byte.MaxValue, 224 - (int)(_wave2.normalized * 150.0), 90 + (int)(_wave2.normalized * 50.0)), depth + 1, false);
+            Graphics.DrawRect(position + new Vec2(-4f, -4f), position + new Vec2(4f, 4f), new Color(byte.MaxValue - (int)(_wave.normalized * 90f), 137 + (int)(_wave.normalized * 50f), 31 + (int)(_wave.normalized * 30f)), depth);
+            Graphics.DrawRect(position + new Vec2(-4f, -4f), position + new Vec2(4f, 4f), new Color(byte.MaxValue, 224 - (int)(_wave2.normalized * 150f), 90 + (int)(_wave2.normalized * 50f)), depth + 1, false);
             base.Draw();
         }
     }

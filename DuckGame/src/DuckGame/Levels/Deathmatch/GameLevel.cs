@@ -552,22 +552,22 @@ namespace DuckGame
                     else if (text1 == null)
                         text1 = "CUSTOM LEVEL";
                     float stringWidth1 = Graphics.GetStringWidth(text1);
-                    float num1 = (float)((stringWidth1 + x + 12.0) * (1.0 - _infoSlide));
+                    float num1 = (float)((stringWidth1 + x + 12f) * (1f - _infoSlide));
                     Vec2 p1 = new Vec2(-num1, x - 1f);
-                    Vec2 p2 = new Vec2((float)(x + stringWidth1 + 4.0), x + 10f);
+                    Vec2 p2 = new Vec2((float)(x + stringWidth1 + 4f), x + 10f);
                     Graphics.DrawRect(p1, p2 + new Vec2(-num1, 0f), new Color(13, 130, 211), (Depth)0.95f);
-                    Graphics.DrawRect(p1 + new Vec2(-2f, 2f), p2 + new Vec2((float)(-num1 + 2.0), 2f), Colors.BlueGray, (Depth)0.9f);
+                    Graphics.DrawRect(p1 + new Vec2(-2f, 2f), p2 + new Vec2((float)(-num1 + 2f), 2f), Colors.BlueGray, (Depth)0.9f);
                     Graphics.DrawStringOutline(text1, p1 + new Vec2(x, 2f), Color.White, Color.Black, (Depth)1f);
                     if (data.workshopData != null && data.workshopData.author != null && data.workshopData.author != "")
                     {
                         string text2 = "BY " + data.workshopData.author;
                         float stringWidth2 = Graphics.GetStringWidth(text2);
-                        float num2 = (float)((stringWidth2 + x + 12.0) * (1.0 - _infoSlide));
-                        p1 = new Vec2((float)(Layer.HUD.width - stringWidth2 - x - 5.0) + num2, (float)(Layer.HUD.height - x - 10.0));
-                        p2 = new Vec2(Layer.HUD.width + num2, (float)(Layer.HUD.height - x + 1.0));
+                        float num2 = (float)((stringWidth2 + x + 12f) * (1f - _infoSlide));
+                        p1 = new Vec2((float)(Layer.HUD.width - stringWidth2 - x - 5f) + num2, (float)(Layer.HUD.height - x - 10f));
+                        p2 = new Vec2(Layer.HUD.width + num2, (float)(Layer.HUD.height - x + 1f));
                         Graphics.DrawRect(p1, p2, new Color(138, 38, 190), (Depth)0.95f);
                         Graphics.DrawRect(p1 + new Vec2(-2f, -2f), p2 + new Vec2(2f, -2f), Colors.BlueGray, (Depth)0.9f);
-                        Graphics.DrawStringOutline(text2, new Vec2(Layer.HUD.width - stringWidth2 - x + num2, (float)(Layer.HUD.height - x - 8.0)), Color.White, Color.Black, (Depth)1f);
+                        Graphics.DrawStringOutline(text2, new Vec2(Layer.HUD.width - stringWidth2 - x + num2, (float)(Layer.HUD.height - x - 8f)), Color.White, Color.Black, (Depth)1f);
                     }
                 }
             }

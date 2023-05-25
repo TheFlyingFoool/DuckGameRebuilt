@@ -58,31 +58,31 @@ namespace DuckGame
                 {
                     if (offDir < 0)
                     {
-                        if (_rotAngle > -90.0)
+                        if (_rotAngle > -90)
                             _rotAngle -= 3f;
-                        if (_rotAngle <= -90.0)
+                        if (_rotAngle <= -90)
                         {
                             tamping = true;
                             _tampInc += 0.2f * _tampBoost;
                             tampPos = (float)Math.Sin(_tampInc) * 2f;
-                            if (tampPos < -1.0 && !_puffed)
+                            if (tampPos < -1 && !_puffed)
                             {
                                 Vec2 vec2 = Offset(barrelOffset) - barrelVector * 8f;
                                 if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
                                 else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
                                 _puffed = true;
                             }
-                            if (tampPos > -1.0)
+                            if (tampPos > -1)
                                 _puffed = false;
                             _tampTime += 0.005f * _tampBoost;
                         }
                         if (_tampTime >= _timeToTamp)
                         {
                             _rotAngle += 8f;
-                            if (_offsetY > 0.0)
+                            if (_offsetY > 0)
                                 _offsetY -= 2f;
                             tamping = false;
-                            if (_rotAngle >= 0.0)
+                            if (_rotAngle >= 0)
                             {
                                 _rotAngle = 0f;
                                 _rotating = false;
@@ -94,31 +94,31 @@ namespace DuckGame
                     }
                     else
                     {
-                        if (_rotAngle < 90.0)
+                        if (_rotAngle < 90)
                             _rotAngle += 3f;
-                        if (_rotAngle >= 90.0)
+                        if (_rotAngle >= 90)
                         {
                             tamping = true;
                             _tampInc += 0.2f * _tampBoost;
                             tampPos = (float)Math.Sin(_tampInc) * 2f;
-                            if (tampPos < -1.0 && !_puffed)
+                            if (tampPos < -1 && !_puffed)
                             {
                                 Vec2 vec2 = Offset(barrelOffset) - barrelVector * 8f;
                                 if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
                                 else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
                                 _puffed = true;
                             }
-                            if (tampPos > -1.0)
+                            if (tampPos > -1)
                                 _puffed = false;
                             _tampTime += 0.005f * _tampBoost;
                         }
                         if (_tampTime >= _timeToTamp)
                         {
                             _rotAngle -= 8f;
-                            if (_offsetY > 0.0)
+                            if (_offsetY > 0)
                                 _offsetY -= 2f;
                             tamping = false;
-                            if (_rotAngle <= 0.0)
+                            if (_rotAngle <= 0)
                             {
                                 _rotAngle = 0f;
                                 _rotating = false;
@@ -169,7 +169,7 @@ namespace DuckGame
                 _tampingHand.depth = depth - 1;
                 float angle = duck._spriteArms.angle;
                 Vec2 vec2 = Offset(barrelOffset);
-                Vec2 p2 = vec2 + barrelVector * (float)(tampPos * 2.0 + 3.0);
+                Vec2 p2 = vec2 + barrelVector * (float)(tampPos * 2 + 3);
                 Graphics.DrawLine(vec2 - barrelVector * 6f, p2, Color.Gray, depth: (depth - 2));
                 duck._spriteArms.depth = depth - 1;
                 Graphics.Draw(duck._spriteArms, p2.x, p2.y);

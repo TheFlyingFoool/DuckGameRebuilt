@@ -838,7 +838,7 @@ namespace DuckGame
 
         //private static void DoMatchSettingsInfoOpen()
         //{
-        //    DuckNetwork._ducknetUIGroup = new UIComponent((float)(320.0 / 2.0), 180f / 2f, 0f, 0f);
+        //    DuckNetwork._ducknetUIGroup = new UIComponent((float)(320 / 2), 180f / 2f, 0f, 0f);
         //    DuckNetwork._core._matchSettingMenu = DuckNetwork.CreateMatchSettingsInfoWindow();
         //    DuckNetwork._ducknetUIGroup.Add((UIComponent)DuckNetwork._core._matchSettingMenu, false);
         //    DuckNetwork._ducknetUIGroup.Close();
@@ -857,7 +857,7 @@ namespace DuckGame
 
         private static void DoSpectatorOpen(bool pSpectator)
         {
-            _ducknetUIGroup = new UIComponent((float)(320.0 / 2.0), 180f / 2f, 0f, 0f);
+            _ducknetUIGroup = new UIComponent((float)(320 / 2), 180f / 2f, 0f, 0f);
             UIMenu spectatorWindow = CreateSpectatorWindow(pSpectator);
             _ducknetUIGroup.Add(spectatorWindow, false);
             _ducknetUIGroup.Close();
@@ -1996,9 +1996,9 @@ namespace DuckGame
                     foreach (ChatMessage chatMessage in _core.chatMessages)
                     {
                         chatMessage.timeout -= 0.016f;
-                        if (chatMessage.timeout < 0.0)
+                        if (chatMessage.timeout < 0)
                             chatMessage.alpha -= 0.01f;
-                        if (chatMessage.alpha < 0.0)
+                        if (chatMessage.alpha < 0)
                             chatMessageList.Add(chatMessage);
                     }
                     foreach (ChatMessage chatMessage in chatMessageList)
@@ -3246,16 +3246,15 @@ namespace DuckGame
                 _core._chatFont.scale = new Vec2(num3, num3) * chatMessage.scale;
                 if (_core._chatFont is RasterFont)
                     _core._chatFont.scale = new Vec2(0.5f);
-                float x = (float)(_core._chatFont.GetWidth(chatMessage.text) + num7 + 8.0 * chatScale);
+                float x = (float)(_core._chatFont.GetWidth(chatMessage.text) + num7 + 8 * chatScale);
                 if (chatMessage.who.slotType == SlotType.Spectator)
                 {
                     if (_core._chatFont is RasterFont)
                     {
-                        float num8 = (float)((_core._chatFont as RasterFont).data.fontSize * RasterFont.fontScaleFactor / 10.0);
+                        float num8 = (float)((_core._chatFont as RasterFont).data.fontSize * RasterFont.fontScaleFactor / 10);
                         x += 6f * num8;
                     }
-                    else
-                        x += 8f * _core._chatFont.scale.x;
+                    else x += 8f * _core._chatFont.scale.x;
                 }
                 float y = chatMessage.newlines * (_core._chatFont.characterHeight + 2) * _core._chatFont.scale.y;
                 Vec2 p1 = new Vec2(14f, num1 + (vec2_1.y - (y + 10f)));

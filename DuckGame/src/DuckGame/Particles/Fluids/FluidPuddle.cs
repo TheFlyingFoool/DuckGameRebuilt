@@ -50,7 +50,7 @@ namespace DuckGame
             _rightCorner = null;
             foreach (BlockCorner blockCorner in groupCorners)
             {
-                if (Math.Abs(ypos - blockCorner.corner.y) < 4.0)
+                if (Math.Abs(ypos - blockCorner.corner.y) < 4)
                 {
                     if (blockCorner.corner.x > xpos)
                     {
@@ -117,25 +117,25 @@ namespace DuckGame
             }
             if (_lightRect == null && Layer.lighting)
             {
-                _lightRect = new WhiteRectangle(x, y, width, height, dat.heat <= 0.0);
+                _lightRect = new WhiteRectangle(x, y, width, height, dat.heat <= 0);
                 Level.Add(_lightRect);
             }
-            if (dat.amount > 0.0)
+            if (dat.amount > 0)
                 _framesSinceFeed = 0;
             data.Mix(dat);
             data.amount = Maths.Clamp(data.amount, 0f, MaxFluidFill());
             _wide = FeedAmountToDistance(data.amount);
             float num1 = _wide + 4f;
-            _collisionOffset.x = (float)-(num1 / 2.0);
+            _collisionOffset.x = (float)-(num1 / 2);
             _collisionSize.x = num1;
             FeedEdges();
             if (_leftCorner != null && _rightCorner != null && _wide > _rightCorner.corner.x - _leftCorner.corner.x)
             {
                 _wide = _rightCorner.corner.x - _leftCorner.corner.x;
-                x = _leftCorner.corner.x + (float)((_rightCorner.corner.x - _leftCorner.corner.x) / 2.0);
+                x = _leftCorner.corner.x + (float)((_rightCorner.corner.x - _leftCorner.corner.x) / 2);
             }
             float num2 = _wide + 4f;
-            _collisionOffset.x = (float)-(num2 / 2.0);
+            _collisionOffset.x = (float)-(num2 / 2);
             _collisionSize.x = num2;
             if (!(data.sprite == "water") || _leftCorner == null)
                 return;
@@ -147,14 +147,14 @@ namespace DuckGame
                     case null:
                         goto label_19;
                     case SnowTileset _:
-                        if (block.left + 2.0 > left && block.right - 2.0 < right)
+                        if (block.left + 2 > left && block.right - 2 < right)
                         {
                             (block as SnowTileset).Freeze();
                             break;
                         }
                         break;
                     case SnowIceTileset _:
-                        if (block.left + 2.0 > left && block.right - 2.0 < right)
+                        if (block.left + 2 > left && block.right - 2 < right)
                         {
                             (block as SnowIceTileset).Freeze();
                             break;
@@ -319,7 +319,7 @@ namespace DuckGame
             else
             {
                 alpha = Lerp.Float(alpha, 1f, 0.04f);
-                if (num < 3.0)
+                if (num < 3)
                 {
                     FluidData dat2 = data;
                     dat2.amount = -0.0001f;
@@ -330,7 +330,7 @@ namespace DuckGame
 
             }
             float depth = CalculateDepth();
-            if (depth > 4.0 && !_initializedUpperCorners)
+            if (depth > 4 && !_initializedUpperCorners)
             {
                 _initializedUpperCorners = true;
                 foreach (BlockCorner groupCorner in _block.GetGroupCorners())
@@ -355,7 +355,7 @@ namespace DuckGame
                 _leftStream.position.y = y - _collisionOffset.y;
             if (_rightStream != null)
                 _rightStream.position.y = y - _collisionOffset.y;
-            _collisionOffset.y = (float)(-depth - 1.0);
+            _collisionOffset.y = (float)(-depth - 1);
             _collisionSize.y = depth;
         }
 

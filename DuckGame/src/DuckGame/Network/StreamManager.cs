@@ -81,7 +81,7 @@ namespace DuckGame
 
         public void LogPing(float pingVal)
         {
-            if (pingVal < 0.0)
+            if (pingVal < 0)
                 pingVal = 0f;
             _previousPings[_currentPing % 32] = pingVal;
             ++_currentPing;
@@ -172,7 +172,7 @@ namespace DuckGame
                 foreach (NetMessage unreliableMessage in _unreliableMessages)
                 {
                     unreliableMessage.timeout -= Maths.IncFrameTimer();
-                    if (unreliableMessage.timeout <= 0.0)
+                    if (unreliableMessage.timeout <= 0)
                         netMessageList.Add(unreliableMessage);
                 }
                 foreach (NetMessage m in netMessageList)
@@ -332,7 +332,7 @@ namespace DuckGame
                     NetMessage orderedPacket = _orderedPackets[index];
                     orderedPacket.timeout += Maths.IncFrameTimer();
                     ushort expectedReliableOrder;
-                    if (orderedPacket.timeout > 2.0 && orderedPacket.timeout < 3.0)
+                    if (orderedPacket.timeout > 2 && orderedPacket.timeout < 3)
                     {
                         orderedPacket.timeout = 1000f;
                         string[] strArray = new string[7]
@@ -507,7 +507,7 @@ namespace DuckGame
                             // DevConsole.Log("Sending unacknowledged " + unacknowledgedMessage.GetType().Name);
                             if (unacknowledgedMessage.priority != NetMessagePriority.Urgent || unacknowledgedMessage.timesRetransmitted >= 2)
                             {
-                                int num = (int)(MathHelper.Clamp(ping, 0.064f, 1f) * 60.0) + 1;
+                                int num = (int)(MathHelper.Clamp(ping, 0.064f, 1f) * 60) + 1;
                                 if (unacknowledgedMessage.serializedData.lengthInBytes > 500)
                                     num += 30;
                                 if (unacknowledgedMessage.lastTransmitted + num > Graphics.frame)

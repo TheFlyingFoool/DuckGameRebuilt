@@ -31,7 +31,7 @@ namespace DuckGame
         public void Mix(FluidData with)
         {
             float num1 = with.amount + amount;
-            if (with.amount > 0.0)
+            if (with.amount > 0)
             {
                 float num2 = amount / num1;
                 float num3 = with.amount / num1;

@@ -21,7 +21,7 @@ namespace DuckGame
         {
             if (_data == null || !_inMixer)
                 return 0;
-            if (_volume <= 0.0)
+            if (_volume <= 0)
                 return count;
             int length = 0;
             lock (this)

@@ -158,7 +158,7 @@ namespace DuckGame
                 case 18:
                 case 26:
                     _collisionSize.x = verticalWidthThick;
-                    _collisionOffset.x = (float)(16.0 - verticalWidthThick - 8.0);
+                    _collisionOffset.x = (float)(16f - verticalWidthThick - 8f);
                     break;
                 case 4:
                 case 5:

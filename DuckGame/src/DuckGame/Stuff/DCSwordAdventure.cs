@@ -31,7 +31,7 @@ namespace DuckGame
                 {
                     Sword sword = new Sword(c.x, c.y)
                     {
-                        hSpeed = (float)((index / 7f) * 30.0 - 15.0) * Rando.Float(0.5f, 1f),
+                        hSpeed = (float)((index / 7f) * 30 - 15) * Rando.Float(0.5f, 1f),
                         vSpeed = Rando.Float(-10f, 10f),
                         _wasLifted = true,
                         _framesExisting = 16

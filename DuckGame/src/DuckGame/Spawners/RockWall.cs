@@ -45,9 +45,9 @@ namespace DuckGame
             if (!(Level.current is Editor))
             {
                 Graphics.Draw(_wall, x, y);
-                if (Level.current.topLeft.y < y - 500.0)
+                if (Level.current.topLeft.y < y - 500)
                     Graphics.Draw(_wall, x, y - _wall.h);
-                if (Level.current.bottomRight.y <= y + 500.0)
+                if (Level.current.bottomRight.y <= y + 500)
                     return;
                 Graphics.Draw(_wall, x, y + _wall.h);
             }

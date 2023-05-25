@@ -957,9 +957,9 @@ namespace DuckGame
 
         public static void PostLoad()
         {
-            if (Data.musicVolume > 1.0)
+            if (Data.musicVolume > 1)
                 Data.musicVolume /= 100f;
-            if (Data.sfxVolume > 1.0)
+            if (Data.sfxVolume > 1)
                 Data.sfxVolume /= 100f;
             if (Data.windowScale < 0)
                 Data.windowScale = !MonoMain.fourK ? 0 : 1;

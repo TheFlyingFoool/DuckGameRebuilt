@@ -493,7 +493,7 @@ namespace DuckGame
                     padState.sticks.left = Vec2.Zero;
                 if (padState.sticks.right.Length() < 0.1f)
                     padState.sticks.right = Vec2.Zero;
-                if (state.leftZ > 0.0)
+                if (state.leftZ > 0f)
                     padState.triggers.left = state.leftZ;
             }
             else

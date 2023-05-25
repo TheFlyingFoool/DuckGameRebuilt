@@ -31,6 +31,7 @@ namespace DuckGame
           Duck own)
           : base(xpos, ypos)
         {
+            shouldbegraphicculled = false; //theres a glitch that makes these invisible adding this just incase? -NiK0
             offDir = (sbyte)dir;
             graphic = new Sprite("sledgeForce");
             center = new Vec2(graphic.w, graphic.h);
@@ -66,7 +67,7 @@ namespace DuckGame
                             grenade.PressAction();
                         if (materialThing is PhysicsObject)
                         {
-                            materialThing.hSpeed = (float)((_speed - 3.0) * offDir * 1.5 + offDir * 4.0) * alpha;
+                            materialThing.hSpeed = (float)((_speed - 3) * offDir * 1.5 + offDir * 4) * alpha;
                             materialThing.vSpeed = (_speedv - 4.5f) * alpha;
                             materialThing.clip.Add(_waveOwner as MaterialThing);
                         }
@@ -98,7 +99,7 @@ namespace DuckGame
             x += offDir * _speed;
             y += _speedv;
             alpha -= _alphaSub;
-            if (alpha > 0.0)
+            if (alpha > 0)
                 return;
             Level.Remove(this);
         }

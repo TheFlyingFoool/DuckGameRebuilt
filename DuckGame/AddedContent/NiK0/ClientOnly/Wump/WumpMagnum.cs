@@ -45,8 +45,8 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            _angleOffset = owner == null ? 0f : (offDir >= 0 ? -Maths.DegToRad(rise * 65f) : -Maths.DegToRad((float)(-rise * 65.0)));
-            if (rise > 0.0)
+            _angleOffset = owner == null ? 0f : (offDir >= 0 ? -Maths.DegToRad(rise * 65f) : -Maths.DegToRad((float)(-rise * 65f)));
+            if (rise > 0f)
                 rise -= 0.013f;
             else
                 rise = 0f;

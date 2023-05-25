@@ -34,12 +34,12 @@
 //        {
 //            if (layer == Layer.HUD && this._data != null)
 //            {
-//                DuckGame.Graphics.Draw(this._data.image, (float)(layer.camera.width / 2.0 - 32.0), (float)(layer.camera.height / 2.0 - 32.0), 0.5f, 0.5f, (Depth)0.5f);
+//                DuckGame.Graphics.Draw(this._data.image, (float)(layer.camera.width / 2f - 32f), (float)(layer.camera.height / 2f - 32f), 0.5f, 0.5f, (Depth)0.5f);
 //                float stringWidth1 = DuckGame.Graphics.GetStringWidth(this._data.name);
-//                DuckGame.Graphics.DrawString(this._data.name, new Vec2((float)(layer.camera.width / 2.0 - stringWidth1 / 2.0), (float)(layer.camera.height / 2.0 - 43.0)), Color.Black, (Depth)1f);
+//                DuckGame.Graphics.DrawString(this._data.name, new Vec2((float)(layer.camera.width / 2f - stringWidth1 / 2f), (float)(layer.camera.height / 2f - 43f)), Color.Black, (Depth)1f);
 //                string text = "\"" + this._data.quote + "\"";
 //                float stringWidth2 = DuckGame.Graphics.GetStringWidth(text);
-//                DuckGame.Graphics.DrawString(text, new Vec2((float)(layer.camera.width / 2.0 - stringWidth2 / 2.0), (float)(layer.camera.height / 2.0 + 38.0)), Color.Black, (Depth)1f);
+//                DuckGame.Graphics.DrawString(text, new Vec2((float)(layer.camera.width / 2f - stringWidth2 / 2f), (float)(layer.camera.height / 2f + 38f)), Color.Black, (Depth)1f);
 //            }
 //            base.PostDrawLayer(layer);
 //        }

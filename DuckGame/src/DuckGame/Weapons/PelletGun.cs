@@ -122,7 +122,7 @@ namespace DuckGame
                 else if (_loadState == 2)
                 {
                     handOffset.x += 0.31f;
-                    if (handOffset.x > 4.0)
+                    if (handOffset.x > 4)
                     {
                         ++_loadState;
                         ammo = 2;
@@ -139,7 +139,7 @@ namespace DuckGame
                 else if (_loadState == 3)
                 {
                     handOffset.x -= 0.2f;
-                    if (handOffset.x <= 0.0)
+                    if (handOffset.x <= 0)
                     {
                         ++_loadState;
                         handOffset.x = 0f;
@@ -256,7 +256,7 @@ namespace DuckGame
             _spring.depth = depth - 5;
             _spring.center = new Vec2(4f, 7f);
             _spring.angleDegrees = Maths.PointDirection(position + _posOffset, springPos) - 90f;
-            _spring.yscale = (float)((position.y + _posOffset.y - springPos.y) / 8.0);
+            _spring.yscale = (float)((position.y + _posOffset.y - springPos.y) / 8);
             _spring.flipH = offDir < 0;
             if (_spring.yscale > 1.2f)
                 _spring.yscale = 1.2f;

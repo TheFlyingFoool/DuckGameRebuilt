@@ -31,7 +31,7 @@ namespace DuckGame
                 {
                     Present present = new Present(c.x, c.y)
                     {
-                        hSpeed = (float)((index / 7f) * 30.0 - 15.0) * Rando.Float(0.5f, 1f),
+                        hSpeed = (float)((index / 7f) * 30 - 15) * Rando.Float(0.5f, 1f),
                         vSpeed = Rando.Float(-3f, -11f)
                     };
                     Level.Add(present);
@@ -40,7 +40,7 @@ namespace DuckGame
                 {
                     Flower flower = new Flower(c.x, c.y)
                     {
-                        hSpeed = (float)((index / 3f) * 20.0 - 10.0) * Rando.Float(0.5f, 1f),
+                        hSpeed = (float)((index / 3f) * 20 - 10) * Rando.Float(0.5f, 1f),
                         vSpeed = Rando.Float(-3f, -11f)
                     };
                     Level.Add(flower);

@@ -38,12 +38,12 @@ namespace DuckGame
             if (_profile != null)
             {
                 string text = " |RED|" + _profile.name + " has disconnected.";
-                Graphics.DrawString(text, new Vec2((float)(Layer.HUD.camera.width / 2.0 - Graphics.GetStringWidth(text) / 2.0), Layer.HUD.camera.height / 2f), Color.White);
+                Graphics.DrawString(text, new Vec2((float)(Layer.HUD.camera.width / 2f - Graphics.GetStringWidth(text) / 2f), Layer.HUD.camera.height / 2f), Color.White);
             }
             else
             {
                 string text = " |RED|The host has disconnected.";
-                Graphics.DrawString(text, new Vec2((float)(Layer.HUD.camera.width / 2.0 - Graphics.GetStringWidth(text) / 2.0), Layer.HUD.camera.height / 2f), Color.White);
+                Graphics.DrawString(text, new Vec2((float)(Layer.HUD.camera.width / 2f - Graphics.GetStringWidth(text) / 2f), Layer.HUD.camera.height / 2f), Color.White);
             }
         }
     }

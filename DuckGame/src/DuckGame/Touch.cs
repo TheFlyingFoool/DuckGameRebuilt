@@ -19,7 +19,7 @@ namespace DuckGame
         public bool canBeDrag = true;
         public Vec2 originalPosition;
 
-        public bool drag => canBeDrag && data != null && (data.touchXY - originalPosition).length > 25.0;
+        public bool drag => canBeDrag && data != null && (data.touchXY - originalPosition).length > 25;
 
         public Vec2 positionCamera => data == null ? Vec2.Zero : Transform(Level.current.camera);
 

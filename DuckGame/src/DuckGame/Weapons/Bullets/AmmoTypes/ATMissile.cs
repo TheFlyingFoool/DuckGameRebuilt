@@ -51,7 +51,7 @@ namespace DuckGame
                 List<Bullet> varBullets = new List<Bullet>();
                 for (int index = 0; index < 12; ++index)
                 {
-                    float num = (float)(index * 30.0 - 10.0) + Rando.Float(20f);
+                    float num = (float)(index * 30 - 10) + Rando.Float(20f);
                     ATMissileShrapnel type = new ATMissileShrapnel
                     {
                         range = 15f + Rando.Float(5f)

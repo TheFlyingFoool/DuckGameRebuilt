@@ -402,10 +402,9 @@ namespace DuckGame
                     _covered.flipH = true;
                     Graphics.Draw(_covered, x + 19f, y - 19f);
                 }
-                else
-                    Graphics.Draw(_covered, x - 18f, y - 19f);
+                else Graphics.Draw(_covered, x - 18f, y - 19f);
             }
-            if (_hoverFade <= 0.0)
+            if (_hoverFade <= 0f)
                 return;
             _outline.alpha = _hoverFade;
             _outline.flipH = flipHorizontal;

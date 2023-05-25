@@ -263,7 +263,7 @@ namespace DuckGame
             _drawText = text;
             if (text.Length == 0 && !_inFocus)
                 _drawText = _emptyText;
-            _blink = (float)((_blink + 0.02f) % 1.0);
+            _blink = (float)((_blink + 0.02f) % 1f);
         }
 
         public void Draw()

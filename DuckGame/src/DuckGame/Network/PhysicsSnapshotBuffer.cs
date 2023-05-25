@@ -60,7 +60,7 @@ namespace DuckGame
                 if (_frames[index1] != null)
                 {
                     double num2 = time - _frames[index1].clientTime;
-                    if (num2 < num1 && num2 > 0.0)
+                    if (num2 < num1 && num2 > 0)
                     {
                         index2 = index1;
                         num1 = _frames[index1].clientTime;
@@ -108,7 +108,7 @@ namespace DuckGame
                 if (_frames[index1] != null)
                 {
                     double num2 = reference.serverTime - _frames[index1].clientTime;
-                    if (num2 < num1 && num2 > 0.0)
+                    if (num2 < num1 && num2 > 0)
                     {
                         index2 = index1;
                         num1 = _frames[index1].clientTime;

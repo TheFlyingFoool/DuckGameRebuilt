@@ -478,7 +478,7 @@ namespace DuckGame
                 pMessage.text = "??????";
             }
             int num = pMessage.text.Count(x => x == '\n');
-            if (chatMessage != null && num == 0 && chatMessage.newlines < 3 && chatMessage.timeout > 2.0 && chatMessage.who == pMessage.who)
+            if (chatMessage != null && num == 0 && chatMessage.newlines < 3 && chatMessage.timeout > 2 && chatMessage.who == pMessage.who)
             {
                 pMessage.text = "|GRAY|" + pMessage.who.nameUIBodge + ": |BLACK|" + pMessage.text;
                 chatMessage.timeout = 10f;

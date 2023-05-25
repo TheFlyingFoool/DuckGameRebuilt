@@ -105,8 +105,8 @@ namespace DuckGame
             _previewSprite = null;
             float num1 = 350f;
             float num2 = 350f;
-            Vec2 vec2_1 = new Vec2((float)(layer.width / 2.0 - num1 / 2.0) + hOffset, (float)(layer.height / 2.0 - num2 / 2.0));
-            Vec2 vec2_2 = new Vec2((float)(layer.width / 2.0 + num1 / 2.0) + hOffset, (float)(layer.height / 2.0 + num2 / 2.0));
+            Vec2 vec2_1 = new Vec2((float)(layer.width / 2f - num1 / 2f) + hOffset, (float)(layer.height / 2f - num2 / 2f));
+            Vec2 vec2_2 = new Vec2((float)(layer.width / 2f + num1 / 2f) + hOffset, (float)(layer.height / 2f + num2 / 2f));
             position = vec2_1 + new Vec2(4f, 40f);
             _save = save;
             rootFolder = rootFolder.Replace('\\', '/');
@@ -127,7 +127,7 @@ namespace DuckGame
             float percent = 0f;
             if (!DuckFile.GetLevelSpacePercentUsed(ref percent))
                 return;
-            _percentStorageUsed = percent > 100.0 ? 100f : percent;
+            _percentStorageUsed = percent > 100f ? 100f : percent;
         }
 
         public void Close()
@@ -346,7 +346,7 @@ namespace DuckGame
                 else
                 {
                     cm.visible = true;
-                    cm.position = new Vec2(_items[i].position.x, (float)(y + 3.0 + n * (_items[i].itemSize.y + 1.0)));
+                    cm.position = new Vec2(_items[i].position.x, (float)(y + 3f + n * (_items[i].itemSize.y + 1f)));
                     n++;
                 }
             }
@@ -388,7 +388,7 @@ namespace DuckGame
             _framesSinceSelected = 0;
             if (!flag && Editor.inputMode == EditorInput.Touch)
                 return;
-            if (_percentStorageUsed >= 100.0 && (_save || item.text == "@NEWICONTINY@New File..."))
+            if (_percentStorageUsed >= 100f && (_save || item.text == "@NEWICONTINY@New File..."))
             {
                 SFX.Play("consoleError");
             }
@@ -673,16 +673,16 @@ namespace DuckGame
                         _selectedIndex += _maxItems;
                     _selectedIndex = Maths.Clamp(_selectedIndex, 0, _items.Count - 1);
                     float num1 = 1f / (_items.Count - _maxItems);
-                    if (Mouse.scroll != 0.0)
+                    if (Mouse.scroll != 0)
                     {
                         _scrollPosition += Math.Sign(Mouse.scroll) * num1;
-                        if (_scrollPosition > 1.0)
+                        if (_scrollPosition > 1)
                             _scrollPosition = 1f;
-                        if (_scrollPosition < 0.0)
+                        if (_scrollPosition < 0)
                             _scrollPosition = 0f;
                     }
                     bool flag3 = false;
-                    int num2 = (int)Math.Round((_items.Count - _maxItems - 1.0) * _scrollPosition);
+                    int num2 = (int)Math.Round((_items.Count - _maxItems - 1f) * _scrollPosition);
                     int num3 = 0;
                     int num4 = 0;
                     for (int index = 0; index < _items.Count; ++index)
@@ -714,7 +714,7 @@ namespace DuckGame
                         {
                             ContextMenu contextMenu = _items[index];
                             _items[index].visible = true;
-                            _items[index].position = new Vec2(_items[index].position.x, (float)(y + 3.0 + num3 * _items[index].itemSize.y));
+                            _items[index].position = new Vec2(_items[index].position.x, (float)(y + 3f + num3 * _items[index].itemSize.y));
                             ++num3;
                         }
                     }
@@ -730,8 +730,8 @@ namespace DuckGame
             base.Draw();
             float num1 = 350f;
             float num2 = _fdHeight + 22f;
-            Vec2 topLeft = new Vec2((float)(layer.width / 2.0 - num1 / 2.0 + hOffset - 1.0), (float)(layer.height / 2.0 - num2 / 2.0 - 15.0));
-            Vec2 bottomRight = new Vec2((float)(layer.width / 2.0 + num1 / 2.0 + hOffset + 1.0), (float)(layer.height / 2.0 + num2 / 2.0 - 12.0));
+            Vec2 topLeft = new Vec2((float)(layer.width / 2f - num1 / 2f + hOffset - 1f), (float)(layer.height / 2f - num2 / 2f - 15f));
+            Vec2 bottomRight = new Vec2((float)(layer.width / 2f + num1 / 2f + hOffset + 1f), (float)(layer.height / 2f + num2 / 2f - 12f));
             Graphics.DrawRect(topLeft, bottomRight, new Color(70, 70, 70), depth, false);
             Graphics.DrawRect(topLeft, bottomRight, new Color(30, 30, 30), depth - 8);
             Graphics.DrawRect(topLeft + new Vec2(3f, 23f), bottomRight + new Vec2(-18f, -4f), new Color(10, 10, 10), depth - 4);
@@ -742,8 +742,8 @@ namespace DuckGame
             if (_scrollBar)
             {
                 _scrollLerp = Lerp.Float(_scrollLerp, _scrollPosition, 0.05f);
-                Vec2 p1_3 = new Vec2(bottomRight.x - 14f, (float)(topRight.y + 7.0 + (240.0 * _scrollLerp - 4.0)));
-                Vec2 p2_3 = new Vec2(bottomRight.x - 5f, (float)(topRight.y + 11.0 + (240.0 * _scrollLerp + 8.0)));
+                Vec2 p1_3 = new Vec2(bottomRight.x - 14f, (float)(topRight.y + 7f + (240f * _scrollLerp - 4f)));
+                Vec2 p2_3 = new Vec2(bottomRight.x - 5f, (float)(topRight.y + 11f + (240f * _scrollLerp + 8f)));
                 bool flag = false;
                 if (Mouse.x > p1_3.x && Mouse.x < p2_3.x && Mouse.y > p1_3.y && Mouse.y < p2_3.y)
                 {
@@ -755,10 +755,10 @@ namespace DuckGame
                     drag = false;
                 if (drag)
                 {
-                    _scrollPosition = (float)((Mouse.y - p1_2.y - 10.0) / (p2_2.y - p1_2.y - 20.0));
-                    if (_scrollPosition < 0.0)
+                    _scrollPosition = (float)((Mouse.y - p1_2.y - 10f) / (p2_2.y - p1_2.y - 20f));
+                    if (_scrollPosition < 0f)
                         _scrollPosition = 0f;
-                    if (_scrollPosition > 1.0)
+                    if (_scrollPosition > 1f)
                         _scrollPosition = 1f;
                     _scrollLerp = _scrollPosition;
                 }
@@ -831,7 +831,7 @@ namespace DuckGame
                     {
                         string text = "- " + keyValuePair.Key + (keyValuePair.Value > 1 ? " (x" + keyValuePair.Value.ToString() + ")" : "");
                         _fancyFont.Draw(text, p1_6.x + 4f, p1_6.y + 4f + num3, Color.White, depth + 8);
-                        if (_fancyFont.GetWidth(text) > 160.0)
+                        if (_fancyFont.GetWidth(text) > 160f)
                             num3 += 12;
                         num3 += 12;
                     }

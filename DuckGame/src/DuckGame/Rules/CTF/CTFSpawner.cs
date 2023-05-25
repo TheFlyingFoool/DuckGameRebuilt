@@ -72,7 +72,7 @@ namespace DuckGame
             {
                 x = x
             };
-            _present.y = (float)(top + (_present.y - _present.bottom) - 6.0);
+            _present.y = (float)(top + (_present.y - _present.bottom) - 6);
             _present.vSpeed = -2f;
             Level.Add(_present);
             if (!_seated)

@@ -98,7 +98,7 @@ namespace DuckGame
             else if (_loadState == 3)
             {
                 handOffset.y += 0.15f;
-                if (handOffset.y < 0.0)
+                if (handOffset.y < 0)
                     return;
                 ++_loadState;
                 handOffset.y = 0f;

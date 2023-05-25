@@ -56,7 +56,7 @@ namespace DuckGame
             for (int index = 0; index < num2; ++index)
             {
                 Color col = Color.Gray;
-                if (num4 >= index && num4 != -1.0)
+                if (num4 >= index && num4 != -1)
                     col = Color.White;
                 else if (num3 >= index)
                     col = new Color(200, 200, 200);

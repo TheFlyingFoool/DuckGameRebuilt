@@ -59,7 +59,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (!burntOut && burnt >= 1.0)
+            if (!burntOut && burnt >= 1f)
             {
                 _sprite = new SpriteMap("campingMelted", 23, 15);
                 for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
@@ -71,21 +71,21 @@ namespace DuckGame
                 burntOut = true;
             }
             base.Update();
-            if (_loadAnimation == -1.0)
+            if (_loadAnimation == -1f)
             {
                 SFX.Play("click");
                 _loadAnimation = 0f;
             }
-            if (_loadAnimation >= 0.0)
+            if (_loadAnimation >= 0f)
             {
                 if (_loadProgress < 0)
                 {
-                    if (_loadAnimation < 1.0)
+                    if (_loadAnimation < 1f)
                         _loadAnimation += 0.1f;
                     else
                         _loadAnimation = 1f;
                 }
-                else if (_loadAnimation < 0.5)
+                else if (_loadAnimation < 0.5f)
                     _loadAnimation += 0.2f;
                 else
                     _loadAnimation = 0.5f;
@@ -152,7 +152,7 @@ namespace DuckGame
                             t.responsibleProfile = owner.responsibleProfile;
                         t.clip.Add(owner as MaterialThing);
                         t.hSpeed = barrelVector.x * 10f;
-                        t.vSpeed = (float)(barrelVector.y * 7.0 - 0.75);
+                        t.vSpeed = (float)(barrelVector.y * 7 - 0.75);
                     }
                 }
                 _loadProgress = -1;

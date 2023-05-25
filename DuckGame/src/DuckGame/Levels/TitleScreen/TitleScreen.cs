@@ -1046,7 +1046,7 @@ namespace DuckGame
             for (int index = 0; index < num; ++index)
             {
                 starWait -= Maths.IncFrameTimer();
-                if (starWait < 0.0)
+                if (starWait < 0)
                 {
                     starWait = 0.1f + Rando.Float(0.2f);
                     Color color = Colors.DGRed;
@@ -1058,7 +1058,7 @@ namespace DuckGame
                         color = Colors.DGPink;
                     particles.Add(new StarParticle()
                     {
-                        pos = new Vec2(0f, (int)(Rando.Float(0f, 150f) / 1.0)),
+                        pos = new Vec2(0f, (int)(Rando.Float(0f, 150f) / 1f)),
                         speed = new Vec2(Rando.Float(0.5f, 1f), 0f),
                         color = color,
                         flicker = Rando.Float(100f, 230f)
@@ -1070,8 +1070,8 @@ namespace DuckGame
                 List<StarParticle> starParticleList = new List<StarParticle>();
                 foreach (StarParticle particle in particles)
                 {
-                    particle.pos += particle.speed * (float)(0.5 + (1.0 - extraFade) * 0.5);
-                    if (particle.pos.x > 300.0 && !_enterCredits || particle.pos.x > 680.0)
+                    particle.pos += particle.speed * (float)(0.5f + (1 - extraFade) * 0.5f);
+                    if (particle.pos.x > 300 && !_enterCredits || particle.pos.x > 680)
                         starParticleList.Add(particle);
                 }
                 foreach (StarParticle starParticle in starParticleList)
@@ -1107,7 +1107,7 @@ namespace DuckGame
                 {
                     _duck.immobilized = true;
                     _duck.updatePhysics = false;
-                    if (camera.x < 140.0)
+                    if (camera.x < 140)
                     {
                         flashDissipationSpeed = 0.08f;
                         Graphics.flashAdd = 2f;
@@ -1118,11 +1118,11 @@ namespace DuckGame
                     else
                     {
                         switchWait -= 0.04f;
-                        if (switchWait <= 0.0)
+                        if (switchWait <= 0f)
                         {
                             if (!_startedMusic)
                                 Music.volumeMult = Lerp.Float(Music.volumeMult, 0f, 3f / 500f);
-                            if (Layer.Parallax.camera.y > -12.0)
+                            if (Layer.Parallax.camera.y > -12f)
                             {
                                 camera.y += 0.064f;
                                 Layer.Parallax.camera.y -= 0.08f;
@@ -1135,28 +1135,28 @@ namespace DuckGame
                                     Music.Play("tabledoodles", false);
                                     _startedMusic = true;
                                 }
-                                if (creditsScroll > 939.0)
+                                if (creditsScroll > 939f)
                                 {
-                                    if (Layer.Parallax.camera.y > -22.0)
+                                    if (Layer.Parallax.camera.y > -22f)
                                     {
                                         camera.y += 0.064f;
                                         Layer.Parallax.camera.y -= 0.08f;
                                     }
                                     extraFade -= 0.01f;
-                                    if (extraFade < 0.0)
+                                    if (extraFade < 0f)
                                         extraFade = 0f;
                                 }
-                                if (creditsScroll > 2650.0 && !shownPrompt)
+                                if (creditsScroll > 2650f && !shownPrompt)
                                 {
                                     shownPrompt = true;
                                     HUD.AddCornerControl(HUDCorner.BottomLeft, "@CANCEL@Exit");
                                 }
-                                if (creditsScroll < 100.0 && !shownPromptF)
+                                if (creditsScroll < 100f && !shownPromptF)
                                 {
                                     HUD.AddCornerControl(HUDCorner.BottomRight, "@SHOOT@Fast");
                                     shownPromptF = true;
                                 }
-                                else if (creditsScroll > 100.0 && shownPromptF)
+                                else if (creditsScroll > 100f && shownPromptF)
                                 {
                                     HUD.CloseCorner(HUDCorner.BottomRight);
                                     shownPromptF = false;
@@ -1178,7 +1178,7 @@ namespace DuckGame
                 if (_duck != null)
                 {
                     _duck.updatePhysics = true;
-                    if (_duck.x > 324.0)
+                    if (_duck.x > 324)
                         _enterArcade = true;
                 }
                 if (quittingCredits)
@@ -1209,7 +1209,7 @@ namespace DuckGame
             _hasMenusOpen = menuOpen;
             if (!_enterMultiplayer && !_enterEditor && !_enterLibrary) // && !this._enterBuyScreen
             {
-                if (Graphics.fade < 1.0)
+                if (Graphics.fade < 1)
                     Graphics.fade += 1f / 1000f;
                 else
                     Graphics.fade = 1f;
@@ -1217,7 +1217,7 @@ namespace DuckGame
             else
             {
                 Graphics.fade -= 0.05f;
-                if (Graphics.fade <= 0.0)
+                if (Graphics.fade <= 0)
                 {
                     Graphics.fade = 0f;
                     Music.Stop();
@@ -1247,7 +1247,7 @@ namespace DuckGame
                 }
             }
             _pressStartBlink += 0.01f;
-            if (_pressStartBlink > 1.0)
+            if (_pressStartBlink > 1)
                 --_pressStartBlink;
             if (_duck != null)
             {
@@ -1328,7 +1328,7 @@ namespace DuckGame
             if (_selectionText != _selectionTextDesired)
             {
                 _selectionFade -= 0.1f;
-                if (_selectionFade <= 0.0)
+                if (_selectionFade <= 0)
                 {
                     _selectionFade = 0f;
                     _selectionText = _selectionTextDesired;
@@ -1340,7 +1340,7 @@ namespace DuckGame
             if (_controlsFrame != _controlsFrameDesired)
             {
                 _controlsFade -= 0.1f;
-                if (_controlsFade <= 0.0)
+                if (_controlsFade <= 0)
                 {
                     _controlsFade = 0f;
                     _controlsFrame = _controlsFrameDesired;
@@ -1354,7 +1354,7 @@ namespace DuckGame
                 {
                     _fadeIn = true;
                     _title = new BigTitle();
-                    _title.x = (float)(Layer.HUD.camera.width / 2.0 - _title.graphic.w / 2 + 3.0);
+                    _title.x = (float)(Layer.HUD.camera.width / 2f - _title.graphic.w / 2 + 3f);
                     _title.y = Layer.HUD.camera.height / 2f;
                     AddThing(_title);
                     _title.fade = true;
@@ -1433,12 +1433,12 @@ namespace DuckGame
             }
             _space.parallax.y = -80f;
             moveWait -= 0.02f;
-            if (moveWait < 0.0)
+            if (moveWait < 0)
             {
                 if (_title == null)
                 {
                     _title = new BigTitle();
-                    _title.x = (float)(Layer.HUD.camera.width / 2.0 - _title.graphic.w / 2 + 3.0);
+                    _title.x = (float)(Layer.HUD.camera.width / 2f - _title.graphic.w / 2 + 3);
                     _title.y = Layer.HUD.camera.height / 2f;
                     AddThing(_title);
                 }
@@ -1455,11 +1455,11 @@ namespace DuckGame
                 _title.alpha = 1f;
                 _fadeIn = true;
             }
-            if (flash > 0.0)
+            if (flash > 0)
             {
                 flash -= 0.016f;
                 dim -= 0.08f;
-                if (dim >= 0.0)
+                if (dim >= 0)
                     return;
                 dim = 0f;
             }
@@ -1536,12 +1536,12 @@ namespace DuckGame
                     foreach (List<string> stringList in creditsRoll)
                     {
                         float num2 = num1 + (200f - creditsScroll);
-                        if (num2 >= -11.0 && num2 < 200.0)
+                        if (num2 >= -11 && num2 < 200)
                         {
                             if (stringList.Count == 1)
                             {
                                 float stringWidth = Graphics.GetStringWidth(stringList[0]);
-                                Graphics.DrawStringColoredSymbols(stringList[0], new Vec2((float)(490.0 - stringWidth / 2.0), num1 + (200f - creditsScroll)), Color.White, (Depth)1f);
+                                Graphics.DrawStringColoredSymbols(stringList[0], new Vec2((float)(490f - stringWidth / 2f), num1 + (200f - creditsScroll)), Color.White, (Depth)1f);
                             }
                             else
                             {
@@ -1558,9 +1558,9 @@ namespace DuckGame
             else if (layer == Layer.Parallax)
             {
                 float num = 0f;
-                if (camera.y > 4.0)
+                if (camera.y > 4)
                 {
-                    _starField.alpha = num + (float)((camera.y - 4.0) / 13.0) - extraFade * 0.7f;
+                    _starField.alpha = num + (float)((camera.y - 4f) / 13) - extraFade * 0.7f;
                     Graphics.Draw(_starField, 0f, layer.camera.y - 58f, -0.99f);
                 }
             }
@@ -1570,18 +1570,18 @@ namespace DuckGame
                 {
                     float num3 = Math.Max(1f - Math.Min(Math.Abs(particle.pos.x - particle.flicker) / 10f, 1f), 0f);
                     float num4 = 0.2f;
-                    if (camera.y > 0.0)
+                    if (camera.y > 0)
                         num4 += camera.y / 52f;
-                    Graphics.DrawRect(particle.pos, particle.pos + new Vec2(1f, 1f), Color.White * (float)((num4 + num3 * 0.6f) * (0.3f + (1.0 - extraFade) * 0.7f)), -0.3f);
+                    Graphics.DrawRect(particle.pos, particle.pos + new Vec2(1f, 1f), Color.White * (float)((num4 + num3 * 0.6f) * (0.3f + (1f - extraFade) * 0.7f)), -0.3f);
                     float num5 = 0.1f;
-                    if (camera.y > 0.0)
+                    if (camera.y > 0)
                         num5 += camera.y / 52f;
                     Vec2 pos = particle.pos;
                     int num6 = 4;
                     for (int index = 0; index < num6; ++index)
                     {
                         float num7 = particle.speed.x * 8f;
-                        Graphics.DrawLine(pos + new Vec2(-num7, 0.5f), pos + new Vec2(0f, 0.5f), particle.color * ((float)(1.0 - index / num6) * num5) * (float)(0.3f + (1.0 - extraFade) * 0.7f), depth: (-0.4f));
+                        Graphics.DrawLine(pos + new Vec2(-num7, 0.5f), pos + new Vec2(0f, 0.5f), particle.color * ((float)(1f - index / num6) * num5) * (float)(0.3f + (1f - extraFade) * 0.7f), depth: (-0.4f));
                         pos.x -= num7;
                     }
                 }

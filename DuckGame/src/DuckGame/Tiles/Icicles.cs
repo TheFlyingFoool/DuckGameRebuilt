@@ -158,7 +158,7 @@ namespace DuckGame
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (with.impactPowerV > 2.0 && (graphic as SpriteMap).frame != 3)
+            if (with.impactPowerV > 2 && (graphic as SpriteMap).frame != 3)
             {
                 Break(with.isLocal);
             }

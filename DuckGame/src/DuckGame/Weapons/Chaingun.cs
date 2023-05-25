@@ -100,7 +100,7 @@ namespace DuckGame
                 _spinUp.Volume = 1f;
                 _spinUp.Play();
             }
-            if (_spin < 1.0)
+            if (_spin < 1f)
             {
                 _spin += 0.04f;
             }

@@ -249,7 +249,7 @@ namespace DuckGame
                 }
                 if (_afterChallenge)
                 {
-                    if (_afterChallengeWait > 0.0)
+                    if (_afterChallengeWait > 0f)
                         _afterChallengeWait -= 0.03f;
                     else if (_lastPlayed == null)
                     {

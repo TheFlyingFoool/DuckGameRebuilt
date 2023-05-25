@@ -125,7 +125,7 @@ namespace DuckGame
 
         public override bool hasMotionAxis => true;
 
-        public override float motionAxis => (float)Math.Abs(Math.Sin(SwitchSixAxis.GetAxis(_index) * Math.PI * 2.0));
+        public override float motionAxis => (float)Math.Abs(Math.Sin(SwitchSixAxis.GetAxis(_index) * Math.PI * 2f));
 
         public override bool allowStartRemap => false;
 

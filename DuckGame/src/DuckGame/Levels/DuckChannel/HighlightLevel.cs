@@ -331,7 +331,7 @@ namespace DuckGame
                     if (_image != null)
                     {
                         _image.depth = (Depth)0.65f;
-                        if (_cameraOffset.x > 19.0)
+                        if (_cameraOffset.x > 19f)
                             Graphics.Draw(_image, 50f, 40f);
                     }
                 }

@@ -209,7 +209,7 @@ namespace DuckGame
             if (_currentAnimation.HasValue && (ignoreFlipFlop || _flipFlop != Graphics.frameFlipFlop) && !VirtualTransition.doingVirtualTransition)
             {
                 _frameInc += _currentAnimation.Value.speed * _speed;
-                if (_frameInc >= 1.0)
+                if (_frameInc >= 1)
                 {
                     _frameInc = 0f;
                     ++_frame;
@@ -245,7 +245,7 @@ namespace DuckGame
             if (_currentAnimation.HasValue && !VirtualTransition.doingVirtualTransition)
             {
                 _frameInc += _currentAnimation.Value.speed * _speed;
-                if (_frameInc >= 1.0)
+                if (_frameInc >= 1)
                 {
                     _frameInc = 0f;
                     ++_frame;

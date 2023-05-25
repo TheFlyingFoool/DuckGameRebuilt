@@ -105,7 +105,7 @@ namespace DuckGame
             reset();
         }
 
-        public void clock(float f) => ticksPerSample = (float)(f / 16.0 / 44100.0);
+        public void clock(float f) => ticksPerSample = (float)(f / 16 / 44100);
 
         public void reset()
         {
@@ -229,7 +229,7 @@ namespace DuckGame
         {
             if (0U >= 1U)
                 return 0f;
-            for (; ticksCount > 0.0; --ticksCount)
+            for (; ticksCount > 0; --ticksCount)
             {
                 --cntA;
                 if (cntA < 0)

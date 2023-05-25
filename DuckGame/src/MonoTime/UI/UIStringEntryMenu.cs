@@ -161,7 +161,7 @@ namespace DuckGame
             if (_directional)
                 Graphics.DrawPassword(text, new Vec2(x - len * 8 / 2 * textScale, y - 6f * textScale), Color.White, depth + 10);
             else
-                Graphics.DrawString(text + (blink % 1.0 > 0.5 ? "_" : ""), new Vec2(x - len * 8 / 2 * textScale, y - 6f * textScale), Color.White, depth + 10, scale: textScale);
+                Graphics.DrawString(text + (blink % 1f > 0.5f ? "_" : ""), new Vec2(x - len * 8 / 2 * textScale, y - 6f * textScale), Color.White, depth + 10, scale: textScale);
             base.Draw();
         }
     }

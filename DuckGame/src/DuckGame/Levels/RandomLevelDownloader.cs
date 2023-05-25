@@ -210,8 +210,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    if (_totalMaps == -1 || _fetchDelay > 0.0)
-                        return;
+                    if (_totalMaps == -1 || _fetchDelay > 0f) return;
                     DownloadRandomMap();
                 }
             }

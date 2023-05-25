@@ -35,7 +35,7 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            if (vSpeed > 1.0)
+            if (vSpeed > 1)
                 vSpeed = 1f;
             if (_grounded)
             {

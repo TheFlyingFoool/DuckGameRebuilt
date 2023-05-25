@@ -110,7 +110,7 @@ namespace DuckGame
                 gravMultTime = 0f;
             IPlatform platform = Level.Nearest<IPlatform>(position, 32.0f);
             bool flag = false;
-            if (platform != null) //((platform as Thing).position - position).length < 32.0
+            if (platform != null) //((platform as Thing).position - position).length < 32f
                 flag = true;
             if (!flag)
             {
@@ -125,7 +125,7 @@ namespace DuckGame
                 shotsSinceGrounded = 0;
                 for (int index1 = 0; index1 < 8; ++index1)
                 {
-                    float deg = (float)(index1 * 45.0 - 5.0) + Rando.Float(20f);
+                    float deg = (float)(index1 * 45f - 5f) + Rando.Float(20f);
                     Vec2 position;
                     if (Level.CheckLine<IPlatform>(this.position, this.position + new Vec2((float)Math.Cos(Maths.DegToRad(deg)), (float)Math.Sin(Maths.DegToRad(deg))) * 32f, out position) != null)
                     {
@@ -145,7 +145,7 @@ namespace DuckGame
                     heat = (tape.gun1 as Warpgun).heat;
                 ammoType.range *= 2f;
             }
-            if (isServerForObject && heat > 1.0)
+            if (isServerForObject && heat > 1)
             {
                 explode = true;
                 PressAction();
@@ -157,24 +157,21 @@ namespace DuckGame
                     if (duck.grounded)
                     {
                         shotsSinceDuckWasGrounded = 0;
-                        if (heat > 0.0)
-                            heat -= 0.05f;
+                        if (heat > 0) heat -= 0.05f;
                     }
                     if (!(bool)infinite)
                     {
-                        if (shotsSinceDuckWasGrounded >= 16)
-                            heat = 1f;
+                        if (shotsSinceDuckWasGrounded >= 16) heat = 1f;
                         else if (!(bool)infinite)
                         {
                             float num = Math.Min(shotsSinceDuckWasGrounded / 38f, 1f);
-                            if (heat < num)
-                                heat = num;
+                            if (heat < num) heat = num;
                         }
                     }
                 }
                 if (isServerForObject)
                 {
-                    if (gravMultTime > 0.0 && !duck.inPipe)
+                    if (gravMultTime > 0 && !duck.inPipe)
                     {
                         heat += 0.005f;
                         if (warped)
@@ -257,25 +254,25 @@ namespace DuckGame
             if (flag)
                 num4 = 5f;
             float num5 = 8f;
-            if (angleDegrees != 0.0 && Math.Abs(angleDegrees) != 90.0 && Math.Abs(angleDegrees) != 180.0)
+            if (angleDegrees != 0f && Math.Abs(angleDegrees) != 90f && Math.Abs(angleDegrees) != 180f)
                 num5 = 24f;
             int num6 = 6;
-            if (Math.Abs((int)angleDegrees) < 70.0 && Math.Abs((int)angleDegrees) > 65.0)
+            if (Math.Abs((int)angleDegrees) < 70f && Math.Abs((int)angleDegrees) > 65f)
                 num6 = 12;
-            if (Math.Abs((int)angleDegrees) > -70.0)
-            {
-                double num7 = Math.Abs((int)angleDegrees);
-            }
+            //if (Math.Abs((int)angleDegrees) > -70f) what -NiK0
+            //{
+            //    double num7 = Math.Abs((int)angleDegrees);
+            //}
             for (int index = 0; index < 3; ++index)
             {
                 Vec2 vec2_3 = new Vec2((float)Math.Cos(num1) * 134f, (float)-Math.Sin(num1) * 134f);
-                if (Math.Abs(vec2_3.x) < 16.0)
+                if (Math.Abs(vec2_3.x) < 16f)
                 {
                     num4 = 2f;
                     num6 = 8;
                 }
                 float num8 = (float)(-num4 + index * num4);
-                Vec2 start = position + new Vec2((float)Math.Cos(num1 + Math.PI / 2.0) * num8, (float)-Math.Sin(num1 + Math.PI / 2.0) * num8);
+                Vec2 start = position + new Vec2((float)Math.Cos(num1 + Math.PI / 2f) * num8, (float)-Math.Sin(num1 + Math.PI / 2f) * num8);
                 Vec2 vec2_4 = start - vec2_3;
                 Vec2 vec2_5 = -(start - vec2_4).normalized;
                 Vec2 hitPos = Vec2.Zero;
@@ -287,7 +284,7 @@ namespace DuckGame
                 if (thing != null)
                 {
                     Vec2 vec2_6 = start - (hitPos + vec2_5 * -num6);
-                    Vec2 vec2_7 = vec2_1 = hitPos + vec2_5 * -num6;
+                    //Vec2 vec2_7 = vec2_1 = hitPos + vec2_5 * -num6; what -NiK0
                     if (index == 1)
                         num3 = vec2_6.length;
                     if (vec2_6.length < num2)
@@ -305,7 +302,7 @@ namespace DuckGame
                 if (index == 2)
                     ignore = thing;
             }
-            if (num3 < 99999.0 && num5 > 9.0 && Math.Abs(num3 - num2) < num5)
+            if (num3 < 99999f && num5 > 9f && Math.Abs(num3 - num2) < num5)
                 num2 = num3;
             warpLines.Add(new WarpLine()
             {
@@ -344,7 +341,7 @@ namespace DuckGame
                 _barrelOffsetTL = new Vec2(8f, 4f);
                 if (duck != null)
                 {
-                    if (vec2_1.y < duck.y - 16.0 && Math.Abs(vec2_1.x - duck.x) < 16.0)
+                    if (vec2_1.y < duck.y - 16f && Math.Abs(vec2_1.x - duck.x) < 16f)
                         num2 -= 2f;
                     duck.position = duck.position + vec2_2 * num2;
                     duck.sleeping = false;

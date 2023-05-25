@@ -41,9 +41,9 @@ namespace DuckGame
             }
         }
 
-        public int GetProfileScore() => (int)Math.Round(Maths.Clamp((float)(CalculateProfileScore() * 0.3f * 250.0), -50f, 200f));
+        public int GetProfileScore() => (int)Math.Round(Maths.Clamp((float)(CalculateProfileScore() * 0.3f * 250f), -50f, 200f));
 
-        public string GetCoolnessString() => _hotnessStrings[(int)Math.Floor((Maths.Clamp(GetProfileScore(), -50, 200) + 50) / 250.0 * 8.99f)];
+        public string GetCoolnessString() => _hotnessStrings[(int)Math.Floor((Maths.Clamp(GetProfileScore(), -50, 200) + 50) / 250f * 8.99f)];
 
         public string currentTitle { get; set; }
 
@@ -262,7 +262,7 @@ namespace DuckGame
                 name = "LVE",
                 amount = num10
             });
-            float num12 = (float)Math.Log(1.0 + quacks * 0.0001f) * 0.4f;
+            float num12 = (float)Math.Log(1f + quacks * 0.0001f) * 0.4f;
             float num13 = num11 + num12;
             if (num12 > 0f)
                 num3 += num12;

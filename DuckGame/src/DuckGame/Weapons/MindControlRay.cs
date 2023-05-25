@@ -82,7 +82,7 @@ namespace DuckGame
             immobilizeOwner = _controlledDuck != null;
             if (isServerForObject)
             {
-                if (_beamTime > 1.0 || this.owner == null)
+                if (_beamTime > 1 || this.owner == null)
                 {
                     _beamTime = 0f;
                     _triggerHeld = false;
@@ -158,7 +158,7 @@ namespace DuckGame
             }
             _beamSound.lerpVolume = _triggerHeld ? 0.55f : 0f;
             _beamSound.Update();
-            if (_canConvert > 0.0)
+            if (_canConvert > 0)
                 _canConvert -= 0.02f;
             else
                 _canConvert = 0f;

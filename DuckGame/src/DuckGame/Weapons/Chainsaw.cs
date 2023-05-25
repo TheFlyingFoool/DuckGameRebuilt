@@ -451,11 +451,11 @@ namespace DuckGame
                 {
                     _releasePull = false;
                     _upWait += 0.1f;
-                    if (_upWait > 6.0)
+                    if (_upWait > 6f)
                         _pullState = -1;
                 }
                 _bladeSpin += _engineSpin;
-                while (_bladeSpin >= 1.0)
+                while (_bladeSpin >= 1f)
                 {
                     --_bladeSpin;
                     int num4 = _sprite.frame + 1;
@@ -507,9 +507,9 @@ namespace DuckGame
                     }
                     else
                     {
-                        if (_throwSpin > 180.0)
+                        if (_throwSpin > 180f)
                             _throwSpin -= 360f;
-                        else if (_throwSpin < -180.0)
+                        else if (_throwSpin < -180f)
                             _throwSpin += 360f;
                         _throwSpin = Lerp.Float(_throwSpin, 0f, 14f);
                     }
@@ -532,7 +532,7 @@ namespace DuckGame
                     FluidData gas = Fluid.Gas;
                     gas.amount = 0.003f;
                     _gas -= 0.005f;
-                    if (_gas < 0.0)
+                    if (_gas < 0)
                         _gas = 0f;
                     Level.Add(new Fluid(x, y, Vec2.Zero, gas));
                     _gasDripFrames = 0;
@@ -569,7 +569,7 @@ namespace DuckGame
                         {
                             vec2 += barrelVector * 2f;
                             _fireTrailWait -= 0.5f;
-                            if ((bool)souped && _fireTrailWait <= 0.0)
+                            if ((bool)souped && _fireTrailWait <= 0f)
                             {
                                 _fireTrailWait = 1f;
                                 SmallFire smallFire = SmallFire.New(vec2.x, vec2.y, offDir * Rando.Float(0f, 2f), Rando.Float(0.5f, 1.5f));
@@ -758,9 +758,9 @@ namespace DuckGame
                                 Vec2 vec2 = wall3.travel;
                                 float length = vec2.length;
                                 float num5 = 1f;
-                                if (offDir > 0 && vec2.x < 0.0)
+                                if (offDir > 0 && vec2.x < 0f)
                                     num5 = 1.5f;
-                                else if (offDir < 0 && vec2.x > 0.0)
+                                else if (offDir < 0 && vec2.x > 0f)
                                     num5 = 1.5f;
                                 vec2 = offDir <= 0 ? new Vec2(-length * num5, 0f) : new Vec2(length * num5, 0f);
                                 wall3.travel = vec2;

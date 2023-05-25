@@ -31,7 +31,7 @@ namespace DuckGame
             _travelVec = new Vec2(offDir * Rando.Float(6f, 10f), Rando.Float(-10f, 10f));
             _prevPositions.Insert(0, position);
             alpha -= 0.1f;
-            if (alpha < 0.0)
+            if (alpha < 0)
                 Level.Remove(this);
             Vec2 position2 = position;
             foreach (IAmADuck amAduck in Level.CheckLineAll<IAmADuck>(position1, position2))
@@ -59,7 +59,7 @@ namespace DuckGame
                     Graphics.DrawLine(prevPosition, p2, Colors.DGYellow * num, depth: ((Depth)0.9f));
                     num -= 0.25f;
                 }
-                if (num <= 0.0)
+                if (num <= 0)
                     break;
             }
             base.Draw();

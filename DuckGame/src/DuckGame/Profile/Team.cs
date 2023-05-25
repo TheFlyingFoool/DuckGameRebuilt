@@ -141,7 +141,7 @@ namespace DuckGame
             try
             {
                 Texture2D texture2D1 = TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, new Bitmap(new MemoryStream(pData)), true);
-                double num = texture2D1.Width / 32.0 % 1.0;
+                double num = texture2D1.Width / 32f % 1f;
                 Team pTeam = deserializeInto;
                 if (pTeam == null)
                     pTeam = new Team(pName, texture2D1);

@@ -111,7 +111,7 @@ namespace DuckGame
             _harpoon.noisy = false;
             _harpoon.Fire(position + new Vec2(0f, -8f), new Vec2(0f, -1f));
             _rope = new Rope(x, y, null, _harpoon, duck, true, _vinePartSprite);
-            if (initLength != 0.0)
+            if (initLength != 0)
                 _rope.properLength = initLength;
             Level.Add(_rope);
         }
@@ -247,7 +247,7 @@ namespace DuckGame
                 gravMultiplier = 1f;
             }
             Vec2 vec2_1 = _rope.attach1.position - _rope.attach2.position;
-            if (_rope.properLength < 0.0)
+            if (_rope.properLength < 0)
                 _rope.properLength = vec2_1.length;
             if (vec2_1.length <= _rope.properLength)
                 return;

@@ -42,14 +42,14 @@ namespace DuckGame
 
         private void UpdateOpenState()
         {
-            if (angleDegrees == 0.0)
+            if (angleDegrees == 0)
             {
                 collisionSize = _colSize;
                 _open = false;
             }
             else
             {
-                if (angleDegrees == 0.0)
+                if (angleDegrees == 0)
                     return;
                 if (!_open)
                 {

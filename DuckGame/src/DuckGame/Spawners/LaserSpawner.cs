@@ -50,7 +50,7 @@ namespace DuckGame
                 _spawnWait += 0.0166666f;
             if (Level.current.simulatePhysics && Network.isServer && (_numSpawned < spawnNum || spawnNum == -1) && _spawnWait >= spawnTime)
             {
-                if (initialDelay > 0.0)
+                if (initialDelay > 0)
                 {
                     initialDelay -= 0.0166666f;
                 }

@@ -92,7 +92,7 @@ namespace DuckGame
                     .ToList();
                 foreach (PhysicsObject above in _aboveList)
                 {
-                    if (above.grounded || above.vSpeed > 0.0 || above.vSpeed == 0.0)
+                    if (above.grounded || above.vSpeed > 0 || above.vSpeed == 0)
                     {
                         Fondle(above);
                         above.y -= 2f;
@@ -167,7 +167,7 @@ namespace DuckGame
         {
             UpdateContainedObject();
             _aboveList.Clear();
-            if (startY < -9999.0)
+            if (startY < -9999)
                 startY = y;
             _sprite.frame = _hit ? 1 : 0;
             if (contains == null && containedObject == null && !(this is ItemBoxRandom))
@@ -182,7 +182,7 @@ namespace DuckGame
                 {
                     if (isServerForObject && above.owner == null)
                         Fondle(above);
-                    if (above.isServerForObject && (above.grounded || above.vSpeed > 0.0 || above.vSpeed == 0.0))
+                    if (above.isServerForObject && (above.grounded || above.vSpeed > 0 || above.vSpeed == 0))
                     {
                         above.y -= 2f;
                         above.vSpeed = -3f;
@@ -352,7 +352,7 @@ namespace DuckGame
             string text = "EMPTY";
             if (contains != null)
                 text = contains.Name;
-            Graphics.DrawString(text, position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2.0), -16f),
+            Graphics.DrawString(text, position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2), -16f),
                 Color.White, 0.9f);
         }
     }

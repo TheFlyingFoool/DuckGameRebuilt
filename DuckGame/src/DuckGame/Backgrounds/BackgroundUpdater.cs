@@ -32,7 +32,7 @@ namespace DuckGame
         {
             _parallax.scissor = scissor;
             _parallax.visible = vis;
-            if (scissor.width == 0.0)
+            if (scissor.width == 0f)
                 return;
             _parallax.layer.scissor = scissor;
         }
@@ -94,7 +94,7 @@ namespace DuckGame
                 _parallax.xmove = (_lastCameraX - Level.current.camera.centerX) / num;
             }
             _lastCameraX = Level.current.camera.centerX;
-            if (scissor.width != 0.0)
+            if (scissor.width != 0f)
                 _parallax.scissor = scissor;
             base.Update();
         }

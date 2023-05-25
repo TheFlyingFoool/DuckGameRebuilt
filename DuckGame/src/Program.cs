@@ -922,7 +922,7 @@ namespace DuckGame
                                         str2 = allMod.configuration.name;
                                         if (!MonoMain.modDebugging)
                                         {
-                                            if (!gameLoadedSuccessfully || Options.Data.disableModOnCrash && (DateTime.Now - MonoMain.startTime).TotalMinutes < 2.0)
+                                            if (!gameLoadedSuccessfully || Options.Data.disableModOnCrash && (DateTime.Now - MonoMain.startTime).TotalMinutes < 2)
                                                 allMod.configuration.Disable();
                                             flag2 = true;
                                         }

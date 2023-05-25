@@ -238,7 +238,7 @@ namespace DuckGame
                     };
                     typeProbPairList.Add(typeProbPair1);
                 }
-                if (typeProbPair1.probability == 0.0)
+                if (typeProbPair1.probability == 0)
                 {
                     typeProbPairList.Remove(typeProbPair1);
                 }
@@ -382,7 +382,7 @@ namespace DuckGame
                 }
                 Graphics.DrawRect(position + new Vec2(x1 - 2f, 3f), position + new Vec2(x1 + 2f, itemSize.y - 3f), new Color(250, 250, 250), (Depth)(0.85f + num3));
                 Graphics.DrawRect(position + new Vec2(x2, 0f), position + new Vec2(x3, itemSize.y), new Color(70, 70, 70), (Depth)(0.75f + num3));
-                Graphics.DrawRect(position + new Vec2(4f, (float)(itemSize.y / 2.0 - 2.0)), position + new Vec2(itemSize.x - 4f, (float)(itemSize.y / 2.0 + 2.0)), new Color(150, 150, 150), (Depth)(0.82f + num3));
+                Graphics.DrawRect(position + new Vec2(4f, (float)(itemSize.y / 2 - 2)), position + new Vec2(itemSize.x - 4f, (float)(itemSize.y / 2 + 2)), new Color(150, 150, 150), (Depth)(0.82f + num3));
                 if (Editor.inputMode != EditorInput.Gamepad)
                     return;
                 Vec2 vec2 = position + new Vec2(x1, 0f);
@@ -395,7 +395,7 @@ namespace DuckGame
                     Graphics.DrawRect(position, position + itemSize, new Color(70, 70, 70), depth);
                 Color color = Color.White;
                 if (_field.value is List<TypeProbPair>)
-                    color = num1 != 0.0 ? (num1 >= 0.3f ? (num1 >= 0.7f ? Color.Green : Color.Orange) : Colors.DGRed) : Color.DarkGray;
+                    color = num1 != 0 ? (num1 >= 0.3f ? (num1 >= 0.7f ? Color.Green : Color.Orange) : Colors.DGRed) : Color.DarkGray;
                 Graphics.DrawString(_text, position + new Vec2(2f, 5f), color, (Depth)0.82f);
                 Graphics.DrawString(text1, position + new Vec2(itemSize.x - 4f - Graphics.GetStringWidth(text1), 5f), Color.White, (Depth)0.82f);
             }

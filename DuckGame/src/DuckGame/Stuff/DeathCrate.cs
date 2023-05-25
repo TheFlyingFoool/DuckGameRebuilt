@@ -66,7 +66,7 @@ namespace DuckGame
             for (int index = 0; index < 100; ++index)
             {
                 settingIndex = (byte)Rando.Int(_settings.Count - 1);
-                if (_settings[settingIndex].likelyhood == 1.0 || Rando.Float(1f) < _settings[settingIndex].likelyhood)
+                if (_settings[settingIndex].likelyhood == 1 || Rando.Float(1f) < _settings[settingIndex].likelyhood)
                     break;
             }
         }
@@ -75,7 +75,7 @@ namespace DuckGame
         {
             if (with.isStateObject)
                 with.Fondle(this);
-            if (from == ImpactedFrom.Top || Math.Abs(angleDegrees) > 90f && Math.Abs(angleDegrees) < 270.0 && from == ImpactedFrom.Bottom && with.totalImpactPower + totalImpactPower > 0.1f && _sprite.currentAnimation == "idle")
+            if (from == ImpactedFrom.Top || Math.Abs(angleDegrees) > 90f && Math.Abs(angleDegrees) < 270 && from == ImpactedFrom.Bottom && with.totalImpactPower + totalImpactPower > 0.1f && _sprite.currentAnimation == "idle")
             {
                 activated = true;
                 _sprite.SetAnimation("activate");

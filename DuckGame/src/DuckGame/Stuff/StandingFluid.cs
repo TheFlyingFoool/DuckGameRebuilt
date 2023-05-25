@@ -76,7 +76,7 @@ namespace DuckGame
                         fluidType.amount = 0.5f;
                         fluidPuddle.Feed(fluidType);
                         float depth = fluidPuddle.CalculateDepth();
-                        if (Math.Abs(num - depth) < 1.0 / 1000.0)
+                        if (Math.Abs(num - depth) < 1f / 1000f)
                         {
                             Level.Remove(this);
                             break;

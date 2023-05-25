@@ -55,7 +55,7 @@ namespace DuckGame
                 return status.lastResult;
             status.lastUpdateFrame = Graphics.frame;
             status.breakTimer -= breakSpeed;
-            if (status.breakTimer <= 0.0)
+            if (status.breakTimer <= 0f)
                 status.Break();
             if (status.currentIndex > triggers.Count || status.currentIndex < 0)//dan check into later, caused a crash on weird linux machine ArgumentOutOfRangeException triggers
             {

@@ -402,13 +402,13 @@ namespace DuckGame
             frame.bottomRight = Vec2.Lerp(item.bottomRight, lerpTo.bottomRight, dist);
             float num1 = item.rotation % 360f;
             float num2 = lerpTo.rotation % 360f;
-            if (num1 > 180.0)
+            if (num1 > 180)
                 num1 -= 360f;
-            else if (num1 < -180.0)
+            else if (num1 < -180)
                 num1 += 360f;
-            if (num2 > 180.0)
+            if (num2 > 180)
                 num2 -= 360f;
-            else if (num2 < -180.0)
+            else if (num2 < -180)
                 num2 += 360f;
             frame.rotation = MathHelper.Lerp(num1, num2, dist);
             frame.color = Color.Lerp(item.color, lerpTo.color, dist);

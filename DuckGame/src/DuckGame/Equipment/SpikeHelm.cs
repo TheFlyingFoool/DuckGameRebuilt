@@ -161,10 +161,10 @@ namespace DuckGame
                 collisionSize = new Vec2(11f, 10f);
             }
             base.Update();
-            if (oldPokeCooldown > 0.0)
+            if (oldPokeCooldown > 0)
             {
                 oldPokeCooldown -= Maths.IncFrameTimer();
-                if (oldPokeCooldown <= 0.0)
+                if (oldPokeCooldown <= 0)
                     oldPoke = null;
             }
             if (poked == null || !isServerForObject)
@@ -176,7 +176,7 @@ namespace DuckGame
             poked.visible = false;
             poked.solid = false;
             poked.grounded = true;
-            if (poked.removeFromLevel || poked.y < level.topLeft.y - 2000.0 || !poked.active)
+            if (poked.removeFromLevel || poked.y < level.topLeft.y - 2000 || !poked.active)
             {
                 ReleasePokedObject();
             }

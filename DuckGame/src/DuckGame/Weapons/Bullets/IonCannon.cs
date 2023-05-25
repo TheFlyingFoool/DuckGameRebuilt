@@ -108,15 +108,15 @@ namespace DuckGame
         public override void Update()
         {
             _blast = Maths.CountDown(_blast, 0.05f);
-            if (_blast >= 0.0)
+            if (_blast >= 0)
                 return;
             Level.Remove(this);
         }
 
         public override void Draw()
         {
-            double num1 = Maths.NormalizeSection(_blast, 0f, 0.2f);
-            double num2 = Maths.NormalizeSection(_blast, 0.6f, 1f);
+            //double num1 = Maths.NormalizeSection(_blast, 0f, 0.2f); what -NiK0
+            //double num2 = Maths.NormalizeSection(_blast, 0.6f, 1f);
             Vec2 vec2_1 = position - _target;
             vec2_1 = vec2_1.Rotate(Maths.DegToRad(-90f), Vec2.Zero);
             Vec2 normalized1 = vec2_1.normalized;

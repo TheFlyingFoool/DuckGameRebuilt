@@ -41,7 +41,7 @@ namespace DuckGame
             try
             {
                 wait -= 0.004f;
-                if (wait >= 0.0)
+                if (wait >= 0)
                     return;
                 wait = 1f;
                 Duck t = new Duck(x, y, Profiles.DefaultPlayer1)

@@ -53,7 +53,7 @@ namespace DuckGame
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(x - 8f + Rando.Float(16f), y - 8f + Rando.Float(16f));
-                woodDebris.hSpeed = (float)((Rando.Float(1f) > 0.5 ? 1.0 : -1.0) * Rando.Float(3f) + Math.Sign(vec2.x) * 0.5);
+                woodDebris.hSpeed = (float)((Rando.Float(1f) > 0.5f ? 1 : -1) * Rando.Float(3f) + Math.Sign(vec2.x) * 0.5f);
                 woodDebris.vSpeed = -Rando.Float(1f);
                 Level.Add(woodDebris);
             }
@@ -97,30 +97,30 @@ namespace DuckGame
         {
             base.Update();
             offDir = 1;
-            if (damageMultiplier > 1.0)
+            if (damageMultiplier > 1)
                 damageMultiplier -= 0.2f;
             else
                 damageMultiplier = 1f;
-            _sprite.frame = (int)Math.Floor((1.0 - _hitPoints / _maxHealth) * 4.0);
-            if (_hitPoints <= 0.0 && !_destroyed)
+            _sprite.frame = (int)Math.Floor((1 - _hitPoints / _maxHealth) * 4f);
+            if (_hitPoints <= 0f && !_destroyed)
                 Destroy(new DTImpact(this));
             _flip = MathHelper.Lerp(_flip, flipped != 0 ? 1.1f : -0.1f, 0.2f);
-            if (_flip > 1.0)
+            if (_flip > 1)
                 _flip = 1f;
-            if (_flip < 0.0)
+            if (_flip < 0)
                 _flip = 0f;
             if (owner != null && flipped != 0)
                 flipped = 0;
             Vec2 collisionSize = this.collisionSize;
             Vec2 collisionOffset = this.collisionOffset;
-            if (_flip == 0.0)
+            if (_flip == 0)
             {
                 if (!landed)
                     Land();
                 this.collisionOffset = new Vec2(-8f, -6f);
                 this.collisionSize = new Vec2(17f, 11f);
             }
-            else if (_flip == 1.0)
+            else if (_flip == 1)
             {
                 if (!landed)
                     Land();
@@ -145,15 +145,15 @@ namespace DuckGame
                 ReturnItemToWorld(this);
             if (flipped != 0)
             {
-                centerx = (float)(9.0 + 4.0 * _flip * (flipped > 0 ? 1.0 : -1.0));
-                centery = (float)(6.0 + 4.0 * _flip);
-                angle = _flip * (float)(1.5 * (flipped > 0 ? 1.0 : -1.0));
+                centerx = (float)(9 + 4 * _flip * (flipped > 0 ? 1 : -1));
+                centery = (float)(6 + 4 * _flip);
+                angle = _flip * (float)(1.5f * (flipped > 0 ? 1 : -1));
             }
             else
             {
-                centerx = (float)(9.0 + 4.0 * _flip * (angle > 0.0 ? 1.0 : -1.0));
-                centery = (float)(6.0 + 4.0 * _flip);
-                angle = _flip * (float)(1.5 * (angle > 0.0 ? 1.0 : -1.0));
+                centerx = (float)(9 + 4 * _flip * (angle > 0 ? 1 : -1));
+                centery = (float)(6 + 4 * _flip);
+                angle = _flip * (float)(1.5f * (angle > 0 ? 1 : -1));
             }
             firstFrame = false;
         }

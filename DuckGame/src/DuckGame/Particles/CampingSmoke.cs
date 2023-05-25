@@ -54,7 +54,7 @@ namespace DuckGame
         {
             angle += _angleInc;
             xscale += _scaleInc;
-            if (_fastGrow > 0.0)
+            if (_fastGrow > 0)
             {
                 _fastGrow -= 0.05f;
                 xscale += 0.03f;

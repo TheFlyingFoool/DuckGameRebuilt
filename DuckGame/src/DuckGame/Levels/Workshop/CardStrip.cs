@@ -104,9 +104,9 @@ namespace DuckGame
                 _selectedCardIndex = 0;
             if (_levelIndex + (_numCardsPerScreen - 1) < _selectedCardIndex)
             {
-                if (_indexSlide > -1.0)
+                if (_indexSlide > -1f)
                     _indexSlide = Lerp.FloatSmooth(_indexSlide, -1.2f, 0.2f);
-                if (_indexSlide <= -1.0)
+                if (_indexSlide <= -1f)
                 {
                     ++_levelIndex;
                     _indexSlide = 0f;
@@ -114,9 +114,9 @@ namespace DuckGame
             }
             if (_levelIndex <= _selectedCardIndex)
                 return;
-            if (_indexSlide < 1.0)
+            if (_indexSlide < 1f)
                 _indexSlide = Lerp.FloatSmooth(_indexSlide, 1.2f, 0.2f);
-            if (_indexSlide < 1.0)
+            if (_indexSlide < 1f)
                 return;
             --_levelIndex;
             _indexSlide = 0f;

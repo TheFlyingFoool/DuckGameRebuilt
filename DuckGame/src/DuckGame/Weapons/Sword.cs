@@ -315,10 +315,10 @@ namespace DuckGame
                 _swung = false;
             }
             _addOffsetX = MathHelper.Lerp(_addOffsetX, -12f, 0.45f);
-            if (_addOffsetX < -12.0)
+            if (_addOffsetX < -12)
                 _addOffsetX = -12f;
             _addOffsetY = MathHelper.Lerp(_addOffsetY, -4f, 0.35f);
-            if (_addOffsetX >= -3.0)
+            if (_addOffsetX >= -3)
                 return;
             _addOffsetY = -3f;
         }
@@ -877,7 +877,7 @@ namespace DuckGame
         {
             if (_lastHistoryPos != Vec2.Zero)
             {
-                _lastAngles[_lastIndex] = (float)((angle + _lastHistoryAngle) / 2.0);
+                _lastAngles[_lastIndex] = (float)((angle + _lastHistoryAngle) / 2);
                 _lastPositions[_lastIndex] = (position + _lastHistoryPos) / 2f;
                 _lastIndex = (_lastIndex + 1) % 8;
                 ++_lastSize;
@@ -900,7 +900,7 @@ namespace DuckGame
             }
             if (DevConsole.showCollision)
                 Graphics.DrawLine(barrelStartPos, barrelPosition, Color.Red, depth: ((Depth)1f));
-            if (_swordSwing.speed > 0.0)
+            if (_swordSwing.speed > 0)
             {
                 if (duck != null)
                     _swordSwing.flipH = duck.offDir <= 0;
@@ -912,7 +912,7 @@ namespace DuckGame
             Vec2 position = this.position;
             Depth depth = this.depth;
             graphic.color = Color.White;
-            if (owner == null && velocity.length > 1.0 || _swing != 0.0 || tape != null && bayonetLethal)
+            if (owner == null && velocity.length > 1 || _swing != 0 || tape != null && bayonetLethal)
             {
                 float alpha = this.alpha;
                 this.alpha = 1f;

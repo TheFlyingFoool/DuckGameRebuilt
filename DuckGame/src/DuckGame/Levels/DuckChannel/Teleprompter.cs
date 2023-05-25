@@ -143,12 +143,12 @@ namespace DuckGame
                 {
                     _waitAfterLine -= 0.03f;
                     _talkMove += 0.75f;
-                    if (_talkMove > 1.0)
+                    if (_talkMove > 1f)
                     {
                         SetCasterFrame(0);
                         _talkMove = 0f;
                     }
-                    if (_waitAfterLine <= 0.0)
+                    if (_waitAfterLine <= 0f)
                     {
                         _lineProgress.Clear();
                         if (!_lines[0].text.StartsWith("CUE%"))
@@ -164,10 +164,10 @@ namespace DuckGame
                 if (_currentLine != "")
                 {
                     _waitLetter -= 0.5f;
-                    if (_waitLetter >= 0.0)
+                    if (_waitLetter >= 0f)
                         return;
                     _talkMove += 0.75f;
-                    if (_talkMove > 1.0)
+                    if (_talkMove > 1f)
                     {
                         if (_currentLine[0] != ' ' && GetCasterFrame() == 0)
                             SetCasterFrame(Rando.Int(1) + 1);
@@ -301,7 +301,7 @@ namespace DuckGame
                 else
                 {
                     _talkMove += 0.75f;
-                    if (_talkMove <= 1.0)
+                    if (_talkMove <= 1f)
                         return;
                     SetCasterFrame(0);
                     _talkMove = 0f;
@@ -316,8 +316,8 @@ namespace DuckGame
             {
                 float width = _font.GetWidth(_lineProgress[index1].text);
                 float ypos = 140 - (_lineProgress.Count - 1) * 9 + num * 9;
-                Graphics.DrawRect(new Vec2((float)(132.0 - width / 2.0 - 1.0), ypos - 1f), new Vec2((float)(132.0 + width / 2.0), ypos + 9f), Color.Black, (Depth)0.84f);
-                float xpos = (float)(132.0 - width / 2.0);
+                Graphics.DrawRect(new Vec2((float)(132f - width / 2f - 1f), ypos - 1f), new Vec2((float)(132f + width / 2f), ypos + 9f), Color.Black, (Depth)0.84f);
+                float xpos = (float)(132f - width / 2f);
                 for (int index2 = _lineProgress[index1].segments.Count - 1; index2 >= 0; --index2)
                 {
                     _font.Draw(_lineProgress[index1].segments[index2].text, xpos, ypos, _lineProgress[index1].segments[index2].color, (Depth)0.85f);

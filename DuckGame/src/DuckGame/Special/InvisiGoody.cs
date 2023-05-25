@@ -30,7 +30,7 @@ namespace DuckGame
             float num = size.value;
             center = new Vec2(8f, 8f);
             collisionSize = new Vec2(num * 16f);
-            collisionOffset = new Vec2((float)(-(num * 16.0) / 2.0));
+            collisionOffset = new Vec2((float)(-(num * 16f) / 2f));
             scale = new Vec2(num);
         }
 

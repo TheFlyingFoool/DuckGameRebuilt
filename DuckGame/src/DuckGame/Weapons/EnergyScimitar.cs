@@ -140,7 +140,7 @@ namespace DuckGame
                 WireMount owner = this.owner as WireMount;
                 foreach (MaterialThing materialThing in Level.CheckRectAll<Block>(position + new Vec2(-8f, -8f), position + new Vec2(8f, 8f)))
                     clip.Add(materialThing);
-                float pAngleDegrees = (float)(-angleDegrees - 90.0 - 180.0);
+                float pAngleDegrees = (float)(-angleDegrees - 90 - 180);
                 this.owner = null;
                 owner._containedThing = null;
                 StartFlying(pAngleDegrees);
@@ -166,12 +166,12 @@ namespace DuckGame
                 {
                     if (_airFly)
                     {
-                        if (vSpeed < -4.0)
+                        if (vSpeed < -4)
                         {
                             collisionOffset = new Vec2(0f, -4f);
                             collisionSize = new Vec2(6f, 8f);
                         }
-                        else if (vSpeed > 4.0)
+                        else if (vSpeed > 4)
                         {
                             collisionOffset = new Vec2(-5f, -4f);
                             collisionSize = new Vec2(6f, 8f);
@@ -198,11 +198,11 @@ namespace DuckGame
                     PerformAirSpin();
                     flag1 = true;
                 }
-                else if (Math.Abs(hSpeed) + Math.Abs(vSpeed) > 2.0 || !grounded)
+                else if (Math.Abs(hSpeed) + Math.Abs(vSpeed) > 2 || !grounded)
                 {
                     if (!grounded && Level.CheckRect<Block>(position + new Vec2(-6f, -6f), position + new Vec2(6f, -2f)) != null)
                         flag2 = true;
-                    if (!flag2 && !_grounded && (Level.CheckPoint<IPlatform>(position + new Vec2(0f, 8f)) == null || vSpeed < 0.0 || _airFly))
+                    if (!flag2 && !_grounded && (Level.CheckPoint<IPlatform>(position + new Vec2(0f, 8f)) == null || vSpeed < 0 || _airFly))
                     {
                         PerformAirSpin();
                         flag1 = true;
@@ -218,15 +218,15 @@ namespace DuckGame
                     else
                         _throwSpin = Lerp.Float(-90f, 0f, 16f);
                 }
-                else if (_throwSpin > 90.0 && _throwSpin < 270.0)
+                else if (_throwSpin > 90 && _throwSpin < 270)
                 {
                     _throwSpin = Lerp.Float(_throwSpin, 180f, 14f);
                 }
                 else
                 {
-                    if (_throwSpin > 180.0)
+                    if (_throwSpin > 180)
                         _throwSpin -= 360f;
-                    else if (_throwSpin < -180.0)
+                    else if (_throwSpin < -180)
                         _throwSpin += 360f;
                     _throwSpin = Lerp.Float(_throwSpin, 0f, 14f);
                 }
@@ -241,7 +241,7 @@ namespace DuckGame
                 collisionSize = new Vec2(4f, 4f);
                 _throwSpin = 0f;
                 _wasLifted = true;
-                _blocking = duck.crouch && Math.Abs(duck.hSpeed) < 2.0;
+                _blocking = duck.crouch && Math.Abs(duck.hSpeed) < 2;
                 if (duck.inputProfile.Pressed(Triggers.Up) && !duck.inputProfile.Pressed(Triggers.Jump) && (_stance == Stance.Drag || _stance == Stance.Intermediate) && !duck.sliding)
                     _stance = Stance.SwingUp;
                 if (duck.crouch && !duck.sliding && duck.inputProfile.Pressed(Triggers.Left))
@@ -251,7 +251,7 @@ namespace DuckGame
                 bool flag = Level.CheckLine<IPlatform>(new Vec2(owner.position.x, owner.bottom) + new Vec2(-offDir * 16, -10f), new Vec2(owner.position.x, owner.bottom) + new Vec2(-offDir * 16, 2f)) == null;
                 _spikeDrag = duck.grounded && !flag && Level.CheckLine<Spikes>(new Vec2(owner.position.x, owner.bottom) + new Vec2(-offDir * 16, -10f), new Vec2(owner.position.x, owner.bottom) + new Vec2(-offDir * 16, 2f)) != null;
                 _dragRand = Lerp.FloatSmooth(_dragRand, 0f, 0.1f);
-                if (_dragRand > 1.0)
+                if (_dragRand > 1)
                     _dragRand = 1f;
                 dragSpeedBonus = _stance == Stance.Drag && !flag && _stanceReady;
                 if (_spikeDrag && dragSpeedBonus)
@@ -271,7 +271,7 @@ namespace DuckGame
                 }
                 if (duck.inputProfile.Pressed(Triggers.Down) && duck.grounded)
                     _stance = Stance.Drag;
-                if (Math.Abs(duck.hSpeed) > 1.0)
+                if (Math.Abs(duck.hSpeed) > 1)
                 {
                     if (dragSpeedBonus)
                     {
@@ -399,13 +399,13 @@ namespace DuckGame
                     {
                         _swordAngle = 80f;
                         handAngle = Maths.DegToRad(_swordAngle) * offDir;
-                        _holdOffset = new Vec2(0f, (float)(-2.0 - _swingDif * 0.55f));
-                        handOffset = new Vec2((float)(0.0 + _swingDif * 0.35f), 3f);
+                        _holdOffset = new Vec2(0f, (float)(-2 - _swingDif * 0.55f));
+                        handOffset = new Vec2((float)(0 + _swingDif * 0.35f), 3f);
                         _swordFlip = offDir < 0;
                     }
                 }
                 _lerpedAngle = Lerp.FloatSmooth(_lerpedAngle, _swordAngle, 0.25f + _lerpBoost);
-                _stanceReady = Math.Abs(_lerpedAngle - _swordAngle) < 25.0;
+                _stanceReady = Math.Abs(_lerpedAngle - _swordAngle) < 25;
                 _stanceCounter += Maths.IncFrameTimer();
                 _swingDif = Math.Min(Math.Abs(_lerpedAngle - _swordAngle), 35f);
                 if (_timeSincePress > 25)
@@ -577,11 +577,11 @@ namespace DuckGame
             {
                 Fondle(with);
                 Vec2 vec1 = Maths.AngleToVec(Maths.DegToRad(_airFlyAngle));
-                hSpeed = lastHSpeed = (float)(-vec1.x * 3.0);
-                vSpeed = lastVSpeed = (float)(-vec1.y * 3.0);
+                hSpeed = lastHSpeed = (float)(-vec1.x * 3);
+                vSpeed = lastVSpeed = (float)(-vec1.y * 3);
                 Vec2 vec2 = Maths.AngleToVec(Maths.DegToRad((with as EnergyScimitar)._airFlyAngle));
-                with.hSpeed = with.lastHSpeed = (float)(-vec2.x * 3.0);
-                with.vSpeed = with.lastVSpeed = (float)(-vec2.y * 3.0);
+                with.hSpeed = with.lastHSpeed = (float)(-vec2.x * 3);
+                with.vSpeed = with.lastVSpeed = (float)(-vec2.y * 3);
                 Shing();
                 (with as EnergyScimitar).Shing();
             }
@@ -599,7 +599,7 @@ namespace DuckGame
                     offset = position - duck.ragdoll.part2.position
                 });
             }
-            else if (with is Block || with is IPlatform && from == ImpactedFrom.Bottom && vSpeed > 0.0)
+            else if (with is Block || with is IPlatform && from == ImpactedFrom.Bottom && vSpeed > 0)
             {
                 if (with is Nubber)
                     return;
@@ -665,7 +665,7 @@ namespace DuckGame
         private void UpdateAirDirection()
         {
             if (offDir < 0)
-                _throwSpin = (float)(-_airFlyAngle + 180.0);
+                _throwSpin = (float)(-_airFlyAngle + 180);
             else
                 _throwSpin = -_airFlyAngle;
         }
@@ -682,7 +682,7 @@ namespace DuckGame
                 if (Math.Abs(vec.x) < 0.2f && vec.y < 0f)
                 {
                     _upFlyTime += Maths.IncFrameTimer();
-                    if (_upFlyTime > 2.0)
+                    if (_upFlyTime > 2)
                         ReverseFlyDirection();
                 }
                 UpdateAirDirection();
@@ -819,8 +819,8 @@ namespace DuckGame
                 {
                     if (materialThing is ScimiPlatform)
                     {
-                        hSpeed = lastHSpeed = (float)(-vec2.x * 3.0);
-                        vSpeed = lastHSpeed = (float)(-vec2.y * 3.0);
+                        hSpeed = lastHSpeed = (float)(-vec2.x * 3);
+                        vSpeed = lastHSpeed = (float)(-vec2.y * 3);
                     }
                     else
                     {
@@ -948,7 +948,7 @@ namespace DuckGame
 
         public override bool Sprung(Thing pSpringer)
         {
-            StartFlying((float)(-pSpringer.angleDegrees - 90.0 - 180.0));
+            StartFlying((float)(-pSpringer.angleDegrees - 90 - 180));
             return false;
         }
 
@@ -999,10 +999,10 @@ namespace DuckGame
             if (isServerForObject)
             {
                 _stickWait -= Maths.IncFrameTimer();
-                if (duck != null && slowWait > 0.0)
+                if (duck != null && slowWait > 0)
                 {
                     slowWait -= Maths.IncFrameTimer();
-                    if (slowWait <= 0.0)
+                    if (slowWait <= 0)
                     {
                         if (_revertVMaxDuck != null)
                         {
@@ -1024,7 +1024,7 @@ namespace DuckGame
                 }
                 _timeSincePickedUp += Maths.IncFrameTimer();
                 if (_stance == Stance.Drag && duck != null)
-                    _glow = Math.Abs(duck.hSpeed) > 1.0 ? 0.35f : 0f;
+                    _glow = Math.Abs(duck.hSpeed) > 1 ? 0.35f : 0f;
                 if (grounded)
                     _canAirFly = true;
                 _timeTillPulse -= Maths.IncFrameTimer();
@@ -1132,8 +1132,8 @@ namespace DuckGame
                         vec2 += OffsetLocal(new Vec2(0f, -num2 / _walls.Count));
                         wall.position = vec2;
                         float num3 = 1f - Math.Min(_stanceCounter / 0.25f, 1f);
-                        wall.collisionSize = new Vec2((float)(6.0 + num3 * 8.0), 6f);
-                        wall.collisionOffset = new Vec2((float)(-3.0 - num3 * 4.0), -3f);
+                        wall.collisionSize = new Vec2((float)(6 + num3 * 8), 6f);
+                        wall.collisionOffset = new Vec2((float)(-3 - num3 * 4), -3f);
                     }
                 }
                 else
@@ -1164,16 +1164,16 @@ namespace DuckGame
             {
                 float val2_1 = 800f;
                 float val2_2 = 400f;
-                float num5 = (float)(1.0 - Math.Min(Math.Max((level.camera.position - position).length, val2_2) - val2_2, val2_1) / val2_1);
+                float num5 = (float)(1 - Math.Min(Math.Max((level.camera.position - position).length, val2_2) - val2_2, val2_1) / val2_1);
                 if (_hum != null)
                     _hum.volume *= num5;
-                if (isServerForObject && visible && (x < level.topLeft.x - 1000.0 || x > level.bottomRight.x + 1000.0) && owner == null && !inPipe)
+                if (isServerForObject && visible && (x < level.topLeft.x - 1000 || x > level.bottomRight.x + 1000) && owner == null && !inPipe)
                     Level.Remove(this);
             }
             _extraOffset = new Vec2(0f, -num1);
             _barrelOffsetTL = new Vec2(4f, 3f - num1);
             _lastAngleHum = angle;
-            if (_glow > 1.0)
+            if (_glow > 1)
                 _glow *= 0.85f;
             if (owner != null)
                 _airFly = false;
@@ -1196,13 +1196,13 @@ namespace DuckGame
                 else
                     to2 = 0f;
                 if (_stance == Stance.Drag && duck != null)
-                    _glow = Math.Abs(duck.hSpeed) > 1.0 ? 0.35f : 0f;
+                    _glow = Math.Abs(duck.hSpeed) > 1 ? 0.35f : 0f;
                 _glow = Lerp.Float(_glow, to2, 0.1f);
             }
             else
             {
                 _unchargeWait -= Maths.IncFrameTimer();
-                if (_unchargeWait < 0.0)
+                if (_unchargeWait < 0)
                 {
                     if (_playedChargeUp && owner == null)
                     {
@@ -1219,7 +1219,7 @@ namespace DuckGame
             _platform.position = new Vec2(-99999f, -99999f);
             if (!stuck)
                 return;
-            if (Math.Abs(barrelStartPos.y - barrelPosition.y) < 6.0)
+            if (Math.Abs(barrelStartPos.y - barrelPosition.y) < 6)
             {
                 _platform.solid = true;
                 _platform.enablePhysics = true;
@@ -1242,12 +1242,12 @@ namespace DuckGame
                 Vec2 vec2_1 = warpLine.start - warpLine.end;
                 Vec2 vec2_2 = warpLine.end - warpLine.start;
                 float num1 = Math.Min(warpLine.lerp, 0.5f) / 0.5f;
-                float num2 = Math.Max((float)((warpLine.lerp - 0.5) * 2.0), 0f);
+                float num2 = Math.Max((float)((warpLine.lerp - 0.5f) * 2), 0f);
                 Graphics.DrawTexturedLine(_warpLine.texture, warpLine.start - vec2_1 * (num1 * 0.5f), warpLine.start, swordColor * (1f - num2), warpLine.wide / 32f, (Depth)0.9f);
                 Graphics.DrawTexturedLine(_warpLine.texture, warpLine.start - vec2_1 * (num1 * 0.5f), warpLine.start - vec2_1 * (num1 * 1f), swordColor * (1f - num2), warpLine.wide / 32f, (Depth)0.9f);
                 warpLine.lerp += 0.13f;
             }
-            warpLines.RemoveAll(v => v.lerp >= 1.0);
+            warpLines.RemoveAll(v => v.lerp >= 1);
             base.DrawGlow();
         }
 
@@ -1321,7 +1321,7 @@ namespace DuckGame
             {
                 int index3 = historyIndex(0);
                 int index4 = historyIndex(2);
-                addHistory((float)((_lastAngles[index3] + _lastAngles[index4]) / 2.0), (_lastPositions[index3] + _lastPositions[index4]) / 2f);
+                addHistory((float)((_lastAngles[index3] + _lastAngles[index4]) / 2), (_lastPositions[index3] + _lastPositions[index4]) / 2f);
             }
             if (_lastSize <= 8)
                 return;

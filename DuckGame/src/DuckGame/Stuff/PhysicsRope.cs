@@ -62,7 +62,7 @@ namespace DuckGame
                 return;
             position.y -= 8f;
             _length = length.value / 6.5f;
-            _divisions = (int)(length.value * 16.0 / 8.0);
+            _divisions = (int)(length.value * 16 / 8);
             _lenDiv = _length / _divisions;
             for (int index = 0; index <= _divisions; ++index)
             {
@@ -105,7 +105,7 @@ namespace DuckGame
                             lowestVine1.prevVine = _lowestVine;
                         }
                         _lowestVine.changeSpeed = false;
-                        if (d.vSpeed > 0.0)
+                        if (d.vSpeed > 0)
                             d.vSpeed = 0f;
                         _lowestVine.UpdateRopeStuff();
                         _lowestVine.UpdateRopeStuff();
@@ -131,7 +131,7 @@ namespace DuckGame
                         _lowestVine.prevVine = lowestVine;
                     }
                     _lowestVine.changeSpeed = false;
-                    if (d.vSpeed > 0.0)
+                    if (d.vSpeed > 0)
                         d.vSpeed = 0f;
                     _lowestVine.UpdateRopeStuff();
                     _lowestVine.UpdateRopeStuff();
@@ -209,10 +209,10 @@ namespace DuckGame
             {
                 for (int index2 = 1; index2 <= _divisions; ++index2)
                 {
-                    float num1 = (float)((_nodes[index2].calcPos.x - _nodes[index2 - 1].calcPos.x) / 100.0);
-                    float num2 = (float)((_nodes[index2].calcPos.y - _nodes[index2 - 1].calcPos.y) / 100.0);
+                    float num1 = (float)((_nodes[index2].calcPos.x - _nodes[index2 - 1].calcPos.x) / 100);
+                    float num2 = (float)((_nodes[index2].calcPos.y - _nodes[index2 - 1].calcPos.y) / 100);
                     float num3 = (float)Math.Sqrt(num1 * num1 + num2 * num2);
-                    float num4 = (float)((num3 - _lenDiv) * 50.0);
+                    float num4 = (float)((num3 - _lenDiv) * 50);
                     _nodes[index2].calcPos.x -= num1 / num3 * num4;
                     _nodes[index2].calcPos.y -= num2 / num3 * num4;
                     _nodes[index2 - 1].calcPos.x += num1 / num3 * num4;
@@ -255,28 +255,28 @@ namespace DuckGame
                 _nodes[index4].hSpeed = _nodes[index4].calcPos.x - _nodes[index4].position.x;
                 _nodes[index4].vSpeed = _nodes[index4].calcPos.y - _nodes[index4].position.y;
                 float num6 = 5f;
-                if (_nodes[index4].hSpeed > 0.0 && _nodes[index4].hSpeed > num6)
+                if (_nodes[index4].hSpeed > 0 && _nodes[index4].hSpeed > num6)
                     _nodes[index4].hSpeed = num6;
-                if (_nodes[index4].hSpeed < 0.0 && _nodes[index4].hSpeed < -num6)
+                if (_nodes[index4].hSpeed < 0 && _nodes[index4].hSpeed < -num6)
                     _nodes[index4].hSpeed = -num6;
                 foreach (PhysicsObject physicsObject in Level.CheckPointAll<PhysicsObject>(_nodes[index4].position))
                 {
-                    if (physicsObject.hSpeed > 0.0 && _nodes[index4].hSpeed < physicsObject.hSpeed)
+                    if (physicsObject.hSpeed > 0 && _nodes[index4].hSpeed < physicsObject.hSpeed)
                     {
                         _nodes[index4].hSpeed += physicsObject.hSpeed;
-                        if (Math.Abs(physicsObject.hSpeed) > 2.0)
+                        if (Math.Abs(physicsObject.hSpeed) > 2)
                         {
-                            if (Math.Abs(physicsObject.hSpeed) > 4.0)
+                            if (Math.Abs(physicsObject.hSpeed) > 4)
                                 flag2 = true;
                             flag1 = true;
                         }
                     }
-                    if (physicsObject.hSpeed < 0.0 && _nodes[index4].hSpeed > physicsObject.hSpeed)
+                    if (physicsObject.hSpeed < 0 && _nodes[index4].hSpeed > physicsObject.hSpeed)
                     {
                         _nodes[index4].hSpeed += physicsObject.hSpeed;
-                        if (Math.Abs(physicsObject.hSpeed) > 2.0)
+                        if (Math.Abs(physicsObject.hSpeed) > 2)
                         {
-                            if (Math.Abs(physicsObject.hSpeed) > 4.0)
+                            if (Math.Abs(physicsObject.hSpeed) > 4)
                                 flag2 = true;
                             flag1 = true;
                         }
@@ -284,9 +284,9 @@ namespace DuckGame
                 }
                 _nodes[index4].UpdatePhysics();
             }
-            if (soundWait > 0.0)
+            if (soundWait > 0)
                 soundWait -= 0.01f;
-            if (!(chain & flag1) || soundWait > 0.0)
+            if (!(chain & flag1) || soundWait > 0)
                 return;
             soundWait = 0.1f;
             if (!flag1)

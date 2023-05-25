@@ -406,10 +406,10 @@ namespace DuckGame
                     if (Music.finished)
                         _wait -= 0.0006f;
                     _waitFade -= 0.04f;
-                    if (_waitFade > 0.0 || !getReady || Network.isActive && Network.isClient && !Level.current.transferCompleteCalled)
+                    if (_waitFade > 0 || !getReady || Network.isActive && Network.isClient && !Level.current.transferCompleteCalled)
                         return;
                     _waitSpawn -= 0.06f;
-                    if (_waitSpawn <= 0.0)
+                    if (_waitSpawn <= 0)
                     {
                         if (Network.isServer && _pendingSpawns == null)
                             _pendingSpawns = AssignSpawns();
@@ -531,7 +531,7 @@ namespace DuckGame
                         else if (!_started)
                         {
                             _waitAfterSpawn -= 0.05f;
-                            if (_waitAfterSpawn <= 0.0)
+                            if (_waitAfterSpawn <= 0)
                             {
                                 ++_waitAfterSpawnDings;
                                 if (_waitAfterSpawnDings > 2)
@@ -558,7 +558,7 @@ namespace DuckGame
                         else
                         {
                             _fontFade -= 0.1f;
-                            if (_fontFade < 0.0)
+                            if (_fontFade < 0)
                                 _fontFade = 0f;
                         }
                     }
@@ -669,8 +669,8 @@ namespace DuckGame
                     }
                     if (_validityTest && _watch != null)
                     {
-                        long elapsedMilliseconds = _watch.ElapsedMilliseconds;
-                        if (frames / (_watch.ElapsedMilliseconds / 1000.0) < 30.0)
+                        //long elapsedMilliseconds = _watch.ElapsedMilliseconds; what -NiK0
+                        if (frames / (_watch.ElapsedMilliseconds / 1000) < 30)
                         {
                             DeathmatchTestDialogue.success = false;
                             DeathmatchTestDialogue.tooSlow = true;
@@ -741,7 +741,7 @@ namespace DuckGame
                 {
                     foreach (KeyValuePair<Duck, float> keyValuePair in mine.ducksOnMine)
                     {
-                        if (!keyValuePair.Key.dead && keyValuePair.Value > 5.0 && keyValuePair.Key.profile != null && (!Network.isActive || keyValuePair.Key.profile.connection == DuckNetwork.localConnection))
+                        if (!keyValuePair.Key.dead && keyValuePair.Value > 5 && keyValuePair.Key.profile != null && (!Network.isActive || keyValuePair.Key.profile.connection == DuckNetwork.localConnection))
                         {
                             Global.GiveAchievement("mine");
                             break;
@@ -853,15 +853,15 @@ namespace DuckGame
                 else if (_waitAfterSpawnDings == 3)
                     text = "";
                 float width = _font.GetWidth(text);
-                _font.Draw(text, (float)(Layer.HUD.camera.width / 2.0 - width / 2.0), (float)(Layer.HUD.camera.height / 2.0 - _font.height / 2.0), Color.White);
+                _font.Draw(text, (float)(Layer.HUD.camera.width / 2 - width / 2), (float)(Layer.HUD.camera.height / 2 - _font.height / 2), Color.White);
             }
             if (!_validityTest || _waitAfterSpawnDings <= 0 || _fontFade >= 0.5)
                 return;
             _pulse += 0.08f;
             string text1 = "WIN THE MATCH";
             float width1 = _font.GetWidth(text1);
-            _font.alpha = (float)((Math.Sin(_pulse) + 1.0) / 2.0);
-            _font.Draw(text1, (float)(Layer.HUD.camera.width / 2.0 - width1 / 2.0), (float)(Layer.HUD.camera.height - _font.height - 16.0), Color.Red);
+            _font.alpha = (float)((Math.Sin(_pulse) + 1) / 2);
+            _font.Draw(text1, (float)(Layer.HUD.camera.width / 2 - width1 / 2), (float)(Layer.HUD.camera.height - _font.height - 16), Color.Red);
         }
 
         private void drawNameDisplay()

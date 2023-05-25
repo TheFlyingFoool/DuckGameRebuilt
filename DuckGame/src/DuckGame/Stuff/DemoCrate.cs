@@ -62,7 +62,7 @@ namespace DuckGame
                 Level.Add(smallSmoke);
             }
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 3; ++index)
-                Level.Add(new CampingSmoke(pPosition.x - 5f + Rando.Float(10f), (float)(pPosition.y + 6.0 - 3.0 + Rando.Float(6f) - index * 1.0))
+                Level.Add(new CampingSmoke(pPosition.x - 5f + Rando.Float(10f), (float)(pPosition.y + 6 - 3 + Rando.Float(6f) - index * 1))
                 {
                     move = {
             x = (Rando.Float(0.6f) - 0.3f),
@@ -72,7 +72,7 @@ namespace DuckGame
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(pPosition.x - 8f + Rando.Float(16f), pPosition.y - 8f + Rando.Float(16f));
-                woodDebris.hSpeed = (float)((Rando.Float(1f) > 0.5 ? 1.0 : -1.0) * Rando.Float(3f) + Math.Sign(pFlyX) * 0.5);
+                woodDebris.hSpeed = (float)((Rando.Float(1f) > 0.5f ? 1 : -1) * Rando.Float(3f) + Math.Sign(pFlyX) * 0.5);
                 woodDebris.vSpeed = -Rando.Float(1f);
                 Level.Add(woodDebris);
             }
@@ -100,12 +100,12 @@ namespace DuckGame
             List<Bullet> varBullets = new List<Bullet>();
             for (int index = 0; index < 20; ++index)
             {
-                float num = (float)(index * 18.0 - 5.0) + Rando.Float(10f);
+                float num = (float)(index * 18 - 5) + Rando.Float(10f);
                 ATShrapnel type1 = new ATShrapnel
                 {
                     range = baseExplosionRange - 20f + Rando.Float(18f)
                 };
-                Bullet bullet = new Bullet(x + (float)(Math.Cos(Maths.DegToRad(num)) * 6.0), y - (float)(Math.Sin(Maths.DegToRad(num)) * 6.0), type1, num)
+                Bullet bullet = new Bullet(x + (float)(Math.Cos(Maths.DegToRad(num)) * 6), y - (float)(Math.Sin(Maths.DegToRad(num)) * 6), type1, num)
                 {
                     firedFrom = this
                 };

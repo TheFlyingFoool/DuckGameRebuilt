@@ -38,12 +38,12 @@ namespace DuckGame
             if (pLayer != Layer.Game)
                 return;
             _animate += 0.05f;
-            double y = this.y;
+            //double y = this.y; what -NiK0
             int num1 = 6;
             for (int index = 0; index < num1; ++index)
             {
-                Vec2 p1 = new Vec2(x - 6f, (float)(this.y - index * 4.0 - _animate % 1.0 * 4.0));
-                float num2 = (float)(1.0 - (this.y - p1.y) / 24.0);
+                Vec2 p1 = new Vec2(x - 6f, (float)(y - index * 4 - _animate % 1 * 4));
+                float num2 = (float)(1 - (y - p1.y) / 24);
                 float width = num2 * 3f;
                 p1.y += width / 2f;
                 Graphics.DrawLine(p1, p1 + new Vec2(12f, 0f), Colors.DGBlue * (num2 * 0.8f), width, -0.75f);
@@ -53,14 +53,14 @@ namespace DuckGame
             for (int index = 0; index < vec2_1.x * vec2_1.y; ++index)
             {
                 Vec2 vec2_3 = new Vec2((int)(index % vec2_1.x), (int)(index / vec2_1.y));
-                float num3 = (float)((Noise.Generate(vec2_3.x * 32f, 0f) + 1.0) / 2.0 * 1.5 + 0.1f);
-                float num4 = _animate * 0.1f - (int)(_animate * num3 / 1.0);
-                float num5 = Noise.Generate(vec2_3.x + 100f, (float)((vec2_3.y + 100.0 - num4) * 0.5));
+                float num3 = (float)((Noise.Generate(vec2_3.x * 32f, 0f) + 1) / 2 * 1.5f + 0.1f);
+                float num4 = _animate * 0.1f - (int)(_animate * num3 / 1f);
+                float num5 = Noise.Generate(vec2_3.x + 100f, (float)((vec2_3.y + 100f - num4) * 0.5f));
                 if (num5 > 0.25)
                 {
-                    vec2_3.y -= (float)(_animate * num3 % 1.0);
-                    float num6 = 1f - Math.Abs((float)((vec2_1.x / 2.0 - vec2_3.x) / vec2_1.x * 2.0));
-                    float num7 = (float)((num5 - 0.25) / 0.75) * num6 * Math.Max(0f, Math.Min((float)((vec2_3.y / vec2_1.y - 0.1f) * 2.0), 1f));
+                    vec2_3.y -= (float)(_animate * num3 % 1);
+                    float num6 = 1f - Math.Abs((float)((vec2_1.x / 2 - vec2_3.x) / vec2_1.x * 2));
+                    float num7 = (float)((num5 - 0.25f) / 0.75f) * num6 * Math.Max(0f, Math.Min((float)((vec2_3.y / vec2_1.y - 0.1f) * 2f), 1f));
                     vec2_3 *= 2f;
                     vec2_3.y *= 2f;
                     Graphics.DrawRect(vec2_3 + vec2_2, vec2_3 + vec2_2 + new Vec2(1f, 1f), Color.White * num7, -0.5f);

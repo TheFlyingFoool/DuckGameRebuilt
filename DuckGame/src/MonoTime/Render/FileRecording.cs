@@ -177,7 +177,7 @@ namespace DuckGame
             if (_loadedNextFrame)
             {
                 _framePos += speed;
-                if (_framePos < 1.0)
+                if (_framePos < 1)
                     return;
                 --_framePos;
                 num1 = 1;

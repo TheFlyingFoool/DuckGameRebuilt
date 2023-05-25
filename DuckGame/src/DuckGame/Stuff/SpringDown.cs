@@ -32,7 +32,7 @@ namespace DuckGame
         {
             if (with.isServerForObject && with.Sprung(this))
             {
-                if (with.vSpeed < 12.0 * _mult)
+                if (with.vSpeed < 12f * _mult)
                     with.vSpeed = 12f * _mult;
                 if (with is Gun)
                     (with as Gun).PressAction();

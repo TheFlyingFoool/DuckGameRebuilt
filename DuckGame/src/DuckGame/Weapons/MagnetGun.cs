@@ -109,7 +109,7 @@ namespace DuckGame
             else if (_beamSound.Volume < 0.01f && _beamSound.State == SoundState.Playing)
                 _beamSound.Stop();
             _beamSound.Volume = Maths.LerpTowards(_beamSound.Volume, _magnetActive ? 0.1f : 0f, 0.1f);
-            if (_power > 1.0)
+            if (_power > 1)
                 _power = 1f;
             if (_power < 0f)
                 _power = 0f;
@@ -191,21 +191,21 @@ namespace DuckGame
                             if (!(holdable1.owner.realObject is Duck) && Network.isActive)
                                 return;
                             holdable1.owner.realObject.hSpeed += normalized2.x * num;
-                            holdable1.owner.realObject.vSpeed += (float)(normalized2.y * num * 4.0);
-                            if ((holdable1.owner.realObject as PhysicsObject).grounded && holdable1.owner.realObject.vSpeed > 0.0)
+                            holdable1.owner.realObject.vSpeed += (float)(normalized2.y * num * 4);
+                            if ((holdable1.owner.realObject as PhysicsObject).grounded && holdable1.owner.realObject.vSpeed > 0)
                                 holdable1.owner.realObject.vSpeed = 0f;
                         }
                         else
                         {
                             Fondle(holdable1);
                             holdable1.hSpeed += normalized2.x * num;
-                            holdable1.vSpeed += (float)(normalized2.y * num * 4.0);
-                            if (holdable1.grounded && holdable1.vSpeed > 0.0)
+                            holdable1.vSpeed += (float)(normalized2.y * num * 4);
+                            if (holdable1.grounded && holdable1.vSpeed > 0)
                                 holdable1.vSpeed = 0f;
                         }
                         _hasRay = true;
                         _rayHit = holdable1.position;
-                        if (isServerForObject && val1 < 20.0)
+                        if (isServerForObject && val1 < 20)
                         {
                             if (holdable1 is Equipment && holdable1.duck != null)
                             {
@@ -359,7 +359,7 @@ namespace DuckGame
                     _keepRaised = false;
                 if (_stuck != null && duck != null)
                 {
-                    if (_stickPos.y < owner.position.y - 8.0)
+                    if (_stickPos.y < owner.position.y - 8)
                     {
                         owner.position = _stickPos + _stickNormal * 12f;
                         _raised = true;
@@ -422,13 +422,13 @@ namespace DuckGame
             pThing.vSpeed = barrelVector.y * 5f;
             if (!(pThing is EnergyScimitar))
                 return;
-            (pThing as EnergyScimitar).StartFlying(offDir < 0 ? (float)(-angleDegrees - 180.0) : -angleDegrees, true);
+            (pThing as EnergyScimitar).StartFlying(offDir < 0 ? (float)(-angleDegrees - 180) : -angleDegrees, true);
         }
 
         public override void Draw()
         {
             base.Draw();
-            Draw(_magnet, new Vec2(5f, (float)((float)_wave * _waveMult - 2.0)));
+            Draw(_magnet, new Vec2(5f, (float)((float)_wave * _waveMult - 2)));
             foreach (Thing line in _lines)
                 line.Draw();
         }

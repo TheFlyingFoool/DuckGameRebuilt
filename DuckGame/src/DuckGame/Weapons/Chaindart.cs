@@ -119,7 +119,7 @@ namespace DuckGame
                 _spinUp.Volume = 1f;
                 _spinUp.Play();
             }
-            if (_spin < 1.0)
+            if (_spin < 1f)
             {
                 _spin += 0.04f;
             }
@@ -148,19 +148,19 @@ namespace DuckGame
             if (!onFire)
                 return;
             _burnWait -= 0.01f;
-            if (_burnWait < 0.0)
+            if (_burnWait < 0f)
             {
                 Level.Add(SmallFire.New(22f, 0f, 0f, 0f, stick: this, canMultiply: false, firedFrom: this));
                 _burnWait = 1f;
             }
-            if (burnt >= 1.0)
+            if (burnt >= 1f)
                 return;
             burnt += 1f / 1000f;
         }
 
         public override void Update()
         {
-            if (!burntOut && burnt >= 1.0)
+            if (!burntOut && burnt >= 1f)
             {
                 Vec2 vec2 = Offset(new Vec2(10f, 0f));
                 if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
@@ -202,7 +202,7 @@ namespace DuckGame
                 else
                     _spin = 0f;
                 spinAmount += _spin;
-                barrelInsertOffset = new Vec2(0f, (float)(2.0 + Math.Sin(spinAmount / 9f * 3.14f) * 2f));
+                barrelInsertOffset = new Vec2(0f, (float)(2 + Math.Sin(spinAmount / 9f * 3.14f) * 2f));
             }
             base.Update();
             if (_topBullet == null)
@@ -246,7 +246,7 @@ namespace DuckGame
                 _tip.flipH = graphic.flipH;
                 _tip.center = graphic.center;
                 _tip.depth = depth + 1;
-                _tip.alpha = Math.Min((float)(_barrelHeat * 1.5 / 10.0), 1f);
+                _tip.alpha = Math.Min((float)(_barrelHeat * 1.5f / 10f), 1f);
                 _tip.angle = angle;
                 Graphics.Draw(_tip, x, y);
                 Graphics.material = material;

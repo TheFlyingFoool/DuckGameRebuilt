@@ -318,7 +318,7 @@ namespace DuckGame
              * 3. non pure color (non zero rgb) will eventually return white
              */
 
-            int i = (int)(1.0 / (1.0 - factor));
+            int i = (int)(1f / (1f - factor));
             switch (r)
             {
                 case 0 when g == 0 && b == 0:

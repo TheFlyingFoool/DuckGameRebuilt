@@ -312,7 +312,7 @@ namespace DuckGame
             if (immediate)
                 _viewSize = right5;
             float right6 = _viewSize;
-            if (manualViewSize > 0.0)
+            if (manualViewSize > 0f)
                 right6 = manualViewSize;
             width = right6 * right2;
             height = right6;

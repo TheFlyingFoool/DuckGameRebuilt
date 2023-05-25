@@ -63,9 +63,9 @@ namespace DuckGame
             if (_playSwipe)
             {
                 _transitionWait += 0.02f;
-                if (_transitionWait > 1.0)
+                if (_transitionWait > 1f)
                     _doTransition = true;
-                if (_slideOutWait < 1.0)
+                if (_slideOutWait < 1f)
                 {
                     _duckLerp = Lerp.FloatSmooth(_duckLerp, 1f, 0.1f, 1.1f);
                     _channelLerp = Lerp.FloatSmooth(_channelLerp, 1f, 0.1f, 1.1f);

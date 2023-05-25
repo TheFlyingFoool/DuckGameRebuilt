@@ -87,7 +87,7 @@ namespace DuckGame
                                     _did3 = true;
                                 }
                                 _wait4 -= 0.016f;
-                                if (_wait4 <= 0.0)
+                                if (_wait4 <= 0)
                                 {
                                     ai.Press(Triggers.Quack);
                                     return new AIStateWait(Rando.Float(0.8f, 1f));

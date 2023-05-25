@@ -25,7 +25,7 @@ namespace DuckGame
                 if (thing.Count() > 0)
                 {
                     Duck duck = thing.First() as Duck;
-                    if (duck.x < x - 5.0)
+                    if (duck.x < x - 5)
                     {
                         duck.x -= 10f;
                         MonoMain.transitionDirection = TransitionDirection.Left;

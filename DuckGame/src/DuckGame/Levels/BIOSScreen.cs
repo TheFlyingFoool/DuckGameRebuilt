@@ -37,19 +37,16 @@ namespace DuckGame
             TitleScreen.SpargLogic();
 
             _wait -= 0.008f;
-            if (_wait >= 0.0)
-                return;
+            if (_wait >= 0f) return;
             if (!_playedMusic)
             {
                 Music.Play("Title");
                 _playedMusic = true;
             }
             _moveWait -= 0.015f;
-            if (_moveWait >= 0.0)
-                return;
+            if (_moveWait >= 0f) return;
             _shiftText += 3.5f;
-            if (_shiftText <= 300.0)
-                return;
+            if (_shiftText <= 300f) return;
             current = new CorptronLogo();
         }
 

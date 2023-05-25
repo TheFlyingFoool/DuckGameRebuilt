@@ -38,7 +38,7 @@ namespace DuckGame
         public override void Update()
         {
             alpha -= fade;
-            if (alpha < 0.0)
+            if (alpha < 0)
                 Level.Remove(this);
             x += _move.x * _moveSpeed;
             y += _move.y * _moveSpeed;

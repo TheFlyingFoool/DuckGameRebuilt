@@ -46,7 +46,7 @@ namespace DuckGame
             if (_dropped)
             {
                 flag1 = true;
-                Rectangle r2 = new Rectangle(position.x, (float)(position.y + vec2.y + 4.0), vec2.x, vec2.y * elementList.Count);
+                Rectangle r2 = new Rectangle(position.x, (float)(position.y + vec2.y + 4), vec2.x, vec2.y * elementList.Count);
                 Graphics.DrawRect(r2, Color.White, depth + 2, false);
                 Graphics.DrawRect(r2, Color.Black * 0.8f, depth + 1);
                 foreach (Element element in elementList)

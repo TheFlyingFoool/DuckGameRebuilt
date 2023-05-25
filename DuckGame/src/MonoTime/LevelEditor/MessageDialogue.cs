@@ -39,8 +39,8 @@ namespace DuckGame
             depth = (Depth)0.95f;
             float num1 = 300f;
             float num2 = 40f;
-            Vec2 vec2_1 = new Vec2((float)(layer.width / 2.0 - num1 / 2.0), (float)(layer.height / 2.0 - num2 / 2.0));
-            Vec2 vec2_2 = new Vec2((float)(layer.width / 2.0 + num1 / 2.0), (float)(layer.height / 2.0 + num2 / 2.0));
+            Vec2 vec2_1 = new Vec2((float)(layer.width / 2f - num1 / 2f), (float)(layer.height / 2f - num2 / 2f));
+            //Vec2 vec2_2 = new Vec2((float)(layer.width / 2f + num1 / 2f), (float)(layer.height / 2f + num2 / 2f)); why are there so many duplicate useless vec2s like this :sob: -NiK0
             position = vec2_1 + new Vec2(4f, 20f);
             itemSize = new Vec2(490f, 16f);
             _root = true;
@@ -88,12 +88,12 @@ namespace DuckGame
             }
             float num1 = 300f;
             float num2 = 80f;
-            Vec2 vec2_1 = new Vec2((float)(layer.width / 2.0 - num1 / 2.0), (float)(layer.height / 2.0 - num2 / 2.0) + windowYOffsetAdd);
+            Vec2 vec2_1 = new Vec2((float)(layer.width / 2f - num1 / 2f), (float)(layer.height / 2f - num2 / 2f) + windowYOffsetAdd);
             Vec2 vec2_2 = new Vec2(vec2_1.x + 18f, bottomRightPos - 50f);
             Vec2 vec2_3 = new Vec2(120f, 40f);
-            float num3 = (float)((layer.width / 2.0 + num1 / 2.0 - vec2_1.x) / 2.0);
+            float num3 = (float)((layer.width / 2f + num1 / 2f - vec2_1.x) / 2f);
             if (okayOnly)
-                vec2_2 = new Vec2((float)(vec2_1.x + num3 - vec2_3.x / 2.0), bottomRightPos - 50f);
+                vec2_2 = new Vec2((float)(vec2_1.x + num3 - vec2_3.x / 2f), bottomRightPos - 50f);
             Vec2 vec2_4 = new Vec2(vec2_1.x + 160f, bottomRightPos - 50f);
             Vec2 vec2_5 = new Vec2(120f, 40f);
             Rectangle pRect1 = new Rectangle(vec2_2.x, vec2_2.y, vec2_3.x, vec2_3.y);
@@ -200,9 +200,9 @@ namespace DuckGame
             Graphics.DrawRect(new Vec2(0f, 0f), new Vec2(Layer.HUD.width, Layer.HUD.height), Color.Black * 0.5f, depth - 2);
             float num1 = 300f;
             float num2 = 80f;
-            Vec2 p1_1 = new Vec2((float)(layer.width / 2.0 - num1 / 2.0), (float)(layer.height / 2.0 - num2 / 2.0) + windowYOffsetAdd);
-            Vec2 p2 = new Vec2((float)(layer.width / 2.0 + num1 / 2.0), (float)(layer.height / 2.0 + num2 / 2.0) + windowYOffsetAdd);
-            float num3 = (float)((p2.x - p1_1.x) / 2.0);
+            Vec2 p1_1 = new Vec2((float)(layer.width / 2f - num1 / 2f), (float)(layer.height / 2f - num2 / 2f) + windowYOffsetAdd);
+            Vec2 p2 = new Vec2((float)(layer.width / 2f + num1 / 2f), (float)(layer.height / 2f + num2 / 2f) + windowYOffsetAdd);
+            float num3 = (float)((p2.x - p1_1.x) / 2f);
             if (_description != null)
             {
                 int num4 = 18;
@@ -224,20 +224,20 @@ namespace DuckGame
             if (okayOnly)
             {
                 Vec2 vec2 = new Vec2(120f, 40f);
-                Vec2 p1_2 = new Vec2((float)(x + num3 - vec2.x / 2.0 - 2.0), p2.y - 50f);
+                Vec2 p1_2 = new Vec2((float)(x + num3 - vec2.x / 2f - 2f), p2.y - 50f);
                 Graphics.DrawRect(p1_2, p1_2 + vec2, _hoverOk ? new Color(80, 80, 80) : new Color(30, 30, 30), depth + 2);
-                _font.Draw("OK", (float)(p1_2.x + vec2.x / 2.0 - _font.GetWidth("OK") / 2.0), p1_2.y + 12f, Color.White, depth + 3);
+                _font.Draw("OK", (float)(p1_2.x + vec2.x / 2f - _font.GetWidth("OK") / 2f), p1_2.y + 12f, Color.White, depth + 3);
             }
             else
             {
                 Vec2 p1_3 = new Vec2(p1_1.x + 18f, p2.y - 50f);
                 Vec2 vec2_1 = new Vec2(120f, 40f);
                 Graphics.DrawRect(p1_3, p1_3 + vec2_1, _hoverOk ? new Color(80, 80, 80) : new Color(30, 30, 30), depth + 2);
-                _font.Draw("OK", (float)(p1_3.x + vec2_1.x / 2.0 - _font.GetWidth("OK") / 2.0), p1_3.y + 12f, Color.White, depth + 3);
+                _font.Draw("OK", (float)(p1_3.x + vec2_1.x / 2f - _font.GetWidth("OK") / 2f), p1_3.y + 12f, Color.White, depth + 3);
                 Vec2 p1_4 = new Vec2(p1_1.x + 160f, p2.y - 50f);
                 Vec2 vec2_2 = new Vec2(120f, 40f);
                 Graphics.DrawRect(p1_4, p1_4 + vec2_2, _hoverCancel ? new Color(80, 80, 80) : new Color(30, 30, 30), depth + 2);
-                _font.Draw(Triggers.Cancel, (float)(p1_4.x + vec2_2.x / 2.0 - _font.GetWidth(Triggers.Cancel) / 2.0), p1_4.y + 12f, Color.White, depth + 3);
+                _font.Draw(Triggers.Cancel, (float)(p1_4.x + vec2_2.x / 2f - _font.GetWidth(Triggers.Cancel) / 2f), p1_4.y + 12f, Color.White, depth + 3);
             }
             bottomRightPos = p2.y;
         }

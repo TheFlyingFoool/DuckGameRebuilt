@@ -92,7 +92,7 @@ namespace DuckGame
                     _persona[index].armSprite.frame = _persona[index].sprite.imageIndex;
                     _persona[index].armSprite.scale = new Vec2(1f, 1f);
                     _persona[index].armSprite.depth = depth + 4;
-                    Graphics.Draw(_persona[index].armSprite, (float)(num2 - num1 + index * 18 - 3.0), y1 + 6f);
+                    Graphics.Draw(_persona[index].armSprite, (float)(num2 - num1 + index * 18 - 3), y1 + 6f);
                     Vec2 hatPoint = DuckRig.GetHatPoint(_persona[index].sprite.imageIndex);
                     team.hat.depth = depth + 2;
                     team.hat.center = new Vec2(16f, 16f) + team.hatOffset;

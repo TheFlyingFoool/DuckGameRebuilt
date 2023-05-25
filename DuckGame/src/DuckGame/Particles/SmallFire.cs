@@ -158,7 +158,7 @@ namespace DuckGame
           MaterialThing stick = null,
           bool canMultiply = true)
         {
-            if (xpos == 0.0 && ypos == 0.0 && stick == null)
+            if (xpos == 0 && ypos == 0 && stick == null)
             {
                 xpos = Vec2.NetMin.x;
                 ypos = Vec2.NetMin.y;
@@ -219,16 +219,12 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (waitToHurt > 0.0)
-                waitToHurt -= Maths.IncFrameTimer();
-            else
-                whoWait = null;
+            if (waitToHurt > 0f) waitToHurt -= Maths.IncFrameTimer();
+            else whoWait = null;
             if (!isLocal)
             {
-                if (_stick != null)
-                    UpdateStick();
-                else
-                    base.Update();
+                if (_stick != null) UpdateStick();
+                else base.Update();
             }
             else
             {
@@ -237,37 +233,32 @@ namespace DuckGame
                 if (_grounded && _stick == null)
                 {
                     _airFireScale -= 0.3f;
-                    if (_airFireScale < 0.9f)
-                        _airFireScale = 0.9f;
+                    if (_airFireScale < 0.9f) _airFireScale = 0.9f;
                     _spinSpeed -= 0.01f;
-                    if (_spinSpeed < 0.05f)
-                        _spinSpeed = 0.05f;
+                    if (_spinSpeed < 0.05f) _spinSpeed = 0.05f;
                 }
                 if (_grounded)
                 {
                     if (_groundLife <= 0)
                     {
                         alpha -= 0.04f;
-                        if (alpha < 0.0)
-                            Level.Remove(this);
+                        if (alpha < 0f) Level.Remove(this);
                     }
-                    else
-                        --_groundLife;
+                    else _groundLife--;
                 }
-                if (y > Level.current.bottomRight.y + 200.0)
-                    Level.Remove(this);
+                if (y > Level.current.bottomRight.y + 200) Level.Remove(this);
                 _airFire.xscale = _airFire.yscale = _airFireScale;
                 _airFire.depth = depth - 1;
                 _airFire.alpha = 0.5f;
                 _airFire.angle += hSpeed * _spinSpeed;
-                if (isLocal && _canMultiply && !_multiplied && Rando.Float(310f) < 1.0 && y > level.topLeft.y - 500.0)
+                if (isLocal && _canMultiply && !_multiplied && Rando.Float(310f) < 1 && y > level.topLeft.y - 500)
                 {
                     Level.Add(New(x, y, Rando.Float(1f) - 0.5f, (float)-(0.5 + Rando.Float(0.5f))));
                     _multiplied = true;
                 }
                 if (_stick == null)
                 {
-                    if (level != null && y < level.topLeft.y - 1500.0)
+                    if (level != null && y < level.topLeft.y - 1500)
                         Level.Remove(this);
                     base.Update();
                 }

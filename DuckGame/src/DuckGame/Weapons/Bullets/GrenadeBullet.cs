@@ -46,7 +46,7 @@ namespace DuckGame
             Vec2 vec2 = position - travelDirNormalized;
             for (int index = 0; index < 12; ++index)
             {
-                float ang = (float)(index * 30.0 - 10.0) + Rando.Float(20f);
+                float ang = (float)(index * 30 - 10) + Rando.Float(20f);
                 ATGrenadeLauncherShrapnel type = new ATGrenadeLauncherShrapnel
                 {
                     range = 25f + Rando.Float(10f)
@@ -86,7 +86,7 @@ namespace DuckGame
         public override void Update()
         {
             _isVolatile -= 0.06f;
-            if (_isVolatile <= 0.0)
+            if (_isVolatile <= 0)
                 rebound = false;
             base.Update();
         }

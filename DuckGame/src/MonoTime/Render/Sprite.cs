@@ -73,7 +73,7 @@ namespace DuckGame
             set => _color = value;
         }
 
-        public void CenterOrigin() => center = new Vec2((float)Math.Round(width / 2.0), (float)Math.Round(height / 2.0));
+        public void CenterOrigin() => center = new Vec2((float)Math.Round(width / 2f), (float)Math.Round(height / 2f));
 
         public Sprite()
         {

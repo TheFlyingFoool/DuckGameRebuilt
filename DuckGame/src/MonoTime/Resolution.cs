@@ -385,7 +385,7 @@ namespace DuckGame
                 float num2 = Math.Abs(nearestInternal.aspect - pAspect);
                 bool flag1 = num1 < num2 && Math.Abs(num1 - num2) > 0.05f;
                 bool flag2 = Math.Abs(num1 - num2) < 0.05f;
-                if ((nearestInternal == null || Math.Abs(resolution.x - pX) + Math.Abs(resolution.y - pY) < Math.Abs(nearestInternal.x - pX) + Math.Abs(nearestInternal.y - pY) || flag1 && pAspect > 0.0 || pRecommended && resolution.recommended && !nearestInternal.recommended) && (nearestInternal == null || pAspect < 0.0 || flag1 | flag2 && (resolution.recommended || !pRecommended)))
+                if ((nearestInternal == null || Math.Abs(resolution.x - pX) + Math.Abs(resolution.y - pY) < Math.Abs(nearestInternal.x - pX) + Math.Abs(nearestInternal.y - pY) || flag1 && pAspect > 0 || pRecommended && resolution.recommended && !nearestInternal.recommended) && (nearestInternal == null || pAspect < 0.0 || flag1 | flag2 && (resolution.recommended || !pRecommended)))
                     nearestInternal = resolution;
             }
             return nearestInternal;

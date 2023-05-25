@@ -39,11 +39,11 @@ namespace DuckGame
             _image.frame = _frame;
             _image.depth = _depth;
             _image.xscale = _image.yscale = _scale;
-            if (_scale == 1.0)
+            if (_scale == 1f)
                 _image.color = new Color(0.8f, 0.8f, 0.8f, 1f);
             else
                 _image.color = Color.White * _scale;
-            Graphics.Draw(_image, pos.x + _position.x, (float)(pos.y + _position.y + Math.Sin(_sin) * (_scale * 2.0)));
+            Graphics.Draw(_image, pos.x + _position.x, (float)(pos.y + _position.y + Math.Sin(_sin) * (_scale * 2f)));
             _sin += 0.01f;
         }
     }

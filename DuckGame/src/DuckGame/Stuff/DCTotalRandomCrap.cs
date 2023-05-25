@@ -33,7 +33,7 @@ namespace DuckGame
                 {
                     PhysicsObject randomItem = ItemBoxRandom.GetRandomItem();
                     randomItem.position = c.position;
-                    randomItem.hSpeed = (float)((index / 7f) * 30.0 - 15.0) * Rando.Float(0.5f, 1f);
+                    randomItem.hSpeed = (float)((index / 7f) * 30 - 15) * Rando.Float(0.5f, 1f);
                     randomItem.vSpeed = Rando.Float(-10f, 10f);
                     Level.Add(randomItem);
                 }

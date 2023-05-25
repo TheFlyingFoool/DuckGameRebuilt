@@ -53,7 +53,7 @@ namespace DuckGame
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(x - 8f + Rando.Float(16f), y - 8f + Rando.Float(16f));
-                woodDebris.hSpeed = (float)((Rando.Float(1f) > 0.5 ? 1.0 : -1.0) * Rando.Float(3f) + Math.Sign(vec2.x) * 0.5);
+                woodDebris.hSpeed = (float)((Rando.Float(1f) > 0.5f ? 1 : -1) * Rando.Float(3f) + Math.Sign(vec2.x) * 0.5f);
                 woodDebris.vSpeed = -Rando.Float(1f);
                 Level.Add(woodDebris);
             }
@@ -96,7 +96,7 @@ namespace DuckGame
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (_hitPoints <= 0.0)
+            if (_hitPoints <= 0)
                 return base.Hit(bullet, hitPos);
             if (bullet.isLocal && owner == null)
                 Fondle(this, DuckNetwork.localConnection);
@@ -118,7 +118,7 @@ namespace DuckGame
             }
             _hitPoints -= damageMultiplier;
             damageMultiplier += 2f;
-            if (_hitPoints <= 0.0)
+            if (_hitPoints <= 0)
             {
                 if (bullet.isLocal)
                     SuperFondle(this, DuckNetwork.localConnection);

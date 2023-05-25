@@ -40,23 +40,23 @@ namespace DuckGame
                 yscale -= 0.015f;
                 y += 0.13f;
             }
-            if (yscale < 0.0)
+            if (yscale < 0)
                 Level.Remove(this);
             base.Update();
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (!kill && (with.impactPowerV > 2.0 || with.impactPowerH > 2.0))
+            if (!kill && (with.impactPowerV > 2 || with.impactPowerH > 2))
             {
                 clip.Add(with);
                 float num1 = with.impactPowerV;
                 float num2 = -with.impactDirectionH;
-                if (num1 > 6.0)
+                if (num1 > 6)
                     num1 = 6f;
-                if (num2 > 6.0)
+                if (num2 > 6)
                     num2 = 6f;
-                if (num1 < 2.0)
+                if (num1 < 2)
                     num1 = 2f;
                 for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 20; ++index)
                 {

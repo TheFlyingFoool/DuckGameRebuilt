@@ -216,7 +216,7 @@ namespace DuckGame
                 CalculateBounds();
                 _initialized = true;
                 if (_centeredView)
-                    camera.centerY -= (float)(((Graphics.aspect * camera.width) - (9f / 16f * camera.width)) / 2.0);
+                    camera.centerY -= (float)(((Graphics.aspect * camera.width) - (9f / 16f * camera.width)) / 2);
                 if (!VirtualTransition.active)
                     StaticRenderer.Update();
                 foreach (BlockGroup block in _things[typeof(BlockGroup)])
@@ -581,7 +581,7 @@ namespace DuckGame
                 _bottomRight = new Vec2(-99999f, -99999f);
                 foreach (Block block in _things[typeof(Block)])
                 {
-                    if (!(block is RockWall) && block.y <= 7500.0)
+                    if (!(block is RockWall) && block.y <= 7500)
                     {
                         if (block.right > _bottomRight.x)
                             _bottomRight.x = block.right;
@@ -595,7 +595,7 @@ namespace DuckGame
                 }
                 foreach (AutoPlatform autoPlatform in _things[typeof(AutoPlatform)])
                 {
-                    if (autoPlatform.y <= 7500.0)
+                    if (autoPlatform.y <= 7500)
                     {
                         if (autoPlatform.right > _bottomRight.x)
                             _bottomRight.x = autoPlatform.right;
@@ -642,14 +642,14 @@ namespace DuckGame
             {
                 Level currentLevel = _core.currentLevel;
                 _core.currentLevel = this;
-                if (Graphics.flashAdd > 0.0)
+                if (Graphics.flashAdd > 0)
                     Graphics.flashAdd -= flashDissipationSpeed;
                 else
                     Graphics.flashAdd = 0f;
                 if (_levelStart)
                 {
                     Graphics.fade = Lerp.Float(Graphics.fade, 1f, 0.05f);
-                    if (Graphics.fade == 1.0)
+                    if (Graphics.fade == 1)
                         _levelStart = false;
                 }
                 if (_core.nextLevel == null && initializeFunctionHasBeenRun && levelMessages.Count > 0)
@@ -860,8 +860,8 @@ namespace DuckGame
         {
             if (l != Layer.HUD || !_centeredView)
                 return;
-            float num = (float)(Resolution.size.x * Graphics.aspect - Resolution.size.x * (9.0 / 16.0));
-            if (num <= 0.0)
+            float num = (float)(Resolution.size.x * Graphics.aspect - Resolution.size.x * (9f / 16f)); //for the love of jod keep the "f" on these otherwise reality breaks -NiK0
+            if (num <= 0)
                 return;
             Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
             Graphics.DrawRect(Vec2.Zero, new Vec2(Resolution.size.x, num / 2f), Color.Black, (Depth)0.9f);
@@ -905,13 +905,13 @@ namespace DuckGame
             }
             else if (layer == Layer.Foreground)
             {
-                if (layer.fade <= 0.0)
+                if (layer.fade <= 0)
                     return;
                 HUD.DrawForeground();
             }
             else if (layer == Layer.HUD)
             {
-                if (layer.fade <= 0.0)
+                if (layer.fade <= 0)
                     return;
                 Vote.Draw();
                 HUD.Draw();
@@ -1985,7 +1985,7 @@ namespace DuckGame
                 TravelInfo travelInfo = travelInfoStack.Pop();
                 if (current.CollisionLine<T>(travelInfo.p1, travelInfo.p2) != null)
                 {
-                    if (travelInfo.length < 8.0)
+                    if (travelInfo.length < 8)
                     {
                         T obj = Raycast<T>(travelInfo.p1, dir, travelInfo.length, out hitPos);
                         if (obj != null)
@@ -2017,7 +2017,7 @@ namespace DuckGame
                 TravelInfo travelInfo = travelInfoStack.Pop();
                 if (current.CollisionLine<T>(travelInfo.p1, travelInfo.p2, ignore) != null)
                 {
-                    if (travelInfo.length < 8.0)
+                    if (travelInfo.length < 8)
                     {
                         T obj = Raycast<T>(travelInfo.p1, dir, ignore, travelInfo.length, out hitPos);
                         if (obj != null)

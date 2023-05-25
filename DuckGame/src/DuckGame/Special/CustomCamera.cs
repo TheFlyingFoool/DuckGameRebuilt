@@ -37,7 +37,7 @@ namespace DuckGame
                 return;
             float num1 = wide.value;
             float num2 = num1 * (9f / 16f);
-            Graphics.DrawRect(position + new Vec2((float)(-num1 / 2.0), (float)(-num2 / 2.0)), position + new Vec2(num1 / 2f, num2 / 2f), Color.Blue * 0.5f, (Depth)1f, false);
+            Graphics.DrawRect(position + new Vec2((float)(-num1 / 2f), (float)(-num2 / 2f)), position + new Vec2(num1 / 2f, num2 / 2f), Color.Blue * 0.5f, (Depth)1f, false);
         }
     }
 }
