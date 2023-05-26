@@ -922,7 +922,8 @@ namespace DuckGame
             AddLoadingAction(DuckGame.Content.InitializeLevels, "Content InitializeLevels");
             AddLoadingAction(DuckGame.Content.InitializeEffects, "Content InitializeEffects");
             AddLoadingAction(Input.InitializeGraphics, "Input InitializeGraphics");
-            AddLoadingAction(Music.Initialize, "Music Initialize");
+            if (DGRSettings.LoadMusic) AddLoadingAction(Music.Initialize, "Music Initialize");
+            DGRSettings.LoaderMusic = DGRSettings.LoadMusic;
             AddLoadingAction(DevConsole.InitializeFont, "DevConsole InitializeFont");
             AddLoadingAction(DevConsole.InitializeCommands, "DevConsole InitializeCommands");
             AddLoadingAction(Editor.InitializePlaceableGroup, "Editor InitializePlaceableGroup");

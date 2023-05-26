@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Policy;
 
 namespace DuckGame
 {
@@ -26,10 +27,15 @@ namespace DuckGame
         public static bool skipOnlineBumper = false;
 
         [AutoConfigField]
+        public static bool LoadMusic = true;
+        public static bool LoaderMusic;//this is so you wont crash immediately when changing the setting, this only gets set on startup -NiK0
+
+        [AutoConfigField]
         public static string PreferredLevel = "";
 
         [AutoConfigField]
         public static bool PreloadLevels;
+
 
         [AutoConfigField]
         public static bool SpriteAtlas = true;

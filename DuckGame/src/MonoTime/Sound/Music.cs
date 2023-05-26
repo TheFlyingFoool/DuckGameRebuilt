@@ -95,6 +95,8 @@ namespace DuckGame
 
         public static string RandomTrack(string folder, string ignore = "")
         {
+            if (!DGRSettings.LoaderMusic) return "";
+
             if (DevConsole.rhythmMode)
                 return "InGame/comic.ogg";
             string[] strArray = _songList;
@@ -170,6 +172,8 @@ namespace DuckGame
 
         public static string FindSong(string song)
         {
+            if (!DGRSettings.LoaderMusic) return "";
+
             foreach (string song1 in _songList)
             {
                 string withoutExtension = Path.GetFileNameWithoutExtension(song1);
@@ -193,6 +197,7 @@ namespace DuckGame
 
         public static bool Load(string music, bool looping = true, float crossFadeTime = 0f)
         {
+            if (!DGRSettings.LoaderMusic) return false;
             _currentSong = music;
             _musicPlayer.Stop();
             if (!music.Contains(":"))
@@ -233,9 +238,15 @@ namespace DuckGame
             return true;
         }
 
-        public static void PlayLoaded() => _musicPlayer.Play();
+        public static void PlayLoaded()
+        {
+            if (DGRSettings.LoaderMusic) _musicPlayer.Play();
+        }
 
-        public static void CancelLooping() => _musicPlayer.IsLooped = false;
+        public static void CancelLooping()
+        {
+            if (DGRSettings.LoaderMusic) _musicPlayer.IsLooped = false;
+        }
 
         public static void LoadAlternateSong(string music, bool looping = true, float crossFadeTime = 0f)
         {
@@ -256,12 +267,19 @@ namespace DuckGame
             _pendingSong = null;
         }
 
-        public static void Pause() => _musicPlayer.Pause();
+        public static void Pause()
+        {
+            if (DGRSettings.LoaderMusic) _musicPlayer.Pause();
+        }
 
-        public static void Resume() => _musicPlayer.Resume();
+        public static void Resume()
+        {
+            if (DGRSettings.LoaderMusic) _musicPlayer.Resume();
+        }
 
         public static void Stop()
         {
+            if (!DGRSettings.LoaderMusic) return;
             _musicPlayer.Stop();
             _currentSong = "";
         }

@@ -508,6 +508,10 @@ namespace DuckGame
             {
                 dgrDescription = "Loads custom levels on startup instead of when the level folder is opened\n(Will increase load times)"
             }, true);
+            menu.Add(new UIMenuItemToggle("Load music", field: new FieldBinding(dGRSettings, "LoadMusic"))
+            {
+                dgrDescription = "If this is disabled music wont load resulting in faster load times\n(Requires restart)"
+            }, true);
 
             menu.Add(new UIText(" ", Color.White), true);
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true), true);
