@@ -75,7 +75,7 @@ namespace DuckGame
 
         public static TimeSpan position => new TimeSpan(0, 0, 0, 0, (int)(_musicPlayer.Platform_GetProgress() * _musicPlayer.Platform_GetLengthInMilliseconds()));
 
-        public static bool finished => _musicPlayer.State == SoundState.Stopped;
+        public static bool finished => DGRSettings.LoaderMusic && _musicPlayer.State == SoundState.Stopped;
 
         public static void Initialize()
         {
