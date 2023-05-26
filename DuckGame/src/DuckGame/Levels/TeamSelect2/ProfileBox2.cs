@@ -640,7 +640,7 @@ namespace DuckGame
             {
                 _currentMessage = 0;
                 Vec2 vec2 = _duck.position - _consolePos;
-                bool flag2 = vec2.length < 2f;
+                bool flag2 = vec2.length < 20f;
                 _consoleFade = Lerp.Float(_consoleFade, flag2 ? 1f : 0f, 0.1f);
                 if (_teamSelect != null & flag2)
                 {

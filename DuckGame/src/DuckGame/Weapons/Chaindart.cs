@@ -202,7 +202,7 @@ namespace DuckGame
                 else
                     _spin = 0f;
                 spinAmount += _spin;
-                barrelInsertOffset = new Vec2(0f, (float)(2 + Math.Sin(spinAmount / 9f * 3.14f) * 2f));
+                barrelInsertOffset = new Vec2(0f, (float)(2f + Math.Sin(spinAmount / 9f * 3.14f) * 2f));
             }
             base.Update();
             if (_topBullet == null)
@@ -216,9 +216,11 @@ namespace DuckGame
         public override void Fire()
         {
             if (burnt >= 1f || burntOut)
-                SFX.Play("dartStick", 0.5f, Rando.Float(0.2f) - 0.1f);
-            else
-                base.Fire();
+            {
+                SFX.Play("dartStick", 0.5f, -0.1f + Rando.Float(0.2f), 0f, false);
+                return;
+            }
+            base.Fire();
         }
 
         protected override bool OnBurn(Vec2 firePosition, Thing litBy)

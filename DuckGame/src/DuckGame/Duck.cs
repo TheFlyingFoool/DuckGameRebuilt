@@ -1342,7 +1342,7 @@ namespace DuckGame
                             if (weaponThing is PhysicsObject)
                             {
                                 double totalSeconds = (DateTime.Now - (weaponThing as PhysicsObject).lastGrounded).TotalSeconds;
-                                yourCoolness += 1 + (int)Math.Floor((DateTime.Now - (weaponThing as PhysicsObject).lastGrounded).TotalSeconds * 6);
+                                yourCoolness += 1 + (int)Math.Floor((DateTime.Now - (weaponThing as PhysicsObject).lastGrounded).TotalSeconds * 6f);
                                 if (Recorder.currentRecording != null)
                                 {
                                     Recorder.currentRecording.LogAction(14);

@@ -507,7 +507,7 @@ namespace DuckGame
                                 Vec2 vec2 = Offset(barrelOffset);
                                 Dart dart = new Dart(vec2.x, vec2.y, owner as Duck, -angle);
                                 Fondle(dart);
-                                if (onFire || _barrelHeat > 6)
+                                if (onFire || _barrelHeat > 6f)
                                 {
                                     Level.Add(SmallFire.New(0f, 0f, 0f, 0f, stick: dart, firedFrom: this));
                                     dart.burning = true;
