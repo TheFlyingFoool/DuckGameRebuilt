@@ -67,6 +67,7 @@ namespace DuckGame
                     Hat hat = new TeamHat(0f, 0f, t, d.profile);
                     Level.Add(hat);
                     d.Equip(hat, false);
+                    d.profile.team = t;
                     if (equipment != null) Level.Remove(equipment);
                 }
             }
