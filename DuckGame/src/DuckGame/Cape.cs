@@ -28,6 +28,10 @@ namespace DuckGame
             Vec2 attachOffset = Vec2.Zero;
             if (_attach != null)
             {
+                //this is needed because otherwise capes will just stay at the point they were spawned into
+                //its usually not an issue but graphics culling will cull them turning them invisible when they shoudln't be
+                //-NiK0
+                position = _attach.position;
                 attachOffset = _attach.OffsetLocal(metadata.CapeOffset.value);
                 if (_attach.removeFromLevel)
                 {

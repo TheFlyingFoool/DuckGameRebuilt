@@ -35,7 +35,7 @@ namespace DuckGame
 
         public static void Reset() => _recentSongs.Clear();
 
-        public static bool stopped => _musicPlayer.State == SoundState.Stopped || _musicPlayer.State == SoundState.Paused;
+        public static bool stopped => DGRSettings.LoaderMusic && (_musicPlayer.State == SoundState.Stopped || _musicPlayer.State == SoundState.Paused);
 
         public static float volumeMult
         {

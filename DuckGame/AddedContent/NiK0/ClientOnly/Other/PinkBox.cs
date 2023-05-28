@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using NAudio.Gui;
 
 namespace DuckGame
 {
@@ -35,11 +36,11 @@ namespace DuckGame
             {
                 SuperFondle(this, DuckNetwork.localConnection);
                 _hit = true;
-                D = duck;
+                d = duck;
                 lD = duck;
             }
         }
-        public Duck D;
+        public Duck d;
         public Duck lD;
         public void Bounce()
         {
@@ -80,11 +81,11 @@ namespace DuckGame
         public SinWave SIN = new SinWave(0.1f);
         public override void Draw()
         {
-            if (D != null)
+            if (d != null)
             {
-                if (D.team.hasHat)
+                if (d.team.hasHat)
                 {
-                    SpriteMap spr = D.team.hat;
+                    SpriteMap spr = d.team.hat;
                     float prev = spr.alpha;
                     spr.alpha = 0.5f;
                     Graphics.Draw(spr, x, top - 16, 1);
@@ -92,10 +93,10 @@ namespace DuckGame
                 }
                 else
                 {
-                    SpriteMap spr = D.persona.defaultHead;
+                    SpriteMap spr = d.persona.defaultHead;
                     float prev = spr.alpha;
                     spr.alpha = 0.5f;
-                    spr.frame = D.quack > 0 ? 1 : 0;
+                    spr.frame = d.quack > 0 ? 1 : 0;
                     Graphics.Draw(spr, x - 2, top - 16 + SIN * 3, 1);
                     spr.alpha = prev;
                 }
@@ -104,7 +105,7 @@ namespace DuckGame
         }
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (from == ImpactedFrom.Bottom && with.isServerForObject && D == null)
+            if (from == ImpactedFrom.Bottom && with.isServerForObject && d == null)
             {
                 Holdable h = with as Holdable;
                 if (h != null && (h.lastThrownBy != null || (h is RagdollPart && !Network.isActive)))
@@ -165,27 +166,65 @@ namespace DuckGame
         public bool collision;
         public override void Update()
         {
-            if (D != null && isServerForObject)
+            if (d != null && isServerForObject)
             {
                 Fondle(this);
                 //Failsafe for if multiple people happen to hit the box it explodes
-                if (D != lD && !collision)
+                if (d != lD && !collision)
                 {
                     collision = true;
                     Send.Message(new NMPinkCollision(this));
                 }
-                if (D.dead)
+                if (d.dead)
                 {
                     Fondle(this);
-                    UnstoppableFondle(D, DuckNetwork.localConnection);
-                    D.position = position;
-                    D.Ressurect();
-                    D.dead = false;
-                    D.position = position;
-                    UnstoppableFondle(D, DuckNetwork.localConnection);
+                    UnstoppableFondle(d, DuckNetwork.localConnection);
+                    d.Ressurect();
+                    if (d._cooked != null) d.position = position;
+                    if (d.onFire)
+                    {
+                        d.onFire = false;
+                        d.moveLock = false;
+                        d.dead = false;
+                    }
+                    d.dead = false;
+                    d.ResetNonServerDeathState();
+                    d.Regenerate();
+                    d.crouch = false;
+                    d.sliding = false;
+                    d.burnt = 0f;
+                    d.hSpeed = 0f;
+                    d.vSpeed = 0f;
+                    if (d.ragdoll != null)
+                    {
+                        d.ragdoll.Unragdoll();
+                    }
+                    if (d._trapped != null)
+                    {
+                        d._trapped.position = position;
+                        d._trapped._trapTime = 0;
+                    }
+                    d.position = position;
+                    if (d._ragdollInstance != null)
+                    {
+                        if (d._ragdollInstance.removeFromLevel)
+                        {
+                            d._ragdollInstance = new Ragdoll(d.x, d.y - 9999, d, false, 0, 0, Vec2.Zero);
+                            d._ragdollInstance.npi = d.netProfileIndex;
+                            d._ragdollInstance.RunInit();
+                            d._ragdollInstance.active = false;
+                            d._ragdollInstance.visible = false;
+                            d._ragdollInstance.authority = 80;
+                            Level.Add(d._ragdollInstance);
+                            Fondle(d._ragdollInstance);
+                        }
+                    }
+                    d.position = position;
+                    d.visible = true;
+                    UnstoppableFondle(d, DuckNetwork.localConnection);
                     Explode();
                 }
-                lD = D;
+                lD = d;
             }
             _aboveList.Clear();
             if (startY < -9999f)

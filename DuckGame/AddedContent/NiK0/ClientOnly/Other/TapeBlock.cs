@@ -53,6 +53,8 @@
                 alpha = 0.7f,
                 depth = (Depth)0.91f
             };
+            _editorName = "Tape Box";
+            editorTooltip = "Put 2 and 2 together and you might end with a weapon of mass destruction! or a bomb.";
         }
         public override void Update()
         {
