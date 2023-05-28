@@ -71,6 +71,9 @@ namespace DuckGame
                     if (equipment != null) Level.Remove(equipment);
                 }
             }
+
+            d.profile.persona = Persona.alllist[RoomEditorExtra.arcadeDuckColor];
+            
             _profile = d.profile;
             _duck = d;
             Level.Add(_profileBox);

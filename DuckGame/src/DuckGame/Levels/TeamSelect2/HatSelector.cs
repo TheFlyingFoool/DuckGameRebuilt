@@ -330,6 +330,9 @@ namespace DuckGame
                 }
                 Send.Message(new NMSetTeam(_box.duck.profile, team, _teamWasCustomHat));
             }
+
+            RoomEditorExtra.arcadeDuckColor = _profile.persona.index;
+            
             if (team.hasHat)
             {
                 if (_box.duck != null)
