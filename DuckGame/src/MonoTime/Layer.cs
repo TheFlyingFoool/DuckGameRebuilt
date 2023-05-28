@@ -177,7 +177,7 @@ namespace DuckGame
             set => _blurEffect = value;
         }
 
-        public float barSize => (float)((camera.width * Graphics.aspect - camera.width * (9 / 16)) / 2);
+        public float barSize => (float)((camera.width * Graphics.aspect - camera.width * (9f / 16f)) / 2f); //keep the f's here otherwise reality breaks -NiK0
 
         public Matrix projection { get; set; }
 

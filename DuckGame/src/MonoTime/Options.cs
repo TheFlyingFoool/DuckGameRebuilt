@@ -451,6 +451,15 @@ namespace DuckGame
                 dgrDescription = "Shows the percentage of maps and the list of people in the lobby if host uses Rebuilt",
             });
 
+            if (Program.IS_DEV_BUILD)
+            {
+                menu.Add(new UIText(" ", Color.White), true);
+                menu.Add(new UIMenuItemToggle("|PINK|No Level Restrictions", field: new FieldBinding(dGRSettings, "IgnoreLevRestrictions"))
+                {
+                    dgrDescription = "When enabled, you'll be able to turn on any custom level on an online match"
+                }, true);
+            }
+
             menu.Add(new UIText(" ", Color.White), true);
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true), true);
             return menu;

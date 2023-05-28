@@ -28,7 +28,7 @@
             collisionSize = new Vec2(32, 16);
             _collisionOffset = new Vec2(-16, -8);
 
-            _scanner = new Sprite("purpleScanner")
+            _scanner = new Sprite("tapeScanner")
             {
                 center = new Vec2(4f, 1f),
                 xscale = 1.5f,
@@ -142,6 +142,7 @@
                     leftStore.x = x + _double * 2f - 10;
                     leftStore.y = y - 16f - num;
                     leftStore.Draw();
+                    leftStore.position = new Vec2(-2000);
                     Graphics.material = material;
                     Duck.renderingIcon = false;
                 }
@@ -161,6 +162,7 @@
                 leftStore.x = x - 10;
                 leftStore.y = y - 16f - num;
                 leftStore.Draw();
+                leftStore.position = new Vec2(-2000);
                 Graphics.material = material;
                 Duck.renderingIcon = false;
             }
@@ -181,6 +183,7 @@
                     rightStore.x = x + _double * 2f + 10;
                     rightStore.y = y - 16f - num;
                     rightStore.Draw();
+                    rightStore.position = new Vec2(-2000);
                     Graphics.material = material;
                     Duck.renderingIcon = false;
                 }
@@ -200,6 +203,7 @@
                 rightStore.x = x + 10;
                 rightStore.y = y - 16f - num;
                 rightStore.Draw();
+                rightStore.position = new Vec2(-2000);
                 Graphics.material = material;
                 Duck.renderingIcon = false;
             }
@@ -265,6 +269,7 @@
         }
         public override PhysicsObject GetSpawnItem()
         {
+            if (leftStore == null || rightStore == null) return null;
             TapedGun tp = new TapedGun(0, 0);
 
             //this is not a great way to do it but idc
@@ -280,7 +285,6 @@
                 return;
             if (leftStore != null && rightStore != null)
             {
-                containContext = GetSpawnItem();
                 Pop();
             }
             else

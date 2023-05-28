@@ -116,7 +116,7 @@ namespace DuckGame
         {
             if (!(activeNetwork._lastReceivedTime < pTime))
                 return;
-            activeNetwork._synchronizedTime = pTime + (ushort)(host.manager.ping / 2 / Maths.IncFrameTimer());
+            activeNetwork._synchronizedTime = pTime + (ushort)(host.manager.ping / 2f / Maths.IncFrameTimer());
             activeNetwork._lastReceivedTime = pTime;
         }
 

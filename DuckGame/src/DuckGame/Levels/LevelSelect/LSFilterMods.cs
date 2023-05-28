@@ -27,6 +27,7 @@ namespace DuckGame
 
         public bool Filter(string lev, LevelLocation location = LevelLocation.Any)
         {
+            if (DGRSettings.IgnoreLevRestrictions) return true;
             try
             {
                 Dictionary<bool, bool> dictionary = null;

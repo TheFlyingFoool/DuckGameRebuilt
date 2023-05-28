@@ -291,6 +291,7 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigRagdollPart.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigRagdoll.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigTrapped.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\ReDemoBlaster.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\TapeBlock.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATDeathCaliber.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATWumpMagnum.cs" />

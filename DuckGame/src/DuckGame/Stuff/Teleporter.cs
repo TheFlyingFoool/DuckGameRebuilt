@@ -373,7 +373,7 @@ namespace DuckGame
                     _arrow.angleDegrees = -90f;
                 else if (direction == 3)
                     _arrow.angleDegrees = 90f;
-                Graphics.Draw(_arrow, (float)(x - 8 + (int)teleHeight * 16 / 2 + (float)_float * 2), y);
+                Graphics.Draw(_arrow, (float)(x - 8 + (int)teleHeight * 16f / 2f + (float)_float * 2), y);
             }
             else
             {
@@ -398,7 +398,7 @@ namespace DuckGame
                     _arrow.angleDegrees = -90f;
                 else if (direction == 3)
                     _arrow.angleDegrees = 90f;
-                Graphics.Draw(_arrow, x, (float)(y + 8 - (int)teleHeight * 16 / 2 + (float)_float * 2));
+                Graphics.Draw(_arrow, x, (float)(y + 8f - (int)teleHeight * 16f / 2f + (float)_float * 2f));
             }
         }
 

@@ -24,6 +24,9 @@ namespace DuckGame
             }
         }
         [AutoConfigField]
+        public static bool IgnoreLevRestrictions = false;
+
+        [AutoConfigField]
         public static bool skipOnlineBumper = false;
 
         [AutoConfigField]
