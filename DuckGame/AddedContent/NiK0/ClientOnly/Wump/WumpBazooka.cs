@@ -1,7 +1,9 @@
 ﻿namespace DuckGame
 {
     [ClientOnly]
-    //[EditorGroup("Rebuilt|Wump|Explosives")]
+#if DEBUG
+    [EditorGroup("Rebuilt|Wump|Explosives")]
+#endif
     public class WumpBazooka : TampingWeapon
     {
         public WumpBazooka(float xval, float yval)

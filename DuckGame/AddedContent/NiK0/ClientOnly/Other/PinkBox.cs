@@ -5,7 +5,9 @@ using System.Collections.Generic;
 namespace DuckGame
 {
     [ClientOnly]
-    //[EditorGroup("Rebuilt|Stuff")]
+#if DEBUG
+    [EditorGroup("Rebuilt|Stuff")]
+#endif
     public class PinkBox : Block
     {
         public bool canBounce
@@ -286,7 +288,7 @@ namespace DuckGame
                 }
             }
         }
-        public StateBinding _DBinding = new StateBinding("D");
+        public StateBinding _DBinding = new StateBinding("d");
         public StateBinding _positionBinding = new StateBinding("position", -1, false, false);
         public StateBinding _hitBinding = new StateBinding("_hit");
         public StateBinding _netDisarmIndexBinding = new StateBinding("netDisarmIndex", -1, false, false);

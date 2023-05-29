@@ -1,14 +1,9 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Magnum
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [ClientOnly]
-    //[EditorGroup("Rebuilt|Wump|Pistols")]
+#if DEBUG
+    [EditorGroup("Rebuilt|Wump|Pistols")]
+#endif
     public class WumpMagnum : Gun
     {
         public StateBinding _angleOffsetBinding = new StateBinding(nameof(_angleOffset));

@@ -7,7 +7,9 @@ using Microsoft.Xna.Framework.Graphics;
 namespace DuckGame
 {
     [ClientOnly]
-    //[EditorGroup("Rebuilt|Stuff")]
+#if DEBUG
+    [EditorGroup("Rebuilt|Stuff")]
+#endif
     public class TheDishes : Holdable
     {
         public Sprite dirty;

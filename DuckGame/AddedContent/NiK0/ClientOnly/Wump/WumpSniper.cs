@@ -1,7 +1,9 @@
 ﻿namespace DuckGame
 {
     [ClientOnly]
-    //[EditorGroup("Rebuilt|Wump|Rifles")]
+#if DEBUG
+    [EditorGroup("Rebuilt|Wump|Rifles")]
+#endif
     public class WumpSniper : Gun
     {
         public WumpSniper(float xval, float yval) : base(xval, yval)
