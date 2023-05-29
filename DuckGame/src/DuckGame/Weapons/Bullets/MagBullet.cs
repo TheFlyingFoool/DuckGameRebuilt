@@ -75,10 +75,13 @@ namespace DuckGame
         {
             if (!destroyed)
                 return;
-            ExplosionPart explosionPart = new ExplosionPart(x, y);
-            explosionPart.xscale *= 0.7f;
-            explosionPart.yscale *= 0.7f;
-            Level.Add(explosionPart);
+            if (DGRSettings.ActualParticleMultiplier > 0)
+            {
+                ExplosionPart explosionPart = new ExplosionPart(x, y);
+                explosionPart.xscale *= 0.7f;
+                explosionPart.yscale *= 0.7f;
+                Level.Add(explosionPart);
+            }
             SFX.Play("magPop", 0.7f, Rando.Float(-0.5f, -0.3f));
             if (!isLocal)
                 return;

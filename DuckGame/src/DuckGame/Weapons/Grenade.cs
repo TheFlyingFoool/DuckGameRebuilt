@@ -173,12 +173,15 @@ namespace DuckGame
             if (!_pin)
                 return;
             _pin = false;
-            GrenadePin grenadePin = new GrenadePin(x, y)
+            for (float i = 0; i < DGRSettings.ActualParticleMultiplier; i++)
             {
-                hSpeed = -offDir * (1.5f + Rando.Float(0.5f)),
-                vSpeed = -2f
-            };
-            Level.Add(grenadePin);
+                GrenadePin grenadePin = new GrenadePin(x, y)
+                {
+                    hSpeed = -offDir * (1.5f + Rando.Float(0.5f)),
+                    vSpeed = -2f
+                };
+                Level.Add(grenadePin);
+            }
             if (duck != null)
                 RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(_fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));
             SFX.Play("pullPin");

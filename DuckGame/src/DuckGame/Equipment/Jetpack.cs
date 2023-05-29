@@ -81,7 +81,7 @@ namespace DuckGame
                         float angle = this.angle;
                         this.angle = propel.angle;
                         Vec2 offset = Offset(new Vec2(0f, 8f));
-                        Level.Add(new JetpackSmoke(offset.x, offset.y));
+                        for (float i = 0; i < DGRSettings.ActualParticleMultiplier; i++) Level.Add(new JetpackSmoke(offset.x, offset.y));
                         this.angle = angle;
                         if (propel.velocity.length < 7f)
                         {
@@ -120,7 +120,7 @@ namespace DuckGame
                     }
                     else
                     {
-                        Level.Add(new JetpackSmoke(x, y + 8f + smokeOff));
+                        for (float i = 0; i < DGRSettings.ActualParticleMultiplier; i++) Level.Add(new JetpackSmoke(x, y + 8f + smokeOff));
                         if (angle > 0f)
                         {
                             if (propel.hSpeed < 6f)

@@ -600,7 +600,7 @@ namespace DuckGame
                 {
                     if (!doFloat && this.vSpeed > 1f)
                     {
-                        Level.Add(new WaterSplash(x, num5 - 3f, _curFluid));
+                        if (DGRSettings.ActualParticleMultiplier > 0) Level.Add(new WaterSplash(x, num5 - 3f, _curFluid));
                         SFX.Play("largeSplash", Rando.Float(0.6f, 0.7f), Rando.Float(-0.7f, -0.2f));
                     }
                     doFloat = true;

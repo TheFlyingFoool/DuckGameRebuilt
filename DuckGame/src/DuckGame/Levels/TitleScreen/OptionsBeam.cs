@@ -47,7 +47,7 @@ namespace DuckGame
         {
             _selectBeam.color = new Color(0.5f, (float)(0.2f + _wave2.normalized * 0.2f), (float)(0.3f + _wave.normalized * 0.3f)) * (1f + _flash);
             _flash = Maths.CountDown(_flash, 0.1f);
-            _spawnWait -= 0.025f;
+            _spawnWait -= 0.025f * DGRSettings.ActualParticleMultiplier;
             if (_spawnWait < 0f)
             {
                 Level.Add(new MultiBeamParticle(x, y + 190f, -0.8f - _wave.normalized, false, Color.Cyan * 0.8f));

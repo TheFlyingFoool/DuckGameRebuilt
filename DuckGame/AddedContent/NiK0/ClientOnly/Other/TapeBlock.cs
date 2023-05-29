@@ -28,6 +28,8 @@
             collisionSize = new Vec2(32, 16);
             _collisionOffset = new Vec2(-16, -8);
 
+            editorOffset = new Vec2(8, 0);
+
             _scanner = new Sprite("tapeScanner")
             {
                 center = new Vec2(4f, 1f),
@@ -53,7 +55,7 @@
                 alpha = 0.7f,
                 depth = (Depth)0.91f
             };
-            _editorName = "Tape Box";
+            _editorName = "Tape Block";
             editorTooltip = "Put 2 and 2 together and you might end with a weapon of mass destruction! or a bomb.";
         }
         public override void Update()
@@ -275,6 +277,13 @@
             //this is not a great way to do it but idc
             tp.gun1 = (Holdable)LoadThing(leftStore.Serialize());
             tp.gun2 = (Holdable)LoadThing(rightStore.Serialize());
+
+            Holdable tms = tp.gun1.BecomeTapedMonster(tp);
+            if (tms != null)
+            {
+                return tms;
+            }
+
             return tp;
         }
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
@@ -285,6 +294,10 @@
                 return;
             if (leftStore != null && rightStore != null)
             {
+                if (!Network.isActive)
+                {
+                    containContext = GetSpawnItem();
+                }
                 Pop();
             }
             else

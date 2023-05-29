@@ -372,10 +372,13 @@ namespace DuckGame
         {
             if (physicsMaterial == PhysicsMaterial.Metal)
             {
-                Level.Add(MetalRebound.New(hitPos.x, hitPos.y, bullet.travelDirNormalized.x > 0f ? 1 : -1));
-                hitPos -= bullet.travelDirNormalized;
-                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 3; ++index)
-                    Level.Add(Spark.New(hitPos.x, hitPos.y, bullet.travelDirNormalized));
+                if (DGRSettings.ActualParticleMultiplier > 0)
+                {
+                    Level.Add(MetalRebound.New(hitPos.x, hitPos.y, bullet.travelDirNormalized.x > 0f ? 1 : -1));
+                    hitPos -= bullet.travelDirNormalized;
+                    for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 3; ++index)
+                        Level.Add(Spark.New(hitPos.x, hitPos.y, bullet.travelDirNormalized));
+                }
             }
             else if (physicsMaterial == PhysicsMaterial.Wood)
             {

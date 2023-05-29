@@ -177,7 +177,7 @@ namespace DuckGame
             if (!_prevRuined && _ruined)
             {
                 SFX.Play("smallElectronicBreak", 0.8f, Rando.Float(-0.1f, 0.1f));
-                for (int index = 0; index < 8; ++index)
+                for (int index = 0; index < 8f * DGRSettings.ActualParticleMultiplier; ++index)
                     Level.Add(Spark.New(x + Rando.Float(-8f, 8f), y + Rando.Float(-4f, 4f), new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
                 if (isServerForObject && Rando.Int(5) == 0)
                     brokenKey = (byte)(1 + Rando.Int(12));

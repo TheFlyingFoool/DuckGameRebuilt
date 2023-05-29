@@ -195,7 +195,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    int ix = (int)(DGRSettings.ActualParticleMultiplier * 8);
+                    int ix = (int)(8f * DGRSettings.ActualParticleMultiplier);
                     float fr = 32f / ix;
                     for (int index = 0; index < ix; ++index)
                     {
@@ -264,8 +264,11 @@ namespace DuckGame
                 vec2.y = bottom;
             _hits.Add(vec2);
             exitPos += bullet.travelDirNormalized;
-            for (int index = 0; index < 1.0f + damageMultiplier / 2.0f; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++index)
+            {
                 Level.Add(new GlassParticle(exitPos.x, exitPos.y, -bullet.travelDirNormalized, tint.value));
+                if (index > 32) break;
+            }
         }
 
         public void Shake()

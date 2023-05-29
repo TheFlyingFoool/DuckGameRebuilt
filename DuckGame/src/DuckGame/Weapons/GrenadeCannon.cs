@@ -70,12 +70,18 @@ namespace DuckGame
             base.Update();
             if (_doLoad && _sprite.finished)
             {
-                GrenadePin grenadePin = new GrenadePin(x, y)
+                if (DGRSettings.ActualParticleMultiplier > 0)
                 {
-                    hSpeed = -offDir * (1.5f + Rando.Float(0.5f)),
-                    vSpeed = -2f
-                };
-                Level.Add(grenadePin);
+                    for (int i = 0; i < Maths.Clamp(DGRSettings.ActualParticleMultiplier, 1, 1000); i++)
+                    {
+                        GrenadePin grenadePin = new GrenadePin(x, y)
+                        {
+                            hSpeed = -offDir * (1.5f + Rando.Float(0.5f)),
+                            vSpeed = -2f
+                        };
+                        Level.Add(grenadePin);
+                    }
+                }
                 SFX.Play("pullPin");
                 _doneLoad = true;
                 _doLoad = false;

@@ -263,9 +263,12 @@ namespace DuckGame
             if (bullet.isLocal && Network.isActive)
                 NetSoundEffect.Play("equipmentTing");
             bullet.hitArmor = true;
-            Level.Add(MetalRebound.New(hitPos.x, hitPos.y, bullet.travelDirNormalized.x > 0 ? 1 : -1));
-            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
-                Level.Add(Spark.New(x, y, bullet.travelDirNormalized));
+            if (DGRSettings.ActualParticleMultiplier > 0)
+            {
+                Level.Add(MetalRebound.New(hitPos.x, hitPos.y, bullet.travelDirNormalized.x > 0 ? 1 : -1));
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
+                    Level.Add(Spark.New(x, y, bullet.travelDirNormalized));
+            }
             return base.Hit(bullet, hitPos);
         }
     }

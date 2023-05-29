@@ -40,7 +40,7 @@ namespace DuckGame
             if (type is DTIncinerate && isServerForObject)
             {
                 SFX.Play("flameExplode");
-                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 3; ++index)
+                for (int index = 0; index < 3f * DGRSettings.ActualParticleMultiplier; ++index)
                     Level.Add(SmallSmoke.New(x + Rando.Float(-2f, 2f), y + Rando.Float(-2f, 2f)));
                 Holdable holdable = SpawnPresent(null);
                 if (holdable != null)
@@ -63,7 +63,7 @@ namespace DuckGame
         public static void OpenEffect(Vec2 pPosition, int pFrame, bool pIsNetMessage)
         {
             Level.Add(new OpenPresent(pPosition.x, pPosition.y, pFrame));
-            for (int index = 0; index < 4; ++index)
+            for (int index = 0; index < 4f * DGRSettings.ActualParticleMultiplier; ++index)
                 Level.Add(SmallSmoke.New(pPosition.x + Rando.Float(-2f, 2f), pPosition.y + Rando.Float(-2f, 2f)));
             SFX.Play("harp", 0.8f);
             if (pIsNetMessage)
