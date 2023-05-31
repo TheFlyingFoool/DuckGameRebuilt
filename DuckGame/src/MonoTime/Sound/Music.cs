@@ -286,7 +286,7 @@ namespace DuckGame
 
         //public static void FadeOut(float duration) => Music._fadeSpeed = duration / 60f;
 
-        //public static void FadeIn(float duration) => Music._fadeSpeed = (float)-(duration / 60.0);
+        //public static void FadeIn(float duration) => Music._fadeSpeed = (float)-(duration / 60f);
 
         private static void SearchDir(string dir)
         {

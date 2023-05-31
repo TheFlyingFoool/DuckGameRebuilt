@@ -76,7 +76,7 @@ namespace DuckGame
         public static bool LineIsClear(Vec2 from, Vec2 to, Thing ignore = null)
         {
             IEnumerable<IPathNodeBlocker> pathNodeBlockers = Level.current.CollisionLineAll<IPathNodeBlocker>(from, to);
-            if (to.y - from.y < -64.0)
+            if (to.y - from.y < -64f)
                 return false;
             bool flag = false;
             foreach (IPathNodeBlocker pathNodeBlocker in pathNodeBlockers)
@@ -131,7 +131,7 @@ namespace DuckGame
             //}
         }
 
-        public static bool CheckTraversalLimits(Vec2 from, Vec2 to) => from.y - to.y <= 64.0 && Math.Abs(from.x - to.x) <= 128.0 && (from.y - to.y <= 8.0 || Math.Abs(from.x - to.x) <= 64.0);
+        public static bool CheckTraversalLimits(Vec2 from, Vec2 to) => from.y - to.y <= 64f && Math.Abs(from.x - to.x) <= 128f && (from.y - to.y <= 8f || Math.Abs(from.x - to.x) <= 64f);
 
         public static bool CanTraverse(Vec2 from, Vec2 to, Thing ignore) => CheckTraversalLimits(from, to) && !PathPhysicallyBlocked(from, to, ignore);
 
@@ -205,7 +205,7 @@ namespace DuckGame
                         link = to,
                         distance = (to.position - position).length
                     };
-                    if (Math.Abs(y - to.y) < 8.0)
+                    if (Math.Abs(y - to.y) < 8f)
                     {
                         Vec2 p1 = (position + to.position) / 2f;
                         if (Level.CheckLine<IPathNodeBlocker>(p1, p1 + new Vec2(0f, 18f)) == null)
@@ -235,7 +235,7 @@ namespace DuckGame
         {
             float num1 = who.x - parent.x;
             float num2 = who.y - parent.y;
-            if (parent.y > who.y && Math.Abs(num2) > 48.0)
+            if (parent.y > who.y && Math.Abs(num2) > 48f)
                 num2 *= 100f;
             float num3 = num2 * 2f;
             return parent.cost + (float)(num1 * num1 + num3 * num3);

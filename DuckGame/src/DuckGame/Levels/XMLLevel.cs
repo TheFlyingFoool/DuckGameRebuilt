@@ -313,7 +313,7 @@ namespace DuckGame
             if (!bareInitialize && !isPreview)
                 GhostManager.context.ResetGhostIndex(networkIndex);
             Thing.loadingLevel = _data;
-            int version = _data.metaData.version;
+            //int version = _data.metaData.version; useless code -NiK0
             onlineEnabled = _data.metaData.online;
             bool flag = true;
             int num = 0;

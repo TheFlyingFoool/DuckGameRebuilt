@@ -160,18 +160,18 @@ namespace DuckGame
         public override void Start()
         {
             _things.RefreshState();
-            Vec2 vec2_1 = new Vec2(9999f, -9999f);
-            Vec2 zero = Vec2.Zero;
-            int num = 0;
+            //Vec2 vec2_1 = new Vec2(9999f, -9999f);
+            //Vec2 zero = Vec2.Zero; why does this code just exist -NiK0
+            //int num = 0;
             foreach (Duck t in things[typeof(Duck)])
             {
                 followCam.Add(t);
-                if (t.x < vec2_1.x)
-                    vec2_1 = t.position;
-                zero += t.position;
-                ++num;
+                //if (t.x < vec2_1.x)
+                //    vec2_1 = t.position;
+                //zero += t.position;
+                //++num;
             }
-            Vec2 vec2_2 = zero / num;
+            //Vec2 vec2_2 = zero / num; whys this code the fuck here
             followCam.Adjust();
 
             if (level != "RANDOM" && Rando.Float(1) <= DGRSettings.RandomWeather)
@@ -279,21 +279,21 @@ namespace DuckGame
         protected override void OnTransferComplete(NetworkConnection c)
         {
             current.things.RefreshState();
-            Vec2 vec2_1 = new Vec2(9999f, -9999f);
-            Vec2 zero = Vec2.Zero;
+            //Vec2 vec2_1 = new Vec2(9999f, -9999f);
+            //Vec2 zero = Vec2.Zero;
             int num = 0;
             List<Duck> duckList = new List<Duck>();
             foreach (Duck t in things[typeof(Duck)])
             {
                 t.localSpawnVisible = false;
                 followCam.Add(t);
-                if (t.x < vec2_1.x)
-                    vec2_1 = t.position;
-                zero += t.position;
+                //if (t.x < vec2_1.x)
+                //    vec2_1 = t.position;
+                //zero += t.position;
                 ++num;
                 duckList.Add(t);
             }
-            Vec2 vec2_2 = zero / num;
+            //Vec2 vec2_2 = zero / num; WHY -NiK0
             _numberOfDucksSpawned = num;
             if (_numberOfDucksSpawned > 4)
                 TeamSelect2.eightPlayersActive = true;

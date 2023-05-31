@@ -675,7 +675,7 @@ namespace DuckGame
             get => base.connection;
             set
             {
-                if (Network.isServer && connection != null && connection.status == ConnectionStatus.Disconnected && Network.inGameLevel)
+                if (Network.isServer && connection != null && connection.status == ConnectionStatus.Disconnected && Network.inGameLevel && !Network.isFakeActive)
                     Kill(new DTDisconnect(this));
                 if (_profile != null)
                 {

@@ -44,7 +44,7 @@ namespace DuckGame
             {
                 _avatar.depth = depth + 2;
                 _avatar.scale = new Vec2(0.25f);
-                Graphics.Draw(_avatar, (float)(leftSection.left + _avatar.width * _avatar.scale.x / 2.0 + 6.0), y + 3f);
+                Graphics.Draw(_avatar, (float)(leftSection.left + _avatar.width * _avatar.scale.x / 2f + 6f), y + 3f);
             }
             base.Draw();
         }

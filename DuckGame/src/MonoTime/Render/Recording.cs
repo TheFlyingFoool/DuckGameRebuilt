@@ -118,11 +118,11 @@ namespace DuckGame
 
         public void LogCoolness(int val) => _frames[_frame].coolness = Math.Max((byte)(_frames[_frame].coolness + (uint)(byte)(val * Highlights.highlightRatingMultiplier)), _frames[_frame].coolness);
 
-        public void LogDeath() => _frames[_frame].deaths = Math.Max((byte)(_frames[_frame].deaths + (uint)(byte)(1.0 * Highlights.highlightRatingMultiplier)), _frames[_frame].deaths);
+        public void LogDeath() => _frames[_frame].deaths = Math.Max((byte)(_frames[_frame].deaths + (uint)(byte)(1f * Highlights.highlightRatingMultiplier)), _frames[_frame].deaths);
 
         public void LogAction(int num = 1) => _frames[_frame].actions = Math.Max((byte)(_frames[_frame].actions + (uint)(byte)(num * Highlights.highlightRatingMultiplier)), _frames[_frame].actions);
 
-        public void LogBonus() => _frames[_frame].bonus = Math.Max((byte)(_frames[_frame].bonus + (uint)(byte)(1.0 * Highlights.highlightRatingMultiplier)), _frames[_frame].bonus);
+        public void LogBonus() => _frames[_frame].bonus = Math.Max((byte)(_frames[_frame].bonus + (uint)(byte)(1f * Highlights.highlightRatingMultiplier)), _frames[_frame].bonus);
 
         public void LogBackgroundColor(Color c) => _frames[_frame].backgroundColor = c;
 
@@ -187,7 +187,7 @@ namespace DuckGame
             if (!flag)
                 num1 = 99f;
             f.timeBeforeKill = num1;
-            float num2 = (float)((1.0 - Maths.Clamp(f.timeBeforeKill, 0f, 3f) / 3.0) * 1.0 + 1.0);
+            float num2 = (float)((1.0 - Maths.Clamp(f.timeBeforeKill, 0f, 3f) / 3f) * 1f + 1f);
             f.actions = _frames[fr].actions * (num2 * 0.03f);
             f.deaths = _frames[fr].deaths * num2;
             f.bonus = _frames[fr].bonus * (num2 * 0.08f);

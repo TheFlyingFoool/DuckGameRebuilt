@@ -499,11 +499,8 @@ namespace DuckGame
         private void RebuildProfileList()
         {
             _profiles = Profiles.allCustomProfiles;
-            if (_box.controllerIndex != 0 || !Options.Data.defaultAccountMerged)
-                _profiles.Add(Profiles.universalProfileList.ElementAt(_box.controllerIndex));
-            if (!Network.isActive)
-                return;
-            _profiles.Remove(Profiles.experienceProfile);
+            if (_box.controllerIndex != 0 || !Options.Data.defaultAccountMerged) _profiles.Add(Profiles.universalProfileList.ElementAt(_box.controllerIndex));
+            if (Network.isActive) _profiles.Remove(Profiles.experienceProfile);
         }
 
         private void SaveSettings(bool pIsEditing, bool pAccepted)
@@ -612,6 +609,17 @@ namespace DuckGame
                             RebuildProfileList();
                             _slide = _slideTo;
                             _deleteContext = null;
+
+                            _box.ChangeProfile(_profiles[_selectorPosition]);
+                            _profile = _profiles[_selectorPosition];
+                            _profile.inputProfile = null;
+                            _profile.inputProfile = _inputProfile;
+                            Input.ApplyDefaultMapping(_inputProfile, _profile);
+                            _selector.ConfirmProfile();
+                            _open = false;
+                            _selector.fade = 1f;
+                            _fade = 0f;
+                            _selector.screen.DoFlashTransition();
                         }
                     }
                     if (_inputProfile.Pressed(Triggers.Cancel))
