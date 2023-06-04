@@ -485,6 +485,12 @@ namespace DuckGame
 
             return false;
         }
+
+        public static readonly Regex SplitByUppercaseRegex = new(@"[A-Z][a-z]+|[A-Z]+(?![a-z])", RegexOptions.Compiled);
+        public static string GetDisplayName(this Enum @enum)
+        {
+            return SplitByUppercaseRegex.Replace(@enum.ToString(), " $0").TrimEnd();
+        }
         
         public static void AppendResult(this ValueOrException<string> @this, ValueOrException<string> addedResult)
         {
