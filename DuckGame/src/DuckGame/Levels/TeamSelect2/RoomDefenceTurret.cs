@@ -89,7 +89,7 @@ namespace DuckGame
         private void LoseTarget()
         {
             _target = null;
-            if (_charge > 0.0)
+            if (_charge > 0)
                 SFX.PlaySynchronized("chaingunSpinDown", 0.95f, 0.1f);
             _charge = 0f;
         }

@@ -166,7 +166,7 @@ namespace DuckGame
             {
                 float maxDist = 24f;
                 Holdable holdable = Level.Nearest<Holdable>(position, maxDist);
-                if (holdable != null && holdable.owner == null && holdable != null && holdable.canPickUp && holdable.bottom <= top && Math.Abs(holdable.hSpeed) + Math.Abs(holdable.vSpeed) < 2.0)
+                if (holdable != null && holdable.owner == null && holdable != null && holdable.canPickUp && holdable.bottom <= top && Math.Abs(holdable.hSpeed) + Math.Abs(holdable.vSpeed) < 2)
                 {
                     float dist = 999f;
                     if (holdable != null)
@@ -254,7 +254,7 @@ namespace DuckGame
             if (!_alternate)
                 Graphics.Draw(_projector, x, y - 8f);
             float num = (float)(_useWave ? _projectionWave : _projectionWave2);
-            if (_double > 0.0)
+            if (_double > 0f)
             {
                 if (_currentProjection != null)
                 {

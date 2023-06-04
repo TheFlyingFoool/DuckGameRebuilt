@@ -95,7 +95,7 @@ namespace DuckGame
         {
             if (_stringConfetti)
             {
-                Vec2 p2 = this.position + velocity.normalized * (velocity.length * (float)(3.0 + sinMult * 3.0));
+                Vec2 p2 = this.position + velocity.normalized * (velocity.length * (float)(3 + sinMult * 3));
                 Vec2 position;
                 Graphics.DrawLine(this.position, Level.CheckLine<Block>(this.position, p2, out position) != null ? position : p2, _color * alpha, _width, depth);
             }

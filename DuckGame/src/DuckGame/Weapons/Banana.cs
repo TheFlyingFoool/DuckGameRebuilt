@@ -151,7 +151,7 @@ namespace DuckGame
                         }
                         _sprite.frame = 3;
                         _fade = true;
-                        Level.Add(new BananaSlip(x, y + 2f, duck.offDir > 0));
+                        if (DGRSettings.ActualParticleMultiplier > 0) Level.Add(new BananaSlip(x, y + 2f, duck.offDir > 0));
                     }
                 }
             }

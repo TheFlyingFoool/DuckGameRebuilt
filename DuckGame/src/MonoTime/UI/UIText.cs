@@ -36,7 +36,6 @@ namespace DuckGame
                     while (_text.Length < minLength)
                         _text = " " + _text;
                 }
-                _font.scale = new Vec2(1f);
                 _collisionSize = new Vec2(_font.GetWidth(_text), _font.height + _heightAdd);
             }
         }
@@ -87,38 +86,22 @@ namespace DuckGame
             _controlProfile = controlProfile;
         }
 
-        protected Vec2 calcAlignOffset()
-        {
-            float xOffset;
-            float yOffset;
-            if ((align & UIAlign.Left) > UIAlign.Center)
-                xOffset = -parent.width / 2f;
-            else if ((align & UIAlign.Right) > UIAlign.Center)
-                xOffset = parent.width / 2f - width;
-            else
-                xOffset = -width / 2f;
-            if ((align & UIAlign.Top) > UIAlign.Center)
-                yOffset = -parent.height / 2f;
-            else if ((align & UIAlign.Bottom) > UIAlign.Center)
-                yOffset = parent.height / 2f - _font.height;
-            else
-                yOffset = -_font.height / 2f;
-            return new Vec2(xOffset, yOffset);
-        }
-
         public override void Draw()
         {
-            /* important fix */
-            x = parent.x;
-            _font.scale = new Vec2(1f, 1f);
-            _collisionSize.x = _font.GetWidth(_text);
-
             _font.scale = scale;
             _font.alpha = alpha;
-
-            Vec2 alignOffset = calcAlignOffset();
-            _font.Draw(text, x + alignOffset.x, y + alignOffset.y, UIMenu.disabledDraw ? Colors.BlueGray : _color, depth, _controlProfile);
-
+            float width = _font.GetWidth(text);
+            float num1 = (align & UIAlign.Left) <= UIAlign.Center ? ((align & UIAlign.Right) <= UIAlign.Center ? (float)(-width / 2f) : this.width / 2f - width) : (float)-(this.width / 2f);
+            float num2 = (align & UIAlign.Top) <= UIAlign.Center ? ((align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-_font.height / 2f) : height / 2f - _font.height) : (float)-(height / 2f);
+            if (specialScale != 0.0)
+            {
+                Vec2 scale = _font.scale;
+                _font.scale = new Vec2(specialScale);
+                _font.Draw(text, x + num1, y + num2, UIMenu.disabledDraw ? Colors.BlueGray : _color, depth, _controlProfile);
+                _font.scale = scale;
+            }
+            else
+                _font.Draw(text, x + num1, y + num2, UIMenu.disabledDraw ? Colors.BlueGray : _color, depth, _controlProfile);
             base.Draw();
         }
     }

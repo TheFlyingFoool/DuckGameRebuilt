@@ -47,7 +47,7 @@ namespace DuckGame
             if (!melted)
             {
                 melt += 0.05f;
-                if (melt > 1.0)
+                if (melt > 1)
                     Melt();
             }
             base.HeatUp(location);

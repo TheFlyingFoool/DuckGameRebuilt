@@ -491,7 +491,7 @@ namespace DuckGame
             set => _canFire = value;
         }
 
-        public bool CanMove() => (holdObject == null || !holdObject.immobilizeOwner) && !immobilized && crippleTimer <= 0.0 && !inNet && !swinging && !dead && !listening && Level.current.simulatePhysics && !_closingEyes && ragdoll == null;
+        public bool CanMove() => (holdObject == null || !holdObject.immobilizeOwner) && !immobilized && crippleTimer <= 0 && !inNet && !swinging && !dead && !listening && Level.current.simulatePhysics && !_closingEyes && ragdoll == null;
 
         public static Duck Get(int index)
         {
@@ -675,7 +675,7 @@ namespace DuckGame
             get => base.connection;
             set
             {
-                if (Network.isServer && connection != null && connection.status == ConnectionStatus.Disconnected && Network.inGameLevel)
+                if (Network.isServer && connection != null && connection.status == ConnectionStatus.Disconnected && Network.inGameLevel && !Network.isFakeActive)
                     Kill(new DTDisconnect(this));
                 if (_profile != null)
                 {
@@ -1034,7 +1034,7 @@ namespace DuckGame
 
         public void AddCoolness(int amount)
         {
-            if (Highlights.highlightRatingMultiplier == 0.0)
+            if (Highlights.highlightRatingMultiplier == 0f)
                 return;
             profile.stats.coolness += amount;
             //this._coolnessThisFrame += amount;
@@ -1284,14 +1284,8 @@ namespace DuckGame
                             float mult = 1f + Math.Min(bb.timeAlive / 5f, 2f);
                             yourCoolness += (int)(1f * mult);
                         }
-                        if ((DateTime.Now - killedBy.stats.lastKillTime).TotalSeconds < 2.0)
-                        {
-                            yourCoolness++;
-                        }
-                        if (bullet != null && Math.Abs(bullet.travelDirNormalized.y) > 0.3f)
-                        {
-                            yourCoolness++;
-                        }
+                        if ((DateTime.Now - killedBy.stats.lastKillTime).TotalSeconds < 2f) yourCoolness++;
+                        if (bullet != null && Math.Abs(bullet.travelDirNormalized.y) > 0.3f) yourCoolness++;
                         killedBy.stats.lastKillTime = DateTime.Now;
                         if (weaponThing is Grenade)
                         {
@@ -1302,31 +1296,22 @@ namespace DuckGame
                                 g.cookThrower.AddCoolness(1);
                             }
                         }
-                        if (Math.Abs(killedBy.duck.hSpeed) + Math.Abs(killedBy.duck.vSpeed) + Math.Abs(hSpeed) + Math.Abs(vSpeed) > 20f)
-                        {
-                            yourCoolness++;
-                        }
-                        if (_holdingAtDisarm != null && _disarmedBy == killedBy && (DateTime.Now - _disarmedAt).TotalSeconds < 3.0)
+                        if (Math.Abs(killedBy.duck.hSpeed) + Math.Abs(killedBy.duck.vSpeed) + Math.Abs(hSpeed) + Math.Abs(vSpeed) > 20f) yourCoolness++;
+                        if (_holdingAtDisarm != null && _disarmedBy == killedBy && (DateTime.Now - _disarmedAt).TotalSeconds < 3f)
                         {
                             if (killedBy.duck.holdObject == _holdingAtDisarm)
                             {
                                 yourCoolness += 4;
                                 myCoolness -= 2;
                             }
-                            else
-                            {
-                                yourCoolness++;
-                            }
+                            else yourCoolness++;
                         }
                         if (killedBy.duck.dead)
                         {
                             yourCoolness++;
                             killedBy.stats.killsFromTheGrave++;
                         }
-                        if (type is DTShot && prevHold == null)
-                        {
-                            killedBy.stats.unarmedDucksShot++;
-                        }
+                        if (type is DTShot && prevHold == null) killedBy.stats.unarmedDucksShot++;
                         else if (prevHold != null)
                         {
                             if (prevHold is PlasmaBlaster)
@@ -1348,25 +1333,16 @@ namespace DuckGame
                         }
                         if (weapon != null)
                         {
-                            if (weapon == typeof(SledgeHammer) || weapon == typeof(DuelingPistol))
-                            {
-                                yourCoolness++;
-                            }
-                            if (weaponThing is Sword && weaponThing.owner != null && (weaponThing as Sword).jabStance)
-                            {
-                                yourCoolness++;
-                            }
+                            if (weapon == typeof(SledgeHammer) || weapon == typeof(DuelingPistol)) yourCoolness++;
+                            if (weaponThing is Sword && weaponThing.owner != null && (weaponThing as Sword).jabStance) yourCoolness++;
                         }
-                        if (wasTrapped && type is DTFall)
-                        {
-                            yourCoolness++;
-                        }
+                        if (wasTrapped && type is DTFall) yourCoolness++;
                         if (type is DTCrush)
                         {
                             if (weaponThing is PhysicsObject)
                             {
                                 double totalSeconds = (DateTime.Now - (weaponThing as PhysicsObject).lastGrounded).TotalSeconds;
-                                yourCoolness += 1 + (int)Math.Floor((DateTime.Now - (weaponThing as PhysicsObject).lastGrounded).TotalSeconds * 6.0);
+                                yourCoolness += 1 + (int)Math.Floor((DateTime.Now - (weaponThing as PhysicsObject).lastGrounded).TotalSeconds * 6f);
                                 if (Recorder.currentRecording != null)
                                 {
                                     Recorder.currentRecording.LogAction(14);
@@ -1388,14 +1364,8 @@ namespace DuckGame
                         yourCoolness -= 2;
                         Party.AddDrink(killedBy, 1);
                     }
-                    if ((DateTime.Now - _timeSinceDuckLayedToRest).TotalSeconds < 3.0)
-                    {
-                        yourCoolness--;
-                    }
-                    if ((DateTime.Now - _timeSinceFuneralPerformed).TotalSeconds < 3.0)
-                    {
-                        yourCoolness -= 2;
-                    }
+                    if ((DateTime.Now - _timeSinceDuckLayedToRest).TotalSeconds < 3f) yourCoolness--;
+                    if ((DateTime.Now - _timeSinceFuneralPerformed).TotalSeconds < 3f) yourCoolness -= 2;
                 }
                 if (controlledBy != null && controlledBy.profile != null)
                 {
@@ -1693,10 +1663,10 @@ namespace DuckGame
             _trapped.clip.Add(this);
             _trapped.clip.Add(n);
             _trapped.hSpeed = hSpeed + n.hSpeed * 0.4f;
-            _trapped.vSpeed = (float)(vSpeed + n.vSpeed - 1.0);
-            if (_trapped.hSpeed > 6.0)
+            _trapped.vSpeed = (float)(vSpeed + n.vSpeed - 1f);
+            if (_trapped.hSpeed > 6f)
                 _trapped.hSpeed = 6f;
-            if (_trapped.hSpeed < -6.0)
+            if (_trapped.hSpeed < -6f)
                 _trapped.hSpeed = -6f;
             if (n.onFire)
                 Burn(n.position, n);
@@ -1816,7 +1786,7 @@ namespace DuckGame
                 float num2 = 1f;
                 if (inputProfile.Down(Triggers.Left) || inputProfile.Down(Triggers.Right))
                     num1 = 2.5f;
-                if (num1 == 1.0 && inputProfile.Down(Triggers.Up))
+                if (num1 == 1f && inputProfile.Down(Triggers.Up))
                 {
                     holdObject.vSpeed -= 5f * holdWeightMultiplier;
                 }
@@ -1896,7 +1866,7 @@ namespace DuckGame
                 if (h.owner == null && h.canPickUp && (h != _lastHoldItem || _timeSinceThrow >= 30) && h.active && h.visible && Level.CheckLine<Block>(position, h.position) == null)
                 {
                     GiveHoldable(h);
-                    if (holdObject.weight > 5.0)
+                    if (holdObject.weight > 5f)
                     {
                         if (Rando.Float(1f) < 0.5)
                             PlaySFX("liftBarrel", pitch: Rando.Float(-0.1f, 0.2f));
@@ -1906,11 +1876,9 @@ namespace DuckGame
                     }
                     else if (Network.isActive)
                     {
-                        if (isServerForObject)
-                            _netTinyMotion.Play();
+                        if (isServerForObject) _netTinyMotion.Play();
                     }
-                    else
-                        SFX.Play("tinyMotion");
+                    else SFX.Play("tinyMotion");
                     if (holdObject.disarmedFrom != this && (DateTime.Now - holdObject.disarmTime).TotalSeconds < 0.5)
                         AddCoolness(2);
                     tryGrabFrames = 0;
@@ -2016,14 +1984,14 @@ namespace DuckGame
             }
             else if (grounded)
             {
-                if (hSpeed > 0.0 && !_gripped)
+                if (hSpeed > 0f && !_gripped)
                 {
                     _sprite.currentAnimation = "run";
                     if (strafing || Math.Sign(offDir) == Math.Sign(hSpeed))
                         return;
                     _sprite.currentAnimation = "slide";
                 }
-                else if (hSpeed < 0.0 && !_gripped)
+                else if (hSpeed < 0f && !_gripped)
                 {
                     _sprite.currentAnimation = "run";
                     if (strafing || Math.Sign(offDir) == Math.Sign(hSpeed))
@@ -2037,7 +2005,7 @@ namespace DuckGame
             {
                 _sprite.currentAnimation = "jump";
                 _sprite.speed = 0f;
-                if (vSpeed < 0.0 && !_hovering)
+                if (vSpeed < 0f && !_hovering)
                     _sprite.frame = 0;
                 else
                     _sprite.frame = 2;
@@ -2049,7 +2017,7 @@ namespace DuckGame
             burnSpeed = 0.005f;
             if (onFire && !dead)
             {
-                if (_flameWait > 1.0)
+                if (_flameWait > 1f)
                     RumbleManager.AddRumbleEvent(profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Short, RumbleFalloff.Short));
                 profile.stats.timeOnFire += Maths.IncFrameTimer();
                 if (wallCollideLeft != null)
@@ -2068,7 +2036,7 @@ namespace DuckGame
                 if (onFire || dead)
                     return;
                 burnt -= 0.005f;
-                if (burnt >= 0.0)
+                if (burnt >= 0f)
                     return;
                 burnt = 0f;
             }
@@ -2132,7 +2100,7 @@ namespace DuckGame
         public static void ResurrectEffect(Vec2 pPosition)
         {
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
-                Level.Add(new CampingSmoke(pPosition.x - 5f + Rando.Float(10f), (float)(pPosition.y + 6.0 - 3.0 + Rando.Float(6f) - index * 1.0))
+                Level.Add(new CampingSmoke(pPosition.x - 5f + Rando.Float(10f), (float)(pPosition.y + 6f - 3f + Rando.Float(6f) - index * 1))
                 {
                     move = {
             x = (Rando.Float(0.6f) - 0.3f),
@@ -2161,7 +2129,7 @@ namespace DuckGame
             if (!this._isGhost)
                 return;
             this._ghostTimer -= 23f / 1000f;
-            if (_ghostTimer >= 0.0)
+            if (_ghostTimer >= 0f)
                 return;
             this._ghostTimer = 1f;
             this._isGhost = false;
@@ -2595,7 +2563,7 @@ namespace DuckGame
                 ThrowItem(false);
             }
             OnTeleport();
-            if (y > -4000.0)
+            if (y > -4000f)
                 y -= 5000f;
             sliding = false;
             crouch = false;
@@ -2740,10 +2708,10 @@ namespace DuckGame
             }
             if (DGRSettings.S_ParticleMultiplier != 0 && flag)
             {
-                Level.Add(new ColorStar(x + hSpeed * 2f, y + 4f, new Vec2(-1.5f, -2.5f) + new Vec2((float)((hSpeed + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2.0), Rando.Float(-0.5f, 0f)), new Color(237, 94, 238)));
-                Level.Add(new ColorStar(x + hSpeed * 2f, y + 4f, new Vec2(-0.9f, -1.5f) + new Vec2((float)((hSpeed + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2.0), Rando.Float(-0.5f, 0f)), new Color(49, 162, 242)));
-                Level.Add(new ColorStar(x + hSpeed * 2f, y + 4f, new Vec2(0.9f, -1.5f) + new Vec2((float)((hSpeed + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2.0), Rando.Float(-0.5f, 0f)), new Color(247, 224, 90)));
-                Level.Add(new ColorStar(x + hSpeed * 2f, y + 4f, new Vec2(1.5f, -2.5f) + new Vec2((float)((hSpeed + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2.0), Rando.Float(-0.5f, 0f)), new Color(192, 32, 45)));
+                Level.Add(new ColorStar(x + hSpeed * 2f, y + 4f, new Vec2(-1.5f, -2.5f) + new Vec2((float)((hSpeed + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2f), Rando.Float(-0.5f, 0f)), new Color(237, 94, 238)));
+                Level.Add(new ColorStar(x + hSpeed * 2f, y + 4f, new Vec2(-0.9f, -1.5f) + new Vec2((float)((hSpeed + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2f), Rando.Float(-0.5f, 0f)), new Color(49, 162, 242)));
+                Level.Add(new ColorStar(x + hSpeed * 2f, y + 4f, new Vec2(0.9f, -1.5f) + new Vec2((float)((hSpeed + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2f), Rando.Float(-0.5f, 0f)), new Color(247, 224, 90)));
+                Level.Add(new ColorStar(x + hSpeed * 2f, y + 4f, new Vec2(1.5f, -2.5f) + new Vec2((float)((hSpeed + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2f), Rando.Float(-0.5f, 0f)), new Color(192, 32, 45)));
             }
             return flag;
         }
@@ -2808,7 +2776,7 @@ namespace DuckGame
                 if (!flag1 && HasEquipment(typeof(ChokeCollar)))
                 {
                     ChokeCollar equipment = GetEquipment(typeof(ChokeCollar)) as ChokeCollar;
-                    if (equipment.ball.grounded && equipment.ball.bottom < top && vSpeed > -1.0)
+                    if (equipment.ball.grounded && equipment.ball.bottom < top && vSpeed > -1f)
                         flag1 = true;
                 }
                 if (flag1)
@@ -2855,7 +2823,7 @@ namespace DuckGame
                         maxrun *= 1.35f;
                     }
                 }
-                if (specialFrictionMod > 0.0)
+                if (specialFrictionMod > 0f)
                     num1 *= Math.Min(specialFrictionMod * 2f, 1f);
                 if (isServerForObject && isOffBottomOfLevel && !dead)
                 {
@@ -3124,7 +3092,7 @@ namespace DuckGame
                             }
                             onWall = false;
                         }
-                        if ((leftWall || rightWall) && vSpeed > 1.0 && _atWallFrames == num5)
+                        if ((leftWall || rightWall) && vSpeed > 1f && _atWallFrames == num5)
                             vSpeed = 0.5f;
                         if (_wallJump > 0)
                             --_wallJump;
@@ -3135,8 +3103,8 @@ namespace DuckGame
                         {
                             PhysicsRopeSection section = null;
                             if (_vine == null)
-                                section = Level.Nearest<PhysicsRopeSection>(position, 18.0f);
-                            if (section != null && (position - section.position).length < 18.0)
+                                section = Level.Nearest<PhysicsRopeSection>(position, 18f);
+                            if (section != null && (position - section.position).length < 18f)
                             {
                                 _vine = section.rope.LatchOn(section, this);
                                 _double = false;
@@ -3266,7 +3234,7 @@ namespace DuckGame
                         if (flag8)
                         {
                             jumping = false;
-                            if (flag9 && vSpeed < 0.0)
+                            if (flag9 && vSpeed < 0f)
                                 vSpeed *= 0.7f;
                         }
                         if (inputProfile.Released(Triggers.Jump))
@@ -3275,7 +3243,7 @@ namespace DuckGame
                             {
                                 jumping = false;
                                 pipeOut = 0;
-                                if (vSpeed < 0.0)
+                                if (vSpeed < 0f)
                                     vSpeed *= 0.5f;
                             }
                             _hovering = false;
@@ -3348,7 +3316,7 @@ namespace DuckGame
                             }
                             if (!sliding)
                                 didFireSlide = false;
-                            if (slideBuildup > 0.0 || !sliding || !didFireSlide)
+                            if (slideBuildup > 0f || !sliding || !didFireSlide)
                             {
                                 slideBuildup -= Maths.IncFrameTimer();
                                 if (slideBuildup <= -0.6f)
@@ -3363,17 +3331,17 @@ namespace DuckGame
                         if (isServerForObject && grounded && Math.Abs(vSpeed) + Math.Abs(hSpeed) < 0.5 && !_closingEyes && holdObject == null && inputProfile.Pressed(Triggers.Shoot))
                         {
                             Ragdoll t = Level.Nearest<Ragdoll>(position, 100.0f);
-                            if (t != null && t.active && t.visible && t.captureDuck != null && t.captureDuck.dead && !t.captureDuck._eyesClosed && (t.part1.position - (position + new Vec2(0f, 8f))).length < 4.0)
+                            if (t != null && t.active && t.visible && t.captureDuck != null && t.captureDuck.dead && !t.captureDuck._eyesClosed && (t.part1.position - (position + new Vec2(0f, 8f))).length < 4f)
                             {
-                                Level.Add(new EyeCloseWing(t.part1.angle < 0.0 ? x - 4f : x - 11f, y + 7f, t.part1.angle < 0.0 ? 1 : -1, _spriteArms, this, t.captureDuck));
+                                Level.Add(new EyeCloseWing(t.part1.angle < 0f ? x - 4f : x - 11f, y + 7f, t.part1.angle < 0f ? 1 : -1, _spriteArms, this, t.captureDuck));
                                 if (Network.isActive)
                                     Send.Message(new NMEyeCloseWing(position, this, t.captureDuck));
                                 _closingEyes = true;
                                 ++profile.stats.respectGivenToDead;
                                 AddCoolness(1);
                                 _timeSinceDuckLayedToRest = DateTime.Now;
-                                Flower flower = Level.Nearest<Flower>(position, 22.0f);
-                                if (flower != null && (flower.position - position).length < 22.0)
+                                Flower flower = Level.Nearest<Flower>(position, 22f);
+                                if (flower != null && (flower.position - position).length < 22f)
                                 {
                                     Fondle(t);
                                     Fondle(t.captureDuck);
@@ -3405,11 +3373,11 @@ namespace DuckGame
             {
                 Vec2 zero = Vec2.Zero;
                 Vec2 cameraPosition = ragdoll == null ? (_cooked == null ? (_trapped == null ? base.cameraPosition : _trapped.cameraPosition) : _cooked.cameraPosition) : ragdoll.cameraPosition;
-                if ((cameraPositionOverride - position).length < 1000.0)
+                if ((cameraPositionOverride - position).length < 1000f)
                     cameraPositionOverride = Vec2.Zero;
                 if (cameraPositionOverride != Vec2.Zero)
                     return cameraPositionOverride;
-                if (cameraPosition.y < -1000.0 || cameraPosition == Vec2.Zero || cameraPosition.x < -5000.0)
+                if (cameraPosition.y < -1000f || cameraPosition == Vec2.Zero || cameraPosition.x < -5000f)
                     cameraPosition = prevCamPosition;
                 else
                     prevCamPosition = cameraPosition;
@@ -3422,7 +3390,7 @@ namespace DuckGame
         public Thing followPart => _followPart == null ? this : _followPart;
 
         public bool offdirLocked;
-        public bool underwater => doFloat && _curPuddle != null && top + 2.0 > _curPuddle.top;
+        public bool underwater => doFloat && _curPuddle != null && top + 2 > _curPuddle.top;
 
         public void EmitBubbles(int num, float hVel)
         {
@@ -3445,11 +3413,11 @@ namespace DuckGame
         public static void MakeStars(Vec2 pPosition, Vec2 pVelocity)
         {
             if (DGRSettings.ActualParticleMultiplier == 0) return;
-            Level.Add(new NewDizzyStar(pPosition.x + pVelocity.x * 2f, pPosition.y, new Vec2(-1.7f, -1f) + new Vec2((float)((pVelocity.x + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2.0), Rando.Float(-0.5f, 0f) - 1f), new Color(247, 224, 89)));
-            Level.Add(new NewDizzyStar(pPosition.x + pVelocity.x * 2f, pPosition.y, new Vec2(-0.7f, -0.5f) + new Vec2((float)((pVelocity.x + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2.0), Rando.Float(-0.5f, 0f) - 1f), new Color(247, 224, 89)));
-            Level.Add(new NewDizzyStar(pPosition.x + pVelocity.x * 2f, pPosition.y, new Vec2(0.7f, -0.5f) + new Vec2((float)((pVelocity.x + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2.0), Rando.Float(-0.5f, 0f) - 1f), new Color(247, 224, 89)));
-            Level.Add(new NewDizzyStar(pPosition.x + pVelocity.x * 2f, pPosition.y, new Vec2(1.7f, -1f) + new Vec2((float)((pVelocity.x + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2.0), Rando.Float(-0.5f, 0f) - 1f), new Color(247, 224, 89)));
-            Level.Add(new NewDizzyStar(pPosition.x + pVelocity.x * 2f, pPosition.y, new Vec2(0f, -1.4f) + new Vec2((float)((pVelocity.x + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2.0), Rando.Float(-0.5f, 0f) - 1f), new Color(247, 224, 89)));
+            Level.Add(new NewDizzyStar(pPosition.x + pVelocity.x * 2f, pPosition.y, new Vec2(-1.7f, -1f) + new Vec2((float)((pVelocity.x + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2), Rando.Float(-0.5f, 0f) - 1f), new Color(247, 224, 89)));
+            Level.Add(new NewDizzyStar(pPosition.x + pVelocity.x * 2f, pPosition.y, new Vec2(-0.7f, -0.5f) + new Vec2((float)((pVelocity.x + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2), Rando.Float(-0.5f, 0f) - 1f), new Color(247, 224, 89)));
+            Level.Add(new NewDizzyStar(pPosition.x + pVelocity.x * 2f, pPosition.y, new Vec2(0.7f, -0.5f) + new Vec2((float)((pVelocity.x + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2), Rando.Float(-0.5f, 0f) - 1f), new Color(247, 224, 89)));
+            Level.Add(new NewDizzyStar(pPosition.x + pVelocity.x * 2f, pPosition.y, new Vec2(1.7f, -1f) + new Vec2((float)((pVelocity.x + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2), Rando.Float(-0.5f, 0f) - 1f), new Color(247, 224, 89)));
+            Level.Add(new NewDizzyStar(pPosition.x + pVelocity.x * 2f, pPosition.y, new Vec2(0f, -1.4f) + new Vec2((float)((pVelocity.x + Rando.Float(-0.5f, 0.5f)) * Rando.Float(0.6f, 0.9f) / 2), Rando.Float(-0.5f, 0f) - 1f), new Color(247, 224, 89)));
         }
 
         public override bool active
@@ -3582,7 +3550,7 @@ namespace DuckGame
                 --_disarmWait;
             if (_disarmDisable > 0)
                 --_disarmDisable;
-            if (killMultiplier > 0.0)
+            if (killMultiplier > 0f)
                 killMultiplier -= 0.016f;
             else
                 killMultiplier = 0f;
@@ -3629,13 +3597,13 @@ namespace DuckGame
                 if (isServerForObject)
                 {
                     disarmIndexCooldown -= Maths.IncFrameTimer();
-                    if (disarmIndexCooldown <= 0.0 && profile != null)
+                    if (disarmIndexCooldown <= 0f && profile != null)
                     {
                         disarmIndexCooldown = 0f;
                         disarmIndex = profile.networkIndex;
                     }
                 }
-                if (y > -999.0)
+                if (y > -999f)
                     _lastGoodPosition = position;
                 if (Network.isActive)
                 {
@@ -3643,14 +3611,14 @@ namespace DuckGame
                         _ragdollInstance.captureDuck = this;
                     if (ragdoll != null && ragdoll.isServerForObject)
                     {
-                        if (_trapped != null && _trapped.y > -5000.0)
+                        if (_trapped != null && _trapped.y > -5000f)
                         {
                             if (Network.isActive)
                             {
                                 ragdoll.active = false;
                                 ragdoll.visible = false;
                                 ragdoll.owner = null;
-                                if (y > -1000.0)
+                                if (y > -1000f)
                                 {
                                     ragdoll.y = -9999f;
                                     if (ragdoll.part1 != null)
@@ -3667,7 +3635,7 @@ namespace DuckGame
                         }
                         if (ragdoll != null)
                         {
-                            if (ragdoll.y < -5000.0)
+                            if (ragdoll.y < -5000f)
                             {
                                 ragdoll.position = cameraPosition;
                                 if (ragdoll.part1 != null)
@@ -3677,22 +3645,22 @@ namespace DuckGame
                                 if (ragdoll.part3 != null)
                                     ragdoll.part3.position = cameraPosition;
                             }
-                            if (ragdoll.part1 != null && ragdoll.part1.owner != null && ragdoll.part1.owner.y < -5000.0)
+                            if (ragdoll.part1 != null && ragdoll.part1.owner != null && ragdoll.part1.owner.y < -5000f)
                                 ragdoll.part1.owner = null;
-                            if (ragdoll.part2 != null && ragdoll.part2.owner != null && ragdoll.part2.owner.y < -5000.0)
+                            if (ragdoll.part2 != null && ragdoll.part2.owner != null && ragdoll.part2.owner.y < -5000f)
                                 ragdoll.part2.owner = null;
-                            if (ragdoll.part3 != null && ragdoll.part3.owner != null && ragdoll.part3.owner.y < -5000.0)
+                            if (ragdoll.part3 != null && ragdoll.part3.owner != null && ragdoll.part3.owner.y < -5000f)
                                 ragdoll.part3.owner = null;
                         }
                     }
-                    if (_trapped != null && _trapped.y < -5000.0 && _trapped.isServerForObject)
+                    if (_trapped != null && _trapped.y < -5000f && _trapped.isServerForObject)
                         _trapped.position = cameraPosition;
-                    if (_cooked != null && _cooked.y < -5000.0 && _cooked.isServerForObject)
+                    if (_cooked != null && _cooked.y < -5000f && _cooked.isServerForObject)
                         _cooked.position = cameraPosition;
                 }
                 if (_profile.localPlayer && !(this is RockThrowDuck) && isServerForObject)
                 {
-                    if (ragdoll == null && _trapped == null && _cooked == null && y < -5000.0f)
+                    if (ragdoll == null && _trapped == null && _cooked == null && y < -5000f)
                         position = cameraPosition;
                     if (_ragdollInstance != null)
                     {
@@ -3861,7 +3829,7 @@ namespace DuckGame
             if (dead)
             {
                 immobilized = true;
-                if (unfocus > 0.0)
+                if (unfocus > 0f)
                     unfocus -= 0.015f;
                 else if (!unfocused)
                 {
@@ -3963,16 +3931,14 @@ namespace DuckGame
                 base.Update();
             if (ragdoll == null && _prevRagdoll != null && DGRSettings.S_ParticleMultiplier != 0)
             {
-                Level.Add(SmallSmoke.New(x - Rando.Float(2f, 5f), (float)(y + Rando.Float(-3f, 3f) + 16.0)));
-                Level.Add(SmallSmoke.New(x + Rando.Float(2f, 5f), (float)(y + Rando.Float(-3f, 3f) + 16.0)));
-                Level.Add(SmallSmoke.New(x, (float)(y + Rando.Float(-3f, 3f) + 16.0)));
+                Level.Add(SmallSmoke.New(x - Rando.Float(2f, 5f), (float)(y + Rando.Float(-3f, 3f) + 16)));
+                Level.Add(SmallSmoke.New(x + Rando.Float(2f, 5f), (float)(y + Rando.Float(-3f, 3f) + 16)));
+                Level.Add(SmallSmoke.New(x, (float)(y + Rando.Float(-3f, 3f) + 16)));
             }
             _prevRagdoll = ragdoll;
-            if (kick > 0f)
-                kick -= 0.1f;
-            else
-                kick = 0f;
-            _sprite.speed = (0.1f + Math.Abs(hSpeed) / maxrun * 0.1f);
+            if (kick > 0f) kick -= 0.1f;
+            else kick = 0f;
+            _sprite.speed = 0.1f + Math.Abs(hSpeed) / maxrun * 0.1f;
             _sprite.flipH = offDir < 0;
             if (!swinging)
                 UpdateAnimation();
@@ -4205,7 +4171,7 @@ namespace DuckGame
             if (holdObject.canRaise && (_hovering && holdObject.hoverRaise || holdObstructed || holdObject.keepRaised))
             {
                 if (updateLerp)
-                    holdAngleOff = Maths.LerpTowards(holdAngleOff, -((float)(Math.PI / 2.0f) * offDir) * holdObject.angleMul, instant ? 1.0f : (holdObject.raiseSpeed) * 2);
+                    holdAngleOff = Maths.LerpTowards(holdAngleOff, -((float)(Math.PI / 2f) * offDir) * holdObject.angleMul, instant ? 1.0f : (holdObject.raiseSpeed) * 2);
                 holdObject.raised = true;
             }
             else
@@ -4245,7 +4211,7 @@ namespace DuckGame
                 }
             }
             for (int index = 0; index < 3 * Maths.Clamp(DGRSettings.ActualParticleMultiplier, 1, 10000); ++index)
-                Level.Add(new MusketSmoke(x - 5f + Rando.Float(10f), (float)(y + 6.0 - 3.0 + Rando.Float(6f) - index * 1.0))
+                Level.Add(new MusketSmoke(x - 5f + Rando.Float(10f), (float)(y + 6f - 3f + Rando.Float(6f) - index * 1))
                 {
                     move = {
             x = (Rando.Float(0.4f) - 0.2f),
@@ -4262,7 +4228,7 @@ namespace DuckGame
         {
             if (ragdoll != null) position = ragdoll.position;
             for (int index = 0; index < 3 * Maths.Clamp(DGRSettings.ActualParticleMultiplier, 1, 10000); ++index)
-                Level.Add(new MusketSmoke(position.x - 5f + Rando.Float(10f), (float)(position.y + 6.0 - 3.0 + Rando.Float(6f) - index * 1.0))
+                Level.Add(new MusketSmoke(position.x - 5f + Rando.Float(10f), (float)(position.y + 6f - 3f + Rando.Float(6f) - index * 1f))
                 {
                     move = {
                     x = Rando.Float(0.4f) - 0.2f,
@@ -4305,7 +4271,7 @@ namespace DuckGame
 
         public void UpdateLerp()
         {
-            if (lerpSpeed == 0.0) return;
+            if (lerpSpeed == 0f) return;
             lerpPosition += lerpVector * lerpSpeed;
         }
 
@@ -4364,7 +4330,7 @@ namespace DuckGame
                 position = _cooked.position;
             if (Network.isActive && _cooked != null && _cookedInstance != null && !_cookedInstance.visible)
                 position = this.position;
-            if (position.x < level.camera.left - 1000.0 || position.y < -3000.0)
+            if (position.x < level.camera.left - 1000f || position.y < -3000f)
                 return false;
             float num = -6f;
             if (level != null && level.camera != null && !dead && !VirtualTransition.doingVirtualTransition)
@@ -4456,7 +4422,7 @@ namespace DuckGame
                 position = _trapped.position;
             Vec2 p2 = position;
             //why?
-            //float num1 = (float)(Level.current.camera.width / 320.0 * 0.5);
+            //float num1 = (float)(Level.current.camera.width / 320f * 0.5);
             //float num2 = 0.75f;
             float num3 = 16.5f;
             Vec2 vec2_1 = new Vec2(0f, 0f);
@@ -4579,7 +4545,7 @@ namespace DuckGame
                         Vec2 tounge = this.tounge;
                         if (sliding)
                         {
-                            if (tounge.y < 0.0)
+                            if (tounge.y < 0f)
                                 tounge.y = 0f;
                             if (offDir > 0)
                             {
@@ -4598,9 +4564,9 @@ namespace DuckGame
                         }
                         else
                         {
-                            if (offDir > 0 && tounge.x < 0.0)
+                            if (offDir > 0 && tounge.x < 0f)
                                 tounge.x = 0f;
-                            if (offDir < 0 && tounge.x > 0.0)
+                            if (offDir < 0 && tounge.x > 0f)
                                 tounge.x = 0f;
                             if (tounge.y < -0.3f)
                                 tounge.y = -0.3f;
@@ -4695,7 +4661,7 @@ namespace DuckGame
                         Vec2 vec2 = Vec2.Zero;
                         if (gun != null)
                             vec2 = -gun.barrelVector * kick;
-                        float num13 = Math.Abs((float)((_flapFrame - 4.0) / 4.0)) - 0.1f;
+                        float num13 = Math.Abs((float)((_flapFrame - 4f) / 4f)) - 0.1f;
                         if (!_hovering)
                             num13 = 0f;
                         _spriteArms._frameInc = 0f;
@@ -4716,7 +4682,7 @@ namespace DuckGame
                                 {
                                     _spriteArms.angle = 0f;
                                     _spriteArms.depth = this.depth + -10;
-                                    Graphics.Draw(_spriteArms, _sprite.imageIndex + 5 + (int)Math.Round(num13 * 2.0), (float)(x + vec2.x + 2 * offDir * xscale), (float)(y + vec2.y + armOffY * yscale), -_sprite.xscale, _sprite.yscale, true);
+                                    Graphics.Draw(_spriteArms, _sprite.imageIndex + 5 + (int)Math.Round(num13 * 2f), (float)(x + vec2.x + 2 * offDir * xscale), (float)(y + vec2.y + armOffY * yscale), -_sprite.xscale, _sprite.yscale, true);
                                     _spriteArms.depth = this.depth + 11;
                                 }
                             }
@@ -4741,13 +4707,13 @@ namespace DuckGame
                                     if (holdObject == null || !holdObject.hideRightWing)
                                     {
                                         _spriteArms.depth = this.depth + 11;
-                                        Graphics.Draw(_spriteArms, _spriteArms.imageIndex + 5 + (int)Math.Round(num13 * 2.0), (float)(x + vec2.x - offDir * num14 * xscale), (float)(y + vec2.y + armOffY * yscale), _sprite.xscale, _sprite.yscale, true);
+                                        Graphics.Draw(_spriteArms, _spriteArms.imageIndex + 5 + (int)Math.Round(num13 * 2f), (float)(x + vec2.x - offDir * num14 * xscale), (float)(y + vec2.y + armOffY * yscale), _sprite.xscale, _sprite.yscale, true);
                                         _spriteArms.depth = this.depth + -10;
                                     }
                                     if (holdObject == null || !holdObject.hideLeftWing)
                                     {
                                         _spriteArms.imageIndex = 9;
-                                        Graphics.Draw(_spriteArms, _spriteArms.imageIndex + 5 + (int)Math.Round(num13 * 2.0), (float)(x + vec2.x + 2 * offDir * xscale), (float)(y + vec2.y + armOffY * yscale), -_sprite.xscale, _sprite.yscale, true);
+                                        Graphics.Draw(_spriteArms, _spriteArms.imageIndex + 5 + (int)Math.Round(num13 * 2f), (float)(x + vec2.x + 2 * offDir * xscale), (float)(y + vec2.y + armOffY * yscale), -_sprite.xscale, _sprite.yscale, true);
                                         _spriteArms.depth = this.depth + 11;
                                     }
                                 }
@@ -4910,7 +4876,7 @@ namespace DuckGame
 
             public void Draw()
             {
-                if (duck.position.x < -4000.0)
+                if (duck.position.x < -4000f)
                     return;
                 _rainbowGradient ??= new Sprite("rainbowGradient");
                 if (numProblems <= 0)
@@ -5038,7 +5004,7 @@ namespace DuckGame
                     if ((drawPos - pOffset).length > 16f)
                         drawPos = pOffset;
                     drawPos = Lerp.Vec2Smooth(drawPos, pOffset, 0.4f);
-                    sprite.scale = new Vec2((float)(1.0 + bloop * 0.6f), (float)(1.0 + bloop * 0.35f));
+                    sprite.scale = new Vec2((float)(1 + bloop * 0.6f), (float)(1 + bloop * 0.35f));
                     sprite.depth = (Depth)0.9f;
                     Graphics.Draw(sprite, pPos.x + drawPos.x, pPos.y + drawPos.y);
                 }

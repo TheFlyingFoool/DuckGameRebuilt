@@ -60,10 +60,10 @@ namespace DuckGame
             {
                 if (!_flipHorizontal)
                 {
-                    if (with.hSpeed > -12.0 * _mult)
+                    if (with.hSpeed > -12f * _mult)
                         with.hSpeed = -12f * _mult;
                 }
-                else if (with.hSpeed < 12.0 * _mult)
+                else if (with.hSpeed < 12f * _mult)
                     with.hSpeed = 12f * _mult;
                 if (with is Gun)
                     (with as Gun).PressAction();

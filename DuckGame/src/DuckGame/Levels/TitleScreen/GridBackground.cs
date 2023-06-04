@@ -50,7 +50,7 @@ namespace DuckGame
         public override void Update()
         {
             _scroll += 0.4f;
-            if (_scroll <= 32.0)
+            if (_scroll <= 32f)
                 return;
             _scroll -= 32f;
         }

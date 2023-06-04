@@ -127,7 +127,7 @@ namespace DuckGame
         {
             get
             {
-                int currentNote = (int)Math.Round(handPitch * 13.0);
+                int currentNote = (int)Math.Round(handPitch * 13);
                 if (currentNote < 0)
                     currentNote = 0;
                 if (currentNote > 12)
@@ -145,7 +145,7 @@ namespace DuckGame
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (isServerForObject && (Math.Abs(hSpeed) > 4.0 || Math.Abs(vSpeed) > 4.0) && !_ruined && owner == null)
+            if (isServerForObject && (Math.Abs(hSpeed) > 4 || Math.Abs(vSpeed) > 4) && !_ruined && owner == null)
                 _ruined = true;
             base.OnSolidImpact(with, from);
         }
@@ -177,7 +177,7 @@ namespace DuckGame
             if (!_prevRuined && _ruined)
             {
                 SFX.Play("smallElectronicBreak", 0.8f, Rando.Float(-0.1f, 0.1f));
-                for (int index = 0; index < 8; ++index)
+                for (int index = 0; index < 8f * DGRSettings.ActualParticleMultiplier; ++index)
                     Level.Add(Spark.New(x + Rando.Float(-8f, 8f), y + Rando.Float(-4f, 4f), new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
                 if (isServerForObject && Rando.Int(5) == 0)
                     brokenKey = (byte)(1 + Rando.Int(12));
@@ -223,10 +223,10 @@ namespace DuckGame
                 }
                 int num1 = currentNote;
                 if (preset == presets.Length - 1)
-                    num1 = (int)Math.Round(currentNote / 2.0);
-                if (notePitch == 0.0 || (num1 != prevNote || noteSound != null && noteSound.Pitch + 1.0 != bender / 12.0) && !owner._hovering)
+                    num1 = (int)Math.Round(currentNote / 2f);
+                if (notePitch == 0 || (num1 != prevNote || noteSound != null && noteSound.Pitch + 1 != bender / 12) && !owner._hovering)
                 {
-                    if (notePitch != 0.0)
+                    if (notePitch != 0)
                     {
                         if (noteSound == null || num1 != prevNote)
                         {
@@ -260,7 +260,7 @@ namespace DuckGame
                                 Level.Add(new MusicNote(barrelPosition.x, barrelPosition.y, barrelVector));
                         }
                         else
-                            noteSound.Pitch = (float)(bender / 12.0 - 1.0);
+                            noteSound.Pitch = (float)(bender / 12 - 1);
                     }
                     else
                     {

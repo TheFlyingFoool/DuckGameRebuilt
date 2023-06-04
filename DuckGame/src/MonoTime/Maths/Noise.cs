@@ -244,7 +244,7 @@ namespace DuckGame
             Random r = new Random(value);
             for (int i = 0; i < 512; i++)
             {
-                perm[i] = (byte)Math.Round(r.NextDouble() * 255.0);
+                perm[i] = (byte)Math.Round(r.NextDouble() * 255);
             }
         }
 

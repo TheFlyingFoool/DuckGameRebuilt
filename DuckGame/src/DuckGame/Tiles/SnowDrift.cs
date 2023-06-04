@@ -54,7 +54,7 @@ namespace DuckGame
                 xscale += 0.036f;
                 y += 0.16f;
             }
-            if (yscale < 0.0)
+            if (yscale < 1)
                 Level.Remove(this);
             base.Update();
         }

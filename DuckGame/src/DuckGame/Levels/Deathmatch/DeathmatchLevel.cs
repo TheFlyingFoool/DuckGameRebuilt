@@ -120,10 +120,10 @@ namespace DuckGame
                 }
             }
             _waitFade -= 0.04f;
-            if (_waitFade > 0.0)
+            if (_waitFade > 0f)
                 return;
             _waitSpawn -= 0.06f;
-            if (_waitSpawn > 0.0)
+            if (_waitSpawn > 0f)
                 return;
             if (_pendingSpawns != null && _pendingSpawns.Count > 0)
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Policy;
 
 namespace DuckGame
 {
@@ -23,10 +24,21 @@ namespace DuckGame
             }
         }
         [AutoConfigField]
+        public static bool IgnoreLevRestrictions = false;
+
+        [AutoConfigField]
+        public static bool skipOnlineBumper = false;
+
+        [AutoConfigField]
+        public static bool LoadMusic = true;
+        public static bool LoaderMusic;//this is so you wont crash immediately when changing the setting, this only gets set on startup -NiK0
+
+        [AutoConfigField]
         public static string PreferredLevel = "";
 
         [AutoConfigField]
         public static bool PreloadLevels;
+
 
         [AutoConfigField]
         public static bool SpriteAtlas = true;
@@ -156,6 +168,12 @@ namespace DuckGame
         public static bool LobbyNameOnPause = true;
 
         [AutoConfigField]
+        public static bool EditorOnlinePhysics = false; //for the love of god be off by default jesus christ -NiK0
+
+        [AutoConfigField]
         public static bool EditorInstructions = true;
+
+        [AutoConfigField]
+        public static bool EditorLevelName = true;
     }
 }

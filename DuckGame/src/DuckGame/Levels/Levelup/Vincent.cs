@@ -262,10 +262,10 @@ namespace DuckGame
                             furnitureData = list2[0]
                         };
                         vincentProduct.originalCost = vincentProduct.furnitureData.price;
-                        vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 2.5);
+                        vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 2.5f);
                         if (Rando.Float(1f) > 0.95f)
-                            vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 4.0);
-                        if (vincentProduct.furnitureData.name == "ROUND TABLE" && Rando.Float(1f) > 0.5)
+                            vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 4f);
+                        if (vincentProduct.furnitureData.name == "ROUND TABLE" && Rando.Float(1f) > 0.5f)
                         {
                             Add("|POINT|Oh baby, is that one of them ROUND tables??");
                             Add("|CONCERNED| Can I buy it from you?|SHOW| I'm so tired of square tables...");
@@ -747,12 +747,12 @@ namespace DuckGame
                             if (Rando.Int(50) == 0)
                             {
                                 vincentProduct.furnitureData = UIGachaBox.GetRandomFurniture(Rarity.SuperRare, 1, 0.3f)[0];
-                                vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 2.0);
+                                vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 2f);
                                 vincentProduct.originalCost = vincentProduct.furnitureData.price;
                             }
                             else
                             {
-                                vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 1.5);
+                                vincentProduct.cost = (int)(vincentProduct.furnitureData.price * 1.5f);
                                 vincentProduct.originalCost = vincentProduct.furnitureData.price;
                             }
                             products.Add(vincentProduct);
@@ -1045,19 +1045,19 @@ namespace DuckGame
                 bool flag4 = !_allowMovement && Input.Down(Triggers.Select);
                 if (_lines.Count > 0 && _currentLine == "")
                 {
-                    int num3 = _waitAfterLine <= 0.0 ? 1 : 0;
+                    int num3 = _waitAfterLine <= 0f ? 1 : 0;
                     _waitAfterLine -= 0.045f;
                     if (flag4)
                         _waitAfterLine -= 0.045f;
                     if (killSkip)
                         _waitAfterLine -= 0.1f;
                     _talkMove += 0.75f;
-                    if (_talkMove > 1.0)
+                    if (_talkMove > 1f)
                     {
                         frame = 0;
                         _talkMove = 0f;
                     }
-                    if (num3 == 0 && _waitAfterLine <= 0.0)
+                    if (num3 == 0 && _waitAfterLine <= 0f)
                         HUD.AddCornerMessage(HUDCorner.BottomRight, "@SELECT@CONTINUE");
                     if (_lineProgress.Count == 0 || Input.Pressed(Triggers.Select))
                     {
@@ -1075,12 +1075,12 @@ namespace DuckGame
                     _waitLetter -= 0.9f;
                     if (flag4)
                         _waitLetter -= 1.8f;
-                    if (_waitLetter < 0.0)
+                    if (_waitLetter < 0f)
                     {
                         _talkMove += 0.75f;
-                        if (_talkMove > 1.0)
+                        if (_talkMove > 1f)
                         {
-                            frame = _currentLine[0] == ' ' || frame != 1 || _extraWait > 0.0 ? 1 : 2;
+                            frame = _currentLine[0] == ' ' || frame != 1 || _extraWait > 0f ? 1 : 2;
                             _talkMove = 0f;
                         }
                         _waitLetter = 1f;
@@ -1293,11 +1293,11 @@ namespace DuckGame
                     if (show)
                     {
                         _afterShowWait += 0.12f;
-                        if (_afterShowWait >= 1.0)
+                        if (_afterShowWait >= 1f)
                             _allowMovement = true;
                     }
                     _talkMove += 0.75f;
-                    if (_talkMove > 1.0)
+                    if (_talkMove > 1f)
                     {
                         frame = 0;
                         _talkMove = 0f;
@@ -1325,7 +1325,7 @@ namespace DuckGame
                     num1 = Math.Min(Math.Max(products[index].cost, 0), 9999);
                     string text = "$" + num1.ToString();
                     _furniTag.frame = text.Length - 1;
-                    _priceFontRightways.Draw(text, new Vec2((float)((5 - text.Length) / 5.0 * 20.0), 0f), products[index].cost > Profiles.experienceProfile.littleManBucks ? Colors.DGRed : Color.Black, (Depth)0.97f);
+                    _priceFontRightways.Draw(text, new Vec2((float)((5 - text.Length) / 5f * 20f), 0f), products[index].cost > Profiles.experienceProfile.littleManBucks ? Colors.DGRed : Color.Black, (Depth)0.97f);
                     Graphics.screen.End();
                     Graphics.SetRenderTarget(null);
                 }
@@ -1334,10 +1334,10 @@ namespace DuckGame
 
         public static void Draw()
         {
-            Vec2 vec2_1 = new Vec2((float)(_listLerp * 270.0 - 200.0), 20f);
+            //Vec2 vec2_1 = new Vec2((float)(_listLerp * 270f - 200f), 20f); what -NiK0
             if (_challengeLerp < 0.01f && _chancyLerp < 0.01f)
                 return;
-            Vec2 vec2_2 = new Vec2((float)(100.0 * (1.0 - _chancyLerp)), (float)(100.0 * (1.0 - _chancyLerp) - 4.0));
+            Vec2 vec2_2 = new Vec2((float)(100f * (1f - _chancyLerp)), (float)(100f * (1f - _chancyLerp) - 4f));
             Vec2 vec2_3 = new Vec2(280f, 30f);
             Vec2 vec2_4 = new Vec2(20f, 132f) + vec2_2;
             Graphics.DrawRect(vec2_4 + new Vec2(-2f, 0f), vec2_4 + vec2_3 + new Vec2(2f, 0f), Color.Black, (Depth)0.96f);
@@ -1346,7 +1346,7 @@ namespace DuckGame
             {
                 float stringWidth = Graphics.GetStringWidth(_lineProgress[index1].text);
                 float y = vec2_4.y + 2f + num * 9;
-                float x = (float)(vec2_4.x + vec2_3.x / 2.0 - stringWidth / 2.0);
+                float x = (float)(vec2_4.x + vec2_3.x / 2f - stringWidth / 2f);
                 for (int index2 = _lineProgress[index1].segments.Count - 1; index2 >= 0; --index2)
                 {
                     _descriptionFont.Draw(_lineProgress[index1].segments[index2].text, new Vec2(x, y), _lineProgress[index1].segments[index2].color, (Depth)0.97f);
@@ -1365,13 +1365,13 @@ namespace DuckGame
             {
                 case DayType.SaleDay:
                     _bigBanner.depth = (Depth)0.96f;
-                    Graphics.Draw(_bigBanner, 22f, (float)(_showLerp * 100.0 - 80.0));
-                    Graphics.Draw(_bigBanner, 194f, (float)(_showLerp * 100.0 - 80.0));
+                    Graphics.Draw(_bigBanner, 22f, (float)(_showLerp * 100f - 80f));
+                    Graphics.Draw(_bigBanner, 194f, (float)(_showLerp * 100f - 80f));
                     break;
                 case DayType.ImportDay:
                     _fancyBanner.depth = (Depth)0.96f;
-                    Graphics.Draw(_fancyBanner, 22f, (float)(_showLerp * 100.0 - 80.0));
-                    Graphics.Draw(_fancyBanner, 194f, (float)(_showLerp * 100.0 - 80.0));
+                    Graphics.Draw(_fancyBanner, 22f, (float)(_showLerp * 100f - 80f));
+                    Graphics.Draw(_fancyBanner, 194f, (float)(_showLerp * 100f - 80f));
                     break;
             }
             _furniFrame.alpha = alpha;
@@ -1439,7 +1439,7 @@ namespace DuckGame
                 if (products.Count > 1)
                 {
                     int index4 = 1;
-                    pos = new Vec2((float)(vec2_5.x + 70.0 - 200.0) + Math.Min(_showLerp * (200 + 40 * index4), 200f), vec2_5.y);
+                    pos = new Vec2((float)(vec2_5.x + 70f - 200f) + Math.Min(_showLerp * (200 + 40 * index4), 200f), vec2_5.y);
                     Graphics.Draw(_furniFrame, pos.x, pos.y);
                     int val1_2 = products[1].cost;
                     bool flag2 = false;
@@ -1527,7 +1527,7 @@ namespace DuckGame
                 if (products.Count > 3)
                 {
                     int index6 = 3;
-                    pos = new Vec2((float)(vec2_5.x + 70.0 - 200.0) + Math.Min(_showLerp * (200 + 40 * index6), 200f), vec2_5.y + 54f);
+                    pos = new Vec2((float)(vec2_5.x + 70f - 200f) + Math.Min(_showLerp * (200 + 40 * index6), 200f), vec2_5.y + 54f);
                     Graphics.Draw(_furniFrame, pos.x, pos.y);
                     int val1_4 = products[3].cost;
                     bool flag4 = false;
@@ -1578,7 +1578,7 @@ namespace DuckGame
                 Vec2 vec2_6 = new Vec2(226f, 11f);
                 Graphics.DrawRect(p1, p1 + vec2_6, Color.Black, (Depth)0.96f);
                 string name = products[index].name;
-                Graphics.DrawString(name, p1 + new Vec2((float)(vec2_6.x / 2.0 - Graphics.GetStringWidth(name) / 2.0), 2f), new Color(163, 206, 39) * alpha, (Depth)0.97f);
+                Graphics.DrawString(name, p1 + new Vec2((float)(vec2_6.x / 2f - Graphics.GetStringWidth(name) / 2f), 2f), new Color(163, 206, 39) * alpha, (Depth)0.97f);
                 _tail.depth = (Depth)0.5f;
                 _tail.alpha = alpha;
                 _tail.flipH = false;

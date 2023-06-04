@@ -177,7 +177,7 @@ namespace DuckGame
             set => _blurEffect = value;
         }
 
-        public float barSize => (float)((camera.width * Graphics.aspect - camera.width * (9.0 / 16.0)) / 2.0);
+        public float barSize => (float)((camera.width * Graphics.aspect - camera.width * (9f / 16f)) / 2f); //keep the f's here otherwise reality breaks -NiK0
 
         public Matrix projection { get; set; }
 
@@ -230,7 +230,7 @@ namespace DuckGame
             get => _scissor;
             set
             {
-                if (_scissor.width == 0.0 && value.width != 0.0)
+                if (_scissor.width == 0 && value.width != 0)
                 {
                     _state = new RasterizerState
                     {
@@ -244,7 +244,7 @@ namespace DuckGame
 
         public void ClearScissor()
         {
-            if (_scissor.width == 0.0)
+            if (_scissor.width == 0)
                 return;
             _scissor = new Rectangle(0f, 0f, 0f, 0f);
             _state = new RasterizerState
@@ -362,7 +362,7 @@ namespace DuckGame
                     _oldRenderTarget = Graphics.GetRenderTarget();
                     _oldViewport = Graphics.viewport;
                     Graphics.SetRenderTarget(_target);
-                    if (flashAddClearInfluence > 0.0)
+                    if (flashAddClearInfluence > 0)
                         Graphics.Clear(new Color((byte)Math.Min(_targetClearColor.r + (float)(flashAddClearInfluence * Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), (byte)Math.Min(_targetClearColor.g + (float)(flashAddClearInfluence * Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), (byte)Math.Min(_targetClearColor.b + (float)(flashAddClearInfluence * Graphics.flashAddRenderValue * byte.MaxValue), byte.MaxValue), _targetClearColor.a));
                     else
                         Graphics.Clear(_targetClearColor);
@@ -442,6 +442,7 @@ namespace DuckGame
             BlendState blendState = _blend;
             if (isTargetDraw)
                 blendState = _targetBlend;
+
             if (target != null & isTargetDraw)
             {
                 Vec2 position1 = camera.position;

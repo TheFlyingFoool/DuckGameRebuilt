@@ -580,7 +580,7 @@ namespace DuckGame
                 Thread.Sleep(40);
                 if (!started || !Graphics.inFocus)
                     ResetInfiniteLoopTimer();
-                if (_loopTimer.Elapsed.TotalSeconds > 5.0)
+                if (_loopTimer.Elapsed.TotalSeconds > 5d)
                 {
                     try
                     {
@@ -922,7 +922,8 @@ namespace DuckGame
             AddLoadingAction(DuckGame.Content.InitializeLevels, "Content InitializeLevels");
             AddLoadingAction(DuckGame.Content.InitializeEffects, "Content InitializeEffects");
             AddLoadingAction(Input.InitializeGraphics, "Input InitializeGraphics");
-            AddLoadingAction(Music.Initialize, "Music Initialize");
+            if (DGRSettings.LoadMusic) AddLoadingAction(Music.Initialize, "Music Initialize");
+            DGRSettings.LoaderMusic = DGRSettings.LoadMusic;
             AddLoadingAction(DevConsole.InitializeFont, "DevConsole InitializeFont");
             AddLoadingAction(DevConsole.InitializeCommands, "DevConsole InitializeCommands");
             AddLoadingAction(Editor.InitializePlaceableGroup, "Editor InitializePlaceableGroup");
@@ -1207,7 +1208,7 @@ namespace DuckGame
                 if (Program.isLinux)
                 {
                     elapsed = _waitToStartLoadingTimer.elapsed;
-                    if (elapsed.TotalMilliseconds <= 3500.0)
+                    if (elapsed.TotalMilliseconds <= 3500d)
                         goto label_19;
                 }
                 _loadTimer.Restart();
@@ -1215,7 +1216,7 @@ namespace DuckGame
                 while (_thingsToLoad.Count > 0)
                 {
                     elapsed = _loadTimer.elapsed;
-                    if (elapsed.TotalMilliseconds < 40.0)
+                    if (elapsed.TotalMilliseconds < 40d)
                     {
  
                         currentActionQueue = _thingsToLoad;
@@ -1309,7 +1310,7 @@ namespace DuckGame
                     if (transitionLevel != null)
                     {
                         Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.05f);
-                        if (Graphics.fade <= 0.0)
+                        if (Graphics.fade <= 0f)
                         {
                             Level.current = transitionLevel;
                             transitionLevel = null;
@@ -1319,7 +1320,7 @@ namespace DuckGame
                     else
                     {
                         Graphics.fade = Lerp.Float(Graphics.fade, 1f, 0.1f);
-                        if (Graphics.fade >= 1.0)
+                        if (Graphics.fade >= 1f)
                         {
                             transitionLevel = null;
                             transitionDirection = TransitionDirection.None;
@@ -1336,8 +1337,8 @@ namespace DuckGame
                     {
                         if (DevConsole.rhythmMode && Level.current is GameLevel)
                         {
-                            RhythmMode.TickSound((float)(((float)(Music.position + new TimeSpan(0, 0, 0, 0, 80)).TotalMinutes * 140f) % 1.0 / 1.0));
-                            RhythmMode.Tick((float)(((float)(Music.position + new TimeSpan(0, 0, 0, 0, 40)).TotalMinutes * 140f) % 1.0 / 1.0));
+                            RhythmMode.TickSound((float)(((float)(Music.position + new TimeSpan(0, 0, 0, 0, 80)).TotalMinutes * 140f) % 1f / 1f));
+                            RhythmMode.Tick((float)(((float)(Music.position + new TimeSpan(0, 0, 0, 0, 40)).TotalMinutes * 140f) % 1f / 1f));
                         }
                         foreach (IEngineUpdatable engineUpdatable in core.engineUpdatables)
                             engineUpdatable.PreUpdate();
@@ -1408,13 +1409,13 @@ namespace DuckGame
         /// </summary>
         public static void SleepForNoMoreThan(double milliseconds)
         {
-            if (LowestSleepThreshold == 0.0)
+            if (LowestSleepThreshold == 0d)
             {
                 int MinimumResolution;
                 int MaximumResolution;
                 int CurrentResolution;
                 NtQueryTimerResolution(out MinimumResolution, out MaximumResolution, out CurrentResolution);
-                LowestSleepThreshold = 1.0 + MaximumResolution / 10000.0;
+                LowestSleepThreshold = 1 + MaximumResolution / 10000;
                 DevConsole.Log(DCSection.General, "TIMER RES(" + MinimumResolution.ToString() + ", " + MaximumResolution.ToString() + ", " + CurrentResolution.ToString() + ")");
             }
             if (milliseconds < LowestSleepThreshold)
@@ -1450,7 +1451,7 @@ namespace DuckGame
         //    moonInfo.phase = (num + 4.867) / 29.53059;
         //    moonInfo.phase -= Math.Floor(moonInfo.phase);
         //    moonInfo.age = moonInfo.phase >= 0.5 ? moonInfo.phase * 29.53059 - 14.765295 : moonInfo.phase * 29.53059 + 14.765295;
-        //    moonInfo.age = Math.Floor(moonInfo.age) + 1.0;
+        //    moonInfo.age = Math.Floor(moonInfo.age) + 1;
         //    return moonInfo;
         //}
 
@@ -1459,7 +1460,7 @@ namespace DuckGame
             get
             {
                 double num = (DateTime.UtcNow - new DateTime(1900, 1, 1)).TotalDays % 29.530588853;// Not a Floating point error as far as i know
-                return DateTime.Now.Hour < 1 && num > 13.0 && num < 17.0;
+                return DateTime.Now.Hour < 1 && num > 13f && num < 17f;
             }
         }
         [HandleProcessCorruptedStateExceptions, SecurityCritical]
@@ -1659,9 +1660,9 @@ namespace DuckGame
                 //    loadMessages.Push(lastLoadMessage = loadMessage);
                 //}
                 float textPadding = -24f;
-                if (Cloud.processing && Cloud.progress != 0.0 && Cloud.progress != 1.0)
+                if (Cloud.processing && Cloud.progress != 0 && Cloud.progress != 1)
                 {
-                    Graphics.DrawString("Synchronizing Steam Cloud... (" + ((int)(Cloud.progress * 100.0)).ToString() + "%)", p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
+                    Graphics.DrawString("Synchronizing Steam Cloud... (" + ((int)(Cloud.progress * 100)).ToString() + "%)", p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
                     textPadding -= 20;
                 }
                 if (loadMessage != lastLoadMessage)

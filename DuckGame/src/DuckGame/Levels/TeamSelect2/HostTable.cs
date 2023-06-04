@@ -139,7 +139,7 @@ namespace DuckGame
                 thing.DoDraw();
             }
             float num1 = spectators.Count * 22;
-            float x = (float)(this.x - num1 / 2.0 + 10.0);
+            float x = (float)(this.x - num1 / 2f + 10f);
             int num2 = 0;
             foreach (Profile spectator in spectators)
             {

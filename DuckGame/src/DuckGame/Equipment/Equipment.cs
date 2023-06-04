@@ -124,13 +124,11 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (autoEquipTime > 0.0)
-                autoEquipTime -= 0.016f;
-            else
-                autoEquipTime = 0f;
+            if (autoEquipTime > 0) autoEquipTime -= 0.016f;
+            else autoEquipTime = 0f;
             if (isServerForObject)
             {
-                if (_equipmentHealth <= 0.0 && _equippedDuck != null && duck != null)
+                if (_equipmentHealth <= 0 && _equippedDuck != null && duck != null)
                 {
                     duck.KnockOffEquipment(this);
                     if (Network.isActive)
@@ -142,7 +140,7 @@ namespace DuckGame
             if (destroyed)
             {
                 alpha -= 0.1f;
-                if (alpha < 0.0)
+                if (alpha < 0)
                     Level.Remove(this);
             }
             if (localEquipIndex < equipIndex)
@@ -265,9 +263,12 @@ namespace DuckGame
             if (bullet.isLocal && Network.isActive)
                 NetSoundEffect.Play("equipmentTing");
             bullet.hitArmor = true;
-            Level.Add(MetalRebound.New(hitPos.x, hitPos.y, bullet.travelDirNormalized.x > 0.0 ? 1 : -1));
-            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
-                Level.Add(Spark.New(x, y, bullet.travelDirNormalized));
+            if (DGRSettings.ActualParticleMultiplier > 0)
+            {
+                Level.Add(MetalRebound.New(hitPos.x, hitPos.y, bullet.travelDirNormalized.x > 0 ? 1 : -1));
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
+                    Level.Add(Spark.New(x, y, bullet.travelDirNormalized));
+            }
             return base.Hit(bullet, hitPos);
         }
     }

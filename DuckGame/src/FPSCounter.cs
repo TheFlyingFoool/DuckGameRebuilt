@@ -47,7 +47,7 @@ namespace DuckGame
                 _fpsTimer[index].Start();
             }
             ++_fpsIncrement[index];
-            if (_fpsTimer[index].Elapsed.TotalMilliseconds <= 1000.0)
+            if (_fpsTimer[index].Elapsed.TotalMilliseconds <= 1000d)
                 return;
             _fpsTimer[index].Restart();
             _fpsValue[index] = _fpsIncrement[index];

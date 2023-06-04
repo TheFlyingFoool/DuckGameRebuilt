@@ -202,7 +202,7 @@ namespace DuckGame
                 _stickTime -= 0.005f;
                 gravMultiplier = 0f;
             }
-            if (_stickTime > 0.0 || destroyed)
+            if (_stickTime > 0 || destroyed)
                 return;
             Destroy(new DTFade());
         }

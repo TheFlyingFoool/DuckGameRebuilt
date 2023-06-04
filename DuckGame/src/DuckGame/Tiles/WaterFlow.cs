@@ -103,9 +103,9 @@ namespace DuckGame
             IEnumerable<PhysicsObject> source = Level.CheckRectAll<PhysicsObject>(topLeft, bottomRight);
             foreach (PhysicsObject physicsObject in source)
             {
-                if (flipHorizontal && physicsObject.hSpeed > -2.0)
+                if (flipHorizontal && physicsObject.hSpeed > -2)
                     physicsObject.hSpeed -= 0.3f;
-                else if (!flipHorizontal && physicsObject.hSpeed < 2.0)
+                else if (!flipHorizontal && physicsObject.hSpeed < 2)
                     physicsObject.hSpeed += 0.3f;
                 physicsObject.sleeping = false;
                 physicsObject.frictionMult = 0.3f;
@@ -128,9 +128,9 @@ namespace DuckGame
 
         public override void Draw()
         {
-            (graphic as SpriteMap).frame = (int)(Graphics.frame / 3.0 % 4.0);
+            (graphic as SpriteMap).frame = (int)(Graphics.frame / 3 % 4);
             foreach (Thing thing in _extraWater)
-                (thing.graphic as SpriteMap).frame = (int)(Graphics.frame / 3.0 % 4.0);
+                (thing.graphic as SpriteMap).frame = (int)(Graphics.frame / 3 % 4);
             graphic.flipH = offDir <= 0;
             base.Draw();
             if (!flipHorizontal)

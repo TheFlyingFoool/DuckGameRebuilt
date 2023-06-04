@@ -367,6 +367,8 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigRagdollPart.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigRagdoll.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigTrapped.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\ReDemoBlaster.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\TapeBlock.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATDeathCaliber.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATWumpMagnum.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\Bubble.cs" />
@@ -478,6 +480,16 @@
     <Compile Include="src\MonoTime\Input\CharEnteredHandler.cs" />
     <Compile Include="src\MonoTime\Input\KeyEventHandler.cs" />
     <Compile Include="src\MonoTime\Input\2InputMan.cs" />
+    <Compile Include="src\MonoTime\LUI\LUIChangingText.cs" />
+    <Compile Include="src\MonoTime\LUI\LUIControlElement.cs" />
+    <Compile Include="src\MonoTime\LUI\LUIMenuItemNumber.cs" />
+    <Compile Include="src\MonoTime\LUI\LUIMenuItemString.cs" />
+    <Compile Include="src\MonoTime\LUI\LUIMenuItemToggle.cs" />
+    <Compile Include="src\MonoTime\LUI\LUIMultiToggle.cs" />
+    <Compile Include="src\MonoTime\LUI\LUINumber.cs" />
+    <Compile Include="src\MonoTime\LUI\LUIOnOff.cs" />
+    <Compile Include="src\MonoTime\LUI\LUIStringEntry.cs" />
+    <Compile Include="src\MonoTime\LUI\LUIText.cs" />
     <Compile Include="src\MonoTime\UI\UIDGRDescribe.cs" />
     <Compile Include="src\WindowsPlatformStartup.cs" />
     <Compile Include="src\MonoTime\Console\ServiceContainer.cs" />

@@ -27,7 +27,7 @@ namespace DuckGame
         public override void Activate()
         {
             if (closer != null && closee != null && closee.ragdoll != null && closee.ragdoll.part1 != null)
-                Level.Add(new EyeCloseWing(closee.ragdoll.part1.angle < 0.0 ? position.x - 4f : position.x - 11f, position.y + 7f, closee.ragdoll.part1.angle < 0.0 ? 1 : -1, closer._spriteArms, closer, closee));
+                Level.Add(new EyeCloseWing(closee.ragdoll.part1.angle < 0f ? position.x - 4f : position.x - 11f, position.y + 7f, closee.ragdoll.part1.angle < 0f ? 1 : -1, closer._spriteArms, closer, closee));
             base.Activate();
         }
     }

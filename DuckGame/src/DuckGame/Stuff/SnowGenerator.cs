@@ -37,7 +37,7 @@ namespace DuckGame
         {
             if (DGRSettings.S_ParticleMultiplier == 0) return; //so sad, no snow :(
             snowWait -= Maths.IncFrameTimer();
-            if (snowWait <= 0.0)
+            if (snowWait <= 0)
             {
                 snowWait = Rando.Float(2f, 4f) / DGRSettings.ActualParticleMultiplier;
                 Level.Add(new SnowFallParticle(x + Rando.Float(-8f, 8f), y + Rando.Float(-8f, 8f), new Vec2(0f, 0f)));

@@ -75,7 +75,7 @@ namespace DuckGame
             Duck duck1 = Level.Nearest<Duck>(x, y);
             if (duck1 != null)
             {
-                if (duck1.grounded && (duck1.position - position).length < 20.0)
+                if (duck1.grounded && (duck1.position - position).length < 20f)
                 {
                     _hoverFade = Lerp.Float(_hoverFade, 1f, 0.1f);
                     hover = true;
@@ -90,8 +90,7 @@ namespace DuckGame
             {
                 Vec2 vec2 = new Vec2(40f, 0f);
                 Duck duck2 = Level.Nearest<Duck>(x + vec2.x, y + vec2.y);
-                if (duck2 != null)
-                    hoverChancyChallenge = duck2.grounded && (duck2.position - (position + vec2)).length < 20.0;
+                if (duck2 != null) hoverChancyChallenge = duck2.grounded && (duck2.position - (position + vec2)).length < 20f;
             }
             _dust.fade = 0.5f;
             _dust.visible = _unlocked && visible;

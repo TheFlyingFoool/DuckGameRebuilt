@@ -110,13 +110,13 @@ namespace DuckGame
             if (floor)
             {
                 collisionSize = new Vec2(num, 6f);
-                collisionOffset = new Vec2((float)(-num + 16.0), -2f);
+                collisionOffset = new Vec2((float)(-num + 16), -2f);
                 _sprite.angleDegrees = -90f;
             }
             else
             {
                 collisionSize = new Vec2(6f, num);
-                collisionOffset = new Vec2(-3f, (float)(-num + 8.0));
+                collisionOffset = new Vec2(-3f, (float)(-num + 8));
                 _sprite.angle = 0f;
             }
             _sprite.yscale = num;
@@ -195,7 +195,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    int ix = (int)(DGRSettings.ActualParticleMultiplier * 8);
+                    int ix = (int)(8f * DGRSettings.ActualParticleMultiplier);
                     float fr = 32f / ix;
                     for (int index = 0; index < ix; ++index)
                     {
@@ -219,15 +219,15 @@ namespace DuckGame
             if (!_hasGlass)
                 return base.Hit(bullet, hitPos);
             _enter = hitPos + bullet.travelDirNormalized;
-            if (_enter.x < x && _enter.x < left + 2.0f)
+            if (_enter.x < x && _enter.x < left + 2f)
                 _enter.x = left;
-            else if (_enter.x > x && _enter.x > right - 2.0f)
+            else if (_enter.x > x && _enter.x > right - 2f)
                 _enter.x = right;
-            if (_enter.y < y && _enter.y < top + 2.0f)
+            if (_enter.y < y && _enter.y < top + 2f)
                 _enter.y = top;
-            else if (_enter.y > y && _enter.y > bottom - 2.0f)
+            else if (_enter.y > y && _enter.y > bottom - 2f)
                 _enter.y = bottom;
-            if (hitPoints <= 0.0)
+            if (hitPoints <= 0)
                 return false;
             hitPos -= bullet.travelDirNormalized;
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++index)
@@ -264,8 +264,11 @@ namespace DuckGame
                 vec2.y = bottom;
             _hits.Add(vec2);
             exitPos += bullet.travelDirNormalized;
-            for (int index = 0; index < 1.0f + damageMultiplier / 2.0f; ++index)
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++index)
+            {
                 Level.Add(new GlassParticle(exitPos.x, exitPos.y, -bullet.travelDirNormalized, tint.value));
+                if (index > 32) break;
+            }
         }
 
         public void Shake()
@@ -319,11 +322,11 @@ namespace DuckGame
         public override void Update()
         {
             _shake.Update();
-            breakForce = (float)(6.0 * (hitPoints / maxHealth));
-            if (hitPoints <= 0.0)
+            breakForce = (float)(6 * (hitPoints / maxHealth));
+            if (hitPoints <= 0)
                 Destroy(new DTImpact(null));
             base.Update();
-            if (damageMultiplier > 1.0)
+            if (damageMultiplier > 1f)
                 damageMultiplier -= 0.2f;
             else
                 damageMultiplier = 1f;
@@ -361,13 +364,13 @@ namespace DuckGame
                 alpha = 0.7f;
                 if (floor)
                 {
-                    Graphics.Draw(_sprite, (float)(x - num2 + 16.0), y + 4f);
-                    Graphics.Draw(_borderSprite, (float)(x - num2 + 16.0), y + 4f);
+                    Graphics.Draw(_sprite, (float)(x - num2 + 16), y + 4f);
+                    Graphics.Draw(_borderSprite, (float)(x - num2 + 16), y + 4f);
                 }
                 else
                 {
-                    Graphics.Draw(_sprite, x - 3f, (float)(y - num2 + 8.0));
-                    Graphics.Draw(_borderSprite, x - 3f, (float)(y - num2 + 8.0));
+                    Graphics.Draw(_sprite, x - 3f, (float)(y - num2 + 8));
+                    Graphics.Draw(_borderSprite, x - 3f, (float)(y - num2 + 8));
                 }
                 for (int index = 0; index < _hits.Count; index += 2)
                 {
@@ -382,10 +385,10 @@ namespace DuckGame
             if (floor)
             {
                 if (bars.value)
-                    Graphics.Draw(_barSprite, (float)(x - num2 + 16.0), y + 5f);
+                    Graphics.Draw(_barSprite, (float)(x - num2 + 16), y + 5f);
             }
             else if (bars.value)
-                Graphics.Draw(_barSprite, x - 4f, (float)(y - num2 + 8.0));
+                Graphics.Draw(_barSprite, x - 4f, (float)(y - num2 + 8));
             base.Draw();
         }
     }

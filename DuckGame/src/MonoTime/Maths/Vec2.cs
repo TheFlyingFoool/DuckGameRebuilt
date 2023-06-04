@@ -186,7 +186,7 @@ namespace DuckGame
 
         public static Vec2 Reflect(Vec2 vector, Vec2 normal)
         {
-            float num = (float)(2.0 * (vector.x * normal.x + vector.y * normal.y));
+            float num = (float)(2 * (vector.x * normal.x + vector.y * normal.y));
             Vec2 vec2;
             vec2.x = vector.x - normal.x * num;
             vec2.y = vector.y - normal.y * num;
@@ -195,7 +195,7 @@ namespace DuckGame
 
         public static void Reflect(ref Vec2 vector, ref Vec2 normal, out Vec2 result)
         {
-            float num = (float)(2.0 * (vector.x * normal.x + vector.y * normal.y));
+            float num = (float)(2 * (vector.x * normal.x + vector.y * normal.y));
             result.x = vector.x - normal.x * num;
             result.y = vector.y - normal.y * num;
         }
@@ -292,7 +292,7 @@ namespace DuckGame
         public void Normalize()
         {
             float num1 = (float)Math.Sqrt(x * x + y * y);
-            if (num1 == 0.0)
+            if (num1 == 0)
                 return;
             float num2 = 1f / num1;
             x *= num2;
@@ -304,7 +304,7 @@ namespace DuckGame
             get
             {
                 float num1 = (float)Math.Sqrt(x * x + y * y);
-                if (num1 == 0.0)
+                if (num1 == 0)
                     return Zero;
                 float num2 = 1f / num1;
                 return new Vec2(x * num2, y * num2);
@@ -314,7 +314,7 @@ namespace DuckGame
         public static Vec2 Normalize(Vec2 value)
         {
             float num1 = (float)Math.Sqrt(value.x * value.x + value.y * value.y);
-            if (num1 != 0.0)
+            if (num1 != 0)
             {
                 float num2 = 1f / num1;
                 value.x *= num2;
@@ -326,7 +326,7 @@ namespace DuckGame
         public static void Normalize(ref Vec2 value, out Vec2 result)
         {
             float num1 = (float)Math.Sqrt(value.x * value.x + value.y * value.y);
-            if (num1 != 0.0)
+            if (num1 != 0)
             {
                 float num2 = 1f / num1;
                 result.x = value.x * num2;

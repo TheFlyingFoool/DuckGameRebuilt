@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt")]
+    //[EditorGroup("Rebuilt")]
     public class PizzaLauncher : Gun
     {
         public const string OvenSprite = "iVBORw0KGgoAAAANSUhEUgAAABEAAAAUCAYAAABroNZJAAAAAXNSR0IArs4c6QAAAQFJREFUOE9jZICA/1CaHIqREWRAQnkNw4LOFrABIDYIwPgwU2HiMDl9Dz8GQ309sDoUQ2ASMIXSakZwl7kGesHZyBbCDSHHD8h6wC75/5+0IJk3bx5DUlISA4hOTk6GeAdkCCM4eEgDsLBEMQRkGLIt+IwEuQAUhhd3bKLMJRiGEOsCkOsO37rPYKumCKbhsQPzRl3nVIant84RDBhQ1DeVZ2M3BORP5LQhoiQDN/DNvScMID6IBlk0d+5cwobgMgBkKlGG4DMAJAeKEbwuAYU4DCB7ASRGlHcoCliY0whGC1TB+YuXwDkYRMMTG7IXiDUIpA4WU9TLgFTxDilewKYWAOOe+wL1uWk5AAAAAElFTkSuQmCC";

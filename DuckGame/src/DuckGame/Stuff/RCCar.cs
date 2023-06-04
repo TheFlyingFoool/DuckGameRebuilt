@@ -90,12 +90,12 @@ namespace DuckGame
             List<Bullet> varBullets = new List<Bullet>();
             for (int index = 0; index < 20; ++index)
             {
-                float num = (float)(index * 18.0 - 5.0) + Rando.Float(10f);
+                float num = (float)(index * 18 - 5) + Rando.Float(10f);
                 ATRCShrapnel type1 = new ATRCShrapnel
                 {
                     range = 55f + Rando.Float(14f)
                 };
-                Bullet bullet = new Bullet(x + (float)(Math.Cos(Maths.DegToRad(num)) * 6.0), y - (float)(Math.Sin(Maths.DegToRad(num)) * 6.0), type1, num)
+                Bullet bullet = new Bullet(x + (float)(Math.Cos(Maths.DegToRad(num)) * 6), y - (float)(Math.Sin(Maths.DegToRad(num)) * 6), type1, num)
                 {
                     firedFrom = this
                 };
@@ -173,17 +173,14 @@ namespace DuckGame
                 if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(SmallSmoke.New(x - offDir * 10, y));
                 else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(x - offDir * 10, y));
             }
-            if (!moveLeft && !moveRight)
-                _idleSpeed -= 0.03f;
-            if (_idleSpeed > 1.0)
-                _idleSpeed = 1f;
-            if (_idleSpeed < 0.0)
-                _idleSpeed = 0f;
+            if (!moveLeft && !moveRight) _idleSpeed -= 0.03f;
+            if (_idleSpeed > 1) _idleSpeed = 1f;
+            if (_idleSpeed < 0) _idleSpeed = 0f;
             if (jump && grounded)
                 vSpeed -= 4.8f;
             _tilt = MathHelper.Lerp(_tilt, -hSpeed, 0.4f);
             _waveMult = MathHelper.Lerp(_waveMult, -hSpeed, 0.1f);
-            angleDegrees = (float)(_tilt * 2.0 + _wave.value * (_waveMult * (_maxSpeed - Math.Abs(hSpeed))));
+            angleDegrees = (float)(_tilt * 2 + _wave.value * (_waveMult * (_maxSpeed - Math.Abs(hSpeed))));
             if (!isServerForObject || !isOffBottomOfLevel || destroyed)
                 return;
             Destroy(new DTFall());
@@ -192,7 +189,7 @@ namespace DuckGame
         public override void Draw()
         {
             if (owner == null)
-                _sprite.flipH = offDir < 0.0;
+                _sprite.flipH = offDir < 0;
             base.Draw();
             Graphics.Draw(_wheel, x - 7f, y + 9f);
             Graphics.Draw(_wheel, x + 7f, y + 9f);

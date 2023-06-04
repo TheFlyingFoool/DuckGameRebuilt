@@ -16,7 +16,7 @@ namespace DuckGame
 
         public static float FramesToTravel(float distance, float acceleration, float startSpeed)
         {
-            return ((float)Math.Sqrt(Math.Pow((double)(2f * startSpeed + acceleration), 2.0) + (double)(8f * acceleration * distance)) - 2f * startSpeed - acceleration) / (2f * acceleration);
+            return ((float)Math.Sqrt(Math.Pow((double)(2f * startSpeed + acceleration), 2f) + (double)(8f * acceleration * distance)) - 2f * startSpeed - acceleration) / (2f * acceleration);
         }
 
         public static float DistanceTravelled(int frames, float acceleration, float startSpeed)

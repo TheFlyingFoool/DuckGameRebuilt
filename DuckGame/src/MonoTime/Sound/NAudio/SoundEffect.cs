@@ -221,7 +221,7 @@ namespace DuckGame
                 {
                     num = 0f;
                 }
-                replaygainModifier = Math.Max(0f, Math.Min(1f, (float)((100f * (float)Math.Pow(10.0, num / 20.0)) / 100.0 * 1.9f)));
+                replaygainModifier = Math.Max(0f, Math.Min(1f, (float)((100f * (float)Math.Pow(10, num / 20)) / 100 * 1.9f)));
             }
             if (waveStream == null)
                 return false;

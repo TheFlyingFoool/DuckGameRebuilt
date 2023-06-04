@@ -1,16 +1,10 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.MetroidDoor
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame
 {
-    [EditorGroup("Stuff|Doors", EditorItemType.Debug)]
+    //this probably shoudln't be visible on the editor lol -NiK0
+    //[EditorGroup("Stuff|Doors", EditorItemType.Debug)]
     public class MetroidDoor : VerticalDoor
     {
         public Profile _arcadeProfile;
@@ -31,7 +25,7 @@ namespace DuckGame
                 if (thing.Count() > 0)
                 {
                     Duck duck = thing.First() as Duck;
-                    if (duck.x < x - 5.0)
+                    if (duck.x < x - 5)
                     {
                         duck.x -= 10f;
                         MonoMain.transitionDirection = TransitionDirection.Left;

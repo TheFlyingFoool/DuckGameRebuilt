@@ -33,7 +33,7 @@ namespace DuckGame
         {
             foreach (SmallFire litBy in Level.current.things[typeof(SmallFire)])
             {
-                if (litBy.y >= -2000.0 && litBy.fireID == _curUpdateID && litBy.alpha > 0.5)
+                if (litBy.y >= -2000f && litBy.fireID == _curUpdateID && litBy.alpha > 0.5f)
                 {
                     Thing thing = null;
                     if (litBy.stick != null && (litBy.stick is DartGun || litBy.stick is Chaindart))
@@ -50,14 +50,14 @@ namespace DuckGame
                                 {
                                     litBy.doFloat = true;
                                     FluidPuddle fluidPuddle = materialThing as FluidPuddle;
-                                    if (fluidPuddle.data.flammable <= 0.5 && fluidPuddle.data.heat < 0.5 && fluidPuddle.data.douseFire > 0.5)
+                                    if (fluidPuddle.data.flammable <= 0.5f && fluidPuddle.data.heat < 0.5f && fluidPuddle.data.douseFire > 0.5f)
                                     {
                                         Level.Remove(litBy);
                                         break;
                                     }
                                 }
                                 Duck duck = materialThing as Duck;
-                                if (duck != null && (duck.slideBuildup > 0.0 && duck.sliding || duck.holdObject is Sword && (duck.holdObject as Sword)._slamStance))
+                                if (duck != null && (duck.slideBuildup > 0f && duck.sliding || duck.holdObject is Sword && (duck.holdObject as Sword)._slamStance))
                                 {
                                     if (DGRSettings.S_ParticleMultiplier != 0)
                                     {
@@ -67,7 +67,7 @@ namespace DuckGame
                                     }
                                     Level.Remove(litBy);
                                 }
-                                else if (Rando.Float(1000f) < materialThing.flammable * 1000.0 && (litBy.whoWait == null || duck != litBy.whoWait))
+                                else if (Rando.Float(1000f) < materialThing.flammable * 1000f && (litBy.whoWait == null || duck != litBy.whoWait))
                                     materialThing.Burn(litBy.position + new Vec2(0f, 4f), litBy);
                             }
                         }
@@ -84,7 +84,7 @@ namespace DuckGame
                     {
                         if (materialThing != litBy1 && materialThing.isServerForObject)
                         {
-                            if ((!(materialThing is Duck duck) || duck.slideBuildup <= 0.0) && Rando.Float(1000f) < materialThing.flammable * 1000.0)
+                            if ((!(materialThing is Duck duck) || duck.slideBuildup <= 0f) && Rando.Float(1000f) < materialThing.flammable * 1000f)
                                 materialThing.Burn(litBy1.position + new Vec2(0f, 4f), litBy1);
                             materialThing.DoHeatUp(0.05f, litBy1.position);
                         }
@@ -109,16 +109,16 @@ namespace DuckGame
                 {
                     foreach (SmallFire smallFire in Level.CheckCircleAll<SmallFire>(extinguisherSmoke.position + new Vec2(0f, -8f), 12f))
                     {
-                        if (extinguisherSmoke.scale.x > 1.0)
+                        if (extinguisherSmoke.scale.x > 1f)
                             smallFire.SuckLife(10f);
                     }
                     foreach (MaterialThing materialThing in Level.CheckCircleAll<MaterialThing>(extinguisherSmoke.position + new Vec2(0f, -8f), 4f))
                     {
-                        if (extinguisherSmoke.scale.x > 1.0)
+                        if (extinguisherSmoke.scale.x > 1f)
                             materialThing.spreadExtinguisherSmoke = 1f;
                         if (materialThing.physicsMaterial == PhysicsMaterial.Metal)
                             materialThing.DoFreeze(0.03f, extinguisherSmoke.position);
-                        if (materialThing.onFire && Rando.Float(1000f) > materialThing.flammable * 650.0)
+                        if (materialThing.onFire && Rando.Float(1000f) > materialThing.flammable * 650f)
                             materialThing.Extinquish();
                     }
                 }

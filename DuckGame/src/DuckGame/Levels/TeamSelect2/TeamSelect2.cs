@@ -101,7 +101,6 @@ namespace DuckGame
         private float _waitToShow = 1f;
         private static bool _showedPS4Warning = false;
         private float _afkTimeout;
-        private static bool _showedOnlineBumper = false;
         private float _timeoutFade;
         private float _topScroll;
         private float _afkMaxTimeout = 300f;
@@ -121,16 +120,23 @@ namespace DuckGame
 
         public static string DefaultGameName()
         {
-            if (GetSettingInt("type") >= 3)
+            List<Profile> activep = Profiles.active;
+            if (Network.lanMode)
             {
-                List<Profile> activep = Profiles.active;
                 if (activep.Count > 0)
                 {
                     return activep[0].name + "'s LAN Game";
                 }
             }
+            string hostName = "";
+            activep.ForEach((profile) =>
+            {
+                if (profile.isHost)
+                    hostName = profile.name;
+            });
+            if (hostName != "")
+                return hostName + "'s Game";
             return Profiles.experienceProfile.name + "'s Game";
-            
         }
 
         public static void DefaultSettings(bool resetMatchSettings = true)
@@ -141,12 +147,7 @@ namespace DuckGame
                     matchSetting.value = matchSetting.defaultValue;
             }
             foreach (MatchSetting onlineSetting in onlineSettings)
-            {
-                if (onlineSetting.id == "name")
-                    onlineSetting.value = DefaultGameName();
-                else
-                    onlineSetting.value = onlineSetting.defaultValue;
-            }
+                onlineSetting.value = onlineSetting.defaultValue;
             if (resetMatchSettings)
             {
                 foreach (UnlockData unlock in Unlocks.GetUnlocks(UnlockType.Modifier))
@@ -555,7 +556,7 @@ namespace DuckGame
                 if (!(matchSetting.id == "workshopmaps") || Network.available) //if ((!(matchSetting.id == "workshopmaps") || Network.available) && (!(matchSetting.id == "custommaps") || !ParentalControls.AreParentalControlsActive()))
                 {
                     if (matchSetting.id != "partymode")
-                        _hostMatchSettingsMenu.AddMatchSetting(matchSetting, false);
+                        _hostMatchSettingsMenu.AddMatchSettingL(matchSetting, false);
                     if (matchSetting.id == "wallmode")
                         _hostMatchSettingsMenu.Add(new UIText(" ", Color.White), true);
                 }
@@ -747,116 +748,100 @@ namespace DuckGame
             int pMinLength = 50;
             float heightAdd = 3f;
             _playOnlineBumper = new UIMenu("PLAYING ONLINE", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 220f, conString: "@SELECT@OK!");
-            UIMenu playOnlineBumper1 = _playOnlineBumper;
             UIText component1 = new UIText("", Color.White, heightAdd: -3f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper1.Add(component1, true);
-            UIMenu playOnlineBumper2 = _playOnlineBumper;
+            _playOnlineBumper.Add(component1, true);
             UIText component2 = new UIText("There are many tools of expression", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper2.Add(component2, true);
-            UIMenu playOnlineBumper3 = _playOnlineBumper;
+            _playOnlineBumper.Add(component2, true);
             UIText component3 = new UIText("in Duck Game. Please use them for", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper3.Add(component3, true);
-            UIMenu playOnlineBumper4 = _playOnlineBumper;
+            _playOnlineBumper.Add(component3, true);
             UIText component4 = new UIText("|PINK|love|WHITE| and not for |DGRED|hate...|WHITE|", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper4.Add(component4, true);
-            UIMenu playOnlineBumper5 = _playOnlineBumper;
+            _playOnlineBumper.Add(component4, true);
             UIText component5 = new UIText("", Color.White, heightAdd: -3f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper5.Add(component5, true);
-            UIMenu playOnlineBumper6 = _playOnlineBumper;
+            _playOnlineBumper.Add(component5, true);
             UIText component6 = new UIText("Things every Duck aught to remember:", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper6.Add(component6, true);
-            UIMenu playOnlineBumper7 = _playOnlineBumper;
+            _playOnlineBumper.Add(component6, true);
             UIText component7 = new UIText("", Color.White, heightAdd: -3f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper7.Add(component7, true);
-            UIMenu playOnlineBumper8 = _playOnlineBumper;
+            _playOnlineBumper.Add(component7, true);
             UIText component8 = new UIText("-Trolling and hate appear exactly the same online.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper8.Add(component8, true);
-            UIMenu playOnlineBumper9 = _playOnlineBumper;
+            _playOnlineBumper.Add(component8, true);
             UIText component9 = new UIText("-Please! be kind to one another.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper9.Add(component9, true);
-            UIMenu playOnlineBumper10 = _playOnlineBumper;
+            _playOnlineBumper.Add(component9, true);
             UIText component10 = new UIText("-Please! don't use hate speech or strong words.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper10.Add(component10, true);
-            UIMenu playOnlineBumper11 = _playOnlineBumper;
+            _playOnlineBumper.Add(component10, true);
             UIText component11 = new UIText("-Please! don't use hacks in public lobbies.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper11.Add(component11, true);
-            UIMenu playOnlineBumper12 = _playOnlineBumper;
+            _playOnlineBumper.Add(component11, true);
             UIText component12 = new UIText("-Please! keep custom content tasteful.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper12.Add(component12, true);
-            UIMenu playOnlineBumper13 = _playOnlineBumper;
+            _playOnlineBumper.Add(component12, true);
             UIText component13 = new UIText("-Angle shots are neat (and are not hacks).".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper13.Add(component13, true);
-            UIMenu playOnlineBumper14 = _playOnlineBumper;
+            _playOnlineBumper.Add(component13, true);
             UIText component14 = new UIText("", Color.White, heightAdd: -3f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper14.Add(component14, true);
-            UIMenu playOnlineBumper15 = _playOnlineBumper;
+            _playOnlineBumper.Add(component14, true);
             UIText component15 = new UIText("If anyone is hacking or being unkind, please", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper15.Add(component15, true);
-            UIMenu playOnlineBumper16 = _playOnlineBumper;
+            _playOnlineBumper.Add(component15, true);
             UIText component16 = new UIText("hover their name in the pause menu", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper16.Add(component16, true);
-            UIMenu playOnlineBumper17 = _playOnlineBumper;
+            _playOnlineBumper.Add(component16, true);
             UIText component17 = new UIText("and go 'Mute -> Block'.", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper17.Add(component17, true);
-            UIMenu playOnlineBumper18 = _playOnlineBumper;
+            _playOnlineBumper.Add(component17, true);
             UIText component18 = new UIText("", Color.White, heightAdd: -3f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper18.Add(component18, true);
+            _playOnlineBumper.Add(component18, true);
             _playOnlineBumper.SetAcceptFunction(new UIMenuActionOpenMenu(_playOnlineBumper, _playOnlineMenu));
             _playOnlineBumper.SetBackFunction(new UIMenuActionOpenMenu(_playOnlineBumper, _playOnlineMenu));
+
+
             _browseGamesMenu = new UIServerBrowser(_playOnlineMenu, "SERVER BROWSER", Layer.HUD.camera.width, Layer.HUD.camera.height, 550f);
             if (Network.available)
             {
@@ -1067,7 +1052,7 @@ namespace DuckGame
             if (core.endedGameInProgress && !DuckNetwork.isDedicatedServer)
             {
                 _waitToShow -= Maths.IncFrameTimer();
-                if (_waitToShow <= 0.0 && MonoMain.pauseMenu == null)
+                if (_waitToShow <= 0 && MonoMain.pauseMenu == null)
                 {
                     if (!DuckNetwork.ShowUserXPGain() && Unlockables.HasPendingUnlocks())
                         MonoMain.pauseMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
@@ -1287,7 +1272,7 @@ namespace DuckGame
                         }
                     }
                 }
-                if (Graphics.fade <= 0.0 && _returnToMenu.value)
+                if (Graphics.fade <= 0 && _returnToMenu.value)
                     current = new TitleScreen();
                 if (!Network.isActive)
                     DuckNetwork.core.startCountdown = _starting;
@@ -1315,7 +1300,7 @@ namespace DuckGame
                         DuckNetwork.inGame = true;
                         dim = Maths.LerpTowards(dim, 0.8f, 0.02f);
                         _countTime -= 0.006666667f;
-                        if (_countTime <= 0.0 && Network.isServer && (Graphics.fade <= 0.0 || NetworkDebugger.enabled))
+                        if (_countTime <= 0 && Network.isServer && (Graphics.fade <= 0 || NetworkDebugger.enabled))
                         {
                             UpdateModifierStatus();
                             DevConsole.qwopMode = Enabled("QWOPPY", true);
@@ -1443,9 +1428,8 @@ namespace DuckGame
                     if (_afkTimeout > _afkMaxTimeout)
                         current = new DisconnectFromGame();
                 }
-                else
-                    _afkTimeout = 0f;
-                Graphics.fade = Lerp.Float(Graphics.fade, _returnToMenu.value || _countTime <= 0.0 ? 0f : 1f, 0.02f);
+                else _afkTimeout = 0f;
+                Graphics.fade = Lerp.Float(Graphics.fade, _returnToMenu.value || _countTime <= 0f ? 0f : 1f, 0.02f);
                 _setupFade = Lerp.Float(_setupFade, !_matchSetup || menuOpen || DuckNetwork.core.startCountdown ? 0f : 1f, 0.05f);
                 Layer.Game.fade = Lerp.Float(Layer.Game.fade, _matchSetup ? 0.5f : 1f, 0.05f);
             }
@@ -1461,13 +1445,12 @@ namespace DuckGame
         {
             FillMatchmakingProfiles();
             _playOnlineGroup.Open();
-            if (!_showedOnlineBumper)
+            if (!DGRSettings.skipOnlineBumper)
             {
-                _showedOnlineBumper = true;
+                DGRSettings.skipOnlineBumper = true;
                 _playOnlineBumper.Open();
             }
-            else
-                _playOnlineMenu.Open();
+            else _playOnlineMenu.Open();
             MonoMain.pauseMenu = _playOnlineGroup;
         }
 
@@ -1557,8 +1540,8 @@ namespace DuckGame
                         Graphics.DrawRect(new Vec2(-1000f, -1000f), new Vec2(10000f, 10000f), Color.Black * 0.7f * _timeoutFade, (Depth)0.95f);
                         string text1 = "AFK TIMEOUT IN";
                         string text2 = ((int)(_afkMaxTimeout - _afkTimeout)).ToString();
-                        Graphics.DrawString(text1, new Vec2((float)(layer.width / 2.0 - Graphics.GetStringWidth(text1) / 2.0), (float)(layer.height / 2.0 - 8.0)), Color.White * _timeoutFade, (Depth)0.96f);
-                        Graphics.DrawString(text2, new Vec2(layer.width / 2f - Graphics.GetStringWidth(text2), (float)(layer.height / 2.0 + 4.0)), Color.White * _timeoutFade, (Depth)0.96f, scale: 2f);
+                        Graphics.DrawString(text1, new Vec2((float)(layer.width / 2f - Graphics.GetStringWidth(text1) / 2f), (float)(layer.height / 2f - 8f)), Color.White * _timeoutFade, (Depth)0.96f);
+                        Graphics.DrawString(text2, new Vec2(layer.width / 2f - Graphics.GetStringWidth(text2), (float)(layer.height / 2f + 4f)), Color.White * _timeoutFade, (Depth)0.96f, scale: 2f);
                     }
                     else
                         _timeoutFade = Lerp.Float(_timeoutFade, 0f, 0.05f);
@@ -1600,15 +1583,15 @@ namespace DuckGame
                         if (text3.Length > 30)
                             num1 = 1f / 500f;
                         _topScroll += num1;
-                        if (_topScroll > 1.0)
+                        if (_topScroll > 1)
                             --_topScroll;
-                        if (_topScroll < 0.0)
+                        if (_topScroll < 0)
                             ++_topScroll;
-                        _littleFont.Draw(text4, new Vec2((float)(1.0 - _topScroll * (_littleFont.GetWidth(text3) + 7.0)), vec2.y + 3f), Color.White, (Depth)0.95f);
+                        _littleFont.Draw(text4, new Vec2((float)(1f - _topScroll * (_littleFont.GetWidth(text3) + 7f)), vec2.y + 3f), Color.White, (Depth)0.95f);
                     }
                     if (_setupFade > 0.01f)
                     {
-                        float num = (float)(Layer.HUD.camera.height / 2.0 - 28.0);
+                        float num = (float)(Layer.HUD.camera.height / 2f - 28f);
                         string str1 = "@MENU2@PLAY ONLINE";
                         if (!Network.available)
                         {
@@ -1627,19 +1610,19 @@ namespace DuckGame
                             {
                                 string text5 = str2;
                                 _font.alpha = _setupFade;
-                                _font.Draw(text5, (float)(Layer.HUD.width / 2.0 - _font.GetWidth(text5) / 2.0), num + 15f, Color.White, (Depth)0.81f);
+                                _font.Draw(text5, (float)(Layer.HUD.width / 2f - _font.GetWidth(text5) / 2f), num + 15f, Color.White, (Depth)0.81f);
                                 string text6 = str1;
                                 _font.alpha = _setupFade;
-                                _font.Draw(text6, (float)(Layer.HUD.width / 2.0 - _font.GetWidth(text6) / 2.0), (float)(num + 12.0 + 17.0), Color.White, (Depth)0.81f);
+                                _font.Draw(text6, (float)(Layer.HUD.width / 2f - _font.GetWidth(text6) / 2f), (float)(num + 12f + 17f), Color.White, (Depth)0.81f);
                             }
                             else
                             {
                                 string text7 = str2;
                                 _font.alpha = _setupFade;
-                                _font.Draw(text7, (float)(Layer.HUD.width / 2.0 - _font.GetWidth(text7) / 2.0), num + 15f, Color.White, (Depth)0.81f);
+                                _font.Draw(text7, (float)(Layer.HUD.width / 2f - _font.GetWidth(text7) / 2f), num + 15f, Color.White, (Depth)0.81f);
                                 string text8 = str1;
                                 _font.alpha = _setupFade;
-                                _font.Draw(text8, (float)(Layer.HUD.width / 2.0 - _font.GetWidth(text8) / 2.0), (float)(num + 12.0 + 17.0), Color.White, (Depth)0.81f);
+                                _font.Draw(text8, (float)(Layer.HUD.width / 2f - _font.GetWidth(text8) / 2f), (float)(num + 12f + 17f), Color.White, (Depth)0.81f);
                             }
                         }
                         else
@@ -1650,23 +1633,23 @@ namespace DuckGame
                                 string text = "WAITING FOR HOST TO START";
                                 if (core.gameInProgress)
                                     text = "WAITING FOR HOST TO RESUME";
-                                _font.Draw(text, (float)(Layer.HUD.width / 2.0 - _font.GetWidth(text) / 2.0), num + 22f, Color.White, (Depth)0.81f);
+                                _font.Draw(text, (float)(Layer.HUD.width / 2f - _font.GetWidth(text) / 2f), num + 22f, Color.White, (Depth)0.81f);
                             }
                             else if (!Network.isActive)
                             {
                                 string text9 = "@SELECT@START MATCH";
-                                _font.Draw(text9, (float)(Layer.HUD.width / 2.0 - _font.GetWidth(text9) / 2.0), num + 9f, Color.White, (Depth)0.81f);
+                                _font.Draw(text9, (float)(Layer.HUD.width / 2f - _font.GetWidth(text9) / 2f), num + 9f, Color.White, (Depth)0.81f);
                                 string text10 = "@MENU1@MATCH SETTINGS";
-                                _font.Draw(text10, (float)(Layer.HUD.width / 2.0 - _font.GetWidth(text10) / 2.0), num + 22f, Color.White, (Depth)0.81f);
+                                _font.Draw(text10, (float)(Layer.HUD.width / 2f - _font.GetWidth(text10) / 2f), num + 22f, Color.White, (Depth)0.81f);
                                 string text11 = str1;
-                                _font.Draw(text11, (float)(Layer.HUD.width / 2.0 - _font.GetWidth(text11) / 2.0), num + 35f, Color.White, (Depth)0.81f);
+                                _font.Draw(text11, (float)(Layer.HUD.width / 2f - _font.GetWidth(text11) / 2f), num + 35f, Color.White, (Depth)0.81f);
                             }
                             else
                             {
                                 string text = "@SELECT@START MATCH";
                                 if (core.gameInProgress)
                                     text = "@SELECT@RESUME MATCH";
-                                _font.Draw(text, (float)(Layer.HUD.width / 2.0 - _font.GetWidth(text) / 2.0), num + 22f, Color.White, (Depth)0.81f);
+                                _font.Draw(text, (float)(Layer.HUD.width / 2f - _font.GetWidth(text) / 2f), num + 22f, Color.White, (Depth)0.81f);
                             }
                         }
                         _countdownScreen.alpha = _setupFade;
@@ -1682,17 +1665,17 @@ namespace DuckGame
                         Graphics.Draw(_countdownScreen, Layer.HUD.camera.x, Layer.HUD.camera.height / 2f);
                         _countdown.alpha = dim * 1.2f;
                         _countdown.depth = (Depth)0.81f;
-                        _countdown.frame = (int)(float)Math.Ceiling((1.0 - _countTime) * 2.0);
+                        _countdown.frame = (int)(float)Math.Ceiling((1f - _countTime) * 2f);
                         _countdown.centery = _countdown.height / 2;
                         if (DuckNetwork.isDedicatedServer)
                         {
-                            Graphics.Draw(_countdown, 160f, (float)(Layer.HUD.camera.height / 2.0 - 8.0));
+                            Graphics.Draw(_countdown, 160f, (float)(Layer.HUD.camera.height / 2f - 8f));
                             string text = "@CANCEL@STOP COUNTDOWN";
                             _font.alpha = dim * 1.2f;
-                            _font.Draw(text, (float)(Layer.HUD.width / 2.0 - _font.GetWidth(text) / 2.0), (float)(Layer.HUD.camera.height / 2.0 + 8.0), Color.White, (Depth)0.81f);
+                            _font.Draw(text, (float)(Layer.HUD.width / 2f - _font.GetWidth(text) / 2f), (float)(Layer.HUD.camera.height / 2f + 8f), Color.White, (Depth)0.81f);
                         }
                         else
-                            Graphics.Draw(_countdown, 160f, (float)(Layer.HUD.camera.height / 2.0 - 3.0));
+                            Graphics.Draw(_countdown, 160f, (float)(Layer.HUD.camera.height / 2f - 3f));
                     }
                 }
                 base.PostDrawLayer(layer);

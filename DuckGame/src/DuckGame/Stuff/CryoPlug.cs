@@ -41,7 +41,7 @@ namespace DuckGame
             {
                 foreach (PowerSocket powerSocket in Level.current.things[typeof(PowerSocket)])
                 {
-                    if ((powerSocket.position - position).length < 8.0)
+                    if ((powerSocket.position - position).length < 8f)
                     {
                         SFX.Play("equip");
                         _sprite.frame = 1;

@@ -31,12 +31,9 @@ namespace DuckGame
         {
             base.Update();
             angle += _rotSpeed;
-            if (vSpeed < 0.0 || _grounded)
-                _die = true;
-            if (_die)
-                alpha -= 0.05f;
-            if (alpha > 0.0)
-                return;
+            if (vSpeed < 0f || _grounded) _die = true;
+            if (_die) alpha -= 0.05f;
+            if (alpha > 0f) return;
             Level.Remove(this);
         }
     }

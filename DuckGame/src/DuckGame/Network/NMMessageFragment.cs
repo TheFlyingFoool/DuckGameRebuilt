@@ -19,7 +19,7 @@ namespace DuckGame
         public BitBuffer data;
         public ushort type;
 
-        public static int FragmentsRequired(NetMessage pMessage) => (int)Math.Ceiling(pMessage.serializedData.lengthInBytes / 700.0);
+        public static int FragmentsRequired(NetMessage pMessage) => (int)Math.Ceiling(pMessage.serializedData.lengthInBytes / 700f);
 
         public static List<NMMessageFragment> BreakApart(NetMessage pMessage)
         {

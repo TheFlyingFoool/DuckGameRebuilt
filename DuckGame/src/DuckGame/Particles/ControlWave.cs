@@ -36,7 +36,7 @@ namespace DuckGame
             {
                 xscale = yscale = Maths.CountUp(yscale, 0.05f);
                 _fade -= 0.05f;
-                if (_fade < 0.0)
+                if (_fade < 0)
                     Level.Remove(this);
                 alpha = Maths.NormalizeSection(_fade, 0.2f, 0.3f);
                 Vec2 p2 = Vec2.Zero;

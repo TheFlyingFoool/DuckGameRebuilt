@@ -35,14 +35,14 @@ namespace DuckGame
                 return;
             if (flipHorizontal)
             {
-                Vec2 vec2 = new Vec2(x - 16f, (float)(y - 32.0 - 20.0));
+                Vec2 vec2 = new Vec2(x - 16f, (float)(y - 32 - 32));
                 _occluders.Add(new LightOccluder(vec2 + new Vec2(8f, 5f), vec2 + new Vec2(-1f, -4f), new Color(0.4f, 0.4f, 0.4f)));
                 _occluders.Add(new LightOccluder(vec2 + new Vec2(1f, -4f), vec2 + new Vec2(-8f, 5f), new Color(0.4f, 0.4f, 0.4f)));
                 Level.Add(new PointLight(vec2.x, vec2.y + 1f, new Color(247, 198, 120), 200f, _occluders));
             }
             else
             {
-                Vec2 vec2 = new Vec2(x + 16f, (float)(y - 32.0 - 20.0));
+                Vec2 vec2 = new Vec2(x + 16f, (float)(y - 32 - 32));
                 _occluders.Add(new LightOccluder(vec2 + new Vec2(-8f, 5f), vec2 + new Vec2(1f, -4f), new Color(0.4f, 0.4f, 0.4f)));
                 _occluders.Add(new LightOccluder(vec2 + new Vec2(-1f, -4f), vec2 + new Vec2(8f, 5f), new Color(0.4f, 0.4f, 0.4f)));
                 Level.Add(new PointLight(vec2.x, vec2.y + 1f, new Color(247, 198, 120), 200f, _occluders));

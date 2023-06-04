@@ -107,7 +107,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (_soundWait > 0.0)
+            if (_soundWait > 0)
                 _soundWait -= 0.1f;
             base.Update();
         }
@@ -127,7 +127,7 @@ namespace DuckGame
         {
             _sprite.currentAnimation = "spring";
             _sprite.frame = 0;
-            if (_soundWait > 0.0)
+            if (_soundWait > 0)
                 return;
             SFX.Play("spring", 0.2f, Rando.Float(0.2f) - 0.1f);
             _soundWait = 1f;
@@ -139,7 +139,7 @@ namespace DuckGame
         {
             if (with.isServerForObject && with.Sprung(this))
             {
-                if (with.vSpeed > -22.0 * _mult)
+                if (with.vSpeed > -22f * _mult)
                     with.vSpeed = -22f * _mult;
                 if (with is RagdollPart)
                 {

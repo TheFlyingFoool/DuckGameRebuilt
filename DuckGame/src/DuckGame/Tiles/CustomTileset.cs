@@ -60,11 +60,11 @@ namespace DuckGame
                 verticalWidth = 14f;
                 horizontalHeight = 16f;
             }
-            if (horizontalHeight == 0.0)
+            if (horizontalHeight == 0)
                 horizontalHeight = 16f;
-            if (verticalWidth == 0.0)
+            if (verticalWidth == 0)
                 verticalWidth = 14f;
-            if (verticalWidthThick == 0.0)
+            if (verticalWidthThick == 0)
                 verticalWidthThick = 16f;
             _sprite.frame = num;
             _tileset = "CUSTOM0" + (customIndex + 1).ToString();

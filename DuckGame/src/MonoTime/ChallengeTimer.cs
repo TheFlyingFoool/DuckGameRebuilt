@@ -18,8 +18,8 @@ namespace DuckGame
         {
             get
             {
-                TimeSpan timeSpan = new TimeSpan(0, 0, 0, 0, (int)(_time * 1000.0));
-                return _maxTime.TotalSeconds == 0.0 || timeSpan < _maxTime ? timeSpan : _maxTime;
+                TimeSpan timeSpan = new TimeSpan(0, 0, 0, 0, (int)(_time * 1000f));
+                return _maxTime.TotalSeconds == 0f || timeSpan < _maxTime ? timeSpan : _maxTime;
             }
         }
 

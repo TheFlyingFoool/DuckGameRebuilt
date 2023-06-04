@@ -72,7 +72,7 @@ namespace DuckGame
         public override void Draw()
         {
             base.Draw();
-            if (_hotAlpha <= 0.0)
+            if (_hotAlpha <= 0)
                 return;
             if (_timeHot <= 0)
                 _hotAlpha -= 0.01f;

@@ -35,7 +35,7 @@ namespace DuckGame
 
         public static void Reset() => _recentSongs.Clear();
 
-        public static bool stopped => _musicPlayer.State == SoundState.Stopped || _musicPlayer.State == SoundState.Paused;
+        public static bool stopped => DGRSettings.LoaderMusic && (_musicPlayer.State == SoundState.Stopped || _musicPlayer.State == SoundState.Paused);
 
         public static float volumeMult
         {
@@ -75,7 +75,7 @@ namespace DuckGame
 
         public static TimeSpan position => new TimeSpan(0, 0, 0, 0, (int)(_musicPlayer.Platform_GetProgress() * _musicPlayer.Platform_GetLengthInMilliseconds()));
 
-        public static bool finished => _musicPlayer.State == SoundState.Stopped;
+        public static bool finished => DGRSettings.LoaderMusic && _musicPlayer.State == SoundState.Stopped;
 
         public static void Initialize()
         {
@@ -95,6 +95,8 @@ namespace DuckGame
 
         public static string RandomTrack(string folder, string ignore = "")
         {
+            if (!DGRSettings.LoaderMusic) return "";
+
             if (DevConsole.rhythmMode)
                 return "InGame/comic.ogg";
             string[] strArray = _songList;
@@ -170,6 +172,8 @@ namespace DuckGame
 
         public static string FindSong(string song)
         {
+            if (!DGRSettings.LoaderMusic) return "";
+
             foreach (string song1 in _songList)
             {
                 string withoutExtension = Path.GetFileNameWithoutExtension(song1);
@@ -193,6 +197,7 @@ namespace DuckGame
 
         public static bool Load(string music, bool looping = true, float crossFadeTime = 0f)
         {
+            if (!DGRSettings.LoaderMusic) return false;
             _currentSong = music;
             _musicPlayer.Stop();
             if (!music.Contains(":"))
@@ -233,9 +238,15 @@ namespace DuckGame
             return true;
         }
 
-        public static void PlayLoaded() => _musicPlayer.Play();
+        public static void PlayLoaded()
+        {
+            if (DGRSettings.LoaderMusic) _musicPlayer.Play();
+        }
 
-        public static void CancelLooping() => _musicPlayer.IsLooped = false;
+        public static void CancelLooping()
+        {
+            if (DGRSettings.LoaderMusic) _musicPlayer.IsLooped = false;
+        }
 
         public static void LoadAlternateSong(string music, bool looping = true, float crossFadeTime = 0f)
         {
@@ -256,19 +267,26 @@ namespace DuckGame
             _pendingSong = null;
         }
 
-        public static void Pause() => _musicPlayer.Pause();
+        public static void Pause()
+        {
+            if (DGRSettings.LoaderMusic) _musicPlayer.Pause();
+        }
 
-        public static void Resume() => _musicPlayer.Resume();
+        public static void Resume()
+        {
+            if (DGRSettings.LoaderMusic) _musicPlayer.Resume();
+        }
 
         public static void Stop()
         {
+            if (!DGRSettings.LoaderMusic) return;
             _musicPlayer.Stop();
             _currentSong = "";
         }
 
         //public static void FadeOut(float duration) => Music._fadeSpeed = duration / 60f;
 
-        //public static void FadeIn(float duration) => Music._fadeSpeed = (float)-(duration / 60.0);
+        //public static void FadeIn(float duration) => Music._fadeSpeed = (float)-(duration / 60f);
 
         private static void SearchDir(string dir)
         {

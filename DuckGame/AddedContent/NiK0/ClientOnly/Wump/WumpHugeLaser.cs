@@ -3,7 +3,9 @@
 namespace DuckGame
 {
     [ClientOnly]
+#if DEBUG
     [EditorGroup("Rebuilt|Wump|Lasers")]
+#endif
     public class WumpHugeLaser : Gun, IDrawToDifferentLayers
     {
         public byte netAnimationIndex

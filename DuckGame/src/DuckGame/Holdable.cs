@@ -102,9 +102,9 @@ namespace DuckGame
             set
             {
                 double num = Math.Abs(value.x);
-                if (value.x <= -9000.0)
+                if (value.x <= -9000f)
                     return;
-                if (hoverSpawner == null || _lastReceivedPosition != value || (_lastReceivedPosition - position).length > 25.0)
+                if (hoverSpawner == null || _lastReceivedPosition != value || (_lastReceivedPosition - position).length > 25f)
                     position = value;
                 _lastReceivedPosition = value;
             }
@@ -221,14 +221,14 @@ namespace DuckGame
             if (offDir > 0)
             {
                 Block block = Level.CheckLine<Block>(new Vec2(owner.x, y), new Vec2(right, y));
-                if (block is Door && ((block as Door)._jam == 1.0 || (block as Door)._jam == -1.0))
+                if (block is Door && ((block as Door)._jam == 1f || (block as Door)._jam == -1f))
                     block = null;
                 owner.holdObstructed = block != null;
             }
             else
             {
                 Block block = Level.CheckLine<Block>(new Vec2(left, y), new Vec2(owner.x, y));
-                if (block is Door && ((block as Door)._jam == 1.0 || (block as Door)._jam == -1.0))
+                if (block is Door && ((block as Door)._jam == 1f || (block as Door)._jam == -1f))
                     block = null;
                 owner.holdObstructed = block != null;
             }

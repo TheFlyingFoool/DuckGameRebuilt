@@ -57,7 +57,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (burnt >= 1.0)
+            if (burnt >= 1)
             {
                 if (graphic != _burnt)
                 {
@@ -125,7 +125,7 @@ namespace DuckGame
                     if (framesSinceThrown < 15)
                     {
                         Gun gun = Level.current.NearestThing<Gun>(position);
-                        if (gun != null && (gun.barrelPosition - position).length < 4.0 && gun.held && gun.wideBarrel && (gun.offDir > 0 && hSpeed < 0.0 || gun.offDir < 0 && hSpeed > 0.0))
+                        if (gun != null && (gun.barrelPosition - position).length < 4 && gun.held && gun.wideBarrel && (gun.offDir > 0 && hSpeed < 0 || gun.offDir < 0 && hSpeed > 0))
                         {
                             _stuck = gun;
                             _prevBarrelHeat = _stuck._barrelHeat;

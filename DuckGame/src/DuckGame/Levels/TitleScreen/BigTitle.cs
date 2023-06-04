@@ -83,7 +83,7 @@ namespace DuckGame
             //if (Main.isDemo)
             //{
             //    this._fartWait -= 0.008f;
-            //    if (_fartWait < 0.0 && !this._showFart)
+            //    if (_fartWait < 0 && !this._showFart)
             //    {
             //        this._showFart = true;
             //        SFX.Play("fart" + Rando.Int(3).ToString());

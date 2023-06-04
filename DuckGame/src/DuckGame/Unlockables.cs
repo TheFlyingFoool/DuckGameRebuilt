@@ -42,7 +42,7 @@ namespace DuckGame
             _unlocks.Add(new UnlockableAchievement(false, "basement", () => Unlocks.IsUnlocked("BASEMENTKEY"), "Basement Dweller", "Unlock the basement", "basement"));
             _unlocks.Add(new UnlockableAchievement(false, "poweruser", () => Global.data.customMapPlayCount.Count > (futz ? 0 : 9), "Power User", "Play on 10 different custom maps", "editor"));
             _unlocks.Add(new UnlockableAchievement(false, "drawbreaker", () => Global.data.drawsPlayed > (futz ? 0 : 9), "Draw Breaker", "Break 10 draws", "drawbreaker"));
-            _unlocks.Add(new UnlockableAchievement(false, "hotstuff", () => Profiles.MostTimeOnFire() > (futz ? 2.0 : 899.0), "Hot Stuff", "Spend 15 minutes on fire with any one profile", "fire"));
+            _unlocks.Add(new UnlockableAchievement(false, "hotstuff", () => Profiles.MostTimeOnFire() > (futz ? 2 : 899), "Hot Stuff", "Spend 15 minutes on fire with any one profile", "fire"));
             _unlocks.Add(new UnlockableAchievement(false, "myboy", () => Profiles.experienceProfile != null && Profiles.experienceProfile.numLittleMen > 0, "That's My Boy", "Raise a little man.", "myboy"));
             _unlocks.Add(new UnlockableAchievement(false, "jukebox", () => Profiles.experienceProfile != null && Profiles.experienceProfile.numLittleMen > 7, "Jukebox Hero", "Raise eight little men.", "jukebox"));
             _unlocks.Add(new UnlockableAchievement(false, "kingme", () => Profiles.experienceProfile != null && Profiles.experienceProfile.xp >= DuckNetwork.GetLevel(999).xpRequired, "King Me", "Level up all the way.", "kingme"));

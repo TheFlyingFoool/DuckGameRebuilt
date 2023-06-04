@@ -402,8 +402,7 @@ namespace DuckGame
             alpha = UnlockScreen.open || lookingAtChallenge ? Lerp.Float(alpha, 1f, 0.05f) : Lerp.Float(alpha, 0f, 0.05f);
             if (afterChallenge)
             {
-                if (afterChallengeWait > 0.0)
-                    afterChallengeWait -= 0.03f;
+                if (afterChallengeWait > 0f) afterChallengeWait -= 0.03f;
                 else if (HasNewTime() || HasNewTrophy())
                 {
                     SFX.Play("dacBang", pitch: -0.7f);
@@ -469,10 +468,9 @@ namespace DuckGame
             if (_currentLine != "")
             {
                 _waitLetter -= 0.8f;
-                if (_waitLetter >= 0.0)
-                    return;
+                if (_waitLetter >= 0f) return;
                 _talkMove += 0.75f;
-                if (_talkMove > 1.0)
+                if (_talkMove > 1f)
                 {
                     frame = _currentLine[0] == ' ' || frame != 0 ? 0 : Rando.Int(1);
                     _talkMove = 0f;
@@ -633,8 +631,7 @@ namespace DuckGame
             else
             {
                 _talkMove += 0.75f;
-                if (_talkMove <= 1.0)
-                    return;
+                if (_talkMove <= 1f) return;
                 frame = 0;
                 _talkMove = 0f;
             }
@@ -667,7 +664,7 @@ namespace DuckGame
 
         public static void Draw()
         {
-            Vec2 vec2_1 = new Vec2((float)(_listLerp * 270.0 - 200.0), 20f);
+            Vec2 vec2_1 = new Vec2((float)(_listLerp * 270f - 200f), 20f);
             if (lookingAtList || _listLerp > 0.01f)
             {
                 listPaper.depth = (Depth)0.8f;

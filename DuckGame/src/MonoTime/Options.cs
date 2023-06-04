@@ -37,6 +37,7 @@ namespace DuckGame
         public static UIMenu _lastCreatedDGRHudMenu;
         public static UIMenu _lastCreatedOptimizationsMenu;
         public static UIMenu _lastCreatedDGRGraphicsMenu;
+        public static UIMenu _lastCreatedDGREditorMenu;
         public static int flagForSave = 0;
         private static bool _doingResolutionRestart = false;
         private static List<string> chatFonts = new List<string>()
@@ -114,6 +115,7 @@ namespace DuckGame
             to.Add(_lastCreatedDGRHudMenu, false);
             to.Add(_lastCreatedDGRGraphicsMenu, false);
             to.Add(_lastCreatedOptimizationsMenu, false);
+            to.Add(_lastCreatedDGREditorMenu, false);
 
 
             if (accessibilityMenu != null)
@@ -155,6 +157,7 @@ namespace DuckGame
             _lastCreatedDGRHudMenu = _DGRHudMenu;
             _lastCreatedDGRGraphicsMenu = _DGRGraphicsMenu;
             _lastCreatedOptimizationsMenu = _DGROptimMenu;
+            _lastCreatedDGREditorMenu = _DGREditorMenu;
             //DGR OPTIONS GUI HELL BEGINS HERE -NiK0
 
 
@@ -185,6 +188,7 @@ namespace DuckGame
             _DGRMiscMenu = _lastCreatedDGRMenu;
             _DGROptimMenu = _lastCreatedOptimizationsMenu;
             _DGRGraphicsMenu = _lastCreatedDGRMenu;
+            _DGREditorMenu = _lastCreatedDGREditorMenu;
         }
 
         public static UIMenu CreateControllerWarning()
@@ -322,6 +326,35 @@ namespace DuckGame
         public static UIMenu _DGROptimMenu;
         public static UIMenu _DGRMiscMenu;
         public static UIMenu _DGRHudMenu;
+        public static UIMenu _DGREditorMenu;
+
+        public static UIMenu CreateDGREditorMenu(UIMenu pPrev)
+        {
+            UIMenu menu = new UIMenu("|PINK|♥|WHITE|EDITOR|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
+
+            menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+
+            menu.Add(new UIMenuItemToggle("Online Physics", field: new FieldBinding(dGRSettings, "EditorOnlinePhysics"))
+            {
+                dgrDescription = "WARNING This may be highly unstable but it'll make it so online physics apply while testing levels in the editor (Ragdoll rng, etc)"
+            }, true);
+
+            menu.Add(new UIMenuItemToggle("Instructions", field: new FieldBinding(dGRSettings, "EditorInstructions"))
+            {
+                dgrDescription = "Displays real-time instructions on how to operate the editor. You might not need it anymore if you're already used to it"
+            }, true);
+
+            menu.Add(new UIMenuItemToggle("Level Name", field: new FieldBinding(dGRSettings, "EditorLevelName"))
+            {
+                dgrDescription = "Displays current level name at top left of the screen"
+            }, true);
+
+            menu.Add(new UIText(" ", Color.White), true);
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true), true);
+            return menu;
+        }
+
         public static UIMenu CreateDGRGraphicsMenu(UIMenu pPrev)
         {
             UIMenu menu = new UIMenu("|PINK|♥|WHITE|GRAPHICS|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
@@ -347,13 +380,13 @@ namespace DuckGame
 
             menu.Add(new UIMenuItemNumber("Particle Level", field: new FieldBinding(dGRSettings, "ParticleMultiplier", 0, 7, 1), valStrings: new List<string>()
             {
-                "None",
-                "Minimum",
-                "Low",
-                "Default",
-                "Many",
-                "EXTREME",
-                "WUMBO",
+                "None     ",
+                "Minimum     ",
+                "Low     ",
+                "Default     ",
+                "Many     ",
+                "EXTREME     ",
+                "WUMBO     ",
                 "|RED|UNCOUNTABLE"
             })
             {
@@ -388,7 +421,7 @@ namespace DuckGame
             }, true);
             menu.Add(new UIMenuItemToggle("Discord RPC", field: new FieldBinding(dGRSettings, "RPC"))
             {
-                dgrDescription = "Toggles discord rich presence showing current level, if you're in the editor, etc\n(May take a few seconds to connect)"
+                dgrDescription = "Toggles discord rich presence displaying the current level, if you're in the editor, etc\n(May take a few seconds to connect)"
             }, true);
             menu.Add(new UIMenuItemToggle("Menu Mouse", field: new FieldBinding(dGRSettings, "MenuMouse"))
             {
@@ -417,6 +450,15 @@ namespace DuckGame
             {
                 dgrDescription = "Shows the percentage of maps and the list of people in the lobby if host uses Rebuilt",
             });
+
+            if (Program.IS_DEV_BUILD)
+            {
+                menu.Add(new UIText(" ", Color.White), true);
+                menu.Add(new UIMenuItemToggle("|PINK|No Level Restrictions", field: new FieldBinding(dGRSettings, "IgnoreLevRestrictions"))
+                {
+                    dgrDescription = "When enabled, you'll be able to turn on any custom level on an online match"
+                }, true);
+            }
 
             menu.Add(new UIText(" ", Color.White), true);
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true), true);
@@ -447,12 +489,6 @@ namespace DuckGame
                 dgrDescription = "Displays lobby name on pause screen (not supporting LAN lobbies)"
             }, true);
 
-            menu.Add(new UIMenuItemToggle("Editor Instructions", field: new FieldBinding(dGRSettings, "EditorInstructions"))
-            {
-                dgrDescription = "Displays real-time instructions in the editor. You might not need it anymore if you're already used to it"
-            }, true);
-
-
             menu.Add(new UIText(" ", Color.White), true);
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true), true);
             return menu;
@@ -481,6 +517,10 @@ namespace DuckGame
             {
                 dgrDescription = "Loads custom levels on startup instead of when the level folder is opened\n(Will increase load times)"
             }, true);
+            menu.Add(new UIMenuItemToggle("Load music", field: new FieldBinding(dGRSettings, "LoadMusic"))
+            {
+                dgrDescription = "If this is disabled music wont load resulting in faster load times\n(Requires restart)"
+            }, true);
 
             menu.Add(new UIText(" ", Color.White), true);
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true), true);
@@ -502,6 +542,9 @@ namespace DuckGame
 
             _DGRHudMenu = CreateDGRHudMenu(menu);
             menu.Add(new UIMenuItem("HUD", new UIMenuActionOpenMenu(menu, _DGRHudMenu), backButton: true), true);
+
+            _DGREditorMenu = CreateDGREditorMenu(menu);
+            menu.Add(new UIMenuItem("EDITOR", new UIMenuActionOpenMenu(menu, _DGREditorMenu), backButton: true), true);
 
             menu.Add(new UIText(" ", Color.White), true);
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pOptionsMenu), backButton: true), true);
@@ -927,9 +970,9 @@ namespace DuckGame
 
         public static void PostLoad()
         {
-            if (Data.musicVolume > 1.0)
+            if (Data.musicVolume > 1)
                 Data.musicVolume /= 100f;
-            if (Data.sfxVolume > 1.0)
+            if (Data.sfxVolume > 1)
                 Data.sfxVolume /= 100f;
             if (Data.windowScale < 0)
                 Data.windowScale = !MonoMain.fourK ? 0 : 1;

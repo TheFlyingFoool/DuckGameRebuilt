@@ -54,11 +54,11 @@ namespace DuckGame
                     graphic.flipH = false;
                     _beam.depth = depth - 2;
                     float y = _endPoint.y - this.y;
-                    int num = (int)Math.Ceiling(y / 16.0);
+                    int num = (int)Math.Ceiling(y / 16);
                     for (int index = 0; index < num; ++index)
                     {
                         if (index == num - 1)
-                            _beam.cutWidth = 16 - (int)(y % 16.0);
+                            _beam.cutWidth = 16 - (int)(y % 16);
                         else
                             _beam.cutWidth = 0;
                         _beam.angleDegrees = 90f;

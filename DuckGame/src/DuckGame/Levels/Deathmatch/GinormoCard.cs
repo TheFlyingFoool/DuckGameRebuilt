@@ -68,8 +68,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (_slideWait < 0.0)
-                position = Vec2.Lerp(position, _end, 0.15f);
+            if (_slideWait < 0f) position = Vec2.Lerp(position, _end, 0.15f);
             _slideWait -= 0.4f;
             Graphics.SetRenderTarget(_faceTarget);
             Graphics.Clear(Color.Transparent);
@@ -119,12 +118,9 @@ namespace DuckGame
                 hat.depth = (Depth)0.8f;
                 hat.center = new Vec2(16f, 16f) + activeProfile.team.hatOffset;
                 hat.scale = new Vec2(2f, 2f);
-                if (hat.texture.width > 16.0)
-                    hat.frame = 1;
-                if (_smallMode)
-                    Graphics.Draw(hat, hat.frame, (float)(x + hatPoint.x - 8.0), (float)(y + hatPoint.y - 8.0));
-                else
-                    Graphics.Draw(hat, hat.frame, x + hatPoint.x * 2f, y + hatPoint.y * 2f, 2f, 2f);
+                if (hat.texture.width > 16f) hat.frame = 1;
+                if (_smallMode) Graphics.Draw(hat, hat.frame, (float)(x + hatPoint.x - 8f), (float)(y + hatPoint.y - 8f));
+                else Graphics.Draw(hat, hat.frame, x + hatPoint.x * 2f, y + hatPoint.y * 2f, 2f, 2f);
                 hat.color = Color.White;
                 hat.scale = new Vec2(1f, 1f);
                 hat.frame = 0;

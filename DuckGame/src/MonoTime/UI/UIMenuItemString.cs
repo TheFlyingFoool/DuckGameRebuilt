@@ -14,7 +14,7 @@ namespace DuckGame
         private UIStringEntryMenu _enterStringMenu;
         private string _text;
         private string _id;
-        private UIStringEntry _stringEntry;
+        private UIStringEntry _passwordItem;
         private UIMenuActionOpenMenu _activateFunction;
 
         public void SetFieldBinding(FieldBinding f) => _field = f;
@@ -36,17 +36,21 @@ namespace DuckGame
             BitmapFont f = null;
             if (tiny)
                 f = new BitmapFont("smallBiosFontUI", 7, 5);
-            UIDivider splitter = new UIDivider(true, 0f);
+            UIDivider component1 = new UIDivider(true, 0f);
             if (text != "")
             {
-                UIText t = new UIText(text, c, al: UIAlign.Left);
+                UIText component2 = new UIText(text, c);
                 if (tiny)
-                    t.SetFont(f);
-                splitter.leftSection.Add(t, true);
+                    component2.SetFont(f);
+                component2.align = UIAlign.Left;
+                component1.leftSection.Add(component2, true);
             }
-            _stringEntry = new UIStringEntry(false, "", Color.White, al: UIAlign.Right);
-            splitter.rightSection.Add(_stringEntry, true);
-            rightSection.Add(splitter, true);
+            _passwordItem = new UIStringEntry(false, "", Color.White)
+            {
+                align = UIAlign.Right
+            };
+            component1.rightSection.Add(_passwordItem, true);
+            rightSection.Add(component1, true);
             if (tiny)
                 _arrow = new UIImage("littleContextArrowRight");
             else
@@ -66,13 +70,13 @@ namespace DuckGame
                 if (open && _id == "name" && Profiles.active.Count > 0)
                 {
                     _field.value = TeamSelect2.DefaultGameName();
-                    _stringEntry.text = (string)_field.value;
+                    _passwordItem.text = (string)_field.value;
                 }
                 else
-                    _stringEntry.text = "NONE";
+                    _passwordItem.text = "NONE";
             }
             else
-                _stringEntry.text = (string)_field.value;
+                _passwordItem.text = (string)_field.value;
             base.Update();
         }
 
@@ -80,21 +84,6 @@ namespace DuckGame
         {
             _enterStringMenu = !(_id == "port") ? new UIStringEntryMenu(false, "SET " + _text, _field) : new UIStringEntryMenu(false, "SET " + _text, _field, 6, true, 1337, 55535);
             _enterStringMenu.SetBackFunction(new UIMenuActionOpenMenu(_enterStringMenu, pReturn));
-            _enterStringMenu.SetAcceptFunction(new UIMenuActionCallFunction(() =>
-            {
-                if (_id == "name" && (string)_field.value == "")
-                    _field.value = TeamSelect2.DefaultGameName();
-                if (Network.activeNetwork.core.lobby != null)
-                {
-                    Network.activeNetwork.core.lobby.SetLobbyData(_id, (string)_field.value);
-                    if (_id == "name")
-                    {
-                        Network.activeNetwork.core.lobby.SetLobbyData("customName", (string)_field.value != TeamSelect2.DefaultGameName() ? "true" : "false");
-                        if (DGRSettings.LobbyNameOnPause)
-                            DuckNetwork.core._ducknetMenu.title = (string)_field.value;
-                    }
-                }
-            }));
             _enterStringMenu.Close();
             pGroup.Add(_enterStringMenu, false);
             _activateFunction = new UIMenuActionOpenMenu(pReturn, _enterStringMenu);

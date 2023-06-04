@@ -48,7 +48,7 @@ namespace DuckGame
                     _firedCork = 0;
                     scale = new Vec2(1.5f, 1.5f);
                 }
-                if (num < 16.0)
+                if (num < 16)
                     windingVelocity = 1f;
             }
             scale = Lerp.Vec2Smooth(scale, Vec2.One, 0.1f);

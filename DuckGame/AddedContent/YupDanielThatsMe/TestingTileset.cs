@@ -1,7 +1,7 @@
 ﻿namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Blocks")]
+    //[EditorGroup("Blocks")]
     public class TestingTileset : AutoBlock
     {
         // Token: 0x06001973 RID: 6515 RVA: 0x00113388 File Offset: 0x00111588

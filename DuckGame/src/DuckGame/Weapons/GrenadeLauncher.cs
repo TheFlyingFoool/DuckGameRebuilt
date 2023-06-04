@@ -51,11 +51,11 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            if (_aiming && _aimWait <= 0.0 && _fireAngle < 90.0)
+            if (_aiming && _aimWait <= 0 && _fireAngle < 90)
                 _fireAngle += 3f;
-            if (_aimWait > 0.0)
+            if (_aimWait > 0)
                 _aimWait -= 0.9f;
-            if (_cooldown > 0.0)
+            if (_cooldown > 0)
                 _cooldown -= 0.1f;
             else
                 _cooldown = 0f;
@@ -79,7 +79,7 @@ namespace DuckGame
 
         public override void OnPressAction()
         {
-            if (_cooldown != 0.0)
+            if (_cooldown != 0)
                 return;
             if (ammo > 0)
             {
@@ -92,7 +92,7 @@ namespace DuckGame
 
         public override void OnReleaseAction()
         {
-            if (_cooldown != 0.0 || ammo <= 0)
+            if (_cooldown != 0 || ammo <= 0)
                 return;
             _aiming = false;
             Fire();

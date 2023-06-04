@@ -14,8 +14,6 @@ namespace DuckGame
 {
     public class DuckNetworkCore
     {
-        private static int kWinsStep = 5;
-        private static int kWinsMin = 5;
         public List<MatchSetting> matchSettings = new List<MatchSetting>()
         {
             new MatchSetting()
@@ -25,13 +23,17 @@ namespace DuckGame
                 value = 10,
                 min = 1,
                 max = 255,
-                step = kWinsStep,
+                step = 5,
                 altStep = 1,
                 stepMap = new Dictionary<int, int>()
                 {
                     {
+                        2,
+                        4
+                    },
+                    {
                         50,
-                        kWinsStep
+                        5
                     },
                     {
                         100,
@@ -46,13 +48,17 @@ namespace DuckGame
                 value = 10,
                 min = 1,
                 max = 255,
-                step = kWinsStep,
+                step = 5,
                 altStep = 1,
                 stepMap = new Dictionary<int, int>()
                 {
                     {
+                        2,
+                        4
+                    },
+                    {
                         50,
-                        kWinsStep
+                        5
                     },
                     {
                         100,
@@ -472,7 +478,7 @@ namespace DuckGame
                 pMessage.text = "??????";
             }
             int num = pMessage.text.Count(x => x == '\n');
-            if (chatMessage != null && num == 0 && chatMessage.newlines < 3 && chatMessage.timeout > 2.0 && chatMessage.who == pMessage.who)
+            if (chatMessage != null && num == 0 && chatMessage.newlines < 3 && chatMessage.timeout > 2 && chatMessage.who == pMessage.who)
             {
                 pMessage.text = "|GRAY|" + pMessage.who.nameUIBodge + ": |BLACK|" + pMessage.text;
                 chatMessage.timeout = 10f;

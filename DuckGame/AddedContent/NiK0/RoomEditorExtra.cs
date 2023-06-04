@@ -15,6 +15,8 @@ namespace DuckGame
         public static List<string> favoriteHats = new List<string>();
         [AutoConfigField]
         public static string arcadeHat = "";
+        [AutoConfigField]
+        public static int arcadeDuckColor = 0;
 
         public static void Initialize()
         {

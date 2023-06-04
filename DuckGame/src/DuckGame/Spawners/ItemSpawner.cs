@@ -126,7 +126,7 @@ namespace DuckGame
             if (hover == null)
                 return;
             hover.x = x;
-            hover.y = (float)(top + (hover.y - hover.bottom) - 6.0);
+            hover.y = (float)(top + (hover.y - hover.bottom) - 6);
             hover.vSpeed = -2f;
             hover.spawnAnimation = true;
             hover.isSpawned = true;
@@ -191,7 +191,7 @@ namespace DuckGame
                 if (_seated)
                 {
                     Holdable hover = Level.current.NearestThingFilter<Holdable>(position, d => !(d is TeamHat) && (d as Holdable).canPickUp, 16f);
-                    if (hover != null && hover.owner == null && hover != null && hover.canPickUp && Math.Abs(hover.hSpeed) + Math.Abs(hover.vSpeed) < 2.5 && (!(hover is Gun) || (hover as Gun).ammo > 0))
+                    if (hover != null && hover.owner == null && hover != null && hover.canPickUp && Math.Abs(hover.hSpeed) + Math.Abs(hover.vSpeed) < 2.5f && (!(hover is Gun) || (hover as Gun).ammo > 0))
                         SetHoverItem(hover);
                 }
                 _ball1.desiredOrbitDistance = 3f;
@@ -201,13 +201,13 @@ namespace DuckGame
                 if (Level.current.simulatePhysics)
                     _spawnWait += 0.0166666f;
             }
-            else if (Math.Abs(_hoverItem.hSpeed) + Math.Abs(_hoverItem.vSpeed) > 2.0 || (_hoverItem.collisionCenter - position).length > 18.0 || _hoverItem.destroyed || _hoverItem.removeFromLevel || _hoverItem.owner != null || !_hoverItem.visible)
+            else if (Math.Abs(_hoverItem.hSpeed) + Math.Abs(_hoverItem.vSpeed) > 2 || (_hoverItem.collisionCenter - position).length > 18 || _hoverItem.destroyed || _hoverItem.removeFromLevel || _hoverItem.owner != null || !_hoverItem.visible)
             {
                 BreakHoverBond();
             }
             else
             {
-                _hoverItem.position = Lerp.Vec2Smooth(_hoverItem.position, position + new Vec2(0f, (float)(-(_hoverItem.bottom - _hoverItem.y) - 2.0 + (float)_hoverSin * 2.0)), 0.2f);
+                _hoverItem.position = Lerp.Vec2Smooth(_hoverItem.position, position + new Vec2(0f, (float)(-(_hoverItem.bottom - _hoverItem.y) - 2 + (float)_hoverSin * 2)), 0.2f);
                 _hoverItem.vSpeed = 0f;
                 _hoverItem.gravMultiplier = 0f;
                 _ball1.desiredOrbitDistance = _hoverItem.collisionSize.x / 2f;
@@ -217,7 +217,7 @@ namespace DuckGame
             }
             if (!Network.isServer || _numSpawned >= spawnNum && spawnNum != -1 || _hoverItem != null || !(contains != null) && !randomSpawn || _spawnWait < spawnTime)
                 return;
-            if (initialDelay > 0.0)
+            if (initialDelay > 0)
             {
                 initialDelay -= 0.0166666f;
             }
@@ -245,7 +245,7 @@ namespace DuckGame
                 previewSprite.CenterOrigin();
                 previewSprite.alpha = 0.5f;
                 previewSprite.flipH = offDir < 0;
-                Graphics.Draw(previewSprite, x, (float)(y - 8.0 + Math.Sin(_bob) * 2.0));
+                Graphics.Draw(previewSprite, x, (float)(y - 8 + Math.Sin(_bob) * 2));
             }
             if (_isClassicSpawner && (_sprite.frame == 1 || _sprite.frame == 3))
             {
@@ -253,8 +253,7 @@ namespace DuckGame
                 base.Draw();
                 y += 2f;
             }
-            else
-                base.Draw();
+            else base.Draw();
         }
 
         public override void Terminate()
@@ -406,7 +405,7 @@ namespace DuckGame
             string str = "EMPTY";
             if (contains != null)
                 str = contains.Name;
-            if (contains == null && spawnTime == 10.0)
+            if (contains == null && spawnTime == 10)
                 return base.GetDetailsString();
             return base.GetDetailsString() + "Contains: " + str + "\nTime: " + spawnTime.ToString("0.00", CultureInfo.InvariantCulture);
         }

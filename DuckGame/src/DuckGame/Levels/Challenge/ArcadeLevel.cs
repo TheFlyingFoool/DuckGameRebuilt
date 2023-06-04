@@ -291,10 +291,7 @@ namespace DuckGame
             }
             if (spawnKey)
             {
-                if (spawnKeyWait > 0.0)
-                {
-                    spawnKeyWait -= Maths.IncFrameTimer();
-                }
+                if (spawnKeyWait > 0f) spawnKeyWait -= Maths.IncFrameTimer();
                 else
                 {
                     SFX.Play("ching");
@@ -408,7 +405,7 @@ namespace DuckGame
                 {
                     _duck.alpha = Lerp.FloatSmooth(_duck.alpha, 0f, 0.1f);
                     _followCam.manualViewSize = Lerp.FloatSmooth(_followCam.manualViewSize, 2f, 0.16f);
-                    if (_followCam.manualViewSize < 30.0)
+                    if (_followCam.manualViewSize < 30f)
                     {
                         Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
                         Layer.Background.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
@@ -500,7 +497,7 @@ namespace DuckGame
                 {
                     _duck.alpha = Lerp.FloatSmooth(_duck.alpha, 0f, 0.1f);
                     _followCam.manualViewSize = Lerp.FloatSmooth(_followCam.manualViewSize, 2f, 0.16f);
-                    if (_followCam.manualViewSize < 30.0)
+                    if (_followCam.manualViewSize < 30f)
                     {
                         Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
                         Layer.Background.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
@@ -805,7 +802,7 @@ namespace DuckGame
                 else if (_state == ArcadeState.UnlockMachine)
                 {
                     _unlockMachineWait -= 0.02f;
-                    if (_unlockMachineWait < 0.0)
+                    if (_unlockMachineWait < 0f)
                     {
                         if (_unlockingMachine)
                         {

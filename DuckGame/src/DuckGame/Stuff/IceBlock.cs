@@ -312,7 +312,7 @@ namespace DuckGame
                 _graphic.depth = depth;
                 _graphic.scale = scale;
                 _graphic.center = center;
-                int y2 = (int)((1.0 - _hitPoints) * 12.0);
+                int y2 = (int)((1 - _hitPoints) * 12);
                 Graphics.Draw(_graphic.texture, position + new Vec2(0f, y2), new Rectangle?(new Rectangle(0f, 0f, 16f, 24 - y2)), Color.White, angle, _graphic.center, scale, graphic.flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth);
                 y = y1;
             }
@@ -347,7 +347,7 @@ namespace DuckGame
                 (_containedThing as MaterialThing).heat = -1f;
                 (_containedThing as Holdable).UpdateMaterial();
             }
-            if (carved >= 1.0 && !didCarve)
+            if (carved >= 1 && !didCarve)
             {
                 if (_containedThing != null)
                 {
@@ -368,7 +368,7 @@ namespace DuckGame
                     didCarve = true;
                 }
             }
-            if (damageMultiplier > 1.0)
+            if (damageMultiplier > 1)
             {
                 damageMultiplier -= 0.2f;
             }
@@ -379,7 +379,7 @@ namespace DuckGame
             }
             if (!didCarve)
             {
-                _sprite.frame = (int)Math.Floor((1.0 - _hitPoints / 1.0) * 5.0);
+                _sprite.frame = (int)Math.Floor((1f - _hitPoints / 1f) * 5f);
                 if (_sprite.frame == 0)
                 {
                     collisionOffset = new Vec2(-8f, -8f);
@@ -410,7 +410,7 @@ namespace DuckGame
             }
             else
             {
-                int num = (int)((1.0 - _hitPoints) * 12.0);
+                int num = (int)((1 - _hitPoints) * 12);
                 collisionOffset = new Vec2(-8f, num - 8);
                 collisionSize = new Vec2(16f, 16 - num);
             }

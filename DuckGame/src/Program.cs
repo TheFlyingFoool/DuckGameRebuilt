@@ -10,25 +10,25 @@ using DbMon.NET;
 using DGWindows;
 using Microsoft.Xna.Framework;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.IO.Compression;
-using System.Linq;
 using System.Net;
+using System.Linq;
+using System.Text;
 using System.Net.Http;
-using System.Reflection;
+using System.Security;
+using System.Threading;
 using System.Resources;
+using System.Reflection;
+using System.Diagnostics;
+using System.Collections;
+using System.Windows.Forms;
+using System.Globalization;
+using System.IO.Compression;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
-using System.Security;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace DuckGame
 {
@@ -44,12 +44,13 @@ namespace DuckGame
 #endif
         public static readonly bool HasInternet = Internet.IsAvailable();
         // this should be formatted like X.X.X where each X is a number
-        public const string CURRENT_VERSION_ID = "1.0.11";
+        public const string CURRENT_VERSION_ID = "1.0.14";
 
-        // dont change this unless you know what you're doing -Firebreak
+        // do change this you know what you're doing -NiK0
         public const string CURRENT_VERSION_ID_FORMATTED = $"v{CURRENT_VERSION_ID}-beta";
 
         public static bool Prestart = DirtyPreStart();
+        
 
         public static string StartinEditorLevelName;
         public static string GameDirectory;
@@ -921,7 +922,7 @@ namespace DuckGame
                                         str2 = allMod.configuration.name;
                                         if (!MonoMain.modDebugging)
                                         {
-                                            if (!gameLoadedSuccessfully || Options.Data.disableModOnCrash && (DateTime.Now - MonoMain.startTime).TotalMinutes < 2.0)
+                                            if (!gameLoadedSuccessfully || Options.Data.disableModOnCrash && (DateTime.Now - MonoMain.startTime).TotalMinutes < 2)
                                                 allMod.configuration.Disable();
                                             flag2 = true;
                                         }

@@ -56,7 +56,7 @@ namespace DuckGame
             position.y = ypos;
             alpha = 1f;
             hSpeed = Rando.Float(6f) - 3f;
-            vSpeed = (float)(Rando.Float(2f) - 1.0 - 1.0);
+            vSpeed = (float)(Rando.Float(2f) - 1 - 1);
             _sprite = who.featherSprite.CloneMap();
             _sprite.SetAnimation("feather");
             _sprite.frame = Rando.Int(3);

@@ -422,7 +422,7 @@ namespace DuckGame
                                 flag1 = TouchScreen.GetTap() != Touch.None;
                                 break;
                         }
-                        if (vec2_2.x > vec2_1.x - 5.0 && vec2_2.x < vec2_1.x + 3.0 && vec2_2.y > vec2_1.y - 4.0 && vec2_2.y < vec2_1.y + 4.0)
+                        if (vec2_2.x > vec2_1.x - 5f && vec2_2.x < vec2_1.x + 3f && vec2_2.y > vec2_1.y - 4f && vec2_2.y < vec2_1.y + 4f)
                         {
                             _hoverPin = true;
                             if (flag1 && (!_root || pinned))
@@ -973,7 +973,7 @@ namespace DuckGame
                                 Vec2 vec2_3 = new Vec2(12f, 12f);
                                 if (Editor.bigInterfaceMode)
                                     vec2_3 = new Vec2(24f, 24f);
-                                Vec2 p1_3 = p1_1 + new Vec2((float)-(vec2_3.x + 2.0), 0f);
+                                Vec2 p1_3 = p1_1 + new Vec2((float)-(vec2_3.x + 2f), 0f);
                                 Vec2 p2_2 = p1_1 + new Vec2(-2f, vec2_3.y);
                                 Graphics.DrawRect(p1_3, p2_2, new Color(70, 70, 70) * alpha, depth);
                                 Graphics.DrawRect(p1_3 + new Vec2(1f, 1f), p2_2 + new Vec2(-1f, -1f), new Color(30, 30, 30) * alpha, depth + 1);
@@ -1273,7 +1273,7 @@ namespace DuckGame
                     num2 += contextMenu.itemSize.y + 1f;
                 if (contextMenu.itemSize.x < 107f)
                     contextMenu.itemSize.x = 107f;
-                if (contextMenu.itemSize.x + 4.0 > menuSize.x)
+                if (contextMenu.itemSize.x + 4f > menuSize.x)
                     menuSize.x = contextMenu.itemSize.x + 4f;
                 contextMenu.depth = depth + 2;
                 if (contextMenu.itemSize.x > num1)

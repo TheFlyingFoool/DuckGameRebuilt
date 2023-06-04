@@ -22,15 +22,14 @@ namespace DuckGame
             _plasma = new Sprite("arcade/plasma");
             camera = new Camera();
             _plasmaMaterial = new MaterialPlasma();
-            _target = new RenderTarget2D(320, (int)(320.0 * Graphics.aspect));
+            _target = new RenderTarget2D(320, (int)(320 * Graphics.aspect));
             visible = false;
         }
 
         public override void Update()
         {
             visible = alpha > 0.01f;
-            if (!visible)
-                return;
+            if (!visible) return;
             _plasmaMaterial.offset = 0.5f;
             _plasmaMaterial.offset2 = 0.3f;
             _plasmaMaterial.scroll += 0.0009f;
@@ -64,8 +63,7 @@ namespace DuckGame
 
         public override void Draw(bool transparent, bool isTargetDraw = false)
         {
-            if (!visible)
-                return;
+            if (!visible) return;
             Graphics.currentLayer = this;
             Graphics.screen = _batch;
             _batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, _state, null, camera.getMatrix());

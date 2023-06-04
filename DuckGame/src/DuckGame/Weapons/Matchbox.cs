@@ -38,7 +38,7 @@ namespace DuckGame
             if (isServerForObject && ammo > 0)
             {
                 for (int index = 0; index < 5; ++index)
-                    Level.Add(SmallFire.New(x - 6f + Rando.Float(12f), y - 8f + Rando.Float(4f), Rando.Float(4f) - 2f, (float)-(1.0 + Rando.Float(2f)), firedFrom: this));
+                    Level.Add(SmallFire.New(x - 6f + Rando.Float(12f), y - 8f + Rando.Float(4f), Rando.Float(4f) - 2f, (float)-(1f + Rando.Float(2f)), firedFrom: this));
                 SFX.Play("ignite", pitch: (Rando.Float(0.3f) - 0.3f));
                 if (this.owner is Duck owner)
                     owner.ThrowItem();

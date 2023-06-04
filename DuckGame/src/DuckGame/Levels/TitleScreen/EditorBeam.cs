@@ -48,7 +48,7 @@ namespace DuckGame
             _selectBeam.color = new Color(0.5f, 0.2f + _wave2.normalized * 0.2f, 0.3f + _wave.normalized * 0.3f) * (1f + _flash);
             _flash = Maths.CountDown(_flash, 0.1f);
             _spawnWait -= 0.025f * DGRSettings.ActualParticleMultiplier;
-            if (_spawnWait < 0.0)
+            if (_spawnWait < 0f)
             {
                 Level.Add(new MultiBeamParticle(x, y + 190f, -0.8f - _wave.normalized, false, Color.Cyan * 0.8f));
                 Level.Add(new MultiBeamParticle(x, y + 190f, -0.8f - _wave2.normalized, true, Color.LightBlue * 0.8f));
@@ -89,7 +89,7 @@ namespace DuckGame
             int count = _ducks.Count;
             int num1 = 0;
             float num2 = 150f;
-            float num3 = (float)((_beamHeight - num2 * 2.0) / (count > 1 ? count - 1 : 1.0));
+            float num3 = (float)((_beamHeight - num2 * 2f) / (count > 1 ? count - 1 : 1f));
             for (int index = 0; index < _ducks.Count; ++index)
             {
                 BeamDuck duck = _ducks[index];
@@ -98,7 +98,7 @@ namespace DuckGame
                     duck.duck.solid = true;
                     duck.duck.hSpeed = _leaveLeft ? -4f : 4f;
                     duck.duck.vSpeed = 0f;
-                    if (Math.Abs(duck.duck.position.x - x) > 24.0)
+                    if (Math.Abs(duck.duck.position.x - x) > 24f)
                     {
                         duck.duck.immobilized = false;
                         _ducks.RemoveAt(index);
@@ -109,7 +109,7 @@ namespace DuckGame
                 else
                 {
                     duck.duck.position.x = Lerp.FloatSmooth(duck.duck.position.x, position.x + (float)duck.sin2 * 1f, 0.2f);
-                    duck.duck.position.y = Lerp.FloatSmooth(duck.duck.position.y, (float)(num2 + num3 * index + (float)duck.sin * 2.0), 0.08f);
+                    duck.duck.position.y = Lerp.FloatSmooth(duck.duck.position.y, (float)(num2 + num3 * index + (float)duck.sin * 2f), 0.08f);
                     duck.duck.vSpeed = 0f;
                     duck.duck.hSpeed = 0f;
                 }
@@ -127,11 +127,11 @@ namespace DuckGame
                 Thing gun = _guns[index];
                 gun.vSpeed = 0f;
                 gun.hSpeed = 0f;
-                if (Math.Abs(position.x - gun.position.x) < 6.0)
+                if (Math.Abs(position.x - gun.position.x) < 6f)
                 {
                     gun.position = Vec2.Lerp(gun.position, new Vec2(position.x, gun.position.y - 3f), 0.1f);
                     gun.alpha = Maths.LerpTowards(gun.alpha, 0f, 0.1f);
-                    if (gun.alpha <= 0.0)
+                    if (gun.alpha <= 0f)
                     {
                         gun.y = -200f;
                         _guns.RemoveAt(index);

@@ -26,8 +26,8 @@ namespace DuckGame
             depth = (Depth)0.95f;
             float num1 = 300f;
             float num2 = 40f;
-            Vec2 vec2_1 = new Vec2((float)(layer.width / 2.0 - num1 / 2.0), (float)(layer.height / 2.0 - num2 / 2.0));
-            Vec2 vec2_2 = new Vec2((float)(layer.width / 2.0 + num1 / 2.0), (float)(layer.height / 2.0 + num2 / 2.0));
+            Vec2 vec2_1 = new Vec2((float)(layer.width / 2f - num1 / 2f), (float)(layer.height / 2f - num2 / 2f));
+            //Vec2 vec2_2 = new Vec2((float)(layer.width / 2f + num1 / 2f), (float)(layer.height / 2f + num2 / 2f)); AOURGH -NiK0
             position = vec2_1 + new Vec2(4f, 20f);
             itemSize = new Vec2(490f, 16f);
             _root = true;
@@ -60,12 +60,12 @@ namespace DuckGame
             }
             float num1 = 300f;
             float num2 = 80f;
-            Vec2 vec2_1 = new Vec2((float)(layer.width / 2.0 - num1 / 2.0), (float)(layer.height / 2.0 - num2 / 2.0));
-            Vec2 vec2_2 = new Vec2((float)(layer.width / 2.0 + num1 / 2.0), (float)(layer.height / 2.0 + num2 / 2.0));
+            Vec2 vec2_1 = new Vec2((float)(layer.width / 2f - num1 / 2f), (float)(layer.height / 2f - num2 / 2f));
+            //Vec2 vec2_2 = new Vec2((float)(layer.width / 2f + num1 / 2f), (float)(layer.height / 2f + num2 / 2f));
             Vec2 vec2_3 = vec2_1 + new Vec2(18f, 28f);
             Vec2 vec2_4 = new Vec2(120f, 40f);
-            Vec2 vec2_5 = vec2_1 + new Vec2(160f, 28f);
-            Vec2 vec2_6 = new Vec2(120f, 40f);
+            //Vec2 vec2_5 = vec2_1 + new Vec2(160f, 28f); AH -NiK0
+            //Vec2 vec2_6 = new Vec2(120f, 40f);
             _hoverOk = Mouse.x > vec2_3.x && Mouse.x < vec2_3.x + vec2_4.x && Mouse.y > vec2_3.y && Mouse.y < vec2_3.y + vec2_4.y;
             if (!Editor.tookInput && Input.Pressed(Triggers.MenuLeft))
                 --_selectedIndex;
@@ -85,8 +85,8 @@ namespace DuckGame
             base.Draw();
             float num1 = 300f;
             float num2 = 60f;
-            Vec2 p1_1 = new Vec2((float)(layer.width / 2.0 - num1 / 2.0), (float)(layer.height / 2.0 - num2 / 2.0));
-            Vec2 p2 = new Vec2((float)(layer.width / 2.0 + num1 / 2.0), (float)(layer.height / 2.0 + num2 / 2.0));
+            Vec2 p1_1 = new Vec2((float)(layer.width / 2f - num1 / 2f), (float)(layer.height / 2f - num2 / 2f));
+            Vec2 p2 = new Vec2((float)(layer.width / 2f + num1 / 2f), (float)(layer.height / 2f + num2 / 2f));
             Graphics.DrawRect(p1_1, p2, new Color(70, 70, 70), depth, false);
             Graphics.DrawRect(p1_1, p2, new Color(30, 30, 30), depth - 1);
             Graphics.DrawRect(p1_1 + new Vec2(4f, 20f), p2 + new Vec2(-4f, -4f), new Color(10, 10, 10), depth + 1);
@@ -98,10 +98,8 @@ namespace DuckGame
             TransferProgress uploadProgress = _item.GetUploadProgress();
             float x = uploadProgress.bytesDownloaded / (float)uploadProgress.bytesTotal;
             Graphics.DrawRect(p1_2, p1_2 + vec2 * new Vec2(x, 1f), _hoverOk ? new Color(80, 80, 80) : new Color(30, 30, 30), depth + 2);
-            if (uploadProgress.bytesTotal == 0UL)
-                _font.Draw("Waiting...", p1_2.x, p1_2.y - 12f, Color.White, depth + 3);
-            else
-                _font.Draw("Uploading " + uploadProgress.bytesDownloaded.ToString() + "/" + uploadProgress.bytesTotal.ToString() + "B", p1_2.x, (float)(p1_2.y - 12.0), Color.White, depth + 3);
+            if (uploadProgress.bytesTotal == 0UL) _font.Draw("Waiting...", p1_2.x, p1_2.y - 12f, Color.White, depth + 3);
+            else _font.Draw("Uploading " + uploadProgress.bytesDownloaded.ToString() + "/" + uploadProgress.bytesTotal.ToString() + "B", p1_2.x, (float)(p1_2.y - 12f), Color.White, depth + 3);
         }
     }
 }

@@ -58,7 +58,7 @@ namespace DuckGame
             {
                 _strip.active = false;
                 camOffset = Lerp.FloatSmooth(camOffset, 360f, 0.1f);
-                if (camOffset <= 330.0 || !(_pageToOpen.specialText == "VIEW ALL"))
+                if (camOffset <= 330 || !(_pageToOpen.specialText == "VIEW ALL"))
                     return;
                 current = new CategoryPage(_cards, true);
             }
@@ -67,9 +67,9 @@ namespace DuckGame
                 if (_state != CategoryState.Idle)
                     return;
                 camOffset = Lerp.FloatSmooth(camOffset, -40f, 0.1f);
-                if (camOffset < 0.0)
+                if (camOffset < 0)
                     camOffset = 0f;
-                _strip.active = camOffset == 0.0;
+                _strip.active = camOffset == 0;
             }
         }
 

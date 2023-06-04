@@ -86,7 +86,7 @@ namespace DuckGame
             get => _destroyedReal;
             set
             {
-                int num = value ? 1 : 0;
+                //int num = value ? 1 : 0; ??? -NiK0
                 _destroyedReal = value;
             }
         }
@@ -95,8 +95,7 @@ namespace DuckGame
 
         public virtual bool Hurt(float points)
         {
-            if (_maxHealth == 0.0)
-                return false;
+            if (_maxHealth == 0) return false;
             _hitPoints -= points;
             return true;
         }
@@ -168,7 +167,7 @@ namespace DuckGame
             get
             {
                 float num = weight;
-                if (num < 5.0)
+                if (num < 5)
                     num = 5f;
                 return 5f / num;
             }
@@ -179,7 +178,7 @@ namespace DuckGame
             get
             {
                 float num = weight * 0.75f;
-                if (num < 5.0)
+                if (num < 5)
                     num = 5f;
                 return 5f / num;
             }
@@ -190,7 +189,7 @@ namespace DuckGame
             get
             {
                 float num = weight;
-                if (num < 5.0)
+                if (num < 5)
                     num = 5f;
                 return num / 5f;
             }
@@ -291,9 +290,9 @@ namespace DuckGame
 
         public virtual void UpdateOnFire()
         {
-            if (burnt < 1.0)
+            if (burnt < 1)
             {
-                if (_flameWait > 1.0)
+                if (_flameWait > 1)
                 {
                     AddFire();
                     _flameWait = 0f;
@@ -307,7 +306,7 @@ namespace DuckGame
 
         public override void DoUpdate()
         {
-            if (spreadExtinguisherSmoke > 0.0)
+            if (spreadExtinguisherSmoke > 0)
             {
                 spreadExtinguisherSmoke -= 0.15f;
                 if (Math.Abs(hSpeed) + Math.Abs(vSpeed) > 2f)
@@ -373,10 +372,13 @@ namespace DuckGame
         {
             if (physicsMaterial == PhysicsMaterial.Metal)
             {
-                Level.Add(MetalRebound.New(hitPos.x, hitPos.y, bullet.travelDirNormalized.x > 0f ? 1 : -1));
-                hitPos -= bullet.travelDirNormalized;
-                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 3; ++index)
-                    Level.Add(Spark.New(hitPos.x, hitPos.y, bullet.travelDirNormalized));
+                if (DGRSettings.ActualParticleMultiplier > 0)
+                {
+                    Level.Add(MetalRebound.New(hitPos.x, hitPos.y, bullet.travelDirNormalized.x > 0f ? 1 : -1));
+                    hitPos -= bullet.travelDirNormalized;
+                    for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 3; ++index)
+                        Level.Add(Spark.New(hitPos.x, hitPos.y, bullet.travelDirNormalized));
+                }
             }
             else if (physicsMaterial == PhysicsMaterial.Wood)
             {

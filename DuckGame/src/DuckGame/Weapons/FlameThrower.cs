@@ -83,7 +83,7 @@ namespace DuckGame
             if (isServerForObject && _firing && _barrelFlame.imageIndex > 5)
             {
                 _flameWait -= 0.25f;
-                if (_flameWait > 0.0)
+                if (_flameWait > 0)
                     return;
                 Vec2 vec = Maths.AngleToVec(barrelAngle + Rando.Float(-0.5f, 0.5f));
                 Vec2 vec2 = new Vec2(vec.x * Rando.Float(2f, 3.5f), vec.y * Rando.Float(2f, 3.5f));
@@ -100,19 +100,19 @@ namespace DuckGame
             base.Draw();
             Material material = Graphics.material;
             Graphics.material = null;
-            if (_barrelFlame.speed > 0.0)
+            if (_barrelFlame.speed > 0)
             {
                 _barrelFlame.alpha = 0.9f;
                 Draw(_barrelFlame, new Vec2(11f, 1f));
             }
-            _can.frame = (int)((1.0 - ammo / _maxAmmo) * 15.0);
+            _can.frame = (int)((1 - ammo / _maxAmmo) * 15);
             Draw(_can, new Vec2(barrelOffset.x - 11f, barrelOffset.y + 4f));
             Graphics.material = material;
         }
 
         public override void OnPressAction()
         {
-            if (heat > 1.0)
+            if (heat > 1)
             {
                 for (int index = 0; index < ammo / 10 + 3; ++index)
                     Level.Add(SmallFire.New(x - 6f + Rando.Float(12f), y - 8f + Rando.Float(4f), Rando.Float(6f) - 3f, 1f - Rando.Float(4.5f), firedFrom: this));

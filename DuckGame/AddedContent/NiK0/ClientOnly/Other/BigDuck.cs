@@ -75,7 +75,7 @@ namespace DuckGame
                 float num2 = 1f;
                 if (inputProfile.Down(Triggers.Left) || inputProfile.Down(Triggers.Right))
                     num1 = 2.5f;
-                if (num1 == 1.0 && inputProfile.Down(Triggers.Up))
+                if (num1 == 1f && inputProfile.Down(Triggers.Up))
                 {
                     holdObject.vSpeed -= 5f * holdWeightMultiplier;
                 }
@@ -211,7 +211,7 @@ namespace DuckGame
                 ThrowItem(false);
             }
             OnTeleport();
-            if (y > -4000.0)
+            if (y > -4000f)
                 y -= 5000f;
             sliding = false;
             crouch = false;
@@ -291,10 +291,10 @@ namespace DuckGame
             _trapped.clip.Add(this);
             _trapped.clip.Add(n);
             _trapped.hSpeed = hSpeed + n.hSpeed * 0.4f;
-            _trapped.vSpeed = (float)(vSpeed + n.vSpeed - 1.0);
-            if (_trapped.hSpeed > 6.0)
+            _trapped.vSpeed = (float)(vSpeed + n.vSpeed - 1f);
+            if (_trapped.hSpeed > 6f)
                 _trapped.hSpeed = 6f;
-            if (_trapped.hSpeed < -6.0)
+            if (_trapped.hSpeed < -6f)
                 _trapped.hSpeed = -6f;
             if (n.onFire)
                 Burn(n.position, n);

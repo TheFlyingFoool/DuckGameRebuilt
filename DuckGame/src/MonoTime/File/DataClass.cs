@@ -251,7 +251,7 @@ namespace DuckGame
                         {
                             if (Steam.IsInitialized())
                             {
-                                if (Steam.GetStat(property.Name) >= -99999.0f)
+                                if (Steam.GetStat(property.Name) >= -99999f)
                                     continue;
                             }
                             if (property.GetValue(output, null) is StatBinding statBinding)
@@ -302,7 +302,7 @@ namespace DuckGame
                             {
                                 if (Steam.IsInitialized())
                                 {
-                                    if (Steam.GetStat(field.Name) >= -99999.0)
+                                    if (Steam.GetStat(field.Name) >= -99999f)
                                         continue;
                                 }
                                 if (field.GetValue(output) is StatBinding statBinding)

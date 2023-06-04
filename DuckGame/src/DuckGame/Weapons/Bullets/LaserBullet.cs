@@ -96,7 +96,7 @@ namespace DuckGame
             t.connection = connection;
             reboundCalled = true;
             Level.current.AddThing(t);
-            Level.current.AddThing(new LaserRebound(pos.x, pos.y));
+            if (DGRSettings.ActualParticleMultiplier > 0) Level.current.AddThing(new LaserRebound(pos.x, pos.y));
         }
     }
 }

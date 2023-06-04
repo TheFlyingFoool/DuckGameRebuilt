@@ -771,9 +771,9 @@ namespace DuckGame
                 {
                     repeatingKey.repeatTime -= 0.1f;
                     bool flag = MapDown((int)repeatingKey.key, false);
-                    if (flag && repeatingKey.repeatTime < 0.0)
+                    if (flag && repeatingKey.repeatTime < 0)
                         _repeatList.Add(repeatingKey.key);
-                    if (repeatingKey.repeatTime <= 0.0 & flag)
+                    if (repeatingKey.repeatTime <= 0 & flag)
                         repeatingKey.repeatTime = 0.25f;
                     if (!flag)
                         repeatKeyList.Add(repeatingKey);

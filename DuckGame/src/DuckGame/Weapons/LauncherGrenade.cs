@@ -62,7 +62,7 @@ namespace DuckGame
             {
                 --_numTrail;
                 _fadeVal -= 0.1f;
-                if (_fadeVal <= 0.0)
+                if (_fadeVal <= 0)
                     Level.Remove(this);
             }
             _prevPosition.x = position.x;
@@ -71,11 +71,11 @@ namespace DuckGame
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (_fade || with is Gun || (with is AutoPlatform || with is Nubber) && vSpeed <= 0.0)
+            if (_fade || with is Gun || (with is AutoPlatform || with is Nubber) && vSpeed <= 0)
                 return;
             if (with is PhysicsObject)
                 _isVolatile = -1f;
-            if (_startWait <= 0.0 && !_fade && (totalImpactPower > 2.0 && (_isVolatile <= 0.0 || !(with is Block)) || _blowUp))
+            if (_startWait <= 0 && !_fade && (totalImpactPower > 2 && (_isVolatile <= 0 || !(with is Block)) || _blowUp))
             {
                 int num1 = 0;
                 for (int index = 0; index < 1; ++index)

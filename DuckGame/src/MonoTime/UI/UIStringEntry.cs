@@ -23,25 +23,22 @@ namespace DuckGame
             _directionalPassword = directional;
         }
 
-        public override void Update()
-        {
-            if (_text.Length > 10)
-            {
-                _text = _text.Substring(0, 8) + "..";
-            }
-            _collisionSize.x = _font.GetWidth(_text);
-            base.Update();
-        }
-
         public override void Draw()
         {
             if (_directionalPassword && _text != "  NONE")
             {
-                Vec2 alignOffset = calcAlignOffset();
-                Graphics.DrawPassword(_text, new Vec2(x + alignOffset.x, y + alignOffset.y), _color, depth);
+                _collisionSize.x = 48f;
+                float num = _text.Length * 8;
+                Graphics.DrawPassword(_text, new Vec2(x + (((align & UIAlign.Left) <= UIAlign.Center ? ((align & UIAlign.Right) <= UIAlign.Center ? (float)(-num / 2f) : width / 2f - num) : (float)-(width / 2f)) - 8f), y + ((align & UIAlign.Top) <= UIAlign.Center ? ((align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-_font.height / 2f) : height / 2f - _font.height) : (float)-(height / 2f))), _color, depth);
             }
             else
-                base.Draw();
+            {
+                if (_text.Length > 10)
+                    _text = _text.Substring(0, 8) + "..";
+                _collisionSize.x = 48f;
+                float num = _text.Length * 8;
+                Graphics.DrawString(_text, new Vec2(x + (((align & UIAlign.Left) <= UIAlign.Center ? ((align & UIAlign.Right) <= UIAlign.Center ? (float)(-num / 2f) : width / 2f - num) : (float)-(width / 2f)) - 8f), y + ((align & UIAlign.Top) <= UIAlign.Center ? ((align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-_font.height / 2f) : height / 2f - _font.height) : (float)-(height / 2f))), _color, depth);
+            }
         }
     }
 }

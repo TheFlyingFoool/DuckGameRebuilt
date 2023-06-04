@@ -618,16 +618,16 @@ namespace DuckGame
                             sprite2.scale *= (this.scale.x / 2f);
                             if (this is RasterFont)
                             {
-                                float num2 = (float)((this as RasterFont).data.fontSize * RasterFont.fontScaleFactor / 10.0);
+                                float num2 = (float)((this as RasterFont).data.fontSize * RasterFont.fontScaleFactor / 10);
                                 Sprite sprite3 = sprite1;
                                 sprite3.scale *= num2;
-                                sprite1.scale = new Vec2((float)Math.Round(sprite1.scale.x * 2.0) / 2f);
+                                sprite1.scale = new Vec2((float)Math.Round(sprite1.scale.x * 2) / 2f);
                             }
-                            num1 += (float)(sprite1.width * sprite1.scale.x + 1.0);
+                            num1 += (float)(sprite1.width * sprite1.scale.x + 1);
                             sprite1.scale = scale;
                         }
                         else
-                            num1 += thinButtons ? 6f : (float)(sprite1.width * sprite1.scale.x + 1.0);
+                            num1 += thinButtons ? 6f : (float)(sprite1.width * sprite1.scale.x + 1);
                         flag = true;
                     }
                     else

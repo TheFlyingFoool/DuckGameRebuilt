@@ -190,7 +190,7 @@ namespace DuckGame
             string text = "EMPTY";
             if (contains != null)
                 text = contains.Name;
-            Graphics.DrawString(text, position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
+            Graphics.DrawString(text, position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2), -16f), Color.White, (Depth)0.9f);
         }
 
         public Holster(float xpos, float ypos)
@@ -239,12 +239,9 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (_equippedDuck != null && duck == null)
-                return;
-            if (destroyed)
-                alpha -= 0.05f;
-            if (alpha < 0.0)
-                Level.Remove(this);
+            if (_equippedDuck != null && duck == null) return;
+            if (destroyed) alpha -= 0.05f;
+            if (alpha < 0f) Level.Remove(this);
             if (isServerForObject)
             {
                 netRaise = false;
@@ -287,16 +284,16 @@ namespace DuckGame
                     }
                     if (!containedObject.isServerForObject && !(containedObject is IAmADuck))
                         Fondle(containedObject);
-                    if (containedObject.removeFromLevel || containedObject.y < level.topLeft.y - 2000.0 || !containedObject.active || !containedObject.isServerForObject)
+                    if (containedObject.removeFromLevel || containedObject.y < level.topLeft.y - 2000f || !containedObject.active || !containedObject.isServerForObject)
                         SetContainedObject(null);
                 }
                 if (containedObject is Gun && Level.CheckRect<FunBeam>(containedObject.position + new Vec2(-4f, -4f), containedObject.position + new Vec2(4f, 4f)) != null)
                     (containedObject as Gun).triggerAction = true;
                 if (containedObject is RagdollPart && (containedObject as RagdollPart).doll != null && (containedObject as RagdollPart).doll.part1 != null && (containedObject as RagdollPart).doll.part2 != null && (containedObject as RagdollPart).doll.part3 != null)
                 {
-                    if ((containedObject as RagdollPart).doll.part1.x < (containedObject as RagdollPart).doll.part3.x - 4.0)
+                    if ((containedObject as RagdollPart).doll.part1.x < (containedObject as RagdollPart).doll.part3.x - 4f)
                         (containedObject as RagdollPart).doll.part1.x = (containedObject as RagdollPart).doll.part3.x - 4f;
-                    if ((containedObject as RagdollPart).doll.part1.x > (containedObject as RagdollPart).doll.part3.x + 4.0)
+                    if ((containedObject as RagdollPart).doll.part1.x > (containedObject as RagdollPart).doll.part3.x + 4f)
                         (containedObject as RagdollPart).doll.part1.x = (containedObject as RagdollPart).doll.part3.x + 4f;
                     Vec2 vec2_2 = (containedObject as RagdollPart).doll.part3.position + new Vec2(0f, -11f);
                     Vec2 vec2_3 = (containedObject as RagdollPart).doll.part3.position + new Vec2(0f, -5f);

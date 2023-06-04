@@ -361,8 +361,8 @@ namespace DuckGame
 
         public void WritePacked(byte[] data, int bits)
         {
-            if (position + (int)Math.Ceiling(bits / 8.0) > _buffer.Length)
-                resize((position + (int)Math.Ceiling(bits / 8.0)) * 2);
+            if (position + (int)Math.Ceiling(bits / 8f) > _buffer.Length)
+                resize((position + (int)Math.Ceiling(bits / 8f)) * 2);
             int index = 0;
             if (!isPacked)
             {
@@ -394,7 +394,7 @@ namespace DuckGame
             byte[] numArray;
             if (allowPacking)
             {
-                int length2 = (int)Math.Ceiling(length1 / 8.0);
+                int length2 = (int)Math.Ceiling(length1 / 8f);
                 numArray = new byte[length2];
                 int num = length1;
                 for (int index = 0; index < length2; ++index)

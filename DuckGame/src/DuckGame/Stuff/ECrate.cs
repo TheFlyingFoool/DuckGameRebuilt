@@ -58,7 +58,7 @@ namespace DuckGame
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (_hitPoints <= 0.0)
+            if (_hitPoints <= 0)
                 return false;
             if (bullet.isLocal && owner == null)
                 Fondle(this, DuckNetwork.localConnection);
@@ -75,7 +75,7 @@ namespace DuckGame
             }
             _hitPoints -= damageMultiplier;
             damageMultiplier += 2f;
-            if (_hitPoints <= 0.0)
+            if (_hitPoints <= 0)
             {
                 if (bullet.isLocal)
                     SuperFondle(this, DuckNetwork.localConnection);

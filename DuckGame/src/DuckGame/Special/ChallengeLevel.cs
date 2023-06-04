@@ -497,14 +497,14 @@ namespace DuckGame
                                 }
                                 Profiles.Save(_duck.profile);
                             }
-                            if (_showEndTextWait > 0.0)
+                            if (_showEndTextWait > 0)
                             {
                                 _showEndTextWait -= 0.01f;
                             }
                             else
                             {
                                 _fontFade = 1f;
-                                if (_showResultsWait > 0.0)
+                                if (_showResultsWait > 0)
                                     _showResultsWait -= 0.01f;
                                 else if (!_showedEndMenu)
                                 {
@@ -532,7 +532,7 @@ namespace DuckGame
                     else
                     {
                         _waitSpawn -= 0.06f;
-                        if (_waitSpawn > 0.0)
+                        if (_waitSpawn > 0)
                             return;
                         if (_pendingSpawns != null && _pendingSpawns.Count > 0)
                         {
@@ -661,8 +661,7 @@ namespace DuckGame
                         else if (!_started)
                         {
                             _waitAfterSpawn -= 0.06f;
-                            if (_waitAfterSpawn > 0.0)
-                                return;
+                            if (_waitAfterSpawn > 0) return;
                             ++_waitAfterSpawnDings;
                             if (_waitAfterSpawnDings > 2)
                             {
@@ -671,18 +670,15 @@ namespace DuckGame
                                 running = true;
                                 SFX.Play("ding");
                                 _timer.Start();
-                                if (Music.stopped)
-                                    Music.PlayLoaded();
+                                if (Music.stopped) Music.PlayLoaded();
                             }
-                            else
-                                SFX.Play("preStartDing");
+                            else SFX.Play("preStartDing");
                             _waitSpawn = 1.1f;
                         }
                         else
                         {
                             _fontFade -= 0.1f;
-                            if (_fontFade < 0.0)
-                                _fontFade = 0f;
+                            if (_fontFade < 0) _fontFade = 0f;
                             PauseLogic();
                         }
                     }

@@ -53,7 +53,7 @@ namespace DuckGame
                 edge.flipH = true;
                 Graphics.Draw(edge, x + size.x, y);
                 edgeVert.flipH = true;
-                Graphics.Draw(edgeVert, (float)(x + size.x + 16.0), y + size.y);
+                Graphics.Draw(edgeVert, (float)(x + size.x + 16), y + size.y);
                 edgeVert.flipH = false;
                 Graphics.Draw(edgeVert, x - 16f, y + size.y);
                 base.Draw();

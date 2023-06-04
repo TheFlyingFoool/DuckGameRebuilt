@@ -64,7 +64,7 @@ namespace DuckGame
             if (!edge && !didChange)
             {
                 snowWait -= 0.01f;
-                if (snowWait <= 0.0)
+                if (snowWait <= 0)
                 {
                     //bad code lol but idc as of now -NiK0
 
@@ -82,9 +82,9 @@ namespace DuckGame
             if (!edge && _snowFall.currentAnimation != "idle" && !_snowFall.finished)
             {
                 _snowFall.depth = -0.1f;
-                _snowFall.scale = new Vec2(1f, (float)(_snowFall.frame / 5.0 * 0.04f + 0.2f));
-                _snowFall.alpha = (float)(1.0 - _snowFall.frame / 5.0 * 1.0);
-                Graphics.Draw(_snowFall, x, (float)(y - 7.0 + _snowFall.frame / 5.0 * 3.0));
+                _snowFall.scale = new Vec2(1f, (float)(_snowFall.frame / 5 * 0.04f + 0.2f));
+                _snowFall.alpha = (float)(1 - _snowFall.frame / 5 * 1);
+                Graphics.Draw(_snowFall, x, (float)(y - 7 + _snowFall.frame / 5 * 3));
             }
             if (_snowFall.currentAnimation != "idle" && (edge || _snowFall.frame == 1 && !didChange))
             {

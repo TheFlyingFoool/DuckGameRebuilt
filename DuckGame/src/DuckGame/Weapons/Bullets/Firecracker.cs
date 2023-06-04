@@ -86,12 +86,12 @@ namespace DuckGame
             List<Bullet> varBullets = new List<Bullet>();
             for (int index = 0; index < 8; ++index)
             {
-                float num = (float)(index * 45.0 - 5.0) + Rando.Float(10f);
+                float num = (float)(index * 45 - 5) + Rando.Float(10f);
                 ATShrapnel type = new ATShrapnel
                 {
                     range = 8f + Rando.Float(3f)
                 };
-                Bullet bullet = new Bullet(x + (float)(Math.Cos(Maths.DegToRad(num)) * 6.0), y - (float)(Math.Sin(Maths.DegToRad(num)) * 6.0), type, num)
+                Bullet bullet = new Bullet(x + (float)(Math.Cos(Maths.DegToRad(num)) * 6), y - (float)(Math.Sin(Maths.DegToRad(num)) * 6), type, num)
                 {
                     firedFrom = this
                 };

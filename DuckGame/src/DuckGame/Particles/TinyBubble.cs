@@ -40,14 +40,14 @@ namespace DuckGame
             position.y += vSpeed;
             hSpeed = Lerp.Float(hSpeed, 0f, 0.1f);
             xscale = yscale = Lerp.Float(xscale, 1f, 0.1f);
-            if (y < _minY - 4.0)
+            if (y < _minY - 4)
                 alpha -= 0.025f;
-            if (y < _minY - 8.0)
+            if (y < _minY - 8)
                 alpha = 0f;
             if (y >= _minY)
                 return;
             alpha -= 0.025f;
-            if (alpha >= 0.0)
+            if (alpha >= 0)
                 return;
             Level.Remove(this);
         }

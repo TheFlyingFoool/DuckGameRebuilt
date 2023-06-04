@@ -66,18 +66,15 @@ namespace DuckGame
             Vec3 fade = new Vec3((Graphics.fade * _fade) * (1.0f - _darken)) * colorMul;
             Vec3 fadeAdd = _colorAdd + new Vec3(_fadeAdd) + new Vec3(Graphics.flashAddRenderValue) + new Vec3(Graphics.fadeAddRenderValue) - new Vec3(darken);
             fadeAdd = new Vec3(Maths.Clamp(fadeAdd.x, -1f, 1f), Maths.Clamp(fadeAdd.y, -1f, 1f), Maths.Clamp(fadeAdd.z, -1f, 1f));
-            if (_darken > 0.0)
-                _darken -= 0.15f;
-            else
-                _darken = 0f;
+            if (_darken > 0f) _darken -= 0.15f;
+            else _darken = 0f;
             if (_fx != null)
             {
                 _fx.Parameters["fade"]?.SetValue((Vector3)fade);
                 _fx.Parameters["add"]?.SetValue((Vector3)fadeAdd);
             }
             Graphics.screen = _batch;
-            if (_state.ScissorTestEnable)
-                Graphics.SetScissorRectangle(_scissor);
+            if (_state.ScissorTestEnable) Graphics.SetScissorRectangle(_scissor);
             _batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, _state, (MTEffect)_fx, camera.getMatrix());
         }
 

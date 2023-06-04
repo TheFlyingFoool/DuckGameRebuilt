@@ -66,22 +66,17 @@ namespace DuckGame
         {
             if (with is Duck && collar != null && with != null)
             {
-                if (with == collar.owner || totalImpactPower <= 8.0)
-                    return;
-                if (collar.duck != null)
-                    RumbleManager.AddRumbleEvent(collar.duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
-                if (!_isMace)
-                    return;
+                if (with == collar.owner || totalImpactPower <= 8f) return;
+                if (collar.duck != null) RumbleManager.AddRumbleEvent(collar.duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
+                if (!_isMace) return;
                 with.Destroy(new DTCrush(this));
             }
-            else
-                base.OnSoftImpact(with, from);
+            else base.OnSoftImpact(with, from);
         }
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (collar != null && collar.duck != null && collar.duck.profile != null && totalImpactPower > 4.0)
-                RumbleManager.AddRumbleEvent(collar.duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
+            if (collar != null && collar.duck != null && collar.duck.profile != null && totalImpactPower > 4f) RumbleManager.AddRumbleEvent(collar.duck.profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Pulse, RumbleFalloff.Short));
             base.OnSolidImpact(with, from);
         }
 
@@ -139,10 +134,8 @@ namespace DuckGame
             thing1.vSpeed = vec2_6.y;
             thing2.hSpeed = vec2_4.x;
             thing2.vSpeed = vec2_4.y;
-            if (thing1 is ChainLink && (thing2.position - thing1.position).length > num1 * 12.0)
-                thing1.position = position;
-            if (thing2 is ChainLink && (thing2.position - thing1.position).length > num1 * 12.0)
-                thing2.position = position;
+            if (thing1 is ChainLink && (thing2.position - thing1.position).length > num1 * 12f) thing1.position = position;
+            if (thing2 is ChainLink && (thing2.position - thing1.position).length > num1 * 12f) thing2.position = position;
             return num8;
         }
 
@@ -154,8 +147,7 @@ namespace DuckGame
                 Duck attach = _attach as Duck;
                 physicsObject = attach.ragdoll != null ? attach.ragdoll.part1 : attach;
             }
-            if (physicsObject == null)
-                return;
+            if (physicsObject == null) return;
             double num1 = Solve(this, physicsObject, 30f);
             int num2 = 0;
             PhysicsObject b2 = this;
@@ -166,17 +158,14 @@ namespace DuckGame
                 link.depth = _attach.depth - 8 - num2;
                 ++num2;
             }
-            double num4 = Solve(physicsObject, b2, 2f);
+            //double num4 = Solve(physicsObject, b2, 2f); what -NiK0
             base.Update();
-            if (_sparkWait > 0.0)
-                _sparkWait -= 0.1f;
-            else
-                _sparkWait = 0f;
-            if (_sparkWait != 0.0 || !grounded || Math.Abs(hSpeed) <= 1.0)
-                return;
+            if (_sparkWait > 0f) _sparkWait -= 0.1f;
+            else _sparkWait = 0f;
+            if (_sparkWait != 0f || !grounded || Math.Abs(hSpeed) <= 1f) return;
             _sparkWait = 0.25f;
-            if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(Spark.New(x + (hSpeed > 0.0 ? -2f : 2f), y + 7f, new Vec2(0f, 0.5f)));
-            else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(Spark.New(x + (hSpeed > 0.0 ? -2f : 2f), y + 7f, new Vec2(0f, 0.5f)));
+            if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(Spark.New(x + (hSpeed > 0f ? -2f : 2f), y + 7f, new Vec2(0f, 0.5f)));
+            else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(Spark.New(x + (hSpeed > 0f ? -2f : 2f), y + 7f, new Vec2(0f, 0.5f)));
         }
     }
 }

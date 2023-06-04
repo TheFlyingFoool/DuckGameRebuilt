@@ -67,9 +67,13 @@ namespace DuckGame
                     Hat hat = new TeamHat(0f, 0f, t, d.profile);
                     Level.Add(hat);
                     d.Equip(hat, false);
+                    d.profile.team = t;
                     if (equipment != null) Level.Remove(equipment);
                 }
             }
+
+            d.profile.persona = Persona.alllist[RoomEditorExtra.arcadeDuckColor];
+            
             _profile = d.profile;
             _duck = d;
             Level.Add(_profileBox);

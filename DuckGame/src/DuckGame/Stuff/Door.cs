@@ -122,7 +122,7 @@ namespace DuckGame
 
         public override void Terminate()
         {
-            if (_hitPoints > 5.0 && !Network.isActive)
+            if (_hitPoints > 5 && !Network.isActive)
             {
                 Level.Remove(_frame);
                 _frame = null;
@@ -162,8 +162,8 @@ namespace DuckGame
                 if (type is DTShot dtShot && dtShot.bullet != null)
                 {
                     t.hSpeed = dtShot.bullet.travelDirNormalized.x * 2f;
-                    t.vSpeed = (float)(dtShot.bullet.travelDirNormalized.y * 2.0 - 1.0);
-                    t.offDir = dtShot.bullet.travelDirNormalized.x > 0.0 ? (sbyte)1 : (sbyte)-1;
+                    t.vSpeed = (float)(dtShot.bullet.travelDirNormalized.y * 2 - 1);
+                    t.offDir = dtShot.bullet.travelDirNormalized.x > 0 ? (sbyte)1 : (sbyte)-1;
                 }
                 else
                 {
@@ -184,7 +184,7 @@ namespace DuckGame
         {
             if (bullet.isLocal)
                 Fondle(this, DuckNetwork.localConnection);
-            if (_hitPoints <= 0.0)
+            if (_hitPoints <= 0)
                 return base.Hit(bullet, hitPos);
             hitPos -= bullet.travelDirNormalized;
             if (physicsMaterial == PhysicsMaterial.Wood)
@@ -291,7 +291,7 @@ namespace DuckGame
                 physicsMaterial = PhysicsMaterial.Metal;
                 thickness = 4f;
             }
-            if (!_fucked && _hitPoints < _maxHealth / 2.0)
+            if (!_fucked && _hitPoints < _maxHealth / 2f)
             {
                 _sprite = new SpriteMap(secondaryFrame ? "flimsyDoorDamaged" : "doorFucked", 32, 32);
                 graphic = _sprite;
@@ -306,7 +306,7 @@ namespace DuckGame
                 _cornerInit = true;
             }
             base.Update();
-            if (damageMultiplier > 1.0)
+            if (damageMultiplier > 1)
                 damageMultiplier -= 0.2f;
             else
                 damageMultiplier = 1f;
@@ -339,7 +339,7 @@ namespace DuckGame
                             thing = d;
                             break;
                         }
-                        if (Math.Abs(d.hSpeed) > 4.0)
+                        if (Math.Abs(d.hSpeed) > 4)
                         {
                             search2 = d;
                         }
@@ -347,7 +347,7 @@ namespace DuckGame
                 }
                 if (thing == null)
                 {
-                    thing = search2;//Level.CheckRectFilter<Duck>(_topLeft - new Vec2(32f, 0f), _bottomRight + new Vec2(32f, 0f), d => !(d is TargetDuck) && Math.Abs(d.hSpeed) > 4.0);
+                    thing = search2;//Level.CheckRectFilter<Duck>(_topLeft - new Vec2(32f, 0f), _bottomRight + new Vec2(32f, 0f), d => !(d is TargetDuck) && Math.Abs(d.hSpeed) > 4);
                     flag2 = true;
                 }
                 if (thing != null)
@@ -361,7 +361,7 @@ namespace DuckGame
                         _jam = 1f;
                         foreach (PhysicsObject t2 in _coll)
                         {
-                            if (!(t2 is TeamHat) && !(t2 is Duck) && t2.weight > 3.0 && t2.owner == null && (!(t2 is Holdable) || (t2 as Holdable).hoverSpawner == null))
+                            if (!(t2 is TeamHat) && !(t2 is Duck) && t2.weight > 3f && t2.owner == null && (!(t2 is Holdable) || (t2 as Holdable).hoverSpawner == null))
                             {
                                 if (t2 is RagdollPart)
                                 {
@@ -462,10 +462,9 @@ namespace DuckGame
                         }
                     }
                 }
-                else
-                    _didJiggle = false;
+                else _didJiggle = false;
             }
-            if (_open < -0.0 || _open > 0.0)
+            if (_open < -0 || _open > 0)
             {
                 _coll.Clear();
                 Level.CheckRectAll(_topLeft - new Vec2(18f, 0f), _bottomRight + new Vec2(18f, 0f), _coll);
@@ -473,22 +472,22 @@ namespace DuckGame
                 {
                     if (!(t4 is TeamHat) && (t4 is Duck || !_jammed) && (!(t4 is Holdable) || t4 is Mine || (t4 as Holdable).canPickUp) && t4.solid)
                     {
-                        if (!(t4 is Duck) && weight < 3.0)
+                        if (!(t4 is Duck) && weight < 3)
                         {
-                            if (_open < -0.0)
+                            if (_open < -0)
                             {
                                 Fondle(t4);
                                 t4.hSpeed = 3f;
                             }
-                            else if (_open > 0.0)
+                            else if (_open > 0)
                             {
                                 Fondle(t4);
                                 t4.hSpeed = -3f;
                             }
                         }
-                        if (_open < -0.0 && t4 != null && (t4 is Duck || t4.right > _topLeft.x - 10.0 && t4.left < _topRight.x))
+                        if (_open < -0 && t4 != null && (t4 is Duck || t4.right > _topLeft.x - 10 && t4.left < _topRight.x))
                             flag1 = true;
-                        if (_open > 0.0 && t4 != null && (t4 is Duck || t4.left < _topRight.x + 10.0 && t4.right > _topLeft.x))
+                        if (_open > 0 && t4 != null && (t4 is Duck || t4.left < _topRight.x + 10 && t4.right > _topLeft.x))
                             flag1 = true;
                     }
                 }
@@ -519,9 +518,9 @@ namespace DuckGame
                 _opened = false;
                 SFX.Play("doorClose", Rando.Float(0.5f, 0.6f), Rando.Float(-0.1f, 0.1f));
             }
-            if (_open > 1.0)
+            if (_open > 1)
                 _open = 1f;
-            if (_open < -1.0)
+            if (_open < -1)
                 _open = -1f;
             if (_jam > 0f && _open > _jam)
             {

@@ -53,7 +53,7 @@ namespace DuckGame
 
         public LoopingSound(string sound, float startVolume = 0f, float startPitch = 0f, string multiSound = null)
         {
-            _effect = startVolume <= 0.0 ? (multiSound == null ? SFX.Get(sound, startVolume * SFX.volume, startPitch, looped: true) : SFX.GetMultiSound(sound, multiSound)) : SFX.Play(sound, startVolume * SFX.volume, startPitch, looped: true);
+            _effect = startVolume <= 0 ? (multiSound == null ? SFX.Get(sound, startVolume * SFX.volume, startPitch, looped: true) : SFX.GetMultiSound(sound, multiSound)) : SFX.Play(sound, startVolume * SFX.volume, startPitch, looped: true);
             if (_effect != null)
                 return;
             _effect = new InvalidSound(sound, startVolume, startPitch, 0f, true);

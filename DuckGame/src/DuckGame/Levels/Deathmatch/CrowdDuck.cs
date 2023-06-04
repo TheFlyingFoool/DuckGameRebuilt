@@ -277,18 +277,18 @@ namespace DuckGame
                     if (_letter[_letter.Length - 1] == 'S')
                     {
                         Graphics.Draw(_suckSign, x + 28f, y - 27f + num);
-                        _font.Draw(_letter, (float)(x - _font.GetWidth(_letter) / 2.0 + 28.0), (float)(y - 26.0 - 8.0) + num, Color.Gray, _suckSign.depth + 3);
+                        _font.Draw(_letter, (float)(x - _font.GetWidth(_letter) / 2f + 28f), (float)(y - 26f - 8f) + num, Color.Gray, _suckSign.depth + 3);
                     }
                     else
                     {
                         Graphics.Draw(_sucksSign, x + 28f, y - 27f + num);
-                        _font.Draw(_letter, (float)(x - _font.GetWidth(_letter) / 2.0 + 28.0), (float)(y - 26.0 - 8.0) + num, Color.Gray, _sucksSign.depth + 3);
+                        _font.Draw(_letter, (float)(x - _font.GetWidth(_letter) / 2f + 28f), (float)(y - 26f - 8f) + num, Color.Gray, _sucksSign.depth + 3);
                     }
                 }
                 else
                 {
                     Graphics.Draw(_loveSign, x + 28f, y - 27f + num);
-                    _font.Draw(_letter, (float)(x - _font.GetWidth(_letter) / 2.0 + 29.0), y - 26f + num, Color.Gray, _loveSign.depth + 3);
+                    _font.Draw(_letter, (float)(x - _font.GetWidth(_letter) / 2f + 29f), y - 26f + num, Color.Gray, _loveSign.depth + 3);
                 }
             }
             if (!_empty && _lastLoyalty != null && _lastLoyalty.persona != null && _lastLoyalty.team != null)
@@ -326,7 +326,7 @@ namespace DuckGame
                 if (loyal)
                     g.frame = flag ? 1 : 0;
                 g.CenterOrigin();
-                Graphics.Draw(g, (float)(x - vec2.x + 8.0) + num, (float)(y - vec2.y - 22.0 - (flag ? 1.0 : 0.0)));
+                Graphics.Draw(g, (float)(x - vec2.x + 8f) + num, (float)(y - vec2.y - 22f - (flag ? 1f : 0f)));
                 g.frame = 0;
                 g.flipH = false;
             }

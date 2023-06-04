@@ -1,14 +1,9 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Bazooka
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [ClientOnly]
+#if DEBUG
     [EditorGroup("Rebuilt|Wump|Explosives")]
+#endif
     public class WumpBazooka : TampingWeapon
     {
         public WumpBazooka(float xval, float yval)
@@ -29,7 +24,7 @@ namespace DuckGame
             loseAccuracy = 0.1f;
             maxAccuracyLost = 0.6f;
             _editorName = "Wump Bazooka";
-            editorTooltip = "Funnier name, the missiles this gun are greatly explosive and volatile. Woudln't recommend.";
+            editorTooltip = "Funnier name, the missiles this gun are greatly explosive and volatile. Wouldn't recommend.";
             physicsMaterial = PhysicsMaterial.Metal;
             _numBulletsPerFire = 2;
             _timeToTamp = 1.5f;

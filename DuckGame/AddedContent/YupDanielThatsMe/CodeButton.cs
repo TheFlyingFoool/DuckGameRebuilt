@@ -10,7 +10,7 @@ using System.Linq;
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Stuff|Wires")]
+    //[EditorGroup("Stuff|Wires")]
     [BaggedProperty("isInDemo", true)]
     public class CodeButton : Block, IWirePeripheral
     {
@@ -102,7 +102,7 @@ namespace DuckGame
             //                        t.sleeping = false;
             //                        t.hSpeed -= 16f; 
             //                    }
-            //                    return 0.0;
+            //                    return 0f;
             //                }
             //            }
             //        }
@@ -275,7 +275,7 @@ public class CodeButton
             t.sleeping = false;
             t.hSpeed -= 16f; 
         }
-        return 0.0;
+        return 0f;
     }
 }";
                     }

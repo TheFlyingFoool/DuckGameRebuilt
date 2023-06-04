@@ -294,7 +294,7 @@ namespace DuckGame
         {
             if (f == null || f.removeFromLevel)
                 return;
-            int num1 = (int)(f.collisionSize.x / 8.0);
+            int num1 = (int)(f.collisionSize.x / 8f);
             float num2 = f.data.amount / num1;
             for (int index = 0; index < num1; ++index)
             {
@@ -770,7 +770,7 @@ namespace DuckGame
                 case 18:
                 case 26:
                     _collisionSize.x = verticalWidthThick;
-                    _collisionOffset.x = (float)(16.0 - verticalWidthThick - 8.0);
+                    _collisionOffset.x = (float)(16f - verticalWidthThick - 8f);
                     break;
                 case 4:
                 case 5:

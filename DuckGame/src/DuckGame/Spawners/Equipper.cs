@@ -125,7 +125,7 @@ namespace DuckGame
             string text = "EMPTY";
             if (contains != null)
                 text = contains.Name;
-            Graphics.DrawString(text, position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
+            Graphics.DrawString(text, position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2), -16f), Color.White, (Depth)0.9f);
             if (radius.value == 0)
                 return;
             Graphics.DrawCircle(position, radius.value, Color.Red, depth: ((Depth)0.9f));

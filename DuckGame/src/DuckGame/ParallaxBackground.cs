@@ -91,9 +91,9 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (scissor.width != 0.0)
+            if (scissor.width != 0)
                 layer.scissor = scissor;
-            if (position.y > 0.0)
+            if (position.y > 0)
                 position.y = 0f;
             if (restrictBottom && position.y + _sprite.texture.height < Layer.Parallax.camera.bottom)
                 position.y = Layer.Parallax.camera.bottom - _sprite.texture.height;

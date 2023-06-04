@@ -16,7 +16,7 @@ namespace DuckGame
         {
             itemSize.y = 16f;
             _text = "@searchicon@ search...";
-            tooltip = "Search for an object!";
+            tooltip = "Search for an object! (Shortcut: @COMMA@)";
         }
 
         public override void Selected() => (Level.current as Editor).searching = true;

@@ -838,7 +838,7 @@ namespace DuckGame
 
         //private static void DoMatchSettingsInfoOpen()
         //{
-        //    DuckNetwork._ducknetUIGroup = new UIComponent((float)(320.0 / 2.0), 180f / 2f, 0f, 0f);
+        //    DuckNetwork._ducknetUIGroup = new UIComponent((float)(320 / 2), 180f / 2f, 0f, 0f);
         //    DuckNetwork._core._matchSettingMenu = DuckNetwork.CreateMatchSettingsInfoWindow();
         //    DuckNetwork._ducknetUIGroup.Add((UIComponent)DuckNetwork._core._matchSettingMenu, false);
         //    DuckNetwork._ducknetUIGroup.Close();
@@ -857,7 +857,7 @@ namespace DuckGame
 
         private static void DoSpectatorOpen(bool pSpectator)
         {
-            _ducknetUIGroup = new UIComponent((float)(320.0 / 2.0), 180f / 2f, 0f, 0f);
+            _ducknetUIGroup = new UIComponent((float)(320 / 2), 180f / 2f, 0f, 0f);
             UIMenu spectatorWindow = CreateSpectatorWindow(pSpectator);
             _ducknetUIGroup.Add(spectatorWindow, false);
             _ducknetUIGroup.Close();
@@ -964,10 +964,12 @@ namespace DuckGame
                 _core._lobbySettingMenu = new UIMenu("@LWING@LOBBY SETTINGS@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK");
                 _core._lobbySettingMenu.SetBackFunction(new UIMenuActionOpenMenu(_core._lobbySettingMenu, _core._ducknetMenu));
                 _core._lobbySettingMenu.Close();
-                UIMenuItemString nameSetting = _core._lobbySettingMenu.AddMatchSetting(TeamSelect2.GetOnlineSetting("name"), false) as UIMenuItemString;
-                nameSetting.InitializeEntryMenu(_core.ducknetUIGroup, _core._lobbySettingMenu);
-                UIMenuItemString passwordSetting = _core._lobbySettingMenu.AddMatchSetting(TeamSelect2.GetOnlineSetting("password"), false) as UIMenuItemString;
-                passwordSetting.InitializeEntryMenu(_core.ducknetUIGroup, _core._lobbySettingMenu);
+                MatchSetting nameSetting = TeamSelect2.GetOnlineSetting("name");
+                LUIMenuItemString nameSettingLUI = _core._lobbySettingMenu.AddMatchSettingL(nameSetting, false) as LUIMenuItemString;
+                nameSettingLUI.InitializeEntryMenu(_core.ducknetUIGroup, _core._lobbySettingMenu);
+                MatchSetting passwordSetting = TeamSelect2.GetOnlineSetting("password");
+                LUIMenuItemString passwordSettingLUI = _core._lobbySettingMenu.AddMatchSettingL(passwordSetting, false) as LUIMenuItemString;
+                passwordSettingLUI.InitializeEntryMenu(_core.ducknetUIGroup, _core._lobbySettingMenu);
                 _ducknetUIGroup.Add(_core._lobbySettingMenu, false);
                 _core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|LOBBY SETTINGS", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._lobbySettingMenu), UIAlign.Left), true);
             }
@@ -999,7 +1001,7 @@ namespace DuckGame
                     {
                         if (matchSetting.id != "partymode")
                         {
-                            _core._matchSettingMenu.AddMatchSetting(matchSetting, false, true);
+                            _core._matchSettingMenu.AddMatchSettingL(matchSetting, false, true);
                         }
                         if (matchSetting.id == "wallmode")
                         {
@@ -1050,10 +1052,10 @@ namespace DuckGame
                 }
             }
             Main.SpecialCode = "men7";
-            _core._ducknetMenu.Add(new UIText("", Color.White), true);
             if (Network.inLobby && whoOpen.slotType != SlotType.Local && Network.available)
             {
                 Main.SpecialCode = "men8";
+                _core._ducknetMenu.Add(new UIText("", Color.White), true);
                 _core._inviteMenu = new UIInviteMenu("INVITE FRIENDS", null, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
                 ((UIInviteMenu)_core._inviteMenu).SetAction(new UIMenuActionOpenMenu(_core._inviteMenu, _core._ducknetMenu));
                 _core._inviteMenu.Close();
@@ -1066,6 +1068,7 @@ namespace DuckGame
             if (Level.current is GameLevel)
 			{
                 GameLevel gameLevel = (Level.current as GameLevel);
+                bool blankAdded = false;
                 if (Level.current.isCustomLevel)
                 {
                     if (gameLevel.data != null && gameLevel.data.metaData != null && gameLevel.data.metaData.workshopID != 0UL && Steam.IsInitialized())
@@ -1074,6 +1077,8 @@ namespace DuckGame
                         WorkshopItem workshopItem = WorkshopItem.GetItem((Level.current as GameLevel).data.metaData.workshopID);
                         if (workshopItem != null)
                         {
+                            _core._ducknetMenu.Add(new UIText("", Color.White), true);
+                            blankAdded = true;
                             _core._ducknetMenu.Add(new UIMenuItem("@STEAMICON@|DGGREEN|VIEW", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(GameMode.View)), UIAlign.Left), true);
                             if ((workshopItem.stateFlags & WorkshopItemState.Subscribed) != WorkshopItemState.None)
                             {
@@ -1091,13 +1096,17 @@ namespace DuckGame
                 if (!gameLevel.matchOver)
                 {
                     if (Network.isServer)
+                    {
+                        if (!blankAdded)
+                            _core._ducknetMenu.Add(new UIText("", Color.White), true);
                         _core._ducknetMenu.Add(new UIMenuItem("@SKIPSPIN@|DGRED|SKIP", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Skip)), UIAlign.Left), true);
-                    _core._ducknetMenu.Add(new UIText(" ", Color.White), true);
+                    }
                 }
             }
             Main.SpecialCode = "men13";
             if (whoOpen.slotType != SlotType.Local || Network.inLobby)
             {
+                _core._ducknetMenu.Add(new UIText(" ", Color.White), true);
                 if (whoOpen.slotType == SlotType.Local)
                     _core._ducknetMenu.Add(new UIMenuItem("|DGRED|BACK OUT", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmMenu), UIAlign.Left), true);
                 else
@@ -1994,9 +2003,9 @@ namespace DuckGame
                     foreach (ChatMessage chatMessage in _core.chatMessages)
                     {
                         chatMessage.timeout -= 0.016f;
-                        if (chatMessage.timeout < 0.0)
+                        if (chatMessage.timeout < 0)
                             chatMessage.alpha -= 0.01f;
-                        if (chatMessage.alpha < 0.0)
+                        if (chatMessage.alpha < 0)
                             chatMessageList.Add(chatMessage);
                     }
                     foreach (ChatMessage chatMessage in chatMessageList)
@@ -3244,16 +3253,15 @@ namespace DuckGame
                 _core._chatFont.scale = new Vec2(num3, num3) * chatMessage.scale;
                 if (_core._chatFont is RasterFont)
                     _core._chatFont.scale = new Vec2(0.5f);
-                float x = (float)(_core._chatFont.GetWidth(chatMessage.text) + num7 + 8.0 * chatScale);
+                float x = (float)(_core._chatFont.GetWidth(chatMessage.text) + num7 + 8 * chatScale);
                 if (chatMessage.who.slotType == SlotType.Spectator)
                 {
                     if (_core._chatFont is RasterFont)
                     {
-                        float num8 = (float)((_core._chatFont as RasterFont).data.fontSize * RasterFont.fontScaleFactor / 10.0);
+                        float num8 = (float)((_core._chatFont as RasterFont).data.fontSize * RasterFont.fontScaleFactor / 10);
                         x += 6f * num8;
                     }
-                    else
-                        x += 8f * _core._chatFont.scale.x;
+                    else x += 8f * _core._chatFont.scale.x;
                 }
                 float y = chatMessage.newlines * (_core._chatFont.characterHeight + 2) * _core._chatFont.scale.y;
                 Vec2 p1 = new Vec2(14f, num1 + (vec2_1.y - (y + 10f)));

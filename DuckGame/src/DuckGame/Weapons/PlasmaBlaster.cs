@@ -43,7 +43,7 @@ namespace DuckGame
         public override void Update()
         {
             ammo = 99;
-            if (_fireWait > 6.0)
+            if (_fireWait > 6)
                 _fireWait = 6f;
             _fireWait = Maths.LerpTowards(_fireWait, 0.3f, 0.01f);
             base.Update();
@@ -52,7 +52,7 @@ namespace DuckGame
         public override void Draw()
         {
             _barrelHeat = 0f;
-            if (_flareAlpha > 0.0 && !_flared)
+            if (_flareAlpha > 0 && !_flared)
             {
                 _flared = true;
                 _bigFlare.SetAnimation("idle");

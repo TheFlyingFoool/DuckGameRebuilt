@@ -38,7 +38,7 @@ namespace DuckGame
         public static Type PickType(int chanceGroup, List<TypeProbPair> contains)
         {
             ItemBox.GetPhysicsObjects(Editor.Placeables);
-            Random random = new Random((int)(Level.GetChanceGroup2(chanceGroup) * 2147483648.0 - 1.0));
+            Random random = new Random((int)(Level.GetChanceGroup2(chanceGroup) * 2147483648 - 1));
             Random generator = Rando.generator;
             Rando.generator = random;
             List<TypeProbPair> typeProbPairList = Utils.Shuffle(contains);
@@ -46,7 +46,7 @@ namespace DuckGame
             float num = 0f;
             foreach (TypeProbPair typeProbPair in typeProbPairList)
             {
-                if (Rando.Float(1f) > 1.0 - typeProbPair.probability)
+                if (Rando.Float(1f) > 1 - typeProbPair.probability)
                 {
                     type = typeProbPair.type;
                     break;

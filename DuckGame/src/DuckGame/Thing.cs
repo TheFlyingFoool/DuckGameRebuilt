@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Thing
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -588,9 +581,9 @@ namespace DuckGame
         public void ApplyForce(Vec2 force, Vec2 limits)
         {
             limits = new Vec2(Math.Abs(limits.x), Math.Abs(limits.y));
-            if (force.x < 0.0 && _hSpeed > -limits.x || force.x > 0.0 && _hSpeed < limits.x)
+            if (force.x < 0 && _hSpeed > -limits.x || force.x > 0 && _hSpeed < limits.x)
                 _hSpeed += force.x;
-            if ((force.y >= 0.0 || _vSpeed <= -limits.y) && (force.y <= 0.0 || _vSpeed >= limits.y))
+            if ((force.y >= 0 || _vSpeed <= -limits.y) && (force.y <= 0 || _vSpeed >= limits.y))
                 return;
             _vSpeed += force.y;
         }
@@ -598,10 +591,10 @@ namespace DuckGame
         public void ApplyForceLimited(Vec2 force)
         {
             _hSpeed += force.x;
-            if (force.x < 0.0 && _hSpeed < force.x || force.x > 0.0 && _hSpeed > force.x)
+            if (force.x < 0 && _hSpeed < force.x || force.x > 0 && _hSpeed > force.x)
                 _hSpeed = force.x;
             _vSpeed += force.y;
-            if ((force.y >= 0.0 || _vSpeed >= force.y) && (force.y <= 0.0 || _vSpeed <= force.y))
+            if ((force.y >= 0 || _vSpeed >= force.y) && (force.y <= 0 || _vSpeed <= force.y))
                 return;
             _vSpeed = force.y;
         }
@@ -745,7 +738,7 @@ namespace DuckGame
 
         public static bool CheckForBozoData(Thing pThing)
         {
-            if (pThing == null || Math.Abs(pThing.y) > 99999.0 || Math.Abs(pThing.x) > 99999.0)
+            if (pThing == null || Math.Abs(pThing.y) > 99999 || Math.Abs(pThing.x) > 99999)
                 return true;
             if (!(pThing is ThingContainer))
                 return false;
@@ -768,7 +761,7 @@ namespace DuckGame
             Thing thing = Editor.CreateThing(type);
             if (!thing.Deserialize(node))
                 return null;
-            if (!(Level.current is Editor) && chance && thing.likelyhoodToExist != 1.0 && !Level.PassedChanceGroup(thing.chanceGroup, thing.likelyhoodToExist))
+            if (!(Level.current is Editor) && chance && thing.likelyhoodToExist != 1 && !Level.PassedChanceGroup(thing.chanceGroup, thing.likelyhoodToExist))
                 return null;
             if (thing is IContainPossibleThings)
                 (thing as IContainPossibleThings).PreparePossibilities();
@@ -841,7 +834,7 @@ namespace DuckGame
             Thing thing = Editor.CreateThing(type);
             if (!thing.LegacyDeserialize(node))
                 thing = null;
-            return Level.current is Editor || !chance || thing.likelyhoodToExist == 1.0 || Level.PassedChanceGroup(thing.chanceGroup, thing.likelyhoodToExist) ? thing : null;
+            return Level.current is Editor || !chance || thing.likelyhoodToExist == 1 || Level.PassedChanceGroup(thing.chanceGroup, thing.likelyhoodToExist) ? thing : null;
         }
 
         public bool isAccessible
@@ -1102,7 +1095,7 @@ namespace DuckGame
                 return new Sprite("basketBall");
             if (_alphaTestEffect == null)
                 _alphaTestEffect = (Effect)Content.Load<MTEffect>("Shaders/alphatest");
-            if (pUseCollisionSize && collisionSize.x > 0.0)
+            if (pUseCollisionSize && collisionSize.x > 0)
             {
                 if (wide <= 0)
                     wide = (int)collisionSize.x;
@@ -1121,13 +1114,13 @@ namespace DuckGame
                 target = new RenderTarget2D(wide, high, true);
             if (graphic == null)
                 return new Sprite(target, 0f, 0f);
-            float num2 = num1 / (collisionSize.x > 0.0 & pUseCollisionSize ? collisionSize.x : graphic.width);
+            float num2 = num1 / (collisionSize.x > 0 & pUseCollisionSize ? collisionSize.x : graphic.width);
             Camera camera = new Camera(0f, 0f, wide, high)
             {
                 position = new Vec2(x - centerx * num2, y - centery * num2)
             };
-            if (pUseCollisionSize && collisionSize.x > 0.0)
-                camera.center = new Vec2((int)((left + right) / 2.0), (int)((top + bottom) / 2.0));
+            if (pUseCollisionSize && collisionSize.x > 0)
+                camera.center = new Vec2((int)((left + right) / 2), (int)((top + bottom) / 2));
             RenderTarget2D currentRenderTarget = Graphics.currentRenderTarget;
             Graphics.SetRenderTarget(target);
             DepthStencilState depthStencilState = new DepthStencilState()
@@ -1240,9 +1233,9 @@ namespace DuckGame
 
         public virtual string GetDetailsString()
         {
-            if (_likelyhoodToExist == 1.0 && _chanceGroup == -1)
+            if (_likelyhoodToExist == 1 && _chanceGroup == -1)
                 return GetPropertyDetails();
-            return "Chance: " + Math.Round(likelyhoodToExist / 1.0 * 100.0).ToString() + "%\nChance Group: " + (_chanceGroup == -1 ? "None" : _chanceGroup.ToString(CultureInfo.InvariantCulture)) + "\n" + GetPropertyDetails();
+            return "Chance: " + Math.Round(likelyhoodToExist / 1f * 100f).ToString() + "%\nChance Group: " + (_chanceGroup == -1 ? "None" : _chanceGroup.ToString(CultureInfo.InvariantCulture)) + "\n" + GetPropertyDetails();
         }
 
         public virtual void ReturnItemToWorld(Thing t)
@@ -1262,7 +1255,7 @@ namespace DuckGame
             t.bottom = block4.top;
         }
 
-        public bool isOffBottomOfLevel => y > Level.activeLevel.lowestPoint + 100.0 && top > Level.current.camera.bottom + 8.0;
+        public bool isOffBottomOfLevel => y > Level.activeLevel.lowestPoint + 100 && top > Level.current.camera.bottom + 8;
 
         public virtual Vec2 collisionOffset
         {

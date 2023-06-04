@@ -178,7 +178,7 @@ namespace DuckGame
                         System_MapTouch(new TSData(0)
                         {
                             fingerId = 0,
-                            touchXY = new Vec2(Mouse.xConsole - _spoofFingerDistance, Mouse.yConsole) + new Vec2((float)Math.Sin(_spoofFinger1Waver), (float)Math.Cos(_spoofFinger1Waver * 2.0)) * 2f
+                            touchXY = new Vec2(Mouse.xConsole - _spoofFingerDistance, Mouse.yConsole) + new Vec2((float)Math.Sin(_spoofFinger1Waver), (float)Math.Cos(_spoofFinger1Waver * 2)) * 2f
                         });
                     if (Mouse.right == InputState.Down)
                         System_MapTouch(new TSData(0)
@@ -194,7 +194,7 @@ namespace DuckGame
                             touchXY = new Vec2(Mouse.xConsole, Mouse.yConsole)
                         });
                     _spoofFingerDistance += Mouse.scroll * 0.1f;
-                    if (_spoofFingerDistance < 0.0)
+                    if (_spoofFingerDistance < 0)
                         _spoofFingerDistance = 0f;
                 }
                 _updated = true;

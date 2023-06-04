@@ -97,15 +97,11 @@ namespace DuckGame
             if (_flashTransition)
             {
                 _darken -= 0.2f;
-                if (_darken < 0.2f)
-                    _flashTransition = false;
+                if (_darken < 0.2f) _flashTransition = false;
             }
-            if (_flashTransition)
-                return;
-            if (_darken < 1.0)
-                _darken += 0.2f;
-            else
-                _darken = 1f;
+            if (_flashTransition) return;
+            if (_darken < 1f) _darken += 0.2f;
+            else _darken = 1f;
         }
     }
 }

@@ -205,12 +205,12 @@ namespace DuckGame
                         _trapTime -= 0.028f;
                         if (owner == null)
                         {
-                            if (Math.Abs(hSpeed) < 1.0 && _framesSinceTransfer > 30)
+                            if (Math.Abs(hSpeed) < 1 && _framesSinceTransfer > 30)
                                 _duckOwner.Fondle(this);
                             vSpeed -= Rando.Float(0.8f, 1.1f);
-                            if (_duckOwner.inputProfile.Down(Triggers.Left) && hSpeed > -1.0)
+                            if (_duckOwner.inputProfile.Down(Triggers.Left) && hSpeed > -1)
                                 hSpeed -= Rando.Float(0.6f, 0.8f);
-                            if (_duckOwner.inputProfile.Down(Triggers.Right) && hSpeed < 1.0)
+                            if (_duckOwner.inputProfile.Down(Triggers.Right) && hSpeed < 1)
                                 hSpeed += Rando.Float(0.6f, 0.8f);
                         }
                     }
@@ -245,13 +245,13 @@ namespace DuckGame
                 _duckOwner.DrawConnectionIndicators();
             float num1 = 0f;
             if (owner != null)
-                num1 = (float)(Math.Sin(_shakeInc) * _shakeMult * 1.0);
+                num1 = (float)(Math.Sin(_shakeInc) * _shakeMult * 1);
             if (_duckOwner.quack > 0)
             {
                 Vec2 tounge = _duckOwner.tounge;
-                if (!_duckOwner._spriteQuack.flipH && tounge.x < 0.0f)
+                if (!_duckOwner._spriteQuack.flipH && tounge.x < 0f)
                     tounge.x = 0f;
-                if (_duckOwner._spriteQuack.flipH && tounge.x > 0.0f)
+                if (_duckOwner._spriteQuack.flipH && tounge.x > 0f)
                     tounge.x = 0f;
                 if (tounge.y < -0.3f)
                     tounge.y = -0.3f;

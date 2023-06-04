@@ -96,7 +96,7 @@ namespace DuckGame
                     _font.scale = new Vec2(1f, 1f);
                     _font.Draw(_openedItem.name, new Vec2(16f, 16f), Color.White, (Depth)0.5f);
                     if (_openedItem.preview != null)
-                        Graphics.Draw(_openedItem.preview, 16f, 32f, (float)(256.0 / _openedItem.preview.height * 0.5), (float)(256.0 / _openedItem.preview.height * 0.5), (Depth)0.5f);
+                        Graphics.Draw(_openedItem.preview, 16f, 32f, (float)(256f / _openedItem.preview.height * 0.5f), (float)(256f / _openedItem.preview.height * 0.5f), (Depth)0.5f);
                     _font.maxWidth = 300;
                     _font.Draw(_openedItem.description, new Vec2(16f, 170f), Color.White, (Depth)0.5f);
                     _font.maxWidth = 0;

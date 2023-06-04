@@ -62,14 +62,14 @@ namespace DuckGame
                 _loadProgress = 1f;
                 _loadWait = 0f;
             }
-            if (_loadWait > 0.0)
+            if (_loadWait > 0)
                 return;
-            if (_loadProgress == 0.0)
+            if (_loadProgress == 0)
                 SFX.Play("shotgunLoad");
             if (_loadProgress == 0.5)
                 Reload();
             _loadWait = 0f;
-            if (_loadProgress < 1.0)
+            if (_loadProgress < 1f)
             {
                 _loadProgress += 0.1f;
             }
@@ -83,7 +83,7 @@ namespace DuckGame
 
         public override void OnPressAction()
         {
-            if (_loadProgress >= 1.0)
+            if (_loadProgress >= 1f)
             {
                 base.OnPressAction();
                 _loadProgress = 0f;
@@ -91,7 +91,7 @@ namespace DuckGame
             }
             else
             {
-                if (_loadWait != 1.0)
+                if (_loadWait != 1f)
                     return;
                 _loadWait = 0f;
             }

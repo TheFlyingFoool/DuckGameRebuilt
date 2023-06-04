@@ -53,8 +53,8 @@ namespace DuckGame
                 SFX.Play("pyramidClose", 0.6f);
             }
             _open = Maths.LerpTowards(_open, _desiredOpen, 0.15f);
-            _sprite.frame = (int)(_open * 32.0);
-            _collisionSize.y = (float)((1.0 - _open) * 32.0);
+            _sprite.frame = (int)(_open * 32);
+            _collisionSize.y = (float)((1 - _open) * 32);
         }
     }
 }

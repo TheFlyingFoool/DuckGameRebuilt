@@ -61,7 +61,7 @@ namespace DuckGame
             if (!Network.isActive)
             {
                 melt += 0.05f;
-                if (melt > 1.0)
+                if (melt > 1)
                 {
                     melted = true;
                     _sprite = new SpriteMap(meltedTileset, 16, 16)

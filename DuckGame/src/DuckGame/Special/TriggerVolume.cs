@@ -147,7 +147,7 @@ namespace DuckGame
                 return;
             float num1 = Wide.value;
             float num2 = High.value;
-            Graphics.DrawRect(position + new Vec2((float)(-num1 / 2.0), (float)(-num2 / 2.0)), position + new Vec2(num1 / 2f, num2 / 2f), Colors.DGGreen * 0.5f, (Depth)1f, false);
+            Graphics.DrawRect(position + new Vec2((float)(-num1 / 2f), (float)(-num2 / 2f)), position + new Vec2(num1 / 2f, num2 / 2f), Colors.DGGreen * 0.5f, (Depth)1f, false);
         }
     }
 }

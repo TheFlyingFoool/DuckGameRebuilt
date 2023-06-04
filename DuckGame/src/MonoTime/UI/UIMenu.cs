@@ -153,7 +153,7 @@ namespace DuckGame
                 }
                 if (gamepadMode)
                 {
-                    if ((_oldPos - Mouse.positionScreen).lengthSq > 120.0)
+                    if ((_oldPos - Mouse.positionScreen).lengthSq > 120)
                     {
                         storeinputState = Mouse.left;
                         gamepadMode = false;
@@ -230,6 +230,53 @@ namespace DuckGame
                 component = new UIMenuItemToggle(m.name, field: new FieldBinding(m, "value"), filterBinding: (filterMenu ? new FieldBinding(m, "filtered") : null));
             else if (m.value is string)
                 component = new UIMenuItemString(m.name, m.id, field: new FieldBinding(m, "value"), filterBinding: (filterMenu ? new FieldBinding(m, "filtered") : null));
+            component.condition = m.condition;
+            if (component != null)
+            {
+                component.isEnabled = enabled;
+                _section.Add(component, true);
+                _dirty = true;
+            }
+            return component;
+        }
+
+        public UIComponent AddMatchSettingL(MatchSetting m, bool filterMenu, bool enabled = true)
+        {
+            UIComponent component = null;
+            if (m.value is int)
+            {
+                FieldBinding upperBoundField = null;
+                if (m.maxSyncID != null)
+                {
+                    foreach (MatchSetting matchSetting in TeamSelect2.matchSettings)
+                    {
+                        if (matchSetting.id == m.maxSyncID)
+                            upperBoundField = new FieldBinding(matchSetting, "value");
+                    }
+                }
+                FieldBinding lowerBoundField = null;
+                if (m.minSyncID != null)
+                {
+                    foreach (MatchSetting matchSetting in TeamSelect2.matchSettings)
+                    {
+                        if (matchSetting.id == m.minSyncID)
+                            lowerBoundField = new FieldBinding(matchSetting, "value");
+                    }
+                }
+                component = new LUIMenuItemNumber(m.name, field: new FieldBinding(m, "value", m.min, m.max), step: m.step, upperBoundField: upperBoundField, lowerBoundField: lowerBoundField, append: m.suffix, filterField: (filterMenu ? new FieldBinding(m, "filtered") : null), valStrings: m.valueStrings, setting: m);
+                if (m.percentageLinks != null)
+                {
+                    foreach (string percentageLink in m.percentageLinks)
+                    {
+                        MatchSetting matchSetting = TeamSelect2.GetMatchSetting(percentageLink);
+                        (component as LUIMenuItemNumber).percentageGroup.Add(new FieldBinding(matchSetting, "value", matchSetting.min, matchSetting.max, matchSetting.step));
+                    }
+                }
+            }
+            else if (m.value is bool)
+                component = new LUIMenuItemToggle(m.name, field: new FieldBinding(m, "value"), filterBinding: (filterMenu ? new FieldBinding(m, "filtered") : null));
+            else if (m.value is string)
+                component = new LUIMenuItemString(m.name, m.id, field: new FieldBinding(m, "value"), filterBinding: (filterMenu ? new FieldBinding(m, "filtered") : null));
             component.condition = m.condition;
             if (component != null)
             {

@@ -26,7 +26,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (_startWait > 0.0)
+            if (_startWait > 0)
             {
                 _startWait -= 0.1f;
             }
@@ -36,7 +36,7 @@ namespace DuckGame
                 y += _vel;
                 _alph -= 0.1f;
                 alpha = Math.Min(_alph, 1f);
-                if (alpha <= 0.0)
+                if (alpha <= 0)
                     Level.Remove(this);
             }
             base.Update();

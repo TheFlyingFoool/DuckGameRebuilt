@@ -229,7 +229,7 @@ namespace DuckGame
 
         public uint estimatedClientTick
         {
-            get => (uint)(_estimatedClientTick + (ulong)(int)(manager.ping / 2.0 * 60.0));
+            get => (uint)(_estimatedClientTick + (ulong)(int)(manager.ping / 2f * 60f));
             set => _estimatedClientTick = value;
         }
 
@@ -543,27 +543,27 @@ namespace DuckGame
                 ++_currentSessionTicks;
                 if (_status == ConnectionStatus.Connecting)
                 {
-                    if (Maths.TicksToSeconds(_currentSessionTicks) > 0.0 && _numErrorLogs == 0)
+                    if (Maths.TicksToSeconds(_currentSessionTicks) > 0f && _numErrorLogs == 0)
                     {
                         ++_numErrorLogs;
                         LogSessionDetails();
                     }
-                    if (Maths.TicksToSeconds(_currentSessionTicks) > 5.0 && _numErrorLogs == 1)
+                    if (Maths.TicksToSeconds(_currentSessionTicks) > 5f && _numErrorLogs == 1)
                     {
                         ++_numErrorLogs;
                         LogSessionDetails();
                     }
-                    if (Maths.TicksToSeconds(_currentSessionTicks) > 8.0 && _numErrorLogs == 2)
+                    if (Maths.TicksToSeconds(_currentSessionTicks) > 8f && _numErrorLogs == 2)
                     {
                         ++_numErrorLogs;
                         LogSessionDetails();
                     }
-                    if (Maths.TicksToSeconds(_currentSessionTicks) > 10.0 && _numErrorLogs == 3)
+                    if (Maths.TicksToSeconds(_currentSessionTicks) > 10f && _numErrorLogs == 3)
                     {
                         ++_numErrorLogs;
                         LogSessionDetails();
                     }
-                    if (Maths.TicksToSeconds(_currentSessionTicks) > 15.0 && _numErrorLogs == 4)
+                    if (Maths.TicksToSeconds(_currentSessionTicks) > 15f && _numErrorLogs == 4)
                     {
                         ++_numErrorLogs;
                         LogSessionDetails();

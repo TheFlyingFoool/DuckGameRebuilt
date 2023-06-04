@@ -35,7 +35,7 @@ namespace DuckGame
             depth = _owner.depth - 1;
             hSpeed = 0f;
             vSpeed = 0f;
-            graphic.flipH = _owner.offDir < 0.0;
+            graphic.flipH = _owner.offDir < 0;
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)

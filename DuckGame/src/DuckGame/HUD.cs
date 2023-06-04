@@ -211,7 +211,7 @@ namespace DuckGame
                 {
                     inputChangeDisplay.life -= Maths.IncFrameTimer();
                     inputChangeDisplay.slide = Lerp.FloatSmooth(inputChangeDisplay.slide, 1f, 0.15f, 1.2f);
-                    if (inputChangeDisplay.life <= 0.0)
+                    if (inputChangeDisplay.life <= 0f)
                         inputChangeDisplay.closing = true;
                 }
             }
@@ -231,7 +231,7 @@ namespace DuckGame
                 {
                     playerChangeDisplay.life -= Maths.IncFrameTimer();
                     playerChangeDisplay.slide = Lerp.FloatSmooth(playerChangeDisplay.slide, 1f, 0.15f, 1.2f);
-                    if (playerChangeDisplay.life <= 0.0)
+                    if (playerChangeDisplay.life <= 0f)
                         playerChangeDisplay.closing = true;
                 }
             }

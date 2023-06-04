@@ -226,13 +226,10 @@ namespace DuckGame
                 signal.position.y -= travelSpeed;
                 overshoot = signal.travel.position.y - signal.position.y;
             }
-            else
-                overshoot = 0f;
-            signal.life -= (float)(travelSpeed / 16.0 * 0.01f);
-            if (overshoot >= 0.0 && signal.life > 0.0)
-                Emit(signal, overshoot, signal.signalType);
-            if (signal.life > 0.0)
-                return;
+            else overshoot = 0f;
+            signal.life -= (float)(travelSpeed / 16 * 0.01f);
+            if (overshoot >= 0 && signal.life > 0) Emit(signal, overshoot, signal.signalType);
+            if (signal.life > 0) return;
             _removeSignals.Add(signal);
         }
 

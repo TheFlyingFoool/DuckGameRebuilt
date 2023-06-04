@@ -101,7 +101,7 @@ namespace DuckGame
                 if (!initializedWired)
                 {
                     WireTileset wireTileset = Level.current.NearestThing<WireTileset>(position);
-                    if (wireTileset != null && (wireTileset.position - position).length < 1.0)
+                    if (wireTileset != null && (wireTileset.position - position).length < 1)
                         wired = true;
                     initializedWired = true;
                 }
@@ -160,7 +160,7 @@ namespace DuckGame
                     float num1 = Math.Max(spawnTime - _spawnWait, 0f) + initialDelay;
                     float num2 = bing.value * Maths.IncFrameTimer();
                     float num3 = (num2 - num1) / num2;
-                    if (beeps == 0 && num3 > 0.0)
+                    if (beeps == 0 && num3 > 0)
                     {
                         SFX.Play("singleBeep");
                         ++beeps;
@@ -178,7 +178,7 @@ namespace DuckGame
                 }
                 if (Level.current.simulatePhysics && _spawnWait >= spawnTime)
                 {
-                    if (initialDelay > 0.0)
+                    if (initialDelay > 0)
                     {
                         initialDelay -= 0.0166666f;
                     }
@@ -257,7 +257,7 @@ namespace DuckGame
             string text = "EMPTY";
             if (contains != null)
                 text = contains.Name;
-            Graphics.DrawString(text, this.position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
+            Graphics.DrawString(text, this.position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2), -16f), Color.White, (Depth)0.9f);
             if (!(contains != null))
                 return;
             if (_hoverThing == null || _hoverThing.GetType() != contains)
@@ -299,8 +299,8 @@ namespace DuckGame
             float num = Maths.Clamp(val, 0f, 1f);
             if (num > 0.8f && !(Level.current is Editor))
             {
-                xscale = (float)(1.0 - (num - 0.8f) * 2.0);
-                yscale = (float)(1.0 + (num - 0.8f) * 4.0);
+                xscale = (float)(1 - (num - 0.8f) * 2);
+                yscale = (float)(1 + (num - 0.8f) * 4);
             }
             angleDegrees = -direction;
             base.Draw();

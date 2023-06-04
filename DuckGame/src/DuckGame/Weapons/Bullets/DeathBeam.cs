@@ -73,7 +73,7 @@ namespace DuckGame
         public override void Update()
         {
             _blast = Maths.CountDown(_blast, 0.1f);
-            if (_blast >= 0.0)
+            if (_blast >= 0)
                 return;
             Level.Remove(this);
         }

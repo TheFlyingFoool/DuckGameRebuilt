@@ -210,8 +210,7 @@ namespace DuckGame
                     _networkCape = !duck.profile.localPlayer ? duck.profile.flagIndex : Global.data.flag;
                     UpdateCape();
                 }
-                if (Network.inLobby && _team != null && (sprite == null || sprite != null && sprite.globalIndex != _team.hat.globalIndex))
-                    _shouldUpdateSprite = true;
+                if (Network.inLobby && _team != null && (sprite == null || sprite != null && sprite.globalIndex != _team.hat.globalIndex)) _shouldUpdateSprite = true;
             }
             else if (Level.current is TeamSelect2 && _equippedDuck != null && team != null && team.customHatPath != null && Keyboard.Pressed(Keys.F5) && !Network.isActive)
             {
@@ -234,22 +233,15 @@ namespace DuckGame
             }
             if (_equippedDuck != null && !destroyed)
             {
-                if (_sprite.frame == 1)
-                    _timeOpen += 0.1f;
-                else
-                    _timeOpen = 0f;
+                if (_sprite.frame == 1) _timeOpen += 0.1f;
+                else _timeOpen = 0f;
             }
-            if (_sprite.frame == 1 && _prevFrame == 0)
-                glow = 1.2f;
+            if (_sprite.frame == 1 && _prevFrame == 0) glow = 1.2f;
             _prevFrame = _sprite.frame;
-            if (destroyed)
-                alpha -= 0.05f;
-            if (alpha < 0.0)
-                Level.Remove(this);
-            if (_quackWait > 0.0)
-                _quackWait -= Maths.IncFrameTimer();
-            else if (_quackHold > 0.0)
-                _quackHold -= Maths.IncFrameTimer();
+            if (destroyed) alpha -= 0.05f;
+            if (alpha < 0f) Level.Remove(this);
+            if (_quackWait > 0) _quackWait -= Maths.IncFrameTimer();
+            else if (_quackHold > 0) _quackHold -= Maths.IncFrameTimer();
             base.Update();
         }
 
@@ -276,11 +268,11 @@ namespace DuckGame
 
         public override void OpenHat()
         {
-            if (duck == null || duck.z != 0.0)
+            if (duck == null || duck.z != 0f)
                 return;
             if (team != null && team.metadata != null)
             {
-                if (team.metadata.QuackSuppressRequack.value && (_quackWait > 0.0 || _quackHold > 0.0))
+                if (team.metadata.QuackSuppressRequack.value && (_quackWait > 0 || _quackHold > 0))
                     return;
                 _quackWait = team.metadata.QuackDelay.value;
                 _quackHold = team.metadata.QuackHold.value;
@@ -289,58 +281,49 @@ namespace DuckGame
                 if (_addedParticles == null)
                     _addedParticles = new List<CustomParticle>();
                 int num1 = team.metadata.ParticleCount.value;
-                Vec2 vec2_1 = new Vec2((float)(-team.metadata.ParticleEmitShapeSize.value.x / 2.0), (float)(-team.metadata.ParticleEmitShapeSize.value.y / 2.0));
+                Vec2 vec2_1 = new Vec2((float)(-team.metadata.ParticleEmitShapeSize.value.x / 2f), (float)(-team.metadata.ParticleEmitShapeSize.value.y / 2f));
                 Vec2 vec2_2 = new Vec2(team.metadata.ParticleEmitShapeSize.value.x / 2f, team.metadata.ParticleEmitShapeSize.value.y / 2f);
                 Vec2 vec2_3 = team.metadata.ParticleEmitterOffset.value;
                 for (int index1 = 0; index1 < num1; ++index1)
                 {
                     Vec2 pPosition = vec2_3;
-                    if (team.metadata.ParticleEmitShape.value.x == 1.0)
+                    if (team.metadata.ParticleEmitShape.value.x == 1f)
                     {
-                        float rad = Maths.DegToRad(team.metadata.ParticleEmitShape.value.y == 2.0 ? index1 * (360f / num1) : Rando.Float(360f));
+                        float rad = Maths.DegToRad(team.metadata.ParticleEmitShape.value.y == 2f ? index1 * (360f / num1) : Rando.Float(360f));
                         Vec2 vec2_4 = new Vec2((float)Math.Cos(rad) * (team.metadata.ParticleEmitShapeSize.value.x / 2f), (float)-Math.Sin(rad) * (team.metadata.ParticleEmitShapeSize.value.y / 2f));
-                        if (team.metadata.ParticleEmitShape.value.y == 1.0)
-                            pPosition += vec2_4 * Rando.Float(1f);
-                        else
-                            pPosition += vec2_4;
+                        if (team.metadata.ParticleEmitShape.value.y == 1f) pPosition += vec2_4 * Rando.Float(1f);
+                        else pPosition += vec2_4;
                     }
-                    else if (team.metadata.ParticleEmitShape.value.x == 2.0)
+                    else if (team.metadata.ParticleEmitShape.value.x == 2f)
                     {
-                        if (team.metadata.ParticleEmitShape.value.y == 0.0)
+                        if (team.metadata.ParticleEmitShape.value.y == 0f)
                         {
                             float num2 = Rando.Float(1f) >= 0.5 ? 1f : -1f;
-                            if (Rando.Float(1f) >= 0.5)
-                                pPosition += new Vec2(team.metadata.ParticleEmitShapeSize.value.x * num2, Rando.Float((float)(-team.metadata.ParticleEmitShapeSize.value.y / 2.0), team.metadata.ParticleEmitShapeSize.value.y / 2f));
-                            else
-                                pPosition += new Vec2(Rando.Float((float)(-team.metadata.ParticleEmitShapeSize.value.x / 2.0), team.metadata.ParticleEmitShapeSize.value.x / 2f), team.metadata.ParticleEmitShapeSize.value.y * num2);
+                            if (Rando.Float(1f) >= 0.5f) pPosition += new Vec2(team.metadata.ParticleEmitShapeSize.value.x * num2, Rando.Float((float)(-team.metadata.ParticleEmitShapeSize.value.y / 2f), team.metadata.ParticleEmitShapeSize.value.y / 2f));
+                            else pPosition += new Vec2(Rando.Float((float)(-team.metadata.ParticleEmitShapeSize.value.x / 2f), team.metadata.ParticleEmitShapeSize.value.x / 2f), team.metadata.ParticleEmitShapeSize.value.y * num2);
                         }
-                        else if (team.metadata.ParticleEmitShape.value.y == 1.0)
-                            pPosition += new Vec2(Rando.Float((float)(-team.metadata.ParticleEmitShapeSize.value.x / 2.0), team.metadata.ParticleEmitShapeSize.value.x / 2f), Rando.Float((float)(-team.metadata.ParticleEmitShapeSize.value.y / 2.0), team.metadata.ParticleEmitShapeSize.value.y / 2f));
-                        else if (team.metadata.ParticleEmitShape.value.y == 2.0)
+                        else if (team.metadata.ParticleEmitShape.value.y == 1f) pPosition += new Vec2(Rando.Float((float)(-team.metadata.ParticleEmitShapeSize.value.x / 2f), team.metadata.ParticleEmitShapeSize.value.x / 2f), Rando.Float((float)(-team.metadata.ParticleEmitShapeSize.value.y / 2f), team.metadata.ParticleEmitShapeSize.value.y / 2f));
+                        else if (team.metadata.ParticleEmitShape.value.y == 2f)
                         {
-                            float rad = Maths.DegToRad(team.metadata.ParticleEmitShape.value.y == 2.0 ? index1 * (360f / num1) : Rando.Float(360f));
+                            float rad = Maths.DegToRad(team.metadata.ParticleEmitShape.value.y == 2f ? index1 * (360f / num1) : Rando.Float(360f));
                             Vec2 vec2_5 = new Vec2((float)Math.Cos(rad) * 100f, (float)-Math.Sin(rad) * 100f);
-                            Vec2 zero = Vec2.Zero;
+                            //Vec2 zero = Vec2.Zero; what -NiK0
                             for (int index2 = 0; index2 < 4; ++index2)
                             {
                                 Vec2 vec2_6 = Vec2.Zero;
                                 if (index2 == 0)
                                 {
-                                    if (Collision.LineIntersect(Vec2.Zero, vec2_5, vec2_1, new Vec2(vec2_1.x, vec2_2.y)))
-                                        vec2_6 = Collision.LineIntersectPoint(Vec2.Zero, vec2_5, vec2_1, new Vec2(vec2_1.x, vec2_2.y));
+                                    if (Collision.LineIntersect(Vec2.Zero, vec2_5, vec2_1, new Vec2(vec2_1.x, vec2_2.y))) vec2_6 = Collision.LineIntersectPoint(Vec2.Zero, vec2_5, vec2_1, new Vec2(vec2_1.x, vec2_2.y));
                                 }
                                 else if (index2 == 1)
                                 {
-                                    if (Collision.LineIntersect(Vec2.Zero, vec2_5, vec2_1, new Vec2(vec2_2.x, vec2_1.y)))
-                                        vec2_6 = Collision.LineIntersectPoint(Vec2.Zero, vec2_5, vec2_1, new Vec2(vec2_2.x, vec2_1.y));
+                                    if (Collision.LineIntersect(Vec2.Zero, vec2_5, vec2_1, new Vec2(vec2_2.x, vec2_1.y))) vec2_6 = Collision.LineIntersectPoint(Vec2.Zero, vec2_5, vec2_1, new Vec2(vec2_2.x, vec2_1.y));
                                 }
                                 else if (index2 == 2)
                                 {
-                                    if (Collision.LineIntersect(Vec2.Zero, vec2_5, new Vec2(vec2_1.x, vec2_2.y), vec2_2))
-                                        vec2_6 = Collision.LineIntersectPoint(Vec2.Zero, vec2_5, new Vec2(vec2_1.x, vec2_2.y), vec2_2);
+                                    if (Collision.LineIntersect(Vec2.Zero, vec2_5, new Vec2(vec2_1.x, vec2_2.y), vec2_2)) vec2_6 = Collision.LineIntersectPoint(Vec2.Zero, vec2_5, new Vec2(vec2_1.x, vec2_2.y), vec2_2);
                                 }
-                                else if (index2 == 3 && Collision.LineIntersect(Vec2.Zero, vec2_5, new Vec2(vec2_2.x, vec2_1.y), vec2_2))
-                                    vec2_6 = Collision.LineIntersectPoint(Vec2.Zero, vec2_5, new Vec2(vec2_2.x, vec2_1.y), vec2_2);
+                                else if (index2 == 3 && Collision.LineIntersect(Vec2.Zero, vec2_5, new Vec2(vec2_2.x, vec2_1.y), vec2_2)) vec2_6 = Collision.LineIntersectPoint(Vec2.Zero, vec2_5, new Vec2(vec2_2.x, vec2_1.y), vec2_2);
                                 if (vec2_6 != Vec2.Zero)
                                 {
                                     vec2_5 = vec2_6;
@@ -424,14 +407,14 @@ namespace DuckGame
                 return;
             if (team != null && team.metadata != null)
             {
-                if (team.metadata.WetLips.value && _timeOpen > 1.0)
+                if (team.metadata.WetLips.value && _timeOpen > 1f)
                     SFX.Play("smallSplat", 0.9f, Rando.Float(-0.4f, 0.4f));
-                if (team.metadata.MechanicalLips.value && _timeOpen > 2.0)
+                if (team.metadata.MechanicalLips.value && _timeOpen > 2f)
                     SFX.Play("smallDoorShut", pitch: Rando.Float(-0.1f, 0.1f));
             }
             if (_sprite.texture.textureName == "hats/burgers")
             {
-                if (_timeOpen <= 1.0)
+                if (_timeOpen <= 1)
                     return;
                 FluidData ketchup = Fluid.Ketchup;
                 ketchup.amount = Rando.Float(0.0005f, 0.001f);
@@ -448,7 +431,7 @@ namespace DuckGame
             }
             else
             {
-                if (!(_sprite.texture.textureName == "hats/divers") && !(_sprite.texture.textureName == "hats/fridge") || _timeOpen <= 2.0)
+                if (!(_sprite.texture.textureName == "hats/divers") && !(_sprite.texture.textureName == "hats/fridge") || _timeOpen <= 2)
                     return;
                 SFX.Play("smallDoorShut", pitch: Rando.Float(-0.1f, 0.1f));
             }
@@ -458,23 +441,17 @@ namespace DuckGame
         {
             int frame = _sprite.frame;
             sbyte offDir = this.offDir;
-            if (_team == null && duck != null)
-                _team = duck.team;
+            if (_team == null && duck != null) _team = duck.team;
             Vec2 hatOffset = _hatOffset;
             if (_team != null)
             {
-                if (_team.noCrouchOffset && duck != null && duck.crouch)
-                    ++_hatOffset.y;
+                if (_team.noCrouchOffset && duck != null && duck.crouch) ++_hatOffset.y;
                 if (_team.metadata != null)
                 {
-                    if (_team.metadata.HatNoFlip.value && this.offDir < 0)
-                        _hatOffset.x -= 4f;
-                    if (duck != null && duck.sliding)
-                        ++_hatOffset.y;
-                    if (_quackWait > 0.0)
-                        _sprite.frame = 0;
-                    else if (_quackHold > 0.0)
-                        _sprite.frame = 1;
+                    if (_team.metadata.HatNoFlip.value && this.offDir < 0) _hatOffset.x -= 4f;
+                    if (duck != null && duck.sliding) ++_hatOffset.y;
+                    if (_quackWait > 0f) _sprite.frame = 0;
+                    else if (_quackHold > 0f) _sprite.frame = 1;
                 }
             }
             _wave.Update();
@@ -550,8 +527,7 @@ namespace DuckGame
                         Vec2 vec2_4 = Offset(new Vec2(4f, 2f));
                         Graphics.Draw(_specialSprite, vec2_4.x, vec2_4.y);
                     }
-                    if (glow > 0.0)
-                        glow -= 0.02f;
+                    if (glow > 0f) glow -= 0.02f;
                 }
             }
             if (_addedParticles != null)
@@ -631,9 +607,9 @@ namespace DuckGame
                 velocity *= _particleFriction;
                 hSpeed = Maths.Clamp(hSpeed, -4f, 4f);
                 vSpeed = Maths.Clamp(vSpeed, -4f, 4f);
-                _life -= (float)(60.0 / (60.0 * _lifespan)) * Maths.IncFrameTimer();
+                _life -= (float)(60 / (60 * _lifespan)) * Maths.IncFrameTimer();
                 UpdateAppearance();
-                if (_life <= 0.0)
+                if (_life <= 0)
                     Level.Remove(this);
                 if (_metadata.ParticleAnchor.value)
                 {
@@ -664,20 +640,17 @@ namespace DuckGame
                 {
                     Vec2 position1 = position;
                     sbyte offDir = _owner.offDir;
-                    if (_metadata.HatNoFlip.value)
-                        _owner.offDir = 1;
+                    if (_metadata.HatNoFlip.value) _owner.offDir = 1;
                     position = _owner.Offset(position);
                     _owner.offDir = offDir;
                     float angle = this.angle;
-                    if (_metadata.ParticleAnchorOrientation.value)
-                        angleDegrees += _owner.angleDegrees;
+                    if (_metadata.ParticleAnchorOrientation.value) angleDegrees += _owner.angleDegrees;
                     Vec2 position2 = position;
                     base.Draw();
                     position = position1 + (position - position2);
                     this.angle = angle;
                 }
-                else
-                    base.Draw();
+                else base.Draw();
             }
         }
     }

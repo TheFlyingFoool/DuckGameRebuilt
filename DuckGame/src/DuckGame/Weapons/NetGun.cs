@@ -58,7 +58,7 @@ namespace DuckGame
         public override void Update()
         {
             _netGunGuage.frame = 4 - Math.Min(ammo + 1, 4);
-            if (_barrelSteam.speed > 0.0 && _barrelSteam.finished)
+            if (_barrelSteam.speed > 0 && _barrelSteam.finished)
                 _barrelSteam.speed = 0f;
             base.Update();
         }
@@ -66,7 +66,7 @@ namespace DuckGame
         public override void Draw()
         {
             base.Draw();
-            if (_barrelSteam.speed > 0.0)
+            if (_barrelSteam.speed > 0)
             {
                 _barrelSteam.alpha = 0.6f;
                 Draw(_barrelSteam, new Vec2(9f, 1f));
@@ -95,7 +95,7 @@ namespace DuckGame
                     t.responsibleProfile = owner.responsibleProfile;
                 t.clip.Add(owner as MaterialThing);
                 t.hSpeed = barrelVector.x * 10f;
-                t.vSpeed = (float)(barrelVector.y * 7.0 - 1.5);
+                t.vSpeed = (float)(barrelVector.y * 7 - 1.5f);
             }
             else
                 DoAmmoClick();

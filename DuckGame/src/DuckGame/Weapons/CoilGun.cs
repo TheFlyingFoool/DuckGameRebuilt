@@ -86,7 +86,7 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
-            if (_charge > 0.0)
+            if (_charge > 0f)
                 _charge -= 0.1f;
             else
                 _charge = 0f;

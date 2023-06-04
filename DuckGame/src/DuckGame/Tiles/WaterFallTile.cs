@@ -25,7 +25,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            (graphic as SpriteMap).frame = (int)(Graphics.frame / 3.0 % 4.0);
+            (graphic as SpriteMap).frame = (int)(Graphics.frame / 3 % 4);
             graphic.flipH = offDir <= 0;
             base.Draw();
         }

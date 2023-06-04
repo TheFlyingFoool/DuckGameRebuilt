@@ -47,12 +47,12 @@ namespace DuckGame
                 List<Bullet> varBullets = new List<Bullet>();
                 for (int index = 0; index < 20; ++index)
                 {
-                    float num4 = (float)(index * 18.0 - 5.0) + Rando.Float(10f);
+                    float num4 = (float)(index * 18f - 5f) + Rando.Float(10f);
                     ATPropExplosion type = new ATPropExplosion
                     {
                         range = 60f + Rando.Float(18f)
                     };
-                    Bullet bullet = new Bullet(x + (float)(Math.Cos(Maths.DegToRad(num4)) * 6.0), num3 - (float)(Math.Sin(Maths.DegToRad(num4)) * 6.0), type, num4)
+                    Bullet bullet = new Bullet(x + (float)(Math.Cos(Maths.DegToRad(num4)) * 6f), num3 - (float)(Math.Sin(Maths.DegToRad(num4)) * 6f), type, num4)
                     {
                         firedFrom = this
                     };

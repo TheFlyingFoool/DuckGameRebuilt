@@ -41,7 +41,7 @@ namespace DuckGame
         public override void Update()
         {
             _isVolatile -= 0.06f;
-            if (_isVolatile <= 0.0)
+            if (_isVolatile <= 0)
                 rebound = false;
             base.Update();
         }

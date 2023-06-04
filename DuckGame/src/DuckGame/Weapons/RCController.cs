@@ -71,16 +71,16 @@ namespace DuckGame
                 Release(lockedOwner);
             if (isServerForObject)
             {
-                if (_burning && _burnLife > 0.0)
+                if (_burning && _burnLife > 0)
                 {
                     _burnWait -= 0.01f;
-                    if (_burnWait < 0.0)
+                    if (_burnWait < 0)
                     {
                         Level.Add(SmallFire.New(8f, 0f, 0f, 0f, stick: this, canMultiply: false, firedFrom: this));
                         _burnWait = 1f;
                     }
                     _burnLife -= 1f / 500f;
-                    if (_burnLife <= 0.0)
+                    if (_burnLife <= 0)
                         _sprite.frame = 1;
                 }
                 if (this.owner is Duck owner)

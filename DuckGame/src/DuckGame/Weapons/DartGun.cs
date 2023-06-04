@@ -56,19 +56,19 @@ namespace DuckGame
             if (!onFire)
                 return;
             _burnWait -= 0.01f;
-            if (_burnWait < 0.0)
+            if (_burnWait < 0)
             {
                 Level.Add(SmallFire.New(10f, 0f, 0f, 0f, stick: this, canMultiply: false, firedFrom: this));
                 _burnWait = 1f;
             }
-            if (burnt >= 1.0)
+            if (burnt >= 1f)
                 return;
             burnt += 1f / 1000f;
         }
 
         public override void Update()
         {
-            if (!burntOut && burnt >= 1.0)
+            if (!burntOut && burnt >= 1f)
             {
                 _sprite.frame = 1;
                 Vec2 vec2 = Offset(new Vec2(10f, 0f));
@@ -93,7 +93,7 @@ namespace DuckGame
         {
             if (ammo > 0)
             {
-                if (_burnLife <= 0.0)
+                if (_burnLife <= 0)
                 {
                     SFX.Play("dartStick", 0.5f, Rando.Float(0.2f) - 0.1f);
                 }

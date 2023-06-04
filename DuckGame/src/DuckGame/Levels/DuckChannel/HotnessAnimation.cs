@@ -77,7 +77,7 @@ namespace DuckGame
 
         public void Draw()
         {
-            if (_wait > 1.0)
+            if (_wait > 1f)
             {
                 bool flag = true;
                 for (int index = 0; index < _cool.Count; ++index)
@@ -92,18 +92,16 @@ namespace DuckGame
                         ++_cool[index];
                         flag = false;
                     }
-                    if (_upScale[index] > 0.0)
+                    if (_upScale[index] > 0f)
                         _upScale[index] -= 0.05f;
                 }
                 if (flag)
                 {
                     _wait += 0.015f;
-                    if (_wait > 2.0)
-                        _readyToTalk = true;
+                    if (_wait > 2f) _readyToTalk = true;
                 }
             }
-            else
-                _wait += 0.01f;
+            else _wait += 0.01f;
             _redBar.depth = (Depth)0.2f;
             Graphics.Draw(_redBar, 30f, 25f);
             _font.depth = (Depth)0.25f;
@@ -121,7 +119,7 @@ namespace DuckGame
             int index1 = 0;
             foreach (Profile profile in active)
             {
-                float num1 = active.Count != 1 ? (active.Count != 2 ? index1 * (vec2_3.x / (active.Count - 1)) : (float)(vec2_3.x / 2.0 - vec2_3.x / 4.0 + index1 * (vec2_3.x / 2.0))) : vec2_3.x / 2f;
+                float num1 = active.Count != 1 ? (active.Count != 2 ? index1 * (vec2_3.x / (active.Count - 1)) : (float)(vec2_3.x / 2f - vec2_3.x / 4f + index1 * (vec2_3.x / 2f))) : vec2_3.x / 2f;
                 float num2 = (_cool[index1] + 50) / 250f;
                 float num3 = 1f / (_tempMap.Count - 2);
                 int index2 = (int)(num2 * (_tempMap.Count - 2));
@@ -133,7 +131,7 @@ namespace DuckGame
                 float num6 = 50f;
                 float num7 = num2 + 0.28f;
                 float x = vec2_1.x + num1;
-                float y = (float)(vec2_2.y - 32.0 - num7 * num6);
+                float y = (float)(vec2_2.y - 32f - num7 * num6);
                 profile.persona.sprite.depth = (Depth)0.3f;
                 profile.persona.sprite.color = Color.White;
                 Graphics.Draw(profile.persona.sprite, 0, x, y);
@@ -149,7 +147,7 @@ namespace DuckGame
                 _font.depth = (Depth)0.25f;
                 if (_cool.Count > 4)
                     _font.scale = new Vec2(0.5f);
-                _font.Draw(text, new Vec2((float)(x - _font.GetWidth(text) / 2.0 + 3.0), 140f), Color.White, (Depth)0.25f);
+                _font.Draw(text, new Vec2((float)(x - _font.GetWidth(text) / 2f + 3f), 140f), Color.White, (Depth)0.25f);
                 _font.scale = new Vec2(1f);
                 _icon.depth = (Depth)0.3f;
                 _icon.frame = (int)Math.Floor(num2 * 8.99f);

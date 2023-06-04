@@ -97,9 +97,9 @@ namespace DuckGame
         public static bool scrollingDown => scroll > 0;
         public static bool scrollingUp => scroll < 0;
 
-        public static bool prevScrollDown => _prevScrollValue > 0.0;
+        public static bool prevScrollDown => _prevScrollValue > 0;
 
-        public static bool prevScrollUp => _prevScrollValue < 0.0;
+        public static bool prevScrollUp => _prevScrollValue < 0;
 
         public static float x => _mouseScreenPos.x;
 

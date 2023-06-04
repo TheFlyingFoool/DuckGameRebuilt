@@ -760,7 +760,7 @@ namespace DuckGame
                     num1 += networkConnection.manager.losses;
                     num2 += networkConnection.manager.sent;
                 }
-                return num1 == 0 ? 0 : (int)Math.Round(num1 / connections.Count / (num2 / connections.Count) * 100.0);
+                return num1 == 0 ? 0 : (int)Math.Round(num1 / connections.Count / (num2 / connections.Count) * 100f);
             }
         }
 

@@ -100,7 +100,7 @@ namespace DuckGame
                 _spinUp.Volume = 1f;
                 _spinUp.Play();
             }
-            if (_spin < 1.0)
+            if (_spin < 1f)
             {
                 _spin += 0.04f;
             }
@@ -169,7 +169,7 @@ namespace DuckGame
             _tip.flipH = graphic.flipH;
             _tip.center = graphic.center;
             _tip.depth = depth + 1;
-            _tip.alpha = (float)Math.Min((_barrelHeat * 1.5 / 10f), 1f);
+            _tip.alpha = (float)Math.Min((_barrelHeat * 1.5f / 10f), 1f);
             _tip.angle = angle;
             Graphics.Draw(_tip, x, y);
             if (_topBullet != null)

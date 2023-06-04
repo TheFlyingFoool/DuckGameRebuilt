@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Equipment")]
+    //[EditorGroup("Equipment")]
     [BaggedProperty("previewPriority", true)]
     public class DebugJetpack : Equipment
     {
