@@ -22,8 +22,8 @@ namespace DuckGame
     {
         public static IEnumerable<(TypeInfo Class, AdvancedConfig Attribute)> All;
         private static Dictionary<Type, IAdvancedConfig> s_configs = new();
-        public static string SaveDirPath = AutoConfigHandler.SaveDirPath + "/Advanced";
-        public string FileName;
+        public static readonly string SaveDirPath = AutoConfigHandler.SaveDirPath + "/Advanced";
+        public readonly string FileName;
         
         public static void OnResults(Dictionary<Type,List<(MemberInfo MemberInfo, Attribute Attribute)>> lookupTable)
         {

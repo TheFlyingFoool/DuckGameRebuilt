@@ -13,6 +13,9 @@
         
         [ACHeader] [ACKeybind]
         public MMSplitKeymapConfig Split;
+        
+        [ACHeader] [ACKeybind]
+        public MMConfigKeymapConfig Config;
     }
 
     public sealed class MMConsoleKeymapConfig
@@ -46,5 +49,10 @@
     public sealed class MMSplitKeymapConfig
     {
         public string ToggleEditMode;
+    }
+
+    public sealed class MMConfigKeymapConfig
+    {
+        public string UseSecondarySliderStep;
     }
 }

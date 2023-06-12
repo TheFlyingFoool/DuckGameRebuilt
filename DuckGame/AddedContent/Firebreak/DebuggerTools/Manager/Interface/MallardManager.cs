@@ -41,6 +41,9 @@ namespace DuckGame.ConsoleInterface
         {
             GameCursor.CurrentCursor = new MallardPointer();
             DisplayPane.OnFocus();
+
+            if (Config.Zoom <= 0)
+                Config.Zoom = Graphics.height / 540f;
         }
 
         [PostInitialize(Priority = 0)]
@@ -91,7 +94,7 @@ namespace DuckGame.ConsoleInterface
             if (Keyboard.Pressed(Keys.F5))
             {
                 Initialize();
-                DisplayPane.OnFocus();
+                OnOpen();
             }
             
             if (Keyboard.control)
@@ -99,7 +102,7 @@ namespace DuckGame.ConsoleInterface
                 if (Keyboard.Pressed(Keys.OemPlus))
                     Config.Zoom++;
                 else if (Keyboard.Pressed(Keys.OemMinus))
-                    Config.Zoom--;
+                    Config.Zoom = Config.Zoom - 1 <= 0 ? Config.Zoom : Config.Zoom - 1;
                 else if (Keyboard.Pressed(Keys.D0))
                     Config.Zoom = 1f;
 

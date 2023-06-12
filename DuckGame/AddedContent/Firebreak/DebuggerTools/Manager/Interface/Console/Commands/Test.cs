@@ -11,18 +11,13 @@ namespace DuckGame.ConsoleEngine
         [MMCommand(Hidden = true)]
         public static void Test()
         {
-            var me = Extensions.GetMe().duck;
+            float width = Graphics.width;
+            float height = Graphics.height;
+            float scale = height / 540;
             
-            me._ragdollInstance.tongueStuckThing = new WhiteRectangle(0,0,0,0);
-            typeof(Thing).GetField("_removeFromLevel", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(me._ragdollInstance.tongueStuckThing, true);
-            
-            return;
-            SDL.SDL_SetClipboardText(string.Join("\n", typeof(Thing).GetFields()
-                .Select(x => $"{x.Name}: {x.GetValue(Extensions.GetMe().duck._ragdollInstance.tongueStuckThing)}")
-                .Concat(typeof(Thing).GetProperties()
-                    .Where(x => x.CanRead)
-                    .Select(x => $"{x.Name}: {x.GetValue(Extensions.GetMe().duck._ragdollInstance.tongueStuckThing)}")) 
-            ));
+            Zoom(scale);
+            console.Print($"dimensions: ({width}, {height})");
+            console.Print($"scaling factor: {scale}");
         }
         
         [MMCommand(Hidden = true)]

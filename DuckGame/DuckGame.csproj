@@ -230,13 +230,18 @@
   <ItemGroup>
     <Compile Include="AddedContent\DGRSettings.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ACColorAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ACDiscreteAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ACFileAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ACHeaderAttribute.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ACIncrementValueAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ACHiddenAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ACSliderAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ACKeybindAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ACMaxAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ACMinAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ACRoundingAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ACScreenPositionAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\AdvancedConfigAttribute.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\AdvancedConfigItem.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ExperimentalConfig.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\IAdvancedConfig.cs" />
     <Compile Include="AddedContent\Firebreak\CallerArgumentExpressionAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Cursor\MallardPointer.cs" />
@@ -296,7 +301,11 @@
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\MallardManager.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Panes\MallardManagerPane.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Panes\MMBorderPane.cs" />
-    <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Panes\MMConfigPane.cs" />
+    <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Panes\MMConfigPane\AdvancedConfigItem.cs" />
+    <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Panes\MMConfigPane\Checkbox.cs" />
+    <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Panes\MMConfigPane\MMConfigPane.cs" />
+    <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Panes\MMConfigPane\Slider.cs" />
+    <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Panes\MMConfigPane\UI.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Panes\MMParentPane.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Panes\MMDrawingPane.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Panes\MMPagerPane.cs" />

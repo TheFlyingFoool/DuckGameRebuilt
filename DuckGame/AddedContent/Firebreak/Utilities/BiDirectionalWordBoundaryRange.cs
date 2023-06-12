@@ -2,7 +2,7 @@
 
 namespace DuckGame
 {
-    public class BiDirectionalWordBoundaryMovement
+    public static class BiDirectionalWordBoundaryMovement
     {
         public static string GetNextWord(
             string text,

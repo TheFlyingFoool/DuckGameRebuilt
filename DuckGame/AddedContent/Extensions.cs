@@ -183,6 +183,125 @@ namespace DuckGame
             return derivedType.IsGenericType && baseType.IsAssignableFrom(derivedType.GetGenericTypeDefinition());
         }
         
+        public static bool IsNumericType(this Type t)
+        {
+            return !t.InheritsFrom<Enum>() && (int)Type.GetTypeCode(t) is >= 5 and <= 15;
+        }
+        
+        public static bool IsFloatingPointType(this Type t)
+        {
+            return (int)Type.GetTypeCode(t) is >= 13 and <= 15;
+        }
+        
+        public static bool IsUnsignedIntegerType(this Type t)
+        {
+            return (int)Type.GetTypeCode(t) is var v && v % 2 == 0 && v / 2 is >= 3 and <= 6;
+        }
+        
+        public static bool IsSignedIntegerType(this Type t)
+        {
+            return !t.InheritsFrom<Enum>() && (int)Type.GetTypeCode(t) + 1 is var v && v % 2 == 0 && v / 2 is >= 3 and <= 6;
+        }
+        
+        public static int GetDecimalDigits(this double value) => GetDecimalDigits((decimal)value);
+        public static int GetDecimalDigits(this decimal value)
+        {
+            return BitConverter.GetBytes(decimal.GetBits(value)[3])[2];
+        }
+        
+        public static T? FirstOf<T>(this IEnumerable<Attribute> collection) where T : Attribute
+        {
+            return (T?) collection.FirstOrDefault(x => x is T);
+        }
+        
+        public static float FindClosestNumber(float[] A, float x)
+        {
+            if (A.Length == 0)
+            {
+                throw new ArgumentException("The array cannot be empty.");
+            }
+
+            float closest = A[0];
+
+            if (Math.Abs(closest - x) < float.Epsilon)
+            {
+                return closest;
+            }
+
+            foreach (float num in A)
+            {
+                if (Math.Abs(num - x) < float.Epsilon)
+                {
+                    return num;
+                }
+
+                float difference = Math.Abs(num - x);
+
+                if (difference < Math.Abs(closest - x))
+                {
+                    closest = num;
+                }
+            }
+
+            return closest;
+        }
+
+        public static double GetMinValue(Type numericalType)
+        {
+            if (numericalType == typeof(float))
+                return Convert.ToDouble(float.MinValue);
+            else if (numericalType == typeof(double))
+                return Convert.ToDouble(double.MinValue);
+            else if (numericalType == typeof(decimal))
+                return Convert.ToDouble(decimal.MinValue);
+            else if (numericalType == typeof(int))
+                return Convert.ToDouble(int.MinValue);
+            else if (numericalType == typeof(uint))
+                return Convert.ToDouble(uint.MinValue);
+            else if (numericalType == typeof(short))
+                return Convert.ToDouble(short.MinValue);
+            else if (numericalType == typeof(ushort))
+                return Convert.ToDouble(ushort.MinValue);
+            else if (numericalType == typeof(long))
+                return Convert.ToDouble(long.MinValue);
+            else if (numericalType == typeof(ulong))
+                return Convert.ToDouble(ulong.MinValue);
+            else if (numericalType == typeof(byte))
+                return Convert.ToDouble(byte.MinValue);
+            else if (numericalType == typeof(sbyte))
+                return Convert.ToDouble(sbyte.MinValue);
+
+            throw new ArgumentException("Unsupported numeric type.");
+        }
+
+        public static double GetMaxValue(Type numericalType)
+        {
+            if (numericalType == typeof(float))
+                return Convert.ToDouble(float.MaxValue);
+            else if (numericalType == typeof(double))
+                return Convert.ToDouble(double.MaxValue);
+            else if (numericalType == typeof(decimal))
+                return Convert.ToDouble(decimal.MaxValue);
+            else if (numericalType == typeof(int))
+                return Convert.ToDouble(int.MaxValue);
+            else if (numericalType == typeof(uint))
+                return Convert.ToDouble(uint.MaxValue);
+            else if (numericalType == typeof(short))
+                return Convert.ToDouble(short.MaxValue);
+            else if (numericalType == typeof(ushort))
+                return Convert.ToDouble(ushort.MaxValue);
+            else if (numericalType == typeof(long))
+                return Convert.ToDouble(long.MaxValue);
+            else if (numericalType == typeof(ulong))
+                return Convert.ToDouble(ulong.MaxValue);
+            else if (numericalType == typeof(byte))
+                return Convert.ToDouble(byte.MaxValue);
+            else if (numericalType == typeof(sbyte))
+                return Convert.ToDouble(sbyte.MaxValue);
+
+            throw new ArgumentException("Unsupported numeric type.");
+        }
+
         public static bool CaselessEquals(this string str, string str2) =>
             string.Equals(str, str2, StringComparison.CurrentCultureIgnoreCase);
 

@@ -874,8 +874,8 @@ namespace DuckGame
             float opacity = config.Opacity;
             float teamLineWidth = config.TeamLineWidth;
             NameDisplayConfig.DeadPlayerRemoval removeDeadPlayers = config.RemoveDeadPlayers;
-            float xOffset = config.XOffset;
-            float yOffset = config.YOffset;
+            float xOffset = config.PositionOffset.X;
+            float yOffset = config.PositionOffset.Y;
             NameDisplayConfig.ScoreShowing showScore = config.ShowScores;
 
             bool doTeams = Extensions.MultiPlayerTeamsExist() && teamLineWidth > 0;

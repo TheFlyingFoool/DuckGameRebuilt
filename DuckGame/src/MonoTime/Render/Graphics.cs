@@ -770,7 +770,7 @@ namespace DuckGame
         public static void DrawOutlinedRect(Rectangle rect, Color col, Color outlineCol, Depth depth = default, float borderwidth = 1f)
         {
             DrawRect(rect, col, depth, true, 0);
-            DrawRect(rect, outlineCol, depth.value + 0.05f, false, borderwidth);
+            DrawRect(rect, outlineCol, depth + 0.05f, false, borderwidth);
         }
         
         public static void DrawExternallyOutlinedRect(Rectangle rect, Color col, Color outlineCol, Depth depth = default, float borderwidth = 1f)

@@ -3,12 +3,13 @@
     [AdvancedConfig("mallardManager")]
     public sealed class MallardManagerConfig : IAdvancedConfig
     {
+        [ACHidden]
         public bool Enabled;
         
-        [ACMin(0)] [ACMax(8)] [ACIncrementValue(1)]
+        [ACHidden]
         public float Zoom;
         
-        [ACMin(0)] [ACMax(1)] [ACIncrementValue(0.05)]
+        [ACMin(0)] [ACMax(1)] [ACSlider(0.1, SecondaryStep = 0.01)]
         public float Opacity;
         
         [ACHeader] [ACColor]
@@ -28,8 +29,8 @@
             Enabled = false;
             #endif
             
-            Opacity = 1f;
-            Zoom = 1f;
+            Opacity = 0.9f;
+            Zoom = 0;
             Console = new MMConsoleConfig()
             {
                 TabWidth = 4,
@@ -38,7 +39,7 @@
                 {
                     BlinkSpeed = 1f,
                     IsHorizontal = false,
-                    ThicknessPercentage = 1f,
+                    ThicknessPercentage = 0.2f,
                     MovementSmoothness = 20f,
                 },
             };
@@ -60,31 +61,35 @@
                 General = new MMGeneralKeymapConfig()
                 {
                     ReloadConfig = "F5",
-                    ResetZoom = "Ctrl+D0",
-                    ZoomIn = "Ctrl+OemPlus",
-                    ZoomOut = "Ctrl+OemMinus",
-                    ToggleMallardManager = "Ctrl+OemTilde"
+                    ResetZoom = "_Ctrl+D0",
+                    ZoomIn = "_Ctrl+OemPlus",
+                    ZoomOut = "_Ctrl+OemMinus",
+                    ToggleMallardManager = "_Ctrl+OemTilde"
                 },
                 Console = new MMConsoleKeymapConfig()
                 {
-                    MoveCaretToBeginning = "Ctrl+Up",
-                    MoveCaretToEnd = "Ctrl+Down",
+                    MoveCaretToBeginning = "_Ctrl+Up",
+                    MoveCaretToEnd = "_Ctrl+Down",
                     MoveCaretLeft = "Left",
                     MoveCaretRight = "Right",
-                    MoveCaretLeftByWord = "Ctrl+Left",
-                    MoveCaretRightByWord = "Ctrl+Right",
+                    MoveCaretLeftByWord = "_Ctrl+Left",
+                    MoveCaretRightByWord = "_Ctrl+Right",
                     RunCommand = "Enter",
                 },
                 Pager = new MMPagerKeymapConfig()
                 {
                     CycleTabBackward = "None",
-                    CycleTabForward = "Ctrl+Tab",
-                    NewTab = "Ctrl+T",
-                    CloseTab = "Ctrl+W",
+                    CycleTabForward = "_Ctrl+Tab",
+                    NewTab = "_Ctrl+T",
+                    CloseTab = "_Ctrl+W",
                 },
                 Split = new MMSplitKeymapConfig()
                 {
-                    ToggleEditMode = "Ctrl+E"
+                    ToggleEditMode = "_Ctrl+E"
+                },
+                Config = new MMConfigKeymapConfig
+                {
+                    UseSecondarySliderStep = "_Shift"
                 }
             };
         }
