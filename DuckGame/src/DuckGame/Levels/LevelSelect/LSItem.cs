@@ -6,9 +6,9 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -143,64 +143,88 @@ namespace DuckGame
         public static List<string> GetLevelsInside(LevelSelect selector, string path)
         {
             List<string> levelsInside = new List<string>();
-            if (path == "@WORKSHOP@")
+            switch (path)
             {
-                foreach (WorkshopItem allWorkshopItem in Steam.GetAllWorkshopItems())
-                {
-                    if ((allWorkshopItem.stateFlags & WorkshopItemState.Installed) != WorkshopItemState.None && allWorkshopItem.path != null && Directory.Exists(allWorkshopItem.path))
+                case "@WORKSHOP@":
                     {
-                        foreach (string file in DuckFile.GetFiles(allWorkshopItem.path))
+                        List<WorkshopItem> wsi = Steam.GetAllWorkshopItems();
+                        for (int i = 0; i < wsi.Count; i++)
                         {
-                            string lName = file;
-                            if (lName.EndsWith(".lev") && selector.filters.TrueForAll(a => a.Filter(lName, LevelLocation.Workshop)))
-                                levelsInside.Add(lName);
+                            WorkshopItem allWorkshopItem = wsi[i];
+                            if ((allWorkshopItem.stateFlags & WorkshopItemState.Installed) != WorkshopItemState.None && allWorkshopItem.path != null && Directory.Exists(allWorkshopItem.path))
+                            {
+                                List<string> files = DuckFile.ReGetFiles(allWorkshopItem.path);
+                                for (int x = 0; x < files.Count; x++)
+                                {
+                                    string lName = files[x];
+                                    if (lName.EndsWith(".lev") && selector.filters.TrueForAll(a => a.Filter(lName, LevelLocation.Workshop)))
+                                        levelsInside.Add(lName);
+                                }
+                            }
                         }
+                        break;
                     }
-                }
-            }
-            else if (path == "@VANILLA@")
-            {
-                string path1 = DuckFile.contentDirectory + "Levels/deathmatch/";
-                foreach (string directory in DuckFile.GetDirectories(path1))
-                    levelsInside.AddRange(GetLevelsInside(selector, directory).Where(x => !x.Contains("online") && !x.Contains("holiday")));
-                foreach (string file1 in Content.GetFiles(path1))
-                {
-                    string file = file1;
-                    if (!file.Contains("online") && !file.Contains("holiday") && file.EndsWith(".lev") && selector.filters.TrueForAll(a => a.Filter(file)))
+                case "@VANILLA@":
                     {
-                        string str = file.Replace('\\', '/');
-                        levelsInside.Add(str);
+                        string path1 = DuckFile.contentDirectory + "Levels/deathmatch/";
+
+                        List<string> directories = DuckFile.ReGetDirectories(path1);
+                        for (int i = 0; i < directories.Count; i++)
+                        {
+                            string directory = directories[i];
+                            levelsInside.AddRange(GetLevelsInside(selector, directory).Where(x => !x.Contains("online") && !x.Contains("holiday")));
+                        }
+
+                        List<string> files = Content.ReGetFiles(path1);
+                        for (int i = 0; i < files.Count; i++)
+                        {
+                            string file = files[i];
+                            if (!file.Contains("online") && !file.Contains("holiday") && file.EndsWith(".lev") && selector.filters.TrueForAll(a => a.Filter(file)))
+                            {
+                                string str = file.Replace('\\', '/');
+                                levelsInside.Add(str);
+                            }
+                        }
+                        break;
                     }
-                }
-            }
-            else if (path.EndsWith(".play"))
-            {
-                DXMLNode node = DuckFile.LoadDuckXML(path).Element("playlist");
-                if (node != null)
-                {
-                    LevelPlaylist levelPlaylist = new LevelPlaylist();
-                    levelPlaylist.Deserialize(node);
-                    foreach (string level in levelPlaylist.levels)
+                default:
                     {
-                        string lName = level;
-                        if (selector.filters.TrueForAll(a => a.Filter(lName)))
-                            levelsInside.Add(lName);
+                        if (path.EndsWith(".play"))
+                        {
+                            DXMLNode node = DuckFile.LoadDuckXML(path).Element("playlist");
+                            if (node != null)
+                            {
+                                LevelPlaylist levelPlaylist = new LevelPlaylist();
+                                levelPlaylist.Deserialize(node);
+                                foreach (string level in levelPlaylist.levels)
+                                {
+                                    string lName = level;
+                                    if (selector.filters.TrueForAll(a => a.Filter(lName)))
+                                        levelsInside.Add(lName);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            List<string> directories = DuckFile.ReGetDirectories(path);
+                            for (int i = 0; i < directories.Count; i++)
+                            {
+                                string directory = directories[i];
+                                levelsInside.AddRange(GetLevelsInside(selector, directory));
+                            }
+                            List<string> files = Content.ReGetFiles(path);
+                            for (int i = 0; i < files.Count; i++)
+                            {
+                                string file = files[i];
+                                if (file.EndsWith(".lev") && selector.filters.TrueForAll(a => a.Filter(file)))
+                                {
+                                    string str = file.Replace('\\', '/');
+                                    levelsInside.Add(str);
+                                }
+                            }
+                        }
+                        break;
                     }
-                }
-            }
-            else
-            {
-                foreach (string directory in DuckFile.GetDirectories(path))
-                    levelsInside.AddRange(GetLevelsInside(selector, directory));
-                foreach (string file2 in Content.GetFiles(path))
-                {
-                    string file = file2;
-                    if (file.EndsWith(".lev") && selector.filters.TrueForAll(a => a.Filter(file)))
-                    {
-                        string str = file.Replace('\\', '/');
-                        levelsInside.Add(str);
-                    }
-                }
             }
             return levelsInside;
         }

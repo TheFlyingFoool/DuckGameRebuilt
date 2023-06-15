@@ -39,6 +39,11 @@ namespace DuckGame
         [AutoConfigField]
         public static bool PreloadLevels;
 
+        [AutoConfigField]
+        public static bool SortLevels = true; //do you care about levels being sorted? no? turn this the fuck off for faster load times -NiK0
+
+        //[AutoConfigField] nvm im not smart enough for async stuff -NiK0
+        //public static bool ThreadedLevelLoading = true;
 
         [AutoConfigField]
         public static bool SpriteAtlas = true;
