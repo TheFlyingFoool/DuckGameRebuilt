@@ -143,7 +143,7 @@ namespace DuckGame
         public static float WeatherLighting = 1;
 
         [AutoConfigField]
-        public static bool CameraUnfollow = true;
+        public static bool CameraUnfollow = false;
 
         [AutoConfigField]
         public static bool dubberspeed = false;
