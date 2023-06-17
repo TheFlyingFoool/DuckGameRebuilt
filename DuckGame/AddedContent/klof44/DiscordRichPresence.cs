@@ -79,7 +79,6 @@ namespace DuckGame
         }
         public static string ToTitleCase(string str)
         {
-
             TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
             return textInfo.ToTitleCase(str);
         }
@@ -174,15 +173,20 @@ namespace DuckGame
                     }
                     if (Level.current is GameLevel)
                     {
+                        assets.LargeImageKey = "netgun";
                         if ((Level.current as GameLevel).displayName == null)
                         {
                             rpc.State = "Random Level";
                         }
                         else
                         {
+                            if (!(Level.current as GameLevel).isCustomLevel)
+                            {
+                                assets.LargeImageKey = $"https://klof44.github.io/static/img/DGR/{(Level.current as GameLevel).displayName}.png";
+                            }
                             rpc.State = $"Playing {(Level.current as GameLevel).displayName}";
                         }
-                        assets.LargeImageKey = "netgun"; // Placeholder Image
+
                     }
                     if (Level.current is TeamSelect2)
                     {

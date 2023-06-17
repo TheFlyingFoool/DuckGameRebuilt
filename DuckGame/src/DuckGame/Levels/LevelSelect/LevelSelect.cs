@@ -104,18 +104,21 @@ namespace DuckGame
             if (folder.EndsWith(".play") || folder == "@WORKSHOP@" || folder == "@VANILLA@")
             {
                 List<string> levelsInside = LSItem.GetLevelsInside(this, folder);
-                levelsInside.Sort();
-                foreach (string PATH in levelsInside)
-                    AddItem(new LSItem(0f, 0f, this, PATH));
-                _items = _items.OrderBy(x => x.data != null && x.data.metaData.eightPlayer).ToList();
+                if (DGRSettings.SortLevels) levelsInside.Sort();
+                for (int i = 0; i < levelsInside.Count; i++)
+                    AddItem(new LSItem(0f, 0f, this, levelsInside[i]));
+                if (DGRSettings.SortLevels) _items = _items.OrderBy(x => x.data != null && x.data.metaData.eightPlayer).ToList();
                 PositionItems();
             }
             else
             {
-                string[] directories = DuckFile.GetDirectories(folder);
-                string[] files = DuckFile.GetFiles(folder);
-                Array.Sort(directories);
-                Array.Sort(files);
+                List<string> directories = DuckFile.ReGetDirectories(folder);
+                List<string> files = DuckFile.ReGetFiles(folder);
+                if (DGRSettings.SortLevels)
+                {
+                    directories.Sort();
+                    files.Sort();
+                }
                 if (_currentDirectory == _rootDirectory)
                 {
                     foreach (Mod accessibleMod in (IEnumerable<Mod>)ModLoader.accessibleMods)
@@ -126,30 +129,35 @@ namespace DuckGame
                                 _name = accessibleMod.configuration.name
                             });
                     }
-                    foreach (MapPack mapPack in MapPack.active)
+
+                    for (int i = 0; i < MapPack.active.Count; i++)
+                    {
+                        MapPack mapPack = MapPack.active[i];
                         AddItem(new LSItem(0f, 0f, this, mapPack.path, pIsModPath: true, pIsModRoot: true, pIsMapPack: true)
                         {
                             _name = mapPack.name,
                             _customIcon = mapPack.icon,
                             mapPack = mapPack
                         });
+                    }
                 }
-                foreach (string str in directories)
+                for (int i = 0; i < directories.Count; i++)
                 {
+                    string str = directories[i];
                     if (DuckFile.GetFiles(str, "*.lev", SearchOption.AllDirectories).Length > 0)
                         AddItem(new LSItem(0f, 0f, this, str, pIsModPath: isModPath));
                 }
                 List<string> stringList = new List<string>();
-                foreach (string str in files)
+                for (int i = 0; i < files.Count; i++)
                 {
-                    string file = str;
+                    string file = files[i];
                     if (Path.GetExtension(file) == ".lev" && _filters.TrueForAll(a => a.Filter(file)))
                         stringList.Add(file);
                     else if (Path.GetExtension(file) == ".play")
                         AddItem(new LSItem(0f, 0f, this, file, pIsModPath: isModPath));
                 }
-                foreach (string PATH in stringList)
-                    AddItem(new LSItem(0f, 0f, this, PATH, pIsModPath: isModPath));
+                for (int i = 0; i < stringList.Count; i++)
+                    AddItem(new LSItem(0f, 0f, this, stringList[i], pIsModPath: isModPath));
                 PositionItems();
             }
         }

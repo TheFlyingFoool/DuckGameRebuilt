@@ -426,10 +426,13 @@ namespace DuckGame
                             Type[] array2 = modConfig.assembly.GetExportedTypes().Where(type => type.IsSubclassOf(typeof(Mod)) && !type.IsAbstract).ToArray();
                             if (array2.Length != 1)
                                 throw new ModTypeMissingException(modConfig.uniqueID + " is missing or has more than one Mod subclass");
-                            if (MonoMain.preloadModContent && modConfig.preloadContent)
-                                modConfig.content.PreloadContent();
-                            else
-                                modConfig.content.PreloadContentPaths();
+                            if (!modConfig.noAssetLoad)
+                            {
+                                if (MonoMain.preloadModContent && modConfig.preloadContent)
+                                    modConfig.content.PreloadContent();
+                                else
+                                    modConfig.content.PreloadContentPaths();
+                            }
                             mod = (Mod)Activator.CreateInstance(array2[0]);
                             if (mod is DisabledMod || mod is CoreMod || mod is ErrorMod)
                             {

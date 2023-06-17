@@ -171,6 +171,7 @@ namespace DuckGame
         ///   <c>true</c> if mod will not try to compile itself; otherwise, <c>false</c>.
         /// </value>
         public bool noRecompilation { get; internal set; }
+        public bool noAssetLoad { get; internal set; }
         public bool noCompilation { get; internal set; }
 
         /// <summary>
@@ -277,6 +278,7 @@ namespace DuckGame
                     }, StringSplitOptions.RemoveEmptyEntries);
                 }
                 noRecompilation = documentElement["NoRecompilation"] != null && documentElement["NoRecompilation"].InnerText.ToLower() == "true";
+                noAssetLoad = documentElement["NoAssetLoad"] != null && documentElement["NoAssetLoad"].InnerText.ToLower() == "true";
                 noCompilation = documentElement["NoCompilation"] != null && documentElement["NoCompilation"].InnerText.ToLower() == "true";
                 preloadContent = documentElement["PreloadContent"] == null || !(documentElement["PreloadContent"].InnerText.ToLower() == "false");
                 processPinkTransparency = documentElement["PinkTransparency"] == null || !(documentElement["PinkTransparency"].InnerText.ToLower() == "false");

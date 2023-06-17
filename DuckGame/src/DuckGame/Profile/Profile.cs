@@ -646,7 +646,7 @@ namespace DuckGame
                 return nameUi;
             }
         }
-        //alright so hear me out, DUCK GAME FUCKING SUCKS
+        //alright so hear me out, DUCK GAME FUCKING SUCKS -NiK0
         public string nameUIBodge
         {
             get
