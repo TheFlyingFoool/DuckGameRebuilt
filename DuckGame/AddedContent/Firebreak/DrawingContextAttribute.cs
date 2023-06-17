@@ -62,7 +62,13 @@ namespace DuckGame
         /// But because it is no longer the original invocation, debugging becomes
         /// harder due to no longer executing your "original" code per se
         /// </remarks>
-        public bool UsePrecompiledLambda = false;
+        public bool UsePrecompiledLambda = 
+#if DEBUG
+            false
+#else
+            true
+#endif
+            ;
 
         /// <summary>
         /// Whether or not this drawing context gets drawn or not

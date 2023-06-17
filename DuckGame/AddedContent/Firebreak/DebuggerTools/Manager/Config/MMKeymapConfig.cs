@@ -2,57 +2,66 @@
 {
     public sealed class MMKeymapConfig
     {
-        [ACHeader] [ACKeybind]
-        public MMConsoleKeymapConfig Console;
+        [ACHeader]
+        public MMDefaultKeymapSettingsConfig DefaultSettings = new();
         
         [ACHeader] [ACKeybind]
-        public MMPagerKeymapConfig Pager;
+        public MMConsoleKeymapConfig Console = new();
         
         [ACHeader] [ACKeybind]
-        public MMGeneralKeymapConfig General;
+        public MMPagerKeymapConfig Pager = new();
         
         [ACHeader] [ACKeybind]
-        public MMSplitKeymapConfig Split;
+        public MMGeneralKeymapConfig General = new();
         
         [ACHeader] [ACKeybind]
-        public MMConfigKeymapConfig Config;
+        public MMSplitKeymapConfig Split = new();
+        
+        [ACHeader] [ACKeybind]
+        public MMConfigKeymapConfig Config = new();
+    }
+
+    public sealed class MMDefaultKeymapSettingsConfig
+    {
+        public int SequenceGraceMilliseconds = 300;
+        public int MultiInputGraceMilliseconds = 100;
     }
 
     public sealed class MMConsoleKeymapConfig
     {
-        public string MoveCaretToBeginning;
-        public string MoveCaretToEnd;
-        public string MoveCaretLeft;
-        public string MoveCaretRight;
-        public string MoveCaretLeftByWord;
-        public string MoveCaretRightByWord;
-        public string RunCommand;
+        public string MoveCaretToBeginning = "_Ctrl+Up";
+        public string MoveCaretToEnd = "_Ctrl+Down";
+        public string MoveCaretLeft = "Left";
+        public string MoveCaretRight = "Right";
+        public string MoveCaretLeftByWord = "_Ctrl+Left";
+        public string MoveCaretRightByWord = "_Ctrl+Right";
+        public string RunCommand = "Enter";
     }
 
     public sealed class MMGeneralKeymapConfig
     {
-        public string ToggleMallardManager;
-        public string ReloadConfig;
-        public string ZoomIn;
-        public string ZoomOut;
-        public string ResetZoom;
+        public string ReloadConfig = "F5";
+        public string ResetZoom = "_Ctrl+D0";
+        public string ZoomIn = "_Ctrl+OemPlus";
+        public string ZoomOut = "_Ctrl+OemMinus";
+        public string ToggleMallardManager = "_Ctrl+OemTilde";
     }
 
     public sealed class MMPagerKeymapConfig
     {
-        public string NewTab;
-        public string CloseTab;
-        public string CycleTabForward;
-        public string CycleTabBackward;
+        public string CycleTabBackward = "None";
+        public string CycleTabForward = "_Ctrl+Tab";
+        public string NewTab = "_Ctrl+T";
+        public string CloseTab = "_Ctrl+W";
     }
 
     public sealed class MMSplitKeymapConfig
     {
-        public string ToggleEditMode;
+        public string ToggleEditMode = "_Ctrl+E";
     }
 
     public sealed class MMConfigKeymapConfig
     {
-        public string UseSecondarySliderStep;
+        public string UseSecondarySliderStep = "_Shift";
     }
 }

@@ -1,9 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace DuckGame
+﻿namespace DuckGame
 {
-    public interface IAdvancedConfig
-    {
-        void RevertToDefaults();
-    }
+    public interface IAdvancedConfig { }
 }

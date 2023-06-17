@@ -1,6 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using DuckGame.MMConfig;
+using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using SDL2;
+using System;
 using System.Linq;
 using System.Reflection;
 
@@ -9,21 +11,17 @@ namespace DuckGame.ConsoleEngine
     public static partial class Commands
     {
         [MMCommand(Hidden = true)]
-        public static void Test()
+        public static string Test()
         {
-            float width = Graphics.width;
-            float height = Graphics.height;
-            float scale = height / 540;
-            
-            Zoom(scale);
-            console.Print($"dimensions: ({width}, {height})");
-            console.Print($"scaling factor: {scale}");
+            OnKeybindAttribute attr = typeof(Commands).GetMethod(nameof(ExampleMethod))!.GetCustomAttribute<OnKeybindAttribute>();
+
+            return attr.KeybindString;
         }
-        
-        [MMCommand(Hidden = true)]
-        public static void Test2()
+
+        [OnKeybind(typeof(MMConsoleKeymapConfig), nameof(MMConsoleKeymapConfig.RunCommand))]
+        public static void ExampleMethod()
         {
-            Level.current = new GameLevel(DuckFile.LoadLevel($"{Content.path}/levels/deathmatch/snow07.lev").metaData.guid);
+            Console.WriteLine("test breakpoint");
         }
     }
 }

@@ -24,6 +24,7 @@ namespace DuckGame
                 typeof(FireSerializerModuleAttribute),
                 typeof(DevConsoleCommandAttribute),
                 typeof(DrawingContextAttribute),
+                typeof(OnKeybindAttribute),
                 typeof(PostInitializeAttribute)
             };
             foreach (Type CustomAttribute in TargetCustomAttributes)
@@ -79,6 +80,7 @@ namespace DuckGame
             AutoConfigFieldAttribute.OnResults(LookupTable);
             AdvancedConfig.OnResults(LookupTable);
             FireSerializerModuleAttribute.OnResults(LookupTable);
+            OnKeybindAttribute.OnResults(LookupTable);
             DevConsoleCommandAttribute.OnResults(LookupTable);
             DrawingContextAttribute.OnResults(LookupTable);
             PostInitializeAttribute.OnResults(LookupTable);

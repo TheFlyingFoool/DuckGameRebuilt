@@ -41,7 +41,6 @@ namespace DuckGame
                     continue;
 
                 IAdvancedConfig configData = (IAdvancedConfig)Activator.CreateInstance(type.AsType());
-                configData.RevertToDefaults();
                 string jsonData = JsonConvert.SerializeObject(configData, Formatting.Indented);
 
                 try
@@ -78,7 +77,9 @@ namespace DuckGame
                 {
                     Type configType = type.AsType();
                     string jsonString = File.ReadAllText($"{SaveDirPath}/{attribute.FileName}.json");
-                    IAdvancedConfig configData = (IAdvancedConfig) JsonConvert.DeserializeObject(jsonString, type.AsType());
+                    
+                    IAdvancedConfig configData = (IAdvancedConfig) Activator.CreateInstance(configType);
+                    JsonConvert.PopulateObject(jsonString, configData);
                     
                     s_configs[configType] = configData;
                 }

@@ -8,12 +8,7 @@
         public int UnsignedInteger;
         public float Float;
         [ACMin(0)] [ACMax(10)] [ACSlider(2, SecondaryStep = 1)]
-        public int Slider;
+        public int Slider = 5;
         public string String;
-        
-        public void RevertToDefaults()
-        {
-            Slider = 5;
-        }
     }
 }

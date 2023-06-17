@@ -3,10 +3,10 @@
     public sealed class MMConsoleConfig
     {
         [ACMin(0)]
-        public int TabWidth;
-        public string ShellStartUpCommand;
+        public int TabWidth = 4;
+        public string ShellStartUpCommand = "";
         
         [ACHeader]
-        public MMCaretConfig Caret;
+        public MMCaretConfig Caret = new();
     }
 }
