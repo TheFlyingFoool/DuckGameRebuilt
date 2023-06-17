@@ -147,6 +147,7 @@ namespace DuckGame
             optionsMenu.Add(new UIMenuItemSlider("Rumble Intensity", field: new FieldBinding(Data, "rumbleIntensity"), step: 0.06666667f), true);
             optionsMenu.Add(new UIText(" ", Color.White), true);
             optionsMenu.Add(new UIMenuItemToggle("SHENANIGANS", field: new FieldBinding(Data, "shennanigans")), true);
+            _lastCreatedControlsMenu = CreateControlsMenu(optionsMenu);
             _lastCreatedGraphicsMenu = CreateGraphicsMenu(optionsMenu);
             _lastCreatedAccessibilityMenu = CreateAccessibilityMenu(optionsMenu);
             _lastCreatedTTSMenu = tempTTSMenu;
@@ -160,17 +161,17 @@ namespace DuckGame
             _lastCreatedDGREditorMenu = _DGREditorMenu;
             //DGR OPTIONS GUI HELL BEGINS HERE -NiK0
 
-
             optionsMenu.Add(new UIText(" ", Color.White), true);
 
-
             optionsMenu.Add(new UIMenuItem("REBUILT", new UIMenuActionOpenMenu(optionsMenu, _lastCreatedDGRMenu), backButton: true), true);
+            optionsMenu.Add(new UIMenuItem("EDIT CONTROLS", new UIMenuActionOpenMenu(optionsMenu, _lastCreatedControlsMenu), backButton: true), true);
             optionsMenu.Add(new UIMenuItem("GRAPHICS", new UIMenuActionOpenMenu(optionsMenu, _lastCreatedGraphicsMenu), backButton: true), true);
             optionsMenu.Add(new UIMenuItem("AUDIO", new UIMenuActionOpenMenu(optionsMenu, _lastCreatedAudioMenu), backButton: true), true);
             optionsMenu.Add(new UIText(" ", Color.White), true);
             optionsMenu.Add(new UIMenuItem("USABILITY", new UIMenuActionOpenMenu(optionsMenu, _lastCreatedAccessibilityMenu), backButton: true), true);
             optionsMenu.SetBackFunction(new UIMenuActionCloseMenuCallFunction(optionsMenu, new UIMenuActionCloseMenuCallFunction.Function(OptionsMenuClosed)));
             optionsMenu.Close();
+
             return optionsMenu;
         }
 
@@ -178,6 +179,7 @@ namespace DuckGame
         {
             _optionsMenu = CreateOptionsMenu();
             _controllerWarning = CreateControllerWarning();
+            _controlsMenu = _lastCreatedControlsMenu;
             _graphicsMenu = _lastCreatedGraphicsMenu;
             _accessibilityMenu = _lastCreatedAccessibilityMenu;
             _audioMenu = _lastCreatedAudioMenu;
@@ -556,6 +558,13 @@ namespace DuckGame
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pOptionsMenu), backButton: true), true);
             return menu;
         }
+
+        public static UIMenu CreateControlsMenu(UIMenu pOptionsMenu)
+        {
+            UIMenu menu = new UIControlConfig(pOptionsMenu, "@WRENCH@DEVICE DEFAULTS@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 194f, conString: "@WASD@@SELECT@ADJUST @CANCEL@BACK");
+            return menu;
+        }
+
         public static UIMenu CreateGraphicsMenu(UIMenu pOptionsMenu)
         {
             UIMenu menu = new UIMenu("@WRENCH@GRAPHICS@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
