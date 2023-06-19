@@ -58,9 +58,9 @@ namespace DuckGame
             };
             _profileBox._hatSelector.layer = Layer.HUD;
             _profileBox._hatSelector.isArcadeHatSelector = true;
-            if (RoomEditorExtra.arcadeHat != "")
+            if (DGRSettings.arcadeHat != "")
             {
-                Team t = Teams.all.Find(t => t.name == RoomEditorExtra.arcadeHat);
+                Team t = Teams.all.Find(t => t.name == DGRSettings.arcadeHat);
                 if (t != null)
                 {
                     Hat equipment = d.GetEquipment(typeof(Hat)) as Hat;
@@ -72,7 +72,7 @@ namespace DuckGame
                 }
             }
 
-            d.profile.persona = Persona.alllist[RoomEditorExtra.arcadeDuckColor];
+            d.profile.persona = Persona.alllist[DGRSettings.arcadeDuckColor];
             
             _profile = d.profile;
             _duck = d;

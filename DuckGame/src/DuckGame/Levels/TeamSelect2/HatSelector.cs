@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.HatSelector
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -331,13 +324,13 @@ namespace DuckGame
                 Send.Message(new NMSetTeam(_box.duck.profile, team, _teamWasCustomHat));
             }
 
-            RoomEditorExtra.arcadeDuckColor = _profile.persona.index;
+            DGRSettings.arcadeDuckColor = _profile.persona.index;
             
             if (team.hasHat)
             {
                 if (_box.duck != null)
                 {
-                    if (isArcadeHatSelector) RoomEditorExtra.arcadeHat = team.name;
+                    if (isArcadeHatSelector) DGRSettings.arcadeHat = team.name;
                     Hat equipment = _box.duck.GetEquipment(typeof(Hat)) as Hat;
                     Hat hat = new TeamHat(0f, 0f, team, _box.duck.profile);
                     Level.Add(hat);
@@ -435,7 +428,7 @@ namespace DuckGame
         {
             if (!Network.isActive)
             {
-                if (RoomEditorExtra.favoriteHats.Count == 0)
+                if (DGRSettings.favoriteHats.Count == 0)
                 {
                     return Teams.all;
                 }
@@ -473,7 +466,7 @@ namespace DuckGame
                 return teamList;
             }
 
-            if (RoomEditorExtra.favoriteHats.Count == 0)
+            if (DGRSettings.favoriteHats.Count == 0)
             {
                 List<Team> list2 = new List<Team>(Teams.core.teams);
                 foreach (Team item2 in Teams.core.extraTeams)
@@ -768,7 +761,7 @@ namespace DuckGame
                                     SFX.Play("click");
                                     t.favorited = !t.favorited;
 
-                                    RoomEditorExtra.ReloadFavHats();
+                                    DGRSettings.ReloadFavHats();
                                 }
                             }
                             if (inputProfile.Pressed(Triggers.Ragdoll))

@@ -614,6 +614,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
+            DGRSettings.InitializeFavoritedHats();
             if (sign)
             {
                 Add(new VersionSign(32, -20) { fadeTime = 300 });
@@ -1043,6 +1044,7 @@ namespace DuckGame
 
         public override void Update()
         {
+            if (Keyboard.Pressed(Keys.F6)) Options.ReloadHats();
             if (MonoMain.pauseMenu == null && Options.Data.showControllerWarning && Input.mightHavePlaystationController && !_showedPS4Warning)
             {
                 _showedPS4Warning = true;

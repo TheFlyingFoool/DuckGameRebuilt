@@ -326,7 +326,6 @@
     <Compile Include="AddedContent\NiK0\MathParser.cs" />
     <Compile Include="AddedContent\NiK0\RainbowConstant.cs" />
     <Compile Include="AddedContent\NiK0\RainParticel.cs" />
-    <Compile Include="AddedContent\NiK0\RoomEditorExtra.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\ClientOnlyAttribute.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\CodeButton.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\ContextButton.cs" />

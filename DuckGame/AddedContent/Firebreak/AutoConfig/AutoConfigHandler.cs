@@ -12,7 +12,7 @@ namespace DuckGame
         private const string SaveDirName = "Data/";
         private const string MainSaveFileName = "Config" + FileExtension;
         private const string FileExtension = ".quack";
-        public static string SaveDirPath => DuckFile.oldSaveLocation + "DuckGame/" + SaveDirName;
+        public static string SaveDirPath = DuckFile.newSaveLocation + "DuckGame/" + SaveDirName;
         public static string MainSaveFilePath => SaveDirPath + MainSaveFileName;
 
         public static void Initialize()
@@ -25,8 +25,14 @@ namespace DuckGame
             if (!File.Exists(MainSaveFilePath))
                 SaveAll(false);
 
-            if (!LoadAll())
-                DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD CONFIG FIELDS");
+            if (!LoadAll()) DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD CONFIG FIELDS");
+            if (!DGRSettings.newSaveFilePath)
+            {
+                SaveDirPath = DuckFile.oldSaveLocation + "DuckGame/" + SaveDirName;
+                if (!LoadAll()) DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD CONFIG FIELDS");
+                SaveDirPath = DuckFile.newSaveLocation + "DuckGame/" + SaveDirName;
+                DGRSettings.newSaveFilePath = true;
+            }
 
             MonoMain.OnGameExit += SaveAll;
         }

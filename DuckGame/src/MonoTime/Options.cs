@@ -8,6 +8,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace DuckGame
 {
@@ -256,8 +257,8 @@ namespace DuckGame
                 scale = new Vec2(0.5f)
             };
             uiMenu10.Add(component10, true);
-            menu.Add(new UIMenuItem("|DGORANGE|OK THEN", new UIMenuActionCloseMenu(menu), c: Color.White), true);
-            menu.Add(new UIMenuItem("|DGRED|DON'T SHOW THIS AGAIN", new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(QuitShowingControllerWarning)), c: Color.White), true);
+            menu.Add(new UIMenuItem("|DGORANGE|OK THEN", new UIMenuActionCloseMenu(menu), c: Color.White));
+            menu.Add(new UIMenuItem("|DGRED|DON'T SHOW THIS AGAIN", new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(QuitShowingControllerWarning)), c: Color.White));
             menu.SetBackFunction(new UIMenuActionCloseMenu(menu));
             menu.Close();
             return menu;
@@ -335,25 +336,25 @@ namespace DuckGame
             UIMenu menu = new UIMenu("|PINK|♥|WHITE|EDITOR|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
 
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
-            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
             menu.Add(new UIMenuItemToggle("Online Physics", field: new FieldBinding(dGRSettings, "EditorOnlinePhysics"))
             {
                 dgrDescription = "WARNING This may be highly unstable but it'll make it so online physics apply while testing levels in the editor (Ragdoll rng, etc)"
-            }, true);
+            });
 
             menu.Add(new UIMenuItemToggle("Instructions", field: new FieldBinding(dGRSettings, "EditorInstructions"))
             {
                 dgrDescription = "Displays real-time instructions on how to operate the editor. You might not need it anymore if you're already used to it"
-            }, true);
+            });
 
             menu.Add(new UIMenuItemToggle("Level Name", field: new FieldBinding(dGRSettings, "EditorLevelName"))
             {
                 dgrDescription = "Displays current level name at top left of the screen"
-            }, true);
+            });
 
-            menu.Add(new UIText(" ", Color.White), true);
-            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true), true);
+            menu.Add(new UIText(" ", Color.White));
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
             return menu;
         }
 
@@ -362,7 +363,7 @@ namespace DuckGame
             UIMenu menu = new UIMenu("|PINK|♥|WHITE|GRAPHICS|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
 
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
-            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
             menu.Add(new UIMenuItemSlider("Weather Chance", field: new FieldBinding(dGRSettings, "RandomWeather", 0, 10, 1), step: 1f)
             {
@@ -377,7 +378,7 @@ namespace DuckGame
                 dgrDescription = "Chance for thunder to occur in levels from x0 to x16"
             });
 
-            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
 
             menu.Add(new UIMenuItemNumber("Particle Level", field: new FieldBinding(dGRSettings, "ParticleMultiplier", 0, 7, 1), valStrings: new List<string>()
@@ -393,7 +394,7 @@ namespace DuckGame
             })
             {
                 dgrDescription = "Global particle multiplier from x0 to x16"
-            }, true);
+            });
             menu.Add(new UIMenuItemNumber("Rebuilt Effect", field: new FieldBinding(dGRSettings, "RebuiltEffect", 0, 2, 1), valStrings: new List<string>()
             {
                 "HEART",
@@ -402,11 +403,11 @@ namespace DuckGame
             })
             {
                 dgrDescription = "The effect displayed for other rebuilt users"
-            }, true);
+            });
 
 
-            menu.Add(new UIText(" ", Color.White), true);
-            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true), true);
+            menu.Add(new UIText(" ", Color.White));
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
             return menu;
         }
 
@@ -415,24 +416,24 @@ namespace DuckGame
             UIMenu menu = new UIMenu("|PINK|♥|WHITE|QOL|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
 
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
-            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
             menu.Add(new UIMenuItemToggle("Camera unfollow", field: new FieldBinding(dGRSettings, "CameraUnfollow"))
             {
                 dgrDescription = "When the camera is big enough it stops following distant players"
-            }, true);
+            });
             menu.Add(new UIMenuItemToggle("Discord RPC", field: new FieldBinding(dGRSettings, "RPC"))
             {
                 dgrDescription = "Toggles discord rich presence displaying the current level, if you're in the editor, etc\n(May take a few seconds to connect)"
-            }, true);
+            });
             menu.Add(new UIMenuItemToggle("Menu Mouse", field: new FieldBinding(dGRSettings, "MenuMouse"))
             {
                 dgrDescription = "Toggles the menu mouse"
-            }, true);
+            });
             menu.Add(new UIMenuItemToggle("Dubber Speed", field: new FieldBinding(dGRSettings, "dubberspeed"))
             {
                 dgrDescription = "For true vim users, adds keybinds from 1-9 for faster menu browsing"
-            }, true);
+            });
             menu.Add(new UIMenuItemNumber("Start in", field: new FieldBinding(dGRSettings, "StartIn", 0, 3), valStrings: new List<string>
             {
                 "TITLE",
@@ -442,29 +443,114 @@ namespace DuckGame
             })
             {
                 dgrDescription = "When starting up the game you'll spawn into the selected level"
-            }, true);
+            });
             menu.Add(new UIMenuItemToggle("Sticky Hats", field: new FieldBinding(dGRSettings, "StickyHats"))
             {
                 dgrDescription = "Vanity hats no longer fall off when ragdolling"
-            }, true);
+            });
 
             menu.Add(new UIMenuItemToggle("Lobby data", field: new FieldBinding(dGRSettings, nameof(DGRSettings.LobbyData)))
             {
-                dgrDescription = "Shows the percentage of maps and the list of people in the lobby if host uses Rebuilt",
+                dgrDescription = "Shows the percentage of maps and the list of people in the lobby if host uses Rebuilt"
             });
+
+            menu.Add(new UIMenuItemToggle("Skip Excess Rounds", field: new FieldBinding(dGRSettings, "SkipExcessRounds"))
+            {
+                dgrDescription = "If a player has already definitely won extra rounds that wont change the outcome of the match will be skipped (HOST ONLY)"
+            });
+            menu.Add(new UIMenuItem("Reload Hats", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(ReloadHats)))
+            {
+                dgrDescription = "Reloads all hats (OFFLINE ONLY, MIGHT REMOVE MODDED HATS, F6 QUICK RELOAD, F5 RELOADS CURRENTLY WORN ONE)"
+            });
+            
 
             if (Program.IS_DEV_BUILD)
             {
-                menu.Add(new UIText(" ", Color.White), true);
+                menu.Add(new UIText(" ", Color.White));
                 menu.Add(new UIMenuItemToggle("|PINK|No Level Restrictions", field: new FieldBinding(dGRSettings, "IgnoreLevRestrictions"))
                 {
                     dgrDescription = "When enabled, you'll be able to turn on any custom level on an online match"
-                }, true);
+                });
             }
 
-            menu.Add(new UIText(" ", Color.White), true);
-            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true), true);
+            menu.Add(new UIText(" ", Color.White));
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
             return menu;
+        }
+
+        public static void ReloadHats()
+        {
+            if (Network.isActive) return;
+            try
+            {
+                if (Teams.core != null && Teams.core.extraTeams != null)
+                {
+                    for (int i = 0; i < Teams.core.extraTeams.Count; i++)
+                    {
+                        Team t = Teams.core.extraTeams[i];
+                        if (t.customHatPath != null)
+                        {
+                            for (int x = 0; x < Team.hatSearchPaths.Count; x++)
+                            {
+                                if (t.customHatPath.Contains(Team.hatSearchPaths[x]))
+                                {
+                                    Teams.core.extraTeams.RemoveAt(i);
+                                    i--;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    List<string> files = new List<string>();
+                    for (int i = 0; i < Team.hatSearchPaths.Count; i++)
+                    {
+                        files.AddRange(DuckFile.ReGetFiles(Team.hatSearchPaths[i], "*.png"));
+                        files.AddRange(DuckFile.ReGetFiles(Team.hatSearchPaths[i], "*.hat"));
+                    }
+
+
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        Team team = Team.Deserialize(files[i]);
+                        if (team != null)
+                        {
+                            Teams.core.extraTeams.Add(team);
+                        }
+                    }
+                    DGRSettings.InitializeFavoritedHats();
+                }
+                /*
+                List<string> rel = new List<string>();
+                for (int i = 0; i < Teams.all.Count; i++)
+                {
+                    Team t = Teams.all[i];
+                    if (t.defaultTeam)
+                    {
+                        if (DGRSettings.favoriteHats.Contains("D" + t.name))
+                        {
+                            t.favorited = true;
+                            rel.Add("D" + t.name);
+                        }
+                    }
+                    else
+                    {
+                        if (DGRSettings.favoriteHats.Contains("C" + t.name))
+                        {
+                            t.favorited = true;
+                            rel.Add("C" + t.name);
+                        }
+                    }
+                }
+                //If any hats have been renamed or deleted they get deleted from the list
+                DGRSettings.favoriteHats = rel;
+                */
+                SFX.Play("consoleSelect");
+            }
+            catch
+            {
+                SFX.Play("consoleError");
+            }
         }
 
         public static UIMenu CreateDGRHudMenu(UIMenu pPrev)
@@ -472,27 +558,27 @@ namespace DuckGame
             UIMenu menu = new UIMenu("|PINK|♥|WHITE|HUD|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
 
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
-            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
             menu.Add(new UIMenuItemToggle("GUI Name Display", field: new FieldBinding(dGRSettings, "QOLScoreThingButWithoutScore"))
             {
                 dgrDescription = "Displays every participating duck in the game's name and color above"
-            }, true);
+            });
 
             menu.Add(new UIMenuItemToggle("Name Tags", field: new FieldBinding(dGRSettings, "NameTags"))
             {
                 dgrDescription = "Before the round starts or when you're dead/spectating, display the name of every duck above their heads"
-            }, true);
+            });
 
-            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
             menu.Add(new UIMenuItemToggle("In-Game Lobby Name", field: new FieldBinding(dGRSettings, "LobbyNameOnPause"))
             {
                 dgrDescription = "Displays lobby name on pause screen (not supporting LAN lobbies)"
-            }, true);
+            });
 
-            menu.Add(new UIText(" ", Color.White), true);
-            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true), true);
+            menu.Add(new UIText(" ", Color.White));
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
             return menu;
         }
 
@@ -501,37 +587,37 @@ namespace DuckGame
             UIMenu menu = new UIMenu("|PINK|♥|WHITE|OPTIMIZATIONS|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
 
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
-            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
             menu.Add(new UIMenuItemToggle("Graphics Culling", field: new FieldBinding(dGRSettings, "GraphicsCulling"))
             {
                 dgrDescription = "If on, anything outside the camera wont render"
-            }, true);
+            });
             menu.Add(new UIMenuItemToggle("Use sprite atlas", field: new FieldBinding(dGRSettings, "SpriteAtlas"))
             {
                 dgrDescription = "Lowers render times using an atlas so buffer doesn't constantly switch sprites\n(Requires restart)"
-            }, true);
+            });
 
 
-            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
             menu.Add(new UIMenuItemToggle("Pre-load levels", field: new FieldBinding(dGRSettings, "PreloadLevels"))
             {
                 dgrDescription = "Loads custom levels on startup instead of when the level folder is opened\n(Will increase load times)"
-            }, true);
+            });
 
             menu.Add(new UIMenuItemToggle("Sort levels", field: new FieldBinding(dGRSettings, "SortLevels"))
             {
                 dgrDescription = "Whether or not to sort levels on the level selector (If off it will decrease level load time)"
-            }, true);
+            });
 
             menu.Add(new UIMenuItemToggle("Load music", field: new FieldBinding(dGRSettings, "LoadMusic"))
             {
                 dgrDescription = "If this is disabled music wont load resulting in faster load times\n(Requires restart)"
-            }, true);
+            });
 
-            menu.Add(new UIText(" ", Color.White), true);
-            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true), true);
+            menu.Add(new UIText(" ", Color.White));
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
             return menu;
         }
         public static UIMenu CreateDGRMenu(UIMenu pOptionsMenu)
@@ -540,22 +626,22 @@ namespace DuckGame
 
             _DGRMenu = menu;
             _DGROptimMenu = CreateDGROptimMenu(menu);
-            menu.Add(new UIMenuItem("OPTIMIZATIONS", new UIMenuActionOpenMenu(menu, _DGROptimMenu), backButton: true), true);
+            menu.Add(new UIMenuItem("OPTIMIZATIONS", new UIMenuActionOpenMenu(menu, _DGROptimMenu), backButton: true));
 
             _DGRGraphicsMenu = CreateDGRGraphicsMenu(menu);
-            menu.Add(new UIMenuItem("GRAPHICS", new UIMenuActionOpenMenu(menu, _DGRGraphicsMenu), backButton: true), true);
+            menu.Add(new UIMenuItem("GRAPHICS", new UIMenuActionOpenMenu(menu, _DGRGraphicsMenu), backButton: true));
 
             _DGRMiscMenu = CreateDGRMiscMenu(menu);
-            menu.Add(new UIMenuItem("QOL", new UIMenuActionOpenMenu(menu, _DGRMiscMenu), backButton: true), true);
+            menu.Add(new UIMenuItem("QOL", new UIMenuActionOpenMenu(menu, _DGRMiscMenu), backButton: true));
 
             _DGRHudMenu = CreateDGRHudMenu(menu);
-            menu.Add(new UIMenuItem("HUD", new UIMenuActionOpenMenu(menu, _DGRHudMenu), backButton: true), true);
+            menu.Add(new UIMenuItem("HUD", new UIMenuActionOpenMenu(menu, _DGRHudMenu), backButton: true));
 
             _DGREditorMenu = CreateDGREditorMenu(menu);
-            menu.Add(new UIMenuItem("EDITOR", new UIMenuActionOpenMenu(menu, _DGREditorMenu), backButton: true), true);
+            menu.Add(new UIMenuItem("EDITOR", new UIMenuActionOpenMenu(menu, _DGREditorMenu), backButton: true));
 
-            menu.Add(new UIText(" ", Color.White), true);
-            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pOptionsMenu), backButton: true), true);
+            menu.Add(new UIText(" ", Color.White));
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pOptionsMenu), backButton: true));
             return menu;
         }
 
@@ -568,21 +654,21 @@ namespace DuckGame
         public static UIMenu CreateGraphicsMenu(UIMenu pOptionsMenu)
         {
             UIMenu menu = new UIMenu("@WRENCH@GRAPHICS@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            menu.Add(new UIMenuItemToggle("Fullscreen", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(FullscreenChanged)), new FieldBinding(Data, "fullscreen")), true);
+            menu.Add(new UIMenuItemToggle("Fullscreen", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(FullscreenChanged)), new FieldBinding(Data, "fullscreen")));
             menu.Add(new UIMenuItemResolution("Resolution", new FieldBinding(LocalData, "currentResolution", max: 0f))
             {
                 selectAction = new Action(ApplyResolution)
-            }, true);
-            menu.Add(new UIText(" ", Color.White), true);
-            menu.Add(new UIMenuItemToggle("Windowed Fullscreen", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(WindowedFullscreenChanged)), new FieldBinding(Data, "windowedFullscreen")), true);
-            menu.Add(new UIText(" ", Color.White), true);
-            menu.Add(new UIMenuItemToggle("Fire Glow", field: new FieldBinding(Data, "fireGlow")), true);
-            menu.Add(new UIMenuItemToggle("Lighting", field: new FieldBinding(Data, "lighting")), true);
-            menu.Add(new UIMenuItemToggle("Backfill Fix", field: new FieldBinding(Data, "fillBackground")), true);
-            menu.Add(new UIMenuItemToggle("Explosion Flashes", field: new FieldBinding(Data, "flashing")), true);
-            menu.Add(new UIText(" ", Color.White), true);
-            menu.Add(new UIMenuItemNumber("Console Width", field: new FieldBinding(Data, "consoleWidth", 25f, 100f), step: 10), true);
-            menu.Add(new UIMenuItemNumber("Console Height", field: new FieldBinding(Data, "consoleHeight", 10f, 100f), step: 10), true);
+            });
+            menu.Add(new UIText(" ", Color.White));
+            menu.Add(new UIMenuItemToggle("Windowed Fullscreen", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(WindowedFullscreenChanged)), new FieldBinding(Data, "windowedFullscreen")));
+            menu.Add(new UIText(" ", Color.White));
+            menu.Add(new UIMenuItemToggle("Fire Glow", field: new FieldBinding(Data, "fireGlow")));
+            menu.Add(new UIMenuItemToggle("Lighting", field: new FieldBinding(Data, "lighting")));
+            menu.Add(new UIMenuItemToggle("Backfill Fix", field: new FieldBinding(Data, "fillBackground")));
+            menu.Add(new UIMenuItemToggle("Explosion Flashes", field: new FieldBinding(Data, "flashing")));
+            menu.Add(new UIText(" ", Color.White));
+            menu.Add(new UIMenuItemNumber("Console Width", field: new FieldBinding(Data, "consoleWidth", 25f, 100f), step: 10));
+            menu.Add(new UIMenuItemNumber("Console Height", field: new FieldBinding(Data, "consoleHeight", 10f, 100f), step: 10));
             menu.Add(new UIMenuItemNumber("Console Scale", field: new FieldBinding(Data, "consoleScale", max: 4f), valStrings: new List<string>()
               {
                 "Tiny",
@@ -590,33 +676,33 @@ namespace DuckGame
                 "Large",
                 "Gigantic",
                 "WUMBO"
-              }), true);
-            menu.Add(new UIText(" ", Color.White), true);
-            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pOptionsMenu), backButton: true), true);
+              }));
+            menu.Add(new UIText(" ", Color.White));
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pOptionsMenu), backButton: true));
             return menu;
         }
 
         public static UIMenu CreateAudioMenu(UIMenu pOptionsMenu)
         {
             UIMenu menu = new UIMenu("@WRENCH@Audio@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 280f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            menu.Add(new UIText("Exclusive Mode can reduce", Colors.DGBlue), true);
-            menu.Add(new UIText("audio latency, but will", Colors.DGBlue), true);
-            menu.Add(new UIText("stop all other programs from", Colors.DGBlue), true);
-            menu.Add(new UIText("making sound while Duck Game", Colors.DGBlue), true);
-            menu.Add(new UIText("is running!", Colors.DGBlue), true);
-            menu.Add(new UIText(" ", Colors.DGBlue), true);
-            menu.Add(new UIMenuItemToggle("Exclusive Mode", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(ExclusiveAudioModeChanged)), new FieldBinding(Data, "audioExclusiveMode")), true);
+            menu.Add(new UIText("Exclusive Mode can reduce", Colors.DGBlue));
+            menu.Add(new UIText("audio latency, but will", Colors.DGBlue));
+            menu.Add(new UIText("stop all other programs from", Colors.DGBlue));
+            menu.Add(new UIText("making sound while Duck Game", Colors.DGBlue));
+            menu.Add(new UIText("is running!", Colors.DGBlue));
+            menu.Add(new UIText(" ", Colors.DGBlue));
+            menu.Add(new UIMenuItemToggle("Exclusive Mode", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(ExclusiveAudioModeChanged)), new FieldBinding(Data, "audioExclusiveMode")));
             menu.Add(new UIMenuItemNumber("Audio Engine", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(AudioEngineChanged)), new FieldBinding(Data, "audioMode", 1f, 3f), valStrings: new List<string>()
           {
             "None",
             "WaveOut",
             "Wasapi",
             "DirectSound"
-          }), true);
-            menu.Add(new UIText(" ", Color.White), true);
-            menu.Add(new UIMenuItemToggle("Mute If In The Background", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(MuteOnBackground)), new FieldBinding(Data, "muteOnBackground")), true);
-            menu.Add(new UIText(" ", Color.White), true);
-            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pOptionsMenu), backButton: true), true);
+          }));
+            menu.Add(new UIText(" ", Color.White));
+            menu.Add(new UIMenuItemToggle("Mute If In The Background", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(MuteOnBackground)), new FieldBinding(Data, "muteOnBackground")));
+            menu.Add(new UIText(" ", Color.White));
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pOptionsMenu), backButton: true));
             return menu;
         }
 
@@ -692,7 +778,7 @@ namespace DuckGame
             try
             {
                 UIMenu menu = new UIMenu("TTS SETTINGS", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 280f, conString: "@SELECT@SELECT");
-                menu.Add(new UIMenuItemToggle("Text To Speech", field: new FieldBinding(Data, "textToSpeech")), true);
+                menu.Add(new UIMenuItemToggle("Text To Speech", field: new FieldBinding(Data, "textToSpeech")));
                 List<string> sayVoices = SFX.GetSayVoices();
                 List<string> valStrings = new List<string>();
                 foreach (string str1 in sayVoices)
@@ -702,12 +788,12 @@ namespace DuckGame
                         str2 = str2.Substring(0, 8) + "..";
                     valStrings.Add(str2);
                 }
-                menu.Add(new UIMenuItemNumber("TTS Voice", field: new FieldBinding(Data, "textToSpeechVoice", max: sayVoices.Count), valStrings: valStrings), true);
-                menu.Add(new UIMenuItemSlider("TTS Volume", field: new FieldBinding(Data, "textToSpeechVolume"), step: 0.06666667f), true);
-                menu.Add(new UIMenuItemSlider("TTS Speed", field: new FieldBinding(Data, "textToSpeechRate"), step: 0.04739336f), true);
-                menu.Add(new UIMenuItemToggle("TTS Read Names", field: new FieldBinding(Data, "textToSpeechReadNames")), true);
-                menu.Add(new UIText(" ", Color.White), true);
-                menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenuCallFunction(menu, pAccessibilityMenu, new UIMenuActionOpenMenuCallFunction.Function(CloseMoreMenu))), true);
+                menu.Add(new UIMenuItemNumber("TTS Voice", field: new FieldBinding(Data, "textToSpeechVoice", max: sayVoices.Count), valStrings: valStrings));
+                menu.Add(new UIMenuItemSlider("TTS Volume", field: new FieldBinding(Data, "textToSpeechVolume"), step: 0.06666667f));
+                menu.Add(new UIMenuItemSlider("TTS Speed", field: new FieldBinding(Data, "textToSpeechRate"), step: 0.04739336f));
+                menu.Add(new UIMenuItemToggle("TTS Read Names", field: new FieldBinding(Data, "textToSpeechReadNames")));
+                menu.Add(new UIText(" ", Color.White));
+                menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenuCallFunction(menu, pAccessibilityMenu, new UIMenuActionOpenMenuCallFunction.Function(CloseMoreMenu))));
                 menu.SetBackFunction(new UIMenuActionOpenMenuCallFunction(menu, pAccessibilityMenu, new UIMenuActionOpenMenuCallFunction.Function(CloseMoreMenu)));
                 return menu;
             }
@@ -836,8 +922,8 @@ namespace DuckGame
             if (pShowDialog)
             {
                 UIMenu menu = new UIMenu("@WRENCH@MERGE COMPLETE@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 260f, conString: "@CANCEL@BACK @SELECT@SELECT");
-                menu.Add(new UIText("Successfully merged profiles!", Colors.DGBlue), true);
-                menu.Add(new UIMenuItem("FINALLY!!", new UIMenuActionCloseMenu(menu)), true);
+                menu.Add(new UIText("Successfully merged profiles!", Colors.DGBlue));
+                menu.Add(new UIMenuItem("FINALLY!!", new UIMenuActionCloseMenu(menu)));
                 menu.SetBackFunction(new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(OptionsMenuClosed)));
                 menu.Close();
                 Level.Add(menu);
@@ -851,16 +937,16 @@ namespace DuckGame
         public static UIMenu CreateProfileMergeMenu()
         {
             UIMenu menu = new UIMenu("@WRENCH@MERGE PROFILES@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 270f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            menu.Add(new UIText("Looks like you have a 'DEFAULT'", Colors.DGBlue), true);
-            menu.Add(new UIText("profile. These are now obsolete.", Colors.DGBlue), true);
-            menu.Add(new UIText("", Colors.DGBlue), true);
-            menu.Add(new UIText("Would you like to merge all", Colors.DGBlue), true);
-            menu.Add(new UIText("data from the 'DEFAULT' profile", Colors.DGBlue), true);
-            menu.Add(new UIText("into this one?", Colors.DGBlue), true);
-            menu.Add(new UIText("", Colors.DGBlue), true);
-            menu.Add(new UIMenuItem("NO!", new UIMenuActionCloseMenu(menu)), true);
-            menu.Add(new UIMenuItem("YES! (PREFER DEFAULT)", new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(MergeDefaultPreferDefault))), true);
-            menu.Add(new UIMenuItem("YES! (PREFER THIS ACCOUNT)", new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(MergeDefaultPreferAccount))), true);
+            menu.Add(new UIText("Looks like you have a 'DEFAULT'", Colors.DGBlue));
+            menu.Add(new UIText("profile. These are now obsolete.", Colors.DGBlue));
+            menu.Add(new UIText("", Colors.DGBlue));
+            menu.Add(new UIText("Would you like to merge all", Colors.DGBlue));
+            menu.Add(new UIText("data from the 'DEFAULT' profile", Colors.DGBlue));
+            menu.Add(new UIText("into this one?", Colors.DGBlue));
+            menu.Add(new UIText("", Colors.DGBlue));
+            menu.Add(new UIMenuItem("NO!", new UIMenuActionCloseMenu(menu)));
+            menu.Add(new UIMenuItem("YES! (PREFER DEFAULT)", new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(MergeDefaultPreferDefault))));
+            menu.Add(new UIMenuItem("YES! (PREFER THIS ACCOUNT)", new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(MergeDefaultPreferAccount))));
             menu.SetBackFunction(new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(OptionsMenuClosed)));
             menu.Close();
             return menu;
@@ -869,15 +955,15 @@ namespace DuckGame
         public static UIMenu CreateResolutionApplyMenu()
         {
             UIMenu menu = new UIMenu("@WRENCH@NEW ASPECT RATIO@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 270f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            menu.Add(new UIText("To apply a resolution", Colors.DGBlue), true);
-            menu.Add(new UIText("with a different aspect ratio,", Colors.DGBlue), true);
-            menu.Add(new UIText("The game must be restarted.", Colors.DGBlue), true);
-            menu.Add(new UIText("", Colors.DGBlue), true);
-            menu.Add(new UIText("Would you like to restart", Colors.DGBlue), true);
-            menu.Add(new UIText("and apply changes?", Colors.DGBlue), true);
-            menu.Add(new UIText("", Colors.DGBlue), true);
-            menu.Add(new UIMenuItem("NO!", new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(CancelResolutionChange))), true);
-            menu.Add(new UIMenuItem("YES! (Restart)", new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(RestartAndApplyResolution))), true);
+            menu.Add(new UIText("To apply a resolution", Colors.DGBlue));
+            menu.Add(new UIText("with a different aspect ratio,", Colors.DGBlue));
+            menu.Add(new UIText("The game must be restarted.", Colors.DGBlue));
+            menu.Add(new UIText("", Colors.DGBlue));
+            menu.Add(new UIText("Would you like to restart", Colors.DGBlue));
+            menu.Add(new UIText("and apply changes?", Colors.DGBlue));
+            menu.Add(new UIText("", Colors.DGBlue));
+            menu.Add(new UIMenuItem("NO!", new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(CancelResolutionChange))));
+            menu.Add(new UIMenuItem("YES! (Restart)", new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(RestartAndApplyResolution))));
             menu.SetBackFunction(new UIMenuActionCloseMenuCallFunction(menu, new UIMenuActionCloseMenuCallFunction.Function(OptionsMenuClosed)));
             menu.Close();
             return menu;
