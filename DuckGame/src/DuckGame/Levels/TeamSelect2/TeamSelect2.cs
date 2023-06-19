@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static DuckGame.CMD;
 
 namespace DuckGame
 {
@@ -1042,6 +1043,26 @@ namespace DuckGame
             DevConsole.Log(DCSection.Connection, Main.SpecialCode);
         }
 
+        public static bool CheckForCTeams(Profile p2)
+        {
+            try
+            {
+                foreach (Profile p in Profiles.activeNonSpectators)
+                {
+                    if (p != p2)
+                    {
+                        if (p.team.name == p2.team.name && !p.team.defaultTeam && p.team != p2.team)
+                        {
+                            p2.team = p.team;
+                            DuckNetwork.SendToEveryone(new NMSetTeam(p2, p.team, true));
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch { }
+            return false;
+        }
         public override void Update()
         {
             if (Keyboard.Pressed(Keys.F6)) Options.ReloadHats();

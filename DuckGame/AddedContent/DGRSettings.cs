@@ -120,6 +120,9 @@ namespace DuckGame
         public static bool IgnoreLevRestrictions = false;
 
         [AutoConfigField]
+        public static bool CustomHatTeams = false;
+
+        [AutoConfigField]
         public static bool skipOnlineBumper = false;
 
         [AutoConfigField]

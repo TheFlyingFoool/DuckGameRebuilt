@@ -458,6 +458,10 @@ namespace DuckGame
             {
                 dgrDescription = "If a player has already definitely won extra rounds that wont change the outcome of the match will be skipped (HOST ONLY)"
             });
+            menu.Add(new UIMenuItemToggle("Custom Hat Teams", field: new FieldBinding(dGRSettings, "CustomHatTeams"))
+            {
+                dgrDescription = "Allows for teams with custom hats that have the same name (HOST ONLY)"
+            });
             menu.Add(new UIMenuItem("Reload Hats", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(ReloadHats)))
             {
                 dgrDescription = "Reloads all hats (OFFLINE ONLY, MIGHT REMOVE MODDED HATS, F6 QUICK RELOAD, F5 RELOADS CURRENTLY WORN ONE)"

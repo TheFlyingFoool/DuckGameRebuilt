@@ -321,7 +321,18 @@ namespace DuckGame
                     foreach (NetworkConnection connection in Network.connections)
                         Send.Message(new NMSpecialHat(team, _profile, connection.profile != null && connection.profile.muteHat), connection);
                 }
-                Send.Message(new NMSetTeam(_box.duck.profile, team, _teamWasCustomHat));
+
+                if (Network.isServer)
+                {
+                    if (!TeamSelect2.CheckForCTeams(_box.duck.profile))
+                    {
+                        Send.Message(new NMSetTeam(_box.duck.profile, team, _teamWasCustomHat));
+                    }
+                }
+                else
+                {
+                    Send.Message(new NMSetTeam(_box.duck.profile, team, _teamWasCustomHat));
+                }
             }
 
             DGRSettings.arcadeDuckColor = _profile.persona.index;
@@ -774,10 +785,25 @@ namespace DuckGame
                             }
                             if (inputProfile.Pressed(Triggers.Cancel))
                             {
-                                _desiredTeamSelection = (short)GetTeamIndex(_startingTeam);
-                                _teamSelection = _desiredTeamSelection;
-                                SelectTeam();
-                                ConfirmTeamSelection();
+                                //this if check is here because if the host has Custom Hat Teams enabled and this player is currently in a custom hat team then
+                                //they'll instantly crash because GetTeamIndex() cant find the index of their currently wore hat as for that hat doesnt belong to them
+                                //but it has been forcefully set to them by the host so teams can happen
+                                //-NiK0
+                                if (_startingTeam.defaultTeam || (_startingTeam.activeProfiles.Count == 1 && _startingTeam.activeProfiles.Contains(_box.duck.profile)))
+                                {
+                                    _desiredTeamSelection = (short)GetTeamIndex(_startingTeam);
+                                    _teamSelection = _desiredTeamSelection;
+                                    SelectTeam();
+                                    ConfirmTeamSelection();
+                                }
+                                else
+                                {
+                                    _box.profile.team = _startingTeam;
+                                    SFX.Play("consoleCancel", 0.4f);
+                                    _selection = HSSelection.Main;
+                                    _screen.DoFlashTransition();
+                                    return;
+                                }
                                 SFX.Play("consoleCancel", 0.4f);
                                 _selection = HSSelection.Main;
                                 _screen.DoFlashTransition();

@@ -3045,10 +3045,15 @@ namespace DuckGame
                                     nmSetTeam.profile.team.Leave(nmSetTeam.profile, false);
                                 nmSetTeam.profile.team = nmSetTeam.team;
                             }
-                            else
-                                nmSetTeam.profile.team = nmSetTeam.team;
+                            else nmSetTeam.profile.team = nmSetTeam.team;
                             if (!Network.isServer || !OnTeamSwitch(nmSetTeam.profile))
                                 break;
+
+                            if (TeamSelect2.GetSettingBool("teams") && DGRSettings.CustomHatTeams && nmSetTeam.profile.slotType != SlotType.Spectator && nmSetTeam.connection != localConnection)
+                            {
+                                TeamSelect2.CheckForCTeams(nmSetTeam.connection.profile);
+                                break;
+                            }
                             Send.MessageToAllBut(new NMSetTeam(nmSetTeam.profile, nmSetTeam.team, nmSetTeam.custom), NetMessagePriority.ReliableOrdered, m.connection);
                             break;
                         case NMRoomData _:
