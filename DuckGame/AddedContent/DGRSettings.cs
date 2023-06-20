@@ -1,10 +1,103 @@
 ﻿using System;
-using System.Security.Policy;
+using System.Collections.Generic;
 
 namespace DuckGame
 {
     public class DGRSettings
     {
+        /*[AutoConfigField]//TODO: this eventually -NiK0
+        public static List<byte> room1 = new List<byte>();
+        [AutoConfigField]
+        public static List<byte> room2 = new List<byte>();
+        [AutoConfigField]
+        public static List<byte> room3 = new List<byte>();*/
+
+        [AutoConfigField]
+        public static bool newSaveFilePath = false;
+
+        [AutoConfigField]
+        public static List<string> favoriteHats = new List<string>();
+        [AutoConfigField]
+        public static string arcadeHat = "";
+        [AutoConfigField]
+        public static int arcadeDuckColor = 0;
+
+        //this is ran everytime TeamSelect2.cs is initialized or hats are reloaded
+        //it should probably be moved to be ran somewhere else but thats the solution i came up with ages ago and works
+        //issue is people with insane amount of hats might suffer lag spikes every time teamselect2.cs is loaded even though
+        //this code doens't need to be run everytime -NiK0
+        public static void InitializeFavoritedHats()
+        {
+            List<string> rel = new List<string>();
+            for (int i = 0; i < Teams.all.Count; i++)
+            {
+                Team t = Teams.all[i];
+                if (t.defaultTeam)
+                {
+                    if (favoriteHats.Contains("D" + t.name))
+                    {
+                        t.favorited = true;
+                        rel.Add("D" + t.name);
+                    }
+                }
+                else
+                {
+                    if (favoriteHats.Contains("C" + t.name))
+                    {
+                        t.favorited = true;
+                        rel.Add("C" + t.name);
+                    }
+                }
+            }
+            //If any hats have been renamed or deleted they get deleted from the list
+            favoriteHats = rel;
+        }
+        public static void ReloadFavHats()
+        {
+            if (!Network.isActive)
+            {
+                List<Team> tts = new List<Team>();
+
+                List<Team> laterer = new List<Team>();
+                for (int i = 0; i < Teams.all.Count; i++)
+                {
+                    Team t = Teams.all[i];
+                    if (t.favorited)
+                    {
+                        laterer.Add(t);
+                    }
+                    else
+                    {
+                        tts.Add(t);
+                    }
+                }
+                tts.AddRange(laterer);
+
+                HatSelector.remember = tts;
+            }
+            else
+            {
+
+            }
+
+            favoriteHats.Clear();
+            for (int i = 0; i < Teams.all.Count; i++)
+            {
+                Team t = Teams.all[i];
+                if (t.favorited)
+                {
+                    if (t.defaultTeam)
+                    {
+                        favoriteHats.Add("D" + t.name);
+                    }
+                    else
+                    {
+                        favoriteHats.Add("C" + t.name);
+                    }
+                }
+            }
+        }
+
         public static void PrreloadLevels()
         {
             MonoMain.NloadMessage = "Pre-Loading Custom Levels";
@@ -25,6 +118,9 @@ namespace DuckGame
         }
         [AutoConfigField]
         public static bool IgnoreLevRestrictions = false;
+
+        [AutoConfigField]
+        public static bool CustomHatTeams = false;
 
         [AutoConfigField]
         public static bool skipOnlineBumper = false;
@@ -153,6 +249,9 @@ namespace DuckGame
 
         [AutoConfigField]
         public static bool MenuMouse = false;
+
+        [AutoConfigField]
+        public static bool SkipExcessRounds = false;
 
         [AutoConfigField]
         public static int RebuiltEffect = 1;

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.GameMode
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -696,6 +689,7 @@ namespace DuckGame
                             if (_doScore && !skippedLevel)
                             {
                                 _doScore = false;
+
                                 if (showdown)
                                 {
                                     if (_roundHadWinner)
@@ -718,11 +712,66 @@ namespace DuckGame
                                     Level.current = new RockIntro(nextLevel);
                                     _doScore = false;
                                 }
+
                             }
                             else
                             {
                                 _endedHighlights = false;
                                 Level.current = !TeamSelect2.partyMode || skippedLevel ? nextLevel : new DrinkRoom(nextLevel);
+                            }
+
+                            if (Network.isActive && Network.isServer && DGRSettings.SkipExcessRounds)
+                            {
+                                bool teamWon = false;
+                                int winsPerS = winsPerSet;
+                                int difference = roundsBetweenIntermission - numMatchesPlayed;
+                                int teamsWon = 0;
+                                foreach (Team team in Teams.all)
+                                {
+                                    if (team.activeProfiles.Count > 0 && team.score >= winsPerS)
+                                    {
+                                        teamWon = true;
+                                        winsPerS = team.score;
+                                    }
+                                }
+                                if (teamWon)
+                                {
+                                    foreach (Team team2 in Teams.all)
+                                    {
+                                        if (team2.activeProfiles.Count > 0 && team2.score + difference >= winsPerS)
+                                        {
+                                            teamsWon++;
+                                        }
+                                    }
+                                }
+                                if (teamsWon == 1)
+                                {
+                                    GameLevel gameLevel = new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel, "deathmatch"), 0, false, false);
+                                    GameMode.previousLevel = gameLevel.level;
+                                    if (Network.isServer)
+                                    {
+                                        List<int> list = new List<int>();
+                                        foreach (Profile profile in DuckNetwork.profiles)
+                                        {
+                                            profile.ready = true;
+                                            if (profile.team != null)
+                                            {
+                                                list.Add(profile.team.score);
+                                                if (profile.connection != null)
+                                                {
+                                                    profile.ready = false;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                list.Add(0);
+                                            }
+                                        }
+                                        Send.Message(new NMTransferScores(list));
+                                        RunPostRound(false);
+                                    }
+                                    Level.current = new RockIntro(gameLevel);
+                                }
                             }
                         }
                         _switchedLevel = true;

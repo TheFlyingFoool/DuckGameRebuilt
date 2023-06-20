@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static DuckGame.CMD;
 
 namespace DuckGame
 {
@@ -614,6 +615,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
+            DGRSettings.InitializeFavoritedHats();
             if (sign)
             {
                 Add(new VersionSign(32, -20) { fadeTime = 300 });
@@ -1041,8 +1043,29 @@ namespace DuckGame
             DevConsole.Log(DCSection.Connection, Main.SpecialCode);
         }
 
+        public static bool CheckForCTeams(Profile p2)
+        {
+            try
+            {
+                foreach (Profile p in Profiles.activeNonSpectators)
+                {
+                    if (p != p2)
+                    {
+                        if (p.team.name == p2.team.name && !p.team.defaultTeam && p.team != p2.team)
+                        {
+                            p2.team = p.team;
+                            DuckNetwork.SendToEveryone(new NMSetTeam(p2, p.team, true));
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch { }
+            return false;
+        }
         public override void Update()
         {
+            if (Keyboard.Pressed(Keys.F6)) Options.ReloadHats();
             if (MonoMain.pauseMenu == null && Options.Data.showControllerWarning && Input.mightHavePlaystationController && !_showedPS4Warning)
             {
                 _showedPS4Warning = true;
