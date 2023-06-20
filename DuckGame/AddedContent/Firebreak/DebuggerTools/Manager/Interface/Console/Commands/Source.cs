@@ -6,7 +6,7 @@ namespace DuckGame.ConsoleEngine
 {
     public static partial class Commands
     {
-        public static string ScriptsDirPath = DuckFile.oldSaveLocation + "DuckGame/" + "mm_scripts/";
+        public static string ScriptsDirPath = DuckFile.newSaveLocation + "DuckGame/" + "mm_scripts/";
         public const string SCRIPT_FILE_EXTENSION = "dsh";
         
         [MMCommand(Description = "Runs a script (by extensionless name) from your mm_scripts folder")]

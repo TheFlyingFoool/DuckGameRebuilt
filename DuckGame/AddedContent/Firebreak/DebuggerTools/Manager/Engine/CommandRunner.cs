@@ -16,7 +16,7 @@ public class CommandRunner
     
     public Regex ValidNameRegex { get; } = new("^[^ ]+$", RegexOptions.Compiled);
 
-    public Action<MMCommandAttribute, object> PostCommandRunAction { get; protected set; } = (cmd, o) => { };
+    public event Action<MMCommandAttribute, object> PostCommandRunAction;
 
     public virtual ValueOrException<object?> Run(string input)
     {

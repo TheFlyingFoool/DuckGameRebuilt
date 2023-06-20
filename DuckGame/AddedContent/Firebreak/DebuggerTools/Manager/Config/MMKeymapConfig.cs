@@ -23,41 +23,41 @@
 
     public sealed class MMDefaultKeymapSettingsConfig
     {
-        public int SequenceGraceMilliseconds = 300;
-        public int MultiInputGraceMilliseconds = 100;
+        public int SequenceGraceMilliseconds = 200;
+        public int MultiInputGraceMilliseconds = 50;
     }
 
     public sealed class MMConsoleKeymapConfig
     {
-        public string MoveCaretToBeginning = "_Ctrl+Up";
-        public string MoveCaretToEnd = "_Ctrl+Down";
-        public string MoveCaretLeft = "Left";
-        public string MoveCaretRight = "Right";
-        public string MoveCaretLeftByWord = "_Ctrl+Left";
-        public string MoveCaretRightByWord = "_Ctrl+Right";
-        public string RunCommand = "Enter";
+        public string MoveCaretToBeginning = "_ctrl+up";
+        public string MoveCaretToEnd = "_ctrl+down";
+        public string MoveCaretLeft = "left";
+        public string MoveCaretRight = "right";
+        public string MoveCaretLeftByWord = "_ctrl+left";
+        public string MoveCaretRightByWord = "_ctrl+right";
+        public string RunCommand = "enter";
     }
 
     public sealed class MMGeneralKeymapConfig
     {
-        public string ReloadConfig = "F5";
-        public string ResetZoom = "_Ctrl+D0";
-        public string ZoomIn = "_Ctrl+OemPlus";
-        public string ZoomOut = "_Ctrl+OemMinus";
-        public string ToggleMallardManager = "_Ctrl+OemTilde";
+        public string ReloadConfig = "f5";
+        public string ResetZoom = "_ctrl+d0";
+        public string ZoomIn = "_ctrl+oemplus";
+        public string ZoomOut = "_ctrl+oemminus";
+        public string ToggleMallardManager = "_ctrl+oemtilde";
     }
 
     public sealed class MMPagerKeymapConfig
     {
-        public string CycleTabBackward = "None";
-        public string CycleTabForward = "_Ctrl+Tab";
-        public string NewTab = "_Ctrl+T";
-        public string CloseTab = "_Ctrl+W";
+        public string CycleTabBackward = "*";
+        public string CycleTabForward = "_ctrl+tab";
+        public string NewTab = "_ctrl+t";
+        public string CloseTab = "_ctrl+w";
     }
 
     public sealed class MMSplitKeymapConfig
     {
-        public string ToggleEditMode = "_Ctrl+E";
+        public string ToggleEditMode = "_ctrl+E";
     }
 
     public sealed class MMConfigKeymapConfig

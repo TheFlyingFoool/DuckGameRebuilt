@@ -8,7 +8,10 @@ namespace DuckGame
 {
     public static class KeybindReceptionHandler
     {
-        public static List<InputActivationInfo> LastActivatedInputs = new();
+        public static List<InputActivationInfo> LastActivatedKeyboardInputs = new();
+        public static List<InputActivationInfo> LastActivatedDuckInputs = new();
+        public static List<string> DownInputs = new();
+        public static bool HasListUpdated = false;
         
         public static void UpdateKeyboardInputs()
         {
@@ -25,17 +28,26 @@ namespace DuckGame
                     continue;
 
                 InputActivationInfo inputActivationInfo = new($"k_{key.ToString()}", keyPressed);
-                LastActivatedInputs.Add(inputActivationInfo);
+                LastActivatedKeyboardInputs.Add(inputActivationInfo);
+                
+                if (keyPressed && !DownInputs.Contains(inputActivationInfo.InputName))
+                    DownInputs.Add(inputActivationInfo.InputName);
+                else if (DownInputs.Contains(inputActivationInfo.InputName)) 
+                    DownInputs.Remove(inputActivationInfo.InputName);
+
+                HasListUpdated = true;
             }
 
             // -- debug viewer --
+
+            List<InputActivationInfo> inputs = LastActivatedDuckInputs.Concat(LastActivatedKeyboardInputs).OrderBy(x => x.ActivationTime.Ticks).ToList();
             
-            /*int inputCount = LastActivatedInputs.Count;
+            int inputCount = inputs.Count;
             for (int i = 0; i < Math.Min(inputCount, 25); i++)
             {
-                InputActivationInfo input = LastActivatedInputs[(inputCount - 1) - i];
+                InputActivationInfo input = inputs[(inputCount - 1) - i];
 
-                string drawString = input.InputName + $" {input.ActivationTime.Ticks}";
+                string drawString = input.InputName + $" {input.ActivationTime:mm:ss.fff}";
                 float size = 0.5f;
                 SizeF textDimensions = RebuiltMono.GetDimensions(drawString, size);
                 Vec2 drawPos = new(Layer.HUD.width, Layer.HUD.height - i * textDimensions.Height);
@@ -43,7 +55,7 @@ namespace DuckGame
                 RebuiltMono.Draw(drawString, drawPos, input.Pressed ? Color.Aqua : Color.Maroon, 2f, size, ContentAlignment.BottomRight);
             }
             
-            RebuiltMono.DebugDraw(LastActivatedInputs.Count, (0, 0), Color.Red, 2f);*/
+            RebuiltMono.DebugDraw(inputs.Count, (0, 0), Color.Red, 2f);
         }
         
         public static void UpdateDuckInputs()
@@ -61,9 +73,22 @@ namespace DuckGame
                         continue;
 
                     InputActivationInfo inputActivationInfo = new($"d_{trigger}", triggerPressed);
-                    LastActivatedInputs.Add(inputActivationInfo);
+                    LastActivatedDuckInputs.Add(inputActivationInfo);
+                
+                    if (triggerPressed && !DownInputs.Contains(inputActivationInfo.InputName))
+                        DownInputs.Add(inputActivationInfo.InputName);
+                    else if (DownInputs.Contains(inputActivationInfo.InputName)) 
+                        DownInputs.Remove(inputActivationInfo.InputName);
+
+                    HasListUpdated = true;
                 }
             }
+        }
+
+        public static void Flush()
+        {
+            LastActivatedDuckInputs.Clear();
+            LastActivatedKeyboardInputs.Clear();
         }
     }
 }

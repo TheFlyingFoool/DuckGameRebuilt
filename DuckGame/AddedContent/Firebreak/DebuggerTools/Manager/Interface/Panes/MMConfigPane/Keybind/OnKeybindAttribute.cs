@@ -1,7 +1,9 @@
 ﻿using DuckGame.ConsoleInterface;
 using DuckGame.MMConfig;
+using Humanizer;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 
@@ -42,12 +44,43 @@ namespace DuckGame
             ConfigClass = configClass;
             FieldName = fieldName;
         }
+        
+        public OnKeybindAttribute(string keybind)
+        {
+            _keybindString = keybind;
+        }
+        
+        public OnKeybindAttribute(Keys key)
+        {
+            _keybindString = key.ToString().ToLower();
+        }
 
         [DrawingContext(CustomID = "keybindUpdate")]
         public static void Update()
         {
             UpdateInputActivationReception(); // is pressed/released checks and additions to register
             UpdateKeybindActivationActions(); // check if keybinds are activated and run methods
+            
+            // testing
+
+            foreach (string keybind in new[]
+                     {
+                         "numpad1,numpad2,numpad3,numpad4,numpad5",
+                         "numpad7,numpad9",
+                         "_ctrl+z",
+                         "MENUUP+MENURIGHT"
+                     })
+            {
+                AcrossTime.Do(keybind, 500.Milliseconds(), _ =>
+                {
+                    if (!IsActive(keybind))
+                        return;
+
+                    RebuiltMono.Draw(keybind, new Vec2(Layer.HUD.width / 2, Layer.HUD.height / 2),
+                        Color.Red,
+                        2f, 3, ContentAlignment.MiddleCenter);
+                });
+            }
         }
 
         private static void UpdateInputActivationReception()
@@ -60,6 +93,11 @@ namespace DuckGame
         {
             foreach (OnKeybindAttribute keybindAttribute in All)
             {
+                if (!KeybindReceptionHandler.HasListUpdated)
+                    continue;
+
+                KeybindReceptionHandler.HasListUpdated = false;
+                
                 if (!keybindAttribute.IsActive())
                     continue;
 

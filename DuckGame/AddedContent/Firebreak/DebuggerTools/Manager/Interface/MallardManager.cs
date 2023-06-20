@@ -68,9 +68,7 @@ namespace DuckGame.ConsoleInterface
         [DrawingContext(CustomID = "mmUpdate")]
         public static void Update()
         {
-            // TODO: change to custom keymap handler later
-            
-            if (Keyboard.Pressed(Keys.NumPad8))
+            if (OnKeybindAttribute.IsActive(Config.Keymap.General.ToggleMallardManager))
             {
                 DevConsoleCommands.MMToggle();
                 return;
@@ -91,7 +89,7 @@ namespace DuckGame.ConsoleInterface
             
             DisplayPane.Update();
             
-            if (Keyboard.Pressed(Keys.F5))
+            if (OnKeybindAttribute.IsActive(Config.Keymap.General.ReloadConfig))
             {
                 Initialize();
                 OnOpen();
@@ -99,16 +97,16 @@ namespace DuckGame.ConsoleInterface
             
             if (Keyboard.control)
             {
-                if (Keyboard.Pressed(Keys.OemPlus))
+                if (OnKeybindAttribute.IsActive(Config.Keymap.General.ZoomIn))
                     Config.Zoom++;
-                else if (Keyboard.Pressed(Keys.OemMinus))
+                else if (OnKeybindAttribute.IsActive(Config.Keymap.General.ZoomOut))
                     Config.Zoom = Config.Zoom - 1 <= 0 ? Config.Zoom : Config.Zoom - 1;
-                else if (Keyboard.Pressed(Keys.D0))
+                else if (OnKeybindAttribute.IsActive(Config.Keymap.General.ResetZoom))
                     Config.Zoom = 1f;
 
-                // if (Keyboard.Pressed(Keys.OemOpenBrackets))
+                // if (OnKeybindAttribute.IsActive(Keys.OemOpenBrackets))
                 //     DisplayPane = new MMSplitPane(Orientation.Horizontal, DisplayPane, new MMConsolePane());
-                // else if (Keyboard.Pressed(Keys.OemCloseBrackets))
+                // else if (OnKeybindAttribute.IsActive(Keys.OemCloseBrackets))
                 //     DisplayPane = new MMSplitPane(Orientation.Vertical, DisplayPane, new MMConsolePane());
             }
         }

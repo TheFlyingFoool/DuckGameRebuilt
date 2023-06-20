@@ -1,4 +1,5 @@
 ﻿using DuckGame.MMConfig;
+using Humanizer;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using SDL2;
@@ -11,17 +12,11 @@ namespace DuckGame.ConsoleEngine
     public static partial class Commands
     {
         [MMCommand(Hidden = true)]
-        public static string Test()
+        public static void Test()
         {
-            OnKeybindAttribute attr = typeof(Commands).GetMethod(nameof(ExampleMethod))!.GetCustomAttribute<OnKeybindAttribute>();
-
-            return attr.KeybindString;
-        }
-
-        [OnKeybind(typeof(MMConsoleKeymapConfig), nameof(MMConsoleKeymapConfig.RunCommand))]
-        public static void ExampleMethod()
-        {
-            Console.WriteLine("test breakpoint");
+            // OnKeybindAttribute attr = typeof(Commands).GetMethod(nameof(ExampleMethod))!.GetCustomAttribute<OnKeybindAttribute>();
+            //
+            // return attr.KeybindString;
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 namespace DuckGame
 {
+    [DebuggerDisplay("{InputName}")]
     public struct InputActivationInfo
     {
         public DateTime ActivationTime;
