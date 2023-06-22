@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SDL2;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -143,6 +144,8 @@ namespace DuckGame
             if (!(Level.current is GameLevel) || (Level.current as GameLevel).data == null || (Level.current as GameLevel).data.metaData.workshopID == 0UL)
                 return;
             Steam.OverlayOpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" + (Level.current as GameLevel).data.metaData.workshopID.ToString());
+            if (Program.IsLinuxD)
+                SDL.SDL_SetClipboardText("https://steamcommunity.com/sharedfiles/filedetails/?id=" + (Level.current as GameLevel).data.metaData.workshopID.ToString());
         }
 
         public static void Blacklist()

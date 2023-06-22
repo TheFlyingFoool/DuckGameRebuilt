@@ -5,6 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using SDL2;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -116,7 +117,11 @@ namespace DuckGame
                     }
                 }
                 if (Input.Pressed(Triggers.Select))
+                {
                     Steam.OverlayOpenURL("http://steamcommunity.com/profiles/" + items[_selection].Key.ToString());
+                    if(Program.IsLinuxD)
+                        SDL.SDL_SetClipboardText("http://steamcommunity.com/profiles/" + items[_selection].Key.ToString());
+                }
                 if (Input.Pressed(Triggers.Cancel))
                 {
                     if (_openOnClose != null)
