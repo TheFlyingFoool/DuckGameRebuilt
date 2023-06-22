@@ -40,7 +40,7 @@ namespace DuckGame
 
             // -- debug viewer --
 
-            List<InputActivationInfo> inputs = LastActivatedDuckInputs.Concat(LastActivatedKeyboardInputs).OrderBy(x => x.ActivationTime.Ticks).ToList();
+            /*List<InputActivationInfo> inputs = LastActivatedDuckInputs.Concat(LastActivatedKeyboardInputs).OrderBy(x => x.ActivationTime.Ticks).ToList();
             
             int inputCount = inputs.Count;
             for (int i = 0; i < Math.Min(inputCount, 25); i++)
@@ -55,7 +55,7 @@ namespace DuckGame
                 RebuiltMono.Draw(drawString, drawPos, input.Pressed ? Color.Aqua : Color.Maroon, 2f, size, ContentAlignment.BottomRight);
             }
             
-            RebuiltMono.DebugDraw(inputs.Count, (0, 0), Color.Red, 2f);
+            RebuiltMono.DebugDraw(inputs.Count, (0, 0), Color.Red, 2f);*/
         }
         
         public static void UpdateDuckInputs()
