@@ -99,8 +99,9 @@ namespace DuckGame.ConsoleInterface.Panes
                         // }
                         //
                         // Value = Maths.Clamp(Min + Extensions.FindClosestNumber(possibleValues, (float) (sliderProgress.NormalizedValue * Max)), Min, Max);
-                        
-                        double usedStep = Keyboard.shift && SecondaryStep is not null ? SecondaryStep.Value : Step;
+
+                        bool useSecondary = OnKeybindAttribute.IsActive(MallardManager.Config.Keymap.Config.UseSecondarySliderStep);
+                        double usedStep = useSecondary && SecondaryStep is not null ? SecondaryStep.Value : Step;
                         
                         double clampedValue = Maths.Clamp(sliderProgress.NormalizedValue * Max, Min, Max);
                         double difference = clampedValue - Min;

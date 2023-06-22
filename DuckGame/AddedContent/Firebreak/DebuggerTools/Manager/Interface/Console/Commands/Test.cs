@@ -12,11 +12,17 @@ namespace DuckGame.ConsoleEngine
     public static partial class Commands
     {
         [MMCommand(Hidden = true)]
-        public static void Test()
+        public static string Test()
         {
-            // OnKeybindAttribute attr = typeof(Commands).GetMethod(nameof(ExampleMethod))!.GetCustomAttribute<OnKeybindAttribute>();
-            //
-            // return attr.KeybindString;
+            OnKeybindAttribute attr = typeof(Commands).GetMethod(nameof(ExampleMethod))!.GetCustomAttribute<OnKeybindAttribute>();
+
+            return attr.KeybindString;
+        }
+
+        [OnKeybind("UP+RIGHT,UP,DOWN,DOWN,UP,UP")]
+        public static void ExampleMethod()
+        {
+            Graphics.FlashScreen();
         }
     }
 }

@@ -159,7 +159,7 @@ public class CommandRunner
             try
             {
                 object? invokationValue = attribute.Command.Invoke(appliedParameters);
-                PostCommandRunAction(attribute, invokationValue);
+                PostCommandRunAction?.Invoke(attribute, invokationValue);
 
                 result = ValueOrException<object?>.FromValue(invokationValue);
             }

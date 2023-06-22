@@ -29,13 +29,13 @@
 
     public sealed class MMConsoleKeymapConfig
     {
+        public string ScrollLinesUp = "pageup";
+        public string ScrollLinesDown = "pagedown";
         public string MoveCaretToBeginning = "_ctrl+up";
         public string MoveCaretToEnd = "_ctrl+down";
-        public string MoveCaretLeft = "left";
-        public string MoveCaretRight = "right";
-        public string MoveCaretLeftByWord = "_ctrl+left";
-        public string MoveCaretRightByWord = "_ctrl+right";
         public string RunCommand = "enter";
+        public string PasteText = "_ctrl+v";
+        public string CopySelection = "_ctrl+c";
     }
 
     public sealed class MMGeneralKeymapConfig
@@ -44,7 +44,7 @@
         public string ResetZoom = "_ctrl+d0";
         public string ZoomIn = "_ctrl+oemplus";
         public string ZoomOut = "_ctrl+oemminus";
-        public string ToggleMallardManager = "_ctrl+oemtilde";
+        public string ToggleMallardManager = "numpad1,numpad8";
     }
 
     public sealed class MMPagerKeymapConfig
@@ -57,11 +57,11 @@
 
     public sealed class MMSplitKeymapConfig
     {
-        public string ToggleEditMode = "_ctrl+E";
+        public string ToggleEditMode = "_ctrl+e";
     }
 
     public sealed class MMConfigKeymapConfig
     {
-        public string UseSecondarySliderStep = "_Shift";
+        public string UseSecondarySliderStep = "_shift";
     }
 }

@@ -63,24 +63,24 @@ namespace DuckGame
             
             // testing
 
-            foreach (string keybind in new[]
-                     {
-                         "numpad1,numpad2,numpad3,numpad4,numpad5",
-                         "numpad7,numpad9",
-                         "_ctrl+z",
-                         "MENUUP+MENURIGHT"
-                     })
-            {
-                AcrossTime.Do(keybind, 500.Milliseconds(), _ =>
-                {
-                    if (!IsActive(keybind))
-                        return;
-
-                    RebuiltMono.Draw(keybind, new Vec2(Layer.HUD.width / 2, Layer.HUD.height / 2),
-                        Color.Red,
-                        2f, 3, ContentAlignment.MiddleCenter);
-                });
-            }
+            // foreach (string keybind in new[]
+            //          {
+            //              "numpad1,numpad2,numpad3,numpad4,numpad5",
+            //              "numpad7,numpad9",
+            //              "_ctrl+z",
+            //              "MENUUP+MENURIGHT"
+            //          })
+            // {
+            //     AcrossTime.Do(keybind, 500.Milliseconds(), _ =>
+            //     {
+            //         if (!IsActive(keybind))
+            //             return;
+            //
+            //         RebuiltMono.Draw(keybind, new Vec2(Layer.HUD.width / 2, Layer.HUD.height / 2),
+            //             Color.Red,
+            //             2f, 3, ContentAlignment.MiddleCenter);
+            //     });
+            // }
         }
 
         private static void UpdateInputActivationReception()

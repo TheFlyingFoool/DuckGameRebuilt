@@ -15,22 +15,31 @@ namespace DuckGame.ConsoleInterface.Panes
         {
             base.Update();
             
-            if (Keyboard.control
-                && FocusedPane is not MMPagerPane)
+            if (FocusedPane is not MMPagerPane)
             {
-                if (Keyboard.Pressed(Keys.Tab)
-                    && Children.Count > 1)
+                if (Children.Count > 1)
                 {
-                    s_oldFocusPaneIndex = s_focusPaneIndex;
-                    s_focusPaneIndex++;
-                    s_focusPaneIndex %= Children.Count;
-                    OnFocusedPaneChange();
+                    if (OnKeybindAttribute.IsActive(MallardManager.Config.Keymap.Pager.CycleTabForward))
+                    {
+                        s_oldFocusPaneIndex = s_focusPaneIndex;
+                        s_focusPaneIndex++;
+                        s_focusPaneIndex %= Children.Count;
+                        OnFocusedPaneChange();
+                    }
+                    else if (OnKeybindAttribute.IsActive(MallardManager.Config.Keymap.Pager.CycleTabBackward))
+                    {
+                        s_oldFocusPaneIndex = s_focusPaneIndex;
+                        s_focusPaneIndex--;
+                        if (s_focusPaneIndex < 0)
+                            s_focusPaneIndex = Children.Count - 1;
+                        OnFocusedPaneChange();
+                    }
                 }
-                else if (Keyboard.Pressed(Keys.T))
+                else if (OnKeybindAttribute.IsActive(MallardManager.Config.Keymap.Pager.NewTab))
                 {
                     AddDefaultNewPane();
                 }
-                else if (Keyboard.Pressed(Keys.W))
+                else if (OnKeybindAttribute.IsActive(MallardManager.Config.Keymap.Pager.CloseTab))
                 {
                     RemovePane(FocusedPane);
                 }

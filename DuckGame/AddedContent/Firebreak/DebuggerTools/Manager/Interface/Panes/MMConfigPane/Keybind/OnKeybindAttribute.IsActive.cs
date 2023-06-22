@@ -60,6 +60,7 @@ namespace DuckGame
                 sequenceLowerLimit = lowestActivationTime;
             }
 
+            KeybindReceptionHandler.Flush();
             return true;
         }
 

@@ -95,20 +95,12 @@ namespace DuckGame.ConsoleInterface
                 OnOpen();
             }
             
-            if (Keyboard.control)
-            {
-                if (OnKeybindAttribute.IsActive(Config.Keymap.General.ZoomIn))
-                    Config.Zoom++;
-                else if (OnKeybindAttribute.IsActive(Config.Keymap.General.ZoomOut))
-                    Config.Zoom = Config.Zoom - 1 <= 0 ? Config.Zoom : Config.Zoom - 1;
-                else if (OnKeybindAttribute.IsActive(Config.Keymap.General.ResetZoom))
-                    Config.Zoom = 1f;
-
-                // if (OnKeybindAttribute.IsActive(Keys.OemOpenBrackets))
-                //     DisplayPane = new MMSplitPane(Orientation.Horizontal, DisplayPane, new MMConsolePane());
-                // else if (OnKeybindAttribute.IsActive(Keys.OemCloseBrackets))
-                //     DisplayPane = new MMSplitPane(Orientation.Vertical, DisplayPane, new MMConsolePane());
-            }
+            if (OnKeybindAttribute.IsActive(Config.Keymap.General.ZoomIn))
+                Config.Zoom++;
+            else if (OnKeybindAttribute.IsActive(Config.Keymap.General.ZoomOut))
+                Config.Zoom = Config.Zoom - 1 <= 0 ? Config.Zoom : Config.Zoom - 1;
+            else if (OnKeybindAttribute.IsActive(Config.Keymap.General.ResetZoom))
+                Config.Zoom = 1f;
         }
 
         [DrawingContext(DrawingLayer.Console, CustomID = "mmDraw")]

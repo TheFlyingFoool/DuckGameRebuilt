@@ -135,6 +135,26 @@ namespace DuckGame.ConsoleInterface.Panes
 
         private void HandleKeyboardInput()
         {
+            // keybinds
+
+            (string, Action)[] binds = {
+                (MallardManager.Config.Keymap.Console.ScrollLinesDown, ScrollLinesDown),
+                (MallardManager.Config.Keymap.Console.ScrollLinesUp, ScrollLinesUp),
+                (MallardManager.Config.Keymap.Console.RunCommand, InputEnter),
+                (MallardManager.Config.Keymap.Console.MoveCaretToEnd, MoveCaretToEnd),
+                (MallardManager.Config.Keymap.Console.MoveCaretToBeginning, MoveCaretToBeginning),
+                (MallardManager.Config.Keymap.Console.CopySelection, CopySelection),
+                (MallardManager.Config.Keymap.Console.PasteText, PasteText),
+            };
+
+            foreach ((string bind, Action method) in binds)
+            {
+                if (OnKeybindAttribute.IsActive(bind))
+                    method();
+            }
+
+            // rest
+            
             Microsoft.Xna.Framework.Input.Keys[] pressedKeys = Keyboard.KeyState.GetPressedKeys();
             foreach (Microsoft.Xna.Framework.Input.Keys key in pressedKeys)
             {
@@ -155,6 +175,7 @@ namespace DuckGame.ConsoleInterface.Panes
                 switch (key)
                 {
                     case Microsoft.Xna.Framework.Input.Keys.Escape:
+                    case Microsoft.Xna.Framework.Input.Keys.Enter:
                         break;
                     case Microsoft.Xna.Framework.Input.Keys.Space:
                         {
@@ -170,11 +191,6 @@ namespace DuckGame.ConsoleInterface.Panes
                             CaretIndex += tabWidth;
                             
                             OnUserInputChange(_userInput.ToString());
-                            break;
-                        }
-                    case Microsoft.Xna.Framework.Input.Keys.Enter:
-                        {
-                            InputEnter();
                             break;
                         }
                     case Microsoft.Xna.Framework.Input.Keys.Back:
@@ -224,18 +240,6 @@ namespace DuckGame.ConsoleInterface.Panes
                             SetCaretPosition(_userInput.Length);
                             break;
                         }
-                    case Microsoft.Xna.Framework.Input.Keys.PageUp:
-                        {
-                            if (_cameraYOffset > 0)
-                                _cameraYOffset--;
-                            break;
-                        }
-                    case Microsoft.Xna.Framework.Input.Keys.PageDown:
-                        {
-                            if (_cameraYOffset < Lines.Count - 1)
-                                _cameraYOffset++;
-                            break;
-                        }
                     case Microsoft.Xna.Framework.Input.Keys.Left:
                         {
                             MoveCaretLeft();
@@ -260,6 +264,18 @@ namespace DuckGame.ConsoleInterface.Panes
                         }
                 }
             }
+        }
+
+        private void ScrollLinesDown()
+        {
+            if (_cameraYOffset < Lines.Count - 1)
+                _cameraYOffset++;
+        }
+
+        private void ScrollLinesUp()
+        {
+            if (_cameraYOffset > 0)
+                _cameraYOffset--;
         }
 
         private void InputEnter()
@@ -371,21 +387,6 @@ namespace DuckGame.ConsoleInterface.Panes
         {
             switch (key)
             {
-                case Microsoft.Xna.Framework.Input.Keys.V:
-                {
-                    string clipboardText = SDL.SDL_GetClipboardText();
-                    
-                    _userInput.Insert(CaretIndex, clipboardText);
-                    CaretIndex += clipboardText.Length;
-                            
-                    OnUserInputChange(_userInput.ToString());
-                    break;
-                }
-                case Microsoft.Xna.Framework.Input.Keys.C:
-                {
-                    SDL.SDL_SetClipboardText(_userInputString);
-                    break;
-                }
                 case Microsoft.Xna.Framework.Input.Keys.Back:
                 {
                     InputBackspace(BiDirectionalWordBoundaryMovement.GetNextWord(_userInputString, CaretIndex, HorizontalDirection.Left).Length);
@@ -406,17 +407,32 @@ namespace DuckGame.ConsoleInterface.Panes
                     MoveCaretRight(BiDirectionalWordBoundaryMovement.GetNextWord(_userInputString, CaretIndex, HorizontalDirection.Right).Length);
                     break;
                 }
-                case Microsoft.Xna.Framework.Input.Keys.Up:
-                {
-                    SetCaretPosition(0);
-                    break;
-                }
-                case Microsoft.Xna.Framework.Input.Keys.Down:
-                {
-                    SetCaretPosition(_userInputString.Length);
-                    break;
-                }
             }
+        }
+
+        private void MoveCaretToEnd()
+        {
+            SetCaretPosition(_userInputString.Length);
+        }
+
+        private void MoveCaretToBeginning()
+        {
+            SetCaretPosition(0);
+        }
+
+        private void CopySelection()
+        {
+            SDL.SDL_SetClipboardText(_userInputString);
+        }
+
+        private void PasteText()
+        {
+            string clipboardText = SDL.SDL_GetClipboardText();
+
+            _userInput.Insert(CaretIndex, clipboardText);
+            CaretIndex += clipboardText.Length;
+
+            OnUserInputChange(_userInput.ToString());
         }
 
         private void OnUserInputChange(string newText)

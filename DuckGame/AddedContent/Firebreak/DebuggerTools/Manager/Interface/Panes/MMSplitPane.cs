@@ -18,7 +18,7 @@ namespace DuckGame.ConsoleInterface.Panes
         {
             base.Update();
             
-            if (Keyboard.control && Keyboard.Pressed(Keys.E))
+            if (OnKeybindAttribute.IsActive(MallardManager.Config.Keymap.Split.ToggleEditMode))
             {
                 EditMode ^= true;
                 return;
