@@ -180,10 +180,8 @@ namespace DuckGame
                 if (_team.capeTexture == null)
                     return;
                 _cape = new Cape(x, y, this);
+                if (_team.metadata != null) _cape.metadata = _team.metadata;
                 _cape.SetCapeTexture(_team.capeTexture);
-                if (_team.metadata == null)
-                    return;
-                _cape.metadata = _team.metadata;
             }
         }
 

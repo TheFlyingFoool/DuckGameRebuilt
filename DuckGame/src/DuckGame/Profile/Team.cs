@@ -848,6 +848,13 @@ namespace DuckGame
 
             [Metapixel(80, "Sticky Hat", "If this metapixel exists, the hat will not fall off when ragdolling.")]
             public MDBool StickyHat = new MDBool();
+            [Metapixel(81, "Cape Length", "Amount of segments the cape will have from 0 to 20 (Default 10)")]
+            public MDInt CapeLength = new MDInt
+            {
+                range = 24,
+                value = -1, //its -1 by default because dg automatically assigns a cape length -NiK0
+                allowNegative = false
+            };
 
             [Metapixel(100, "Randomize Parameter X", "If present, the previously defined metapixel value will have it's X value multiplied by a random normalized number between G and B each time it's used. This will generally only work with particles..")]
             public MDRandomizer RandomizeParameterX = new MDRandomizer

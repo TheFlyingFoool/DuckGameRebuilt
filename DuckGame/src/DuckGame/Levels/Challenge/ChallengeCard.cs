@@ -190,12 +190,35 @@ namespace DuckGame
             _fancyFont.maxWidth = 200;
             _fancyFont.alpha = num1;
             _fancyFont.xscale = _fancyFont.yscale = 0.75f;
-            _fancyFont.Draw(str2, this.x + 41f, y + 12f, c1, (Depth)1f);
+            _fancyFont.Draw(str2, this.x + 41f, y + 12f, c1, (Depth)0.8f);
             if (_dataAlpha <= 0.01f)
                 return;
             float num2 = _dataAlpha * num1;
-            Graphics.DrawLine(position + new Vec2(0f, 42f), position + new Vec2(258f, 42f), Color.White * num2, depth: (Depth)(0.8f + num1 * 0.04f));
-            Graphics.DrawLine(position + new Vec2(0f, 64f), position + new Vec2(258f, 64f), Color.White * num2, depth: (Depth)(0.8f + num1 * 0.04f));
+
+#if DEBUG
+            Graphics.DrawLine(position + new Vec2(0f, 42f), position + new Vec2(170f, 42f), Color.White * num2, depth: (Depth)(0.8f + num1 * 0.04f));
+            Graphics.DrawLine(position + new Vec2(0f, 64f), position + new Vec2(170, 64f), Color.White * num2, depth: (Depth)(0.8f + num1 * 0.04f));
+            Graphics.DrawRect(position + new Vec2(170, 34), position + new Vec2(270, 130), Color.White * num2, (Depth)(0.8f + num1 * 0.04f + 2), false);
+            Graphics.DrawRect(position + new Vec2(170, 34), position + new Vec2(270, 130), Color.Black, 0.91f , true);
+
+            for (int i = 0; i < 5; i++)
+            {
+                Color c = Color.White;
+                if (i == 0) c = Colors.Developer;
+                else if (i == 1) c = Colors.Platinum;
+                else if (i == 2) c = Colors.Gold;
+                else if (i == 3) c = Colors.Silver;
+                else if (i == 4) c = Colors.Bronze;
+
+                _fancyFont.Draw($"#{i + 1} player\n00:00:00", this.x + 184, y + 40 + 18 * i, c, (Depth)1f);
+                _fancyFont.Draw($"pfp", this.x + 170, y + 40 + 18 * i, Color.White, (Depth)1f);
+
+            }
+#else
+            Graphics.DrawLine(position + new Vec2(0f, 42f), position + new Vec2(260f, 42f), Color.White * num2, depth: (Depth)(0.8f + num1 * 0.04f));
+            Graphics.DrawLine(position + new Vec2(0f, 64f), position + new Vec2(260, 64f), Color.White * num2, depth: (Depth)(0.8f + num1 * 0.04f));
+#endif
+
             _font.alpha = num2;
             Color color = new Color(245, 165, 36);
             Color c2 = Colors.DGRed;
@@ -209,8 +232,8 @@ namespace DuckGame
                 c2 = Colors.Platinum;
             else if (_save.trophy == TrophyType.Developer)
                 c2 = Colors.Developer;
-            _fancyFont.Draw("|DGBLUE|" + _challenge.goal, this.x + 6f, y + 45f, Color.White, (Depth)1f);
-            _font.Draw(Chancy.GetChallengeBestString(_save, _challenge), this.x + 6f, (float)(y + 45f + 9f), c2, (Depth)1f);
+            _fancyFont.Draw("|DGBLUE|" + _challenge.goal, this.x + 4f, y + 45f, Color.White, (Depth)0.9f);
+            _font.Draw(Chancy.GetChallengeBestString(_save, _challenge), this.x + 4f, (float)(y + 45f + 9f), c2, (Depth)1f);
             bool flag1 = false;
             _medalNoRibbon.depth = (Depth)(0.8f + num1 * 0.04f);
             _medalNoRibbon.alpha = num2;
