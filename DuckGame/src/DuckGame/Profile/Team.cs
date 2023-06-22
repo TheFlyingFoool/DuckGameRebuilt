@@ -846,6 +846,9 @@ namespace DuckGame
             [Metapixel(71, "Mechanical Lips", "If this metapixel exists, the hat will have 'mechanical lips'.")]
             public MDBool MechanicalLips = new MDBool();
 
+            [Metapixel(80, "Sticky Hat", "If this metapixel exists, the hat will not fall off when ragdolling.")]
+            public MDBool StickyHat = new MDBool();
+
             [Metapixel(100, "Randomize Parameter X", "If present, the previously defined metapixel value will have it's X value multiplied by a random normalized number between G and B each time it's used. This will generally only work with particles..")]
             public MDRandomizer RandomizeParameterX = new MDRandomizer
             {
