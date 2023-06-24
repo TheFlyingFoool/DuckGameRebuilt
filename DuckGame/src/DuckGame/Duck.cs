@@ -1112,6 +1112,11 @@ namespace DuckGame
                     {
                         ExtraFondle(e, DuckNetwork.localConnection);
                     }
+                    if (e is TeamHat th && th.team != null && th.team.metadata != null && th.team.metadata.FadeOnDeath.value)
+                    {
+                        th.UnEquip();
+                        th._destroyed = true;
+                    }
                     e.hSpeed = hSpeed - (1f + NetRand.Float(2f));
                     e.vSpeed = vSpeed - NetRand.Float(1.5f);
                     ReturnItemToWorld(e);

@@ -26,13 +26,6 @@ namespace DuckGame
                 SaveAll(false);
 
             if (!LoadAll()) DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD CONFIG FIELDS");
-            if (!DGRSettings.newSaveFilePath)
-            {
-                SaveDirPath = DuckFile.oldSaveLocation + "DuckGame/" + SaveDirName;
-                if (!LoadAll()) DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD CONFIG FIELDS");
-                SaveDirPath = DuckFile.newSaveLocation + "DuckGame/" + SaveDirName;
-                DGRSettings.newSaveFilePath = true;
-            }
 
             MonoMain.OnGameExit += SaveAll;
         }

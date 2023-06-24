@@ -215,8 +215,8 @@ namespace DuckGame
 
             }
 #else
-            Graphics.DrawLine(position + new Vec2(0f, 42f), position + new Vec2(260f, 42f), Color.White * num2, depth: (Depth)(0.8f + num1 * 0.04f));
-            Graphics.DrawLine(position + new Vec2(0f, 64f), position + new Vec2(260, 64f), Color.White * num2, depth: (Depth)(0.8f + num1 * 0.04f));
+            Graphics.DrawLine(position + new Vec2(0f, 42f), position + new Vec2(258, 42f), Color.White * num2, depth: (Depth)(0.8f + num1 * 0.04f));
+            Graphics.DrawLine(position + new Vec2(0f, 64f), position + new Vec2(258, 64f), Color.White * num2, depth: (Depth)(0.8f + num1 * 0.04f));
 #endif
 
             _font.alpha = num2;
