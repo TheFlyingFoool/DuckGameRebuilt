@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 
 namespace DuckGame.ConsoleInterface.Panes
 {
@@ -19,6 +20,7 @@ namespace DuckGame.ConsoleInterface.Panes
                 public List<Attribute> Attributes = new();
                 public bool IsHeader = false;
                 public List<Element> Elements = new();
+                public FieldInfo ItemFieldInfo;
 
                 public AdvancedConfigItem InitializeElements()
                 {
@@ -50,6 +52,26 @@ namespace DuckGame.ConsoleInterface.Panes
                                 () => Convert.ToDouble(ValueGetter()),
                                 newValue => ValueSetter(newValue)
                             ) { SecondaryStep = sliderAttribute.SecondaryStep });
+                        }
+                        
+                        // text box
+                    }
+                    else if (Type == typeof(string))
+                    {
+                        if (Attributes.FirstOf<ACKeybindAttribute>() is { } keybindAttribute)
+                        {
+                            // button that listens for keybind and displays it
+                            Elements.Add(new Button(null));
+                            keybindAttribute.InitializeMembers(ItemFieldInfo, ItemFieldInfo.DeclaringType.GetTypeInfo());
+                            Elements.Add(new Label(keybindAttribute.KeybindString));
+                        }
+                        else if (Attributes.FirstOf<ACFileAttribute>() is { } fileAttribute)
+                        {
+                            // button that opens file explorer
+                        }
+                        else if (Attributes.FirstOf<ACColorAttribute>() is { } colorAttribute)
+                        {
+                            // textbox and color display
                         }
                         
                         // text box

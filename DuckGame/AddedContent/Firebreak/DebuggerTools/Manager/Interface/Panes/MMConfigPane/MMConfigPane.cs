@@ -35,7 +35,8 @@ namespace DuckGame.ConsoleInterface.Panes
                         ValueGetter = () => configItem.GetValue(instance),
                         ValueSetter = newValue => configItem.SetValue(instance, Convert.ChangeType(newValue, configItem.FieldType)),
                         Attributes = configItem.GetCustomAttributes().Where(x => x is not ACHeaderAttribute).ToList(),
-                        IsHeader = configItem.GetCustomAttribute<ACHeaderAttribute>() != null
+                        IsHeader = configItem.GetCustomAttribute<ACHeaderAttribute>() != null,
+                        ItemFieldInfo = configItem
                     }.InitializeElements());
                 }
                 

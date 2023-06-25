@@ -307,7 +307,9 @@
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Panes\MMConfigPane\Keybind\OnKeybindAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Panes\MMConfigPane\Keybind\OnKeybindAttribute.IsActive.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Panes\MMConfigPane\MMConfigPane.cs" />
+    <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Panes\MMConfigPane\UI\Button.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Panes\MMConfigPane\UI\Checkbox.cs" />
+    <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Panes\MMConfigPane\UI\Label.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Panes\MMConfigPane\UI\Slider.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Panes\MMConfigPane\UI\UI.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Panes\MMParentPane.cs" />
