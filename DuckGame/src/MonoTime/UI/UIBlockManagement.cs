@@ -117,11 +117,7 @@ namespace DuckGame
                     }
                 }
                 if (Input.Pressed(Triggers.Select))
-                {
-                    Steam.OverlayOpenURL("http://steamcommunity.com/profiles/" + items[_selection].Key.ToString());
-                    if(Program.IsLinuxD)
-                        SDL.SDL_SetClipboardText("http://steamcommunity.com/profiles/" + items[_selection].Key.ToString());
-                }
+                    AddedContent.othello7.HelperMethods.OpenURL("http://steamcommunity.com/profiles/" + items[_selection].Key.ToString());
                 if (Input.Pressed(Triggers.Cancel))
                 {
                     if (_openOnClose != null)

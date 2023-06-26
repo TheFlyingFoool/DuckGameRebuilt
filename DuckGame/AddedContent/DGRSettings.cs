@@ -279,5 +279,8 @@ namespace DuckGame
 
         [AutoConfigField]
         public static bool EditorLevelName = true;
-    }
+
+        [AutoConfigField]
+        public static bool OpenURLsInBrowser = false;
+}
 }

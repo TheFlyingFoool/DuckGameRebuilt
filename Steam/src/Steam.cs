@@ -281,8 +281,6 @@ public class Steam : IDisposable {
     }
 
     public static unsafe void OverlayOpenURL(string url) {
-        //I would want to copy to clipboard here, but SDL seems unavailable from Steam.cs :(  -othello7
-        //SDL.SDL_SetClipboardText("bleeeeh");
         if (!_initialized)
             return;
         SteamFriends.ActivateGameOverlayToWebPage(url);

@@ -56,7 +56,7 @@ namespace DuckGame
         public static string GameDirectory;
         public static string FileName;
         public static string FilePath;
-        public static bool IsLinuxD;
+        public static bool IsLinuxD; //new better system
         public static bool intro = false;
         public static bool testServer = false;
         public static Main main;
@@ -70,7 +70,7 @@ namespace DuckGame
         public static string steamInitializeError = "";
         public static int steamBuildID = 0;
         //private const uint WM_CLOSE = 16;
-        public static bool isLinux = false;
+        public static bool isLinux = false; //old system to keep wine support
         public static string wineVersion = null;
         private static List<Func<string>> _extraExceptionDetailsMinimal = new List<Func<string>>()
         {

@@ -2071,6 +2071,7 @@
     <Compile Include="src\XnaToFna\__NetworkMachine__.cs" />
     <Compile Include="src\XnaToFna\__NetworkSession__.cs" />
     <Compile Include="src\XnaToFna\__PropertyDictionary__.cs" />
+    <Compile Include="AddedContent\othello7\HelperMethods.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -2117,6 +2118,9 @@
       <Project>{d63ad3fc-dcf0-4db6-b944-5d828a10ccb8}</Project>
       <Name>Steam</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="AddedContent\othello7\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">
