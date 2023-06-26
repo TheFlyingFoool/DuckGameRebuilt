@@ -150,61 +150,73 @@ namespace DuckGame
             }
             return vgmHeader;
         }
-
-        private bool OpenVGMFile(string fileName)
+        //stuff -NiK0
+        bool OpenVGMFile(string fileName)
         {
-            bool flag = fileName.Contains(".vgz");
-            FileStream input = File.Open(fileName, FileMode.Open);
-            uint num1;
-            if (flag)
+            bool zipped = fileName.Contains(".vgz");
+
+            //Read size
+            uint FileSize = 0;
+            FileStream vgmFile = File.Open(fileName, FileMode.Open);
+            if (zipped)
             {
-                input.Position = input.Length - 4L;
-                byte[] buffer = new byte[4];
-                input.Read(buffer, 0, 4);
-                num1 = BitConverter.ToUInt32(buffer, 0);
-                input.Position = 0L;
-                _vgmReader = new BinaryReader(new GZipStream(input, CompressionMode.Decompress));
+                vgmFile.Position = vgmFile.Length - 4;
+                byte[] b = new byte[4];
+                vgmFile.Read(b, 0, 4);
+                uint fileSize = BitConverter.ToUInt32(b, 0);
+                FileSize = fileSize;
+                vgmFile.Position = 0;
+
+                GZipStream stream = new GZipStream(vgmFile, CompressionMode.Decompress);
+                _vgmReader = new BinaryReader(stream);
             }
             else
             {
-                num1 = (uint)input.Length;
-                _vgmReader = new BinaryReader(input);
+                FileSize = (uint)vgmFile.Length;
+                _vgmReader = new BinaryReader(vgmFile);
             }
-            if (_vgmReader.ReadUInt32() != 544040790U)
+
+            uint fccHeader;
+            fccHeader = (uint)_vgmReader.ReadUInt32();
+            if (fccHeader != FCC_VGM)
                 return false;
-            _VGMDataLen = num1;
+
+            _VGMDataLen = FileSize;
             _VGMHead = ReadVGMHeader(_vgmReader);
-            if (flag)
+
+            if (zipped)
             {
                 _vgmReader.Close();
-                input = File.Open(fileName, FileMode.Open);
-                _vgmReader = new BinaryReader(new GZipStream(input, CompressionMode.Decompress));
+                vgmFile = File.Open(fileName, FileMode.Open);
+                GZipStream stream = new GZipStream(vgmFile, CompressionMode.Decompress);
+                _vgmReader = new BinaryReader(stream);
             }
             else
-                _vgmReader.BaseStream.Seek(0L, SeekOrigin.Begin);
-            int count = (int)_VGMHead.lngDataOffset;
-            switch (count)
-            {
-                case 0:
-                case 12:
-                    count = 64;
-                    break;
-            }
-            _VGMDataOffset = count;
-            _vgmReader.ReadBytes(count);
-            _VGMData = _vgmReader.ReadBytes((int)(num1 - count));
+                _vgmReader.BaseStream.Seek(0, SeekOrigin.Begin);
+
+            //Figure out header offset
+            int offset = (int)_VGMHead.lngDataOffset;
+            if (offset == 0 || offset == 0x0000000C)
+                offset = 0x40;
+            _VGMDataOffset = offset;
+
+            _vgmReader.ReadBytes(offset);
+            _VGMData = _vgmReader.ReadBytes((int)(FileSize - offset));
             _vgmReader = new BinaryReader(new MemoryStream(_VGMData));
-            if ((byte)_vgmReader.PeekChar() == 103)
+
+            if ((byte)_vgmReader.PeekChar() == 0x67)
             {
-                int num2 = _vgmReader.ReadByte();
-                if ((byte)_vgmReader.PeekChar() == 102)
+                _vgmReader.ReadByte();
+                if ((byte)_vgmReader.PeekChar() == 0x66)
                 {
-                    int num3 = _vgmReader.ReadByte();
-                    int num4 = _vgmReader.ReadByte();
-                    _DACData = _vgmReader.ReadBytes((int)_vgmReader.ReadUInt32());
+                    _vgmReader.ReadByte();
+                    byte type = _vgmReader.ReadByte();
+                    uint size = _vgmReader.ReadUInt32();
+                    _DACData = _vgmReader.ReadBytes((int)size);
                 }
             }
-            input.Close();
+
+            vgmFile.Close();
             return true;
         }
 
@@ -295,6 +307,8 @@ namespace DuckGame
                         else if (num3 >= 128 && num3 <= 143)
                         {
                             _wait = num3 & 15;
+
+                            //DAC DATA IS NULL
                             _chip.WritePort0(42, _DACData[_DACOffset]);
                             ++_DACOffset;
                             if (_wait != 0)

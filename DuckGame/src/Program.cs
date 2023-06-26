@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Program
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using AddedContent.Firebreak;
+﻿using AddedContent.Firebreak;
 using DbMon.NET;
 using DGWindows;
 using Microsoft.Xna.Framework;
@@ -44,7 +37,7 @@ namespace DuckGame
 #endif
         public static readonly bool HasInternet = Internet.IsAvailable();
         // this should be formatted like X.X.X where each X is a number
-        public static string CURRENT_VERSION_ID = "1.0.14";
+        public static string CURRENT_VERSION_ID = "1.0.16";
 
         // do change this you know what you're doing -NiK0
         public static string CURRENT_VERSION_ID_FORMATTED = $"v{CURRENT_VERSION_ID}-beta";
