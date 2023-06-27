@@ -12,8 +12,6 @@ namespace DuckGame
         [AutoConfigField]
         public static List<byte> room3 = new List<byte>();*/
 
-        [AutoConfigField]
-        public static bool newSaveFilePath = false;
 
         [AutoConfigField]
         public static List<string> favoriteHats = new List<string>();
@@ -279,5 +277,8 @@ namespace DuckGame
 
         [AutoConfigField]
         public static bool EditorLevelName = true;
-    }
+
+        [AutoConfigField]
+        public static bool OpenURLsInBrowser = false;
+}
 }

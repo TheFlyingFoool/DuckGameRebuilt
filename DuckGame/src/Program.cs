@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Program
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using AddedContent.Firebreak;
+﻿using AddedContent.Firebreak;
 using DbMon.NET;
 using DGWindows;
 using Microsoft.Xna.Framework;
@@ -44,7 +37,7 @@ namespace DuckGame
 #endif
         public static readonly bool HasInternet = Internet.IsAvailable();
         // this should be formatted like X.X.X where each X is a number
-        public const string CURRENT_VERSION_ID = "1.0.14";
+        public const string CURRENT_VERSION_ID = "1.0.16";
 
         // do change this you know what you're doing -NiK0
         public const string CURRENT_VERSION_ID_FORMATTED = $"v{CURRENT_VERSION_ID}-beta";
@@ -56,7 +49,7 @@ namespace DuckGame
         public static string GameDirectory;
         public static string FileName;
         public static string FilePath;
-        public static bool IsLinuxD;
+        public static bool IsLinuxD; //new better system
         public static bool intro = false;
         public static bool testServer = false;
         public static Main main;
@@ -70,7 +63,7 @@ namespace DuckGame
         public static string steamInitializeError = "";
         public static int steamBuildID = 0;
         //private const uint WM_CLOSE = 16;
-        public static bool isLinux = false;
+        public static bool isLinux = false; //old system to keep wine support
         public static string wineVersion = null;
         private static List<Func<string>> _extraExceptionDetailsMinimal = new List<Func<string>>()
         {
@@ -96,6 +89,8 @@ namespace DuckGame
         public static Vec2 StartPos = Vec2.Zero;
         public static string gitVersion = "N/A";
         public static bool lateCrash;
+        public static ProgressValue AutoUpdaterCompletionProgress = new(0, 1, 0, 7);
+        public static string AutoUpdaterProgressMessage = "";
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
         public static void Main(string[] args)
@@ -188,10 +183,10 @@ namespace DuckGame
             int tries = 10;
             int p = (int)Environment.OSVersion.Platform;
             IsLinuxD = (p == 4) || (p == 6) || (p == 128);
-            if (!IS_DEV_BUILD)
-            {
-                AutoUpdaterNew();
-            }
+            // if (!IS_DEV_BUILD)
+            // {
+            //     AutoUpdaterNew();
+            // }
             if (fullstop)
             {
                 return false;
@@ -451,6 +446,9 @@ namespace DuckGame
                     case "-firebreak":
                     case "-unlockall":
                         MonoMain.firebreak = true;
+                        break;
+                    case "-norebuiltupdates":
+                        MonoMain.IgnoreDGRUpdates = true;
                         break;
                     case "-gay":
                         gay = true;
@@ -1103,73 +1101,93 @@ namespace DuckGame
             return strings;
         }
 
-        public static void AutoUpdaterNew()
+        public const string GITHUB_RELEASE_URL = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest";
+        
+        public static void HandleAutoUpdater()
         {
-            string dgrExePath = Assembly.GetEntryAssembly()!.Location;
-            string parentDirectoryPath = Path.GetDirectoryName(dgrExePath);
-            string zipPath = parentDirectoryPath + "/DuckGameRebuilt.zip";
-            try
-            {
-                foreach (string filePath in Directory.GetFiles(parentDirectoryPath, "*.tmp")) // deletes .tmp files from past updating sequence 
-                {
-                    if (File.Exists(filePath))
-                        File.Delete(filePath);
-                }
-                if (File.Exists(zipPath))
-                    File.Delete(zipPath);
-            }
-            catch
-            { }
-            if (!HasInternet)
-            {
-                DevConsole.Log("AutoUpdater check failed: No Internet");
-                return;
-            }
-            const string url = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest";
-            WebRequest myWebRequest = WebRequest.Create(url);
-            WebResponse myWebResponse = myWebRequest.GetResponse();
-
-            string latestVersionID = myWebResponse.ResponseUri.OriginalString.Split('/').Last();
-            DGVersion LatestPublicVersion = new DGVersion(latestVersionID);
-            DGVersion CurrentVersion = new DGVersion(CURRENT_VERSION_ID);
-
-            if (LatestPublicVersion == CurrentVersion)
-            {
-                DevConsole.Log($"Running latest DGR version: {CURRENT_VERSION_ID_FORMATTED}");
-                return;
-            }
-            else if (CurrentVersion > LatestPublicVersion)
-            {
-                DevConsole.Log($"Dam Looks like you got an even newer version that release: {CURRENT_VERSION_ID_FORMATTED}");
-                return;
-            }
-            const string latestDgrReleaseUrl = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest/download/DuckGameRebuilt.zip";
-            FileStream dgrZipStream = DownloadFile(latestDgrReleaseUrl, zipPath);
-            using ZipArchive archive = new(dgrZipStream);
-            archive.ExtractToDirectoryOverride(parentDirectoryPath);
-            string[] args = Environment.GetCommandLineArgs();
-            string argstring = "";
-            for (int i = 1; i < args.Length; i++)
-            {
-                argstring += args[i] + " ";
-            }
-            Process.Start(dgrExePath, argstring);
-            // tells dg to kill itself
-            fullstop = true;
-            Environment.Exit(0); // to kill it self faster :smile:
-        }
-
-        /// Fetches the latest DGR release from github and returns it's ID
-        public static async Task<string> GetLatestReleaseVersionID()
-        {
-            const string url = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest";
-            WebRequest myWebRequest = WebRequest.Create(url);
-            WebResponse myWebResponse = await myWebRequest.GetResponseAsync();
+            const string dgrZipName = @"DuckGameRebuilt.zip";
             
-            string lastestversion = myWebResponse.ResponseUri.OriginalString.Split('/').Last();
-            return lastestversion;
+            UpdateAutoUpdaterProgress(1);
+            
+            string dgrExePath = typeof(ItemBox).Assembly.Location;
+            string parentDirectoryPath = Path.GetDirectoryName(dgrExePath)!;
+            string zipPath = parentDirectoryPath + $"/{dgrZipName}";
+            
+            UpdateAutoUpdaterProgress(2);
+            
+            foreach (string filePath in Directory.GetFiles(parentDirectoryPath, "*.tmp")) // deletes .tmp files from past updating sequence 
+            {
+                if (File.Exists(filePath))
+                    File.Delete(filePath);
+            }
+            
+            if (File.Exists(zipPath))
+                File.Delete(zipPath);
+            
+            UpdateAutoUpdaterProgress(3);
+            
+            if (!Internet.IsAvailable())
+            {
+                throw new WebException("No internet for AutoUpdater");
+            }
+
+            UpdateAutoUpdaterProgress(4);
+            
+            if (!CheckForNewVersion(out DGVersion _))
+                return;
+            
+            UpdateAutoUpdaterProgress(5);
+            
+            FileStream dgrZipStream = DownloadFile(GITHUB_RELEASE_URL + "/download/" + dgrZipName, zipPath);
+            
+            UpdateAutoUpdaterProgress(6);
+            
+            using ZipArchive archive = new(dgrZipStream);
+            archive.ExtractToDirectory(parentDirectoryPath);
+            
+            UpdateAutoUpdaterProgress(7);
+            
+            Thread.Sleep(500); // dramatic pause
+            Process.Start(dgrExePath, Environment.CommandLine);
+            Process.GetCurrentProcess().Kill();
         }
-        public static void ExtractToDirectoryOverride(this ZipArchive archive, string destinationDirectoryName)
+
+        private static void UpdateAutoUpdaterProgress(int step)
+        {
+            AutoUpdaterProgressMessage = step switch
+            {
+                1 => "Finding game file path",
+                2 => "Deleting temporary files",
+                3 => "Checking internet connection",
+                4 => "Checking for new version",
+                5 => "Downloading build files",
+                6 => "Installing",
+                7 => "Restarting Duck Game",
+                _ => ""
+            };
+
+            AutoUpdaterCompletionProgress.Value = step;
+        }
+
+        public static DGVersion GetLatestReleaseVersion()
+        {
+            WebRequest webRequest = WebRequest.Create(GITHUB_RELEASE_URL);
+            WebResponse response = webRequest.GetResponse();
+            
+            string lastestversionId = response.ResponseUri.OriginalString.Split('/').Last();
+            return new DGVersion(lastestversionId);
+        }
+        
+        /// <returns>True if a newer release version exists</returns>
+        public static bool CheckForNewVersion(out DGVersion version)
+        {
+            version = GetLatestReleaseVersion();
+            DGVersion currentVersion = new(CURRENT_VERSION_ID);
+
+            return currentVersion < version;
+        }
+        
+        public static void ExtractToDirectory(this ZipArchive archive, string destinationDirectoryName)
         {
             DirectoryInfo di = Directory.CreateDirectory(destinationDirectoryName);
             string destinationDirectoryFullPath = di.FullName;

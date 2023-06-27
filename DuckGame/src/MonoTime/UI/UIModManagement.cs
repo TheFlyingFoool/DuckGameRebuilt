@@ -5,6 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using SDL2;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -154,7 +155,7 @@ namespace DuckGame
         {
             _editModMenu.Close();
             Open();
-            Steam.OverlayOpenURL("http://steamcommunity.com/sharedfiles/filedetails/?id=" + _selectedMod.configuration.workshopID.ToString());
+            AddedContent.othello7.HelperMethods.OpenURL("http://steamcommunity.com/sharedfiles/filedetails/?id=" + _selectedMod.configuration.workshopID.ToString());
         }
 
         private static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
@@ -377,7 +378,7 @@ namespace DuckGame
                             }
                             else if (_transferItem.finishedProcessing)
                             {
-                                Steam.OverlayOpenURL("http://steamcommunity.com/sharedfiles/filedetails/?id=" + _transferItem.id.ToString());
+                                AddedContent.othello7.HelperMethods.OpenURL("http://steamcommunity.com/sharedfiles/filedetails/?id=" + _transferItem.id.ToString());
                                 Directory.Delete(DuckFile.workshopDirectory + _transferItem.id.ToString() + "/", true);
                                 _transferItem.ResetProcessing();
                                 _transferItem = null;
@@ -515,7 +516,7 @@ namespace DuckGame
                                         new UIMenuActionOpenMenu(this, _editModMenu).Activate();
                                         return;
                                     }
-                                    Steam.OverlayOpenURL("http://steamcommunity.com/workshop/browse/?appid=312530&searchtext=&childpublishedfileid=0&browsesort=trend&section=readytouseitems&requiredtags%5B%5D=Mod");
+                                    AddedContent.othello7.HelperMethods.OpenURL("http://steamcommunity.com/workshop/browse/?appid=312530&searchtext=&childpublishedfileid=0&browsesort=trend&section=readytouseitems&requiredtags%5B%5D=Mod");
                                 }
                             }
                         }

@@ -39,8 +39,9 @@ namespace DuckGame
             return !new ProgressValue((startTime + duration).Ticks, endTime.Ticks / startTime.Ticks, startTime.Ticks, endTime.Ticks);
         }
 
-        public string GenerateBar(int characterCount = 30, char filled = '#', char empty = '-')
+        public string GenerateBar(int characterCount = 30, char filled = '#', char empty = '-', Func<string, string, string>? formatFunction = null)
         {
+            formatFunction ??= (done, left) => $"{done}{left}";
             Value = ~this;
 
             double fillPercentage = NormalizedValue * characterCount;
@@ -48,7 +49,7 @@ namespace DuckGame
             string whiteBar = new(filled, (int)fillPercentage);
             string blackBar = new(empty, (int)(characterCount - fillPercentage));
 
-            string fullBar = $"{whiteBar}{blackBar}";
+            string fullBar = formatFunction(whiteBar, blackBar);
             fullBar = fullBar.Length == characterCount - 1
                 ? fullBar + empty
                 : fullBar;

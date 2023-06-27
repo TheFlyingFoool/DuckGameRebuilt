@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.TeamHat
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
@@ -180,10 +173,8 @@ namespace DuckGame
                 if (_team.capeTexture == null)
                     return;
                 _cape = new Cape(x, y, this);
+                if (_team.metadata != null) _cape.metadata = _team.metadata;
                 _cape.SetCapeTexture(_team.capeTexture);
-                if (_team.metadata == null)
-                    return;
-                _cape.metadata = _team.metadata;
             }
         }
 
@@ -198,6 +189,15 @@ namespace DuckGame
         {
             if (_cape != null && _cape.level == null)
                 Level.Add(_cape);
+            if (team != null && team.metadata != null)
+            {
+                bouncy = team.metadata.Bouncyness.value; //YUH 
+                if (team.metadata.Roll.value && isServerForObject)
+                {
+                    if (grounded) angleDegrees += hSpeed * 3;
+                    else angleDegrees += hSpeed * 2;
+                }
+            }
             if (Network.isActive)
             {
                 if (_team != null && _team.filter != _filter)

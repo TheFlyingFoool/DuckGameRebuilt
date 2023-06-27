@@ -466,7 +466,11 @@ namespace DuckGame
             {
                 dgrDescription = "Reloads all hats (OFFLINE ONLY, MIGHT REMOVE MODDED HATS, F6 QUICK RELOAD, F5 RELOADS CURRENTLY WORN ONE)"
             });
-            
+            menu.Add(new UIMenuItemToggle("Open URLs in Browser", field: new FieldBinding(dGRSettings, "OpenURLsInBrowser"))
+            {
+                dgrDescription = "URLs will open in your web browser instead of the Steam Overlay."
+            });
+
 
             if (Program.IS_DEV_BUILD)
             {

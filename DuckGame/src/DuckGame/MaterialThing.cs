@@ -348,9 +348,10 @@ namespace DuckGame
 
         public void NetworkDestroy() => OnDestroy(new DTImpact(this));
 
+        public bool indestructible;
         public virtual bool Destroy(DestroyType type = null)
         {
-            if (!_destroyed)
+            if (!_destroyed && !indestructible)
             {
                 _destroyed = OnDestroy(type);
                 if (isServerForObject && (_destroyed || _sendDestroyMessage && !_sentDestroyMessage) && isStateObject)

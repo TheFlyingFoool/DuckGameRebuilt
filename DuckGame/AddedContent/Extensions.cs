@@ -7,11 +7,21 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Reflection.Emit;
+using System.Diagnostics;
+using System.Web.UI.WebControls;
 
 namespace DuckGame
 {
     public static class Extensions
     {
+        [DevConsoleCommand(Name = "playvgm")]
+        public static void PlayVGM()
+        {
+            VGMSong vs = new VGMSong(DuckFile.contentDirectory + "/Audio/test.vgm");
+            vs.Play();
+            vs.looped = false;
+        }
+
         static Type PatchProcessorT;
         static MethodInfo GetPatchInfoM;
         static FieldInfo DynOwner;

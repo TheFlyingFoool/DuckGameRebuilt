@@ -139,10 +139,9 @@ namespace DuckGame
                 }
                 idx++;
             }
-            if (_trail)
-            {
-                maxLength = 16;
-            }
+
+            if (_trail && !overrideCapeLength) maxLength = 16;
+
             while (capePeices.Count > maxLength + 1 && capePeices.Count > 0)
             {
                 capePeices.RemoveAt(0);
@@ -163,13 +162,22 @@ namespace DuckGame
             }
         }
 
+        public bool overrideCapeLength;
         public void SetCapeTexture(Texture2D tex)
         {
             _capeTexture = tex;
-            maxLength = _capeTexture.height / 2 - 6;
-            if (halfFlag)
+            if (metadata.CapeLength.value != -1)
             {
-                maxLength = (int)(_capeTexture.width * 0.28f) - 6;
+                overrideCapeLength = true;
+                maxLength = Maths.Clamp(metadata.CapeLength.value, 1, 24);
+            }
+            else
+            {
+                maxLength = _capeTexture.height / 2 - 6;
+                if (halfFlag)
+                {
+                    maxLength = (int)(_capeTexture.width * 0.28f) - 6;
+                }
             }
         }
 
