@@ -426,14 +426,6 @@ namespace DuckGame
             {
                 dgrDescription = "Toggles discord rich presence displaying the current level, if you're in the editor, etc\n(May take a few seconds to connect)"
             });
-            menu.Add(new UIMenuItemToggle("Menu Mouse", field: new FieldBinding(dGRSettings, "MenuMouse"))
-            {
-                dgrDescription = "Toggles the menu mouse"
-            });
-            menu.Add(new UIMenuItemToggle("Dubber Speed", field: new FieldBinding(dGRSettings, "dubberspeed"))
-            {
-                dgrDescription = "For true vim users, adds keybinds from 1-9 for faster menu browsing"
-            });
             menu.Add(new UIMenuItemNumber("Start in", field: new FieldBinding(dGRSettings, "StartIn", 0, 3), valStrings: new List<string>
             {
                 "TITLE",
@@ -462,7 +454,7 @@ namespace DuckGame
             {
                 dgrDescription = "Allows for teams with custom hats that have the same name (HOST ONLY)"
             });
-            menu.Add(new UIMenuItemToggle("Remember Match Settings", field: new FieldBinding(dGRSettings, "RememberMatchSettings"))
+            menu.Add(new UIMenuItemToggle("Keep Match Settings", field: new FieldBinding(dGRSettings, "RememberMatchSettings"))
             {
                 dgrDescription = "When starting an online game, match settings will automatically be set to the last match settings you had"
             });
@@ -587,6 +579,15 @@ namespace DuckGame
             menu.Add(new UIMenuItemToggle("In-Game Lobby Name", field: new FieldBinding(dGRSettings, "LobbyNameOnPause"))
             {
                 dgrDescription = "Displays lobby name on pause screen (not supporting LAN lobbies)"
+            });
+
+            menu.Add(new UIMenuItemToggle("Menu Mouse", field: new FieldBinding(dGRSettings, "MenuMouse"))
+            {
+                dgrDescription = "Toggles the menu mouse"
+            });
+            menu.Add(new UIMenuItemToggle("Dubber Speed", field: new FieldBinding(dGRSettings, "dubberspeed"))
+            {
+                dgrDescription = "For true vim users, adds keybinds from 1-9 for faster menu browsing"
             });
 
             menu.Add(new UIText(" ", Color.White));

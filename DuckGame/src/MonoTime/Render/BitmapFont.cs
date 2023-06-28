@@ -12,6 +12,7 @@ namespace DuckGame
 {
     public class BitmapFont : Transform
     {
+        public float ySpacing = 0;
         private SpriteMap _texture;
         public static SpriteMap _japaneseCharacters;
         public int charcolorindex;
@@ -722,7 +723,7 @@ namespace DuckGame
                     }
                     if (text[_letterIndex] == '\n')
                     {
-                        num1 += _texture.height * scale.y;
+                        num1 += _texture.height * scale.y + ySpacing;
                         num2 = 0f;
                     }
                     else
