@@ -12,6 +12,19 @@ namespace DuckGame
         [AutoConfigField]
         public static List<byte> room3 = new List<byte>();*/
 
+        public static BitBuffer LastMatchSettings = new BitBuffer();
+        [AutoConfigField]
+        public static byte[] LMatchSetSave //scuffed i know, fuck you -NiK0
+        {
+            get
+            {
+                return LastMatchSettings.buffer;
+            }
+            set
+            {
+                LastMatchSettings = new BitBuffer(value);
+            }
+        }
 
         [AutoConfigField]
         public static List<string> favoriteHats = new List<string>();
@@ -116,6 +129,9 @@ namespace DuckGame
         }
         [AutoConfigField]
         public static bool IgnoreLevRestrictions = false;
+
+        [AutoConfigField]
+        public static bool RememberMatchSettings = true;
 
         [AutoConfigField]
         public static bool CustomHatTeams = false;

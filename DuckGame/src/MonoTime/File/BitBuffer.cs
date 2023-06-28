@@ -15,7 +15,7 @@ namespace DuckGame
     public class BitBuffer
     {
         private static int[] _maxMasks;
-        private byte[] _buffer = new byte[64];
+        public byte[] _buffer = new byte[64];
         private bool _dirty;
         private int _offsetPosition;
         private int _endPosition;
