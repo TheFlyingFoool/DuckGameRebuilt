@@ -1271,6 +1271,8 @@ namespace DuckGame
 
         public static string TranslateMessage(Exception exception)
         {
+	    if(IsLinuxD)
+		return "aaaAAA";
             Assembly a = exception.GetType().Assembly;
             ResourceManager rm = new ResourceManager(a.GetName().Name, a);
             CultureInfo culture = Thread.CurrentThread.CurrentCulture.Equals(CultureInfo.InvariantCulture) ? CultureInfo.CurrentUICulture : CultureInfo.CurrentCulture;
