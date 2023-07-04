@@ -8,6 +8,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Threading;
 
 namespace DuckGame
 {
@@ -75,6 +77,7 @@ namespace DuckGame
         private UIMenu _steamWarningMessage;
         private UIComponent _pauseGroup;
         private UIMenu _mainPauseMenu;
+        private UIMenu _updaterPromptMenu;
         private MenuBoolean _enterCreditsMenuBool = new MenuBoolean();
         private UIMenu _betaMenu;
         private UIMenu _cloudConfigMenu;
@@ -84,6 +87,8 @@ namespace DuckGame
         private UIMenu _blockMenu;
         private UIMenu _modConfigMenu;
         private UICloudManagement _cloudManagerMenu;
+        private DGVersion _latestRebuiltVersion;
+        private bool _shouldUpdateRebuilt;
         private bool _enterEditor;
         private bool _enterCredits;
         private bool _enterArcade;
@@ -108,6 +113,7 @@ namespace DuckGame
         private bool quittingCredits;
         private bool showedNewVersionStartup;
         private bool showedModsDisabled;
+
         // private int time;
         //  private static bool _showedSteamFailMessage = false;
 
@@ -151,6 +157,11 @@ namespace DuckGame
 
         public override void Initialize()
         {
+            #if AutoUpdater
+            if (!MonoMain.IgnoreDGRUpdates && Program.CheckForNewVersion(out _latestRebuiltVersion))
+                _shouldUpdateRebuilt = true;
+            #endif
+            
             Vote.ClearVotes();
             Program.gameLoadedSuccessfully = true;
             Global.Save();
@@ -547,6 +558,25 @@ namespace DuckGame
             {
                 isPauseMenu = true
             };
+            if (_shouldUpdateRebuilt)
+            {
+                _updaterPromptMenu = new UIMenu("@DGR@DGR UPDATER@WRENCH@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f);
+                _updaterPromptMenu.Add(new LUIText("A new version of DGR", Colors.DGPink));
+                _updaterPromptMenu.Add(new LUIText("has been found", Colors.DGPink));
+                _updaterPromptMenu.Add(new LUIText(_latestRebuiltVersion.VersionStringFormatted, Colors.Platinum));
+                _updaterPromptMenu.Add(new LUIText("", Colors.DGPink));
+                _updaterPromptMenu.Add(new LUIText("-- UPDATING --", Colors.DGPink));
+                _updaterPromptMenu.Add(new LUIText("", Colors.DGPink));
+                _updaterPromptMenu.Add(new LUIText(() =>
+                {
+                    ProgressValue progress = Program.AutoUpdaterCompletionProgress;
+                    return $"[{progress.Value}/{progress.MaximumValue} {progress.GenerateBar(16, formatFunction: (w, b) => $"|DGGREEN|{w}|GRAY|{b}")}|255,246,214|]";
+                }, Colors.DGVanilla));
+                _updaterPromptMenu.Add(new LUIText(() => $"{Program.AutoUpdaterProgressMessage}", Colors.DGVanilla));
+                _updaterPromptMenu.Close();
+                _pauseGroup.Add(_updaterPromptMenu, false);
+            }
+
             _mainPauseMenu = new UIMenu("@LWING@DUCK GAME@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
             _quitMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
             _quitMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_quitMenu, _mainPauseMenu)), true);
@@ -948,6 +978,14 @@ namespace DuckGame
             Input.lastActiveProfile = InputProfile.DefaultPlayer1;
             if (!DuckNetwork.ShowUserXPGain() && Unlockables.HasPendingUnlocks())
                 MonoMain.pauseMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
+
+            if (_shouldUpdateRebuilt)
+            {
+                _updaterPromptMenu.Open();
+                MonoMain.pauseMenu = _updaterPromptMenu;
+                SFX.Play("pause", 0.6f);
+            }
+            
             base.Initialize();
         }
 
@@ -973,6 +1011,14 @@ namespace DuckGame
 
         public override void Update()
         {
+            #if AutoUpdater
+            if (_shouldUpdateRebuilt)
+            {
+                new Thread(Program.HandleAutoUpdater).Start();
+                return;
+            }
+            #endif
+            
             if (_duck != null && DGSave.showOnePointFiveMessages)
             {
                 if (!showedNewVersionStartup && !DuckFile.freshInstall && DGSave.upgradingFromVanilla)
