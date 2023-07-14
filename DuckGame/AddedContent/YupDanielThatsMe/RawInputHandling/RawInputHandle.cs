@@ -160,13 +160,13 @@ namespace RawInput
             if (e.KeyPressEvent.KeyPressState == "MAKE")
             {
 
-                deviceinput[e.KeyPressEvent.DeviceHandle][e.KeyPressEvent.VKey] = 0x1;
+                deviceinput[e.KeyPressEvent.DeviceHandle][(int)e.KeyPressEvent.DGKey] = 0x1;
                 if (DansTestArea.showkeys)
                     DevConsole.Log("Key Down");
             }
             else if (e.KeyPressEvent.KeyPressState == "BREAK")
             {
-                deviceinput[e.KeyPressEvent.DeviceHandle][e.KeyPressEvent.VKey] = 0x0;
+                deviceinput[e.KeyPressEvent.DeviceHandle][(int)e.KeyPressEvent.DGKey] = 0x0;
                 if (DansTestArea.showkeys)
                     DevConsole.Log("Key Up");
             }
