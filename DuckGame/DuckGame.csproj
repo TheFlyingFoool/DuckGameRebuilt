@@ -335,6 +335,17 @@
     <Compile Include="AddedContent\YupDanielThatsMe\DebugTablet.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\DevTestLevel.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\FunctionBinding.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\RawInputHandling\DataStructures.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\RawInputHandling\Enumerations.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\RawInputHandling\KeyMapper.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\RawInputHandling\KeyPressEvent.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\RawInputHandling\PreMessageFilter.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\RawInputHandling\RawInputHandle.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\RawInputHandling\RawInputEventArg.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\RawInputHandling\RawKeyboard_1.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\RawInputHandling\RawKeyboardC.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\RawInputHandling\RegistryAccess.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\RawInputHandling\Win32.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\TestingTileset.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\RectPackSharp\HashCode.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\RectPackSharp\PackingHints.cs" />
@@ -2119,9 +2130,7 @@
       <Name>Steam</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AddedContent\othello7\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">
     <Exec Command="git describe  --always --dirty --abbrev=40 &gt; &quot;$(ProjectDir)version.txt&quot;" />

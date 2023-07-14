@@ -25,6 +25,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using AddedContent.Hyeve;
 using XnaToFna;
+using RawInput;
+using Mono.Cecil;
+using System.Xml.Linq;
 
 namespace DuckGame
 {
@@ -616,10 +619,24 @@ namespace DuckGame
         protected override void LoadContent() => base.LoadContent();
 
         public bool canSyncFramerateWithVSync => Options.Data.vsync;
-
+        public static RawInputHandle RawKeyboardHandle;
         protected override void Initialize()
         {
-
+            try
+            {
+                // Get the window handle from SDL2
+                SDL.SDL_SysWMinfo info = new SDL.SDL_SysWMinfo();
+                IntPtr _windowHandle = IntPtr.Zero;
+                if (SDL.SDL_GetWindowWMInfo(Window.Handle, ref info) == SDL.SDL_bool.SDL_TRUE)
+                {
+                    _windowHandle = info.info.win.window;
+                }
+                RawKeyboardHandle = new RawInput.RawInputHandle(_windowHandle,false);
+            }
+            catch (Exception ex)
+            {
+                DevConsole.Log(ex.Message);
+            }
             Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             LangHandler.Initialize();
             //IsFixedTimeStep = true; edited because i change it back after load is done
@@ -668,6 +685,8 @@ namespace DuckGame
             }
             _canStartLoading = true;
         }
+
+      
 
         private void PostCloudLogic()
         {

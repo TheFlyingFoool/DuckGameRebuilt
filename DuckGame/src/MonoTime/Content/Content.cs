@@ -636,6 +636,7 @@ namespace DuckGame
 
         private static LevelData LoadLevelData(string pPath, LevelLocation pLocation)
         {
+            pPath = pPath.Replace("//", "/");
             pPath = pPath.Replace('\\', '/');
             if (Program.IsLinuxD || Program.isLinux)
             {

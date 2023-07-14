@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using RawInput;
 using RectpackSharp;
 using SDL2;
 using System;
@@ -9,12 +10,101 @@ using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace DuckGame
 {
     public static class DansTestArea
     {
+        [DevConsoleCommand(Name = "kbtest")]
+        public static void KeyboardTest()
+        {
+            experimentalkb = !experimentalkb;
+            DevConsole.Log("experimental keyboard : " + experimentalkb.ToString());
+        }
+        [DevConsoleCommand(Name = "showpressinfo")]
+        public static void showpressinfo()
+        {
+            showkeys = !showkeys;
+            DevConsole.Log("showpressinfo : " + showkeys.ToString());
+        }
+        [DevConsoleCommand(Name = "setkb")]
+        public static void setkeyboard(int profile, int kbnumber)
+        {
+            if (!RawInput.RawInputHandle.devicenumbermap.ContainsKey(kbnumber))
+            {
+                DevConsole.Log("keyboard not in list, try pressing a key on it, with showpressinfo on");
+                return;
+            }
+            profile -= 1;
+            InputProfile InputP = InputProfile.Get(InputProfile.MPPlayers[profile]);
+            IntPtr devicehandle = RawInput.RawInputHandle.devicenumbermap[kbnumber];
+            if (profile == 0)
+            {
+                maindeviceset = true;
+                maindevice = devicehandle;
+            }
+            Profile duckProfile = null;
+            string devicename = "RAW KEYBOARD " + kbnumber.ToString();
+            RawKeyboard rawInput = new RawKeyboard(profile, devicehandle, kbnumber);
+            DeviceInputMapping deviceInputMapping = Input.GetDefaultMapping(devicename, "", p: duckProfile) ?? Input.GetDefaultMapping(devicename, "");
+            if (deviceInputMapping == null)
+            {
+                InputP.Map(rawInput, Triggers.Left, (int)Keys.A);
+                InputP.Map(rawInput, Triggers.Right, (int)Keys.D);
+                InputP.Map(rawInput, Triggers.Up, (int)Keys.W);
+                InputP.Map(rawInput, Triggers.Down, (int)Keys.S);
+                InputP.Map(rawInput, Triggers.Jump, (int)Keys.W);
+                InputP.Map(rawInput, Triggers.Shoot, (int)Keys.V);
+                InputP.Map(rawInput, Triggers.Grab, (int)Keys.C);
+                InputP.Map(rawInput, Triggers.Quack, (int)Keys.E);
+                InputP.Map(rawInput, Triggers.Start, (int)Keys.Escape);
+                InputP.Map(rawInput, Triggers.Strafe, (int)Keys.B);
+                InputP.Map(rawInput, Triggers.Ragdoll, (int)Keys.Q);
+                //InputP.Map(rawInput, Triggers.LeftTrigger, (int)Keys.Escape);
+                //InputP.Map(rawInput, Triggers.RightTrigger, (int)Keys.Escape);
+                InputP.Map(rawInput, Triggers.Select, (int)Keys.Space);
+                InputP.Map(rawInput, Triggers.Cancel, (int)Keys.E);
+
+                InputP.Map(rawInput, Triggers.MenuLeft, (int)Keys.A);
+                InputP.Map(rawInput, Triggers.MenuRight, (int)Keys.D);
+                InputP.Map(rawInput, Triggers.MenuUp, (int)Keys.W);
+                InputP.Map(rawInput, Triggers.MenuDown, (int)Keys.S);
+            }
+            else
+            {
+                foreach (KeyValuePair<string, int> keyValuePair in deviceInputMapping.map)
+                    InputP.Map(rawInput, keyValuePair.Key, keyValuePair.Value);
+            }
+            List<InputDevice> devices = Input.GetInputDevices();
+            for (var i = devices.Count - 1; i >= 0; i--)
+            {
+                InputDevice inputDevice = devices[i];
+                if (inputDevice != null && inputDevice.productName == devicename)
+                {
+                    Input.RemoveDevice(inputDevice);
+                }
+            }
+            Input.AddDevice(rawInput);
+            bool foundmapping = false;
+            DeviceInputMapping Inputmap = null;
+            foreach (DeviceInputMapping mapping in Input._defaultInputMappingPresets)
+            {
+                if (mapping.deviceName == devicename)
+                {
+                    foundmapping = true;
+                    Inputmap = mapping;
+                    Inputmap.deviceOverride = rawInput;
+                    break;
+                }
+            }
+            DevConsole.Log("test");
+        }
+        public static bool maindeviceset;
+        public static bool showkeys;
+        public static bool experimentalkb;
+        public static IntPtr maindevice;
         public static Vec2 topleft = new Vec2(0f, 0f);
         public static Vec2 bottomright = new Vec2(100f, 100f);
         //private static float offset = 4000000.0f;

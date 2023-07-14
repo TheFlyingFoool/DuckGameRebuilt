@@ -21,7 +21,10 @@ namespace DuckGame
         public int inputOverrideType;
         public InputDevice deviceOverride;
 
-        public void MapInput(string pTrigger, int pIndex) => map[pTrigger] = pIndex;
+        public void MapInput(string pTrigger, int pIndex)
+        {
+            map[pTrigger] = pIndex;
+        }
 
         public InputDevice device
         {
@@ -190,7 +193,7 @@ namespace DuckGame
                     }
                 }
             }
-            if (device is Keyboard)
+            if (device is Keyboard || device is RawKeyboard)
             {
                 foreach (Keys b2 in Enum.GetValues(typeof(Keys)).Cast<Keys>())
                 {

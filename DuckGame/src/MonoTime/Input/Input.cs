@@ -353,7 +353,7 @@ namespace DuckGame
             DeviceInputMapping defaultMapping2 = defaultMapping1.Clone();
             defaultMapping2.deviceName = productName;
             defaultMapping2.deviceGUID = productGUID;
-            return defaultMapping2;
+             return defaultMapping2;
         }
 
         public static void TryFallback(string pTrigger, string pFallback, DeviceInputMapping pMap)
@@ -502,6 +502,7 @@ namespace DuckGame
             }
             else
             {
+                RawKeyboard rawkeyboard = p.GetDevice(typeof(RawKeyboard)) as RawKeyboard;
                 GenericController device = p.GetDevice(typeof(GenericController)) as GenericController;
                 p.ClearMappings();
                 if (device != null)
@@ -530,10 +531,19 @@ namespace DuckGame
                     else
                         p.Map(device, "", 0);
                 }
+                if (rawkeyboard != null)
+                {
+                    DeviceInputMapping deviceInputMapping = GetDefaultMapping(rawkeyboard.productName, rawkeyboard.productGUID, p: duckProfile) ?? GetDefaultMapping(rawkeyboard.productName, rawkeyboard.productGUID);
+                    if (deviceInputMapping == null)
+                        return;
+                    foreach (KeyValuePair<string, int> keyValuePair in deviceInputMapping.map)
+                        p.Map(rawkeyboard, keyValuePair.Key, keyValuePair.Value);
+                }
                 if (p == InputProfile.defaultProfiles[Options.Data.keyboard1PlayerIndex])
                 {
                     DeviceInputMapping deviceInputMapping = GetDefaultMapping("KEYBOARD P1", "", p: duckProfile) ?? GetDefaultMapping("KEYBOARD P1", "");
                     if (deviceInputMapping == null)
+                        
                         return;
                     foreach (KeyValuePair<string, int> keyValuePair in deviceInputMapping.map)
                         p.Map(GetDevice<Keyboard>(), keyValuePair.Key, keyValuePair.Value);
@@ -1146,6 +1156,7 @@ namespace DuckGame
             EnumerateGamepads();
             InitDefaultProfiles();
             string str = DuckFile.optionsDirectory + "/input.dat";
+            str = str.Replace("//", "/");
             if (MonoMain.defaultControls)
             {
                 DevConsole.Log(DCSection.General, "Clearing input settings (MonoMain.defaultControls == true)");
@@ -1259,7 +1270,14 @@ namespace DuckGame
             }
             return default(T);
         }
-
+        public static void AddDevice(InputDevice device)
+        {
+            _devices.Add(device);
+        }
+        public static void RemoveDevice(InputDevice device)
+        {
+            _devices.Remove(device);
+        }
         public static InputDevice GetDevice(string name)
         {
             foreach (InputDevice device in _devices)

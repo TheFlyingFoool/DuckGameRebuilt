@@ -668,6 +668,7 @@ namespace DuckGame
 
         public virtual bool Pressed(string trigger, bool any = false)
         {
+          
             if (Input.ignoreInput && _virtualInput == null)
             {
                 return false;
@@ -687,30 +688,35 @@ namespace DuckGame
             foreach (KeyValuePair<InputDevice, MultiMap<string, int>> map in _mappings)
             {
                 InputDevice mapped_device = map.Key;
-                if ((!(mapped_device is Keyboard) || !ignoreKeyboard) && (_virtualInput == null || mapped_device is VirtualInput))
+                if (mapped_device is Keyboard && DansTestArea.experimentalkb)
                 {
-                    List<int> vals;
-                    if (any)
+                    continue;
+                }
+                if ((mapped_device is Keyboard || mapped_device is RawKeyboard) && ignoreKeyboard || _virtualInput != null && mapped_device is not VirtualInput)
+                {
+                    continue;
+                }
+                List<int> vals;
+                if (any)
+                {
+                    if (mapped_device.MapPressed(-1, true))
                     {
-                        if (mapped_device.MapPressed(-1, true))
+                        lastPressFrame = Graphics.frame;
+                        return true;
+                    }
+                }
+                else if (map.Value.TryGetValue(trigger, out vals))
+                {
+                    foreach (int val in vals)
+                    {
+                        if ((mapped_device is AnalogGamePad || mapped_device is GenericController) && _leftStickStates.ContainsKey((PadButton)val) && _leftStickStates[(PadButton)val] == InputState.Pressed)
+                        {
+                            return true;
+                        }
+                        if (mapped_device.MapPressed(val, any))
                         {
                             lastPressFrame = Graphics.frame;
                             return true;
-                        }
-                    }
-                    else if (map.Value.TryGetValue(trigger, out vals))
-                    {
-                        foreach (int val in vals)
-                        {
-                            if ((mapped_device is AnalogGamePad || mapped_device is GenericController) && _leftStickStates.ContainsKey((PadButton)val) && _leftStickStates[(PadButton)val] == InputState.Pressed)
-                            {
-                                return true;
-                            }
-                            if (mapped_device.MapPressed(val, any))
-                            {
-                                lastPressFrame = Graphics.frame;
-                                return true;
-                            }
                         }
                     }
                 }
@@ -762,6 +768,10 @@ namespace DuckGame
             {
                 InputDevice mapped_device = map.Key;
                 List<int> vals;
+                if (mapped_device is Keyboard && DansTestArea.experimentalkb)
+                {
+                    continue;
+                }
                 if ((_virtualInput == null || mapped_device is VirtualInput) && map.Value.TryGetValue(trigger, out vals))
                 {
                     foreach (int val in vals)

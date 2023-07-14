@@ -17,10 +17,10 @@ namespace DuckGame
         private List<UIBox> _playerBoxes = new List<UIBox>();
         private UIMenuItemToggle _configuringToggle;
         private List<string> inputTypes = new List<string>()
-    {
-      "GAMEPAD",
-      "KEYBOARD"
-    };
+        {
+          "GAMEPAD",
+          "KEYBOARD"
+        };
         private List<DeviceInputMapping> inputMaps = new List<DeviceInputMapping>();
         public UIMenu _confirmMenu;
         public UIMenu _warningMenu;
@@ -34,7 +34,7 @@ namespace DuckGame
         {
             inputTypes.Clear();
             inputMaps.Clear();
-            for (int index = 0; index < 4; ++index)
+            for (int index = 0; index < MonoMain.MaximumGamepadCount; ++index)
             {
                 XInputPad device = Input.GetDevice<XInputPad>(index);
                 if (device != null && device.isConnected)
@@ -70,6 +70,58 @@ namespace DuckGame
             inputTypes.Add("KEYBOARD P2");
             inputMaps.Add(Input.GetDefaultMapping("KEYBOARD P2", "").Clone());
             inputConfigType = 0;
+            foreach (int devicenumber in RawInput.RawInputHandle.devicenumbermap.Keys)
+            {
+                string devicename = "RAW KEYBOARD " + devicenumber.ToString();
+                inputTypes.Add(devicename);
+                bool foundmapping = false;
+                DeviceInputMapping Inputmap = null;
+                foreach (DeviceInputMapping mapping in Input.CloneDefaultMappings())
+                {
+                    if (mapping.deviceName == devicename)
+                    {
+                        foundmapping = true;
+                        Inputmap = mapping;
+                        break;
+                    }
+                }
+                if (!foundmapping)
+                {
+                    Inputmap = new DeviceInputMapping()
+                    {
+                        deviceName = devicename,
+                        deviceGUID = "",
+                        map = new Dictionary<string, int>()
+                        {
+                            { Triggers.Left, (int)Keys.A },
+                            { Triggers.Right, (int)Keys.D },
+                            { Triggers.Up, (int)Keys.W },
+                            { Triggers.Down, (int)Keys.S },
+                            { Triggers.Jump, (int)Keys.Space },
+                            { Triggers.Shoot, (int)Keys.H },
+                            { Triggers.Grab, (int)Keys.G },
+                            { Triggers.Start, (int)Keys.Escape },
+                            { Triggers.Ragdoll, (int)Keys.F },
+                            { Triggers.Strafe, (int)Keys.LeftShift },
+                            { Triggers.Quack, (int)Keys.E },
+                            { Triggers.Select, (int)Keys.Space },
+                            { Triggers.Chat, (int)Keys.Enter },
+                            { Triggers.Cancel, (int)Keys.E },
+                            { Triggers.Menu1, (int)Keys.H },
+                            { Triggers.Menu2, (int)Keys.Q },
+                            { Triggers.MenuLeft, (int)Keys.A },
+                            { Triggers.MenuRight, (int)Keys.D },
+                            { Triggers.MenuUp, (int)Keys.W },
+                            { Triggers.MenuDown, (int)Keys.S },
+                            { Triggers.RightStick, (int)Keys.Tab },
+                            { Triggers.VoiceRegister, (int)Keys.Home },
+                            { Triggers.KeyboardF, (int)Keys.F },
+                        }
+                    };
+                    Input._defaultInputMappingPresets.Add(Inputmap);
+                }
+                inputMaps.Add(Inputmap.Clone());
+            }
             SwitchConfigType();
         }
 
@@ -128,18 +180,18 @@ namespace DuckGame
         {
             _openOnClose = openOnClose;
             List<string> stringList1 = new List<string>()
-      {
-        "P1   ",
-        "P2   ",
-        "P3   ",
-        "P4"
-      };
+            {
+                "P1   ",
+                "P2   ",
+                "P3   ",
+                "P4"
+            };
             List<string> stringList2 = new List<string>()
-      {
-        "GAMEPAD",
-        "KEYBOARD",
-        "PAD + KEYS"
-      };
+            {
+                "GAMEPAD",
+                "KEYBOARD",
+                "PAD + KEYS"
+            };
             BitmapFont bitmapFont = new BitmapFont("smallBiosFontUI", 7, 5);
             UIBox uiBox = new UIBox(isVisible: false);
             _configuringToggle = new UIMenuItemToggle("", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(SwitchConfigType)), new FieldBinding(this, nameof(inputConfigType)), multi: inputTypes, compressedMulti: true, tiny: true);
@@ -326,6 +378,7 @@ namespace DuckGame
                     return;
                 }
                 if (Input.uiDevicesHaveChanged)
+
                 {
                     SwitchPlayerProfile();
                     Input.uiDevicesHaveChanged = false;
@@ -333,7 +386,7 @@ namespace DuckGame
             }
             if (_controlBox.selection > 0 && _controlBox.selection < 17)
             {
-                if (!_showingMenu && inputConfigType < inputMaps.Count && inputMaps[inputConfigType].deviceName != "KEYBOARD P1" && inputMaps[inputConfigType].deviceName != "KEYBOARD P2")
+                 if (!_showingMenu && inputConfigType < inputMaps.Count && inputMaps[inputConfigType].deviceName != "KEYBOARD P1" && inputMaps[inputConfigType].deviceName != "KEYBOARD P2")
                 {
                     HUD.AddCornerControl(HUDCorner.BottomLeft, "@MENU2@STYLE");
                     _showingMenu = true;

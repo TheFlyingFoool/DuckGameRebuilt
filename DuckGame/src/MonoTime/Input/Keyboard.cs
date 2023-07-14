@@ -729,7 +729,21 @@ namespace DuckGame
             if (_flipper == 0)
             {
                 _keyStatePrev = _keyState;
-                _keyState = Microsoft.Xna.Framework.Input.Keyboard.GetState();
+                if (DansTestArea.experimentalkb)
+                {
+                    if (DansTestArea.maindeviceset)
+                    {
+                        _keyState = RawInput.RawInputHandle.GetState(DansTestArea.maindevice);
+                    }
+                    else
+                    {
+                        _keyState = RawInput.RawInputHandle.GetStates();
+                    }
+                }
+                else
+                {
+                    _keyState = Microsoft.Xna.Framework.Input.Keyboard.GetState();
+                }
                 _keyboardPress = false;
                 int num = _keyState.GetPressedKeys().Length;
                 if (num != _lastKeyCount && num != 0)

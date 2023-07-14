@@ -950,9 +950,10 @@ namespace DuckGame
         }
         public static bool FileExists(string pPath)
         {
+            pPath = pPath.Replace("//", "/");
             if (Program.IsLinuxD || Program.isLinux)
             {
-                pPath = pPath.Replace("//", "/").Replace("\\", "/");
+                pPath = pPath.Replace("\\", "/");
                 pPath = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(pPath), true);
             }
             return File.Exists(pPath);

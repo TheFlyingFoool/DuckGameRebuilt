@@ -41,16 +41,16 @@ namespace DuckGame
         public InputProfile DefaultPlayer8 => Get(InputProfile.MPPlayer8);
 
         public List<InputProfile> defaultProfiles => new List<InputProfile>()
-    {
-      DefaultPlayer1,
-      DefaultPlayer2,
-      DefaultPlayer3,
-      DefaultPlayer4,
-      DefaultPlayer5,
-      DefaultPlayer6,
-      DefaultPlayer7,
-      DefaultPlayer8
-    };
+        {
+          DefaultPlayer1,
+          DefaultPlayer2,
+          DefaultPlayer3,
+          DefaultPlayer4,
+          DefaultPlayer5,
+          DefaultPlayer6,
+          DefaultPlayer7,
+          DefaultPlayer8
+        };
 
         public InputProfile Get(string name)
         {
