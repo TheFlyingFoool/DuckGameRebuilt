@@ -131,7 +131,7 @@ namespace DuckGame
         public static bool IgnoreLevRestrictions = false;
 
         [AutoConfigField]
-        public static bool RememberMatchSettings = true;
+        public static bool RememberMatchSettings = false;
 
         [AutoConfigField]
         public static bool CustomHatTeams = false;

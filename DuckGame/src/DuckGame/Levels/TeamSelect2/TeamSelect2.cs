@@ -370,6 +370,7 @@ namespace DuckGame
                 
                 //by-by-by-by-by-bo-bo-by-int-bys-bo-int-strings
                 int varWinsPerSet = bf.ReadByte();
+                if (varWinsPerSet == 0) return; //anti match setting destruction system -NiK0
                 GetMatchSetting("requiredwins").value = varWinsPerSet;
                 int varRoundsPerIntermission = bf.ReadByte();
                 GetMatchSetting("restsevery").value = varRoundsPerIntermission;
