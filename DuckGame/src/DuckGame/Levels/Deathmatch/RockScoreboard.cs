@@ -1015,12 +1015,9 @@ namespace DuckGame
             if (Program.BirthdayDGR)
             {
                 _confettiDelay++;
-                if (_confettiDelay >= 10) // for going less than per tick
+                if (_confettiDelay >= 10) // for going less than once per tick -othello7
                 {
-                    Vec2 pPos = new Vec2(Rando.Float(640),
-                       Rando.Float(340, 400));
-                    Thing firework = new Firework(pPos.x, pPos.y);
-                    Add(firework);
+                    Add(new Firework(Rando.Float(640), Rando.Float(340, 400)));
                     _confettiDelay = 0;
                 }
             }
