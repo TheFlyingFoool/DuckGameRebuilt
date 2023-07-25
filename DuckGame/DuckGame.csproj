@@ -41,7 +41,6 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <AssemblyName>DuckGame</AssemblyName>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -54,7 +53,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <AssemblyName>DuckGame</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -66,7 +64,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <AssemblyName>DuckGame</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -78,7 +75,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <AssemblyName>DuckGame</AssemblyName>
     <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DuckGame</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -95,7 +91,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <AssemblyName>DuckGame</AssemblyName>
     <OutputPath>..\bin\</OutputPath>
     <DefineConstants>TRACE;DuckGame</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -109,7 +104,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <AssemblyName>DuckGame</AssemblyName>
     <OutputPath>..\bin\</OutputPath>
     <DefineConstants>TRACE;DuckGame</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -2072,6 +2066,7 @@
     <Compile Include="src\XnaToFna\__NetworkSession__.cs" />
     <Compile Include="src\XnaToFna\__PropertyDictionary__.cs" />
     <Compile Include="AddedContent\othello7\HelperMethods.cs" />
+    <Compile Include="AddedContent\othello7\Firework.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

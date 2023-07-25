@@ -2,7 +2,7 @@
 using DbMon.NET;
 using DGWindows;
 using Microsoft.Xna.Framework;
-using System;
+using System; 
 using System.IO;
 using System.Net;
 using System.Linq;
@@ -50,6 +50,7 @@ namespace DuckGame
         public static string FileName;
         public static string FilePath;
         public static bool IsLinuxD; //new better system
+        public static bool BirthdayDGR = false; //this needs to be set
         public static bool intro = false;
         public static bool testServer = false;
         public static Main main;

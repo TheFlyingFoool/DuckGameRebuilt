@@ -1012,6 +1012,26 @@ namespace DuckGame
 
         public override void Update()
         {
+            if (Program.BirthdayDGR)
+            {
+                _confettiDelay++;
+                if (_confettiDelay >= 1) // for going less than per tick
+                {
+                    int l = 0;
+                    while (l < 1) // for going more than per tick
+                    {
+                        Vec2 pPos = new Vec2(70 + Rando.Int(460 + 600),
+                            -400 + Rando.Int(700));
+                        Thing firework = new Firework(pPos.x, pPos.y);
+                        //firework sets itself to foreground now lol
+                        //firework.layer = Layer.Foreground;
+                        Level.Add(firework);
+                        l++;
+                    }
+                    _confettiDelay = 0;
+                }
+            }
+
             if (Network.isActive)
             {
                 if (_netCountdown == null)
@@ -2175,6 +2195,6 @@ namespace DuckGame
 
         private Material _sunshineMaterialBare;
 
-
+        private int _confettiDelay = 0;
     }
 }
