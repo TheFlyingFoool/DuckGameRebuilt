@@ -50,7 +50,13 @@ namespace DuckGame
         public static string FileName;
         public static string FilePath;
         public static bool IsLinuxD; //new better system
-        public static bool BirthdayDGR = false; //this needs to be set
+        public static bool BirthdayDGR
+        {
+            get
+            {
+                return DateTime.Today.Date == new DateTime(DateTime.Today.Year, 8, 3).Date;
+            }//DateTime.Now.Date == targetDate.Date
+        }
         public static bool intro = false;
         public static bool testServer = false;
         public static Main main;
