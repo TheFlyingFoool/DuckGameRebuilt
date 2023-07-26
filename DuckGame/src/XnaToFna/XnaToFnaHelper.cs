@@ -168,6 +168,15 @@ namespace XnaToFna
             }
             File.Copy(sourceFileName, destFileName, false);
         }
+        public static string Combine(string path1, string path2)
+        {
+            if(Program.IsLinuxD || Program.isLinux)
+            {
+                path1 = path1.Replace("//", "/").Replace("\\", "/");
+                path2 = path2.Replace("//", "/").Replace("\\", "/");
+            }
+            return System.IO.Path.Combine(path1, path2);
+        }
         public static string FileReadAllText(string path)
         {
             if (Program.IsLinuxD || Program.isLinux)

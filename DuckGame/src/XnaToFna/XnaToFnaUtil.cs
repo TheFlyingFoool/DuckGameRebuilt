@@ -72,7 +72,7 @@ namespace XnaToFna
         public List<string> FixPathsFor;
         public ILPlatform PreferredPlatform;
         public static Assembly Aassembly;
-        public static int RemapVersion = 17;
+        public static int RemapVersion = 18;
         public void Stub(ModuleDefinition mod)
         {
             Log(string.Format("[Stub] Stubbing {0}", mod.Assembly.Name.Name));
@@ -186,6 +186,8 @@ namespace XnaToFna
 
             Modder.RelinkMap["System.Void System.IO.File::Copy(System.String,System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void FileCopy(System.String,System.String)");
             Modder.RelinkMap["System.Void System.IO.File::Copy(System.String,System.String,System.Boolean)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void FileCopy(System.String,System.String,System.Boolean)");
+
+            Modder.RelinkMap["System.String System.IO.Path::Combine(System.String,System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String Combine(System.String,System.String)");
 
             Modder.RelinkMap["System.Byte[] System.IO.File::ReadAllBytes(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Byte[] FileReadAllBytes(System.String)"); //idk
             Modder.RelinkMap["System.String System.IO.File::ReadAllText(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String FileReadAllText(System.String)");
