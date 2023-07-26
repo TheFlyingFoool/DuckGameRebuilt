@@ -1017,7 +1017,12 @@ namespace DuckGame
                 _confettiDelay++;
                 if (_confettiDelay >= 10) // for going less than once per tick -othello7
                 {
-                    Add(new Firework(Rando.Float(640), Rando.Float(340, 400)));
+                    int bottom = (int)Layer.Console.height;
+                    int width = (int)Layer.Console.width;
+                    int noSplodeRegionHeight = bottom / 6;
+                    int extraAccelRegionHeight = bottom / 2;
+
+                    Add(new Firework(Rando.Float(width), Rando.Int(bottom, bottom + extraAccelRegionHeight), Rando.Int(bottom - noSplodeRegionHeight)));
                     _confettiDelay = 0;
                 }
             }
