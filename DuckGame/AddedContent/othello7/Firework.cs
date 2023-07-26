@@ -5,19 +5,49 @@ namespace DuckGame
     public class Firework : Thing
     {
         private Color _color; // watch?v=FZFZl0ZaFSU
-        private int _lifespan;
+        private float _deathHeight;
         private float _speed = 1;
+        private static Color[] s_fireworkColors = {
+            Color.Violet,
+            Color.SkyBlue,
+            Color.Wheat,
+            Color.GreenYellow,
+            Color.Pink
+        };
 
-        private static Color[] FireworkColors = new Color[] { Color.Violet, Color.SkyBlue, Color.Wheat, Color.GreenYellow, Color.Pink};
-        public Firework(float xpos, float ypos)
+        private const int TRAIL_PARTICLE_FRAME_INTERVAL = 3;
+        private float _framesSinceTrailParticle = Rando.Int(TRAIL_PARTICLE_FRAME_INTERVAL);
+
+        private static int[][,] s_explosionPatterns = { // for some god forsaken reason even-number
+            new[,] // heart                             // widths/heights cause wacky alignment
+            {                                           // issues that drive me insane   -firebreak
+                {0, 1, 1, 0, 1, 1, 0},
+                {1, 0, 0, 1, 0, 0, 1},
+                {1, 0, 0, 0, 0, 0, 1},
+                {1, 0, 0, 0, 0, 0, 1},
+                {0, 1, 0, 0, 0, 1, 0},
+                {0, 0, 1, 0, 1, 0, 0},
+                {0, 0, 0, 1, 0, 0, 0},
+            },
+        };
+        
+        public Firework(float xpos, float ypos, float deathHeight)
           : base(xpos, ypos)
         {
             graphic = new Sprite("firework");
             layer = Layer.Console;
             depth = 1;
-            _color = FireworkColors[Rando.Int(FireworkColors.Length - 1)];
-            _lifespan = Rando.Int(20);
-            scale = new Vec2(1.2f, 1.4f);
+            center = new Vec2(graphic.w / 2, graphic.h / 2);
+            // scale = new Vec2(1.2f, 1.4f);
+            _deathHeight = deathHeight;
+            
+            _color = s_fireworkColors.ChooseRandom();
+        }
+
+        public override void Draw()
+        {
+            Graphics.DrawRect(new Rectangle(x, y, w, h), Color.Purple, 2f, false, 0.5f);
+            base.Draw();
         }
 
         public override void Update()
@@ -25,7 +55,13 @@ namespace DuckGame
             y -= _speed;
             _speed += 0.2f; //accelerating upwards
 
-            if (_lifespan > 52) //explode now
+            if (_framesSinceTrailParticle++ > TRAIL_PARTICLE_FRAME_INTERVAL)
+            {
+                Level.Add(new FireworkCharm(x + width, y + height, Color.White));
+                _framesSinceTrailParticle = 0;
+            }
+
+            if (y < _deathHeight) //explode now
             {
                 int sg = 2;
                 if (Rando.Int(3) == 0) 
@@ -36,31 +72,58 @@ namespace DuckGame
                 if (Rando.Int(20) == 0)
                 {
                     _color = Color.Pink;
+                    int[,] explosionPattern = s_explosionPatterns.ChooseRandom();
+                    
                     for (int i = 1; i < sg; i++)
                     {
                         if (i == 2) 
                             _color = Color.Red;
                         else if (i == 3) 
                             _color = Color.Orange;
-                        float radius = 6 + Rando.Float(6) * i + i * 4;
+                        float radius = 
+                            6 +
+                            i * Rando.Float(6) +
+                            i * 4;
 
-                        //i do not care. -NiK0
-                        Level.Add(new FireworkCharm(x, y, _color, new Vec2(x - 3 * radius, y)));
-                        Level.Add(new FireworkCharm(x, y, _color, new Vec2(x - 3 * radius, y - 1 * radius)));
-                        Level.Add(new FireworkCharm(x, y, _color, new Vec2(x + 3 * radius, y)));
-                        Level.Add(new FireworkCharm(x, y, _color, new Vec2(x + 3 * radius, y - 1 * radius)));
+                        int explosionWidth = explosionPattern.GetLength(1);
+                        int explosionHeight = explosionPattern.GetLength(0);
+                        
+                        int halfExplosionWidth = explosionWidth / 2;
+                        int halfExplosionHeight = explosionHeight / 2;
+                        
+                        for (int yi = 0; yi < explosionHeight; yi++)
+                        {
+                            for (int xi = 0; xi < explosionWidth; xi++)
+                            {
+                                if (explosionPattern[yi, xi] == 0)
+                                    continue;
+                                
+                                Vec2 posMultiplier = new(xi - halfExplosionWidth, yi - halfExplosionHeight);
 
-                        Level.Add(new FireworkCharm(x, y, _color, new Vec2(x + 2 * radius, y - 2 * radius)));
-                        Level.Add(new FireworkCharm(x, y, _color, new Vec2(x + 1 * radius, y - 2 * radius)));
-                        Level.Add(new FireworkCharm(x, y, _color, new Vec2(x - 2 * radius, y - 2 * radius)));
-                        Level.Add(new FireworkCharm(x, y, _color, new Vec2(x - 1 * radius, y - 2 * radius)));
-                        Level.Add(new FireworkCharm(x, y, _color, new Vec2(x, y - 1 * radius)));
+                                Level.Add(new FireworkCharm(x, y, _color, position + new Vec2(radius, radius) * posMultiplier));
+                            }
+                        }
 
-                        Level.Add(new FireworkCharm(x, y, _color, new Vec2(x - 2 * radius, y + 1 * radius)));
-                        Level.Add(new FireworkCharm(x, y, _color, new Vec2(x + 2 * radius, y + 1 * radius)));
-                        Level.Add(new FireworkCharm(x, y, _color, new Vec2(x - 1 * radius, y + 2 * radius)));
-                        Level.Add(new FireworkCharm(x, y, _color, new Vec2(x + 1 * radius, y + 2 * radius)));
-                        Level.Add(new FireworkCharm(x, y, _color, new Vec2(x, y + 3 * radius)));
+                        // //i do not care. -NiK0 // I DO -firebreak
+                        // float tripleRadius = 3 * singleRadius;
+                        // float doubleRadius = 2 * singleRadius;
+                        //
+                        // Level.Add(new FireworkCharm(x, y, _color, new Vec2(x - tripleRadius, y)));
+                        // Level.Add(new FireworkCharm(x, y, _color, new Vec2(x - tripleRadius, y - singleRadius)));
+                        // Level.Add(new FireworkCharm(x, y, _color, new Vec2(x + tripleRadius, y)));
+                        // Level.Add(new FireworkCharm(x, y, _color, new Vec2(x + tripleRadius, y - singleRadius)));
+                        //
+                        // Level.Add(new FireworkCharm(x, y, _color, new Vec2(x + doubleRadius, y - doubleRadius)));
+                        // Level.Add(new FireworkCharm(x, y, _color, new Vec2(x + singleRadius, y - doubleRadius)));
+                        // Level.Add(new FireworkCharm(x, y, _color, new Vec2(x - doubleRadius, y - doubleRadius)));
+                        // Level.Add(new FireworkCharm(x, y, _color, new Vec2(x - singleRadius, y - doubleRadius)));
+                        // Level.Add(new FireworkCharm(x, y, _color, new Vec2(x, y - singleRadius)));
+                        //
+                        // Level.Add(new FireworkCharm(x, y, _color, new Vec2(x - doubleRadius, y + singleRadius)));
+                        // Level.Add(new FireworkCharm(x, y, _color, new Vec2(x + doubleRadius, y + singleRadius)));
+                        // Level.Add(new FireworkCharm(x, y, _color, new Vec2(x - singleRadius, y + doubleRadius)));
+                        // Level.Add(new FireworkCharm(x, y, _color, new Vec2(x + singleRadius, y + doubleRadius)));
+                        // Level.Add(new FireworkCharm(x, y, _color, new Vec2(x, y + tripleRadius)));
                     }
                 }
                 else
@@ -80,7 +143,6 @@ namespace DuckGame
                 Level.Remove(this);
                 DoTerminate();
             }
-            _lifespan++;
         }
         private class FireworkCharm : Thing
         {
@@ -105,6 +167,23 @@ namespace DuckGame
                 layer = Layer.Console;
                 _flyangle = flyangle;
                 _speed = speed;
+                scale = new Vec2(Rando.Float(1.3f, 1.6f));
+            }
+            public FireworkCharm(float xpos, float ypos, Color color)
+              : base(xpos, ypos)
+            {
+                sprite = new SpriteMap("cspark", 5, 5);
+                sprite.AddAnimation("go", Rando.Float(0.2f, 0.4f), false, 0, 1, 2, 3);
+                sprite.SetAnimation("go");
+                graphic = sprite;
+                graphic.color = color;
+                center = new Vec2(2.5f);
+                collisionSize = new Vec2(5);
+                _collisionOffset = new Vec2(-2.5f);
+                _color = color;
+                layer = Layer.Console;
+                _flyangle = 0;
+                _speed = 0;
                 scale = new Vec2(Rando.Float(1.3f, 1.6f));
             }
             public FireworkCharm(float xpos, float ypos, Color color, Vec2 lerp)
