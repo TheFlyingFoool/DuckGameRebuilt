@@ -6,8 +6,10 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -95,7 +97,31 @@ namespace DuckGame
                 typeList = _typeLists[pType] = new List<System.Type>();
             return typeList;
         }
+        public IEnumerable<System.Type> SortTypeOrder(IEnumerable<System.Type> types)
+        {
+            if (configuration.SortedTypeNames.Length == 0)
+            {
+                return types;
+            }
+            List<System.Type> unsortedTypes = new List<System.Type>(types);
+            List<System.Type> sortedTypes = new List<System.Type>(unsortedTypes.Count);
 
+            foreach (string typeName in configuration.SortedTypeNames)
+            {
+                for (int i = 0; i < unsortedTypes.Count; i++)
+                {
+                    if (unsortedTypes[i].FullName == typeName)
+                    {
+                        sortedTypes.Add(unsortedTypes[i]);
+                        unsortedTypes.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
+            sortedTypes.AddRange(unsortedTypes);
+
+            return sortedTypes;
+        }
         /// <summary>
         /// Used by the mod upload window, you shouldn't need this.
         /// </summary>

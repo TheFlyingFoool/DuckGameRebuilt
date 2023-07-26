@@ -25,6 +25,7 @@ namespace DuckGame
         private string _contentDirectory;
         private string _uniqueID;
         private Assembly _assembly;
+        public string[] SortedTypeNames = new string[0]; // for DG Compatiablity as DGR rebuilding mods alters the order
 
         /// <summary>The type of mod this is.</summary>
         public Type modType { get; internal set; }
