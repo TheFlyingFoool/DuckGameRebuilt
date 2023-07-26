@@ -347,7 +347,7 @@ namespace DuckGame
 
         public virtual void Begin(bool transparent, bool isTargetDraw = false)
         {
-            int num1 = name == "LIGHTING" ? 1 : 0;
+            //int num1 = name == "LIGHTING" ? 1 : 0;
             if (aspectReliesOnGameLayer && this.camera != Game.camera)
             {
                 this.camera.width = 320f;

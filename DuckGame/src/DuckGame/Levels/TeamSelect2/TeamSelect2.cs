@@ -94,7 +94,8 @@ namespace DuckGame
         private float _waitToShow = 1f;
         private static bool _showedPS4Warning = false;
         private float _afkTimeout;
-        private static bool _showedOnlineBumper = false;
+        //keep this its important although it may not seem like it and may never be used -NiK0
+        private static bool _showedOnlineBumper = false; 
         private float _timeoutFade;
         private float _topScroll;
         private float _afkMaxTimeout = 300f;

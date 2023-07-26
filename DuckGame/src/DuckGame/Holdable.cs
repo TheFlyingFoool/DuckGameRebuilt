@@ -358,6 +358,7 @@ namespace DuckGame
             }
         }
 
+        
         public override void Update()
         {
             UpdateMaterial();
