@@ -157,6 +157,17 @@ namespace XnaToFna
             }
             File.Copy(sourceFileName, destFileName, overwrite);
         }
+        public static void FileCopy(string sourceFileName, string destFileName)
+        {
+            if (Program.IsLinuxD || Program.isLinux)
+            {
+                sourceFileName = sourceFileName.Replace("//", "/").Replace("\\", "/");
+                sourceFileName = GetActualCaseForFileName(FixPath(sourceFileName));
+                destFileName = destFileName.Replace("//", "/").Replace("\\", "/");
+                destFileName = GetActualCaseForFileName(FixPath(destFileName), true);
+            }
+            File.Copy(sourceFileName, destFileName, false);
+        }
         public static string FileReadAllText(string path)
         {
             if (Program.IsLinuxD || Program.isLinux)
@@ -238,6 +249,9 @@ namespace XnaToFna
             return path;
         }
         public static bool get_IsTrialMode() => Environment.GetEnvironmentVariable("XNATOFNA_ISTRIALMODE") != "0";
+        public static void DoNothing()
+        {
+        }
 
         public static void ApplyChanges(GraphicsDeviceManager self)
         {

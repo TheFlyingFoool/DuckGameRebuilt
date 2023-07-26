@@ -215,16 +215,24 @@ namespace DuckGame
             else if (Level.current is TeamSelect2 && _equippedDuck != null && team != null && team.customHatPath != null && Keyboard.Pressed(Keys.F5) && !Network.isActive)
             {
                 int index = Teams.core.extraTeams.IndexOf(team);
-                Team.deserializeInto = team;
-                Teams.core.extraTeams[index] = Team.Deserialize(team.customHatPath);
-                Team.deserializeInto = null;
-                Duck equippedDuck = _equippedDuck;
-                _equippedDuck.Unequip(this);
-                Level.Remove(this);
-                TeamHat teamHat = new TeamHat(x, y, Teams.core.extraTeams[index]);
-                Level.Add(teamHat);
-                TeamHat e = teamHat;
-                equippedDuck.Equip(e, false);
+                if (index >= 0) // issue nike was having realted to hat reloading F6 and F5, unsure why the teams hat wouldnt be in the list but this should stop the crash
+                {
+                    Team.deserializeInto = team;
+                    Teams.core.extraTeams[index] = Team.Deserialize(team.customHatPath);
+                    Team.deserializeInto = null;
+                    Duck equippedDuck = _equippedDuck;
+                    _equippedDuck.Unequip(this);
+                    Level.Remove(this);
+                    TeamHat teamHat = new TeamHat(x, y, Teams.core.extraTeams[index]);
+                    Level.Add(teamHat);
+                    TeamHat e = teamHat;
+                    equippedDuck.Equip(e, false);
+                }
+                else // well if it is that odd cause i guess ill just kill it
+                {
+                    _equippedDuck.Unequip(this);
+                    Level.Remove(this);
+                }
             }
             if (_shouldUpdateSprite)
             {

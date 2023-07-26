@@ -54,8 +54,8 @@ namespace DuckGame
         {
             get
             {
-                return DateTime.Today.Date == new DateTime(DateTime.Today.Year, 8, 3).Date;
-            }//DateTime.Now.Date == targetDate.Date
+                return DateTime.Today.Date.Month == 8 && DateTime.Today.Date.Day == 3;
+            }
         }
         public static bool intro = false;
         public static bool testServer = false;

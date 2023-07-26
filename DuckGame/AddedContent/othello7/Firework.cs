@@ -8,31 +8,14 @@ namespace DuckGame
         private int _lifespan;
         private float _speed = 1;
 
-
+        private static Color[] FireworkColors = new Color[] { Color.Violet, Color.SkyBlue, Color.Wheat, Color.GreenYellow, Color.Pink};
         public Firework(float xpos, float ypos)
           : base(xpos, ypos)
         {
             graphic = new Sprite("firework");
             layer = Layer.Console;
             depth = 1;
-            switch (Rando.Int(4))
-            {
-                case 0:
-                    _color = Color.Violet;
-                    break;
-                case 1:
-                    _color = Color.SkyBlue;
-                    break;
-                case 2:
-                    _color = Color.Wheat;
-                    break;
-                case 3:
-                    _color = Color.GreenYellow;
-                    break;
-                default:
-                    _color = Color.Pink;
-                    break;
-            }
+            _color = FireworkColors[Rando.Int(FireworkColors.Length - 1)];
             _lifespan = Rando.Int(20);
             scale = new Vec2(1.2f, 1.4f);
         }
@@ -45,16 +28,20 @@ namespace DuckGame
             if (_lifespan > 52) //explode now
             {
                 int sg = 2;
-                if (Rando.Int(3) == 0) sg++;
-                if (Rando.Int(9) == 0) sg++;
+                if (Rando.Int(3) == 0) 
+                    sg++;
+                if (Rando.Int(9) == 0) 
+                    sg++;
 
                 if (Rando.Int(20) == 0)
                 {
                     _color = Color.Pink;
                     for (int i = 1; i < sg; i++)
                     {
-                        if (i == 2) _color = Color.Red;
-                        else if (i == 3) _color = Color.Orange;
+                        if (i == 2) 
+                            _color = Color.Red;
+                        else if (i == 3) 
+                            _color = Color.Orange;
                         float radius = 6 + Rando.Float(6) * i + i * 4;
 
                         //i do not care. -NiK0
