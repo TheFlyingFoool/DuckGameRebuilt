@@ -1428,7 +1428,14 @@ namespace DuckGame
                 {
                     ExceptionMessage = pException.GetType().FullName + ": ";
                     string tempMsg = pException.Message;
-                    string tempMsg2 = TranslateMessage(pException);
+
+                    string tempMsg2;
+                    if (!Program.IsLinuxD) //PLEASE do not translate on linux. it dies -othello7
+                        tempMsg2 = TranslateMessage(pException);
+                    else
+                        tempMsg2 = pException.ToString();
+
+
                     if (tempMsg2 != "" && tempMsg2 != tempMsg)
                     {
                         ExceptionMessage += tempMsg2 + Environment.NewLine + tempMsg;
@@ -1438,7 +1445,7 @@ namespace DuckGame
                         ExceptionMessage += tempMsg;
                     }
                 }
-                catch(Exception ex2)
+                catch (Exception ex2)
                 {
                     ExceptionMessage += pException.Message + " [F][" + ex2.HResult + "]";
                 }
