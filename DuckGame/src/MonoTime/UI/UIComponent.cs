@@ -80,7 +80,13 @@ namespace DuckGame
                 return _parent != null ? _parent.rootMenu : null;
             }
         }
-
+        public UIMenuAction backFunction
+        { 
+            get 
+            { 
+                return _backFunction; 
+            } 
+        }
         public bool dirty
         {
             get => _dirty;
