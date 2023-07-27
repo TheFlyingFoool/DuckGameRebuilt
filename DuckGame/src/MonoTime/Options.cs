@@ -346,7 +346,7 @@ namespace DuckGame
 
             menu.Add(new UIMenuItemToggle("Instructions", field: new FieldBinding(dGRSettings, "EditorInstructions"))
             {
-                dgrDescription = "Displays real-time instructions on how to operate the editor. You might not need it anymore if you're already used to it"
+                dgrDescription = "Displays real-time instructions on how to operate the editor. You might not need them anymore if you're already familiar with everything"
             });
 
             menu.Add(new UIMenuItemToggle("Level Name", field: new FieldBinding(dGRSettings, "EditorLevelName"))
@@ -589,7 +589,7 @@ namespace DuckGame
 
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemToggle("In-Game Lobby Name", field: new FieldBinding(dGRSettings, "LobbyNameOnPause"))
+            menu.Add(new UIMenuItemToggle("Lobby Name", field: new FieldBinding(dGRSettings, "LobbyNameOnPause"))
             {
                 dgrDescription = "Displays lobby name on pause screen (not supporting LAN lobbies)"
             });
