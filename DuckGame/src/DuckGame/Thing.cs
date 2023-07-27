@@ -1254,6 +1254,22 @@ namespace DuckGame
                 return;
             t.bottom = block4.top;
         }
+        public void OldReturnItemToWorld(Thing t)
+        {
+            Block block1 = Level.OldCheckLine<Block>(position, position + new Vec2(16f, 0f));
+            if (block1 != null && block1.solid && t.right > block1.left)
+                t.right = block1.left;
+            Block block2 = Level.OldCheckLine<Block>(position, position - new Vec2(16f, 0f));
+            if (block2 != null && block2.solid && t.left < block2.right)
+                t.left = block2.right;
+            Block block3 = Level.OldCheckLine<Block>(position, position + new Vec2(0f, -16f));
+            if (block3 != null && block3.solid && t.top < block3.bottom)
+                t.top = block3.bottom;
+            Block block4 = Level.OldCheckLine<Block>(position, position + new Vec2(0f, 16f));
+            if (block4 == null || !block4.solid || t.bottom <= block4.top)
+                return;
+            t.bottom = block4.top;
+        }
 
         public bool isOffBottomOfLevel => y > Level.activeLevel.lowestPoint + 100 && top > Level.current.camera.bottom + 8;
 

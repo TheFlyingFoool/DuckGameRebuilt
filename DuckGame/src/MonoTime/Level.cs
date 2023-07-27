@@ -1089,6 +1089,7 @@ namespace DuckGame
         public static T CheckLine<T>(Vec2 p1, Vec2 p2, Thing ignore) => current.CollisionLine<T>(p1, p2, ignore);
 
         public static T CheckLine<T>(Vec2 p1, Vec2 p2) => current.CollisionLine<T>(p1, p2);
+        public static T OldCheckLine<T>(Vec2 p1, Vec2 p2) => current.OldCollisionLine<T>(p1, p2);
 
         public static T CheckLine<T>(Vec2 p1, Vec2 p2, out Vec2 position, Thing ignore) => current.CollisionLine<T>(p1, p2, out position, ignore);
 
@@ -1665,6 +1666,22 @@ namespace DuckGame
             }
             return default(T);
         }
+        public T OldCollisionLine<T>(Vec2 p1, Vec2 p2)
+        {
+            Type t = typeof(T);
+            foreach (Thing thing in this._things.GetDynamicObjects(t))
+            {
+                if (!thing.removeFromLevel && Collision.Line(p1, p2, thing))
+                {
+                    return (T)((object)thing);
+                }
+            }
+            if (this._things.HasStaticObjects(t))
+            {
+                return this._things.quadTree.CheckLine<T>(p1, p2);
+            }
+            return default(T);
+        }
 
 
         public T CollisionLine<T>(Vec2 p1, Vec2 p2, out Vec2 position, Thing ignore)
@@ -1956,10 +1973,29 @@ namespace DuckGame
         //}
         public void CollisionBullet(Vec2 point, List<MaterialThing> output)
         {
-            foreach (Thing thing in things.CollisionPointAll(point, typeof(MaterialThing)))
+            //TODO: Re-optimize this code, this is currently DG's collision code because the code that uses the Bucket system makes certain bullet collisions
+            //work differently from vanilla, this is unoptimal because as with normal DG it checks every thing in the entire map and not just a sector like
+            //what we do with buckets so if someone can figure out a way to make it use buckets and work in vanilla go for it -NiK0
+            Type t = typeof(MaterialThing);
+            foreach (Thing thing in _things.GetDynamicObjects(t))
+            {
+                if (!thing.removeFromLevel && Collision.Point(point, thing))
+                {
+                    output.Add(thing as MaterialThing);
+                }
+            }
+            /*foreach (Thing thing in things.CollisionPointAll(point, typeof(MaterialThing)))
             {
                 if (!thing.removeFromLevel && Collision.Point(point, thing))
                     output.Add(thing as MaterialThing);
+            }*/
+            if (_things.HasStaticObjects(t))
+            {
+                MaterialThing thing2 = _things.quadTree.CheckPoint<MaterialThing>(point);
+                if (thing2 != null)
+                {
+                    output.Add(thing2);
+                }
             }
         }
 
