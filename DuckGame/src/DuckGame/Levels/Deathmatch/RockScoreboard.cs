@@ -1078,8 +1078,18 @@ namespace DuckGame
             bool isServer = Network.isServer;
             Network.isServer = true;
             backgroundColor = new Color(139, 204, 248) * _backgroundFade;
-            Layer.Game.fade = _backgroundFade;
-            Layer.Background.fade = _backgroundFade;
+
+
+            if (Program.BirthdayDGR)
+            {
+                Layer.Game.fade = _backgroundFade;
+                Layer.Background.fade = _backgroundFade - 0.2f;
+            }
+            else
+            {
+                Layer.Game.fade = _backgroundFade;
+                Layer.Background.fade = _backgroundFade;
+            }
             _backgroundFade = Lerp.Float(_backgroundFade, 1f, 0.02f);
             _field.rise = _fieldScroll;
             _fieldForeground.rise = _fieldScroll;

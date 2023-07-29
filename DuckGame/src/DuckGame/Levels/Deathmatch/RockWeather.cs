@@ -524,6 +524,17 @@ namespace DuckGame
 
         private RockWeatherState GetWeatherState(float time, bool lerp = true)
         {
+            if (Program.BirthdayDGR)
+            {
+                RockWeatherState WH = new RockWeatherState();
+                WH.add = Vec3.Zero;
+                WH.multiply = Vec3.One;
+                WH.sky = new Vec3(0.05f);
+                WH.lightOpacity = 0.3F;
+                WH.sunGlow = 0;
+                WH.sunOpacity = 0;
+                return WH;
+            }
             RockWeatherState rockWeatherState1 = null;
             RockWeatherState rockWeatherState2 = null;
             float num1 = 0f;
