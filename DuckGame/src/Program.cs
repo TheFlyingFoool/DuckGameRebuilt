@@ -457,6 +457,9 @@ namespace DuckGame
                     case "-norebuiltupdates":
                         MonoMain.IgnoreDGRUpdates = true;
                         break;
+                    case "-updaterebuilt":
+                        MonoMain.ForceDGRUpdate = true;
+                        break;
                     case "-gay":
                         gay = true;
                         break;
@@ -1133,15 +1136,15 @@ namespace DuckGame
             
             UpdateAutoUpdaterProgress(3);
             
-            if (!Internet.IsAvailable())
-            {
-                throw new WebException("No internet for AutoUpdater");
-            }
+            // if (!Internet.IsAvailable()) // unnecessary
+            // {
+            //     throw new WebException("No internet for AutoUpdater");
+            // }
 
             UpdateAutoUpdaterProgress(4);
             
-            if (!CheckForNewVersion(out DGVersion _))
-                return;
+            if (!(MonoMain.ForceDGRUpdate || CheckForNewVersion(out DGVersion _)))
+                throw new Exception("No new version available");
             
             UpdateAutoUpdaterProgress(5);
             
@@ -1176,18 +1179,29 @@ namespace DuckGame
             AutoUpdaterCompletionProgress.Value = step;
         }
 
+        private static DGVersion? s_latestDgVersion = null;
+        
         public static DGVersion GetLatestReleaseVersion()
         {
+            if (s_latestDgVersion is not null)
+                return s_latestDgVersion;
+            
             WebRequest webRequest = WebRequest.Create(GITHUB_RELEASE_URL);
             WebResponse response = webRequest.GetResponse();
             
             string lastestversionId = response.ResponseUri.OriginalString.Split('/').Last();
             return new DGVersion(lastestversionId);
         }
-        
+
         /// <returns>True if a newer release version exists</returns>
         public static bool CheckForNewVersion(out DGVersion version)
         {
+            if (s_latestDgVersion is not null)
+            {
+                version = s_latestDgVersion;
+                return true;
+            }
+            
             version = GetLatestReleaseVersion();
             DGVersion currentVersion = new(CURRENT_VERSION_ID);
 

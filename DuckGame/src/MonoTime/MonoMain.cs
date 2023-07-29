@@ -207,6 +207,7 @@ namespace DuckGame
         public static bool doPauseFade = true;
         public static bool firebreak = false;
         public static bool IgnoreDGRUpdates = false;
+        public static bool ForceDGRUpdate = false;
         public static bool experimental = false;
         public static volatile int loadyBits = 0;
         public static volatile int totalLoadyBits = 365;

@@ -182,7 +182,7 @@ namespace DuckGame
         public override void Initialize()
         {
             #if AutoUpdater
-            if (!MonoMain.IgnoreDGRUpdates && Program.CheckForNewVersion(out _latestRebuiltVersion))
+            if (MonoMain.ForceDGRUpdate | !MonoMain.IgnoreDGRUpdates & Program.CheckForNewVersion(out _latestRebuiltVersion))
                 _shouldUpdateRebuilt = true;
             #endif
             
@@ -1039,7 +1039,19 @@ namespace DuckGame
             #if AutoUpdater
             if (_shouldUpdateRebuilt)
             {
-                new Thread(Program.HandleAutoUpdater).Start();
+                new Thread(() =>
+                {
+                    try
+                    {
+                        Program.HandleAutoUpdater();
+                    }
+                    catch (Exception e)
+                    {
+                        DevConsole.Log("AutoUpdater Failed:");
+                        DevConsole.LogComplexMessage(e.ToString(), Colors.DGRed);
+                        MonoMain.pauseMenu.Close();
+                    }
+                }).Start();
                 return;
             }
             #endif

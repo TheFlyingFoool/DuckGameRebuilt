@@ -10,14 +10,13 @@ namespace AddedContent.Firebreak
     {
         // "What is this IP?"
         // see: https://www.reddit.com/r/pihole/comments/edvpkn/what_is_wwwmsftncsicom_its_showing_up_every/?utm_source=share&utm_medium=web2x&context=3
-        private const string DEFAULT_IP = "23.76.156.57";
+        private const string DEFAULT_IP = "www.google.com";
         private const int DEFAULT_TIMEOUT = 2000;
 
         /// <summary>
-        /// Checks the Internet access with default ip = "23.76.156.57" or "http://www.msftncsi.com/ncsi.txt" 
+        /// Checks the Internet access with default ip = "www.google.com" 
         /// and default timeout of 2000 Milliseconds.
         /// </summary>
-        /// <seealso cref="http://www.msftncsi.com/ncsi.txt"/>
         public static bool IsAvailable()
         {
             return DoCheck(DEFAULT_IP, DEFAULT_TIMEOUT);
