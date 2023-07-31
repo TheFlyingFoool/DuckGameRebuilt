@@ -25,7 +25,36 @@ namespace DuckGame
             else
                 text = "";
 
-            base.Draw();
+
+            x = parent.x;
+            _font.scale = new Vec2(1f, 1f);
+            _collisionSize.x = _font.GetWidth(_text);
+
+            _font.scale = scale;
+            _font.alpha = alpha;
+            _font.ySpacing = 0.5f;
+
+            Vec2 alignOffset = calcAlignOffset();
+            _font.Draw(text, x + alignOffset.x, y + alignOffset.y, UIMenu.disabledDraw ? Colors.BlueGray : _color, depth, _controlProfile);
+
+            if (HUD.hide)
+                return;
+            foreach (UIComponent component in _components)
+            {
+                if (component.condition == null || component.condition())
+                {
+                    if (component is UIMenuItem)
+                        UIMenu.disabledDraw = component.mode == MenuItemMode.Disabled;
+                    component.depth = depth + 10;
+                    if (component.visible && component.mode != MenuItemMode.Hidden)
+                    {
+                        component.Draw();
+                    }
+                    if (component is UIMenuItem)
+                        UIMenu.disabledDraw = false;
+                }
+            }
+            int num = debug ? 1 : 0;
         }
     }
 }

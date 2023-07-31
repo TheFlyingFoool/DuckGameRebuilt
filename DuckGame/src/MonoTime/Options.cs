@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -345,7 +346,7 @@ namespace DuckGame
 
             menu.Add(new UIMenuItemToggle("Instructions", field: new FieldBinding(dGRSettings, "EditorInstructions"))
             {
-                dgrDescription = "Displays real-time instructions on how to operate the editor. You might not need it anymore if you're already used to it"
+                dgrDescription = "Displays real-time instructions on how to operate the editor. You might not need them anymore if you're already familiar with everything"
             });
 
             menu.Add(new UIMenuItemToggle("Level Name", field: new FieldBinding(dGRSettings, "EditorLevelName"))
@@ -426,14 +427,6 @@ namespace DuckGame
             {
                 dgrDescription = "Toggles discord rich presence displaying the current level, if you're in the editor, etc\n(May take a few seconds to connect)"
             });
-            menu.Add(new UIMenuItemToggle("Menu Mouse", field: new FieldBinding(dGRSettings, "MenuMouse"))
-            {
-                dgrDescription = "Toggles the menu mouse"
-            });
-            menu.Add(new UIMenuItemToggle("Dubber Speed", field: new FieldBinding(dGRSettings, "dubberspeed"))
-            {
-                dgrDescription = "For true vim users, adds keybinds from 1-9 for faster menu browsing"
-            });
             menu.Add(new UIMenuItemNumber("Start in", field: new FieldBinding(dGRSettings, "StartIn", 0, 3), valStrings: new List<string>
             {
                 "TITLE",
@@ -461,6 +454,10 @@ namespace DuckGame
             menu.Add(new UIMenuItemToggle("Custom Hat Teams", field: new FieldBinding(dGRSettings, "CustomHatTeams"))
             {
                 dgrDescription = "Allows for teams with custom hats that have the same name (HOST ONLY)"
+            });
+            menu.Add(new UIMenuItemToggle("Keep Match Settings", field: new FieldBinding(dGRSettings, "RememberMatchSettings"))
+            {
+                dgrDescription = "When starting an online game, match settings will automatically be set to the last match settings you had"
             });
             menu.Add(new UIMenuItem("Reload Hats", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(ReloadHats)))
             {
@@ -517,15 +514,27 @@ namespace DuckGame
                         files.AddRange(DuckFile.ReGetFiles(Team.hatSearchPaths[i], "*.hat"));
                     }
 
-
+                    Dictionary<string, Team> tths = new Dictionary<string, Team>();
                     for (int i = 0; i < files.Count; i++)
                     {
                         Team team = Team.Deserialize(files[i]);
                         if (team != null)
                         {
+                            tths.Add(files[i], team);
                             Teams.core.extraTeams.Add(team);
                         }
                     }
+
+                    IEnumerable<TeamHat> ths = Level.current.things[typeof(TeamHat)].Cast<TeamHat>();
+                    foreach (TeamHat th in ths)
+                    {
+                        //might be a bit unoptimal to do this but im going with it anyways -NiK0
+                        if (files.Contains(th.team.customHatPath))
+                        {
+                            th.team = tths[th.team.customHatPath];
+                        }
+                    }
+
                     DGRSettings.InitializeFavoritedHats();
                 }
                 /*
@@ -580,9 +589,18 @@ namespace DuckGame
 
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemToggle("In-Game Lobby Name", field: new FieldBinding(dGRSettings, "LobbyNameOnPause"))
+            menu.Add(new UIMenuItemToggle("Lobby Name", field: new FieldBinding(dGRSettings, "LobbyNameOnPause"))
             {
                 dgrDescription = "Displays lobby name on pause screen (not supporting LAN lobbies)"
+            });
+
+            menu.Add(new UIMenuItemToggle("Menu Mouse", field: new FieldBinding(dGRSettings, "MenuMouse"))
+            {
+                dgrDescription = "Toggles the menu mouse"
+            });
+            menu.Add(new UIMenuItemToggle("Dubber Speed", field: new FieldBinding(dGRSettings, "dubberspeed"))
+            {
+                dgrDescription = "For true vim users, adds keybinds from 1-9 for faster menu browsing"
             });
 
             menu.Add(new UIText(" ", Color.White));

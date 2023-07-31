@@ -577,6 +577,43 @@ namespace DuckGame
             "n",
         };
 
+        public static T ChooseRandom<T>(this IEnumerable<T> collection)
+        {
+            int length = collection.Count();
+            int randomIndex = Rando.Int(length - 1);
+
+            using IEnumerator<T> enumerator = collection.GetEnumerator();
+
+            for (int i = 0; i < randomIndex + 1; i++)
+            {
+                enumerator.MoveNext();
+            }
+
+            return enumerator.Current;
+        }
+
+        public static T[] ChooseRandom<T>(this IEnumerable<T> collection, int count, bool unique = false)
+        {
+            int length = collection.Count();
+
+            if (count > length && unique)
+                throw new IndexOutOfRangeException("Not enough unique items in collection");
+        
+            T[] randomItems = new T[count];
+            List<T> validCollection = collection.ToList();
+
+            for (int i = 0; i < count; i++)
+            {
+                int randomIndex = Rando.Int(validCollection.Count - 1);
+                randomItems[i] = validCollection[randomIndex];
+
+                if (unique)
+                    validCollection.RemoveAt(randomIndex);
+            }
+
+            return randomItems;
+        }
+
         public enum CleanMethod { Color, Mojis, Both }
 
         // :D

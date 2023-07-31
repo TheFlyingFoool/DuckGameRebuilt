@@ -37,7 +37,7 @@ namespace DuckGame
 #endif
         public static readonly bool HasInternet = Internet.IsAvailable();
         // this should be formatted like X.X.X where each X is a number
-        public const string CURRENT_VERSION_ID = "1.0.16";
+        public const string CURRENT_VERSION_ID = "1.0.17";
 
         // do change this you know what you're doing -NiK0
         public const string CURRENT_VERSION_ID_FORMATTED = $"v{CURRENT_VERSION_ID}-beta";
@@ -50,6 +50,13 @@ namespace DuckGame
         public static string FileName;
         public static string FilePath;
         public static bool IsLinuxD; //new better system
+        public static bool BirthdayDGR
+        {
+            get
+            {
+                return DateTime.Today.Date.Month == 8 && DateTime.Today.Date.Day == 3;
+            }
+        }
         public static bool intro = false;
         public static bool testServer = false;
         public static Main main;
@@ -449,6 +456,9 @@ namespace DuckGame
                         break;
                     case "-norebuiltupdates":
                         MonoMain.IgnoreDGRUpdates = true;
+                        break;
+                    case "-updaterebuilt":
+                        MonoMain.ForceDGRUpdate = true;
                         break;
                     case "-gay":
                         gay = true;
@@ -1126,15 +1136,15 @@ namespace DuckGame
             
             UpdateAutoUpdaterProgress(3);
             
-            if (!Internet.IsAvailable())
-            {
-                throw new WebException("No internet for AutoUpdater");
-            }
+            // if (!Internet.IsAvailable()) // unnecessary
+            // {
+            //     throw new WebException("No internet for AutoUpdater");
+            // }
 
             UpdateAutoUpdaterProgress(4);
             
-            if (!CheckForNewVersion(out DGVersion _))
-                return;
+            if (!(MonoMain.ForceDGRUpdate || CheckForNewVersion(out DGVersion _)))
+                throw new Exception("No new version available");
             
             UpdateAutoUpdaterProgress(5);
             
@@ -1169,18 +1179,29 @@ namespace DuckGame
             AutoUpdaterCompletionProgress.Value = step;
         }
 
+        private static DGVersion? s_latestDgVersion = null;
+        
         public static DGVersion GetLatestReleaseVersion()
         {
+            if (s_latestDgVersion is not null)
+                return s_latestDgVersion;
+            
             WebRequest webRequest = WebRequest.Create(GITHUB_RELEASE_URL);
             WebResponse response = webRequest.GetResponse();
             
             string lastestversionId = response.ResponseUri.OriginalString.Split('/').Last();
             return new DGVersion(lastestversionId);
         }
-        
+
         /// <returns>True if a newer release version exists</returns>
         public static bool CheckForNewVersion(out DGVersion version)
         {
+            if (s_latestDgVersion is not null)
+            {
+                version = s_latestDgVersion;
+                return true;
+            }
+            
             version = GetLatestReleaseVersion();
             DGVersion currentVersion = new(CURRENT_VERSION_ID);
 
@@ -1421,7 +1442,14 @@ namespace DuckGame
                 {
                     ExceptionMessage = pException.GetType().FullName + ": ";
                     string tempMsg = pException.Message;
-                    string tempMsg2 = TranslateMessage(pException);
+
+                    string tempMsg2;
+                    if (!Program.IsLinuxD) //PLEASE do not translate on linux. it dies -othello7
+                        tempMsg2 = TranslateMessage(pException);
+                    else
+                        tempMsg2 = pException.ToString();
+
+
                     if (tempMsg2 != "" && tempMsg2 != tempMsg)
                     {
                         ExceptionMessage += tempMsg2 + Environment.NewLine + tempMsg;
@@ -1431,7 +1459,7 @@ namespace DuckGame
                         ExceptionMessage += tempMsg;
                     }
                 }
-                catch(Exception ex2)
+                catch (Exception ex2)
                 {
                     ExceptionMessage += pException.Message + " [F][" + ex2.HResult + "]";
                 }

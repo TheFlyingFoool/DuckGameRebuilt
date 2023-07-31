@@ -347,6 +347,7 @@ namespace DuckGame
 
         public virtual void Begin(bool transparent, bool isTargetDraw = false)
         {
+            //HKK
             int num1 = name == "LIGHTING" ? 1 : 0;
             if (aspectReliesOnGameLayer && this.camera != Game.camera)
             {
@@ -367,107 +368,137 @@ namespace DuckGame
                     else
                         Graphics.Clear(_targetClearColor);
                 }
-                if (!isTargetDraw)
+                if (!isTargetDraw && (Graphics.currentRenderTarget == null || Graphics.currentRenderTarget.depth))
                 {
-                    if (Graphics.currentRenderTarget != null)
-                    {
-                        if (!Graphics.currentRenderTarget.depth)
-                            goto label_14;
-                    }
-                    Graphics.device.Clear(ClearOptions.DepthBuffer, (Microsoft.Xna.Framework.Color)Color.Black, 1f, 0);
+                    Graphics.device.Clear(ClearOptions.DepthBuffer, Color.Black, 1f, 0);
                 }
             }
             catch (Exception ex)
             {
                 DevConsole.Log("|DGRED|Layer.Begin exception: " + ex.Message);
             }
-        label_14:
             Graphics.ResetSpanAdjust();
-            Effect effect = (Effect)_core._basicEffect;
-            Vec3 vec3_1 = new Vec3((Graphics.fade * _fade * (1f - _darken))) * colorMul;
-            Vec3 vec3_2 = _colorAdd + new Vec3(_fadeAdd) + new Vec3(Graphics.flashAddRenderValue) * flashAddInfluence + new Vec3(Graphics.fadeAddRenderValue) - new Vec3(darken);
-            vec3_2 = new Vec3(Maths.Clamp(vec3_2.x, -1f, 1f), Maths.Clamp(vec3_2.y, -1f, 1f), Maths.Clamp(vec3_2.z, -1f, 1f));
-            vec3_2 *= vec3_1;
-            if (this == Game)
+            Effect effect = Layer._core._basicEffect;
+            Vec3 fade = new Vec3(Graphics.fade * this._fade * (1f - this._darken)) * this.colorMul;
+            Vec3 fadeAdd = this._colorAdd + new Vec3(this._fadeAdd) + new Vec3(Graphics.flashAddRenderValue) * this.flashAddInfluence + new Vec3(Graphics.fadeAddRenderValue) - new Vec3(this.darken);
+            fadeAdd = new Vec3(Maths.Clamp(fadeAdd.x, -1f, 1f), Maths.Clamp(fadeAdd.y, -1f, 1f), Maths.Clamp(fadeAdd.z, -1f, 1f));
+            fadeAdd *= fade;
+            if (this == Layer.Game)
             {
-                kGameLayerFade = vec3_1;
-                kGameLayerAdd = vec3_2;
+                Layer.kGameLayerFade = fade;
+                Layer.kGameLayerAdd = fadeAdd;
             }
-            if (_darken > 0f)
-                _darken -= 0.15f;
-            else if (_darken < 0f)
-                _darken += 0.15f;
-            if (Math.Abs(_darken) < 0.16f)
-                _darken = 0f;
-            if (_effect != null)
+            if (this._darken > 0f)
             {
-                effect = _effect;
-                effect.Parameters["fade"]?.SetValue((Vector3)vec3_1);
-                effect.Parameters["add"]?.SetValue((Vector3)vec3_2);
+                this._darken -= 0.15f;
+            }
+            else if (this._darken < 0f)
+            {
+                this._darken += 0.15f;
+            }
+            if (Math.Abs(this._darken) < 0.16f)
+            {
+                this._darken = 0f;
+            }
+            if (this._effect != null)
+            {
+                effect = this._effect;
+                EffectParameter p = effect.Parameters["fade"];
+                if (p != null)
+                {
+                    p.SetValue(fade);
+                }
+                p = effect.Parameters["add"];
+                if (p != null)
+                {
+                    p.SetValue(fadeAdd);
+                }
             }
             else
             {
-                float num2 = vec3_2.LengthSquared();
-                if (vec3_1 != Vec3.One && num2 > 1f / 1000f)
+                float fadeLen = fadeAdd.LengthSquared();
+                if (fade != Vec3.One && fadeLen > 0.001f)
                 {
-                    effect = (Effect)_core._basicEffectFadeAdd;
-                    effect.Parameters["fade"].SetValue((Vector3)vec3_1);
-                    effect.Parameters["add"].SetValue((Vector3)vec3_2);
+                    effect = Layer._core._basicEffectFadeAdd;
+                    effect.Parameters["fade"].SetValue(fade);
+                    effect.Parameters["add"].SetValue(fadeAdd);
                 }
-                else if (vec3_1 != Vec3.One)
+                else if (fade != Vec3.One)
                 {
-                    effect = (Effect)_core._basicEffectFade;
-                    effect.Parameters["fade"].SetValue((Vector3)vec3_1);
+                    effect = Layer._core._basicEffectFade;
+                    effect.Parameters["fade"].SetValue(fade);
                 }
-                else if (num2 > 1f / 1000f)
+                else if (fadeLen > 0.001f)
                 {
-                    effect = (Effect)_core._basicEffectAdd;
-                    effect.Parameters["add"].SetValue((Vector3)vec3_2);
+                    effect = Layer._core._basicEffectAdd;
+                    effect.Parameters["add"].SetValue(fadeAdd);
                 }
-                if (doVirtualEffect && (Game == this || Foreground == this || Blocks == this || Background == this))
-                    effect = !basicWireframeTex ? (Effect)_core._basicWireframeEffect : (Effect)_core._basicWireframeEffectTex;
+                if (Layer.doVirtualEffect && (Layer.Game == this || Layer.Foreground == this || Layer.Blocks == this || Layer.Background == this))
+                {
+                    if (Layer.basicWireframeTex)
+                    {
+                        effect = Layer._core._basicWireframeEffectTex;
+                    }
+                    else
+                    {
+                        effect = Layer._core._basicWireframeEffect;
+                    }
+                }
             }
-            if (_state.ScissorTestEnable)
-                Graphics.SetScissorRectangle(_scissor);
-            Graphics.screen = _batch;
-            Camera camera = this.camera;
-            if (target != null & isTargetDraw && !targetOnly)
+            if (this._state.ScissorTestEnable)
             {
-                _targetCamera.x = (float)Math.Round(this.camera.x - 1f);
-                _targetCamera.y = (float)Math.Round(this.camera.y - 1f);
-                _targetCamera.width = Math.Max(this.camera.width, Graphics.width);
-                _targetCamera.height = Math.Max(this.camera.height, Graphics.height);
-                camera = _targetCamera;
+                Graphics.SetScissorRectangle(this._scissor);
             }
-            BlendState blendState = _blend;
+            Graphics.screen = this._batch;
+            Camera c = this.camera;
+            if (this.target != null && isTargetDraw && !this.targetOnly)
+            {
+                this._targetCamera.x = (float)Math.Round((double)(this.camera.x - 1f));
+                this._targetCamera.y = (float)Math.Round((double)(this.camera.y - 1f));
+                this._targetCamera.width = Math.Max(this.camera.width, (float)Graphics.width);
+                this._targetCamera.height = Math.Max(this.camera.height, (float)Graphics.height);
+                c = this._targetCamera;
+            }
+            BlendState blendState = this._blend;
             if (isTargetDraw)
-                blendState = _targetBlend;
-
-            if (target != null & isTargetDraw)
             {
-                Vec2 position1 = camera.position;
-                position1.x = (float)Math.Floor(position1.x);
-                position1.y = (float)Math.Floor(position1.y);
-                Vec2 size1 = camera.size;
-                size1.x = (float)Math.Floor(size1.x);
-                size1.y = (float)Math.Floor(size1.y);
-                Vec2 position2 = camera.position;
-                Vec2 size2 = camera.size;
-                _batch.Begin(SpriteSortMode.BackToFront, blendState, SamplerState.PointClamp, _targetDepthStencil, _state, (MTEffect)effect, camera.getMatrix());
-                camera.position = position2;
-                camera.size = size2;
+                blendState = this._targetBlend;
             }
-            else if (blurry || _blurEffect)
+            if (this.target != null && isTargetDraw)
+            {
+                Vec2 pos = c.position;
+                pos.x = (float)Math.Floor((double)pos.x);
+                pos.y = (float)Math.Floor((double)pos.y);
+                Vec2 size = c.size;
+                size.x = (float)Math.Floor((double)size.x);
+                size.y = (float)Math.Floor((double)size.y);
+                Vec2 realPos = c.position;
+                Vec2 realSize = c.size;
+                this._batch.Begin(SpriteSortMode.BackToFront, blendState, SamplerState.PointClamp, this._targetDepthStencil, this._state, effect, c.getMatrix());
+                c.position = realPos;
+                c.size = realSize;
+                return;
+            }
+            if (Layer.blurry || this._blurEffect)
             {
                 if (!transparent)
-                    _batch.Begin(SpriteSortMode.FrontToBack, blendState, SamplerState.LinearClamp, DepthStencilState.Default, _state, (MTEffect)effect, camera.getMatrix());
-                else
-                    _batch.Begin(SpriteSortMode.BackToFront, blendState, SamplerState.LinearClamp, DepthStencilState.DepthRead, _state, (MTEffect)effect, camera.getMatrix());
+                {
+                    this._batch.Begin(SpriteSortMode.FrontToBack, blendState, SamplerState.LinearClamp, DepthStencilState.Default, this._state, effect, c.getMatrix());
+                    return;
+                }
+                this._batch.Begin(SpriteSortMode.BackToFront, blendState, SamplerState.LinearClamp, DepthStencilState.DepthRead, this._state, effect, c.getMatrix());
+                return;
             }
-            else if (!transparent)
-                _batch.Begin(SpriteSortMode.FrontToBack, blendState, SamplerState.PointClamp, DepthStencilState.Default, _state, (MTEffect)effect, camera.getMatrix());
             else
-                _batch.Begin(SpriteSortMode.BackToFront, blendState, SamplerState.PointClamp, DepthStencilState.DepthRead, _state, (MTEffect)effect, camera.getMatrix());
+            {
+                if (!transparent)
+                {
+                    this._batch.Begin(SpriteSortMode.FrontToBack, blendState, SamplerState.PointClamp, DepthStencilState.Default, this._state, effect, c.getMatrix());
+                    return;
+                }
+                this._batch.Begin(SpriteSortMode.BackToFront, blendState, SamplerState.PointClamp, DepthStencilState.DepthRead, this._state, effect, c.getMatrix());
+                return;
+            }
         }
 
         public void End(bool transparent, bool isTargetDraw = false)

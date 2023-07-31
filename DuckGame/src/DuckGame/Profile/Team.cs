@@ -890,6 +890,29 @@ namespace DuckGame
                 allowNegative = true,
                 randomizeBoth = true
             };
+
+            [Metapixel(110, "Passive particle spawn rate", "The rate at which particles should passively spawn, minimum 0.1s, maximum 2.5s")]
+            public MDFloat PassiveParticleRate = new MDFloat
+            {
+                value = 0f,
+                range = 2.5f,
+            };
+            [Metapixel(111, "Passive particle quack toggle", "If present, passive particles will be toggled on and off when quacking")]
+            public MDBool PassiveParticleToggle = new MDBool
+            {
+                value = false
+            };
+            [Metapixel(112, "Passive particle condition", "The condition to when particles should spawn in passively, 0 = Always, 1 = Hat is being worn, 2 = Hat is not being worn, 3 = Currently quacking, 4 Currently not quacking, 5 Hat is held")]
+            public MDInt PassiveParticleCondition = new MDInt
+            {
+                value = 0,
+                range = 5
+            };
+            [Metapixel(113, "Passive particle override quack", "If present, quacking will not generate particles")]
+            public MDBool PassiveParticleOverrideQuack = new MDBool
+            {
+                value = false
+            };
             public Team team;
             private static CustomHatMetadata kCurrentMetadata;
             private static Dictionary<Func<object, object>, Metapixel> kParameterAttributes;

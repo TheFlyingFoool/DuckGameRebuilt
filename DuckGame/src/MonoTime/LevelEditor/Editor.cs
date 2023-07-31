@@ -3045,7 +3045,7 @@ namespace DuckGame
                     }
 
                     bool flag = false;
-                    if (Keyboard.Pressed(Keys.Delete) ||
+                    if ((Keyboard.Pressed(Keys.Delete) || Keyboard.Pressed(Keys.Back)) ||
                         _input.Pressed(Triggers.Menu2) && inputMode == EditorInput.Gamepad)
                     {
                         History.BeginUndoSection();

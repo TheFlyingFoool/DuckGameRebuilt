@@ -2800,36 +2800,36 @@ namespace DuckGame
                     mindControl.UpdateExtraInput();
                 //this._heldLeft = false;
                 //this._heldRight = false;
-                Block block1 = Level.CheckRect<Block>(new Vec2(x - 3f, y - 9f), new Vec2(x + 3f, y + 4f));
-                _crouchLock = (crouch || sliding) && block1 != null && block1.solid;
-                float num1 = 0.55f * holdWeightMultiplier * grappleMultiplier * accelerationMultiplier;
+                Block lockBlock = Level.CheckRect<Block>(new Vec2(x - 3f, y - 9f), new Vec2(x + 3f, y + 4f));
+                _crouchLock = (crouch || sliding) && lockBlock != null && lockBlock.solid;
+                float hAcc = 0.55f * holdWeightMultiplier * grappleMultiplier * accelerationMultiplier;
                 maxrun = _runMax * holdWeightMultiplier;
                 if (_isGhost)
                 {
-                    num1 *= 1.4f;
+                    hAcc *= 1.4f;
                     maxrun *= 1.5f;
                 }
                 int num2 = HasTVs(false);
                 for (int index = 0; index < num2; ++index)
                 {
-                    num1 *= 1.4f;
+                    hAcc *= 1.4f;
                     maxrun *= 1.5f;
                 }
                 if (holdObject is EnergyScimitar && (holdObject as EnergyScimitar).dragSpeedBonus)
                 {
                     if ((holdObject as EnergyScimitar)._spikeDrag)
                     {
-                        num1 *= 0.5f;
+                        hAcc *= 0.5f;
                         maxrun *= 0.5f;
                     }
                     else
                     {
-                        num1 *= 1.3f;
+                        hAcc *= 1.3f;
                         maxrun *= 1.35f;
                     }
                 }
                 if (specialFrictionMod > 0f)
-                    num1 *= Math.Min(specialFrictionMod * 2f, 1f);
+                    hAcc *= Math.Min(specialFrictionMod * 2f, 1f);
                 if (isServerForObject && isOffBottomOfLevel && !dead)
                 {
                     if (ragdoll != null && ragdoll.part1 != null && ragdoll.part2 != null && ragdoll.part3 != null)
@@ -2857,17 +2857,17 @@ namespace DuckGame
                             t.Flip(offDir < 0);
                         }
                     }
-                    float num3;
+                    float leftMul;
                     if (inputProfile.Down(Triggers.Left))
                     {
-                        num3 = 1f;
+                        leftMul = 1f;
                         if (_leftPressedFrame == 0)
                             _leftPressedFrame = (int)Graphics.frame;
                     }
                     else
                     {
-                        num3 = Maths.NormalizeSection(Math.Abs(Math.Min(inputProfile.leftStick.x, 0f)), 0.2f, 0.9f);
-                        if (num3 > 0.01f)
+                        leftMul = Maths.NormalizeSection(Math.Abs(Math.Min(inputProfile.leftStick.x, 0f)), 0.2f, 0.9f);
+                        if (leftMul > 0.01f)
                         {
                             if (_leftPressedFrame == 0)
                                 _leftPressedFrame = (int)Graphics.frame;
@@ -2875,17 +2875,17 @@ namespace DuckGame
                         else
                             _leftPressedFrame = 0;
                     }
-                    float num4;
+                    float rightMul;
                     if (inputProfile.Down(Triggers.Right))
                     {
-                        num4 = 1f;
+                        rightMul = 1f;
                         if (_rightPressedFrame == 0)
                             _rightPressedFrame = (int)Graphics.frame;
                     }
                     else
                     {
-                        num4 = Maths.NormalizeSection(Math.Max(inputProfile.leftStick.x, 0f), 0.2f, 0.9f);
-                        if (num4 > 0.01f)
+                        rightMul = Maths.NormalizeSection(Math.Max(inputProfile.leftStick.x, 0f), 0.2f, 0.9f);
+                        if (rightMul > 0.01f)
                         {
                             if (_rightPressedFrame == 0)
                                 _rightPressedFrame = (int)Graphics.frame;
@@ -2893,34 +2893,34 @@ namespace DuckGame
                         else
                             _rightPressedFrame = 0;
                     }
-                    bool flag2 = Options.Data.oldAngleCode;
+                    bool oldAngleCode = Options.Data.oldAngleCode;
                     if (!isServerForObject && inputProfile != null)
-                        flag2 = inputProfile.oldAngles;
-                    if (num3 < 0.01f && onFire && offDir == 1)
-                        num4 = 1f;
-                    if (num4 < 0.01f && onFire && offDir == -1)
-                        num3 = 1f;
+                        oldAngleCode = inputProfile.oldAngles;
+                    if (leftMul < 0.01f && onFire && offDir == 1)
+                        rightMul = 1f;
+                    if (rightMul < 0.01f && onFire && offDir == -1)
+                        leftMul = 1f;
                     if (grappleMul)
                     {
-                        num3 *= 1.5f;
-                        num4 *= 1.5f;
+                        leftMul *= 1.5f;
+                        rightMul *= 1.5f;
                     }
                     if (DevConsole.qwopMode && Level.current is GameLevel)
                     {
-                        if (num3 > 0f)
+                        if (leftMul > 0f)
                             offDir = -1;
-                        else if (num4 > 0f)
+                        else if (rightMul > 0f)
                             offDir = 1;
                         if (_walkTime == 0)
                         {
-                            num4 = num3 = 0f;
+                            rightMul = leftMul = 0f;
                         }
                         else
                         {
                             if (offDir < 0)
-                                num3 = 1f;
+                                leftMul = 1f;
                             else
-                                num4 = 1f;
+                                rightMul = 1f;
                             --_walkTime;
                         }
                         if (_walkCount > 0)
@@ -2968,21 +2968,21 @@ namespace DuckGame
                             }
                         }
                     }
-                    bool flag3 = _crouchLock && grounded && inputProfile.Pressed(Triggers.Any);
-                    if (flag3 && offDir == -1)
+                    bool nudging = _crouchLock && grounded && inputProfile.Pressed(Triggers.Any);
+                    if (nudging && offDir == -1)
                     {
-                        num3 = 1f;
-                        num4 = 0f;
+                        leftMul = 1f;
+                        rightMul = 0f;
                     }
-                    if (flag3 && offDir == 1)
+                    if (nudging && offDir == 1)
                     {
-                        num4 = 1f;
-                        num3 = 0f;
+                        rightMul = 1f;
+                        leftMul = 0f;
                     }
                     if (_leftJump)
-                        num3 = 0f;
+                        leftMul = 0f;
                     else if (_rightJump)
-                        num4 = 0f;
+                        rightMul = 0f;
                     strafing = false;
                     if (!_moveLock)
                     {
@@ -2991,28 +2991,28 @@ namespace DuckGame
                         {
                             strafing = true;
                         }
-                        if (num3 > 0.01f && !crouch | flag3)
+                        if (leftMul > 0.01f && !crouch | nudging)
                         {
-                            if (hSpeed > -maxrun * num3)
+                            if (hSpeed > -maxrun * leftMul)
                             {
-                                hSpeed -= num1;
-                                if (hSpeed < -maxrun * num3)
-                                    hSpeed = -maxrun * num3;
+                                hSpeed -= hAcc;
+                                if (hSpeed < -maxrun * leftMul)
+                                    hSpeed = -maxrun * leftMul;
                             }
                             //this._heldLeft = true;
-                            if (!strafing && !flag3 && (flag2 || _leftPressedFrame > _rightPressedFrame))
+                            if (!strafing && !nudging && (oldAngleCode || _leftPressedFrame > _rightPressedFrame))
                                 offDir = -1;
                         }
-                        if (num4 > 0.01f && !crouch | flag3)
+                        if (rightMul > 0.01f && !crouch | nudging)
                         {
-                            if (hSpeed < maxrun * num4)
+                            if (hSpeed < maxrun * rightMul)
                             {
-                                hSpeed += num1;
-                                if (hSpeed > maxrun * num4)
-                                    hSpeed = maxrun * num4;
+                                hSpeed += hAcc;
+                                if (hSpeed > maxrun * rightMul)
+                                    hSpeed = maxrun * rightMul;
                             }
                             //this._heldRight = true;
-                            if (!strafing && !flag3 && (flag2 || _rightPressedFrame > _leftPressedFrame))
+                            if (!strafing && !nudging && (oldAngleCode || _rightPressedFrame > _leftPressedFrame))
                                 offDir = 1;
                         }
                         if (isServerForObject && strafing)
@@ -3028,16 +3028,16 @@ namespace DuckGame
                             rightWall = false;
                         }
                         _canWallJump = GetEquipment(typeof(WallBoots)) != null;
-                        int num5 = 6;
+                        int wallJumpGiveFrames = 6;
                         if (!grounded && _canWallJump)
                         {
-                            Block block2 = Level.CheckLine<Block>(topLeft + new Vec2(0f, 4f), bottomLeft + new Vec2(-3f, -4f));
-                            Block block3 = Level.CheckLine<Block>(topRight + new Vec2(3f, 4f), bottomRight + new Vec2(0f, -4f));
-                            if (inputProfile.Down(Triggers.Left) && block2 != null && !block2.clip.Contains(this))
+                            Block blockLeft = Level.CheckLine<Block>(topLeft + new Vec2(0f, 4f), bottomLeft + new Vec2(-3f, -4f));
+                            Block blockRight = Level.CheckLine<Block>(topRight + new Vec2(3f, 4f), bottomRight + new Vec2(0f, -4f));
+                            if (inputProfile.Down(Triggers.Left) && blockLeft != null && !blockLeft.clip.Contains(this))
                             {
                                 atWall = true;
                                 leftWall = true;
-                                _atWallFrames = num5;
+                                _atWallFrames = wallJumpGiveFrames;
                                 if (!onWall)
                                 {
                                     onWall = true;
@@ -3056,11 +3056,11 @@ namespace DuckGame
                                     }
                                 }
                             }
-                            else if (inputProfile.Down(Triggers.Right) && block3 != null && !block3.clip.Contains(this))
+                            else if (inputProfile.Down(Triggers.Right) && blockRight != null && !blockRight.clip.Contains(this))
                             {
                                 atWall = true;
                                 rightWall = true;
-                                _atWallFrames = num5;
+                                _atWallFrames = wallJumpGiveFrames;
                                 if (!onWall)
                                 {
                                     onWall = true;
@@ -3080,7 +3080,7 @@ namespace DuckGame
                                 }
                             }
                         }
-                        if (onWall && _atWallFrames != num5)
+                        if (onWall && _atWallFrames != wallJumpGiveFrames)
                         {
                             SFX.Play("wallLeave", pitch: Rando.Float(-0.1f, 0.1f));
                             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
@@ -3097,13 +3097,13 @@ namespace DuckGame
                             }
                             onWall = false;
                         }
-                        if ((leftWall || rightWall) && vSpeed > 1f && _atWallFrames == num5)
+                        if ((leftWall || rightWall) && vSpeed > 1f && _atWallFrames == wallJumpGiveFrames)
                             vSpeed = 0.5f;
                         if (_wallJump > 0)
                             --_wallJump;
                         else
                             _rightJump = _leftJump = false;
-                        bool flag4 = _jumpValid > 0 && (_groundValid > 0 && !_crouchLock || atWall && _wallJump == 0 || doFloat);
+                        bool canJump = _jumpValid > 0 && (_groundValid > 0 && !_crouchLock || atWall && _wallJump == 0 || doFloat);
                         if (_double && !HasJumpModEquipment() && !_hovering && inputProfile.Pressed(Triggers.Jump))
                         {
                             PhysicsRopeSection section = null;
@@ -3113,18 +3113,18 @@ namespace DuckGame
                             {
                                 _vine = section.rope.LatchOn(section, this);
                                 _double = false;
-                                flag4 = false;
+                                canJump = false;
                                 _groundValid = 0;
                             }
                         }
-                        bool flag5 = false;
-                        if (flag4 && Math.Abs(hSpeed) < 0.2f && inputProfile.Down(Triggers.Down) && Math.Abs(hSpeed) < 0.2f && inputProfile.Down(Triggers.Down))
+                        bool jumpDown = false;
+                        if (canJump && Math.Abs(hSpeed) < 0.2f && inputProfile.Down(Triggers.Down) && Math.Abs(hSpeed) < 0.2f && inputProfile.Down(Triggers.Down))
                         {
                             foreach (IPlatform platform1 in Level.CheckLineAll<IPlatform>(bottomLeft + new Vec2(0.1f, 1f), bottomRight + new Vec2(-0.1f, 1f)))
                             {
                                 if (platform1 is Block)
                                 {
-                                    flag4 = true;
+                                    canJump = true;
                                     break;
                                 }
                                 if (platform1 is MaterialThing materialThing)
@@ -3140,17 +3140,17 @@ namespace DuckGame
                                         if (platform3 != null && platform3 is MaterialThing && !(platform3 is Block))
                                             clip.Add(platform3 as MaterialThing);
                                     }
-                                    flag4 = false;
+                                    canJump = false;
                                 }
                             }
-                            if (!flag4)
+                            if (!canJump)
                             {
                                 ++y;
                                 vSpeed = 1f;
                                 _groundValid = 0;
                                 _hovering = false;
                                 jumping = true;
-                                flag5 = true;
+                                jumpDown = true;
                             }
                         }
                         PhysicsRopeSection section1 = null;
@@ -3160,48 +3160,48 @@ namespace DuckGame
                             if (section1 != null && (position - section1.position).length >= 18.0f)
                                 section1 = null;
                         }
-                        bool flag6 = false;
-                        if (!flag5)
+                        bool jet = false;
+                        if (!jumpDown)
                         {
                             if (inputProfile.Pressed(Triggers.Jump))
                             {
                                 if (HasEquipment(typeof(Jetpack)) && (_groundValid <= 0 || crouch || sliding))
                                 {
                                     GetEquipment(typeof(Jetpack)).PressAction();
-                                    flag6 = true;
+                                    jet = true;
                                 }
-                                if (!flag4 && HasTV() && CheckTVChannel(true) && CheckTVJump() && section1 == null)
+                                if (!canJump && HasTV() && CheckTVChannel(true) && CheckTVJump() && section1 == null)
                                 {
                                     _groundValid = 9999;
-                                    flag4 = true;
+                                    canJump = true;
                                     tvJumped = true;
                                 }
                             }
                             if (inputProfile.Down(Triggers.Jump) && HasEquipment(typeof(Jetpack)) && (_groundValid <= 0 || crouch || sliding))
-                                flag6 = true;
+                                jet = true;
                             if (inputProfile.Released(Triggers.Jump) && HasEquipment(typeof(Jetpack)))
                                 GetEquipment(typeof(Jetpack)).ReleaseAction();
                             if (inputProfile.Pressed(Triggers.Jump) && HasEquipment(typeof(Grapple)) && !grounded && _jumpValid <= 0 && _groundValid <= 0)
-                                flag6 = true;
+                                jet = true;
                         }
-                        bool flag7 = flag4 && !flag6;
-                        bool flag8 = false;
-                        bool flag9 = false;
-                        bool flag10 = false;
-                        if (!flag7 && _vine != null && inputProfile.Released(Triggers.Jump))
+                        bool canJump2 = canJump && !jet;
+                        bool cancelJumping = false;
+                        bool halfSpeed = false;
+                        bool releasedVine = false;
+                        if (!canJump2 && _vine != null && inputProfile.Released(Triggers.Jump))
                         {
                             _vine.Degrapple();
                             _vine = null;
                             if (!inputProfile.Down(Triggers.Down))
                             {
-                                flag7 = true;
-                                flag8 = true;
+                                canJump2 = true;
+                                cancelJumping = true;
                             }
                             if (!inputProfile.Down(Triggers.Up))
-                                flag9 = true;
-                            flag10 = true;
+                                halfSpeed = true;
+                            releasedVine = true;
                         }
-                        if (flag7)
+                        if (canJump2)
                         {
                             if (atWall)
                             {
@@ -3236,10 +3236,10 @@ namespace DuckGame
                             if (Recorder.currentRecording != null)
                                 Recorder.currentRecording.LogAction(6);
                         }
-                        if (flag8)
+                        if (cancelJumping)
                         {
                             jumping = false;
-                            if (flag9 && vSpeed < 0f)
+                            if (halfSpeed && vSpeed < 0f)
                                 vSpeed *= 0.7f;
                         }
                         if (inputProfile.Released(Triggers.Jump))
@@ -3253,7 +3253,7 @@ namespace DuckGame
                             }
                             _hovering = false;
                         }
-                        if (!flag7 && !HasJumpModEquipment() && _groundValid <= 0)
+                        if (!canJump2 && !HasJumpModEquipment() && _groundValid <= 0)
                         {
                             bool flag11 = !crouch && holdingWeight <= 5f && (pipeOut <= 0 || vSpeed > -0.1f);
                             if (!_hovering && inputProfile.Pressed(Triggers.Jump))
@@ -3364,7 +3364,7 @@ namespace DuckGame
                         }
                         if (inputProfile.Released(Triggers.Jump) || vineRelease)
                             vineRelease = false;
-                        if (flag10)
+                        if (releasedVine)
                             vineRelease = true;
                     }
                 }

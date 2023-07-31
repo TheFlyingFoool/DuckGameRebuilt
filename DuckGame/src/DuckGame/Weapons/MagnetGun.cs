@@ -392,8 +392,7 @@ namespace DuckGame
                     (_grabbed as Duck).UpdateSkeleton();
                     (_grabbed as Duck).gripped = true;
                 }
-                else
-                    _grabbed.position = Offset(barrelOffset) + barrelVector * _grabbed.halfWidth;
+                else _grabbed.position = Offset(barrelOffset) + barrelVector * _grabbed.halfWidth;
             }
             else
             {

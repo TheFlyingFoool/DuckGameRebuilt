@@ -6,9 +6,10 @@ namespace DuckGame
     public static partial class DevConsoleCommands
     {
         [DevConsoleCommand]
-        public static string Debug()
+        public static void Debug()
         {
-            return JsonConvert.SerializeObject(new Rectangle(0, 0, 24, 24), Formatting.Indented);
+            DevConsole.RunCommand("eight");
+            DevConsole.RunCommand("lev rockthrow");
         }
     }
 }

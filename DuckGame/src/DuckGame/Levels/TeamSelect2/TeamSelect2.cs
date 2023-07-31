@@ -1,15 +1,7 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.TeamSelect2
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Text;
-using static DuckGame.CMD;
+using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -102,6 +94,8 @@ namespace DuckGame
         private float _waitToShow = 1f;
         private static bool _showedPS4Warning = false;
         private float _afkTimeout;
+        //keep this its important although it may not seem like it and may never be used -NiK0
+        private static bool _showedOnlineBumper = false; 
         private float _timeoutFade;
         private float _topScroll;
         private float _afkMaxTimeout = 300f;
@@ -346,6 +340,92 @@ namespace DuckGame
                 if (Network.isServer && thing.isStateObject)
                     GhostManager.context.MakeGhost(thing);
             }
+
+            if (DGRSettings.LastMatchSettings != null && DGRSettings.LastMatchSettings.lengthInBytes > 32 && DGRSettings.RememberMatchSettings)
+            {
+                /*bf.Write((byte)GetSettingInt("requiredwins"));
+            bf.Write((byte)GetSettingInt("restsevery"));
+            bf.Write((byte)GetSettingInt("randommaps"));
+            bf.Write((byte)GetSettingInt("workshopmaps"));
+            bf.Write((byte)GetSettingInt("normalmaps"));
+            bf.Write((bool)GetOnlineSetting("teams").value);
+            bf.Write((byte)GetSettingInt("custommaps"));
+            bf.Write(GetSettingBool("wallmode"));
+            bf.Write(GetSettingBool("clientlevelsenabled"));
+
+            List<byte> bs = GetNetworkModifierList();
+            bf.Write(bs.Count);
+            for (int i = 0; i < bs.Count; i++) bf.Write(bs[i]);
+
+
+            bf.Write(Editor.activatedLevels.Count);
+            for (int i = 0; i < Editor.activatedLevels.Count; i++)
+            {
+                string s = Editor.activatedLevels[i];
+                bf.Write(s);
+            }
+                */
+
+                BitBuffer bf = DGRSettings.LastMatchSettings;
+                bf.position = 0;
+                bf.bitOffset = 0;
+                
+                //by-by-by-by-by-bo-bo-by-int-bys-bo-int-strings
+                int varWinsPerSet = bf.ReadByte();
+                if (varWinsPerSet == 0) return; //anti match setting destruction system -NiK0
+                GetMatchSetting("requiredwins").value = varWinsPerSet;
+                int varRoundsPerIntermission = bf.ReadByte();
+                GetMatchSetting("restsevery").value = varRoundsPerIntermission;
+                int varRandomPercent = bf.ReadByte();
+                GetMatchSetting("randommaps").value = varRandomPercent;
+                int varWorkshopPercent = bf.ReadByte();
+                GetMatchSetting("workshopmaps").value = varWorkshopPercent;
+                int varNormalPercent = bf.ReadByte();
+                GetMatchSetting("normalmaps").value = varNormalPercent;
+                GetOnlineSetting("teams").value = bf.ReadBool();
+                int varCustomPercent = bf.ReadByte();
+                GetMatchSetting("custommaps").value = varCustomPercent;
+
+                bool varWallmode = bf.ReadBool();
+                GetMatchSetting("wallmode").value = varWallmode;
+
+                GetMatchSetting("clientlevelsenabled").value = bf.ReadBool();
+
+                int c = bf.ReadInt();
+                List<byte> enabledModifiers = new List<byte>();
+                for (int i = 0; i < c; i++)
+                {
+                    enabledModifiers.Add(bf.ReadByte());
+                }
+                foreach (UnlockData unlock in Unlocks.GetUnlocks(UnlockType.Modifier))
+                {
+                    if (Unlocks.modifierToByte.ContainsKey(unlock.id))
+                    {
+                        byte num2 = Unlocks.modifierToByte[unlock.id];
+                        if (enabledModifiers.Contains(num2)) unlock.enabled = true;
+                        else unlock.enabled = false;
+                        unlock.prevEnabled = unlock.enabled;
+                    }
+                }
+
+                GameMode.roundsBetweenIntermission = varRoundsPerIntermission;
+                GameMode.winsPerSet = varWinsPerSet;
+                Deathmatch.userMapsPercent = varCustomPercent;
+                randomMapPercent = varRandomPercent;
+                normalMapPercent = varNormalPercent;
+                workshopMapPercent = varWorkshopPercent;
+                UpdateModifierStatus();
+                RockScoreboard.wallMode = varWallmode;
+
+
+                c = bf.ReadInt();
+                DuckNetwork.core._activatedLevels = new List<string>();
+                for (int i = 0; i < c; i++)
+                {
+                    string s = bf.ReadString();
+                    DuckNetwork.core._activatedLevels.Add(s);
+                }
+            }
         }
 
         private void ShowEightPlayer() => showEightPlayerSelected = !showEightPlayerSelected;
@@ -479,6 +559,33 @@ namespace DuckGame
 
         public static void SendMatchSettings(NetworkConnection c = null, bool initial = false)
         {
+            BitBuffer bf = new BitBuffer();
+            bf.Write((byte)GetSettingInt("requiredwins"));
+            bf.Write((byte)GetSettingInt("restsevery"));
+            bf.Write((byte)GetSettingInt("randommaps"));
+            bf.Write((byte)GetSettingInt("workshopmaps"));
+            bf.Write((byte)GetSettingInt("normalmaps"));
+            bf.Write((bool)GetOnlineSetting("teams").value);
+            bf.Write((byte)GetSettingInt("custommaps"));
+            bf.Write((bool)GetSettingBool("wallmode"));
+            bf.Write((bool)GetSettingBool("clientlevelsenabled"));
+
+            List<byte> bs = GetNetworkModifierList();
+            bf.Write(bs.Count);
+            for (int i = 0; i < bs.Count; i++) bf.Write(bs[i]);
+
+
+            bf.Write(Editor.activatedLevels.Count);
+            for (int i = 0; i < Editor.activatedLevels.Count; i++)
+            {
+                string s = Editor.activatedLevels[i];
+                bf.Write(s);
+            }
+
+            bf.position = 0;
+            bf.bitOffset = 0;
+            DGRSettings.LMatchSetSave = bf.buffer;
+            
             UpdateModifierStatus();
             if (!Network.isActive)
                 return;
@@ -976,6 +1083,8 @@ namespace DuckGame
             if (!DuckNetwork.isDedicatedServer && !DuckNetwork.ShowUserXPGain() && Unlockables.HasPendingUnlocks())
                 MonoMain.pauseMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
             core.endedGameInProgress = false;
+
+            
         }
 
         public void OpenPauseMenu(ProfileBox2 pProfile)
