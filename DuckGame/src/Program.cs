@@ -98,6 +98,7 @@ namespace DuckGame
         public static bool lateCrash;
         public static ProgressValue AutoUpdaterCompletionProgress = new(0, 1, 0, 7);
         public static string AutoUpdaterProgressMessage = "";
+        public static DGVersion latestReleaseVersion; // for fetching
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
         public static void Main(string[] args)
@@ -1118,8 +1119,8 @@ namespace DuckGame
             const string dgrZipName = @"DuckGameRebuilt.zip";
             
             UpdateAutoUpdaterProgress(1);
-            
-            string dgrExePath = typeof(ItemBox).Assembly.Location;
+
+            string dgrExePath = FilePath;
             string parentDirectoryPath = Path.GetDirectoryName(dgrExePath)!;
             string zipPath = parentDirectoryPath + $"/{dgrZipName}";
             
@@ -1143,7 +1144,7 @@ namespace DuckGame
 
             UpdateAutoUpdaterProgress(4);
             
-            if (!(MonoMain.ForceDGRUpdate || CheckForNewVersion(out DGVersion _)))
+            if (!MonoMain.ForceDGRUpdate && !CheckForNewVersion())
                 throw new Exception("No new version available");
             
             UpdateAutoUpdaterProgress(5);
@@ -1179,7 +1180,7 @@ namespace DuckGame
             AutoUpdaterCompletionProgress.Value = step;
         }
 
-        private static DGVersion? s_latestDgVersion = null;
+        private static DGVersion s_latestDgVersion = null;
         
         public static DGVersion GetLatestReleaseVersion()
         {
@@ -1194,24 +1195,22 @@ namespace DuckGame
         }
 
         /// <returns>True if a newer release version exists</returns>
-        public static bool CheckForNewVersion(out DGVersion version)
+        public static bool CheckForNewVersion()
         {
-            version = null;
-
             try
             {
                 if (s_latestDgVersion is not null)
                 {
-                    version = s_latestDgVersion;
+                    latestReleaseVersion = s_latestDgVersion;
                     return true;
                 }
-            
-                version = GetLatestReleaseVersion();
-                DGVersion currentVersion = new(CURRENT_VERSION_ID);
 
-                return currentVersion < version;
+                latestReleaseVersion = GetLatestReleaseVersion();
+                DGVersion currentVersion = new DGVersion(CURRENT_VERSION_ID);
+
+                return currentVersion < latestReleaseVersion;
             }
-            catch (WebException e)
+            catch (Exception e)
             {
                 return false;
             }

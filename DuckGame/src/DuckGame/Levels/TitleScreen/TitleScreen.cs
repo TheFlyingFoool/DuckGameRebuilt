@@ -88,7 +88,6 @@ namespace DuckGame
         private UIMenu _blockMenu;
         private UIMenu _modConfigMenu;
         private UICloudManagement _cloudManagerMenu;
-        private DGVersion _latestRebuiltVersion;
         private bool _shouldUpdateRebuilt;
         private bool _enterEditor;
         private bool _enterCredits;
@@ -187,7 +186,7 @@ namespace DuckGame
             if (!Checked)
             {
                 Checked = true;
-                if (MonoMain.ForceDGRUpdate | !MonoMain.IgnoreDGRUpdates & Program.CheckForNewVersion(out _latestRebuiltVersion))
+                if (MonoMain.ForceDGRUpdate | !MonoMain.IgnoreDGRUpdates & Program.CheckForNewVersion())
                     _shouldUpdateRebuilt = true;
             }
             #endif
@@ -593,7 +592,10 @@ namespace DuckGame
                 _updaterPromptMenu = new UIMenu("@DGR@DGR UPDATER@WRENCH@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f);
                 _updaterPromptMenu.Add(new LUIText("A new version of DGR", Colors.DGPink));
                 _updaterPromptMenu.Add(new LUIText("has been found", Colors.DGPink));
-                _updaterPromptMenu.Add(new LUIText(_latestRebuiltVersion.VersionStringFormatted, Colors.Platinum));
+                if (Program.latestReleaseVersion != null)
+                {
+                    _updaterPromptMenu.Add(new LUIText(Program.latestReleaseVersion.VersionStringFormatted, Colors.Platinum));
+                }
                 _updaterPromptMenu.Add(new LUIText("", Colors.DGPink));
                 _updaterPromptMenu.Add(new LUIText("-- UPDATING --", Colors.DGPink));
                 _updaterPromptMenu.Add(new LUIText("", Colors.DGPink));
@@ -1055,7 +1057,10 @@ namespace DuckGame
                     {
                         DevConsole.Log("AutoUpdater Failed:");
                         DevConsole.LogComplexMessage(e.ToString(), Colors.DGRed);
-                        MonoMain.pauseMenu.Close();
+                        if (MonoMain.pauseMenu != null)
+                        {
+                            MonoMain.pauseMenu.Close();
+                        }
                     }
                 }).Start();
                 return;
