@@ -98,7 +98,7 @@ namespace DuckGame
         public static bool lateCrash;
         public static ProgressValue AutoUpdaterCompletionProgress = new(0, 1, 0, 7);
         public static string AutoUpdaterProgressMessage = "";
-        public static DGVersion latestReleaseVersion; // for fetching
+        public static DGVersion latestRebuiltVersion; // for fetching
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
         public static void Main(string[] args)
@@ -1179,13 +1179,11 @@ namespace DuckGame
 
             AutoUpdaterCompletionProgress.Value = step;
         }
-
-        private static DGVersion s_latestDgVersion = null;
         
         public static DGVersion GetLatestReleaseVersion()
         {
-            if (s_latestDgVersion is not null)
-                return s_latestDgVersion;
+            if (latestRebuiltVersion != null)
+                return latestRebuiltVersion;
             
             WebRequest webRequest = WebRequest.Create(GITHUB_RELEASE_URL);
             WebResponse response = webRequest.GetResponse();
@@ -1199,16 +1197,11 @@ namespace DuckGame
         {
             try
             {
-                if (s_latestDgVersion is not null)
-                {
-                    latestReleaseVersion = s_latestDgVersion;
+                if (latestRebuiltVersion != null)
                     return true;
-                }
-
-                latestReleaseVersion = GetLatestReleaseVersion();
+                latestRebuiltVersion = GetLatestReleaseVersion();
                 DGVersion currentVersion = new DGVersion(CURRENT_VERSION_ID);
-
-                return currentVersion < latestReleaseVersion;
+                return currentVersion < latestRebuiltVersion;
             }
             catch (Exception e)
             {
