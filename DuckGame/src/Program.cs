@@ -618,17 +618,17 @@ namespace DuckGame
                 string title = GetDefaultWindowTitle();
                 main.Window.Title = title + " Debugging";
             }
-            if (DGRSettings.StartIn == 1)
+            switch (DGRSettings.StartIn)
             {
-                MonoMain.startInLobby = true;
-            }
-            else if (DGRSettings.StartIn == 2)
-            {
-                MonoMain.startInEditor = true;
-            }
-            else if (DGRSettings.StartIn == 3)
-            {
-                MonoMain.startInArcade = true;
+                case 1:
+                    MonoMain.startInLobby = true;
+                    break;
+                case 2:
+                    MonoMain.startInEditor = true;
+                    break;
+                case 3:
+                    MonoMain.startInArcade = true;
+                    break;
             }
             // Program.main.TargetElapsedTime = TimeSpan.FromTicks(1000L);
             accumulatedElapsedTimefieldinfo = typeof(Game).GetField("accumulatedElapsedTime", BindingFlags.NonPublic | BindingFlags.Instance);

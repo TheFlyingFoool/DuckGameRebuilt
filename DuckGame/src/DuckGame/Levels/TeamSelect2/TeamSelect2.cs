@@ -1510,14 +1510,17 @@ namespace DuckGame
                         }
                         if (!menuOpen && Input.Pressed(Triggers.Select) && (!_singlePlayer || Profiles.active.Count > 0 && !Profiles.IsDefault(Profiles.active[0])) || DuckNetwork.isDedicatedServer && !_sentDedicatedCountdown && !_spectatorCountdownStop)
                         {
+                            if (_starting || _sentDedicatedCountdown)
+                            {
+                                _countTime = -100;
+                            }
                             if (Network.isActive)
                             {
                                 Send.Message(new NMBeginCountdown());
                                 _sentDedicatedCountdown = true;
                                 _spectatorCountdownStop = false;
                             }
-                            else
-                                _starting = true;
+                            else _starting = true;
                         }
                         if (Network.isActive && DuckNetwork.isDedicatedServer && !_spectatorCountdownStop && Input.Pressed(Triggers.Cancel))
                         {
@@ -1562,6 +1565,11 @@ namespace DuckGame
                 }
                 else _afkTimeout = 0f;
                 Graphics.fade = Lerp.Float(Graphics.fade, _returnToMenu.value || _countTime <= 0f ? 0f : 1f, 0.02f);
+                if (_countTime < -100)
+                {
+                    Graphics.fade = Lerp.Float(Graphics.fade, _returnToMenu.value || _countTime <= 0f ? 0f : 1f, 0.04f);
+
+                }
                 _setupFade = Lerp.Float(_setupFade, !_matchSetup || menuOpen || DuckNetwork.core.startCountdown ? 0f : 1f, 0.05f);
                 Layer.Game.fade = Lerp.Float(Layer.Game.fade, _matchSetup ? 0.5f : 1f, 0.05f);
             }
@@ -1806,8 +1814,14 @@ namespace DuckGame
                             _font.alpha = dim * 1.2f;
                             _font.Draw(text, (float)(Layer.HUD.width / 2f - _font.GetWidth(text) / 2f), (float)(Layer.HUD.camera.height / 2f + 8f), Color.White, (Depth)0.81f);
                         }
-                        else
-                            Graphics.Draw(_countdown, 160f, (float)(Layer.HUD.camera.height / 2f - 3f));
+                        else Graphics.Draw(_countdown, 160f, (float)(Layer.HUD.camera.height / 2f - 3f));
+
+                        if (!_singlePlayer && (!Network.isActive || Network.isServer))
+                        {
+                            string t = "@SELECT@START NOW";
+                            _font.alpha = dim * 1.2f;
+                            _font.Draw(t, (float)(Layer.HUD.width / 2f - 144), (float)(Layer.HUD.camera.height / 2f - 20f), Color.White, (Depth)0.81f);
+                        }
                     }
                 }
                 base.PostDrawLayer(layer);
