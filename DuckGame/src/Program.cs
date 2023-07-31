@@ -1196,16 +1196,25 @@ namespace DuckGame
         /// <returns>True if a newer release version exists</returns>
         public static bool CheckForNewVersion(out DGVersion version)
         {
-            if (s_latestDgVersion is not null)
-            {
-                version = s_latestDgVersion;
-                return true;
-            }
-            
-            version = GetLatestReleaseVersion();
-            DGVersion currentVersion = new(CURRENT_VERSION_ID);
+            version = null;
 
-            return currentVersion < version;
+            try
+            {
+                if (s_latestDgVersion is not null)
+                {
+                    version = s_latestDgVersion;
+                    return true;
+                }
+            
+                version = GetLatestReleaseVersion();
+                DGVersion currentVersion = new(CURRENT_VERSION_ID);
+
+                return currentVersion < version;
+            }
+            catch (WebException e)
+            {
+                return false;
+            }
         }
         
         public static void ExtractToDirectory(this ZipArchive archive, string destinationDirectoryName)
