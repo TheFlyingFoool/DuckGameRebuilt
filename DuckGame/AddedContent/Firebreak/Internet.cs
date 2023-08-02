@@ -10,11 +10,11 @@ namespace AddedContent.Firebreak
     {
         // "What is this IP?"
         // see: https://www.reddit.com/r/pihole/comments/edvpkn/what_is_wwwmsftncsicom_its_showing_up_every/?utm_source=share&utm_medium=web2x&context=3
-        private const string DEFAULT_IP = "www.google.com";
+        private const string DEFAULT_IP = "www.github.com";
         private const int DEFAULT_TIMEOUT = 2000;
 
         /// <summary>
-        /// Checks the Internet access with default ip = "www.google.com" 
+        /// Checks the Internet access with default ip = "www.github.com" 
         /// and default timeout of 2000 Milliseconds.
         /// </summary>
         public static bool IsAvailable()

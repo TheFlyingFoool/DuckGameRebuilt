@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
+using System.Web;
 
 namespace DuckGame
 {
@@ -179,11 +180,16 @@ namespace DuckGame
             MonoMain.pauseMenu = _mainPauseMenu;
 
         }
+        public static bool Checked;
         public override void Initialize()
         {
             #if AutoUpdater
-            if (MonoMain.ForceDGRUpdate | !MonoMain.IgnoreDGRUpdates & Program.CheckForNewVersion(out _latestRebuiltVersion))
-                _shouldUpdateRebuilt = true;
+            if (!Checked)
+            {
+                Checked = true;
+                if (MonoMain.ForceDGRUpdate | !MonoMain.IgnoreDGRUpdates & Program.CheckForNewVersion(out _latestRebuiltVersion))
+                    _shouldUpdateRebuilt = true;
+            }
             #endif
             
             Vote.ClearVotes();

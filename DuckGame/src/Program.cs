@@ -618,17 +618,17 @@ namespace DuckGame
                 string title = GetDefaultWindowTitle();
                 main.Window.Title = title + " Debugging";
             }
-            if (DGRSettings.StartIn == 1)
+            switch (DGRSettings.StartIn)
             {
-                MonoMain.startInLobby = true;
-            }
-            else if (DGRSettings.StartIn == 2)
-            {
-                MonoMain.startInEditor = true;
-            }
-            else if (DGRSettings.StartIn == 3)
-            {
-                MonoMain.startInArcade = true;
+                case 1:
+                    MonoMain.startInLobby = true;
+                    break;
+                case 2:
+                    MonoMain.startInEditor = true;
+                    break;
+                case 3:
+                    MonoMain.startInArcade = true;
+                    break;
             }
             // Program.main.TargetElapsedTime = TimeSpan.FromTicks(1000L);
             accumulatedElapsedTimefieldinfo = typeof(Game).GetField("accumulatedElapsedTime", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -1196,16 +1196,25 @@ namespace DuckGame
         /// <returns>True if a newer release version exists</returns>
         public static bool CheckForNewVersion(out DGVersion version)
         {
-            if (s_latestDgVersion is not null)
-            {
-                version = s_latestDgVersion;
-                return true;
-            }
-            
-            version = GetLatestReleaseVersion();
-            DGVersion currentVersion = new(CURRENT_VERSION_ID);
+            version = null;
 
-            return currentVersion < version;
+            try
+            {
+                if (s_latestDgVersion is not null)
+                {
+                    version = s_latestDgVersion;
+                    return true;
+                }
+            
+                version = GetLatestReleaseVersion();
+                DGVersion currentVersion = new(CURRENT_VERSION_ID);
+
+                return currentVersion < version;
+            }
+            catch (WebException e)
+            {
+                return false;
+            }
         }
         
         public static void ExtractToDirectory(this ZipArchive archive, string destinationDirectoryName)
