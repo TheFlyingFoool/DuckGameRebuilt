@@ -5399,6 +5399,7 @@ namespace DuckGame
 
         public static void EnableClientOnlyContent()
         {
+            DestroyType.indexTypeMap.Clear();
             clientonlycontent = true;
             AmmoType.InitializeTypes();
             DestroyType.InitializeTypes();
@@ -5407,6 +5408,7 @@ namespace DuckGame
 
         public static void DisableClientOnlyContent()
         {
+            DestroyType.indexTypeMap.Clear();
             clientonlycontent = false;
             AmmoType.InitializeTypes();
             DestroyType.InitializeTypes();

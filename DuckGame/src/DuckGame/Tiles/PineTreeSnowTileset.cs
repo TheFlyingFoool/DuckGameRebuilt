@@ -32,6 +32,11 @@ namespace DuckGame
             snowWait = Rando.Float(4f);
         }
 
+        public override void Initialize()
+        {
+            DoPositioning();
+            //this override is here because pine tree's need to update, normal initialize makes them not be in the update loop -N
+        }
         public override void KnockOffSnow(Vec2 dir, bool vertShake)
         {
             iterated = true;
@@ -69,9 +74,10 @@ namespace DuckGame
                     //bad code lol but idc as of now -NiK0
 
                     //old bad code was changed for a better solution -NiK0 again
-                    snowWait = Rando.Float(2f, 3f) / DGRSettings.S_ParticleMultiplier;
-                    if (Rando.Float(1f) > 0.92)
-                        Level.Add(new SnowFallParticle(x + Rando.Float(-4f, 4f), y + Rando.Float(-4f, 4f), new Vec2(0f, 0f)));
+
+                    //the new code was also wrong -NiK0 yet again
+                    snowWait = Rando.Float(2f, 3f) / DGRSettings.ActualParticleMultiplier;
+                    if (Rando.Float(1f) > 0.92f) Level.Add(new SnowFallParticle(x + Rando.Float(-4f, 4f), y + Rando.Float(-4f, 4f), new Vec2(0f, 0f)));
                 }
             }
             base.Update();

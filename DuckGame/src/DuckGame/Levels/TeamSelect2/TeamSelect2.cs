@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using System.Collections.Generic;
+using System.Runtime;
 
 namespace DuckGame
 {
@@ -659,6 +660,9 @@ namespace DuckGame
             _hostModifiersMenu.Close();
             _playOnlineGroup.Add(_hostModifiersMenu, false);
             _hostMatchSettingsMenu.AddMatchSetting(GetOnlineSetting("teams"), false);
+
+
+
             foreach (MatchSetting matchSetting in matchSettings)
             {
                 if (!(matchSetting.id == "workshopmaps") || Network.available) //if ((!(matchSetting.id == "workshopmaps") || Network.available) && (!(matchSetting.id == "custommaps") || !ParentalControls.AreParentalControlsActive()))
@@ -673,6 +677,7 @@ namespace DuckGame
             //if (!ParentalControls.AreParentalControlsActive()) and move the below block back into place
             _hostMatchSettingsMenu.Add(new UICustomLevelMenu(new UIMenuActionOpenMenu(_hostMatchSettingsMenu, _hostLevelSelectMenu)), true);
             _hostMatchSettingsMenu.Add(new UIModifierMenuItem(new UIMenuActionOpenMenu(_hostMatchSettingsMenu, _hostModifiersMenu)), true);
+
             _hostMatchSettingsMenu.SetBackFunction(new UIMenuActionOpenMenuCallFunction(_hostMatchSettingsMenu, _hostSettingsMenu, HUD.CloseAllCorners));
             _hostMatchSettingsMenu.SetOpenFunction(new UIMenuActionCallFunction(() =>
             {
@@ -722,6 +727,10 @@ namespace DuckGame
 
         public override void Initialize()
         {
+            if (Editor.clientonlycontent)
+            {
+                Editor.DisableClientOnlyContent();
+            }
             DGRSettings.InitializeFavoritedHats();
             if (sign)
             {
@@ -1463,6 +1472,28 @@ namespace DuckGame
                             {
                                 if (!Network.isServer)
                                     return;
+                                if (DGRSettings.DGRItems)
+                                {
+                                    bool DGR = true;
+                                    for (int i = 0; i < Profiles.active.Count(); i++)
+                                    {
+                                        Profile p = Profiles.active.ElementAt(i);
+                                        if (!p.isUsingRebuilt)
+                                        {
+                                            DGR = false;
+                                            break;
+                                        }
+                                    }
+                                    if (!DGR)
+                                    {
+                                        DGRSettings.DGRItems = false;
+                                    }
+                                    if (DGRSettings.DGRItems)
+                                    {
+                                        Editor.EnableClientOnlyContent();
+                                        Send.Message(new NMClientOnlyContent());
+                                    }
+                                }
                                 foreach (Profile profile in DuckNetwork.profiles)
                                 {
                                     profile.reservedUser = null;

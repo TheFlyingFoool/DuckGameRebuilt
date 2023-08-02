@@ -328,7 +328,7 @@ namespace DuckGame
             if (!_searching && mode != SearchMode.None && Graphics.frame >= _lobbySearchCooldownNextAvailable)
             {
                 _lobbySearchCooldownNextAvailable = Graphics.frame;
-                // Network.lanMode = mode == SearchMode.LAN;
+                Network.lanMode = mode == SearchMode.LAN;
                 NCBasic.lobbySearchPort = lanSearchPort;
                 if (mode == SearchMode.Global)
                     NCSteam.globalSearch = true;

@@ -127,8 +127,11 @@ namespace DuckGame
         public override void Initialize()
         {
             DoPositioning();
-            _level.AddUpdateOnce(this);
-            shouldbeinupdateloop = false;
+            if (ModLoader.ShouldOptimizations)
+            {
+                _level.AddUpdateOnce(this);
+                shouldbeinupdateloop = false;
+            }
         }
         public virtual void DoPositioning()
         {

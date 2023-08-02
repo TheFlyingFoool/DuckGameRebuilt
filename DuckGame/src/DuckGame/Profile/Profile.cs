@@ -22,6 +22,14 @@ namespace DuckGame
                 return netData.Get("REBUILT", false);
             }
         }
+        public bool inSameRebuiltVersion
+        {
+            get
+            {
+                if (netData == null) return false;
+                return netData.Get<string>("rVer", "?") == Program.CURRENT_VERSION_ID;
+            }
+        }
         public HatSelector hatSelector;
         public int prevXPsave;
         public string prevFurniPositionData;

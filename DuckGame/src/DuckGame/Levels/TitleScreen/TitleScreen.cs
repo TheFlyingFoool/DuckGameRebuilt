@@ -182,6 +182,10 @@ namespace DuckGame
         public static bool Checked;
         public override void Initialize()
         {
+            if (Editor.clientonlycontent)
+            {
+                Editor.DisableClientOnlyContent();
+            }
             #if AutoUpdater
             if (!Checked)
             {
