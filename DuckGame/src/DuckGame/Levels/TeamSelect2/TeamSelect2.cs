@@ -117,7 +117,7 @@ namespace DuckGame
         public static string DefaultGameName()
         {
             List<Profile> activep = Profiles.active;
-            if (Network.lanMode)
+            if (TeamSelect2.GetSettingInt("type") >= 3 && Profiles.active.Count > 0)
             {
                 if (activep.Count > 0)
                 {
