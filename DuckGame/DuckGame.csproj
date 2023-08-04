@@ -266,6 +266,7 @@
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Engine\TypeInterpreters\UInt16Interpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Engine\TypeInterpreters\UInt32Interpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Engine\TypeInterpreters\UInt64Interpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Engine\TypeInterpreters\Vec2Interpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Engine\ValueOrException.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Console\Commands\Clear.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Manager\Interface\Console\Commands\Close.cs" />
