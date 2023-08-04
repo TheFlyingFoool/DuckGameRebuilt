@@ -35,15 +35,14 @@ namespace DuckGame
 #else
             true;
 #endif
-        public static readonly bool HasInternet = Internet.IsAvailable();
+
         // this should be formatted like X.X.X where each X is a number
-        public static string CURRENT_VERSION_ID = "1.1.0";
+        public const string CURRENT_VERSION_ID = "1.1.0";
 
         // do change this you know what you're doing -NiK0
-        public static string CURRENT_VERSION_ID_FORMATTED = $"v{CURRENT_VERSION_ID}-beta";
+        public const string CURRENT_VERSION_ID_FORMATTED = "v" + CURRENT_VERSION_ID + "-beta";
 
         public static bool Prestart = DirtyPreStart();
-        
 
         public static string StartinEditorLevelName;
         public static string GameDirectory;
@@ -98,7 +97,9 @@ namespace DuckGame
         public static bool lateCrash;
         public static ProgressValue AutoUpdaterCompletionProgress = new(0, 1, 0, 7);
         public static string AutoUpdaterProgressMessage = "";
-        public static DGVersion latestRebuiltVersion; // for fetching
+        public static DGVersion LatestRebuiltVersion; // for fetching
+        public static bool NewerRebuiltVersionExists; // for fetching
+        
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
         public static void Main(string[] args)
@@ -1182,8 +1183,8 @@ namespace DuckGame
         
         public static DGVersion GetLatestReleaseVersion()
         {
-            if (latestRebuiltVersion != null)
-                return latestRebuiltVersion;
+            if (LatestRebuiltVersion is not null)
+                return LatestRebuiltVersion;
             
             WebRequest webRequest = WebRequest.Create(GITHUB_RELEASE_URL);
             WebResponse response = webRequest.GetResponse();
@@ -1197,11 +1198,14 @@ namespace DuckGame
         {
             try
             {
-                if (latestRebuiltVersion != null)
+                if (NewerRebuiltVersionExists)
                     return true;
-                latestRebuiltVersion = GetLatestReleaseVersion();
+                
+                LatestRebuiltVersion = GetLatestReleaseVersion();
                 DGVersion currentVersion = new DGVersion(CURRENT_VERSION_ID);
-                return currentVersion < latestRebuiltVersion;
+
+                NewerRebuiltVersionExists = currentVersion < LatestRebuiltVersion;
+                return NewerRebuiltVersionExists;
             }
             catch (Exception e)
             {

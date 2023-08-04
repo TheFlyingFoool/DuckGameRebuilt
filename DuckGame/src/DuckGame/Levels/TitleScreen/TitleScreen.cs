@@ -596,9 +596,9 @@ namespace DuckGame
                 _updaterPromptMenu = new UIMenu("@DGR@DGR UPDATER@WRENCH@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f);
                 _updaterPromptMenu.Add(new LUIText("A new version of DGR", Colors.DGPink));
                 _updaterPromptMenu.Add(new LUIText("has been found", Colors.DGPink));
-                if (Program.latestRebuiltVersion != null)
+                if (Program.NewerRebuiltVersionExists)
                 {
-                    _updaterPromptMenu.Add(new LUIText(Program.latestRebuiltVersion.VersionStringFormatted, Colors.Platinum));
+                    _updaterPromptMenu.Add(new LUIText(Program.LatestRebuiltVersion.VersionStringFormatted, Colors.Platinum));
                 }
                 _updaterPromptMenu.Add(new LUIText("", Colors.DGPink));
                 _updaterPromptMenu.Add(new LUIText("-- UPDATING --", Colors.DGPink));
