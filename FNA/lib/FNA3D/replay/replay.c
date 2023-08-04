@@ -1,6 +1,6 @@
 /* FNA3D - 3D Graphics Library for FNA
  *
- * Copyright (c) 2020-2022 Ethan Lee
+ * Copyright (c) 2020-2023 Ethan Lee
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
@@ -231,7 +231,7 @@ static uint8_t replay(const char *filename, uint8_t forceDebugMode)
 		if (i == trace##array##Count) \
 		{ \
 			trace##array##Count += 1; \
-			trace##array = SDL_realloc( \
+			trace##array = (FNA3D_##type**) SDL_realloc( \
 				trace##array, \
 				sizeof(FNA3D_##type*) * trace##array##Count \
 			); \
@@ -1105,11 +1105,11 @@ static uint8_t replay(const char *filename, uint8_t forceDebugMode)
 			if (i == traceEffectCount)
 			{
 				traceEffectCount += 1;
-				traceEffect = SDL_realloc(
+				traceEffect = (FNA3D_Effect**) SDL_realloc(
 					traceEffect,
 					sizeof(FNA3D_Effect*) * traceEffectCount
 				);
-				traceEffectData = SDL_realloc(
+				traceEffectData = (MOJOSHADER_effect**) SDL_realloc(
 					traceEffectData,
 					sizeof(MOJOSHADER_effect*) * traceEffectCount
 				);
@@ -1137,11 +1137,11 @@ static uint8_t replay(const char *filename, uint8_t forceDebugMode)
 			if (i == traceEffectCount)
 			{
 				traceEffectCount += 1;
-				traceEffect = SDL_realloc(
+				traceEffect = (FNA3D_Effect**) SDL_realloc(
 					traceEffect,
 					sizeof(FNA3D_Effect*) * traceEffectCount
 				);
-				traceEffectData = SDL_realloc(
+				traceEffectData = (MOJOSHADER_effect**) SDL_realloc(
 					traceEffectData,
 					sizeof(MOJOSHADER_effect*) * traceEffectCount
 				);
@@ -1300,7 +1300,14 @@ int main(int argc, char **argv)
 
 	if (replayArgIndex == argc)
 	{
-		replay("FNA3D_Trace.bin", forceDebugMode);
+		const char *defaultName = "FNA3D_Trace.bin";
+		char *rootPath = SDL_GetBasePath();
+		size_t pathLen = SDL_strlen(rootPath) + SDL_strlen(defaultName) + 1;
+		char *path = (char*) SDL_malloc(pathLen);
+		SDL_snprintf(path, pathLen, "%s%s", rootPath, defaultName);
+		SDL_free(rootPath);
+		replay(path, forceDebugMode);
+		SDL_free(path);
 	}
 	else
 	{

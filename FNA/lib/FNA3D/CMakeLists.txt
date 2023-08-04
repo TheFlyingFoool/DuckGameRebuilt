@@ -10,8 +10,8 @@ option(BUILD_DXVK_NATIVE "Enable support for dxvk-native" OFF)
 
 # Version
 SET(LIB_MAJOR_VERSION "0")
-SET(LIB_MINOR_VERSION "22")
-SET(LIB_REVISION "10")
+SET(LIB_MINOR_VERSION "23")
+SET(LIB_REVISION "08")
 SET(LIB_VERSION "${LIB_MAJOR_VERSION}.${LIB_MINOR_VERSION}.${LIB_REVISION}")
 
 # Build Type
@@ -90,6 +90,8 @@ add_library(FNA3D
 	src/FNA3D_Driver_OpenGL.h
 	src/FNA3D_Driver_OpenGL_glfuncs.h
 	src/FNA3D_Driver_Vulkan_vkfuncs.h
+	src/FNA3D_CommandBuffer.h
+	src/FNA3D_Memory.h
 	src/FNA3D_PipelineCache.h
 	# Source Files
 	src/FNA3D.c
@@ -97,6 +99,8 @@ add_library(FNA3D
 	src/FNA3D_Driver_OpenGL.c
 	src/FNA3D_Driver_Vulkan.c
 	src/FNA3D_Image.c
+	src/FNA3D_CommandBuffer.c
+	src/FNA3D_Memory.c
 	src/FNA3D_PipelineCache.c
 	src/FNA3D_Tracing.c
 )

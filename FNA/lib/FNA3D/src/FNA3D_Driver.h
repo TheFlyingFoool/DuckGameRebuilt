@@ -1,6 +1,6 @@
 /* FNA3D - 3D Graphics Library for FNA
  *
- * Copyright (c) 2020-2022 Ethan Lee
+ * Copyright (c) 2020-2023 Ethan Lee
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
@@ -36,11 +36,17 @@
 #define inline __inline
 #endif
 
+#ifdef __cplusplus
+#define FNA3D_SHAREDINTERNAL extern "C"
+#else
+#define FNA3D_SHAREDINTERNAL extern
+#endif
+
 /* Logging */
 
-extern void FNA3D_LogInfo(const char *fmt, ...);
-extern void FNA3D_LogWarn(const char *fmt, ...);
-extern void FNA3D_LogError(const char *fmt, ...);
+FNA3D_SHAREDINTERNAL void FNA3D_LogInfo(const char *fmt, ...);
+FNA3D_SHAREDINTERNAL void FNA3D_LogWarn(const char *fmt, ...);
+FNA3D_SHAREDINTERNAL void FNA3D_LogError(const char *fmt, ...);
 
 /* Internal Helper Utilities */
 
@@ -818,10 +824,10 @@ typedef struct FNA3D_Driver
 	);
 } FNA3D_Driver;
 
-extern FNA3D_Driver VulkanDriver;
-extern FNA3D_Driver D3D11Driver;
-extern FNA3D_Driver OpenGLDriver;
-extern FNA3D_Driver GNMXDriver;
+FNA3D_SHAREDINTERNAL FNA3D_Driver VulkanDriver;
+FNA3D_SHAREDINTERNAL FNA3D_Driver D3D11Driver;
+FNA3D_SHAREDINTERNAL FNA3D_Driver OpenGLDriver;
+FNA3D_SHAREDINTERNAL FNA3D_Driver GNMXDriver;
 
 #endif /* FNA3D_DRIVER_H */
 

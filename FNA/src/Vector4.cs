@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -1227,16 +1227,16 @@ namespace Microsoft.Xna.Framework
 			double yzz = rotation.Y * zz;
 			double zzz = rotation.Z * zz;
 			result.X = (float) (
-                 value.X * (1.0 - yyy - zzz) +
-                 value.Y * (xyy - wzz)
+				(double) value.X * (1.0 - yyy - zzz) +
+				(double) value.Y * (xyy - wzz)
 			);
 			result.Y = (float) (
-                 value.X * (xyy + wzz) +
-                 value.Y * (1.0 - xxx - zzz)
+				(double) value.X * (xyy + wzz) +
+				(double) value.Y * (1.0 - xxx - zzz)
 			);
 			result.Z = (float) (
-                 value.X * (xzz - wyy) +
-                 value.Y * (yzz + wxx)
+				(double) value.X * (xzz - wyy) +
+				(double) value.Y * (yzz + wxx)
 			);
 			result.W = 1.0f;
 		}
@@ -1265,19 +1265,19 @@ namespace Microsoft.Xna.Framework
 			double yzz = rotation.Y * zz;
 			double zzz = rotation.Z * zz;
 			result.X = (float) (
-                 value.X * (1.0 - yyy - zzz) +
-                 value.Y * (xyy - wzz) +
-                 value.Z * (xzz + wyy)
+				(double) value.X * (1.0 - yyy - zzz) +
+				(double) value.Y * (xyy - wzz) +
+				(double) value.Z * (xzz + wyy)
 			);
 			result.Y = (float) (
-                 value.X * (xyy + wzz) +
-                 value.Y * (1.0 - xxx - zzz) +
-                 value.Z * (yzz - wxx)
+				(double) value.X * (xyy + wzz) +
+				(double) value.Y * (1.0 - xxx - zzz) +
+				(double) value.Z * (yzz - wxx)
 			);
 			result.Z = (float) (
-                 value.X * (xzz - wyy) +
-                 value.Y * (yzz + wxx) +
-                 value.Z * (1.0 - xxx - yyy)
+				(double) value.X * (xzz - wyy) +
+				(double) value.Y * (yzz + wxx) +
+				(double) value.Z * (1.0 - xxx - yyy)
 			);
 			result.W = 1.0f;
 		}
@@ -1306,19 +1306,19 @@ namespace Microsoft.Xna.Framework
 			double yzz = rotation.Y * zz;
 			double zzz = rotation.Z * zz;
 			result.X = (float) (
-                 value.X * (1.0 - yyy - zzz) +
-                 value.Y * (xyy - wzz) +
-                 value.Z * (xzz + wyy)
+				(double) value.X * (1.0 - yyy - zzz) +
+				(double) value.Y * (xyy - wzz) +
+				(double) value.Z * (xzz + wyy)
 			);
 			result.Y = (float) (
-                 value.X * (xyy + wzz) +
-                 value.Y * (1.0 - xxx - zzz) +
-                 value.Z * (yzz - wxx)
+				(double) value.X * (xyy + wzz) +
+				(double) value.Y * (1.0 - xxx - zzz) +
+				(double) value.Z * (yzz - wxx)
 			);
 			result.Z = (float) (
-                 value.X * (xzz - wyy) +
-                 value.Y * (yzz + wxx) +
-                 value.Z * (1.0 - xxx - yyy)
+				(double) value.X * (xzz - wyy) +
+				(double) value.Y * (yzz + wxx) +
+				(double) value.Z * (1.0 - xxx - yyy)
 			);
 			result.W = value.W;
 		}

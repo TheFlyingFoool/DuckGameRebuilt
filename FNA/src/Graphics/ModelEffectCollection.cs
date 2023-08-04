@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -38,9 +38,9 @@ namespace Microsoft.Xna.Framework.Graphics
 		/// <summary>
 		/// Returns a ModelEffectCollection.Enumerator that can iterate through a ModelEffectCollection.
 		/// </summary>
-		public new Enumerator GetEnumerator()
+		public new ModelEffectCollection.Enumerator GetEnumerator()
 		{
-			return new Enumerator((List<Effect>) Items);
+			return new ModelEffectCollection.Enumerator((List<Effect>) Items);
 		}
 
 		#endregion

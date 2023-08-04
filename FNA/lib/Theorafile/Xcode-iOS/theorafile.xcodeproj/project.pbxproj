@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02A487812980C537008EEDBC /* armstate.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A487772980BE69008EEDBC /* armstate.c */; };
+		02A487832980C53A008EEDBC /* armcpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A487782980BE69008EEDBC /* armcpu.c */; };
+		02A487852980C53D008EEDBC /* armidct.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A487792980BE69008EEDBC /* armidct.c */; };
+		02A487872980C53F008EEDBC /* armloop.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A4877B2980BE69008EEDBC /* armloop.c */; };
+		02A4878B2980C543008EEDBC /* armfrag.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A4877D2980BE69008EEDBC /* armfrag.c */; };
 		7B2FB809219117A40087816E /* theorafile.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B2FB807219117A40087816E /* theorafile.c */; };
 		7B2FBA1921911F170087816E /* framing.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B2FB9A221911F170087816E /* framing.c */; };
 		7B2FBA1A21911F170087816E /* bitwise.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B2FB9A421911F170087816E /* bitwise.c */; };
@@ -32,7 +37,6 @@
 		7B2FBA2E21911F170087816E /* window.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B2FB9E721911F170087816E /* window.c */; };
 		7B2FBA2F21911F170087816E /* fragment.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B2FB9EC21911F170087816E /* fragment.c */; };
 		7B2FBA3021911F170087816E /* tinfo.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B2FB9EE21911F170087816E /* tinfo.c */; };
-		7B2FBA3121911F170087816E /* cpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B2FB9F121911F170087816E /* cpu.c */; };
 		7B2FBA3221911F170087816E /* state.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B2FB9F521911F170087816E /* state.c */; };
 		7B2FBA3321911F170087816E /* decinfo.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B2FB9F721911F170087816E /* decinfo.c */; };
 		7B2FBA3421911F170087816E /* decode.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B2FB9F921911F170087816E /* decode.c */; };
@@ -68,7 +72,6 @@
 		7BFBC8FF219367B900837E89 /* window.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B2FB9E721911F170087816E /* window.c */; };
 		7BFBC900219367B900837E89 /* fragment.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B2FB9EC21911F170087816E /* fragment.c */; };
 		7BFBC901219367B900837E89 /* tinfo.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B2FB9EE21911F170087816E /* tinfo.c */; };
-		7BFBC902219367B900837E89 /* cpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B2FB9F121911F170087816E /* cpu.c */; };
 		7BFBC903219367B900837E89 /* state.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B2FB9F521911F170087816E /* state.c */; };
 		7BFBC904219367B900837E89 /* decinfo.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B2FB9F721911F170087816E /* decinfo.c */; };
 		7BFBC905219367B900837E89 /* decode.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B2FB9F921911F170087816E /* decode.c */; };
@@ -105,6 +108,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		02A487732980BE69008EEDBC /* armint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = armint.h; sourceTree = "<group>"; };
+		02A487752980BE69008EEDBC /* armfrag.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = armfrag.h; sourceTree = "<group>"; };
+		02A487772980BE69008EEDBC /* armstate.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = armstate.c; sourceTree = "<group>"; };
+		02A487782980BE69008EEDBC /* armcpu.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = armcpu.c; sourceTree = "<group>"; };
+		02A487792980BE69008EEDBC /* armidct.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = armidct.c; sourceTree = "<group>"; };
+		02A4877A2980BE69008EEDBC /* neon_transpose.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = neon_transpose.h; sourceTree = "<group>"; };
+		02A4877B2980BE69008EEDBC /* armloop.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = armloop.c; sourceTree = "<group>"; };
+		02A4877D2980BE69008EEDBC /* armfrag.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = armfrag.c; sourceTree = "<group>"; };
+		02A4877F2980BE69008EEDBC /* armcpu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = armcpu.h; sourceTree = "<group>"; };
+		02A487802980BE69008EEDBC /* neon_a64_compat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = neon_a64_compat.h; sourceTree = "<group>"; };
 		7B2FB6B02191169C0087816E /* libtheorafile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libtheorafile.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B2FB807219117A40087816E /* theorafile.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = theorafile.c; path = ../theorafile.c; sourceTree = "<group>"; };
 		7B2FB808219117A40087816E /* theorafile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = theorafile.h; path = ../theorafile.h; sourceTree = "<group>"; };
@@ -180,7 +193,6 @@
 		7B2FB9EE21911F170087816E /* tinfo.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tinfo.c; sourceTree = "<group>"; };
 		7B2FB9EF21911F170087816E /* internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = internal.h; sourceTree = "<group>"; };
 		7B2FB9F021911F170087816E /* theora.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = theora.h; sourceTree = "<group>"; };
-		7B2FB9F121911F170087816E /* cpu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cpu.c; sourceTree = "<group>"; };
 		7B2FB9F221911F170087816E /* dct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dct.h; sourceTree = "<group>"; };
 		7B2FB9F321911F170087816E /* quant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = quant.h; sourceTree = "<group>"; };
 		7B2FB9F421911F170087816E /* ocintrin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ocintrin.h; sourceTree = "<group>"; };
@@ -195,7 +207,6 @@
 		7B2FB9FD21911F170087816E /* codec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = codec.h; sourceTree = "<group>"; };
 		7B2FB9FE21911F170087816E /* apiwrapper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = apiwrapper.c; sourceTree = "<group>"; };
 		7B2FBA0721911F170087816E /* decapiwrapper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = decapiwrapper.c; sourceTree = "<group>"; };
-		7B2FBA0821911F170087816E /* cpu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cpu.h; sourceTree = "<group>"; };
 		7B2FBA0921911F170087816E /* bitpack.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bitpack.c; sourceTree = "<group>"; };
 		7B2FBA0A21911F170087816E /* idct.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = idct.c; sourceTree = "<group>"; };
 		7B2FBA0B21911F170087816E /* quant.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = quant.c; sourceTree = "<group>"; };
@@ -225,6 +236,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		02A487722980BE69008EEDBC /* arm-intrinsics */ = {
+			isa = PBXGroup;
+			children = (
+				02A487732980BE69008EEDBC /* armint.h */,
+				02A487752980BE69008EEDBC /* armfrag.h */,
+				02A487772980BE69008EEDBC /* armstate.c */,
+				02A487782980BE69008EEDBC /* armcpu.c */,
+				02A487792980BE69008EEDBC /* armidct.c */,
+				02A4877A2980BE69008EEDBC /* neon_transpose.h */,
+				02A4877B2980BE69008EEDBC /* armloop.c */,
+				02A4877D2980BE69008EEDBC /* armfrag.c */,
+				02A4877F2980BE69008EEDBC /* armcpu.h */,
+				02A487802980BE69008EEDBC /* neon_a64_compat.h */,
+			);
+			path = "arm-intrinsics";
+			sourceTree = "<group>";
+		};
 		7B2FB6A72191169C0087816E = {
 			isa = PBXGroup;
 			children = (
@@ -387,12 +415,12 @@
 		7B2FB9EB21911F170087816E /* theora */ = {
 			isa = PBXGroup;
 			children = (
+				02A487722980BE69008EEDBC /* arm-intrinsics */,
 				7B2FB9EC21911F170087816E /* fragment.c */,
 				7B2FB9ED21911F170087816E /* apiwrapper.h */,
 				7B2FB9EE21911F170087816E /* tinfo.c */,
 				7B2FB9EF21911F170087816E /* internal.h */,
 				7B2FB9F021911F170087816E /* theora.h */,
-				7B2FB9F121911F170087816E /* cpu.c */,
 				7B2FB9F221911F170087816E /* dct.h */,
 				7B2FB9F321911F170087816E /* quant.h */,
 				7B2FB9F421911F170087816E /* ocintrin.h */,
@@ -407,7 +435,6 @@
 				7B2FB9FD21911F170087816E /* codec.h */,
 				7B2FB9FE21911F170087816E /* apiwrapper.c */,
 				7B2FBA0721911F170087816E /* decapiwrapper.c */,
-				7B2FBA0821911F170087816E /* cpu.h */,
 				7B2FBA0921911F170087816E /* bitpack.c */,
 				7B2FBA0A21911F170087816E /* idct.c */,
 				7B2FBA0B21911F170087816E /* quant.c */,
@@ -500,21 +527,24 @@
 				7B2FBA1C21911F170087816E /* res0.c in Sources */,
 				7B2FBA1921911F170087816E /* framing.c in Sources */,
 				7B2FBA2C21911F170087816E /* lsp.c in Sources */,
+				02A4878B2980C543008EEDBC /* armfrag.c in Sources */,
 				7B2FBA2221911F170087816E /* codebook.c in Sources */,
 				7B2FBA3621911F170087816E /* internal.c in Sources */,
 				7B2FBA2621911F170087816E /* smallft.c in Sources */,
+				02A487812980C537008EEDBC /* armstate.c in Sources */,
 				7B2FBA3221911F170087816E /* state.c in Sources */,
 				7B2FB809219117A40087816E /* theorafile.c in Sources */,
+				02A487852980C53D008EEDBC /* armidct.c in Sources */,
 				7B2FBA2F21911F170087816E /* fragment.c in Sources */,
 				7B2FBA1D21911F170087816E /* block.c in Sources */,
 				7B2FBA3E21911F170087816E /* idct.c in Sources */,
+				02A487832980C53A008EEDBC /* armcpu.c in Sources */,
 				7B2FBA2D21911F170087816E /* registry.c in Sources */,
 				7B2FBA2521911F170087816E /* psy.c in Sources */,
 				7B2FBA2821911F170087816E /* floor1.c in Sources */,
 				7B2FBA3F21911F170087816E /* quant.c in Sources */,
 				7B2FBA1B21911F170087816E /* vinfo.c in Sources */,
 				7B2FBA2E21911F170087816E /* window.c in Sources */,
-				7B2FBA3121911F170087816E /* cpu.c in Sources */,
 				7B2FBA3521911F170087816E /* dequant.c in Sources */,
 				7B2FBA3C21911F170087816E /* decapiwrapper.c in Sources */,
 				7B2FBA2A21911F170087816E /* mapping0.c in Sources */,
@@ -522,6 +552,7 @@
 				7B2FBA3321911F170087816E /* decinfo.c in Sources */,
 				7B2FBA2121911F170087816E /* analysis.c in Sources */,
 				7B2FBA3421911F170087816E /* decode.c in Sources */,
+				02A487872980C53F008EEDBC /* armloop.c in Sources */,
 				7B2FBA2B21911F170087816E /* lpc.c in Sources */,
 				7B2FBA3721911F170087816E /* apiwrapper.c in Sources */,
 				7B2FBA2421911F170087816E /* bitrate.c in Sources */,
@@ -544,14 +575,18 @@
 				7BFBC8EB219367B900837E89 /* bitwise.c in Sources */,
 				7BFBC8EC219367B900837E89 /* analysis.c in Sources */,
 				7BFBC8ED219367B900837E89 /* bitrate.c in Sources */,
+				02A4878C2980C544008EEDBC /* armfrag.c in Sources */,
 				7BFBC8EE219367B900837E89 /* block.c in Sources */,
 				7BFBC8EF219367B900837E89 /* codebook.c in Sources */,
 				7BFBC8F0219367B900837E89 /* envelope.c in Sources */,
+				02A487822980C538008EEDBC /* armstate.c in Sources */,
 				7BFBC8F1219367B900837E89 /* floor0.c in Sources */,
 				7BFBC8F2219367B900837E89 /* floor1.c in Sources */,
+				02A487862980C53D008EEDBC /* armidct.c in Sources */,
 				7BFBC8F3219367B900837E89 /* lookup.c in Sources */,
 				7BFBC8F4219367B900837E89 /* lpc.c in Sources */,
 				7BFBC8F5219367B900837E89 /* lsp.c in Sources */,
+				02A487842980C53B008EEDBC /* armcpu.c in Sources */,
 				7BFBC8F6219367B900837E89 /* mapping0.c in Sources */,
 				7BFBC8F7219367B900837E89 /* mdct.c in Sources */,
 				7BFBC8F8219367B900837E89 /* psy.c in Sources */,
@@ -564,8 +599,8 @@
 				7BFBC8FF219367B900837E89 /* window.c in Sources */,
 				7BFBC900219367B900837E89 /* fragment.c in Sources */,
 				7BFBC901219367B900837E89 /* tinfo.c in Sources */,
-				7BFBC902219367B900837E89 /* cpu.c in Sources */,
 				7BFBC903219367B900837E89 /* state.c in Sources */,
+				02A487882980C53F008EEDBC /* armloop.c in Sources */,
 				7BFBC904219367B900837E89 /* decinfo.c in Sources */,
 				7BFBC905219367B900837E89 /* decode.c in Sources */,
 				7BFBC906219367B900837E89 /* dequant.c in Sources */,
@@ -638,6 +673,20 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				"OTHER_CFLAGS[sdk=appletvos*]" = (
+					"-DOC_ARM_ASM",
+					"-DOC_ARM_ASM_EDSP",
+					"-DOC_ARM_ASM_MEDIA",
+					"-DOC_ARM_ASM_NEON",
+				);
+				"OTHER_CFLAGS[sdk=appletvsimulator*]" = "";
+				"OTHER_CFLAGS[sdk=iphoneos*]" = (
+					"-DOC_ARM_ASM",
+					"-DOC_ARM_ASM_EDSP",
+					"-DOC_ARM_ASM_MEDIA",
+					"-DOC_ARM_ASM_NEON",
+				);
+				"OTHER_CFLAGS[sdk=iphonesimulator*]" = "";
 				SDKROOT = iphoneos;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -691,6 +740,20 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				"OTHER_CFLAGS[sdk=appletvos*]" = (
+					"-DOC_ARM_ASM",
+					"-DOC_ARM_ASM_EDSP",
+					"-DOC_ARM_ASM_MEDIA",
+					"-DOC_ARM_ASM_NEON",
+				);
+				"OTHER_CFLAGS[sdk=appletvsimulator*]" = "";
+				"OTHER_CFLAGS[sdk=iphoneos*]" = (
+					"-DOC_ARM_ASM",
+					"-DOC_ARM_ASM_EDSP",
+					"-DOC_ARM_ASM_MEDIA",
+					"-DOC_ARM_ASM_NEON",
+				);
+				"OTHER_CFLAGS[sdk=iphonesimulator*]" = "";
 				SDKROOT = iphoneos;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VALIDATE_PRODUCT = YES;

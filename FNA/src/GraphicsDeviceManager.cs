@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -291,13 +291,11 @@ namespace Microsoft.Xna.Framework
 				return;
 			}
 
-            // Recreate device information before resetting
-            GraphicsDeviceInformation gdi = new GraphicsDeviceInformation
-            {
-                Adapter = graphicsDevice.Adapter,
-                PresentationParameters = graphicsDevice.PresentationParameters.Clone()
-            };
-            INTERNAL_CreateGraphicsDeviceInformation(gdi);
+			// Recreate device information before resetting
+			GraphicsDeviceInformation gdi = new GraphicsDeviceInformation();
+			gdi.Adapter = graphicsDevice.Adapter;
+			gdi.PresentationParameters = graphicsDevice.PresentationParameters.Clone();
+			INTERNAL_CreateGraphicsDeviceInformation(gdi);
 
 			// Prepare the window...
 			if (supportsOrientations)
@@ -519,16 +517,12 @@ namespace Microsoft.Xna.Framework
 				graphicsDevice = null;
 			}
 
-            // Set the default device information
-            GraphicsDeviceInformation gdi = new GraphicsDeviceInformation
-            {
-                Adapter = GraphicsAdapter.DefaultAdapter,
-                PresentationParameters = new PresentationParameters
-                {
-                    DeviceWindowHandle = game.Window.Handle
-                }
-            };
-            INTERNAL_CreateGraphicsDeviceInformation(gdi);
+			// Set the default device information
+			GraphicsDeviceInformation gdi = new GraphicsDeviceInformation();
+			gdi.Adapter = GraphicsAdapter.DefaultAdapter;
+			gdi.PresentationParameters = new PresentationParameters();
+			gdi.PresentationParameters.DeviceWindowHandle = game.Window.Handle;
+			INTERNAL_CreateGraphicsDeviceInformation(gdi);
 
 			// Prepare the window...
 			if (supportsOrientations)
