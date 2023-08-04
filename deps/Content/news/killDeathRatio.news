@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NewsStory name="Kill Death Ratio">
+	<Section name="PlayerComments"/>
+	<Cycle value="PerProfile"/>
+	
+	<SubStory name="Kill Death No Deaths">
+		<VALUE><![CDATA[  round(stat(kills) / toFloat(stat(timesKilled) + 1))  ]]></VALUE>
+		<Requirement><![CDATA[  stat(kills) / toFloat(stat(timesKilled) + 1) > 1.5  ]]></Requirement>
+		<Requirement><![CDATA[  stat(timesKilled) == 0  ]]></Requirement>
+		<Requirement><![CDATA[  hasGreatest(VALUE)  ]]></Requirement>
+		<Dialogue value="%NAME% got %INTVALUE% kills without a single death! |EXCITED|They were untouchable!"/>
+		<Dialogue value="%NAME% didn't die once, and finished with %INTVALUE% kills!"/>
+	</SubStory>
+	
+	<SubStory name="Kill Death With Deaths">
+		<VALUE><![CDATA[  round(stat(kills) / toFloat(stat(timesKilled)))  ]]></VALUE>
+		<Requirement><![CDATA[  stat(kills) / toFloat(stat(timesKilled)) > 1.0  ]]></Requirement>
+		<Requirement><![CDATA[  stat(timesKilled) > 0  ]]></Requirement>
+		<Requirement><![CDATA[  hasGreatest(VALUE)  ]]></Requirement>
+		<Dialogue value="%NAME% was rolling a %INTVALUE%:1 Kill-Death ratio like a pro."/>
+		<Dialogue value="%NAME% had a respectable %INTVALUE%:1 Kill-Death ratio."/>
+	</SubStory>
+	
+	<NewsStoryHalloween name="Kill Death Ratio">
+		<Section name="PlayerComments"/>
+		<Cycle value="PerProfile"/>
+		
+		<SubStory name="Kill Death No Deaths">
+			<VALUE><![CDATA[  round(stat(kills) / toFloat(stat(timesKilled) + 1))  ]]></VALUE>
+			<Requirement><![CDATA[  stat(kills) / toFloat(stat(timesKilled) + 1) > 1.5  ]]></Requirement>
+			<Requirement><![CDATA[  stat(timesKilled) == 0  ]]></Requirement>
+			<Requirement><![CDATA[  hasGreatest(VALUE)  ]]></Requirement>
+			<Dialogue value="%NAME% got %INTVALUE% kills without a single death! |EXCITED|They were so SPOOKY!"/>
+			<Dialogue value="%NAME% didn't die once, and finished with %INTVALUE% kills!"/>
+		</SubStory>
+		
+		<SubStory name="Kill Death With Deaths">
+			<VALUE><![CDATA[  round(stat(kills) / toFloat(stat(timesKilled)))  ]]></VALUE>
+			<Requirement><![CDATA[  stat(kills) / toFloat(stat(timesKilled)) > 1.0  ]]></Requirement>
+			<Requirement><![CDATA[  stat(timesKilled) > 0  ]]></Requirement>
+			<Requirement><![CDATA[  hasGreatest(VALUE)  ]]></Requirement>
+			<Dialogue value="%NAME% was rolling a SPOOKY %INTVALUE%:1 Kill-Death ratio like a pro."/>
+			<Dialogue value="%NAME% had a SPOOKY %INTVALUE%:1 Kill-Death ratio."/>
+		</SubStory>
+	</NewsStoryHalloween>
+</NewsStory>

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NewsStory name="Pre Highlights">
+	<Section name="ShowHighlights"/>
+	<Cycle value="Once"/>
+	<Dialogue value="Let's take a look at some highlights."/>
+	<Dialogue value="Our |EXCITED|SPORTSTRON|CALM| computer has calculated some highlights for us!"/>
+	<Dialogue value="How about a look at today's most |EXCITED|exciting|CALM| rounds!"/>
+	<SubStory name = "Show Highlights">
+		<Dialogue value="%CUEHIGHLIGHTS%"/>
+	</SubStory>+
+	
+	<NewsStoryHalloween name="Pre Highlights">
+		<Section name="ShowHighlights"/>
+		<Cycle value="Once"/>
+		<Dialogue value="Let's take a look at some SPOOKY highlights."/>
+		<Dialogue value="Our |EXCITED|SPOOKY|CALM| computer has calculated some SPOOKY highlights for us!"/>
+		<Dialogue value="How about a look at today's most |EXCITED|SPOOKY|CALM| rounds!"/>
+		<SubStory name = "Show Highlights">
+			<Dialogue value="%CUEHIGHLIGHTS%"/>
+		</SubStory>
+	</NewsStoryHalloween>
+</NewsStory>
