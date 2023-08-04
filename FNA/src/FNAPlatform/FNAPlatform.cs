@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -91,6 +91,8 @@ namespace Microsoft.Xna.Framework
 				);
 			}
 
+			Malloc =			SDL2_FNAPlatform.Malloc;
+			Free =				SDL2.SDL.SDL_free;
 			CreateWindow =			SDL2_FNAPlatform.CreateWindow;
 			DisposeWindow =			SDL2_FNAPlatform.DisposeWindow;
 			ApplyWindowChanges =		SDL2_FNAPlatform.ApplyWindowChanges;
@@ -101,12 +103,14 @@ namespace Microsoft.Xna.Framework
 			GetWindowBorderless =		SDL2_FNAPlatform.GetWindowBorderless;
 			SetWindowBorderless =		SDL2_FNAPlatform.SetWindowBorderless;
 			SetWindowTitle =		SDL2_FNAPlatform.SetWindowTitle;
+			IsScreenKeyboardShown =		SDL2_FNAPlatform.IsScreenKeyboardShown;
 			RegisterGame =			SDL2_FNAPlatform.RegisterGame;
 			UnregisterGame =		SDL2_FNAPlatform.UnregisterGame;
 			PollEvents =			SDL2_FNAPlatform.PollEvents;
 			GetGraphicsAdapters =		SDL2_FNAPlatform.GetGraphicsAdapters;
 			GetCurrentDisplayMode =		SDL2_FNAPlatform.GetCurrentDisplayMode;
 			GetKeyFromScancode =		SDL2_FNAPlatform.GetKeyFromScancode;
+			IsTextInputActive =		SDL2_FNAPlatform.IsTextInputActive;
 			StartTextInput =		SDL2.SDL.SDL_StartTextInput;
 			StopTextInput =			SDL2.SDL.SDL_StopTextInput;
 			SetTextInputRectangle =		SDL2_FNAPlatform.SetTextInputRectangle;
@@ -184,12 +188,20 @@ namespace Microsoft.Xna.Framework
 		#endregion
 
 		#region Public Static Methods
+		/* Dan's stuff improve later */
 		public delegate void OnDeviceChangeEvent(int dev, bool removed);
 		public static event OnDeviceChangeEvent DeviceChangeEvent;
 		public static void OnDeviceChange(int dev, bool removed)
 		{
-            DeviceChangeEvent?.Invoke(dev, removed);
+			DeviceChangeEvent?.Invoke(dev, removed);
 		}
+
+		/* Technically this should be IntPtr, but oh well... */
+		public delegate IntPtr MallocFunc(int size);
+		public static readonly MallocFunc Malloc;
+
+		public delegate void FreeFunc(IntPtr ptr);
+		public static readonly FreeFunc Free;
 
 		public delegate GameWindow CreateWindowFunc();
 		public static readonly CreateWindowFunc CreateWindow;
@@ -228,6 +240,9 @@ namespace Microsoft.Xna.Framework
 		public delegate void SetWindowTitleFunc(IntPtr window, string title);
 		public static readonly SetWindowTitleFunc SetWindowTitle;
 
+		public delegate bool IsScreenKeyboardShownFunc(IntPtr window);
+		public static readonly IsScreenKeyboardShownFunc IsScreenKeyboardShown;
+
 		public delegate GraphicsAdapter RegisterGameFunc(Game game);
 		public static readonly RegisterGameFunc RegisterGame;
 
@@ -250,6 +265,9 @@ namespace Microsoft.Xna.Framework
 
 		public delegate Keys GetKeyFromScancodeFunc(Keys scancode);
 		public static readonly GetKeyFromScancodeFunc GetKeyFromScancode;
+
+		public delegate bool IsTextInputActiveFunc();
+		public static readonly IsTextInputActiveFunc IsTextInputActive;
 
 		public delegate void StartTextInputFunc();
 		public static readonly StartTextInputFunc StartTextInput;

@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -117,26 +117,24 @@ namespace Microsoft.Xna.Framework.Content
 
 		public Matrix ReadMatrix()
 		{
-            Matrix result = new Matrix
-            {
-                M11 = ReadSingle(),
-                M12 = ReadSingle(),
-                M13 = ReadSingle(),
-                M14 = ReadSingle(),
-                M21 = ReadSingle(),
-                M22 = ReadSingle(),
-                M23 = ReadSingle(),
-                M24 = ReadSingle(),
-                M31 = ReadSingle(),
-                M32 = ReadSingle(),
-                M33 = ReadSingle(),
-                M34 = ReadSingle(),
-                M41 = ReadSingle(),
-                M42 = ReadSingle(),
-                M43 = ReadSingle(),
-                M44 = ReadSingle()
-            };
-            return result;
+			Matrix result = new Matrix();
+			result.M11 = ReadSingle();
+			result.M12 = ReadSingle();
+			result.M13 = ReadSingle();
+			result.M14 = ReadSingle();
+			result.M21 = ReadSingle();
+			result.M22 = ReadSingle();
+			result.M23 = ReadSingle();
+			result.M24 = ReadSingle();
+			result.M31 = ReadSingle();
+			result.M32 = ReadSingle();
+			result.M33 = ReadSingle();
+			result.M34 = ReadSingle();
+			result.M41 = ReadSingle();
+			result.M42 = ReadSingle();
+			result.M43 = ReadSingle();
+			result.M44 = ReadSingle();
+			return result;
 		}
 
 		public T ReadObject<T>()
@@ -169,24 +167,22 @@ namespace Microsoft.Xna.Framework.Content
 
 		public Quaternion ReadQuaternion()
 		{
-            Quaternion result = new Quaternion
-            {
-                X = ReadSingle(),
-                Y = ReadSingle(),
-                Z = ReadSingle(),
-                W = ReadSingle()
-            };
-            return result;
+			Quaternion result = new Quaternion();
+			result.X = ReadSingle();
+			result.Y = ReadSingle();
+			result.Z = ReadSingle();
+			result.W = ReadSingle();
+			return result;
 		}
 
 		public T ReadRawObject<T>()
 		{
-			return ReadRawObject(default(T));
+			return (T) ReadRawObject<T>(default(T));
 		}
 
 		public T ReadRawObject<T>(ContentTypeReader typeReader)
 		{
-			return ReadRawObject(typeReader, default(T));
+			return (T) ReadRawObject<T>(typeReader, default(T));
 		}
 
 		public T ReadRawObject<T>(T existingInstance)
@@ -196,7 +192,7 @@ namespace Microsoft.Xna.Framework.Content
 			{
 				if (typeReader.TargetType == objectType)
 				{
-					return ReadRawObject(typeReader, existingInstance);
+					return (T) ReadRawObject<T>(typeReader,existingInstance);
 				}
 			}
 			throw new NotSupportedException();
@@ -232,47 +228,39 @@ namespace Microsoft.Xna.Framework.Content
 
 		public Vector2 ReadVector2()
 		{
-            Vector2 result = new Vector2
-            {
-                X = ReadSingle(),
-                Y = ReadSingle()
-            };
-            return result;
+			Vector2 result = new Vector2();
+			result.X = ReadSingle();
+			result.Y = ReadSingle();
+			return result;
 		}
 
 		public Vector3 ReadVector3()
 		{
-            Vector3 result = new Vector3
-            {
-                X = ReadSingle(),
-                Y = ReadSingle(),
-                Z = ReadSingle()
-            };
-            return result;
+			Vector3 result = new Vector3();
+			result.X = ReadSingle();
+			result.Y = ReadSingle();
+			result.Z = ReadSingle();
+			return result;
 		}
 
 		public Vector4 ReadVector4()
 		{
-            Vector4 result = new Vector4
-            {
-                X = ReadSingle(),
-                Y = ReadSingle(),
-                Z = ReadSingle(),
-                W = ReadSingle()
-            };
-            return result;
+			Vector4 result = new Vector4();
+			result.X = ReadSingle();
+			result.Y = ReadSingle();
+			result.Z = ReadSingle();
+			result.W = ReadSingle();
+			return result;
 		}
 
 		public Color ReadColor()
 		{
-            Color result = new Color
-            {
-                R = ReadByte(),
-                G = ReadByte(),
-                B = ReadByte(),
-                A = ReadByte()
-            };
-            return result;
+			Color result = new Color();
+			result.R = ReadByte();
+			result.G = ReadByte();
+			result.B = ReadByte();
+			result.A = ReadByte();
+			return result;
 		}
 
 		#endregion

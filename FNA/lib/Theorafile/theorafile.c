@@ -342,13 +342,28 @@ fail:
 	return errcode;
 }
 
+static size_t default_read_func(void* ptr, size_t size, size_t nmemb, void* datasource)
+{
+	return fread(ptr, size, nmemb, datasource);
+}
+
+static int default_seek_func(void* datasource, ogg_int64_t offset, int origin)
+{
+	return fseek(datasource, offset, origin);
+}
+
+static int default_close_func(void* datasource)
+{
+	return fclose(datasource);
+}
+
 int tf_fopen(const char *fname, OggTheora_File *file)
 {
 	tf_callbacks io =
 	{
-		(size_t (*) (void*, size_t, size_t, void*)) fread,
-		(int (*) (void*, ogg_int64_t, int)) fseek,
-		(int (*) (void*)) fclose,
+		default_read_func,
+		default_seek_func,
+		default_close_func,
 	};
 	return tf_open_callbacks(
 		fopen(fname, "rb"),

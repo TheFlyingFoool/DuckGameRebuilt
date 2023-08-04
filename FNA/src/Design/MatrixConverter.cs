@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -44,24 +44,24 @@ namespace Microsoft.Xna.Framework.Design
 			ITypeDescriptorContext context,
 			IDictionary propertyValues
 		) {
-			return new Matrix(
-                (float)propertyValues["M11"],
-                (float)propertyValues["M12"],
-                (float)propertyValues["M13"],
-                (float)propertyValues["M14"],
-                (float)propertyValues["M21"],
-                (float)propertyValues["M22"],
-                (float)propertyValues["M23"],
-                (float)propertyValues["M24"],
-                (float)propertyValues["M31"],
-                (float)propertyValues["M32"],
-                (float)propertyValues["M33"],
-                (float)propertyValues["M34"],
-                (float)propertyValues["M41"],
-                (float)propertyValues["M42"],
-                (float)propertyValues["M43"],
-                (float)propertyValues["M44"]
-            );
+			return (object) new Matrix(
+				(float) propertyValues["M11"],
+				(float) propertyValues["M12"],
+				(float) propertyValues["M13"],
+				(float) propertyValues["M14"],
+				(float) propertyValues["M21"],
+				(float) propertyValues["M22"],
+				(float) propertyValues["M23"],
+				(float) propertyValues["M24"],
+				(float) propertyValues["M31"],
+				(float) propertyValues["M32"],
+				(float) propertyValues["M33"],
+				(float) propertyValues["M34"],
+				(float) propertyValues["M41"],
+				(float) propertyValues["M42"],
+				(float) propertyValues["M43"],
+				(float) propertyValues["M44"]
+			);
 		}
 
 		#endregion

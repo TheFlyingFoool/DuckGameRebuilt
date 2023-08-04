@@ -1,6 +1,6 @@
 /* FNA3D - 3D Graphics Library for FNA
  *
- * Copyright (c) 2020-2022 Ethan Lee
+ * Copyright (c) 2020-2023 Ethan Lee
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
@@ -148,7 +148,7 @@ uint32_t FNA3D_PrepareWindowAttributes(void)
 	{
 		if (hint != NULL)
 		{
-			if (SDL_strcmp(hint, drivers[i]->Name) != 0)
+			if (SDL_strcasecmp(hint, drivers[i]->Name) != 0)
 			{
 				continue;
 			}

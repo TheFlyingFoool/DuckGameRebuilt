@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -15,16 +15,17 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 
 using Microsoft.Xna.Framework.Design;
 #endregion
 
 namespace Microsoft.Xna.Framework
 {
-    /// <summary>
-    /// Describes a 2D-vector.
-    /// </summary>
-    [Serializable]
+	/// <summary>
+	/// Describes a 2D-vector.
+	/// </summary>
+	[Serializable]
 	[TypeConverter(typeof(Vector2Converter))]
 	[DebuggerDisplay("{DebugDisplayString,nq}")]
 	public struct Vector2 : IEquatable<Vector2>

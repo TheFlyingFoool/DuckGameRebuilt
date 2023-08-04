@@ -27,11 +27,6 @@ typedef struct oc_pack_buf oc_pack_buf;
 
 
 
-/*Custom bitpacker implementations.*/
-# if defined(OC_ARM_ASM)
-#  include "arm/armbits.h"
-# endif
-
 # if !defined(oc_pack_read)
 #  define oc_pack_read oc_pack_read_c
 # endif
