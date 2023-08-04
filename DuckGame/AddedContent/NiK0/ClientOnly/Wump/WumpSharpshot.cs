@@ -3,7 +3,7 @@
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Wump|Rifles")]
+    //[EditorGroup("Rebuilt|Wump|Rifles")]
     public class WumpSharpshot : Gun
     {
         public StateBinding _loadStateBinding = new StateBinding(nameof(_loadState));

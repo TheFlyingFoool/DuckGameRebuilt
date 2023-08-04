@@ -38,6 +38,10 @@
             _editorName = "AK47";
             editorTooltip = "This aint no normal gun, charge up a barrage of bullets and watch out for the recoil.";
         }
+        protected override void PlayFireSound()
+        {
+            SFX.PlaySynchronized(_fireSound, pitch: (Rando.Float(0.2f) - 0.1f + _fireSoundPitch));
+        }
         public override void Update()
         {
             if (fires > 0 && !charge && isServerForObject)

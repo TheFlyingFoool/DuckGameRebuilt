@@ -90,7 +90,14 @@ namespace DuckGame
             _bio = "Invented by Dr.Death for scanning items at your local super market. Also has some military application.";
             shouldbegraphicculled = false;
         }
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is HugeLaser && pTaped.gun2 is HugeLaser ? new HugerLaser(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void Initialize()
         {
             _chargeSound = SFX.Get("laserCharge", 0f);

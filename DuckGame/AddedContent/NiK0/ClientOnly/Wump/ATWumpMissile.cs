@@ -35,10 +35,8 @@ namespace DuckGame
             };
             Level.Add(pistolShell);
         }
-        public static int lol = 1;
         public override Bullet FireBullet(Vec2 position, Thing owner = null, float angle = 0, Thing firedFrom = null)
         {
-            lol *= -1;
             return base.FireBullet(position, owner, angle, firedFrom);
         }
         public override void OnHit(bool destroyed, Bullet b)
