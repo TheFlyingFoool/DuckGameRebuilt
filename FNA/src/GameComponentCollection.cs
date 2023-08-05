@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -40,7 +40,7 @@ namespace Microsoft.Xna.Framework
 		/// </summary>
 		protected override void ClearItems()
 		{
-			for (int i = 0; i < Count; i += 1)
+			for (int i = 0; i < base.Count; i += 1)
 			{
 				this.OnComponentRemoved(new GameComponentCollectionEventArgs(base[i]));
 			}
@@ -49,7 +49,7 @@ namespace Microsoft.Xna.Framework
 
 		protected override void InsertItem(int index, IGameComponent item)
 		{
-			if (IndexOf(item) != -1)
+			if (base.IndexOf(item) != -1)
 			{
 				throw new ArgumentException("Cannot Add Same Component Multiple Times");
 			}

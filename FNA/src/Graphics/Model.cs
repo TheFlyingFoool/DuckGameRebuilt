@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -163,11 +163,11 @@ namespace Microsoft.Xna.Framework.Graphics
 			}
 		}
 
-        /// <summary>
-        /// Copies bone transforms relative to <see cref="Root"/> bone from a given array to this model.
-        /// </summary>
-        /// <param name="sourceBoneTransforms">The array of prepared bone transform data.</param>
-        public void CopyBoneTransformsFrom(Matrix[] sourceBoneTransforms)
+		/// <summary>
+		/// Copies bone transforms relative to <see cref="Model.Root"/> bone from a given array to this model.
+		/// </summary>
+		/// <param name="sourceBoneTransforms">The array of prepared bone transform data.</param>
+		public void CopyBoneTransformsFrom(Matrix[] sourceBoneTransforms)
 		{
 			if (sourceBoneTransforms == null)
 			{
@@ -183,11 +183,11 @@ namespace Microsoft.Xna.Framework.Graphics
 			}
 		}
 
-        /// <summary>
-        /// Copies bone transforms relative to <see cref="Root"/> bone from this model to a given array.
-        /// </summary>
-        /// <param name="destinationBoneTransforms">The array receiving the transformed bones.</param>
-        public void CopyBoneTransformsTo(Matrix[] destinationBoneTransforms)
+		/// <summary>
+		/// Copies bone transforms relative to <see cref="Model.Root"/> bone from this model to a given array.
+		/// </summary>
+		/// <param name="destinationBoneTransforms">The array receiving the transformed bones.</param>
+		public void CopyBoneTransformsTo(Matrix[] destinationBoneTransforms)
 		{
 			if (destinationBoneTransforms == null)
 			{

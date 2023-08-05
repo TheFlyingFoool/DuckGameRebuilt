@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -38,7 +38,7 @@ namespace Microsoft.Xna.Framework.Content
 			if (existingInstance != null)
 			{
 				// Read the texture into the existing texture instance
-				input.ReadObject(existingInstance.textureValue);
+				input.ReadObject<Texture2D>(existingInstance.textureValue);
 
 				/* Discard the rest of the SpriteFont data as we are only
 				 * reloading GPU resources for now

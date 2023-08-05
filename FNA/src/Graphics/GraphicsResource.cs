@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -9,11 +9,12 @@
 
 #region Using Statements
 using System;
+using System.Collections.Generic;
 #endregion
 
 namespace Microsoft.Xna.Framework.Graphics
-{
-    public abstract class GraphicsResource : IDisposable
+{	
+	public abstract class GraphicsResource : IDisposable
 	{
 		#region Public Properties
 
@@ -125,7 +126,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		/// Warning: This may be called after a call to Dispose() up until
 		/// the resource is garbage collected.
 		/// </summary>
-		protected internal virtual void GraphicsDeviceResetting()
+		internal protected virtual void GraphicsDeviceResetting()
 		{
 		}
 

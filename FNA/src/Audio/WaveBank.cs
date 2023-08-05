@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -10,12 +10,13 @@
 #region Using Statements
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 #endregion
 
 namespace Microsoft.Xna.Framework.Audio
 {
-    // http://msdn.microsoft.com/en-us/library/microsoft.xna.framework.audio.wavebank.aspx
-    public class WaveBank : IDisposable
+	// http://msdn.microsoft.com/en-us/library/microsoft.xna.framework.audio.wavebank.aspx
+	public class WaveBank : IDisposable
 	{
 		#region Public Properties
 
@@ -127,11 +128,9 @@ namespace Microsoft.Xna.Framework.Audio
 			}
 			bankData = FAudio.FAudio_fopen(safeName);
 
-            FAudio.FACTStreamingParameters settings = new FAudio.FACTStreamingParameters
-            {
-                file = bankData
-            };
-            FAudio.FACTAudioEngine_CreateStreamingWaveBank(
+			FAudio.FACTStreamingParameters settings = new FAudio.FACTStreamingParameters();
+			settings.file = bankData;
+			FAudio.FACTAudioEngine_CreateStreamingWaveBank(
 				audioEngine.handle,
 				ref settings,
 				out handle

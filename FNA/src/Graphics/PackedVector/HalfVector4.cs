@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -185,12 +185,12 @@ namespace Microsoft.Xna.Framework.Graphics.PackedVector
 		/// <returns>The ulong containing the packed values.</returns>
 		private static ulong Pack(float x, float y, float z, float w)
 		{
-			return
-                 HalfTypeHelper.Convert(x) |
-                (((ulong)HalfTypeHelper.Convert(y) << 0x10)) |
-                (((ulong)HalfTypeHelper.Convert(z) << 0x20)) |
-                (((ulong)HalfTypeHelper.Convert(w) << 0x30))
-            ;
+			return (ulong) (
+				((ulong) HalfTypeHelper.Convert(x)) |
+				(((ulong) HalfTypeHelper.Convert(y) << 0x10)) |
+				(((ulong) HalfTypeHelper.Convert(z) << 0x20)) |
+				(((ulong) HalfTypeHelper.Convert(w) << 0x30))
+			);
 		}
 
 		#endregion

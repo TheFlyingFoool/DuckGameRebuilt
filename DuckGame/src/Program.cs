@@ -2,7 +2,7 @@
 using DbMon.NET;
 using DGWindows;
 using Microsoft.Xna.Framework;
-using System;
+using System; 
 using System.IO;
 using System.Net;
 using System.Linq;
@@ -35,15 +35,14 @@ namespace DuckGame
 #else
             true;
 #endif
-        public static readonly bool HasInternet = Internet.IsAvailable();
+
         // this should be formatted like X.X.X where each X is a number
-        public const string CURRENT_VERSION_ID = "1.0.17";
+        public const string CURRENT_VERSION_ID = "1.1.0";
 
         // do change this you know what you're doing -NiK0
-        public const string CURRENT_VERSION_ID_FORMATTED = $"v{CURRENT_VERSION_ID}-beta";
+        public const string CURRENT_VERSION_ID_FORMATTED = "v" + CURRENT_VERSION_ID + "-beta";
 
         public static bool Prestart = DirtyPreStart();
-        
 
         public static string StartinEditorLevelName;
         public static string GameDirectory;
@@ -98,6 +97,9 @@ namespace DuckGame
         public static bool lateCrash;
         public static ProgressValue AutoUpdaterCompletionProgress = new(0, 1, 0, 7);
         public static string AutoUpdaterProgressMessage = "";
+        public static DGVersion LatestRebuiltVersion; // for fetching
+        public static bool NewerRebuiltVersionExists; // for fetching
+        
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
         public static void Main(string[] args)
@@ -1118,8 +1120,8 @@ namespace DuckGame
             const string dgrZipName = @"DuckGameRebuilt.zip";
             
             UpdateAutoUpdaterProgress(1);
-            
-            string dgrExePath = typeof(ItemBox).Assembly.Location;
+
+            string dgrExePath = FilePath;
             string parentDirectoryPath = Path.GetDirectoryName(dgrExePath)!;
             string zipPath = parentDirectoryPath + $"/{dgrZipName}";
             
@@ -1143,7 +1145,7 @@ namespace DuckGame
 
             UpdateAutoUpdaterProgress(4);
             
-            if (!(MonoMain.ForceDGRUpdate || CheckForNewVersion(out DGVersion _)))
+            if (!MonoMain.ForceDGRUpdate && !CheckForNewVersion())
                 throw new Exception("No new version available");
             
             UpdateAutoUpdaterProgress(5);
@@ -1178,13 +1180,11 @@ namespace DuckGame
 
             AutoUpdaterCompletionProgress.Value = step;
         }
-
-        private static DGVersion? s_latestDgVersion = null;
         
         public static DGVersion GetLatestReleaseVersion()
         {
-            if (s_latestDgVersion is not null)
-                return s_latestDgVersion;
+            if (LatestRebuiltVersion is not null)
+                return LatestRebuiltVersion;
             
             WebRequest webRequest = WebRequest.Create(GITHUB_RELEASE_URL);
             WebResponse response = webRequest.GetResponse();
@@ -1194,24 +1194,20 @@ namespace DuckGame
         }
 
         /// <returns>True if a newer release version exists</returns>
-        public static bool CheckForNewVersion(out DGVersion version)
+        public static bool CheckForNewVersion()
         {
-            version = null;
-
             try
             {
-                if (s_latestDgVersion is not null)
-                {
-                    version = s_latestDgVersion;
+                if (NewerRebuiltVersionExists)
                     return true;
-                }
-            
-                version = GetLatestReleaseVersion();
-                DGVersion currentVersion = new(CURRENT_VERSION_ID);
+                
+                LatestRebuiltVersion = GetLatestReleaseVersion();
+                DGVersion currentVersion = new DGVersion(CURRENT_VERSION_ID);
 
-                return currentVersion < version;
+                NewerRebuiltVersionExists = currentVersion < LatestRebuiltVersion;
+                return NewerRebuiltVersionExists;
             }
-            catch (WebException e)
+            catch (Exception e)
             {
                 return false;
             }

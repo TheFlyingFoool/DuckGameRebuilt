@@ -50,6 +50,7 @@ namespace DuckGame
         public static int clientLevelRoundRobin;
         private static bool _prevNetworkSetting;
         private static bool _prevEightPlayerSetting;
+        private static bool _prevClientItems;
         private static List<string> _fourPlayerLevels;
         private static List<string> _eightPlayerNonRestrictedLevels;
         private static List<string> _eightPlayerAllLevels;
@@ -127,13 +128,15 @@ namespace DuckGame
 
         public static string RandomLevelString(string ignore = "", string folder = "deathmatch") => RandomLevelString(ignore, folder, false);
 
+        
         public static string RandomLevelString(string ignore, string folder, bool forceCustom)
         {
             List<string> stringList1 = new List<string>();
-            if (_fourPlayerLevels == null || Network.isActive != _prevNetworkSetting || TeamSelect2.eightPlayersActive != _prevEightPlayerSetting)
+            if (_fourPlayerLevels == null || Network.isActive != _prevNetworkSetting || TeamSelect2.eightPlayersActive != _prevEightPlayerSetting || Editor.clientonlycontent != _prevClientItems || true)
             {
                 _prevNetworkSetting = Network.isActive;
                 _prevEightPlayerSetting = TeamSelect2.eightPlayersActive;
+                _prevClientItems = Editor.clientonlycontent;
                 _fourPlayerLevels = Content.GetLevels(folder, LevelLocation.Content, false, Network.isActive, false);
                 _eightPlayerNonRestrictedLevels = Content.GetLevels(folder, LevelLocation.Content, false, Network.isActive, true, true);
                 _eightPlayerAllLevels = Content.GetLevels(folder, LevelLocation.Content, false, Network.isActive, true);
@@ -143,6 +146,12 @@ namespace DuckGame
                     _fourPlayerLevels.AddRange(Content.GetLevels(folder + "/online_only", LevelLocation.Content, false, Network.isActive, false));
                     _eightPlayerNonRestrictedLevels.AddRange(Content.GetLevels(folder + "/online_only", LevelLocation.Content, false, Network.isActive, false, true));
                     _eightPlayerAllLevels.AddRange(Content.GetLevels(folder + "/online_only", LevelLocation.Content, false, Network.isActive, true));
+                }
+                if (Editor.clientonlycontent)
+                {
+                    _fourPlayerLevels.AddRange(Content.GetLevels(folder + "/DGR", LevelLocation.Content, false, Network.isActive, false));
+                    _eightPlayerNonRestrictedLevels.AddRange(Content.GetLevels(folder + "/DGR", LevelLocation.Content, false, Network.isActive, true, true));
+                    _eightPlayerAllLevels.AddRange(Content.GetLevels(folder + "/DGR", LevelLocation.Content, false, Network.isActive, true));
                 }
             }
             if (TeamSelect2.eightPlayersActive)

@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -176,20 +176,18 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public PresentationParameters Clone()
 		{
-            PresentationParameters clone = new PresentationParameters
-            {
-                BackBufferFormat = BackBufferFormat,
-                BackBufferHeight = BackBufferHeight,
-                BackBufferWidth = BackBufferWidth,
-                DeviceWindowHandle = DeviceWindowHandle,
-                IsFullScreen = IsFullScreen,
-                DepthStencilFormat = DepthStencilFormat,
-                MultiSampleCount = MultiSampleCount,
-                PresentationInterval = PresentationInterval,
-                DisplayOrientation = DisplayOrientation,
-                RenderTargetUsage = RenderTargetUsage
-            };
-            return clone;
+			PresentationParameters clone = new PresentationParameters();
+			clone.BackBufferFormat = BackBufferFormat;
+			clone.BackBufferHeight = BackBufferHeight;
+			clone.BackBufferWidth = BackBufferWidth;
+			clone.DeviceWindowHandle = DeviceWindowHandle;
+			clone.IsFullScreen = IsFullScreen;
+			clone.DepthStencilFormat = DepthStencilFormat;
+			clone.MultiSampleCount = MultiSampleCount;
+			clone.PresentationInterval = PresentationInterval;
+			clone.DisplayOrientation = DisplayOrientation;
+			clone.RenderTargetUsage = RenderTargetUsage;
+			return clone;
 		}
 
 		#endregion

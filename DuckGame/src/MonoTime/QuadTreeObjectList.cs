@@ -625,7 +625,7 @@ namespace DuckGame
         }
         private void AddUpdateList(Thing removeThing)
         {
-            if (!removeThing.shouldbeinupdateloop) //|removeThing is Block || removeThing is AutoPlatform || removeThing is Nubber)
+            if (!removeThing.shouldbeinupdateloop && ModLoader.ShouldOptimizations) //|removeThing is Block || removeThing is AutoPlatform || removeThing is Nubber)
                 return;
             RealupdateList.Add(removeThing);
         }

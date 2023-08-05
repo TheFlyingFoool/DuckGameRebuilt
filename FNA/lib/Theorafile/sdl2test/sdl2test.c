@@ -78,7 +78,7 @@ static const GLchar *GLFrag =
 	"	gl_FragColor = vec4(rgb, 1.0);\n"
 	"}\n";
 
-void AudioCallback(void *userdata, Uint8* stream, int len)
+void SDLCALL AudioCallback(void *userdata, Uint8* stream, int len)
 {
 	const int samples = len / 4;
 	int read = tf_readaudio((OggTheora_File*) userdata, (float*) stream, samples);

@@ -1501,6 +1501,7 @@ namespace DuckGame
                 return;
             if (Network.isActive)
                 DoNetworkInitialize();
+            if (!ModLoader.ShouldOptimizations) shouldbegraphicculled = false;
             _networkDrawIndex = NetworkDebugger.currentIndex;
             Initialize();
             _initialized = true;

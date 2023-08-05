@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -160,7 +160,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				height = Math.Max(1, Size >> level);
 			}
 
-			int elementSizeInBytes = Marshal.SizeOf(typeof(T));
+			int elementSizeInBytes = MarshalHelper.SizeOf<T>();
 			GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
 			FNA3D.FNA3D_SetTextureDataCube(
 				GraphicsDevice.GLDevice,
@@ -288,7 +288,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				subH = rect.Value.Height;
 			}
 
-			int elementSizeInBytes = Marshal.SizeOf(typeof(T));
+			int elementSizeInBytes = MarshalHelper.SizeOf<T>();
 			ValidateGetDataFormat(Format, elementSizeInBytes);
 
 			GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
@@ -324,7 +324,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			int width, height, levels;
 			bool isCube;
 			SurfaceFormat format;
-                ParseDDS(
+			Texture.ParseDDS(
 				reader,
 				out format,
 				out width,
@@ -354,7 +354,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				{
 					for (int i = 0; i < levels; i += 1)
 					{
-						int mipLevelSize = CalculateDDSLevelSize(
+						int mipLevelSize = Texture.CalculateDDSLevelSize(
 							width >> i,
 							width >> i,
 							format
@@ -380,7 +380,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				{
 					for (int i = 0; i < levels; i += 1)
 					{
-						tex = reader.ReadBytes(CalculateDDSLevelSize(
+						tex = reader.ReadBytes(Texture.CalculateDDSLevelSize(
 							width >> i,
 							width >> i,
 							format

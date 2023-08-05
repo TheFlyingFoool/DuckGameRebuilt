@@ -5,9 +5,8 @@ using System;
 namespace DuckGame
 {
     [ClientOnly]
-#if DEBUG
     [EditorGroup("Rebuilt|Guns")]
-#endif
+    [BaggedProperty("canSpawn", false)]
     public class ReDemoBlaster : Gun
     {
         private FluidStream _stream;

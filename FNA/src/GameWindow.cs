@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -10,11 +10,13 @@
 #region Using Statements
 using System;
 using System.ComponentModel;
+
+using Microsoft.Xna.Framework.Input;
 #endregion
 
 namespace Microsoft.Xna.Framework
 {
-    public abstract class GameWindow
+	public abstract class GameWindow
 	{
 		#region Public Properties
 
@@ -62,13 +64,13 @@ namespace Microsoft.Xna.Framework
 			}
 		}
 
-        /// <summary>
-        /// Determines whether the border of the window is visible.
-        /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// Thrown when trying to use this property on an unsupported platform.
-        /// </exception>
-        public virtual bool IsBorderlessEXT
+		/// <summary>
+		/// Determines whether the border of the window is visible.
+		/// </summary>
+		/// <exception cref="System.NotImplementedException">
+		/// Thrown when trying to use this property on an unsupported platform.
+		/// </exception>
+		public virtual bool IsBorderlessEXT
 		{
 			get
 			{

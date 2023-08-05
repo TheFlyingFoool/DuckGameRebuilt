@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -136,19 +136,19 @@ namespace Microsoft.Xna.Framework.Content
 					parts.Add(part);
 
 					int jj = (int) j;
-					reader.ReadSharedResource(
+					reader.ReadSharedResource<VertexBuffer>(
 						delegate (VertexBuffer v)
 						{
 							parts[jj].VertexBuffer = v;
 						}
 					);
-					reader.ReadSharedResource(
+					reader.ReadSharedResource<IndexBuffer>(
 						delegate (IndexBuffer v)
 						{
 							parts[jj].IndexBuffer = v;
 						}
 					);
-					reader.ReadSharedResource(
+					reader.ReadSharedResource<Effect>(
 						delegate (Effect v)
 						{
 							parts[jj].Effect = v;
@@ -159,13 +159,11 @@ namespace Microsoft.Xna.Framework.Content
 				{
 					continue;
 				}
-                ModelMesh mesh = new ModelMesh(device, parts)
-                {
-                    Tag = meshTag,
-                    Name = name,
-                    ParentBone = bones[parentBoneIndex]
-                };
-                mesh.ParentBone.AddMesh(mesh);
+				ModelMesh mesh = new ModelMesh(device, parts);
+				mesh.Tag = meshTag;
+				mesh.Name = name;
+				mesh.ParentBone = bones[parentBoneIndex];
+				mesh.ParentBone.AddMesh(mesh);
 				mesh.BoundingSphere = boundingSphere;
 				meshes.Add(mesh);
 			}
@@ -178,13 +176,11 @@ namespace Microsoft.Xna.Framework.Content
 			}
 			// Read the final pieces of model data.
 			int rootBoneIndex = ReadBoneReference(reader, boneCount);
-            Model model = new Model(device, bones, meshes)
-            {
-                Root = bones[rootBoneIndex],
-                // Tag?
-                Tag = reader.ReadObject<object>()
-            };
-            return model;
+			Model model = new Model(device, bones, meshes);
+			model.Root = bones[rootBoneIndex];
+			// Tag?
+			model.Tag = reader.ReadObject<object>();
+			return model;
 		}
 
 		#endregion

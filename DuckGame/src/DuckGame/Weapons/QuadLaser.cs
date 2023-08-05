@@ -32,6 +32,14 @@ namespace DuckGame
             editorTooltip = "Shoots a slow-moving science block of doom that passes through walls.";
         }
 
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is QuadLaser && pTaped.gun2 is QuadLaser ? new OctoLaser(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void OnPressAction()
         {
             if (ammo <= 0)

@@ -436,13 +436,10 @@ static size_t oc_huff_tree_size(const ogg_int16_t *_tree,int _node){
   _src: The array of trees to copy.*/
 int oc_huff_trees_copy(ogg_int16_t *_dst[TH_NHUFFMAN_TABLES],
  const ogg_int16_t *const _src[TH_NHUFFMAN_TABLES]){
-  int total;
   int i;
-  total=0;
   for(i=0;i<TH_NHUFFMAN_TABLES;i++){
     size_t size;
     size=oc_huff_tree_size(_src[i],0);
-    total+=size;
     _dst[i]=(ogg_int16_t *)_ogg_malloc(size*sizeof(*_dst[i]));
     if(_dst[i]==NULL){
       while(i-->0)_ogg_free(_dst[i]);

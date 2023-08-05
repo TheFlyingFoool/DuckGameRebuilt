@@ -289,8 +289,8 @@ namespace DuckGame
                     _skipSmoke = !_skipSmoke;
                     if (_throttle || !_skipSmoke)
                     {
-                        if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(SmallSmoke.New(x + offDir * 4, y + 5f, _smokeFlipper ? -0.1f : 0.8f, 0.7f));
-                        else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(x + offDir * 4, y + 5f, _smokeFlipper ? -0.1f : 0.8f, 0.7f));
+                        if (DGRSettings.ActualParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++) Level.Add(SmallSmoke.New(x + offDir * 4, y + 5f, _smokeFlipper ? -0.1f : 0.8f, 0.7f));
+                        else if (Rando.Float(1) < DGRSettings.ActualParticleMultiplier) Level.Add(SmallSmoke.New(x + offDir * 4, y + 5f, _smokeFlipper ? -0.1f : 0.8f, 0.7f));
                         _smokeFlipper = !_smokeFlipper;
                         _puffClick = true;
                     }
@@ -664,25 +664,31 @@ namespace DuckGame
                                     {
                                         Vec2 vec2_2 = vec2_1 + barrelVector * Rando.Float(0f, 3f);
                                         Vec2 vec2_3 = -barrelVector.Rotate(Rando.Float(-0.2f, 0.2f), Vec2.Zero);
-                                        if (DGRSettings.S_ParticleMultiplier >= 1)
+                                        if (DGRSettings.ActualParticleMultiplier >= 1)
                                         {
-                                            for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++)//once again bad code someone else fix it -NiK0
+                                            if (materialThing.physicsMaterial == PhysicsMaterial.Wood)
                                             {
-                                                if (materialThing.physicsMaterial == PhysicsMaterial.Wood)
+                                                for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++)//not a great fix but better on performance -NiK0 talking to older niko
                                                 {
                                                     WoodDebris woodDebris = WoodDebris.New(vec2_2.x, vec2_2.y);
                                                     woodDebris.hSpeed = vec2_3.x * 3f;
                                                     woodDebris.vSpeed = vec2_3.y * 3f;
                                                     Level.Add(woodDebris);
                                                 }
-                                                else if (materialThing.physicsMaterial == PhysicsMaterial.Metal)
+                                            }
+                                            else if (materialThing.physicsMaterial == PhysicsMaterial.Metal)
+                                            {
+                                                for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++)
                                                 {
                                                     Spark spark = Spark.New(vec2_2.x, vec2_2.y, Vec2.Zero);
                                                     spark.hSpeed = vec2_3.x * 3f;
                                                     spark.vSpeed = vec2_3.y * 3f;
                                                     Level.Add(spark);
                                                 }
-                                                else if (materialThing.physicsMaterial == PhysicsMaterial.Glass)
+                                            }
+                                            else if (materialThing.physicsMaterial == PhysicsMaterial.Glass)
+                                            {
+                                                for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++)
                                                 {
                                                     GlassParticle glassParticle = new GlassParticle(vec2_2.x, vec2_2.y, Vec2.Zero)
                                                     {
@@ -693,7 +699,7 @@ namespace DuckGame
                                                 }
                                             }
                                         }
-                                        else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0)
+                                        else if (Rando.Float(1) < DGRSettings.ActualParticleMultiplier)
                                         {
                                             if (materialThing.physicsMaterial == PhysicsMaterial.Wood)
                                             {

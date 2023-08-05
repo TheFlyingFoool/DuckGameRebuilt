@@ -33,6 +33,7 @@ namespace DuckGame
         [AutoConfigField]
         public static int arcadeDuckColor = 0;
 
+
         //this is ran everytime TeamSelect2.cs is initialized or hats are reloaded
         //it should probably be moved to be ran somewhere else but thats the solution i came up with ages ago and works
         //issue is people with insane amount of hats might suffer lag spikes every time teamselect2.cs is loaded even though
@@ -142,6 +143,9 @@ namespace DuckGame
         [AutoConfigField]
         public static bool LoadMusic = true;
         public static bool LoaderMusic;//this is so you wont crash immediately when changing the setting, this only gets set on startup -NiK0
+
+        [AutoConfigField]
+        public static bool DGRItems = false;
 
         [AutoConfigField]
         public static string PreferredLevel = "";

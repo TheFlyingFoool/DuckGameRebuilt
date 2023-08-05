@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -1625,7 +1625,7 @@ namespace Microsoft.Xna.Framework
 			R = (byte) MathHelper.Clamp(r, Byte.MinValue, Byte.MaxValue);
 			G = (byte) MathHelper.Clamp(g, Byte.MinValue, Byte.MaxValue);
 			B = (byte) MathHelper.Clamp(b, Byte.MinValue, Byte.MaxValue);
-			A = 255;
+			A = (byte)255;
 		}
 
 		/// <summary>

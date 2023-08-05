@@ -502,6 +502,7 @@ namespace DuckGame
             }
         }
 
+        public static bool ShouldOptimizations;
         internal static string modHash
         {
             get;
@@ -1033,6 +1034,8 @@ namespace DuckGame
             {
                 throw new Exception("Late crash used!");
             }
+
+            ShouldOptimizations = modHash == "nomods" || modHash == "";
         }
 
         internal static void Start()

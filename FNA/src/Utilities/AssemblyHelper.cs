@@ -15,13 +15,13 @@ namespace MonoGame.Utilities
             string windowTitle = string.Empty;
 
             // When running unit tests this can return null.
-            Assembly assembly = Assembly.GetEntryAssembly();
+            var assembly = Assembly.GetEntryAssembly();
             if (assembly != null)
             {
                 // Use the Title attribute of the Assembly if possible.
                 try
                 {
-                    AssemblyTitleAttribute assemblyTitleAtt = ((AssemblyTitleAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyTitleAttribute)));
+                    var assemblyTitleAtt = ((AssemblyTitleAttribute)Attribute.GetCustomAttribute(assembly, typeof(AssemblyTitleAttribute)));
                     if (assemblyTitleAtt != null)
                         windowTitle = assemblyTitleAtt.Title;
                 }

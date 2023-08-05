@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -579,7 +579,7 @@ namespace Microsoft.Xna.Framework
 			Vector3 objectPosition,
 			Vector3 cameraPosition,
 			Vector3 cameraUpVector,
-            Vector3? cameraForwardVector
+			Nullable<Vector3> cameraForwardVector
 		) {
 			Matrix result;
 
@@ -665,8 +665,8 @@ namespace Microsoft.Xna.Framework
 			Vector3 objectPosition,
 			Vector3 cameraPosition,
 			Vector3 rotateAxis,
-            Vector3? cameraForwardVector,
-            Vector3? objectForwardVector
+			Nullable<Vector3> cameraForwardVector,
+			Nullable<Vector3> objectForwardVector
 		) {
 			Matrix result;
 			CreateConstrainedBillboard(
@@ -1315,7 +1315,7 @@ namespace Microsoft.Xna.Framework
 		/// <param name="result">The rotation <see cref="Matrix"/> around X axis as an output parameter.</param>
 		public static void CreateRotationX(float radians, out Matrix result)
 		{
-			result = Identity;
+			result = Matrix.Identity;
 
 			float val1 = (float) Math.Cos(radians);
 			float val2 = (float) Math.Sin(radians);
@@ -1345,7 +1345,7 @@ namespace Microsoft.Xna.Framework
 		/// <param name="result">The rotation <see cref="Matrix"/> around Y axis as an output parameter.</param>
 		public static void CreateRotationY(float radians, out Matrix result)
 		{
-			result = Identity;
+			result = Matrix.Identity;
 
 			float val1 = (float) Math.Cos(radians);
 			float val2 = (float) Math.Sin(radians);
@@ -1375,7 +1375,7 @@ namespace Microsoft.Xna.Framework
 		/// <param name="result">The rotation <see cref="Matrix"/> around Z axis as an output parameter.</param>
 		public static void CreateRotationZ(float radians, out Matrix result)
 		{
-			result = Identity;
+			result = Matrix.Identity;
 
 			float val1 = (float) Math.Cos(radians);
 			float val2 = (float) Math.Sin(radians);
@@ -1706,15 +1706,13 @@ namespace Microsoft.Xna.Framework
 			x.Normalize();
 			y.Normalize();
 
-            result = new Matrix
-            {
-                Right = x,
-                Up = y,
-                Forward = z,
-                Translation = position,
-                M44 = 1f
-            };
-        }
+			result = new Matrix();
+			result.Right = x;
+			result.Up = y;
+			result.Forward = z;
+			result.Translation = position;
+			result.M44 = 1f;
+		}
 
 		/// <summary>
 		/// Divides the elements of a <see cref="Matrix"/> by the elements of another matrix.
@@ -2593,7 +2591,7 @@ namespace Microsoft.Xna.Framework
 		/// <returns>Sum of the matrixes.</returns>
 		public static Matrix operator +(Matrix matrix1, Matrix matrix2)
 		{
-			return Add(matrix1, matrix2);
+			return Matrix.Add(matrix1, matrix2);
 		}
 
 		/// <summary>
@@ -2604,7 +2602,7 @@ namespace Microsoft.Xna.Framework
 		/// <returns>The result of dividing the matrixes.</returns>
 		public static Matrix operator /(Matrix matrix1, Matrix matrix2)
 		{
-			return Divide(matrix1, matrix2);
+			return Matrix.Divide(matrix1, matrix2);
 		}
 
 		/// <summary>
@@ -2615,7 +2613,7 @@ namespace Microsoft.Xna.Framework
 		/// <returns>The result of dividing a matrix by a scalar.</returns>
 		public static Matrix operator /(Matrix matrix, float divider)
 		{
-			return Divide(matrix, divider);
+			return Matrix.Divide(matrix, divider);
 		}
 
 		/// <summary>

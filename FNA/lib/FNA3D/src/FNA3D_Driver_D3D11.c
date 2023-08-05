@@ -1,6 +1,6 @@
 /* FNA3D - 3D Graphics Library for FNA
  *
- * Copyright (c) 2020-2022 Ethan Lee
+ * Copyright (c) 2020-2023 Ethan Lee
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
@@ -501,7 +501,7 @@ static void D3D11_INTERNAL_LogError(
 	const char *msg,
 	HRESULT res
 ) {
-	#define MAX_ERROR_LEN 1024 /* FIXME: Arbitrary! */
+	#define MAX_ERROR_LEN 2048 /* FIXME: Arbitrary! */
 
 	/* Buffer for text, ensure space for \0 terminator after buffer */
 	char wszMsgBuff[MAX_ERROR_LEN + 1];
@@ -967,14 +967,19 @@ static ID3D11InputLayout* D3D11_INTERNAL_FetchBindingsInputLayout(
 		}
 	}
 
-	MOJOSHADER_d3d11CompileVertexShader(
+	if (MOJOSHADER_d3d11CompileVertexShader(
 		renderer->shaderContext,
 		(unsigned long long) *hash,
 		elements,
 		numElements,
 		&bytecode,
 		&bytecodeLength
-	);
+	) < 0) {
+		FNA3D_LogError(
+			"%s", MOJOSHADER_d3d11GetError(renderer->shaderContext)
+		);
+		return NULL;
+	}
 	res = ID3D11Device_CreateInputLayout(
 		renderer->device,
 		elements,
@@ -1471,15 +1476,9 @@ static void D3D11_INTERNAL_BlitFauxBackbuffer(
 		&renderer->samplers[0]
 	);
 
-	/* Bind the faux-backbuffer */
-	D3D11_SetRenderTargets(
-		(FNA3D_Renderer*) renderer,
-		NULL,
-		0,
-		NULL,
-		FNA3D_DEPTHFORMAT_NONE,
-		0
-	);
+	/* Don't rebind the faux-backbuffer here, this gets done after
+	 * Present is called, since some DXGI modes unset the binding each frame
+	 */
 
 	SDL_UnlockMutex(renderer->ctxLock);
 }
@@ -1607,6 +1606,16 @@ static void D3D11_SwapBuffers(
 
 	/* Present! */
 	IDXGISwapChain_Present(swapchainData->swapchain, renderer->syncInterval, 0);
+
+	/* Bind the faux-backbuffer now, in case DXGI unsets target state */
+	D3D11_SetRenderTargets(
+		(FNA3D_Renderer*) renderer,
+		NULL,
+		0,
+		NULL,
+		FNA3D_DEPTHFORMAT_NONE,
+		0
+	);
 
 	/* An overlay program may seize our context and render with it, so
 	 * unlock _after_ we present so the device context is safe in that time
@@ -2176,6 +2185,11 @@ static void D3D11_ApplyVertexBufferBindings(
 		numBindings,
 		&hash
 	);
+	if (inputLayout == NULL)
+	{
+		SDL_UnlockMutex(renderer->ctxLock);
+		return;
+	}
 
 	if (renderer->inputLayout != inputLayout)
 	{
@@ -2212,10 +2226,14 @@ static void D3D11_ApplyVertexBufferBindings(
 		}
 	}
 
-	MOJOSHADER_d3d11ProgramReady(
+	if (MOJOSHADER_d3d11ProgramReady(
 		renderer->shaderContext,
 		(unsigned long long) hash
-	);
+	) < 0) {
+		FNA3D_LogError(
+			"%s", MOJOSHADER_d3d11GetError(renderer->shaderContext)
+		);
+	}
 	renderer->effectApplied = 0;
 
 	SDL_UnlockMutex(renderer->ctxLock);
@@ -2951,6 +2969,7 @@ static void D3D11_ReadBackbuffer(
 	backbufferTexture.twod.width = renderer->backbuffer->width;
 	backbufferTexture.twod.height = renderer->backbuffer->height;
 	backbufferTexture.levelCount = 1;
+	backbufferTexture.isRenderTarget = 1;
 	backbufferTexture.staging = (ID3D11Resource*) renderer->backbuffer->stagingBuffer;
 
 	if (renderer->backbuffer->type == BACKBUFFER_TYPE_D3D11)
@@ -5387,8 +5406,10 @@ static void D3D11_PLATFORM_CreateSwapChain(
 	SDL_GetWindowWMInfo((SDL_Window*) windowHandle, &info);
 
 	/* Initialize swapchain descriptor */
-	swapchainDesc.Width = 0;
-	swapchainDesc.Height = 0;
+	int w, h;
+	SDL_GetWindowSize((SDL_Window*) windowHandle, &w, &h);
+	swapchainDesc.Width = w;
+	swapchainDesc.Height = h;
 	swapchainDesc.Format = XNAToD3D_TextureFormat[backBufferFormat];
 	swapchainDesc.Stereo = 0;
 	swapchainDesc.SampleDesc.Count = 1;

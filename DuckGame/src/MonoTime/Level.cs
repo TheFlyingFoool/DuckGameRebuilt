@@ -1056,6 +1056,10 @@ namespace DuckGame
             return current.CollisionRectAllDan<T>(p1, p2, null); // spooky time
             //return Level.current.CollisionRectAll<T>(p1, p2, null);
         }
+        public static IEnumerable<T> OldCheckRectAll<T>(Vec2 p1, Vec2 p2)
+        {
+            return current.CollisionRectAll<T>(p1, p2, null);
+        }
         public static IEnumerable<T> CheckRectAllDan<T>(Vec2 p1, Vec2 p2)
         {
             return current.CollisionRectAllDan<T>(p1, p2, null);

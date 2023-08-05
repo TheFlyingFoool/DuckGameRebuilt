@@ -1,9 +1,7 @@
 ﻿namespace DuckGame
 {
     [ClientOnly]
-#if DEBUG
     [EditorGroup("Rebuilt|Wump|Machine Guns")]
-#endif
     public class WumpAK47 : Gun
     {
         public StateBinding _firesBinding = new StateBinding("fires");
@@ -39,6 +37,10 @@
             maxAccuracyLost = 0.8f;
             _editorName = "AK47";
             editorTooltip = "This aint no normal gun, charge up a barrage of bullets and watch out for the recoil.";
+        }
+        protected override void PlayFireSound()
+        {
+            SFX.PlaySynchronized(_fireSound, pitch: (Rando.Float(0.2f) - 0.1f + _fireSoundPitch));
         }
         public override void Update()
         {

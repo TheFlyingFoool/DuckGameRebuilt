@@ -48,13 +48,13 @@ namespace MonoGame.Utilities
                 filePath = ForwardSlashString + filePath;
 
             // Get a uri for filePath using the file:// schema and no host.
-            Uri src = new Uri("file://" + filePath);
+            var src = new Uri("file://" + filePath);
 
-            Uri dst = new Uri(src, relativeFile);
+            var dst = new Uri(src, relativeFile);
 
             // The uri now contains the path to the relativeFile with 
             // relative addresses resolved... get the local path.
-            string localPath = dst.LocalPath;
+            var localPath = dst.LocalPath;
 
             if (!hasForwardSlash && localPath.StartsWith("/"))
                 localPath = localPath.Substring(1);

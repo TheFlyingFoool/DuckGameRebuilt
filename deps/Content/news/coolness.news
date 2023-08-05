@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NewsStory name="Coolness Story">
+	<Section name="CoolestDuckAward"/>
+	<Cycle value="Once"/>
+
+	<SubStory name = "">
+		<Dialogue value="CUE%HOTNESSIMAGE%"/>
+		<SubStory name = "Show Hotness">
+			<Dialogue value="It's time for a breakdown of the Hottest Duck!"/>
+			<Dialogue value="The polls are in, who do our fans like?"/>
+			<Dialogue value="But what do the fans think?"/>
+			<Cycle value="Once"/>
+				<SubStory name = "Show Hotness">
+					<Dialogue value="CUE%CUEHOTNESS%"/>
+				</SubStory>
+		</SubStory>
+	</SubStory>
+	
+	<NewsStoryHalloween name="Coolness Story">
+		<Section name="CoolestDuckAward"/>
+		<Cycle value="Once"/>
+
+		<SubStory name = "">
+			<Dialogue value="CUE%HOTNESSIMAGE%"/>
+			<SubStory name = "Show Hotness">
+				<Dialogue value="It's time for a breakdown of the Spookiest Duck!"/>
+				<Dialogue value="The polls are in, who do our fans like?"/>
+				<Dialogue value="But what do the fans think? (About Spookyness)"/>
+				<Cycle value="Once"/>
+					<SubStory name = "Show Hotness">
+						<Dialogue value="CUE%CUEHOTNESS%"/>
+					</SubStory>
+			</SubStory>
+		</SubStory>
+	</NewsStoryHalloween>
+</NewsStory>

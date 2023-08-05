@@ -1,9 +1,7 @@
 ﻿namespace DuckGame
 {
     [ClientOnly]
-#if DEBUG
     [EditorGroup("Rebuilt|Wump|Lasers")]
-#endif
     public class WumpQuadLaser : Gun
     {
         public WumpQuadLaser(float xval, float yval) : base(xval, yval)

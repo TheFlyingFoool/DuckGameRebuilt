@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -21,15 +21,13 @@ namespace Microsoft.Xna.Framework.Content
 			ContentReader input,
 			DualTextureEffect existingInstance
 		) {
-            DualTextureEffect effect = new DualTextureEffect(input.ContentManager.GetGraphicsDevice())
-            {
-                Texture = input.ReadExternalReference<Texture>() as Texture2D,
-                Texture2 = input.ReadExternalReference<Texture>() as Texture2D,
-                DiffuseColor = input.ReadVector3(),
-                Alpha = input.ReadSingle(),
-                VertexColorEnabled = input.ReadBoolean()
-            };
-            return effect;
+			DualTextureEffect effect = new DualTextureEffect(input.ContentManager.GetGraphicsDevice());
+			effect.Texture = input.ReadExternalReference<Texture>() as Texture2D;
+			effect.Texture2 = input.ReadExternalReference<Texture>() as Texture2D;
+			effect.DiffuseColor = input.ReadVector3();
+			effect.Alpha = input.ReadSingle();
+			effect.VertexColorEnabled = input.ReadBoolean();
+			return effect;
 		}
 
 		#endregion

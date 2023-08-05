@@ -3,9 +3,7 @@
 namespace DuckGame
 {
     [ClientOnly]
-#if DEBUG
     [EditorGroup("Rebuilt|Wump|Lasers")]
-#endif
     public class WumpHugeLaser : Gun, IDrawToDifferentLayers
     {
         public byte netAnimationIndex
@@ -159,7 +157,7 @@ namespace DuckGame
                 _chargeSoundShort.Volume = 0f;
             }
             _chargeAnim.SetAnimation("drain");
-            SFX.Play("laserBlast", 1f, 0f, 0f, false);
+            SFX.PlaySynchronized("laserBlast", 1f, 0f, 0f, false);
         }
         public override void Update()
         {

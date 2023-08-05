@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -21,17 +21,15 @@ namespace Microsoft.Xna.Framework.Content
 			ContentReader input,
 			SkinnedEffect existingInstance
 		) {
-            SkinnedEffect effect = new SkinnedEffect(input.ContentManager.GetGraphicsDevice())
-            {
-                Texture = input.ReadExternalReference<Texture>() as Texture2D,
-                WeightsPerVertex = input.ReadInt32(),
-                DiffuseColor = input.ReadVector3(),
-                EmissiveColor = input.ReadVector3(),
-                SpecularColor = input.ReadVector3(),
-                SpecularPower = input.ReadSingle(),
-                Alpha = input.ReadSingle()
-            };
-            return effect;
+			SkinnedEffect effect = new SkinnedEffect(input.ContentManager.GetGraphicsDevice());
+			effect.Texture = input.ReadExternalReference<Texture>() as Texture2D;
+			effect.WeightsPerVertex = input.ReadInt32();
+			effect.DiffuseColor = input.ReadVector3();
+			effect.EmissiveColor = input.ReadVector3();
+			effect.SpecularColor = input.ReadVector3();
+			effect.SpecularPower = input.ReadSingle();
+			effect.Alpha = input.ReadSingle();
+			return effect;
 		}
 
 		#endregion

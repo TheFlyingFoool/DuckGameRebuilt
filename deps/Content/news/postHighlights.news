@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NewsStory name="Post Highlights">
+	<Section name="AfterHighlightMessage"/>
+	<Cycle value="Once"/>
+	<Dialogue value="|EXCITED|Wow!"/>
+	<Dialogue value="|EXCITED|BLAMO!"/>
+	<Dialogue value="|EXCITED|WALABAM KABAM!"/>
+	<Dialogue value="|EXCITED|BAZOOM!"/>
+	<Dialogue value="|EXCITED|Action Action Action!"/>
+	<Dialogue value="|EXCITED|Christos!"/>
+	<Dialogue value="|EXCITED|BOOM BOOM BABY!"/>
+	<Dialogue value="|EXCITED|KAPOW!"/>
+	<Dialogue value="|EXCITED|WEEEOOOOHHHH!"/>
+	<Dialogue value="|EXCITED|KABLAMO!"/>
+	<Dialogue value="|EXCITED|WOAH!"/>
+	<Dialogue value="|EXCITED|BLEAURAUGH!"/>
+	<Dialogue value="|EXCITED|CAN YOU BELIEVE IT!?"/>
+	<Dialogue value="|EXCITED|OH MY!"/>
+	<Dialogue value="|SUAVE|YEAH BOY!"/>
+	<Dialogue value="|SUAVE|FANCY STUFF!"/>
+	<SubStory name = "Computer Rating">
+		<VALUE><![CDATA[  highlightRating()  ]]></VALUE>
+		<Dialogue value="Our computer rated that highlight reel as... |EXCITED||RED|%VALUE%|WHITE|!**"/>
+		<Dialogue value="The computer says those highlights were... |EXCITED||RED|%VALUE%|WHITE|!**"/>
+		<Dialogue value="|EXCITED||RED|%VALUE%|WHITE|!** That's what the computer thought of that match!"/>
+	</SubStory>
+	
+	<NewsStoryHalloween name="Post Highlights">
+		<Section name="AfterHighlightMessage"/>
+		<Cycle value="Once"/>
+		<Dialogue value="|EXCITED|SPOOKY!"/>
+		<Dialogue value="|EXCITED|HOW SPOOKY!"/>
+		<Dialogue value="|EXCITED|THAT WAS SPOOKY!"/>
+		<Dialogue value="|EXCITED|SPOOOOOOOKY!"/>
+		<Dialogue value="|EXCITED|WHAT A SPOOKY MATCH!"/>
+		<SubStory name = "Computer Rating">
+			<VALUE><![CDATA[  highlightRating()  ]]></VALUE>
+			<Dialogue value="Our computer rated that highlight reel as... |EXCITED||RED|SPOOKY|WHITE|!**"/>
+			<Dialogue value="The computer says those highlights were... |EXCITED||RED|SPOOKY|WHITE|!**"/>
+			<Dialogue value="|EXCITED||RED|SPOOKY|WHITE|!** That's what the computer thought of that match!"/>
+		</SubStory>
+	</NewsStoryHalloween>
+</NewsStory>

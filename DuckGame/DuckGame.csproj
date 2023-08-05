@@ -378,6 +378,16 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigTrapped.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\ReDemoBlaster.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\TapeBlock.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\FadingAwayThing.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\CampNetgun.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\HugerLaser.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\OctoLaser.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\QuadPhaser.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\LaserDiskParticle.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\MaterialRedFade.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\NMDeathCone.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Projectile\LaserConeBlast.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Projectile\OctoLaserBullet.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATDeathCaliber.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATWumpMagnum.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\Bubble.cs" />
@@ -409,6 +419,7 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpSniper.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpTeleporter.cs" />
     <Compile Include="AddedContent\NiK0\MathParser.cs" />
+    <Compile Include="AddedContent\NiK0\NMClientOnlyContent.cs" />
     <Compile Include="AddedContent\NiK0\RainbowConstant.cs" />
     <Compile Include="AddedContent\NiK0\RainParticel.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\ClientOnlyAttribute.cs" />
