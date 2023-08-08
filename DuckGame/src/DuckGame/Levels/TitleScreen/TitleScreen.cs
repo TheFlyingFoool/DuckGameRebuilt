@@ -596,9 +596,17 @@ namespace DuckGame
                 _updaterPromptMenu = new UIMenu("@DGR@DGR UPDATER@WRENCH@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f);
                 _updaterPromptMenu.Add(new LUIText("A new version of DGR", Colors.DGPink));
                 _updaterPromptMenu.Add(new LUIText("has been found", Colors.DGPink));
+                
+                bool nightly = MonoMain.nightlyDgrUpdates;
+                Program.IntitializeAutoUpdaterProgress(nightly);
+                
                 if (Program.NewerRebuiltVersionExists)
                 {
-                    _updaterPromptMenu.Add(new LUIText(Program.LatestRebuiltVersion.VersionStringFormatted, Colors.Platinum));
+                    string displayVersion = nightly 
+                        ? Program.LatestNightlyRebuiltVersion.Substring(0, 8) 
+                        : Program.LatestReleaseRebuiltVersion.VersionStringFormatted;
+                    
+                    _updaterPromptMenu.Add(new LUIText(displayVersion, Colors.Platinum));
                 }
                 _updaterPromptMenu.Add(new LUIText("", Colors.DGPink));
                 _updaterPromptMenu.Add(new LUIText("-- UPDATING --", Colors.DGPink));
@@ -1055,16 +1063,19 @@ namespace DuckGame
                 {
                     try
                     {
-                        Program.HandleAutoUpdater();
+                        if (MonoMain.nightlyDgrUpdates)
+                            Program.HandleNightlyAutoUpdater();
+                        else Program.HandleAutoUpdater();
                     }
                     catch (Exception e)
                     {
-                        DevConsole.Log("AutoUpdater Failed:");
+                        DevConsole.Log($"AutoUpdater failed at step [{Program.AutoUpdaterCompletionProgress}] ({Program.AutoUpdaterProgressMessage}):");
                         DevConsole.LogComplexMessage(e.ToString(), Colors.DGRed);
                         if (MonoMain.pauseMenu != null)
                         {
                             MonoMain.pauseMenu.Close();
                         }
+                        _shouldUpdateRebuilt = false;
                     }
                 }).Start();
                 return;

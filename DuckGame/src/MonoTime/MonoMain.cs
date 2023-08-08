@@ -139,6 +139,7 @@ namespace DuckGame
         public static bool recoversave = false;
         public static bool noHidef;
         public static bool oldAngles;
+        public static bool nightlyDgrUpdates;
         public static bool alternateFullscreen = false;
         /// <summary>deprecated</summary>
         public static bool alternateAudioMode = false;

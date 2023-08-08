@@ -56,6 +56,11 @@ namespace DuckGame
                 s = "DEV♥VER";
                 c = Color.DeepPink;
             }
+            else if (MonoMain.nightlyDgrUpdates)
+            {
+                s = Program.rawGitVersion.Substring(0, 8);
+                c = Color.Purple;
+            }
             Vec2 v = new Vec2(x + 8, y + 35);
 
             float xs = s.Length * 6f;

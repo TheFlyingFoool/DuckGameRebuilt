@@ -1,7 +1,12 @@
-﻿using AddedContent.Firebreak;
-using DbMon.NET;
+﻿using DbMon.NET;
 using DGWindows;
+using Microsoft.Build.Execution;
+using Microsoft.Build.Evaluation;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Logging;
 using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System; 
 using System.IO;
 using System.Net;
@@ -22,6 +27,8 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
+using LibGit2Sharp;
+using System.Runtime.CompilerServices;
 
 namespace DuckGame
 {
@@ -93,19 +100,33 @@ namespace DuckGame
         public static bool nikogay; // sht about to get real colorful
         /// <summary>The main entry point for the application.</summary>\
         public static Vec2 StartPos = Vec2.Zero;
+        public static string rawGitVersion;
         public static string gitVersion = "N/A";
         public static bool lateCrash;
-        public static ProgressValue AutoUpdaterCompletionProgress = new(0, 1, 0, 7);
+        public static ProgressValue AutoUpdaterCompletionProgress;
         public static string AutoUpdaterProgressMessage = "";
-        public static DGVersion LatestRebuiltVersion; // for fetching
-        public static bool NewerRebuiltVersionExists; // for fetching
+        public static DGVersion LatestReleaseRebuiltVersion;
+        public static string LatestNightlyRebuiltVersion;
+        public static bool NewerRebuiltVersionExists;
         
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
         public static void Main(string[] args)
         {
-            if (fullstop)
+            if (true || fullstop)
             {
+                try
+                {
+                    FilePath = typeof(ItemBox).Assembly.Location;
+                    IntitializeAutoUpdaterProgress(true);
+                    HandleNightlyAutoUpdater();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+
+                Console.ReadLine();
                 return;
             }
             //File.Delete(Path.GetFullPath("DGInput.dll"));
@@ -125,7 +146,9 @@ namespace DuckGame
                 bool isDirty = false;
                 using (StreamReader st = new(gameAssembly.GetManifestResourceStream("version.txt")))
                 {
-                    gitVersion = st.ReadToEnd();
+                    rawGitVersion = st.ReadToEnd();
+                    gitVersion = rawGitVersion;
+                    rawGitVersion = rawGitVersion.Substring(0, 40);
                 }
                 if (gitVersion.EndsWith("-dirty\n"))
                 {
@@ -429,6 +452,9 @@ namespace DuckGame
                         break;
                     case "-nofullscreen":
                         MonoMain.noFullscreen = true;
+                        break;
+                    case "-nightly":
+                        MonoMain.nightlyDgrUpdates = true;
                         break;
                     case "-nosteam":
                         MonoMain.disableSteam = true;
@@ -1113,78 +1139,71 @@ namespace DuckGame
             return strings;
         }
 
-        public const string GITHUB_RELEASE_URL = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest";
+        public const string GITHUB_REPO_URL = "https://github.com/TheFlyingFoool/DuckGameRebuilt";
+        public const string GITHUB_RELEASE_URL = "/releases/latest";
         
         public static void HandleAutoUpdater()
         {
             const string dgrZipName = @"DuckGameRebuilt.zip";
             
-            UpdateAutoUpdaterProgress(1);
+            UpdateAutoUpdaterProgress("Finding game file path");
 
             string dgrExePath = FilePath;
             string parentDirectoryPath = Path.GetDirectoryName(dgrExePath)!;
             string zipPath = parentDirectoryPath + $"/{dgrZipName}";
             
-            UpdateAutoUpdaterProgress(2);
-            
-            foreach (string filePath in Directory.GetFiles(parentDirectoryPath, "*.tmp")) // deletes .tmp files from past updating sequence 
-            {
-                if (File.Exists(filePath))
-                    File.Delete(filePath);
-            }
-            
-            if (File.Exists(zipPath))
-                File.Delete(zipPath);
-            
-            UpdateAutoUpdaterProgress(3);
-            
-            // if (!Internet.IsAvailable()) // unnecessary
-            // {
-            //     throw new WebException("No internet for AutoUpdater");
-            // }
-
-            UpdateAutoUpdaterProgress(4);
-            
-            if (!MonoMain.ForceDGRUpdate && !CheckForNewVersion())
-                throw new Exception("No new version available");
-            
-            UpdateAutoUpdaterProgress(5);
+            UpdateAutoUpdaterProgress("Downloading build files");
             
             FileStream dgrZipStream = DownloadFile(GITHUB_RELEASE_URL + "/download/" + dgrZipName, zipPath);
             
-            UpdateAutoUpdaterProgress(6);
+            UpdateAutoUpdaterProgress("Installing");
             
             using ZipArchive archive = new(dgrZipStream);
             archive.ExtractToDirectory(parentDirectoryPath);
             
-            UpdateAutoUpdaterProgress(7);
+            UpdateAutoUpdaterProgress("Restarting Duck Game");
             
             Thread.Sleep(500); // dramatic pause
             Process.Start(dgrExePath, Environment.CommandLine);
             Process.GetCurrentProcess().Kill();
         }
 
-        private static void UpdateAutoUpdaterProgress(int step)
+        public static void DeleteAutoUpdaterTempFiles()
         {
-            AutoUpdaterProgressMessage = step switch
+            const string dgrZipName = @"DuckGameRebuilt.zip";
+            string dgrExePath = FilePath;
+            string parentDirectoryPath = Path.GetDirectoryName(dgrExePath)!;
+            string zipPath = parentDirectoryPath + $"/{dgrZipName}";
+            
+            // deletes .tmp files from past updating sequence
+            foreach (string filePath in Directory.GetFiles(parentDirectoryPath, "*.tmp"))
             {
-                1 => "Finding game file path",
-                2 => "Deleting temporary files",
-                3 => "Checking internet connection",
-                4 => "Checking for new version",
-                5 => "Downloading build files",
-                6 => "Installing",
-                7 => "Restarting Duck Game",
-                _ => ""
-            };
+                if (File.Exists(filePath))
+                    File.Delete(filePath);
+            }
 
-            AutoUpdaterCompletionProgress.Value = step;
+            if (File.Exists(zipPath))
+                File.Delete(zipPath);
+        }
+
+        public static void IntitializeAutoUpdaterProgress(bool nightly)
+        {
+            int steps = nightly ? 5 : 4;
+            AutoUpdaterCompletionProgress = new ProgressValue(0, 1, 0, steps);
+        }
+
+        private static void UpdateAutoUpdaterProgress(string description)
+        {
+            AutoUpdaterProgressMessage = description;
+            AutoUpdaterCompletionProgress.Value += 1;
+
+            Console.WriteLine($"[{AutoUpdaterCompletionProgress.GenerateBar()}] {AutoUpdaterCompletionProgress} {description}");
         }
         
         public static DGVersion GetLatestReleaseVersion()
         {
-            if (LatestRebuiltVersion is not null)
-                return LatestRebuiltVersion;
+            if (LatestReleaseRebuiltVersion is not null)
+                return LatestReleaseRebuiltVersion;
             
             WebRequest webRequest = WebRequest.Create(GITHUB_RELEASE_URL);
             WebResponse response = webRequest.GetResponse();
@@ -1200,17 +1219,180 @@ namespace DuckGame
             {
                 if (NewerRebuiltVersionExists)
                     return true;
-                
-                LatestRebuiltVersion = GetLatestReleaseVersion();
-                DGVersion currentVersion = new DGVersion(CURRENT_VERSION_ID);
 
-                NewerRebuiltVersionExists = currentVersion < LatestRebuiltVersion;
+                if (MonoMain.nightlyDgrUpdates)
+                {
+                    LatestNightlyRebuiltVersion = GetLatestNightlyVersion().Result;
+                    string currentVersion = rawGitVersion;
+
+                    NewerRebuiltVersionExists = true || currentVersion != LatestNightlyRebuiltVersion;
+                }
+                else
+                {
+                    LatestReleaseRebuiltVersion = GetLatestReleaseVersion();
+                    DGVersion currentVersion = new DGVersion(CURRENT_VERSION_ID);
+
+                    NewerRebuiltVersionExists = currentVersion < LatestReleaseRebuiltVersion;
+                }
+
                 return NewerRebuiltVersionExists;
             }
             catch (Exception e)
             {
                 return false;
             }
+        }
+
+        public static void HandleNightlyAutoUpdater()
+        {
+            #if AutoUpdater
+            #else
+            throw new InvalidOperationException("Way too many problems pop up unless it's built on ReleaseAutoUpdater, don't even bother.");
+            #endif
+            
+            UpdateAutoUpdaterProgress("Finding game file path");
+
+            string dgrExePath = FilePath;
+            string parentDirectoryPath = Path.GetDirectoryName(dgrExePath)!;
+            string sourceCodeDirectoryPath = parentDirectoryPath + "/source";
+            string sourceLibDirectoryPath = sourceCodeDirectoryPath + "/DuckGame/lib";
+            string sourceSolutionPath = sourceCodeDirectoryPath + "/DuckGame.sln";
+            string sourceBinDirectoryPath = sourceCodeDirectoryPath + "/bin";
+            
+            UpdateAutoUpdaterProgress("Downloading source code");
+            
+            Repository.Clone(GITHUB_REPO_URL, sourceCodeDirectoryPath);
+            
+            UpdateAutoUpdaterProgress("Compiling");
+
+            Directory.CreateDirectory(sourceBinDirectoryPath);
+            foreach (string dependencyPath in Directory.GetFiles(sourceLibDirectoryPath, "*.dll"))
+            {
+                File.Copy(dependencyPath, sourceBinDirectoryPath + Path.GetFileName(dependencyPath));
+            }
+
+            bool isBuildSuccessful = BuildSolution(sourceSolutionPath);
+            
+            /* [TODO]         -- ON FAIL --                /
+            / - tell user something went wrong.            /
+            /                                              /
+            / - save commit id on disk that it's a failure /
+            /   as to not keep attempting updating on      /
+            /   next attempts and failing repeatedly.      /
+            /                                              /
+            / - allow user to exit updater menu.          */
+            
+            // TODO actually just make a thing that handles crashes for
+            //      the autoupdater and does that on every exception
+
+            UpdateAutoUpdaterProgress("Installing");
+
+            string[] files = Directory.GetFiles(sourceBinDirectoryPath, "*", SearchOption.AllDirectories);
+
+            foreach (string filePath in files)
+            {
+                string relativePath = filePath.Substring(sourceBinDirectoryPath.Length + 1);
+                string destinationPath = parentDirectoryPath + $"/{relativePath}";
+                
+                try
+                {
+                    File.Copy(filePath, destinationPath, true);
+                }
+                catch (IOException ex)
+                {
+                    if (!IsFileLocked(ex))
+                        throw;
+                    
+                    string tempFileName = $"{destinationPath}.tmp";
+                    
+                    if (File.Exists(tempFileName))
+                        File.Delete(tempFileName);
+                    
+                    File.Move(destinationPath, tempFileName);
+                    File.Copy(filePath, destinationPath, true);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("An error occurred: " + ex.Message);
+                }
+            }
+
+            //UpdateAutoUpdaterProgress("Cleaning up files");
+            
+            //Directory.Delete(sourceCodeDirectoryPath, true);
+
+            return;
+            
+            UpdateAutoUpdaterProgress("Restarting Duck Game");
+            
+            Thread.Sleep(500); // dramatic pause
+            Process.Start(dgrExePath, Environment.CommandLine);
+            Process.GetCurrentProcess().Kill();
+        }
+
+        private static bool BuildSolution(string sourceSolutionPath)
+        {
+            ProjectCollection projectCollection = new();
+
+            Dictionary<string, string> globalProperty = new()
+            {
+                {"Configuration", "ReleaseAutoUpdater"},
+                {"Platform", "Any CPU"},
+                {"RestorePackagesConfig", "true"},
+                {"Optimize", "false"},
+            };
+            
+            BuildManager.DefaultBuildManager.ResetCaches();
+            
+            BuildRequestData buildRequest = new(sourceSolutionPath, globalProperty, null, new[] { "Restore", "Build" }, null);
+
+            BuildParameters buildParameters = new(projectCollection)
+            {
+                Loggers = new[] { new ConsoleLogger(LoggerVerbosity.Diagnostic) }
+            };
+
+            BuildResult buildResult = BuildManager.DefaultBuildManager.Build(buildParameters, buildRequest);
+
+            return buildResult.OverallResult == BuildResultCode.Success;
+        }
+        
+        public static async Task<string> GetLatestNightlyVersion()
+        {
+            if (LatestNightlyRebuiltVersion is not null)
+                return LatestNightlyRebuiltVersion;
+            
+            using HttpClient httpClient = new();
+            
+            httpClient.DefaultRequestHeaders.Add("User-Agent", $"DuckGameRebuilt/{CURRENT_VERSION_ID}");
+
+            const string apiUrl = "https://api.github.com/repos/TheFlyingFoool/DuckGameRebuilt/commits";
+            
+            using Stream responseStream = await httpClient.GetStreamAsync(apiUrl);
+            using JsonTextReader reader = new JsonTextReader(new StreamReader(responseStream));
+            
+            while (await reader.ReadAsync())
+            {
+                switch (reader.TokenType)
+                {
+                    case JsonToken.StartArray:
+                        await reader.ReadAsync();
+                        break;
+
+                    case JsonToken.StartObject:
+                        JObject commitObject = await JObject.LoadAsync(reader);
+                        JToken commitUrl = commitObject["url"];
+
+                        if (commitUrl != null)
+                        {
+                            string latestNightlyVersionId = commitUrl.ToString().Substring(72 /* might need to change 72 if we switch repos. */ );
+                            return latestNightlyVersionId;                                    /* alternatively, regex would work great here  */
+                        }                                                                     /*                                - Firebreak  */
+
+                        break;
+                }
+            }
+
+            throw new InvalidOperationException("Latest commit not found in API response.");
         }
         
         public static void ExtractToDirectory(this ZipArchive archive, string destinationDirectoryName)
