@@ -1481,7 +1481,7 @@ namespace DuckGame
         internal static bool CheckCheats()
         {
             // sole online player
-            if (Network.isActive && Network.connections.Count == 1)
+            if (Network.isActive && !Network.connections.Any())
                 return false;
 
             // network debug

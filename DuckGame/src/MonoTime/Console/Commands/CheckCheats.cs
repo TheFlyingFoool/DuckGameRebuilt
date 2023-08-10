@@ -7,7 +7,7 @@ namespace DuckGame
         [DevConsoleCommand(Description = "Checks if you qualify as a cheater for the developer console")]
         public static string CheckCheats()
         {
-            if (Network.isActive && Network.connections.Count == 1)
+            if (Network.isActive && !Network.connections.Any())
                 return "|DGBLUE|PASS | Sole online player";
 
             if (NetworkDebugger.enabled)
