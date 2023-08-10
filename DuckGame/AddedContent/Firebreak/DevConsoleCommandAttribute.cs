@@ -72,7 +72,7 @@ namespace DuckGame
                         return;
                     }
                     
-                    if (attribute.IsCheat && !DevConsole.CheckCheats())
+                    if (attribute.IsCheat && DevConsole.CheckCheats())
                     {
                         DevConsole.Log("You can't do that here!", Color.Red);
                         return;
