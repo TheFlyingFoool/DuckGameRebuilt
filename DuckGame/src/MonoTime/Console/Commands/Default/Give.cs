@@ -3,7 +3,7 @@
 
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand(Description = "Gives a player an item by name")]
+        [DevConsoleCommand(Description = "Gives a player an item by name", IsCheat = true)]
         public static void Give(Profile player, Holdable item, string arguments = "")
         {
             //bool hold = true;
