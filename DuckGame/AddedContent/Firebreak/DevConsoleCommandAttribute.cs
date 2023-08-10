@@ -31,6 +31,7 @@ namespace DuckGame
         public bool IsCheat { get; set; }
         public bool CanCrash { get; set; }
         public string[] Aliases { get; set; } = Array.Empty<string>();
+        public bool HostOnly { get; set; }
 
         static DevConsoleCommandAttribute()
         {
@@ -65,6 +66,18 @@ namespace DuckGame
 
                 DevConsole.AddCommand(new CMD(realName, arguments, cmd =>
                 {
+                    if (attribute.HostOnly && !Network.isServer)
+                    {
+                        DevConsole.Log("You have to be the host!", Color.Red);
+                        return;
+                    }
+                    
+                    if (attribute.IsCheat && !DevConsole.CheckCheats())
+                    {
+                        DevConsole.Log("You can't do that here!", Color.Red);
+                        return;
+                    }
+                    
                     object[] objectParameters = new object[arguments.Length];
                     for (int i = 0; i < arguments.Length; i++)
                     {
