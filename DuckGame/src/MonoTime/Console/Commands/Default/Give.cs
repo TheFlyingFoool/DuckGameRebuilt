@@ -6,6 +6,8 @@
         [DevConsoleCommand(Description = "Gives a player an item by name", IsCheat = true)]
         public static void Give(Profile player, Holdable item, string arguments = "")
         {
+            bool noHold = false;
+            
             if (item is Gun g)
             {
                 if (arguments.Contains("i"))
@@ -30,6 +32,8 @@
                         holsteredItem.SetContainedObject(g);
                         player.duck.Equip(holsteredItem);
                     }
+                    
+                    noHold = true;
                 }
             }
             
@@ -40,7 +44,7 @@
             {
                 player.duck.Equip(e);
             }
-            else
+            else if (!noHold)
             {
                 player.duck.GiveHoldable(item);
             }
