@@ -51,11 +51,11 @@ namespace DuckGame
                 
                 string realName = getRealName(method, attribute);
 
-                if (!parameters.Any())
-                {
-                    DevConsole.AddCommand(new CMD(realName, delegate () { method.Invoke(null, null); }) { cancrash = attribute.CanCrash});
-                    continue;
-                }
+                // if (!parameters.Any())
+                // {
+                //     DevConsole.AddCommand(new CMD(realName, delegate () { method.Invoke(null, null); }) { cancrash = attribute.CanCrash});
+                //     continue;
+                // }
 
                 int parameterLength = parameters.Length;
                 CMD.Argument[] arguments = new CMD.Argument[parameterLength];
