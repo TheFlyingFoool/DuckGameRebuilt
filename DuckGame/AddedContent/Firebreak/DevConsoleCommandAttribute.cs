@@ -81,7 +81,12 @@ namespace DuckGame
                     object[] objectParameters = new object[arguments.Length];
                     for (int i = 0; i < arguments.Length; i++)
                     {
-                        objectParameters[i] = cmd.Arg<object>(parameters[i].Name);
+                        object argVal = cmd.Arg<object>(parameters[i].Name);
+                        object val = cmd.arguments[i].optional && argVal is null
+                            ? parameters[i].DefaultValue
+                            : argVal;
+                        
+                        objectParameters[i] = val;
                     }
 
                     try
