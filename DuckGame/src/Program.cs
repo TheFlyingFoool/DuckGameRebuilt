@@ -537,8 +537,8 @@ namespace DuckGame
                         if (index < args.Length)
                             DevConsole.startupCommands.Add(args[index]);
                         break;
-                    case "-useRPC":
-                        MonoMain.useRPC = true;
+                    case "-noRPC":
+                        MonoMain.useRPC = false;
                         break;
                     case "-logLoading":
                         MonoMain.logLoading = true;
