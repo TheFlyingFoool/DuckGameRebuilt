@@ -174,9 +174,8 @@ namespace DuckGame
             //Vec2 vec2_2 = zero / num; whys this code the fuck here
             followCam.Adjust();
 
-            if (level != "RANDOM" && Rando.Float(1) <= DGRSettings.RandomWeather)
+            if (level != "RANDOM" && Rando.Float(10) <= DGRSettings.RandomWeather)
             {
-
                 if (Program.BirthdayDGR)
                 {
                     DGRBirthday = true;
@@ -222,7 +221,7 @@ namespace DuckGame
                         rainDarken = darkenRainer;
                         rainwindto = rainwind;
                     }
-                    else if (First<OfficeTileset>() != null && (Rando.Int(1) == 1 || DGRSettings.RandomWeather > 9.9f))
+                    else if (First<OfficeTileset>() != null)
                     {
                         rainSound = new LoopingSound("sizzle", 1, -3)
                         {

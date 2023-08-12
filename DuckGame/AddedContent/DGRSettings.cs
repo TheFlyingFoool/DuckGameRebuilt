@@ -263,7 +263,7 @@ namespace DuckGame
         public static bool dubberspeed = false;
 
         [AutoConfigField]
-        public static float RandomWeather = 0.3f;
+        public static float RandomWeather = 1;
 
         [AutoConfigField]
         public static bool MenuMouse = false;

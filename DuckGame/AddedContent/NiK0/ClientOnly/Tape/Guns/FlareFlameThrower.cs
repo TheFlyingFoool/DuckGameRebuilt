@@ -5,11 +5,12 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using static DuckGame.CMD;
+
 namespace DuckGame
 {
-    [EditorGroup("Guns|Fire")]
-    [BaggedProperty("isSuperWeapon", true)]
-    public class FlameThrower : Gun
+    [ClientOnly]
+    public class FlareFlameThrower : Gun
     {
         public StateBinding _firingBinding = new StateBinding(nameof(_firing));
         private SpriteMap _barrelFlame;
@@ -17,9 +18,9 @@ namespace DuckGame
         private new float _flameWait;
         private SpriteMap _can;
         private ConstantSound _sound;
-        private int _maxAmmo = 100;
+        private int _maxAmmo = 80;
 
-        public FlameThrower(float xval, float yval)
+        public FlareFlameThrower(float xval, float yval)
           : base(xval, yval)
         {
             barrelInsertOffset = new Vec2(0f, -2f);
@@ -30,11 +31,11 @@ namespace DuckGame
                 combustable = true
             };
             _type = "gun";
-            graphic = new Sprite("flamethrower");
-            center = new Vec2(16f, 15f);
-            collisionOffset = new Vec2(-8f, -3f);
-            collisionSize = new Vec2(16f, 9f);
-            _barrelOffsetTL = new Vec2(28f, 16f);
+            graphic = new Sprite("flameflarethrower");
+            center = new Vec2(13.5f, 10.5f);
+            collisionOffset = new Vec2(-11.5f, -7.5f);
+            collisionSize = new Vec2(23, 18f);
+            _barrelOffsetTL = new Vec2(28f, 8);
             _fireSound = "smg";
             _fullAuto = true;
             _fireWait = 1f;
@@ -52,19 +53,8 @@ namespace DuckGame
             {
                 center = new Vec2(4f, 4f)
             };
-            _holdOffset = new Vec2(2f, 0f);
+            _holdOffset = new Vec2(2, -3.5f);
             _barrelAngleOffset = 8f;
-            _editorName = "Flame Thrower";
-            editorTooltip = "Some Ducks just want to watch the world burn.";
-            _bio = "I have a problem. I want this flame here, to be over there. But I can't pick it up, it's too damn hot. If only there was some way I could throw it.";
-        }
-        public override Holdable BecomeTapedMonster(TapedGun pTaped)
-        {
-            if (Editor.clientonlycontent)
-            {
-                return pTaped.gun1 is FlameThrower && pTaped.gun2 is FlareGun ? new FlareFlameThrower(x, y) : null;
-            }
-            return base.BecomeTapedMonster(pTaped);
         }
         public override void Initialize()
         {
@@ -93,14 +83,25 @@ namespace DuckGame
                 _flameWait -= 0.25f;
                 if (_flameWait > 0)
                     return;
-                Vec2 vec = Maths.AngleToVec(barrelAngle + Rando.Float(-0.5f, 0.5f));
-                Vec2 vec2 = new Vec2(vec.x * Rando.Float(2f, 3.5f), vec.y * Rando.Float(2f, 3.5f));
+                Vec2 vec = Maths.AngleToVec(barrelAngle);
+                Vec2 vec2 = new Vec2(vec.x * 7, vec.y * 7);
                 ammo -= 2;
+                if (ammo % 20 == 0)
+                {
+                    SFX.Play("netGunFire", 0.5f, Rando.Float(0.2f) - 0.4f);
+                    if (duck != null)
+                        RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(_fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));
+                    ApplyKick();
+                    Flare t = new Flare(barrelPosition.x, barrelPosition.y, null);
+                    Fondle(t);
+                    t.hSpeed = vec.x * 12;
+                    t.vSpeed = vec.y * 12;
+                    Level.Add(t);
+                }
                 Level.Add(SmallFire.New(barrelPosition.x, barrelPosition.y, vec2.x, vec2.y, firedFrom: this));
-                _flameWait = 1f;
+                _flameWait = 1.25f;
             }
-            else
-                _flameWait = 0f;
+            else _flameWait = 0f;
         }
 
         public override void Draw()
@@ -117,11 +118,30 @@ namespace DuckGame
             Draw(_can, new Vec2(barrelOffset.x - 11f, barrelOffset.y + 4f));
             Graphics.material = material;
         }
-
+        public override bool CanTapeTo(Thing pThing)
+        {
+            switch (pThing)
+            {
+                case FlareGun _:
+                case FlameThrower _:
+                    return false;
+                default:
+                    return true;
+            }
+        }
         public override void OnPressAction()
         {
             if (heat > 1)
             {
+                for (int i = 0; i < 3; i++)
+                {
+                    Vec2 vec = Maths.AngleToVec(Rando.Float(7));
+                    Flare t = new Flare(barrelPosition.x, barrelPosition.y, null);
+                    Fondle(t);
+                    t.hSpeed = vec.x * 12;
+                    t.vSpeed = vec.y * 12;
+                    Level.Add(t);
+                }
                 for (int index = 0; index < ammo / 10 + 3; ++index)
                     Level.Add(SmallFire.New(x - 6f + Rando.Float(12f), y - 8f + Rando.Float(4f), Rando.Float(6f) - 3f, 1f - Rando.Float(4.5f), firedFrom: this));
                 SFX.Play("explode", pitch: (Rando.Float(0.3f) - 0.3f));

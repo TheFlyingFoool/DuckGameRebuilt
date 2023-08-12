@@ -67,7 +67,7 @@ namespace DuckGame
                             for (int z = 0; z < bg.blocks.Count; z++)
                             {
                                 AutoBlock ab = (AutoBlock)bg.blocks[z];
-                                if (ab != null && Collision.Line(p1, p2, ab.rectangle))
+                                if (ab != null && !ab.shouldWreck && Collision.Line(p1, p2, ab.rectangle))
                                 {
                                     ab.shouldWreck = true;
                                     Level.current.AddUpdateOnce(ab);
