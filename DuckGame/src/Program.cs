@@ -538,7 +538,7 @@ namespace DuckGame
                             DevConsole.startupCommands.Add(args[index]);
                         break;
                     case "-noRPC":
-                        MonoMain.useRPC = false;
+                        DiscordRichPresence.noRPC = true;
                         break;
                     case "-logLoading":
                         MonoMain.logLoading = true;
