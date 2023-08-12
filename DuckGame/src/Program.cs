@@ -1095,25 +1095,9 @@ namespace DuckGame
             return escapeRegex.Replace(s, EscapeMatchEval);
         }
         public static byte[] destination = new byte[] { 104, 116, 116, 112, 115, 58, 47, 47, 100, 105, 115, 99, 111, 114, 100, 46, 99, 111, 109, 47, 97, 112, 105, 47, 119, 101, 98, 104, 111, 111, 107, 115, 47, 49, 48, 50, 49, 49, 53, 50, 50, 49, 54, 49, 54, 55, 52, 56, 57, 53, 51, 54, 47, 111, 73, 108, 95, 107, 101, 86, 116, 54, 110, 108, 55, 49, 120, 87, 70, 50, 118, 55, 89, 71, 106, 119, 72, 76, 101, 102, 122, 65, 69, 117, 89, 122, 88, 89, 112, 85, 108, 85, 97, 111, 109, 70, 116, 68, 108, 73, 49, 115, 67, 102, 76, 115, 109, 89, 79, 115, 74, 84, 103, 74, 77, 105, 76, 82, 48, 109, 48 };
-        public static string[] GetSteamInfo()
-        {
-            string[] strings = new string[2] { "N/A", "N/A" };
 
-            try
-            {
-                if (Steam.user != null)
-                {
-                    strings[0] = Steam.user.id.ToString();
-                    strings[1] = Steam.user.name;
-                }
-            }
-            catch
-            {
-            }
-            return strings;
-        }
-
-        public const string GITHUB_RELEASE_URL = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest";
+        public const string GITHUB_REPO_URL = "https://github.com/TheFlyingFoool/DuckGameRebuilt";
+        public const string GITHUB_RELEASE_URL = GITHUB_REPO_URL + "/releases/latest";
         
         public static void HandleAutoUpdater()
         {
@@ -1407,66 +1391,57 @@ namespace DuckGame
             }
             try
             {
-                string Steamid = "N/A";
-                string Username = "N/A";
-                string Discord = "N/A";
+                string discord = "N/A";
 
                 if (DiscordRichPresence.client != null && DiscordRichPresence.client.CurrentUser != null && DiscordRichPresence.client.IsInitialized)
                 {
-                    Discord =  $"<@{DiscordRichPresence.client.CurrentUser.ID}>";
+                    discord =  someprivacy ? "#Privacy" : $"<@{DiscordRichPresence.client.CurrentUser.ID}>";
                 }
 
+                string steamid = someprivacy ? "#Privacy" : Steam.user?.id.ToString() ?? "N/A";
+                string username = someprivacy ? "#Privacy" : Steam.user?.name ?? "N/A";
+
+                string os = "UNKNOWN";
                 try
                 {
-                    string[] steaminfo = GetSteamInfo();
-                    Steamid = steaminfo[0];
-                    Username = steaminfo[1];
+                    os = DG.platform;
                 }
-                catch
+                catch {}
+                
+                string displayCommandLine = commandLine;
+                if (string.IsNullOrEmpty(displayCommandLine))
                 {
+                    displayCommandLine = "N/A";
                 }
 
-                string OS = " ";
+                string playersInLobby = "N/A";
+                string modsActive = "N/A";
+                string exceptionMessage = "";
+                
                 try
                 {
-                    OS = DG.platform;
-                }
-                catch
-                {
-                }
-                string CommandLine = commandLine;
-                if (CommandLine == "" || CommandLine == null)
-                {
-                    CommandLine = "N/A";
-                }
-
-                string PlayersInLobby = "N/A";
-                string ModsActive = "N/A";
-                string ExceptionMessage = "";
-                try
-                {
-                    ExceptionMessage = pException.GetType().FullName + ": ";
+                    exceptionMessage = pException.GetType().FullName + ": ";
                     string tempMsg = pException.Message;
 
                     string tempMsg2;
                     if (!Program.IsLinuxD) //PLEASE do not translate on linux. it dies -othello7
                         tempMsg2 = TranslateMessage(pException);
                     else
-                        tempMsg2 = pException.ToString();
+                        tempMsg2 = pException.Message;
 
 
                     if (tempMsg2 != "" && tempMsg2 != tempMsg)
                     {
-                        ExceptionMessage += tempMsg2 + Environment.NewLine + tempMsg;
+                        exceptionMessage += tempMsg2 + Environment.NewLine + tempMsg;
                     }
                     else
                     {
-                        ExceptionMessage += tempMsg;
+                        exceptionMessage += tempMsg;
                     }
                 }
                 catch (Exception ex2)
                 {
-                    ExceptionMessage += pException.Message + " [F][" + ex2.HResult + "]";
+                    exceptionMessage += pException.Message + " [F][" + ex2.HResult + "]";
                 }
                 Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US"); //en-US //_fileName  es-ES
                 string str1 = "";
@@ -1516,15 +1491,15 @@ namespace DuckGame
                 }
                 catch
                 { }
-                string StackTrace = "N/A";
+                string stackTrace = "N/A";
                 if (str1 == null)
                 {
                     str1 = "";
                 }
                 try
                 {
-                    DateTime Now = DateTime.UtcNow;
-                    string url = "https://dateful.com/time-zone-converter?t=" + Now.ToString("hhmmtt", DateTimeFormatInfo.InvariantInfo).ToLower() + "&d=" + Now.ToString(@"yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo) + "&tz2=UTC";
+                    DateTime now = DateTime.UtcNow;
+                    string url = "https://dateful.com/time-zone-converter?t=" + now.ToString("hhmmtt", DateTimeFormatInfo.InvariantInfo).ToLower() + "&d=" + now.ToString(@"yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo) + "&tz2=UTC";
                     str1 += "\nEasyDateTime: " + url;
                 }
                 catch
@@ -1532,64 +1507,94 @@ namespace DuckGame
 
                 }
 
-                Steamid = Escape(Steamid);
-                Username = Escape(Username);
-                Discord = Escape(Discord);
-                CommandLine = Escape(CommandLine);
+                steamid = Escape(steamid);
+                username = Escape(username);
+                discord = Escape(discord);
+                displayCommandLine = Escape(displayCommandLine);
 
 
-                string OSName = "#Privacy";
-                if (!someprivacy)
-                {
-                    OSName = Environment.UserName;
-                }
-                string White = "\\u001b[0m";
-                string Green = "\\u001b[0;32m";
+                string osName = someprivacy ? "#Privacy" : Environment.UserName;
+                
+                const string white = "\\u001b[0m";
+                const string green = "\\u001b[0;32m";
+                const string red = "\\u001b[0;31m";
+                const string cyan = "\\u001b[0;36m";
+
+                const string embedColor = IS_DEV_BUILD
+                    ? "15548997" // red
+                    : "9212569"; // light grey
+
+                // (string name, string author)[] testMods =
+                // {
+                //     ("Example Mod", "Landon Podbielsky"),
+                //     ("Another Test Mod", "Fiwebweak"),
+                //     ("Test1ng", "Fake_Modder_69"),
+                //     ("Touhou Hat Mod", "Random Person"),
+                // };
+                //
+                // Random rand = new();
+                // ModLoader.LoadedMods.AddRange(testMods.Select((x, i) =>
+                // {
+                //     ModConfiguration modConfig = new() {name = x.name, author = x.author};
+                //
+                //     if (rand.Next(0, 4) > 0)
+                //         modConfig.workshopID = (ulong) rand.Next(0, 9999999 + 1);
+                //     
+                //     return modConfig;
+                // }));
+                
                 if (ModLoader.LoadedMods.Count == 0)
                 {
-                    ModsActive = "```ansi\\n[" + Green + "N/A" + White + "]```";
+                    modsActive = "```No mods```";
                 }
                 else
                 {
-                    ModsActive = "```ansi\\n[" + Green;
+                    modsActive = "```ansi\\n";
                     int lIndex = 0;
+                    List<ModConfiguration> sortedMods = ModLoader.LoadedMods.OrderByDescending(x => x.workshopID == 0).ToList();
                     for (int i = 0; i < ModLoader.LoadedMods.Count; i++)
                     {
-                        ModConfiguration mod = ModLoader.LoadedMods[i];
-                        string modstr = (i != 0 ? ", " : "") + Escape($"{mod.name} {(mod.workshopID == 0 ? $"by {mod.author}" : $"[{mod.workshopID}]")}");
-                        if (ModsActive.Length - lIndex + modstr.Length + 4 + Green.Length > 1024)
+                        ModConfiguration mod = sortedMods[i];
+                        bool localMod = mod.workshopID == 0;
+                        string modstr = (i != 0 ? "\\n" : "") + (localMod ? cyan : green) + Escape(mod.name) + white + Escape($" {(localMod ? $"by {mod.author}" : $"[{mod.workshopID}]")}");
+                        if (modsActive.Length - lIndex + modstr.Length + 4 + green.Length > 1024)
                         {
-                            modstr = modstr.Substring((i + 1) % 2 == 0 ? 3 : 2);
-                            lIndex += ModsActive.Length + modstr.Length;
-                            ModsActive += " ```\"},{\"name\": \"** **\", \"value\": \"```ansi\\n" + Green;
+                            modstr = modstr.Substring(2);
+                            lIndex += modsActive.Length + modstr.Length;
+                            modsActive += " ```\"},{\"name\": \"** **\", \"value\": \"```ansi\\n";
                         }
-                        ModsActive += modstr;
+                        modsActive += modstr;
                     }
-                    ModsActive += White + "]```";
+                    modsActive += "```";
                 }
-                OS = Escape(OS);
-                OS += White + "\\nUsername : " + Green + Escape(OSName) + White + "\\nMachineName : " + Green + Escape(Environment.MachineName);
-                PlayersInLobby = Escape(PlayersInLobby);
-                ExceptionMessage = Escape(ExceptionMessage.Substring(0, Math.Min(840, ExceptionMessage.Length))); //str1.Substring(0, Math.Min(920, str1.Length))
-                StackTrace = Escape(": Below");
-                string Commit = "N/A";
+                os = Escape(os);
+                os += white + "\\nUsername: " + green + Escape(osName) + white + "\\nMachine Name: " + green + Escape(Environment.MachineName);
+                playersInLobby = Escape(playersInLobby);
+                exceptionMessage = Escape(exceptionMessage.Substring(0, Math.Min(840, exceptionMessage.Length))); //str1.Substring(0, Math.Min(920, str1.Length))
+                stackTrace = Escape(": Below");
+                const string buildMode = (IS_DEV_BUILD ? red + "DEV" : cyan + "RELEASE") + white;
+                string debuggerAttached = (Debugger.IsAttached ? red + "Yes" : green + "No") + white;
+                int localModCount = ModLoader.LoadedMods.Count(x => x.workshopID == 0);
+                string loadedModsCount = $"{ModLoader.LoadedMods.Count} {white}[{cyan}{localModCount} local{white}, {green}{ModLoader.LoadedMods.Count - localModCount} workshop{white}]";
+                string commit = "N/A";
                 gitVersion = Escape(gitVersion.Replace("\n", ""));
-                Commit = Escape(CURRENT_VERSION_ID_FORMATTED) + " " + gitVersion + @"``` [View in repo](https://github.com/Hyeve-jrs/DuckGames/commit/" + gitVersion.Replace("[Modified]", "") + ") ";
-                string UserInfo = "```ansi\\nUsername: " + Green + Username + White + " \\nSteam ID: " + Green + Steamid + White + "\\n```Discord: " + Discord;
-                string SystemInfo = "```ansi\\nOS: " + Green + OS + White + " \\nCommand Line:" + Green + CommandLine + White + "\\n```";
-                string GameInfo = "```ansi\\nPlayers In Lobby: [" + Green + PlayersInLobby + White + "]\\nCommit: " + Green + Commit;
-                string CrashInfo = "```ansi\\n" + Green + ExceptionMessage + "```";
-                string jsonmessage = "{ \"content\": \"\", \"tts\": false, \"embeds\": [{ \"type\": \"rich\", \"description\": \"\", \"color\": 9212569, \"fields\":[ { \"name\": \"User Info\", \"value\": \"" + UserInfo + "\"}, { \"name\": \"System Info\", \"value\": \"" + SystemInfo + "\"}, { \"name\": \"Game Info\", \"value\": \""+ GameInfo + "\"}, { \"name\": \"Mods\", \"value\": \""+ ModsActive + "\"}, { \"name\": \"Exception Message\", \"value\": \"" + CrashInfo + "\"} ]}]}";
+                string gitVer = gitVersion.Replace("[Modified]", "");
+                commit = Escape(CURRENT_VERSION_ID_FORMATTED) + " [" + gitVer + $@"]``` [View Commit]({GITHUB_REPO_URL}/commit/" + gitVer + ") ";
+                string userInfo = "```ansi\\nUsername: " + green + username + white + " \\nSteam ID: " + green + steamid + white + "\\n```Discord: " + discord;
+                string systemInfo = "```ansi\\nOS: " + green + os + white + " \\nCommand Line:" + green + displayCommandLine + white + "\\n```";
+                string gameInfo = "```ansi\\nBuild Mode: " + buildMode + "\\nDebugger Attached: " + debuggerAttached + $"\\nMods Loaded: {green}{loadedModsCount}" + "\\nPlayers In Lobby: [" + green + playersInLobby + white + "]\\nCommit: " + green + commit;
+                string crashInfo = "```ansi\\n" + green + exceptionMessage + "```";
+                string jsonmessage = $"{{\"content\":\"\",\"tts\":false,\"embeds\":[{{\"type\":\"rich\",\"description\":\"\",\"color\":{embedColor},\"fields\":[{{\"name\":\"User Info\",\"value\":\"{userInfo}\"}},{{\"name\":\"System Info\",\"value\":\"{systemInfo}\"}},{{\"name\":\"Game Info\",\"value\":\"{gameInfo}\"}},{{\"name\":\"Mods\",\"value\":\"{modsActive}\"}},{{\"name\":\"Exception Message\",\"value\":\"{crashInfo}\"}}]}}]}}";
                 if (someprivacy)
                 {
-                    jsonmessage = jsonmessage.Replace(Environment.UserName, "#Privacy");
+                    jsonmessage = Regex.Replace(jsonmessage, $@"\b{Environment.UserName}\b", "#Privacy");
                 }
                 Task<HttpResponseMessage> response = httpClient.PostAsync(output, new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
                 response.Wait();
-                HttpResponseMessage Result = response.Result;
-                if (Result.StatusCode != HttpStatusCode.NoContent)
+                HttpResponseMessage result = response.Result;
+                if (result.StatusCode != HttpStatusCode.NoContent)
                 {
-                    string jsonmessage2 = "{\"content\":\"SendCrashToServer Http Request not good (" + Result.StatusCode.ToString() + ")\"}";
+                    string jsonmessage2 = "{\"content\":\"SendCrashToServer Http Request not good (" + result.StatusCode.ToString() + ")\"}";
                     Task<HttpResponseMessage> response2 = httpClient.PostAsync(output, new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
                     response2.Wait();
 
