@@ -56,7 +56,14 @@ namespace DuckGame
             _clickSound = "campingEmpty";
             physicsMaterial = PhysicsMaterial.Plastic;
         }
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is CampingRifle && pTaped.gun2 is NetGun ? new CampNetgun(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void Update()
         {
             if (!burntOut && burnt >= 1f)
