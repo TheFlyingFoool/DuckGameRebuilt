@@ -24,7 +24,7 @@ namespace DuckGame
             _collisionOffset = new Vec2(-14, -7.5f);
             center = new Vec2(20f, 12.5f);
             _holdOffset = new Vec2(2, -4);
-
+           
             _barrelOffsetTL = new Vec2(40, 12.5f);
             _kickForce = 20;
         }
@@ -70,10 +70,13 @@ namespace DuckGame
                 time++;
                 if (_chargeAnim.finished)
                 {
+                    if (duck != null)
+                        RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Long, RumbleFalloff.Medium));
                     time = 0;
                     SFX.Play("laserBlast", 1, 0.15f);
                     SFX.Play("balloonPop", 1.5f, -4.3f);
                     _chargeAnim.SetAnimation("nothing");
+                    Send.Message(new NMDeathCone(this, barrelPosition, barrelVector));
                     Level.Add(new LaserConeBlast(barrelPosition.x, barrelPosition.y, barrelVector) { angle = angle });
                     if (duck != null)
                     {

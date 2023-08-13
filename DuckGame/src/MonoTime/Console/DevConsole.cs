@@ -1477,33 +1477,35 @@ namespace DuckGame
                 }
             }
         }
+
         internal static bool CheckCheats()
         {
+            // sole online player
+            if (Network.isActive && !Network.connections.Any())
+                return false;
+
+            // network debug
             if (NetworkDebugger.enabled)
                 return false;
-            bool flag = Steam.user != null && Steam.user.id is 76561197996786074UL or 76561198885030822UL or 76561198416200652UL or 76561198104352795UL or 76561198114791325UL or 76561198441121574UL or 76561198797606383UL;
-            if (!flag)
-            {
-                if (!Network.isActive)
-                {
-                    switch (Level.current)
-                    {
-                        case ChallengeLevel _:
-                        case ArcadeLevel _:
-                            break;
-                        default:
-                            return false;
-                    }
-                }
 
-                _core.lines.Enqueue(new DCLine
-                {
-                    line = "You can't do that here!",
-                    color = Color.Red
-                });
-                return true;
-            }
-            return false;
+            ulong[] specialUsers =
+            {
+                76561197996786074UL,    // landon
+                76561198885030822UL,    // landon alt
+                76561198416200652UL,    // landon alt
+                76561198104352795UL,    // dord
+                76561198114791325UL,    // collin
+                
+                // haram 🙏
+                // 76561198441121574UL, // klof
+                // 76561198797606383UL, // othello
+            };
+
+            // exempted by landon
+            if (Steam.user is null || specialUsers.Contains(Steam.user.id))
+                return false;
+            
+            return Network.isActive || Level.current is ChallengeLevel or ArcadeLevel;
         }
 
         public static void LogComplexMessage(string text, Color c, float scale = 2f, int index = -1)

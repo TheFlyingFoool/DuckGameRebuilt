@@ -31,6 +31,7 @@ namespace DuckGame
         public bool IsCheat { get; set; }
         public bool CanCrash { get; set; }
         public string[] Aliases { get; set; } = Array.Empty<string>();
+        public bool HostOnly { get; set; }
 
         static DevConsoleCommandAttribute()
         {
@@ -50,11 +51,11 @@ namespace DuckGame
                 
                 string realName = getRealName(method, attribute);
 
-                if (!parameters.Any())
-                {
-                    DevConsole.AddCommand(new CMD(realName, delegate () { method.Invoke(null, null); }) { cancrash = attribute.CanCrash});
-                    continue;
-                }
+                // if (!parameters.Any())
+                // {
+                //     DevConsole.AddCommand(new CMD(realName, delegate () { method.Invoke(null, null); }) { cancrash = attribute.CanCrash});
+                //     continue;
+                // }
 
                 int parameterLength = parameters.Length;
                 CMD.Argument[] arguments = new CMD.Argument[parameterLength];
@@ -65,10 +66,27 @@ namespace DuckGame
 
                 DevConsole.AddCommand(new CMD(realName, arguments, cmd =>
                 {
+                    if (attribute.HostOnly && !Network.isServer)
+                    {
+                        DevConsole.Log("You have to be the host!", Color.Red);
+                        return;
+                    }
+                    
+                    if (attribute.IsCheat && DevConsole.CheckCheats())
+                    {
+                        DevConsole.Log("You can't do that here!", Color.Red);
+                        return;
+                    }
+                    
                     object[] objectParameters = new object[arguments.Length];
                     for (int i = 0; i < arguments.Length; i++)
                     {
-                        objectParameters[i] = cmd.Arg<object>(parameters[i].Name);
+                        object argVal = cmd.Arg<object>(parameters[i].Name);
+                        object val = cmd.arguments[i].optional && argVal is null
+                            ? parameters[i].DefaultValue
+                            : argVal;
+                        
+                        objectParameters[i] = val;
                     }
 
                     try

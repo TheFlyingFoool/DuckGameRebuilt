@@ -13,7 +13,7 @@
             _collisionSize = new Vec2(19, 18);
             _collisionOffset = new Vec2(-9, -8.5f);
 
-            _barrelOffsetTL = new Vec2(19, 8.5f);
+            _barrelOffsetTL = new Vec2(21, 8.5f);
         }
         public override bool CanTapeTo(Thing pThing)
         {
