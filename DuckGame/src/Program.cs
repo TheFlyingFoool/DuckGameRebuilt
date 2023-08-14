@@ -538,7 +538,7 @@ namespace DuckGame
                             DevConsole.startupCommands.Add(args[index]);
                         break;
                     case "-noRPC":
-                        MonoMain.useRPC = false;
+                        DiscordRichPresence.noRPC = true;
                         break;
                     case "-logLoading":
                         MonoMain.logLoading = true;
@@ -1379,7 +1379,7 @@ namespace DuckGame
             result = string.Join(Environment.NewLine, spl);
             return result;
         }
-        public static void SendCrashToServer(Exception pException)
+        public static void SendCrashToServer(Exception pException, bool color = true)
         {
             // switch later locale to american english so the team can read exception messages
             CultureInfo prevCurrentInfo = Thread.CurrentThread.CurrentUICulture;
@@ -1515,10 +1515,10 @@ namespace DuckGame
 
                 string osName = someprivacy ? "#Privacy" : Environment.UserName;
                 
-                const string white = "\\u001b[0m";
-                const string green = "\\u001b[0;32m";
-                const string red = "\\u001b[0;31m";
-                const string cyan = "\\u001b[0;36m";
+                string white = color ? "\\u001b[0m" : "";
+                string green = color ? "\\u001b[0;32m" : "";
+                string red = color ? "\\u001b[0;31m" : "";
+                string cyan = color ? "\\u001b[0;36m" : "";
 
                 const string embedColor = IS_DEV_BUILD
                     ? "15548997" // red
@@ -1572,7 +1572,7 @@ namespace DuckGame
                 playersInLobby = Escape(playersInLobby);
                 exceptionMessage = Escape(exceptionMessage.Substring(0, Math.Min(840, exceptionMessage.Length))); //str1.Substring(0, Math.Min(920, str1.Length))
                 stackTrace = Escape(": Below");
-                const string buildMode = (IS_DEV_BUILD ? red + "DEV" : cyan + "RELEASE") + white;
+                string buildMode = (IS_DEV_BUILD ? red + "DEV" : cyan + "RELEASE") + white;
                 string debuggerAttached = (Debugger.IsAttached ? red + "Yes" : green + "No") + white;
                 int localModCount = ModLoader.LoadedMods.Count(x => x.workshopID == 0);
                 string loadedModsCount = $"{ModLoader.LoadedMods.Count} {white}[{cyan}{localModCount} local{white}, {green}{ModLoader.LoadedMods.Count - localModCount} workshop{white}]";
@@ -1613,6 +1613,12 @@ namespace DuckGame
             }
             catch (Exception ex)
             {
+                if (color)
+                {
+                    SendCrashToServer(pException, false);
+                    return;
+                }
+                
                 try
                 {
                     string jsonmessage = "{\"content\":\"SendCrashToServer Crashed Fck " + Escape(ex.Message) + "\"}";

@@ -18,8 +18,15 @@ namespace DuckGame
 
         public static bool connected;
 
+        public static bool noRPC = false;
+
         public static void Initialize()
         {
+            if (noRPC)
+            {
+                return;
+            }
+
             client = new DiscordRpcClient("1006027196613267568"); // klof44, Dan and Firebreak have access
 
             tryReconnect = new System.Timers.Timer(30000)
