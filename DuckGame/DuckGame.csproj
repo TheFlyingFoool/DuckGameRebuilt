@@ -289,6 +289,8 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\TapeBlock.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\FadingAwayThing.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\CampNetgun.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\DoubleShotgun.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\EnergyChainsaw.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\FlareFlameThrower.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\HugerLaser.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\OctoLaser.cs" />
@@ -296,6 +298,7 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\SniperZooka.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\WarpSword.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\LaserDiskParticle.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\MaterialEnergyChainsaw.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\MaterialRedFade.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\NMDeathCone.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Projectile\LaserConeBlast.cs" />

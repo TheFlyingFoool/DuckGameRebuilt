@@ -502,7 +502,14 @@ namespace DuckGame
         }
 
         public Vec2 barrelStartPos => position + (Offset(barrelOffset) - position).normalized * 2f;
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is EnergyScimitar && pTaped.gun2 is Chainsaw ? new EnergyChainsaw(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void Initialize()
         {
             if (material is MaterialGold)

@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace DuckGame
 {
@@ -68,8 +69,32 @@ namespace DuckGame
             };
             weight = 0.5f;
             physicsMaterial = PhysicsMaterial.Metal;
+            if (Editor.clientonlycontent) tapedIndexPreference = 0;
         }
+        public override void PreUpdateTapedPositioning(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent && receivingSignal)
+            {
+                DevConsole.Log(velocity.ToString());
+                pTaped.velocity = velocity;
 
+                if (Math.Abs(hSpeed) > 0.3f)
+                {
+                    offDir = hSpeed > 0 ? (sbyte)1 : (sbyte)-1;
+                    pTaped.offDir = offDir;
+                    //offDir *= -1;
+                }
+                pTaped.gun2.enablePhysics = false;//jank -NiK0
+                enablePhysics = true;
+                pTaped.angle = 0;
+            }
+            base.PreUpdateTapedPositioning(pTaped);
+        }
+        public override void UpdateTapedPositioning(TapedGun pTaped)
+        {
+            base.UpdateTapedPositioning(pTaped);
+            if (Editor.clientonlycontent) angle = 0;
+        }
         public override void Initialize()
         {
             _idle = new ConstantSound("rcDrive");
@@ -83,9 +108,21 @@ namespace DuckGame
 
         protected override bool OnDestroy(DestroyType type = null)
         {
+            if (type == null && isServerForObject && Editor.clientonlycontent && tapedIsGun1)
+            {
+                if (tapedCompatriot is Gun g && g.ammo > 0 && g is not MindControlRay)
+                {
+                    if (g is HugeLaser hl)
+                    {
+                        g.OnPressAction();
+                        hl.doBlast = true;
+                    }
+                    else g.PressAction();
+                    return false;
+                }
+            }
             RumbleManager.AddRumbleEvent(position, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));
-            if (!isServerForObject)
-                return false;
+            if (!isServerForObject) return false;
             new ATRCShrapnel().MakeNetEffect(position, false);
             List<Bullet> varBullets = new List<Bullet>();
             for (int index = 0; index < 20; ++index)
@@ -108,19 +145,15 @@ namespace DuckGame
                 varBullets.Clear();
             }
             Level.Remove(this);
-            if (Level.current.camera is FollowCam camera)
-                camera.Remove(this);
-            if (Recorder.currentRecording != null)
-                Recorder.currentRecording.LogBonus();
+            if (Level.current.camera is FollowCam camera) camera.Remove(this);
+            if (Recorder.currentRecording != null) Recorder.currentRecording.LogBonus();
             return true;
         }
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (bullet.isLocal && owner == null)
-                Fondle(this, DuckNetwork.localConnection);
-            if (bullet.isLocal)
-                Destroy(new DTShot(bullet));
+            if (bullet.isLocal && owner == null) Fondle(this, DuckNetwork.localConnection);
+            if (bullet.isLocal) Destroy(new DTShot(bullet));
             return false;
         }
 
@@ -181,18 +214,19 @@ namespace DuckGame
             _tilt = MathHelper.Lerp(_tilt, -hSpeed, 0.4f);
             _waveMult = MathHelper.Lerp(_waveMult, -hSpeed, 0.1f);
             angleDegrees = (float)(_tilt * 2 + _wave.value * (_waveMult * (_maxSpeed - Math.Abs(hSpeed))));
-            if (!isServerForObject || !isOffBottomOfLevel || destroyed)
-                return;
+
+            if (!isServerForObject || !isOffBottomOfLevel || destroyed) return;
             Destroy(new DTFall());
         }
 
         public override void Draw()
         {
-            if (owner == null)
-                _sprite.flipH = offDir < 0;
+            if (Editor.clientonlycontent && tapedIsGun1) offDir *= -1;
+            if (owner == null) _sprite.flipH = offDir < 0;
             base.Draw();
             Graphics.Draw(_wheel, x - 7f, y + 9f);
             Graphics.Draw(_wheel, x + 7f, y + 9f);
+            if (Editor.clientonlycontent && tapedIsGun1) offDir *= -1;
         }
     }
 }

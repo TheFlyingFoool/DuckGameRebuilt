@@ -319,9 +319,8 @@ namespace DuckGame
             AddCreditLine("|BLACK|Erik|GRAY|7302");
             AddCreditLine("|DGBLUE|othello|PURPLE|7");
             AddCreditLine("|GREEN|klof44|CREDITSGRAY|");
-            AddCreditLine("");
-            AddCreditLine("|CREDITSGRAY|@LWINGGRAY@GITHUB CONTRIBUTOR@RWINGGRAY@");
-            AddCreditLine("Lutalli");
+            AddCreditLine("|PURPLE|Hyeve");
+            AddCreditLine("|ORANGE|Lutalli");
             AddCreditLine("");
             AddCreditLine("|CREDITSGRAY|@LWINGGRAY@ROOM FURNITURE@RWINGGRAY@");
             AddCreditLine("|CREDITSGRAY|@LWINGGRAY@HOME UPDATE HAT ART@RWINGGRAY@");

@@ -65,7 +65,14 @@ namespace DuckGame
             _sightHit.CenterOrigin();
             _laserTex = Content.Load<Tex2D>("pointerLaser");
         }
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is Warpgun && pTaped.gun2 is Sword ? new WarpSword(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         protected override void PlayFireSound() => PlaySFX(_fireSound, pitch: (0.6f + Rando.Float(0.2f)));
 
         public override void CheckIfHoldObstructed()

@@ -37,6 +37,7 @@ namespace DuckGame
 
         public StateBinding _loadBinding = new StateBinding("load");
         public StateBinding _multBinding = new StateBinding("mult");
+        public StateBinding _rotAngleBinding = new StateBinding("rotangle");
         public override void OnPressAction()
         {
             if (loaded)
@@ -131,7 +132,11 @@ namespace DuckGame
                     SFX.Play("loadSniper");
                 }
             }
-            if (loaded && owner != null) laserSight = true;
+            if (loaded && owner != null)
+            {
+                handOffset = Vec2.Zero;//online fix
+                laserSight = true;
+            }
             else laserSight = false;
             base.Update();
         }

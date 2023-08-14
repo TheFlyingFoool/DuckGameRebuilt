@@ -108,7 +108,14 @@ namespace DuckGame
             holsterAngle = -10f;
             editorTooltip = "The perfect tool for cutting wood or carving decorative ice sculptures.";
         }
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is Chainsaw && pTaped.gun2 is EnergyScimitar ? new EnergyChainsaw(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void Initialize()
         {
             _sound = new LoopingSound("chainsawIdle", multiSound: "chainsawIdleMulti");
