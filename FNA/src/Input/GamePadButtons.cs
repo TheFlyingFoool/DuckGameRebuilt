@@ -127,7 +127,7 @@ namespace Microsoft.Xna.Framework.Input
 
 		#region Internal Variables
 
-		internal Buttons buttons;
+		public Buttons buttons;
 
 		#endregion
 

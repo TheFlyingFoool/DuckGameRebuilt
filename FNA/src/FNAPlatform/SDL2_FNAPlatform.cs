@@ -24,7 +24,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Microsoft.Xna.Framework
 {
-	internal static class SDL2_FNAPlatform
+	public static class SDL2_FNAPlatform
 	{
 		#region Static Constants
 
@@ -1651,7 +1651,7 @@ namespace Microsoft.Xna.Framework
 		#region GamePad Backend
 
 		// Controller device information
-		private static IntPtr[] INTERNAL_devices = new IntPtr[GamePad.GAMEPAD_COUNT];
+		public static IntPtr[] INTERNAL_devices = new IntPtr[GamePad.GAMEPAD_COUNT];
 		private static Dictionary<int, int> INTERNAL_instanceList = new Dictionary<int, int>();
 		private static string[] INTERNAL_guids = GenStringArray();
 

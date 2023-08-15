@@ -7,6 +7,7 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using SDL2;
 using System;
 using System.Collections.Generic;
 using static SDL2.SDL;
@@ -323,7 +324,11 @@ namespace DuckGame
                     _productName = productname;
                 }
             }
+
+            //LogControllerInputs(index, state1);
+
             PadState state2 = new PadState();
+
             foreach (PadButton button in PadButtons)
             {
                 if (state1.IsButtonDown((Buttons)button))
@@ -340,7 +345,75 @@ namespace DuckGame
             state2.triggers.left = state1.Triggers.Left;
             state2.triggers.right = state1.Triggers.Right;
             _connectedState = state1.IsConnected;
+
+
+            
+
+            if (state1.IsConnected && (int)state1.Buttons.buttons != 0)
+            {
+                string info = index + " ";
+                info += Convert.ToString((int)state1.Buttons.buttons, 2) + " ";
+                info += Convert.ToString((int)SDLControllerType, 2) + " ";
+                FNAPlatform.GetGamePadGyro(index, out Vector3 gyrovec3);
+                FNAPlatform.GetGamePadAccelerometer(index, out Vector3 accvec3);
+                info += gyrovec3.ToString() + " ";
+                info += accvec3.ToString() + " ";
+                info += Convert.ToString((int)SDLControllerType, 2) + " ";
+                info += left.ToString() + " ";
+                info += right.ToString() + " ";
+                info += state1.Triggers.Left.ToString() + " ";
+                info += state1.Triggers.Right.ToString() + " ";
+                IntPtr controllerDevice = SDL2_FNAPlatform.INTERNAL_devices[index];
+                IntPtr thisJoystick = SDL.SDL_GameControllerGetJoystick(controllerDevice);
+                info += "The:" + SDL.SDL_JoystickNumButtons(thisJoystick) + " ";
+                for (int b = 0; b < (int)SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_MAX; b++)
+                {
+                    info += SDL.SDL_GameControllerGetStringForButton((SDL.SDL_GameControllerButton)b) + ":" + SDL.SDL_GameControllerGetButton(controllerDevice, (SDL.SDL_GameControllerButton)b).ToString();
+                }
+
+
+
+                Console.WriteLine(info);
+            }
+
+
             return state2;
         }
+
+        private void LogControllerInputs(int index, GamePadState state)
+        {
+            // Create a log entry with controller inputs
+            string logEntry = $"Controller {index} Inputs:\n" +
+                              $"    LeftThumbstick: {state.ThumbSticks.Left}\n" +
+                              $"    RightThumbstick: {state.ThumbSticks.Right}\n" +
+                              $"    Triggers: {state.Triggers}\n" +
+                              $"    Buttons:\n";
+
+            // Iterate through each button in the Buttons enum
+            foreach (Buttons button in Enum.GetValues(typeof(Buttons)))
+            {
+                // Check if the button is pressed
+                if (state.IsButtonDown(button))
+                {
+                    logEntry += $"        {button}: Pressed\n";
+                }
+                else
+                {
+                    logEntry += $"        {button}: Released\n";
+                }
+            }
+
+            logEntry += $"    DPad: {state.DPad}\n" +
+                        $"    IsConnected: {state.IsConnected}\n" +
+                        $"    Timestamp: {DateTime.Now}\n";
+
+            // You can choose to log to a file or output to console
+            // For console output:
+            Console.WriteLine(logEntry);
+
+            // For file output (append to a log file):
+            // File.AppendAllText("controller_log.txt", logEntry);
+        }
+
     }
 }
