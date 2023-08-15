@@ -222,14 +222,14 @@ namespace DuckGame
                             _mood = CasterMood.Suave;
                         else if (str1 == "CALM")
                             _mood = CasterMood.Normal;
-                        else if (str1 == "DEMOWAIT")
+                        /*else if (str1 == "DEMOWAIT")
                         {
                             HUD.CloseAllCorners();
                             HUD.AddCornerControl(HUDCorner.BottomLeft, "PAY THE MAN@MENU2@");
                             HUD.AddCornerControl(HUDCorner.BottomRight, "@SELECT@NO!");
                             _demoWait = true;
                             return;
-                        }
+                        }*/
                         if (flag)
                         {
                             if (_lineProgress.Count == 0)

@@ -323,6 +323,10 @@ namespace DuckGame
                 {
                     _productName = productname;
                 }
+                else
+                {
+                    _productName = SDL.SDL_GameControllerName(SDL2_FNAPlatform.INTERNAL_devices[index]);
+                }
             }
 
             //LogControllerInputs(index, state1);
@@ -351,6 +355,7 @@ namespace DuckGame
 
             if (state1.IsConnected && (int)state1.Buttons.buttons != 0)
             {
+                //IntPtr controllerDevice = SDL.SDL_GameControllerOpen(0);
                 string info = index + " ";
                 info += Convert.ToString((int)state1.Buttons.buttons, 2) + " ";
                 info += Convert.ToString((int)SDLControllerType, 2) + " ";
@@ -370,7 +375,7 @@ namespace DuckGame
                 {
                     info += SDL.SDL_GameControllerGetStringForButton((SDL.SDL_GameControllerButton)b) + ":" + SDL.SDL_GameControllerGetButton(controllerDevice, (SDL.SDL_GameControllerButton)b).ToString();
                 }
-
+                info += "\n" + SDL.SDL_GameControllerName(SDL2_FNAPlatform.INTERNAL_devices[index]) + " ";
 
 
                 Console.WriteLine(info);

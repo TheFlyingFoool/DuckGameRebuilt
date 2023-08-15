@@ -39,7 +39,7 @@ namespace DuckGame
                 XInputPad device = Input.GetDevice<XInputPad>(index);
                 if (device != null && device.isConnected)
                 {
-                    inputTypes.Add("XBOX GAMEPAD");
+                    inputTypes.Add(device.productName);
                     inputMaps.Add(Input.GetDefaultMapping(device.productName, device.productGUID).Clone());
                     break;
                 }
