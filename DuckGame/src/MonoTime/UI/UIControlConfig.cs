@@ -34,12 +34,12 @@ namespace DuckGame
         {
             inputTypes.Clear();
             inputMaps.Clear();
-            for (int index = 0; index < 4; ++index)
+            for (int index = 0; index < MonoMain.MaximumGamepadCount; ++index)
             {
                 XInputPad device = Input.GetDevice<XInputPad>(index);
                 if (device != null && device.isConnected)
                 {
-                    inputTypes.Add("XBOX GAMEPAD");
+                    inputTypes.Add(device.productName);
                     inputMaps.Add(Input.GetDefaultMapping(device.productName, device.productGUID).Clone());
                     break;
                 }
