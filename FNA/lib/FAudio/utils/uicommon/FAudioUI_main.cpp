@@ -1,6 +1,6 @@
 /* FAudio - XAudio Reimplementation for FNA
  *
- * Copyright (c) 2011-2022 Ethan Lee, Luigi Auriemma, and the MonoGame Team
+ * Copyright (c) 2011-2023 Ethan Lee, Luigi Auriemma, and the MonoGame Team
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
@@ -38,7 +38,6 @@
 extern const char* TOOL_NAME;
 extern int TOOL_WIDTH;
 extern int TOOL_HEIGHT;
-extern void FAudioTool_Init();
 extern void FAudioTool_Update();
 extern void FAudioTool_Quit();
 

@@ -280,53 +280,57 @@ namespace DuckGame
                 if (_tray == null)
                     return;
                 _tray.alpha = _core.alpha;
-                _tray.scale = new Vec2((float)(Math.Round(Resolution.current.x / 1280f * 2f) / 2f) * 2f) *
-                    (consoleScale + 1) / 2f;
+                if (Resolution.current.x > 320 && Resolution.current.y > 180)
+                {
+                    _tray.scale = new Vec2((float)(Math.Round(Resolution.current.x / 1280f * 2f) / 2f) * 2f) * (consoleScale + 1) / 2f;
+                }
+                else // for extra extra small scale
+                {
+                    _tray.scale = new Vec2((float)((Resolution.current.x / 1280f * 2f) / 2f) * 2f) * (consoleScale + 1) / 2f;
+                }
+                
                 _tray.depth = 0.75f;
                 if (Layer.core._console != null)
                 {
-                    int num1 = (int)((double)Layer.core._console.camera.height * dimensions.y / (16f * _tray.scale.y)) - 2;
-                    int num2 = (int)((double)Layer.core._console.camera.width * dimensions.x / (16f * _tray.scale.x)) - 2;
-                    Graphics.Draw(_tray, 0.0f, 0.0f, new Rectangle(0.0f, 0.0f, 18f, 18f));
-                    Graphics.Draw(_tray, 0.0f, (float)(18f * _tray.scale.y + num1 * (16f * _tray.scale.y)),
-                        new Rectangle(0.0f, _tray.height - 18, 18f, 18f));
-                    Graphics.Draw(_tray, (float)(18f * _tray.scale.x + (num2 - 6) * (16f * _tray.scale.x)),
-                        (float)(18f * _tray.scale.y + num1 * (16f * _tray.scale.y)),
-                        new Rectangle(_tray.width - 114, _tray.height - 18, 114f, 18f));
-                    for (int index = 0; index < num2; ++index)
+                    int numSectionsVert = (int)((Layer.core._console.camera.height * dimensions.y) / (16.0f * _tray.scale.y)) - 2;
+                    int numSectionsHor = (int)((Layer.core._console.camera.width * dimensions.x) / (16.0f * _tray.scale.x)) - 2;
+                    Graphics.Draw(_tray, 0, 0, new Rectangle(0, 0, 18, 18));
+                    Graphics.Draw(_tray, 0, (18 * _tray.scale.y) + (((numSectionsVert) * (16.0f * _tray.scale.y))), new Rectangle(0, _tray.height - 18, 18, 18));
+                    Graphics.Draw(_tray, (18 * _tray.scale.x) + (((numSectionsHor - 6) * (16.0f * _tray.scale.x))), (18 * _tray.scale.y) + (((numSectionsVert) * (16.0f * _tray.scale.y))), new Rectangle(_tray.width - 114, _tray.height - 18, 114, 18));
+                    for (int index = 0; index < numSectionsHor; ++index)
                     {
                         const float width = 16f;
                         Graphics.Draw(_tray, (float)(18f * _tray.scale.x + 16f * _tray.scale.x * index), 0.0f,
                             new Rectangle(width, 0.0f, width, 18f));
-                        if (index < num2 - 6)
+                        if (index < numSectionsHor - 6)
                             Graphics.Draw(_tray, (float)(18f * _tray.scale.x + 16f * _tray.scale.x * index),
-                                (float)(18f * _tray.scale.y + num1 * (16f * _tray.scale.y)),
+                                (float)(18f * _tray.scale.y + numSectionsVert * (16f * _tray.scale.y)),
                                 new Rectangle(width, _tray.height - 18, width, 18f));
                     }
 
-                    Graphics.Draw(_tray, (float)(18f * _tray.scale.x + num2 * (16f * _tray.scale.x)), 0f,
+                    Graphics.Draw(_tray, (float)(18f * _tray.scale.x + numSectionsHor * (16f * _tray.scale.x)), 0f,
                         new Rectangle(_tray.width - 18, 0f, 18f, 18f));
-                    for (int index = 0; index < num1; ++index)
+                    for (int index = 0; index < numSectionsVert; ++index)
                     {
                         Graphics.Draw(_tray, 0.0f, (float)(18f * _tray.scale.y + 16f * _tray.scale.y * index),
                             new Rectangle(0.0f, 18f, 18f, 16f));
-                        Graphics.Draw(_tray, (float)(18f * _tray.scale.x + num2 * (16f * _tray.scale.x)),
+                        Graphics.Draw(_tray, (float)(18f * _tray.scale.x + numSectionsHor * (16f * _tray.scale.x)),
                             (float)(18f * _tray.scale.y + 16f * _tray.scale.y * index),
                             new Rectangle(_tray.width - 18, 18f, 18f, 16f));
                     }
 
                     Graphics.DrawRect(Vec2.Zero,
-                        new Vec2((float)(18f * _tray.scale.x + num2 * (16f * _tray.scale.x) + _tray.scale.y * 4f),
-                            (num1 + 2) * (16f * _tray.scale.y)), Color.Black * 0.8f * _core.alpha,
+                        new Vec2((float)(18f * _tray.scale.x + numSectionsHor * (16f * _tray.scale.x) + _tray.scale.y * 4f),
+                            (numSectionsVert + 2) * (16f * _tray.scale.y)), Color.Black * 0.8f * _core.alpha,
                         0.7f);
                     _core.fancyFont.scale = new Vec2(_tray.scale.x / 2f);
                     _core.fancyFont.depth = 0.98f;
                     _core.fancyFont.alpha = _core.alpha;
-                    float num3 = (float)((num1 + 1) * 16 * (double)_tray.scale.y + 5f * _tray.scale.y);
-                    float num4 = (num2 + 2) * (16f * _tray.scale.x);
+                    float num3 = (float)((numSectionsVert + 1) * 16 * (double)_tray.scale.y + 5f * _tray.scale.y);
+                    float num4 = (numSectionsHor + 2) * (16f * _tray.scale.x);
                     string version = DG.version;
                     _core.fancyFont.Draw(version,
-                        new Vec2((float)(82f * _tray.scale.x + (num2 - 6) * (16f * _tray.scale.x)),
+                        new Vec2((float)(82f * _tray.scale.x + (numSectionsHor - 6) * (16f * _tray.scale.x)),
                             num3 + 7f * _tray.scale.y), new Color(62, 114, 122), 0.98f);
                     _core.cursorPosition = Math.Min(Math.Max(_core.cursorPosition, 0),
                         _core.Typing.Length);
@@ -513,27 +517,14 @@ namespace DuckGame
                          cmd.subcommand != null && consoleCommand2.NextWord(peek: true) == cmd.subcommand.keyword;
                          cmd = cmd.subcommand)
                         consoleCommand2.NextWord();
-                    if (cmd.cheat && !NetworkDebugger.enabled)
+                    if (cmd.cheat && CheckCheats())
                     {
-                        bool flag2 = Steam.user is
+                        _core.lines.Enqueue(new DCLine
                         {
-                            id: 76561197996786074UL
-                            or 76561198885030822UL
-                            or 76561198416200652UL
-                            or 76561198104352795UL
-                            or 76561198114791325UL
-                            or 76561198797606383UL
-                        };
-
-                        if (!flag2 && (Network.isActive || Level.current is ChallengeLevel or ArcadeLevel))
-                        {
-                            _core.lines.Enqueue(new DCLine
-                            {
-                                line = "You can't do that here!",
-                                color = Color.Red
-                            });
-                            return;
-                        }
+                            line = "You can't do that here!",
+                            color = Color.Red
+                        });
+                        return;
                     }
 
                     if (cmd.Run(consoleCommand2.Remainder()))
@@ -1473,33 +1464,36 @@ namespace DuckGame
                 }
             }
         }
+
+        /// <returns>True if cheats shan't be used</returns>
         internal static bool CheckCheats()
         {
+            // sole online player
+            if (Network.isActive && !Network.connections.Any())
+                return false;
+
+            // network debug
             if (NetworkDebugger.enabled)
                 return false;
-            bool flag = Steam.user != null && Steam.user.id is 76561197996786074UL or 76561198885030822UL or 76561198416200652UL or 76561198104352795UL or 76561198114791325UL or 76561198441121574UL or 76561198797606383UL;
-            if (!flag)
-            {
-                if (!Network.isActive)
-                {
-                    switch (Level.current)
-                    {
-                        case ChallengeLevel _:
-                        case ArcadeLevel _:
-                            break;
-                        default:
-                            return false;
-                    }
-                }
 
-                _core.lines.Enqueue(new DCLine
-                {
-                    line = "You can't do that here!",
-                    color = Color.Red
-                });
-                return true;
-            }
-            return false;
+            ulong[] specialUsers =
+            {
+                76561197996786074UL,    // landon
+                76561198885030822UL,    // landon alt
+                76561198416200652UL,    // landon alt
+                76561198104352795UL,    // dord
+                76561198114791325UL,    // collin
+                
+                // haram 🙏
+                // 76561198441121574UL, // klof
+                // 76561198797606383UL, // othello
+            };
+
+            // exempted by landon
+            if (Steam.user is null || specialUsers.Contains(Steam.user.id))
+                return false;
+            
+            return Network.isActive || Level.current is ChallengeLevel or ArcadeLevel;
         }
 
         public static void LogComplexMessage(string text, Color c, float scale = 2f, int index = -1)

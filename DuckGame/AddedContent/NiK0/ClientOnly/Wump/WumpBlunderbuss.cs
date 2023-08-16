@@ -1,9 +1,7 @@
 ﻿namespace DuckGame
 {
     [ClientOnly]
-#if DEBUG
     [EditorGroup("Rebuilt|Wump|Shotguns")]
-#endif
     public class WumpBlunderbuss : TampingWeapon
     {
         public WumpBlunderbuss(float xval, float yval) : base(xval, yval)
@@ -31,6 +29,10 @@
             _holdOffset = new Vec2(4f, 1f);
             _editorName = "Blunderbuss";
             editorTooltip = "A new and frosty blunderbuss, and yet it still takes 150 years to reload.";
+        }
+        protected override void PlayFireSound()
+        {
+            SFX.PlaySynchronized(_fireSound, pitch: (Rando.Float(0.2f) - 0.1f + _fireSoundPitch));
         }
         public override void Fire()
         {

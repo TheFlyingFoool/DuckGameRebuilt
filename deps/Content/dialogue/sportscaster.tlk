@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Dialogue>
+  <ShowIntroduction>
+    <Line>Hello, and welcome to Duck Channel Sports!</Line>
+	<Line>Welcome, to another edition of Duck Channel Sports!</Line>
+	<Line>Time for another exciting episode of Duck Channel Sports!</Line>
+	<Line>This is it! It's Duck Channel Sports!</Line>
+  </ShowIntroduction>
+  
+  <NSIntroduction>
+    <Line>It's DUCK CHANNEL SPORTS! I'm your sports caster |RED|John Mallard|WHITE|!</Line>
+	<Line>|RED|John Mallard|WHITE| here with another exciting Duck Game recap!</Line>
+  </NSIntroduction>
+  
+  
+  <NSWinner>
+	<Line>|RED|%NAME%|WHITE| won, with a %DATA2% point lead!*</Line>
+	<Line>The win goes to |RED|%NAME%|WHITE|!*</Line>
+  </NSWinner>
+  
+  <NSShowHighlights>
+	<Line>Now let's watch some highlights!</Line>
+	<Line>Let's watch a recap of our computer's favorite matches!</Line>
+	<Line>The computer has picked some highlights for us.</Line>
+  </NSShowHighlights>
+  
+  <NSAfterHighlights>
+    <Line>Wow!</Line>
+	<Line>BLAMO!</Line>
+	<Line>WALABAM KABAM!</Line>
+	<Line>BAZOOM!</Line>
+	<Line>Action Action Action!</Line>
+	<Line>Christos!</Line>
+  </NSAfterHighlights>
+  
+  <NSHighlightsRating>
+	<Line>Our computer rated that highlight reel as... "|RED|%DATA%|WHITE|"!***</Line>
+  </NSHighlightsRating>
+  
+ 
+<NSKillDeathRatioGood>
+    <Line>%NAME% was rolling a %DATA% Kill-Death ratio like a machine.*</Line>
+</NSKillDeathRatioGood>
+
+<NSKillDeathRatioBad>
+    <Line>%NAME% had an embarassing Kill-Death ratio of %DATA%*</Line>
+</NSKillDeathRatioBad>
+
+<NSFallDeathsBad>
+    <Line>%NAME% just could not keep their balance! %DATA% of their deaths were from falling.*</Line>
+</NSFallDeathsBad>
+
+<NSDisarmsGood>
+    <Line>Nobody could hold onto their gun with %NAME% around. They disarmed %DATA% times!*</Line>
+</NSDisarmsGood>
+
+<NSTimeOnFireBad>
+    <Line>%NAME% spent %DATA2% of the game on fire! They seem to have an attraction to it.*</Line>
+	<Line>With a whopping %DATA% seconds spent on fire, %NAME% was left with some serious burns.*</Line>
+</NSTimeOnFireBad>
+  
+
+<NSAverageRoundLengthGood>
+    <Line>Today's game raced along, if you blinked at all you probably missed some rounds.</Line>
+	<Line>With an average round length of %DATA% seconds, today's match was a quick one!</Line>
+</NSAverageRoundLengthGood>
+
+<NSAverageRoundLengthBad>
+    <Line>It was a real marathon today, with an average round length of %DATA% seconds.</Line>
+	<Line>A lot of strategy out on the field today, we saw some real long rounds.</Line>
+</NSAverageRoundLengthBad>
+
+<NSCoolestDuckIntro>
+    <Line>Now it's time for the Coolest Duck Award, awarding sportsmanship and general coolness!**</Line>
+</NSCoolestDuckIntro>
+
+<NSDuckCoolnessLeast>
+    <Line>Least cool is |RED|%NAME%|WHITE|, who ranked "|RED|%DATA%|WHITE|".***</Line>
+</NSDuckCoolnessLeast>
+
+<NSDuckCoolness>
+    <Line>|RED|%NAME%|WHITE| ranked "|RED|%DATA%|WHITE|".***</Line>
+</NSDuckCoolness>
+
+<NSCoolestDuckAward>
+    <Line>And the Coolest Duck Award goes to |RED|%NAME%|WHITE|, who ranked "|RED|%DATA%|WHITE|"!***</Line>
+</NSCoolestDuckAward>
+
+<NSClosing>
+    <Line>And that's Duck Game! Thanks for tuning in.</Line>
+</NSClosing>
+  
+</Dialogue>

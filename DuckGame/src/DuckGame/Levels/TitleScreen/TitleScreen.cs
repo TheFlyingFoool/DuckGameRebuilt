@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
+using System.Web;
 
 namespace DuckGame
 {
@@ -87,7 +88,6 @@ namespace DuckGame
         private UIMenu _blockMenu;
         private UIMenu _modConfigMenu;
         private UICloudManagement _cloudManagerMenu;
-        private DGVersion _latestRebuiltVersion;
         private bool _shouldUpdateRebuilt;
         private bool _enterEditor;
         private bool _enterCredits;
@@ -113,6 +113,8 @@ namespace DuckGame
         private bool quittingCredits;
         private bool showedNewVersionStartup;
         private bool showedModsDisabled;
+
+        private UIMenuAction prevbackFunction;
 
         // private int time;
         //  private static bool _showedSteamFailMessage = false;
@@ -154,12 +156,43 @@ namespace DuckGame
         {
             creditsRoll.Add(new List<string>(line));
         }
+        public void PauseMenuOpenLogic() //Jank-ish fix for issues improve later
+        {
+            if (!Options.menuOpen)
+            {
+                _mainPauseMenu.Close();
+                _optionsGroup.Open();
+                _optionsMenu.Open();
+                prevbackFunction = _optionsMenu.backFunction;
+                _optionsMenu.SetBackFunction(new UIMenuActionCloseMenuCallFunction(_optionsMenu, new UIMenuActionCloseMenuCallFunction.Function(OptionsSaveAndCloseDan)));
+                MonoMain.pauseMenu = _optionsGroup;
+            }
+        }
+        private void OptionsSaveAndCloseDan()
+        {
+            Options.Save();
+            Options.SaveLocalData();
+            _optionsMenu.SetBackFunction(prevbackFunction); //reset backfunction 
+            _optionsGroup.Close();
+            _mainPauseMenu.Open();
 
+            MonoMain.pauseMenu = _mainPauseMenu;
+
+        }
+        public static bool Checked;
         public override void Initialize()
         {
+            if (Editor.clientonlycontent)
+            {
+                Editor.DisableClientOnlyContent();
+            }
             #if AutoUpdater
-            if (!MonoMain.IgnoreDGRUpdates && Program.CheckForNewVersion(out _latestRebuiltVersion))
-                _shouldUpdateRebuilt = true;
+            if (!Checked)
+            {
+                Checked = true;
+                if (MonoMain.ForceDGRUpdate | !MonoMain.IgnoreDGRUpdates & Program.CheckForNewVersion())
+                    _shouldUpdateRebuilt = true;
+            }
             #endif
             
             Vote.ClearVotes();
@@ -286,9 +319,8 @@ namespace DuckGame
             AddCreditLine("|BLACK|Erik|GRAY|7302");
             AddCreditLine("|DGBLUE|othello|PURPLE|7");
             AddCreditLine("|GREEN|klof44|CREDITSGRAY|");
-            AddCreditLine("");
-            AddCreditLine("|CREDITSGRAY|@LWINGGRAY@GITHUB CONTRIBUTOR@RWINGGRAY@");
-            AddCreditLine("Lutalli");
+            AddCreditLine("|PURPLE|Hyeve");
+            AddCreditLine("|ORANGE|Lutalli");
             AddCreditLine("");
             AddCreditLine("|CREDITSGRAY|@LWINGGRAY@ROOM FURNITURE@RWINGGRAY@");
             AddCreditLine("|CREDITSGRAY|@LWINGGRAY@HOME UPDATE HAT ART@RWINGGRAY@");
@@ -456,7 +488,7 @@ namespace DuckGame
             if (Music.currentSong != "Title" && Music.currentSong != "TitleDemo" || Music.finished)
                 Music.Play("Title");
             if (GameMode.playedGame)
-                GameMode.playedGame = false;
+                GameMode.playedGame = false; 
             _optionsGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
             _optionsMenu = new UIMenu("@WRENCH@OPTIONS@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
             _controlConfigMenu = new UIControlConfig(_optionsMenu, "@WRENCH@DEVICE DEFAULTS@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 194f, conString: "@WASD@@SELECT@ADJUST @CANCEL@BACK");
@@ -563,7 +595,10 @@ namespace DuckGame
                 _updaterPromptMenu = new UIMenu("@DGR@DGR UPDATER@WRENCH@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f);
                 _updaterPromptMenu.Add(new LUIText("A new version of DGR", Colors.DGPink));
                 _updaterPromptMenu.Add(new LUIText("has been found", Colors.DGPink));
-                _updaterPromptMenu.Add(new LUIText(_latestRebuiltVersion.VersionStringFormatted, Colors.Platinum));
+                if (Program.NewerRebuiltVersionExists)
+                {
+                    _updaterPromptMenu.Add(new LUIText(Program.LatestRebuiltVersion.VersionStringFormatted, Colors.Platinum));
+                }
                 _updaterPromptMenu.Add(new LUIText("", Colors.DGPink));
                 _updaterPromptMenu.Add(new LUIText("-- UPDATING --", Colors.DGPink));
                 _updaterPromptMenu.Add(new LUIText("", Colors.DGPink));
@@ -851,7 +886,8 @@ namespace DuckGame
             component41.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
             _mainPauseMenu.Add(component41, true);
             component41.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(_pauseGroup)), true);
-            component41.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_mainPauseMenu, Options.optionsMenu), UIAlign.Left), true);
+            //component41.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_mainPauseMenu, Options.optionsMenu), UIAlign.Left), true);
+            component41.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(PauseMenuOpenLogic)), UIAlign.Left), true);
             component41.leftSection.Add(new UIMenuItem("CREDITS", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _enterCreditsMenuBool), UIAlign.Left), true);
             component41.leftSection.Add(new UIText("", Color.White), true);
             component41.leftSection.Add(new UIMenuItem("|DGRED|QUIT", new UIMenuActionOpenMenu(_mainPauseMenu, _quitMenu)), true);
@@ -1014,7 +1050,22 @@ namespace DuckGame
             #if AutoUpdater
             if (_shouldUpdateRebuilt)
             {
-                new Thread(Program.HandleAutoUpdater).Start();
+                new Thread(() =>
+                {
+                    try
+                    {
+                        Program.HandleAutoUpdater();
+                    }
+                    catch (Exception e)
+                    {
+                        DevConsole.Log("AutoUpdater Failed:");
+                        DevConsole.LogComplexMessage(e.ToString(), Colors.DGRed);
+                        if (MonoMain.pauseMenu != null)
+                        {
+                            MonoMain.pauseMenu.Close();
+                        }
+                    }
+                }).Start();
                 return;
             }
             #endif

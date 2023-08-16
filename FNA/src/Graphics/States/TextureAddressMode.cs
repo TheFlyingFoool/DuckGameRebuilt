@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -22,9 +22,9 @@ namespace Microsoft.Xna.Framework.Graphics
 		/// Texels outside range will be setted to color of 0.0 or 1.0 texel.
 		/// </summary>
 		Clamp,
-        /// <summary>
-        /// Same as <see cref="Wrap"/> but tiles will also flipped at every integer junction.
-        /// </summary>
-        Mirror,
+		/// <summary>
+		/// Same as <see cref="TextureAddressMode.Wrap"/> but tiles will also flipped at every integer junction.
+		/// </summary>
+		Mirror,
 	}
 }

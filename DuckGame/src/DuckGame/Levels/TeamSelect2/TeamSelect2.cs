@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using System.Collections.Generic;
+using System.Runtime;
 
 namespace DuckGame
 {
@@ -94,6 +95,8 @@ namespace DuckGame
         private float _waitToShow = 1f;
         private static bool _showedPS4Warning = false;
         private float _afkTimeout;
+        //keep this its important although it may not seem like it and may never be used -NiK0
+        private static bool _showedOnlineBumper = false; 
         private float _timeoutFade;
         private float _topScroll;
         private float _afkMaxTimeout = 300f;
@@ -114,7 +117,7 @@ namespace DuckGame
         public static string DefaultGameName()
         {
             List<Profile> activep = Profiles.active;
-            if (Network.lanMode)
+            if (TeamSelect2.GetSettingInt("type") >= 3 && Profiles.active.Count > 0)
             {
                 if (activep.Count > 0)
                 {
@@ -370,6 +373,7 @@ namespace DuckGame
                 
                 //by-by-by-by-by-bo-bo-by-int-bys-bo-int-strings
                 int varWinsPerSet = bf.ReadByte();
+                if (varWinsPerSet == 0) return; //anti match setting destruction system -NiK0
                 GetMatchSetting("requiredwins").value = varWinsPerSet;
                 int varRoundsPerIntermission = bf.ReadByte();
                 GetMatchSetting("restsevery").value = varRoundsPerIntermission;
@@ -656,6 +660,9 @@ namespace DuckGame
             _hostModifiersMenu.Close();
             _playOnlineGroup.Add(_hostModifiersMenu, false);
             _hostMatchSettingsMenu.AddMatchSetting(GetOnlineSetting("teams"), false);
+
+
+
             foreach (MatchSetting matchSetting in matchSettings)
             {
                 if (!(matchSetting.id == "workshopmaps") || Network.available) //if ((!(matchSetting.id == "workshopmaps") || Network.available) && (!(matchSetting.id == "custommaps") || !ParentalControls.AreParentalControlsActive()))
@@ -670,6 +677,7 @@ namespace DuckGame
             //if (!ParentalControls.AreParentalControlsActive()) and move the below block back into place
             _hostMatchSettingsMenu.Add(new UICustomLevelMenu(new UIMenuActionOpenMenu(_hostMatchSettingsMenu, _hostLevelSelectMenu)), true);
             _hostMatchSettingsMenu.Add(new UIModifierMenuItem(new UIMenuActionOpenMenu(_hostMatchSettingsMenu, _hostModifiersMenu)), true);
+
             _hostMatchSettingsMenu.SetBackFunction(new UIMenuActionOpenMenuCallFunction(_hostMatchSettingsMenu, _hostSettingsMenu, HUD.CloseAllCorners));
             _hostMatchSettingsMenu.SetOpenFunction(new UIMenuActionCallFunction(() =>
             {
@@ -719,6 +727,10 @@ namespace DuckGame
 
         public override void Initialize()
         {
+            if (Editor.clientonlycontent)
+            {
+                Editor.DisableClientOnlyContent();
+            }
             DGRSettings.InitializeFavoritedHats();
             if (sign)
             {
@@ -1460,6 +1472,28 @@ namespace DuckGame
                             {
                                 if (!Network.isServer)
                                     return;
+                                if (DGRSettings.DGRItems)
+                                {
+                                    bool DGR = true;
+                                    for (int i = 0; i < Profiles.active.Count(); i++)
+                                    {
+                                        Profile p = Profiles.active.ElementAt(i);
+                                        if (!p.isUsingRebuilt)
+                                        {
+                                            DGR = false;
+                                            break;
+                                        }
+                                    }
+                                    if (!DGR)
+                                    {
+                                        DGRSettings.DGRItems = false;
+                                    }
+                                    if (DGRSettings.DGRItems)
+                                    {
+                                        Editor.EnableClientOnlyContent();
+                                        Send.Message(new NMClientOnlyContent());
+                                    }
+                                }
                                 foreach (Profile profile in DuckNetwork.profiles)
                                 {
                                     profile.reservedUser = null;
@@ -1507,14 +1541,17 @@ namespace DuckGame
                         }
                         if (!menuOpen && Input.Pressed(Triggers.Select) && (!_singlePlayer || Profiles.active.Count > 0 && !Profiles.IsDefault(Profiles.active[0])) || DuckNetwork.isDedicatedServer && !_sentDedicatedCountdown && !_spectatorCountdownStop)
                         {
+                            if (_starting || _sentDedicatedCountdown)
+                            {
+                                _countTime = -100;
+                            }
                             if (Network.isActive)
                             {
                                 Send.Message(new NMBeginCountdown());
                                 _sentDedicatedCountdown = true;
                                 _spectatorCountdownStop = false;
                             }
-                            else
-                                _starting = true;
+                            else _starting = true;
                         }
                         if (Network.isActive && DuckNetwork.isDedicatedServer && !_spectatorCountdownStop && Input.Pressed(Triggers.Cancel))
                         {
@@ -1559,6 +1596,11 @@ namespace DuckGame
                 }
                 else _afkTimeout = 0f;
                 Graphics.fade = Lerp.Float(Graphics.fade, _returnToMenu.value || _countTime <= 0f ? 0f : 1f, 0.02f);
+                if (_countTime < -100)
+                {
+                    Graphics.fade = Lerp.Float(Graphics.fade, _returnToMenu.value || _countTime <= 0f ? 0f : 1f, 0.04f);
+
+                }
                 _setupFade = Lerp.Float(_setupFade, !_matchSetup || menuOpen || DuckNetwork.core.startCountdown ? 0f : 1f, 0.05f);
                 Layer.Game.fade = Lerp.Float(Layer.Game.fade, _matchSetup ? 0.5f : 1f, 0.05f);
             }
@@ -1803,8 +1845,14 @@ namespace DuckGame
                             _font.alpha = dim * 1.2f;
                             _font.Draw(text, (float)(Layer.HUD.width / 2f - _font.GetWidth(text) / 2f), (float)(Layer.HUD.camera.height / 2f + 8f), Color.White, (Depth)0.81f);
                         }
-                        else
-                            Graphics.Draw(_countdown, 160f, (float)(Layer.HUD.camera.height / 2f - 3f));
+                        else Graphics.Draw(_countdown, 160f, (float)(Layer.HUD.camera.height / 2f - 3f));
+
+                        if (!_singlePlayer && (!Network.isActive || Network.isServer))
+                        {
+                            string t = "@SELECT@START NOW";
+                            _font.alpha = dim * 1.2f;
+                            _font.Draw(t, (float)(Layer.HUD.width / 2f - 144), (float)(Layer.HUD.camera.height / 2f - 20f), Color.White, (Depth)0.81f);
+                        }
                     }
                 }
                 base.PostDrawLayer(layer);

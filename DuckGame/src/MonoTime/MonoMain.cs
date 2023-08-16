@@ -147,7 +147,6 @@ namespace DuckGame
         public static bool networkDebugger = false;
         public static bool disableSteam = false;
         public static bool noIntro = false;
-        public static bool useRPC = false;
         public static bool startInEditor = false;
         public static bool preloadModContent = true;
         public static bool breakSteam = false;
@@ -207,6 +206,7 @@ namespace DuckGame
         public static bool doPauseFade = true;
         public static bool firebreak = false;
         public static bool IgnoreDGRUpdates = false;
+        public static bool ForceDGRUpdate = false;
         public static bool experimental = false;
         public static volatile int loadyBits = 0;
         public static volatile int totalLoadyBits = 365;

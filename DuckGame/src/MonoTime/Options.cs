@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -345,7 +346,7 @@ namespace DuckGame
 
             menu.Add(new UIMenuItemToggle("Instructions", field: new FieldBinding(dGRSettings, "EditorInstructions"))
             {
-                dgrDescription = "Displays real-time instructions on how to operate the editor. You might not need it anymore if you're already used to it"
+                dgrDescription = "Displays real-time instructions on how to operate the editor. You might not need them anymore if you're already familiar with everything"
             });
 
             menu.Add(new UIMenuItemToggle("Level Name", field: new FieldBinding(dGRSettings, "EditorLevelName"))
@@ -513,15 +514,27 @@ namespace DuckGame
                         files.AddRange(DuckFile.ReGetFiles(Team.hatSearchPaths[i], "*.hat"));
                     }
 
-
+                    Dictionary<string, Team> tths = new Dictionary<string, Team>();
                     for (int i = 0; i < files.Count; i++)
                     {
                         Team team = Team.Deserialize(files[i]);
                         if (team != null)
                         {
+                            tths.Add(files[i], team);
                             Teams.core.extraTeams.Add(team);
                         }
                     }
+
+                    IEnumerable<TeamHat> ths = Level.current.things[typeof(TeamHat)].Cast<TeamHat>();
+                    foreach (TeamHat th in ths)
+                    {
+                        //might be a bit unoptimal to do this but im going with it anyways -NiK0
+                        if (files.Contains(th.team.customHatPath))
+                        {
+                            th.team = tths[th.team.customHatPath];
+                        }
+                    }
+
                     DGRSettings.InitializeFavoritedHats();
                 }
                 /*
@@ -576,7 +589,7 @@ namespace DuckGame
 
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemToggle("In-Game Lobby Name", field: new FieldBinding(dGRSettings, "LobbyNameOnPause"))
+            menu.Add(new UIMenuItemToggle("Lobby Name", field: new FieldBinding(dGRSettings, "LobbyNameOnPause"))
             {
                 dgrDescription = "Displays lobby name on pause screen (not supporting LAN lobbies)"
             });

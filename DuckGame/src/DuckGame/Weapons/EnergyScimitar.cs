@@ -275,9 +275,9 @@ namespace DuckGame
                 {
                     if (dragSpeedBonus)
                     {
-                        if (DGRSettings.S_ParticleMultiplier >= 1)
+                        if (DGRSettings.ActualParticleMultiplier >= 1)
                         {
-                            for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++)
+                            for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++)
                             {
                                 Spark spark = Spark.New(barrelPosition.x, barrelPosition.y - 6f, new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f)));
                                 spark._color = swordColor;
@@ -286,7 +286,7 @@ namespace DuckGame
                                 Level.Add(spark);
                             }
                         }
-                        else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0)
+                        else if (Rando.Float(1) < DGRSettings.ActualParticleMultiplier)
                         {
                             Spark spark = Spark.New(barrelPosition.x, barrelPosition.y - 6f, new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f)));
                             spark._color = swordColor;
@@ -502,7 +502,14 @@ namespace DuckGame
         }
 
         public Vec2 barrelStartPos => position + (Offset(barrelOffset) - position).normalized * 2f;
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is EnergyScimitar && pTaped.gun2 is Chainsaw ? new EnergyChainsaw(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void Initialize()
         {
             if (material is MaterialGold)

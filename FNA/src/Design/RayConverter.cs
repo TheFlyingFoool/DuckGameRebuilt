@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -53,10 +53,10 @@ namespace Microsoft.Xna.Framework.Design
 			ITypeDescriptorContext context,
 			IDictionary propertyValues
 		) {
-			return new Ray(
-                (Vector3)propertyValues["Position"],
-                (Vector3)propertyValues["Direction"]
-            );
+			return (object) new Ray(
+				(Vector3) propertyValues["Position"],
+				(Vector3) propertyValues["Direction"]
+			);
 		}
 
 		#endregion

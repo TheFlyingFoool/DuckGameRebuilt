@@ -1,6 +1,6 @@
 /* FAudio - XAudio Reimplementation for FNA
  *
- * Copyright (c) 2011-2022 Ethan Lee, Luigi Auriemma, and the MonoGame Team
+ * Copyright (c) 2011-2023 Ethan Lee, Luigi Auriemma, and the MonoGame Team
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
@@ -598,7 +598,7 @@ static void FAudio_INTERNAL_DecodeBuffers(
 
 static inline void FAudio_INTERNAL_FilterVoice(
 	FAudio *audio,
-	const FAudioFilterParameters *filter,
+	const FAudioFilterParametersEXT *filter,
 	FAudioFilterState *filterState,
 	float *samples,
 	uint32_t numSamples,
@@ -630,7 +630,7 @@ static inline void FAudio_INTERNAL_FilterVoice(
 		filterState[ci][FAudioHighPassFilter] = samples[j * numChannels + ci] - filterState[ci][FAudioLowPassFilter] - (filter->OneOverQ * filterState[ci][FAudioBandPassFilter]);
 		filterState[ci][FAudioBandPassFilter] = (filter->Frequency * filterState[ci][FAudioHighPassFilter]) + filterState[ci][FAudioBandPassFilter];
 		filterState[ci][FAudioNotchFilter] = filterState[ci][FAudioHighPassFilter] + filterState[ci][FAudioLowPassFilter];
-		samples[j * numChannels + ci] = filterState[ci][filter->Type];
+		samples[j * numChannels + ci] = filterState[ci][filter->Type] * filter->WetDryMix + samples[j * numChannels + ci] * (1.0 - filter->WetDryMix);
 	}
 
 	LOG_FUNC_EXIT(audio)

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NewsStory name="Clumsy Duck">
+	<Section name="PlayerComments"/>
+	<Cycle value="PerProfile"/>
+	
+	<VALUE><![CDATA[  stat(timesLitOnFire) + stat(timesNetted) + stat(timesDisarmed) + stat(minesSteppedOn) + stat(fallDeaths) + stat(suicides)  ]]></VALUE>
+	<Requirement><![CDATA[  floatVALUE() > 30  ]]></Requirement>
+	<Requirement><![CDATA[  stat(timesKilled) == 0  ]]></Requirement>
+	<Requirement><![CDATA[  hasGreatest(VALUE)  ]]></Requirement>
+	
+	<Dialogue value="%NAME% was the clumsiest duck that round, with a CQ of %INTVALUE%."/>
+	<Dialogue value="%NAME% wasn't the sharpest knife in the drawer, with a clumsyness score of %INTVALUE%."/>
+</NewsStory>

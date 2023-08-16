@@ -152,7 +152,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    if (Program.CheckForNewVersion(out DGVersion _) && !IgnoreDGRUpdates)
+                    if (Program.CheckForNewVersion() && !IgnoreDGRUpdates)
                     {
                         Level.current = new TitleScreen();
                     }

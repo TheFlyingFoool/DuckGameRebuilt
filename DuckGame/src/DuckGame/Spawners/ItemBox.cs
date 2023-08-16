@@ -87,8 +87,9 @@ namespace DuckGame
             }
             else
             {
+                //on the edges of collision cells dan's CheckRectAll wouldn't properly return some items -NiK0
                 _aboveList = Level
-                    .CheckRectAll<PhysicsObject>(topLeft + new Vec2(1f, -4f), bottomRight + new Vec2(-1f, -12f))
+                    .OldCheckRectAll<PhysicsObject>(topLeft + new Vec2(1f, -4f), bottomRight + new Vec2(-1f, -12f))
                     .ToList();
                 foreach (PhysicsObject above in _aboveList)
                 {
@@ -99,10 +100,8 @@ namespace DuckGame
                         above.vSpeed = -3f;
                         if (above is Duck pTarget)
                         {
-                            if (!pTarget.isServerForObject)
-                                Send.Message(new NMDisarmVertical(pTarget, -3f), pTarget.connection);
-                            else
-                                pTarget.Disarm(this);
+                            if (!pTarget.isServerForObject) Send.Message(new NMDisarmVertical(pTarget, -3f), pTarget.connection);
+                            else pTarget.Disarm(this);
                         }
                     }
                 }

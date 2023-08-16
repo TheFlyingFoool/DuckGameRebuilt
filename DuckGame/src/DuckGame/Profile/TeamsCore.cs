@@ -187,6 +187,12 @@ namespace DuckGame
             new Team("johnnygrey", "hats/johnnys"),
             new Team("wolfy", "hats/werewolves")
           };
+
+            Team DGRHat = Team.Deserialize(Content.path + "/DGRHat.png"); //the fabled DGR hat -NiK0
+            if (DGRHat != null)
+            {
+                Teams.AddExtraTeam(DGRHat);
+            }
         }
     }
 }

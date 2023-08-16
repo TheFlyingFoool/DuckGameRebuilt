@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -803,7 +803,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				h = rect.Value.Height;
 			}
 
-			int elementSizeInBytes = Marshal.SizeOf(typeof(T));
+			int elementSizeInBytes = MarshalHelper.SizeOf<T>();
 			Texture.ValidateGetDataFormat(
 				FNA3D.FNA3D_GetBackbufferSurfaceFormat(GLDevice),
 				elementSizeInBytes

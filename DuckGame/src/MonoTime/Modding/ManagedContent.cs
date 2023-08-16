@@ -20,7 +20,7 @@ namespace DuckGame
                 foreach (Mod accessibleMod in (IEnumerable<Mod>)ModLoader.accessibleMods)
                 {
                     List<Type> typeList = accessibleMod.GetTypeList(typeof(T));
-                    foreach (Type type in accessibleMod.configuration.contentManager.Compile<T>(accessibleMod))
+                    foreach (Type type in accessibleMod.SortTypeOrder(accessibleMod.configuration.contentManager.Compile<T>(accessibleMod)))
                     {
                         list.Add(type);
                         typeList.Add(type);

@@ -5,7 +5,8 @@
     {
         [DevConsoleCommand(
             Aliases = new[] { "8" },
-            Description = "Fills all empty profile slots with a player")]
+            Description = "Fills all empty profile slots with a player",
+            IsCheat = true)]
         public static void Eight()
         {
             for (int i = 0; i < Profiles.defaultProfiles.Count; i++)

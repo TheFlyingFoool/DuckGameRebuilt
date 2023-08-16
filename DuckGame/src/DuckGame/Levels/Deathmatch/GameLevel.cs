@@ -174,11 +174,9 @@ namespace DuckGame
             //Vec2 vec2_2 = zero / num; whys this code the fuck here
             followCam.Adjust();
 
-            if (level != "RANDOM" && Rando.Float(1) <= DGRSettings.RandomWeather)
+            if (level != "RANDOM" && Rando.Float(10) <= DGRSettings.RandomWeather)
             {
-                DateTime targetDate = new DateTime(DateTime.Now.Year, 8, 3);
-
-                if (DateTime.Now.Date == targetDate.Date)
+                if (Program.BirthdayDGR)
                 {
                     DGRBirthday = true;
 
@@ -223,7 +221,7 @@ namespace DuckGame
                         rainDarken = darkenRainer;
                         rainwindto = rainwind;
                     }
-                    else if (First<OfficeTileset>() != null && (Rando.Int(1) == 1 || DGRSettings.RandomWeather > 9.9f))
+                    else if (First<OfficeTileset>() != null)
                     {
                         rainSound = new LoopingSound("sizzle", 1, -3)
                         {
@@ -333,7 +331,7 @@ namespace DuckGame
         public int acidTimer;
         public bool acider;
         //DGR was made on the 3rd of august, if weather is enabled and its currently the date all weather will be replaced by
-        //confetti falling from the sky
+        //confetti falling from the sky -NiK0
         public bool DGRBirthday; 
         public override void Update()
         {
@@ -349,11 +347,11 @@ namespace DuckGame
                         ConfettiParticle confettiParticle = new ConfettiParticle();
                         confettiParticle.Init(pPosition.x + Rando.Float(-4f, 0f), pPosition.y + Rando.Float(-4f, 6f), new Vec2(Rando.Float(-1f, 0f), Rando.Float(-1f, 1f)), 0.01f);
                         confettiParticle._color = Color.Pink;
-                        Level.Add(confettiParticle);
+                        Add(confettiParticle);
                         confettiParticle = new ConfettiParticle();
                         confettiParticle.Init(pPosition.x + Rando.Float(-4f, 0f), pPosition.y + Rando.Float(-4f, 6f), new Vec2(Rando.Float(-1f, 0f), Rando.Float(-1f, 1f)), 0.01f);
                         confettiParticle._color = Color.DeepPink;
-                        Level.Add(confettiParticle);
+                        Add(confettiParticle);
                     }
                 }
             }

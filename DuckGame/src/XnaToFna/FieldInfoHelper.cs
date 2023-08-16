@@ -16,37 +16,62 @@ namespace XnaToFna.ProxyReflection
     public static class FieldInfoHelper
     {
         private static readonly Dictionary<Type, Dictionary<string, XnaToFnaFieldInfo>> Map = new Dictionary<Type, Dictionary<string, XnaToFnaFieldInfo>>()
-    {
-      {
-        typeof (StringBuilder),
-        new Dictionary<string, XnaToFnaFieldInfo>()
         {
           {
-            "m_StringValue",
-            new XnaToFnaFieldInfo(typeof (string),  obj =>  ((StringBuilder) obj).ToString(),  (obj, val) => ((StringBuilder) obj).Clear().Append(val))
+            typeof (StringBuilder),
+            new Dictionary<string, XnaToFnaFieldInfo>()
+            {
+              {
+                "m_StringValue",
+                new XnaToFnaFieldInfo(typeof (string),  obj =>  ((StringBuilder) obj).ToString(),  (obj, val) => ((StringBuilder) obj).Clear().Append(val))
+              }
+            }
           }
-        }
-      }
-    };
-
+        };
+        public static MethodInfo DrawSelectionHandler = typeof(FieldInfoHelper).GetMethod("DrawSelection", BindingFlags.Static | BindingFlags.Public);
+        public static MethodInfo RealDrawSelection;
         public static FieldInfo GetField(Type self, string name, BindingFlags bindingAttr)
         {
-            Dictionary<string, XnaToFnaFieldInfo> dictionary;
-            XnaToFnaFieldInfo xnaToFnaFieldInfo;
-            return Map.TryGetValue(self, out dictionary) && dictionary.TryGetValue(name, out xnaToFnaFieldInfo) ? xnaToFnaFieldInfo : self.GetField(name, bindingAttr);
+            try
+            {
+                Dictionary<string, XnaToFnaFieldInfo> dictionary;
+                XnaToFnaFieldInfo xnaToFnaFieldInfo;
+                return Map.TryGetValue(self, out dictionary) && dictionary.TryGetValue(name, out xnaToFnaFieldInfo) ? xnaToFnaFieldInfo : self.GetField(name, bindingAttr);
+            }
+            catch(Exception  e)
+            {
+                DevConsole.Log("test");
+            }
+            return null;
         }
 
         public static MethodInfo GetMethod(Type self, string name, BindingFlags bindingAttr)
         {
             XnaToFnaFieldInfo xnaToFnaFieldInfo;
             DevConsole.Log("GetMethod " + name);
-            if (name == "DuckNetworkUpdate_Transpiler" && self.FullName == "DuckGame.BetterChat.HarmonyPatches")
+            if (self.FullName == "DuckGame.BetterChat.HarmonyPatches")
             {
-                return null;
+                if (name == "DuckNetworkUpdate_Transpiler")
+                {
+                    return null;
+                }
+                else if (name == "DrawSelection")
+                {
+                    RealDrawSelection = self.GetMethod(name, bindingAttr);
+                    return DrawSelectionHandler;
+                }
             }
             return self.GetMethod(name, bindingAttr);
         }
-
+        public static void DrawSelection(Vec2 messagePos) // for better chat
+        {
+            try
+            {
+                RealDrawSelection.Invoke(null, new object[] { messagePos });
+            }
+            catch
+            { }
+        }
 
         public static FieldInfo GetField(Type self, string name)
         {

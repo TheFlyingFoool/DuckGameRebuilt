@@ -3,17 +3,10 @@
 
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand(Description = "Kills a player")]
+        [DevConsoleCommand(Description = "Kills a player", IsCheat = true)]
         public static void Kill(Duck duck)
         {
-            if (!DevConsole.CheckCheats())
-            {
-                duck.Kill(new DTIncinerate(null));
-            }
-            else
-            {
-                DevConsole.Log("You can't do that here!", Color.Red);
-            }
+            duck.Kill(new DTIncinerate(null));
         }
     }
 }

@@ -164,7 +164,7 @@ namespace DuckGame
                 _modsByWorkshopID[mod.configuration.workshopID] = mod;
             _modTypes.Add(mod.GetType(), mod);
         }
-        public static Assembly FixLoadAssembly(string path)
+        public static void FixLoadAssembly(ModConfiguration modConfig, string path)
         {
             path = path.Replace("\\", "/");
             string pathprimer = path.Replace(".dll", "");
@@ -172,20 +172,32 @@ namespace DuckGame
             string RebuiltAssemblyPath = (pathprimer + "Rebuilt.dll");
             string modificationdatetime = File.GetLastWriteTime(path).ToString();
             string saveddata = "";
+            string[] lines;
             if (File.Exists(RebuiltDataPath))
             {
                 if (File.Exists(RebuiltAssemblyPath))
                 {
                     saveddata = File.ReadAllText(RebuiltDataPath);
-                    if (saveddata.Contains("|"))
+                    lines = saveddata.Split( new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (lines.Length  >  1)
                     {
-                        string[] splitdata = saveddata.Split('|');
-                        if (splitdata.Length > 1 && splitdata[0] == modificationdatetime && splitdata[1] == XnaToFnaUtil.RemapVersion.ToString())
+                        string saveinfo = lines[0];
+                        if (saveinfo.Contains("|") && lines[1] == "Type Order")
                         {
-                            byte[] filebytes = File.ReadAllBytes(RebuiltAssemblyPath);
-                            if (filebytes.Length != 0)
+                            string[] splitdata = saveinfo.Split('|');
+                            if (splitdata.Length > 1 && splitdata[0] == modificationdatetime && splitdata[1] == XnaToFnaUtil.RemapVersion.ToString())
                             {
-                                return Assembly.Load(filebytes);
+                                byte[] filebytes = File.ReadAllBytes(RebuiltAssemblyPath);
+                                if (filebytes.Length != 0)
+                                {
+                                    modConfig.SortedTypeNames = new string[lines.Length - 2];
+                                    for (int i = 2; i < lines.Length; i++)
+                                    {
+                                        modConfig.SortedTypeNames[i - 2] = lines[i];
+                                    }
+                                    modConfig.assembly = Assembly.Load(filebytes);
+                                    return;
+                                }
                             }
                         }
                     }
@@ -198,8 +210,19 @@ namespace DuckGame
             {
                 File.Delete(RebuiltAssemblyPath);
             }
+            Assembly normalmodassembly = Assembly.Load(File.ReadAllBytes(path));
+            Type[] modtypes = normalmodassembly.GetTypes();
+            modConfig.SortedTypeNames = new string[modtypes.Length];
+            string typeorder = "\nType Order";
+            for (int i = 0; i < modtypes.Length; i++)
+            {
+                string typename = modtypes[i].FullName;
+                modConfig.SortedTypeNames[i] = typename;
+                typeorder += "\n" + typename;
+            }
+            normalmodassembly = null;
             //(modificationdatetime + " | " + XnaToFnaUtil.RemapVersion.ToString())
-            File.WriteAllText(RebuiltDataPath, (modificationdatetime + "|" + XnaToFnaUtil.RemapVersion.ToString()));
+            File.WriteAllText(RebuiltDataPath, (modificationdatetime + "|" + XnaToFnaUtil.RemapVersion.ToString()) + typeorder);
             MonoMain.NloadMessage = "REMAPPING/LOADING MOD " + currentModLoadString + " " + saveddata;
             string folderpath = Path.GetDirectoryName(path);
             xnaToFnaUtil = new XnaToFnaUtil(folderpath); //Path.GetDirectoryName(path);
@@ -224,7 +247,7 @@ namespace DuckGame
             Assembly assembly = xnaToFnaUtil.RelinkToAssemblyToFile(mod, RebuiltAssemblyPath);
             (xnaToFnaUtil.Modder.AssemblyResolver as DefaultAssemblyResolver).RemoveSearchDirectory(folderpath);
             xnaToFnaUtil.Dispose();
-            return assembly;
+            modConfig.assembly = assembly;
         }
         private static ModConfiguration GetDependency(
           string pDependency,
@@ -418,7 +441,7 @@ namespace DuckGame
                             }
                             else
                             {
-                                modConfig.assembly = FixLoadAssembly(assemblypath);
+                                FixLoadAssembly(modConfig, assemblypath);
                             }
                             MonoMain.loadedModsWithAssemblies.Add(modConfig);
                             Type[] array1 = modConfig.assembly.GetExportedTypes().Where(type => type.IsSubclassOf(typeof(IManageContent)) && type.IsPublic && type.IsClass && !type.IsAbstract).ToArray();
@@ -479,6 +502,7 @@ namespace DuckGame
             }
         }
 
+        public static bool ShouldOptimizations;
         internal static string modHash
         {
             get;
@@ -908,6 +932,7 @@ namespace DuckGame
             {
                 foreach (Mod initializationFailure in initializationFailures)
                     _sortedAccessibleMods.Remove(initializationFailure);
+                
                 modHash = GetModHash();
                 foreach (Mod sortedAccessibleMod in (IEnumerable<Mod>)_sortedAccessibleMods)
                 {
@@ -1009,6 +1034,8 @@ namespace DuckGame
             {
                 throw new Exception("Late crash used!");
             }
+
+            ShouldOptimizations = modHash == "nomods" || modHash == "";
         }
 
         internal static void Start()

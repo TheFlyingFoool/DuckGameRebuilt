@@ -3045,7 +3045,7 @@ namespace DuckGame
                     }
 
                     bool flag = false;
-                    if (Keyboard.Pressed(Keys.Delete) ||
+                    if ((Keyboard.Pressed(Keys.Delete) || Keyboard.Pressed(Keys.Back)) ||
                         _input.Pressed(Triggers.Menu2) && inputMode == EditorInput.Gamepad)
                     {
                         History.BeginUndoSection();
@@ -5399,6 +5399,7 @@ namespace DuckGame
 
         public static void EnableClientOnlyContent()
         {
+            DestroyType.indexTypeMap.Clear();
             clientonlycontent = true;
             AmmoType.InitializeTypes();
             DestroyType.InitializeTypes();
@@ -5407,6 +5408,7 @@ namespace DuckGame
 
         public static void DisableClientOnlyContent()
         {
+            DestroyType.indexTypeMap.Clear();
             clientonlycontent = false;
             AmmoType.InitializeTypes();
             DestroyType.InitializeTypes();

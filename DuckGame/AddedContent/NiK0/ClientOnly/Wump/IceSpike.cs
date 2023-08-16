@@ -27,7 +27,7 @@
             {
                 return;
             }
-            if (with is IAmADuck && alpha > 0.6f && (existance < 16 || with != ignore))
+            if (with is IAmADuck && alpha > 0.6f && (with != ignore || existance > 8))
             {
                 SuperFondle(with, DuckNetwork.localConnection);
                 with.velocity = velocity;

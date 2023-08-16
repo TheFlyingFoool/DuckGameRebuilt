@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NewsStory name="Introduction">
+	<Section name="Introduction"/>
+	<Cycle value="Once"/>
+	
+	<SubStory name = "Non Demo Intro">
+		<Requirement><![CDATA[  isNotDemo()  ]]></Requirement>
+		<Dialogue value="It's DUCK CHANNEL SPORTS! I'm your sports caster |SUAVE||RED|John Mallard|WHITE|!"/>
+		<Dialogue value="|SUAVE||RED|John Mallard|WHITE| here with another |EXCITED|exciting Duck Game recap!"/>
+	</SubStory>
+	
+	<SubStory name = "Demo Intro">
+		<Requirement><![CDATA[  isDemo()  ]]></Requirement>
+		<Dialogue value="It's DUCK GAME |RED|DEMO|WHITE| SPORTS! I'm your sports caster |EXCITED||RED|John Mallard|WHITE|!"/>
+		<SubStory name = "More Demo Intro">
+			<Dialogue value="|EXCITED|I am incomplete, I need your money or I'm going to be |RED|fired|WHITE|!"/>
+			<Dialogue value="|EXCITED|Please buy the game, the developer told me I can't |RED|eat|WHITE| until then!"/>
+			<Dialogue value="|EXCITED|I have no |RED|legs|WHITE|! Please buy the full version so I can have |RED|legs|WHITE| again!"/>
+			<Dialogue value="|EXCITED|It's so cold here, we can't afford heating in the demo!"/>
+			<Dialogue value="|EXCITED|Can you spare some change? I need ten bucks for the bus!"/>
+		</SubStory>
+	</SubStory>
+	
+	<SubStory name = "Winning Duck">
+		<VALUE><![CDATA[  winner()  ]]></VALUE>
+		<Dialogue value="|EXCITED|%VALUE% won!"/>
+	</SubStory>
+	
+	<NewsStoryHalloween name="Introduction">
+		<Section name="Introduction"/>
+		<Cycle value="Once"/>
+		
+		<SubStory name = "Non Demo Intro">
+			<Requirement><![CDATA[  isNotDemo()  ]]></Requirement>
+			<Dialogue value="It's DUCK CHANNEL SPORTS! I'm your sports caster |SUAVE||RED|SPOOKY John Mallard|WHITE|!"/>
+			<Dialogue value="|SUAVE||RED|SPOOKY John Mallard|WHITE| here with another |EXCITED|SPOOKY Duck Game recap!"/>
+		</SubStory>
+		
+		<SubStory name = "Winning Duck">
+			<VALUE><![CDATA[  winner()  ]]></VALUE>
+			<Dialogue value="|EXCITED|%VALUE% won! How SPOOKY!"/>
+		</SubStory>
+	</NewsStoryHalloween>
+</NewsStory>
+
+
+

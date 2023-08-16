@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -104,16 +104,14 @@ namespace Microsoft.Xna.Framework.Content
 
 		public ContentSerializerAttribute Clone()
 		{
-            ContentSerializerAttribute clone = new ContentSerializerAttribute
-            {
-                AllowNull = AllowNull,
-                collectionItemName = collectionItemName,
-                ElementName = ElementName,
-                FlattenContent = FlattenContent,
-                Optional = Optional,
-                SharedResource = SharedResource
-            };
-            return clone;
+			ContentSerializerAttribute clone = new ContentSerializerAttribute();
+			clone.AllowNull = AllowNull;
+			clone.collectionItemName = collectionItemName;
+			clone.ElementName = ElementName;
+			clone.FlattenContent = FlattenContent;
+			clone.Optional = Optional;
+			clone.SharedResource = SharedResource;
+			return clone;
 		}
 
 		#endregion

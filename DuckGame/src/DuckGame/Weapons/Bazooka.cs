@@ -26,7 +26,14 @@
             editorTooltip = "Funny name, serious firepower. Launches an explosive missile that can destroy terrain.";
             physicsMaterial = PhysicsMaterial.Metal;
         }
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is Bazooka && pTaped.gun2 is Sniper ? new SniperZooka(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void OnPressAction()
         {
             if (_tamped)

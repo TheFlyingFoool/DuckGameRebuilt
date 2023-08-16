@@ -48,20 +48,14 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (Rando.Float(2f) < 0.3f)
-                vSpeed += Rando.Float(3.5f) - 2f;
-            if (Rando.Float(9f) < 0.1f)
-                vSpeed += Rando.Float(3.1f) - 3f;
-            if (Rando.Float(14f) < 0.1f)
-                vSpeed += Rando.Float(4f) - 5f;
-            if (Rando.Float(25f) < 0.1f)
-                vSpeed += Rando.Float(6f) - 7f;
-            if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(SmallSmoke.New(x, y));
-            else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(x, y));
-            if (hSpeed > 0f)
-                _sprite.angleDegrees = 90f;
-            else if (hSpeed < 0f)
-                _sprite.angleDegrees = -90f;
+            if (Rando.Float(2f) < 0.3f) vSpeed += Rando.Float(3.5f) - 2f;
+            if (Rando.Float(9f) < 0.1f) vSpeed += Rando.Float(3.1f) - 3f;
+            if (Rando.Float(14f) < 0.1f) vSpeed += Rando.Float(4f) - 5f;
+            if (Rando.Float(25f) < 0.1f) vSpeed += Rando.Float(6f) - 7f;
+            if (DGRSettings.ActualParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++) Level.Add(SmallSmoke.New(x, y));
+            else if (Rando.Float(1) < DGRSettings.ActualParticleMultiplier) Level.Add(SmallSmoke.New(x, y));
+            if (hSpeed > 0f) _sprite.angleDegrees = 90f;
+            else if (hSpeed < 0f) _sprite.angleDegrees = -90f;
             base.Update();
         }
 

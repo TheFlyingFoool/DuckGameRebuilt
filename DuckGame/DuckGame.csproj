@@ -41,7 +41,6 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <AssemblyName>DuckGame</AssemblyName>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -54,7 +53,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <AssemblyName>DuckGame</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -66,7 +64,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <AssemblyName>DuckGame</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -78,7 +75,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <AssemblyName>DuckGame</AssemblyName>
     <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DuckGame</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -95,7 +91,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <AssemblyName>DuckGame</AssemblyName>
     <OutputPath>..\bin\</OutputPath>
     <DefineConstants>TRACE;DuckGame</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -109,7 +104,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <AssemblyName>DuckGame</AssemblyName>
     <OutputPath>..\bin\</OutputPath>
     <DefineConstants>TRACE;DuckGame</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -293,6 +287,22 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigTrapped.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\ReDemoBlaster.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\TapeBlock.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\FadingAwayThing.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\CampNetgun.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\DoubleShotgun.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\EnergyChainsaw.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\FlareFlameThrower.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\HugerLaser.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\OctoLaser.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\QuadPhaser.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\SniperZooka.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\WarpSword.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\LaserDiskParticle.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\MaterialEnergyChainsaw.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\MaterialRedFade.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\NMDeathCone.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Projectile\LaserConeBlast.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Projectile\OctoLaserBullet.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATDeathCaliber.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATWumpMagnum.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\Bubble.cs" />
@@ -324,6 +334,7 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpSniper.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpTeleporter.cs" />
     <Compile Include="AddedContent\NiK0\MathParser.cs" />
+    <Compile Include="AddedContent\NiK0\NMClientOnlyContent.cs" />
     <Compile Include="AddedContent\NiK0\RainbowConstant.cs" />
     <Compile Include="AddedContent\NiK0\RainParticel.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\ClientOnlyAttribute.cs" />
@@ -357,6 +368,7 @@
     <Compile Include="src\DuckGame\Network\ConcurrentStack.cs" />
     <Compile Include="src\MonoTime\Console\Commands\AdvancedConfig.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Bind.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\CheckCheats.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Clear.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Config.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Debug.cs" />
@@ -396,6 +408,7 @@
     <Compile Include="src\MonoTime\Console\Commands\Rep.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Echo.cs" />
     <Compile Include="src\MonoTime\Console\Commands\DansTestArea.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\SkipMap.cs" />
     <Compile Include="src\MonoTime\ExecuteOnAttribute.cs" />
     <Compile Include="src\MonoTime\Input\InputMan.cs" />
     <Compile Include="src\MonoTime\Input\1InputMan.cs" />
@@ -2072,6 +2085,7 @@
     <Compile Include="src\XnaToFna\__NetworkSession__.cs" />
     <Compile Include="src\XnaToFna\__PropertyDictionary__.cs" />
     <Compile Include="AddedContent\othello7\HelperMethods.cs" />
+    <Compile Include="AddedContent\othello7\Firework.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -2119,9 +2133,7 @@
       <Name>Steam</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AddedContent\othello7\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">
     <Exec Command="git describe  --always --dirty --abbrev=40 &gt; &quot;$(ProjectDir)version.txt&quot;" />

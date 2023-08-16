@@ -11,9 +11,9 @@ namespace DuckGame
     {
         public StateBinding _positionBinding = new CompressedVec2Binding("position", doLerp: true);
         public StateBinding _travelBinding = new CompressedVec2Binding(nameof(travel), 20);
-        private Vec2 _travel;
-        private SinWaveManualUpdate _wave = (SinWaveManualUpdate)0.5f;
-        private SinWaveManualUpdate _wave2 = (SinWaveManualUpdate)1f;
+        protected Vec2 _travel;
+        protected SinWaveManualUpdate _wave = (SinWaveManualUpdate)0.5f;
+        protected SinWaveManualUpdate _wave2 = (SinWaveManualUpdate)1f;
         public int safeFrames;
         public Duck safeDuck;
         public float timeAlive;

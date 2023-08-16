@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.IsolatedStorage;
 using System.Linq;
 
 namespace DuckGame
 {
     [ClientOnly]
-#if DEBUG
     [EditorGroup("Rebuilt|Wump|Pistols")]
-#endif
     public class WumpPistol : Gun
     {
         public WumpPistol(float xval, float yval) : base(xval, yval)
@@ -51,22 +50,26 @@ namespace DuckGame
             editorTooltip = "A frozen pistol that holds dark secrets within.";
             physicsMaterial = PhysicsMaterial.Metal;
         }
+        public StateBinding _brokenBinding = new StateBinding("broken");
+        public StateBinding _breakAgainCooldown = new StateBinding("breakAgainCooldown");
+        public float breakAgainCooldown;
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
             if (Network.isActive && connection != DuckNetwork.localConnection)
             {
                 return;
             }
-            if (with is Block && CalculateImpactPower(with, from) > 4)
+            if (with is Block && CalculateImpactPower(with, from) > 4 && breakAgainCooldown <= 0)
             {
                 if (broken)
                 {
                     Level.Remove(this);
                 }
                 ammo = 1;
-                SFX.Play("glassBreak");
+                SFX.PlaySynchronized("glassBreak");
                 broken = true;
                 _sprite.SetAnimation("broken");
+                breakAgainCooldown = 1;
                 for (int i = 0; i < DGRSettings.ActualParticleMultiplier * 14; i++)
                 {
                     Level.Add(new GlassParticle(x, y, new Vec2(Rando.Float(-1, 1), Rando.Float(-1, 1))));
@@ -76,8 +79,13 @@ namespace DuckGame
         }
         public override void Update()
         {
-            if (broken && (Math.Abs(hSpeed) > 3 || Math.Abs(vSpeed) > 2))
+            if (isServerForObject)
             {
+                breakAgainCooldown -= 0.017f;
+            }
+            if (broken && (Math.Abs(hSpeed) > 3 || Math.Abs(vSpeed) > 2) && isServerForObject)
+            {
+                _sprite.SetAnimation("broken");
                 List<IAmADuck> iaads = Level.CheckCircleAll<IAmADuck>(position + velocity, 12).ToList();
                 for (int i = 0; i < iaads.Count; i++)
                 {
@@ -92,6 +100,10 @@ namespace DuckGame
                 _sprite.SetAnimation("idle");
             }
             base.Update();
+        }
+        protected override void PlayFireSound()
+        {
+            SFX.PlaySynchronized(_fireSound, pitch: (Rando.Float(0.2f) - 0.1f + _fireSoundPitch));
         }
         public override void Fire()
         {

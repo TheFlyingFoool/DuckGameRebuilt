@@ -3,55 +3,50 @@
 
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand(Description = "Gives a player an item by name")]
+        [DevConsoleCommand(Description = "Gives a player an item by name", IsCheat = true)]
         public static void Give(Profile player, Holdable item, string arguments = "")
         {
-            //bool hold = true;
-
-            // Parameter checks
-
-
-            //if (item is Gun g)
-            //{
-            //    if (arguments.Contains("-i"))
-            //        g.infiniteAmmoVal = true;
-
-            //    if (arguments.Contains("-ph"))
-            //    {
-            //        item = new PowerHolster(g.x, g.y)
-            //        {
-            //            containedObject = g
-            //        };
-            //    }
-            //    else if (arguments.Contains("-h"))
-            //    {
-            //        item = new Holster(g.x, g.y)
-            //        {
-            //            containedObject = g
-            //        };
-            //    }
-            //}
-            // Commented out because auto equipping is dysfunctional currently with this method.
-            //if (item is Equipment e)
-            //{
-            //    if (arguments.Contains("-e"))
-            //        player.duck.Equip(e);
-            //}
-
-            if (!DevConsole.CheckCheats())
+            bool noHold = false;
+            
+            if (item is Gun g)
             {
-                if (!string.IsNullOrEmpty(arguments) && item is Gun g && arguments.Contains("-i"))
+                if (arguments.Contains("i"))
                 {
-                    g.infiniteAmmoVal = true;
+                    g.infinite.value = true;
                 }
 
-                SFX.Play("hitBox");
-                Level.Add(item);
-                player.duck.GiveHoldable(item);
+                if (arguments.Contains("ph") || arguments.Contains("h"))
+                {
+                    if (player.duck.GetEquipment(typeof(Holster)) is Holster holster)
+                    {
+                        holster.SetContainedObject(g);
+                    }
+                    else
+                    {
+                        item = arguments.Contains("ph")
+                            ? new PowerHolster(0, 0)
+                            : new Holster(0, 0);
+
+                        Holster holsteredItem = (Holster) item;
+                        
+                        holsteredItem.SetContainedObject(g);
+                        player.duck.Equip(holsteredItem);
+                    }
+                    
+                    noHold = true;
+                }
             }
-            else
+            
+            SFX.Play("hitBox");
+            Level.Add(item);
+            
+            if (item is Equipment e && arguments.Contains("e"))
             {
-                DevConsole.Log("You can't do that here!", Color.Red);
+                player.duck.Equip(e);
+            }
+            else if (!noHold)
+            {
+                player.duck.GiveHoldable(item);
             }
         }
     }

@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -140,12 +140,12 @@ namespace Microsoft.Xna.Framework.Content
 				BasicEffectReader hBasicEffectReader = new BasicEffectReader();
 				VertexBufferReader hVertexBufferReader = new VertexBufferReader();
 				AlphaTestEffectReader hAlphaTestEffectReader = new AlphaTestEffectReader();
-				EnumReader<Graphics.SpriteEffects> hEnumSpriteEffectsReader = new EnumReader<Graphics.SpriteEffects>();
+				EnumReader<Microsoft.Xna.Framework.Graphics.SpriteEffects> hEnumSpriteEffectsReader = new EnumReader<Graphics.SpriteEffects>();
 				ArrayReader<float> hArrayFloatReader = new ArrayReader<float>();
 				ArrayReader<Vector2> hArrayVector2Reader = new ArrayReader<Vector2>();
 				ListReader<Vector2> hListVector2Reader = new ListReader<Vector2>();
 				ArrayReader<Matrix> hArrayMatrixReader = new ArrayReader<Matrix>();
-				EnumReader<Graphics.Blend> hEnumBlendReader = new EnumReader<Graphics.Blend>();
+				EnumReader<Microsoft.Xna.Framework.Graphics.Blend> hEnumBlendReader = new EnumReader<Graphics.Blend>();
 				NullableReader<Rectangle> hNullableRectReader = new NullableReader<Rectangle>();
 				EffectMaterialReader hEffectMaterialReader = new EffectMaterialReader();
 				ExternalReferenceReader hExternalReferenceReader = new ExternalReferenceReader();

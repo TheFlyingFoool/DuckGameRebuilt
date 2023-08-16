@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -58,7 +58,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		#region Internal Context Reset Method
 
-		protected internal override void GraphicsDeviceResetting()
+		internal protected override void GraphicsDeviceResetting()
 		{
 			// FIXME: Do we even want to bother with DeviceResetting for GL? -flibit
 		}
@@ -239,14 +239,15 @@ namespace Microsoft.Xna.Framework.Graphics
 			const uint DDS_MAGIC = 0x20534444;
 			const uint DDS_HEADERSIZE = 124;
 			const uint DDS_PIXFMTSIZE = 32;
-			const uint DDSD_CAPS = 0x1;
 			const uint DDSD_HEIGHT = 0x2;
 			const uint DDSD_WIDTH = 0x4;
 			const uint DDSD_PITCH = 0x8;
-			const uint DDSD_FMT = 0x1000;
 			const uint DDSD_LINEARSIZE = 0x80000;
 			const uint DDSD_REQ = (
-				DDSD_CAPS | DDSD_HEIGHT | DDSD_WIDTH | DDSD_FMT
+				/* Per the spec, this should also be or'd with DDSD_CAPS | DDSD_FMT,
+				 * but some compression tools don't obey the spec, so here we are...
+				 */
+				DDSD_HEIGHT | DDSD_WIDTH
 			);
 			const uint DDSCAPS_MIPMAP = 0x400000;
 			const uint DDSCAPS_TEXTURE = 0x1000;

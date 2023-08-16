@@ -5,10 +5,11 @@ namespace DuckGame
 {
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand]
-        public static string Debug()
+        [DevConsoleCommand(IsCheat = true)]
+        public static void Debug()
         {
-            return JsonConvert.SerializeObject(new Rectangle(0, 0, 24, 24), Formatting.Indented);
+            DevConsole.RunCommand("eight");
+            DevConsole.RunCommand("lev rockthrow");
         }
     }
 }

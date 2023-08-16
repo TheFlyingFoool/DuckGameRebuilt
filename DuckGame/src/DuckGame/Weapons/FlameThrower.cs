@@ -58,6 +58,14 @@ namespace DuckGame
             editorTooltip = "Some Ducks just want to watch the world burn.";
             _bio = "I have a problem. I want this flame here, to be over there. But I can't pick it up, it's too damn hot. If only there was some way I could throw it.";
         }
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is FlameThrower && pTaped.gun2 is FlareGun ? new FlareFlameThrower(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void Initialize()
         {
             _sound = new ConstantSound("flameThrowing");

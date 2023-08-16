@@ -90,82 +90,94 @@ namespace DuckGame
 
         public float Solve(PhysicsObject b1, PhysicsObject b2, float dist)
         {
-            Thing thing1 = b1.owner != null ? b1.owner : b1;
-            Thing thing2 = b2.owner != null ? b2.owner : b2;
-            float num1 = dist;
-            Vec2 vec2_1 = b2.position - b1.position;
-            float num2 = vec2_1.length;
-            if (num2 < 0.0001f)
-                num2 = 0.0001f;
-            if (num2 < num1)
+            Thing body = (b1.owner != null) ? b1.owner : b1;
+            Thing body2 = (b2.owner != null) ? b2.owner : b2;
+            Vec2 axis = b2.position - b1.position;
+            float currentDistance = axis.length;
+            if (currentDistance < 0.0001f)
+            {
+                currentDistance = 0.0001f;
+            }
+            if (currentDistance < dist)
+            {
                 return 0f;
-            Vec2 vec2_2 = vec2_1 * (1f / num2);
-            Vec2 vec2_3 = new Vec2(thing1.hSpeed, thing1.vSpeed);
-            Vec2 vec2_4 = new Vec2(thing2.hSpeed, thing2.vSpeed);
-            double num3 = Vec2.Dot(vec2_4 - vec2_3, vec2_2);
-            float num4 = num2 - num1;
-            float num5 = 2.5f;
-            float num6 = 2.1f;
-            if (thing1 is ChainLink && !(thing2 is ChainLink))
-            {
-                num5 = 10f;
-                num6 = 0f;
             }
-            else if (thing2 is ChainLink && !(thing1 is ChainLink))
+            Vec2 unitAxis = axis * (1f / currentDistance);
+            Vec2 vel = new Vec2(body.hSpeed, body.vSpeed);
+            Vec2 vel2 = new Vec2(body2.hSpeed, body2.vSpeed);
+            float num = Vec2.Dot(vel2 - vel, unitAxis);
+            float relDist = currentDistance - dist;
+            float invMass = 2.5f;
+            float invMass2 = 2.1f;
+            if (body is ChainLink && !(body2 is ChainLink))
             {
-                num5 = 0f;
-                num6 = 10f;
+                invMass = 10f;
+                invMass2 = 0f;
             }
-            else if (thing1 is ChainLink && thing2 is ChainLink)
+            else if (body2 is ChainLink && !(body is ChainLink))
             {
-                num5 = 10f;
-                num6 = 10f;
+                invMass = 0f;
+                invMass2 = 10f;
             }
-            if (thing1 is ChokeCollar)
-                num5 = 10f;
-            else if (thing2 is ChokeCollar)
-                num6 = 10f;
-            double num7 = num4;
-            float num8 = (float)((num3 + num7) / (num5 + num6));
-            Vec2 vec2_5 = vec2_2 * num8;
-            Vec2 vec2_6 = vec2_3 + vec2_5 * num5;
-            vec2_4 -= vec2_5 * num6;
-            thing1.hSpeed = vec2_6.x;
-            thing1.vSpeed = vec2_6.y;
-            thing2.hSpeed = vec2_4.x;
-            thing2.vSpeed = vec2_4.y;
-            if (thing1 is ChainLink && (thing2.position - thing1.position).length > num1 * 12f) thing1.position = position;
-            if (thing2 is ChainLink && (thing2.position - thing1.position).length > num1 * 12f) thing2.position = position;
-            return num8;
+            else if (body is ChainLink && body2 is ChainLink)
+            {
+                invMass = 10f;
+                invMass2 = 10f;
+            }
+            if (body is ChokeCollar)
+            {
+                invMass = 10f;
+            }
+            else if (body2 is ChokeCollar)
+            {
+                invMass2 = 10f;
+            }
+            float impulse = (num + relDist) / (invMass + invMass2);
+            Vec2 impulseVector = unitAxis * impulse;
+            vel += impulseVector * invMass;
+            vel2 -= impulseVector * invMass2;
+            body.hSpeed = vel.x;
+            body.vSpeed = vel.y;
+            body2.hSpeed = vel2.x;
+            body2.vSpeed = vel2.y;
+            if (body is ChainLink && (body2.position - body.position).length > dist * 12f)
+            {
+                body.position = this.position;
+            }
+            if (body2 is ChainLink && (body2.position - body.position).length > dist * 12f)
+            {
+                body2.position = this.position;
+            }
+            return impulse;
         }
 
         public override void Update()
         {
-            PhysicsObject physicsObject = _attach;
+            PhysicsObject attach = _attach;
             if (_attach is Duck)
             {
-                Duck attach = _attach as Duck;
-                physicsObject = attach.ragdoll != null ? attach.ragdoll.part1 : attach;
+                Duck d = _attach as Duck;
+                attach = d.ragdoll != null ? d.ragdoll.part1 : d;
             }
-            if (physicsObject == null) return;
-            double num1 = Solve(this, physicsObject, 30f);
-            int num2 = 0;
-            PhysicsObject b2 = this;
-            foreach (ChainLink link in _links)
+            if (attach == null) return;
+            Solve(this, attach, 30f);
+            int index = 0;
+            PhysicsObject prev = this;
+            foreach (ChainLink i in _links)
             {
-                double num3 = Solve(link, b2, 2f);
-                b2 = link;
-                link.depth = _attach.depth - 8 - num2;
-                ++num2;
+                Solve(i, prev, 2f);
+                prev = i;
+                i.depth = _attach.depth - 8 - index;
+                index++;
             }
-            //double num4 = Solve(physicsObject, b2, 2f); what -NiK0
+            Solve(attach, prev, 2f);
             base.Update();
             if (_sparkWait > 0f) _sparkWait -= 0.1f;
             else _sparkWait = 0f;
             if (_sparkWait != 0f || !grounded || Math.Abs(hSpeed) <= 1f) return;
             _sparkWait = 0.25f;
-            if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(Spark.New(x + (hSpeed > 0f ? -2f : 2f), y + 7f, new Vec2(0f, 0.5f)));
-            else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(Spark.New(x + (hSpeed > 0f ? -2f : 2f), y + 7f, new Vec2(0f, 0.5f)));
+            if (DGRSettings.ActualParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++) Level.Add(Spark.New(x + (hSpeed > 0f ? -2f : 2f), y + 7f, new Vec2(0f, 0.5f)));
+            else if (Rando.Float(1) < DGRSettings.ActualParticleMultiplier) Level.Add(Spark.New(x + (hSpeed > 0f ? -2f : 2f), y + 7f, new Vec2(0f, 0.5f)));
         }
     }
 }

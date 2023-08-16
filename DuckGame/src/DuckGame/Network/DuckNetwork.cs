@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime;
 using System.Threading;
 
 namespace DuckGame
@@ -916,8 +917,6 @@ namespace DuckGame
                     if (title == "")
                     {
                         title = TeamSelect2.DefaultGameName();
-                        TeamSelect2.GetOnlineSetting("name").value = title;
-                        lobby.SetLobbyData("name", title);
                     }
                     tiny = true;
                 }
@@ -1044,6 +1043,34 @@ namespace DuckGame
                     _ducknetUIGroup.Add(_core._levelSelectMenu, false);
                 }
             }
+
+            if (Network.isServer)
+            {
+                bool DGR = true;
+                for (int i = 0; i < Profiles.active.Count(); i++)
+                {
+                    Profile p = Profiles.active.ElementAt(i);
+                    if (!p.isUsingRebuilt || !p.inSameRebuiltVersion)
+                    {
+                        DGR = false;
+                        break;
+                    }
+                }
+                if (Level.current is TeamSelect2)
+                {
+                    if (DGR)
+                    {
+                        _core._ducknetMenu.Add(new UIMenuItemToggle("DGR Stuff", field: new FieldBinding(Options.dGRSettings, "DGRItems"), c: new Color(246, 88, 191)));
+                    }
+                    else
+                    {
+                        DGRSettings.DGRItems = false;
+                        _core._ducknetMenu.Add(new UIText(" DGR Stuff        ON |WHITE|OFF"/*, field: new FieldBinding(Options.dGRSettings, "DGRItems")*/, c: Color.Gray));
+
+                    }
+                }
+            }
+
             Main.SpecialCode = "men7";
             if (Network.inLobby && whoOpen.slotType != SlotType.Local && Network.available)
             {

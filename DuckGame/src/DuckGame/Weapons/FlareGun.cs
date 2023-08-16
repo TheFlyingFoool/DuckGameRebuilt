@@ -34,7 +34,14 @@ namespace DuckGame
             editorTooltip = "Shoots a flare at long range that spits fire on impact. Fun at parties!";
             _bio = "For safety purposes, used to call help. What? No it's not a weapon. NO DON'T USE IT LIKE THAT!";
         }
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is FlareGun && pTaped.gun2 is FlameThrower ? new FlareFlameThrower(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void Initialize() => base.Initialize();
 
         public override void Update() => base.Update();

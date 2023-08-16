@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -62,13 +62,13 @@ namespace Microsoft.Xna.Framework.Graphics
 			}
 		}
 
-        /// <summary>
-        /// Gets a <see cref="System.Boolean"/> indicating whether
-        /// <see cref="CurrentDisplayMode"/> has a
-        /// Width:Height ratio corresponding to a widescreen <see cref="DisplayMode"/>.
-        /// Common widescreen modes include 16:9, 16:10 and 2:1.
-        /// </summary>
-        public bool IsWideScreen
+		/// <summary>
+		/// Gets a <see cref="System.Boolean"/> indicating whether
+		/// <see cref="GraphicsAdapter.CurrentDisplayMode"/> has a
+		/// Width:Height ratio corresponding to a widescreen <see cref="DisplayMode"/>.
+		/// Common widescreen modes include 16:9, 16:10 and 2:1.
+		/// </summary>
+		public bool IsWideScreen
 		{
 			get
 			{
