@@ -121,6 +121,7 @@ namespace Microsoft.Xna.Framework
 			SetRelativeMouseMode =		SDL2_FNAPlatform.SetRelativeMouseMode;
 			GetGamePadCapabilities =	SDL2_FNAPlatform.GetGamePadCapabilities;
 			GetGamePadState =		SDL2_FNAPlatform.GetGamePadState;
+			GetGameControllerName = SDL2_FNAPlatform.GetGameControllerName;
 			SetGamePadVibration =		SDL2_FNAPlatform.SetGamePadVibration;
 			SetGamePadTriggerVibration =	SDL2_FNAPlatform.SetGamePadTriggerVibration;
 			GetGamePadGUID =		SDL2_FNAPlatform.GetGamePadGUID;
@@ -314,6 +315,11 @@ namespace Microsoft.Xna.Framework
 			GamePadDeadZone deadZoneMode
 		);
 		public static readonly GetGamePadStateFunc GetGamePadState;
+
+		public delegate string GetGameControllerNameFunc(
+			int index
+		);
+		public static readonly GetGameControllerNameFunc GetGameControllerName;
 
 		public delegate bool SetGamePadVibrationFunc(
 			int index,

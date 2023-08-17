@@ -517,27 +517,14 @@ namespace DuckGame
                          cmd.subcommand != null && consoleCommand2.NextWord(peek: true) == cmd.subcommand.keyword;
                          cmd = cmd.subcommand)
                         consoleCommand2.NextWord();
-                    if (cmd.cheat && !NetworkDebugger.enabled)
+                    if (cmd.cheat && CheckCheats())
                     {
-                        bool flag2 = Steam.user is
+                        _core.lines.Enqueue(new DCLine
                         {
-                            id: 76561197996786074UL
-                            or 76561198885030822UL
-                            or 76561198416200652UL
-                            or 76561198104352795UL
-                            or 76561198114791325UL
-                            or 76561198797606383UL
-                        };
-
-                        if (!flag2 && (Network.isActive || Level.current is ChallengeLevel or ArcadeLevel))
-                        {
-                            _core.lines.Enqueue(new DCLine
-                            {
-                                line = "You can't do that here!",
-                                color = Color.Red
-                            });
-                            return;
-                        }
+                            line = "You can't do that here!",
+                            color = Color.Red
+                        });
+                        return;
                     }
 
                     if (cmd.Run(consoleCommand2.Remainder()))
@@ -1478,6 +1465,7 @@ namespace DuckGame
             }
         }
 
+        /// <returns>True if cheats shan't be used</returns>
         internal static bool CheckCheats()
         {
             // sole online player
