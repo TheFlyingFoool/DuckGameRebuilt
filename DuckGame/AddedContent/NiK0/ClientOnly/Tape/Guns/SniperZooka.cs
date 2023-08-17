@@ -238,7 +238,6 @@ namespace DuckGame
                     Graphics.Draw(snizsnos, v.x + 0.8f, v.y, d - 2);
                 }
                 Graphics.Draw(armSprite, v.x, v.y, d);
-                DevConsole.Log("!");
             }
         }
     }

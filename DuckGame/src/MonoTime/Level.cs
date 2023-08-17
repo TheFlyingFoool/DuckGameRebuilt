@@ -1035,6 +1035,8 @@ namespace DuckGame
 
         public static IEnumerable<T> CheckCircleAll<T>(Vec2 p1, float radius) => current.CollisionCircleAll<T>(p1, radius);
 
+        public static IEnumerable<T> CheckCircleAllOld<T>(Vec2 p1, float radius) => current.CollisionCircleAllOld<T>(p1, radius);
+
         public T CollisionCircle<T>(float p1x, float p1y, float radius, Thing ignore) => CollisionCircle<T>(new Vec2(p1x, p1y), radius, ignore);
 
         public T CollisionCircle<T>(float p1x, float p1y, float radius) => CollisionCircle<T>(new Vec2(p1x, p1y), radius);
@@ -1524,20 +1526,20 @@ namespace DuckGame
             }
             return outList1;//nextCollisionList.AsEnumerable<object>().Cast<T>();
         }
-        //public IEnumerable<T> CollisionCircleAll<T>(Vec2 p1, float radius) old
-        //{
+        public IEnumerable<T> CollisionCircleAllOld<T>(Vec2 p1, float radius) //old //brought it back to fix collision issue with the postitron shooter -NiK0
+        {
 
-        //    List<object> nextCollisionList = Level.GetNextCollisionList();
-        //    System.Type key = typeof(T);
-        //    foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
-        //    {
-        //        if (!dynamicObject.removeFromLevel && Collision.Circle(p1, radius, dynamicObject))
-        //            nextCollisionList.Add(dynamicObject);
-        //    }
-        //    if (_things.HasStaticObjects(key))
-        //        _things.quadTree.CheckCircleAll<T>(p1, radius, nextCollisionList);
-        //    return nextCollisionList.AsEnumerable<object>().Cast<T>();
-        //}
+            List<object> nextCollisionList = Level.GetNextCollisionList();
+            System.Type key = typeof(T);
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
+            {
+                if (!dynamicObject.removeFromLevel && Collision.Circle(p1, radius, dynamicObject))
+                    nextCollisionList.Add(dynamicObject);
+            }
+            if (_things.HasStaticObjects(key))
+                _things.quadTree.CheckCircleAll<T>(p1, radius, nextCollisionList);
+            return nextCollisionList.AsEnumerable<object>().Cast<T>();
+        }
 
         public T CollisionRectFilter<T>(Vec2 p1, Vec2 p2, Predicate<T> filter)
         {

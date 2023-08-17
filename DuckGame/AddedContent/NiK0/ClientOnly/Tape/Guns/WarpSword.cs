@@ -109,7 +109,7 @@ namespace DuckGame
                             if (raised)
                             {
                                 heat += 0.02f;
-                                for (int i = 0; i < 8; i++)
+                                for (int i = 0; i < 12; i++)
                                 { //jank but it'll do
                                     owner.y -= 2;
                                     ReturnItemToWorld(owner);
@@ -117,7 +117,7 @@ namespace DuckGame
                             }
                             else
                             {
-                                for (int i = 0; i < 8; i++)
+                                for (int i = 0; i < 12; i++)
                                 { //jank but it'll do
                                     owner.x += 2 * offDir;
                                     ReturnItemToWorld(owner);

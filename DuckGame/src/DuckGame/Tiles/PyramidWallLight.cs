@@ -35,8 +35,18 @@ namespace DuckGame
             placementLayerOverride = Layer.Blocks;
             hugWalls = WallHug.Left | WallHug.Right;
             editorCycleType = typeof(PyramidBLight);
+            shouldbeinupdateloop = DGRSettings.AmbientParticles;
         }
-
+        public float timer;
+        public override void Update()
+        {
+            timer += 0.02f * DGRSettings.ActualParticleMultiplier;
+            if (timer >= 0.6f)
+            {
+                timer = Rando.Float(0.1f, 0.2f);
+                Level.Add(new Ember(x + Rando.Float(-4, 4), y - Rando.Float(3.5f, 6)));
+            }
+        }
         public override void Draw()
         {
             graphic.flipH = flipHorizontal;

@@ -146,7 +146,7 @@ namespace DuckGame
             }
         }
 
-        public override Holdable BecomeTapedMonster(TapedGun pTaped) => pTaped.gun1 is Sword && pTaped.gun2 is Sword ? new TapedSword(x, y) : pTaped.gun1 is Sword && pTaped.gun2 is Warpgun ? new WarpSword(x, y) : null;
+        public override Holdable BecomeTapedMonster(TapedGun pTaped) => pTaped.gun1 is Sword && pTaped.gun2 is Sword ? new TapedSword(x, y) : Editor.clientonlycontent ? pTaped.gun1 is Sword && pTaped.gun2 is Warpgun ? new WarpSword(x, y) : null : null;
 
         public override void CheckIfHoldObstructed()
         {

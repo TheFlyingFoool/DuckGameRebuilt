@@ -381,6 +381,11 @@ namespace DuckGame
                             materialThing.OnSoftImpact(owner as MaterialThing, ImpactedFrom.Top);
                             if (owner != null)
                                 materialThing.Touch(owner as MaterialThing);
+
+                            //if the owner impacts with saws then they'll die and drop their currently held gun then making null OnSoftImpacts
+                            //which serve no purpose and will more likely crash the game, this is vanilla issue which im fixing since afaik
+                            //null OnSoftImpacts are just useless and will probably crash -NiK0
+                            if (owner == null) break; 
                         }
                     }
                 }

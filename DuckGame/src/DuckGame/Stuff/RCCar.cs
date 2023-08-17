@@ -1,13 +1,5 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.RCCar
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace DuckGame
 {
@@ -156,7 +148,19 @@ namespace DuckGame
             if (bullet.isLocal) Destroy(new DTShot(bullet));
             return false;
         }
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                if (pTaped.gun1 is RCCar rc1 && pTaped.gun2 is RCCar rc2)
+                {
+                    rc1._destroyed = true;
+                    rc2._destroyed = true;
+                    return new SuperRCCar(x, y);
+                }
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void Update()
         {
             if (_controller == null && !(Level.current is Editor) && isServerForObject)
@@ -224,8 +228,9 @@ namespace DuckGame
             if (Editor.clientonlycontent && tapedIsGun1) offDir *= -1;
             if (owner == null) _sprite.flipH = offDir < 0;
             base.Draw();
-            Graphics.Draw(_wheel, x - 7f, y + 9f);
-            Graphics.Draw(_wheel, x + 7f, y + 9f);
+            _wheel.scale = scale;
+            Graphics.Draw(_wheel, x - 7f * xscale, y + 9f * yscale);
+            Graphics.Draw(_wheel, x + 7f * xscale, y + 9f * yscale);
             if (Editor.clientonlycontent && tapedIsGun1) offDir *= -1;
         }
     }

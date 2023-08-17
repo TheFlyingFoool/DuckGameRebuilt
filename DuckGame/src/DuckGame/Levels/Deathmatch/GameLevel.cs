@@ -37,7 +37,7 @@ namespace DuckGame
         public bool Raining;
         public bool heavyRain;
         public float rainDarken;
-        public float rainwind;
+        public static float rainwind;
         public float rainwindto;
         public bool Snowing;
         public void SkipMatch()
@@ -52,6 +52,7 @@ namespace DuckGame
         public GameLevel(string lev, int seedVal = 0, bool validityTest = false, bool editorTestMode = false)
           : base(lev)
         {
+            rainwind = 0;
             levelInputString = lev;
             _followCam = new FollowCam
             {
@@ -210,7 +211,7 @@ namespace DuckGame
                         darkenRainer = 0.8f;
                         rainwind = Rando.Float(-2, 2);
                         lightningRNG = Rando.Int(1200, 2400);
-                        if (Rando.Int(2) == 0)
+                        if (Rando.Int(2) == 0 || true)
                         {
                             darkenRainer = 0.8f;
                             rainSound.volume = 0.5f;

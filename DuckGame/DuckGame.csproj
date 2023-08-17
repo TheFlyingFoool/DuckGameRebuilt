@@ -296,6 +296,7 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\OctoLaser.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\QuadPhaser.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\SniperZooka.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\SuperRCCar.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\WarpSword.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\LaserDiskParticle.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\MaterialEnergyChainsaw.cs" />
@@ -337,6 +338,7 @@
     <Compile Include="AddedContent\NiK0\NMClientOnlyContent.cs" />
     <Compile Include="AddedContent\NiK0\RainbowConstant.cs" />
     <Compile Include="AddedContent\NiK0\RainParticel.cs" />
+    <Compile Include="AddedContent\NiK0\TreeLeaf.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\ClientOnlyAttribute.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\CodeButton.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\ContextButton.cs" />

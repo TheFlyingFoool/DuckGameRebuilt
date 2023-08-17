@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.TreeTopDead
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Details|Terrain")]
     [BaggedProperty("isInDemo", true)]
@@ -28,9 +21,18 @@ namespace DuckGame
             _collisionOffset = new Vec2(-8f, -8f);
             depth = (Depth)0.9f;
             hugWalls = WallHug.Left | WallHug.Right | WallHug.Ceiling | WallHug.Floor;
-            shouldbeinupdateloop = false;
+            shouldbeinupdateloop = DGRSettings.AmbientParticles;
         }
-
+        public float timer;
+        public override void Update()
+        {
+            timer += 0.01f * DGRSettings.ActualParticleMultiplier;
+            if (timer >= 1)
+            {
+                timer = Rando.Float(0.1f, 0.2f);
+                Level.Add(TreeLeaf.New(x + Rando.Float(-16, 16), y + Rando.Float(-16, 16), true));
+            }
+        }
         public override void Draw()
         {
             graphic.flipH = offDir <= 0;
