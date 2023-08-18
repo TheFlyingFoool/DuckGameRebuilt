@@ -54,12 +54,9 @@ namespace DuckGame
             set
             {
                 _volume = value;
+                if (_vgmPlayer != null) _vgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
                 if (_musicPlayer == null)
                     return;
-                if (_vgmPlayer != null)
-                {
-                    _vgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
-                }
                 _musicPlayer.Volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
             }
         }
@@ -217,6 +214,7 @@ namespace DuckGame
 
         public static bool Load(string music, bool looping = true, float crossFadeTime = 0f)
         {
+            //TODO make this support .vgz in the future when it becomes relevant -NiK0
             if (!DGRSettings.LoaderMusic) return false;
             _currentSong = music;
             _musicPlayer.Stop();
@@ -262,6 +260,7 @@ namespace DuckGame
         public static void PlayLoaded()
         {
             if (DGRSettings.LoaderMusic) _musicPlayer.Play();
+            if (_vgmPlayer != null) _vgmPlayer.Play();
         }
 
         public static void CancelLooping()
@@ -292,16 +291,19 @@ namespace DuckGame
         public static void Pause()
         {
             if (DGRSettings.LoaderMusic) _musicPlayer.Pause();
+            if (_vgmPlayer != null) _vgmPlayer.Pause();
         }
 
         public static void Resume()
         {
             if (DGRSettings.LoaderMusic) _musicPlayer.Resume();
+            if (_vgmPlayer != null) _vgmPlayer.Resume();
         }
 
         public static void Stop()
         {
             if (!DGRSettings.LoaderMusic) return;
+            if (_vgmPlayer != null) _vgmPlayer.Stop();
             _musicPlayer.Stop();
             _currentSong = "";
         }
