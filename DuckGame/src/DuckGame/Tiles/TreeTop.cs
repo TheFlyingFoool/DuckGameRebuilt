@@ -30,7 +30,7 @@ namespace DuckGame
         public override void Update()
         {
             timer += 0.01f * DGRSettings.ActualParticleMultiplier;
-            if (timer >= 1)
+            if (timer >= 2)
             {
                 timer = Rando.Float(0.3f);
                 Level.Add(TreeLeaf.New(x + Rando.Float(-16, 16), y + Rando.Float(-16, 16), false));

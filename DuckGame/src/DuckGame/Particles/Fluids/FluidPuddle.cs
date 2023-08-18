@@ -226,9 +226,31 @@ namespace DuckGame
                 physicsObject.DoFloat();
             }
         }
-
+        public float timer;
         public override void Update()
         {
+            //1 per frame if 1000 wide
+            if (DGRSettings.AmbientParticles)
+            {
+                if (data.heat > 0)
+                {
+                    timer += 0.001f * collisionSize.x * DGRSettings.ActualParticleMultiplier * data.heat;
+                    while (timer >= 1)
+                    {
+                        Level.Add(new Ember(Rando.Float(left, right), top));
+                        timer--;
+                    }
+                }
+                else if (onFire)
+                {
+                    timer += 0.0005f * collisionSize.x * DGRSettings.ActualParticleMultiplier;
+                    while (timer >= 1)
+                    {
+                        Level.Add(new Ember(Rando.Float(left, right), top));
+                        timer--;
+                    }
+                }
+            }
             ++_framesSinceFeed;
             fluidWave += 0.1f;
             if (data.amount < 0.0001f)
