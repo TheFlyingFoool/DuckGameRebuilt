@@ -67,7 +67,7 @@ namespace DuckGame
         {
             if (Editor.clientonlycontent && receivingSignal)
             {
-                DevConsole.Log(velocity.ToString());
+                //DevConsole.Log(velocity.ToString());
                 pTaped.velocity = velocity;
 
                 if (Math.Abs(hSpeed) > 0.3f)

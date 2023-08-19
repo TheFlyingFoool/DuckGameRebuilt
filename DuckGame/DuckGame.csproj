@@ -428,6 +428,7 @@
     <Compile Include="src\MonoTime\LUI\LUIStringEntry.cs" />
     <Compile Include="src\MonoTime\LUI\LUIText.cs" />
     <Compile Include="src\MonoTime\UI\UIDGRDescribe.cs" />
+    <Compile Include="src\MonoTime\UI\UISideButton.cs" />
     <Compile Include="src\WindowsPlatformStartup.cs" />
     <Compile Include="src\MonoTime\Console\ServiceContainer.cs" />
     <Compile Include="src\OnOutputDebugStringHandler.cs" />

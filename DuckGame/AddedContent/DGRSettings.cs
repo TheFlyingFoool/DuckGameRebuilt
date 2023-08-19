@@ -12,19 +12,53 @@ namespace DuckGame
         [AutoConfigField]
         public static List<byte> room3 = new List<byte>();*/
 
-        public static BitBuffer LastMatchSettings = new BitBuffer();
+        public static int mMatch = -1;
+        public static BitBuffer MatchsettingsPreset1 = new BitBuffer();
         [AutoConfigField]
-        public static byte[] LMatchSetSave //scuffed i know, fuck you -NiK0
+        public static byte[] MatchSetSave1 //scuffed i know, fuck you -NiK0
         {
             get
             {
-                return LastMatchSettings.buffer;
+                return MatchsettingsPreset1.buffer;
             }
             set
             {
-                LastMatchSettings = new BitBuffer(value);
+                MatchsettingsPreset1 = new BitBuffer(value);
             }
         }
+        [AutoConfigField]
+        public static List<string> bMatchSetSave1 = new List<string>();
+        public static BitBuffer MatchsettingsPreset2 = new BitBuffer();
+        [AutoConfigField]
+        public static byte[] MatchSetSave2 //scuffed i know, fuck you -NiK0
+        {
+            get
+            {
+                return MatchsettingsPreset2.buffer;
+            }
+            set
+            {
+                MatchsettingsPreset2 = new BitBuffer(value);
+            }
+        }
+        [AutoConfigField]
+        public static List<string> bMatchSetSave2 = new List<string>();
+        public static BitBuffer MatchsettingsPreset3 = new BitBuffer();
+        [AutoConfigField]
+        public static byte[] MatchSetSave3 //scuffed i know, fuck you -NiK0
+        {
+            get
+            {
+                return MatchsettingsPreset3.buffer;
+            }
+            set
+            {
+                MatchsettingsPreset3 = new BitBuffer(value);
+            }
+        }
+        [AutoConfigField]
+        public static List<string> bMatchSetSave3 = new List<string>();
+
 
         [AutoConfigField]
         public static List<string> favoriteHats = new List<string>();

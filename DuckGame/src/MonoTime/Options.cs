@@ -459,10 +459,6 @@ namespace DuckGame
             {
                 dgrDescription = "Allows for teams with custom hats that have the same name (HOST ONLY)"
             });
-            menu.Add(new UIMenuItemToggle("Keep Match Settings", field: new FieldBinding(dGRSettings, "RememberMatchSettings"))
-            {
-                dgrDescription = "When starting an online game, match settings will automatically be set to the last match settings you had"
-            });
             menu.Add(new UIMenuItem("Reload Hats", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(ReloadHats)))
             {
                 dgrDescription = "Reloads all hats (OFFLINE ONLY, MIGHT REMOVE MODDED HATS, F6 QUICK RELOAD, F5 RELOADS CURRENTLY WORN ONE)"

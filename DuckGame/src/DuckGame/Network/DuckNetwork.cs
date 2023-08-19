@@ -553,7 +553,7 @@ namespace DuckGame
             SFX.Play("pause", 0.6f);
             return _core._restartModsUIGroup;
         }
-
+        public static UISideButton box;
         private static UIMenu CreateResolutionRestartWindow(UIMenu openOnClose)
         {
             UIMenu resolutionRestartWindow = new UIMenu("@LWING@GRAPHICS CHANGE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 230f, conString: "@CANCEL@BACK");
@@ -987,8 +987,24 @@ namespace DuckGame
                 _core._matchModifierMenu.SetBackFunction(new UIMenuActionOpenMenu(_core._matchModifierMenu, _core._matchSettingMenu));
                 _core._matchModifierMenu.Close();
                 _core._matchSettingMenu.AddMatchSetting(TeamSelect2.GetOnlineSetting("teams"), false);
+                //_core._matchSettingMenu.Add(new UISideButton(66, -50, 50, 0, "@SHOOT@"));
+                //_core._matchSettingMenu.Add(new UISideButton(66, -50, 50, 0, "@SHOOT@"));
+                int z = 0;
                 foreach (MatchSetting matchSetting in TeamSelect2.matchSettings) // removed ParentalControls.AreParentalControlsActive bs
                 {
+                    z++;
+                    if (z == 2)
+                    {
+                        _core._matchSettingMenu.Add(new UISideButton(66, -50, 50, 0, "P1@GRAB@"));
+                    }
+                    if (z == 4)
+                    {
+                        _core._matchSettingMenu.Add(new UISideButton(66, -50, 50, 0, "P2@SHOOT@"));
+                    }
+                    if (z == 7)
+                    {
+                        _core._matchSettingMenu.Add(new UISideButton(66, -50, 50, 0, "P3@STRAFE@"));
+                    }
                     if (!(matchSetting.id == "workshopmaps") || Network.available)
                     {
                         if (matchSetting.id != "partymode")
