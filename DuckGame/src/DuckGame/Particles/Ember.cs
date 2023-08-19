@@ -19,6 +19,10 @@
 
         public override void Update()
         {
+            if (GameLevel.rainwind != 0)
+            {
+                hSpeed = Lerp.Float(hSpeed, GameLevel.rainwind * 0.5f, 0.04f);
+            }
             _wave.Update();
             position.x += _wave.value * 0.2f;
             position.x += hSpeed;

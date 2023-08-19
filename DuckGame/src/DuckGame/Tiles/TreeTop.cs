@@ -25,6 +25,7 @@ namespace DuckGame
             depth = (Depth)0.9f;
             hugWalls = WallHug.Left | WallHug.Right | WallHug.Ceiling | WallHug.Floor;
             shouldbeinupdateloop = DGRSettings.AmbientParticles;
+            timer = Rando.Float(2);
         }
         public float timer;
         public override void Update()

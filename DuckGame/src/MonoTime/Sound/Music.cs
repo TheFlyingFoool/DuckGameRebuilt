@@ -8,6 +8,7 @@
 using Microsoft.Xna.Framework.Audio;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -187,9 +188,22 @@ namespace DuckGame
 
         public static void Play(string music, bool looping = true, float crossFadeTime = 0f)
         {
-            //DevConsole.Log("trying to play: " + music);
-            //DevConsole.Log("should loop " + looping);
-            if (File.Exists("./Content/Audio/Music/" + music + ".vgz"))
+            #if DEBUG
+            DevConsole.Log("trying to play: " + music);
+            DevConsole.Log("should loop " + looping);
+            DevConsole.Log("full vgm music filepath " + "./Content/Audio/Music/InGame/" + music + ".vgz");
+            #endif
+            //not great code also welcome to my hell for .vgz music loading -NiK0
+            if (File.Exists("./Content/Audio/Music/InGame/" + music + ".vgz"))
+            {
+                _vgmPlayer = new VGMSong("./Content/Audio/Music/InGame/" + music + ".vgz");
+                _vgmPlayer.Play();
+                _vgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
+                _vgmPlayer.looped = looping;
+                //DevConsole.Log("is looping " + _vgmPlayer.looped);
+                if (_musicPlayer != null) _musicPlayer.Stop();
+            }
+            else if (File.Exists("./Content/Audio/Music/" + music + ".vgz"))
             {
                 _vgmPlayer = new VGMSong("./Content/Audio/Music/" + music + ".vgz");
                 _vgmPlayer.Play();
