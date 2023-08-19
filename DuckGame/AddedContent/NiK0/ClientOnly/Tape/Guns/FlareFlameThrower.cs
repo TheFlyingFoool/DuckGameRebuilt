@@ -79,7 +79,7 @@
                 ammo -= 2;
                 if (ammo % 20 == 0)
                 {
-                    SFX.Play("netGunFire", 0.5f, Rando.Float(0.2f) - 0.4f);
+                    SFX.PlaySynchronized("netGunFire", 0.5f, Rando.Float(0.2f) - 0.4f);
                     if (duck != null)
                         RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(_fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));
                     ApplyKick();
@@ -113,8 +113,9 @@
         {
             switch (pThing)
             {
-                case FlareGun _:
-                case FlameThrower _:
+                case FlareGun:
+                case FlameThrower:
+                case FlareFlameThrower:
                     return false;
                 default:
                     return true;

@@ -1,15 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Chainsaw
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
-using System.Collections.Generic;
-using System.Runtime.Versioning;
-using System.Windows.Documents;
-using static DuckGame.CMD;
+﻿using System;
 
 namespace DuckGame
 {
@@ -19,6 +8,7 @@ namespace DuckGame
         public SpriteMap sprite;
         public SpriteMap blade;
 
+        public StateBinding _holdBinding = new StateBinding("_hold");
         private float _hold;
         public override float angle
         {
@@ -27,6 +17,8 @@ namespace DuckGame
         }
         public EnergyChainsaw(float xpos, float ypos) : base(xpos, ypos)
         {
+            tapeable = false;
+
             ammo = 10;
             _ammoType = new ATG18();
 
@@ -78,10 +70,13 @@ namespace DuckGame
 
                     if (block != null)
                     {
-                        Vec2 reVec = Maths.AngleToVec(Maths.PointDirectionRad(owner.position, block.position)) * new Vec2(-1, 1);
-                        reVec.y -= 0.5f;
-                        reVec.x *= 1.3f;
-                        owner.velocity = reVec * 10;
+                        if (isServerForObject)
+                        {
+                            Vec2 reVec = Maths.AngleToVec(Maths.PointDirectionRad(owner.position, block.position)) * new Vec2(-1, 1);
+                            reVec.y -= 0.5f;
+                            reVec.x *= 1.3f;
+                            owner.velocity = reVec * 10;
+                        }
                         SFX.Play("scimisawClash");
                         glowInc = 2.5f;
 
@@ -94,80 +89,83 @@ namespace DuckGame
                             Level.Add(spark);
                         }
                     }
-
-                    bool playsurge = false;
-                    foreach (MaterialThing materialThing in Level.CheckLineAll<MaterialThing>(Offset(new Vec2(7, 0)), Offset(new Vec2(27, 0))))
+                    if (isServerForObject)
                     {
-                        if (materialThing == owner) continue;
-                        Fondle(materialThing);
-                        if (owner.velocity.length > 0 && materialThing is PhysicsObject && materialThing.owner == null)
-                        {
-                            materialThing.velocity += owner.velocity;
-                            owner.hSpeed *= 0.8f;
-                            if (owner.hSpeed < 0) owner.hSpeed *= 0.8f;
 
-
-                            playsurge = true;
-                        }
-                        if (materialThing is EnergyScimitar scimi && scimi.velocity.length > 6)
+                        bool playsurge = false;
+                        foreach (MaterialThing materialThing in Level.CheckLineAll<MaterialThing>(Offset(new Vec2(7, 0)), Offset(new Vec2(27, 0))))
                         {
-                            scimi.StartFlying(Maths.PointDirection(Vec2.Zero, scimi.velocity), true);
-                            scimi.TravelThroughAir(1);
-                        }
-                        materialThing.Destroy(new DTIncinerate(this));
-                    }
-                    if (playsurge && surgeDel <= 0)
-                    {
-                        surgeDel = 10;
-                        SFX.Play("scimiSurge", 1, Rando.Float(0.2f));
-                    }
-
-                    if (duck != null)
-                    {
-                                duck._disarmDisable = 5;
-                        if (duck.crouch)
-                        {
-                            _hold = Lerp.FloatSmooth(_hold, 0, 0.3f);
-                            Thing best = null;
-                            foreach (IPlatform ipl in Level.CheckLineAll<IPlatform>(Offset(new Vec2(7, 4)), Offset(new Vec2(23, 4))))
+                            if (materialThing == owner) continue;
+                            Fondle(materialThing);
+                            if (owner.velocity.length > 0 && materialThing is PhysicsObject && materialThing.owner == null)
                             {
-                                best = (MaterialThing)ipl;
-                                if (ipl is Block b)
+                                materialThing.velocity += owner.velocity;
+                                owner.hSpeed *= 0.8f;
+                                if (owner.hSpeed < 0) owner.hSpeed *= 0.8f;
+
+
+                                playsurge = true;
+                            }
+                            if (materialThing is EnergyScimitar scimi && scimi.velocity.length > 6)
+                            {
+                                scimi.StartFlying(Maths.PointDirection(Vec2.Zero, scimi.velocity), true);
+                                scimi.TravelThroughAir(1);
+                            }
+                            materialThing.Destroy(new DTIncinerate(this));
+                        }
+                        if (playsurge && surgeDel <= 0)
+                        {
+                            surgeDel = 10;
+                            SFX.Play("scimiSurge", 1, Rando.Float(0.2f));
+                        }
+
+                        if (duck != null)
+                        {
+                            duck._disarmDisable = 5;
+                            if (duck.crouch)
+                            {
+                                _hold = Lerp.FloatSmooth(_hold, 0, 0.3f);
+                                Thing best = null;
+                                foreach (IPlatform ipl in Level.CheckLineAll<IPlatform>(Offset(new Vec2(7, 4)), Offset(new Vec2(23, 4))))
                                 {
-                                    best = b;
-                                    break;
+                                    best = (MaterialThing)ipl;
+                                    if (ipl is Block b)
+                                    {
+                                        best = b;
+                                        break;
+                                    }
+                                }
+
+                                if (best != null && duck.grounded)
+                                {
+                                    float hs;
+                                    if (best is Block)
+                                    {
+                                        hs = 10;
+                                    }
+                                    else hs = 5;
+
+                                    Vec2 vec2 = position + barrelVector * 5f;
+                                    for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
+                                    {
+                                        Spark spark = Spark.New(vec2.x, vec2.y, new Vec2(offDir * Rando.Float(0f, 3f), Rando.Float(0.5f, 1.5f)));
+                                        spark._color = bladeColor;
+                                        spark._width = 1f;
+                                        Level.Add(spark);
+                                    }
+
+                                    duck.hSpeed = hs * offDir;
                                 }
                             }
-
-                            if (best != null && duck.grounded)
+                            else
                             {
-                                float hs;
-                                if (best is Block)
-                                {
-                                    hs = 10;
-                                }
-                                else hs = 5;
-
-                                Vec2 vec2 = position + barrelVector * 5f;
-                                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
-                                {
-                                    Spark spark = Spark.New(vec2.x, vec2.y, new Vec2(offDir * Rando.Float(0f, 3f), Rando.Float(0.5f, 1.5f)));
-                                    spark._color = bladeColor;
-                                    spark._width = 1f;
-                                    Level.Add(spark);
-                                }
-
-                                duck.hSpeed = hs * offDir;
+                                _hold = Lerp.FloatSmooth(_hold, -0.6f, 0.1f) + (float)Math.Sin(time * 4) / 30;
                             }
                         }
                         else
                         {
                             _hold = Lerp.FloatSmooth(_hold, -0.6f, 0.1f) + (float)Math.Sin(time * 4) / 30;
                         }
-                    }
-                    else
-                    {
-                        _hold = Lerp.FloatSmooth(_hold, -0.6f, 0.1f) + (float)Math.Sin(time * 4) / 30;
                     }
 
 

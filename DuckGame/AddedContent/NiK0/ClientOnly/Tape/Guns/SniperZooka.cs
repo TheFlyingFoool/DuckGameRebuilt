@@ -37,7 +37,20 @@ namespace DuckGame
 
         public StateBinding _loadBinding = new StateBinding("load");
         public StateBinding _multBinding = new StateBinding("mult");
-        public StateBinding _rotAngleBinding = new StateBinding("rotangle");
+        public StateBinding _rotAngleBinding = new StateBinding("rotAngle");
+        public override bool CanTapeTo(Thing pThing)
+        {
+            switch (pThing)
+            {
+                case Sniper:
+                case Bazooka:
+                case SniperZooka:
+                case TampingWeapon:
+                    return false;
+                default:
+                    return true;
+            }
+        }
         public override void OnPressAction()
         {
             if (loaded)

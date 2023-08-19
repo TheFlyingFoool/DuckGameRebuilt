@@ -1,7 +1,5 @@
-﻿using Microsoft.Xna.Framework.Design;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace DuckGame
 {
@@ -23,6 +21,7 @@ namespace DuckGame
             physicsMaterial = PhysicsMaterial.Metal;
 
             _holdOffset = new Vec2(-6, 4.5f);
+            tapeable = false;
         }
 
         private bool _drawing;
@@ -82,7 +81,7 @@ namespace DuckGame
                     charges = 2;
                 }
             }
-
+            else if (drawnPowerFrom == null) mult = Rando.Float(1, 1.2f);
             if (duck != null)
             {
                 center = new Vec2(8.5f, 37f);

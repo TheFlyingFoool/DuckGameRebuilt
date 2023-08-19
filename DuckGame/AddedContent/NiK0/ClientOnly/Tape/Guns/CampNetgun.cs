@@ -19,6 +19,18 @@ namespace DuckGame
         }
         public Sprite campnet;
         public List<Vec2> timld = new List<Vec2>();
+        public override bool CanTapeTo(Thing pThing)
+        {
+            switch (pThing)
+            {
+                case NetGun:
+                case CampNetgun:
+                case CampingRifle:
+                    return false;
+                default:
+                    return true;
+            }
+        }
         public override void Draw()
         {
             float f = 0;
@@ -48,17 +60,6 @@ namespace DuckGame
         {
             
             base.Update();
-        }
-        public override bool CanTapeTo(Thing pThing)
-        {
-            switch (pThing)
-            {
-                case NetGun _:
-                case CampingRifle _:
-                    return false;
-                default:
-                    return true;
-            }
         }
         public override void OnPressAction()
         {

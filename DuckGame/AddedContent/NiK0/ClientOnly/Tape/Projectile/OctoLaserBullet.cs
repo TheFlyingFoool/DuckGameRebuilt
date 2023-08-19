@@ -3,6 +3,7 @@
     [ClientOnly]
     public class OctoLaserBullet : QuadLaserBullet
     {
+        public StateBinding _quadScaleBinding = new StateBinding("quadScale");
         public OctoLaserBullet(float xpos, float ypos, Vec2 travel, float qscal = 2)
           : base(xpos, ypos, travel)
         {

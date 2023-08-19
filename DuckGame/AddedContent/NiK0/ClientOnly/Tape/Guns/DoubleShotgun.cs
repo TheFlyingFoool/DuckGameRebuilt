@@ -35,7 +35,17 @@ namespace DuckGame
             };
             _holdOffset = new Vec2(1.5f, -1.5f);
         }
-
+        public override bool CanTapeTo(Thing pThing)
+        {
+            switch (pThing)
+            {
+                case Shotgun:
+                case DoubleShotgun:
+                    return false;
+                default:
+                    return true;
+            }
+        }
         public override void Update()
         {
             base.Update();

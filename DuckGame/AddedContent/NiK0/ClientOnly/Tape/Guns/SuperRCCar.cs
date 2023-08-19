@@ -67,7 +67,7 @@ namespace DuckGame
             }
             Level.Remove(this);
 
-            ATMissile.DestroyRadius(position, 52, resp); //gotta have a bullet here so dg doesn't crash because reasons
+            ATMissile.DestroyRadius(position, 96, resp); //gotta have a bullet here so dg doesn't crash because reasons
             if (Level.current.camera is FollowCam camera) camera.Remove(this);
             if (Recorder.currentRecording != null) Recorder.currentRecording.LogBonus();
             return true;

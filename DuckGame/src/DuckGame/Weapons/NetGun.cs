@@ -52,14 +52,14 @@ namespace DuckGame
             editorTooltip = "Fires entangling nets that hold Ducks in place *evil moustache twirl*";
             isFatal = false;
         }
-        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        /*public override Holdable BecomeTapedMonster(TapedGun pTaped)
         {
             if (Editor.clientonlycontent)
             {
                 return pTaped.gun1 is NetGun && pTaped.gun2 is CampingRifle ? new CampNetgun(x, y) : null;
             }
             return base.BecomeTapedMonster(pTaped);
-        }
+        }*/
         public override void Initialize() => base.Initialize();
 
         public override void Update()
