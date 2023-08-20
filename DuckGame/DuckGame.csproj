@@ -223,6 +223,14 @@
     <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\AdvancedConfigAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ConfigClasses\NameDisplayConfig.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\IAdvancedConfig.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\FireSerializer.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\FireSerializerModuleAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\IFireSerializerModule.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\ColorSerializerModule.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\ConsoleBindSerializerModule.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\DateTimeSerializeModule.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\StringSerializerModule.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\Vec2SerializerModule.cs" />
     <Compile Include="AddedContent\Firebreak\Internet.cs" />
     <Compile Include="AddedContent\Firebreak\LockMovementQueue.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\IAmUi.cs" />
@@ -251,14 +259,6 @@
     <Compile Include="AddedContent\Extensions.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AutoConfigFieldAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AutoConfigHandler.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\FireSerializer.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\FireSerializerModuleAttribute.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\IFireSerializerModule.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\SerializerModules\ColorSerializerModule.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\SerializerModules\ConsoleBindSerializerModule.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\SerializerModules\DateTimeSerializeModule.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\SerializerModules\StringSerializerModule.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\SerializerModules\Vec2SerializerModule.cs" />
     <Compile Include="AddedContent\Firebreak\Content\SinkingBlock.cs" />
     <Compile Include="AddedContent\Firebreak\Cursor\CursorHandler.cs" />
     <Compile Include="AddedContent\Firebreak\Cursor\GameCursor.cs" />
@@ -2136,7 +2136,6 @@
       <Name>Steam</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">
     <Exec Command="git describe  --always --dirty --abbrev=40 &gt; &quot;$(ProjectDir)version.txt&quot;" />
