@@ -14,7 +14,7 @@ namespace DuckGame
 
         public static int mMatch = -1;
         public static BitBuffer MatchsettingsPreset1 = new BitBuffer();
-        [AutoConfigField(External = "matchSetSave")]
+        [AutoConfigField]
         public static byte[] MatchSetSave1 //scuffed i know, fuck you -NiK0
         {
             get
@@ -26,10 +26,10 @@ namespace DuckGame
                 MatchsettingsPreset1 = new BitBuffer(value);
             }
         }
-        [AutoConfigField(External = "matchSetSave")]
+        [AutoConfigField]
         public static List<string> bMatchSetSave1 = new List<string>();
         public static BitBuffer MatchsettingsPreset2 = new BitBuffer();
-        [AutoConfigField(External = "matchSetSave")]
+        [AutoConfigField]
         public static byte[] MatchSetSave2 //scuffed i know, fuck you -NiK0
         {
             get
@@ -41,10 +41,10 @@ namespace DuckGame
                 MatchsettingsPreset2 = new BitBuffer(value);
             }
         }
-        [AutoConfigField(External = "matchSetSave")]
+        [AutoConfigField]
         public static List<string> bMatchSetSave2 = new List<string>();
         public static BitBuffer MatchsettingsPreset3 = new BitBuffer();
-        [AutoConfigField(External = "matchSetSave")]
+        [AutoConfigField]
         public static byte[] MatchSetSave3 //scuffed i know, fuck you -NiK0
         {
             get
@@ -56,7 +56,7 @@ namespace DuckGame
                 MatchsettingsPreset3 = new BitBuffer(value);
             }
         }
-        [AutoConfigField(External = "matchSetSave")]
+        [AutoConfigField]
         public static List<string> bMatchSetSave3 = new List<string>();
 
 
