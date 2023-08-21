@@ -533,9 +533,36 @@ namespace DuckGame
                         MonoMain.noConnectionTimeout = true;
                         break;
                     case "-command":
-                        ++index;
-                        if (index < args.Length)
-                            DevConsole.startupCommands.Add(args[index]);
+                    case "+command":
+                        if (index + 1 < args.Length)
+                        {
+                            string nextArg = args[++index];
+                            bool someMotherfuckerMakingMyLifeHarderWithUnnecessaryQuotesAddingMoreConditionsToCheck = nextArg.EndsWith("'");
+                            if (!nextArg.StartsWith("'") || someMotherfuckerMakingMyLifeHarderWithUnnecessaryQuotesAddingMoreConditionsToCheck)
+                            {
+                                if (someMotherfuckerMakingMyLifeHarderWithUnnecessaryQuotesAddingMoreConditionsToCheck)
+                                    nextArg = nextArg.Substring(1, nextArg.Length - 2);
+                                
+                                DevConsole.startupCommands.Add(nextArg);
+                            }
+                            else
+                            {
+                                List<string> totalCommandSegments = new() {nextArg.Substring(1)};
+
+                                while (index + 1 < args.Length)
+                                {
+                                    if (!args[++index].EndsWith("'"))
+                                        totalCommandSegments.Add(args[index]);
+                                    else
+                                    {
+                                        totalCommandSegments.Add(args[index].Substring(0, args[index].Length - 1));
+                                        break;
+                                    }
+                                }
+
+                                DevConsole.startupCommands.Add(string.Join(" ", totalCommandSegments));
+                            }
+                        }
                         break;
                     case "-noRPC":
                         DiscordRichPresence.noRPC = true;
