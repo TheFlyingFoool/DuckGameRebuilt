@@ -26,15 +26,15 @@ float4 PixelShaderFunction(float2 uv: TEXCOORD0, float4 c: COLOR0) : COLOR0
 	
 		float2 fUv = float2((gameX - gL) / (gR - gL), (gameY - gT) / (gB - gT));
 	
-		float center = (gT + gB) / 2.0; // Calculate the center of the range
-		float distanceFromCenter = abs(gameY - center); // Calculate the distance from the center
-		float maxDistance = (gB - gT) / 2.0; // Calculate the maximum distance from the center
+		float center = (gT + gB) / 2.0; 
+		float distanceFromCenter = abs(gameY - center); 
+		float maxDistance = (gB - gT) / 2.0;
 
 		float xMultiplier = saturate(1.0 - smoothstep(0.0, 1.0, distanceFromCenter / maxDistance));
 		
-		center = (gL + gR) / 2.0; // Calculate the center of the range
-		distanceFromCenter = abs(gameX - center); // Calculate the distance from the center
-		maxDistance = (gR - gL) / 2.0; // Calculate the maximum distance from the center
+		center = (gL + gR) / 2.0; 
+		distanceFromCenter = abs(gameX - center); 
+		maxDistance = (gR - gL) / 2.0;
 
 		float yMultiplier = saturate(1.0 - smoothstep(0.0, 1.0, distanceFromCenter / maxDistance));
 		
