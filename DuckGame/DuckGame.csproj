@@ -334,6 +334,7 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpQuadLaserBullet.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpSniper.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpTeleporter.cs" />
+    <Compile Include="AddedContent\NiK0\MaterialLavaWobble.cs" />
     <Compile Include="AddedContent\NiK0\MathParser.cs" />
     <Compile Include="AddedContent\NiK0\NMClientOnlyContent.cs" />
     <Compile Include="AddedContent\NiK0\RainbowConstant.cs" />

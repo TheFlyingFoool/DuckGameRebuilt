@@ -227,11 +227,16 @@ namespace DuckGame
             }
         }
         public float timer;
+        public MaterialLavaWobble mt;
         public override void Update()
         {
             //1 per frame if 1000 wide
             if (DGRSettings.AmbientParticles)
             {
+                if (mt == null)
+                {
+                    mt = new MaterialLavaWobble(this);
+                }
                 if (data.heat > 0)
                 {
                     timer += 0.001f * collisionSize.x * DGRSettings.ActualParticleMultiplier * data.heat;

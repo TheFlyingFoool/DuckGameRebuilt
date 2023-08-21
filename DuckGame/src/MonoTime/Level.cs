@@ -799,9 +799,37 @@ namespace DuckGame
         public virtual void StartDrawing()
         {
         }
-
+        public RenderTarget2D rd2;
         public virtual void DoDraw()
         {
+            bool currentlyShadering = false;
+
+            List<FluidPuddle> lavaPuddles = new List<FluidPuddle>();
+            if (DGRSettings.AmbientParticles) //so theres kind of a mess here, but this is for wobbly shader lava effect :)
+            {
+                IEnumerable<FluidPuddle> flps = things.OfType<FluidPuddle>();
+
+                foreach (FluidPuddle fl in flps)
+                {
+                    if ((fl.data.heat > 0 || fl.onFire) && !fl.beinggraphicculled)
+                    {
+                        lavaPuddles.Add(fl);
+                    }
+                }
+
+                if (Graphics.currentRenderTarget == null && lavaPuddles.Count > 0)
+                {
+                    if (rd2 != null) rd2.Dispose();
+                    int width = Graphics.viewport.Width;
+                    int height = Graphics.viewport.Height;//-100 200
+
+                    //DevConsole.Log(width);
+                    //DevConsole.Log(height);
+                    rd2 = new RenderTarget2D(width, height);
+                    Graphics.SetRenderTarget(rd2);
+                    currentlyShadering = true;
+                }
+            }
             StartDrawing();
             foreach (IDrawToDifferentLayers toDifferentLayers in things[typeof(IDrawToDifferentLayers)])
                 toDifferentLayers.OnDrawLayer(Layer.PreDrawLayer);
@@ -854,6 +882,50 @@ namespace DuckGame
                 Graphics.screen.End();
             }
             AfterDrawLayers();
+
+            if (currentlyShadering)
+            {
+
+                Graphics.SetRenderTarget(null);
+
+                bool multiLayering = false;
+                if (lavaPuddles.Count > 1) multiLayering = true;
+                List<RenderTarget2D> dispose = new List<RenderTarget2D>();
+                dispose.Add(rd2);
+                //DevConsole.Log(Resolution.getTransformationMatrix().Up.ToString());
+                for (int i = 0; i < lavaPuddles.Count; i++)
+                {
+                    RenderTarget2D rd3 = null;
+                    if (multiLayering && i != lavaPuddles.Count - 1)
+                    {
+                        rd3 = new RenderTarget2D(Graphics.viewport.Width, Graphics.viewport.Height);
+                        dispose.Add(rd3);
+                        Graphics.SetRenderTarget(rd3);
+                    }
+                    Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Matrix.CreateScale(1,1,1));
+                    Graphics.Clear(Color.Black);
+                    //need to translate game coords into screen coords into UV coords
+                    //also need multiple passes depending on how many shaders are being applied
+                    //EnergyChainsaw ec = Level.First<EnergyChainsaw>();
+                    //if (ec != null) Graphics.material = ec.mt;
+                    Graphics.material = lavaPuddles[i].mt;
+                    //DevConsole.Log(rd2.width + " WI");
+                    //DevConsole.Log(MonoMain.screenWidth + " WI2");
+                    Graphics.Draw(rd2, 0, 0, 1, 1);
+                    Graphics.material = null;
+                    Graphics.screen.End();
+                    if (multiLayering)
+                    {
+                        Graphics.SetRenderTarget(null);
+                        rd2 = rd3;
+                        //rd3.Dispose();
+                    }
+                }
+                for (int i = 0; i < dispose.Count; i++)
+                {
+                    dispose[i].Dispose();
+                }
+            }
         }
 
         public virtual void InitializeDraw(Layer l)

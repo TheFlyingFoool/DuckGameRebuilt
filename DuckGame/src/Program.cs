@@ -40,7 +40,7 @@ namespace DuckGame
         public const string CURRENT_VERSION_ID = "1.1.0";
 
         // do change this you know what you're doing -NiK0
-        public const string CURRENT_VERSION_ID_FORMATTED = "v" + CURRENT_VERSION_ID + "-beta";
+        public const string CURRENT_VERSION_ID_FORMATTED = "v" + CURRENT_VERSION_ID;
 
         public static bool Prestart = DirtyPreStart();
 
