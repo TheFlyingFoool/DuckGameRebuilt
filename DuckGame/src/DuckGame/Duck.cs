@@ -136,6 +136,11 @@ namespace DuckGame
         private bool _moveLock;
         private InputProfile _inputProfile = InputProfile.Get("SinglePlayer");
         private InputProfile _virtualInput;
+        public InputProfile VirtualInput
+        {
+            get => _virtualInput;
+            set => _virtualInput = value;
+        }
         protected Profile _profile;
         protected Sprite _swirl;
         private float _swirlSpin;
