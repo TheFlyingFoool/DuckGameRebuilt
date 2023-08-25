@@ -15,12 +15,13 @@ namespace DuckGame
         public Vec2 topLeft;
         public Vec2 bottomRight;
         public FluidPuddle theOne;
+        public float mult;
         public override void Apply()
         {
-            time += 0.005f;
+            time += 0.07f;
 
-            topLeft = theOne.topLeft - new Vec2(48, 64);
-            bottomRight = theOne.topRight + new Vec2(48, 16);
+            topLeft = theOne.topLeft - new Vec2(Maths.Clamp(theOne.collisionSize.x / 2f, 0, 16), Maths.Clamp(theOne.collisionSize.y, 16, 48));
+            bottomRight = theOne.bottomRight  + new Vec2(Maths.Clamp(theOne.collisionSize.x / 2f, 0, 16), 0);
 
             //24 0
 
@@ -28,7 +29,7 @@ namespace DuckGame
             //0-1 bottom 0 top 1
             //transform from game to screen to uv
             SetValue("time", time);
-            SetValue("glow", 0.1f);
+            SetValue("mult", mult * DGRSettings.HeatWaveMultiplier);
             SetValue("gL", topLeft.x);
             SetValue("gR", bottomRight.x);
             SetValue("gT", topLeft.y);
@@ -38,7 +39,6 @@ namespace DuckGame
             SetValue("uvL", vec3.x / Resolution.current.x);
             SetValue("uvB", vec3.y / Resolution.current.y);
             vec3 = Vec3.Transform(new Vec3(bottomRight.x, bottomRight.y, 0f), Matrix.Invert(Matrix.CreateScale(1, 1, 1)) * Level.current.camera.getMatrix());
-            DevConsole.Log(Math.Abs(vec3.y / Resolution.current.y - 1));
             SetValue("uvT", vec3.y / Resolution.current.y);
             SetValue("uvR", vec3.x / Resolution.current.x);
 

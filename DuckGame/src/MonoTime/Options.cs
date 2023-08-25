@@ -381,10 +381,16 @@ namespace DuckGame
 
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
+            menu.Add(new UIMenuItemSlider("Heat Wave Strength", field: new FieldBinding(dGRSettings, "HeatWaveMultiplier", 0, 1, 0.1f), step: 0.1f)
+            {
+                dgrDescription = "The strength that the heat wave shader has on the enviroment around it"
+            });
+
             menu.Add(new UIMenuItemToggle("Ambient Particles", field: new FieldBinding(dGRSettings, "AmbientParticles"))
             {
                 dgrDescription = "Extra cosmetic particles added by DGR, embers from lamps, leafs from trees, etc"
             });
+
 
             menu.Add(new UIMenuItemNumber("Particle Level", field: new FieldBinding(dGRSettings, "ParticleMultiplier", 0, 7, 1), valStrings: new List<string>()
             {
