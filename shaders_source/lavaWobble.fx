@@ -1,6 +1,5 @@
 sampler sprite;
 
-
 float uvL;
 float uvR;
 float uvT;
@@ -9,44 +8,33 @@ float gL;
 float gR;
 float gT;
 float gB;
-
+float mult;
 float time;
-float glow;
+
 float4 PixelShaderFunction(float2 uv: TEXCOORD0, float4 c: COLOR0) : COLOR0
 {
-	//ignore how overly complicated this HLSL code please, or dont -NiK0
-	bool inRect = uv.x >= uvL && uv.x <= uvR && uv.y <= uvT && uv.y >= uvB;
-	if (inRect)
-	{
-		float uvWidth = uvR - uvL;
-		float uvHeight = uvB - uvT;
+    if (uv.x < uvL || uv.x > uvR || uv.y > uvT || uv.y < uvB) return tex2D(sprite, uv) * c;
+        
+    float uvWidth = uvR - uvL;
+    float uvHeight = uvB - uvT;
 
-		float gameX = (uv.x - uvL) / uvWidth * (gR - gL) + gL;
-		float gameY = (uv.y - uvT) / uvHeight * (gB - gT) + gT;
-	
-		float2 fUv = float2((gameX - gL) / (gR - gL), (gameY - gT) / (gB - gT));
-	
-		float center = (gT + gB) / 2.0; 
-		float distanceFromCenter = abs(gameY - center); 
-		float maxDistance = (gB - gT) / 2.0;
+    float gameX = (uv.x - uvL) / uvWidth * (gR - gL) + gL;
+    float gameY = (uv.y - uvT) / uvHeight * (gB - gT) + gT;
+    
+    float2 boundsUv = float2((gameX - gL) / (gR - gL), (gameY - gT) / (gB - gT));
+    
+    float roundness = boundsUv.y > 0.35 ? 0.3 : 0.;
+    float strength = 1. - smoothstep(0., 0.3, length(max(abs(boundsUv - float2(0.5, 0.35)) - float2(0.35, 0.35) + roundness, 0.)) - roundness);
 
-		float xMultiplier = saturate(1.0 - smoothstep(0.0, 1.0, distanceFromCenter / maxDistance));
-		
-		center = (gL + gR) / 2.0; 
-		distanceFromCenter = abs(gameX - center); 
-		maxDistance = (gR - gL) / 2.0;
 
-		float yMultiplier = saturate(1.0 - smoothstep(0.0, 1.0, distanceFromCenter / maxDistance));
-		
-		float2 offset = float2((sin((time * 12) + (fUv.y * 12)) * 0.05f) * xMultiplier * uvWidth * yMultiplier, (cos((time * 8) + (fUv.x * 10)) * 0.05f) * xMultiplier * uvHeight * yMultiplier) * glow;
+    float xOff = sin(time + gameX * 0.3 + cos(gameY * 0.3) * 2.) * 1e-2;
+    float yOff = cos(-time + gameY * 0.3 + sin(gameX * 0.3) * 2.) * 1e-2;
 
-		float4 col = tex2D(sprite, uv + offset) * c;
+    float perPixel = (uvWidth / (gR - gL)) * 100.;
 
-		float4 origCol = col;
+    uv += (float2(xOff, yOff) * strength * perPixel) * mult;
 
-		return (col * glow) + (origCol * (1.0f - glow));
-	}
-	return tex2D(sprite, uv) * c;
+    return tex2D(sprite, uv) * c;
 }
 
 technique Test

@@ -282,6 +282,9 @@ namespace DuckGame
         public static float WeatherMultiplier = 1;
 
         [AutoConfigField]
+        public static float HeatWaveMultiplier = 1;
+
+        [AutoConfigField]
         public static bool AmbientParticles = true;
 
         [AutoConfigField]
