@@ -22,7 +22,7 @@ namespace DuckGame
         public static void PlayReplay(int replay)
         {
             string[] ss = Directory.GetFiles(Corderator.CordsPath, "*.rdt");
-            string Replay = ss[replay];
+            string Replay = ss[replay == -1 ? ss.Length - 1 : replay];
 
             using (FileStream zipStream = new FileStream(Replay, FileMode.Open))
             {
