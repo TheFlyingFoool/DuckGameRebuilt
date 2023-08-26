@@ -26,7 +26,7 @@ namespace DuckGame
             Holdable h = (Holdable)t;
 
             if (lastHover == null && h.duck == null) h.position = (Vec2)valOf("position");
-            //lastHover = h.hoverSpawner;
+            lastHover = h.hoverSpawner;
             if (syncled.ContainsKey("infoed_h"))
             {
                 BitArray br = new BitArray(new byte[] { (byte)valOf("infoed_h") });

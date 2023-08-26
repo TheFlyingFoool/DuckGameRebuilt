@@ -11,7 +11,7 @@ namespace DuckGame
             //this is dumb
             byte bited = b.ReadByte();
 
-            reAdd.Add(thineCorder);
+            reAdd.Add(CCorderr);
             //DevConsole.Log(bited.ToString(), Color.Blue);
             if (bited != 255)
             {
@@ -276,41 +276,40 @@ namespace DuckGame
                 reAdd.Add(pp);
             }
 
-            Main.SpecialCode = "sukune katano best len'en tho";
+            Main.SpecialCode = "its in here somewhere";
             x = b.ReadUShort();
             for (int i = 0; i < x; i++)
             {
                 Main.SpecialCode2 = "posRead";
-                Vec2 v = b.ReadVec2();
-                Main.SpecialCode2 = "whoRead";
-                byte who = b.ReadByte();
-                Main.SpecialCode2 = "boteRead";
-                byte bote = b.ReadByte();
+                Vec2 position = b.ReadVec2();
+                Main.SpecialCode2 = "FrameRead";
+                byte Frame = b.ReadByte();
+                Main.SpecialCode2 = "bgTileIndex Read";
+                byte bgTileIndex = b.ReadByte();
 
-                BackgroundTile sukune_katano_best_lenen = (BackgroundTile)Editor.CreateThing(Recorderator.bgtileIDX[bote]);
-                sukune_katano_best_lenen.position = v;
+                BackgroundTile bgTiles = (BackgroundTile)Editor.CreateThing(Recorderator.bgtileIDX[bgTileIndex]);
+                bgTiles.position = position;
 
-                Main.SpecialCode2 = "bit array real";
-                BitArray b_arr = new BitArray(new byte[] { who });
+                Main.SpecialCode2 = "Bit array creation";
+                BitArray b_arr = new BitArray(new byte[] { Frame });
                 int lol = 0;
                 int divide = 64;
                 for (int y = 0; y < 7; y++)
                 {
-                    Main.SpecialCode2 = "fuck loop " + y;
+                    Main.SpecialCode2 = "ll Loop " + y;
                     if (b_arr[y]) lol += divide;
                     divide /= 2;
                 }
-                Main.SpecialCode2 = "something was wrong";
-                sukune_katano_best_lenen.frame = lol;
-                sukune_katano_best_lenen.flipHorizontal = b_arr[7];
-                reAdd.Add(sukune_katano_best_lenen);
+                Main.SpecialCode2 = "Something went wrong here";
+                bgTiles.frame = lol;
+                bgTiles.flipHorizontal = b_arr[7];
+                reAdd.Add(bgTiles);
             }
             Main.SpecialCode2 = "";
             Main.SpecialCode = "out of lev buffer";
-            //for (int i = 0; i < itakemyleave.Count; i++) itakemyleave[i].PlaceBlock();
         }
         public List<Thing> reAdd = new List<Thing>();
-        public Corderator thineCorder;
+        public Corderator CCorderr;
         public static bool MenuOpen;
         public override void Update()
         {
@@ -318,17 +317,17 @@ namespace DuckGame
             {
                 MenuOpen = !MenuOpen;
             }
-            if (thineCorder.cFrame == 0)
+            if (CCorderr.cFrame == 0)
             {
-                List<AutoBlock> thineFUCKYOU_YOU_SUCK = Extensions.GetListOfThings<AutoBlock>();
-                for (int i = 0; i < thineFUCKYOU_YOU_SUCK.Count; i++) thineFUCKYOU_YOU_SUCK[i].PlaceBlock();
-                List<AutoPlatform> youdontsuck_you_are_fine = Extensions.GetListOfThings<AutoPlatform>();
-                for (int i = 0; i < youdontsuck_you_are_fine.Count; i++) youdontsuck_you_are_fine[i].PlaceBlock();
+                List<AutoBlock> autoBlocks = Extensions.GetListOfThings<AutoBlock>();
+                for (int i = 0; i < autoBlocks.Count; i++) autoBlocks[i].PlaceBlock();
+                List<AutoPlatform> autoPlatforms = Extensions.GetListOfThings<AutoPlatform>();
+                for (int i = 0; i < autoPlatforms.Count; i++) autoPlatforms[i].PlaceBlock();
             }
             base.Update();
         }
         public override void Initialize()
-        {//choclolate choclolate chip
+        {
             for (int i = 0; i < reAdd.Count; i++)
             {
                 Add(reAdd[i]);

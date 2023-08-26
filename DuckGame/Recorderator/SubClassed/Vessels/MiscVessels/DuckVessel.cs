@@ -60,17 +60,17 @@ namespace DuckGame
         public override void DoUpdateThing()
         {
             Duck d = (Duck)t;
-            t.Update();
+            t.DoUpdate();
             if (d.ragdoll != null)
             {
-                d.ragdoll.Update();
-                d.ragdoll.part1.Update();
-                d.ragdoll.part2.Update();
-                d.ragdoll.part3.Update();
+                d.ragdoll.DoUpdate();
+                d.ragdoll.part1.DoUpdate();
+                d.ragdoll.part2.DoUpdate();
+                d.ragdoll.part3.DoUpdate();
             }
             if (d._trapped != null)
             {
-                d._trapped.Update();
+                d._trapped.DoUpdate();
             }
         }
         public override void Draw()

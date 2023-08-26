@@ -209,7 +209,8 @@ namespace DuckGame
         public virtual void DoUpdateThing()
         {
             t.shouldbegraphicculled = false;
-            t.Update();
+            Level.current.things.UpdateObject(t);
+            t.DoUpdate();
         }
         public virtual void RecordUpdate()
         {
