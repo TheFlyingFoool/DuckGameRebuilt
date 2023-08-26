@@ -5,6 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using DuckGame;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,7 +53,14 @@ namespace DuckGame
         public float _flapLerp;
         public float _flap;
 
-        public bool IsBackground() => connections.Count > 1 && background.value;
+        public bool IsBackground()
+        {
+            if (Corderator.instance != null && Corderator.instance.PlayingThatShitBack)
+            {
+                return background.value;
+            }
+            return connections.Count > 1 && background.value;
+        }
 
         public PipeTileset(float x, float y, string pSprite)
           : base(x, y)

@@ -339,7 +339,7 @@
     <Compile Include="AddedContent\NiK0\NMClientOnlyContent.cs" />
     <Compile Include="AddedContent\NiK0\RainbowConstant.cs" />
     <Compile Include="AddedContent\NiK0\RainParticel.cs" />
-    <Compile Include="AddedContent\NiK0\Recorderator.cs" />
+    <Compile Include="Recorderator\Recorderator.cs" />
     <Compile Include="AddedContent\NiK0\TreeLeaf.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\ClientOnlyAttribute.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\CodeButton.cs" />
@@ -367,6 +367,48 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Recorderator\OtherStuff\NilVessel.cs" />
+    <Compile Include="Recorderator\OtherStuff\ReplayLevel.cs" />
+    <Compile Include="Recorderator\OtherStuff\TheCorderator.cs" />
+    <Compile Include="Recorderator\OtherStuff\Vec6.cs" />
+    <Compile Include="Recorderator\Priority\BitCrusher.cs" />
+    <Compile Include="Recorderator\Priority\RecorderatorOptions.cs" />
+    <Compile Include="Recorderator\Priority\update.cs" />
+    <Compile Include="Recorderator\SubClassed\SomethingSomethingVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\BananaVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\EnergyscimitarVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\GrenadeLauncherVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\GrenadeVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\GunVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\HugeLaserVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\MagnumVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\MineVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\OldPistolVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\PhaserVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\PlasmaBlasterVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SharpshotVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SledgeHammerVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SniperVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SwordVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\TampingWeaponVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\DoorVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\ItemBoxVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\WindowVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\DuckVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\EquipmentVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\ForceWaveVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\HoldableVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\ItemSpawnerVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\QuadLaserBulletVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\TeamHatVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\OneTimeVessels\BulletVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\OneTimeVessels\DeathBeamVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\CampingBallVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\DeathCrateVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\DoorOffHingesVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\ItemCrateVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\NetVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\PresentVessel.cs" />
     <Compile Include="src\DuckGame\DirectBitmap.cs" />
     <Compile Include="src\DuckGame\LangHandler.cs" />
     <Compile Include="src\DuckGame\Network\ConcurrentStack.cs" />
@@ -2138,6 +2180,7 @@
       <Name>Steam</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">
     <Exec Command="git describe  --always --dirty --abbrev=40 &gt; &quot;$(ProjectDir)version.txt&quot;" />

@@ -13,6 +13,102 @@ namespace DuckGame
 {
     public static class Extensions
     {
+        public static int AutoBlockSortred(AutoBlock b1, AutoBlock b2)
+        {
+            var xx = b1.blockIndex;
+            var yy = b2.blockIndex;
+            if (xx < yy) return -1;
+            else if (yy < xx) return 1;
+            return 0;
+        }
+        public static byte BitArrayToByte(BitArray array_o_bits)
+        {
+            byte[] b = new byte[1];
+            array_o_bits.CopyTo(b, 0);
+            return b.First();
+        }
+        public static void RenameKey<TKey, TValue>(this IDictionary<TKey, TValue> dic,
+                                      TKey fromKey, TKey toKey)
+        {
+            TValue value = dic[fromKey];
+            dic.Remove(fromKey);
+            dic[toKey] = value;
+        }
+        public static byte[] BitArrayToBytes(BitArray array_o_bits)
+        {
+            byte[] b = new byte[Maths.Clamp(array_o_bits.Length / 8, 1, 100)];
+            array_o_bits.CopyTo(b, 0);
+            return b;
+        }
+        public static IEnumerable<Type> GetSubclasses(Type t)
+        {
+            List<Type> subclasses = new List<Type>();
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                try
+                {
+                    foreach (Type type in assembly.GetTypes())
+                    {
+                        if (type.IsSubclassOf(t))
+                        {
+                            subclasses.Add(type);
+                        }
+                    }
+                }
+                catch
+                {
+                }
+
+            }
+            return subclasses;
+        }
+        public static Profile GetProfileFromIndex(byte index)
+        {
+            return GetListOfProfiles().FirstOrDefault(p => p.networkIndex == index);
+        }
+        public static IEnumerable<Profile> GetListOfProfiles()
+        {
+            if (Network.isActive)
+                return DuckNetwork.profiles;
+            return Profiles.active;
+        }
+        public static List<T> GetListOfThings<T>()
+        {
+            if (Level.current == null) return null;
+
+            //check if cant convert T to other thing to avoid crash
+            if (!(typeof(T).IsAssignableFrom(typeof(IConvertible))))
+            {
+                try
+                {
+                    return Level.current.things[typeof(T)].Cast<T>().ToList();
+                }
+                catch
+                {
+                    return Level.current.things[typeof(T)].OfType<T>().ToList();
+                }
+            }
+            return Level.current.things[typeof(T)].Select(t => (T)Convert.ChangeType(t, typeof(T))).ToList();
+        }
+        public static void SetPrivateFieldValue<T>(this object obj, string propName, T val)
+        {
+            if (obj == null) throw new ArgumentNullException("obj");
+            Type t = obj.GetType();
+            FieldInfo fi = null;
+            while (fi == null && t != null)
+            {
+                fi = t.GetField(propName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                t = t.BaseType;
+            }
+            if (fi == null) throw new ArgumentOutOfRangeException("propName", string.Format("Field {0} was not found in Type {1}", propName, obj.GetType().FullName));
+            fi.SetValue(obj, val);
+        }
+        public static T RandomElementUsing<T>(this IEnumerable<T> enumerable, Random rand)
+        {
+            int index = rand.Next(0, enumerable.Count());
+            return enumerable.ElementAt(index);
+        }
+
         [DevConsoleCommand(Name = "playvgm")]
         public static void PlayVGM()
         {
