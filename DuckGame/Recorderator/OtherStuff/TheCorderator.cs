@@ -153,6 +153,9 @@ namespace DuckGame
         public static string CordsPath = DuckFile.saveDirectory + "Recorderations/";
         public byte[] SaveToFile()
         {
+            if (!Directory.Exists(CordsPath))
+                Directory.CreateDirectory(CordsPath);
+            
             BitBuffer buffer = new BitBuffer();
             buffer.Write(cFrame);
 
