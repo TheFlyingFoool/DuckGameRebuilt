@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
 using System.Reflection;
+using System.IO.Compression;
 
 namespace DuckGame
 {
@@ -104,7 +105,7 @@ namespace DuckGame
             DevConsole.Log("chain of wows");
             DevConsole.Log(WOW[0] + "|" + WOW[1] + "|" + WOW[2] + "|" + WOW[3] + "|" + WOW[4] + "|" + WOW[5] + "|" + WOW[6] + "|" + WOW[7] + "|" + WOW[8] + "|" + WOW[9]);
             #endregion
-            Level.current = new ReplayLevel() { thineCorder = cd };
+            Level.current = new ReplayLevel() { CCorderr = cd };
             (Level.current as ReplayLevel).DeserializeLevel(levBuffer);
 
             int iters = b.ReadInt();
@@ -485,7 +486,24 @@ namespace DuckGame
                     V++;
                     path = CordsPath + "cord_" + DateTime.Now.ToString().Replace('/', '-').Replace(':', '-').Replace(' ', '-') + "_" + V + ".rdt";
                 }
-                File.WriteAllBytes(path, bf.ToArray());
+                using (MemoryStream customFileStream = new MemoryStream(bf.ToArray()))
+                {
+                    string zipFilePath = CordsPath + "cord_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".rdt";
+
+                    using (FileStream zipStream = new FileStream(zipFilePath, FileMode.Create))
+                    {
+                        using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Create))
+                        {
+                            ZipArchiveEntry entry = archive.CreateEntry("cord_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".rdt");
+
+                            using (Stream entryStream = entry.Open())
+                            {
+                                customFileStream.CopyTo(entryStream);
+                            }
+                        }
+                    }
+                }
+                //File.WriteAllBytes(path, bf.ToArray());
             }
             return bf.ToArray();
         }
@@ -558,7 +576,7 @@ namespace DuckGame
                 //run that back
                 if (!Paused)
                 {
-                    PlayThatShitBack();
+                    PlayThatBack();
                 }
             }
             else
@@ -634,7 +652,7 @@ namespace DuckGame
             }
             base.Update();
         }
-        public void PlayThatShitBack()
+        public void PlayThatBack()
         {
             cFrame++;
             if (cFrame >= 0 && cFrame < maxFrame - 1)
@@ -643,21 +661,20 @@ namespace DuckGame
                 for (int i = 0; i < somethings.Count; i++)
                 {
                     SomethingSomethingVessel ves = somethings[i];
-                    Main.SpecialCode = "is ves null, if true die " + (ves == null);
+                    Main.SpecialCode = "is ves null, if true " + (ves == null);
                     if (cFrame == ves.addTime)
                     {
-                        //why dont you grabclip some bitches¿¿
-                        Main.SpecialCode = "present world overhauled duck game wont tell me why this is crashing at any point in time";
+                        Main.SpecialCode = "crash ves.OnAdd";
                         ves.OnAdd();
                         ReAddSomeVessel(ves);
-                        Main.SpecialCode = "WHY DIDN'T I GRABCLIP SOME BITCHES!??!?!?";
+                        Main.SpecialCode = "After ReAddSomeVessel";
                     }
                     else if (cFrame == ves.deleteTime)
                     {
                         Level.Remove(ves.t);
                     }
                 }
-                Main.SpecialCode = "why are you crashing, Duck dot Game";
+                Main.SpecialCode = "crash at camSize";
                 Level.current.camera.width = camSize[cFrame].x;
                 Level.current.camera.height = camSize[cFrame].y;
                 Main.SpecialCode = "the pain is eternal";

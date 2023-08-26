@@ -19,8 +19,8 @@ namespace DuckGame
         public override void PlaybackUpdate()
         {
             Grenade g = (Grenade)t;
-            byte ohNo_A_Plague_Upon_Thee = (byte)valOf("infoed");
-            BitArray big_boy_array = new BitArray(new byte[] { ohNo_A_Plague_Upon_Thee });
+            byte infoed = (byte)valOf("infoed");
+            BitArray big_boy_array = new BitArray(new byte[] { infoed });
             bool pinned = big_boy_array[0];
             g.visible = big_boy_array[1];
             g.grounded = big_boy_array[2];

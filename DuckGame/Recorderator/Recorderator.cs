@@ -7,6 +7,8 @@ using System.Runtime;
 using Microsoft.Xna.Framework;
 using System.Reflection;
 using System.IO;
+using System.IO.Compression;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 namespace DuckGame
 {
@@ -20,8 +22,33 @@ namespace DuckGame
         public static void PlayReplay(int replay)
         {
             string[] ss = Directory.GetFiles(Corderator.CordsPath, "*.rdt");
-            byte[] bytes = File.ReadAllBytes(ss[replay]);
-            Corderator.ReadCord(bytes);
+            string Replay = ss[replay];
+
+            using (FileStream zipStream = new FileStream(Replay, FileMode.Open))
+            {
+                using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Read))
+                {
+                    ZipArchiveEntry entry = archive.GetEntry(Replay.Split('/').Last()); //dont ask
+
+                    if (entry != null)
+                    {
+                        using (MemoryStream extractedStream = new MemoryStream())
+                        {
+                            using (Stream entryStream = entry.Open())
+                            {
+                                entryStream.CopyTo(extractedStream);
+                            }
+
+                            byte[] extractedData = extractedStream.ToArray();
+                            Corderator.ReadCord(extractedData);
+                        }
+                    }
+                    else
+                    {
+                        //??? explode ig
+                    }
+                }
+            }
         }
         [AutoConfigField]
         public static int Record = 0;

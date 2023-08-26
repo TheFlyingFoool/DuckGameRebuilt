@@ -47,7 +47,7 @@ namespace DuckGame
         protected Vec2 centerHeld = new Vec2(4f, 21f);
         protected Vec2 centerUnheld = new Vec2(4f, 11f);
         protected bool _stayVolatile;
-        private bool bayonetLethal;
+        public bool bayonetLethal;
         private float _prevAngle;
         private Vec2 _prevPos;
         private int _prevOffdir = -1;

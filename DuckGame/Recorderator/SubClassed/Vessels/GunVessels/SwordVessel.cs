@@ -29,7 +29,7 @@ namespace DuckGame
             s._crouchStance = b_array[2];
             s._slamStance = b_array[3];
             s._swinging = b_array[4];
-            s._volatile = b_array[5];
+            s.bayonetLethal = b_array[5];
             if (s.crouchStance) s.handOffset = (Vec2)valOf("holdoffset") + new Vec2(3, -4);
             else s.handOffset = (Vec2)valOf("holdoffset") + new Vec2(4, -4);
             s._holdOffset = (Vec2)valOf("holdoffset");
@@ -47,16 +47,16 @@ namespace DuckGame
             addVal("holdoffset", s._holdOffset);
             if (s.owner != null) addVal("ang", s._hold + s._swing);
             else addVal("ang", s.angleDegrees);
-            BitArray brFilhoDaPuta = new BitArray(8);
-            brFilhoDaPuta[0] = s.infiniteAmmoVal;
-            brFilhoDaPuta[1] = s._jabStance;
-            brFilhoDaPuta[2] = s._crouchStance;
-            brFilhoDaPuta[3] = s._slamStance;
-            brFilhoDaPuta[4] = s._swinging;
-            brFilhoDaPuta[5] = s._volatile;
-            brFilhoDaPuta[6] = (s.velocity.length > 1 && s.owner == null) || s._swing != 0;
-            brFilhoDaPuta[7] = s.visible;
-            addVal("infoed", Extensions.BitArrayToByte(brFilhoDaPuta));
+            BitArray br = new BitArray(8);
+            br[0] = s.infiniteAmmoVal;
+            br[1] = s._jabStance;
+            br[2] = s._crouchStance;
+            br[3] = s._slamStance;
+            br[4] = s._swinging;
+            br[5] = s.bayonetLethal;
+            br[6] = (s.velocity.length > 1 && s.owner == null) || s._swing != 0;
+            br[7] = s.visible;
+            addVal("infoed", Extensions.BitArrayToByte(br));
             base.RecordUpdate();
         }
     }
