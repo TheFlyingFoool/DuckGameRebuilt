@@ -40,6 +40,7 @@ namespace DuckGame
         public static UIMenu _lastCreatedOptimizationsMenu;
         public static UIMenu _lastCreatedDGRGraphicsMenu;
         public static UIMenu _lastCreatedDGREditorMenu;
+        public static UIMenu _lastCreatedDGRRecorderatorMenu;
         public static int flagForSave = 0;
         private static bool _doingResolutionRestart = false;
         private static List<string> chatFonts = new List<string>()
@@ -118,6 +119,7 @@ namespace DuckGame
             to.Add(_lastCreatedDGRGraphicsMenu, false);
             to.Add(_lastCreatedOptimizationsMenu, false);
             to.Add(_lastCreatedDGREditorMenu, false);
+            to.Add(_lastCreatedDGRRecorderatorMenu, false);
 
 
             if (accessibilityMenu != null)
@@ -161,6 +163,7 @@ namespace DuckGame
             _lastCreatedDGRGraphicsMenu = _DGRGraphicsMenu;
             _lastCreatedOptimizationsMenu = _DGROptimMenu;
             _lastCreatedDGREditorMenu = _DGREditorMenu;
+            _lastCreatedDGRRecorderatorMenu = _DGRRecorderatorMenu;
             //DGR OPTIONS GUI HELL BEGINS HERE -NiK0
 
             optionsMenu.Add(new UIText(" ", Color.White), true);
@@ -192,6 +195,7 @@ namespace DuckGame
             _DGRMiscMenu = _lastCreatedDGRMenu;
             _DGROptimMenu = _lastCreatedOptimizationsMenu;
             _DGRGraphicsMenu = _lastCreatedDGRMenu;
+            _DGRRecorderatorMenu = _lastCreatedDGRRecorderatorMenu;
             _DGREditorMenu = _lastCreatedDGREditorMenu;
         }
 
@@ -331,6 +335,7 @@ namespace DuckGame
         public static UIMenu _DGRMiscMenu;
         public static UIMenu _DGRHudMenu;
         public static UIMenu _DGREditorMenu;
+        public static UIMenu _DGRRecorderatorMenu;
 
         public static UIMenu CreateDGREditorMenu(UIMenu pPrev)
         {
@@ -671,6 +676,10 @@ namespace DuckGame
 
             _DGREditorMenu = CreateDGREditorMenu(menu);
             menu.Add(new UIMenuItem("EDITOR", new UIMenuActionOpenMenu(menu, _DGREditorMenu), backButton: true));
+
+            _DGRRecorderatorMenu = Recorderator.CreateRecorderatorMenu(menu);
+            menu.Add(new UIMenuItem("RECORDERATOR", new UIMenuActionOpenMenu(menu, _DGRRecorderatorMenu), backButton: true));
+
 
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pOptionsMenu), backButton: true));
