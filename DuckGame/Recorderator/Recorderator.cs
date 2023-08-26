@@ -20,7 +20,7 @@ namespace DuckGame
             try
             {
                 string[] ss = Directory.GetFiles(Corderator.CordsPath, "*.rdt");
-                string Replay = ss[replay];
+                string Replay = ss[replay < 0 ? ss.Length + replay : replay];
 
                 using (FileStream zipStream = new FileStream(Replay, FileMode.Open))
                 {
