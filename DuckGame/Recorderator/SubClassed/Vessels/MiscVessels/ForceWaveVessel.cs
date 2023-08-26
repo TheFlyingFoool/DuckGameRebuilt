@@ -1,4 +1,3 @@
-//made in phone tm
 using System;
 using System.Collections;
 
@@ -20,8 +19,8 @@ namespace DuckGame
         public override void PlaybackUpdate()
         {
             ForceWave f = (ForceWave)t;
-            byte WALUIGI = (byte)valOf("infoed");
-            BitArray br = new BitArray(new byte[] { WALUIGI });
+            byte infoed = (byte)valOf("infoed");
+            BitArray br = new BitArray(new byte[] { infoed });
             float a = 0;
             float div = 0.8f;
             for (int i = 0; i < 4; i++)
@@ -45,7 +44,7 @@ namespace DuckGame
             br[3] = (yay & 1) > 0;
 
             br[7] = f.offDir > 0;
-            addVal("infoed", Extensions.BitArrayToByte(br));
+            addVal("infoed", BitCrusher.BitArrayToByte(br));
             addVal("position", f.position);
             base.RecordUpdate();
         }

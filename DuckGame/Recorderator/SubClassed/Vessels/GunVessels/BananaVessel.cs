@@ -33,7 +33,7 @@
             br[0] = b._pin;
             br[1] = b._thrown;
             br[2] = b.infiniteAmmoVal;
-            addVal("infoed", Extensions.BitArrayToByte(br));
+            addVal("infoed", BitCrusher.BitArrayToByte(br));
 
             base.RecordUpdate();
         }

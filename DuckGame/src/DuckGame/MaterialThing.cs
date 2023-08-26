@@ -32,7 +32,7 @@ namespace DuckGame
         private HashSet<MaterialThing> _solidImpacting = new HashSet<MaterialThing>();
         private byte _planeOfExistence = 4;
         public bool _didImpactSound;
-        protected bool _grounded;
+        public bool _grounded;
         protected float _bouncy;
         protected float _breakForce = 999f;
         protected float _impactThreshold = 0.5f;

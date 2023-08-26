@@ -36,7 +36,8 @@ namespace DuckGame
             prevBuffer.Write(t.position);
             BitArray br = new BitArray(8);
             br[0] = ((Door)t)._lockDoor;
-            br[1] = (t is FlimsyDoor);
+            br[1] = ((Door)t).secondaryFrame;
+            prevBuffer.Write(BitCrusher.BitArrayToByte(br));
             return prevBuffer;
         }
         public override void PlaybackUpdate()

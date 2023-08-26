@@ -125,13 +125,14 @@ namespace DuckGame
             iters = b.ReadInt();
             for (int i = 0; i < iters; i++)
             {
-                SomethingSomethingVessel.FirstDeser = true;SomethingSomethingVessel choclolatechip = SomethingSomethingVessel.RCDeserialize(new BitBuffer(b.ReadBytes()));
-                if (choclolatechip == null)
+                SomethingSomethingVessel.FirstDeser = true;
+                SomethingSomethingVessel deserialized = SomethingSomethingVessel.RCDeserialize(new BitBuffer(b.ReadBytes()));
+                if (deserialized == null)
                 {
                     DevConsole.Log("nulled", Color.Red);
                     continue;
                 }
-                cd.somethings.Add(choclolatechip);
+                cd.somethings.Add(deserialized);
             }
 
             instance = cd;
@@ -188,7 +189,7 @@ namespace DuckGame
                 br[6] = (wow & 1) > 0;
                 br[7] = p.IsBackground();
 
-                levBuffer.Write(Extensions.BitArrayToByte(br));
+                levBuffer.Write(BitCrusher.BitArrayToByte(br));
             }
             levBuffer.Write((ushort)Teleporters.Count);
             for (int i = 0; i < Teleporters.Count; i++)
@@ -208,7 +209,7 @@ namespace DuckGame
                 br[7] = (x & 4) > 0;
                 br[8] = (x & 2) > 0;
                 br[9] = (x & 1) > 0;
-                levBuffer.Write(Extensions.BitArrayToBytes(br));
+                levBuffer.Write(BitCrusher.BitArrayToBytes(br));
             }
 
             levBuffer.Write((ushort)theSpikesSawsSpringsETC.Count);
@@ -306,7 +307,7 @@ namespace DuckGame
                 br[3] = (wow & 1) > 0;
                 br[6] = t.flipVertical;
                 br[7] = t.flipHorizontal;
-                levBuffer.Write(Extensions.BitArrayToByte(br));
+                levBuffer.Write(BitCrusher.BitArrayToByte(br));
                 levBuffer.Write(t.position);
             }
 
@@ -363,7 +364,7 @@ namespace DuckGame
                 ineedtostopdoingthis[5] = (w & 2) > 0;
                 ineedtostopdoingthis[6] = (w & 1) > 0;
                 ineedtostopdoingthis[7] = t.flipHorizontal;
-                levBuffer.Write(Extensions.BitArrayToByte(ineedtostopdoingthis));
+                levBuffer.Write(BitCrusher.BitArrayToByte(ineedtostopdoingthis));
                 levBuffer.Write(Recorderator.bgtileIDX[t.GetType()]);
             }
 
@@ -375,7 +376,7 @@ namespace DuckGame
             buffer.Write(Lbf.ToArray(), true);
             #endregion
             Main.SpecialCode = "outside of lev buffer";
-            byte[] buff = Extensions.BitArrayToBytes(array);
+            byte[] buff = BitCrusher.BitArrayToBytes(array);
             buffer.Write(buff[0]);
             buffer.Write(buff[1]);
             if (array[0])
@@ -436,7 +437,7 @@ namespace DuckGame
                 BitArray br = new BitArray(8);
                 if (v1.y < -500000) br[0] = true;
                 if (v2.y < -500000) br[1] = true;
-                buffer.Write(Extensions.BitArrayToByte(br));
+                buffer.Write(BitCrusher.BitArrayToByte(br));
 
                 if (!br[0]) buffer.Write(v1);
                 if (!br[1]) buffer.Write(v2);
@@ -560,7 +561,7 @@ namespace DuckGame
             somethingMapped.Add(yes.myIndex, yes);
             Level.Add(yes);
         }
-        public void UnmmapSomeBitches(SomethingSomethingVessel yes)
+        public void UnmapVessel(SomethingSomethingVessel yes)
         {
             somethings.Remove(yes);
             somethingMap.Remove(yes.myIndex);
@@ -601,7 +602,6 @@ namespace DuckGame
                         Type typeoid = th.GetType();
                         if (SomethingSomethingVessel.tatchedVessels.ContainsKey(typeoid))
                         {
-                            //if (th is TeamHat) DevConsole.Log("THERE ARE SPIDERS UNDER YOUR SKIN, RIP IT OFF", Color.Blue);
                             object[] args = new object[] { th };
                             SomethingSomethingVessel vs = (SomethingSomethingVessel)Activator.CreateInstance(SomethingSomethingVessel.tatchedVessels[typeoid], args);
                             MapSomeSomeVessel(vs);
@@ -644,7 +644,7 @@ namespace DuckGame
                             EquipmentVessel ev = new EquipmentVessel(e);
                             MapSomeSomeVessel(ev);
                         }
-                        else if (th is CustomParallaxSegment cbt) CustomParallaxSegments.Add(cbt);
+                        else if (th is CustomParallaxSegment cps) CustomParallaxSegments.Add(cps);
                     }
                     bgUPD = Level.current.FirstOfType<BackgroundUpdater>();
                 }
@@ -655,6 +655,7 @@ namespace DuckGame
         public void PlayThatBack()
         {
             cFrame++;
+            SFX.enabled = false;
             if (cFrame >= 0 && cFrame < maxFrame - 1)
             {
                 Main.SpecialCode2 = "record frame " + cFrame;
@@ -671,6 +672,7 @@ namespace DuckGame
                     }
                     else if (cFrame == ves.deleteTime)
                     {
+                        ves.OnRemove();
                         Level.Remove(ves.t);
                     }
                 }
@@ -680,6 +682,8 @@ namespace DuckGame
                 Main.SpecialCode = "the pain is eternal";
                 Level.current.camera.position = camPos[cFrame];
             }
+            SFX.enabled = true;
+            //do sfx stuff here
         }
     }
 }

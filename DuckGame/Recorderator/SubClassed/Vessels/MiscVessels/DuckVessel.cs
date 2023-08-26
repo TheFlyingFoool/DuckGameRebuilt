@@ -60,7 +60,7 @@ namespace DuckGame
         public override void DoUpdateThing()
         {
             Duck d = (Duck)t;
-            t.DoUpdate();
+            d.DoUpdate();
             if (d.ragdoll != null)
             {
                 d.ragdoll.DoUpdate();
@@ -225,6 +225,8 @@ namespace DuckGame
                 }
                 prevNetOwner = tOwner;
             }
+            d.cordHover = d._hovering;
+            if (d._hovering) d.UpdateAnimation();
 
             STRAFE = (z & 512) > 0;
             RAGDOLL = (z & 256) > 0;
@@ -263,7 +265,7 @@ namespace DuckGame
             b_ARR[7] = d.visible;
 
             Main.SpecialCode = "coded 1-weird";
-            addVal("infoed", Extensions.BitArrayToByte(b_ARR));            
+            addVal("infoed", BitCrusher.BitArrayToByte(b_ARR));            
 
             if (d._ragdollInstance != null)
             {

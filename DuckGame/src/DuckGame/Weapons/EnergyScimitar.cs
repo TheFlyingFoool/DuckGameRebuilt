@@ -22,7 +22,7 @@ namespace DuckGame
         public StateBinding _airFlyBinding = new StateBinding(true, nameof(_airFly));
         public StateBinding _airFlyDirBinding = new StateBinding(true, nameof(_airFlyAngle));
         public StateBinding _wasLiftedBinding = new StateBinding(nameof(_wasLifted));
-        private bool _stuck;
+        public bool _stuck;
         public float _swordAngle;
         public float _lerpedAngle;
         public bool dragSpeedBonus;
@@ -64,7 +64,7 @@ namespace DuckGame
         private float _upFlyTime;
         public float _airFlySpeed = 14f;
         private int timeSinceReversal;
-        private bool _wasLifted;
+        public bool _wasLifted;
         private bool skipThrowMove;
         public MaterialThing _stuckInto;
         private float _glow;

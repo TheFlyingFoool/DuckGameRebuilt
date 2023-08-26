@@ -48,7 +48,7 @@ namespace DuckGame
         private bool _fucked;
         private List<PhysicsObject> _coll;
         public EditorProperty<bool> objective;
-        protected bool secondaryFrame;
+        public bool secondaryFrame;
         private bool _lockedSprite;
         public bool networkUnlockMessage;
         private bool didUnlock;

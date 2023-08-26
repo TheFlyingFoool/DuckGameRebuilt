@@ -46,7 +46,7 @@ namespace DuckGame
             another_array[3] = g.sleeping;
             another_array[4] = g.offDir > 0;
             another_array[5] = g.infiniteAmmoVal;
-            addVal("infoed", Extensions.BitArrayToByte(another_array));
+            addVal("infoed", BitCrusher.BitArrayToByte(another_array));
             base.RecordUpdate();
         }
     }

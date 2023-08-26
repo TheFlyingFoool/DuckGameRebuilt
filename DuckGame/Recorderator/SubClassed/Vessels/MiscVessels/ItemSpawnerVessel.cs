@@ -47,6 +47,8 @@
             else if (hObj != -1 && isp._hoverItem == null && Corderator.instance.somethingMap.Contains(hObj) && Corderator.instance.somethingMap[hObj] is Holdable holdable)
             {
                 isp.SetHoverItem(holdable);
+                holdable.spawnAnimation = true;
+                holdable.isSpawned = true;
                 //isp.SetHoverItem((Holdable)Corderator.instance.somethingMap[hObj];
                 //isp._hoverItem.hoverSpawner = isp;
             }
@@ -64,7 +66,6 @@
                 (t as ItemSpawner).spawnOnStart = false;
                 (t as ItemSpawner).spawnTime = 100000;
             }
-            //isp.active = true; // this is to make it so items hover properly
             base.PlaybackUpdate();
         }
         public override void Draw()

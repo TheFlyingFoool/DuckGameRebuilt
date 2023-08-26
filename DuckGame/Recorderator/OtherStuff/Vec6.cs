@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Text;
-using Microsoft.Xna.Framework;
 
-//we talking VEC 6 OVER HERE BITCH!!
 namespace DuckGame
 {
 	[Serializable]
@@ -104,7 +101,7 @@ namespace DuckGame
 
 		public override bool Equals(object obj)
 		{
-			return obj is Vec6 v && this.Equals(v);
+			return obj is Vec6 v && Equals(v);
 		}
 
 		public bool Equals(Vec6 other)

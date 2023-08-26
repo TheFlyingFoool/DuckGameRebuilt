@@ -67,7 +67,7 @@ namespace DuckGame
             array_o_bits[5] = (w & 2) > 0;
             array_o_bits[6] = (w & 1) > 0;
             array_o_bits[7] = g.infiniteAmmoVal;
-            addVal("infoed_g", Extensions.BitArrayToByte(array_o_bits));
+            addVal("infoed_g", BitCrusher.BitArrayToByte(array_o_bits));
             base.RecordUpdate();
         }
     }

@@ -12,7 +12,7 @@ namespace DuckGame
     [EditorGroup("Stuff|Props")]
     public class Present : Holdable, IPlatform
     {
-        private SpriteMap _sprite;
+        public SpriteMap _sprite;
         private System.Type _contains;
 
         public Present(float xpos, float ypos)

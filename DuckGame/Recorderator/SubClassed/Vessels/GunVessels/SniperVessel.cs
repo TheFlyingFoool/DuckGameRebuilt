@@ -24,26 +24,26 @@ namespace DuckGame
         {
             Sniper s = (Sniper)t;
             s.active = true;
-            byte fuck = (byte)valOf("MEGAINFOED");
-            BitArray br = new BitArray(new byte[] { fuck });
+            byte infoedComp = (byte)valOf("MEGAINFOED");
+            BitArray br = new BitArray(new byte[] { infoedComp });
             int divide = 4;
-            int NinjasPlusPlus = 0;
+            int totalAmmo = 0;
             for (int i = 0; i < 3; i++)
             {
-                if (br[i]) NinjasPlusPlus += divide;
+                if (br[i]) totalAmmo += divide;
                 divide /= 2;
             }
-            if (NinjasPlusPlus == 0) s.infiniteAmmoVal = true;
-            else s.ammo = NinjasPlusPlus - 1;
+            if (totalAmmo == 0) s.infiniteAmmoVal = true;
+            else s.ammo = totalAmmo - 1;
 
-            int lod = -1;
+            int currentLoadState = -1;
             divide = 4;
             for (int i = 3; i < 6; i++)
             {
-                if (br[i]) lod += divide;
+                if (br[i]) currentLoadState += divide;
                 divide /= 2;
             }
-            s._loadState = lod;
+            s._loadState = currentLoadState;
             s.offDir = (sbyte)(br[6] ? 1 : -1);
             s.loaded = br[7];
             base.PlaybackUpdate();
@@ -63,7 +63,7 @@ namespace DuckGame
             br[5] = (lod & 1) > 0;
             br[6] = s.offDir > 0;
             br[7] = s.loaded;
-            addVal("MEGAINFOED", Extensions.BitArrayToByte(br));
+            addVal("MEGAINFOED", BitCrusher.BitArrayToByte(br));
             base.RecordUpdate();
         }
     }

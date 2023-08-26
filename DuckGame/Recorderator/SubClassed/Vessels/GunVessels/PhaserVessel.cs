@@ -1,4 +1,3 @@
-//made in phone tm
 namespace DuckGame
 {
     public class PhaserVessel : GunVessel

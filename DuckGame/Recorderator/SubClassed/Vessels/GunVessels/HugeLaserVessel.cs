@@ -1,4 +1,3 @@
-//made in phone tm
 ﻿using System.Collections;
 
 ﻿namespace DuckGame
@@ -45,7 +44,7 @@
             br[4] = (z & 2) > 0;
             br[5] = (z & 1) > 0;
             br[6] = h.infiniteAmmoVal;
-            addVal("infoed", Extensions.BitArrayToByte(br));
+            addVal("infoed", BitCrusher.BitArrayToByte(br));
 
             base.RecordUpdate();
         }

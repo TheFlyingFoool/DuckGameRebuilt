@@ -6,6 +6,7 @@ namespace DuckGame
         public EquipmentVessel(Thing th) : base(th)
         {
             AddSynncl("equipped", new SomethingSync(typeof(int)));
+            AddSynncl("ang", new SomethingSync(typeof(ushort)));
         }
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
@@ -39,6 +40,7 @@ namespace DuckGame
                 }
                 e._equippedDuck = d;
             }
+            e.angleDegrees = BitCrusher.UShortToFloat((ushort)valOf("ang"), 360);
             base.PlaybackUpdate();
         }
         public override void RecordUpdate()
@@ -53,6 +55,8 @@ namespace DuckGame
                 else addVal("equipped", -1);
             }
             else addVal("equipped", -1);
+            float f = e.angleDegrees % 360;
+            addVal("ang", BitCrusher.FloatToUShort(f, 360));
             base.RecordUpdate();
         }
     }

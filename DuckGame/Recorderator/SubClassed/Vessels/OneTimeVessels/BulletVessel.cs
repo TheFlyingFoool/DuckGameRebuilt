@@ -94,7 +94,7 @@ namespace DuckGame
             prevBuffer.Write(rangfe);
             prevBuffer.Write(penetration);
             prevBuffer.Write(speedo);
-            //bitchass owner cant even exist
+            //owner cant even exist
             if (owned != null && Corderator.instance.somethingMap.Contains(owned)) prevBuffer.Write((ushort)(Corderator.instance.somethingMap[owned] + 1));
             else prevBuffer.Write((ushort)0);
             return prevBuffer;

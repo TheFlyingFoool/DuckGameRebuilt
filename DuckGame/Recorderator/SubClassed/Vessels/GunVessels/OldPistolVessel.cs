@@ -19,8 +19,8 @@ namespace DuckGame
         public override void PlaybackUpdate()
         {
             OldPistol op = (OldPistol)t;
-            byte i_byte_you = (byte)valOf("infoed");
-            BitArray br = new BitArray(new byte[] { /*IBigStupidWall visual studio i did not want a stupid wall i wanted a furry that is obsessed with biting*/ i_byte_you });
+            byte infoed = (byte)valOf("infoed");
+            BitArray br = new BitArray(new byte[] { infoed }); //What.
             int nplusplus = 0;
             int divide = 8;
             for (int i = 0; i < 4; i++)
@@ -48,7 +48,7 @@ namespace DuckGame
             br[5] = op.offDir > 0;
             br[6] = op.visible;
             br[7] = op.loaded;
-            addVal("infoed", Extensions.BitArrayToByte(br));
+            addVal("infoed", BitCrusher.BitArrayToByte(br));
             base.RecordUpdate();
         }
     }

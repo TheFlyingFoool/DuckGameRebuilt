@@ -70,9 +70,14 @@ namespace DuckGame
         public BitArray bArray;
         public string destroyedReason = "NONE";
         public static string somethingCrash;
+
+        public virtual void OnRemove()
+        {
+
+        }
         public void AddSynncl(string name, SomethingSync s)
         {
-            if (indexedSyncled.Count == 8) throw new Exception("This vessel has hit the SomethingSync Cap! Try optimizing or removing some syncs dumbass can't you code? did you forget how your own system even worked? how did you get this message. you should do something with bitarrays");
+            if (indexedSyncled.Count == 8) throw new Exception("This vessel has hit the SomethingSync Cap!");
             s.name = name;
             byte c = 0;
             while (indexedSyncled.ContainsValue(c)) c++;
@@ -270,7 +275,7 @@ namespace DuckGame
             Main.SpecialCode = "WHEN IT WAS REMOVED";
             //WHEN IT WAS REMOVED
             b.Write(deleteTime);
-            Main.SpecialCode = "THE INDEX (FUCKING SHUT UP IM TYPING SPECIAL CODES)";
+            Main.SpecialCode = "THE INDEX";
             //THE INDEX (helps when a duck grabs something)
             if (doIndex) b.Write(myIndex);
 
@@ -437,10 +442,13 @@ namespace DuckGame
                         }
                 }
             }
-            
+            Main.SpecialCode = "Out of change destroy reads";
+
             syncledDestroy = v.syncled;
             doDestroy = true;
+            Main.SpecialCode = "Ves RecDeserialize pre-create";
             SomethingSomethingVessel ves = v.RecDeserialize(b);
+            Main.SpecialCode = "Ves RecDeserialize post-create";
             doDestroy = false;
             return ves;
         }

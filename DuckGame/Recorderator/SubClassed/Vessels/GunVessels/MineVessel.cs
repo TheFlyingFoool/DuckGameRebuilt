@@ -19,15 +19,15 @@ namespace DuckGame
         public override void PlaybackUpdate()
         {
             Mine m = (Mine)t;
-            byte ohNo_A_Plague_Upon_Thee = (byte)valOf("infoed");
-            BitArray big_boy_array = new BitArray(new byte[] { ohNo_A_Plague_Upon_Thee });
-            bool pinned = big_boy_array[0];
-            m.visible = big_boy_array[1];
-            m.grounded = big_boy_array[2];
-            m.sleeping = big_boy_array[3];
-            m.offDir = (sbyte)(big_boy_array[4] ? -1 : 1);
-            m.infiniteAmmoVal = big_boy_array[5];
-            m._armed = big_boy_array[6];
+            byte inFoed = (byte)valOf("infoed");
+            BitArray br = new BitArray(new byte[] { inFoed });
+            bool pinned = br[0];
+            m.visible = br[1];
+            m.grounded = br[2];
+            m.sleeping = br[3];
+            m.offDir = (sbyte)(br[4] ? -1 : 1);
+            m.infiniteAmmoVal = br[5];
+            m._armed = br[6];
             if (m._pin && !pinned) SFX.Play("minePullPin");
             m._pin = pinned;
             m._timer = 100;
@@ -36,15 +36,15 @@ namespace DuckGame
         public override void RecordUpdate()
         {
             Mine m = (Mine)t;
-            BitArray another_array = new BitArray(8);
-            another_array[0] = m._pin;
-            another_array[1] = m.visible;
-            another_array[2] = m.grounded;
-            another_array[3] = m.sleeping;
-            another_array[4] = m.offDir > 0;
-            another_array[5] = m.infiniteAmmoVal;
-            another_array[6] = m._armed;
-            addVal("infoed", Extensions.BitArrayToByte(another_array));
+            BitArray array = new BitArray(8);
+            array[0] = m._pin;
+            array[1] = m.visible;
+            array[2] = m.grounded;
+            array[3] = m.sleeping;
+            array[4] = m.offDir > 0;
+            array[5] = m.infiniteAmmoVal;
+            array[6] = m._armed;
+            addVal("infoed", BitCrusher.BitArrayToByte(array));
             base.RecordUpdate();
         }
     }

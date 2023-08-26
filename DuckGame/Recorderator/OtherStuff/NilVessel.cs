@@ -2,6 +2,8 @@
 
 namespace DuckGame
 {
+    //if something has gone terribly wrong a nil vessel will appear in its place
+    //it probably means we're overreading or forgot to read a part of the buffer and everything has gone to hell
     public class NilVessel : SomethingSomethingVessel
     {
         private string error;

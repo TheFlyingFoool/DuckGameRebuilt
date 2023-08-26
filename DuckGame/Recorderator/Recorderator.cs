@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Runtime;
 using Microsoft.Xna.Framework;
 using System.Reflection;
 using System.IO;
 using System.IO.Compression;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 
 namespace DuckGame
 {
@@ -21,33 +17,41 @@ namespace DuckGame
         [DevConsoleCommand(Name = "playreplay")]
         public static void PlayReplay(int replay)
         {
-            string[] ss = Directory.GetFiles(Corderator.CordsPath, "*.rdt");
-            string Replay = ss[replay];
-
-            using (FileStream zipStream = new FileStream(Replay, FileMode.Open))
+            try
             {
-                using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Read))
+                string[] ss = Directory.GetFiles(Corderator.CordsPath, "*.rdt");
+                string Replay = ss[replay];
+
+                using (FileStream zipStream = new FileStream(Replay, FileMode.Open))
                 {
-                    ZipArchiveEntry entry = archive.GetEntry(Replay.Split('/').Last()); //dont ask
-
-                    if (entry != null)
+                    using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Read))
                     {
-                        using (MemoryStream extractedStream = new MemoryStream())
-                        {
-                            using (Stream entryStream = entry.Open())
-                            {
-                                entryStream.CopyTo(extractedStream);
-                            }
+                        ZipArchiveEntry entry = archive.GetEntry(Replay.Split('/').Last()); //dont ask
 
-                            byte[] extractedData = extractedStream.ToArray();
-                            Corderator.ReadCord(extractedData);
+                        if (entry != null)
+                        {
+                            using (MemoryStream extractedStream = new MemoryStream())
+                            {
+                                using (Stream entryStream = entry.Open())
+                                {
+                                    entryStream.CopyTo(extractedStream);
+                                }
+
+                                byte[] extractedData = extractedStream.ToArray();
+                                Corderator.ReadCord(extractedData);
+                            }
+                        }
+                        else
+                        {
+                            DevConsole.Log("????????????????????????????");
+                            //??? explode ig
                         }
                     }
-                    else
-                    {
-                        //??? explode ig
-                    }
                 }
+            }
+            catch
+            {
+                DevConsole.Log("an error occured " + Main.SpecialCode, Colors.DGRed);
             }
         }
         [AutoConfigField]

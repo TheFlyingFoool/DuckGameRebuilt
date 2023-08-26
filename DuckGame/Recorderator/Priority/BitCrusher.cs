@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -7,6 +8,18 @@ namespace DuckGame
     //i think it should be fine (it won't)
     public static class BitCrusher
     {
+        public static byte BitArrayToByte(BitArray array)
+        {
+            byte[] b = new byte[1];
+            array.CopyTo(b, 0);
+            return b.First();
+        }
+        public static byte[] BitArrayToBytes(BitArray array)
+        {
+            byte[] b = new byte[Maths.Clamp(array.Length / 8, 1, 100)];
+            array.CopyTo(b, 0);
+            return b;
+        }
         public static ushort BitArrayToUShort(BitArray arr, int idx)
         {
             ushort divide = 32768;

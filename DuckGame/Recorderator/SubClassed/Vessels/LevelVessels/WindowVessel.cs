@@ -46,7 +46,7 @@ namespace DuckGame
             b[5] = (tint & 1) > 0;
             b[6] = w.floor;
             b[7] = w.bars.value;
-            prevBuffer.Write(Extensions.BitArrayToByte(b));
+            prevBuffer.Write(BitCrusher.BitArrayToByte(b));
             prevBuffer.Write((byte)w.windowHeight.value);
             return prevBuffer;
         }

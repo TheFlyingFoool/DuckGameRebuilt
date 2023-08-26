@@ -21,24 +21,12 @@ namespace DuckGame
             else if (yy < xx) return 1;
             return 0;
         }
-        public static byte BitArrayToByte(BitArray array_o_bits)
-        {
-            byte[] b = new byte[1];
-            array_o_bits.CopyTo(b, 0);
-            return b.First();
-        }
         public static void RenameKey<TKey, TValue>(this IDictionary<TKey, TValue> dic,
                                       TKey fromKey, TKey toKey)
         {
             TValue value = dic[fromKey];
             dic.Remove(fromKey);
             dic[toKey] = value;
-        }
-        public static byte[] BitArrayToBytes(BitArray array_o_bits)
-        {
-            byte[] b = new byte[Maths.Clamp(array_o_bits.Length / 8, 1, 100)];
-            array_o_bits.CopyTo(b, 0);
-            return b;
         }
         public static IEnumerable<Type> GetSubclasses(Type t)
         {

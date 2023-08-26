@@ -50,7 +50,7 @@ namespace DuckGame
             br[2] = h.grounded;
             br[3] = h.solid;
             br[4] = h.sleeping;
-            addVal("infoed_h", Extensions.BitArrayToByte(br));
+            addVal("infoed_h", BitCrusher.BitArrayToByte(br));
             //bArray[7] = h.offDir > 0;
         }
     }

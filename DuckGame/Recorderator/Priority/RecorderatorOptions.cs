@@ -28,7 +28,7 @@ namespace DuckGame
             BitArray b = new BitArray(16);
             b[0] = SlowSave;
             b[1] = SaveSFX;
-            File.WriteAllBytes(zePath + "RecorderatorOptions.dat", Extensions.BitArrayToBytes(b));
+            File.WriteAllBytes(zePath + "RecorderatorOptions.dat", BitCrusher.BitArrayToBytes(b));
         }
     }
 }

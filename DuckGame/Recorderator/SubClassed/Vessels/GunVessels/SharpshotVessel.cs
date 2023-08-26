@@ -64,7 +64,7 @@ namespace DuckGame
             br[5] = (lod & 1) > 0;
             br[6] = s.offDir > 0;
             br[7] = s.loaded;
-            addVal("MEGAINFOED", Extensions.BitArrayToByte(br));
+            addVal("MEGAINFOED", BitCrusher.BitArrayToByte(br));
             base.RecordUpdate();
         }
     }

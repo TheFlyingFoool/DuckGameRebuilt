@@ -1965,7 +1965,7 @@ namespace DuckGame
             ThrowItem();
         }
 
-        private void UpdateAnimation()
+        public void UpdateAnimation()
         {
             _updatedAnimation = true;
             if (_hovering)
@@ -4178,6 +4178,126 @@ namespace DuckGame
 
         public void UpdateHoldLerp(bool updateLerp = false, bool instant = false)
         {
+            if (Level.current is ReplayLevel)
+            {
+                float armOffY = 6;
+                float armOffX = -3f * offDir;
+                float holdOffX = 6;
+                float holdOffY = -3;
+                if (holdObject != null)
+                {
+                    armOffY = 6f;
+                    armOffX = -2f * offDir;
+                }
+                if (holdObject != null)
+                {
+                    holdObject._sleeping = false;
+                    if (holdObject.owner != this)
+                    {
+                        return;
+                    }
+                    if (spriteImageIndex == 1)
+                    {
+                        holdOffY += 1f;
+                    }
+                    else if (spriteImageIndex == 2)
+                    {
+                        holdOffY += 1f;
+                        holdOffX -= 1f;
+                    }
+                    else if (spriteImageIndex == 3)
+                    {
+                        holdOffY += 1f;
+                        holdOffX -= 2f;
+                    }
+                    else if (spriteImageIndex == 4)
+                    {
+                        holdOffY += 1f;
+                        holdOffX -= 1f;
+                    }
+                    else if (spriteImageIndex == 5)
+                    {
+                        holdOffY += 1f;
+                    }
+                    else if (spriteImageIndex == 7)
+                    {
+                        holdOffY += 1f;
+                    }
+                    else if (spriteImageIndex == 9)
+                    {
+                        holdOffY -= 1f;
+                    }
+                }
+
+                holdOffX *= offDir;
+                if (holdObject != null)
+                {
+                    _spriteArms.angle = holdAngle;
+                    if (holdObject is DrumSet)
+                    {
+                        position = holdObject.position + new Vec2(0f, -12f);
+                    }
+                    else
+                    {
+                        holdObject.position = armPositionNoKick +  holdObject.holdOffset + new Vec2(holdOffX, holdOffY) + new Vec2((float)(2 * offDir), 0f);
+                    }
+                    holdObject.CheckIfHoldObstructed();
+                    if (HasEquipment(typeof(Holster)))
+                    {
+                        Holster h = GetEquipment(typeof(Holster)) as Holster;
+                        if (!h.chained.value || h.containedObject == null)
+                        {
+                            if (!isServerForObject)
+                            {
+                                holdObstructed = h.netRaise;
+                            }
+                            else if (holdObject != null && inputProfile.Down("UP") && holdObject.holsterable)
+                            {
+                                holdObstructed = true;
+                            }
+                        }
+                    }
+                    if (!(holdObject is RagdollPart))
+                    {
+                        holdObject.offDir = offDir;
+                    }
+                    if (spriteImageIndex == 12 || spriteImageIndex == 13)
+                    {
+                        armOffY = 12;
+                        holdOffY = -3;
+                        holdOffX += 1f;
+                    }
+                    else if (spriteImageIndex == 11)
+                    {
+                        if (holdObject != null)
+                        {
+                            armOffY += 4f;
+                        }
+                    }
+                    else if ((spriteImageIndex == 12 || spriteImageIndex == 13) && holdObject != null)
+                    {
+                        armOffY += 6f;
+                    }
+                    if (!(holdObject is DrumSet))
+                    {
+                        holdObject.position = HoldOffset(holdObject.holdOffset);
+                        if (!(holdObject is RagdollPart))
+                        {
+                            holdObject.angle = holdObject.handAngle + holdAngleOff;
+                        }
+                    }
+                }
+                this.armOffX = armOffX;
+                this.armOffY = armOffY;
+                this.holdOffX = holdOffX;
+                this.holdOffY = holdOffY;
+                //Extensions.SetPrivateFieldValue(__instance, "armOffX", armOffX);
+                //Extensions.SetPrivateFieldValue(__instance, "armOffY", armOffY);
+
+                //Extensions.SetPrivateFieldValue(__instance, "holdOffX", holdOffX);
+                //Extensions.SetPrivateFieldValue(__instance, "holdOffY", holdOffY);
+                return;
+            }
             if (holdObject.canRaise && (_hovering && holdObject.hoverRaise || holdObstructed || holdObject.keepRaised))
             {
                 if (updateLerp)
@@ -4500,6 +4620,7 @@ namespace DuckGame
             }
         }
 
+        public bool cordHover;
         public override void Draw()
         {
             if (_sprite == null || !localSpawnVisible)
@@ -4672,7 +4793,7 @@ namespace DuckGame
                         if (gun != null)
                             vec2 = -gun.barrelVector * kick;
                         float num13 = Math.Abs((float)((_flapFrame - 4f) / 4f)) - 0.1f;
-                        if (!_hovering)
+                        if (!_hovering && !cordHover)
                             num13 = 0f;
                         _spriteArms._frameInc = 0f;
                         _spriteArms.flipH = _sprite.flipH;
@@ -4709,7 +4830,7 @@ namespace DuckGame
                             if (!flag2)
                             {
                                 _spriteArms.angle = 0f;
-                                if (_sprite.currentAnimation == "jump" && _spriteArms.imageIndex == 9)
+                                if ((_sprite.currentAnimation == "jump" && _spriteArms.imageIndex == 9) || cordHover)
                                 {
                                     int num14 = 2;
                                     if (HasEquipment(typeof(ChestPlate)))

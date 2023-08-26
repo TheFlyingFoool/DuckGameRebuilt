@@ -14,6 +14,11 @@ namespace DuckGame
             v.t.frame = col;
             return v;
         }
+        public override void OnRemove()
+        {
+            Present.OpenEffect(t.position, ((Present)t)._sprite.frame, false);
+            base.OnRemove();
+        }
         public override BitBuffer RecSerialize(BitBuffer prevBuffer)
         {
             prevBuffer.Write((byte)((Present)t).frame);

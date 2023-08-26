@@ -56,7 +56,7 @@ namespace DuckGame
             br[5] = s.bayonetLethal;
             br[6] = (s.velocity.length > 1 && s.owner == null) || s._swing != 0;
             br[7] = s.visible;
-            addVal("infoed", Extensions.BitArrayToByte(br));
+            addVal("infoed", BitCrusher.BitArrayToByte(br));
             base.RecordUpdate();
         }
     }

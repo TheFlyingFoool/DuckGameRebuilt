@@ -310,12 +310,11 @@ namespace DuckGame
         }
         public List<Thing> reAdd = new List<Thing>();
         public Corderator CCorderr;
-        public static bool MenuOpen;
         public override void Update()
         {
             if (Input.Pressed("START", "Any"))
             {
-                MenuOpen = !MenuOpen;
+                //do gui stuff
             }
             if (CCorderr.cFrame == 0)
             {
