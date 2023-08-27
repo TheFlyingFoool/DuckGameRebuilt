@@ -171,6 +171,12 @@ namespace DuckGame
         public static bool IgnoreLevRestrictions = false;
 
         [AutoConfigField]
+        public static bool HideFS = false;
+
+        [AutoConfigField]
+        public static bool ReducedMovement = false;
+
+        [AutoConfigField]
         public static bool RememberMatchSettings = false;
 
         [AutoConfigField]

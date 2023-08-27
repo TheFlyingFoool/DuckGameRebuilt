@@ -320,6 +320,7 @@ namespace DuckGame
         public UIMenu _ducknetMenu;
         public UIMenu _optionsMenu;
         public UIMenu _confirmMenu;
+        public UIMenu _confirmStartMenu;
         public UIMenu _confirmBlacklistMenu;
         public UIMenu _confirmBlock;
         public UIMenu _confirmReturnToLobby;

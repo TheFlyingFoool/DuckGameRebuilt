@@ -168,7 +168,7 @@ namespace DuckGame
 
             optionsMenu.Add(new UIText(" ", Color.White), true);
 
-            optionsMenu.Add(new UIMenuItem("REBUILT", new UIMenuActionOpenMenu(optionsMenu, _lastCreatedDGRMenu), backButton: true), true);
+            optionsMenu.Add(new UIMenuItem("REBUILT|PINK|♠", new UIMenuActionOpenMenu(optionsMenu, _lastCreatedDGRMenu), backButton: true), true);
             optionsMenu.Add(new UIMenuItem("EDIT CONTROLS", new UIMenuActionOpenMenu(optionsMenu, _lastCreatedControlsMenu), backButton: true), true);
             optionsMenu.Add(new UIMenuItem("GRAPHICS", new UIMenuActionOpenMenu(optionsMenu, _lastCreatedGraphicsMenu), backButton: true), true);
             optionsMenu.Add(new UIMenuItem("AUDIO", new UIMenuActionOpenMenu(optionsMenu, _lastCreatedAudioMenu), backButton: true), true);
@@ -612,6 +612,15 @@ namespace DuckGame
             menu.Add(new UIMenuItemToggle("Dubber Speed", field: new FieldBinding(dGRSettings, "dubberspeed"))
             {
                 dgrDescription = "For true vim users, adds keybinds from 1-9 for faster menu browsing"
+            });
+
+            menu.Add(new UIMenuItemToggle("No Force Start Menu", field: new FieldBinding(dGRSettings, "HideFS"))
+            {
+                dgrDescription = "Disables the force start button from the pause menu while hosting."
+            });
+            menu.Add(new UIMenuItemToggle("Reduced Movement", field: new FieldBinding(dGRSettings, "ReducedMovement"))
+            {
+                dgrDescription = "If on, menu animations will be skipped."
             });
 
             menu.Add(new UIText(" ", Color.White));

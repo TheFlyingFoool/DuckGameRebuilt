@@ -12,7 +12,6 @@ namespace DuckGame
             RemoveSynncl("infoed_g");
             RemoveSynncl("infoed_h");
             RemoveSynncl("angledeg");
-            //AddSynncl("throwspin", new SomethingSync(typeof(float)));
             AddSynncl("infoed_energy", new SomethingSync(typeof(byte)));
             AddSynncl("infoed_energy2", new SomethingSync(typeof(byte)));
             AddSynncl("infoed_energy3", new SomethingSync(typeof(byte)));
@@ -63,13 +62,7 @@ namespace DuckGame
             ang *= br[0] ? -1 : 1;
             e._airFlyAngle = ang;
 
-
             base.PlaybackUpdate();
-        }
-        public override void DoUpdateThing()
-        {
-            EnergyScimitar e = (EnergyScimitar)t;
-            base.DoUpdateThing();
         }
         public override void RecordUpdate()
         {
@@ -109,7 +102,6 @@ namespace DuckGame
             br[7] = (c & 1) > 0;
             //_airFlyAngle compressed into 7 non negative
 
-            //5 2 4 8 16 32 64 128
             addVal("infoed_energy3", BitCrusher.BitArrayToByte(br));
             base.RecordUpdate();
         }

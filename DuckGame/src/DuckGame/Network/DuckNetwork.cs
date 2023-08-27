@@ -894,7 +894,16 @@ namespace DuckGame
             thread.Start();
             // thread.Join();
         }
-
+        public static void ForceStart()
+        {
+            if (Level.current is TeamSelect2 ts2)
+            {
+                ts2.forcestart = true;
+                ts2._countTime = 0;
+                ts2.dim = 0.8f;
+                Graphics.fade = 0;
+            }
+        }
         private static void OpenMenu(Profile whoOpen)
         {
             if (_ducknetUIGroup != null)
@@ -923,6 +932,7 @@ namespace DuckGame
             }
             core._ducknetMenu = new UIMenu(title, wide / 2f, high / 2f, 210f, conString: "@CANCEL@CLOSE @SELECT@SELECT", tinyTitle: tiny);
             _ducknetMenu = core._ducknetMenu;
+            core._confirmStartMenu = new UIMenu("REALLY START?", wide / 2f, high / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
             core._confirmMenu = whoOpen.slotType != SlotType.Local ? new UIMenu("REALLY QUIT?", wide / 2f, high / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT") : new UIMenu("REALLY BACK OUT?", wide / 2f, high / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
             core._confirmBlacklistMenu = new UIMenu("AVOID LEVEL?", wide / 2f, high / 2f, 10f, conString: "@CANCEL@BACK @SELECT@SELECT");
             core._confirmKick = new UIMenu("REALLY KICK?", wide / 2f, high / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
@@ -1074,10 +1084,8 @@ namespace DuckGame
                 }
                 if (Level.current is TeamSelect2)
                 {
-                    if (DGR)
-                    {
-                        _core._ducknetMenu.Add(new UIMenuItemToggle("DGR Stuff", field: new FieldBinding(Options.dGRSettings, "DGRItems"), c: new Color(246, 88, 191)));
-                    }
+                    if (!DGRSettings.HideFS) _core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|FORCE START", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmStartMenu)));
+                    if (DGR) _core._ducknetMenu.Add(new UIMenuItemToggle("DGR Stuff", field: new FieldBinding(Options.dGRSettings, "DGRItems"), c: new Color(246, 88, 191)));
                     else
                     {
                         DGRSettings.DGRItems = false;
@@ -1189,6 +1197,10 @@ namespace DuckGame
             _core._confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_core._confirmMenu, _core._ducknetMenu), UIAlign.Left, backButton: true), true);
             _core._confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(_ducknetUIGroup, _core._quit)), true);
             _core._confirmMenu.Close();
+            core._confirmStartMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_core._confirmStartMenu, _core._ducknetMenu), UIAlign.Left, backButton: true), true);
+            core._confirmStartMenu.Add(new UIMenuItem("YES!", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(ForceStart))), true);
+            core._confirmStartMenu.Close();
+            _ducknetUIGroup.Add(core._confirmStartMenu, false);
             _ducknetUIGroup.Add(_core._confirmMenu, false);
             UIMenu confirmBlacklistMenu1 = _core._confirmBlacklistMenu;
             UIText component1 = new UIText("", Color.White, heightAdd: -4f)

@@ -230,8 +230,14 @@ namespace DuckGame
                 float to = _close ? layer.camera.height * 2f : _startPosition.y;
                 position.y = Lerp.FloatSmooth(position.y, to, 0.2f, 1.05f);
                 bool flag = position.y != to;
-                if (animating != flag)
-                    animating = flag;
+                //stuff might look weird but i have to introduce a 1 frame delay cuz otherwise the open menu input can go through
+                //multiple menus and do bad stuff -NiK0
+                if (DGRSettings.ReducedMovement) 
+                {
+                    if (position.y == to) animating = false;
+                    position.y = to;
+                }
+                else if (animating != flag) animating = flag;
             }
             if (open && !animating)
                 UpdateParts();

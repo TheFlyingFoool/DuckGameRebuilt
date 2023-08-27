@@ -136,7 +136,7 @@ namespace DuckGame
 
         public static void Remove(Thing thing)
         {
-            if (Corderator.instance != null && !(Level.current is ReplayLevel))
+            if (Corderator.instance != null && !(Level.current is ReplayLevel) && thing.shouldhavevessel)
             {
                 if (Corderator.instance.somethingMap.Contains(thing))
                 {
@@ -291,7 +291,7 @@ namespace DuckGame
 
         public virtual void AddThing(Thing t)
         {
-            if (Corderator.instance != null && !(current is ReplayLevel) && Corderator.instance.cFrame > 0)
+            if (Corderator.instance != null && !(current is ReplayLevel) && Corderator.instance.cFrame > 0 && t.shouldhavevessel)
             {
                 Type typeoid = t.GetType();
                 //if (t is TeamHat) DevConsole.Log("what1");

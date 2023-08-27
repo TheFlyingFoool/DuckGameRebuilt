@@ -13,6 +13,7 @@ namespace DuckGame
     /// </summary>
     public abstract class Thing : Transform
     {
+        public bool shouldhavevessel = true;
         public bool shouldbegraphicculled = true;
         public bool beinggraphicculled;
         public bool shouldbeinupdateloop = true;

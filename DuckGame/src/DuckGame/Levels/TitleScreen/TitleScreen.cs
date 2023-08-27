@@ -506,7 +506,7 @@ namespace DuckGame
             _optionsMenu.Add(new UIText(" ", Color.White), true);
             _optionsMenu.Add(new UIMenuItemToggle("SHENANIGANS", field: new FieldBinding(Options.Data, "shennanigans")), true);
             _optionsMenu.Add(new UIText(" ", Color.White), true);
-            _optionsMenu.Add(new UIMenuItem("REBUILT", new UIMenuActionOpenMenu(_optionsMenu, _dgrMenu), backButton: true), true);
+            _optionsMenu.Add(new UIMenuItem("REBUILT|PINK|♠", new UIMenuActionOpenMenu(_optionsMenu, _dgrMenu), backButton: true), true);
             _optionsMenu.Add(new UIMenuItem("EDIT CONTROLS", new UIMenuActionOpenMenuCallFunction(_optionsMenu, _controlConfigMenu, new UIMenuActionOpenMenuCallFunction.Function(UIControlConfig.ResetWarning)), backButton: true), true);
             _optionsMenu.Add(new UIMenuItem("GRAPHICS", new UIMenuActionOpenMenu(_optionsMenu, _graphicsMenu), backButton: true), true);
             _optionsMenu.Add(new UIMenuItem("AUDIO", new UIMenuActionOpenMenu(_optionsMenu, _audioMenu), backButton: true), true);

@@ -26,8 +26,9 @@ namespace DuckGame
                 {
                     using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Read))
                     {
-                        ZipArchiveEntry entry = archive.GetEntry(Replay.Split('/').Last()); //dont ask
-
+                        //DevConsole.Log(Replay);
+                        ZipArchiveEntry entry = archive.Entries[0];
+                        //DevConsole.Log(Replay.Split('/').Last());
                         if (entry != null)
                         {
                             using (MemoryStream extractedStream = new MemoryStream())
@@ -65,7 +66,6 @@ namespace DuckGame
         public static Map<byte, Type> bgtileIDX = new Map<byte, Type>();
         public static void Initialize()
         {
-            RecorderatorOptions.LoadFile();
             instance = new Recorderator();
         }
         [PostInitialize]

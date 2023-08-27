@@ -385,15 +385,16 @@
     <Compile Include="Recorderator\OtherStuff\TheCorderator.cs" />
     <Compile Include="Recorderator\OtherStuff\Vec6.cs" />
     <Compile Include="Recorderator\Priority\BitCrusher.cs" />
-    <Compile Include="Recorderator\Priority\RecorderatorOptions.cs" />
     <Compile Include="Recorderator\Priority\update.cs" />
     <Compile Include="Recorderator\SubClassed\SomethingSomethingVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\JetpackVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\HelmetVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\SpikeHelmVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\BootsVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\ChestplateVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\BananaVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\EnergyscimitarVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\NetGunVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\GrenadeLauncherVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\GrenadeVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\GunVessel.cs" />

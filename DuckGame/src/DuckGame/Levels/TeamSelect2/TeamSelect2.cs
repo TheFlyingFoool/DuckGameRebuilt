@@ -11,14 +11,14 @@ namespace DuckGame
         public static bool didcreatelanlobby;
         public static bool KillsForPoints = false;
         public static bool QUACK3;
-        private float dim;
+        public float dim;
         public static bool fakeOnlineImmediately = false;
         public static int customLevels = 0;
         public static int prevCustomLevels = 0;
         public static int prevNumModifiers = 0;
         private BitmapFont _font;
         private SpriteMap _countdown;
-        private float _countTime = 1.5f;
+        public float _countTime = 1.5f;
         public List<ProfileBox2> _profiles = new List<ProfileBox2>();
         private SpriteMap _buttons;
         private bool _matchSetup;
@@ -1270,6 +1270,7 @@ namespace DuckGame
                 }
             }
         }
+        public bool forcestart;
         public override void Update()
         {
             if (Keyboard.Pressed(Keys.F6)) Options.ReloadHats();
@@ -1522,15 +1523,15 @@ namespace DuckGame
                     activePlayers = 2;
                     num2 = 0;
                 }
-                if (activePlayers == num1 && !_returnToMenu.value && (!Network.isActive && num1 > 0 || Network.isActive && num1 > num2))
+                if ((activePlayers == num1 && !_returnToMenu.value && (!Network.isActive && num1 > 0 || Network.isActive && num1 > num2)) || forcestart)
                 {
                     _singlePlayer = num1 == 1;
-                    if (DuckNetwork.core.startCountdown)
+                    if (DuckNetwork.core.startCountdown || forcestart)
                     {
                         DuckNetwork.inGame = true;
                         dim = Maths.LerpTowards(dim, 0.8f, 0.02f);
                         _countTime -= 0.006666667f;
-                        if (_countTime <= 0 && Network.isServer && (Graphics.fade <= 0 || NetworkDebugger.enabled))
+                        if ((_countTime <= 0 && Network.isServer && (Graphics.fade <= 0 || NetworkDebugger.enabled)) || forcestart)
                         {
                             UpdateModifierStatus();
                             DevConsole.qwopMode = Enabled("QWOPPY", true);
@@ -1552,7 +1553,7 @@ namespace DuckGame
                                 Main.ResetMatchStuff();
                             Music.Stop();
                             MonoMain.FinishLazyLoad();
-                            if (_singlePlayer)
+                            if (_singlePlayer && !forcestart)
                             {
                                 current.Clear();
                                 current = new ArcadeLevel(Content.GetLevelID("arcade"));
@@ -1632,7 +1633,7 @@ namespace DuckGame
                         {
                             if (_starting || _sentDedicatedCountdown)
                             {
-                                _countTime = -100;
+                                forcestart = true;
                             }
                             if (Network.isActive)
                             {

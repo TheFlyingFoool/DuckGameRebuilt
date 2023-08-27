@@ -15,7 +15,7 @@ namespace DuckGame
     [BaggedProperty("previewPriority", true)]
     public class NetGun : Gun
     {
-        private SpriteMap _barrelSteam;
+        public SpriteMap _barrelSteam;
         private SpriteMap _netGunGuage;
 
         public NetGun(float xval, float yval)
