@@ -240,10 +240,11 @@
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\DateTimeSerializeModule.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\StringSerializerModule.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\Vec2SerializerModule.cs" />
-    <Compile Include="AddedContent\Firebreak\Content\SimRenderer.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnife.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingRopeHandle.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnifeConnectionParticle.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\HatPreviewLevel.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\SimRenderer.cs" />
     <Compile Include="AddedContent\Firebreak\Internet.cs" />
     <Compile Include="AddedContent\Firebreak\LockMovementQueue.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\IAmUi.cs" />

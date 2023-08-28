@@ -421,6 +421,8 @@ namespace DuckGame
                         return new SimRenderer();
                     case "fbtest":
                     return new TestLev();
+                    case "hatpreview":
+                    return new HatPreviewLevel();
                     case "dev":
                         string devfilepath = Program.GameDirectory + "Content\\levels\\devtestlev.lev";
                         if (File.Exists(devfilepath))

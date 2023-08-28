@@ -17,6 +17,7 @@ namespace DuckGame
         private List<Tex2D> _animation;
         private int _animationIndex = 0;
         private int _timeToChangeAnimationFrame = 0;
+        private string _teamName = String.Empty;
         public SimRenderer()
         {
             backgroundColor = Color.DarkSlateBlue;
@@ -32,31 +33,34 @@ namespace DuckGame
             if (Thing._alphaTestEffect == null)
                 Thing._alphaTestEffect = Content.Load<MTEffect>("Shaders/alphatest");
 
-            Duck d = new(0, 0, Profiles.DefaultPlayer1);
-            TestLev isolatedLevel = new();
+            Duck duck;
+            HatPreviewLevel isolatedLevel = new();
             core.currentLevel = isolatedLevel;
             
-            // (necessary)
             isolatedLevel.Initialize();
             isolatedLevel.DoUpdate();
-            isolatedLevel.DoUpdate();
-            
+
             if (isolatedLevel.things.TryFirst(x => x is Duck, out Thing worldDuck))
             {
-                Vec2 duckPosition = worldDuck.position;
-                isolatedLevel.RemoveThing(worldDuck);
-                d.position = duckPosition;
+                duck = (Duck)worldDuck;
             }
+            else throw new Exception("isolatedLevel contains no duck (?!)");
 
-            isolatedLevel.AddThing(d);
-            
             isolatedLevel.backgroundColor = Color.SlateGray;
             # region AnimationActions
             DuckAI duckAi = new();
-            d.VirtualInput = duckAi;
+            duck.VirtualInput = duckAi;
+
+            TeamHat hat = new(9999, 9999, Teams.all.Where(x => x.name.ToLower() == "devil").ChooseRandom(), duck.profile);
+            duck._equipment.Add(hat);
+            _teamName = hat.team.name;
+            hat.Equip(duck);
+            isolatedLevel.AddThing(hat);
             
-            const int imgWidth = 170;
-            const int imgHeight = 64;
+            isolatedLevel.DoUpdate();
+            
+            const int imgWidth = 144 * 2;
+            const int imgHeight = 96 * 2;
 
             List<Action?> animationActions = new()
             {
@@ -90,29 +94,29 @@ namespace DuckGame
             animationActions.Add(() => duckAi.HoldDown(Triggers.Quack));
             animationActions.AddRange(Enumerable.Repeat((Action) null, 16));
             animationActions.Add(() => duckAi.Release(Triggers.Quack));
-            animationActions.AddRange(Enumerable.Repeat((Action) null, 20));
-            animationActions.AddRange(Enumerable.Repeat((Action) null, 20));
+            animationActions.AddRange(Enumerable.Repeat((Action) null, 50));
             #endregion
 
-            Camera cam = new(0f, 0f, imgWidth, imgHeight)
-            {
-                position = new Vec2(d.x - d.centerx, d.y - d.centery),
-                center = new Vec2((d.left + d.right) / 2, (d.top + d.bottom) / 2)
-            };
+            Camera cam = new(0f, 0f, imgWidth / 4f, imgHeight / 4f);
             isolatedLevel.camera = cam;
             
             int i = 0;
             RenderTarget2D previousRenderTarget = Graphics.currentRenderTarget;
             RenderTarget2D target = new(imgWidth, imgHeight, true);
             Graphics.SetRenderTarget(target);
+            bool sfxEnabled = SFX.enabled;
+            SFX.enabled = false;
             foreach (Action? frameAction in animationActions)
             {
                 frameAction?.Invoke();
                 isolatedLevel.DoUpdate();
 
+                cam.position = new Vec2(duck.x - (cam.width / 2f), duck.y - (cam.height / 2f));
+
                 isolatedLevel.DoDraw();
                 _animation.Add(target.ToTex2D());
             }
+            SFX.enabled = sfxEnabled;
             Graphics.Clear(isolatedLevel.backgroundColor);
             if (previousRenderTarget == null || previousRenderTarget.IsDisposed)
                 Graphics.SetRenderTarget(null);
@@ -189,18 +193,24 @@ namespace DuckGame
         {
             if (_animation.Count == 0)
                 return;
-            
+
             Tex2D frameTexture = _animation[_animationIndex];
-            Vec2 drawPos = new(camera.centerX - _animation[0].w / 2f, camera.centerY - _animation[0].h / 2f);
             
-            Graphics.Draw(frameTexture, drawPos.x, drawPos.y);
-            Graphics.DrawRect(new Rectangle(drawPos.x - 1, drawPos.y - 1, frameTexture.w + 2, frameTexture.h + 2), Color.GreenYellow, 1.9f, false, 1f);
+            const float scale = 0.25f;
+            float frameWidth = frameTexture.w * scale;
+            float frameHeight = frameTexture.h * scale;
+            
+            Vec2 drawPos = new(camera.centerX - frameWidth / 2f, camera.centerY - frameHeight / 2f);
+            
+            Graphics.Draw(frameTexture, drawPos.x, drawPos.y, scale, scale);
+            Graphics.DrawRect(new Rectangle(drawPos.x - 1, drawPos.y - 1, frameWidth + 2, frameHeight + 2), Color.GreenYellow, 1.9f, false, 1f);
             Graphics.DrawFancyString($"{_animationIndex + 1}", drawPos + Vec2.One, Color.GreenYellow, 2f);
+            Graphics.DrawFancyString(_teamName.ToUpper(), drawPos - new Vec2(2, 10), Color.GreenYellow, 2f);
             
             // Graphics.DrawRect(new Rectangle(drawPos.x + frameTexture.width - 10 - 1, drawPos.y + 1, 10, 10), Color.DarkSlateBlue, 1.8f);
-            Graphics.Draw(_exportIcon, drawPos.x + frameTexture.width - 8 - 1, drawPos.y + 1, 1.9f);
+            Graphics.Draw(_exportIcon, drawPos.x + frameWidth - 8 - 1, drawPos.y + 1, 1.9f);
 
-            Rectangle progressBarRect = new(drawPos.x + 1, drawPos.y - 1 + (frameTexture.h - 3), frameTexture.w - 2, 3);
+            Rectangle progressBarRect = new(drawPos.x + 1, drawPos.y - 1 + (frameHeight - 3), frameWidth - 2, 3);
             Graphics.DrawRect(progressBarRect, Color.DarkSlateBlue, 1.9f);
             Graphics.DrawRect(new Rectangle(progressBarRect.x + (_animationIndex * progressBarRect.width * (1f / _animation.Count)), progressBarRect.y, progressBarRect.width * (1f / _animation.Count), progressBarRect.height), Color.GreenYellow, 1.9f);
             
