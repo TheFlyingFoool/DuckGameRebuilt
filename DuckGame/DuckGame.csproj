@@ -240,7 +240,7 @@
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\DateTimeSerializeModule.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\StringSerializerModule.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\Vec2SerializerModule.cs" />
-    <Compile Include="AddedContent\Firebreak\Content\GifGenLev.cs" />
+    <Compile Include="AddedContent\Firebreak\Content\SimRenderer.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnife.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingRopeHandle.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnifeConnectionParticle.cs" />

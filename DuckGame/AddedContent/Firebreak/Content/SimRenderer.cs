@@ -10,14 +10,14 @@ using System.Linq;
 
 namespace DuckGame
 {
-    public class GifGenLev : Level
+    public class SimRenderer : Level
     {
         private Sprite _exportIcon;
         
         private List<Tex2D> _animation;
         private int _animationIndex = 0;
         private int _timeToChangeAnimationFrame = 0;
-        public GifGenLev()
+        public SimRenderer()
         {
             backgroundColor = Color.DarkSlateBlue;
             _animation = new List<Tex2D>();
@@ -25,6 +25,8 @@ namespace DuckGame
 
         public override void Initialize()
         {
+            Add(new Block(0, camera.height * 0.75f, camera.width, camera.height * 0.25f));
+            
             _exportIcon = new Sprite("exportIcon") {color = Color.GreenYellow};
 
             if (Thing._alphaTestEffect == null)
@@ -48,9 +50,7 @@ namespace DuckGame
 
             isolatedLevel.AddThing(d);
             
-            
             isolatedLevel.backgroundColor = Color.SlateGray;
-            
             # region AnimationActions
             DuckAI duckAi = new();
             d.VirtualInput = duckAi;
@@ -93,33 +93,29 @@ namespace DuckGame
             animationActions.AddRange(Enumerable.Repeat((Action) null, 20));
             animationActions.AddRange(Enumerable.Repeat((Action) null, 20));
             #endregion
-            
 
             Camera cam = new(0f, 0f, imgWidth, imgHeight)
             {
                 position = new Vec2(d.x - d.centerx, d.y - d.centery),
-                center = new Vec2((d.left + d.right) / 2, (d.top + d.bottom) / 2),
+                center = new Vec2((d.left + d.right) / 2, (d.top + d.bottom) / 2)
             };
             isolatedLevel.camera = cam;
             
             int i = 0;
+            RenderTarget2D previousRenderTarget = Graphics.currentRenderTarget;
+            RenderTarget2D target = new(imgWidth, imgHeight, true);
+            Graphics.SetRenderTarget(target);
             foreach (Action? frameAction in animationActions)
             {
                 frameAction?.Invoke();
                 isolatedLevel.DoUpdate();
-                RenderTarget2D target = new(imgWidth, imgHeight, true);
-
-                RenderTarget2D previousRenderTarget = Graphics.currentRenderTarget;
-                Graphics.SetRenderTarget(target);
 
                 isolatedLevel.DoDraw();
-
-                if (previousRenderTarget == null || previousRenderTarget.IsDisposed)
-                    Graphics.SetRenderTarget(null);
-                else Graphics.SetRenderTarget(previousRenderTarget);
-
-                _animation.Add(target);
+                _animation.Add(target.ToTex2D());
             }
+            if (previousRenderTarget == null || previousRenderTarget.IsDisposed)
+                Graphics.SetRenderTarget(null);
+            else Graphics.SetRenderTarget(previousRenderTarget);
             
             core.currentLevel = this;
 
