@@ -30,7 +30,7 @@
         {
             if (playBack)
             {
-                DevConsole.Log("deathlaser " + addTime);
+                //DevConsole.Log("deathlaser " + addTime);
                 y = -3000;
                 Level.Remove(this);
             }

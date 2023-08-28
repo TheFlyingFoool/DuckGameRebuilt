@@ -23,6 +23,7 @@ namespace DuckGame
         {
             Equipment e = (Equipment)t;
             int hObj = (int)valOf("equipped");
+            bool smoek = false;
             if (hObj == -1)
             {
                 if (e._equippedDuck != null)
@@ -36,12 +37,20 @@ namespace DuckGame
                 Duck d = (Duck)Corderator.instance.somethingMap[hObj];
                 if (e._equippedDuck == null)
                 {
+                    smoek = true;
                     d.Equip(e, false);
+                    d.Update();
+                    skipPositioning = true;
                 }
                 e._equippedDuck = d;
             }
             e.angleDegrees = BitCrusher.UShortToFloat((ushort)valOf("ang"), 360);
             base.PlaybackUpdate();
+            if (smoek)
+            {
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
+                    Level.Add(SmallSmoke.New(e.x + Rando.Float(-2f, 2f), e.y + Rando.Float(-2f, 2f)));
+            }
         }
         public override void RecordUpdate()
         {

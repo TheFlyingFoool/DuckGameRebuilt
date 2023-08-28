@@ -43,7 +43,7 @@ namespace DuckGame
         {
             if (alpha > 0)
             {
-                DevConsole.Log("boolet " + addTime);
+                //DevConsole.Log("boolet " + addTime);
                 alpha = 0;
             }
             y = -30000;
@@ -53,7 +53,6 @@ namespace DuckGame
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
             Vec2 v = b.ReadVec2();
-            //Main.SpecialCode = "it crashed here";
             AmmoType at = (AmmoType)Activator.CreateInstance(AmmoType.indexTypeMap[b.ReadByte()]);
             float f = b.ReadFloat();
             rangfe = b.ReadFloat();
@@ -64,21 +63,17 @@ namespace DuckGame
             at.bulletSpeed = speedo;
             int z = b.ReadUShort() - 1;
             
-            //Main.SpecialCode = "actually it crashed here: " + z;
-            
-            //Main.SpecialCode = "nvm duck game fucking sucks";
             BulletVessel vb;
             if (at.bulletType != typeof(Bullet))
             {
-                //i forgor
-                Bullet boolet = at.GetBullet(v.x, v.y, null, -f);
-                boolet.rebound = false;
-                vb = new BulletVessel(boolet);
+                Bullet bullet = at.GetBullet(v.x, v.y, null, -f);
+                bullet.rebound = false;
+                if (at.bulletType == typeof(GrenadeBullet) || at.bulletType == typeof(LaserBullet)) bullet.rebound = true;
+                vb = new BulletVessel(bullet);
                 vb.wowownerd = z;
             }
             else
             {
-                //i rember!
                 vb = new BulletVessel(new Bullet(v.x, v.y, at, f, null));
                 vb.wowownerd = z;
                 if (at is ATPlasmaBlaster) ((Bullet)vb.t).color = Color.Orange;

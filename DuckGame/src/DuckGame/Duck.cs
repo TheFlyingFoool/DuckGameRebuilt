@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Duck
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -4178,7 +4171,7 @@ namespace DuckGame
 
         public void UpdateHoldLerp(bool updateLerp = false, bool instant = false)
         {
-            if (Level.current is ReplayLevel)
+            if (Recorderator.Playing)
             {
                 float armOffY = 6;
                 float armOffX = -3f * offDir;
@@ -4469,6 +4462,7 @@ namespace DuckGame
                 {
                     case GameLevel _:
                     case ChallengeLevel _:
+                    case ReplayLevel _://recorderator
                         if (Level.current.simulatePhysics)
                             return position.x < level.camera.left + num || position.x > level.camera.right - num || position.y < level.camera.top + num || position.y > level.camera.bottom - num;
                         break;
@@ -4830,7 +4824,7 @@ namespace DuckGame
                             if (!flag2)
                             {
                                 _spriteArms.angle = 0f;
-                                if ((_sprite.currentAnimation == "jump" && _spriteArms.imageIndex == 9) || cordHover)
+                                if ((_sprite.currentAnimation == "jump" && _spriteArms.imageIndex == 9) || (cordHover || (Recorderator.Playing && _spriteArms.imageIndex == 9)))
                                 {
                                     int num14 = 2;
                                     if (HasEquipment(typeof(ChestPlate)))

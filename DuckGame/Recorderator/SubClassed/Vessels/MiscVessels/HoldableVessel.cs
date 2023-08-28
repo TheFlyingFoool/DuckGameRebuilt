@@ -20,12 +20,14 @@ namespace DuckGame
             prevBuffer.Write(Editor.IDToType[t.GetType()]);
             return prevBuffer;
         }
+        public bool skipPositioning;
         public ItemSpawner lastHover;
         public override void PlaybackUpdate()
         {
             Holdable h = (Holdable)t;
 
-            if (lastHover == null && h.duck == null) h.position = (Vec2)valOf("position");
+            if (lastHover == null && h.duck == null && h._equippedDuck == null && !skipPositioning) h.position = (Vec2)valOf("position");
+            skipPositioning = false;
             lastHover = h.hoverSpawner;
             if (syncled.ContainsKey("infoed_h"))
             {
@@ -42,7 +44,7 @@ namespace DuckGame
         public override void RecordUpdate()
         {
             Holdable h = (Holdable)t;
-            if ((lastHover == null && h.duck == null) || exFrames == 0) addVal("position", h.position);
+            if ((lastHover == null && h.duck == null && h._equippedDuck == null && !skipPositioning) || exFrames == 0) addVal("position", h.position);
             lastHover = h.hoverSpawner;
             BitArray br = new BitArray(8);
             br[0] = h.offDir > 0;

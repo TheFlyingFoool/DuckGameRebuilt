@@ -15,6 +15,9 @@
         }
         public override void DoUpdateThing()
         {
+            Gun g = (Gun)t;
+            if (g.kick > 0) g.kick -= 0.2f;
+            else g.kick = 0;
         }
     }
 }

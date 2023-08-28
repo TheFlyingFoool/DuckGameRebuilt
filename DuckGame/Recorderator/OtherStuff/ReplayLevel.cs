@@ -104,82 +104,216 @@ namespace DuckGame
                 Main.SpecialCode2 = "btr: " + bitedTHREE + "  btwo: " + bitedTWO;
                 Vec2 v = b.ReadVec2();
                 Thing somethingthing;
-                if (bitedTHREE == 0)
+                DevConsole.Log(bitedTHREE);
+                switch (bitedTHREE)
                 {
-                    switch (bitedTWO)
-                    {
-                        case 0:
-                            somethingthing = new Saws(v.x, v.y);
+                    case 0:
+                        {
+                            switch (bitedTWO)
+                            {
+                                case 0:
+                                    somethingthing = new Saws(v.x, v.y);
+                                    break;
+                                case 1:
+                                    somethingthing = new SawsDown(v.x, v.y);
+                                    break;
+                                case 2:
+                                    somethingthing = new SawsLeft(v.x, v.y);
+                                    break;
+                                case 3:
+                                    somethingthing = new SawsRight(v.x, v.y);
+                                    break;
+                                case 255:
+                                default:
+                                    continue;
+                            }
                             break;
-                        case 1:
-                            somethingthing = new SawsDown(v.x, v.y);
+                        }
+                    case 1:
+                        {
+                            switch (bitedTWO)
+                            {
+                                case 0:
+                                    somethingthing = new Spikes(v.x, v.y);
+                                    break;
+                                case 1:
+                                    somethingthing = new SpikesDown(v.x, v.y);
+                                    break;
+                                case 2:
+                                    somethingthing = new SpikesLeft(v.x, v.y);
+                                    break;
+                                case 3:
+                                    somethingthing = new SpikesRight(v.x, v.y);
+                                    break;
+                                case 255:
+                                default:
+                                    continue;
+                            }
                             break;
-                        case 2:
-                            somethingthing = new SawsLeft(v.x, v.y);
+                        }
+                    case 2:
+                        {
+                            switch (bitedTWO)
+                            {
+                                case 0:
+                                    somethingthing = new Spring(v.x, v.y);
+                                    break;
+                                case 1:
+                                    somethingthing = new SpringDown(v.x, v.y);
+                                    break;
+                                case 2:
+                                    somethingthing = new SpringDownLeft(v.x, v.y);
+                                    break;
+                                case 3:
+                                    somethingthing = new SpringDownRight(v.x, v.y);
+                                    break;
+                                case 4:
+                                    somethingthing = new SpringLeft(v.x, v.y);
+                                    break;
+                                case 5:
+                                    somethingthing = new SpringRight(v.x, v.y);
+                                    break;
+                                case 6:
+                                    somethingthing = new SpringUpLeft(v.x, v.y);
+                                    break;
+                                case 7:
+                                    somethingthing = new SpringUpRight(v.x, v.y);
+                                    break;
+                                case 255:
+                                default:
+                                    continue;
+                            }
                             break;
-                        case 3:
-                            somethingthing = new SawsRight(v.x, v.y);
+                        }
+                    case 3:
+                        {
+                            somethingthing = new ArcadeLight(v.x, v.y);
                             break;
-                        case 255:
-                        default:
-                            continue;
-                    }
+                        }
+                    case 4:
+                        {
+                            somethingthing = new PyramidLightRoof(v.x, v.y);
+                            break;
+                        }
+                    case 5:
+                        {
+                            somethingthing = new PyramidWallLight(v.x, v.y);
+                            break;
+                        }
+                    case 6:
+                        {
+                            somethingthing = new Bulb(v.x, v.y);
+                            break;
+                        }
+                    case 7:
+                        {
+                            somethingthing = new HangingCityLight(v.x, v.y);
+                            break;
+                        }
+                    case 8:
+                        {
+                            somethingthing = new Lamp(v.x, v.y);
+                            break;
+                        }
+                    case 9:
+                        {
+                            somethingthing = new OfficeLight(v.x, v.y);
+                            break;
+                        }
+                    case 10:
+                        {
+                            somethingthing = new WallLightRight(v.x, v.y);
+                            break;
+                        }
+                    case 11:
+                        {
+                            somethingthing = new Sun(v.x, v.y);
+                            break;
+                        }
+                    case 12:
+                        {
+                            somethingthing = new ArcadeTableLight(v.x, v.y);
+                            break;
+                        }
+                    case 13:
+                        {
+                            somethingthing = new OfficeLight(v.x, v.y);
+                            break;
+                        }
+                    case 14:
+                        {
+                            somethingthing = new WallLightLeft(v.x, v.y);
+                            break;
+                        }
+                    case 15:
+                        {
+                            somethingthing = new FishinSign(v.x, v.y);
+                            break;
+                        }
+                    case 16:
+                        {
+                            somethingthing = new MallardBillboard(v.x, v.y);
+                            break;
+                        }
+                    case 17:
+                        {
+                            somethingthing = new ClippingSign(v.x, v.y);
+                            ((ClippingSign)somethingthing).style.value = bitedTWO;
+                            break;
+                        }
+                    case 19:
+                        {
+                            somethingthing = new StreetLight(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
+                            break;
+                        }
+                    case 20:
+                        {
+                            somethingthing = new PyramidBLight(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
+                            break;
+                        }
+                    case 21:
+                        {
+                            somethingthing = new TroubleLight(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
+                            break;
+                        }
+                    case 22:
+                        {
+                            somethingthing = new RaceSign(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
+                            break;
+                        }
+                    case 23:
+                        {
+                            somethingthing = new ArrowSign(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
+                            break;
+                        }
+                    case 24:
+                        {
+                            somethingthing = new DangerSign(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
+                            break;
+                        }
+                    case 25:
+                        {
+                            somethingthing = new EasySign(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
+                            break;
+                        }
+                    case 26:
+                        {
+                            somethingthing = new HardLeft(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
+                            break;
+                        }
+                    case 27:
+                        {
+                            somethingthing = new UpSign(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
+                            break;
+                        }
+                    case 28:
+                        {
+                            somethingthing = new VeryHardSign(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
+                            break;
+                        }
+                    default:
+                        continue;
                 }
-                else if (bitedTHREE == 1)
-                {
-                    switch (bitedTWO)
-                    {
-                        case 0:
-                            somethingthing = new Spikes(v.x, v.y);
-                            break;
-                        case 1:
-                            somethingthing = new SpikesDown(v.x, v.y);
-                            break;
-                        case 2:
-                            somethingthing = new SpikesLeft(v.x, v.y);
-                            break;
-                        case 3:
-                            somethingthing = new SpikesRight(v.x, v.y);
-                            break;
-                        case 255:
-                        default:
-                            continue;
-                    }
-                }
-                else if (bitedTHREE == 2)
-                {
-                    switch (bitedTWO)
-                    {
-                        case 0:
-                            somethingthing = new Spring(v.x, v.y);
-                            break;
-                        case 1:
-                            somethingthing = new SpringDown(v.x, v.y);
-                            break;
-                        case 2:
-                            somethingthing = new SpringDownLeft(v.x, v.y);
-                            break;
-                        case 3:
-                            somethingthing = new SpringDownRight(v.x, v.y);
-                            break;
-                        case 4:
-                            somethingthing = new SpringLeft(v.x, v.y);
-                            break;
-                        case 5:
-                            somethingthing = new SpringRight(v.x, v.y);
-                            break;
-                        case 6:
-                            somethingthing = new SpringUpLeft(v.x, v.y);
-                            break;
-                        case 7:
-                            somethingthing = new SpringUpRight(v.x, v.y);
-                            break;
-                        case 255:
-                        default:
-                            continue;
-                    }
-                }
-                else continue;
                 Main.SpecialCode = "a weird crash";
                 if (somethingthing == null) continue;
                 reAdd.Add(somethingthing);
@@ -312,6 +446,7 @@ namespace DuckGame
         public Corderator CCorderr;
         public override void Update()
         {
+            Recorderator.Playing = true;
             if (Input.Pressed("START", "Any"))
             {
                 //do gui stuff

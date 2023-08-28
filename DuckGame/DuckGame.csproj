@@ -414,6 +414,8 @@
     <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\WindowVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\DuckVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\EquipmentVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\FlareVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\TrappedDuckVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\ForceWaveVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\HoldableVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\ItemSpawnerVessel.cs" />

@@ -35,6 +35,7 @@ namespace DuckGame
             if (!(Level.current is ReplayLevel)) Corderator.instance = null;
             SomethingSomethingVessel.somethingIndex = 0;
             TeamHatVessel.regTems.Clear();
+            Recorderator.Playing = false;
         }
         public static Corderator zeCorder;
         public static Level lastLevel;

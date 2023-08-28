@@ -60,6 +60,7 @@ namespace DuckGame
 
         [AutoConfigField]
         public static int ClipLength = 5;
+        public static bool Playing;
         public static Map<byte, Type> autoBlockIDX = new Map<byte, Type>();
         public static Map<byte, Type> autoPlatIDX = new Map<byte, Type>();
         public static Map<byte, Type> bgIDX = new Map<byte, Type>();

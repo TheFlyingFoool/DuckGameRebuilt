@@ -18,6 +18,7 @@
             Net n = (Net)t;
             n.position = (Vec2)valOf("position");
             n.velocity = (Vec2)valOf("velocity");
+            n.solid = false;
             base.PlaybackUpdate();
         }
         public override void RecordUpdate()

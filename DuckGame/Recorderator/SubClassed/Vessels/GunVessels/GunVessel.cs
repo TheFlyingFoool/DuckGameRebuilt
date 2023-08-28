@@ -23,8 +23,14 @@ namespace DuckGame
         }
         public override BitBuffer RecSerialize(BitBuffer prevBuffer)
         {
-            if (GetType() == typeof(GunVessel)) prevBuffer.Write(Editor.IDToType[t.GetType()]);
+            //p sure that isn't needed but that might come back to bite me later
+            /*if (GetType() == typeof(GunVessel)) */prevBuffer.Write(Editor.IDToType[t.GetType()]);
             return prevBuffer;
+        }
+        public virtual void AmmoDecreased()
+        {
+            Gun g = (Gun)t;
+            g.kick = 1;
         }
         public override void PlaybackUpdate()
         {
@@ -46,6 +52,8 @@ namespace DuckGame
                     if (b_ARR[i]) ammo += divide;
                     divide /= 2;
                 }
+
+                if (ammo < g.ammo) AmmoDecreased();
                 g.ammo = ammo;
                 g.infiniteAmmoVal = b_ARR[7];
             }

@@ -84,6 +84,8 @@ namespace DuckGame
 
         protected override void Rebound(Vec2 pos, float dir, float rng)
         {
+            if (DGRSettings.ActualParticleMultiplier > 0) Level.current.AddThing(new LaserRebound(pos.x, pos.y));
+            if (Recorderator.Playing) return;
             ++reboundBulletsCreated;
             isRebound = true;
             LaserBullet t = new LaserBullet(pos.x, pos.y, ammo, dir, rbound: rebound, distance: rng);
@@ -96,7 +98,6 @@ namespace DuckGame
             t.connection = connection;
             reboundCalled = true;
             Level.current.AddThing(t);
-            if (DGRSettings.ActualParticleMultiplier > 0) Level.current.AddThing(new LaserRebound(pos.x, pos.y));
         }
     }
 }

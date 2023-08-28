@@ -20,6 +20,9 @@ namespace DuckGame
         }
         public override void DoUpdateThing()
         {
+            Gun g = (Gun)t;
+            if (g.kick > 0) g.kick -= 0.2f;
+            else g.kick = 0;
         }
         public override void PlaybackUpdate()
         {
@@ -28,14 +31,14 @@ namespace DuckGame
             byte fuck = (byte)valOf("MEGAINFOED");
             BitArray br = new BitArray(new byte[] { fuck });
             int divide = 4;
-            int NinjasPlusPlus = 0;
+            int plus = 0;
             for (int i = 0; i < 3; i++)
             {
-                if (br[i]) NinjasPlusPlus += divide;
+                if (br[i]) plus += divide;
                 divide /= 2;
             }
-            if (NinjasPlusPlus == 0) s.infiniteAmmoVal = true;
-            else s.ammo = NinjasPlusPlus - 1;
+            if (plus == 0) s.infiniteAmmoVal = true;
+            else s.ammo = plus - 1;
 
             int lod = -1;
             divide = 4;

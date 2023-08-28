@@ -4,23 +4,20 @@
     {
         public NetGunVessel(Thing th) : base(th)
         {
-            tatchedTo.Add(typeof(NetGunVessel));
+            tatchedTo.Add(typeof(NetGun));
         }
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
             NetGunVessel v = new NetGunVessel(new NetGun(0, -2000));
             return v;
         }
-        public override void PlaybackUpdate()
+        public override void AmmoDecreased()
         {
             NetGun g = (NetGun)t;
-            int cAmmo = g.ammo;
-            base.PlaybackUpdate();
-            if (g.ammo != cAmmo)
-            {
-                g._barrelSteam.speed = 1f;
-                g._barrelSteam.frame = 0;
-            }
+
+            g._barrelSteam.speed = 1f;
+            g._barrelSteam.frame = 0;
+            base.AmmoDecreased();
         }
     }
 }

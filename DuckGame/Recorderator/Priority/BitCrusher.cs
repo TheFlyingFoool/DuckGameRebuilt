@@ -64,14 +64,14 @@ namespace DuckGame
             return (float)Math.Round(v * f, rounding);
         }
 
-        public static ushort FloatToByte(float v, int range = 1, bool negative = true)
+        public static byte FloatToByte(float v, int range = 1, bool negative = true)
         {
-            float f = range / (negative ? 128 : 256);
-            return (ushort)Math.Round(v / f);
+            float f = range / (negative ? 128f : 256f);
+            return (byte)Math.Round(v / f);
         }
         public static float ByteToFloat(ushort v, int range = 1, bool negative = true, int rounding = 2)
         {
-            float f = range / (negative ? 128 : 256);
+            float f = range / (negative ? 128f : 256f);
             return (float)Math.Round(v * f, rounding);
         }
     }

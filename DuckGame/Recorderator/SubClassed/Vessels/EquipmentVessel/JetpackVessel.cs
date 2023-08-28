@@ -19,8 +19,7 @@ namespace DuckGame
         public override void PlaybackUpdate()
         {
             Jetpack j = (Jetpack)t;
-            //float pH = j._heat; if jetpack particles dont work then make a system with this to do odfo fosdsgoasigd hasgu h<asiu ogs-mniko
-            j._heat = BitCrusher.ByteToFloat((byte)valOf("fuel"));
+            //float pH = j._heat; if jetpack particles dont work then make a system with this to do odfo fosdsgoasigd hasgu h<asiu ogs -mniko
             BitArray br = new BitArray(new byte[] { (byte)valOf("infoed_j") });
             j.offDir = (sbyte)(br[0] ? 1 : -1);
             j.visible = br[1];
@@ -28,6 +27,7 @@ namespace DuckGame
             j.solid = br[3];
             j.sleeping = br[4];
             j._on = br[5];
+            j._heat = BitCrusher.ByteToFloat((byte)valOf("fuel"));
             base.PlaybackUpdate();
         }
         public override void RecordUpdate()

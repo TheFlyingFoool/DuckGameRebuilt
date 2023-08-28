@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Linq;
 
 namespace DuckGame
@@ -16,8 +15,9 @@ namespace DuckGame
             AddSynncl("position", new SomethingSync(typeof(Vec2)));
 
             AddSynncl("infoed", new SomethingSync(typeof(byte)));
-            AddSynncl("trappedpos", new SomethingSync(typeof(Vec2)));//x
-            AddSynncl("trappedowner", new SomethingSync(typeof(int)));//x
+            //AddSynncl("trappedpos", new SomethingSync(typeof(Vec2)));//x
+            //AddSynncl("trappedowner", new SomethingSync(typeof(int)));//x
+            AddSynncl("currentanimation", new SomethingSync(typeof(byte)));
 
             //vec 6 4*2*3 8*3 24 bytes per rpos
             AddSynncl("rpos", new SomethingSync(typeof(Vec6)));
@@ -29,10 +29,12 @@ namespace DuckGame
             //
             //1 2 4 8 16 32 64 128 256 512 1024 2048 4096 8192 16384 32768
         }
+        public ulong ID;
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
             byte persona = b.ReadByte();
             string pName = b.ReadString();
+            ID = b.ReadULong();
             p = new Profile(pName, null, null, Persona.all.ElementAt(persona));
             DuckVessel dv = new DuckVessel(new Duck(0, -2000, p) { invincible = true }) { p = p };
             return dv;
@@ -41,6 +43,7 @@ namespace DuckGame
         {
             prevBuffer.Write((byte)((Duck)t).persona.index);
             prevBuffer.Write(((Duck)t).profile.name);
+            prevBuffer.Write(((Duck)t).profile.steamID);
             return prevBuffer;
         }
         public int prevNetOwner;
@@ -68,10 +71,10 @@ namespace DuckGame
                 d.ragdoll.part2.DoUpdate();
                 d.ragdoll.part3.DoUpdate();
             }
-            if (d._trapped != null)
+            /*if (d._trapped != null)
             {
                 d._trapped.DoUpdate();
-            }
+            }*/
         }
         public override void Draw()
         {
@@ -138,8 +141,42 @@ namespace DuckGame
             d.holdAngleOff = Maths.DegToRad(BitCrusher.UShortToFloat((ushort)valOf("holdang"), 360));
             int hObj = (ushort)valOf("hold") - 1;
             Vec6 v6 = (Vec6)valOf("rpos");
-            Vec2 tPos = (Vec2)valOf("trappedpos");
-            int tOwner = (int)valOf("trappedowner");
+            //Vec2 tPos = (Vec2)valOf("trappedpos");
+            //int tOwner = (int)valOf("trappedowner");
+
+            byte current = (byte)valOf("currentanimation");
+            switch (current)
+            {
+                case 0:
+                    d._sprite.currentAnimation = "idle";
+                    break;
+                case 1:
+                    d._sprite.currentAnimation = "run";
+                    break;
+                case 2:
+                    d._sprite.currentAnimation = "jump";
+                    break;
+                case 3:
+                    d._sprite.currentAnimation = "slide";
+                    break;
+                case 4:
+                    d._sprite.currentAnimation = "crouch";
+                    break;
+                case 5:
+                    d._sprite.currentAnimation = "groundSlide";
+                    break;
+                case 6:
+                    d._sprite.currentAnimation = "dead";
+                    break;
+                case 7:
+                    d._sprite.currentAnimation = "netted";
+                    break;
+                case 8:
+                    d._sprite.currentAnimation = "listening";
+                    break;
+            }
+
+            //d._spriteArms.imageIndex = armframe;
 
             d._sprite.ClearAnimations();
             d.velocity = Vec2.Zero;
@@ -158,7 +195,7 @@ namespace DuckGame
 
             d._hovering = b_ARR[5];
             d.spriteImageIndex = (byte)frame;
-            d._spriteArms.imageIndex = d._sprite.imageIndex;
+            //d._spriteArms.imageIndex = d._sprite.imageIndex;
             d.offDir = (sbyte)(b_ARR[6]?1:-1);
             if (hObj == -1 && lastHold != null)
             {
@@ -184,7 +221,7 @@ namespace DuckGame
             d.visible = b_ARR[7];
             if (d.ragdoll != null) d.visible = false;
 
-            if (tPos.y > -1500)
+            /*if (tPos.y > -1500)
             {
                 d.Netted(new Net(0, 0, null));
                 d._trapped.active = false;
@@ -194,7 +231,7 @@ namespace DuckGame
                 Level.Remove(d._trapped);
                 d._trapped._trapTime = 0;
                 d._trapped = null;
-            }
+            }*/
 
 
             if (d.ragdoll != null)
@@ -208,7 +245,7 @@ namespace DuckGame
                 d.ragdoll.part3.position = r3;
             }
 
-            if (d._trapped != null)
+            /*if (d._trapped != null)
             {
                 d._trapped.position = tPos;
                 if (tOwner == -1 && d._trapped.owner != null)
@@ -224,7 +261,7 @@ namespace DuckGame
                     d._trapped.owner = t;
                 }
                 prevNetOwner = tOwner;
-            }
+            }*/
             d.cordHover = d._hovering;
             if (d._hovering) d.UpdateAnimation();
 
@@ -265,7 +302,40 @@ namespace DuckGame
             b_ARR[7] = d.visible;
 
             Main.SpecialCode = "coded 1-weird";
-            addVal("infoed", BitCrusher.BitArrayToByte(b_ARR));            
+            addVal("infoed", BitCrusher.BitArrayToByte(b_ARR));
+            byte b;
+            switch (d._sprite.currentAnimation)
+            {
+                default:
+                case "idle":
+                    b = 0;
+                    break;
+                case "run":
+                    b = 1;
+                    break;
+                case "jump":
+                    b = 2; 
+                    break;
+                case "slide":
+                    b = 3;
+                    break;
+                case "crouch":
+                    b = 4;
+                    break;
+                case "groundSlide":
+                    b = 5;
+                    break;
+                case "dead":
+                    b = 6; 
+                    break;
+                case "netted":
+                    b = 7;
+                    break;
+                case "listening":
+                    b = 8;
+                    break;
+            }
+            addVal("currentanimation", b);
 
             if (d._ragdollInstance != null)
             {
@@ -283,7 +353,7 @@ namespace DuckGame
             {
                 addVal("rpos", new Vec6(0, -2000, 0, -2000, 0, -2000));   
             }
-            if (d._trapped != null)
+            /*if (d._trapped != null)
             {
                 Main.SpecialCode = "coded 1-trapped";
                 addVal("trappedpos", d._trapped.position);
@@ -299,7 +369,7 @@ namespace DuckGame
             {
                 addVal("trappedpos", new Vec2(0, -2000));
                 addVal("trappedowner", -1);
-            }
+            }*/
             Main.SpecialCode = "coded 1-hold";
             if (d.holdObject != null && Corderator.instance.somethingMap.Contains(d.holdObject))
             {
