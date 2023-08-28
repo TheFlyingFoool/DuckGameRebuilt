@@ -33,6 +33,8 @@ namespace DuckGame
             Duck d = new(0, 0, Profiles.DefaultPlayer1);
             TestLev isolatedLevel = new();
             core.currentLevel = isolatedLevel;
+            
+            // (necessary)
             isolatedLevel.Initialize();
             isolatedLevel.DoUpdate();
             isolatedLevel.DoUpdate();
@@ -53,7 +55,8 @@ namespace DuckGame
             DuckAI duckAi = new();
             d.VirtualInput = duckAi;
             
-            const int imgSize = 64;
+            const int imgWidth = 170;
+            const int imgHeight = 64;
 
             List<Action?> animationActions = new()
             {
@@ -92,7 +95,7 @@ namespace DuckGame
             #endregion
             
 
-            Camera cam = new(0f, 0f, imgSize, imgSize)
+            Camera cam = new(0f, 0f, imgWidth, imgHeight)
             {
                 position = new Vec2(d.x - d.centerx, d.y - d.centery),
                 center = new Vec2((d.left + d.right) / 2, (d.top + d.bottom) / 2),
@@ -103,19 +106,13 @@ namespace DuckGame
             foreach (Action? frameAction in animationActions)
             {
                 frameAction?.Invoke();
-                // d.Update();
                 isolatedLevel.DoUpdate();
-                RenderTarget2D target = new(imgSize, imgSize, true);
+                RenderTarget2D target = new(imgWidth, imgHeight, true);
 
                 RenderTarget2D previousRenderTarget = Graphics.currentRenderTarget;
                 Graphics.SetRenderTarget(target);
 
-                Graphics.Clear(Color.SlateGray);
-                // Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, new DepthStencilState(), RasterizerState.CullNone, Thing._alphaTestEffect, cam.getMatrix());
-                // d.Draw();
                 isolatedLevel.DoDraw();
-                // Graphics.DrawString($"{i++}", d.position - new Vec2(16), Color.Red, 2f);
-                // Graphics.screen.End();
 
                 if (previousRenderTarget == null || previousRenderTarget.IsDisposed)
                     Graphics.SetRenderTarget(null);
@@ -156,9 +153,10 @@ namespace DuckGame
 
         private void ExportGIF()
         {
-            int imgSize = _animation.First().w;
+            int imgWidth = _animation.First().w;
+            int imgHeight = _animation.First().h;
             
-            using Image<Rgba32> gif = new(imgSize, imgSize, SixLabors.ImageSharp.Color.SlateGray);
+            using Image<Rgba32> gif = new(imgWidth, imgHeight, SixLabors.ImageSharp.Color.SlateGray);
             
             gif.Metadata.GetGifMetadata().RepeatCount = 0;
             
@@ -185,7 +183,7 @@ namespace DuckGame
             
             gif.Frames.RemoveFrame(0);
             
-            gif.Mutate(x => x.Resize(imgSize * 4, imgSize * 4, new NearestNeighborResampler()));
+            gif.Mutate(x => x.Resize(imgWidth * 4, imgHeight * 4, new NearestNeighborResampler()));
             gif.SaveAsGif($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}/duck.gif");
         }
 
