@@ -473,6 +473,10 @@ namespace DuckGame
             {
                 dgrDescription = "URLs will open in your web browser instead of the Steam Overlay."
             });
+            menu.Add(new UIMenuItemToggle("Invite HTTPS Redirect", field: new FieldBinding(dGRSettings, "UseDGRJoinLink"))
+            {
+                dgrDescription = "The lobby invite link will use DGR's own HTTPS redirect to join the game, instead of the default STEAM protocol, which makes the link clickable on Discord"
+            });
 
 
             if (Program.IS_DEV_BUILD)

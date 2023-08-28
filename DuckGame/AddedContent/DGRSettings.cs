@@ -14,6 +14,7 @@ namespace DuckGame
 
         public static int mMatch = -1;
         public static BitBuffer MatchsettingsPreset1 = new BitBuffer();
+
         [AutoConfigField]
         public static byte[] MatchSetSave1 //scuffed i know, fuck you -NiK0
         {
@@ -26,9 +27,10 @@ namespace DuckGame
                 MatchsettingsPreset1 = new BitBuffer(value);
             }
         }
-        [AutoConfigField]
-        public static List<string> bMatchSetSave1 = new List<string>();
+
+        [AutoConfigField] public static List<string> bMatchSetSave1 = new List<string>();
         public static BitBuffer MatchsettingsPreset2 = new BitBuffer();
+
         [AutoConfigField]
         public static byte[] MatchSetSave2 //scuffed i know, fuck you -NiK0
         {
@@ -41,9 +43,10 @@ namespace DuckGame
                 MatchsettingsPreset2 = new BitBuffer(value);
             }
         }
-        [AutoConfigField]
-        public static List<string> bMatchSetSave2 = new List<string>();
+
+        [AutoConfigField] public static List<string> bMatchSetSave2 = new List<string>();
         public static BitBuffer MatchsettingsPreset3 = new BitBuffer();
+
         [AutoConfigField]
         public static byte[] MatchSetSave3 //scuffed i know, fuck you -NiK0
         {
@@ -56,16 +59,13 @@ namespace DuckGame
                 MatchsettingsPreset3 = new BitBuffer(value);
             }
         }
-        [AutoConfigField]
-        public static List<string> bMatchSetSave3 = new List<string>();
+
+        [AutoConfigField] public static List<string> bMatchSetSave3 = new List<string>();
 
 
-        [AutoConfigField]
-        public static List<string> favoriteHats = new List<string>();
-        [AutoConfigField]
-        public static string arcadeHat = "";
-        [AutoConfigField]
-        public static int arcadeDuckColor = 0;
+        [AutoConfigField] public static List<string> favoriteHats = new List<string>();
+        [AutoConfigField] public static string arcadeHat = "";
+        [AutoConfigField] public static int arcadeDuckColor = 0;
 
 
         //this is ran everytime TeamSelect2.cs is initialized or hats are reloaded
@@ -95,9 +95,11 @@ namespace DuckGame
                     }
                 }
             }
+
             //If any hats have been renamed or deleted they get deleted from the list
             favoriteHats = rel;
         }
+
         public static void ReloadFavHats()
         {
             if (!Network.isActive)
@@ -117,6 +119,7 @@ namespace DuckGame
                         tts.Add(t);
                     }
                 }
+
                 tts.AddRange(laterer);
 
                 HatSelector.remember = tts;
@@ -162,30 +165,25 @@ namespace DuckGame
                 DevConsole.Log("Failed to preload levels: " + ex.ToString(), Colors.DGRed);
             }
         }
-        [AutoConfigField]
-        public static bool IgnoreLevRestrictions = false;
 
-        [AutoConfigField]
-        public static bool RememberMatchSettings = false;
+        [AutoConfigField] public static bool IgnoreLevRestrictions = false;
 
-        [AutoConfigField]
-        public static bool CustomHatTeams = false;
+        [AutoConfigField] public static bool RememberMatchSettings = false;
 
-        [AutoConfigField]
-        public static bool skipOnlineBumper = false;
+        [AutoConfigField] public static bool CustomHatTeams = false;
 
-        [AutoConfigField]
-        public static bool LoadMusic = true;
-        public static bool LoaderMusic;//this is so you wont crash immediately when changing the setting, this only gets set on startup -NiK0
+        [AutoConfigField] public static bool skipOnlineBumper = false;
 
-        [AutoConfigField]
-        public static bool DGRItems = false;
+        [AutoConfigField] public static bool LoadMusic = true;
 
-        [AutoConfigField]
-        public static string PreferredLevel = "";
+        public static bool
+            LoaderMusic; //this is so you wont crash immediately when changing the setting, this only gets set on startup -NiK0
 
-        [AutoConfigField]
-        public static bool PreloadLevels;
+        [AutoConfigField] public static bool DGRItems = false;
+
+        [AutoConfigField] public static string PreferredLevel = "";
+
+        [AutoConfigField] public static bool PreloadLevels;
 
         [AutoConfigField]
         public static bool SortLevels = true; //do you care about levels being sorted? no? turn this the fuck off for faster load times -NiK0
@@ -193,12 +191,10 @@ namespace DuckGame
         //[AutoConfigField] nvm im not smart enough for async stuff -NiK0
         //public static bool ThreadedLevelLoading = true;
 
-        [AutoConfigField]
-        public static bool SpriteAtlas = true;
+        [AutoConfigField] public static bool SpriteAtlas = true;
 
-        [AutoConfigField] 
-        public static bool S_RPC = true;
-        
+        [AutoConfigField] public static bool S_RPC = true;
+
         public static bool RPC
         {
             get => S_RPC;
@@ -216,6 +212,7 @@ namespace DuckGame
                 }
             }
         }
+
         public int ParticleMultiplier
         {
             get
@@ -256,8 +253,10 @@ namespace DuckGame
                 WoodDebris._lastActiveObject = (WoodDebris._lastActiveObject) % WoodDebris.kMaxObjects;
             }
         }
+
         [AutoConfigField]
         public static int S_ParticleMultiplier = 3;
+
         //listen if you wanna make better code go for it i cant bother to personally
         //-NiK0
         public static float ActualParticleMultiplier
@@ -278,67 +277,49 @@ namespace DuckGame
             }
         }
 
-        [AutoConfigField]
-        public static float WeatherMultiplier = 1;
+        [AutoConfigField] public static float WeatherMultiplier = 1;
 
-        [AutoConfigField]
-        public static float HeatWaveMultiplier = 1;
+        [AutoConfigField] public static float HeatWaveMultiplier = 1;
 
-        [AutoConfigField]
-        public static bool AmbientParticles = true;
+        [AutoConfigField] public static bool AmbientParticles = true;
 
-        [AutoConfigField]
-        public static bool GraphicsCulling = true;
+        [AutoConfigField] public static bool GraphicsCulling = true;
 
-        [AutoConfigField]
-        public static int StartIn = 0;
+        [AutoConfigField] public static int StartIn = 0;
 
-        [AutoConfigField]
-        public static float WeatherLighting = 1;
+        [AutoConfigField] public static float WeatherLighting = 1;
 
-        [AutoConfigField]
-        public static bool CameraUnfollow = false;
+        [AutoConfigField] public static bool CameraUnfollow = false;
 
-        [AutoConfigField]
-        public static bool dubberspeed = false;
+        [AutoConfigField] public static bool dubberspeed = false;
 
-        [AutoConfigField]
-        public static float RandomWeather = 1;
+        [AutoConfigField] public static float RandomWeather = 1;
 
-        [AutoConfigField]
-        public static bool MenuMouse = false;
+        [AutoConfigField] public static bool MenuMouse = false;
 
-        [AutoConfigField]
-        public static bool SkipExcessRounds = false;
+        [AutoConfigField] public static bool SkipExcessRounds = false;
 
-        [AutoConfigField]
-        public static int RebuiltEffect = 1;
+        [AutoConfigField] public static int RebuiltEffect = 1;
 
-        [AutoConfigField]
-        public static bool StickyHats { get; set; }
+        [AutoConfigField] public static bool StickyHats { get; set; }
 
-        [AutoConfigField]
-        public static bool QOLScoreThingButWithoutScore { get; set; }
+        [AutoConfigField] public static bool QOLScoreThingButWithoutScore { get; set; }
 
-        [AutoConfigField]
-        public static bool NameTags { get; set; }
+        [AutoConfigField] public static bool NameTags { get; set; }
 
-        [AutoConfigField]
-        public static bool LobbyData { get; set; }
+        [AutoConfigField] public static bool LobbyData { get; set; }
 
-        [AutoConfigField]
-        public static bool LobbyNameOnPause = true;
+        [AutoConfigField] public static bool LobbyNameOnPause = true;
 
         [AutoConfigField]
         public static bool EditorOnlinePhysics = false; //for the love of god be off by default jesus christ -NiK0
 
-        [AutoConfigField]
-        public static bool EditorInstructions = true;
+        [AutoConfigField] public static bool EditorInstructions = true;
 
-        [AutoConfigField]
-        public static bool EditorLevelName = true;
+        [AutoConfigField] public static bool EditorLevelName = true;
 
-        [AutoConfigField]
-        public static bool OpenURLsInBrowser = false;
-}
+        [AutoConfigField] public static bool OpenURLsInBrowser = false;
+
+        [AutoConfigField] public static bool UseDGRJoinLink = false;
+    }
 }
