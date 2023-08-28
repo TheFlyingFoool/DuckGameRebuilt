@@ -113,10 +113,12 @@ namespace DuckGame
                 isolatedLevel.DoDraw();
                 _animation.Add(target.ToTex2D());
             }
+            Graphics.Clear(isolatedLevel.backgroundColor);
             if (previousRenderTarget == null || previousRenderTarget.IsDisposed)
                 Graphics.SetRenderTarget(null);
             else Graphics.SetRenderTarget(previousRenderTarget);
             
+            core.currentLevel.Terminate();
             core.currentLevel = this;
 
             base.Initialize();
@@ -165,7 +167,7 @@ namespace DuckGame
                 {
                     for (int x = 0; x < frameTexture.w; x++)
                     {
-                        int i = y * frameTexture.h + x;
+                        int i = y * frameTexture.w + x;
                         Color pixel = pixelData[i];
                         Rgba32 imageSharpPixel = new(pixel.r, pixel.g, pixel.b, pixel.a);
             
@@ -179,7 +181,7 @@ namespace DuckGame
             
             gif.Frames.RemoveFrame(0);
             
-            gif.Mutate(x => x.Resize(imgWidth * 4, imgHeight * 4, new NearestNeighborResampler()));
+            gif.Mutate(x => x.Resize(imgWidth, imgHeight, new NearestNeighborResampler()));
             gif.SaveAsGif($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}/duck.gif");
         }
 
