@@ -72,7 +72,7 @@ namespace DuckGame
                     if (a[y]) f += d;
                     d /= 2;
                 }
-                t.direction = d;
+                t.direction = f; //idk how i messed this up lol
                 f = 0;
                 d = 16;
                 for (int y = 5; y < 10; y++)

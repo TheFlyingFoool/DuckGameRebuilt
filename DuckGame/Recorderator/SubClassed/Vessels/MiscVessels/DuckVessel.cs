@@ -275,6 +275,8 @@ namespace DuckGame
             UP = (z & 4) > 0;
             QUACK = (z & 2) > 0;
             JUMP = (z & 1) > 0;
+
+
             base.PlaybackUpdate();
         }
         public override void RecordUpdate()

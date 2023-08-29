@@ -3368,6 +3368,23 @@ namespace DuckGame
                 }
                 disableCrouch = false;
             }
+            if (Recorderator.Playing)
+            {
+                if (spriteImageIndex == 11)
+                {
+                    crouch = true;
+                }
+                else if (spriteImageIndex == 12)
+                {
+                    crouch = true;
+                    sliding = true;
+                }
+                else
+                {
+                    crouch = false;
+                    sliding = false;
+                }
+            }
         }
 
         public override Vec2 cameraPosition

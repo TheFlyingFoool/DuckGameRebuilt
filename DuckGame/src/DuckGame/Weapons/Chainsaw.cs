@@ -20,7 +20,7 @@ namespace DuckGame
         public StateBinding _floodBinding = new StateBinding(nameof(_flood));
         public StateBinding _chainsawStateBinding = new ChainsawFlagBinding();
         public EditorProperty<bool> souped = new EditorProperty<bool>(false);
-        private float _hold;
+        public float _hold;
         private bool _shing;
         private static bool _playedShing;
         public float _throwSpin;
@@ -30,8 +30,8 @@ namespace DuckGame
         private SpriteMap _sprite;
         private float _rotSway;
         public bool _started;
-        private int _pullState = -1;
-        private float _animRot;
+        public int _pullState = -1;
+        public float _animRot;
         private float _upWait;
         private float _engineSpin;
         private float _bladeSpin;
@@ -46,7 +46,7 @@ namespace DuckGame
         private bool _releasePull;
         public float _gas = 1f;
         private bool _struggling;
-        private bool _throttle;
+        public bool _throttle;
         private float _throttleWait;
         private bool _releasedSincePull;
         private int _skipDebris;

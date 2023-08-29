@@ -392,6 +392,7 @@
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\SpikeHelmVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\BootsVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\ChestplateVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\ChainsawVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\BananaVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\EnergyscimitarVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\NetGunVessel.cs" />
