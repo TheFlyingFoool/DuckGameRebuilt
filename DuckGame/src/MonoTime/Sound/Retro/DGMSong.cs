@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
+﻿using System.IO;
 using System.Linq;
+using System.IO.Compression;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework.Audio;
 //added by othello7
 
 namespace DuckGame
@@ -14,7 +14,7 @@ namespace DuckGame
 
         private float _volume = 1f;
         private bool _looped = true;
-
+        public SoundState state => vgmList[0].state;
 
         public DGMSong(string file)
         {
@@ -63,8 +63,9 @@ namespace DuckGame
             set
             {
                 _looped = value;
-                foreach (VGMSong player in vgmList)
+                for (int i = 0; i < vgmList.Count; i++)
                 {
+                    VGMSong player = vgmList[i];
                     player.looped = _looped;
                 }
             }
@@ -72,32 +73,36 @@ namespace DuckGame
 
         public void Play()
         {
-            foreach (VGMSong player in vgmList)
+            for (int i = 0; i < vgmList.Count; i++)
             {
+                VGMSong player = vgmList[i];
                 player.Play();
             }
         }
 
         public void Pause()
         {
-            foreach (VGMSong player in vgmList)
+            for (int i = 0; i < vgmList.Count; i++)
             {
+                VGMSong player = vgmList[i];
                 player.Pause();
             }
         }
 
         public void Resume()
         {
-            foreach (VGMSong player in vgmList)
+            for (int i = 0; i < vgmList.Count; i++)
             {
+                VGMSong player = vgmList[i];
                 player.Resume();
             }
         }
 
         public void Stop()
         {
-            foreach (VGMSong player in vgmList)
+            for (int i = 0; i < vgmList.Count; i++)
             {
+                VGMSong player = vgmList[i];
                 player.Stop();
             }
         }
