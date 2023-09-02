@@ -1,16 +1,8 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.TitleScreen
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Threading;
-using System.Web;
+using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -182,6 +174,7 @@ namespace DuckGame
         public static bool Checked;
         public override void Initialize()
         {
+            Add(new CrumbleShamble(160, 157));
             if (Editor.clientonlycontent)
             {
                 Editor.DisableClientOnlyContent();
@@ -908,10 +901,10 @@ namespace DuckGame
             {
                 depth = (Depth)0.9f
             };
-            _beamPlatform = new Sprite("title/beamPlatform")
-            {
-                depth = (Depth)0.9f
-            };
+            //_beamPlatform = new SpriteMap("title/beamPlatform", 84,22)
+            //{
+            //    depth = (Depth)0.9f
+            //};
             _upperMonitor = new Sprite("title/upperMonitor")
             {
                 depth = (Depth)0.85f
@@ -1108,7 +1101,7 @@ namespace DuckGame
                     }
                 }
             }
-            if (!_enterCredits && !_enterMultiplayer && _duck != null && _duck.inputProfile.Pressed(Triggers.Start))
+            if (!_enterCredits && !_enterMultiplayer && _duck != null && _duck.inputProfile.Pressed(Triggers.Start) && _duck.y < 600)
             {
                 _pauseGroup.Open();
                 _mainPauseMenu.Open();
@@ -1624,7 +1617,7 @@ namespace DuckGame
                 Graphics.Draw(_leftPlatform, 0f, 61f);
                 Graphics.Draw(_airlock, 266f, 135f);
                 Graphics.Draw(_rightPlatform, byte.MaxValue, 61f);
-                Graphics.Draw(_beamPlatform, 118f, 146f);
+                //Graphics.Draw(_beamPlatform, 118f, 146f);
                 Graphics.Draw(_optionsTV, 0f, 19f);
                 Graphics.Draw(_libraryBookcase, 263f, 12f);
                 Graphics.Draw(_editorBench, 1f, 130f);

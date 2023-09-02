@@ -21,6 +21,10 @@ namespace DuckGame
             EnergyscimitarVessel v = new EnergyscimitarVessel(new EnergyScimitar(0, -2000));
             return v;
         }
+        public override BitBuffer RecSerialize(BitBuffer prevBuffer)
+        {
+            return prevBuffer;
+        }
         public override void PlaybackUpdate()
         {
             EnergyScimitar e = (EnergyScimitar)t;

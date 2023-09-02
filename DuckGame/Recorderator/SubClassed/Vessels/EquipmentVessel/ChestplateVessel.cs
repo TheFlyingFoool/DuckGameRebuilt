@@ -11,5 +11,9 @@
             ChestplateVessel v = new ChestplateVessel(new ChestPlate(0, -2000));
             return v;
         }
+        public override BitBuffer RecSerialize(BitBuffer prevBuffer)
+        {
+            return prevBuffer;
+        }
     }
 }

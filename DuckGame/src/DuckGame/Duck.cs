@@ -2333,7 +2333,7 @@ namespace DuckGame
                 }
                 else if (from == ImpactedFrom.Top && with.y < y && with.vSpeed > 0f && with.impactPowerV > 2f && with.weight >= 5f)
                 {
-                    if (with is PhysicsObject)
+                    if (with is PhysicsObject && !Recorderator.Playing)
                     {
                         PhysicsObject wp = with as PhysicsObject;
                         if (wp.lastPosition.y + with.collisionOffset.y + with.collisionSize.y < top)
@@ -3326,7 +3326,7 @@ namespace DuckGame
                                     slideBuildup = -0.6f;
                             }
                         }
-                        if (isServerForObject && !(holdObject is DrumSet) && !(holdObject is Trumpet) && inputProfile.Pressed(Triggers.Ragdoll) && !(Level.current is TitleScreen) && pipeOut <= 0)
+                        if (isServerForObject && !(holdObject is DrumSet) && !(holdObject is Trumpet) && inputProfile.Pressed(Triggers.Ragdoll) && !(Level.current is TitleScreen || Level.current is DGRDevHall) && pipeOut <= 0)
                         {
                             framesSinceRagdoll = 0;
                             GoRagdoll();
@@ -3546,7 +3546,7 @@ namespace DuckGame
             ++framesSinceRagdoll;
             if (killedByProfile != null)
                 ++framesSinceKilled;
-            int num = crouch ? 1 : 0;
+            //int num = crouch ? 1 : 0;
             if (_sprite == null)
                 return;
             fancyShoes = HasEquipment(typeof(FancyShoes));

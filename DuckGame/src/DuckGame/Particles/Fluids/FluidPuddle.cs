@@ -17,7 +17,7 @@ namespace DuckGame
         private BlockCorner _topRightCorner;
         private bool _initializedUpperCorners;
         private List<SpriteMap> _surfaceFire = new List<SpriteMap>();
-        private Block _block;
+        public Block _block;
         private SpriteMap _lava;
         private SpriteMap _lavaAlternate;
         private int _framesSinceFeed;

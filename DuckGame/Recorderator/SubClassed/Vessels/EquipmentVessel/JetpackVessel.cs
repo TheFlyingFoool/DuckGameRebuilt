@@ -16,6 +16,10 @@ namespace DuckGame
             JetpackVessel v = new JetpackVessel(new Jetpack(0, -2000));
             return v;
         }
+        public override BitBuffer RecSerialize(BitBuffer prevBuffer)
+        {
+            return prevBuffer;
+        }
         public override void PlaybackUpdate()
         {
             Jetpack j = (Jetpack)t;

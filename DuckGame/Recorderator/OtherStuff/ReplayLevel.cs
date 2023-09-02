@@ -46,7 +46,12 @@ namespace DuckGame
                 else if (wow == 2) p = new PipeGreen(v.x, v.y);
                 p._sprite.frame = f;
                 p.background.value = a[7];
-                
+                p._initializedConnections = false;
+                p.searchUp = true;
+                p.searchDown = true;
+                p.searchLeft = true;
+                p.searchRight = true;
+
                 //Extensions.SetPrivateFieldValue(p, "searchUp", a[1]);
                 //Extensions.SetPrivateFieldValue(p, "searchDown", a[2]);
                 //Extensions.SetPrivateFieldValue(p, "searchLeft", a[3]);

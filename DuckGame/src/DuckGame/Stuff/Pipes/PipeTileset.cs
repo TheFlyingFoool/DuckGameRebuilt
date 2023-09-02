@@ -20,10 +20,10 @@ namespace DuckGame
         private Dictionary<Direction, PipeTileset> connections = new Dictionary<Direction, PipeTileset>();
         public SpriteMap _sprite;
         public float pipeDepth;
-        private bool searchUp;
-        private bool searchDown;
-        private bool searchLeft;
-        private bool searchRight;
+        public bool searchUp;
+        public bool searchDown;
+        public bool searchLeft;
+        public bool searchRight;
         private PipeTileset _pipeUp;
         private PipeTileset _pipeDown;
         private PipeTileset _pipeLeft;
@@ -38,7 +38,7 @@ namespace DuckGame
         private List<MaterialThing> _colliding;
         private int framesSincePipeout;
         private int _transportingIndex;
-        private bool _initializedConnections;
+        public bool _initializedConnections;
         private bool _testedValidity;
         private int _initializedBackground;
         private bool entered;
@@ -170,8 +170,8 @@ namespace DuckGame
             return editorCycleType;
         }
 
-        public bool isEntryPipe => _validPipe && connections.Count == 1 && !(bool)trapdoor;
-
+        public bool isEntryPipe => _validPipe && connections.Count == 1 && !(bool) trapdoor;
+        //9 11
         private void PipeOut(PhysicsObject d)
         {
             FlapPipe();

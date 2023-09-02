@@ -52,6 +52,7 @@ namespace DuckGame
             }
             catch
             {
+                SomethingSomethingVessel.doDestroy = false;
                 DevConsole.Log("an error occured " + Main.SpecialCode, Colors.DGRed);
             }
         }
@@ -74,33 +75,39 @@ namespace DuckGame
         {
             SomethingSomethingVessel.YeahFillMeUpWithLists();
 
-            List<Type> gtiles = Extensions.GetSubclasses(typeof(AutoBlock)).ToList();
+            IEnumerable<Type> gtiles = Extensions.GetSubclasses(typeof(AutoBlock));
             byte b = 0;
-            for (int i = 0; i < gtiles.Count; i++)
+            foreach (Type t in gtiles)
             {
-                if (gtiles[i] == typeof(BlockGroup)) continue;
-                autoBlockIDX.Add(b, gtiles[i]);
+                if (t == typeof(BlockGroup)) continue;
+                autoBlockIDX.Add(b, t);
                 b++;
             }
-            List<Type> gplats = Extensions.GetSubclasses(typeof(AutoPlatform)).ToList();
+            IEnumerable<Type> gplats = Extensions.GetSubclasses(typeof(AutoPlatform));
             b = 0;
-            for (int i = 0; i < gplats.Count; i++)
+            foreach (Type t in gplats)
             {
-                autoPlatIDX.Add(b, gplats[i]);
+                autoPlatIDX.Add(b, t);
                 b++;
             }
-            List<Type> bgs = Extensions.GetSubclasses(typeof(BackgroundUpdater)).ToList();
+            IEnumerable<Type> bgs = Extensions.GetSubclasses(typeof(BackgroundUpdater));
             b = 0;
-            for (int i = 0; i < bgs.Count; i++)
+            foreach (Type t in bgs)
             {
-                bgIDX.Add(b, bgs[i]);
+                bgIDX.Add(b, t);
                 b++;
             }
-            List<Type> bgts = Extensions.GetSubclasses(typeof(BackgroundTile)).ToList();
+            IEnumerable<Type> bgts = Extensions.GetSubclasses(typeof(BackgroundTile));
             b = 0;
-            for (int i = 0; i < bgts.Count; i++)
+            foreach (Type t in bgts)
             {
-                bgtileIDX.Add(b, bgts[i]);
+                bgtileIDX.Add(b, t);
+                b++;
+            }
+            bgts = Extensions.GetSubclasses(typeof(ForegroundTile));
+            foreach(Type t in bgts)
+            {
+                bgtileIDX.Add(b, t);
                 b++;
             }
             (typeof(Game).GetField("updateableComponents", BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic).GetValue(MonoMain.instance) as List<IUpdateable>).Add(new update());

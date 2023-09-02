@@ -15,6 +15,10 @@
             BananaVessel v = new BananaVessel(new Banana(0, -2000));
             return v;
         }
+        public override BitBuffer RecSerialize(BitBuffer prevBuffer)
+        {
+            return prevBuffer;
+        }
         public override void PlaybackUpdate()
         {
             Banana b = (Banana)t; 

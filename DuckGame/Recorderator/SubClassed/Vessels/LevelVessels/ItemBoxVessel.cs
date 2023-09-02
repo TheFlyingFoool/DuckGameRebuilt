@@ -12,7 +12,7 @@ namespace DuckGame
             tatchedTo.Add(typeof(ItemBoxRandom));
             tatchedTo.Add(typeof(PurpleBlock));
 
-            AddSynncl("containing", new SomethingSync(typeof(int)));
+            AddSynncl("containing", new SomethingSync(typeof(ushort)));
             AddSynncl("position", new SomethingSync(typeof(Vec2)));
             AddSynncl("_hit", new SomethingSync(typeof(bool)));
         }
@@ -34,6 +34,7 @@ namespace DuckGame
         }
         public override BitBuffer RecSerialize(BitBuffer prevBuffer)
         {
+            //can optimize this to a single byte because theres only a few itembox types
             prevBuffer.Write(Editor.IDToType[t.GetType()]);
             return prevBuffer;
         }
@@ -42,7 +43,7 @@ namespace DuckGame
             ItemBox i = (ItemBox)t;
             i.position = (Vec2)valOf("position");
             i._hit = (bool)valOf("_hit");
-            int hObj = (int)valOf("containing");
+            int hObj = (ushort)valOf("containing") - 1;
             if (hObj == -1 && i.containedObject != null)
             {
                 i.containedObject.visible = true;
@@ -63,11 +64,11 @@ namespace DuckGame
             {
                 if (Corderator.instance.somethingMap.Contains(i.containedObject))
                 {
-                    addVal("containing", Corderator.instance.somethingMap[i.containedObject]);
+                    addVal("containing", (ushort)(Corderator.instance.somethingMap[i.containedObject] + 1));
                 }
-                else addVal("containing", -1);
+                else addVal("containing", (ushort)0);
             }
-            else addVal("containing", -1);
+            else addVal("containing", (ushort)0);
             addVal("position", i.position);
             addVal("_hit", i._hit);
         }

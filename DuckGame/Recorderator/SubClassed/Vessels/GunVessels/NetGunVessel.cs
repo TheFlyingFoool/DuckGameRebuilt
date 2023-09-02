@@ -11,6 +11,10 @@
             NetGunVessel v = new NetGunVessel(new NetGun(0, -2000));
             return v;
         }
+        public override BitBuffer RecSerialize(BitBuffer prevBuffer)
+        {
+            return prevBuffer;
+        }
         public override void AmmoDecreased()
         {
             NetGun g = (NetGun)t;

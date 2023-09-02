@@ -18,6 +18,10 @@ namespace DuckGame
             SwordVessel v = new SwordVessel(new Sword(0, -2000));
             return v;
         }
+        public override BitBuffer RecSerialize(BitBuffer prevBuffer)
+        {
+            return prevBuffer;
+        }
         public override void PlaybackUpdate()
         {
             Sword s = (Sword)t;

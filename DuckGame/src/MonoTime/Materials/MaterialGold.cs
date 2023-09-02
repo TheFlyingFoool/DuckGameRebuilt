@@ -11,7 +11,7 @@ namespace DuckGame
 {
     public class MaterialGold : Material  //todo make non sprite batch version, works with Spriteatlas
     {
-        private Tex2D _goldTexture;
+        public Tex2D _goldTexture;
         private Thing _thing;
         private MTEffect _spritebatcheffect;
         private MTEffect _baseeffect;

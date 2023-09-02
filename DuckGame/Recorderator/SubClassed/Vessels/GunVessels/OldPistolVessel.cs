@@ -16,6 +16,10 @@ namespace DuckGame
             OldPistolVessel v = new OldPistolVessel(new OldPistol(0, -2000));
             return v;
         }
+        public override BitBuffer RecSerialize(BitBuffer prevBuffer)
+        {
+            return prevBuffer;
+        }
         public override void PlaybackUpdate()
         {
             OldPistol op = (OldPistol)t;

@@ -16,6 +16,10 @@ namespace DuckGame
             MineVessel v = new MineVessel(new Mine(0, -2000));
             return v;
         }
+        public override BitBuffer RecSerialize(BitBuffer prevBuffer)
+        {
+            return prevBuffer;
+        }
         public override void PlaybackUpdate()
         {
             Mine m = (Mine)t;

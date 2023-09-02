@@ -5,7 +5,7 @@ namespace DuckGame
     {
         public EquipmentVessel(Thing th) : base(th)
         {
-            AddSynncl("equipped", new SomethingSync(typeof(int)));
+            AddSynncl("equipped", new SomethingSync(typeof(ushort)));
             AddSynncl("ang", new SomethingSync(typeof(ushort)));
         }
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
@@ -22,7 +22,7 @@ namespace DuckGame
         public override void PlaybackUpdate()
         {
             Equipment e = (Equipment)t;
-            int hObj = (int)valOf("equipped");
+            int hObj = (ushort)valOf("equipped") - 1;
             bool smoek = false;
             if (hObj == -1)
             {
@@ -40,10 +40,14 @@ namespace DuckGame
                     smoek = true;
                     d.Equip(e, false);
                     d.Update();
-                    skipPositioning = true;
                 }
                 e._equippedDuck = d;
+                skipPositioning = 1;
             }
+
+            //look into the future to see if you're gonna be equipped in the next frame so you can skip positioning
+            if (syncled["equipped"].Count > 1 && (ushort)syncled["equipped"][1] != 0 && bArray[2]) skipPositioning = 1;
+
             e.angleDegrees = BitCrusher.UShortToFloat((ushort)valOf("ang"), 360);
             base.PlaybackUpdate();
             if (smoek)
@@ -59,11 +63,12 @@ namespace DuckGame
             {
                 if (Corderator.instance.somethingMap.Contains(e._equippedDuck))
                 {
-                    addVal("equipped", Corderator.instance.somethingMap[e._equippedDuck]);
+                    addVal("equipped", (ushort)(Corderator.instance.somethingMap[e._equippedDuck] + 1));
                 }
-                else addVal("equipped", -1);
+                else addVal("equipped", (ushort)0);
+                skipPositioning = 1;
             }
-            else addVal("equipped", -1);
+            else addVal("equipped", (ushort)0);
             float f = e.angleDegrees % 360;
             addVal("ang", BitCrusher.FloatToUShort(f, 360));
             base.RecordUpdate();

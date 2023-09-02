@@ -6,12 +6,16 @@
         {
             tatchedTo.Add(typeof(PlasmaBlaster));
             AddSynncl("lostaccuracy", new SomethingSync(typeof(float)));
-            AddSynncl("flarealph", new SomethingSync(typeof(float)));
+            AddSynncl("flarealph", new SomethingSync(typeof(float))); //optimize this later with ushorts
         }
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
             PlasmaBlasterVessel v = new PlasmaBlasterVessel(new PlasmaBlaster(0, -2000));
             return v;
+        }
+        public override BitBuffer RecSerialize(BitBuffer prevBuffer)
+        {
+            return prevBuffer;
         }
         public override void PlaybackUpdate()
         {

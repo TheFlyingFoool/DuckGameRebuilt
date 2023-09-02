@@ -109,6 +109,8 @@ namespace DuckGame
             Level.current = new ReplayLevel() { CCorderr = cd };
             (Level.current as ReplayLevel).DeserializeLevel(levBuffer);
 
+            //Level.current.Initialize();
+            
             int iters = b.ReadInt();
             Vec2 lastV = Vec2.Zero;
             Vec2 lastV2 = Vec2.Zero;
@@ -148,7 +150,7 @@ namespace DuckGame
         public List<PipeTileset> Pipes = new List<PipeTileset>();
         public List<Teleporter> Teleporters = new List<Teleporter>();
         public List<AutoPlatform> AutoPlatforms = new List<AutoPlatform>();
-        public List<BackgroundTile> BackgroundTiles = new List<BackgroundTile>();
+        public List<Thing> BackgroundTiles = new List<Thing>();
         public List<Thing> TheThings = new List<Thing>();
         public List<Thing> theLevelDetailsETC = new List<Thing>();
         public List<string> names = new List<string>();
@@ -192,6 +194,8 @@ namespace DuckGame
                 br[5] = (wow & 2) > 0;
                 br[6] = (wow & 1) > 0;
                 br[7] = p.IsBackground();
+
+                //levBuffer.Write((ushort)Pipes.IndexOf(p.Up()));
 
                 levBuffer.Write(BitCrusher.BitArrayToByte(br));
             }
@@ -389,7 +393,7 @@ namespace DuckGame
             Type ccTHREE = typeof(CustomBackground3);
             for (int i = 0; i < BackgroundTiles.Count; i++)
             {
-                BackgroundTile t = BackgroundTiles[i];
+                Thing t = BackgroundTiles[i];
                 Type type = t.GetType();
                 if (type == cc) array[7] = true;
                 else if (type == ccTWO) array[8] = true;
@@ -649,6 +653,7 @@ namespace DuckGame
                             MapSomeSomeVessel(vs);
                         }
                         else if (th is BackgroundTile bt) BackgroundTiles.Add(bt);
+                        else if (th is ForegroundTile ft) BackgroundTiles.Add(ft);
                         else if (th is AutoPlatform ap) AutoPlatforms.Add(ap);
                         else if (th is TreeTop || th is TreeTopDead || th is IBigStupidWall || th is PyramidWall || th is VerticalDoor || th is IceWedge || th is WaterFlow)
                         {

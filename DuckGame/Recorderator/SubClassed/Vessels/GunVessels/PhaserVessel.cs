@@ -12,6 +12,10 @@ namespace DuckGame
             PhaserVessel v = new PhaserVessel(new Phaser(0, -2000));
             return v;
         }
+        public override BitBuffer RecSerialize(BitBuffer prevBuffer)
+        {
+            return prevBuffer;
+        }
         public override void PlaybackUpdate()
         {
             Phaser p = (Phaser)t;

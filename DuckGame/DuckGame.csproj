@@ -228,6 +228,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddedContent\DGRDevHall.cs" />
     <Compile Include="AddedContent\DGRSettings.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\AdvancedConfigAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ConfigClasses\NameDisplayConfig.cs" />
@@ -347,11 +348,14 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpQuadLaserBullet.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpSniper.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpTeleporter.cs" />
+    <Compile Include="AddedContent\NiK0\CrumbleShamble.cs" />
+    <Compile Include="AddedContent\NiK0\GlassPlatform.cs" />
     <Compile Include="AddedContent\NiK0\MaterialLavaWobble.cs" />
     <Compile Include="AddedContent\NiK0\MathParser.cs" />
     <Compile Include="AddedContent\NiK0\NMClientOnlyContent.cs" />
     <Compile Include="AddedContent\NiK0\RainbowConstant.cs" />
     <Compile Include="AddedContent\NiK0\RainParticel.cs" />
+    <Compile Include="AddedContent\NiK0\SpaceMaterial.cs" />
     <Compile Include="Recorderator\Recorderator.cs" />
     <Compile Include="AddedContent\NiK0\TreeLeaf.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\ClientOnlyAttribute.cs" />
@@ -389,6 +393,7 @@
     <Compile Include="Recorderator\SubClassed\SomethingSomethingVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\JetpackVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\HelmetVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\HolsterVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\SpikeHelmVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\BootsVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\ChestplateVessel.cs" />
@@ -402,6 +407,7 @@
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\HugeLaserVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\MagnumVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\MineVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\PistolVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\OldPistolVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\PhaserVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\PlasmaBlasterVessel.cs" />
@@ -410,6 +416,7 @@
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SniperVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SwordVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\TampingWeaponVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\FluidPuddleVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\DoorVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\ItemBoxVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\WindowVessel.cs" />

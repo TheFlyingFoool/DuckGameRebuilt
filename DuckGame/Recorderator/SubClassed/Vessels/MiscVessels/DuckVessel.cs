@@ -17,7 +17,7 @@ namespace DuckGame
             AddSynncl("infoed", new SomethingSync(typeof(byte)));
             //AddSynncl("trappedpos", new SomethingSync(typeof(Vec2)));//x
             //AddSynncl("trappedowner", new SomethingSync(typeof(int)));//x
-            AddSynncl("currentanimation", new SomethingSync(typeof(byte)));
+            AddSynncl("infoed_2", new SomethingSync(typeof(byte)));
 
             //vec 6 4*2*3 8*3 24 bytes per rpos
             AddSynncl("rpos", new SomethingSync(typeof(Vec6)));
@@ -144,7 +144,17 @@ namespace DuckGame
             //Vec2 tPos = (Vec2)valOf("trappedpos");
             //int tOwner = (int)valOf("trappedowner");
 
-            byte current = (byte)valOf("currentanimation");
+            byte Q = (byte)valOf("infoed_2");
+            BitArray brI = new BitArray(new byte[] { Q });
+
+            int current = 0;
+            int div = 8;
+            for (int i = 0; i < 4; i ++)
+            {
+                if (brI[i]) current += div;
+                div /= 2;
+            }
+            d.quack = brI[4] ? 20 : 0;
             switch (current)
             {
                 case 0:
@@ -219,7 +229,8 @@ namespace DuckGame
             }
             else if (d.ragdoll != null) d.ragdoll.Unragdoll();
             d.visible = b_ARR[7];
-            if (d.ragdoll != null) d.visible = false;
+            //if (d.ragdoll != null) d.visible = false;
+            //DUMBASS WHY'D YOU PUT THAT THERE
 
             /*if (tPos.y > -1500)
             {
@@ -337,7 +348,15 @@ namespace DuckGame
                     b = 8;
                     break;
             }
-            addVal("currentanimation", b);
+
+            BitArray brI = new BitArray(8);
+            brI[0] = (b & 8) > 0;
+            brI[1] = (b & 4) > 0;
+            brI[2] = (b & 2) > 0;
+            brI[3] = (b & 1) > 0;
+            brI[4] = d.quack > 0;
+
+            addVal("infoed_2", BitCrusher.BitArrayToByte(brI));
 
             if (d._ragdollInstance != null)
             {

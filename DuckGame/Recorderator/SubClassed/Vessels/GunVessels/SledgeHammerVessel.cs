@@ -12,6 +12,10 @@ namespace DuckGame
             SledgeHammerVessel v = new SledgeHammerVessel(new SledgeHammer(0, -2000));
             return v;
         }
+        public override BitBuffer RecSerialize(BitBuffer prevBuffer)
+        {
+            return prevBuffer;
+        }
         public override void PlaybackUpdate()
         {
             SledgeHammer p = (SledgeHammer)t;

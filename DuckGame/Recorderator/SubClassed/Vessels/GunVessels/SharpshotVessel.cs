@@ -18,6 +18,10 @@ namespace DuckGame
             SharpshotVessel v = new SharpshotVessel(new Sharpshot(0, -2000));
             return v;
         }
+        public override BitBuffer RecSerialize(BitBuffer prevBuffer)
+        {
+            return prevBuffer;
+        }
         public override void DoUpdateThing()
         {
             Gun g = (Gun)t;

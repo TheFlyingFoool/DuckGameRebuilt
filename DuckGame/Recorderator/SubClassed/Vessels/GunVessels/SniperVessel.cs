@@ -17,6 +17,10 @@ namespace DuckGame
             SniperVessel v = new SniperVessel(new Sniper(0, -2000));
             return v;
         }
+        public override BitBuffer RecSerialize(BitBuffer prevBuffer)
+        {
+            return prevBuffer;
+        }
         public override void DoUpdateThing()
         {
             Gun g = (Gun)t;

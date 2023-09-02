@@ -205,6 +205,7 @@ namespace DuckGame
             typeWow.Add(typeof(string), 6);
             typeWow.Add(typeof(bool), 7);
             typeWow.Add(typeof(Vec6), 8);
+            typeWow.Add(typeof(Vec4), 9);
             //there was a large comment here but i removed it because it was annoying
         }
         public virtual void PlaybackUpdate()
@@ -310,6 +311,18 @@ namespace DuckGame
                         b.Write(v.f);
                     }
                 }
+                else if (s.items.Count > 0 && s.items[0] is Vec4)
+                {
+                    Main.SpecialCode = "vec4 got fucked";
+                    for (int z = 0; z < s.items.Count; z++)
+                    {
+                        Vec4 v = (Vec4)s.items[z];
+                        b.Write(v.x);
+                        b.Write(v.y);
+                        b.Write(v.z);
+                        b.Write(v.w);
+                    }
+                }
                 else
                 {
                     Main.SpecialCode = "i have none of the idea";
@@ -368,6 +381,7 @@ namespace DuckGame
                 SomethingSync ss = v.syncled.ElementAt(i).Value;
                 byte tope = b.ReadByte();
                 int x = b.ReadInt();
+                Main.SpecialCode = "ChangeDestroy loop";
                 /* 
                 typeWow.Add(typeof(byte), 0);
                 typeWow.Add(typeof(sbyte), 1);
@@ -437,6 +451,18 @@ namespace DuckGame
                                 float e = b.ReadFloat();
                                 float f = b.ReadFloat();
                                 ss.items.Add(new Vec6(a, b2, c, d, e, f));
+                            }
+                            break;
+                        }
+                    case 9:
+                        {
+                            for (int q = 0; q < x; q++)
+                            {
+                                float a = b.ReadFloat();
+                                float b3 = b.ReadFloat();
+                                float c2 = b.ReadFloat();
+                                float d2 = b.ReadFloat();
+                                ss.items.Add(new Vec4(a, b3, c2, d2));
                             }
                             break;
                         }

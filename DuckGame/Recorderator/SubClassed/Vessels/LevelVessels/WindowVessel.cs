@@ -38,7 +38,7 @@ namespace DuckGame
             BitArray b = new BitArray(8);
             Window w = (Window)t;
             int tint = w.tint.value;
-            b[0] = (tint & 32) > 0;
+            b[0] = (tint & 32) > 0; //theres only 12 total window colors so 32 and 16 arent really needed here if space is needed later for optimization
             b[1] = (tint & 16) > 0;
             b[2] = (tint & 8) > 0;
             b[3] = (tint & 4) > 0;
@@ -68,7 +68,7 @@ namespace DuckGame
             //it used to be at minimum 8 bytes per frame but now its 1 byte per frame (at its best)
             //and here i dind't add any variables but instead use the stream to store single booleans
             //so, win
-            if (Extensions.GetPrivateFieldValue<float>(w, "_shakeVal") > 3.08f) bArray[0] = true;
+            bArray[0] = Extensions.GetPrivateFieldValue<float>(w, "_shakeVal") > 3.08f;
             bArray[1] = Extensions.GetPrivateFieldValue<bool>(w, "_hasGlass");
 
             //addVal("shake/death", Extensions.GetPrivateFieldValue<float>(w, "_shakeVal"));

@@ -39,7 +39,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (isServerForObject)
+            if (isServerForObject && !Recorderator.Playing)
             {
                 if (_equippedDuck != null && _equippedDuck.inputProfile != null)
                     trigger = _equippedDuck.inputProfile.Down(Triggers.Quack);
