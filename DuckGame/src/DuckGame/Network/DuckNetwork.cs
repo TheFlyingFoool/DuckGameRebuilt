@@ -3268,7 +3268,8 @@ namespace DuckGame
                     _core.cursorFlash = 0;
                 int num5 = _core.cursorFlash >= 15 ? 1 : 0;
                 Profile localProfile = DuckNetwork.localProfile;
-                string text = localProfile.name + ": " + _core.currentEnterText;
+                string currentEnterText = _core.currentEnterText;
+                string text = localProfile.name + ": " + (currentEnterText.StartsWith(">") ? "|0,153,0|" : "") +  currentEnterText;
                 string str = text;
                 if (num5 != 0)
                     text += "_";

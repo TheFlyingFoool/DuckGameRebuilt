@@ -321,5 +321,10 @@ namespace DuckGame
         [AutoConfigField] public static bool OpenURLsInBrowser = false;
 
         [AutoConfigField] public static bool UseDGRJoinLink = false;
+        
+        // the 4chan disease..
+        [AutoConfigField] public static bool GreenTextSupport = false;
+
+        [AutoConfigField] public static bool becomegod = false;
     }
 }
