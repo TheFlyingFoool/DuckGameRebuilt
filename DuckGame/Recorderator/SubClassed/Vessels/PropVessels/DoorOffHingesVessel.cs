@@ -5,7 +5,7 @@
         public DoorOffHingesVessel(Thing th) : base(th)
         {
             tatchedTo.Add(typeof(DoorOffHinges));
-            AddSynncl("position", new SomethingSync(typeof(Vec2)));
+            AddSynncl("position", new SomethingSync(typeof(int)));
             AddSynncl("visible", new SomethingSync(typeof(bool)));
             AddSynncl("spin", new SomethingSync(typeof(int)));
         }
@@ -23,7 +23,7 @@
         public override void PlaybackUpdate()
         {
             DoorOffHinges dfh = (DoorOffHinges)t;
-            dfh.position = (Vec2)valOf("position");
+            dfh.position = CompressedVec2Binding.GetUncompressedVec2((int)valOf("position"), 10000);
             dfh.visible = (bool)valOf("visible");
             dfh._throwSpin = (int)valOf("spin");
             base.PlaybackUpdate();
@@ -32,8 +32,8 @@
         {
             DoorOffHinges dfh = (DoorOffHinges)t;
             addVal("visible", dfh.visible);
-            if (dfh.visible) addVal("position", dfh.position);
-            else if (exFrames == 0) addVal("position", new Vec2(0, -2000));
+            if (dfh.visible) addVal("position", CompressedVec2Binding.GetCompressedVec2(dfh.position, 10000));
+            else if (exFrames == 0) addVal("position", CompressedVec2Binding.GetCompressedVec2(new Vec2(0, -2000), 10000));
             addVal("spin", (int)dfh._throwSpin);
         }
     }

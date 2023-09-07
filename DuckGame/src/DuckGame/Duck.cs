@@ -263,7 +263,7 @@ namespace DuckGame
         private Camera _iconCamera;
         private Rectangle _iconRect = new Rectangle(0f, 0f, 96f, 96f);
         public Vec2 tongueCheck = Vec2.Zero;
-        private Vec2 _stickLerp;
+        public Vec2 _stickLerp;
         private Vec2 _stickSlowLerp;
         public bool localSpawnVisible = true;
         public bool enteringWalldoor;
@@ -343,7 +343,7 @@ namespace DuckGame
 
         public Vec2 tounge
         {
-            get => (!Network.isActive || isServerForObject) && inputProfile != null ? inputProfile.rightStick : _tounge;
+            get => (!Network.isActive || isServerForObject) && inputProfile != null && !Recorderator.Playing ? inputProfile.rightStick : _tounge;
             set => _tounge = value;
         }
 

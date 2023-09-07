@@ -13,7 +13,7 @@ namespace DuckGame
             tatchedTo.Add(typeof(PurpleBlock));
 
             AddSynncl("containing", new SomethingSync(typeof(ushort)));
-            AddSynncl("position", new SomethingSync(typeof(Vec2)));
+            AddSynncl("position", new SomethingSync(typeof(int)));
             AddSynncl("_hit", new SomethingSync(typeof(bool)));
         }
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
@@ -41,7 +41,7 @@ namespace DuckGame
         public override void PlaybackUpdate()
         {
             ItemBox i = (ItemBox)t;
-            i.position = (Vec2)valOf("position");
+            i.position = CompressedVec2Binding.GetUncompressedVec2((int)valOf("position"), 10000);
             i._hit = (bool)valOf("_hit");
             int hObj = (ushort)valOf("containing") - 1;
             if (hObj == -1 && i.containedObject != null)
@@ -69,7 +69,7 @@ namespace DuckGame
                 else addVal("containing", (ushort)0);
             }
             else addVal("containing", (ushort)0);
-            addVal("position", i.position);
+            addVal("position", CompressedVec2Binding.GetCompressedVec2(i.position, 10000));
             addVal("_hit", i._hit);
         }
     }

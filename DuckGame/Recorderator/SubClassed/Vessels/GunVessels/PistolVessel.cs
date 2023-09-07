@@ -26,7 +26,7 @@ namespace DuckGame
             byte infoed = (byte)valOf("infoed");
             BitArray br = new BitArray(new byte[] { infoed }); //What.
 
-
+            if (br[1]) ApplyFire();
             int div = 2;
             int value = 0;
             for (int i = 2; i < 4; i++)
@@ -37,13 +37,21 @@ namespace DuckGame
             op.frame = value;
 
             div = 8;
-            value = 0;
+            value = -1;
             for (int i = 4; i < 8; i++)
             {
                 if (br[i]) value += div;
                 div /= 2;
             }
-            op.ammo = value;
+            if (value == -1)
+            {
+                op.infiniteAmmoVal = true;
+            }
+            else
+            {
+                op.ammo = value;
+                op.infiniteAmmoVal = false;
+            }
             op.infiniteAmmoVal = op.ammo > 9;
 
             base.PlaybackUpdate();
@@ -57,9 +65,11 @@ namespace DuckGame
             //1 2 [2 bits for sprite
 
 
-            int ammo = op.ammo;
+            int ammo = op.ammo + 1;
             int sp = op.frame;
+            if (op.infiniteAmmoVal) ammo = 0;
 
+            br[1] = op.kick == 1;
             br[2] = (sp & 2) > 0;
             br[3] = (sp & 1) > 0;
             br[4] = (ammo & 8) > 0; //if ammo > 9 then infinite

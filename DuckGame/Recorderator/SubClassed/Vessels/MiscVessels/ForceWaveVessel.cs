@@ -9,7 +9,7 @@ namespace DuckGame
         {
             tatchedTo.Add(typeof(ForceWave));
             AddSynncl("infoed", new SomethingSync(typeof(byte)));
-            AddSynncl("position", new SomethingSync(typeof(Vec2)));
+            AddSynncl("position", new SomethingSync(typeof(int)));
         }
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
@@ -30,7 +30,7 @@ namespace DuckGame
             }
             f.alpha = a;
             f.offDir = (sbyte)(br[7] ? 1 : -1);
-            f.position = (Vec2)valOf("position");
+            f.position = CompressedVec2Binding.GetUncompressedVec2((int)valOf("position"), 10000);
             base.PlaybackUpdate();
         }
         public override void RecordUpdate()
@@ -45,7 +45,7 @@ namespace DuckGame
 
             br[7] = f.offDir > 0;
             addVal("infoed", BitCrusher.BitArrayToByte(br));
-            addVal("position", f.position);
+            addVal("position", CompressedVec2Binding.GetCompressedVec2(f.position, 10000));
             base.RecordUpdate();
         }
     }

@@ -6,7 +6,7 @@ namespace DuckGame
         public ItemCrateVessel(Thing th) : base(th)
         {
             tatchedTo.Add(typeof(ItemCrate));
-            AddSynncl("position", new SomethingSync(typeof(Vec2)));
+            AddSynncl("position", new SomethingSync(typeof(int)));
             AddSynncl("hitpoints", new SomethingSync(typeof(float)));
         }
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
@@ -35,14 +35,14 @@ namespace DuckGame
         public override void PlaybackUpdate()
         {
             ItemCrate c = (ItemCrate)t;
-            c.position = (Vec2)valOf("position");
+            c.position = CompressedVec2Binding.GetUncompressedVec2((int)valOf("position"), 10000);
             c._hitPoints = (float)valOf("hitpoints");
             base.PlaybackUpdate();
         }
         public override void RecordUpdate()
         {
             ItemCrate c = (ItemCrate)t;
-            addVal("position", c.position);
+            addVal("position", CompressedVec2Binding.GetCompressedVec2(c.position, 10000));
             addVal("hitpoints", c._hitPoints);
         }
     }

@@ -5,7 +5,7 @@
         public QuadLaserBulletVessel(Thing th) : base(th)
         {
             tatchedTo.Add(typeof(QuadLaserBullet));
-            AddSynncl("position", new SomethingSync(typeof(Vec2)));
+            AddSynncl("position", new SomethingSync(typeof(int)));
         }
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
@@ -15,13 +15,13 @@
         public override void PlaybackUpdate()
         {
             QuadLaserBullet q = (QuadLaserBullet)t;
-            q.position = (Vec2)valOf("position");
+            q.position = CompressedVec2Binding.GetUncompressedVec2((int)valOf("position"), 10000);
             base.PlaybackUpdate();
         }
         public override void RecordUpdate()
         {
             QuadLaserBullet q = (QuadLaserBullet)t;
-            addVal("position", q.position);
+            addVal("position", CompressedVec2Binding.GetCompressedVec2(q.position, 10000));
         }
     }
 }

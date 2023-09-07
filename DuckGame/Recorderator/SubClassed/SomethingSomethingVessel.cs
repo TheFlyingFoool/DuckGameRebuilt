@@ -63,6 +63,7 @@ namespace DuckGame
         public int addTime;
         public int deleteTime = -2;
         public int exFrames;
+        public int skipPositioning;
         public List<Type> tatchedTo = new List<Type>();
         public Dictionary<string, SomethingSync> syncled = new Dictionary<string, SomethingSync>();
         public Map<string, byte> indexedSyncled = new Map<string, byte>();
@@ -206,17 +207,23 @@ namespace DuckGame
             typeWow.Add(typeof(bool), 7);
             typeWow.Add(typeof(Vec6), 8);
             typeWow.Add(typeof(Vec4), 9);
+            typeWow.Add(typeof(BitBuffer), 10);
             //there was a large comment here but i removed it because it was annoying
         }
         public virtual void PlaybackUpdate()
         {
+            if (skipPositioning > 0) skipPositioning--;
+            else skipPositioning = 0;
             DoUpdateThing();
         }
         public virtual void DoUpdateThing()
         {
-            t.shouldbegraphicculled = false;
-            Level.current.things.UpdateObject(t);
-            t.DoUpdate();
+            if (!t.removeFromLevel)
+            {
+                t.shouldbegraphicculled = false;
+                Level.current.things.UpdateObject(t);
+                t.DoUpdate();
+            }
         }
         public virtual void RecordUpdate()
         {
@@ -463,6 +470,14 @@ namespace DuckGame
                                 float c2 = b.ReadFloat();
                                 float d2 = b.ReadFloat();
                                 ss.items.Add(new Vec4(a, b3, c2, d2));
+                            }
+                            break;
+                        }
+                    case 10:
+                        {
+                            for (int q = 0; q < x; q++)
+                            {
+                                ss.items.Add(b.ReadBitBuffer());
                             }
                             break;
                         }

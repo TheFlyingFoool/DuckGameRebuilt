@@ -5,7 +5,7 @@ namespace DuckGame
         public FlareVessel(Thing th) : base(th)
         {
             tatchedTo.Add(typeof(Flare));
-            AddSynncl("position", new SomethingSync(typeof(Vec2)));
+            AddSynncl("position", new SomethingSync(typeof(int)));
         }
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
@@ -15,13 +15,13 @@ namespace DuckGame
         public override void PlaybackUpdate()
         {
             Flare f = (Flare)t;
-            f.position = (Vec2)valOf("position");
+            f.position = CompressedVec2Binding.GetUncompressedVec2((int)valOf("position"), 10000);
             base.PlaybackUpdate();
         }
         public override void RecordUpdate()
         {
             Flare f = (Flare)t;
-            addVal("position", f.position);
+            addVal("position", CompressedVec2Binding.GetCompressedVec2(f.position, 10000));
             base.RecordUpdate();
         }
     }

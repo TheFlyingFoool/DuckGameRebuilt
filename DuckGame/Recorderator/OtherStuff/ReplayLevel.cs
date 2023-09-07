@@ -316,6 +316,11 @@ namespace DuckGame
                             somethingthing = new VeryHardSign(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
                             break;
                         }
+                    case 29:
+                        {
+                            somethingthing = new WaterCooler(v.x, v.y);
+                            break;
+                        }
                     default:
                         continue;
                 }

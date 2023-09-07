@@ -57,7 +57,7 @@ namespace DuckGame
         protected bool _manualLoad;
         public bool laserSight;
         protected SpriteMap _flare;
-        protected float _flareAlpha;
+        public float _flareAlpha;
         private SpriteMap _barrelSmoke;
         public float _barrelHeat;
         protected float _smokeWait;
@@ -285,7 +285,7 @@ namespace DuckGame
                 if (_framesSinceThrown > 25)
                     _framesSinceThrown = 25;
             }
-            if (!(this is Sword) && owner == null && CanSpin() && Level.current.simulatePhysics)
+            if (!(this is Sword) && owner == null && CanSpin() && Level.current.simulatePhysics && !Recorderator.Playing)
             {
                 bool flag1 = false;
                 bool flag2 = false;

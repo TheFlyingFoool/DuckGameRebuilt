@@ -15,13 +15,13 @@
         {
             return prevBuffer;
         }
-        public override void AmmoDecreased()
+        public override void ApplyFire()
         {
             NetGun g = (NetGun)t;
 
             g._barrelSteam.speed = 1f;
             g._barrelSteam.frame = 0;
-            base.AmmoDecreased();
+            base.ApplyFire();
         }
     }
 }

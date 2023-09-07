@@ -12,7 +12,10 @@ namespace DuckGame
         public DuckVessel(Thing th) : base(th)
         {
             tatchedTo.Add(typeof(Duck));
-            AddSynncl("position", new SomethingSync(typeof(Vec2)));
+
+            //MOVED HOLD TO THE TOP TO KEEP THE bArray CONSISTENT TO 0
+            AddSynncl("hold", new SomethingSync(typeof(ushort)));//x
+            AddSynncl("position", new SomethingSync(typeof(int)));
 
             AddSynncl("infoed", new SomethingSync(typeof(byte)));
             //AddSynncl("trappedpos", new SomethingSync(typeof(Vec2)));//x
@@ -22,9 +25,11 @@ namespace DuckGame
             //vec 6 4*2*3 8*3 24 bytes per rpos
             AddSynncl("rpos", new SomethingSync(typeof(Vec6)));
 
-            AddSynncl("hold", new SomethingSync(typeof(ushort)));//x
+
             AddSynncl("holdang", new SomethingSync(typeof(ushort)));//x
             AddSynncl("input", new SomethingSync(typeof(ushort)));//8
+
+            AddSynncl("tongue", new SomethingSync(typeof(int)));
             //65536
             //
             //1 2 4 8 16 32 64 128 256 512 1024 2048 4096 8192 16384 32768
@@ -47,6 +52,7 @@ namespace DuckGame
             return prevBuffer;
         }
         public int prevNetOwner;
+        public int lastObj;
         public Holdable lastHold;
         public Profile p;
         
@@ -135,7 +141,7 @@ namespace DuckGame
         public override void PlaybackUpdate()
         {
             Duck d = (Duck)t;
-            d.position = (Vec2)valOf("position");
+            d.position = CompressedVec2Binding.GetUncompressedVec2((int)valOf("position"), 10000);
             byte b = (byte)valOf("infoed");
             ushort z = (ushort)valOf("input");
             d.holdAngleOff = Maths.DegToRad(BitCrusher.UShortToFloat((ushort)valOf("holdang"), 360));
@@ -155,6 +161,12 @@ namespace DuckGame
                 div /= 2;
             }
             d.quack = brI[4] ? 20 : 0;
+            d.dead = brI[5];
+
+            bool stuck = brI[6];
+
+            d.tounge = CompressedVec2Binding.GetUncompressedVec2((int)valOf("tongue"), 10000);
+
             switch (current)
             {
                 case 0:
@@ -207,10 +219,28 @@ namespace DuckGame
             d.spriteImageIndex = (byte)frame;
             //d._spriteArms.imageIndex = d._sprite.imageIndex;
             d.offDir = (sbyte)(b_ARR[6]?1:-1);
+
+            //(ushort)valOf("hold") - 1
+
+            //look into the future to see if the holdogjbecfojsdghsdfidf
+            Main.SpecialCode = "future Looking";
+
+            if (syncled["hold"].Count > 1 && (ushort)syncled["hold"][1] != 0 && bArray[0])
+            {
+                int indx = ((int)(ushort)(syncled["hold"][1]) - 1);
+                Main.SpecialCode = "reaching into the future, index " + indx;
+                if (Corderator.instance.somethingMapped.Contains(indx)) Corderator.instance.somethingMapped[indx].skipPositioning = 1;
+            }
+
+            Main.SpecialCode = "not looking into the future";
             if (hObj == -1 && lastHold != null)
             {
                 lastHold.owner = null;
                 d.holdObject = null;
+                if (lastObj != -1)
+                {
+                    Corderator.instance.somethingMapped[lastObj].skipPositioning = 1;
+                }
             }
             else if (hObj != -1 && lastHold == null && Corderator.instance.somethingMap.Contains(hObj))
             {
@@ -218,7 +248,8 @@ namespace DuckGame
             }
             if (d.holdObject != null) d.holdObject.owner = d;
             lastHold = d.holdObject;
-            
+            lastObj = hObj;
+
             Vec2 r1 = new Vec2(v6.a, v6.b);
             Vec2 r2 = new Vec2(v6.c, v6.d);
             Vec2 r3 = new Vec2(v6.e, v6.f);
@@ -254,6 +285,8 @@ namespace DuckGame
                 d.ragdoll.part1.position = r1;
                 d.ragdoll.part2.position = r2;
                 d.ragdoll.part3.position = r3;
+                if (stuck) d.ragdoll.tongueStuck = d.tounge;
+                else d.ragdoll.tongueStuck = Vec2.Zero;
             }
 
             /*if (d._trapped != null)
@@ -300,7 +333,7 @@ namespace DuckGame
                 DevConsole.Log("|RED|RECORDERATOR WENT INCREDIBLY WRONG!!");
                 return;
             }
-            addVal("position", d.position);
+            addVal("position", CompressedVec2Binding.GetCompressedVec2(d.position, 10000));
             BitArray b_ARR = new BitArray(8);
             int z = d.spriteImageIndex;
 
@@ -355,6 +388,8 @@ namespace DuckGame
             brI[2] = (b & 2) > 0;
             brI[3] = (b & 1) > 0;
             brI[4] = d.quack > 0;
+            brI[5] = d.dead;
+            brI[6] = (d.ragdoll != null && d.ragdoll.tongueStuckThing != null);
 
             addVal("infoed_2", BitCrusher.BitArrayToByte(brI));
 
@@ -418,6 +453,10 @@ namespace DuckGame
             if (d.inputProfile.Down("QUACK") || d.inputProfile.Pressed("QUACK")) value |= 2;
             if (d.inputProfile.Down("JUMP") || d.inputProfile.Pressed("JUMP")) value |= 1;
             addVal("input", value);
+
+            Vec2 vc = d.tounge;
+            if (d.ragdoll != null && d.ragdoll.tongueStuckThing != null) vc = d.ragdoll.tongueStuck;
+            addVal("tongue", CompressedVec2Binding.GetCompressedVec2(vc, 10000));
         }
     }
 }

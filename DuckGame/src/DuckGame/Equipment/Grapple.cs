@@ -178,7 +178,7 @@ namespace DuckGame
         {
             if (_harpoon == null)
                 return;
-            if (isServerForObject)
+            if (isServerForObject && !Recorderator.Playing)
             {
                 ropeData.Clear();
                 SerializeRope(_rope);

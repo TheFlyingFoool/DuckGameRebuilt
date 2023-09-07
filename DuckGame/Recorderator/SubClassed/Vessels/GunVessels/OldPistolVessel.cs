@@ -36,7 +36,7 @@ namespace DuckGame
             op.infiniteAmmoVal = br[4];
             op.offDir = (sbyte)(br[5] ? 1 : -1);
             op.visible = br[6];
-            if (op.loaded && !br[7]) AmmoDecreased();
+            if (op.loaded && !br[7]) ApplyFire();
             op.loaded = br[7];
             base.PlaybackUpdate();
         }

@@ -5,9 +5,22 @@ using System.Linq;
 using System.Collections;
 using System.Reflection;
 using System.IO.Compression;
+using SixLabors.ImageSharp.Memory;
 
 namespace DuckGame
 {
+    public class SoundData
+    {
+        public SoundData(int h, float v, float p)
+        {
+            hash = h;
+            volume = v;
+            pitch = p;
+        }
+        public int hash;
+        public float pitch;
+        public float volume;
+    }
     public class Corderator : Thing
     {
         public Corderator() : base(-9999, -9999)
@@ -138,6 +151,21 @@ namespace DuckGame
                 cd.somethings.Add(deserialized);
             }
 
+            iters = b.ReadInt();
+            for (int i = 0; i < iters; i++)
+            {
+                int iters2 = b.ReadUShort();
+                List<SoundData> sd = new List<SoundData>();
+                for (int x = 0; x < iters2; x++)
+                {
+                    int hash = b.ReadInt();
+                    float volume = BitCrusher.UShortToFloat(b.ReadUShort(), 4);
+                    float pitch = BitCrusher.UShortToFloat(b.ReadUShort(), 10);
+                    sd.Add(new SoundData(hash, volume, pitch));
+                }
+                cd.SFXToPlaySave.Add(i, sd);
+            }
+
             Main.SpecialCode = "Out of recorderator load stuff";
             instance = cd;
             return cd;
@@ -253,6 +281,7 @@ namespace DuckGame
                 else if (s is HardLeft) write = 26;
                 else if (s is UpSign) write = 27;
                 else if (s is VeryHardSign) write = 28;
+                else if (s is WaterCooler) write = 29;
                 //else if (s is ArcadeFrame) levBuffer.Write((byte)14);
                 else levBuffer.Write((byte)255);
                 levBuffer.Write(write);
@@ -277,16 +306,27 @@ namespace DuckGame
                         levBuffer.Write((byte)1);
                         break;
                     case SpringLeft:
-                        levBuffer.Write((byte)4);
+                        //THESE .FLIPHORIZONTAL CHECKS ARE HERE BECAUSE DUCK GAME IS FUCKING DUMB
+                        //let me explain, theres a city map with a springUpLeft flipped to be to the right
+                        //so i had to add this dumbass edge case because springs worked when flipped
+                        //yes this will make it so on the replay flipped springs will be replaced with their 
+                        //other spring counterpart but honestly i could not care less since the gameplay aint
+                        //gonna be affected its just some internal dumb shit, maybe it is affected because
+                        //the collision can change a bit, also i think im going crazy -NiK0
+                        if (s.flipHorizontal) levBuffer.Write((byte)5);
+                        else levBuffer.Write((byte)4);
                         break;
                     case SpringRight:
-                        levBuffer.Write((byte)5);
+                        if (s.flipHorizontal) levBuffer.Write((byte)4);
+                        else levBuffer.Write((byte)5);
                         break;
                     case SpringUpLeft:
-                        levBuffer.Write((byte)6);
+                        if (s.flipHorizontal) levBuffer.Write((byte)7);
+                        else levBuffer.Write((byte)6);
                         break;
                     case SpringUpRight:
-                        levBuffer.Write((byte)7);
+                        if (s.flipHorizontal) levBuffer.Write((byte)6);
+                        else levBuffer.Write((byte)7);
                         break;
                     case Saws:
                     case Spikes:
@@ -294,7 +334,7 @@ namespace DuckGame
                         levBuffer.Write((byte)0);
                         break;
                     default:
-                        if (write > 18)
+                        if (write > 18 && write < 29)
                         {
                             levBuffer.Write((byte)(s.flipHorizontal ? 1 : 0));
                         }
@@ -513,6 +553,22 @@ namespace DuckGame
                 }
             }
 
+            buffer.Write(SFXToPlaySave.Count);
+            for (int i = 0; i < SFXToPlaySave.Count; i++)
+            {
+                List<SoundData> sd = SFXToPlaySave[i];
+                buffer.Write((ushort)sd.Count); //i was gonna go with a byte but just to be safe im going with ushort even though theres no way more than 255 sounds are gonna be played at once
+                for (int x = 0; x < sd.Count; x++)
+                {
+                    SoundData s = sd[x];
+                    buffer.Write(s.hash);
+                    buffer.Write(BitCrusher.FloatToUShort(s.volume, 4));
+                    buffer.Write(BitCrusher.FloatToUShort(s.pitch, 10));
+                }
+            }
+
+
+
             List<byte> bf = buffer.buffer.ToList();
             if (buffer.position + 13 < buffer.buffer.Count())
             {
@@ -556,6 +612,7 @@ namespace DuckGame
         }
         public int cFrame;
 
+        public Dictionary<int, List<SoundData>> SFXToPlaySave = new Dictionary<int, List<SoundData>>();
         public List<Vec2> camPos = new List<Vec2>();
         public List<Vec2> camSize = new List<Vec2>();
         public List<SomethingSomethingVessel> somethings = new List<SomethingSomethingVessel>();
@@ -563,6 +620,7 @@ namespace DuckGame
         public Map<int, SomethingSomethingVessel> somethingMapped = new Map<int, SomethingSomethingVessel>();
         public bool PlayingThatShitBack;
         public static Corderator instance;
+        public List<SoundData> toAddThisFrame = new List<SoundData>();
         public void ReAddSomeVessel(SomethingSomethingVessel vessel)
         {
             if (vessel.t == null)
@@ -639,6 +697,9 @@ namespace DuckGame
                     camSize.Add(new Vec2(0, -999999999));
                 }
                 else camSize.Add(v);
+                SFXToPlaySave.Add(cFrame, toAddThisFrame);
+                DevConsole.Log(toAddThisFrame.Count);
+                toAddThisFrame = new List<SoundData>();
                 if (cFrame == 1)
                 {
                     List<Thing> allTheThings = Extensions.GetListOfThings<Thing>();
@@ -659,7 +720,7 @@ namespace DuckGame
                         {
                             TheThings.Add(th);
                         }
-                        else if (th is Saws || th is Spikes || th is Spring || th is ArcadeLight || th is PyramidLightRoof || th is PyramidWallLight || th is Bulb || th is HangingCityLight || th is Lamp || th is OfficeLight || th is WallLightRight || th is Sun || th is ArcadeTableLight || th is OfficeLight || th is WallLightLeft || th is FishinSign || th is MallardBillboard || th is ClippingSign || th is StreetLight || th is PyramidBLight || th is TroubleLight || th is RaceSign || th is ArrowSign || th is DangerSign || th is EasySign || th is HardLeft || th is UpSign || th is VeryHardSign) theLevelDetailsETC.Add(th);
+                        else if (th is Saws || th is Spikes || th is Spring || th is ArcadeLight || th is PyramidLightRoof || th is PyramidWallLight || th is Bulb || th is HangingCityLight || th is Lamp || th is OfficeLight || th is WallLightRight || th is Sun || th is ArcadeTableLight || th is OfficeLight || th is WallLightLeft || th is FishinSign || th is MallardBillboard || th is ClippingSign || th is StreetLight || th is PyramidBLight || th is TroubleLight || th is RaceSign || th is ArrowSign || th is DangerSign || th is EasySign || th is HardLeft || th is UpSign || th is VeryHardSign || th is WaterCooler) theLevelDetailsETC.Add(th);
                         else if (th is PipeTileset pt) Pipes.Add(pt);
                         else if (th is Teleporter t) Teleporters.Add(t);
                         else if (th is AutoBlock bb)
@@ -701,6 +762,16 @@ namespace DuckGame
         }
         public void PlayThatBack()
         {
+            if (SFXToPlaySave.ContainsKey(cFrame))
+            {
+                List<SoundData> sd = SFXToPlaySave[cFrame];
+                for (int i = 0; i < sd.Count; i++)
+                {
+                    SoundData s = sd[i];
+                    DevConsole.Log(s.pitch);
+                    SFX.Play(s.hash, s.volume, s.pitch);
+                }
+            }
             cFrame++;
             SFX.enabled = false;
             if (cFrame >= 0 && cFrame < maxFrame - 1)

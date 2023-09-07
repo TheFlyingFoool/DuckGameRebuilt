@@ -53,6 +53,8 @@ namespace DuckGame
             s._loadState = currentLoadState;
             s.offDir = (sbyte)(br[6] ? 1 : -1);
             s.loaded = br[7];
+
+            if (bArray[7]) ApplyFire();
             base.PlaybackUpdate();
         }
         public override void RecordUpdate()
@@ -71,7 +73,9 @@ namespace DuckGame
             br[6] = s.offDir > 0;
             br[7] = s.loaded;
             addVal("MEGAINFOED", BitCrusher.BitArrayToByte(br));
+            bArray[7] = s.kick == 1;
             base.RecordUpdate();
+
         }
     }
 }

@@ -21,16 +21,20 @@ namespace DuckGame
             v.t.y = -2000;
             return v;
         }
+        public float lastKick;
         public override BitBuffer RecSerialize(BitBuffer prevBuffer)
         {
             //p sure that isn't needed but that might come back to bite me later
-            /*if (GetType() == typeof(GunVessel)) */prevBuffer.Write(Editor.IDToType[t.GetType()]);
+
+            //it isn't really needed but it helps a bit
+            if (GetType() == typeof(GunVessel)) prevBuffer.Write(Editor.IDToType[t.GetType()]);
             return prevBuffer;
         }
-        public virtual void AmmoDecreased()
+        public virtual void ApplyFire()
         {
             Gun g = (Gun)t;
             g.kick = 1;
+            g._flareAlpha = 1.5f;
         }
         public override void PlaybackUpdate()
         {
@@ -46,16 +50,20 @@ namespace DuckGame
                 byte z = (byte)valOf("infoed_g");//lol? nvm it isn't as bad as it was before but imagine bad code being here ok?
                 BitArray b_ARR = new BitArray(new byte[] { z });
                 int divide = 64;
-                int ammo = 0;
+                int ammo = -1;
                 for (int i = 0; i < 7; i++)
                 {
                     if (b_ARR[i]) ammo += divide;
                     divide /= 2;
                 }
 
-                if (ammo < g.ammo) AmmoDecreased();
-                g.ammo = ammo;
-                g.infiniteAmmoVal = b_ARR[7];
+                if (b_ARR[7]) ApplyFire();
+                if (ammo == -1) g.infiniteAmmoVal = true;
+                else
+                {
+                    g.ammo = ammo;
+                    g.infiniteAmmoVal = false;
+                }
             }
             base.PlaybackUpdate();
         }
@@ -66,7 +74,8 @@ namespace DuckGame
             addVal("angledeg", BitCrusher.FloatToUShort(f, 360));
             BitArray array_o_bits = new BitArray(8);
 
-            int w = Maths.Clamp(g.ammo, 0, 100);
+            int w = Maths.Clamp(g.ammo, 0, 125) + 1;
+            if (g.infiniteAmmoVal) w = 0;
             array_o_bits[0] = (w & 64) > 0;
             array_o_bits[1] = (w & 32) > 0;
             array_o_bits[2] = (w & 16) > 0;
@@ -74,7 +83,9 @@ namespace DuckGame
             array_o_bits[4] = (w & 4) > 0;
             array_o_bits[5] = (w & 2) > 0;
             array_o_bits[6] = (w & 1) > 0;
-            array_o_bits[7] = g.infiniteAmmoVal;
+            array_o_bits[7] = g.kick > lastKick;
+            lastKick = g.kick;
+            if (array_o_bits[7]) DevConsole.Log("!!!");
             addVal("infoed_g", BitCrusher.BitArrayToByte(array_o_bits));
             base.RecordUpdate();
         }

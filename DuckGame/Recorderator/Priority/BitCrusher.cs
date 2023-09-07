@@ -55,13 +55,44 @@ namespace DuckGame
         }
         public static ushort FloatToUShort(float v, int range = 1000, bool negative = true)
         {
-            float f = range / (negative ? 32767.5f : 65535);
-            return (ushort)Math.Round(v / f);
+            if (negative)
+            {
+                float halfRange = range / 2f;
+                if (v < -halfRange)
+                    v = -halfRange;
+                else if (v > halfRange)
+                    v = halfRange;
+
+                float f = halfRange / 32767f;
+                return (ushort)Math.Round((v + halfRange) / f);
+            }
+            else
+            {
+                float f = range / 65535f;
+                return (ushort)Math.Round(v / f);
+            }
         }
+
         public static float UShortToFloat(ushort v, int range = 1000, bool negative = true, int rounding = 2)
         {
-            float f = range / (negative ? 32767.5f : 65535);
-            return (float)Math.Round(v * f, rounding);
+            if (negative)
+            {
+                float halfRange = range / 2f;
+                float f = halfRange / 32767f;
+                float result = (float)Math.Round(v * f, rounding) - halfRange;
+
+                if (result < -halfRange)
+                    result = -halfRange;
+                else if (result > halfRange)
+                    result = halfRange;
+
+                return result;
+            }
+            else
+            {
+                float f = range / 65535f;
+                return (float)Math.Round(v * f, rounding);
+            }
         }
 
         public static byte FloatToByte(float v, int range = 1, bool negative = true)

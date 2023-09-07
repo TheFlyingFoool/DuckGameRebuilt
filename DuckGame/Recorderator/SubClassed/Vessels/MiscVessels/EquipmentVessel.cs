@@ -38,11 +38,12 @@ namespace DuckGame
                 if (e._equippedDuck == null)
                 {
                     smoek = true;
-                    d.Equip(e, false);
-                    d.Update();
+                    d.Equip(e, true);
+                    //d.Update();
                 }
-                e._equippedDuck = d;
+                e.owner = d;
                 skipPositioning = 1;
+                //e._equippedDuck = d;
             }
 
             //look into the future to see if you're gonna be equipped in the next frame so you can skip positioning
@@ -66,7 +67,7 @@ namespace DuckGame
                     addVal("equipped", (ushort)(Corderator.instance.somethingMap[e._equippedDuck] + 1));
                 }
                 else addVal("equipped", (ushort)0);
-                skipPositioning = 1;
+                //skipPositioning = 1; ??? DUMBASS????'
             }
             else addVal("equipped", (ushort)0);
             float f = e.angleDegrees % 360;
