@@ -244,6 +244,10 @@
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnife.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingRopeHandle.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnifeConnectionParticle.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\FFEditorPane.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\FFExtra.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\FeatherFashion.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\FFPreviewPane.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\HatPreviewLevel.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\SimRenderer.cs" />
     <Compile Include="AddedContent\Firebreak\Internet.cs" />
