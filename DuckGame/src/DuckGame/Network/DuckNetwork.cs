@@ -887,7 +887,9 @@ namespace DuckGame
                 return;
             Thread thread = new Thread(() =>
             {
-               SDL.SDL_SetClipboardText("steam://joinlobby/312530/" + Steam.lobby.id.ToString() + "/" + Steam.user.id.ToString());
+                SDL.SDL_SetClipboardText(!DGRSettings.UseDGRJoinLink 
+                    ? $"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}"
+                    : $"https://dgr-join.github.io/?lobby={Steam.lobby.id}&user={Steam.user.id}");
                HUD.AddPlayerChangeDisplay("@CLIPCOPY@Invite Link Copied!");
             });
             thread.SetApartmentState(ApartmentState.STA);
@@ -3278,7 +3280,8 @@ namespace DuckGame
                     _core.cursorFlash = 0;
                 int num5 = _core.cursorFlash >= 15 ? 1 : 0;
                 Profile localProfile = DuckNetwork.localProfile;
-                string text = localProfile.name + ": " + _core.currentEnterText;
+                string currentEnterText = _core.currentEnterText;
+                string text = localProfile.name + ": " + (currentEnterText.StartsWith(">") ? "|0,153,0|" : "") +  currentEnterText;
                 string str = text;
                 if (num5 != 0)
                     text += "_";

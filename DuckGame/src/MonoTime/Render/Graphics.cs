@@ -954,7 +954,7 @@ namespace DuckGame
                     _currentTargetSize.height = renderTarget.Height;
                 }
                 device.SetRenderTarget(renderTarget);
-                if (!_settingScreenTarget && _defaultRenderTarget == null)
+                if (!_settingScreenTarget && _defaultRenderTarget == null && !SettingForShader)
                     UpdateScreenViewport();
             }
             else
@@ -994,7 +994,7 @@ namespace DuckGame
                 DevConsole.Log("Error: Invalid Viewport (x = " + pViewport.X.ToString() + ", y = " + pViewport.Y.ToString() + ", w = " + pViewport.Width.ToString() + ", h = " + pViewport.Height.ToString() + ", minDepth = " + pViewport.MinDepth.ToString() + ", maxDepth = " + pViewport.MaxDepth.ToString() + ")");
             }
         }
-
+        public static bool SettingForShader;
         public static void UpdateScreenViewport(bool pForceReset = false)
         {
             try

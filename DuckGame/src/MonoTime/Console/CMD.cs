@@ -418,9 +418,13 @@ namespace DuckGame
                 switch (pValue)
                 {
                     case "fb":
-                        return new GifGenLev();
-                    // case "fb":
-                    // return new TestLev();
+                        return new SimRenderer();
+                    case "fbtest":
+                        return new TestLev();
+                    case "hatpreview":
+                        return new HatPreviewLevel();
+                    case "ff":
+                        return new FeatherFashion();
                     case "dev":
                         string devfilepath = Program.GameDirectory + "Content\\levels\\devtestlev.lev";
                         if (File.Exists(devfilepath))

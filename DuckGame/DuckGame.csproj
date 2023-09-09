@@ -195,9 +195,6 @@
     <Reference Include="SixLabors.Fonts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
       <HintPath>..\packages\SixLabors.Fonts.1.0.0\lib\netstandard2.0\SixLabors.Fonts.dll</HintPath>
     </Reference>
-    <Reference Include="SixLabors.ImageSharp, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
-      <HintPath>..\packages\SixLabors.ImageSharp.2.1.5\lib\net472\SixLabors.ImageSharp.dll</HintPath>
-    </Reference>
     <Reference Include="SixLabors.ImageSharp.Drawing, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
       <HintPath>..\packages\SixLabors.ImageSharp.Drawing.1.0.0\lib\net472\SixLabors.ImageSharp.Drawing.dll</HintPath>
     </Reference>
@@ -226,6 +223,10 @@
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="SixLabors.ImageSharp, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
+      <HintPath>..\packages\SixLabors.ImageSharp.2.1.5\lib\net472\SixLabors.ImageSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddedContent\DGRDevHall.cs" />
@@ -241,10 +242,15 @@
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\DateTimeSerializeModule.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\StringSerializerModule.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\Vec2SerializerModule.cs" />
-    <Compile Include="AddedContent\Firebreak\Content\GifGenLev.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnife.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingRopeHandle.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnifeConnectionParticle.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\FFEditorPane.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\FFExtra.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\FeatherFashion.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\FFPreviewPane.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\HatPreviewLevel.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\SimRenderer.cs" />
     <Compile Include="AddedContent\Firebreak\Internet.cs" />
     <Compile Include="AddedContent\Firebreak\LockMovementQueue.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\IAmUi.cs" />
@@ -2168,6 +2174,7 @@
     <Compile Include="src\XnaToFna\__PropertyDictionary__.cs" />
     <Compile Include="AddedContent\othello7\HelperMethods.cs" />
     <Compile Include="AddedContent\othello7\Firework.cs" />
+    <Compile Include="src\MonoTime\Sound\Retro\DGMSong.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

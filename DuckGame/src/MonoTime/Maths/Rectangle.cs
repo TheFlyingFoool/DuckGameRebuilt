@@ -109,5 +109,20 @@ namespace DuckGame
                     return new Rectangle(x, y + height / 2f, width / 2f, height / 2f);
             }
         }
+
+        public Rectangle Shrink(float fromAllSides)
+        {
+            return Shrink(fromAllSides, fromAllSides, fromAllSides, fromAllSides);
+        }
+
+        public Rectangle Shrink(float fromHorizontal, float fromVertical)
+        {
+            return Shrink(fromHorizontal, fromHorizontal, fromVertical, fromVertical);
+        }
+
+        public Rectangle Shrink(float fromLeft, float fromRight, float fromTop, float fromBottom)
+        {
+            return new Rectangle(x + fromLeft, y + fromTop, width - fromLeft - fromRight, height - fromTop - fromBottom);
+        }
     }
 }

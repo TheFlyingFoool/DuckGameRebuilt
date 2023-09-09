@@ -35,11 +35,13 @@ namespace DuckGame
         public static UIMenu _lastCreatedBlockMenu;
         public static UIMenu _lastCreatedControlsMenu;
         public static UIMenu _lastCreatedDGRMenu;
-        public static UIMenu _lastCreatedDGRMiscMenu;
+        public static UIMenu _lastCreatedDGRQOLMenu;
         public static UIMenu _lastCreatedDGRHudMenu;
         public static UIMenu _lastCreatedOptimizationsMenu;
         public static UIMenu _lastCreatedDGRGraphicsMenu;
         public static UIMenu _lastCreatedDGREditorMenu;
+        public static UIMenu _lastCreatedDGRDumbShitMenu;
+        public static UIMenu _lastCreatedDGRDeveloperMenu;
         public static UIMenu _lastCreatedDGRRecorderatorMenu;
         public static int flagForSave = 0;
         private static bool _doingResolutionRestart = false;
@@ -114,12 +116,15 @@ namespace DuckGame
             to.Add(graphicsMenu, false);
             to.Add(audioMenu, false);
             to.Add(_lastCreatedDGRMenu, false);
-            to.Add(_lastCreatedDGRMiscMenu, false);
+            to.Add(_lastCreatedDGRQOLMenu, false);
             to.Add(_lastCreatedDGRHudMenu, false);
             to.Add(_lastCreatedDGRGraphicsMenu, false);
             to.Add(_lastCreatedOptimizationsMenu, false);
             to.Add(_lastCreatedDGREditorMenu, false);
             to.Add(_lastCreatedDGRRecorderatorMenu, false);
+            to.Add(_lastCreatedDGRDumbShitMenu, false);
+            if (Program.IS_DEV_BUILD)
+                to.Add(_lastCreatedDGRDeveloperMenu, false);
 
 
             if (accessibilityMenu != null)
@@ -158,11 +163,13 @@ namespace DuckGame
             _lastCreatedBlockMenu = tempBlockMenu;
             _lastCreatedAudioMenu = CreateAudioMenu(optionsMenu);
             _lastCreatedDGRMenu = CreateDGRMenu(optionsMenu);
-            _lastCreatedDGRMiscMenu = _DGRMiscMenu;
+            _lastCreatedDGRQOLMenu = _DGRQOLMenu;
             _lastCreatedDGRHudMenu = _DGRHudMenu;
             _lastCreatedDGRGraphicsMenu = _DGRGraphicsMenu;
             _lastCreatedOptimizationsMenu = _DGROptimMenu;
             _lastCreatedDGREditorMenu = _DGREditorMenu;
+            _lastCreatedDGRDumbShitMenu = _DGRDumbShitMenu;
+            _lastCreatedDGRDeveloperMenu = _DGRDeveloperMenu;
             _lastCreatedDGRRecorderatorMenu = _DGRRecorderatorMenu;
             //DGR OPTIONS GUI HELL BEGINS HERE -NiK0
 
@@ -192,11 +199,13 @@ namespace DuckGame
             _blockMenu = _lastCreatedBlockMenu;
             _DGRMenu = _lastCreatedDGRMenu;
             _DGRHudMenu = _lastCreatedDGRMenu;
-            _DGRMiscMenu = _lastCreatedDGRMenu;
+            _DGRQOLMenu = _lastCreatedDGRMenu;
             _DGROptimMenu = _lastCreatedOptimizationsMenu;
             _DGRGraphicsMenu = _lastCreatedDGRMenu;
             _DGRRecorderatorMenu = _lastCreatedDGRRecorderatorMenu;
             _DGREditorMenu = _lastCreatedDGREditorMenu;
+            _DGRDumbShitMenu = _lastCreatedDGRDumbShitMenu;
+            _DGRDeveloperMenu = _lastCreatedDGRDeveloperMenu;
         }
 
         public static UIMenu CreateControllerWarning()
@@ -332,9 +341,11 @@ namespace DuckGame
         public static UIMenu _DGRMenu;
         public static UIMenu _DGRGraphicsMenu;
         public static UIMenu _DGROptimMenu;
-        public static UIMenu _DGRMiscMenu;
+        public static UIMenu _DGRQOLMenu;
         public static UIMenu _DGRHudMenu;
         public static UIMenu _DGREditorMenu;
+        public static UIMenu _DGRDumbShitMenu;
+        public static UIMenu _DGRDeveloperMenu;
         public static UIMenu _DGRRecorderatorMenu;
 
         public static UIMenu CreateDGREditorMenu(UIMenu pPrev)
@@ -357,6 +368,62 @@ namespace DuckGame
             menu.Add(new UIMenuItemToggle("Level Name", field: new FieldBinding(dGRSettings, "EditorLevelName"))
             {
                 dgrDescription = "Displays current level name at top left of the screen"
+            });
+
+            menu.Add(new UIText(" ", Color.White));
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
+            return menu;
+        }
+        
+        public static UIMenu CreateDGRDumbShitMenu(UIMenu pPrev)
+        {
+            UIMenu menu = new UIMenu("|PINK|♥|WHITE|MISCELLANEOUS|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
+
+            menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
+
+            menu.Add(new UIMenuItemToggle("Green Text Support", field: new FieldBinding(dGRSettings, "GreenTextSupport"))
+            {
+                dgrDescription = "Chat messages beginning with a \">\" will be green (only for your game)"
+            });
+            menu.Add(new UIMenuItemToggle("Discord RPC", field: new FieldBinding(dGRSettings, "RPC"))
+            {
+                dgrDescription = "Toggles discord rich presence displaying the current level, if you're in the editor, etc\n(May take a few seconds to connect)"
+            });
+            menu.Add(new UIMenuItemToggle("Open URLs in Browser", field: new FieldBinding(dGRSettings, "OpenURLsInBrowser"))
+            {
+                dgrDescription = "URLs will open in your web browser instead of the Steam Overlay."
+            });
+            menu.Add(new UIMenuItemToggle("Custom Hat Teams", field: new FieldBinding(dGRSettings, "CustomHatTeams"))
+            {
+                dgrDescription = "Allows for teams with custom hats that have the same name (HOST ONLY)"
+            });
+            menu.Add(new UIMenuItem("Reload Hats", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(ReloadHats)))
+            {
+                dgrDescription = "Reloads all hats (OFFLINE ONLY, MIGHT REMOVE MODDED HATS, F6 QUICK RELOAD, F5 RELOADS CURRENTLY WORN ONE)"
+            });
+
+            menu.Add(new UIText(" ", Color.White));
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
+            return menu;
+        }
+        
+        // go wild with option naming here
+        public static UIMenu CreateDGRDeveloperMenu(UIMenu pPrev)
+        {
+            UIMenu menu = new UIMenu("|PINK|♥|WHITE|DEVELOPER|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
+
+            menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
+            
+            menu.Add(new UIMenuItemToggle("No Level Restrictions", field: new FieldBinding(dGRSettings, "IgnoreLevRestrictions"))
+            {
+                dgrDescription = "When enabled, you'll be able to turn on any custom level on an online match"
+            });
+            
+            menu.Add(new UIMenuItemToggle("become god", field: new FieldBinding(dGRSettings, "becomegod"))
+            {
+                dgrDescription = "..."
             });
 
             menu.Add(new UIText(" ", Color.White));
@@ -427,7 +494,7 @@ namespace DuckGame
             return menu;
         }
 
-        public static UIMenu CreateDGRMiscMenu(UIMenu pPrev)
+        public static UIMenu CreateDGRQOLMenu(UIMenu pPrev)
         {
             UIMenu menu = new UIMenu("|PINK|♥|WHITE|QOL|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
 
@@ -437,10 +504,6 @@ namespace DuckGame
             menu.Add(new UIMenuItemToggle("Camera unfollow", field: new FieldBinding(dGRSettings, "CameraUnfollow"))
             {
                 dgrDescription = "When the camera is big enough it stops following distant players"
-            });
-            menu.Add(new UIMenuItemToggle("Discord RPC", field: new FieldBinding(dGRSettings, "RPC"))
-            {
-                dgrDescription = "Toggles discord rich presence displaying the current level, if you're in the editor, etc\n(May take a few seconds to connect)"
             });
             menu.Add(new UIMenuItemNumber("Start in", field: new FieldBinding(dGRSettings, "StartIn", 0, 3), valStrings: new List<string>
             {
@@ -466,29 +529,11 @@ namespace DuckGame
             {
                 dgrDescription = "If a player has already definitely won extra rounds that wont change the outcome of the match will be skipped (HOST ONLY)"
             });
-            menu.Add(new UIMenuItemToggle("Custom Hat Teams", field: new FieldBinding(dGRSettings, "CustomHatTeams"))
+            menu.Add(new UIMenuItemToggle("Invite Link Redirect", field: new FieldBinding(dGRSettings, "UseDGRJoinLink"))
             {
-                dgrDescription = "Allows for teams with custom hats that have the same name (HOST ONLY)"
+                dgrDescription = "The lobby invite link will use DGR's own HTTPS link redirect to join the game, instead of the default STEAM protocol, which makes the link clickable on Discord"
             });
-            menu.Add(new UIMenuItem("Reload Hats", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(ReloadHats)))
-            {
-                dgrDescription = "Reloads all hats (OFFLINE ONLY, MIGHT REMOVE MODDED HATS, F6 QUICK RELOAD, F5 RELOADS CURRENTLY WORN ONE)"
-            });
-            menu.Add(new UIMenuItemToggle("Open URLs in Browser", field: new FieldBinding(dGRSettings, "OpenURLsInBrowser"))
-            {
-                dgrDescription = "URLs will open in your web browser instead of the Steam Overlay."
-            });
-
-
-            if (Program.IS_DEV_BUILD)
-            {
-                menu.Add(new UIText(" ", Color.White));
-                menu.Add(new UIMenuItemToggle("|PINK|No Level Restrictions", field: new FieldBinding(dGRSettings, "IgnoreLevRestrictions"))
-                {
-                    dgrDescription = "When enabled, you'll be able to turn on any custom level on an online match"
-                });
-            }
-
+            
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
             return menu;
@@ -677,8 +722,8 @@ namespace DuckGame
             _DGRGraphicsMenu = CreateDGRGraphicsMenu(menu);
             menu.Add(new UIMenuItem("GRAPHICS", new UIMenuActionOpenMenu(menu, _DGRGraphicsMenu), backButton: true));
 
-            _DGRMiscMenu = CreateDGRMiscMenu(menu);
-            menu.Add(new UIMenuItem("QOL", new UIMenuActionOpenMenu(menu, _DGRMiscMenu), backButton: true));
+            _DGRQOLMenu = CreateDGRQOLMenu(menu);
+            menu.Add(new UIMenuItem("QOL", new UIMenuActionOpenMenu(menu, _DGRQOLMenu), backButton: true));
 
             _DGRHudMenu = CreateDGRHudMenu(menu);
             menu.Add(new UIMenuItem("HUD", new UIMenuActionOpenMenu(menu, _DGRHudMenu), backButton: true));
@@ -686,6 +731,16 @@ namespace DuckGame
             _DGREditorMenu = CreateDGREditorMenu(menu);
             menu.Add(new UIMenuItem("EDITOR", new UIMenuActionOpenMenu(menu, _DGREditorMenu), backButton: true));
 
+            _DGRDumbShitMenu = CreateDGRDumbShitMenu(menu);
+            menu.Add(new UIMenuItem("MISCELLANEOUS", new UIMenuActionOpenMenu(menu, _DGRDumbShitMenu), backButton: true));
+            
+            _DGRDeveloperMenu = CreateDGRDeveloperMenu(menu);
+            if (Program.IS_DEV_BUILD)
+            {
+                menu.Add(new UIText(" ", Color.White));
+                menu.Add(new UIMenuItem("|PINK|DEVELOPER", new UIMenuActionOpenMenu(menu, _DGRDeveloperMenu), backButton: true));
+            }
+            
             _DGRRecorderatorMenu = Recorderator.CreateRecorderatorMenu(menu);
             menu.Add(new UIMenuItem("RECORDERATOR", new UIMenuActionOpenMenu(menu, _DGRRecorderatorMenu), backButton: true));
 

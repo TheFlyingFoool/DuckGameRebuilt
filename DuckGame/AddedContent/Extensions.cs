@@ -104,6 +104,20 @@ namespace DuckGame
             vs.Play();
             vs.looped = false;
         }
+        [DevConsoleCommand(Name = "playvgz")]
+        public static void PlayVGZ()
+        {
+            VGMSong vs = new VGMSong(DuckFile.contentDirectory + "/Audio/test.vgz");
+            vs.Play();
+            vs.looped = false;
+        }
+        [DevConsoleCommand(Name = "playdgm")]
+        public static void PlayDGM()
+        {
+            DGMSong vs = new DGMSong("Content/Audio/test.dgm");
+            vs.Play();
+            vs.looped = false;
+        }
 
         static Type PatchProcessorT;
         static MethodInfo GetPatchInfoM;
