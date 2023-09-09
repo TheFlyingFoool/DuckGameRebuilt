@@ -27,6 +27,7 @@ namespace DuckGame
             hugWalls = WallHug.Ceiling;
             layer = Layer.Game;
             editorCycleType = typeof(StreetLight);
+            shouldbeinupdateloop = DGRSettings.AmbientParticles;
         }
         public override void Update()
         {

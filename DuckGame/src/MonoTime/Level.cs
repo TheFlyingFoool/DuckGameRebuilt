@@ -825,7 +825,9 @@ namespace DuckGame
 
                     Layer.Console.visible = false;
                     rd2 = new RenderTarget2D(width, height);
+                    Graphics.SettingForShader = true;
                     Graphics.SetRenderTarget(rd2);
+                    Graphics.SettingForShader = false;
                     currentlyShadering = true;
                 }
             }
@@ -885,7 +887,9 @@ namespace DuckGame
             if (currentlyShadering)
             {
 
+                    Graphics.SettingForShader = true;
                 Graphics.SetRenderTarget(null);
+                Graphics.SettingForShader = false;
 
                 bool multiLayering = false;
                 if (lavaPuddles.Count > 1) multiLayering = true;
@@ -897,19 +901,27 @@ namespace DuckGame
                     {
                         rd3 = new RenderTarget2D(Graphics.viewport.Width, Graphics.viewport.Height);
                         dispose.Add(rd3);
+                    Graphics.SettingForShader = true;
                         Graphics.SetRenderTarget(rd3);
+                    Graphics.SettingForShader = false;
                     }
 
-                    //TODO: FIX EVERYTHING AROUND HERE, IT ALL BREAKS ON ULTRAWIDE OR WEIRD RESOLUTIONS FUCKING HELL -NiK0
                     Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Matrix.CreateScale(1, 1, 1));
                     Graphics.Clear(Color.Black);
+#if DEBUG
+                    Graphics.DrawString("this stuff only shows in debug builds -NiK0", new Vec2(0, 0), Color.White, 1, null, 2);
+                    Graphics.DrawString(Resolution.size.ToString(), new Vec2(0, 16), Color.White, 1, null, 2);
+                    Graphics.DrawString(Resolution.current.dimensions.ToString(), new Vec2(0, 32), Color.White, 1, null, 2);
+#endif
                     Graphics.material = lavaPuddles[i].mt;
                     Graphics.Draw(rd2, 0, 0, 1, 1);
                     Graphics.material = null;
                     Graphics.screen.End();
                     if (multiLayering)
                     {
+                    Graphics.SettingForShader = true;
                         Graphics.SetRenderTarget(null);
+                    Graphics.SettingForShader = true;
                         rd2 = rd3;
                     }
                 }
