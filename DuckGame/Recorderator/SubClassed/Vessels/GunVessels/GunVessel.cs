@@ -83,9 +83,9 @@ namespace DuckGame
             array_o_bits[4] = (w & 4) > 0;
             array_o_bits[5] = (w & 2) > 0;
             array_o_bits[6] = (w & 1) > 0;
-            array_o_bits[7] = g.kick > lastKick;
+            array_o_bits[7] = g.kick == 1 || (g.kick > lastKick && g.kick > 0.4f);
             lastKick = g.kick;
-            if (array_o_bits[7]) DevConsole.Log("!!!");
+            //if (array_o_bits[7]) DevConsole.Log("!!!");
             addVal("infoed_g", BitCrusher.BitArrayToByte(array_o_bits));
             base.RecordUpdate();
         }

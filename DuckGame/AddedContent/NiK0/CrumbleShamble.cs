@@ -45,7 +45,7 @@ namespace DuckGame
                             d.y -= 200;
                             Level.current.camera.position -= new Vec2(0, 200);
                         }
-                        if (Graphics.fade <= -0.5f)
+                        if (Graphics.fade <= -0.4f)
                         {
                             Level.current = new DGRDevHall(Level.First<Duck>());
                         }

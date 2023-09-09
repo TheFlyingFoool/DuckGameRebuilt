@@ -440,17 +440,22 @@ namespace DuckGame
                 else if (type == ccTHREE) array[9] = true;
                 levBuffer.Write(t.position);
 
-                int w = Maths.Clamp(t.frame, 0, 127);
-                BitArray br = new BitArray(8);
-                br[0] = (w & 64) > 0;
-                br[1] = (w & 32) > 0;
-                br[2] = (w & 16) > 0;
-                br[3] = (w & 8) > 0;
-                br[4] = (w & 4) > 0;
-                br[5] = (w & 2) > 0;
-                br[6] = (w & 1) > 0;
-                br[7] = t.flipHorizontal;
-                levBuffer.Write(BitCrusher.BitArrayToByte(br));
+                int w = t.frame;
+                BitArray br = new BitArray(16);
+                br[0] = (w & 1024) > 0;
+                br[1] = (w & 512) > 0;
+                br[2] = (w & 256) > 0;
+                br[3] = (w & 128) > 0;
+                br[4] = (w & 64) > 0;
+                br[5] = (w & 32) > 0;
+                br[6] = (w & 16) > 0;
+                br[7] = (w & 8) > 0;
+                br[8] = (w & 4) > 0;
+                br[9] = (w & 2) > 0;
+                br[10] = (w & 1) > 0;
+
+                br[15] = t.flipHorizontal;
+                levBuffer.Write(BitCrusher.BitArrayToUShort(br));
                 levBuffer.Write(Recorderator.bgtileIDX[t.GetType()]);
             }
 

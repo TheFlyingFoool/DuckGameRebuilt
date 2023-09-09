@@ -4820,7 +4820,7 @@ namespace DuckGame
                                 Graphics.Draw(_spriteArms, _sprite.imageIndex + 18 + Maths.Int(action) * 18 * (holdObject.hasTrigger ? 1 : 0), armPosition.x + holdObject.handOffset.x * offDir, armPosition.y + holdObject.handOffset.y, _sprite.xscale, _sprite.yscale);
                                 _spriteArms._frameInc = 0f;
                                 _spriteArms.flipH = flipH;
-                                if (_sprite.currentAnimation == "jump")
+                                if (_sprite.currentAnimation == "jump" || (cordHover || (Recorderator.Playing && _spriteArms.imageIndex == 9)))
                                 {
                                     _spriteArms.angle = 0f;
                                     _spriteArms.depth = this.depth + -10;

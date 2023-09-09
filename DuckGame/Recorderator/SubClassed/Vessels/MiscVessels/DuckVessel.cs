@@ -165,6 +165,18 @@ namespace DuckGame
 
             bool stuck = brI[6];
 
+            if (d.currentPlusOne == null && brI[7])
+            {
+                PlusOne pls = new PlusOne(0, 0, d.profile, false, true);
+                pls._duck = d;
+                pls.anchor = d;
+                pls.anchor.offset = new Vec2(0f, -16f);
+                pls.depth = (Depth)0.95f;
+                d.currentPlusOne = pls;
+                Level.Add(pls);
+            }
+
+
             d.tounge = CompressedVec2Binding.GetUncompressedVec2((int)valOf("tongue"), 10000);
 
             switch (current)
@@ -259,7 +271,12 @@ namespace DuckGame
                 d.ragdoll.active = false;
             }
             else if (d.ragdoll != null) d.ragdoll.Unragdoll();
+
             d.visible = b_ARR[7];
+            if (d._trapped != null && d._trapped.active)
+            {
+                d.visible = true;
+            }
             //if (d.ragdoll != null) d.visible = false;
             //DUMBASS WHY'D YOU PUT THAT THERE
 
@@ -390,6 +407,7 @@ namespace DuckGame
             brI[4] = d.quack > 0;
             brI[5] = d.dead;
             brI[6] = (d.ragdoll != null && d.ragdoll.tongueStuckThing != null);
+            brI[7] = d.currentPlusOne != null;
 
             addVal("infoed_2", BitCrusher.BitArrayToByte(brI));
 

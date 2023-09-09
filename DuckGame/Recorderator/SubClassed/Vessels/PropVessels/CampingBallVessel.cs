@@ -6,7 +6,7 @@
         {
             tatchedTo.Add(typeof(CampingBall));
             AddSynncl("position", new SomethingSync(typeof(int)));
-            AddSynncl("velocity", new SomethingSync(typeof(Vec2)));
+            AddSynncl("velocity", new SomethingSync(typeof(int)));
         }
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
@@ -17,14 +17,14 @@
         {
             CampingBall c = (CampingBall)t;
             c.position = CompressedVec2Binding.GetUncompressedVec2((int)valOf("position"), 10000);
-            c.velocity = (Vec2)valOf("velocity");
+            c.velocity = CompressedVec2Binding.GetUncompressedVec2((int)valOf("velocity"), 20);
             base.PlaybackUpdate();
         }
         public override void RecordUpdate()
         {
             CampingBall n = (CampingBall)t;
             addVal("position", CompressedVec2Binding.GetCompressedVec2(n.position, 10000));
-            addVal("velocity", n.velocity);
+            addVal("velocity", CompressedVec2Binding.GetCompressedVec2(n.velocity, 20));
         }
     }
 }

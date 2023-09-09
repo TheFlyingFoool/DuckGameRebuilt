@@ -20,20 +20,20 @@ namespace DuckGame
             array.CopyTo(b, 0);
             return b;
         }
-        public static ushort BitArrayToUShort(BitArray arr, int idx)
+        public static ushort BitArrayToUShort(BitArray arr) //why was IDX here what the fuck old niko
         {
             ushort divide = 32768;
             ushort xd = 0;
 
             
-            for (int i = idx; i < idx + 16; i++)
+            for (int i = 0; i < 16; i++)
             {
                 if (arr[i]) xd += divide;
                 divide /= 2;
             }
             return xd;
         }
-        public static BitArray UShortIntoArray(ushort val, ref BitArray arr, int idx = 0)
+        public static BitArray UShortIntoArray(ushort val, ref BitArray arr)
         {
             if ((val & 32768) > 0) arr[0] = true;
             if ((val & 16384) > 0) arr[1] = true;

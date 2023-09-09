@@ -96,6 +96,7 @@ namespace DuckGame
             }
             if (refresh || _geo == null || forceRefresh)
             {
+                forceRefresh = false;
                 DrawLightNew();
             }
         }

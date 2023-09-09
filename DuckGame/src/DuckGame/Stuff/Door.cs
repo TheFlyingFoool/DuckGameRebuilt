@@ -51,7 +51,7 @@ namespace DuckGame
         public bool secondaryFrame;
         private bool _lockedSprite;
         public bool networkUnlockMessage;
-        private bool didUnlock;
+        public bool didUnlock;
         private bool prevLocked;
         private List<Mine> _removeMines = new List<Mine>();
 
@@ -249,8 +249,11 @@ namespace DuckGame
             DoUnlock(with.position);
         }
 
+        public Vec2 ps;
         public void DoUnlock(Vec2 keyPos)
         {
+            ps = keyPos;
+            SFX.DontSave = 1;
             SFX.Play("deedleBeep");
             if (DGRSettings.S_ParticleMultiplier != 0)
             {

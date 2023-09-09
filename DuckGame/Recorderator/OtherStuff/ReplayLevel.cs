@@ -427,26 +427,29 @@ namespace DuckGame
                 Main.SpecialCode2 = "posRead";
                 Vec2 position = b.ReadVec2();
                 Main.SpecialCode2 = "FrameRead";
-                byte Frame = b.ReadByte();
+                ushort Frame = b.ReadUShort();
                 Main.SpecialCode2 = "bgTileIndex Read";
                 byte bgTileIndex = b.ReadByte();
 
-                BackgroundTile bgTiles = (BackgroundTile)Editor.CreateThing(Recorderator.bgtileIDX[bgTileIndex]);
+                //replaced this with a thing because ForegroundTile doesn't inherit BackgroundTile resulting in a crash when casting those to BackgroundTiles
+                Thing bgTiles = Editor.CreateThing(Recorderator.bgtileIDX[bgTileIndex]);
                 bgTiles.position = position;
 
                 Main.SpecialCode2 = "Bit array creation";
-                BitArray b_arr = new BitArray(new byte[] { Frame });
-                int lol = 0;
-                int divide = 64;
-                for (int y = 0; y < 7; y++)
+                BitArray b_arr = new BitArray(16);
+                BitCrusher.UShortIntoArray(Frame, ref b_arr);
+
+                int val = 0;
+                int divide = 1024;
+                for (int y = 0; y < 11; y++)
                 {
                     Main.SpecialCode2 = "ll Loop " + y;
-                    if (b_arr[y]) lol += divide;
+                    if (b_arr[y]) val += divide;
                     divide /= 2;
                 }
                 Main.SpecialCode2 = "Something went wrong here";
-                bgTiles.frame = lol;
-                bgTiles.flipHorizontal = b_arr[7];
+                bgTiles.frame = val;
+                bgTiles.flipHorizontal = b_arr[15];
                 reAdd.Add(bgTiles);
             }
             Main.SpecialCode2 = "";

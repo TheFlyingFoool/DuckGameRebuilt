@@ -8,6 +8,7 @@
             starfield = new Sprite("background/starField");
             duck = d;
         }
+        public bool ascend;
         public Sprite starfield;
         public override void PostDrawLayer(Layer layer)
         {
@@ -18,10 +19,27 @@
             }
             base.PostDrawLayer(layer);
         }
+        public float spd = 2;
         public override void Update()
         {
             duck.x = Maths.Clamp(duck.x, 10, 310);
-            camera.y = Lerp.FloatSmooth(camera.y, 0, 0.1f, 0.95f);
+            if (ascend)
+            {
+                camera.y += spd;
+                spd -= 0.1f;
+                if (spd < -1)
+                {
+                    Graphics.fade = Lerp.Float(Graphics.fade, -0.6f, 0.01f);
+                    if (Graphics.fade <= -0.3f)
+                    {
+                        current = new TitleScreen();
+                    }
+                }
+            }
+            else
+            {
+                camera.y = Lerp.FloatSmooth(camera.y, 0, 0.1f, 0.95f);
+            }
             base.Update();
         }
         public override void Initialize()
@@ -36,6 +54,7 @@
             Add(new InvisibleBlock(200, 88, 120, 13));
             Add(new InvisibleBlock(0, 33, 120, 13));
             Add(new InvisibleBlock(200, 33, 120, 13));
+            Add(new PinkBox(160, 16));
 
             Add(new Platform(118, 112, 84, 8));
             Add(new Platform(118, 57, 84, 8));

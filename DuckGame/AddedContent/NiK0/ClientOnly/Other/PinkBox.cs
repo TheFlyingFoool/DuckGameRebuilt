@@ -31,6 +31,11 @@ namespace DuckGame
         public void Pop(Duck duck)
         {
             Bounce();
+            if (Level.current is DGRDevHall dvh)
+            {
+                dvh.ascend = true;
+                return;
+            }
             if (!_hit)
             {
                 SuperFondle(this, DuckNetwork.localConnection);
