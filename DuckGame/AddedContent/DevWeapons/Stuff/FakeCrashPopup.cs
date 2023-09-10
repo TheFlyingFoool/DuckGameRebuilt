@@ -7,15 +7,16 @@
         {
             graphic = new Sprite("FakeCrash");
             graphic.CenterOrigin();
-            scale = new Vec2(0.15f);
+            scale = new Vec2(0.21f);
             alpha = 0;
-            time = Rando.Int(200, 300);
+            startTime = Rando.Int(200, 300);
+            time = startTime;
             center = new Vec2(285.5f, 227);
         }
         public override void Draw()
         {
         }
-        public int time;
+        public int startTime, time;
         public Camera origCamera;
         public bool froze;
         public override void Update()
@@ -32,16 +33,23 @@
         {
             if (l == Layer.HUD)
             {
-                if (time > 20)
+                int timeDelta = startTime - time;
+                float timeFactor;
+
+                if (timeDelta <= 15)
                 {
-                    scale = Lerp.Vec2(scale, new Vec2(0.25f), 0.05f);
-                    alpha = Lerp.Float(alpha, 1, 0.1f);
+                    timeFactor = Ease.Out.Quad(timeDelta / 15f);
+                    scale = new Vec2((float)(0.21f + (timeFactor * 0.04f)));
+                    alpha = timeFactor;
                 }
-                else
+
+                if (time < 10)
                 {
-                    alpha -= 0.1f;
-                    scale = Lerp.Vec2(scale, Vec2.Zero, 0.05f);
+                    timeFactor = Ease.Out.Quad(time * 0.1f);
+                    scale = new Vec2((float)(0.225f + (timeFactor * 0.025f)));
+                    alpha = timeFactor;
                 }
+
                 base.Draw();
             }
         }
