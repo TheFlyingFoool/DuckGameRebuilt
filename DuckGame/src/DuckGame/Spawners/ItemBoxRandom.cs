@@ -48,6 +48,17 @@ namespace DuckGame
                 }
                 t1 = physicsObjects[Rando.Int(physicsObjects.Count - 1)];
             }
+            if (Editor.clientonlycontent)
+            {
+                if (Rando.Int(1000) == 1)
+                {
+
+                }
+                else if (Rando.Int(300) == 1)
+                {
+
+                }
+            }
             PhysicsObject thing = Editor.CreateThing(t1) as PhysicsObject;
             if (Rando.Int(1000) == 1 && thing is Gun && (thing as Gun).CanSpawnInfinite())
             {

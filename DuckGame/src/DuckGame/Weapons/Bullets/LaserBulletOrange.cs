@@ -29,7 +29,24 @@ namespace DuckGame
             _thickness = type.bulletThickness;
             _beem = Content.Load<Texture2D>("laserBeemOrange");
         }
-
+        protected override void Rebound(Vec2 pos, float dir, float rng)
+        {
+            if (coinRebound)
+            {
+                ++reboundBulletsCreated;
+                LaserBulletOrange bullet = new LaserBulletOrange(pos.x, pos.y, ammo, dir, null, false, rng);
+                bullet._teleporter = _teleporter;
+                bullet.timesRebounded = timesRebounded + 1;
+                bullet.lastReboundSource = lastReboundSource;
+                bullet.isLocal = isLocal;
+                bullet._thickness = _thickness;
+                _reboundedBullet = bullet;
+                reboundCalled = true;
+                Level.Add(bullet);
+                return;
+            }
+            base.Rebound(pos, dir, rng);
+        }
         protected override void CheckTravelPath(Vec2 pStart, Vec2 pEnd)
         {
             if (_thickness > 1f && _travels > 0)

@@ -592,6 +592,14 @@ namespace DuckGame
                 Shing();
                 (with as EnergyScimitar).Shing();
             }
+            else if (_airFly && with is Coin c)
+            {
+                Duck d = null;
+                if (_lastThrownBy != null) d = (Duck)_lastThrownBy;
+                Fondle(c);
+                Vec2 v = c.TargetNear(d, true)[0];
+                _airFlyAngle = Maths.PointDirection(position, v);
+            }
             else if (_airFly && with is PhysicsObject && !(with is Gun) && !(with is Equipment) && !(with is Duck) && !(with is RagdollPart))
                 with.Destroy(new DTIncinerate(this));
             else if (_airFly && with is Duck && (with != _prevOwner || _framesSinceThrown > 15))

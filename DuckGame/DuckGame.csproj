@@ -229,7 +229,20 @@
     <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddedContent\DevWeapons\Stuff\Coin.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\NMHitscanBullet.cs" />
     <Compile Include="AddedContent\DGRDevHall.cs" />
+    <Compile Include="AddedContent\DevWeapons\CollinGun.cs" />
+    <Compile Include="AddedContent\DevWeapons\DanGun.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\aWobbleMaterial.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\FakeCrashPopup.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\GlitchProjectile.cs" />
+    <Compile Include="AddedContent\DevWeapons\HyeveGun.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\HitscanBullet.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\IcerIcyBlcok.cs" />
+    <Compile Include="AddedContent\DevWeapons\NiK0Gun.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\LightBullet.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\NMCrashPopup.cs" />
     <Compile Include="AddedContent\DGRSettings.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\AdvancedConfigAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ConfigClasses\NameDisplayConfig.cs" />
