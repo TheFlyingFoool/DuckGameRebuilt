@@ -243,6 +243,7 @@
     <Compile Include="AddedContent\DevWeapons\NiK0Gun.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\LightBullet.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\NMCrashPopup.cs" />
+    <Compile Include="AddedContent\DGRDevs.cs" />
     <Compile Include="AddedContent\DGRSettings.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\AdvancedConfigAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ConfigClasses\NameDisplayConfig.cs" />
@@ -299,8 +300,6 @@
     <Compile Include="AddedContent\Firebreak\DebuggerTools\DynamicDCLine.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\FireDebug.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Levels\TestLev.cs" />
-    <Compile Include="AddedContent\Firebreak\DebuggerTools\Levels\TestLev.FireBlock.cs" />
-    <Compile Include="AddedContent\Firebreak\DebuggerTools\Levels\TestLev.SelectionPad.cs" />
     <Compile Include="AddedContent\Firebreak\DevConsoleCommandAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\DrawingContextAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\PostInitializeAttribute.cs" />
