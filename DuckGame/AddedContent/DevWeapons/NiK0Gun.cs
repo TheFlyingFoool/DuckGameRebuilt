@@ -24,15 +24,35 @@ namespace DuckGame
             laserSight = true;
         }
         public aWobbleMaterial wobble;
+        public Sound charge;
         public override void OnPressAction()
         {
 
+        }
+        public override void Update()
+        {
+            if (_triggerHeld && ammo > 0)
+            {
+                if (charge == null)
+                {
+                    charge = SFX.Play("FunnyGunCharge");
+                }
+            }
+            else
+            {
+                if (charge != null)
+                {
+                    charge.Kill();
+                    charge = null;
+                }
+            }
+            base.Update();
         }
         public override void OnHoldAction()
         {
             if (ammo > 0)
             {
-                load = Lerp.Float(load, 6f, 0.02f);
+                load = Lerp.Float(load, 6f, 0.023f);
                 if (load > 4)
                 {
                     load = Lerp.Float(load, 6f, 0.08f);
@@ -60,6 +80,8 @@ namespace DuckGame
         {
             if (load > 0.2f)
             {
+                if (load >= 4) SFX.PlaySynchronized("FunnyGunSuperShoot");
+                else SFX.PlaySynchronized("FunnyGunShoot");
                 ammo--;
                 Level.Add(new LightBullet(barrelPosition, barrelVector * Maths.Clamp(load * 10, 10, 25), load >= 4, duck));
                 _kickForce = load * 2;

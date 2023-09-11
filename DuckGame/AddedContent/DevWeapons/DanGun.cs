@@ -1,5 +1,5 @@
 ﻿namespace DuckGame
-{    
+{
     [ClientOnly]
     public class DanGun : Gun
     {
@@ -9,12 +9,12 @@
         {
             ammo = 1;
             _ammoType = new ATLaser();//place holder cuz dg
-            sprite = new SpriteMap("DanGun", 27, 15);
+            sprite = new SpriteMap("DanGun", 29, 17);
             graphic = sprite;
-            center = new Vec2(13.5f, 7.5f);
+            center = new Vec2(14.5f, 8.5f);
             _barrelOffsetTL = new Vec2(27, 7f);
-            collisionSize = new Vec2(23, 11);
-            _collisionOffset = new Vec2(-13.5f, -4.5f);
+            collisionSize = new Vec2(22, 10);
+            _collisionOffset = new Vec2(-12.5f, -3.5f);
             wobble = new aWobbleMaterial(this, 0.2f);
         }
         public aWobbleMaterial wobble;

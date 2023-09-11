@@ -107,6 +107,8 @@ namespace DuckGame
                     }
                 }
                 vvs.RemoveAt(0);
+                SFX.PlaySynchronized("targetRebound", 1, Rando.Float(-0.1f, 0.2f));
+
             }
             if (bulWidth <= 0)
             {

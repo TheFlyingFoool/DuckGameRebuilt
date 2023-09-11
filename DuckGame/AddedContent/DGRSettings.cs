@@ -187,6 +187,8 @@ namespace DuckGame
 
         [AutoConfigField] public static bool LoadMusic = true;
 
+        [AutoConfigField] public static bool FasterLoad = false;
+
         public static bool
             LoaderMusic; //this is so you wont crash immediately when changing the setting, this only gets set on startup -NiK0
 
@@ -335,7 +337,5 @@ namespace DuckGame
         
         // the 4chan disease..
         [AutoConfigField] public static bool GreenTextSupport = false;
-
-        [AutoConfigField] public static bool becomegod = false;
     }
 }

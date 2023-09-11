@@ -2017,7 +2017,7 @@ namespace DuckGame
                     : 0); // Replaced !(Keyboard.Pressed(Keys.OemTilde)) ? with that because Press can cause issues with it auto trying to close 
 
             //Just for NiK0 Purposes
-            if (Steam.user.id == DGRDevs.NiK0.SteamID && Keyboard.Down(Keys.LeftControl) && Keyboard.Pressed(Keys.NumPad2)) 
+            if (Steam.user != null && Steam.user.id == DGRDevs.NiK0.SteamID && Keyboard.Down(Keys.LeftControl) && Keyboard.Pressed(Keys.NumPad2)) 
                 num1 = 1;
 
             WasDownLastFrame = Keyboard.Down(Keys.OemTilde);

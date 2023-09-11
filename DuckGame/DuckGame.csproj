@@ -229,8 +229,12 @@
     <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddedContent\DevWeapons\LutalliGun.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\Coin.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\NMHitscanBullet.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\LPortal.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\PortalProjectile.cs" />
+    <Compile Include="AddedContent\DevWeapons\SohRock.cs" />
     <Compile Include="AddedContent\DGRDevHall.cs" />
     <Compile Include="AddedContent\DevWeapons\CollinGun.cs" />
     <Compile Include="AddedContent\DevWeapons\DanGun.cs" />
@@ -407,7 +411,7 @@
     <Compile Include="Recorderator\OtherStuff\TheCorderator.cs" />
     <Compile Include="Recorderator\OtherStuff\Vec6.cs" />
     <Compile Include="Recorderator\Priority\BitCrusher.cs" />
-    <Compile Include="Recorderator\Priority\update.cs" />
+    <Compile Include="Recorderator\Priority\updateCorderator.cs" />
     <Compile Include="Recorderator\SubClassed\SomethingSomethingVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\GrappleVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\KnightHelmetVessel.cs" />
@@ -524,6 +528,7 @@
     <Compile Include="src\MonoTime\LUI\LUIOnOff.cs" />
     <Compile Include="src\MonoTime\LUI\LUIStringEntry.cs" />
     <Compile Include="src\MonoTime\LUI\LUIText.cs" />
+    <Compile Include="src\MonoTime\Sound\QOA.cs" />
     <Compile Include="src\MonoTime\UI\UIDGRDescribe.cs" />
     <Compile Include="src\MonoTime\UI\UISideButton.cs" />
     <Compile Include="src\WindowsPlatformStartup.cs" />

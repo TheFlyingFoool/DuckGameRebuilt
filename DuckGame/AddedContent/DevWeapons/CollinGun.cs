@@ -11,9 +11,9 @@ namespace DuckGame
         public StateBinding _coinBinding = new StateBinding("coin");
         public CollinGun(float xpos, float ypos) : base(xpos, ypos)
         {
-            sprite = new SpriteMap("CollinGun", 21, 15);
+            sprite = new SpriteMap("CollinGun", 23, 17);
             graphic = sprite;
-            center = new Vec2(10.5f, 7.5f);
+            center = new Vec2(11.5f, 8.5f);
             collisionSize = new Vec2(19, 12);
             _collisionOffset = new Vec2(-9.5f, -5.5f);
             _ammoType = new ATHighCalSniper();
