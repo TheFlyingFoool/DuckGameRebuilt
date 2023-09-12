@@ -911,18 +911,15 @@ namespace DuckGame
                     Graphics.RestoreOldViewport();
                 }
             }
-            if (Recorder.currentRecording != null)
-                Recorder.currentRecording.LogBackgroundColor(backgroundColor);
+            if (Recorder.currentRecording != null) Recorder.currentRecording.LogBackgroundColor(backgroundColor);
             BeforeDraw();
             Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.getMatrix());
             Draw();
             things.Draw();
 
             Graphics.screen.End();
-            if (DevConsole.splitScreen && this is GameLevel)
-                SplitScreen.Draw();
-            else
-                Layer.DrawLayers();
+            if (DevConsole.splitScreen && this is GameLevel) SplitScreen.Draw();
+            else Layer.DrawLayers();
             if (DevConsole.rhythmMode && this is GameLevel)
             {
                 Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Layer.HUD.camera.getMatrix());
@@ -934,7 +931,7 @@ namespace DuckGame
             if (currentlyShadering)
             {
 
-                    Graphics.SettingForShader = true;
+                Graphics.SettingForShader = true;
                 Graphics.SetRenderTarget(null);
                 Graphics.SettingForShader = false;
 
@@ -948,17 +945,20 @@ namespace DuckGame
                     {
                         rd3 = new RenderTarget2D(Graphics.viewport.Width, Graphics.viewport.Height);
                         dispose.Add(rd3);
-                    Graphics.SettingForShader = true;
+                        Graphics.SettingForShader = true;
                         Graphics.SetRenderTarget(rd3);
-                    Graphics.SettingForShader = false;
+                        Graphics.SettingForShader = false;
                     }
 
                     Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Matrix.CreateScale(1, 1, 1));
                     Graphics.Clear(Color.Black);
 #if DEBUG
-                    Graphics.DrawString("this stuff only shows in debug builds -NiK0", new Vec2(0, 0), Color.White, 1, null, 2);
-                    Graphics.DrawString(Resolution.size.ToString(), new Vec2(0, 16), Color.White, 1, null, 2);
-                    Graphics.DrawString(Resolution.current.dimensions.ToString(), new Vec2(0, 32), Color.White, 1, null, 2);
+                    if (!Network.isActive)
+                    {
+                        Graphics.DrawString("this stuff only shows in debug builds and offline -NiK0", new Vec2(0, 0), Color.White, 1, null, 2);
+                        Graphics.DrawString(Resolution.size.ToString(), new Vec2(0, 16), Color.White, 1, null, 2);
+                        Graphics.DrawString(Resolution.current.dimensions.ToString(), new Vec2(0, 32), Color.White, 1, null, 2);
+                    }
 #endif
                     Graphics.material = lavaPuddles[i].mt;
                     Graphics.Draw(rd2, 0, 0, 1, 1);
@@ -966,9 +966,9 @@ namespace DuckGame
                     Graphics.screen.End();
                     if (multiLayering)
                     {
-                    Graphics.SettingForShader = true;
+                        Graphics.SettingForShader = true;
                         Graphics.SetRenderTarget(null);
-                    Graphics.SettingForShader = true;
+                        Graphics.SettingForShader = true;
                         rd2 = rd3;
                     }
                 }

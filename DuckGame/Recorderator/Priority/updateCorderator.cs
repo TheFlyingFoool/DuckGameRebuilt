@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace DuckGame
 {
-    internal class update : IUpdateable
+    internal class updateCorderator : IUpdateable
     {
         public bool Enabled
         {

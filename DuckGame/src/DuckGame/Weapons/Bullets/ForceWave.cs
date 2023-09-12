@@ -55,6 +55,7 @@ namespace DuckGame
                 {
                     if (materialThing is Coin c && !c.used && isServerForObject && c.frames > 6)
                     {
+                        SFX.PlaySynchronized("coin");
                         Fondle(c);
                         Duck d = null;
                         if (_waveOwner != null) d = (Duck)_waveOwner;
@@ -83,8 +84,10 @@ namespace DuckGame
                         c.used = false;
                         c.position = v;
                         c.frames = 0;
+                        if (c.coinFly != null) c.coinFly.Kill();
+                        c.coinFly = null;
                         c.velocity = new Vec2(0, -6);
-                        c.gravMultiplier = 0.85f;
+                        c.gravMultiplier = 0.8f;
 
                         continue;
                     }

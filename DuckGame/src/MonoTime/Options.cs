@@ -420,10 +420,10 @@ namespace DuckGame
             {
                 dgrDescription = "When enabled, you'll be able to turn on any custom level on an online match"
             });
-            
-            menu.Add(new UIMenuItemToggle("become god", field: new FieldBinding(dGRSettings, "becomegod"))
+
+            menu.Add(new UIMenuItemToggle("Faster Load", field: new FieldBinding(dGRSettings, "FasterLoad"))
             {
-                dgrDescription = "..."
+                dgrDescription = "If this is enabled hats, effects, devconsole, challenges, textures wont load on startup resulting in instability so use at your own risk"
             });
 
             menu.Add(new UIText(" ", Color.White));
@@ -731,8 +731,11 @@ namespace DuckGame
             _DGREditorMenu = CreateDGREditorMenu(menu);
             menu.Add(new UIMenuItem("EDITOR", new UIMenuActionOpenMenu(menu, _DGREditorMenu), backButton: true));
 
-            _DGRRecorderatorMenu = Recorderator.CreateRecorderatorMenu(menu);
-            menu.Add(new UIMenuItem("RECORDERATOR", new UIMenuActionOpenMenu(menu, _DGRRecorderatorMenu), backButton: true));
+            if (Program.IS_DEV_BUILD)//WHEN RECORDERATOR IS A THING AGAIN MAKE THIS MENU ALWAYS SHOW UP -NiK0
+            {
+                _DGRRecorderatorMenu = Recorderator.CreateRecorderatorMenu(menu);
+                menu.Add(new UIMenuItem("RECORDERATOR", new UIMenuActionOpenMenu(menu, _DGRRecorderatorMenu), backButton: true));
+            }
             
             _DGRDumbShitMenu = CreateDGRDumbShitMenu(menu);
             menu.Add(new UIMenuItem("MISCELLANEOUS", new UIMenuActionOpenMenu(menu, _DGRDumbShitMenu), backButton: true));

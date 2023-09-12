@@ -110,7 +110,8 @@ namespace DuckGame
                 bgtileIDX.Add(b, t);
                 b++;
             }
-            (typeof(Game).GetField("updateableComponents", BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic).GetValue(MonoMain.instance) as List<IUpdateable>).Add(new update());
+            //WHEN RECORDERATOR IS NEEDED REMOVE THIS COMMENT -NiK0
+            //(typeof(Game).GetField("updateableComponents", BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic).GetValue(MonoMain.instance) as List<IUpdateable>).Add(new updateCorderator());
         }
         public static Recorderator instance;
         public static UIMenu CreateRecorderatorMenu(UIMenu pPrev)

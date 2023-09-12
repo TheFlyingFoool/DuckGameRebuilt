@@ -24,9 +24,19 @@ namespace DuckGame
         public StateBinding _framesBinding = new StateBinding("frames");
         public StateBinding _alphaBinding = new StateBinding("alpha");
         public StateBinding _usedBinding = new StateBinding("used");
-
+        public override void Terminate()
+        {
+            coinFly.Kill();
+            base.Terminate();
+        }
+        public override void Initialize()
+        {
+            base.Initialize();
+        }
+        public Sound coinFly;
         public List<Vec2> TargetNear(Duck ignore, bool targetCoins = false, bool ignoreWalls = false)
         {
+            if (coinFly != null) coinFly.Kill();
             List<Vec2> list = new List<Vec2>();
             used = true;
 
@@ -96,13 +106,26 @@ namespace DuckGame
                 Vec2 ang = Maths.AngleToVec(Rando.Float(7));
                 Vec2 p2 = position + ang * 2000;
                 Level.CheckRay<Block>(position, p2, null, out p2);
+                coinFly = SFX.Play("coinFly");
 
                 list.Add(p2);
             }
             return list;
         }
+        public bool dieSFX;
         public override void Update()
         {
+            if (frames > 20 && coinFly == null)
+            {
+                coinFly = SFX.Play("coinFly");
+
+            }
+            if (grounded && !dieSFX && frames > 5)
+            {
+                if (coinFly != null) coinFly.Kill();
+                SFX.Play("coinDie");
+                dieSFX = true;
+            }
             float siz = Maths.Clamp(frames / 4f + 10, 15, 30);
             if (used || grounded) siz = 2;
             collisionSize = new Vec2(siz);
@@ -126,15 +149,15 @@ namespace DuckGame
                 }
                 else angleDegrees += hSpeed * 4;
             }
-            trail.Add(position);
             if (trail.Count > 10) trail.RemoveAt(0);
             base.Update();
+            trail.Add(position);
         }
         public override void Draw()
         {
             for (int i = 1; i < trail.Count; i++)
             {
-                Graphics.DrawLine(trail[i - 1], trail[i], Color.Yellow * ((float)i / (float)trail.Count), 5 * ((float)i / (float)trail.Count), depth - 2);
+                Graphics.DrawLine(trail[i - 1], trail[i], Color.White * 0.7f * ((float)i / (float)trail.Count), 5 * ((float)i / (float)trail.Count), depth - 2);
             }
             base.Draw();
         }
@@ -144,6 +167,7 @@ namespace DuckGame
             if (bullet.owner != null) d = (Duck)bullet.owner;
             Vec2 v = TargetNear(d, true)[0];
 
+            SFX.PlaySynchronized("targetRebound");
             Bullet.coinRebound = true;
             bullet.DoRebound(position, Maths.PointDirection(position, v), 0);
             Bullet.coinRebound = false;

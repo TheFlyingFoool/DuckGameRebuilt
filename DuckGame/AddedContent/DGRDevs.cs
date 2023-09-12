@@ -9,7 +9,7 @@ namespace DuckGame
             DisplayName = "Collin",
             Color = new Color("#FED95F"),
             DevRole = DGRebuiltDeveloper.Role.Collin,
-            DevItem = typeof(PositronShooter),
+            DevItem = typeof(CollinGun),
             SteamID = 76561198114791325,
         };
 
@@ -18,7 +18,7 @@ namespace DuckGame
             DisplayName = "Dan",
             Color = new Color("#00FF00"),
             DevRole = DGRebuiltDeveloper.Role.LeadDeveloper,
-            DevItem = typeof(PositronShooter),
+            DevItem = typeof(DanGun),
             SteamID = 76561198124539558,
         };
 
@@ -27,7 +27,7 @@ namespace DuckGame
             DisplayName = "NiK0",
             Color = new Color("#00FFFF"),
             DevRole = DGRebuiltDeveloper.Role.LeadDeveloper,
-            DevItem = typeof(PositronShooter),
+            DevItem = typeof(NiK0Gun),
             SteamID = 76561198806685720,
         };
 
@@ -54,7 +54,7 @@ namespace DuckGame
             DisplayName = "Hyeve",
             Color = new Color("#ED32A8"),
             DevRole = DGRebuiltDeveloper.Role.HelpingHand,
-            DevItem = typeof(PositronShooter),
+            DevItem = typeof(HyeveGun),
             SteamID = 76561198138278564,
         };
 
@@ -120,7 +120,6 @@ namespace DuckGame
             DevItem = typeof(PositronShooter),
             SteamID = 76561199015640200,
         };
-        
         // sorted by importance
         public static readonly DGRebuiltDeveloper[] All =
         {
@@ -137,6 +136,19 @@ namespace DuckGame
             Tater,
             Tmob03,
             TheKingOfCringe11,
+        };
+        //NiK0 stuff
+        public static readonly DGRebuiltDeveloper[] AllWithGuns =
+        {
+            Collin,
+            Dan,
+            NiK0,
+            Firebreak,
+            Othello7,
+            Hyeve,
+            Lutalli,
+            Erik7302,
+            Klof44,
         };
     }
 

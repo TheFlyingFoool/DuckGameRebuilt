@@ -15,12 +15,12 @@ namespace DuckGame
             ice.center = new Vec2(8);
 
             _ammoType = new ATMissile();
-            sprite = new SpriteMap("HyeveGun", 15, 18);
-            center = new Vec2(7.5f, 9f);
+            sprite = new SpriteMap("HyeveGun", 18, 21);
+            center = new Vec2(9, 10.5f);
 
-            _barrelOffsetTL = new Vec2(14, 9);
-            collisionSize = new Vec2(10);//15 18
-            _collisionOffset = new Vec2(-6.5f, -4);
+            _barrelOffsetTL = new Vec2(15, 10);
+            collisionSize = new Vec2(8, 13);//15 18
+            _collisionOffset = new Vec2(-6f, -4.5f);
             graphic = sprite;
             ammo = 24;
             _holdOffset = new Vec2(0, -2);
@@ -130,7 +130,7 @@ namespace DuckGame
 
 
             int ls = Maths.Clamp(ammo, 0, 24);
-            Graphics.DrawRect(Offset(new Vec2(-5.5f, -2.75f + ((charge - 0.7f) * 0.34f) - ((ls - 24) / 4f))), Offset(new Vec2(0.5f, 3.1f)), new Color(0, 150, 249), depth - 1);
+            Graphics.DrawRect(Offset(new Vec2(-5f, -3.5f + ((charge - 0.7f) * 0.34f) - ((ls - 24) / 4f))), Offset(new Vec2(1f, 3.1f)), new Color(0, 150, 249), depth - 1);
             
             base.Draw();
 

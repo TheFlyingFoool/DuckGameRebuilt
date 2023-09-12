@@ -52,11 +52,36 @@ namespace DuckGame
             {
                 if (Rando.Int(1000) == 1)
                 {
-
+                    int rng = Rando.Int(9);
+                    switch (rng)
+                    {
+                        default:
+                        case 0:
+                            t1 = typeof(DanGun);
+                            break;
+                        case 1:
+                            t1 = typeof(HyeveGun);
+                            break;
+                        case 2:
+                            t1 = typeof(CollinGun);
+                            break;
+                        case 3:
+                            t1 = typeof(NiK0Gun);
+                            break;
+                    }
+                    if (Rando.Int(50) == 0) t1 = typeof(SohRock);
                 }
-                else if (Rando.Int(300) == 1)
+                else if (Rando.Int(300) == 1 && Steam.user != null)
                 {
-
+                    ulong u = Steam.user.id;
+                    foreach (DGRebuiltDeveloper dgr in DGRDevs.AllWithGuns)
+                    {
+                        if (u == dgr.SteamID && dgr.DevItem != typeof(PositronShooter))
+                        {
+                            t1 = dgr.DevItem;
+                            break;
+                        }
+                    }
                 }
             }
             PhysicsObject thing = Editor.CreateThing(t1) as PhysicsObject;
