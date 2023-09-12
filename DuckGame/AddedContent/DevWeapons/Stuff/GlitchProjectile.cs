@@ -74,7 +74,7 @@ namespace DuckGame
                 }
                 position += velocity;
             }
-            if (Rando.Int(3) == 0)
+            if (Rando.Float(1) < 0.33f * DGRSettings.ActualParticleMultiplier)
             {
                 Level.Add(new DanCircParticle(x + Rando.Float(-charg * 10, charg * 10), y + Rando.Float(-charg * 10, charg * 10), charg * 8 * Rando.Float(1, 0.3f)));
             }

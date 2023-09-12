@@ -47,7 +47,7 @@ namespace DuckGame
             if (c != null)
             {
                 pos2 = c.position;
-                vvs = c.TargetNear(ignore, true);
+                vvs = c.TargetNear(ignore, true, false, true);
             }
         }
         public float travelAng;

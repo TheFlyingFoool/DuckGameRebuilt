@@ -63,7 +63,7 @@ namespace DuckGame
             DisplayName = "Lutalli",
             Color = new Color("#9370DB"),
             DevRole = DGRebuiltDeveloper.Role.HelpingHand,
-            DevItem = typeof(PositronShooter),
+            DevItem = typeof(LutalliGun),
             SteamID = 76561198328210060,
         };
 

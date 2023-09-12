@@ -7,6 +7,7 @@ namespace DuckGame
     {
         public SohRock(float xpos,float ypos) : base(xpos, ypos)
         {
+            tapeable = false;
         }
         public override void Update()
         {

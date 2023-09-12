@@ -24,6 +24,9 @@
         public LPortal portal2;
 
         public int img;
+        public StateBinding _imgBinding = new StateBinding("img");
+        public StateBinding _portal1Binding = new StateBinding("portal1");
+        public StateBinding _portal2Binding = new StateBinding("portal2");
         public override void Fire()
         {
             if (_wait == 0)
@@ -31,15 +34,30 @@
                 ApplyKick();
                 _wait = _fireWait;
 
-                PortalProjectile pp = new PortalProjectile(barrelPosition.x, barrelPosition.y);
-                pp.velocity = barrelVector * 14;
-                pp.firedBy = this;
-                pp.frame = img;
-                pp.angle = -barrelAngle;
+                if (isServerForObject)
+                {
+                    PortalProjectile pp = new PortalProjectile(barrelPosition.x, barrelPosition.y);
+                    pp.velocity = barrelVector * 14;
+                    pp.firedBy = this;
+                    pp.frame = img;
+                    pp.angle = -barrelAngle;
 
-                img++;
-                if (img > 1) img = 0;
-                Level.Add(pp);
+                    img++;
+                    if (img > 1) img = 0;
+                    Level.Add(pp);
+                }
+
+                for (int i = 0; i < 6 * DGRSettings.ActualParticleMultiplier; i++)
+                {
+                    PortalParticle pp = new PortalParticle(x, y, img == 0 ? new Color(227, 171, 2) : new Color(2, 222, 206));
+
+                    pp.position = barrelPosition;
+                    pp.velocity = barrelVector.Rotate(Rando.Float(-0.6f, 0.6f), Vec2.Zero) * Rando.Float(3);
+
+                    pp.scale = new Vec2(Rando.Float(1.3f, 2.4f));
+                    pp.alpha = Rando.Float(0.6f, 0.8f);
+                    Level.Add(pp);
+                }
             }
         }
         public override void Draw()

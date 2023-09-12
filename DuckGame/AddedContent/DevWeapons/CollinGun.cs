@@ -8,7 +8,6 @@ namespace DuckGame
     {
         public SpriteMap sprite;
         public StateBinding _rechargeBinding = new StateBinding("recharge");
-        public StateBinding _coinBinding = new StateBinding("coin");
         public CollinGun(float xpos, float ypos) : base(xpos, ypos)
         {
             sprite = new SpriteMap("CollinGun", 23, 17);
@@ -23,14 +22,13 @@ namespace DuckGame
             ammo = 100;
             _barrelOffsetTL = new Vec2(20, 5.5f);
             wobble = new aWobbleMaterial(this, 0.2f);
-            coin = true;
+            recharge = 400;
         }
         public aWobbleMaterial wobble;
         protected override void PlayFireSound()
         {
         }
         public int recharge;
-        public bool coin;
         public override void OnPressAction()
         {
             loaded = true;
@@ -40,11 +38,13 @@ namespace DuckGame
         {
             if (_wait == 0)
             {
-                if (coin)
+                if (recharge > 300)
                 {
                     SFX.Play("coin");
                     if (isServerForObject)
                     {
+                        recharge -= 300;
+                        _wait = 1f;
                         Coin c = new Coin(x, y);
                         Vec2 extra = velocity;
                         if (owner != null) extra = owner.velocity;
@@ -52,7 +52,6 @@ namespace DuckGame
                         if (Math.Abs(c.hSpeed) < 3) c.hSpeed += offDir * 3;
                         Level.Add(c);
 
-                        coin = false;
                         loaded = false;
                     }
                 }
@@ -99,7 +98,7 @@ namespace DuckGame
             depth += 1;
             Graphics.material = null;
 
-            if (coin)
+            if (recharge > 300)
             {
                 float al = alpha;
                 sprite.imageIndex = 2;
@@ -108,18 +107,37 @@ namespace DuckGame
                 base.Draw();
                 depth -= 1;
                 alpha = al;
+
             }
+            if (owner != null)
+            {
+                if (holsterDraw)
+                {
+                    Graphics.DrawString((recharge / 300f).ToString("0.0"), Offset(new Vec2(-16, 8 * offDir)), Color.Yellow, 1, null, 0.7f);
+                }
+                else
+                {
+                    Graphics.DrawString(Math.Floor(recharge / 300f).ToString("0"), Offset(new Vec2(-18 + (offDir < 0 ? 5 : 0), -2)), Color.Yellow, 1, null, 0.7f);
+
+                }
+            }
+        }
+        public bool holsterDraw;
+        public override void HolsterUpdate(Holster pHolster)
+        {
+            if (pHolster is Holster)
+            {
+                holsterDraw = true;
+                if (recharge < 1200 && pHolster is PowerHolster) recharge += 2;
+            }
+            base.HolsterUpdate(pHolster);
         }
         public override void Update()
         {
-            if (!coin && isServerForObject)
+            holsterDraw = false;
+            if (recharge < 1200 && isServerForObject)
             {
                 recharge++;
-                if (recharge > 240)
-                {
-                    coin = true;
-                    recharge = 0;
-                }
             }
             ammo = 100;
             base.Update();

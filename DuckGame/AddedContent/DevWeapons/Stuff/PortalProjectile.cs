@@ -2,6 +2,7 @@
 
 namespace DuckGame
 {
+    [ClientOnly]
     public class PortalProjectile : MaterialThing, ITeleport
     {
         public StateBinding _positionBinding = new StateBinding("position");
@@ -60,6 +61,8 @@ namespace DuckGame
                             explode = true;
                         }
                     }
+                    if (block is ItemBox || block is InvisibleBlock || block is GreyBlock || block is Door || block is Window) explode = true;
+
                     if (firedBy != null && !explode)
                     {
                         LPortal lportal = new LPortal(x, y);
@@ -67,6 +70,7 @@ namespace DuckGame
                         lportal.orange = sprite.imageIndex == 1;
 
                         position -= velocity.normalized;
+
 
                         if (x < block.left && Level.CheckPoint<Block>(block.position - new Vec2(12, 0)) == null)
                         {
@@ -92,9 +96,9 @@ namespace DuckGame
                         }
                         if (!explode)
                         {
-                            SFX.Play("scimiSurge");
-                            lportal.PositionOnBlock();
-                            if (Level.CheckRect<LPortal>(lportal.topLeft, lportal.bottomRight, lportal) == null)
+                            SFX.PlaySynchronized("scimiSurge");
+                            explode = !lportal.PositionOnBlock();
+                            if (Level.CheckRect<LPortal>(lportal.topLeft, lportal.bottomRight, lportal) == null && !explode)
                             {
                                 Level.Add(lportal);
 
@@ -123,7 +127,18 @@ namespace DuckGame
                     else explode = true;
 
                     if (explode)
-                    { 
+                    {
+                        for (int i = 0; i < 9 * DGRSettings.ActualParticleMultiplier; i++)
+                        {
+                            PortalParticle pp = new PortalParticle(x, y, frame > 0 ? new Color(227, 171, 2) : new Color(2, 222, 206));
+                            pp.x = Rando.Float(left, right);
+                            pp.y = Rando.Float(top, bottom);
+                            pp.hSpeed = Rando.Float(-3, 3);
+                            pp.vSpeed = Rando.Float(-3, 3);
+                            pp.scale = new Vec2(Rando.Float(0.8f, 2f));
+                            pp.alpha = Rando.Float(0.7f, 1.2f);
+                            Level.Add(pp);
+                        }
                     }
                     Level.Remove(this);
                 }

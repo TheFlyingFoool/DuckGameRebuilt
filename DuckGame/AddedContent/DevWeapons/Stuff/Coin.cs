@@ -16,7 +16,7 @@ namespace DuckGame
             gravMultiplier = 0.9f;
             weight = 0;
             scale = new Vec2(2);
-            thickness = 200;
+            thickness = 10000;
         }
         public int frames;
         public bool used;
@@ -26,7 +26,7 @@ namespace DuckGame
         public StateBinding _usedBinding = new StateBinding("used");
         public override void Terminate()
         {
-            coinFly.Kill();
+            if (coinFly != null) coinFly.Kill();
             base.Terminate();
         }
         public override void Initialize()
@@ -34,7 +34,7 @@ namespace DuckGame
             base.Initialize();
         }
         public Sound coinFly;
-        public List<Vec2> TargetNear(Duck ignore, bool targetCoins = false, bool ignoreWalls = false)
+        public List<Vec2> TargetNear(Duck ignore, bool targetCoins = false, bool ignoreWalls = false, bool hitscan = false)
         {
             if (coinFly != null) coinFly.Kill();
             List<Vec2> list = new List<Vec2>();
@@ -76,7 +76,7 @@ namespace DuckGame
             {
                 Duck d = Duck.GetAssociatedDuck(t);
                 float ff = (position - t.position).length;
-                if (!d.dead && ff < nearest && d != ignore && (ignoreWalls || Level.CheckLine<Block>(position, t.position) == null))
+                if (d.coinTargetted <= 0 && !d.dead && ff < nearest && d != ignore && (ignoreWalls || Level.CheckLine<Block>(position, t.position) == null))
                 {
                     if (theTwo != theOne) theTwo = theOne;
                     theOne = d;
@@ -87,9 +87,11 @@ namespace DuckGame
             if (theOne != null)
             {
                 list.Add(theOne.GetPos());
+                if (hitscan) theOne.coinTargetted = 16;
                 if (theTwo != null && ((frames > 20 && frames < 26) || frames > 60))
                 {
                     list.Add(theTwo.GetPos());
+                    if (hitscan) theTwo.coinTargetted = 16;
                 }
             }
 
@@ -168,9 +170,9 @@ namespace DuckGame
             Vec2 v = TargetNear(d, true)[0];
 
             SFX.PlaySynchronized("targetRebound");
-            Bullet.coinRebound = true;
+            Bullet.specialRebound = true;
             bullet.DoRebound(position, Maths.PointDirection(position, v), 0);
-            Bullet.coinRebound = false;
+            Bullet.specialRebound = false;
             return true;
         }
     }

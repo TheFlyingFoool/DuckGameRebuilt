@@ -231,7 +231,7 @@ namespace DuckGame
 
         public virtual void DoRebound(Vec2 pos, float dir, float rng) => Rebound(pos, dir, rng);
 
-        public static bool coinRebound;
+        public static bool specialRebound;
         protected virtual void Rebound(Vec2 pos, float dir, float rng)
         {
             ++reboundBulletsCreated;
@@ -240,10 +240,11 @@ namespace DuckGame
             bullet.timesRebounded = timesRebounded + 1;
             bullet.lastReboundSource = lastReboundSource;
             bullet.isLocal = isLocal;
+            if (specialRebound) bullet.owner = owner;
             _reboundedBullet = bullet;
             reboundCalled = true;
             Level.Add(bullet);
-            if (coinRebound)
+            if (specialRebound)
             {
                 Send.Message(new NMFireGun(null, new List<Bullet> { bullet }, 1, false));
             }

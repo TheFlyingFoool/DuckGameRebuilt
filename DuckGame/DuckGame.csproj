@@ -229,8 +229,10 @@
     <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddedContent\DevWeapons\FirebreakGun.cs" />
     <Compile Include="AddedContent\DevWeapons\LutalliGun.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\Coin.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\NMPortalEffect.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\NMHitscanBullet.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\LPortal.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\PortalProjectile.cs" />

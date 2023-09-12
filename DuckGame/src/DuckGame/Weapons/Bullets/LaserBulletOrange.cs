@@ -31,7 +31,7 @@ namespace DuckGame
         }
         protected override void Rebound(Vec2 pos, float dir, float rng)
         {
-            if (coinRebound)
+            if (specialRebound)
             {
                 ++reboundBulletsCreated;
                 LaserBulletOrange bullet = new LaserBulletOrange(pos.x, pos.y, ammo, dir, null, false, rng);

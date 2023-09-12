@@ -30,6 +30,7 @@ namespace DuckGame
         public StateBinding _conversionResistanceBinding = new StateBinding(nameof(conversionResistance), 8);
         public bool forceDead;
         public bool afk;
+        public int coinTargetted; //hi whats good -NiK0
         private byte _quackPitch;
         public NetSoundEffect _netQuack = new NetSoundEffect(new string[1]
         {
@@ -3523,6 +3524,7 @@ namespace DuckGame
             verticalOffset = Lerp.FloatSmooth(verticalOffset, 0f, 0.25f);
             if (swordInvincibility > 0)
                 --swordInvincibility;
+            if (coinTargetted > 0) coinTargetted--;
             if ((ragdoll == null || ragdoll.tongueStuck == Vec2.Zero) && tongueCheck != Vec2.Zero && level.cold)
             {
                 Block block = Level.CheckPoint<Block>(tongueCheck);
