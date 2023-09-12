@@ -15,10 +15,6 @@ namespace DuckGame
             public static CanvasTool CurrentCanvasTool = CanvasTool.Brush;
             public static Color CanvasPrimaryColor = Color.Black;
             public static Color CanvasSecondaryColor = Color.White;
-            private static int s_framesUntilTooltip;
-            private static string s_toolTipMessage = string.Empty;
-            private static bool s_iconBeingHovered;
-            private static string s_iconHoveredID = string.Empty;
             private static bool s_renderOnionSkin = false;
             private static int s_animationFrameBeingHovered = -1;
 
@@ -118,13 +114,16 @@ namespace DuckGame
 
             public static void OnSwitch()
             {
-                ClearThings();
+                
+            }
+            
+            public static void OnSwitchOutOf()
+            {
+                
             }
 
             public static void Update()
             {
-                UpdateCursorTooltip();
-                
                 switch (CurrentMode)
                 {
                     case EditorMode.Hat:
@@ -152,8 +151,6 @@ namespace DuckGame
 
             public static void Draw()
             {
-                DrawCursor(Mouse.positionScreen);
-                
                 switch (CurrentMode)
                 {
                     case EditorMode.Hat:
@@ -173,20 +170,11 @@ namespace DuckGame
                         break;
 
                     case EditorMode.Metapixel:
+                        // METAPIXEL EDITOR WIP
                         break;
 
                     default: throw new InvalidOperationException();
                 }
-            }
-
-            private static void UpdateCursorTooltip()
-            {
-                if (s_iconBeingHovered)
-                {
-                    s_iconBeingHovered = false;
-                    s_framesUntilTooltip++;
-                }
-                else s_framesUntilTooltip = 0;
             }
 
             private static void UpdateCanvasToolsSelector()
@@ -514,42 +502,6 @@ namespace DuckGame
 
                 if (!didHover)
                     s_animationFrameBeingHovered = -1;
-            }
-
-            private static void RegisterButtonHover(string ID, string tooltip)
-            {
-                s_iconHoveredID = ID;
-                s_iconBeingHovered = true;
-                s_toolTipMessage = tooltip;
-            }
-
-            private static void DrawCursor(Vec2 position)
-            {
-                Graphics.DrawRect(new Rectangle(position - new Vec2(0.5f), position + new Vec2(0.5f)), FFColors.Focus, 1.95f);
-                
-                if (s_framesUntilTooltip > 40)
-                    DrawCursorHoverTip(position, s_toolTipMessage);
-            }
-
-            private static void DrawCursorHoverTip(Vec2 position, string tip, float alpha = 1f)
-            {
-                const float fontSize = 0.6f;
-                
-                string segmentedTip = string.Join("\n", tip.SplitByLength(30));
-                Vec2 textSize = Extensions.GetStringSize(segmentedTip, fontSize);
-                Rectangle bgBox = new(position, position + textSize + new Vec2(2));
-
-                bool drawLeft = bgBox.Right > current.camera.width;
-                bool drawUp = bgBox.Bottom > current.camera.height;
-
-                if (drawLeft)
-                    bgBox.x -= bgBox.width;
-
-                if (drawUp)
-                    bgBox.y -= bgBox.height;
-                
-                Graphics.DrawRect(bgBox, Color.Black * 0.6f * alpha, 1.975f);
-                Graphics.DrawString(segmentedTip, bgBox.tl + Vec2.One, Color.White * alpha, 2f, null, fontSize);
             }
         }
     }

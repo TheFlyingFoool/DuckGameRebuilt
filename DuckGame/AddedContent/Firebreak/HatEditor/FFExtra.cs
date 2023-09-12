@@ -51,6 +51,7 @@ namespace DuckGame
             public static Sprite CanvasToolsFrame;
             public static Sprite AnimationControlsBig;
             public static Sprite AnimationControlsSmall;
+            public static Sprite PreviewPaneFrames;
 
             public static void Initialize()
             {
@@ -87,6 +88,7 @@ namespace DuckGame
                 CanvasToolsFrame = new Sprite("ff_icons/canvasTools");
                 AnimationControlsBig = new Sprite("ff_icons/animationControls32");
                 AnimationControlsSmall = new Sprite("ff_icons/animationControls12_24");
+                PreviewPaneFrames = new Sprite("ff_icons/previewPane_frames");
             }
         }
 

@@ -13,25 +13,19 @@ namespace DuckGame
             
             Vec2 rectPos = camera.position + camera.size / 2;
             Rectangle bounds = new(rectPos - new Vec2(60, 24), rectPos + new Vec2(60, 24));
-            
-            Add(new Block(bounds.x, bounds.y - 16, bounds.width, 16));
-            Add(new Block(bounds.x + bounds.width, bounds.y, 16, bounds.height));
-            Add(new Block(bounds.x - 16, bounds.y, 16, bounds.height));
-            Add(new Block(bounds.x, bounds.y + bounds.height, bounds.width, 16));
+            SpawnInvisiblePrison(bounds);
             
             Add(new Duck(bounds.Center.x, bounds.Bottom, Profiles.DefaultPlayer1));
             
             base.Initialize();
         }
 
-        public override void Update()
+        public static void SpawnInvisiblePrison(Rectangle innerBounds)
         {
-            foreach (Duck d in things[typeof(Duck)])
-            {
-                // d.x = 0;
-            }
-            
-            base.Update();
+            Add(new Block(innerBounds.x, innerBounds.y - 16, innerBounds.width, 16));
+            Add(new Block(innerBounds.x + innerBounds.width, innerBounds.y, 16, innerBounds.height));
+            Add(new Block(innerBounds.x - 16, innerBounds.y, 16, innerBounds.height));
+            Add(new Block(innerBounds.x, innerBounds.y + innerBounds.height, innerBounds.width, 16));
         }
     }
 }
