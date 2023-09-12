@@ -135,6 +135,11 @@ namespace DuckGame
             get => _virtualInput;
             set => _virtualInput = value;
         }
+        public DuckAI AiInput
+        {
+            get => (DuckAI)_virtualInput;
+            set => _virtualInput = value;
+        }
         protected Profile _profile;
         protected Sprite _swirl;
         private float _swirlSpin;

@@ -1,6 +1,4 @@
-using Microsoft.Xna.Framework.Graphics;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Gif;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Processing.Processors.Transforms;
@@ -14,14 +12,13 @@ namespace DuckGame
     {
         private Sprite _exportIcon;
         
-        private List<Tex2D> _animation;
+        private Tex2D[] _animation;
         private int _animationIndex = 0;
         private int _timeToChangeAnimationFrame = 0;
         private string _teamName = String.Empty;
         public SimRenderer()
         {
             backgroundColor = Color.DarkSlateBlue;
-            _animation = new List<Tex2D>();
         }
 
         public override void Initialize()
@@ -30,102 +27,128 @@ namespace DuckGame
             
             _exportIcon = new Sprite("exportIcon") {color = Color.GreenYellow};
 
+            Dictionary<uint, Action<Duck>> timelineActions = new()
+            {
+                {30, duck =>
+                    {
+                        duck.AiInput.HoldDown(Triggers.Right);
+                    }
+                },
+                {60, duck =>
+                    {
+                        duck.AiInput.Release(Triggers.Right);
+                        duck.AiInput.HoldDown(Triggers.Left);
+                    }
+                },
+                {61, duck =>
+                    {
+                        duck.AiInput.Press(Triggers.Shoot);
+                        duck.AiInput.Press(Triggers.Jump);
+                    }
+                },
+                {62, duck =>
+                    {
+                        duck.AiInput.Release(Triggers.Shoot);
+                        duck.AiInput.HoldDown(Triggers.Jump);
+                    }
+                },
+                {70, duck =>
+                    {
+                        duck.AiInput.Press(Triggers.Shoot);
+                    }
+                },
+                {71, duck =>
+                    {
+                        duck.AiInput.Release(Triggers.Shoot);
+                    }
+                },
+                {95, duck =>
+                    {
+                        duck.AiInput.Release(Triggers.Jump);
+                    }
+                },
+            };
+
+            Action<Duck> initialize = duck =>
+            {
+                duck.AiInput = new DuckAI();
+
+                VirtualShotgun shotty = new(duck.x, duck.y);
+                duck.GiveHoldable(shotty);
+                Add(shotty);
+                
+                TeamHat hat = new(9999, 9999, Teams.all.ChooseRandom(), duck.profile);
+                duck._equipment.Add(hat);
+                _teamName = hat.team.name;
+                hat.Equip(duck);
+                Add(hat);
+            };
+            
+            _animation = RenderLevelAnimation(new FeatherFashion.AnimationData(120, initialize, timelineActions), 320, 320, 1.5f);
+
+            base.Initialize();
+        }
+
+        public static Tex2D[] RenderLevelAnimation(FeatherFashion.AnimationData animationData, int renderWidth = 144, int renderHeight = 96, float renderResolutionScale = 2f, Vec2 cameraOffset = default)
+        {
+            int framesToRender = animationData.Length;
+            Action<Duck> initialize = animationData.Initialize;
+            Dictionary<uint, Action<Duck>> timelineActions = animationData.Timeline;
+            
+            Tex2D[] animationFrames = new Tex2D[framesToRender];
+            
             if (Thing._alphaTestEffect == null)
                 Thing._alphaTestEffect = Content.Load<MTEffect>("Shaders/alphatest");
 
-            Duck duck;
             HatPreviewLevel isolatedLevel = new();
+            Level trueCurrentLevel = Level.current;
             core.currentLevel = isolatedLevel;
             
             isolatedLevel.Initialize();
             isolatedLevel.DoUpdate();
 
-            if (isolatedLevel.things.TryFirst(x => x is Duck, out Thing worldDuck))
-            {
-                duck = (Duck)worldDuck;
-            }
-            else throw new Exception("isolatedLevel contains no duck (?!)");
+            Duck levelDuck = (Duck) isolatedLevel.things[typeof(Duck)].First();
+            initialize?.Invoke(levelDuck);
 
-            isolatedLevel.backgroundColor = Color.SlateGray;
-            # region AnimationActions
-            DuckAI duckAi = new();
-            duck.VirtualInput = duckAi;
-
-            TeamHat hat = new(9999, 9999, Teams.all.Where(x => x.name.ToLower() == "devil").ChooseRandom(), duck.profile);
-            duck._equipment.Add(hat);
-            _teamName = hat.team.name;
-            hat.Equip(duck);
-            isolatedLevel.AddThing(hat);
-            
             isolatedLevel.DoUpdate();
+
+            renderWidth = (int) (renderWidth * renderResolutionScale);
+            renderHeight = (int) (renderHeight * renderResolutionScale);
+
+            float camWidth = renderWidth / (2f * renderResolutionScale);
+            float camHeight = renderHeight / (2f * renderResolutionScale);
             
-            const int imgWidth = 144 * 2;
-            const int imgHeight = 96 * 2;
-
-            List<Action?> animationActions = new()
-            {
-                () => duckAi.Press(Triggers.Right),
-                () => duckAi.HoldDown(Triggers.Right),
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                () => duckAi.Release(Triggers.Right),
-                () => duckAi.Press(Triggers.Left),
-                () => duckAi.HoldDown(Triggers.Left),
-            };
-
-            animationActions.AddRange(Enumerable.Repeat((Action) null, 20));
-            animationActions.Add(() => duckAi.Release(Triggers.Left));
-            animationActions.Add(() => duckAi.Press(Triggers.Down));
-            animationActions.Add(() => duckAi.HoldDown(Triggers.Down));
-            animationActions.AddRange(Enumerable.Repeat((Action) null, 20));
-            animationActions.Add(() => duckAi.Release(Triggers.Down));
-            animationActions.AddRange(Enumerable.Repeat((Action) null, 20));
-            animationActions.AddRange(Enumerable.Repeat((Action) null, 20));
-            animationActions.Add(() => duckAi.Press(Triggers.Quack));
-            animationActions.Add(() => duckAi.HoldDown(Triggers.Quack));
-            animationActions.AddRange(Enumerable.Repeat((Action) null, 2));
-            animationActions.Add(() => duckAi.Release(Triggers.Quack));
-            animationActions.AddRange(Enumerable.Repeat((Action) null, 2));
-            animationActions.Add(() => duckAi.Press(Triggers.Quack));
-            animationActions.Add(() => duckAi.HoldDown(Triggers.Quack));
-            animationActions.AddRange(Enumerable.Repeat((Action) null, 16));
-            animationActions.Add(() => duckAi.Release(Triggers.Quack));
-            animationActions.AddRange(Enumerable.Repeat((Action) null, 50));
-            #endregion
-
-            Camera cam = new(0f, 0f, imgWidth / 4f, imgHeight / 4f);
+            Camera cam = new((camWidth / -2) + cameraOffset.x, (camHeight / -2) + cameraOffset.y, camWidth, camHeight);
             isolatedLevel.camera = cam;
             
-            int i = 0;
             RenderTarget2D previousRenderTarget = Graphics.currentRenderTarget;
-            RenderTarget2D target = new(imgWidth, imgHeight, true);
+            RenderTarget2D target = new(renderWidth, renderHeight, true);
             Graphics.SetRenderTarget(target);
+            
             bool sfxEnabled = SFX.enabled;
             SFX.enabled = false;
-            foreach (Action? frameAction in animationActions)
+
+            for (uint currentFrame = 0; currentFrame < framesToRender; currentFrame++)
             {
-                frameAction?.Invoke();
+                if (timelineActions.TryGetValue(currentFrame, out Action<Duck> frameAction))
+                    frameAction(levelDuck);
+                
                 isolatedLevel.DoUpdate();
-
-                cam.position = new Vec2(duck.x - (cam.width / 2f), duck.y - (cam.height / 2f));
-
                 isolatedLevel.DoDraw();
-                _animation.Add(target.ToTex2D());
+                animationFrames[currentFrame] = target.ToTex2D();
             }
+            
             SFX.enabled = sfxEnabled;
+            
             Graphics.Clear(isolatedLevel.backgroundColor);
             if (previousRenderTarget == null || previousRenderTarget.IsDisposed)
                 Graphics.SetRenderTarget(null);
             else Graphics.SetRenderTarget(previousRenderTarget);
             
             core.currentLevel.Terminate();
-            core.currentLevel = this;
+            core.currentLevel = trueCurrentLevel;
 
-            base.Initialize();
+            return animationFrames;
         }
 
         public override void Update()
@@ -135,34 +158,37 @@ namespace DuckGame
                 _exportIcon.color = Color.White;
 
                 if (Mouse.left == InputState.Pressed)
-                    ExportGIF();
+                    ExportGIF(_animation, $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}/duck.gif");
             }
             else _exportIcon.color = Color.GreenYellow;
             
             const int timeToChangeAnimationFrame = 0;
             
-            if (_animation.Count > 0 && ++_timeToChangeAnimationFrame > timeToChangeAnimationFrame)
+            if (_animation.Length > 0 && ++_timeToChangeAnimationFrame > timeToChangeAnimationFrame)
             {
                 _animationIndex++;
-                _animationIndex %= _animation.Count;
+                _animationIndex %= _animation.Length;
 
                 if (timeToChangeAnimationFrame != 0)
                     _timeToChangeAnimationFrame %= timeToChangeAnimationFrame;
             }
 
+            if (Keyboard.Pressed(Keys.NumPad3))
+                current = new SimRenderer();
+
             base.Update();
         }
 
-        private void ExportGIF()
+        public static void ExportGIF(Tex2D[] animation, string toPath)
         {
-            int imgWidth = _animation.First().w;
-            int imgHeight = _animation.First().h;
+            int imgWidth = animation.First().w;
+            int imgHeight = animation.First().h;
             
             using Image<Rgba32> gif = new(imgWidth, imgHeight, SixLabors.ImageSharp.Color.SlateGray);
             
             gif.Metadata.GetGifMetadata().RepeatCount = 0;
             
-            foreach (Tex2D frameTexture in _animation)
+            foreach (Tex2D frameTexture in animation)
             {
                 using Image<Rgba32> frame = new(frameTexture.w, frameTexture.h);
             
@@ -185,13 +211,12 @@ namespace DuckGame
             
             gif.Frames.RemoveFrame(0);
             
-            gif.Mutate(x => x.Resize(imgWidth, imgHeight, new NearestNeighborResampler()));
-            gif.SaveAsGif($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}/duck.gif");
+            gif.SaveAsGif(toPath);
         }
 
         public override void Draw()
         {
-            if (_animation.Count == 0)
+            if (_animation.Length == 0)
                 return;
 
             Tex2D frameTexture = _animation[_animationIndex];
@@ -212,7 +237,7 @@ namespace DuckGame
 
             Rectangle progressBarRect = new(drawPos.x + 1, drawPos.y - 1 + (frameHeight - 3), frameWidth - 2, 3);
             Graphics.DrawRect(progressBarRect, Color.DarkSlateBlue, 1.9f);
-            Graphics.DrawRect(new Rectangle(progressBarRect.x + (_animationIndex * progressBarRect.width * (1f / _animation.Count)), progressBarRect.y, progressBarRect.width * (1f / _animation.Count), progressBarRect.height), Color.GreenYellow, 1.9f);
+            Graphics.DrawRect(new Rectangle(progressBarRect.x + (_animationIndex * progressBarRect.width * (1f / _animation.Length)), progressBarRect.y, progressBarRect.width * (1f / _animation.Length), progressBarRect.height), Color.GreenYellow, 1.9f);
             
             Graphics.DrawRect(new Rectangle(Mouse.xScreen - 0.5f, Mouse.yScreen - 0.5f, 1, 1), Color.White, 2f);
             

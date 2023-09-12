@@ -80,6 +80,22 @@ namespace DuckGame
             return data;
         }
 
+        public Color[,] GetData2D()
+        {
+            Color[] rawData = GetData();
+            Color[,] data2D = new Color[_base.Width, _base.Height];
+            
+            for (int y = 0, i = 0; y < h; y++)
+            {
+                for (int x = 0; x < w; x++, i++)
+                {
+                    data2D[x, y] = rawData[i];
+                }
+            }
+
+            return data2D;
+        }
+
         public override void SetData<T>(T[] colors)
         {
             if (_base == null)
