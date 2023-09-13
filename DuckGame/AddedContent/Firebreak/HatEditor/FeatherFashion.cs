@@ -111,9 +111,13 @@ namespace DuckGame
             base.Draw();
         }
 
-        public static void LoadHat(Team team) => LoadHat(team.hat.texture);
+        public static void LoadHat(Team team)
+        {
+            if (team != null && team.hat != null && team.hat.texture != null) LoadHat(team.hat.texture);
+        }
         public static void LoadHat(Tex2D hatTexture)
         {
+            if (hatTexture == null) return;
             int w = hatTexture.w;
             int h = hatTexture.h;
 

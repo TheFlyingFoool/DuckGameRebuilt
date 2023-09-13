@@ -858,7 +858,7 @@ namespace DuckGame
 
                 foreach (FluidPuddle fl in flps)
                 {
-                    if ((fl.data.heat > 0 || fl.onFire) && !fl.beinggraphicculled)
+                    if ((fl.data.heat > 0 || fl.onFire) && !fl.currentlyDrawing)
                     {
                         lavaPuddles.Add(fl);
                     }

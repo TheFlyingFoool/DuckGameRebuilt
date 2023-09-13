@@ -41,7 +41,8 @@ namespace DuckGame
         public static Level lastLevel;
         public void Update(GameTime gameTime)
         {
-            if (Level.current != null)
+            //uncomment this when recorderator is a thing
+            /*if (Level.current != null)
             {
                 if (lastLevel != Level.current) OnLevelChange();
                 if (Level.current is GameLevel && Level.current.things.OfType<Corderator>().Count() == 0)
@@ -50,7 +51,7 @@ namespace DuckGame
                     Level.Add(zeCorder);
                 }
                 lastLevel = Level.current;
-            }
+            }*/
         }
     }
 }

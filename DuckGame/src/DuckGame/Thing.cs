@@ -15,7 +15,7 @@ namespace DuckGame
     {
         public bool shouldhavevessel = true;
         public bool shouldbegraphicculled = true;
-        public bool beinggraphicculled;
+        public bool currentlyDrawing;
         public bool shouldbeinupdateloop = true;
         public int hashcodeindex; // dont touch :)
         public Vec2 oldposition = Vec2.Zero;
