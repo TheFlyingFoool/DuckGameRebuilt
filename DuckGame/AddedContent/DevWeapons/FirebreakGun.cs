@@ -13,14 +13,15 @@ namespace DuckGame
     {
         //26 19
         public SpriteMap sprite;
+        private bool @CHARGEFUCKINGDIE = true;
         public FirebreakGun(float xpos, float ypos) : base(xpos, ypos) 
         {
             sprite = new SpriteMap("FirebreakGun", 26, 19);
             graphic = sprite;
 
-            ammo = 3;
+            ammo = 5;
 
-            _ammoType = new ATHighCalSniper();
+            _ammoType = new ATMagicalInk();
 
             collisionSize = new Vec2(13, 9.5f);
             _collisionOffset = new Vec2(-7, -4.5f);
@@ -31,33 +32,49 @@ namespace DuckGame
         public aWobbleMaterial wobble;
         public override void Fire()
         {
+            base.Fire();
         }
         public override void OnPressAction()
         {
+            @CHARGEFUCKINGDIE = false;
         }
         public override void OnHoldAction()
         {
-            charge = Lerp.Float(charge, 1, 0.005f);
+            if (sprite.imageIndex == 0)
+                return;
+            
+            charge = Lerp.Float(charge, 1, 0.01f);
             base.OnHoldAction();
         }
+
         public override void OnReleaseAction()
         {
+            if (charge < 0.3f)
+            {
+                @CHARGEFUCKINGDIE = true;
+                return;
+            }
+
             SFX.Play("magicFade", charge);
 
+            _ammoType.bulletSpeed = charge * 12;
             _kickForce = charge * 3;
             ApplyKick();
+            Fire();
             base.OnReleaseAction();
             charge = 0;
         }
         public float charge;
         public override void Update()
         {
-            sprite.imageIndex = owner != null ? 1 : 0;
+            sprite.imageIndex = owner != null && ammo > 0 ? 1 : 0;
+            if (@CHARGEFUCKINGDIE)
+                charge = Lerp.Float(charge, 0, 0.02f);
             base.Update();
         }
         public override void Draw()
         {
-            Vec2 p = position;
+            Vec2 previousPosition = position;
 
             x += Rando.Float(-charge, charge) * 0.5f;
             y += Rando.Float(-charge, charge) * 0.5f;
@@ -65,8 +82,8 @@ namespace DuckGame
 
             if (charge > 0)
             {
-                float a = alpha;
-                float ang = angle;
+                float trueAlpha = alpha;
+                float trueAngle = angle;
                 alpha = charge / 3;
 
                 int loops = Rando.Int(2, 3);
@@ -77,13 +94,16 @@ namespace DuckGame
                     y += Rando.Float(12, 20) * Rando.ChooseInt(-1, 1);
 
                     base.Draw();
-                    angle = ang;
+                    angle = trueAngle;
                 }
-                alpha = a;
-                angle = ang;
+                alpha = trueAlpha;
+                angle = trueAngle;
 
             }
-                position = p;
+            
+            position = previousPosition;
+            
+            Graphics.DrawLine(position, charge * 32f, angle + (Maths.PI / 2f), DGRDevs.Firebreak.Color, 1f, 2f);
 
             sprite.imageIndex += 2;
             Graphics.material = wobble;
