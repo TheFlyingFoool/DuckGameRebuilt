@@ -123,6 +123,11 @@ namespace DuckGame
                 xscale = yscale = Maths.LerpTowards(xscale, _fullScale * 0.8f, 0.04f);
             s1 = xscale;
             s2 = xscale;
+
+            //since the lifetime of this particle is tied to its animation when its being culled the animation doesn't progress
+            //so instead its just getting called here so it can delete properly -NiK0
+            if (currentlyDrawing) _sprite.UpdateFrame();
+
             if (!isLocal)
             {
                 base.Update();
@@ -136,6 +141,7 @@ namespace DuckGame
                     if (extinguisherSmoke != null && _groundedTime < extinguisherSmoke._groundedTime - 0.1f)
                         extinguisherSmoke.y -= 0.1f;
                 }
+
                 if (_life < 0f && _sprite.currentAnimation != "puff")
                     _sprite.SetAnimation("puff");
                 if (_sprite.currentAnimation == "puff" && _sprite.finished)

@@ -32,6 +32,9 @@ namespace DuckGame
             depth = -0.5f;
             _editorName = "Wall Door";
             _canFlip = false;
+
+            //a lot of stuff is tied to the sprite animation so this shall never be graphic culled -NiK0
+            shouldbegraphicculled = false;
         }
 
         public void AddDuck(Duck d)

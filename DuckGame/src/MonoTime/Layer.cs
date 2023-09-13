@@ -681,9 +681,10 @@ namespace DuckGame
                                             break;
                                         }
                                     }
-                                    thing.beinggraphicculled = !flag;
+                                    thing.currentlyDrawing = false;
                                     if ((flag || thing.Buckets.Length == 0 || thing.owner != null || !thing.shouldbegraphicculled || thing.layer == Foreground) && thing.visible)
                                     {
+                                        thing.currentlyDrawing = true; //this implementation is a bit dumber but it works -NiK0
                                         if (_perspective)
                                         {
                                             Vec2 position = thing.position;
