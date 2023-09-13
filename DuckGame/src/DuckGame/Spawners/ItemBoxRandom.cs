@@ -33,71 +33,47 @@ namespace DuckGame
             List<System.Type> physicsObjects = GetPhysicsObjects(Editor.Placeables);
             physicsObjects.RemoveAll(t => t == typeof(LavaBarrel) || t == typeof(Grapple) || t == typeof(Slag) || t == typeof(Holster));
             System.Type t1;
+            
             if (Rando.Int(10000) == 0)
             {
                 t1 = typeof(PositronShooter);
                 Options.Data.specialTimes = 100;
             }
+            else if (Editor.clientonlycontent && Rando.Int(1000) == 1)
+            {
+                if (Rando.Int(50) == 0) // 1/50000 lmao
+                    t1 = typeof(SohRock);
+                else
+                {
+                    t1 = DGRDevs.AllWithGuns.ChooseRandom().DevItem;
+
+                    // to be removed when all devs get their gun
+                    if (t1 == typeof(PositronShooter))
+                        t1 = typeof(DanGun);
+                }
+            }
             else
             {
-                if (Options.Data.specialTimes > 0)
+                if (Options.Data.specialTimes-- > 0)
                 {
                     physicsObjects.Add(typeof(PositronShooter));
                     physicsObjects.Add(typeof(PositronShooter));
-                    --Options.Data.specialTimes;
                 }
-                t1 = physicsObjects[Rando.Int(physicsObjects.Count - 1)];
+                
+                t1 = physicsObjects.ChooseRandom();
             }
-            if (Editor.clientonlycontent)
-            {
-                if (Rando.Int(1000) == 1)
-                {
-                    int rng = Rando.Int(9);
-                    switch (rng)
-                    {
-                        default:
-                        case 0:
-                            t1 = typeof(DanGun);
-                            break;
-                        case 1:
-                            t1 = typeof(HyeveGun);
-                            break;
-                        case 2:
-                            t1 = typeof(CollinGun);
-                            break;
-                        case 3:
-                            t1 = typeof(NiK0Gun);
-                            break;
-                        case 4:
-                            t1 = typeof(LutalliGun);
-                            break;
-                        case 5:
-                            t1 = typeof(FirebreakGun);
-                            break;
-                    }
-                    if (Rando.Int(50) == 0) t1 = typeof(SohRock);
-                }
-                /*else if (Rando.Int(300) == 1 && Steam.user != null)
-                {meh maybe not
-                    ulong u = Steam.user.id;
-                    foreach (DGRebuiltDeveloper dgr in DGRDevs.AllWithGuns)
-                    {
-                        if (u == dgr.SteamID && dgr.DevItem != typeof(PositronShooter))
-                        {
-                            t1 = dgr.DevItem;
-                            break;
-                        }
-                    }
-                }*/
-            }
+
+            if (t1 == typeof(Rock) && Rando.Int(1000000) == 0)
+                t1 = typeof(SpawnedGoldRock);
+            
             PhysicsObject thing = Editor.CreateThing(t1) as PhysicsObject;
-            if (Rando.Int(1000) == 1 && thing is Gun && (thing as Gun).CanSpawnInfinite())
+            
+            if (thing is Gun gun && gun.CanSpawnInfinite() && Rando.Int(1000) == 1)
             {
-                (thing as Gun).infiniteAmmoVal = true;
-                (thing as Gun).infinite.value = true;
+                gun.infiniteAmmoVal = true;
+                gun.infinite.value = true;
             }
-            if (thing is Rock && Rando.Int(1000000) == 0)
-                thing = Editor.CreateThing(typeof(SpawnedGoldRock)) as PhysicsObject;
+            
             return thing;
         }
 
