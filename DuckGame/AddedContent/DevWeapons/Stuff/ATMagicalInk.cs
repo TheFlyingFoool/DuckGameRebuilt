@@ -1,5 +1,6 @@
 namespace DuckGame
 {
+    [ClientOnly]
     public class ATMagicalInk : AmmoType
     {
         public ATMagicalInk()
