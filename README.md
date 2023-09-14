@@ -31,14 +31,14 @@ Note: your IDE will scream at you with 200+ warnings when building, which is nor
 ### Building on GNU/Linux
 
 * Install the `msbuild` package from your distro's package manager
-* Install the `mono-complete` package from your distro's package manager
+* Install the `mono-complete` package from the [official monoproject site](https://www.mono-project.com/download/stable/)
 * `cd` to the solution's directory
 * Restore the NuGet packages if your IDE hasn't
-  * `nuget restore <solution file path>`
+  * `nuget restore`
 * Add missing DLL dependencies from Windows located in ./DuckGame/lib/
   * `mkdir ./bin/`
   * `cp ./DuckGame/lib/* ./bin/`
 * Build the solution
-  * `msbuild /m /p:Configuration=Debug ./`
+  * `msbuild -m -p:Configuration=Debug`
 * Run the game (will crash unless Steam is currently running)
   * `mono ./bin/DuckGame.exe`
