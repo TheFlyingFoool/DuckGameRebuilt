@@ -70,7 +70,7 @@ namespace DuckGame
         public bool AreWeSureThisPersonIsRunningRebuiltLikeOneHundredPercentSure()
         {
             NetDataPair netDataPair;
-            return (_elements.TryGetValue(100000000, out netDataPair) && netDataPair.data is bool ? (bool)netDataPair.data : false) && _elements.TryGetValue(100000001, out netDataPair) && netDataPair.data is bool ? (bool)netDataPair.data : false;
+            return _elements.TryGetValue(100000000, out netDataPair) && netDataPair.data is bool ? (bool)netDataPair.data : false;
         }
         public static Map<int, string> MappedNetdata = new Map<int, string>();
         [PostInitialize]
@@ -79,14 +79,13 @@ namespace DuckGame
             //this is a dumbass solution but since DG uses GetHashCode() to transmit the netdata then between linux windows and other builds
             //the hashes wont match resulting in stuff just NOT SYNCING!!!!!!! 
 
-            MappedNetdata.Add("REBUILT", 100000000);//theres 2 here just in the ever so slight chance that something hashes into 100000000/100000001
-            MappedNetdata.Add("REBUILT", 100000001);//we dont get false positives n stuff -NiK0
-            MappedNetdata.Add("rVer", 100000002);
+            MappedNetdata.Add("REBUILT", 100000000);
+            MappedNetdata.Add("rVer", 100000001);
 
-            MappedNetdata.Add("gamePaused", 100000003);
-            MappedNetdata.Add("gameInFocus", 100000004);
-            MappedNetdata.Add("chatting", 100000005);
-            MappedNetdata.Add("consoleOpen", 100000006);
+            MappedNetdata.Add("gamePaused", 100000002);
+            MappedNetdata.Add("gameInFocus", 100000003);
+            MappedNetdata.Add("chatting", 100000004);
+            MappedNetdata.Add("consoleOpen", 100000005);
 
             /*
              * profile2.netData.Set("gamePaused", MonoMain.pauseMenu != null); 
