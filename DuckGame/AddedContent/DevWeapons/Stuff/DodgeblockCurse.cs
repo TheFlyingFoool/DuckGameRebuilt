@@ -79,24 +79,31 @@ namespace DuckGame
             }
             else
             {
-                if (falling != null)
+                if (falling != null && bFall != null)
                 {
-                    ushort count = bFall.ReadUShort();
-                    if (count > falling.Count)
+                    try
                     {
-                        for (int i = 0; i < count - falling.Count; i++)
+                        ushort count = bFall.ReadUShort();
+                        if (count > falling.Count)
                         {
-                            falling.Add(new DodgeBlock() { x = 0, y = -18});
+                            for (int i = 0; i < count - falling.Count; i++)
+                            {
+                                falling.Add(new DodgeBlock() { x = 0, y = -18 });
+                            }
+                        }
+                        else if (count < falling.Count) falling.RemoveAt(0);
+                        for (int i = 0; i < count; i++)
+                        {
+                            DodgeBlock dg = falling[i];
+                            byte xVal = bFall.ReadByte();
+                            byte yVal = bFall.ReadByte();
+                            dg.x = xVal - 3;
+                            dg.y = yVal - 18;
                         }
                     }
-                    else if (count < falling.Count) falling.RemoveAt(0);
-                    for (int i = 0; i < count; i++)
+                    catch
                     {
-                        DodgeBlock dg = falling[i];
-                        byte xVal = bFall.ReadByte();
-                        byte yVal = bFall.ReadByte();
-                        dg.x = xVal - 3;
-                        dg.y = yVal - 18;
+                        //jank
                     }
                 }
             }
