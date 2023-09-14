@@ -36,7 +36,7 @@ namespace DuckGame
             DisplayName = "Firebreak",
             Color = new Color("#FF5938"),
             DevRole = DGRebuiltDeveloper.Role.ActiveContributor,
-            DevItem = typeof(PositronShooter),
+            DevItem = typeof(FirebreakGun),
             SteamID = 76561198431449604,
         };
 
@@ -45,7 +45,7 @@ namespace DuckGame
             DisplayName = "othello7",
             Color = new Color("#A000FF"),
             DevRole = DGRebuiltDeveloper.Role.ActiveContributor,
-            DevItem = typeof(PositronShooter),
+            DevItem = typeof(othello7Gun),
             SteamID = 76561198797606383,
         };
 
