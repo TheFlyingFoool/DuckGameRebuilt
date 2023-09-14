@@ -2,6 +2,7 @@
 
 namespace DuckGame
 {
+    [ClientOnly]
     public class InkSpike : MaterialThing
     {
         public Vec2 vector;

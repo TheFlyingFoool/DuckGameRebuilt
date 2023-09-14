@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DuckGame
 {
-
+    [ClientOnly]
     public class DodgeblockCurse : Thing
     {
         public StateBinding _fallBinding = new StateBinding("bFall");
