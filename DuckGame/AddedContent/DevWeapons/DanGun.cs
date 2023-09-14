@@ -16,7 +16,11 @@
             collisionSize = new Vec2(22, 10);
             _collisionOffset = new Vec2(-12.5f, -3.5f);
             wobble = new aWobbleMaterial(this, 0.2f);
+            spawn = new MaterialDev(this, new Color(0, 255, 0));
         }
+        public MaterialDev spawn;
+        public float spawnSc;
+
         public aWobbleMaterial wobble;
         public float charge;
         public override void Fire()
@@ -111,14 +115,25 @@
             }
             else
             {
+                if (!spawn.finished) { Graphics.material = spawn; spawn.Update(); }
+
+
                 sprite.imageIndex = 0;
                 base.Draw();
                 sprite.imageIndex = 1;
-                Graphics.material = wobble;
-                depth -= 1;
-                base.Draw();
-                depth += 1;
-                Graphics.material = null;
+
+                if (spawn.finished)
+                {
+                    if (spawnSc == 0) SFX.Play("laserChargeTeeny", 0.8f, -0.1f);
+                    spawnSc = Lerp.FloatSmooth(spawnSc, 1, 0.06f);
+                    Graphics.material = wobble;
+                    depth -= 1;
+                    alpha = spawnSc;
+                    base.Draw();
+                    alpha = 1;
+                    depth += 1;
+                    Graphics.material = null;
+                }
 
             }
         }

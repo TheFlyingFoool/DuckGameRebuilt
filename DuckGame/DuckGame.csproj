@@ -231,13 +231,19 @@
   <ItemGroup>
     <Compile Include="AddedContent\DevWeapons\FirebreakGun.cs" />
     <Compile Include="AddedContent\DevWeapons\LutalliGun.cs" />
+    <Compile Include="AddedContent\DevWeapons\othello7Gun.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\ATMagicalInk.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\Coin.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\DodgeblockCurse.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\InkSpike.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\MagicalInkBullet.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\MagicalInkSplat.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\MaterialDev.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\NMDodgeBlockCurse.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\NMPortalEffect.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\NMHitscanBullet.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\LPortal.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\OthProjectile.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\PortalProjectile.cs" />
     <Compile Include="AddedContent\DevWeapons\SohRock.cs" />
     <Compile Include="AddedContent\DGRDevHall.cs" />

@@ -27,7 +27,10 @@ namespace DuckGame
 
             chargeSound = new LoopingSound("chainsawIdle");
             wobble = new aWobbleMaterial(this, 0.2f);
+            spawn = new MaterialDev(this, new Color(237, 50, 168));
         }
+        public MaterialDev spawn;
+        public float spawnSc;
         public aWobbleMaterial wobble;
         public override void OnPressAction()
         {
@@ -110,6 +113,9 @@ namespace DuckGame
         public override void Draw()
         {
             //new Color(0, 150, 249)
+
+            if (!spawn.finished) { Graphics.material = spawn; spawn.Update(); }
+
             if (charge > 0.7f)
             {
                 Vec2 pos = barrelPosition + (barrelVector * 4 * actualCharge);
@@ -131,16 +137,23 @@ namespace DuckGame
 
             int ls = Maths.Clamp(ammo, 0, 24);
             Graphics.DrawRect(Offset(new Vec2(-5f, -3.5f + ((charge - 0.7f) * 0.34f) - ((ls - 24) / 4f))), Offset(new Vec2(1f, 3.1f)), new Color(0, 150, 249), depth - 1);
-            
+
             base.Draw();
 
-            sprite.imageIndex = 1;
-            Graphics.material = wobble;
-            depth -= 2;
-            base.Draw();
-            depth += 2;
-            Graphics.material = null;
-            position = p;
+            if (spawn.finished)
+            {
+                if (spawnSc == 0) SFX.Play("laserChargeTeeny", 0.8f, -0.1f);
+                spawnSc = Lerp.FloatSmooth(spawnSc, 1, 0.06f);
+                sprite.imageIndex = 1;
+                Graphics.material = wobble;
+                depth -= 2;
+                alpha = spawnSc;
+                base.Draw();
+                alpha = 1;
+                depth += 2;
+                Graphics.material = null;
+                position = p;
+            }
         }
     }
 }

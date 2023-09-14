@@ -9,6 +9,7 @@ using System.Collections.Generic;
 
 namespace DuckGame
 {
+    [ClientOnly] //idk if this needs to be clientonly or not im just makin sure -NiK0
     public class MagicalInkBullet : Bullet
     {
         public MagicalInkBullet(

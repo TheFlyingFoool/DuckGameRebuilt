@@ -13,7 +13,7 @@ namespace DuckGame
         }
         public override void Apply()
         {
-            _time += 0.016f;
+            _time += 0.016f * timeMult;
             if (Graphics.device.Textures[0] != null)
             {
                 Tex2D tex2D = Graphics.device.Textures[0] as Texture2D;
@@ -34,6 +34,8 @@ namespace DuckGame
                 effectPass.Apply();
             }
         }
+
+        public float timeMult = 1;
 
         private Thing _thing;
 

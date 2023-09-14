@@ -17,7 +17,10 @@
             _barrelOffsetTL = new Vec2(27, 11);
             wobble = new aWobbleMaterial(this, 0.2f);
             _kickForce = 1.7f;
+            spawn = new MaterialDev(this, new Color(147, 112, 219));
         }
+        public MaterialDev spawn;
+        public float spawnSc;
         public aWobbleMaterial wobble;
 
         public LPortal portal1;
@@ -62,15 +65,23 @@
         }
         public override void Draw()
         {
+            if (!spawn.finished) { Graphics.material = spawn; spawn.Update(); }
+
             sprite.imageIndex = 0;
             base.Draw();
-
-            sprite.imageIndex = 1;
-            Graphics.material = wobble;
-            depth -= 1;
-            base.Draw();
-            depth += 1;
-            Graphics.material = null;
+            if (spawn.finished)
+            {
+                if (spawnSc == 0) SFX.Play("laserChargeTeeny", 0.8f, -0.1f);
+                spawnSc = Lerp.FloatSmooth(spawnSc, 1, 0.06f);
+                sprite.imageIndex = 1;
+                alpha = spawnSc;
+                Graphics.material = wobble;
+                depth -= 1;
+                base.Draw();
+                depth += 1;
+                alpha = 1;
+                Graphics.material = null;
+            }
         }
         public override void Update()
         {

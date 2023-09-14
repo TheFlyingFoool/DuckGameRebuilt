@@ -6,7 +6,7 @@ namespace DuckGame
         public ATMagicalInk()
         {
             accuracy = 1f;
-            // penetration = 0.35f;
+            penetration = 1;
             bulletSpeed = 9f;
             rangeVariation = 0f;
             speedVariation = 0f;
@@ -16,20 +16,15 @@ namespace DuckGame
             weight = 5f;
             // ownerSafety = 4; // ???
             bulletThickness = 2f;
-            bulletColor = Color.White;
+            bulletColor = DGRDevs.Firebreak.Color;
             bulletType = typeof(MagicalInkBullet);
-            sprite = new Sprite("launcherGrenade");
+            sprite = new Sprite("inkBullet");
             sprite.CenterOrigin();
             flawlessPipeTravel = true;
         }
 
         public override void PopShell(float x, float y, int dir)
         {
-            PistolShell pistolShell = new PistolShell(x, y)
-            {
-                hSpeed = dir * (1.5f + Rando.Float(1f))
-            };
-            Level.Add(pistolShell);
         }
     }
 }
