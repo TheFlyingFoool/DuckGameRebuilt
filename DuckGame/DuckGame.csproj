@@ -230,9 +230,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddedContent\DevWeapons\FirebreakGun.cs" />
+    <Compile Include="AddedContent\DevWeapons\KlofGun.cs" />
     <Compile Include="AddedContent\DevWeapons\LutalliGun.cs" />
     <Compile Include="AddedContent\DevWeapons\othello7Gun.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\ATMagicalInk.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\BrainRotBubble.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\BrainRotBullet.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\Coin.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\DodgeblockCurse.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\InkSpike.cs" />

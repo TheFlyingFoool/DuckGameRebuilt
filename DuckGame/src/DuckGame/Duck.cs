@@ -4006,6 +4006,57 @@ namespace DuckGame
             foreach (Equipment equipment in _equipment)
                 equipment.PositionOnOwner();
             _gripped = false;
+            if (hasBrainRot)
+                UpdateBrainRot();
+        }
+        
+        public void GiveBrainRot()
+        {
+            
+            if (!hasBrainRot)
+            {
+                hasBrainRot = true;
+                bubble = new(Level.current.topLeft.x - 200f, Level.current.topLeft.y - 200f, this);
+                Level.Add(bubble);
+                SFX.Play("radioNoise", 0.8f);
+            }
+        }
+        public bool hasBrainRot;
+        public BrainRotBubble bubble;
+        private int badInputTime;
+
+        public void UpdateBrainRot()
+        {
+            switch (Rando.Int(300))
+            {
+                case 1:
+                    if (Rando.Int(1) == 1)
+                    {
+                        GoRagdoll();
+                    }
+                    break;
+                case 2:
+                    inputProfile.doInputs.Clear();
+                    inputProfile.doInputs.Add("RIGHT");
+                    badInputTime = 5;
+                    break;
+                case 3:
+                    inputProfile.doInputs.Clear();  
+                    inputProfile.doInputs.Add("LEFT");
+                    badInputTime = 5;
+                    break;
+                case 4:
+                    if (gun != null && velocity.x != 0)
+                    {
+                        gun.PressAction();
+                    }
+                    break;
+            }
+            
+            if (badInputTime > 0)
+                badInputTime--;
+            else
+                inputProfile.doInputs.Clear();
         }
 
         public override Thing realObject => _trapped != null ? _trapped : this;
