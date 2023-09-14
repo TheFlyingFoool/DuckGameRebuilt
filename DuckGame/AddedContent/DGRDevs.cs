@@ -8,7 +8,7 @@ namespace DuckGame
         {
             DisplayName = "Collin",
             Color = new Color("#FED95F"),
-            DevRole = DGRebuiltDeveloper.Role.Collin,
+            DevRole = DGRebuiltDeveloper.Role.Mascot,
             DevItem = typeof(CollinGun),
             SteamID = 76561198114791325,
         };
@@ -89,7 +89,7 @@ namespace DuckGame
         {
             DisplayName = "Can't Sleep",
             Color = new Color("#FFFF00"),
-            DevRole = DGRebuiltDeveloper.Role.MinorContributor,
+            DevRole = DGRebuiltDeveloper.Role.Mascot,
             DevItem = typeof(PositronShooter),  
             SteamID = 76561198207428731,
         };
@@ -141,6 +141,7 @@ namespace DuckGame
         public static readonly DGRebuiltDeveloper[] AllWithGuns =
         {
             Collin,
+            Moro,
             Dan,
             NiK0,
             Firebreak,
@@ -163,7 +164,7 @@ namespace DuckGame
 
         public enum Role
         {
-            Collin,
+            Mascot,
             LeadDeveloper,
             ActiveContributor,
             HelpingHand,
