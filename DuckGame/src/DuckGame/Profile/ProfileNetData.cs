@@ -5,6 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using RectpackSharp;
 using System;
 using System.Collections.Generic;
 
@@ -59,9 +60,41 @@ namespace DuckGame
         {
             int hashCode = pKey.GetHashCode();
             NetDataPair netDataPair;
+            if (AreWeSureThisPersonIsRunningRebuiltLikeOneHundredPercentSure() && MappedNetdata.Contains(pKey))
+            {
+                hashCode = MappedNetdata[pKey];
+            }
+
             return _elements.TryGetValue(hashCode, out netDataPair) && netDataPair.data is T ? (T)netDataPair.data : pDefault;
         }
+        public bool AreWeSureThisPersonIsRunningRebuiltLikeOneHundredPercentSure()
+        {
+            NetDataPair netDataPair;
+            return (_elements.TryGetValue(100000000, out netDataPair) && netDataPair.data is bool ? (bool)netDataPair.data : false) && _elements.TryGetValue(100000001, out netDataPair) && netDataPair.data is bool ? (bool)netDataPair.data : false;
+        }
+        public static Map<int, string> MappedNetdata = new Map<int, string>();
+        [PostInitialize]
+        public static void Initialize()
+        {
+            //this is a dumbass solution but since DG uses GetHashCode() to transmit the netdata then between linux windows and other builds
+            //the hashes wont match resulting in stuff just NOT SYNCING!!!!!!! 
 
+            MappedNetdata.Add("REBUILT", 100000000);//theres 2 here just in the ever so slight chance that something hashes into 100000000/100000001
+            MappedNetdata.Add("REBUILT", 100000001);//we dont get false positives n stuff -NiK0
+            MappedNetdata.Add("rVer", 100000002);
+
+            MappedNetdata.Add("gamePaused", 100000003);
+            MappedNetdata.Add("gameInFocus", 100000004);
+            MappedNetdata.Add("chatting", 100000005);
+            MappedNetdata.Add("consoleOpen", 100000006);
+
+            /*
+             * profile2.netData.Set("gamePaused", MonoMain.pauseMenu != null); 
+                    profile2.netData.Set("gameInFocus", Graphics.inFocus);
+                    profile2.netData.SetFiltered("chatting", _core.enteringText);
+                    profile2.netData.Set("consoleOpen", DevConsole.open);*/
+
+        }
         /// <summary>
         /// Set a property to a value. This property will be synchronized over the network
         /// and accessible from this profile on other computers!
@@ -71,7 +104,27 @@ namespace DuckGame
         /// <param name="pValue">The value!</param>
         public void Set<T>(string pKey, T pValue)
         {
+            if (MappedNetdata.Contains(pKey)) DGRSet<T>(pKey, pValue);
             int hashCode = pKey.GetHashCode();
+            NetDataPair netDataPair;
+            if (!_elements.TryGetValue(hashCode, out netDataPair))
+            {
+                _elements[hashCode] = netDataPair = new NetDataPair();
+                netDataPair.MakeDirty();
+                if (_settingFiltered)
+                    netDataPair.filtered = true;
+            }
+            if (netDataPair.id != null && netDataPair.id != pKey)
+                throw new Exception("Profile.netData.Set<" + typeof(T).Name + ">(" + pKey + ") error: GetHashCode for (" + pKey + ") is identical to GetHashCode for (" + netDataPair.id + "), a value already set in Profile.netData! Please use a more unique key name.");
+            if (Equals(netDataPair.data, pValue) && netDataPair.activeControllingConnection == DuckNetwork.localConnection)
+                return;
+            netDataPair.data = pValue;
+            netDataPair.id = pKey;
+            netDataPair.MakeDirty();
+        }
+        public void DGRSet<T>(string pKey, T pValue)
+        {
+            int hashCode = MappedNetdata[pKey];
             NetDataPair netDataPair;
             if (!_elements.TryGetValue(hashCode, out netDataPair))
             {

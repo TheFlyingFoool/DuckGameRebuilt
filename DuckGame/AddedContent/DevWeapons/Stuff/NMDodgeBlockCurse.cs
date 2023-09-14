@@ -16,10 +16,13 @@ namespace DuckGame
 
         public override void Activate()
         {
-            Vec2 v = duck.GetPos();
-            DodgeblockCurse dc = new DodgeblockCurse((float)Math.Round(v.x / 16) * 16, (float)Math.Round(v.y / 16) * 16);
-            dc.duck = duck;
-            Level.Add(dc);
+            if (duck.isServerForObject)
+            {
+                Vec2 v = duck.GetPos();
+                DodgeblockCurse dc = new DodgeblockCurse((float)Math.Round(v.x / 16) * 16, (float)Math.Round(v.y / 16) * 16);
+                dc.duck = duck;
+                Level.Add(dc);
+            }
         }
     }
 }

@@ -52,19 +52,23 @@ namespace DuckGame
 
                 if (timer % 40 == 0 || (Rando.Int(3) == 0 && timer % 20 == 0)) falling.Add(new DodgeBlock() { x = Rando.Int(-3, 2), y = -18 });
 
-                if (duck.ragdoll == null && duck._trapped == null)
+                if (duck != null)
                 {
-                    if (duck.left < left) left = duck.left;
-                    if (duck.right > right) right = duck.right;
+                    if (duck.ragdoll == null && duck._trapped == null)
+                    {
+                        if (duck.left < left) left = duck.left;
+                        if (duck.right > right) right = duck.right;
+                    }
+                    else
+                    {
+                        Vec2 v = duck.position;
+                        if (duck.ragdoll != null) v = duck.ragdoll.position;
+                        else if (duck._trapped != null) v = duck._trapped.position;
+                        if (v.x < left) x -= 16;
+                        if (v.x > right) x += 16;
+                    }
                 }
-                else
-                {
-                    Vec2 v = duck.position;
-                    if (duck.ragdoll != null) v = duck.ragdoll.position;
-                    else if (duck._trapped != null) v = duck._trapped.position;
-                    if (v.x < left) x -= 16;
-                    if (v.x > right) x += 16;
-                }
+
                 timer++;
 
                 bFall = new BitBuffer();
@@ -75,7 +79,7 @@ namespace DuckGame
                     bFall.Write((byte)(falling[i].y + 18));
                 }
 
-                if (timer > 1440 || duck.dead) Level.Remove(this);
+                if (timer > 1440 || (duck != null && duck.dead)) Level.Remove(this);
             }
             else
             {
@@ -108,20 +112,23 @@ namespace DuckGame
                 }
             }
 
-            for (int i = 0; i < falling.Count; i++)
+            if (isServerForObject)
             {
-                DodgeBlock block = falling[i];
-                Vec2 v = new Vec2(block.x, block.y) * 16;
-
-                IEnumerable<IAmADuck> iaads = Level.CheckRectAll<IAmADuck>(position + v + new Vec2(0, 8), position + new Vec2(16, 24) + v);
-                foreach (IAmADuck iaad in iaads)
+                for (int i = 0; i < falling.Count; i++)
                 {
-                    MaterialThing mt = (MaterialThing)iaad;
-                    Duck d = Duck.GetAssociatedDuck(mt);
-                    if (d != null && d == duck && !d.dead)
+                    DodgeBlock block = falling[i];
+                    Vec2 v = new Vec2(block.x, block.y) * 16;
+
+                    IEnumerable<IAmADuck> iaads = Level.CheckRectAll<IAmADuck>(position + v + new Vec2(0, 8), position + new Vec2(16, 24) + v);
+                    foreach (IAmADuck iaad in iaads)
                     {
-                        d.MakeStars();
-                        d.Kill(new DTCrush(null));
+                        MaterialThing mt = (MaterialThing)iaad;
+                        Duck d = Duck.GetAssociatedDuck(mt);
+                        if (d != null && d == duck && !d.dead)
+                        {
+                            d.MakeStars();
+                            d.Kill(new DTCrush(null));
+                        }
                     }
                 }
             }

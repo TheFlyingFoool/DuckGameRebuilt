@@ -1,10 +1,14 @@
 ﻿namespace DuckGame
 {
+    [ClientOnly]
     public class BrainRotBullet : Thing, ITeleport
     {
+        public StateBinding _positionBinding = new StateBinding("position");
+        public StateBinding _travelBinding = new StateBinding("_travel");
         public SpriteMap orbSprite;
         public SpriteMap ringSprite;
-        public BrainRotBullet(float xpos, float ypos, Vec2 travel) : base(xpos, ypos) {
+        public BrainRotBullet(float xpos, float ypos, Vec2 travel) : base(xpos, ypos) 
+        {
             _travel = travel;
             _collisionSize = new Vec2(12f, 12f);
             _collisionOffset = new Vec2(2f, 2f);
@@ -33,14 +37,11 @@
                     duck.GiveBrainRot();
                 }
             }
-            if (safeFrames > 0)
-            {
-                safeFrames--;
-            }
+            if (safeFrames > 0) safeFrames--;
             base.Update();
         }
         
-        aWobbleMaterial wobble;
+        public aWobbleMaterial wobble;
         public override void Draw()
         {
             orbSprite.imageIndex = 0;

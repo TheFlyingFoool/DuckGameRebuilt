@@ -14,7 +14,10 @@
 
         public override void Activate()
         {
-            lportal.TPEffect();
+            if (lportal != null)
+            {
+                lportal.TPEffect();
+            }
         }
     }
 }

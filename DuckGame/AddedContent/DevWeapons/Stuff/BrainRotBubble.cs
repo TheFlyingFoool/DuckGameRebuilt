@@ -1,10 +1,13 @@
 ﻿namespace DuckGame
 {
+    [ClientOnly]
     public class BrainRotBubble : Thing
     {
         public SpriteMap sprite;
         RotTypes type;
         private Duck target;
+
+        public StateBinding _positionBinding = new StateBinding("position");
         public BrainRotBubble(float xval, float yval, Duck target, RotTypes type = RotTypes.Amogus) : base(xval, yval)
         { 
             this.type = type;
@@ -27,9 +30,9 @@
                 {
                     position = new Vec2(target.ragdoll.position + new Vec2(5, -34f));
                 }
-                else if (target._trappedInstance != null)
+                else if (target._trapped != null)
                 {
-                    position = new Vec2(target._trappedInstance.position + new Vec2(5, -34f));
+                    position = new Vec2(target._trapped.position + new Vec2(5, -34f));
                 }
                 else
                 {

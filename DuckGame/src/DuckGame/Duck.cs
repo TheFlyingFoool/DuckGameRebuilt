@@ -4006,13 +4006,11 @@ namespace DuckGame
             foreach (Equipment equipment in _equipment)
                 equipment.PositionOnOwner();
             _gripped = false;
-            if (hasBrainRot)
-                UpdateBrainRot();
+            if (hasBrainRot) UpdateBrainRot();
         }
         
         public void GiveBrainRot()
         {
-            
             if (!hasBrainRot)
             {
                 hasBrainRot = true;
@@ -4027,10 +4025,10 @@ namespace DuckGame
 
         public void UpdateBrainRot()
         {
-            switch (Rando.Int(300))
+            switch (Rando.Int(200))
             {
                 case 1:
-                    if (Rando.Int(1) == 1)
+                    if (Rando.Int(2) == 1)
                     {
                         GoRagdoll();
                     }
@@ -4038,18 +4036,25 @@ namespace DuckGame
                 case 2:
                     inputProfile.doInputs.Clear();
                     inputProfile.doInputs.Add("RIGHT");
-                    badInputTime = 5;
+                    badInputTime = 6;
                     break;
                 case 3:
                     inputProfile.doInputs.Clear();  
                     inputProfile.doInputs.Add("LEFT");
-                    badInputTime = 5;
+                    badInputTime = 6;
                     break;
                 case 4:
-                    if (gun != null && velocity.x != 0)
+                    if (Rando.Int(2) == 0 && gun != null && velocity.x != 0)
                     {
-                        gun.PressAction();
+                        inputProfile.doInputs.Clear();
+                        inputProfile.doInputs.Add("SHOOT");
+                        badInputTime = 2;
                     }
+                    break;
+                case 5:
+                    inputProfile.doInputs.Clear();
+                    inputProfile.doInputs.Add("DOWN");
+                    badInputTime = 16;
                     break;
             }
             

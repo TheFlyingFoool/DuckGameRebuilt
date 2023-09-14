@@ -81,7 +81,7 @@ namespace DuckGame
             DisplayName = "klof44",
             Color = new Color("#00FA9A"),
             DevRole = DGRebuiltDeveloper.Role.HelpingHand,
-            DevItem = typeof(PositronShooter),
+            DevItem = typeof(KlofGun),
             SteamID = 76561198441121574,
         };
 
