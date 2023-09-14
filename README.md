@@ -30,8 +30,8 @@ Note: your IDE will scream at you with 200+ warnings when building, which is nor
 
 ### Building on GNU/Linux
 
-* Install the `msbuild` package from your distro's package manager
-* Install the `mono-complete` package from the [official monoproject site](https://www.mono-project.com/download/stable/)
+* Add the [official monoproject repos](https://www.mono-project.com/download/stable/) (unless you're firebreak appearantly)
+* Install the `mono-complete` package<!-- * Install the `msbuild` package ..I think msbuild is a dependency of mono-complete -->
 * `cd` to the solution's directory
 * Restore the NuGet packages if your IDE hasn't
   * `nuget restore`
