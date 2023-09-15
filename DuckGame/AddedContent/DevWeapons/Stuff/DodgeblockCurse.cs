@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -90,6 +86,7 @@ namespace DuckGame
                 {
                     bFall.Write((byte)(falling[i].x + 3));
                     bFall.Write((byte)(falling[i].y + 18));
+                    bFall.Write(falling[i].special);
                 }
 
                 if (timer > 1440 || (duck != null && duck.dead)) Level.Remove(this);
@@ -114,8 +111,10 @@ namespace DuckGame
                             DodgeBlock dg = falling[i];
                             byte xVal = bFall.ReadByte();
                             byte yVal = bFall.ReadByte();
+                            bool special = bFall.ReadBool();
                             dg.x = xVal - 3;
                             dg.y = yVal - 18;
+                            dg.special = special;
                         }
                     }
                     catch

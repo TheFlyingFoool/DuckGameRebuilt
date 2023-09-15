@@ -232,6 +232,7 @@
     <Compile Include="AddedContent\DevWeapons\FirebreakGun.cs" />
     <Compile Include="AddedContent\DevWeapons\KlofGun.cs" />
     <Compile Include="AddedContent\DevWeapons\LutalliGun.cs" />
+    <Compile Include="AddedContent\DevWeapons\MoroGun.cs" />
     <Compile Include="AddedContent\DevWeapons\othello7Gun.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\ATMagicalInk.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\BrainRotBubble.cs" />
@@ -389,6 +390,7 @@
     <Compile Include="AddedContent\NiK0\GlassPlatform.cs" />
     <Compile Include="AddedContent\NiK0\MaterialLavaWobble.cs" />
     <Compile Include="AddedContent\NiK0\MathParser.cs" />
+    <Compile Include="AddedContent\NiK0\ModDebug.cs" />
     <Compile Include="AddedContent\NiK0\NMClientOnlyContent.cs" />
     <Compile Include="AddedContent\NiK0\RainbowConstant.cs" />
     <Compile Include="AddedContent\NiK0\RainParticel.cs" />

@@ -47,16 +47,17 @@
         }
         public override void OnReleaseAction()
         {
-            if (ammo > 0)
+            if (ammo > 0 && charge > 0.7f)
             {
                 Vec2 v = barrelPosition + barrelVector * charge * 10;
 
                 Level.Add(new GlitchProjectile(v.x, v.y, charge, barrelVector + (barrelVector * charge * 1.5f)));
-                _kickForce =  4 * charge;
+                _kickForce = 4 * charge;
                 charge = 0;
                 ammo--;
                 ApplyKick();
             }
+            else charge = 0;
         }
         public Sound chargeSound;
         public override void Update()
@@ -122,7 +123,7 @@
                 base.Draw();
                 sprite.imageIndex = 1;
 
-                if (spawn.finished)
+                if (spawn.finished && level != null)  
                 {
                     if (spawnSc == 0) SFX.Play("laserChargeTeeny", 0.8f, -0.1f);
                     spawnSc = Lerp.FloatSmooth(spawnSc, 1, 0.06f);

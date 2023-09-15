@@ -81,28 +81,34 @@ namespace DuckGame
         public override void Fire()
         {
         }
+
+        public StateBinding _spinAngBinding = new StateBinding("spinAng");
+        public StateBinding _barrelAngBinding = new StateBinding("barrelAng");
+        public StateBinding _spinSpeedBinding = new StateBinding("spinSpeed");
         public override void Update()
         {
-            spinAng += spinSpeed;
-            if (spinAng > 6.283f) spinAng -= 6.283f;
-
-            barrelAng = Lerp.FloatSmooth(barrelAng, 0.1f, 0.02f);
-            if (barrelAng > 0) barrelAng = 0;
-
-            bool click = spinAng == 6.283f;
-            spinAng = Lerp.Float(spinAng, 6.283f, 0.05f);
-            if (!click && spinAng == 6.283f && spinSpeed == 0)
+            if (isServerForObject)
             {
-                SFX.Play("click");
-                loaded = true;
-            }
+                spinAng += spinSpeed;
+                if (spinAng > 6.283f) spinAng -= 6.283f;
 
-            spinSpeed = Lerp.Float(spinSpeed, 0, 0.01f);
+                barrelAng = Lerp.FloatSmooth(barrelAng, 0.1f, 0.02f);
+                if (barrelAng > 0) barrelAng = 0;
+
+                bool click = spinAng == 6.283f;
+                spinAng = Lerp.Float(spinAng, 6.283f, 0.05f);
+                if (!click && spinAng == 6.283f && spinSpeed == 0)
+                {
+                    SFX.PlaySynchronized("click");
+                    loaded = true;
+                }
+
+                spinSpeed = Lerp.Float(spinSpeed, 0, 0.01f);
+            }
             base.Update();
         }
         public override void Draw()
         {
-
             if (!spawn.finished) { Graphics.material = spawn; spawn.Update(); }
 
             Vec2 barPos = Offset(new Vec2(-5 + barrelAng * 8, -3.5f) + barrelPos);
@@ -132,7 +138,7 @@ namespace DuckGame
                 _graphic.center = center;
              * */
 
-            if (spawn.finished)
+            if (spawn.finished && level != null)  
             {
                 if (spawnSc == 0) SFX.Play("laserChargeTeeny", 0.8f, -0.1f);
                 spawnSc = Lerp.FloatSmooth(spawnSc, 1, 0.06f);

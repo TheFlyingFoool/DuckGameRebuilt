@@ -1595,6 +1595,11 @@ namespace DuckGame
 
         public void OnKill(DestroyType type = null)
         {
+            if (hasBrainRot)
+            {
+                hasBrainRot = false;
+                inputProfile.doInputs.Clear();
+            }
             if (!(type is DTPop))
             {
                 SFX.Play("death");

@@ -107,7 +107,7 @@
             position = previousPosition;
             
             //Graphics.DrawLine(position, charge * 32f, angle + (Maths.PI / 2f), DGRDevs.Firebreak.Color, 1f, 2f);
-            if (spawn.finished)
+            if (spawn.finished && level != null)  
             {
                 if (spawnSc == 0) SFX.Play("laserChargeTeeny", 0.8f, -0.1f);
                 spawnSc = Lerp.FloatSmooth(spawnSc, 1, 0.06f);

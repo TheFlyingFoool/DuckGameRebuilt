@@ -152,7 +152,7 @@ namespace DuckGame
             sprite.imageIndex = 1;
 
 
-            if (spawn.finished)
+            if (spawn.finished && level != null)  
             {
                 if (spawnSc == 0) SFX.Play("laserChargeTeeny", 0.8f, -0.1f);
                 spawnSc = Lerp.FloatSmooth(spawnSc, 1, 0.06f);
