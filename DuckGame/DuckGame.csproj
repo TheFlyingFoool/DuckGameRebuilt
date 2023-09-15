@@ -235,6 +235,7 @@
     <Compile Include="AddedContent\DevWeapons\MoroGun.cs" />
     <Compile Include="AddedContent\DevWeapons\othello7Gun.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\ATMagicalInk.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\BFGBall.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\BrainRotBubble.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\BrainRotBullet.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\Coin.cs" />

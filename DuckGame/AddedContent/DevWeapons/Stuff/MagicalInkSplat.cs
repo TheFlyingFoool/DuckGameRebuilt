@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 
 namespace DuckGame
 {
+    [ClientOnly]
     public class MagicalInkSplat : MaterialThing
     {
         public SpriteMap sprite;
