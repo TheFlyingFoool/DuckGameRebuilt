@@ -1,4 +1,9 @@
+using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.IO;
+using System.Security;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace DuckGame
 {
@@ -10,12 +15,13 @@ namespace DuckGame
         private static string s_toolTipMessage = string.Empty;
         private static bool s_iconBeingHovered;
         private static string s_iconHoveredID = string.Empty;
+        public static string? FilePath = null;
+        public static string? HatName => Path.GetFileNameWithoutExtension(FilePath);
         
         [PostInitialize]
         public static void StaticInitialize()
         {
             FFIcons.Initialize();
-            LoadHat(Teams.all.Find(x => x.name.ToLower() == "devil"));
         }
 
         public override void Initialize()
@@ -34,6 +40,7 @@ namespace DuckGame
         public override void Terminate()
         {
             FFPreviewPane.DisposeCurrentAnimation();
+            Options.ReloadHats();
             
             base.Terminate();
         }
@@ -41,39 +48,7 @@ namespace DuckGame
         public override void Update()
         {
             UpdateCursorTooltip();
-            
-            if (Keyboard.Pressed(Keys.Tab))
-            {
-                switch (CurrentWorkMode)
-                {
-                    case WorkMode.Editor:
-                        FFEditorPane.OnSwitchOutOf();
-                        break;
-
-                    case WorkMode.Preview:
-                        FFPreviewPane.OnSwitchOutOf();
-                        break;
-
-                    default:
-                        throw new InvalidOperationException();
-                }
-                CurrentWorkMode += 1;
-                CurrentWorkMode = (WorkMode) ((int)CurrentWorkMode % Enum.GetNames(typeof(WorkMode)).Length);
-                switch (CurrentWorkMode)
-                {
-                    case WorkMode.Editor:
-                        FFEditorPane.OnSwitch();
-                        break;
-
-                    case WorkMode.Preview:
-                        FFPreviewPane.OnSwitch();
-                        break;
-
-                    default:
-                        throw new InvalidOperationException();
-                }
-                return;
-            }
+            UpdateModeSelector();
             
             switch (CurrentWorkMode)
             {
@@ -94,6 +69,7 @@ namespace DuckGame
         public override void Draw()
         {
             DrawCursor(Mouse.positionScreen);
+            DrawModeSelector();
             
             switch (CurrentWorkMode)
             {
@@ -130,6 +106,7 @@ namespace DuckGame
             bool hasMetapixels = w > 96;
 
             Color[,] hatData2D = hatTexture.GetData2D();
+            FFEditorPane.ClearBuffers();
             
             FFEditorPane.HatAnimationBuffer[0] = GetDataInRegion(hatData2D, new Rectangle(0, 0, 32, 32));
             FFEditorPane.HatAnimationBuffer[1] = GetDataInRegion(hatData2D, new Rectangle(32, 0, 32, 32));
@@ -186,6 +163,223 @@ namespace DuckGame
             s_iconHoveredID = ID;
             s_iconBeingHovered = true;
             s_toolTipMessage = tooltip;
+        }
+
+        private void UpdateModeSelector()
+        {
+            if (Keyboard.Pressed(Keys.Tab))
+            {
+                SwitchWorkMode();
+                return;
+            }
+            
+            (SpriteMap, WorkMode)[] modeSelectorIcons =
+            {
+                (FFIcons.GlobalActionSwitchEditor, WorkMode.Editor),
+                (FFIcons.GlobalActionSwitchPreview, WorkMode.Preview),
+            };
+
+            (SpriteMap, Action<bool>)[] menuActionIcons =
+            {
+                (FFIcons.GlobalActionImport, GlobalActionImport),
+                (FFIcons.GlobalActionSave, GlobalActionSave),
+                (FFIcons.GlobalActionLeave, GlobalActionLeave),
+            };
+
+            for (int i = 0; i < modeSelectorIcons.Length; i++)
+            {
+                (SpriteMap icon, WorkMode mode) = modeSelectorIcons[i];
+                
+                if (CurrentWorkMode != mode && icon.frame == 1 && Mouse.left == InputState.Pressed)
+                {
+                    SwitchWorkMode();
+                    break;
+                }
+            }
+
+            for (int i = 0; i < menuActionIcons.Length; i++)
+            {
+                (SpriteMap icon, Action<bool> action) = menuActionIcons[i];
+
+                if (icon.frame == 1 && (Mouse.left == InputState.Pressed || Mouse.right == InputState.Pressed))
+                {
+                    action(Mouse.right == InputState.Pressed);
+                    break;
+                }
+            }
+        }
+
+        private void SwitchWorkMode()
+        {
+            switch (CurrentWorkMode)
+            {
+                case WorkMode.Editor:
+                    FFEditorPane.OnSwitchOutOf();
+                    break;
+
+                case WorkMode.Preview:
+                    FFPreviewPane.OnSwitchOutOf();
+                    break;
+
+                default:
+                    throw new InvalidOperationException();
+            }
+
+            CurrentWorkMode += 1;
+            CurrentWorkMode = (WorkMode) ((int) CurrentWorkMode % Enum.GetNames(typeof(WorkMode)).Length);
+            switch (CurrentWorkMode)
+            {
+                case WorkMode.Editor:
+                    FFEditorPane.OnSwitch();
+                    break;
+
+                case WorkMode.Preview:
+                    FFPreviewPane.OnSwitch();
+                    break;
+
+                default:
+                    throw new InvalidOperationException();
+            }
+        }
+
+        private void DrawModeSelector()
+        {
+            (SpriteMap, WorkMode)[] modeSelectorIcons =
+            {
+                (FFIcons.GlobalActionSwitchEditor, WorkMode.Editor),
+                (FFIcons.GlobalActionSwitchPreview, WorkMode.Preview),
+            };
+
+            SpriteMap[] menuActionIcons =
+            {
+                FFIcons.GlobalActionImport,
+                FFIcons.GlobalActionSave,
+                FFIcons.GlobalActionLeave,
+            };
+
+            for (int i = 0; i < modeSelectorIcons.Length; i++)
+            {
+                (SpriteMap icon, WorkMode mode) = modeSelectorIcons[i];
+                
+                Rectangle selectionBounds = new(camera.width - 50, 4 + (i * 12), 48, 11);
+
+                if (CurrentWorkMode != mode)
+                {
+                    if (selectionBounds.Contains(Mouse.positionScreen))
+                        icon.frame = 1;
+                    else icon.frame = 0;
+                }
+                else icon.frame = 1;
+                
+                Graphics.Draw(icon, selectionBounds.x, selectionBounds.y, 1.3f);
+            }
+
+            float gapLineY = modeSelectorIcons.Length * 12 + 6f;
+            Graphics.DrawLine(new Vec2(camera.width - 50, gapLineY), new Vec2(camera.width - 2, gapLineY), FFColors.PrimaryDim, 1f, 1.4f);
+            
+            for (int i = 0; i < menuActionIcons.Length; i++)
+            {
+                SpriteMap icon = menuActionIcons[i];
+                
+                Rectangle selectionBounds = new(camera.width - 50, gapLineY + 3 + (i * 12), 48, 11);
+
+                if (selectionBounds.Contains(Mouse.positionScreen))
+                    icon.frame = 1;
+                else icon.frame = 0;
+                
+                Graphics.Draw(icon, selectionBounds.x, selectionBounds.y, 1.3f);
+            }
+        }
+
+        private static void GlobalActionImport(bool rightClick)
+        {
+            Thread t = new(() =>
+            {
+                try
+                {
+                    OpenFileDialog dialog = new() {Filter = "PNG files (*.png)|*.png"};
+                    if (dialog.ShowDialog() == DialogResult.OK)
+                    {
+                        Texture2D texture =
+                            TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, dialog.FileName, true);
+
+                        if (texture.Width > 100 || texture.Height > 56)
+                            throw new Exception("Image file too big to be a vanilla hat");
+
+                        LoadHat(texture);
+                        FilePath = dialog.FileName;
+                    }
+                }
+                catch (SecurityException ex)
+                {
+                    MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
+                                    $"Details:\n\n{ex.StackTrace}");
+                }
+                catch (Exception e)
+                {
+                    DevConsole.Log(e);
+                }
+            });
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
+        }
+
+        private static void GlobalActionSave(bool alwaysNew = false)
+        {
+            if (FilePath is not null && !alwaysNew)
+            {
+                try
+                {
+                    using FileStream stream = File.OpenWrite(FilePath);
+                    Tex2D fullHatTexture = FFEditorPane.FullHatTexture;
+                    fullHatTexture.SaveAsPng(stream, fullHatTexture.w, fullHatTexture.h);
+                    
+                    HUD.AddPlayerChangeDisplay($"{HatName} saved!", 1f);
+                }
+                catch (Exception e)
+                {
+                    DevConsole.Log(e);
+                    HUD.AddPlayerChangeDisplay("Save failed. Check console for error");
+                    throw;
+                }
+                return;
+            }
+            else
+            {
+                Thread t = new(() =>
+                {
+                    try
+                    {
+                        SaveFileDialog dialog = new()
+                        {
+                            AddExtension = true,
+                            DefaultExt = "png",
+                            Filter = "PNG files (*.png)|*.png"
+                        };
+                        if (dialog.ShowDialog() == DialogResult.OK)
+                        {
+                            FilePath = dialog.FileName;
+                            GlobalActionSave();
+                        }
+                    }
+                    catch (SecurityException ex)
+                    {
+                        MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
+                                        $"Details:\n\n{ex.StackTrace}");
+                    }
+                    catch (Exception e)
+                    {
+                        DevConsole.Log(e);
+                    }
+                });
+                t.SetApartmentState(ApartmentState.STA);
+                t.Start();
+            }
+        }
+        
+        private static void GlobalActionLeave(bool _)
+        {
+            current = new TitleScreen();
         }
 
         public static void DrawCursor(Vec2 position)

@@ -44,6 +44,11 @@ namespace DuckGame
             public static SpriteMap Rock;
             public static SpriteMap NextAnimation;
             public static SpriteMap PreviousAnimation;
+            public static SpriteMap GlobalActionSwitchEditor;
+            public static SpriteMap GlobalActionSwitchPreview;
+            public static SpriteMap GlobalActionImport;
+            public static SpriteMap GlobalActionSave;
+            public static SpriteMap GlobalActionLeave;
             
             public static Sprite CanvasBig;
             public static Sprite CanvasSmall;
@@ -81,6 +86,11 @@ namespace DuckGame
                 Rock = new SpriteMap("ff_icons/rock", 8, 8);
                 NextAnimation = new SpriteMap("ff_icons/skip", 8, 8);
                 PreviousAnimation = new SpriteMap("ff_icons/skip_flipH", 8, 8);
+                GlobalActionSwitchEditor = new SpriteMap("ff_icons/mode_editor", 48, 11);
+                GlobalActionSwitchPreview = new SpriteMap("ff_icons/mode_preview", 48, 11);
+                GlobalActionImport = new SpriteMap("ff_icons/menu_import", 48, 11);
+                GlobalActionSave = new SpriteMap("ff_icons/menu_save", 48, 11);
+                GlobalActionLeave = new SpriteMap("ff_icons/menu_leave", 48, 11);
 
                 CanvasBig = new Sprite("ff_icons/canvas32");
                 CanvasSmall = new Sprite("ff_icons/canvas12_24");

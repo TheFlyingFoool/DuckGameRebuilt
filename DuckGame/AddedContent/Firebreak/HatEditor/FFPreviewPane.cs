@@ -64,7 +64,7 @@ namespace DuckGame
 
             private static Team GetHatTeam()
             {
-                Team team = new("UntitledHatTeam", s_hatTexture);
+                Team team = new(HatName ?? string.Empty, s_hatTexture);
 
                 team._capeTexture = new Tex2D(32, 32);
                 team._capeTexture.SetData(FFEditorPane.CapeFrameBuffer);

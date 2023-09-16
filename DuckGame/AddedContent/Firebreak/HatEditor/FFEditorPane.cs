@@ -9,7 +9,6 @@ namespace DuckGame
     {
         public static class FFEditorPane
         {
-
             public static int AnimationFrame;
             public static EditorMode CurrentMode = EditorMode.Hat;
             public static CanvasTool CurrentCanvasTool = CanvasTool.Brush;
@@ -17,6 +16,7 @@ namespace DuckGame
             public static Color CanvasSecondaryColor = Color.White;
             private static bool s_renderOnionSkin = false;
             private static int s_animationFrameBeingHovered = -1;
+            private static bool s_lastPressInPreviousMenu = false;
 
             public static Color[][] HatAnimationBuffer =
             {
@@ -226,6 +226,7 @@ namespace DuckGame
                 {
                     if (s_iconHoveredID == icon.Namebase && icon.frame == 1 && Mouse.left == InputState.Pressed)
                     {
+                        s_lastPressInPreviousMenu = true;
                         CurrentMode = mode;
                         AnimationFrame = 0;
                         break;
@@ -340,6 +341,13 @@ namespace DuckGame
                 UpdateCanvasToolsSelector();
                 if (CurrentMode is EditorMode.Hat or EditorMode.Particle)
                     UpdateAnimationController(canvasBig);
+
+                if (s_lastPressInPreviousMenu)
+                {
+                    if (Mouse.left == InputState.Released)
+                        s_lastPressInPreviousMenu = false;
+                    else return;
+                }
                 
                 float canvasScale = canvasBig ? 1f : 0.75f;
                 float pixelScale = canvasSize == 12 ? 8f : 4f;
@@ -502,6 +510,30 @@ namespace DuckGame
 
                 if (!didHover)
                     s_animationFrameBeingHovered = -1;
+            }
+            
+            public static void ClearBuffers()
+            {
+                Color[][] buffersToClear =
+                {
+                    HatAnimationBuffer[0],
+                    HatAnimationBuffer[1],
+                    CapeFrameBuffer,
+                    RockFrameBuffer,
+                    ParticleAnimationBuffer[0],
+                    ParticleAnimationBuffer[1],
+                    ParticleAnimationBuffer[2],
+                    ParticleAnimationBuffer[3],
+                    Metapixels,
+                };
+
+                foreach (Color[] buffer in buffersToClear)
+                {
+                    for (int i = 0; i < buffer.Length; i++)
+                    {
+                        buffer[i] = default;
+                    }
+                }
             }
         }
     }
