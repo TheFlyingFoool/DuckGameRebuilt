@@ -1522,10 +1522,6 @@ namespace DuckGame
             if (_anchor != null)
                 position = _anchor.position;
             Update();
-            if (this is Duck)
-            {
-                DevConsole.Log((oldposition - position).LengthSquared().ToString("0.0"));
-            }
             if (Buckets.Length > 0 && ((oldcollisionOffset != collisionOffset || oldcollisionSize != collisionSize) || (oldposition - position).LengthSquared() > 50f) && Level.current != null) //((oldposition - position)).length > 10
             {
                 oldcollisionOffset = collisionOffset;
