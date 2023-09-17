@@ -1,6 +1,10 @@
 ﻿namespace DuckGame
 {
     [ClientOnly]
+#if DEBUG
+    [EditorGroup("Rebuilt|DEV")]
+    [BaggedProperty("canSpawn", false)]
+#endif
     public class KlofGun : Gun
     {
         public SpriteMap sprite;

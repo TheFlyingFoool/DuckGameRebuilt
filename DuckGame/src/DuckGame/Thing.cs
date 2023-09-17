@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
+using System.Security.Policy;
 using System.Threading;
 
 namespace DuckGame
@@ -1513,6 +1514,7 @@ namespace DuckGame
         {
         }
 
+        private bool UpdateAgainJustInCase;
         public virtual void DoUpdate()
         {
             if (wasSuperFondled > 0)
@@ -1520,7 +1522,11 @@ namespace DuckGame
             if (_anchor != null)
                 position = _anchor.position;
             Update();
-            if (Buckets.Length > 0 && ((oldcollisionOffset != collisionOffset || oldcollisionSize != collisionSize) || (oldposition - position).LengthSquared() > 100f) && Level.current != null) //((oldposition - position)).length > 10
+            if (this is Duck)
+            {
+                DevConsole.Log((oldposition - position).LengthSquared().ToString("0.0"));
+            }
+            if (Buckets.Length > 0 && ((oldcollisionOffset != collisionOffset || oldcollisionSize != collisionSize) || (oldposition - position).LengthSquared() > 50f) && Level.current != null) //((oldposition - position)).length > 10
             {
                 oldcollisionOffset = collisionOffset;
                 oldcollisionSize = collisionSize;

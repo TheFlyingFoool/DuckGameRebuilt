@@ -3,6 +3,10 @@
 namespace DuckGame
 {
     [ClientOnly]
+#if DEBUG
+    [EditorGroup("Rebuilt|DEV")]
+    [BaggedProperty("canSpawn", false)]
+#endif
     public class HyeveGun : Gun
     {
         public SpriteMap sprite;

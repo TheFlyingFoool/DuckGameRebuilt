@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 namespace DuckGame
 {
     [ClientOnly]
+#if DEBUG
+    [EditorGroup("Rebuilt|DEV")]
+    [BaggedProperty("canSpawn", false)]
+#endif
     public class MoroGun : Gun
     {
         public SpriteMap sprite;
