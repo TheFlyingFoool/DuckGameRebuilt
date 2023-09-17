@@ -3,11 +3,23 @@
 namespace DuckGame
 {
     [ClientOnly]
+#if DEBUG
+    [EditorGroup("Rebuilt|DEV")]
+    [BaggedProperty("canSpawn", false)]
+#endif
     public class SohRock : Rock
     {
         public SohRock(float xpos,float ypos) : base(xpos, ypos)
         {
             tapeable = false;
+        }
+        public override void Draw()
+        {
+            if (Graphics.currentRenderTarget != null)
+            {
+                Graphics.material = null;
+            }
+            base.Draw();
         }
         public override void Update()
         {
