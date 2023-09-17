@@ -103,8 +103,8 @@ namespace DuckGame
         protected HashSet<string> _contextMenuFilter = new HashSet<string>();
         public static Effect _alphaTestEffect;
         private bool _skipPositioning;
-        private static Dictionary<Type, Sprite> _editorIcons = new Dictionary<Type, Sprite>();
-        protected Sprite _editorIcon;
+        public static Dictionary<Type, Sprite> _editorIcons = new Dictionary<Type, Sprite>();
+        public Sprite _editorIcon;
         protected bool _solid = true;
         protected Vec2 _collisionOffset;
         protected Vec2 _collisionSize;

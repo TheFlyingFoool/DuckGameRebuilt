@@ -16,6 +16,10 @@ namespace DuckGame
         private int _globalIndex = Thing.GetGlobalIndex();
         private int _width;
         private int _height;
+
+        public bool canRegress;
+        public bool canMultiframeSkip;
+
         public float _speed = 1f;
         private bool _finished;
         private List<Animation> _animations = new List<Animation>();
@@ -211,8 +215,31 @@ namespace DuckGame
                 _frameInc += _currentAnimation.Value.speed * _speed;
                 if (_frameInc >= 1)
                 {
-                    _frameInc = 0f;
+                    if (canMultiframeSkip)
+                    {
+                        _frameInc--;
+                        if (_frameInc <= -1)
+                        {
+                            _frameInc--;
+                            ++_frame;
+                        }
+                    }
+                    else _frameInc = 0;
                     ++_frame;
+                }
+                else if (canRegress && _frameInc <= -1)
+                {
+                    if (canMultiframeSkip)
+                    {
+                        _frameInc++;
+                        if (_frameInc <= -1)
+                        {
+                            _frameInc++;
+                            --_frame;
+                        }
+                    }
+                    else _frameInc = 0;
+                    --_frame;
                 }
                 if (_lastFrame != _frame)
                 {
@@ -225,6 +252,18 @@ namespace DuckGame
                         else
                         {
                             frame = _currentAnimation.Value.frames.Length - 1;
+                            finished = true;
+                        }
+                    }
+                    else if (canRegress && _frame < 0)
+                    {
+                        if (_currentAnimation.Value.looping)
+                        {
+                            frame = _currentAnimation.Value.frames.Length - 1;
+                        }
+                        else
+                        {
+                            frame = 0;
                             finished = true;
                         }
                     }

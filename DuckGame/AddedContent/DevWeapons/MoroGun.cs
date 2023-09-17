@@ -43,6 +43,7 @@ namespace DuckGame
                     Level.Add(new BFGBall(barrelPosition.x, barrelPosition.y) { travel = barrelVector * 7 });
                 }
                 ammo--;
+
                 firing = true;
                 _accuracyLost += loseAccuracy;
                 if (_accuracyLost <= maxAccuracyLost)

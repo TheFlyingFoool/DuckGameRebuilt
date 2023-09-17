@@ -13,6 +13,7 @@ namespace DuckGame
     public class Tex2D : Tex2DBase
     {
         protected Texture2D _base;
+        public bool skipSpriteAtlas;
         private RenderTarget2D _effectTexture;
 
         public RenderTarget2D effectTexture

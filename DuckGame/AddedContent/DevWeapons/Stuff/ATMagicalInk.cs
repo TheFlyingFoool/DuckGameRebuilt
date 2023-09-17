@@ -22,9 +22,5 @@ namespace DuckGame
             sprite.CenterOrigin();
             flawlessPipeTravel = true;
         }
-
-        public override void PopShell(float x, float y, int dir)
-        {
-        }
     }
 }

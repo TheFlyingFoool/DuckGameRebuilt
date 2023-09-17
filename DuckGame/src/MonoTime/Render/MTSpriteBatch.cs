@@ -457,7 +457,7 @@ namespace DuckGame
                 _tempRect.width = texture.width;
                 _tempRect.height = texture.height;
             }
-            if ((fx == null || fx.spsupport) && texture.Texbase != null && texture.Texbase.Name != null && Content.offests.TryGetValue(texture.Texbase.Name, out Microsoft.Xna.Framework.Rectangle offset))
+            if ((fx == null || fx.spsupport) && !texture.skipSpriteAtlas && texture.Texbase != null && texture.Texbase.Name != null && Content.offests.TryGetValue(texture.Texbase.Name, out Microsoft.Xna.Framework.Rectangle offset))
             {
                 batchItem.NormalTexture = texture;
                 batchItem.usingspriteatlas = true;

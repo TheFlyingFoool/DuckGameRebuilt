@@ -13,6 +13,54 @@ namespace DuckGame
 {
     public static class Extensions
     {
+        /// <summary>
+        /// Checks if there are any of <typeparamref name="T"/> in a thick line, the more iterations the more accurate it will be
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        /// <param name="thickness"></param>
+        /// <param name="iters"></param>
+        /// <returns></returns>
+        public static T ThickCheckLine<T>(Vec2 p1, Vec2 p2, float thickness, int iters = 5)
+        {
+            Vec2 vec = Maths.AngleToVec(Maths.PointDirectionRad(p1, p2)).Rotate(1.5708f, Vec2.Zero) * (thickness / iters);
+            Vec2 v = vec * (float)Math.Floor(iters / 2f);
+            T th = Level.CheckLine<T>(p1 + v, p2 + v);
+            int op = 0;
+            while (th == null && op < iters)
+            {
+                op++;
+                v -= vec;
+                th = Level.CheckLine<T>(p1 + v, p2 + v);
+            }
+            return th;
+        }
+        /// <summary>
+        /// Checks all the <typeparamref name="T"/> in a thick line, the more iterations the more accurate it will be
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="p1"></param>
+        /// <param name="p2"></param>
+        /// <param name="thickness"></param>
+        /// <param name="iters"></param>
+        /// <returns>Returns a List of <typeparamref name="T"/> found</returns>
+        public static List<T> ThickCheckLineAll<T>(Vec2 p1, Vec2 p2, float thickness, int iters = 4)
+        {
+            Vec2 vec = Maths.AngleToVec(Maths.PointDirectionRad(p1, p2)).Rotate(1.5708f, Vec2.Zero) * (thickness / iters);
+            Vec2 v = vec * (float)Math.Floor(iters / 2f);
+            List<T> th = new List<T>();
+            for (int i = 0; i < iters; i++)
+            {
+                v -= vec;
+                List<T> epic = Level.CheckLineAll<T>(p1 + v, p2 + v).ToList();
+                for (int x = 0; x < epic.Count; x++)
+                {
+                    if (!th.Contains(epic[x])) th.Add(epic[x]);
+                }
+            }
+            return th;
+        }
         public static int AutoBlockSortred(AutoBlock b1, AutoBlock b2)
         {
             var xx = b1.blockIndex;
