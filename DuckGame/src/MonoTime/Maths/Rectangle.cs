@@ -63,10 +63,27 @@ namespace DuckGame
 
         public Rectangle(float x, float y, float width, float height)
         {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
+            if (width > 0)
+            {
+                this.x = x;
+                this.width = width;
+            }
+            else
+            {
+                this.x = x + width;
+                this.width = -width;
+            }
+            
+            if (height > 0)
+            {
+                this.y = y;
+                this.height = height;
+            }
+            else
+            {
+                this.y = y + height;
+                this.height = -height;
+            }
         }
 
         public Rectangle(Vec2 tl, Vec2 br)
