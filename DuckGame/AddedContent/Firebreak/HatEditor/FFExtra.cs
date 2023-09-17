@@ -57,6 +57,10 @@ namespace DuckGame
             public static Sprite AnimationControlsBig;
             public static Sprite AnimationControlsSmall;
             public static Sprite PreviewPaneFrames;
+            public static Sprite FFLogo_Beta;
+            public static Sprite FFLogo;
+            public static Sprite Watermark;
+            public static Sprite Watermark_Beta;
 
             public static void Initialize()
             {
@@ -99,6 +103,10 @@ namespace DuckGame
                 AnimationControlsBig = new Sprite("ff_icons/animationControls32");
                 AnimationControlsSmall = new Sprite("ff_icons/animationControls12_24");
                 PreviewPaneFrames = new Sprite("ff_icons/previewPane_frames");
+                FFLogo_Beta = new Sprite("ff_icons/FFLogo_beta");
+                FFLogo = new Sprite("ff_icons/FFLogo");
+                Watermark = new Sprite("ff_icons/watermark");
+                Watermark_Beta = new Sprite("ff_icons/watermark_beta");
             }
         }
 
@@ -109,6 +117,13 @@ namespace DuckGame
             Rock,
             Particle,
             Metapixel
+        }
+
+        public enum MetapixelEditorMode
+        {
+            MyMetapixelList,
+            EditMetapixel,
+            NewMetapixel,
         }
 
         public enum CanvasTool

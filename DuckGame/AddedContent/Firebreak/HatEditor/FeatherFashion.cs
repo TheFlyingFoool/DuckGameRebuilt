@@ -1,6 +1,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Security;
 using System.Threading;
 using System.Windows.Forms;
@@ -22,6 +24,17 @@ namespace DuckGame
         public static void StaticInitialize()
         {
             FFIcons.Initialize();
+            
+            // don't ask.
+            FFEditorPane.MetapixelInfo = typeof(Team.CustomHatMetadata)
+                .GetFields(BindingFlags.Instance | BindingFlags.Public)
+                .Where(x => x.GetCustomAttribute<Team.Metapixel>() is not null)
+                .Select(x =>
+                {
+                    Team.Metapixel attribute = x.GetCustomAttribute<Team.Metapixel>();
+                    return new MetapixelInfo((byte)attribute.index, attribute.name, attribute.description, x.FieldType);
+                })
+                .ToDictionary(x => x.Index, x => x);
         }
 
         public override void Initialize()
@@ -70,6 +83,7 @@ namespace DuckGame
         {
             DrawCursor(Mouse.positionScreen);
             DrawModeSelector();
+            Graphics.Draw(FFIcons.FFLogo_Beta, 2, 2, 0.5f);
             
             switch (CurrentWorkMode)
             {
@@ -131,7 +145,8 @@ namespace DuckGame
             
             if (hasMetapixels)
             {
-                GetDataInRegion(hatData2D, new Rectangle(96, 0, w - 96, 56)).CopyTo(FFEditorPane.Metapixels, 0);
+                Color[] metapixelData = GetDataInRegion(hatData2D, new Rectangle(96, 0, w - 96, hasRock ? 56 : 32));
+                FFEditorPane.Metapixels.AddRange(metapixelData.Where(x => x != default));
             }
         }
 

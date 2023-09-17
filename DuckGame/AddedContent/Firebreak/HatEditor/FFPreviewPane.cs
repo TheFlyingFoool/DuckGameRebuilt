@@ -261,8 +261,6 @@ namespace DuckGame
                 Tex2D[] renderFrames = CurrentDuckAnimation;
                 Tex2D currentFrame = renderFrames[s_currentAnimationFrame];
 
-                Graphics.DrawString($"{CurrentPLayingAnimationIndex}:{s_currentAnimationFrame} [{currentFrame.w} {currentFrame.h}]", Vec2.One, Color.Red, 2f, scale: 0.6f);
-                
                 if (IsPlayingAnimation && !s_clickedInProgressBar)
                 {
                     s_currentAnimationFrame++;

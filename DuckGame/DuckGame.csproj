@@ -286,6 +286,7 @@
     <Compile Include="AddedContent\Firebreak\HatEditor\FFPreviewPane.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\FFPromptMenu.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\HatPreviewLevel.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\MetapixelInfo.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\SimRenderer.cs" />
     <Compile Include="AddedContent\Firebreak\Internet.cs" />
     <Compile Include="AddedContent\Firebreak\LockMovementQueue.cs" />
