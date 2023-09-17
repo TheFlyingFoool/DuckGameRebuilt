@@ -305,15 +305,19 @@ namespace DuckGame
             AddCreditLine("Landon Podbielski");
             AddCreditLine("");
             AddCreditLine("|CREDITSGRAY|@LWINGGRAY@DGR TEAM@RWINGGRAY@");
-            AddCreditLine("NiK0");
-            AddCreditLine("Dan");
-            AddCreditLine("Collin");
-            AddCreditLine("|RED|Fire|WHITE|break|CREDITSGRAY|");
-            AddCreditLine("|BLACK|Erik|GRAY|7302");
-            AddCreditLine("|DGBLUE|othello|PURPLE|7");
-            AddCreditLine("|GREEN|klof44|CREDITSGRAY|");
-            AddCreditLine("|PURPLE|Hyeve");
-            AddCreditLine("|ORANGE|Lutalli");
+            // AddCreditLine("NiK0");
+            // AddCreditLine("Dan");
+            // AddCreditLine("Collin");
+            // AddCreditLine("|RED|Fire|WHITE|break|CREDITSGRAY|");
+            // AddCreditLine("|BLACK|Erik|GRAY|7302");
+            // AddCreditLine("|DGBLUE|othello|PURPLE|7");
+            // AddCreditLine("|GREEN|klof44|CREDITSGRAY|");
+            // AddCreditLine("|PURPLE|Hyeve");
+            // AddCreditLine("|ORANGE|Lutalli");
+            foreach (DGRebuiltDeveloper dgrDev in DGRDevs.AllWithGuns)
+            {
+                AddCreditLine($"{dgrDev.ColorTag}{dgrDev.DisplayName}|CREDITSGRAY|");
+            }
             AddCreditLine("");
             AddCreditLine("|CREDITSGRAY|@LWINGGRAY@ROOM FURNITURE@RWINGGRAY@");
             AddCreditLine("|CREDITSGRAY|@LWINGGRAY@HOME UPDATE HAT ART@RWINGGRAY@");
