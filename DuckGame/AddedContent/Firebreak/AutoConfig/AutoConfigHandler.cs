@@ -50,6 +50,9 @@ namespace DuckGame
             Log(ACAction.TrySave);
             bool failed = false;
             
+            // quick fix to https://canary.discord.com/channels/1004557726082400378/1005054418636517537/1153024982390161448
+            HashSet<string> visitedExternalPaths = new();
+            
             StringBuilder stringBuilder = new();
             for (int i = 0; i < AutoConfigFieldAttribute.All.Count; i++)
             {
@@ -72,6 +75,9 @@ namespace DuckGame
                 {
                     string fileName = attribute.External + FileExtension;
                     string fullPath = SaveDirPath + fileName;
+                    
+                    if (visitedExternalPaths.Add(fullPath))
+                        File.WriteAllText(fullPath, string.Empty);
                     File.AppendAllLines(fullPath, new [] {$"{attribute.UsableName}={writtenValue}"});
 
                     writtenValue = fileName;
@@ -151,14 +157,23 @@ namespace DuckGame
                 // fix this garbage sloppy code -firebreak
                 string[] lines = File.ReadAllLines(SaveDirPath + newValue);
 
+                int i = 0;
                 foreach (string line in lines)
                 {
+                    i++;
                     string[] spl = line.Split('=');
 
                     if (spl[0] != attribute.UsableName)
                         continue;
 
                     serializedValue = spl[1];
+
+                    if (lines.Skip(i).Any(x => x.Split('=')[0] == spl[0]))
+                    {
+                        File.WriteAllText(SaveDirPath + newValue, string.Empty);
+                        throw new Exception("Duplicate AutoConfig entries for the same field");
+                    }
+                            
                     goto Deserialize_And_Set;
                 }
 
