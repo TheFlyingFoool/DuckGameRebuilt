@@ -106,7 +106,7 @@
             
             position = previousPosition;
             
-            //Graphics.DrawLine(position, charge * 32f, angle + (Maths.PI / 2f), DGRDevs.Firebreak.Color, 1f, 2f);
+            //Graphics.DrawLine(position, charge * 32f, angle + 90f, DGRDevs.Firebreak.Color, 1f, 2f);
             if (spawn.finished && level != null)  
             {
                 if (spawnSc == 0) SFX.Play("laserChargeTeeny", 0.8f, -0.1f);

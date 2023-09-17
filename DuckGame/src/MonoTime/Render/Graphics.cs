@@ -587,8 +587,9 @@ namespace DuckGame
             Draw(_blank, p1, new Rectangle?(), col, rotation, new Vec2(0f, 0.5f), new Vec2(length, width), SpriteEffects.None, depth);
         }
         
-        public static void DrawLine(Vec2 p, float lineLength, float angleRadians, Color col, float width = 1f, Depth depth = default(Depth))
+        public static void DrawLine(Vec2 p, float lineLength, float angleDegrees, Color col, float width = 1f, Depth depth = default(Depth))
         {
+            float angleRadians = Maths.DegToRad(angleDegrees);
             Vec2 lineEnd = new(lineLength * Maths.FastSin(angleRadians), lineLength * Maths.FastCos(angleRadians));
             
             DrawLine(p, p + lineEnd, col, width, depth);
