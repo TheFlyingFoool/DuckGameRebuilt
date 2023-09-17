@@ -1514,7 +1514,6 @@ namespace DuckGame
         {
         }
 
-        private bool UpdateAgainJustInCase;
         public virtual void DoUpdate()
         {
             if (wasSuperFondled > 0)
@@ -1714,6 +1713,8 @@ namespace DuckGame
 
         public virtual void OnTeleport()
         {
+            //need to update cells here because teleporters teleport wrongly otherwise -NiK0
+            Level.current.things.UpdateObject(this);
         }
 
         public virtual void DoTerminate() => Terminate();

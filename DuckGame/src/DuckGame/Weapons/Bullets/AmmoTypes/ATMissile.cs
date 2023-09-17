@@ -120,6 +120,7 @@ namespace DuckGame
                                     Level.current.AddUpdateOnce(block);
                                 }
                                 block.shouldWreck = true;
+                                Level.current.things.UpdateObject(block);
                                 if (block is AutoBlock && !(block as AutoBlock).indestructable)
                                 {
                                     varBlocks.Add((block as AutoBlock).blockIndex);

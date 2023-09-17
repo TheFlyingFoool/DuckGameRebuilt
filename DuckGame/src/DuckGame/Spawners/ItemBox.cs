@@ -88,8 +88,10 @@ namespace DuckGame
             else
             {
                 //on the edges of collision cells dan's CheckRectAll wouldn't properly return some items -NiK0
+
+                //reverted the reversal back to optimized collision checks now that i've fixed the issue with collision cells and edging -NiK0
                 _aboveList = Level
-                    .OldCheckRectAll<PhysicsObject>(topLeft + new Vec2(1f, -4f), bottomRight + new Vec2(-1f, -12f))
+                    .CheckRectAll<PhysicsObject>(topLeft + new Vec2(1f, -4f), bottomRight + new Vec2(-1f, -12f))
                     .ToList();
                 foreach (PhysicsObject above in _aboveList)
                 {

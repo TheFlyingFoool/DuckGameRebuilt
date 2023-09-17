@@ -2107,7 +2107,12 @@ namespace DuckGame
             //TODO: Re-optimize this code, this is currently DG's collision code because the code that uses the Bucket system makes certain bullet collisions
             //work differently from vanilla, this is unoptimal because as with normal DG it checks every thing in the entire map and not just a sector like
             //what we do with buckets so if someone can figure out a way to make it use buckets and work in vanilla go for it -NiK0
-            Type t = typeof(MaterialThing);
+            foreach (Thing thing in things.CollisionPointAll(point, typeof(MaterialThing)))
+            {
+                if (!thing.removeFromLevel && Collision.Point(point, thing))
+                    output.Add(thing as MaterialThing);
+            }
+            /*Type t = typeof(MaterialThing);
             foreach (Thing thing in _things.GetDynamicObjects(t))
             {
                 if (!thing.removeFromLevel && Collision.Point(point, thing))
@@ -2115,11 +2120,6 @@ namespace DuckGame
                     output.Add(thing as MaterialThing);
                 }
             }
-            /*foreach (Thing thing in things.CollisionPointAll(point, typeof(MaterialThing)))
-            {
-                if (!thing.removeFromLevel && Collision.Point(point, thing))
-                    output.Add(thing as MaterialThing);
-            }*/
             if (_things.HasStaticObjects(t))
             {
                 MaterialThing thing2 = _things.quadTree.CheckPoint<MaterialThing>(point);
@@ -2127,7 +2127,7 @@ namespace DuckGame
                 {
                     output.Add(thing2);
                 }
-            }
+            }*/
         }
 
 

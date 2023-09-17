@@ -356,7 +356,7 @@ namespace DuckGame
         }
         // public Dictionary<Vec2, List<Thing>> Buckets = new Dictionary<Vec2, List<Thing>>();
         public Dictionary<Vec2, Dictionary<int, List<Thing>>> Buckets = new Dictionary<Vec2, Dictionary<int, List<Thing>>>();
-        public static float Leniancy = 8f;
+        public static float Leniancy = 9f;
         public void UpdateObject(Thing thing)  //float size = Math.Max(Math.Max(thing.right - thing.left, thing.bottom - thing.top), 16);
         {
             Vec2[] buckets = GetIdForObj(thing.topLeft - new Vec2(Leniancy), thing.bottomRight + new Vec2(Leniancy));//GetIdForObj(thing.position, thing.right - thing.left, thing.bottom - thing.top);

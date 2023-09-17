@@ -168,7 +168,9 @@ namespace DuckGame
                 InitLinks();
             if (_link == null)
                 return;
-            IEnumerable<ITeleport> source = Level.CheckRectAllNiK0<ITeleport>(topLeft, bottomRight);
+
+            //reverted this back to optimized dgr's collision system, exact fix is in Thing.OnTeleport() -NiK0
+            IEnumerable<ITeleport> source = Level.CheckRectAll<ITeleport>(topLeft, bottomRight);
             for (int index = 0; index < _teleported.Count; ++index)
             {
                 ITeleport teleport = _teleported[index];
