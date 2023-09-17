@@ -335,6 +335,7 @@
     <Compile Include="AddedContent\klof44\DiscordRichPresence.cs" />
     <Compile Include="AddedContent\NiK0\BGLightning.cs" />
     <Compile Include="AddedContent\NiK0\ChangePlus.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\NMRobbedItemFrame.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\NMPush.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigDuck.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigFan.cs" />

@@ -4,7 +4,7 @@ using System.Drawing.Drawing2D;
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Guns")]
+    //[EditorGroup("Rebuilt|Guns")]
     public sealed class ThrowingKnife : Gun, IPlatform
     {
         private SpriteMap _sprite;
