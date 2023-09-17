@@ -11,28 +11,36 @@ namespace DuckGame
         {
             public static int AnimationFrame;
             public static EditorMode CurrentMode = EditorMode.Hat;
+            public static MetapixelEditorMode MetapixelEditorMode = MetapixelEditorMode.MyMetapixelList;
             public static CanvasTool CurrentCanvasTool = CanvasTool.Brush;
             public static Color CanvasPrimaryColor = Color.Black;
             public static Color CanvasSecondaryColor = Color.White;
             private static bool s_renderOnionSkin = false;
             private static int s_animationFrameBeingHovered = -1;
             private static bool s_lastPressInPreviousMenu = false;
+            private static int s_currentlyEditingMetapixelIndex = -1;
+            private static int s_scrollIndex = 0;
+            private static int s_scrollLimit = 0;
+            public static Dictionary<byte, MetapixelInfo> MetapixelInfo;
+            private static bool s_usingSlider1 = false;
+            private static bool s_usingSlider2 = false;
 
+            // TODO: update those to use 2D arrays (Color[,]). makes the code a lot less hell
             public static Color[][] HatAnimationBuffer =
             {
-                new Color[1024], // hat
-                new Color[1024], // quack
+                new Color[32 * 32], // hat
+                new Color[32 * 32], // quack
             };
-            public static Color[] CapeFrameBuffer = new Color[1024];
-            public static Color[] RockFrameBuffer = new Color[576];
+            public static Color[] CapeFrameBuffer = new Color[32 * 32];
+            public static Color[] RockFrameBuffer = new Color[24 * 24];
             public static Color[][] ParticleAnimationBuffer =
             {
-                new Color[144], // 1
-                new Color[144], // 2
-                new Color[144], // 3
-                new Color[144], // 4
+                new Color[12 * 12], // 1
+                new Color[12 * 12], // 2
+                new Color[12 * 12], // 3
+                new Color[12 * 12], // 4
             };
-            public static Color[] Metapixels = new Color[224];
+            public static List<Color> Metapixels = new();
 
             public static Tex2D FullHatTexture
             {
@@ -63,10 +71,6 @@ namespace DuckGame
                                 else if (x < 96)
                                 {
                                     textureData[i] = CapeFrameBuffer[y * 32 + (x - 64)];
-                                }
-                                else
-                                {
-                                    // metapixels
                                 }
                             }
                             else if (x < 24)
@@ -102,7 +106,7 @@ namespace DuckGame
                     {
                         for (int y = 0; y < hatHeight; y++, i++)
                         {
-                            Color metapixel = Metapixels[i];
+                            Color metapixel = i >= Metapixels.Count ? default : Metapixels[i];
                             textureData[y * hatWidth + x] = metapixel;
                         }
                     }
@@ -143,6 +147,7 @@ namespace DuckGame
                         break;
 
                     case EditorMode.Metapixel:
+                        UpdateMetapixelEditor(Level.current.camera.center);
                         break;
 
                     default: throw new InvalidOperationException();
@@ -170,10 +175,277 @@ namespace DuckGame
                         break;
 
                     case EditorMode.Metapixel:
-                        // METAPIXEL EDITOR WIP
+                        DrawMetapixelEditor(Level.current.camera.center);
                         break;
 
                     default: throw new InvalidOperationException();
+                }
+            }
+
+            private static void UpdateMetapixelEditor(Vec2 center)
+            {
+                if (Mouse.scrollingUp && s_scrollIndex > 0)
+                    s_scrollIndex--;
+                else if (Mouse.scrollingDown && s_scrollIndex < s_scrollLimit - 1)
+                    s_scrollIndex++;
+
+                s_scrollIndex = Maths.Clamp(s_scrollIndex, 0, s_scrollLimit);
+                
+                UpdateEditorSwitcher();
+                // TODO: make interactions and stuff happen in here and not the fucking draw loop
+            }
+            
+            private static void DrawMetapixelEditor(Vec2 center)
+            {
+                const float totw = 128 + 32;
+                const float toth = 128;
+                Rectangle editorInnerBounds = new(center - new Vec2(totw / 2, toth / 2), center + new Vec2(totw / 2, toth / 2));
+                DrawEditorSwitcher(new Vec2(editorInnerBounds.x - 8, editorInnerBounds.y + (editorInnerBounds.height / 2f)));
+
+                switch (MetapixelEditorMode)
+                {
+                    case MetapixelEditorMode.MyMetapixelList:
+                        DrawMetapixelList(editorInnerBounds);
+                        break;
+
+                    case MetapixelEditorMode.EditMetapixel:
+                        DrawEditMetapixel(editorInnerBounds);
+                        break;
+
+                    case MetapixelEditorMode.NewMetapixel:
+                        DrawAddMetapixel(editorInnerBounds);
+                        break;
+                }
+
+                if (s_usingSlider1 && Mouse.left == InputState.Released)
+                    s_usingSlider1 = false;
+                if (s_usingSlider2 && Mouse.left == InputState.Released)
+                    s_usingSlider2 = false;
+            }
+
+            private static void DrawAddMetapixel(Rectangle innerBounds)
+            {
+                s_scrollLimit = MetapixelInfo.Count;
+                Graphics.DrawRect(innerBounds, Color.Black, 0.9f);
+                
+                float textH = Extensions.GetStringSize("H", 0.6f).y;
+                
+                Graphics.DrawFancyString("you can scroll here btw", innerBounds.tl + (Vec2.One * 2), Color.Red, 1.1f, 0.6f);
+                Graphics.DrawLine(innerBounds.tl + new Vec2(2, 4 + textH), innerBounds.width - 4, 90, Color.Red, depth: 1f);
+
+                Vec2 posPastLine = innerBounds.tl + new Vec2(2, 6 + textH);
+
+                int i = 0;
+                foreach ((byte index, MetapixelInfo info) in MetapixelInfo)
+                {
+                    if (i < s_scrollIndex)
+                    {
+                        i++;
+                        continue;
+                    }
+                    
+                    if (i - s_scrollIndex >= 17)
+                        break;
+
+                    string text = $"[{index:000}] {info.Name}";
+                    float textW = Graphics.GetFancyStringWidth(text, scale: 0.6f);
+                    Vec2 textDrawPos = posPastLine + new Vec2(0, (i - s_scrollIndex) * (textH + 2));
+                    Rectangle textBounds = new(textDrawPos.x, textDrawPos.y, textW, textH);
+
+                    Graphics.DrawFancyString(text, textDrawPos, textBounds.Contains(Mouse.positionScreen) ? Color.Yellow : Color.Red, 1.1f, scale: 0.6f);
+
+                    if (Mouse.left == InputState.Pressed && textBounds.Contains(Mouse.positionScreen))
+                    {
+                        Metapixels.Add(new Color(index, byte.MinValue, byte.MinValue));
+                        s_scrollIndex = 0;
+                        MetapixelEditorMode = MetapixelEditorMode.EditMetapixel;
+                        s_currentlyEditingMetapixelIndex = Metapixels.Count - 1;
+                        break;
+                    }
+                    
+                    i++;
+                }
+            }
+
+            private static void DrawEditMetapixel(Rectangle innerBounds)
+            {
+                s_scrollLimit = 0;
+                Graphics.DrawRect(innerBounds, Color.Black, 0.9f);
+                
+                int i = s_currentlyEditingMetapixelIndex;
+                Color pixel = Metapixels[i];
+                MetapixelInfo info = MetapixelInfo[pixel.r];
+                
+                string title = $"{pixel.r:000} / {info.Name}";
+                    
+                float textH = Extensions.GetStringSize("H", 0.6f).y;
+                
+                Graphics.DrawFancyString(title, innerBounds.tl + (Vec2.One * 2), Color.Red, 1.1f, 0.6f);
+                Graphics.DrawLine(innerBounds.tl + new Vec2(2, 4 + textH), innerBounds.width - 4, 90, Color.Red, depth: 1f);
+                
+                string mpDescription = $"Type: {info.MDType.Name.Substring(2)}\n\n{string.Join("\n", info.Description.SplitByLength(50))}";
+                Graphics.DrawFancyString(mpDescription, innerBounds.tl + new Vec2(2, 6 + textH), Color.Red, 1.1f, scale: 0.6f);
+
+                float yDescriptionLine = innerBounds.y + 10 + (textH * (mpDescription.Count(x => x == '\n') + 2));
+                Vec2 posDescriptionLine = new(innerBounds.x + 2, yDescriptionLine);
+                Graphics.DrawLine(posDescriptionLine, innerBounds.width - 4, 90, Color.Red, depth: 1f);
+
+                bool hasG = info.MDType == typeof(Team.CustomHatMetadata.MDInt)
+                         || info.MDType == typeof(Team.CustomHatMetadata.MDFloat);
+                bool hasB = info.MDType == typeof(Team.CustomHatMetadata.MDVec2)
+                         || info.MDType == typeof(Team.CustomHatMetadata.MDIntPair)
+                         || info.MDType == typeof(Team.CustomHatMetadata.MDRandomizer)
+                         || info.MDType == typeof(Team.CustomHatMetadata.MDVec2Normalized);
+                
+                if (hasG || hasB)
+                {
+                    string text = $"G {pixel.g:000}";
+                    float textW = Graphics.GetStringWidth(text);
+                    Graphics.DrawString(text, posDescriptionLine + new Vec2(0, 2), Color.Red, 1.1f);
+                    
+                    Vec2 sliderTL = posDescriptionLine + new Vec2(textW + 2, 2);
+                    Rectangle sliderBounds = new(sliderTL, new Vec2(innerBounds.x + innerBounds.width - 2, sliderTL.y + Graphics._biosFont.height));
+                    
+                    Graphics.DrawRect(sliderBounds, Color.Red, 1.1f);
+
+                    if (sliderBounds.Contains(Mouse.positionScreen) && Mouse.left == InputState.Pressed)
+                    {
+                        s_usingSlider1 = true;
+                    }
+
+                    if (s_usingSlider1)
+                    {
+                        float left = sliderBounds.x;
+                        float right = left + sliderBounds.width;
+
+                        float mouseX = Maths.Clamp(Mouse.xScreen, left, right);
+                        int nearestValueSelected = (int)(255 * new ProgressValue(mouseX, 0, left, right).NormalizedValue);
+
+                        Metapixels[i] = new Color(pixel.r, (byte)Maths.Clamp(nearestValueSelected, 0, 255), pixel.b);
+                    }
+
+                    Graphics.DrawLine(new Vec2(sliderTL.x + (float) (sliderBounds.width * new ProgressValue(Metapixels[i].g, 0, 0, 255).NormalizedValue), sliderTL.y), sliderBounds.height, 0, Color.Yellow, depth: 1.4f);
+                }
+
+                if (hasB)
+                {
+                    string text = $"B {pixel.b:000}";
+                    float textW = Graphics.GetStringWidth(text);
+                    Graphics.DrawString(text, posDescriptionLine + new Vec2(0, 3 + Graphics._biosFont.height), Color.Red, 1.1f);
+                    
+                    Vec2 sliderTL = posDescriptionLine + new Vec2(textW + 2, 3 + Graphics._biosFont.height);
+                    Rectangle sliderBounds = new(sliderTL, new Vec2(innerBounds.x + innerBounds.width - 2, sliderTL.y + Graphics._biosFont.height));
+                    
+                    Graphics.DrawRect(sliderBounds, Color.Red, 1.1f);
+                    
+                    if (sliderBounds.Contains(Mouse.positionScreen) && Mouse.left == InputState.Pressed)
+                    {
+                        s_usingSlider2 = true;
+                    }
+
+                    if (s_usingSlider2)
+                    {
+                        float left = sliderBounds.x;
+                        float right = left + sliderBounds.width;
+
+                        float mouseX = Maths.Clamp(Mouse.xScreen, left, right);
+                        int nearestValueSelected = (int)(255 * new ProgressValue(mouseX, 0, left, right).NormalizedValue);
+
+                        Metapixels[i] = new Color(pixel.r, pixel.g, (byte)Maths.Clamp(nearestValueSelected, 0, 255));
+                    }
+
+                    Graphics.DrawLine(new Vec2(sliderTL.x + (float) (sliderBounds.width * new ProgressValue(Metapixels[i].b, 0, 0, 255).NormalizedValue), sliderTL.y), sliderBounds.height, 0, Color.Yellow, depth: 1.4f);
+                }
+                
+                Rectangle backButtonBounds = new(innerBounds.x - 2 + innerBounds.width, innerBounds.y - 2 + innerBounds.height, -40, -12);
+                Graphics.DrawRect(backButtonBounds, backButtonBounds.Contains(Mouse.positionScreen) ? Color.Yellow : Color.Red, 1.1f);
+                Graphics.DrawString("ok", backButtonBounds.tl + new Vec2(4), backButtonBounds.Contains(Mouse.positionScreen) ? Color.Red : Color.Yellow, 1.12f, scale: 0.6f);
+
+                if (backButtonBounds.Contains(Mouse.positionScreen) && Mouse.left == InputState.Pressed)
+                {
+                    s_currentlyEditingMetapixelIndex = -1;
+                    MetapixelEditorMode = MetapixelEditorMode.MyMetapixelList;
+                    s_scrollIndex = 0;
+                    return;
+                }
+                
+                Rectangle deleteButtonBounds = new(backButtonBounds.x - 2, backButtonBounds.y, -40, 12);
+                Graphics.DrawRect(deleteButtonBounds, deleteButtonBounds.Contains(Mouse.positionScreen) ? Color.Yellow : Color.Red, 1.1f);
+                Graphics.DrawString("delete", deleteButtonBounds.tl + new Vec2(4), deleteButtonBounds.Contains(Mouse.positionScreen) ? Color.Red : Color.Yellow, 1.12f, scale: 0.6f);
+
+                if (deleteButtonBounds.Contains(Mouse.positionScreen) && Mouse.left == InputState.Pressed)
+                {
+                    Metapixels.RemoveAt(s_currentlyEditingMetapixelIndex);
+                    s_currentlyEditingMetapixelIndex = -1;
+                    MetapixelEditorMode = MetapixelEditorMode.MyMetapixelList;
+                    s_scrollIndex = 0;
+                    return;
+                }
+            }
+
+            private static void DrawMetapixelList(Rectangle innerBounds)
+            {
+                s_scrollLimit = Metapixels.Count;
+                Graphics.DrawRect(innerBounds, Color.Black, 0.9f);
+                
+                Rectangle addMetapixelButtonBounds = new(innerBounds.x + 1, innerBounds.y - 1 + innerBounds.height - 12, 48, 12);
+                Graphics.DrawOutlinedRect(addMetapixelButtonBounds, addMetapixelButtonBounds.Contains(Mouse.positionScreen) ? Color.Yellow : Color.Black, Color.Red, 1f);
+                Graphics.DrawString("add", addMetapixelButtonBounds.tl + new Vec2(4), Color.Red, 1.1f, scale: 0.6f);
+                Graphics.DrawFancyString($"current metapixels: |255,255,0|{Metapixels.Count}", addMetapixelButtonBounds.tr + new Vec2(2, 4), Color.Red, 1f, scale: 0.6f);
+
+                if (addMetapixelButtonBounds.Contains(Mouse.positionScreen) && Mouse.left == InputState.Pressed)
+                {
+                    MetapixelEditorMode = MetapixelEditorMode.NewMetapixel;
+                    s_scrollIndex = 0;
+                    return;
+                }
+                if (addMetapixelButtonBounds.Contains(Mouse.positionScreen) && Mouse.right == InputState.Pressed)
+                {
+                    for (int i = 0; i < 32; i++)
+                    {
+                        Metapixels.Add(new Color(MetapixelInfo.ChooseRandom().Key, Byte.MinValue, Byte.MinValue));
+                    }
+                    return;
+                }
+
+                for (int i = s_scrollIndex; i < Math.Min(Metapixels.Count, 16) + s_scrollIndex; i++)
+                {
+                    if (i >= Metapixels.Count)
+                        break;
+                    
+                    Color pixel = Metapixels[i];
+                    if (pixel == default)
+                        break;
+
+                    (byte index, byte g, byte b) = pixel;
+                    MetapixelInfo info = MetapixelInfo[index];
+
+                    string text = $"{i + 1} / {info.Name}";
+                    
+                    float textH = Extensions.GetStringSize("H", 0.6f).y;
+                    float textW = Graphics.GetFancyStringWidth(text, scale: 0.6f);
+                    Vec2 textDrawPos = innerBounds.tl + new Vec2(2, 2 + ((textH + 2) * (i - s_scrollIndex)));
+
+                    Rectangle textBounds = new(textDrawPos.x, textDrawPos.y, textW, textH);
+                    Graphics.DrawFancyString(text, textDrawPos, textBounds.Contains(Mouse.positionScreen) ? Color.Yellow : Color.Red, 1.1f, scale: 0.6f);
+                    Rectangle deleteBoxBounds = new(textDrawPos.x + 2 + textW, textDrawPos.y, textH, textH);
+                    Graphics.DrawLine(deleteBoxBounds.tl, deleteBoxBounds.br, !deleteBoxBounds.Contains(Mouse.positionScreen) ? Color.Red : Color.Yellow, 1f, 1.12f);
+                    Graphics.DrawLine(deleteBoxBounds.bl, deleteBoxBounds.tr, !deleteBoxBounds.Contains(Mouse.positionScreen) ? Color.Red : Color.Yellow, 1f, 1.12f);
+                    
+                    if ((deleteBoxBounds.Contains(Mouse.positionScreen) && Mouse.left == InputState.Pressed) || textBounds.Contains(Mouse.positionScreen) && Mouse.middle == InputState.Pressed)
+                    {
+                        Metapixels.RemoveAt(i);
+                        if (s_scrollIndex >= s_scrollLimit - 1)
+                            s_scrollIndex--;
+                        break;
+                    }
+                    else if (textBounds.Contains(Mouse.positionScreen) && Mouse.left == InputState.Pressed)
+                    {
+                        MetapixelEditorMode = MetapixelEditorMode.EditMetapixel;
+                        s_currentlyEditingMetapixelIndex = i;
+                        s_scrollIndex = 0;
+                        return;
+                    }
                 }
             }
 
@@ -524,7 +796,6 @@ namespace DuckGame
                     ParticleAnimationBuffer[1],
                     ParticleAnimationBuffer[2],
                     ParticleAnimationBuffer[3],
-                    Metapixels,
                 };
 
                 foreach (Color[] buffer in buffersToClear)
@@ -534,6 +805,8 @@ namespace DuckGame
                         buffer[i] = default;
                     }
                 }
+                
+                Metapixels.Clear();
             }
         }
     }
