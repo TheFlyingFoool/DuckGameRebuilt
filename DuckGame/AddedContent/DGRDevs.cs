@@ -90,7 +90,7 @@ namespace DuckGame
             DisplayName = "Can't Sleep",
             Color = new Color("#FFFF00"),
             DevRole = DGRebuiltDeveloper.Role.Mascot,
-            DevItem = typeof(PositronShooter),  
+            DevItem = typeof(MoroGun),  
             SteamID = 76561198207428731,
         };
 

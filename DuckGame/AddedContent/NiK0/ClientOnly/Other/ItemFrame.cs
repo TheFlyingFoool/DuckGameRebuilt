@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Security.Permissions;
-using System.Windows;
 
 namespace DuckGame
 {
@@ -11,6 +7,10 @@ namespace DuckGame
     [EditorGroup("Rebuilt|Stuff")]
     public class ItemFrame : MaterialThing
     {
+        public StateBinding _containedObjectBinding = new StateBinding("containedObject");
+        public StateBinding _hitPointsBinding = new StateBinding("hitPoints");
+        public StateBinding _didUnlockBinding = new StateBinding("didUnlock");
+
         public EditorProperty<int> tint = new EditorProperty<int>(0, max: Window.windowColors.Count - 1, increment: 1f);
         public EditorProperty<int> style = new EditorProperty<int>(0, null, 0, 3, 1);
         public EditorProperty<bool> locked = new EditorProperty<bool>(false);
@@ -119,43 +119,49 @@ namespace DuckGame
             _destroyed = true;
             return base.OnDestroy(type);
         }
+        public bool localPlayedDeedle;
+        
         public override void Update()
         {
+            //if has been opened by other client and sfx hasn't played play it on this side
+            if (!localPlayedDeedle && didUnlock)
+            {
+                SFX.DontSave = 1;
+                SFX.Play("deedleBeep");
+                localPlayedDeedle = true;
+            }
+
+            //check for key, if on key side fondle this thing and unlock the frame
             Key k = Level.CheckRect<Key>(topLeft, bottomRight);
             if (k != null && k.isServerForObject)
             {
-                Fondle(this);
-                UnlockDoor(k);
+                Fondle(this, DuckNetwork.localConnection);
+                UnlockThis(k);
             }
 
+            //kill
             if (hitPoints <= 0 && _hasGlass) Destroy(new DTImpact(null));
 
-            if (_hasGlass)
-            {
-                UpdateContainedObject();
+            //spawn in object if it even exists
+            if (_hasGlass && isServerForObject) UpdateContainedObject();
 
-            }
+
             if (containedObject != null)
             {
                 if (isServerForObject)
                 {
-                    if (locked && !didUnlock)
-                    {
-                        containedObject.canPickUp = false;
-                    }
-                    else
-                    {
-                        containedObject.canPickUp = true;
-
-                    }
+                    //if its locked we gotta make the object not be able to be picked up
+                    if (locked && !didUnlock) containedObject.canPickUp = false;
+                    else containedObject.canPickUp = true;
                 }
-                if ((containedObject.owner != null && containedObject.isServerForObject) || (!_hasGlass && (!locked || didUnlock)))
+                if ((containedObject.owner != null && containedObject.owner.isServerForObject) || (!_hasGlass && (!locked || didUnlock) && isServerForObject))
                 {
-                    Fondle(this);
+                    Fondle(this, DuckNetwork.localConnection);
                     hitPoints = -1;
                     containedObject.solid = true;
                     containedObject.alpha = 1;
                     containedObject.enablePhysics = true;
+                    Send.Message(new NMRobbedItemFrame(this, containedObject));
                     containedObject = null;
                 }
                 else
@@ -166,10 +172,7 @@ namespace DuckGame
                 if (contains != null && (previewThing == null || previewThing.GetType() != contains))
                 {
                     previewThing = Editor.GetThing(contains);
-                    if (previewThing != null)
-                    {
-                        previewSprite = previewThing.GeneratePreview(22, 22, true);
-                    }
+                    if (previewThing != null) previewSprite = previewThing.GeneratePreview(22, 22, true);
                 }
             }
 
@@ -190,7 +193,7 @@ namespace DuckGame
         public Holdable containedObject;
         public Type contains { get; set; }
 
-        public void UnlockDoor(Key with)
+        public void UnlockThis(Key with)
         {
             if (!locked || !with.isServerForObject)
                 return;
@@ -206,6 +209,7 @@ namespace DuckGame
                 RumbleManager.AddRumbleEvent(owner.profile, new RumbleEvent(RumbleIntensity.Kick, RumbleDuration.Pulse, RumbleFalloff.None));
                 owner.ThrowItem();
             }
+            didUnlock = true;
             Level.Remove(with);
             if (Network.isActive)
                 return;
@@ -218,6 +222,7 @@ namespace DuckGame
         {
             ps = keyPos;
             SFX.DontSave = 1;
+            localPlayedDeedle = true;
             SFX.Play("deedleBeep");
             if (DGRSettings.S_ParticleMultiplier != 0)
             {
@@ -225,7 +230,6 @@ namespace DuckGame
                 for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 3; ++index)
                     Level.Add(SmallSmoke.New(x + Rando.Float(-3f, 3f), y + Rando.Float(-3f, 3f)));
             }
-            didUnlock = true;
         }
         public override void Draw()
         {
