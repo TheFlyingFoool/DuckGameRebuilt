@@ -24,6 +24,10 @@ namespace DuckGame
             public static Dictionary<byte, MetapixelInfo> MetapixelInfo;
             private static bool s_usingSlider1 = false;
             private static bool s_usingSlider2 = false;
+            private static bool s_primColPickerOpen = false;
+            private static bool s_secColPickerOpen = false;
+            private static Rectangle s_colPickSliderBounds;
+            private static int s_colPickSliderUsedIndex = -1;
 
             // TODO: update those to use 2D arrays (Color[,]). makes the code a lot less hell
             public static Color[][] HatAnimationBuffer =
@@ -602,9 +606,96 @@ namespace DuckGame
                     
                     Graphics.Draw(icon, iconBounds.x, iconBounds.y);
                 }
+
+                // TODO: seperate this out to the update loop
+                Rectangle primaryColorPickerBounds = new(canvasToolsBounds.x + 4, canvasToolsBounds.Bottom - 28, 8, 8);
+                Graphics.DrawRect(primaryColorPickerBounds, CanvasPrimaryColor, 1f);
+                Rectangle secondaryColorPickerBounds = new(canvasToolsBounds.x + 4, canvasToolsBounds.Bottom - 12, 8, 8);
+                Graphics.DrawRect(secondaryColorPickerBounds, CanvasSecondaryColor, 1f);
+
+                if (primaryColorPickerBounds.Contains(Mouse.positionScreen) && Mouse.left == InputState.Pressed)
+                {
+                    s_primColPickerOpen = true;
+                    s_secColPickerOpen = false;
+                    s_colPickSliderUsedIndex = -1;
+                }
+                else if (secondaryColorPickerBounds.Contains(Mouse.positionScreen) && Mouse.left == InputState.Pressed)
+                {
+                    s_primColPickerOpen = false;
+                    s_secColPickerOpen = true;
+                    s_colPickSliderUsedIndex = -1;
+                }
                 
-                Graphics.DrawRect(new Rectangle(canvasToolsBounds.x + 4, canvasToolsBounds.Bottom - 28, 8, 8), CanvasPrimaryColor, 1f);
-                Graphics.DrawRect(new Rectangle(canvasToolsBounds.x + 4, canvasToolsBounds.Bottom - 12, 8, 8), CanvasSecondaryColor, 1f);
+                if (s_primColPickerOpen)
+                    DrawPickColorWindow(primaryColorPickerBounds, ref CanvasPrimaryColor, ref s_primColPickerOpen);
+                else if (s_secColPickerOpen)
+                    DrawPickColorWindow(secondaryColorPickerBounds, ref CanvasSecondaryColor, ref s_secColPickerOpen);
+            }
+
+            private static void DrawPickColorWindow(Rectangle bounds, ref Color color, ref bool toggle)
+            {
+                Rectangle pickerBounds = new(bounds.tr + new Vec2(8, -20), bounds.tr + new Vec2(64 + 8, 20));
+
+                if (Mouse.left == InputState.Pressed && !pickerBounds.Contains(Mouse.positionScreen) && !bounds.Contains(Mouse.positionScreen))
+                {
+                    toggle ^= true;
+                    return;
+                }
+                
+                Graphics.DrawRect(pickerBounds, Color.Black, 1.2f);
+                (byte r, byte g, byte b) = color;
+
+                byte[] bytes = {r, g, b};
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    float sH = ((pickerBounds.height - 2) / bytes.Length) - 2;
+                    const byte bz = 0;
+                    Rectangle sliderBounds = new(pickerBounds.x + 1, pickerBounds.y + 1 + ((sH + 2) * i), pickerBounds.width - 2, sH);
+
+                    float left = sliderBounds.x;
+                    float right = left + sliderBounds.width;
+
+                    float mouseX = Maths.Clamp(Mouse.xScreen, left, right);
+                    int nearestValueSelected = (int)(255 * new ProgressValue(mouseX, 0, left, right).NormalizedValue);
+
+                    Graphics.DrawLine(sliderBounds.tl + new Vec2((float)(sliderBounds.width * new ProgressValue(bytes[i], 0, 0, 255).NormalizedValue), 0), sliderBounds.height, 0, Color.White, 1f, 1.5f);
+
+                    if (s_colPickSliderUsedIndex == i)
+                    {
+                        switch (i)
+                        {
+                            case 0:
+                                color = new Color((byte)Maths.Clamp(nearestValueSelected, 0, 255), color.g, color.b);
+                                break;
+                            case 1:
+                                color = new Color(color.r, (byte)Maths.Clamp(nearestValueSelected, 0, 255), color.b);
+                                break;
+                            case 2:
+                                color = new Color(color.r, color.g, (byte)Maths.Clamp(nearestValueSelected, 0, 255));
+                                break;
+                        }
+                    }
+                    
+                    Color pc = i switch
+                    {
+                        0 => new Color(r, bz, bz),
+                        1 => new Color(bz, g, bz),
+                        2 => new Color(bz, bz, b),
+                        _ => throw new InvalidOperationException("God did not intend for this to happen")
+                    };
+                    
+                    Graphics.DrawRect(sliderBounds, pc, 1.3f);
+
+                    if (sliderBounds.Contains(Mouse.positionScreen) && Mouse.left == InputState.Pressed)
+                    {
+                        s_colPickSliderBounds = sliderBounds;
+                        s_colPickSliderUsedIndex = i;
+                    }
+                    else if (s_colPickSliderUsedIndex != -1 && Mouse.left == InputState.Released)
+                    {
+                        s_colPickSliderUsedIndex = -1;
+                    }
+                }
             }
 
             private static void UpdateCanvas(bool canvasBig, int canvasSize, ref Color[] buffer, Vec2 center)
