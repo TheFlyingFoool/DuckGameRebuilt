@@ -768,8 +768,22 @@ namespace DuckGame
                 DrawEditorSwitcher(new Vec2(canvasSprite.x - 8, canvasSprite.y + (canvasSprite.h / 2f)));
                 DrawCanvasTools(new Vec2(canvasSprite.x + canvasSprite.w + 8, canvasSprite.y + (canvasSprite.h / 2f)));
 
+                Color[]? onionSkinBuffer = null;
                 if (CurrentMode is EditorMode.Hat or EditorMode.Particle)
+                {
                     DrawAnimationController(canvasBig, new Vec2(canvasSprite.x + (canvasSprite.w / 2f), canvasSprite.y + canvasSprite.h));
+                    
+                    if (s_renderOnionSkin)
+                    {
+                        onionSkinBuffer = CurrentMode switch
+                        {
+                            EditorMode.Hat => AnimationFrame == 0 ? HatAnimationBuffer[1] : HatAnimationBuffer[0],
+                            EditorMode.Particle => ParticleAnimationBuffer[AnimationFrame == 0 ? 3 : AnimationFrame - 1] 
+                        };
+                        
+                        DrawOnionSkin(onionSkinBuffer, buffer, innerCanvasBounds, pixelScale, canvasSize);
+                    }
+                }
 
                 for (int i = 0; i < canvasSize * canvasSize; i++)
                 {
@@ -783,7 +797,7 @@ namespace DuckGame
                     );
                     Color color = buffer[i] != default
                         ? buffer[i]
-                        : x % 2 == y % 2
+                        : x % 2 == y % 2 || (onionSkinBuffer is not null && onionSkinBuffer[i] != default)
                             ? FFColors.CanvasEmpty1
                             : FFColors.CanvasEmpty2;
 
@@ -873,6 +887,25 @@ namespace DuckGame
 
                 if (!didHover)
                     s_animationFrameBeingHovered = -1;
+            }
+
+            private static void DrawOnionSkin(Color[] buffer, Color[] drawingBuffer, Rectangle canvasBounds, float pixelScale, int canvasSize)
+            {
+                for (int i = 0; i < canvasSize * canvasSize; i++)
+                {
+                    int x = i % canvasSize;
+                    int y = i / canvasSize;
+
+                    Rectangle pixelBounds = new(
+                        canvasBounds.x + (x * pixelScale),
+                        canvasBounds.y + (y * pixelScale),
+                        pixelScale, pixelScale
+                    );
+
+                    Color pixelColor = buffer[i];
+                    if (pixelColor != default && drawingBuffer[i] == default)
+                        Graphics.DrawRect(pixelBounds, pixelColor * 0.6f, 1.05f);
+                }
             }
             
             public static void ClearBuffers()
