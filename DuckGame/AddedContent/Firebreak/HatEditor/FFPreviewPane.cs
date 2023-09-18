@@ -12,7 +12,7 @@ namespace DuckGame
         {
             public static bool AllowUserControl = false;
             public static int CurrentPLayingAnimationIndex;
-            public static bool IsLoopingAnimation = false;
+            public static bool IsLoopingAnimation;
             public static bool IsPlayingAnimation = true;
             public static Dictionary<string, AnimationData> DuckAnimations = new();
             public static Tex2D[] CurrentDuckAnimation;
@@ -29,11 +29,15 @@ namespace DuckGame
             {
                 s_hatTexture = FFEditorPane.FullHatTexture;
                 InitializeAnimations();
+                
+                if (AllowUserControl)
+                    InitializePlayable();
             }
             
             public static void OnSwitchOutOf()
             {
                 DisposeCurrentAnimation();
+                ClearThings();
             }
 
             private static void InitializeAnimations()
@@ -54,10 +58,14 @@ namespace DuckGame
                 Team team = GetHatTeam();
                 duck.profile.team = team;
                 
-                TeamHat hat = new(9999, 9999, team, duck.profile);
-                duck._equipment.Add(hat);
-                hat.Equip(duck);
-                Add(hat);
+                // turns out this is done automatically, and
+                // manually doing it actually makes you equip
+                // two hats at once, lmao
+                
+                // TeamHat hat = new(9999, 9999, team, duck.profile);
+                // duck._equipment.Add(hat);
+                // hat.Equip(duck);
+                // Add(hat);
 
                 duck.AiInput = new DuckAI();
             }
@@ -228,6 +236,9 @@ namespace DuckGame
                         new Rectangle(framesBounds.x + 4, framesBounds.y + 112, 24, 8)
                     )
                 };
+
+                Rectangle animationSelectorBounds = new(framesBounds.x + 36, framesBounds.y + 80, 92, 40);
+                Graphics.DrawFancyString("ignore this void\n\nmight be a thing later", animationSelectorBounds.tl + Vec2.One, FFColors.Focus, 1f, 0.6f);
 
                 foreach ((SpriteMap icon, string tooltip, bool? toggle, Rectangle bounds) in iconBoundsPairs)
                 {

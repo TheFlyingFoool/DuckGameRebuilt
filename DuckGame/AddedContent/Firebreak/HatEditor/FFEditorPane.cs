@@ -468,6 +468,11 @@ namespace DuckGame
                         break;
                     }
                 }
+
+                if (Keyboard.Pressed(Keys.B))
+                    CurrentCanvasTool = CanvasTool.Brush;
+                else if (Keyboard.Pressed(Keys.E))
+                    CurrentCanvasTool = CanvasTool.Eraser;
             }
 
             private static void UpdateAnimationController(bool canvasBig)
@@ -784,6 +789,10 @@ namespace DuckGame
                         DrawOnionSkin(onionSkinBuffer, buffer, innerCanvasBounds, pixelScale, canvasSize);
                     }
                 }
+                else if (CurrentMode == EditorMode.Rock)
+                {
+                    DrawRockResetButton(new Vec2(canvasSprite.x + (canvasSprite.w / 2f), canvasSprite.y + canvasSprite.h));
+                }
 
                 for (int i = 0; i < canvasSize * canvasSize; i++)
                 {
@@ -805,6 +814,28 @@ namespace DuckGame
                     
                     if (pixel.Shrink(0.1f).Contains(Mouse.positionScreen))
                         Graphics.DrawRect(pixel, FFColors.Focus, 1.1f, false, 0.5f);
+                }
+            }
+
+            private static void DrawRockResetButton(Vec2 topCenter)
+            {
+                const float w = 56;
+                const float h = 12;
+                const float yOffset = 2;
+                
+                Rectangle frameBounds = new(
+                    topCenter - new Vec2(w / 2f, -yOffset),
+                    topCenter + new Vec2(w / 2f, h + yOffset)
+                );
+                
+                bool hover = frameBounds.Contains(Mouse.positionScreen);
+                
+                Graphics.DrawOutlinedRect(frameBounds, hover ? Color.Yellow : Color.Black, hover ? Color.Black : Color.White, 1.2f);
+                Graphics.DrawString("Reset Rock", frameBounds.tl + new Vec2(4), hover ? Color.Black : Color.White, 1.3f, scale: 0.6f);
+
+                if (hover && Mouse.left == InputState.Pressed)
+                {
+                    DefaultRockBuffer.CopyTo(RockFrameBuffer, 0);
                 }
             }
 
@@ -930,6 +961,7 @@ namespace DuckGame
                     }
                 }
                 
+                DefaultRockBuffer.CopyTo(RockFrameBuffer, 0);
                 Metapixels.Clear();
             }
         }

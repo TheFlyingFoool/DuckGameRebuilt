@@ -308,6 +308,17 @@ namespace DuckGame
 
         private static void GlobalActionImport(bool rightClick)
         {
+            if (rightClick && FilePath is not null)
+            {
+                Texture2D texture = TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, FilePath, true);
+
+                if (texture.Width > 100 || texture.Height > 56)
+                    throw new Exception("Image file too big to be a vanilla hat");
+
+                LoadHat(texture);
+                return;
+            }
+            
             Thread t = new(() =>
             {
                 try
@@ -315,8 +326,7 @@ namespace DuckGame
                     OpenFileDialog dialog = new() {Filter = "PNG files (*.png)|*.png"};
                     if (dialog.ShowDialog() == DialogResult.OK)
                     {
-                        Texture2D texture =
-                            TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, dialog.FileName, true);
+                        Texture2D texture = TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, dialog.FileName, true);
 
                         if (texture.Width > 100 || texture.Height > 56)
                             throw new Exception("Image file too big to be a vanilla hat");
