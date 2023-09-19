@@ -418,7 +418,11 @@ namespace DuckGame
             //TODO: Re-optimize this code
             //the collision code here was reverted because pyramid upclipping worked differently than in normal DG because of
             //collision buckets or something -NiK0
-            _part2.OldReturnItemToWorld(_duck);
+
+            //this code has been re-optimized yay :DD -NiK0
+            QuadTreeObjectList.LineLeniancy = 1;
+            _part2.ReturnItemToWorld(_duck);
+            QuadTreeObjectList.LineLeniancy = 0;
             if (Network.isActive)
             {
                 active = false;

@@ -179,7 +179,7 @@ namespace DuckGame
 
             if (level != "RANDOM")
             {
-                if (Rando.Float(10) <= DGRSettings.RandomWeather)
+                if (Rando.Float(10) <= DGRSettings.RandomWeather && First<BlizzardThing>() == null)
                 {
                     if (Program.BirthdayDGR)
                     {

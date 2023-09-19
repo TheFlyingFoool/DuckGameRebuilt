@@ -342,6 +342,7 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigRagdollPart.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigRagdoll.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigTrapped.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\BlizzardThing.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\ConveyorBelt.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\ItemFrame.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\ReDemoBlaster.cs" />

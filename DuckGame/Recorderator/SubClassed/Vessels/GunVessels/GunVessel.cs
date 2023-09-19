@@ -67,11 +67,15 @@ namespace DuckGame
             }
             base.PlaybackUpdate();
         }
+        public bool saveAnglesAnyways;
         public override void RecordUpdate()
         {
             Gun g = (Gun)t;
-            float f = g.angleDegrees % 360;
-            addVal("angledeg", BitCrusher.FloatToUShort(f, 360));
+            if (g.owner == null || saveAnglesAnyways)
+            {
+                float f = g.angleDegrees % 360;
+                addVal("angledeg", BitCrusher.FloatToUShort(f, 360));
+            }
             BitArray array_o_bits = new BitArray(8);
 
             int w = Maths.Clamp(g.ammo, 0, 125) + 1;

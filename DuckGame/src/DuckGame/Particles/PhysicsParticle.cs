@@ -28,7 +28,7 @@ namespace DuckGame
         protected bool _touchedFloor;
         private float _framesAlive;
         private bool _waitForNoCollide;
-        protected float _airFriction = 0.03f;
+        public float _airFriction = 0.03f;
         protected float _life = 1f;
         public Vec2 lerpPos = Vec2.Zero;
         public Vec2 lerpSpeed = Vec2.Zero;

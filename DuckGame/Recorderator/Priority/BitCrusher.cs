@@ -8,6 +8,68 @@ namespace DuckGame
     //i think it should be fine (it won't)
     public static class BitCrusher
     {
+        /// <summary>
+        /// Put in a bitarray, tell it the initial and end index of bits it should use, the current float value and how much this value can go to
+        /// </summary>
+        /// <param name="bitArray"></param>
+        /// <param name="startIndex"></param>
+        /// <param name="endIndex"></param>
+        /// <param name="value"></param>
+        /// <param name="upperValue"></param>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static void CompressFloat(BitArray bitArray, int startIndex, int endIndex, float value, float upperValue)
+        {
+            if (startIndex < 0 || startIndex >= bitArray.Length || endIndex < 0 || endIndex >= bitArray.Length || startIndex > endIndex)
+            {
+                throw new ArgumentOutOfRangeException("Invalid startIndex or endIndex");
+            }
+
+            value = Maths.Clamp(value, 0, upperValue);
+
+            int numBits = endIndex - startIndex + 1;
+            int numSteps = 1 << numBits;
+            int compressedValue = (int)Math.Floor((value / upperValue) * numSteps);
+
+            for (int i = 0; i < numBits; i++)
+            {
+                bitArray[startIndex + i] = (compressedValue & (1 << i)) != 0;
+            }
+        }
+
+        /// <summary>
+        /// Opposite as CompressFloat
+        /// </summary>
+        /// <param name="bitArray"></param>
+        /// <param name="startIndex"></param>
+        /// <param name="endIndex"></param>
+        /// <param name="upperValue"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public static float DecompressFloat(BitArray bitArray, int startIndex, int endIndex, float upperValue)
+        {
+            if (startIndex < 0 || startIndex >= bitArray.Length || endIndex < 0 || endIndex >= bitArray.Length || startIndex > endIndex)
+            {
+                throw new ArgumentOutOfRangeException("Invalid startIndex or endIndex");
+            }
+
+            int numBits = endIndex - startIndex + 1;
+            int numSteps = 1 << numBits;
+
+            int compressedValue = 0;
+            for (int i = 0; i < numBits; i++)
+            {
+                if (bitArray[startIndex + i])
+                {
+                    compressedValue |= (1 << i);
+                }
+            }
+
+            return (float)compressedValue / numSteps * upperValue;
+        }
+        public static BitArray ByteToBitArray(byte b)
+        {
+            return new BitArray(new byte[] { b });
+        }
         public static byte BitArrayToByte(BitArray array)
         {
             byte[] b = new byte[1];
@@ -100,7 +162,7 @@ namespace DuckGame
             float f = range / (negative ? 128f : 256f);
             return (byte)Math.Round(v / f);
         }
-        public static float ByteToFloat(ushort v, int range = 1, bool negative = true, int rounding = 2)
+        public static float ByteToFloat(byte v, int range = 1, bool negative = true, int rounding = 2)
         {
             float f = range / (negative ? 128f : 256f);
             return (float)Math.Round(v * f, rounding);
