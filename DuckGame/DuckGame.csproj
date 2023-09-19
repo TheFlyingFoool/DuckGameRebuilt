@@ -536,6 +536,7 @@
     <Compile Include="src\MonoTime\Console\Commands\Echo.cs" />
     <Compile Include="src\MonoTime\Console\Commands\DansTestArea.cs" />
     <Compile Include="src\MonoTime\Console\Commands\SkipMap.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Version.cs" />
     <Compile Include="src\MonoTime\ExecuteOnAttribute.cs" />
     <Compile Include="src\MonoTime\Input\InputMan.cs" />
     <Compile Include="src\MonoTime\Input\1InputMan.cs" />
