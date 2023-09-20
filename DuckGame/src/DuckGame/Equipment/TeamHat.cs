@@ -107,6 +107,7 @@ namespace DuckGame
         {
             team = t;
             depth = -0.5f;
+            shouldbegraphicculled = false;
         }
 
         public TeamHat(float xpos, float ypos, Team t, Profile p)
@@ -115,6 +116,7 @@ namespace DuckGame
             _profile = p;
             team = t;
             depth = -0.5f;
+            shouldbegraphicculled = false;
         }
 
         public override BinaryClassChunk Serialize()

@@ -409,8 +409,11 @@ namespace DuckGame
 
         public static void DrawCursor(Vec2 position)
         {
-            Graphics.DrawRect(new Rectangle(position - new Vec2(0.5f), position + new Vec2(0.5f)), FFColors.Focus, 1.95f);
-                
+            //Graphics.DrawRect(new Rectangle(position - new Vec2(0.5f), position + new Vec2(0.5f)), FFColors.Focus, 1.95f);
+
+            Graphics.DrawLine(position - new Vec2(4, 0), position + new Vec2(4, 0), FFColors.Focus, 1, 1.95f);
+            Graphics.DrawLine(position - new Vec2(0, 4), position + new Vec2(0, 4), FFColors.Focus, 1, 1.95f);
+
             if (s_framesUntilTooltip > 40)
                 DrawCursorHoverTip(position, s_toolTipMessage);
         }

@@ -63,11 +63,6 @@ namespace DuckGame
             set
             {
                 _looped = value;
-                for (int i = 0; i < vgmList.Count; i++)
-                {
-                    VGMSong player = vgmList[i];
-                    player.looped = _looped;
-                }
             }
         }
 
@@ -77,6 +72,26 @@ namespace DuckGame
             {
                 VGMSong player = vgmList[i];
                 player.Play();
+                player.looped = false;
+            }
+        }
+        public void Update()
+        {
+            if (looped)
+            {
+                for (int i = 0; i < vgmList.Count; i++)
+                {
+                    VGMSong player = vgmList[i];
+                    if (player.state != SoundState.Stopped)
+                    {
+                        return;
+                    }
+                }
+                for (int i = 0; i < vgmList.Count; i++)
+                {
+                    VGMSong player = vgmList[i];
+                    player.Play();
+                }
             }
         }
 

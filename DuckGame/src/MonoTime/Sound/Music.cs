@@ -390,6 +390,7 @@ namespace DuckGame
 
         public static void Update()
         {
+            if (_dgmPlayer != null) _dgmPlayer.Update();
         }
     }
 }

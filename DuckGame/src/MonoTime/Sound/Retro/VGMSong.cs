@@ -15,7 +15,7 @@ namespace DuckGame
 {
     public class VGMSong
     {
-        private DynamicSoundEffectInstance _instance;
+        public DynamicSoundEffectInstance _instance;
         private byte[] _buffer;
         private int[] _intBuffer;
         private YM2612 _chip = new YM2612();
