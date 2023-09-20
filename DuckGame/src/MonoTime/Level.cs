@@ -864,7 +864,7 @@ namespace DuckGame
                     }
                 }
 
-                DevConsole.Log(lavaPuddles.Count);
+                // DevConsole.Log(lavaPuddles.Count);
                 if (Graphics.currentRenderTarget == null && lavaPuddles.Count > 0)
                 {
                     if (rd2 != null) rd2.Dispose();
