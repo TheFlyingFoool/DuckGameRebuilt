@@ -858,12 +858,13 @@ namespace DuckGame
 
                 foreach (FluidPuddle fl in flps)
                 {
-                    if ((fl.data.heat > 0 || fl.onFire) && !fl.currentlyDrawing)
+                    if ((fl.data.heat > 0 || fl.onFire) && fl.currentlyDrawing)
                     {
                         lavaPuddles.Add(fl);
                     }
                 }
 
+                DevConsole.Log(lavaPuddles.Count);
                 if (Graphics.currentRenderTarget == null && lavaPuddles.Count > 0)
                 {
                     if (rd2 != null) rd2.Dispose();
