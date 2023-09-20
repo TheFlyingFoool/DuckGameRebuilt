@@ -19,6 +19,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using SDL2;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 
@@ -1591,6 +1592,13 @@ namespace DuckGame
             if (!Network.isActive || pConnection != DuckNetwork.localConnection)
                 return;
             Send.Message(new NMLogEvent(pDescription));
+        }
+        
+        /// only logs if currently in DEBUG mode
+        [Conditional("DEBUG")]
+        public static void DebugLog(object? obj)
+        {
+            Log(obj);
         }
 
         public static void Log(DCSection section, string text, int netIndex = -1) =>
