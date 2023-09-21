@@ -773,6 +773,8 @@ namespace DuckGame
                                     t.favorited = !t.favorited;
 
                                     DGRSettings.ReloadFavHats();
+                                    _desiredTeamSelection = (short) AllTeams().IndexOf(t);
+                                    _slideTo = float.Epsilon;
                                 }
                             }
                             if (inputProfile.Pressed(Triggers.Ragdoll))
