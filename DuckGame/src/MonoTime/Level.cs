@@ -858,12 +858,13 @@ namespace DuckGame
 
                 foreach (FluidPuddle fl in flps)
                 {
-                    if ((fl.data.heat > 0 || fl.onFire) && !fl.currentlyDrawing)
+                    if ((fl.data.heat > 0 || fl.onFire) && fl.currentlyDrawing)
                     {
                         lavaPuddles.Add(fl);
                     }
                 }
 
+                // DevConsole.Log(lavaPuddles.Count);
                 if (Graphics.currentRenderTarget == null && lavaPuddles.Count > 0)
                 {
                     if (rd2 != null) rd2.Dispose();
@@ -2107,12 +2108,12 @@ namespace DuckGame
             //TODO: Re-optimize this code, this is currently DG's collision code because the code that uses the Bucket system makes certain bullet collisions
             //work differently from vanilla, this is unoptimal because as with normal DG it checks every thing in the entire map and not just a sector like
             //what we do with buckets so if someone can figure out a way to make it use buckets and work in vanilla go for it -NiK0
-            foreach (Thing thing in things.CollisionPointAll(point, typeof(MaterialThing)))
+            /*foreach (Thing thing in things.CollisionPointAll(point, typeof(MaterialThing)))
             {
                 if (!thing.removeFromLevel && Collision.Point(point, thing))
                     output.Add(thing as MaterialThing);
-            }
-            /*Type t = typeof(MaterialThing);
+            }*/
+            Type t = typeof(MaterialThing);
             foreach (Thing thing in _things.GetDynamicObjects(t))
             {
                 if (!thing.removeFromLevel && Collision.Point(point, thing))
@@ -2127,7 +2128,7 @@ namespace DuckGame
                 {
                     output.Add(thing2);
                 }
-            }*/
+            }
         }
 
 

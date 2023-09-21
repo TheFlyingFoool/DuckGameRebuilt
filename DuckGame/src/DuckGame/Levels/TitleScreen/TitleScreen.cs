@@ -3,6 +3,12 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+#if AutoUpdater 
+// apparently people remove this accidentally sometimes because it's not
+// referenced outside of the ReleaseAutoUpdater configuration, which makes
+// intellisense think it's useless and automatically remove it  ~Firebreak
+using System.Threading;
+#endif
 
 namespace DuckGame
 {
@@ -560,7 +566,10 @@ namespace DuckGame
             if (Program.IS_DEV_BUILD)
                 _optionsGroup.Add(Options._DGRDeveloperMenu, false);
             _optionsGroup.Add(Options._DGROptimMenu, false);
+            #if AutoUpdater
+            #else
             _optionsGroup.Add(Options._DGRRecorderatorMenu, false);
+            #endif
             _optionsGroup.Add(_audioMenu, false);
             if (_accessibilityMenu != null)
                 _optionsGroup.Add(_accessibilityMenu, false);

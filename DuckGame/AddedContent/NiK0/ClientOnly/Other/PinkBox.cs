@@ -170,7 +170,7 @@ namespace DuckGame
         public bool collision;
         public override void Update()
         {
-            if (d != null && isServerForObject)
+            if (d != null && d.isServerForObject)
             {
                 Fondle(this);
                 //Failsafe for if multiple people happen to hit the box it explodes

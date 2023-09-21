@@ -25,7 +25,7 @@ namespace DuckGame
             OldPistol op = (OldPistol)t;
             byte infoed = (byte)valOf("infoed");
             BitArray br = new BitArray(new byte[] { infoed }); //What.
-            int nplusplus = 0;
+            int nplusplus = 0; //what did they mean by this
             int divide = 8;
             for (int i = 0; i < 4; i++)
             {

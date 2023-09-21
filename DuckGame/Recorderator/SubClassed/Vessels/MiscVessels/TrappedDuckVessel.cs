@@ -49,7 +49,7 @@ namespace DuckGame
             TrappedDuck td = (TrappedDuck)t;
             addVal("traptime", BitCrusher.FloatToByte(td._trapTime, 1));
             addVal("shake", BitCrusher.FloatToByte(td._shakeMult, 1));
-            if (td._duckOwner != null && Corderator.instance.somethingMap.Contains(td._duckOwner)) addVal("owner", (ushort)(Corderator.instance.somethingMap[td._duckOwner] + 1));
+            if (td._duckOwner != null && Corderator.instance.somethingMap.Contains(td._duckOwner) && td.y > -9000) addVal("owner", (ushort)(Corderator.instance.somethingMap[td._duckOwner] + 1));
             else addVal("owner", (ushort)0);
             base.RecordUpdate();
         }

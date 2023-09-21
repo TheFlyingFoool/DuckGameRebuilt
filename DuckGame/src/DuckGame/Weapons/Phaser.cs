@@ -1,18 +1,11 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Phaser
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Guns|Lasers")]
     public class Phaser : Gun
     {
         protected float _charge;
         protected int _chargeLevel;
-        protected float _chargeFade;
+        public float _chargeFade;
         private SinWave _chargeWaver = (SinWave)0.4f;
         protected SpriteMap _phaserCharge;
 

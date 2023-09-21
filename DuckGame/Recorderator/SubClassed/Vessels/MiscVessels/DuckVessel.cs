@@ -161,6 +161,27 @@ namespace DuckGame
                 div /= 2;
             }
             d.quack = brI[4] ? 20 : 0;
+
+            if (!d.dead && brI[5])
+            {
+                if (d.GetPos().y > Level.current.camera.bottom)
+                {
+                    Vec2 pos = d.GetEdgePos();
+                    Vec2 dir = (pos - d.GetPos()).normalized;
+                    for (int i = 0; i < DGRSettings.ActualParticleMultiplier * 8; i++)
+                    {
+                        Feather feather = Feather.New(pos.x - dir.x * 16f, pos.y - dir.y * 16f, d.persona);
+                        feather.hSpeed += dir.x * 1f;
+                        feather.vSpeed += dir.y * 1f;
+                        Level.Add(feather);
+                    }
+                }
+                else
+                {
+                    for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 8; ++index)
+                        Level.Add(Feather.New(cameraPosition.x, cameraPosition.y, d.persona));
+                }
+            }
             d.dead = brI[5];
 
             bool stuck = brI[6];
@@ -277,21 +298,6 @@ namespace DuckGame
             {
                 d.visible = true;
             }
-            //if (d.ragdoll != null) d.visible = false;
-            //DUMBASS WHY'D YOU PUT THAT THERE
-
-            /*if (tPos.y > -1500)
-            {
-                d.Netted(new Net(0, 0, null));
-                d._trapped.active = false;
-            }
-            else if (d._trapped != null)
-            {
-                Level.Remove(d._trapped);
-                d._trapped._trapTime = 0;
-                d._trapped = null;
-            }*/
-
 
             if (d.ragdoll != null)
             {
@@ -306,23 +312,6 @@ namespace DuckGame
                 else d.ragdoll.tongueStuck = Vec2.Zero;
             }
 
-            /*if (d._trapped != null)
-            {
-                d._trapped.position = tPos;
-                if (tOwner == -1 && d._trapped.owner != null)
-                {
-                    Thing t = Corderator.instance.somethingMap[prevNetOwner];
-                    if (t != null && t is Duck o_Duck) o_Duck.holdObject = null;
-                    d._trapped.owner = null;
-                }
-                else if (tOwner != -1 && Corderator.instance.somethingMap.Contains(tOwner))
-                {
-                    Thing t = Corderator.instance.somethingMap[tOwner];
-                    if (t is Duck o_Duck) o_Duck.holdObject = d._trapped;
-                    d._trapped.owner = t;
-                }
-                prevNetOwner = tOwner;
-            }*/
             d.cordHover = d._hovering;
             if (d._hovering) d.UpdateAnimation();
 

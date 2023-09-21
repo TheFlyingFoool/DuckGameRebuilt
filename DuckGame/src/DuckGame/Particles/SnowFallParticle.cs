@@ -34,6 +34,10 @@ namespace DuckGame
 
         public override void Update()
         {
+            //if (GameLevel.rainwind != 0)
+            //{
+            //    hSpeed = Lerp.Float(hSpeed, GameLevel.rainwind * 0.5f, 0.04f);
+            //}
             base.Update();
             if (vSpeed > 1)
                 vSpeed = 1f;

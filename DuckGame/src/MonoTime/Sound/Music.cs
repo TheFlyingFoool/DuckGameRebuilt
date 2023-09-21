@@ -194,6 +194,7 @@ namespace DuckGame
             //not great code also welcome to my hell for .vgz music loading -NiK0
             if (File.Exists("./Content/Audio/Music/InGame/" + music + ".vgz"))
             {
+                if (_vgmPlayer != null) _vgmPlayer.Stop();
                 _vgmPlayer = new VGMSong("./Content/Audio/Music/InGame/" + music + ".vgz");
                 _vgmPlayer.Play();
                 _vgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
@@ -203,6 +204,7 @@ namespace DuckGame
             }
             else if (File.Exists("./Content/Audio/Music/" + music + ".vgz"))
             {
+                if (_vgmPlayer != null) _vgmPlayer.Stop();
                 _vgmPlayer = new VGMSong("./Content/Audio/Music/" + music + ".vgz");
                 _vgmPlayer.Play();
                 _vgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
@@ -212,6 +214,7 @@ namespace DuckGame
             }
             else if (File.Exists("./Content/Audio/Music/InGame/" + music + ".dgm"))
             {
+                if (_dgmPlayer != null) _dgmPlayer.Stop();
                 _dgmPlayer = new DGMSong("./Content/Audio/Music/InGame/" + music + ".dgm");
                 _dgmPlayer.Play();
                 _dgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
@@ -221,6 +224,7 @@ namespace DuckGame
             }
             else if (File.Exists("./Content/Audio/Music/" + music + ".dgm"))
             {
+                if (_dgmPlayer != null) _dgmPlayer.Stop();
                 _dgmPlayer = new DGMSong("./Content/Audio/Music/" + music + ".dgm");
                 _dgmPlayer.Play();
                 _dgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
@@ -228,10 +232,8 @@ namespace DuckGame
                 if (_musicPlayer != null) _musicPlayer.Stop();
                 if (_vgmPlayer != null) _vgmPlayer.Stop();
             }
-            else
+            else if (Load(music))
             {
-                if (!Load(music))
-                    return;
                 _musicPlayer.Play();
                 _musicPlayer.IsLooped = looping;
                 if (_vgmPlayer != null) _vgmPlayer.Stop();
@@ -388,6 +390,7 @@ namespace DuckGame
 
         public static void Update()
         {
+            if (_dgmPlayer != null) _dgmPlayer.Update();
         }
     }
 }

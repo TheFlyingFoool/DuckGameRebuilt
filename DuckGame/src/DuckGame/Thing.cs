@@ -1257,6 +1257,7 @@ namespace DuckGame
                 return;
             t.bottom = block4.top;
         }
+        //useless now -NiK0
         public void OldReturnItemToWorld(Thing t)
         {
             Block block1 = Level.OldCheckLine<Block>(position, position + new Vec2(16f, 0f));
