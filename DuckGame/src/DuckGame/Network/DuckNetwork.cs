@@ -1087,12 +1087,11 @@ namespace DuckGame
                 if (Level.current is TeamSelect2)
                 {
                     if (!DGRSettings.HideFS) _core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|FORCE START", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmStartMenu)));
-                    if (DGR) _core._ducknetMenu.Add(new UIMenuItemToggle("DGR Stuff", field: new FieldBinding(Options.dGRSettings, "DGRItems"), c: new Color(246, 88, 191)));
+                    if (DGR) _core._ducknetMenu.Add(new UIMenuItemToggle("DGR Stuff", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DGRItems)), c: new Color(246, 88, 191)));
                     else
                     {
                         DGRSettings.DGRItems = false;
-                        _core._ducknetMenu.Add(new UIText(" DGR Stuff        ON |WHITE|OFF"/*, field: new FieldBinding(Options.dGRSettings, "DGRItems")*/, c: Color.Gray));
-
+                        _core._ducknetMenu.Add(new UIText(" DGR Stuff        ON |WHITE|OFF", c: Color.Gray));
                     }
                 }
             }

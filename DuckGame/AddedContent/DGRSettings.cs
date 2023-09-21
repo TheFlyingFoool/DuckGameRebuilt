@@ -3,13 +3,8 @@ using System.Collections.Generic;
 
 namespace DuckGame
 {
-    public class DGRSettings
+    public static class DGRSettings
     {
-        public static DGRSettings instance;
-        public DGRSettings()
-        {
-            instance = this;
-        }
         /*[AutoConfigField]//TODO: this eventually -NiK0
         public static List<byte> room1 = new List<byte>();
         [AutoConfigField]
@@ -226,7 +221,7 @@ namespace DuckGame
             }
         }
 
-        public int ParticleMultiplier
+        public static int ParticleMultiplier
         {
             get
             {

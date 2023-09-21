@@ -83,7 +83,6 @@ namespace DuckGame
 
         public static UIMenu controllerWarning => _controllerWarning;
 
-        public static DGRSettings dGRSettings = new DGRSettings();
         public static OptionsData Data
         {
             get => _data;
@@ -355,17 +354,17 @@ namespace DuckGame
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemToggle("Online Physics", field: new FieldBinding(dGRSettings, "EditorOnlinePhysics"))
+            menu.Add(new UIMenuItemToggle("Online Physics", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.EditorOnlinePhysics)))
             {
                 dgrDescription = "WARNING This may be highly unstable but it'll make it so online physics apply while testing levels in the editor (Ragdoll rng, etc)"
             });
 
-            menu.Add(new UIMenuItemToggle("Instructions", field: new FieldBinding(dGRSettings, "EditorInstructions"))
+            menu.Add(new UIMenuItemToggle("Instructions", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.EditorInstructions)))
             {
                 dgrDescription = "Displays real-time instructions on how to operate the editor. You might not need them anymore if you're already familiar with everything"
             });
 
-            menu.Add(new UIMenuItemToggle("Level Name", field: new FieldBinding(dGRSettings, "EditorLevelName"))
+            menu.Add(new UIMenuItemToggle("Level Name", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.EditorLevelName)))
             {
                 dgrDescription = "Displays current level name at top left of the screen"
             });
@@ -382,19 +381,19 @@ namespace DuckGame
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemToggle("Green Text Support", field: new FieldBinding(dGRSettings, "GreenTextSupport"))
+            menu.Add(new UIMenuItemToggle("Green Text Support", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.GreenTextSupport)))
             {
                 dgrDescription = "Chat messages beginning with a \">\" will be green (only for your game)"
             });
-            menu.Add(new UIMenuItemToggle("Discord RPC", field: new FieldBinding(dGRSettings, "RPC"))
+            menu.Add(new UIMenuItemToggle("Discord RPC", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.RPC)))
             {
                 dgrDescription = "Toggles discord rich presence displaying the current level, if you're in the editor, etc\n(May take a few seconds to connect)"
             });
-            menu.Add(new UIMenuItemToggle("Open URLs in Browser", field: new FieldBinding(dGRSettings, "OpenURLsInBrowser"))
+            menu.Add(new UIMenuItemToggle("Open URLs in Browser", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.OpenURLsInBrowser)))
             {
                 dgrDescription = "URLs will open in your web browser instead of the Steam Overlay."
             });
-            menu.Add(new UIMenuItemToggle("Custom Hat Teams", field: new FieldBinding(dGRSettings, "CustomHatTeams"))
+            menu.Add(new UIMenuItemToggle("Custom Hat Teams", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.CustomHatTeams)))
             {
                 dgrDescription = "Allows for teams with custom hats that have the same name (HOST ONLY)"
             });
@@ -416,12 +415,12 @@ namespace DuckGame
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
             
-            menu.Add(new UIMenuItemToggle("No Level Restrictions", field: new FieldBinding(dGRSettings, "IgnoreLevRestrictions"))
+            menu.Add(new UIMenuItemToggle("No Level Restrictions", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.IgnoreLevRestrictions)))
             {
                 dgrDescription = "When enabled, you'll be able to turn on any custom level on an online match"
             });
 
-            menu.Add(new UIMenuItemToggle("Faster Load", field: new FieldBinding(dGRSettings, "FasterLoad"))
+            menu.Add(new UIMenuItemToggle("Faster Load", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.FasterLoad)))
             {
                 dgrDescription = "If this is enabled hats, effects, devconsole, challenges, textures wont load on startup resulting in instability so use at your own risk"
             });
@@ -438,33 +437,33 @@ namespace DuckGame
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemSlider("Weather Chance", field: new FieldBinding(dGRSettings, "RandomWeather", 0, 10, 1), step: 1f)
+            menu.Add(new UIMenuItemSlider("Weather Chance", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.RandomWeather), 0, 10, 1), step: 1f)
             {
                 dgrDescription = "Chance for random weather to occur in levels from 0% to 100%"
             });
-            menu.Add(new UIMenuItemSlider("Weather Particle Level", field: new FieldBinding(dGRSettings, "WeatherMultiplier", 0, 16, 1), step: 1f)
+            menu.Add(new UIMenuItemSlider("Weather Particle Level", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.WeatherMultiplier), 0, 16, 1), step: 1f)
             {
                 dgrDescription = "Particle multiplier for weather events"
             });
-            menu.Add(new UIMenuItemSlider("Weather Thunder Chance", field: new FieldBinding(dGRSettings, "WeatherLighting", 0, 16, 1), step: 1f)
+            menu.Add(new UIMenuItemSlider("Weather Thunder Chance", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.WeatherLighting), 0, 16, 1), step: 1f)
             {
                 dgrDescription = "Chance for thunder to occur in levels from x0 to x16"
             });
 
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemSlider("Heat Wave Strength", field: new FieldBinding(dGRSettings, "HeatWaveMultiplier", 0, 1, 0.1f), step: 0.1f)
+            menu.Add(new UIMenuItemSlider("Heat Wave Strength", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HeatWaveMultiplier), 0, 1, 0.1f), step: 0.1f)
             {
                 dgrDescription = "The strength that the heat wave shader has on the enviroment around it"
             });
 
-            menu.Add(new UIMenuItemToggle("Ambient Particles", field: new FieldBinding(dGRSettings, "AmbientParticles"))
+            menu.Add(new UIMenuItemToggle("Ambient Particles", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.AmbientParticles)))
             {
                 dgrDescription = "Extra cosmetic particles added by DGR, embers from lamps, leafs from trees, etc"
             });
 
 
-            menu.Add(new UIMenuItemNumber("Particle Level", field: new FieldBinding(dGRSettings, "ParticleMultiplier", 0, 7, 1), valStrings: new List<string>()
+            menu.Add(new UIMenuItemNumber("Particle Level", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ParticleMultiplier), 0, 7, 1), valStrings: new List<string>()
             {
                 "None     ",
                 "Minimum     ",
@@ -478,7 +477,7 @@ namespace DuckGame
             {
                 dgrDescription = "Global particle multiplier from x0 to x16"
             });
-            menu.Add(new UIMenuItemNumber("Rebuilt Effect", field: new FieldBinding(dGRSettings, "RebuiltEffect", 0, 2, 1), valStrings: new List<string>()
+            menu.Add(new UIMenuItemNumber("Rebuilt Effect", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.RebuiltEffect), 0, 2, 1), valStrings: new List<string>()
             {
                 "HEART",
                 "NAME",
@@ -501,11 +500,11 @@ namespace DuckGame
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemToggle("Camera unfollow", field: new FieldBinding(dGRSettings, "CameraUnfollow"))
+            menu.Add(new UIMenuItemToggle("Camera unfollow", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.CameraUnfollow)))
             {
                 dgrDescription = "When the camera is big enough it stops following distant players"
             });
-            menu.Add(new UIMenuItemNumber("Start in", field: new FieldBinding(dGRSettings, "StartIn", 0, 3), valStrings: new List<string>
+            menu.Add(new UIMenuItemNumber("Start in", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.StartIn), 0, 3), valStrings: new List<string>
             {
                 "TITLE",
                 "LOBBY",
@@ -515,21 +514,21 @@ namespace DuckGame
             {
                 dgrDescription = "When starting up the game you'll spawn into the selected level"
             });
-            menu.Add(new UIMenuItemToggle("Sticky Hats", field: new FieldBinding(dGRSettings, "StickyHats"))
+            menu.Add(new UIMenuItemToggle("Sticky Hats", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.StickyHats)))
             {
                 dgrDescription = "Vanity hats no longer fall off when ragdolling"
             });
 
-            menu.Add(new UIMenuItemToggle("Lobby data", field: new FieldBinding(dGRSettings, nameof(DGRSettings.LobbyData)))
+            menu.Add(new UIMenuItemToggle("Lobby data", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.LobbyData)))
             {
                 dgrDescription = "Shows the percentage of maps and the list of people in the lobby if host uses Rebuilt"
             });
 
-            menu.Add(new UIMenuItemToggle("Skip Excess Rounds", field: new FieldBinding(dGRSettings, "SkipExcessRounds"))
+            menu.Add(new UIMenuItemToggle("Skip Excess Rounds", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SkipExcessRounds)))
             {
                 dgrDescription = "If a player has already definitely won extra rounds that wont change the outcome of the match will be skipped (HOST ONLY)"
             });
-            menu.Add(new UIMenuItemToggle("Invite Link Redirect", field: new FieldBinding(dGRSettings, "UseDGRJoinLink"))
+            menu.Add(new UIMenuItemToggle("Invite Link Redirect", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.UseDGRJoinLink)))
             {
                 dgrDescription = "The lobby invite link will use DGR's own HTTPS link redirect to join the game, instead of the default STEAM protocol, which makes the link clickable on Discord"
             });
@@ -633,37 +632,37 @@ namespace DuckGame
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemToggle("GUI Name Display", field: new FieldBinding(dGRSettings, "QOLScoreThingButWithoutScore"))
+            menu.Add(new UIMenuItemToggle("GUI Name Display", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.QOLScoreThingButWithoutScore)))
             {
                 dgrDescription = "Displays every participating duck in the game's name and color above"
             });
 
-            menu.Add(new UIMenuItemToggle("Name Tags", field: new FieldBinding(dGRSettings, "NameTags"))
+            menu.Add(new UIMenuItemToggle("Name Tags", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.NameTags)))
             {
                 dgrDescription = "Before the round starts or when you're dead/spectating, display the name of every duck above their heads"
             });
 
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemToggle("Lobby Name", field: new FieldBinding(dGRSettings, "LobbyNameOnPause"))
+            menu.Add(new UIMenuItemToggle("Lobby Name", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.LobbyNameOnPause)))
             {
                 dgrDescription = "Displays lobby name on pause screen (not supporting LAN lobbies)"
             });
 
-            menu.Add(new UIMenuItemToggle("Menu Mouse", field: new FieldBinding(dGRSettings, "MenuMouse"))
+            menu.Add(new UIMenuItemToggle("Menu Mouse", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.MenuMouse)))
             {
                 dgrDescription = "Toggles the menu mouse"
             });
-            menu.Add(new UIMenuItemToggle("Dubber Speed", field: new FieldBinding(dGRSettings, "dubberspeed"))
+            menu.Add(new UIMenuItemToggle("Dubber Speed", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.dubberspeed)))
             {
                 dgrDescription = "For true vim users, adds keybinds from 1-9 for faster menu browsing"
             });
 
-            menu.Add(new UIMenuItemToggle("No Force Start Menu", field: new FieldBinding(dGRSettings, "HideFS"))
+            menu.Add(new UIMenuItemToggle("No Force Start Menu", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HideFS)))
             {
                 dgrDescription = "Disables the force start button from the pause menu while hosting."
             });
-            menu.Add(new UIMenuItemToggle("Reduced Movement", field: new FieldBinding(dGRSettings, "ReducedMovement"))
+            menu.Add(new UIMenuItemToggle("Reduced Movement", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ReducedMovement)))
             {
                 dgrDescription = "If on, menu animations will be skipped."
             });
@@ -680,11 +679,11 @@ namespace DuckGame
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemToggle("Graphics Culling", field: new FieldBinding(dGRSettings, "GraphicsCulling"))
+            menu.Add(new UIMenuItemToggle("Graphics Culling", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.GraphicsCulling)))
             {
                 dgrDescription = "If on, anything outside the camera wont render"
             });
-            menu.Add(new UIMenuItemToggle("Use sprite atlas", field: new FieldBinding(dGRSettings, "SpriteAtlas"))
+            menu.Add(new UIMenuItemToggle("Use sprite atlas", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SpriteAtlas)))
             {
                 dgrDescription = "Lowers render times using an atlas so buffer doesn't constantly switch sprites\n(Requires restart)"
             });
@@ -692,17 +691,17 @@ namespace DuckGame
 
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemToggle("Pre-load levels", field: new FieldBinding(dGRSettings, "PreloadLevels"))
+            menu.Add(new UIMenuItemToggle("Pre-load levels", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.PreloadLevels)))
             {
                 dgrDescription = "Loads custom levels on startup instead of when the level folder is opened\n(Will increase load times)"
             });
 
-            menu.Add(new UIMenuItemToggle("Sort levels", field: new FieldBinding(dGRSettings, "SortLevels"))
+            menu.Add(new UIMenuItemToggle("Sort levels", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SortLevels)))
             {
                 dgrDescription = "Whether or not to sort levels on the level selector (If off it will decrease level load time)"
             });
 
-            menu.Add(new UIMenuItemToggle("Load music", field: new FieldBinding(dGRSettings, "LoadMusic"))
+            menu.Add(new UIMenuItemToggle("Load music", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.LoadMusic)))
             {
                 dgrDescription = "If this is disabled music wont load resulting in faster load times\n(Requires restart)"
             });
