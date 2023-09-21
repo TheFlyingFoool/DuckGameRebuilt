@@ -1007,15 +1007,15 @@ namespace DuckGame
                     z++;
                     if (z == 2)
                     {
-                        _core._matchSettingMenu.Add(new UISideButton(66, -50, 50, 0, "P1@GRAB@"));
+                        _core._matchSettingMenu.Add(new UISideButton(66, -60, 60, 0, "P1@MENU1@"));
                     }
                     if (z == 4)
                     {
-                        _core._matchSettingMenu.Add(new UISideButton(66, -50, 50, 0, "P2@SHOOT@"));
+                        _core._matchSettingMenu.Add(new UISideButton(66, -60, 60, 0, "P2@MENU2@"));
                     }
                     if (z == 7)
                     {
-                        _core._matchSettingMenu.Add(new UISideButton(66, -50, 50, 0, "P3@STRAFE@"));
+                        _core._matchSettingMenu.Add(new UISideButton(66, -60, 60, 0, "P3@RAGDOLL@"));
                     }
                     if (!(matchSetting.id == "workshopmaps") || Network.available)
                     {

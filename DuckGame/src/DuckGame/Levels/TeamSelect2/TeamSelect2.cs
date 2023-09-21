@@ -611,15 +611,15 @@ namespace DuckGame
                 z++;
                 if (z == 2)
                 {
-                    _hostMatchSettingsMenu.Add(new UISideButton(66, -50, 50, 0, "P1@GRAB@"));
+                    _hostMatchSettingsMenu.Add(new UISideButton(66, -60, 60, 0, "P1@MENU1@"));
                 }
                 if (z == 4)
                 {
-                    _hostMatchSettingsMenu.Add(new UISideButton(66, -50, 50, 0, "P2@SHOOT@"));
+                    _hostMatchSettingsMenu.Add(new UISideButton(66, -60, 60, 0, "P2@MENU2@"));
                 }
                 if (z == 7)
                 {
-                    _hostMatchSettingsMenu.Add(new UISideButton(66, -50, 50, 0, "P3@STRAFE@"));
+                    _hostMatchSettingsMenu.Add(new UISideButton(66, -60, 60, 0, "P3@RAGDOLL@"));
                 }
                 if (!(matchSetting.id == "workshopmaps") || Network.available) //if ((!(matchSetting.id == "workshopmaps") || Network.available) && (!(matchSetting.id == "custommaps") || !ParentalControls.AreParentalControlsActive()))
                 {
@@ -805,15 +805,15 @@ namespace DuckGame
                 z++;
                 if (z == 2)
                 {
-                    _multiplayerMenu.Add(new UISideButton(66, -50, 50, 0, "P1@GRAB@"));
+                    _multiplayerMenu.Add(new UISideButton(66, -60, 60, 0, "P1@MENU1@"));
                 }
                 if (z == 4)
                 {
-                    _multiplayerMenu.Add(new UISideButton(66, -50, 50, 0, "P2@SHOOT@"));
+                    _multiplayerMenu.Add(new UISideButton(66, -60, 60, 0, "P2@MENU2@"));
                 }
                 if (z == 7)
                 {
-                    _multiplayerMenu.Add(new UISideButton(66, -50, 50, 0, "P3@STRAFE@"));
+                    _multiplayerMenu.Add(new UISideButton(66, -60, 60, 0, "P3@RAGDOLL@"));
                 }
                 if (!(matchSetting.id == "clientlevelsenabled") && (!(matchSetting.id == "workshopmaps") || Network.available))
                 {
@@ -1158,7 +1158,7 @@ namespace DuckGame
         {
             BitBuffer bf = new BitBuffer();
             bool doBf = false;
-            if (Input.Pressed(Triggers.Grab))
+            if (Input.Pressed(Triggers.Menu1))
             {
                 doBf = true;
                 bf = DGRSettings.MatchsettingsPreset1;
@@ -1166,7 +1166,7 @@ namespace DuckGame
                 if (DGRSettings.mMatch == 0) DGRSettings.mMatch = -1;
                 else DGRSettings.mMatch = 0;
             }
-            if (Input.Pressed(Triggers.Shoot))
+            if (Input.Pressed(Triggers.Menu2))
             {
                 doBf = true;
                 bf = DGRSettings.MatchsettingsPreset2;
@@ -1174,7 +1174,7 @@ namespace DuckGame
                 if (DGRSettings.mMatch == 1) DGRSettings.mMatch = -1;
                 else DGRSettings.mMatch = 1;
             }
-            if (Input.Pressed(Triggers.Strafe))
+            if (Input.Pressed(Triggers.Ragdoll))
             {
                 doBf = true;
                 bf = DGRSettings.MatchsettingsPreset3;

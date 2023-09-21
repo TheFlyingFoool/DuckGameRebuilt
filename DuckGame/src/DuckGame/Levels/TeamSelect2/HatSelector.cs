@@ -759,7 +759,7 @@ namespace DuckGame
                                 }
                             }
                             //NiK0's personal hell
-                            if (inputProfile.Pressed(Triggers.Shoot) && text1 != "NO TEAM")
+                            if (inputProfile.Pressed(Triggers.Menu2) && text1 != "NO TEAM")
                             {
                                 Team t = FilterTeam();
                                 if (t.locked)
@@ -835,7 +835,7 @@ namespace DuckGame
                             extraButton.depth = 1;
                             extraButton.alpha = _fade;
                             Graphics.Draw(extraButton, x + 15, y + 61, (Depth)1);
-                            _font.Draw("@SHOOT@", x + 7.5f, y + 61, new Color(180, 180, 180), (Depth)1, profileInput);
+                            _font.Draw("@MENU2@", x + 7.5f, y + 61, new Color(180, 180, 180), (Depth)1, profileInput);
                             _font.Draw("@STARGOODY@", x + 27, y + 61, new Color(180, 180, 180) * 0.3f, (Depth)1, profileInput);
                         }
 
