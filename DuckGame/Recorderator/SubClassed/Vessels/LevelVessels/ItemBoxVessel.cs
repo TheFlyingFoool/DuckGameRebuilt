@@ -62,7 +62,7 @@ namespace DuckGame
             ItemBox i = (ItemBox)t;
             if (i.containedObject != null)
             {
-                if (Corderator.instance.somethingMap.Contains(i.containedObject))
+                if (Corderator.instance != null && Corderator.instance.somethingMap.Contains(i.containedObject))
                 {
                     addVal("containing", (ushort)(Corderator.instance.somethingMap[i.containedObject] + 1));
                 }

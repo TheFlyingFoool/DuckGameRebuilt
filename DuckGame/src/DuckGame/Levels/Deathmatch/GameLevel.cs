@@ -212,6 +212,7 @@ namespace DuckGame
                             {
                                 volume = 0.2f
                             };
+                            rainSound._effect.saveToRecording = false;
                             darkenRainer = 0.8f;
                             rainwind = Rando.Float(-2, 2);
                             lightningRNG = Rando.Int(1200, 2400);
@@ -232,6 +233,7 @@ namespace DuckGame
                             {
                                 volume = 0.2f
                             };
+                            rainSound._effect.saveToRecording = false;
                             darkenRainer = 0.8f;
                             Raining = true;
                             rainwind = Rando.Float(-2, 2);
@@ -257,6 +259,7 @@ namespace DuckGame
                                 {
                                     volume = 0.2f
                                 };
+                                rainSound._effect.saveToRecording = false;
                                 darkenRainer = 0.8f;
                                 cityRaining = true;
                                 rainwind = Rando.Float(-2, 2);

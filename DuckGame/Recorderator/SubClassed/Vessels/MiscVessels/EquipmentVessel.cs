@@ -62,7 +62,7 @@ namespace DuckGame
             Equipment e = (Equipment)t;
             if (e._equippedDuck != null)
             {
-                if (Corderator.instance.somethingMap.Contains(e._equippedDuck)) addVal("equipped", (ushort)(Corderator.instance.somethingMap[e._equippedDuck] + 1));
+                if (Corderator.instance != null && Corderator.instance.somethingMap.Contains(e._equippedDuck)) addVal("equipped", (ushort)(Corderator.instance.somethingMap[e._equippedDuck] + 1));
                 else addVal("equipped", (ushort)0);
             }
             else addVal("equipped", (ushort)0);

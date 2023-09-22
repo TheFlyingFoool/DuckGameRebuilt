@@ -492,7 +492,7 @@ namespace DuckGame
                 addVal("trappedowner", -1);
             }*/
             Main.SpecialCode = "coded 1-hold";
-            if (d.holdObject != null && Corderator.instance.somethingMap.Contains(d.holdObject))
+            if (d.holdObject != null && Corderator.instance != null && Corderator.instance.somethingMap.Contains(d.holdObject))
             {
                 Main.SpecialCode = "coded 2-hold";
                 addVal("hold", (ushort)(Corderator.instance.somethingMap[d.holdObject] + 1));

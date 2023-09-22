@@ -127,7 +127,7 @@ namespace DuckGame
             TeamHat th = (TeamHat)t;
             if (th._equippedDuck != null)
             {
-                if (Corderator.instance.somethingMap.Contains(th._equippedDuck)) addVal("equipped", Corderator.instance.somethingMap[th._equippedDuck]);
+                if (Corderator.instance != null && Corderator.instance.somethingMap.Contains(th._equippedDuck)) addVal("equipped", Corderator.instance.somethingMap[th._equippedDuck]);
                 else addVal("equipped", -1);
             }
             else addVal("equipped", -1);

@@ -108,8 +108,7 @@ namespace DuckGame
                 byte bitedTWO = b.ReadByte();
                 Main.SpecialCode2 = "btr: " + bitedTHREE + "  btwo: " + bitedTWO;
                 Vec2 v = CompressedVec2Binding.GetUncompressedVec2(b.ReadInt(), 10000);
-                Thing somethingthing;
-                DevConsole.Log(bitedTHREE);
+                Thing somethingthing = null;
                 switch (bitedTHREE)
                 {
                     case 0:
@@ -321,8 +320,14 @@ namespace DuckGame
                             somethingthing = new WaterCooler(v.x, v.y);
                             break;
                         }
+                    case 30:
+                        {
+                            somethingthing = new Altar(v.x, v.y, 0) { wide = bitedTWO };
+                            break;
+                        }
                     default:
-                        continue;
+                        DevConsole.Log("|RED|RECORDERATOR |WHITE|A non indexed prop was found :" + bitedTHREE);
+                        break;
                 }
                 Main.SpecialCode = "a weird crash";
                 if (somethingthing == null) continue;

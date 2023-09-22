@@ -57,7 +57,7 @@ namespace DuckGame
         public override void RecordUpdate()
         {
             Holster h = (Holster)t;
-            if (h.containedObject != null && Corderator.instance.somethingMap.Contains(h.containedObject)) addVal("hold", (ushort)(Corderator.instance.somethingMap[h.containedObject] + 1));
+            if (h.containedObject != null && Corderator.instance != null && Corderator.instance.somethingMap.Contains(h.containedObject)) addVal("hold", (ushort)(Corderator.instance.somethingMap[h.containedObject] + 1));
             else addVal("hold", (ushort)0);
             base.RecordUpdate();
         }

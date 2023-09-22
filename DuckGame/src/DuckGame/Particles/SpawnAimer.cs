@@ -58,7 +58,7 @@ namespace DuckGame
         public override void Update()
         {
             _sin.Update();
-            if ((GameMode.started && !Recorderator.Playing) || (Corderator.instance != null && Corderator.instance.cFrame >= Corderator.instance.gamemodeStarted))
+            if ((GameMode.started && !Recorderator.Playing) || (Corderator.instance != null && Recorderator.Playing && Corderator.instance.cFrame >= Corderator.instance.gamemodeStarted))
                 Level.Remove(this);
             distOut = Lerp.FloatSmooth(distOut, 16f, 0.08f, 1.2f);
             distLen = Lerp.FloatSmooth(distLen, 10f, 0.08f, 1.2f);

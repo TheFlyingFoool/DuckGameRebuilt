@@ -101,7 +101,7 @@ namespace DuckGame
             prevBuffer.Write(thickness);
             prevBuffer.Write(ACCURACY);
             //owner cant even exist
-            if (owned != null && Corderator.instance.somethingMap.Contains(owned)) prevBuffer.Write((ushort)(Corderator.instance.somethingMap[owned] + 1));
+            if (owned != null && Corderator.instance != null && Corderator.instance.somethingMap.Contains(owned)) prevBuffer.Write((ushort)(Corderator.instance.somethingMap[owned] + 1));
             else prevBuffer.Write((ushort)0);
             return prevBuffer;
         }

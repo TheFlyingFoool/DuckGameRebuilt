@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class FlamethrowerVessel : GunVessel
     {

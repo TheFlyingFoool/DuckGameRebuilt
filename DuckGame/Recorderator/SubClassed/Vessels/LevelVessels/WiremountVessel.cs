@@ -38,7 +38,7 @@ namespace DuckGame
         {
             WireMount w = (WireMount)t;
 
-            if (w._containedThing != null && Corderator.instance.somethingMap.Contains(w._containedThing))
+            if (w._containedThing != null && Corderator.instance != null && Corderator.instance.somethingMap.Contains(w._containedThing))
             {
                 int i = Corderator.instance.somethingMap[w._containedThing];
                 addVal("holding", (ushort)(i + 1));

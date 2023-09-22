@@ -45,10 +45,17 @@ namespace DuckGame
             cd.PlayingThatShitBack = true;
             cd.cFrame = -1;
 
+
+            int cPos = b.position;
+
             cd.maxFrame = b.ReadInt();
             cd.gamemodeStarted = b.ReadInt();
 
             BitBuffer levBuffer = new BitBuffer(b.ReadBytes());
+
+            DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Level size:" + (b.position - cPos));
+            cPos = b.position;
+
             #region WOW
             byte xd = b.ReadByte();
             byte xd2 = b.ReadByte();
@@ -126,6 +133,8 @@ namespace DuckGame
                 CustomBackground3.customBackground03 = s1;
                 Custom.ApplyCustomData(new CustomTileData() { path = s1, texture = Editor.StringToTexture(s2) }, 2, CustomType.Background);
             }
+            DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Custom texture size:" + (b.position - cPos));
+            cPos = b.position;
             #endregion
             Level.current = new ReplayLevel() { CCorderr = cd };
             (Level.current as ReplayLevel).DeserializeLevel(levBuffer);
@@ -140,23 +149,29 @@ namespace DuckGame
                 byte bo = b.ReadByte();
                 BitArray b_array = new BitArray(new byte[] { bo });
 
-                if (!b_array[0]) lastV = b.ReadVec2();
-                if (!b_array[1]) lastV2 = b.ReadVec2();
+                if (!b_array[0]) lastV = CompressedVec2Binding.GetUncompressedVec2(b.ReadInt(), 10000);
+                if (!b_array[1]) lastV2 = CompressedVec2Binding.GetUncompressedVec2(b.ReadInt(), 10000);
                 cd.camPos.Add(lastV);
                 cd.camSize.Add(lastV2);
             }
+            DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Camera buffer size:" + (b.position - cPos));
+            cPos = b.position;
 
             iters = b.ReadInt();
             for (int i = 0; i < iters; i++)
             {
                 SomethingSomethingVessel.FirstDeser = true;
                 SomethingSomethingVessel deserialized = SomethingSomethingVessel.RCDeserialize(new BitBuffer(b.ReadBytes()));
+
+
                 if (deserialized == null)
                 {
                     continue;
                 }
                 cd.somethings.Add(deserialized);
             }
+            DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Something vessel size:" + (b.position - cPos));
+            cPos = b.position;
 
             iters = b.ReadInt();
             for (int i = 0; i < iters; i++)
@@ -172,6 +187,8 @@ namespace DuckGame
                 }
                 cd.SFXToPlaySave.Add(i, sd);
             }
+            DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Sound buffer size:" + (b.position - cPos));
+            cPos = b.position;
 
             iters = b.ReadInt();
             for (int i = 0; i < iters; i++)
@@ -185,6 +202,7 @@ namespace DuckGame
                 }
                 cd.BlocksBroken.Add(new BlockbreakData(frame, data));
             }
+            DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Misc buffer size:" + (b.position - cPos));
 
             Main.SpecialCode = "Outside of recorderator load stuff";
             instance = cd;
@@ -306,6 +324,7 @@ namespace DuckGame
                 else if (s is UpSign) write = 27;
                 else if (s is VeryHardSign) write = 28;
                 else if (s is WaterCooler) write = 29;
+                else if (s is Altar) write = 30;
                 //else if (s is ArcadeFrame) levBuffer.Write((byte)14);
                 else levBuffer.Write((byte)255);
                 levBuffer.Write(write);
@@ -356,6 +375,9 @@ namespace DuckGame
                     case Spikes:
                     case Spring:
                         levBuffer.Write((byte)0);
+                        break;
+                    case Altar:
+                        levBuffer.Write((byte)((Altar)s).wide);
                         break;
                     default:
                         if (write > 18 && write < 29)
@@ -563,8 +585,8 @@ namespace DuckGame
                 if (v2.y < -500000) br[1] = true;
                 buffer.Write(BitCrusher.BitArrayToByte(br));
 
-                if (!br[0]) buffer.Write(v1);
-                if (!br[1]) buffer.Write(v2);
+                if (!br[0]) buffer.Write(CompressedVec2Binding.GetCompressedVec2(v1, 10000));
+                if (!br[1]) buffer.Write(CompressedVec2Binding.GetCompressedVec2(v2, 10000));
             }
 
             bool isThisReplayBroken = false;
@@ -770,7 +792,7 @@ namespace DuckGame
                         {
                             TheThings.Add(th);
                         }
-                        else if (th is Saws || th is Spikes || th is Spring || th is ArcadeLight || th is PyramidLightRoof || th is PyramidWallLight || th is Bulb || th is HangingCityLight || th is Lamp || th is OfficeLight || th is WallLightRight || th is Sun || th is ArcadeTableLight || th is OfficeLight || th is WallLightLeft || th is FishinSign || th is MallardBillboard || th is ClippingSign || th is StreetLight || th is PyramidBLight || th is TroubleLight || th is RaceSign || th is ArrowSign || th is DangerSign || th is EasySign || th is HardLeft || th is UpSign || th is VeryHardSign || th is WaterCooler) theLevelDetailsETC.Add(th);
+                        else if (th is Saws || th is Spikes || th is Spring || th is ArcadeLight || th is PyramidLightRoof || th is PyramidWallLight || th is Bulb || th is HangingCityLight || th is Lamp || th is OfficeLight || th is WallLightRight || th is Sun || th is ArcadeTableLight || th is OfficeLight || th is WallLightLeft || th is FishinSign || th is MallardBillboard || th is ClippingSign || th is StreetLight || th is PyramidBLight || th is TroubleLight || th is RaceSign || th is ArrowSign || th is DangerSign || th is EasySign || th is HardLeft || th is UpSign || th is VeryHardSign || th is WaterCooler || th is Altar) theLevelDetailsETC.Add(th);
                         else if (th is PipeTileset pt) Pipes.Add(pt);
                         else if (th is Teleporter t) Teleporters.Add(t);
                         else if (th is AutoBlock bb)
