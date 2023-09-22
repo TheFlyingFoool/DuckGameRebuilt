@@ -446,7 +446,7 @@ namespace DuckGame
                 if (!flag && heat < 0f)
                     heat = 0f;
             }
-            if (val <= 0f)
+            if (val <= 0f || Recorderator.Playing)
                 return;
             HeatUp(location);
         }

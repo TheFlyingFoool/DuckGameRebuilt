@@ -6,11 +6,12 @@ namespace DuckGame
     {
         public ItemBoxVessel(Thing th) : base(th)
         {
-            somethingCrash = "???";
             tatchedTo.Add(typeof(ItemBox));
             tatchedTo.Add(typeof(ItemBoxOneTime));
             tatchedTo.Add(typeof(ItemBoxRandom));
             tatchedTo.Add(typeof(PurpleBlock));
+            //tatchedTo.Add(typeof(TapeBlock)); idk about that yet
+            tatchedTo.Add(typeof(PinkBox));
 
             AddSynncl("containing", new SomethingSync(typeof(ushort)));
             AddSynncl("position", new SomethingSync(typeof(int)));
@@ -34,7 +35,6 @@ namespace DuckGame
         }
         public override BitBuffer RecSerialize(BitBuffer prevBuffer)
         {
-            //can optimize this to a single byte because theres only a few itembox types
             prevBuffer.Write(Editor.IDToType[t.GetType()]);
             return prevBuffer;
         }

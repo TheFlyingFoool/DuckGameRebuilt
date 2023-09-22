@@ -851,6 +851,7 @@ namespace DuckGame
         {
             bool currentlyShadering = false;
 
+            bool cameraD = false;
             List<FluidPuddle> lavaPuddles = new List<FluidPuddle>();
             if (DGRSettings.HeatWaveMultiplier > 0) //so theres kind of a mess here, but this is for wobbly shader lava effect :)
             {
@@ -870,6 +871,12 @@ namespace DuckGame
                     if (rd2 != null) rd2.Dispose();
                     int width = (int)Resolution._device.PreferredBackBufferWidth;
                     int height = (int)Resolution._device.PreferredBackBufferHeight;
+
+                    if (Math.Abs(((float)width / (float)height) - camera.aspect) > 0.01f)
+                    {
+                        cameraD = true;
+                        height = (int)(width / camera.aspect) + 1;
+                    }
 
                     Layer.Console.visible = false;
                     rd2 = new RenderTarget2D(width, height);
@@ -932,7 +939,7 @@ namespace DuckGame
             if (currentlyShadering)
             {
 
-                Graphics.SettingForShader = true;
+                if (!cameraD) Graphics.SettingForShader = true;
                 Graphics.SetRenderTarget(null);
                 Graphics.SettingForShader = false;
 
@@ -944,7 +951,15 @@ namespace DuckGame
                     RenderTarget2D rd3 = null;
                     if (multiLayering && i != lavaPuddles.Count - 1)
                     {
-                        rd3 = new RenderTarget2D(Graphics.viewport.Width, Graphics.viewport.Height);
+                        int width = (int)Resolution._device.PreferredBackBufferWidth;
+                        int height = (int)Resolution._device.PreferredBackBufferHeight;
+                        if (Math.Abs(((float)width / (float)height) - camera.aspect) > 0.01f)
+                        {
+                            cameraD = true;
+                            height = (int)(width / camera.aspect) + 1;
+                        }
+                        rd3 = new RenderTarget2D(width, height);
+
                         dispose.Add(rd3);
                         Graphics.SettingForShader = true;
                         Graphics.SetRenderTarget(rd3);
@@ -952,13 +967,18 @@ namespace DuckGame
                     }
 
                     Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Matrix.CreateScale(1, 1, 1));
-                    Graphics.Clear(Color.Black);
+                    Graphics.Clear(backgroundColor);
 #if DEBUG
                     if (!Network.isActive)
                     {
                         Graphics.DrawString("this stuff only shows in debug builds and offline -NiK0", new Vec2(0, 0), Color.White, 1, null, 2);
                         Graphics.DrawString(Resolution.size.ToString(), new Vec2(0, 16), Color.White, 1, null, 2);
                         Graphics.DrawString(Resolution.current.dimensions.ToString(), new Vec2(0, 32), Color.White, 1, null, 2);
+                        Graphics.DrawString(Graphics._screenViewport.Value.Bounds.ToString(), new Vec2(0, 48), Color.White, 1, null, 2);
+                        int width = (int)Resolution._device.PreferredBackBufferWidth;
+                        int height = (int)Resolution._device.PreferredBackBufferHeight;
+                        Graphics.DrawString($"{width}:{height} didRSVP:{cameraD}", new Vec2(0, 64), Color.White, 1, null, 2);
+
                     }
 #endif
                     Graphics.material = lavaPuddles[i].mt;
@@ -967,7 +987,7 @@ namespace DuckGame
                     Graphics.screen.End();
                     if (multiLayering)
                     {
-                        Graphics.SettingForShader = true;
+                        if (!cameraD) Graphics.SettingForShader = true;
                         Graphics.SetRenderTarget(null);
                         Graphics.SettingForShader = true;
                         rd2 = rd3;

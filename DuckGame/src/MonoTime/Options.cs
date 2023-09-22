@@ -362,6 +362,11 @@ namespace DuckGame
                 dgrDescription = "WARNING This may be highly unstable but it'll make it so online physics apply while testing levels in the editor (Ragdoll rng, etc)"
             });
 
+            menu.Add(new UIMenuItemToggle("Test Timer", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.EditorTimer)))
+            {
+                dgrDescription = "Displays a timer of how much time the current level has been running for while testing it in the editor"
+            });
+
             menu.Add(new UIMenuItemToggle("Instructions", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.EditorInstructions)))
             {
                 dgrDescription = "Displays real-time instructions on how to operate the editor. You might not need them anymore if you're already familiar with everything"
@@ -371,6 +376,7 @@ namespace DuckGame
             {
                 dgrDescription = "Displays current level name at top left of the screen"
             });
+            //EditorTimer
 
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using NAudio.MediaFoundation;
+using System.Collections;
 
 namespace DuckGame
 {
@@ -40,7 +41,6 @@ namespace DuckGame
         }
         public override void RecordUpdate()
         {
-            //same shenaningans as the windowvessel one happened here
             DeathCrate d = (DeathCrate)t;
             int z = ((SpriteMap)d.graphic).imageIndex;
 
@@ -58,7 +58,6 @@ namespace DuckGame
             h.grounded = br[2];
             h.solid = br[3];
             h.sleeping = br[4];*/
-            addVal("frame", BitCrusher.BitArrayToByte(br));
 
             base.RecordUpdate();
         }

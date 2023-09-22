@@ -1,10 +1,10 @@
 ﻿namespace DuckGame
 {
     [ClientOnly]
-#if DEBUG
+    #if DEBUG
     [EditorGroup("Rebuilt|DEV")]
     [BaggedProperty("canSpawn", false)]
-#endif
+    #endif
     public class LutalliGun : Gun
     {
         public SpriteMap sprite;

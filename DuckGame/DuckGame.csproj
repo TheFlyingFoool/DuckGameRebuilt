@@ -446,6 +446,9 @@
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\SpikeHelmVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\BootsVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\ChestplateVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\FlamethrowerVessel - Copy.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\CampingRifleVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\PositronShooterVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\ChainsawVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\BananaVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\EnergyscimitarVessel.cs" />
@@ -471,9 +474,13 @@
     <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\FluidPuddleVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\DoorVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\ItemBoxVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\WireButtonVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\WiremountVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\WindowVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\DuckVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\EquipmentVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\ExtinguisherSmokeVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\SmallFireVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\FlareVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\TrappedDuckVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\ForceWaveVessel.cs" />

@@ -14,6 +14,7 @@ namespace DuckGame
             tatchedTo.Add(typeof(GrenadeBullet));
             tatchedTo.Add(typeof(LaserBullet));
             tatchedTo.Add(typeof(PelletBullet));
+            tatchedTo.Add(typeof(LaserBulletOrange));
             Bullet b = (Bullet)th;
             if (b != null)
             {
@@ -24,6 +25,8 @@ namespace DuckGame
                 rangfe = b.range;
                 penetration = b.ammo.penetration;
                 speedo = b.ammo.bulletSpeed;
+                thickness = b.ammo.bulletThickness;
+                ACCURACY = b.ammo.accuracy;
                 if (doDestroy) b.active = false;
             }
         }
@@ -33,6 +36,8 @@ namespace DuckGame
         public float rangfe;
         public float penetration;
         public float speedo;
+        public float thickness;
+        public float ACCURACY;
 
         private int wowownerd;
         public override void OnAdd()
@@ -58,9 +63,13 @@ namespace DuckGame
             rangfe = b.ReadFloat();
             penetration = b.ReadFloat();
             speedo = b.ReadFloat();
+            thickness = b.ReadFloat();
+            ACCURACY = b.ReadFloat();
             at.range = rangfe;
             at.penetration = penetration;
             at.bulletSpeed = speedo;
+            at.bulletThickness = thickness;
+            at.accuracy = ACCURACY;
             int z = b.ReadUShort() - 1;
             
             BulletVessel vb;
@@ -89,6 +98,8 @@ namespace DuckGame
             prevBuffer.Write(rangfe);
             prevBuffer.Write(penetration);
             prevBuffer.Write(speedo);
+            prevBuffer.Write(thickness);
+            prevBuffer.Write(ACCURACY);
             //owner cant even exist
             if (owned != null && Corderator.instance.somethingMap.Contains(owned)) prevBuffer.Write((ushort)(Corderator.instance.somethingMap[owned] + 1));
             else prevBuffer.Write((ushort)0);

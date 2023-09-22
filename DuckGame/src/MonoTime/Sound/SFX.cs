@@ -161,6 +161,7 @@ namespace DuckGame
                 {
                     Sound s = _playedThisFrame[i];
                     if (s.saveToRecording) ls.Add(new SoundData(SoundHash(s.name), s.Volume, s.Pitch));
+                    s.saveToRecording = true;
                 }
                 if (Corderator.instance.toAddThisFrame.Count > 0) Corderator.instance.toAddThisFrame.AddRange(ls);
                 else Corderator.instance.toAddThisFrame = ls;
@@ -231,8 +232,11 @@ namespace DuckGame
                         sound1.Play();
                         if (!Recorderator.Playing)
                         {
-                            sound1.saveToRecording = DontSave == 0;
-                            if (DontSave > 0) DontSave--;
+                            if (!sound1.saveToRecording)
+                            {
+                                sound1.saveToRecording = DontSave == 0;
+                                if (DontSave > 0) DontSave--;
+                            }
                         }
                         _playedThisFrame.Add(sound1);
                     }

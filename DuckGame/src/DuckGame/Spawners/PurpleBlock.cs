@@ -90,6 +90,11 @@ namespace DuckGame
 
         public static void StoreItem(Profile p, Thing t)
         {
+            if (Recorderator.Playing)
+            {
+                SFX.Play("scanBeep");
+                return;
+            }
             switch (t)
             {
                 case RagdollPart _:

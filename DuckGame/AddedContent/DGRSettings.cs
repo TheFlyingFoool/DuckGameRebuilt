@@ -184,8 +184,7 @@ namespace DuckGame
 
         [AutoConfigField] public static bool FasterLoad = false;
 
-        public static bool
-            LoaderMusic; //this is so you wont crash immediately when changing the setting, this only gets set on startup -NiK0
+        public static bool LoaderMusic; //this is so you wont crash immediately when changing the setting, only gets set on startup -NiK0
 
         [AutoConfigField] public static bool DGRItems = false;
 
@@ -194,7 +193,7 @@ namespace DuckGame
         [AutoConfigField] public static bool PreloadLevels;
 
         [AutoConfigField]
-        public static bool SortLevels = true; //do you care about levels being sorted? no? turn this the fuck off for faster load times -NiK0
+        public static bool SortLevels = true; //do you care about levels being sorted? no? turn this off for faster load times -NiK0
 
         //[AutoConfigField] nvm im not smart enough for async stuff -NiK0
         //public static bool ThreadedLevelLoading = true;
@@ -202,6 +201,8 @@ namespace DuckGame
         [AutoConfigField] public static bool SpriteAtlas = true;
 
         [AutoConfigField] public static bool S_RPC = true;
+
+        [AutoConfigField] public static bool EditorTimer = true;
 
         public static bool RPC
         {

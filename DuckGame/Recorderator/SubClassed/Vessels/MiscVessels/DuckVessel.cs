@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame
@@ -40,8 +41,22 @@ namespace DuckGame
             byte persona = b.ReadByte();
             string pName = b.ReadString();
             ID = b.ReadULong();
+            ushort ush = b.ReadUShort();
             p = new Profile(pName, null, null, Persona.all.ElementAt(persona));
             DuckVessel dv = new DuckVessel(new Duck(0, -2000, p) { invincible = true }) { p = p };
+            for (int i = 0; i < ush; i++)
+            {
+                int z = b.ReadInt();
+                BitBuffer bf = b.ReadBitBuffer(false);
+                bf.position = 0;
+
+                StoredItem storedItem = new StoredItem();
+                BinaryClassChunk bChunk = BinaryClassChunk.FromData<BinaryClassChunk>(bf);
+                storedItem.serializedData = bChunk;
+                storedItem.thing = LoadThing(bChunk);
+
+                dv.changesInPB.Add(z, storedItem);
+            }
             return dv;
         }
         public override BitBuffer RecSerialize(BitBuffer prevBuffer)
@@ -49,9 +64,14 @@ namespace DuckGame
             prevBuffer.Write((byte)((Duck)t).persona.index);
             prevBuffer.Write(((Duck)t).profile.name);
             prevBuffer.Write(((Duck)t).profile.steamID);
+            prevBuffer.Write((ushort)changesInPB.Count);
+            for (int i = 0; i < changesInPB.Count; i++)
+            {
+                prevBuffer.Write(changesInPB.ElementAt(i).Key);
+                prevBuffer.Write(changesInPB.ElementAt(i).Value.serializedData.GetData());
+            }
             return prevBuffer;
         }
-        public int prevNetOwner;
         public int lastObj;
         public Holdable lastHold;
         public Profile p;
@@ -86,11 +106,11 @@ namespace DuckGame
         {
             if (playBack && Corderator.instance != null)
             {
-                if (Corderator.instance.cFrame < 160 && p != null)
-                {
-                    string z = Program.RemoveColorTags(p.name);
-                    Graphics.DrawStringOutline(z, new Vec2(t.x - z.Length * 4, t.top - 8), p.persona.colorUsable, Color.Black, 1);
-                }
+                //if (Corderator.instance.cFrame < 160 && p != null)
+                //{
+                //    string z = Program.RemoveColorTags(p.name);
+                //    Graphics.DrawStringOutline(z, new Vec2(t.x - z.Length * 4, t.top - 8), p.persona.colorUsable, Color.Black, 1);
+                //}
                 if (Keyboard.Down(Keys.LeftShift))
                 {
                     string inputstring = "";
@@ -138,13 +158,22 @@ namespace DuckGame
             }
             base.Draw();
         }
+
+        public int pbIndex;
         public override void PlaybackUpdate()
         {
             Duck d = (Duck)t;
+            if (changesInPB.Count > pbIndex && changesInPB.ElementAt(pbIndex).Key <= exFrames)
+            {
+                StoredItem st = changesInPB.ElementAt(pbIndex).Value;
+                if (Level.core._storedItems.ContainsKey(d.profile)) Level.core._storedItems[d.profile] = st;
+                else Level.core._storedItems.Add(d.profile, st);
+                pbIndex++;
+            }
             d.position = CompressedVec2Binding.GetUncompressedVec2((int)valOf("position"), 10000);
             byte b = (byte)valOf("infoed");
             ushort z = (ushort)valOf("input");
-            d.holdAngleOff = Maths.DegToRad(BitCrusher.UShortToFloat((ushort)valOf("holdang"), 360));
+            d.holdAngleOff = Maths.DegToRad(BitCrusher.UShortToFloat((ushort)valOf("holdang"), 720) - 360);
             int hObj = (ushort)valOf("hold") - 1;
             Vec6 v6 = (Vec6)valOf("rpos");
             //Vec2 tPos = (Vec2)valOf("trappedpos");
@@ -299,6 +328,19 @@ namespace DuckGame
                 d.visible = true;
             }
 
+            bool val = (z & 2048) > 0;
+            if (val && !d.localSpawnVisible)
+            {
+                Vec3 color = d.profile.persona.color;
+                Level.Add(new SpawnLine(d.x, d.y, 0, 0f, new Color((int)color.x, (int)color.y, (int)color.z), 32f));
+                Level.Add(new SpawnLine(d.x, d.y, 0, -4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
+                Level.Add(new SpawnLine(d.x, d.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
+                Level.Add(new SpawnAimer(d.x, d.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), d.persona, 4f));
+                SFX.Play("pullPin", 0.7f);
+            }
+            d.localSpawnVisible = val;
+            
+
             if (d.ragdoll != null)
             {
                 d.ragdoll.inSleepingBag = (z & 1024) > 0;
@@ -329,6 +371,9 @@ namespace DuckGame
 
             base.PlaybackUpdate();
         }
+        public StoredItem sd;
+
+        public Dictionary<int, StoredItem> changesInPB = new Dictionary<int, StoredItem>();
         public override void RecordUpdate()
         {
             Duck d = (Duck)t;
@@ -339,6 +384,19 @@ namespace DuckGame
                 DevConsole.Log("|RED|RECORDERATOR WENT INCREDIBLY WRONG!!");
                 return;
             }
+
+            StoredItem rsd = PurpleBlock.GetStoredItem(d.profile);
+            if (rsd != null && rsd.serializedData != null)
+            {
+                if (sd == null || rsd.serializedData != sd.serializedData)
+                {
+                    StoredItem STOARD = new StoredItem();
+                    STOARD.serializedData = BinaryClassChunk.FromData<BinaryClassChunk>(rsd.serializedData.GetData());
+                    changesInPB.Add(exFrames, STOARD);
+                }
+                sd = new StoredItem() { serializedData = rsd.serializedData };
+            }
+
             addVal("position", CompressedVec2Binding.GetCompressedVec2(d.position, 10000));
             BitArray b_ARR = new BitArray(8);
             int z = d.spriteImageIndex;
@@ -443,10 +501,12 @@ namespace DuckGame
 
             Main.SpecialCode = "coded 1-comic";
             float f = Maths.RadToDeg(d.holdAngleOff) % 360;
-            addVal("holdang", BitCrusher.FloatToUShort(f, 360));
+            addVal("holdang", BitCrusher.FloatToUShort(f + 360, 720));
 
             Main.SpecialCode = "coded 2-comic";
             ushort value = 0;
+
+            if (d.localSpawnVisible) value |= 2048;
             if (d._ragdollInstance != null && d._ragdollInstance.inSleepingBag) value |= 1024;
             Main.SpecialCode = "coded 3-comic";
             if (d.inputProfile.Down("STRAFE") || d.inputProfile.Pressed("STRAFE")) value |= 512;
@@ -464,6 +524,7 @@ namespace DuckGame
             Vec2 vc = d.tounge;
             if (d.ragdoll != null && d.ragdoll.tongueStuckThing != null) vc = d.ragdoll.tongueStuck;
             addVal("tongue", CompressedVec2Binding.GetCompressedVec2(vc, 10000));
+            Main.SpecialCode = "not in 3-comic";
         }
     }
 }

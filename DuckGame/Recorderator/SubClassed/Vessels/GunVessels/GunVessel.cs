@@ -12,7 +12,6 @@ namespace DuckGame
     {
         public GunVessel(Thing th) : base(th)
         {
-            AddSynncl("angledeg", new SomethingSync(typeof(ushort)));
             AddSynncl("infoed_g", new SomethingSync(typeof(byte)));
         }
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
@@ -44,7 +43,6 @@ namespace DuckGame
                 if (g.owner != null) g.depth = g.owner.depth + 10;
                 else g.depth = -0.1f;
             }
-            if (syncled.ContainsKey("angledeg")) g.angleDegrees = BitCrusher.UShortToFloat((ushort)valOf("angledeg"), 360);
             if (syncled.ContainsKey("infoed_g"))
             {
                 byte z = (byte)valOf("infoed_g");//lol? nvm it isn't as bad as it was before but imagine bad code being here ok?
@@ -70,8 +68,6 @@ namespace DuckGame
         public override void RecordUpdate()
         {
             Gun g = (Gun)t;
-            float f = g.angleDegrees % 360;
-            addVal("angledeg", BitCrusher.FloatToUShort(f, 360));
             BitArray array_o_bits = new BitArray(8);
 
             int w = Maths.Clamp(g.ammo, 0, 125) + 1;

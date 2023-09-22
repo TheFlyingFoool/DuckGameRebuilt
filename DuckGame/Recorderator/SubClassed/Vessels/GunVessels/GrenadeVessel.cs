@@ -11,18 +11,46 @@ namespace DuckGame
             RemoveSynncl("infoed_h");
             AddSynncl("infoed", new SomethingSync(typeof(byte)));
         }
+        public int explodeFrame = -1;
+        public Vec2 v;
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
             GrenadeVessel v = new GrenadeVessel(new Grenade(0, -2000));
+            v.explodeFrame = b.ReadInt();
+            if (v.explodeFrame != -1)
+            {
+                v.v = b.ReadVec2();
+            }
             return v;
         }
         public override BitBuffer RecSerialize(BitBuffer prevBuffer)
         {
+            prevBuffer.Write(explodeFrame);
+            if (explodeFrame != -1)
+            {
+                prevBuffer.Write(v);
+            }
             return prevBuffer;
+        }
+        public bool exploded;
+        public override void OnRemove()
+        {
+            if (explodeFrame != -1 && !exploded)
+            {
+                Grenade g = (Grenade)t;
+                g.OnNetworkBulletsFired(v);
+                exploded = true;
+            }
+            base.OnRemove();
         }
         public override void PlaybackUpdate()
         {
             Grenade g = (Grenade)t;
+            if (exFrames == explodeFrame)
+            {
+                g.OnNetworkBulletsFired(v);
+                exploded = true;
+            }
             byte infoed = (byte)valOf("infoed");
             BitArray big_boy_array = new BitArray(new byte[] { infoed });
             bool pinned = big_boy_array[0];

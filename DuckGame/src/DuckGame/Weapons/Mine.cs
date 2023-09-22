@@ -286,6 +286,11 @@ namespace DuckGame
         {
             if (blownUp)
                 return;
+            if (currentVessel != null && currentVessel is MineVessel mv && !Recorderator.Playing)
+            {
+                mv.explodeFrame = mv.exFrames;
+                mv.v = pos;
+            }
             blownUp = true;
             SFX.Play("explode");
             RumbleManager.AddRumbleEvent(pos, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));

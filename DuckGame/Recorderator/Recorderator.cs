@@ -26,9 +26,7 @@ namespace DuckGame
                 {
                     using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Read))
                     {
-                        //DevConsole.Log(Replay);
                         ZipArchiveEntry entry = archive.Entries[0];
-                        //DevConsole.Log(Replay.Split('/').Last());
                         if (entry != null)
                         {
                             using (MemoryStream extractedStream = new MemoryStream())
@@ -63,6 +61,7 @@ namespace DuckGame
         public static int ClipLength = 5;
         public static bool Playing;
         public static Map<byte, Type> autoBlockIDX = new Map<byte, Type>();
+        public static Map<byte, Type> autoTileIDX = new Map<byte, Type>();
         public static Map<byte, Type> autoPlatIDX = new Map<byte, Type>();
         public static Map<byte, Type> bgIDX = new Map<byte, Type>();
         public static Map<byte, Type> bgtileIDX = new Map<byte, Type>();
@@ -81,6 +80,13 @@ namespace DuckGame
             {
                 if (t == typeof(BlockGroup)) continue;
                 autoBlockIDX.Add(b, t);
+                b++;
+            }
+            IEnumerable<Type> atiles = Extensions.GetSubclasses(typeof(AutoTile));
+            b = 0;
+            foreach (Type t in atiles)
+            {
+                autoTileIDX.Add(b, t);
                 b++;
             }
             IEnumerable<Type> gplats = Extensions.GetSubclasses(typeof(AutoPlatform));
@@ -110,8 +116,10 @@ namespace DuckGame
                 bgtileIDX.Add(b, t);
                 b++;
             }
-            //WHEN RECORDERATOR IS NEEDED REMOVE THIS COMMENT -NiK0
-            //(typeof(Game).GetField("updateableComponents", BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic).GetValue(MonoMain.instance) as List<IUpdateable>).Add(new updateCorderator());
+            if (Program.IS_DEV_BUILD)
+            {
+                (typeof(Game).GetField("updateableComponents", BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic).GetValue(MonoMain.instance) as List<IUpdateable>).Add(new updateCorderator());
+            }
         }
         public static Recorderator instance;
         public static UIMenu CreateRecorderatorMenu(UIMenu pPrev)

@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [ClientOnly]
-#if DEBUG
+    #if DEBUG
     [EditorGroup("Rebuilt|DEV")]
     [BaggedProperty("canSpawn", false)]
-#endif
+    #endif
     public class othello7Gun : Gun
     {
         public Sprite gBaseOut;

@@ -34,7 +34,7 @@ namespace DuckGame
         public Vec2 lerpSpeed = Vec2.Zero;
         private static Map<byte, Type> _netParticleTypes = new Map<byte, Type>();
         private static byte _netParticleTypeIndex = 0;
-        protected Vec2 netLerpPosition = Vec2.Zero;
+        public Vec2 netLerpPosition = Vec2.Zero;
         public bool customGravity;
         public bool onlyDieWhenGrounded;
 

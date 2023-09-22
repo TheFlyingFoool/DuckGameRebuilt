@@ -17,6 +17,7 @@ namespace DuckGame
         protected SpriteMap _sprite;
         public Nubber _bLeftNub;
         public Nubber _bRightNub;
+        public bool corderatorIndexedthemAlready;
         public string _tileset;
         public float verticalWidth = 16f;
         public float verticalWidthThick = 16f;

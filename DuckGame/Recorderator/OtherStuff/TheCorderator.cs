@@ -5,10 +5,19 @@ using System.Linq;
 using System.Collections;
 using System.Reflection;
 using System.IO.Compression;
-using SixLabors.ImageSharp.Memory;
 
 namespace DuckGame
 {
+    public class BlockbreakData
+    {
+        public BlockbreakData(int frame, HashSet<ushort> data)
+        {
+            Frame = frame;
+            Data = data;
+        }
+        public int Frame;
+        public HashSet<ushort> Data;
+    }
     public class SoundData
     {
         public SoundData(int h, float v, float p)
@@ -37,20 +46,21 @@ namespace DuckGame
             cd.cFrame = -1;
 
             cd.maxFrame = b.ReadInt();
+            cd.gamemodeStarted = b.ReadInt();
 
             BitBuffer levBuffer = new BitBuffer(b.ReadBytes());
             #region WOW
             byte xd = b.ReadByte();
             byte xd2 = b.ReadByte();
-            BitArray WOW = new BitArray(new byte[] { xd, xd2 });
-            if (WOW[0])
+            BitArray doCustomTile = new BitArray(new byte[] { xd, xd2 });
+            if (doCustomTile[0])
             {
                 string s1 = b.ReadString();
                 string s2 = b.ReadString();
                 CustomParallax.customParallax = s1;
                 Custom.ApplyCustomData(new CustomTileData() { path = s1, texture = Editor.StringToTexture(s2) }, 0, CustomType.Parallax);
             }
-            if (WOW[1])
+            if (doCustomTile[1])
             {//bloc
                 string s1 = b.ReadString();
                 string s2 = b.ReadString();
@@ -58,7 +68,7 @@ namespace DuckGame
                 CustomTileset.customTileset01 = s1;
                 Custom.ApplyCustomData(new CustomTileData() { path = s1, texture = Editor.StringToTexture(s2) }, 0, CustomType.Block);
             }
-            if (WOW[2])
+            if (doCustomTile[2])
             {//bloc
                 string s1 = b.ReadString();
                 string s2 = b.ReadString();
@@ -66,7 +76,7 @@ namespace DuckGame
                 CustomTileset2.customTileset02 = s1;
                 Custom.ApplyCustomData(new CustomTileData() { path = s1, texture = Editor.StringToTexture(s2) }, 1, CustomType.Block);
             }
-            if (WOW[3])
+            if (doCustomTile[3])
             {//bloc
                 string s1 = b.ReadString();
                 string s2 = b.ReadString();
@@ -74,50 +84,48 @@ namespace DuckGame
                 CustomTileset3.customTileset03 = s1;
                 Custom.ApplyCustomData(new CustomTileData() { path = s1, texture = Editor.StringToTexture(s2) }, 2, CustomType.Block);
             }
-            if (WOW[4])
+            if (doCustomTile[4])
             {//plat
                 string s1 = b.ReadString();
                 string s2 = b.ReadString();
                 CustomPlatform.customPlatform01 = s1;
                 Custom.ApplyCustomData(new CustomTileData() { path = s1, texture = Editor.StringToTexture(s2) }, 0, CustomType.Platform);
             }
-            if (WOW[5])
+            if (doCustomTile[5])
             {//plat
                 string s1 = b.ReadString();
                 string s2 = b.ReadString();
                 CustomPlatform2.customPlatform02 = s1;
                 Custom.ApplyCustomData(new CustomTileData() { path = s1, texture = Editor.StringToTexture(s2) }, 1, CustomType.Platform);
             }
-            if (WOW[6])
+            if (doCustomTile[6])
             {//plat
                 string s1 = b.ReadString();
                 string s2 = b.ReadString();
                 CustomPlatform3.customPlatform03 = s1;
                 Custom.ApplyCustomData(new CustomTileData() { path = s1, texture = Editor.StringToTexture(s2) }, 2, CustomType.Platform);
             }
-            if (WOW[7])
+            if (doCustomTile[7])
             {//back
                 string s1 = b.ReadString();
                 string s2 = b.ReadString();
                 CustomBackground.customBackground01 = s1;
                 Custom.ApplyCustomData(new CustomTileData() { path = s1, texture = Editor.StringToTexture(s2) }, 0, CustomType.Background);
             }
-            if (WOW[8])
+            if (doCustomTile[8])
             {//back
                 string s1 = b.ReadString();
                 string s2 = b.ReadString();
                 CustomBackground2.customBackground02 = s1;
                 Custom.ApplyCustomData(new CustomTileData() { path = s1, texture = Editor.StringToTexture(s2) }, 1, CustomType.Background);
             }
-            if (WOW[9])
+            if (doCustomTile[9])
             {//back
                 string s1 = b.ReadString();
                 string s2 = b.ReadString();
                 CustomBackground3.customBackground03 = s1;
                 Custom.ApplyCustomData(new CustomTileData() { path = s1, texture = Editor.StringToTexture(s2) }, 2, CustomType.Background);
             }
-            DevConsole.Log("chain of wows");
-            DevConsole.Log(WOW[0] + "|" + WOW[1] + "|" + WOW[2] + "|" + WOW[3] + "|" + WOW[4] + "|" + WOW[5] + "|" + WOW[6] + "|" + WOW[7] + "|" + WOW[8] + "|" + WOW[9]);
             #endregion
             Level.current = new ReplayLevel() { CCorderr = cd };
             (Level.current as ReplayLevel).DeserializeLevel(levBuffer);
@@ -145,7 +153,6 @@ namespace DuckGame
                 SomethingSomethingVessel deserialized = SomethingSomethingVessel.RCDeserialize(new BitBuffer(b.ReadBytes()));
                 if (deserialized == null)
                 {
-                    DevConsole.Log("nulled", Color.Red);
                     continue;
                 }
                 cd.somethings.Add(deserialized);
@@ -159,14 +166,27 @@ namespace DuckGame
                 for (int x = 0; x < iters2; x++)
                 {
                     int hash = b.ReadInt();
-                    float volume = BitCrusher.UShortToFloat(b.ReadUShort(), 4);
-                    float pitch = BitCrusher.UShortToFloat(b.ReadUShort(), 10);
+                    float volume = BitCrusher.UShortToFloat(b.ReadUShort(), 8) - 4;
+                    float pitch = BitCrusher.UShortToFloat(b.ReadUShort(), 20) - 10;
                     sd.Add(new SoundData(hash, volume, pitch));
                 }
                 cd.SFXToPlaySave.Add(i, sd);
             }
 
-            Main.SpecialCode = "Out of recorderator load stuff";
+            iters = b.ReadInt();
+            for (int i = 0; i < iters; i++)
+            {
+                int frame = b.ReadInt();
+                ushort count = b.ReadUShort();
+                HashSet<ushort> data = new HashSet<ushort>();
+                for (int x = 0; x < count; x++)
+                {
+                    data.Add(b.ReadUShort());
+                }
+                cd.BlocksBroken.Add(new BlockbreakData(frame, data));
+            }
+
+            Main.SpecialCode = "Outside of recorderator load stuff";
             instance = cd;
             return cd;
         }
@@ -175,6 +195,8 @@ namespace DuckGame
         //xd 
         public List<CustomParallaxSegment> CustomParallaxSegments = new List<CustomParallaxSegment>();
         public List<AutoBlock> StartingBlocks = new List<AutoBlock>();
+        public List<BlockbreakData> BlocksBroken = new List<BlockbreakData>();
+        public List<AutoTile> StartingTiles = new List<AutoTile>();
         public List<PipeTileset> Pipes = new List<PipeTileset>();
         public List<Teleporter> Teleporters = new List<Teleporter>();
         public List<AutoPlatform> AutoPlatforms = new List<AutoPlatform>();
@@ -189,6 +211,8 @@ namespace DuckGame
             
             BitBuffer buffer = new BitBuffer();
             buffer.Write(cFrame);
+
+            buffer.Write(gamemodeStarted);
 
             Main.SpecialCode = "in lev buffer";
             BitArray array = new BitArray(16);
@@ -208,7 +232,7 @@ namespace DuckGame
             for (int i = 0; i < Pipes.Count; i++)
             {
                 PipeTileset p = Pipes[i];
-                levBuffer.Write(p.position);
+                levBuffer.Write(CompressedVec2Binding.GetCompressedVec2(p.position, 10000));
                 BitArray br = new BitArray(8);
                 int wow = 0;
                 int z = ((SpriteMap)p.graphic).imageIndex;
@@ -231,7 +255,7 @@ namespace DuckGame
             for (int i = 0; i < Teleporters.Count; i++)
             {
                 Teleporter t = Teleporters[i];
-                levBuffer.Write(t.position);
+                levBuffer.Write(CompressedVec2Binding.GetCompressedVec2(t.position, 10000));
                 BitArray br = new BitArray(16);
                 int z = t.direction;
                 int x = t.teleHeight;
@@ -344,7 +368,7 @@ namespace DuckGame
                         }
                         break;
                 }
-                levBuffer.Write(s.position);
+                levBuffer.Write(CompressedVec2Binding.GetCompressedVec2(s.position, 10000));
             }
 
             levBuffer.Write((ushort)TheThings.Count);
@@ -353,7 +377,7 @@ namespace DuckGame
                 Thing t = TheThings[i];
                 byte wow = 0;
                 switch (t.GetType().Name)
-                {
+                {//idiotic
                     case "CityWall":
                         wow = 0;
                         break;
@@ -394,7 +418,7 @@ namespace DuckGame
                 br[6] = t.flipVertical;
                 br[7] = t.flipHorizontal;
                 levBuffer.Write(BitCrusher.BitArrayToByte(br));
-                levBuffer.Write(t.position);
+                levBuffer.Write(CompressedVec2Binding.GetCompressedVec2(t.position, 10000));
             }
 
             levBuffer.Write((ushort)StartingBlocks.Count);
@@ -409,8 +433,17 @@ namespace DuckGame
                 if (xd == b1) array[1] = true;
                 else if (xd == b2) array[2] = true;
                 else if (xd == b3) array[3] = true;
-                levBuffer.Write(b.position);
+                levBuffer.Write(CompressedVec2Binding.GetCompressedVec2(b.position, 10000));
                 levBuffer.Write(Recorderator.autoBlockIDX[b.GetType()]);
+            }
+
+            levBuffer.Write((ushort)StartingTiles.Count);
+            for (int i = 0; i < StartingTiles.Count; i++)
+            {
+                AutoTile b = StartingTiles[i];
+                Type xd = b.GetType();
+                levBuffer.Write(CompressedVec2Binding.GetCompressedVec2(b.position, 10000));
+                levBuffer.Write(Recorderator.autoTileIDX[b.GetType()]);
             }
 
             levBuffer.Write((ushort)AutoPlatforms.Count);
@@ -424,7 +457,7 @@ namespace DuckGame
                 if (xd == p1) array[4] = true;
                 else if (xd == p2) array[5] = true;
                 else if (xd == p3) array[6] = true;
-                levBuffer.Write(p.position);
+                levBuffer.Write(CompressedVec2Binding.GetCompressedVec2(p.position, 10000));
                 levBuffer.Write(Recorderator.autoPlatIDX[p.GetType()]);
             }
             levBuffer.Write((ushort)BackgroundTiles.Count);
@@ -438,7 +471,7 @@ namespace DuckGame
                 if (type == cc) array[7] = true;
                 else if (type == ccTWO) array[8] = true;
                 else if (type == ccTHREE) array[9] = true;
-                levBuffer.Write(t.position);
+                levBuffer.Write(CompressedVec2Binding.GetCompressedVec2(t.position, 10000));
 
                 int w = t.frame;
                 BitArray br = new BitArray(16);
@@ -567,8 +600,24 @@ namespace DuckGame
                 {
                     SoundData s = sd[x];
                     buffer.Write(s.hash);
-                    buffer.Write(BitCrusher.FloatToUShort(s.volume, 4));
-                    buffer.Write(BitCrusher.FloatToUShort(s.pitch, 10));
+                    buffer.Write(BitCrusher.FloatToUShort(Maths.Clamp(s.volume, -4, 4) + 4, 8));
+                    buffer.Write(BitCrusher.FloatToUShort(Maths.Clamp(s.pitch, -10, 10) + 10, 20));
+                }
+            }
+
+            buffer.Write(BlocksBroken.Count);
+            for (int i = 0; i < BlocksBroken.Count; i++)
+            {
+                BlockbreakData bd = BlocksBroken[i];
+                buffer.Write(bd.Frame);
+                if (bd.Data == null) buffer.Write((ushort)0);//just in case
+                else
+                {
+                    buffer.Write((ushort)bd.Data.Count);
+                    for (int x = 0; x < bd.Data.Count; x++)
+                    {
+                        buffer.Write(bd.Data.ElementAt(x));
+                    }
                 }
             }
 
@@ -618,6 +667,7 @@ namespace DuckGame
         public int cFrame;
 
         public Dictionary<int, List<SoundData>> SFXToPlaySave = new Dictionary<int, List<SoundData>>();
+        public int gamemodeStarted = -1;
         public List<Vec2> camPos = new List<Vec2>();
         public List<Vec2> camSize = new List<Vec2>();
         public List<SomethingSomethingVessel> somethings = new List<SomethingSomethingVessel>();
@@ -630,7 +680,6 @@ namespace DuckGame
         {
             if (vessel.t == null)
             {
-                DevConsole.Log("t was null, created nilvessel");
                 if (vessel.syncled.ContainsKey("position"))
                 {
                     Level.Add(new NilVessel(vessel.syncled["position"], vessel.changeRemove, "Nulled, vessel name: " + vessel.editorName + " vessel reason:" + vessel.destroyedReason));
@@ -639,11 +688,7 @@ namespace DuckGame
                 Level.Add(new NilVessel(Vec2.Zero, "Nulled, vessel name: " + vessel.editorName + " vessel reason:" + vessel.destroyedReason));
                 return;
             }
-            if (somethingMap.Contains(vessel.t))
-            {
-                DevConsole.Log("already containted", Color.Orange);
-                return;
-            }
+            if (somethingMap.Contains(vessel.t)) return;
             if (vessel.doIndex)
             {
                 Main.SpecialCode = "ReAdding " + vessel.editorName + "\ndid it contain same index: " + somethingMap.ContainsKey(vessel.myIndex) + "\ndid it contain same thing: " + somethingMap.ContainsValue(vessel.t);
@@ -660,11 +705,7 @@ namespace DuckGame
         }
         public void MapSomeSomeVessel(SomethingSomethingVessel yes)
         {
-            if (somethingMap.Contains(yes.t))
-            {
-                DevConsole.Log("already containted", Color.Orange);
-                return;
-            }
+            if (somethingMap.Contains(yes.t)) return;
             somethings.Add(yes);
             somethingMap.Add(yes.myIndex, yes.t);
             somethingMapped.Add(yes.myIndex, yes);
@@ -679,6 +720,7 @@ namespace DuckGame
             Level.Remove(yes.t);
         }
         public static bool Paused;
+        
         public override void Update()
         {
             if (PlayingThatShitBack)
@@ -703,11 +745,14 @@ namespace DuckGame
                 }
                 else camSize.Add(v);
                 SFXToPlaySave.Add(cFrame, toAddThisFrame);
-                DevConsole.Log(toAddThisFrame.Count);
                 toAddThisFrame = new List<SoundData>();
+                if (GameMode.started && gamemodeStarted == -1)
+                {
+                    gamemodeStarted = cFrame;
+                }
                 if (cFrame == 1)
                 {
-                    List<Thing> allTheThings = Extensions.GetListOfThings<Thing>();
+                    List<Thing> allTheThings = Level.current.things.ToList();//still dumb but prolly better than what i was using before
                     for (int i = 0; i < allTheThings.Count; i++)
                     {
                         Thing th = allTheThings[i];
@@ -740,6 +785,10 @@ namespace DuckGame
                             }
                             else StartingBlocks.Add(bb);
                         }
+                        else if (th is AutoTile at)
+                        {
+                            StartingTiles.Add(at);
+                        }
                         else if (th is Holdable h)
                         {
                             if (h is IAmADuck || h is Equipment) continue;
@@ -761,6 +810,22 @@ namespace DuckGame
                     }
                     bgUPD = Level.current.FirstOfType<BackgroundUpdater>();
                 }
+                HashSet<ushort> ush = new HashSet<ushort>();
+                for (int i = 0; i < StartingBlocks.Count; i++)
+                {
+                    AutoBlock ab = StartingBlocks[i];
+                    if (ab.corderatorIndexedthemAlready) continue;
+
+                    if (ab.shouldWreck || ab.removeFromLevel)
+                    {
+                        ush.Add(ab.blockIndex);
+                        ab.corderatorIndexedthemAlready = true;
+                    }
+                }
+                if (ush.Count > 0)
+                {
+                    BlocksBroken.Add(new BlockbreakData(cFrame, ush));
+                }
                 cFrame++;
             }
             base.Update();
@@ -773,9 +838,26 @@ namespace DuckGame
                 for (int i = 0; i < sd.Count; i++)
                 {
                     SoundData s = sd[i];
-                    DevConsole.Log(s.pitch);
                     SFX.Play(s.hash, s.volume, s.pitch);
                 }
+            }
+            if (BlocksBroken.Count > 0 && BlocksBroken[0].Frame <= cFrame)
+            {
+                BlockbreakData bd = BlocksBroken[0];
+                foreach (AutoBlock autoBlock in Level.current.things[typeof(AutoBlock)])
+                {
+                    if (bd.Data.Contains(autoBlock.blockIndex))
+                    {
+                        bd.Data.Remove(autoBlock.blockIndex);
+                        autoBlock.shouldWreck = true;
+                        autoBlock.skipWreck = true;
+                        if (!autoBlock.shouldbeinupdateloop)
+                        {
+                            Level.current.AddUpdateOnce(autoBlock);
+                        }
+                    }
+                }
+                BlocksBroken.RemoveAt(0);
             }
             cFrame++;
             SFX.enabled = false;

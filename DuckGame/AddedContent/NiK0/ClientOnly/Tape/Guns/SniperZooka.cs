@@ -77,7 +77,7 @@ namespace DuckGame
             {
                 pHolster.EjectItem();
                 SFX.Play("spring", 1, Rando.Float(-0.6f, -0.4f));
-                return false;
+                return true;
             }
             return base.HolsterActivate(pHolster);
         }
@@ -98,7 +98,7 @@ namespace DuckGame
         }
         protected override void PlayFireSound()
         {
-            SFX.Play("sniper", 1, Rando.Float(-0.1f, 0.1f));//ERRRRRIIIIIIIIIIK
+            SFX.Play("sniper", 1, Rando.Float(-0.1f, 0.1f));
             base.PlayFireSound();
         }
         public override void Update()

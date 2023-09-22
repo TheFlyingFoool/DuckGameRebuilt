@@ -64,6 +64,7 @@ namespace DuckGame
         public int deleteTime = -2;
         public int exFrames;
         public int skipPositioning;
+        public int skipAngles;
         public List<Type> tatchedTo = new List<Type>();
         public Dictionary<string, SomethingSync> syncled = new Dictionary<string, SomethingSync>();
         public Map<string, byte> indexedSyncled = new Map<string, byte>();
@@ -208,12 +209,14 @@ namespace DuckGame
             typeWow.Add(typeof(Vec6), 8);
             typeWow.Add(typeof(Vec4), 9);
             typeWow.Add(typeof(BitBuffer), 10);
-            //there was a large comment here but i removed it because it was annoying
+            typeWow.Add(typeof(short), 11);
         }
         public virtual void PlaybackUpdate()
         {
             if (skipPositioning > 0) skipPositioning--;
             else skipPositioning = 0;
+            if (skipAngles > 0) skipAngles--;
+            else skipAngles = 0;
             DoUpdateThing();
         }
         public virtual void DoUpdateThing()
@@ -231,13 +234,11 @@ namespace DuckGame
         }
         public override void Update()
         {
+            if (t != null) t.currentVessel = this;
             if (playBack)
             {
                 if (Corderator.Paused) return;
                 position = t.position;
-                //this comment is irrelevant now
-                //
-                //ushorts ocuppy half the space that ints do yay!1!!!!0'!¡?!¡?
                 if (changeRemove.Count > 0)
                 {
                     bArray = new BitArray(new byte[] { changeRemove[0] });
@@ -479,6 +480,11 @@ namespace DuckGame
                             {
                                 ss.items.Add(b.ReadBitBuffer());
                             }
+                            break;
+                        }
+                    case 11:
+                        {
+                            for (int q = 0; q < x; q++) ss.items.Add(b.ReadShort());
                             break;
                         }
                 }

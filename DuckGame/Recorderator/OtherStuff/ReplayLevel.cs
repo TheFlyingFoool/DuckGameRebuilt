@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace DuckGame
 {
-    public class ReplayLevel : Level
+    public class ReplayLevel : Level, IHaveAVirtualTransition
     {
         public void DeserializeLevel(BitBuffer b)
         {
@@ -23,7 +23,7 @@ namespace DuckGame
             int x = b.ReadUShort();
             for (int i = 0; i < x; i++)
             {
-                Vec2 v = b.ReadVec2();
+                Vec2 v = CompressedVec2Binding.GetUncompressedVec2(b.ReadInt(), 10000);
                 byte shorted = b.ReadByte();
                 BitArray a = new BitArray(new byte[] { shorted });
                 PipeTileset p = null;
@@ -63,7 +63,7 @@ namespace DuckGame
             x = b.ReadUShort();
             for (int i = 0; i < x; i++)
             {
-                Vec2 v = b.ReadVec2();
+                Vec2 v = CompressedVec2Binding.GetUncompressedVec2(b.ReadInt(), 10000);
                 byte b1 = b.ReadByte();
                 byte b2 = b.ReadByte();
                 BitArray a = new BitArray(new byte[] { b1, b2 });
@@ -107,7 +107,7 @@ namespace DuckGame
                 byte bitedTHREE = b.ReadByte();
                 byte bitedTWO = b.ReadByte();
                 Main.SpecialCode2 = "btr: " + bitedTHREE + "  btwo: " + bitedTWO;
-                Vec2 v = b.ReadVec2();
+                Vec2 v = CompressedVec2Binding.GetUncompressedVec2(b.ReadInt(), 10000);
                 Thing somethingthing;
                 DevConsole.Log(bitedTHREE);
                 switch (bitedTHREE)
@@ -344,7 +344,7 @@ namespace DuckGame
                     if (br[y]) switched += divide;
                     divide /= 2;
                 }
-                Vec2 v = b.ReadVec2();
+                Vec2 v = CompressedVec2Binding.GetUncompressedVec2(b.ReadInt(), 10000);
                 Thing t;
                 switch (switched)
                 {
@@ -393,7 +393,7 @@ namespace DuckGame
             for (int i = 0; i < x; i++)
             {
                 //DevConsole.Log("chocoloate ", Color.Blue);
-                Vec2 v = b.ReadVec2();
+                Vec2 v = CompressedVec2Binding.GetUncompressedVec2(b.ReadInt(), 10000);
                 byte bote = b.ReadByte();
 
                 AutoBlock bb = (AutoBlock)Editor.CreateThing(Recorderator.autoBlockIDX[bote]);
@@ -405,11 +405,24 @@ namespace DuckGame
                 reAdd.Add(bb);
             }
 
+            Main.SpecialCode = "tile s";
+            x = b.ReadUShort();
+            for (int i = 0; i < x; i++)
+            {
+                Vec2 v = CompressedVec2Binding.GetUncompressedVec2(b.ReadInt(), 10000);
+                byte bote = b.ReadByte();
+
+                AutoTile bb = (AutoTile)Editor.CreateThing(Recorderator.autoTileIDX[bote]);
+                bb.position = v;
+
+                reAdd.Add(bb);
+            }
+
             Main.SpecialCode = "platform s";
             x = b.ReadUShort();
             for (int i = 0; i < x; i++)
             {
-                Vec2 v = b.ReadVec2();
+                Vec2 v = CompressedVec2Binding.GetUncompressedVec2(b.ReadInt(), 10000);
                 byte bote = b.ReadByte();
 
                 AutoPlatform pp = (AutoPlatform)Editor.CreateThing(Recorderator.autoPlatIDX[bote]);
@@ -425,7 +438,7 @@ namespace DuckGame
             for (int i = 0; i < x; i++)
             {
                 Main.SpecialCode2 = "posRead";
-                Vec2 position = b.ReadVec2();
+                Vec2 position = CompressedVec2Binding.GetUncompressedVec2(b.ReadInt(), 10000);
                 Main.SpecialCode2 = "FrameRead";
                 ushort Frame = b.ReadUShort();
                 Main.SpecialCode2 = "bgTileIndex Read";
@@ -460,16 +473,14 @@ namespace DuckGame
         public override void Update()
         {
             Recorderator.Playing = true;
-            if (Input.Pressed("START", "Any"))
-            {
-                //do gui stuff
-            }
             if (CCorderr.cFrame == 0)
             {
                 List<AutoBlock> autoBlocks = Extensions.GetListOfThings<AutoBlock>();
                 for (int i = 0; i < autoBlocks.Count; i++) autoBlocks[i].PlaceBlock();
                 List<AutoPlatform> autoPlatforms = Extensions.GetListOfThings<AutoPlatform>();
                 for (int i = 0; i < autoPlatforms.Count; i++) autoPlatforms[i].PlaceBlock();
+                List<AutoTile> autoTiles = Extensions.GetListOfThings<AutoTile>();
+                for (int i = 0; i < autoTiles.Count; i++) autoTiles[i].PlaceBlock();
             }
             base.Update();
         }

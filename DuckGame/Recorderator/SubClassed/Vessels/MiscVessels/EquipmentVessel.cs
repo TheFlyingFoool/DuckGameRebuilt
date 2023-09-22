@@ -49,7 +49,7 @@ namespace DuckGame
             //look into the future to see if you're gonna be equipped in the next frame so you can skip positioning
             if (syncled["equipped"].Count > 1 && (ushort)syncled["equipped"][1] != 0 && bArray[2]) skipPositioning = 1;
 
-            e.angleDegrees = BitCrusher.UShortToFloat((ushort)valOf("ang"), 360);
+            e.angleDegrees = BitCrusher.UShortToFloat((ushort)valOf("ang"), 720) - 360;
             base.PlaybackUpdate();
             if (smoek)
             {
@@ -62,16 +62,12 @@ namespace DuckGame
             Equipment e = (Equipment)t;
             if (e._equippedDuck != null)
             {
-                if (Corderator.instance.somethingMap.Contains(e._equippedDuck))
-                {
-                    addVal("equipped", (ushort)(Corderator.instance.somethingMap[e._equippedDuck] + 1));
-                }
+                if (Corderator.instance.somethingMap.Contains(e._equippedDuck)) addVal("equipped", (ushort)(Corderator.instance.somethingMap[e._equippedDuck] + 1));
                 else addVal("equipped", (ushort)0);
-                //skipPositioning = 1; ??? DUMBASS????'
             }
             else addVal("equipped", (ushort)0);
             float f = e.angleDegrees % 360;
-            addVal("ang", BitCrusher.FloatToUShort(f, 360));
+            if (skipAngles == 0) addVal("ang", BitCrusher.FloatToUShort(f + 360, 720));
             base.RecordUpdate();
         }
     }

@@ -16,6 +16,17 @@ namespace DuckGame
         private SpriteMap _sprite;
         private SpriteMap _sledgeSwing;
         private Vec2 _offset;
+        public float swing
+        {
+            get
+            {
+                return _swing;
+            }
+            set
+            {
+                _swing = value;
+            }
+        }
         private float _swing;
         private float _swingLast;
         private float _swingVelocity;

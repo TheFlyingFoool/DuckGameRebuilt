@@ -14,15 +14,43 @@ namespace DuckGame
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
             MineVessel v = new MineVessel(new Mine(0, -2000));
+            v.explodeFrame = b.ReadInt();
+            if (v.explodeFrame != -1)
+            {
+                v.v = b.ReadVec2();
+            }
             return v;
         }
         public override BitBuffer RecSerialize(BitBuffer prevBuffer)
         {
+            prevBuffer.Write(explodeFrame);
+            if (explodeFrame != -1)
+            {
+                prevBuffer.Write(v);
+            }
             return prevBuffer;
+        }
+        public int explodeFrame = -1;
+        public Vec2 v;
+        public bool exploded;
+        public override void OnRemove()
+        {
+            if (explodeFrame != -1 && !exploded)
+            {
+                Mine m = (Mine)t;
+                m.OnNetworkBulletsFired(v);
+                exploded = true;
+            }
+            base.OnRemove();
         }
         public override void PlaybackUpdate()
         {
             Mine m = (Mine)t;
+            if (exFrames == explodeFrame)
+            {
+                m.OnNetworkBulletsFired(v);
+                exploded = true;
+            }
             byte inFoed = (byte)valOf("infoed");
             BitArray br = new BitArray(new byte[] { inFoed });
             bool pinned = br[0];

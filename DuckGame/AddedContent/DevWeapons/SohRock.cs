@@ -3,10 +3,10 @@
 namespace DuckGame
 {
     [ClientOnly]
-#if DEBUG
+    #if DEBUG
     [EditorGroup("Rebuilt|DEV")]
     [BaggedProperty("canSpawn", false)]
-#endif
+    #endif
     public class SohRock : Rock
     {
         public SohRock(float xpos,float ypos) : base(xpos, ypos)

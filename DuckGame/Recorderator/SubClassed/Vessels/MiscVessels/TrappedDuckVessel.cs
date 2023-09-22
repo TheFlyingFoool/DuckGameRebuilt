@@ -41,7 +41,6 @@ namespace DuckGame
                 if (td._duckOwner != null) td._duckOwner._trapped = null;
                 td._duckOwner = null;
             }
-
             base.PlaybackUpdate();
         }
         public override void RecordUpdate()
@@ -49,7 +48,7 @@ namespace DuckGame
             TrappedDuck td = (TrappedDuck)t;
             addVal("traptime", BitCrusher.FloatToByte(td._trapTime, 1));
             addVal("shake", BitCrusher.FloatToByte(td._shakeMult, 1));
-            if (td._duckOwner != null && Corderator.instance.somethingMap.Contains(td._duckOwner) && td.y > -9000) addVal("owner", (ushort)(Corderator.instance.somethingMap[td._duckOwner] + 1));
+            if (td._duckOwner != null && Corderator.instance != null && Corderator.instance.somethingMap.Contains(td._duckOwner) && td.y > -9000) addVal("owner", (ushort)(Corderator.instance.somethingMap[td._duckOwner] + 1));
             else addVal("owner", (ushort)0);
             base.RecordUpdate();
         }

@@ -185,9 +185,22 @@ namespace DuckGame
                 _started = false;
             }
         }
-
+        public int playtestTime;
+        public override void PostDrawLayer(Layer layer)
+        {
+            if (DGRSettings.EditorTimer && layer == Layer.HUD)
+            {
+                if (layer.fade <= 0)
+                    return;
+                TimeSpan timeSpan = TimeSpan.FromSeconds((float)playtestTime / 60f);
+                string formattedTime = string.Format("{0:D2}:{1:D2}:{2:D2}", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+                Graphics.DrawString(formattedTime, new Vec2(Layer.HUD.width / 2f - formattedTime.Length * 4, 0), Color.White * 0.5f, 1);
+            }
+            base.PostDrawLayer(layer);
+        }
         public override void Update()
         {
+            playtestTime++;
             if (_startTestMode.value)
             {
                 foreach (Profile profile in Profiles.active)

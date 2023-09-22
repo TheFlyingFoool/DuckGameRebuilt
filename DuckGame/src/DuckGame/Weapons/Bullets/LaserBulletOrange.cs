@@ -49,7 +49,7 @@ namespace DuckGame
         }
         protected override void CheckTravelPath(Vec2 pStart, Vec2 pEnd)
         {
-            if (_thickness > 1f && _travels > 0)
+            if (_thickness > 1f && _travels > 0 && !Recorderator.Playing)
             {
                 for (int index = 0; index < 10; ++index)
                 {

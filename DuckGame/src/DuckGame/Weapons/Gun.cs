@@ -445,6 +445,7 @@ namespace DuckGame
 
         public virtual void ApplyKick()
         {
+            kick = 1f;
             if (owner == null || !isServerForObject)
                 return;
             if (_kickForce != 0)
@@ -478,7 +479,6 @@ namespace DuckGame
                         thing.vSpeed += vec2.y - _kickForce * 0.333f;
                 }
             }
-            kick = 1f;
         }
 
         public virtual void Fire()

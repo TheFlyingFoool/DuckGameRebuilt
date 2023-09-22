@@ -8,6 +8,7 @@ namespace DuckGame
         {
             AddSynncl("position", new SomethingSync(typeof(int)));
             AddSynncl("infoed_h", new SomethingSync(typeof(byte)));
+            AddSynncl("angledeg", new SomethingSync(typeof(ushort)));
         }
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
@@ -40,6 +41,8 @@ namespace DuckGame
                 h.enablePhysics = br[7];
                 //h.offDir = (sbyte)(bArray[7] ? 1 : -1);
             }
+
+            if (syncled.ContainsKey("angledeg") && skipAngles == 0) t.angleDegrees = BitCrusher.UShortToFloat((ushort)valOf("angledeg"), 720) - 360;
             base.PlaybackUpdate();
         }
         public override void RecordUpdate()
@@ -58,10 +61,11 @@ namespace DuckGame
             br[6] = h._destroyed;
             br[7] = h.enablePhysics;
 
+            if (skipAngles == 0 || exFrames == 0) addVal("angledeg", BitCrusher.FloatToUShort(t.angleDegrees % 360 + 360, 720));
             //if a class inherits this, solid ruined enablePhysics and destroyed arent truly necessary so infoed_h can be removed and replaced with other relevant data
             //im just adding a few bools here to fill the bitarray and they might make some stuff work better idrk -NiK0
-
             addVal("infoed_h", BitCrusher.BitArrayToByte(br));
+
             //bArray[7] = h.offDir > 0;
         }
     }

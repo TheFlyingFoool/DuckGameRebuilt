@@ -131,6 +131,7 @@ namespace DuckGame
                 else addVal("equipped", -1);
             }
             else addVal("equipped", -1);
+
             base.RecordUpdate();
         }
     }

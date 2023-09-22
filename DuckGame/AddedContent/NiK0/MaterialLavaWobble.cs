@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.IO;
 
@@ -35,12 +36,21 @@ namespace DuckGame
             SetValue("gT", topLeft.y);
             SetValue("gB", bottomRight.y);
 
+
+            int width = (int)Resolution._device.PreferredBackBufferWidth;
+            int height = (int)Resolution._device.PreferredBackBufferHeight;
+
+            if (Math.Abs(((float)width / (float)height) - Level.current.camera.aspect) > 0.01f)
+            {
+                height = (int)(width / Level.current.camera.aspect) + 1;
+            }
+
             Vec3 vec3 = Vec3.Transform(new Vec3(topLeft.x, topLeft.y, 0f), Matrix.Invert(Matrix.CreateScale(1, 1, 1)) * Level.current.camera.getMatrix());
-            SetValue("uvL", vec3.x / Resolution.current.x);
-            SetValue("uvB", vec3.y / Resolution.current.y);
+            SetValue("uvL", vec3.x / width);
+            SetValue("uvB", vec3.y / height);
             vec3 = Vec3.Transform(new Vec3(bottomRight.x, bottomRight.y, 0f), Matrix.Invert(Matrix.CreateScale(1, 1, 1)) * Level.current.camera.getMatrix());
-            SetValue("uvT", vec3.y / Resolution.current.y);
-            SetValue("uvR", vec3.x / Resolution.current.x);
+            SetValue("uvT", vec3.y / height);
+            SetValue("uvR", vec3.x / width);
 
             /*SetValue("uvL", Level.current.camera.transformWorldVector(topLeft).x / Resolution.current.x);
             SetValue("uvR", Level.current.camera.transformWorldVector(bottomRight).x / Resolution.current.x);

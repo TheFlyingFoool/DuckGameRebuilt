@@ -2447,6 +2447,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
+            if (inputProfile != null && inputProfile.doInputs != null) inputProfile.doInputs.Clear();
             jumpSpeed = JumpSpeed;
             if (Level.current != null)
             {

@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
-using System.Security.Policy;
 using System.Threading;
 
 namespace DuckGame
@@ -14,6 +13,7 @@ namespace DuckGame
     /// </summary>
     public abstract class Thing : Transform
     {
+        public SomethingSomethingVessel currentVessel;
         public bool shouldhavevessel = true;
         public bool shouldbegraphicculled = true;
         public bool currentlyDrawing;

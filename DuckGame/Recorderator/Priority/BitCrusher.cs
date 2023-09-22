@@ -82,7 +82,7 @@ namespace DuckGame
             array.CopyTo(b, 0);
             return b;
         }
-        public static ushort BitArrayToUShort(BitArray arr) //why was IDX here what the fuck old niko
+        public static ushort BitArrayToUShort(BitArray arr)
         {
             ushort divide = 32768;
             ushort xd = 0;
@@ -115,56 +115,26 @@ namespace DuckGame
             if ((val & 1) > 0) arr[15] = true;
             return arr;
         }
-        public static ushort FloatToUShort(float v, int range = 1000, bool negative = true)
+        public static ushort FloatToUShort(float v, int range = 1000)
         {
-            if (negative)
-            {
-                float halfRange = range / 2f;
-                if (v < -halfRange)
-                    v = -halfRange;
-                else if (v > halfRange)
-                    v = halfRange;
-
-                float f = halfRange / 32767f;
-                return (ushort)Math.Round((v + halfRange) / f);
-            }
-            else
-            {
-                float f = range / 65535f;
-                return (ushort)Math.Round(v / f);
-            }
+            float f = range / 65535f;
+            return (ushort)Math.Round(v / f);
         }
 
-        public static float UShortToFloat(ushort v, int range = 1000, bool negative = true, int rounding = 2)
+        public static float UShortToFloat(ushort v, int range = 1000, int rounding = 2)
         {
-            if (negative)
-            {
-                float halfRange = range / 2f;
-                float f = halfRange / 32767f;
-                float result = (float)Math.Round(v * f, rounding) - halfRange;
-
-                if (result < -halfRange)
-                    result = -halfRange;
-                else if (result > halfRange)
-                    result = halfRange;
-
-                return result;
-            }
-            else
-            {
-                float f = range / 65535f;
-                return (float)Math.Round(v * f, rounding);
-            }
+            float f = range / 65535f;
+            return (float)Math.Round(v * f, rounding);
         }
 
-        public static byte FloatToByte(float v, int range = 1, bool negative = true)
+        public static byte FloatToByte(float v, int range = 1)
         {
-            float f = range / (negative ? 128f : 256f);
+            float f = range / 255f;
             return (byte)Math.Round(v / f);
         }
-        public static float ByteToFloat(byte v, int range = 1, bool negative = true, int rounding = 2)
+        public static float ByteToFloat(byte v, int range = 1, int rounding = 2)
         {
-            float f = range / (negative ? 128f : 256f);
+            float f = range / 255f;
             return (float)Math.Round(v * f, rounding);
         }
     }

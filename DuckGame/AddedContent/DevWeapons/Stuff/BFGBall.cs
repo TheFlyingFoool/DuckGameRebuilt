@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DuckGame
 {
@@ -73,6 +70,15 @@ namespace DuckGame
                 SFX.PlaySynchronized("snare", 0.7f, Rando.Float(-1.5f, -1.8f));
                 Send.Message(new NMDestroyBlocks(hashSet));
             }
+        }
+        public override void Terminate()
+        {
+            float charg = 3;
+            for (int i = 0; i < DGRSettings.ActualParticleMultiplier * 16; i++)
+            {
+                Level.Add(new DanCircParticle(x + Rando.Float(-charg * 10, charg * 10), y + Rando.Float(-charg * 10, charg * 10), charg * 8 * Rando.Float(1, 0.3f)));
+            }
+            base.Terminate();
         }
         public override void Update()
         {
