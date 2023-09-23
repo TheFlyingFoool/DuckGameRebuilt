@@ -8,6 +8,7 @@ namespace DuckGame
         {
             tatchedTo.Add(typeof(PlasmaBlaster));
             RemoveSynncl("infoed_g");
+            RemoveSynncl("infoed_x");
             AddSynncl("infoed_p", new SomethingSync(typeof(byte)));
         }//0.9f
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
@@ -47,8 +48,7 @@ namespace DuckGame
             BitArray br = new BitArray(8);
 
             br[0] = p.infiniteAmmoVal;
-            br[1] = p.kick == 1 || (p.kick > lastKick && p.kick > 0.4f);
-            lastKick = p.kick;
+            br[1] = p.recordKick;
 
             BitCrusher.CompressFloat(br, 2, 7, lostaccuracy, 0.9f);
 

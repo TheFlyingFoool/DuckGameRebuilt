@@ -255,30 +255,33 @@ namespace DuckGame
                     Fondle(t);
                 }
             }
-            float x = position.x;
-            float y = position.y;
-            for (int index = 0; index < 20; ++index)
+            if (!Recorderator.Playing)
             {
-                float ang = (float)(index * 18 - 5) + Rando.Float(10f);
-                ATShrapnel type = new ATShrapnel
+                float x = position.x;
+                float y = position.y;
+                for (int index = 0; index < 20; ++index)
                 {
-                    range = 60f + Rando.Float(18f)
-                };
-                Bullet bullet = new Bullet(x, y, type, ang)
+                    float ang = (float)(index * 18 - 5) + Rando.Float(10f);
+                    ATShrapnel type = new ATShrapnel
+                    {
+                        range = 60f + Rando.Float(18f)
+                    };
+                    Bullet bullet = new Bullet(x, y, type, ang)
+                    {
+                        firedFrom = this
+                    };
+                    firedBullets.Add(bullet);
+                    Level.Add(bullet);
+                }
+                bulletFireIndex += 20;
+                if (Network.isActive && isServerForObject)
                 {
-                    firedFrom = this
-                };
-                firedBullets.Add(bullet);
-                Level.Add(bullet);
+                    Send.Message(new NMFireGun(this, firedBullets, bulletFireIndex, false), NetMessagePriority.ReliableOrdered);
+                    firedBullets.Clear();
+                }
+                if (Recorder.currentRecording != null)
+                    Recorder.currentRecording.LogBonus();
             }
-            bulletFireIndex += 20;
-            if (Network.isActive && isServerForObject)
-            {
-                Send.Message(new NMFireGun(this, firedBullets, bulletFireIndex, false), NetMessagePriority.ReliableOrdered);
-                firedBullets.Clear();
-            }
-            if (Recorder.currentRecording != null)
-                Recorder.currentRecording.LogBonus();
             Level.Remove(this);
         }
 

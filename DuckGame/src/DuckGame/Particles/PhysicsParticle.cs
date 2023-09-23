@@ -169,7 +169,10 @@ namespace DuckGame
                     {
                         _touchedFloor = true;
                         if (_bounceSound != "" && (Math.Abs(vSpeed) > 1 || Math.Abs(hSpeed) > 1))
+                        {
+                            SFX.DontSave = 1;
                             SFX.Play(_bounceSound, 0.5f, Rando.Float(0.2f) - 0.1f);
+                        }
                         if (vSpeed > 0 && thing.top > y)
                         {
                             vSpeed = (float)-(vSpeed * _bounceEfficiency);

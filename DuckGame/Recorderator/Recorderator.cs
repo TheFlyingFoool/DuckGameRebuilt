@@ -48,10 +48,11 @@ namespace DuckGame
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 SomethingSomethingVessel.doDestroy = false;
                 DevConsole.Log("an error occured " + Main.SpecialCode, Colors.DGRed);
+                DevConsole.LogComplexMessage(ex.ToString(), Color.DarkGreen);
             }
         }
         [AutoConfigField]

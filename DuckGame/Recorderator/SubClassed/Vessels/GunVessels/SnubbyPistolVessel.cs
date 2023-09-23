@@ -58,8 +58,7 @@ namespace DuckGame
             br[2] = (am & 1) > 0;
 
             br[3] = sn._loadBurst > 0.82f;
-            br[4] = sn.kick > lastKick;
-            lastKick = sn.kick;
+            br[4] = sn.recordKick;
 
             addVal("infoed_snv", BitCrusher.BitArrayToByte(br));
             base.RecordUpdate();

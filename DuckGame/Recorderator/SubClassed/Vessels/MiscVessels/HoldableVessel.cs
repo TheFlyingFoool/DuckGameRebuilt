@@ -65,7 +65,6 @@ namespace DuckGame
             //if a class inherits this, solid ruined enablePhysics and destroyed arent truly necessary so infoed_h can be removed and replaced with other relevant data
             //im just adding a few bools here to fill the bitarray and they might make some stuff work better idrk -NiK0
             addVal("infoed_h", BitCrusher.BitArrayToByte(br));
-
             //bArray[7] = h.offDir > 0;
         }
     }

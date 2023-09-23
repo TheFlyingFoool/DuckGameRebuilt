@@ -195,6 +195,7 @@ namespace DuckGame
                     _selection = _currentMenuItemSelection.Count - 1;
             }
             while (_currentMenuItemSelection[_selection].mode != MenuItemMode.Normal && selection != _selection);
+            SFX.DontSave = 1;
             SFX.Play("textLetter", 0.7f);
         }
 
@@ -208,6 +209,7 @@ namespace DuckGame
                     _selection = 0;
             }
             while (_currentMenuItemSelection[_selection].mode != MenuItemMode.Normal && selection != _selection);
+            SFX.DontSave = 1;
             SFX.Play("textLetter", 0.7f);
         }
         public static Keys[] keysOfInterest =
@@ -316,6 +318,7 @@ namespace DuckGame
                             {
                                 //optimal -NiK0
                                 if (dubberOffset == -1) dubberOffset = _currentMenuItemSelection.FindAll(ui => ui is UIConnectionInfo).Count;
+                                SFX.DontSave = 1;
                                 SFX.Play("rockHitGround");
                                 ((UIMenuItem)_currentMenuItemSelection[i + dubberOffset]).Activate(Triggers.Select);
                             }
@@ -355,6 +358,7 @@ namespace DuckGame
                                 if (!_animating && Input.Pressed(Triggers.Select))
                                 {
                                     uiMenuItem.Activate(Triggers.Select);
+                                    SFX.DontSave = 1;
                                     SFX.Play("rockHitGround", 0.7f);
                                 }
                                 else if (!_animating && Input.Pressed(Triggers.Menu1))

@@ -45,11 +45,13 @@ namespace DuckGame
             if (_desiredOpen > 0.5 && !_opened)
             {
                 _opened = true;
+                SFX.DontSave = 1;
                 SFX.Play("pyramidOpen", 0.6f);
             }
             if (_desiredOpen < 0.5 && _opened)
             {
                 _opened = false;
+                SFX.DontSave = 1;
                 SFX.Play("pyramidClose", 0.6f);
             }
             _open = Maths.LerpTowards(_open, _desiredOpen, 0.15f);

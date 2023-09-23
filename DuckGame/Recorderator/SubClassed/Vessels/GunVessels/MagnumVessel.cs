@@ -20,6 +20,8 @@
             Gun g = (Gun)t;
             if (g.kick > 0) g.kick -= 0.2f;
             else g.kick = 0;
+            if (g._flareAlpha > 0f) g._flareAlpha -= 0.5f;
+            else g._flareAlpha = 0f;
         }
     }
 }

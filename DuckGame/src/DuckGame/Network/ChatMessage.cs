@@ -17,6 +17,8 @@ namespace DuckGame
         public float slide;
         public float scale = 1f;
         public int newlines = 1;
+        public bool newLinesAdded;
+        public bool addedToReplay;
 
         public ChatMessage(Profile w, string t, ushort idx)
         {

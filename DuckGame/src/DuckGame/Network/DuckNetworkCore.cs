@@ -490,6 +490,8 @@ namespace DuckGame
                 chatMessage.text += pMessage.text;
                 chatMessage.index = pMessage.index;
                 chatMessage.slide = 0.5f;
+                chatMessage.newLinesAdded = true;
+
                 ++chatMessage.newlines;
             }
             else

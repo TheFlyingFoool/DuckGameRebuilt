@@ -26,6 +26,8 @@ namespace DuckGame
             Gun g = (Gun)t;
             if (g.kick > 0) g.kick -= 0.2f;
             else g.kick = 0;
+            if (g._flareAlpha > 0f) g._flareAlpha -= 0.5f;
+            else g._flareAlpha = 0f;
         }
         public override void PlaybackUpdate()
         {
@@ -73,9 +75,8 @@ namespace DuckGame
             br[6] = s.offDir > 0;
             br[7] = s.loaded;
             addVal("MEGAINFOED", BitCrusher.BitArrayToByte(br));
-            bArray[7] = s.kick == 1;
+            bArray[7] = s.recordKick;
             base.RecordUpdate();
-
         }
     }
 }

@@ -461,6 +461,7 @@ namespace DuckGame
             _core._noModsMenu.Open();
             MonoMain.pauseMenu = _core._noModsUIGroup;
             _core._pauseOpen = true;
+            SFX.DontSave = 1;
             SFX.Play("pause", 0.6f);
         }
 
@@ -865,6 +866,7 @@ namespace DuckGame
             _ducknetUIGroup.isPauseMenu = true;
             MonoMain.pauseMenu = _ducknetUIGroup;
             _core._pauseOpen = true;
+            SFX.DontSave = 1;
             SFX.Play("pause", 0.6f);
         }
 
@@ -1279,6 +1281,7 @@ namespace DuckGame
             MonoMain.pauseMenu = _ducknetUIGroup;
 
             _core._pauseOpen = true;
+            SFX.DontSave = 1;
             SFX.Play("pause", 0.6f);
         }
 
@@ -2372,6 +2375,7 @@ namespace DuckGame
                 realText = !(message is NMChatDisabledMessage) ? (num != 2 ? "@error@Chat |DGRED|disabled|PREV| in options. Ignoring messages..." : "@error@Player is |DGRED|muted|PREV|. Ignoring messages...") : message.text;
             }
             _core.AddChatMessage(new ChatMessage(message.profile, realText != null ? realText : message.text, message.index));
+            SFX.DontSave = 1;
             SFX.Play("chatmessage", 0.8f, Rando.Float(-0.15f, 0.15f));
         }
 

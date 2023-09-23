@@ -12,6 +12,7 @@ namespace DuckGame
             tatchedTo.Add(typeof(Musket));
             tatchedTo.Add(typeof(Bazooka));
             RemoveSynncl("infoed_g");
+            RemoveSynncl("infoed_x");
             AddSynncl("yOff", new SomethingSync(typeof(float))); //optimize this later
             AddSynncl("tampPos", new SomethingSync(typeof(float)));
             AddSynncl("tampInc", new SomethingSync(typeof(float)));
@@ -49,6 +50,7 @@ namespace DuckGame
             tw._rotating = br[2];
 
             if (br[3]) ApplyFire();
+            if (br[4]) tw.DoAmmoClick();
 
             tw.infiniteAmmoVal = br[7];
             tw._offsetY = (float)valOf("yOff");
@@ -65,8 +67,12 @@ namespace DuckGame
             br[1] = tw._tamped;
             br[2] = tw._rotating;
 
-            br[3] = tw.kick == 1;
+            br[3] = tw.recordKick;
+            br[4] = tw.recordPuff;
 
+            /*g.recordPopShell;
+            br2[1] = g.recordPuff;
+             * */
             br[7] = tw.infiniteAmmoVal;
             addVal("yOff", tw._offsetY);
             addVal("tampPos", tw.tampPos);
@@ -96,6 +102,8 @@ namespace DuckGame
             Gun g = (Gun)t;
             if (g.kick > 0) g.kick -= 0.2f;
             else g.kick = 0;
+            if (g._flareAlpha > 0f) g._flareAlpha -= 0.5f;
+            else g._flareAlpha = 0f;
         }
     }
 }

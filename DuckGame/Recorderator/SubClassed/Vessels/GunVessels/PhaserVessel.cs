@@ -22,13 +22,6 @@ namespace DuckGame
             p._chargeFade = BitCrusher.ByteToFloat((byte)valOf("charge"), 1);
             base.PlaybackUpdate();
         }
-        public override void DoUpdateThing()
-        {
-            //Gun g = (Gun)t;
-            //if (g.kick > 0) g.kick -= 0.2f;
-            //else g.kick = 0;
-            base.DoUpdateThing();
-        }
         public override void RecordUpdate()
         {
             Phaser p = (Phaser)t;

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections;
 using System.Reflection;
 using System.IO.Compression;
+using System.Buffers;
 
 namespace DuckGame
 {
@@ -51,6 +52,26 @@ namespace DuckGame
             cd.maxFrame = b.ReadInt();
             cd.gamemodeStarted = b.ReadInt();
 
+            byte prs = b.ReadByte();
+            for (int i = 0; i < prs; i++)
+            {
+                byte persona = b.ReadByte();
+                string name = b.ReadString();
+                ulong steamid = b.ReadULong();
+                Profile p = new Profile(name, null, null, Persona.all.ElementAt(persona));
+                p.steamID = steamid;
+                BitArray br = new BitArray(new byte[] { b.ReadByte() });
+                p.ReplayHost = br[0];
+                p.ReplaySpectator = br[1];
+                p.ReplayLocal = br[2];
+                p.ReplayRebuilt = br[3];
+                if (br[6])
+                {
+                    ushort ush = b.ReadUShort();
+                }
+                cd.profiles.Add(p);
+            }
+            Main.SpecialCode = "readbytes";
             BitBuffer levBuffer = new BitBuffer(b.ReadBytes());
 
             DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Level size:" + (b.position - cPos));
@@ -133,6 +154,7 @@ namespace DuckGame
                 CustomBackground3.customBackground03 = s1;
                 Custom.ApplyCustomData(new CustomTileData() { path = s1, texture = Editor.StringToTexture(s2) }, 2, CustomType.Background);
             }
+            Main.SpecialCode = "Past tiles";
             DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Custom texture size:" + (b.position - cPos));
             cPos = b.position;
             #endregion
@@ -149,8 +171,8 @@ namespace DuckGame
                 byte bo = b.ReadByte();
                 BitArray b_array = new BitArray(new byte[] { bo });
 
-                if (!b_array[0]) lastV = CompressedVec2Binding.GetUncompressedVec2(b.ReadInt(), 10000);
-                if (!b_array[1]) lastV2 = CompressedVec2Binding.GetUncompressedVec2(b.ReadInt(), 10000);
+                if (!b_array[0]) lastV = b.ReadVec2();
+                if (!b_array[1]) lastV2 = b.ReadVec2();
                 cd.camPos.Add(lastV);
                 cd.camSize.Add(lastV2);
             }
@@ -189,7 +211,35 @@ namespace DuckGame
             }
             DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Sound buffer size:" + (b.position - cPos));
             cPos = b.position;
-
+            /*buffer.Write(chatMessages.Count);
+            for (int i = 0; i < chatMessages.Count; i++)
+            {
+                KeyValuePair<int, List<ChatMessage>> lls = chatMessages.ElementAt(i);
+                List<ChatMessage> list = lls.Value;
+                buffer.Write((ushort)lls.Key);
+                buffer.Write((ushort)list.Count);
+                for (int x = 0; x < list.Count; x++)
+                {
+                    ChatMessage cm = list[x];
+                    if (profiles.Contains(cm.who))
+                    {
+                        buffer.Write((byte)0);
+                        buffer.Write((byte)profiles.IndexOf(cm.who));
+                    }
+                    else if (cm.who.team != null)
+                    {
+                        buffer.Write((byte)1);
+                        buffer.Write((ushort)Teams.IndexOf(cm.who.team));
+                    }
+                    else
+                    {
+                        buffer.Write((byte)2);
+                        buffer.Write(cm.who.name);
+                    }
+                    buffer.Write(cm.text);
+                }
+            }
+             * */
             iters = b.ReadInt();
             for (int i = 0; i < iters; i++)
             {
@@ -203,6 +253,25 @@ namespace DuckGame
                 cd.BlocksBroken.Add(new BlockbreakData(frame, data));
             }
             DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Misc buffer size:" + (b.position - cPos));
+
+            iters = b.ReadInt();
+            for (int i = 0; i < iters; i++)
+            {
+                ushort key = b.ReadUShort();
+                ushort count = b.ReadUShort();
+                List<ChatMessage> list = new List<ChatMessage>();
+                for (int x = 0; x < count; x++)
+                {
+                    byte prof = b.ReadByte();
+                    Profile pref = cd.profiles[prof];
+                    string message = b.ReadString();
+                    DevConsole.Log(message);
+                    list.Add(new ChatMessage(pref, message, 0));
+                }
+                cd.chatMessages.Add(key, list);
+            }
+            DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Chat buffer size:" + (b.position - cPos));
+            cPos = b.position;
 
             Main.SpecialCode = "Outside of recorderator load stuff";
             instance = cd;
@@ -223,14 +292,46 @@ namespace DuckGame
         public List<Thing> theLevelDetailsETC = new List<Thing>();
         public List<string> names = new List<string>();
         public static string CordsPath = DuckFile.saveDirectory + "Recorderations/";
+        public List<Profile> profiles = new List<Profile>();
+        public List<Team> teams = new List<Team>();
         public byte[] SaveToFile()
         {
             if (!Directory.Exists(CordsPath)) Directory.CreateDirectory(CordsPath);
             
+            Main.SpecialCode = "before anything existed";
             BitBuffer buffer = new BitBuffer();
             buffer.Write(cFrame);
 
             buffer.Write(gamemodeStarted);
+
+            Main.SpecialCode = "there were profiles";
+            buffer.Write((byte)profiles.Count);
+            for (int i = 0; i < profiles.Count; i++)
+            {
+                Profile p = profiles[i];
+
+                buffer.Write((byte)p.persona.index);
+                buffer.Write(p.name);
+                buffer.Write(p.steamID);
+                Main.SpecialCode = "and the profiles have some data";
+                BitArray br = new BitArray(8);
+                if (p.connection != null)
+                {
+                    br[0] = p.isHost;
+                    br[2] = p.localPlayer;
+                }
+                br[1] = p.spectator;
+                
+
+                br[3] = p.isUsingRebuilt;
+                br[4] = p.duck != null;
+                br[6] = p.team != null;
+                Main.SpecialCode = "or something like that";
+                if (p.team != null) br[7] = p.team.defaultTeam;
+                buffer.Write(BitCrusher.BitArrayToByte(br));
+                if (p.team != null) buffer.Write((ushort)Teams.IndexOf(p.team));
+                Main.SpecialCode = "end";
+            }
 
             Main.SpecialCode = "in lev buffer";
             BitArray array = new BitArray(16);
@@ -377,7 +478,7 @@ namespace DuckGame
                         levBuffer.Write((byte)0);
                         break;
                     case Altar:
-                        levBuffer.Write((byte)((Altar)s).wide);
+                        levBuffer.Write((byte)((Altar)s).wide.value);
                         break;
                     default:
                         if (write > 18 && write < 29)
@@ -585,8 +686,8 @@ namespace DuckGame
                 if (v2.y < -500000) br[1] = true;
                 buffer.Write(BitCrusher.BitArrayToByte(br));
 
-                if (!br[0]) buffer.Write(CompressedVec2Binding.GetCompressedVec2(v1, 10000));
-                if (!br[1]) buffer.Write(CompressedVec2Binding.GetCompressedVec2(v2, 10000));
+                if (!br[0]) buffer.Write(v1);
+                if (!br[1]) buffer.Write(v2);
             }
 
             bool isThisReplayBroken = false;
@@ -640,6 +741,21 @@ namespace DuckGame
                     {
                         buffer.Write(bd.Data.ElementAt(x));
                     }
+                }
+            }
+
+            buffer.Write(chatMessages.Count);
+            for (int i = 0; i < chatMessages.Count; i++)
+            {
+                KeyValuePair<int, List<ChatMessage>> lls = chatMessages.ElementAt(i);
+                List<ChatMessage> list = lls.Value;
+                buffer.Write((ushort)lls.Key);
+                buffer.Write((ushort)list.Count);
+                for (int x = 0; x < list.Count; x++)
+                {
+                    ChatMessage cm = list[x];
+                    buffer.Write((byte)profiles.IndexOf(cm.who));
+                    buffer.Write(cm.text);
                 }
             }
 
@@ -698,6 +814,7 @@ namespace DuckGame
         public bool PlayingThatShitBack;
         public static Corderator instance;
         public List<SoundData> toAddThisFrame = new List<SoundData>();
+        public Dictionary<int, List<ChatMessage>> chatMessages = new Dictionary<int, List<ChatMessage>>();
         public void ReAddSomeVessel(SomethingSomethingVessel vessel)
         {
             if (vessel.t == null)
@@ -766,6 +883,43 @@ namespace DuckGame
                     camSize.Add(new Vec2(0, -999999999));
                 }
                 else camSize.Add(v);
+
+                if (profiles.Count == 0)
+                {
+                    for (int i = 0; i < Profiles.alllist.Count; i++)
+                    {
+                        Profile pr = Profiles.alllist[i];
+                        profiles.Add(pr);
+                    }
+                }
+                
+                if (DuckNetwork.active)
+                {
+                    List<ChatMessage> cms = new List<ChatMessage>();
+                    for (int i = 0; i < DuckNetwork.core.chatMessages.Count; i++)
+                    {
+                        ChatMessage cm = DuckNetwork.core.chatMessages[i];
+                        if (!cm.addedToReplay || cm.newLinesAdded)
+                        {
+                            if (cm.newLinesAdded)
+                            {
+                                cm.newLinesAdded = false;
+                                cms.Add(new ChatMessage(cm.who, cm.text.Split('\n').Last(), 0));
+                                cm.addedToReplay = true;
+                            }
+                            else
+                            {
+                                cms.Add(new ChatMessage(cm.who, cm.text, 0));
+                                cm.addedToReplay = true;
+                            }
+                        }
+                    }
+                    if (cms.Count > 0)
+                    {
+                        chatMessages.Add(cFrame, cms);
+                    }
+                }
+
                 SFXToPlaySave.Add(cFrame, toAddThisFrame);
                 toAddThisFrame = new List<SoundData>();
                 if (GameMode.started && gamemodeStarted == -1)
@@ -854,6 +1008,10 @@ namespace DuckGame
         }
         public void PlayThatBack()
         {
+            /*
+            SFX.Play("chatmessage", 0.8f, Rando.Float(-0.15f, 0.15f));
+             * 
+             * */
             if (SFXToPlaySave.ContainsKey(cFrame))
             {
                 List<SoundData> sd = SFXToPlaySave[cFrame];
@@ -861,6 +1019,14 @@ namespace DuckGame
                 {
                     SoundData s = sd[i];
                     SFX.Play(s.hash, s.volume, s.pitch);
+                }
+            }
+            if (chatMessages.Count > 0 && chatMessages.ContainsKey(cFrame))
+            {
+                List<ChatMessage> cms = chatMessages[cFrame];
+                for (int i = 0; i < cms.Count; i++)
+                {
+                    DevConsole.Log(cms[i].text);
                 }
             }
             if (BlocksBroken.Count > 0 && BlocksBroken[0].Frame <= cFrame)

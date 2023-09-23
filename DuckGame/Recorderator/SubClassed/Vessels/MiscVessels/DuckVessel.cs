@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using NAudio.Wave;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -38,11 +39,9 @@ namespace DuckGame
         public ulong ID;
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
-            byte persona = b.ReadByte();
-            string pName = b.ReadString();
-            ID = b.ReadULong();
+            byte prof = b.ReadByte();
+            Profile p = Corderator.instance.profiles[prof];
             ushort ush = b.ReadUShort();
-            p = new Profile(pName, null, null, Persona.all.ElementAt(persona));
             DuckVessel dv = new DuckVessel(new Duck(0, -2000, p) { invincible = true }) { p = p };
             for (int i = 0; i < ush; i++)
             {
@@ -61,9 +60,7 @@ namespace DuckGame
         }
         public override BitBuffer RecSerialize(BitBuffer prevBuffer)
         {
-            prevBuffer.Write((byte)((Duck)t).persona.index);
-            prevBuffer.Write(((Duck)t).profile.name);
-            prevBuffer.Write(((Duck)t).profile.steamID);
+            prevBuffer.Write((byte)Corderator.instance.profiles.IndexOf(((Duck)t).profile));
             prevBuffer.Write((ushort)changesInPB.Count);
             for (int i = 0; i < changesInPB.Count; i++)
             {
@@ -160,6 +157,7 @@ namespace DuckGame
         }
 
         public int pbIndex;
+        public bool spawnedPlusOne;
         public override void PlaybackUpdate()
         {
             Duck d = (Duck)t;
@@ -215,8 +213,9 @@ namespace DuckGame
 
             bool stuck = brI[6];
 
-            if (d.currentPlusOne == null && brI[7])
+            if (d.currentPlusOne == null && brI[7] && !spawnedPlusOne)
             {
+                spawnedPlusOne = true;
                 PlusOne pls = new PlusOne(0, 0, d.profile, false, true);
                 pls._duck = d;
                 pls.anchor = d;

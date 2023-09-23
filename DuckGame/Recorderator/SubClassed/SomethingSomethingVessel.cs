@@ -97,10 +97,24 @@ namespace DuckGame
         {
             indexedSyncled.Remove(name);
             syncled.Remove(name);
+
+            if (indexedSyncled.Count > 0)
+            {
+                List<string> strangs = new List<string>();
+                for (int i = 0; i < indexedSyncled.Count; i++)
+                {
+                    strangs.Add(indexedSyncled.ElementAt(i).Key);
+                }
+                indexedSyncled.Clear();
+                for (int i = 0; i < strangs.Count; i++)
+                {
+                    indexedSyncled.Add((byte)i, strangs[i]);
+                }
+            }
         }
         public object valOf(string name)
         {
-            Main.SpecialCode = "getting val of " + name;
+            Main.SpecialCode = "getting val of " + name + " in " + GetType().Name;
             return syncled[name][0];
         }
         public bool HistoryDisplay;
@@ -495,7 +509,7 @@ namespace DuckGame
             doDestroy = true;
             Main.SpecialCode = "Ves RecDeserialize pre-create";
             SomethingSomethingVessel ves = v.RecDeserialize(b);
-            Main.SpecialCode = "Ves RecDeserialize post-create";
+            Main.SpecialCode = "Ves RecDeserialize post-create " + ves.GetType().Name;
             doDestroy = false;
             return ves;
         }

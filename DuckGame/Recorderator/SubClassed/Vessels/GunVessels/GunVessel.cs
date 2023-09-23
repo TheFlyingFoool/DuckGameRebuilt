@@ -12,6 +12,7 @@ namespace DuckGame
     {
         public GunVessel(Thing th) : base(th)
         {
+            AddSynncl("infoed_x", new SomethingSync(typeof(byte)));
             AddSynncl("infoed_g", new SomethingSync(typeof(byte)));
         }
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
@@ -20,7 +21,6 @@ namespace DuckGame
             v.t.y = -2000;
             return v;
         }
-        public float lastKick;
         public override BitBuffer RecSerialize(BitBuffer prevBuffer)
         {
             //p sure that isn't needed but that might come back to bite me later
@@ -63,6 +63,15 @@ namespace DuckGame
                     g.infiniteAmmoVal = false;
                 }
             }
+            if (syncled.ContainsKey("infoed_x"))
+            {
+                byte lz = (byte)valOf("infoed_x");
+                BitArray br = new BitArray(new byte[] { lz });
+                bool pop = br[0];
+                bool puff = br[1];
+                if (pop) g.PopShell(true);
+                if (puff) g.DoAmmoClick();
+            }
             base.PlaybackUpdate();
         }
         public override void RecordUpdate()
@@ -79,10 +88,17 @@ namespace DuckGame
             array_o_bits[4] = (w & 4) > 0;
             array_o_bits[5] = (w & 2) > 0;
             array_o_bits[6] = (w & 1) > 0;
-            array_o_bits[7] = g.kick == 1 || (g.kick > lastKick && g.kick > 0.4f);
-            lastKick = g.kick;
-            //if (array_o_bits[7]) DevConsole.Log("!!!");
+            array_o_bits[7] = g.recordKick;
             addVal("infoed_g", BitCrusher.BitArrayToByte(array_o_bits));
+
+            BitArray br2 = new BitArray(8);
+            br2[0] = g.recordPopShell;
+            br2[1] = g.recordPuff;
+
+            addVal("infoed_x", BitCrusher.BitArrayToByte(br2));
+            g.recordPopShell = false;
+            g.recordPuff = false;
+            g.recordKick = false;
             base.RecordUpdate();
         }
     }

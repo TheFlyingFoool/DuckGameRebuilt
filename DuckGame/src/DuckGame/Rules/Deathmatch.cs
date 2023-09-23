@@ -352,6 +352,7 @@ namespace DuckGame
                 if (_paused)
                     return;
                 Music.Pause();
+                SFX.DontSave = 1;
                 SFX.Play("pause", 0.6f);
                 _paused = true;
             }
@@ -360,6 +361,7 @@ namespace DuckGame
                 if (_paused && MonoMain.pauseMenu == null)
                 {
                     _paused = false;
+                    SFX.DontSave = 1;
                     SFX.Play("resume", 0.6f);
                     Music.Resume();
                 }

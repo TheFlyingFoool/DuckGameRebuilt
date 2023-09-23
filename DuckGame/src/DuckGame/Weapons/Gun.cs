@@ -70,6 +70,8 @@ namespace DuckGame
         protected Vec2 _wallPoint;
         protected Sprite _sightHit;
         private bool _doPuff;
+        public bool recordPuff;
+        public bool recordPopShell;
         public byte _framesSinceThrown;
         public bool explode;
         public List<Bullet> firedBullets = new List<Bullet>();
@@ -177,10 +179,12 @@ namespace DuckGame
         public void DoAmmoClick()
         {
             _doPuff = true;
+            recordPuff = true;
             _clickPuff.frame = 0;
             _clickPuff.SetAnimation("puff");
             _barrelHeat = 0f;
             _barrelSmoke.SetAnimation("finish");
+            SFX.DontSave = 1;
             SFX.Play(_clickSound);
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
             {
@@ -443,9 +447,10 @@ namespace DuckGame
             Fire();
         }
 
+        public bool recordKick;
         public virtual void ApplyKick()
         {
-            kick = 1f;
+            recordKick = true;
             if (owner == null || !isServerForObject)
                 return;
             if (_kickForce != 0)
@@ -479,6 +484,7 @@ namespace DuckGame
                         thing.vSpeed += vec2.y - _kickForce * 0.333f;
                 }
             }
+            kick = 1f;
         }
 
         public virtual void Fire()
@@ -587,6 +593,7 @@ namespace DuckGame
             {
                 _ammoType.PopShell(x, y, -offDir);
             }
+            recordPopShell = true;
             if (isMessage) return;
             Send.Message(new NMPopShell(this), NetMessagePriority.UnreliableUnordered);
         }

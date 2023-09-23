@@ -104,16 +104,16 @@ namespace DuckGame
             x = b.ReadUShort();
             for (int i = 0; i < x; i++)
             {
-                byte bitedTHREE = b.ReadByte();
-                byte bitedTWO = b.ReadByte();
-                Main.SpecialCode2 = "btr: " + bitedTHREE + "  btwo: " + bitedTWO;
+                byte byteOne = b.ReadByte();
+                byte dataByte = b.ReadByte();
+                Main.SpecialCode2 = "btr: " + byteOne + "  btwo: " + dataByte;
                 Vec2 v = CompressedVec2Binding.GetUncompressedVec2(b.ReadInt(), 10000);
                 Thing somethingthing = null;
-                switch (bitedTHREE)
+                switch (byteOne)
                 {
                     case 0:
                         {
-                            switch (bitedTWO)
+                            switch (dataByte)
                             {
                                 case 0:
                                     somethingthing = new Saws(v.x, v.y);
@@ -135,7 +135,7 @@ namespace DuckGame
                         }
                     case 1:
                         {
-                            switch (bitedTWO)
+                            switch (dataByte)
                             {
                                 case 0:
                                     somethingthing = new Spikes(v.x, v.y);
@@ -157,7 +157,7 @@ namespace DuckGame
                         }
                     case 2:
                         {
-                            switch (bitedTWO)
+                            switch (dataByte)
                             {
                                 case 0:
                                     somethingthing = new Spring(v.x, v.y);
@@ -262,57 +262,57 @@ namespace DuckGame
                     case 17:
                         {
                             somethingthing = new ClippingSign(v.x, v.y);
-                            ((ClippingSign)somethingthing).style.value = bitedTWO;
+                            ((ClippingSign)somethingthing).style.value = dataByte;
                             break;
                         }
                     case 19:
                         {
-                            somethingthing = new StreetLight(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
+                            somethingthing = new StreetLight(v.x, v.y) { flipHorizontal = dataByte > 0 };
                             break;
                         }
                     case 20:
                         {
-                            somethingthing = new PyramidBLight(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
+                            somethingthing = new PyramidBLight(v.x, v.y) { flipHorizontal = dataByte > 0 };
                             break;
                         }
                     case 21:
                         {
-                            somethingthing = new TroubleLight(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
+                            somethingthing = new TroubleLight(v.x, v.y) { flipHorizontal = dataByte > 0 };
                             break;
                         }
                     case 22:
                         {
-                            somethingthing = new RaceSign(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
+                            somethingthing = new RaceSign(v.x, v.y) { flipHorizontal = dataByte > 0 };
                             break;
                         }
                     case 23:
                         {
-                            somethingthing = new ArrowSign(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
+                            somethingthing = new ArrowSign(v.x, v.y) { flipHorizontal = dataByte > 0 };
                             break;
                         }
                     case 24:
                         {
-                            somethingthing = new DangerSign(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
+                            somethingthing = new DangerSign(v.x, v.y) { flipHorizontal = dataByte > 0 };
                             break;
                         }
                     case 25:
                         {
-                            somethingthing = new EasySign(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
+                            somethingthing = new EasySign(v.x, v.y) { flipHorizontal = dataByte > 0 };
                             break;
                         }
                     case 26:
                         {
-                            somethingthing = new HardLeft(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
+                            somethingthing = new HardLeft(v.x, v.y) { flipHorizontal = dataByte > 0 };
                             break;
                         }
                     case 27:
                         {
-                            somethingthing = new UpSign(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
+                            somethingthing = new UpSign(v.x, v.y) { flipHorizontal = dataByte > 0 };
                             break;
                         }
                     case 28:
                         {
-                            somethingthing = new VeryHardSign(v.x, v.y) { flipHorizontal = bitedTWO > 0 };
+                            somethingthing = new VeryHardSign(v.x, v.y) { flipHorizontal = dataByte > 0 };
                             break;
                         }
                     case 29:
@@ -322,11 +322,13 @@ namespace DuckGame
                         }
                     case 30:
                         {
-                            somethingthing = new Altar(v.x, v.y, 0) { wide = bitedTWO };
+                            Altar alt = new Altar(v.x, v.y, 0);
+                            alt.wide.value = dataByte;
+                            somethingthing = alt;
                             break;
                         }
                     default:
-                        DevConsole.Log("|RED|RECORDERATOR |WHITE|A non indexed prop was found :" + bitedTHREE);
+                        DevConsole.Log("|RED|RECORDERATOR |WHITE|A non indexed prop was found :" + byteOne);
                         break;
                 }
                 Main.SpecialCode = "a weird crash";

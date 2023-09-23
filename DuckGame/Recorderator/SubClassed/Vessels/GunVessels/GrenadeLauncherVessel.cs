@@ -1,12 +1,11 @@
 ﻿namespace DuckGame
 {
-    //yes this vessel only exists to deactivate
-    //the grenade launcher
     public class GrenadeLauncherVessel : GunVessel
     {
         public GrenadeLauncherVessel(Thing th) : base(th)
         {
             tatchedTo.Add(typeof(GrenadeLauncher));
+            AddSynncl("ang", new SomethingSync(typeof(ushort)));
         }
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
@@ -17,11 +16,17 @@
         {
             return prevBuffer;
         }
-        public override void DoUpdateThing()
+        public override void PlaybackUpdate()
+        {//_aimAngle
+            GrenadeLauncher gl = (GrenadeLauncher)t;
+            gl._fireAngle = BitCrusher.UShortToFloat((ushort)valOf("ang"), 720) - 360;
+            base.PlaybackUpdate();
+        }
+        public override void RecordUpdate()
         {
-            Gun g = (Gun)t;
-            if (g.kick > 0) g.kick -= 0.2f;
-            else g.kick = 0;
+            GrenadeLauncher gl = (GrenadeLauncher)t;
+            addVal("ang", BitCrusher.FloatToUShort(gl._fireAngle % 360 + 360, 720));
+            base.RecordUpdate();
         }
     }
 }

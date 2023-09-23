@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Drawing.Design;
 
 namespace DuckGame
 {
@@ -69,7 +68,7 @@ namespace DuckGame
             int sp = op.frame;
             if (op.infiniteAmmoVal) ammo = 0;
 
-            br[1] = op.kick == 1;
+            br[1] = op.recordKick;
             br[2] = (sp & 2) > 0;
             br[3] = (sp & 1) > 0;
             br[4] = (ammo & 8) > 0; //if ammo > 9 then infinite

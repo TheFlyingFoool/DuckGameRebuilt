@@ -53,6 +53,7 @@ namespace DuckGame
             br[5] = d.visible;
             br[6] = d.grounded;
             br[7] = d.sleeping;
+            addVal("frame", BitCrusher.BitArrayToByte(br));
             /*h.offDir = (sbyte)(br[0] ? 1 : -1);
             h.visible = br[1];
             h.grounded = br[2];

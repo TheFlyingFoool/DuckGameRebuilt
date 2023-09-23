@@ -150,7 +150,10 @@ namespace DuckGame
         }
         public override void Terminate()
         {
-            Level.Remove(block);
+            if (block != null)
+            {
+                Level.Remove(block);
+            }
             base.Terminate();
         }
         public override void Update()
