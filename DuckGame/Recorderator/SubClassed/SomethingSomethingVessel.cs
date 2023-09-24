@@ -73,6 +73,8 @@ namespace DuckGame
         public string destroyedReason = "NONE";
         public static string somethingCrash;
 
+        public int IndexPriority = 0; //this is for backwards compatability stuff
+
         public virtual void OnRemove()
         {
 
@@ -178,7 +180,7 @@ namespace DuckGame
                 syncled = syncledDestroy;
                 deleteTime = KILLDESTROY;
                 changeRemove = passOnTheBytes;
-                th.active = false;
+                if (th != null) th.active = false;
                 //DESTRUCTION
             }
             else
@@ -192,25 +194,36 @@ namespace DuckGame
             t = th;
         }
         public static Dictionary<Type, byte> typeWow = new Dictionary<Type, byte>();
-        public static Map<byte, Type> TypeVessels = new Map<byte, Type>();
+        public static Map<ushort, Type> TypeVessels = new Map<ushort, Type>();
         public static Dictionary<Type, Type> tatchedVessels = new Dictionary<Type, Type>();
         public static void YeahFillMeUpWithLists()
         {
             List<Type> zTyped = Extensions.GetSubclasses(typeof(SomethingSomethingVessel)).ToList();
-            for (int i = 0; i < zTyped.Count; i++)
+            int count = 0;
+            int cPriori = 0;
+            int added = 1;
+            while (added > 0)
             {
-                Type t = zTyped[i];
-                if (t == typeof(SomethingSomethingVessel) || t == typeof(NilVessel)) continue;
-                object[] args = new object[] { null };
-                SomethingSomethingVessel vs = (SomethingSomethingVessel)Activator.CreateInstance(t, args);
-                if (vs.tatchedTo.Count > 0)
+                added = 0;
+                for (int i = 0; i < zTyped.Count; i++)
                 {
-                    for (int zx = 0; zx < vs.tatchedTo.Count; zx++)
+                    Type t = zTyped[i];
+                    if (t == typeof(SomethingSomethingVessel) || t == typeof(NilVessel)) continue;
+                    object[] args = new object[] { null };
+                    SomethingSomethingVessel vs = (SomethingSomethingVessel)Activator.CreateInstance(t, args);
+                    if (vs.IndexPriority != cPriori) continue;
+                    if (vs.tatchedTo.Count > 0)
                     {
-                        tatchedVessels.Add(vs.tatchedTo[zx], t);
+                        for (int zx = 0; zx < vs.tatchedTo.Count; zx++)
+                        {
+                            tatchedVessels.Add(vs.tatchedTo[zx], t);
+                        }
                     }
+                    TypeVessels.Add((ushort)count, zTyped[i]);
+                    added++;
+                    count++;
                 }
-                TypeVessels.Add((byte)i, zTyped[i]);
+                cPriori++;
             }
             typeWow.Add(typeof(byte), 0);
             typeWow.Add(typeof(sbyte), 1);
@@ -378,7 +391,7 @@ namespace DuckGame
         public static bool FirstDeser;
         public static SomethingSomethingVessel RCDeserialize(BitBuffer b)
         {
-            byte u = b.ReadByte();
+            ushort u = b.ReadUShort();
             addDestroy = b.ReadInt();
             KILLDESTROY = b.ReadInt();
             passOnTheBytes = new List<byte>();
@@ -507,7 +520,7 @@ namespace DuckGame
 
             syncledDestroy = v.syncled;
             doDestroy = true;
-            Main.SpecialCode = "Ves RecDeserialize pre-create";
+            Main.SpecialCode = "Ves RecDeserialize pre-create\n" + more;  
             SomethingSomethingVessel ves = v.RecDeserialize(b);
             Main.SpecialCode = "Ves RecDeserialize post-create " + ves.GetType().Name;
             doDestroy = false;

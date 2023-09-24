@@ -28,12 +28,12 @@ namespace DuckGame
         private Vec2 warpPos;
         private bool onUpdate;
         public List<BlockGlow> blockGlows = new List<BlockGlow>();
-        private int shotsSinceDuckWasGrounded;
+        public int shotsSinceDuckWasGrounded;
         private int framesSinceShot;
         private float lerpShut;
         private Vec2 _warpPoint;
-        private float gravMultTime;
-        private bool warped;
+        public float gravMultTime;
+        public bool warped;
         private Duck lastDuck;
 
         public Warpgun(float xval, float yval)
@@ -113,7 +113,7 @@ namespace DuckGame
         public override void Update()
         {
             ammo = 9999;
-            if (isServerForObject && !_triggerHeld)
+            if (isServerForObject && !_triggerHeld && !Recorderator.Playing)
                 gravMultTime = 0f;
             IPlatform platform = Level.Nearest<IPlatform>(position, 32.0f);
             bool flag = false;
@@ -128,7 +128,10 @@ namespace DuckGame
             if (platform != null & flag && shotsSinceGrounded > 0 && framesSinceShot > 2)
             {
                 if (shotsSinceGrounded > 1)
+                {
+                    SFX.DontSave = 1;
                     SFX.PlaySynchronized("laserChargeTeeny", 0.8f, 0.3f);
+                }
                 shotsSinceGrounded = 0;
                 for (int index1 = 0; index1 < 8; ++index1)
                 {
@@ -184,7 +187,7 @@ namespace DuckGame
                         if (warped)
                         {
                             duck.blendColor = Lerp.Color(Color.White, Color.Purple, gravMultTime);
-                            duck.position = warpPos;
+                            if (!Recorderator.Playing) duck.position = warpPos;
                             duck.vSpeed = -0.3f;
                             duck.hSpeed = -0.3f;
                         }

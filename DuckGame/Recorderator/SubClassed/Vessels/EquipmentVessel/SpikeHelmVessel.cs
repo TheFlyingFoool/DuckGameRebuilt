@@ -25,7 +25,6 @@
         {
             SpikeHelm sh = (SpikeHelm)t;
             int hObj = ((ushort)valOf("hold")) - 1;
-            DevConsole.Log(hObj);
             if (hObj == -1 && lastHold != null)
             {
                 sh.ReleasePokedObject();
@@ -34,7 +33,6 @@
             else if (hObj != -1 && lastHold == null && Corderator.instance.somethingMap.Contains(hObj)) sh.poked = (PhysicsObject)Corderator.instance.somethingMap[hObj];
             if (sh.poked != null) sh.poked.owner = sh;
 
-            DevConsole.Log(sh.poked != null);
             lastHold = sh.poked;
             base.PlaybackUpdate();
         }

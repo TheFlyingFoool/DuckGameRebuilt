@@ -265,7 +265,6 @@ namespace DuckGame
                     byte prof = b.ReadByte();
                     Profile pref = cd.profiles[prof];
                     string message = b.ReadString();
-                    DevConsole.Log(message);
                     list.Add(new ChatMessage(pref, message, 0));
                 }
                 cd.chatMessages.Add(key, list);
@@ -412,20 +411,28 @@ namespace DuckGame
                 else if (s is OfficeLight) write = 13;
                 else if (s is WallLightLeft) write = 14;
                 else if (s is FishinSign) write = 15;
-                else if (s is MallardBillboard) write = 16;
-                else if (s is ClippingSign) write = 17; //special case for style 0-2
-                else if (s is StreetLight) write = 19;
-                else if (s is PyramidBLight) write = 20;
-                else if (s is TroubleLight) write = 21;
-                else if (s is RaceSign) write = 22;
-                else if (s is ArrowSign) write = 23;
-                else if (s is DangerSign) write = 24;
-                else if (s is EasySign) write = 25;
-                else if (s is HardLeft) write = 26;
-                else if (s is UpSign) write = 27;
-                else if (s is VeryHardSign) write = 28;
-                else if (s is WaterCooler) write = 29;
-                else if (s is Altar) write = 30;
+                else if (s is WaterCooler) write = 16;
+                else if (s is Altar) write = 17;
+                else if (s is SnowGenerator) write = 18;
+                else if (s is WaterFall) write = 19;
+                else if (s is WaterFallTile) write = 20;
+
+                else if (s is MallardBillboard) write = 80;//special case for  80 or more
+                else if (s is ClippingSign) write = 81;
+                else if (s is SnowDrift) write = 82;
+                else if (s is StreetLight) write = 83;
+                else if (s is PyramidBLight) write = 84;
+                else if (s is TroubleLight) write = 85;
+                else if (s is RaceSign) write = 86;
+                else if (s is ArrowSign) write = 87;
+                else if (s is DangerSign) write = 88;
+                else if (s is EasySign) write = 99;
+                else if (s is HardLeft) write = 90;
+                else if (s is UpSign) write = 91;
+                else if (s is VeryHardSign) write = 92;
+                else if (s is SnowPile) write = 93;
+                else if (s is WaterFallEdge) write = 94;
+                else if (s is WaterFallEdgeTop) write = 95;
                 //else if (s is ArcadeFrame) levBuffer.Write((byte)14);
                 else levBuffer.Write((byte)255);
                 levBuffer.Write(write);
@@ -481,7 +488,7 @@ namespace DuckGame
                         levBuffer.Write((byte)((Altar)s).wide.value);
                         break;
                     default:
-                        if (write > 18 && write < 29)
+                        if (write >= 80)
                         {
                             levBuffer.Write((byte)(s.flipHorizontal ? 1 : 0));
                         }
@@ -548,7 +555,6 @@ namespace DuckGame
             Type b1 = typeof(CustomTileset);
             Type b2 = typeof(CustomTileset2);
             Type b3 = typeof(CustomTileset3);
-            StartingBlocks.Sort(Extensions.AutoBlockSortred);
             for (int i = 0; i < StartingBlocks.Count; i++)
             {
                 AutoBlock b = StartingBlocks[i];
@@ -556,6 +562,7 @@ namespace DuckGame
                 if (xd == b1) array[1] = true;
                 else if (xd == b2) array[2] = true;
                 else if (xd == b3) array[3] = true;
+                levBuffer.Write(b.blockIndex);
                 levBuffer.Write(CompressedVec2Binding.GetCompressedVec2(b.position, 10000));
                 levBuffer.Write(Recorderator.autoBlockIDX[b.GetType()]);
             }
@@ -946,7 +953,7 @@ namespace DuckGame
                         {
                             TheThings.Add(th);
                         }
-                        else if (th is Saws || th is Spikes || th is Spring || th is ArcadeLight || th is PyramidLightRoof || th is PyramidWallLight || th is Bulb || th is HangingCityLight || th is Lamp || th is OfficeLight || th is WallLightRight || th is Sun || th is ArcadeTableLight || th is OfficeLight || th is WallLightLeft || th is FishinSign || th is MallardBillboard || th is ClippingSign || th is StreetLight || th is PyramidBLight || th is TroubleLight || th is RaceSign || th is ArrowSign || th is DangerSign || th is EasySign || th is HardLeft || th is UpSign || th is VeryHardSign || th is WaterCooler || th is Altar) theLevelDetailsETC.Add(th);
+                        else if (th is Saws || th is Spikes || th is Spring || th is ArcadeLight || th is PyramidLightRoof || th is PyramidWallLight || th is Bulb || th is HangingCityLight || th is Lamp || th is OfficeLight || th is WallLightRight || th is Sun || th is ArcadeTableLight || th is OfficeLight || th is WallLightLeft || th is FishinSign || th is MallardBillboard || th is ClippingSign || th is StreetLight || th is PyramidBLight || th is TroubleLight || th is RaceSign || th is ArrowSign || th is DangerSign || th is EasySign || th is HardLeft || th is UpSign || th is VeryHardSign || th is WaterCooler || th is Altar || th is SnowGenerator || th is SnowDrift || th is SnowPile || th is WaterFall || th is WaterFallEdge || th is WaterFallEdgeTop  || th is WaterFallTile) theLevelDetailsETC.Add(th);
                         else if (th is PipeTileset pt) Pipes.Add(pt);
                         else if (th is Teleporter t) Teleporters.Add(t);
                         else if (th is AutoBlock bb)
@@ -1055,7 +1062,7 @@ namespace DuckGame
                 for (int i = 0; i < somethings.Count; i++)
                 {
                     SomethingSomethingVessel ves = somethings[i];
-                    ves.t.shouldbegraphicculled = false;
+                    if (ves.t != null) ves.t.shouldbegraphicculled = false;
                     Main.SpecialCode = "is ves null, if true " + (ves == null);
                     if (cFrame == ves.addTime)
                     {
@@ -1067,7 +1074,7 @@ namespace DuckGame
                     else if (cFrame == ves.deleteTime)
                     {
                         ves.OnRemove();
-                        Level.Remove(ves.t);
+                        if (ves.t != null) Level.Remove(ves.t);
                     }
                 }
                 Main.SpecialCode = "crash at camSize";

@@ -12,16 +12,18 @@ namespace DuckGame
         public static Dictionary<ushort, Team> regTems = new Dictionary<ushort, Team>();
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
-            DevConsole.Log("rec deserialize teamhat");
+            Main.SpecialCode = "rec deserialize hat";
             Team team;
             byte WHAT = b.ReadByte();
             ushort z = b.ReadUShort();
+            Main.SpecialCode = "rec deserialize hat 2 " + z;
             if (WHAT > 0)
             {
                 if (WHAT == 2)
                 {
-                    return null;
+                    return new NilVessel(position, "NULL TEAMHAT");
                 }
+                Main.SpecialCode = "rec deserialize hat reg teams";
                 if (regTems.ContainsKey(z)) team = regTems[z];
                 else
                 {
@@ -54,7 +56,12 @@ namespace DuckGame
                     //text.SaveAsPng(stream, text.Width, text.Height);
                 }
             }
-            else team = Teams.all[z];
+            else
+            {
+                Main.SpecialCode = "rec deserialize hat 3 " + z;
+                team = Teams.all[z];
+            }
+            Main.SpecialCode = "post all rec deserialize hat";
             TeamHatVessel v = new TeamHatVessel(new TeamHat(0, -2000, team));
             return v;
         }

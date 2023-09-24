@@ -446,6 +446,7 @@
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\SpikeHelmVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\BootsVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\ChestplateVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\WAGNUSVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\FlamethrowerVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\CampingRifleVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\PositronShooterVessel.cs" />

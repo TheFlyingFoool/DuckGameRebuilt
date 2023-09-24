@@ -12,7 +12,7 @@ namespace DuckGame
         {
             Vec2 v = CompressedVec2Binding.GetUncompressedVec2(b.ReadInt(), 10000);
 
-            BitArray br = new BitArray(b.ReadByte());
+            BitArray br = new BitArray(new byte[] { b.ReadByte() });
 
             WireButton wm = new WireButton(v.x, v.y);
             wm.invert = br[0];
@@ -21,7 +21,7 @@ namespace DuckGame
 
             int val = 0;
             if (br[3]) val += 2;
-            if (br[4]) val += 1;
+            if (br[4]) val += 1; //why here
             wm.orientation = val;
             wm.holdTime = BitCrusher.ByteToFloat(b.ReadByte());
 

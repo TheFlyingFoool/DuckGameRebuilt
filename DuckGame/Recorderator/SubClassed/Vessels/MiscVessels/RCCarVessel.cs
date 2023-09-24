@@ -25,7 +25,6 @@ namespace DuckGame
 
             rc.receivingSignal = br[0];
             rc._idleSpeed = BitCrusher.DecompressFloat(br, 1, 5, 1);
-            DevConsole.Log(rc._idleSpeed);
            
 
             rc.velocity = CompressedVec2Binding.GetUncompressedVec2((int)valOf("velocity"), 20);

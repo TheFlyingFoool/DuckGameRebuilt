@@ -15,6 +15,7 @@ namespace DuckGame
             tatchedTo.Add(typeof(LaserBullet));
             tatchedTo.Add(typeof(PelletBullet));
             tatchedTo.Add(typeof(LaserBulletOrange));
+            tatchedTo.Add(typeof(LaserBulletPurple));
             Bullet b = (Bullet)th;
             if (b != null)
             {
