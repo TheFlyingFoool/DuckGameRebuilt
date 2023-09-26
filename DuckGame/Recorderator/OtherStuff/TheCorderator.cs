@@ -1083,6 +1083,12 @@ namespace DuckGame
                 Main.SpecialCode = "the pain is eternal";
                 Level.current.camera.position = camPos[cFrame];
             }
+            else
+            {
+                Recorderator.Playing = false;
+                PlayingThatShitBack = false;
+                Level.current = new SendToLevel(new RecorderationSelector());
+            }
             SFX.enabled = true;
             //do sfx stuff here
         }

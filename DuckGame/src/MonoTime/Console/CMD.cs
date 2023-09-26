@@ -425,6 +425,9 @@ namespace DuckGame
                         return new HatPreviewLevel();
                     case "ff":
                         return new FeatherFashion();
+                    case "rdt":
+                    case "cord":
+                        return new RecorderationSelector();
                     case "dev":
                         string devfilepath = Program.GameDirectory + "Content\\levels\\devtestlev.lev";
                         if (File.Exists(devfilepath))

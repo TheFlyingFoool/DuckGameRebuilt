@@ -562,6 +562,14 @@ namespace DuckGame
                 List<AutoTile> autoTiles = Extensions.GetListOfThings<AutoTile>();
                 for (int i = 0; i < autoTiles.Count; i++) autoTiles[i].PlaceBlock();
             }
+
+            if (Keyboard.Pressed(Keys.Home))
+            {
+                Recorderator.Playing = false;
+                current = new SendToLevel(new RecorderationSelector());
+                return;
+            }
+            
             base.Update();
         }
         public override void PostDrawLayer(Layer layer)

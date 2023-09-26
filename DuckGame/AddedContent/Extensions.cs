@@ -659,6 +659,11 @@ namespace DuckGame
         {
             x = Graphics.GetStringWidth(text, false, fontSize), y = Graphics.GetStringHeight(text) * fontSize
         };
+        
+        public static Vec2 GetFancyStringSize(string text, float fontSize = 1f) => new()
+        {
+            x = Graphics.GetFancyStringWidth(text, false, fontSize), y = Graphics.GetStringHeight(text) * fontSize
+        };
 
         public static bool MultiPlayerTeamsExist()
         {
