@@ -1585,7 +1585,7 @@ namespace DuckGame
                     {
                         ModConfiguration mod = sortedMods[i];
                         bool localMod = mod.workshopID == 0;
-                        string modstr = (i != 0 ? "\\n" : "") + (localMod ? cyan : green) + Escape(mod.name) + white + Escape($" {(localMod ? $"by {mod.author}" : $"[{mod.workshopID}]")}");
+                        string modstr = (i != 0 ? "\\n" : "") + (localMod ? cyan : green) + Escape(mod.name) + white + Escape($" {(localMod ? $"by {mod.author.CleanFormatting()}" : $"[{mod.workshopID}]")}");
                         if (modsActive.Length - lIndex + modstr.Length + 4 + green.Length > 1024)
                         {
                             modstr = modstr.Substring(2);

@@ -30,10 +30,10 @@ namespace DuckGame
             const float fontSize = 0.6f;
             FeatherFashion.DrawCursor(Mouse.positionScreen);
 
-            for (int i = Recorderations.Length - 1 + scrollIndex; i >= 0 + scrollIndex; i--)
+            for (int i = scrollIndex; i < Recorderations.Length + scrollIndex; i++)
             {
                 int replayIndex = i - scrollIndex;
-                FileInfo fileInfo = new(Recorderations[replayIndex]);
+                FileInfo fileInfo = new(Recorderations[Recorderations.Length - 1 - replayIndex]);
 
                 // TODO hi niko i dont know how your things work could you do these
                 float matchLengthSeconds = 0;
@@ -48,7 +48,7 @@ namespace DuckGame
 
                 if (hovered && Mouse.left == InputState.Pressed)
                 {
-                    Recorderator.PlayReplay(replayIndex);
+                    Recorderator.PlayReplay(Recorderations.Length - 1 - replayIndex);
                     return;
                 }
                 

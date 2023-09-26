@@ -662,8 +662,8 @@ namespace DuckGame
             {
                 string nameUi = name;
                 if (muteName)
-                    nameUi = "Player " + (networkIndex + 1).ToString();
-                if (isUsingRebuilt && DGRSettings.RebuiltEffect == 1) nameUi += "@DGRBIG@";
+                    nameUi = "Player " + (networkIndex + 1);
+                if (isUsingRebuilt && DGRSettings.RebuiltEffect == 1) nameUi += inSameRebuiltVersion ? "@DGRBIG@" : "@DGRBIGDIM@";
                 return nameUi;
             }
         }
