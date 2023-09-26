@@ -142,11 +142,6 @@ namespace DuckGame
                                 Graphics.DrawString(v2.x + ":" + v2.y, v, Color.White, 1, null, 0.5f);
                                 continue;
                             }
-                            else if (val is Vec6 v6)
-                            {
-                                Graphics.DrawString((float)Math.Round(v6.a) + ":" + (float)Math.Round(v6.b) + ":" + (float)Math.Round(v6.c) + ":" + (float)Math.Round(v6.d) + ":" + (float)Math.Round(v6.e) + ":" + (float)Math.Round(v6.f), v, Color.Red, 1, null, 0.5f);
-                                continue;
-                            }
                             string ld = val.ToString().Replace("{", string.Empty).Replace("}", string.Empty);
                             Graphics.DrawString(ld, v, Color.White, 1, null, 0.5f);
                         }
@@ -233,7 +228,6 @@ namespace DuckGame
             typeWow.Add(typeof(ushort), 5);
             typeWow.Add(typeof(string), 6);
             typeWow.Add(typeof(bool), 7);
-            typeWow.Add(typeof(Vec6), 8);
             typeWow.Add(typeof(Vec4), 9);
             typeWow.Add(typeof(BitBuffer), 10);
             typeWow.Add(typeof(short), 11);
@@ -332,21 +326,7 @@ namespace DuckGame
                 Main.SpecialCode = "WHY DID THIS CRASH";
                 b.Write(s.items.Count);
                 Main.SpecialCode = "index died on something sync:\"" + s.name + "\"";
-                if (s.items.Count > 0 && s.items[0] is Vec6)
-                {
-                    Main.SpecialCode = "vec6 got fucked";
-                    for (int z = 0; z < s.items.Count; z++)
-                    {
-                        Vec6 v = (Vec6)s.items[z];
-                        b.Write(v.a);
-                        b.Write(v.b);
-                        b.Write(v.c);
-                        b.Write(v.d);
-                        b.Write(v.e);
-                        b.Write(v.f);
-                    }
-                }
-                else if (s.items.Count > 0 && s.items[0] is Vec4)
+                if (s.items.Count > 0 && s.items[0] is Vec4)
                 {
                     Main.SpecialCode = "vec4 got fucked";
                     for (int z = 0; z < s.items.Count; z++)
@@ -473,20 +453,6 @@ namespace DuckGame
                     case 7:
                         {
                             for (int q = 0; q < x; q++) ss.items.Add(b.ReadBool());
-                            break;
-                        }
-                    case 8:
-                        {
-                            for (int q = 0; q < x; q++)
-                            {
-                                float a = b.ReadFloat();
-                                float b2 = b.ReadFloat();
-                                float c = b.ReadFloat();
-                                float d = b.ReadFloat();
-                                float e = b.ReadFloat();
-                                float f = b.ReadFloat();
-                                ss.items.Add(new Vec6(a, b2, c, d, e, f));
-                            }
                             break;
                         }
                     case 9:

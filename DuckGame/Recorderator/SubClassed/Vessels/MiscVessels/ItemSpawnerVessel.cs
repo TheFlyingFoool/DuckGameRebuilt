@@ -47,8 +47,12 @@
             else if (hObj != -1 && isp._hoverItem == null && Corderator.instance.somethingMap.Contains(hObj) && Corderator.instance.somethingMap[hObj] is Holdable holdable)
             {
                 isp.SetHoverItem(holdable);
-                holdable.spawnAnimation = true;
-                holdable.isSpawned = true;
+                if (!(Corderator.instance != null && Corderator.instance.somethingMapped.Contains(hObj) && Corderator.instance.somethingMapped[hObj].exFrames > 5))
+                {
+                    holdable.spawnAnimation = true;
+                    holdable.isSpawned = true;
+                }
+
                 //isp.SetHoverItem((Holdable)Corderator.instance.somethingMap[hObj];
                 //isp._hoverItem.hoverSpawner = isp;
             }

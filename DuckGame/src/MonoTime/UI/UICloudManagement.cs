@@ -182,6 +182,7 @@ namespace DuckGame
                     --_selection;
                     if (_selection < _topOffset)
                         --_topOffset;
+                    SFX.DontSave = 1;
                     SFX.Play("textLetter", 0.7f);
                 }
                 if (Input.Pressed(Triggers.MenuDown) && _selection < currentFolder.files.Count - 1)
@@ -189,6 +190,7 @@ namespace DuckGame
                     ++_selection;
                     if (_selection > _topOffset + kMaxInView)
                         ++_topOffset;
+                    SFX.DontSave = 1;
                     SFX.Play("textLetter", 0.7f);
                 }
                 if (Input.Pressed(Triggers.Select) && currentFolder.files.Count > 0)
@@ -204,6 +206,7 @@ namespace DuckGame
                         _flagged.Remove(currentFolder.files[_selection]);
                     else
                         _flagged.Add(currentFolder.files[_selection]);
+                    SFX.DontSave = 1;
                     SFX.Play("textLetter", 0.7f);
                 }
                 if (Input.Pressed(Triggers.Menu2) && _flagged.Count > 0)
@@ -230,6 +233,7 @@ namespace DuckGame
             currentFolder = pFolder;
             _selection = 0;
             _topOffset = 0;
+            SFX.DontSave = 1;
             SFX.Play("textLetter", 0.7f);
         }
 

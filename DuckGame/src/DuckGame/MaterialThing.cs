@@ -409,6 +409,7 @@ namespace DuckGame
 
         public virtual void Burn(Vec2 firePosition, Thing litBy)
         {
+            if (Recorderator.Playing) return;
             if (Network.isActive && !isServerForObject && !isBurnMessage && !_onFire && this is Duck && (this as Duck).profile != null)
                 Send.Message(new NMLightDuck(this as Duck));
             if (!isServerForObject && !isBurnMessage || _onFire || _burnWaitTimer != null && !(bool)_burnWaitTimer)

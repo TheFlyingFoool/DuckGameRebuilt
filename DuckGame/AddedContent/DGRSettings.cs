@@ -204,6 +204,8 @@ namespace DuckGame
 
         [AutoConfigField] public static bool EditorTimer = true;
 
+        [AutoConfigField] public static bool SkipXP = false;
+
         public static bool RPC
         {
             get => S_RPC;

@@ -12,6 +12,17 @@ namespace DuckGame
         public StateBinding _stickTimeBinding = new StateBinding(nameof(_stickTime));
         public StateBinding _stuckBinding = new StateBinding(nameof(_stuck));
         private SpriteMap _sprite;
+        public SpriteMap sprite
+        {
+            get
+            {
+                return _sprite;
+            }
+            set
+            {
+                _sprite = value;
+            }
+        }
         public bool _stuck;
         public float _stickTime = 1f;
         private Duck _owner;
@@ -40,6 +51,9 @@ namespace DuckGame
             clip.Add(owner);
         }
 
+        public bool faded;
+        public Vec2 fadedPos;
+        public Vec2 fadedVel;
         protected override bool OnDestroy(DestroyType type = null)
         {
             if (_stuck && _stickTime > 0.98f)
@@ -62,6 +76,7 @@ namespace DuckGame
 
         public override void OnImpact(MaterialThing with, ImpactedFrom from)
         {
+            if (Recorderator.Playing) return;
             if (_stuck || with is Gun || (with.weight < 5f && !(with is Dart) && !(with is RagdollPart)) || with is FeatherVolume || with is Teleporter || removeFromLevel || with is Spring || with is SpringUpLeft || with is SpringUpRight)
             {
                 if (with is EnergyBlocker && with.solid)
@@ -127,6 +142,9 @@ namespace DuckGame
                         dartShell.hSpeed = -hSpeed / 3f * (0.3f + Rando.Float(0.8f));
                         dartShell.vSpeed = -2f + Rando.Float(4f);
                         Level.Remove(this);
+                        faded = true;
+                        fadedVel = dartShell.velocity;
+                        fadedPos = dartShell.position;
                         if (burning)
                         {
                             with.Burn(position, this);
@@ -191,7 +209,11 @@ namespace DuckGame
                 if (!burning && Level.CheckCircle<SmallFire>(position, 8f) != null)
                     LightOnFire();
                 _sprite.frame = 0;
-                angleDegrees = -Maths.PointDirection(Vec2.Zero, new Vec2(hSpeed, vSpeed));
+                if (!Recorderator.Playing)
+                {
+
+                    angleDegrees = -Maths.PointDirection(Vec2.Zero, new Vec2(hSpeed, vSpeed));
+                }
             }
             if (_stuck)
             {

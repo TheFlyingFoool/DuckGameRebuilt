@@ -194,8 +194,8 @@ namespace DuckGame
                                 addWeight += physicsObject.weight;
                                 break;
                         }
-                        foreach (PhysicsObject previousThing in previousThings)
-                            ;
+                        //foreach (PhysicsObject previousThing in previousThings)
+                        //    ; what
                     }
                 }
                 List<Duck> duckList2 = new List<Duck>();

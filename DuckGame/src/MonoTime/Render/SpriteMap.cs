@@ -8,6 +8,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Security.Policy;
 
 namespace DuckGame
 {
@@ -23,6 +24,11 @@ namespace DuckGame
         public float _speed = 1f;
         private bool _finished;
         private List<Animation> _animations = new List<Animation>();
+        public List<Animation> animations
+        {
+            get { return _animations; }
+            set { _animations = value; }
+        }
         private Animation? _currentAnimation;
         private bool _hasAnimation;
         public int _frame;

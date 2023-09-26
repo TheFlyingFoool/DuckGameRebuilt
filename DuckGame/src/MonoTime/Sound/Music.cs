@@ -186,11 +186,6 @@ namespace DuckGame
         public static void Play(string music, bool looping = true, float crossFadeTime = 0f)
         {
             if (!DGRSettings.LoaderMusic) return;
-            #if DEBUG
-            DevConsole.Log("trying to play: " + music);
-            DevConsole.Log("should loop " + looping);
-            DevConsole.Log("full vgm music filepath " + "./Content/Audio/Music/InGame/" + music + ".vgz");
-#endif
             //not great code also welcome to my hell for .vgz music loading -NiK0
             if (File.Exists("./Content/Audio/Music/InGame/" + music + ".vgz"))
             {

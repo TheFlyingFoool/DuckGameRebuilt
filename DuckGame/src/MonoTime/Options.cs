@@ -532,10 +532,14 @@ namespace DuckGame
             {
                 dgrDescription = "Shows the percentage of maps and the list of people in the lobby if host uses Rebuilt"
             });
-
+            //SkipXP
             menu.Add(new UIMenuItemToggle("Skip Excess Rounds", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SkipExcessRounds)))
             {
                 dgrDescription = "If a player has already definitely won extra rounds that wont change the outcome of the match will be skipped (HOST ONLY)"
+            });
+            menu.Add(new UIMenuItemToggle("Skip XP", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SkipXP)))
+            {
+                dgrDescription = "Completely skips the XP level up and Vincent dialogue. You wont get the XP from it if this is ON"
             });
             menu.Add(new UIMenuItemToggle("Invite Link Redirect", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.UseDGRJoinLink)))
             {

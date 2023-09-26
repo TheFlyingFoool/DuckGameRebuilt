@@ -41,7 +41,7 @@ namespace DuckGame
             SmallFire s = (SmallFire)t;
 
             bool addedX = false;
-            if (s.stick != null && Corderator.instance != null && Corderator.instance.somethingMap.Contains(s.stick) && s.stick is not RagdollPart) addVal("stick", (ushort)(Corderator.instance.somethingMap[s.stick] + 1));
+            if (s.stick != null && Corderator.instance != null && Corderator.instance.somethingMap.Contains(s.stick)) addVal("stick", (ushort)(Corderator.instance.somethingMap[s.stick] + 1));
             else
             {
                 addedX = true;

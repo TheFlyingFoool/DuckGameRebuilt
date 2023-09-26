@@ -39,6 +39,7 @@ namespace DuckGame
                 divide /= 2;
             }
             e.stanceInt = stance;
+            e.raised = br[3];
 
 
 
@@ -79,6 +80,7 @@ namespace DuckGame
             br[0] = (w & 4) > 0;
             br[1] = (w & 2) > 0;
             br[2] = (w & 1) > 0;
+            br[3] = e.raised;
 
 
             addVal("infoed_energy", BitCrusher.BitArrayToByte(br));

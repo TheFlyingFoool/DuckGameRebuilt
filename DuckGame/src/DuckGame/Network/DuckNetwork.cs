@@ -124,6 +124,7 @@ namespace DuckGame
 
         public static bool ShowUserXPGain()
         {
+            if (DGRSettings.SkipXP) return false;
             if (!Level.core.gameFinished || _xpEarned.Count <= 0)
                 return false;
             _xpMenu = new UILevelBox("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
@@ -424,6 +425,7 @@ namespace DuckGame
                 Options.Data.unblockedPlayers.Add(pProfile.steamID);
             Options.Data.muteSettings[pProfile.steamID] = "";
             pProfile._blockStatusDirty = true;
+            SFX.DontSave = 1;
             SFX.Play("textLetter", 0.7f);
         }
 
@@ -2366,6 +2368,11 @@ namespace DuckGame
         {
             if (message.profile == null)
                 return;
+            if (Corderator.instance != null)
+            {
+                Corderator.instance.receivedMessages.Add(new ChatMessage(message.profile, message.text, message.index));
+            }
+
             int num = FilterPlayer(message.profile);
             if (num > 0)
             {
@@ -3264,7 +3271,7 @@ namespace DuckGame
 
         public static void Draw()
         {
-            if (localProfile == null)
+            if (localProfile == null && !Recorderator.Playing)
                 return;
             Vec2 vec2_1 = new Vec2(Layer.Console.width, Layer.Console.height);
             float num1 = 0f;

@@ -308,8 +308,7 @@ namespace DuckGame
                     Level.Add(smallSmoke);
                 }
             }
-            else
-                SFX.Play("quack", volume, pitch);
+            else SFX.Play("quack", volume, pitch);
         }
 
         public void SpawnParticles()

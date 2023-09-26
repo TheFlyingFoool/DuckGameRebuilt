@@ -138,7 +138,7 @@ namespace DuckGame
             catch
             {
             }
-            DevConsole.Log("Version " + gitVersion);
+            DevConsole.Log("|PINK|DGR |WHITE|Version " + gitVersion);
             int p = (int)Environment.OSVersion.Platform;
             IsLinuxD = (p == 4) || (p == 6) || (p == 128);
             if (IsLinuxD)
@@ -146,7 +146,7 @@ namespace DuckGame
                 MonoMain.enableThreadedLoading = false;
                 MonoMain.disableDirectInput = true;
             }
-            DevConsole.Log(IsLinuxD.ToString() + " " + p.ToString());
+            DevConsole.Log("|PINK|DGR |WHITE|" + IsLinuxD.ToString() + " " + p.ToString());
             gameAssembly = Assembly.GetExecutingAssembly();
             gameAssemblyName = gameAssembly.GetName().Name;
             FilePath = gameAssembly.Location;
@@ -216,24 +216,24 @@ namespace DuckGame
                 }
                 if (IsLinuxD)
                 {
-                    DevConsole.Log("setting dll to linux steam");
+                    DevConsole.Log("|PINK|DGR |WHITE|Setting dll to LinuxSteamworks");
                     File.Copy(GameDirectory + "OSX-Linux-x64//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
                 }
                 else if (Environment.Is64BitProcess)
                 {
-                    DevConsole.Log("setting dll to windows steam x64"); //this is left over from me thinking about building for 64 bit, i dont want to build FNA my self so no
+                    DevConsole.Log("|PINK|DGR |WHITE|Setting dll to WindowsSteamx64"); //this is left over from me thinking about building for 64 bit, i dont want to build FNA my self so no
                     File.Copy(GameDirectory + "Windows-x64//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
                 }
                 else
                 {
-                    DevConsole.Log("setting dll to windows steam x86");
+                    DevConsole.Log("|PINK|DGR |WHITE|Setting dll to WindowsSteamx86");
                     File.Copy(GameDirectory + "Windows-x86//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
                 }
             }
             catch
             {
             }
-            DevConsole.Log("Is Linux " + IsLinuxD.ToString() + " PlatformID " + p.ToString());
+            DevConsole.Log("|PINK|DGR |WHITE|Is Linux " + IsLinuxD.ToString() + " PlatformID " + p.ToString());
             gameAssembly = Assembly.GetExecutingAssembly();
             gameAssemblyName = gameAssembly.GetName().Name;
             FilePath = gameAssembly.Location;
