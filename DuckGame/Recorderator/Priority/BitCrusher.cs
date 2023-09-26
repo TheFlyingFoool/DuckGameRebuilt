@@ -115,6 +115,27 @@ namespace DuckGame
             if ((val & 1) > 0) arr[15] = true;
             return arr;
         }
+        // Convert an int to a BitArray -ChatGPT
+        public static BitArray IntToBitArray(int number)
+        {
+            byte[] bytes = BitConverter.GetBytes(number);
+            BitArray bitArray = new BitArray(bytes);
+            return bitArray;
+        }
+
+        // Convert a BitArray to an int -ChatGPT
+        public static int BitArrayToInt(BitArray bitArray)
+        {
+            if (bitArray.Length != 32) // Assuming 32 bits for an int -ChatGPT
+            {
+                throw new ArgumentException("BitArray length must be 32 for converting to int.");
+            }
+
+            byte[] bytes = new byte[4];
+            bitArray.CopyTo(bytes, 0);
+            int number = BitConverter.ToInt32(bytes, 0);
+            return number;
+        }
         public static ushort FloatToUShort(float v, int range = 1000)
         {
             float f = range / 65535f;
@@ -127,12 +148,12 @@ namespace DuckGame
             return (float)Math.Round(v * f, rounding);
         }
 
-        public static byte FloatToByte(float v, int range = 1)
+        public static byte FloatToByte(float v, float range = 1)
         {
             float f = range / 255f;
             return (byte)Math.Round(v / f);
         }
-        public static float ByteToFloat(byte v, int range = 1, int rounding = 2)
+        public static float ByteToFloat(byte v, float range = 1, int rounding = 2)
         {
             float f = range / 255f;
             return (float)Math.Round(v * f, rounding);

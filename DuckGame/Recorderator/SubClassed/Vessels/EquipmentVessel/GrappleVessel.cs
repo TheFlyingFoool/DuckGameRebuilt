@@ -20,6 +20,7 @@
         {
             Grapple g = (Grapple)t;
             g.ropeData = (BitBuffer)valOf("grappleData");
+            g.ropeData.position = 0;
             base.PlaybackUpdate();
         }
         public override void RecordUpdate()

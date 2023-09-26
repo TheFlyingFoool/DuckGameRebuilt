@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.GrenadeCannon
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -26,6 +19,17 @@ namespace DuckGame
         public bool _aiming;
         public float _cooldown;
         private SpriteMap _sprite;
+        public SpriteMap sprite
+        {
+            get
+            {
+                return _sprite;
+            }
+            set
+            {
+                _sprite = value;
+            }
+        }
 
         public override float angle
         {
@@ -93,7 +97,7 @@ namespace DuckGame
                 _timer = 1.2f;
                 _doneLoad = false;
                 _doLoad = false;
-                if (isServerForObject)
+                if (isServerForObject && !Recorderator.Playing)
                 {
                     Vec2 vec2 = Offset(barrelOffset);
                     --ammo;
@@ -104,6 +108,7 @@ namespace DuckGame
                         Level.Add(SmallSmoke.New(vec2.x + Rando.Float(-2f, 2f), vec2.y + Rando.Float(-2f, 2f)));
                     _sprite.SetAnimation("idle" + Math.Min(ammo, 4).ToString());
                     kick = 1f;
+                    recordKick = true;
                     _aiming = false;
                     _cooldown = 1f;
                     _fireAngle = 0f;

@@ -265,7 +265,8 @@ namespace DuckGame
                     byte prof = b.ReadByte();
                     Profile pref = cd.profiles[prof];
                     string message = b.ReadString();
-                    list.Add(new ChatMessage(pref, message, 0));
+                    ushort index = b.ReadUShort();
+                    list.Add(new ChatMessage(pref, message, index));
                 }
                 cd.chatMessages.Add(key, list);
             }
@@ -763,6 +764,7 @@ namespace DuckGame
                     ChatMessage cm = list[x];
                     buffer.Write((byte)profiles.IndexOf(cm.who));
                     buffer.Write(cm.text);
+                    buffer.Write(cm.index);
                 }
             }
 
@@ -866,7 +868,8 @@ namespace DuckGame
             Level.Remove(yes.t);
         }
         public static bool Paused;
-        
+
+        public List<ChatMessage> receivedMessages = new List<ChatMessage>();
         public override void Update()
         {
             if (PlayingThatShitBack)
@@ -903,24 +906,12 @@ namespace DuckGame
                 if (DuckNetwork.active)
                 {
                     List<ChatMessage> cms = new List<ChatMessage>();
-                    for (int i = 0; i < DuckNetwork.core.chatMessages.Count; i++)
+                    for (int i = 0; i < receivedMessages.Count; i++)
                     {
-                        ChatMessage cm = DuckNetwork.core.chatMessages[i];
-                        if (!cm.addedToReplay || cm.newLinesAdded)
-                        {
-                            if (cm.newLinesAdded)
-                            {
-                                cm.newLinesAdded = false;
-                                cms.Add(new ChatMessage(cm.who, cm.text.Split('\n').Last(), 0));
-                                cm.addedToReplay = true;
-                            }
-                            else
-                            {
-                                cms.Add(new ChatMessage(cm.who, cm.text, 0));
-                                cm.addedToReplay = true;
-                            }
-                        }
+                        ChatMessage cm = receivedMessages[i];
+                        cms.Add(new ChatMessage(cm.who, cm.text, cm.index));
                     }
+                    receivedMessages.Clear();
                     if (cms.Count > 0)
                     {
                         chatMessages.Add(cFrame, cms);
@@ -1015,10 +1006,6 @@ namespace DuckGame
         }
         public void PlayThatBack()
         {
-            /*
-            SFX.Play("chatmessage", 0.8f, Rando.Float(-0.15f, 0.15f));
-             * 
-             * */
             if (SFXToPlaySave.ContainsKey(cFrame))
             {
                 List<SoundData> sd = SFXToPlaySave[cFrame];
@@ -1031,11 +1018,23 @@ namespace DuckGame
             if (chatMessages.Count > 0 && chatMessages.ContainsKey(cFrame))
             {
                 List<ChatMessage> cms = chatMessages[cFrame];
+                SFX.Play("chatmessage", 0.8f, Rando.Float(-0.15f, 0.15f));
                 for (int i = 0; i < cms.Count; i++)
                 {
-                    DevConsole.Log(cms[i].text);
+                    DuckNetwork.core.AddChatMessage(cms[i]);
                 }
             }
+            List<ChatMessage> chatMessageList = new List<ChatMessage>();
+            foreach (ChatMessage chatMessage in DuckNetwork.core.chatMessages)
+            {
+                chatMessage.timeout -= 0.016f;
+                if (chatMessage.timeout < 0)
+                    chatMessage.alpha -= 0.01f;
+                if (chatMessage.alpha < 0)
+                    chatMessageList.Add(chatMessage);
+            }
+            foreach (ChatMessage chatMessage in chatMessageList)
+                DuckNetwork.core.chatMessages.Remove(chatMessage);
             if (BlocksBroken.Count > 0 && BlocksBroken[0].Frame <= cFrame)
             {
                 BlockbreakData bd = BlocksBroken[0];

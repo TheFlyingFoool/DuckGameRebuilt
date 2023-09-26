@@ -312,6 +312,7 @@ namespace DuckGame
                         }
                     }
                 }
+
                 if (_stance == Stance.SwingDown && duck.inputProfile.Pressed(Triggers.Jump))
                     _stance = Stance.SwingUp;
                 if (_goIntermediate && _stanceReady)
@@ -355,7 +356,7 @@ namespace DuckGame
                 }
                 else if (_stance == Stance.SwingUp)
                 {
-                    if (duck._hovering)
+                    if (duck._hovering || (duck.cordHover))
                     {
                         _swordAngle = -25f;
                         _swordFlip = offDir < 0;
@@ -1200,6 +1201,7 @@ namespace DuckGame
                 if (!_playedChargeUp && owner != null)
                 {
                     _playedChargeUp = true;
+                    SFX.DontSave = 1;
                     SFX.Play("laserChargeShort", pitch: Rando.Float(-0.1f, 0.1f));
                 }
                 float to2;
@@ -1222,6 +1224,7 @@ namespace DuckGame
                     if (_playedChargeUp && owner == null)
                     {
                         _playedChargeUp = false;
+                        SFX.DontSave = 1;
                         SFX.Play("laserUnchargeShort", pitch: Rando.Float(-0.1f, 0.1f));
                     }
                     _glow = Lerp.Float(_glow, 0f, 0.2f);

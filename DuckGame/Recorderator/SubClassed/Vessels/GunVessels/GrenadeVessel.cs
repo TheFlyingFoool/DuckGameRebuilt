@@ -7,6 +7,7 @@ namespace DuckGame
         public GrenadeVessel(Thing th) : base(th)
         {
             tatchedTo.Add(typeof(Grenade));
+            tatchedTo.Add(typeof(CannonGrenade));
             RemoveSynncl("infoed_g");
             RemoveSynncl("infoed_h");
             AddSynncl("infoed", new SomethingSync(typeof(byte)));
@@ -15,8 +16,14 @@ namespace DuckGame
         public Vec2 v;
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
-            GrenadeVessel v = new GrenadeVessel(new Grenade(0, -2000));
-            v.explodeFrame = b.ReadInt();
+            int explodeFrame = b.ReadInt();
+            bool cannonNade = b.ReadBool();
+
+            Grenade g;
+            if (cannonNade) g = new CannonGrenade(0, -2000);
+            else g = new Grenade(0, -2000);
+            GrenadeVessel v = new GrenadeVessel(g);
+            v.explodeFrame = explodeFrame;
             if (v.explodeFrame != -1)
             {
                 v.v = b.ReadVec2();
@@ -30,6 +37,7 @@ namespace DuckGame
             {
                 prevBuffer.Write(v);
             }
+            prevBuffer.Write(t is CannonGrenade);
             return prevBuffer;
         }
         public bool exploded;

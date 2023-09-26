@@ -9,16 +9,26 @@ namespace DuckGame
             RemoveSynncl("infoed_g");
             RemoveSynncl("angledeg");
             tatchedTo.Add(typeof(Sword));
+            tatchedTo.Add(typeof(TapedSword));
             AddSynncl("infoed", new SomethingSync(typeof(byte)));
             AddSynncl("velocity", new SomethingSync(typeof(int)));
         }
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
-            SwordVessel v = new SwordVessel(new Sword(0, -2000));
-            return v;
+            if (b.ReadBool())
+            {
+                SwordVessel v = new SwordVessel(new TapedSword(0, -2000));
+                return v;
+            }
+            else
+            {
+                SwordVessel v = new SwordVessel(new Sword(0, -2000));
+                return v;
+            }
         }
         public override BitBuffer RecSerialize(BitBuffer prevBuffer)
         {
+            prevBuffer.Write(t is TapedSword);
             return prevBuffer;
         }
         public override void PlaybackUpdate()

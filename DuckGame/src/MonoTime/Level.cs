@@ -974,7 +974,7 @@ namespace DuckGame
                         Graphics.DrawString("this stuff only shows in debug builds and offline -NiK0", new Vec2(0, 0), Color.White, 1, null, 2);
                         Graphics.DrawString(Resolution.size.ToString(), new Vec2(0, 16), Color.White, 1, null, 2);
                         Graphics.DrawString(Resolution.current.dimensions.ToString(), new Vec2(0, 32), Color.White, 1, null, 2);
-                        Graphics.DrawString(Graphics._screenViewport.Value.Bounds.ToString(), new Vec2(0, 48), Color.White, 1, null, 2);
+                        if (Graphics._screenViewport != null) Graphics.DrawString(Graphics._screenViewport.Value.Bounds.ToString(), new Vec2(0, 48), Color.White, 1, null, 2);
                         int width = (int)Resolution._device.PreferredBackBufferWidth;
                         int height = (int)Resolution._device.PreferredBackBufferHeight;
                         Graphics.DrawString($"{width}:{height} didRSVP:{cameraD}", new Vec2(0, 64), Color.White, 1, null, 2);

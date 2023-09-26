@@ -6,7 +6,7 @@ namespace DuckGame
     {
         public HolsterVessel(Thing th) : base(th)
         {
-            AddSynncl("hold", new SomethingSync(typeof(ushort)));//x
+            AddSynncl("hold", new SomethingSync(typeof(ushort)));
             tatchedTo.Add(typeof(Holster));
             tatchedTo.Add(typeof(PowerHolster));
         }
@@ -16,7 +16,6 @@ namespace DuckGame
             Holster h;
             if (br[0]) h = new PowerHolster(0, -2000);
             else h = new Holster(0, -2000);
-            //DevConsole.Log("is ph " + br[0]);
 
             h.chained = br[1];
             HolsterVessel v = new HolsterVessel(h);

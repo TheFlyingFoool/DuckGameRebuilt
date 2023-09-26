@@ -20,7 +20,7 @@ namespace DuckGame
         private float hitPitch;
         private Sound noteSound;
         private List<InstrumentNote> _notes = new List<InstrumentNote>();
-        private int currentPitch = -1;
+        public int currentPitch = -1;
         private bool leftPressed;
         private bool rightPressed;
 
@@ -60,7 +60,7 @@ namespace DuckGame
             if (this.owner is Duck owner && owner.inputProfile != null)
             {
                 hideLeftWing = ignoreHands = !raised;
-                if (isServerForObject)
+                if (isServerForObject && !Recorderator.Playing)
                 {
                     if (owner.inputProfile.Pressed(Triggers.Shoot))
                         currentPitch = 2;
@@ -98,6 +98,10 @@ namespace DuckGame
                     }
                     notePitch = currentPitch < 0 || _raised ? 0f : (float)(currentPitch / 3f + 0.01f);
                 }
+                if (Recorderator.Playing)
+                {
+                    notePitch = currentPitch < 0 || _raised ? 0f : (float)(currentPitch / 3f + 0.01f);
+                }
                 if (notePitch != prevNotePitch)
                 {
                     if (notePitch != 0)
@@ -115,6 +119,7 @@ namespace DuckGame
                         if (noteSound == null)
                         {
                             hitPitch = notePitch;
+                            SFX.DontSave = 1;
                             noteSound = SFX.Play("trumpet0" + Change.ToString(num + 1), 0.8f);
                             Level.Add(new MusicNote(barrelPosition.x, barrelPosition.y, barrelVector));
                         }

@@ -28,10 +28,8 @@ namespace DuckGame
                 {
                     depth = (Depth)(float)(0.9f + index * (1f / 1000f))
                 };
-                if (index < 3)
-                    campingSmoke.move -= c.barrelVector * Rando.Float(0.05f);
-                else
-                    campingSmoke.fly += c.barrelVector * (1f + Rando.Float(2.8f));
+                if (index < 3) campingSmoke.move -= c.barrelVector * Rando.Float(0.05f);
+                else campingSmoke.fly += c.barrelVector * (1f + Rando.Float(2.8f));
                 Level.Add(campingSmoke);
             }
             base.ApplyFire();

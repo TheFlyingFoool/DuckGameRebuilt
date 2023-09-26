@@ -30,6 +30,14 @@ namespace DuckGame
         public StateBinding _conversionResistanceBinding = new StateBinding(nameof(conversionResistance), 8);
         public bool forceDead;
         public bool afk;
+        public bool forcePaused;
+        public bool forceTabbed;
+        public bool forceLag;
+        public bool forceLoss;
+        public bool forceDisconnection;
+        public bool forceConsole;
+        public bool forceChatting;
+        public bool forceAFK;
         public int coinTargetted; //hi whats good -NiK0
         private byte _quackPitch;
         public NetSoundEffect _netQuack = new NetSoundEffect(new string[1]
@@ -1983,6 +1991,11 @@ namespace DuckGame
 
         private void UpdateCurrentAnimation()
         {
+            if (Recorderator.Playing)
+            {
+                _sprite.speed = 0;
+                return;
+            }
             if (dead && _eyesClosed)
                 _sprite.currentAnimation = "dead";
             else if (inNet)
@@ -3550,6 +3563,7 @@ namespace DuckGame
                     }
                 }
             }
+            if (Recorderator.Playing) UpdateConnectionIndicators();
             if (Network.isActive)
             {
                 UpdateConnectionIndicators();
@@ -3848,7 +3862,7 @@ namespace DuckGame
             --listenTime;
             if (listenTime < 0)
                 listenTime = 0;
-            if (listening && listenTime <= 0)
+            if (listening && listenTime <= 0 && !Recorderator.Playing)
                 listening = false;
             if (isServerForObject && !listening)
             {
@@ -3962,7 +3976,7 @@ namespace DuckGame
                 centerOffset = 24f;
             if (ragdoll == null && isServerForObject)
                 base.Update();
-            if (ragdoll == null && _prevRagdoll != null && DGRSettings.S_ParticleMultiplier != 0)
+            if (ragdoll == null && _prevRagdoll != null && DGRSettings.S_ParticleMultiplier != 0 && !Recorderator.Playing)
             {
                 Level.Add(SmallSmoke.New(x - Rando.Float(2f, 5f), (float)(y + Rando.Float(-3f, 3f) + 16)));
                 Level.Add(SmallSmoke.New(x + Rando.Float(2f, 5f), (float)(y + Rando.Float(-3f, 3f) + 16)));
@@ -4889,7 +4903,7 @@ namespace DuckGame
                                 Graphics.Draw(_spriteArms, _sprite.imageIndex + 18 + Maths.Int(action) * 18 * (holdObject.hasTrigger ? 1 : 0), armPosition.x + holdObject.handOffset.x * offDir, armPosition.y + holdObject.handOffset.y, _sprite.xscale, _sprite.yscale);
                                 _spriteArms._frameInc = 0f;
                                 _spriteArms.flipH = flipH;
-                                if (_sprite.currentAnimation == "jump" || (cordHover || (Recorderator.Playing && _spriteArms.imageIndex == 9)))
+                                if (_sprite.currentAnimation == "jump")
                                 {
                                     _spriteArms.angle = 0f;
                                     _spriteArms.depth = this.depth + -10;
@@ -4910,7 +4924,7 @@ namespace DuckGame
                             if (!flag2)
                             {
                                 _spriteArms.angle = 0f;
-                                if ((_sprite.currentAnimation == "jump" && _spriteArms.imageIndex == 9) || (cordHover || (Recorderator.Playing && _spriteArms.imageIndex == 9)))
+                                if (_sprite.currentAnimation == "jump" && _spriteArms.imageIndex == 9)
                                 {
                                     int num14 = 2;
                                     if (HasEquipment(typeof(ChestPlate)))
@@ -4940,7 +4954,7 @@ namespace DuckGame
                         }
                     }
                 }
-                if (Network.isActive && !_renderingDuck)
+                if ((Network.isActive || Recorderator.Playing) && !_renderingDuck)
                     DrawConnectionIndicators();
                 Sprite graphic = this.graphic;
                 this.graphic = null;
@@ -5143,6 +5157,24 @@ namespace DuckGame
                 {
                     get
                     {
+                        if (Recorderator.Playing)
+                        {
+                            if (problem == ConnectionTrouble.Chatting)
+                                return owner.duck.forceChatting;
+                            if (problem == ConnectionTrouble.AFK)
+                                return owner.duck.forceAFK;
+                            if (problem == ConnectionTrouble.Disconnection)
+                                return owner.duck.forceDisconnection;
+                            if (problem == ConnectionTrouble.Lag)
+                                return owner.duck.forceLag;
+                            if (problem == ConnectionTrouble.Loss)
+                                return owner.duck.forceLoss;
+                            if (problem == ConnectionTrouble.Minimized)
+                                return !owner.duck.forceTabbed;
+                            if (problem == ConnectionTrouble.Paused)
+                                return owner.duck.forcePaused;
+                            return problem == ConnectionTrouble.DevConsole && owner.duck.forceConsole;
+                        }
                         if (owner.duck.connection == null || owner.duck.profile == null)
                             return false;
                         if (problem == ConnectionTrouble.Chatting)
@@ -5180,7 +5212,10 @@ namespace DuckGame
                             or ConnectionTrouble.Paused
                             or ConnectionTrouble.DevConsole
                             or ConnectionTrouble.AFK)
+                        {
+                            SFX.DontSave = 1;
                             SFX.Play("rainpop", 0.65f, Rando.Float(-0.1f, 0.1f));
+                        }
                     }
                     if (!active)
                     {

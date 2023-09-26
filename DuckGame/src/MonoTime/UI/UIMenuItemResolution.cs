@@ -94,6 +94,7 @@ namespace DuckGame
             {
                 showAll = !showAll;
                 RefreshValueList();
+                SFX.DontSave = 1;
                 SFX.Play("textLetter", 0.7f);
                 currentIndex = _values.IndexOf(_field.value as Resolution);
                 if (currentIndex < 0)
@@ -120,7 +121,10 @@ namespace DuckGame
                 currentValue = _values[currentIndex];
                 int currentIndex2 = currentIndex;
                 if (currentIndex1 != currentIndex2)
+                {
+                    SFX.DontSave = 1;
                     SFX.Play("textLetter", 0.7f);
+                }
                 if (_textItem == null)
                     return;
                 _textItem.text = _values[currentIndex].ToShortString();

@@ -210,6 +210,7 @@ namespace DuckGame
             _controlledDuck.mindControl = owner.inputProfile;
             _controlledDuck.controlledBy = owner;
             immobilizeOwner = true;
+            SFX.DontSave = 1;
             SFX.Play("radioNoise", 0.8f);
             Event.Log(new MindControlEvent(responsibleProfile, d.profile));
             if (Recorder.currentRecording == null)
