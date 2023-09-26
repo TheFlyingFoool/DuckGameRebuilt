@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Shotgun
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -53,12 +46,13 @@ namespace DuckGame
             base.Update();
             if (_loadAnimation == -1)
             {
+                SFX.DontSave = 1;
                 SFX.Play("shotgunLoad");
                 _loadAnimation = 0f;
             }
             if (_loadAnimation >= 0)
             {
-                if (_loadAnimation == 0.5 && ammo != 0)
+                if (_loadAnimation == 0.5 && ammo != 0 && !Recorderator.Playing)
                     PopShell();
                 if (_loadAnimation < 1)
                     _loadAnimation += 0.1f;

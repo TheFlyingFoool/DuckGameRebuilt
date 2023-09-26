@@ -122,7 +122,7 @@ namespace DuckGame
 
         public override void Terminate()
         {
-            if (_hitPoints > 5 && !Network.isActive)
+            if (_hitPoints > 5 && !Network.isActive && !Recorderator.Playing)
             {
                 Level.Remove(_frame);
                 _frame = null;
@@ -142,6 +142,7 @@ namespace DuckGame
                 if (ChallengeLevel.running)
                     ++ChallengeLevel.goodiesGot;
             }
+            if (Recorderator.Playing) return true;
             DoorOffHinges t = null;
             if (Network.isActive)
             {

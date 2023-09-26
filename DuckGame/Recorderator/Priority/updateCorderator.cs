@@ -27,7 +27,7 @@ namespace DuckGame
         {
             if (zeCorder != null)
             {
-                zeCorder.SaveToFile();
+                zeCorder.SaveToFile(lastLevel);
                 zeCorder = null;
 
                 //corders.Add(pels[i].Remove(0, p + 1), File.ReadAllBytes(pels[i]));

@@ -17,6 +17,11 @@ namespace DuckGame
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
             int explodeFrame = b.ReadInt();
+            Vec2 vs = Vec2.Zero;
+            if (explodeFrame != -1)
+            {
+                vs = b.ReadVec2();
+            }
             bool cannonNade = b.ReadBool();
 
             Grenade g;
@@ -24,10 +29,7 @@ namespace DuckGame
             else g = new Grenade(0, -2000);
             GrenadeVessel v = new GrenadeVessel(g);
             v.explodeFrame = explodeFrame;
-            if (v.explodeFrame != -1)
-            {
-                v.v = b.ReadVec2();
-            }
+            v.v = vs;
             return v;
         }
         public override BitBuffer RecSerialize(BitBuffer prevBuffer)

@@ -397,16 +397,6 @@ namespace DuckGame
                 byte tope = b.ReadByte();
                 int x = b.ReadInt();
                 Main.SpecialCode = "ChangeDestroy loop";
-                /* 
-                typeWow.Add(typeof(byte), 0);
-                typeWow.Add(typeof(sbyte), 1);
-                typeWow.Add(typeof(int), 2);
-                typeWow.Add(typeof(float), 3);
-                typeWow.Add(typeof(Vec2), 4);
-                typeWow.Add(typeof(ushort), 5);
-                typeWow.Add(typeof(string), 6);
-                typeWow.Add(typeof(bool), 7);
-                 */
                 switch (tope)
                 {
                     case 0:

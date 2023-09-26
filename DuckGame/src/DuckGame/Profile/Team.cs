@@ -16,6 +16,7 @@ namespace DuckGame
         //YUH YEAH AYUYH YUH YYUH ELETI GUEWHYUH YUH YUH
         public float shake;
         public bool favorited;
+        public int recordIndex;
 
         public NetworkConnection customConnection;
         private Dictionary<DuckPersona, SpriteMap> _recolors = new Dictionary<DuckPersona, SpriteMap>();

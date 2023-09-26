@@ -17,13 +17,18 @@
         }
         public override BitBuffer RecSerialize(BitBuffer prevBuffer)
         {
-            prevBuffer.WriteObject(((DoorOffHinges)t)._secondaryFrame);
+            prevBuffer.Write(((DoorOffHinges)t)._secondaryFrame);
             return base.RecSerialize(prevBuffer);
         }
+        public bool init;
         public override void PlaybackUpdate()
         {
             DoorOffHinges dfh = (DoorOffHinges)t;
             dfh.position = CompressedVec2Binding.GetUncompressedVec2((int)valOf("position"), 10000);
+            if (!dfh.visible && (bool)valOf("visible"))
+            {
+                dfh.MakeEffects();
+            }
             dfh.visible = (bool)valOf("visible");
             dfh._throwSpin = (int)valOf("spin");
             base.PlaybackUpdate();

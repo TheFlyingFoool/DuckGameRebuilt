@@ -52,6 +52,16 @@ namespace DuckGame
             cd.maxFrame = b.ReadInt();
             cd.gamemodeStarted = b.ReadInt();
 
+            ushort teams = b.ReadUShort();
+            for (int i = 0; i < teams; i++)
+            {
+                byte[] tData = b.ReadBytes();
+                Team th = Team.Deserialize(tData);
+                th.recordIndex = i;
+                cd.teams.Add(th);
+            }
+            
+
             byte prs = b.ReadByte();
             for (int i = 0; i < prs; i++)
             {
@@ -67,7 +77,11 @@ namespace DuckGame
                 p.ReplayRebuilt = br[3];
                 if (br[6])
                 {
-                    ushort ush = b.ReadUShort();
+                    int ush = b.ReadUShort() - 1;
+                    if (ush != -1 && cd.teams.Count > ush)
+                    {
+                        p.team = cd.teams[ush];
+                    }
                 }
                 cd.profiles.Add(p);
             }
@@ -211,35 +225,6 @@ namespace DuckGame
             }
             DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Sound buffer size:" + (b.position - cPos));
             cPos = b.position;
-            /*buffer.Write(chatMessages.Count);
-            for (int i = 0; i < chatMessages.Count; i++)
-            {
-                KeyValuePair<int, List<ChatMessage>> lls = chatMessages.ElementAt(i);
-                List<ChatMessage> list = lls.Value;
-                buffer.Write((ushort)lls.Key);
-                buffer.Write((ushort)list.Count);
-                for (int x = 0; x < list.Count; x++)
-                {
-                    ChatMessage cm = list[x];
-                    if (profiles.Contains(cm.who))
-                    {
-                        buffer.Write((byte)0);
-                        buffer.Write((byte)profiles.IndexOf(cm.who));
-                    }
-                    else if (cm.who.team != null)
-                    {
-                        buffer.Write((byte)1);
-                        buffer.Write((ushort)Teams.IndexOf(cm.who.team));
-                    }
-                    else
-                    {
-                        buffer.Write((byte)2);
-                        buffer.Write(cm.who.name);
-                    }
-                    buffer.Write(cm.text);
-                }
-            }
-             * */
             iters = b.ReadInt();
             for (int i = 0; i < iters; i++)
             {
@@ -294,18 +279,29 @@ namespace DuckGame
         public static string CordsPath = DuckFile.saveDirectory + "Recorderations/";
         public List<Profile> profiles = new List<Profile>();
         public List<Team> teams = new List<Team>();
-        public byte[] SaveToFile()
+        public byte[] SaveToFile(Level lastLevel)
         {
             if (!Directory.Exists(CordsPath)) Directory.CreateDirectory(CordsPath);
             
             Main.SpecialCode = "before anything existed";
             BitBuffer buffer = new BitBuffer();
+            BitBuffer metadataBuffer = new BitBuffer();
             buffer.Write(cFrame);
 
             buffer.Write(gamemodeStarted);
 
+            metadataBuffer.Write(cFrame);
             Main.SpecialCode = "there were profiles";
+
+            buffer.Write((ushort)teams.Count);
+            for (int i = 0; i < teams.Count; i++)
+            {
+                Team t = teams[i];
+                buffer.Write(t.customData, true);
+            }
+
             buffer.Write((byte)profiles.Count);
+            metadataBuffer.Write((byte)profiles.Count);
             for (int i = 0; i < profiles.Count; i++)
             {
                 Profile p = profiles[i];
@@ -313,6 +309,10 @@ namespace DuckGame
                 buffer.Write((byte)p.persona.index);
                 buffer.Write(p.name);
                 buffer.Write(p.steamID);
+
+                metadataBuffer.Write((byte)p.persona.index);
+                metadataBuffer.Write(p.name);
+                metadataBuffer.Write(p.steamID);
                 Main.SpecialCode = "and the profiles have some data";
                 BitArray br = new BitArray(8);
                 if (p.connection != null)
@@ -329,7 +329,14 @@ namespace DuckGame
                 Main.SpecialCode = "or something like that";
                 if (p.team != null) br[7] = p.team.defaultTeam;
                 buffer.Write(BitCrusher.BitArrayToByte(br));
-                if (p.team != null) buffer.Write((ushort)Teams.IndexOf(p.team));
+                if (p.team != null)
+                {
+                    if (teams.Contains(p.team)) buffer.Write((ushort)(teams.IndexOf(p.team) + 1));
+                    else buffer.Write((ushort)0);
+                }
+
+                metadataBuffer.Write(BitCrusher.BitArrayToByte(br));
+                if (p.team != null) metadataBuffer.Write((ushort)Teams.IndexOf(p.team));
                 Main.SpecialCode = "end";
             }
 
@@ -776,6 +783,12 @@ namespace DuckGame
                 bf.RemoveRange(buffer.position + 10, buffer.buffer.Count() - buffer.position - 11);
             }
 
+            List<byte> bf2 = metadataBuffer.buffer.ToList();
+            if (metadataBuffer.position + 13 < metadataBuffer.buffer.Count())
+            {
+                bf2.RemoveRange(metadataBuffer.position + 10, metadataBuffer.buffer.Count() - metadataBuffer.position - 11);
+            }
+
             if (isThisReplayBroken)
             {
                 File.WriteAllText(CordsPath + "broken_cord_" + DateTime.Now.ToString().Replace('/', '-').Replace(':', '-').Replace(' ', '-') + ".txt", crashStuff);
@@ -803,6 +816,16 @@ namespace DuckGame
                             using (Stream entryStream = entry.Open())
                             {
                                 customFileStream.CopyTo(entryStream);
+                            }
+
+                            // Second entry from bf2 with the name "metadata.rmt"
+                            ZipArchiveEntry entry2 = archive.CreateEntry("metadata.rmt");
+                            using (Stream entryStream2 = entry2.Open())
+                            {
+                                using (MemoryStream customFileStream2 = new MemoryStream(bf2.ToArray()))
+                                {
+                                    customFileStream2.CopyTo(entryStream2);
+                                }
                             }
                         }
                     }
@@ -940,9 +963,17 @@ namespace DuckGame
                         else if (th is BackgroundTile bt) BackgroundTiles.Add(bt);
                         else if (th is ForegroundTile ft) BackgroundTiles.Add(ft);
                         else if (th is AutoPlatform ap) AutoPlatforms.Add(ap);
-                        else if (th is TreeTop || th is TreeTopDead || th is IBigStupidWall || th is PyramidWall || th is VerticalDoor || th is IceWedge || th is WaterFlow)
+                        else if (th is TreeTop || th is TreeTopDead || th is IBigStupidWall || th is PyramidWall || th is VerticalDoor || th is IceWedge)
                         {
                             TheThings.Add(th);
+                        }
+                        else if (th is WaterFlow wf)
+                        {
+                            if (wf.extraWater.Count > 0)
+                            {
+                                TheThings.AddRange(wf.extraWater);
+                            }
+                            TheThings.Add(wf);
                         }
                         else if (th is Saws || th is Spikes || th is Spring || th is ArcadeLight || th is PyramidLightRoof || th is PyramidWallLight || th is Bulb || th is HangingCityLight || th is Lamp || th is OfficeLight || th is WallLightRight || th is Sun || th is ArcadeTableLight || th is OfficeLight || th is WallLightLeft || th is FishinSign || th is MallardBillboard || th is ClippingSign || th is StreetLight || th is PyramidBLight || th is TroubleLight || th is RaceSign || th is ArrowSign || th is DangerSign || th is EasySign || th is HardLeft || th is UpSign || th is VeryHardSign || th is WaterCooler || th is Altar || th is SnowGenerator || th is SnowDrift || th is SnowPile || th is WaterFall || th is WaterFallEdge || th is WaterFallEdgeTop  || th is WaterFallTile) theLevelDetailsETC.Add(th);
                         else if (th is PipeTileset pt) Pipes.Add(pt);
