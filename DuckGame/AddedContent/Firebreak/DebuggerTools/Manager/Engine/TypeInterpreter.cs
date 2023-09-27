@@ -1,12 +1,13 @@
 ﻿using System;
 
-namespace DuckGame.ConsoleEngine;
-
-public interface ITypeInterpreter
+namespace DuckGame.ConsoleEngine
 {
-    /// <summary>
-    /// The type the interpreter is designed to parse for.
-    /// </summary>
-    Type ParsingType { get; }
-    ValueOrException<object> ParseString(string fromString, Type specificType, CommandRunner engine);
+    public interface ITypeInterpreter
+    {
+        /// <summary>
+        /// The type the interpreter is designed to parse for.
+        /// </summary>
+        Type ParsingType { get; }
+        ValueOrException<object> ParseString(string fromString, Type specificType, CommandRunner engine);
+    }
 }

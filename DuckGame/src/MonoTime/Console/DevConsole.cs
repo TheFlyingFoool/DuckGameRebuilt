@@ -1644,29 +1644,6 @@ namespace DuckGame
             }
         }
         
-        /// <summary>
-        /// Log the expression and it's value in this format
-        /// <code>
-        /// {expression}: {value}
-        /// </code>
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// DevConsole.DebugLog(2 + 2);         // '2 + 2: 4'
-        /// DevConsole.DebugLog(true == false); // 'true == false: false'
-        /// DevConsole.DebugLog(someVariable);  // 'someVariable: 69'
-        /// </code>
-        /// </example>
-        /// <param name="expression">what's gonna be logged</param>
-        /// <param name="compileTimeExpression">
-        /// do NOT use this parameter.
-        /// it's going to cause unexpected behaviour
-        /// </param>
-        public static void DebugLog(object? expression, [CallerArgumentExpression(nameof(expression))] string compileTimeExpression = default!)
-        {
-            Log($"{compileTimeExpression}: {expression}");
-        }
-
         public static void SendNetLog(NetworkConnection pConnection)
         {
             List<string> stringList = new();

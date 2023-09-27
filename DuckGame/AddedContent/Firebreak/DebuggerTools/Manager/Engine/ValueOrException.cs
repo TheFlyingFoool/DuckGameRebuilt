@@ -1,52 +1,53 @@
 ﻿using System;
 
-namespace DuckGame.ConsoleEngine;
-
-public class ValueOrException<T>
+namespace DuckGame.ConsoleEngine
 {
-    public T Value { get; set; } = default!;
-    public bool Failed { get; set; }
-    public Exception Error { get; set; } = default!;
-
-    public static implicit operator ValueOrException<T>(Exception e)
+    public class ValueOrException<T>
     {
-        return FromError(e);
-    }
+        public T Value { get; set; } = default!;
+        public bool Failed { get; set; }
+        public Exception Error { get; set; } = default!;
 
-    public static implicit operator ValueOrException<T>(T value)
-    {
-        return FromValue(value);
-    }
+        public static implicit operator ValueOrException<T>(Exception e)
+        {
+            return FromError(e);
+        }
+
+        public static implicit operator ValueOrException<T>(T value)
+        {
+            return FromValue(value);
+        }
     
-    public static ValueOrException<T> FromError(Exception e)
-    {
-        return new ValueOrException<T>()
+        public static ValueOrException<T> FromError(Exception e)
         {
-            Failed = true,
-            Error = e
-        };
-    }
+            return new ValueOrException<T>()
+            {
+                Failed = true,
+                Error = e
+            };
+        }
 
-    public static ValueOrException<T> FromValue(T value)
-    {
-        return new ValueOrException<T>()
+        public static ValueOrException<T> FromValue(T value)
         {
-            Value = value
-        };
-    }
+            return new ValueOrException<T>()
+            {
+                Value = value
+            };
+        }
 
-    public void TryUse(Action<T> usage, Action<Exception> failureUsage)
-    {
-        if (Failed) 
-            failureUsage(Error!);
-        else usage(Value);
-    }
+        public void TryUse(Action<T> usage, Action<Exception> failureUsage)
+        {
+            if (Failed) 
+                failureUsage(Error!);
+            else usage(Value);
+        }
 
-    public override string ToString()
-    {
-        if (Failed)
-            return Error.Message;
+        public override string ToString()
+        {
+            if (Failed)
+                return Error.Message;
 
-        return Value?.ToString() ?? "";
+            return Value?.ToString() ?? "";
+        }
     }
 }

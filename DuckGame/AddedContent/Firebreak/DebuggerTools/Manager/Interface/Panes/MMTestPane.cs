@@ -31,13 +31,13 @@ namespace DuckGame.ConsoleInterface.Panes
         {
             Graphics.DrawRect(Bounds, MallardManager.Colors.PrimaryBackground, depth);
             
-            AcrossTime.Do(this, TimeSpan.FromSeconds(1), progress => 
-            {
-                Vec2 textPosition = Bounds.bl - (deltaUnit * -2, RebuiltMono.HEIGHT * deltaUnit + deltaUnit * 2); 
-                Color color = Lerp.Color(Color, Color2, (float) progress.NormalizedValue); 
-                 
-                RebuiltMono.Draw($"{Math.Round(progress.NormalizedValue, 2)}", textPosition, color, depth + 0.1f, deltaUnit); 
-            });
+            // AcrossTime.Do(this, TimeSpan.FromSeconds(1), progress => 
+            // {
+            //     Vec2 textPosition = Bounds.bl - (deltaUnit * -2, RebuiltMono.HEIGHT * deltaUnit + deltaUnit * 2); 
+            //     Color color = Lerp.Color(Color, Color2, (float) progress.NormalizedValue); 
+            //      
+            //     RebuiltMono.Draw($"{Math.Round(progress.NormalizedValue, 2)}", textPosition, color, depth + 0.1f, deltaUnit); 
+            // });
 
             Color[] colors =
             {

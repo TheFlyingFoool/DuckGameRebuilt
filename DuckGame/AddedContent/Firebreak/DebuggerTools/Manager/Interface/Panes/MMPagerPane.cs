@@ -65,7 +65,7 @@ namespace DuckGame.ConsoleInterface.Panes
         public override void DrawRaw(Depth depth, float deltaUnit)
         {
             float renderSpaceTop = 20 * deltaUnit;
-            Rectangle tabSpace = Bounds with {height = renderSpaceTop};
+            Rectangle tabSpace = new(Bounds.x, Bounds.y, Bounds.width, renderSpaceTop);// Bounds with {height = renderSpaceTop};
 
             Rectangle renderSpace = new(tabSpace.bl, tabSpace.br + new Vec2(0, Bounds.height - renderSpaceTop));
 

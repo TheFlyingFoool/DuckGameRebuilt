@@ -57,13 +57,13 @@ namespace DuckGame.ConsoleInterface.Panes
                 
                 Graphics.DrawRect(splitPaneBounds, overlayBoxColor, depth);
 
-                Vec2 point1 = Keyboard.shift
-                    ? splitPaneBounds.tl with {y = splitPaneBounds.Center.y}
-                    : splitPaneBounds.tl with {x = splitPaneBounds.Center.x};
-
-                Vec2 point2 = Keyboard.shift
-                    ? splitPaneBounds.br with {y = splitPaneBounds.Center.y}
-                    : splitPaneBounds.br with {x = splitPaneBounds.Center.x};
+                // Vec2 point1 = Keyboard.shift
+                //     ? splitPaneBounds.tl with {y = splitPaneBounds.Center.y}
+                //     : splitPaneBounds.tl with {x = splitPaneBounds.Center.x};
+                //
+                // Vec2 point2 = Keyboard.shift
+                //     ? splitPaneBounds.br with {y = splitPaneBounds.Center.y}
+                //     : splitPaneBounds.br with {x = splitPaneBounds.Center.x};
 
                 if (!mouseHovering)
                     return;
@@ -71,8 +71,8 @@ namespace DuckGame.ConsoleInterface.Panes
                 Rectangle closePaneBox = new(splitPaneBounds.tr - (zoom * 8, 0), zoom * 8, zoom * 8);
                 Graphics.DrawOutlinedRect(closePaneBox, MallardManager.Colors.SecondarySystemText, MallardManager.Colors.UserOverlay, depth + 0.1f, zoom / 2);
 
-                if (Mouse.right != InputState.Down)
-                    Graphics.DrawLine(point1, point2, MallardManager.Colors.UserOverlay, zoom, depth);
+                // if (Mouse.right != InputState.Down)
+                //     Graphics.DrawLine(point1, point2, MallardManager.Colors.UserOverlay, zoom, depth);
 
                 if (Mouse.right == InputState.Pressed)
                 {

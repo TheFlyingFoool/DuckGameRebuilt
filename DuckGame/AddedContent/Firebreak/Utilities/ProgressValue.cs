@@ -5,7 +5,7 @@ namespace DuckGame
 
     public struct ProgressValue
     {
-        public double Value = 0;
+        public double Value;
 
         public double NormalizedValue
         {
@@ -13,20 +13,18 @@ namespace DuckGame
             set => Value = value * (MaximumValue - MinimumValue) + MinimumValue;
         }
 
-        public double MaximumValue = 1;
-        public double MinimumValue = 0;
-        public double IncrementSize = 0.05;
+        public double MaximumValue;
+        public double MinimumValue;
+        public double IncrementSize;
 
         public bool Completed => NormalizedValue >= 1;
-
-        public ProgressValue() : this(0D) { }
 
         public ProgressValue(ProgressValue p) : this(p.Value, p.IncrementSize, p.MinimumValue, p.MaximumValue) { }
 
         public ProgressValue(double value, double incrementSize = 0.05, double min = 0, double max = 1)
         {
-            if (MinimumValue > MaximumValue)
-                throw new Exception("Minimum size cannot be less than the maximum size");
+            // if (MinimumValue > MaximumValue)
+            //     throw new Exception("Minimum size cannot be less than the maximum size");
 
             Value = value;
             MaximumValue = max;

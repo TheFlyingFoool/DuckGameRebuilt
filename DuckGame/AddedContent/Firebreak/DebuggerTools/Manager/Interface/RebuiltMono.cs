@@ -137,10 +137,10 @@ namespace DuckGame.ConsoleInterface
             }
         }
         
-        public static void DebugDraw(object? expression, Vec2 pos, Color color, Depth depth, float size = 1f, [CallerArgumentExpression(nameof(expression))] string compileTimeExpression = default!)
-        {
-            Draw($"{compileTimeExpression}: {expression}", pos, color, depth, size);
-        }
+        // public static void DebugDraw(object? expression, Vec2 pos, Color color, Depth depth, float size = 1f, [CallerArgumentExpression(nameof(expression))] string compileTimeExpression = default!)
+        // {
+        //     Draw($"{compileTimeExpression}: {expression}", pos, color, depth, size);
+        // }
 
         public static Sprite FontSprite;
         public static Dictionary<char, Vec2> CharPositionMapping = new()
