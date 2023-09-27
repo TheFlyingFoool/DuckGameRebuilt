@@ -1,3 +1,4 @@
+using System.Drawing;
 using System.IO;
 
 namespace DuckGame
@@ -40,8 +41,8 @@ namespace DuckGame
                 string mapName = "LEVEL";
                 
                 string cordDisplayName = $"{fileInfo.CreationTime:ddd yyyy-MM-dd hh:mm:ss} [{mapName}] [{matchLengthSeconds}s]";
-                Vec2 stringSize = Extensions.GetFancyStringSize(cordDisplayName, fontSize);
-                Rectangle textBounds = new(1, 1 + (stringSize.y + 1) * i, stringSize.x, stringSize.y);
+                SizeF stringSize = Extensions.GetFancyStringSize(cordDisplayName, fontSize);
+                Rectangle textBounds = new(1, 1 + (stringSize.Height + 1) * i, stringSize.Width, stringSize.Height);
 
                 bool hovered = textBounds.Contains(Mouse.positionScreen);
                 Color textColor = hovered ? Color.Yellow : Color.White;

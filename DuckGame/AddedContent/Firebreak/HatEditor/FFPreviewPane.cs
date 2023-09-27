@@ -201,7 +201,7 @@ namespace DuckGame
 
                 float textScale = 0.6f;
                 string animationName = s_animationsIndexed[CurrentPLayingAnimationIndex];
-                Graphics.DrawString(animationName, framesBounds.tl + new Vec2(5, Extensions.GetStringSize(animationName, textScale).y + 1), FFColors.Focus, 1.1f, scale: textScale);
+                Graphics.DrawString(animationName, framesBounds.tl + new Vec2(5, Extensions.GetStringSize(animationName, textScale).Height + 1), FFColors.Focus, 1.1f, scale: textScale);
 
                 (SpriteMap, string, bool?, Rectangle)[] iconBoundsPairs =
                 {

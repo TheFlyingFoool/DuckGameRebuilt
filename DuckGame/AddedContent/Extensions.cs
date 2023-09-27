@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Reflection.Emit;
 using System.Diagnostics;
+using System.Drawing;
 using System.Web.UI.WebControls;
 
 namespace DuckGame
@@ -269,8 +270,13 @@ namespace DuckGame
             return false;
         }
 
-        public static void Deconstruct<TKey, TValue>(this KeyValuePair<TKey, TValue> pair, out TKey key,
-            out TValue value)
+        public static void Deconstruct(this SizeF size, out float width, out float height)
+        {
+            width = size.Width;
+            height = size.Height;
+        }
+
+        public static void Deconstruct<TKey, TValue>(this KeyValuePair<TKey, TValue> pair, out TKey key, out TValue value)
         {
             key = pair.Key;
             value = pair.Value;
@@ -655,14 +661,14 @@ namespace DuckGame
         public static string CleanFormatting(this string str, CleanMethod cleanMethod = CleanMethod.Both) =>
             CleanStringFormatting(str, cleanMethod);
 
-        public static Vec2 GetStringSize(string text, float fontSize = 1f) => new(0, 0)
+        public static SizeF GetStringSize(string text, float fontSize = 1f) => new(0, 0)
         {
-            x = Graphics.GetStringWidth(text, false, fontSize), y = Graphics.GetStringHeight(text) * fontSize
+            Width = Graphics.GetStringWidth(text, false, fontSize), Height = Graphics.GetStringHeight(text) * fontSize
         };
         
-        public static Vec2 GetFancyStringSize(string text, float fontSize = 1f) => new()
+        public static SizeF GetFancyStringSize(string text, float fontSize = 1f) => new()
         {
-            x = Graphics.GetFancyStringWidth(text, false, fontSize), y = Graphics.GetStringHeight(text) * fontSize
+            Width = Graphics.GetFancyStringWidth(text, false, fontSize), Height = Graphics.GetStringHeight(text) * fontSize
         };
 
         public static bool MultiPlayerTeamsExist()

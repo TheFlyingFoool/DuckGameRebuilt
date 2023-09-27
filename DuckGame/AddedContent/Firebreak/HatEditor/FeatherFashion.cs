@@ -1,5 +1,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -423,8 +424,8 @@ namespace DuckGame
             const float fontSize = 0.6f;
                 
             string segmentedTip = string.Join("\n", tip.SplitByLength(30));
-            Vec2 textSize = Extensions.GetStringSize(segmentedTip, fontSize);
-            Rectangle bgBox = new(position, position + textSize + new Vec2(2));
+            SizeF textSize = Extensions.GetStringSize(segmentedTip, fontSize);
+            Rectangle bgBox = new(position, position + (Vec2) textSize + new Vec2(2));
 
             bool drawLeft = bgBox.Right > current.camera.width;
             bool drawUp = bgBox.Bottom > current.camera.height;

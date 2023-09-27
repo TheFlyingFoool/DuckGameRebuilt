@@ -232,7 +232,7 @@ namespace DuckGame
                 s_scrollLimit = MetapixelInfo.Count;
                 Graphics.DrawRect(innerBounds, Color.Black, 0.9f);
                 
-                float textH = Extensions.GetStringSize("H", 0.6f).y;
+                float textH = Extensions.GetStringSize("H", 0.6f).Height;
                 
                 Graphics.DrawFancyString("you can scroll here btw", innerBounds.tl + (Vec2.One * 2), Color.Red, 1.1f, 0.6f);
                 Graphics.DrawLine(innerBounds.tl + new Vec2(2, 4 + textH), innerBounds.width - 4, 90, Color.Red, depth: 1f);
@@ -282,7 +282,7 @@ namespace DuckGame
                 
                 string title = $"{pixel.r:000} / {info.Name}";
                     
-                float textH = Extensions.GetStringSize("H", 0.6f).y;
+                float textH = Extensions.GetStringSize("H", 0.6f).Height;
                 
                 Graphics.DrawFancyString(title, innerBounds.tl + (Vec2.One * 2), Color.Red, 1.1f, 0.6f);
                 Graphics.DrawLine(innerBounds.tl + new Vec2(2, 4 + textH), innerBounds.width - 4, 90, Color.Red, depth: 1f);
@@ -426,7 +426,7 @@ namespace DuckGame
 
                     string text = $"{i + 1} / {info.Name}";
                     
-                    float textH = Extensions.GetStringSize("H", 0.6f).y;
+                    float textH = Extensions.GetStringSize("H", 0.6f).Height;
                     float textW = Graphics.GetFancyStringWidth(text, scale: 0.6f);
                     Vec2 textDrawPos = innerBounds.tl + new Vec2(2, 2 + ((textH + 2) * (i - s_scrollIndex)));
 
