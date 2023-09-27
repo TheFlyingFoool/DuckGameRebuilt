@@ -125,7 +125,7 @@ namespace DuckGame
                     float bottom = top + s_progressBarRect.height;
                     
                     float mouseY = Maths.Clamp(Mouse.yScreen, top, bottom);
-                    int nearestFrameSelected = (int)(CurrentDuckAnimation.Length * new ProgressValue(mouseY, 0, top, bottom).NormalizedValue);
+                    int nearestFrameSelected = (int)(CurrentDuckAnimation.Length * ProgressValue.Normalize(mouseY, top, bottom));
 
                     s_currentAnimationFrame = Maths.Clamp(nearestFrameSelected, 0, CurrentDuckAnimation.Length - 1);
                 }

@@ -3,29 +3,28 @@
 namespace DuckGame
 {
 
-    public class ProgressValue
+    public struct ProgressValue
     {
-        public double Value = 0;
+        public double Value;
+        public double MaximumValue;
+        public double MinimumValue;
+        public double IncrementSize;
 
         public double NormalizedValue
         {
             get => (Value - MinimumValue) / (MaximumValue - MinimumValue);
             set => Value = value * (MaximumValue - MinimumValue) + MinimumValue;
         }
+        
+        public static double Normalize(double value, double min, double max) => (value - min) / (max - min);
 
-        public double MaximumValue = 1;
-        public double MinimumValue = 0;
-        public double IncrementSize = 0.05;
-
-        public bool Completed => NormalizedValue >= 1;
-
-        public ProgressValue() : this(0D) { }
+        public bool Completed => IncrementSize >= 0 ? NormalizedValue >= 1 : NormalizedValue <= 0;
 
         public ProgressValue(ProgressValue p) : this(p.Value, p.IncrementSize, p.MinimumValue, p.MaximumValue) { }
 
-        public ProgressValue(double value, double incrementSize = 0.05, double min = 0, double max = 1)
+        public ProgressValue(double value, double incrementSize, double min, double max)
         {
-            if (MinimumValue > MaximumValue)
+            if (min > max)
                 throw new Exception("Minimum size cannot be less than the maximum size");
 
             Value = value;
@@ -33,10 +32,21 @@ namespace DuckGame
             MinimumValue = min;
             IncrementSize = incrementSize;
         }
+        
+        public ProgressValue(double value, double min, double max)
+        {
+            if (min > max)
+                throw new Exception("Minimum size cannot be less than the maximum size");
+
+            Value = value;
+            MaximumValue = max;
+            MinimumValue = min;
+            IncrementSize = Normalize(value, min, max) * (max - min);
+        }
 
         public string GenerateBar(int characterCount = 30, char filled = '#', char empty = '-', Func<string, string, string>? formatFunction = null)
         {
-            formatFunction ??= (done, left) => $"{done}{left}";
+            formatFunction ??= (done, left) => $"[{done}{left}]";
             Value = ~this;
 
             double fillPercentage = NormalizedValue * characterCount;
@@ -70,26 +80,26 @@ namespace DuckGame
 
         public static ProgressValue operator +(ProgressValue a, ProgressValue b)
         {
-            a.Value = a.Value + b.Value;
+            a.Value += b.Value;
             return a;
         }
 
         public static ProgressValue operator -(ProgressValue a, ProgressValue b)
         {
 
-            a.Value = a.Value - b.Value;
+            a.Value -= b.Value;
             return a;
         }
 
         public static ProgressValue operator *(ProgressValue a, ProgressValue b)
         {
-            a.Value = a.Value * b.Value;
+            a.Value *= b.Value;
             return a;
         }
 
         public static ProgressValue operator /(ProgressValue a, ProgressValue b)
         {
-            a.Value = a.Value / b.Value;
+            a.Value /= b.Value;
             return a;
         }
 

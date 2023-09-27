@@ -323,12 +323,12 @@ namespace DuckGame
                         float right = left + sliderBounds.width;
 
                         float mouseX = Maths.Clamp(Mouse.xScreen, left, right);
-                        int nearestValueSelected = (int)(255 * new ProgressValue(mouseX, 0, left, right).NormalizedValue);
+                        int nearestValueSelected = (int)(255 * ProgressValue.Normalize(mouseX, left, right));
 
                         Metapixels[i] = new Color(pixel.r, (byte)Maths.Clamp(nearestValueSelected, 0, 255), pixel.b);
                     }
 
-                    Graphics.DrawLine(new Vec2(sliderTL.x + (float) (sliderBounds.width * new ProgressValue(Metapixels[i].g, 0, 0, 255).NormalizedValue), sliderTL.y), sliderBounds.height, 0, Color.Yellow, depth: 1.4f);
+                    Graphics.DrawLine(new Vec2(sliderTL.x + (float) (sliderBounds.width * ProgressValue.Normalize(Metapixels[i].g, 0, 255)), sliderTL.y), sliderBounds.height, 0, Color.Yellow, depth: 1.4f);
                 }
 
                 if (hasB)
@@ -353,12 +353,12 @@ namespace DuckGame
                         float right = left + sliderBounds.width;
 
                         float mouseX = Maths.Clamp(Mouse.xScreen, left, right);
-                        int nearestValueSelected = (int)(255 * new ProgressValue(mouseX, 0, left, right).NormalizedValue);
+                        int nearestValueSelected = (int)(255 * ProgressValue.Normalize(mouseX, left, right));
 
                         Metapixels[i] = new Color(pixel.r, pixel.g, (byte)Maths.Clamp(nearestValueSelected, 0, 255));
                     }
 
-                    Graphics.DrawLine(new Vec2(sliderTL.x + (float) (sliderBounds.width * new ProgressValue(Metapixels[i].b, 0, 0, 255).NormalizedValue), sliderTL.y), sliderBounds.height, 0, Color.Yellow, depth: 1.4f);
+                    Graphics.DrawLine(new Vec2(sliderTL.x + (float) (sliderBounds.width * ProgressValue.Normalize(Metapixels[i].b, 0, 255)), sliderTL.y), sliderBounds.height, 0, Color.Yellow, depth: 1.4f);
                 }
                 
                 Rectangle backButtonBounds = new(innerBounds.x - 2 + innerBounds.width, innerBounds.y - 2 + innerBounds.height, -40, -12);
@@ -661,9 +661,9 @@ namespace DuckGame
                     float right = left + sliderBounds.width;
 
                     float mouseX = Maths.Clamp(Mouse.xScreen, left, right);
-                    int nearestValueSelected = (int)(255 * new ProgressValue(mouseX, 0, left, right).NormalizedValue);
+                    int nearestValueSelected = (int)(255 * ProgressValue.Normalize(mouseX, left, right));
 
-                    Graphics.DrawLine(sliderBounds.tl + new Vec2((float)(sliderBounds.width * new ProgressValue(bytes[i], 0, 0, 255).NormalizedValue), 0), sliderBounds.height, 0, Color.White, 1f, 1.5f);
+                    Graphics.DrawLine(sliderBounds.tl + new Vec2((float)(sliderBounds.width * ProgressValue.Normalize(bytes[i], 0, 255)), 0), sliderBounds.height, 0, Color.White, 1f, 1.5f);
 
                     if (s_colPickSliderUsedIndex == i)
                     {
