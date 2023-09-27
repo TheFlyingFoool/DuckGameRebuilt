@@ -30,7 +30,6 @@ namespace DuckGame
                 All.Add(attribute);
             }
         }
-        public string? ShortName { get; set; } = null;
         /// <summary>
         /// Whether or not this field will be saved in the event of a crash.
         /// This can be potentially dangerous if the reason for the crash is this
@@ -56,24 +55,39 @@ namespace DuckGame
         /// </summary>
         public MemberInfo MemberInfo;
 
-        public object GetMemberValue()
+        public Type MemberType => MemberInfo switch
         {
-            return MemberInfo switch
+            FieldInfo fieldInfo => fieldInfo.FieldType,
+            PropertyInfo propertyInfo => propertyInfo.PropertyType,
+            _ => throw s_notImplementedException
+        };
+        
+        public object Value
+        {
+            get => MemberInfo switch
             {
-                FieldInfo fi => fi.GetValue(null),
-                PropertyInfo pi => pi.GetMethod?.Invoke(null, null),
-                _ => throw new Exception("Unsupported AutoConfig field type")
+                FieldInfo fieldInfo => fieldInfo.GetValue(null),
+                PropertyInfo propertyInfo => propertyInfo.GetMethod?.Invoke(null, null),
+                _ => throw s_notImplementedException
             };
+            set
+            {
+                switch (MemberInfo)
+                {
+                    case FieldInfo fieldInfo:
+                        fieldInfo.SetValue(null, value);
+                        break;
+                    case PropertyInfo propertyInfo:
+                        propertyInfo.SetMethod?.Invoke(null, new[] {value});
+                        break;
+                    default:
+                        throw s_notImplementedException;
+                }
+            }
         }
 
-        public Type GetMemberType()
-        {
-            return MemberInfo switch
-            {
-                FieldInfo fi => fi.FieldType,
-                PropertyInfo pi => pi.PropertyType,
-                _ => throw new Exception("Unsupported AutoConfig field type")
-            };
-        }
+        public string UsableName => Id ?? MemberInfo.GetFullName();
+
+        private static readonly NotImplementedException s_notImplementedException = new("AutoConfig only supports fields and properties");
     }
 }

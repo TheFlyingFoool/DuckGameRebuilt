@@ -98,75 +98,136 @@ namespace DuckGame
                 t.sleeping = false;
                 t.vSpeed = -2f;
             }
-            int num = 0;
-            HashSet<ushort> varBlocks = new HashSet<ushort>();
-            foreach (BlockGroup blockGroup1 in Level.CheckCircleAll<BlockGroup>(pPosition, pRadius))
+            //hi hello yes, pExplode is used by the positron shooter afaik and it would sometimes not destroy certain blocks
+            //so i made it use the old collision if pExplode is true to fix this for now, this is probably an issue for dan to fix
+            //with his collision system so its gonna stay like this for now prolly -NiK0
+            if (pExplode)
             {
-                if (blockGroup1 != null)
+                int num = 0;
+                HashSet<ushort> varBlocks = new HashSet<ushort>();
+                foreach (BlockGroup blockGroup1 in Level.CheckCircleAllOld<BlockGroup>(pPosition, pRadius))
                 {
-                    BlockGroup blockGroup2 = blockGroup1;
-                    List<Block> blockList = new List<Block>();
-                    foreach (Block block in blockGroup2.blocks)
+                    if (blockGroup1 != null)
                     {
-                        if (Collision.Circle(pPosition, pRadius - 22f, block.rectangle))
+                        BlockGroup blockGroup2 = blockGroup1;
+                        List<Block> blockList = new List<Block>();
+                        foreach (Block block in blockGroup2.blocks)
                         {
+                            if (Collision.Circle(pPosition, pRadius - 22f, block.rectangle))
+                            {
+                                if (!block.shouldbeinupdateloop)
+                                {
+                                    Level.current.AddUpdateOnce(block);
+                                }
+                                block.shouldWreck = true;
+                                Level.current.things.UpdateObject(block);
+                                if (block is AutoBlock && !(block as AutoBlock).indestructable)
+                                {
+                                    varBlocks.Add((block as AutoBlock).blockIndex);
+                                    if (pExplode && num % 10 == 0)
+                                    {
+                                        Level.Add(new ExplosionPart(block.x, block.y));
+                                        Level.Add(SmallFire.New(block.x, block.y, Rando.Float(-2f, 2f), Rando.Float(-2f, 2f)));
+                                    }
+                                    ++num;
+                                }
+                            }
+                        }
+                        blockGroup2.Wreck();
+                    }
+                }
+                foreach (Block block in Level.CheckCircleAllOld<Block>(pPosition, pRadius - 22f))
+                {
+                    switch (block)
+                    {
+                        case AutoBlock _ when !(block as AutoBlock).indestructable:
+                            block.skipWreck = true;
+                            block.shouldWreck = true;
                             if (!block.shouldbeinupdateloop)
                             {
                                 Level.current.AddUpdateOnce(block);
                             }
-                            block.shouldWreck = true;
-                            if (block is AutoBlock && !(block as AutoBlock).indestructable)
+                            varBlocks.Add((block as AutoBlock).blockIndex);
+                            if (pExplode)
                             {
-                                varBlocks.Add((block as AutoBlock).blockIndex);
-                                if (pExplode && num % 10 == 0)
+                                if (num % 10 == 0)
                                 {
                                     Level.Add(new ExplosionPart(block.x, block.y));
                                     Level.Add(SmallFire.New(block.x, block.y, Rando.Float(-2f, 2f), Rando.Float(-2f, 2f)));
                                 }
                                 ++num;
+                                continue;
                             }
-                        }
-                    }
-                    blockGroup2.Wreck();
-                }
-            }
-            foreach (Block block in Level.CheckCircleAll<Block>(pPosition, pRadius - 22f))
-            {
-                switch (block)
-                {
-                    case AutoBlock _ when !(block as AutoBlock).indestructable:
-                        block.skipWreck = true;
-                        block.shouldWreck = true;
-                        if (!block.shouldbeinupdateloop)
-                        {
-                            Level.current.AddUpdateOnce(block);
-                        }
-                        varBlocks.Add((block as AutoBlock).blockIndex);
-                        if (pExplode)
-                        {
-                            if (num % 10 == 0)
-                            {
-                                Level.Add(new ExplosionPart(block.x, block.y));
-                                Level.Add(SmallFire.New(block.x, block.y, Rando.Float(-2f, 2f), Rando.Float(-2f, 2f)));
-                            }
-                            ++num;
                             continue;
-                        }
-                        continue;
-                    case Door _:
-                    case VerticalDoor _:
-                        Level.Remove(block);
-                        block.Destroy(new DTRocketExplosion(null));
-                        continue;
-                    default:
-                        continue;
+                        case Door _:
+                        case VerticalDoor _:
+                            Level.Remove(block);
+                            block.Destroy(new DTRocketExplosion(null));
+                            continue;
+                        default:
+                            continue;
+                    }
                 }
+                if (Network.isActive && (pBullet.isLocal || pBullet.isServerForObject) && varBlocks.Count > 0)
+                    Send.Message(new NMDestroyBlocks(varBlocks));
+                foreach (ILight light in Level.current.things[typeof(ILight)])
+                    light.Refresh();
+                return varBlocks.Count;
             }
-            if (Network.isActive && (pBullet.isLocal || pBullet.isServerForObject) && varBlocks.Count > 0)
-                Send.Message(new NMDestroyBlocks(varBlocks));
-            foreach (ILight light in Level.current.things[typeof(ILight)])
-                light.Refresh();
-            return varBlocks.Count;
+            else
+            {
+                HashSet<ushort> varBlocks = new HashSet<ushort>();
+                foreach (BlockGroup blockGroup1 in Level.CheckCircleAll<BlockGroup>(pPosition, pRadius))
+                {
+                    if (blockGroup1 != null)
+                    {
+                        BlockGroup blockGroup2 = blockGroup1;
+                        foreach (Block block in blockGroup2.blocks)
+                        {
+                            if (Collision.Circle(pPosition, pRadius - 22f, block.rectangle))
+                            {
+                                if (!block.shouldbeinupdateloop)
+                                {
+                                    Level.current.AddUpdateOnce(block);
+                                }
+                                block.shouldWreck = true;
+                                if (block is AutoBlock && !(block as AutoBlock).indestructable)
+                                {
+                                    varBlocks.Add((block as AutoBlock).blockIndex);
+                                }
+                            }
+                        }
+                        blockGroup2.Wreck();
+                    }
+                }
+                foreach (Block block in Level.CheckCircleAll<Block>(pPosition, pRadius - 22f))
+                {
+                    switch (block)
+                    {
+                        case AutoBlock _ when !(block as AutoBlock).indestructable:
+                            block.skipWreck = true;
+                            block.shouldWreck = true;
+                            if (!block.shouldbeinupdateloop)
+                            {
+                                Level.current.AddUpdateOnce(block);
+                            }
+                            varBlocks.Add((block as AutoBlock).blockIndex);
+                            continue;
+                        case Door _:
+                        case VerticalDoor _:
+                            Level.Remove(block);
+                            block.Destroy(new DTRocketExplosion(null));
+                            continue;
+                        default:
+                            continue;
+                    }
+                }
+                if (Network.isActive && (pBullet.isLocal || pBullet.isServerForObject) && varBlocks.Count > 0)
+                    Send.Message(new NMDestroyBlocks(varBlocks));
+                foreach (ILight light in Level.current.things[typeof(ILight)])
+                    light.Refresh();
+                return varBlocks.Count;
+            }
         }
     }
 }

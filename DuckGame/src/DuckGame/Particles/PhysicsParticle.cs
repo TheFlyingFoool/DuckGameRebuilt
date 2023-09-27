@@ -28,13 +28,13 @@ namespace DuckGame
         protected bool _touchedFloor;
         private float _framesAlive;
         private bool _waitForNoCollide;
-        protected float _airFriction = 0.03f;
+        public float _airFriction = 0.03f;
         protected float _life = 1f;
         public Vec2 lerpPos = Vec2.Zero;
         public Vec2 lerpSpeed = Vec2.Zero;
         private static Map<byte, Type> _netParticleTypes = new Map<byte, Type>();
         private static byte _netParticleTypeIndex = 0;
-        protected Vec2 netLerpPosition = Vec2.Zero;
+        public Vec2 netLerpPosition = Vec2.Zero;
         public bool customGravity;
         public bool onlyDieWhenGrounded;
 
@@ -169,7 +169,10 @@ namespace DuckGame
                     {
                         _touchedFloor = true;
                         if (_bounceSound != "" && (Math.Abs(vSpeed) > 1 || Math.Abs(hSpeed) > 1))
+                        {
+                            SFX.DontSave = 1;
                             SFX.Play(_bounceSound, 0.5f, Rando.Float(0.2f) - 0.1f);
+                        }
                         if (vSpeed > 0 && thing.top > y)
                         {
                             vSpeed = (float)-(vSpeed * _bounceEfficiency);

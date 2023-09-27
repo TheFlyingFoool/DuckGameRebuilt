@@ -5,7 +5,7 @@ namespace DuckGame
 {
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand]
+        [DevConsoleCommand(IsCheat = true)]
         public static void Debug()
         {
             DevConsole.RunCommand("eight");

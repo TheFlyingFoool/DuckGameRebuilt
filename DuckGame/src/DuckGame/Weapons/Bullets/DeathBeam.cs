@@ -5,6 +5,8 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using static DuckGame.CMD;
+
 namespace DuckGame
 {
     public class DeathBeam : Thing
@@ -38,6 +40,24 @@ namespace DuckGame
             Level.Add(new LaserLine(position, _target, normalized2, 2.5f, Color.White, 2f));
             if (isLocal)
             {
+                Coin c = Level.CheckLine<Coin>(position, _target);
+                if (c != null && c.frames > 6 && !c.used)
+                {
+                    Duck d = null;
+                    if (_blastOwner != null) d = (Duck)_blastOwner;
+                    Vec2 v = c.TargetNear(d, false, true)[0];
+
+                    Vec2 v1 = c.position;
+                    Vec2 v2 = (c.position - v).normalized * -2000;
+
+                    if (Network.isActive)
+                        Send.Message(new NMDeathBeam(null, v1, v2));
+                    DeathBeam deathBeam = new DeathBeam(v1, v2, _blastOwner)
+                    {
+                        isLocal = true
+                    };
+                    Level.Add(deathBeam);
+                }
                 int num = 0;
                 Vec2 vec2 = position + normalized1 * 16f;
                 for (int index = 0; index < 5; ++index)

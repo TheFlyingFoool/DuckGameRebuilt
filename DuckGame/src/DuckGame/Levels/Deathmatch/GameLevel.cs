@@ -37,7 +37,7 @@ namespace DuckGame
         public bool Raining;
         public bool heavyRain;
         public float rainDarken;
-        public float rainwind;
+        public static float rainwind;
         public float rainwindto;
         public bool Snowing;
         public void SkipMatch()
@@ -52,6 +52,7 @@ namespace DuckGame
         public GameLevel(string lev, int seedVal = 0, bool validityTest = false, bool editorTestMode = false)
           : base(lev)
         {
+            rainwind = 0;
             levelInputString = lev;
             _followCam = new FollowCam
             {
@@ -174,118 +175,136 @@ namespace DuckGame
             //Vec2 vec2_2 = zero / num; whys this code the fuck here
             followCam.Adjust();
 
-            if (level != "RANDOM" && Rando.Float(1) <= DGRSettings.RandomWeather)
+
+
+            if (level != "RANDOM")
             {
-
-                if (Program.BirthdayDGR)
+                if (Rando.Float(10) <= DGRSettings.RandomWeather && First<BlizzardThing>() == null)
                 {
-                    DGRBirthday = true;
+                    if (Program.BirthdayDGR)
+                    {
+                        DGRBirthday = true;
 
-                    CityBackground cbg = First<CityBackground>();
-                    if (cbg != null)
-                    {
-                        cbg.SkySay("HAPPY BIRTHDAY DUCK GAME REBUILT!", new Vec2(-20, 60));
-                    }
-                }
-                else
-                {
-                    RainParticel.c = new Color(0, 112, 168);
-                    RainParticel.flud = Fluid.Water;
-                    if (cold)
-                    {
-                        Snowing = true;
-                    }
-                    else if (First<NatureTileset>() != null)
-                    {
-                        Raining = true;
-                        NatureBackground ng = First<NatureBackground>();
-                        if (ng != null)
-                        {
-                            Remove(ng._parallax);
-                            ng.Initialize();
-                        }
-                        rainSound = new LoopingSound("sizzle", 1, -3)
-                        {
-                            volume = 0.2f
-                        };
-                        darkenRainer = 0.8f;
-                        rainwind = Rando.Float(-2, 2);
-                        lightningRNG = Rando.Int(1200, 2400);
-                        if (Rando.Int(2) == 0)
-                        {
-                            darkenRainer = 0.8f;
-                            rainSound.volume = 0.5f;
-                            rainwind = Rando.Float(4, 5) * Rando.ChooseInt(-1, 1);
-                            lightningRNG = (int)Math.Floor(0.2f * lightningRNG);
-                            heavyRain = true;
-                        }
-                        rainDarken = darkenRainer;
-                        rainwindto = rainwind;
-                    }
-                    else if (First<OfficeTileset>() != null && (Rando.Int(1) == 1 || DGRSettings.RandomWeather > 9.9f))
-                    {
-                        rainSound = new LoopingSound("sizzle", 1, -3)
-                        {
-                            volume = 0.2f
-                        };
-                        darkenRainer = 0.8f;
-                        Raining = true;
-                        rainwind = Rando.Float(-2, 2);
-                        lightningRNG = Rando.Int(2400, 4800);
-                        if (Rando.Int(2) == 0)
-                        {
-                            darkenRainer = 0.8f;
-                            rainSound.volume = 0.5f;
-                            rainwind = Rando.Float(4, 5) * Rando.ChooseInt(-1, 1);
-                            lightningRNG = (int)Math.Floor(0.2f * lightningRNG);
-                            heavyRain = true;
-                        }
-                        rainDarken = darkenRainer;
-                        rainwindto = rainwind;
-                    }
-                    else if (First<CityTileset>() != null)
-                    {
                         CityBackground cbg = First<CityBackground>();
-                        string forecast = "RAINY";
-                        if (Rando.Int(1) == 0)
+                        if (cbg != null)
+                        {
+                            cbg.SkySay("HAPPY BIRTHDAY DUCK GAME REBUILT!", new Vec2(-20, 60));
+                        }
+                    }
+                    else
+                    {
+                        RainParticel.c = new Color(0, 112, 168);
+                        RainParticel.flud = Fluid.Water;
+                        if (cold)
+                        {
+                            Snowing = true;
+                        }
+                        else if (First<NatureTileset>() != null)
+                        {
+                            Raining = true;
+                            NatureBackground ng = First<NatureBackground>();
+                            if (ng != null)
+                            {
+                                Remove(ng._parallax);
+                                ng.Initialize();
+                            }
+                            rainSound = new LoopingSound("sizzle", 1, -3)
+                            {
+                                volume = 0.2f
+                            };
+                            rainSound._effect.saveToRecording = false;
+                            darkenRainer = 0.8f;
+                            rainwind = Rando.Float(-2, 2);
+                            lightningRNG = Rando.Int(1200, 2400);
+                            if (Rando.Int(2) == 0)
+                            {
+                                darkenRainer = 0.8f;
+                                rainSound.volume = 0.5f;
+                                rainwind = Rando.Float(4, 5) * Rando.ChooseInt(-1, 1);
+                                lightningRNG = (int)Math.Floor(0.2f * lightningRNG);
+                                heavyRain = true;
+                            }
+                            rainDarken = darkenRainer;
+                            rainwindto = rainwind;
+                        }
+                        else if (First<OfficeTileset>() != null)
                         {
                             rainSound = new LoopingSound("sizzle", 1, -3)
                             {
                                 volume = 0.2f
                             };
+                            rainSound._effect.saveToRecording = false;
                             darkenRainer = 0.8f;
-                            cityRaining = true;
+                            Raining = true;
                             rainwind = Rando.Float(-2, 2);
-                            lightningRNG = Rando.Int(1200, 2400);
+                            lightningRNG = Rando.Int(2400, 4800);
                             if (Rando.Int(2) == 0)
                             {
-                                forecast = "HEAVY RAIN";
                                 darkenRainer = 0.8f;
                                 rainSound.volume = 0.5f;
                                 rainwind = Rando.Float(4, 5) * Rando.ChooseInt(-1, 1);
-                                lightningRNG = (int)Math.Floor(0.4f * lightningRNG);
-                                if (Rando.Int(1) == 0)
-                                {
-                                    lightningRNG = (int)Math.Floor(0.3f * lightningRNG);
-                                    forecast = "THUNDERSTORM";
-                                    darkenRainer = 0.55f;
-                                }
+                                lightningRNG = (int)Math.Floor(0.2f * lightningRNG);
                                 heavyRain = true;
                             }
                             rainDarken = darkenRainer;
+                            rainwindto = rainwind;
                         }
-                        else
+                        else if (First<CityTileset>() != null)
                         {
-                            forecast = "SNOW";
-                            Snowing = true;
+                            CityBackground cbg = First<CityBackground>();
+                            string forecast = "RAINY";
+                            if (Rando.Int(1) == 0)
+                            {
+                                rainSound = new LoopingSound("sizzle", 1, -3)
+                                {
+                                    volume = 0.2f
+                                };
+                                rainSound._effect.saveToRecording = false;
+                                darkenRainer = 0.8f;
+                                cityRaining = true;
+                                rainwind = Rando.Float(-2, 2);
+                                lightningRNG = Rando.Int(1200, 2400);
+                                if (Rando.Int(2) == 0)
+                                {
+                                    forecast = "HEAVY RAIN";
+                                    darkenRainer = 0.8f;
+                                    rainSound.volume = 0.5f;
+                                    rainwind = Rando.Float(4, 5) * Rando.ChooseInt(-1, 1);
+                                    lightningRNG = (int)Math.Floor(0.4f * lightningRNG);
+                                    if (Rando.Int(1) == 0)
+                                    {
+                                        lightningRNG = (int)Math.Floor(0.3f * lightningRNG);
+                                        forecast = "THUNDERSTORM";
+                                        darkenRainer = 0.55f;
+                                    }
+                                    heavyRain = true;
+                                }
+                                rainDarken = darkenRainer;
+                            }
+                            else
+                            {
+                                forecast = "SNOW";
+                                Snowing = true;
+                            }
+                            if (cbg != null)
+                            {
+                                cbg.SkySay("TODAYS FORECAST", new Vec2(-20, 60));
+                                cbg.SkySay(forecast, new Vec2(-20, 70));
+                            }
+                            rainwindto = rainwind;
                         }
-                        if (cbg != null)
-                        {
-                            cbg.SkySay("TODAYS FORECAST", new Vec2(-20, 60));
-                            cbg.SkySay(forecast, new Vec2(-20, 70));
-                        }
-                        rainwindto = rainwind;
                     }
+                }
+                else if (First<SpaceTileset>() == null)
+                {
+                    //have wind happen anyways
+                    rainwind = Rando.Float(-1, 1);
+                    if (Rando.Int(1) == 0)
+                    {
+                        rainwind = Rando.Float(1, 2) * Rando.ChooseInt(-1, 1);
+                        if (Rando.Int(3) == 0) rainwind = Rando.Float(3, 5) * Rando.ChooseInt(-1, 1);
+                    }
+                    rainwindto = rainwind;
                 }
             }
         }
@@ -400,6 +419,7 @@ namespace DuckGame
                 {
                     rainDarken = 1.2f;
                     Add(new BGLightning(Rando.Float(-30, 270), 0));
+                    SFX.DontSave = 1;
                     SFX.Play("balloonPop", 1, Rando.Float(-3, -4));
                 }
                 rainDarken = Lerp.Float(rainDarken, darkenRainer, 0.005f);
@@ -470,6 +490,7 @@ namespace DuckGame
                 {
                     rainDarken = 1.2f;
                     Add(new BGLightning(Rando.Float(-30, 270), 0));
+                    SFX.DontSave = 1;
                     SFX.Play("balloonPop", 1, Rando.Float(-3, -4));
                 }
                 rainDarken = Lerp.Float(rainDarken, darkenRainer, 0.005f);

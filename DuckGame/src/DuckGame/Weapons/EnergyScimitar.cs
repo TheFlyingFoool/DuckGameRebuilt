@@ -22,7 +22,7 @@ namespace DuckGame
         public StateBinding _airFlyBinding = new StateBinding(true, nameof(_airFly));
         public StateBinding _airFlyDirBinding = new StateBinding(true, nameof(_airFlyAngle));
         public StateBinding _wasLiftedBinding = new StateBinding(nameof(_wasLifted));
-        private bool _stuck;
+        public bool _stuck;
         public float _swordAngle;
         public float _lerpedAngle;
         public bool dragSpeedBonus;
@@ -64,7 +64,7 @@ namespace DuckGame
         private float _upFlyTime;
         public float _airFlySpeed = 14f;
         private int timeSinceReversal;
-        private bool _wasLifted;
+        public bool _wasLifted;
         private bool skipThrowMove;
         public MaterialThing _stuckInto;
         private float _glow;
@@ -312,6 +312,7 @@ namespace DuckGame
                         }
                     }
                 }
+
                 if (_stance == Stance.SwingDown && duck.inputProfile.Pressed(Triggers.Jump))
                     _stance = Stance.SwingUp;
                 if (_goIntermediate && _stanceReady)
@@ -355,7 +356,7 @@ namespace DuckGame
                 }
                 else if (_stance == Stance.SwingUp)
                 {
-                    if (duck._hovering)
+                    if (duck._hovering || (duck.cordHover))
                     {
                         _swordAngle = -25f;
                         _swordFlip = offDir < 0;
@@ -502,7 +503,14 @@ namespace DuckGame
         }
 
         public Vec2 barrelStartPos => position + (Offset(barrelOffset) - position).normalized * 2f;
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is EnergyScimitar && pTaped.gun2 is Chainsaw ? new EnergyChainsaw(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void Initialize()
         {
             if (material is MaterialGold)
@@ -584,6 +592,14 @@ namespace DuckGame
                 with.vSpeed = with.lastVSpeed = (float)(-vec2.y * 3);
                 Shing();
                 (with as EnergyScimitar).Shing();
+            }
+            else if (_airFly && with is Coin c)
+            {
+                Duck d = null;
+                if (_lastThrownBy != null) d = (Duck)_lastThrownBy;
+                Fondle(c);
+                Vec2 v = c.TargetNear(d, true)[0];
+                _airFlyAngle = Maths.PointDirection(position, v);
             }
             else if (_airFly && with is PhysicsObject && !(with is Gun) && !(with is Equipment) && !(with is Duck) && !(with is RagdollPart))
                 with.Destroy(new DTIncinerate(this));
@@ -1185,6 +1201,7 @@ namespace DuckGame
                 if (!_playedChargeUp && owner != null)
                 {
                     _playedChargeUp = true;
+                    SFX.DontSave = 1;
                     SFX.Play("laserChargeShort", pitch: Rando.Float(-0.1f, 0.1f));
                 }
                 float to2;
@@ -1207,6 +1224,7 @@ namespace DuckGame
                     if (_playedChargeUp && owner == null)
                     {
                         _playedChargeUp = false;
+                        SFX.DontSave = 1;
                         SFX.Play("laserUnchargeShort", pitch: Rando.Float(-0.1f, 0.1f));
                     }
                     _glow = Lerp.Float(_glow, 0f, 0.2f);

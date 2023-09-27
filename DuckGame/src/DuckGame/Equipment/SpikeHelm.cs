@@ -194,7 +194,7 @@ namespace DuckGame
             }
         }
 
-        private void ReleasePokedObject()
+        public void ReleasePokedObject()
         {
             if (poked != null)
             {

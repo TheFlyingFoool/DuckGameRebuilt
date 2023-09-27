@@ -5,6 +5,8 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using System;
+
 namespace DuckGame
 {
     [EditorGroup("Guns|Fire")]
@@ -58,9 +60,18 @@ namespace DuckGame
             editorTooltip = "Some Ducks just want to watch the world burn.";
             _bio = "I have a problem. I want this flame here, to be over there. But I can't pick it up, it's too damn hot. If only there was some way I could throw it.";
         }
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is FlameThrower && pTaped.gun2 is FlareGun ? new FlareFlameThrower(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void Initialize()
         {
             _sound = new ConstantSound("flameThrowing");
+            _sound.effect.saveToRecording = false;
             base.Initialize();
         }
         public override void Update()
@@ -85,10 +96,13 @@ namespace DuckGame
                 _flameWait -= 0.25f;
                 if (_flameWait > 0)
                     return;
-                Vec2 vec = Maths.AngleToVec(barrelAngle + Rando.Float(-0.5f, 0.5f));
-                Vec2 vec2 = new Vec2(vec.x * Rando.Float(2f, 3.5f), vec.y * Rando.Float(2f, 3.5f));
-                ammo -= 2;
-                Level.Add(SmallFire.New(barrelPosition.x, barrelPosition.y, vec2.x, vec2.y, firedFrom: this));
+                if (!Recorderator.Playing)
+                {
+                    Vec2 vec = Maths.AngleToVec(barrelAngle + Rando.Float(-0.5f, 0.5f));
+                    Vec2 vec2 = new Vec2(vec.x * Rando.Float(2f, 3.5f), vec.y * Rando.Float(2f, 3.5f));
+                    ammo -= 2;
+                    Level.Add(SmallFire.New(barrelPosition.x, barrelPosition.y, vec2.x, vec2.y, firedFrom: this));
+                }
                 _flameWait = 1f;
             }
             else
@@ -105,7 +119,7 @@ namespace DuckGame
                 _barrelFlame.alpha = 0.9f;
                 Draw(_barrelFlame, new Vec2(11f, 1f));
             }
-            _can.frame = (int)((1 - ammo / _maxAmmo) * 15);
+            _can.frame = (int)((1f - (float)ammo / (float)_maxAmmo) * 15f);
             Draw(_can, new Vec2(barrelOffset.x - 11f, barrelOffset.y + 4f));
             Graphics.material = material;
         }

@@ -1,13 +1,9 @@
-﻿name: Build, Zip, and Release
+name: Build, Zip, and Release
 
 on:
   release:
     branches: [ "master" ]
     types: [published]
-
-env:
-  SOLUTION_FILE_PATH: .  # Path to the solution file relative to the root of the project.
-  BUILD_CONFIGURATION: ReleaseAutoUpdater
 
 jobs:
   build_and_release:
@@ -23,26 +19,26 @@ jobs:
           sudo apt-get install -y msbuild
 
       - name: Restore NuGet packages
-        run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+        run: nuget restore .
 
       - name: Add Project Dependencies
         run: |
-          mkdir ${{env.SOLUTION_FILE_PATH}}/bin
-          cp ${{env.SOLUTION_FILE_PATH}}/DuckGame/lib/* ${{env.SOLUTION_FILE_PATH}}/bin
+          mkdir ./bin
+          cp ./DuckGame/lib/* ./bin
 
       - name: Build
-        run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+        run: msbuild /m /p:Configuration=ReleaseAutoUpdater .
 
       - name: Zip binaries
         run: |
           sudo apt-get update
           sudo apt-get install -y zip
-          mv ${{env.SOLUTION_FILE_PATH}}/bin ${{env.SOLUTION_FILE_PATH}}/DuckGameRebuilt
-          zip -r ${{env.SOLUTION_FILE_PATH}}/DuckGameRebuilt.zip ${{env.SOLUTION_FILE_PATH}}/DuckGameRebuilt
+          mv ./bin ./DuckGameRebuilt
+          cd ./DuckGameRebuilt && zip -r ../DuckGameRebuilt.zip ./* && cd ..
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{env.SOLUTION_FILE_PATH}}/DuckGameRebuilt.zip
+          file: ./DuckGameRebuilt.zip
           overwrite: true

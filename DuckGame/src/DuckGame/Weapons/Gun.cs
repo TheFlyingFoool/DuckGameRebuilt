@@ -57,7 +57,7 @@ namespace DuckGame
         protected bool _manualLoad;
         public bool laserSight;
         protected SpriteMap _flare;
-        protected float _flareAlpha;
+        public float _flareAlpha;
         private SpriteMap _barrelSmoke;
         public float _barrelHeat;
         protected float _smokeWait;
@@ -70,6 +70,8 @@ namespace DuckGame
         protected Vec2 _wallPoint;
         protected Sprite _sightHit;
         private bool _doPuff;
+        public bool recordPuff;
+        public bool recordPopShell;
         public byte _framesSinceThrown;
         public bool explode;
         public List<Bullet> firedBullets = new List<Bullet>();
@@ -177,10 +179,12 @@ namespace DuckGame
         public void DoAmmoClick()
         {
             _doPuff = true;
+            recordPuff = true;
             _clickPuff.frame = 0;
             _clickPuff.SetAnimation("puff");
             _barrelHeat = 0f;
             _barrelSmoke.SetAnimation("finish");
+            SFX.DontSave = 1;
             SFX.Play(_clickSound);
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
             {
@@ -285,7 +289,7 @@ namespace DuckGame
                 if (_framesSinceThrown > 25)
                     _framesSinceThrown = 25;
             }
-            if (!(this is Sword) && owner == null && CanSpin() && Level.current.simulatePhysics)
+            if (!(this is Sword) && owner == null && CanSpin() && Level.current.simulatePhysics && !Recorderator.Playing)
             {
                 bool flag1 = false;
                 bool flag2 = false;
@@ -443,8 +447,10 @@ namespace DuckGame
             Fire();
         }
 
+        public bool recordKick;
         public virtual void ApplyKick()
         {
+            recordKick = true;
             if (owner == null || !isServerForObject)
                 return;
             if (_kickForce != 0)
@@ -587,6 +593,7 @@ namespace DuckGame
             {
                 _ammoType.PopShell(x, y, -offDir);
             }
+            recordPopShell = true;
             if (isMessage) return;
             Send.Message(new NMPopShell(this), NetMessagePriority.UnreliableUnordered);
         }

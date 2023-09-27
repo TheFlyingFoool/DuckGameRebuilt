@@ -147,6 +147,7 @@ namespace DuckGame
             _airFire.center = new Vec2(8f, 8f);
             _collisionSize = new Vec2(12f, 12f);
             _collisionOffset = new Vec2(-6f, -6f);
+            timer = Rando.Float(1);
         }
 
         private void Init(
@@ -216,9 +217,19 @@ namespace DuckGame
             }
             base.Removed();
         }
-
+        public float timer;
         public override void Update()
         {
+            if (DGRSettings.AmbientParticles)
+            {
+                timer += 0.01f * DGRSettings.ActualParticleMultiplier;
+                if (timer >= 1)
+                {
+                    timer--;
+                    timer += Rando.Float(0.2f);
+                    Level.Add(new Ember(x, y));
+                }
+            }
             if (waitToHurt > 0f) waitToHurt -= Maths.IncFrameTimer();
             else whoWait = null;
             if (!isLocal)

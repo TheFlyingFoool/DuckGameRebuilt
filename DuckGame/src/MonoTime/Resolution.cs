@@ -21,7 +21,7 @@ namespace DuckGame
         private static IntPtr _window;
         private static float _screenDPI;
         private static int _takeFocus;
-        private static GraphicsDeviceManager _device;
+        public static GraphicsDeviceManager _device;
         private static Resolution _pendingResolution;
         //private static Matrix _matrix;
         public bool isDefault;

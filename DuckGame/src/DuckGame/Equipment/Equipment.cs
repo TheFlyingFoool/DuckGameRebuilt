@@ -147,6 +147,7 @@ namespace DuckGame
             {
                 for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
                     Level.Add(SmallSmoke.New(x + Rando.Float(-2f, 2f), y + Rando.Float(-2f, 2f)));
+                SFX.DontSave = 1;
                 SFX.Play("equip", 0.8f);
                 localEquipIndex = equipIndex;
             }

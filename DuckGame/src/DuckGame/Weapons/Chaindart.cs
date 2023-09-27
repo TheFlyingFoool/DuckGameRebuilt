@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Chaindart
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -27,8 +20,29 @@ namespace DuckGame
         private ChaingunBullet _topBullet;
         private Sound _spinUp;
         private Sound _spinDown;
+        public Sound spinUp
+        {
+            get { return _spinUp; }
+            set { _spinUp = value; }
+        }
+        public Sound spinDown
+        {
+            get { return _spinDown; }
+            set { _spinDown = value; }
+        }
         private int bulletsTillRemove = 10;
         private int numHanging = 10;
+        public bool spinning
+        {
+            get
+            {
+                return _spinning;
+            }
+            set
+            {
+                _spinning = value;
+            }
+        }
         private bool _spinning;
         private float spinAmount;
         private bool burntOut;
@@ -70,6 +84,8 @@ namespace DuckGame
         {
             _spinUp = SFX.Get("chaingunSpinUp");
             _spinDown = SFX.Get("chaingunSpinDown");
+            _spinUp.saveToRecording = false;
+            _spinDown.saveToRecording = false;
             base.Initialize();
             _bullets = new ChaingunBullet(x, y, true)
             {

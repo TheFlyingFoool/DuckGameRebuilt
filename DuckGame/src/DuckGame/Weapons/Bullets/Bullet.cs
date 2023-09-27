@@ -15,7 +15,7 @@ namespace DuckGame
     {
         public static int bulletcolorindex;
         private new NetworkConnection _connection;
-        protected Teleporter _teleporter;
+        public Teleporter _teleporter;
         public AmmoType ammo;
         public bool randomDir;
         public Vec2 start;
@@ -48,7 +48,7 @@ namespace DuckGame
         public float range;
         private PhysicalBullet _physicalBullet;
         public bool trickshot;
-        protected int timesRebounded;
+        public int timesRebounded;
         protected int reboundBulletsCreated;
         protected Bullet _reboundedBullet;
         public bool reboundCalled;
@@ -231,6 +231,7 @@ namespace DuckGame
 
         public virtual void DoRebound(Vec2 pos, float dir, float rng) => Rebound(pos, dir, rng);
 
+        public static bool specialRebound;
         protected virtual void Rebound(Vec2 pos, float dir, float rng)
         {
             ++reboundBulletsCreated;
@@ -239,9 +240,14 @@ namespace DuckGame
             bullet.timesRebounded = timesRebounded + 1;
             bullet.lastReboundSource = lastReboundSource;
             bullet.isLocal = isLocal;
+            if (specialRebound) bullet.owner = owner;
             _reboundedBullet = bullet;
             reboundCalled = true;
             Level.Add(bullet);
+            if (specialRebound)
+            {
+                Send.Message(new NMFireGun(null, new List<Bullet> { bullet }, 1, false));
+            }
         }
 
         public virtual void OnCollide(Vec2 pos, Thing t, bool willBeStopped)

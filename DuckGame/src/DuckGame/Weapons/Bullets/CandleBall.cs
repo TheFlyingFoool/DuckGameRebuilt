@@ -47,7 +47,7 @@ namespace DuckGame
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            if (isServerForObject)
+            if (isServerForObject && !Recorderator.Playing)
             {
                 for (int index = 0; index < _numFlames; ++index)
                     Level.Add(SmallFire.New(x - hSpeed, y - vSpeed, Rando.Float(6f) - 3f, Rando.Float(6f) - 3f, firedFrom: this));

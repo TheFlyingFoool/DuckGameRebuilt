@@ -5,6 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -52,6 +53,44 @@ namespace DuckGame
             {
                 foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(topLeft, bottomRight))
                 {
+                    if (materialThing is Coin c && !c.used && isServerForObject && c.frames > 6)
+                    {
+                        SFX.PlaySynchronized("coin");
+                        Fondle(c);
+                        Duck d = null;
+                        if (_waveOwner != null) d = (Duck)_waveOwner;
+                        Vec2 v = c.TargetNear(d)[0];
+
+                        HitscanBullet bb = new HitscanBullet(c.x, c.y, v);
+                        bb.c = Color.Yellow;
+                        IEnumerable<MaterialThing> mts = Level.CheckLineAll<MaterialThing>(c.position, v);
+                        foreach (MaterialThing mt in mts)
+                        {
+                            if (mt == _waveOwner) continue;
+                            if (mt is IAmADuck)
+                            {
+                                SuperFondle(mt, DuckNetwork.localConnection);
+                                mt.Destroy(new DTShot(null));
+                            }
+                            else
+                            {
+                                Fondle(mt);
+                                mt.Hurt(0.1f);
+                            }
+                        }
+
+                        Level.Add(bb);
+                        c.trail.Clear();
+                        c.used = false;
+                        c.position = v;
+                        c.frames = 0;
+                        if (c.coinFly != null) c.coinFly.Kill();
+                        c.coinFly = null;
+                        c.velocity = new Vec2(0, -6);
+                        c.gravMultiplier = 0.8f;
+
+                        continue;
+                    }
                     if ((materialThing is PhysicsObject || materialThing is Icicles) && !_hits.Contains(materialThing) && materialThing != _waveOwner && materialThing.owner != _waveOwner && Duck.GetAssociatedDuck(materialThing) != _waveOwner)
                     {
                         if (materialThing.owner != null)

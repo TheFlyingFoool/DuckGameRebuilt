@@ -59,7 +59,10 @@ namespace DuckGame
                 num = Maths.Clamp((float)_field.value + _step, _field.min, _field.max);
             }
             if (num != (float)_field.value)
+            {
+                SFX.DontSave = 1;
                 SFX.Play("textLetter", 0.7f);
+            }
             _field.value = num;
         }
     }

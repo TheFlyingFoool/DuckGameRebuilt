@@ -24,6 +24,10 @@ namespace DuckGame
             wearable = false;
             _editorName = "Tape";
             editorTooltip = "Taping things together is always a good time!";
+            //if (Editor.clientonlycontent)
+            //{nvm its ugly -NiK0
+            //    graphic.color = Color.Red; //dan peer pressured me into this -NiK0
+            //}
         }
 
         public override void PressAction()

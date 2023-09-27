@@ -12,14 +12,8 @@ namespace AddedContent.Hyeve
             get => DevConsole.core.previousLines.FastTakeFromEnd(25);
             set
             {
-                foreach (string line in DevConsole.core.previousLines)
-                { 
-                    if (!DevConsole.core.previousLines.Contains(line)) 
-                    {
-                        DevConsole.core.previousLines.Add(line);
-                        DevConsole.core.lastCommandIndex += 1;
-                    }
-                }
+                DevConsole.core.previousLines.AddRange(value);
+                DevConsole.core.lastCommandIndex = value.Count - 1;
             }
         }
 

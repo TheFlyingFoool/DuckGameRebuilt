@@ -13,7 +13,10 @@ namespace DuckGame
     /// </summary>
     public abstract class Thing : Transform
     {
+        public SomethingSomethingVessel currentVessel;
+        public bool shouldhavevessel = true;
         public bool shouldbegraphicculled = true;
+        public bool currentlyDrawing;
         public bool shouldbeinupdateloop = true;
         public int hashcodeindex; // dont touch :)
         public Vec2 oldposition = Vec2.Zero;
@@ -101,8 +104,8 @@ namespace DuckGame
         protected HashSet<string> _contextMenuFilter = new HashSet<string>();
         public static Effect _alphaTestEffect;
         private bool _skipPositioning;
-        private static Dictionary<Type, Sprite> _editorIcons = new Dictionary<Type, Sprite>();
-        protected Sprite _editorIcon;
+        public static Dictionary<Type, Sprite> _editorIcons = new Dictionary<Type, Sprite>();
+        public Sprite _editorIcon;
         protected bool _solid = true;
         protected Vec2 _collisionOffset;
         protected Vec2 _collisionSize;
@@ -1254,6 +1257,7 @@ namespace DuckGame
                 return;
             t.bottom = block4.top;
         }
+        //useless now -NiK0
         public void OldReturnItemToWorld(Thing t)
         {
             Block block1 = Level.OldCheckLine<Block>(position, position + new Vec2(16f, 0f));
@@ -1518,7 +1522,7 @@ namespace DuckGame
             if (_anchor != null)
                 position = _anchor.position;
             Update();
-            if (Buckets.Length > 0 && ((oldcollisionOffset != collisionOffset || oldcollisionSize != collisionSize) || (oldposition - position).LengthSquared() > 100f) && Level.current != null) //((oldposition - position)).length > 10
+            if (Buckets.Length > 0 && ((oldcollisionOffset != collisionOffset || oldcollisionSize != collisionSize) || (oldposition - position).LengthSquared() > 50f) && Level.current != null) //((oldposition - position)).length > 10
             {
                 oldcollisionOffset = collisionOffset;
                 oldcollisionSize = collisionSize;
@@ -1710,6 +1714,8 @@ namespace DuckGame
 
         public virtual void OnTeleport()
         {
+            //need to update cells here because teleporters teleport wrongly otherwise -NiK0
+            Level.current.things.UpdateObject(this);
         }
 
         public virtual void DoTerminate() => Terminate();

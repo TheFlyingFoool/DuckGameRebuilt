@@ -6,6 +6,7 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using System;
+using System.Diagnostics;
 
 namespace DuckGame
 {
@@ -124,6 +125,11 @@ namespace DuckGame
             vSpeed -= 0.01f;
             hSpeed *= 0.95f;
             _life -= lifeTake;
+
+            //since the lifetime of this particle is tied to its animation when its being culled the animation doesn't progress
+            //so instead its just getting called here so it can delete properly -NiK0
+            if (currentlyDrawing) _sprite.UpdateFrame();
+
             if (_life < 0 && _sprite.currentAnimation != "puff")
                 _sprite.SetAnimation("puff");
             if (_sprite.currentAnimation == "puff" && _sprite.finished)

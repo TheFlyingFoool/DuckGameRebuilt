@@ -102,6 +102,7 @@ namespace DuckGame
                     --ammo;
                     SFX.Play("dartGunFire", 0.5f, Rando.Float(0.2f) - 0.1f);
                     kick = 1f;
+                    recordKick = true;
                     if (receivingPress || !isServerForObject)
                         return;
                     Vec2 vec2 = Offset(barrelOffset + new Vec2(-8f, 0f));

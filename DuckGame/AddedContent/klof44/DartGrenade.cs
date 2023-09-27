@@ -2,8 +2,8 @@
 
 namespace DuckGame
 {
-    [ClientOnly]
-    [EditorGroup("Rebuilt|Guns")]
+    [ClientOnly]//im sorry klof but this aint it
+    //[EditorGroup("Rebuilt|Guns")]
     internal class DartGrenade : Gun // All this code is taken from normal grenades but changed as to not create shrapnel
     {//:)
         public StateBinding _timerBinding = new StateBinding(nameof(_timer));

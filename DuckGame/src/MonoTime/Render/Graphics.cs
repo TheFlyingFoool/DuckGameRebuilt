@@ -646,6 +646,14 @@ namespace DuckGame
             float length = (p1 - p2).length;
             Draw(_blank, p1, new Rectangle?(), col, rotation, new Vec2(0f, 0.5f), new Vec2(length, width), SpriteEffects.None, depth);
         }
+        
+        public static void DrawLine(Vec2 p, float lineLength, float angleDegrees, Color col, float width = 1f, Depth depth = default(Depth))
+        {
+            float angleRadians = Maths.DegToRad(angleDegrees);
+            Vec2 lineEnd = new(lineLength * Maths.FastSin(angleRadians), lineLength * Maths.FastCos(angleRadians));
+            
+            DrawLine(p, p + lineEnd, col, width, depth);
+        }
 
         public static void DrawDottedLine(
           Vec2 p1,
@@ -1027,7 +1035,7 @@ namespace DuckGame
                     _currentTargetSize.height = renderTarget.Height;
                 }
                 device.SetRenderTarget(renderTarget);
-                if (!_settingScreenTarget && _defaultRenderTarget == null)
+                if (!_settingScreenTarget && _defaultRenderTarget == null && !SettingForShader)
                     UpdateScreenViewport();
             }
             else
@@ -1067,7 +1075,7 @@ namespace DuckGame
                 DevConsole.Log("Error: Invalid Viewport (x = " + pViewport.X.ToString() + ", y = " + pViewport.Y.ToString() + ", w = " + pViewport.Width.ToString() + ", h = " + pViewport.Height.ToString() + ", minDepth = " + pViewport.MinDepth.ToString() + ", maxDepth = " + pViewport.MaxDepth.ToString() + ")");
             }
         }
-
+        public static bool SettingForShader;
         public static void UpdateScreenViewport(bool pForceReset = false)
         {
             try

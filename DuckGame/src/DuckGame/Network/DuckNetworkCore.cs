@@ -320,6 +320,7 @@ namespace DuckGame
         public UIMenu _ducknetMenu;
         public UIMenu _optionsMenu;
         public UIMenu _confirmMenu;
+        public UIMenu _confirmStartMenu;
         public UIMenu _confirmBlacklistMenu;
         public UIMenu _confirmBlock;
         public UIMenu _confirmReturnToLobby;
@@ -478,20 +479,24 @@ namespace DuckGame
                 pMessage.text = "??????";
             }
             int num = pMessage.text.Count(x => x == '\n');
+            string colorTag = pMessage.text.StartsWith(">") && DGRSettings.GreenTextSupport
+                ? "0,153,0"
+                : "BLACK";
             if (chatMessage != null && num == 0 && chatMessage.newlines < 3 && chatMessage.timeout > 2 && chatMessage.who == pMessage.who)
             {
-                pMessage.text = "|GRAY|" + pMessage.who.nameUIBodge + ": |BLACK|" + pMessage.text;
+                pMessage.text = "|GRAY|" + pMessage.who.nameUIBodge + $": |{colorTag}|" + pMessage.text;
                 chatMessage.timeout = 10f;
                 chatMessage.text += "\n";
                 chatMessage.text += pMessage.text;
                 chatMessage.index = pMessage.index;
                 chatMessage.slide = 0.5f;
+
                 ++chatMessage.newlines;
             }
             else
             {
                 pMessage.newlines = num + 1;
-                pMessage.text = "|WHITE|" + pMessage.who.nameUIBodge + ": |BLACK|" + pMessage.text;
+                pMessage.text = "|WHITE|" + pMessage.who.nameUIBodge + $": |{colorTag}|" + pMessage.text;
                 chatMessages.Add(pMessage);
             }
             chatMessages = chatMessages.OrderBy(x => -x.index).ToList();

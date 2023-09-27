@@ -24,20 +24,10 @@ namespace DuckGame
             _collisionOffset = new Vec2(-14, -7.5f);
             center = new Vec2(20f, 12.5f);
             _holdOffset = new Vec2(2, -4);
-
+           
             _barrelOffsetTL = new Vec2(40, 12.5f);
             _kickForce = 20;
-        }
-        public override bool CanTapeTo(Thing pThing)
-        {
-            switch (pThing)
-            {
-                case HugerLaser _:
-                case HugeLaser _:
-                    return false;
-                default:
-                    return true;
-            }
+            tapeable = false;
         }
         public override void Initialize()
         {
@@ -65,15 +55,19 @@ namespace DuckGame
                     adjustingS.RemoveAt(i);
                 }
             }
+            if (!isServerForObject && time > 0 && _chargeAnim.currentAnimation != "charge") _chargeAnim.SetAnimation("charge");
             if (_chargeAnim.currentAnimation == "charge" && isServerForObject)
             {
                 time++;
                 if (_chargeAnim.finished)
                 {
+                    if (duck != null)
+                        RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Long, RumbleFalloff.Medium));
                     time = 0;
-                    SFX.Play("laserBlast", 1, 0.15f);
-                    SFX.Play("balloonPop", 1.5f, -4.3f);
+                    SFX.PlaySynchronized("laserBlast", 1, 0.15f);
+                    SFX.PlaySynchronized("balloonPop", 1.5f, -4.3f);
                     _chargeAnim.SetAnimation("nothing");
+                    Send.Message(new NMDeathCone(this, barrelPosition, barrelVector));
                     Level.Add(new LaserConeBlast(barrelPosition.x, barrelPosition.y, barrelVector) { angle = angle });
                     if (duck != null)
                     {
@@ -83,6 +77,15 @@ namespace DuckGame
                     }
                     ApplyKick();
                 }
+            }
+
+            if (!_triggerHeld)
+            {
+                if (s != null && s.State == Microsoft.Xna.Framework.Audio.SoundState.Playing)
+                {
+                    s.Stop();
+                }
+                _chargeAnim.SetAnimation("nothing");
             }
             base.Update();
         }
@@ -139,9 +142,10 @@ namespace DuckGame
             base.Draw();
         }
 
+        public Sound s;
         public override void OnPressAction()
         {
-            SFX.Play("Audio/SFX/DeltaLaserCharge", 1);
+            s = SFX.Play("Audio/SFX/DeltaLaserCharge", 1);
             _chargeAnim.SetAnimation("charge");
         }
         public override void OnHoldAction()

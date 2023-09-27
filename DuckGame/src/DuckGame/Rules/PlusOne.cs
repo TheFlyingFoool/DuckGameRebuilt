@@ -25,6 +25,7 @@ namespace DuckGame
         {
             _font = new BitmapFont("biosFont", 8);
             _profile = p;
+            if (p != null && p.duck != null) p.duck.currentPlusOne = this;
             _temp = temp;
             layer = Layer.Blocks;
             depth = (Depth)0.9f;

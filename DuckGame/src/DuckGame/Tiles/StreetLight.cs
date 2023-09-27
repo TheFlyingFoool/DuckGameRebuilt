@@ -28,7 +28,28 @@ namespace DuckGame
             layer = Layer.Game;
             editorCycleType = typeof(Sun);
         }
-
+        public override void Update()
+        {
+            if (tim > 0)
+            {
+                pl._range = Rando.Float(200);
+                if (tim <= 1)
+                {
+                    pl._range = 200;
+                }
+                pl.forceRefresh = true;
+                tim--;
+            }
+            else
+            {
+                if (Rando.Int(480) == 0)
+                {
+                    tim = Rando.Int(10);
+                }
+            }
+        }
+        public int tim;
+        public PointLight pl;
         public override void Initialize()
         {
             if (Level.current is Editor)
@@ -38,14 +59,16 @@ namespace DuckGame
                 Vec2 vec2 = new Vec2(x - 16f, (float)(y - 32 - 32));
                 _occluders.Add(new LightOccluder(vec2 + new Vec2(8f, 5f), vec2 + new Vec2(-1f, -4f), new Color(0.4f, 0.4f, 0.4f)));
                 _occluders.Add(new LightOccluder(vec2 + new Vec2(1f, -4f), vec2 + new Vec2(-8f, 5f), new Color(0.4f, 0.4f, 0.4f)));
-                Level.Add(new PointLight(vec2.x, vec2.y + 1f, new Color(247, 198, 120), 200f, _occluders));
+                pl = new PointLight(vec2.x, vec2.y + 1f, new Color(247, 198, 120), 200f, _occluders);
+                Level.Add(pl);
             }
             else
             {
                 Vec2 vec2 = new Vec2(x + 16f, (float)(y - 32 - 32));
                 _occluders.Add(new LightOccluder(vec2 + new Vec2(-8f, 5f), vec2 + new Vec2(1f, -4f), new Color(0.4f, 0.4f, 0.4f)));
                 _occluders.Add(new LightOccluder(vec2 + new Vec2(-1f, -4f), vec2 + new Vec2(8f, 5f), new Color(0.4f, 0.4f, 0.4f)));
-                Level.Add(new PointLight(vec2.x, vec2.y + 1f, new Color(247, 198, 120), 200f, _occluders));
+                pl = new PointLight(vec2.x, vec2.y + 1f, new Color(247, 198, 120), 200f, _occluders);
+                Level.Add(pl);
             }
         }
 

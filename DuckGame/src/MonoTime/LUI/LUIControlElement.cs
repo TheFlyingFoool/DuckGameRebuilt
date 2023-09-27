@@ -157,21 +157,25 @@ namespace DuckGame
                     if (Input.Pressed(Triggers.MenuLeft))
                     {
                         --_selectionIndex;
+                        SFX.DontSave = 1;
                         SFX.Play("textLetter", 0.7f);
                     }
                     if (Input.Pressed(Triggers.MenuRight))
                     {
                         ++_selectionIndex;
+                        SFX.DontSave = 1;
                         SFX.Play("textLetter", 0.7f);
                     }
                     if (Input.Pressed(Triggers.MenuUp))
                     {
                         _selectionIndex -= 4;
+                        SFX.DontSave = 1;
                         SFX.Play("textLetter", 0.7f);
                     }
                     if (Input.Pressed(Triggers.MenuDown))
                     {
                         _selectionIndex += 4;
+                        SFX.DontSave = 1;
                         SFX.Play("textLetter", 0.7f);
                     }
                     if (_selectionIndex < 0)
@@ -181,6 +185,7 @@ namespace DuckGame
                     if (Input.Pressed(Triggers.Cancel))
                     {
                         flag = true;
+                        SFX.DontSave = 1;
                         SFX.Play("consoleError");
                     }
                     if (Input.Pressed(Triggers.Select))
@@ -190,6 +195,7 @@ namespace DuckGame
                         if (inputMapping.map.TryGetValue(_trigger, out key))
                         {
                             inputMapping.graphicMap[key] = Input.buttonStyles[_selectionIndex].texture.textureName;
+                            SFX.DontSave = 1;
                             SFX.Play("consoleSelect");
                         }
                     }

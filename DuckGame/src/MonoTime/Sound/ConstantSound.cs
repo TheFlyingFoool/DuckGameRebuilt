@@ -12,6 +12,17 @@ namespace DuckGame
     public class ConstantSound : IAutoUpdate
     {
         private Sound _effect;
+        public Sound effect
+        {
+            get
+            {
+                return _effect;
+            }
+            set
+            {
+                _effect = value;
+            }
+        }
         private float _lerpVolume;
         private float _lerpSpeed = 0.1f;
         private bool _killSound;

@@ -15,6 +15,7 @@ namespace DuckGame
     public class Tex2D : Tex2DBase
     {
         protected Texture2D _base;
+        public bool skipSpriteAtlas;
         private RenderTarget2D _effectTexture;
 
         public RenderTarget2D effectTexture
@@ -80,6 +81,22 @@ namespace DuckGame
             Color[] data = new Color[_base.Width * _base.Height];
             _base.GetData(data);
             return data;
+        }
+
+        public Color[,] GetData2D()
+        {
+            Color[] rawData = GetData();
+            Color[,] data2D = new Color[_base.Width, _base.Height];
+            
+            for (int y = 0, i = 0; y < h; y++)
+            {
+                for (int x = 0; x < w; x++, i++)
+                {
+                    data2D[x, y] = rawData[i];
+                }
+            }
+
+            return data2D;
         }
 
         public override void SetData<T>(T[] colors)

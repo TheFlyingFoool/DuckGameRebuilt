@@ -136,6 +136,7 @@ namespace DuckGame
                 {
                     if (!(bool)_filterField.value && (trigger == Triggers.MenuRight || trigger == Triggers.Select))
                     {
+                        SFX.DontSave = 1;
                         SFX.Play("textLetter", 0.7f);
                         _filterField.value = true;
                         _field.value = (int)_field.min;
@@ -143,6 +144,7 @@ namespace DuckGame
                     }
                     if (!(bool)_filterField.value && trigger == Triggers.MenuLeft)
                     {
+                        SFX.DontSave = 1;
                         SFX.Play("textLetter", 0.7f);
                         _filterField.value = true;
                         _field.value = (int)_field.max;
@@ -150,18 +152,21 @@ namespace DuckGame
                     }
                     if ((bool)_filterField.value && trigger == Triggers.MenuLeft && (int)_field.value == _field.min)
                     {
+                        SFX.DontSave = 1;
                         SFX.Play("textLetter", 0.7f);
                         _filterField.value = false;
                         return;
                     }
                     if ((bool)_filterField.value && (trigger == Triggers.MenuRight || trigger == Triggers.Select) && (int)_field.value == _field.max)
                     {
+                        SFX.DontSave = 1;
                         SFX.Play("textLetter", 0.7f);
                         _filterField.value = false;
                         return;
                     }
                     if (_setting != null && trigger == Triggers.Menu2)
                     {
+                        SFX.DontSave = 1;
                         SFX.Play("textLetter", 0.7f);
                         if (_setting.filterMode == FilterMode.GreaterThan)
                         {
@@ -192,7 +197,10 @@ namespace DuckGame
                 if (num1 != index && _action != null)
                     _action.Activate();
                 if (num1 != (int)_field.value)
+                {
+                    SFX.DontSave = 1;
                     SFX.Play("textLetter", 0.7f);
+                }
                 int num2 = index - num1;
                 _field.value = index;
                 if (num2 > 0)

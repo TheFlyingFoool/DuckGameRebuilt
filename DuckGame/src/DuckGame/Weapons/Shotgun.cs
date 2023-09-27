@@ -40,7 +40,14 @@ namespace DuckGame
             };
             editorTooltip = "It's...a shotgun. I don't really have anything more to say about it.";
         }
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is Shotgun && pTaped.gun2 is Shotgun ? new DoubleShotgun(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void Update()
         {
             base.Update();

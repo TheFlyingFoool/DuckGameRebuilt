@@ -147,7 +147,6 @@ namespace DuckGame
         public static bool networkDebugger = false;
         public static bool disableSteam = false;
         public static bool noIntro = false;
-        public static bool useRPC = false;
         public static bool startInEditor = false;
         public static bool preloadModContent = true;
         public static bool breakSteam = false;
@@ -801,6 +800,7 @@ namespace DuckGame
         private void StartLazyLoad()
         {
             SFX.Initialize();
+            if (DGRSettings.FasterLoad) return;
             DuckGame.Content.Initialize();
         }
 
@@ -920,19 +920,19 @@ namespace DuckGame
             AddLoadingAction(Network.InitializeMessageTypes, "Network InitializeMessageTypes");
             AddLoadingAction(DeathCrate.InitializeDeathCrateSettings, "DeathCrate InitializeDeathCrateSettings");
             AddLoadingAction(Editor.InitializeConstructorLists, "Editor InitializeConstructorLists");
-            AddLoadingAction(Team.DeserializeCustomHats, "Team DeserializeCustomHats");
+            if (!DGRSettings.FasterLoad) AddLoadingAction(Team.DeserializeCustomHats, "Team DeserializeCustomHats");
             AddLoadingAction(DuckGame.Content.InitializeLevels, "Content InitializeLevels");
-            AddLoadingAction(DuckGame.Content.InitializeEffects, "Content InitializeEffects");
+            if (!DGRSettings.FasterLoad) AddLoadingAction(DuckGame.Content.InitializeEffects, "Content InitializeEffects");
             AddLoadingAction(Input.InitializeGraphics, "Input InitializeGraphics");
             if (DGRSettings.LoadMusic) AddLoadingAction(Music.Initialize, "Music Initialize");
             DGRSettings.LoaderMusic = DGRSettings.LoadMusic;
-            AddLoadingAction(DevConsole.InitializeFont, "DevConsole InitializeFont");
-            AddLoadingAction(DevConsole.InitializeCommands, "DevConsole InitializeCommands");
+            if (!DGRSettings.FasterLoad) AddLoadingAction(DevConsole.InitializeFont, "DevConsole InitializeFont");
+            if (!DGRSettings.FasterLoad) AddLoadingAction(DevConsole.InitializeCommands, "DevConsole InitializeCommands");
             AddLoadingAction(Editor.InitializePlaceableGroup, "Editor InitializePlaceableGroup");
-            AddLoadingAction(Challenges.Initialize, "Challenges Initialize");
+            if (!DGRSettings.FasterLoad) AddLoadingAction(Challenges.Initialize, "Challenges Initialize");
             AddLoadingAction(Collision.Initialize, "Collision Initialize");
-            AddLoadingAction(Level.InitializeCollisionLists, "Level InitializeCollisionLists");  
-            AddLoadingAction(MapPack.RegeneratePreviewsIfNecessary, "MapPack RegeneratePreviewsIfNecessary");
+            AddLoadingAction(Level.InitializeCollisionLists, "Level InitializeCollisionLists");
+            if (!DGRSettings.FasterLoad) AddLoadingAction(MapPack.RegeneratePreviewsIfNecessary, "MapPack RegeneratePreviewsIfNecessary");
             AddLoadingAction(StartLazyLoad, "StartLazyLoad");
             AddLoadingAction(SetStarted, "SetStarted");
         }

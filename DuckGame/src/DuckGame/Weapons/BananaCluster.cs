@@ -46,7 +46,7 @@ namespace DuckGame
                     owner.ThrowItem();
                 Level.Remove(this);
             }
-            if (owner == null && ammo == 1)
+            if (owner == null && ammo == 1 && !Recorderator.Playing)
             {
                 Banana banana = new Banana(x, y)
                 {
