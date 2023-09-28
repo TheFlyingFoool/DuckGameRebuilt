@@ -126,7 +126,7 @@ namespace DuckGame
         public DuckPersona defaultPersona;
         public bool isNetworkProfile;
         public string fileName = "";
-        private bool isDefaultProfile;
+        public bool isDefaultProfile;
 
         public void ReportConnectionTrouble(NetworkConnection pFrom) => connectionTrouble[pFrom] = 200;
 

@@ -38,10 +38,10 @@ namespace DuckGame
             instance = this;
         }
         public int maxFrame;
-        public static Corderator ReadCord(byte[] zeByted)
+        public static Corderator ReadCord(byte[] data1, byte[] levelData)
         {
             Main.SpecialCode = "Begin ReadCord";
-            BitBuffer b = new BitBuffer(zeByted);
+            BitBuffer b = new BitBuffer(data1);
             Corderator cd = new Corderator();
             cd.PlayingThatShitBack = true;
             cd.cFrame = -1;
@@ -85,11 +85,11 @@ namespace DuckGame
                 }
                 cd.profiles.Add(p);
             }
-            Main.SpecialCode = "readbytes";
-            BitBuffer levBuffer = new BitBuffer(b.ReadBytes());
-
-            DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Level size:" + (b.position - cPos));
+            DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Teams and profiles size:" + levelData.Length);
             cPos = b.position;
+
+            Main.SpecialCode = "readbytes";
+
 
             #region WOW
             byte xd = b.ReadByte();
@@ -173,7 +173,8 @@ namespace DuckGame
             cPos = b.position;
             #endregion
             Level.current = new ReplayLevel() { CCorderr = cd };
-            (Level.current as ReplayLevel).DeserializeLevel(levBuffer);
+            (Level.current as ReplayLevel).DeserializeLevel(new BitBuffer(levelData));
+            DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Level size:" + levelData.Length);
 
             //Level.current.Initialize();
             
@@ -256,7 +257,6 @@ namespace DuckGame
                 cd.chatMessages.Add(key, list);
             }
             DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Chat buffer size:" + (b.position - cPos));
-            cPos = b.position;
 
             Main.SpecialCode = "Outside of recorderator load stuff";
             instance = cd;
@@ -286,11 +286,11 @@ namespace DuckGame
             Main.SpecialCode = "before anything existed";
             BitBuffer buffer = new BitBuffer();
             BitBuffer metadataBuffer = new BitBuffer();
+            BitBuffer hatsPreviewBuffer = new BitBuffer();
             buffer.Write(cFrame);
 
             buffer.Write(gamemodeStarted);
 
-            metadataBuffer.Write(cFrame);
             Main.SpecialCode = "there were profiles";
 
             buffer.Write((ushort)teams.Count);
@@ -301,6 +301,7 @@ namespace DuckGame
             }
 
             buffer.Write((byte)profiles.Count);
+            metadataBuffer.Write(cFrame);
             metadataBuffer.Write((byte)profiles.Count);
             for (int i = 0; i < profiles.Count; i++)
             {
@@ -325,13 +326,21 @@ namespace DuckGame
 
                 br[3] = p.isUsingRebuilt;
                 br[4] = p.duck != null;
+                br[5] = Profiles.active.Contains(p);
                 br[6] = p.team != null;
                 Main.SpecialCode = "or something like that";
                 if (p.team != null) br[7] = p.team.defaultTeam;
                 buffer.Write(BitCrusher.BitArrayToByte(br));
                 if (p.team != null)
                 {
-                    if (teams.Contains(p.team)) buffer.Write((ushort)(teams.IndexOf(p.team) + 1));
+                    if (teams.Contains(p.team))
+                    {
+                        hatsPreviewBuffer.Write((byte)1);
+                        hatsPreviewBuffer.Write((ushort)Teams.IndexOf(p.team));
+                        hatsPreviewBuffer.Write(p.team.customData, true);
+
+                        buffer.Write((ushort)(teams.IndexOf(p.team) + 1));
+                    }
                     else buffer.Write((ushort)0);
                 }
 
@@ -339,6 +348,7 @@ namespace DuckGame
                 if (p.team != null) metadataBuffer.Write((ushort)Teams.IndexOf(p.team));
                 Main.SpecialCode = "end";
             }
+            hatsPreviewBuffer.Write((byte)0);
 
             Main.SpecialCode = "in lev buffer";
             BitArray array = new BitArray(16);
@@ -635,7 +645,6 @@ namespace DuckGame
             {
                 Lbf.RemoveRange(levBuffer.position + 10, levBuffer.buffer.Count() - levBuffer.position - 11);
             }
-            buffer.Write(Lbf.ToArray(), true);
             #endregion
             Main.SpecialCode = "outside of lev buffer";
             byte[] buff = BitCrusher.BitArrayToBytes(array);
@@ -777,6 +786,8 @@ namespace DuckGame
 
 
 
+
+            //HAHHAHAHHAHAHHAHAHHAHAHAHHAHHAHAHAHHAHAHHAHAHHAHAHHAHAHAHHAHAHHAHAHHAHAHHAHAH -NIK0!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             List<byte> bf = buffer.buffer.ToList();
             if (buffer.position + 13 < buffer.buffer.Count())
             {
@@ -789,6 +800,13 @@ namespace DuckGame
                 bf2.RemoveRange(metadataBuffer.position + 10, metadataBuffer.buffer.Count() - metadataBuffer.position - 11);
             }
 
+
+            List<byte> bf4 = hatsPreviewBuffer.buffer.ToList();
+            if (hatsPreviewBuffer.position + 13 < hatsPreviewBuffer.buffer.Count())
+            {
+                bf4.RemoveRange(hatsPreviewBuffer.position + 10, hatsPreviewBuffer.buffer.Count() - hatsPreviewBuffer.position - 11);
+            }
+
             if (isThisReplayBroken)
             {
                 File.WriteAllText(CordsPath + "broken_cord_" + DateTime.Now.ToString().Replace('/', '-').Replace(':', '-').Replace(' ', '-') + ".txt", crashStuff);
@@ -796,29 +814,50 @@ namespace DuckGame
             }
             else
             {
-                string path = CordsPath + "cord_" + DateTime.Now.ToString().Replace('/', '-').Replace(':', '-').Replace(' ', '-') + ".rdt";
+                string path = CordsPath + "cord_" + DateTime.Now.ToString().Replace('/', '-').Replace(':', '-').Replace(' ', '-') + ".crf";
                 int V = 0;
                 while (File.Exists(path))
                 {
                     V++;
-                    path = CordsPath + "cord_" + DateTime.Now.ToString().Replace('/', '-').Replace(':', '-').Replace(' ', '-') + "_" + V + ".rdt";
+                    path = CordsPath + "cord_" + DateTime.Now.ToString().Replace('/', '-').Replace(':', '-').Replace(' ', '-') + "_" + V + ".crf";
                 }
                 using (MemoryStream customFileStream = new MemoryStream(bf.ToArray()))
                 {
-                    string zipFilePath = CordsPath + "cord_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".rdt";
+                    string zipFilePath = CordsPath + "cord_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".crf";
 
                     using (FileStream zipStream = new FileStream(zipFilePath, FileMode.Create))
                     {
                         using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Create))
                         {
-                            ZipArchiveEntry entry = archive.CreateEntry("cord_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".rdt");
+                            ZipArchiveEntry entry = archive.CreateEntry("replaydata.rdt");
 
                             using (Stream entryStream = entry.Open())
                             {
                                 customFileStream.CopyTo(entryStream);
                             }
+                            //Lbf
 
-                            // Second entry from bf2 with the name "metadata.rmt"
+
+                            ZipArchiveEntry entry3 = archive.CreateEntry("level.lbf");
+                            using (Stream entryStream3 = entry3.Open())
+                            {
+                                using (MemoryStream customFileStream3 = new MemoryStream(Lbf.ToArray()))
+                                {
+                                    customFileStream3.CopyTo(entryStream3);
+                                }
+                            }
+
+                            ZipArchiveEntry entry4 = archive.CreateEntry("hatpreview.hpb");
+                            using (Stream entryStream4 = entry4.Open())
+                            {
+                                using (MemoryStream customFileStream4 = new MemoryStream(bf4.ToArray()))
+                                {
+                                    customFileStream4.CopyTo(entryStream4);
+                                }
+                            }
+
+                            //save metadata last -NiK0
+                            // Second entry from bf2 with the name "metadata.rmt" -ChatGPT
                             ZipArchiveEntry entry2 = archive.CreateEntry("metadata.rmt");
                             using (Stream entryStream2 = entry2.Open())
                             {
@@ -1117,7 +1156,8 @@ namespace DuckGame
             {
                 Recorderator.Playing = false;
                 PlayingThatShitBack = false;
-                Level.current = new SendToLevel(new RecorderationSelector());
+                if (Level.current is ReplayLevel rl && rl.prev != null) Level.current = rl.prev;
+                else Level.current = new RecorderationSelector();
             }
             SFX.enabled = true;
             //do sfx stuff here

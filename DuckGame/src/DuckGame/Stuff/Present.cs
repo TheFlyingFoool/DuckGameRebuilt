@@ -59,16 +59,15 @@ namespace DuckGame
                 || t == typeof(LavaBarrel)
                 || t == typeof(Grapple));
             _contains = physicsObjects[Rando.Int(physicsObjects.Count - 1)];
-            if (Rando.Int(500) == 0)
+            if (Rando.Int(500) == 0 && Editor.clientonlycontent) //oopss
             {
                 Type t = null;
-                if (Rando.Int(50) == 0) // 1/50000 lmao
+                if (Rando.Int(50) == 0)
                     t = typeof(SohRock);
                 else
                 {
                     t = DGRDevs.AllWithGuns.ChooseRandom().DevItem;
 
-                    // to be removed when all devs get their gun
                     if (t == typeof(PositronShooter))
                         t = typeof(DanGun);
                 }

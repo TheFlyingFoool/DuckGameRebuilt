@@ -329,6 +329,7 @@ namespace DuckGame
             }
             FF:
 
+            Main.SpecialCode = "vay";
             if (Thread.CurrentThread == Content.previewThread && this != Content.previewLevel) Content.previewLevel.AddThing(t);
             else if (t is ThingContainer)
             {
@@ -349,6 +350,7 @@ namespace DuckGame
             }
             else
             {
+            Main.SpecialCode = "lay";
                 if (t.level != this)
                 {
                     _things.Add(t);

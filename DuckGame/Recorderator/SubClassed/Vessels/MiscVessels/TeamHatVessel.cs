@@ -13,17 +13,28 @@ namespace DuckGame
         public static Dictionary<ushort, Team> regTems = new Dictionary<ushort, Team>();
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
-            Team team = null;
-            int ush = b.ReadUShort() - 1;
-            if (Corderator.instance.teams.Count > ush - 1) team = Corderator.instance.teams[ush];
+            Team team;
+            byte byt = b.ReadByte();
+            int ush = b.ReadUShort();
+            if (byt == 1) team = Corderator.instance.teams[ush];
+            else team = Teams.ParseFromIndex((ushort)ush);
+
             TeamHatVessel v = new TeamHatVessel(new TeamHat(0, -2000, team));
             return v;
         }
         public override BitBuffer RecSerialize(BitBuffer prevBuffer)
         {
             TeamHat th = (TeamHat)t;
-            if (Corderator.instance.teams.Contains(th.team)) prevBuffer.Write((ushort)(Corderator.instance.teams.IndexOf(th.team) + 1));
-            else prevBuffer.Write((ushort)0);
+            if (Corderator.instance.teams.Contains(th.team))
+            {
+                prevBuffer.Write((byte)1);
+                prevBuffer.Write((ushort)(Corderator.instance.teams.IndexOf(th.team)));
+            }
+            else
+            {
+                prevBuffer.Write((byte)0);
+                prevBuffer.Write((ushort)th.netTeamIndex);
+            }
             return prevBuffer;
         }
         public override void PlaybackUpdate()
@@ -50,10 +61,18 @@ namespace DuckGame
                 th._equippedDuck = d;
             }
 
-            if (Corderator.instance != null)
+            if (bArray[7])
             {
-                int team = (ushort)valOf("team");
-                if (th.team.recordIndex != team) th.team = Corderator.instance.teams[team];
+                if (Corderator.instance != null)
+                {
+                    int team = (ushort)valOf("team");
+                    if (th.team == null || th.team.recordIndex != team) th.team = Corderator.instance.teams[team];
+                }
+            }
+            else
+            {
+                ushort team = (ushort)valOf("team");
+                if (th.netTeamIndex != team) th.netTeamIndex = team;
             }
 
             base.PlaybackUpdate();
@@ -70,9 +89,18 @@ namespace DuckGame
                 th.team.recordIndex = Corderator.instance.teams.Count;
                 Corderator.instance.teams.Add(th.team);
             }
-            
-            
-            if (Corderator.instance != null) addVal("team", (ushort)th.team.recordIndex);
+
+
+            if (Corderator.instance != null && th.team != null && th.team.recordIndex != -1)
+            {
+                addVal("team", (ushort)th.team.recordIndex);
+                bArray[7] = true;
+            }
+            else
+            {
+                addVal("team", th.netTeamIndex);
+                bArray[7] = false;
+            }
 
             if (th._equippedDuck != null)
             {

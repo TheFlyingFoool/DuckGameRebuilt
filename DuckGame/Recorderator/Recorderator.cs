@@ -14,39 +14,28 @@ namespace DuckGame
     //
     public class Recorderator
     {
+        public static byte[] DataFromEntry(ZipArchiveEntry entry)
+        {
+            using (MemoryStream extractedStream = new MemoryStream())
+            {
+                using (Stream entryStream = entry.Open())
+                {
+                    entryStream.CopyTo(extractedStream);
+                }
+
+                return extractedStream.ToArray();
+            }
+        }
         [DevConsoleCommand(Name = "playreplay")]
+
         public static void PlayReplay(int replay)
         {
             try
             {
-                string[] ss = Directory.GetFiles(Corderator.CordsPath, "*.rdt");
+                string[] ss = Directory.GetFiles(Corderator.CordsPath, "*.crf");
                 string Replay = ss[replay < 0 ? ss.Length + replay : replay];
 
-                using (FileStream zipStream = new FileStream(Replay, FileMode.Open))
-                {
-                    using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Read))
-                    {
-                        ZipArchiveEntry entry = archive.Entries[0];
-                        if (entry != null)
-                        {
-                            using (MemoryStream extractedStream = new MemoryStream())
-                            {
-                                using (Stream entryStream = entry.Open())
-                                {
-                                    entryStream.CopyTo(extractedStream);
-                                }
-
-                                byte[] extractedData = extractedStream.ToArray();
-                                Corderator.ReadCord(extractedData);
-                            }
-                        }
-                        else
-                        {
-                            DevConsole.Log("????????????????????????????");
-                            //??? explode ig
-                        }
-                    }
-                }
+                PlayReplay(Replay);
             }
             catch (Exception ex)
             {
@@ -55,6 +44,20 @@ namespace DuckGame
                 DevConsole.LogComplexMessage(ex.ToString(), Color.DarkGreen);
             }
         }
+
+        public static void PlayReplay(string path)
+        {
+            using (FileStream zipStream = new FileStream(path, FileMode.Open))
+            {
+                using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Read))
+                {
+                    byte[] data1 = DataFromEntry(archive.Entries[0]);
+                    byte[] data2 = DataFromEntry(archive.Entries[1]);
+                    Corderator.ReadCord(data1, data2);
+                }
+            }
+        }
+
         [AutoConfigField]
         public static int Record = 0;
 

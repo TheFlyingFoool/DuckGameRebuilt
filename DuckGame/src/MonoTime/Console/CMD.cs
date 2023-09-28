@@ -427,6 +427,7 @@ namespace DuckGame
                         return new FeatherFashion();
                     case "rdt":
                     case "cord":
+                    case "rec":
                         return new RecorderationSelector();
                     case "dev":
                         string devfilepath = Program.GameDirectory + "Content\\levels\\devtestlev.lev";

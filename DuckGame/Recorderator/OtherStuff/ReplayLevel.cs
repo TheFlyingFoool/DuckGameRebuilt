@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using static DuckGame.CMD;
 
 namespace DuckGame
 {
     public class ReplayLevel : Level, IHaveAVirtualTransition
     {
+        public bool fake;
         public void DeserializeLevel(BitBuffer b)
         {
             //this is dumb
             byte bited = b.ReadByte();
 
-            reAdd.Add(CCorderr);
+            if (!fake) reAdd.Add(CCorderr);
             if (bited != 255)
             {
                 BackgroundUpdater bu = (BackgroundUpdater)Editor.CreateThing(Recorderator.bgIDX[bited]);
@@ -493,6 +492,22 @@ namespace DuckGame
         }
         public List<Thing> reAdd = new List<Thing>();
         public Corderator CCorderr;
+
+        public int frame;
+        public void FakeUpdate()
+        {
+            if (frame == 0)
+            {
+                List<AutoBlock> autoBlocks = Extensions.GetListOfThings<AutoBlock>();
+                for (int i = 0; i < autoBlocks.Count; i++) autoBlocks[i].PlaceBlock();
+                List<AutoPlatform> autoPlatforms = Extensions.GetListOfThings<AutoPlatform>();
+                for (int i = 0; i < autoPlatforms.Count; i++) autoPlatforms[i].PlaceBlock();
+                List<AutoTile> autoTiles = Extensions.GetListOfThings<AutoTile>();
+                for (int i = 0; i < autoTiles.Count; i++) autoTiles[i].PlaceBlock();
+            }
+            frame++;
+            base.Update();
+        }
         public override void Update()
         {
             Recorderator.Playing = true;
@@ -509,12 +524,15 @@ namespace DuckGame
             if (Keyboard.Pressed(Keys.Home))
             {
                 Recorderator.Playing = false;
-                current = new SendToLevel(new RecorderationSelector());
+                if (prev != null) current = prev;
+                else current = new SendToLevel(new RecorderationSelector());
                 return;
             }
             
             base.Update();
         }
+
+        public RecorderationSelector prev;
         public override void PostDrawLayer(Layer layer)
         {
             if (layer == Layer.Console)
@@ -528,7 +546,7 @@ namespace DuckGame
             DuckNetwork.core.chatMessages.Clear();
             for (int i = 0; i < reAdd.Count; i++)
             {
-                Add(reAdd[i]);
+                AddThing(reAdd[i]);
             }
             base.Initialize();
         }
