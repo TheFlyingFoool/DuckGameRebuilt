@@ -463,7 +463,7 @@ namespace DuckGame
                     if (_sightHit != null)
                     {
                         _sightHit.color = Color.Red;
-                        Graphics.Draw(_sightHit, p2.x, p2.y);
+                        Graphics.Draw(ref _sightHit, p2.x, p2.y);
                     }
                 }
             }

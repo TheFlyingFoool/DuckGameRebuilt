@@ -360,13 +360,13 @@ namespace DuckGame
             _keybed.angle = angle;
             _keybed.frame = notePitch != 0f ? currentNote + 1 : 0;
             Vec2 vec2_2 = Offset(new Vec2(-5f, -2f));
-            Graphics.Draw(_keybed, vec2_2.x, vec2_2.y);
+            Graphics.Draw(ref _keybed, vec2_2.x, vec2_2.y);
             _settingStrip.depth = depth + 2;
             _settingStrip.flipH = offDir <= 0;
             _settingStrip.angle = angle;
             _settingStrip.frame = preset;
             Vec2 vec2_3 = Offset(new Vec2(-1f, 3f));
-            Graphics.Draw(_settingStrip, vec2_3.x, vec2_3.y);
+            Graphics.Draw(ref _settingStrip, vec2_3.x, vec2_3.y);
             base.Draw();
         }
     }

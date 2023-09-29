@@ -630,7 +630,7 @@ namespace DuckGame
             else
                 _key.depth = depth + 1;
             _key.flipH = graphic.flipH;
-            Graphics.Draw(_key, x + _open * 12f, y - 8f);
+            Graphics.Draw(ref _key, x + _open * 12f, y - 8f);
         }
 
         public override BinaryClassChunk Serialize()

@@ -118,7 +118,7 @@ namespace DuckGame
             _numbers.frame = 4 - _currentHighlight;
             _numbers.depth = (Depth)1f;
             _numbers.scale = new Vec2(4f, 4f);
-            Graphics.Draw(_numbers, 32f, 32f);
+            Graphics.Draw(ref _numbers, 32f, 32f);
             Graphics.screen.End();
         }
     }

@@ -37,7 +37,7 @@ namespace DuckGame
         public override void Draw()
         {
             _scoreCard.depth = depth;
-            Graphics.Draw(_scoreCard, x, y);
+            Graphics.Draw(ref _scoreCard, x, y);
             if (_team == null)
             {
                 string text = "X";

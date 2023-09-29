@@ -103,14 +103,14 @@ namespace DuckGame
             }
             else _wait += 0.01f;
             _redBar.depth = (Depth)0.2f;
-            Graphics.Draw(_redBar, 30f, 25f);
+            Graphics.Draw(ref _redBar, 30f, 25f);
             _font.depth = (Depth)0.25f;
             if (DG.isHalloween)
                 _font.Draw("SPOOKY  REPORT", 44f, 28f, Color.White, (Depth)0.25f);
             else
                 _font.Draw("HOTNESS REPORT", 44f, 28f, Color.White, (Depth)0.25f);
             _blueBar.depth = (Depth)0.1f;
-            Graphics.Draw(_blueBar, 30f, 18f);
+            Graphics.Draw(ref _blueBar, 30f, 18f);
             Graphics.DrawRect(new Vec2(20f, 135f), new Vec2(260f, 160f), new Color(12, 90, 182), (Depth)0.1f);
             Vec2 vec2_1 = new Vec2(60f, 50f);
             Vec2 vec2_2 = new Vec2(200f, 150f);
@@ -157,7 +157,7 @@ namespace DuckGame
                     _upScale[index1] = 0.5f;
                 }
                 _icon.scale = new Vec2(1f + _upScale[index1]);
-                Graphics.Draw(_icon, x, y + 28f);
+                Graphics.Draw(ref _icon, x, y + 28f);
                 ++index1;
             }
         }

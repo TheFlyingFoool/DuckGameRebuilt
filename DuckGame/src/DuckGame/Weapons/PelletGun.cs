@@ -261,13 +261,13 @@ namespace DuckGame
             else
                 _sprite.angle = angle + _angleOffset + _angleOffset2;
             Vec2 vec2 = Offset(_posOffset);
-            Graphics.Draw(_sprite, vec2.x, vec2.y);
+            Graphics.Draw(ref _sprite, vec2.x, vec2.y);
             _sprite.frame = 1;
             if (offDir > 0)
                 _sprite.angle = angle + _angleOffset * 3f - _angleOffset2;
             else
                 _sprite.angle = angle - _angleOffset * 3f + _angleOffset2;
-            Graphics.Draw(_sprite, vec2.x, vec2.y);
+            Graphics.Draw(ref _sprite, vec2.x, vec2.y);
             if (firesTillFail > 0)
                 return;
             _spring.depth = depth - 5;
@@ -280,7 +280,7 @@ namespace DuckGame
             if (_spring.yscale < -1.2f)
                 _spring.yscale = -1.2f;
             _spring.alpha = alpha;
-            Graphics.Draw(_spring, vec2.x, vec2.y);
+            Graphics.Draw(ref _spring, vec2.x, vec2.y);
         }
     }
 }

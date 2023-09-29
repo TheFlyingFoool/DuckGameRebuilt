@@ -98,7 +98,7 @@ namespace DuckGame
                 float ypos = _yScroll * maxYPos;
                 _virtualBackground.parallax.y = ypos - maxYPos;
                 _bigDome.depth = (Depth)0.5f;
-                Graphics.Draw(_bigDome, 160f, 130f + ypos);
+                Graphics.Draw(ref _bigDome, 160f, 130f + ypos);
                 float deg = 45f;
                 float rad1 = Maths.DegToRad(deg);
                 float rad2 = Maths.DegToRad(25f + rotter);
@@ -113,12 +113,12 @@ namespace DuckGame
                         _smallDome.depth = (Depth)0.4f;
                     Vec2 pos = new Vec2((float)Math.Cos(rad2 + index * rad1), (float)(-Math.Sin(rad2 + index * rad1) * (0.4f * (1f - ypos / maxYPos))));
                     Vec2 drawPos = new Vec2(160f, 130f + ypos) + pos * 100f;
-                    Graphics.Draw(_smallDome, drawPos.x, drawPos.y - 30f);
+                    Graphics.Draw(ref _smallDome, drawPos.x, drawPos.y - 30f);
                     _smallPillar.depth = _smallDome.depth;
-                    Graphics.Draw(_smallPillar, drawPos.x, drawPos.y - 11f);
+                    Graphics.Draw(ref _smallPillar, drawPos.x, drawPos.y - 11f);
                     _domeBleachers.depth = _smallDome.depth + 1;
                     _domeBleachers.frame = 7 - (index + 5) % 8;
-                    Graphics.Draw(_domeBleachers, drawPos.x, drawPos.y - 30f);
+                    Graphics.Draw(ref _domeBleachers, drawPos.x, drawPos.y - 30f);
                 }
             }
             else if (l == Layer.HUD)
@@ -133,7 +133,7 @@ namespace DuckGame
                     x = 320f - _intermissionSlide * 320f;
                     y = 60f;
                     Graphics.DrawRect(new Vec2(x, y + 30f), new Vec2(x + 320f, y + 60f), Color.Black, (Depth)0.9f);
-                    Graphics.Draw(_intermissionText, _intermissionSlide * 336f - 320f, y + 18f);
+                    Graphics.Draw(ref _intermissionText, _intermissionSlide * 336f - 320f, y + 18f);
                     _intermissionText.depth = (Depth)0.91f;
                 }
             }

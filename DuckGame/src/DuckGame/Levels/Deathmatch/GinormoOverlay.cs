@@ -44,7 +44,7 @@ namespace DuckGame
             Graphics.device.Textures[1] = (Texture2D)_overlaySprite;
             Graphics.device.SamplerStates[1] = SamplerState.LinearClamp;
             _targetSprite.depth = (Depth)0.9f;
-            Graphics.Draw(_targetSprite, x - 92f, y - 33f);
+            Graphics.Draw(ref _targetSprite, x - 92f, y - 33f);
             Graphics.material = material;
         }
     }

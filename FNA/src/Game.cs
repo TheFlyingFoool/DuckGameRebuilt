@@ -120,6 +120,11 @@ namespace Microsoft.Xna.Framework
 			get;
 			set;
 		}
+		public bool UnFixedDraw
+		{
+			get;
+			set;
+		}
 
 		private bool INTERNAL_isMouseVisible;
 		public bool IsMouseVisible
@@ -254,6 +259,7 @@ namespace Microsoft.Xna.Framework
 
 			IsMouseVisible = false;
 			IsFixedTimeStep = true;
+			UnFixedDraw = false;
 			TargetElapsedTime = TimeSpan.FromTicks(166667); // 60fps
 			InactiveSleepTime = TimeSpan.FromSeconds(0.02);
 			for (int i = 0; i < previousSleepTimes.Length; i += 1)
@@ -429,7 +435,7 @@ namespace Microsoft.Xna.Framework
 
 			AdvanceElapsedTime();
 
-			if (IsFixedTimeStep)
+			if (IsFixedTimeStep && !UnFixedDraw)
 			{
 				/* If we are in fixed timestep, we want to wait until the next frame,
 				 * but we don't want to oversleep. Requesting repeated 1ms sleeps and
@@ -517,7 +523,13 @@ namespace Microsoft.Xna.Framework
 				/* Draw needs to know the total elapsed time
 				 * that occured for the fixed length updates.
 				 */
-				gameTime.ElapsedGameTime = TimeSpan.FromTicks(TargetElapsedTime.Ticks * stepCount);
+				if (UnFixedDraw)
+                {
+					gameTime.ElapsedGameTime = accumulatedElapsedTime;
+					//gameTime.TotalGameTime += gameTime.ElapsedGameTime;
+				}
+				else
+					gameTime.ElapsedGameTime = TimeSpan.FromTicks(TargetElapsedTime.Ticks * stepCount);
 			}
 			else
 			{

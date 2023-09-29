@@ -446,6 +446,12 @@ namespace DuckGame
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
+            menu.Add(new UIMenuItemToggle("Uncap FPS", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.UncappedFPS)))
+            {
+                dgrDescription = "Game will use interpolation to render at higher than 60fps"
+            });
+
+
             menu.Add(new UIMenuItemSlider("Weather Chance", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.RandomWeather), 0, 10, 1), step: 1f)
             {
                 dgrDescription = "Chance for random weather to occur in levels from 0% to 100%"

@@ -267,7 +267,7 @@ namespace DuckGame
                 double length = stickLerp.length;
                 if (length > 0.5)
                     num2 = 72;
-                Graphics.Draw(_duckOwner._spriteQuack, _duckOwner._sprite.imageIndex + num2, x + num1, y - 8f);
+                Graphics.Draw(ref _duckOwner._spriteQuack, _duckOwner._sprite.imageIndex + num2, x + num1, y - 8f);
                 if (length > 0.05f)
                 {
                     Vec2 vec2_1 = position + new Vec2(num1 + (_duckOwner._spriteQuack.flipH ? -1f : 1f), -2f);
@@ -298,7 +298,7 @@ namespace DuckGame
                 }
             }
             else
-                Graphics.Draw(_duckOwner._sprite, x + num1, y - 8f);
+                Graphics.Draw(ref _duckOwner._sprite, x + num1, y - 8f);
             base.Draw();
         }
     }

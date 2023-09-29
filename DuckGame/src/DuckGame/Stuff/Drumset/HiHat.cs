@@ -26,7 +26,7 @@ namespace DuckGame
         {
             base.Draw();
             _stand.depth = depth - 1;
-            Graphics.Draw(_stand, x, y - 4f);
+            Graphics.Draw(ref _stand, x, y - 4f);
         }
     }
 }

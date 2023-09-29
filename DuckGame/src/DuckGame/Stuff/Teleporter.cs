@@ -363,8 +363,8 @@ namespace DuckGame
                 _bottom.angleDegrees = 90f;
                 _top.depth = depth + 1;
                 _bottom.depth = depth + 1;
-                Graphics.Draw(_top, x + ((int)teleHeight * 16 - 9), y);
-                Graphics.Draw(_bottom, x - 5f, y);
+                Graphics.Draw(ref _top, x + ((int)teleHeight * 16 - 9), y);
+                Graphics.Draw(ref _bottom, x - 5f, y);
                 _arrow.depth = depth + 2;
                 _arrow.alpha = 0.5f;
                 if (direction == 0)
@@ -375,7 +375,7 @@ namespace DuckGame
                     _arrow.angleDegrees = -90f;
                 else if (direction == 3)
                     _arrow.angleDegrees = 90f;
-                Graphics.Draw(_arrow, (float)(x - 8 + (int)teleHeight * 16f / 2f + (float)_float * 2), y);
+                Graphics.Draw(ref _arrow, (float)(x - 8 + (int)teleHeight * 16f / 2f + (float)_float * 2), y);
             }
             else
             {
@@ -388,8 +388,8 @@ namespace DuckGame
                 _bottom.angle = 0f;
                 _top.depth = depth + 1;
                 _bottom.depth = depth + 1;
-                Graphics.Draw(_top, x, y - ((int)teleHeight * 16 - 9));
-                Graphics.Draw(_bottom, x, y + 5f);
+                Graphics.Draw(ref _top, x, y - ((int)teleHeight * 16 - 9));
+                Graphics.Draw(ref _bottom, x, y + 5f);
                 _arrow.depth = depth + 2;
                 _arrow.alpha = 0.5f;
                 if (direction == 0)
@@ -400,7 +400,7 @@ namespace DuckGame
                     _arrow.angleDegrees = -90f;
                 else if (direction == 3)
                     _arrow.angleDegrees = 90f;
-                Graphics.Draw(_arrow, x, (float)(y + 8f - (int)teleHeight * 16f / 2f + (float)_float * 2f));
+                Graphics.Draw(ref _arrow, x, (float)(y + 8f - (int)teleHeight * 16f / 2f + (float)_float * 2f));
             }
         }
 

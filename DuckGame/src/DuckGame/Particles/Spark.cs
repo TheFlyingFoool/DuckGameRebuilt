@@ -71,9 +71,11 @@ namespace DuckGame
 
         public override void Draw()
         {
-            Vec2 p2 = this.position + velocity.normalized * (velocity.length * 2f);
+            ParticleLerp.UpdateLerpState(this.position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
+            Vec2 p2 = ParticleLerp.Position + velocity.normalized * (velocity.length * 2f);
             Vec2 position;
-            Graphics.DrawLine(this.position, Level.CheckLine<Block>(this.position, p2, out position) != null ? position : p2, _color * alpha, _width, depth);
+            Graphics.DrawLine(ParticleLerp.Position, Level.CheckLine<Block>(ParticleLerp.Position, p2, out position) != null ? position : p2, _color * alpha, _width, depth);
         }
     }
 }

@@ -37,6 +37,7 @@ namespace DuckGame
         public Vec2 netLerpPosition = Vec2.Zero;
         public bool customGravity;
         public bool onlyDieWhenGrounded;
+        protected Interp ParticleLerp = new Interp(true);
 
         public float spinAngle
         {

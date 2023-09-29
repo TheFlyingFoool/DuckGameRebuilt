@@ -427,7 +427,7 @@ namespace DuckGame
         public override void Draw()
         {
             base.Draw();
-            Draw(_magnet, new Vec2(5f, (float)((float)_wave * _waveMult - 2)));
+            Draw(ref _magnet, new Vec2(5f, (float)((float)_wave * _waveMult - 2)));
             foreach (Thing line in _lines)
                 line.Draw();
         }

@@ -638,14 +638,14 @@ namespace DuckGame
                 _clickPuff.alpha = 0.6f;
                 _clickPuff.angle = angle + _smokeAngle;
                 _clickPuff.flipH = offDir < 0;
-                Draw(_clickPuff, barrelOffset);
+                Draw(ref _clickPuff, barrelOffset);
             }
             if (!VirtualTransition.active && Graphics.material == null)
                 Graphics.material = this.material;
             base.Draw();
             Graphics.material = null;
             if (_flareAlpha > 0)
-                Draw(_flare, barrelOffset);
+                Draw(ref _flare, barrelOffset);
             if (_barrelSmoke.speed > 0 && !raised)
             {
                 _barrelSmoke.alpha = 0.7f;
@@ -656,7 +656,7 @@ namespace DuckGame
                 if (offDir < 0 && angleDegrees > 90 && angleDegrees < 270)
                     _barrelSmoke.flipH = false;
                 _barrelSmoke.yscale = 1f - _smokeFlatten;
-                DrawIgnoreAngle(_barrelSmoke, barrelOffset);
+                DrawIgnoreAngle(ref _barrelSmoke, barrelOffset);
             }
             if (!Options.Data.fireGlow)
                 DrawGlow();
@@ -691,7 +691,7 @@ namespace DuckGame
                 {
                     _sightHit.alpha = num;
                     _sightHit.color = Color.Red * num;
-                    Graphics.Draw(_sightHit, _wallPoint.x, _wallPoint.y);
+                    Graphics.Draw(ref _sightHit, _wallPoint.x, _wallPoint.y);
                 }
             }
             base.DrawGlow();

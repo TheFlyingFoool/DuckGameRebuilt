@@ -77,7 +77,7 @@ namespace DuckGame
             Graphics.DrawRect(position, position + vec2, Color.Black * 0.8f, depth + 1);
             Graphics.DrawRect(r1, Color.White, depth + 6, false);
             Graphics.DrawRect(r1, flag2 ? Color.White * 0.6f : Color.Gray * 0.5f, depth + 5);
-            Graphics.Draw(_downArrow, r1.Center.x, r1.Center.y, depth + 8);
+            Graphics.Draw(ref _downArrow, r1.Center.x, r1.Center.y, depth + 8);
             string text = "-";
             if (selected != null)
                 text = selected.name;

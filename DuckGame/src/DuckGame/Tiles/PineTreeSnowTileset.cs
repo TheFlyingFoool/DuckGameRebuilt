@@ -90,7 +90,7 @@ namespace DuckGame
                 _snowFall.depth = -0.1f;
                 _snowFall.scale = new Vec2(1f, (float)(_snowFall.frame / 5 * 0.04f + 0.2f));
                 _snowFall.alpha = (float)(1 - _snowFall.frame / 5 * 1);
-                Graphics.Draw(_snowFall, x, (float)(y - 7 + _snowFall.frame / 5 * 3));
+                Graphics.Draw(ref _snowFall, x, (float)(y - 7 + _snowFall.frame / 5 * 3));
             }
             if (_snowFall.currentAnimation != "idle" && (edge || _snowFall.frame == 1 && !didChange))
             {

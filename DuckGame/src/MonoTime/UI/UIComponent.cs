@@ -16,6 +16,8 @@ namespace DuckGame
         public MenuItemMode mode;
         public bool debug;
         public Func<bool> condition;
+        protected Interp UILerp = new Interp(true);
+        protected Interp AnimLerp = new Interp(true);
 
         public string dgrDescription
         {
@@ -228,7 +230,8 @@ namespace DuckGame
             if (anchor == null)
             {
                 float to = _close ? layer.camera.height * 2f : _startPosition.y;
-                position.y = Lerp.FloatSmooth(position.y, to, 0.2f, 1.05f);
+                if (animating)
+                    position.y = Lerp.FloatSmooth(position.y, to, 0.2f, 1.05f);
                 bool flag = position.y != to;
                 //stuff might look weird but i have to introduce a 1 frame delay cuz otherwise the open menu input can go through
                 //multiple menus and do bad stuff -NiK0

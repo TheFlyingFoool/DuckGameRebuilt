@@ -83,7 +83,8 @@ namespace DuckGame
             {
                 _flavourLines[index].depth = depth;
                 _flavourLines[index].color = Color.White * _hotAlpha;
-                Graphics.Draw(_flavourLines[index], x - 4f + index * 4 + num, y - 3f);
+                SpriteMap g = _flavourLines[index];
+                Graphics.Draw(ref g, x - 4f + index * 4 + num, y - 3f);
             }
         }
     }

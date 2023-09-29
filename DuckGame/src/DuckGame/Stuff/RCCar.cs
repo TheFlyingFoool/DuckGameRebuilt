@@ -229,8 +229,8 @@ namespace DuckGame
             if (owner == null) _sprite.flipH = offDir < 0;
             base.Draw();
             _wheel.scale = scale;
-            Graphics.Draw(_wheel, x - 7f * xscale, y + 9f * yscale);
-            Graphics.Draw(_wheel, x + 7f * xscale, y + 9f * yscale);
+            Graphics.Draw(ref _wheel, x - 7f * xscale, y + 9f * yscale);
+            Graphics.Draw(ref _wheel, x + 7f * xscale, y + 9f * yscale);
             if (Editor.clientonlycontent && tapedIsGun1) offDir *= -1;
         }
     }

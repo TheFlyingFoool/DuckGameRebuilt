@@ -76,9 +76,9 @@ namespace DuckGame
             if (_barrelSteam.speed > 0)
             {
                 _barrelSteam.alpha = 0.6f;
-                Draw(_barrelSteam, new Vec2(9f, 1f));
+                Draw(ref _barrelSteam, new Vec2(9f, 1f));
             }
-            Draw(_netGunGuage, new Vec2(-4f, -4f));
+            Draw(ref _netGunGuage, new Vec2(-4f, -4f));
         }
 
         public override void OnPressAction()

@@ -109,7 +109,7 @@ namespace DuckGame
                         Vec2 vec2_2 = new Vec2(vec2_1.x, vec2_1.y + num2 * 14);
                         vec2_2.x -= Layer.HUD.width * (1f - bar.position);
                         _bar.depth = (Depth)0.84f;
-                        Graphics.Draw(_bar, vec2_2.x, vec2_2.y);
+                        Graphics.Draw(ref _bar, vec2_2.x, vec2_2.y);
                         _smallBios.depth = (Depth)0.9f;
                         string str1 = "CUSTOM";
                         int num3 = 0;

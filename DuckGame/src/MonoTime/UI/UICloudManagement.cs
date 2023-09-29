@@ -256,12 +256,12 @@ namespace DuckGame
                         if (_topOffset > 0)
                         {
                             _downArrow.flipV = true;
-                            Graphics.Draw(_downArrow, x, vec2.y - 2f, (Depth)0.5f);
+                            Graphics.Draw(ref _downArrow, x, vec2.y - 2f, (Depth)0.5f);
                         }
                         if (num2 > kMaxInView)
                         {
                             _downArrow.flipV = false;
-                            Graphics.Draw(_downArrow, x, vec2.y + y, (Depth)0.5f);
+                            Graphics.Draw(ref _downArrow, x, vec2.y + y, (Depth)0.5f);
                             break;
                         }
                         string str1 = file.name;

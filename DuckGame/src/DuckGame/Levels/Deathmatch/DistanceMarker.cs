@@ -29,7 +29,7 @@ namespace DuckGame
         public override void Draw()
         {
             _distanceSign.depth = depth;
-            Graphics.Draw(_distanceSign, x, y);
+            Graphics.Draw(ref _distanceSign, x, y);
             string text = Change.ToString(_distance);
             _font.Draw(text, x - _font.GetWidth(text) / 2f, (float)(y - _font.height / 2f + 1f), Color.DarkSlateGray, depth + 1);
         }

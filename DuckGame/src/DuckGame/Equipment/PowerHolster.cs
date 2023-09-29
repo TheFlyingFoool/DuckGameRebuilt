@@ -68,7 +68,7 @@ namespace DuckGame
                 _overPart.scale = scale;
                 _overPart.depth = thing.depth + 5;
                 _overPart.frame = _equippedDuck.quack > 0 ? 1 : 0;
-                Graphics.Draw(_overPart, x, y);
+                Graphics.Draw(ref _overPart, x, y);
                 _underPart.flipH = owner.offDir <= 0;
                 _underPart.angle = angle;
                 _underPart.alpha = alpha;
@@ -79,7 +79,7 @@ namespace DuckGame
                     _underPart.depth = thing.depth + -7;
                 _underPart.frame = trigger ? 1 : 0;
                 Vec2 vec2 = Offset(new Vec2(-2f, 0f));
-                Graphics.Draw(_underPart, vec2.x, vec2.y);
+                Graphics.Draw(ref _underPart, vec2.x, vec2.y);
             }
             else
                 _sprite.frame = trigger ? 1 : 0;

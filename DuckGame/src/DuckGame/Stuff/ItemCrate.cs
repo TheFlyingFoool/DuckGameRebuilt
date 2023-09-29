@@ -181,7 +181,7 @@ namespace DuckGame
                 Vec2 vec2 = Offset(new Vec2(0f, -8f));
                 _randomMark.angle = angle;
                 _randomMark.flipH = offDir <= 0;
-                Graphics.Draw(_randomMark, vec2.x, vec2.y, depth + 10);
+                Graphics.Draw(ref _randomMark, vec2.x, vec2.y, depth + 10);
             }
             else if (_containedSprite != null)
             {
@@ -190,7 +190,7 @@ namespace DuckGame
                 Vec2 vec2 = Offset(new Vec2(0f, -8f));
                 _containedSprite.angle = angle;
                 _containedSprite.flipH = offDir <= 0;
-                Graphics.Draw(_containedSprite, vec2.x, vec2.y, depth + 10);
+                Graphics.Draw(ref _containedSprite, vec2.x, vec2.y, depth + 10);
             }
             else
                 _sprite.frame = 0;

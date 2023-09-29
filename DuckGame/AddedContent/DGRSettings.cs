@@ -288,6 +288,8 @@ namespace DuckGame
             }
         }
 
+        [AutoConfigField] public static bool UncappedFPS = false;
+
         [AutoConfigField] public static float WeatherMultiplier = 1;
 
         [AutoConfigField] public static float HeatWaveMultiplier = 1;

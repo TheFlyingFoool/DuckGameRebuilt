@@ -228,7 +228,7 @@ namespace DuckGame
                 }
                 else
                     _styleBubble.flipH = false;
-                Graphics.Draw(_styleBubble, vec2_1.x, vec2_1.y);
+                Graphics.Draw(ref _styleBubble, vec2_1.x, vec2_1.y);
                 if (inputMapping.map.ContainsKey(_trigger))
                 {
                     Sprite g = inputMapping.GetSprite(inputMapping.map[_trigger]) ?? inputMapping.device.DoGetMapImage(inputMapping.map[_trigger], true);
@@ -241,7 +241,7 @@ namespace DuckGame
                 if (_selectStyle)
                 {
                     _styleTray.depth = (Depth)0.92f;
-                    Graphics.Draw(_styleTray, x + 118f, Layer.HUD.camera.height / 2f);
+                    Graphics.Draw(ref _styleTray, x + 118f, Layer.HUD.camera.height / 2f);
                     Vec2 vec2_2 = new Vec2(x + 90f, (float)(Layer.HUD.camera.height / 2f - 80f));
                     int num = 0;
                     foreach (Sprite buttonStyle in Input.buttonStyles)

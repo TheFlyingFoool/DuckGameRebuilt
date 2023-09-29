@@ -1994,7 +1994,7 @@ namespace DuckGame
                 if (_getScreenshot && Graphics.screenCapture == null)
                 {
                     _finalSprite.scale = new Vec2(0.25f, 0.25f);
-                    Graphics.Draw(_finalSprite, 0f, 0f);
+                    Graphics.Draw(ref _finalSprite, 0f, 0f);
                 }
                 if (_intermissionSlide > 0.01f)
                 {
@@ -2005,7 +2005,7 @@ namespace DuckGame
                     xpos = 320f - _intermissionSlide * 320f;
                     ypos = 60f;
                     Graphics.DrawRect(new Vec2(xpos, ypos + 30f), new Vec2(xpos + 320f, ypos + 60f), Color.Black, 0.9f, true, 1f);
-                    Graphics.Draw(_intermissionText, -320f + _intermissionSlide * 336f, ypos + 18f);
+                    Graphics.Draw(ref _intermissionText, -320f + _intermissionSlide * 336f, ypos + 18f);
                 }
             }
             else if (layer == Layer.Game)
@@ -2015,9 +2015,9 @@ namespace DuckGame
                     _winnerPost.depth = -0.962f;
                     _winnerBanner.depth = -0.858f;
                     float yOff = -10f;
-                    Graphics.Draw(_winnerPost, 63f, 40f + yOff);
-                    Graphics.Draw(_winnerPost, 248f, 40f + yOff);
-                    Graphics.Draw(_winnerBanner, 70f, 43f + yOff);
+                    Graphics.Draw(ref _winnerPost, 63f, 40f + yOff);
+                    Graphics.Draw(ref _winnerPost, 248f, 40f + yOff);
+                    Graphics.Draw(ref _winnerBanner, 70f, 43f + yOff);
                     string text = Results.winner.name;
                     BitmapFont font = Results.winner.font;
                     font.scale = new Vec2(2f, 2f);

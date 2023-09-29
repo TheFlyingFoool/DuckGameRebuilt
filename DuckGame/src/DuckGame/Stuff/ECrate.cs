@@ -122,7 +122,7 @@ namespace DuckGame
                 num2 = 0.4f;
             }
             _light.color = new Color(1f - g, g, 0.2f) * Maths.Clamp(num2 + _colorFlux.normalized * (1f - num2), 0f, 1f);
-            Graphics.Draw(_light, x, y);
+            Graphics.Draw(ref _light, x, y);
         }
     }
 }

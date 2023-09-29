@@ -117,10 +117,10 @@ namespace DuckGame
             if (_barrelFlame.speed > 0)
             {
                 _barrelFlame.alpha = 0.9f;
-                Draw(_barrelFlame, new Vec2(11f, 1f));
+                Draw(ref _barrelFlame, new Vec2(11f, 1f));
             }
             _can.frame = (int)((1f - (float)ammo / (float)_maxAmmo) * 15f);
-            Draw(_can, new Vec2(barrelOffset.x - 11f, barrelOffset.y + 4f));
+            Draw(ref _can, new Vec2(barrelOffset.x - 11f, barrelOffset.y + 4f));
             Graphics.material = material;
         }
 

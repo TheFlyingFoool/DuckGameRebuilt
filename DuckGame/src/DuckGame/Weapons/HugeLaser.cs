@@ -239,12 +239,12 @@ namespace DuckGame
                 _tip.alpha = (24 - _chargeAnim.frame) / 24f;
             else
                 _tip.alpha = 0f;
-            Graphics.Draw(_tip, barrelPosition.x, barrelPosition.y);
+            Graphics.Draw(ref _tip, barrelPosition.x, barrelPosition.y);
             _chargeAnim.flipH = graphic.flipH;
             _chargeAnim.depth = depth + 1;
             _chargeAnim.angle = angle;
             _chargeAnim.alpha = alpha;
-            Graphics.Draw(_chargeAnim, x, y);
+            Graphics.Draw(ref _chargeAnim, x, y);
             Graphics.material = material;
             float num1 = Maths.NormalizeSection(_tip.alpha, 0f, 0.7f);
             float num2 = Maths.NormalizeSection(_tip.alpha, 0.6f, 1f);

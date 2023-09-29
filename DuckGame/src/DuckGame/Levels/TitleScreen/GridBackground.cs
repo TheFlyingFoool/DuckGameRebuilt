@@ -68,7 +68,7 @@ namespace DuckGame
             _effect.World = (Microsoft.Xna.Framework.Matrix)Matrix.CreateTranslation(new Vec3(190f, -75f, 300f));
             Begin(transparent, false);
             _planet.flipH = true;
-            Graphics.Draw(_planet, 0f, 0f);
+            Graphics.Draw(ref _planet, 0f, 0f);
             _batch.End();
             _effect.World = (Microsoft.Xna.Framework.Matrix)(Matrix.CreateRotationX(Maths.DegToRad(90f)) * Matrix.CreateTranslation(new Vec3(-400f, 52f, 0f)));
             Begin(transparent, false);

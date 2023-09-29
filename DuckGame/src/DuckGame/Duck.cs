@@ -294,6 +294,7 @@ namespace DuckGame
         private bool _protectedFromFire;
         public override bool destroyed => _destroyed || forceDead;
 
+        private Interp DuckLerp = new Interp { };
         public byte quackPitch
         {
             get => _quackPitch;
@@ -3959,6 +3960,7 @@ namespace DuckGame
             if (_iceWedging < 0)
                 _iceWedging = 0;
             UpdateMove();
+
             if (inputProfile == null)
                 return;
             if (sliding && _iceWedging <= 0 && grounded && Level.CheckLine<Block>(position + new Vec2(-10f, 0f), position + new Vec2(10f, 0f)) != null)
@@ -4027,8 +4029,10 @@ namespace DuckGame
                 equipment.PositionOnOwner();
             _gripped = false;
             if (hasBrainRot) UpdateBrainRot();
+
+
         }
-        
+
         public void GiveBrainRot()
         {
             if (!hasBrainRot)
@@ -4719,6 +4723,10 @@ namespace DuckGame
         {
             if (_sprite == null || !localSpawnVisible)
                 return;
+
+            DuckLerp.CanLerp = true;
+            DuckLerp.UpdateLerpState(new Interp.InterpState(position, angle), MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
             if (inNet)
             {
                 DrawHat();
@@ -4743,7 +4751,7 @@ namespace DuckGame
                 {
                     if (!_renderingDuck)
                     {
-                        if (!_updatedAnimation)
+                        if (!_updatedAnimation && MonoMain.UpdateLerpState)
                         {
                             UpdateAnimation();
                         }
@@ -4808,7 +4816,8 @@ namespace DuckGame
                         double length = stickLerp.length;
                         if (length > 0.5)
                             num10 = 72;
-                        Graphics.Draw(_mindControl == null || !_derpMindControl ? _spriteQuack : _spriteControlled, _sprite.imageIndex + num10, x, y + verticalOffset, xscale, yscale);
+                        SpriteMap spriteToDraw = _mindControl == null || !_derpMindControl ? _spriteQuack : _spriteControlled;
+                        Graphics.Draw(spriteToDraw, _sprite.imageIndex + num10, DuckLerp.x, DuckLerp.y + verticalOffset, xscale, yscale);
                         if (length > 0.05f)
                         {
                             Vec2 vec2_1 = position + new Vec2(0f, 1f);
@@ -4854,7 +4863,8 @@ namespace DuckGame
                     }
                     else
                     {
-                        Graphics.DrawWithoutUpdate(_sprite, x, y + verticalOffset, xscale, yscale);
+
+                        Graphics.DrawWithoutUpdate(_sprite, DuckLerp.x, DuckLerp.y + verticalOffset, xscale, yscale);
                         _stickLerp = Vec2.Zero;
                         _stickSlowLerp = Vec2.Zero;
                     }
@@ -4900,14 +4910,14 @@ namespace DuckGame
                                 bool flipH = _spriteArms.flipH;
                                 if (holdObject.handFlip)
                                     _spriteArms.flipH = !_spriteArms.flipH;
-                                Graphics.Draw(_spriteArms, _sprite.imageIndex + 18 + Maths.Int(action) * 18 * (holdObject.hasTrigger ? 1 : 0), armPosition.x + holdObject.handOffset.x * offDir, armPosition.y + holdObject.handOffset.y, _sprite.xscale, _sprite.yscale);
+                                Graphics.Draw(ref _spriteArms, _sprite.imageIndex + 18 + Maths.Int(action) * 18 * (holdObject.hasTrigger ? 1 : 0), armPosition.x + holdObject.handOffset.x * offDir, armPosition.y + holdObject.handOffset.y, _sprite.xscale, _sprite.yscale);
                                 _spriteArms._frameInc = 0f;
                                 _spriteArms.flipH = flipH;
                                 if (_sprite.currentAnimation == "jump")
                                 {
                                     _spriteArms.angle = 0f;
                                     _spriteArms.depth = this.depth + -10;
-                                    Graphics.Draw(_spriteArms, _sprite.imageIndex + 5 + (int)Math.Round(num13 * 2f), (float)(x + vec2.x + 2 * offDir * xscale), (float)(y + vec2.y + armOffY * yscale), -_sprite.xscale, _sprite.yscale, true);
+                                    Graphics.Draw(_spriteArms, _sprite.imageIndex + 5 + (int)Math.Round(num13 * 2f), (float)(DuckLerp.x + vec2.x + 2 * offDir * xscale), (float)(DuckLerp.y + vec2.y + armOffY * yscale), -_sprite.xscale, _sprite.yscale, true);
                                     _spriteArms.depth = this.depth + 11;
                                 }
                             }
@@ -4916,7 +4926,7 @@ namespace DuckGame
                                 _bionicArm.flipH = _sprite.flipH;
                                 if (holdObject.handFlip)
                                     _bionicArm.flipH = !_bionicArm.flipH;
-                                Graphics.Draw(_bionicArm, _sprite.imageIndex + 18 + num12, armPosition.x + holdObject.handOffset.x * offDir, armPosition.y + holdObject.handOffset.y, _sprite.xscale, _sprite.yscale);
+                                Graphics.Draw(ref _bionicArm, _sprite.imageIndex + 18 + num12, armPosition.x + holdObject.handOffset.x * offDir, armPosition.y + holdObject.handOffset.y, _sprite.xscale, _sprite.yscale);
                             }
                         }
                         else if (!_closingEyes)
@@ -4931,25 +4941,28 @@ namespace DuckGame
                                         num14 = 3;
                                     if (holdObject == null || !holdObject.hideRightWing)
                                     {
+                                        //Right Wing when moving down
                                         _spriteArms.depth = this.depth + 11;
-                                        Graphics.Draw(_spriteArms, _spriteArms.imageIndex + 5 + (int)Math.Round(num13 * 2f), (float)(x + vec2.x - offDir * num14 * xscale), (float)(y + vec2.y + armOffY * yscale), _sprite.xscale, _sprite.yscale, true);
+                                        Graphics.Draw(_spriteArms, _spriteArms.imageIndex + 5 + (int)Math.Round(num13 * 2f), (float)(DuckLerp.x + vec2.x - offDir * num14 * xscale), (float)(DuckLerp.y + vec2.y + armOffY * yscale), _sprite.xscale, _sprite.yscale, true);
                                         _spriteArms.depth = this.depth + -10;
                                     }
                                     if (holdObject == null || !holdObject.hideLeftWing)
                                     {
+                                        //Left Wing when moving down
                                         _spriteArms.imageIndex = 9;
-                                        Graphics.Draw(_spriteArms, _spriteArms.imageIndex + 5 + (int)Math.Round(num13 * 2f), (float)(x + vec2.x + 2 * offDir * xscale), (float)(y + vec2.y + armOffY * yscale), -_sprite.xscale, _sprite.yscale, true);
+                                        Graphics.Draw(_spriteArms, _spriteArms.imageIndex + 5 + (int)Math.Round(num13 * 2f), (float)(DuckLerp.x + vec2.x + 2 * offDir * xscale), (float)(DuckLerp.y + vec2.y + armOffY * yscale), -_sprite.xscale, _sprite.yscale, true);
                                         _spriteArms.depth = this.depth + 11;
                                     }
                                 }
                                 else if (holdObject == null || !holdObject.hideRightWing)
-                                    Graphics.Draw(_spriteArms, _sprite.imageIndex, armPosition.x, armPosition.y, _sprite.xscale, _sprite.yscale);
+                                    //Front wing when walking and jumping before moving downward
+                                    Graphics.Draw(ref _spriteArms, _sprite.imageIndex, armPosition.x, armPosition.y, _sprite.xscale, _sprite.yscale);
                             }
                             else
                             {
                                 _bionicArm.angle = 0f;
                                 _bionicArm.flipH = _sprite.flipH;
-                                Graphics.Draw(_bionicArm, _sprite.imageIndex + num12, armPosition.x, armPosition.y, _sprite.xscale, _sprite.yscale);
+                                Graphics.Draw(ref _bionicArm, _sprite.imageIndex + num12, armPosition.x, armPosition.y, _sprite.xscale, _sprite.yscale);
                             }
                         }
                     }

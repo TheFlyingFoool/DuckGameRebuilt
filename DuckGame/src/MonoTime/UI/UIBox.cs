@@ -385,34 +385,36 @@ namespace DuckGame
         {
             if (_borderVisible)
             {
+                UILerp.UpdateLerpState(new Interp.InterpState(position, angle), MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
                 _sections.scale = scale;
                 _sections.alpha = alpha;
                 _sections.depth = depth;
                 _sections.frame = 0;
-                Graphics.Draw(_sections, -halfWidth + x, -halfHeight + y);
+                Graphics.Draw(_sections, -halfWidth + UILerp.x, -halfHeight + UILerp.y);
                 _sections.frame = 2;
-                Graphics.Draw(_sections, (float)(halfWidth + x - _sections.w * scale.x), -halfHeight + y);
+                Graphics.Draw(_sections, (float)(halfWidth + UILerp.x - _sections.w * scale.x), -halfHeight + UILerp.y);
                 _sections.frame = 1;
                 _sections.xscale = (_collisionSize.x - _sections.w * 2) / _sections.w * xscale;
-                Graphics.Draw(_sections, (float)(-halfWidth + x + _sections.w * scale.x), -halfHeight + y);
+                Graphics.Draw(_sections, (float)(-halfWidth + UILerp.x + _sections.w * scale.x), -halfHeight + UILerp.y);
                 _sections.xscale = xscale;
                 _sections.frame = 3;
                 _sections.yscale = (_collisionSize.y - _sections.h * 2) / _sections.h * yscale;
-                Graphics.Draw(_sections, -halfWidth + x, (float)(-halfHeight + y + _sections.h * scale.y));
+                Graphics.Draw(_sections, -halfWidth + UILerp.x, (float)(-halfHeight + UILerp.y + _sections.h * scale.y));
                 _sections.frame = 5;
-                Graphics.Draw(_sections, (float)(halfWidth + x - _sections.w * scale.x), (float)(-halfHeight + y + _sections.h * scale.y));
+                Graphics.Draw(_sections, (float)(halfWidth + UILerp.x - _sections.w * scale.x), (float)(-halfHeight + UILerp.y + _sections.h * scale.y));
                 _sections.frame = 4;
                 _sections.xscale = (_collisionSize.x - _sections.w * 2) / _sections.w * xscale;
-                Graphics.Draw(_sections, (float)(-halfWidth + x + _sections.w * scale.x), (float)(-halfHeight + y + _sections.h * scale.y));
+                Graphics.Draw(_sections, (float)(-halfWidth + UILerp.x + _sections.w * scale.x), (float)(-halfHeight + UILerp.y + _sections.h * scale.y));
                 _sections.xscale = xscale;
                 _sections.yscale = yscale;
                 _sections.frame = 6;
-                Graphics.Draw(_sections, -halfWidth + x, (float)(halfHeight + y - _sections.h * scale.y));
+                Graphics.Draw(_sections, -halfWidth + UILerp.x, (float)(halfHeight + UILerp.y - _sections.h * scale.y));
                 _sections.frame = 8;
-                Graphics.Draw(_sections, (float)(halfWidth + x - _sections.w * scale.x), (float)(halfHeight + y - _sections.h * scale.y));
+                Graphics.Draw(_sections, (float)(halfWidth + UILerp.x - _sections.w * scale.x), (float)(halfHeight + UILerp.y - _sections.h * scale.y));
                 _sections.frame = 7;
                 _sections.xscale = (_collisionSize.x - _sections.w * 2) / _sections.w * xscale;
-                Graphics.Draw(_sections, (float)(-halfWidth + x + _sections.w * scale.x), (float)(halfHeight + y - _sections.h * scale.y));
+                Graphics.Draw(_sections, (float)(-halfWidth + UILerp.x + _sections.w * scale.x), (float)(halfHeight + UILerp.y - _sections.h * scale.y));
             }
             base.Draw();
         }

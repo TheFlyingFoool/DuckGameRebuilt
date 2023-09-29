@@ -364,7 +364,7 @@ namespace DuckGame
                 if (_sightHit != null)
                 {
                     _sightHit.color = Color.Red;
-                    Graphics.Draw(_sightHit, _wallPoint.x, _wallPoint.y);
+                    Graphics.Draw(ref _sightHit, _wallPoint.x, _wallPoint.y);
                 }
             }
             base.DrawGlow();

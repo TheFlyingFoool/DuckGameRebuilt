@@ -614,7 +614,7 @@ namespace DuckGame
         public override void Draw()
         {
             _frame.depth = depth;
-            Graphics.Draw(_frame, x, y);
+            Graphics.Draw(ref _frame, x, y);
             if (!_searchingIsOver)
             {
                 for (int index = 0; index < 7; ++index)
@@ -634,21 +634,25 @@ namespace DuckGame
                         _matchmakingSignal.frame = 1;
                     if (num3 > 0.95f)
                         _matchmakingSignal.frame = 0;
-                    Graphics.Draw(_matchmakingSignal, x, y - 21f);
+                    Graphics.Draw(ref _matchmakingSignal, x, y - 21f);
                 }
             }
             _matchmakingStars[0].depth = depth + 2;
-            Graphics.Draw(_matchmakingStars[0], x - 9f, y - 18f);
+            SpriteMap g1 = _matchmakingStars[0];
+            Graphics.Draw(ref g1, x - 9f, y - 18f);
             _matchmakingStars[1].depth = depth + 2;
-            Graphics.Draw(_matchmakingStars[1], x + 31f, y - 22f);
+            SpriteMap g2 = _matchmakingStars[1];
+            Graphics.Draw(ref g2, x + 31f, y - 22f);
             _matchmakingStars[2].depth = depth + 2;
-            Graphics.Draw(_matchmakingStars[2], x + 12f, y - 20f);
+            SpriteMap g3 = _matchmakingStars[2];
+            Graphics.Draw(ref g3, x + 12f, y - 20f);
             _matchmakingStars[3].depth = depth + 2;
-            Graphics.Draw(_matchmakingStars[3], x - 23f, y - 21f);
+            SpriteMap g4 = _matchmakingStars[3];
+            Graphics.Draw(ref g4, x - 23f, y - 21f);
             _signalCrossLocal.depth = depth + 2;
-            Graphics.Draw(_signalCrossLocal, x - 35f, y - 19f);
+            Graphics.Draw(ref _signalCrossLocal, x - 35f, y - 19f);
             _signalCrossNetwork.depth = depth + 2;
-            Graphics.Draw(_signalCrossNetwork, x + 45f, y - 23f);
+            Graphics.Draw(ref _signalCrossNetwork, x + 45f, y - 23f);
             _font.DrawOutline(_caption, position + new Vec2((float)-(_font.GetWidth(_caption) / 2.0), -42f), Color.White, Color.Black, depth + 2);
             _fancyFont.scale = new Vec2(0.5f);
             int num4 = 0;

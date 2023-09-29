@@ -44,7 +44,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            Graphics.Draw(_cork, drawEnd.x, drawEnd.y);
+            Graphics.Draw(ref _cork, drawEnd.x, drawEnd.y);
             base.Draw();
         }
     }

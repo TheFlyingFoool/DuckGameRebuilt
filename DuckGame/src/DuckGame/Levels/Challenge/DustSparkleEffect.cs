@@ -68,7 +68,7 @@ namespace DuckGame
             _light.depth = depth - 2;
             _light.frame = 1;
             _light.alpha = 0.7f;
-            Graphics.Draw(_light, x, y);
+            Graphics.Draw(ref _light, x, y);
             foreach (DustSparkle sparkle in _sparkles)
                 Graphics.DrawRect(sparkle.position + new Vec2(-0.5f, -0.5f), sparkle.position + new Vec2(0.5f, 0.5f), Color.White * sparkle.alpha, depth + 10);
         }
