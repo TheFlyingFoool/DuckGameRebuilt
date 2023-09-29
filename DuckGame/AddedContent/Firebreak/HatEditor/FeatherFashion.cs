@@ -420,7 +420,7 @@ namespace DuckGame
             //     AlphaDestinationBlend = Blend.InverseSourceAlpha,
             // };
 
-            float rotationValue = (Maths.FastSin((float) (DateTime.Now - MonoMain.startTime).TotalSeconds / 7f) + 1) / 2f;
+            float rotationValue = (Maths.FastSin((float) ((DateTime.Now - MonoMain.startTime).TotalSeconds % 1f * Math.PI * 2)) + 1) * 2f;
 
             // Graphics.DrawLine(position - new Vec2(4, 0), position + new Vec2(4, 0), FFColors.Focus, 1, 1.95f);
             // Graphics.DrawLine(position - new Vec2(0, 4), position + new Vec2(0, 4), FFColors.Focus, 1, 1.95f);
