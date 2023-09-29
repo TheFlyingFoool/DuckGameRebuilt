@@ -404,7 +404,10 @@
     <Compile Include="AddedContent\NiK0\RainbowConstant.cs" />
     <Compile Include="AddedContent\NiK0\RainParticel.cs" />
     <Compile Include="AddedContent\NiK0\SpaceMaterial.cs" />
-    <Compile Include="Recorderator\RecorderationSelector.cs" />
+    <Compile Include="Recorderator\RecorderationSelector\FolderInfo.cs" />
+    <Compile Include="Recorderator\RecorderationSelector\ProfileInfo.cs" />
+    <Compile Include="Recorderator\RecorderationSelector\RecorderationSelector.cs" />
+    <Compile Include="Recorderator\RecorderationSelector\ReplayInfo.cs" />
     <Compile Include="Recorderator\Recorderator.cs" />
     <Compile Include="AddedContent\NiK0\TreeLeaf.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\ClientOnlyAttribute.cs" />
@@ -2298,7 +2301,6 @@
       <Name>Steam</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">
     <Exec Command="git describe  --always --dirty --abbrev=40 &gt; &quot;$(ProjectDir)version.txt&quot;" />

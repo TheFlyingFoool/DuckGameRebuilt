@@ -410,10 +410,25 @@ namespace DuckGame
 
         public static void DrawCursor(Vec2 position)
         {
-            //Graphics.DrawRect(new Rectangle(position - new Vec2(0.5f), position + new Vec2(0.5f)), FFColors.Focus, 1.95f);
+            // Layer currentLayer = Layer.core._layers.First(x => x.isTargetLayer);
+            //
+            // currentLayer.blend = new BlendState()
+            // {
+            //     ColorSourceBlend = Blend.InverseDestinationAlpha,
+            //     AlphaSourceBlend = Blend.InverseDestinationAlpha,
+            //     ColorDestinationBlend = Blend.InverseSourceAlpha,
+            //     AlphaDestinationBlend = Blend.InverseSourceAlpha,
+            // };
 
-            Graphics.DrawLine(position - new Vec2(4, 0), position + new Vec2(4, 0), FFColors.Focus, 1, 1.95f);
-            Graphics.DrawLine(position - new Vec2(0, 4), position + new Vec2(0, 4), FFColors.Focus, 1, 1.95f);
+            float rotationValue = (Maths.FastSin((float) (DateTime.Now - MonoMain.startTime).TotalSeconds / 7f) + 1) / 2f;
+
+            // Graphics.DrawLine(position - new Vec2(4, 0), position + new Vec2(4, 0), FFColors.Focus, 1, 1.95f);
+            // Graphics.DrawLine(position - new Vec2(0, 4), position + new Vec2(0, 4), FFColors.Focus, 1, 1.95f);
+            
+            Graphics.DrawLine(position, 4f, (Maths.RadToDeg(rotationValue) + 000) % 360f, FFColors.Focus, 1, 1.95f);
+            Graphics.DrawLine(position, 4f, (Maths.RadToDeg(rotationValue) + 090) % 360f, FFColors.Focus, 1, 1.95f);
+            Graphics.DrawLine(position, 4f, (Maths.RadToDeg(rotationValue) + 180) % 360f, FFColors.Focus, 1, 1.95f);
+            Graphics.DrawLine(position, 4f, (Maths.RadToDeg(rotationValue) + 270) % 360f, FFColors.Focus, 1, 1.95f);
 
             if (s_framesUntilTooltip > 40)
                 DrawCursorHoverTip(position, s_toolTipMessage);
