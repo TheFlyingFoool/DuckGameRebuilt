@@ -147,7 +147,7 @@ namespace DuckGame
             if (hasMetapixels)
             {
                 Color[] metapixelData = GetDataInRegion(hatData2D, new Rectangle(96, 0, w - 96, hasRock ? 56 : 32));
-                FFEditorPane.Metapixels.AddRange(metapixelData.Where(x => x != default));
+                FFEditorPane.Metapixels.AddRange(metapixelData.Where(x => x != default && FFEditorPane.MetapixelInfo.ContainsKey(x.r)));
             }
         }
 
