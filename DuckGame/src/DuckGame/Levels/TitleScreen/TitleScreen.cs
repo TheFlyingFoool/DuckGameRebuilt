@@ -967,7 +967,7 @@ namespace DuckGame
             Add(vs);
             for (int index = 0; index < 21; ++index)
             {
-                SpaceTileset t = new SpaceTileset(index * 16 +8 , 176f)
+                SpaceTileset t = new SpaceTileset(index * 16 - 6, 176f)
                 {
                     frame = 3,
                     layer = Layer.Game,

@@ -37,17 +37,19 @@ namespace DuckGame
         {
             instance = this;
         }
+        public bool fake;
         public int maxFrame;
-        public static Corderator ReadCord(byte[] data1, byte[] levelData)
+        public static ReplayLevel outLev;
+        public static Corderator ReadCord(byte[] data1, byte[] levelData, bool fake = false)
         {
             Main.SpecialCode = "Begin ReadCord";
             BitBuffer b = new BitBuffer(data1);
             Corderator cd = new Corderator();
+            cd.fake = fake;
             cd.PlayingThatShitBack = true;
             cd.cFrame = -1;
 
 
-            int cPos = b.position;
 
             cd.maxFrame = b.ReadInt();
             cd.gamemodeStarted = b.ReadInt();
@@ -85,8 +87,8 @@ namespace DuckGame
                 }
                 cd.profiles.Add(p);
             }
-            DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Teams and profiles size:" + levelData.Length);
-            cPos = b.position;
+            if (!fake) DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Teams and profiles size:" + levelData.Length);
+            int cPos = b.position;
 
             Main.SpecialCode = "readbytes";
 
@@ -169,12 +171,20 @@ namespace DuckGame
                 Custom.ApplyCustomData(new CustomTileData() { path = s1, texture = Editor.StringToTexture(s2) }, 2, CustomType.Background);
             }
             Main.SpecialCode = "Past tiles";
-            DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Custom texture size:" + (b.position - cPos));
+            if (!fake) DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Custom texture size:" + (b.position - cPos));
             cPos = b.position;
             #endregion
-            Level.current = new ReplayLevel() { CCorderr = cd };
-            (Level.current as ReplayLevel).DeserializeLevel(new BitBuffer(levelData));
-            DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Level size:" + levelData.Length);
+            if (!fake)
+            {
+                Level.current = new ReplayLevel() { CCorderr = cd };
+                (Level.current as ReplayLevel).DeserializeLevel(new BitBuffer(levelData));
+            }
+            else
+            {
+                outLev = new ReplayLevel() { CCorderr = cd };
+                outLev.DeserializeLevel(new BitBuffer(levelData));
+            }
+            if (!fake) DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Level size:" + levelData.Length);
 
             //Level.current.Initialize();
             
@@ -191,23 +201,27 @@ namespace DuckGame
                 cd.camPos.Add(lastV);
                 cd.camSize.Add(lastV2);
             }
-            DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Camera buffer size:" + (b.position - cPos));
+            if (!fake) DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Camera buffer size:" + (b.position - cPos));
             cPos = b.position;
 
             iters = b.ReadInt();
+
+            bool logExtra = false;
+            if (!fake && Keyboard.Down(Keys.Tab)) logExtra = true;
             for (int i = 0; i < iters; i++)
             {
                 SomethingSomethingVessel.FirstDeser = true;
                 SomethingSomethingVessel deserialized = SomethingSomethingVessel.RCDeserialize(new BitBuffer(b.ReadBytes()));
-
-
-                if (deserialized == null)
+                if (logExtra)
                 {
-                    continue;
+                    DevConsole.DebugLog($"|RED|RECORDERATOR |WHITE|{deserialized.GetType().Name} size:" + (b.position - cPos));
+                    cPos = b.position;
                 }
+
+                if (deserialized == null) continue;
                 cd.somethings.Add(deserialized);
             }
-            DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Something vessel size:" + (b.position - cPos));
+            if (!fake && !logExtra) DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Something vessel size:" + (b.position - cPos));
             cPos = b.position;
 
             iters = b.ReadInt();
@@ -224,7 +238,7 @@ namespace DuckGame
                 }
                 cd.SFXToPlaySave.Add(i, sd);
             }
-            DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Sound buffer size:" + (b.position - cPos));
+            if (!fake) DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Sound buffer size:" + (b.position - cPos));
             cPos = b.position;
             iters = b.ReadInt();
             for (int i = 0; i < iters; i++)
@@ -238,7 +252,7 @@ namespace DuckGame
                 }
                 cd.BlocksBroken.Add(new BlockbreakData(frame, data));
             }
-            DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Misc buffer size:" + (b.position - cPos));
+            if (!fake) DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Misc buffer size:" + (b.position - cPos));
 
             iters = b.ReadInt();
             for (int i = 0; i < iters; i++)
@@ -256,15 +270,14 @@ namespace DuckGame
                 }
                 cd.chatMessages.Add(key, list);
             }
-            DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Chat buffer size:" + (b.position - cPos));
+            if (!fake) DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Chat buffer size:" + (b.position - cPos));
 
             Main.SpecialCode = "Outside of recorderator load stuff";
-            instance = cd;
+            if (!fake) instance = cd;
             return cd;
         }
         public BackgroundUpdater bgUPD;
-        //damn this sucks
-        //xd 
+        
         public List<CustomParallaxSegment> CustomParallaxSegments = new List<CustomParallaxSegment>();
         public List<AutoBlock> StartingBlocks = new List<AutoBlock>();
         public List<BlockbreakData> BlocksBroken = new List<BlockbreakData>();
@@ -1076,52 +1089,55 @@ namespace DuckGame
         }
         public void PlayThatBack()
         {
-            if (SFXToPlaySave.ContainsKey(cFrame))
+            if (!fake)
             {
-                List<SoundData> sd = SFXToPlaySave[cFrame];
-                for (int i = 0; i < sd.Count; i++)
+                if (SFXToPlaySave.ContainsKey(cFrame))
                 {
-                    SoundData s = sd[i];
-                    SFX.Play(s.hash, s.volume, s.pitch);
-                }
-            }
-            if (chatMessages.Count > 0 && chatMessages.ContainsKey(cFrame))
-            {
-                List<ChatMessage> cms = chatMessages[cFrame];
-                SFX.Play("chatmessage", 0.8f, Rando.Float(-0.15f, 0.15f));
-                for (int i = 0; i < cms.Count; i++)
-                {
-                    DuckNetwork.core.AddChatMessage(cms[i]);
-                }
-            }
-            List<ChatMessage> chatMessageList = new List<ChatMessage>();
-            foreach (ChatMessage chatMessage in DuckNetwork.core.chatMessages)
-            {
-                chatMessage.timeout -= 0.016f;
-                if (chatMessage.timeout < 0)
-                    chatMessage.alpha -= 0.01f;
-                if (chatMessage.alpha < 0)
-                    chatMessageList.Add(chatMessage);
-            }
-            foreach (ChatMessage chatMessage in chatMessageList)
-                DuckNetwork.core.chatMessages.Remove(chatMessage);
-            if (BlocksBroken.Count > 0 && BlocksBroken[0].Frame <= cFrame)
-            {
-                BlockbreakData bd = BlocksBroken[0];
-                foreach (AutoBlock autoBlock in Level.current.things[typeof(AutoBlock)])
-                {
-                    if (bd.Data.Contains(autoBlock.blockIndex))
+                    List<SoundData> sd = SFXToPlaySave[cFrame];
+                    for (int i = 0; i < sd.Count; i++)
                     {
-                        bd.Data.Remove(autoBlock.blockIndex);
-                        autoBlock.shouldWreck = true;
-                        autoBlock.skipWreck = true;
-                        if (!autoBlock.shouldbeinupdateloop)
-                        {
-                            Level.current.AddUpdateOnce(autoBlock);
-                        }
+                        SoundData s = sd[i];
+                        SFX.Play(s.hash, s.volume, s.pitch);
                     }
                 }
-                BlocksBroken.RemoveAt(0);
+                if (chatMessages.Count > 0 && chatMessages.ContainsKey(cFrame))
+                {
+                    List<ChatMessage> cms = chatMessages[cFrame];
+                    SFX.Play("chatmessage", 0.8f, Rando.Float(-0.15f, 0.15f));
+                    for (int i = 0; i < cms.Count; i++)
+                    {
+                        DuckNetwork.core.AddChatMessage(cms[i]);
+                    }
+                }
+                List<ChatMessage> chatMessageList = new List<ChatMessage>();
+                foreach (ChatMessage chatMessage in DuckNetwork.core.chatMessages)
+                {
+                    chatMessage.timeout -= 0.016f;
+                    if (chatMessage.timeout < 0)
+                        chatMessage.alpha -= 0.01f;
+                    if (chatMessage.alpha < 0)
+                        chatMessageList.Add(chatMessage);
+                }
+                foreach (ChatMessage chatMessage in chatMessageList)
+                    DuckNetwork.core.chatMessages.Remove(chatMessage);
+                if (BlocksBroken.Count > 0 && BlocksBroken[0].Frame <= cFrame)
+                {
+                    BlockbreakData bd = BlocksBroken[0];
+                    foreach (AutoBlock autoBlock in Level.current.things[typeof(AutoBlock)])
+                    {
+                        if (bd.Data.Contains(autoBlock.blockIndex))
+                        {
+                            bd.Data.Remove(autoBlock.blockIndex);
+                            autoBlock.shouldWreck = true;
+                            autoBlock.skipWreck = true;
+                            if (!autoBlock.shouldbeinupdateloop)
+                            {
+                                Level.current.AddUpdateOnce(autoBlock);
+                            }
+                        }
+                    }
+                    BlocksBroken.RemoveAt(0);
+                }
             }
             cFrame++;
             SFX.enabled = false;

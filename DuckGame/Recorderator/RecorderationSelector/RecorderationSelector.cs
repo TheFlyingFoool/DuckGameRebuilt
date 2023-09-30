@@ -1,5 +1,5 @@
-using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Web.UI.WebControls;
 
 namespace DuckGame
 {
@@ -10,7 +10,7 @@ namespace DuckGame
         public Sprite MainSprite;
         public Sprite DoorSprite;
         
-        public const float FONT_SIZE = 0.6f;
+        public const float FONT_SIZE = 0.8f;
         public bool IsLoadingReplayPreview;
         public FolderInfo CurrentFolder;
         public FolderInfo SelectedFolder;
@@ -46,6 +46,13 @@ namespace DuckGame
                 SelectedFolder = null;
             }
             
+            if (loadPreviewFor != null)
+            {
+                loadPreviewFor.LoadPreview();
+                loadPreviewFor = null;
+                Graphics.fade = 1;
+            }
+
             if (ReplayToPlay != null)
             {
                 Recorderator.PlayReplay(ReplayToPlay.ReplayFilePath);
@@ -59,9 +66,12 @@ namespace DuckGame
 
             base.Update();
         }
-        
+
+        public ReplayInfo loadPreviewFor;
         public override void Draw()
         {
+            Layer.lighting = false;
+
             Graphics.Draw(MainSprite, 0, 0, -0.8f);
             Graphics.Draw(DoorSprite, 194, 10.5f, -1f);
 
@@ -149,9 +159,9 @@ namespace DuckGame
 
                     if (!replayInfo.DidLoadPreview)
                     {
-                        if (replayInfo.FramesUntilPreviewLoad > 10)
+                        if (replayInfo.FramesUntilPreviewLoad > 15)
                         {
-                            replayInfo.LoadPreview();
+                            loadPreviewFor = replayInfo;
                         }
                         else
                         {
@@ -162,7 +172,7 @@ namespace DuckGame
                     }
                     else
                     {
-                        Graphics.Draw(replayInfo.Preview, 0, 0, 1, 0.5f, -1);
+                        Graphics.Draw(replayInfo.Preview, 194, 9, 0.1f, 0.1f, -1);
                         IsLoadingReplayPreview = false;
                     }
 
@@ -172,7 +182,14 @@ namespace DuckGame
 
                         if (profile.Team != null)
                         {
+                            /*
+                             * if (profile.Team != null && profile.Team.metadata != null)
+                {
+                    profile.ChatBustDuck.center = profile.Team.metadata.HatOffset.value;
+                }
+                             * */
                             profile.Team.hat.center = new Vec2(0);
+                            if (profile.Team.metadata != null) profile.Team.hat.center = profile.Team.metadata.HatOffset.value;
                             profile.Team.hat.scale = new Vec2(0.4f);
                             profile.Team.hat.depth = -0.98f;
                             profile.Team.hat.alpha = profile.IsSpectator ? 0.5f : 1;

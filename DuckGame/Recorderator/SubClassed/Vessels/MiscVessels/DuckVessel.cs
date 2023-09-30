@@ -160,7 +160,7 @@ namespace DuckGame
 
             d._hovering = b_ARR[5];
             d.spriteImageIndex = (byte)frame;
-            d.offDir = (sbyte)(b_ARR[6]?1:-1);
+            d.offDir = (sbyte)(b_ARR[6] ? 1 : -1);
 
             d.visible = b_ARR[7];
             int current = 0;
@@ -284,7 +284,7 @@ namespace DuckGame
                 SFX.Play("pullPin", 0.7f);
             }
             d.localSpawnVisible = val;
-            
+
 
             if (d.ragdoll != null)
             {

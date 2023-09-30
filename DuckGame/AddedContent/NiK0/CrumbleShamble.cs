@@ -56,7 +56,7 @@ namespace DuckGame
         }
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (platform.imageIndex < 5)
+            if (platform.imageIndex < 5 && Program.IS_DEV_BUILD)
             {//179 148 9 21
              //179 155 22 14
                 platform.imageIndex += 1;

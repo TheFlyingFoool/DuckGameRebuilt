@@ -176,7 +176,6 @@ namespace DuckGame
             width = wval;
             height = hval;
         }
-
         public void DoUpdate()
         {
             if (skipUpdate)

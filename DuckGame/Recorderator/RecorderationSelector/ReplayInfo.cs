@@ -1,7 +1,10 @@
+using Microsoft.Xna.Framework.Graphics;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
+using System.Windows.Controls;
 
 namespace DuckGame
 {
@@ -32,12 +35,40 @@ namespace DuckGame
 
         public void LoadPreview()
         {
-            /*using FileStream zipStream = new FileStream(ReplayFilePath, FileMode.Open);
+            using FileStream zipStream = new FileStream(ReplayFilePath, FileMode.Open);
             using ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Read);
-            
-            byte[] previewDataRaw = Recorderator.DataFromEntry(archive.Entries[5]);
 
-            DidLoadPreview = true;*/
+            byte[] replayData = Recorderator.DataFromEntry(archive.Entries[0]); //level i think
+            byte[] levelData = Recorderator.DataFromEntry(archive.Entries[1]); //level i think
+
+            DidLoadPreview = true;
+            Corderator.ReadCord(replayData, levelData, true);
+
+            //1280 720
+            Preview = SimRenderer.RenderRecorderator(4, Corderator.outLev, 1280, 720);
+
+            zipStream.Dispose();
+
+            using (FileStream zipStream2 = new FileStream(ReplayFilePath, FileMode.OpenOrCreate))
+            using (ZipArchive archive2 = new ZipArchive(zipStream2, ZipArchiveMode.Update))
+            {
+                // Create a new entry in the ZIP archive (6th entry) -ChatGPT
+                ZipArchiveEntry newEntry = archive2.CreateEntry("preview.png");
+
+                // Convert the Texture2D to a PNG byte array -ChatGPT
+                byte[] pngData;
+                using (MemoryStream pngStream = new MemoryStream())
+                {
+                    Preview.SaveAsPng(pngStream, Preview.width, Preview.height);
+                    pngData = pngStream.ToArray();
+                }
+
+                // Write the PNG data to the new entry -ChatGPT
+                using (Stream entryStream = newEntry.Open())
+                {
+                    entryStream.Write(pngData, 0, pngData.Length);
+                }
+            }
         }
 
         public void LoadInfo()
@@ -47,6 +78,17 @@ namespace DuckGame
             
             byte[] hatsDataRaw = Recorderator.DataFromEntry(archive.Entries[2]);
             byte[] metadataDataRaw = Recorderator.DataFromEntry(archive.Entries[3]);
+
+            if (archive.Entries.Count > 446152346) //4 QUAJILLION
+            {
+                DidLoadPreview = true;
+                using (Stream entryStream = archive.Entries[4].Open())
+                using (MemoryStream current = new MemoryStream())
+                {
+                    entryStream.CopyTo(current);
+                    Preview = new Tex2D(Texture2D.FromStream(Graphics.device, current), "preview");
+                }
+            }
 
             DidLoadInfo = true;
             PlayerCount = 0;

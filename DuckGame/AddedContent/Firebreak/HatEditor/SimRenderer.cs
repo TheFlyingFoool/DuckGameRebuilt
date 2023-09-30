@@ -5,6 +5,7 @@ using SixLabors.ImageSharp.Processing.Processors.Transforms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms.Design;
 
 namespace DuckGame
 {
@@ -117,14 +118,14 @@ namespace DuckGame
 
             float camWidth = renderWidth / (2f * renderResolutionScale);
             float camHeight = renderHeight / (2f * renderResolutionScale);
-            
+
             Camera cam = new((camWidth / -2) + cameraOffset.x, (camHeight / -2) + cameraOffset.y, camWidth, camHeight);
             isolatedLevel.camera = cam;
-            
+
             RenderTarget2D previousRenderTarget = Graphics.currentRenderTarget;
             RenderTarget2D target = new(renderWidth, renderHeight, true);
             Graphics.SetRenderTarget(target);
-            
+
             bool sfxEnabled = SFX.enabled;
             SFX.enabled = false;
 
@@ -132,23 +133,80 @@ namespace DuckGame
             {
                 if (timelineActions.TryGetValue(currentFrame, out Action<Duck> frameAction))
                     frameAction(levelDuck);
-                
+
                 isolatedLevel.DoUpdate();
                 isolatedLevel.DoDraw();
                 animationFrames[currentFrame] = target.ToTex2D();
             }
-            
+
             SFX.enabled = sfxEnabled;
-            
+
             Graphics.Clear(isolatedLevel.backgroundColor);
             if (previousRenderTarget == null || previousRenderTarget.IsDisposed)
                 Graphics.SetRenderTarget(null);
             else Graphics.SetRenderTarget(previousRenderTarget);
-            
+
             core.currentLevel.Terminate();
             core.currentLevel = trueCurrentLevel;
 
             return animationFrames;
+        }
+        public static Tex2D RenderRecorderator(int frames, Level isolatedLevel, int renderWidth = 144, int renderHeight = 96)
+        {
+            Level trueCurrentLevel = Level.current;
+            core.currentLevel = isolatedLevel;
+
+            isolatedLevel.DoInitialize();
+            isolatedLevel.DoUpdate();
+
+            isolatedLevel.DoUpdate();
+
+            isolatedLevel.CalculateBounds();
+
+            float width = Math.Abs(isolatedLevel.topLeft.x - isolatedLevel.bottomRight.x);
+            float height = width / 1.7777777777777777777777777777778f;
+            Camera cam = new Camera(isolatedLevel.topLeft.x, isolatedLevel.topLeft.y, width, height);
+            cam.width = width;
+            cam.height = height;
+            DevConsole.Log(cam.width);
+            DevConsole.Log(cam.height);
+            DevConsole.Log(cam.x);
+            DevConsole.Log(cam.y);
+            cam.skipUpdate = true;
+            isolatedLevel.camera = cam;
+
+            RenderTarget2D previousRenderTarget = Graphics.currentRenderTarget;
+            
+
+            bool sfxEnabled = SFX.enabled;
+            SFX.enabled = false;
+
+            Layer.Console.visible = false;
+            Layer.HUD.visible = false;
+
+            RenderTarget2D target = new RenderTarget2D(renderWidth, renderHeight, true); 
+            for (int i = 0; i < frames; i++)
+            {
+                if (i == frames - 1)
+                {
+                    Graphics.SetRenderTarget(target);
+                }
+                isolatedLevel.DoUpdate();
+                isolatedLevel.DoDraw();
+            }
+            Layer.HUD.visible = true;
+            Layer.Console.visible = true;
+
+            SFX.enabled = sfxEnabled;
+
+            if (previousRenderTarget == null || previousRenderTarget.IsDisposed)
+                Graphics.SetRenderTarget(null);
+            else Graphics.SetRenderTarget(previousRenderTarget);
+
+            core.currentLevel.Terminate();
+            core.currentLevel = trueCurrentLevel;
+
+            return target;
         }
 
         public override void Update()

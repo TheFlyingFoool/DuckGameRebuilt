@@ -11,11 +11,12 @@ namespace DuckGame
             //this is dumb
             byte bited = b.ReadByte();
 
-            if (!fake) reAdd.Add(CCorderr);
+            reAdd.Add(CCorderr);
             if (bited != 255)
             {
                 BackgroundUpdater bu = (BackgroundUpdater)Editor.CreateThing(Recorderator.bgIDX[bited]);
                 bu.y = -8000;
+                bu.scissor = new Rectangle(0f, 0f, 0f, 0f);
                 reAdd.Add(bu);
             }
             Main.SpecialCode = "pipetilesets";
@@ -494,42 +495,47 @@ namespace DuckGame
         public Corderator CCorderr;
 
         public int frame;
-        public void FakeUpdate()
-        {
-            if (frame == 0)
-            {
-                List<AutoBlock> autoBlocks = Extensions.GetListOfThings<AutoBlock>();
-                for (int i = 0; i < autoBlocks.Count; i++) autoBlocks[i].PlaceBlock();
-                List<AutoPlatform> autoPlatforms = Extensions.GetListOfThings<AutoPlatform>();
-                for (int i = 0; i < autoPlatforms.Count; i++) autoPlatforms[i].PlaceBlock();
-                List<AutoTile> autoTiles = Extensions.GetListOfThings<AutoTile>();
-                for (int i = 0; i < autoTiles.Count; i++) autoTiles[i].PlaceBlock();
-            }
-            frame++;
-            base.Update();
-        }
         public override void Update()
         {
-            Recorderator.Playing = true;
-            if (CCorderr.cFrame == 0)
+            if (fake)
             {
-                List<AutoBlock> autoBlocks = Extensions.GetListOfThings<AutoBlock>();
-                for (int i = 0; i < autoBlocks.Count; i++) autoBlocks[i].PlaceBlock();
-                List<AutoPlatform> autoPlatforms = Extensions.GetListOfThings<AutoPlatform>();
-                for (int i = 0; i < autoPlatforms.Count; i++) autoPlatforms[i].PlaceBlock();
-                List<AutoTile> autoTiles = Extensions.GetListOfThings<AutoTile>();
-                for (int i = 0; i < autoTiles.Count; i++) autoTiles[i].PlaceBlock();
+                if (frame == 0)
+                {
+                    List<AutoBlock> autoBlocks = Extensions.GetListOfThings<AutoBlock>();
+                    for (int i = 0; i < autoBlocks.Count; i++) autoBlocks[i].PlaceBlock();
+                    List<AutoPlatform> autoPlatforms = Extensions.GetListOfThings<AutoPlatform>();
+                    for (int i = 0; i < autoPlatforms.Count; i++) autoPlatforms[i].PlaceBlock();
+                    List<AutoTile> autoTiles = Extensions.GetListOfThings<AutoTile>();
+                    for (int i = 0; i < autoTiles.Count; i++) autoTiles[i].PlaceBlock();
+                }
+                frame++;
+                SFX.enabled = false;
+                base.Update();
+                SFX.enabled = true;
             }
+            else
+            {
+                Recorderator.Playing = true;
+                if (CCorderr.cFrame == 0)
+                {
+                    List<AutoBlock> autoBlocks = Extensions.GetListOfThings<AutoBlock>();
+                    for (int i = 0; i < autoBlocks.Count; i++) autoBlocks[i].PlaceBlock();
+                    List<AutoPlatform> autoPlatforms = Extensions.GetListOfThings<AutoPlatform>();
+                    for (int i = 0; i < autoPlatforms.Count; i++) autoPlatforms[i].PlaceBlock();
+                    List<AutoTile> autoTiles = Extensions.GetListOfThings<AutoTile>();
+                    for (int i = 0; i < autoTiles.Count; i++) autoTiles[i].PlaceBlock();
+                }
 
-            if (Keyboard.Pressed(Keys.Home))
-            {
-                Recorderator.Playing = false;
-                if (prev != null) current = prev;
-                else current = new SendToLevel(new RecorderationSelector());
-                return;
+                if (Keyboard.Pressed(Keys.Home))
+                {
+                    Recorderator.Playing = false;
+                    if (prev != null) current = prev;
+                    else current = new SendToLevel(new RecorderationSelector());
+                    return;
+                }
+
+                base.Update();
             }
-            
-            base.Update();
         }
 
         public RecorderationSelector prev;
@@ -543,10 +549,20 @@ namespace DuckGame
         }
         public override void Initialize()
         {
-            DuckNetwork.core.chatMessages.Clear();
-            for (int i = 0; i < reAdd.Count; i++)
+            if (fake)
             {
-                AddThing(reAdd[i]);
+                for (int i = 0; i < reAdd.Count; i++)
+                {
+                    SimRenderer.Add(reAdd[i]);
+                }
+            }
+            else
+            {
+                DuckNetwork.core.chatMessages.Clear();
+                for (int i = 0; i < reAdd.Count; i++)
+                {
+                    Add(reAdd[i]);
+                }
             }
             base.Initialize();
         }
