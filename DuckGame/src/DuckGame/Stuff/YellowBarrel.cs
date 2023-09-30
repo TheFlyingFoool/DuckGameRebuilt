@@ -4,6 +4,7 @@ namespace DuckGame
 {
     [EditorGroup("Stuff|Props|Barrels")]
     [BaggedProperty("noRandomSpawningOnline", true)]
+
     public class YellowBarrel : Holdable, IPlatform, ISequenceItem
     {
         public YellowBarrel(float xpos, float ypos) : base(xpos, ypos)
@@ -210,10 +211,15 @@ namespace DuckGame
 
         public override void Draw()
         {
+            BarrelLerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
             float level = 1f - _fluidLevel;
             float darken = 0.6f + (1f - burnt) * 0.4f;
             graphic.color = new Color((byte)(150f * darken), (byte)(150f * darken), (byte)(150f * darken));
-            base.Draw();
+            //base.Draw();
+            Sprite g = graphic;
+            g.center = center;
+            Graphics.Draw(g, BarrelLerp.x, BarrelLerp.y);
             if (_hitPoints > 0f)
             {
                 graphic.color = new Color((byte)(255f * darken), (byte)(255f * darken), (byte)(255f * darken));
@@ -222,9 +228,10 @@ namespace DuckGame
                 graphic.scale = scale;
                 float ypos = level * graphic.height;
                 graphic.center = center - new Vec2(0f, (int)ypos);
-                Graphics.Draw(graphic, x, y, new Rectangle(0f, (int)ypos, graphic.w, (int)(graphic.h - ypos)));
+                Graphics.Draw(graphic, BarrelLerp.x, BarrelLerp.y, new Rectangle(0f, (int)ypos, graphic.w, (int)(graphic.h - ypos)));
             }
         }
+        protected Interp BarrelLerp = new Interp(true);
 
         public EditorProperty<bool> valid;
 

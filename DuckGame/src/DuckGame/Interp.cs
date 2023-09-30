@@ -51,7 +51,7 @@ namespace DuckGame
         protected TimeSpan CurrentStateUpdate = TimeSpan.Zero;
         private bool RecentLerp
         {
-            get => (CurrentStateUpdate - PreviousStateUpdate).TotalMilliseconds < 20;
+            get => (CurrentStateUpdate - PreviousStateUpdate).TotalMilliseconds < 30;
         }
 
         public Vec2 Size

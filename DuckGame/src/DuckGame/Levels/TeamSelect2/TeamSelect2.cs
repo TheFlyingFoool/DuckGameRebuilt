@@ -1845,11 +1845,14 @@ namespace DuckGame
                             num1 = 0.005f;
                         if (text3.Length > 30)
                             num1 = 1f / 500f;
-                        _topScroll += num1;
-                        if (_topScroll > 1)
-                            --_topScroll;
-                        if (_topScroll < 0)
-                            ++_topScroll;
+                        if (MonoMain.UpdateLerpState)
+                        {
+                            _topScroll += num1;
+                            if (_topScroll > 1)
+                                --_topScroll;
+                            if (_topScroll < 0)
+                                ++_topScroll;
+                        }
                         _littleFont.Draw(text4, new Vec2((float)(1f - _topScroll * (_littleFont.GetWidth(text3) + 7f)), vec2.y + 3f), Color.White, (Depth)0.95f);
                     }
                     if (_setupFade > 0.01f)

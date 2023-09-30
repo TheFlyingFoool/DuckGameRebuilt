@@ -314,7 +314,8 @@ namespace DuckGame
                 Vec2 vec2_2 = vec2_1 + new Vec2(0f, _scanner.height);
                 Graphics.DrawLine(vec2_2 + new Vec2(18f, -20f), new Vec2(x, (float)(vec2_2.y + 100f - num2 * 250f)), Color.Red * num3, 2f, (Depth)0.9f);
                 Graphics.DrawLine(vec2_2 + new Vec2(18f, -34f), new Vec2(x, (float)(vec2_2.y + 10f - 80f * num2)), Color.Red * num3, 2f, (Depth)0.9f);
-                _parallax.Update();
+                if(MonoMain.UpdateLerpState)
+                    _parallax.Update();
                 _parallax.Draw();
                 Graphics.PopMarker();
             }

@@ -408,7 +408,7 @@ namespace DuckGame
                     _surfaceFire[index].yscale = _fireRise;
                     _surfaceFire[index].depth = depth + 1;
                     SpriteMap g = _surfaceFire[index];
-                    Graphics.Draw(ref g, (left + 8f + index * num2), (y + _collisionOffset.y + 1f) - num3);
+                    Graphics.Draw(g, (left + 8f + index * num2), (y + _collisionOffset.y + 1f) - num3);
                 }
             }
             if (_lava != null && collisionSize.y > 2f)

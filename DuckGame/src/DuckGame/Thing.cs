@@ -1645,6 +1645,23 @@ namespace DuckGame
             }
             _graphic.Draw();
         }
+        public virtual void DrawLerpLess()
+        {
+            if (_graphic == null)
+                return;
+            if (!_skipPositioning)
+            {
+                _graphic.position = position;
+                _graphic.alpha = alpha;
+                _graphic.angle = angle;
+                _graphic.depth = depth;
+                _graphic.scale = scale;
+                _graphic.center = center;
+                _graphic.LerpState.CanLerp = false;
+            }
+            _graphic.Draw();
+        }
+
         public void DrawCollision()
         {
             Graphics.DrawRect(topLeft, bottomRight, Color.Orange * 0.8f, 1f, false, 0.5f);

@@ -826,13 +826,13 @@ namespace DuckGame
                                             if (_noImage.texture.width > _noImage.texture.height)
                                             {
                                                 _noImage.scale = new Vec2(32f / _noImage.texture.height);
-                                                Graphics.Draw(ref _noImage, x1 + 2f + zero.x, y + 2f + zero.y, new Rectangle(_noImage.texture.width / 2 - _noImage.texture.height / 2, 0f, _noImage.texture.height, _noImage.texture.height), (Depth)0.5f);
+                                                Graphics.Draw(_noImage, x1 + 2f + zero.x, y + 2f + zero.y, new Rectangle(_noImage.texture.width / 2 - _noImage.texture.height / 2, 0f, _noImage.texture.height, _noImage.texture.height), (Depth)0.5f);
                                             }
                                             else
-                                                Graphics.Draw(ref _noImage, x1 + 2f + zero.x, y + 2f + zero.y, new Rectangle(0f, 0f, _noImage.texture.width, _noImage.texture.width), (Depth)0.5f);
+                                                Graphics.Draw(_noImage, x1 + 2f + zero.x, y + 2f + zero.y, new Rectangle(0f, 0f, _noImage.texture.width, _noImage.texture.width), (Depth)0.5f);
                                         }
                                         else
-                                            Graphics.Draw(ref _noImage, x1 + 2f + zero.x, y + 2f + zero.y, (Depth)0.5f);
+                                            Graphics.Draw(_noImage, x1 + 2f + zero.x, y + 2f + zero.y, (Depth)0.5f);
                                         zero.x += 16f;
                                         if (zero.x >= 32.0)
                                         {
@@ -843,7 +843,7 @@ namespace DuckGame
                                 }
                             }
                             else
-                                Graphics.Draw(ref _noImage, x1 + 2f, y + 2f, (Depth)0.5f);
+                                Graphics.Draw(_noImage, x1 + 2f, y + 2f, (Depth)0.5f);
                             titleString += " (" + Math.Min(lobby._userCount - (lobby.dedicated ? 1 : 0), 8).ToString() + "/" + Math.Min(lobby.numSlots, 8).ToString() + ")";
                             if (lobby.hasFriends)
                                 titleString += " |DGGREEN|FRIEND";
@@ -901,17 +901,17 @@ namespace DuckGame
                             float num = 0f;
                             if (lobby.hasPassword)
                             {
-                                Graphics.Draw(ref _lockedServer, (float)(x1 + 36.0 + 10.0), y + 2.5f, (Depth)0.5f);
+                                Graphics.Draw(_lockedServer, (float)(x1 + 36.0 + 10.0), y + 2.5f, (Depth)0.5f);
                                 num += 10f;
                             }
                             if (lobby.hasCustomName)
                             {
-                                Graphics.Draw(ref _namedServer, (float)(x1 + num + 36.0 + 10.0), y + 2.5f, (Depth)0.5f);
+                                Graphics.Draw(_namedServer, (float)(x1 + num + 36.0 + 10.0), y + 2.5f, (Depth)0.5f);
                                 num += 10f;
                             }
                             if (lobby.isGlobalLobby)
                             {
-                                Graphics.Draw(ref _globeIcon, (float)(x1 + num + 36.0 + 10.0), y + 2.5f, (Depth)0.5f);
+                                Graphics.Draw(_globeIcon, (float)(x1 + num + 36.0 + 10.0), y + 2.5f, (Depth)0.5f);
                                 num += 10f;
                             }
                             _fancyFont.Draw(titleString, new Vec2((float)(x1 + 36.0 + num + 10.0), y + 2f), Color.Yellow, (Depth)0.5f);
@@ -938,9 +938,9 @@ namespace DuckGame
                             else
                                 _fancyFont.Draw("????ms", new Vec2(x1 + 470f, y + 26f), Colors.DGRed * 0.45f, (Depth)0.5f);
                             if (lobby.lobby != null)
-                                Graphics.Draw(ref _steamIcon, x1 + 36f, y + 2.5f, (Depth)0.5f);
+                                Graphics.Draw(_steamIcon, x1 + 36f, y + 2.5f, (Depth)0.5f);
                             else
-                                Graphics.Draw(ref _lanIcon, x1 + 36f, y + 2.5f, (Depth)0.5f);
+                                Graphics.Draw(_lanIcon, x1 + 36f, y + 2.5f, (Depth)0.5f);
                             _fancyFont.Draw(text1, new Vec2(x1 + 36f, y + 6f + _fancyFont.characterHeight), Color.LightGray, (Depth)0.5f);
 
                             Lobby steamLobby = lobby.lobby;
@@ -959,7 +959,7 @@ namespace DuckGame
 
                                     int percentage = _percentageFunctions[i](steamLobby);
 
-                                    Graphics.Draw(ref _mapSprites[i], mapX, mapY, 0.5f);
+                                    Graphics.Draw(_mapSprites[i], mapX, mapY, 0.5f);
                                     _smallFont.Draw(percentage.ToString() + "%", new Vec2(mapX + 10f, mapY + 1f), Color.White, 0.5f);
                                 }
 

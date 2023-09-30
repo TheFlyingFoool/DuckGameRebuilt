@@ -157,7 +157,7 @@ namespace DuckGame
                     _upScale[index1] = 0.5f;
                 }
                 _icon.scale = new Vec2(1f + _upScale[index1]);
-                Graphics.Draw(ref _icon, x, y + 28f);
+                Graphics.Draw(_icon, x, y + 28f);
                 ++index1;
             }
         }

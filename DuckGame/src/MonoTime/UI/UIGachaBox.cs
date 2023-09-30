@@ -288,9 +288,9 @@ namespace DuckGame
         {
             y += yOffset;
             _frame.depth = -0.9f;
-            Graphics.Draw(ref _frame, x, y);
+            Graphics.Draw(_frame, x, y);
             _frame.depth = -0.7f;
-            Graphics.Draw(ref _frame, x, y, new Rectangle(0f, 0f, 125f, 36f));
+            Graphics.Draw(_frame, x, y, new Rectangle(0f, 0f, 125f, 36f));
             if (_swapped)
             {
                 _contains.Draw(position + new Vec2(0f, 10f), -0.8f);
@@ -299,13 +299,13 @@ namespace DuckGame
                     _star.depth = (Depth)0.9f;
                     _star.scale = new Vec2((float)(2.5 + _starGrow * 3.0));
                     _star.alpha = 1f - _starGrow;
-                    Graphics.Draw(ref _star, x, y + 10f);
+                    Graphics.Draw(_star, x, y + 10f);
                 }
             }
             else if (gachaY > 10.0)
             {
                 _gachaEgg.depth = -0.8f;
-                Graphics.Draw(ref _gachaEgg, x, y - 38f + gachaY);
+                Graphics.Draw(_gachaEgg, x, y - 38f + gachaY);
             }
             string text1 = "@LWING@NEW TOY@RWING@";
             if (_rare)
@@ -323,7 +323,7 @@ namespace DuckGame
             {
                 _duckCoin.frame = _rare ? 1 : 0;
                 _duckCoin.depth = -0.8f;
-                Graphics.Draw(ref _duckCoin, x + 40f, (float)(y - 100.0 + _insertCoin * 65.0));
+                Graphics.Draw(_duckCoin, x + 40f, (float)(y - 100.0 + _insertCoin * 65.0));
             }
             if (_swapped)
             {

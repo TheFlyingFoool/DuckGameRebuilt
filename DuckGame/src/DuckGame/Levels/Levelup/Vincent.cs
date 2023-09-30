@@ -1355,23 +1355,23 @@ namespace DuckGame
                 ++num;
             }
             _tail.flipV = true;
-            Graphics.Draw(ref _tail, 222f + vec2_2.x, 117f + vec2_2.y);
+            Graphics.Draw(_tail, 222f + vec2_2.x, 117f + vec2_2.y);
             if (hasKid)
                 _dealer.frame += 9;
             _dealer.depth = (Depth)0.96f;
             _dealer.alpha = alpha;
-            Graphics.Draw(ref _dealer, 200f + vec2_2.x, 26f + vec2_2.y);
+            Graphics.Draw(_dealer, 200f + vec2_2.x, 26f + vec2_2.y);
             switch (type)
             {
                 case DayType.SaleDay:
                     _bigBanner.depth = (Depth)0.96f;
-                    Graphics.Draw(ref _bigBanner, 22f, (float)(_showLerp * 100f - 80f));
-                    Graphics.Draw(ref _bigBanner, 194f, (float)(_showLerp * 100f - 80f));
+                    Graphics.Draw(_bigBanner, 22f, (float)(_showLerp * 100f - 80f));
+                    Graphics.Draw(_bigBanner, 194f, (float)(_showLerp * 100f - 80f));
                     break;
                 case DayType.ImportDay:
                     _fancyBanner.depth = (Depth)0.96f;
-                    Graphics.Draw(ref _fancyBanner, 22f, (float)(_showLerp * 100f - 80f));
-                    Graphics.Draw(ref _fancyBanner, 194f, (float)(_showLerp * 100f - 80f));
+                    Graphics.Draw(_fancyBanner, 22f, (float)(_showLerp * 100f - 80f));
+                    Graphics.Draw(_fancyBanner, 194f, (float)(_showLerp * 100f - 80f));
                     break;
             }
             _furniFrame.alpha = alpha;
@@ -1397,7 +1397,7 @@ namespace DuckGame
                 Vec2 pos = new Vec2(vec2_5.x - 200f + Math.Min(_showLerp * (200 + 40 * index3), 200f), vec2_5.y);
                 if (products.Count == 1)
                     pos = new Vec2(vec2_5.x - 200f + Math.Min(_showLerp * 275f, 240f), vec2_5.y + 30f);
-                Graphics.Draw(ref _furniFrame, pos.x, pos.y);
+                Graphics.Draw(_furniFrame, pos.x, pos.y);
                 int val1_1 = products[0].cost;
                 bool flag1 = false;
                 if (products[0].cost != products[0].originalCost)
@@ -1406,32 +1406,32 @@ namespace DuckGame
                     val1_1 = products[0].originalCost;
 
                     Graphics.Draw(_priceTargets[0], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
-                    Graphics.Draw(ref _cheapTape, pos.x, pos.y);
+                    Graphics.Draw(_cheapTape, pos.x, pos.y);
                 }
                 _furniFill.color = products[index3].color;
-                Graphics.Draw(ref _furniFill, pos.x, pos.y);
+                Graphics.Draw(_furniFill, pos.x, pos.y);
                 products[index3].Draw(pos, alpha, 0.97f);
                 if (index3 == _selectIndex)
-                    Graphics.Draw(ref _furniHov, pos.x - 1f, pos.y);
+                    Graphics.Draw(_furniHov, pos.x - 1f, pos.y);
                 if (products[index3].type == VPType.Furniture && products[index3].furnitureData.rarity >= Rarity.SuperRare)
                 {
                     _rareSticker.frame = index3 == _selectIndex ? 1 : 0;
-                    Graphics.Draw(ref _rareSticker, pos.x - 23f, pos.y - 19f);
+                    Graphics.Draw(_rareSticker, pos.x - 23f, pos.y - 19f);
                 }
                 else if (products[index3].type == VPType.Hat || !products[index3].sold && Profiles.experienceProfile.GetNumFurnitures(products[index3].furnitureData.index) <= 0)
                 {
                     _newSticker.frame = index3 == _selectIndex ? 1 : 0;
-                    Graphics.Draw(ref _newSticker, pos.x - 23f, pos.y - 19f);
+                    Graphics.Draw(_newSticker, pos.x - 23f, pos.y - 19f);
                 }
                 if (products[index3].sold)
                 {
-                    Graphics.Draw(ref _soldSprite, pos.x, pos.y);
+                    Graphics.Draw(_soldSprite, pos.x, pos.y);
                 }
                 else
                 {
                     string str = Math.Min(Math.Max(val1_1, 0), 9999).ToString();
                     _furniTag.frame = str.Length - 1;
-                    Graphics.Draw(ref _furniTag, pos.x + 21f, pos.y - 25f);
+                    Graphics.Draw(_furniTag, pos.x + 21f, pos.y - 25f);
                     string text = "$\n";
                     foreach (char ch in str)
                         text = text + ch.ToString() + "\n";
@@ -1441,7 +1441,7 @@ namespace DuckGame
                 {
                     int index4 = 1;
                     pos = new Vec2((float)(vec2_5.x + 70f - 200f) + Math.Min(_showLerp * (200 + 40 * index4), 200f), vec2_5.y);
-                    Graphics.Draw(ref _furniFrame, pos.x, pos.y);
+                    Graphics.Draw(_furniFrame, pos.x, pos.y);
                     int val1_2 = products[1].cost;
                     bool flag2 = false;
                     if (products[1].cost != products[1].originalCost)
@@ -1450,32 +1450,32 @@ namespace DuckGame
                         val1_2 = products[1].originalCost;
 
                         Graphics.Draw(_priceTargets[1], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
-                        Graphics.Draw(ref _cheapTape, pos.x, pos.y);
+                        Graphics.Draw(_cheapTape, pos.x, pos.y);
                     }
                     _furniFill.color = products[index4].color;
-                    Graphics.Draw(ref _furniFill, pos.x, pos.y);
+                    Graphics.Draw(_furniFill, pos.x, pos.y);
                     products[index4].Draw(pos, alpha, 0.97f);
                     if (index4 == _selectIndex)
-                        Graphics.Draw(ref _furniHov, pos.x - 1f, pos.y);
+                        Graphics.Draw(_furniHov, pos.x - 1f, pos.y);
                     if (products[index4].type == VPType.Furniture && products[index4].furnitureData.rarity >= Rarity.SuperRare)
                     {
                         _rareSticker.frame = index4 == _selectIndex ? 1 : 0;
-                        Graphics.Draw(ref _rareSticker, pos.x - 23f, pos.y - 19f);
+                        Graphics.Draw(_rareSticker, pos.x - 23f, pos.y - 19f);
                     }
                     else if (Profiles.experienceProfile.GetNumFurnitures(products[index4].furnitureData.index) <= 0)
                     {
                         _newSticker.frame = index4 == _selectIndex ? 1 : 0;
-                        Graphics.Draw(ref _newSticker, pos.x - 23f, pos.y - 19f);
+                        Graphics.Draw(_newSticker, pos.x - 23f, pos.y - 19f);
                     }
                     if (products[index4].sold)
                     {
-                        Graphics.Draw(ref _soldSprite, pos.x, pos.y);
+                        Graphics.Draw(_soldSprite, pos.x, pos.y);
                     }
                     else
                     {
                         string str = Math.Min(Math.Max(val1_2, 0), 9999).ToString();
                         _furniTag.frame = str.Length - 1;
-                        Graphics.Draw(ref _furniTag, pos.x + 21f, pos.y - 25f);
+                        Graphics.Draw(_furniTag, pos.x + 21f, pos.y - 25f);
                         string text = "$\n";
                         foreach (char ch in str)
                             text = text + ch.ToString() + "\n";
@@ -1486,7 +1486,7 @@ namespace DuckGame
                 {
                     int index5 = 2;
                     pos = new Vec2(vec2_5.x - 200f + Math.Min(_showLerp * (200 + 40 * index5), 200f), vec2_5.y + 54f);
-                    Graphics.Draw(ref _furniFrame, pos.x, pos.y);
+                    Graphics.Draw(_furniFrame, pos.x, pos.y);
                     int val1_3 = products[2].cost;
                     bool flag3 = false;
                     if (products[2].cost != products[2].originalCost)
@@ -1497,29 +1497,29 @@ namespace DuckGame
                         Graphics.Draw(_cheapTape, pos.x, pos.y);
                     }
                     _furniFill.color = products[index5].color;
-                    Graphics.Draw(ref _furniFill, pos.x, pos.y);
+                    Graphics.Draw(_furniFill, pos.x, pos.y);
                     products[index5].Draw(pos, alpha, 0.97f);
                     if (index5 == _selectIndex)
-                        Graphics.Draw(ref _furniHov, pos.x - 1f, pos.y);
+                        Graphics.Draw(_furniHov, pos.x - 1f, pos.y);
                     if (products[index5].type == VPType.Furniture && products[index5].furnitureData.rarity >= Rarity.SuperRare)
                     {
                         _rareSticker.frame = index5 == _selectIndex ? 1 : 0;
-                        Graphics.Draw(ref _rareSticker, pos.x - 23f, pos.y - 19f);
+                        Graphics.Draw(_rareSticker, pos.x - 23f, pos.y - 19f);
                     }
                     else if (Profiles.experienceProfile.GetNumFurnitures(products[index5].furnitureData.index) <= 0)
                     {
                         _newSticker.frame = index5 == _selectIndex ? 1 : 0;
-                        Graphics.Draw(ref _newSticker, pos.x - 23f, pos.y - 19f);
+                        Graphics.Draw(_newSticker, pos.x - 23f, pos.y - 19f);
                     }
                     if (products[index5].sold)
                     {
-                        Graphics.Draw(ref _soldSprite, pos.x, pos.y);
+                        Graphics.Draw(_soldSprite, pos.x, pos.y);
                     }
                     else
                     {
                         string str = Math.Min(Math.Max(val1_3, 0), 9999).ToString();
                         _furniTag.frame = str.Length - 1;
-                        Graphics.Draw(ref _furniTag, pos.x + 21f, pos.y - 25f);
+                        Graphics.Draw(_furniTag, pos.x + 21f, pos.y - 25f);
                         string text = "$\n";
                         foreach (char ch in str)
                             text = text + ch.ToString() + "\n";
@@ -1530,7 +1530,7 @@ namespace DuckGame
                 {
                     int index6 = 3;
                     pos = new Vec2((float)(vec2_5.x + 70f - 200f) + Math.Min(_showLerp * (200 + 40 * index6), 200f), vec2_5.y + 54f);
-                    Graphics.Draw(ref _furniFrame, pos.x, pos.y);
+                    Graphics.Draw(_furniFrame, pos.x, pos.y);
                     int val1_4 = products[3].cost;
                     bool flag4 = false;
                     if (products[3].cost != products[3].originalCost)
@@ -1538,32 +1538,32 @@ namespace DuckGame
                         flag4 = true;
                         val1_4 = products[3].originalCost;
                         Graphics.Draw(_priceTargets[3], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
-                        Graphics.Draw(ref _cheapTape, pos.x, pos.y);
+                        Graphics.Draw(_cheapTape, pos.x, pos.y);
                     }
                     _furniFill.color = products[index6].color;
-                    Graphics.Draw(ref _furniFill, pos.x, pos.y);
+                    Graphics.Draw(_furniFill, pos.x, pos.y);
                     products[index6].Draw(pos, alpha, 0.97f);
                     if (index6 == _selectIndex)
-                        Graphics.Draw(ref _furniHov, pos.x - 1f, pos.y);
+                        Graphics.Draw(_furniHov, pos.x - 1f, pos.y);
                     if (products[index6].type == VPType.Furniture && products[index6].furnitureData.rarity >= Rarity.SuperRare)
                     {
                         _rareSticker.frame = index6 == _selectIndex ? 1 : 0;
-                        Graphics.Draw(ref _rareSticker, pos.x - 23f, pos.y - 19f);
+                        Graphics.Draw(_rareSticker, pos.x - 23f, pos.y - 19f);
                     }
                     else if (Profiles.experienceProfile.GetNumFurnitures(products[index6].furnitureData.index) <= 0)
                     {
                         _newSticker.frame = index6 == _selectIndex ? 1 : 0;
-                        Graphics.Draw(ref _newSticker, pos.x - 23f, pos.y - 19f);
+                        Graphics.Draw(_newSticker, pos.x - 23f, pos.y - 19f);
                     }
                     if (products[index6].sold)
                     {
-                        Graphics.Draw(ref _soldSprite, pos.x, pos.y);
+                        Graphics.Draw(_soldSprite, pos.x, pos.y);
                     }
                     else
                     {
                         string str = Math.Min(Math.Max(val1_4, 0), 9999).ToString();
                         _furniTag.frame = str.Length - 1;
-                        Graphics.Draw(ref _furniTag, pos.x + 21f, pos.y - 25f);
+                        Graphics.Draw(_furniTag, pos.x + 21f, pos.y - 25f);
                         string text = "$\n";
                         foreach (char ch in str)
                             text = text + ch.ToString() + "\n";
@@ -1585,7 +1585,7 @@ namespace DuckGame
                 _tail.alpha = alpha;
                 _tail.flipH = false;
                 _tail.flipV = false;
-                Graphics.Draw(ref _tail, 222f, 17f);
+                Graphics.Draw(_tail, 222f, 17f);
             }
             if (!hasKid)
                 return;

@@ -1822,7 +1822,7 @@ namespace DuckGame
             _font.scale = new Vec2(1f, 1f);
             _lev.depth = depth + 2;
             _lev.frame = _currentLevel - 1;
-            Graphics.Draw(ref _lev, x - 90f, y - 34f + num3);
+            Graphics.Draw(_lev, x - 90f, y - 34f + num3);
             _font.DrawOutline(_currentLevel.ToString()[0].ToString() ?? "", position + new Vec2(-84f, num3 - 30f), Color.White, Color.Black, depth + 2);
             if (_currentLevel > 9)
             {
@@ -1876,12 +1876,12 @@ namespace DuckGame
             _xpBar.depth = depth + 2;
             _xpBar.xscale = 1f;
             Vec2 vec2_4 = new Vec2(x - 87f, y - 18f);
-            Graphics.Draw(ref _xpBar, vec2_4.x, vec2_4.y + num3, new Rectangle(0f, 0f, 3f, 6f));
+            Graphics.Draw(_xpBar, vec2_4.x, vec2_4.y + num3, new Rectangle(0f, 0f, 3f, 6f));
             _xpBar.xscale = num9 - 4f;
-            Graphics.Draw(ref _xpBar, vec2_4.x + 3f, vec2_4.y + num3, new Rectangle(2f, 0f, 1f, 6f));
+            Graphics.Draw(_xpBar, vec2_4.x + 3f, vec2_4.y + num3, new Rectangle(2f, 0f, 1f, 6f));
             _xpBar.depth = depth + 7;
             _xpBar.xscale = 1f;
-            Graphics.Draw(ref _xpBar, vec2_4.x + (num9 - 2f), vec2_4.y + num3, new Rectangle(3f, 0f, 3f, 6f));
+            Graphics.Draw(_xpBar, vec2_4.x + (num9 - 2f), vec2_4.y + num3, new Rectangle(3f, 0f, 3f, 6f));
             int x2 = 0;
             _barFront.depth = depth + 10;
             if (num9 < 13.0)
@@ -1890,7 +1890,7 @@ namespace DuckGame
             if (_barHeat > 1.0)
                 _barHeat = 1f;
             _barFront.alpha = _barHeat;
-            Graphics.Draw(ref _barFront, vec2_4.x + num9 + x2, vec2_4.y + num3, new Rectangle(x2, 0f, _barFront.width - x2, 6f));
+            Graphics.Draw(_barFront, vec2_4.x + num9 + x2, vec2_4.y + num3, new Rectangle(x2, 0f, _barFront.width - x2, 6f));
             _barHeat = Maths.CountDown(_barHeat, 0.04f);
             if (_currentLevel >= 3)
             {
@@ -1906,16 +1906,16 @@ namespace DuckGame
                 _gachaBar.depth = depth + 2;
                 _gachaBar.xscale = 1f;
                 Vec2 vec2_5 = new Vec2(x - 87f, y - 5f);
-                Graphics.Draw(ref _gachaBar, vec2_5.x, vec2_5.y + num3, new Rectangle(0f, 0f, 3f, 3f));
+                Graphics.Draw(_gachaBar, vec2_5.x, vec2_5.y + num3, new Rectangle(0f, 0f, 3f, 3f));
                 _gachaBar.xscale = num12 - 5f;
-                Graphics.Draw(ref _gachaBar, vec2_5.x + 3f, vec2_5.y + num3, new Rectangle(2f, 0f, 1f, 3f));
+                Graphics.Draw(_gachaBar, vec2_5.x + 3f, vec2_5.y + num3, new Rectangle(2f, 0f, 1f, 3f));
                 _gachaBar.depth = depth + 7;
                 _gachaBar.xscale = 1f;
-                Graphics.Draw(ref _gachaBar, vec2_5.x + (num12 - 2f), vec2_5.y + num3, new Rectangle(3f, 0f, 3f, 3f));
+                Graphics.Draw(_gachaBar, vec2_5.x + (num12 - 2f), vec2_5.y + num3, new Rectangle(3f, 0f, 3f, 3f));
                 _duckCoin.frame = 0;
                 _duckCoin.alpha = (float)(1.0 - Math.Max(_coinLerp - 0.5f, 0f) * 2.0);
                 _duckCoin.depth = (Depth)0.9f;
-                Graphics.Draw(ref _duckCoin, (float)(vec2_5.x + (num11 - 2.0) + 15.0), (float)(vec2_5.y + num3 - 8.0 - _coinLerp * 18.0));
+                Graphics.Draw(_duckCoin, (float)(vec2_5.x + (num11 - 2.0) + 15.0), (float)(vec2_5.y + num3 - 8.0 - _coinLerp * 18.0));
             }
             if (_currentLevel >= 4)
             {
@@ -1927,12 +1927,12 @@ namespace DuckGame
                 _sandwichBar.depth = depth + 2;
                 _sandwichBar.xscale = 1f;
                 Vec2 vec2_6 = new Vec2(x - 87f, y + 5f);
-                Graphics.Draw(ref _sandwichBar, vec2_6.x, vec2_6.y + num3, new Rectangle(0f, 0f, 3f, 3f));
+                Graphics.Draw(_sandwichBar, vec2_6.x, vec2_6.y + num3, new Rectangle(0f, 0f, 3f, 3f));
                 _sandwichBar.xscale = num15 - 5f;
-                Graphics.Draw(ref _sandwichBar, vec2_6.x + 3f, vec2_6.y + num3, new Rectangle(2f, 0f, 1f, 3f));
+                Graphics.Draw(_sandwichBar, vec2_6.x + 3f, vec2_6.y + num3, new Rectangle(2f, 0f, 1f, 3f));
                 _sandwichBar.depth = depth + 7;
                 _sandwichBar.xscale = 1f;
-                Graphics.Draw(ref _sandwichBar, vec2_6.x + (num15 - 2f), vec2_6.y + num3, new Rectangle(3f, 0f, 3f, 3f));
+                Graphics.Draw(_sandwichBar, vec2_6.x + (num15 - 2f), vec2_6.y + num3, new Rectangle(3f, 0f, 3f, 3f));
                 _sandwich.depth = (Depth)0.88f;
                 float num16 = _sandwichLerp * -150f;
                 float num17 = 0f;
@@ -1947,13 +1947,13 @@ namespace DuckGame
                 }
                 float x3 = Math.Max(val1, 0f);
                 if (x3 < _sandwich.width)
-                    Graphics.Draw(ref _sandwich, (float)(vec2_6.x + (num14 - 2.0) + 12.0 + num17 + x3 + 1.0), (float)(vec2_6.y + num3 - 16.0) + num16, new Rectangle(x3, 0f, _sandwich.width - x3, _sandwich.height), (Depth)0.88f);
+                    Graphics.Draw(_sandwich, (float)(vec2_6.x + (num14 - 2.0) + 12.0 + num17 + x3 + 1.0), (float)(vec2_6.y + num3 - 16.0) + num16, new Rectangle(x3, 0f, _sandwich.width - x3, _sandwich.height), (Depth)0.88f);
             }
             if (_currentStat.Key != null)
             {
                 _addXPBar.depth = depth - 20;
                 _addXPBar.xscale = 1f;
-                Graphics.Draw(ref _addXPBar, vec2_1.x, vec2_1.y);
+                Graphics.Draw(_addXPBar, vec2_1.x, vec2_1.y);
                 _fancyFont.DrawOutline(_currentStat.Value.num == 0 ? _currentStat.Key : _currentStat.Value.num.ToString() + " " + _currentStat.Key, vec2_1 + new Vec2(-(_addXPBar.width / 2) + 4, -2f), Color.White, Color.Black, depth - 10);
                 Vec2 p1 = vec2_1 + new Vec2(-(_addXPBar.width / 2) + 2, -7.5f);
                 Graphics.DrawLine(p1, p1 + new Vec2((_addXPBar.width - 5) * _drain, 0f), Color.Lime, depth: (_addXPBar.depth + 2));
@@ -1971,17 +1971,17 @@ namespace DuckGame
                 _xpPoint.color = particle.color;
                 _xpPoint.alpha = particle.alpha * num19;
                 _xpPoint.depth = depth + num18;
-                Graphics.Draw(ref _xpPoint, particle.position.x, particle.position.y);
+                Graphics.Draw(_xpPoint, particle.position.x, particle.position.y);
                 _xpPointOutline.alpha = particle.alpha * num19;
                 _xpPointOutline.depth = depth + (num18 - 5);
-                Graphics.Draw(ref _xpPointOutline, particle.position.x, particle.position.y);
+                Graphics.Draw(_xpPointOutline, particle.position.x, particle.position.y);
             }
             foreach (LittleHeart heart in _hearts)
             {
                 _heart.alpha = heart.alpha;
                 _heart.depth = (Depth)0.98f;
                 _heart.scale = new Vec2(0.5f, 0.5f);
-                Graphics.Draw(ref _heart, heart.position.x, heart.position.y);
+                Graphics.Draw(_heart, heart.position.x, heart.position.y);
             }
             int curLev = _currentLevel;
             if (Profiles.experienceProfile.numLittleMen > 0)
@@ -2004,8 +2004,8 @@ namespace DuckGame
                         _egg.yscale = 1f;
                         int num22 = 8;
                         Vec2 vec2_7 = new Vec2(x + num8, y - 29f + num3 + num22 + num21);
-                        Graphics.Draw(ref _egg, vec2_7.x, vec2_7.y, new Rectangle(0f, num22 + num21, 16f, 16 - num22 - num21));
-                        Graphics.Draw(ref _egg, x + num8, y - 29f + num3 - num20, new Rectangle(0f, 0f, 16f, num22 + num21));
+                        Graphics.Draw(_egg, vec2_7.x, vec2_7.y, new Rectangle(0f, num22 + num21, 16f, 16 - num22 - num21));
+                        Graphics.Draw(_egg, x + num8, y - 29f + num3 - num20, new Rectangle(0f, 0f, 16f, num22 + num21));
                         Vec2 center = _egg.center;
                         _egg.yscale = num20;
                         _egg.center = center;
@@ -2019,11 +2019,11 @@ namespace DuckGame
                     littleManPos = new Vec2(x + num8, (float)(y - 29.0 + num3 + 4.0) + num21);
                     if (!_inTaxi)
                     {
-                        Graphics.Draw(ref _littleMan, littleManPos.x, littleManPos.y, new Rectangle(0f, 4 + num21, 16f, 12 - num21));
-                        Graphics.Draw(ref _littleMan, x + num8, y - 29f + num3 - num20, new Rectangle(0f, 0f, 16f, 4 + num21));
+                        Graphics.Draw(_littleMan, littleManPos.x, littleManPos.y, new Rectangle(0f, 4 + num21, 16f, 12 - num21));
+                        Graphics.Draw(_littleMan, x + num8, y - 29f + num3 - num20, new Rectangle(0f, 0f, 16f, 4 + num21));
                         Vec2 center = _littleMan.center;
                         _littleMan.yscale = num20;
-                        Graphics.Draw(ref _littleMan, x + num8, (float)(y - 29.0 + (num3 - num20) + 4.0) + num21, new Rectangle(0f, 4 + num21, 16f, 1f));
+                        Graphics.Draw(_littleMan, x + num8, (float)(y - 29.0 + (num3 - num20) + 4.0) + num21, new Rectangle(0f, 4 + num21, 16f, 1f));
                         _littleMan.center = center;
                     }
                 }
@@ -2033,16 +2033,16 @@ namespace DuckGame
                 {
                     Vec2 vec2_8 = new Vec2((float)(x + num8 + 16.0), y - 28f + num3);
                     _talkBubble.xscale = 1f;
-                    Graphics.Draw(ref _talkBubble, vec2_8.x, vec2_8.y, new Rectangle(0f, 0f, 8f, 8f));
+                    Graphics.Draw(_talkBubble, vec2_8.x, vec2_8.y, new Rectangle(0f, 0f, 8f, 8f));
                     float num23 = Graphics.GetStringWidth(talkLine) - 5f;
                     float y2 = Graphics.GetStringHeight(talkLine) + 2f;
                     _talkBubble.xscale = num23;
-                    Graphics.Draw(ref _talkBubble, vec2_8.x + 8f, vec2_8.y, new Rectangle(5f, 0f, 1f, 2f));
-                    Graphics.Draw(ref _talkBubble, vec2_8.x + 8f, vec2_8.y + y2, new Rectangle(5f, 10f, 1f, 2f));
+                    Graphics.Draw(_talkBubble, vec2_8.x + 8f, vec2_8.y, new Rectangle(5f, 0f, 1f, 2f));
+                    Graphics.Draw(_talkBubble, vec2_8.x + 8f, vec2_8.y + y2, new Rectangle(5f, 10f, 1f, 2f));
                     _talkBubble.xscale = 1f;
-                    Graphics.Draw(ref _talkBubble, vec2_8.x, vec2_8.y + (y2 - 2f), new Rectangle(0f, 8f, 8f, 4f));
-                    Graphics.Draw(ref _talkBubble, (float)(vec2_8.x + num23 + 8.0), vec2_8.y + (y2 - 2f), new Rectangle(8f, 8f, 4f, 4f));
-                    Graphics.Draw(ref _talkBubble, (float)(vec2_8.x + num23 + 8.0), vec2_8.y, new Rectangle(8f, 0f, 4f, 4f));
+                    Graphics.Draw(_talkBubble, vec2_8.x, vec2_8.y + (y2 - 2f), new Rectangle(0f, 8f, 8f, 4f));
+                    Graphics.Draw(_talkBubble, (float)(vec2_8.x + num23 + 8.0), vec2_8.y + (y2 - 2f), new Rectangle(8f, 8f, 4f, 4f));
+                    Graphics.Draw(_talkBubble, (float)(vec2_8.x + num23 + 8.0), vec2_8.y, new Rectangle(8f, 0f, 4f, 4f));
                     Graphics.DrawRect(vec2_8 + new Vec2(5f, 2f), vec2_8 + new Vec2(num23 + 11f, y2), Color.White, (Depth)0.9f);
                     Graphics.DrawLine(vec2_8 + new Vec2(4.5f, 5f), vec2_8 + new Vec2(4.5f, y2 - 1f), Color.Black, depth: ((Depth)0.9f));
                     Graphics.DrawLine(vec2_8 + new Vec2(11.5f + num23, 4f), vec2_8 + new Vec2(11.5f + num23, y2 - 1f), Color.Black, depth: ((Depth)0.9f));
@@ -2053,7 +2053,7 @@ namespace DuckGame
             {
                 float num24 = (float)(-((1.0 - _stampCardLerp) * 200.0) + Math.Sin(_stampWobbleSin) * _stampWobble * 4.0);
                 Graphics.DrawRect(new Vec2(-1000f, -1000f), new Vec2(1000f, 1000f), Color.Black * 0.5f * _stampCardLerp, (Depth)0.96f);
-                Graphics.Draw(ref _sandwichCard, x, y + num24, (Depth)0.97f);
+                Graphics.Draw(_sandwichCard, x, y + num24, (Depth)0.97f);
                 Random generator = Rando.generator;
                 Random random = new Random(365023);
                 Rando.generator = random;
@@ -2066,13 +2066,13 @@ namespace DuckGame
                     float num27 = index / 2 * 16;
                     _sandwichStamp.angle = Rando.Float(-0.2f, 0.2f);
                     _sandwichStamp.frame = Rando.Int(3);
-                    Graphics.Draw(ref _sandwichStamp, x + 30f + num26 + Rando.Float(-2f, 2f), y - 15f + num27 + Rando.Float(-2f, 2f) + num24, (Depth)0.98f);
+                    Graphics.Draw(_sandwichStamp, x + 30f + num26 + Rando.Float(-2f, 2f), y - 15f + num27 + Rando.Float(-2f, 2f) + num24, (Depth)0.98f);
                     if (index == 5)
                     {
                         _duckCoin.frame = 1;
                         _duckCoin.alpha = (float)(1.0 - Math.Max(_coinLerp2 - 0.5f, 0f) * 2.0);
                         _duckCoin.depth = (Depth)0.99f;
-                        Graphics.Draw(ref _duckCoin, x + 30f + num26, (float)(y - 15.0 + num27 + num24 - _coinLerp2 * 18.0));
+                        Graphics.Draw(_duckCoin, x + 30f + num26, (float)(y - 15.0 + num27 + num24 - _coinLerp2 * 18.0));
                     }
                 }
                 Rando.generator = random;
@@ -2081,7 +2081,7 @@ namespace DuckGame
             {
                 _milk.depth = (Depth)0.7f;
                 _milk.frame = (int)(_milkValue / milkNeed * 15.0);
-                Graphics.Draw(ref _milk, x + 26f, y - 33f);
+                Graphics.Draw(_milk, x + 26f, y - 33f);
                 Vec2 vec2_9 = position + new Vec2(-88f, 44f);
                 int num28 = 0;
                 foreach (Sprite littleEgg in littleEggs)
@@ -2091,7 +2091,7 @@ namespace DuckGame
                     _littleMan.frame = LittleManFrame(Math.Max(Profiles.experienceProfile.numLittleMen - 8, 0) + num28, -1, bottomBar: true);
                     _littleMan.depth = (Depth)0.9f;
                     _littleMan.yscale = 1f;
-                    Graphics.Draw(ref _littleMan, (float)(vec2_9.x + (num28 * 23) + 3.0), vec2_9.y + 1f);
+                    Graphics.Draw(_littleMan, (float)(vec2_9.x + (num28 * 23) + 3.0), vec2_9.y + 1f);
                     ++num28;
                 }
             }
@@ -2160,21 +2160,21 @@ namespace DuckGame
                         _circle.depth = (Depth)(0.85f + num31);
                         _circle.angle = _weekDays.angle;
                         if (index == 0 && _advancedDay)
-                            Graphics.Draw(ref _circle, position.x - 71f + index * 28 + num35, position.y + 33f + num29 + num34, new Rectangle(0f, 0f, _circle.width * _newCircleLerp, _circle.height));
+                            Graphics.Draw(_circle, position.x - 71f + index * 28 + num35, position.y + 33f + num29 + num34, new Rectangle(0f, 0f, _circle.width * _newCircleLerp, _circle.height));
                         else
-                            Graphics.Draw(ref _circle, position.x - 71f + index * 28 + num35, position.y + 33f + num29 + num34);
+                            Graphics.Draw(_circle, position.x - 71f + index * 28 + num35, position.y + 33f + num29 + num34);
                     }
                     _weekDays.depth = (Depth)(0.83f + num31);
                     _weekDays.frame = (Profiles.experienceProfile.currentDay + index) % 5;
                     _weekDays.frame += (int)Math.Floor((Profiles.experienceProfile.currentDay + index) / 20.0) % 4 * 6;
-                    Graphics.Draw(ref _weekDays, position.x - 71f + index * 28 + num35, position.y + 33f + num34 + num29);
+                    Graphics.Draw(_weekDays, position.x - 71f + index * 28 + num35, position.y + 33f + num34 + num29);
                     DayType day = GetDay(Profiles.experienceProfile.currentDay + index);
                     if (day != DayType.Empty)
                     {
                         _days.depth = (Depth)(0.84f + num31);
                         _days.frame = (int)day;
                         _days.angle = _weekDays.angle;
-                        Graphics.Draw(ref _days, position.x - 71f + index * 28 + num35, (float)(position.y + num29 + 33.0) + num34);
+                        Graphics.Draw(_days, position.x - 71f + index * 28 + num35, (float)(position.y + num29 + 33.0) + num34);
                     }
                 }
                 Rando.generator = generator;
@@ -2191,11 +2191,11 @@ namespace DuckGame
             {
                 Vec2 vec2_13 = new Vec2((float)(position.x - 200.0 + _taxiDrive * 210.0), position.y - 33f);
                 _taxi.depth = (Depth)0.97f;
-                Graphics.Draw(ref _taxi, vec2_13.x, vec2_13.y);
+                Graphics.Draw(_taxi, vec2_13.x, vec2_13.y);
                 if (_inTaxi)
                 {
                     _littleMan.frame = LittleManFrame(Profiles.experienceProfile.numLittleMen, curLev);
-                    Graphics.Draw(ref _littleMan, vec2_13.x - 16f, vec2_13.y - 8f, new Rectangle(0f, 0f, 16f, 6f));
+                    Graphics.Draw(_littleMan, vec2_13.x - 16f, vec2_13.y - 8f, new Rectangle(0f, 0f, 16f, 6f));
                 }
             }
             if (_intermissionSlide > 0.01f)

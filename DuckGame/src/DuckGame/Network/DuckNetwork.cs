@@ -3285,7 +3285,9 @@ namespace DuckGame
             float num4 = Options.Data.chatOpacity / 100f;
             if (_core.enteringText && !_core.stopEnteringText)
             {
-                ++_core.cursorFlash;
+                if(MonoMain.UpdateLerpState)
+                    ++_core.cursorFlash;
+
                 if (_core.cursorFlash > 30)
                     _core.cursorFlash = 0;
                 int num5 = _core.cursorFlash >= 15 ? 1 : 0;
@@ -3336,11 +3338,14 @@ namespace DuckGame
                 float num9 = (0.3f + chatMessage.text.Length * 0.007f);
                 if (num9 > 0.5f)
                     num9 = 0.5f;
-                if (chatMessage.slide > 0.8f)
-                    chatMessage.scale = Lerp.FloatSmooth(chatMessage.scale, 1f, 0.1f, 1.1f);
-                else if (chatMessage.slide > 0.5f)
-                    chatMessage.scale = Lerp.FloatSmooth(chatMessage.scale, 1f + num9, 0.1f, 1.1f);
-                chatMessage.slide = Lerp.FloatSmooth(chatMessage.slide, 1f, 0.1f, 1.1f);
+                if (MonoMain.UpdateLerpState)
+                {
+                    if (chatMessage.slide > 0.8f)
+                        chatMessage.scale = Lerp.FloatSmooth(chatMessage.scale, 1f, 0.1f, 1.1f);
+                    else if (chatMessage.slide > 0.5f)
+                        chatMessage.scale = Lerp.FloatSmooth(chatMessage.scale, 1f + num9, 0.1f, 1.1f);
+                    chatMessage.slide = Lerp.FloatSmooth(chatMessage.slide, 1f, 0.1f, 1.1f);
+                }
                 Color color = Color.White;
                 Color black = Color.Black;
                 if (chatMessage.who.persona != null)

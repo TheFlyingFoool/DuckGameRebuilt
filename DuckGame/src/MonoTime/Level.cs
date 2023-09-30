@@ -1118,7 +1118,7 @@ namespace DuckGame
                                         {
                                             float x = (fluidPuddle.bottomLeft.x + index * num2 + 11f - 8f);
                                             float y = fluidPuddle.top - 1f + (float)Math.Sin(fluidPuddle.fluidWave + index * 0.7f);
-                                            Graphics.Draw(ref _burnGlowWide, x, y);
+                                            Graphics.Draw(_burnGlowWide, x, y);
                                             if (index == 0)
                                                 Graphics.Draw(_burnGlowWideLeft, x, y);
                                             else if (index == num4 - 1)

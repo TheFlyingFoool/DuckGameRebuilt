@@ -1390,7 +1390,8 @@ namespace DuckGame
                 partRot = Rando.Float(10f);
             Vec2 vec2_1 = endNormal;
             Vec2 vec2_2 = vec2_1.Rotate(Maths.DegToRad(Up() != null || Right() != null ? 90f : -90f), Vec2.Zero);
-            --partWait;
+            if(MonoMain.UpdateLerpState)
+                --partWait;
             if (partWait <= 0)
             {
                 PipeParticle pipeParticle = null;
@@ -1418,11 +1419,17 @@ namespace DuckGame
                 if (_particles[index].alpha < 1)
                 {
                     Vec2 vec2_3 = position - _particles[index].position;
-                    _particles[index].velocity -= endNormal * 0.03f;
-                    _particles[index].position -= vec2_3 * vec2_2 * 0.07f;
+                    if (MonoMain.UpdateLerpState)
+                    {
+                        _particles[index].velocity -= endNormal * 0.03f;
+                        _particles[index].position -= vec2_3 * vec2_2 * 0.07f;
+                    }
                     Graphics.DrawLine(_particles[index].position, _particles[index].position + _particles[index].velocity * 3f, Color.White * _particles[index].alpha, 0.75f, depth - 10);
-                    _particles[index].position += _particles[index].velocity;
-                    _particles[index].alpha += 0.016f;
+                    if (MonoMain.UpdateLerpState)
+                    {
+                        _particles[index].position += _particles[index].velocity;
+                        _particles[index].alpha += 0.016f;
+                    }
                     vec2_1 = _particles[index].position * endNormal - position * endNormal;
                     if (vec2_1.length < 2)
                         _particles[index].alpha = 1f;

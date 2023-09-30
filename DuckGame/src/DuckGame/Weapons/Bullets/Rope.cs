@@ -363,12 +363,12 @@ namespace DuckGame
                     if (i == num - 1)
                     {
                         _vine.yscale = 1.0f;
-                        Graphics.Draw(ref _vine, drawPrev.x, drawPrev.y, new Rectangle(0, 0, 16, (int)(lent % stepSize)));
+                        Graphics.Draw(_vine, drawPrev.x, drawPrev.y, new Rectangle(0, 0, 16, (int)(lent % stepSize)));
                     }
                     else
                     {
                         _vine.yscale = (lent / 16.0f) + 0.1f;
-                        Graphics.Draw(ref _vine, drawPrev.x, drawPrev.y);
+                        Graphics.Draw(_vine, drawPrev.x, drawPrev.y);
                     }
                     drawPrev = toPos;
                     drawStart += travelNorm * stepSize;

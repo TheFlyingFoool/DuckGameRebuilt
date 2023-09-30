@@ -295,6 +295,8 @@ namespace DuckGame
         public override bool destroyed => _destroyed || forceDead;
 
         private Interp DuckLerp = new Interp { };
+        protected Interp DuckCamLerp = new Interp(true);
+
         public byte quackPitch
         {
             get => _quackPitch;
@@ -4685,6 +4687,7 @@ namespace DuckGame
             _sprite.flipH = false;
             _sprite.UpdateSpriteBox();
             _sprite.position = new Vec2(position.x + (float)Math.Cos(rad) * 12f, position.y - (float)Math.Sin(rad) * 12f);
+            _sprite.LerpState.CanLerp = false;
             _sprite.DrawWithoutUpdate();
             _sprite.angle = 0f;
             _sprite.imageIndex = imageIndex;
@@ -4726,6 +4729,7 @@ namespace DuckGame
 
             DuckLerp.CanLerp = true;
             DuckLerp.UpdateLerpState(new Interp.InterpState(position, angle), MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            DuckCamLerp.UpdateLerpState(cameraPosition, MonoMain.IntraTick, MonoMain.UpdateLerpState);
 
             if (inNet)
             {
@@ -4878,9 +4882,10 @@ namespace DuckGame
                 }
                 if (_mindControl != null && _derpMindControl || listening)
                 {
-                    _swirlSpin += 0.2f;
+                    if (MonoMain.UpdateLerpState)
+                        _swirlSpin += 0.2f;
                     _swirl.angle = _swirlSpin;
-                    Graphics.Draw(_swirl, x, y - 12f);
+                    Graphics.Draw(_swirl, DuckLerp.x, DuckLerp.y - 12f);
                 }
                 DrawHat();
                 if (!skipDraw)
@@ -5122,7 +5127,7 @@ namespace DuckGame
                 float num1 = 37f;
                 float num2 = (numProblems - 1) * num1;
                 Vec2 vec2_1 = new Vec2(-1000f, -1000f);
-                Vec2 pPos = duck.cameraPosition + new Vec2(0f, 6f);
+                Vec2 pPos = duck.DuckCamLerp.Position + new Vec2(0f, 6f);
                 float num3 = numProblems / 5f;
                 int num4 = 0;
                 float num5 = -20f;
@@ -5160,6 +5165,7 @@ namespace DuckGame
                 public float activeLerp;
                 public bool _prevActive;
                 private Vec2 drawPos = Vec2.Zero;
+
 
                 public bool noWait => problem
                     is ConnectionTrouble.Chatting
