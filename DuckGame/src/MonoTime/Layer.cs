@@ -89,6 +89,7 @@ namespace DuckGame
         public static Layer Lighting => _core._lighting;
 
         public static Layer Foreground => _core._foreground;
+        public static Layer FFCursor => _core._ffcursor;
 
         public static Layer HUD
         {

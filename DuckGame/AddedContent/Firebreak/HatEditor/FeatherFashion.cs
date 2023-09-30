@@ -410,25 +410,15 @@ namespace DuckGame
 
         public static void DrawCursor(Vec2 position)
         {
-            // Layer currentLayer = Layer.core._layers.First(x => x.isTargetLayer);
-            //
-            // currentLayer.blend = new BlendState()
-            // {
-            //     ColorSourceBlend = Blend.InverseDestinationAlpha,
-            //     AlphaSourceBlend = Blend.InverseDestinationAlpha,
-            //     ColorDestinationBlend = Blend.InverseSourceAlpha,
-            //     AlphaDestinationBlend = Blend.InverseSourceAlpha,
-            // };
+            float rotationValue = Maths.RadToDeg((Maths.FastSin((float) ((DateTime.Now - MonoMain.startTime).TotalSeconds % 1f * Math.PI * 2)) + 1) * 2f);
 
-            float rotationValue = (Maths.FastSin((float) ((DateTime.Now - MonoMain.startTime).TotalSeconds % 1f * Math.PI * 2)) + 1) * 2f;
-
-            // Graphics.DrawLine(position - new Vec2(4, 0), position + new Vec2(4, 0), FFColors.Focus, 1, 1.95f);
-            // Graphics.DrawLine(position - new Vec2(0, 4), position + new Vec2(0, 4), FFColors.Focus, 1, 1.95f);
+            Graphics.DrawLine(position, -0.5f, (rotationValue + 000) % 360f, FFColors.Focus, 1, 1.95f);
+            Graphics.DrawLine(position, 0.5f, (rotationValue + 000) % 360f, FFColors.Focus, 1, 1.95f);
             
-            Graphics.DrawLine(position, 4f, (Maths.RadToDeg(rotationValue) + 000) % 360f, FFColors.Focus, 1, 1.95f);
-            Graphics.DrawLine(position, 4f, (Maths.RadToDeg(rotationValue) + 090) % 360f, FFColors.Focus, 1, 1.95f);
-            Graphics.DrawLine(position, 4f, (Maths.RadToDeg(rotationValue) + 180) % 360f, FFColors.Focus, 1, 1.95f);
-            Graphics.DrawLine(position, 4f, (Maths.RadToDeg(rotationValue) + 270) % 360f, FFColors.Focus, 1, 1.95f);
+            Graphics.DrawLine(position, 4f, (rotationValue + 000) % 360f, FFColors.Focus, 1, 1.95f);
+            Graphics.DrawLine(position, 4f, (rotationValue + 090) % 360f, FFColors.Focus, 1, 1.95f);
+            Graphics.DrawLine(position, 4f, (rotationValue + 180) % 360f, FFColors.Focus, 1, 1.95f);
+            Graphics.DrawLine(position, 4f, (rotationValue + 270) % 360f, FFColors.Focus, 1, 1.95f);
 
             if (s_framesUntilTooltip > 40)
                 DrawCursorHoverTip(position, s_toolTipMessage);
