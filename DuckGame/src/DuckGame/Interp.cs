@@ -83,7 +83,10 @@ namespace DuckGame
         {
             get => LerpState.Position.y;
         }
-
+        private bool ShouldAbortLerp
+        {
+            get => !DGRSettings.UncappedFPS || !CanLerp || Editor.editorDraw || Duck.renderingIcon;
+        }
         private float LerpAngle(float startAngle, float endAngle, float t)
         {
             float PI = (float)Math.PI;
@@ -106,7 +109,7 @@ namespace DuckGame
         public void UpdateLerpState(InterpState RealState, float IntraTick, bool UpdateState)
         {
             LerpState = RealState;
-            if (!DGRSettings.UncappedFPS || !CanLerp || Editor.editorDraw)
+            if (ShouldAbortLerp)
                 return;
 
             if (UpdateState)
@@ -126,7 +129,7 @@ namespace DuckGame
         public void UpdateLerpState(Vec2 Pos, float IntraTick, bool UpdateState)
         {
             LerpState.Position = Pos;
-            if (!DGRSettings.UncappedFPS || !CanLerp || Editor.editorDraw)
+            if (ShouldAbortLerp)
                 return;
 
             if (UpdateState)
@@ -147,7 +150,7 @@ namespace DuckGame
         {
             InterpState RealState = new InterpState(Pos, Angle);
             LerpState = RealState;
-            if (!DGRSettings.UncappedFPS || !CanLerp || Editor.editorDraw)
+            if (ShouldAbortLerp)
                 return;
 
             if (UpdateState)
@@ -168,7 +171,7 @@ namespace DuckGame
         {
             InterpState RealState = new InterpState(Pos, Size);
             LerpState = RealState;
-            if (!DGRSettings.UncappedFPS || !CanLerp || Editor.editorDraw)
+            if (ShouldAbortLerp)
                 return;
 
             if (UpdateState)

@@ -82,7 +82,7 @@ namespace DuckGame
         {
             float num1 = (this.distOut + (float)(Math.Sin(sizeWaver) * 2)) * aimerScale;
             float distOut = this.distOut;
-            if (Network.isActive && dugg != null && dugg.profile != null && dugg.profile.connection == DuckNetwork.localConnection)
+            if (Network.isActive && dugg != null && dugg.profile != null && dugg.profile.connection == DuckNetwork.localConnection && MonoMain.UpdateLerpState)
                 distOut += _sin.value * 2f;
             _thickness = 2f;
             for (int index = 0; index < 4; ++index)

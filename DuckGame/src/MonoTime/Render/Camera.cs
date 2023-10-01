@@ -20,7 +20,7 @@ namespace DuckGame
         public bool skipUpdate;
         private Rectangle _rectangle;
         public Vec2 _viewSize;
-        protected Interp CameraLerp = new Interp { };
+        protected Interp CameraLerp = new Interp(false);
 
         public Vec2 position
         {
@@ -71,6 +71,8 @@ namespace DuckGame
             {
                 centerX = value.x;
                 centerY = value.y;
+                if (DGRSettings.UncappedFPS)
+                    SubFrameUpdate();
             }
         }
 
@@ -83,6 +85,8 @@ namespace DuckGame
                     return;
                 _position.x = value - width / 2f;
                 _dirty = true;
+                if (DGRSettings.UncappedFPS)
+                    SubFrameUpdate();
             }
         }
 
@@ -95,6 +99,8 @@ namespace DuckGame
                     return;
                 _position.y = value - height / 2f;
                 _dirty = true;
+                if (DGRSettings.UncappedFPS)
+                    SubFrameUpdate();
             }
         }
 
