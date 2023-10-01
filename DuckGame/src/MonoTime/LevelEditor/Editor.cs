@@ -3495,6 +3495,7 @@ namespace DuckGame
                                 _cursor.frame = 1;
                             else if (_cursorMode == CursorMode.Drag)
                                 _cursor.frame = 5;
+                            _cursor.LerpState.CanLerp = true;
                             _cursor.Draw();
                         }
                         else if (_placementMenu == null)
@@ -3904,7 +3905,7 @@ namespace DuckGame
                         _cursor.position.y -= 4f;
                         _cursor.scale = new Vec2(0.5f, 1f);
                     }
-
+                    _cursor.LerpState.CanLerp = true;
                     _cursor.Draw();
                 }
 

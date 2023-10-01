@@ -914,7 +914,10 @@ namespace DuckGame
                 angle = angle1;
                 for (int idx = 0; idx < 7; ++idx)
                 {
-                    base.Draw();
+                    if (idx == 0)
+                        base.Draw();
+                    else
+                        base.DrawLerpLess();
                     if (_lastSize > idx)
                     {
                         int index = historyIndex(idx);
@@ -936,7 +939,8 @@ namespace DuckGame
             }
             else
                 base.Draw();
-            addHistory(angle, this.position);
+            if(MonoMain.UpdateLerpState)
+                addHistory(angle, this.position);
         }
 
         protected virtual void OnSwing()
