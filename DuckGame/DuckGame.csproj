@@ -405,6 +405,7 @@
     <Compile Include="AddedContent\NiK0\RainParticel.cs" />
     <Compile Include="AddedContent\NiK0\SpaceMaterial.cs" />
     <Compile Include="Recorderator\RecorderationSelector\FolderInfo.cs" />
+    <Compile Include="Recorderator\RecorderationSelector\IRMenuItem.cs" />
     <Compile Include="Recorderator\RecorderationSelector\ProfileInfo.cs" />
     <Compile Include="Recorderator\RecorderationSelector\RecorderationSelector.cs" />
     <Compile Include="Recorderator\RecorderationSelector\ReplayInfo.cs" />

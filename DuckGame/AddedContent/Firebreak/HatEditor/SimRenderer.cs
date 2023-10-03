@@ -168,10 +168,6 @@ namespace DuckGame
             Camera cam = new Camera(isolatedLevel.topLeft.x, isolatedLevel.topLeft.y, width, height);
             cam.width = width;
             cam.height = height;
-            DevConsole.Log(cam.width);
-            DevConsole.Log(cam.height);
-            DevConsole.Log(cam.x);
-            DevConsole.Log(cam.y);
             cam.skipUpdate = true;
             isolatedLevel.camera = cam;
 
