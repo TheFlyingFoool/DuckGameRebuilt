@@ -38,10 +38,8 @@
         public override void RecordUpdate()
         {
             TapedGun tg = (TapedGun)t;
-            if (tg.gun1 != null && Corderator.instance != null && Corderator.instance.somethingMap.ContainsValue(tg.gun1)) addVal("gun1", (ushort)(Corderator.instance.somethingMap[tg.gun1] + 1));
-            else addVal("gun1", (ushort)0);
-            if (tg.gun2 != null && Corderator.instance != null && Corderator.instance.somethingMap.ContainsValue(tg.gun2)) addVal("gun2", (ushort)(Corderator.instance.somethingMap[tg.gun2] + 1));
-            else addVal("gun2", (ushort)0);
+            addVal("gun1", Corderator.Indexify(tg.gun1));
+            addVal("gun2", Corderator.Indexify(tg.gun2));
             base.RecordUpdate();
         }
     }

@@ -1,5 +1,8 @@
-﻿using System.Collections;
+﻿using Microsoft.Xna.Framework;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace DuckGame
 {
@@ -495,6 +498,41 @@ namespace DuckGame
         public Corderator CCorderr;
 
         public int frame;
+
+        public float PlaybackSpeed = 1;
+        public float timer;
+        public void IntraTick()
+        {
+            if (Corderator.Paused) return;
+
+            MonoMain.IntraTick = (float)Math.Abs((ts.TotalMilliseconds - MonoMain.TotalGameTime.TotalMilliseconds) / TimeSpan.FromMilliseconds(1000.0 / 60.0).TotalMilliseconds) * PlaybackSpeed;
+            MonoMain.UpdateLerpState = lerpSt;
+            DevConsole.Log($"tick:{MonoMain.IntraTick:0.000} tsMillis:{ts.TotalMilliseconds} monomainMillis:{MonoMain.TotalGameTime.TotalMilliseconds}");
+        }
+
+        public TimeSpan ts;
+        public bool lerpSt;
+        
+
+        public override void DoUpdate()
+        {
+            if (!Corderator.Paused)
+            {
+                timer += PlaybackSpeed;
+                lerpSt = false;
+                while (timer >= 1)
+                {
+                    ts = new TimeSpan(MonoMain.TotalGameTime.Ticks);
+                    lerpSt = true;
+                    timer--;
+                    base.DoUpdate();
+                }
+            }
+            else
+            {
+
+            }
+        }
         public override void Update()
         {
             if (fake)

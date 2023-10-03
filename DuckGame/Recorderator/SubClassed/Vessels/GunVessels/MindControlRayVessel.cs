@@ -59,8 +59,7 @@ namespace DuckGame
             br[7] = mcr.infiniteAmmoVal;
             addVal("infoed_mcr", BitCrusher.BitArrayToByte(br));
 
-            if (mcr.controlledDuck != null && Corderator.instance != null && Corderator.instance.somethingMap.ContainsValue(mcr.controlledDuck)) addVal("controlling", (ushort)(Corderator.instance.somethingMap[mcr.controlledDuck] + 1));
-            else addVal("controlling", (ushort)0);
+            addVal("controlling", Corderator.Indexify(mcr.controlledDuck));
 
             base.RecordUpdate();
         }

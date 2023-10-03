@@ -496,6 +496,7 @@
     <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\FluidPuddleVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\DoorVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\IciclesVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\PinkBoxVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\ItemBoxVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\WireActivatorVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\WireButtonVessel.cs" />

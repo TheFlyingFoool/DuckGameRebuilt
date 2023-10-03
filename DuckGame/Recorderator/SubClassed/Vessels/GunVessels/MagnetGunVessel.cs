@@ -39,8 +39,7 @@ namespace DuckGame
         public override void RecordUpdate()
         {
             MagnetGun mg = (MagnetGun)t;
-            if (mg.grabbed != null && Corderator.instance != null && Corderator.instance.somethingMap.Contains(mg.grabbed)) addVal("hold", (ushort)(Corderator.instance.somethingMap[mg.grabbed] + 1));
-            else addVal("hold", (ushort)0);
+            addVal("hold", Corderator.Indexify(mg.grabbed));
 
             BitArray br = new BitArray(8);
             br[0] = mg.infiniteAmmoVal;

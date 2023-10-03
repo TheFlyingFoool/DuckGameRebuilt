@@ -40,6 +40,16 @@ namespace DuckGame
         public bool fake;
         public int maxFrame;
         public static ReplayLevel outLev;
+        public static ushort Indexify(Thing t)
+        {
+            if (t == null || instance == null || !instance.somethingMap.Contains(t)) return 0;
+            return (ushort)(instance.somethingMap[t] + 1);
+        }
+        public static Thing Unindexify(ushort u)
+        {
+            if (u == 0 || instance == null || !instance.somethingMap.Contains(u)) return null;
+            return instance.somethingMap[u - 1];
+        }
         public static Corderator ReadCord(byte[] data1, byte[] levelData, bool fake = false)
         {
             Main.SpecialCode = "Begin ReadCord";

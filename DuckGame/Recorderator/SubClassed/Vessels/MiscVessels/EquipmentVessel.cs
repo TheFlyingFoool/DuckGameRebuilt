@@ -60,12 +60,7 @@ namespace DuckGame
         public override void RecordUpdate()
         {
             Equipment e = (Equipment)t;
-            if (e._equippedDuck != null)
-            {
-                if (Corderator.instance != null && Corderator.instance.somethingMap.Contains(e._equippedDuck)) addVal("equipped", (ushort)(Corderator.instance.somethingMap[e._equippedDuck] + 1));
-                else addVal("equipped", (ushort)0);
-            }
-            else addVal("equipped", (ushort)0);
+            addVal("equipped", Corderator.Indexify(e._equippedDuck));
             float f = e.angleDegrees % 360;
             if (skipAngles == 0) addVal("ang", BitCrusher.FloatToUShort(f + 360, 720));
             base.RecordUpdate();

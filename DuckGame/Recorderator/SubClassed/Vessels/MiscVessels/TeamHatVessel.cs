@@ -7,7 +7,7 @@ namespace DuckGame
         public TeamHatVessel(Thing th) : base(th)
         {
             tatchedTo.Add(typeof(TeamHat));
-            AddSynncl("equipped", new SomethingSync(typeof(int)));
+            AddSynncl("equipped", new SomethingSync(typeof(ushort)));
             AddSynncl("team", new SomethingSync(typeof(ushort)));
         }
         public static Dictionary<ushort, Team> regTems = new Dictionary<ushort, Team>();
@@ -42,8 +42,8 @@ namespace DuckGame
             TeamHat th = (TeamHat)t;
 
 
-            int hObj = (int)valOf("equipped");
-            if (hObj == -1)
+            Duck duck = (Duck)Corderator.Unindexify((ushort)valOf("equipped"));
+            if (duck == null)
             {
                 if (th._equippedDuck != null)
                 {
@@ -51,14 +51,13 @@ namespace DuckGame
                 }
                 th._equippedDuck = null;
             }
-            else if (hObj != -1 && Corderator.instance.somethingMap.Contains(hObj))
+            else if (duck != null)
             {
-                Duck d = (Duck)Corderator.instance.somethingMap[hObj];
                 if (th._equippedDuck == null)
                 {
-                    d.Equip(th, false);
+                    duck.Equip(th, false);
                 }
-                th._equippedDuck = d;
+                th._equippedDuck = duck;
             }
 
             if (bArray[7])
@@ -102,12 +101,7 @@ namespace DuckGame
                 bArray[7] = false;
             }
 
-            if (th._equippedDuck != null)
-            {
-                if (Corderator.instance != null && Corderator.instance.somethingMap.Contains(th._equippedDuck)) addVal("equipped", Corderator.instance.somethingMap[th._equippedDuck]);
-                else addVal("equipped", -1);
-            }
-            else addVal("equipped", -1);
+            addVal("equipped", Corderator.Indexify(th._equippedDuck));
 
             base.RecordUpdate();
         }

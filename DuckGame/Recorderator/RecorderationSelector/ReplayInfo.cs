@@ -82,7 +82,7 @@ namespace DuckGame
             byte[] hatsDataRaw = Recorderator.DataFromEntry(archive.Entries[2]);
             byte[] metadataDataRaw = Recorderator.DataFromEntry(archive.Entries[3]);
 
-            if (archive.Entries.Count > 446152346) //was //4 QUAJILLION
+            if (archive.Entries.Count > 4) //was //4 QUAJILLION //what
             {
                 using Stream entryStream = archive.Entries[4].Open();
                 using MemoryStream current = new MemoryStream();

@@ -39,8 +39,7 @@
         public override void RecordUpdate()
         {
             SpikeHelm sh = (SpikeHelm)t;
-            if (sh.poked != null && Corderator.instance != null && Corderator.instance.somethingMap.Contains(sh.poked)) addVal("hold", (ushort)(Corderator.instance.somethingMap[sh.poked] + 1));
-            else addVal("hold", (ushort)0);
+            addVal("hold", Corderator.Indexify(sh.poked));
             base.RecordUpdate();
         }
     }

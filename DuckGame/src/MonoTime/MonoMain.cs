@@ -1544,7 +1544,14 @@ namespace DuckGame
         {
             FPSCounter.Tick(1);
             IntraTick = (float)(gameTime.ElapsedGameTime.TotalMilliseconds / TimeSpan.FromMilliseconds(1000.0 / 60.0).TotalMilliseconds);
+
+
+            if (Level.current is ReplayLevel rps)
+            {
+                rps.IntraTick();
+            }
             TotalGameTime = gameTime.TotalGameTime;
+
 
             _didFirstDraw = true;
             if(UpdateLerpState)

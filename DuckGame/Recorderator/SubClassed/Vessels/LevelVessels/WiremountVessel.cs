@@ -38,16 +38,12 @@ namespace DuckGame
         {
             WireMount w = (WireMount)t;
 
-            if (w._containedThing != null && Corderator.instance != null && Corderator.instance.somethingMap.Contains(w._containedThing))
+            ushort unsh = Corderator.Indexify(w._containedThing);
+            addVal("holding", unsh);
+            if (unsh != 0 && Corderator.instance.somethingMapped.Contains(unsh - 1))
             {
-                int i = Corderator.instance.somethingMap[w._containedThing];
-                addVal("holding", (ushort)(i + 1));
-                if (Corderator.instance.somethingMapped.Contains(i))
-                {
-                    Corderator.instance.somethingMapped[i].skipAngles = 1;
-                }
+                Corderator.instance.somethingMapped[unsh - 1].skipAngles = 1;
             }
-            else addVal("holding", (ushort)0);
         }
     }
 }

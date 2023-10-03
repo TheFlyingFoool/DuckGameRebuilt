@@ -10,8 +10,6 @@ namespace DuckGame
             tatchedTo.Add(typeof(ItemBoxOneTime));
             tatchedTo.Add(typeof(ItemBoxRandom));
             tatchedTo.Add(typeof(PurpleBlock));
-            //tatchedTo.Add(typeof(TapeBlock)); idk about that yet
-            tatchedTo.Add(typeof(PinkBox));
 
             AddSynncl("containing", new SomethingSync(typeof(ushort)));
             AddSynncl("position", new SomethingSync(typeof(int)));
@@ -62,11 +60,7 @@ namespace DuckGame
             ItemBox i = (ItemBox)t;
             if (i.containedObject != null)
             {
-                if (Corderator.instance != null && Corderator.instance.somethingMap.Contains(i.containedObject))
-                {
-                    addVal("containing", (ushort)(Corderator.instance.somethingMap[i.containedObject] + 1));
-                }
-                else addVal("containing", (ushort)0);
+                addVal("containing", Corderator.Indexify(i.containedObject));
             }
             else addVal("containing", (ushort)0);
             addVal("position", CompressedVec2Binding.GetCompressedVec2(i.position, 10000));

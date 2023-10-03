@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ItemBox
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -153,6 +146,15 @@ namespace DuckGame
 
         public virtual void UpdateContainedObject()
         {
+            if (Recorderator.Playing)
+            {
+                if (containedObject == null)
+                    return;
+                containedObject.visible = false;
+                containedObject.active = false;
+                containedObject.position = position;
+                return;
+            }
             if (!Network.isActive || !isServerForObject && loadingLevel == null || containedObject != null)
                 return;
             containedObject = GetSpawnItem();
