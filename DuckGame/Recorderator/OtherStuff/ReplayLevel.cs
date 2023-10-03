@@ -499,31 +499,39 @@ namespace DuckGame
 
         public int frame;
 
-        public float PlaybackSpeed = 1;
+        public float PlaybackSpeed = 0.25f;
         public float timer;
-        public void IntraTick()
+
+        public TimeSpan TickStart;
+        public TimeSpan TickCurrent;
+
+        public void IntraTick(TimeSpan TotalTime)
         {
             if (Corderator.Paused) return;
+            //TickStart = TotalTime;
+            TickCurrent = TotalTime;
+            if (MonoMain.UpdateLerpState)
+                TickStart = TotalTime;
 
-            MonoMain.IntraTick = (float)Math.Abs((ts.TotalMilliseconds - MonoMain.TotalGameTime.TotalMilliseconds) / TimeSpan.FromMilliseconds(1000.0 / 60.0).TotalMilliseconds) * PlaybackSpeed;
-            MonoMain.UpdateLerpState = lerpSt;
-            DevConsole.Log($"tick:{MonoMain.IntraTick:0.000} tsMillis:{ts.TotalMilliseconds} monomainMillis:{MonoMain.TotalGameTime.TotalMilliseconds}");
+            MonoMain.IntraTick = (float)((TickCurrent - TickStart).TotalMilliseconds / (16.66666f / (float)PlaybackSpeed));
+            DevConsole.Log($"tick:{MonoMain.IntraTick:0.000} tsMillis:{TickStart.TotalMilliseconds} monomainMillis:{TotalTime}");
         }
 
-        public TimeSpan ts;
-        public bool lerpSt;
-        
+        //public TimeSpan ts;
+        //public bool lerpSt;
+
 
         public override void DoUpdate()
         {
             if (!Corderator.Paused)
             {
                 timer += PlaybackSpeed;
-                lerpSt = false;
+                MonoMain.UpdateLerpState = false;
+
                 while (timer >= 1)
                 {
-                    ts = new TimeSpan(MonoMain.TotalGameTime.Ticks);
-                    lerpSt = true;
+                    //TickStart = MonoMain.TotalGameTime;
+                    MonoMain.UpdateLerpState = true;
                     timer--;
                     base.DoUpdate();
                 }

@@ -1342,6 +1342,8 @@ namespace DuckGame
                     }
                     shouldPauseGameplay = true;
                 }
+                UpdateLerpState = true;
+
                 RumbleManager.Update();
                 if (!shouldPauseGameplay)
                 {
@@ -1370,7 +1372,6 @@ namespace DuckGame
                 Input.ignoreInput = false;
                 base.Update(gameTime);
                 FPSCounter.Tick(0);
-                UpdateLerpState = true;
                 if (!NetworkDebugger.enabled)
                     Network.PostUpdate();
                 foreach (IEngineUpdatable engineUpdatable in core.engineUpdatables)
@@ -1548,7 +1549,7 @@ namespace DuckGame
 
             if (Level.current is ReplayLevel rps)
             {
-                rps.IntraTick();
+                rps.IntraTick(gameTime.TotalGameTime + gameTime.ElapsedGameTime);
             }
             TotalGameTime = gameTime.TotalGameTime;
 
