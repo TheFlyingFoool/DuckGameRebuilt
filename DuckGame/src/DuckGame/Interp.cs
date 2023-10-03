@@ -45,6 +45,7 @@ namespace DuckGame
         protected InterpState CurrentState;
         protected InterpState LerpState;
         public bool CanLerp = false;
+        private bool UpdatedOnce = false;
 
         //TODO: replace this with a tick counting system instead.
         protected TimeSpan PreviousStateUpdate = TimeSpan.Zero;
@@ -121,9 +122,10 @@ namespace DuckGame
                     CurrentStateUpdate = MonoMain.TotalGameTime;
                 }
                 CurrentState = RealState;
+                UpdatedOnce = true;
             }
 
-            if (PreviousState.Position != null && RecentLerp)
+            if (PreviousState.Position != null && RecentLerp && UpdatedOnce)
             {
                 LerpState.Position = Lerp.Vec2Smooth(PreviousState.Position, CurrentState.Position, IntraTick);
                 LerpState.Angle = LerpAngle(PreviousState.Angle, CurrentState.Angle, IntraTick);
@@ -144,9 +146,10 @@ namespace DuckGame
                     CurrentStateUpdate = MonoMain.TotalGameTime;
                 }
                 CurrentState.Position = Pos;
+                UpdatedOnce = true;
             }
 
-            if (PreviousState.Position != null && RecentLerp)
+            if (PreviousState.Position != null && RecentLerp && UpdatedOnce)
             {
                 LerpState.Position = Lerp.Vec2Smooth(PreviousState.Position, CurrentState.Position, IntraTick);
             }
@@ -168,9 +171,10 @@ namespace DuckGame
                     CurrentStateUpdate = MonoMain.TotalGameTime;
                 }
                 CurrentState = RealState;
+                UpdatedOnce = true;
             }
 
-            if (PreviousState.Position != null && RecentLerp)
+            if (PreviousState.Position != null && RecentLerp && UpdatedOnce)
             {
                 LerpState.Position = Lerp.Vec2Smooth(PreviousState.Position, CurrentState.Position, IntraTick);
                 LerpState.Angle = LerpAngle(PreviousState.Angle, CurrentState.Angle, IntraTick);
@@ -192,9 +196,10 @@ namespace DuckGame
                     CurrentStateUpdate = MonoMain.TotalGameTime;
                 }
                 CurrentState = RealState;
+                UpdatedOnce = true;
             }
 
-            if (PreviousState.Position != null && RecentLerp)
+            if (PreviousState.Position != null && RecentLerp && UpdatedOnce)
             {
                 LerpState.Position = Lerp.Vec2Smooth(PreviousState.Position, CurrentState.Position, IntraTick);
                 LerpState.Size = Lerp.Vec2Smooth(PreviousState.Size, CurrentState.Size, IntraTick);
