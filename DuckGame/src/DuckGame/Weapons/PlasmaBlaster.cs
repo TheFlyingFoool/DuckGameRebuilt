@@ -66,7 +66,7 @@ namespace DuckGame
             }
             if (_flared)
             {
-                Draw(_bigFlare, barrelOffset + new Vec2(-8f, -1f));
+                Draw(ref _bigFlare, barrelOffset + new Vec2(-8f, -1f));
                 if (_bigFlare.finished)
                 {
                     _flared = false;

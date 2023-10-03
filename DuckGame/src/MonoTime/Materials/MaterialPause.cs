@@ -42,10 +42,13 @@ namespace DuckGame
             SetValue("scrollY", _scrollY);
             SetValue("aspect", Resolution.current.aspect);
             float num = 0.0003f;
-            _rot += num;
-            _rot2 += num;
-            _scrollX = _rot;
-            _scrollY = -_rot2;
+            if (MonoMain.UpdateLerpState)
+            {
+                _rot += num;
+                _rot2 += num;
+                _scrollX = _rot;
+                _scrollY = -_rot2;
+            }
             foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();
         }

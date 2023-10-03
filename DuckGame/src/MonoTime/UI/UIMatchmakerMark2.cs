@@ -436,13 +436,17 @@ namespace DuckGame
                 }
             }
             _matchmakingStars[0].depth = depth + 2;
-            Graphics.Draw(_matchmakingStars[0], x - 9f, num1 - 18f);
+            SpriteMap g1 = _matchmakingStars[0];
+            Graphics.Draw(g1, x - 9f, num1 - 18f);
             _matchmakingStars[1].depth = depth + 2;
-            Graphics.Draw(_matchmakingStars[1], x + 31f, num1 - 22f);
+            SpriteMap g2 = _matchmakingStars[1];
+            Graphics.Draw(g2, x + 31f, num1 - 22f);
             _matchmakingStars[2].depth = depth + 2;
-            Graphics.Draw(_matchmakingStars[2], x + 12f, num1 - 20f);
+            SpriteMap g3 = _matchmakingStars[2];
+            Graphics.Draw(g3, x + 12f, num1 - 20f);
             _matchmakingStars[3].depth = depth + 2;
-            Graphics.Draw(_matchmakingStars[3], x - 23f, num1 - 21f);
+            SpriteMap g4 = _matchmakingStars[3];
+            Graphics.Draw(g4, x - 23f, num1 - 21f);
             _signalCrossLocal.depth = depth + 2;
             Graphics.Draw(_signalCrossLocal, x - 45f, num1 - 19f);
             _signalCrossNetwork.depth = depth + 2;

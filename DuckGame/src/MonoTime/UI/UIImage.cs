@@ -46,7 +46,7 @@ namespace DuckGame
             _image.scale = scale;
             _image.alpha = alpha;
             _image.depth = depth;
-            Graphics.Draw(_image, x, y + yOffset);
+            Graphics.Draw(ref _image, x, y + yOffset);
             base.Draw();
         }
     }

@@ -682,7 +682,7 @@ namespace DuckGame
                     if (index == _challengeSelection)
                     {
                         _pencil.depth = (Depth)0.9f;
-                        Graphics.Draw(_pencil, vec2_2.x, vec2_2.y);
+                        Graphics.Draw(ref _pencil, vec2_2.x, vec2_2.y);
                         Graphics.DrawLine(vec2_1 + new Vec2(19f, (12f + num + 8.5f)), vec2_1 + new Vec2(19f + _font.GetWidth(challengeData.name), (float)(12f + num + 8.5f)), Colors.SuperDarkBlueGray, depth: ((Depth)0.9f));
                     }
                     ChallengeSaveData saveData = Profiles.active[0].GetSaveData(_chancyChallenges[index].levelID);
@@ -690,7 +690,7 @@ namespace DuckGame
                     {
                         _tinyStars.frame = (int)(saveData.trophy - 1);
                         _tinyStars.depth = (Depth)0.85f;
-                        Graphics.Draw(_tinyStars, vec2_2.x + 2f, vec2_2.y);
+                        Graphics.Draw(ref _tinyStars, vec2_2.x + 2f, vec2_2.y);
                     }
                     num += 9f;
                     ++index;
@@ -723,13 +723,13 @@ namespace DuckGame
                 Graphics.Draw(challengePaper, vec2_1.x, vec2_1.y);
                 _paperclip.depth = (Depth)0.92f;
                 _photo.depth = (Depth)0.87f;
-                Graphics.Draw(_photo, vec2_1.x + 135f, vec2_1.y - 3f);
-                Graphics.Draw(_paperclip, vec2_1.x + 140f, vec2_1.y - 10f);
+                Graphics.Draw(ref _photo, vec2_1.x + 135f, vec2_1.y - 3f);
+                Graphics.Draw(ref _paperclip, vec2_1.x + 140f, vec2_1.y - 10f);
                 if (_previewPhoto != null)
                 {
                     _previewPhoto.depth = (Depth)0.89f;
                     _previewPhoto.angleDegrees = 12f;
-                    Graphics.Draw(_previewPhoto, vec2_1.x + 146f, vec2_1.y + 0f);
+                    Graphics.Draw(ref _previewPhoto, vec2_1.x + 146f, vec2_1.y + 0f);
                 }
                 if (_save != null)
                 {
@@ -737,21 +737,21 @@ namespace DuckGame
                     {
                         _sticker.depth = (Depth)0.9f;
                         _sticker.frame = (int)(_save.trophy - 1);
-                        Graphics.Draw(_sticker, vec2_1.x + 123f, vec2_1.y + 2f);
+                        Graphics.Draw(ref _sticker, vec2_1.x + 123f, vec2_1.y + 2f);
                         _completeStamp.depth = (Depth)0.9f;
                         _completeStamp.angleDegrees = _stampAngle;
                         _completeStamp.alpha = 0.9f;
-                        Graphics.Draw(_completeStamp, vec2_1.x + 72f, vec2_1.y + 82f);
+                        Graphics.Draw(ref _completeStamp, vec2_1.x + 72f, vec2_1.y + 82f);
                     }
                     string challengeBestString = GetChallengeBestString(_save, _challengeData, true);
                     if (challengeBestString != null && challengeBestString != "")
                     {
                         _tapePaper.depth = (Depth)0.9f;
                         _tapePaper.angleDegrees = _paperAngle;
-                        Graphics.Draw(_tapePaper, vec2_1.x + 64f, vec2_1.y + 22f);
+                        Graphics.Draw(ref _tapePaper, vec2_1.x + 64f, vec2_1.y + 22f);
                         _tape.depth = (Depth)0.95f;
                         _tape.angleDegrees = _tapeAngle;
-                        Graphics.Draw(_tape, vec2_1.x + 64f, vec2_1.y + 22f);
+                        Graphics.Draw(ref _tape, vec2_1.x + 64f, vec2_1.y + 22f);
                         if (_bestTextTarget != null)
                             Graphics.Draw((Tex2D)(Texture2D)_bestTextTarget, new Vec2(vec2_1.x + 64f, vec2_1.y + 22f), new Rectangle?(), Color.White, Maths.DegToRad(_paperAngle), new Vec2(_bestTextTarget.width / 2, _bestTextTarget.height / 2), new Vec2(1f, 1f), SpriteEffects.None, (Depth)0.92f);
                     }
@@ -779,7 +779,7 @@ namespace DuckGame
                     _font.Draw("|DGBLUE|beat it in " + trophy.timeRequirement.ToString() + " seconds", vec2_1 + new Vec2(5f, 75f), Colors.BlueGray, (Depth)0.85f);
             }
             _tail.flipV = true;
-            Graphics.Draw(_tail, 222f + vec2_3.x, 117f + vec2_3.y);
+            Graphics.Draw(ref _tail, 222f + vec2_3.x, 117f + vec2_3.y);
             bool flag = true;
             if (Unlocks.IsUnlocked("BASEMENTKEY", Profiles.active[0]))
                 flag = false;
@@ -787,7 +787,7 @@ namespace DuckGame
                 _dealer.frame += 6;
             _dealer.depth = (Depth)0.5f;
             _dealer.alpha = alpha;
-            Graphics.Draw(_dealer, 216f + vec2_3.x, 32f + vec2_3.y);
+            Graphics.Draw(ref _dealer, 216f + vec2_3.x, 32f + vec2_3.y);
             if (flag)
                 return;
             _dealer.frame -= 6;

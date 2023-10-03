@@ -87,7 +87,7 @@ namespace DuckGame
             _spriteOver.scale = scale;
             _spriteOver.depth = owner.depth + (duck.holdObject != null ? 5 : 12);
             _spriteOver.center = center;
-            Graphics.Draw(_spriteOver, x, y);
+            Graphics.Draw(ref _spriteOver, x, y);
         }
     }
 }

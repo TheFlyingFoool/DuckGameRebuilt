@@ -176,7 +176,7 @@ namespace DuckGame
         {
             Vec2 vec2 = Offset(new Vec2(0.5f, 0.5f));
             _positronWinder.angle = _wind * offDir;
-            Graphics.Draw(_positronWinder, vec2.x, vec2.y, depth + 10);
+            Graphics.Draw(ref _positronWinder, vec2.x, vec2.y, depth + 10);
             base.Draw();
         }
 

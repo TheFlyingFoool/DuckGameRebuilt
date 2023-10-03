@@ -114,12 +114,12 @@ namespace DuckGame
             boardLightingLayer.colorAdd = new Vec3(1f - RockWeather.lightOpacity);
             _lighting.frame = RockWeather.lightOpacity <= 0.01f ? 0 : 1;
             _board.depth = depth;
-            Graphics.Draw(_board, x, y - 12f);
-            Graphics.Draw(_boardBottom, x, y + 58f);
-            Graphics.Draw(_boardTop, x, y - 68f);
+            Graphics.Draw(ref _board, x, y - 12f);
+            Graphics.Draw(ref _boardBottom, x, y + 58f);
+            Graphics.Draw(ref _boardTop, x, y - 68f);
             if (!RockScoreboard._sunEnabled)
                 return;
-            Graphics.Draw(_lighting, x - 95f, y - 67f);
+            Graphics.Draw(ref _lighting, x - 95f, y - 67f);
         }
     }
 }

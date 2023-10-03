@@ -180,12 +180,12 @@ namespace DuckGame
             if (_levelIndex + _numCardsPerScreen < _cards.Count)
             {
                 _arrow.flipH = false;
-                Graphics.Draw(_arrow, 312f, y + vec2_2.y / 2f);
+                Graphics.Draw(ref _arrow, 312f, y + vec2_2.y / 2f);
             }
             if (_levelIndex <= 0)
                 return;
             _arrow.flipH = true;
-            Graphics.Draw(_arrow, 8f, y + vec2_2.y / 2f);
+            Graphics.Draw(ref _arrow, 8f, y + vec2_2.y / 2f);
         }
     }
 }

@@ -216,6 +216,13 @@ namespace DuckGame
         {
             if (!valid)
                 return false;
+            if (!MonoMain.UpdateLerpState)
+            {
+                if (_lastImageIndex != _imageIndex)
+                    UpdateSpriteBox();
+
+                return true;
+            }
             if (_currentAnimation.HasValue && (ignoreFlipFlop || _flipFlop != Graphics.frameFlipFlop) && !VirtualTransition.doingVirtualTransition)
             {
                 _frameInc += _currentAnimation.Value.speed * _speed;
@@ -329,7 +336,10 @@ namespace DuckGame
             _texture.currentObjectIndex = _globalIndex;
             if (w <= 0)
                 return;
-            Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color * alpha, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : (flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
+
+            LerpState.UpdateLerpState(new Interp.InterpState(position, angle), MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
+            Graphics.Draw(_texture, LerpState.Position, new Rectangle?(_spriteBox), _color * alpha, LerpState.Angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : (flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }
 
         public override void Draw(Rectangle r)
@@ -339,7 +349,10 @@ namespace DuckGame
             r.x += _spriteBox.x;
             r.y += _spriteBox.y;
             _texture.currentObjectIndex = _globalIndex;
-            Graphics.Draw(_texture, position, new Rectangle?(r), _color * alpha, angle, center, scale, _flipH ? SpriteEffects.FlipHorizontally : (_flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
+
+            LerpState.UpdateLerpState(new Interp.InterpState(position, angle), MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
+            Graphics.Draw(_texture, LerpState.Position, new Rectangle?(r), _color * alpha, LerpState.Angle, center, scale, _flipH ? SpriteEffects.FlipHorizontally : (_flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }
 
         public void DrawWithoutUpdate()
@@ -349,7 +362,10 @@ namespace DuckGame
             _texture.currentObjectIndex = _globalIndex;
             if (w <= 0)
                 return;
-            Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color * alpha, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : (flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
+
+            LerpState.UpdateLerpState(new Interp.InterpState(position, angle), MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
+            Graphics.Draw(_texture, LerpState.Position, new Rectangle?(_spriteBox), _color * alpha, LerpState.Angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : (flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }
 
         public override void CheapDraw(bool flipH = false)

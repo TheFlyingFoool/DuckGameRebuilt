@@ -404,7 +404,7 @@ namespace DuckGame
                 _halo.depth = -0.2f;
                 _halo.xscale = _halo.yscale = (float)(0.95f + (float)_haloWave * 0.05f);
                 _halo.angle += 0.01f;
-                Graphics.Draw(_halo, owner.x, owner.y);
+                Graphics.Draw(ref _halo, owner.x, owner.y);
                 if (_ringPulse > 0f)
                 {
                     int num1 = 16;

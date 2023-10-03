@@ -93,9 +93,9 @@ namespace DuckGame
             Vec2 vec2 = new Vec2(13f, -2f);
             float num = (float)Math.Sin(_loadAnimation * 3.14f) * 3f;
             _loaderSprite.flipV = false;
-            Draw(_loaderSprite, new Vec2(vec2.x - 9.5f - num, vec2.y + 6.5f));
+            Draw(ref _loaderSprite, new Vec2(vec2.x - 9.5f - num, vec2.y + 6.5f));
             _loaderSprite.flipV = true;
-            Draw(_loaderSprite, new Vec2(vec2.x - 9.5f - num, vec2.y - 2.5f));
+            Draw(ref _loaderSprite, new Vec2(vec2.x - 9.5f - num, vec2.y - 2.5f));
         }
     }
 }

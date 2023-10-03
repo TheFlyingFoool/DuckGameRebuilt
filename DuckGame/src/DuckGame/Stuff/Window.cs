@@ -364,13 +364,13 @@ namespace DuckGame
                 alpha = 0.7f;
                 if (floor)
                 {
-                    Graphics.Draw(_sprite, (float)(x - num2 + 16), y + 4f);
-                    Graphics.Draw(_borderSprite, (float)(x - num2 + 16), y + 4f);
+                    Graphics.Draw(ref _sprite, (float)(x - num2 + 16), y + 4f);
+                    Graphics.Draw(ref _borderSprite, (float)(x - num2 + 16), y + 4f);
                 }
                 else
                 {
-                    Graphics.Draw(_sprite, x - 3f, (float)(y - num2 + 8));
-                    Graphics.Draw(_borderSprite, x - 3f, (float)(y - num2 + 8));
+                    Graphics.Draw(ref _sprite, x - 3f, (float)(y - num2 + 8));
+                    Graphics.Draw(ref _borderSprite, x - 3f, (float)(y - num2 + 8));
                 }
                 for (int index = 0; index < _hits.Count; index += 2)
                 {
@@ -385,10 +385,10 @@ namespace DuckGame
             if (floor)
             {
                 if (bars.value)
-                    Graphics.Draw(_barSprite, (float)(x - num2 + 16), y + 5f);
+                    Graphics.Draw(ref _barSprite, (float)(x - num2 + 16), y + 5f);
             }
             else if (bars.value)
-                Graphics.Draw(_barSprite, x - 4f, (float)(y - num2 + 8));
+                Graphics.Draw(ref _barSprite, x - 4f, (float)(y - num2 + 8));
             base.Draw();
         }
     }

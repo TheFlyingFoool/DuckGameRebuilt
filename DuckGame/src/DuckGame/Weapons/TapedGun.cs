@@ -461,9 +461,9 @@ namespace DuckGame
             if (gun2 != null)
             {
                 Vec2 vec2_2 = gun2.Offset(new Vec2(0f, (float)-(collisionOffset.y / 2f)));
-                Graphics.Draw(_tape, vec2_2.x, vec2_2.y);
+                Graphics.Draw(ref _tape, vec2_2.x, vec2_2.y);
             }
-            else Graphics.Draw(_tape, position.x, position.y);
+            else Graphics.Draw(ref _tape, position.x, position.y);
             if (level != null && !Duck.renderingIcon) return;
             if (gun1 != null) gun1.Draw();
             if (gun2 == null) return;

@@ -16,9 +16,14 @@ namespace DuckGame
         {
             //DevConsole.Log("HELP");
             //jank ui component but it'll do -NiK0
-            x = 52;
+            this.x = 52;
             collisionSize = new Vec2(width, 26);
             depth = -1;
+
+            UILerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            float x = UILerp.x;
+            float y = UILerp.y;
+
             if (_borderVisible)
             {
                 Color c = Colors.MenuOption;

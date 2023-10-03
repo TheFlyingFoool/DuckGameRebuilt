@@ -1641,6 +1641,23 @@ namespace DuckGame
                 _graphic.depth = depth;
                 _graphic.scale = scale;
                 _graphic.center = center;
+                _graphic.LerpState.CanLerp = true;
+            }
+            _graphic.Draw();
+        }
+        public virtual void DrawLerpLess()
+        {
+            if (_graphic == null)
+                return;
+            if (!_skipPositioning)
+            {
+                _graphic.position = position;
+                _graphic.alpha = alpha;
+                _graphic.angle = angle;
+                _graphic.depth = depth;
+                _graphic.scale = scale;
+                _graphic.center = center;
+                _graphic.LerpState.CanLerp = false;
             }
             _graphic.Draw();
         }
@@ -1702,6 +1719,19 @@ namespace DuckGame
             spr.flipH = offDir < 0;
             Graphics.Draw(spr, vec2.x, vec2.y);
         }
+        public void Draw<T>(ref T spr, Vec2 pos, int d = 1) where T : Sprite
+        {
+            Vec2 vec2 = Offset(pos);
+            if (graphic != null)
+                spr.flipH = graphic.flipH;
+            spr.angle = angle;
+            spr.alpha = alpha;
+            spr.depth = depth + d;
+            spr.scale = scale;
+            spr.flipH = offDir < 0;
+            spr.LerpState.CanLerp = true;
+            Graphics.Draw(ref spr, vec2.x, vec2.y);
+        }
 
         public void DrawIgnoreAngle(Sprite spr, Vec2 pos, int d = 1)
         {
@@ -1710,6 +1740,15 @@ namespace DuckGame
             spr.depth = depth + d;
             spr.scale = scale;
             Graphics.Draw(spr, vec2.x, vec2.y);
+        }
+        public void DrawIgnoreAngle<T>(ref T spr, Vec2 pos, int d = 1) where T : Sprite
+        {
+            Vec2 vec2 = Offset(pos);
+            spr.alpha = alpha;
+            spr.depth = depth + d;
+            spr.scale = scale;
+            spr.LerpState.CanLerp = true;
+            Graphics.Draw(ref spr, vec2.x, vec2.y);
         }
 
         public virtual void OnTeleport()

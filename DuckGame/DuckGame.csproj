@@ -529,6 +529,7 @@
     <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\PresentVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\TVVessel.cs" />
     <Compile Include="src\DuckGame\DirectBitmap.cs" />
+    <Compile Include="src\DuckGame\Interp.cs" />
     <Compile Include="src\DuckGame\LangHandler.cs" />
     <Compile Include="src\DuckGame\Network\ConcurrentStack.cs" />
     <Compile Include="src\MonoTime\Console\Commands\AdvancedConfig.cs" />

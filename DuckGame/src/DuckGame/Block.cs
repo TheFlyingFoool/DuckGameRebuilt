@@ -373,6 +373,6 @@ namespace DuckGame
         {
         }
 
-        public override void Draw() => base.Draw();
+        public override void Draw() => base.DrawLerpLess();
     }
 }

@@ -71,6 +71,8 @@ namespace DuckGame
         protected float drawdist;
         protected bool _initializedDraw;
         //private byte networkKillWait = 60;
+        protected Interp BulletStart = new Interp(true);
+        protected Interp BulletEnd = new Interp(true);
 
         public new NetworkConnection connection
         {
@@ -648,6 +650,12 @@ namespace DuckGame
         {
             if (_tracer || _bulletDistance <= 0.1f)
                 return;
+
+            BulletStart.UpdateLerpState(this.drawStart, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            BulletEnd.UpdateLerpState(this.drawEnd, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            Vec2 drawStart = BulletStart.Position;
+            Vec2 drawEnd = BulletEnd.Position;
+
             if (gravityAffected)
             {
                 if (prev.Count < 1)
@@ -674,7 +682,8 @@ namespace DuckGame
                         //could just be setting the angle direction skipping two operations 
                         //-NiK0
                         ammo.sprite.angle = -Maths.PointDirectionRad(Vec2.Zero, travelDirNormalized);
-                        Graphics.Draw(ammo.sprite, p2.x, p2.y);
+                        Sprite ammoSprite = ammo.sprite;
+                        Graphics.Draw(ref ammoSprite, p2.x, p2.y);
                     }
                 }
             }
@@ -685,7 +694,8 @@ namespace DuckGame
                     //same optimization here
                     ammo.sprite.depth = depth + 10;
                     ammo.sprite.angle = -Maths.PointDirectionRad(Vec2.Zero, travelDirNormalized);
-                    Graphics.Draw(ammo.sprite, drawEnd.x, drawEnd.y);
+                    Sprite ammoSprite = ammo.sprite;
+                    Graphics.Draw(ref ammoSprite, drawEnd.x, drawEnd.y);
                 }
                 float length = (drawStart - drawEnd).length;
                 float dist = 0f;

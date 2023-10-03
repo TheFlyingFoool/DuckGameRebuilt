@@ -28,6 +28,8 @@ namespace DuckGame
 
         public Duck captureDuck => _duckOwner;
 
+        public Interp TrappedLerp = new Interp(true);
+
         public override bool visible
         {
             get => base.visible;
@@ -230,6 +232,8 @@ namespace DuckGame
             if (owner != null)
                 return;
             depth = _duckOwner.depth - 10;
+
+            TrappedLerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
         }
 
         public override void Draw()
@@ -267,7 +271,7 @@ namespace DuckGame
                 double length = stickLerp.length;
                 if (length > 0.5)
                     num2 = 72;
-                Graphics.Draw(_duckOwner._spriteQuack, _duckOwner._sprite.imageIndex + num2, x + num1, y - 8f);
+                Graphics.Draw(ref _duckOwner._spriteQuack, _duckOwner._sprite.imageIndex + num2, x + num1, y - 8f);
                 if (length > 0.05f)
                 {
                     Vec2 vec2_1 = position + new Vec2(num1 + (_duckOwner._spriteQuack.flipH ? -1f : 1f), -2f);
@@ -298,7 +302,7 @@ namespace DuckGame
                 }
             }
             else
-                Graphics.Draw(_duckOwner._sprite, x + num1, y - 8f);
+                Graphics.Draw(ref _duckOwner._sprite, x + num1, y - 8f);
             base.Draw();
         }
     }

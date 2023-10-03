@@ -102,9 +102,12 @@ namespace DuckGame
                 float deg = 45f;
                 float rad1 = Maths.DegToRad(deg);
                 float rad2 = Maths.DegToRad(25f + rotter);
-                rotter -= 0.3f;
-                if (rotter <= -deg)
-                    rotter += deg;
+                if (MonoMain.UpdateLerpState)
+                {
+                    rotter -= 0.3f;
+                    if (rotter <= -deg)
+                        rotter += deg;
+                }
                 for (int index = 0; index < 8; ++index)
                 {
                     if (index == 0 || index > 4)

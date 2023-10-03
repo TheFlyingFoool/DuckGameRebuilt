@@ -1484,13 +1484,12 @@ namespace DuckGame
                 76561198416200652UL,    // landon alt
                 76561198104352795UL,    // dord
                 76561198114791325UL,    // collin
-                
-                // haram 🙏
-                // 76561198441121574UL, // klof
-                // 76561198797606383UL, // othello
+                76561198090678474UL,    // tater 
+                76561198441121574UL,    // klof
+                76561198797606383UL,    // othello
             };
 
-            // exempted by landon
+            // exempted from the rule of law
             if (Steam.user is null || specialUsers.Contains(Steam.user.id))
                 return false;
             

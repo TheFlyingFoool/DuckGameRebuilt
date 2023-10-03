@@ -18,7 +18,7 @@ namespace DuckGame
         public bool show;
         public float dist;
         public float _alphaFade;
-
+        private Interp LineLerp = new Interp(true);
         public MagnaLine(float xpos, float ypos, Gun attach, float length, float percent)
           : base(xpos, ypos)
         {
@@ -35,7 +35,8 @@ namespace DuckGame
 
         public override void Draw()
         {
-            _move = Lerp.Float(_move, 0f, 0.04f);
+            if(MonoMain.UpdateLerpState)
+                _move = Lerp.Float(_move, 0f, 0.04f);
             if (_move <= 0.01f)
                 _move += (float)(Math.PI / 2);
             if (_length > dist)
@@ -47,7 +48,8 @@ namespace DuckGame
                 return;
             position = _attach.barrelPosition + _attach.barrelVector * _length;
             Vec2 vec2 = _attach.barrelVector.Rotate(Maths.DegToRad(90f), Vec2.Zero);
-            Graphics.DrawLine(position + vec2 * 7f, position - vec2 * 7f, Color.Blue * alpha, (1f + (1f - _length / _startLength) * 4f), (Depth)0.9f);
+            LineLerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            Graphics.DrawLine(LineLerp.Position + vec2 * 7f, LineLerp.Position - vec2 * 7f, Color.Blue * alpha, (1f + (1f - _length / _startLength) * 4f), (Depth)0.9f);
         }
     }
 }

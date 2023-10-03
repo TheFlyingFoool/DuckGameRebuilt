@@ -142,11 +142,11 @@ namespace DuckGame
             base.Draw();
             this.position = position;
             _bottom.depth = depth + 1;
-            Graphics.Draw(_bottom, x, y + 9f);
+            Graphics.Draw(ref _bottom, x, y + 9f);
             _jugLine.depth = depth + 1;
             _jugLine.imageIndex = _sprite.imageIndex;
             _jugLine.alpha = (float)(_fluidLevel * 10 % 1);
-            Graphics.Draw(_jugLine, x + num, y);
+            Graphics.Draw(ref _jugLine, x + num, y);
         }
     }
 }

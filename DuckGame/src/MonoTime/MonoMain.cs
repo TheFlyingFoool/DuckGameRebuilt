@@ -42,7 +42,7 @@ namespace DuckGame
         private MTEffect _watermarkEffect;
         private Tex2D _watermarkTexture;
         public static MonoMain instance;
-        private GraphicsDeviceManager graphics;
+        public static GraphicsDeviceManager graphics;
         private static int _screenWidth = 1280;
         private static int _screenHeight = 720;
         public static bool _fullScreen = false;
@@ -215,6 +215,10 @@ namespace DuckGame
         public static bool startInLobby = false;
         public static bool startInArcade = false;
         //private int deviceLostWait;
+
+        public static float IntraTick = 1.0f;
+        public static bool UpdateLerpState = true;
+        public static TimeSpan TotalGameTime = TimeSpan.Zero;
 
         public static MonoMainCore core
         {
@@ -1026,6 +1030,14 @@ namespace DuckGame
         [HandleProcessCorruptedStateExceptions, SecurityCritical]
         protected override void Update(GameTime gameTime)
         {
+            
+            Program.main.UnFixedDraw = DGRSettings.UncappedFPS;
+            if (DGRSettings.UncappedFPS)
+            {
+
+            }
+
+
             if (showingSaveTool && saveTool == null && File.Exists("SaveTool.dll"))
             {
                 saveTool = Activator.CreateInstance(Assembly.Load(File.ReadAllBytes(Directory.GetCurrentDirectory() + "/SaveTool.dll")).GetType("SaveRecovery.SaveTool")) as Form;
@@ -1358,6 +1370,7 @@ namespace DuckGame
                 Input.ignoreInput = false;
                 base.Update(gameTime);
                 FPSCounter.Tick(0);
+                UpdateLerpState = true;
                 if (!NetworkDebugger.enabled)
                     Network.PostUpdate();
                 foreach (IEngineUpdatable engineUpdatable in core.engineUpdatables)
@@ -1530,8 +1543,13 @@ namespace DuckGame
         protected void RunDraw(GameTime gameTime)
         {
             FPSCounter.Tick(1);
+            IntraTick = (float)(gameTime.ElapsedGameTime.TotalMilliseconds / TimeSpan.FromMilliseconds(1000.0 / 60.0).TotalMilliseconds);
+            TotalGameTime = gameTime.TotalGameTime;
+
             _didFirstDraw = true;
-            Graphics.frameFlipFlop = !Graphics.frameFlipFlop;
+            if(UpdateLerpState)
+                Graphics.frameFlipFlop = !Graphics.frameFlipFlop;
+
             if (Graphics.device.IsDisposed)
                 return;
 
@@ -1684,12 +1702,12 @@ namespace DuckGame
                 if (_timeSinceLastLoadFrame.elapsed.Milliseconds > 16)
                     ++_duckRun.frame;
                 Vec2 vec2_2 = new Vec2(Graphics.width - _duckRun.width * 4 - 50, Graphics.height - _duckRun.height * 4 - 55);
-                Graphics.Draw(_duckRun, vec2_2.x, vec2_2.y);
+                Graphics.Draw(ref _duckRun, vec2_2.x, vec2_2.y);
                 _duckArm.frame = _duckRun.imageIndex;
                 _duckArm.scale = new Vec2(4f, 4f);
                 _duckArm.depth = 0.8f;
                 _duckArm.color = new Color(80, 80, 80);
-                Graphics.Draw(_duckArm, vec2_2.x + 20f, vec2_2.y + 56f);
+                Graphics.Draw(ref _duckArm, vec2_2.x + 20f, vec2_2.y + 56f);
                 Graphics.screen.End();
                 _timeSinceLastLoadFrame.Restart();
                 //if (Layer.Console != null)
@@ -1827,10 +1845,12 @@ namespace DuckGame
                             Layer.HUD.End(true);
                         }
                     }
-                    if (!DevConsole.showFPS)
-                        return;
-                    FPSCounter.Render(Graphics.device, index: 0, label: "UPS");
-                    FPSCounter.Render(Graphics.device, 100f, index: 1);
+                    if (DevConsole.showFPS)
+                    {
+                        FPSCounter.Render(Graphics.device, index: 0, label: "UPS");
+                        FPSCounter.Render(Graphics.device, 100f, index: 1);
+                    }
+                    UpdateLerpState = false;
                 }
             }
         }

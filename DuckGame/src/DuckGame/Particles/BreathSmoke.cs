@@ -157,7 +157,7 @@ namespace DuckGame
             _sprite.alpha = alpha;
             _sprite.color = new Color(byte.MaxValue, byte.MaxValue, byte.MaxValue, (byte)(alpha * byte.MaxValue));
             _sprite.color = Color.White * alpha;
-            Graphics.Draw(_sprite, x + num2, y + num3);
+            Graphics.Draw(ref _sprite, x + num2, y + num3);
             _sprite2.frame = 0;
             _sprite2.imageIndex = _sprite.imageIndex;
             _sprite2.angle = _sprite.angle;
@@ -166,7 +166,7 @@ namespace DuckGame
             _sprite2.center = center;
             double num4 = Rando.Float(0.2f);
             _sprite2.color = _sprite.color;
-            Graphics.Draw(_sprite2, x + num2, y + num3);
+            Graphics.Draw(ref _sprite2, x + num2, y + num3);
         }
     }
 }

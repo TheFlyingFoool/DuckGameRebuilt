@@ -266,7 +266,7 @@ namespace DuckGame
                 _tip.depth = depth + 1;
                 _tip.alpha = Math.Min((float)(_barrelHeat * 1.5f / 10f), 1f);
                 _tip.angle = angle;
-                Graphics.Draw(_tip, x, y);
+                Graphics.Draw(ref _tip, x, y);
                 Graphics.material = material;
             }
             if (_topBullet == null)

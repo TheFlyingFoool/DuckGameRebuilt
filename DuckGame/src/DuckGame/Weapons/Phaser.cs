@@ -65,7 +65,7 @@
                 return;
             float alpha = this.alpha;
             this.alpha = ((_chargeFade * 0.6f + _chargeFade * _chargeWaver.normalized * 0.4f) * 0.8f);
-            Draw(_phaserCharge, new Vec2((3f + _chargeFade * _chargeWaver * 0.5f), -4f), -1);
+            Draw(ref _phaserCharge, new Vec2((3f + _chargeFade * _chargeWaver * 0.5f), -4f), -1);
             this.alpha = alpha;
         }
 

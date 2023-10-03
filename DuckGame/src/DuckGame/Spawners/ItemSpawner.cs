@@ -234,7 +234,8 @@ namespace DuckGame
                 _sprite.frame = (_seated ? 0 : 1) + (keepRandom ? 4 : (randomSpawn ? 2 : 0));
             if (contains != null && !randomSpawn && Level.current is Editor && previewThing != null)
             {
-                _bob += 0.05f;
+                if(MonoMain.UpdateLerpState)
+                    _bob += 0.05f;
                 previewSprite.CenterOrigin();
                 previewSprite.alpha = 0.5f;
                 previewSprite.flipH = offDir < 0;

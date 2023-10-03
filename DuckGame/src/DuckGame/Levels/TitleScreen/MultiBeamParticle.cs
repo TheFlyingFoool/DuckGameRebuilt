@@ -17,6 +17,7 @@ namespace DuckGame
         private bool _inverse;
         private float _size;
         private Color _color;
+        protected Interp ParticleLerp = new Interp(true);
 
         public MultiBeamParticle(float xpos, float ypos, float spd, bool inverse, Color c)
           : base(xpos, ypos)
@@ -55,8 +56,11 @@ namespace DuckGame
 
         public override void Draw()
         {
+
             Vec2 vec2 = position + new Vec2((16f * _sinVal * (_inverse ? -1f : 1f)), 0f);
-            Graphics.DrawRect(vec2 - new Vec2(_size, _size), vec2 + new Vec2(_size, _size), _color * 0.4f, depth);
+            ParticleLerp.UpdateLerpState(vec2, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
+            Graphics.DrawRect(ParticleLerp.Position - new Vec2(_size, _size), ParticleLerp.Position + new Vec2(_size, _size), _color * 0.4f, depth);
             base.Draw();
         }
     }

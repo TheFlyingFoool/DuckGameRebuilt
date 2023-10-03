@@ -17,6 +17,7 @@ namespace DuckGame
         public int safeFrames;
         public Duck safeDuck;
         public float timeAlive;
+        private Interp QuadLerp = new Interp(true);
 
         public Vec2 travel
         {
@@ -62,8 +63,10 @@ namespace DuckGame
 
         public override void Draw()
         {
-            Graphics.DrawRect(position + new Vec2(-4f, -4f), position + new Vec2(4f, 4f), new Color(byte.MaxValue - (int)(_wave.normalized * 90f), 137 + (int)(_wave.normalized * 50f), 31 + (int)(_wave.normalized * 30f)), depth);
-            Graphics.DrawRect(position + new Vec2(-4f, -4f), position + new Vec2(4f, 4f), new Color(byte.MaxValue, 224 - (int)(_wave2.normalized * 150f), 90 + (int)(_wave2.normalized * 50f)), depth + 1, false);
+            QuadLerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
+            Graphics.DrawRect(QuadLerp.Position + new Vec2(-4f, -4f), QuadLerp.Position + new Vec2(4f, 4f), new Color(byte.MaxValue - (int)(_wave.normalized * 90f), 137 + (int)(_wave.normalized * 50f), 31 + (int)(_wave.normalized * 30f)), depth);
+            Graphics.DrawRect(QuadLerp.Position + new Vec2(-4f, -4f), QuadLerp.Position + new Vec2(4f, 4f), new Color(byte.MaxValue, 224 - (int)(_wave2.normalized * 150f), 90 + (int)(_wave2.normalized * 50f)), depth + 1, false);
             base.Draw();
         }
     }

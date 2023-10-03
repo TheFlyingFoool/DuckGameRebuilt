@@ -36,6 +36,12 @@ namespace DuckGame
         {
             if (_tracer || _bulletDistance <= 0.1f)
                 return;
+
+            BulletStart.UpdateLerpState(this.drawStart, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            BulletEnd.UpdateLerpState(this.drawEnd, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            Vec2 drawStart = BulletStart.Position;
+            Vec2 drawEnd = BulletEnd.Position;
+
             if (gravityAffected)
             {
                 if (prev.Count < 1)

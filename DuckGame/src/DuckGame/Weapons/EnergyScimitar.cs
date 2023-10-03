@@ -1253,7 +1253,7 @@ namespace DuckGame
             _whiteGlow.angle = angle;
             _whiteGlow.color = this.swordColor;
             _whiteGlow.alpha = _glow * 0.5f;
-            Graphics.Draw(_whiteGlow, x, y, depth - 2);
+            Graphics.Draw(ref _whiteGlow, x, y, depth - 2);
             Color swordColor = this.swordColor;
             foreach (WarpLine warpLine in warpLines)
             {
@@ -1301,7 +1301,7 @@ namespace DuckGame
             else
                 _blade.scale = new Vec2(1f);
             _bladeTrail.yscale = _blade.yscale + num1;
-            Graphics.Draw(_blade, x, y, this.depth - 1);
+            Graphics.Draw(ref _blade, x, y, this.depth - 1);
             Graphics.material = null;
             Depth depth = this.depth;
             _bladeTrail.color = swordColor;
@@ -1329,7 +1329,7 @@ namespace DuckGame
                             vec2 += owner.velocity * 0.5f;
                         _bladeTrail.angle = num2;
                         _bladeTrail.alpha = Math.Min(Math.Max((float)((_humAmount - 0.1f) * 4f), 0f), 1f) * 0.7f;
-                        Graphics.Draw(_bladeTrail, vec2.x, vec2.y, this.depth - 2);
+                        Graphics.Draw(ref _bladeTrail, vec2.x, vec2.y, this.depth - 2);
                     }
                     num3 -= 0.15f;
                 }

@@ -103,10 +103,10 @@
             if (_barrelFlame.speed > 0)
             {
                 _barrelFlame.alpha = 0.9f;
-                Draw(_barrelFlame, new Vec2(11f, 1f));
+                Draw(ref _barrelFlame, new Vec2(11f, 1f));
             }
             _can.frame = (int)((1 - ammo / _maxAmmo) * 15);
-            Draw(_can, new Vec2(barrelOffset.x - 11f, barrelOffset.y + 4f));
+            Draw(ref _can, new Vec2(barrelOffset.x - 11f, barrelOffset.y + 4f));
             Graphics.material = material;
         }
         public override bool CanTapeTo(Thing pThing)

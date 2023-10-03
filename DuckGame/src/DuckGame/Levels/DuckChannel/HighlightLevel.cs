@@ -290,7 +290,7 @@ namespace DuckGame
                         float num2 = (Layer.HUD.camera.width - 0f) / _rockImage2.texture.width;
                         _rockImage2.color = new Color(_tvFade, _tvFade, _tvFade);
                         _rockImage2.scale = new Vec2(num2, num2);
-                        Graphics.Draw(_rockImage2, num1 - 10f, y, (Depth)0.8f);
+                        Graphics.Draw(ref _rockImage2, num1 - 10f, y, (Depth)0.8f);
                     }
                 }
                 else if (_state == TVState.ShowNewscaster)
@@ -299,11 +299,11 @@ namespace DuckGame
                     _duck.color = new Color(_tvFade, _tvFade, _tvFade);
                     _tie.color = new Color(_tvFade, _tvFade, _tvFade);
                     _newsTable.color = new Color(_tvFade, _tvFade, _tvFade);
-                    Graphics.Draw(_background, 0f + _cameraOffset.x, 3f + _cameraOffset.y, (Depth)0.5f);
-                    Graphics.Draw(_newsTable, 0f + _cameraOffset.x, 116f + _cameraOffset.y, (Depth)0.6f);
+                    Graphics.Draw(ref _background, 0f + _cameraOffset.x, 3f + _cameraOffset.y, (Depth)0.5f);
+                    Graphics.Draw(ref _newsTable, 0f + _cameraOffset.x, 116f + _cameraOffset.y, (Depth)0.6f);
                     _duck.depth = (Depth)0.8f;
                     Vec2 vec2 = new Vec2(63f + _cameraOffset.x, 35f + _cameraOffset.y);
-                    Graphics.Draw(_duck, vec2.x, vec2.y);
+                    Graphics.Draw(ref _duck, vec2.x, vec2.y);
                     if (_duck.frame == 6)
                         vec2.x -= 3f;
                     else if (_duck.frame == 7)
@@ -313,7 +313,7 @@ namespace DuckGame
                     if (DG.isHalloween)
                     {
                         _pumpkin.depth = (Depth)0.81f;
-                        Graphics.Draw(_pumpkin, vec2.x + 69f, vec2.y + 22f);
+                        Graphics.Draw(ref _pumpkin, vec2.x + 69f, vec2.y + 22f);
                     }
                     _tie.depth = (Depth)0.805f;
                     float num3 = 0f;
@@ -321,18 +321,18 @@ namespace DuckGame
                         num3 += 2f;
                     else if (_duck.frame == 8)
                         ++num3;
-                    Graphics.Draw(_tie, 130f + _cameraOffset.x + num3, 96f + _cameraOffset.y);
+                    Graphics.Draw(ref _tie, 130f + _cameraOffset.x + num3, 96f + _cameraOffset.y);
                     if (!DG.isHalloween)
                     {
                         _duckBeak.depth = (Depth)0.81f;
                         _duckBeak.frame = _duck.frame;
-                        Graphics.Draw(_duckBeak, 63f + _cameraOffset.x, 35f + _cameraOffset.y);
+                        Graphics.Draw(ref _duckBeak, 63f + _cameraOffset.x, 35f + _cameraOffset.y);
                     }
                     if (_image != null)
                     {
                         _image.depth = (Depth)0.65f;
                         if (_cameraOffset.x > 19f)
-                            Graphics.Draw(_image, 50f, 40f);
+                            Graphics.Draw(ref _image, 50f, 40f);
                     }
                 }
                 else if (_state == TVState.ShowHotness)
@@ -340,9 +340,9 @@ namespace DuckGame
                 else if (_state == TVState.ShowInterview)
                 {
                     _image.scale = new Vec2(2f);
-                    Graphics.Draw(_image, 40f, 30f);
+                    Graphics.Draw(ref _image, 40f, 30f);
                 }
-                Graphics.Draw(_tv, 0f, -10f, (Depth)0.9f);
+                Graphics.Draw(ref _tv, 0f, -10f, (Depth)0.9f);
             }
             base.PostDrawLayer(layer);
         }

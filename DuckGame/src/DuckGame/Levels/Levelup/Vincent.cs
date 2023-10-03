@@ -1404,6 +1404,7 @@ namespace DuckGame
                 {
                     flag1 = true;
                     val1_1 = products[0].originalCost;
+
                     Graphics.Draw(_priceTargets[0], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
                     Graphics.Draw(_cheapTape, pos.x, pos.y);
                 }
@@ -1447,6 +1448,7 @@ namespace DuckGame
                     {
                         flag2 = true;
                         val1_2 = products[1].originalCost;
+
                         Graphics.Draw(_priceTargets[1], new Vec2(pos.x - 13f, pos.y - 27f), new Rectangle?(), Color.White, 0.3f, Vec2.Zero, Vec2.One, SpriteEffects.None, (Depth)0.9685f);
                         Graphics.Draw(_cheapTape, pos.x, pos.y);
                     }

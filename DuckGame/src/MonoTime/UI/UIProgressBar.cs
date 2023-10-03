@@ -26,13 +26,15 @@ namespace DuckGame
 
         public override void Draw()
         {
+            UILerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
             float num1 = _barSize.x * scale.x;
             float num2 = _barSize.y * scale.y;
             int num3 = (int)Math.Ceiling((_field.max - _field.min) / _step);
             for (int index = 0; index < num3; ++index)
             {
-                Vec2 p1 = position - new Vec2(halfWidth, num2 / 2f) + new Vec2(index * (int)Math.Round(num1 / num3), 0f);
-                Vec2 p2 = position - new Vec2(halfWidth, (float)(-num2 / 2.0)) + new Vec2((index + 1) * (int)Math.Round(num1 / num3) - 1f, 0f);
+                Vec2 p1 = UILerp.Position - new Vec2(halfWidth, num2 / 2f) + new Vec2(index * (int)Math.Round(num1 / num3), 0f);
+                Vec2 p2 = UILerp.Position - new Vec2(halfWidth, (float)(-num2 / 2.0)) + new Vec2((index + 1) * (int)Math.Round(num1 / num3) - 1f, 0f);
                 if ((align & UIAlign.Center) > UIAlign.Center)
                 {
                     p1.x += halfWidth - num1 / 2f;

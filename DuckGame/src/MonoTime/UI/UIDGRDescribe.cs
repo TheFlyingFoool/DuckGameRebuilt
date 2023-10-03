@@ -33,9 +33,10 @@ namespace DuckGame
             _font.scale = scale;
             _font.alpha = alpha;
             _font.ySpacing = 0.5f;
+            UILerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
 
             Vec2 alignOffset = calcAlignOffset();
-            _font.Draw(text, x + alignOffset.x, y + alignOffset.y, UIMenu.disabledDraw ? Colors.BlueGray : _color, depth, _controlProfile);
+            _font.Draw(text, UILerp.x + alignOffset.x, UILerp.y + alignOffset.y, UIMenu.disabledDraw ? Colors.BlueGray : _color, depth, _controlProfile);
 
             if (HUD.hide)
                 return;

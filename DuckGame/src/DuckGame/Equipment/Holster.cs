@@ -332,7 +332,7 @@ namespace DuckGame
             _overPart.alpha = alpha;
             _overPart.scale = scale;
             _overPart.depth = owner.depth + 5;
-            Graphics.Draw(_overPart, x, y);
+            Graphics.Draw(ref _overPart, x, y);
             _underPart.flipH = owner.offDir <= 0;
             _underPart.angle = angle;
             _underPart.alpha = alpha;
@@ -341,7 +341,7 @@ namespace DuckGame
                 _underPart.depth = _equippedDuck.ragdoll.part2.depth + -11;
             else
                 _underPart.depth = owner.depth + -7;
-            Graphics.Draw(_underPart, x, y);
+            Graphics.Draw(ref _underPart, x, y);
         }
 
         private void PositionContainedObject()
@@ -385,7 +385,7 @@ namespace DuckGame
                 _previewSprite.depth = depth + 1;
                 _previewSprite.scale = new Vec2(0.5f, 0.5f);
                 _previewSprite.center = new Vec2(16f, 16f);
-                Graphics.Draw(_previewSprite, x, y);
+                Graphics.Draw(ref _previewSprite, x, y);
             }
             if (_equippedDuck != null)
                 graphic = null;
@@ -406,14 +406,14 @@ namespace DuckGame
                     _chain.depth = _underPart.depth + 1;
                     _chain.angleDegrees = angleDegrees - 45 * this.offDir;
                     Vec2 vec2 = Offset(new Vec2(num - 11f, -3f));
-                    Graphics.Draw(_chain, vec2.x, vec2.y);
+                    Graphics.Draw(ref _chain, vec2.x, vec2.y);
                     _lock.angleDegrees = _chainSway;
                     _chainSwayVel -= ((_lock.angleDegrees - (owner != null ? owner.hSpeed : hSpeed) * 10f) * 0.1f);
                     _chainSwayVel *= 0.95f;
                     _chainSway += _chainSwayVel;
                     _lock.depth = _underPart.depth + 2;
                     Offset(new Vec2(num - 9f, -5f));
-                    Graphics.Draw(_lock, vec2.x, vec2.y);
+                    Graphics.Draw(ref _lock, vec2.x, vec2.y);
                 }
                 if (!(containedObject is RagdollPart) || !Network.isActive)
                     _containedObject.Draw();
@@ -430,7 +430,7 @@ namespace DuckGame
                 if (equippedDuck != null)
                     vec2 = Offset(new Vec2(-9f, -2f));
                 _chain.center = new Vec2(3f, 3f);
-                Graphics.Draw(_chain, vec2.x, vec2.y);
+                Graphics.Draw(ref _chain, vec2.x, vec2.y);
                 Offset(new Vec2(0f, -8f));
                 _chain.angleDegrees = 90f + _chainSway;
                 _chainSwayVel -= ((_chain.angleDegrees - (90f + (owner != null ? owner.hSpeed : hSpeed) * 10f)) * 0.1f);

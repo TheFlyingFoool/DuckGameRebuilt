@@ -18,7 +18,7 @@ namespace DuckGame
         private static BitmapFont _smallBios_m;
         private static Sprite _bar;
         private static int spectatorNum = 0;
-
+        private static Interp ConLerp = new Interp(true);
         public static ConnectionStatusUICore core
         {
             get => _core;
@@ -106,8 +106,10 @@ namespace DuckGame
                 {
                     if (bar.position > 0.01f)
                     {
-                        Vec2 vec2_2 = new Vec2(vec2_1.x, vec2_1.y + num2 * 14);
-                        vec2_2.x -= Layer.HUD.width * (1f - bar.position);
+                        Vec2 barPos = new Vec2(vec2_1.x, vec2_1.y + num2 * 14);
+                        barPos.x -= Layer.HUD.width * (1f - bar.position);
+                        Vec2 vec2_2 = barPos;
+
                         _bar.depth = (Depth)0.84f;
                         Graphics.Draw(_bar, vec2_2.x, vec2_2.y);
                         _smallBios.depth = (Depth)0.9f;

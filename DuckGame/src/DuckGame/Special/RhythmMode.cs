@@ -37,7 +37,7 @@ namespace DuckGame
                 _ball.CenterOrigin();
             }
             Vec2 barPos = new Vec2(Layer.HUD.camera.width / 2f - _bar.w / 2, 10f);
-            Graphics.Draw(_bar, barPos.x, barPos.y);
+            Graphics.Draw(ref _bar, barPos.x, barPos.y);
             for (int i = 0; i < 5; i++)
             {
                 float xpos = ((barPos.x + 2 + ((i * (_bar.w / 4)) + 1))) + (_pos * (_bar.w / 4.0f));
@@ -49,7 +49,7 @@ namespace DuckGame
                 else
                     _ball.scale = new Vec2(1, 1);
 
-                Graphics.Draw(_ball, xpos, (barPos.y + 4));
+                Graphics.Draw(ref _ball, xpos, (barPos.y + 4));
             }
         }
     }

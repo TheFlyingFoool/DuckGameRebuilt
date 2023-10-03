@@ -86,10 +86,10 @@ namespace DuckGame
             if (_sprite.frame == 0)
             {
                 _trophy.depth = depth + 1;
-                Graphics.Draw(_trophy, x, y - 14f);
+                Graphics.Draw(ref _trophy, x, y - 14f);
             }
             _scoreCard.depth = (Depth)1f;
-            Graphics.Draw(_scoreCard, x, y + 2f);
+            Graphics.Draw(ref _scoreCard, x, y + 2f);
             string text = Change.ToString(_team.score);
             _font.Draw(text, x - _font.GetWidth(text) / 2f, y, Color.DarkSlateGray, _scoreCard.depth + 1);
         }

@@ -147,7 +147,7 @@ namespace DuckGame
             _sprite.depth = depth;
             _sprite.scale = new Vec2(s1);
             _sprite.center = center;
-            Graphics.Draw(_sprite, x + num2, y + num3);
+            Graphics.Draw(ref _sprite, x + num2, y + num3);
             _sprite2.imageIndex = _sprite.imageIndex;
             _sprite2.angle = _sprite.angle;
             _sprite2.depth = -0.5f;
@@ -162,7 +162,7 @@ namespace DuckGame
             _orbiter.depth = depth;
             _orbiter.scale = new Vec2(s2);
             _orbiter.center = center;
-            Graphics.Draw(_orbiter, x - num2, y - num3);
+            Graphics.Draw(ref _orbiter, x - num2, y - num3);
             _sprite2.imageIndex = _orbiter.imageIndex;
             _sprite2.angle = _orbiter.angle;
             _sprite2.depth = -0.5f;

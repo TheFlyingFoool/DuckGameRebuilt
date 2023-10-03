@@ -851,6 +851,9 @@ namespace DuckGame
         public RenderTarget2D rd2;
         public virtual void DoDraw()
         {
+            if (DGRSettings.UncappedFPS)
+                camera.LerpCamera();
+
             bool currentlyShadering = false;
 
             bool cameraD = false;

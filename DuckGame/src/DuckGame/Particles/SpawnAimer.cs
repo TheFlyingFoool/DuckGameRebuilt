@@ -69,7 +69,7 @@ namespace DuckGame
                 if (streamAlpha < 0)
                     streamAlpha = 0f;
             }
-            Level.current.camera.getMatrix();
+            //Level.current.camera.getMatrix();
             Vec2 targetPos = this.targetPos;
             aimerScale = layer.camera.width / Layer.HUD.width;
             position = Lerp.Vec2Smooth(position, targetPos, 0.2f);

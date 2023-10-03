@@ -59,6 +59,7 @@ namespace DuckGame
         {
             if (Editor.editorDraw)
                 return;
+
             if (enabled && GetType() == typeof(FunBeam))
             {
                 if (_prev != position)
@@ -98,7 +99,7 @@ namespace DuckGame
                     collisionSize = new Vec2(4f, 10f);
                 }
             }
-            base.Draw();
+            base.DrawLerpLess();
         }
     }
 }

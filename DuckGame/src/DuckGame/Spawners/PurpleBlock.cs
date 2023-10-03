@@ -255,9 +255,9 @@ namespace DuckGame
             if (pLayer != Layer.Background)
                 return;
             if (_alternate)
-                Graphics.Draw(_scanner, x, y + 9f);
+                Graphics.Draw(ref _scanner, x, y + 9f);
             if (!_alternate)
-                Graphics.Draw(_projector, x, y - 8f);
+                Graphics.Draw(ref _projector, x, y - 8f);
             float num = (float)(_useWave ? _projectionWave : _projectionWave2);
             if (_double > 0f)
             {
@@ -279,8 +279,8 @@ namespace DuckGame
                 else
                 {
                     _none.alpha = (0.2f + _projectionFlashWave.normalized * 0.2f + _glitch * 1f) * _projectorAlpha;
-                    Graphics.Draw(_none, x - _double * 2f, y - 16f - num);
-                    Graphics.Draw(_none, x + _double * 2f, y - 16f - num);
+                    Graphics.Draw(ref _none, x - _double * 2f, y - 16f - num);
+                    Graphics.Draw(ref _none, x + _double * 2f, y - 16f - num);
                 }
             }
             else if (_currentProjection != null)
@@ -296,15 +296,15 @@ namespace DuckGame
                 Duck.renderingIcon = false;
             }
             else
-                Graphics.Draw(_none, x, y - 16f - num);
+                Graphics.Draw(ref _none, x, y - 16f - num);
             if (_currentProjection != null && _served.Contains(_close[_closeIndex]))
             {
                 _none.alpha = (float)(0.2f + _projectionFlashWave.normalized * 0.2f + _glitch * 1f) * _projectorAlpha;
-                Graphics.Draw(_none, x, y - 16f - num, depth + 5);
+                Graphics.Draw(ref _none, x, y - 16f - num, depth + 5);
             }
             if (_glitch <= 0f)
                 return;
-            Graphics.Draw(_projectorGlitch, x, y - 16f);
+            Graphics.Draw(ref _projectorGlitch, x, y - 16f);
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)

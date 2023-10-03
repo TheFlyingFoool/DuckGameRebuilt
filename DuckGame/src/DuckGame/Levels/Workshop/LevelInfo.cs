@@ -69,7 +69,7 @@
                 _sprite.xscale = _sprite.yscale = width / _sprite.width;
                 _sprite.depth = (Depth)0.95f;
                 _sprite.alpha = alpha;
-                Graphics.Draw(_sprite, position.x, position.y);
+                Graphics.Draw(ref _sprite, position.x, position.y);
             }
         }
     }

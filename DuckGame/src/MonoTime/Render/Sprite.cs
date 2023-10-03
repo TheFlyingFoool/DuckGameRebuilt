@@ -23,6 +23,19 @@ namespace DuckGame
         private int _waitFrames;
         public int globalIndex => _globalIndex;
         public Material cheapmaterial;
+        protected struct SpriteState
+        {
+            public Vec2 Position;
+            public float Angle;
+            public SpriteState(Vec2 pos, float ang)
+            {
+                Position = pos;
+                Angle = ang;
+            }
+        }
+
+        public Interp LerpState = new Interp{};
+
         public Tex2D texture
         {
             get => _texture;
@@ -107,13 +120,19 @@ namespace DuckGame
         public virtual void Draw()
         {
             _texture.currentObjectIndex = _globalIndex;
-            Graphics.Draw(_texture, position, new Rectangle?(), _color * alpha, angle, center, scale, _flipH ? SpriteEffects.FlipHorizontally : (_flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
+
+            LerpState.UpdateLerpState(new Interp.InterpState(position, angle), MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
+            Graphics.Draw(_texture, LerpState.Position, new Rectangle?(), _color * alpha, LerpState.Angle, center, scale, _flipH ? SpriteEffects.FlipHorizontally : (_flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }
 
         public virtual void Draw(Rectangle r)
         {
             _texture.currentObjectIndex = _globalIndex;
-            Graphics.Draw(_texture, position, new Rectangle?(r), _color * alpha, angle, center, scale, _flipH ? SpriteEffects.FlipHorizontally : (_flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
+
+            LerpState.UpdateLerpState(new Interp.InterpState(position, angle), MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
+            Graphics.Draw(_texture, LerpState.Position, new Rectangle?(r), _color * alpha, LerpState.Angle, center, scale, _flipH ? SpriteEffects.FlipHorizontally : (_flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }
 
         public virtual void CheapDraw(bool flipH)

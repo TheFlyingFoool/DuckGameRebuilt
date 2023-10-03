@@ -67,7 +67,7 @@ namespace DuckGame
             position.y += _sin.value * _size;
             _sprite.alpha = alpha;
             _sprite.scale = scale;
-            Graphics.Draw(_sprite, position.x, position.y);
+            Graphics.Draw(ref _sprite, position.x, position.y);
         }
     }
 }
