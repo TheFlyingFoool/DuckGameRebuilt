@@ -35,6 +35,7 @@ namespace DuckGame
         private Sound _unchargeSound;
         private Sound _unchargeSoundShort;
         private int _framesSinceBlast;
+        Interp DeathBeamLerp = new Interp(true);
 
         public byte netAnimationIndex
         {
@@ -253,8 +254,17 @@ namespace DuckGame
             float num5 = Maths.NormalizeSection(_tip.alpha, 0.8f, 1f) * 0.5f;
             if (num1 <= 0)
                 return;
+
+            Vec2 barrelOffset = this.barrelOffset;
+            DeathBeamLerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
             Vec2 p1 = Offset(barrelOffset);
             Vec2 p2 = Offset(barrelOffset + new Vec2(num1 * 1200f, 0f));
+            if (angleDegrees == -90.0f || angleDegrees == 0.0f)
+            {
+                p1 = DeathBeamLerp.Position + OffsetLocal(barrelOffset);
+                p2 = DeathBeamLerp.Position + OffsetLocal(barrelOffset + new Vec2(num1 * 1200f, 0f));
+            }
             Graphics.DrawLine(p1, p2, new Color((_tip.alpha * 0.7f + 0.3f), _tip.alpha, _tip.alpha) * (0.3f + num5), (1f + num2 * 12f));
             Graphics.DrawLine(p1, p2, Color.Red * (0.2f + num5), (1f + num3 * 28f));
             Graphics.DrawLine(p1, p2, Color.Red * (0.1f + num5), (0.2f + num4 * 40f));

@@ -44,6 +44,7 @@ namespace DuckGame
             if (doWait)
                 return;
             _wait = 0f;
+            position = new Vec2(9999f, 9999f);
         }
 
         public override void Initialize()

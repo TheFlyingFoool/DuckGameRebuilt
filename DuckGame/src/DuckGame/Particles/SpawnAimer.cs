@@ -69,7 +69,7 @@ namespace DuckGame
                 if (streamAlpha < 0)
                     streamAlpha = 0f;
             }
-            Level.current.camera.getMatrix();
+            //Level.current.camera.getMatrix();
             Vec2 targetPos = this.targetPos;
             aimerScale = layer.camera.width / Layer.HUD.width;
             position = Lerp.Vec2Smooth(position, targetPos, 0.2f);
@@ -82,7 +82,7 @@ namespace DuckGame
         {
             float num1 = (this.distOut + (float)(Math.Sin(sizeWaver) * 2)) * aimerScale;
             float distOut = this.distOut;
-            if (Network.isActive && dugg != null && dugg.profile != null && dugg.profile.connection == DuckNetwork.localConnection && MonoMain.UpdateLerpState)
+            if (Network.isActive && dugg != null && dugg.profile != null && dugg.profile.connection == DuckNetwork.localConnection)
                 distOut += _sin.value * 2f;
             _thickness = 2f;
             for (int index = 0; index < 4; ++index)

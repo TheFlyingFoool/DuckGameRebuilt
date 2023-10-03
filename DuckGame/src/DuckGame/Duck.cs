@@ -4650,31 +4650,52 @@ namespace DuckGame
                 position = ragdoll.part1.position;
             else if (_trapped != null)
                 position = _trapped.position;
+
+            if (DGRSettings.UncappedFPS)
+            {
+                position = DuckLerp.Position;
+                if (ragdoll != null)
+                    position = ragdoll.part1.RagLerp.Position;
+                else if (_trapped != null)
+                    position = _trapped.TrappedLerp.Position;
+            }
             Vec2 p2 = position;
             //why?
             //float num1 = (float)(Level.current.camera.width / 320f * 0.5);
             //float num2 = 0.75f;
             float num3 = 16.5f;
             Vec2 vec2_1 = new Vec2(0f, 0f);
-            if (position.x < Level.current.camera.left + num3)
+            float camLeft = Level.current.camera.left;
+            float camRight = Level.current.camera.right;
+            float camTop = Level.current.camera.top;
+            float camBottom = Level.current.camera.bottom;
+            if (DGRSettings.UncappedFPS)
             {
-                vec2_1.x = Math.Abs(Level.current.camera.left - position.x);
-                position.x = Level.current.camera.left + num3;
+                camLeft = Level.current.camera.CameraLerp.x;
+                camRight = Level.current.camera.CameraLerp.x + Level.current.camera.CameraLerp.Size.x;
+                camTop = Level.current.camera.CameraLerp.y;
+                camBottom = Level.current.camera.CameraLerp.y + Level.current.camera.CameraLerp.Size.y;
             }
-            if (position.x > Level.current.camera.right - num3)
+
+            if (position.x < camLeft + num3)
             {
-                vec2_1.x = Math.Abs(Level.current.camera.right - position.x);
-                position.x = Level.current.camera.right - num3;
+                vec2_1.x = Math.Abs(camLeft - position.x);
+                position.x = camLeft + num3;
             }
-            if (position.y < Level.current.camera.top + num3)
+            if (position.x > camRight - num3)
             {
-                vec2_1.y = Math.Abs(Level.current.camera.top - position.y);
-                position.y = Level.current.camera.top + num3;
+                vec2_1.x = Math.Abs(camRight - position.x);
+                position.x = camRight - num3;
             }
-            if (position.y > Level.current.camera.bottom - num3)
+            if (position.y < camTop + num3)
             {
-                vec2_1.y = Math.Abs(Level.current.camera.bottom - position.y);
-                position.y = Level.current.camera.bottom - num3;
+                vec2_1.y = Math.Abs(camTop - position.y);
+                position.y = camTop + num3;
+            }
+            if (position.y > camBottom - num3)
+            {
+                vec2_1.y = Math.Abs(camBottom - position.y);
+                position.y = camBottom - num3;
             }
             Vec2 vec2_2 = vec2_1 * (3f / 1000f);
             float num4 = 0.75f - Math.Min(vec2_2.length, 1f) * 0.4f;

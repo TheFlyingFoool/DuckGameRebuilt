@@ -689,7 +689,8 @@ namespace DuckGame
                 {
                     float x = (float)(_box.x - _box.halfWidth + 116.0);
                     float y = _splitter.topSection.y - 5f;
-                    _refreshingDots += 0.01f;
+                    if(MonoMain.UpdateLerpState)
+                        _refreshingDots += 0.01f;
                     if (_refreshingDots > 1.0)
                         _refreshingDots = 0f;
                     string str = "(REFRESHING";

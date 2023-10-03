@@ -28,6 +28,8 @@ namespace DuckGame
 
         public Duck captureDuck => _duckOwner;
 
+        public Interp TrappedLerp = new Interp(true);
+
         public override bool visible
         {
             get => base.visible;
@@ -230,6 +232,8 @@ namespace DuckGame
             if (owner != null)
                 return;
             depth = _duckOwner.depth - 10;
+
+            TrappedLerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
         }
 
         public override void Draw()

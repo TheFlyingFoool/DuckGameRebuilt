@@ -320,13 +320,13 @@ namespace DuckGame
                 {
                     Program.main.FrameLimiterTarget = S_TargetFrameRate;
                     Program.main.UseDrawRateLimiter = true;
+                    S_TargetFrameRate = value;
                 }
                 else
                 {
                     Program.main.UseDrawRateLimiter = false;
                     S_TargetFrameRate = 0;
                 }
-                S_TargetFrameRate = value;
             }
         }
 

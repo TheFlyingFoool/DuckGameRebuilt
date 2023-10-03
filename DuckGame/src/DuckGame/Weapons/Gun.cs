@@ -76,7 +76,7 @@ namespace DuckGame
         public bool explode;
         public List<Bullet> firedBullets = new List<Bullet>();
         //private Material _additiveMaterial;
-
+        Interp LaserSightLerp = new Interp(true);
         public bool CanSpawnInfinite()
         {
             return !(this is FlareGun) && !(this is QuadLaser) && !(this is RomanCandle) && !(this is Matchbox) && !(this is FireCrackers) && !(this is NetGun);
@@ -672,6 +672,11 @@ namespace DuckGame
                 if (!Options.Data.fireGlow)
                     num = 0.4f;
                 Vec2 p1 = Offset(laserOffset);
+
+                LaserSightLerp.UpdateLerpState(p1, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+                if(angleDegrees == -90.0f || angleDegrees == 0.0f)
+                    p1 = LaserSightLerp.Position;
+
                 float length = (p1 - _wallPoint).length;
                 float val1 = 100f;
                 if (ammoType != null)

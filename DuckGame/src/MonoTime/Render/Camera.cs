@@ -20,7 +20,7 @@ namespace DuckGame
         public bool skipUpdate;
         private Rectangle _rectangle;
         public Vec2 _viewSize;
-        protected Interp CameraLerp = new Interp(false);
+        public Interp CameraLerp = new Interp(false);
         public bool LerpWithoutFear = false;
 
         public Vec2 position
