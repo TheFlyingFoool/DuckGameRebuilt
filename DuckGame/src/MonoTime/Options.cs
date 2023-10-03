@@ -450,7 +450,17 @@ namespace DuckGame
             {
                 dgrDescription = "Game will use interpolation to render at higher than 60fps"
             });
+            menu.Add(new UIMenuItemToggle("Use V-Sync", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.UseVSync)))
+            {
+                dgrDescription = "Verticaly synced drawing, overrides FPS target"
+            });
 
+            menu.Add(new UIMenuItemNumber("FPS Target", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.TargetFrameRate), 0, 1000, 60), step: 60)
+            {
+                dgrDescription = "Tries to target a specific FPS value, set to 0 for unlimited FPS"
+            });
+
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
             menu.Add(new UIMenuItemSlider("Weather Chance", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.RandomWeather), 0, 10, 1), step: 1f)
             {

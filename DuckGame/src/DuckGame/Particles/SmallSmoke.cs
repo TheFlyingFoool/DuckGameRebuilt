@@ -156,7 +156,7 @@ namespace DuckGame
             float num4 = 0.6f - Rando.Float(0.2f);
             float num5 = 0.4f;
             _sprite2.color = new Color(num5, num5, num5);
-            Graphics.Draw(ref _sprite2, x + num2, y + num3);
+            Graphics.Draw(_sprite2, x + num2, y + num3);
             _orbiter.imageIndex = _sprite.imageIndex;
             _orbiter.color = _sprite.color;
             _orbiter.depth = depth;
@@ -169,7 +169,7 @@ namespace DuckGame
             _sprite2.scale = _orbiter.scale;
             _sprite2.center = center;
             _sprite2.color = new Color(num5, num5, num5);
-            Graphics.Draw(ref _sprite2, x - num2, y - num3);
+            Graphics.Draw(_sprite2, x - num2, y - num3);
         }
     }
 }

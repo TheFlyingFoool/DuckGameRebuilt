@@ -174,12 +174,12 @@ namespace DuckGame
                     if (_smallMode)
                     {
                         _trophy.depth = (Depth)(0.8f + index * 0.01f);
-                        Graphics.Draw(ref _trophy, x + 24f + index * 6, y + 6f);
+                        Graphics.Draw(_trophy, x + 24f + index * 6, y + 6f);
                     }
                     else
                     {
                         _trophy.depth = (Depth)(0.8f - index * 0.01f);
-                        Graphics.Draw(ref _trophy, x + 175f - index * 8, y + 18f);
+                        Graphics.Draw(_trophy, x + 175f - index * 8, y + 18f);
                     }
                 }
             }

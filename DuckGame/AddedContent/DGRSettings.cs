@@ -290,6 +290,55 @@ namespace DuckGame
 
         [AutoConfigField] public static bool UncappedFPS = false;
 
+        [AutoConfigField] public static bool S_UseVSync = true;
+        public static bool UseVSync
+        {
+            get
+            {
+                return S_UseVSync;
+            }
+            set
+            {
+                MonoMain.graphics.SynchronizeWithVerticalRetrace = value;
+                Program.main.UseDrawRateLimiter = !value;
+                S_UseVSync = value;
+                MonoMain.graphics.ApplyChanges();
+            }
+        }
+
+        //Tater: It's really annoying you can't make dynamic settings display based on other settings, so this is ugly.
+        [AutoConfigField] public static int S_TargetFrameRate = 0;
+        public static int TargetFrameRate
+        {
+            get
+            {
+                return S_TargetFrameRate;
+            }
+            set
+            {
+                if (value >= 60)
+                {
+                    Program.main.FrameLimiterTarget = S_TargetFrameRate;
+                    Program.main.UseDrawRateLimiter = true;
+                }
+                else
+                {
+                    Program.main.UseDrawRateLimiter = false;
+                    S_TargetFrameRate = 0;
+                }
+                S_TargetFrameRate = value;
+            }
+        }
+
+        [PostInitialize]
+        public static void InitalizeFPSThings()
+        {
+            MonoMain.graphics.SynchronizeWithVerticalRetrace = DGRSettings.UseVSync;
+            Program.main.FrameLimiterTarget = Math.Max(DGRSettings.TargetFrameRate,60);
+            Program.main.UseDrawRateLimiter = !DGRSettings.UseVSync && DGRSettings.UncappedFPS && TargetFrameRate >= 60;
+            MonoMain.graphics.ApplyChanges();
+        }
+
         [AutoConfigField] public static float WeatherMultiplier = 1;
 
         [AutoConfigField] public static float HeatWaveMultiplier = 1;

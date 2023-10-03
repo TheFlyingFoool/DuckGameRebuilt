@@ -1146,6 +1146,7 @@ namespace DuckGame
                         if (ves.t != null) Level.Remove(ves.t);
                     }
                 }
+                Level.current.camera.LerpWithoutFear = true;
                 Main.SpecialCode = "crash at camSize";
                 Level.current.camera.width = camSize[cFrame].x;
                 Level.current.camera.height = camSize[cFrame].y;

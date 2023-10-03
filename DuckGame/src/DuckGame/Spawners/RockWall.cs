@@ -44,12 +44,12 @@ namespace DuckGame
             _wall.flipH = flipHorizontal;
             if (!(Level.current is Editor))
             {
-                Graphics.Draw(ref _wall, x, y);
+                Graphics.Draw(_wall, x, y);
                 if (Level.current.topLeft.y < y - 500)
-                    Graphics.Draw(ref _wall, x, y - _wall.h);
+                    Graphics.Draw(_wall, x, y - _wall.h);
                 if (Level.current.bottomRight.y <= y + 500)
                     return;
-                Graphics.Draw(ref _wall, x, y + _wall.h);
+                Graphics.Draw(_wall, x, y + _wall.h);
             }
             else
             {

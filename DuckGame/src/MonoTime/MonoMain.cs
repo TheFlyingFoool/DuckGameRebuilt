@@ -42,7 +42,7 @@ namespace DuckGame
         private MTEffect _watermarkEffect;
         private Tex2D _watermarkTexture;
         public static MonoMain instance;
-        private GraphicsDeviceManager graphics;
+        public static GraphicsDeviceManager graphics;
         private static int _screenWidth = 1280;
         private static int _screenHeight = 720;
         public static bool _fullScreen = false;

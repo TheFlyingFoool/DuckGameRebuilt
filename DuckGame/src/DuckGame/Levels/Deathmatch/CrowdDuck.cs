@@ -262,7 +262,8 @@ namespace DuckGame
             if (!_empty && _letter != null)
             {
                 float num = (float)(Math.Sin(_letterSway + _letterNumber * 0.1f) * 2f + 4f);
-                _letterSway += 0.1f;
+                if(MonoMain.UpdateLerpState)
+                    _letterSway += 0.1f;
                 if (_letter.Length == 1)
                 {
                     if ((_signProfile == null || _signProfile == loyalty) && _letter != " ")

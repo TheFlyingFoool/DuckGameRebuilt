@@ -114,10 +114,13 @@ namespace DuckGame
 
             if (UpdateState)
             {
-                PreviousState = CurrentState;
+                if (CurrentStateUpdate != MonoMain.TotalGameTime)
+                {
+                    PreviousState = CurrentState;
+                    PreviousStateUpdate = CurrentStateUpdate;
+                    CurrentStateUpdate = MonoMain.TotalGameTime;
+                }
                 CurrentState = RealState;
-                PreviousStateUpdate = CurrentStateUpdate;
-                CurrentStateUpdate = MonoMain.TotalGameTime;
             }
 
             if (PreviousState.Position != null && RecentLerp)
@@ -134,10 +137,13 @@ namespace DuckGame
 
             if (UpdateState)
             {
-                PreviousState.Position = CurrentState.Position;
+                if (CurrentStateUpdate != MonoMain.TotalGameTime)
+                {
+                    PreviousState.Position = CurrentState.Position;
+                    PreviousStateUpdate = CurrentStateUpdate;
+                    CurrentStateUpdate = MonoMain.TotalGameTime;
+                }
                 CurrentState.Position = Pos;
-                PreviousStateUpdate = CurrentStateUpdate;
-                CurrentStateUpdate = MonoMain.TotalGameTime;
             }
 
             if (PreviousState.Position != null && RecentLerp)
@@ -155,10 +161,13 @@ namespace DuckGame
 
             if (UpdateState)
             {
-                PreviousState = CurrentState;
+                if (CurrentStateUpdate != MonoMain.TotalGameTime)
+                {
+                    PreviousState = CurrentState;
+                    PreviousStateUpdate = CurrentStateUpdate;
+                    CurrentStateUpdate = MonoMain.TotalGameTime;
+                }
                 CurrentState = RealState;
-                PreviousStateUpdate = CurrentStateUpdate;
-                CurrentStateUpdate = MonoMain.TotalGameTime;
             }
 
             if (PreviousState.Position != null && RecentLerp)
@@ -176,10 +185,13 @@ namespace DuckGame
 
             if (UpdateState)
             {
-                PreviousState = CurrentState;
+                if (CurrentStateUpdate != MonoMain.TotalGameTime)
+                {
+                    PreviousState = CurrentState;
+                    PreviousStateUpdate = CurrentStateUpdate;
+                    CurrentStateUpdate = MonoMain.TotalGameTime;
+                }
                 CurrentState = RealState;
-                PreviousStateUpdate = CurrentStateUpdate;
-                CurrentStateUpdate = MonoMain.TotalGameTime;
             }
 
             if (PreviousState.Position != null && RecentLerp)

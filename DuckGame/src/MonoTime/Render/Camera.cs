@@ -21,6 +21,7 @@ namespace DuckGame
         private Rectangle _rectangle;
         public Vec2 _viewSize;
         protected Interp CameraLerp = new Interp(false);
+        public bool LerpWithoutFear = false;
 
         public Vec2 position
         {
@@ -199,12 +200,22 @@ namespace DuckGame
         }
         public virtual void LerpCamera()
         {
-            CameraLerp.CanLerp = false;
-            CameraLerp.UpdateLerpState(_position, new Vec2(width, height), 1.0f, true);
+            if (!LerpWithoutFear)
+            {
+                CameraLerp.CanLerp = false;
+                CameraLerp.UpdateLerpState(_position, new Vec2(width, height), 1.0f, true);
+            }
+            else
+            {
+                CameraLerp.CanLerp = true;
+                CameraLerp.UpdateLerpState(_position, new Vec2(width, height), MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            }
             _dirty = true;
         }
         public virtual void SubFrameUpdate()
         {
+            if (LerpWithoutFear)
+                return;
             CameraLerp.CanLerp = false;
             CameraLerp.SubFrameUpdate(_position, MonoMain.IntraTick);
             _dirty = true;
