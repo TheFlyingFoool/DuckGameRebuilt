@@ -43,8 +43,8 @@ namespace DuckGame
         public ReplayInfo ReplayToPlay;
         public ReplayInfo ReplayToLoadPreview;
 
-        public int _selectedItemIndex;
         public int ScrollIndex = 0;
+        private int _selectedItemIndex;
         
         public override void Initialize()
         {
@@ -61,13 +61,6 @@ namespace DuckGame
 
             backgroundColor = Color.Black;
 
-            UpdateMenuItemList();
-            
-            base.Initialize();
-        }
-
-        public void UpdateMenuItemList()
-        {
             MenuItems.Clear();
             
             string[] replayPaths = Directory.GetFiles(CordsPath, "*.crf", SearchOption.TopDirectoryOnly);
@@ -75,6 +68,47 @@ namespace DuckGame
 
             MenuItems.AddRange(folderPaths.Select(x => new FolderInfo(x)));
             MenuItems.AddRange(replayPaths.OrderByDescending(x => new FileInfo(x).CreationTime).Select(x => new ReplayInfo(x)));
+            
+            base.Initialize();
+        }
+
+        public void UpdateMenuItemList()
+        {
+            List<(int, List<IRMenuItem>)> toAdd = new();
+            
+            for (int i = 0; i < MenuItems.Count; i++)
+            {
+                IRMenuItem item = MenuItems[i];
+
+                if (item.Parent is FolderInfo parentFolder && !parentFolder.Open)
+                {
+                    parentFolder.Items.Add(item);
+                    MenuItems[i] = null;
+                    continue;
+                }
+                
+                if (item is not FolderInfo folder)
+                    continue;
+                
+                if (!folder.Open)
+                    continue;
+                
+                folder.Items.ForEach(x =>
+                {
+                    x.FolderSub = folder.FolderSub + 1;
+                    x.Parent = folder;
+                });
+                
+                toAdd.Add((i + 1, folder.Items.ToList()));
+                folder.Items.Clear();
+            }
+
+            foreach ((int insertionIndex, List<IRMenuItem> items) in toAdd)
+            {
+                MenuItems.InsertRange(insertionIndex, items);
+            }
+
+            MenuItems.RemoveAll(x => x is null);
         }
         
         public override void Update()
@@ -116,10 +150,43 @@ namespace DuckGame
             {
                 MenuItems[SelectedItemIndex].OnSelect();
             }
+
+            if (DGRSettings.MenuMouse)
+            {
+                if (Mouse.scrollingDown)
+                {
+                    for (int i = 0; i < (int)(Mouse.scroll / 120); i++)
+                    {
+                        ScrollDown();
+                    }
+                }
+                else if (Mouse.scrollingUp)
+                {
+                    for (int i = 0; i < (int)(-Mouse.scroll / 120); i++)
+                    {
+                        ScrollUp();
+                    }
+                }
+            }
+        }
+
+        private void ScrollUp()
+        {
+            if (ScrollIndex > 0)
+                ScrollIndex--;
+        }
+
+        private void ScrollDown()
+        {
+            if (ScrollIndex < MenuItems.Count - 24)
+                ScrollIndex++;
         }
 
         public override void Draw()
         {
+            // debug
+            Graphics.DrawFancyString($"{Mouse.scroll}", Vec2.One, Mouse.isScrolling ? Color.Cyan : Color.Red, 2f);
+            
             Layer.lighting = false;
 
             Graphics.Draw(MainSprite, 0, 0, -0.8f);
@@ -152,13 +219,15 @@ namespace DuckGame
 
             IconSheet.scale = new Vec2(FONT_SIZE * 0.75f);
             float accumulatedYOffset = 0f;
-            for (int i = 0; i < MenuItems.Count; i++)
+            for (int i = ScrollIndex; i < 24 + ScrollIndex; i++)
             {
-                int itemIndex = i; // for scrolling later
+                int itemIndex = i - ScrollIndex;
+                
+                IRMenuItem menuItem = MenuItems[i];
                 
                 IconSheet.frame = 1;
-                Vec2 drawPos = new(18, 1 + accumulatedYOffset);
-                Rectangle textBounds = MenuItems[i].Draw(drawPos, itemIndex == SelectedItemIndex);
+                Vec2 drawPos = new(18 + (menuItem.FolderSub * 6), 1 + accumulatedYOffset);
+                Rectangle textBounds = menuItem.Draw(drawPos, itemIndex == SelectedItemIndex);
 
                 accumulatedYOffset += textBounds.height + 1;
 
@@ -166,6 +235,9 @@ namespace DuckGame
                 {
                     SelectedItemIndex = itemIndex;
                 }
+                
+                // debug
+                Graphics.DrawFancyString($"{itemIndex}: {i}", textBounds.tr + new Vec2(4, 0), Color.Red, scale: FONT_SIZE);
             }
         }
     }

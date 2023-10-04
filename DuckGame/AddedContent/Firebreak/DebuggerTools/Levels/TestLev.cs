@@ -4,7 +4,7 @@
     {
         public override void Initialize()
         {
-            backgroundColor = Color.SlateBlue;
+            // backgroundColor = Color.SlateBlue;
         }
 
         public override void Draw()

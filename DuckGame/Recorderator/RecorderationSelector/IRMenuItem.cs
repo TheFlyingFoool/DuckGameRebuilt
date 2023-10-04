@@ -7,5 +7,7 @@ namespace DuckGame
         void OnSelect();
         void OnHover();
         void OnUnhover();
+        int FolderSub { get; set; }
+        IRMenuItem Parent { get; set; }
     }
 }

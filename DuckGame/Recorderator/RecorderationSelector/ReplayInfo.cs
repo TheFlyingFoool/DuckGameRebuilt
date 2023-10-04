@@ -27,6 +27,8 @@ namespace DuckGame
         public string ReplayFilePath;
         public int FramesUntilPreviewLoad;
         public DateTime CreationTime;
+        public int FolderSub { get; set; }
+        public IRMenuItem Parent { get; set; }
 
         public ReplayInfo(string replayFilePath)
         {
@@ -187,7 +189,8 @@ namespace DuckGame
                     ($"{CreationTime:hh:mm:ss}", 0),
                 };
 
-                Rectangle textBounds = new(position.x, position.y, columns.Sum(x => x.Width), Graphics._biosFont.height * FONT_SIZE);
+                float width = columns.Sum(x => x.Width == 0 ? Graphics.GetFancyStringWidth(x.Item, scale: FONT_SIZE) : x.Width);
+                Rectangle textBounds = new(position.x, position.y, width, Graphics._biosFont.height * FONT_SIZE);
 
                 for (int i = 0, accWidth = 0; i < columns.Length; accWidth += columns[i].Width, i++)
                 {
@@ -262,11 +265,7 @@ namespace DuckGame
                 LoadInfo();
         }
 
-        public void OnUnhover()
-        {
-            
-        }
-
+        public void OnUnhover() { }
         public void OnSelect()
         {
             current.ReplayToPlay = this;

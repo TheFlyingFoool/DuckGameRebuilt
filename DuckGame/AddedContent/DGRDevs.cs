@@ -98,7 +98,7 @@ namespace DuckGame
         {
             DisplayName = "Tater",
             Color = new Color("#FF9742"),
-            DevRole = DGRebuiltDeveloper.Role.MinorContributor,
+            DevRole = DGRebuiltDeveloper.Role.HelpingHand,
             DevItem = typeof(PositronShooter),
             SteamID = 76561198090678474,
         };
@@ -120,6 +120,7 @@ namespace DuckGame
             DevItem = typeof(PositronShooter),
             SteamID = 76561199015640200,
         };
+        
         // sorted by importance
         public static readonly DGRebuiltDeveloper[] All =
         {
@@ -128,28 +129,30 @@ namespace DuckGame
             NiK0,
             Firebreak,
             Othello7,
+            Tater,
             Hyeve,
             Lutalli,
             Erik7302,
             Klof44,
             Moro,
-            Tater,
             Tmob03,
             TheKingOfCringe11,
         };
+        
         //NiK0 stuff
         public static readonly DGRebuiltDeveloper[] AllWithGuns =
         {
             Collin,
-            Moro,
             Dan,
             NiK0,
             Firebreak,
             Othello7,
+            Tater,
             Hyeve,
             Lutalli,
             Erik7302,
             Klof44,
+            Moro,
         };
     }
 

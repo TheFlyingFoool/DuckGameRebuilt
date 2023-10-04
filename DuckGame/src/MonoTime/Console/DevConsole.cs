@@ -1484,13 +1484,11 @@ namespace DuckGame
                 76561198416200652UL,    // landon alt
                 76561198104352795UL,    // dord
                 76561198114791325UL,    // collin
-                76561198090678474UL,    // tater 
-                76561198441121574UL,    // klof
-                76561198797606383UL,    // othello
             };
 
-            // exempted from the rule of law
-            if (Steam.user is null || specialUsers.Contains(Steam.user.id))
+            if (Steam.user is null
+                || specialUsers.Contains(Steam.user.id)              // landon exemption
+                || DGRDevs.All.Any(x => x.SteamID == Steam.user.id)) // tater exemption
                 return false;
             
             return Network.isActive || Level.current is ChallengeLevel or ArcadeLevel;
