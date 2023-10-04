@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Threading;
 using static DuckGame.RecorderationSelector;
 
 namespace DuckGame
@@ -51,11 +52,20 @@ namespace DuckGame
             Corderator.ReadCord(replayData, levelData, true);
 
             //1280 720
-            Preview = SimRenderer.RenderRecorderator(4, Corderator.outLev, 1280, 720);
+            //640 360
+            Preview = SimRenderer.RenderRecorderator(1, Corderator.outLev, 640, 360);
 
             zipStream.Dispose();
 
-            using FileStream zipStream2 = new FileStream(ReplayFilePath, FileMode.OpenOrCreate);
+            Thread thread = new Thread(() =>
+            {
+                ProcessFile(ReplayFilePath, Preview);
+            });
+
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+            thread.Join();
+            /*using FileStream zipStream2 = new FileStream(ReplayFilePath, FileMode.OpenOrCreate);
             using ZipArchive archive2 = new ZipArchive(zipStream2, ZipArchiveMode.Update);
             
             // Create a new entry in the ZIP archive (6th entry) -ChatGPT
@@ -73,9 +83,43 @@ namespace DuckGame
             using (Stream entryStream = newEntry.Open())
             {
                 entryStream.Write(pngData, 0, pngData.Length);
+            }*/
+        }
+
+        public static void ProcessFile(string ReplayFilePath, Tex2D prev)
+        {
+            using (FileStream zipStream = new FileStream(ReplayFilePath, FileMode.OpenOrCreate))
+            using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Update))
+            {
+                // Perform file-specific operations -ChatGPT
+                byte[] fileData;
+                using (MemoryStream fileStream = new MemoryStream())
+                {
+                    // Load your file data here (e.g., Read from disk) -ChatGPT
+                    LoadData(fileStream, prev);
+                    fileData = fileStream.ToArray();
+                }
+
+                // Create or update a Zip archive entry for each file -ChatGPT
+                var entry = archive.CreateEntry("preview.png", CompressionLevel.Optimal);
+                using (Stream entryStream = entry.Open())
+                {
+                    entryStream.Write(fileData, 0, fileData.Length);
+                }
             }
         }
 
+        public static void LoadData(MemoryStream fileStream, Tex2D Preview)
+        {
+            byte[] pngData;
+            using (MemoryStream pngStream = new MemoryStream())
+            {
+                Preview.SaveAsPng(pngStream, Preview.width, Preview.height);
+                pngData = pngStream.ToArray();
+            }
+
+            fileStream.Write(pngData, 0, pngData.Length);
+        }
         public void LoadInfo()
         {
             using FileStream zipStream = new FileStream(ReplayFilePath, FileMode.Open);
@@ -213,9 +257,9 @@ namespace DuckGame
             
             Graphics.DrawFancyString(infoString, new Vec2(195, 95f), Color.White, 1f, 0.5f);
             
-            if (DidLoadPreview)
+            if (DidLoadPreview && Preview != null)
             {
-                Graphics.Draw(Preview, 194, 9, 0.1f, 0.1f, -1);
+                Graphics.Draw(Preview, 194, 9, 0.2f, 0.2f, -1);
             }
 
             for (int j = 0; j < Profiles.Count; j++)

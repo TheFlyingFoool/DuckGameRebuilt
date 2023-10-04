@@ -32,9 +32,9 @@ namespace DuckGame
                 t1 = typeof(PositronShooter);
                 Options.Data.specialTimes = 100;
             }
-            else if (Editor.clientonlycontent && Rando.Int(1000) == 1)
+            else if (Editor.clientonlycontent && Rando.Int(2000) == 1)
             {
-                if (Rando.Int(50) == 0) // 1/50000 lmao
+                if (Rando.Int(50) == 0) // 1/100000 lmao
                     t1 = typeof(SohRock);
                 else
                 {

@@ -760,6 +760,7 @@ namespace DuckGame
 
         public static Thing LoadThing(BinaryClassChunk node, bool chance = true)
         {
+            if (node == null) return null;
             Type type = Editor.GetType(node.GetProperty<string>("type"));
             if (!(type != null))
                 return null;
