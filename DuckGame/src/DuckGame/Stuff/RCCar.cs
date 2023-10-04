@@ -23,7 +23,7 @@ namespace DuckGame
         public float _idleSpeed;
         public RCController _controller;
         private ConstantSound _idle;
-
+        private Interp CarLerp = new Interp(true);
         public bool receivingSignal
         {
             get => _receivingSignal;
@@ -229,8 +229,9 @@ namespace DuckGame
             if (owner == null) _sprite.flipH = offDir < 0;
             base.Draw();
             _wheel.scale = scale;
-            Graphics.Draw(ref _wheel, x - 7f * xscale, y + 9f * yscale);
-            Graphics.Draw(ref _wheel, x + 7f * xscale, y + 9f * yscale);
+            CarLerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            Graphics.Draw(_wheel, CarLerp.x - 7f * xscale, CarLerp.y + 9f * yscale);
+            Graphics.Draw(_wheel, CarLerp.x + 7f * xscale, CarLerp.y + 9f * yscale);
             if (Editor.clientonlycontent && tapedIsGun1) offDir *= -1;
         }
     }

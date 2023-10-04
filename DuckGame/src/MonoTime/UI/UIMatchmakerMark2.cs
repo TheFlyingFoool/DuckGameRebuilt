@@ -381,10 +381,12 @@ namespace DuckGame
                 return;
             _window.depth = depth;
             Graphics.Draw(_window, x, y);
-            _scroll += 0.06f;
+            if (MonoMain.UpdateLerpState)
+                _scroll += 0.06f;
             if (_scroll > 9.0)
                 _scroll = 0f;
-            _dots += 0.01f;
+            if (MonoMain.UpdateLerpState)
+                _dots += 0.01f;
             if (_dots > 1.0)
                 _dots = 0f;
             if (_state == State.Idle || _state == State.Failed)

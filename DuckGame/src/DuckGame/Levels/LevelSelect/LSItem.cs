@@ -242,7 +242,7 @@ namespace DuckGame
             if (_selected)
             {
                 _icons.frame = 3;
-                Graphics.Draw(ref _icons, xDraw - 8f, y);
+                Graphics.Draw(_icons, xDraw - 8f, y);
             }
             string text = _name;
             if (text.Length > 15)
@@ -250,7 +250,7 @@ namespace DuckGame
             if (_itemType != LSItemType.UpFolder)
             {
                 _icons.frame = _partiallyEnabled ? 4 : (_enabled ? 1 : 0);
-                Graphics.Draw(ref _icons, xDraw, y);
+                Graphics.Draw(_icons, xDraw, y);
                 xDraw += 10f;
             }
             bool makeBlue = false;
@@ -268,13 +268,13 @@ namespace DuckGame
                     _icons.frame = 7;
                     makeBlue = true;
                 }
-                Graphics.Draw(ref _icons, xDraw, y);
+                Graphics.Draw(_icons, xDraw, y);
                 xDraw += 10f;
             }
             if (_itemType == LSItemType.Playlist)
             {
                 _icons.frame = 5;
-                Graphics.Draw(ref _icons, xDraw, y);
+                Graphics.Draw(_icons, xDraw, y);
                 xDraw += 10f;
                 makeBlue = true;
             }
@@ -283,7 +283,7 @@ namespace DuckGame
                 if (_steamIcon == null)
                     _steamIcon = new Sprite("steamIcon");
                 _steamIcon.scale = new Vec2(0.25f, 0.25f);
-                Graphics.Draw(ref _steamIcon, xDraw, y);
+                Graphics.Draw(_steamIcon, xDraw, y);
                 xDraw += 10f;
                 text = "Workshop";
             }
@@ -292,14 +292,14 @@ namespace DuckGame
                 if (_vanillaIcon == null)
                     _vanillaIcon = new Sprite("vanillaIcon");
                 _vanillaIcon.scale = new Vec2(0.5f, 0.5f);
-                Graphics.Draw(ref _vanillaIcon, xDraw, y);
+                Graphics.Draw(_vanillaIcon, xDraw, y);
                 xDraw += 10f;
                 text = "Vanilla";
                 makeVanilla = true;
             }
             if (_itemType == LSItemType.MapPack)
             {
-                Graphics.Draw(ref _customIcon, xDraw, y, 8f / _customIcon.w, 8f / _customIcon.h);
+                Graphics.Draw(_customIcon, xDraw, y, 8f / _customIcon.w, 8f / _customIcon.h);
                 xDraw += 10f;
                 makeBlue = true;
             }

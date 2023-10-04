@@ -484,7 +484,7 @@ namespace DuckGame
             {
                 _previewSprite.scale = new Vec2(0.5f, 0.5f);
                 _previewSprite.depth = (Depth)0.9f;
-                Graphics.Draw(ref _previewSprite, 150f, 45f);
+                Graphics.Draw(_previewSprite, 150f, 45f);
             }
             else if (_selectedLevel.mapPack != null && _selectedLevel.mapPack.preview != null)
             {
