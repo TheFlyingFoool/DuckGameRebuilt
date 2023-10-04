@@ -69,7 +69,7 @@ namespace DuckGame
 
         // From T to Progress
         public static implicit operator ProgressValue(float f) => new((double)f);
-        public static implicit operator ProgressValue(double f) => new(f);
+        public static implicit operator ProgressValue(double f) => new(f, 0, double.MinValue, double.MaxValue);
         public static implicit operator ProgressValue(int f) => new((double)f);
 
         // Positive/Negative
@@ -112,8 +112,17 @@ namespace DuckGame
         public static bool operator <=(ProgressValue a, ProgressValue b) => a.Value <= b.Value;
 
         // Increment/Decrement
-        public static ProgressValue operator ++(ProgressValue p) => p += p.IncrementSize;
-        public static ProgressValue operator --(ProgressValue p) => p -= p.IncrementSize;
+        public static ProgressValue operator ++(ProgressValue p)
+        {
+            p += p.IncrementSize;
+            return p;
+        }
+
+        public static ProgressValue operator --(ProgressValue p)
+        {
+            p -= p.IncrementSize;
+            return p;
+        }
 
         // Inversion
         public static ProgressValue operator !(ProgressValue p)
