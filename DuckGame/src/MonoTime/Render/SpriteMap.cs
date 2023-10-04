@@ -337,7 +337,7 @@ namespace DuckGame
             if (w <= 0)
                 return;
 
-            LerpState.UpdateLerpState(new Interp.InterpState(position, angle), MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            LerpState.UpdateLerpState(new Interp.InterpState(position, angle), SkipIntraTick > 0 ? 1 : MonoMain.IntraTick, MonoMain.UpdateLerpState);
 
             Graphics.Draw(_texture, LerpState.Position, new Rectangle?(_spriteBox), _color * alpha, LerpState.Angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : (flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }
@@ -350,7 +350,7 @@ namespace DuckGame
             r.y += _spriteBox.y;
             _texture.currentObjectIndex = _globalIndex;
 
-            LerpState.UpdateLerpState(new Interp.InterpState(position, angle), MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            LerpState.UpdateLerpState(new Interp.InterpState(position, angle), SkipIntraTick > 0 ? 1 : MonoMain.IntraTick, MonoMain.UpdateLerpState);
 
             Graphics.Draw(_texture, LerpState.Position, new Rectangle?(r), _color * alpha, LerpState.Angle, center, scale, _flipH ? SpriteEffects.FlipHorizontally : (_flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }
@@ -363,7 +363,7 @@ namespace DuckGame
             if (w <= 0)
                 return;
 
-            LerpState.UpdateLerpState(new Interp.InterpState(position, angle), MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            LerpState.UpdateLerpState(new Interp.InterpState(position, angle), SkipIntraTick > 0 ? 1 : MonoMain.IntraTick, MonoMain.UpdateLerpState);
 
             Graphics.Draw(_texture, LerpState.Position, new Rectangle?(_spriteBox), _color * alpha, LerpState.Angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : (flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }

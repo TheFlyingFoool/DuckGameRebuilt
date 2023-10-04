@@ -81,6 +81,7 @@ namespace DuckGame
             base.Draw();
             if (_equippedDuck != null && duck == null || _equippedDuck == null)
                 return;
+            _spriteOver.SkipIntraTick = graphic.SkipIntraTick;
             _spriteOver.flipH = graphic.flipH;
             _spriteOver.angle = angle;
             _spriteOver.alpha = alpha;

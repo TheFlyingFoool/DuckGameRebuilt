@@ -2445,6 +2445,7 @@ namespace DuckGame
                 holdObject.OnTeleport();
             foreach (Thing thing in _equipment)
                 thing.OnTeleport();
+            base.OnTeleport();
             if (_vine == null)
                 return;
             _vine.Degrapple();
@@ -4749,7 +4750,8 @@ namespace DuckGame
                 return;
 
             DuckLerp.CanLerp = true;
-            DuckLerp.UpdateLerpState(new Interp.InterpState(position, angle), MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            DuckLerp.UpdateLerpState(new Interp.InterpState(position, angle), SkipIntratick>0?1: MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            _spriteArms.SkipIntraTick = SkipIntratick;
             DuckCamLerp.UpdateLerpState(cameraPosition, MonoMain.IntraTick, MonoMain.UpdateLerpState);
 
             if (inNet)

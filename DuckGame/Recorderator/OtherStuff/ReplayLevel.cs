@@ -499,7 +499,7 @@ namespace DuckGame
 
         public int frame;
 
-        public float PlaybackSpeed = 0.25f;
+        public float PlaybackSpeed = 1;
         public float timer;
 
         public TimeSpan TickStart;
@@ -514,11 +514,8 @@ namespace DuckGame
                 TickStart = TotalTime;
 
             MonoMain.IntraTick = (float)((TickCurrent - TickStart).TotalMilliseconds / (16.66666f / (float)PlaybackSpeed));
-            DevConsole.Log($"tick:{MonoMain.IntraTick:0.000} tsMillis:{TickStart.TotalMilliseconds} monomainMillis:{TotalTime}");
+            //DevConsole.Log($"tick:{MonoMain.IntraTick:0.000} tsMillis:{TickStart.TotalMilliseconds} monomainMillis:{TotalTime}");
         }
-
-        //public TimeSpan ts;
-        //public bool lerpSt;
 
 
         public override void DoUpdate()
@@ -530,7 +527,6 @@ namespace DuckGame
 
                 while (timer >= 1)
                 {
-                    //TickStart = MonoMain.TotalGameTime;
                     MonoMain.UpdateLerpState = true;
                     timer--;
                     base.DoUpdate();

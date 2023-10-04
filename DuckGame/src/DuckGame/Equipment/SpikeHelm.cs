@@ -211,6 +211,7 @@ namespace DuckGame
         {
             int frame = _sprite.frame;
             _sprite.frame = crushed ? 1 : 0;
+            _sprite.SkipIntraTick = SkipIntratick;
             (_pickupSprite as SpriteMap).frame = _sprite.frame;
             base.Draw();
             _sprite.frame = frame;

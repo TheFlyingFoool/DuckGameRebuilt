@@ -13,6 +13,8 @@ namespace DuckGame
     /// </summary>
     public abstract class Thing : Transform
     {
+
+        public int SkipIntratick;
         public SomethingSomethingVessel currentVessel;
         public bool shouldhavevessel = true;
         public bool shouldbegraphicculled = true;
@@ -1517,6 +1519,8 @@ namespace DuckGame
 
         public virtual void DoUpdate()
         {
+            if (SkipIntratick > 0)
+                SkipIntratick--;
             if (wasSuperFondled > 0)
                 --wasSuperFondled;
             if (_anchor != null)
@@ -1642,6 +1646,7 @@ namespace DuckGame
                 _graphic.scale = scale;
                 _graphic.center = center;
                 _graphic.LerpState.CanLerp = true;
+                _graphic.SkipIntraTick = SkipIntratick;
             }
             _graphic.Draw();
         }
@@ -1658,6 +1663,7 @@ namespace DuckGame
                 _graphic.scale = scale;
                 _graphic.center = center;
                 _graphic.LerpState.CanLerp = false;
+                _graphic.SkipIntraTick = SkipIntratick;
             }
             _graphic.Draw();
         }
@@ -1753,6 +1759,7 @@ namespace DuckGame
 
         public virtual void OnTeleport()
         {
+            SkipIntratick = 3;
             //need to update cells here because teleporters teleport wrongly otherwise -NiK0
             Level.current.things.UpdateObject(this);
         }

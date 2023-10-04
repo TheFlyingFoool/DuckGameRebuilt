@@ -12,6 +12,7 @@ namespace DuckGame
 {
     public class Sprite : Transform, ICloneable<Sprite>, ICloneable
     {
+        public int SkipIntraTick;
         private int _globalIndex = Thing.GetGlobalIndex();
         protected Tex2D _texture;
         protected RenderTarget2D _renderTexture;
@@ -121,7 +122,7 @@ namespace DuckGame
         {
             _texture.currentObjectIndex = _globalIndex;
 
-            LerpState.UpdateLerpState(new Interp.InterpState(position, angle), MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            LerpState.UpdateLerpState(new Interp.InterpState(position, angle), SkipIntraTick > 0 ? 1 : MonoMain.IntraTick, MonoMain.UpdateLerpState);
 
             Graphics.Draw(_texture, LerpState.Position, new Rectangle?(), _color * alpha, LerpState.Angle, center, scale, _flipH ? SpriteEffects.FlipHorizontally : (_flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }
@@ -130,7 +131,7 @@ namespace DuckGame
         {
             _texture.currentObjectIndex = _globalIndex;
 
-            LerpState.UpdateLerpState(new Interp.InterpState(position, angle), MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            LerpState.UpdateLerpState(new Interp.InterpState(position, angle), SkipIntraTick > 0 ? 1 : MonoMain.IntraTick, MonoMain.UpdateLerpState);
 
             Graphics.Draw(_texture, LerpState.Position, new Rectangle?(r), _color * alpha, LerpState.Angle, center, scale, _flipH ? SpriteEffects.FlipHorizontally : (_flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }

@@ -52,7 +52,8 @@ namespace DuckGame
         protected TimeSpan CurrentStateUpdate = TimeSpan.Zero;
         private bool RecentLerp
         {
-            get => (CurrentStateUpdate - PreviousStateUpdate).TotalMilliseconds < 30 * 4;
+            //LMAO -NiK0
+            get => Recorderator.Playing ? true : (CurrentStateUpdate - PreviousStateUpdate).TotalMilliseconds < 30 * 4;
         }
 
         public Vec2 Size
