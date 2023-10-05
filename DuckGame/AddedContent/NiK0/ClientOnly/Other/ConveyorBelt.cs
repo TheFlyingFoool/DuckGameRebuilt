@@ -63,7 +63,6 @@ namespace DuckGame
             bool left = neighbors.ContainsKey(Direction.Left);
             bool right = neighbors.ContainsKey(Direction.Right);
 
-            DevConsole.Log("!");
             dontExpand = true;
 
             if (!left && !right || (left && right))

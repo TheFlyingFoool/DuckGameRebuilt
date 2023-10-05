@@ -891,9 +891,18 @@ namespace DuckGame
                 return;
             Thread thread = new Thread(() =>
             {
-                SDL.SDL_SetClipboardText(!DGRSettings.UseDGRJoinLink 
-                    ? $"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}"
-                    : $"https://dgr-join.github.io/?lobby={Steam.lobby.id}&user={Steam.user.id}");
+                if (DGRSettings.DGRJoinLink == 0)
+                {
+                    SDL.SDL_SetClipboardText($"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}");
+                }
+                else if (DGRSettings.DGRJoinLink == 1)
+                {
+                    SDL.SDL_SetClipboardText($"https://dgr-join.github.io/?lobby={Steam.lobby.id}&user={Steam.user.id}");
+                }
+                else
+                {
+                    SDL.SDL_SetClipboardText($"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}  https://dgr-join.github.io/?lobby={Steam.lobby.id}&user={Steam.user.id}");
+                }
                HUD.AddPlayerChangeDisplay("@CLIPCOPY@Invite Link Copied!");
             });
             thread.SetApartmentState(ApartmentState.STA);
