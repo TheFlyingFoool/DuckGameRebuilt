@@ -186,7 +186,7 @@ namespace DuckGame
                 {
                     ($"{CreationTime:ddd}", 20),
                     ($"{CreationTime:yyyy-MM-dd}", 52),
-                    ($"{CreationTime:hh:mm:ss}", 0),
+                    ($"{CreationTime:HH:mm:ss}", 0),
                 };
 
                 float width = columns.Sum(x => x.Width == 0 ? Graphics.GetFancyStringWidth(x.Item, scale: FONT_SIZE) : x.Width);

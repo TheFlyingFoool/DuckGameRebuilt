@@ -68,6 +68,16 @@ namespace DuckGame
         {
             Open ^= true;
             current.UpdateMenuItemList();
+
+            // close bebe folders when closing
+            if (!_open)
+            {
+                for (int i = 0; i < Items.Count; i++)
+                {
+                    if (Items[i] is FolderInfo childFolder)
+                        childFolder.Open = false;
+                }
+            }
         }
     }
 }
