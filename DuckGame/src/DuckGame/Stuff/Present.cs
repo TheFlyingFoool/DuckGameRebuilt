@@ -59,7 +59,7 @@ namespace DuckGame
                 || t == typeof(LavaBarrel)
                 || t == typeof(Grapple));
             _contains = physicsObjects[Rando.Int(physicsObjects.Count - 1)];
-            if (Rando.Int(500) == 0 && Editor.clientonlycontent) //oopss
+            if (Rando.Int(1000) == 0 && Editor.clientonlycontent) //oopss
             {
                 Type t = null;
                 if (Rando.Int(50) == 0)

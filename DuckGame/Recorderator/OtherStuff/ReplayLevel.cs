@@ -508,7 +508,6 @@ namespace DuckGame
         public void IntraTick(TimeSpan TotalTime)
         {
             if (Corderator.Paused) return;
-            //TickStart = TotalTime;
             TickCurrent = TotalTime;
             if (MonoMain.UpdateLerpState)
                 TickStart = TotalTime;
@@ -516,7 +515,6 @@ namespace DuckGame
             MonoMain.IntraTick = (float)((TickCurrent - TickStart).TotalMilliseconds / (16.66666f / (float)PlaybackSpeed));
             //DevConsole.Log($"tick:{MonoMain.IntraTick:0.000} tsMillis:{TickStart.TotalMilliseconds} monomainMillis:{TotalTime}");
         }
-
 
         public override void DoUpdate()
         {
@@ -531,10 +529,6 @@ namespace DuckGame
                     timer--;
                     base.DoUpdate();
                 }
-            }
-            else
-            {
-
             }
         }
         public override void Update()

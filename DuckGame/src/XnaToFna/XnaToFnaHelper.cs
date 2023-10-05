@@ -334,7 +334,7 @@ namespace XnaToFna
                     if (file.Length >= pathAndFileName.Length)
                     {
                         string filename = file;
-                        if (didnothaveex)
+                        if (didnothaveex && filename.Length > 1)
                         {
                             filename = filename.Substring(0, filename.LastIndexOf("."));
                         }
@@ -355,7 +355,7 @@ namespace XnaToFna
                 }
                 return ogpathAndFileName;
             }
-            if (didnothaveex)
+            if (didnothaveex && pathAndFileName.Length > 1)
             {
                 pathAndFileName = pathAndFileName.Substring(0, pathAndFileName.LastIndexOf("."));
             }
