@@ -61,7 +61,8 @@ namespace DuckGame
 
         public override void Draw()
         {
-            _dots += 0.01f;
+            if(MonoMain.UpdateLerpState)
+                _dots += 0.01f;
             if (_dots > 1f) _dots = 0f;
             string str = "";
             for (int index = 0; index < 3; ++index)

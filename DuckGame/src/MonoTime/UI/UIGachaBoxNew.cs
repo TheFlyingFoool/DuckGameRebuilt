@@ -512,8 +512,11 @@ namespace DuckGame
             Graphics.Draw(_gachaTwisterShadow, x - 14f + vec2_2.x + vec2_3.x, y + vec2_2.y + vec2_3.y);
             Material material1 = Graphics.material;
             Graphics.material = _rainbowMaterial;
-            _rainbowMaterial.offset += 0.05f;
-            _rainbowMaterial.offset2 += 0.02f;
+            if (MonoMain.UpdateLerpState)
+            {
+                _rainbowMaterial.offset += 0.05f;
+                _rainbowMaterial.offset2 += 0.02f;
+            }
             _rainbow.alpha = 0.25f;
             _rainbow.depth = -0.95f;
             Graphics.Draw(_rainbow, 0f, 0f);

@@ -73,6 +73,7 @@ namespace DuckGame
         //private byte networkKillWait = 60;
         protected Interp BulletStart = new Interp(true);
         protected Interp BulletEnd = new Interp(true);
+        protected Interp BulletLerp = new Interp(true);
 
         public new NetworkConnection connection
         {
@@ -682,8 +683,8 @@ namespace DuckGame
                         //could just be setting the angle direction skipping two operations 
                         //-NiK0
                         ammo.sprite.angle = -Maths.PointDirectionRad(Vec2.Zero, travelDirNormalized);
-                        Sprite ammoSprite = ammo.sprite;
-                        Graphics.Draw(ref ammoSprite, p2.x, p2.y);
+                        BulletLerp.UpdateLerpState(p2, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+                        Graphics.Draw(ammo.sprite, BulletLerp.x, BulletLerp.y);
                     }
                 }
             }
@@ -695,7 +696,7 @@ namespace DuckGame
                     ammo.sprite.depth = depth + 10;
                     ammo.sprite.angle = -Maths.PointDirectionRad(Vec2.Zero, travelDirNormalized);
                     Sprite ammoSprite = ammo.sprite;
-                    Graphics.Draw(ref ammoSprite, drawEnd.x, drawEnd.y);
+                    Graphics.Draw(ammoSprite, drawEnd.x, drawEnd.y);
                 }
                 float length = (drawStart - drawEnd).length;
                 float dist = 0f;
