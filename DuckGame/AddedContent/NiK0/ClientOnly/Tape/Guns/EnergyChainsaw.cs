@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
+using System.Collections;
+using static DuckGame.CMD;
+using System.Web.UI.WebControls.WebParts;
 
 namespace DuckGame
 {
@@ -9,12 +13,14 @@ namespace DuckGame
         public SpriteMap blade;
 
         public StateBinding _holdBinding = new StateBinding("_hold");
+        public StateBinding _spinningBinding = new StateBinding("Spinning");
         private float _hold;
         public override float angle
         {
             get => base.angle + _hold * offDir;
             set => _angle = value;
         }
+        public SpriteMap spin;
         public EnergyChainsaw(float xpos, float ypos) : base(xpos, ypos)
         {
             tapeable = false;
@@ -25,6 +31,11 @@ namespace DuckGame
             sprite = new SpriteMap("energychainsaw", 34, 14);
 
             blade = new SpriteMap("energychainsawblade", 34, 14);
+            spin = new SpriteMap("energyChainsawSpin", 41, 41);
+            spin.AddAnimation("spin", 0.6f, true, 0, 1, 2);
+            spin.SetAnimation("spin");
+            spin.center = new Vec2(20.5f);
+            spin.canMultiframeSkip = true;
 
             collisionSize = new Vec2(10);
             _collisionOffset = new Vec2(-9, -2);
@@ -38,6 +49,8 @@ namespace DuckGame
 
             _sound = new LoopingSound("scimisawHum");
         }
+
+        public bool Spinning;
         private LoopingSound _sound;
         public Color properBladeColor = Color.White;
         public Color properColor = new Color(178, 220, 239);
@@ -205,8 +218,40 @@ namespace DuckGame
                 }
                 center = new Vec2(17, 7);
             }
+            if (Spinning)
+            {
+                del++;
+                if (del > 1)
+                {
+                    del = 0;
+                    sparkPart += 16;
+                    float part = sparkPart;
+                    int iters = (int)Math.Ceiling(2f * DGRSettings.ActualParticleMultiplier);
+                    float add = 360f / iters;
+                    for (int i = 0; i < iters; i++)
+                    {
+                        Vec2 vec2 = position + Maths.AngleToVec(Maths.DegToRad(part)) * 16;
+                        Vec2 speed = Maths.AngleToVec(Maths.DegToRad(part + 90)) * 2;
+                        Spark spark = Spark.New(vec2.x, vec2.y, speed, 0.05f);
+                        spark._color = bladeColor;
+                        spark._width = 1f;
+                        Level.Add(spark);
+                        part += add;
+                    }
+                }
+
+                UpdateSpin();
+            }
+            else
+            {
+                colMult = 0;
+                collisionSize = new Vec2(10);
+                _collisionOffset = new Vec2(-9, -2);
+                spinFade = Lerp.Float(spinFade, 0, 0.015f);
+            }
             base.Update();
         }
+        public int del;
         public override void OnPressAction()
         {
         }
@@ -216,48 +261,249 @@ namespace DuckGame
         public override void OnReleaseAction()
         {
         }
+        public float sparkPart;
+        public Vec2 assignSpeed;
+        public override void Thrown()
+        {
+            if (duck == null)
+                return;
+            x = duck.x;
+            safeTime = 10;
+            _oldDepth = depth = -0.1f;
+            if (!isServerForObject || duck == null || duck.destroyed)
+                return;
+            if (!duck.inputProfile.Down(Triggers.Grab))
+                return;
+            if (duck.inputProfile.Down(Triggers.Left) && duck.offDir < 0 || duck.inputProfile.Down(Triggers.Right) && duck.offDir > 0)
+            {
+                assignSpeed = barrelVector;
+
+                boomeraming = false;
+
+                spinPower = 50;
+                Spinning = true;
+            }
+        }
+        public override bool PlayCollideSound(ImpactedFrom from)
+        {
+            return base.PlayCollideSound(from);
+        }
+        public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
+        {
+            if (Spinning)
+            {
+                boomeraming = false;
+                spinPower -= 5;
+                SFX.PlaySynchronized("scimisawClash", 1, Rando.Float(0.1f));
+                return;
+            }
+            base.OnSolidImpact(with, from);
+        }
+        public float faded;
+        public float spinFade;
+
+        public StateBinding _spinPowerBinding = new StateBinding("spinPower");
+        public StateBinding _fadedBinding = new StateBinding("faded");
+        public override bool Sprung(Thing pSpringer)
+        {
+            boomeraming = false;
+            spinPower = 50;
+            return base.Sprung(pSpringer);
+        }
+
+        public Vec2 somoreRangTo;
+        public float assignedAngle;
+        public float antiAngle;
+        public float spd;
+        public bool boomeraming;
+        public Vec2 larp;
+
+        public float pull;
+        public void UpdateSpin()
+        {
+            if (assignSpeed != Vec2.Zero)
+            {
+                velocity = assignSpeed * 9;
+                assignSpeed = Vec2.Zero;
+            }
+            if (spinPower <= 0 || owner != null)
+            {
+                if (isServerForObject)
+                {
+                    if (owner != null && faded > 1) faded = 1;
+                    if (faded < 1f)
+                    {
+                        gravMultiplier = 1;
+                        bouncy = 0.5f;
+                        friction = 0.1f;
+                        if (faded < 0.5f)
+                        {
+                            spinFade = 0.9f;
+                            Spinning = false;
+                        }
+                    }
+                    else
+                    {
+                        velocity = Lerp.Vec2(velocity, Vec2.Zero, 0.2f);
+                    }
+                }
+                glowInc = Lerp.Float(glowInc, 0, 0.01f);
+                faded = Lerp.Float(faded, 0, 0.2f);
+                if (isServerForObject) angleDegrees += faded;
+                return;
+            }
+            else faded = 3;
+            glowInc = Rando.Float(0.2f, 0.3f) * (spinPower/50f);
+            gravMultiplier = 0;
+            friction = 0;
+            bouncy = 1.1f;
+
+            collisionSize = new Vec2(26) * colMult;
+            _collisionOffset = new Vec2(-13) * colMult;
+
+            colMult = Lerp.Float(colMult, 1, 0.1f);
+
+            if (isServerForObject)
+            {
+                if (Level.CheckLine<Block>(position, position + velocity * 480) == null && (x < Level.current.topLeft.x || x > Level.current.bottomRight.x || y < Level.current.topLeft.y || y > Level.current.bottomRight.y))
+                {
+                    larp = Maths.AngleToVec(Maths.PointDirectionRad(position, (Level.current.topLeft + Level.current.bottomRight) / 2f)) * 9;
+                    velocity = Maths.AngleToVec(Lerp.RadAngleLerp(Maths.PointDirectionRad(Vec2.Zero, velocity), Maths.PointDirectionRad(position, (Level.current.topLeft + Level.current.bottomRight) / 2f), 0.05f)) * 9;
+                    boomeraming = true;
+                }
+                else if (boomeraming)
+                {
+                    pull = 0;
+                    velocity = Lerp.Vec2(velocity, larp, 0.4f);
+                    if (velocity == larp) boomeraming = false;
+                }
+                else pull = 0;
+
+                angleDegrees += spinPower;
+
+                foreach (MaterialThing materialThing in Level.CheckCircleAll<MaterialThing>(position, 17))
+                {
+                    if (materialThing == lastThrownBy && safeTime > 0) continue;
+                    Fondle(materialThing);
+                    if (materialThing is EnergyScimitar scimi && scimi.velocity.length > 6)
+                    {
+                        scimi.StartFlying(Maths.PointDirection(Vec2.Zero, velocity), true);
+                        scimi.TravelThroughAir(1);
+                    }
+                    materialThing.Destroy(new DTIncinerate(this));
+                }
+                foreach (MaterialThing materialThing in Level.CheckCircleAll<MaterialThing>(position + velocity * 2, 16))
+                {
+                    if (Level.CheckLine<Block>(position, materialThing.position) != null) continue;
+                    if (materialThing == lastThrownBy && safeTime > 0) continue;
+                    Fondle(materialThing);
+                    if (materialThing is EnergyScimitar scimi && scimi.velocity.length > 6)
+                    {
+                        scimi.StartFlying(Maths.PointDirection(Vec2.Zero, velocity), true);
+                        scimi.TravelThroughAir(1);
+                    }
+                    materialThing.Destroy(new DTIncinerate(this));
+                }
+                safeTime--;
+
+                //mts = Level.CheckCircleAll<MaterialThing>(position + velocity * 1.5f, 16);
+            }
+
+        }
+        public float colMult;
+        public int safeTime;
+        public float spinPower;
         public float glow = 0.2f;
         public override void Draw()
         {
-            if (DevConsole.showCollision)
+            if (Spinning)
             {
-                Graphics.DrawLine(Offset(new Vec2(7, 4)), Offset(new Vec2(23, 4)), Color.Blue, 1, 1); //block slide check
-                Graphics.DrawLine(Offset(new Vec2(7, 0)), Offset(new Vec2(27, 0)), Color.Red, 1, 1); //kill box check and block fling check
-            }
-            animTime += _sound.volume / 4f;
-            if (animTime > 0.5f)
-            {
-                animTime = 0;
-                sprite.imageIndex++;
-                if (sprite.imageIndex > 1)
+                if (DevConsole.showCollision)
                 {
-                    sprite.imageIndex = 0;
+                    Graphics.DrawCircle(position, 17, Color.Red, 2, 1);
+                    Graphics.DrawCircle(position + velocity * 1.5f, 16, Color.DarkRed, 2, 1);
+
+                    Graphics.DrawLine(position, position + velocity.normalized * 480, Color.White, 3, depth - 1);
                 }
+
+                Graphics.material = mt;
+                mt.glow = glow + glowInc;
+
+                spin.position = position;
+                spin.alpha = alpha;
+                spin.depth = depth + 1;
+                spin.scale = scale;
+                spin.angle = angle;
+                spin.flipH = offDir < 0;
+                spin.speed = 1;
+                Graphics.Draw(spin, x, y, depth);
+
+                if (glowInc > 0.1f)
+                {
+                    spin.scale += new Vec2(glowInc * 2, glowInc * 2);
+                    spin.alpha = 0.2f;
+                    Graphics.Draw(spin, x, y, depth);
+
+
+                }
+
+                Graphics.material = null;
             }
-
-            Graphics.material = mt;
-            mt.glow = glow + glowInc;
-            glowInc = Lerp.FloatSmooth(glowInc, 0, 0.1f);
-            blade.imageIndex = sprite.imageIndex;
-            blade.position = position;
-            blade.alpha = alpha;
-            blade.angle = angle;
-            blade.depth = depth;
-            blade.scale = scale;
-            blade.center = center;
-            blade.flipH = offDir < 0;
-            Graphics.Draw(blade, x, y, depth);
-
-            Graphics.material = null;
-            if (glowInc > 0.1f)
+            else
             {
-                blade.scale += new Vec2(glowInc / 3, glowInc * 2);
-                blade.alpha = 0.3f;
+                if (DevConsole.showCollision)
+                {
+                    Graphics.DrawLine(Offset(new Vec2(7, 4)), Offset(new Vec2(23, 4)), Color.Blue, 1, 1); //block slide check
+                    Graphics.DrawLine(Offset(new Vec2(7, 0)), Offset(new Vec2(27, 0)), Color.Red, 1, 1); //kill box check and block fling check
+                }
+                animTime += _sound.volume / 4f;
+                if (animTime > 0.5f)
+                {
+                    animTime = 0;
+                    sprite.imageIndex++;
+                    if (sprite.imageIndex > 1)
+                    {
+                        sprite.imageIndex = 0;
+                    }
+                }
+
+                Graphics.material = mt;
+                mt.glow = glow + glowInc;
+                glowInc = Lerp.FloatSmooth(glowInc, 0, 0.1f);
+                blade.imageIndex = sprite.imageIndex;
+                blade.position = position;
+                blade.alpha = alpha;
+                blade.angle = angle;
+                blade.depth = depth;
+                blade.scale = scale;
+                blade.center = center;
+                blade.flipH = offDir < 0;
                 Graphics.Draw(blade, x, y, depth);
 
-            }
+                if (spinFade > 0)
+                {
+                    spin.speed = spinFade;
+                    spin.scale = new Vec2(Math.Abs(spinFade - 2));
+                    spin.position = position;
+                    spin.alpha = spinFade - 0.2f;
+                    spin.angle = angle;
+                    spin.flipH = offDir < 0;
+                    spin.speed = 1;
+                    Graphics.Draw(spin, x, y, depth + 3);
 
-            base.Draw();
+                }
+
+                Graphics.material = null;
+                if (glowInc > 0.1f)
+                {
+                    blade.scale += new Vec2(glowInc / 3, glowInc * 2);
+                    blade.alpha = 0.3f;
+                    Graphics.Draw(blade, x, y, depth);
+
+                }
+
+                base.Draw();
+            }
         }
     }
 }

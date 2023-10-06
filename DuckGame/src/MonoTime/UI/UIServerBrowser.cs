@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 
@@ -657,6 +658,16 @@ namespace DuckGame
 
         public static string PreviewPathForWorkshopItem(ulong id) => DuckFile.workshopDirectory + "/modPreview" + id.ToString() + "preview.png";
 
+        public void nikostuff(ref string str2, WorkshopItem workshopItem1, LobbyData lobby)
+        {
+            //str2 = !lobby.hasFirstMod ? "|RED|Requires " + workshopItem1.data.name : "|DGGREEN|Requires " + workshopItem1.data.name;
+
+            WorkshopItem itd2 = WorkshopItem.GetItem(workshopItem1.id);
+
+            
+
+            str2 = $"id:{workshopItem1.id} name:{workshopItem1.name} dataname:{workshopItem1.data.name} itdName:{itd2.name} itd2DataName:{itd2.data.name}";
+        }
         public override void Draw()
         {
             if (_downloadModsMenu.open)
@@ -761,6 +772,10 @@ namespace DuckGame
                                         lobby.downloadedWorkshopItems = true;
                                     }
                                     string str2 = !lobby.hasFirstMod ? "|RED|Requires " + workshopItem1.name : "|DGGREEN|Requires " + workshopItem1.name;
+                                    if (Keyboard.Down(Keys.LeftControl) && Debugger.IsAttached)
+                                    {
+                                        nikostuff(ref str2, workshopItem1, lobby);   
+                                    }
                                     string str3 = lobby.hasRestOfMods ? "|DGGREEN|" : "|RED|";
                                     if (lobby.workshopItems.Count == 2)
                                         str2 = str2 + str3 + " +" + (lobby.workshopItems.Count - 1).ToString() + " other mod.";

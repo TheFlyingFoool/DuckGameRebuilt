@@ -27,7 +27,7 @@ namespace DuckGame
             editorTooltip = "Thats a pretty big fan, maybe even the biggest one.";
         }
         public EditorProperty<int> spin = new EditorProperty<int>(1, null, 1, 4, 1);
-        public EditorProperty<float> strength = new EditorProperty<float>(0.5f, null, 0.1f, 1, 0.01f);
+        public EditorProperty<float> strength = new EditorProperty<float>(0.5f, null, 0.1f, 1.5f, 0.01f);
         public override void EditorUpdate()
         {
             angleDegrees = 90 * (spin - 1);
@@ -88,7 +88,7 @@ namespace DuckGame
                 Level.Add(new WindSpec(vv, angle - 1.57f, strength + 0.5f) { blockIgnore = this });
             }
             Vec2 v = Maths.AngleToVec(-angle - 1.57f) * -strength;
-            List<PhysicsObject> pos = Extensions.ThickCheckLineAll<PhysicsObject>(Offset(new Vec2(0, -8)), Offset(new Vec2(0, -96)), 24, 8).ToList();
+            List<PhysicsObject> pos = Extensions.ThickCheckLineAll<PhysicsObject>(Offset(new Vec2(0, -8)), Offset(new Vec2(0, -100)), 24, 8).ToList();
             for (int i = 0; i < pos.Count; i++)
             {
                 if (pos[i].isServerForObject && Level.CheckLine<Block>(position, pos[i].position, this) == null)
@@ -96,7 +96,7 @@ namespace DuckGame
                     pos[i].velocity += v;
                 }
             }
-            List<PhysicsParticle> pls = Extensions.ThickCheckLineAll<PhysicsParticle>(Offset(new Vec2(0, -8)), Offset(new Vec2(0, -96)), 24, 12).ToList();
+            List<PhysicsParticle> pls = Extensions.ThickCheckLineAll<PhysicsParticle>(Offset(new Vec2(0, -8)), Offset(new Vec2(0, -100)), 24, 12).ToList();
             for (int i = 0; i < pls.Count; i++)
             {
                 if (pls[i].isServerForObject && Level.CheckLine<Block>(position, pls[i].position, this) == null)
