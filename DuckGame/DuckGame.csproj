@@ -345,6 +345,7 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigTrapped.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\BlizzardThing.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\ConveyorBelt.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\EnergyForceWave.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\ItemFrame.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\ReDemoBlaster.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\TapeBlock.cs" />
@@ -352,10 +353,12 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\CampNetgun.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\DoubleShotgun.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\EnergyChainsaw.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\EnergyHammer.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\FlareFlameThrower.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\HugerLaser.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\OctoLaser.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\QuadPhaser.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\QuadSniper.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\SniperZooka.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\SuperRCCar.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\WarpSword.cs" />
@@ -397,6 +400,7 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpTeleporter.cs" />
     <Compile Include="AddedContent\NiK0\CrumbleShamble.cs" />
     <Compile Include="AddedContent\NiK0\GlassPlatform.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\MaterialEnergy.cs" />
     <Compile Include="AddedContent\NiK0\MaterialLavaWobble.cs" />
     <Compile Include="AddedContent\NiK0\MathParser.cs" />
     <Compile Include="AddedContent\NiK0\ModDebug.cs" />

@@ -34,6 +34,10 @@ namespace DuckGame
         public bool forceTabbed;
         public bool forceLag;
         public bool forceLoss;
+
+        public float hAccMulti = 1;
+        public float runmaxMulti = 1;
+
         public bool forceDisconnection;
         public bool forceConsole;
         public bool forceChatting;
@@ -2830,7 +2834,12 @@ namespace DuckGame
                 Block lockBlock = Level.CheckRect<Block>(new Vec2(x - 3f, y - 9f), new Vec2(x + 3f, y + 4f));
                 _crouchLock = (crouch || sliding) && lockBlock != null && lockBlock.solid;
                 float hAcc = 0.55f * holdWeightMultiplier * grappleMultiplier * accelerationMultiplier;
-                maxrun = _runMax * holdWeightMultiplier;
+                hAcc *= hAccMulti;
+                maxrun = _runMax * holdWeightMultiplier * runmaxMulti;
+
+                runmaxMulti = 1;
+                hAccMulti = 1;
+
                 if (_isGhost)
                 {
                     hAcc *= 1.4f;

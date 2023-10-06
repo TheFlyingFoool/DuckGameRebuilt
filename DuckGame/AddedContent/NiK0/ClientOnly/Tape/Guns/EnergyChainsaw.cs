@@ -48,6 +48,7 @@ namespace DuckGame
             _barrelOffsetTL = new Vec2(34, 8);
 
             _sound = new LoopingSound("scimisawHum");
+            tapeable = false;
         }
 
         public bool Spinning;
@@ -170,15 +171,9 @@ namespace DuckGame
                                     duck.hSpeed = hs * offDir;
                                 }
                             }
-                            else
-                            {
-                                _hold = Lerp.FloatSmooth(_hold, -0.6f, 0.1f) + (float)Math.Sin(time * 4) / 30;
-                            }
+                            else _hold = Lerp.FloatSmooth(_hold, -0.6f, 0.1f) + (float)Math.Sin(time * 4) / 30;
                         }
-                        else
-                        {
-                            _hold = Lerp.FloatSmooth(_hold, -0.6f, 0.1f) + (float)Math.Sin(time * 4) / 30;
-                        }
+                        else _hold = Lerp.FloatSmooth(_hold, -0.6f, 0.1f) + (float)Math.Sin(time * 4) / 30;
                     }
 
 
@@ -249,6 +244,7 @@ namespace DuckGame
                 _collisionOffset = new Vec2(-9, -2);
                 spinFade = Lerp.Float(spinFade, 0, 0.015f);
             }
+            glowInc = Lerp.FloatSmooth(glowInc, 0, 0.1f);
             base.Update();
         }
         public int del;
@@ -265,15 +261,12 @@ namespace DuckGame
         public Vec2 assignSpeed;
         public override void Thrown()
         {
-            if (duck == null)
-                return;
+            if (duck == null) return;
             x = duck.x;
             safeTime = 10;
             _oldDepth = depth = -0.1f;
-            if (!isServerForObject || duck == null || duck.destroyed)
-                return;
-            if (!duck.inputProfile.Down(Triggers.Grab))
-                return;
+            if (!isServerForObject || duck == null || duck.destroyed) return;
+            if (!duck.inputProfile.Down(Triggers.Grab)) return;
             if (duck.inputProfile.Down(Triggers.Left) && duck.offDir < 0 || duck.inputProfile.Down(Triggers.Right) && duck.offDir > 0)
             {
                 assignSpeed = barrelVector;
@@ -311,10 +304,6 @@ namespace DuckGame
             return base.Sprung(pSpringer);
         }
 
-        public Vec2 somoreRangTo;
-        public float assignedAngle;
-        public float antiAngle;
-        public float spd;
         public bool boomeraming;
         public Vec2 larp;
 
@@ -469,7 +458,6 @@ namespace DuckGame
 
                 Graphics.material = mt;
                 mt.glow = glow + glowInc;
-                glowInc = Lerp.FloatSmooth(glowInc, 0, 0.1f);
                 blade.imageIndex = sprite.imageIndex;
                 blade.position = position;
                 blade.alpha = alpha;

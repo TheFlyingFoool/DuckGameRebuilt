@@ -6,7 +6,6 @@ namespace DuckGame
     {
         public PinkBoxVessel(Thing th) : base(th)
         {
-            IndexPriority = 1;
             tatchedTo.Add(typeof(PinkBox));
             AddSynncl("position", new SomethingSync(typeof(int)));
 

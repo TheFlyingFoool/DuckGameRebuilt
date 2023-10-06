@@ -19,7 +19,7 @@ namespace DuckGame
         public float mult;
         public override void Apply()
         {
-            time += 0.07f;
+            if (MonoMain.UpdateLerpState) time += 0.07f;
 
             topLeft = theOne.topLeft - new Vec2(Maths.Clamp(theOne.collisionSize.x / 2f, 0, 16), Maths.Clamp(theOne.collisionSize.y, 16, 48));
             bottomRight = theOne.bottomRight  + new Vec2(Maths.Clamp(theOne.collisionSize.x / 2f, 0, 16), 0);

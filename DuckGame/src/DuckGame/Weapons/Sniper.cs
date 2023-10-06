@@ -44,7 +44,8 @@ namespace DuckGame
         {
             if (Editor.clientonlycontent)
             {
-                return pTaped.gun1 is Sniper && pTaped.gun2 is Bazooka ? new SniperZooka(x, y) : null;
+                return pTaped.gun1 is Sniper && pTaped.gun2 is Bazooka ? new SniperZooka(x, y) :
+                    pTaped.gun1 is Sniper && pTaped.gun2 is QuadLaser ? new QuadSniper(x, y) : null;
             }
             return base.BecomeTapedMonster(pTaped);
         }

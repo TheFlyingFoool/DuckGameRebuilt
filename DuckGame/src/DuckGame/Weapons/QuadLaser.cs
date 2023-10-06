@@ -36,7 +36,9 @@ namespace DuckGame
         {
             if (Editor.clientonlycontent)
             {
-                return pTaped.gun1 is QuadLaser && pTaped.gun2 is QuadLaser ? new OctoLaser(x, y) : (pTaped.gun1 is QuadLaser && pTaped.gun2 is Phaser ? new QuadPhaser(x, y) : null);
+                return pTaped.gun1 is QuadLaser && pTaped.gun2 is QuadLaser ? new OctoLaser(x, y) :
+                    pTaped.gun1 is QuadLaser && pTaped.gun2 is Phaser ? new QuadPhaser(x, y) :
+                    pTaped.gun1 is QuadLaser && pTaped.gun2 is Sniper ? new QuadSniper(x, y) : null;
             }
             return base.BecomeTapedMonster(pTaped);
         }
