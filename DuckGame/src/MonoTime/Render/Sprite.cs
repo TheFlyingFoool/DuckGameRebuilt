@@ -68,7 +68,16 @@ namespace DuckGame
         public bool flipH
         {
             get => _flipH;
-            set => _flipH = value;
+            set
+            {
+                if (_flipH != value)
+                {
+                    //Remove this if it breaks things.
+                    LerpState.FlipUpdate = true;
+                }
+
+                _flipH = value;
+            }
         }
 
         public bool flipV

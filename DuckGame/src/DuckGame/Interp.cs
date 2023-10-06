@@ -46,6 +46,7 @@ namespace DuckGame
         protected InterpState LerpState;
         public bool CanLerp = false;
         private bool UpdatedOnce = false;
+        public bool FlipUpdate = false;
 
         //TODO: replace this with a tick counting system instead.
         protected TimeSpan PreviousStateUpdate = TimeSpan.Zero;
@@ -125,6 +126,11 @@ namespace DuckGame
                 CurrentState = RealState;
                 UpdatedOnce = true;
             }
+            if (FlipUpdate)
+            {
+                PreviousState = CurrentState;
+                FlipUpdate = false;
+            }
 
             if (PreviousState.Position != null && RecentLerp && UpdatedOnce)
             {
@@ -148,6 +154,11 @@ namespace DuckGame
                 }
                 CurrentState.Position = Pos;
                 UpdatedOnce = true;
+            }
+            if (FlipUpdate)
+            {
+                PreviousState = CurrentState;
+                FlipUpdate = false;
             }
 
             if (PreviousState.Position != null && RecentLerp && UpdatedOnce)
@@ -174,6 +185,11 @@ namespace DuckGame
                 CurrentState = RealState;
                 UpdatedOnce = true;
             }
+            if (FlipUpdate)
+            {
+                PreviousState = CurrentState;
+                FlipUpdate = false;
+            }
 
             if (PreviousState.Position != null && RecentLerp && UpdatedOnce)
             {
@@ -198,6 +214,11 @@ namespace DuckGame
                 }
                 CurrentState = RealState;
                 UpdatedOnce = true;
+            }
+            if (FlipUpdate)
+            {
+                PreviousState = CurrentState;
+                FlipUpdate = false;
             }
 
             if (PreviousState.Position != null && RecentLerp && UpdatedOnce)
