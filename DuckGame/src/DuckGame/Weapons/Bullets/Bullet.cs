@@ -74,6 +74,7 @@ namespace DuckGame
         protected Interp BulletStart = new Interp(true);
         protected Interp BulletEnd = new Interp(true);
         protected Interp BulletLerp = new Interp(true);
+        public int BonusUpdateTicks = 0;
 
         public new NetworkConnection connection
         {
@@ -570,59 +571,67 @@ namespace DuckGame
                 vel.Add(0f);
                 _initializedDraw = true;
             }
-            _travelTime += Maths.IncFrameTimer();
-            _bulletDistance += _bulletSpeed;
-            startpoint = Maths.Clamp(_bulletDistance - _bulletLength, 0f, 99999f);
-            float num = _bulletDistance;
-            if (_gravityAffected)
+            int iterNum = 1;
+            if (BonusUpdateTicks > 0)
+                iterNum += BonusUpdateTicks;
+            for (int i = 0; i < iterNum; ++i)
             {
-                end = start + velocity;
-                vSpeed += PhysicsObject.gravity * gravityMultiplier;
-                hSpeed *= ammo.airFrictionMultiplier;
-                if (vSpeed > 8f)
-                    vSpeed = 8f;
+                _travelTime += Maths.IncFrameTimer();
+                _bulletDistance += _bulletSpeed;
+                startpoint = Maths.Clamp(_bulletDistance - _bulletLength, 0f, 99999f);
+                float num = _bulletDistance;
+                if (_gravityAffected)
+                {
+                    end = start + velocity;
+                    vSpeed += PhysicsObject.gravity * gravityMultiplier;
+                    hSpeed *= ammo.airFrictionMultiplier;
+                    if (vSpeed > 8f)
+                        vSpeed = 8f;
+                    if (!doneTravelling)
+                    {
+                        prev.Add(end);
+                        float length = (end - start).length;
+                        _totalArc += length;
+                        vel.Add(length);
+                    }
+                }
+                else
+                    end = start + travelDirNormalized * _bulletSpeed;
                 if (!doneTravelling)
                 {
-                    prev.Add(end);
-                    float length = (end - start).length;
-                    _totalArc += length;
-                    vel.Add(length);
+                    TravelBullet();
+                    _totalLength = (travelStart - travelEnd).length;
+                    if (_bulletDistance >= _totalLength)
+                    {
+                        doneTravelling = true;
+                        travelEnd = end;
+                        _totalLength = (travelStart - end).length;
+                    }
+                    if (_gravityAffected && doneTravelling)
+                    {
+                        prev[prev.Count - 1] = travelEnd;
+                        float length = (travelEnd - start).length;
+                        _totalArc += length;
+                        vel[vel.Count - 1] = length;
+                    }
                 }
-            }
-            else
-                end = start + travelDirNormalized * _bulletSpeed;
-            if (!doneTravelling)
-            {
-                TravelBullet();
-                _totalLength = (travelStart - travelEnd).length;
-                if (_bulletDistance >= _totalLength)
+                else
                 {
-                    doneTravelling = true;
-                    travelEnd = end;
-                    _totalLength = (travelStart - end).length;
+                    alpha -= 0.1f;
+                    if (alpha <= 0f)
+                        Level.Remove(this);
                 }
-                if (_gravityAffected && doneTravelling)
-                {
-                    prev[prev.Count - 1] = travelEnd;
-                    float length = (travelEnd - start).length;
-                    _totalArc += length;
-                    vel[vel.Count - 1] = length;
-                }
+                start = end;
+                if (num > _totalLength)
+                    num = _totalLength;
+                if (startpoint > num)
+                    startpoint = num;
+                if(i == 0)
+                    drawStart = travelStart + travelDirNormalized * startpoint;
+                drawEnd = travelStart + travelDirNormalized * num;
+                drawdist = num;
             }
-            else
-            {
-                alpha -= 0.1f;
-                if (alpha <= 0f)
-                    Level.Remove(this);
-            }
-            start = end;
-            if (num > _totalLength)
-                num = _totalLength;
-            if (startpoint > num)
-                startpoint = num;
-            drawStart = travelStart + travelDirNormalized * startpoint;
-            drawEnd = travelStart + travelDirNormalized * num;
-            drawdist = num;
+            BonusUpdateTicks = 0;
         }
 
         public Vec2 GetPointOnArc(float distanceBack)
@@ -705,16 +714,17 @@ namespace DuckGame
                 float drawLength = 8f;
                 while (true)
                 {
-                    bool flag = false;
+                    bool bulletDrawn = false;
                     if (dist + drawLength > length)
                     {
                         drawLength = length - Maths.Clamp(dist, 0f, 99f);
-                        flag = true;
+                        bulletDrawn = true;
                     }
                     alph -= incs;
+
                     --Graphics.currentDrawIndex;
                     Graphics.DrawLine(drawStart + travelDirNormalized * length - travelDirNormalized * dist, drawStart + travelDirNormalized * length - travelDirNormalized * (dist + drawLength), color * alph, ammo.bulletThickness, depth);
-                    if (!flag)
+                    if (!bulletDrawn)
                         dist += 8f;
                     else
                         break;

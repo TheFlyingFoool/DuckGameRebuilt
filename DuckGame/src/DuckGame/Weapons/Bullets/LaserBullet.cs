@@ -66,22 +66,22 @@ namespace DuckGame
             else
             {
                 float length = (drawStart - drawEnd).length;
-                float val = 0f;
-                float num1 = (1f / (length / 8f));
-                float num2 = 0f;
-                float num3 = 8f;
+                float dist = 0f;
+                float incs = (1f / (length / 8f));
+                float alph = 1f;
+                float drawLength = 8f;
                 while (true)
                 {
-                    bool flag = false;
-                    if (val + num3 > length)
+                    bool bulletDrawn = false;
+                    if (dist + drawLength > length)
                     {
-                        num3 = length - Maths.Clamp(val, 0f, 99f);
-                        flag = true;
+                        drawLength = length - Maths.Clamp(dist, 0f, 99f);
+                        bulletDrawn = true;
                     }
-                    num2 += num1;
-                    Graphics.DrawTexturedLine((Tex2D)_beem, drawStart + travelDirNormalized * val, drawStart + travelDirNormalized * (val + num3), Color.White * num2, _thickness, (Depth)0.6f);
-                    if (!flag)
-                        val += 8f;
+                    alph -= incs;
+                    Graphics.DrawTexturedLine((Tex2D)_beem, drawStart + travelDirNormalized * length - travelDirNormalized * dist, drawStart + travelDirNormalized * length - travelDirNormalized * (dist + drawLength), Color.White * alph, _thickness, (Depth)0.6f);
+                    if (!bulletDrawn)
+                        dist += 8f;
                     else
                         break;
                 }
