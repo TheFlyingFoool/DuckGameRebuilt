@@ -805,6 +805,7 @@ namespace DuckGame
         {
             SFX.Initialize();
             if (DGRSettings.FasterLoad) return;
+            if (Program.RecorderatorWatchMode) return;
             DuckGame.Content.Initialize();
         }
 
@@ -893,7 +894,7 @@ namespace DuckGame
             Loadaction.label = label;
             _thingsToLoad.Enqueue(Loadaction);
         }
-        
+
         private void StartThreadedLoading()
         {
             _threadedLoadingStarted = true;
@@ -921,30 +922,49 @@ namespace DuckGame
 
             if (DGRSettings.PreloadLevels) AddLoadingAction(DGRSettings.PrreloadLevels, "DGRSettings PrreloadLevels");
             AddLoadingAction(ManagedContent.InitializeMods, "ManagedContent InitializeMods");
-            AddLoadingAction(Network.InitializeMessageTypes, "Network InitializeMessageTypes");
             AddLoadingAction(DeathCrate.InitializeDeathCrateSettings, "DeathCrate InitializeDeathCrateSettings");
             AddLoadingAction(Editor.InitializeConstructorLists, "Editor InitializeConstructorLists");
-            if (!DGRSettings.FasterLoad) AddLoadingAction(Team.DeserializeCustomHats, "Team DeserializeCustomHats");
-            AddLoadingAction(DuckGame.Content.InitializeLevels, "Content InitializeLevels");
-            if (!DGRSettings.FasterLoad) AddLoadingAction(DuckGame.Content.InitializeEffects, "Content InitializeEffects");
-            AddLoadingAction(Input.InitializeGraphics, "Input InitializeGraphics");
-            if (DGRSettings.LoadMusic) AddLoadingAction(Music.Initialize, "Music Initialize");
-            DGRSettings.LoaderMusic = DGRSettings.LoadMusic;
-            if (!DGRSettings.FasterLoad) AddLoadingAction(DevConsole.InitializeFont, "DevConsole InitializeFont");
-            if (!DGRSettings.FasterLoad) AddLoadingAction(DevConsole.InitializeCommands, "DevConsole InitializeCommands");
-            AddLoadingAction(Editor.InitializePlaceableGroup, "Editor InitializePlaceableGroup");
-            if (!DGRSettings.FasterLoad) AddLoadingAction(Challenges.Initialize, "Challenges Initialize");
+            if (!Program.RecorderatorWatchMode)
+            {
+                AddLoadingAction(Network.InitializeMessageTypes, "Network InitializeMessageTypes");
+                if (!DGRSettings.FasterLoad) AddLoadingAction(Team.DeserializeCustomHats, "Team DeserializeCustomHats");
+                AddLoadingAction(DuckGame.Content.InitializeLevels, "Content InitializeLevels");
+            }
+
+            if (!Program.RecorderatorWatchMode)
+            {
+                if (!DGRSettings.FasterLoad) AddLoadingAction(DuckGame.Content.InitializeEffects, "Content InitializeEffects");
+                AddLoadingAction(Input.InitializeGraphics, "Input InitializeGraphics");
+                if (DGRSettings.LoadMusic) AddLoadingAction(Music.Initialize, "Music Initialize");
+                DGRSettings.LoaderMusic = DGRSettings.LoadMusic;
+                if (!DGRSettings.FasterLoad) AddLoadingAction(DevConsole.InitializeFont, "DevConsole InitializeFont");
+                if (!DGRSettings.FasterLoad) AddLoadingAction(DevConsole.InitializeCommands, "DevConsole InitializeCommands");
+                if (!DGRSettings.FasterLoad) AddLoadingAction(Challenges.Initialize, "Challenges Initialize");
+                AddLoadingAction(Editor.InitializePlaceableGroup, "Editor InitializePlaceableGroup");
+            }
             AddLoadingAction(Collision.Initialize, "Collision Initialize");
             AddLoadingAction(Level.InitializeCollisionLists, "Level InitializeCollisionLists");
-            if (!DGRSettings.FasterLoad) AddLoadingAction(MapPack.RegeneratePreviewsIfNecessary, "MapPack RegeneratePreviewsIfNecessary");
+            if (!DGRSettings.FasterLoad && !Program.RecorderatorWatchMode) AddLoadingAction(MapPack.RegeneratePreviewsIfNecessary, "MapPack RegeneratePreviewsIfNecessary");
             AddLoadingAction(StartLazyLoad, "StartLazyLoad");
+
             AddLoadingAction(SetStarted, "SetStarted");
         }
 
         private void SetStarted()
         {
             _doStart = true;
-            if (enableThreadedLoading)
+            if (Program.RecorderatorWatchMode) return;
+            if (Program.RecorderatorWatchMode)
+            {
+                _lazyLoadThread = new Thread(new ThreadStart(DoLazyLoading))
+                {
+                    CurrentCulture = CultureInfo.InvariantCulture,
+                    Priority = ThreadPriority.Highest,
+                    IsBackground = true
+                };
+                _lazyLoadThread.Start();
+            }
+            else if (enableThreadedLoading)
             {
                 _lazyLoadThread = new Thread(new ThreadStart(DoLazyLoading))
                 {
@@ -964,6 +984,8 @@ namespace DuckGame
             OnStart();
             _started = true;
 
+            DGRSettings.InitalizeFPSThings();
+            Recorderator.PostInitialize();
             // this is basically the lifeline of all attributes so i cant
             // use the PostInitialize attribute for it since it wont even
             // work without this lol
@@ -977,6 +999,7 @@ namespace DuckGame
            
             Program.SetAccumulatedElapsedTime(Program.main, Program.main.TargetElapsedTime);
 
+            if (Program.RecorderatorWatchMode) return;
             foreach (MethodInfo methodInfo in PostInitializeAttribute.All)
             {
                 methodInfo.Invoke(null, null);
@@ -1262,28 +1285,31 @@ namespace DuckGame
 
             if (Graphics.inFocus)
                 Input.Update();
-            lock (LevelMetaData._completedPreviewTasks)
+            if (!Program.RecorderatorWatchMode)
             {
-                if (LevelMetaData._completedPreviewTasks.Count > 0)
+                lock (LevelMetaData._completedPreviewTasks)
                 {
-                    foreach (LevelMetaData.SaveLevelPreviewTask completedPreviewTask in LevelMetaData._completedPreviewTasks)
+                    if (LevelMetaData._completedPreviewTasks.Count > 0)
                     {
-                        try
+                        foreach (LevelMetaData.SaveLevelPreviewTask completedPreviewTask in LevelMetaData._completedPreviewTasks)
                         {
-                            DuckFile.SaveString(completedPreviewTask.levelString, completedPreviewTask.savePath);
+                            try
+                            {
+                                DuckFile.SaveString(completedPreviewTask.levelString, completedPreviewTask.savePath);
+                            }
+                            catch (Exception)
+                            {
+                            }
                         }
-                        catch (Exception)
-                        {
-                        }
+                        LevelMetaData._completedPreviewTasks.Clear();
                     }
-                    LevelMetaData._completedPreviewTasks.Clear();
                 }
-            }
-            Cloud.Update();
-            if (_started && !NetworkDebugger.enabled)
-            {
-                InputProfile.Update();
-                Network.PreUpdate();
+                Cloud.Update();
+                if (_started && !NetworkDebugger.enabled)
+                {
+                    InputProfile.Update();
+                    Network.PreUpdate();
+                }
             }
             if (!Keyboard.alt && Keyboard.Pressed(Keys.F4) || Keyboard.alt && Keyboard.Pressed(Keys.Enter))
             {

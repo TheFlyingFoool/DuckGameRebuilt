@@ -237,7 +237,7 @@ namespace DuckGame
 
         public static void Initialize()
         {
-            _core._builtInChatFont = new FancyBitmapFont("smallFontChat")
+                _core._builtInChatFont = new FancyBitmapFont("smallFontChat")
             {
                 chatFont = true
             };

@@ -118,7 +118,7 @@ namespace DuckGame
         public float bulWidth;
         public override void Draw()
         {
-            bulWidth -= 0.5f;
+            if (MonoMain.UpdateLerpState) bulWidth -= 0.5f;
             Graphics.DrawLine(position, pos2, c, bulWidth, 1);
             base.Draw();
         }

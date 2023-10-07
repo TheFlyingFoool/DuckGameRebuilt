@@ -180,6 +180,7 @@ namespace DuckGame
 
         public static void Initialize()
         {
+            if (Program.RecorderatorWatchMode) return;
             if (_dealer != null)
                 return;
             _dealer = new SpriteMap("arcade/schooly", 100, 100);

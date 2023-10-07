@@ -107,6 +107,29 @@ namespace DuckGame
             return subclasses;
         }
 
+        public static List<Type> GetSubclassesList(Type t)
+        {
+            List<Type> subclasses = new List<Type>();
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                try
+                {
+                    foreach (Type type in assembly.GetTypes())
+                    {
+                        if (type.IsSubclassOf(t))
+                        {
+                            subclasses.Add(type);
+                        }
+                    }
+                }
+                catch
+                {
+                }
+            }
+
+            return subclasses;
+        }
+
         public static List<T> GetListOfThings<T>()
         {
             if (Level.current == null) return null;

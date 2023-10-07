@@ -291,7 +291,7 @@ namespace DuckGame
             {
                 if (safeframes > 0) safeframes--;
                 _hold = 0;
-                angleDegrees += 30;
+                angleDegrees += 30 * offDir;
                 hSpeed = offDir * 11;
                 vSpeed = 0;
                 trLs.Add(position);

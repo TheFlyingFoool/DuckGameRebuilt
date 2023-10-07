@@ -330,7 +330,6 @@ namespace DuckGame
             }
         }
 
-        [PostInitialize]
         public static void InitalizeFPSThings()
         {
             MonoMain.graphics.SynchronizeWithVerticalRetrace = DGRSettings.UseVSync;

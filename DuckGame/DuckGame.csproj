@@ -361,6 +361,7 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\QuadSniper.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\SniperZooka.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\SuperRCCar.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\WarpScimitar.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\WarpSword.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\LaserDiskParticle.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\MaterialEnergyChainsaw.cs" />
@@ -368,6 +369,8 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\NMDeathCone.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Projectile\LaserConeBlast.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Projectile\OctoLaserBullet.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\WarpBeam.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\WarpSlash.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATDeathCaliber.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATWumpMagnum.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\Bubble.cs" />

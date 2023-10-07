@@ -514,13 +514,14 @@ namespace DuckGame
         }
         public override void Initialize()
         {
-            if (material is MaterialGold)
+            //No -NiK0
+            /*if (material is MaterialGold)
             {
                 // _blade.color = Color.Lerp(properBladeColor, Color.Red, heat);
                 //swordColor = Color.Lerp(properColor, Color.Red, heat);
                 properBladeColor = new Color(255, 216, 0);
                 properColor = new Color(255, 216, 0); //255, 216, 24
-            }
+            }*/
             _platform = new ScimiPlatform(0f, 0f, 20f, 8f, this)
             {
                 solid = false,
