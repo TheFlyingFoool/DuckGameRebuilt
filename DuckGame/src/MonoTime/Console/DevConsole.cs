@@ -20,6 +20,7 @@ using System.Threading;
 using System.Windows.Forms;
 using SDL2;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 
@@ -473,11 +474,30 @@ namespace DuckGame
                 DevConsole.commands[pKeyword] = commands = new List<CMD>();
             return commands;
         }
+        
+        private static Regex s_getInviteLinkRegex = new(@"^(?:\[?steam:\/\/joinlobby\/312530\/|https:\/\/dgr-join\.github\.io\/\?lobby=)(\d+)(?:\/|&user=)(\d+)", RegexOptions.Compiled);
+        public static bool HandleInviteLinkCommand(string command)
+        {
+            Match match = s_getInviteLinkRegex.Match(command.Trim());
+            
+            if (!match.Success)
+                return false;
+
+            if (!ulong.TryParse(match.Groups[1].Value, out ulong lobbyId))
+                return false;
+
+            Level.current = new JoinServer(lobbyId);
+            return true;
+        }
 
         public static void RunCommand(string command)
         {
             if (DG.buildExpired)
                 return;
+
+            if (HandleInviteLinkCommand(command))
+                return;
+            
             if (_doDataSubmission)
             {
                 _dataSubmissionMessage = command;
