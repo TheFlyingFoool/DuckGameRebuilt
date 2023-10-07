@@ -891,19 +891,16 @@ namespace DuckGame
                 return;
             Thread thread = new Thread(() =>
             {
-                if (DGRSettings.DGRJoinLink == 0)
+                string inviteLink = DGRSettings.DGRJoinLink switch
                 {
-                    SDL.SDL_SetClipboardText($"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}");
-                }
-                else if (DGRSettings.DGRJoinLink == 1)
-                {
-                    SDL.SDL_SetClipboardText($"https://dgr-join.github.io/?lobby={Steam.lobby.id}&user={Steam.user.id}");
-                }
-                else
-                {
-                    SDL.SDL_SetClipboardText($"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}  https://dgr-join.github.io/?lobby={Steam.lobby.id}&user={Steam.user.id}");
-                }
-               HUD.AddPlayerChangeDisplay("@CLIPCOPY@Invite Link Copied!");
+                    0 => $"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}",
+                    1 => $"https://dgr-join.github.io/?lobby={Steam.lobby.id}&user={Steam.user.id}",
+                    2 => $"[steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}](https://dgr-join.github.io/?lobby={Steam.lobby.id}&user={Steam.user.id})",
+                    _ => $"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}  https://dgr-join.github.io/?lobby={Steam.lobby.id}&user={Steam.user.id}"
+                };
+
+                SDL.SDL_SetClipboardText(inviteLink);
+                HUD.AddPlayerChangeDisplay("@CLIPCOPY@Invite Link Copied!");
             });
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();

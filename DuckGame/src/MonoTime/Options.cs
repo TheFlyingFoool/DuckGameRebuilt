@@ -557,14 +557,16 @@ namespace DuckGame
             {
                 dgrDescription = "Completely skips the XP level up and Vincent dialogue. You wont get the XP from it if this is ON"
             });
-            menu.Add(new UIMenuItemNumber("Invite Link Redirect", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DGRJoinLink), 0, 2), valStrings: new List<string>
+            menu.Add(new UIMenuItemNumber("Invite Link", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DGRJoinLink), 0, 3), valStrings: new List<string>
             {
                 "STEAM",
                 "DGR",
-                "BOTH"
+                "BOTH (D)",
+                "BOTH (G)"
             })
             {
-                dgrDescription = "The lobby invite link will use DGR's own HTTPS link redirect to join the game, instead of the default STEAM protocol, making the link clickable on Discord"
+                dgrDescription = "STEAM    - Regular steam link\nDGR      - Custom DGR link (https protocol)\nBOTH (D) - Both in one link, clickable on Discord\nBOTH (G) - Both copied but as seperate links",
+                manualFormatting = true
             });
 
 
