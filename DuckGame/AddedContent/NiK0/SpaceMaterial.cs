@@ -27,8 +27,11 @@ namespace DuckGame
         public float sizMult;
         public override void Apply()
         {
-            xAdd += xS;
-            yAdd += yS;
+            if (MonoMain.UpdateLerpState)
+            {
+                xAdd += xS;
+                yAdd += yS;
+            }
             if (Graphics.device.Textures[0] != null)
             {
                 _effect = _baseeffect;

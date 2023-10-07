@@ -74,7 +74,14 @@ namespace DuckGame
             holsterOffset = new Vec2(11f, 0f);
             editorTooltip = "For big nails.";
         }
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is SledgeHammer && pTaped.gun2 is EnergyScimitar ? new EnergyHammer(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
             if (!(with is IPlatform))

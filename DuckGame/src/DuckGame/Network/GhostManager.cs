@@ -155,37 +155,45 @@ namespace DuckGame
 
         public GhostObject GetGhost(Thing thing) => thing.ghostObject;
 
+        public int crashIndex;
         public void OnMessage(NetMessage m)
         {
+            crashIndex = -1;
+            string specialCode = "";
             try
             {
                 switch (m)
                 {
                     case NMParticles _:
+                        crashIndex = 18;
                         NMParticles m1 = m as NMParticles;
                         if (m1.levelIndex != DuckNetwork.levelIndex)
                             break;
                         particleManager.OnMessage(m1);
                         break;
                     case NMParticlesRemoved _:
+                        crashIndex = 17;
                         NMParticlesRemoved m2 = m as NMParticlesRemoved;
                         if (m2.levelIndex != DuckNetwork.levelIndex)
                             break;
                         particleManager.OnMessage(m2);
                         break;
                     case NMProfileNetData _:
+                        crashIndex = 16;
                         NMProfileNetData nmProfileNetData = m as NMProfileNetData;
                         if (nmProfileNetData._profile == null || nmProfileNetData._netData == null)
                             break;
                         nmProfileNetData._profile.netData.Deserialize(nmProfileNetData._netData, nmProfileNetData.connection, false);
                         break;
                     case NMObjectNetData _:
+                        crashIndex = 15;
                         NMObjectNetData nmObjectNetData = m as NMObjectNetData;
                         if (nmObjectNetData.thing == null || nmObjectNetData._netData == null)
                             break;
                         nmObjectNetData.thing.GetOrCreateNetData().Deserialize(nmObjectNetData._netData, nmObjectNetData.connection, !nmObjectNetData.thing.TransferControl(nmObjectNetData.connection, nmObjectNetData.authority));
                         break;
                     case NMRemoveGhosts _:
+                        crashIndex = 14;
                         NMRemoveGhosts nmRemoveGhosts = m as NMRemoveGhosts;
                         if (nmRemoveGhosts.levelIndex != DuckNetwork.levelIndex)
                             break;
@@ -202,19 +210,26 @@ namespace DuckGame
                         receivingDestroyMessage = false;
                         break;
                     case NMGhostData _:
+                        specialCode = "NMGD01";
                         NMGhostData nmGhostData = m as NMGhostData;
+                        specialCode = "NMGD02";
                         if (nmGhostData.levelIndex != DuckNetwork.levelIndex)
                             break;
+                        specialCode = "NMGD03";
                         using (List<NMGhostState>.Enumerator enumerator = nmGhostData.states.GetEnumerator())
                         {
+                            specialCode = "NMGD04";
                             while (enumerator.MoveNext())
                                 ProcessGhostState(enumerator.Current);
                             break;
                         }
                     case NMGhostState _:
+                        specialCode = "NMGS01";
                         NMGhostState pState = m as NMGhostState;
+                        specialCode = "NMGS02";
                         if (pState.levelIndex != DuckNetwork.levelIndex)
                             break;
+                        specialCode = "NMGS03";
                         ProcessGhostState(pState);
                         break;
                 }
@@ -223,15 +238,19 @@ namespace DuckGame
             {
                 DevConsole.Log(DCSection.GhostMan, "@error !! GHOST MANAGER UPDATE EXCEPTION", m.connection);
                 DevConsole.Log(DCSection.GhostMan, ex.ToString(), m.connection);
+                DevConsole.Log(DCSection.GhostMan, $"NM {m} specialCode:{specialCode} CCI:{crashIndex}");
                 receivingDestroyMessage = false;
             }
         }
 
         private void ProcessGhostState(NMGhostState pState)
         {
+            crashIndex = 0;
             Profile profile = GhostObject.IndexToProfile(pState.id);
+            crashIndex = 1;
             if (profile != null && profile.removedGhosts.TryGetValue(pState.id, out GhostObject removedGhost))
             {
+                crashIndex = 2;
                 if (removedGhost != null)
                 {
                     if (removedGhost.removeLogCooldown == 0)
@@ -247,26 +266,33 @@ namespace DuckGame
             }
             else
             {
+                crashIndex = 3;
                 GhostObject ghostObject = GetGhost(pState.id);
                 if (pState.classID == 0)
                 {
+                    crashIndex = 4;
                     RemoveGhost(ghostObject, pState.id);
                 }
                 else
                 {
+                    crashIndex = 5;
                     Type t = Editor.IDToType[pState.classID];
                     long mask = pState.header.delta ? GhostObject.ReadMask(t, pState.data) : long.MaxValue;
+                    crashIndex = 6;
                     if (ghostObject != null && (t != ghostObject.thing.GetType() || ghostObject.isDestroyed && mask == long.MaxValue))
                     {
+                        crashIndex = 7;
                         receivingDestroyMessage = true;
                         changingGhostType = true;
                         RemoveGhost(ghostObject, ghostObject.ghostObjectIndex);
                         ghostObject = null;
                         receivingDestroyMessage = false;
                         changingGhostType = false;
+                        crashIndex = 9;
                     }
                     if (ghostObject == null)
                     {
+                        crashIndex = 8;
                         Thing thing = Editor.CreateThing(t);
                         thing.position = new Vec2(-2000f, -2000f);
                         Level.Add(thing);
@@ -274,12 +300,14 @@ namespace DuckGame
                         ghostObject = new GhostObject(thing, this, (int)pState.id);
                         ghostObject.ClearStateMask(pState.connection);
                         pState.ghost = ghostObject;
+                        crashIndex = 10;
                         AddGhost(ghostObject);
                         if (pState.connection.profile != null && pState.id > pState.connection.profile.latestGhostIndex)
                             pState.connection.profile.latestGhostIndex = pState.id;
                     }
                     else
                     {
+                        crashIndex = 11;
                         if (ghostObject.isDestroyed)
                         {
                             DevConsole.Log(DCSection.GhostMan, "Skipped ghost data (DESTROYED)(" + ghostObject.ghostObjectIndex.ToString() + ")", pState.connection);
@@ -298,6 +326,7 @@ namespace DuckGame
                     }
                     if (NetworkDebugger.enabled && pState.connection.profile != null)
                         NetworkDebugger.GetGhost(ghostObject).dataReceivedFrames[pState.connection.profile.persona] = Graphics.frame;
+                    crashIndex = 12;
                     if (ghostObject.thing.connection == pState.connection || ghostObject.thing.connection == pState.header.connection)
                     {
                         ghostObject.ReadInNetworkData(pState, mask, pState.connection, false);
@@ -313,6 +342,7 @@ namespace DuckGame
                     double x = ghostObject.thing.position.x;
                 }
             }
+            crashIndex = 13;
         }
 
         public void Notify(StreamManager pManager, NetMessage pMessage, bool pDropped)

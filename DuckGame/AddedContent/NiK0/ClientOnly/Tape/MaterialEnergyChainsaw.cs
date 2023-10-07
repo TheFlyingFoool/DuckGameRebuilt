@@ -19,7 +19,7 @@ namespace DuckGame
         }
         public override void Apply()
         {
-            _time += 0.016f;
+            if (MonoMain.UpdateLerpState) _time += 0.016f;
             if (Graphics.device.Textures[0] != null)
             {
                 Tex2D texture = Graphics.device.Textures[0] as Texture2D;

@@ -22,14 +22,17 @@ namespace DuckGame
 
         public override void Update()
         {
-            transWave -= 0.08f;
-            if (Math.Sin(transWave) < -0.7f && !secondScan)
+            if (MonoMain.UpdateLerpState)
             {
-                secondScan = true;
-                transWave -= 2f;
+                transWave -= 0.08f;
+                if (Math.Sin(transWave) < -0.7f && !secondScan)
+                {
+                    secondScan = true;
+                    transWave -= 2f;
+                }
+                else if (Math.Sin(transWave) > 0.9f && secondScan) finished = true;
+                base.Update();
             }
-            else if (Math.Sin(transWave) > 0.9f && secondScan) finished = true;
-            base.Update();
         }
 
         public override void Apply()
