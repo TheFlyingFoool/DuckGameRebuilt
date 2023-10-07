@@ -99,6 +99,8 @@ namespace DuckGame
         public static string AutoUpdaterProgressMessage = "";
         public static DGVersion LatestRebuiltVersion; // for fetching
         public static bool NewerRebuiltVersionExists; // for fetching
+        public static bool RecorderatorWatchMode = false;
+        public static string CordToViewName;
         
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
@@ -292,6 +294,17 @@ namespace DuckGame
         }
         private static void DoMain(string[] args)
         {
+            if (args.Length == 1)
+            {
+                Match match = Regex.Match(args[0], @"DuckGame(\\|\/)Recorderations\1.*(cord_.+\.crf)$");
+                if (match.Success)
+                {
+                    RecorderatorWatchMode = true;
+                    CordToViewName = match.Groups[2].Value;
+                    args = new[] { "-nomods", "-noRPC", "-command", "'lev", "cord'" };
+                }
+            }
+            
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             MonoMain.startTime = DateTime.Now;
             for (int index = 0; index < args.Length; ++index)

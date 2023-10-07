@@ -410,6 +410,7 @@
     <Compile Include="AddedContent\NiK0\SpaceMaterial.cs" />
     <Compile Include="Recorderator\RecorderationSelector\FolderInfo.cs" />
     <Compile Include="Recorderator\RecorderationSelector\IRMenuItem.cs" />
+    <Compile Include="Recorderator\RecorderationSelector\NullRMenuItem.cs" />
     <Compile Include="Recorderator\RecorderationSelector\ProfileInfo.cs" />
     <Compile Include="Recorderator\RecorderationSelector\RecorderationSelector.cs" />
     <Compile Include="Recorderator\RecorderationSelector\ReplayInfo.cs" />
@@ -576,6 +577,7 @@
     <Compile Include="src\MonoTime\Console\Commands\Filter.cs" />
     <Compile Include="src\MonoTime\Console\Commands\For.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Help.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\LaunchArguments.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Rep.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Echo.cs" />
     <Compile Include="src\MonoTime\Console\Commands\DansTestArea.cs" />
