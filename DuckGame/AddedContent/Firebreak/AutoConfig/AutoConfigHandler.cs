@@ -21,9 +21,10 @@ namespace DuckGame
 
             if (!File.Exists(MainSaveFilePath))
                 SaveAll(false);
-            else CleanForgottenFields();
+            // else CleanForgottenFields(); // unnecessary
             
-            LoadAll();
+            if (!LoadAll())
+                SaveAll(false);
 
             MonoMain.OnGameExit += SaveAll;
         }
@@ -37,7 +38,7 @@ namespace DuckGame
 
             foreach (string line in allLines)
             {
-                string[] spl = line.Split('=');
+                string[] spl = line.Split(new[] {'='}, 2);
                 if (AutoConfigFieldAttribute.All.Any(x => x.UsableName == spl[0]))
                     keepLines.Add(line);
             }
@@ -95,6 +96,7 @@ namespace DuckGame
                 Log(ACAction.SaveSuccess);
         }
         
+        /// <returns>True if loading succeeded</returns>
         public static bool LoadAll()
         {
             Log(ACAction.TryLoad);
@@ -121,7 +123,7 @@ namespace DuckGame
                 if (string.IsNullOrWhiteSpace(line))
                     continue;
 
-                string[] lineSplit = line.Split('=');
+                string[] lineSplit = line.Split(new[] {'='}, 2);
 
                 if (lineSplit.Length != 2)
                 {
@@ -161,14 +163,15 @@ namespace DuckGame
                 foreach (string line in lines)
                 {
                     i++;
-                    string[] spl = line.Split('=');
+                    // ... `=`s in the actual value will cause problems
+                    string[] spl = line.Split(new[] {'='}, 2);
 
                     if (spl[0] != attribute.UsableName)
                         continue;
 
                     serializedValue = spl[1];
 
-                    if (lines.Skip(i).Any(x => x.Split('=')[0] == spl[0]))
+                    if (lines.Skip(i).Any(x => x.Split(new[] {'='}, 2)[0] == spl[0]))
                     {
                         File.WriteAllText(SaveDirPath + newValue, string.Empty);
                         throw new Exception("Duplicate AutoConfig entries for the same field");

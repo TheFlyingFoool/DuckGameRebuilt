@@ -483,10 +483,9 @@ namespace DuckGame
             if (!match.Success)
                 return false;
 
-            if (!ulong.TryParse(match.Groups[1].Value, out ulong lobbyId))
-                return false;
-
-            Level.current = new JoinServer(lobbyId);
+            // Level.current = new JoinServer(ulong.Parse(match.Groups[1].Value));
+            Level.current = new DisconnectFromGame(ulong.Parse(match.Groups[1].Value));
+            // DuckNetwork.Join(match.Groups[1].Value);
             return true;
         }
 
