@@ -13,12 +13,13 @@ namespace DuckGame
     [BaggedProperty("isInDemo", true)]
     public class SequenceCrate : Crate, ISequenceItem
     {
-        public int _variant = Rando.Int(1, 3);
+        public int _variant = Rando.Int(1, 4);
         public static Dictionary<int, DuckPersona> _variantPersonaMap = new()
         {
             {1, Persona.Duck7},
             {2, Persona.Duck6},
             {3, Persona.Duck2},
+            {4, Persona.Duck3},
         };
         
         public SequenceCrate(float xpos, float ypos)
