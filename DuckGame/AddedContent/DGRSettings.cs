@@ -183,6 +183,8 @@ namespace DuckGame
         [AutoConfigField] public static bool LoadMusic = true;
 
         [AutoConfigField] public static bool FasterLoad = false;
+        
+        [AutoConfigField] public static bool SequenceCrateRetexture = false;
 
         public static bool LoaderMusic; //this is so you wont crash immediately when changing the setting, only gets set on startup -NiK0
 

@@ -434,6 +434,11 @@ namespace DuckGame
                 dgrDescription = "If this is enabled hats, effects, devconsole, challenges, textures wont load on startup resulting in instability so use at your own risk"
             });
 
+            menu.Add(new UIMenuItemToggle("Alt SeqCrate Texture", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SequenceCrateRetexture)))
+            {
+                dgrDescription = "Retextures the Sequence Crate so it doesn't look indentical to the regular crate"
+            });
+
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
             return menu;
