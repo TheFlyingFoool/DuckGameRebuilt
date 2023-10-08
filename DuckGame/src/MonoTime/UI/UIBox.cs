@@ -115,24 +115,25 @@ namespace DuckGame
         {
             if (_vertical)
             {
-                float num1 = 0f;
-                float num2 = 0f;
+                float wide = 0f;
+                float high = 0f;
                 foreach (UIComponent component in _components)
                 {
                     if (component.condition == null || component.condition())
                     {
-                        num2 += component.collisionSize.y + _seperation;
-                        if (component.collisionSize.x > num1)
-                            num1 = component.collisionSize.x;
+                        if (!component.ignoreSeperation)
+                            high += component.collisionSize.y + _seperation;
+                        if (component.collisionSize.x > wide)
+                            wide = component.collisionSize.x;
                     }
                 }
-                float num3 = num1 + borderSize.x * 2f;
-                float num4 = num2 - _seperation + borderSize.y * 2f;
-                if (_autoSizeHor && (fit & UIFit.Horizontal) == UIFit.None && num3 > _collisionSize.x)
-                    _collisionSize.x = num3;
-                if (_autoSizeVert && (fit & UIFit.Vertical) == UIFit.None && num4 > _collisionSize.y)
-                    _collisionSize.y = num4;
-                float num5 = (float)(-num4 / 2.0) + borderSize.y;
+                float wide2 = wide + borderSize.x * 2f;
+                float high2 = high - _seperation + borderSize.y * 2f;
+                if (_autoSizeHor && (fit & UIFit.Horizontal) == UIFit.None && wide2 > _collisionSize.x)
+                    _collisionSize.x = wide2;
+                if (_autoSizeVert && (fit & UIFit.Vertical) == UIFit.None && high2 > _collisionSize.y)
+                    _collisionSize.y = high2;
+                float yDraw = (float)(-high2 / 2.0) + borderSize.y;
                 foreach (UIComponent component in _components)
                 {
                     if (component.condition == null || component.condition())
@@ -142,38 +143,41 @@ namespace DuckGame
                             component.anchor.offset.x = (float)(-collisionSize.x / 2.0 + borderSize.x + component.collisionSize.x / 2.0);
                         else if ((component.align & UIAlign.Right) > UIAlign.Center)
                             component.anchor.offset.x = (float)(collisionSize.x / 2.0 - borderSize.x - component.collisionSize.x / 2.0);
-                        component.anchor.offset.y = (float)(num5 * scale.y + component.height / 2.0);
-                        num5 += component.collisionSize.y + _seperation;
+                        component.anchor.offset.y = (float)(yDraw * scale.y + component.height / 2.0);
+                        if (!component.ignoreSeperation)
+                            yDraw += component.collisionSize.y + _seperation;
                     }
                 }
             }
             else
             {
-                float num6 = 0f;
-                float num7 = 0f;
+                float wide = 0f;
+                float high = 0f;
                 foreach (UIComponent component in _components)
                 {
                     if (component.condition == null || component.condition())
                     {
-                        num6 += component.collisionSize.x + _seperation;
-                        if (component.collisionSize.y > num7)
-                            num7 = component.collisionSize.y;
+                        if (!component.ignoreSeperation)
+                            wide += component.collisionSize.x + _seperation;
+                        if (component.collisionSize.y > high)
+                            high = component.collisionSize.y;
                     }
                 }
-                float num8 = num7 + borderSize.y * 2f;
-                float num9 = num6 - _seperation + borderSize.x * 2f;
-                if (_autoSizeHor && (fit & UIFit.Horizontal) == UIFit.None && num9 > _collisionSize.x)
-                    _collisionSize.x = num9;
-                if (_autoSizeVert && (fit & UIFit.Vertical) == UIFit.None && num8 > _collisionSize.y)
-                    _collisionSize.y = num8;
-                float num10 = (float)(-num9 / 2.0) + borderSize.x;
+                float wide2 = high + borderSize.y * 2f;
+                float high2 = wide - _seperation + borderSize.x * 2f;
+                if (_autoSizeHor && (fit & UIFit.Horizontal) == UIFit.None && high2 > _collisionSize.x)
+                    _collisionSize.x = high2;
+                if (_autoSizeVert && (fit & UIFit.Vertical) == UIFit.None && wide2 > _collisionSize.y)
+                    _collisionSize.y = wide2;
+                float xDraw = (float)(-high2 / 2.0) + borderSize.x;
                 foreach (UIComponent component in _components)
                 {
                     if (component.condition == null || component.condition())
                     {
-                        component.anchor.offset.x = (float)(num10 * scale.x + component.width / 2.0);
+                        component.anchor.offset.x = (float)(xDraw * scale.x + component.width / 2.0);
                         component.anchor.offset.y = 0f;
-                        num10 += component.collisionSize.x + _seperation;
+                        if (!component.ignoreSeperation)
+                            xDraw += component.collisionSize.x + _seperation;
                     }
                 }
             }

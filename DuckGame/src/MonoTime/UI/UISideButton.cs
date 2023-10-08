@@ -9,6 +9,7 @@ namespace DuckGame
         {
             _sections = new SpriteMap("uiBox", 10, 10);
             text = txt;
+            ignoreSeperation = true;
         }
         private SpriteMap _sections;
         private bool _borderVisible = true;
