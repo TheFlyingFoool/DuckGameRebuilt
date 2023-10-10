@@ -229,6 +229,7 @@
     <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddedContent\CorinthianPillar.cs" />
     <Compile Include="AddedContent\DevWeapons\FirebreakGun.cs" />
     <Compile Include="AddedContent\DevWeapons\KlofGun.cs" />
     <Compile Include="AddedContent\DevWeapons\LutalliGun.cs" />

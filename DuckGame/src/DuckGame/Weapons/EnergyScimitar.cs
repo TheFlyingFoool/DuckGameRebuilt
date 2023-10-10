@@ -508,7 +508,8 @@ namespace DuckGame
             if (Editor.clientonlycontent)
             {
                 return pTaped.gun1 is EnergyScimitar && pTaped.gun2 is Chainsaw ? new EnergyChainsaw(x, y) :
-                    pTaped.gun1 is EnergyScimitar && pTaped.gun2 is SledgeHammer ? new EnergyHammer(x, y) : null;
+                    pTaped.gun1 is EnergyScimitar && pTaped.gun2 is SledgeHammer ? new EnergyHammer(x, y) :
+                    pTaped.gun1 is EnergyScimitar && pTaped.gun2 is Warpgun ? new WarpScimitar(x, y) : null;
             }
             return base.BecomeTapedMonster(pTaped);
         }

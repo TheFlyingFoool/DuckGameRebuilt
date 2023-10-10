@@ -406,12 +406,16 @@ namespace DuckGame
                 }
 
 
-                if (heavyRain) rainSound.volume = Lerp.Float(rainSound.volume, 0.5f, 0.01f);
-                else rainSound.volume = Lerp.Float(rainSound.volume, 0.2f, 0.01f);
 
-                rainSound.pitch = Rando.Float(-3f, -3.1f);
+                if (rainSound != null)
+                {
+                    if (heavyRain) rainSound.volume = Lerp.Float(rainSound.volume, 0.5f, 0.01f);
+                    else rainSound.volume = Lerp.Float(rainSound.volume, 0.2f, 0.01f);
 
-                if (rainSound._effect._instance.Platform_GetProgress() > 0.5f) rainSound._effect._instance._position = 0;
+                    rainSound.pitch = Rando.Float(-3f, -3.1f);
+
+                    if (rainSound._effect != null && rainSound._effect._instance != null && rainSound._effect._instance.Platform_GetProgress() > 0.5f) rainSound._effect._instance._position = 0;
+                }
 
                 //ignore this mess im just quickly assembling this if you wanna make it better go ahead
                 //-NiK0
@@ -477,12 +481,15 @@ namespace DuckGame
                 }
 
 
-                if (heavyRain) rainSound.volume = Lerp.Float(rainSound.volume, 0.5f, 0.01f);
-                else rainSound.volume = Lerp.Float(rainSound.volume, 0.2f, 0.01f);
+                if (rainSound != null)
+                {
+                    if (heavyRain) rainSound.volume = Lerp.Float(rainSound.volume, 0.5f, 0.01f);
+                    else rainSound.volume = Lerp.Float(rainSound.volume, 0.2f, 0.01f);
 
-                rainSound.pitch = Rando.Float(-3f, -3.1f);
+                    rainSound.pitch = Rando.Float(-3f, -3.1f);
 
-                if (rainSound._effect._instance.Platform_GetProgress() > 0.5f) rainSound._effect._instance._position = 0;
+                    if (rainSound._effect != null && rainSound._effect._instance != null && rainSound._effect._instance.Platform_GetProgress() > 0.5f) rainSound._effect._instance._position = 0;
+                }
 
                 //ignore this mess im just quickly assembling this if you wanna make it better go ahead
                 //-NiK0

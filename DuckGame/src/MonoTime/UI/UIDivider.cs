@@ -159,7 +159,6 @@ namespace DuckGame
 
         public override void Draw()
         {
-
             if (!_vertical)
             {
                 Vec2 vec2_1 = _rightBox.position - new Vec2(_rightBox.width / 2f, _rightBox.height / 2f);

@@ -203,12 +203,15 @@ namespace DuckGame
                 {
                     if (PassiveParticleTimer < -100)
                     {
-                        PassiveParticleTimer = Maths.Clamp(team.metadata.PassiveParticleRate.value, 0.1f, 2.5f);
+                        if (team.metadata.ParticleCount.value != 1) PassiveParticleTimer = Maths.Clamp(team.metadata.PassiveParticleRate.value, 0.1f, 2.5f);
+                        else PassiveParticleTimer = team.metadata.PassiveParticleRate.value;
                     }
                     PassiveParticleTimer -= 0.017f;
                     if (PassiveParticleTimer <= 0 && PassiveParticlesActive)
                     {
-                        PassiveParticleTimer = Maths.Clamp(team.metadata.PassiveParticleRate.value, 0.1f, 2.5f);
+                        if (team.metadata.ParticleCount.value != 1) PassiveParticleTimer = Maths.Clamp(team.metadata.PassiveParticleRate.value, 0.1f, 2.5f);
+                        else PassiveParticleTimer = team.metadata.PassiveParticleRate.value;
+
                         bool canSpawn;
                         switch (team.metadata.PassiveParticleCondition.value)
                         {
