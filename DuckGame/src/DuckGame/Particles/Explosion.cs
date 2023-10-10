@@ -72,9 +72,7 @@ namespace DuckGame
             }
             if (_wait <= 0)
                 y += vSpeed;
-            //since the lifetime of this particle is tied to its animation when its being culled the animation doesn't progress
-            //so instead its just getting called here so it can delete properly -NiK0
-            if (currentlyDrawing) _sprite.UpdateFrame();
+            if (!currentlyDrawing) _sprite.UpdateFrame(true);
             if (!_sprite.finished)
                 return;
             Level.Remove(this);

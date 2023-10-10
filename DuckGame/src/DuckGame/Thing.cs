@@ -260,18 +260,29 @@ namespace DuckGame
 
         public virtual bool TransferControl(NetworkConnection to, NetIndex8 auth)
         {
+            Main.SpecialCode2 = "to conn";
             if (to == connection)
             {
+                Main.SpecialCode2 = "to conn 4";
                 if (auth > authority)
+                {
+                    Main.SpecialCode2 = "to conn 8";
+
                     authority = auth;
+                }
                 return true;
             }
+            Main.SpecialCode2 = "to conn 16";
             if (connection.profile != null && connection.profile.slotType != SlotType.Spectator && (auth < authority || connection != null && CanBeControlled() && connection.profile != null && connection.profile.slotType != SlotType.Spectator && auth == authority && (connection.profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks < (to.profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks))
                 return false;
+            Main.SpecialCode2 = "to conn 24";
             if (NetIndex8.Difference(auth, authority) > 19)
                 wasSuperFondled = 120;
+            Main.SpecialCode2 = "to conn 32";
             _framesSinceTransfer = 0;
+            Main.SpecialCode2 = "to conn 40";
             connection = to;
+            Main.SpecialCode2 = "to conn 44";
             authority = auth;
             return true;
         }

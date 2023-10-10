@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.DeathCrate
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -69,6 +62,12 @@ namespace DuckGame
                 if (_settings[settingIndex].likelyhood == 1 || Rando.Float(1f) < _settings[settingIndex].likelyhood)
                     break;
             }
+
+            //this is here because the deathcrate timer is tied to the sprite animation and sprite animations
+            //are executed in the draw cycle, so if the deathcrate is activated and goes offscreen it wont do draw calls
+            //making the sprite animation freeze resulting in the deathcrate never exploding until being unculled
+            //which is fucking idiotic -NiK0
+            shouldbegraphicculled = false;
         }
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
@@ -107,11 +106,6 @@ namespace DuckGame
         {
             if (activated && _sprite.currentAnimation != "activate")
             {
-                //this is here because the deathcrate timer is tied to the sprite animation and sprite animations
-                //are executed in the draw cycle, so if the deathcrate is activated and goes offscreen it wont do draw calls
-                //making the sprite animation freeze resulting in the deathcrate never exploding until being unculled
-                //which is fucking idiotic -NiK0
-                shouldbegraphicculled = false; 
                 _sprite.SetAnimation("activate");
                 collisionOffset = new Vec2(-8f, -8f);
                 collisionSize = new Vec2(16f, 15f);

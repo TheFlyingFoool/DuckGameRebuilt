@@ -237,8 +237,12 @@ namespace DuckGame
             catch (Exception ex)
             {
                 DevConsole.Log(DCSection.GhostMan, "@error !! GHOST MANAGER UPDATE EXCEPTION", m.connection);
+                DevConsole.Log("");
                 DevConsole.Log(DCSection.GhostMan, ex.ToString(), m.connection);
-                DevConsole.Log(DCSection.GhostMan, $"NM {m} specialCode:{specialCode} CCI:{crashIndex}");
+                DevConsole.Log("");
+                DevConsole.Log("");
+                DevConsole.Log(DCSection.GhostMan, $"NM {m} specialCode:{specialCode} CCI:{crashIndex} hyperSpecial:{Main.SpecialCode2}");
+                DevConsole.Log(DCSection.GhostMan, "IF YOU SEE THIS, PLEASE REPORT IT TO A DGR DEV");
                 receivingDestroyMessage = false;
             }
         }
@@ -307,22 +311,34 @@ namespace DuckGame
                     }
                     else
                     {
-                        crashIndex = 11;
+                        crashIndex = 100;
                         if (ghostObject.isDestroyed)
                         {
                             DevConsole.Log(DCSection.GhostMan, "Skipped ghost data (DESTROYED)(" + ghostObject.ghostObjectIndex.ToString() + ")", pState.connection);
                             return;
                         }
+                        crashIndex = 101;
                         if (ghostObject.thing.isBitBufferCreatedGhostThing)
                         {
+                            crashIndex = 102;
                             ghostObject.thing.isBitBufferCreatedGhostThing = false;
+                            crashIndex = 103;
                             ghostObject.thing.level = null;
+                            crashIndex = 104;
                             Level.Add(ghostObject.thing);
                         }
+                        crashIndex = 105;
                         if (pState.header.connection != null)
+                        {
+                            crashIndex = 800;
                             ghostObject.thing.TransferControl(pState.header.connection, pState.authority);
+                        }
                         else
+                        {
+                            crashIndex = 500;
                             ghostObject.thing.TransferControl(pState.connection, pState.authority);
+                        }
+                        crashIndex = 106;
                     }
                     if (NetworkDebugger.enabled && pState.connection.profile != null)
                         NetworkDebugger.GetGhost(ghostObject).dataReceivedFrames[pState.connection.profile.persona] = Graphics.frame;

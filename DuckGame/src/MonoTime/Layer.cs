@@ -575,8 +575,10 @@ namespace DuckGame
                                             break;
                                         }
                                     }
+                                    thing.currentlyDrawing = false;
                                     if ((inbox || thing.Buckets.Length == 0 || thing.owner != null || !thing.shouldbegraphicculled || thing.layer == Foreground) && thing.visible && (thing.ghostObject == null || thing.ghostObject.IsInitialized()))
                                     {
+                                        thing.currentlyDrawing = true;
                                         if (_perspective)
                                         {
                                             Vec2 position = thing.position;
@@ -608,8 +610,10 @@ namespace DuckGame
                             {
                                 foreach (Thing thing in transparent1)
                                 {
+                                    thing.currentlyDrawing = false;
                                     if (thing.visible && (thing.ghostObject == null || thing.ghostObject.IsInitialized()))
                                     {
+                                        thing.currentlyDrawing = true;
                                         if (_perspective)
                                         {
                                             Vec2 position = thing.position;

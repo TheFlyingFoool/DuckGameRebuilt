@@ -69,7 +69,8 @@ namespace DuckGame
         {
             if (Editor.clientonlycontent)
             {
-                return pTaped.gun1 is Warpgun && pTaped.gun2 is Sword ? new WarpSword(x, y) : null;
+                return pTaped.gun1 is Warpgun && pTaped.gun2 is Sword ? new WarpSword(x, y) :
+                    pTaped.gun1 is Warpgun && pTaped.gun2 is EnergyScimitar ? new WarpScimitar(x, y) : null;
             }
             return base.BecomeTapedMonster(pTaped);
         }
