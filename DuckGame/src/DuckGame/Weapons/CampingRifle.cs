@@ -56,14 +56,15 @@ namespace DuckGame
             _clickSound = "campingEmpty";
             physicsMaterial = PhysicsMaterial.Plastic;
         }
-        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        //i'll come back to this later when i finish the camp netgun -NiK0
+        /*public override Holdable BecomeTapedMonster(TapedGun pTaped)
         {
             if (Editor.clientonlycontent)
             {
                 return pTaped.gun1 is CampingRifle && pTaped.gun2 is NetGun ? new CampNetgun(x, y) : null;
             }
             return base.BecomeTapedMonster(pTaped);
-        }
+        }*/
         public override void Update()
         {
             if (!burntOut && burnt >= 1f)
@@ -182,7 +183,7 @@ namespace DuckGame
             base.Draw();
             Vec2 vec2 = new Vec2(13f, -2f);
             float num = (float)Math.Sin(_loadAnimation * 3.14f) * 3f;
-            Draw(_loaderSprite, new Vec2(vec2.x - 8f - num, vec2.y + 4f));
+            Draw(ref _loaderSprite, new Vec2(vec2.x - 8f - num, vec2.y + 4f));
         }
     }
 }

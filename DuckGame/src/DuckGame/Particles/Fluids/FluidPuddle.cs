@@ -17,7 +17,7 @@ namespace DuckGame
         private BlockCorner _topRightCorner;
         private bool _initializedUpperCorners;
         private List<SpriteMap> _surfaceFire = new List<SpriteMap>();
-        private Block _block;
+        public Block _block;
         private SpriteMap _lava;
         private SpriteMap _lavaAlternate;
         private int _framesSinceFeed;
@@ -226,9 +226,46 @@ namespace DuckGame
                 physicsObject.DoFloat();
             }
         }
-
+        public float timer;
+        public MaterialLavaWobble mt;
         public override void Update()
         {
+            //1 per frame if 1000 wide
+
+            if (DGRSettings.HeatWaveMultiplier > 0)
+            {
+                if (data.heat > 0)
+                {
+                    if (mt == null) mt = new MaterialLavaWobble(this);
+                    mt.mult = Maths.Clamp(data.amount / 3f, 0, 0.5f) + Maths.Clamp(data.amount / 50, 0, 0.25f);
+                }
+                else if (onFire)
+                {
+                    if (mt == null) mt = new MaterialLavaWobble(this);
+                    mt.mult = Maths.Clamp(data.amount / 3f, 0, 1) + Maths.Clamp(data.amount / 50, 0, 0.5f);
+                }
+            }
+            if (DGRSettings.AmbientParticles)
+            {
+                if (data.heat > 0)
+                {
+                    timer += 0.001f * collisionSize.x * DGRSettings.ActualParticleMultiplier * data.heat;
+                    while (timer >= 1)
+                    {
+                        Level.Add(new Ember(Rando.Float(left, right), top));
+                        timer--;
+                    }
+                }
+                else if (onFire)
+                {
+                    timer += 0.0005f * collisionSize.x * DGRSettings.ActualParticleMultiplier;
+                    while (timer >= 1)
+                    {
+                        Level.Add(new Ember(Rando.Float(left, right), top));
+                        timer--;
+                    }
+                }
+            }
             ++_framesSinceFeed;
             fluidWave += 0.1f;
             if (data.amount < 0.0001f)
@@ -370,7 +407,8 @@ namespace DuckGame
                     _surfaceFire[index].alpha = alpha;
                     _surfaceFire[index].yscale = _fireRise;
                     _surfaceFire[index].depth = depth + 1;
-                    Graphics.Draw(_surfaceFire[index], (left + 8f + index * num2), (y + _collisionOffset.y + 1f) - num3);
+                    SpriteMap g = _surfaceFire[index];
+                    Graphics.Draw(g, (left + 8f + index * num2), (y + _collisionOffset.y + 1f) - num3);
                 }
             }
             if (_lava != null && collisionSize.y > 2f)

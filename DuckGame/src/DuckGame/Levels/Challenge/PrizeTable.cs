@@ -109,12 +109,14 @@ namespace DuckGame
             if (Chancy.atCounter && !(Level.current is Editor))
             {
                 Vec2 vec2 = new Vec2(32f, -15f);
-                Chancy.body.flipH = true;
                 if (_hasEligibleChallenges)
                 {
                     vec2 = new Vec2(42f, -10f);
                     Chancy.body.flipH = false;
                 }
+                else
+                    Chancy.body.flipH = true;
+
                 Chancy.body.depth = depth - 6;
                 Graphics.Draw(Chancy.body, x + vec2.x, y + vec2.y);
                 if (hoverChancyChallenge)

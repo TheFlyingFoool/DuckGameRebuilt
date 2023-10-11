@@ -29,7 +29,6 @@ namespace DuckGame
                 All.Add(attribute);
             }
         }
-        public string? ShortName { get; set; } = null;
         /// <summary>
         /// Whether or not this field will be saved in the event of a crash.
         /// This can be potentially dangerous if the reason for the crash is this
@@ -54,5 +53,40 @@ namespace DuckGame
         /// The <see cref="MemberInfo"/> the attribute is applied to
         /// </summary>
         public MemberInfo MemberInfo;
+
+        public Type MemberType => MemberInfo switch
+        {
+            FieldInfo fieldInfo => fieldInfo.FieldType,
+            PropertyInfo propertyInfo => propertyInfo.PropertyType,
+            _ => throw s_notImplementedException
+        };
+        
+        public object Value
+        {
+            get => MemberInfo switch
+            {
+                FieldInfo fieldInfo => fieldInfo.GetValue(null),
+                PropertyInfo propertyInfo => propertyInfo.GetMethod?.Invoke(null, null),
+                _ => throw s_notImplementedException
+            };
+            set
+            {
+                switch (MemberInfo)
+                {
+                    case FieldInfo fieldInfo:
+                        fieldInfo.SetValue(null, value);
+                        break;
+                    case PropertyInfo propertyInfo:
+                        propertyInfo.SetMethod?.Invoke(null, new[] {value});
+                        break;
+                    default:
+                        throw s_notImplementedException;
+                }
+            }
+        }
+
+        public string UsableName => Id ?? MemberInfo.GetFullName();
+
+        private static readonly NotImplementedException s_notImplementedException = new("AutoConfig only supports fields and properties");
     }
 }

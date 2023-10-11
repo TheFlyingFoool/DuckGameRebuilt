@@ -1,16 +1,14 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.TitleScreen
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
+using System.Collections.Generic;
+#if AutoUpdater 
+// apparently people remove this accidentally sometimes because it's not
+// referenced outside of the ReleaseAutoUpdater configuration, which makes
+// intellisense think it's useless and automatically remove it  ~Firebreak
 using System.Threading;
-using System.Web;
+#endif
 
 namespace DuckGame
 {
@@ -182,6 +180,7 @@ namespace DuckGame
         public static bool Checked;
         public override void Initialize()
         {
+            Add(new CrumbleShamble(160, 157));
             if (Editor.clientonlycontent)
             {
                 Editor.DisableClientOnlyContent();
@@ -312,16 +311,19 @@ namespace DuckGame
             AddCreditLine("Landon Podbielski");
             AddCreditLine("");
             AddCreditLine("|CREDITSGRAY|@LWINGGRAY@DGR TEAM@RWINGGRAY@");
-            AddCreditLine("NiK0");
-            AddCreditLine("Dan");
-            AddCreditLine("Collin");
-            AddCreditLine("|RED|Fire|WHITE|break|CREDITSGRAY|");
-            AddCreditLine("|BLACK|Erik|GRAY|7302");
-            AddCreditLine("|DGBLUE|othello|PURPLE|7");
-            AddCreditLine("|GREEN|klof44|CREDITSGRAY|");
-            AddCreditLine("");
-            AddCreditLine("|CREDITSGRAY|@LWINGGRAY@GITHUB CONTRIBUTOR@RWINGGRAY@");
-            AddCreditLine("Lutalli");
+            // AddCreditLine("NiK0");
+            // AddCreditLine("Dan");
+            // AddCreditLine("Collin");
+            // AddCreditLine("|RED|Fire|WHITE|break|CREDITSGRAY|");
+            // AddCreditLine("|BLACK|Erik|GRAY|7302");
+            // AddCreditLine("|DGBLUE|othello|PURPLE|7");
+            // AddCreditLine("|GREEN|klof44|CREDITSGRAY|");
+            // AddCreditLine("|PURPLE|Hyeve");
+            // AddCreditLine("|ORANGE|Lutalli");
+            foreach (DGRebuiltDeveloper dgrDev in DGRDevs.AllWithGuns)
+            {
+                AddCreditLine($"{dgrDev.ColorTag}{dgrDev.DisplayName}|CREDITSGRAY|");
+            }
             AddCreditLine("");
             AddCreditLine("|CREDITSGRAY|@LWINGGRAY@ROOM FURNITURE@RWINGGRAY@");
             AddCreditLine("|CREDITSGRAY|@LWINGGRAY@HOME UPDATE HAT ART@RWINGGRAY@");
@@ -507,7 +509,7 @@ namespace DuckGame
             _optionsMenu.Add(new UIText(" ", Color.White), true);
             _optionsMenu.Add(new UIMenuItemToggle("SHENANIGANS", field: new FieldBinding(Options.Data, "shennanigans")), true);
             _optionsMenu.Add(new UIText(" ", Color.White), true);
-            _optionsMenu.Add(new UIMenuItem("REBUILT", new UIMenuActionOpenMenu(_optionsMenu, _dgrMenu), backButton: true), true);
+            _optionsMenu.Add(new UIMenuItem("REBUILT|PINK|♠", new UIMenuActionOpenMenu(_optionsMenu, _dgrMenu), backButton: true), true);
             _optionsMenu.Add(new UIMenuItem("EDIT CONTROLS", new UIMenuActionOpenMenuCallFunction(_optionsMenu, _controlConfigMenu, new UIMenuActionOpenMenuCallFunction.Function(UIControlConfig.ResetWarning)), backButton: true), true);
             _optionsMenu.Add(new UIMenuItem("GRAPHICS", new UIMenuActionOpenMenu(_optionsMenu, _graphicsMenu), backButton: true), true);
             _optionsMenu.Add(new UIMenuItem("AUDIO", new UIMenuActionOpenMenu(_optionsMenu, _audioMenu), backButton: true), true);
@@ -559,8 +561,15 @@ namespace DuckGame
             _optionsGroup.Add(Options._DGRGraphicsMenu, false);
             _optionsGroup.Add(Options._DGRHudMenu, false);
             _optionsGroup.Add(Options._DGREditorMenu, false);
-            _optionsGroup.Add(Options._DGRMiscMenu, false);
+            _optionsGroup.Add(Options._DGRQOLMenu, false);
+            _optionsGroup.Add(Options._DGRDumbShitMenu, false);
+            if (Program.IS_DEV_BUILD)
+                _optionsGroup.Add(Options._DGRDeveloperMenu, false);
             _optionsGroup.Add(Options._DGROptimMenu, false);
+            #if AutoUpdater
+            #else
+            _optionsGroup.Add(Options._DGRRecorderatorMenu, false);
+            #endif
             _optionsGroup.Add(_audioMenu, false);
             if (_accessibilityMenu != null)
                 _optionsGroup.Add(_accessibilityMenu, false);
@@ -916,10 +925,10 @@ namespace DuckGame
             {
                 depth = (Depth)0.9f
             };
-            _beamPlatform = new Sprite("title/beamPlatform")
-            {
-                depth = (Depth)0.9f
-            };
+            //_beamPlatform = new SpriteMap("title/beamPlatform", 84,22)
+            //{
+            //    depth = (Depth)0.9f
+            //};
             _upperMonitor = new Sprite("title/upperMonitor")
             {
                 depth = (Depth)0.85f
@@ -1119,7 +1128,7 @@ namespace DuckGame
                     }
                 }
             }
-            if (!_enterCredits && !_enterMultiplayer && _duck != null && _duck.inputProfile.Pressed(Triggers.Start))
+            if (!_enterCredits && !_enterMultiplayer && _duck != null && _duck.inputProfile.Pressed(Triggers.Start) && _duck.y < 600)
             {
                 _pauseGroup.Open();
                 _mainPauseMenu.Open();
@@ -1635,7 +1644,7 @@ namespace DuckGame
                 Graphics.Draw(_leftPlatform, 0f, 61f);
                 Graphics.Draw(_airlock, 266f, 135f);
                 Graphics.Draw(_rightPlatform, byte.MaxValue, 61f);
-                Graphics.Draw(_beamPlatform, 118f, 146f);
+                //Graphics.Draw(_beamPlatform, 118f, 146f);
                 Graphics.Draw(_optionsTV, 0f, 19f);
                 Graphics.Draw(_libraryBookcase, 263f, 12f);
                 Graphics.Draw(_editorBench, 1f, 130f);

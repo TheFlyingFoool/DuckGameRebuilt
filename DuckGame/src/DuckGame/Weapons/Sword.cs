@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Sword
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -54,7 +47,7 @@ namespace DuckGame
         protected Vec2 centerHeld = new Vec2(4f, 21f);
         protected Vec2 centerUnheld = new Vec2(4f, 11f);
         protected bool _stayVolatile;
-        private bool bayonetLethal;
+        public bool bayonetLethal;
         private float _prevAngle;
         private Vec2 _prevPos;
         private int _prevOffdir = -1;
@@ -121,7 +114,6 @@ namespace DuckGame
             _impactThreshold = 0.3f;
             editorTooltip = "Basically a giant letter opener.";
         }
-
         public override void Initialize() => base.Initialize();
 
         public override Vec2 tapedOffset => tapedCompatriot is Gun ? (tapedCompatriot as Gun).barrelOffset + new Vec2(-14f, 2f) : new Vec2(-6f, -3f);
@@ -154,7 +146,7 @@ namespace DuckGame
             }
         }
 
-        public override Holdable BecomeTapedMonster(TapedGun pTaped) => pTaped.gun1 is Sword && pTaped.gun2 is Sword ? new TapedSword(x, y) : null;
+        public override Holdable BecomeTapedMonster(TapedGun pTaped) => pTaped.gun1 is Sword && pTaped.gun2 is Sword ? new TapedSword(x, y) : Editor.clientonlycontent ? pTaped.gun1 is Sword && pTaped.gun2 is Warpgun ? new WarpSword(x, y) : null : null;
 
         public override void CheckIfHoldObstructed()
         {
@@ -922,7 +914,10 @@ namespace DuckGame
                 angle = angle1;
                 for (int idx = 0; idx < 7; ++idx)
                 {
-                    base.Draw();
+                    if (idx == 0)
+                        base.Draw();
+                    else
+                        base.DrawLerpLess();
                     if (_lastSize > idx)
                     {
                         int index = historyIndex(idx);
@@ -944,7 +939,8 @@ namespace DuckGame
             }
             else
                 base.Draw();
-            addHistory(angle, this.position);
+            if(MonoMain.UpdateLerpState)
+                addHistory(angle, this.position);
         }
 
         protected virtual void OnSwing()

@@ -48,10 +48,10 @@ namespace DuckGame
         private bool _fucked;
         private List<PhysicsObject> _coll;
         public EditorProperty<bool> objective;
-        protected bool secondaryFrame;
+        public bool secondaryFrame;
         private bool _lockedSprite;
         public bool networkUnlockMessage;
-        private bool didUnlock;
+        public bool didUnlock;
         private bool prevLocked;
         private List<Mine> _removeMines = new List<Mine>();
 
@@ -122,7 +122,7 @@ namespace DuckGame
 
         public override void Terminate()
         {
-            if (_hitPoints > 5 && !Network.isActive)
+            if (_hitPoints > 5 && !Network.isActive && !Recorderator.Playing)
             {
                 Level.Remove(_frame);
                 _frame = null;
@@ -142,6 +142,7 @@ namespace DuckGame
                 if (ChallengeLevel.running)
                     ++ChallengeLevel.goodiesGot;
             }
+            if (Recorderator.Playing) return true;
             DoorOffHinges t = null;
             if (Network.isActive)
             {
@@ -249,8 +250,11 @@ namespace DuckGame
             DoUnlock(with.position);
         }
 
+        public Vec2 ps;
         public void DoUnlock(Vec2 keyPos)
         {
+            ps = keyPos;
+            SFX.DontSave = 1;
             SFX.Play("deedleBeep");
             if (DGRSettings.S_ParticleMultiplier != 0)
             {
@@ -626,7 +630,7 @@ namespace DuckGame
             else
                 _key.depth = depth + 1;
             _key.flipH = graphic.flipH;
-            Graphics.Draw(_key, x + _open * 12f, y - 8f);
+            Graphics.Draw(ref _key, x + _open * 12f, y - 8f);
         }
 
         public override BinaryClassChunk Serialize()

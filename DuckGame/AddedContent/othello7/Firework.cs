@@ -104,7 +104,7 @@ namespace DuckGame
                             }
                         }
 
-                        // //i do not care. -NiK0 // I DO -firebreak
+                        // //i do not care. -NiK0 // I DO -firebreak // WHAT THE FUCK MR BREAK -NiK0
                         // float tripleRadius = 3 * singleRadius;
                         // float doubleRadius = 2 * singleRadius;
                         //

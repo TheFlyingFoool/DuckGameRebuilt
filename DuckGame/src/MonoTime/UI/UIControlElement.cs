@@ -164,21 +164,25 @@ namespace DuckGame
                     if (Input.Pressed(Triggers.MenuLeft))
                     {
                         --_selectionIndex;
+                        SFX.DontSave = 1;
                         SFX.Play("textLetter", 0.7f);
                     }
                     if (Input.Pressed(Triggers.MenuRight))
                     {
                         ++_selectionIndex;
+                        SFX.DontSave = 1;
                         SFX.Play("textLetter", 0.7f);
                     }
                     if (Input.Pressed(Triggers.MenuUp))
                     {
                         _selectionIndex -= 4;
+                        SFX.DontSave = 1;
                         SFX.Play("textLetter", 0.7f);
                     }
                     if (Input.Pressed(Triggers.MenuDown))
                     {
                         _selectionIndex += 4;
+                        SFX.DontSave = 1;
                         SFX.Play("textLetter", 0.7f);
                     }
                     if (_selectionIndex < 0)
@@ -229,7 +233,7 @@ namespace DuckGame
                 }
                 else
                     _styleBubble.flipH = false;
-                Graphics.Draw(_styleBubble, vec2_1.x, vec2_1.y);
+                Graphics.Draw(ref _styleBubble, vec2_1.x, vec2_1.y);
                 if (inputMapping.map.ContainsKey(_trigger))
                 {
                     Sprite g = inputMapping.GetSprite(inputMapping.map[_trigger]) ?? inputMapping.device.DoGetMapImage(inputMapping.map[_trigger], true);
@@ -242,7 +246,7 @@ namespace DuckGame
                 if (_selectStyle)
                 {
                     _styleTray.depth = (Depth)0.92f;
-                    Graphics.Draw(_styleTray, x + 118f, Layer.HUD.camera.height / 2f);
+                    Graphics.Draw(ref _styleTray, x + 118f, Layer.HUD.camera.height / 2f);
                     Vec2 vec2_2 = new Vec2(x + 90f, (float)(Layer.HUD.camera.height / 2.0 - 80.0));
                     int num = 0;
                     foreach (Sprite buttonStyle in Input.buttonStyles)

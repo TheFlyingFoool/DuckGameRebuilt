@@ -42,7 +42,7 @@ namespace DuckGame
         private MTEffect _watermarkEffect;
         private Tex2D _watermarkTexture;
         public static MonoMain instance;
-        private GraphicsDeviceManager graphics;
+        public static GraphicsDeviceManager graphics;
         private static int _screenWidth = 1280;
         private static int _screenHeight = 720;
         public static bool _fullScreen = false;
@@ -216,6 +216,10 @@ namespace DuckGame
         public static bool startInLobby = false;
         public static bool startInArcade = false;
         //private int deviceLostWait;
+
+        public static float IntraTick = 1.0f;
+        public static bool UpdateLerpState = true;
+        public static TimeSpan TotalGameTime = TimeSpan.Zero;
 
         public static MonoMainCore core
         {
@@ -801,6 +805,8 @@ namespace DuckGame
         private void StartLazyLoad()
         {
             SFX.Initialize();
+            if (DGRSettings.FasterLoad) return;
+            if (Program.RecorderatorWatchMode) return;
             DuckGame.Content.Initialize();
         }
 
@@ -889,7 +895,7 @@ namespace DuckGame
             Loadaction.label = label;
             _thingsToLoad.Enqueue(Loadaction);
         }
-        
+
         private void StartThreadedLoading()
         {
             _threadedLoadingStarted = true;
@@ -917,30 +923,49 @@ namespace DuckGame
 
             if (DGRSettings.PreloadLevels) AddLoadingAction(DGRSettings.PrreloadLevels, "DGRSettings PrreloadLevels");
             AddLoadingAction(ManagedContent.InitializeMods, "ManagedContent InitializeMods");
-            AddLoadingAction(Network.InitializeMessageTypes, "Network InitializeMessageTypes");
             AddLoadingAction(DeathCrate.InitializeDeathCrateSettings, "DeathCrate InitializeDeathCrateSettings");
             AddLoadingAction(Editor.InitializeConstructorLists, "Editor InitializeConstructorLists");
-            AddLoadingAction(Team.DeserializeCustomHats, "Team DeserializeCustomHats");
-            AddLoadingAction(DuckGame.Content.InitializeLevels, "Content InitializeLevels");
-            AddLoadingAction(DuckGame.Content.InitializeEffects, "Content InitializeEffects");
-            AddLoadingAction(Input.InitializeGraphics, "Input InitializeGraphics");
-            if (DGRSettings.LoadMusic) AddLoadingAction(Music.Initialize, "Music Initialize");
-            DGRSettings.LoaderMusic = DGRSettings.LoadMusic;
-            AddLoadingAction(DevConsole.InitializeFont, "DevConsole InitializeFont");
-            AddLoadingAction(DevConsole.InitializeCommands, "DevConsole InitializeCommands");
-            AddLoadingAction(Editor.InitializePlaceableGroup, "Editor InitializePlaceableGroup");
-            AddLoadingAction(Challenges.Initialize, "Challenges Initialize");
+            if (!Program.RecorderatorWatchMode)
+            {
+                AddLoadingAction(Network.InitializeMessageTypes, "Network InitializeMessageTypes");
+                if (!DGRSettings.FasterLoad) AddLoadingAction(Team.DeserializeCustomHats, "Team DeserializeCustomHats");
+                AddLoadingAction(DuckGame.Content.InitializeLevels, "Content InitializeLevels");
+            }
+
+            if (!Program.RecorderatorWatchMode)
+            {
+                if (!DGRSettings.FasterLoad) AddLoadingAction(DuckGame.Content.InitializeEffects, "Content InitializeEffects");
+                AddLoadingAction(Input.InitializeGraphics, "Input InitializeGraphics");
+                if (DGRSettings.LoadMusic) AddLoadingAction(Music.Initialize, "Music Initialize");
+                DGRSettings.LoaderMusic = DGRSettings.LoadMusic;
+                if (!DGRSettings.FasterLoad) AddLoadingAction(DevConsole.InitializeFont, "DevConsole InitializeFont");
+                if (!DGRSettings.FasterLoad) AddLoadingAction(DevConsole.InitializeCommands, "DevConsole InitializeCommands");
+                if (!DGRSettings.FasterLoad) AddLoadingAction(Challenges.Initialize, "Challenges Initialize");
+                AddLoadingAction(Editor.InitializePlaceableGroup, "Editor InitializePlaceableGroup");
+            }
             AddLoadingAction(Collision.Initialize, "Collision Initialize");
-            AddLoadingAction(Level.InitializeCollisionLists, "Level InitializeCollisionLists");  
-            AddLoadingAction(MapPack.RegeneratePreviewsIfNecessary, "MapPack RegeneratePreviewsIfNecessary");
+            AddLoadingAction(Level.InitializeCollisionLists, "Level InitializeCollisionLists");
+            if (!DGRSettings.FasterLoad && !Program.RecorderatorWatchMode) AddLoadingAction(MapPack.RegeneratePreviewsIfNecessary, "MapPack RegeneratePreviewsIfNecessary");
             AddLoadingAction(StartLazyLoad, "StartLazyLoad");
+
             AddLoadingAction(SetStarted, "SetStarted");
         }
 
         private void SetStarted()
         {
             _doStart = true;
-            if (enableThreadedLoading)
+            if (Program.RecorderatorWatchMode) return;
+            if (Program.RecorderatorWatchMode)
+            {
+                _lazyLoadThread = new Thread(new ThreadStart(DoLazyLoading))
+                {
+                    CurrentCulture = CultureInfo.InvariantCulture,
+                    Priority = ThreadPriority.Highest,
+                    IsBackground = true
+                };
+                _lazyLoadThread.Start();
+            }
+            else if (enableThreadedLoading)
             {
                 _lazyLoadThread = new Thread(new ThreadStart(DoLazyLoading))
                 {
@@ -960,6 +985,8 @@ namespace DuckGame
             OnStart();
             _started = true;
 
+            DGRSettings.InitalizeFPSThings();
+            Recorderator.PostInitialize();
             // this is basically the lifeline of all attributes so i cant
             // use the PostInitialize attribute for it since it wont even
             // work without this lol
@@ -973,6 +1000,7 @@ namespace DuckGame
            
             Program.SetAccumulatedElapsedTime(Program.main, Program.main.TargetElapsedTime);
 
+            if (Program.RecorderatorWatchMode) return;
             foreach (MethodInfo methodInfo in PostInitializeAttribute.All)
             {
                 methodInfo.Invoke(null, null);
@@ -1026,6 +1054,14 @@ namespace DuckGame
         [HandleProcessCorruptedStateExceptions, SecurityCritical]
         protected override void Update(GameTime gameTime)
         {
+            
+            Program.main.UnFixedDraw = DGRSettings.UncappedFPS;
+            if (DGRSettings.UncappedFPS)
+            {
+
+            }
+
+
             if (showingSaveTool && saveTool == null && File.Exists("SaveTool.dll"))
             {
                 saveTool = Activator.CreateInstance(Assembly.Load(File.ReadAllBytes(Directory.GetCurrentDirectory() + "/SaveTool.dll")).GetType("SaveRecovery.SaveTool")) as Form;
@@ -1250,28 +1286,31 @@ namespace DuckGame
 
             if (Graphics.inFocus)
                 Input.Update();
-            lock (LevelMetaData._completedPreviewTasks)
+            if (!Program.RecorderatorWatchMode)
             {
-                if (LevelMetaData._completedPreviewTasks.Count > 0)
+                lock (LevelMetaData._completedPreviewTasks)
                 {
-                    foreach (LevelMetaData.SaveLevelPreviewTask completedPreviewTask in LevelMetaData._completedPreviewTasks)
+                    if (LevelMetaData._completedPreviewTasks.Count > 0)
                     {
-                        try
+                        foreach (LevelMetaData.SaveLevelPreviewTask completedPreviewTask in LevelMetaData._completedPreviewTasks)
                         {
-                            DuckFile.SaveString(completedPreviewTask.levelString, completedPreviewTask.savePath);
+                            try
+                            {
+                                DuckFile.SaveString(completedPreviewTask.levelString, completedPreviewTask.savePath);
+                            }
+                            catch (Exception)
+                            {
+                            }
                         }
-                        catch (Exception)
-                        {
-                        }
+                        LevelMetaData._completedPreviewTasks.Clear();
                     }
-                    LevelMetaData._completedPreviewTasks.Clear();
                 }
-            }
-            Cloud.Update();
-            if (_started && !NetworkDebugger.enabled)
-            {
-                InputProfile.Update();
-                Network.PreUpdate();
+                Cloud.Update();
+                if (_started && !NetworkDebugger.enabled)
+                {
+                    InputProfile.Update();
+                    Network.PreUpdate();
+                }
             }
             if (!Keyboard.alt && Keyboard.Pressed(Keys.F4) || Keyboard.alt && Keyboard.Pressed(Keys.Enter))
             {
@@ -1330,6 +1369,8 @@ namespace DuckGame
                     }
                     shouldPauseGameplay = true;
                 }
+                UpdateLerpState = true;
+
                 RumbleManager.Update();
                 if (!shouldPauseGameplay)
                 {
@@ -1530,8 +1571,20 @@ namespace DuckGame
         protected void RunDraw(GameTime gameTime)
         {
             FPSCounter.Tick(1);
+            IntraTick = (float)(gameTime.ElapsedGameTime.TotalMilliseconds / TimeSpan.FromMilliseconds(1000.0 / 60.0).TotalMilliseconds);
+
+
+            if (Level.current is ReplayLevel rps)
+            {
+                rps.IntraTick(gameTime.TotalGameTime + gameTime.ElapsedGameTime);
+            }
+            TotalGameTime = gameTime.TotalGameTime;
+
+
             _didFirstDraw = true;
-            Graphics.frameFlipFlop = !Graphics.frameFlipFlop;
+            if(UpdateLerpState)
+                Graphics.frameFlipFlop = !Graphics.frameFlipFlop;
+
             if (Graphics.device.IsDisposed)
                 return;
 
@@ -1684,12 +1737,12 @@ namespace DuckGame
                 if (_timeSinceLastLoadFrame.elapsed.Milliseconds > 16)
                     ++_duckRun.frame;
                 Vec2 vec2_2 = new Vec2(Graphics.width - _duckRun.width * 4 - 50, Graphics.height - _duckRun.height * 4 - 55);
-                Graphics.Draw(_duckRun, vec2_2.x, vec2_2.y);
+                Graphics.Draw(ref _duckRun, vec2_2.x, vec2_2.y);
                 _duckArm.frame = _duckRun.imageIndex;
                 _duckArm.scale = new Vec2(4f, 4f);
                 _duckArm.depth = 0.8f;
                 _duckArm.color = new Color(80, 80, 80);
-                Graphics.Draw(_duckArm, vec2_2.x + 20f, vec2_2.y + 56f);
+                Graphics.Draw(ref _duckArm, vec2_2.x + 20f, vec2_2.y + 56f);
                 Graphics.screen.End();
                 _timeSinceLastLoadFrame.Restart();
                 //if (Layer.Console != null)
@@ -1827,10 +1880,12 @@ namespace DuckGame
                             Layer.HUD.End(true);
                         }
                     }
-                    if (!DevConsole.showFPS)
-                        return;
-                    FPSCounter.Render(Graphics.device, index: 0, label: "UPS");
-                    FPSCounter.Render(Graphics.device, 100f, index: 1);
+                    if (DevConsole.showFPS)
+                    {
+                        FPSCounter.Render(Graphics.device, index: 0, label: "UPS");
+                        FPSCounter.Render(Graphics.device, 100f, index: 1);
+                    }
+                    UpdateLerpState = false;
                 }
             }
         }

@@ -178,7 +178,7 @@ namespace DuckGame
         {
             if (_harpoon == null)
                 return;
-            if (isServerForObject)
+            if (isServerForObject && !Recorderator.Playing)
             {
                 ropeData.Clear();
                 SerializeRope(_rope);
@@ -364,7 +364,7 @@ namespace DuckGame
                 if (_sightHit != null)
                 {
                     _sightHit.color = Color.Red;
-                    Graphics.Draw(_sightHit, _wallPoint.x, _wallPoint.y);
+                    Graphics.Draw(ref _sightHit, _wallPoint.x, _wallPoint.y);
                 }
             }
             base.DrawGlow();

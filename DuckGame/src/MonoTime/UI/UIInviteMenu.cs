@@ -163,11 +163,13 @@ namespace DuckGame
                 if (Input.Pressed(Triggers.MenuUp) && _selection > 0)
                 {
                     --_selection;
+                    SFX.DontSave = 1;
                     SFX.Play("textLetter", 0.7f);
                 }
                 if (Input.Pressed(Triggers.MenuDown) && _selection < _users.Count - 1)
                 {
                     ++_selection;
+                    SFX.DontSave = 1;
                     SFX.Play("textLetter", 0.7f);
                 }
                 if (_selection >= _viewTop + _maxShow)
@@ -239,13 +241,13 @@ namespace DuckGame
             {
                 _moreArrow.depth = depth + 2;
                 _moreArrow.flipV = false;
-                Graphics.Draw(_moreArrow, x, (float)(y + num2 / 2.0 + 13.0));
+                Graphics.Draw(ref _moreArrow, x, (float)(y + num2 / 2.0 + 13.0));
             }
             if (_viewTop > 0)
             {
                 _moreArrow.depth = depth + 2;
                 _moreArrow.flipV = true;
-                Graphics.Draw(_moreArrow, x, (float)(y - num2 / 2.0 - 2.0));
+                Graphics.Draw(ref _moreArrow, x, (float)(y - num2 / 2.0 - 2.0));
             }
             base.Draw();
         }

@@ -34,7 +34,7 @@ namespace DuckGame
             flammable = 0f;
             collideSounds.Add("rockHitGround2");
             physicsMaterial = PhysicsMaterial.Metal;
-            editorTooltip = "Don’t throw rocks!";
+            editorTooltip = "Don't throw rocks!";
             holsterAngle = 90f;
         }
 

@@ -48,6 +48,7 @@ namespace DuckGame
         private int _framesCreated;
         public static bool boost;
 
+
         public float viewSize
         {
             get => _viewSize;
@@ -116,7 +117,16 @@ namespace DuckGame
             get => _zoomMult;
             set => _zoomMult = value;
         }
-
+        public override void LerpCamera()
+        {
+            CameraLerp.CanLerp = true;
+            CameraLerp.UpdateLerpState(_position, new Vec2(width, height), MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            _dirty = true;
+        }
+        public override void SubFrameUpdate()
+        {
+            return;
+        }
         public override void Update()
         {
             ++_framesCreated;
@@ -343,11 +353,11 @@ namespace DuckGame
             }
             x = _center.x - width / 2f;
             this.y = _center.y - height / 2f;
-            if (x < hardLimitLeft)
+            if (_position.x < hardLimitLeft)
                 x = hardLimitLeft;
             if (right > hardLimitRight)
                 x = hardLimitRight - width;
-            if (this.y < hardLimitTop)
+            if (_position.y < hardLimitTop)
                 this.y = hardLimitTop;
             if (bottom > hardLimitBottom)
                 this.y = hardLimitBottom - height;

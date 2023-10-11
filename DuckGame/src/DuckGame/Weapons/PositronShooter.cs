@@ -74,7 +74,7 @@ namespace DuckGame
         private int _prevInc;
         private bool _winding;
         private float _windVelocity;
-        private float _wind;
+        public float _wind;
         private int _noteIndex;
         public static bool inFire;
 
@@ -147,8 +147,10 @@ namespace DuckGame
                 {
                     if (_noteIndex < _notes.Count)
                     {
-                        if (_notes[_noteIndex] != "")
+                        if (_notes[_noteIndex] != "" && !Recorderator.Playing)
+                        {
                             SFX.Play("musicBox" + _notes[_noteIndex]);
+                        }
                         ++_noteIndex;
                     }
                     else
@@ -174,7 +176,7 @@ namespace DuckGame
         {
             Vec2 vec2 = Offset(new Vec2(0.5f, 0.5f));
             _positronWinder.angle = _wind * offDir;
-            Graphics.Draw(_positronWinder, vec2.x, vec2.y, depth + 10);
+            Graphics.Draw(ref _positronWinder, vec2.x, vec2.y, depth + 10);
             base.Draw();
         }
 

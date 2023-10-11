@@ -20,6 +20,8 @@ namespace DuckGame
         public bool skipUpdate;
         private Rectangle _rectangle;
         public Vec2 _viewSize;
+        public Interp CameraLerp = new Interp(false);
+        public bool LerpWithoutFear = false;
 
         public Vec2 position
         {
@@ -30,6 +32,8 @@ namespace DuckGame
                     return;
                 _position = value;
                 _dirty = true;
+                if (DGRSettings.UncappedFPS)
+                    SubFrameUpdate();
             }
         }
 
@@ -42,6 +46,8 @@ namespace DuckGame
                     return;
                 _position.x = value;
                 _dirty = true;
+                if (DGRSettings.UncappedFPS)
+                    SubFrameUpdate();
             }
         }
 
@@ -53,7 +59,9 @@ namespace DuckGame
                 if (_position.y == value)
                     return;
                 _position.y = value;
-                _dirty = true;
+                _dirty = true; 
+                if (DGRSettings.UncappedFPS)
+                    SubFrameUpdate();
             }
         }
 
@@ -64,30 +72,36 @@ namespace DuckGame
             {
                 centerX = value.x;
                 centerY = value.y;
+                if (DGRSettings.UncappedFPS)
+                    SubFrameUpdate();
             }
         }
 
         public float centerX
         {
-            get => _position.x + width / 2f;
+            get => x + width / 2f;
             set
             {
                 if (centerX == value)
                     return;
                 _position.x = value - width / 2f;
                 _dirty = true;
+                if (DGRSettings.UncappedFPS)
+                    SubFrameUpdate();
             }
         }
 
         public float centerY
         {
-            get => _position.y + height / 2f;
+            get => y + height / 2f;
             set
             {
                 if (centerY == value)
                     return;
                 _position.y = value - height / 2f;
                 _dirty = true;
+                if (DGRSettings.UncappedFPS)
+                    SubFrameUpdate();
             }
         }
 
@@ -176,13 +190,34 @@ namespace DuckGame
             width = wval;
             height = hval;
         }
-
         public void DoUpdate()
         {
             if (skipUpdate)
                 skipUpdate = false;
             else
                 Update();
+        }
+        public virtual void LerpCamera()
+        {
+            if (!LerpWithoutFear)
+            {
+                CameraLerp.CanLerp = false;
+                CameraLerp.UpdateLerpState(_position, new Vec2(width, height), 1.0f, true);
+            }
+            else
+            {
+                CameraLerp.CanLerp = true;
+                CameraLerp.UpdateLerpState(_position, new Vec2(width, height), MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            }
+            _dirty = true;
+        }
+        public virtual void SubFrameUpdate()
+        {
+            if (LerpWithoutFear)
+                return;
+            CameraLerp.CanLerp = false;
+            CameraLerp.SubFrameUpdate(_position, MonoMain.IntraTick);
+            _dirty = true;
         }
 
         public virtual void Update()
@@ -240,9 +275,9 @@ namespace DuckGame
             viewport = Graphics.viewport;
             double height1 = viewport.Height;
             _viewSize = new Vec2((float)width1, (float)height1);
-            Vec2 position = this.position;
-            float width2 = width;
-            float height2 = height;
+            Vec2 position = DGRSettings.UncappedFPS ? CameraLerp.Position : _position;
+            float width2 = CameraLerp.Size.x != 0f  && DGRSettings.UncappedFPS ? CameraLerp.Size.x : width;
+            float height2 = CameraLerp.Size.y != 0f && DGRSettings.UncappedFPS ? CameraLerp.Size.y : height;
             _matrix = Matrix.CreateTranslation(new Vec3(-position.x, -position.y, 0f)) * Matrix.CreateScale(_viewSize.x / width2, _viewSize.y / height2, 1f);
             _dirty = false;
             return _matrix;

@@ -22,7 +22,7 @@ namespace DuckGame
         public StateBinding _airFlyBinding = new StateBinding(true, nameof(_airFly));
         public StateBinding _airFlyDirBinding = new StateBinding(true, nameof(_airFlyAngle));
         public StateBinding _wasLiftedBinding = new StateBinding(nameof(_wasLifted));
-        private bool _stuck;
+        public bool _stuck;
         public float _swordAngle;
         public float _lerpedAngle;
         public bool dragSpeedBonus;
@@ -64,7 +64,7 @@ namespace DuckGame
         private float _upFlyTime;
         public float _airFlySpeed = 14f;
         private int timeSinceReversal;
-        private bool _wasLifted;
+        public bool _wasLifted;
         private bool skipThrowMove;
         public MaterialThing _stuckInto;
         private float _glow;
@@ -312,6 +312,7 @@ namespace DuckGame
                         }
                     }
                 }
+
                 if (_stance == Stance.SwingDown && duck.inputProfile.Pressed(Triggers.Jump))
                     _stance = Stance.SwingUp;
                 if (_goIntermediate && _stanceReady)
@@ -355,7 +356,7 @@ namespace DuckGame
                 }
                 else if (_stance == Stance.SwingUp)
                 {
-                    if (duck._hovering)
+                    if (duck._hovering || (duck.cordHover))
                     {
                         _swordAngle = -25f;
                         _swordFlip = offDir < 0;
@@ -502,16 +503,26 @@ namespace DuckGame
         }
 
         public Vec2 barrelStartPos => position + (Offset(barrelOffset) - position).normalized * 2f;
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is EnergyScimitar && pTaped.gun2 is Chainsaw ? new EnergyChainsaw(x, y) :
+                    pTaped.gun1 is EnergyScimitar && pTaped.gun2 is SledgeHammer ? new EnergyHammer(x, y) :
+                    pTaped.gun1 is EnergyScimitar && pTaped.gun2 is Warpgun ? new WarpScimitar(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void Initialize()
         {
-            if (material is MaterialGold)
+            //No -NiK0
+            /*if (material is MaterialGold)
             {
                 // _blade.color = Color.Lerp(properBladeColor, Color.Red, heat);
                 //swordColor = Color.Lerp(properColor, Color.Red, heat);
                 properBladeColor = new Color(255, 216, 0);
                 properColor = new Color(255, 216, 0); //255, 216, 24
-            }
+            }*/
             _platform = new ScimiPlatform(0f, 0f, 20f, 8f, this)
             {
                 solid = false,
@@ -584,6 +595,14 @@ namespace DuckGame
                 with.vSpeed = with.lastVSpeed = (float)(-vec2.y * 3);
                 Shing();
                 (with as EnergyScimitar).Shing();
+            }
+            else if (_airFly && with is Coin c)
+            {
+                Duck d = null;
+                if (_lastThrownBy != null) d = (Duck)_lastThrownBy;
+                Fondle(c);
+                Vec2 v = c.TargetNear(d, true)[0];
+                _airFlyAngle = Maths.PointDirection(position, v);
             }
             else if (_airFly && with is PhysicsObject && !(with is Gun) && !(with is Equipment) && !(with is Duck) && !(with is RagdollPart))
                 with.Destroy(new DTIncinerate(this));
@@ -1185,6 +1204,7 @@ namespace DuckGame
                 if (!_playedChargeUp && owner != null)
                 {
                     _playedChargeUp = true;
+                    SFX.DontSave = 1;
                     SFX.Play("laserChargeShort", pitch: Rando.Float(-0.1f, 0.1f));
                 }
                 float to2;
@@ -1207,6 +1227,7 @@ namespace DuckGame
                     if (_playedChargeUp && owner == null)
                     {
                         _playedChargeUp = false;
+                        SFX.DontSave = 1;
                         SFX.Play("laserUnchargeShort", pitch: Rando.Float(-0.1f, 0.1f));
                     }
                     _glow = Lerp.Float(_glow, 0f, 0.2f);
@@ -1235,7 +1256,7 @@ namespace DuckGame
             _whiteGlow.angle = angle;
             _whiteGlow.color = this.swordColor;
             _whiteGlow.alpha = _glow * 0.5f;
-            Graphics.Draw(_whiteGlow, x, y, depth - 2);
+            Graphics.Draw(ref _whiteGlow, x, y, depth - 2);
             Color swordColor = this.swordColor;
             foreach (WarpLine warpLine in warpLines)
             {
@@ -1283,7 +1304,7 @@ namespace DuckGame
             else
                 _blade.scale = new Vec2(1f);
             _bladeTrail.yscale = _blade.yscale + num1;
-            Graphics.Draw(_blade, x, y, this.depth - 1);
+            Graphics.Draw(ref _blade, x, y, this.depth - 1);
             Graphics.material = null;
             Depth depth = this.depth;
             _bladeTrail.color = swordColor;
@@ -1311,7 +1332,7 @@ namespace DuckGame
                             vec2 += owner.velocity * 0.5f;
                         _bladeTrail.angle = num2;
                         _bladeTrail.alpha = Math.Min(Math.Max((float)((_humAmount - 0.1f) * 4f), 0f), 1f) * 0.7f;
-                        Graphics.Draw(_bladeTrail, vec2.x, vec2.y, this.depth - 2);
+                        Graphics.Draw(ref _bladeTrail, vec2.x, vec2.y, this.depth - 2);
                     }
                     num3 -= 0.15f;
                 }

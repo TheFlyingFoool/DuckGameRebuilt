@@ -15,18 +15,21 @@ namespace DuckGame
 
             ulong[] specialUsers =
             {
-                76561197996786074UL,
-                76561198885030822UL,
-                76561198416200652UL,
-                76561198104352795UL,
-                76561198114791325UL,
+                76561197996786074UL,    // landon
+                76561198885030822UL,    // landon alt
+                76561198416200652UL,    // landon alt
+                76561198104352795UL,    // dord
+                76561198114791325UL,    // collin
             };
 
             if (Steam.user is null)
                 return "|DGBLUE|PASS | Steam inactive";
-            
+
             if (specialUsers.Contains(Steam.user.id))
-                return "|DGBLUE|PASS | Exempt by landon";
+                return "|DGBLUE|PASS | Exempt by Landon";
+
+            if (DGRDevs.All.Any(x => x.SteamID == Steam.user.id))
+                return "|DGBLUE|PASS | Exempt by Tater";
 
             if (Network.isActive)
                 return "|RED|FAIL | Online with other players";

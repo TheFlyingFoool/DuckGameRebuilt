@@ -37,6 +37,20 @@ namespace DuckGame
 
         public StateBinding _loadBinding = new StateBinding("load");
         public StateBinding _multBinding = new StateBinding("mult");
+        public StateBinding _rotAngleBinding = new StateBinding("rotAngle");
+        public override bool CanTapeTo(Thing pThing)
+        {
+            switch (pThing)
+            {
+                case Sniper:
+                case Bazooka:
+                case SniperZooka:
+                case TampingWeapon:
+                    return false;
+                default:
+                    return true;
+            }
+        }
         public override void OnPressAction()
         {
             if (loaded)
@@ -63,7 +77,7 @@ namespace DuckGame
             {
                 pHolster.EjectItem();
                 SFX.Play("spring", 1, Rando.Float(-0.6f, -0.4f));
-                return false;
+                return true;
             }
             return base.HolsterActivate(pHolster);
         }
@@ -84,7 +98,7 @@ namespace DuckGame
         }
         protected override void PlayFireSound()
         {
-            SFX.Play("sniper", 1, Rando.Float(-0.1f, 0.1f));//ERRRRRIIIIIIIIIIK
+            SFX.Play("sniper", 1, Rando.Float(-0.1f, 0.1f));
             base.PlayFireSound();
         }
         public override void Update()
@@ -131,7 +145,11 @@ namespace DuckGame
                     SFX.Play("loadSniper");
                 }
             }
-            if (loaded && owner != null) laserSight = true;
+            if (loaded && owner != null)
+            {
+                handOffset = Vec2.Zero;//online fix
+                laserSight = true;
+            }
             else laserSight = false;
             base.Update();
         }
@@ -233,7 +251,6 @@ namespace DuckGame
                     Graphics.Draw(snizsnos, v.x + 0.8f, v.y, d - 2);
                 }
                 Graphics.Draw(armSprite, v.x, v.y, d);
-                DevConsole.Log("!");
             }
         }
     }

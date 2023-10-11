@@ -7,6 +7,7 @@
 
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -1114,6 +1115,16 @@ namespace DuckGame
                     _sounds.TryGetValue(name, out soundEffect);
                 if (soundEffect == null)
                 {
+                    //TODO this eventually -NiK0
+                    /*if (File.Exists("./" + DuckFile.contentDirectory + name + ".qoa"))
+                    {
+                        byte[] bb = File.ReadAllBytes("./" + DuckFile.contentDirectory + name + ".qoa");
+                        QOASoundBase qsb = new QOASoundBase();
+                        if (qsb.Load(bb))
+                        {
+                            //WaveFormat
+                        }
+                    }*/
                     if (!name.Contains(":") && !name.EndsWith(".wav"))
                     {
                         lock (_loadLock)

@@ -17,7 +17,7 @@ namespace DuckGame
         public bool purple;
         protected SpriteMap _sprite;
         protected float _soundWait;
-        protected float _mult;
+        public float _mult;
         protected float _setMult;
         private bool _prevPurple;
 

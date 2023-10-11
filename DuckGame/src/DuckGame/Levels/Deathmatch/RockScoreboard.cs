@@ -833,7 +833,7 @@ namespace DuckGame
             }
             for (int m = 0; m < 24; m++)
             {
-                SpriteThing spriteThing = new SpriteThing(100 + m * (cs.w + 13), cs.h + 15, cs)
+                SpriteThing spriteThing = new SpriteThing(100 + m * (cs.w + 13), cs.h + 15, cs.Clone())
                 {
                     shouldbegraphicculled = false,
                     center = new Vec2(cs.w / 2, cs.h - 1)

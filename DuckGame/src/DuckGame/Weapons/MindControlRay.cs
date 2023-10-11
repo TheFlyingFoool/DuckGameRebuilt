@@ -183,7 +183,7 @@ namespace DuckGame
             else
                 _hat.angleDegrees = 0f;
             Vec2 hatPoint = DuckRig.GetHatPoint(owner._sprite.imageIndex);
-            Graphics.Draw(_hat, owner.x + hatPoint.x * owner._sprite.flipMultH, owner.y + hatPoint.y * owner._sprite.flipMultV);
+            Graphics.Draw(ref _hat, owner.x + hatPoint.x * owner._sprite.flipMultH, owner.y + hatPoint.y * owner._sprite.flipMultV);
         }
 
         public void ControlDuck(Duck d)
@@ -210,6 +210,7 @@ namespace DuckGame
             _controlledDuck.mindControl = owner.inputProfile;
             _controlledDuck.controlledBy = owner;
             immobilizeOwner = true;
+            SFX.DontSave = 1;
             SFX.Play("radioNoise", 0.8f);
             Event.Log(new MindControlEvent(responsibleProfile, d.profile));
             if (Recorder.currentRecording == null)

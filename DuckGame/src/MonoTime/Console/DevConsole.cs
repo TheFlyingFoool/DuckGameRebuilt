@@ -19,6 +19,8 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using SDL2;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 
@@ -472,11 +474,29 @@ namespace DuckGame
                 DevConsole.commands[pKeyword] = commands = new List<CMD>();
             return commands;
         }
+        
+        private static Regex s_getInviteLinkRegex = new(@"^(?:\[?steam:\/\/joinlobby\/312530\/|https:\/\/dgr-join\.github\.io\/\?lobby=)(\d+)(?:\/|&user=)(\d+)", RegexOptions.Compiled);
+        public static bool HandleInviteLinkCommand(string command)
+        {
+            Match match = s_getInviteLinkRegex.Match(command.Trim());
+            
+            if (!match.Success)
+                return false;
+
+            // Level.current = new JoinServer(ulong.Parse(match.Groups[1].Value));
+            Level.current = new DisconnectFromGame(ulong.Parse(match.Groups[1].Value));
+            // DuckNetwork.Join(match.Groups[1].Value);
+            return true;
+        }
 
         public static void RunCommand(string command)
         {
             if (DG.buildExpired)
                 return;
+
+            if (HandleInviteLinkCommand(command))
+                return;
+            
             if (_doDataSubmission)
             {
                 _dataSubmissionMessage = command;
@@ -517,27 +537,14 @@ namespace DuckGame
                          cmd.subcommand != null && consoleCommand2.NextWord(peek: true) == cmd.subcommand.keyword;
                          cmd = cmd.subcommand)
                         consoleCommand2.NextWord();
-                    if (cmd.cheat && !NetworkDebugger.enabled)
+                    if (cmd.cheat && CheckCheats())
                     {
-                        bool flag2 = Steam.user is
+                        _core.lines.Enqueue(new DCLine
                         {
-                            id: 76561197996786074UL
-                            or 76561198885030822UL
-                            or 76561198416200652UL
-                            or 76561198104352795UL
-                            or 76561198114791325UL
-                            or 76561198797606383UL
-                        };
-
-                        if (!flag2 && (Network.isActive || Level.current is ChallengeLevel or ArcadeLevel))
-                        {
-                            _core.lines.Enqueue(new DCLine
-                            {
-                                line = "You can't do that here!",
-                                color = Color.Red
-                            });
-                            return;
-                        }
+                            line = "You can't do that here!",
+                            color = Color.Red
+                        });
+                        return;
                     }
 
                     if (cmd.Run(consoleCommand2.Remainder()))
@@ -1478,6 +1485,7 @@ namespace DuckGame
             }
         }
 
+        /// <returns>True if cheats shan't be used</returns>
         internal static bool CheckCheats()
         {
             // sole online player
@@ -1495,14 +1503,11 @@ namespace DuckGame
                 76561198416200652UL,    // landon alt
                 76561198104352795UL,    // dord
                 76561198114791325UL,    // collin
-                
-                // haram 🙏
-                // 76561198441121574UL, // klof
-                // 76561198797606383UL, // othello
             };
 
-            // exempted by landon
-            if (Steam.user is null || specialUsers.Contains(Steam.user.id))
+            if (Steam.user is null
+                || specialUsers.Contains(Steam.user.id)              // landon exemption
+                || DGRDevs.All.Any(x => x.SteamID == Steam.user.id)) // tater exemption
                 return false;
             
             return Network.isActive || Level.current is ChallengeLevel or ArcadeLevel;
@@ -1546,6 +1551,7 @@ namespace DuckGame
         }
 
         public static void Log(string text) => Log(DCSection.General, text);
+        public static void Log(Exception e) => Log(e.ToString(), Colors.DGRed);
         public static void Log(object? obj) => Log(obj?.ToString() ?? "null");
         public static void Log(params object[]? obj)
         {
@@ -1602,6 +1608,13 @@ namespace DuckGame
             if (!Network.isActive || pConnection != DuckNetwork.localConnection)
                 return;
             Send.Message(new NMLogEvent(pDescription));
+        }
+        
+        /// only logs if currently in DEBUG mode
+        [Conditional("DEBUG")]
+        public static void DebugLog(object? obj)
+        {
+            Log(obj);
         }
 
         public static void Log(DCSection section, string text, int netIndex = -1) =>
@@ -2029,7 +2042,8 @@ namespace DuckGame
                     : 0); // Replaced !(Keyboard.Pressed(Keys.OemTilde)) ? with that because Press can cause issues with it auto trying to close 
 
             //Just for NiK0 Purposes
-            if (Keyboard.Down(Keys.LeftControl) && Keyboard.Pressed(Keys.NumPad2)) num1 = 1;
+            if (Steam.user != null && Steam.user.id == DGRDevs.NiK0.SteamID && Keyboard.Down(Keys.LeftControl) && Keyboard.Pressed(Keys.NumPad2)) 
+                num1 = 1;
 
             WasDownLastFrame = Keyboard.Down(Keys.OemTilde);
             if (core.pendingSends.Count > 0)

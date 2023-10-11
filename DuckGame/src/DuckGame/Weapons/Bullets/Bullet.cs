@@ -15,7 +15,7 @@ namespace DuckGame
     {
         public static int bulletcolorindex;
         private new NetworkConnection _connection;
-        protected Teleporter _teleporter;
+        public Teleporter _teleporter;
         public AmmoType ammo;
         public bool randomDir;
         public Vec2 start;
@@ -48,7 +48,7 @@ namespace DuckGame
         public float range;
         private PhysicalBullet _physicalBullet;
         public bool trickshot;
-        protected int timesRebounded;
+        public int timesRebounded;
         protected int reboundBulletsCreated;
         protected Bullet _reboundedBullet;
         public bool reboundCalled;
@@ -71,6 +71,9 @@ namespace DuckGame
         protected float drawdist;
         protected bool _initializedDraw;
         //private byte networkKillWait = 60;
+        protected Interp BulletStart = new Interp(true);
+        protected Interp BulletEnd = new Interp(true);
+        protected Interp BulletLerp = new Interp(true);
 
         public new NetworkConnection connection
         {
@@ -231,6 +234,7 @@ namespace DuckGame
 
         public virtual void DoRebound(Vec2 pos, float dir, float rng) => Rebound(pos, dir, rng);
 
+        public static bool specialRebound;
         protected virtual void Rebound(Vec2 pos, float dir, float rng)
         {
             ++reboundBulletsCreated;
@@ -239,9 +243,14 @@ namespace DuckGame
             bullet.timesRebounded = timesRebounded + 1;
             bullet.lastReboundSource = lastReboundSource;
             bullet.isLocal = isLocal;
+            if (specialRebound) bullet.owner = owner;
             _reboundedBullet = bullet;
             reboundCalled = true;
             Level.Add(bullet);
+            if (specialRebound)
+            {
+                Send.Message(new NMFireGun(null, new List<Bullet> { bullet }, 1, false));
+            }
         }
 
         public virtual void OnCollide(Vec2 pos, Thing t, bool willBeStopped)
@@ -642,6 +651,12 @@ namespace DuckGame
         {
             if (_tracer || _bulletDistance <= 0.1f)
                 return;
+
+            BulletStart.UpdateLerpState(this.drawStart, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            BulletEnd.UpdateLerpState(this.drawEnd, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            Vec2 drawStart = BulletStart.Position;
+            Vec2 drawEnd = BulletEnd.Position;
+
             if (gravityAffected)
             {
                 if (prev.Count < 1)
@@ -668,7 +683,8 @@ namespace DuckGame
                         //could just be setting the angle direction skipping two operations 
                         //-NiK0
                         ammo.sprite.angle = -Maths.PointDirectionRad(Vec2.Zero, travelDirNormalized);
-                        Graphics.Draw(ammo.sprite, p2.x, p2.y);
+                        BulletLerp.UpdateLerpState(p2, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+                        Graphics.Draw(ammo.sprite, BulletLerp.x, BulletLerp.y);
                     }
                 }
             }
@@ -679,7 +695,8 @@ namespace DuckGame
                     //same optimization here
                     ammo.sprite.depth = depth + 10;
                     ammo.sprite.angle = -Maths.PointDirectionRad(Vec2.Zero, travelDirNormalized);
-                    Graphics.Draw(ammo.sprite, drawEnd.x, drawEnd.y);
+                    Sprite ammoSprite = ammo.sprite;
+                    Graphics.Draw(ammoSprite, drawEnd.x, drawEnd.y);
                 }
                 float length = (drawStart - drawEnd).length;
                 float dist = 0f;

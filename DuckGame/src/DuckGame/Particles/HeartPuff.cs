@@ -35,6 +35,7 @@ namespace DuckGame
                     center = new Vec2(5f, 16f);
                 angle = anchor.thing.angle;
             }
+            if (!currentlyDrawing) _sprite.UpdateFrame(true);
             if (_sprite.finished)
                 Level.Remove(this);
             base.Update();

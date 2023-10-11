@@ -1,11 +1,5 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ItemBoxRandom
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -33,29 +27,47 @@ namespace DuckGame
             List<System.Type> physicsObjects = GetPhysicsObjects(Editor.Placeables);
             physicsObjects.RemoveAll(t => t == typeof(LavaBarrel) || t == typeof(Grapple) || t == typeof(Slag) || t == typeof(Holster));
             System.Type t1;
+            
             if (Rando.Int(10000) == 0)
             {
                 t1 = typeof(PositronShooter);
                 Options.Data.specialTimes = 100;
             }
+            else if (Editor.clientonlycontent && Rando.Int(2000) == 1)
+            {
+                if (Rando.Int(50) == 0) // 1/100000 lmao
+                    t1 = typeof(SohRock);
+                else
+                {
+                    t1 = DGRDevs.AllWithGuns.ChooseRandom().DevItem;
+
+                    // to be removed when all devs get their gun
+                    if (t1 == typeof(PositronShooter))
+                        t1 = typeof(DanGun);
+                }
+            }
             else
             {
-                if (Options.Data.specialTimes > 0)
+                if (Options.Data.specialTimes-- > 0)
                 {
                     physicsObjects.Add(typeof(PositronShooter));
                     physicsObjects.Add(typeof(PositronShooter));
-                    --Options.Data.specialTimes;
                 }
-                t1 = physicsObjects[Rando.Int(physicsObjects.Count - 1)];
+                
+                t1 = physicsObjects.ChooseRandom();
             }
+
+            if (t1 == typeof(Rock) && Rando.Int(1000000) == 0)
+                t1 = typeof(SpawnedGoldRock);
+            
             PhysicsObject thing = Editor.CreateThing(t1) as PhysicsObject;
-            if (Rando.Int(1000) == 1 && thing is Gun && (thing as Gun).CanSpawnInfinite())
+            
+            if (thing is Gun gun && gun.CanSpawnInfinite() && Rando.Int(1000) == 1)
             {
-                (thing as Gun).infiniteAmmoVal = true;
-                (thing as Gun).infinite.value = true;
+                gun.infiniteAmmoVal = true;
+                gun.infinite.value = true;
             }
-            if (thing is Rock && Rando.Int(1000000) == 0)
-                thing = Editor.CreateThing(typeof(SpawnedGoldRock)) as PhysicsObject;
+            
             return thing;
         }
 

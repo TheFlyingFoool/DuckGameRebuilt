@@ -28,7 +28,7 @@ namespace DuckGame
             }
             Layer.lighting = true;
         }
-
+        public bool forceRefresh;
         public override void Update()
         {
             if (NetworkDebugger.enabled)
@@ -94,8 +94,9 @@ namespace DuckGame
                 fullRefreshCountdown--;
                 return;
             }
-            if (refresh || _geo == null)
+            if (refresh || _geo == null || forceRefresh)
             {
+                forceRefresh = false;
                 DrawLightNew();
             }
         }
@@ -221,9 +222,9 @@ namespace DuckGame
 
         private List<LightOccluder> _occluders = new List<LightOccluder>();
 
-        private Color _lightColor;
+        public Color _lightColor;
 
-        private float _range;
+        public float _range;
 
         private GeometryItem _geo;
 

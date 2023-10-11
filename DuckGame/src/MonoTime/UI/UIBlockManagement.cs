@@ -83,6 +83,7 @@ namespace DuckGame
                         --_selection;
                     if (_selection < _topOffset)
                         _topOffset = _selection;
+                    SFX.DontSave = 1;
                     SFX.Play("textLetter", 0.7f);
                 }
                 if (Input.Pressed(Triggers.MenuDown) && _selection < items.Count - 1)
@@ -92,6 +93,7 @@ namespace DuckGame
                         ++_selection;
                     if (_selection > _topOffset + kMaxInView)
                         ++_topOffset;
+                    SFX.DontSave = 1;
                     SFX.Play("textLetter", 0.7f);
                 }
                 if (_selection >= 0 && _selection < items.Count && Input.Pressed(Triggers.Menu1))
@@ -103,6 +105,7 @@ namespace DuckGame
                             Options.Data.blockedPlayers.Add(keyValuePair.Key);
                         Options.Data.unblockedPlayers.Remove(keyValuePair.Key);
                         Options.Data.muteSettings[keyValuePair.Key] = "CHR";
+                        SFX.DontSave = 1;
                         SFX.Play("textLetter", 0.7f);
                         MakeDirty();
                     }
@@ -112,6 +115,7 @@ namespace DuckGame
                         if (!Options.Data.unblockedPlayers.Contains(keyValuePair.Key))
                             Options.Data.unblockedPlayers.Add(keyValuePair.Key);
                         Options.Data.muteSettings[keyValuePair.Key] = "";
+                        SFX.DontSave = 1;
                         SFX.Play("textLetter", 0.7f);
                         MakeDirty();
                     }
@@ -161,12 +165,12 @@ namespace DuckGame
                         if (_topOffset > 0)
                         {
                             _downArrow.flipV = true;
-                            Graphics.Draw(_downArrow, x, vec2.y - 2f, (Depth)0.5f);
+                            Graphics.Draw(ref _downArrow, x, vec2.y - 2f, (Depth)0.5f);
                         }
                         if (num2 > kMaxInView)
                         {
                             _downArrow.flipV = false;
-                            Graphics.Draw(_downArrow, x, vec2.y + y, (Depth)0.5f);
+                            Graphics.Draw(ref _downArrow, x, vec2.y + y, (Depth)0.5f);
                             break;
                         }
                         string str1 = keyValuePair.Key.ToString();

@@ -5,6 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -12,7 +13,7 @@ namespace DuckGame
     [EditorGroup("Stuff|Props")]
     public class Present : Holdable, IPlatform
     {
-        private SpriteMap _sprite;
+        public SpriteMap _sprite;
         private System.Type _contains;
 
         public Present(float xpos, float ypos)
@@ -52,12 +53,26 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            List<System.Type> physicsObjects = ItemBox.GetPhysicsObjects(Editor.Placeables);
+            List<Type> physicsObjects = ItemBox.GetPhysicsObjects(Editor.Placeables);
             physicsObjects.RemoveAll(t =>
                 t == typeof(Present)
                 || t == typeof(LavaBarrel)
                 || t == typeof(Grapple));
             _contains = physicsObjects[Rando.Int(physicsObjects.Count - 1)];
+            if (Rando.Int(1000) == 0 && Editor.clientonlycontent) //oopss
+            {
+                Type t = null;
+                if (Rando.Int(50) == 0)
+                    t = typeof(SohRock);
+                else
+                {
+                    t = DGRDevs.AllWithGuns.ChooseRandom().DevItem;
+
+                    if (t == typeof(PositronShooter))
+                        t = typeof(DanGun);
+                }
+                _contains = t;
+            }
         }
 
         public static void OpenEffect(Vec2 pPosition, int pFrame, bool pIsNetMessage)

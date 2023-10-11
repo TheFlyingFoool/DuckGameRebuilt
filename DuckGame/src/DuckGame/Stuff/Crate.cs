@@ -19,6 +19,10 @@ namespace DuckGame
         public StateBinding _damageMultiplierBinding = new StateBinding(nameof(damageMultiplier));
         public float damageMultiplier = 1f;
         private SpriteMap _sprite;
+        internal SpriteMap _spriteAccessor { get => _sprite; set => _sprite = value; }
+        internal string _onHitSFX = "woodHit";
+        internal string _onCollideSFX = "crateHit";
+        internal string _onDestroySFX = "crateDestroy";
         private float _burnt;
 
         public Crate(float xpos, float ypos)
@@ -38,7 +42,7 @@ namespace DuckGame
             buoyancy = 1f;
             _holdOffset = new Vec2(2f, 0f);
             flammable = 0.3f;
-            collideSounds.Add("crateHit");
+            collideSounds.Add(_onCollideSFX);
             editorTooltip = "It's made of wood. That's...pretty much it.";
         }
 
@@ -46,7 +50,7 @@ namespace DuckGame
         {
             _hitPoints = 0f;
             Level.Remove(this);
-            SFX.Play("crateDestroy");
+            SFX.Play(_onDestroySFX);
             Vec2 vec2 = Vec2.Zero;
             if (type is DTShot)
                 vec2 = (type as DTShot).bullet.travelDirNormalized;
@@ -102,12 +106,23 @@ namespace DuckGame
                 Fondle(this, DuckNetwork.localConnection);
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++index)
             {
-                WoodDebris woodDebris = WoodDebris.New(hitPos.x, hitPos.y);
-                woodDebris.hSpeed = -bullet.travelDirNormalized.x * 2f * (Rando.Float(1f) + 0.3f);
-                woodDebris.vSpeed = (-bullet.travelDirNormalized.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
-                Level.Add(woodDebris);
+                if (this is SequenceCrate sc)
+                {
+                    Feather woodDebris = Feather.New(hitPos.x, hitPos.y, SequenceCrate._variantPersonaMap[sc._variant]);
+                    woodDebris.hSpeed = -bullet.travelDirNormalized.x * 2f * (Rando.Float(1f) + 0.3f);
+                    woodDebris.vSpeed = (-bullet.travelDirNormalized.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
+                    Level.Add(woodDebris);
+                }
+                else
+                {
+                    WoodDebris woodDebris = WoodDebris.New(hitPos.x, hitPos.y);
+                    woodDebris.hSpeed = -bullet.travelDirNormalized.x * 2f * (Rando.Float(1f) + 0.3f);
+                    woodDebris.vSpeed = (-bullet.travelDirNormalized.y * 2f * (Rando.Float(1f) + 0.3f)) -
+                                        Rando.Float(2f);
+                    Level.Add(woodDebris);
+                }
             }
-            SFX.Play("woodHit");
+            SFX.Play(_onHitSFX);
             if (isServerForObject && TeamSelect2.Enabled("EXPLODEYCRATES"))
             {
                 Fondle(this, DuckNetwork.localConnection);
@@ -131,10 +146,20 @@ namespace DuckGame
         {
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++index)
             {
-                WoodDebris woodDebris = WoodDebris.New(exitPos.x, exitPos.y);
-                woodDebris.hSpeed = (bullet.travelDirNormalized.x * 3f * (Rando.Float(1f) + 0.3f));
-                woodDebris.vSpeed = (bullet.travelDirNormalized.y * 3f * (Rando.Float(1f) + 0.3f) - (Rando.Float(2f) - 1f));
-                Level.Add(woodDebris);
+                if (this is SequenceCrate sc)
+                {
+                    Feather woodDebris = Feather.New(exitPos.x, exitPos.y, SequenceCrate._variantPersonaMap[sc._variant]);
+                    woodDebris.hSpeed = (bullet.travelDirNormalized.x * 3f * (Rando.Float(1f) + 0.3f));
+                    woodDebris.vSpeed = (bullet.travelDirNormalized.y * 3f * (Rando.Float(1f) + 0.3f) - (Rando.Float(2f) - 1f));
+                    Level.Add(woodDebris);
+                }
+                else
+                {
+                    WoodDebris woodDebris = WoodDebris.New(exitPos.x, exitPos.y);
+                    woodDebris.hSpeed = (bullet.travelDirNormalized.x * 3f * (Rando.Float(1f) + 0.3f));
+                    woodDebris.vSpeed = (bullet.travelDirNormalized.y * 3f * (Rando.Float(1f) + 0.3f) - (Rando.Float(2f) - 1f));
+                    Level.Add(woodDebris);
+                }
             }
         }
 

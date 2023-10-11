@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.RCCar
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -30,7 +23,7 @@ namespace DuckGame
         public float _idleSpeed;
         public RCController _controller;
         private ConstantSound _idle;
-
+        private Interp CarLerp = new Interp(true);
         public bool receivingSignal
         {
             get => _receivingSignal;
@@ -38,6 +31,7 @@ namespace DuckGame
             {
                 if (_receivingSignal != value && !destroyed)
                 {
+                    SFX.DontSave = 1;
                     if (value)
                         SFX.Play("rcConnect", 0.5f);
                     else
@@ -68,8 +62,31 @@ namespace DuckGame
             };
             weight = 0.5f;
             physicsMaterial = PhysicsMaterial.Metal;
+            if (Editor.clientonlycontent) tapedIndexPreference = 0;
         }
+        public override void PreUpdateTapedPositioning(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent && receivingSignal)
+            {
+                pTaped.velocity = velocity;
 
+                if (Math.Abs(hSpeed) > 0.3f)
+                {
+                    offDir = hSpeed > 0 ? (sbyte)1 : (sbyte)-1;
+                    pTaped.offDir = offDir;
+                    //offDir *= -1;
+                }
+                pTaped.gun2.enablePhysics = false;//jank -NiK0
+                enablePhysics = true;
+                pTaped.angle = 0;
+            }
+            base.PreUpdateTapedPositioning(pTaped);
+        }
+        public override void UpdateTapedPositioning(TapedGun pTaped)
+        {
+            base.UpdateTapedPositioning(pTaped);
+            if (Editor.clientonlycontent) angle = 0;
+        }
         public override void Initialize()
         {
             _idle = new ConstantSound("rcDrive");
@@ -83,9 +100,21 @@ namespace DuckGame
 
         protected override bool OnDestroy(DestroyType type = null)
         {
+            if (type == null && isServerForObject && Editor.clientonlycontent && tapedIsGun1)
+            {
+                if (tapedCompatriot is Gun g && g.ammo > 0 && g is not MindControlRay)
+                {
+                    if (g is HugeLaser hl)
+                    {
+                        g.OnPressAction();
+                        hl.doBlast = true;
+                    }
+                    else g.PressAction();
+                    return false;
+                }
+            }
             RumbleManager.AddRumbleEvent(position, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));
-            if (!isServerForObject)
-                return false;
+            if (!isServerForObject) return false;
             new ATRCShrapnel().MakeNetEffect(position, false);
             List<Bullet> varBullets = new List<Bullet>();
             for (int index = 0; index < 20; ++index)
@@ -108,25 +137,33 @@ namespace DuckGame
                 varBullets.Clear();
             }
             Level.Remove(this);
-            if (Level.current.camera is FollowCam camera)
-                camera.Remove(this);
-            if (Recorder.currentRecording != null)
-                Recorder.currentRecording.LogBonus();
+            if (Level.current.camera is FollowCam camera) camera.Remove(this);
+            if (Recorder.currentRecording != null) Recorder.currentRecording.LogBonus();
             return true;
         }
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (bullet.isLocal && owner == null)
-                Fondle(this, DuckNetwork.localConnection);
-            if (bullet.isLocal)
-                Destroy(new DTShot(bullet));
+            if (bullet.isLocal && owner == null) Fondle(this, DuckNetwork.localConnection);
+            if (bullet.isLocal) Destroy(new DTShot(bullet));
             return false;
         }
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                if (pTaped.gun1 is RCCar rc1 && pTaped.gun2 is RCCar rc2)
+                {
+                    rc1._destroyed = true;
+                    rc2._destroyed = true;
+                    return new SuperRCCar(x, y);
+                }
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void Update()
         {
-            if (_controller == null && !(Level.current is Editor) && isServerForObject)
+            if (_controller == null && !(Level.current is Editor) && isServerForObject && !Recorderator.Playing)
             {
                 _controller = new RCController(x, y, this);
                 Level.Add(_controller);
@@ -181,18 +218,21 @@ namespace DuckGame
             _tilt = MathHelper.Lerp(_tilt, -hSpeed, 0.4f);
             _waveMult = MathHelper.Lerp(_waveMult, -hSpeed, 0.1f);
             angleDegrees = (float)(_tilt * 2 + _wave.value * (_waveMult * (_maxSpeed - Math.Abs(hSpeed))));
-            if (!isServerForObject || !isOffBottomOfLevel || destroyed)
-                return;
+
+            if (!isServerForObject || !isOffBottomOfLevel || destroyed) return;
             Destroy(new DTFall());
         }
 
         public override void Draw()
         {
-            if (owner == null)
-                _sprite.flipH = offDir < 0;
+            if (Editor.clientonlycontent && tapedIsGun1) offDir *= -1;
+            if (owner == null) _sprite.flipH = offDir < 0;
             base.Draw();
-            Graphics.Draw(_wheel, x - 7f, y + 9f);
-            Graphics.Draw(_wheel, x + 7f, y + 9f);
+            _wheel.scale = scale;
+            CarLerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            Graphics.Draw(_wheel, CarLerp.x - 7f * xscale, CarLerp.y + 9f * yscale);
+            Graphics.Draw(_wheel, CarLerp.x + 7f * xscale, CarLerp.y + 9f * yscale);
+            if (Editor.clientonlycontent && tapedIsGun1) offDir *= -1;
         }
     }
 }

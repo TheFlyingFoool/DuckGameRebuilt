@@ -38,6 +38,11 @@ namespace DuckGame
             _bio = "Originally found in a crater next to a burnt power suit. It's origin and mechanism of action are unknown, but tests indicate that it is seriously badass.";
             _editorName = "Plasma Blaster";
             editorTooltip = "Out of control rapid-fire blaster. Seriously, be careful with this one.";
+
+            //this is here because an omega edge case where a plasmablaster can fire at lightning speed if being graphic culled
+            //because there is functionality in the draw function. i could of moved that into update but it might change the way
+            //it works ever so slightly so just gotta deal with the mess that is duck game by duct taping stuff on top -NiK0
+            shouldbegraphicculled = false;
         }
 
         public override void Update()
@@ -61,7 +66,7 @@ namespace DuckGame
             }
             if (_flared)
             {
-                Draw(_bigFlare, barrelOffset + new Vec2(-8f, -1f));
+                Draw(ref _bigFlare, barrelOffset + new Vec2(-8f, -1f));
                 if (_bigFlare.finished)
                 {
                     _flared = false;

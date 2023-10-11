@@ -44,10 +44,10 @@ namespace DuckGame
 #endif
 
         // this should be formatted like X.X.X where each X is a number
-        public const string CURRENT_VERSION_ID = "1.1.0";
+        public const string CURRENT_VERSION_ID = "1.2.2";
 
         // do change this you know what you're doing -NiK0
-        public const string CURRENT_VERSION_ID_FORMATTED = "v" + CURRENT_VERSION_ID + "-beta";
+        public const string CURRENT_VERSION_ID_FORMATTED = "v" + CURRENT_VERSION_ID;
 
         public static bool Prestart = DirtyPreStart();
 
@@ -105,9 +105,10 @@ namespace DuckGame
         public static bool lateCrash;
         public static ProgressValue AutoUpdaterCompletionProgress;
         public static string AutoUpdaterProgressMessage = "";
-        public static DGVersion LatestReleaseRebuiltVersion;
-        public static string LatestNightlyRebuiltVersion;
-        public static bool NewerRebuiltVersionExists;
+        public static DGVersion LatestRebuiltVersion; // for fetching
+        public static bool NewerRebuiltVersionExists; // for fetching
+        public static bool RecorderatorWatchMode = false;
+        public static string CordToViewName;
         
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
@@ -161,7 +162,7 @@ namespace DuckGame
             catch
             {
             }
-            DevConsole.Log("Version " + gitVersion);
+            DevConsole.Log("|PINK|DGR |WHITE|Version " + gitVersion);
             int p = (int)Environment.OSVersion.Platform;
             IsLinuxD = (p == 4) || (p == 6) || (p == 128);
             if (IsLinuxD)
@@ -169,7 +170,7 @@ namespace DuckGame
                 MonoMain.enableThreadedLoading = false;
                 MonoMain.disableDirectInput = true;
             }
-            DevConsole.Log(IsLinuxD.ToString() + " " + p.ToString());
+            DevConsole.Log("|PINK|DGR |WHITE|" + IsLinuxD.ToString() + " " + p.ToString());
             gameAssembly = Assembly.GetExecutingAssembly();
             gameAssemblyName = gameAssembly.GetName().Name;
             FilePath = gameAssembly.Location;
@@ -239,24 +240,24 @@ namespace DuckGame
                 }
                 if (IsLinuxD)
                 {
-                    DevConsole.Log("setting dll to linux steam");
+                    DevConsole.Log("|PINK|DGR |WHITE|Setting dll to LinuxSteamworks");
                     File.Copy(GameDirectory + "OSX-Linux-x64//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
                 }
                 else if (Environment.Is64BitProcess)
                 {
-                    DevConsole.Log("setting dll to windows steam x64"); //this is left over from me thinking about building for 64 bit, i dont want to build FNA my self so no
+                    DevConsole.Log("|PINK|DGR |WHITE|Setting dll to WindowsSteamx64"); //this is left over from me thinking about building for 64 bit, i dont want to build FNA my self so no
                     File.Copy(GameDirectory + "Windows-x64//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
                 }
                 else
                 {
-                    DevConsole.Log("setting dll to windows steam x86");
+                    DevConsole.Log("|PINK|DGR |WHITE|Setting dll to WindowsSteamx86");
                     File.Copy(GameDirectory + "Windows-x86//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
                 }
             }
             catch
             {
             }
-            DevConsole.Log("Is Linux " + IsLinuxD.ToString() + " PlatformID " + p.ToString());
+            DevConsole.Log("|PINK|DGR |WHITE|Is Linux " + IsLinuxD.ToString() + " PlatformID " + p.ToString());
             gameAssembly = Assembly.GetExecutingAssembly();
             gameAssemblyName = gameAssembly.GetName().Name;
             FilePath = gameAssembly.Location;
@@ -315,6 +316,17 @@ namespace DuckGame
         }
         private static void DoMain(string[] args)
         {
+            if (args.Length == 1)
+            {
+                Match match = Regex.Match(args[0], @"DuckGame(\\|\/)Recorderations\1.*(cord_.+\.crf)$");
+                if (match.Success)
+                {
+                    RecorderatorWatchMode = true;
+                    CordToViewName = match.Groups[2].Value;
+                    args = new[] { "-nomods", "-noRPC", "-command", "'lev", "cord'" };
+                }
+            }
+            
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             MonoMain.startTime = DateTime.Now;
             for (int index = 0; index < args.Length; ++index)
@@ -559,9 +571,36 @@ namespace DuckGame
                         MonoMain.noConnectionTimeout = true;
                         break;
                     case "-command":
-                        ++index;
-                        if (index < args.Length)
-                            DevConsole.startupCommands.Add(args[index]);
+                    case "+command":
+                        if (index + 1 < args.Length)
+                        {
+                            string nextArg = args[++index];
+                            bool someMotherfuckerMakingMyLifeHarderWithUnnecessaryQuotesAddingMoreConditionsToCheck = nextArg.EndsWith("'");
+                            if (!nextArg.StartsWith("'") || someMotherfuckerMakingMyLifeHarderWithUnnecessaryQuotesAddingMoreConditionsToCheck)
+                            {
+                                if (someMotherfuckerMakingMyLifeHarderWithUnnecessaryQuotesAddingMoreConditionsToCheck)
+                                    nextArg = nextArg.Substring(1, nextArg.Length - 2);
+                                
+                                DevConsole.startupCommands.Add(nextArg);
+                            }
+                            else
+                            {
+                                List<string> totalCommandSegments = new() {nextArg.Substring(1)};
+
+                                while (index + 1 < args.Length)
+                                {
+                                    if (!args[++index].EndsWith("'"))
+                                        totalCommandSegments.Add(args[index]);
+                                    else
+                                    {
+                                        totalCommandSegments.Add(args[index].Substring(0, args[index].Length - 1));
+                                        break;
+                                    }
+                                }
+
+                                DevConsole.startupCommands.Add(string.Join(" ", totalCommandSegments));
+                            }
+                        }
                         break;
                     case "-noRPC":
                         DiscordRichPresence.noRPC = true;
@@ -1487,6 +1526,8 @@ namespace DuckGame
 
         public static string TranslateMessage(Exception exception)
         {
+	    if(IsLinuxD)
+		return "aaaAAA";
             Assembly a = exception.GetType().Assembly;
             ResourceManager rm = new ResourceManager(a.GetName().Name, a);
             CultureInfo culture = Thread.CurrentThread.CurrentCulture.Equals(CultureInfo.InvariantCulture) ? CultureInfo.CurrentUICulture : CultureInfo.CurrentCulture;
@@ -1737,7 +1778,7 @@ namespace DuckGame
                     {
                         ModConfiguration mod = sortedMods[i];
                         bool localMod = mod.workshopID == 0;
-                        string modstr = (i != 0 ? "\\n" : "") + (localMod ? cyan : green) + Escape(mod.name) + white + Escape($" {(localMod ? $"by {mod.author}" : $"[{mod.workshopID}]")}");
+                        string modstr = (i != 0 ? "\\n" : "") + (localMod ? cyan : green) + Escape(mod.name) + white + Escape($" {(localMod ? $"by {mod.author.CleanFormatting()}" : $"[{mod.workshopID}]")}");
                         if (modsActive.Length - lIndex + modstr.Length + 4 + green.Length > 1024)
                         {
                             modstr = modstr.Substring(2);

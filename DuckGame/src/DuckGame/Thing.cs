@@ -13,7 +13,12 @@ namespace DuckGame
     /// </summary>
     public abstract class Thing : Transform
     {
+
+        public int SkipIntratick;
+        public SomethingSomethingVessel currentVessel;
+        public bool shouldhavevessel = true;
         public bool shouldbegraphicculled = true;
+        public bool currentlyDrawing;
         public bool shouldbeinupdateloop = true;
         public int hashcodeindex; // dont touch :)
         public Vec2 oldposition = Vec2.Zero;
@@ -101,8 +106,8 @@ namespace DuckGame
         protected HashSet<string> _contextMenuFilter = new HashSet<string>();
         public static Effect _alphaTestEffect;
         private bool _skipPositioning;
-        private static Dictionary<Type, Sprite> _editorIcons = new Dictionary<Type, Sprite>();
-        protected Sprite _editorIcon;
+        public static Dictionary<Type, Sprite> _editorIcons = new Dictionary<Type, Sprite>();
+        public Sprite _editorIcon;
         protected bool _solid = true;
         protected Vec2 _collisionOffset;
         protected Vec2 _collisionSize;
@@ -255,18 +260,29 @@ namespace DuckGame
 
         public virtual bool TransferControl(NetworkConnection to, NetIndex8 auth)
         {
+            Main.SpecialCode2 = "to conn";
             if (to == connection)
             {
+                Main.SpecialCode2 = "to conn 4";
                 if (auth > authority)
+                {
+                    Main.SpecialCode2 = "to conn 8";
+
                     authority = auth;
+                }
                 return true;
             }
+            Main.SpecialCode2 = "to conn 16";
             if (connection.profile != null && connection.profile.slotType != SlotType.Spectator && (auth < authority || connection != null && CanBeControlled() && connection.profile != null && connection.profile.slotType != SlotType.Spectator && auth == authority && (connection.profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks < (to.profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks))
                 return false;
+            Main.SpecialCode2 = "to conn 24";
             if (NetIndex8.Difference(auth, authority) > 19)
                 wasSuperFondled = 120;
+            Main.SpecialCode2 = "to conn 32";
             _framesSinceTransfer = 0;
+            Main.SpecialCode2 = "to conn 40";
             connection = to;
+            Main.SpecialCode2 = "to conn 44";
             authority = auth;
             return true;
         }
@@ -755,6 +771,7 @@ namespace DuckGame
 
         public static Thing LoadThing(BinaryClassChunk node, bool chance = true)
         {
+            if (node == null) return null;
             Type type = Editor.GetType(node.GetProperty<string>("type"));
             if (!(type != null))
                 return null;
@@ -1254,6 +1271,7 @@ namespace DuckGame
                 return;
             t.bottom = block4.top;
         }
+        //useless now -NiK0
         public void OldReturnItemToWorld(Thing t)
         {
             Block block1 = Level.OldCheckLine<Block>(position, position + new Vec2(16f, 0f));
@@ -1513,12 +1531,14 @@ namespace DuckGame
 
         public virtual void DoUpdate()
         {
+            if (SkipIntratick > 0)
+                SkipIntratick--;
             if (wasSuperFondled > 0)
                 --wasSuperFondled;
             if (_anchor != null)
                 position = _anchor.position;
             Update();
-            if (Buckets.Length > 0 && ((oldcollisionOffset != collisionOffset || oldcollisionSize != collisionSize) || (oldposition - position).LengthSquared() > 100f) && Level.current != null) //((oldposition - position)).length > 10
+            if (Buckets.Length > 0 && ((oldcollisionOffset != collisionOffset || oldcollisionSize != collisionSize) || (oldposition - position).LengthSquared() > 50f) && Level.current != null) //((oldposition - position)).length > 10
             {
                 oldcollisionOffset = collisionOffset;
                 oldcollisionSize = collisionSize;
@@ -1637,6 +1657,25 @@ namespace DuckGame
                 _graphic.depth = depth;
                 _graphic.scale = scale;
                 _graphic.center = center;
+                _graphic.LerpState.CanLerp = true;
+                _graphic.SkipIntraTick = SkipIntratick;
+            }
+            _graphic.Draw();
+        }
+        public virtual void DrawLerpLess()
+        {
+            if (_graphic == null)
+                return;
+            if (!_skipPositioning)
+            {
+                _graphic.position = position;
+                _graphic.alpha = alpha;
+                _graphic.angle = angle;
+                _graphic.depth = depth;
+                _graphic.scale = scale;
+                _graphic.center = center;
+                _graphic.LerpState.CanLerp = false;
+                _graphic.SkipIntraTick = SkipIntratick;
             }
             _graphic.Draw();
         }
@@ -1698,6 +1737,19 @@ namespace DuckGame
             spr.flipH = offDir < 0;
             Graphics.Draw(spr, vec2.x, vec2.y);
         }
+        public void Draw<T>(ref T spr, Vec2 pos, int d = 1) where T : Sprite
+        {
+            Vec2 vec2 = Offset(pos);
+            if (graphic != null)
+                spr.flipH = graphic.flipH;
+            spr.angle = angle;
+            spr.alpha = alpha;
+            spr.depth = depth + d;
+            spr.scale = scale;
+            spr.flipH = offDir < 0;
+            spr.LerpState.CanLerp = true;
+            Graphics.Draw(ref spr, vec2.x, vec2.y);
+        }
 
         public void DrawIgnoreAngle(Sprite spr, Vec2 pos, int d = 1)
         {
@@ -1707,9 +1759,21 @@ namespace DuckGame
             spr.scale = scale;
             Graphics.Draw(spr, vec2.x, vec2.y);
         }
+        public void DrawIgnoreAngle<T>(ref T spr, Vec2 pos, int d = 1) where T : Sprite
+        {
+            Vec2 vec2 = Offset(pos);
+            spr.alpha = alpha;
+            spr.depth = depth + d;
+            spr.scale = scale;
+            spr.LerpState.CanLerp = true;
+            Graphics.Draw(ref spr, vec2.x, vec2.y);
+        }
 
         public virtual void OnTeleport()
         {
+            SkipIntratick = 3;
+            //need to update cells here because teleporters teleport wrongly otherwise -NiK0
+            Level.current.things.UpdateObject(this);
         }
 
         public virtual void DoTerminate() => Terminate();

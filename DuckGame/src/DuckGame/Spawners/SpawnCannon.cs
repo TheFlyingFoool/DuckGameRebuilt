@@ -294,7 +294,7 @@ namespace DuckGame
                 Vec2 vec2 = Offset(Maths.AngleToVec(radians) * 2f);
                 _arrowHead.angle = (float)((flipHorizontal ? radians : -radians) + angle + 3.1415927f * (flipHorizontal ? -0.5 : 0.5));
                 _arrowHead.scale = new Vec2(0.5f, 0.5f);
-                Graphics.Draw(_arrowHead, vec2.x, vec2.y, depth + 2);
+                Graphics.Draw(ref _arrowHead, vec2.x, vec2.y, depth + 2);
             }
             float num = Maths.Clamp(val, 0f, 1f);
             if (num > 0.8f && !(Level.current is Editor))

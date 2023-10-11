@@ -36,6 +36,12 @@ namespace DuckGame
         {
             if (_tracer || _bulletDistance <= 0.1f)
                 return;
+
+            BulletStart.UpdateLerpState(this.drawStart, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            BulletEnd.UpdateLerpState(this.drawEnd, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            Vec2 drawStart = BulletStart.Position;
+            Vec2 drawEnd = BulletEnd.Position;
+
             if (gravityAffected)
             {
                 if (prev.Count < 1)
@@ -84,6 +90,8 @@ namespace DuckGame
 
         protected override void Rebound(Vec2 pos, float dir, float rng)
         {
+            if (DGRSettings.ActualParticleMultiplier > 0) Level.current.AddThing(new LaserRebound(pos.x, pos.y));
+            if (Recorderator.Playing) return;
             ++reboundBulletsCreated;
             isRebound = true;
             LaserBullet t = new LaserBullet(pos.x, pos.y, ammo, dir, rbound: rebound, distance: rng);
@@ -96,7 +104,6 @@ namespace DuckGame
             t.connection = connection;
             reboundCalled = true;
             Level.current.AddThing(t);
-            if (DGRSettings.ActualParticleMultiplier > 0) Level.current.AddThing(new LaserRebound(pos.x, pos.y));
         }
     }
 }

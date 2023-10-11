@@ -1,11 +1,9 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.DemoBlaster
-using System;
+﻿using System;
 
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Guns")]
+    //[EditorGroup("Rebuilt|Guns")]
     [BaggedProperty("canSpawn", false)]
     public class ReDemoBlaster : Gun
     {

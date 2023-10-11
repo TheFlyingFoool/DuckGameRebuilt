@@ -5,6 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using DuckGame;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,10 +20,10 @@ namespace DuckGame
         private Dictionary<Direction, PipeTileset> connections = new Dictionary<Direction, PipeTileset>();
         public SpriteMap _sprite;
         public float pipeDepth;
-        private bool searchUp;
-        private bool searchDown;
-        private bool searchLeft;
-        private bool searchRight;
+        public bool searchUp;
+        public bool searchDown;
+        public bool searchLeft;
+        public bool searchRight;
         private PipeTileset _pipeUp;
         private PipeTileset _pipeDown;
         private PipeTileset _pipeLeft;
@@ -37,7 +38,7 @@ namespace DuckGame
         private List<MaterialThing> _colliding;
         private int framesSincePipeout;
         private int _transportingIndex;
-        private bool _initializedConnections;
+        public bool _initializedConnections;
         private bool _testedValidity;
         private int _initializedBackground;
         private bool entered;
@@ -52,7 +53,14 @@ namespace DuckGame
         public float _flapLerp;
         public float _flap;
 
-        public bool IsBackground() => connections.Count > 1 && background.value;
+        public bool IsBackground()
+        {
+            if (Corderator.instance != null && Corderator.instance.PlayingThatShitBack)
+            {
+                return background.value;
+            }
+            return connections.Count > 1 && background.value;
+        }
 
         public PipeTileset(float x, float y, string pSprite)
           : base(x, y)
@@ -162,8 +170,8 @@ namespace DuckGame
             return editorCycleType;
         }
 
-        public bool isEntryPipe => _validPipe && connections.Count == 1 && !(bool)trapdoor;
-
+        public bool isEntryPipe => _validPipe && connections.Count == 1 && !(bool) trapdoor;
+        //9 11
         private void PipeOut(PhysicsObject d)
         {
             FlapPipe();
@@ -1382,7 +1390,8 @@ namespace DuckGame
                 partRot = Rando.Float(10f);
             Vec2 vec2_1 = endNormal;
             Vec2 vec2_2 = vec2_1.Rotate(Maths.DegToRad(Up() != null || Right() != null ? 90f : -90f), Vec2.Zero);
-            --partWait;
+            if(MonoMain.UpdateLerpState)
+                --partWait;
             if (partWait <= 0)
             {
                 PipeParticle pipeParticle = null;
@@ -1410,11 +1419,17 @@ namespace DuckGame
                 if (_particles[index].alpha < 1)
                 {
                     Vec2 vec2_3 = position - _particles[index].position;
-                    _particles[index].velocity -= endNormal * 0.03f;
-                    _particles[index].position -= vec2_3 * vec2_2 * 0.07f;
+                    if (MonoMain.UpdateLerpState)
+                    {
+                        _particles[index].velocity -= endNormal * 0.03f;
+                        _particles[index].position -= vec2_3 * vec2_2 * 0.07f;
+                    }
                     Graphics.DrawLine(_particles[index].position, _particles[index].position + _particles[index].velocity * 3f, Color.White * _particles[index].alpha, 0.75f, depth - 10);
-                    _particles[index].position += _particles[index].velocity;
-                    _particles[index].alpha += 0.016f;
+                    if (MonoMain.UpdateLerpState)
+                    {
+                        _particles[index].position += _particles[index].velocity;
+                        _particles[index].alpha += 0.016f;
+                    }
                     vec2_1 = _particles[index].position * endNormal - position * endNormal;
                     if (vec2_1.length < 2)
                         _particles[index].alpha = 1f;

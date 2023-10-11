@@ -39,7 +39,7 @@ namespace DuckGame
         private int _ownTime;
         private Vec2 _stickLerp;
         private Vec2 _stickSlowLerp;
-
+        public Interp RagLerp = new Interp(true);
         public override NetworkConnection connection
         {
             get => _doll != null ? _doll.connection : base.connection;
@@ -539,6 +539,8 @@ namespace DuckGame
 
         public override void Draw()
         {
+            RagLerp.UpdateLerpState(this.position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
             addWeight = 0f;
             extraGravMultiplier = 1f;
             if (_part == 2 || _joint == null)

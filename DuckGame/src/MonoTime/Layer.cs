@@ -89,6 +89,7 @@ namespace DuckGame
         public static Layer Lighting => _core._lighting;
 
         public static Layer Foreground => _core._foreground;
+        public static Layer FFCursor => _core._ffcursor;
 
         public static Layer HUD
         {
@@ -348,11 +349,11 @@ namespace DuckGame
         public virtual void Begin(bool transparent, bool isTargetDraw = false)
         {
             //HKK
-            int num1 = name == "LIGHTING" ? 1 : 0;
-            if (aspectReliesOnGameLayer && this.camera != Game.camera)
+            //int num1 = name == "LIGHTING" ? 1 : 0;
+            if (aspectReliesOnGameLayer && camera != Game.camera)
             {
-                this.camera.width = 320f;
-                this.camera.height = 320f / Game.camera.aspect;
+                camera.width = 320f;
+                camera.height = 320f / Game.camera.aspect;
             }
             if (allowTallAspect)
                 Graphics.SetFullViewport();
@@ -378,93 +379,78 @@ namespace DuckGame
                 DevConsole.Log("|DGRED|Layer.Begin exception: " + ex.Message);
             }
             Graphics.ResetSpanAdjust();
-            Effect effect = Layer._core._basicEffect;
-            Vec3 fade = new Vec3(Graphics.fade * this._fade * (1f - this._darken)) * this.colorMul;
-            Vec3 fadeAdd = this._colorAdd + new Vec3(this._fadeAdd) + new Vec3(Graphics.flashAddRenderValue) * this.flashAddInfluence + new Vec3(Graphics.fadeAddRenderValue) - new Vec3(this.darken);
+            Effect effect = _core._basicEffect;
+            Vec3 fade = new Vec3(Graphics.fade * _fade * (1f - _darken)) * colorMul;
+            Vec3 fadeAdd = _colorAdd + new Vec3(_fadeAdd) + new Vec3(Graphics.flashAddRenderValue) * flashAddInfluence + new Vec3(Graphics.fadeAddRenderValue) - new Vec3(darken);
             fadeAdd = new Vec3(Maths.Clamp(fadeAdd.x, -1f, 1f), Maths.Clamp(fadeAdd.y, -1f, 1f), Maths.Clamp(fadeAdd.z, -1f, 1f));
             fadeAdd *= fade;
-            if (this == Layer.Game)
+            if (this == Game)
             {
-                Layer.kGameLayerFade = fade;
-                Layer.kGameLayerAdd = fadeAdd;
+                kGameLayerFade = fade;
+                kGameLayerAdd = fadeAdd;
             }
-            if (this._darken > 0f)
+            if (_darken > 0f) _darken -= 0.15f;
+            else if (_darken < 0f) _darken += 0.1f;
+            if (Math.Abs(_darken) < 0.16f) _darken = 0f;
+            if (_effect != null)
             {
-                this._darken -= 0.15f;
-            }
-            else if (this._darken < 0f)
-            {
-                this._darken += 0.15f;
-            }
-            if (Math.Abs(this._darken) < 0.16f)
-            {
-                this._darken = 0f;
-            }
-            if (this._effect != null)
-            {
-                effect = this._effect;
+                effect = _effect;
                 EffectParameter p = effect.Parameters["fade"];
-                if (p != null)
-                {
-                    p.SetValue(fade);
-                }
+                if (p != null) p.SetValue(fade);
                 p = effect.Parameters["add"];
-                if (p != null)
-                {
-                    p.SetValue(fadeAdd);
-                }
+                if (p != null) p.SetValue(fadeAdd);
             }
             else
             {
                 float fadeLen = fadeAdd.LengthSquared();
                 if (fade != Vec3.One && fadeLen > 0.001f)
                 {
-                    effect = Layer._core._basicEffectFadeAdd;
+                    effect = _core._basicEffectFadeAdd;
                     effect.Parameters["fade"].SetValue(fade);
                     effect.Parameters["add"].SetValue(fadeAdd);
                 }
                 else if (fade != Vec3.One)
                 {
-                    effect = Layer._core._basicEffectFade;
+                    effect = _core._basicEffectFade;
                     effect.Parameters["fade"].SetValue(fade);
                 }
                 else if (fadeLen > 0.001f)
                 {
-                    effect = Layer._core._basicEffectAdd;
+                    effect = _core._basicEffectAdd;
                     effect.Parameters["add"].SetValue(fadeAdd);
                 }
-                if (Layer.doVirtualEffect && (Layer.Game == this || Layer.Foreground == this || Layer.Blocks == this || Layer.Background == this))
+                if (doVirtualEffect && (Game == this || Foreground == this || Blocks == this || Background == this))
                 {
-                    if (Layer.basicWireframeTex)
+                    if (basicWireframeTex)
                     {
-                        effect = Layer._core._basicWireframeEffectTex;
+                        effect = _core._basicWireframeEffectTex;
                     }
                     else
                     {
-                        effect = Layer._core._basicWireframeEffect;
+                        effect = _core._basicWireframeEffect;
                     }
                 }
             }
-            if (this._state.ScissorTestEnable)
+            if (_state.ScissorTestEnable)
             {
-                Graphics.SetScissorRectangle(this._scissor);
+                Graphics.SetScissorRectangle(_scissor);
             }
-            Graphics.screen = this._batch;
-            Camera c = this.camera;
-            if (this.target != null && isTargetDraw && !this.targetOnly)
+            Graphics.screen = _batch;
+            Camera c = camera;
+            if (target != null && isTargetDraw && !targetOnly)
             {
-                this._targetCamera.x = (float)Math.Round((double)(this.camera.x - 1f));
-                this._targetCamera.y = (float)Math.Round((double)(this.camera.y - 1f));
-                this._targetCamera.width = Math.Max(this.camera.width, (float)Graphics.width);
-                this._targetCamera.height = Math.Max(this.camera.height, (float)Graphics.height);
-                c = this._targetCamera;
+                _targetCamera.x = (float)Math.Round((double)(camera.x - 1f));
+                _targetCamera.y = (float)Math.Round((double)(camera.y - 1f));
+                _targetCamera.width = Math.Max(camera.width, (float)Graphics.width);
+                _targetCamera.height = Math.Max(camera.height, (float)Graphics.height);
+                c = _targetCamera;
             }
-            BlendState blendState = this._blend;
+            BlendState blendState = _blend;
             if (isTargetDraw)
             {
-                blendState = this._targetBlend;
+                blendState = _targetBlend;
             }
-            if (this.target != null && isTargetDraw)
+            if (target != null && isTargetDraw)
             {
                 Vec2 pos = c.position;
                 pos.x = (float)Math.Floor((double)pos.x);
@@ -474,29 +460,29 @@ namespace DuckGame
                 size.y = (float)Math.Floor((double)size.y);
                 Vec2 realPos = c.position;
                 Vec2 realSize = c.size;
-                this._batch.Begin(SpriteSortMode.BackToFront, blendState, SamplerState.PointClamp, this._targetDepthStencil, this._state, effect, c.getMatrix());
+                _batch.Begin(SpriteSortMode.BackToFront, blendState, SamplerState.PointClamp, _targetDepthStencil, _state, effect, c.getMatrix());
                 c.position = realPos;
                 c.size = realSize;
                 return;
             }
-            if (Layer.blurry || this._blurEffect)
+            if (blurry || _blurEffect)
             {
                 if (!transparent)
                 {
-                    this._batch.Begin(SpriteSortMode.FrontToBack, blendState, SamplerState.LinearClamp, DepthStencilState.Default, this._state, effect, c.getMatrix());
+                    _batch.Begin(SpriteSortMode.FrontToBack, blendState, SamplerState.LinearClamp, DepthStencilState.Default, _state, effect, c.getMatrix());
                     return;
                 }
-                this._batch.Begin(SpriteSortMode.BackToFront, blendState, SamplerState.LinearClamp, DepthStencilState.DepthRead, this._state, effect, c.getMatrix());
+                _batch.Begin(SpriteSortMode.BackToFront, blendState, SamplerState.LinearClamp, DepthStencilState.DepthRead, _state, effect, c.getMatrix());
                 return;
             }
             else
             {
                 if (!transparent)
                 {
-                    this._batch.Begin(SpriteSortMode.FrontToBack, blendState, SamplerState.PointClamp, DepthStencilState.Default, this._state, effect, c.getMatrix());
+                    _batch.Begin(SpriteSortMode.FrontToBack, blendState, SamplerState.PointClamp, DepthStencilState.Default, _state, effect, c.getMatrix());
                     return;
                 }
-                this._batch.Begin(SpriteSortMode.BackToFront, blendState, SamplerState.PointClamp, DepthStencilState.DepthRead, this._state, effect, c.getMatrix());
+                _batch.Begin(SpriteSortMode.BackToFront, blendState, SamplerState.PointClamp, DepthStencilState.DepthRead, _state, effect, c.getMatrix());
                 return;
             }
         }
@@ -589,8 +575,10 @@ namespace DuckGame
                                             break;
                                         }
                                     }
+                                    thing.currentlyDrawing = false;
                                     if ((inbox || thing.Buckets.Length == 0 || thing.owner != null || !thing.shouldbegraphicculled || thing.layer == Foreground) && thing.visible && (thing.ghostObject == null || thing.ghostObject.IsInitialized()))
                                     {
+                                        thing.currentlyDrawing = true;
                                         if (_perspective)
                                         {
                                             Vec2 position = thing.position;
@@ -622,8 +610,10 @@ namespace DuckGame
                             {
                                 foreach (Thing thing in transparent1)
                                 {
+                                    thing.currentlyDrawing = false;
                                     if (thing.visible && (thing.ghostObject == null || thing.ghostObject.IsInitialized()))
                                     {
+                                        thing.currentlyDrawing = true;
                                         if (_perspective)
                                         {
                                             Vec2 position = thing.position;
@@ -696,8 +686,10 @@ namespace DuckGame
                                             break;
                                         }
                                     }
+                                    thing.currentlyDrawing = false;
                                     if ((flag || thing.Buckets.Length == 0 || thing.owner != null || !thing.shouldbegraphicculled || thing.layer == Foreground) && thing.visible)
                                     {
+                                        thing.currentlyDrawing = true; //this implementation is a bit dumber but it works -NiK0
                                         if (_perspective)
                                         {
                                             Vec2 position = thing.position;

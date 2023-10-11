@@ -1756,7 +1756,15 @@ namespace Microsoft.Xna.Framework
 			}
 			return INTERNAL_capabilities[index];
 		}
-
+		public static string GetGameControllerName(int index)
+		{
+			IntPtr device = INTERNAL_devices[index];
+			if (device == IntPtr.Zero)
+			{
+				return "";
+			}
+			return SDL.SDL_GameControllerName(SDL2_FNAPlatform.INTERNAL_devices[index]);
+		}
 		public static GamePadState GetGamePadState(int index, GamePadDeadZone deadZoneMode)
 		{
 			IntPtr device = INTERNAL_devices[index];

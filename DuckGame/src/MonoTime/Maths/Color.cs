@@ -177,6 +177,11 @@ namespace DuckGame
             this.a = a;
         }
 
+        public Color(string hex) : this()
+        {
+            (r, g, b, a) = FromHexString(hex);
+        }
+
         public Color(byte r, byte g, byte b)
           : this(r, g, b, byte.MaxValue)
         {

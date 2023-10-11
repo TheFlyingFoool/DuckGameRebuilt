@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using AddedContent.Hyeve;
+using DuckGame;
 
 namespace DuckGame
 {
@@ -135,6 +136,14 @@ namespace DuckGame
 
         public static void Remove(Thing thing)
         {
+            if (Corderator.instance != null && !Recorderator.Playing && thing.shouldhavevessel)
+            {
+                if (Corderator.instance.somethingMap.Contains(thing))
+                {
+                    int z = Corderator.instance.somethingMap[thing];
+                    Corderator.instance.somethingMapped[z].deleteTime = Corderator.instance.cFrame;
+                }
+            }
             if (_core.currentLevel == null)
                 return;
             _core.currentLevel.RemoveThing(thing);
@@ -282,6 +291,45 @@ namespace DuckGame
 
         public virtual void AddThing(Thing t)
         {
+            if (Corderator.instance != null && !Recorderator.Playing && Corderator.instance.cFrame > 0 && t.shouldhavevessel)
+            {
+                Type typeoid = t.GetType();
+                //if (t is TeamHat) DevConsole.Log("what1");
+                if (SomethingSomethingVessel.tatchedVessels.ContainsKey(typeoid))
+                {
+                    //if (t is TeamHat) DevConsole.Log("what2");
+                    object[] args = new object[] { t };
+                    SomethingSomethingVessel vs = (SomethingSomethingVessel)Activator.CreateInstance(SomethingSomethingVessel.tatchedVessels[typeoid], args);
+                    vs.addTime = Corderator.instance.cFrame;
+                    Corderator.instance.MapSomeSomeVessel(vs);
+                    goto FF;
+                }
+                /*if (t is Bullet b)
+                {
+                    BulletVessel bv = new BulletVessel(b) { addTime = Corderator.instance.cFrame };
+                    Corderator.instance.MapSomeSomeVessel(bv);
+                }*/
+                if (t is Equipment e)
+                {
+                    EquipmentVessel ev = new EquipmentVessel(e) { addTime = Corderator.instance.cFrame };
+                    Corderator.instance.MapSomeSomeVessel(ev);
+                }
+                else if (t is Holdable h)
+                {
+                    if (t is IAmADuck || t is Equipment) goto FF;
+                    if (t is Gun)
+                    {
+                        GunVessel gv = new GunVessel(t) { addTime = Corderator.instance.cFrame };
+                        Corderator.instance.MapSomeSomeVessel(gv);
+                        goto FF;
+                    }
+                    HoldableVessel hv = new HoldableVessel(h) { addTime = Corderator.instance.cFrame };
+                    Corderator.instance.MapSomeSomeVessel(hv);
+                }
+            }
+            FF:
+
+            Main.SpecialCode = "vay";
             if (Thread.CurrentThread == Content.previewThread && this != Content.previewLevel) Content.previewLevel.AddThing(t);
             else if (t is ThingContainer)
             {
@@ -302,6 +350,7 @@ namespace DuckGame
             }
             else
             {
+            Main.SpecialCode = "lay";
                 if (t.level != this)
                 {
                     _things.Add(t);
@@ -799,9 +848,49 @@ namespace DuckGame
         public virtual void StartDrawing()
         {
         }
-
+        public RenderTarget2D rd2;
         public virtual void DoDraw()
         {
+            if (DGRSettings.UncappedFPS)
+                camera.LerpCamera();
+
+            bool currentlyShadering = false;
+
+            bool cameraD = false;
+            List<FluidPuddle> lavaPuddles = new List<FluidPuddle>();
+            if (DGRSettings.HeatWaveMultiplier > 0) //so theres kind of a mess here, but this is for wobbly shader lava effect :)
+            {
+                IEnumerable<FluidPuddle> flps = things.OfType<FluidPuddle>();
+
+                foreach (FluidPuddle fl in flps)
+                {
+                    if ((fl.data.heat > 0 || fl.onFire) && fl.currentlyDrawing)
+                    {
+                        lavaPuddles.Add(fl);
+                    }
+                }
+
+                // DevConsole.Log(lavaPuddles.Count);
+                if (Graphics.currentRenderTarget == null && lavaPuddles.Count > 0)
+                {
+                    if (rd2 != null) rd2.Dispose();
+                    int width = (int)Resolution._device.PreferredBackBufferWidth;
+                    int height = (int)Resolution._device.PreferredBackBufferHeight;
+
+                    if (Math.Abs(((float)width / (float)height) - camera.aspect) > 0.01f)
+                    {
+                        cameraD = true;
+                        height = (int)(width / camera.aspect) + 1;
+                    }
+
+                    Layer.Console.visible = false;
+                    rd2 = new RenderTarget2D(width, height);
+                    Graphics.SettingForShader = true;
+                    Graphics.SetRenderTarget(rd2);
+                    Graphics.SettingForShader = false;
+                    currentlyShadering = true;
+                }
+            }
             StartDrawing();
             foreach (IDrawToDifferentLayers toDifferentLayers in things[typeof(IDrawToDifferentLayers)])
                 toDifferentLayers.OnDrawLayer(Layer.PreDrawLayer);
@@ -835,18 +924,15 @@ namespace DuckGame
                     Graphics.RestoreOldViewport();
                 }
             }
-            if (Recorder.currentRecording != null)
-                Recorder.currentRecording.LogBackgroundColor(backgroundColor);
+            if (Recorder.currentRecording != null) Recorder.currentRecording.LogBackgroundColor(backgroundColor);
             BeforeDraw();
             Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.getMatrix());
             Draw();
             things.Draw();
 
             Graphics.screen.End();
-            if (DevConsole.splitScreen && this is GameLevel)
-                SplitScreen.Draw();
-            else
-                Layer.DrawLayers();
+            if (DevConsole.splitScreen && this is GameLevel) SplitScreen.Draw();
+            else Layer.DrawLayers();
             if (DevConsole.rhythmMode && this is GameLevel)
             {
                 Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Layer.HUD.camera.getMatrix());
@@ -854,6 +940,71 @@ namespace DuckGame
                 Graphics.screen.End();
             }
             AfterDrawLayers();
+
+            if (currentlyShadering)
+            {
+
+                if (!cameraD) Graphics.SettingForShader = true;
+                Graphics.SetRenderTarget(null);
+                Graphics.SettingForShader = false;
+
+                bool multiLayering = false;
+                if (lavaPuddles.Count > 1) multiLayering = true;
+                List<RenderTarget2D> dispose = new List<RenderTarget2D>() { rd2 };
+                for (int i = 0; i < lavaPuddles.Count; i++)
+                {
+                    RenderTarget2D rd3 = null;
+                    if (multiLayering && i != lavaPuddles.Count - 1)
+                    {
+                        int width = (int)Resolution._device.PreferredBackBufferWidth;
+                        int height = (int)Resolution._device.PreferredBackBufferHeight;
+                        if (Math.Abs(((float)width / (float)height) - camera.aspect) > 0.01f)
+                        {
+                            cameraD = true;
+                            height = (int)(width / camera.aspect) + 1;
+                        }
+                        rd3 = new RenderTarget2D(width, height);
+
+                        dispose.Add(rd3);
+                        Graphics.SettingForShader = true;
+                        Graphics.SetRenderTarget(rd3);
+                        Graphics.SettingForShader = false;
+                    }
+
+                    Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, Matrix.CreateScale(1, 1, 1));
+                    Graphics.Clear(backgroundColor);
+#if DEBUG
+                    if (!Network.isActive)
+                    {
+                        Graphics.DrawString("this stuff only shows in debug builds and offline -NiK0", new Vec2(0, 0), Color.White, 1, null, 2);
+                        Graphics.DrawString(Resolution.size.ToString(), new Vec2(0, 16), Color.White, 1, null, 2);
+                        Graphics.DrawString(Resolution.current.dimensions.ToString(), new Vec2(0, 32), Color.White, 1, null, 2);
+                        if (Graphics._screenViewport != null) Graphics.DrawString(Graphics._screenViewport.Value.Bounds.ToString(), new Vec2(0, 48), Color.White, 1, null, 2);
+                        int width = (int)Resolution._device.PreferredBackBufferWidth;
+                        int height = (int)Resolution._device.PreferredBackBufferHeight;
+                        Graphics.DrawString($"{width}:{height} didRSVP:{cameraD}", new Vec2(0, 64), Color.White, 1, null, 2);
+
+                    }
+#endif
+                    Graphics.material = lavaPuddles[i].mt;
+                    Graphics.Draw(rd2, 0, 0, 1, 1);
+                    Graphics.material = null;
+                    Graphics.screen.End();
+                    if (multiLayering)
+                    {
+                        if (!cameraD) Graphics.SettingForShader = true;
+                        Graphics.SetRenderTarget(null);
+                        Graphics.SettingForShader = true;
+                        rd2 = rd3;
+                    }
+                }
+                Layer.Console.visible = true;
+                Layer.Console.Draw(true);
+                for (int i = 0; i < dispose.Count; i++)
+                {
+                    dispose[i].Dispose();
+                }
+            }
         }
 
         public virtual void InitializeDraw(Layer l)
@@ -1034,6 +1185,8 @@ namespace DuckGame
         public static T CheckCircle<T>(Vec2 p1, float radius) => current.CollisionCircle<T>(p1, radius);
 
         public static IEnumerable<T> CheckCircleAll<T>(Vec2 p1, float radius) => current.CollisionCircleAll<T>(p1, radius);
+
+        public static IEnumerable<T> CheckCircleAllOld<T>(Vec2 p1, float radius) => current.CollisionCircleAllOld<T>(p1, radius);
 
         public T CollisionCircle<T>(float p1x, float p1y, float radius, Thing ignore) => CollisionCircle<T>(new Vec2(p1x, p1y), radius, ignore);
 
@@ -1524,20 +1677,20 @@ namespace DuckGame
             }
             return outList1;//nextCollisionList.AsEnumerable<object>().Cast<T>();
         }
-        //public IEnumerable<T> CollisionCircleAll<T>(Vec2 p1, float radius) old
-        //{
+        public IEnumerable<T> CollisionCircleAllOld<T>(Vec2 p1, float radius) //old //brought it back to fix collision issue with the postitron shooter -NiK0
+        {
 
-        //    List<object> nextCollisionList = Level.GetNextCollisionList();
-        //    System.Type key = typeof(T);
-        //    foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
-        //    {
-        //        if (!dynamicObject.removeFromLevel && Collision.Circle(p1, radius, dynamicObject))
-        //            nextCollisionList.Add(dynamicObject);
-        //    }
-        //    if (_things.HasStaticObjects(key))
-        //        _things.quadTree.CheckCircleAll<T>(p1, radius, nextCollisionList);
-        //    return nextCollisionList.AsEnumerable<object>().Cast<T>();
-        //}
+            List<object> nextCollisionList = Level.GetNextCollisionList();
+            System.Type key = typeof(T);
+            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
+            {
+                if (!dynamicObject.removeFromLevel && Collision.Circle(p1, radius, dynamicObject))
+                    nextCollisionList.Add(dynamicObject);
+            }
+            if (_things.HasStaticObjects(key))
+                _things.quadTree.CheckCircleAll<T>(p1, radius, nextCollisionList);
+            return nextCollisionList.AsEnumerable<object>().Cast<T>();
+        }
 
         public T CollisionRectFilter<T>(Vec2 p1, Vec2 p2, Predicate<T> filter)
         {
@@ -1980,6 +2133,11 @@ namespace DuckGame
             //TODO: Re-optimize this code, this is currently DG's collision code because the code that uses the Bucket system makes certain bullet collisions
             //work differently from vanilla, this is unoptimal because as with normal DG it checks every thing in the entire map and not just a sector like
             //what we do with buckets so if someone can figure out a way to make it use buckets and work in vanilla go for it -NiK0
+            /*foreach (Thing thing in things.CollisionPointAll(point, typeof(MaterialThing)))
+            {
+                if (!thing.removeFromLevel && Collision.Point(point, thing))
+                    output.Add(thing as MaterialThing);
+            }*/
             Type t = typeof(MaterialThing);
             foreach (Thing thing in _things.GetDynamicObjects(t))
             {
@@ -1988,11 +2146,6 @@ namespace DuckGame
                     output.Add(thing as MaterialThing);
                 }
             }
-            /*foreach (Thing thing in things.CollisionPointAll(point, typeof(MaterialThing)))
-            {
-                if (!thing.removeFromLevel && Collision.Point(point, thing))
-                    output.Add(thing as MaterialThing);
-            }*/
             if (_things.HasStaticObjects(t))
             {
                 MaterialThing thing2 = _things.quadTree.CheckPoint<MaterialThing>(point);

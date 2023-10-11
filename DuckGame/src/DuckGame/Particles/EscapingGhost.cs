@@ -25,6 +25,7 @@ namespace DuckGame
 
         public override void Update()
         {
+            if (!currentlyDrawing) _sprite.UpdateFrame(true);
             if (_sprite.finished)
                 Level.Remove(this);
             base.Update();

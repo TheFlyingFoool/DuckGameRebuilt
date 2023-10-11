@@ -88,6 +88,8 @@ namespace DuckGame
 
         public override void Draw()
         {
+            UILerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
             _font.scale = scale;
             _font.alpha = alpha;
             float width = _font.GetWidth(text);
@@ -97,11 +99,11 @@ namespace DuckGame
             {
                 Vec2 scale = _font.scale;
                 _font.scale = new Vec2(specialScale);
-                _font.Draw(text, x + num1, y + num2, UIMenu.disabledDraw ? Colors.BlueGray : _color, depth, _controlProfile);
+                _font.Draw(text, UILerp.x + num1, UILerp.y + num2, UIMenu.disabledDraw ? Colors.BlueGray : _color, depth, _controlProfile);
                 _font.scale = scale;
             }
             else
-                _font.Draw(text, x + num1, y + num2, UIMenu.disabledDraw ? Colors.BlueGray : _color, depth, _controlProfile);
+                _font.Draw(text, UILerp.x + num1, UILerp.y + num2, UIMenu.disabledDraw ? Colors.BlueGray : _color, depth, _controlProfile);
             base.Draw();
         }
     }

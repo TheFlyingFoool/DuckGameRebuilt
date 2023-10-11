@@ -35,6 +35,7 @@ namespace DuckGame
         private Sound _unchargeSound;
         private Sound _unchargeSoundShort;
         private int _framesSinceBlast;
+        Interp DeathBeamLerp = new Interp(true);
 
         public byte netAnimationIndex
         {
@@ -168,46 +169,49 @@ namespace DuckGame
             if (_chargeAnim.currentAnimation == "charge" && _chargeAnim.finished && isServerForObject)
             {
                 PostFireLogic();
-                if (this.owner is Duck owner)
+                if (!Recorderator.Playing)
                 {
-                    RumbleManager.AddRumbleEvent(owner.profile, new RumbleEvent(RumbleIntensity.Medium, RumbleDuration.Pulse, RumbleFalloff.Short));
-                    owner.sliding = true;
-                    owner.crouch = true;
-                    Vec2 vec2 = barrelVector * 9f;
-                    if (owner.ragdoll != null && owner.ragdoll.part2 != null && owner.ragdoll.part1 != null && owner.ragdoll.part3 != null)
+                    if (this.owner is Duck owner)
                     {
-                        owner.ragdoll.part2.hSpeed -= vec2.x;
-                        owner.ragdoll.part2.vSpeed -= vec2.y;
-                        owner.ragdoll.part1.hSpeed -= vec2.x;
-                        owner.ragdoll.part1.vSpeed -= vec2.y;
-                        owner.ragdoll.part3.hSpeed -= vec2.x;
-                        owner.ragdoll.part3.vSpeed -= vec2.y;
+                        RumbleManager.AddRumbleEvent(owner.profile, new RumbleEvent(RumbleIntensity.Medium, RumbleDuration.Pulse, RumbleFalloff.Short));
+                        owner.sliding = true;
+                        owner.crouch = true;
+                        Vec2 vec2 = barrelVector * 9f;
+                        if (owner.ragdoll != null && owner.ragdoll.part2 != null && owner.ragdoll.part1 != null && owner.ragdoll.part3 != null)
+                        {
+                            owner.ragdoll.part2.hSpeed -= vec2.x;
+                            owner.ragdoll.part2.vSpeed -= vec2.y;
+                            owner.ragdoll.part1.hSpeed -= vec2.x;
+                            owner.ragdoll.part1.vSpeed -= vec2.y;
+                            owner.ragdoll.part3.hSpeed -= vec2.x;
+                            owner.ragdoll.part3.vSpeed -= vec2.y;
+                        }
+                        else
+                        {
+                            owner.hSpeed -= vec2.x;
+                            owner.vSpeed -= vec2.y + 3f;
+                            owner.CancelFlapping();
+                        }
                     }
                     else
                     {
-                        owner.hSpeed -= vec2.x;
-                        owner.vSpeed -= vec2.y + 3f;
-                        owner.CancelFlapping();
+                        Vec2 barrelVector = this.barrelVector;
+                        hSpeed -= barrelVector.x * 9f;
+                        vSpeed -= (float)(barrelVector.y * 9 + 3);
                     }
+                    Vec2 vec2_1 = Offset(barrelOffset);
+                    Vec2 vec2_2 = Offset(barrelOffset + new Vec2(1200f, 0f)) - vec2_1;
+                    if (isServerForObject)
+                        ++Global.data.laserBulletsFired.valueInt;
+                    if (Network.isActive)
+                        Send.Message(new NMDeathBeam(this, vec2_1, vec2_2));
+                    DeathBeam deathBeam = new DeathBeam(vec2_1, vec2_2, this.owner)
+                    {
+                        isLocal = isServerForObject
+                    };
+                    Level.Add(deathBeam);
+                    doBlast = true;
                 }
-                else
-                {
-                    Vec2 barrelVector = this.barrelVector;
-                    hSpeed -= barrelVector.x * 9f;
-                    vSpeed -= (float)(barrelVector.y * 9 + 3);
-                }
-                Vec2 vec2_1 = Offset(barrelOffset);
-                Vec2 vec2_2 = Offset(barrelOffset + new Vec2(1200f, 0f)) - vec2_1;
-                if (isServerForObject)
-                    ++Global.data.laserBulletsFired.valueInt;
-                if (Network.isActive)
-                    Send.Message(new NMDeathBeam(this, vec2_1, vec2_2));
-                DeathBeam deathBeam = new DeathBeam(vec2_1, vec2_2, this.owner)
-                {
-                    isLocal = isServerForObject
-                };
-                Level.Add(deathBeam);
-                doBlast = true;
             }
             if (doBlast && isServerForObject)
             {
@@ -236,12 +240,12 @@ namespace DuckGame
                 _tip.alpha = (24 - _chargeAnim.frame) / 24f;
             else
                 _tip.alpha = 0f;
-            Graphics.Draw(_tip, barrelPosition.x, barrelPosition.y);
+            Graphics.Draw(ref _tip, barrelPosition.x, barrelPosition.y);
             _chargeAnim.flipH = graphic.flipH;
             _chargeAnim.depth = depth + 1;
             _chargeAnim.angle = angle;
             _chargeAnim.alpha = alpha;
-            Graphics.Draw(_chargeAnim, x, y);
+            Graphics.Draw(ref _chargeAnim, x, y);
             Graphics.material = material;
             float num1 = Maths.NormalizeSection(_tip.alpha, 0f, 0.7f);
             float num2 = Maths.NormalizeSection(_tip.alpha, 0.6f, 1f);
@@ -250,8 +254,17 @@ namespace DuckGame
             float num5 = Maths.NormalizeSection(_tip.alpha, 0.8f, 1f) * 0.5f;
             if (num1 <= 0)
                 return;
+
+            Vec2 barrelOffset = this.barrelOffset;
+            DeathBeamLerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
             Vec2 p1 = Offset(barrelOffset);
             Vec2 p2 = Offset(barrelOffset + new Vec2(num1 * 1200f, 0f));
+            if (angleDegrees == -90.0f || angleDegrees == 0.0f)
+            {
+                p1 = DeathBeamLerp.Position + OffsetLocal(barrelOffset);
+                p2 = DeathBeamLerp.Position + OffsetLocal(barrelOffset + new Vec2(num1 * 1200f, 0f));
+            }
             Graphics.DrawLine(p1, p2, new Color((_tip.alpha * 0.7f + 0.3f), _tip.alpha, _tip.alpha) * (0.3f + num5), (1f + num2 * 12f));
             Graphics.DrawLine(p1, p2, Color.Red * (0.2f + num5), (1f + num3 * 28f));
             Graphics.DrawLine(p1, p2, Color.Red * (0.1f + num5), (0.2f + num4 * 40f));

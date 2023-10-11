@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [ClientOnly]
     public class QuadPhaser : Phaser
@@ -24,6 +18,9 @@ namespace DuckGame
         {
             switch (pThing)
             {
+                case QuadLaser _:
+                case Phaser _:
+                    return false;
                 default:
                     return true;
             }
@@ -82,14 +79,14 @@ namespace DuckGame
                 else if (_charge > 0.4f && _chargeLevel == 1)
                 {
                     _chargeLevel = 2;
-                    SFX.Play("phaserCharge02", 0.5f, -0.5f);
+                    SFX.PlaySynchronized("phaserCharge02", 0.5f, -0.5f);
                 }
                 else
                 {
                     if (_charge <= 0.8f || _chargeLevel != 2)
                         return;
                     _chargeLevel = 3;
-                    SFX.Play("phaserCharge03", 0.6f, -0.5f);
+                    SFX.PlaySynchronized("phaserCharge03", 0.6f, -0.5f);
                 }
             }
         }

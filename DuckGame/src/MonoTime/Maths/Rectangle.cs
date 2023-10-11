@@ -63,10 +63,27 @@ namespace DuckGame
 
         public Rectangle(float x, float y, float width, float height)
         {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
+            if (width > 0)
+            {
+                this.x = x;
+                this.width = width;
+            }
+            else
+            {
+                this.x = x + width;
+                this.width = -width;
+            }
+            
+            if (height > 0)
+            {
+                this.y = y;
+                this.height = height;
+            }
+            else
+            {
+                this.y = y + height;
+                this.height = -height;
+            }
         }
 
         public Rectangle(Vec2 tl, Vec2 br)
@@ -108,6 +125,21 @@ namespace DuckGame
                 default:
                     return new Rectangle(x, y + height / 2f, width / 2f, height / 2f);
             }
+        }
+
+        public Rectangle Shrink(float fromAllSides)
+        {
+            return Shrink(fromAllSides, fromAllSides, fromAllSides, fromAllSides);
+        }
+
+        public Rectangle Shrink(float fromHorizontal, float fromVertical)
+        {
+            return Shrink(fromHorizontal, fromHorizontal, fromVertical, fromVertical);
+        }
+
+        public Rectangle Shrink(float fromLeft, float fromRight, float fromTop, float fromBottom)
+        {
+            return new Rectangle(x + fromLeft, y + fromTop, width - fromLeft - fromRight, height - fromTop - fromBottom);
         }
     }
 }

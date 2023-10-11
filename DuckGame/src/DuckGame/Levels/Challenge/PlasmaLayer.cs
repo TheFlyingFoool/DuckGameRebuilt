@@ -47,7 +47,7 @@ namespace DuckGame
             _plasma.depth = -0.9f;
             _plasma.alpha = 1f;
             Graphics.device.SamplerStates[0] = SamplerState.PointWrap;
-            Graphics.Draw(_plasma, -30f, -30f);
+            Graphics.Draw(ref _plasma, -30f, -30f);
             _batch.End();
             Graphics.SetRenderTarget(null);
             Graphics.viewport = viewport;

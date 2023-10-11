@@ -461,16 +461,12 @@ namespace DuckGame
             if (gun2 != null)
             {
                 Vec2 vec2_2 = gun2.Offset(new Vec2(0f, (float)-(collisionOffset.y / 2f)));
-                Graphics.Draw(_tape, vec2_2.x, vec2_2.y);
+                Graphics.Draw(ref _tape, vec2_2.x, vec2_2.y);
             }
-            else
-                Graphics.Draw(_tape, position.x, position.y);
-            if (level != null && !Duck.renderingIcon)
-                return;
-            if (gun1 != null)
-                gun1.Draw();
-            if (gun2 == null)
-                return;
+            else Graphics.Draw(ref _tape, position.x, position.y);
+            if (level != null && !Duck.renderingIcon) return;
+            if (gun1 != null) gun1.Draw();
+            if (gun2 == null) return;
             gun2.Draw();
         }
 
@@ -478,10 +474,8 @@ namespace DuckGame
         {
             try
             {
-                if (gun1 != null && gun1.flammable > 0f)
-                    gun1.Burn(firePosition, litBy);
-                if (gun2 == null || gun2.flammable <= 0f)
-                    return;
+                if (gun1 != null && gun1.flammable > 0f) gun1.Burn(firePosition, litBy);
+                if (gun2 == null || gun2.flammable <= 0f) return;
                 gun2.Burn(firePosition, litBy);
             }
             catch (Exception ex)
@@ -495,10 +489,8 @@ namespace DuckGame
         {
             try
             {
-                if (gun1 != null)
-                    gun1.DoHeatUp(val, location);
-                if (gun2 == null)
-                    return;
+                if (gun1 != null) gun1.DoHeatUp(val, location);
+                if (gun2 == null) return;
                 gun2.DoHeatUp(val, location);
             }
             catch (Exception ex)

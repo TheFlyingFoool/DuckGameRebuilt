@@ -28,12 +28,12 @@ namespace DuckGame
         private Vec2 warpPos;
         private bool onUpdate;
         public List<BlockGlow> blockGlows = new List<BlockGlow>();
-        private int shotsSinceDuckWasGrounded;
+        public int shotsSinceDuckWasGrounded;
         private int framesSinceShot;
         private float lerpShut;
         private Vec2 _warpPoint;
-        private float gravMultTime;
-        private bool warped;
+        public float gravMultTime;
+        public bool warped;
         private Duck lastDuck;
 
         public Warpgun(float xval, float yval)
@@ -65,7 +65,15 @@ namespace DuckGame
             _sightHit.CenterOrigin();
             _laserTex = Content.Load<Tex2D>("pointerLaser");
         }
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is Warpgun && pTaped.gun2 is Sword ? new WarpSword(x, y) :
+                    pTaped.gun1 is Warpgun && pTaped.gun2 is EnergyScimitar ? new WarpScimitar(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         protected override void PlayFireSound() => PlaySFX(_fireSound, pitch: (0.6f + Rando.Float(0.2f)));
 
         public override void CheckIfHoldObstructed()
@@ -106,7 +114,7 @@ namespace DuckGame
         public override void Update()
         {
             ammo = 9999;
-            if (isServerForObject && !_triggerHeld)
+            if (isServerForObject && !_triggerHeld && !Recorderator.Playing)
                 gravMultTime = 0f;
             IPlatform platform = Level.Nearest<IPlatform>(position, 32.0f);
             bool flag = false;
@@ -121,7 +129,10 @@ namespace DuckGame
             if (platform != null & flag && shotsSinceGrounded > 0 && framesSinceShot > 2)
             {
                 if (shotsSinceGrounded > 1)
+                {
+                    SFX.DontSave = 1;
                     SFX.PlaySynchronized("laserChargeTeeny", 0.8f, 0.3f);
+                }
                 shotsSinceGrounded = 0;
                 for (int index1 = 0; index1 < 8; ++index1)
                 {
@@ -177,7 +188,7 @@ namespace DuckGame
                         if (warped)
                         {
                             duck.blendColor = Lerp.Color(Color.White, Color.Purple, gravMultTime);
-                            duck.position = warpPos;
+                            if (!Recorderator.Playing) duck.position = warpPos;
                             duck.vSpeed = -0.3f;
                             duck.hSpeed = -0.3f;
                         }
@@ -374,6 +385,11 @@ namespace DuckGame
                             materialThing.OnSoftImpact(owner as MaterialThing, ImpactedFrom.Top);
                             if (owner != null)
                                 materialThing.Touch(owner as MaterialThing);
+
+                            //if the owner impacts with saws then they'll die and drop their currently held gun then making null OnSoftImpacts
+                            //which serve no purpose and will more likely crash the game, this is vanilla issue which im fixing since afaik
+                            //null OnSoftImpacts are just useless and will probably crash -NiK0
+                            if (owner == null) break; 
                         }
                     }
                 }
@@ -448,7 +464,7 @@ namespace DuckGame
                     if (_sightHit != null)
                     {
                         _sightHit.color = Color.Red;
-                        Graphics.Draw(_sightHit, p2.x, p2.y);
+                        Graphics.Draw(ref _sightHit, p2.x, p2.y);
                     }
                 }
             }

@@ -489,11 +489,26 @@ namespace DuckGame
             g.y = y;
             g.Draw();
         }
+        public static void Draw<T>(ref T g, float x, float y) where T : Sprite
+        {
+            g.x = x;
+            g.y = y;
+            g.LerpState.CanLerp = true;
+            g.Draw();
+        }
+
 
         public static void Draw(Sprite g, float x, float y, Rectangle sourceRectangle)
         {
             g.x = x;
             g.y = y;
+            g.Draw(sourceRectangle);
+        }
+        public static void Draw<T>(ref T g, float x, float y, Rectangle sourceRectangle) where T : Sprite
+        {
+            g.x = x;
+            g.y = y;
+            g.LerpState.CanLerp = true;
             g.Draw(sourceRectangle);
         }
 
@@ -505,11 +520,28 @@ namespace DuckGame
             g.Draw(sourceRectangle);
         }
 
+        public static void Draw<T>(ref T g, float x, float y, Rectangle sourceRectangle, Vec2 scale) where T : Sprite
+        {
+            g.x = x;
+            g.y = y;
+            g.scale = scale;
+            g.LerpState.CanLerp = true;
+            g.Draw(sourceRectangle);
+        }
+
         public static void Draw(Sprite g, float x, float y, Rectangle sourceRectangle, Depth depth)
         {
             g.x = x;
             g.y = y;
             g.depth = depth;
+            g.Draw(sourceRectangle);
+        }
+        public static void Draw<T>(ref T g, float x, float y, Rectangle sourceRectangle, Depth depth) where T : Sprite
+        {
+            g.x = x;
+            g.y = y;
+            g.depth = depth;
+            g.LerpState.CanLerp = true;
             g.Draw(sourceRectangle);
         }
 
@@ -518,6 +550,14 @@ namespace DuckGame
             g.x = x;
             g.y = y;
             g.depth = depth;
+            g.Draw();
+        }
+        public static void Draw<T>(ref T g, float x, float y, Depth depth = default(Depth)) where T : Sprite
+        {
+            g.x = x;
+            g.y = y;
+            g.depth = depth;
+            g.LerpState.CanLerp = true;
             g.Draw();
         }
 
@@ -529,9 +569,28 @@ namespace DuckGame
             g.yscale = scaleY;
             g.Draw();
         }
+        public static void Draw<T>(ref T g, float x, float y, float scaleX, float scaleY) where T : Sprite
+        {
+            g.x = x;
+            g.y = y;
+            g.xscale = scaleX;
+            g.yscale = scaleY; 
+            g.LerpState.CanLerp = true;
+            g.Draw();
+        }
 
         public static void Draw(
           Tex2D target,
+          float x,
+          float y,
+          float xscale = 1f,
+          float yscale = 1f,
+          Depth depth = default(Depth))
+        {
+            Draw(target, new Vec2(x, y), new Rectangle?(), Color.White, 0f, Vec2.Zero, new Vec2(xscale, yscale), SpriteEffects.None, depth);
+        }
+        public static void Draw(
+          ref Tex2D target,
           float x,
           float y,
           float xscale = 1f,
@@ -552,6 +611,28 @@ namespace DuckGame
         {
             g.x = x;
             g.y = y;
+            g.LerpState.CanLerp = false;
+            g.xscale = scaleX;
+            g.yscale = scaleY;
+            int frame1 = g.frame;
+            g.SetFrameWithoutReset(frame);
+            g.Draw();
+            if (!maintainFrame)
+                return;
+            g.SetFrameWithoutReset(frame1);
+        }
+        public static void Draw(
+          ref SpriteMap g,
+          int frame,
+          float x,
+          float y,
+          float scaleX = 1f,
+          float scaleY = 1f,
+          bool maintainFrame = false)
+        {
+            g.x = x;
+            g.y = y;
+            g.LerpState.CanLerp = true;
             g.xscale = scaleX;
             g.yscale = scaleY;
             int frame1 = g.frame;
@@ -574,6 +655,22 @@ namespace DuckGame
             g.y = y;
             g.xscale = scaleX;
             g.yscale = scaleY;
+            g.LerpState.CanLerp = false;
+            g.DrawWithoutUpdate();
+        }
+        public static void DrawWithoutUpdate(
+          ref SpriteMap g,
+          float x,
+          float y,
+          float scaleX = 1f,
+          float scaleY = 1f,
+          bool maintainFrame = false)
+        {
+            g.x = x;
+            g.y = y;
+            g.xscale = scaleX;
+            g.yscale = scaleY;
+            g.LerpState.CanLerp = true;
             g.DrawWithoutUpdate();
         }
 
@@ -585,6 +682,14 @@ namespace DuckGame
             float rotation = (float)Math.Atan2(p2.y - p1.y, p2.x - p1.x);
             float length = (p1 - p2).length;
             Draw(_blank, p1, new Rectangle?(), col, rotation, new Vec2(0f, 0.5f), new Vec2(length, width), SpriteEffects.None, depth);
+        }
+
+        public static void DrawLine(Vec2 p, float lineLength, float angleDegrees, Color col, float width = 1f, Depth depth = default(Depth))
+        {
+            float angleRadians = Maths.DegToRad(angleDegrees);
+            Vec2 lineEnd = new(lineLength * Maths.FastSin(angleRadians), lineLength * Maths.FastCos(angleRadians));
+
+            DrawLine(p, p + lineEnd, col, width, depth);
         }
 
         public static void DrawDottedLine(
@@ -706,7 +811,7 @@ namespace DuckGame
                 DrawLine(new Vec2(vec2.x - num, vec2.y - borderWidth), new Vec2(vec2.x - num, position.y + borderWidth), col, borderWidth, depth);
             }
         }
-        
+
         public static void DrawOutlinedRect(Rectangle rect, Color col, Color outlineCol, Depth depth = default, float borderwidth = 1f)
         {
             DrawRect(rect, col, depth, true, 0);
@@ -954,7 +1059,7 @@ namespace DuckGame
                     _currentTargetSize.height = renderTarget.Height;
                 }
                 device.SetRenderTarget(renderTarget);
-                if (!_settingScreenTarget && _defaultRenderTarget == null)
+                if (!_settingScreenTarget && _defaultRenderTarget == null && !SettingForShader)
                     UpdateScreenViewport();
             }
             else
@@ -994,7 +1099,7 @@ namespace DuckGame
                 DevConsole.Log("Error: Invalid Viewport (x = " + pViewport.X.ToString() + ", y = " + pViewport.Y.ToString() + ", w = " + pViewport.Width.ToString() + ", h = " + pViewport.Height.ToString() + ", minDepth = " + pViewport.MinDepth.ToString() + ", maxDepth = " + pViewport.MaxDepth.ToString() + ")");
             }
         }
-
+        public static bool SettingForShader;
         public static void UpdateScreenViewport(bool pForceReset = false)
         {
             try

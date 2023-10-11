@@ -51,7 +51,7 @@ namespace DuckGame
                 _sprite.xscale = _sprite.yscale = xscale * part.scale;
                 _sprite.center = new Vec2(_sprite.w / 2, _sprite.h / 2);
                 _sprite.alpha = 0.8f;
-                Graphics.Draw(_sprite, x, y);
+                Graphics.Draw(ref _sprite, x, y);
             }
             base.Draw();
         }

@@ -17,7 +17,7 @@ namespace DuckGame
         }
         public PinkBox(float xpos, float ypos) : base(xpos, ypos)
         {
-            _sprite = new SpriteMap("pinkbox", 16, 16); // im cool with this box, im not
+            _sprite = new SpriteMap("pinkbox", 16, 16); // im cool with this box -YupDanielThatsMe, im not -??? the mistery man
             graphic = _sprite;
             layer = Layer.Foreground;
             center = new Vec2(8f, 8f);
@@ -31,6 +31,11 @@ namespace DuckGame
         public void Pop(Duck duck)
         {
             Bounce();
+            if (Level.current is DGRDevHall dvh)
+            {
+                dvh.ascend = true;
+                return;
+            }
             if (!_hit)
             {
                 SuperFondle(this, DuckNetwork.localConnection);
@@ -165,7 +170,7 @@ namespace DuckGame
         public bool collision;
         public override void Update()
         {
-            if (d != null && isServerForObject)
+            if (d != null && d.profile != null && d.profile.connection == DuckNetwork.localConnection)
             {
                 Fondle(this);
                 //Failsafe for if multiple people happen to hit the box it explodes
@@ -176,8 +181,8 @@ namespace DuckGame
                 }
                 if (d.dead)
                 {
-                    Fondle(this);
                     UnstoppableFondle(d, DuckNetwork.localConnection);
+                    UnstoppableFondle(this, DuckNetwork.localConnection);
                     d.Ressurect();
                     if (d._cooked != null) d.position = position;
                     if (d.onFire)

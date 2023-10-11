@@ -11,16 +11,6 @@ namespace DuckGame
         [DevConsoleCommand(Description = "Get or Modify config fields from the console")]
         public static object Config(string fieldId, string serializedValue = null)
         {
-            object getValue(MemberInfo mi)
-            {
-                return mi switch
-                {
-                    FieldInfo fi => fi.GetValue(null),
-                    PropertyInfo pi => pi.GetMethod?.Invoke(null, null),
-                    _ => throw new Exception("Unsupported AutoConfig field type")
-                };
-            }
-
             switch (fieldId.ToUpper())
             {
                 case "%SAVE":
@@ -31,43 +21,26 @@ namespace DuckGame
                     return null;
                 case "%LIST":
                     return AutoConfigFieldAttribute.All
-                        .Select(x => $"{x.MemberInfo.Name}: |DGBLUE|{getValue(x.MemberInfo)}|PREV|");
+                        .Select(x => $"{x.MemberInfo.Name}: |DGBLUE|{FireSerializer.Serialize(x.Value)}|PREV|");
             }
 
             List<AutoConfigFieldAttribute> all = AutoConfigFieldAttribute.All;
 
-            if (!all.TryFirst(x => (x.ShortName ?? x.Id ?? x.MemberInfo.Name).CaselessEquals(fieldId), out AutoConfigFieldAttribute attribute))
+            if (!all.TryFirst(x => (x.Id ?? x.MemberInfo.Name).CaselessEquals(fieldId), out AutoConfigFieldAttribute attribute))
                 throw new Exception($"No configuration field found with ID: {fieldId}");
 
-            object oldVal = getValue(attribute.MemberInfo);
+            object oldVal = attribute.Value;
+            string oldReserializedValue = FireSerializer.Serialize(oldVal);
 
             if (serializedValue is null)
-                return oldVal;
+                return oldReserializedValue;
 
-            object newVal = FireSerializer.Deserialize(attribute.MemberInfo switch
-            {
-                FieldInfo fi => fi.FieldType,
-                PropertyInfo pi => pi.PropertyType,
-                _ => throw new Exception("Unsupported AutoConfig field type")
-            }, serializedValue);
+            object newVal = FireSerializer.Deserialize(attribute.MemberType, serializedValue);
+            string newReserializedValue = FireSerializer.Serialize(newVal);
 
-            switch (attribute.MemberInfo)
-            {
-                case FieldInfo fieldInfo:
-                {
-                    fieldInfo.SetValue(null, newVal);
-                    break;
-                }
-                case PropertyInfo propertyInfo:
-                {
-                    propertyInfo.SetMethod?.Invoke(null, new[] { newVal });
-                    break;
-                }
-                default:
-                    throw new Exception("Unsupported AutoConfig field type");
-            }
+            attribute.Value = newVal;
             
-            return $"|DGBLUE|Modified value of field [|PINK|{attribute.MemberInfo.Name}|DGBLUE|] from [|GREEN|{oldVal}|DGBLUE|] to [|GREEN|{newVal}|DGBLUE|]";
+            return $"|PINK|{attribute.MemberInfo.Name}|WHITE|: |WHITE|[|GREEN|{oldReserializedValue}|WHITE|] to [|GREEN|{newReserializedValue}|WHITE|]";
         }
     }
 }

@@ -75,15 +75,18 @@ namespace DuckGame
             float y1 = y + 8f;
             _persona.sprite.depth = depth;
             _persona.sprite.color = Color.White;
-            Graphics.Draw(_persona.sprite, 0, x1, y1);
+            SpriteMap g1 = _persona.sprite;
+            Graphics.Draw(ref g1, 0, x1, y1);
             _persona.armSprite.frame = _persona.sprite.imageIndex;
             _persona.armSprite.scale = new Vec2(1f, 1f);
             _persona.armSprite.depth = depth + 4;
-            Graphics.Draw(_persona.armSprite, x1 - 3f, y1 + 6f);
+            SpriteMap g2 = _persona.armSprite;
+            Graphics.Draw(ref g2, x1 - 3f, y1 + 6f);
             Vec2 hatPoint = DuckRig.GetHatPoint(_persona.sprite.imageIndex);
             _team.hat.depth = depth + 2;
             _team.hat.center = new Vec2(16f, 16f) + _team.hatOffset;
-            Graphics.Draw(_team.hat, _team.hat.frame, x1 + hatPoint.x, y1 + hatPoint.y);
+            SpriteMap g3 = _team.hat;
+            Graphics.Draw(ref g3, _team.hat.frame, x1 + hatPoint.x, y1 + hatPoint.y);
             if (_team.hat.texture.textureName == "hats/devhat" && _cape == null)
             {
                 _hat = new TeamHat(x1 + hatPoint.x, (float)(y1 + hatPoint.y + 5), Teams.GetTeam("CAPTAIN"));

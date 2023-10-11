@@ -6,6 +6,7 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using System.Collections.Generic;
+using System.Security.Principal;
 
 namespace DuckGame
 {
@@ -27,8 +28,30 @@ namespace DuckGame
             hugWalls = WallHug.Ceiling;
             layer = Layer.Game;
             editorCycleType = typeof(Lamp);
+            shouldbeinupdateloop = DGRSettings.AmbientParticles;
         }
-
+        public override void Update()
+        {
+            if (tim > 0)
+            {
+                pl._range = Rando.Float(180f);
+                if (tim <= 1)
+                {
+                    pl._range = 180;
+                }
+                pl.forceRefresh = true;
+                tim--; 
+            }
+            else
+            {
+                if (Rando.Int(300) == 0)
+                {
+                    tim = Rando.Int(10);
+                }
+            }
+        }
+        public int tim;
+        public PointLight pl;
         public override void Initialize()
         {
             if (Level.current is Editor)
@@ -36,7 +59,8 @@ namespace DuckGame
             Vec2 vec2 = new Vec2(x, y);
             _occluders.Add(new LightOccluder(vec2 + new Vec2(-8f, 5f), vec2 + new Vec2(1f, -4f), new Color(0.4f, 0.4f, 0.4f)));
             _occluders.Add(new LightOccluder(vec2 + new Vec2(-1f, -4f), vec2 + new Vec2(8f, 5f), new Color(0.4f, 0.4f, 0.4f)));
-            Level.Add(new PointLight(vec2.x, vec2.y, new Color(247, 198, 120), 180f, _occluders));
+            pl = new PointLight(vec2.x, vec2.y, new Color(247, 198, 120), 180f, _occluders);
+            Level.Add(pl);
         }
     }
 }

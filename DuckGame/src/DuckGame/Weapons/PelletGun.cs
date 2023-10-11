@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.PelletGun
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -106,10 +99,16 @@ namespace DuckGame
                     if (Network.isActive)
                     {
                         if (isServerForObject)
+                        {
+                            SFX.DontSave = 1;
                             NetSoundEffect.Play("pelletGunSwipe");
+                        }
                     }
                     else
+                    {
+                        SFX.DontSave = 1;
                         SFX.Play("swipe", 0.4f, 0.3f);
+                    }
                     ++_loadState;
                 }
                 else if (_loadState == 1)
@@ -130,10 +129,16 @@ namespace DuckGame
                         if (Network.isActive)
                         {
                             if (isServerForObject)
+                            {
+                                SFX.DontSave = 1;
                                 NetSoundEffect.Play("pelletGunLoad");
+                            }
                         }
                         else
+                        {
+                            SFX.DontSave = 1;
                             SFX.Play("loadLow", 0.7f, Rando.Float(-0.05f, 0.05f));
+                        }
                     }
                 }
                 else if (_loadState == 3)
@@ -146,10 +151,16 @@ namespace DuckGame
                         if (Network.isActive)
                         {
                             if (isServerForObject)
+                            {
+                                SFX.DontSave = 1;
                                 NetSoundEffect.Play("pelletGunSwipe2");
+                            }
                         }
                         else
+                        {
+                            SFX.DontSave = 1;
                             SFX.Play("swipe", 0.5f, 0.4f);
+                        }
                     }
                 }
                 else if (_loadState == 4)
@@ -166,10 +177,16 @@ namespace DuckGame
                         if (Network.isActive)
                         {
                             if (isServerForObject)
+                            {
+                                SFX.DontSave = 1;
                                 NetSoundEffect.Play("pelletGunClick");
+                            }
                         }
                         else
+                        {
+                            SFX.DontSave = 1;
                             SFX.Play("click", pitch: 0.5f);
+                        }
                     }
                 }
             }
@@ -244,13 +261,13 @@ namespace DuckGame
             else
                 _sprite.angle = angle + _angleOffset + _angleOffset2;
             Vec2 vec2 = Offset(_posOffset);
-            Graphics.Draw(_sprite, vec2.x, vec2.y);
+            Graphics.Draw(ref _sprite, vec2.x, vec2.y);
             _sprite.frame = 1;
             if (offDir > 0)
                 _sprite.angle = angle + _angleOffset * 3f - _angleOffset2;
             else
                 _sprite.angle = angle - _angleOffset * 3f + _angleOffset2;
-            Graphics.Draw(_sprite, vec2.x, vec2.y);
+            Graphics.Draw(ref _sprite, vec2.x, vec2.y);
             if (firesTillFail > 0)
                 return;
             _spring.depth = depth - 5;
@@ -263,7 +280,7 @@ namespace DuckGame
             if (_spring.yscale < -1.2f)
                 _spring.yscale = -1.2f;
             _spring.alpha = alpha;
-            Graphics.Draw(_spring, vec2.x, vec2.y);
+            Graphics.Draw(ref _spring, vec2.x, vec2.y);
         }
     }
 }

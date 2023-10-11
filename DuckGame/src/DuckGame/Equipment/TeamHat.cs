@@ -107,6 +107,7 @@ namespace DuckGame
         {
             team = t;
             depth = -0.5f;
+            shouldbegraphicculled = false;
         }
 
         public TeamHat(float xpos, float ypos, Team t, Profile p)
@@ -115,6 +116,7 @@ namespace DuckGame
             _profile = p;
             team = t;
             depth = -0.5f;
+            shouldbegraphicculled = false;
         }
 
         public override BinaryClassChunk Serialize()
@@ -201,12 +203,15 @@ namespace DuckGame
                 {
                     if (PassiveParticleTimer < -100)
                     {
-                        PassiveParticleTimer = Maths.Clamp(team.metadata.PassiveParticleRate.value, 0.1f, 2.5f);
+                        if (team.metadata.ParticleCount.value != 1) PassiveParticleTimer = Maths.Clamp(team.metadata.PassiveParticleRate.value, 0.1f, 2.5f);
+                        else PassiveParticleTimer = team.metadata.PassiveParticleRate.value;
                     }
                     PassiveParticleTimer -= 0.017f;
                     if (PassiveParticleTimer <= 0 && PassiveParticlesActive)
                     {
-                        PassiveParticleTimer = Maths.Clamp(team.metadata.PassiveParticleRate.value, 0.1f, 2.5f);
+                        if (team.metadata.ParticleCount.value != 1) PassiveParticleTimer = Maths.Clamp(team.metadata.PassiveParticleRate.value, 0.1f, 2.5f);
+                        else PassiveParticleTimer = team.metadata.PassiveParticleRate.value;
+
                         bool canSpawn;
                         switch (team.metadata.PassiveParticleCondition.value)
                         {
@@ -306,8 +311,7 @@ namespace DuckGame
                     Level.Add(smallSmoke);
                 }
             }
-            else
-                SFX.Play("quack", volume, pitch);
+            else SFX.Play("quack", volume, pitch);
         }
 
         public void SpawnParticles()
@@ -551,7 +555,7 @@ namespace DuckGame
                         float num = 0.8f + _wave.normalized * 0.2f;
                         _specialSprite.scale = new Vec2(num, num);
                         Vec2 vec2 = Offset(new Vec2(2f, 4f));
-                        Graphics.Draw(_specialSprite, vec2.x, vec2.y);
+                        Graphics.Draw(ref _specialSprite, vec2.x, vec2.y);
                     }
                 }
                 else if (_sprite.frame == 1 && _sprite.texture.textureName == "hats/master")
@@ -568,16 +572,16 @@ namespace DuckGame
                     if (this.offDir < 0)
                     {
                         Vec2 vec2_1 = Offset(new Vec2(1f, 2f));
-                        Graphics.Draw(_specialSprite, vec2_1.x, vec2_1.y);
+                        Graphics.Draw(ref _specialSprite, vec2_1.x, vec2_1.y);
                         Vec2 vec2_2 = Offset(new Vec2(5f, 2f));
-                        Graphics.Draw(_specialSprite, vec2_2.x, vec2_2.y);
+                        Graphics.Draw(ref _specialSprite, vec2_2.x, vec2_2.y);
                     }
                     else
                     {
                         Vec2 vec2_3 = Offset(new Vec2(0f, 2f));
-                        Graphics.Draw(_specialSprite, vec2_3.x, vec2_3.y);
+                        Graphics.Draw(ref _specialSprite, vec2_3.x, vec2_3.y);
                         Vec2 vec2_4 = Offset(new Vec2(4f, 2f));
-                        Graphics.Draw(_specialSprite, vec2_4.x, vec2_4.y);
+                        Graphics.Draw(ref _specialSprite, vec2_4.x, vec2_4.y);
                     }
                     if (glow > 0f) glow -= 0.02f;
                 }

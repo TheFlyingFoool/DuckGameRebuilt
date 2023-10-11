@@ -145,7 +145,7 @@ namespace DuckGame
                     _glob.color = new Color(data.color) * alpha;
                     _glob.CenterOrigin();
                     _glob.angle = Maths.DegToRad(-Maths.PointDirection(position, position + velocity) + 90f);
-                    Graphics.Draw(_glob, x, y);
+                    Graphics.Draw(ref _glob, x, y);
                     return;
                 }
                 Graphics.DrawRect(position - new Vec2(_thickness / 2f, _thickness / 2f), position + new Vec2(_thickness / 2f, _thickness / 2f), new Color(data.color) * alpha, depth, true, 1f);

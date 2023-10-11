@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.RCController
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Guns|Misc")]
     [BaggedProperty("canSpawn", false)]
@@ -52,7 +45,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (_car == null && !(Level.current is Editor) && isServerForObject)
+            if (_car == null && !(Level.current is Editor) && isServerForObject && !Recorderator.Playing)
             {
                 _car = new RCCar(x, y)
                 {
@@ -69,7 +62,7 @@ namespace DuckGame
             }
             if (lockedOwner != owner)
                 Release(lockedOwner);
-            if (isServerForObject)
+            if (isServerForObject && !Recorderator.Playing)
             {
                 if (_burning && _burnLife > 0)
                 {
@@ -98,7 +91,7 @@ namespace DuckGame
                             _car.Destroy();
                         }
                     }
-                    else
+                    else if (_car != null)
                         _car.moveLeft = _car.moveRight = _car.jump = false;
                 }
                 if (_car != null && _car.destroyed)
@@ -147,7 +140,10 @@ namespace DuckGame
             lockedOwner = null;
             if (_car == null)
                 return;
-            _car.receivingSignal = false;
+            if (!Recorderator.Playing)
+            {
+                _car.receivingSignal = false;
+            }
             if (!(Level.current.camera is FollowCam camera))
                 return;
             camera.Remove(_car);

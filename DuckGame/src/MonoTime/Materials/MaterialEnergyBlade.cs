@@ -40,7 +40,8 @@ namespace DuckGame
         }
         public override void Apply()
         {
-            _time += 0.016f;
+            if(MonoMain.UpdateLerpState)
+                _time += 0.016f;
             bool isspritebatch = false;
             if (batchItem != null && batchItem.NormalTexture != null && batchItem.NormalTexture.Namebase != null && Content.offests.ContainsKey("energyTex") && Content.offests.ContainsKey(batchItem.NormalTexture.Namebase))
             {

@@ -15,7 +15,7 @@ namespace DuckGame
     [BaggedProperty("previewPriority", true)]
     public class NetGun : Gun
     {
-        private SpriteMap _barrelSteam;
+        public SpriteMap _barrelSteam;
         private SpriteMap _netGunGuage;
 
         public NetGun(float xval, float yval)
@@ -52,14 +52,14 @@ namespace DuckGame
             editorTooltip = "Fires entangling nets that hold Ducks in place *evil moustache twirl*";
             isFatal = false;
         }
-        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        /*public override Holdable BecomeTapedMonster(TapedGun pTaped)
         {
             if (Editor.clientonlycontent)
             {
                 return pTaped.gun1 is NetGun && pTaped.gun2 is CampingRifle ? new CampNetgun(x, y) : null;
             }
             return base.BecomeTapedMonster(pTaped);
-        }
+        }*/
         public override void Initialize() => base.Initialize();
 
         public override void Update()
@@ -76,9 +76,9 @@ namespace DuckGame
             if (_barrelSteam.speed > 0)
             {
                 _barrelSteam.alpha = 0.6f;
-                Draw(_barrelSteam, new Vec2(9f, 1f));
+                Draw(ref _barrelSteam, new Vec2(9f, 1f));
             }
-            Draw(_netGunGuage, new Vec2(-4f, -4f));
+            Draw(ref _netGunGuage, new Vec2(-4f, -4f));
         }
 
         public override void OnPressAction()

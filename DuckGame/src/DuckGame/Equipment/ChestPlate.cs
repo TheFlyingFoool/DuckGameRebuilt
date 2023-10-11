@@ -81,13 +81,14 @@ namespace DuckGame
             base.Draw();
             if (_equippedDuck != null && duck == null || _equippedDuck == null)
                 return;
+            _spriteOver.SkipIntraTick = graphic.SkipIntraTick;
             _spriteOver.flipH = graphic.flipH;
             _spriteOver.angle = angle;
             _spriteOver.alpha = alpha;
             _spriteOver.scale = scale;
             _spriteOver.depth = owner.depth + (duck.holdObject != null ? 5 : 12);
             _spriteOver.center = center;
-            Graphics.Draw(_spriteOver, x, y);
+            Graphics.Draw(ref _spriteOver, x, y);
         }
     }
 }

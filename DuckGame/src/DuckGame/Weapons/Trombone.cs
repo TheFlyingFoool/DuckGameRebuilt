@@ -50,7 +50,7 @@ namespace DuckGame
             Duck d = owner as Duck;
             if (d != null)
             {
-                if (isServerForObject && d.inputProfile != null)
+                if (isServerForObject && d.inputProfile != null && !Recorderator.Playing)
                 {
                     handPitch = d.inputProfile.leftTrigger;
                     if (d.inputProfile.hasMotionAxis)
@@ -97,6 +97,7 @@ namespace DuckGame
                         if (noteSound == null)
                         {
                             hitPitch = notePitch;
+                            SFX.DontSave = 1;
                             Sound snd = SFX.Play("trombone" + Change.ToString(note), 1f, 0f, 0f, false);
                             noteSound = snd;
                             Level.Add(new MusicNote(barrelPosition.x, barrelPosition.y, barrelVector));
@@ -156,7 +157,7 @@ namespace DuckGame
             base.Draw();
             Material material = Graphics.material;
             Graphics.material = base.material;
-            Draw(_slide, new Vec2(6f + _slideVal * 8f, 0f), -1);
+            Draw(ref _slide, new Vec2(6f + _slideVal * 8f, 0f), -1);
             Graphics.material = material;
         }
 

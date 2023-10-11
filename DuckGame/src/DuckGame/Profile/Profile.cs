@@ -8,12 +8,12 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DuckGame
 {
     public class Profile
     {
+        public bool ReplayRebuilt;
         public bool isUsingRebuilt
         {
             get
@@ -126,7 +126,7 @@ namespace DuckGame
         public DuckPersona defaultPersona;
         public bool isNetworkProfile;
         public string fileName = "";
-        private bool isDefaultProfile;
+        public bool isDefaultProfile;
 
         public void ReportConnectionTrouble(NetworkConnection pFrom) => connectionTrouble[pFrom] = 200;
 
@@ -253,6 +253,7 @@ namespace DuckGame
             }
         }
 
+        public bool ReplaySpectator;
         public bool spectator => slotType == SlotType.Spectator;
 
         public ushort customTeamIndexOffset => (ushort)(Teams.kCustomOffset + fixedGhostIndex * Teams.kCustomSpread);
@@ -648,9 +649,13 @@ namespace DuckGame
             get
             {
                 string nameUi = name;
+                
                 if (muteName)
-                    nameUi = "Player " + (networkIndex + 1).ToString();
-                if (isUsingRebuilt && DGRSettings.RebuiltEffect == 1) nameUi += "@DGR@";
+                    nameUi = $"Player {networkIndex + 1}";
+                
+                if (isUsingRebuilt && DGRSettings.RebuiltEffect == 1)
+                    nameUi += inSameRebuiltVersion ? "@DGR@" : "@DGRDIM@";
+                
                 return nameUi;
             }
         }
@@ -660,9 +665,13 @@ namespace DuckGame
             get
             {
                 string nameUi = name;
+                
                 if (muteName)
-                    nameUi = "Player " + (networkIndex + 1).ToString();
-                if (isUsingRebuilt && DGRSettings.RebuiltEffect == 1) nameUi += "@DGRBIG@";
+                    nameUi = $"Player {networkIndex + 1}";
+                
+                if (isUsingRebuilt && DGRSettings.RebuiltEffect == 1)
+                    nameUi += inSameRebuiltVersion ? "@DGRBIG@" : "@DGRBIGDIM@";
+                
                 return nameUi;
             }
         }
@@ -1389,6 +1398,7 @@ namespace DuckGame
             set => _linkedProfile = value;
         }
 
+        public bool ReplayHost;
         public bool isHost => connection == Network.host;
 
         public bool ready
@@ -1405,6 +1415,7 @@ namespace DuckGame
 
         public void SetFixedGhostIndex(byte idx) => _fixedGhostIndex = idx;
 
+        public bool ReplayLocal;
         public bool localPlayer => !Network.isActive || _connection == DuckNetwork.localConnection;
 
         public byte remoteSpectatorChangeIndex
@@ -1579,6 +1590,7 @@ namespace DuckGame
           string varID,
           bool pDefaultProfile)
         {
+            Main.SpecialCode = "can";
             _name = varName;
             _inputProfile = varProfile;
             if (_inputProfile != null)
@@ -1588,6 +1600,7 @@ namespace DuckGame
                 varStartTeam.Join(this);
                 defaultTeam = varStartTeam;
             }
+            Main.SpecialCode = "you";
             _persona = varDefaultPersona;
             defaultPersona = varDefaultPersona;
             _id = varID != null ? varID : Guid.NewGuid().ToString();

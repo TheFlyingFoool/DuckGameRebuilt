@@ -6,6 +6,7 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using System;
+using System.Diagnostics;
 
 namespace DuckGame
 {
@@ -124,6 +125,9 @@ namespace DuckGame
             vSpeed -= 0.01f;
             hSpeed *= 0.95f;
             _life -= lifeTake;
+
+            if (!currentlyDrawing) _sprite.UpdateFrame(true);
+
             if (_life < 0 && _sprite.currentAnimation != "puff")
                 _sprite.SetAnimation("puff");
             if (_sprite.currentAnimation == "puff" && _sprite.finished)
@@ -141,7 +145,7 @@ namespace DuckGame
             _sprite.depth = depth;
             _sprite.scale = new Vec2(s1);
             _sprite.center = center;
-            Graphics.Draw(_sprite, x + num2, y + num3);
+            Graphics.Draw(ref _sprite, x + num2, y + num3);
             _sprite2.imageIndex = _sprite.imageIndex;
             _sprite2.angle = _sprite.angle;
             _sprite2.depth = -0.5f;
@@ -156,7 +160,7 @@ namespace DuckGame
             _orbiter.depth = depth;
             _orbiter.scale = new Vec2(s2);
             _orbiter.center = center;
-            Graphics.Draw(_orbiter, x - num2, y - num3);
+            Graphics.Draw(ref _orbiter, x - num2, y - num3);
             _sprite2.imageIndex = _orbiter.imageIndex;
             _sprite2.angle = _orbiter.angle;
             _sprite2.depth = -0.5f;

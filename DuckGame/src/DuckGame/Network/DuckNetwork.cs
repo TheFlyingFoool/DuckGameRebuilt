@@ -124,6 +124,7 @@ namespace DuckGame
 
         public static bool ShowUserXPGain()
         {
+            if (DGRSettings.SkipXP) return false;
             if (!Level.core.gameFinished || _xpEarned.Count <= 0)
                 return false;
             _xpMenu = new UILevelBox("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
@@ -236,7 +237,7 @@ namespace DuckGame
 
         public static void Initialize()
         {
-            _core._builtInChatFont = new FancyBitmapFont("smallFontChat")
+                _core._builtInChatFont = new FancyBitmapFont("smallFontChat")
             {
                 chatFont = true
             };
@@ -424,6 +425,7 @@ namespace DuckGame
                 Options.Data.unblockedPlayers.Add(pProfile.steamID);
             Options.Data.muteSettings[pProfile.steamID] = "";
             pProfile._blockStatusDirty = true;
+            SFX.DontSave = 1;
             SFX.Play("textLetter", 0.7f);
         }
 
@@ -461,6 +463,7 @@ namespace DuckGame
             _core._noModsMenu.Open();
             MonoMain.pauseMenu = _core._noModsUIGroup;
             _core._pauseOpen = true;
+            SFX.DontSave = 1;
             SFX.Play("pause", 0.6f);
         }
 
@@ -553,7 +556,7 @@ namespace DuckGame
             SFX.Play("pause", 0.6f);
             return _core._restartModsUIGroup;
         }
-
+        public static UISideButton box;
         private static UIMenu CreateResolutionRestartWindow(UIMenu openOnClose)
         {
             UIMenu resolutionRestartWindow = new UIMenu("@LWING@GRAPHICS CHANGE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 230f, conString: "@CANCEL@BACK");
@@ -865,6 +868,7 @@ namespace DuckGame
             _ducknetUIGroup.isPauseMenu = true;
             MonoMain.pauseMenu = _ducknetUIGroup;
             _core._pauseOpen = true;
+            SFX.DontSave = 1;
             SFX.Play("pause", 0.6f);
         }
 
@@ -887,14 +891,31 @@ namespace DuckGame
                 return;
             Thread thread = new Thread(() =>
             {
-               SDL.SDL_SetClipboardText("steam://joinlobby/312530/" + Steam.lobby.id.ToString() + "/" + Steam.user.id.ToString());
-               HUD.AddPlayerChangeDisplay("@CLIPCOPY@Invite Link Copied!");
+                string inviteLink = DGRSettings.DGRJoinLink switch
+                {
+                    0 => $"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}",
+                    1 => $"https://dgr-join.github.io/?lobby={Steam.lobby.id}&user={Steam.user.id}",
+                    2 => $"[steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}](https://dgr-join.github.io/?lobby={Steam.lobby.id}&user={Steam.user.id})",
+                    _ => $"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}  https://dgr-join.github.io/?lobby={Steam.lobby.id}&user={Steam.user.id}"
+                };
+
+                SDL.SDL_SetClipboardText(inviteLink);
+                HUD.AddPlayerChangeDisplay("@CLIPCOPY@Invite Link Copied!");
             });
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
             // thread.Join();
         }
-
+        public static void ForceStart()
+        {
+            if (Level.current is TeamSelect2 ts2)
+            {
+                ts2.forcestart = true;
+                ts2._countTime = 0;
+                ts2.dim = 0.8f;
+                Graphics.fade = 0;
+            }
+        }
         private static void OpenMenu(Profile whoOpen)
         {
             if (_ducknetUIGroup != null)
@@ -923,6 +944,7 @@ namespace DuckGame
             }
             core._ducknetMenu = new UIMenu(title, wide / 2f, high / 2f, 210f, conString: "@CANCEL@CLOSE @SELECT@SELECT", tinyTitle: tiny);
             _ducknetMenu = core._ducknetMenu;
+            core._confirmStartMenu = new UIMenu("REALLY START?", wide / 2f, high / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
             core._confirmMenu = whoOpen.slotType != SlotType.Local ? new UIMenu("REALLY QUIT?", wide / 2f, high / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT") : new UIMenu("REALLY BACK OUT?", wide / 2f, high / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
             core._confirmBlacklistMenu = new UIMenu("AVOID LEVEL?", wide / 2f, high / 2f, 10f, conString: "@CANCEL@BACK @SELECT@SELECT");
             core._confirmKick = new UIMenu("REALLY KICK?", wide / 2f, high / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
@@ -987,8 +1009,24 @@ namespace DuckGame
                 _core._matchModifierMenu.SetBackFunction(new UIMenuActionOpenMenu(_core._matchModifierMenu, _core._matchSettingMenu));
                 _core._matchModifierMenu.Close();
                 _core._matchSettingMenu.AddMatchSetting(TeamSelect2.GetOnlineSetting("teams"), false);
+                //_core._matchSettingMenu.Add(new UISideButton(66, -50, 50, 0, "@SHOOT@"));
+                //_core._matchSettingMenu.Add(new UISideButton(66, -50, 50, 0, "@SHOOT@"));
+                int z = 0;
                 foreach (MatchSetting matchSetting in TeamSelect2.matchSettings) // removed ParentalControls.AreParentalControlsActive bs
                 {
+                    z++;
+                    if (z == 2)
+                    {
+                        _core._matchSettingMenu.Add(new UISideButton(66, -60, 60, 0, "P1@MENU1@"));
+                    }
+                    if (z == 4)
+                    {
+                        _core._matchSettingMenu.Add(new UISideButton(66, -60, 60, 0, "P2@MENU2@"));
+                    }
+                    if (z == 7)
+                    {
+                        _core._matchSettingMenu.Add(new UISideButton(66, -60, 60, 0, "P3@RAGDOLL@"));
+                    }
                     if (!(matchSetting.id == "workshopmaps") || Network.available)
                     {
                         if (matchSetting.id != "partymode")
@@ -1058,15 +1096,12 @@ namespace DuckGame
                 }
                 if (Level.current is TeamSelect2)
                 {
-                    if (DGR)
-                    {
-                        _core._ducknetMenu.Add(new UIMenuItemToggle("DGR Stuff", field: new FieldBinding(Options.dGRSettings, "DGRItems"), c: new Color(246, 88, 191)));
-                    }
+                    if (!DGRSettings.HideFS) _core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|FORCE START", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmStartMenu)));
+                    if (DGR) _core._ducknetMenu.Add(new UIMenuItemToggle("DGR Stuff", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DGRItems)), c: new Color(246, 88, 191)));
                     else
                     {
                         DGRSettings.DGRItems = false;
-                        _core._ducknetMenu.Add(new UIText(" DGR Stuff        ON |WHITE|OFF"/*, field: new FieldBinding(Options.dGRSettings, "DGRItems")*/, c: Color.Gray));
-
+                        _core._ducknetMenu.Add(new UIText(" DGR Stuff        ON |WHITE|OFF", c: Color.Gray));
                     }
                 }
             }
@@ -1173,6 +1208,10 @@ namespace DuckGame
             _core._confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_core._confirmMenu, _core._ducknetMenu), UIAlign.Left, backButton: true), true);
             _core._confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(_ducknetUIGroup, _core._quit)), true);
             _core._confirmMenu.Close();
+            core._confirmStartMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_core._confirmStartMenu, _core._ducknetMenu), UIAlign.Left, backButton: true), true);
+            core._confirmStartMenu.Add(new UIMenuItem("YES!", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(ForceStart))), true);
+            core._confirmStartMenu.Close();
+            _ducknetUIGroup.Add(core._confirmStartMenu, false);
             _ducknetUIGroup.Add(_core._confirmMenu, false);
             UIMenu confirmBlacklistMenu1 = _core._confirmBlacklistMenu;
             UIText component1 = new UIText("", Color.White, heightAdd: -4f)
@@ -1250,6 +1289,7 @@ namespace DuckGame
             MonoMain.pauseMenu = _ducknetUIGroup;
 
             _core._pauseOpen = true;
+            SFX.DontSave = 1;
             SFX.Play("pause", 0.6f);
         }
 
@@ -2334,6 +2374,11 @@ namespace DuckGame
         {
             if (message.profile == null)
                 return;
+            if (Corderator.instance != null)
+            {
+                Corderator.instance.receivedMessages.Add(new ChatMessage(message.profile, message.text, message.index));
+            }
+
             int num = FilterPlayer(message.profile);
             if (num > 0)
             {
@@ -2343,6 +2388,7 @@ namespace DuckGame
                 realText = !(message is NMChatDisabledMessage) ? (num != 2 ? "@error@Chat |DGRED|disabled|PREV| in options. Ignoring messages..." : "@error@Player is |DGRED|muted|PREV|. Ignoring messages...") : message.text;
             }
             _core.AddChatMessage(new ChatMessage(message.profile, realText != null ? realText : message.text, message.index));
+            SFX.DontSave = 1;
             SFX.Play("chatmessage", 0.8f, Rando.Float(-0.15f, 0.15f));
         }
 
@@ -3231,7 +3277,7 @@ namespace DuckGame
 
         public static void Draw()
         {
-            if (localProfile == null)
+            if (localProfile == null && !Recorderator.Playing)
                 return;
             Vec2 vec2_1 = new Vec2(Layer.Console.width, Layer.Console.height);
             float num1 = 0f;
@@ -3245,12 +3291,15 @@ namespace DuckGame
             float num4 = Options.Data.chatOpacity / 100f;
             if (_core.enteringText && !_core.stopEnteringText)
             {
-                ++_core.cursorFlash;
+                if(MonoMain.UpdateLerpState)
+                    ++_core.cursorFlash;
+
                 if (_core.cursorFlash > 30)
                     _core.cursorFlash = 0;
                 int num5 = _core.cursorFlash >= 15 ? 1 : 0;
                 Profile localProfile = DuckNetwork.localProfile;
-                string text = localProfile.name + ": " + _core.currentEnterText;
+                string currentEnterText = _core.currentEnterText;
+                string text = localProfile.name + ": " + (currentEnterText.StartsWith(">") ? "|0,153,0|" : "") +  currentEnterText;
                 string str = text;
                 if (num5 != 0)
                     text += "_";
@@ -3295,11 +3344,14 @@ namespace DuckGame
                 float num9 = (0.3f + chatMessage.text.Length * 0.007f);
                 if (num9 > 0.5f)
                     num9 = 0.5f;
-                if (chatMessage.slide > 0.8f)
-                    chatMessage.scale = Lerp.FloatSmooth(chatMessage.scale, 1f, 0.1f, 1.1f);
-                else if (chatMessage.slide > 0.5f)
-                    chatMessage.scale = Lerp.FloatSmooth(chatMessage.scale, 1f + num9, 0.1f, 1.1f);
-                chatMessage.slide = Lerp.FloatSmooth(chatMessage.slide, 1f, 0.1f, 1.1f);
+                if (MonoMain.UpdateLerpState)
+                {
+                    if (chatMessage.slide > 0.8f)
+                        chatMessage.scale = Lerp.FloatSmooth(chatMessage.scale, 1f, 0.1f, 1.1f);
+                    else if (chatMessage.slide > 0.5f)
+                        chatMessage.scale = Lerp.FloatSmooth(chatMessage.scale, 1f + num9, 0.1f, 1.1f);
+                    chatMessage.slide = Lerp.FloatSmooth(chatMessage.slide, 1f, 0.1f, 1.1f);
+                }
                 Color color = Color.White;
                 Color black = Color.Black;
                 if (chatMessage.who.persona != null)

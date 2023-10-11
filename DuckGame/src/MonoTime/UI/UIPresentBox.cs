@@ -112,12 +112,12 @@ namespace DuckGame
             if (_wrapped)
             {
                 _wrappedFrame.depth = depth;
-                Graphics.Draw(_wrappedFrame, x, y);
+                Graphics.Draw(ref _wrappedFrame, x, y);
             }
             else
             {
                 _frame.depth = depth;
-                Graphics.Draw(_frame, x, y);
+                Graphics.Draw(ref _frame, x, y);
                 string text1 = "@LWING@MEMENTO@RWING@";
                 if (_furni.name == "VOODOO VINCENT")
                     text1 = "@LWING@XP SKIP@RWING@";

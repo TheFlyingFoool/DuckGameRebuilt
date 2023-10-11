@@ -21,6 +21,8 @@ namespace DuckGame
 
         public override void Draw()
         {
+            UILerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
             _font.scale = scale;
             _font.alpha = alpha;
             float width = _font.GetWidth("ON OFF");
@@ -30,16 +32,16 @@ namespace DuckGame
             if (_filterBinding != null)
             {
                 if (!(bool)_filterBinding.value)
-                    _font.Draw("   ANY", x + num1, y + num2, Color.White, depth);
+                    _font.Draw("   ANY", UILerp.x + num1, UILerp.y + num2, Color.White, depth);
                 else if (flag)
-                    _font.Draw("    ON", x + num1, y + num2, Color.White, depth);
+                    _font.Draw("    ON", UILerp.x + num1, UILerp.y + num2, Color.White, depth);
                 else
-                    _font.Draw("   OFF", x + num1, y + num2, Color.White, depth);
+                    _font.Draw("   OFF", UILerp.x + num1, UILerp.y + num2, Color.White, depth);
             }
             else
             {
-                _font.Draw("ON", x + num1, y + num2, flag ? Color.White : new Color(70, 70, 70), depth);
-                _font.Draw("   OFF", x + num1, y + num2, !flag ? Color.White : new Color(70, 70, 70), depth);
+                _font.Draw("ON", UILerp.x + num1, UILerp.y + num2, flag ? Color.White : new Color(70, 70, 70), depth);
+                _font.Draw("   OFF", UILerp.x + num1, UILerp.y + num2, !flag ? Color.White : new Color(70, 70, 70), depth);
             }
         }
     }

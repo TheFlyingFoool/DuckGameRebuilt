@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Duck
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +30,19 @@ namespace DuckGame
         public StateBinding _conversionResistanceBinding = new StateBinding(nameof(conversionResistance), 8);
         public bool forceDead;
         public bool afk;
+        public bool forcePaused;
+        public bool forceTabbed;
+        public bool forceLag;
+        public bool forceLoss;
+
+        public float hAccMulti = 1;
+        public float runmaxMulti = 1;
+
+        public bool forceDisconnection;
+        public bool forceConsole;
+        public bool forceChatting;
+        public bool forceAFK;
+        public int coinTargetted; //hi whats good -NiK0
         private byte _quackPitch;
         public NetSoundEffect _netQuack = new NetSoundEffect(new string[1]
         {
@@ -136,6 +142,16 @@ namespace DuckGame
         private bool _moveLock;
         private InputProfile _inputProfile = InputProfile.Get("SinglePlayer");
         private InputProfile _virtualInput;
+        public InputProfile VirtualInput
+        {
+            get => _virtualInput;
+            set => _virtualInput = value;
+        }
+        public DuckAI AiInput
+        {
+            get => (DuckAI)_virtualInput;
+            set => _virtualInput = value;
+        }
         protected Profile _profile;
         protected Sprite _swirl;
         private float _swirlSpin;
@@ -265,7 +281,7 @@ namespace DuckGame
         private Camera _iconCamera;
         private Rectangle _iconRect = new Rectangle(0f, 0f, 96f, 96f);
         public Vec2 tongueCheck = Vec2.Zero;
-        private Vec2 _stickLerp;
+        public Vec2 _stickLerp;
         private Vec2 _stickSlowLerp;
         public bool localSpawnVisible = true;
         public bool enteringWalldoor;
@@ -281,6 +297,9 @@ namespace DuckGame
         private ConnectionIndicators _indicators;
         private bool _protectedFromFire;
         public override bool destroyed => _destroyed || forceDead;
+
+        private Interp DuckLerp = new Interp { };
+        protected Interp DuckCamLerp = new Interp(true);
 
         public byte quackPitch
         {
@@ -345,7 +364,7 @@ namespace DuckGame
 
         public Vec2 tounge
         {
-            get => (!Network.isActive || isServerForObject) && inputProfile != null ? inputProfile.rightStick : _tounge;
+            get => (!Network.isActive || isServerForObject) && inputProfile != null && !Recorderator.Playing ? inputProfile.rightStick : _tounge;
             set => _tounge = value;
         }
 
@@ -1591,6 +1610,11 @@ namespace DuckGame
 
         public void OnKill(DestroyType type = null)
         {
+            if (hasBrainRot)
+            {
+                hasBrainRot = false;
+                inputProfile.doInputs.Clear();
+            }
             if (!(type is DTPop))
             {
                 SFX.Play("death");
@@ -1960,7 +1984,7 @@ namespace DuckGame
             ThrowItem();
         }
 
-        private void UpdateAnimation()
+        public void UpdateAnimation()
         {
             _updatedAnimation = true;
             if (_hovering)
@@ -1974,6 +1998,11 @@ namespace DuckGame
 
         private void UpdateCurrentAnimation()
         {
+            if (Recorderator.Playing)
+            {
+                _sprite.speed = 0;
+                return;
+            }
             if (dead && _eyesClosed)
                 _sprite.currentAnimation = "dead";
             else if (inNet)
@@ -2335,7 +2364,7 @@ namespace DuckGame
                 }
                 else if (from == ImpactedFrom.Top && with.y < y && with.vSpeed > 0f && with.impactPowerV > 2f && with.weight >= 5f)
                 {
-                    if (with is PhysicsObject)
+                    if (with is PhysicsObject && !Recorderator.Playing)
                     {
                         PhysicsObject wp = with as PhysicsObject;
                         if (wp.lastPosition.y + with.collisionOffset.y + with.collisionSize.y < top)
@@ -2420,6 +2449,7 @@ namespace DuckGame
                 holdObject.OnTeleport();
             foreach (Thing thing in _equipment)
                 thing.OnTeleport();
+            base.OnTeleport();
             if (_vine == null)
                 return;
             _vine.Degrapple();
@@ -2438,6 +2468,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
+            if (inputProfile != null && inputProfile.doInputs != null) inputProfile.doInputs.Clear();
             jumpSpeed = JumpSpeed;
             if (Level.current != null)
             {
@@ -2803,7 +2834,12 @@ namespace DuckGame
                 Block lockBlock = Level.CheckRect<Block>(new Vec2(x - 3f, y - 9f), new Vec2(x + 3f, y + 4f));
                 _crouchLock = (crouch || sliding) && lockBlock != null && lockBlock.solid;
                 float hAcc = 0.55f * holdWeightMultiplier * grappleMultiplier * accelerationMultiplier;
-                maxrun = _runMax * holdWeightMultiplier;
+                hAcc *= hAccMulti;
+                maxrun = _runMax * holdWeightMultiplier * runmaxMulti;
+
+                runmaxMulti = 1;
+                hAccMulti = 1;
+
                 if (_isGhost)
                 {
                     hAcc *= 1.4f;
@@ -3328,7 +3364,7 @@ namespace DuckGame
                                     slideBuildup = -0.6f;
                             }
                         }
-                        if (isServerForObject && !(holdObject is DrumSet) && !(holdObject is Trumpet) && inputProfile.Pressed(Triggers.Ragdoll) && !(Level.current is TitleScreen) && pipeOut <= 0)
+                        if (isServerForObject && !(holdObject is DrumSet) && !(holdObject is Trumpet) && inputProfile.Pressed(Triggers.Ragdoll) && !(Level.current is TitleScreen || Level.current is DGRDevHall) && pipeOut <= 0)
                         {
                             framesSinceRagdoll = 0;
                             GoRagdoll();
@@ -3369,6 +3405,23 @@ namespace DuckGame
                     }
                 }
                 disableCrouch = false;
+            }
+            if (Recorderator.Playing)
+            {
+                if (spriteImageIndex == 11)
+                {
+                    crouch = true;
+                }
+                else if (spriteImageIndex == 12)
+                {
+                    crouch = true;
+                    sliding = true;
+                }
+                else
+                {
+                    crouch = false;
+                    sliding = false;
+                }
             }
         }
 
@@ -3508,6 +3561,7 @@ namespace DuckGame
             verticalOffset = Lerp.FloatSmooth(verticalOffset, 0f, 0.25f);
             if (swordInvincibility > 0)
                 --swordInvincibility;
+            if (coinTargetted > 0) coinTargetted--;
             if ((ragdoll == null || ragdoll.tongueStuck == Vec2.Zero) && tongueCheck != Vec2.Zero && level.cold)
             {
                 Block block = Level.CheckPoint<Block>(tongueCheck);
@@ -3522,6 +3576,7 @@ namespace DuckGame
                     }
                 }
             }
+            if (Recorderator.Playing) UpdateConnectionIndicators();
             if (Network.isActive)
             {
                 UpdateConnectionIndicators();
@@ -3531,7 +3586,7 @@ namespace DuckGame
             ++framesSinceRagdoll;
             if (killedByProfile != null)
                 ++framesSinceKilled;
-            int num = crouch ? 1 : 0;
+            //int num = crouch ? 1 : 0;
             if (_sprite == null)
                 return;
             fancyShoes = HasEquipment(typeof(FancyShoes));
@@ -3820,7 +3875,7 @@ namespace DuckGame
             --listenTime;
             if (listenTime < 0)
                 listenTime = 0;
-            if (listening && listenTime <= 0)
+            if (listening && listenTime <= 0 && !Recorderator.Playing)
                 listening = false;
             if (isServerForObject && !listening)
             {
@@ -3917,6 +3972,7 @@ namespace DuckGame
             if (_iceWedging < 0)
                 _iceWedging = 0;
             UpdateMove();
+
             if (inputProfile == null)
                 return;
             if (sliding && _iceWedging <= 0 && grounded && Level.CheckLine<Block>(position + new Vec2(-10f, 0f), position + new Vec2(10f, 0f)) != null)
@@ -3934,7 +3990,7 @@ namespace DuckGame
                 centerOffset = 24f;
             if (ragdoll == null && isServerForObject)
                 base.Update();
-            if (ragdoll == null && _prevRagdoll != null && DGRSettings.S_ParticleMultiplier != 0)
+            if (ragdoll == null && _prevRagdoll != null && DGRSettings.S_ParticleMultiplier != 0 && !Recorderator.Playing)
             {
                 Level.Add(SmallSmoke.New(x - Rando.Float(2f, 5f), (float)(y + Rando.Float(-3f, 3f) + 16)));
                 Level.Add(SmallSmoke.New(x + Rando.Float(2f, 5f), (float)(y + Rando.Float(-3f, 3f) + 16)));
@@ -3984,6 +4040,64 @@ namespace DuckGame
             foreach (Equipment equipment in _equipment)
                 equipment.PositionOnOwner();
             _gripped = false;
+            if (hasBrainRot) UpdateBrainRot();
+
+
+        }
+
+        public void GiveBrainRot()
+        {
+            if (!hasBrainRot)
+            {
+                hasBrainRot = true;
+                bubble = new(Level.current.topLeft.x - 200f, Level.current.topLeft.y - 200f, this);
+                Level.Add(bubble);
+                SFX.Play("radioNoise", 0.8f);
+            }
+        }
+        public bool hasBrainRot;
+        public BrainRotBubble bubble;
+        private int badInputTime;
+
+        public void UpdateBrainRot()
+        {
+            switch (Rando.Int(200))
+            {
+                case 1:
+                    if (Rando.Int(2) == 1)
+                    {
+                        GoRagdoll();
+                    }
+                    break;
+                case 2:
+                    inputProfile.doInputs.Clear();
+                    inputProfile.doInputs.Add("RIGHT");
+                    badInputTime = 6;
+                    break;
+                case 3:
+                    inputProfile.doInputs.Clear();  
+                    inputProfile.doInputs.Add("LEFT");
+                    badInputTime = 6;
+                    break;
+                case 4:
+                    if (Rando.Int(2) == 0 && gun != null && velocity.x != 0)
+                    {
+                        inputProfile.doInputs.Clear();
+                        inputProfile.doInputs.Add("SHOOT");
+                        badInputTime = 2;
+                    }
+                    break;
+                case 5:
+                    inputProfile.doInputs.Clear();
+                    inputProfile.doInputs.Add("DOWN");
+                    badInputTime = 16;
+                    break;
+            }
+            
+            if (badInputTime > 0)
+                badInputTime--;
+            else
+                inputProfile.doInputs.Clear();
         }
 
         public override Thing realObject => _trapped != null ? _trapped : this;
@@ -4173,6 +4287,126 @@ namespace DuckGame
 
         public void UpdateHoldLerp(bool updateLerp = false, bool instant = false)
         {
+            if (Recorderator.Playing)
+            {
+                float armOffY = 6;
+                float armOffX = -3f * offDir;
+                float holdOffX = 6;
+                float holdOffY = -3;
+                if (holdObject != null)
+                {
+                    armOffY = 6f;
+                    armOffX = -2f * offDir;
+                }
+                if (holdObject != null)
+                {
+                    holdObject._sleeping = false;
+                    if (holdObject.owner != this)
+                    {
+                        return;
+                    }
+                    if (spriteImageIndex == 1)
+                    {
+                        holdOffY += 1f;
+                    }
+                    else if (spriteImageIndex == 2)
+                    {
+                        holdOffY += 1f;
+                        holdOffX -= 1f;
+                    }
+                    else if (spriteImageIndex == 3)
+                    {
+                        holdOffY += 1f;
+                        holdOffX -= 2f;
+                    }
+                    else if (spriteImageIndex == 4)
+                    {
+                        holdOffY += 1f;
+                        holdOffX -= 1f;
+                    }
+                    else if (spriteImageIndex == 5)
+                    {
+                        holdOffY += 1f;
+                    }
+                    else if (spriteImageIndex == 7)
+                    {
+                        holdOffY += 1f;
+                    }
+                    else if (spriteImageIndex == 9)
+                    {
+                        holdOffY -= 1f;
+                    }
+                }
+
+                holdOffX *= offDir;
+                if (holdObject != null)
+                {
+                    _spriteArms.angle = holdAngle;
+                    if (holdObject is DrumSet)
+                    {
+                        position = holdObject.position + new Vec2(0f, -12f);
+                    }
+                    else
+                    {
+                        holdObject.position = armPositionNoKick +  holdObject.holdOffset + new Vec2(holdOffX, holdOffY) + new Vec2((float)(2 * offDir), 0f);
+                    }
+                    holdObject.CheckIfHoldObstructed();
+                    if (HasEquipment(typeof(Holster)))
+                    {
+                        Holster h = GetEquipment(typeof(Holster)) as Holster;
+                        if (!h.chained.value || h.containedObject == null)
+                        {
+                            if (!isServerForObject)
+                            {
+                                holdObstructed = h.netRaise;
+                            }
+                            else if (holdObject != null && inputProfile.Down("UP") && holdObject.holsterable)
+                            {
+                                holdObstructed = true;
+                            }
+                        }
+                    }
+                    if (!(holdObject is RagdollPart))
+                    {
+                        holdObject.offDir = offDir;
+                    }
+                    if (spriteImageIndex == 12 || spriteImageIndex == 13)
+                    {
+                        armOffY = 12;
+                        holdOffY = -3;
+                        holdOffX += 1f;
+                    }
+                    else if (spriteImageIndex == 11)
+                    {
+                        if (holdObject != null)
+                        {
+                            armOffY += 4f;
+                        }
+                    }
+                    else if ((spriteImageIndex == 12 || spriteImageIndex == 13) && holdObject != null)
+                    {
+                        armOffY += 6f;
+                    }
+                    if (!(holdObject is DrumSet))
+                    {
+                        holdObject.position = HoldOffset(holdObject.holdOffset);
+                        if (!(holdObject is RagdollPart))
+                        {
+                            holdObject.angle = holdObject.handAngle + holdAngleOff;
+                        }
+                    }
+                }
+                this.armOffX = armOffX;
+                this.armOffY = armOffY;
+                this.holdOffX = holdOffX;
+                this.holdOffY = holdOffY;
+                //Extensions.SetPrivateFieldValue(__instance, "armOffX", armOffX);
+                //Extensions.SetPrivateFieldValue(__instance, "armOffY", armOffY);
+
+                //Extensions.SetPrivateFieldValue(__instance, "holdOffX", holdOffX);
+                //Extensions.SetPrivateFieldValue(__instance, "holdOffY", holdOffY);
+                return;
+            }
             if (holdObject.canRaise && (_hovering && holdObject.hoverRaise || holdObstructed || holdObject.keepRaised))
             {
                 if (updateLerp)
@@ -4344,6 +4578,7 @@ namespace DuckGame
                 {
                     case GameLevel _:
                     case ChallengeLevel _:
+                    case ReplayLevel _://recorderator
                         if (Level.current.simulatePhysics)
                             return position.x < level.camera.left + num || position.x > level.camera.right - num || position.y < level.camera.top + num || position.y > level.camera.bottom - num;
                         break;
@@ -4425,31 +4660,52 @@ namespace DuckGame
                 position = ragdoll.part1.position;
             else if (_trapped != null)
                 position = _trapped.position;
+
+            if (DGRSettings.UncappedFPS)
+            {
+                position = DuckLerp.Position;
+                if (ragdoll != null)
+                    position = ragdoll.part1.RagLerp.Position;
+                else if (_trapped != null)
+                    position = _trapped.TrappedLerp.Position;
+            }
             Vec2 p2 = position;
             //why?
             //float num1 = (float)(Level.current.camera.width / 320f * 0.5);
             //float num2 = 0.75f;
             float num3 = 16.5f;
             Vec2 vec2_1 = new Vec2(0f, 0f);
-            if (position.x < Level.current.camera.left + num3)
+            float camLeft = Level.current.camera.left;
+            float camRight = Level.current.camera.right;
+            float camTop = Level.current.camera.top;
+            float camBottom = Level.current.camera.bottom;
+            if (DGRSettings.UncappedFPS)
             {
-                vec2_1.x = Math.Abs(Level.current.camera.left - position.x);
-                position.x = Level.current.camera.left + num3;
+                camLeft = Level.current.camera.CameraLerp.x;
+                camRight = Level.current.camera.CameraLerp.x + Level.current.camera.CameraLerp.Size.x;
+                camTop = Level.current.camera.CameraLerp.y;
+                camBottom = Level.current.camera.CameraLerp.y + Level.current.camera.CameraLerp.Size.y;
             }
-            if (position.x > Level.current.camera.right - num3)
+
+            if (position.x < camLeft + num3)
             {
-                vec2_1.x = Math.Abs(Level.current.camera.right - position.x);
-                position.x = Level.current.camera.right - num3;
+                vec2_1.x = Math.Abs(camLeft - position.x);
+                position.x = camLeft + num3;
             }
-            if (position.y < Level.current.camera.top + num3)
+            if (position.x > camRight - num3)
             {
-                vec2_1.y = Math.Abs(Level.current.camera.top - position.y);
-                position.y = Level.current.camera.top + num3;
+                vec2_1.x = Math.Abs(camRight - position.x);
+                position.x = camRight - num3;
             }
-            if (position.y > Level.current.camera.bottom - num3)
+            if (position.y < camTop + num3)
             {
-                vec2_1.y = Math.Abs(Level.current.camera.bottom - position.y);
-                position.y = Level.current.camera.bottom - num3;
+                vec2_1.y = Math.Abs(camTop - position.y);
+                position.y = camTop + num3;
+            }
+            if (position.y > camBottom - num3)
+            {
+                vec2_1.y = Math.Abs(camBottom - position.y);
+                position.y = camBottom - num3;
             }
             Vec2 vec2_2 = vec2_1 * (3f / 1000f);
             float num4 = 0.75f - Math.Min(vec2_2.length, 1f) * 0.4f;
@@ -4462,6 +4718,7 @@ namespace DuckGame
             _sprite.flipH = false;
             _sprite.UpdateSpriteBox();
             _sprite.position = new Vec2(position.x + (float)Math.Cos(rad) * 12f, position.y - (float)Math.Sin(rad) * 12f);
+            _sprite.LerpState.CanLerp = false;
             _sprite.DrawWithoutUpdate();
             _sprite.angle = 0f;
             _sprite.imageIndex = imageIndex;
@@ -4495,10 +4752,17 @@ namespace DuckGame
             }
         }
 
+        public bool cordHover;
         public override void Draw()
         {
             if (_sprite == null || !localSpawnVisible)
                 return;
+
+            DuckLerp.CanLerp = true;
+            DuckLerp.UpdateLerpState(new Interp.InterpState(position, angle), SkipIntratick>0?1: MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            _spriteArms.SkipIntraTick = SkipIntratick;
+            DuckCamLerp.UpdateLerpState(cameraPosition, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
             if (inNet)
             {
                 DrawHat();
@@ -4523,7 +4787,7 @@ namespace DuckGame
                 {
                     if (!_renderingDuck)
                     {
-                        if (!_updatedAnimation)
+                        if (!_updatedAnimation && MonoMain.UpdateLerpState)
                         {
                             UpdateAnimation();
                         }
@@ -4588,7 +4852,8 @@ namespace DuckGame
                         double length = stickLerp.length;
                         if (length > 0.5)
                             num10 = 72;
-                        Graphics.Draw(_mindControl == null || !_derpMindControl ? _spriteQuack : _spriteControlled, _sprite.imageIndex + num10, x, y + verticalOffset, xscale, yscale);
+                        SpriteMap spriteToDraw = _mindControl == null || !_derpMindControl ? _spriteQuack : _spriteControlled;
+                        Graphics.Draw(spriteToDraw, _sprite.imageIndex + num10, DuckLerp.x, DuckLerp.y + verticalOffset, xscale, yscale);
                         if (length > 0.05f)
                         {
                             Vec2 vec2_1 = position + new Vec2(0f, 1f);
@@ -4634,7 +4899,8 @@ namespace DuckGame
                     }
                     else
                     {
-                        Graphics.DrawWithoutUpdate(_sprite, x, y + verticalOffset, xscale, yscale);
+
+                        Graphics.DrawWithoutUpdate(_sprite, DuckLerp.x, DuckLerp.y + verticalOffset, xscale, yscale);
                         _stickLerp = Vec2.Zero;
                         _stickSlowLerp = Vec2.Zero;
                     }
@@ -4648,9 +4914,10 @@ namespace DuckGame
                 }
                 if (_mindControl != null && _derpMindControl || listening)
                 {
-                    _swirlSpin += 0.2f;
+                    if (MonoMain.UpdateLerpState)
+                        _swirlSpin += 0.2f;
                     _swirl.angle = _swirlSpin;
-                    Graphics.Draw(_swirl, x, y - 12f);
+                    Graphics.Draw(_swirl, DuckLerp.x, DuckLerp.y - 12f);
                 }
                 DrawHat();
                 if (!skipDraw)
@@ -4667,7 +4934,7 @@ namespace DuckGame
                         if (gun != null)
                             vec2 = -gun.barrelVector * kick;
                         float num13 = Math.Abs((float)((_flapFrame - 4f) / 4f)) - 0.1f;
-                        if (!_hovering)
+                        if (!_hovering && !cordHover)
                             num13 = 0f;
                         _spriteArms._frameInc = 0f;
                         _spriteArms.flipH = _sprite.flipH;
@@ -4680,14 +4947,14 @@ namespace DuckGame
                                 bool flipH = _spriteArms.flipH;
                                 if (holdObject.handFlip)
                                     _spriteArms.flipH = !_spriteArms.flipH;
-                                Graphics.Draw(_spriteArms, _sprite.imageIndex + 18 + Maths.Int(action) * 18 * (holdObject.hasTrigger ? 1 : 0), armPosition.x + holdObject.handOffset.x * offDir, armPosition.y + holdObject.handOffset.y, _sprite.xscale, _sprite.yscale);
+                                Graphics.Draw(ref _spriteArms, _sprite.imageIndex + 18 + Maths.Int(action) * 18 * (holdObject.hasTrigger ? 1 : 0), armPosition.x + holdObject.handOffset.x * offDir, armPosition.y + holdObject.handOffset.y, _sprite.xscale, _sprite.yscale);
                                 _spriteArms._frameInc = 0f;
                                 _spriteArms.flipH = flipH;
                                 if (_sprite.currentAnimation == "jump")
                                 {
                                     _spriteArms.angle = 0f;
                                     _spriteArms.depth = this.depth + -10;
-                                    Graphics.Draw(_spriteArms, _sprite.imageIndex + 5 + (int)Math.Round(num13 * 2f), (float)(x + vec2.x + 2 * offDir * xscale), (float)(y + vec2.y + armOffY * yscale), -_sprite.xscale, _sprite.yscale, true);
+                                    Graphics.Draw(_spriteArms, _sprite.imageIndex + 5 + (int)Math.Round(num13 * 2f), (float)(DuckLerp.x + vec2.x + 2 * offDir * xscale), (float)(DuckLerp.y + vec2.y + armOffY * yscale), -_sprite.xscale, _sprite.yscale, true);
                                     _spriteArms.depth = this.depth + 11;
                                 }
                             }
@@ -4696,7 +4963,7 @@ namespace DuckGame
                                 _bionicArm.flipH = _sprite.flipH;
                                 if (holdObject.handFlip)
                                     _bionicArm.flipH = !_bionicArm.flipH;
-                                Graphics.Draw(_bionicArm, _sprite.imageIndex + 18 + num12, armPosition.x + holdObject.handOffset.x * offDir, armPosition.y + holdObject.handOffset.y, _sprite.xscale, _sprite.yscale);
+                                Graphics.Draw(ref _bionicArm, _sprite.imageIndex + 18 + num12, armPosition.x + holdObject.handOffset.x * offDir, armPosition.y + holdObject.handOffset.y, _sprite.xscale, _sprite.yscale);
                             }
                         }
                         else if (!_closingEyes)
@@ -4711,30 +4978,33 @@ namespace DuckGame
                                         num14 = 3;
                                     if (holdObject == null || !holdObject.hideRightWing)
                                     {
+                                        //Right Wing when moving down
                                         _spriteArms.depth = this.depth + 11;
-                                        Graphics.Draw(_spriteArms, _spriteArms.imageIndex + 5 + (int)Math.Round(num13 * 2f), (float)(x + vec2.x - offDir * num14 * xscale), (float)(y + vec2.y + armOffY * yscale), _sprite.xscale, _sprite.yscale, true);
+                                        Graphics.Draw(_spriteArms, _spriteArms.imageIndex + 5 + (int)Math.Round(num13 * 2f), (float)(DuckLerp.x + vec2.x - offDir * num14 * xscale), (float)(DuckLerp.y + vec2.y + armOffY * yscale), _sprite.xscale, _sprite.yscale, true);
                                         _spriteArms.depth = this.depth + -10;
                                     }
                                     if (holdObject == null || !holdObject.hideLeftWing)
                                     {
+                                        //Left Wing when moving down
                                         _spriteArms.imageIndex = 9;
-                                        Graphics.Draw(_spriteArms, _spriteArms.imageIndex + 5 + (int)Math.Round(num13 * 2f), (float)(x + vec2.x + 2 * offDir * xscale), (float)(y + vec2.y + armOffY * yscale), -_sprite.xscale, _sprite.yscale, true);
+                                        Graphics.Draw(_spriteArms, _spriteArms.imageIndex + 5 + (int)Math.Round(num13 * 2f), (float)(DuckLerp.x + vec2.x + 2 * offDir * xscale), (float)(DuckLerp.y + vec2.y + armOffY * yscale), -_sprite.xscale, _sprite.yscale, true);
                                         _spriteArms.depth = this.depth + 11;
                                     }
                                 }
                                 else if (holdObject == null || !holdObject.hideRightWing)
-                                    Graphics.Draw(_spriteArms, _sprite.imageIndex, armPosition.x, armPosition.y, _sprite.xscale, _sprite.yscale);
+                                    //Front wing when walking and jumping before moving downward
+                                    Graphics.Draw(ref _spriteArms, _sprite.imageIndex, armPosition.x, armPosition.y, _sprite.xscale, _sprite.yscale);
                             }
                             else
                             {
                                 _bionicArm.angle = 0f;
                                 _bionicArm.flipH = _sprite.flipH;
-                                Graphics.Draw(_bionicArm, _sprite.imageIndex + num12, armPosition.x, armPosition.y, _sprite.xscale, _sprite.yscale);
+                                Graphics.Draw(ref _bionicArm, _sprite.imageIndex + num12, armPosition.x, armPosition.y, _sprite.xscale, _sprite.yscale);
                             }
                         }
                     }
                 }
-                if (Network.isActive && !_renderingDuck)
+                if ((Network.isActive || Recorderator.Playing) && !_renderingDuck)
                     DrawConnectionIndicators();
                 Sprite graphic = this.graphic;
                 this.graphic = null;
@@ -4889,7 +5159,7 @@ namespace DuckGame
                 float num1 = 37f;
                 float num2 = (numProblems - 1) * num1;
                 Vec2 vec2_1 = new Vec2(-1000f, -1000f);
-                Vec2 pPos = duck.cameraPosition + new Vec2(0f, 6f);
+                Vec2 pPos = duck.DuckCamLerp.Position + new Vec2(0f, 6f);
                 float num3 = numProblems / 5f;
                 int num4 = 0;
                 float num5 = -20f;
@@ -4928,6 +5198,7 @@ namespace DuckGame
                 public bool _prevActive;
                 private Vec2 drawPos = Vec2.Zero;
 
+
                 public bool noWait => problem
                     is ConnectionTrouble.Chatting
                     or ConnectionTrouble.AFK
@@ -4937,6 +5208,24 @@ namespace DuckGame
                 {
                     get
                     {
+                        if (Recorderator.Playing)
+                        {
+                            if (problem == ConnectionTrouble.Chatting)
+                                return owner.duck.forceChatting;
+                            if (problem == ConnectionTrouble.AFK)
+                                return owner.duck.forceAFK;
+                            if (problem == ConnectionTrouble.Disconnection)
+                                return owner.duck.forceDisconnection;
+                            if (problem == ConnectionTrouble.Lag)
+                                return owner.duck.forceLag;
+                            if (problem == ConnectionTrouble.Loss)
+                                return owner.duck.forceLoss;
+                            if (problem == ConnectionTrouble.Minimized)
+                                return !owner.duck.forceTabbed;
+                            if (problem == ConnectionTrouble.Paused)
+                                return owner.duck.forcePaused;
+                            return problem == ConnectionTrouble.DevConsole && owner.duck.forceConsole;
+                        }
                         if (owner.duck.connection == null || owner.duck.profile == null)
                             return false;
                         if (problem == ConnectionTrouble.Chatting)
@@ -4974,7 +5263,10 @@ namespace DuckGame
                             or ConnectionTrouble.Paused
                             or ConnectionTrouble.DevConsole
                             or ConnectionTrouble.AFK)
+                        {
+                            SFX.DontSave = 1;
                             SFX.Play("rainpop", 0.65f, Rando.Float(-0.1f, 0.1f));
+                        }
                     }
                     if (!active)
                     {

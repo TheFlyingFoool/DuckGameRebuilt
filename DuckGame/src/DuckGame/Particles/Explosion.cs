@@ -44,6 +44,7 @@ namespace DuckGame
             if (doWait)
                 return;
             _wait = 0f;
+            position = new Vec2(9999f, 9999f);
         }
 
         public override void Initialize()
@@ -71,6 +72,7 @@ namespace DuckGame
             }
             if (_wait <= 0)
                 y += vSpeed;
+            if (!currentlyDrawing) _sprite.UpdateFrame(true);
             if (!_sprite.finished)
                 return;
             Level.Remove(this);

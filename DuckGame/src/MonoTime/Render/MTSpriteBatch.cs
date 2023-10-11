@@ -1,10 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.MTSpriteBatch
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
+﻿
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -463,7 +457,7 @@ namespace DuckGame
                 _tempRect.width = texture.width;
                 _tempRect.height = texture.height;
             }
-            if ((fx == null || fx.spsupport) && texture.Texbase != null && texture.Texbase.Name != null && Content.offests.TryGetValue(texture.Texbase.Name, out Microsoft.Xna.Framework.Rectangle offset))
+            if ((fx == null || fx.spsupport) && !texture.skipSpriteAtlas && texture.Texbase != null && texture.Texbase.Name != null && Content.offests.TryGetValue(texture.Texbase.Name, out Microsoft.Xna.Framework.Rectangle offset))
             {
                 batchItem.NormalTexture = texture;
                 batchItem.usingspriteatlas = true;

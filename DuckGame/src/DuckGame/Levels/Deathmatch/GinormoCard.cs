@@ -96,10 +96,10 @@ namespace DuckGame
             }
             if (_smallMode)
                 _gradient.yscale = 0.5f;
-            Graphics.Draw(_gradient, 0f, 0f);
+            Graphics.Draw(ref _gradient, 0f, 0f);
             _edgeOverlay.depth = (Depth)0.9f;
             _edgeOverlay.alpha = 0.5f;
-            Graphics.Draw(_edgeOverlay, 0f, 0f);
+            Graphics.Draw(ref _edgeOverlay, 0f, 0f);
             int num = 0;
             foreach (Profile activeProfile in _team.activeProfiles)
             {
@@ -149,7 +149,7 @@ namespace DuckGame
             }
             _font.scale = new Vec2(1f, 1f);
             _targetSprite.scale = new Vec2(1f, 1f);
-            Graphics.Draw(_targetSprite, x, y);
+            Graphics.Draw(ref _targetSprite, x, y);
             if (_mode == BoardMode.Points)
             {
                 string text2 = Change.ToString(_team.score);

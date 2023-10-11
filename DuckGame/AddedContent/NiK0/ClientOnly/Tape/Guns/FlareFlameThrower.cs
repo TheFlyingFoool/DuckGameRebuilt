@@ -1,13 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.FlameThrower
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using static DuckGame.CMD;
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [ClientOnly]
     public class FlareFlameThrower : Gun
@@ -88,7 +79,7 @@ namespace DuckGame
                 ammo -= 2;
                 if (ammo % 20 == 0)
                 {
-                    SFX.Play("netGunFire", 0.5f, Rando.Float(0.2f) - 0.4f);
+                    SFX.PlaySynchronized("netGunFire", 0.5f, Rando.Float(0.2f) - 0.4f);
                     if (duck != null)
                         RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(_fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));
                     ApplyKick();
@@ -112,18 +103,19 @@ namespace DuckGame
             if (_barrelFlame.speed > 0)
             {
                 _barrelFlame.alpha = 0.9f;
-                Draw(_barrelFlame, new Vec2(11f, 1f));
+                Draw(ref _barrelFlame, new Vec2(11f, 1f));
             }
             _can.frame = (int)((1 - ammo / _maxAmmo) * 15);
-            Draw(_can, new Vec2(barrelOffset.x - 11f, barrelOffset.y + 4f));
+            Draw(ref _can, new Vec2(barrelOffset.x - 11f, barrelOffset.y + 4f));
             Graphics.material = material;
         }
         public override bool CanTapeTo(Thing pThing)
         {
             switch (pThing)
             {
-                case FlareGun _:
-                case FlameThrower _:
+                case FlareGun:
+                case FlameThrower:
+                case FlareFlameThrower:
                     return false;
                 default:
                     return true;

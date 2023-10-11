@@ -101,37 +101,30 @@ namespace DuckGame
                 num1 = _multiToggle.Count - 1;
                 num3 = (int)_field.value;
             }
-            else
-                num3 = (bool)_field.value ? 1 : 0;
-            if (_filterBinding != null && !(bool)_filterBinding.value)
-                num3 = -1;
+            else num3 = (bool)_field.value ? 1 : 0;
+            if (_filterBinding != null && !(bool)_filterBinding.value) num3 = -1;
             bool flag = false;
             if (trigger == Triggers.Select || trigger == Triggers.MenuRight)
             {
-                ++num3;
+                num3++;
                 flag = true;
             }
             else if (trigger == Triggers.MenuLeft)
             {
-                --num3;
+                num3--;
                 flag = true;
             }
-            if (num3 < num2)
-                num3 = num1;
-            else if (num3 > num1)
-                num3 = num2;
-            if (num3 == -1)
-            {
-                _filterBinding.value = false;
-            }
+            if (num3 < num2) num3 = num1;
+            else if (num3 > num1) num3 = num2;
+            if (num3 == -1) _filterBinding.value = false;
             else
             {
                 if (_filterBinding != null)
                     _filterBinding.value = true;
                 _field.value = _multiToggle == null ? num3 != 0 : num3;
             }
-            if (!flag)
-                return;
+            if (!flag) return;
+            SFX.DontSave = 1;
             SFX.Play("textLetter", 0.7f);
             if (_action == null)
                 return;

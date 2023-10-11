@@ -172,6 +172,7 @@ namespace DuckGame
                 Vec2 p2 = vec2 + barrelVector * (float)(tampPos * 2 + 3);
                 Graphics.DrawLine(vec2 - barrelVector * 6f, p2, Color.Gray, depth: (depth - 2));
                 duck._spriteArms.depth = depth - 1;
+                duck._spriteArms.LerpState.CanLerp = false;
                 Graphics.Draw(duck._spriteArms, p2.x, p2.y);
                 duck._spriteArms.angle = angle;
             }

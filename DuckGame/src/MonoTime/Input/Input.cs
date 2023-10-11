@@ -583,7 +583,9 @@ namespace DuckGame
             _triggerImageMap.Add("ALT", new Sprite("buttons/keyboard/alt"));
             _triggerImageMap.Add("COMMA", new KeyImage(','));
             _triggerImageMap.Add("DGR", new Sprite("DGR") { center = new Vec2(0, 0.75f) });
+            _triggerImageMap.Add("DGRDIM", new Sprite("DGR") { center = new Vec2(0, 0.75f), color = new Color(75, 75, 75) });
             _triggerImageMap.Add("DGRBIG", new Sprite("DGRBIG"));
+            _triggerImageMap.Add("DGRBIGDIM", new Sprite("DGRBIG") { color = new Color(75, 75, 75) });
             Dictionary<string, Sprite> triggerImageMap = _triggerImageMap;
             Sprite sprite1 = new Sprite("checkIcon")
             {

@@ -24,9 +24,9 @@
             float num5 = 2.1f * size;
             float num6 = 2.1f * size;
             if (body1 == part1 && jetting)
-                num5 = 6f;
+                num5 = 6f * size;
             else if (body2 == part1 && jetting)
-                num6 = 6f;
+                num6 = 6f * size;
             double num7 = num4;
             float num8 = (float)((num3 + num7) / (num5 + num6));
             Vec2 vec2_5 = vec2_2 * num8;

@@ -75,7 +75,7 @@ namespace DuckGame
             _guage.flipH = graphic.flipH;
             _guage.alpha = graphic.alpha;
             _guage.depth = depth + 1;
-            Draw(_guage, new Vec2(-6f, -8f));
+            Draw(ref _guage, new Vec2(-6f, -8f));
         }
 
         public override void OnPressAction() => _firing = true;

@@ -126,14 +126,14 @@ namespace DuckGame
                 }
             }
             _consoleFlash.depth = depth + 10;
-            Graphics.Draw(_consoleFlash, x + 9f, y + 7f);
+            Graphics.Draw(ref _consoleFlash, x + 9f, y + 7f);
             _base.depth = depth - 10;
-            Graphics.Draw(_base, x + 3f, y + 13f);
+            Graphics.Draw(ref _base, x + 3f, y + 13f);
             if (_consoleFade > 0.01f)
             {
                 _consoleHighlight.depth = depth + 5;
                 _consoleHighlight.alpha = _consoleFade;
-                Graphics.Draw(_consoleHighlight, x, y);
+                Graphics.Draw(ref _consoleHighlight, x, y);
             }
             base.Draw();
         }

@@ -6,6 +6,7 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace DuckGame
 {
@@ -32,8 +33,18 @@ namespace DuckGame
             layer = Layer.Game;
             placementLayerOverride = Layer.Blocks;
             editorCycleType = typeof(PyramidLightRoof);
+            shouldbeinupdateloop = DGRSettings.AmbientParticles;
         }
-
+        public float timer;
+        public override void Update()
+        {
+            timer += 0.02f * DGRSettings.ActualParticleMultiplier;
+            if (timer >= 1)
+            {
+                timer = Rando.Float(0.1f, 0.2f);
+                Level.Add(new Ember(x + Rando.Float(-4, 4), y - Rando.Float(3.5f, 6)));
+            }
+        }
         public override void Initialize()
         {
             if (Level.current is Editor)

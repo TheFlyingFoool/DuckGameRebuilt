@@ -19,12 +19,14 @@ namespace DuckGame
         private float _wait = 1f;
         private bool _testMode;
         private int _num = 1;
+        private Interp PlusOneLerp = new Interp(true);
 
         public PlusOne(float xpos, float ypos, Profile p, bool temp = false, bool testMode = false)
           : base(xpos, ypos)
         {
             _font = new BitmapFont("biosFont", 8);
             _profile = p;
+            if (p != null && p.duck != null) p.duck.currentPlusOne = this;
             _temp = temp;
             layer = Layer.Blocks;
             depth = (Depth)0.9f;
@@ -74,12 +76,15 @@ namespace DuckGame
             _num = 1;
             string text = "+" + _num.ToString();
             float xpos = x - _font.GetWidth(text) / 2f;
-            _font.Draw(text, xpos - 1f, y - 1f, Color.Black, (Depth)0.8f);
-            _font.Draw(text, xpos + 1f, y - 1f, Color.Black, (Depth)0.8f);
-            _font.Draw(text, xpos - 1f, y + 1f, Color.Black, (Depth)0.8f);
-            _font.Draw(text, xpos + 1f, y + 1f, Color.Black, (Depth)0.8f);
+
+            PlusOneLerp.UpdateLerpState(new Vec2(xpos, y), MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
+            _font.Draw(text, PlusOneLerp.x - 1f, PlusOneLerp.y - 1f, Color.Black, (Depth)0.8f);
+            _font.Draw(text, PlusOneLerp.x + 1f, PlusOneLerp.y - 1f, Color.Black, (Depth)0.8f);
+            _font.Draw(text, PlusOneLerp.x - 1f, PlusOneLerp.y + 1f, Color.Black, (Depth)0.8f);
+            _font.Draw(text, PlusOneLerp.x + 1f, PlusOneLerp.y + 1f, Color.Black, (Depth)0.8f);
             Color c = new Color((byte)_profile.persona.color.x, (byte)_profile.persona.color.y, (byte)_profile.persona.color.z);
-            _font.Draw(text, xpos, y, c, (Depth)0.9f);
+            _font.Draw(text, PlusOneLerp.x, PlusOneLerp.y, c, (Depth)0.9f);
         }
     }
 }

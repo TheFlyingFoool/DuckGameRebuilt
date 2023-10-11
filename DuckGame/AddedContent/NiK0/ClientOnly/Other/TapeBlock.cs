@@ -230,43 +230,27 @@
             }
             if (left)
             {
-                if (leftStore == null)
+                leftStore = (Holdable)LoadThing(t.Serialize());
+                if (Network.isActive)
                 {
-                    leftStore = (Holdable)LoadThing(t.Serialize());
-                    if (Network.isActive)
-                    {
-                        leftStore.position = new Vec2(-2000);
-                        leftStore.active = false;
-                        leftStore.visible = false;
-                        Level.Add(leftStore);
-                    }
-                    SFX.PlaySynchronized("scanBeep", 1, 0.2f);
+                    leftStore.position = new Vec2(-2000);
+                    leftStore.active = false;
+                    leftStore.visible = false;
+                    Level.Add(leftStore);
                 }
-                else
-                {
-                    SFX.PlaySynchronized("scanFail", 1, 0.2f);
-
-                }
+                SFX.PlaySynchronized("scanBeep", 1, 0.2f);
             }
             else
             {
-                if (rightStore == null)
+                rightStore = (Holdable)LoadThing(t.Serialize());
+                if (Network.isActive)
                 {
-                    rightStore = (Holdable)LoadThing(t.Serialize());
-                    if (Network.isActive)
-                    {
-                        rightStore.position = new Vec2(-2000);
-                        rightStore.active = false;
-                        rightStore.visible = false;
-                        Level.Add(rightStore);
-                    }
-                    SFX.PlaySynchronized("scanBeep", 1, 0.2f);
+                    rightStore.position = new Vec2(-2000);
+                    rightStore.active = false;
+                    rightStore.visible = false;
+                    Level.Add(rightStore);
                 }
-                else
-                {
-                    SFX.PlaySynchronized("scanFail", 1, 0.2f);
-                     
-                }
+                SFX.PlaySynchronized("scanBeep", 1, 0.2f);
             }
         }
         public override PhysicsObject GetSpawnItem()
@@ -292,6 +276,22 @@
                 with.Fondle(this);
             if (!isServerForObject || !with.isServerForObject || from != ImpactedFrom.Bottom)
                 return;
+            switch (with)
+            {
+                case Holdable holdable:
+                    if (holdable is RagdollPart)
+                        break;
+                    StoreItem(with, holdable.x < x);
+                    Bounce();
+                    break;
+                case Duck pDuck:
+                    Bounce();
+                    if (pDuck.holdObject != null)
+                    {
+                        StoreItem(pDuck.holdObject, pDuck.x < x);
+                    }
+                    break;
+            }
             if (leftStore != null && rightStore != null)
             {
                 if (!Network.isActive)
@@ -299,26 +299,6 @@
                     containContext = GetSpawnItem();
                 }
                 Pop();
-            }
-            else
-            {
-                switch (with)
-                {
-                    case Holdable holdable when holdable.lastThrownBy != null || holdable is RagdollPart && !Network.isActive:
-                        Duck lastThrownBy = holdable.lastThrownBy as Duck;
-                        if (holdable is RagdollPart)
-                            break;
-                        StoreItem(with, holdable.x < x);
-                        Bounce();
-                        break;
-                    case Duck pDuck:
-                        Bounce();
-                        if (pDuck.holdObject != null)
-                        {
-                            StoreItem(pDuck.holdObject, pDuck.x < x);
-                        }
-                        break;
-                }
             }
         }
     }

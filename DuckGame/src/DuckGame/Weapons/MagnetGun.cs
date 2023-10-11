@@ -97,7 +97,7 @@ namespace DuckGame
         public override void Update()
         {
             _waveMult = Lerp.Float(_waveMult, 0f, 0.1f);
-            if (isServerForObject)
+            if (isServerForObject && !Recorderator.Playing)
                 _magnetActive = action && _power > 0.01f;
             if (_magnetActive)
                 _waveMult = 1f;
@@ -427,7 +427,7 @@ namespace DuckGame
         public override void Draw()
         {
             base.Draw();
-            Draw(_magnet, new Vec2(5f, (float)((float)_wave * _waveMult - 2)));
+            Draw(ref _magnet, new Vec2(5f, (float)((float)_wave * _waveMult - 2)));
             foreach (Thing line in _lines)
                 line.Draw();
         }

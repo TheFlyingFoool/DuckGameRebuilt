@@ -47,149 +47,36 @@ namespace DuckGame
         private GhostManager _manager;
         public ITakeInput _inputObject;
 
-        private static BufferedGhostProperty MakeBufferedProperty(
-          StateBinding state,
-          object value,
-          int index = 0,
-          NetIndex16 tick = default(NetIndex16))
+        private static BufferedGhostProperty MakeBufferedProperty(StateBinding state, object value, int index = 0, NetIndex16 tick = default(NetIndex16))
         {
             if (state.type == typeof(float))
-            {
-                return new BufferedGhostProperty<float>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state.type == typeof(bool))
-            {
-                return new BufferedGhostProperty<bool>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state.type == typeof(byte))
-            {
-                return new BufferedGhostProperty<byte>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state.type == typeof(ushort))
-            {
-                return new BufferedGhostProperty<ushort>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state.type == typeof(short))
-            {
-                return new BufferedGhostProperty<short>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state is CompressedVec2Binding || state is InterpolatedVec2Binding)
-            {
-                return new BufferedGhostProperty<Vec2>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state is CompressedFloatBinding)
-            {
-                return new BufferedGhostProperty<float>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state.type == typeof(int))
-            {
-                return new BufferedGhostProperty<int>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state.type == typeof(Vec2))
-            {
-                return new BufferedGhostProperty<Vec2>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state.type == typeof(NetIndex4))
-            {
-                return new BufferedGhostProperty<NetIndex4>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state.type == typeof(NetIndex8))
-            {
-                return new BufferedGhostProperty<NetIndex8>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state.type == typeof(NetIndex16))
-            {
-                return new BufferedGhostProperty<NetIndex16>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state.type == typeof(sbyte))
-            {
-                return new BufferedGhostProperty<sbyte>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            return new BufferedGhostProperty<object>
-            {
-                binding = state,
-                value = value,
-                index = index,
-                tick = tick
-            };
+                return new BufferedGhostProperty<float>() { binding = state, value = value, index = index, tick = tick };
+            else if (state.type == typeof(bool))
+                return new BufferedGhostProperty<bool>() { binding = state, value = value, index = index, tick = tick };
+            else if (state.type == typeof(byte))
+                return new BufferedGhostProperty<byte>() { binding = state, value = value, index = index, tick = tick };
+            else if (state.type == typeof(ushort))
+                return new BufferedGhostProperty<ushort>() { binding = state, value = value, index = index, tick = tick };
+            else if (state.type == typeof(short))
+                return new BufferedGhostProperty<short>() { binding = state, value = value, index = index, tick = tick };
+            else if (state is CompressedVec2Binding || state is InterpolatedVec2Binding)
+                return new BufferedGhostProperty<Vec2>() { binding = state, value = value, index = index, tick = tick };
+            else if (state is CompressedFloatBinding)
+                return new BufferedGhostProperty<float>() { binding = state, value = value, index = index, tick = tick };
+            else if (state.type == typeof(int))
+                return new BufferedGhostProperty<int>() { binding = state, value = value, index = index, tick = tick };
+            else if (state.type == typeof(Vec2))
+                return new BufferedGhostProperty<Vec2>() { binding = state, value = value, index = index, tick = tick };
+            else if (state.type == typeof(NetIndex4))
+                return new BufferedGhostProperty<NetIndex4>() { binding = state, value = value, index = index, tick = tick };
+            else if (state.type == typeof(NetIndex8))
+                return new BufferedGhostProperty<NetIndex8>() { binding = state, value = value, index = index, tick = tick };
+            else if (state.type == typeof(NetIndex16))
+                return new BufferedGhostProperty<NetIndex16>() { binding = state, value = value, index = index, tick = tick };
+            else if (state.type == typeof(sbyte))
+                return new BufferedGhostProperty<sbyte>() { binding = state, value = value, index = index, tick = tick };
+
+            return new BufferedGhostProperty<object>() { binding = state, value = value, index = index, tick = tick };
         }
 
         public GhostConnectionData GetConnectionData(NetworkConnection c)

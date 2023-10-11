@@ -25,11 +25,13 @@ namespace DuckGame
 
         public override void Draw()
         {
+            UILerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
             if (_directionalPassword && _text != "  NONE")
             {
                 _collisionSize.x = 48f;
                 float num = _text.Length * 8;
-                Graphics.DrawPassword(_text, new Vec2(x + (((align & UIAlign.Left) <= UIAlign.Center ? ((align & UIAlign.Right) <= UIAlign.Center ? (float)(-num / 2f) : width / 2f - num) : (float)-(width / 2f)) - 8f), y + ((align & UIAlign.Top) <= UIAlign.Center ? ((align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-_font.height / 2f) : height / 2f - _font.height) : (float)-(height / 2f))), _color, depth);
+                Graphics.DrawPassword(_text, new Vec2(UILerp.x + (((align & UIAlign.Left) <= UIAlign.Center ? ((align & UIAlign.Right) <= UIAlign.Center ? (float)(-num / 2f) : width / 2f - num) : (float)-(width / 2f)) - 8f), UILerp.y + ((align & UIAlign.Top) <= UIAlign.Center ? ((align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-_font.height / 2f) : height / 2f - _font.height) : (float)-(height / 2f))), _color, depth);
             }
             else
             {
@@ -37,7 +39,7 @@ namespace DuckGame
                     _text = _text.Substring(0, 8) + "..";
                 _collisionSize.x = 48f;
                 float num = _text.Length * 8;
-                Graphics.DrawString(_text, new Vec2(x + (((align & UIAlign.Left) <= UIAlign.Center ? ((align & UIAlign.Right) <= UIAlign.Center ? (float)(-num / 2f) : width / 2f - num) : (float)-(width / 2f)) - 8f), y + ((align & UIAlign.Top) <= UIAlign.Center ? ((align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-_font.height / 2f) : height / 2f - _font.height) : (float)-(height / 2f))), _color, depth);
+                Graphics.DrawString(_text, new Vec2(UILerp.x + (((align & UIAlign.Left) <= UIAlign.Center ? ((align & UIAlign.Right) <= UIAlign.Center ? (float)(-num / 2f) : width / 2f - num) : (float)-(width / 2f)) - 8f), UILerp.y + ((align & UIAlign.Top) <= UIAlign.Center ? ((align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-_font.height / 2f) : height / 2f - _font.height) : (float)-(height / 2f))), _color, depth);
             }
         }
     }

@@ -12,6 +12,7 @@ namespace DuckGame
         private float _heightAdd;
         public InputProfile _controlProfile;
         public float specialScale;
+        protected Interp TextLerp = new Interp(true);
 
         public virtual string text
         {
@@ -101,12 +102,16 @@ namespace DuckGame
 
         public override void Draw()
         {
-            x = parent.x;
+            this.x = parent.x;
             _font.scale = new Vec2(1f, 1f);
             _collisionSize.x = _font.GetWidth(_text);
 
             _font.scale = scale;
             _font.alpha = alpha;
+
+            TextLerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            float x = TextLerp.x;
+            float y = TextLerp.y;
 
             Vec2 alignOffset = calcAlignOffset();
             _font.Draw(text, x + alignOffset.x, y + alignOffset.y, UIMenu.disabledDraw ? Colors.BlueGray : _color, depth, _controlProfile);

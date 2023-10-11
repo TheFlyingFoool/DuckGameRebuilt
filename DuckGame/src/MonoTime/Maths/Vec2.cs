@@ -7,6 +7,7 @@
 
 using Microsoft.Xna.Framework;
 using System;
+using System.Drawing;
 using System.Globalization;
 
 namespace DuckGame
@@ -522,5 +523,8 @@ namespace DuckGame
         public static implicit operator Vector2(Vec2 vec) => new Vector2(vec.x, vec.y);
 
         public static implicit operator Vec2(Vector2 vec) => new Vec2(vec.X, vec.Y);
+        
+        public static implicit operator SizeF(Vec2 vec) => new SizeF(vec.x, vec.y);
+        public static implicit operator Vec2(SizeF size) => new Vec2(size.Width, size.Height);
     }
 }

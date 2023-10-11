@@ -44,7 +44,7 @@ namespace DuckGame
                     _eight = new SpriteMap("redEight", 10, 10);
                     _eight.CenterOrigin();
                 }
-                Graphics.Draw(_eight, x - 5f, y + 7f, (Depth)1f);
+                Graphics.Draw(ref _eight, x - 5f, y + 7f, (Depth)1f);
             }
             base.Draw();
         }

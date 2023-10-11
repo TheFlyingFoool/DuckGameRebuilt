@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 
 namespace DuckGame
 {
@@ -355,9 +356,11 @@ namespace DuckGame
         }
         // public Dictionary<Vec2, List<Thing>> Buckets = new Dictionary<Vec2, List<Thing>>();
         public Dictionary<Vec2, Dictionary<int, List<Thing>>> Buckets = new Dictionary<Vec2, Dictionary<int, List<Thing>>>();
+        public static float Leniancy = 9f;
+        public static int LineLeniancy = 0;
         public void UpdateObject(Thing thing)  //float size = Math.Max(Math.Max(thing.right - thing.left, thing.bottom - thing.top), 16);
         {
-            Vec2[] buckets = GetIdForObj(thing.topLeft, thing.bottomRight);//GetIdForObj(thing.position, thing.right - thing.left, thing.bottom - thing.top);
+            Vec2[] buckets = GetIdForObj(thing.topLeft - new Vec2(Leniancy), thing.bottomRight + new Vec2(Leniancy));//GetIdForObj(thing.position, thing.right - thing.left, thing.bottom - thing.top);
             if (thing.Buckets.SequenceEqual(buckets))
             {
                 return;
@@ -525,7 +528,7 @@ namespace DuckGame
             return GetThings(p1, p2, t);
         }
 
-        private Vec2[] GetIdForLine(Vec2 p1, Vec2 p2)
+        public Vec2[] GetIdForLine(Vec2 p1, Vec2 p2)
         {
             //Vec2[] Chunk = new Vec2[0];
             List<Vec2> Chunks = new List<Vec2>();
@@ -537,9 +540,16 @@ namespace DuckGame
             int bottom = y0 < y1 ? y1 : y0;
             int left = x1 < x0 ? x1 : x0;
             int right = x0 < x1 ? x1 : x0;
+            if (LineLeniancy != 0)
+            {
+                top -= LineLeniancy;
+                bottom += LineLeniancy;
+                left -= LineLeniancy;
+                right += LineLeniancy;
+            }
             foreach (Vec2 Bucket in Buckets.Keys)
             {
-                if (left <= Bucket.x && right >= Bucket.x && top <= Bucket.y && bottom >= Bucket.y)
+                if (left <= Bucket.x && right >= Bucket.x && top <= Bucket.y && bottom >= Bucket.y )
                 {
                     Chunks.Add(Bucket);
                 }

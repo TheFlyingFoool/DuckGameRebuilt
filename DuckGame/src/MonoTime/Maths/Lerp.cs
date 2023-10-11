@@ -27,7 +27,45 @@ namespace DuckGame
             }
             return current;
         }
-
+        /// <summary>
+        /// Unlike Lerp.Float this will try to get there using the shortest path
+        /// so it doesnt do a 360 trying to change from 0 rad to 6.28 rad
+        /// </summary>
+        /// <param name="current"></param>
+        /// <param name="to"></param>
+        /// <param name="amount"></param>
+        /// <returns>Returns the interpolation between a Radian angle and the other</returns>
+        public static float RadAngleLerp(float current, float to, float amount)
+        {
+            //Lerp.Float
+            if (current < -1.57f && to > 1.58f)
+            {
+                current -= amount;
+                if (current <= -3.14f) current += 6.28f;
+            }
+            else if (current > 1.57f && to < -1.56f)
+            {
+                current += amount;
+                if (current >= 3.14f) current -= 6.28f;
+            }
+            else if (to > current)
+            {
+                current += amount;
+                if (to < current)
+                {
+                    current = to;
+                }
+            }
+            else if (to < current)
+            {
+                current -= amount;
+                if (to > current)
+                {
+                    current = to;
+                }
+            }
+            return current;
+        }
         public static float FloatSmooth(float current, float to, float amount, float toMul = 1f)
         {
             float num1 = to - (1f - toMul) * to;
