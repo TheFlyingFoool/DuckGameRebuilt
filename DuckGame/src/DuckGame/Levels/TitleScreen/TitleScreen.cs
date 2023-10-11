@@ -606,14 +606,11 @@ namespace DuckGame
                 _updaterPromptMenu.Add(new LUIText("A new version of DGR", Colors.DGPink));
                 _updaterPromptMenu.Add(new LUIText("has been found", Colors.DGPink));
                 
-                bool nightly = MonoMain.nightlyDgrUpdates;
-                Program.IntitializeAutoUpdaterProgress(nightly);
+                Program.IntitializeAutoUpdaterProgress();
                 
                 if (Program.NewerRebuiltVersionExists)
                 {
-                    string displayVersion = nightly 
-                        ? Program.LatestNightlyRebuiltVersion.Substring(0, 8) 
-                        : Program.LatestReleaseRebuiltVersion.VersionStringFormatted;
+                    string displayVersion = Program.LatestReleaseRebuiltVersion.VersionStringFormatted;
                     
                     _updaterPromptMenu.Add(new LUIText(displayVersion, Colors.Platinum));
                 }
@@ -1072,9 +1069,7 @@ namespace DuckGame
                 {
                     try
                     {
-                        if (MonoMain.nightlyDgrUpdates)
-                            Program.HandleNightlyAutoUpdater();
-                        else Program.HandleAutoUpdater();
+                        Program.HandleAutoUpdater();
                     }
                     catch (Exception e)
                     {

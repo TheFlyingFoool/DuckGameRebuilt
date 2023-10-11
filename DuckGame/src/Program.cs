@@ -1,12 +1,6 @@
 ﻿using DbMon.NET;
 using DGWindows;
-using Microsoft.Build.Execution;
-using Microsoft.Build.Evaluation;
-using Microsoft.Build.Framework;
-using Microsoft.Build.Logging;
 using Microsoft.Xna.Framework;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System; 
 using System.IO;
 using System.Net;
@@ -27,8 +21,6 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
-using LibGit2Sharp;
-using System.Runtime.CompilerServices;
 
 namespace DuckGame
 {
@@ -105,8 +97,8 @@ namespace DuckGame
         public static bool lateCrash;
         public static ProgressValue AutoUpdaterCompletionProgress;
         public static string AutoUpdaterProgressMessage = "";
-        public static DGVersion LatestRebuiltVersion; // for fetching
-        public static bool NewerRebuiltVersionExists; // for fetching
+        public static DGVersion LatestReleaseRebuiltVersion;
+        public static bool NewerRebuiltVersionExists;
         public static bool RecorderatorWatchMode = false;
         public static string CordToViewName;
         
@@ -114,19 +106,8 @@ namespace DuckGame
         [SecurityCritical]
         public static void Main(string[] args)
         {
-            if (true || fullstop)
+            if (fullstop)
             {
-                try
-                {
-                    FilePath = typeof(ItemBox).Assembly.Location;
-                    IntitializeAutoUpdaterProgress(true);
-                    HandleNightlyAutoUpdater();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-
                 Console.ReadLine();
                 return;
             }
@@ -464,9 +445,6 @@ namespace DuckGame
                         break;
                     case "-nofullscreen":
                         MonoMain.noFullscreen = true;
-                        break;
-                    case "-nightly":
-                        MonoMain.nightlyDgrUpdates = true;
                         break;
                     case "-nosteam":
                         MonoMain.disableSteam = true;
@@ -1186,8 +1164,9 @@ namespace DuckGame
             UpdateAutoUpdaterProgress("Restarting Duck Game");
             
             Thread.Sleep(500); // dramatic pause
+            
             Process.Start(dgrExePath, Environment.CommandLine);
-            Process.GetCurrentProcess().Kill();
+            Process.GetCurrentProcess().Kill(); // KILL !!!!!!!!!
         }
 
         public static void DeleteAutoUpdaterTempFiles()
@@ -1208,9 +1187,9 @@ namespace DuckGame
                 File.Delete(zipPath);
         }
 
-        public static void IntitializeAutoUpdaterProgress(bool nightly)
+        public static void IntitializeAutoUpdaterProgress()
         {
-            int steps = nightly ? 5 : 4;
+            const int steps = 4;
             AutoUpdaterCompletionProgress = new ProgressValue(0, 1, 0, steps);
         }
 
@@ -1242,20 +1221,10 @@ namespace DuckGame
                 if (NewerRebuiltVersionExists)
                     return true;
 
-                if (MonoMain.nightlyDgrUpdates)
-                {
-                    LatestNightlyRebuiltVersion = GetLatestNightlyVersion().Result;
-                    string currentVersion = rawGitVersion;
+                LatestReleaseRebuiltVersion = GetLatestReleaseVersion();
+                DGVersion currentVersion = new DGVersion(CURRENT_VERSION_ID);
 
-                    NewerRebuiltVersionExists = true || currentVersion != LatestNightlyRebuiltVersion;
-                }
-                else
-                {
-                    LatestReleaseRebuiltVersion = GetLatestReleaseVersion();
-                    DGVersion currentVersion = new DGVersion(CURRENT_VERSION_ID);
-
-                    NewerRebuiltVersionExists = currentVersion < LatestReleaseRebuiltVersion;
-                }
+                NewerRebuiltVersionExists = currentVersion < LatestReleaseRebuiltVersion;
 
                 return NewerRebuiltVersionExists;
             }
@@ -1265,158 +1234,6 @@ namespace DuckGame
             }
         }
 
-        public static void HandleNightlyAutoUpdater()
-        {
-            #if AutoUpdater
-            #else
-            throw new InvalidOperationException("Way too many problems pop up unless it's built on ReleaseAutoUpdater, don't even bother.");
-            #endif
-            
-            UpdateAutoUpdaterProgress("Finding game file path");
-
-            string dgrExePath = FilePath;
-            string parentDirectoryPath = Path.GetDirectoryName(dgrExePath)!;
-            string sourceCodeDirectoryPath = parentDirectoryPath + "/source";
-            string sourceLibDirectoryPath = sourceCodeDirectoryPath + "/DuckGame/lib";
-            string sourceSolutionPath = sourceCodeDirectoryPath + "/DuckGame.sln";
-            string sourceBinDirectoryPath = sourceCodeDirectoryPath + "/bin";
-            
-            UpdateAutoUpdaterProgress("Downloading source code");
-            
-            Repository.Clone(GITHUB_REPO_URL, sourceCodeDirectoryPath);
-            
-            UpdateAutoUpdaterProgress("Compiling");
-
-            Directory.CreateDirectory(sourceBinDirectoryPath);
-            foreach (string dependencyPath in Directory.GetFiles(sourceLibDirectoryPath, "*.dll"))
-            {
-                File.Copy(dependencyPath, sourceBinDirectoryPath + Path.GetFileName(dependencyPath));
-            }
-
-            bool isBuildSuccessful = BuildSolution(sourceSolutionPath);
-            
-            /* [TODO]         -- ON FAIL --                /
-            / - tell user something went wrong.            /
-            /                                              /
-            / - save commit id on disk that it's a failure /
-            /   as to not keep attempting updating on      /
-            /   next attempts and failing repeatedly.      /
-            /                                              /
-            / - allow user to exit updater menu.          */
-            
-            // TODO actually just make a thing that handles crashes for
-            //      the autoupdater and does that on every exception
-
-            UpdateAutoUpdaterProgress("Installing");
-
-            string[] files = Directory.GetFiles(sourceBinDirectoryPath, "*", SearchOption.AllDirectories);
-
-            foreach (string filePath in files)
-            {
-                string relativePath = filePath.Substring(sourceBinDirectoryPath.Length + 1);
-                string destinationPath = parentDirectoryPath + $"/{relativePath}";
-                
-                try
-                {
-                    File.Copy(filePath, destinationPath, true);
-                }
-                catch (IOException ex)
-                {
-                    if (!IsFileLocked(ex))
-                        throw;
-                    
-                    string tempFileName = $"{destinationPath}.tmp";
-                    
-                    if (File.Exists(tempFileName))
-                        File.Delete(tempFileName);
-                    
-                    File.Move(destinationPath, tempFileName);
-                    File.Copy(filePath, destinationPath, true);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("An error occurred: " + ex.Message);
-                }
-            }
-
-            //UpdateAutoUpdaterProgress("Cleaning up files");
-            
-            //Directory.Delete(sourceCodeDirectoryPath, true);
-
-            return;
-            
-            UpdateAutoUpdaterProgress("Restarting Duck Game");
-            
-            Thread.Sleep(500); // dramatic pause
-            Process.Start(dgrExePath, Environment.CommandLine);
-            Process.GetCurrentProcess().Kill();
-        }
-
-        private static bool BuildSolution(string sourceSolutionPath)
-        {
-            ProjectCollection projectCollection = new();
-
-            Dictionary<string, string> globalProperty = new()
-            {
-                {"Configuration", "ReleaseAutoUpdater"},
-                {"Platform", "Any CPU"},
-                {"RestorePackagesConfig", "true"},
-                {"Optimize", "false"},
-            };
-            
-            BuildManager.DefaultBuildManager.ResetCaches();
-            
-            BuildRequestData buildRequest = new(sourceSolutionPath, globalProperty, null, new[] { "Restore", "Build" }, null);
-
-            BuildParameters buildParameters = new(projectCollection)
-            {
-                Loggers = new[] { new ConsoleLogger(LoggerVerbosity.Diagnostic) }
-            };
-
-            BuildResult buildResult = BuildManager.DefaultBuildManager.Build(buildParameters, buildRequest);
-
-            return buildResult.OverallResult == BuildResultCode.Success;
-        }
-        
-        public static async Task<string> GetLatestNightlyVersion()
-        {
-            if (LatestNightlyRebuiltVersion is not null)
-                return LatestNightlyRebuiltVersion;
-            
-            using HttpClient httpClient = new();
-            
-            httpClient.DefaultRequestHeaders.Add("User-Agent", $"DuckGameRebuilt/{CURRENT_VERSION_ID}");
-
-            const string apiUrl = "https://api.github.com/repos/TheFlyingFoool/DuckGameRebuilt/commits";
-            
-            using Stream responseStream = await httpClient.GetStreamAsync(apiUrl);
-            using JsonTextReader reader = new JsonTextReader(new StreamReader(responseStream));
-            
-            while (await reader.ReadAsync())
-            {
-                switch (reader.TokenType)
-                {
-                    case JsonToken.StartArray:
-                        await reader.ReadAsync();
-                        break;
-
-                    case JsonToken.StartObject:
-                        JObject commitObject = await JObject.LoadAsync(reader);
-                        JToken commitUrl = commitObject["url"];
-
-                        if (commitUrl != null)
-                        {
-                            string latestNightlyVersionId = commitUrl.ToString().Substring(72 /* might need to change 72 if we switch repos. */ );
-                            return latestNightlyVersionId;                                    /* alternatively, regex would work great here  */
-                        }                                                                     /*                                - Firebreak  */
-
-                        break;
-                }
-            }
-
-            throw new InvalidOperationException("Latest commit not found in API response.");
-        }
-        
         public static void ExtractToDirectory(this ZipArchive archive, string destinationDirectoryName)
         {
             DirectoryInfo di = Directory.CreateDirectory(destinationDirectoryName);
