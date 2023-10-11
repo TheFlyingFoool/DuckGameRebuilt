@@ -1621,7 +1621,7 @@ namespace DuckGame
                 string commit = "N/A";
                 gitVersion = Escape(gitVersion.Replace("\n", ""));
                 string gitVer = gitVersion.Replace("[Modified]", "");
-                commit = Escape(CURRENT_VERSION_ID_FORMATTED) + " [" + gitVer + $@"]``` [View Commit]({GITHUB_REPO_URL}/commit/" + gitVer + ") ";
+                commit = Escape(CURRENT_VERSION_ID_FORMATTED) + " [" + gitVer + $@"]``` [View Commit](https://github.com/TheFlyingFoool/DuckGameRebuilt/commit/" + gitVer + ") ";
                 string userInfo = "```ansi\\nUsername: " + green + username + white + " \\nSteam ID: " + green + steamid + white + "\\n```Discord: " + discord;
                 string systemInfo = "```ansi\\nOS: " + green + os + white + " \\nCommand Line:" + green + displayCommandLine + white + "\\n```";
                 string gameInfo = "```ansi\\nBuild Mode: " + buildMode + "\\nDebugger Attached: " + debuggerAttached + $"\\nMods Loaded: {green}{loadedModsCount}" + "\\nPlayers In Lobby: [" + green + playersInLobby + white + "]\\nCommit: " + green + commit;
