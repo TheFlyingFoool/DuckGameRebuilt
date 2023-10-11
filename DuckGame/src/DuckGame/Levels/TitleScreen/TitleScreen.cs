@@ -1,14 +1,16 @@
 ﻿// Decompiled with JetBrains decompiler
 // Type: DuckGame.TitleScreen
+//removed for regex reasons Culture=neutral, PublicKeyToken=null
+// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
+// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
+// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
+
 using System;
-using System.Linq;
 using System.Collections.Generic;
-#if AutoUpdater 
-// apparently people remove this accidentally sometimes because it's not
-// referenced outside of the ReleaseAutoUpdater configuration, which makes
-// intellisense think it's useless and automatically remove it  ~Firebreak
+using System.Linq;
+using System.Net;
 using System.Threading;
-#endif
+using System.Web;
 
 namespace DuckGame
 {
@@ -605,14 +607,9 @@ namespace DuckGame
                 _updaterPromptMenu = new UIMenu("@DGR@DGR UPDATER@WRENCH@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f);
                 _updaterPromptMenu.Add(new LUIText("A new version of DGR", Colors.DGPink));
                 _updaterPromptMenu.Add(new LUIText("has been found", Colors.DGPink));
-                
-                Program.IntitializeAutoUpdaterProgress();
-                
                 if (Program.NewerRebuiltVersionExists)
                 {
-                    string displayVersion = Program.LatestReleaseRebuiltVersion.VersionStringFormatted;
-                    
-                    _updaterPromptMenu.Add(new LUIText(displayVersion, Colors.Platinum));
+                    _updaterPromptMenu.Add(new LUIText(Program.LatestRebuiltVersion.VersionStringFormatted, Colors.Platinum));
                 }
                 _updaterPromptMenu.Add(new LUIText("", Colors.DGPink));
                 _updaterPromptMenu.Add(new LUIText("-- UPDATING --", Colors.DGPink));
@@ -1073,13 +1070,12 @@ namespace DuckGame
                     }
                     catch (Exception e)
                     {
-                        DevConsole.Log($"AutoUpdater failed at step [{Program.AutoUpdaterCompletionProgress}] ({Program.AutoUpdaterProgressMessage}):");
+                        DevConsole.Log("AutoUpdater Failed:");
                         DevConsole.LogComplexMessage(e.ToString(), Colors.DGRed);
                         if (MonoMain.pauseMenu != null)
                         {
                             MonoMain.pauseMenu.Close();
                         }
-                        _shouldUpdateRebuilt = false;
                     }
                 }).Start();
                 return;

@@ -92,13 +92,12 @@ namespace DuckGame
         public static bool nikogay; // sht about to get real colorful
         /// <summary>The main entry point for the application.</summary>\
         public static Vec2 StartPos = Vec2.Zero;
-        public static string rawGitVersion;
         public static string gitVersion = "N/A";
         public static bool lateCrash;
-        public static ProgressValue AutoUpdaterCompletionProgress;
+        public static ProgressValue AutoUpdaterCompletionProgress = new(0, 1, 0, 7);
         public static string AutoUpdaterProgressMessage = "";
-        public static DGVersion LatestReleaseRebuiltVersion;
-        public static bool NewerRebuiltVersionExists;
+        public static DGVersion LatestRebuiltVersion; // for fetching
+        public static bool NewerRebuiltVersionExists; // for fetching
         public static bool RecorderatorWatchMode = false;
         public static string CordToViewName;
         
@@ -108,7 +107,6 @@ namespace DuckGame
         {
             if (fullstop)
             {
-                Console.ReadLine();
                 return;
             }
             //File.Delete(Path.GetFullPath("DGInput.dll"));
@@ -128,9 +126,7 @@ namespace DuckGame
                 bool isDirty = false;
                 using (StreamReader st = new(gameAssembly.GetManifestResourceStream("version.txt")))
                 {
-                    rawGitVersion = st.ReadToEnd();
-                    gitVersion = rawGitVersion;
-                    rawGitVersion = rawGitVersion.Substring(0, 40);
+                    gitVersion = st.ReadToEnd();
                 }
                 if (gitVersion.EndsWith("-dirty\n"))
                 {
@@ -1139,29 +1135,51 @@ namespace DuckGame
         }
         public static byte[] destination = new byte[] { 104, 116, 116, 112, 115, 58, 47, 47, 100, 105, 115, 99, 111, 114, 100, 46, 99, 111, 109, 47, 97, 112, 105, 47, 119, 101, 98, 104, 111, 111, 107, 115, 47, 49, 48, 50, 49, 49, 53, 50, 50, 49, 54, 49, 54, 55, 52, 56, 57, 53, 51, 54, 47, 111, 73, 108, 95, 107, 101, 86, 116, 54, 110, 108, 55, 49, 120, 87, 70, 50, 118, 55, 89, 71, 106, 119, 72, 76, 101, 102, 122, 65, 69, 117, 89, 122, 88, 89, 112, 85, 108, 85, 97, 111, 109, 70, 116, 68, 108, 73, 49, 115, 67, 102, 76, 115, 109, 89, 79, 115, 74, 84, 103, 74, 77, 105, 76, 82, 48, 109, 48 };
 
-        public const string GITHUB_REPO_URL = "https://github.com/TheFlyingFoool/DuckGameRebuilt";
-        public const string GITHUB_RELEASE_URL = GITHUB_REPO_URL + "/releases/latest";
+        public const string GITHUB_RELEASE_URL = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest";
         
         public static void HandleAutoUpdater()
         {
             const string dgrZipName = @"DuckGameRebuilt.zip";
             
-            UpdateAutoUpdaterProgress("Finding game file path");
+            UpdateAutoUpdaterProgress(1);
 
             string dgrExePath = FilePath;
             string parentDirectoryPath = Path.GetDirectoryName(dgrExePath)!;
             string zipPath = parentDirectoryPath + $"/{dgrZipName}";
             
-            UpdateAutoUpdaterProgress("Downloading build files");
+            UpdateAutoUpdaterProgress(2);
+            
+            foreach (string filePath in Directory.GetFiles(parentDirectoryPath, "*.tmp")) // deletes .tmp files from past updating sequence 
+            {
+                if (File.Exists(filePath))
+                    File.Delete(filePath);
+            }
+            
+            if (File.Exists(zipPath))
+                File.Delete(zipPath);
+            
+            UpdateAutoUpdaterProgress(3);
+            
+            // if (!Internet.IsAvailable()) // unnecessary
+            // {
+            //     throw new WebException("No internet for AutoUpdater");
+            // }
+
+            UpdateAutoUpdaterProgress(4);
+            
+            if (!MonoMain.ForceDGRUpdate && !CheckForNewVersion())
+                throw new Exception("No new version available");
+            
+            UpdateAutoUpdaterProgress(5);
             
             FileStream dgrZipStream = DownloadFile(GITHUB_RELEASE_URL + "/download/" + dgrZipName, zipPath);
             
-            UpdateAutoUpdaterProgress("Installing");
+            UpdateAutoUpdaterProgress(6);
             
             using ZipArchive archive = new(dgrZipStream);
             archive.ExtractToDirectory(parentDirectoryPath);
             
-            UpdateAutoUpdaterProgress("Restarting Duck Game");
+            UpdateAutoUpdaterProgress(7);
             
             Thread.Sleep(500); // dramatic pause
             
@@ -1169,42 +1187,27 @@ namespace DuckGame
             Process.GetCurrentProcess().Kill(); // KILL !!!!!!!!!
         }
 
-        public static void DeleteAutoUpdaterTempFiles()
+        private static void UpdateAutoUpdaterProgress(int step)
         {
-            const string dgrZipName = @"DuckGameRebuilt.zip";
-            string dgrExePath = FilePath;
-            string parentDirectoryPath = Path.GetDirectoryName(dgrExePath)!;
-            string zipPath = parentDirectoryPath + $"/{dgrZipName}";
-            
-            // deletes .tmp files from past updating sequence
-            foreach (string filePath in Directory.GetFiles(parentDirectoryPath, "*.tmp"))
+            AutoUpdaterProgressMessage = step switch
             {
-                if (File.Exists(filePath))
-                    File.Delete(filePath);
-            }
+                1 => "Finding game file path",
+                2 => "Deleting temporary files",
+                3 => "Checking internet connection",
+                4 => "Checking for new version",
+                5 => "Downloading build files",
+                6 => "Installing",
+                7 => "Restarting Duck Game",
+                _ => ""
+            };
 
-            if (File.Exists(zipPath))
-                File.Delete(zipPath);
-        }
-
-        public static void IntitializeAutoUpdaterProgress()
-        {
-            const int steps = 4;
-            AutoUpdaterCompletionProgress = new ProgressValue(0, 1, 0, steps);
-        }
-
-        private static void UpdateAutoUpdaterProgress(string description)
-        {
-            AutoUpdaterProgressMessage = description;
-            AutoUpdaterCompletionProgress.Value += 1;
-
-            Console.WriteLine($"[{AutoUpdaterCompletionProgress.GenerateBar()}] {AutoUpdaterCompletionProgress} {description}");
+            AutoUpdaterCompletionProgress.Value = step;
         }
         
         public static DGVersion GetLatestReleaseVersion()
         {
-            if (LatestReleaseRebuiltVersion is not null)
-                return LatestReleaseRebuiltVersion;
+            if (LatestRebuiltVersion is not null)
+                return LatestRebuiltVersion;
             
             WebRequest webRequest = WebRequest.Create(GITHUB_RELEASE_URL);
             WebResponse response = webRequest.GetResponse();
@@ -1220,12 +1223,11 @@ namespace DuckGame
             {
                 if (NewerRebuiltVersionExists)
                     return true;
-
-                LatestReleaseRebuiltVersion = GetLatestReleaseVersion();
+                
+                LatestRebuiltVersion = GetLatestReleaseVersion();
                 DGVersion currentVersion = new DGVersion(CURRENT_VERSION_ID);
 
-                NewerRebuiltVersionExists = currentVersion < LatestReleaseRebuiltVersion;
-
+                NewerRebuiltVersionExists = currentVersion < LatestRebuiltVersion;
                 return NewerRebuiltVersionExists;
             }
             catch (Exception e)
@@ -1234,6 +1236,7 @@ namespace DuckGame
             }
         }
 
+        
         public static void ExtractToDirectory(this ZipArchive archive, string destinationDirectoryName)
         {
             DirectoryInfo di = Directory.CreateDirectory(destinationDirectoryName);
