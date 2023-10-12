@@ -199,8 +199,10 @@ namespace DuckGame
 
         public uint GetExistingReceivedReliableMessageSize(ushort pMessageOrder)
         {
+            Main.SpecialCode2 = "hyp 1";
             uint reliableMessageSize;
             _previousReliableMessageSizes.TryGetValue(pMessageOrder, out reliableMessageSize);
+            Main.SpecialCode2 = "hyp 2";
             return reliableMessageSize;
         }
 

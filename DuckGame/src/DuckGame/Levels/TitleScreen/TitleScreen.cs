@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+#if AutoUpdater
+using System.Threading;
+#endif
 
 namespace DuckGame
 {

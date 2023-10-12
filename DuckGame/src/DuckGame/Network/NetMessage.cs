@@ -78,6 +78,7 @@ namespace DuckGame
 
         public virtual void OnDeserialize(BitBuffer msg)
         {
+            Main.SpecialCode2 = "hyp 10";
             foreach (FieldInfo field in getFields())
             {
                 if (field.FieldType == typeof(string))
@@ -125,6 +126,7 @@ namespace DuckGame
                         DevConsole.Log("|DGRED|NetMessage.OnDeserialize invalid assignment (" + field.FieldType.Name + " = " + thing.GetType().Name + ")");
                 }
             }
+            Main.SpecialCode2 = "hyp 11";
         }
 
         public BitBuffer Serialize()
