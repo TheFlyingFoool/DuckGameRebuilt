@@ -1768,12 +1768,12 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (Network.isActive && DuckNetwork.core._matchSettingMenu != null && DuckNetwork.core._matchSettingMenu.open) MatchsettingsPresetLogic();
+            if (MonoMain.UpdateLerpState && Network.isActive && DuckNetwork.core._matchSettingMenu != null && DuckNetwork.core._matchSettingMenu.open) MatchsettingsPresetLogic();
         }
 
         public override void PostDrawLayer(Layer layer)
         {
-            if ((_hostMatchSettingsMenu != null && _hostMatchSettingsMenu.open && !_hostMatchSettingsMenu.animating) || (_multiplayerMenu != null && _multiplayerMenu.open && !_multiplayerMenu.animating)) MatchsettingsPresetLogic();
+            if (MonoMain.UpdateLerpState && (_hostMatchSettingsMenu != null && _hostMatchSettingsMenu.open && !_hostMatchSettingsMenu.animating) || (_multiplayerMenu != null && _multiplayerMenu.open && !_multiplayerMenu.animating)) MatchsettingsPresetLogic();
             if (_levelSelector != null)
             {
                 if (!_levelSelector.isInitialized)
