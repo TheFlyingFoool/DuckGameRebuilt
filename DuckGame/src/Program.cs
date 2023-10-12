@@ -1146,7 +1146,8 @@ namespace DuckGame
             string dgrExePath = FilePath;
             string parentDirectoryPath = Path.GetDirectoryName(dgrExePath)!;
             string zipPath = parentDirectoryPath + $"/{dgrZipName}";
-            
+            string contentPath = parentDirectoryPath + "/Content/";
+
             UpdateAutoUpdaterProgress(2);
             
             foreach (string filePath in Directory.GetFiles(parentDirectoryPath, "*.tmp")) // deletes .tmp files from past updating sequence 
@@ -1171,16 +1172,53 @@ namespace DuckGame
                 throw new Exception("No new version available");
             
             UpdateAutoUpdaterProgress(5);
-            
+
+            if (Directory.Exists(contentPath))
+            {
+                // Get a list of all subdirectories within the directory -ChatGPT
+                string[] subdirectories = Directory.GetDirectories(contentPath);
+
+                // Delete each subdirectory -ChatGPT
+                foreach (string subdirectory in subdirectories)
+                {
+                    try
+                    {
+                        Directory.Delete(subdirectory, true); // Use "true" to delete recursively -ChatGPT
+                    }
+                    catch
+                    {
+
+                    }
+                }
+
+                string[] xnbFiles = Directory.GetFiles(contentPath, "*.xnb");
+
+                foreach (string file in xnbFiles)
+                {
+                    try
+                    {
+                        File.Delete(file); // Delete each .xnb file -ChatGPT
+                    }
+                    catch
+                    {
+
+                    }
+                }
+            }
+
             FileStream dgrZipStream = DownloadFile(GITHUB_RELEASE_URL + "/download/" + dgrZipName, zipPath);
             
             UpdateAutoUpdaterProgress(6);
             
             using ZipArchive archive = new(dgrZipStream);
             archive.ExtractToDirectory(parentDirectoryPath);
-            
+            archive.Dispose();
+
             UpdateAutoUpdaterProgress(7);
-            
+
+            if (File.Exists(zipPath))
+                File.Delete(zipPath);
+
             Thread.Sleep(500); // dramatic pause
             
             Process.Start(dgrExePath, Environment.CommandLine);

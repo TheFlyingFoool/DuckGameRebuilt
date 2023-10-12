@@ -273,8 +273,48 @@ namespace DuckGame
                 return true;
             }
             Main.SpecialCode2 = "to conn 16";
-            if (connection.profile != null && connection.profile.slotType != SlotType.Spectator && (auth < authority || connection != null && CanBeControlled() && connection.profile != null && connection.profile.slotType != SlotType.Spectator && auth == authority && (connection.profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks < (to.profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks))
-                return false;
+            if (connection != null && connection.profile != null && connection.profile.slotType != SlotType.Spectator)
+            {
+                Main.SpecialCode2 = "to conn 18";
+                if (auth < authority)
+                {
+                    return false;
+                }
+                Main.SpecialCode2 = $"to conn 20";
+                int s = 0;
+                try
+                {
+                    Main.SpecialCode += connection != null;
+                    Main.SpecialCode += " ";
+                    s++;
+                    Main.SpecialCode += connection.profile != null;
+                    Main.SpecialCode += " ";
+                    s++;
+                    Main.SpecialCode += auth != null;
+                    Main.SpecialCode += " ";
+                    s++;
+                    Main.SpecialCode += authority != null;
+                    Main.SpecialCode += " ";
+                    s++;
+                    Main.SpecialCode += connection.profile.networkIndex;
+                    Main.SpecialCode += " ";
+                    s++;
+                    Main.SpecialCode += to != null;
+                    Main.SpecialCode += " ";
+                    s++;
+                    Main.SpecialCode += to.profile != null;
+                    s++;
+                }
+                catch
+                {
+
+                }
+                Main.SpecialCode2 += $" sVal:{s}";
+                if (connection != null && CanBeControlled() && connection.profile != null && connection.profile.slotType != SlotType.Spectator && auth == authority && (connection.profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks < (to.profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks)
+                {
+                    return false;
+                }
+            }
             Main.SpecialCode2 = "to conn 24";
             if (NetIndex8.Difference(auth, authority) > 19)
                 wasSuperFondled = 120;

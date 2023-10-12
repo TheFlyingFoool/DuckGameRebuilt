@@ -68,7 +68,8 @@ namespace DuckGame
             {
                 ReplayToPlay = new ReplayInfo(Directory.GetFiles(CordsPath, "*.crf", SearchOption.AllDirectories).First(x => new FileInfo(x).Name == Program.CordToViewName));
             }
-            
+            if (!Directory.Exists(CordsPath)) Directory.CreateDirectory(CordsPath);
+
             _folderPaths = Directory.GetDirectories(CordsPath);
             _replayPaths = Directory.GetFiles(CordsPath, "*.crf", SearchOption.TopDirectoryOnly);
 

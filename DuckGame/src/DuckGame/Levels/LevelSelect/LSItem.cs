@@ -172,14 +172,14 @@ namespace DuckGame
                         for (int i = 0; i < directories.Count; i++)
                         {
                             string directory = directories[i];
-                            levelsInside.AddRange(GetLevelsInside(selector, directory).Where(x => !x.Contains("online") && !x.Contains("holiday")));
+                            levelsInside.AddRange(GetLevelsInside(selector, directory).Where(x => !x.Contains("online") && !x.Contains("holiday") && !x.Contains("DGR")));
                         }
 
                         List<string> files = Content.ReGetFiles(path1);
                         for (int i = 0; i < files.Count; i++)
                         {
                             string file = files[i];
-                            if (!file.Contains("online") && !file.Contains("holiday") && file.EndsWith(".lev") && selector.filters.TrueForAll(a => a.Filter(file)))
+                            if (!file.Contains("online") && !file.Contains("holiday") && !file.Contains("DGR") && file.EndsWith(".lev") && selector.filters.TrueForAll(a => a.Filter(file)))
                             {
                                 string str = file.Replace('\\', '/');
                                 levelsInside.Add(str);

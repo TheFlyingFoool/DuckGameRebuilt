@@ -483,8 +483,11 @@ namespace DuckGame
             if (!match.Success)
                 return false;
 
+            Main.connectID = Convert.ToUInt64(match.Groups[1].Value);
+            NCSteam.inviteLobbyID = Main.connectID;
+            Level.current = new JoinServer(Main.connectID);
             // Level.current = new JoinServer(ulong.Parse(match.Groups[1].Value));
-            Level.current = new DisconnectFromGame(ulong.Parse(match.Groups[1].Value));
+            //Level.current = new DisconnectFromGame(ulong.Parse(match.Groups[1].Value));
             // DuckNetwork.Join(match.Groups[1].Value);
             return true;
         }

@@ -1631,7 +1631,7 @@ namespace DuckGame
                         }
                         if (!menuOpen && Input.Pressed(Triggers.Select) && (!_singlePlayer || Profiles.active.Count > 0 && !Profiles.IsDefault(Profiles.active[0])) || DuckNetwork.isDedicatedServer && !_sentDedicatedCountdown && !_spectatorCountdownStop)
                         {
-                            if (_starting || _sentDedicatedCountdown)
+                            if ((_starting || _sentDedicatedCountdown) && !_singlePlayer)
                             {
                                 forcestart = true;
                             }

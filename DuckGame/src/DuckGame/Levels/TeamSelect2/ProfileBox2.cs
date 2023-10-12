@@ -816,12 +816,15 @@ namespace DuckGame
                     }
                     Sprite doorLeftBlank = _doorLeftBlank;
                     Sprite doorRightBlank = _doorRightBlank;
+                    doorLeftBlank.texture.skipSpriteAtlas = true;
+                    doorRightBlank.texture.skipSpriteAtlas = true;
+
                     if (rightRoom)
                     {
-                        Rectangle sourceRectangle1 = new Rectangle(_doorX, 0f, doorLeftBlank.width - _doorX, _doorLeft.height);
-                        Graphics.Draw(doorLeftBlank, x - 1f, y, sourceRectangle1);
-                        Rectangle sourceRectangle2 = new Rectangle(0f, 0f, _doorRight.width + _doorX, _doorRight.height);
-                        Graphics.Draw(doorRightBlank, (x - 1f + 68f) + _doorX, y, sourceRectangle2);
+                        Rectangle leftRect = new Rectangle(_doorX, 0f, doorLeftBlank.width - _doorX, _doorLeft.height);
+                        Graphics.Draw(doorLeftBlank, x - 1f, y, leftRect);
+                        Rectangle rightRect = new Rectangle(-_doorX, 0f, _doorRight.width, _doorRight.height);
+                        Graphics.Draw(doorRightBlank, x - 1f + 68f, y, rightRect);
                         if (_doorX == 0)
                         {
                             _fontSmall.depth = doorLeftBlank.depth + 10;

@@ -1,16 +1,6 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.TitleScreen
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Threading;
-using System.Web;
 
 namespace DuckGame
 {
@@ -58,6 +48,8 @@ namespace DuckGame
         private OptionsBeam _optionsBeam;
         private LibraryBeam _libraryBeam;
         private MultiBeam _multiBeam;
+        public SelectCircle _featherFashionCircle;
+        public SelectCircle _recorderatorCircle;
         private EditorBeam _editorBeam;
         private Duck _duck;
         private bool _fastMultiplayer;
@@ -92,6 +84,8 @@ namespace DuckGame
         private bool _enterEditor;
         private bool _enterCredits;
         private bool _enterArcade;
+        public bool _enterRecorderator;
+        public bool _enterFeatherFashion;
         private static bool _hasMenusOpen = false;
         public static bool modsChanged = false;
         private static bool firstStart = true;
@@ -182,6 +176,16 @@ namespace DuckGame
         public static bool Checked;
         public override void Initialize()
         {
+            if (Program.IS_DEV_BUILD)
+            {
+                CorinthianPillar c1 = new CorinthianPillar(126, 154);
+                Add(new TitleButton(126, 137, false) { drag = c1 });
+                Add(c1);
+            }
+            CorinthianPillar c2 = new CorinthianPillar(194, 154) { style = 1 };
+            Add(new TitleButton(194, 137, true) { drag = c2 });
+            Add(c2);
+
             Add(new CrumbleShamble(160, 157));
             if (Editor.clientonlycontent)
             {
@@ -959,6 +963,12 @@ namespace DuckGame
             _controls.depth = (Depth)0.95f;
             _multiBeam = new MultiBeam(160f, -30f);
             Add(_multiBeam);
+
+            _featherFashionCircle = new SelectCircle(-320, 0, true);
+            Add(_featherFashionCircle);
+            _recorderatorCircle = new SelectCircle(-380, 0, true);
+            Add(_recorderatorCircle);
+
             _optionsBeam = new OptionsBeam(28f, -110f);
             Add(_optionsBeam);
             _libraryBeam = new LibraryBeam(292f, -110f);
@@ -1210,6 +1220,28 @@ namespace DuckGame
                     current = new ArcadeLevel(Content.GetLevelID("arcade"));
                 }
             }
+            else if (_enterRecorderator)
+            {
+                _duck.immobilized = true;
+                _duck.enablePhysics = false;
+                Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.05f);
+                if (Graphics.fade < 0.01f)
+                {
+                    current.Clear();
+                    current = new RecorderationSelector();
+                }
+            }
+            else if (_enterFeatherFashion)
+            {
+                _duck.immobilized = true;
+                _duck.enablePhysics = false;
+                Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.05f);
+                if (Graphics.fade < 0.01f)
+                {
+                    current.Clear();
+                    current = new FeatherFashion();
+                }
+            }
             else
             {
                 if (_enterCredits)
@@ -1403,6 +1435,28 @@ namespace DuckGame
                     _optionsGroup.Open();
                     _optionsMenu.Open();
                     MonoMain.pauseMenu = _optionsGroup;
+                    _duck.immobilized = true;
+                }
+            }
+            else if (_featherFashionCircle.entered)
+            {
+                _selectionTextDesired = "FEATHER FASHION";
+                _desiredSelection = TitleMenuSelection.FeatherFashion;
+                if (!Options.menuOpen && _duck.inputProfile.Pressed(Triggers.Select))
+                {
+                    SFX.Play("plasmaFire");
+                    _enterFeatherFashion = true;
+                    _duck.immobilized = true;
+                }
+            }
+            else if (_recorderatorCircle.entered)
+            {
+                _selectionTextDesired = "RECORDERATOR";
+                _desiredSelection = TitleMenuSelection.Recorderator;
+                if (!Options.menuOpen && _duck.inputProfile.Pressed(Triggers.Select))
+                {
+                    SFX.Play("plasmaFire");
+                    _enterRecorderator = true;
                     _duck.immobilized = true;
                 }
             }
@@ -1611,6 +1665,14 @@ namespace DuckGame
                     else if (_selection == TitleMenuSelection.Editor)
                     {
                         DisplayUpperMonitorMessage("@SELECT@EDITOR");
+                    }
+                    else if (_selection == TitleMenuSelection.Recorderator)
+                    {
+                        DisplayUpperMonitorMessage("@SELECT@Recorderator");
+                    }
+                    else if (_selection == TitleMenuSelection.FeatherFashion)
+                    {
+                        DisplayUpperMonitorMessage("@SELECT@FEATHER FASHION");
                     }
                 }
                 else

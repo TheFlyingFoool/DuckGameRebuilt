@@ -722,8 +722,10 @@ namespace DuckGame
                             {
                                 foreach (Thing thing in transparent1)
                                 {
+                                    thing.currentlyDrawing = false;
                                     if (thing.visible)
                                     {
+                                        thing.currentlyDrawing = true;
                                         if (_perspective)
                                         {
                                             Vec2 position = thing.position;
