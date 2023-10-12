@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mono.Cecil;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 #if AutoUpdater
@@ -179,7 +180,7 @@ namespace DuckGame
         public static bool Checked;
         public override void Initialize()
         {
-            if (Program.IS_DEV_BUILD)
+            /*if (Program.IS_DEV_BUILD)
             {
                 CorinthianPillar c1 = new CorinthianPillar(126, 154);
                 Add(new TitleButton(126, 137, false) { drag = c1 });
@@ -187,7 +188,7 @@ namespace DuckGame
             }
             CorinthianPillar c2 = new CorinthianPillar(194, 154) { style = 1 };
             Add(new TitleButton(194, 137, true) { drag = c2 });
-            Add(c2);
+            Add(c2);*/
 
             Add(new CrumbleShamble(160, 157));
             if (Editor.clientonlycontent)
