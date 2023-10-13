@@ -56,6 +56,11 @@ namespace DuckGame
             FFPreviewPane.DisposeCurrentAnimation();
             Options.ReloadHats();
             
+            Music.Stop();
+
+            if (Level.current is TitleScreen)
+                Music.Play("Title");
+            
             base.Terminate();
         }
 
