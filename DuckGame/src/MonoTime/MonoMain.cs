@@ -984,7 +984,6 @@ namespace DuckGame
             OnStart();
             _started = true;
 
-            DGRSettings.InitalizeFPSThings();
             Recorderator.PostInitialize();
             // this is basically the lifeline of all attributes so i cant
             // use the PostInitialize attribute for it since it wont even
@@ -1050,15 +1049,17 @@ namespace DuckGame
         {
             get => (SDL.SDL_GetWindowFlags(Window.Handle) & (uint)SDL.SDL_WindowFlags.SDL_WINDOW_INPUT_FOCUS) > 0;
         }
+        public bool initializedFPS;
+
         [HandleProcessCorruptedStateExceptions, SecurityCritical]
         protected override void Update(GameTime gameTime)
         {
-            
-            Program.main.UnFixedDraw = DGRSettings.UncappedFPS;
-            if (DGRSettings.UncappedFPS)
+            if (!initializedFPS && Graphics.inFocus)
             {
-
+                initializedFPS = true;
+                DGRSettings.InitalizeFPSThings();
             }
+            Program.main.UnFixedDraw = DGRSettings.UncappedFPS;
 
 
             if (showingSaveTool && saveTool == null && File.Exists("SaveTool.dll"))

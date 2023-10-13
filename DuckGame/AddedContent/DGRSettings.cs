@@ -308,6 +308,8 @@ namespace DuckGame
             }
         }
 
+        public static bool ApplyOnNextFrame;
+
         //Tater: It's really annoying you can't make dynamic settings display based on other settings, so this is ugly.
         [AutoConfigField] public static int S_TargetFrameRate = 0;
         public static int TargetFrameRate
