@@ -18,7 +18,7 @@ namespace DuckGame
     /// The class has to inherit from <see cref="IAdvancedConfig"/>
     /// </remarks>
     [AttributeUsage(AttributeTargets.Class)]
-    public sealed class AdvancedConfigAttribute : Attribute
+    internal sealed class AdvancedConfigAttribute : Attribute
     {
         private static IEnumerable<(TypeInfo Class, AdvancedConfigAttribute Attribute)> s_all;
         private static Dictionary<Type, IAdvancedConfig> s_configs = new();

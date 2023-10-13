@@ -26,7 +26,7 @@ namespace DuckGame
     /// the method. Please just keep it parameter-less, thanks.
     /// </remarks>
     [AttributeUsage(AttributeTargets.Method, Inherited = false)]
-    public sealed class DrawingContextAttribute : Attribute
+    internal sealed class DrawingContextAttribute : Attribute
     {
         public static List<DrawingContextAttribute> AllDrawingContexts = new List<DrawingContextAttribute>();
 

@@ -6,7 +6,7 @@ using System.Reflection;
 namespace DuckGame
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class FireSerializerModuleAttribute : Attribute
+    internal class FireSerializerModuleAttribute : Attribute
     {
         public static List<IFireSerializerModule> Serializers;
         public TypeInfo memberInfo;

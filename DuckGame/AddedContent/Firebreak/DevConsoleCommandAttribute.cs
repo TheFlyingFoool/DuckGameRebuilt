@@ -24,7 +24,7 @@ namespace DuckGame
     ///     </list>
     /// </summary>
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.ReturnValue, Inherited = false)]
-    public class DevConsoleCommandAttribute : Attribute
+    internal class DevConsoleCommandAttribute : Attribute
     {
         public string? Name { get; set; } = null;
         public string? Description { get; set; } = null;

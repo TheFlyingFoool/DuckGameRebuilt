@@ -6,7 +6,7 @@ namespace DuckGame
 {
 
     [AttributeUsage(AttributeTargets.Method)]
-    public class PostInitializeAttribute : Attribute
+    internal class PostInitializeAttribute : Attribute
     {
         public static List<MethodInfo> All = new List<MethodInfo>();
         public MethodInfo MethodInfo;

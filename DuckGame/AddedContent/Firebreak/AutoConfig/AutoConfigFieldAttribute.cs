@@ -15,7 +15,7 @@ namespace DuckGame
     /// The setter will be invoked when the value is being loaded
     /// </remarks>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-    public sealed class AutoConfigFieldAttribute : Attribute
+    internal sealed class AutoConfigFieldAttribute : Attribute
     {
         public static List<AutoConfigFieldAttribute> All;
 
