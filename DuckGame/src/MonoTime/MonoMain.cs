@@ -1395,6 +1395,10 @@ namespace DuckGame
                         Level.UpdateCurrentLevel();
                         foreach (IEngineUpdatable engineUpdatable in core.engineUpdatables)
                             engineUpdatable.Update();
+                        foreach (Marker.UpdateContextAttribute marker in Marker.UpdateContextAttribute.All)
+                        {
+                            marker.Invoke();
+                        }
                         OnUpdate();
                     }
                 }
