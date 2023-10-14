@@ -223,14 +223,14 @@ namespace DuckGame
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (this.tape != null && this.tape.owner != null)
+            if (tape != null && tape.owner != null)
             {
                 return;
             }
-            if (this._wasLifted && this.owner == null && (with is Block || (with is IPlatform && from == ImpactedFrom.Bottom && this.vSpeed > 0f)))
+            if (_wasLifted && owner == null && (with is Block || (with is IPlatform && from == ImpactedFrom.Bottom && vSpeed > 0f)))
             {
-                this.Shing();
-                this._framesSinceThrown = 25;
+                Shing();
+                _framesSinceThrown = 25;
             }
         }
 

@@ -1,9 +1,11 @@
-﻿namespace DuckGame
+﻿using AddedContent.Firebreak;
+
+namespace DuckGame
 {
 
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand(Description = "Clears the console's text")]
+        [Marker.DevConsoleCommand(Description = "Clears the console's text")]
         public static void Clear(bool verbose = true)
         {
             DevConsole.core.lines.Clear();

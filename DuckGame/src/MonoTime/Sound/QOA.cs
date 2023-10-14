@@ -19,23 +19,23 @@ namespace DuckGame
 
 		internal void Assign(LMS source)
 		{
-			Array.Copy(source.History, 0, this.History, 0, 4);
-			Array.Copy(source.Weights, 0, this.Weights, 0, 4);
+			Array.Copy(source.History, 0, History, 0, 4);
+			Array.Copy(source.Weights, 0, Weights, 0, 4);
 		}
 
-		internal int Predict() => (this.History[0] * this.Weights[0] + this.History[1] * this.Weights[1] + this.History[2] * this.Weights[2] + this.History[3] * this.Weights[3]) >> 13;
+		internal int Predict() => (History[0] * Weights[0] + History[1] * Weights[1] + History[2] * Weights[2] + History[3] * Weights[3]) >> 13;
 
 		internal void Update(int sample, int residual)
 		{
 			int delta = residual >> 4;
-			this.Weights[0] += this.History[0] < 0 ? -delta : delta;
-			this.Weights[1] += this.History[1] < 0 ? -delta : delta;
-			this.Weights[2] += this.History[2] < 0 ? -delta : delta;
-			this.Weights[3] += this.History[3] < 0 ? -delta : delta;
-			this.History[0] = this.History[1];
-			this.History[1] = this.History[2];
-			this.History[2] = this.History[3];
-			this.History[3] = sample;
+			Weights[0] += History[0] < 0 ? -delta : delta;
+			Weights[1] += History[1] < 0 ? -delta : delta;
+			Weights[2] += History[2] < 0 ? -delta : delta;
+			Weights[3] += History[3] < 0 ? -delta : delta;
+			History[0] = History[1];
+			History[1] = History[2];
+			History[2] = History[3];
+			History[3] = sample;
 		}
 	}
 
@@ -51,10 +51,10 @@ namespace DuckGame
 		public const int MaxChannels = 8;
 
 		/// <summary>Returns the number of audio channels.</summary>
-		public int GetChannels() => this.FrameHeader >> 24;
+		public int GetChannels() => FrameHeader >> 24;
 
 		/// <summary>Returns the sample rate in Hz.</summary>
-		public int GetSampleRate() => this.FrameHeader & 16777215;
+		public int GetSampleRate() => FrameHeader & 16777215;
 
 		protected const int SliceSamples = 20;
 
@@ -100,7 +100,7 @@ namespace DuckGame
 		{
 			for (int _i0 = 0; _i0 < 8; _i0++)
 			{
-				this.LMSes[_i0] = new LMS();
+				LMSes[_i0] = new LMS();
 			}
 		}
 
@@ -120,14 +120,14 @@ namespace DuckGame
 		{
 			if (totalSamples <= 0 || channels <= 0 || channels > 8 || sampleRate <= 0 || sampleRate >= 16777216)
 				return false;
-			this.FrameHeader = channels << 24 | sampleRate;
+			FrameHeader = channels << 24 | sampleRate;
 			for (int c = 0; c < channels; c++)
 			{
-				Array.Clear(this.LMSes[c].History, 0, 4);
-				this.LMSes[c].Weights[0] = 0;
-				this.LMSes[c].Weights[1] = 0;
-				this.LMSes[c].Weights[2] = -8192;
-				this.LMSes[c].Weights[3] = 16384;
+				Array.Clear(LMSes[c].History, 0, 4);
+				LMSes[c].Weights[0] = 0;
+				LMSes[c].Weights[1] = 0;
+				LMSes[c].Weights[2] = -8192;
+				LMSes[c].Weights[3] = 16384;
 			}
 			long magic = 1903124838;
 			return WriteLong(magic << 32 | totalSamples);
@@ -148,13 +148,13 @@ namespace DuckGame
 		{
 			if (samplesCount <= 0 || samplesCount > 5120)
 				return false;
-			long header = this.FrameHeader;
+			long header = FrameHeader;
 			if (!WriteLong(header << 32 | samplesCount << 16 | GetFrameBytes(samplesCount)))
 				return false;
 			int channels = GetChannels();
 			for (int c = 0; c < channels; c++)
 			{
-				if (!WriteLMS(this.LMSes[c].History) || !WriteLMS(this.LMSes[c].Weights))
+				if (!WriteLMS(LMSes[c].History) || !WriteLMS(LMSes[c].Weights))
 					return false;
 			}
 			LMS lms = new LMS();
@@ -170,7 +170,7 @@ namespace DuckGame
 					long bestSlice = 0;
 					for (int scaleFactor = 0; scaleFactor < 16; scaleFactor++)
 					{
-						lms.Assign(this.LMSes[c]);
+						lms.Assign(LMSes[c]);
 						int reciprocal = WriteFramereciprocals[scaleFactor];
 						long slice = scaleFactor;
 						long currentError = 0;
@@ -201,7 +201,7 @@ namespace DuckGame
 							bestLMS.Assign(lms);
 						}
 					}
-					this.LMSes[c].Assign(bestLMS);
+					LMSes[c].Assign(bestLMS);
 					bestSlice <<= (20 - sliceSamples) * 3;
 					if (!WriteLong(bestSlice))
 						return false;
@@ -234,17 +234,17 @@ namespace DuckGame
 
 		int ReadBits(int bits)
 		{
-			while (this.BufferBits < bits)
+			while (BufferBits < bits)
 			{
 				int b = ReadByte();
 				if (b < 0)
 					return -1;
-				this.Buffer = this.Buffer << 8 | b;
-				this.BufferBits += 8;
+				Buffer = Buffer << 8 | b;
+				BufferBits += 8;
 			}
-			this.BufferBits -= bits;
-			int result = this.Buffer >> this.BufferBits;
-			this.Buffer &= (1 << this.BufferBits) - 1;
+			BufferBits -= bits;
+			int result = Buffer >> BufferBits;
+			Buffer &= (1 << BufferBits) - 1;
 			return result;
 		}
 
@@ -258,20 +258,20 @@ namespace DuckGame
 		{
 			if (ReadByte() != 'q' || ReadByte() != 'o' || ReadByte() != 'a' || ReadByte() != 'f')
 				return false;
-			this.BufferBits = this.Buffer = 0;
-			this.TotalSamples = ReadBits(32);
-			if (this.TotalSamples <= 0)
+			BufferBits = Buffer = 0;
+			TotalSamples = ReadBits(32);
+			if (TotalSamples <= 0)
 				return false;
-			this.FrameHeader = ReadBits(32);
-			if (this.FrameHeader <= 0)
+			FrameHeader = ReadBits(32);
+			if (FrameHeader <= 0)
 				return false;
-			this.PositionSamples = 0;
+			PositionSamples = 0;
 			int channels = GetChannels();
 			return channels > 0 && channels <= 8 && GetSampleRate() > 0;
 		}
 
 		/// <summary>Returns the file length in samples per channel.</summary>
-		public int GetTotalSamples() => this.TotalSamples;
+		public int GetTotalSamples() => TotalSamples;
 
 		int GetMaxFrameBytes() => 8 + GetChannels() * 2064;
 
@@ -295,10 +295,10 @@ namespace DuckGame
 		/// <param name="samples">PCM samples.</param>
 		public int ReadFrame(short[] samples)
 		{
-			if (this.PositionSamples > 0 && ReadBits(32) != this.FrameHeader)
+			if (PositionSamples > 0 && ReadBits(32) != FrameHeader)
 				return -1;
 			int samplesCount = ReadBits(16);
-			if (samplesCount <= 0 || samplesCount > 5120 || samplesCount > this.TotalSamples - this.PositionSamples)
+			if (samplesCount <= 0 || samplesCount > 5120 || samplesCount > TotalSamples - PositionSamples)
 				return -1;
 			int channels = GetChannels();
 			int slices = (samplesCount + 19) / 20;
@@ -338,7 +338,7 @@ namespace DuckGame
 					}
 				}
 			}
-			this.PositionSamples += samplesCount;
+			PositionSamples += samplesCount;
 			return samplesCount;
 		}
 
@@ -349,11 +349,11 @@ namespace DuckGame
 		{
 			int frame = position / 5120;
 			SeekToByte(frame == 0 ? 12 : 8 + frame * GetMaxFrameBytes());
-			this.PositionSamples = frame * 5120;
+			PositionSamples = frame * 5120;
 		}
 
 		/// <summary>Returns <see langword="true" /> if all frames have been read.</summary>
-		public bool IsEnd() => this.PositionSamples >= this.TotalSamples;
+		public bool IsEnd() => PositionSamples >= TotalSamples;
 	}
 
 	public class QOASoundBase : QOADecoder

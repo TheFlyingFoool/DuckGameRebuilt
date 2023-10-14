@@ -1,11 +1,12 @@
-﻿using System.Linq;
+﻿using AddedContent.Firebreak;
+using System.Linq;
 
 namespace DuckGame
 {
 
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand(
+        [Marker.DevConsoleCommand(
             Aliases = new[] { "johnnygray" },
             Description = "Try it ;D")]
         public static void JohnnyGrey()

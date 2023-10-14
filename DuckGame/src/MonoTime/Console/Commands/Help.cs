@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using AddedContent.Firebreak;
+using System.Linq;
 using System.Text;
 
 namespace DuckGame
@@ -15,7 +16,7 @@ namespace DuckGame
         public static readonly Color SyntaxColorFields = Color.FromHexString("FCFCFA"); // white
         public static readonly Color SyntaxColorStrings = Color.FromHexString("FFD866"); // yellow
 
-        [DevConsoleCommand(
+        [Marker.DevConsoleCommand(
             Aliases = new[] { "?" },
             Description = "Gives general help about every command")]
         public static void Help(bool includeDescriptions = false, bool verboseParameters = false)

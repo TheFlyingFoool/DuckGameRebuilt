@@ -175,7 +175,7 @@ namespace XnaToFna
                 path1 = path1.Replace("//", "/").Replace("\\", "/");
                 path2 = path2.Replace("//", "/").Replace("\\", "/");
             }
-            return System.IO.Path.Combine(path1, path2);
+            return Path.Combine(path1, path2);
         }
         public static string FileReadAllText(string path)
         {

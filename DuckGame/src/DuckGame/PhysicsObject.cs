@@ -537,13 +537,13 @@ namespace DuckGame
                             {
                                 flag4 = true;
                                 _curPuddle = hitThing as FluidPuddle;
-                                if (hitThing.top < this.bottom - 2f && hitThing.collisionSize.y > 2f) num5 = hitThing.top;
+                                if (hitThing.top < bottom - 2f && hitThing.collisionSize.y > 2f) num5 = hitThing.top;
                             }
                             if (hitThing != this && !clip.Contains(hitThing) && !hitThing.clip.Contains(this) && hitThing.solid && (planeOfExistence == 4 || hitThing.planeOfExistence == planeOfExistence))
                             {
                                 Vec2 position = this.position;
                                 bool flag5 = false;
-                                if (hitThing.bottom >= this.top && hitThing.top < this.top)
+                                if (hitThing.bottom >= top && hitThing.top < top)
                                 {
                                     flag5 = true;
                                     if (this.vSpeed < 0)
@@ -554,7 +554,7 @@ namespace DuckGame
                                         Impact(hitThing, ImpactedFrom.Top, true);
                                     }
                                 }
-                                if (hitThing.top <= this.bottom && hitThing.bottom > this.bottom)
+                                if (hitThing.top <= bottom && hitThing.bottom > bottom)
                                 {
                                     flag5 = true;
                                     if (this.vSpeed > 0)
@@ -642,7 +642,7 @@ namespace DuckGame
                 {
                     if (flag4 && vSpeed > 1 && Math.Abs(this.vSpeed) < 0.01f)
                     {
-                        Level.Add(new WaterSplash(x, this.bottom, _curFluid));
+                        Level.Add(new WaterSplash(x, bottom, _curFluid));
                         SFX.Play("littleSplash", Rando.Float(0.8f, 0.9f), Rando.Float(-0.2f, 0.2f));
                     }
                     floatMultiplier = 1f;

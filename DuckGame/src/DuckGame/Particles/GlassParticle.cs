@@ -30,7 +30,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            ParticleLerp.UpdateLerpState(this.position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            ParticleLerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
 
             Graphics.DrawRect(ParticleLerp.Position, ParticleLerp.Position + new Vec2(1f, 1f), (_tint > 0 ? Window.windowColors[_tint] : Color.LightBlue) * alpha, depth);
         }

@@ -1,9 +1,11 @@
-﻿namespace DuckGame
+﻿using AddedContent.Firebreak;
+
+namespace DuckGame
 {
 
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand(
+        [Marker.DevConsoleCommand(
             Description = "Prints your currently active program launch arguments",
             Aliases = new[] { "args", "commandline", "launchargs" })]
         public static string LaunchArguments()

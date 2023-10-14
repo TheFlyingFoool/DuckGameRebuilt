@@ -301,13 +301,13 @@ namespace DuckGame
 
         public static FanNum GetFan()
         {
-            if (Crowd.extraFans > 0 && Rando.Float(1f) > 0.5f)
+            if (extraFans > 0 && Rando.Float(1f) > 0.5f)
             {
-                Crowd.extraFans--;
+                extraFans--;
                 return null;
             }
             List<FanNum> fanNumList = new List<FanNum>();
-            foreach (KeyValuePair<Profile, FanNum> pair in Crowd.fanList)
+            foreach (KeyValuePair<Profile, FanNum> pair in fanList)
             {
                 if (pair.Value.totalFans > 0)
                 {

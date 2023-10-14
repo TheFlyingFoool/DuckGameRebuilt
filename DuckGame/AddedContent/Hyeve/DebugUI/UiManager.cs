@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using AddedContent.Hyeve.DebugUI.Basic;
@@ -66,7 +67,7 @@ namespace AddedContent.Hyeve.DebugUI
         public static UiReflectionVector2Bar CreateReflectionVec2Bar(FieldInfo info, object obj) => new(Vector2.Zero, new Vector2(300, 30), info, obj);
         
 
-        [DrawingContext(DoDraw = false, CustomID = "DebugUI")]
+        [Marker.DrawingContext(DoDraw = false, CustomID = "DebugUI")]
         public static void DrawDebugUi()
         {
             if(InputData.KeyPressed(Keys.F10)) OpenObjectViewerPanel(Profiles.active[0].duck);

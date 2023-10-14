@@ -45,7 +45,7 @@ namespace DuckGame
         public static IReadOnlyPropertyBag GetBag(System.Type t)
         {
             PropertyBag propertyBag;
-            return _propertyBags.TryGetValue(t, out propertyBag) ? propertyBag : ContentProperties._emptyBag;
+            return _propertyBags.TryGetValue(t, out propertyBag) ? propertyBag : _emptyBag;
         }
 
         /// <summary>

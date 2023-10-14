@@ -238,7 +238,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            float xDraw = this.x;
+            float xDraw = x;
             if (_selected)
             {
                 _icons.frame = 3;

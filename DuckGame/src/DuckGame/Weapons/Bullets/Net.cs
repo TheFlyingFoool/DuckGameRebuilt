@@ -46,7 +46,7 @@ namespace DuckGame
         }
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (Network.isActive && this.connection != DuckNetwork.localConnection)
+            if (Network.isActive && connection != DuckNetwork.localConnection)
             {
                 return;
             }
@@ -76,7 +76,7 @@ namespace DuckGame
                 if (p != null && p.doll.captureDuck != null && !p.doll.captureDuck.dead)
                 {
                     duck = p.doll.captureDuck;
-                    base.Fondle(p.doll);
+                    Fondle(p.doll);
                     p.doll.Unragdoll();
                     duck.Netted(this);
                     if (duck._trapped != null)

@@ -1,3 +1,4 @@
+using AddedContent.Firebreak;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -139,7 +140,7 @@ namespace DuckGame
         //        Graphics.DrawRect(ingamepos, ingamepos + new Vec2(10f), Color.Green);
         //    }
         //}
-        [DrawingContext(DrawingLayer.Foreground, CustomID = "cells", DoDraw = false)]
+        [Marker.DrawingContext(Marker.DrawingLayer.Foreground, CustomID = "cells", DoDraw = false)]
         public static void DrawCells()
         {
             //Buckets.Keys
@@ -169,7 +170,7 @@ namespace DuckGame
             }
 
         }
-        [DevConsoleCommand]
+        [Marker.DevConsoleCommand]
         public static void graphiccull()
         {
             DGRSettings.GraphicsCulling = !DGRSettings.GraphicsCulling;
@@ -177,7 +178,7 @@ namespace DuckGame
 
         }
         public static bool looking;
-        [DevConsoleCommand(Name = "search")]
+        [Marker.DevConsoleCommand(Name = "search")]
         public static void Search()
         {
             if (!looking)
@@ -207,7 +208,7 @@ namespace DuckGame
         //    usedfornonsense = 1 / usedfornonsense;
         //}
 
-        [DevConsoleCommand(Name = "steamjoin")]
+        [Marker.DevConsoleCommand(Name = "steamjoin")]
         public static void Join(string id)
         {
             ulong id2 = 0;
@@ -224,13 +225,13 @@ namespace DuckGame
             DevConsole.Log("joining");
             Level.current = new JoinServer(id2);
         }
-        [DevConsoleCommand(Name = "lanjoin")]
+        [Marker.DevConsoleCommand(Name = "lanjoin")]
         public static void LanJoin(string id)
         {
             DevConsole.Log("Trying to join " + id);
             Level.current = new JoinServer(id);
         }
-        [DevConsoleCommand(Name = "res")]
+        [Marker.DevConsoleCommand(Name = "res")]
         public static void Res(int width, int height, int screenmode)
         {
             if (screenmode < 1 || screenmode > 4)
@@ -247,7 +248,7 @@ namespace DuckGame
             Resolution.Set(r);
             Resolution.Apply();
         }
-        [DevConsoleCommand(Name = "windowtoggle")]
+        [Marker.DevConsoleCommand(Name = "windowtoggle")]
         public static void windowtoggle()
         {
             windowed = !windowed;
@@ -257,13 +258,13 @@ namespace DuckGame
         public static bool windowed = true;// SDL.SDL_SetWindowPosition(Resolution._window, 0, 0);
 
 
-        [DevConsoleCommand(Name = "windowpos")]
+        [Marker.DevConsoleCommand(Name = "windowpos")]
         public static void windowtoggle(int x, int y)
         {
             SDL.SDL_SetWindowPosition(MonoMain.instance.Window.Handle, x, y);
             DevConsole.Log("Set Window Pos is " + x.ToString() + " " + y.ToString());
         }
-        [DevConsoleCommand(Name = "tilescreen")]
+        [Marker.DevConsoleCommand(Name = "tilescreen")]
         public static void tilescreen()
         {
             int width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
@@ -283,13 +284,13 @@ namespace DuckGame
             Program.main.KillEverything();
             Program.main.Exit();
         }
-        [DevConsoleCommand(Name = "crashtest", CanCrash = true)]
+        [Marker.DevConsoleCommand(Name = "crashtest", CanCrash = true)]
         public static void crashtest()
         {
             DuckNetwork.CheckVersion(null);
         }
         // SDL.SDL_SetWindowBordered(Resolution._window, true ? SDL.SDL_bool.SDL_FALSE : SDL.SDL_bool.SDL_TRUE); 
-        [DevConsoleCommand(Name = "rlevel")]
+        [Marker.DevConsoleCommand(Name = "rlevel")]
         public static void randomnesstest2()
         {//Content.GetLevels("pyramid", LevelLocation.Content)
             List<string> levels = Content.GetLevels("pyramid", LevelLocation.Content);
@@ -300,14 +301,14 @@ namespace DuckGame
             }
             DevConsole.Log(levels.Count.ToString() + " rlevel");
         }
-        [DevConsoleCommand(Name = "random")]
+        [Marker.DevConsoleCommand(Name = "random")]
         public static void randomnesstest()
         {//Content.GetLevels("pyramid", LevelLocation.Content)
             Random rand = new Random(42069);
             double d = rand.NextDouble();
             DevConsole.Log(d.ToString() + " random");
         }
-        [DevConsoleCommand(Name = "testdg")]
+        [Marker.DevConsoleCommand(Name = "testdg")]
         public static void starttestdg()
         {
             Process.Start(Application.ExecutablePath, Program.commandLine + " -lanjoiner");
@@ -322,7 +323,7 @@ namespace DuckGame
                 FNAPlatform.SetGamePadLightBar(index, (Microsoft.Xna.Framework.Color)color);
         }
 
-        [DevConsoleCommand(Name = "dr")]
+        [Marker.DevConsoleCommand(Name = "dr")]
         public static void debugrandom()
         {
             SetControllerLightBar(Persona.alllist[0].index, Color.Magenta);
@@ -336,14 +337,14 @@ namespace DuckGame
             //cityBackground.RandomSkySay();
             //DevConsole.Log("random test");
         }
-        [DevConsoleCommand(Name = "savegraphic")]
+        [Marker.DevConsoleCommand(Name = "savegraphic")]
         public static void seetheunseen()
         {
             SaveTextures();
             DevConsole.Log("wasnt in spriteatlas " + MTSpriteBatcher.Texidonthave.Count.ToString());
         }
         public static bool runv2;
-        [DevConsoleCommand(Name = "dantest")]
+        [Marker.DevConsoleCommand(Name = "dantest")]
         public static void DanTest()
         {
             //Level.CheckRectAllDan<MaterialThing>(new Vec2(-1100.6f, -414.2592f), new Vec2(800.3334f, 497.3408f));

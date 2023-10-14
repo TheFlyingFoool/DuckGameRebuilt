@@ -2,7 +2,7 @@
 
 namespace DuckGame
 {
-    [FireSerializerModule]
+    [global::AddedContent.Firebreak.Marker.FireSerializer]
     public class StringSerializerModule : IFireSerializerModule<string>
     {
         public string Serialize(string obj)

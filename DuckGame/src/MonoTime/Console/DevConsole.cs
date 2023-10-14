@@ -6,6 +6,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using AddedContent.Firebreak;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -28,7 +29,7 @@ namespace DuckGame
 {
     public class DevConsole
     {
-        [AutoConfigField]
+        [Marker.AutoConfig]
         public static bool showFPS;
         public static List<string> startupCommands = new();
         public static bool fancyMode;
@@ -2271,7 +2272,7 @@ namespace DuckGame
 
                 if (Mouse.isScrolling)
                 {
-                    _core.viewOffset -= (Keyboard.shift ? 10 : 1) * Mouse.discreteScroll;
+                    _core.viewOffset -= (Keyboard.shift ? 10 : 1) * (int) (Mouse.scroll / 120f);
                     if (_core.viewOffset < 0) _core.viewOffset = 0;
                     if (_core.viewOffset > core.lines.Count - 1) _core.viewOffset = core.lines.Count - 1;
                 }
