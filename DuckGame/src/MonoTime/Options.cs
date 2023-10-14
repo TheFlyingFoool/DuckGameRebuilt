@@ -1,15 +1,7 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Options
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System;
 
 namespace DuckGame
 {
@@ -490,6 +482,11 @@ namespace DuckGame
             menu.Add(new UIMenuItemToggle("Ambient Particles", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.AmbientParticles)))
             {
                 dgrDescription = "Extra cosmetic particles added by DGR, embers from lamps, leafs from trees, etc"
+            });
+
+            menu.Add(new UIMenuItemToggle("Explosion Decals", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ExplosionDecals)))
+            {
+                dgrDescription = "Toggles comestic dust decals when explosions happens"
             });
 
 

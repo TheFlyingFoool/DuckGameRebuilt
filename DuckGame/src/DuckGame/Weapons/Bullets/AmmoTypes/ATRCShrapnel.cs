@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ATRCShrapnel
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class ATRCShrapnel : AmmoType
     {
@@ -20,6 +13,9 @@ namespace DuckGame
 
         public override void MakeNetEffect(Vec2 pos, bool fromNetwork = false)
         {
+            Level.Add(new ExplosionDecal(pos.x - 8, pos.y + 6));
+            Level.Add(new ExplosionDecal(pos.x + 8, pos.y + 6));
+            Level.Add(new ExplosionDecal(pos.x, pos.y - 6));
             for (int index = 0; index < 1; index = index + 1 + 1)
                 Level.Add(new ExplosionPart(pos.x - 20f + Rando.Float(40f), pos.y - 20f + Rando.Float(40f)));
             SFX.Play("explode");

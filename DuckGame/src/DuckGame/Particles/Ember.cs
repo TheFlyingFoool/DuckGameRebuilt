@@ -2,7 +2,7 @@
 {
     public class Ember : PhysicsParticle
     {
-        private SinWaveManualUpdate _wave = new SinWaveManualUpdate(0.1f + Rando.Float(0.1f));
+        public SinWaveManualUpdate _wave = new SinWaveManualUpdate(0.1f + Rando.Float(0.1f));
         private Color _col;
         private float _initialLife = 1f;
 
@@ -16,10 +16,10 @@
                 _initialLife += Rando.Float(10f);
             alpha = 0.7f;
         }
-
+        public bool windAffected = true;
         public override void Update()
         {
-            if (GameLevel.rainwind != 0)
+            if (GameLevel.rainwind != 0 && windAffected)
             {
                 hSpeed = Lerp.Float(hSpeed, GameLevel.rainwind * 0.5f, 0.04f);
             }

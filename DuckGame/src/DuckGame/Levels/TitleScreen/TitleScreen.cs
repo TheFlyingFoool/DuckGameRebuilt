@@ -190,7 +190,6 @@ namespace DuckGame
             Add(new TitleButton(194, 137, true) { drag = c2 });
             Add(c2);*/
 
-            Add(new CrumbleShamble(160, 157));
             if (Editor.clientonlycontent)
             {
                 Editor.DisableClientOnlyContent();
@@ -927,10 +926,10 @@ namespace DuckGame
             {
                 depth = (Depth)0.9f
             };
-            //_beamPlatform = new SpriteMap("title/beamPlatform", 84,22)
-            //{
-            //    depth = (Depth)0.9f
-            //};
+            _beamPlatform = new SpriteMap("title/beamPlatform", 84,22)
+            {
+                depth = (Depth)0.9f
+            };
             _upperMonitor = new Sprite("title/upperMonitor")
             {
                 depth = (Depth)0.85f
@@ -1655,6 +1654,8 @@ namespace DuckGame
                     }
                     else if (_selection == TitleMenuSelection.Play)
                     {
+                        //_font.Draw("@SELECT@PLAY", current.camera.PercentW(50f) - _font.GetWidth("@SELECT@PLAY") / 2f, 8, Color.White, (Depth)0.95);
+                        //_font.Draw("@DOWN@DGR", current.camera.PercentW(50f) - _font.GetWidth("@DOWN@DGR") / 2f, 22, Color.White, (Depth)0.95);
                         DisplayUpperMonitorMessage("@SELECT@PLAY");
                     }
                     else if (_selection == TitleMenuSelection.Stats)
@@ -1701,7 +1702,7 @@ namespace DuckGame
                 Graphics.Draw(_leftPlatform, 0f, 61f);
                 Graphics.Draw(_airlock, 266f, 135f);
                 Graphics.Draw(_rightPlatform, byte.MaxValue, 61f);
-                //Graphics.Draw(_beamPlatform, 118f, 146f);
+                Graphics.Draw(_beamPlatform, 118f, 146f);
                 Graphics.Draw(_optionsTV, 0f, 19f);
                 Graphics.Draw(_libraryBookcase, 263f, 12f);
                 Graphics.Draw(_editorBench, 1f, 130f);

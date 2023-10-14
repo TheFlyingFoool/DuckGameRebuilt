@@ -544,10 +544,14 @@ namespace DuckGame
 
         public GhostObject MakeGhost(Thing t, int index = -1, bool initLevel = false)
         {
+            Main.SpecialCode2 = "1011801";
             if (t.ghostObject != null)
                 return t.ghostObject;
+            Main.SpecialCode2 = "1011802";
             GhostObject pGhost = new GhostObject(t, this, index, initLevel);
+            Main.SpecialCode2 = "1011803";
             AddGhost(pGhost);
+            Main.SpecialCode2 = "1011804";
             return pGhost;
         }
 
@@ -562,17 +566,22 @@ namespace DuckGame
 
         internal void AddGhost(GhostObject pGhost)
         {
+            Main.SpecialCode2 = "10118031";
             if (inGhostLerpLoop)
             {
+            Main.SpecialCode2 = "10118032";
                 _tempGhosts.Add(pGhost);
             }
             else
             {
+                Main.SpecialCode2 = "10118033";
                 if (_ghosts.Contains(pGhost) || pGhost.thing == null)
                     return;
                 _ghosts.Add(pGhost);
+                Main.SpecialCode2 = "10118034";
                 pGhost.thing.OnGhostObjectAdded();
             }
+            Main.SpecialCode2 = "10118035";
         }
 
         public void MapGhost(Thing pThing, GhostObject pGhost) => AddGhost(pGhost);

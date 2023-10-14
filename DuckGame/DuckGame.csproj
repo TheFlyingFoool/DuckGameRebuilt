@@ -336,6 +336,7 @@
     <Compile Include="AddedContent\Firebreak\Utilities\ProgressValue.cs" />
     <Compile Include="AddedContent\klof44\DartGrenade.cs" />
     <Compile Include="AddedContent\klof44\DiscordRichPresence.cs" />
+    <Compile Include="AddedContent\NiK0\ExplosionDecal.cs" />
     <Compile Include="AddedContent\NiK0\SelectCircleParticle.cs" />
     <Compile Include="AddedContent\NiK0\BGLightning.cs" />
     <Compile Include="AddedContent\NiK0\ChangePlus.cs" />
@@ -404,7 +405,6 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpQuadLaserBullet.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpSniper.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpTeleporter.cs" />
-    <Compile Include="AddedContent\NiK0\CrumbleShamble.cs" />
     <Compile Include="AddedContent\NiK0\GlassPlatform.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\MaterialEnergy.cs" />
     <Compile Include="AddedContent\NiK0\MaterialLavaWobble.cs" />

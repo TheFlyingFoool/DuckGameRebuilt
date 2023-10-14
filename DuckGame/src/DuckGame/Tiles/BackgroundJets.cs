@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.BackgroundJets
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Details")]
     public class BackgroundJets : Thing
@@ -35,11 +28,36 @@ namespace DuckGame
             editorTooltip = "Things gotta float somehow.";
             hugWalls = WallHug.Ceiling;
             _canFlip = false;
-            shouldbeinupdateloop = false;
         }
 
+        public float partTimer;
         public override void Update()
         {
+            if (DGRSettings.AmbientParticles)
+            {
+                partTimer += 0.15f * DGRSettings.ActualParticleMultiplier;
+                if (partTimer > 1)
+                {
+                    float rng = Rando.Float(-8, 8);
+                    Vec2 v = position + new Vec2(rng - 8, Rando.Float(4, 5f));
+                    Ember emb = new Ember(v.x, v.y);
+                    emb.hSpeed = -rng / 30f;
+                    emb._wave = new SinWaveManualUpdate(Rando.Float(0.01f, 0.03f));
+                    emb.vSpeed = Rando.Float(1f, 2f);
+                    emb.windAffected = false;
+                    Level.Add(emb);
+
+                    rng = Rando.Float(-8, 8);
+                    v = position + new Vec2(rng + 8, Rando.Float(4, 5f));
+                    emb = new Ember(v.x, v.y);
+                    emb.hSpeed = -rng / 30f;
+                    emb._wave = new SinWaveManualUpdate(Rando.Float(0.01f, 0.03f));
+                    emb.vSpeed = Rando.Float(1, 2f);
+                    emb.windAffected = false;
+                    Level.Add(emb);
+                    partTimer--;
+                }
+            }
         }
 
         public override void Draw()

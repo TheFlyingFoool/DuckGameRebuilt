@@ -348,6 +348,8 @@ namespace DuckGame
 
         [AutoConfigField] public static bool AmbientParticles = true;
 
+        [AutoConfigField] public static bool ExplosionDecals = true;
+
         [AutoConfigField] public static bool GraphicsCulling = true;
 
         [AutoConfigField] public static int StartIn = 0;
