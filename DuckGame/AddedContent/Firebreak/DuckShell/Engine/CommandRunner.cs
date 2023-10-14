@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -9,7 +10,7 @@ namespace DuckGame.ConsoleEngine
 {
     public class CommandRunner
     {
-        public readonly List<DSHCommand> Commands = new();
+        internal readonly List<Marker.DSHCommandAttribute> Commands = new();
         public readonly List<ITypeInterpreter> TypeInterpreterModules = new();
         public Dictionary<Type, ITypeInterpreter> TypeInterpreterModulesMap = new();
         public Regex ValidNameRegex { get; } = new("^[^ ]+$", RegexOptions.Compiled);
@@ -124,7 +125,7 @@ namespace DuckGame.ConsoleEngine
                 commandArgs[i - 1] = tokens[i];
             }
 
-            foreach (DSHCommand command in Commands)
+            foreach (Marker.DSHCommandAttribute command in Commands)
             {
                 if (!string.Equals(command.Name, commandName, StringComparison.CurrentCultureIgnoreCase))
                     continue;
@@ -257,15 +258,17 @@ namespace DuckGame.ConsoleEngine
 
                 if (treatNextAsDefault)
                 {
-                    currentSegment.Append(c);
+                    if (!awaitCommentEnd)
+                        currentSegment.Append(c);
+                    
                     treatNextAsDefault = false;
                     continue;
                 }
-            
+
                 switch (c)
                 {
                     case '\\':
-                        if (awaitCloseCodeBlock || awaitCommentEnd)
+                        if (awaitCloseCodeBlock)
                             goto default;
                         
                         treatNextAsDefault = true;
@@ -276,12 +279,6 @@ namespace DuckGame.ConsoleEngine
                             goto default;
 
                         awaitCommentEnd ^= true;
-
-                        // if (awaitCommentEnd)
-                        // {
-                        //     ignoreCommentEnds++;
-                        //     goto default;
-                        // }
                         continue;
                 
                     case '[':
@@ -412,7 +409,7 @@ namespace DuckGame.ConsoleEngine
 
             foreach (MethodInfo methodInfo in allMethods)
             {
-                if (methodInfo.GetCustomAttribute<DSHCommand>() is not { } attr)
+                if (methodInfo.GetCustomAttribute<Marker.DSHCommandAttribute>() is not { } attr)
                     continue; // not using attribute
             
                 if (methodInfo.GetParameters().Any(x => x.ParameterType == typeof(object)))
@@ -433,7 +430,7 @@ namespace DuckGame.ConsoleEngine
         /// </param>
         public void AddCommand(Command command, string? description = null, bool hidden = false)
         {
-            AddCommand(new DSHCommand()
+            AddCommand(new Marker.DSHCommandAttribute()
             {
                 Name = command.Name,
                 Hidden = hidden,
@@ -447,7 +444,7 @@ namespace DuckGame.ConsoleEngine
             Commands.RemoveAll(x => string.Equals(x.Name, commandName, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        private void AddCommand(DSHCommand command)
+        private void AddCommand(Marker.DSHCommandAttribute command)
         {
             if (!ValidNameRegex.IsMatch(command.Name))
                 throw new Exception($"Invalid command name: {command.Name}");

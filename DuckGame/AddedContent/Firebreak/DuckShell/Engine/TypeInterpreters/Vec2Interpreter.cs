@@ -1,16 +1,22 @@
-﻿using DuckGame.ConsoleEngine;
+﻿using AddedContent.Firebreak;
+using DuckGame.ConsoleEngine;
 using System;
 
 namespace DuckGame.ConsoleEngine.TypeInterpreters
 {
-    public class Vec2Interpreter : ITypeInterpreter
+    public static partial class TypeInterpreters
     {
-        public Type ParsingType { get; } = typeof(Vec2);
-        public ValueOrException<object> ParseString(string fromString, Type specificType, CommandRunner engine)
+        [Marker.DSHTypeInterpreterAttribute]
+        public class Vec2Interpreter : ITypeInterpreter
         {
-            return Vec2.TryParse(fromString, out var val)
-                ? val 
-                : new Exception($"Unable to parse to Vec2: {fromString}"); 
+            public Type ParsingType { get; } = typeof(Vec2);
+
+            public ValueOrException<object> ParseString(string fromString, Type specificType, CommandRunner engine)
+            {
+                return Vec2.TryParse(fromString, out var val)
+                    ? val
+                    : new Exception($"Unable to parse to Vec2: {fromString}");
+            }
         }
     }
 }

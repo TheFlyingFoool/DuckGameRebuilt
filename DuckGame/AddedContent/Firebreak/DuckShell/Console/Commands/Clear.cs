@@ -1,8 +1,10 @@
-﻿namespace DuckGame.ConsoleEngine
+﻿using AddedContent.Firebreak;
+
+namespace DuckGame.ConsoleEngine
 {
     public static partial class Commands
     {
-        [DSHCommand(Description = "Clears the console.")]
+        [Marker.DSHCommand(Description = "Clears the console.")]
         public static void Clear()
         {
             console.Clear();

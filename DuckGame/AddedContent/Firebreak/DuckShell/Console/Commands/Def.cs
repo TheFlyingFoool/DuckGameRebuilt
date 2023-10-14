@@ -1,10 +1,11 @@
-﻿using System.Linq;
+﻿using AddedContent.Firebreak;
+using System.Linq;
 
 namespace DuckGame.ConsoleEngine
 {
     public static partial class Commands
     {
-        [DSHCommand(Description = "Creates a temporary command.")]
+        [Marker.DSHCommand(Description = "Creates a temporary command.")]
         public static void Def(string name, string[] definedArgs, string command)
         {
             Command.Parameter[] parameters = definedArgs.Select(x => new Command.Parameter()

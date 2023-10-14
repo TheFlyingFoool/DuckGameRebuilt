@@ -1,24 +1,33 @@
-﻿using System.Text;
+﻿using AddedContent.Firebreak;
+using System;
+using System.Text;
 
 namespace DuckGame.ConsoleEngine
 {
     public static partial class Commands
     {
-        [DSHCommand(Description = "Explains the usage of a command")]
-        public static string Man(string commandName)
+        [Marker.DSHCommand(Description = "Explains the usage of a command")]
+        public static StringBuilder Man(string commandName)
         {
             if (console.Shell.Commands.TryFirst(x => x.Name.CaselessEquals(commandName),
-                    out DSHCommand commandAttribute))
+                    out Marker.DSHCommandAttribute commandAttribute))
             {
-                StringBuilder functionSignature = commandAttribute.GetFunctionSignature();
-                functionSignature.Append('\n');
-                functionSignature.Append(commandAttribute.Description);
+                StringBuilder builder = commandAttribute.GetFunctionSignature();
                 
-                return functionSignature.ToString();
+                builder.Append(" {\n");
+
+                foreach (string line in commandAttribute.Description?.SplitByLength(50) ?? Array.Empty<string>())
+                {
+                    builder.Append($"  // {line}\n");
+                }
+
+                builder.Append('}');
+
+                return builder;
             }
             else
             {
-                return $"No command found with name: {commandName}";
+                throw new Exception($"No command found with name: {commandName}");
             }
         }
     }

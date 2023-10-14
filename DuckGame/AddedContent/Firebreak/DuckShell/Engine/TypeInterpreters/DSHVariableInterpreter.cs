@@ -1,10 +1,12 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 using AddedContent.Firebreak.DebuggerTools.Manager.Interface.Console;
 
 namespace DuckGame.ConsoleEngine.TypeInterpreters
 {
     public static partial class TypeInterpreters
     {
+        [Marker.DSHTypeInterpreterAttribute]
         public class DSHVariableInterpreter : ITypeInterpreter
         {
             public Type ParsingType { get; } = typeof(DSHVariable);

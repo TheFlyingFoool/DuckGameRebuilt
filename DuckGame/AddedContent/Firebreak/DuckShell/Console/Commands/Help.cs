@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 using System.Linq;
 using System.Text;
 
@@ -6,32 +7,16 @@ namespace DuckGame.ConsoleEngine
 {
     public static partial class Commands
     {
-        [DSHCommand(Description = "Displays the function signatures of all public " +
+        [Marker.DSHCommand(Description = "Displays the function signatures of all public " +
                                   "commands, along with their description to explain " +
                                   "their usage.")]
-        public static string Help(bool condensed = false)
+        public static string Help()
         {
             StringBuilder builder = new();
 
-            foreach (DSHCommand commandAttribute in console.Shell.Commands.Where(x => !x.Hidden))
+            foreach (Marker.DSHCommandAttribute commandAttribute in console.Shell.Commands.Where(x => !x.Hidden))
             {
-                builder.Append(commandAttribute.GetFunctionSignature());
-
-                if (!condensed)
-                {
-                    builder.Append(" {\n");
-
-                    foreach (string line in commandAttribute.Description?.SplitByLength(50) ?? Array.Empty<string>())
-                    {
-                        builder.Append($"    // {line}\n");
-                    }
-
-                    builder.Append('}');
-                }
-                else
-                {
-                    builder.Append(';');
-                }
+                builder.Append(Man(commandAttribute.Name));
 
                 builder.Append('\n');
             }

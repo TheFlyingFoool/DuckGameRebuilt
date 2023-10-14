@@ -1,10 +1,11 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 
 namespace DuckGame.ConsoleEngine
 {
     public static partial class Commands
     {
-        [DSHCommand(Name = "?", Description = "Executes a command based on the condition.", Hidden = true)]
+        [Marker.DSHCommand(Name = "?", Description = "Executes a command based on the condition.", Hidden = true)]
         public static object Conditional(bool condition, string commandIfTrue, params string[] alternative)
         {
             if (condition && !string.IsNullOrEmpty(commandIfTrue))

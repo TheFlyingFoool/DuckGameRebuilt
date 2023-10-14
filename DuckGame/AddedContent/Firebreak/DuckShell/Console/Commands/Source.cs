@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -9,7 +10,7 @@ namespace DuckGame.ConsoleEngine
         public static string ScriptsDirPath = $"{DuckFile.newSaveLocation}DuckGame/Scripts/";
         public const string SCRIPT_FILE_EXTENSION = "dsh";
         
-        [DSHCommand(Description = "Runs a script (by extensionless name) from your ~DuckGame/Scripts/ folder")]
+        [Marker.DSHCommand(Description = "Runs a script (by extensionless name) from your ~DuckGame/Scripts/ folder")]
         public static void Source(string scriptName)
         {
             if (!Directory.Exists(ScriptsDirPath))

@@ -1,9 +1,11 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 
 namespace DuckGame.ConsoleEngine.TypeInterpreters
 {
     public static partial class TypeInterpreters
     {
+        [Marker.DSHTypeInterpreterAttribute]
         public class BooleanInterpreter : ITypeInterpreter
         {
             public Type ParsingType { get; } = typeof(bool);

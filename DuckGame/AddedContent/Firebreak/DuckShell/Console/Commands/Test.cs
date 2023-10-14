@@ -1,8 +1,10 @@
-﻿namespace DuckGame.ConsoleEngine
+﻿using AddedContent.Firebreak;
+
+namespace DuckGame.ConsoleEngine
 {
     public static partial class Commands
     {
-        [DSHCommand(Hidden = true)]
+        [Marker.DSHCommand(Hidden = true)]
         public static string Test(huh whuh)
         {
             return $"{(int) whuh}: {whuh}";

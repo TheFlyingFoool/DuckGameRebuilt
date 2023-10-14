@@ -322,7 +322,6 @@
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\IDSHConsole.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\Command.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\CommandRunner.cs" />
-    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\DSHCommand.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\ArrayInterpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\BooleanInterpreter.cs" />
@@ -347,6 +346,8 @@
     <Compile Include="AddedContent\Firebreak\Utilities\Markers\AutoConfigAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\Markers\DevConsoleCommandAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\Markers\DrawingContextAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\DSHCommandAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\DSHTypeInterpreterAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\Markers\FireSerializerAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\Markers\MarkerAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\Markers\PostInitializeAttribute.cs" />

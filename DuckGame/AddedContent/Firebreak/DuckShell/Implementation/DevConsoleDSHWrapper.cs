@@ -14,6 +14,8 @@ namespace AddedContent.Firebreak.DuckShell.Implementation
         public CommandRunner Shell { get; set; }
         public bool Active { get; set; }
         public List<DSHConsoleLine> Lines;
+        
+        public static readonly List<MethodInfo> AttributeCommands = new();
 
         public DevConsoleDSHWrapper()
         {
@@ -21,9 +23,8 @@ namespace AddedContent.Firebreak.DuckShell.Implementation
             Active = false;
             Lines = new List<DSHConsoleLine>();
             
-            // TODO: rewrite to use marker system
-            Shell.AddCommandsUsingAttribute(typeof(Commands).GetMethods());
-            Shell.AddTypeInterpretters(typeof(TypeInterpreters).GetNestedTypes().Select(t => t.GetTypeInfo()));
+            Shell.AddCommandsUsingAttribute(AttributeCommands);
+            Shell.AddTypeInterpretters(Marker.DSHTypeInterpreterAttribute.AllTypes);
         }
 
         [Marker.PostInitialize]

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,6 +7,7 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
 {
     public static partial class TypeInterpreters
     {
+        [Marker.DSHTypeInterpreterAttribute]
         public class ArrayInterpreter : ITypeInterpreter
         {
             public Type ParsingType { get; } = typeof(Array);
