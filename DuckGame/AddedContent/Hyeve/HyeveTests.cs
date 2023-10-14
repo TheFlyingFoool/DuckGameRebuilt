@@ -84,11 +84,11 @@ namespace AddedContent.Hyeve
             _uiDead = false;
         }
 
-
         [Marker.DrawingContext(Marker.DrawingLayer.HUD, DoDraw = false)]
         public static void PolyDrawTest()
         {
-            if(InputData.KeyPressed(Keys.F10)) RegenUI();
+            if(InputData.KeyPressed(Keys.F10) && MonoMain.UpdateLerpState) 
+                RegenUI();
             
             if (_uiDead) return;
             

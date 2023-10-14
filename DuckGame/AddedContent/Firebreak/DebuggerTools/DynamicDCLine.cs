@@ -38,7 +38,7 @@ namespace DuckGame
 
         private static List<DynamicDCLine> s_allDynamicLines = new();
 
-        [Marker.DrawingContext(CustomID = "dyn_dc_update")]
+        [Marker.UpdateContext]
         public static void UpdateLines()
         {
             for (int i = 0; i < s_allDynamicLines.Count; i++)

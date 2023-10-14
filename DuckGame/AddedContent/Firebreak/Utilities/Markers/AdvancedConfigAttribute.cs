@@ -106,7 +106,7 @@ namespace AddedContent.Firebreak
                 return (TConfigClass)s_configs[typeof(TConfigClass)];
             }
 
-            [DrawingContext]
+            [UpdateContext]
             public static void AdvancedConfigReloadUpdate()
             {
                 if (!Keyboard.Pressed(Keys.F5))
