@@ -6,12 +6,9 @@ namespace DuckGame
     public static partial class DevConsoleCommands
     {
         [Marker.DevConsoleCommand(Description = "Clears the console's text")]
-        public static void Clear(bool verbose = true)
+        public static void Clear()
         {
             DevConsole.core.lines.Clear();
-
-            if (verbose)
-                DevConsole.Log("|DGBLUE|CLER|DGGREEN| CONSOLE CLEARED SUCCESSFULLY");
         }
     }
 }

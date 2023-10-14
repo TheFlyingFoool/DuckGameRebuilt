@@ -1,4 +1,5 @@
 ﻿using AddedContent.Firebreak;
+using DuckGame.ConsoleEngine;
 using System;
 using System.Collections;
 using System.Linq;
@@ -632,6 +633,24 @@ namespace DuckGame
             }
 
             return null;
+        }
+        
+        public static void AppendResult(this ValueOrException<string> @this, ValueOrException<string> addedResult)
+        {
+            if (addedResult.Failed)
+            {
+                @this.Failed = true;
+                @this.Error = addedResult.Error;
+                @this.Value = null!;
+            }
+        
+            if (@this.Failed)
+                return;
+
+            if (string.IsNullOrWhiteSpace(@this.Value))
+                @this.Value = addedResult.Value;
+            else if (!string.IsNullOrWhiteSpace(addedResult.Value)) 
+                @this.Value += $"\n{addedResult.Value}";
         }
 
         public static T ChooseRandom<T>(this IEnumerable<T> collection)

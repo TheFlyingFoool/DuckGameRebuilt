@@ -390,5 +390,7 @@ namespace DuckGame
         
         // the 4chan disease..
         [Marker.AutoConfig] public static bool GreenTextSupport = false;
+
+        [Marker.AutoConfig] public static bool UseDuckShell = true;
     }
 }
