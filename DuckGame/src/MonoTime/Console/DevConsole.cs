@@ -2272,7 +2272,7 @@ namespace DuckGame
 
                 if (Mouse.isScrolling)
                 {
-                    _core.viewOffset -= (Keyboard.shift ? 10 : 1) * Mouse.discreteScroll;
+                    _core.viewOffset -= (Keyboard.shift ? 10 : 1) * (int) (Mouse.scroll / 120f);
                     if (_core.viewOffset < 0) _core.viewOffset = 0;
                     if (_core.viewOffset > core.lines.Count - 1) _core.viewOffset = core.lines.Count - 1;
                 }
