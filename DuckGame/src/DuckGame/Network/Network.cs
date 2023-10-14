@@ -192,7 +192,7 @@ namespace DuckGame
 
         public static bool isServer
         {
-            get => activeNetwork.core.isServer || (Network.isFakeActive);
+            get => activeNetwork.core.isServer || (isFakeActive);
             set => activeNetwork.core.isServer = value;
         }
 

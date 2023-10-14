@@ -156,7 +156,7 @@ namespace DuckGame
         {
             base.Draw();
             Material material = Graphics.material;
-            Graphics.material = base.material;
+            Graphics.material = this.material;
             Draw(ref _slide, new Vec2(6f + _slideVal * 8f, 0f), -1);
             Graphics.material = material;
         }

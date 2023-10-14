@@ -102,7 +102,7 @@ namespace DuckGame
                 Thing._alphaTestEffect = Content.Load<MTEffect>("Shaders/alphatest");
 
             HatPreviewLevel isolatedLevel = new();
-            Level trueCurrentLevel = Level.current;
+            Level trueCurrentLevel = current;
             core.currentLevel = isolatedLevel;
             
             isolatedLevel.Initialize();
@@ -153,7 +153,7 @@ namespace DuckGame
         }
         public static Tex2D RenderRecorderator(int frames, Level isolatedLevel, int renderWidth = 144, int renderHeight = 96)
         {
-            Level trueCurrentLevel = Level.current;
+            Level trueCurrentLevel = current;
             core.currentLevel = isolatedLevel;
 
             isolatedLevel.DoInitialize();

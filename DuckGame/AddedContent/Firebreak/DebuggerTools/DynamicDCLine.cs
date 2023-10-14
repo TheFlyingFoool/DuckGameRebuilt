@@ -1,3 +1,4 @@
+using AddedContent.Firebreak;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,7 @@ namespace DuckGame
 
         private static List<DynamicDCLine> s_allDynamicLines = new();
 
-        [DrawingContext(CustomID = "dyn_dc_update")]
+        [Marker.DrawingContext(CustomID = "dyn_dc_update")]
         public static void UpdateLines()
         {
             for (int i = 0; i < s_allDynamicLines.Count; i++)

@@ -20,7 +20,7 @@ namespace DuckGame
         {
             get
             {
-                return this._followCam;
+                return _followCam;
             }
         }
         public DevTestLev() : base(Content.ReloadAndGetLevelID("devtestlev"))

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -8,7 +9,7 @@ namespace DuckGame
 
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand(Description = "Get or Modify config fields from the console")]
+        [Marker.DevConsoleCommand(Description = "Get or Modify config fields from the console")]
         public static object Config(string fieldId, string serializedValue = null)
         {
             switch (fieldId.ToUpper())
@@ -20,13 +21,13 @@ namespace DuckGame
                     AutoConfigHandler.LoadAll();
                     return null;
                 case "%LIST":
-                    return AutoConfigFieldAttribute.All
-                        .Select(x => $"{x.MemberInfo.Name}: |DGBLUE|{FireSerializer.Serialize(x.Value)}|PREV|");
+                    return Marker.AutoConfigAttribute.All
+                        .Select(x => $"{x.Member.Name}: |DGBLUE|{FireSerializer.Serialize(x.Value)}|PREV|");
             }
 
-            List<AutoConfigFieldAttribute> all = AutoConfigFieldAttribute.All;
+            List<Marker.AutoConfigAttribute> all = Marker.AutoConfigAttribute.All;
 
-            if (!all.TryFirst(x => (x.Id ?? x.MemberInfo.Name).CaselessEquals(fieldId), out AutoConfigFieldAttribute attribute))
+            if (!all.TryFirst(x => (x.Id ?? x.Member.Name).CaselessEquals(fieldId), out Marker.AutoConfigAttribute attribute))
                 throw new Exception($"No configuration field found with ID: {fieldId}");
 
             object oldVal = attribute.Value;
@@ -40,7 +41,7 @@ namespace DuckGame
 
             attribute.Value = newVal;
             
-            return $"|PINK|{attribute.MemberInfo.Name}|WHITE|: |WHITE|[|GREEN|{oldReserializedValue}|WHITE|] to [|GREEN|{newReserializedValue}|WHITE|]";
+            return $"|PINK|{attribute.Member.Name}|WHITE|: |WHITE|[|GREEN|{oldReserializedValue}|WHITE|] to [|GREEN|{newReserializedValue}|WHITE|]";
         }
     }
 }

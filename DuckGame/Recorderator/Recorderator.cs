@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
@@ -26,7 +27,7 @@ namespace DuckGame
                 return extractedStream.ToArray();
             }
         }
-        [DevConsoleCommand(Name = "playreplay")]
+        [Marker.DevConsoleCommand(Name = "playreplay")]
 
         public static void PlayReplay(int replay)
         {
@@ -58,10 +59,10 @@ namespace DuckGame
             }
         }
 
-        [AutoConfigField]
+        [Marker.AutoConfig]
         public static int Record = 0;
 
-        [AutoConfigField]
+        [Marker.AutoConfig]
         public static int ClipLength = 5;
         public static bool Playing;
         public static Map<byte, Type> autoBlockIDX = new Map<byte, Type>();

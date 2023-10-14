@@ -142,11 +142,11 @@ namespace DuckGame
             body2.vSpeed = vel2.y;
             if (body is ChainLink && (body2.position - body.position).length > dist * 12f)
             {
-                body.position = this.position;
+                body.position = position;
             }
             if (body2 is ChainLink && (body2.position - body.position).length > dist * 12f)
             {
-                body2.position = this.position;
+                body2.position = position;
             }
             return impulse;
         }

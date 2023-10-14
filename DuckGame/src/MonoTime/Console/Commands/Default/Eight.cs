@@ -1,9 +1,11 @@
-﻿namespace DuckGame
+﻿using AddedContent.Firebreak;
+
+namespace DuckGame
 {
 
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand(
+        [Marker.DevConsoleCommand(
             Aliases = new[] { "8" },
             Description = "Fills all empty profile slots with a player",
             IsCheat = true)]

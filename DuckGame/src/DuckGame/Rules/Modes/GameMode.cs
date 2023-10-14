@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -747,8 +748,8 @@ namespace DuckGame
                                 }
                                 if (teamsWon == 1)
                                 {
-                                    GameLevel gameLevel = new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel, "deathmatch"), 0, false, false);
-                                    GameMode.previousLevel = gameLevel.level;
+                                    GameLevel gameLevel = new GameLevel(Deathmatch.RandomLevelString(previousLevel, "deathmatch"), 0, false, false);
+                                    previousLevel = gameLevel.level;
                                     if (Network.isServer)
                                     {
                                         List<int> list = new List<int>();
@@ -916,7 +917,7 @@ namespace DuckGame
 
         private void drawNameDisplay()
         {
-            NameDisplayConfig config = AdvancedConfigAttribute.Get<NameDisplayConfig>();
+            NameDisplayConfig config = Marker.AdvancedConfigAttribute.Get<NameDisplayConfig>();
 
             float fontSize = config.FontSize;
             float vSpacing = config.VerticalSpacing;

@@ -4797,15 +4797,15 @@ namespace DuckGame
                     _sprite.flipH = (offDir < 0);
                     if (enteringWalldoor)
                     {
-                        base.depth = -0.55f;
+                        this.depth = -0.55f;
                     }
-                    _spriteArms.depth = base.depth + 11;
-                    _bionicArm.depth = base.depth + 11;
+                    _spriteArms.depth = this.depth + 11;
+                    _bionicArm.depth = this.depth + 11;
                     _spriteQuack.alpha = (_spriteControlled.alpha = (_sprite.alpha = (_spriteArms.alpha = (_isGhost ? 0.5f : 1f) * alpha)));
                     _spriteQuack.flipH = (_spriteControlled.flipH = _sprite.flipH);
-                    _spriteControlled.depth = base.depth;
-                    _sprite.depth = base.depth;
-                    _spriteQuack.depth = base.depth;
+                    _spriteControlled.depth = this.depth;
+                    _sprite.depth = this.depth;
+                    _spriteQuack.depth = this.depth;
                     _sprite.angle = (_spriteQuack.angle = (_spriteControlled.angle = angle));
                     if (ragdoll != null && ragdoll.tongueStuck != Vec2.Zero)
                         quack = 10;

@@ -20,7 +20,7 @@ namespace DuckGame
     /// </summary>
     public abstract class Mod
     {
-        private Dictionary<System.Type, List<System.Type>> _typeLists = new Dictionary<System.Type, List<System.Type>>();
+        private Dictionary<Type, List<Type>> _typeLists = new Dictionary<Type, List<Type>>();
         private uint _dataHash;
         private uint _thingHash;
         private uint _netMessageHash;
@@ -34,7 +34,7 @@ namespace DuckGame
         public bool clientMod;
         private Tex2D _previewTexture;
         private Tex2D _screenshot;
-        private Map<ushort, System.Type> _typeToMessageID = new Map<ushort, System.Type>();
+        private Map<ushort, Type> _typeToMessageID = new Map<ushort, Type>();
         private Map<ushort, ConstructorInfo> _constructorToMessageID = new Map<ushort, ConstructorInfo>();
         public ushort currentMessageIDIndex = 1;
         private uint _identifierHash;
@@ -66,7 +66,7 @@ namespace DuckGame
                 if (_thingHash == 0U)
                 {
                     string str = "";
-                    foreach (System.Type type in GetTypeList(typeof(Thing)))
+                    foreach (Type type in GetTypeList(typeof(Thing)))
                         str += type.Name;
                     _thingHash = CRC32.Generate(str);
                 }
@@ -82,7 +82,7 @@ namespace DuckGame
                 if (_netMessageHash == 0U)
                 {
                     string str = "";
-                    foreach (KeyValuePair<ushort, System.Type> keyValuePair in typeToMessageID)
+                    foreach (KeyValuePair<ushort, Type> keyValuePair in typeToMessageID)
                         str += keyValuePair.Value.Name;
                     _netMessageHash = CRC32.Generate(str);
                 }
@@ -90,21 +90,21 @@ namespace DuckGame
             }
         }
 
-        public List<System.Type> GetTypeList(System.Type pType)
+        public List<Type> GetTypeList(Type pType)
         {
-            List<System.Type> typeList;
+            List<Type> typeList;
             if (!_typeLists.TryGetValue(pType, out typeList))
-                typeList = _typeLists[pType] = new List<System.Type>();
+                typeList = _typeLists[pType] = new List<Type>();
             return typeList;
         }
-        public IEnumerable<System.Type> SortTypeOrder(IEnumerable<System.Type> types)
+        public IEnumerable<Type> SortTypeOrder(IEnumerable<Type> types)
         {
             if (configuration.SortedTypeNames.Length == 0)
             {
                 return types;
             }
-            List<System.Type> unsortedTypes = new List<System.Type>(types);
-            List<System.Type> sortedTypes = new List<System.Type>(unsortedTypes.Count);
+            List<Type> unsortedTypes = new List<Type>(types);
+            List<Type> sortedTypes = new List<Type>(unsortedTypes.Count);
 
             foreach (string typeName in configuration.SortedTypeNames)
             {
@@ -284,7 +284,7 @@ namespace DuckGame
 
         internal void InvokeStart() => OnStart();
 
-        public Map<ushort, System.Type> typeToMessageID => _typeToMessageID;
+        public Map<ushort, Type> typeToMessageID => _typeToMessageID;
 
         public Map<ushort, ConstructorInfo> constructorToMessageID => _constructorToMessageID;
 

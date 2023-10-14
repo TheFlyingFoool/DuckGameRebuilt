@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using AddedContent.Firebreak;
+using System.Collections.Generic;
 using System.Reflection;
 using AddedContent.Hyeve.DebugUI;
 using AddedContent.Hyeve.DebugUI.Basic;
@@ -84,7 +85,7 @@ namespace AddedContent.Hyeve
         }
 
 
-        [DrawingContext(DrawingLayer.HUD, DoDraw = false)]
+        [Marker.DrawingContext(Marker.DrawingLayer.HUD, DoDraw = false)]
         public static void PolyDrawTest()
         {
             if(InputData.KeyPressed(Keys.F10)) RegenUI();
@@ -126,7 +127,7 @@ namespace AddedContent.Hyeve
         }
 
 
-        [DrawingContext(DrawingLayer.HUD, DoDraw = false)]
+        [Marker.DrawingContext(Marker.DrawingLayer.HUD, DoDraw = false)]
         public static void TexTest()
         {
             PolyRenderer.Rect(Vector2.Zero, Vector2.One * 50, Color.Aqua);

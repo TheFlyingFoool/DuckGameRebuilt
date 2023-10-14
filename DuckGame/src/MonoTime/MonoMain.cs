@@ -5,6 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using AddedContent.Firebreak;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SDL2;
@@ -998,10 +999,12 @@ namespace DuckGame
            
             Program.SetAccumulatedElapsedTime(Program.main, Program.main.TargetElapsedTime);
 
-            if (Program.RecorderatorWatchMode) return;
-            foreach (MethodInfo methodInfo in PostInitializeAttribute.All)
+            if (Program.RecorderatorWatchMode) 
+                return;
+            
+            foreach (Marker.PostInitializeAttribute attribute in Marker.PostInitializeAttribute.All.OrderByDescending(x => x.Priority))
             {
-                methodInfo.Invoke(null, null);
+                ((MethodInfo)attribute.Member).Invoke(null, null);
             }
         }
 

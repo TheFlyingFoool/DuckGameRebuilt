@@ -267,11 +267,8 @@
     <Compile Include="AddedContent\DevWeapons\Stuff\NMCrashPopup.cs" />
     <Compile Include="AddedContent\DGRDevs.cs" />
     <Compile Include="AddedContent\DGRSettings.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\AdvancedConfigAttribute.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ConfigClasses\NameDisplayConfig.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\IAdvancedConfig.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\NameDisplayConfig.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\FireSerializer.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\FireSerializerModuleAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\IFireSerializerModule.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\ColorSerializerModule.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\ConsoleBindSerializerModule.cs" />
@@ -292,6 +289,13 @@
     <Compile Include="AddedContent\Firebreak\HatEditor\SimRenderer.cs" />
     <Compile Include="AddedContent\Firebreak\Internet.cs" />
     <Compile Include="AddedContent\Firebreak\LockMovementQueue.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\AdvancedConfigAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\AutoConfigAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\DevConsoleCommandAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\DrawingContextAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\FireSerializerAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\MarkerAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\PostInitializeAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\SendToLevel.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\IAmUi.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\UiBasic.cs" />
@@ -317,22 +321,13 @@
     <Compile Include="AddedContent\Hyeve\Utils\InputData.cs" />
     <Compile Include="AddedContent\Hyeve\Utils\VectorMath.cs" />
     <Compile Include="AddedContent\Extensions.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\AutoConfigFieldAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AutoConfigHandler.cs" />
     <Compile Include="AddedContent\Firebreak\Content\SinkingBlock.cs" />
-    <Compile Include="AddedContent\Firebreak\Cursor\CursorHandler.cs" />
-    <Compile Include="AddedContent\Firebreak\Cursor\GameCursor.cs" />
-    <Compile Include="AddedContent\Firebreak\Cursor\OpalCursor.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\DynamicDCLine.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\FireDebug.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Levels\TestLev.cs" />
-    <Compile Include="AddedContent\Firebreak\DevConsoleCommandAttribute.cs" />
-    <Compile Include="AddedContent\Firebreak\DrawingContextAttribute.cs" />
-    <Compile Include="AddedContent\Firebreak\PostInitializeAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\CustomKeyBinds.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\EasingHelper.cs" />
-    <Compile Include="AddedContent\Firebreak\Utilities\MemberAttributePair.cs" />
-    <Compile Include="AddedContent\Firebreak\Utilities\MemberAttributePairHandler.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\ProgressValue.cs" />
     <Compile Include="AddedContent\klof44\DartGrenade.cs" />
     <Compile Include="AddedContent\klof44\DiscordRichPresence.cs" />
@@ -2318,7 +2313,6 @@
       <Name>Steam</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">
     <Exec Command="git describe  --always --dirty --abbrev=40 &gt; &quot;$(ProjectDir)version.txt&quot;" />

@@ -6,6 +6,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using AddedContent.Firebreak;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -28,7 +29,7 @@ namespace DuckGame
 {
     public class DevConsole
     {
-        [AutoConfigField]
+        [Marker.AutoConfig]
         public static bool showFPS;
         public static List<string> startupCommands = new();
         public static bool fancyMode;

@@ -5,6 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using AddedContent.Firebreak;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -1043,7 +1044,11 @@ namespace DuckGame
             foreach (IDrawToDifferentLayers toDifferentLayers in things[typeof(IDrawToDifferentLayers)])
                 toDifferentLayers.OnDrawLayer(layer);
 
-            DrawingContextAttribute.ExecuteAll(DrawingContextAttribute.DrawingLayerFromLayer(layer));
+            Marker.DrawingLayer? drawingLayer = Marker.DrawingContextAttribute.DrawingLayerFromLayer(layer);
+
+            if (drawingLayer != null)
+                Marker.DrawingContextAttribute.ExecuteAll(drawingLayer.Value);
+            
             RenderDelegates.Layers.InvokeFor(layer);
             
             
@@ -1680,8 +1685,8 @@ namespace DuckGame
         public IEnumerable<T> CollisionCircleAllOld<T>(Vec2 p1, float radius) //old //brought it back to fix collision issue with the postitron shooter -NiK0
         {
 
-            List<object> nextCollisionList = Level.GetNextCollisionList();
-            System.Type key = typeof(T);
+            List<object> nextCollisionList = GetNextCollisionList();
+            Type key = typeof(T);
             foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
             {
                 if (!dynamicObject.removeFromLevel && Collision.Circle(p1, radius, dynamicObject))
@@ -1767,16 +1772,16 @@ namespace DuckGame
         {
             List<T> list = (outList == null) ? new List<T>() : outList;
             Type t = typeof(T);
-            foreach (Thing thing in this._things.GetDynamicObjects(t))
+            foreach (Thing thing in _things.GetDynamicObjects(t))
             {
                 if (!thing.removeFromLevel && Collision.Rect(p1, p2, thing))
                 {
                     list.Add((T)((object)thing));
                 }
             }
-            if (this._things.HasStaticObjects(t))
+            if (_things.HasStaticObjects(t))
             {
-                this._things.quadTree.CheckRectangleAll<T>(p1, p2, list);
+                _things.quadTree.CheckRectangleAll<T>(p1, p2, list);
             }
             return list;
         }
@@ -1826,16 +1831,16 @@ namespace DuckGame
         public T OldCollisionLine<T>(Vec2 p1, Vec2 p2)
         {
             Type t = typeof(T);
-            foreach (Thing thing in this._things.GetDynamicObjects(t))
+            foreach (Thing thing in _things.GetDynamicObjects(t))
             {
                 if (!thing.removeFromLevel && Collision.Line(p1, p2, thing))
                 {
                     return (T)((object)thing);
                 }
             }
-            if (this._things.HasStaticObjects(t))
+            if (_things.HasStaticObjects(t))
             {
-                return this._things.quadTree.CheckLine<T>(p1, p2);
+                return _things.quadTree.CheckLine<T>(p1, p2);
             }
             return default(T);
         }

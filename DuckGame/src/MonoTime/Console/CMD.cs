@@ -154,7 +154,7 @@ namespace DuckGame
                     ++index1;
                 }
             }
-            if (this.cancrash)
+            if (cancrash)
             {
                 if (action != null)
                     action(this);
@@ -518,9 +518,9 @@ namespace DuckGame
         {
             Argument arg;
             
-            if (type == typeof(System.Int32))
+            if (type == typeof(Int32))
                 arg = new Integer(name, optional);
-            else if (type == typeof(System.Single))
+            else if (type == typeof(Single))
                 arg = new Float(name, optional);
             else if (type == typeof(System.Boolean))
                 arg = new Boolean(name, optional);
@@ -532,7 +532,7 @@ namespace DuckGame
                 arg = new Duck(name, optional);
             else if (type == typeof(DuckGame.Profile))
                 arg = new Profile(name, optional);
-            else if (typeof(DuckGame.Thing).IsAssignableFrom(type))
+            else if (typeof(Thing).IsAssignableFrom(type))
                 arg = new Thing<Thing>(name, optional);
             else if (typeof(DuckGame.Level).IsAssignableFrom(type))
                 arg = new Level(name, optional);

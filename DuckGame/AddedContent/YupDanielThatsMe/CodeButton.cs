@@ -198,7 +198,7 @@ namespace DuckGame
                 return;
             if (tab == null)
             {
-                tab = new DebugTablet("CodeButton" + this.x.ToString() + "|" + this.y.ToString() + ".cs", new FieldBinding(this, "codestring"));
+                tab = new DebugTablet("CodeButton" + x.ToString() + "|" + y.ToString() + ".cs", new FieldBinding(this, "codestring"));
             }
             if (!DebugTablet.tabs.Contains(tab))
             {

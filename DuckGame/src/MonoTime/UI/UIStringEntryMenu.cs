@@ -94,7 +94,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    UIMenu.globalUILock = true;
+                    globalUILock = true;
                     if (Program.RemoveColorTags(Keyboard.KeyString).Length > _maxLength)
                         Keyboard.KeyString = Keyboard.KeyString.Substring(0, _maxLength + Keyboard.KeyString.Length - Program.RemoveColorTags(Keyboard.KeyString).Length);
                     if (_numeric)

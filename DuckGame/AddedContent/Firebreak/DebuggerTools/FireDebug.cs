@@ -1,16 +1,12 @@
-﻿namespace DuckGame
+﻿using AddedContent.Firebreak;
+
+namespace DuckGame
 {
     public static class FireDebug
     {
         public static bool Debugging => MonoMain.firebreak;
-
-        [DevConsoleCommand]
-        public static bool KFP()
-        {
-            return TeamSelect2.KillsForPoints ^= true;
-        }
-
-        [PostInitialize]
+        
+        [Marker.PostInitialize]
         public static void OnPostInitialize()
         {
             if (!Debugging)
@@ -18,7 +14,7 @@
             
             foreach (Furniture furni in RoomEditor.AllFurnis())
             {
-                Profiles.experienceProfile.SetNumFurnitures(furni.index, 999);
+                Profiles.experienceProfile.SetNumFurnitures(furni.index, 9999);
             }
 
             RoomEditor.maxFurnitures = int.MaxValue;

@@ -3,8 +3,7 @@ using System.Linq;
 
 namespace DuckGame
 {
-
-    [FireSerializerModule]
+    [global::AddedContent.Firebreak.Marker.FireSerializer]
     public class ColorSerializerModule : IFireSerializerModule<Microsoft.Xna.Framework.Color>
     {
         public Microsoft.Xna.Framework.Color Deserialize(string s)

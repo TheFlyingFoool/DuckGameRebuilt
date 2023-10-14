@@ -1,3 +1,4 @@
+using AddedContent.Firebreak;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Drawing;
@@ -21,7 +22,7 @@ namespace DuckGame
         public static string? FilePath = null;
         public static string? HatName => Path.GetFileNameWithoutExtension(FilePath);
         
-        [PostInitialize]
+        [Marker.PostInitialize]
         public static void StaticInitialize()
         {
             FFIcons.Initialize();
@@ -58,7 +59,7 @@ namespace DuckGame
             
             Music.Stop();
 
-            if (Level.current is TitleScreen)
+            if (current is TitleScreen)
                 Music.Play("Title");
             
             base.Terminate();

@@ -1,14 +1,15 @@
-﻿using AddedContent.Hyeve.PolyRender;
+﻿using AddedContent.Firebreak;
+using AddedContent.Hyeve.PolyRender;
 
 namespace DuckGame
 {
 
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand(Description = "Toggle the activity of a Drawing Context from it's ID")]
+        [Marker.DevConsoleCommand(Description = "Toggle the activity of a Drawing Context from it's ID")]
         public static string DoDraw(string id)
         {
-            foreach (DrawingContextAttribute Attribute in DrawingContextAttribute.AllDrawingContexts)
+            foreach (Marker.DrawingContextAttribute Attribute in Marker.DrawingContextAttribute.AllDrawingContexts)
             {
                 string lookupName = Attribute.CustomID ?? Attribute.Name;
 
@@ -23,7 +24,7 @@ namespace DuckGame
             return $"|DGRED|No Drawing Context matches id of [{id}]";
         }
 
-        [DrawingContext(DoDraw = false)]
+        [Marker.DrawingContext(DoDraw = false)]
         public static void TestDraw()
         {
             const float length = 8f;

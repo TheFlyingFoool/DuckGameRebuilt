@@ -1,9 +1,11 @@
-﻿namespace DuckGame
+﻿using AddedContent.Firebreak;
+
+namespace DuckGame
 {
 
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand(Description = "Toggles rhythm mode (groovy)")]
+        [Marker.DevConsoleCommand(Description = "Toggles rhythm mode (groovy)")]
         public static bool RhythmMode()
         {
             if (!DevConsole.core.rhythmMode)

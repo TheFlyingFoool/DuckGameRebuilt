@@ -1,4 +1,5 @@
-﻿using DbMon.NET;
+﻿using AddedContent.Firebreak;
+using DbMon.NET;
 using DGWindows;
 using Microsoft.Xna.Framework;
 using System; 
@@ -312,8 +313,8 @@ namespace DuckGame
                 if (index != args.Length - 1)
                     commandLine += " ";
             }
-            MemberAttributePairHandler.Init();
-            AutoConfigHandler.Initialize(); //settings are loaded :sunglass:
+            MarkerAttribute.Initialize();
+            AutoConfigHandler.Initialize();
             int Controllers = 8;
             bool flag = false;
             for (int index = 0; index < args.Length; ++index)
@@ -1504,7 +1505,7 @@ namespace DuckGame
                     string tempMsg = pException.Message;
 
                     string tempMsg2;
-                    if (!Program.IsLinuxD) //PLEASE do not translate on linux. it dies -othello7
+                    if (!IsLinuxD) //PLEASE do not translate on linux. it dies -othello7
                         tempMsg2 = TranslateMessage(pException);
                     else
                         tempMsg2 = pException.Message;

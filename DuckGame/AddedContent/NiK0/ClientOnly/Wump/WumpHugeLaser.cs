@@ -264,7 +264,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    Vec2 barrelVector = base.barrelVector;
+                    Vec2 barrelVector = this.barrelVector;
                     hSpeed -= barrelVector.x * 9f;
                     vSpeed -= barrelVector.y * 9f + 3f;
                 }
@@ -302,7 +302,7 @@ namespace DuckGame
         {
             base.Draw();
             Material material = Graphics.material;
-            Graphics.material = base.material;
+            Graphics.material = this.material;
             _tip.depth = depth + 1;
             _tip.alpha = _charge;
             if (_chargeAnim.currentAnimation == "charge")
