@@ -28,7 +28,7 @@ namespace AddedContent.Firebreak
             
             protected override void Implement()
             {
-                DevConsoleDSHWrapper.AttributeCommands.Add((MethodInfo) Member);
+                DevConsoleDSHWrapper.AttributeCommandInfos.Add((MethodInfo) Member);
             }
 
             public StringBuilder GetFunctionSignature()

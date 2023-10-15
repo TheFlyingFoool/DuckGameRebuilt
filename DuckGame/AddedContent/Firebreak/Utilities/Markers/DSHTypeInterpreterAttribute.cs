@@ -1,6 +1,5 @@
 using AddedContent.Firebreak.DuckShell.Implementation;
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace AddedContent.Firebreak
@@ -10,11 +9,9 @@ namespace AddedContent.Firebreak
         [AttributeUsage(AttributeTargets.Class)]
         internal class DSHTypeInterpreterAttribute : MarkerAttribute
         {
-            public static List<TypeInfo> AllTypes = new();
-
             protected override void Implement()
             {
-                AllTypes.Add((TypeInfo) Member);
+                DevConsoleDSHWrapper.TypeInterpreterInfos.Add((TypeInfo) Member);
             }
         }
     }

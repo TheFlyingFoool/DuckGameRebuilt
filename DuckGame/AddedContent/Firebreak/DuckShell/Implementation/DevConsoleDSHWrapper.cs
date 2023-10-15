@@ -3,6 +3,7 @@ using DuckGame.ConsoleEngine;
 using DuckGame.ConsoleEngine.TypeInterpreters;
 using DuckGame.ConsoleInterface;
 using DuckShell.Manager.Interface.Console;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -13,18 +14,17 @@ namespace AddedContent.Firebreak.DuckShell.Implementation
     {
         public CommandRunner Shell { get; set; }
         public bool Active { get; set; }
-        public List<DSHConsoleLine> Lines;
         
-        public static readonly List<MethodInfo> AttributeCommands = new();
+        public static readonly List<MethodInfo> AttributeCommandInfos = new();
+        public static readonly List<TypeInfo> TypeInterpreterInfos = new();
 
         public DevConsoleDSHWrapper()
         {
             Shell = new CommandRunner();
             Active = false;
-            Lines = new List<DSHConsoleLine>();
             
-            Shell.AddCommandsUsingAttribute(AttributeCommands);
-            Shell.AddTypeInterpretters(Marker.DSHTypeInterpreterAttribute.AllTypes);
+            Shell.AddCommandsUsingAttribute(AttributeCommandInfos);
+            Shell.AddTypeInterpretters(TypeInterpreterInfos);
         }
 
         [Marker.PostInitialize]
@@ -40,10 +40,18 @@ namespace AddedContent.Firebreak.DuckShell.Implementation
         
         public void WriteLine(object o, DSHConsoleLine.Significance significance)
         {
-            Lines.Add(new DSHConsoleLine(o.ToString(), significance));
+            Color significanceColor = significance switch
+            {
+                DSHConsoleLine.Significance.Neutral => Color.White,
+                DSHConsoleLine.Significance.User => Color.MediumPurple,
+                DSHConsoleLine.Significance.Response => Color.Aquamarine,
+                DSHConsoleLine.Significance.Highlight => Color.Yellow,
+                DSHConsoleLine.Significance.Error => Color.Red,
+                DSHConsoleLine.Significance.VeryFuckingImportant => Color.Purple,
+                _ => throw new ArgumentOutOfRangeException(nameof(significance), significance, null)
+            };
             
-            // debug, remove later
-            DevConsole.LogComplexMessage($"{significance.ToString().ToUpper()} {o}", Color.White);
+            DevConsole.Log($"{significance.ToString().ToUpper(),-9} {o}", significanceColor);
         }
 
         public void Run(string command, bool byUser)
@@ -51,13 +59,14 @@ namespace AddedContent.Firebreak.DuckShell.Implementation
             if (byUser)
             {
                 WriteLine(command, DSHConsoleLine.Significance.User);
+                DevConsole.FlushPendingLines();
             }
 
             ValueOrException<object> valueOrException = Shell.Run(command);
             
             if (valueOrException.Error is { } error)
             {
-                WriteLine(error.ToString(), DSHConsoleLine.Significance.Error);
+                WriteLine($"{(error.GetType() == typeof(Exception) ? "" : $"{error.GetType()}: ")}{error.Message}", DSHConsoleLine.Significance.Error);
             }
             else if (valueOrException.Value is not null)
             {

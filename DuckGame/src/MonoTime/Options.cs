@@ -573,7 +573,10 @@ namespace DuckGame
                 dgrDescription = "STEAM    - Regular steam link\nDGR      - Custom DGR link (https protocol)\nBOTH (D) - Both in one link, clickable on Discord\nBOTH (G) - Both copied but as seperate links",
                 manualFormatting = true
             });
-
+            menu.Add(new UIMenuItemToggle("DSH in console", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.UseDuckShell)))
+            {
+                dgrDescription = "Uses DGR's custom DuckShell language to run commands in the console, which provides more power-user and automation features"
+            });
 
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
