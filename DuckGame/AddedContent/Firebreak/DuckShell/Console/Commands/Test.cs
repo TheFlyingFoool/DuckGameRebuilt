@@ -4,7 +4,7 @@ namespace DuckGame.ConsoleEngine
 {
     public static partial class Commands
     {
-        [Marker.DSHCommand(Hidden = true)]
+        [Marker.DevConsoleCommand(DebugOnly = true, To = ImplementTo.DuckShell)]
         public static string Test(huh whuh)
         {
             return $"{(int) whuh}: {whuh}";

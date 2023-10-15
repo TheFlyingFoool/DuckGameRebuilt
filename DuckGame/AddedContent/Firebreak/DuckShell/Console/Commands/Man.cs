@@ -6,13 +6,41 @@ namespace DuckGame.ConsoleEngine
 {
     public static partial class Commands
     {
-        [Marker.DSHCommand(Description = "Explains the usage of a command")]
+        [Marker.DevConsoleCommand(Description = "Explains the usage of a command", To = ImplementTo.DuckShell)]
         public static StringBuilder Man(string commandName)
         {
             if (console.Shell.Commands.TryFirst(x => x.Name.CaselessEquals(commandName),
-                    out Marker.DSHCommandAttribute commandAttribute))
+                    out Marker.DevConsoleCommandAttribute commandAttribute))
             {
-                StringBuilder builder = commandAttribute.GetFunctionSignature();
+                StringBuilder builder = new();
+        
+                builder.Append(commandAttribute.Name);
+                builder.Append('(');
+
+                ShellCommand.Parameter[] parameterInfos = commandAttribute.Command.Parameters;
+                for (int i = 0; i < parameterInfos.Length; i++)
+                {
+                    ShellCommand.Parameter pInfo = parameterInfos[i];
+
+                    Type pType = pInfo.ParameterType;
+                    string pName = pInfo.Name;
+                    bool isOptional = pInfo.IsOptional;
+
+                    if (i > 0)
+                        builder.Append(", ");
+
+                    if (isOptional)
+                        builder.Append('[');
+
+                    builder.Append(pType.Name);
+                    builder.Append(' ');
+                    builder.Append(pName);
+
+                    if (isOptional)
+                        builder.Append(']');
+                }
+
+                builder.Append(')');
                 
                 builder.Append(" {\n");
 

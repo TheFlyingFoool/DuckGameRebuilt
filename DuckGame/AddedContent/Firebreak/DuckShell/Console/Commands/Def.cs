@@ -5,10 +5,10 @@ namespace DuckGame.ConsoleEngine
 {
     public static partial class Commands
     {
-        [Marker.DSHCommand(Description = "Creates a temporary command.")]
+        [Marker.DevConsoleCommand(Description = "Creates a temporary command.", To = ImplementTo.DuckShell)]
         public static void Def(string name, string[] definedArgs, string command)
         {
-            Command.Parameter[] parameters = definedArgs.Select(x => new Command.Parameter()
+            ShellCommand.Parameter[] parameters = definedArgs.Select(x => new ShellCommand.Parameter()
             {
                 Name = x,
                 ParameterType = typeof(string),
@@ -20,7 +20,7 @@ namespace DuckGame.ConsoleEngine
             // will also overrite real commands if you want which is funny
             console.Shell.RemoveCommand(name);
 
-            console.Shell.AddCommand(new Command(name, parameters, givenArgs =>
+            console.Shell.AddCommand(new ShellCommand(name, parameters, givenArgs =>
             {
                 for (int i = 0; i < givenArgs.Length; i++)
                 {

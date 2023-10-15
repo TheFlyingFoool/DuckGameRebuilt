@@ -68,36 +68,5 @@ namespace DuckGame
             }
         }
         public string GetReceivedLogData(NetworkConnection pConnection) => receivingLogs.ContainsKey(pConnection) ? receivingLogs[pConnection] : null;
-
-        public Queue<DCLine> filteredLines
-        {
-            get
-            {
-                string filter = DevConsoleCommands.DCSectionFilter;
-                if (filter == "all")
-                    return lines;
-                
-                Queue<DCLine> q = new();
-                HashSet<DCSection> wantedSections = new();
-
-                foreach (string sectionName in filter.TrimSplit('|'))
-                {
-                    if (Enum.TryParse(sectionName, true, out DCSection result))
-                    {
-                        wantedSections.Add(result);
-                    }
-                }
-
-                foreach (DCLine line in lines)
-                {
-                    if (!wantedSections.Contains(line.section))
-                        continue;
-                    
-                    q.Enqueue(line);
-                }
-
-                return q;
-            }
-        }
     }
 }

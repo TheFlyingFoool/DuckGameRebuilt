@@ -3,13 +3,13 @@ using System.Reflection;
 
 namespace DuckGame.ConsoleEngine
 {
-    public class Command
+    public class ShellCommand
     {
         public Func<object[], object> Invoke;
         public string Name;
         public Parameter[] Parameters;
 
-        public Command(string name, Parameter[] parameters, Func<object?[]?, object?> invoke)
+        public ShellCommand(string name, Parameter[] parameters, Func<object?[]?, object?> invoke)
         {
             Name = name;
             Parameters = parameters;
@@ -17,7 +17,7 @@ namespace DuckGame.ConsoleEngine
         }
 
         /// <param name="methodInfo" />
-        public static Command FromMethodInfo(MethodInfo methodInfo)
+        public static ShellCommand FromMethodInfo(MethodInfo methodInfo)
         {
             ParameterInfo[] parameterInfos = methodInfo.GetParameters();
             Parameter[] parameters = new Parameter[parameterInfos.Length];
@@ -36,7 +36,7 @@ namespace DuckGame.ConsoleEngine
                 };
             }
 
-            return new Command(methodInfo.Name, parameters, args => methodInfo.Invoke(null, args));
+            return new ShellCommand(methodInfo.Name, parameters, args => methodInfo.Invoke(null, args));
         }
 
         public class Parameter

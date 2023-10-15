@@ -5,7 +5,7 @@ namespace DuckGame.ConsoleEngine
 {
     public static partial class Commands
     {
-        [Marker.DSHCommand(Description = "Quits the game.")]
+        [Marker.DevConsoleCommand(Description = "Quits the game.", To = ImplementTo.DuckShell)]
         public static void Exit()
         {
             DevConsoleCommands.Exit();

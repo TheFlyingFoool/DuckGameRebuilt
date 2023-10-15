@@ -5,7 +5,7 @@ namespace DuckGame.ConsoleEngine
 {
     public static partial class Commands
     {
-        [Marker.DSHCommand(Name = "?", Description = "Executes a command based on the condition.", Hidden = true)]
+        [Marker.DevConsoleCommand(Name = "?", Description = "Executes a command based on the condition.", To = ImplementTo.DuckShell)]
         public static object Conditional(bool condition, string commandIfTrue, params string[] alternative)
         {
             if (condition && !string.IsNullOrEmpty(commandIfTrue))

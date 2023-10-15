@@ -4,7 +4,7 @@ namespace DuckGame.ConsoleEngine
 {
     public static partial class Commands
     {
-        [Marker.DSHCommand(Description = "Clears the console.")]
+        [Marker.DevConsoleCommand(Description = "Clears the console.", To = ImplementTo.DuckShell)]
         public static void Clear()
         {
             console.Clear();

@@ -10,7 +10,7 @@ namespace DuckGame.ConsoleEngine
 {
     public class CommandRunner
     {
-        internal readonly List<Marker.DSHCommandAttribute> Commands = new();
+        internal readonly List<Marker.DevConsoleCommandAttribute> Commands = new();
         public readonly List<ITypeInterpreter> TypeInterpreterModules = new();
         public Dictionary<Type, ITypeInterpreter> TypeInterpreterModulesMap = new();
         public Regex ValidNameRegex { get; } = new("^[^ ]+$", RegexOptions.Compiled);
@@ -125,17 +125,17 @@ namespace DuckGame.ConsoleEngine
                 commandArgs[i - 1] = tokens[i];
             }
 
-            foreach (Marker.DSHCommandAttribute command in Commands)
+            foreach (Marker.DevConsoleCommandAttribute command in Commands)
             {
                 if (!string.Equals(command.Name, commandName, StringComparison.CurrentCultureIgnoreCase))
                     continue;
 
-                Command.Parameter[] parameterInfos = command.Command.Parameters;
+                ShellCommand.Parameter[] parameterInfos = command.Command.Parameters;
                 object?[] appliedParameters = new object?[parameterInfos.Length];
 
                 for (int i = 0; i < appliedParameters.Length; i++)
                 {
-                    Command.Parameter parameterInfo = parameterInfos[i];
+                    ShellCommand.Parameter parameterInfo = parameterInfos[i];
                     object? appliedParameterValue;
                     if (i >= commandArgs.Length && !parameterInfos.Last().IsParams)
                     {
@@ -380,62 +380,16 @@ namespace DuckGame.ConsoleEngine
 
             return split.ToArray();
         }
-    
-        /// <param name="allClasses">The pool of classes to search from</param>
-        public void AddTypeInterpretters(IEnumerable<TypeInfo>? allClasses = default)
-        {
-            allClasses ??= (Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly())
-                .DefinedTypes;
 
-            foreach (TypeInfo typeInfo in allClasses)
-            {
-                if (!typeof(ITypeInterpreter).IsAssignableFrom(typeInfo) // isn't a type interpreter
-                    || typeInfo.AsType() == typeof(ITypeInterpreter))    // or is ITypeInterpreter itself
-                    continue;
-
-                ITypeInterpreter interpreterInstance = (ITypeInterpreter) Activator.CreateInstance(typeInfo)!;
-            
-                TypeInterpreterModules.Add(interpreterInstance);
-                TypeInterpreterModulesMap.Add(interpreterInstance.ParsingType, interpreterInstance);
-            }
-        }
-    
-        /// <param name="allMethods">The pool of methods to search from</param>
-        public void AddCommandsUsingAttribute(IEnumerable<MethodInfo>? allMethods = default)
-        {
-            allMethods ??= (Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly())
-                .DefinedTypes
-                .SelectMany(x => x.DeclaredMethods);
-
-            foreach (MethodInfo methodInfo in allMethods)
-            {
-                if (methodInfo.GetCustomAttribute<Marker.DSHCommandAttribute>() is not { } attr)
-                    continue; // not using attribute
-            
-                if (methodInfo.GetParameters().Any(x => x.ParameterType == typeof(object)))
-                    throw new Exception("Imprecise type [Object] is invalid. Use [String] instead");
-            
-                attr.Name ??= methodInfo.Name;
-                attr.Command = Command.FromMethodInfo(methodInfo);
-
-                AddCommand(attr);
-            }
-        }
-
-        /// <param name="command" />
+        /// <param name="shellCommand" />
         /// <param name="description">Describes the usage of this command</param>
-        /// <param name="hidden">
-        /// Whether or not this command is marked as "hidden".
-        /// Doesn't matter by default, but can be used by your implementation
-        /// </param>
-        public void AddCommand(Command command, string? description = null, bool hidden = false)
+        public void AddCommand(ShellCommand shellCommand, string? description = null)
         {
-            AddCommand(new Marker.DSHCommandAttribute()
+            AddCommand(new Marker.DevConsoleCommandAttribute()
             {
-                Name = command.Name,
-                Hidden = hidden,
+                Name = shellCommand.Name,
                 Description = description,
-                Command = command
+                Command = shellCommand,
             });
         }
 
@@ -444,15 +398,19 @@ namespace DuckGame.ConsoleEngine
             Commands.RemoveAll(x => string.Equals(x.Name, commandName, StringComparison.InvariantCultureIgnoreCase));
         }
 
-        private void AddCommand(Marker.DSHCommandAttribute command)
+        internal void AddCommand(Marker.DevConsoleCommandAttribute command)
         {
             if (!ValidNameRegex.IsMatch(command.Name))
                 throw new Exception($"Invalid command name: {command.Name}");
 
-            if (Commands.Any(x =>
-                    x.Name == command.Name &&
-                    x.Command.Parameters.SequenceEqual(command.Command.Parameters)))
-                throw new Exception($"Duplicate command signature: {command.Name}");
+            // SLOW and CRINGE !!!
+            // if (Commands.Any(x =>
+            //         x.Name == command.Name &&
+            //         x.Command.Parameters.SequenceEqual(command.Command.Parameters)))
+            //     throw new Exception($"Duplicate command signature: {command.Name}");
+            
+            // 😎
+            Commands.RemoveAll(x => x.Name == command.Name);
 
             Commands.Add(command);
         }

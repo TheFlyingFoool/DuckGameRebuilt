@@ -10,7 +10,7 @@ namespace DuckGame.ConsoleEngine
         public static string ScriptsDirPath = $"{DuckFile.newSaveLocation}DuckGame/Scripts/";
         public const string SCRIPT_FILE_EXTENSION = "dsh";
         
-        [Marker.DSHCommand(Description = "Runs a script (by extensionless name) from your ~DuckGame/Scripts/ folder")]
+        [Marker.DevConsoleCommand(Description = "Runs a script (by extensionless name) from your ~DuckGame/Scripts/ folder", To = ImplementTo.DuckShell)]
         public static void Source(string scriptName)
         {
             if (!Directory.Exists(ScriptsDirPath))

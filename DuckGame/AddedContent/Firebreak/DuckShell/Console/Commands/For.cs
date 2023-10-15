@@ -4,7 +4,7 @@ namespace DuckGame.ConsoleEngine
 {
     public static partial class Commands
     {
-        [Marker.DSHCommand(Description = "Does an action for every element in a collection")]
+        [Marker.DevConsoleCommand(Description = "Does an action for every element in a collection", To = ImplementTo.DuckShell)]
         public static void For(string variableName, string[] collection, string command)
         {
             foreach (string item in collection)

@@ -368,7 +368,7 @@ namespace DuckGame
                         Graphics.DrawLine(p1, p1 + new Vec2(0.0f, 4f * _tray.scale.x), Color.White, 2f, 1f);
                     }
 
-                    int index1 = _core.filteredLines.Count - 1 - _core.viewOffset + ConsoleLineOffset;
+                    int index1 = _core.lines.Count - 1 - _core.viewOffset + ConsoleLineOffset;
                     float num5 = 0.0f;
                     _core.font.scale = new Vec2((float)Math.Max(Math.Round(_tray.scale.x / 4f), 1f));
                     float num6 = _core.font.scale.x / 2f;
@@ -383,7 +383,7 @@ namespace DuckGame
 
                     for (int index2 = ConsoleLineOffset; index2 < (num3 - 2f * _tray.scale.y) / num7 - 1f && index1 >= 0; ++index2)
                     {
-                        if (_core.filteredLines.ElementAtOrDefault(index1 + ConsoleLineOffset) is not { } dcLine)
+                        if (_core.lines.ElementAtOrDefault(index1 + ConsoleLineOffset) is not { } dcLine)
                             return;
 
                         string text = index1.ToString().PadLeft(4, '0');
@@ -495,6 +495,8 @@ namespace DuckGame
             return true;
         }
 
+        public static bool RunAsUser = false;
+
         public static void RunCommand(string command)
         {
             if (DG.buildExpired)
@@ -505,7 +507,8 @@ namespace DuckGame
 
             if (DGRSettings.UseDuckShell)
             {
-                Commands.console.Run(command, true);
+                Commands.console.Run(command, RunAsUser);
+                RunAsUser = false;
                 return;
             }
             
@@ -2089,7 +2092,10 @@ namespace DuckGame
                 {
                     _pendingCommandQueue.Dequeue();
                     if (queuedCommand.command != null)
+                    {
+                        RunAsUser = true;
                         RunCommand(queuedCommand.command);
+                    }
                 }
             }
 
@@ -2213,6 +2219,7 @@ namespace DuckGame
                     }
                     else
                     {
+                        RunAsUser = true;
                         RunCommand(_core.Typing);
                     }
                     for (int i = _core.previousLines.Count - 1; i >= 0; i--)

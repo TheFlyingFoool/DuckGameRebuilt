@@ -10,7 +10,7 @@ namespace DuckGame.ConsoleEngine
     {
         public static Dictionary<string, DSHVariable> VariableRegister = new();
 
-        [Marker.DSHCommand(Description = "Creates a variable with the provided value.")]
+        [Marker.DevConsoleCommand(Description = "Creates a variable with the provided value.", To = ImplementTo.DuckShell)]
         public static void Set(string name, string value)
         {
             if (VariableRegister.TryGetValue(name, out DSHVariable variable))
@@ -22,20 +22,20 @@ namespace DuckGame.ConsoleEngine
             });
         }
         
-        [Marker.DSHCommand(Description = "Drops a variable, and returns its value.")]
+        [Marker.DevConsoleCommand(Description = "Drops a variable, and returns its value.", To = ImplementTo.DuckShell)]
         public static string Pop(DSHVariable variable)
         {
             VariableRegister.Remove(variable.Name);
             return variable.Value;
         }
         
-        [Marker.DSHCommand(Description = "Retrieves the value of a variable by its name.")]
+        [Marker.DevConsoleCommand(Description = "Retrieves the value of a variable by its name.", To = ImplementTo.DuckShell)]
         public static object Get(DSHVariable variable)
         {
             return variable.Value;
         }
         
-        [Marker.DSHCommand(Description = "Lists all the currently registered variables")]
+        [Marker.DevConsoleCommand(Description = "Lists all the currently registered variables", To = ImplementTo.DuckShell)]
         public static string VarList()
         {
             return JsonConvert.SerializeObject(VariableRegister.ToDictionary(x => x.Key, x => x.Value.Value), Formatting.Indented);

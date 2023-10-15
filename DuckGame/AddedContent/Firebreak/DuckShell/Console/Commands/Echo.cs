@@ -5,7 +5,7 @@ namespace DuckGame.ConsoleEngine
 {
     public static partial class Commands
     {
-        [Marker.DSHCommand(Description = "Prints a string to the console")]
+        [Marker.DevConsoleCommand(Description = "Prints a string to the console", To = ImplementTo.DuckShell)]
         public static void Echo(string s)
         {
             console.WriteLine(s, DSHConsoleLine.Significance.Neutral);

@@ -5,7 +5,7 @@ namespace DuckGame.ConsoleEngine
 {
     public static partial class Commands
     {
-        [Marker.DSHCommand(Description = "Returns an array of information about the time specified")]
+        [Marker.DevConsoleCommand(Description = "Returns an array of information about the time specified", To = ImplementTo.DuckShell)]
         public static string Time(string from = "now")
         {
             DateTimeOffset time = from == "now" ? DateTimeOffset.Now : DateTimeOffset.Parse(from);

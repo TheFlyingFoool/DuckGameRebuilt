@@ -18,7 +18,8 @@ namespace DuckGame
 
         [Marker.DevConsoleCommand(
             Aliases = new[] { "?" },
-            Description = "Gives general help about every command")]
+            Description = "Gives general help about every command",
+            To = ImplementTo.DuckHack)]
         public static void Help(bool includeDescriptions = false, bool verboseParameters = false)
         {
             string s1 = SyntaxColorBraces.ToDGColorString();

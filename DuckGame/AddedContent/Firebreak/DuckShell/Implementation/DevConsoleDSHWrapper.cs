@@ -15,16 +15,26 @@ namespace AddedContent.Firebreak.DuckShell.Implementation
         public CommandRunner Shell { get; set; }
         public bool Active { get; set; }
         
-        public static readonly List<MethodInfo> AttributeCommandInfos = new();
-        public static readonly List<TypeInfo> TypeInterpreterInfos = new();
+        internal static readonly List<Marker.DevConsoleCommandAttribute> AttributeCommands = new();
+        internal static readonly List<TypeInfo> TypeInterpreterInfos = new();
 
         public DevConsoleDSHWrapper()
         {
             Shell = new CommandRunner();
             Active = false;
+
+            foreach (Marker.DevConsoleCommandAttribute command in AttributeCommands)
+            {
+                Shell.AddCommand(command);
+            }
+
+            foreach (TypeInfo typeInfo in TypeInterpreterInfos)
+            {
+                ITypeInterpreter interpreterInstance = (ITypeInterpreter) Activator.CreateInstance(typeInfo)!;
             
-            Shell.AddCommandsUsingAttribute(AttributeCommandInfos);
-            Shell.AddTypeInterpretters(TypeInterpreterInfos);
+                Shell.TypeInterpreterModules.Add(interpreterInstance);
+                Shell.TypeInterpreterModulesMap.Add(interpreterInstance.ParsingType, interpreterInstance);
+            }
         }
 
         [Marker.PostInitialize]

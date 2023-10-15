@@ -320,7 +320,7 @@
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\DSHConsoleLine.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\DSHVariable.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\IDSHConsole.cs" />
-    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\Command.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\ShellCommand.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\CommandRunner.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\ArrayInterpreter.cs" />
@@ -346,7 +346,6 @@
     <Compile Include="AddedContent\Firebreak\Utilities\Markers\AutoConfigAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\Markers\DevConsoleCommandAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\Markers\DrawingContextAttribute.cs" />
-    <Compile Include="AddedContent\Firebreak\Utilities\Markers\DSHCommandAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\Markers\DSHTypeInterpreterAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\Markers\FireSerializerAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\Markers\MarkerAttribute.cs" />
@@ -634,7 +633,6 @@
     <Compile Include="src\MonoTime\Console\Commands\DoDraw.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Dsh.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Exit.cs" />
-    <Compile Include="src\MonoTime\Console\Commands\Filter.cs" />
     <Compile Include="src\MonoTime\Console\Commands\For.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Help.cs" />
     <Compile Include="src\MonoTime\Console\Commands\LaunchArguments.cs" />

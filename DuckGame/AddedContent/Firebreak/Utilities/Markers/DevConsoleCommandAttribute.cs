@@ -1,4 +1,6 @@
+using AddedContent.Firebreak.DuckShell.Implementation;
 using DuckGame;
+using DuckGame.ConsoleEngine;
 using System;
 using System.Collections;
 using System.Linq;
@@ -27,13 +29,15 @@ namespace AddedContent.Firebreak
         [AttributeUsage(AttributeTargets.Method | AttributeTargets.ReturnValue, Inherited = false)]
         internal class DevConsoleCommandAttribute : MarkerAttribute
         {
-            public string? Name { get; set; } = null;
+            public string Name { get; set; } = null;
             public string? Description { get; set; } = null;
             public bool IsCheat { get; set; }
             public bool CanCrash { get; set; }
             public string[] Aliases { get; set; } = Array.Empty<string>();
             public bool HostOnly { get; set; }
             public bool DebugOnly { get; set; }
+            public ImplementTo To { get; set; } = ImplementTo.Both;
+            public ShellCommand Command { get; set; }
 
             protected override void Implement()
             {
@@ -41,66 +45,76 @@ namespace AddedContent.Firebreak
                     return;
                 
                 MethodInfo method = (MethodInfo)Member;
+                
+                Command = ShellCommand.FromMethodInfo(method);
+                Name ??= method.Name;
 
                 ParameterInfo[] parameters = method.GetParameters();
 
-                string realName = (Name ?? method.Name).ToLower().Replace(" ", "");
-
-                int parameterLength = parameters.Length;
-                CMD.Argument[] arguments = new CMD.Argument[parameterLength];
-                for (int i = 0; i < arguments.Length; i++)
+                string idName = Name.ToLower().Replace(" ", "");
+                
+                if (To is ImplementTo.Both or ImplementTo.DuckShell)
                 {
-                    arguments[i] = ParameterInfoToCmdArgument(parameters[i], i == arguments.Length - 1);
+                    DevConsoleDSHWrapper.AttributeCommands.Add(this);
                 }
-
-                DevConsole.AddCommand(new CMD(realName, arguments, cmd =>
+                if (To is ImplementTo.Both or ImplementTo.DuckHack)
                 {
-                    if (HostOnly && !Network.isServer)
-                    {
-                        DevConsole.Log("You have to be the host!", Color.Red);
-                        return;
-                    }
-
-                    if (IsCheat && DevConsole.CheckCheats())
-                    {
-                        DevConsole.Log("You can't do that here!", Color.Red);
-                        return;
-                    }
-
-                    object[] objectParameters = new object[arguments.Length];
+                    int parameterLength = parameters.Length;
+                    CMD.Argument[] arguments = new CMD.Argument[parameterLength];
                     for (int i = 0; i < arguments.Length; i++)
                     {
-                        object argVal = cmd.Arg<object>(parameters[i].Name);
-                        object val = cmd.arguments[i].optional && argVal is null
-                            ? parameters[i].DefaultValue
-                            : argVal;
-
-                        objectParameters[i] = val;
+                        arguments[i] = ParameterInfoToCmdArgument(parameters[i], i == arguments.Length - 1);
                     }
-
-                    try
+                    
+                    DevConsole.AddCommand(new CMD(idName, arguments, cmd =>
                     {
-                        // invokes the method. if it returns a value, logs it
-                        if (method.Invoke(null, objectParameters) is { } result)
+                        if (HostOnly && !Network.isServer)
                         {
-                            DevConsole.LogComplexMessage(result switch
-                            {
-                                IEnumerable ie and not string => ie.Cast<object>().ToReadableString(),
-                                _ => result.ToString()
-                            }, Color.White);
+                            DevConsole.Log("You have to be the host!", Color.Red);
+                            return;
                         }
-                    }
-                    catch (Exception e)
+
+                        if (IsCheat && DevConsole.CheckCheats())
+                        {
+                            DevConsole.Log("You can't do that here!", Color.Red);
+                            return;
+                        }
+
+                        object[] objectParameters = new object[arguments.Length];
+                        for (int i = 0; i < arguments.Length; i++)
+                        {
+                            object argVal = cmd.Arg<object>(parameters[i].Name);
+                            object val = cmd.arguments[i].optional && argVal is null
+                                ? parameters[i].DefaultValue
+                                : argVal;
+
+                            objectParameters[i] = val;
+                        }
+
+                        try
+                        {
+                            // invokes the method. if it returns a value, logs it
+                            if (method.Invoke(null, objectParameters) is { } result)
+                            {
+                                DevConsole.LogComplexMessage(result switch
+                                {
+                                    IEnumerable ie and not string => ie.Cast<object>().ToReadableString(),
+                                    _ => result.ToString()
+                                }, Color.White);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            throw e.InnerException ?? e;
+                        }
+                    })
                     {
-                        throw e.InnerException ?? e;
-                    }
-                })
-                {
-                    cancrash = CanCrash,
-                    description = Description ?? "",
-                    cheat = IsCheat,
-                    aliases = Aliases.ToList()
-                });
+                        cancrash = CanCrash,
+                        description = Description ?? "",
+                        cheat = IsCheat,
+                        aliases = Aliases.ToList()
+                    });
+                }
             }
 
             private static CMD.Argument ParameterInfoToCmdArgument(ParameterInfo parameter, bool isLast)
@@ -119,5 +133,12 @@ namespace AddedContent.Firebreak
                 return arg;
             }
         }
+    }
+    
+    public enum ImplementTo
+    {
+        Both,
+        DuckShell,
+        DuckHack,
     }
 }

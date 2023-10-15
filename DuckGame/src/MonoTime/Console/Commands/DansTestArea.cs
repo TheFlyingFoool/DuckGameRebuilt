@@ -231,7 +231,8 @@ namespace DuckGame
             DevConsole.Log("Trying to join " + id);
             Level.current = new JoinServer(id);
         }
-        [Marker.DevConsoleCommand(Name = "res")]
+        [Marker.DevConsoleCommand(Name = "res",
+            To = ImplementTo.DuckHack)]
         public static void Res(int width, int height, int screenmode)
         {
             if (screenmode < 1 || screenmode > 4)
@@ -248,7 +249,8 @@ namespace DuckGame
             Resolution.Set(r);
             Resolution.Apply();
         }
-        [Marker.DevConsoleCommand(Name = "windowtoggle")]
+        [Marker.DevConsoleCommand(Name = "windowtoggle",
+            To = ImplementTo.DuckHack)]
         public static void windowtoggle()
         {
             windowed = !windowed;
@@ -258,13 +260,15 @@ namespace DuckGame
         public static bool windowed = true;// SDL.SDL_SetWindowPosition(Resolution._window, 0, 0);
 
 
-        [Marker.DevConsoleCommand(Name = "windowpos")]
+        [Marker.DevConsoleCommand(Name = "windowpos",
+            To = ImplementTo.DuckHack)]
         public static void windowtoggle(int x, int y)
         {
             SDL.SDL_SetWindowPosition(MonoMain.instance.Window.Handle, x, y);
             DevConsole.Log("Set Window Pos is " + x.ToString() + " " + y.ToString());
         }
-        [Marker.DevConsoleCommand(Name = "tilescreen")]
+        [Marker.DevConsoleCommand(Name = "tilescreen",
+            To = ImplementTo.DuckHack)]
         public static void tilescreen()
         {
             int width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
@@ -284,13 +288,15 @@ namespace DuckGame
             Program.main.KillEverything();
             Program.main.Exit();
         }
-        [Marker.DevConsoleCommand(Name = "crashtest", CanCrash = true)]
+        [Marker.DevConsoleCommand(Name = "crashtest", CanCrash = true,
+            To = ImplementTo.DuckHack)]
         public static void crashtest()
         {
             DuckNetwork.CheckVersion(null);
         }
         // SDL.SDL_SetWindowBordered(Resolution._window, true ? SDL.SDL_bool.SDL_FALSE : SDL.SDL_bool.SDL_TRUE); 
-        [Marker.DevConsoleCommand(Name = "rlevel")]
+        [Marker.DevConsoleCommand(Name = "rlevel",
+            To = ImplementTo.DuckHack)]
         public static void randomnesstest2()
         {//Content.GetLevels("pyramid", LevelLocation.Content)
             List<string> levels = Content.GetLevels("pyramid", LevelLocation.Content);
@@ -301,14 +307,16 @@ namespace DuckGame
             }
             DevConsole.Log(levels.Count.ToString() + " rlevel");
         }
-        [Marker.DevConsoleCommand(Name = "random")]
+        [Marker.DevConsoleCommand(Name = "random",
+            To = ImplementTo.DuckHack)]
         public static void randomnesstest()
         {//Content.GetLevels("pyramid", LevelLocation.Content)
             Random rand = new Random(42069);
             double d = rand.NextDouble();
             DevConsole.Log(d.ToString() + " random");
         }
-        [Marker.DevConsoleCommand(Name = "testdg")]
+        [Marker.DevConsoleCommand(Name = "testdg",
+            To = ImplementTo.DuckHack)]
         public static void starttestdg()
         {
             Process.Start(Application.ExecutablePath, Program.commandLine + " -lanjoiner");
@@ -323,7 +331,8 @@ namespace DuckGame
                 FNAPlatform.SetGamePadLightBar(index, (Microsoft.Xna.Framework.Color)color);
         }
 
-        [Marker.DevConsoleCommand(Name = "dr")]
+        [Marker.DevConsoleCommand(Name = "dr",
+            To = ImplementTo.DuckHack)]
         public static void debugrandom()
         {
             SetControllerLightBar(Persona.alllist[0].index, Color.Magenta);
@@ -337,14 +346,16 @@ namespace DuckGame
             //cityBackground.RandomSkySay();
             //DevConsole.Log("random test");
         }
-        [Marker.DevConsoleCommand(Name = "savegraphic")]
+        [Marker.DevConsoleCommand(Name = "savegraphic",
+            To = ImplementTo.DuckHack)]
         public static void seetheunseen()
         {
             SaveTextures();
             DevConsole.Log("wasnt in spriteatlas " + MTSpriteBatcher.Texidonthave.Count.ToString());
         }
         public static bool runv2;
-        [Marker.DevConsoleCommand(Name = "dantest")]
+        [Marker.DevConsoleCommand(Name = "dantest",
+            To = ImplementTo.DuckHack)]
         public static void DanTest()
         {
             //Level.CheckRectAllDan<MaterialThing>(new Vec2(-1100.6f, -414.2592f), new Vec2(800.3334f, 497.3408f));
