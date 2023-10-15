@@ -603,6 +603,8 @@
     <Compile Include="src\MonoTime\LUI\LUIOnOff.cs" />
     <Compile Include="src\MonoTime\LUI\LUIStringEntry.cs" />
     <Compile Include="src\MonoTime\LUI\LUIText.cs" />
+    <Compile Include="src\MonoTime\Materials\FullscreenMaterial.cs" />
+    <Compile Include="src\MonoTime\Materials\MaterialFunBeam.cs" />
     <Compile Include="src\MonoTime\Sound\QOA.cs" />
     <Compile Include="src\MonoTime\UI\UIDGRDescribe.cs" />
     <Compile Include="src\MonoTime\UI\UISideButton.cs" />

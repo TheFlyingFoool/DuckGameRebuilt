@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Teleporter
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,6 +21,7 @@ namespace DuckGame
             _bottom.CenterOrigin();
             _top = new Sprite("wumpTeleTop");
             _top.CenterOrigin();
+            _editorIcon = new Sprite("wumpTeleporterIcon");
         }
         public Color bloo;
         public override void EditorPropertyChanged(object property)

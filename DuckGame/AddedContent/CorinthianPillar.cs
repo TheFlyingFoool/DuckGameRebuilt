@@ -1,4 +1,4 @@
-﻿namespace DuckGame
+﻿/*namespace DuckGame
 {
     [ClientOnly]
     [EditorGroup("Rebuilt|Stuff", EditorItemType.Normal)]
@@ -89,4 +89,4 @@
             Graphics.Draw(_pillar, x - 8, y - 3, new Rectangle(0, 16 - 5, 16, 5));
         }
     }
-}
+}*/

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.EnergyScimitar
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -115,15 +108,23 @@ namespace DuckGame
             }
         }
 
-        public override float angle
+        override public float angle
         {
             get
             {
-                if (owner is WireMount)
-                    return _angle;
-                return !held && owner != null ? _angle + 1.570796f * offDir : Maths.DegToRad(_lerpedAngle) * offDir + Maths.DegToRad(_throwSpin);
+                if (level != null)
+                {
+                    if (owner is WireMount)
+                        return _angle;
+
+                    if (held == false && owner != null)
+                        return _angle + ((Maths.PI / 2) * offDir);
+
+                    return (Maths.DegToRad(_lerpedAngle) * offDir) + Maths.DegToRad(_throwSpin);
+                }
+                return _angle;
             }
-            set => _angle = value;
+            set { _angle = value; }
         }
 
         public override void CheckIfHoldObstructed()
@@ -500,6 +501,8 @@ namespace DuckGame
             swordColor = properColor;
             _warpLine = new Sprite("warpLine2");
             editorTooltip = "How do you invent a sword? It uses modern technology.";
+            _editorPreviewRotation = 90.0f;
+            _editorPreviewOffset.x -= 7;
         }
 
         public Vec2 barrelStartPos => position + (Offset(barrelOffset) - position).normalized * 2f;

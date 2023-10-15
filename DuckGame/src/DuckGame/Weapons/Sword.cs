@@ -113,6 +113,8 @@ namespace DuckGame
             _bouncy = 0.5f;
             _impactThreshold = 0.3f;
             editorTooltip = "Basically a giant letter opener.";
+            _editorPreviewRotation = 90.0f;
+            _editorPreviewOffset.x -= 9;
         }
         public override void Initialize() => base.Initialize();
 

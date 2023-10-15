@@ -497,7 +497,7 @@ namespace DuckGame
             TeamSelect2.DefaultSettings();
             if (Network.isActive)
                 Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.ControlledDisconnect, "Returned to title screen."));
-            if (Music.currentSong != "Title" && Music.currentSong != "TitleDemo" || Music.finished)
+            if (DGRSettings.StartIn == 0 && (Music.currentSong != "Title" && Music.currentSong != "TitleDemo" || Music.finished))
                 Music.Play("Title");
             if (GameMode.playedGame)
                 GameMode.playedGame = false; 
@@ -567,17 +567,17 @@ namespace DuckGame
             _optionsGroup.Add(_flagMenu, false);
             _optionsGroup.Add(_graphicsMenu, false);
             _optionsGroup.Add(_dgrMenu, false);
-            _optionsGroup.Add(Options._DGRGraphicsMenu, false);
-            _optionsGroup.Add(Options._DGRHudMenu, false);
-            _optionsGroup.Add(Options._DGREditorMenu, false);
-            _optionsGroup.Add(Options._DGRQOLMenu, false);
-            _optionsGroup.Add(Options._DGRDumbShitMenu, false);
+            _optionsGroup.Add(Options.TEMPDGRGRAPHICS, false);
+            _optionsGroup.Add(Options.TEMPDGRHUD, false);
+            _optionsGroup.Add(Options.TEMPDGREDITOR, false);
+            _optionsGroup.Add(Options.TEMPDGRQOL, false);
+            _optionsGroup.Add(Options.TEMPDGRMISC, false);
             if (Program.IS_DEV_BUILD)
-                _optionsGroup.Add(Options._DGRDeveloperMenu, false);
-            _optionsGroup.Add(Options._DGROptimMenu, false);
+                _optionsGroup.Add(Options.TEMPDGRDEV, false);
+            _optionsGroup.Add(Options.TEMPDGROPTIM, false);
             #if AutoUpdater
             #else
-            _optionsGroup.Add(Options._DGRRecorderatorMenu, false);
+            _optionsGroup.Add(Options.TEMPDGRRECORDERATOR, false);
             #endif
             _optionsGroup.Add(_audioMenu, false);
             if (_accessibilityMenu != null)
@@ -1199,17 +1199,20 @@ namespace DuckGame
                 foreach (StarParticle starParticle in starParticleList)
                     particles.Remove(starParticle);
             }
-            if (menuOpen)
+            if (!_enterMultiplayer && !_enterEditor && !_enterLibrary)
             {
-                Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0.2f, 0.02f);
-                Layer.Foreground.fade = Lerp.Float(Layer.Foreground.fade, 0.2f, 0.02f);
-                Layer.Background.fade = Lerp.Float(Layer.Foreground.fade, 0.2f, 0.02f);
-            }
-            else
-            {
-                Layer.Game.fade = Lerp.Float(Layer.Game.fade, _fadeInFull ? 1f : (_fadeIn ? 0.5f : 0f), _fadeInFull ? 0.01f : 3f / 500f);
-                Layer.Foreground.fade = Lerp.Float(Layer.Foreground.fade, _fadeIn ? 1f : 0f, 0.01f);
-                Layer.Background.fade = Lerp.Float(Layer.Background.fade, _fadeBackground ? 0f : 1f, 0.02f);
+                if (menuOpen)
+                {
+                    Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0.2f, 0.02f);
+                    Layer.Foreground.fade = Lerp.Float(Layer.Foreground.fade, 0.2f, 0.02f);
+                    Layer.Background.fade = Lerp.Float(Layer.Foreground.fade, 0.2f, 0.02f);
+                }
+                else
+                {
+                    Layer.Game.fade = Lerp.Float(Layer.Game.fade, _fadeInFull ? 1f : (_fadeIn ? 0.5f : 0f), _fadeInFull ? 0.01f : 3f / 500f);
+                    Layer.Foreground.fade = Lerp.Float(Layer.Foreground.fade, _fadeIn ? 1f : 0f, 0.01f);
+                    Layer.Background.fade = Lerp.Float(Layer.Background.fade, _fadeBackground ? 0f : 1f, 0.02f);
+                }
             }
             if (_enterArcade)
             {
@@ -1360,6 +1363,7 @@ namespace DuckGame
             }
             else
             {
+                _levelStart = false;
                 Graphics.fade -= 0.05f;
                 if (Graphics.fade <= 0)
                 {

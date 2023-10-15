@@ -362,6 +362,8 @@ namespace DuckGame
             }
             else
             {
+                flyTrail.Clear();
+                flyTrail2.Clear();
                 _skipPlatforms = false;
                 weight = 5;
                 gravMultiplier = 1;

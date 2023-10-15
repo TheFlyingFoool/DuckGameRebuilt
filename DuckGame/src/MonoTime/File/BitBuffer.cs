@@ -1014,7 +1014,7 @@ namespace DuckGame
                     t.position = new Vec2(-2000, -2000);
 
                     Main.SpecialCode2 = "20060";
-                    ghost.ClearStateMask(NetworkConnection.context);
+                    if (NetworkConnection.context != null) ghost.ClearStateMask(NetworkConnection.context);
                     Main.SpecialCode2 = "20070";
                     t.level = Level.current;
                     Main.SpecialCode2 = "20080";

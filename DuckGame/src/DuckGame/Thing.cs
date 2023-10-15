@@ -104,9 +104,6 @@ namespace DuckGame
         /// This is useful for removing undesired inherited EditorProperty members from the right click menu.
         /// </summary>
         protected HashSet<string> _contextMenuFilter = new HashSet<string>();
-        public static Effect _alphaTestEffect;
-        private bool _skipPositioning;
-        public static Dictionary<Type, Sprite> _editorIcons = new Dictionary<Type, Sprite>();
         public Sprite _editorIcon;
         protected bool _solid = true;
         protected Vec2 _collisionOffset;
@@ -1127,31 +1124,26 @@ namespace DuckGame
         {
         }
 
-        public Sprite GetEditorImage(
-          int wide = 16,
-          int high = 16,
-          bool transparentBack = false,
-          Effect effect = null,
-          RenderTarget2D target = null)
+        public static Effect _alphaTestEffect;
+        private bool _skipPositioning;
+        public static Dictionary<Type, Sprite> _editorIcons = new Dictionary<Type, Sprite>();
+        public Sprite GetEditorImage(int wide = 16, int high = 16, bool transparentBack = false, Effect effect = null, RenderTarget2D target = null)
         {
             return GetEditorImage(wide, high, transparentBack, effect, target, false);
         }
 
-        public Sprite GetEditorImage(
-          int wide,
-          int high,
-          bool transparentBack,
-          Effect effect,
-          RenderTarget2D target,
-          bool pUseCollisionSize)
+        public Sprite GetEditorImage(int wide, int high, bool transparentBack, Effect effect, RenderTarget2D target, bool pUseCollisionSize)
         {
-            Sprite editorImage1;
-            if (_editorIcons.TryGetValue(GetType(), out editorImage1))
-                return editorImage1;
-            if (Thread.CurrentThread != MonoMain.mainThread)
+            Sprite tex = null;
+            if (_editorIcons.TryGetValue(GetType(), out tex))
+                return tex;
+
+            if (Thread.CurrentThread != Main.mainThread)
                 return new Sprite("basketBall");
+
             if (_alphaTestEffect == null)
-                _alphaTestEffect = (Effect)Content.Load<MTEffect>("Shaders/alphatest");
+                _alphaTestEffect = Content.Load<MTEffect>("Shaders/alphatest");
+
             if (pUseCollisionSize && collisionSize.x > 0)
             {
                 if (wide <= 0)
@@ -1166,57 +1158,83 @@ namespace DuckGame
                 if (high <= 0)
                     high = graphic.h;
             }
-            int num1 = wide > high ? wide : high;
+
+
+            int scalar = wide > high ? wide : high;
+
             if (target == null)
                 target = new RenderTarget2D(wide, high, true);
+
             if (graphic == null)
-                return new Sprite(target, 0f, 0f);
-            float num2 = num1 / (collisionSize.x > 0 & pUseCollisionSize ? collisionSize.x : graphic.width);
-            Camera camera = new Camera(0f, 0f, wide, high)
-            {
-                position = new Vec2(x - centerx * num2, y - centery * num2)
-            };
+                return new Sprite(target);
+
+            float s = (float)scalar / ((collisionSize.x > 0 && pUseCollisionSize) ? collisionSize.x : (float)graphic.width);
+            Camera cam = new Camera(0, 0, wide, high);
+
+            cam.position = new Vec2(x - (centerx * s), y - (centery * s));
+
             if (pUseCollisionSize && collisionSize.x > 0)
-                camera.center = new Vec2((int)((left + right) / 2), (int)((top + bottom) / 2));
-            RenderTarget2D currentRenderTarget = Graphics.currentRenderTarget;
+                cam.center = new Vec2((int)((left + right) / 2), (int)((top + bottom) / 2));
+
+
+            RenderTarget2D curTarg = Graphics.currentRenderTarget;
             Graphics.SetRenderTarget(target);
-            DepthStencilState depthStencilState = new DepthStencilState()
+
+            DepthStencilState state = new DepthStencilState()
             {
                 StencilEnable = true,
                 StencilFunction = CompareFunction.Always,
                 StencilPass = StencilOperation.Replace,
                 ReferenceStencil = 1,
-                DepthBufferEnable = false
+                DepthBufferEnable = false,
             };
-            Graphics.Clear(transparentBack ? Color.Transparent : new Color(15, 4, 16));
-            Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)(effect == null ? _alphaTestEffect : effect), camera.getMatrix());
+
+            Graphics.Clear(transparentBack ? new Color(0, 0, 0, 0) : new Color(15, 4, 16));
+
+            Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, state, RasterizerState.CullNone, effect == null ? _alphaTestEffect : effect, cam.getMatrix());
             Draw();
             Graphics.screen.End();
-            if (currentRenderTarget == null || currentRenderTarget.IsDisposed)
+
+            if (curTarg == null || curTarg.IsDisposed)
                 Graphics.SetRenderTarget(null);
             else
-                Graphics.SetRenderTarget(currentRenderTarget);
-            Texture2D tex = new Texture2D(Graphics.device, target.width, target.height);
-            tex.SetData(target.GetData());
-            Sprite editorImage2 = new Sprite((Tex2D)tex);
-            _editorIcons[GetType()] = editorImage2;
-            return editorImage2;
+                Graphics.SetRenderTarget(curTarg);
+
+            Texture2D newTex = new Texture2D(Graphics.device, target.width, target.height);
+            newTex.SetData(target.GetData());
+
+            Sprite spr = new Sprite(newTex);
+            _editorIcons[GetType()] = spr;
+            return spr;
+
         }
 
-        public virtual Sprite GeneratePreview(
-          int wide = 16,
-          int high = 16,
-          bool transparentBack = false,
-          Effect effect = null,
-          RenderTarget2D target = null)
+        protected Vec2 _editorPreviewOffset;
+        protected float _editorPreviewRotation;
+        protected int _editorPreviewWidth = 0;
+        public virtual int GetEditorPreviewWidth()
         {
-            bool flag = ((wide != 16 ? 0 : (high == 16 ? 1 : 0)) & (transparentBack ? 1 : 0)) != 0 && effect == null && target == null;
-            if (flag && _editorIcon != null)
+            if (_editorPreviewWidth == 0)
+                return 16;
+
+            return _editorPreviewWidth;
+        }
+
+        public bool forceEditorPreview;
+
+        virtual public Sprite GeneratePreview(int wide = 16, int high = 16, bool transparentBack = false, Effect effect = null, RenderTarget2D target = null)
+        {
+            bool editorPreview = wide == 16 && high == 16 && transparentBack && effect == null && target == null;
+            if (forceEditorPreview) editorPreview = true;
+            if (editorPreview && _editorIcon != null) // this seems to be unused?
                 return _editorIcon;
-            if (Thread.CurrentThread != MonoMain.mainThread)
+
+            if (Thread.CurrentThread != Main.mainThread)
                 return new Sprite("basketBall");
+
             if (_alphaTestEffect == null)
-                _alphaTestEffect = (Effect)Content.Load<MTEffect>("Shaders/alphatest");
+                _alphaTestEffect = Content.Load<MTEffect>("Shaders/alphatest");
+
             if (graphic != null)
             {
                 if (wide <= 0)
@@ -1224,38 +1242,47 @@ namespace DuckGame
                 if (high <= 0)
                     high = graphic.h;
             }
+
             if (target == null)
                 target = new RenderTarget2D(wide, high, true);
+
             if (graphic == null)
-                return new Sprite(target, 0f, 0f);
-            Camera camera = new Camera(0f, 0f, wide, high)
-            {
-                position = new Vec2(x - wide / 2, y - high / 2)
-            };
+                return new Sprite(target);
+
+            Camera cam = new Camera(0, 0, wide, high);
+            cam.position = new Vec2(x - (wide / 2), y - (high / 2)) - _editorPreviewOffset;
             Graphics.SetRenderTarget(target);
-            DepthStencilState depthStencilState = new DepthStencilState()
+
+            DepthStencilState state = new DepthStencilState()
             {
                 StencilEnable = true,
                 StencilFunction = CompareFunction.Always,
                 StencilPass = StencilOperation.Replace,
                 ReferenceStencil = 1,
-                DepthBufferEnable = false
+                DepthBufferEnable = false,
             };
-            Graphics.Clear(transparentBack ? Color.Transparent : new Color(30, 30, 30));
-            Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)(effect == null ? _alphaTestEffect : effect), camera.getMatrix());
+
+            Graphics.Clear(transparentBack ? new Color(0, 0, 0, 0) : new Color(30, 30, 30));
+
+            Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, state, RasterizerState.CullNone, effect == null ? _alphaTestEffect : effect, cam.getMatrix());
+
+            float a = angle;
+            if (_editorPreviewRotation != 0) angleDegrees = _editorPreviewRotation;
             Draw();
+            angle = a;
+
             Graphics.screen.End();
+
             Graphics.SetRenderTarget(null);
+
             Texture2D tex = new Texture2D(Graphics.device, target.width, target.height);
             tex.SetData(target.GetData());
-            List<string> text = Content.RSplit(GetType().AssemblyQualifiedName, ',', -1);
-            string texname = text[0] + text[1] + wide.ToString() + " " + high.ToString();
-            tex.Name = texname;
-            Content.textures[texname] = tex; //spritea las stuff
-            Sprite preview = new Sprite((Tex2D)tex);
-            if (flag)
-                _editorIcon = preview;
-            return preview;
+            Sprite spr = new Sprite(tex);
+
+            if (editorPreview)
+                _editorIcon = spr;
+
+            return spr;
         }
 
         public virtual bool solid

@@ -40,7 +40,7 @@ namespace DuckGame
         private bool _lowestPointInitialized;
         public float highestPoint = -1000f;
         protected bool _initialized;
-        private bool _levelStart;
+        protected bool _levelStart;
         public bool _startCalled;
         protected bool _centeredView;
         private bool _waitingOnNewData;
@@ -850,6 +850,17 @@ namespace DuckGame
         {
         }
         public RenderTarget2D rd2;
+        public List<FullscreenMaterial> fullscreenShaders = new List<FullscreenMaterial>();
+        public static void AddFullscreenMaterial(FullscreenMaterial material)
+        {
+            current.fullscreenShaders.Add(material);
+            material.added = true;
+        }
+        public static void RemoveFullscreenMaterial(FullscreenMaterial material)
+        {
+            current.fullscreenShaders.Remove(material);
+            material.added = false;
+        }
         public virtual void DoDraw()
         {
             if (DGRSettings.UncappedFPS)
@@ -859,38 +870,38 @@ namespace DuckGame
 
             bool cameraD = false;
             List<FluidPuddle> lavaPuddles = new List<FluidPuddle>();
-            if (DGRSettings.HeatWaveMultiplier > 0) //so theres kind of a mess here, but this is for wobbly shader lava effect :)
+            List<FullscreenMaterial> activeFS = new List<FullscreenMaterial>();
+            if (fullscreenShaders.Count > 0)
             {
-                IEnumerable<FluidPuddle> flps = things.OfType<FluidPuddle>();
-
-                foreach (FluidPuddle fl in flps)
+                fullscreenShaders.RemoveAll(item => item.removed);
+                for (int i = 0; i < fullscreenShaders.Count; i++)
                 {
-                    if ((fl.data.heat > 0 || fl.onFire) && fl.currentlyDrawing)
+                    FullscreenMaterial mt = fullscreenShaders[i];
+                    if (mt.active && (mt.thing == null || (!mt.thing.removeFromLevel && mt.thing.currentlyDrawing)))
                     {
-                        lavaPuddles.Add(fl);
+                        activeFS.Add(mt);
                     }
                 }
+            }
 
-                // DevConsole.Log(lavaPuddles.Count);
-                if (Graphics.currentRenderTarget == null && lavaPuddles.Count > 0)
+            if (Graphics.currentRenderTarget == null && !VirtualTransition.active && activeFS.Count > 0)
+            {
+                if (rd2 != null) rd2.Dispose();
+                int width = (int)Resolution._device.PreferredBackBufferWidth;
+                int height = (int)Resolution._device.PreferredBackBufferHeight;
+
+                if (Math.Abs(((float)width / (float)height) - camera.aspect) > 0.01f)
                 {
-                    if (rd2 != null) rd2.Dispose();
-                    int width = (int)Resolution._device.PreferredBackBufferWidth;
-                    int height = (int)Resolution._device.PreferredBackBufferHeight;
-
-                    if (Math.Abs(((float)width / (float)height) - camera.aspect) > 0.01f)
-                    {
-                        cameraD = true;
-                        height = (int)(width / camera.aspect) + 1;
-                    }
-
-                    Layer.Console.visible = false;
-                    rd2 = new RenderTarget2D(width, height);
-                    Graphics.SettingForShader = true;
-                    Graphics.SetRenderTarget(rd2);
-                    Graphics.SettingForShader = false;
-                    currentlyShadering = true;
+                    cameraD = true;
+                    height = (int)(width / camera.aspect) + 1;
                 }
+
+                Layer.Console.visible = false;
+                rd2 = new RenderTarget2D(width, height);
+                Graphics.SettingForShader = true;
+                Graphics.SetRenderTarget(rd2);
+                Graphics.SettingForShader = false;
+                currentlyShadering = true;
             }
             StartDrawing();
             foreach (IDrawToDifferentLayers toDifferentLayers in things[typeof(IDrawToDifferentLayers)])
@@ -950,12 +961,12 @@ namespace DuckGame
                 Graphics.SettingForShader = false;
 
                 bool multiLayering = false;
-                if (lavaPuddles.Count > 1) multiLayering = true;
+                if (activeFS.Count > 1) multiLayering = true;
                 List<RenderTarget2D> dispose = new List<RenderTarget2D>() { rd2 };
-                for (int i = 0; i < lavaPuddles.Count; i++)
+                for (int i = 0; i < activeFS.Count; i++)
                 {
                     RenderTarget2D rd3 = null;
-                    if (multiLayering && i != lavaPuddles.Count - 1)
+                    if (multiLayering && i != activeFS.Count - 1)
                     {
                         int width = (int)Resolution._device.PreferredBackBufferWidth;
                         int height = (int)Resolution._device.PreferredBackBufferHeight;
@@ -987,7 +998,7 @@ namespace DuckGame
 
                     }
 #endif
-                    Graphics.material = lavaPuddles[i].mt;
+                    Graphics.material = activeFS[i];
                     Graphics.Draw(rd2, 0, 0, 1, 1);
                     Graphics.material = null;
                     Graphics.screen.End();
@@ -2124,6 +2135,27 @@ namespace DuckGame
 
             }
             return nextCollisionList.AsEnumerable().Cast<T>();
+        }
+        public IEnumerable<T> OldCollisionPointAll<T>(Vec2 point)
+        {
+            List<object> list = Level.GetNextCollisionList();
+            Type t = typeof(T);
+            foreach (Thing thing in this._things.GetDynamicObjects(t))
+            {
+                if (!thing.removeFromLevel && Collision.Point(point, thing))
+                {
+                    list.Add(thing);
+                }
+            }
+            if (this._things.HasStaticObjects(t))
+            {
+                T thing2 = (T)((object)this._things.quadTree.CheckPoint<T>(point));
+                if (thing2 != null)
+                {
+                    list.Add(thing2);
+                }
+            }
+            return list.AsEnumerable<object>().Cast<T>();
         }
         //public ICollection<Thing> CollisionPointAll(Vec2 point)
         //{

@@ -107,6 +107,7 @@ namespace DuckGame
             collideSounds.Add("landTV");
             holsterAngle = -10f;
             editorTooltip = "The perfect tool for cutting wood or carving decorative ice sculptures.";
+			_editorPreviewOffset.x -= 5;
         }
         public override Holdable BecomeTapedMonster(TapedGun pTaped)
         {

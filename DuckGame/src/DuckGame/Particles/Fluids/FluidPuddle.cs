@@ -237,12 +237,26 @@ namespace DuckGame
                 if (data.heat > 0)
                 {
                     if (mt == null) mt = new MaterialLavaWobble(this);
-                    mt.mult = Maths.Clamp(data.amount / 3f, 0, 0.5f) + Maths.Clamp(data.amount / 50, 0, 0.25f);
+                    mt.mult = Maths.Clamp(data.amount / 3f, 0, 0.5f) + Maths.Clamp(data.amount / 50, 0, 0.25f) - 0.1f;
+                    if (mt.mult > 0.1f)
+                    {
+                        mt.thing = this;
+                        mt.active = true;
+                        if (!mt.added) Level.AddFullscreenMaterial(mt);
+                    }
+                    else mt.active = false;
                 }
                 else if (onFire)
                 {
                     if (mt == null) mt = new MaterialLavaWobble(this);
-                    mt.mult = Maths.Clamp(data.amount / 3f, 0, 1) + Maths.Clamp(data.amount / 50, 0, 0.5f);
+                    mt.mult = Maths.Clamp(data.amount / 3f, 0, 1) + Maths.Clamp(data.amount / 50, 0, 0.5f) - 0.15f;
+                    if (mt.mult > 0.1f)
+                    {
+                        mt.thing = this;
+                        mt.active = true;
+                        if (!mt.added) Level.AddFullscreenMaterial(mt);
+                    }
+                    else mt.active = false;
                 }
             }
             if (DGRSettings.AmbientParticles)
@@ -434,8 +448,8 @@ namespace DuckGame
 
         public override void Terminate()
         {
-            if (_lightRect != null)
-                Level.Remove(_lightRect);
+            if (mt != null) mt.removed = true;
+            if (_lightRect != null) Level.Remove(_lightRect);
             base.Terminate();
         }
     }

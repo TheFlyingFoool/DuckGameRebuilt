@@ -13,6 +13,7 @@ namespace DuckGame
 {
     public class ContextMenu : Thing, IContextListener
     {
+        public int _previewWidth = 16;
         public Mod mod;
         public string tooltip;
         protected List<ContextMenu> _items = new List<ContextMenu>();
@@ -870,60 +871,64 @@ namespace DuckGame
                             num3 += 8f;
                         }
                         Graphics.DrawFancyString(_text, position + new Vec2(2f + num3, 4f), Color.White * num2, depth + 1);
-                        Vec2 vec2_1 = position + new Vec2(itemSize.x - 24f, 0f);
-                        int num4 = 0;
-                        for (int index1 = 0; index1 < 3 && num4 != 4; ++index1)
+                        Vec2 previewPos = position + new DuckGame.Vec2(itemSize.x - 24, 0);
+                        int numDraw = 0;
+
+                        for (int i = 0; i < 3; i++)
                         {
-                            using (List<ContextMenu>.Enumerator enumerator = _items.GetEnumerator())
+                            if (numDraw == 4)
+                                break;
+
+                            foreach (ContextMenu mz in _items)
                             {
-                            label_31:
-                                while (enumerator.MoveNext())
+                                if (numDraw == 4)
+                                    break;
+
+                                for (int j = 0; j < mz._items.Count + 1; j++)
                                 {
-                                    ContextMenu current = enumerator.Current;
-                                    if (num4 != 4)
+                                    ContextMenu m = mz;
+                                    if (i == 1)
                                     {
-                                        for (int index2 = 0; index2 < current._items.Count + 1; ++index2)
+                                        if (j == mz._items.Count)
+                                            break;
+
+                                        m = mz._items[j];
+                                    }
+
+                                    if (m._image != null && ((i == 2 && !m._previewPriority) || (i != 2 && m._previewPriority)))
+                                    {
+                                        Sprite s = m._image;
+                                        if (s != null)
                                         {
-                                            ContextMenu contextMenu = current;
-                                            if (index1 == 1)
+                                            s.depth = depth + 3;
+                                            s.x = previewPos.x + 1;
+                                            s.y = previewPos.y;
+                                            //s.color = Color.White * 0.5f;
+                                            s.scale = new Vec2(0.5f);
+
+                                            if (m._previewWidth > 16)
+                                                Graphics.Draw(s, previewPos.x + 1, previewPos.y, new Rectangle(8, 0, 16, 16));
+                                            else
+                                                s.Draw();
+
+                                            previewPos.x += 8;
+                                            numDraw++;
+                                            if (numDraw == 2)
                                             {
-                                                if (index2 != current._items.Count)
-                                                    contextMenu = current._items[index2];
-                                                else
-                                                    break;
+                                                previewPos.x -= 8 * 2;
+                                                previewPos.y += 8;
                                             }
-                                            if (contextMenu._image != null && (index1 == 2 && !contextMenu._previewPriority || index1 != 2 && contextMenu._previewPriority))
-                                            {
-                                                Sprite image = contextMenu._image;
-                                                if (image != null)
-                                                {
-                                                    image.depth = depth + 3;
-                                                    image.x = vec2_1.x + 1f;
-                                                    image.y = vec2_1.y;
-                                                    image.scale = new Vec2(0.5f);
-                                                    image.Draw();
-                                                    vec2_1.x += 8f;
-                                                    ++num4;
-                                                    switch (num4)
-                                                    {
-                                                        case 2:
-                                                            vec2_1.x -= 16f;
-                                                            vec2_1.y += 8f;
-                                                            break;
-                                                        case 4:
-                                                            goto label_31;
-                                                    }
-                                                }
-                                            }
-                                            if (index1 != 1)
+                                            else if (numDraw == 4)
                                                 break;
                                         }
                                     }
-                                    else
+
+                                    if (i != 1)
                                         break;
                                 }
                             }
                         }
+
                     }
                     else
                         Graphics.DrawString(_text, position + new Vec2(2f, 4f), Color.White * num2, depth + 1);
@@ -1235,60 +1240,82 @@ namespace DuckGame
             return pCurrentTerms;
         }
 
+        public bool imageOnly = false;
         public void PositionItems()
         {
-            float num1 = 0f;
-            float num2 = y + _openedOffset;
-            _openedOffsetX = 0f;
-            if (Editor.inputMode != EditorInput.Mouse && !_root)
+            float largestWidth = 0.0f;
+            float ypos = y + _openedOffset;
+            _openedOffsetX = 0;
+
+            if (Editor.inputMode != EditorInput.Mouse && /*pinned == false && */_root == false)
             {
-                num2 = 16f;
-                _openedOffset = (-y + 16f);
+                ypos = 16;
+                _openedOffset = (-y) + 16;
             }
-            for (int index = 0; index < _items.Count; ++index)
+
+            for (int i = 0; i < _items.Count; i++)
             {
-                ContextMenu contextMenu = _items[index];
-                if (!contextMenu.opened || contextMenu is ContextToolbarItem && (contextMenu as ContextToolbarItem).isPushingUp)
+                ContextMenu item = _items[i];
+                if (!item.opened || (item is ContextToolbarItem && (item as ContextToolbarItem).isPushingUp))
                 {
-                    if (!_root && !dontPush)
-                        contextMenu.x = (x + 3f + itemSize.x + 3f);
+                    if (_root == false && !dontPush)
+                        item.x = x + 3 + itemSize.x + 3;
                     else
-                        contextMenu.x = x;
-                    if ((_pinned || Editor.pretendPinned == this) && !_root)
+                        item.x = x;
+
+
+
+                    if ((_pinned || Editor.pretendPinned == this) && _root == false)
                     {
                         if (Editor.bigInterfaceMode)
                         {
-                            contextMenu.x += 14f;
-                            _openedOffsetX = 14f;
+                            item.x += 14;
+                            _openedOffsetX = 14;
                         }
                         else
                         {
-                            contextMenu.x += 4f;
-                            _openedOffsetX = 4f;
+                            item.x += 4;
+                            _openedOffsetX = 4;
                         }
                     }
-                    contextMenu.y = num2;
+
+
+                    item.y = ypos;
                 }
-                if (index >= _drawIndex && !pinOpened && (_alwaysDrawLast && (index == _items.Count - 1 || index != _drawIndex + _maxNumToDraw - 1 && index < _drawIndex + _maxNumToDraw) || !_alwaysDrawLast))
-                    num2 += contextMenu.itemSize.y + 1f;
-                if (contextMenu.itemSize.x < 107f)
-                    contextMenu.itemSize.x = 107f;
-                if (contextMenu.itemSize.x + 4f > menuSize.x)
-                    menuSize.x = contextMenu.itemSize.x + 4f;
-                contextMenu.depth = depth + 2;
-                if (contextMenu.itemSize.x > num1)
-                    num1 = contextMenu.itemSize.x;
+
+                if (i >= _drawIndex && !pinOpened)
+                {
+                    if ((_alwaysDrawLast && (i == _items.Count - 1 || (i != (_drawIndex + _maxNumToDraw) - 1 && i < _drawIndex + _maxNumToDraw))) || (!_alwaysDrawLast))
+                        ypos += item.itemSize.y + 1;
+                }
+
+                //if (_root == false && !dontPush)
+                //    item.y -= 2;
+                //else
+                //    item.y -= 1;
+
+                if (item.imageOnly == false && item.itemSize.x < 107)
+                    item.itemSize.x = 107;
+
+                if (item.itemSize.x + 4 > menuSize.x)
+                    menuSize.x = item.itemSize.x + 4;
+
+                item.depth = depth + 2;
+                if (item.itemSize.x > largestWidth)
+                    largestWidth = item.itemSize.x;
             }
-            int num3 = 0;
-            float num4 = 0f;
-            foreach (ContextMenu contextMenu in _items)
+
+            int numItemsSized = 0;
+            float hval = 0;
+            foreach (ContextMenu item in _items)
             {
-                if (num3 < _maxNumToDraw)
-                    num4 += contextMenu.itemSize.y + 1f;
-                contextMenu.itemSize.x = num1;
-                ++num3;
+                if (numItemsSized < _maxNumToDraw)
+                    hval += item.itemSize.y + 1;
+
+                item.itemSize.x = largestWidth;
+                numItemsSized++;
             }
-            menuSize.y = num4 + 3f;
+            menuSize.y = hval + 3;
         }
 
         public void CloseMenus()

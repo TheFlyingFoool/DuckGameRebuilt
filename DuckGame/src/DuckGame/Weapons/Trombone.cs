@@ -33,6 +33,7 @@ namespace DuckGame
             _notePitchBinding.skipLerp = true;
             editorTooltip = "Just look at this thing. It's amazing. The instrument of kings.";
             isFatal = false;
+            _editorPreviewOffset.x -= 5;
         }
 
         public override void Initialize()

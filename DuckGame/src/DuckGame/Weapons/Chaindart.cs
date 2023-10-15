@@ -78,6 +78,8 @@ namespace DuckGame
             flammable = 0.8f;
             physicsMaterial = PhysicsMaterial.Plastic;
             editorTooltip = "Like a chaingun, but for babies. Fires safety-capped sponge darts.";
+            _editorPreviewOffset.x = -5;
+            _editorPreviewWidth = 38;
         }
 
         public override void Initialize()
