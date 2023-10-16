@@ -69,6 +69,44 @@ namespace DuckGame
 
             return th;
         }
+        
+        public static string SetLengthLogically(this string str, int newLength)
+        {
+            string originalJustInCase = str;
+            
+            if (LookingGood()) return str;
+            
+            // round one - fuck vowels
+            str = Regex.Replace(str, @"[iouae]", "", RegexOptions.IgnoreCase);
+            
+            if (LookingGood()) return str;
+            
+            // round two - merge duplicates
+            str = Regex.Replace(str, @"(.)\1{1,}", "$1");
+            
+            if (LookingGood()) return str;
+            
+            // round three - remove uncommon letters
+            str = Regex.Replace(str, @"(?<!^)[VKXJQZ]", "", RegexOptions.IgnoreCase);
+            
+            if (LookingGood()) return str;
+
+            // last ditch effort. just crop the damn thing
+            return str.Substring(0, newLength);
+            
+            bool LookingGood()
+            {
+                if (str.Length == newLength)
+                    return true;
+                else if (str.Length < newLength)
+                {
+                    str = str.PadLeft(newLength);
+                    return true;
+                }
+                
+                return false;
+            }
+        }
 
         public static int AutoBlockSortred(AutoBlock b1, AutoBlock b2)
         {

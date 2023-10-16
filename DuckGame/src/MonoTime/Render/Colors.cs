@@ -21,6 +21,7 @@ namespace DuckGame
         public static Color DGYellow = new Color(247, 224, 90);
         public static Color DGOrange = new Color(235, 136, 49);
         public static Color DGPink = new Color(235, 190, 242);
+        public static Color DGPink2 = new Color(246, 88, 191);
         public static Color DGEgg = new Color(245, 235, 211);
         public static Color DGBlue = new Color(49, 162, 242);
         public static Color DGGreen = new Color(163, 206, 39);
@@ -149,7 +150,7 @@ namespace DuckGame
             },
             {
                 "PINK",
-                new Color(246, 88, 191)
+                DGPink
             },
             {
                 "PURPLE",

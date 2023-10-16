@@ -40,6 +40,23 @@ namespace DuckGame
 
         public static string StringForSection(DCSection s, bool colored, bool small, bool formatting = true)
         {
+            if (DGRSettings.UseDuckShell)
+            {
+                Color[] colorTable =
+                {
+                    Color.White,
+                    Colors.DGBlue,
+                    Colors.DGPink2, 
+                    Colors.DGPurple, 
+                    Colors.DGOrange,
+                    Colors.DGGreen, 
+                    Colors.DGYellow, 
+                    Colors.DGGreen, 
+                };
+
+                return $"{(colored ? colorTable[(int)s].ToDGColorString() : string.Empty)}{s.ToString().SetLengthLogically(small ? 4 : 6)}";
+            }
+            
             if (formatting)
             {
                 if (small)
