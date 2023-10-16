@@ -343,15 +343,13 @@ namespace DuckGame
                     {
                         _raster.scale = new Vec2(0.5f);
                         _raster.alpha = _core.alpha;
-                        _raster.Draw(_core.Typing, 4f * _tray.scale.x,
-                            (float)(num3 + _tray.scale.y * 8f -
-                                     _raster.characterHeight * (double)_raster.scale.y / 2f), Color.White,
-                            0.9f);
+                        _raster.Draw(_core.Typing.Replace("\n", $"{DevConsoleCommands.SyntaxColorComments.ToDGColorString()}\\n|WHITE|"), 4f * _tray.scale.x, (float)(num3 + _tray.scale.y * 8f - _raster.characterHeight * (double)_raster.scale.y / 2f), Color.White, 0.9f);
+                        
                         Vec2 p1 = new(
-                            (float)(_raster.GetWidth(
-                                         _core.Typing.Substring(0, _core.cursorPosition)) +
-                                     4f * _tray.scale.x +
-                                     1f), num3 + 6f * _tray.scale.y);
+                            _raster.GetWidth(_core.Typing.Replace("\n", "nn").Substring(0, _core.cursorPosition) + new string('n', _core.Typing.Count(x => x == '\n'))) + 4f * _tray.scale.x + 1f,
+                            num3 + 6f * _tray.scale.y
+                            );
+                        
                         Graphics.DrawLine(p1, p1 + new Vec2(0.0f, 4f * _tray.scale.x), Color.White,
                             depth: 1f);
                     }
@@ -2208,32 +2206,37 @@ namespace DuckGame
 
                 if (Keyboard.Pressed(Keys.Enter) && !string.IsNullOrWhiteSpace(_core.Typing)/* && !s_acceptingSingleKeyPressResponse*/)
                 {
-                    if (s_awaitingResponse)
+                    if (!Keyboard.shift)
                     {
-                        _core.lines.Enqueue(new DCLine
+                        if (s_awaitingResponse)
                         {
-                            line = _core.Typing,
-                            color = Color.White
-                        });
-                        s_commandResponse = _core.Typing;
+                            _core.lines.Enqueue(new DCLine {line = _core.Typing, color = Color.White});
+                            s_commandResponse = _core.Typing;
+                        }
+                        else
+                        {
+                            RunAsUser = true;
+                            RunCommand(_core.Typing);
+                        }
+
+                        for (int i = _core.previousLines.Count - 1; i >= 0; i--)
+                        {
+                            if (_core.previousLines[i] == _core.Typing)
+                            {
+                                _core.previousLines.RemoveAt(i);
+                            }
+                        }
+
+                        _core.previousLines.Add(_core.Typing);
+                        _core.Typing = "";
+                        Keyboard.keyString = "";
+                        _core.lastCommandIndex = -1;
+                        _core.viewOffset = 0;
                     }
                     else
                     {
-                        RunAsUser = true;
-                        RunCommand(_core.Typing);
+                        _core.Typing = _core.Typing.Insert(_core.cursorPosition++, "\n");
                     }
-                    for (int i = _core.previousLines.Count - 1; i >= 0; i--)
-                    {
-                        if (_core.previousLines[i] == _core.Typing)
-                        {
-                            _core.previousLines.RemoveAt(i);
-                        }
-                    }
-                    _core.previousLines.Add(_core.Typing);
-                    _core.Typing = "";
-                    Keyboard.keyString = "";
-                    _core.lastCommandIndex = -1;
-                    _core.viewOffset = 0;
                 }
                 else if (Keyboard.Pressed(Keys.Back))
                 {
