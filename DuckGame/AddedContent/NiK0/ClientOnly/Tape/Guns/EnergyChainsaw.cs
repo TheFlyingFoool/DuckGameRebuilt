@@ -1,8 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections;
-using static DuckGame.CMD;
-using System.Web.UI.WebControls.WebParts;
+﻿using System;
 
 namespace DuckGame
 {
@@ -47,6 +43,8 @@ namespace DuckGame
             bladeColor = properColor;
             _barrelOffsetTL = new Vec2(34, 8);
 
+            _editorPreviewOffset.y -= 6;
+            _editorPreviewOffset.x -= 16;
             _sound = new LoopingSound("scimisawHum");
             tapeable = false;
         }

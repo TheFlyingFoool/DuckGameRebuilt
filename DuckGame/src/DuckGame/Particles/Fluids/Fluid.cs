@@ -165,7 +165,7 @@ namespace DuckGame
 
         public static FluidData Ketchup = new FluidData(0f, Color.Red.ToVector4() * 0.8f, 0.4f, "ketchup", 0f, 0.7f);
 
-        public static FluidData Poo = new FluidData(0f, Color.SaddleBrown.ToVector4() * 0.8f, 0.5f, "water", 0f, 0.7f);
+        public static FluidData Poo = new FluidData(0f, Color.SaddleBrown.ToVector4() * 0.8f, 0.5f, "poo", 0f, 0.7f);
 
         private Fluid _stream;
 
