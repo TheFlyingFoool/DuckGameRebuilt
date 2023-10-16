@@ -190,7 +190,6 @@ namespace DuckGame
             Add(new TitleButton(194, 137, true) { drag = c2 });
             Add(c2);*/
 
-            Add(new CrumbleShamble(160, 157));
             if (Editor.clientonlycontent)
             {
                 Editor.DisableClientOnlyContent();
@@ -498,7 +497,7 @@ namespace DuckGame
             TeamSelect2.DefaultSettings();
             if (Network.isActive)
                 Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.ControlledDisconnect, "Returned to title screen."));
-            if (Music.currentSong != "Title" && Music.currentSong != "TitleDemo" || Music.finished)
+            if (DGRSettings.StartIn == 0 && (Music.currentSong != "Title" && Music.currentSong != "TitleDemo" || Music.finished))
                 Music.Play("Title");
             if (GameMode.playedGame)
                 GameMode.playedGame = false; 
@@ -568,17 +567,17 @@ namespace DuckGame
             _optionsGroup.Add(_flagMenu, false);
             _optionsGroup.Add(_graphicsMenu, false);
             _optionsGroup.Add(_dgrMenu, false);
-            _optionsGroup.Add(Options._DGRGraphicsMenu, false);
-            _optionsGroup.Add(Options._DGRHudMenu, false);
-            _optionsGroup.Add(Options._DGREditorMenu, false);
-            _optionsGroup.Add(Options._DGRQOLMenu, false);
-            _optionsGroup.Add(Options._DGRDumbShitMenu, false);
+            _optionsGroup.Add(Options.TEMPDGRGRAPHICS, false);
+            _optionsGroup.Add(Options.TEMPDGRHUD, false);
+            _optionsGroup.Add(Options.TEMPDGREDITOR, false);
+            _optionsGroup.Add(Options.TEMPDGRQOL, false);
+            _optionsGroup.Add(Options.TEMPDGRMISC, false);
             if (Program.IS_DEV_BUILD)
-                _optionsGroup.Add(Options._DGRDeveloperMenu, false);
-            _optionsGroup.Add(Options._DGROptimMenu, false);
+                _optionsGroup.Add(Options.TEMPDGRDEV, false);
+            _optionsGroup.Add(Options.TEMPDGROPTIM, false);
             #if AutoUpdater
             #else
-            _optionsGroup.Add(Options._DGRRecorderatorMenu, false);
+            _optionsGroup.Add(Options.TEMPDGRRECORDERATOR, false);
             #endif
             _optionsGroup.Add(_audioMenu, false);
             if (_accessibilityMenu != null)
@@ -927,10 +926,10 @@ namespace DuckGame
             {
                 depth = (Depth)0.9f
             };
-            //_beamPlatform = new SpriteMap("title/beamPlatform", 84,22)
-            //{
-            //    depth = (Depth)0.9f
-            //};
+            _beamPlatform = new SpriteMap("title/beamPlatform", 84,22)
+            {
+                depth = (Depth)0.9f
+            };
             _upperMonitor = new Sprite("title/upperMonitor")
             {
                 depth = (Depth)0.85f
@@ -1200,17 +1199,20 @@ namespace DuckGame
                 foreach (StarParticle starParticle in starParticleList)
                     particles.Remove(starParticle);
             }
-            if (menuOpen)
+            if (!_enterMultiplayer && !_enterEditor && !_enterLibrary)
             {
-                Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0.2f, 0.02f);
-                Layer.Foreground.fade = Lerp.Float(Layer.Foreground.fade, 0.2f, 0.02f);
-                Layer.Background.fade = Lerp.Float(Layer.Foreground.fade, 0.2f, 0.02f);
-            }
-            else
-            {
-                Layer.Game.fade = Lerp.Float(Layer.Game.fade, _fadeInFull ? 1f : (_fadeIn ? 0.5f : 0f), _fadeInFull ? 0.01f : 3f / 500f);
-                Layer.Foreground.fade = Lerp.Float(Layer.Foreground.fade, _fadeIn ? 1f : 0f, 0.01f);
-                Layer.Background.fade = Lerp.Float(Layer.Background.fade, _fadeBackground ? 0f : 1f, 0.02f);
+                if (menuOpen)
+                {
+                    Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0.2f, 0.02f);
+                    Layer.Foreground.fade = Lerp.Float(Layer.Foreground.fade, 0.2f, 0.02f);
+                    Layer.Background.fade = Lerp.Float(Layer.Foreground.fade, 0.2f, 0.02f);
+                }
+                else
+                {
+                    Layer.Game.fade = Lerp.Float(Layer.Game.fade, _fadeInFull ? 1f : (_fadeIn ? 0.5f : 0f), _fadeInFull ? 0.01f : 3f / 500f);
+                    Layer.Foreground.fade = Lerp.Float(Layer.Foreground.fade, _fadeIn ? 1f : 0f, 0.01f);
+                    Layer.Background.fade = Lerp.Float(Layer.Background.fade, _fadeBackground ? 0f : 1f, 0.02f);
+                }
             }
             if (_enterArcade)
             {
@@ -1361,6 +1363,7 @@ namespace DuckGame
             }
             else
             {
+                _levelStart = false;
                 Graphics.fade -= 0.05f;
                 if (Graphics.fade <= 0)
                 {
@@ -1655,6 +1658,8 @@ namespace DuckGame
                     }
                     else if (_selection == TitleMenuSelection.Play)
                     {
+                        //_font.Draw("@SELECT@PLAY", current.camera.PercentW(50f) - _font.GetWidth("@SELECT@PLAY") / 2f, 8, Color.White, (Depth)0.95);
+                        //_font.Draw("@DOWN@DGR", current.camera.PercentW(50f) - _font.GetWidth("@DOWN@DGR") / 2f, 22, Color.White, (Depth)0.95);
                         DisplayUpperMonitorMessage("@SELECT@PLAY");
                     }
                     else if (_selection == TitleMenuSelection.Stats)
@@ -1701,7 +1706,7 @@ namespace DuckGame
                 Graphics.Draw(_leftPlatform, 0f, 61f);
                 Graphics.Draw(_airlock, 266f, 135f);
                 Graphics.Draw(_rightPlatform, byte.MaxValue, 61f);
-                //Graphics.Draw(_beamPlatform, 118f, 146f);
+                Graphics.Draw(_beamPlatform, 118f, 146f);
                 Graphics.Draw(_optionsTV, 0f, 19f);
                 Graphics.Draw(_libraryBookcase, 263f, 12f);
                 Graphics.Draw(_editorBench, 1f, 130f);

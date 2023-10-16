@@ -14,6 +14,7 @@ namespace DuckGame
     {
         protected bool willOnlineGrayout = true;
         private static int deep;
+        public int widestPreview = 16;
 
         public EditorGroupMenu(IContextListener owner, bool root = false, SpriteMap image = null)
           : base(owner, image)
@@ -54,110 +55,128 @@ namespace DuckGame
             }
         }
 
-        public void InitializeGroups(
-          EditorGroup group,
-          FieldBinding radioBinding = null,
-          EditorGroup scriptingGroup = null,
-          bool setPinnable = false)
+        public void InitializeGroups(EditorGroup group, FieldBinding radioBinding = null, EditorGroup scriptingGroup = null, bool setPinnable = false)
         {
-            ++deep;
+            deep++;
             _text = group.Name;
-            itemSize.x = Graphics.GetFancyStringWidth(_text) + 16f;
-            foreach (EditorGroup subGroup in group.SubGroups)
+            itemSize.x = Graphics.GetFancyStringWidth(_text) + 16;
+
+
+            foreach (EditorGroup g in group.SubGroups)
             {
-                EditorGroupMenu editorGroupMenu = new EditorGroupMenu(this)
-                {
-                    fancy = fancy
-                };
-                editorGroupMenu.InitializeGroups(subGroup, radioBinding, setPinnable: setPinnable);
-                if (!editorGroupMenu.greyOut)
+                EditorGroupMenu menu = new EditorGroupMenu(this);
+                menu.fancy = fancy;
+                menu.InitializeGroups(g, radioBinding, null, setPinnable);
+                if (menu.greyOut == false)
                     greyOut = false;
-                if (!editorGroupMenu.willOnlineGrayout)
+                if (menu.willOnlineGrayout == false)
                     willOnlineGrayout = false;
-                editorGroupMenu.isPinnable = setPinnable;
-                AddItem(editorGroupMenu);
+
+                menu.isPinnable = setPinnable;
+
+                AddItem(menu);
             }
+
             if (scriptingGroup != null)
             {
-                EditorGroupMenu editorGroupMenu = new EditorGroupMenu(this);
-                editorGroupMenu.InitializeGroups(scriptingGroup, radioBinding);
-                if (!editorGroupMenu.greyOut)
+                EditorGroupMenu menu = new EditorGroupMenu(this);
+                menu.InitializeGroups(scriptingGroup, radioBinding);
+                if (menu.greyOut == false)
                     greyOut = false;
-                if (!editorGroupMenu.willOnlineGrayout)
+                if (menu.willOnlineGrayout == false)
                     willOnlineGrayout = false;
-                AddItem(editorGroupMenu);
+
+                AddItem(menu);
             }
-            foreach (Thing allThing in group.AllThings)
+
+            foreach (Thing t in group.AllThings)
             {
-                IReadOnlyPropertyBag bag = ContentProperties.GetBag(allThing.GetType());
-                //if (Main.isDemo && bag.GetOrDefault("isInDemo", false))
-                //    this.greyOut = false;
-                if (bag.GetOrDefault("isOnlineCapable", true))
+                int wide = t.GetEditorPreviewWidth();
+                if (wide > widestPreview)
+                    widestPreview = wide;
+            }
+
+            foreach (Thing t in group.AllThings)
+            {
+                var tBag = ContentProperties.GetBag(t.GetType());
+
+                if (Main.isDemo && tBag.GetOrDefault("isInDemo", false))
+                    greyOut = false;
+
+                if (tBag.GetOrDefault("isOnlineCapable", true))
                 {
                     greyOut = false;
                     willOnlineGrayout = false;
                 }
-                switch (allThing)
+
+                BackgroundTile back = t as BackgroundTile;
+                if (back != null || t as ForegroundTile != null || t as SubBackgroundTile != null)
                 {
-                    case BackgroundTile _:
-                    case ForegroundTile _:
-                    case SubBackgroundTile _:
-                        ContextBackgroundTile contextBackgroundTile = new ContextBackgroundTile(allThing, this)
+                    ContextBackgroundTile obj = new ContextBackgroundTile(t, this);
+                    obj.contextThing = t;
+                    AddItem(obj);
+                }
+                else
+                {
+                    if (radioBinding != null)
+                    {
+                        if (radioBinding.value is IList)
                         {
-                            contextThing = allThing
-                        };
-                        AddItem(contextBackgroundTile);
-                        continue;
-                    default:
-                        if (radioBinding != null)
-                        {
-                            if (radioBinding.value is IList)
+
+                            if (radioBinding.value is List<TypeProbPair>)
                             {
-                                if (radioBinding.value is List<TypeProbPair>)
-                                {
-                                    ContextSlider contextSlider = new ContextSlider(allThing.editorName, this, radioBinding, 0.05f, myType: allThing.GetType())
-                                    {
-                                        greyOut = false,//Main.isDemo && !bag.GetOrDefault("isInDemo", false),
-                                        contextThing = allThing
-                                    };
-                                    if (bag.GetOrDefault("isOnlineCapable", true))
-                                        willOnlineGrayout = false;
-                                    AddItem(contextSlider);
-                                    continue;
-                                }
-                                ContextCheckBox contextCheckBox = new ContextCheckBox(allThing.editorName, this, radioBinding, allThing.GetType())
-                                {
-                                    greyOut = false,//Main.isDemo && !bag.GetOrDefault("isInDemo", false),
-                                    contextThing = allThing
-                                };
-                                if (bag.GetOrDefault("isOnlineCapable", true))
+                                ContextSlider obj = new ContextSlider(t.editorName, this, radioBinding, 0.05f, null, false, t.GetType());
+                                obj.greyOut = (Main.isDemo && !tBag.GetOrDefault("isInDemo", false));
+                                obj.contextThing = t;
+
+                                if (tBag.GetOrDefault("isOnlineCapable", true) == true)
                                     willOnlineGrayout = false;
-                                AddItem(contextCheckBox);
-                                continue;
+                                //else
+                                //    greyOut = false;
+
+                                AddItem(obj);
                             }
-                            ContextRadio contextRadio = new ContextRadio(allThing.editorName, false, allThing.GetType(), this, radioBinding)
+                            else
                             {
-                                greyOut = false,//Main.isDemo && !bag.GetOrDefault("isInDemo", false),
-                                contextThing = allThing
-                            };
-                            if (bag.GetOrDefault("isOnlineCapable", true))
-                                willOnlineGrayout = false;
-                            AddItem(contextRadio);
-                            continue;
+                                ContextCheckBox obj = new ContextCheckBox(t.editorName, this, radioBinding, t.GetType());
+                                obj.greyOut = (Main.isDemo && !tBag.GetOrDefault("isInDemo", false));
+                                obj.contextThing = t;
+
+                                if (tBag.GetOrDefault("isOnlineCapable", true) == true)
+                                    willOnlineGrayout = false;
+                                //else
+                                //    greyOut = false;
+
+                                AddItem(obj);
+                            }
                         }
-                        ContextObject contextObject = new ContextObject(allThing, this)
+                        else
                         {
-                            contextThing = allThing,
-                            isPinnable = setPinnable
-                        };
-                        AddItem(contextObject);
-                        continue;
+                            ContextRadio obj = new ContextRadio(t.editorName, false, t.GetType(), this, radioBinding);
+                            obj.greyOut = (Main.isDemo && !tBag.GetOrDefault("isInDemo", false));
+                            obj.contextThing = t;
+
+                            if (tBag.GetOrDefault("isOnlineCapable", true) == true)
+                                willOnlineGrayout = false;
+                            //else
+                            //    greyOut = false;
+
+                            AddItem(obj);
+                        }
+                    }
+                    else
+                    {
+                        ContextObject obj = new ContextObject(t, this);
+                        obj.contextThing = t;
+                        obj.isPinnable = setPinnable;
+                        AddItem(obj);
+                    }
                 }
             }
-            --deep;
-            if (deep != 0)
-                return;
-            UpdateGrayout();
+            deep--;
+
+            if (deep == 0)
+                UpdateGrayout();
         }
 
         public void InitializeTypelist(System.Type pType, FieldBinding pBinding)

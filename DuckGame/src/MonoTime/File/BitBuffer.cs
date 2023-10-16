@@ -928,38 +928,51 @@ namespace DuckGame
 
         public Thing ReadThing(Type pThingType)
         {
+            Main.SpecialCode2 = "10101";
             byte levelIndex = ReadByte();
             ushort typeIndex = (ushort)ReadBits(typeof(ushort), 10);
             ushort readIndex = ReadUShort();
+            Main.SpecialCode2 = "10102";
 
             if (levelIndex != DuckNetwork.levelIndex || readIndex == 0)
                 return null;
 
 
+            Main.SpecialCode2 = "10103";
             if (typeIndex == 0)
                 return GhostManager.context.GetSpecialSync(readIndex);
 
 
+            Main.SpecialCode2 = "10104";
             NetIndex16 index = readIndex;
+            Main.SpecialCode2 = "10105";
             Profile p = GhostObject.IndexToProfile(index);
+            Main.SpecialCode2 = "10106";
             if (p != null && p.removedGhosts.ContainsKey(index))
             {
+                Main.SpecialCode2 = "10107";
                 GhostObject g = p.removedGhosts[index];
                 //DevConsole.Log(DCSection.GhostMan, "Ignoring removed ghost(" + g != null ? g.ToString() : index + ")", NetworkConnection.context);
                 return g.thing;
             }
 
+            Main.SpecialCode2 = "10108";
             Type realType = Editor.IDToType[typeIndex];
+            Main.SpecialCode2 = "10109";
             if (pThingType.IsAssignableFrom(realType) == false)
             {
+                Main.SpecialCode2 = "10110";
                 DevConsole.Log(DCSection.GhostMan, "@error Type mismatch, ignoring ghost (" + index.ToString() + "(" + realType.GetType().Name + " vs. " + pThingType.Name + "))@error");
                 return null;
             }
 
+            Main.SpecialCode2 = "10111";
             GhostObject ghost = GhostManager.context.GetGhost(index);
             //Kill ghost on type mismatch
+            Main.SpecialCode2 = "10112";
             if (ghost != null && ghost.thing.GetType() != realType)
             {
+                Main.SpecialCode2 = "10113";
                 DevConsole.Log(DCSection.GhostMan, "@error Type mismatch, removing ghost (" + index.ToString() + " " + ghost.thing.GetType().ToString() + "(my type) vs. " + realType.ToString() + "(your type))@error");
                 GhostManager.changingGhostType = true;
                 GhostManager.context.RemoveGhost(ghost, 0);
@@ -967,12 +980,14 @@ namespace DuckGame
                 ghost = null;
             }
 
+            Main.SpecialCode2 = "10114";
             if (ghost == null)
             {
                 //HAT FLOATING IN CORNER CAUSED BY DUCK REFERENCE SYNCHRONIZING BEFORE ACTUAL DUCK DOES
                 //if (realType == typeof(Duck)) //THIS LINE IS IMPORTANT. REMOVING IT LEADS TO UNINITIALIZED DUCK.PROFILE CRASHES AND MORE
                 //    return null;
 
+                Main.SpecialCode2 = "10115";
                 Thing t = Editor.CreateThing(realType);
                 t.connection = NetworkConnection.context;
                 t.authority = 1; //Bit buffer created objects start with a lower authority to ensure smooth transfer
@@ -980,26 +995,36 @@ namespace DuckGame
                 if (p != null && index > p.latestGhostIndex)
                     p.latestGhostIndex = index;
 
+                Main.SpecialCode2 = "10116";
                 if (levelIndex != Level.core.currentLevel.networkIndex)
                 {
                     //pending ghost
+                    Main.SpecialCode2 = "10117";
                     ghost = new GhostObject(t, GhostManager.context, index, false);
                     t.position = new Vec2(-2000, -2000);
 
                     GhostManager.context.pendingBitBufferGhosts.Add(ghost);
+                    Main.SpecialCode2 = "10119";
                 }
                 else
                 {
+                    Main.SpecialCode2 = "10118";
                     ghost = GhostManager.context.MakeGhost(t, index, false);
+                    Main.SpecialCode2 = "20050";
                     t.position = new Vec2(-2000, -2000);
 
-                    ghost.ClearStateMask(NetworkConnection.context);
+                    Main.SpecialCode2 = "20060";
+                    if (NetworkConnection.context != null) ghost.ClearStateMask(NetworkConnection.context);
+                    Main.SpecialCode2 = "20070";
                     t.level = Level.current;
+                    Main.SpecialCode2 = "20080";
                     t.isBitBufferCreatedGhostThing = true;
+                    Main.SpecialCode2 = "10120";
                 }
                 t.connection = NetworkConnection.context;
             }
 
+            Main.SpecialCode2 = "10200";
             return ghost.thing;
         }
 

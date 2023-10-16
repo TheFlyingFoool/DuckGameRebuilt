@@ -420,7 +420,7 @@ namespace DuckGame
             //collision buckets or something -NiK0
 
             //this code has been re-optimized yay :DD -NiK0
-            QuadTreeObjectList.LineLeniancy = 1;
+            QuadTreeObjectList.LineLeniancy = 2; //changed the leniancy a bit because i saw people getting the wrong clip -NiK0
             _part2.ReturnItemToWorld(_duck);
             QuadTreeObjectList.LineLeniancy = 0;
             if (Network.isActive)

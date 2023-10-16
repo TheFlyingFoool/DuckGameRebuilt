@@ -386,6 +386,7 @@
     <Compile Include="AddedContent\Firebreak\Utilities\ProgressValue.cs" />
     <Compile Include="AddedContent\klof44\DartGrenade.cs" />
     <Compile Include="AddedContent\klof44\DiscordRichPresence.cs" />
+    <Compile Include="AddedContent\NiK0\ExplosionDecal.cs" />
     <Compile Include="AddedContent\NiK0\SelectCircleParticle.cs" />
     <Compile Include="AddedContent\NiK0\BGLightning.cs" />
     <Compile Include="AddedContent\NiK0\ChangePlus.cs" />
@@ -454,7 +455,6 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpQuadLaserBullet.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpSniper.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpTeleporter.cs" />
-    <Compile Include="AddedContent\NiK0\CrumbleShamble.cs" />
     <Compile Include="AddedContent\NiK0\GlassPlatform.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\MaterialEnergy.cs" />
     <Compile Include="AddedContent\NiK0\MaterialLavaWobble.cs" />
@@ -596,6 +596,7 @@
     <Compile Include="src\DuckGame\Interp.cs" />
     <Compile Include="src\DuckGame\LangHandler.cs" />
     <Compile Include="src\DuckGame\Network\ConcurrentStack.cs" />
+    <Compile Include="src\DuckGame\Stuff\StandingFluid.cs" />
     <Compile Include="src\MonoTime\Console\Commands\AdvancedConfig.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Bind.cs" />
     <Compile Include="src\MonoTime\Console\Commands\CheckCheats.cs" />
@@ -639,6 +640,7 @@
     <Compile Include="src\MonoTime\Console\Commands\Rep.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Echo.cs" />
     <Compile Include="src\MonoTime\Console\Commands\DansTestArea.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Restart.cs" />
     <Compile Include="src\MonoTime\Console\Commands\SkipMap.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Version.cs" />
     <Compile Include="src\MonoTime\ExecuteOnAttribute.cs" />
@@ -657,6 +659,8 @@
     <Compile Include="src\MonoTime\LUI\LUIOnOff.cs" />
     <Compile Include="src\MonoTime\LUI\LUIStringEntry.cs" />
     <Compile Include="src\MonoTime\LUI\LUIText.cs" />
+    <Compile Include="src\MonoTime\Materials\FullscreenMaterial.cs" />
+    <Compile Include="src\MonoTime\Materials\MaterialFunBeam.cs" />
     <Compile Include="src\MonoTime\Sound\QOA.cs" />
     <Compile Include="src\MonoTime\UI\UIDGRDescribe.cs" />
     <Compile Include="src\MonoTime\UI\UISideButton.cs" />
@@ -1490,7 +1494,7 @@
     <Compile Include="src\DuckGame\Stuff\SpringRight.cs" />
     <Compile Include="src\DuckGame\Stuff\SpringUpLeft.cs" />
     <Compile Include="src\DuckGame\Stuff\SpringUpRight.cs" />
-    <Compile Include="src\DuckGame\Stuff\StandingFluid.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\DGRStandingFluid.cs" />
     <Compile Include="src\MonoTime\Windows\TargetStance.cs" />
     <Compile Include="src\DuckGame\Stuff\TargetDuckNew.cs" />
     <Compile Include="src\DuckGame\Stuff\TargetDuck.cs" />

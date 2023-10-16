@@ -1,15 +1,7 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Options
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System;
 
 namespace DuckGame
 {
@@ -101,6 +93,8 @@ namespace DuckGame
 
         public static UIMenu audioMenu => _audioMenu;
 
+        public static UIMenu DGRMenu => _DGRMenu;
+
         public static UIMenu accessibilityMenu => _accessibilityMenu;
 
         public static UIMenu ttsMenu => _ttsMenu;
@@ -114,11 +108,15 @@ namespace DuckGame
             to.Add(optionsMenu, false);
             to.Add(graphicsMenu, false);
             to.Add(audioMenu, false);
-            to.Add(_lastCreatedDGRMenu, false);
+            to.Add(DGRMenu, false);
+            //AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+            //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+            //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+            //Best. -NiK0
+            to.Add(_lastCreatedOptimizationsMenu, false);
+            to.Add(_lastCreatedDGRGraphicsMenu, false);
             to.Add(_lastCreatedDGRQOLMenu, false);
             to.Add(_lastCreatedDGRHudMenu, false);
-            to.Add(_lastCreatedDGRGraphicsMenu, false);
-            to.Add(_lastCreatedOptimizationsMenu, false);
             to.Add(_lastCreatedDGREditorMenu, false);
             #if AutoUpdater
             #else
@@ -165,14 +163,14 @@ namespace DuckGame
             _lastCreatedBlockMenu = tempBlockMenu;
             _lastCreatedAudioMenu = CreateAudioMenu(optionsMenu);
             _lastCreatedDGRMenu = CreateDGRMenu(optionsMenu);
-            _lastCreatedDGRQOLMenu = _DGRQOLMenu;
-            _lastCreatedDGRHudMenu = _DGRHudMenu;
-            _lastCreatedDGRGraphicsMenu = _DGRGraphicsMenu;
-            _lastCreatedOptimizationsMenu = _DGROptimMenu;
-            _lastCreatedDGREditorMenu = _DGREditorMenu;
-            _lastCreatedDGRDumbShitMenu = _DGRDumbShitMenu;
-            _lastCreatedDGRDeveloperMenu = _DGRDeveloperMenu;
-            _lastCreatedDGRRecorderatorMenu = _DGRRecorderatorMenu;
+            _lastCreatedDGRQOLMenu = TEMPDGRQOL;
+            _lastCreatedDGRHudMenu = TEMPDGRHUD;
+            _lastCreatedDGRGraphicsMenu = TEMPDGRGRAPHICS;
+            _lastCreatedOptimizationsMenu = TEMPDGROPTIM;
+            _lastCreatedDGREditorMenu = TEMPDGREDITOR;
+            _lastCreatedDGRDumbShitMenu = TEMPDGRMISC;
+            _lastCreatedDGRDeveloperMenu = TEMPDGRDEV;
+            _lastCreatedDGRRecorderatorMenu = TEMPDGRRECORDERATOR;
             //DGR OPTIONS GUI HELL BEGINS HERE -NiK0
 
             optionsMenu.Add(new UIText(" ", Color.White), true);
@@ -200,10 +198,10 @@ namespace DuckGame
             _ttsMenu = _lastCreatedTTSMenu;
             _blockMenu = _lastCreatedBlockMenu;
             _DGRMenu = _lastCreatedDGRMenu;
-            _DGRHudMenu = _lastCreatedDGRMenu;
-            _DGRQOLMenu = _lastCreatedDGRMenu;
+            _DGRHudMenu = _lastCreatedDGRHudMenu;
+            _DGRQOLMenu = _lastCreatedDGRQOLMenu;
             _DGROptimMenu = _lastCreatedOptimizationsMenu;
-            _DGRGraphicsMenu = _lastCreatedDGRMenu;
+            _DGRGraphicsMenu = _lastCreatedDGRGraphicsMenu;
             _DGRRecorderatorMenu = _lastCreatedDGRRecorderatorMenu;
             _DGREditorMenu = _lastCreatedDGREditorMenu;
             _DGRDumbShitMenu = _lastCreatedDGRDumbShitMenu;
@@ -492,6 +490,11 @@ namespace DuckGame
                 dgrDescription = "Extra cosmetic particles added by DGR, embers from lamps, leafs from trees, etc"
             });
 
+            menu.Add(new UIMenuItemToggle("Explosion Decals", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ExplosionDecals)))
+            {
+                dgrDescription = "Toggles comestic dust decals when explosions happen"
+            });
+
 
             menu.Add(new UIMenuItemNumber("Particle Level", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ParticleMultiplier), 0, 7, 1), valStrings: new List<string>()
             {
@@ -755,40 +758,47 @@ namespace DuckGame
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
             return menu;
         }
+        public static UIMenu TEMPDGROPTIM;
+        public static UIMenu TEMPDGRGRAPHICS;
+        public static UIMenu TEMPDGRQOL;
+        public static UIMenu TEMPDGRHUD;
+        public static UIMenu TEMPDGREDITOR;
+        public static UIMenu TEMPDGRRECORDERATOR;
+        public static UIMenu TEMPDGRMISC;
+        public static UIMenu TEMPDGRDEV;
         public static UIMenu CreateDGRMenu(UIMenu pOptionsMenu)
         {
             UIMenu menu = new UIMenu("|PINK|♥|WHITE|REBUILT|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
 
-            _DGRMenu = menu;
-            _DGROptimMenu = CreateDGROptimMenu(menu);
-            menu.Add(new UIMenuItem("OPTIMIZATIONS", new UIMenuActionOpenMenu(menu, _DGROptimMenu), backButton: true));
+            TEMPDGROPTIM = CreateDGROptimMenu(menu);
+            menu.Add(new UIMenuItem("OPTIMIZATIONS", new UIMenuActionOpenMenu(menu, TEMPDGROPTIM), backButton: true));
 
-            _DGRGraphicsMenu = CreateDGRGraphicsMenu(menu);
-            menu.Add(new UIMenuItem("GRAPHICS", new UIMenuActionOpenMenu(menu, _DGRGraphicsMenu), backButton: true));
+            TEMPDGRGRAPHICS = CreateDGRGraphicsMenu(menu);
+            menu.Add(new UIMenuItem("GRAPHICS", new UIMenuActionOpenMenu(menu, TEMPDGRGRAPHICS), backButton: true));
 
-            _DGRQOLMenu = CreateDGRQOLMenu(menu);
-            menu.Add(new UIMenuItem("QOL", new UIMenuActionOpenMenu(menu, _DGRQOLMenu), backButton: true));
+            TEMPDGRQOL = CreateDGRQOLMenu(menu);
+            menu.Add(new UIMenuItem("QOL", new UIMenuActionOpenMenu(menu, TEMPDGRQOL), backButton: true));
 
-            _DGRHudMenu = CreateDGRHudMenu(menu);
-            menu.Add(new UIMenuItem("HUD", new UIMenuActionOpenMenu(menu, _DGRHudMenu), backButton: true));
+            TEMPDGRHUD = CreateDGRHudMenu(menu);
+            menu.Add(new UIMenuItem("HUD", new UIMenuActionOpenMenu(menu, TEMPDGRHUD), backButton: true));
 
-            _DGREditorMenu = CreateDGREditorMenu(menu);
-            menu.Add(new UIMenuItem("EDITOR", new UIMenuActionOpenMenu(menu, _DGREditorMenu), backButton: true));
+            TEMPDGREDITOR = CreateDGREditorMenu(menu);
+            menu.Add(new UIMenuItem("EDITOR", new UIMenuActionOpenMenu(menu, TEMPDGREDITOR), backButton: true));
 
             if (Program.IS_DEV_BUILD)//WHEN RECORDERATOR IS A THING AGAIN MAKE THIS MENU ALWAYS SHOW UP -NiK0
             {
-                _DGRRecorderatorMenu = Recorderator.CreateRecorderatorMenu(menu);
-                menu.Add(new UIMenuItem("RECORDERATOR", new UIMenuActionOpenMenu(menu, _DGRRecorderatorMenu), backButton: true));
+                TEMPDGRRECORDERATOR = Recorderator.CreateRecorderatorMenu(menu);
+                menu.Add(new UIMenuItem("RECORDERATOR", new UIMenuActionOpenMenu(menu, TEMPDGRRECORDERATOR), backButton: true));
             }
-            
-            _DGRDumbShitMenu = CreateDGRDumbShitMenu(menu);
-            menu.Add(new UIMenuItem("MISCELLANEOUS", new UIMenuActionOpenMenu(menu, _DGRDumbShitMenu), backButton: true));
-            
-            _DGRDeveloperMenu = CreateDGRDeveloperMenu(menu);
+
+            TEMPDGRMISC = CreateDGRDumbShitMenu(menu);
+            menu.Add(new UIMenuItem("MISCELLANEOUS", new UIMenuActionOpenMenu(menu, TEMPDGRMISC), backButton: true));
+
+            TEMPDGRDEV = CreateDGRDeveloperMenu(menu);
             if (Program.IS_DEV_BUILD)
             {
                 menu.Add(new UIText(" ", Color.White));
-                menu.Add(new UIMenuItem("|PINK|DEVELOPER", new UIMenuActionOpenMenu(menu, _DGRDeveloperMenu), backButton: true));
+                menu.Add(new UIMenuItem("|PINK|DEVELOPER", new UIMenuActionOpenMenu(menu, TEMPDGRDEV), backButton: true));
             }
 
             menu.Add(new UIText(" ", Color.White));

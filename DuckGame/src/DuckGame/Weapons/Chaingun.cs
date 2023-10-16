@@ -81,6 +81,8 @@ namespace DuckGame
             weight = 8f;
             _holdOffset = new Vec2(0f, 2f);
             editorTooltip = "Like a chaingun, but for adults. Fires mean pointy metal things.";
+			_editorPreviewOffset.x -= 8;
+            _editorPreviewOffset.y -= 1;
         }
 
         public override void Initialize()

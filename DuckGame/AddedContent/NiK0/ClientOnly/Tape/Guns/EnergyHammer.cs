@@ -92,6 +92,8 @@ namespace DuckGame
 
             _barrelOffsetTL = new Vec2(19, 23.5f);
             tapeable = false;
+
+            _editorPreviewRotation = -90;
         }
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Gun
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -135,8 +128,24 @@ namespace DuckGame
                 material = new MaterialGold(this);
             }
             else
-                base.UpdateMaterial();
+            {
+                if (funTime > 0)
+                {
+                    if (material is MaterialFunBeam fb)
+                    {
+                        funTime -= 0.05f;
+                        fb.intensity = funTime;
+                    }
+                    else material = new MaterialFunBeam(this);
+                }
+                else
+                {
+                    if (material is MaterialFunBeam) material = null;
+                    base.UpdateMaterial();
+                }
+            }
         }
+        public float funTime;
 
         public bool fullAuto => _fullAuto;
 
@@ -172,8 +181,19 @@ namespace DuckGame
             };
             collideSounds.Add("smallMetalCollide");
             impactVolume = 0.3f;
+
             holsterAngle = 90f;
-            coolingFactor = 1f / 500f;
+            coolingFactor = 0.002f;
+            _editorPreviewWidth = 32;
+        }
+        public override int GetEditorPreviewWidth()
+        {
+            if (_editorPreviewWidth != 0)
+                return _editorPreviewWidth;
+
+            if (width > 16)
+                return 32;
+            return 16;
         }
 
         public void DoAmmoClick()
@@ -628,10 +648,8 @@ namespace DuckGame
             Material material = Graphics.material;
             if (graphic != null)
             {
-                if (owner != null && owner.graphic != null)
-                    graphic.flipH = owner.graphic.flipH;
-                else
-                    graphic.flipH = offDir <= 0;
+                if (owner != null && owner.graphic != null) graphic.flipH = owner.graphic.flipH;
+                else graphic.flipH = offDir <= 0;
             }
             if (_doPuff)
             {
@@ -640,8 +658,7 @@ namespace DuckGame
                 _clickPuff.flipH = offDir < 0;
                 Draw(ref _clickPuff, barrelOffset);
             }
-            if (!VirtualTransition.active && Graphics.material == null)
-                Graphics.material = this.material;
+            if (!VirtualTransition.active && Graphics.material == null) Graphics.material = this.material;
             base.Draw();
             Graphics.material = null;
             if (_flareAlpha > 0)

@@ -1,11 +1,4 @@
-﻿using NAudio.MediaFoundation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class TitleButton : MaterialThing, IPlatform
     {
@@ -26,14 +19,14 @@ namespace DuckGame
             _collisionOffset = new Vec2(-6.5f, -2f);
             depth = -1;
         }
-        public CorinthianPillar drag;
+        //public CorinthianPillar drag;
         public MaterialThing lt;
         public override void Update()
         {
             if (lt != null)
             {
                 y++;
-                drag.y++;
+                //drag.y++;
                 if (lt.impacting.Contains(this))
                 {
                     lt.vSpeed += 1;
@@ -42,7 +35,7 @@ namespace DuckGame
                 if (y > 170)
                 {
                     Level.Remove(this);
-                    Level.Remove(drag);
+                    //Level.Remove(drag);
                 }
             }
             base.Update();
