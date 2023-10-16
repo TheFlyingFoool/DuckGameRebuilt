@@ -13,10 +13,13 @@
 
         public override void MakeNetEffect(Vec2 pos, bool fromNetwork = false)
         {
-            Level.Add(new ExplosionDecal(pos.x - 24, pos.y - 24));
-            Level.Add(new ExplosionDecal(pos.x + 24, pos.y - 24));
-            Level.Add(new ExplosionDecal(pos.x + 24, pos.y + 24));
-            Level.Add(new ExplosionDecal(pos.x - 24, pos.y + 24));
+            if (DGRSettings.ExplosionDecals)
+            {
+                Level.Add(new ExplosionDecal(pos.x - 24, pos.y - 24));
+                Level.Add(new ExplosionDecal(pos.x + 24, pos.y - 24));
+                Level.Add(new ExplosionDecal(pos.x + 24, pos.y + 24));
+                Level.Add(new ExplosionDecal(pos.x - 24, pos.y + 24));
+            }
 
             Level.Add(new ExplosionPart(pos.x + Rando.Float(-2f, 2f), pos.y + Rando.Float(-2f, 2f), false));
             for (int index = 0; index < 4; ++index)

@@ -5,7 +5,7 @@ using System.IO;
 
 namespace DuckGame
 {
-    public class MaterialLavaWobble : Material
+    public class MaterialLavaWobble : FullscreenMaterial
     {
         public MaterialLavaWobble(FluidPuddle thing)
         {

@@ -2,11 +2,10 @@
 
 namespace DuckGame
 {
-    [EditorGroup("Stuff")]
-    public class StandingFluid : Thing
+    public class DGRStandingFluid : Thing
     {
         public EditorProperty<int> deep = new EditorProperty<int>(1, min: 1f, max: 100f, increment: 1f);
-        public EditorProperty<int> fluidType = new EditorProperty<int>(0, max: 2f, increment: 1f);
+        public EditorProperty<int> fluidType = new EditorProperty<int>(0, max: 4f, increment: 1f);
         private Vec2 _prevPos = Vec2.Zero;
         private Vec2 _leftSide;
         private Vec2 _rightSide;
@@ -15,13 +14,13 @@ namespace DuckGame
         private bool _filled;
         private int w8;
 
-        public StandingFluid(float xpos, float ypos)
+        public DGRStandingFluid(float xpos, float ypos)
           : base(xpos, ypos)
         {
             _collisionSize = new Vec2(16f, 16f);
             _collisionOffset = new Vec2(-8f, -8f);
             _editorIcon = new Sprite("standingFluidIcon");
-            _editorName = "Liquid";
+            _editorName = "DGR Liquid";
             editorTooltip = "Place a liquid near the floor in a contained space and you've got yourself a pool party.";
             hugWalls = WallHug.Floor;
         }
@@ -38,6 +37,10 @@ namespace DuckGame
                     return Fluid.Gas;
                 case 2:
                     return Fluid.Lava;
+                case 3:
+                    return Fluid.Ketchup;
+                case 4:
+                    return Fluid.Poo;
                 default:
                     return Fluid.Water;
             }

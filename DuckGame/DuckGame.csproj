@@ -542,6 +542,7 @@
     <Compile Include="src\DuckGame\Interp.cs" />
     <Compile Include="src\DuckGame\LangHandler.cs" />
     <Compile Include="src\DuckGame\Network\ConcurrentStack.cs" />
+    <Compile Include="src\DuckGame\Stuff\StandingFluid.cs" />
     <Compile Include="src\MonoTime\Console\Commands\AdvancedConfig.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Bind.cs" />
     <Compile Include="src\MonoTime\Console\Commands\CheckCheats.cs" />
@@ -604,6 +605,8 @@
     <Compile Include="src\MonoTime\LUI\LUIOnOff.cs" />
     <Compile Include="src\MonoTime\LUI\LUIStringEntry.cs" />
     <Compile Include="src\MonoTime\LUI\LUIText.cs" />
+    <Compile Include="src\MonoTime\Materials\FullscreenMaterial.cs" />
+    <Compile Include="src\MonoTime\Materials\MaterialFunBeam.cs" />
     <Compile Include="src\MonoTime\Sound\QOA.cs" />
     <Compile Include="src\MonoTime\UI\UIDGRDescribe.cs" />
     <Compile Include="src\MonoTime\UI\UISideButton.cs" />
@@ -1437,7 +1440,7 @@
     <Compile Include="src\DuckGame\Stuff\SpringRight.cs" />
     <Compile Include="src\DuckGame\Stuff\SpringUpLeft.cs" />
     <Compile Include="src\DuckGame\Stuff\SpringUpRight.cs" />
-    <Compile Include="src\DuckGame\Stuff\StandingFluid.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\DGRStandingFluid.cs" />
     <Compile Include="src\MonoTime\Windows\TargetStance.cs" />
     <Compile Include="src\DuckGame\Stuff\TargetDuckNew.cs" />
     <Compile Include="src\DuckGame\Stuff\TargetDuck.cs" />

@@ -3148,7 +3148,7 @@ namespace DuckGame
         {
             IEnumerable<Thing> source1 = new List<Thing>();
             if (inputMode == EditorInput.Gamepad | isDrag)
-                source1 = CollisionPointAll<Thing>(tilePosition);
+                source1 = OldCollisionPointAll<Thing>(tilePosition);
             else if (inputMode == EditorInput.Touch && TouchScreen.IsScreenTouched())
             {
                 if (_editMode || _copyMode)
@@ -3166,10 +3166,10 @@ namespace DuckGame
                     }
                 }
                 else if (TouchScreen.GetTouch() != Touch.None)
-                    source1 = CollisionPointAll<Thing>(tilePosition);
+                    source1 = OldCollisionPointAll<Thing>(tilePosition);
             }
             else if (inputMode == EditorInput.Mouse && !isDrag)
-                source1 = CollisionPointAll<Thing>(Mouse.positionScreen);
+                source1 = OldCollisionPointAll<Thing>(Mouse.positionScreen);
 
             oldHover = _hover;
             if (!_editMode)

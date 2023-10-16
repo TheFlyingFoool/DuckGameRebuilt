@@ -73,6 +73,8 @@ namespace DuckGame
             holsterAngle = 180f;
             holsterOffset = new Vec2(11f, 0f);
             editorTooltip = "For big nails.";
+            _editorPreviewOffset.x -= 8;
+            _editorPreviewRotation = -90;
         }
         public override Holdable BecomeTapedMonster(TapedGun pTaped)
         {

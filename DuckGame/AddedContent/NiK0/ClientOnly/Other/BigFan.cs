@@ -1,11 +1,5 @@
-﻿using DuckGame;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
-using System;
+﻿using System.Linq;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace DuckGame
 {
@@ -25,6 +19,7 @@ namespace DuckGame
             collisionSize = new Vec2(32, 13);
             editorOffset = new Vec2(8);
             editorTooltip = "Thats a pretty big fan, maybe even the biggest one.";
+            _editorIcon = new Sprite("smallFan");
         }
         public EditorProperty<int> spin = new EditorProperty<int>(1, null, 1, 4, 1);
         public EditorProperty<float> strength = new EditorProperty<float>(0.5f, null, 0.1f, 1.5f, 0.01f);
