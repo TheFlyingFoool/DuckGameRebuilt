@@ -242,6 +242,10 @@ namespace DuckGame
                 BreathSmoke._objects = new BreathSmoke[sixtyd];
                 BreathSmoke._lastActiveObject = (BreathSmoke._lastActiveObject) % BreathSmoke.kMaxObjects;
 
+                TreeLeaf.kMaxObjects = sixtyd;
+                TreeLeaf._objects = new TreeLeaf[sixtyd];
+                TreeLeaf._lastActiveObject = (TreeLeaf._lastActiveObject) % TreeLeaf.kMaxObjects;
+
                 ConfettiParticle.kMaxSparks = sixtyd;
                 ConfettiParticle._sparks = new ConfettiParticle[sixtyd];
                 ConfettiParticle._lastActiveSpark = (ConfettiParticle._lastActiveSpark) % ConfettiParticle.kMaxSparks;
