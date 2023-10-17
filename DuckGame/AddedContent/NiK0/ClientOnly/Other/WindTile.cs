@@ -1,7 +1,7 @@
 ﻿namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Details")]
+    [EditorGroup("Details|Weather")]
     public class WindTile : Thing
     {
         public EditorProperty<float> wind = new EditorProperty<float>(0, null, -5, 5);

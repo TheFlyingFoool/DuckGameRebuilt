@@ -1,7 +1,7 @@
 ﻿namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Details")]
+    [EditorGroup("Details|Terrain")]
     [BaggedProperty("previewPriority", true)]
     public class SummerTreeTop : Thing
     {
@@ -16,6 +16,7 @@
             hugWalls = WallHug.Left | WallHug.Right | WallHug.Ceiling | WallHug.Floor;
             shouldbeinupdateloop = DGRSettings.AmbientParticles;
             timer = Rando.Float(2);
+            _editorName = "Tree Top Summer";
         }
         public float timer;
         public override void Update()

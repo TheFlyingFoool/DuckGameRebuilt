@@ -5,6 +5,8 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using System.Reflection;
+
 namespace DuckGame
 {
     public class ContextObject : ContextMenu
@@ -34,6 +36,12 @@ namespace DuckGame
             itemSize.y = 16;
             _text = thing.editorName;
 
+            bool cc = thing.GetType().GetCustomAttribute<ClientOnlyAttribute>() != null;
+            if (cc)
+            {
+                _text = text + " @DGR@";
+            }
+
             if (imageOnly)
                 itemSize.x = 4 + _previewWidth;
             else
@@ -46,14 +54,20 @@ namespace DuckGame
             else
                 greyOut = false;
 
+            tooltip = thing.editorTooltip;
+            if (cc)
+            { 
+                tooltip = "(DGR ONLY) " + tooltip;
+            }
+
             if (_thingBag.GetOrDefault("previewPriority", false))
                 _previewPriority = true;
 
-            tooltip = thing.editorTooltip;
             if (!_thingBag.GetOrDefault("isOnlineCapable", true))
             {
                 tooltip = "(OFFLINE ONLY) " + tooltip;
             }
+
 
             int thingCost = Editor.CalculatePlacementCost(thing);
             bool cost = false;

@@ -1,7 +1,7 @@
 ﻿namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Details")]
+    [EditorGroup("Details|Weather")]
     public class SnowTile : Thing
     {
         public EditorProperty<float> strength = new EditorProperty<float>(1, null, 0, 2, 0.01f);

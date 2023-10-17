@@ -3,14 +3,18 @@
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Stuff")]
+    [EditorGroup("Stuff")]
+    [BaggedProperty("canSpawn", false)]
     public class DGRElevator : PhysicsObject, IPlatform
     {
         private SpriteMap _sprite;
 
+        public EditorProperty<float> maxSpeed = new EditorProperty<float>(6, null, 0, 6);
+
         public DGRElevator(float xpos, float ypos)
           : base(xpos, ypos)
         {
+            thickness = -1000;
             _skipPlatforms = true;
             _sprite = new SpriteMap("elevator", 32, 37);
             graphic = _sprite;
@@ -22,7 +26,13 @@ namespace DuckGame
             thickness = 4f;
             weight = 7f;
             flammable = 0.3f;
+            friction = 1000; //dont move :^) -NiK0
             collideSounds.Add("rockHitGround2");
+            _editorName = "Elevator";
+            _editorIcon = new Sprite("elevatorIcon");
+            vMax = 6;
+            depth = -1;
+            editorTooltip = "Elevators arent used often but in this virtual simulation they can be powered by nothing!";
         }
 
         public bool goingUp;
@@ -30,6 +40,7 @@ namespace DuckGame
 
         public int tilGo;
 
+        public EditorProperty<bool> spawnFloating = new EditorProperty<bool>(false);
         public StateBinding _tilGoBinding = new StateBinding("tilGo");
         public StateBinding _goingUpBinding = new StateBinding("goingUp");
         public StateBinding _goingDownBinding = new StateBinding("goingDown");
@@ -41,6 +52,12 @@ namespace DuckGame
         {
             if (floor == null)
             {
+                if (spawnFloating)
+                {
+                    gravMultiplier = 0;
+                    grounded = false;
+                    sleeping = false;
+                }
                 floor = new InvisibleBlock(0, 0, 32, 8);
                 side = new InvisibleBlock(0, 0, 3, 37);
                 ceiling = new InvisibleBlock(0, 0, 32, 3);
@@ -55,15 +72,32 @@ namespace DuckGame
             bool goTimer = false;
             IEnumerable<IAmADuck> iaads = Level.CheckRectAll<IAmADuck>(topLeft + new Vec2(0, 2), bottomRight);
 
+            if (goingUp || goingDown)
+            {
+                foreach (PhysicsObject po in Level.CheckRectAll<PhysicsObject>(topLeft, bottomRight))
+                {
+                    if (po.isServerForObject && po != this)
+                    {
+                        po.y += vSpeed;
+                        po.vSpeed += 0.1f;
+                    }
+                }
+            }
+            base.Update();
             if (goingUp)
             {
                 if (isServerForObject)
                 {
+                    if (y < Level.current.topLeft.y - 300)
+                    {
+                        goingDown = true;
+                        goingUp = false;
+                    }
                     if (vSpeed == 0)
                     {
                         goingUp = false;
                     }
-                    vSpeed -= 0.1f;
+                    vSpeed = Lerp.Float(vSpeed, -maxSpeed, 0.1f);
                 }
             }
             else if (goingDown)
@@ -74,7 +108,7 @@ namespace DuckGame
                     {
                         goingDown = false;
                     }
-                    vSpeed += 0.1f;
+                    vSpeed = Lerp.Float(vSpeed, maxSpeed, 0.1f);
                 }
             }
             else
@@ -86,6 +120,18 @@ namespace DuckGame
                     {
                         goTimer = true;
                         break;
+                    }
+                }
+                if (!goTimer)
+                {
+                    IEnumerable<RCCar> rcs = Level.CheckRectAll<RCCar>(topLeft + new Vec2(0, 2), bottomRight);
+                    foreach (RCCar rc in rcs)
+                    {
+                        if (rc.isServerForObject && rc.owner == null)
+                        {
+                            goTimer = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -110,7 +156,6 @@ namespace DuckGame
                 }
             }
             else if (isServerForObject) tilGo = 0;
-            base.Update();
 
             ceiling.position = topLeft;
             if (offDir == 1)
@@ -123,19 +168,7 @@ namespace DuckGame
                 floor.position = Offset(new Vec2(24, 21));
                 side.position = Offset(new Vec2(24, -8));
             }
-
-            if (goingUp || goingDown)
-            {
-                foreach (IAmADuck iaad in iaads)
-                {
-                    MaterialThing mt = (MaterialThing)iaad;
-                    if (mt.isServerForObject)
-                    {
-                        mt.y += vSpeed;
-                        mt.vSpeed -= 0.01f;
-                    }
-                }
-            }
+            
         }
     }
 }

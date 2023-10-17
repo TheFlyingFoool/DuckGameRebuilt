@@ -3,7 +3,7 @@
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Details")]
+    [EditorGroup("Details|Weather")]
     public class RainTile : Thing
     {
         public EditorProperty<float> thunder = new EditorProperty<float>(0, null, 0, 16, 0.1f);
@@ -24,7 +24,7 @@ namespace DuckGame
         public float rainDarken;
         public override void Initialize()
         {
-            rainDarken = 0.8f;
+            rainDarken = dark?0.8f:1;
             base.Initialize();
         }
         public override void Update()
