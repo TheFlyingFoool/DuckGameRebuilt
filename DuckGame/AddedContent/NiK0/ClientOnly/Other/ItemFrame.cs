@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Stuff")]
+    [EditorGroup("Spawns")]
     public class ItemFrame : MaterialThing
     {
         public StateBinding _containedObjectBinding = new StateBinding("containedObject");

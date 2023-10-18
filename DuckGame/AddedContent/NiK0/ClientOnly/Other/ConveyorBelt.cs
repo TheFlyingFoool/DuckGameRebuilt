@@ -5,7 +5,7 @@ using static DuckGame.PipeTileset;
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Stuff")]
+    [EditorGroup("Stuff")]
     public class ConveyorBelt : Block
     {
         public EditorProperty<float> speed = new EditorProperty<float>(1, null, -10, 10, 0.1f);
@@ -27,7 +27,7 @@ namespace DuckGame
             depth = -1;
 
             _editorName = "Conveyor";
-            editorTooltip = "Conveyors are ancient technology presumably used in industrial machinery. Nowadays we use teleporters";
+            editorTooltip = "Conveyors were presumably used in ancient industrial machinery. Nowadays we use teleporters";
         }
         protected virtual Dictionary<Direction, ConveyorBelt> GetNeighbors()
         {

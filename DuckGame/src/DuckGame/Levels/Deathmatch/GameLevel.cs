@@ -1,14 +1,7 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.GameLevel
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -36,6 +29,7 @@ namespace DuckGame
         public bool cityRaining;
         public bool Raining;
         public bool heavyRain;
+        public float rainMulti = 1;
         public float rainDarken;
         public static float rainwind;
         public float rainwindto;
@@ -177,9 +171,9 @@ namespace DuckGame
 
 
 
-            if (level != "RANDOM")
+            if (level != "RANDOM" && First<RainTile>() == null && First<SnowTile>() == null)
             {
-                if (Rando.Float(10) <= DGRSettings.RandomWeather && First<BlizzardThing>() == null)
+                if (Rando.Float(10) <= DGRSettings.RandomWeather)
                 {
                     if (Program.BirthdayDGR)
                     {
@@ -434,7 +428,7 @@ namespace DuckGame
                 Layer.Parallax.fade = rainDarken;
                 Layer.Foreground.fade = rainDarken;
                 Layer.Background.fade = rainDarken;
-                rainTimer += DGRSettings.WeatherMultiplier / (heavyRain ? 2 : 1.5f);
+                rainTimer += DGRSettings.WeatherMultiplier / (heavyRain ? 2 : 1.5f) * rainMulti;
                 if (rainTimer > 1)
                 {
                     for (int i = 0; i < rainTimer; i++)
@@ -540,7 +534,7 @@ namespace DuckGame
                         snowTimer -= 1;
                         Vec2 v = new Vec2(Rando.Float(topLeft.x - 128, bottomRight.x + 128), topLeft.y - 100);
                         SnowFallParticle sn = new SnowFallParticle(v.x, v.y, new Vec2(0, 1), Rando.Int(2) == 0);
-                        //sn.life = Rando.Float(1, 2);
+                        sn.life = Rando.Float(1, 2);
                         //sn._size = Rando.Float(1, 2);
                         Add(sn);
                     }

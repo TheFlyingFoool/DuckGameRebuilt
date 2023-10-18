@@ -400,6 +400,11 @@ namespace DuckGame
             hasUnsavedChanges = true;
             if (obj == null)
                 return;
+            if (obj.maxPlaceable >= 0 && things[obj.GetType()].Count<Thing>() >= obj.maxPlaceable)
+            {
+                HUD.AddPlayerChangeDisplay("@UNPLUG@|RED| Too many placed!", 2f);
+                return;
+            }
             switch (obj)
             {
                 case ThingContainer _:
@@ -2765,13 +2770,13 @@ namespace DuckGame
                 if (_dragSelectShiftModifier)
                 {
                     _currentDragSelectionHoverAdd.Clear();
-                    foreach (Thing thing in CheckRectAll<Thing>(selectionDragStart, selectionDragEnd))
+                    foreach (Thing thing in OldCheckRectAll<Thing>(selectionDragStart, selectionDragEnd))
                         _currentDragSelectionHoverAdd.Add(thing);
                 }
                 else
                 {
                     _currentDragSelectionHover.Clear();
-                    foreach (Thing thing in CheckRectAll<Thing>(selectionDragStart, selectionDragEnd))
+                    foreach (Thing thing in OldCheckRectAll<Thing>(selectionDragStart, selectionDragEnd))
                         _currentDragSelectionHover.Add(thing);
                 }
 

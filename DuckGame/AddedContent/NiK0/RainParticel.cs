@@ -28,7 +28,7 @@
                 lPos = position;
                 return;
             }
-            Graphics.DrawLine(lPos, position, c, 2f, 1.1f);
+            Graphics.DrawLine(lPos, position, c, 1f, 1.1f);
             lPos = position;
         }
         public Vec2 yEnd;
