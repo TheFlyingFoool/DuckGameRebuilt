@@ -135,23 +135,23 @@ namespace DuckGame
                 switch (CurrentMode)
                 {
                     case EditorMode.Hat:
-                        UpdateCanvas(true, 32, ref HatAnimationBuffer[AnimationFrame], Level.current.camera.center);
+                        UpdateCanvas(true, 32, ref HatAnimationBuffer[AnimationFrame], current.camera.center);
                         break;
 
                     case EditorMode.Cape:
-                        UpdateCanvas(true, 32, ref CapeFrameBuffer, Level.current.camera.center);
+                        UpdateCanvas(true, 32, ref CapeFrameBuffer, current.camera.center);
                         break;
 
                     case EditorMode.Rock:
-                        UpdateCanvas(false, 24, ref RockFrameBuffer, Level.current.camera.center);
+                        UpdateCanvas(false, 24, ref RockFrameBuffer, current.camera.center);
                         break;
 
                     case EditorMode.Particle:
-                        UpdateCanvas(false, 12, ref ParticleAnimationBuffer[AnimationFrame], Level.current.camera.center);
+                        UpdateCanvas(false, 12, ref ParticleAnimationBuffer[AnimationFrame], current.camera.center);
                         break;
 
                     case EditorMode.Metapixel:
-                        UpdateMetapixelEditor(Level.current.camera.center);
+                        UpdateMetapixelEditor(current.camera.center);
                         break;
 
                     default: throw new InvalidOperationException();
@@ -163,23 +163,23 @@ namespace DuckGame
                 switch (CurrentMode)
                 {
                     case EditorMode.Hat:
-                        DrawCanvas(true, 32, HatAnimationBuffer[AnimationFrame], Level.current.camera.center);
+                        DrawCanvas(true, 32, HatAnimationBuffer[AnimationFrame], current.camera.center);
                         break;
 
                     case EditorMode.Cape:
-                        DrawCanvas(true, 32, CapeFrameBuffer, Level.current.camera.center);
+                        DrawCanvas(true, 32, CapeFrameBuffer, current.camera.center);
                         break;
 
                     case EditorMode.Rock:
-                        DrawCanvas(false, 24, RockFrameBuffer, Level.current.camera.center);
+                        DrawCanvas(false, 24, RockFrameBuffer, current.camera.center);
                         break;
 
                     case EditorMode.Particle:
-                        DrawCanvas(false, 12, ParticleAnimationBuffer[AnimationFrame], Level.current.camera.center);
+                        DrawCanvas(false, 12, ParticleAnimationBuffer[AnimationFrame], current.camera.center);
                         break;
 
                     case EditorMode.Metapixel:
-                        DrawMetapixelEditor(Level.current.camera.center);
+                        DrawMetapixelEditor(current.camera.center);
                         break;
 
                     default: throw new InvalidOperationException();

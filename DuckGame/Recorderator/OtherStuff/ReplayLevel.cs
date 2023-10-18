@@ -589,7 +589,7 @@ namespace DuckGame
             {
                 for (int i = 0; i < reAdd.Count; i++)
                 {
-                    SimRenderer.Add(reAdd[i]);
+                    Add(reAdd[i]);
                 }
             }
             else

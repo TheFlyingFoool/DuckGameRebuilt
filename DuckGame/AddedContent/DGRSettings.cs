@@ -1,21 +1,22 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 using System.Collections.Generic;
 
 namespace DuckGame
 {
     public static class DGRSettings
     {
-        /*[AutoConfigField]//TODO: this eventually -NiK0
+        /*[Marker.AutoConfig]//TODO: this eventually -NiK0
         public static List<byte> room1 = new List<byte>();
-        [AutoConfigField]
+        [Marker.AutoConfig]
         public static List<byte> room2 = new List<byte>();
-        [AutoConfigField]
+        [Marker.AutoConfig]
         public static List<byte> room3 = new List<byte>();*/
 
         public static int mMatch = -1;
         public static BitBuffer MatchsettingsPreset1 = new BitBuffer();
 
-        [AutoConfigField]
+        [Marker.AutoConfig]
         public static byte[] MatchSetSave1 //scuffed i know, fuck you -NiK0
         {
             get
@@ -28,10 +29,10 @@ namespace DuckGame
             }
         }
 
-        [AutoConfigField] public static List<string> bMatchSetSave1 = new List<string>();
+        [Marker.AutoConfig] public static List<string> bMatchSetSave1 = new List<string>();
         public static BitBuffer MatchsettingsPreset2 = new BitBuffer();
 
-        [AutoConfigField]
+        [Marker.AutoConfig]
         public static byte[] MatchSetSave2 //scuffed i know, fuck you -NiK0
         {
             get
@@ -44,10 +45,10 @@ namespace DuckGame
             }
         }
 
-        [AutoConfigField] public static List<string> bMatchSetSave2 = new List<string>();
+        [Marker.AutoConfig] public static List<string> bMatchSetSave2 = new List<string>();
         public static BitBuffer MatchsettingsPreset3 = new BitBuffer();
 
-        [AutoConfigField]
+        [Marker.AutoConfig]
         public static byte[] MatchSetSave3 //scuffed i know, fuck you -NiK0
         {
             get
@@ -60,12 +61,12 @@ namespace DuckGame
             }
         }
 
-        [AutoConfigField] public static List<string> bMatchSetSave3 = new List<string>();
+        [Marker.AutoConfig] public static List<string> bMatchSetSave3 = new List<string>();
 
 
-        [AutoConfigField] public static List<string> favoriteHats = new List<string>();
-        [AutoConfigField] public static string arcadeHat = "";
-        [AutoConfigField] public static int arcadeDuckColor = 0;
+        [Marker.AutoConfig] public static List<string> favoriteHats = new List<string>();
+        [Marker.AutoConfig] public static string arcadeHat = "";
+        [Marker.AutoConfig] public static int arcadeDuckColor = 0;
 
 
         //this is ran everytime TeamSelect2.cs is initialized or hats are reloaded
@@ -166,45 +167,47 @@ namespace DuckGame
             }
         }
 
-        [AutoConfigField] public static bool IgnoreLevRestrictions = false;
+        [Marker.AutoConfig] public static bool IgnoreLevRestrictions = false;
 
-        [AutoConfigField] public static bool RememberMatchSettings = false;
+        [Marker.AutoConfig] public static bool RememberMatchSettings = false;
 
-        [AutoConfigField] public static bool CustomHatTeams = false;
+        [Marker.AutoConfig] public static bool CustomHatTeams = false;
 
-        [AutoConfigField] public static bool skipOnlineBumper = false;
+        [Marker.AutoConfig] public static bool skipOnlineBumper = false;
 
-        [AutoConfigField]
+        [Marker.AutoConfig]
         public static bool HideFS = false;
 
-        [AutoConfigField]
+        [Marker.AutoConfig]
         public static bool ReducedMovement = false;
 
-        [AutoConfigField] public static bool LoadMusic = true;
+        [Marker.AutoConfig] public static bool LoadMusic = true;
 
-        [AutoConfigField] public static bool FasterLoad = false;
+        [Marker.AutoConfig] public static bool FasterLoad = false;
+        
+        [Marker.AutoConfig] public static bool SequenceCrateRetexture = false;
 
         public static bool LoaderMusic; //this is so you wont crash immediately when changing the setting, only gets set on startup -NiK0
 
-        [AutoConfigField] public static bool DGRItems = false;
+        [Marker.AutoConfig] public static bool DGRItems = false;
 
-        [AutoConfigField] public static string PreferredLevel = "";
+        [Marker.AutoConfig] public static string PreferredLevel = "";
 
-        [AutoConfigField] public static bool PreloadLevels;
+        [Marker.AutoConfig] public static bool PreloadLevels;
 
-        [AutoConfigField]
+        [Marker.AutoConfig]
         public static bool SortLevels = true; //do you care about levels being sorted? no? turn this off for faster load times -NiK0
 
-        //[AutoConfigField] nvm im not smart enough for async stuff -NiK0
+        //[Marker.AutoConfig] nvm im not smart enough for async stuff -NiK0
         //public static bool ThreadedLevelLoading = true;
 
-        [AutoConfigField] public static bool SpriteAtlas = true;
+        [Marker.AutoConfig] public static bool SpriteAtlas = true;
 
-        [AutoConfigField] public static bool S_RPC = true;
+        [Marker.AutoConfig] public static bool S_RPC = true;
 
-        [AutoConfigField] public static bool EditorTimer = true;
+        [Marker.AutoConfig] public static bool EditorTimer = true;
 
-        [AutoConfigField] public static bool SkipXP = false;
+        [Marker.AutoConfig] public static bool SkipXP = false;
 
         public static bool RPC
         {
@@ -239,6 +242,10 @@ namespace DuckGame
                 BreathSmoke._objects = new BreathSmoke[sixtyd];
                 BreathSmoke._lastActiveObject = (BreathSmoke._lastActiveObject) % BreathSmoke.kMaxObjects;
 
+                TreeLeaf.kMaxObjects = sixtyd;
+                TreeLeaf._objects = new TreeLeaf[sixtyd];
+                TreeLeaf._lastActiveObject = (TreeLeaf._lastActiveObject) % TreeLeaf.kMaxObjects;
+
                 ConfettiParticle.kMaxSparks = sixtyd;
                 ConfettiParticle._sparks = new ConfettiParticle[sixtyd];
                 ConfettiParticle._lastActiveSpark = (ConfettiParticle._lastActiveSpark) % ConfettiParticle.kMaxSparks;
@@ -265,7 +272,7 @@ namespace DuckGame
             }
         }
 
-        [AutoConfigField]
+        [Marker.AutoConfig]
         public static int S_ParticleMultiplier = 3;
 
         //listen if you wanna make better code go for it i cant bother to personally
@@ -288,9 +295,9 @@ namespace DuckGame
             }
         }
 
-        [AutoConfigField] public static bool UncappedFPS = false;
+        [Marker.AutoConfig] public static bool UncappedFPS = false;
 
-        [AutoConfigField] public static bool S_UseVSync = true;
+        [Marker.AutoConfig] public static bool S_UseVSync = true;
         public static bool UseVSync
         {
             get
@@ -306,8 +313,10 @@ namespace DuckGame
             }
         }
 
+        public static bool ApplyOnNextFrame;
+
         //Tater: It's really annoying you can't make dynamic settings display based on other settings, so this is ugly.
-        [AutoConfigField] public static int S_TargetFrameRate = 0;
+        [Marker.AutoConfig] public static int S_TargetFrameRate = 0;
         public static int TargetFrameRate
         {
             get
@@ -330,61 +339,62 @@ namespace DuckGame
             }
         }
 
-        [PostInitialize]
         public static void InitalizeFPSThings()
         {
-            MonoMain.graphics.SynchronizeWithVerticalRetrace = DGRSettings.UseVSync;
-            Program.main.FrameLimiterTarget = Math.Max(DGRSettings.TargetFrameRate,60);
-            Program.main.UseDrawRateLimiter = !DGRSettings.UseVSync && DGRSettings.UncappedFPS && TargetFrameRate >= 60;
+            MonoMain.graphics.SynchronizeWithVerticalRetrace = UseVSync;
+            Program.main.FrameLimiterTarget = Math.Max(TargetFrameRate,60);
+            Program.main.UseDrawRateLimiter = !UseVSync && UncappedFPS && TargetFrameRate >= 60;
             MonoMain.graphics.ApplyChanges();
         }
 
-        [AutoConfigField] public static float WeatherMultiplier = 1;
+        [Marker.AutoConfig] public static float WeatherMultiplier = 1;
 
-        [AutoConfigField] public static float HeatWaveMultiplier = 1;
+        [Marker.AutoConfig] public static float HeatWaveMultiplier = 1;
 
-        [AutoConfigField] public static bool AmbientParticles = true;
+        [Marker.AutoConfig] public static bool AmbientParticles = true;
 
-        [AutoConfigField] public static bool GraphicsCulling = true;
+        [Marker.AutoConfig] public static bool ExplosionDecals;
 
-        [AutoConfigField] public static int StartIn = 0;
+        [Marker.AutoConfig] public static bool GraphicsCulling = true;
 
-        [AutoConfigField] public static float WeatherLighting = 1;
+        [Marker.AutoConfig] public static int StartIn = 0;
 
-        [AutoConfigField] public static bool CameraUnfollow = false;
+        [Marker.AutoConfig] public static float WeatherLighting = 1;
 
-        [AutoConfigField] public static bool dubberspeed = false;
+        [Marker.AutoConfig] public static bool CameraUnfollow = false;
 
-        [AutoConfigField] public static float RandomWeather = 1;
+        [Marker.AutoConfig] public static bool dubberspeed = false;
 
-        [AutoConfigField] public static bool MenuMouse = false;
+        [Marker.AutoConfig] public static float RandomWeather = 1;
 
-        [AutoConfigField] public static bool SkipExcessRounds = false;
+        [Marker.AutoConfig] public static bool MenuMouse = false;
 
-        [AutoConfigField] public static int RebuiltEffect = 1;
+        [Marker.AutoConfig] public static bool SkipExcessRounds = false;
 
-        [AutoConfigField] public static bool StickyHats { get; set; }
+        [Marker.AutoConfig] public static int RebuiltEffect = 1;
 
-        [AutoConfigField] public static bool QOLScoreThingButWithoutScore { get; set; }
+        [Marker.AutoConfig] public static bool StickyHats { get; set; }
 
-        [AutoConfigField] public static bool NameTags { get; set; }
+        [Marker.AutoConfig] public static bool QOLScoreThingButWithoutScore { get; set; }
 
-        [AutoConfigField] public static bool LobbyData { get; set; }
+        [Marker.AutoConfig] public static bool NameTags { get; set; }
 
-        [AutoConfigField] public static bool LobbyNameOnPause = true;
+        [Marker.AutoConfig] public static bool LobbyData { get; set; }
 
-        [AutoConfigField]
+        [Marker.AutoConfig] public static bool LobbyNameOnPause = true;
+
+        [Marker.AutoConfig]
         public static bool EditorOnlinePhysics = false; //for the love of god be off by default jesus christ -NiK0
 
-        [AutoConfigField] public static bool EditorInstructions = true;
+        [Marker.AutoConfig] public static bool EditorInstructions = true;
 
-        [AutoConfigField] public static bool EditorLevelName = true;
+        [Marker.AutoConfig] public static bool EditorLevelName = true;
 
-        [AutoConfigField] public static bool OpenURLsInBrowser = false;
+        [Marker.AutoConfig] public static bool OpenURLsInBrowser = false;
 
-        [AutoConfigField] public static int DGRJoinLink = 0;
+        [Marker.AutoConfig] public static int DGRJoinLink = 0;
         
         // the 4chan disease..
-        [AutoConfigField] public static bool GreenTextSupport = false;
+        [Marker.AutoConfig] public static bool GreenTextSupport = false;
     }
 }

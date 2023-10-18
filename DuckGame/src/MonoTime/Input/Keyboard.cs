@@ -736,8 +736,8 @@ namespace DuckGame
                     _keyboardPress = true;
                 _lastKeyCount = num;
                 updateKeyboardString();
-                Keyboard._flipper = 1;
-                if (Keyboard._registerLock && (Keyboard._registerSetThing == null || Keyboard._registerSetThing.removeFromLevel || Keyboard._registerSetThing.owner == null || DevConsole.open || DuckNetwork.core.enteringText || !LockMovementQueue.Empty))
+                _flipper = 1;
+                if (_registerLock && (_registerSetThing == null || _registerSetThing.removeFromLevel || _registerSetThing.owner == null || DevConsole.open || DuckNetwork.core.enteringText || !LockMovementQueue.Empty))
                 {
                     _registerLock = false;
                     //Keyboard._currentNote = 0;
@@ -907,8 +907,8 @@ namespace DuckGame
 
         public static void IMECharEnteredHandler(object sender, CharacterEventArgs e)
         {
-            Keyboard.KeyString = e.Character != '　' ? Keyboard.KeyString + e.Character.ToString() : Keyboard.KeyString + " ";
-            Keyboard.ignoreEnter = 4;
+            KeyString = e.Character != '　' ? KeyString + e.Character.ToString() : KeyString + " ";
+            ignoreEnter = 4;
         }
 
         public static void ALTCharEnteredHandler(object sender, CharacterEventArgs e)
@@ -916,9 +916,9 @@ namespace DuckGame
             if (!e.ExtendedKey)
                 return;
             if (e.Character == '　')
-                Keyboard.KeyString += " ";
+                KeyString += " ";
             else
-                Keyboard.KeyString += e.Character.ToString();
+                KeyString += e.Character.ToString();
         }
         public static List<char> TextInputCharacters = new List<char>(FNAPlatform.TextInputCharacters);
         public static void FNACharEnteredHandler(char c) // FNA SDL call back for key char pressed sht

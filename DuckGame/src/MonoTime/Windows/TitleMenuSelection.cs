@@ -14,5 +14,7 @@ namespace DuckGame
         Options,
         Stats,
         Editor,
+        Recorderator,
+        FeatherFashion
     }
 }

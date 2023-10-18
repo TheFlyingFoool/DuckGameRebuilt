@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 
 namespace DuckGame
 {
@@ -9,7 +10,7 @@ namespace DuckGame
             shouldbegraphicculled = false;
         }
 
-        [DevConsoleCommand(Name = "moddebug", IsCheat = true)]
+        [Marker.DevConsoleCommand(Name = "moddebug", IsCheat = true)]
         public static void MDDebug()
         {
             if (instance != null && instance.level == Level.current)

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 
 namespace DuckGame
 {
 
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand(Description = "Prints Duck Game's current memory usage")]
+        [Marker.DevConsoleCommand(Description = "Prints Duck Game's current memory usage")]
         public static string Mem()
         {
             long num = GC.GetTotalMemory(true) / 1000L;

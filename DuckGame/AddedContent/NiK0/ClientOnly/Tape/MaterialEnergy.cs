@@ -10,6 +10,7 @@ namespace DuckGame
         private Thing _thing;
         private float _time;
         public float glow;
+        public float timeMulti = 1;
 
 
         public MaterialEnergy(Thing t)
@@ -23,7 +24,7 @@ namespace DuckGame
         }
         public override void Update()
         {
-            _time += 0.016f;
+            _time += 0.016f * timeMulti;
             base.Update();
         }
         public Color color;

@@ -1,4 +1,5 @@
-﻿using SDL2;
+﻿using AddedContent.Firebreak;
+using SDL2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace DuckGame
 
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand(Description = "Copies the console's last 750 lines of output to your clipboard")]
+        [Marker.DevConsoleCommand(Description = "Copies the console's last 750 lines of output to your clipboard")]
         public static void Copy()
         {
             StringBuilder currentPart = new();

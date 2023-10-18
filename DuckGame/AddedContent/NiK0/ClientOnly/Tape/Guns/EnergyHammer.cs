@@ -59,8 +59,23 @@ namespace DuckGame
         public int safeframes;
 
         public int machTime;
+
+        public LoopingSound _hum;
+        public LoopingSound _spinHum;
         public EnergyHammer(float xpos, float ypos) : base(xpos, ypos)
         {
+            _hum = new LoopingSound("scimiHum")
+            {
+                volume = 0f
+            };
+            _hum.lerpSpeed = 1;
+
+            _spinHum = new LoopingSound("schammerThrow")
+            {
+                volume = 0f
+            };
+            _spinHum.lerpSpeed = 1;
+
             graphic = new Sprite("EnergyHammerHandle");
             hammer = new Sprite("EnergyHammer");
 
@@ -77,6 +92,58 @@ namespace DuckGame
 
             _barrelOffsetTL = new Vec2(19, 23.5f);
             tapeable = false;
+
+            _editorPreviewRotation = -90;
+        }
+        public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
+        {
+            if (isServerForObject && dragSpin && with is Block)
+            {
+                dragSpin = false;
+                yscale = 1;
+                angle = 0;
+                dragging = null;
+                bouncy = 0;
+                SFX.PlaySynchronized("scimisawClash");
+                for (int i = 0; i < 13 * DGRSettings.ActualParticleMultiplier; i++)
+                {
+                    Spark spark = Spark.New(barrelPosition.x, barrelPosition.y, new Vec2(Rando.Float(-3f, 3f), Rando.Float(-3f, 3f)));
+                    spark._color = hammerColor;
+                    spark._width = 1f;
+                    Level.Add(spark);
+                }
+            }
+            if (isServerForObject && spin && with is Block)
+            {
+                SFX.PlaySynchronized("schammerHitsAWall");
+                stuck = true;
+                spin = false;
+
+                for (int i = 0; i < 13 * DGRSettings.ActualParticleMultiplier; i++)
+                {
+                    Spark spark = Spark.New(barrelPosition.x, barrelPosition.y, new Vec2(Rando.Float(-3f, 3f), Rando.Float(-3f, 3f)));
+                    spark._color = hammerColor;
+                    spark._width = 1f;
+                    Level.Add(spark);
+                }
+            }
+            else
+            {
+
+                alphGlow = 1;
+                glowInc = 0.5f;
+                SFX.PlaySynchronized("scimisawClash");
+
+                for (int i = 0; i < 13 * DGRSettings.ActualParticleMultiplier; i++)
+                {
+                    Spark spark = Spark.New(barrelPosition.x, barrelPosition.y, new Vec2(Rando.Float(-2f, 2f), Rando.Float(-2f, 2f)));
+                    spark._color = hammerColor;
+                    spark._width = 1f;
+                    Level.Add(spark);
+                }
+            }
+
+            base.OnSolidImpact(with, from);
         }
         public override void OnPressAction()
         {
@@ -224,8 +291,8 @@ namespace DuckGame
                 hammer.xscale *= 1 + alphGlow + holdTime / 2;
                 hammer.yscale *= 1.5f + alphGlow + holdTime / 2;
                 hammer.alpha = alphGlow + holdTime / 2;
-                hammer.center = new Vec2(16, 26);
-                Vec2 vec = Offset(new Vec2(0, 27f));
+                hammer.center = new Vec2(16, 25.5f);
+                Vec2 vec = Offset(new Vec2(0, 10));
                 Graphics.Draw(hammer, vec.x, vec.y, depth - 2);
             }
             Graphics.material = mt;
@@ -250,25 +317,22 @@ namespace DuckGame
                 }
             }
         }
-        public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
-        {
-            if (isServerForObject && dragSpin && with is Block)
-            {
-                dragSpin = false;
-                yscale = 1;
-                angle = 0;
-                dragging = null;
-                bouncy = 0;
-            }
-            if (isServerForObject && spin && with is Block)
-            {
-                stuck = true;
-                spin = false;
-            }
-            base.OnSoftImpact(with, from);
-        }
         public override void Update()
         {
+            glowInc = Lerp.Float(glowInc, 0, 0.01f);
+            if (_spinHum != null)
+            {
+                _spinHum.Update();
+                if (spin) _spinHum.volume = 1;
+                else _spinHum.volume = Lerp.Float(_spinHum.volume, 0, 0.1f);
+            }
+            if (_hum != null)
+            {
+                _hum.Update();
+                if (dragSpin) _hum.volume = 1;
+                else _hum.volume = Lerp.Float(_hum.volume, 0, 0.1f);
+            }
+
             if (x > Level.current.bottomRight.x + 300 || x < Level.current.topLeft.x - 300)
             {
                 if (spin)
@@ -291,7 +355,7 @@ namespace DuckGame
             {
                 if (safeframes > 0) safeframes--;
                 _hold = 0;
-                angleDegrees += 30;
+                angleDegrees += 30 * offDir;
                 hSpeed = offDir * 11;
                 vSpeed = 0;
                 trLs.Add(position);
@@ -383,7 +447,11 @@ namespace DuckGame
             else center = new Vec2(16);
 
             if (dragSpin) weight = 2;
-            else if (owner != null) weight = 5;
+            else if (owner != null)
+            {
+                weight = 5;
+                if (duck != null) duck._disarmDisable = 10;
+            }
             else weight = 10;
 
             if (swing > 0)
@@ -410,6 +478,7 @@ namespace DuckGame
                 }
                 else
                 {
+                    SFX.PlaySynchronized("schammerDashSwing");
                     machSwing = true;
                     addHandAngle = -2.5f;
                     if (duck != null)
@@ -428,6 +497,7 @@ namespace DuckGame
                 {
                     if (isServerForObject && reversal % 4 == 0 && duck != null)
                     {
+                        SFX.PlaySynchronized("schammerDashSwing", 1, Rando.Float(-0.1f, 0.1f));
                         Level.Add(new EnergyForceWave(x + offDir * 12, y + 8f, offDir, 0.02f, 4 + Math.Abs(owner.hSpeed), owner.vSpeed * 0.3f, duck));
                     }
                     trLs.Add(position);
@@ -465,7 +535,6 @@ namespace DuckGame
                         Spark spark = Spark.New(barrelPosition.x, barrelPosition.y - 6f, new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f)));
                         spark._color = hammerColor;
                         spark._width = 1f;
-                        alphGlow = Rando.Float(0.1f) * Math.Abs(duck.hSpeed);
                         Level.Add(spark);
                     }
                     if (Math.Abs(duck.hSpeed) > 2.6f && (duck.grounded || Math.Abs(addHandAngle) > 0.1f))
@@ -477,7 +546,7 @@ namespace DuckGame
                             if (machTime == 0)
                             {
                                 machTime = 15;
-                                SFX.Play("laserChargeShort", 1, 0.5f);
+                                SFX.Play("schammerDashStart", 1, Rando.Float(0.1f));
                             }
                             if (machTime % 5 == 0 && machTime < 30 && tilMach > 30)
                             {
@@ -515,6 +584,7 @@ namespace DuckGame
                         float num = duck.hSpeed - Math.Sign(duck.hSpeed);
                         if (Math.Sign(num) != Math.Sign(duck.hSpeed))
                             num = 0f;
+                        if (duck.crouch) num = 0;
                         num = Maths.Clamp(num, -5, 5);
                         duck.tilt = num;
                         duck.verticalOffset = Math.Abs(num);

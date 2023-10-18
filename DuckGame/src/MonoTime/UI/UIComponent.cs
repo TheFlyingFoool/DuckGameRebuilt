@@ -75,6 +75,8 @@ namespace DuckGame
         public UIMenuAction _openFunction;
         private bool _isPauseMenu;
 
+        public bool ignoreSeperation = false;
+
         public UIComponent parent => _parent;
 
         public UIMenu rootMenu

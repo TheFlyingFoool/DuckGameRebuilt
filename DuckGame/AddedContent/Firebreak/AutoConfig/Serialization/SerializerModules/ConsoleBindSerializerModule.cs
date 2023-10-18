@@ -2,8 +2,7 @@
 
 namespace DuckGame
 {
-
-    [FireSerializerModule]
+    [global::AddedContent.Firebreak.Marker.FireSerializer]
     public class ConsoleBindSerializeModule : IFireSerializerModule<DevConsoleCommands.ConsoleBind>
     {
         public DevConsoleCommands.ConsoleBind Deserialize(string s)

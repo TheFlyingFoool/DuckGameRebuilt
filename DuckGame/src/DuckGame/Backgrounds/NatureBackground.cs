@@ -170,7 +170,7 @@
                 _parallax._zones[6].speed = f1;
                 _parallax._zones[5].speed = f1;
                 _parallax._zones[8].speed = f2;//6 5 8 4 7
-                _parallax._zones[4].speed = f2;
+                //_parallax._zones[4].speed = f2; removed this -NiK0
                 _parallax._zones[7].speed = 0.91f * mult;
             }
             base.Update();

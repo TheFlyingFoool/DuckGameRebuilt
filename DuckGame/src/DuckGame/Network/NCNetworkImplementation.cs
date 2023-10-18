@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.NCNetworkImplementation
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -512,9 +505,15 @@ namespace DuckGame
                         {
                             networkPacket.Unpack();
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
                             DevConsole.Log(DCSection.NetCore, "|DGRED|Message unpack failure, possible corruption");
+                            DevConsole.Log("");
+                            DevConsole.Log(DCSection.NetCore, ex.ToString());
+                            DevConsole.Log("");
+                            DevConsole.Log("");
+                            DevConsole.Log(DCSection.NetCore, $"special:{Main.SpecialCode} hyperSpecial:{Main.SpecialCode2}");
+                            DevConsole.Log(DCSection.NetCore, "IF YOU SEE THIS, PLEASE REPORT IT TO A DGR DEV");
                             Program.LogLine("Message unpack failure, possible corruption.");
                             return;
                         }
@@ -640,9 +639,15 @@ namespace DuckGame
                         {
                             packet.Unpack();
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
                             DevConsole.Log(DCSection.NetCore, "|DGRED|Message unpack failure, possible corruption");
+                            DevConsole.Log("");
+                            DevConsole.Log(DCSection.NetCore, ex.ToString());
+                            DevConsole.Log("");
+                            DevConsole.Log("");
+                            DevConsole.Log(DCSection.NetCore, $"special:{Main.SpecialCode} hyperSpecial:{Main.SpecialCode2}");
+                            DevConsole.Log(DCSection.NetCore, "IF YOU SEE THIS, PLEASE REPORT IT TO A DGR DEV");
                             Program.LogLine("Message unpack failure, possible corruption.");
                             continue;
                         }

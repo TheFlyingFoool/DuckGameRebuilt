@@ -63,9 +63,13 @@ namespace DuckGame
             LoadingAnimation.CenterOrigin();
 
             backgroundColor = Color.Black;
-
-            MenuItems.Clear();
             
+            if (Program.RecorderatorWatchMode)
+            {
+                ReplayToPlay = new ReplayInfo(Directory.GetFiles(CordsPath, "*.crf", SearchOption.AllDirectories).First(x => new FileInfo(x).Name == Program.CordToViewName));
+            }
+            if (!Directory.Exists(CordsPath)) Directory.CreateDirectory(CordsPath);
+
             _folderPaths = Directory.GetDirectories(CordsPath);
             _replayPaths = Directory.GetFiles(CordsPath, "*.crf", SearchOption.TopDirectoryOnly);
 
@@ -123,7 +127,7 @@ namespace DuckGame
                 Graphics.fade = 1;
             }
 
-            if (SelectedItemIndex + ScrollIndex != -1)
+            if (MenuItems.Count != 0 && SelectedItemIndex + ScrollIndex != -1)
             {
                 MenuItems[SelectedItemIndex + ScrollIndex].UpdateHovered();
             }
@@ -231,7 +235,7 @@ namespace DuckGame
             for (int i = ScrollIndex; i < MAX_ELEMENTS_ON_SCREEN + ScrollIndex; i++)
             {
                 int itemIndex = i - ScrollIndex;
-                IRMenuItem menuItem = MenuItems[i];
+                IRMenuItem menuItem = i >= MenuItems.Count ? new NullRMenuItem() : MenuItems[i];
                 
                 Vec2 drawPos = new(18 + (menuItem.FolderSub * 6), 1 + accumulatedYOffset);
                 Rectangle textBounds = menuItem.Draw(drawPos, itemIndex == SelectedItemIndex);

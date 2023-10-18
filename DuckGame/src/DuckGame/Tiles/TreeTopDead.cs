@@ -30,7 +30,7 @@
             if (timer >= 1)
             {
                 timer = Rando.Float(0.1f, 0.3f);
-                Level.Add(TreeLeaf.New(x + Rando.Float(-16, 16), y + Rando.Float(-16, 16), true));
+                Level.Add(TreeLeaf.New(x + Rando.Float(-16, 16), y + Rando.Float(-16, 16), 1));
             }
         }
         public SinWave sw = new SinWave(Rando.Float(0.05f, 0.15f), Rando.Float(-5, 5));

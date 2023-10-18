@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
@@ -26,7 +27,7 @@ namespace DuckGame
                 return extractedStream.ToArray();
             }
         }
-        [DevConsoleCommand(Name = "playreplay")]
+        [Marker.DevConsoleCommand(Name = "playreplay")]
 
         public static void PlayReplay(int replay)
         {
@@ -58,10 +59,10 @@ namespace DuckGame
             }
         }
 
-        [AutoConfigField]
+        [Marker.AutoConfig]
         public static int Record = 0;
 
-        [AutoConfigField]
+        [Marker.AutoConfig]
         public static int ClipLength = 5;
         public static bool Playing;
         public static Map<byte, Type> autoBlockIDX = new Map<byte, Type>();
@@ -73,56 +74,62 @@ namespace DuckGame
         {
             instance = new Recorderator();
         }
-        [PostInitialize]
+        
         public static void PostInitialize()
         {
-            SomethingSomethingVessel.YeahFillMeUpWithLists();
+            if (Program.IS_DEV_BUILD || Program.RecorderatorWatchMode)
+            {
+                SomethingSomethingVessel.YeahFillMeUpWithLists();
 
-            IEnumerable<Type> gtiles = Extensions.GetSubclasses(typeof(AutoBlock));
-            byte b = 0;
-            foreach (Type t in gtiles)
-            {
-                if (t == typeof(BlockGroup)) continue;
-                autoBlockIDX.Add(b, t);
-                b++;
-            }
-            IEnumerable<Type> atiles = Extensions.GetSubclasses(typeof(AutoTile));
-            b = 0;
-            foreach (Type t in atiles)
-            {
-                autoTileIDX.Add(b, t);
-                b++;
-            }
-            IEnumerable<Type> gplats = Extensions.GetSubclasses(typeof(AutoPlatform));
-            b = 0;
-            foreach (Type t in gplats)
-            {
-                autoPlatIDX.Add(b, t);
-                b++;
-            }
-            IEnumerable<Type> bgs = Extensions.GetSubclasses(typeof(BackgroundUpdater));
-            b = 0;
-            foreach (Type t in bgs)
-            {
-                bgIDX.Add(b, t);
-                b++;
-            }
-            IEnumerable<Type> bgts = Extensions.GetSubclasses(typeof(BackgroundTile));
-            b = 0;
-            foreach (Type t in bgts)
-            {
-                bgtileIDX.Add(b, t);
-                b++;
-            }
-            bgts = Extensions.GetSubclasses(typeof(ForegroundTile));
-            foreach(Type t in bgts)
-            {
-                bgtileIDX.Add(b, t);
-                b++;
-            }
-            if (Program.IS_DEV_BUILD)
-            {
-                (typeof(Game).GetField("updateableComponents", BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic).GetValue(MonoMain.instance) as List<IUpdateable>).Add(new updateCorderator());
+                List<Type> gtiles = Extensions.GetSubclassesList(typeof(AutoBlock));
+                byte b = 0;
+                for (int i = 0; i < gtiles.Count; i++)
+                {
+                    Type t = gtiles[i];
+                    if (t == typeof(BlockGroup)) continue;
+                    autoBlockIDX.Add(b, t);
+                    b++;
+                }
+                List<Type> atiles = Extensions.GetSubclassesList(typeof(AutoTile));
+                b = 0;
+                for (int i = 0; i < atiles.Count; i++)
+                {
+                    Type t = atiles[i];
+                    autoTileIDX.Add(b, t);
+                    b++;
+                }
+                List<Type> gplats = Extensions.GetSubclassesList(typeof(AutoPlatform));
+                b = 0;
+                for (int i = 0; i < gplats.Count; i++)
+                {
+                    Type t = gplats[i];
+                    autoPlatIDX.Add(b, t);
+                    b++;
+                }
+                List<Type> bgs = Extensions.GetSubclassesList(typeof(BackgroundUpdater));
+                b = 0;
+                for (int i = 0; i < bgs.Count; i++)
+                {
+                    Type t = bgs[i];
+                    bgIDX.Add(b, t);
+                    b++;
+                }
+                List<Type> bgts = Extensions.GetSubclassesList(typeof(BackgroundTile));
+                b = 0;
+                for (int i = 0; i < bgts.Count; i++)
+                {
+                    Type t = bgts[i];
+                    bgtileIDX.Add(b, t);
+                    b++;
+                }
+                bgts = Extensions.GetSubclassesList(typeof(ForegroundTile));
+                for (int i = 0; i < bgts.Count; i++)
+                {
+                    Type t = bgts[i];
+                    bgtileIDX.Add(b, t);
+                    b++;
+                }
+                if (!Program.RecorderatorWatchMode) (typeof(Game).GetField("updateableComponents", BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic).GetValue(MonoMain.instance) as List<IUpdateable>).Add(new updateCorderator());
             }
         }
         public static Recorderator instance;

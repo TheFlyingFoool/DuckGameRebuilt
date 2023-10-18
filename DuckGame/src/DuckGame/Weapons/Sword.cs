@@ -113,6 +113,8 @@ namespace DuckGame
             _bouncy = 0.5f;
             _impactThreshold = 0.3f;
             editorTooltip = "Basically a giant letter opener.";
+            _editorPreviewRotation = 90.0f;
+            _editorPreviewOffset.x -= 9;
         }
         public override void Initialize() => base.Initialize();
 
@@ -223,14 +225,14 @@ namespace DuckGame
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (this.tape != null && this.tape.owner != null)
+            if (tape != null && tape.owner != null)
             {
                 return;
             }
-            if (this._wasLifted && this.owner == null && (with is Block || (with is IPlatform && from == ImpactedFrom.Bottom && this.vSpeed > 0f)))
+            if (_wasLifted && owner == null && (with is Block || (with is IPlatform && from == ImpactedFrom.Bottom && vSpeed > 0f)))
             {
-                this.Shing();
-                this._framesSinceThrown = 25;
+                Shing();
+                _framesSinceThrown = 25;
             }
         }
 

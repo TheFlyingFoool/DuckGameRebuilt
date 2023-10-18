@@ -2,8 +2,7 @@
 
 namespace DuckGame
 {
-
-    [FireSerializerModule]
+    [global::AddedContent.Firebreak.Marker.FireSerializer]
     public class Vec2SerializerModule : IFireSerializerModule<Vec2>
     {
         public string Serialize(Vec2 obj)

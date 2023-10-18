@@ -5,6 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using AddedContent.Firebreak;
 using RectpackSharp;
 using System;
 using System.Collections.Generic;
@@ -73,7 +74,7 @@ namespace DuckGame
             return _elements.TryGetValue(100000000, out netDataPair) && netDataPair.data is bool ? (bool)netDataPair.data : false;
         }
         public static Map<int, string> MappedNetdata = new Map<int, string>();
-        [PostInitialize]
+        [Marker.PostInitialize]
         public static void Initialize()
         {
             //this is a dumbass solution but since DG uses GetHashCode() to transmit the netdata then between linux windows and other builds

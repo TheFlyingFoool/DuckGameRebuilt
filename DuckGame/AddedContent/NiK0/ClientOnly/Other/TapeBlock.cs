@@ -1,7 +1,7 @@
 ﻿namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Stuff")]
+    [EditorGroup("Spawns")]
     public class TapeBlock : ItemBox, IDrawToDifferentLayers
     {
         private Sprite _scanner;
@@ -57,6 +57,7 @@
             };
             _editorName = "Tape Block";
             editorTooltip = "Put 2 and 2 together and you might end with a weapon of mass destruction! or a bomb.";
+            _editorIcon = new Sprite("tapeBlockPreview");
         }
         public override void Update()
         {

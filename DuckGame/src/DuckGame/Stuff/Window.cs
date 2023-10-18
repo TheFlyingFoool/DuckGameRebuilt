@@ -129,7 +129,7 @@ namespace DuckGame
         public Window(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            windowHeight = new EditorProperty<int>(2, this, 1f, 16f, 1f);
+            windowHeight = new EditorProperty<int>(2, this, 1f, 32f, 1f);
             valid = new EditorProperty<bool>(false, this);
             _sprite = new Sprite("window32", 6f, 1f);
             _barSprite = new Sprite("windowBars", 8f, 1f);

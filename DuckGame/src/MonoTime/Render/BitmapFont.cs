@@ -427,7 +427,14 @@ namespace DuckGame
             string color = "";
             for (; _letterIndex != text.Length && text[_letterIndex] != ' ' && text[_letterIndex] != colorchar; ++_letterIndex)
                 color += text[_letterIndex].ToString();
-            return color == "PREV" ? new Color(_previousColor.r, _previousColor.g, _previousColor.b) : Colors.ParseColor(color);
+            if (color == "PREV")
+            {
+                return new Color(_previousColor.r, _previousColor.g, _previousColor.b);
+            }
+            else
+            {
+                return Colors.ParseColor(color);
+            }
         }
 
         public InputProfile GetInputProfile(InputProfile input)
@@ -563,211 +570,163 @@ namespace DuckGame
             Draw(text, pos.x, pos.y, c, deep, input, colorSymbols);
         }
 
-        public void Draw(
-          string text,
-          float xpos,
-          float ypos,
-          Color c,
-          Depth deep = default(Depth),
-          InputProfile input = null,
-          bool colorSymbols = false)
-        {
-            //if (!LangHandler.drawnstrings.Contains(text) && !LangHandler.langmap["en"].ContainsKey(text))
-            //{
-            //    LangHandler.drawnstrings.Add(text);
-            //}
-            if (Program.gay)
-            {
-                if (startingcoloroverride != -1)
-                {
-                    startingcolorindex = startingcoloroverride;
-                }
-                else
-                {
-                    Random t = new Random(text.Length + (int)ypos + (int)xpos);
-                    startingcolorindex = t.Next(0, Color.RainbowColors.Count);
-                }
-                //if (startingcolorindex == -1)
-                //{
-                //    startingcolorindex = Rando.Int(Color.RainbowColors.Count - 1);
-                //}
-                charcolorindex = startingcolorindex;
-            }
-            text = LangHandler.Convert(text);
-            if (colorOverride != new Color())
-                c = colorOverride;
-            _previousColor = c;
-            Color color = c;
-            if (input == null)
-            {
-                if (!MonoMain.started)
-                {
-                    input = InputProfile.DefaultPlayer1;
-                }
-                else
-                {
-                    input = _inputProfile != null ? _inputProfile : Input.lastActiveProfile;
-                    if (_inputProfile == null && !Network.isActive)
-                    {
-                        Profile profileWithInput = Profiles.GetLastProfileWithInput();
-                        if (profileWithInput != null)
-                        {
-                            input = profileWithInput.inputProfile;
-                        }
-                    }
-                }
-            }
-            float num1 = 0f;
-            float num2 = 0f;
-            for (_letterIndex = 0; _letterIndex < text.Length; ++_letterIndex)
-            {
-                bool flag = false;
-                if (text[_letterIndex] == spritechar)
-                {
-                    int letterIndex = _letterIndex;
-                    Sprite sprite1 = ParseSprite(text, input);
-                    if (sprite1 != null)
-                    {
-                        if (sprite1.texture != null)
-                        {
-                            float alpha = sprite1.alpha;
-                            sprite1.alpha = this.alpha * c.ToVector4().w;
-                            if (sprite1 != null)
-                            {
-                                Vec2 scale = sprite1.scale;
-                                Sprite sprite2 = sprite1;
-                                sprite2.scale *= spriteScale;
-                                float num3 = (int)(_texture.height * spriteScale.y / 2f) - (int)(sprite1.height * spriteScale.y / 2f);
-                                if (sprite1.moji)
-                                {
-                                    if (sprite1.height == 28)
-                                    {
-                                        Sprite sprite3 = sprite1;
-                                        sprite3.scale *= (0.25f * this.scale);
-                                        num3 += 10f * this.scale.y;
-                                    }
-                                    else
-                                    {
-                                        Sprite sprite4 = sprite1;
-                                        sprite4.scale *= (0.25f * this.scale);
-                                        num3 += 3f * this.scale.y;
-                                    }
-                                }
-                                if (Program.gay)
-                                {
-                                    c = Colors.Rainbow[charcolorindex];
-                                    charcolorindex += 1;
-                                    if (charcolorindex >= Colors.Rainbow.Length)
-                                    {
-                                        charcolorindex = 0;
-                                    }
-                                    sprite1.color = c;
-                                }
-                                else
-                                {
-                                    if (colorSymbols)
-                                        sprite1.color = c;
-                                }
-                                Graphics.Draw(sprite1, xpos + num2, ypos + num1 + num3, deep);
-                                num2 += (sprite1.width * sprite1.scale.x + 1f);
-                                sprite1.scale = scale;
-                                sprite1.color = Color.White;
-                            }
-                            sprite1.alpha = alpha;
-                        }
-                        flag = true;
-                    }
-                    else
-                        _letterIndex = letterIndex;
-                }
-                else if (text[_letterIndex] == colorchar)
-                {
-                    int letterIndex = _letterIndex;
-                    if (color != Colors.Transparent)
-                    {
-                        _previousColor = color;
-                    }
-                    color = ParseColor(text);
-                    if (colorOverride != new Color())
-                        color = colorOverride;
-                    if (color != Colors.Transparent)
-                    {
-                        float w = c.ToVector4().w;
-                        c = color;
-                        c *= w;
-                        flag = true;
-                    }
-                    else
-                        _letterIndex = letterIndex;
-                }
-                if (!flag)
-                {
-                    if (maxWidth > 0)
-                    {
-                        string source = "";
-                        int letterIndex = _letterIndex;
-                        while (letterIndex < text.Length && text[letterIndex] != ' ' && text[letterIndex] != colorchar && text[letterIndex] != spritechar)
-                        {
-                            source += text[letterIndex].ToString();
-                            ++letterIndex;
-                            if (!enforceWidthByWord)
-                                break;
-                        }
-                        if (num2 + source.Length * (_tileSize * scale.x) > maxWidth)
-                        {
-                            num1 += _texture.height * scale.y;
-                            num2 = 0f;
-                            if (singleLine)
-                                break;
-                        }
-                    }
-                    if (text[_letterIndex] == '\n')
-                    {
-                        num1 += _texture.height * scale.y + ySpacing;
-                        num2 = 0f;
-                    }
-                    else
-                    {
-                        if (Program.gay)
-                        {
-                            c = Colors.Rainbow[charcolorindex];
-                            charcolorindex += 1;
-                            if (charcolorindex >= Colors.Rainbow.Length)
-                            {
-                                charcolorindex = 0;
-                            }
-                        }
-                        SpriteMap g = _texture;
-                        char index = text[_letterIndex];
-                        int num4;
-                        if (index >= 'ぁ')
-                        {
-                            g = FancyBitmapFont._kanjiSprite;
-                            num4 = FancyBitmapFont._kanjiMap[index];
-                        }
-                        else
-                        {
-                            num4 = _characterMap[index];
-                            if (num4 == 0 && index != ' ')
-                            {
-                                num4 = 91;
-                            }
-                        }
-                        if (fallbackIndex != 0 && num4 >= fallbackIndex)
-                        {
-                            if (_fallbackFont == null)
-                                _fallbackFont = new BitmapFont("biosFont", 8);
-                            g = _fallbackFont._texture;
-                        }
-                        g.frame = num4;
-                        g.scale = scale;
-                        g.color = c;
-                        g.alpha = alpha;
-                        Graphics.Draw(g, xpos + num2, ypos + num1 + characterYOffset, deep);
-                        num2 += _tileSize * scale.x;
-                    }
-                }
-            }
-        }
+        public void Draw(string text, float xpos, float ypos, Color c, Depth deep = default(Depth), InputProfile input = null, bool colorSymbols = false)
+		{
+			if (colorOverride != default)
+			{
+				c = colorOverride;
+			}
+			_previousColor = c;
+			if (input == null)
+			{
+				if (!MonoMain.started)
+				{
+					input = InputProfile.DefaultPlayer1;
+				}
+				else
+				{
+					input = _inputProfile ?? Input.lastActiveProfile;
+					if (_inputProfile == null && Profiles.active.Count > 0 && !Network.isActive)
+					{
+						input = Profiles.GetLastProfileWithInput().inputProfile;
+					}
+				}
+			}
+			float yOff = 0f;
+			float xOff = 0f;
+			_letterIndex = 0;
+			while (_letterIndex < text.Length)
+			{
+				bool processedSpecialCharacter = false;
+				if (text[_letterIndex] == '@')
+				{
+					int iPos = _letterIndex;
+					Sprite spr = ParseSprite(text, input);
+					if (spr != null)
+					{
+						if (spr.texture != null)
+						{
+							float al = spr.alpha;
+							spr.alpha = alpha * c.ToVector4().w;
+							if (spr != null)
+							{
+								Vec2 sc = spr.scale;
+								spr.scale *= spriteScale;
+								float yCenter = (int)(_texture.height * spriteScale.y / 2f) - (int)(spr.height * spriteScale.y / 2f);
+								if (spr.moji)
+								{
+									if (spr.height == 28)
+									{
+										spr.scale *= 0.25f * scale;
+										yCenter += 10f * scale.y;
+									}
+									else
+									{
+										spr.scale *= 0.25f * scale;
+										yCenter += 3f * scale.y;
+									}
+								}
+								if (colorSymbols)
+								{
+									spr.color = c;
+								}
+								Graphics.Draw(spr, xpos + xOff, ypos + yOff + yCenter, deep);
+								xOff += spr.width * spr.scale.x + 1f;
+								spr.scale = sc;
+								spr.color = Color.White;
+							}
+							spr.alpha = al;
+						}
+						processedSpecialCharacter = true;
+					}
+					else
+					{
+						_letterIndex = iPos;
+					}
+				}
+				else if (text[_letterIndex] == '|')
+				{
+					int iPos2 = _letterIndex;
+					Color col = ParseColor(text);
+					if (colorOverride != default(Color))
+					{
+						col = colorOverride;
+					}
+					if (col != Colors.Transparent)
+					{
+						_previousColor = c;
+						float al2 = c.ToVector4().w;
+						c = col;
+						// c *= al2;
+						processedSpecialCharacter = true;
+					}
+					else
+					{
+						_letterIndex = iPos2;
+					}
+				}
+				if (!processedSpecialCharacter)
+				{
+					if (maxWidth > 0)
+					{
+						string nextWord = "";
+						int index = _letterIndex;
+						while (index < text.Length && text[index] != ' ' && text[index] != '|' && text[index] != '@')
+						{
+							nextWord += text[index].ToString();
+							index++;
+							if (!enforceWidthByWord)
+							{
+								break;
+							}
+						}
+						if (xOff + nextWord.Count() * (_tileSize * scale.x) > maxWidth)
+						{
+							yOff += _texture.height * scale.y;
+							xOff = 0f;
+							if (singleLine)
+							{
+								return;
+							}
+						}
+					}
+					if (text[_letterIndex] == '\n')
+					{
+						yOff += _texture.height * scale.y;
+						xOff = 0f;
+					}
+					else
+					{
+						SpriteMap fontTexture = _texture;
+						char character = text[_letterIndex];
+						int charIndex;
+						if (character >= 'ぁ')
+						{
+							fontTexture = FancyBitmapFont._kanjiSprite;
+							charIndex = FancyBitmapFont._kanjiMap[character];
+						}
+						else
+						{
+							charIndex = _characterMap[text[_letterIndex]];
+						}
+						if (fallbackIndex != 0 && charIndex >= fallbackIndex)
+						{
+							if (_fallbackFont == null)
+							{
+								_fallbackFont = new BitmapFont("biosFont", 8, -1);
+							}
+							fontTexture = _fallbackFont._texture;
+						}
+						fontTexture.frame = charIndex;
+						fontTexture.scale = scale;
+						fontTexture.color = c;
+						fontTexture.alpha = alpha;
+						Graphics.Draw(fontTexture, xpos + xOff, ypos + yOff + characterYOffset, deep);
+						xOff += _tileSize * scale.x;
+					}
+				}
+				_letterIndex++;
+			}
+		}
     }
 }

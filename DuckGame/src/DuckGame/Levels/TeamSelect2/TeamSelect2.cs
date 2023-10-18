@@ -117,7 +117,7 @@ namespace DuckGame
         public static string DefaultGameName()
         {
             List<Profile> activep = Profiles.active;
-            if (TeamSelect2.GetSettingInt("type") >= 3 && Profiles.active.Count > 0)
+            if (GetSettingInt("type") >= 3 && Profiles.active.Count > 0)
             {
                 if (activep.Count > 0)
                 {
@@ -1631,7 +1631,7 @@ namespace DuckGame
                         }
                         if (!menuOpen && Input.Pressed(Triggers.Select) && (!_singlePlayer || Profiles.active.Count > 0 && !Profiles.IsDefault(Profiles.active[0])) || DuckNetwork.isDedicatedServer && !_sentDedicatedCountdown && !_spectatorCountdownStop)
                         {
-                            if (_starting || _sentDedicatedCountdown)
+                            if ((_starting || _sentDedicatedCountdown) && !_singlePlayer)
                             {
                                 forcestart = true;
                             }
@@ -1768,12 +1768,12 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (Network.isActive && DuckNetwork.core._matchSettingMenu != null && DuckNetwork.core._matchSettingMenu.open) MatchsettingsPresetLogic();
+            if (MonoMain.UpdateLerpState && Network.isActive && DuckNetwork.core._matchSettingMenu != null && DuckNetwork.core._matchSettingMenu.open) MatchsettingsPresetLogic();
         }
 
         public override void PostDrawLayer(Layer layer)
         {
-            if ((_hostMatchSettingsMenu != null && _hostMatchSettingsMenu.open && !_hostMatchSettingsMenu.animating) || (_multiplayerMenu != null && _multiplayerMenu.open && !_multiplayerMenu.animating)) MatchsettingsPresetLogic();
+            if (MonoMain.UpdateLerpState && (_hostMatchSettingsMenu != null && _hostMatchSettingsMenu.open && !_hostMatchSettingsMenu.animating) || (_multiplayerMenu != null && _multiplayerMenu.open && !_multiplayerMenu.animating)) MatchsettingsPresetLogic();
             if (_levelSelector != null)
             {
                 if (!_levelSelector.isInitialized)

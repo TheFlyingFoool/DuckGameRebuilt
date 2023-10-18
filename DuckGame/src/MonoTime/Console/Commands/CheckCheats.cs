@@ -1,10 +1,11 @@
-﻿using System.Linq;
+﻿using AddedContent.Firebreak;
+using System.Linq;
 
 namespace DuckGame
 {
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand(Description = "Checks if you qualify as a cheater for the developer console")]
+        [Marker.DevConsoleCommand(Description = "Checks if you qualify as a cheater for the developer console")]
         public static string CheckCheats()
         {
             if (Network.isActive && !Network.connections.Any())

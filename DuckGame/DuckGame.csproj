@@ -227,8 +227,10 @@
       <HintPath>..\packages\SixLabors.ImageSharp.2.1.5\lib\net472\SixLabors.ImageSharp.dll</HintPath>
     </Reference>
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddedContent\CorinthianPillar.cs" />
     <Compile Include="AddedContent\DevWeapons\FirebreakGun.cs" />
     <Compile Include="AddedContent\DevWeapons\KlofGun.cs" />
     <Compile Include="AddedContent\DevWeapons\LutalliGun.cs" />
@@ -265,11 +267,8 @@
     <Compile Include="AddedContent\DevWeapons\Stuff\NMCrashPopup.cs" />
     <Compile Include="AddedContent\DGRDevs.cs" />
     <Compile Include="AddedContent\DGRSettings.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\AdvancedConfigAttribute.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ConfigClasses\NameDisplayConfig.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\IAdvancedConfig.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\NameDisplayConfig.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\FireSerializer.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\FireSerializerModuleAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\IFireSerializerModule.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\ColorSerializerModule.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\ConsoleBindSerializerModule.cs" />
@@ -290,6 +289,14 @@
     <Compile Include="AddedContent\Firebreak\HatEditor\SimRenderer.cs" />
     <Compile Include="AddedContent\Firebreak\Internet.cs" />
     <Compile Include="AddedContent\Firebreak\LockMovementQueue.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\AdvancedConfigAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\AutoConfigAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\DevConsoleCommandAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\DrawingContextAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\FireSerializerAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\MarkerAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\PostInitializeAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\UpdateContextAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\SendToLevel.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\IAmUi.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\UiBasic.cs" />
@@ -315,25 +322,24 @@
     <Compile Include="AddedContent\Hyeve\Utils\InputData.cs" />
     <Compile Include="AddedContent\Hyeve\Utils\VectorMath.cs" />
     <Compile Include="AddedContent\Extensions.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\AutoConfigFieldAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AutoConfigHandler.cs" />
     <Compile Include="AddedContent\Firebreak\Content\SinkingBlock.cs" />
-    <Compile Include="AddedContent\Firebreak\Cursor\CursorHandler.cs" />
-    <Compile Include="AddedContent\Firebreak\Cursor\GameCursor.cs" />
-    <Compile Include="AddedContent\Firebreak\Cursor\OpalCursor.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\DynamicDCLine.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\FireDebug.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Levels\TestLev.cs" />
-    <Compile Include="AddedContent\Firebreak\DevConsoleCommandAttribute.cs" />
-    <Compile Include="AddedContent\Firebreak\DrawingContextAttribute.cs" />
-    <Compile Include="AddedContent\Firebreak\PostInitializeAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\CustomKeyBinds.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\EasingHelper.cs" />
-    <Compile Include="AddedContent\Firebreak\Utilities\MemberAttributePair.cs" />
-    <Compile Include="AddedContent\Firebreak\Utilities\MemberAttributePairHandler.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\ProgressValue.cs" />
     <Compile Include="AddedContent\klof44\DartGrenade.cs" />
     <Compile Include="AddedContent\klof44\DiscordRichPresence.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\DGRElevator.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\SnowTile.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\SummerTreeTop.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\WinterTreeTop.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\RainTile.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\WindTile.cs" />
+    <Compile Include="AddedContent\NiK0\ExplosionDecal.cs" />
+    <Compile Include="AddedContent\NiK0\SelectCircleParticle.cs" />
     <Compile Include="AddedContent\NiK0\BGLightning.cs" />
     <Compile Include="AddedContent\NiK0\ChangePlus.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\NMRobbedItemFrame.cs" />
@@ -361,6 +367,7 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\QuadSniper.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\SniperZooka.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\SuperRCCar.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\WarpScimitar.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\WarpSword.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\LaserDiskParticle.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\MaterialEnergyChainsaw.cs" />
@@ -368,6 +375,8 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\NMDeathCone.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Projectile\LaserConeBlast.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Projectile\OctoLaserBullet.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\WarpBeam.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\WarpSlash.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATDeathCaliber.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATWumpMagnum.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\Bubble.cs" />
@@ -398,7 +407,6 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpQuadLaserBullet.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpSniper.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpTeleporter.cs" />
-    <Compile Include="AddedContent\NiK0\CrumbleShamble.cs" />
     <Compile Include="AddedContent\NiK0\GlassPlatform.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\MaterialEnergy.cs" />
     <Compile Include="AddedContent\NiK0\MaterialLavaWobble.cs" />
@@ -407,9 +415,12 @@
     <Compile Include="AddedContent\NiK0\NMClientOnlyContent.cs" />
     <Compile Include="AddedContent\NiK0\RainbowConstant.cs" />
     <Compile Include="AddedContent\NiK0\RainParticel.cs" />
+    <Compile Include="AddedContent\NiK0\SelectCircle.cs" />
     <Compile Include="AddedContent\NiK0\SpaceMaterial.cs" />
+    <Compile Include="AddedContent\NiK0\TitleButton.cs" />
     <Compile Include="Recorderator\RecorderationSelector\FolderInfo.cs" />
     <Compile Include="Recorderator\RecorderationSelector\IRMenuItem.cs" />
+    <Compile Include="Recorderator\RecorderationSelector\NullRMenuItem.cs" />
     <Compile Include="Recorderator\RecorderationSelector\ProfileInfo.cs" />
     <Compile Include="Recorderator\RecorderationSelector\RecorderationSelector.cs" />
     <Compile Include="Recorderator\RecorderationSelector\ReplayInfo.cs" />
@@ -537,6 +548,7 @@
     <Compile Include="src\DuckGame\Interp.cs" />
     <Compile Include="src\DuckGame\LangHandler.cs" />
     <Compile Include="src\DuckGame\Network\ConcurrentStack.cs" />
+    <Compile Include="src\DuckGame\Stuff\StandingFluid.cs" />
     <Compile Include="src\MonoTime\Console\Commands\AdvancedConfig.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Bind.cs" />
     <Compile Include="src\MonoTime\Console\Commands\CheckCheats.cs" />
@@ -576,9 +588,11 @@
     <Compile Include="src\MonoTime\Console\Commands\Filter.cs" />
     <Compile Include="src\MonoTime\Console\Commands\For.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Help.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\LaunchArguments.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Rep.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Echo.cs" />
     <Compile Include="src\MonoTime\Console\Commands\DansTestArea.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Restart.cs" />
     <Compile Include="src\MonoTime\Console\Commands\SkipMap.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Version.cs" />
     <Compile Include="src\MonoTime\ExecuteOnAttribute.cs" />
@@ -597,6 +611,8 @@
     <Compile Include="src\MonoTime\LUI\LUIOnOff.cs" />
     <Compile Include="src\MonoTime\LUI\LUIStringEntry.cs" />
     <Compile Include="src\MonoTime\LUI\LUIText.cs" />
+    <Compile Include="src\MonoTime\Materials\FullscreenMaterial.cs" />
+    <Compile Include="src\MonoTime\Materials\MaterialFunBeam.cs" />
     <Compile Include="src\MonoTime\Sound\QOA.cs" />
     <Compile Include="src\MonoTime\UI\UIDGRDescribe.cs" />
     <Compile Include="src\MonoTime\UI\UISideButton.cs" />
@@ -1430,7 +1446,7 @@
     <Compile Include="src\DuckGame\Stuff\SpringRight.cs" />
     <Compile Include="src\DuckGame\Stuff\SpringUpLeft.cs" />
     <Compile Include="src\DuckGame\Stuff\SpringUpRight.cs" />
-    <Compile Include="src\DuckGame\Stuff\StandingFluid.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\DGRStandingFluid.cs" />
     <Compile Include="src\MonoTime\Windows\TargetStance.cs" />
     <Compile Include="src\DuckGame\Stuff\TargetDuckNew.cs" />
     <Compile Include="src\DuckGame\Stuff\TargetDuck.cs" />

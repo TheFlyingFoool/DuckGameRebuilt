@@ -14,7 +14,7 @@ namespace DuckGame
     public class Present : Holdable, IPlatform
     {
         public SpriteMap _sprite;
-        private System.Type _contains;
+        private Type _contains;
 
         public Present(float xpos, float ypos)
           : base(xpos, ypos)

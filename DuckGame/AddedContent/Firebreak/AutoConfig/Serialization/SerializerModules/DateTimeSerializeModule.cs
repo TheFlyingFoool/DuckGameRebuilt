@@ -3,7 +3,7 @@
 namespace DuckGame
 {
 
-    [FireSerializerModule]
+    [global::AddedContent.Firebreak.Marker.FireSerializer]
     public class DateTimeSerializeModule : IFireSerializerModule<DateTime>
     {
         public DateTime Deserialize(string s)

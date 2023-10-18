@@ -8,7 +8,8 @@
         private SpriteMap _sprite;
         private bool _rested;
 
-        public static TreeLeaf New(float xpos, float ypos, bool dead = false)
+        public int leafType;
+        public static TreeLeaf New(float xpos, float ypos, int lT = 0)
         {
             TreeLeaf feather;
             if (NetworkDebugger.enabled)
@@ -22,7 +23,7 @@
                 feather = _objects[_lastActiveObject];
             Level.Remove(feather);
             _lastActiveObject = (_lastActiveObject + 1) % kMaxObjects;
-            feather.Init(xpos, ypos, dead);
+            feather.Init(xpos, ypos, lT);
             feather.ResetProperties();
             feather._sprite.globalIndex = GetGlobalIndex();
             feather.globalIndex = GetGlobalIndex();
@@ -41,13 +42,28 @@
             center = new Vec2(4f, 2f);
         }
 
-        private void Init(float xpos, float ypos, bool dead)
+        private void Init(float xpos, float ypos, int lT)
         {
             position.x = xpos;
             position.y = ypos;
             alpha = Rando.Float(8, 15);
             hSpeed = Rando.Float(-1, 1);
-            _sprite = new SpriteMap(dead ? "treeLeafDead" : "treeLeaf", 8, 4);
+            switch (lT)
+            {
+                default:
+                case 0:
+                    _sprite = new SpriteMap("treeLeaf", 8, 4);
+                    break;
+                case 1:
+                    _sprite = new SpriteMap("treeLeafDead", 8, 4);
+                    break;
+                case 2:
+                    _sprite = new SpriteMap("treeLeafSummer", 8, 4);
+                    break;
+                case 3:
+                    _sprite = new SpriteMap("treeLeafWinter", 8, 4);
+                    break;
+            }
             _sprite.AddAnimation("fall", 1f, true, 0, 1, 2, 1);
             _sprite.SetAnimation("fall");
             _sprite.frame = Rando.Int(3);

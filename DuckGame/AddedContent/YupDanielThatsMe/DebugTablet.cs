@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,10 +24,10 @@ namespace DuckGame
 		public DebugTablet(string tabname, FieldBinding fieldBinding)
 		{
 		    this.tabname = tabname;
-		    this.savefield = fieldBinding;
-		    codestring = ((string)this.savefield.value).Replace("\r", "");
+		    savefield = fieldBinding;
+		    codestring = ((string)savefield.value).Replace("\r", "");
 		    prevcodestring = codestring;
-		    this.Lines = codestring.Split('\n').ToList();
+		    Lines = codestring.Split('\n').ToList();
 		}
 		private string prevcodestring;
 		private string codestring;
@@ -261,7 +262,7 @@ namespace DuckGame
 		}
 
 
-	   [DrawingContext(DrawingLayer.HUD, CustomID = "tablet")]
+	   [Marker.DrawingContext(Marker.DrawingLayer.HUD, CustomID = "tablet")]
 		public static void Draw()
 		{
 		    if (!MonoMain.experimental)

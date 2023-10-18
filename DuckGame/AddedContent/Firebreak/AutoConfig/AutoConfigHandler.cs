@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,14 +17,18 @@ namespace DuckGame
 
         public static void Initialize()
         {
+            if (Marker.AutoConfigAttribute.All.Count == 0)
+                return;
+            
             if (!Directory.Exists(SaveDirPath))
                 Directory.CreateDirectory(SaveDirPath);
 
             if (!File.Exists(MainSaveFilePath))
                 SaveAll(false);
-            else CleanForgottenFields();
+            // else CleanForgottenFields(); // unnecessary
             
-            LoadAll();
+            if (!LoadAll())
+                SaveAll(false);
 
             MonoMain.OnGameExit += SaveAll;
         }
@@ -37,8 +42,8 @@ namespace DuckGame
 
             foreach (string line in allLines)
             {
-                string[] spl = line.Split('=');
-                if (AutoConfigFieldAttribute.All.Any(x => x.UsableName == spl[0]))
+                string[] spl = line.Split(new[] {'='}, 2);
+                if (Marker.AutoConfigAttribute.All.Any(x => x.UsableName == spl[0]))
                     keepLines.Add(line);
             }
 
@@ -54,9 +59,9 @@ namespace DuckGame
             HashSet<string> visitedExternalPaths = new();
             
             StringBuilder stringBuilder = new();
-            for (int i = 0; i < AutoConfigFieldAttribute.All.Count; i++)
+            for (int i = 0; i < Marker.AutoConfigAttribute.All.Count; i++)
             {
-                AutoConfigFieldAttribute attribute = AutoConfigFieldAttribute.All[i];
+                Marker.AutoConfigAttribute attribute = Marker.AutoConfigAttribute.All[i];
 
                 if (isDangerous && attribute.PotentiallyDangerous)
                     continue;
@@ -95,11 +100,12 @@ namespace DuckGame
                 Log(ACAction.SaveSuccess);
         }
         
+        /// <returns>True if loading succeeded</returns>
         public static bool LoadAll()
         {
             Log(ACAction.TryLoad);
             
-            List<AutoConfigFieldAttribute> all = AutoConfigFieldAttribute.All;
+            List<Marker.AutoConfigAttribute> all = Marker.AutoConfigAttribute.All;
 
             if (!Extensions.Try(() => File.ReadAllLines(MainSaveFilePath), out string[] lines))
                 SaveAll(false);
@@ -111,17 +117,17 @@ namespace DuckGame
             return true;
         }
 
-        private static bool LoadAllInternal(List<AutoConfigFieldAttribute> all, string[] lines)
+        private static bool LoadAllInternal(List<Marker.AutoConfigAttribute> all, string[] lines)
         {
             bool failed = false;
-            Dictionary<string, AutoConfigFieldAttribute> dic = all.ToDictionary(x => x.UsableName, x => x);
+            Dictionary<string, Marker.AutoConfigAttribute> dic = all.ToDictionary(x => x.UsableName, x => x);
             
             foreach (string line in lines)
             {
                 if (string.IsNullOrWhiteSpace(line))
                     continue;
 
-                string[] lineSplit = line.Split('=');
+                string[] lineSplit = line.Split(new[] {'='}, 2);
 
                 if (lineSplit.Length != 2)
                 {
@@ -133,7 +139,7 @@ namespace DuckGame
                 string name = lineSplit[0];
                 string serializedValue = lineSplit[1];
 
-                if (!dic.TryGetValue(name, out AutoConfigFieldAttribute attribute))
+                if (!dic.TryGetValue(name, out Marker.AutoConfigAttribute attribute))
                     continue;
 
                 if (!Extensions.Try(() => DeserializeAndSet(attribute, serializedValue)))
@@ -147,7 +153,7 @@ namespace DuckGame
             return !failed;
         }
 
-        private static void DeserializeAndSet(AutoConfigFieldAttribute attribute, string newValue)
+        private static void DeserializeAndSet(Marker.AutoConfigAttribute attribute, string newValue)
         {
             string serializedValue;
             if (attribute.External is null)
@@ -161,14 +167,15 @@ namespace DuckGame
                 foreach (string line in lines)
                 {
                     i++;
-                    string[] spl = line.Split('=');
+                    // ... `=`s in the actual value will cause problems
+                    string[] spl = line.Split(new[] {'='}, 2);
 
                     if (spl[0] != attribute.UsableName)
                         continue;
 
                     serializedValue = spl[1];
 
-                    if (lines.Skip(i).Any(x => x.Split('=')[0] == spl[0]))
+                    if (lines.Skip(i).Any(x => x.Split(new[] {'='}, 2)[0] == spl[0]))
                     {
                         File.WriteAllText(SaveDirPath + newValue, string.Empty);
                         throw new Exception("Duplicate AutoConfig entries for the same field");

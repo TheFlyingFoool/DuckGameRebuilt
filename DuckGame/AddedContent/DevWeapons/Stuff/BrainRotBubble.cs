@@ -16,7 +16,7 @@
             switch (type)
             {
                 case RotTypes.Amogus:
-                    sprite = new SpriteMap("amogusbubble", 28, 28);
+                    sprite = new SpriteMap("amongusbubble", 28, 28);
                     break;
             }
             graphic = sprite;

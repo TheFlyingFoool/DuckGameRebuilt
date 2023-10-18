@@ -1,15 +1,13 @@
-﻿using Newtonsoft.Json;
-using System.Threading.Tasks;
+﻿using AddedContent.Firebreak;
 
 namespace DuckGame
 {
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand(IsCheat = true)]
+        [Marker.DevConsoleCommand(DebugOnly = true)]
         public static void Debug()
         {
-            DevConsole.RunCommand("eight");
-            DevConsole.RunCommand("lev rockthrow");
+            DevConsole.Log("UwU");
         }
     }
 }

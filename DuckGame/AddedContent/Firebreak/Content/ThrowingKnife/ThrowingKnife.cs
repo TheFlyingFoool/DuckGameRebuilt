@@ -23,7 +23,7 @@ namespace DuckGame
             _sprite = new SpriteMap("quasik", 17, 7);
             graphic = _sprite;
             editorTooltip = "Turn your enemies into unwilling partners for a quick game of interdimensional tug-of-war!";
-            _editorName = "QUASIK";
+            _editorName = "SwingCut";
             
             center = new Vec2(8f, 3.5f);
             center = new Vec2(6f, 3.5f);

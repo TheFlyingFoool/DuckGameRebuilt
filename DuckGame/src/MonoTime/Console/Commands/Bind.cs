@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using AddedContent.Firebreak;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace DuckGame
 {
     public static partial class DevConsoleCommands
     {
-        [AutoConfigField]
+        [Marker.AutoConfig]
         public static List<ConsoleBind> Binds = new();
 
-        [DevConsoleCommand(
+        [Marker.DevConsoleCommand(
             Description = "Binds a command to a hotkey to be executed when pressed",
             Aliases = new[] { "binds" })]
         public static object Bind(BindAction action, string? hotkey = null, string? command = null)

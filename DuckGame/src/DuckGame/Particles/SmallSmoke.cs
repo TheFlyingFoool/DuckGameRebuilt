@@ -126,9 +126,7 @@ namespace DuckGame
             hSpeed *= 0.95f;
             _life -= lifeTake;
 
-            //since the lifetime of this particle is tied to its animation when its being culled the animation doesn't progress
-            //so instead its just getting called here so it can delete properly -NiK0
-            if (currentlyDrawing) _sprite.UpdateFrame();
+            if (!currentlyDrawing) _sprite.UpdateFrame(true);
 
             if (_life < 0 && _sprite.currentAnimation != "puff")
                 _sprite.SetAnimation("puff");

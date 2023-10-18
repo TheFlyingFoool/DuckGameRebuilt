@@ -1,242 +1,268 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.BitBuffer
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Runtime.CompilerServices;
 
 namespace DuckGame
 {
     public class BitBuffer
     {
-        private static int[] _maxMasks;
-        public byte[] _buffer = new byte[64];
-        private bool _dirty;
-        private int _offsetPosition;
-        private int _endPosition;
-        private int _bitEndOffset;
-        private int _bitOffsetPosition;
-        private byte[] _trimmedBuffer;
-        private static int[] _readMasks;
-        private bool _allowPacking = true;
-        //private int offset;
-        //private int currentBit;
-        public static List<Type> kTypeIndexList = new List<Type>()
-        {
-          typeof (string),
-          typeof (byte[]),
-          typeof (BitBuffer),
-          typeof (float),
-          typeof (double),
-          typeof (byte),
-          typeof (sbyte),
-          typeof (bool),
-          typeof (short),
-          typeof (ushort),
-          typeof (int),
-          typeof (uint),
-          typeof (long),
-          typeof (ulong),
-          typeof (char),
-          typeof (Vec2),
-          typeof (Color),
-          typeof (NetIndex16),
-          typeof (NetIndex2),
-          typeof (NetIndex4),
-          typeof (NetIndex8),
-          typeof (Thing)
-        };
-
         public string ReadTokenizedString()
         {
-            int index = ReadInt();
-            if (index >= TokenDeserializer.instance._tokens.Count)
+            int token = ReadInt();
+            if (token >= TokenDeserializer.instance._tokens.Count)
                 throw new Exception("BitBuffer.ReadTokenizedString() encountered an invalid token.");
-            return TokenDeserializer.instance._tokens[index];
+
+            return TokenDeserializer.instance._tokens[token];
         }
 
-        private void WriteTokenizedString(string val) => Write(TokenSerializer.instance.Token(val));
+        private void WriteTokenizedString(string val)
+        {
+            Write(TokenSerializer.instance.Token(val));
+        }
 
         public override string ToString()
         {
-            string str = "";
-            for (int index = 0; index < lengthInBytes; ++index)
-                str = str + _buffer[index].ToString() + "|";
-            return str;
+            string s = "";
+            for (int i = 0; i < lengthInBytes; i++)
+            {
+                s += _buffer[i].ToString();
+                s += "|";
+            }
+
+            return s;
         }
 
         public static BitBuffer FromString(string s)
         {
-            BitBuffer bitBuffer = new BitBuffer();
+            BitBuffer b = new BitBuffer();
             try
             {
-                string str1 = s;
-                char[] chArray = new char[1] { '|' };
-                foreach (string str2 in str1.Split(chArray))
+                foreach (string part in s.Split('|'))
                 {
-                    if (!(str2 == ""))
-                        bitBuffer.Write(Convert.ToByte(str2));
+                    if (part == "")
+                        continue;
+                    b.Write(Convert.ToByte(part));
                 }
-                bitBuffer.position = 0;
+                b.position = 0;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 DevConsole.Log(DCSection.General, "BitBuffer conversion from string failed.");
                 return new BitBuffer();
             }
-            return bitBuffer;
+
+            return b;
         }
 
+        private static int[] _maxMasks;
         public static long GetMaxValue(int bits)
         {
             if (_maxMasks == null)
             {
                 _maxMasks = new int[64];
-                int num1 = 0;
-                for (int index = 0; index < 64; ++index)
+                int val = 0;
+                for (int i = 0; i < 64; i++)
                 {
-                    int num2 = num1 | 1;
-                    _maxMasks[index] = num2;
-                    num1 = num2 << 1;
+                    val |= 1;
+                    _maxMasks[i] = val;
+                    val = val << 1;
                 }
             }
             return _maxMasks[bits];
         }
 
+
+        byte[] _buffer = new byte[64];
+
         /// <summary>
         /// This BitBuffers internal buffer. This may have zeroes at the end, as the buffer size is doubled whenever it's filled.
         /// </summary>
-        public byte[] buffer => _buffer;
+		public byte[] buffer { get { return _buffer; } }
 
-        /// <summary>A byte[] representation of all data in the buffer.</summary>
+        /// <summary>
+        /// A byte[] representation of all data in the buffer.
+        /// </summary>
         public byte[] data
         {
             get
             {
                 try
                 {
-                    byte[] destinationArray = new byte[lengthInBytes];
-                    Array.Copy(_buffer, destinationArray, lengthInBytes);
-                    return destinationArray;
+                    byte[] ret = new byte[lengthInBytes];
+                    Array.Copy(_buffer, ret, lengthInBytes);
+                    return ret;
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     return null;
                 }
             }
         }
 
+
+        bool _dirty = false;
+        int _offsetPosition = 0; //position in bytes
+        int _endPosition = 0;
         public int position
         {
-            get => _offsetPosition;
+            get { return _offsetPosition; }
             set
             {
                 if (_offsetPosition != value)
                     _dirty = true;
+
                 _offsetPosition = value;
-                if (_offsetPosition <= _endPosition)
-                    return;
-                _endPosition = _offsetPosition;
-                _bitEndOffset = 0;
+                if (_offsetPosition > _endPosition)
+                {
+                    _endPosition = _offsetPosition;
+                    _bitEndOffset = 0;
+                }
             }
         }
 
         public uint positionInBits
         {
-            get => (uint)(position * 8 + _bitOffsetPosition);
+            get { return (((uint)position * 8) + (uint)bitOffset); }
             set
             {
-                position = (int)(value / 8U);
-                bitOffset = (int)(value % 8U);
+                position = (int)(value / 8);
+                bitOffset = (int)(value % 8);
             }
         }
 
+        int _bitEndOffset = 0;
+        int _bitOffsetPosition = 0; //offset from position in bits
         public int bitOffset
         {
-            get => _bitOffsetPosition;
+            get { return _bitOffsetPosition; }
             set
             {
                 if (_bitOffsetPosition != value)
                     _dirty = true;
+
                 _bitOffsetPosition = value;
-                if (_endPosition != _offsetPosition || _bitOffsetPosition <= _bitEndOffset)
-                    return;
-                _bitEndOffset = value;
+                if (_endPosition == _offsetPosition && _bitOffsetPosition > _bitEndOffset)
+                    _bitEndOffset = value;
             }
         }
 
-        public bool isPacked => _bitEndOffset != 0;
+        public bool isPacked { get { return _bitEndOffset != 0; } }
+        public int lengthInBits { get { return (_endPosition * 8) + _bitEndOffset; } }
+        public int lengthInBytes { get { return _endPosition + (_bitEndOffset > 0 ? 1 : 0); } set { _endPosition = value; } }
 
-        public int lengthInBits => _endPosition * 8 + _bitEndOffset;
-
-        public int lengthInBytes
-        {
-            get => _endPosition + (_bitEndOffset > 0 ? 1 : 0);
-            set => _endPosition = value;
-        }
-
+        private byte[] _trimmedBuffer = null;
         public byte[] GetBytes()
         {
-            if (_trimmedBuffer != null && !_dirty)
+            if (_trimmedBuffer != null && _dirty == false)
                 return _trimmedBuffer;
             _dirty = false;
             _trimmedBuffer = new byte[lengthInBytes];
-            for (int index = 0; index < lengthInBytes; ++index)
-                _trimmedBuffer[index] = _buffer[index];
+            for (int i = 0; i < lengthInBytes; i++)
+                _trimmedBuffer[i] = _buffer[i];
             return _trimmedBuffer;
         }
 
+        private static int[] _readMasks;
+        private static ulong[] _longMasks;
+        private static int[] _chunkMasks;
         private void calculateReadMasks()
         {
-            if (_readMasks != null)
-                return;
-            _readMasks = new int[64];
-            int num1 = 0;
-            for (int index = 0; index < 64; ++index)
+            if (_readMasks == null)
             {
-                int num2 = num1 | 1;
-                _readMasks[index] = num2;
-                num1 = num2 << 1;
+                _readMasks = new int[64];
+
+                int val = 0;
+                for (int i = 0; i < 64; i++)
+                {
+                    val = val | 1;
+                    _readMasks[i] = val;
+                    val = val << 1;
+                }
+
+                _longMasks = new ulong[65];
+
+                ulong lval = 0;
+                for (int i = 1; i < 65; i++)
+                {
+                    lval = lval | 1;
+                    _longMasks[i] = lval;
+                    lval = lval << 1;
+                }
+
+                _chunkMasks = new int[8];
+
+                int chnk = 0;
+                for (int i = 7; i >= 0; i--)
+                {
+                    chnk = chnk | (byte)1;
+                    _chunkMasks[i] = chnk;
+                    chnk = chnk << (byte)1;
+                }
             }
         }
 
-        public bool allowPacking => _allowPacking;
-
+        private bool _allowPacking = true;
+        public bool allowPacking { get { return _allowPacking; } }
         public BitBuffer(bool allowPacking = true)
         {
             calculateReadMasks();
             _allowPacking = allowPacking;
         }
 
+
         public BitBuffer(byte[] data, int bits = 0, bool allowPacking = true)
         {
             _allowPacking = allowPacking;
+
             calculateReadMasks();
-            Write(data, 0, -1);
+            Write(data);
             SeekToStart();
-            if (bits <= 0 || _endPosition * 8 <= bits)
-                return;
-            --_endPosition;
-            _bitEndOffset = bits - _endPosition * 8;
+
+            if (bits > 0 && _endPosition * 8 > bits)
+            {
+                _endPosition -= 1;
+                _bitEndOffset = bits - (_endPosition * 8);
+            }
+        }
+
+        void ConstructSetBits(int bits)
+        {
+            if (bits > 0 && _endPosition * 8 > bits)
+            {
+                _endPosition -= 1;
+                _bitEndOffset = bits - (_endPosition * 8);
+            }
         }
 
         public BitBuffer(byte[] data, bool copyData)
         {
             _allowPacking = false;
+
             calculateReadMasks();
+
             if (copyData)
             {
-                Write(data, 0, -1);
+                Write(data);
                 SeekToStart();
             }
             else
                 _buffer = data;
         }
+
+        //public void CheckForTokenization()
+        //{
+        //    int pos = position;
+        //    if (lengthInBytes > 8)
+        //    {
+        //        position = lengthInBytes - 8;
+        //        long read = ReadLong();
+        //        if (read == kTokenizedIdentifier)
+        //            MakeTokenized();;
+        //    }
+
+        //    position = pos;
+        //}
 
         public void SeekToStart()
         {
@@ -251,482 +277,816 @@ namespace DuckGame
             _bitOffsetPosition = vbitOffset;
         }
 
-        public BitBuffer Instance() => new BitBuffer()
+        //Returns a copy of the buffer as it is right now, with the same underlying data reference.
+        public BitBuffer Instance()
         {
-            _buffer = buffer,
-            _offsetPosition = _offsetPosition,
-            _endPosition = _endPosition,
-            _bitEndOffset = _bitEndOffset,
-            _bitOffsetPosition = _bitOffsetPosition
-        };
+            BitBuffer ret = new BitBuffer();
+            ret._buffer = buffer;
+            ret._offsetPosition = _offsetPosition;
+            ret._endPosition = _endPosition;
+            ret._bitEndOffset = _bitEndOffset;
+            ret._bitOffsetPosition = _bitOffsetPosition;
+            return ret;
+        }
 
         public int ReadPackedBits(int bits)
         {
             if (bits == 0)
                 return 0;
-            int num1 = 0;
+
+            int number = 0;
             if (bits <= 8 - _bitOffsetPosition)
             {
-                num1 = _buffer[position] >> _bitOffsetPosition & _readMasks[bits - 1];
-                bitOffset = _bitOffsetPosition + bits;
+                number = (_buffer[_offsetPosition] >> _bitOffsetPosition) & _readMasks[bits - 1];
+                _bitOffsetPosition += bits;
             }
             else
             {
-                int num2 = 0;
+                int read = 0;
+                int soFar = 0;
                 while (true)
                 {
                     if (_bitOffsetPosition > 7)
                     {
-                        bitOffset = 0;
-                        ++position;
+                        _bitOffsetPosition = 0;
+                        _offsetPosition += 1;
                     }
-                    if (bits > 0)
+                    if (bits <= 0)
                     {
-                        int num3 = 8 - _bitOffsetPosition;
-                        if (num3 > bits)
-                            num3 = bits;
-                        int num4 = _buffer[position] >> _bitOffsetPosition & _readMasks[num3 - 1];
-                        bits -= num3;
-                        int num5 = num4 << num2;
-                        num1 |= num5;
-                        bitOffset = _bitOffsetPosition + num3;
-                        num2 += num3;
-                    }
-                    else
                         break;
+                    }
+
+                    int numRead = 8 - _bitOffsetPosition;
+                    if (numRead > bits)
+                        numRead = bits;
+
+
+                    read = (_buffer[_offsetPosition] >> _bitOffsetPosition) & _readMasks[numRead - 1];
+                    bits -= numRead;
+                    read = read << soFar;
+                    number = number | read;
+                    _bitOffsetPosition += numRead;
+                    soFar += numRead;
                 }
             }
             if (_bitOffsetPosition > 7)
             {
-                bitOffset = 0;
-                ++position;
+                _bitOffsetPosition = 0;
+                _offsetPosition += 1;
             }
-            return num1;
+            return number;
         }
+
+
+        //public int ReadPackedBits2(int bits)
+        //{
+        //    if (bits == 0)
+        //        return 0;
+
+        //    int ret = 0;
+        //    for (int i = 0; i < bits; ++i)
+        //    {
+        //        ret |= (int)(_buffer[position] >> (8 - bitOffset)) & 1;
+        //        bitOffset++;
+
+        //        if (bitOffset == 8)
+        //        {
+        //            position++;
+        //            bitOffset = 0;
+        //        }
+        //    }
+        //    return ret;
+        //}
 
         public byte[] ReadPacked(int bytes)
         {
-            byte[] numArray = new byte[bytes];
-            for (int index = 0; index < bytes; ++index)
-                numArray[index] = (byte)ReadPackedBits(8);
-            return numArray;
+            byte[] data = new byte[bytes];
+            for (int i = 0; i < bytes; i++)
+                data[i] = (byte)ReadPackedBits(8);
+            return data;
         }
 
-        public void WritePacked(int number, int bits)
+        public unsafe ulong ReadAsULong(int bytes)
+        {
+            ulong data = 0;
+            if (_bitOffsetPosition != 0)
+            {
+                byte* ul = (byte*)&data;
+                for (int i = 0; i < bytes; i++)
+                {
+                    ul[i] = (byte)ReadPackedBits(8);
+                }
+            }
+            else
+            {
+                byte* ul = (byte*)&data;
+                for (int i = 0; i < bytes; i++)
+                {
+                    ul[i] = _buffer[_offsetPosition + i];
+                }
+                position += bytes;
+            }
+            return data;
+        }
+
+        private int offset = 0;
+        private int currentBit = 0;
+
+
+        int _localPosition;
+        //      public void WritePacked(uint number, int bits)
+        //{
+        //          //try
+        //          //{
+        //          if (lengthInBits + bits > _buffer.Length * 8)
+        //              resize(_buffer.Length * 2);
+
+        //          currentBit = 0;
+        //          while (bits > 0)
+        //          {
+        //              _buffer[_offsetPosition] |= (byte)((number & 1) << _bitOffsetPosition);
+        //              number = number >> 1;
+        //              _bitOffsetPosition++;
+        //              bits--;
+
+        //              if (_bitOffsetPosition == 8)
+        //              {
+        //                  _offsetPosition++;
+        //                  _bitOffsetPosition = 0;
+        //              }
+        //          }
+        //          //}
+        //          //catch(Exception e)
+        //          //{
+        //          //    Main.SpecialCode += bits.ToString() + ", " + lengthInBits.ToString() + ", " + _buffer.Length.ToString() + ", " + position.ToString() + ", " + number.ToString();
+        //          //    throw e;
+        //          //}
+
+
+        //          if (_offsetPosition > _endPosition)
+        //              _endPosition = _offsetPosition;
+
+        //          if (_bitOffsetPosition > _bitEndOffset)
+        //              _bitEndOffset = _bitOffsetPosition;
+        //      }
+
+        public void WritePackedSlow(int number, int bits)
         {
             try
             {
                 if (lengthInBits + bits > _buffer.Length * 8)
                     resize(_buffer.Length * 2);
-                //this.currentBit = 0;
+
+                currentBit = 0;
                 while (bits > 0)
                 {
-                    _buffer[position] |= (byte)((number & 1) << _bitOffsetPosition);
-                    number >>= 1;
-                    bitOffset = _bitOffsetPosition + 1;
-                    --bits;
+                    _buffer[_offsetPosition] |= (byte)((number & 1) << _bitOffsetPosition);
+                    number = number >> 1;
+                    _bitOffsetPosition++;
+                    bits--;
+
                     if (_bitOffsetPosition == 8)
                     {
-                        ++position;
-                        bitOffset = 0;
+                        _offsetPosition++;
+                        _bitOffsetPosition = 0;
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                string[] strArray = new string[10];
-                strArray[0] = Main.SpecialCode;
-                strArray[1] = bits.ToString();
-                strArray[2] = ", ";
-                int num = lengthInBits;
-                strArray[3] = num.ToString();
-                strArray[4] = ", ";
-                num = _buffer.Length;
-                strArray[5] = num.ToString();
-                strArray[6] = ", ";
-                num = position;
-                strArray[7] = num.ToString();
-                strArray[8] = ", ";
-                strArray[9] = number.ToString();
-                Main.SpecialCode = string.Concat(strArray);
-                throw ex;
+                Main.SpecialCode += bits.ToString() + ", " + lengthInBits.ToString() + ", " + _buffer.Length.ToString() + ", " + position.ToString() + ", " + number.ToString();
+                throw e;
             }
+
+            if (_offsetPosition > _endPosition)
+                _endPosition = _offsetPosition;
+
+            if (_bitOffsetPosition > _bitEndOffset)
+                _bitEndOffset = _bitOffsetPosition;
+        }
+
+        int _dif;
+        public void WritePacked(ulong number, int bits)
+        {
+            if (lengthInBits + bits >= _buffer.Length * 8)
+                resize(_buffer.Length * 2);
+
+            while (bits > 0)
+            {
+                _buffer[_offsetPosition] |= (byte)((number & _longMasks[bits]) << _bitOffsetPosition);
+                _dif = (8 - _bitOffsetPosition);
+                number = number >> _dif;
+                _bitOffsetPosition += (sbyte)Math.Min(bits, _dif);
+                bits -= _dif;
+                if (_bitOffsetPosition >= 8)
+                {
+                    _bitOffsetPosition -= 8;
+                    _offsetPosition += 1;
+                }
+            }
+
+            if (_offsetPosition > _endPosition)
+            {
+                _endPosition = _offsetPosition;
+                _bitEndOffset = _bitOffsetPosition;
+            }
+
+            if (_offsetPosition == _endPosition && _bitOffsetPosition > _bitEndOffset)
+                _bitEndOffset = _bitOffsetPosition;
+        }
+
+        public void WritePacked(long number, int bits)
+        {
+            if (lengthInBits + bits >= _buffer.Length * 8)
+                resize(_buffer.Length * 2);
+
+            while (bits > 0)
+            {
+                _buffer[_offsetPosition] |= (byte)((number & (long)_longMasks[bits]) << _bitOffsetPosition);
+                _dif = (8 - _bitOffsetPosition);
+                number = number >> _dif;
+                _bitOffsetPosition += (sbyte)Math.Min(bits, _dif);
+                bits -= _dif;
+                if (_bitOffsetPosition >= 8)
+                {
+                    _bitOffsetPosition -= 8;
+                    _offsetPosition += 1;
+                }
+            }
+
+            if (_offsetPosition > _endPosition)
+            {
+                _endPosition = _offsetPosition;
+                _bitEndOffset = _bitOffsetPosition;
+            }
+
+            if (_offsetPosition == _endPosition && _bitOffsetPosition > _bitEndOffset)
+                _bitEndOffset = _bitOffsetPosition;
         }
 
         public void WritePacked(byte[] data)
         {
-            foreach (int number in data)
-                WritePacked(number, 8);
+            foreach (byte b in data)
+                WritePacked(b, 8);
         }
 
         public void WritePacked(byte[] data, int bits)
         {
-            if (position + (int)Math.Ceiling(bits / 8f) > _buffer.Length)
-                resize((position + (int)Math.Ceiling(bits / 8f)) * 2);
-            int index = 0;
+            if (position + (int)Math.Ceiling(bits / 8.0f) > _buffer.Length)
+                resize((position + (int)Math.Ceiling(bits / 8.0f)) * 2);
+
+            int cur = 0;
             if (!isPacked)
             {
-                for (; bits >= 8; bits -= 8)
+                while (bits >= 8)
                 {
-                    _buffer[position] = data[index];
-                    ++position;
-                    ++index;
+                    _buffer[position] = data[cur];
+                    position++;
+                    cur++;
+                    bits -= 8;
                 }
             }
             else
             {
-                for (; bits >= 8; bits -= 8)
+                while (bits >= 8)
                 {
-                    WritePacked(data[index], 8);
-                    ++index;
+                    WritePacked(data[cur], 8);
+                    cur += 1;
+                    bits -= 8;
                 }
             }
-            if (bits <= 0)
-                return;
-            WritePacked(data[index], bits);
+            if (bits > 0)
+                WritePacked(data[cur], bits);
         }
+
+        /*
+                // this one should work, and allocate less, but it doesn't and I don't know why
+                public BitBuffer ReadBitBuffer(bool allowPacking = true)
+                {
+                    ushort bits = ReadUShort();
+
+                    BitBuffer newbuf = new BitBuffer(allowPacking);
+
+                    if (allowPacking)
+                    {
+                        int bytes = (int)Math.Ceiling((float)bits / 8);
+
+                        ushort writeBits = bits;
+                        int size = 0;
+                        for (int i = 0; i < bytes; i++)
+                        {
+                            size = (writeBits >= 8 ? 8 : writeBits);
+                            byte val = (byte)ReadPackedBits(size);
+                            newbuf.WritePacked(val, size);
+                            if (writeBits >= 8)
+                                writeBits -= 8;
+                        }
+                    }
+                    else
+                    {
+                        int bytes = bits;
+                        for (int i = 0; i < bits; i++)
+                            newbuf.Write((byte)ReadByte());
+                    }
+                    return newbuf;
+                }
+        */
+
+
+        private static Stack<BitBuffer> _bufferPool = new Stack<BitBuffer>();
+        private bool _pooled = false;
+        public static BitBuffer GetFromPool(int minSize = 0, bool allowPacking = true)
+        {
+            BitBuffer b = null;
+            lock (_bufferPool)
+            {
+                if (_bufferPool.Count > 0)
+                    b = _bufferPool.Pop();
+                else
+                    b = new BitBuffer();
+            }
+
+            b.QuickClear();
+            b._allowPacking = allowPacking;
+            b._pooled = false;
+
+            if (minSize != 0 && b._buffer.Length < minSize)
+                b._buffer = new byte[minSize];
+
+            return b;
+        }
+
+        public void ReturnToPool()
+        {
+            if (_pooled == false)
+            {
+                _pooled = true;
+                lock (_bufferPool)
+                {
+                    _bufferPool.Push(this);
+                }
+            }
+        }
+
+        public BitBuffer ReadBitBufferPooled(bool allowPacking = true)
+        {
+            int bits = ReadUShort();
+            if (bits == ushort.MaxValue)
+                bits = ReadInt();
+
+            BitBuffer b = GetFromPool();
+            if (allowPacking)
+            {
+                b._allowPacking = true;
+                int bytes = (int)Math.Ceiling((float)bits / 8);
+                if (b._buffer.Length < bytes)
+                    b._buffer = new byte[bytes];
+
+                int writeBits = bits;
+                for (int i = 0; i < bytes; i++)
+                {
+                    b._buffer[i] = (byte)ReadPackedBits(writeBits >= 8 ? 8 : writeBits);
+                    if (writeBits >= 8)
+                        writeBits -= 8;
+                }
+            }
+            else
+            {
+                b._allowPacking = false;
+                if (b._buffer.Length < bits)
+                    b._buffer = new byte[bits];
+
+                Array.Copy(buffer, position, b._buffer, 0, bits);
+                position += bits;
+
+                //for (int i = 0; i < bytes; i++)
+                //    data[i] = (byte)ReadByte();
+
+                bits = 0;
+            }
+
+            b.ConstructSetBits(bits);
+            return b;
+        }
+
 
         public BitBuffer ReadBitBuffer(bool allowPacking = true)
         {
-            int length1 = ReadUShort();
-            if (length1 == ushort.MaxValue)
-                length1 = ReadInt();
-            byte[] numArray;
+            int bits = ReadUShort();
+            if (bits == ushort.MaxValue)
+                bits = ReadInt();
+
+
+            byte[] data = null;
             if (allowPacking)
             {
-                int length2 = (int)Math.Ceiling(length1 / 8f);
-                numArray = new byte[length2];
-                int num = length1;
-                for (int index = 0; index < length2; ++index)
+                int bytes = (int)Math.Ceiling((float)bits / 8);
+                data = new byte[bytes];
+                int writeBits = bits;
+                for (int i = 0; i < bytes; i++)
                 {
-                    numArray[index] = (byte)ReadPackedBits(num >= 8 ? 8 : num);
-                    if (num >= 8)
-                        num -= 8;
+                    data[i] = (byte)ReadPackedBits(writeBits >= 8 ? 8 : writeBits);
+                    if (writeBits >= 8)
+                        writeBits -= 8;
                 }
             }
             else
             {
-                numArray = new byte[length1];
-                Array.Copy(buffer, position, numArray, 0, length1);
-                position += length1;
-                length1 = 0;
+                data = new byte[bits];
+                Array.Copy(buffer, position, data, 0, bits);
+                position += bits;
+
+                //for (int i = 0; i < bytes; i++)
+                //    data[i] = (byte)ReadByte();
+
+                bits = 0;
             }
-            return new BitBuffer(numArray, length1, allowPacking);
+            return new BitBuffer(data, bits, allowPacking);
         }
+
 
         public string ReadString()
         {
             if (TokenDeserializer.instance != null)
                 return ReadTokenizedString();
-            int num = ReadUShort();
-            if (num == ushort.MaxValue)
+
+            int length = ReadUShort();
+            if (length == ushort.MaxValue)
             {
-                int bitOffset = _bitOffsetPosition;
-                int position = this.position;
-                if (ReadUShort() == 42252)
-                {
-                    num = ReadInt();
-                }
+                int tBitOffset = bitOffset;
+                int tPosition = position;
+
+                int p2 = ReadUShort();
+                //compatibility stuff for longer strings
+                if (p2 == 42252)
+                    length = ReadInt();
                 else
                 {
-                    this.position = position;
-                    this.bitOffset = bitOffset;
+                    position = tPosition;
+                    bitOffset = tBitOffset;
                 }
+
             }
-            if (_bitOffsetPosition != 0)
-                return Encoding.UTF8.GetString(ReadPacked(num));
-            string str = Encoding.UTF8.GetString(_buffer, position, num);
-            position += num;
-            return str;
+
+            if (bitOffset != 0)
+            {
+                byte[] data = ReadPacked(length);
+                return System.Text.Encoding.UTF8.GetString(data);
+            }
+            else
+            {
+                string s = System.Text.Encoding.UTF8.GetString(_buffer, position, length);
+                position += length;
+                return s;
+            }
         }
 
         public long ReadLong()
         {
-            if (_bitOffsetPosition != 0)
-                return BitConverter.ToInt64(ReadPacked(8), 0);
-            long int64 = BitConverter.ToInt64(_buffer, position);
-            position += 8;
-            return int64;
+            ulong val = ReadAsULong(sizeof(long));
+            unsafe { return ((long*)&val)[0]; }
         }
 
         public ulong ReadULong()
         {
-            if (_bitOffsetPosition != 0)
-                return BitConverter.ToUInt64(ReadPacked(8), 0);
-            long uint64 = (long)BitConverter.ToUInt64(_buffer, position);
-            position += 8;
-            return (ulong)uint64;
+            return ReadAsULong(sizeof(ulong));
         }
 
         public int ReadInt()
         {
-            if (_bitOffsetPosition != 0)
-                return BitConverter.ToInt32(ReadPacked(4), 0);
-            int int32 = BitConverter.ToInt32(_buffer, position);
-            position += 4;
-            return int32;
+            ulong val = ReadAsULong(sizeof(int));
+            unsafe { return ((int*)&val)[0]; }
         }
 
         public uint ReadUInt()
         {
-            if (_bitOffsetPosition != 0)
-                return BitConverter.ToUInt32(ReadPacked(4), 0);
-            int uint32 = (int)BitConverter.ToUInt32(_buffer, position);
-            position += 4;
-            return (uint)uint32;
+            ulong val = ReadAsULong(sizeof(uint));
+            unsafe { return ((uint*)&val)[0]; }
         }
 
         public short ReadShort()
         {
-            if (_bitOffsetPosition != 0)
-                return BitConverter.ToInt16(ReadPacked(2), 0);
-            int int16 = BitConverter.ToInt16(_buffer, position);
-            position += 2;
-            return (short)int16;
+            ulong val = ReadAsULong(sizeof(short));
+            unsafe { return ((short*)&val)[0]; }
         }
 
         public ushort ReadUShort()
         {
-            if (_bitOffsetPosition != 0)
-                return BitConverter.ToUInt16(ReadPacked(2), 0);
-            int uint16 = BitConverter.ToUInt16(_buffer, position);
-            position += 2;
-            return (ushort)uint16;
+            ulong val = ReadAsULong(sizeof(ushort));
+            unsafe { return ((ushort*)&val)[0]; }
         }
 
         public float ReadFloat()
         {
-            if (_bitOffsetPosition != 0)
-                return BitConverter.ToSingle(ReadPacked(4), 0);
-            double single = BitConverter.ToSingle(_buffer, position);
-            position += 4;
-            return (float)single;
+            ulong val = ReadAsULong(sizeof(float));
+            unsafe { return ((float*)&val)[0]; }
         }
 
-        public Vec2 ReadVec2() => new Vec2()
+        public Vec2 ReadVec2()
         {
-            x = ReadFloat(),
-            y = ReadFloat()
-        };
+            Vec2 val = new Vec2();
+            val.x = ReadFloat();
+            val.y = ReadFloat();
+            return val;
+        }
 
-        public Color ReadColor() => new Color()
+        public Color ReadColor()
         {
-            r = ReadByte(),
-            g = ReadByte(),
-            b = ReadByte(),
-            a = ReadByte()
-        };
+            Color val = new Color();
+            val.r = ReadByte();
+            val.g = ReadByte();
+            val.b = ReadByte();
+            val.a = ReadByte();
 
-        public Color ReadRGBColor() => new Color()
+            return val;
+        }
+
+        public Color ReadRGBColor()
         {
-            r = ReadByte(),
-            g = ReadByte(),
-            b = ReadByte(),
-            a = byte.MaxValue
-        };
+            Color val = new Color();
+            val.r = ReadByte();
+            val.g = ReadByte();
+            val.b = ReadByte();
+            val.a = 255;
+
+            return val;
+        }
 
         public double ReadDouble()
         {
-            if (_bitOffsetPosition != 0)
-                return BitConverter.ToDouble(ReadPacked(8), 0);
-            double num = BitConverter.ToDouble(_buffer, position);
-            position += 8;
-            return num;
+            ulong val = ReadAsULong(sizeof(double));
+            unsafe { return ((double*)&val)[0]; }
         }
 
         public char ReadChar()
         {
-            if (_bitOffsetPosition != 0)
-                return BitConverter.ToChar(ReadPacked(2), 0);
-            int num = BitConverter.ToChar(_buffer, position);
-            position += 2;
-            return (char)num;
+            ulong val = ReadAsULong(sizeof(char));
+            unsafe { return ((char*)&val)[0]; }
         }
 
         public byte ReadByte()
         {
-            if (_bitOffsetPosition != 0)
-                return ReadPacked(1)[0];
-            int num = _buffer[position];
-            ++position;
-            return (byte)num;
+            ulong val = ReadAsULong(sizeof(byte));
+            unsafe { return ((byte*)&val)[0]; }
         }
 
         public byte[] ReadBytes()
         {
-            int length = ReadInt();
-            byte[] destinationArray = new byte[length];
-            Array.Copy(buffer, position, destinationArray, 0, length);
-            position += length;
-            return destinationArray;
+            int size = ReadInt();
+            byte[] data = new byte[size];
+            Array.Copy(buffer, position, data, 0, size);
+            position += size;
+            return data;
         }
+
+
 
         public sbyte ReadSByte()
         {
-            if (_bitOffsetPosition != 0)
-                return (sbyte)ReadPacked(1)[0];
-            int num = (sbyte)_buffer[position];
-            ++position;
-            return (sbyte)num;
+            ulong val = ReadAsULong(sizeof(sbyte));
+            unsafe { return ((sbyte*)&val)[0]; }
         }
 
         public bool ReadBool()
         {
             if (_allowPacking)
                 return ReadPackedBits(1) > 0;
-            return ReadByte() > 0;
+            return ReadByte() > 0 ? true : false;
         }
 
-        public NetIndex4 ReadNetIndex4() => new NetIndex4(ReadPackedBits(4));
+        public NetIndex4 ReadNetIndex4()
+        {
+            return new NetIndex4(ReadPackedBits(4));
+        }
 
-        public NetIndex8 ReadNetIndex8() => new NetIndex8(ReadPackedBits(8));
+        public NetIndex8 ReadNetIndex8()
+        {
+            return new NetIndex8(ReadPackedBits(8));
+        }
 
-        public NetIndex16 ReadNetIndex16() => new NetIndex16(ReadPackedBits(16));
+        public NetIndex16 ReadNetIndex16()
+        {
+            return new NetIndex16(ReadPackedBits(16));
+        }
+
 
         public byte[] ReadData(int length)
         {
-            byte[] dst = new byte[length];
-            Buffer.BlockCopy(buffer, position, dst, 0, length);
+            byte[] data = new byte[length];
+            Buffer.BlockCopy(buffer, position, data, 0, length);
             position += length;
-            return dst;
+            return data;
         }
 
         public object Read(Type type, bool allowPacking = true)
         {
             if (type == typeof(string))
                 return ReadString();
-            if (type == typeof(float))
+            else if (type == typeof(float))
                 return ReadFloat();
-            if (type == typeof(double))
+            else if (type == typeof(double))
                 return ReadDouble();
-            if (type == typeof(byte))
+            else if (type == typeof(byte))
                 return ReadByte();
-            if (type == typeof(sbyte))
+            else if (type == typeof(sbyte))
                 return ReadSByte();
-            if (type == typeof(bool))
+            else if (type == typeof(bool))
                 return ReadBool();
-            if (type == typeof(short))
+            else if (type == typeof(short))
                 return ReadShort();
-            if (type == typeof(ushort))
+            else if (type == typeof(ushort))
                 return ReadUShort();
-            if (type == typeof(int))
+            else if (type == typeof(int))
                 return ReadInt();
-            if (type == typeof(uint))
+            else if (type == typeof(uint))
                 return ReadUInt();
-            if (type == typeof(long))
+            else if (type == typeof(long))
                 return ReadLong();
-            if (type == typeof(ulong))
+            else if (type == typeof(ulong))
                 return ReadULong();
-            if (type == typeof(char))
+            else if (type == typeof(char))
                 return ReadChar();
-            if (type == typeof(Vec2))
+            else if (type == typeof(Vec2))
                 return ReadVec2();
-            if (type == typeof(BitBuffer))
+            else if (type == typeof(byte[]))
+                return ReadBytes();
+            else if (type == typeof(BitBuffer))
                 return ReadBitBuffer(allowPacking);
-            if (type == typeof(NetIndex16))
-                return new NetIndex16(ReadUShort());
-            if (type == typeof(NetIndex2))
+            else if (type == typeof(NetIndex16))
+                return new NetIndex16((int)ReadUShort());
+            else if (type == typeof(NetIndex2))
                 return new NetIndex2((int)ReadBits(typeof(int), 2));
-            if (type == typeof(NetIndex4))
+            else if (type == typeof(NetIndex4))
                 return new NetIndex4((int)ReadBits(typeof(int), 4));
-            if (type == typeof(NetIndex8))
+            else if (type == typeof(NetIndex8))
                 return new NetIndex8((int)ReadBits(typeof(int), 8));
-            return typeof(Thing).IsAssignableFrom(type) ? (object)ReadThing(type) : throw new Exception("Trying to read unsupported type " + type?.ToString() + " from BitBuffer!");
+            else if (typeof(Thing).IsAssignableFrom(type))
+                return ReadThing(type);
+            else
+                throw (new Exception("Trying to read unsupported type " + type + " from BitBuffer!"));
         }
 
         public Thing ReadThing(Type pThingType)
         {
-            byte num = ReadByte();
-            ushort key = (ushort)ReadBits(typeof(ushort), 10);
-            ushort index = ReadUShort();
-            if (num != DuckNetwork.levelIndex || index == 0)
+            Main.SpecialCode2 = "10101";
+            byte levelIndex = ReadByte();
+            ushort typeIndex = (ushort)ReadBits(typeof(ushort), 10);
+            ushort readIndex = ReadUShort();
+            Main.SpecialCode2 = "10102";
+
+            if (levelIndex != DuckNetwork.levelIndex || readIndex == 0)
                 return null;
-            if (key == 0)
-                return GhostManager.context.GetSpecialSync(index);
-            NetIndex16 netIndex16 = (NetIndex16)index;
-            Profile profile = GhostObject.IndexToProfile(netIndex16);
-            if (profile != null && profile.removedGhosts.TryGetValue(netIndex16, out GhostObject removedGhost))
-                return removedGhost.thing;
-            Type type = Editor.IDToType[key];
-            if (!pThingType.IsAssignableFrom(type))
+
+
+            Main.SpecialCode2 = "10103";
+            if (typeIndex == 0)
+                return GhostManager.context.GetSpecialSync(readIndex);
+
+
+            Main.SpecialCode2 = "10104";
+            NetIndex16 index = readIndex;
+            Main.SpecialCode2 = "10105";
+            Profile p = GhostObject.IndexToProfile(index);
+            Main.SpecialCode2 = "10106";
+            if (p != null && p.removedGhosts.ContainsKey(index))
             {
-                DevConsole.Log(DCSection.GhostMan, "@error Type mismatch, ignoring ghost (" + netIndex16.ToString() + "(" + type.GetType().Name + " vs. " + pThingType.Name + "))@error");
+                Main.SpecialCode2 = "10107";
+                GhostObject g = p.removedGhosts[index];
+                //DevConsole.Log(DCSection.GhostMan, "Ignoring removed ghost(" + g != null ? g.ToString() : index + ")", NetworkConnection.context);
+                return g.thing;
+            }
+
+            Main.SpecialCode2 = "10108";
+            Type realType = Editor.IDToType[typeIndex];
+            Main.SpecialCode2 = "10109";
+            if (pThingType.IsAssignableFrom(realType) == false)
+            {
+                Main.SpecialCode2 = "10110";
+                DevConsole.Log(DCSection.GhostMan, "@error Type mismatch, ignoring ghost (" + index.ToString() + "(" + realType.GetType().Name + " vs. " + pThingType.Name + "))@error");
                 return null;
             }
-            GhostObject ghost = GhostManager.context.GetGhost(netIndex16);
-            if (ghost != null && ghost.thing.GetType() != type)
+
+            Main.SpecialCode2 = "10111";
+            GhostObject ghost = GhostManager.context.GetGhost(index);
+            //Kill ghost on type mismatch
+            Main.SpecialCode2 = "10112";
+            if (ghost != null && ghost.thing.GetType() != realType)
             {
-                DevConsole.Log(DCSection.GhostMan, "@error Type mismatch, removing ghost (" + netIndex16.ToString() + " " + ghost.thing.GetType().ToString() + "(my type) vs. " + type.ToString() + "(your type))@error");
+                Main.SpecialCode2 = "10113";
+                DevConsole.Log(DCSection.GhostMan, "@error Type mismatch, removing ghost (" + index.ToString() + " " + ghost.thing.GetType().ToString() + "(my type) vs. " + realType.ToString() + "(your type))@error");
                 GhostManager.changingGhostType = true;
-                GhostManager.context.RemoveGhost(ghost, (NetIndex16)0);
+                GhostManager.context.RemoveGhost(ghost, 0);
                 GhostManager.changingGhostType = false;
                 ghost = null;
             }
+
+            Main.SpecialCode2 = "10114";
             if (ghost == null)
             {
-                Thing thing = Editor.CreateThing(type);
-                thing.connection = NetworkConnection.context;
-                thing.authority = (NetIndex8)1;
-                if (profile != null && netIndex16 > profile.latestGhostIndex)
-                    profile.latestGhostIndex = netIndex16;
-                if (num != Level.core.currentLevel.networkIndex)
+                //HAT FLOATING IN CORNER CAUSED BY DUCK REFERENCE SYNCHRONIZING BEFORE ACTUAL DUCK DOES
+                //if (realType == typeof(Duck)) //THIS LINE IS IMPORTANT. REMOVING IT LEADS TO UNINITIALIZED DUCK.PROFILE CRASHES AND MORE
+                //    return null;
+
+                Main.SpecialCode2 = "10115";
+                Thing t = Editor.CreateThing(realType);
+                t.connection = NetworkConnection.context;
+                t.authority = 1; //Bit buffer created objects start with a lower authority to ensure smooth transfer
+
+                if (p != null && index > p.latestGhostIndex)
+                    p.latestGhostIndex = index;
+
+                Main.SpecialCode2 = "10116";
+                if (levelIndex != Level.core.currentLevel.networkIndex)
                 {
-                    ghost = new GhostObject(thing, GhostManager.context, (int)netIndex16);
-                    thing.position = new Vec2(-2000f, -2000f);
+                    //pending ghost
+                    Main.SpecialCode2 = "10117";
+                    ghost = new GhostObject(t, GhostManager.context, index, false);
+                    t.position = new Vec2(-2000, -2000);
+
                     GhostManager.context.pendingBitBufferGhosts.Add(ghost);
+                    Main.SpecialCode2 = "10119";
                 }
                 else
                 {
-                    ghost = GhostManager.context.MakeGhost(thing, (int)netIndex16);
-                    thing.position = new Vec2(-2000f, -2000f);
-                    ghost.ClearStateMask(NetworkConnection.context);
-                    thing.level = Level.current;
-                    thing.isBitBufferCreatedGhostThing = true;
+                    Main.SpecialCode2 = "10118";
+                    ghost = GhostManager.context.MakeGhost(t, index, false);
+                    Main.SpecialCode2 = "20050";
+                    t.position = new Vec2(-2000, -2000);
+
+                    Main.SpecialCode2 = "20060";
+                    if (NetworkConnection.context != null) ghost.ClearStateMask(NetworkConnection.context);
+                    Main.SpecialCode2 = "20070";
+                    t.level = Level.current;
+                    Main.SpecialCode2 = "20080";
+                    t.isBitBufferCreatedGhostThing = true;
+                    Main.SpecialCode2 = "10120";
                 }
-                thing.connection = NetworkConnection.context;
+                t.connection = NetworkConnection.context;
             }
+
+            Main.SpecialCode2 = "10200";
             return ghost.thing;
         }
 
-        public object ReadBits(Type t, int bits) => bits == -1 ? Read(t) : ConvertType(ReadPackedBits(bits), t);
 
-        public T ReadBits<T>(int bits) => bits < 1 ? default(T) : (T)ConvertType(ReadPackedBits(bits), typeof(T));
+        public object ReadBits(Type t, int bits)
+        {
+            if (bits == -1)
+                return Read(t);
+
+            int val = ReadPackedBits(bits);
+            return ConvertType(val, t);
+        }
+
+        public T ReadBits<T>(int bits)
+        {
+            if (bits < 1)
+                return default(T);
+
+            int val = ReadPackedBits(bits);
+            return (T)ConvertType(val, typeof(T));
+        }
 
         protected object ConvertType(int obj, Type type)
         {
             if (type == typeof(float))
                 return (float)obj;
-            if (type == typeof(double))
+            else if (type == typeof(double))
                 return (double)obj;
-            if (type == typeof(byte))
+            else if (type == typeof(byte))
                 return (byte)obj;
-            if (type == typeof(sbyte))
+            else if (type == typeof(sbyte))
                 return (sbyte)obj;
-            if (type == typeof(short))
+            else if (type == typeof(short))
                 return (short)obj;
-            if (type == typeof(ushort))
+            else if (type == typeof(ushort))
                 return (ushort)obj;
-            if (type == typeof(int))
-                return obj;
-            if (type == typeof(uint))
+            else if (type == typeof(int))
+                return (int)obj;
+            else if (type == typeof(uint))
                 return (uint)obj;
-            if (type == typeof(long))
+            else if (type == typeof(long))
                 return (long)obj;
-            if (type == typeof(ulong))
+            else if (type == typeof(ulong))
                 return (ulong)obj;
-            if (type == typeof(char))
+            else if (type == typeof(char))
                 return (char)obj;
-            throw new Exception("unrecognized conversion type " + type?.ToString());
+            else
+                throw (new Exception("unrecognized conversion type " + type));
         }
 
-        public T Read<T>() => (T)Read(typeof(T));
+        public T Read<T>()
+        {
+            return (T)Read(typeof(T));
+        }
 
         public void AlignToByte()
         {
-            if (_bitOffsetPosition <= 0)
-                return;
-            ++position;
-            bitOffset = 0;
+            if (bitOffset > 0)
+            {
+                position += 1;
+                bitOffset = 0;
+            }
         }
 
         public void WriteBufferData(BitBuffer val)
@@ -735,10 +1095,11 @@ namespace DuckGame
             {
                 if (position + val.lengthInBytes > _buffer.Length)
                     resize(position + val.lengthInBytes);
-                for (int index = 0; index < val.lengthInBytes; ++index)
+
+                for (int i = 0; i < val.lengthInBytes; i++)
                 {
-                    _buffer[position] = val.buffer[index];
-                    ++position;
+                    _buffer[position] = val.buffer[i];
+                    position += 1;
                 }
             }
             else
@@ -749,15 +1110,16 @@ namespace DuckGame
         {
             if (writeLength)
             {
-                int val1 = val.allowPacking ? val.lengthInBits : val.lengthInBytes;
-                if (val1 > 65534)
+                int size = val.allowPacking ? val.lengthInBits : val.lengthInBytes;
+                if (size > ushort.MaxValue - 1)
                 {
                     Write(ushort.MaxValue);
-                    Write(val1);
+                    Write(size);
                 }
                 else
-                    Write((ushort)val1);
+                    Write((ushort)size);
             }
+
             WriteBufferData(val);
         }
 
@@ -765,19 +1127,28 @@ namespace DuckGame
         {
             if (writeLength)
                 Write(val.Length);
-            Write(val, length: val.Length);
+
+            Write(val, 0, val.Length);
         }
 
         public void Write(byte[] data, int offset = 0, int length = -1)
         {
-            if (!isPacked || _bitOffsetPosition == 0)
+            if (!isPacked || bitOffset == 0)
             {
                 if (length < 0)
                     length = data.Length;
+
                 if (position + length > _buffer.Length)
                     resize(position + length);
+
                 Array.Copy(data, offset, buffer, position, length);
                 position += length;
+
+                //            for (int i = 0; i < length; i++)
+                //{
+                //                _buffer[position] = data[offset + i];
+                //	position += 1;
+                //}
             }
             else
                 WritePacked(data);
@@ -786,153 +1157,250 @@ namespace DuckGame
         public void Write(string val)
         {
             if (TokenSerializer.instance != null)
-            {
                 WriteTokenizedString(val);
-            }
             else
             {
-                byte[] bytes = Encoding.UTF8.GetBytes(val);
-                if (_bitOffsetPosition != 0)
+                byte[] stringData = System.Text.Encoding.UTF8.GetBytes(val);
+                if (bitOffset != 0)
                 {
-                    Write((ushort)bytes.Length);
-                    WritePacked(bytes);
+                    Write((ushort)stringData.Count());
+                    WritePacked(stringData);
                 }
                 else
                 {
-                    int val1 = bytes.Length;
-                    if (val1 > ushort.MaxValue)
+                    int len = stringData.Count();
+                    if (len > ushort.MaxValue)
                     {
                         Write(ushort.MaxValue);
                         Write((ushort)42252);
-                        Write(val1);
+                        Write(len);
                     }
                     else
-                        Write((ushort)bytes.Length);
-                    int num = bytes.Length;
-                    if (position + num > _buffer.Length)
-                        resize(position + num);
-                    bytes.CopyTo(_buffer, position);
-                    position += num;
+                        Write((ushort)stringData.Count());
+
+                    int size = stringData.Count();
+                    if (position + size > _buffer.Count())
+                        resize(position + size);
+                    stringData.CopyTo(_buffer, position);
+                    position += size;
                 }
             }
         }
 
+
         public void Write(long val)
         {
-            byte[] bytes = BitConverter.GetBytes(val);
-            if (_bitOffsetPosition != 0)
+            if (bitOffset != 0)
             {
-                WritePacked(bytes);
+                unsafe
+                {
+                    ulong* pi = (ulong*)&val;
+                    WritePacked(pi[0], sizeof(ulong) * 8);
+                }
             }
             else
             {
-                byte num = (byte)bytes.Length;
-                if (position + num > _buffer.Length)
-                    resize(position + num);
-                bytes.CopyTo(_buffer, position);
-                position += bytes.Length;
+                byte size = sizeof(ulong);
+                if (_offsetPosition + size > _buffer.Length)
+                    resize(_offsetPosition + size);
+
+                unsafe
+                {
+                    fixed (byte* pRawData = _buffer)
+                    {
+                        byte* pi = (byte*)&val;
+                        pRawData[_offsetPosition] = pi[0];
+                        pRawData[_offsetPosition + 1] = pi[1];
+                        pRawData[_offsetPosition + 2] = pi[2];
+                        pRawData[_offsetPosition + 3] = pi[3];
+                        pRawData[_offsetPosition + 4] = pi[4];
+                        pRawData[_offsetPosition + 5] = pi[5];
+                        pRawData[_offsetPosition + 6] = pi[6];
+                        pRawData[_offsetPosition + 7] = pi[7];
+                        position += size;
+                    }
+                }
             }
         }
 
         public void Write(ulong val)
         {
-            byte[] bytes = BitConverter.GetBytes(val);
-            if (_bitOffsetPosition != 0)
-            {
-                WritePacked(bytes);
-            }
+            if (bitOffset != 0)
+                WritePacked(val, sizeof(ulong) * 8);
             else
             {
-                byte num = (byte)bytes.Length;
-                if (position + num > _buffer.Length)
-                    resize(position + num);
-                bytes.CopyTo(_buffer, position);
-                position += bytes.Length;
+                byte size = sizeof(ulong);
+                if (_offsetPosition + size > _buffer.Length)
+                    resize(_offsetPosition + size);
+
+                unsafe
+                {
+                    fixed (byte* pRawData = _buffer)
+                    {
+                        byte* pi = (byte*)&val;
+                        pRawData[_offsetPosition] = pi[0];
+                        pRawData[_offsetPosition + 1] = pi[1];
+                        pRawData[_offsetPosition + 2] = pi[2];
+                        pRawData[_offsetPosition + 3] = pi[3];
+                        pRawData[_offsetPosition + 4] = pi[4];
+                        pRawData[_offsetPosition + 5] = pi[5];
+                        pRawData[_offsetPosition + 6] = pi[6];
+                        pRawData[_offsetPosition + 7] = pi[7];
+                        position += size;
+                    }
+                }
             }
         }
 
         public void Write(int val)
         {
-            byte[] bytes = BitConverter.GetBytes(val);
-            if (_bitOffsetPosition != 0)
+            if (bitOffset != 0)
             {
-                WritePacked(bytes);
+                unsafe
+                {
+                    ulong* pi = (ulong*)&val;
+                    WritePacked(pi[0], sizeof(int) * 8);
+                }
             }
             else
             {
-                byte num = (byte)bytes.Length;
-                if (position + num > _buffer.Length)
-                    resize(position + num);
-                bytes.CopyTo(_buffer, position);
-                position += bytes.Length;
+                byte size = sizeof(uint);
+                if (_offsetPosition + size > _buffer.Length)
+                    resize(_offsetPosition + size);
+
+                unsafe
+                {
+                    fixed (byte* pRawData = _buffer)
+                    {
+                        byte* pi = (byte*)&val;
+                        pRawData[_offsetPosition] = pi[0];
+                        pRawData[_offsetPosition + 1] = pi[1];
+                        pRawData[_offsetPosition + 2] = pi[2];
+                        pRawData[_offsetPosition + 3] = pi[3];
+                        position += size;
+                    }
+                }
             }
         }
 
         public void Write(uint val)
         {
-            byte[] bytes = BitConverter.GetBytes(val);
-            if (_bitOffsetPosition != 0)
+            if (bitOffset != 0)
             {
-                WritePacked(bytes);
+                unsafe
+                {
+                    ulong* pi = (ulong*)&val;
+                    WritePacked(pi[0], sizeof(uint) * 8);
+                }
             }
             else
             {
-                byte num = (byte)bytes.Length;
-                if (position + num > _buffer.Length)
-                    resize(position + num);
-                bytes.CopyTo(_buffer, position);
-                position += bytes.Length;
+                byte size = sizeof(uint);
+                if (_offsetPosition + size > _buffer.Length)
+                    resize(_offsetPosition + size);
+
+                unsafe
+                {
+                    fixed (byte* pRawData = _buffer)
+                    {
+                        byte* pi = (byte*)&val;
+                        pRawData[_offsetPosition] = pi[0];
+                        pRawData[_offsetPosition + 1] = pi[1];
+                        pRawData[_offsetPosition + 2] = pi[2];
+                        pRawData[_offsetPosition + 3] = pi[3];
+                        position += size;
+                    }
+                }
             }
         }
 
         public void Write(short val)
         {
-            byte[] bytes = BitConverter.GetBytes(val);
-            if (_bitOffsetPosition != 0)
+            if (bitOffset != 0)
             {
-                WritePacked(bytes);
+                unsafe
+                {
+                    ulong* pi = (ulong*)&val;
+                    WritePacked(pi[0], sizeof(short) * 8);
+                }
             }
             else
             {
-                byte num = (byte)bytes.Length;
-                if (position + num > _buffer.Length)
-                    resize(position + num);
-                bytes.CopyTo(_buffer, position);
-                position += bytes.Length;
+                byte size = sizeof(short);
+                if (_offsetPosition + size > _buffer.Length)
+                    resize(_offsetPosition + size);
+
+                unsafe
+                {
+                    fixed (byte* pRawData = _buffer)
+                    {
+                        byte* pi = (byte*)&val;
+                        pRawData[_offsetPosition] = pi[0];
+                        pRawData[_offsetPosition + 1] = pi[1];
+                        position += size;
+                    }
+                }
             }
         }
 
         public void Write(ushort val)
         {
-            byte[] bytes = BitConverter.GetBytes(val);
-            if (_bitOffsetPosition != 0)
+            if (bitOffset != 0)
             {
-                WritePacked(bytes);
+                unsafe
+                {
+                    ulong* pi = (ulong*)&val;
+                    WritePacked(pi[0], sizeof(ushort) * 8);
+                }
             }
             else
             {
-                byte num = (byte)bytes.Length;
-                if (position + num > _buffer.Length)
-                    resize(position + num);
-                bytes.CopyTo(_buffer, position);
-                position += bytes.Length;
+                byte size = sizeof(ushort);
+                if (_offsetPosition + size > _buffer.Length)
+                    resize(_offsetPosition + size);
+
+                unsafe
+                {
+                    fixed (byte* pRawData = _buffer)
+                    {
+                        byte* pi = (byte*)&val;
+                        pRawData[_offsetPosition] = pi[0];
+                        pRawData[_offsetPosition + 1] = pi[1];
+                        position += size;
+                    }
+                }
             }
         }
 
+
         public void Write(float val)
         {
-            byte[] bytes = BitConverter.GetBytes(val);
-            if (_bitOffsetPosition != 0)
+            if (bitOffset != 0)
             {
-                WritePacked(bytes);
+                unsafe
+                {
+                    uint* pi = (uint*)&val;
+                    WritePacked(pi[0], sizeof(float) * 8);
+                }
             }
             else
             {
-                byte num = (byte)bytes.Length;
-                if (position + num > _buffer.Length)
-                    resize(position + num);
-                bytes.CopyTo(_buffer, position);
-                position += bytes.Length;
+                byte size = sizeof(float);
+                if (_offsetPosition + size > _buffer.Length)
+                    resize(_offsetPosition + size);
+
+                unsafe
+                {
+                    fixed (byte* pRawData = _buffer)
+                    {
+                        byte* pi = (byte*)&val;
+                        pRawData[_offsetPosition] = pi[0];
+                        pRawData[_offsetPosition + 1] = pi[1];
+                        pRawData[_offsetPosition + 2] = pi[2];
+                        pRawData[_offsetPosition + 3] = pi[3];
+                        position += size;
+                    }
+                }
             }
         }
 
@@ -959,74 +1427,103 @@ namespace DuckGame
 
         public void Write(double val)
         {
-            byte[] bytes = BitConverter.GetBytes(val);
-            if (_bitOffsetPosition != 0)
+            if (bitOffset != 0)
             {
-                WritePacked(bytes);
+                unsafe
+                {
+                    ulong* pi = (ulong*)&val;
+                    WritePacked(pi[0], sizeof(double) * 8);
+                }
             }
             else
             {
-                byte num = (byte)bytes.Length;
-                if (position + num > _buffer.Length)
-                    resize(position + num);
-                bytes.CopyTo(_buffer, position);
-                position += bytes.Length;
+                byte size = sizeof(double);
+                if (_offsetPosition + size > _buffer.Length)
+                    resize(_offsetPosition + size);
+
+                unsafe
+                {
+                    fixed (byte* pRawData = _buffer)
+                    {
+                        byte* pi = (byte*)&val;
+                        pRawData[_offsetPosition] = pi[0];
+                        pRawData[_offsetPosition + 1] = pi[1];
+                        pRawData[_offsetPosition + 2] = pi[2];
+                        pRawData[_offsetPosition + 3] = pi[3];
+                        pRawData[_offsetPosition + 4] = pi[4];
+                        pRawData[_offsetPosition + 5] = pi[5];
+                        pRawData[_offsetPosition + 6] = pi[6];
+                        pRawData[_offsetPosition + 7] = pi[7];
+                        position += size;
+                    }
+                }
             }
         }
 
         public void Write(char val)
         {
-            byte[] bytes = BitConverter.GetBytes(val);
-            if (_bitOffsetPosition != 0)
-            {
-                WritePacked(bytes);
-            }
+            if (bitOffset != 0)
+                WritePacked((ulong)val, sizeof(char) * 8);
             else
             {
-                byte num = (byte)bytes.Length;
-                if (position + num > _buffer.Length)
-                    resize(position + num);
-                bytes.CopyTo(_buffer, position);
-                position += bytes.Length;
+                byte size = sizeof(char);
+                if (_offsetPosition + size > _buffer.Length)
+                    resize(_offsetPosition + size);
+
+                unsafe
+                {
+                    fixed (byte* pRawData = _buffer)
+                    {
+                        byte* pi = (byte*)&val;
+                        pRawData[_offsetPosition] = pi[0];
+                        pRawData[_offsetPosition + 1] = pi[1];
+                        position += size;
+                    }
+                }
             }
         }
 
         public void Write(byte val)
         {
-            if (_bitOffsetPosition != 0)
-            {
+            if (bitOffset != 0)
                 WritePacked(val, 8);
-            }
             else
             {
-                if (position + 1 > _buffer.Length)
+                if (position + 1 > _buffer.Count())
                     resize(position + 1);
+
                 _buffer[position] = val;
-                ++position;
+                position += 1;
             }
         }
 
         public void Write(sbyte val)
         {
-            if (_bitOffsetPosition != 0)
+            if (bitOffset != 0)
             {
-                WritePacked(val, 8);
+                unsafe
+                {
+                    ulong* pi = (ulong*)&val;
+                    WritePacked(pi[0], sizeof(sbyte) * 8);
+                }
             }
             else
             {
-                if (position + 1 > _buffer.Length)
+                if (position + 1 > _buffer.Count())
                     resize(position + 1);
+
                 _buffer[position] = (byte)val;
-                ++position;
+                position += 1;
             }
         }
+
 
         public void Write(bool val)
         {
             if (_allowPacking)
-                WritePacked(val ? 1 : 0, 1);
+                WritePacked(val ? (uint)1 : 0, 1);
             else
-                Write(val ? (byte)1 : (byte)0);
+                Write((byte)(val ? 1 : 0));
         }
 
         public void WriteProfile(Profile pValue)
@@ -1039,147 +1536,170 @@ namespace DuckGame
 
         public Profile ReadProfile()
         {
-            sbyte index = ReadSByte();
-            Profile profile = null;
-            if (index >= 0 && index < DuckNetwork.profiles.Count)
-                profile = DuckNetwork.profiles[index];
-            return profile;
+            sbyte idx = ReadSByte();
+            Profile p = null;
+            if (idx >= 0 && idx < DuckNetwork.profiles.Count)
+                p = DuckNetwork.profiles[idx];
+
+            return p;
         }
 
         public void WriteTeam(Team pValue)
         {
-            int val = -1;
+            int teamSel = -1;
             if (pValue != null)
-                val = Teams.IndexOf(pValue);
-            Write((ushort)val);
+                teamSel = Teams.IndexOf(pValue);
+
+            Write((ushort)teamSel);
         }
 
-        public Team ReadTeam() => Teams.ParseFromIndex(ReadUShort());
+        public Team ReadTeam()
+        {
+            return Teams.ParseFromIndex(ReadUShort());
+        }
+
+        public static List<Type> kTypeIndexList = new List<Type>()
+        {
+            typeof(string),
+            typeof(byte[]),
+            typeof(BitBuffer),
+            typeof(float),
+            typeof(double),
+            typeof(byte),
+            typeof(sbyte),
+            typeof(bool),
+            typeof(short),
+            typeof(ushort),
+            typeof(int),
+            typeof(uint),
+            typeof(long),
+            typeof(ulong),
+            typeof(char),
+            typeof(Vec2),
+            typeof(Color),
+            typeof(NetIndex16),
+            typeof(NetIndex2),
+            typeof(NetIndex4),
+            typeof(NetIndex8),
+            typeof(Thing)
+        };
 
         public void WriteObject(object obj)
         {
-            int val = byte.MaxValue;
+            int idx = 255;
             if (obj != null)
-                val = !(obj is Thing) ? kTypeIndexList.IndexOf(obj.GetType()) : kTypeIndexList.IndexOf(typeof(Thing));
-            if (val < 0)
-                throw new Exception("Trying to write unsupported type to BitBuffer through WriteObject!");
-            Write((byte)val);
+            {
+                if (obj is Thing)
+                    idx = kTypeIndexList.IndexOf(typeof(Thing));
+                else
+                    idx = kTypeIndexList.IndexOf(obj.GetType());
+            }
+            if (idx < 0)
+                throw (new Exception("Trying to write unsupported type to BitBuffer through WriteObject!"));
+
+            Write((byte)idx);
             Write(obj);
         }
 
         public object ReadObject(out Type pTypeRead)
         {
-            byte index = ReadByte();
-            if (index == byte.MaxValue || index >= kTypeIndexList.Count)
+            byte typeByte = ReadByte();
+            if (typeByte == 255 || typeByte >= kTypeIndexList.Count)
             {
                 pTypeRead = typeof(Thing);
                 return null;
             }
-            pTypeRead = kTypeIndexList[index];
+
+            pTypeRead = kTypeIndexList[typeByte];
             return Read(pTypeRead);
         }
 
         public void Write(object obj)
         {
-            switch (obj)
+            if (obj is string)
+                Write((string)obj);
+            else if (obj is byte[])
+                Write((byte[])obj, true);
+            else if (obj is BitBuffer)
+                Write(obj as BitBuffer);
+            else if (obj is float)
+                Write((float)obj);
+            else if (obj is double)
+                Write((double)obj);
+            else if (obj is byte)
+                Write((byte)obj);
+            else if (obj is sbyte)
+                Write((sbyte)obj);
+            else if (obj is bool)
+                Write((bool)obj);
+            else if (obj is short)
+                Write((short)obj);
+            else if (obj is ushort)
+                Write((ushort)obj);
+            else if (obj is int)
+                Write((int)obj);
+            else if (obj is uint)
+                Write((uint)obj);
+            else if (obj is long)
+                Write((long)obj);
+            else if (obj is ulong)
+                Write((ulong)obj);
+            else if (obj is char)
+                Write((char)obj);
+            else if (obj is Vec2)
+                Write((Vec2)obj);
+            else if (obj is Color)
+                Write((Color)obj);
+            else if (obj is NetIndex16)
+                Write((ushort)(int)((NetIndex16)obj));
+            else if (obj is NetIndex2)
+                WritePacked((int)((NetIndex2)obj), 2);
+            else if (obj is NetIndex4)
+                WritePacked((int)((NetIndex4)obj), 4);
+            else if (obj is NetIndex8)
+                WritePacked((int)((NetIndex8)obj), 8);
+            else if (obj is Thing)
             {
-                case string _:
-                    Write((string)obj);
-                    break;
-                case byte[] _:
-                    Write((byte[])obj, 0, -1);
-                    break;
-                case BitBuffer _:
-                    Write(obj as BitBuffer, true);
-                    break;
-                case float val1:
-                    Write(val1);
-                    break;
-                case double val2:
-                    Write(val2);
-                    break;
-                case byte val3:
-                    Write(val3);
-                    break;
-                case sbyte val4:
-                    Write(val4);
-                    break;
-                case bool val5:
-                    Write(val5);
-                    break;
-                case short val6:
-                    Write(val6);
-                    break;
-                case ushort val7:
-                    Write(val7);
-                    break;
-                case int val8:
-                    Write(val8);
-                    break;
-                case uint val9:
-                    Write(val9);
-                    break;
-                case long val10:
-                    Write(val10);
-                    break;
-                case ulong val11:
-                    Write(val11);
-                    break;
-                case char val12:
-                    Write(val12);
-                    break;
-                case Vec2 val13:
-                    Write(val13);
-                    break;
-                case Color val14:
-                    Write(val14);
-                    break;
-                case NetIndex16 val15:
-                    Write((ushort)(int)val15);
-                    break;
-                case NetIndex2 number1:
-                    WritePacked((int)number1, 2);
-                    break;
-                case NetIndex4 number2:
-                    WritePacked((int)number2, 4);
-                    break;
-                case NetIndex8 number3:
-                    WritePacked((int)number3, 8);
-                    break;
-                case Thing _:
-                    if (!(obj as Thing).isStateObject && (obj as Thing).specialSyncIndex == 0 || (obj as Thing).level == null)
+                if (((obj as Thing).isStateObject == false && (obj as Thing).specialSyncIndex == 0) || (obj as Thing).level == null)
+                {
+                    if ((obj as Thing).level != null && MonoMain.modDebugging)
                     {
-                        if ((obj as Thing).level != null && MonoMain.modDebugging)
-                        {
-                            DevConsole.Log(DCSection.NetCore, "@error |DGRED|!!BitBuffer.Write() - " + obj.GetType().Name + " is not a State Object (isStateObject == false), it has no StateBindings and cannot be written to a Bitbuffer.");
-                            DevConsole.Log(DCSection.NetCore, "@error |DGRED|!!Are you sending a NetMessage with a non GhostObject member variable?");
-                        }
-                        Write((object)null);
-                        break;
+                        DevConsole.Log(DCSection.NetCore, "@error |DGRED|!!BitBuffer.Write() - " + obj.GetType().Name + " is not a State Object (isStateObject == false), it has no StateBindings and cannot be written to a Bitbuffer.");
+                        DevConsole.Log(DCSection.NetCore, "@error |DGRED|!!Are you sending a NetMessage with a non GhostObject member variable?");
                     }
+
+                    //Fail gracefully this time
+                    Write((object)null);
+                }
+                else
+                {
                     Write((obj as Thing).level.networkIndex);
                     if ((obj as Thing).isStateObject)
                     {
-                        WritePacked(Editor.IDToType[(obj as Thing).GetType()], 10);
-                        GhostObject ghostObject = GhostManager.context.MakeGhostLater(obj as Thing);
-                        Write((ushort)(int)ghostObject.ghostObjectIndex);
-                        if (ghostObject.thing.connection != null)
-                            break;
-                        ghostObject.thing.connection = DuckNetwork.localConnection;
-                        break;
+                        WritePacked((int)Editor.IDToType[(obj as Thing).GetType()], 10);
+                        GhostObject g = GhostManager.context.MakeGhostLater(obj as Thing);
+                        Write((ushort)(int)(g.ghostObjectIndex));
+
+                        if (g.thing.connection == null)
+                            g.thing.connection = DuckNetwork.localConnection;
                     }
-                    WritePacked(0, 10);
-                    Write((obj as Thing).specialSyncIndex);
-                    GhostManager.context.MapSpecialSync(obj as Thing, (obj as Thing).specialSyncIndex);
-                    break;
-                case null:
-                    Write(DuckNetwork.levelIndex);
-                    WritePacked(0, 10);
-                    Write((ushort)0);
-                    break;
-                default:
-                    throw new Exception("Trying to write unsupported type " + obj.GetType()?.ToString() + " to BitBuffer!");
+                    else
+                    {
+                        WritePacked((int)0, 10);
+                        Write((ushort)(int)((obj as Thing).specialSyncIndex));
+                        GhostManager.context.MapSpecialSync((obj as Thing), (obj as Thing).specialSyncIndex);
+                    }
+                }
             }
+            else if (obj == null)
+            {
+                Write(DuckNetwork.levelIndex);
+                WritePacked((ushort)0, 10);
+                Write((ushort)0);
+                //Write((byte)0);
+            }
+            else
+                throw (new Exception("Trying to write unsupported type " + obj.GetType() + " to BitBuffer!"));
         }
 
         public void WriteBits(object obj, int bits)
@@ -1192,12 +1712,14 @@ namespace DuckGame
 
         private void resize(int bytes)
         {
-            int length = _buffer.Length * 2;
-            while (length < bytes)
-                length *= 2;
-            byte[] numArray = new byte[length];
-            _buffer.CopyTo(numArray, 0);
-            _buffer = numArray;
+            //Always double size
+            int reqBytes = _buffer.Count() * 2;
+            while (reqBytes < bytes)
+                reqBytes *= 2;
+
+            byte[] newBytes = new byte[reqBytes];
+            _buffer.CopyTo(newBytes, 0);
+            _buffer = newBytes;
         }
 
         public void Clear()

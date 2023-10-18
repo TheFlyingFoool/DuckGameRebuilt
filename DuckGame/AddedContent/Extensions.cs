@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 using System.Collections;
 using System.Linq;
 using System.Text;
@@ -106,6 +107,37 @@ namespace DuckGame
 
             return subclasses;
         }
+        
+        public static void TryAdd<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TKey key, TValue value)
+        {
+            if (!dictionary.ContainsKey(key))
+            {
+                dictionary.Add(key, value);
+            }
+        }
+
+        public static List<Type> GetSubclassesList(Type t)
+        {
+            List<Type> subclasses = new List<Type>();
+            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                try
+                {
+                    foreach (Type type in assembly.GetTypes())
+                    {
+                        if (type.IsSubclassOf(t))
+                        {
+                            subclasses.Add(type);
+                        }
+                    }
+                }
+                catch
+                {
+                }
+            }
+
+            return subclasses;
+        }
 
         public static List<T> GetListOfThings<T>()
         {
@@ -150,7 +182,7 @@ namespace DuckGame
             return enumerable.ElementAt(index);
         }
 
-        [DevConsoleCommand(Name = "playvgm")]
+        [Marker.DevConsoleCommand(Name = "playvgm")]
         public static void PlayVGM()
         {
             VGMSong vs = new VGMSong(DuckFile.contentDirectory + "/Audio/test.vgm");
@@ -158,7 +190,7 @@ namespace DuckGame
             vs.looped = false;
         }
 
-        [DevConsoleCommand(Name = "playvgz")]
+        [Marker.DevConsoleCommand(Name = "playvgz")]
         public static void PlayVGZ()
         {
             VGMSong vs = new VGMSong(DuckFile.contentDirectory + "/Audio/test.vgz");
@@ -166,7 +198,7 @@ namespace DuckGame
             vs.looped = false;
         }
 
-        [DevConsoleCommand(Name = "playdgm")]
+        [Marker.DevConsoleCommand(Name = "playdgm")]
         public static void PlayDGM()
         {
             DGMSong vs = new DGMSong("Content/Audio/test.dgm");

@@ -156,10 +156,10 @@ namespace DuckGame
             {
                 switch (pipetype)
                 {
-                    case DuckGame.PipeBlue:
+                    case PipeBlue:
                         editorCycleType = typeof(PipeRed);
                         break;
-                    case DuckGame.PipeRed:
+                    case PipeRed:
                         editorCycleType = typeof(PipeGreen);
                         break;
                     case PipeGreen:

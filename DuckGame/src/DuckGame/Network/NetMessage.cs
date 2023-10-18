@@ -78,53 +78,108 @@ namespace DuckGame
 
         public virtual void OnDeserialize(BitBuffer msg)
         {
+            Main.SpecialCode2 = "hyp 10";
             foreach (FieldInfo field in getFields())
             {
                 if (field.FieldType == typeof(string))
+                {
+                    Main.SpecialCode2 = "hyp 101";
                     field.SetValue(this, msg.ReadString());
+                }
                 else if (field.FieldType == typeof(float))
+                {
+                    Main.SpecialCode2 = "hyp 102";
                     field.SetValue(this, msg.ReadFloat());
+                }
                 else if (field.FieldType == typeof(bool) && field.Name != "activated" && field.Name != "queued")
+                {
+                    Main.SpecialCode2 = "hyp 103";
                     field.SetValue(this, msg.ReadBool());
+                }
                 else if (field.FieldType == typeof(byte))
+                {
+                    Main.SpecialCode2 = "hyp 104";
                     field.SetValue(this, msg.ReadByte());
+                }
                 else if (field.FieldType == typeof(sbyte))
+                {
+                    Main.SpecialCode2 = "hyp 105";
                     field.SetValue(this, msg.ReadSByte());
+                }
                 else if (field.FieldType == typeof(double))
+                {
+                    Main.SpecialCode2 = "hyp 106";
                     field.SetValue(this, msg.ReadDouble());
+                }
                 else if (field.FieldType == typeof(int))
+                {
+                    Main.SpecialCode2 = "hyp 107";
                     field.SetValue(this, msg.ReadInt());
+                }
                 else if (field.FieldType == typeof(ulong))
+                {
+                    Main.SpecialCode2 = "hyp 108";
                     field.SetValue(this, msg.ReadULong());
+                }
                 else if (field.FieldType == typeof(uint))
+                {
+                    Main.SpecialCode2 = "hyp 109";
                     field.SetValue(this, msg.ReadUInt());
+                }
                 else if (field.FieldType == typeof(ushort) && field.Name != "order" && field.Name != "typeIndex")
+                {
+                    Main.SpecialCode2 = "hyp 110";
                     field.SetValue(this, msg.ReadUShort());
+                }
                 else if (field.FieldType == typeof(short))
+                {
+                    Main.SpecialCode2 = "hyp 111";
                     field.SetValue(this, msg.ReadShort());
+                }
                 else if (field.FieldType == typeof(NetIndex4) && field.Name != "session")
+                {
+                    Main.SpecialCode2 = "hyp 112";
                     field.SetValue(this, msg.ReadNetIndex4());
+                }
                 else if (field.FieldType == typeof(NetIndex16))
+                {
+                    Main.SpecialCode2 = "hyp 113";
                     field.SetValue(this, msg.ReadNetIndex16());
+                }
                 else if (field.FieldType == typeof(Vec2))
+                {
+                    Main.SpecialCode2 = "hyp 114";
                     field.SetValue(this, new Vec2()
                     {
                         x = msg.ReadFloat(),
                         y = msg.ReadFloat()
                     });
+                }
                 else if (field.FieldType == typeof(Profile))
+                {
+                    Main.SpecialCode2 = "hyp 115";
                     field.SetValue(this, msg.ReadProfile());
+                }
                 else if (field.FieldType == typeof(Team))
+                {
+                    Main.SpecialCode2 = "hyp 116";
                     field.SetValue(this, msg.ReadTeam());
+                }
                 else if (typeof(Thing).IsAssignableFrom(field.FieldType))
                 {
+                    Main.SpecialCode2 = "hyp 1010";
                     Thing thing = msg.ReadThing(field.FieldType);
+                    Main.SpecialCode2 = "hyp 1011";
                     if (thing == null || field.FieldType.IsAssignableFrom(thing.GetType()))
+                    {
+                        Main.SpecialCode2 = "hyp 1012";
                         field.SetValue(this, thing);
+                    }
                     else
                         DevConsole.Log("|DGRED|NetMessage.OnDeserialize invalid assignment (" + field.FieldType.Name + " = " + thing.GetType().Name + ")");
                 }
             }
+            Main.SpecialCode2 = "hyp 11";
         }
 
         public BitBuffer Serialize()

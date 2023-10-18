@@ -5,6 +5,8 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using System.Reflection;
+
 namespace DuckGame
 {
     public class ContextObject : ContextMenu
@@ -17,37 +19,73 @@ namespace DuckGame
 
         public Thing thing => _thing;
 
-        public ContextObject(Thing thing, IContextListener owner, bool placement = true)
-          : base(owner)
+        public ContextObject(Thing thing, IContextListener owner, bool placement = true) : base(owner)
         {
             _placement = placement;
             _thing = thing;
-            _image = thing.GeneratePreview(16, 16, true);
-            itemSize.y = 16f;
+
+            if (owner is EditorGroupMenu)
+                _previewWidth = (owner as EditorGroupMenu).widestPreview;
+            else
+                _previewWidth = thing.GetEditorPreviewWidth();
+
+            _image = thing.GeneratePreview(_previewWidth, 16, true);
+
+
+            //imageOnly = true;
+            itemSize.y = 16;
             _text = thing.editorName;
-            itemSize.x = Graphics.GetFancyStringWidth(_text) + 26f;
+
+            bool cc = thing.GetType().GetCustomAttribute<ClientOnlyAttribute>() != null;
+            if (cc)
+            {
+                _text = text + " @DGR@";
+            }
+
+            if (imageOnly)
+                itemSize.x = 4 + _previewWidth;
+            else
+                itemSize.x = Graphics.GetFancyStringWidth(_text) + 10 + _previewWidth;
+
             _thingBag = ContentProperties.GetBag(thing.GetType());
-            //if (Main.isDemo && !this._thingBag.GetOrDefault("isInDemo", false))
-            //    this.greyOut = true;
-            //else
-            greyOut = false;
+
+            if (Main.isDemo && !_thingBag.GetOrDefault("isInDemo", false))
+                greyOut = true;
+            else
+                greyOut = false;
+
+            tooltip = thing.editorTooltip;
+            if (cc)
+            { 
+                tooltip = "(DGR ONLY) " + tooltip;
+            }
+
             if (_thingBag.GetOrDefault("previewPriority", false))
                 _previewPriority = true;
-            tooltip = thing.editorTooltip;
+
             if (!_thingBag.GetOrDefault("isOnlineCapable", true))
-                tooltip = "(OFFLINE ONLY) " + tooltip;
-            int placementCost = Editor.CalculatePlacementCost(thing);
-            bool flag = false;
-            if (placementCost > 0 && Editor.placementLimit > 0)
             {
-                tooltip = "(" + placementCost.ToString() + " @EDITORCURRENCY@) " + tooltip;
-                flag = true;
+                tooltip = "(OFFLINE ONLY) " + tooltip;
             }
+
+
+            int thingCost = Editor.CalculatePlacementCost(thing);
+            bool cost = false;
+            if (thingCost > 0 && Editor.placementLimit > 0)
+            {
+                tooltip = "(" + thingCost + " @EDITORCURRENCY@) " + tooltip;
+                cost = true;
+            }
+
             if (tooltip == null)
                 tooltip = "";
-            if (!(tooltip != "" | flag))
-                return;
-            tooltip = thing.editorName + ": " + tooltip;
+
+            if (tooltip != "" || cost)
+            {
+                tooltip = thing.editorName + ": " + tooltip;
+            }
+
+
         }
 
         public override void Selected()
@@ -94,34 +132,42 @@ namespace DuckGame
 
         public override void Draw()
         {
-            ++_framesSinceSelected;
+            _framesSinceSelected++;
+
             if (_hover && !greyOut)
                 Graphics.DrawRect(position, position + itemSize, new Color(70, 70, 70), depth + 1);
+
+
             if (scrollButtonDirection != 0)
             {
                 _arrow.depth = depth + 2;
                 if (scrollButtonDirection > 0)
                 {
                     _arrow.flipV = true;
-                    Graphics.Draw(_arrow, position.x + (_owner as ContextMenu).menuSize.x / 2f, position.y + 8f);
+                    Graphics.Draw(_arrow, position.x + ((_owner as ContextMenu).menuSize.x / 2), position.y + 8);
                 }
                 else
                 {
                     _arrow.flipV = false;
-                    Graphics.Draw(_arrow, position.x + (_owner as ContextMenu).menuSize.x / 2f, position.y + 8f);
+                    Graphics.Draw(_arrow, position.x + ((_owner as ContextMenu).menuSize.x / 2), position.y + 8);
                 }
             }
             else
             {
-                Color color = Color.White;
+                Color c = Color.White;
                 if (greyOut)
-                    color = Color.White * 0.3f;
-                Graphics.DrawFancyString(_text, position + new Vec2(22f, 4f), color, depth + 2);
+                    c = Color.White * 0.3f;
+
+                if (!imageOnly)
+                    Graphics.DrawFancyString(_text, position + new Vec2(6 + _previewWidth, 4), c, depth + 2);
+
+                //Graphics.Draw(_contextArrow, x + itemSize.x - 11, y + 3, 0.8f);
+
                 _image.depth = depth + 3;
-                _image.x = x + 1f;
+                _image.x = x + 1;
                 _image.y = y;
-                _image.color = color;
-                _image.scale = new Vec2(1f);
+                _image.color = c;
+                _image.scale = new DuckGame.Vec2(1.0f);
                 _image.Draw();
             }
         }

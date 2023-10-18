@@ -5,7 +5,7 @@ using System.IO;
 
 namespace DuckGame
 {
-    public class MaterialLavaWobble : Material
+    public class MaterialLavaWobble : FullscreenMaterial
     {
         public MaterialLavaWobble(FluidPuddle thing)
         {
@@ -60,7 +60,7 @@ namespace DuckGame
             //Graphics.device.Textures[0] = thing.graphic.texture;
             //Graphics.device.Textures[1] = thing.graphic.texture;
             Graphics.device.SamplerStates[1] = SamplerState.PointClamp;
-            foreach (EffectPass effectPass in this._effect.effect.CurrentTechnique.Passes)
+            foreach (EffectPass effectPass in _effect.effect.CurrentTechnique.Passes)
             {
                 effectPass.Apply();
             }

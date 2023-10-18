@@ -31,7 +31,7 @@ namespace XnaToFna
             };
         }
 
-        public static SerializationBinder get_Binder(this BinaryFormatter self) => (self.Binder is BinaryFormatterHelper.XnaToFnaSerializationBinderWrapper binder ? binder.Inner : null) ?? self.Binder;
+        public static SerializationBinder get_Binder(this BinaryFormatter self) => (self.Binder is XnaToFnaSerializationBinderWrapper binder ? binder.Inner : null) ?? self.Binder;
 
         public static void set_Binder(this BinaryFormatter self, SerializationBinder binder) => self.Binder = new XnaToFnaSerializationBinderWrapper(binder);
 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Stuff")]
+    [EditorGroup("Spawns")]
     public class PinkBox : Block
     {
         public bool canBounce
@@ -17,7 +17,7 @@ namespace DuckGame
         }
         public PinkBox(float xpos, float ypos) : base(xpos, ypos)
         {
-            _sprite = new SpriteMap("pinkbox", 16, 16); // im cool with this box, im not
+            _sprite = new SpriteMap("pinkbox", 16, 16); // im cool with this box -YupDanielThatsMe, im not -??? the mistery man
             graphic = _sprite;
             layer = Layer.Foreground;
             center = new Vec2(8f, 8f);
@@ -170,7 +170,7 @@ namespace DuckGame
         public bool collision;
         public override void Update()
         {
-            if (d != null && d.isServerForObject)
+            if (d != null && (!Network.isActive || (d.profile != null && d.profile.connection == DuckNetwork.localConnection)))
             {
                 Fondle(this);
                 //Failsafe for if multiple people happen to hit the box it explodes
@@ -181,8 +181,8 @@ namespace DuckGame
                 }
                 if (d.dead)
                 {
-                    Fondle(this);
                     UnstoppableFondle(d, DuckNetwork.localConnection);
+                    UnstoppableFondle(this, DuckNetwork.localConnection);
                     d.Ressurect();
                     if (d._cooked != null) d.position = position;
                     if (d.onFire)

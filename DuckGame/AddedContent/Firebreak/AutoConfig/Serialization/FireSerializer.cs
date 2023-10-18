@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace DuckGame
             if (obj is Enum @enum)
                 return @enum.ToString();
 
-            foreach (IFireSerializerModule serializerModule in FireSerializerModuleAttribute.Serializers)
+            foreach (IFireSerializerModule serializerModule in Marker.FireSerializerAttribute.Serializers)
             {
                 if (!serializerModule.CanSerialize(type))
                     continue;
@@ -56,7 +57,7 @@ namespace DuckGame
             if (type.InheritsFrom(typeof(Enum)))
                 return Enum.Parse(type, str, true);
 
-            if (FireSerializerModuleAttribute.Serializers
+            if (Marker.FireSerializerAttribute.Serializers
                 .TryFirst(x => x.CanSerialize(type),
                     out IFireSerializerModule serializer))
                 return serializer.Deserialize(str);
@@ -75,7 +76,7 @@ namespace DuckGame
 
         public static bool IsSerializable(Type type)
         {
-            return FireSerializerModuleAttribute.Serializers.Any(x => x.CanSerialize(type))
+            return Marker.FireSerializerAttribute.Serializers.Any(x => x.CanSerialize(type))
                    || type.IsPrimitive
                    || type.InheritsFrom(typeof(Enum))
                    || type.InheritsFrom(typeof(IEnumerable));

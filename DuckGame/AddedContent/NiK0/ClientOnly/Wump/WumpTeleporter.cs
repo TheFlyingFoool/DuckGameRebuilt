@@ -1,18 +1,11 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Teleporter
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Stuff")]
+    [EditorGroup("Stuff")]
     public class WumpTeleporter : Teleporter
     {
         public EditorProperty<float> chargeTime = new EditorProperty<float>(1, null, 0, 60, 0.1f);
@@ -21,13 +14,14 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             _editorIcon.color = Color.Blue;
-            _editorName = "Wump Teleporter";
-            editorTooltip = "Place 2 teleporters pointing toward each other and Ducks can transport between them sometimes.";
+            _editorName = "Weleporter";
+            editorTooltip = "Place 2 weleporters pointing toward each other and Stuff can transport between them sometimes.";
             bloo = new Color(0, 100, 255);
             _bottom = new Sprite("wumpTeleBottom");
             _bottom.CenterOrigin();
             _top = new Sprite("wumpTeleTop");
             _top.CenterOrigin();
+            _editorIcon = new Sprite("wumpTeleporterIcon");
         }
         public Color bloo;
         public override void EditorPropertyChanged(object property)

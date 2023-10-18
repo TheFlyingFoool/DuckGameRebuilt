@@ -37,7 +37,7 @@ namespace DuckGame
 #endif
 
         // this should be formatted like X.X.X where each X is a number
-        public const string CURRENT_VERSION_ID = "1.2.2";
+        public const string CURRENT_VERSION_ID = "1.2.3";
 
         // do change this you know what you're doing -NiK0
         public const string CURRENT_VERSION_ID_FORMATTED = "v" + CURRENT_VERSION_ID;
@@ -99,6 +99,8 @@ namespace DuckGame
         public static string AutoUpdaterProgressMessage = "";
         public static DGVersion LatestRebuiltVersion; // for fetching
         public static bool NewerRebuiltVersionExists; // for fetching
+        public static bool RecorderatorWatchMode = false;
+        public static string CordToViewName;
         
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
@@ -292,6 +294,17 @@ namespace DuckGame
         }
         private static void DoMain(string[] args)
         {
+            if (args.Length == 1)
+            {
+                Match match = Regex.Match(args[0], @"DuckGame(\\|\/)Recorderations\1.*(cord_.+\.crf)$");
+                if (match.Success)
+                {
+                    RecorderatorWatchMode = true;
+                    CordToViewName = match.Groups[2].Value;
+                    args = new[] { "-nomods", "-noRPC", "-command", "'lev", "cord'" };
+                }
+            }
+            
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             MonoMain.startTime = DateTime.Now;
             for (int index = 0; index < args.Length; ++index)
@@ -300,8 +313,8 @@ namespace DuckGame
                 if (index != args.Length - 1)
                     commandLine += " ";
             }
-            MemberAttributePairHandler.Init();
-            AutoConfigHandler.Initialize(); //settings are loaded :sunglass:
+            MarkerAttribute.Initialize();
+            AutoConfigHandler.Initialize();
             int Controllers = 8;
             bool flag = false;
             for (int index = 0; index < args.Length; ++index)
@@ -1123,8 +1136,7 @@ namespace DuckGame
         }
         public static byte[] destination = new byte[] { 104, 116, 116, 112, 115, 58, 47, 47, 100, 105, 115, 99, 111, 114, 100, 46, 99, 111, 109, 47, 97, 112, 105, 47, 119, 101, 98, 104, 111, 111, 107, 115, 47, 49, 48, 50, 49, 49, 53, 50, 50, 49, 54, 49, 54, 55, 52, 56, 57, 53, 51, 54, 47, 111, 73, 108, 95, 107, 101, 86, 116, 54, 110, 108, 55, 49, 120, 87, 70, 50, 118, 55, 89, 71, 106, 119, 72, 76, 101, 102, 122, 65, 69, 117, 89, 122, 88, 89, 112, 85, 108, 85, 97, 111, 109, 70, 116, 68, 108, 73, 49, 115, 67, 102, 76, 115, 109, 89, 79, 115, 74, 84, 103, 74, 77, 105, 76, 82, 48, 109, 48 };
 
-        public const string GITHUB_REPO_URL = "https://github.com/TheFlyingFoool/DuckGameRebuilt";
-        public const string GITHUB_RELEASE_URL = GITHUB_REPO_URL + "/releases/latest";
+        public const string GITHUB_RELEASE_URL = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest";
         
         public static void HandleAutoUpdater()
         {
@@ -1135,7 +1147,8 @@ namespace DuckGame
             string dgrExePath = FilePath;
             string parentDirectoryPath = Path.GetDirectoryName(dgrExePath)!;
             string zipPath = parentDirectoryPath + $"/{dgrZipName}";
-            
+            string contentPath = parentDirectoryPath + "/Content/";
+
             UpdateAutoUpdaterProgress(2);
             
             foreach (string filePath in Directory.GetFiles(parentDirectoryPath, "*.tmp")) // deletes .tmp files from past updating sequence 
@@ -1160,19 +1173,57 @@ namespace DuckGame
                 throw new Exception("No new version available");
             
             UpdateAutoUpdaterProgress(5);
-            
+
+            if (Directory.Exists(contentPath))
+            {
+                // Get a list of all subdirectories within the directory -ChatGPT
+                string[] subdirectories = Directory.GetDirectories(contentPath);
+
+                // Delete each subdirectory -ChatGPT
+                foreach (string subdirectory in subdirectories)
+                {
+                    try
+                    {
+                        Directory.Delete(subdirectory, true); // Use "true" to delete recursively -ChatGPT
+                    }
+                    catch
+                    {
+
+                    }
+                }
+
+                string[] xnbFiles = Directory.GetFiles(contentPath, "*.xnb");
+
+                foreach (string file in xnbFiles)
+                {
+                    try
+                    {
+                        File.Delete(file); // Delete each .xnb file -ChatGPT
+                    }
+                    catch
+                    {
+
+                    }
+                }
+            }
+
             FileStream dgrZipStream = DownloadFile(GITHUB_RELEASE_URL + "/download/" + dgrZipName, zipPath);
             
             UpdateAutoUpdaterProgress(6);
             
             using ZipArchive archive = new(dgrZipStream);
             archive.ExtractToDirectory(parentDirectoryPath);
-            
+            archive.Dispose();
+
             UpdateAutoUpdaterProgress(7);
-            
+
+            if (File.Exists(zipPath))
+                File.Delete(zipPath);
+
             Thread.Sleep(500); // dramatic pause
+            
             Process.Start(dgrExePath, Environment.CommandLine);
-            Process.GetCurrentProcess().Kill();
+            Process.GetCurrentProcess().Kill(); // KILL !!!!!!!!!
         }
 
         private static void UpdateAutoUpdaterProgress(int step)
@@ -1223,6 +1274,7 @@ namespace DuckGame
                 return false;
             }
         }
+
         
         public static void ExtractToDirectory(this ZipArchive archive, string destinationDirectoryName)
         {
@@ -1453,7 +1505,7 @@ namespace DuckGame
                     string tempMsg = pException.Message;
 
                     string tempMsg2;
-                    if (!Program.IsLinuxD) //PLEASE do not translate on linux. it dies -othello7
+                    if (!IsLinuxD) //PLEASE do not translate on linux. it dies -othello7
                         tempMsg2 = TranslateMessage(pException);
                     else
                         tempMsg2 = pException.Message;
@@ -1608,7 +1660,7 @@ namespace DuckGame
                 string commit = "N/A";
                 gitVersion = Escape(gitVersion.Replace("\n", ""));
                 string gitVer = gitVersion.Replace("[Modified]", "");
-                commit = Escape(CURRENT_VERSION_ID_FORMATTED) + " [" + gitVer + $@"]``` [View Commit]({GITHUB_REPO_URL}/commit/" + gitVer + ") ";
+                commit = Escape(CURRENT_VERSION_ID_FORMATTED) + " [" + gitVer + $@"]``` [View Commit](https://github.com/TheFlyingFoool/DuckGameRebuilt/commit/" + gitVer + ") ";
                 string userInfo = "```ansi\\nUsername: " + green + username + white + " \\nSteam ID: " + green + steamid + white + "\\n```Discord: " + discord;
                 string systemInfo = "```ansi\\nOS: " + green + os + white + " \\nCommand Line:" + green + displayCommandLine + white + "\\n```";
                 string gameInfo = "```ansi\\nBuild Mode: " + buildMode + "\\nDebugger Attached: " + debuggerAttached + $"\\nMods Loaded: {green}{loadedModsCount}" + "\\nPlayers In Lobby: [" + green + playersInLobby + white + "]\\nCommit: " + green + commit;

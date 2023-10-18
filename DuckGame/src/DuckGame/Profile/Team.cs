@@ -1147,7 +1147,8 @@ namespace DuckGame
             {
                 if (base.Deserialize(pColor))
                     return true;
-                DevConsole.Log(DCSection.General, "Metapixel with invalid ID value (" + pColor.r.ToString() + ") found in custom hat.");
+                // CAN YOU PLEASE SHUT THE FUCK UP
+                // DevConsole.Log(DCSection.General, "Metapixel with invalid ID value (" + pColor.r.ToString() + ") found in custom hat.");
                 return false;
             }
 

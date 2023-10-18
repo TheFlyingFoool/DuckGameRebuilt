@@ -32,6 +32,8 @@ namespace DuckGame
             _fireRumble = RumbleIntensity.Light;
             _holdOffset = new Vec2(3f, 0f);
             editorTooltip = "Old-timey rifle, takes approximately 150 years to reload.";
+            _editorPreviewOffset.x -= 1;
+            _editorPreviewWidth = 41;
         }
 
         public override void Update() => base.Update();

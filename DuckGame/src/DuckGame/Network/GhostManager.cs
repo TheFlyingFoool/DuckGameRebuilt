@@ -237,8 +237,12 @@ namespace DuckGame
             catch (Exception ex)
             {
                 DevConsole.Log(DCSection.GhostMan, "@error !! GHOST MANAGER UPDATE EXCEPTION", m.connection);
+                DevConsole.Log("");
                 DevConsole.Log(DCSection.GhostMan, ex.ToString(), m.connection);
-                DevConsole.Log(DCSection.GhostMan, $"NM {m} specialCode:{specialCode} CCI:{crashIndex}");
+                DevConsole.Log("");
+                DevConsole.Log("");
+                DevConsole.Log(DCSection.GhostMan, $"NM {m} specialCode:{specialCode} CCI:{crashIndex} hyperSpecial:{Main.SpecialCode2}");
+                DevConsole.Log(DCSection.GhostMan, "IF YOU SEE THIS, PLEASE REPORT IT TO A DGR DEV");
                 receivingDestroyMessage = false;
             }
         }
@@ -307,22 +311,34 @@ namespace DuckGame
                     }
                     else
                     {
-                        crashIndex = 11;
+                        crashIndex = 100;
                         if (ghostObject.isDestroyed)
                         {
                             DevConsole.Log(DCSection.GhostMan, "Skipped ghost data (DESTROYED)(" + ghostObject.ghostObjectIndex.ToString() + ")", pState.connection);
                             return;
                         }
+                        crashIndex = 101;
                         if (ghostObject.thing.isBitBufferCreatedGhostThing)
                         {
+                            crashIndex = 102;
                             ghostObject.thing.isBitBufferCreatedGhostThing = false;
+                            crashIndex = 103;
                             ghostObject.thing.level = null;
+                            crashIndex = 104;
                             Level.Add(ghostObject.thing);
                         }
+                        crashIndex = 105;
                         if (pState.header.connection != null)
+                        {
+                            crashIndex = 800;
                             ghostObject.thing.TransferControl(pState.header.connection, pState.authority);
+                        }
                         else
+                        {
+                            crashIndex = 500;
                             ghostObject.thing.TransferControl(pState.connection, pState.authority);
+                        }
+                        crashIndex = 106;
                     }
                     if (NetworkDebugger.enabled && pState.connection.profile != null)
                         NetworkDebugger.GetGhost(ghostObject).dataReceivedFrames[pState.connection.profile.persona] = Graphics.frame;
@@ -528,10 +544,14 @@ namespace DuckGame
 
         public GhostObject MakeGhost(Thing t, int index = -1, bool initLevel = false)
         {
+            Main.SpecialCode2 = "1011801";
             if (t.ghostObject != null)
                 return t.ghostObject;
+            Main.SpecialCode2 = "1011802";
             GhostObject pGhost = new GhostObject(t, this, index, initLevel);
+            Main.SpecialCode2 = "1011803";
             AddGhost(pGhost);
+            Main.SpecialCode2 = "1011804";
             return pGhost;
         }
 
@@ -546,17 +566,22 @@ namespace DuckGame
 
         internal void AddGhost(GhostObject pGhost)
         {
+            Main.SpecialCode2 = "10118031";
             if (inGhostLerpLoop)
             {
+            Main.SpecialCode2 = "10118032";
                 _tempGhosts.Add(pGhost);
             }
             else
             {
+                Main.SpecialCode2 = "10118033";
                 if (_ghosts.Contains(pGhost) || pGhost.thing == null)
                     return;
                 _ghosts.Add(pGhost);
+                Main.SpecialCode2 = "10118034";
                 pGhost.thing.OnGhostObjectAdded();
             }
+            Main.SpecialCode2 = "10118035";
         }
 
         public void MapGhost(Thing pThing, GhostObject pGhost) => AddGhost(pGhost);
