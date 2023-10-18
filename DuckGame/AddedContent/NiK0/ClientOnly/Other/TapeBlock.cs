@@ -1,7 +1,7 @@
 ﻿namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Stuff")]
+    [EditorGroup("Spawns")]
     public class TapeBlock : ItemBox, IDrawToDifferentLayers
     {
         private Sprite _scanner;

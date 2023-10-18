@@ -521,7 +521,14 @@ namespace DuckGame
             string color = "";
             for (; _letterIndex != text.Length && text[_letterIndex] != ' ' && text[_letterIndex] != '|'; ++_letterIndex)
                 color += text[_letterIndex].ToString();
-            return color == "PREV" ? new Color(_previousColor.r, _previousColor.g, _previousColor.b) : Colors.ParseColor(color);
+            if (color == "PREV")
+            {
+                return new Color(_previousColor.r, _previousColor.g, _previousColor.b);
+            }
+            else
+            {
+                return Colors.ParseColor(color);
+            }
         }
 
         public InputProfile GetInputProfile(InputProfile input)
@@ -950,242 +957,218 @@ namespace DuckGame
 
         public void Draw(string text, Vec2 pos, Color c, Depth deep = default(Depth), bool colorSymbols = false) => Draw(text, pos.x, pos.y, c, deep, colorSymbols);
 
-        public void Draw(
-          string text,
-          float xpos,
-          float ypos,
-          Color c,
-          Depth deep = default(Depth),
-          bool colorSymbols = false)
-        {
-            //if (!LangHandler.drawnstrings.Contains(text) && !LangHandler.langmap["en"].ContainsKey(text))
-            //{
-            //    LangHandler.drawnstrings.Add(text);
-            //}
-            if (Program.gay)
-            {
-                if (startingcoloroverride != -1)
-                {
-                    startingcolorindex = startingcoloroverride;
-                }
-                else
-                {
-                    Random t = new Random(text.Length + (int)ypos + (int)xpos);
-                    startingcolorindex = t.Next(0, Color.RainbowColors.Count);
-                }
-                charcolorindex = startingcolorindex;
-            }
-            text = LangHandler.Convert(text);
-            Color color2 = c;
-            _previousColor = c;
-            if (string.IsNullOrWhiteSpace(text))
-                return;
-            Color color1 = new Color(byte.MaxValue - c.r, byte.MaxValue - c.g, byte.MaxValue - c.b);
-            float num1 = 0f;
-            float num2 = 0f;
-            int num3 = 0;
-            for (_letterIndex = 0; _letterIndex < text.Length; ++_letterIndex)
-            {
-                bool flag1 = false;
-                if (text[_letterIndex] == '@' || chatFont && text[_letterIndex] == ':')
-                {
-                    int letterIndex = _letterIndex;
-                    Sprite sprite1 = ParseSprite(text, null);
-                    if (sprite1 != null)
-                    {
-                        float alpha = sprite1.alpha;
-                        sprite1.alpha = this.alpha * c.ToVector4().w;
-                        if (sprite1 != null)
-                        {
-                            float num4 = characterHeight / 2 - sprite1.height / 2 + symbolYOffset;
-                            if (Program.gay)
-                            {
-                                c = Colors.Rainbow[charcolorindex];
-                                charcolorindex += 1;
-                                if (charcolorindex >= Colors.Rainbow.Length)
-                                {
-                                    charcolorindex = 0;
-                                }
-                                sprite1.color = c;
-                            }
-                            else
-                            {
-                                if (colorSymbols)
-                                    sprite1.color = c;
-                            }
-                            if (chatFont)
-                            {
-                                Vec2 scale = sprite1.scale;
-                                Sprite sprite2 = sprite1;
-                                sprite2.scale *= (this.scale.x / 2f);
-                                if (this is RasterFont)
-                                {
-                                    float num5 = (float)((this as RasterFont).data.fontSize * RasterFont.fontScaleFactor / 10.0);
-                                    Sprite sprite3 = sprite1;
-                                    sprite3.scale *= num5;
-                                    sprite1.scale = new Vec2((float)Math.Round(sprite1.scale.x * 2.0) / 2f);
-                                }
-                                float num6 = (float)(characterHeight * this.scale.y / 2.0 - sprite1.height * sprite1.scale.y / 2.0);
-                                Graphics.Draw(sprite1, xpos + num2, ypos + num1 + num6, deep + 10 + (int)((ypos + num1) / 10.0));
-                                num2 += (float)(sprite1.width * sprite1.scale.x + 1.0);
-                                sprite1.scale = scale;
-                            }
-                            else if (_rasterData != null)
-                            {
-                                Vec2 scale = sprite1.scale;
-                                float num7 = _rasterData.fontHeight / 24f;
-                                Sprite sprite4 = sprite1;
-                                sprite4.scale *= num7;
-                                Graphics.Draw(sprite1, xpos + num2, (float)(ypos + num1 + 1.0 * num7), deep);
-                                num2 += (float)(sprite1.width * sprite1.scale.x + 1.0);
-                                sprite1.scale = scale;
-                            }
-                            else
-                            {
-                                Graphics.Draw(sprite1, xpos + num2, ypos + num1 + num4, deep);
-                                num2 += (float)(sprite1.width * sprite1.scale.x + 1.0);
-                            }
-                            sprite1.color = Color.White;
-                        }
-                        sprite1.alpha = alpha;
-                        flag1 = true;
-                    }
-                    else
-                        _letterIndex = letterIndex;
-                }
-                else if (text[_letterIndex] == '|')
-                {
-                    int letterIndex = _letterIndex;
-                    if (color2 != Colors.Transparent)
-                    {
-                        _previousColor = color2;
-                    }
-                    color2 = ParseColor(text);
-                    if (color2 != Colors.Transparent)
-                    {
-                        if (!_drawingOutline)
-                        {
-                            float w = c.ToVector4().w;
-                            c = color2;
-                            c *= w;
-                        }
-                        flag1 = true;
-                    }
-                    else
-                        _letterIndex = letterIndex;
-                }
-                if (!flag1)
-                {
-                    bool flag2 = false;
-                    if (maxWidth > 0)
-                    {
-                        if (text[_letterIndex] == ' ' || text[_letterIndex] == '|' || text[_letterIndex] == '@')
-                        {
-                            int index1 = _letterIndex + 1;
-                            if (enforceWidthByWord)
-                            {
-                                char index2 = ' ';
-                                float width1 = _widths[_characterMap[(byte)index2]].width;
-                                for (; index1 < text.Length && text[index1] != ' ' && text[index1] != '|' && text[index1] != '@'; ++index1)
-                                {
-                                    byte index3 = (byte)Maths.Clamp(text[index1], 0, 254);
-                                    Rectangle width2 = _widths[_characterMap[index3]];
-                                    width1 += (width2.width - 1f) * scale.x;
-                                }
-                                if (num2 + width1 > maxWidth)
-                                {
-                                    num1 += _charHeight * scale.y;
-                                    num2 = 0f;
-                                    ++num3;
-                                    flag2 = true;
-                                    if (singleLine)
-                                        break;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            byte index = (byte)Maths.Clamp(text[_letterIndex], 0, 254);
-                            Rectangle width = _widths[_characterMap[index]];
-                            if (num2 + width.width * scale.x > maxWidth)
-                            {
-                                num1 += _charHeight * scale.y;
-                                num2 = 0f;
-                                ++num3;
-                                if (singleLine)
-                                    break;
-                            }
-                        }
-                    }
-                    if (maxRows != 0 && num3 >= maxRows)
-                        break;
-                    if (!flag2)
-                    {
-                        if (text[_letterIndex] == '\n')
-                        {
-                            num1 += (_charHeight + lineGap) * scale.y;
-                            num2 = 0f;
-                            ++num3;
-                        }
-                        else
-                        {
-                            if (Program.gay)
-                            {
-                                c = Colors.Rainbow[charcolorindex];
-                                charcolorindex += 1;
-                                if (charcolorindex >= Colors.Rainbow.Length)
-                                {
-                                    charcolorindex = 0;
-                                }
-                            }
-                            char index4 = text[_letterIndex];
-                            if (index4 >= 'ぁ')
-                            {
-                                int kanji = _kanjiMap[index4];
-                                _kanjiSprite.frame = kanji;
-                                _kanjiSprite.scale = scale;
-                                _kanjiSprite.color = c;
-                                _kanjiSprite.alpha = alpha;
-                                Graphics.Draw(_kanjiSprite, (float)(xpos + num2 + 1.0), (float)(ypos + num1 + 1.0), deep);
-                                num2 += 8f * scale.x;
-                            }
-                            else
-                            {
-                                int index5 = _characterMap[index4];
-                                if (index5 >= _widths.Count)
-                                    index5 = _widths.Count - 1;
-                                if (index5 < 0)
-                                    break;
-                                Rectangle width = _widths[index5];
-                                _texture.scale = scale;
-                                if (_highlightStart != -1 && _highlightStart != _highlightEnd && (_highlightStart < _highlightEnd && _letterIndex >= _highlightStart && _letterIndex < _highlightEnd || _letterIndex < _highlightStart && _letterIndex >= _highlightEnd))
-                                {
-                                    Graphics.DrawRect(new Vec2(xpos + num2, ypos + num1), new Vec2(xpos + num2, ypos + num1) + new Vec2(width.width * scale.x, _charHeight * scale.y), c, deep - 5);
-                                    _texture.color = color1;
-                                }
-                                else
-                                    _texture.color = c;
-                                _texture.alpha = alpha;
-                                if (_characterInfos != null)
-                                {
-                                    if (index5 < _characterInfos.Count)
-                                    {
-                                        float num8 = num2 + _characterInfos[index5].leading * scale.x;
-                                        Graphics.Draw(_texture, xpos + num8, ypos + num1, width, deep);
-                                        num2 = num8 + _characterInfos[index5].trailing * scale.x + _characterInfos[index5].width * scale.x;
-                                    }
-                                }
-                                else
-                                {
-                                    Graphics.Draw(_texture, xpos + num2, ypos + num1, width, deep);
-                                    num2 += (width.width - 1f) * scale.x;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        public void Draw(string text, float xpos, float ypos, Color c, Depth deep = default(Depth), bool colorSymbols = false)
+		{
+			_previousColor = c;
+			if (string.IsNullOrWhiteSpace(text))
+			{
+				return;
+			}
+			Color highlight = new Color(byte.MaxValue - c.r, byte.MaxValue - c.g, byte.MaxValue - c.b);
+			float yOff = 0f;
+			float xOff = 0f;
+			int curRow = 0;
+			_letterIndex = 0;
+			while (_letterIndex < text.Length)
+			{
+				bool processedSpecialCharacter = false;
+                Vec4 cNormalized = c.ToVector4();
+                cNormalized.w = 1;
+                if (text[_letterIndex] == '@' || (chatFont && text[_letterIndex] == ':'))
+				{
+					int iPos = _letterIndex;
+					Sprite spr = ParseSprite(text, null);
+					if (spr != null)
+					{
+						float al = spr.alpha;
+						spr.alpha = alpha * cNormalized.w;
+						if (spr != null)
+						{
+							float yCenter = characterHeight / 2 - spr.height / 2;
+							yCenter += symbolYOffset;
+							if (colorSymbols)
+							{
+								spr.color = c;
+							}
+							if (chatFont)
+							{
+								Vec2 sprScale = spr.scale;
+								spr.scale *= scale.x / 2f;
+								if (this is RasterFont)
+								{
+									float scaleFac = (this as RasterFont).data.fontSize * RasterFont.fontScaleFactor / 10f;
+									spr.scale *= scaleFac;
+									spr.scale = new Vec2((float)Math.Round(spr.scale.x * 2f) / 2f);
+								}
+								yCenter = characterHeight * scale.y / 2f - spr.height * spr.scale.y / 2f;
+								Graphics.Draw(spr, xpos + xOff, ypos + yOff + yCenter, deep + 10 + (int)((ypos + yOff) / 10f));
+								xOff += spr.width * spr.scale.x + 1f;
+								spr.scale = sprScale;
+							}
+							else if (_rasterData != null)
+							{
+								Vec2 sprScale2 = spr.scale;
+								float sizeDif = _rasterData.fontHeight / 24f;
+								spr.scale *= sizeDif;
+								Graphics.Draw(spr, xpos + xOff, ypos + yOff + 1f * sizeDif, deep);
+								xOff += spr.width * spr.scale.x + 1f;
+								spr.scale = sprScale2;
+							}
+							else
+							{
+								Graphics.Draw(spr, xpos + xOff, ypos + yOff + yCenter, deep);
+								xOff += spr.width * spr.scale.x + 1f;
+							}
+							spr.color = Color.White;
+						}
+						spr.alpha = al;
+						processedSpecialCharacter = true;
+					}
+					else
+					{
+						_letterIndex = iPos;
+					}
+				}
+				else if (text[_letterIndex] == '|')
+				{
+					int iPos2 = _letterIndex;
+					Color col = ParseColor(text);
+					if (col != Colors.Transparent)
+					{
+						_previousColor = c;
+						if (!_drawingOutline)
+						{
+							float al2 = cNormalized.w;
+							c = col;
+							c *= al2;
+						}
+						processedSpecialCharacter = true;
+					}
+					else
+					{
+						_letterIndex = iPos2;
+					}
+				}
+				if (!processedSpecialCharacter)
+				{
+					bool skippedLine = false;
+					if (maxWidth > 0)
+					{
+						if (text[_letterIndex] == ' ' || text[_letterIndex] == '|' || text[_letterIndex] == '@')
+						{
+							int index = _letterIndex + 1;
+							if (enforceWidthByWord)
+							{
+								char sp = ' ';
+								float additionalWidth = _widths[_characterMap[(byte)sp]].width;
+								while (index < text.Count<char>() && text[index] != ' ' && text[index] != '|' && text[index] != '@')
+								{
+									byte charVal = (byte)Maths.Clamp(text[index], 0, 254);
+									int cIndex = _characterMap[charVal];
+									Rectangle widthData = _widths[cIndex];
+									additionalWidth += (widthData.width - 1f) * scale.x;
+									index++;
+								}
+								if (xOff + additionalWidth > maxWidth)
+								{
+									yOff += _charHeight * scale.y;
+									xOff = 0f;
+									curRow++;
+									skippedLine = true;
+									if (singleLine)
+									{
+										return;
+									}
+								}
+							}
+						}
+						else
+						{
+							byte charVal2 = (byte)Maths.Clamp(text[_letterIndex], 0, 254);
+							int cIndex2 = _characterMap[charVal2];
+							Rectangle widthData2 = _widths[cIndex2];
+							if (xOff + widthData2.width * scale.x > maxWidth)
+							{
+								yOff += _charHeight * scale.y;
+								xOff = 0f;
+								curRow++;
+								if (singleLine)
+								{
+									return;
+								}
+							}
+						}
+					}
+					if (maxRows != 0 && curRow >= maxRows)
+					{
+						return;
+					}
+					if (!skippedLine)
+					{
+						if (text[_letterIndex] == '\n')
+						{
+							yOff += (_charHeight + lineGap) * scale.y;
+							xOff = 0f;
+							curRow++;
+						}
+						else
+						{
+							char charVal3 = text[_letterIndex];
+							if (charVal3 >= 'ぁ')
+							{
+								int charIndex = _kanjiMap[charVal3];
+								_kanjiSprite.frame = charIndex;
+								_kanjiSprite.scale = scale;
+								_kanjiSprite.color = c;
+								_kanjiSprite.alpha = alpha;
+								Graphics.Draw(_kanjiSprite, xpos + xOff + 1f, ypos + yOff + 1f, deep);
+								xOff += 8f * scale.x;
+							}
+							else
+							{
+								int charIndex = _characterMap[charVal3];
+								if (charIndex >= _widths.Count)
+								{
+									charIndex = _widths.Count - 1;
+								}
+								if (charIndex < 0)
+								{
+									return;
+								}
+								Rectangle dat = _widths[charIndex];
+								_texture.scale = scale;
+								if (_highlightStart != -1 && _highlightStart != _highlightEnd && ((_highlightStart < _highlightEnd && _letterIndex >= _highlightStart && _letterIndex < _highlightEnd) || (_letterIndex < _highlightStart && _letterIndex >= _highlightEnd)))
+								{
+									Graphics.DrawRect(new Vec2(xpos + xOff, ypos + yOff), new Vec2(xpos + xOff, ypos + yOff) + new Vec2(dat.width * scale.x, _charHeight * scale.y), c, deep - 5, true, 1f);
+									_texture.color = highlight;
+								}
+								else
+								{
+									_texture.color = c;
+								}
+								_texture.alpha = alpha;
+								if (_characterInfos != null)
+								{
+									if (charIndex < _characterInfos.Count)
+									{
+										xOff += _characterInfos[charIndex].leading * scale.x;
+										Graphics.Draw(_texture, xpos + xOff, ypos + yOff, dat, deep);
+										xOff += _characterInfos[charIndex].trailing * scale.x;
+										xOff += _characterInfos[charIndex].width * scale.x;
+									}
+								}
+								else
+								{
+									Graphics.Draw(_texture, xpos + xOff, ypos + yOff, dat, deep);
+									xOff += (dat.width - 1f) * scale.x;
+								}
+							}
+						}
+					}
+				}
+				_letterIndex++;
+			}
+		}
 
         public RichTextBox MakeRTF(string text)
         {

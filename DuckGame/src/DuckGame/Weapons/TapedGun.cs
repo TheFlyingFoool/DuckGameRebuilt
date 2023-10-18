@@ -130,7 +130,25 @@ namespace DuckGame
             _tape = new Sprite("tapePiece");
             _tape.CenterOrigin();
         }
-
+        public void ReorderTapedGunsByPreference()
+        {
+            if (gun1 != null && gun2 != null)
+            {
+                //Swap indexes if the two guns prefer to be taped a certain way
+                if (gun1.tapedIndexPreference >= 0 && gun1.tapedIndexPreference != 0)
+                {
+                    Holdable g2 = gun2;
+                    gun2 = gun1;
+                    gun1 = g2;
+                }
+                else if (gun2.tapedIndexPreference >= 0 && gun2.tapedIndexPreference != 1)
+                {
+                    Holdable g1 = gun1;
+                    gun1 = gun2;
+                    gun2 = g1;
+                }
+            }
+        }
         public void UpdateChildren()
         {
             if (gun2 != null)

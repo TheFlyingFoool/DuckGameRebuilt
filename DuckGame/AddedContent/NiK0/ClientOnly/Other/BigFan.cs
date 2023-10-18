@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Stuff")]
+    [EditorGroup("Stuff")]
     public class BigFan : Block
     {
         public SpriteMap sprite;

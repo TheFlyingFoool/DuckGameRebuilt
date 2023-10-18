@@ -2,6 +2,7 @@
 
 namespace DuckGame
 {
+    [ClientOnly]
     public class DGRStandingFluid : Thing
     {
         public EditorProperty<int> deep = new EditorProperty<int>(1, min: 1f, max: 100f, increment: 1f);

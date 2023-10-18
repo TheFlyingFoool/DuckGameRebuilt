@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Stuff")]
+    [EditorGroup("Spawns")]
     public class PinkBox : Block
     {
         public bool canBounce
@@ -170,7 +170,7 @@ namespace DuckGame
         public bool collision;
         public override void Update()
         {
-            if (d != null && d.profile != null && d.profile.connection == DuckNetwork.localConnection)
+            if (d != null && (!Network.isActive || (d.profile != null && d.profile.connection == DuckNetwork.localConnection)))
             {
                 Fondle(this);
                 //Failsafe for if multiple people happen to hit the box it explodes
