@@ -4,6 +4,7 @@ namespace DuckGame
 {
     [ClientOnly]
     [EditorGroup("Details|Terrain")]
+    [BaggedProperty("canSpawn", false)]
     public class Rubble : PhysicsObject
     {
         public SpriteMap sprite;

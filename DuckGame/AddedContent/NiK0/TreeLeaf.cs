@@ -63,6 +63,9 @@
                 case 3:
                     _sprite = new SpriteMap("treeLeafWinter", 8, 4);
                     break;
+                case 4:
+                    _sprite = new SpriteMap("treeLeafGold", 8, 4);
+                    break;
             }
             _sprite.AddAnimation("fall", 1f, true, 0, 1, 2, 1);
             _sprite.SetAnimation("fall");
