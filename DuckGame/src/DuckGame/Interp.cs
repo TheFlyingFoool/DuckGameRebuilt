@@ -54,7 +54,7 @@ namespace DuckGame
         private bool RecentLerp
         {
             //LMAO -NiK0
-            get => Recorderator.Playing ? true : (CurrentStateUpdate - PreviousStateUpdate).TotalMilliseconds < 30 * 4;
+            get => Recorderator.Playing ? true : (CurrentStateUpdate - PreviousStateUpdate).TotalMilliseconds < 30;
         }
 
         public Vec2 Size

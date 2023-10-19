@@ -389,8 +389,10 @@
     <Compile Include="AddedContent\klof44\DartGrenade.cs" />
     <Compile Include="AddedContent\klof44\DiscordRichPresence.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\DGRElevator.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\Rubble.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\SnowTile.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\SummerTreeTop.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\GoldenTreeTop.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\WinterTreeTop.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\RainTile.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\WindTile.cs" />
