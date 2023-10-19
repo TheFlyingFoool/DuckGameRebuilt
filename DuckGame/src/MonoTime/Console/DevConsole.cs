@@ -2240,25 +2240,56 @@ namespace DuckGame
                 }
                 else if (Keyboard.Pressed(Keys.Back))
                 {
-                    if (_core.Typing.Length > 0 && _core.cursorPosition > 0)
+                    int length = Keyboard.control
+                        ? WordBoundary.GetNextRange(_core.typing, _core.cursorPosition, HorizontalDirection.Left).LengthAbs
+                        : 1;
+
+                    for (int i = 0; i < length; i++)
                     {
-                        _core.Typing = _core.Typing.Remove(_core.cursorPosition - 1, 1);
-                        --_core.cursorPosition;
+                        if (_core.Typing.Length > 0 && _core.cursorPosition > 0)
+                        {
+                            _core.Typing = _core.Typing.Remove(_core.cursorPosition - 1, 1);
+                            --_core.cursorPosition;
+                        }
                     }
 
                     _core.lastCommandIndex = -1;
                 }
                 else if (Keyboard.Pressed(Keys.Delete))
                 {
-                    if (_core.Typing.Length > 0 && _core.cursorPosition < _core.Typing.Length)
-                        _core.Typing = _core.Typing.Remove(_core.cursorPosition, 1);
-                    _core.lastCommandIndex = -1;
+                    int length = Keyboard.control
+                        ? WordBoundary.GetNextRange(_core.typing, _core.cursorPosition).Length
+                        : 1;
+
+                    for (int i = 0; i < length; i++)
+                    {
+                        if (_core.Typing.Length > 0 && _core.cursorPosition < _core.Typing.Length)
+                            _core.Typing = _core.Typing.Remove(_core.cursorPosition, 1);
+                        _core.lastCommandIndex = -1;
+                    }
                 }
                 else if (Keyboard.Pressed(Keys.Left))
-                    _core.cursorPosition = Math.Max(0, _core.cursorPosition - 1);
+                {
+                    int length = Keyboard.control
+                        ? WordBoundary.GetNextRange(_core.typing, _core.cursorPosition, HorizontalDirection.Left).LengthAbs
+                        : 1;
+
+                    for (int i = 0; i < length; i++)
+                    {
+                        _core.cursorPosition = Math.Max(0, _core.cursorPosition - 1);
+                    }
+                }
                 else if (Keyboard.Pressed(Keys.Right))
-                    _core.cursorPosition = Math.Min(_core.Typing.Length,
-                        _core.cursorPosition + 1);
+                {
+                    int length = Keyboard.control
+                        ? WordBoundary.GetNextRange(_core.typing, _core.cursorPosition).Length
+                        : 1;
+
+                    for (int i = 0; i < length; i++)
+                    {
+                        _core.cursorPosition = Math.Min(_core.Typing.Length, _core.cursorPosition + 1);
+                    }
+                }
                 else if (Keyboard.Pressed(Keys.Home))
                 {
                     if (Keyboard.shift)
