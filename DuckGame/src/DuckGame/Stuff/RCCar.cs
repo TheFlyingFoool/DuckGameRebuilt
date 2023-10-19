@@ -94,8 +94,11 @@ namespace DuckGame
 
         public override void Terminate()
         {
-            _idle.Kill();
-            _idle.lerpVolume = 0f;
+            if (_idle != null)
+            {
+                _idle.Kill();
+                _idle.lerpVolume = 0f;
+            }
         }
 
         protected override bool OnDestroy(DestroyType type = null)

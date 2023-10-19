@@ -13,7 +13,7 @@ namespace DuckGame
     /// </summary>
     public abstract class Thing : Transform
     {
-
+        public bool SpawnCannonUpdate;
         public int SkipIntratick;
         public SomethingSomethingVessel currentVessel;
         public bool shouldhavevessel = true;

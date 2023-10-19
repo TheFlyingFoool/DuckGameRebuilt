@@ -223,7 +223,7 @@ namespace DuckGame
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (with.isServerForObject && locked && with is Key)
+            if (with.isServerForObject && locked && with is Key k && !k.SpawnCannonUpdate)
                 UnlockDoor(with as Key);
             base.OnSoftImpact(with, from);
         }

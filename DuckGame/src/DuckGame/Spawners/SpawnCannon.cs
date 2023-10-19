@@ -272,7 +272,9 @@ namespace DuckGame
             Vec2 position = _hoverThing.position;
             for (int index = 0; index < 100; ++index)
             {
+                _hoverThing.SpawnCannonUpdate = true;
                 _hoverThing.UpdatePhysics();
+                _hoverThing.SpawnCannonUpdate = false;
                 Graphics.DrawLine(position, _hoverThing.position, Color.Red, 2f, (Depth)1f);
                 position = _hoverThing.position;
             }
