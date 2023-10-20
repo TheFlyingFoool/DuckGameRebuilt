@@ -33,6 +33,7 @@ namespace DuckGame.ConsoleEngine
                     IsOptional = pInfo.IsOptional,
                     DefaultValue = pInfo.DefaultValue,
                     IsParams = pInfo.IsDefined(typeof(ParamArrayAttribute), false),
+                    Autocompletion = pInfo.GetCustomAttribute<AutoCompl>() ?? new AutoCompl(pInfo.ParameterType)
                 };
             }
 
@@ -43,9 +44,10 @@ namespace DuckGame.ConsoleEngine
         {
             public string Name;
             public Type ParameterType;
-            public bool IsOptional = false;
-            public object? DefaultValue = null;
-            public bool IsParams = false;
+            public bool IsOptional;
+            public object? DefaultValue;
+            public bool IsParams;
+            public AutoCompl Autocompletion = new();
         }
     }
 }

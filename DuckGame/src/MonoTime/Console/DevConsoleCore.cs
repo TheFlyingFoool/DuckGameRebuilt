@@ -5,6 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
@@ -30,18 +31,20 @@ namespace DuckGame
 
         public string Typing
         {
-            get
-            {
-                OnConsoleTextChange?.Invoke(typing);
-                return typing;
-            }
+            get => typing;
             set
             {
+                if (value == typing)
+                    return;
+
+                string prevTyping = typing;
                 typing = value;
+                
+                OnTextChange?.Invoke(prevTyping, typing);
             }
         }
 
-        public event Action<string> OnConsoleTextChange;
+        public event Action<string, string> OnTextChange;
         public string typing = "";
         public List<string> previousLines = new List<string>();
         public bool splitScreen;

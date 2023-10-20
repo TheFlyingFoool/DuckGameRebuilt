@@ -17,6 +17,14 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
                     ? value
                     : new Exception($"Variable doesn't exist: {fromString}");
             }
+
+            public string[] Options(string fromString, Type specificType, CommandRunner engine)
+            {
+                string[] options = new string[Commands.VariableRegister.Count];
+                Commands.VariableRegister.Keys.CopyTo(options, 0);
+                
+                return options;
+            }
         }
     }
 }

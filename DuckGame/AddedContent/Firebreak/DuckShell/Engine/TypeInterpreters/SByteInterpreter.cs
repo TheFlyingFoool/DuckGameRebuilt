@@ -16,6 +16,11 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
                     ? val
                     : new Exception($"Unable to parse to sbyte: {fromString}");
             }
+
+            public string[] Options(string fromString, Type specificType, CommandRunner engine)
+            {
+                return Array.Empty<string>();
+            }
         }
     }
 }

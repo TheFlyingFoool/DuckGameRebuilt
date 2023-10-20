@@ -278,6 +278,7 @@
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnife.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingRopeHandle.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnifeConnectionParticle.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompl.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Implementation\DevConsoleDSHWrapper.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\FFEditorPane.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\FFExtra.cs" />
@@ -294,7 +295,6 @@
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Clear.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Close.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Conditional.cs" />
-    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\DC.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Def.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Drop.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Echo.cs" />
@@ -322,7 +322,7 @@
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\IDSHConsole.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\ShellCommand.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\CommandRunner.cs" />
-    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\ITypeInterpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\ArrayInterpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\BooleanInterpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\ByteInterpreter.cs" />

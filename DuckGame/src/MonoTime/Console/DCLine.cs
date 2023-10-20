@@ -50,7 +50,7 @@ namespace DuckGame
         };
 
         private static readonly string[] s_nameTable = {
-            "",
+            string.Empty,
             DCSection.NetCore.ToString().ToUpper().SetLengthLogically(2),
             DCSection.DuckNet.ToString().ToUpper().SetLengthLogically(2),
             DCSection.GhostMan.ToString().ToUpper().SetLengthLogically(2),
@@ -58,7 +58,7 @@ namespace DuckGame
             DCSection.Mod.ToString().ToUpper().SetLengthLogically(2),
             DCSection.Connection.ToString().ToUpper().SetLengthLogically(2),
             DCSection.Ack.ToString().ToUpper().SetLengthLogically(2),
-            "",
+            string.Empty,
             DCSection.NetCore.ToString().ToUpper().SetLengthLogically(4),
             DCSection.DuckNet.ToString().ToUpper().SetLengthLogically(4),
             DCSection.GhostMan.ToString().ToUpper().SetLengthLogically(4),
@@ -73,11 +73,11 @@ namespace DuckGame
             if (DGRSettings.UseDuckShell)
             {
                 int sectionIndex = (int)s;
-                string smallPadding = small ? "  " : string.Empty;
                 string colorTag = colored ? s_colorTable[sectionIndex] : string.Empty;
                 string sectionCode = s_nameTable[sectionIndex + (small ? 0 : 8)];
+                string spacer = s == DCSection.General ? string.Empty : " ";
                 
-                return $"{smallPadding}{colorTag}{sectionCode} ";
+                return $"{colorTag}{sectionCode}{spacer}";
             }
             
             if (formatting)

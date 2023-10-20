@@ -14,6 +14,11 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
             {
                 return fromString;
             }
+
+            public string[] Options(string fromString, Type specificType, CommandRunner engine)
+            {
+                return Array.Empty<string>();
+            }
         }
     }
 }

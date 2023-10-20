@@ -21,6 +21,11 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
                     return new Exception($"Unable to parse to {specificType.Name}: {fromString}", e);
                 }
             }
+
+            public string[] Options(string fromString, Type specificType, CommandRunner engine)
+            {
+                return Enum.GetNames(specificType);
+            }
         }
     }
 }

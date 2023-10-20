@@ -13,18 +13,7 @@ namespace AddedContent.Firebreak
         /// <summary>
         ///     Marks the method using the attribute as a console command.
         ///     This will initialize it alongside the default commands, and can
-        ///     then be used in the Dev Console.
-        ///     <br /> <br />
-        ///     Allowed argument types:<br />
-        ///     <list type="bullet">
-        ///         <item> <see cref="int"/> (int)</item>
-        ///         <item> <see cref="float"/> (float)</item>
-        ///         <item> <see cref="bool"/> (bool)</item>
-        ///         <item> <see cref="string"/> (string)</item>
-        ///         <item> <see cref="Thing"/></item>
-        ///         <item> <see cref="Level"/></item>
-        ///         <item> <see cref="Layer"/></item>
-        ///     </list>
+        ///     then be used in the DevConsole or DuckShell.
         /// </summary>
         [AttributeUsage(AttributeTargets.Method | AttributeTargets.ReturnValue, Inherited = false)]
         internal class DevConsoleCommandAttribute : MarkerAttribute

@@ -70,6 +70,11 @@ namespace DuckGame
             return th;
         }
         
+        // (Maths.FastSin((c * Maths.PI * t) - (Maths.PI * 0.5f)) + 1) * 0.5f
+        // where c = cycle constant
+        // where t = time
+        // -firebreak: someone implement this at some point for global cycles
+        
         public static string SetLengthLogically(this string str, int newLength)
         {
             string originalJustInCase = str;

@@ -9,5 +9,6 @@ namespace DuckGame.ConsoleEngine
         /// </summary>
         Type ParsingType { get; }
         ValueOrException<object> ParseString(string fromString, Type specificType, CommandRunner engine);
+        string[] Options(string fromString, Type specificType, CommandRunner engine);
     }
 }

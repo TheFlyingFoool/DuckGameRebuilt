@@ -92,7 +92,8 @@ namespace DuckGame
                 {
                     case '\\':
                         {
-                            builder.Append(str[++i]);
+                            if (i + 1 < str.Length)
+                                builder.Append(str[++i]);
                             break;
                         }
                     default:
@@ -106,7 +107,7 @@ namespace DuckGame
             return builder.ToString();
         }
 
-        public static readonly char[] BadChars = new[] { '[', ']', ';', };
+        public static readonly char[] BadChars = new[] { '[', ']', ';', '\n', };
 
         public static string EscapeBadStringCharacters(string str)
         {

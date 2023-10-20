@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace AddedContent.Firebreak.DuckShell.Implementation
 {
@@ -50,18 +51,29 @@ namespace AddedContent.Firebreak.DuckShell.Implementation
         
         public void WriteLine(object o, DSHConsoleLine.Significance significance)
         {
-            Color significanceColor = significance switch
+            // Color significanceColor = significance switch
+            // {
+            //     DSHConsoleLine.Significance.Neutral => Color.White,
+            //     DSHConsoleLine.Significance.User => Color.MediumPurple,
+            //     DSHConsoleLine.Significance.Response => Color.Aquamarine,
+            //     DSHConsoleLine.Significance.Highlight => Color.Yellow,
+            //     DSHConsoleLine.Significance.Error => Color.Red,
+            //     DSHConsoleLine.Significance.VeryFuckingImportant => Color.Purple,
+            //     _ => throw new ArgumentOutOfRangeException(nameof(significance), significance, null)
+            // };
+            //
+            // DevConsole.Log($"{significance.ToString().ToUpper().SetLengthLogically(4)} {o}", significanceColor);
+            DevConsole.Log(significance switch
             {
-                DSHConsoleLine.Significance.Neutral => Color.White,
-                DSHConsoleLine.Significance.User => Color.MediumPurple,
+                DSHConsoleLine.Significance.User => $"~@u {o}",
+                _ => $"{o}",
+            }, significance switch
+            {
+                DSHConsoleLine.Significance.User => new Color("#afeb8f"),
                 DSHConsoleLine.Significance.Response => Color.Aquamarine,
-                DSHConsoleLine.Significance.Highlight => Color.Yellow,
-                DSHConsoleLine.Significance.Error => Color.Red,
-                DSHConsoleLine.Significance.VeryFuckingImportant => Color.Purple,
-                _ => throw new ArgumentOutOfRangeException(nameof(significance), significance, null)
-            };
-            
-            DevConsole.Log($"{significance.ToString().ToUpper(),-9} {o}", significanceColor);
+                DSHConsoleLine.Significance.Error => Colors.DGRed,
+                _ => Color.White,
+            });
         }
 
         public void Run(string command, bool byUser)
