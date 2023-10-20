@@ -80,7 +80,7 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
                 return convertedArray;
             }
 
-            public string[] Options(string fromString, Type specificType, CommandRunner engine)
+            public IList<string> Options(string fromString, Type specificType, CommandRunner engine)
             {
                 return Array.Empty<string>();
             }

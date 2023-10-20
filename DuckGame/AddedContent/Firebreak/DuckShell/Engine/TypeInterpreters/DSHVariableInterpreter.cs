@@ -1,6 +1,7 @@
 ﻿using AddedContent.Firebreak;
 using System;
 using AddedContent.Firebreak.DebuggerTools.Manager.Interface.Console;
+using System.Collections.Generic;
 
 namespace DuckGame.ConsoleEngine.TypeInterpreters
 {
@@ -18,7 +19,7 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
                     : new Exception($"Variable doesn't exist: {fromString}");
             }
 
-            public string[] Options(string fromString, Type specificType, CommandRunner engine)
+            public IList<string> Options(string fromString, Type specificType, CommandRunner engine)
             {
                 string[] options = new string[Commands.VariableRegister.Count];
                 Commands.VariableRegister.Keys.CopyTo(options, 0);

@@ -623,12 +623,7 @@ namespace DuckGame
                     return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 7);
 
                 case "me":
-                    return GetMe();
-
-                case "nearest":
-                    return Profiles.activeNonSpectators
-                        .OrderBy(x => Vec2.Distance(x.duck.position, GetMe().duck.position))
-                        .FirstOrDefault(x => x != GetMe());
+                    return Profiles.active.First(x => !Network.isActive || x.connection == DuckNetwork.localConnection);
 
                 default:
                     return Profiles.active.TryFirst(

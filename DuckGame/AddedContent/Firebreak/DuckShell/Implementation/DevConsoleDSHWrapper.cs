@@ -51,28 +51,12 @@ namespace AddedContent.Firebreak.DuckShell.Implementation
         
         public void WriteLine(object o, DSHConsoleLine.Significance significance)
         {
-            // Color significanceColor = significance switch
-            // {
-            //     DSHConsoleLine.Significance.Neutral => Color.White,
-            //     DSHConsoleLine.Significance.User => Color.MediumPurple,
-            //     DSHConsoleLine.Significance.Response => Color.Aquamarine,
-            //     DSHConsoleLine.Significance.Highlight => Color.Yellow,
-            //     DSHConsoleLine.Significance.Error => Color.Red,
-            //     DSHConsoleLine.Significance.VeryFuckingImportant => Color.Purple,
-            //     _ => throw new ArgumentOutOfRangeException(nameof(significance), significance, null)
-            // };
-            //
-            // DevConsole.Log($"{significance.ToString().ToUpper().SetLengthLogically(4)} {o}", significanceColor);
             DevConsole.Log(significance switch
             {
-                DSHConsoleLine.Significance.User => $"~@u {o}",
+                DSHConsoleLine.Significance.User => new Color("#afeb8f").ToDGColorString() + $"{o}",
+                DSHConsoleLine.Significance.Response => Color.Aquamarine.ToDGColorString() + o,
+                DSHConsoleLine.Significance.Error => Colors.DGRed.ToDGColorString() + o,
                 _ => $"{o}",
-            }, significance switch
-            {
-                DSHConsoleLine.Significance.User => new Color("#afeb8f"),
-                DSHConsoleLine.Significance.Response => Color.Aquamarine,
-                DSHConsoleLine.Significance.Error => Colors.DGRed,
-                _ => Color.White,
             });
         }
 

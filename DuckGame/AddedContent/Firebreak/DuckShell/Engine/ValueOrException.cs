@@ -26,6 +26,15 @@ namespace DuckGame.ConsoleEngine
                 Error = e
             };
         }
+    
+        public static ValueOrException<T> FromError(string message)
+        {
+            return new ValueOrException<T>()
+            {
+                Failed = true,
+                Error = new Exception(message)
+            };
+        }
 
         public static ValueOrException<T> FromValue(T value)
         {

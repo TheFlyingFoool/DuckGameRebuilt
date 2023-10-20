@@ -2442,7 +2442,7 @@ namespace DuckGame
             int caret = _core.cursorPosition;
 
             bool editCurrentWord = caret - 1 > -1 && !char.IsWhiteSpace(currentCommand[caret - 1]);
-            string newWord = s_latestPredictionSuggestions[s_HighlightedSuggestionIndex] + " ";
+            string newWord = s_latestPredictionSuggestions[s_HighlightedSuggestionIndex];
 
             if (editCurrentWord)
             {

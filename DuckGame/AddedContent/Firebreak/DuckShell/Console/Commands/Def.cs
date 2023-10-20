@@ -6,7 +6,7 @@ namespace DuckGame.ConsoleEngine
     public static partial class Commands
     {
         [Marker.DevConsoleCommand(Description = "Creates a temporary command.", To = ImplementTo.DuckShell)]
-        public static void Def(string name, string[] definedArgs, string command)
+        public static void Def(string name, string[] definedArgs, [CommandAutoCompl(false)] string command)
         {
             ShellCommand.Parameter[] parameters = definedArgs.Select(x => new ShellCommand.Parameter()
             {

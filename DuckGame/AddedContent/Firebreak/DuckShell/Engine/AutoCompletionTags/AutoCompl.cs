@@ -34,7 +34,7 @@ namespace DuckGame.ConsoleEngine
             _func = autocompletionFunction;
         }
         
-        public string[] Get(string word)
+        public virtual string[] Get(string word)
         {
             return FilterAndSortToRelevant(word, _category switch
             {
@@ -57,7 +57,7 @@ namespace DuckGame.ConsoleEngine
                 .ToArray();
         }
 
-        public static string[] GetFromType(Type type, string word = "")
+        public static IList<string> GetFromType(Type type, string word = "")
         {
             if (Commands.console.Shell.TypeInterpreterModules
                 .TryFirst(x => type.InheritsFrom(x.ParsingType), out ITypeInterpreter module))

@@ -278,7 +278,12 @@
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnife.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingRopeHandle.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnifeConnectionParticle.cs" />
-    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompl.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\AutoCompl.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\CommandAutoCompl.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\ConfigAutoCompl.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\DuckInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\ProfileInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\ThingInterpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Implementation\DevConsoleDSHWrapper.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\FFEditorPane.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\FFExtra.cs" />

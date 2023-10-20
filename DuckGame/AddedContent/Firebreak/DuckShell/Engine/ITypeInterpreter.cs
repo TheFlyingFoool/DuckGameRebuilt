@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DuckGame.ConsoleEngine
 {
@@ -9,6 +10,6 @@ namespace DuckGame.ConsoleEngine
         /// </summary>
         Type ParsingType { get; }
         ValueOrException<object> ParseString(string fromString, Type specificType, CommandRunner engine);
-        string[] Options(string fromString, Type specificType, CommandRunner engine);
+        IList<string> Options(string fromString, Type specificType, CommandRunner engine);
     }
 }

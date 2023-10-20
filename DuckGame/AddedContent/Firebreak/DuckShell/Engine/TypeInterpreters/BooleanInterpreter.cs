@@ -1,5 +1,6 @@
 ﻿using AddedContent.Firebreak;
 using System;
+using System.Collections.Generic;
 
 namespace DuckGame.ConsoleEngine.TypeInterpreters
 {
@@ -12,14 +13,33 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
 
             public ValueOrException<object> ParseString(string fromString, Type specificType, CommandRunner engine)
             {
-                return bool.TryParse(fromString, out var val)
-                    ? val
-                    : new Exception($"Unable to parse to bool: {fromString}");
+                if (string.IsNullOrEmpty(fromString))
+                    goto Failed;
+
+                switch (fromString.Trim().ToLower())
+                {
+                    case "1":
+                    case "y":
+                    case "yes":
+                    case "true":
+                        return true;
+                    
+                    case "0":
+                    case "n":
+                    case "no":
+                    case "false":
+                        return true;
+
+                    default:
+                        goto Failed;
+                }
+
+                Failed: return new Exception($"Unable to parse to bool: {fromString}");
             }
 
-            public string[] Options(string fromString, Type specificType, CommandRunner engine)
+            public IList<string> Options(string fromString, Type specificType, CommandRunner engine)
             {
-                return Array.Empty<string>();
+                return new [] {"true", "false"};
             }
         }
     }

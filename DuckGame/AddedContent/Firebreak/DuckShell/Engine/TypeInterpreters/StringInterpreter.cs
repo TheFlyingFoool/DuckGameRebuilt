@@ -1,5 +1,6 @@
 ﻿using AddedContent.Firebreak;
 using System;
+using System.Collections.Generic;
 
 namespace DuckGame.ConsoleEngine.TypeInterpreters
 {
@@ -15,7 +16,7 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
                 return fromString;
             }
 
-            public string[] Options(string fromString, Type specificType, CommandRunner engine)
+            public IList<string> Options(string fromString, Type specificType, CommandRunner engine)
             {
                 return Array.Empty<string>();
             }

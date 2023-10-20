@@ -92,6 +92,10 @@ namespace DuckGame.ConsoleEngine
                 : RunFromTokens(parseResult.Value);
         }
 
+        /* ~Firebreak: TODO
+          * handle custom AutoCompls for longer-than-one-word strings
+          * no autocompletion for empty strings
+        */
         public virtual ValueOrException<string[]> Predict(string partialCommand, int caretPosition)
         {
             if (string.IsNullOrEmpty(partialCommand))
@@ -128,7 +132,7 @@ namespace DuckGame.ConsoleEngine
 
             if (commandArgs.Length == 0)
             {
-                IEnumerable<string> commandNames = Commands.Select(x => x.Name.ToLower());
+                IEnumerable<string> commandNames = Commands.Select(x => x.Name);
                 
                 return AutoCompl.FilterAndSortToRelevant(commandName, commandNames);
             }
