@@ -173,6 +173,9 @@ namespace DuckGame.ConsoleEngine
             
             if (!Commands.TryFirst(x => x.Name.CaselessEquals(commandName), out Marker.DevConsoleCommandAttribute command))
                 return new Exception($"Command not found: {commandName}");
+
+            if (command.IsCheat && DevConsole.CheckCheats())
+                return new Exception("Can't use cheat commands here");
             
             ShellCommand.Parameter[] parameterInfos = command.Command.Parameters;
             object?[] appliedParameters = new object?[parameterInfos.Length]; // parsed and juiced

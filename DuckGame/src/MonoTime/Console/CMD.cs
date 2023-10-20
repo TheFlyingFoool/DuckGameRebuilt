@@ -5,6 +5,7 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using AddedContent.Firebreak;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -403,6 +404,25 @@ namespace DuckGame
                 type = typeof(Level);
                 takesMultispaceString = true;
             }
+            
+            // this is so things outside can get this list too ~FB
+            public static Dictionary<string, Func<DuckGame.Level>> SpecialLevelLookup = new()
+            {
+                {"fb", () => new SimRenderer()},
+                {"fbtest", () => new TestLev()},
+                {"hatpreview", () => new HatPreviewLevel()},
+                {"ff", () => new FeatherFashion()},
+                {"cord", () => new RecorderationSelector()},
+                {"dev", () => new DevTestLev()},
+                {"title", () => new TitleScreen()},
+                {"rockintro", () => new RockIntro(new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel)))},
+                {"rockthrow", () => new RockScoreboard()},
+                {"finishscreen", () => new RockScoreboard(mode: ScoreBoardMode.ShowWinner, afterHighlights: true)},
+                {"highlights", () => new HighlightLevel()},
+                {"next", () => new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel))},
+                {"editor", () => Main.editor},
+                {"arcade", () => new ArcadeLevel(Content.GetLevelID("arcade"))}
+            };
 
             public override object Parse(string pValue)
             {
@@ -415,44 +435,9 @@ namespace DuckGame
 
                     return new GameLevel("RANDOM", seedVal);
                 }
-                switch (pValue)
-                {
-                    case "fb":
-                        return new SimRenderer();
-                    case "fbtest":
-                        return new TestLev();
-                    case "hatpreview":
-                        return new HatPreviewLevel();
-                    case "ff":
-                        return new FeatherFashion();
-                    case "rdt":
-                    case "cord":
-                    case "rec":
-                        return new RecorderationSelector();
-                    case "dev":
-                        string devfilepath = Program.GameDirectory + "Content\\levels\\devtestlev.lev";
-                        if (File.Exists(devfilepath))
-                        {
-                            return new DevTestLev();
-                        }
-                        return Error($"dev level was not found.");
-                    case "title":
-                        return new TitleScreen();
-                    case "rockintro":
-                        return new RockIntro(new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel)));
-                    case "rockthrow":
-                        return new RockScoreboard();
-                    case "finishscreen":
-                        return new RockScoreboard(mode: ScoreBoardMode.ShowWinner, afterHighlights: true);
-                    case "highlights":
-                        return new HighlightLevel();
-                    case "next":
-                        return new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel));
-                    case "editor":
-                        return Main.editor;
-                    case "arcade":
-                        return new ArcadeLevel(Content.GetLevelID("arcade"));
-                }
+
+                if (SpecialLevelLookup.TryGetValue(pValue, out Func<DuckGame.Level> specialLevelInitializer))
+                    return specialLevelInitializer.Invoke();
 
                 if (!pValue.EndsWith(".lev"))
                     pValue += ".lev";

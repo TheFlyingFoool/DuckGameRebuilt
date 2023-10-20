@@ -282,6 +282,8 @@
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\CommandAutoCompl.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\ConfigAutoCompl.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\DuckInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\LayerInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\LevelInterpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\ProfileInterpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\ThingInterpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Implementation\DevConsoleDSHWrapper.cs" />

@@ -400,7 +400,7 @@ namespace DuckGame
                         
                         if (DGRSettings.UseDuckShell)
                         {
-                            int length = Math.Min(COMMAND_SUGGESTION_LIMIT, s_latestPredictionSuggestions.Length);
+                            int length = Math.Min(CommandSuggestionLimit, s_latestPredictionSuggestions.Length);
                             for (int i = 0; i < length; i++)
                             {
                                 string suggestion = s_latestPredictionSuggestions[i].Replace(CommandRunner.INLINE_COMMAND_MARKER, $"|RED|{new string('?', CommandRunner.INLINE_COMMAND_MARKER.Length)}|PREV|");
@@ -484,7 +484,8 @@ namespace DuckGame
 
         }
 
-        private const int COMMAND_SUGGESTION_LIMIT = 8;
+        [Marker.AutoConfig]
+        public static int CommandSuggestionLimit = 8;
 
         public static Vec2 dimensions => new(Options.Data.consoleWidth / 100f, Options.Data.consoleHeight / 100f);
 
@@ -2363,7 +2364,7 @@ namespace DuckGame
                 {
                     if (Keyboard.control)
                     {
-                        int length = Math.Min(COMMAND_SUGGESTION_LIMIT, s_latestPredictionSuggestions.Length);
+                        int length = Math.Min(CommandSuggestionLimit, s_latestPredictionSuggestions.Length);
                         s_HighlightedSuggestionIndex++;
                         s_HighlightedSuggestionIndex %= length;
                     }

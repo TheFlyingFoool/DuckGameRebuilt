@@ -41,7 +41,7 @@ namespace DuckGame
             }
             
             SFX.Play("hitBox");
-            Level.Add(item);
+            DuckGame.Level.Add(item);
             
             if (item is Equipment e && arguments.Contains("e"))
             {
