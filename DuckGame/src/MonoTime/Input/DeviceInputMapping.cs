@@ -192,7 +192,7 @@ namespace DuckGame
             }
             if (device is Keyboard)
             {
-                foreach (Keys b2 in Enum.GetValues(typeof(Keys)).Cast<Keys>())
+                foreach (Keys b2 in Keyboard.KeyTypes)
                 {
                     if (device.MapPressed((int)b2, false))
                     {

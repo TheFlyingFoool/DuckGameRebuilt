@@ -9,7 +9,7 @@ namespace DuckGame
         public static readonly Dictionary<string, Keys> KeyDict = new();
         static CustomKeyBinds()
         {
-            foreach (Keys key in (Keys[])Enum.GetValues(typeof(Keys)))
+            foreach (Keys key in Keyboard.KeyTypes)
             {
                 KeyDict.Add(key.ToString().ToLower(), key);
             }
