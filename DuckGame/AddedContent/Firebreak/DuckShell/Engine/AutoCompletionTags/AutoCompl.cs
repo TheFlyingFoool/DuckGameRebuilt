@@ -34,7 +34,7 @@ namespace DuckGame.ConsoleEngine
             _func = autocompletionFunction;
         }
         
-        public virtual string[] Get(string word)
+        public virtual IList<string> Get(string word)
         {
             return FilterAndSortToRelevant(word, _category switch
             {

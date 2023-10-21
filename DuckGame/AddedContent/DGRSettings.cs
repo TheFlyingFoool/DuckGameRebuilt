@@ -398,5 +398,7 @@ namespace DuckGame
         [Marker.AutoConfig] public static bool GreenTextSupport = false;
 
         [Marker.AutoConfig] public static bool UseDuckShell = true;
+
+        [Marker.AutoConfig] public static bool NoConsoleLineLimit = false;
     }
 }

@@ -1,11 +1,12 @@
 using AddedContent.Firebreak;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame.ConsoleEngine
 {
     public class ConfigAutoCompl : AutoCompl
     {
-        public override string[] Get(string word)
+        public override IList<string> Get(string word)
         {
             string[] suggestions = new string[Marker.AutoConfigAttribute.All.Count + 3];
 

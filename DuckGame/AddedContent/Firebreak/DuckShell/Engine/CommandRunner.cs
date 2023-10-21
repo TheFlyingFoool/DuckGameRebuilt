@@ -1,5 +1,6 @@
 ﻿using AddedContent.Firebreak;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -16,6 +17,13 @@ namespace DuckGame.ConsoleEngine
         public Regex ValidNameRegex { get; } = new("^[^ ]+$", RegexOptions.Compiled);
 
         public const string INLINE_COMMAND_MARKER = "±";
+
+        internal bool TryGetCommand(string from, out Marker.DevConsoleCommandAttribute command)
+        {
+            return Commands.TryFirst(
+                x => x.Name.CaselessEquals(from) || x.Aliases.Any(y => y.CaselessEquals(from)),
+                out command);
+        }
 
         public virtual ValueOrException<object?> Run(string input)
         {
@@ -132,9 +140,9 @@ namespace DuckGame.ConsoleEngine
 
             if (commandArgs.Length == 0)
             {
-                IEnumerable<string> commandNames = Commands.Select(x => x.Name);
+                IList<string> suggestions = CommandAutoCompl.GetCommandNames();
                 
-                return AutoCompl.FilterAndSortToRelevant(commandName, commandNames);
+                return AutoCompl.FilterAndSortToRelevant(commandName, suggestions);
             }
             else
             {
@@ -143,8 +151,7 @@ namespace DuckGame.ConsoleEngine
                 if (lastArgument.StartsWith(INLINE_COMMAND_MARKER))
                     return Predict(lastArgument.Substring(1), -1);
 
-                if (!Commands.TryFirst(x => x.Name.CaselessEquals(commandName),
-                        out Marker.DevConsoleCommandAttribute command))
+                if (!TryGetCommand(commandName, out Marker.DevConsoleCommandAttribute command))
                     return new Exception($"Command not found: {commandName}");
 
                 ShellCommand.Parameter[] parameterInfos = command.Command.Parameters;
@@ -152,10 +159,18 @@ namespace DuckGame.ConsoleEngine
                 if (parameterInfos.Length == 0 || commandArgs.Length > parameterInfos.Length)
                     return Array.Empty<string>();
 
-                string[] rawSuggestions = parameterInfos[commandArgs.Length - 1].Autocompletion.Get(lastArgument);
+                IList<string> rawSuggestions = parameterInfos[commandArgs.Length - 1].Autocompletion.Get(lastArgument);
                 
                 return AutoCompl.FilterAndSortToRelevant(lastArgument, rawSuggestions);
             }
+        }
+
+        protected virtual string MakeTheOutputNicer_Colon3(object o)
+        {
+            if (o is not string && o is IEnumerable collection)
+                return collection.Cast<object>().ToReadableString();
+
+            return o.ToString();
         }
 
         protected virtual ValueOrException<object?> RunFromTokens(string[] tokens)
@@ -171,7 +186,7 @@ namespace DuckGame.ConsoleEngine
                 commandArgs[i - 1] = tokens[i];
             }
             
-            if (!Commands.TryFirst(x => x.Name.CaselessEquals(commandName), out Marker.DevConsoleCommandAttribute command))
+            if (!TryGetCommand(commandName, out Marker.DevConsoleCommandAttribute command))
                 return new Exception($"Command not found: {commandName}");
             
             if (command.HostOnly && !Network.isServer)
@@ -250,6 +265,13 @@ namespace DuckGame.ConsoleEngine
             try
             {
                 object? invokationValue = command.Command.Invoke(appliedParameters);
+
+                if (((MethodInfo)command.Member).ReturnTypeCustomAttributes
+                    .GetCustomAttributes(typeof(PrettyPrintAttribute), true)
+                    .Any())
+                {
+                    invokationValue = MakeTheOutputNicer_Colon3(invokationValue);
+                }
 
                 result = ValueOrException<object?>.FromValue(invokationValue);
             }
@@ -449,23 +471,16 @@ namespace DuckGame.ConsoleEngine
 
         public void RemoveCommand(string commandName)
         {
-            Commands.RemoveAll(x => string.Equals(x.Name, commandName, StringComparison.InvariantCultureIgnoreCase));
+            if (TryGetCommand(commandName, out Marker.DevConsoleCommandAttribute command)) 
+                Commands.Remove(command);
         }
 
         internal void AddCommand(Marker.DevConsoleCommandAttribute command)
         {
             if (!ValidNameRegex.IsMatch(command.Name))
                 throw new Exception($"Invalid command name: {command.Name}");
-
-            // SLOW and CRINGE !!!
-            // if (Commands.Any(x =>
-            //         x.Name == command.Name &&
-            //         x.Command.Parameters.SequenceEqual(command.Command.Parameters)))
-            //     throw new Exception($"Duplicate command signature: {command.Name}");
             
-            // 😎
-            Commands.RemoveAll(x => x.Name == command.Name);
-
+            RemoveCommand(command.Name);
             Commands.Add(command);
         }
     }

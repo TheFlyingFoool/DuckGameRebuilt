@@ -11,6 +11,7 @@ namespace DuckGame
     public static partial class DevConsoleCommands
     {
         [Marker.DevConsoleCommand(Description = "Get or Modify config fields from the console")]
+        [return: PrettyPrint]
         public static object Config([ConfigAutoCompl] string fieldId, string serializedValue = null)
         {
             switch (fieldId.ToUpper())

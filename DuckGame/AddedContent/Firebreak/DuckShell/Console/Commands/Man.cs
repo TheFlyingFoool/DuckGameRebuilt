@@ -9,8 +9,7 @@ namespace DuckGame.ConsoleEngine
         [Marker.DevConsoleCommand(Description = "Explains the usage of a command", To = ImplementTo.DuckShell)]
         public static StringBuilder Man([CommandAutoCompl] string commandName)
         {
-            if (console.Shell.Commands.TryFirst(x => x.Name.CaselessEquals(commandName),
-                    out Marker.DevConsoleCommandAttribute commandAttribute))
+            if (console.Shell.TryGetCommand(commandName, out Marker.DevConsoleCommandAttribute commandAttribute))
             {
                 StringBuilder builder = new();
         

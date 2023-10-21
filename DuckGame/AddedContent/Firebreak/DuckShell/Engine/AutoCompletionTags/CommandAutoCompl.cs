@@ -1,4 +1,6 @@
+using AddedContent.Firebreak;
 using System;
+using System.Collections.Generic;
 
 namespace DuckGame.ConsoleEngine
 {
@@ -10,19 +12,26 @@ namespace DuckGame.ConsoleEngine
             MereName = mereName;
         }
         
-        public override string[] Get(string word)
+        public override IList<string> Get(string word)
         {
             if (!MereName)
                 return Array.Empty<string>();
 
-            string[] options = new string[Commands.console.Shell.Commands.Count];
+            return GetCommandNames();
+        }
 
-            for (int i = 0; i < options.Length; i++)
+        public static IList<string> GetCommandNames()
+        {
+            List<string> suggestions = new();
+            for (int i = 0; i < Commands.console.Shell.Commands.Count; i++)
             {
-                options[i] = Commands.console.Shell.Commands[i].Name;
+                Marker.DevConsoleCommandAttribute command = Commands.console.Shell.Commands[i];
+                    
+                suggestions.Add(command.Name);
+                suggestions.AddRange(command.Aliases);
             }
 
-            return options;
+            return suggestions;
         }
     }
 }

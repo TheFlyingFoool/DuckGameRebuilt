@@ -4,6 +4,7 @@ using DuckGame.ConsoleEngine.TypeInterpreters;
 using DuckGame.ConsoleInterface;
 using DuckShell.Manager.Interface.Console;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -51,13 +52,18 @@ namespace AddedContent.Firebreak.DuckShell.Implementation
         
         public void WriteLine(object o, DSHConsoleLine.Significance significance)
         {
-            DevConsole.Log(significance switch
+            string str = o.ToString();
+
+            foreach (string part in str.Split('\n'))
             {
-                DSHConsoleLine.Significance.User => new Color("#afeb8f").ToDGColorString() + $"{o}",
-                DSHConsoleLine.Significance.Response => Color.Aquamarine.ToDGColorString() + o,
-                DSHConsoleLine.Significance.Error => Colors.DGRed.ToDGColorString() + o,
-                _ => $"{o}",
-            });
+                DevConsole.Log(significance switch
+                {
+                    DSHConsoleLine.Significance.User => new Color("#afeb8f").ToDGColorString() + $"{part}",
+                    DSHConsoleLine.Significance.Response => Color.Aquamarine.ToDGColorString() + part,
+                    DSHConsoleLine.Significance.Error => Colors.DGRed.ToDGColorString() + part,
+                    _ => $"{part}",
+                });
+            }
         }
 
         public void Run(string command, bool byUser)

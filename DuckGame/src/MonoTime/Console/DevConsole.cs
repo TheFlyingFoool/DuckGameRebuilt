@@ -1858,7 +1858,7 @@ namespace DuckGame
                         ++_core.viewOffset;
                 }
 
-                if (_core.lines.Count > 3000)
+                if (!DGRSettings.NoConsoleLineLimit && _core.lines.Count > 3000)
                 {
                     for (int index = 0; index < 500; ++index)
                     {
