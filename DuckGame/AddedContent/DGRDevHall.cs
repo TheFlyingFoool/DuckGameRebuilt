@@ -1,64 +1,57 @@
-﻿namespace DuckGame
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace DuckGame
 {
-    public class DGRDevHall : Level
+    public class DGRDevHall : XMLLevel
     {
-        public Duck duck;
-        public DGRDevHall(Duck d)
+        public DGRDevHall(string name) : base(name)
         {
-            starfield = new Sprite("background/starField");
-            duck = d;
-        }
-        public bool ascend;
-        public Sprite starfield;
-        public override void PostDrawLayer(Layer layer)
-        {
-            if (layer == Layer.Parallax)
+            _followCam = new FollowCam
             {
-                starfield.alpha = 1;
-                Graphics.Draw(starfield, 0f, 0, -0.99f);
-            }
-            base.PostDrawLayer(layer);
+                lerpMult = 1f,
+                startCentered = false
+            };
+            camera = _followCam;
         }
-        public float spd = 2;
+        private List<Duck> _pendingSpawns;
+        public Vec2 SpawnPosition;
+        public override void Initialize()
+        {
+            TeamSelect2.DefaultSettings();
+            base.Initialize();
+            _pendingSpawns = new Deathmatch(this).SpawnPlayers(false);
+            foreach (Duck pendingSpawn in _pendingSpawns)
+            {
+                SpawnPosition = pendingSpawn.position;
+                followCam.Add(pendingSpawn);
+                First<ArcadeHatConsole>()?.MakeHatSelector(pendingSpawn);
+            }
+            followCam.Adjust();
+        }
+        public Duck _duck;
+        public bool _entering = true;
         public override void Update()
         {
-            duck.x = Maths.Clamp(duck.x, 10, 310);
-            if (ascend)
+            if (_entering)
             {
-                camera.y += spd;
-                spd -= 0.1f;
-                if (spd < -1)
+                Graphics.fade = Lerp.Float(Graphics.fade, 1f, 0.05f);
+                if (Graphics.fade > 0.99f)
                 {
-                    Graphics.fade = Lerp.Float(Graphics.fade, -0.6f, 0.01f);
-                    if (Graphics.fade <= -0.3f)
-                    {
-                        current = new TitleScreen();
-                    }
+                    _entering = false;
+                    Graphics.fade = 1f;
                 }
             }
-            else
+            if (_pendingSpawns != null && _pendingSpawns.Count > 0)
             {
-                camera.y = Lerp.FloatSmooth(camera.y, 0, 0.1f, 0.95f);
+                Duck pendingSpawn = _pendingSpawns[0];
+                AddThing(pendingSpawn);
+                _pendingSpawns.RemoveAt(0);
+                _duck = pendingSpawn;
             }
             base.Update();
         }
-        public override void Initialize()
-        {
-            camera.y -= 640;
-            Add(duck);
-            duck.position = new Vec2(160, 138);
-            Add(new GlassPlatform(160, 96));
-            Add(new InvisibleBlock(0, 165, 126, 13));
-            Add(new InvisibleBlock(194, 165, 126, 13));
-            Add(new InvisibleBlock(0, 88, 120, 13));
-            Add(new InvisibleBlock(200, 88, 120, 13));
-            Add(new InvisibleBlock(0, 33, 120, 13));
-            Add(new InvisibleBlock(200, 33, 120, 13));
-            Add(new PinkBox(160, 16));
-
-            Add(new Platform(118, 112, 84, 8));
-            Add(new Platform(118, 57, 84, 8));
-            base.Initialize();
-        }
+        private FollowCam _followCam;
+        public FollowCam followCam => _followCam;
     }
 }

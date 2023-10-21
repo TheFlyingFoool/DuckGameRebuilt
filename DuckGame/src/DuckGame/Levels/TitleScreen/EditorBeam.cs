@@ -35,7 +35,7 @@ namespace DuckGame
             _selectBeam.center = new Vec2(_selectBeam.w / 2, 0f);
             depth = (Depth)0.5f;
             _collisionOffset = new Vec2((float)-(_selectBeam.w / 2 * 0.8f), 0f);
-            _collisionSize = new Vec2(_selectBeam.w * 0.8f, 180f);
+            _collisionSize = new Vec2(_selectBeam.w * 0.8f, 80);
             center = new Vec2(_selectBeam.w / 2);
             layer = Layer.Background;
             thickness = 10f;
@@ -50,8 +50,8 @@ namespace DuckGame
             _spawnWait -= 0.025f * DGRSettings.ActualParticleMultiplier;
             if (_spawnWait < 0f)
             {
-                Level.Add(new MultiBeamParticle(x, y + 190f, -0.8f - _wave.normalized, false, Color.Cyan * 0.8f));
-                Level.Add(new MultiBeamParticle(x, y + 190f, -0.8f - _wave2.normalized, true, Color.LightBlue * 0.8f));
+                Level.Add(new MultiBeamParticle(x, y + 70f, -0.8f - _wave.normalized, false, Color.Cyan * 0.8f));
+                Level.Add(new MultiBeamParticle(x, y + 70f, -0.8f - _wave2.normalized, true, Color.LightBlue * 0.8f));
                 _spawnWait = 1f;
             }
             foreach (Duck duck in Level.CheckRectAll<Duck>(position - center, position - center + new Vec2(_collisionSize.x, _collisionSize.y)))
@@ -156,8 +156,10 @@ namespace DuckGame
         {
             base.Draw();
             _selectBeam.depth = depth;
-            for (int index = 0; index < 6; ++index)
-                Graphics.Draw(_selectBeam, x, y + index * 32);
+            for (int index = 0; index < 2; ++index)
+            {
+                Graphics.Draw(_selectBeam, x, y + index * 32 + 12);
+            }
         }
     }
 }

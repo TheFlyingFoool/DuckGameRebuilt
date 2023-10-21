@@ -24,9 +24,12 @@ namespace DuckGame
         private BigTitle _title;
         private BitmapFont _font;
         private Sprite _background;
+        private Sprite _background2;
         //private Sprite _optionsPlatform;
         private Sprite _rightPlatform;
         private Sprite _leftPlatform;
+        private Sprite _DGRrightPlatform;
+        private Sprite _DGRleftPlatform;
         private Sprite _beamPlatform;
         private Sprite _upperMonitor;
         private Sprite _optionsTV;
@@ -52,9 +55,8 @@ namespace DuckGame
         private OptionsBeam _optionsBeam;
         private LibraryBeam _libraryBeam;
         private MultiBeam _multiBeam;
-        public SelectCircle _featherFashionCircle;
-        public SelectCircle _recorderatorCircle;
         private EditorBeam _editorBeam;
+        private HatEditorBeam _hatEditorBeam;
         private Duck _duck;
         private bool _fastMultiplayer;
         private bool _enterMultiplayer;
@@ -88,6 +90,7 @@ namespace DuckGame
         private bool _enterEditor;
         private bool _enterCredits;
         private bool _enterArcade;
+        private bool _enterDevHall;
         public bool _enterRecorderator;
         public bool _enterFeatherFashion;
         private static bool _hasMenusOpen = false;
@@ -180,16 +183,6 @@ namespace DuckGame
         public static bool Checked;
         public override void Initialize()
         {
-            /*if (Program.IS_DEV_BUILD)
-            {
-                CorinthianPillar c1 = new CorinthianPillar(126, 154);
-                Add(new TitleButton(126, 137, false) { drag = c1 });
-                Add(c1);
-            }
-            CorinthianPillar c2 = new CorinthianPillar(194, 154) { style = 1 };
-            Add(new TitleButton(194, 137, true) { drag = c2 });
-            Add(c2);*/
-
             if (Editor.clientonlycontent)
             {
                 Editor.DisableClientOnlyContent();
@@ -918,6 +911,7 @@ namespace DuckGame
             Add(_pauseGroup);
             _font = new BitmapFont("biosFont", 8);
             _background = new Sprite("title/background");
+            _background2 = new Sprite("title/dgrTitle");
             //this._optionsPlatform = new Sprite("title/optionsPlatform")
             //{
             //    depth = (Depth)0.9f
@@ -939,6 +933,14 @@ namespace DuckGame
                 depth = -0.85f
             };
             _leftPlatform = new Sprite("title/leftPlatform")
+            {
+                depth = (Depth)0.9f
+            };
+            _DGRleftPlatform = new Sprite("title/dgrLeftPlatform")
+            {
+                depth = (Depth)0.9f
+            };
+            _DGRrightPlatform = new Sprite("title/dgrRightPlatform")
             {
                 depth = (Depth)0.9f
             };
@@ -967,22 +969,27 @@ namespace DuckGame
             _multiBeam = new MultiBeam(160f, -30f);
             Add(_multiBeam);
 
-            _featherFashionCircle = new SelectCircle(-320, 0, true);
-            Add(_featherFashionCircle);
-            _recorderatorCircle = new SelectCircle(-380, 0, true);
-            Add(_recorderatorCircle);
-
             _optionsBeam = new OptionsBeam(28f, -110f);
             Add(_optionsBeam);
             _libraryBeam = new LibraryBeam(292f, -110f);
             Add(_libraryBeam);
             _editorBeam = new EditorBeam(28f, 100f);
             Add(_editorBeam);
+            _hatEditorBeam = new HatEditorBeam(292, 285);
+            Add(_hatEditorBeam);
             VersionSign vs = new VersionSign(176f, 18f);
             Add(vs);
             for (int index = 0; index < 21; ++index)
             {
                 SpaceTileset t = new SpaceTileset(index * 16 - 6, 176f)
+                {
+                    frame = 3,
+                    layer = Layer.Game,
+                    setLayer = false
+                };
+                AddThing(t);
+
+                t = new SpaceTileset(index * 16 - 6, 356f)
                 {
                     frame = 3,
                     layer = Layer.Game,
@@ -999,13 +1006,23 @@ namespace DuckGame
             _things.RefreshState();
             Layer.Game.fade = 0f;
             Layer.Foreground.fade = 0f;
+            Add(new Block(317, 180, 16, 96, PhysicsMaterial.Metal));
+            Add(new Block(-13, 180, 16, 96, PhysicsMaterial.Metal));
+            Add(new Block(257, 242, 64, 66, PhysicsMaterial.Metal));
+            Add(new Block(0, 242, 63, 66, PhysicsMaterial.Metal));
             Add(new Block(120f, 155f, 80f, 30f, PhysicsMaterial.Metal));
             Add(new Block(134f, 148f, 52f, 30f, PhysicsMaterial.Metal));
             Add(new Block(0f, 61f, 63f, 70f, PhysicsMaterial.Metal));
             Add(new Block(257f, 61f, 63f, 60f, PhysicsMaterial.Metal));
             Add(new Spring(90f, 160f, 0.32f));
             Add(new Spring(229f, 160f, 0.32f));
+            Add(new Spring(90f, 340, 0.32f));
+            Add(new Spring(229f, 340, 0.32f));
             Add(new VerticalDoor(270f, 160f)
+            {
+                filterDefault = true
+            });
+            Add(new VerticalDoor(51, 340)
             {
                 filterDefault = true
             });
@@ -1069,7 +1086,7 @@ namespace DuckGame
             Teams.Player4.Join(Profiles.DefaultPlayer4);
             InputProfile.ReassignDefaultInputProfiles();
         }
-
+        public bool secondTitlescreen;
         public override void Update()
         {
             #if AutoUpdater
@@ -1226,6 +1243,18 @@ namespace DuckGame
                     current = new ArcadeLevel(Content.GetLevelID("arcade"));
                 }
             }
+            else if (_enterDevHall)
+            {
+                --_duck.x;
+                _duck.immobilized = true;
+                _duck.enablePhysics = false;
+                Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.05f);
+                if (Graphics.fade < 0.01f)
+                {
+                    current.Clear();
+                    current = new DGRDevHall(Content.GetLevelID("devHall"));
+                }
+            }
             else if (_enterRecorderator)
             {
                 _duck.immobilized = true;
@@ -1327,6 +1356,8 @@ namespace DuckGame
                     _duck.updatePhysics = true;
                     if (_duck.x > 324)
                         _enterArcade = true;
+                    if (_duck.x < -4)
+                        _enterDevHall = true;
                 }
                 if (quittingCredits)
                 {
@@ -1421,6 +1452,16 @@ namespace DuckGame
                 _enterCredits = true;
                 _duck.immobilized = true;
             }
+            if (secondTitlescreen)
+            {
+                Level.current.camera.position = Lerp.Vec2Smooth(Level.current.camera.position, new Vec2(0, 180), 0.1f);
+            }
+            else
+            {
+                 _bottomRight.y = 400;
+                lowestPoint = 400;
+                Level.current.camera.position = Lerp.Vec2Smooth(Level.current.camera.position, Vec2.Zero, 0.1f);
+            }
             if (_multiBeam.entered)
             {
                 _selectionTextDesired = "MULTIPLAYER";
@@ -1430,6 +1471,16 @@ namespace DuckGame
                     SFX.Play("plasmaFire");
                     _enterMultiplayer = true;
                     _duck.immobilized = true;
+                }
+                if (_duck.inputProfile.Pressed(Triggers.Down) && MonoMain.pauseMenu == null)
+                {
+                    secondTitlescreen = true;
+                    _multiBeam._ducks[0].duck.y = 290;
+                    _multiBeam._ducks[0].duck.solid = true;
+                    _multiBeam._ducks[0].duck.immobilized = false;
+                    _multiBeam._ducks[0].duck.vSpeed = 1;
+                    _multiBeam._ducks.Clear();
+                    _multiBeam.entered = false;
                 }
             }
             else if (_optionsBeam.entered)
@@ -1445,28 +1496,6 @@ namespace DuckGame
                     _duck.immobilized = true;
                 }
             }
-            else if (_featherFashionCircle.entered)
-            {
-                _selectionTextDesired = "FEATHER FASHION";
-                _desiredSelection = TitleMenuSelection.FeatherFashion;
-                if (!Options.menuOpen && _duck.inputProfile.Pressed(Triggers.Select))
-                {
-                    SFX.Play("plasmaFire");
-                    _enterFeatherFashion = true;
-                    _duck.immobilized = true;
-                }
-            }
-            else if (_recorderatorCircle.entered)
-            {
-                _selectionTextDesired = "RECORDERATOR";
-                _desiredSelection = TitleMenuSelection.Recorderator;
-                if (!Options.menuOpen && _duck.inputProfile.Pressed(Triggers.Select))
-                {
-                    SFX.Play("plasmaFire");
-                    _enterRecorderator = true;
-                    _duck.immobilized = true;
-                }
-            }
             else if (_libraryBeam.entered)
             {
                 _selectionTextDesired = "LIBRARY";
@@ -1475,6 +1504,17 @@ namespace DuckGame
                 {
                     SFX.Play("plasmaFire");
                     _enterLibrary = true;
+                    _duck.immobilized = true;
+                }
+            }
+            else if (_hatEditorBeam.entered)
+            {
+                _selectionTextDesired = "LIBRARY";
+                _desiredSelection = TitleMenuSelection.Stats;
+                if (_duck.inputProfile.Pressed(Triggers.Select) && Profiles.allCustomProfiles.Count > 0 && MonoMain.pauseMenu == null)
+                {
+                    SFX.Play("plasmaFire");
+                    _enterFeatherFashion = true;
                     _duck.immobilized = true;
                 }
             }
@@ -1658,9 +1698,9 @@ namespace DuckGame
                     }
                     else if (_selection == TitleMenuSelection.Play)
                     {
-                        //_font.Draw("@SELECT@PLAY", current.camera.PercentW(50f) - _font.GetWidth("@SELECT@PLAY") / 2f, 8, Color.White, (Depth)0.95);
-                        //_font.Draw("@DOWN@DGR", current.camera.PercentW(50f) - _font.GetWidth("@DOWN@DGR") / 2f, 22, Color.White, (Depth)0.95);
-                        DisplayUpperMonitorMessage("@SELECT@PLAY");
+                        _font.Draw("@SELECT@PLAY", current.camera.PercentW(50f) - _font.GetWidth("@SELECT@PLAY") / 2f, 8, Color.White, (Depth)0.95);
+                        _font.Draw("@DOWN@DGR", current.camera.PercentW(50f) - _font.GetWidth("@DOWN@DGR") / 2f, 22, Color.White, (Depth)0.95);
+                        //DisplayUpperMonitorMessage("@SELECT@PLAY");
                     }
                     else if (_selection == TitleMenuSelection.Stats)
                     {
@@ -1706,6 +1746,8 @@ namespace DuckGame
                 Graphics.Draw(_leftPlatform, 0f, 61f);
                 Graphics.Draw(_airlock, 266f, 135f);
                 Graphics.Draw(_rightPlatform, byte.MaxValue, 61f);
+                Graphics.Draw(_DGRleftPlatform, 0, 242);
+                Graphics.Draw(_DGRrightPlatform, byte.MaxValue, 242);
                 Graphics.Draw(_beamPlatform, 118f, 146f);
                 Graphics.Draw(_optionsTV, 0f, 19f);
                 Graphics.Draw(_libraryBookcase, 263f, 12f);
@@ -1768,6 +1810,8 @@ namespace DuckGame
                 _background.depth = (Depth)0f;
                 Rectangle sourceRectangle = new Rectangle(0f, 0f, 90f, _background.height);
                 Graphics.Draw(_background, 0f, 0f, sourceRectangle);
+
+                Graphics.Draw(_background2, 0, 184);
                 sourceRectangle = new Rectangle(63f, 107f, 194f, 61f);
                 Graphics.Draw(_background, sourceRectangle.x, sourceRectangle.y, sourceRectangle);
                 sourceRectangle = new Rectangle(230f, 61f, 28f, 61f);

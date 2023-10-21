@@ -191,7 +191,11 @@
     <Reference Include="NVorbis.NAudioSupport">
       <HintPath>lib\NVorbis.NAudioSupport.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="QRCoder, Version=1.4.3.0, Culture=neutral, PublicKeyToken=c4ed5b9ae8358a28, processorArchitecture=MSIL">
+      <HintPath>..\packages\QRCoder.1.4.3\lib\net40\QRCoder.dll</HintPath>
+    </Reference>
     <Reference Include="SixLabors.Fonts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
       <HintPath>..\packages\SixLabors.Fonts.1.0.0\lib\netstandard2.0\SixLabors.Fonts.dll</HintPath>
     </Reference>
@@ -397,6 +401,7 @@
     <Compile Include="AddedContent\Firebreak\Utilities\ProgressValue.cs" />
     <Compile Include="AddedContent\klof44\DartGrenade.cs" />
     <Compile Include="AddedContent\klof44\DiscordRichPresence.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\HatEditorBeam.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\DGRElevator.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\Rubble.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\SnowTile.cs" />
@@ -406,7 +411,6 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\RainTile.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\WindTile.cs" />
     <Compile Include="AddedContent\NiK0\ExplosionDecal.cs" />
-    <Compile Include="AddedContent\NiK0\SelectCircleParticle.cs" />
     <Compile Include="AddedContent\NiK0\BGLightning.cs" />
     <Compile Include="AddedContent\NiK0\ChangePlus.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\NMRobbedItemFrame.cs" />
@@ -482,9 +486,7 @@
     <Compile Include="AddedContent\NiK0\NMClientOnlyContent.cs" />
     <Compile Include="AddedContent\NiK0\RainbowConstant.cs" />
     <Compile Include="AddedContent\NiK0\RainParticel.cs" />
-    <Compile Include="AddedContent\NiK0\SelectCircle.cs" />
     <Compile Include="AddedContent\NiK0\SpaceMaterial.cs" />
-    <Compile Include="AddedContent\NiK0\TitleButton.cs" />
     <Compile Include="Recorderator\RecorderationSelector\FolderInfo.cs" />
     <Compile Include="Recorderator\RecorderationSelector\IRMenuItem.cs" />
     <Compile Include="Recorderator\RecorderationSelector\NullRMenuItem.cs" />
