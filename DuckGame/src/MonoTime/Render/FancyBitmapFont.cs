@@ -1071,7 +1071,7 @@ namespace DuckGame
                         {
                             float al2 = c.ToVector4().w;
                             c = col;
-                            c *= al2;
+                            // c *= al2;
                         }
                         flag1 = true;
                     }

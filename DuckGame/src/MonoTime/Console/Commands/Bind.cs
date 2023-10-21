@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using AddedContent.Firebreak;
+using DuckGame.ConsoleEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace DuckGame
         [Marker.DevConsoleCommand(
             Description = "Binds a command to a hotkey to be executed when pressed",
             Aliases = new[] { "binds" })]
+        [return: PrettyPrint]
         public static object Bind(BindAction action, string? hotkey = null, string? command = null)
         {
             switch (action)

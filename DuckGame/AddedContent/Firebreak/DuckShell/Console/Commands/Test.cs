@@ -5,28 +5,9 @@ namespace DuckGame.ConsoleEngine
     public static partial class Commands
     {
         [Marker.DevConsoleCommand(DebugOnly = true, To = ImplementTo.DuckShell)]
-        public static string Test(Huh whuh, Bwuh muh)
+        public static string Test()
         {
-            return $"{(int) whuh}: {whuh}";
-        }
-
-        public enum Huh
-        {
-            Bell,
-            Ride,
-            Rational,
-            Tube,
-            Reputation,
-        }
-
-        public enum Bwuh
-        {
-            Rocket,
-            Sock,
-            Pupil,
-            Gravity,
-            Pigeon,
-            Beginning,
+            return "This\nis\na\ntest";
         }
     }
 }

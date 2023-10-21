@@ -6,6 +6,7 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using System;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -73,11 +74,12 @@ namespace DuckGame
             if (DGRSettings.UseDuckShell)
             {
                 int sectionIndex = (int)s;
-                string colorTag = colored ? s_colorTable[sectionIndex] : string.Empty;
+                string colorTag = colored && s != DCSection.General ? s_colorTable[sectionIndex] : string.Empty;
                 string sectionCode = s_nameTable[sectionIndex + (small ? 0 : 8)];
                 string spacer = s == DCSection.General ? string.Empty : " ";
                 
-                return $"{colorTag}{sectionCode}{spacer}";
+                // TODO: replace concatenation with precalculated values
+                return colorTag + sectionCode + spacer;
             }
             
             if (formatting)

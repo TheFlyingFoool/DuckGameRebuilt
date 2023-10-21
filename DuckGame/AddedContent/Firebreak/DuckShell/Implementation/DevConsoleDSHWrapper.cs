@@ -54,16 +54,13 @@ namespace AddedContent.Firebreak.DuckShell.Implementation
         {
             string str = o.ToString();
 
-            foreach (string part in str.Split('\n'))
+            DevConsole.Log(str, significance switch
             {
-                DevConsole.Log(significance switch
-                {
-                    DSHConsoleLine.Significance.User => new Color("#afeb8f").ToDGColorString() + $"{part}",
-                    DSHConsoleLine.Significance.Response => Color.Aquamarine.ToDGColorString() + part,
-                    DSHConsoleLine.Significance.Error => Colors.DGRed.ToDGColorString() + part,
-                    _ => $"{part}",
-                });
-            }
+                DSHConsoleLine.Significance.User => new Color("#afeb8f"),
+                DSHConsoleLine.Significance.Response => Color.Aquamarine,
+                DSHConsoleLine.Significance.Error => Colors.DGRed,
+                _ => Color.White
+            });
         }
 
         public void Run(string command, bool byUser)

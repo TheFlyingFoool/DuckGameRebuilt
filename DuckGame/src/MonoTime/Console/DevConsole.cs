@@ -336,7 +336,7 @@ namespace DuckGame
                 }
                 else // for extra extra small scale
                 {
-                    _tray.scale = new Vec2((float)((Resolution.current.x / 1280f * 2f) / 2f) * 2f) * (consoleScale + 1) / 2f;
+                    _tray.scale = new Vec2((Resolution.current.x / 1280f * 2f) / 2f * 2f) * (consoleScale + 1) / 2f;
                 }
                 
                 _tray.depth = 0.75f;
@@ -349,130 +349,149 @@ namespace DuckGame
                     Graphics.Draw(_tray, (18 * _tray.scale.x) + (((numSectionsHor - 6) * (16.0f * _tray.scale.x))), (18 * _tray.scale.y) + (((numSectionsVert) * (16.0f * _tray.scale.y))), new Rectangle(_tray.width - 114, _tray.height - 18, 114, 18));
                     for (int index = 0; index < numSectionsHor; ++index)
                     {
-                        const float width = 16f;
-                        Graphics.Draw(_tray, (float)(18f * _tray.scale.x + 16f * _tray.scale.x * index), 0.0f,
-                            new Rectangle(width, 0.0f, width, 18f));
+                        const float variableNameConflictIForgotWhatThisDoesHeyHereHaveThisName = 16f;
+                        Graphics.Draw(_tray, 18f * _tray.scale.x + 16f * _tray.scale.x * index, 0.0f,
+                            new Rectangle(variableNameConflictIForgotWhatThisDoesHeyHereHaveThisName, 0.0f, variableNameConflictIForgotWhatThisDoesHeyHereHaveThisName, 18f));
                         if (index < numSectionsHor - 6)
-                            Graphics.Draw(_tray, (float)(18f * _tray.scale.x + 16f * _tray.scale.x * index),
-                                (float)(18f * _tray.scale.y + numSectionsVert * (16f * _tray.scale.y)),
-                                new Rectangle(width, _tray.height - 18, width, 18f));
+                            Graphics.Draw(_tray, 18f * _tray.scale.x + 16f * _tray.scale.x * index,
+                                18f * _tray.scale.y + numSectionsVert * (16f * _tray.scale.y),
+                                new Rectangle(variableNameConflictIForgotWhatThisDoesHeyHereHaveThisName, _tray.height - 18, variableNameConflictIForgotWhatThisDoesHeyHereHaveThisName, 18f));
                     }
 
-                    Graphics.Draw(_tray, (float)(18f * _tray.scale.x + numSectionsHor * (16f * _tray.scale.x)), 0f,
+                    Graphics.Draw(_tray, 18f * _tray.scale.x + numSectionsHor * (16f * _tray.scale.x), 0f,
                         new Rectangle(_tray.width - 18, 0f, 18f, 18f));
                     for (int index = 0; index < numSectionsVert; ++index)
                     {
-                        Graphics.Draw(_tray, 0.0f, (float)(18f * _tray.scale.y + 16f * _tray.scale.y * index),
+                        Graphics.Draw(_tray, 0.0f, 18f * _tray.scale.y + 16f * _tray.scale.y * index,
                             new Rectangle(0.0f, 18f, 18f, 16f));
-                        Graphics.Draw(_tray, (float)(18f * _tray.scale.x + numSectionsHor * (16f * _tray.scale.x)),
-                            (float)(18f * _tray.scale.y + 16f * _tray.scale.y * index),
+                        Graphics.Draw(_tray, 18f * _tray.scale.x + numSectionsHor * (16f * _tray.scale.x),
+                            18f * _tray.scale.y + 16f * _tray.scale.y * index,
                             new Rectangle(_tray.width - 18, 18f, 18f, 16f));
                     }
 
                     Graphics.DrawRect(Vec2.Zero,
-                        new Vec2((float)(18f * _tray.scale.x + numSectionsHor * (16f * _tray.scale.x) + _tray.scale.y * 4f),
+                        new Vec2(18f * _tray.scale.x + numSectionsHor * (16f * _tray.scale.x) + _tray.scale.y * 4f,
                             (numSectionsVert + 2) * (16f * _tray.scale.y)), Color.Black * 0.8f * _core.alpha,
                         0.7f);
                     _core.fancyFont.scale = new Vec2(_tray.scale.x / 2f);
                     _core.fancyFont.depth = 0.98f;
                     _core.fancyFont.alpha = _core.alpha;
-                    float num3 = (float)((numSectionsVert + 1) * 16 * (double)_tray.scale.y + 5f * _tray.scale.y);
-                    float num4 = (numSectionsHor + 2) * (16f * _tray.scale.x);
+                    float height = (float)((numSectionsVert + 1) * 16 * (double)_tray.scale.y + 5f * _tray.scale.y);
+                    float width = (numSectionsHor + 2) * (16f * _tray.scale.x);
                     string version = DG.version;
                     _core.fancyFont.Draw(version,
-                        new Vec2((float)(82f * _tray.scale.x + (numSectionsHor - 6) * (16f * _tray.scale.x)),
-                            num3 + 7f * _tray.scale.y), new Color(62, 114, 122), 0.98f);
+                        new Vec2(82f * _tray.scale.x + (numSectionsHor - 6) * (16f * _tray.scale.x),
+                            height + 7f * _tray.scale.y), new Color(62, 114, 122), 0.98f);
                     _core.cursorPosition = Math.Min(Math.Max(_core.cursorPosition, 0),
                         _core.Typing.Length);
+                    Vec2 p1;
                     if (_raster != null)
                     {
                         _raster.scale = new Vec2(0.5f);
                         _raster.alpha = _core.alpha;
-                        _raster.Draw(_core.Typing.Replace("\n", $"{DevConsoleCommands.SyntaxColorComments.ToDGColorString()}\\n|PREV|"), 4f * _tray.scale.x, (float)(num3 + _tray.scale.y * 8f - _raster.characterHeight * (double)_raster.scale.y / 2f), Color.White, 0.9f);
+                        _raster.Draw(_core.Typing.Replace("\n", $"{DevConsoleCommands.SyntaxColorComments.ToDGColorString()}\\n|PREV|"), 4f * _tray.scale.x, (float)(height + _tray.scale.y * 8f - _raster.characterHeight * (double)_raster.scale.y / 2f), Color.White, 0.9f);
                         
-                        Vec2 p1 = new(
-                            _raster.GetWidth(_core.Typing.Replace("\n", "\\n").Substring(0, _core.cursorPosition) + new string('n', _core.Typing.Count(x => x == '\n'))) + 4f * _tray.scale.x + 1f,
-                            num3 + 6f * _tray.scale.y
+                        p1 = new(
+                            _raster.GetWidth(_core.Typing.Replace("\n", "\\n").Substring(0, _core.cursorPosition) + new string('n', _core.Typing.Substring(0, _core.cursorPosition).Count(x => x == '\n'))) + 4f * _tray.scale.x + 1f,
+                            height + 6f * _tray.scale.y
                             );
                         
                         Graphics.DrawLine(p1, p1 + new Vec2(0.0f, 4f * _tray.scale.x), Color.White,
                             depth: 1f);
-                        
-                        if (DGRSettings.UseDuckShell)
-                        {
-                            int length = Math.Min(CommandSuggestionLimit, s_latestPredictionSuggestions.Length);
-                            for (int i = 0; i < length; i++)
-                            {
-                                string suggestion = s_latestPredictionSuggestions[i].Replace(CommandRunner.INLINE_COMMAND_MARKER, $"|RED|{new string('?', CommandRunner.INLINE_COMMAND_MARKER.Length)}|PREV|");
-
-                                const float fontSize = 1f;
-                                Vec2 stringSize = Extensions.GetStringSize(suggestion, fontSize);
-                                Vec2 drawPos = p1 + new Vec2(4, -4 - stringSize.y - ((stringSize.y + 2) * i));
-                                Rectangle textBounds = new(drawPos.x, drawPos.y, stringSize.x, stringSize.y);
-                                
-                                Graphics.DrawString(suggestion, drawPos, s_HighlightedSuggestionIndex == i ? Color.Aqua : Color.Yellow, 1.3f, scale: fontSize);
-                                Graphics.DrawRect(textBounds, Color.Black, 1.2f);
-                            }
-                        }
                     }
                     else
                     {
                         _core.font.scale = new Vec2(_tray.scale.x / 2f);
                         _core.font.alpha = _core.alpha;
-                        _core.font.Draw(_core.Typing, 4f * _tray.scale.x,
-                            num3 + 6f * _tray.scale.y, Color.White, 0.9f);
-                        Vec2 p1 = new(
-                            _core.font.GetWidth(
-                                _core.Typing.Substring(0, _core.cursorPosition)) +
-                            4f * _tray.scale.x, num3 + 6f * _tray.scale.y);
+                        _core.font.Draw(_core.Typing.Replace("\n", $"{DevConsoleCommands.SyntaxColorComments.ToDGColorString()}\\n|PREV|"), 4f * _tray.scale.x,
+                            height + 6f * _tray.scale.y, Color.White, 0.9f);
+                        p1 = new(
+                            _core.font.GetWidth(_core.Typing.Replace("\n", "\\n").Substring(0, _core.cursorPosition) + new string('n', _core.Typing.Substring(0, _core.cursorPosition).Count(x => x == '\n'))) + 4f * _tray.scale.x + 1f,
+                            height + 6f * _tray.scale.y);
                         Graphics.DrawLine(p1, p1 + new Vec2(0.0f, 4f * _tray.scale.x), Color.White, 2f, 1f);
+                    }
+                    
+                    if (DGRSettings.UseDuckShell)
+                    {
+                        int length = Math.Min(CommandSuggestionLimit, s_latestPredictionSuggestions.Length);
+                        for (int i = 0; i < length; i++)
+                        {
+                            string suggestion = s_latestPredictionSuggestions[i];
+
+                            const float fontSize = 1f;
+                            Vec2 stringSize = Extensions.GetStringSize(suggestion, fontSize);
+                            Vec2 drawPos = p1 + new Vec2(4, -4 - stringSize.y - ((stringSize.y + 2) * i));
+                            Rectangle textBounds = new(drawPos.x, drawPos.y, stringSize.x, stringSize.y);
+                                
+                            Graphics.DrawString(suggestion, drawPos, s_HighlightedSuggestionIndex == i ? Color.Aqua : Color.Yellow, 1.3f, scale: fontSize);
+                            Graphics.DrawRect(textBounds, Color.Black, 1.2f);
+                        }
                     }
 
                     int index1 = _core.lines.Count - 1 - _core.viewOffset + ConsoleLineOffset;
-                    float num5 = 0.0f;
+                    float vOffset = 0.0f;
                     _core.font.scale = new Vec2((float)Math.Max(Math.Round(_tray.scale.x / 4f), 1f));
-                    float num6 = _core.font.scale.x / 2f;
-                    float num7 = 18f * num6;
-                    float num8 = (float)(20f * (_core.font.scale.x * 2f)) + core.font.GetWidth("HH:mm:ss ");
+                    float mul = _core.font.scale.x / 2f;
+                    float lineHeight = 18f * mul;
+                    float lineNumWidth = 20f * (_core.font.scale.x * 2f) + core.font.GetWidth("HH:mm:ss ");
                     if (_raster != null)
                     {
-                        num7 = (_raster.characterHeight - 2) * _raster.scale.y;
-                        num5 = num7;
-                        num8 = _raster.GetWidth("HH:mm:ss 0000  ");
+                        lineHeight = (_raster.characterHeight - 2) * _raster.scale.y;
+                        vOffset = lineHeight;
+                        lineNumWidth = _raster.GetWidth("HH:mm:ss 0000  ");
                     }
 
-                    for (int index2 = ConsoleLineOffset; index2 < (num3 - 2f * _tray.scale.y) / num7 - 1f && index1 >= 0; ++index2)
+                    for (int index2 = ConsoleLineOffset; index2 < (height - 2f * _tray.scale.y) / lineHeight - 1f && index1 >= 0; ++index2)
                     {
                         DCLine dcLine = _core.lines.ElementAt(index1);
 
-                        string text = index1.ToString().PadLeft(4, '0');
+                        string lineNumber = index1.ToString().PadLeft(4, '0');
                         string timeString = $"{dcLine.timestamp:HH:mm:ss} ";
-                        text = timeString + text;
+                        lineNumber = timeString + lineNumber;
+                        float posX = 4f * _tray.scale.x;
+                        Color lineNumColor = index1 % 2 > 0 ? Color.Gray * 0.4f : Color.Gray * 0.6f;
+
+                        string originalLineText = dcLine.SectionString() + dcLine.line;
+                        
                         if (_raster != null)
                         {
-                            _raster.maxWidth = (int)(num4 - 35f * _tray.scale.x);
+                            int maxCharsPerLine = (int)(width / _raster.GetWidth("M"));
+                            string[] lineParts = originalLineText.SplitByLength(maxCharsPerLine);
+                            int dcLineSize = lineParts.Length;
+                            float blockHeight = lineHeight * dcLineSize;
+                            float posY = height + lineHeight - blockHeight - vOffset + 2f;
+                            
+                            _raster.maxWidth = (int)(width - 35f * _tray.scale.x);
                             _raster.singleLine = true;
                             _raster.enforceWidthByWord = false;
-                            _raster.Draw(text, 4f * _tray.scale.x,
-                                (float)(num3 - (double)num5 + 2f),
-                                index1 % 2 > 0 ? Color.Gray * 0.4f : Color.Gray * 0.6f, 0.9f);
-                            _raster.Draw(dcLine.SectionString() + dcLine.line, 4f * _tray.scale.x + num8,
-                                (float)(num3 - (double)num5 + 2f), dcLine.color, 0.9f);
-                            num5 += num7;
+                            
+                            _raster.Draw(lineNumber, posX, posY, lineNumColor, 0.9f);
+                            for (int i = 0; i < lineParts.Length; i++)
+                            {
+                                _raster.Draw(lineParts[i], posX + lineNumWidth, posY + (i * lineHeight), dcLine.color * 0.8f, 0.9f);
+                            }
+                            
+                            vOffset += blockHeight;
                         }
                         else
                         {
-                            _core.font.maxWidth = (int)(num4 - 35f * _tray.scale.x);
+                            int maxCharsPerLine = (int)(width / _core.font.GetWidth("M"));
+                            string[] lineParts = originalLineText.SplitByLength(maxCharsPerLine);
+                            int dcLineSize = lineParts.Length;
+                            float blockHeight = lineHeight * dcLineSize;
+                            float posY = height - blockHeight - vOffset + 2f;
+                            
+                            _core.font.maxWidth = (int)(width - 35f * _tray.scale.x);
                             _core.font.singleLine = true;
                             _core.font.enforceWidthByWord = false;
-                            _core.font.Draw(text, 4f * _tray.scale.x,
-                                (float)(num3 - 18f * num6 - num5 + 2f),
-                                index1 % 2 > 0 ? Color.Gray * 0.4f : Color.Gray * 0.6f, 0.9f);
-                            _core.font.Draw($"{dcLine.SectionString()}{dcLine.line}",
-                                4f * _tray.scale.x + num8,
-                                (float)(num3 - 18f * num6 - num5 + 2f), dcLine.color * 0.8f,
-                                0.9f);
-                            num5 += 18f * num6;
+
+                            _core.font.Draw(lineNumber, posX, posY, lineNumColor, 0.9f);
+                            for (int i = 0; i < lineParts.Length; i++)
+                            {
+                                _core.font.Draw(lineParts[i], posX + lineNumWidth, posY + (i * lineHeight), dcLine.color * 0.8f, 0.9f);
+                            }
+                            
+                            vOffset += blockHeight;
                         }
 
                         --index1;
