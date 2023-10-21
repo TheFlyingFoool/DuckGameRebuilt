@@ -393,6 +393,8 @@ namespace DuckGame
         [Marker.AutoConfig] public static bool OpenURLsInBrowser = false;
 
         [Marker.AutoConfig] public static int DGRJoinLink = 0;
+
+        [Marker.AutoConfig] public static bool QRCodeJoinLinks = false;
         
         // the 4chan disease..
         [Marker.AutoConfig] public static bool GreenTextSupport = false;

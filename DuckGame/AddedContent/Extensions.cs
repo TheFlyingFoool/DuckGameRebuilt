@@ -1,4 +1,7 @@
 ﻿using AddedContent.Firebreak;
+using QRCoder;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Collections;
 using System.Linq;
@@ -10,6 +13,8 @@ using System.Reflection.Emit;
 using System.Diagnostics;
 using System.Drawing;
 using System.Web.UI.WebControls;
+using Image = SixLabors.ImageSharp.Image;
+using SizeF = System.Drawing.SizeF;
 
 namespace DuckGame
 {
@@ -647,6 +652,14 @@ namespace DuckGame
             }
 
             return enumerator.Current;
+        }
+
+        public static Bitmap GenerateQRCode(string text)
+        {
+            QRCodeGenerator qrGenerator = new();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q);
+            QRCode qrCode = new(qrCodeData);
+            return qrCode.GetGraphic(4);
         }
 
         public static T[] ChooseRandom<T>(this IEnumerable<T> collection, int count, bool unique = false)

@@ -437,6 +437,11 @@ namespace DuckGame
                 dgrDescription = "Retextures the Sequence Crate so it doesn't look indentical to the regular crate"
             });
 
+            menu.Add(new UIMenuItemToggle("QR Code Join Links", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.QRCodeJoinLinks)))
+            {
+                dgrDescription = "Copies a QR code representing the join link"
+            });
+
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
             return menu;
