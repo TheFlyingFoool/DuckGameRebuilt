@@ -4,6 +4,7 @@
     {
         public RainParticel(Vec2 v, float mult = 1)
         {
+            lPos = v;
             position = v;
             rY = Rando.Float(6, 10);
             rX = Rando.Float(1, 2) * mult;
@@ -11,6 +12,7 @@
         }
         public override void Update()
         {
+            lPos = position;
             x += rX;
             y += rY;
             if (position.y > yEnd.y)
@@ -19,7 +21,6 @@
                 Level.Remove(this);
             }
             else if (position.y > Level.current.bottomRight.y + 200) Level.Remove(this);
-            lPos = position;
         }
         public override void Draw()
         {
