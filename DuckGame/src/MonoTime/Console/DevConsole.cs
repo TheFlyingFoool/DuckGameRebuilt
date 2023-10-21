@@ -1833,11 +1833,18 @@ namespace DuckGame
         }
 
 
+        [MethodImpl(MethodImplOptions.NoInlining | MethodImplOptions.NoOptimization)]
         public static void InitializeCommands()
         {
-            // all ported to the new system :D
-            // well, except the terrible ones i got rid of
-            // oops.                            ~firebreak
+            /*
+               all ported to the new system :D
+               
+               well, except the terrible ones i got rid of, oops.                            
+               
+               anyways, keeping this method so harmony stuff
+               doesn't break if anyone's referencing this
+
+                                                    ~firebreak */
         }
 
         public static void FlushPendingLines()
