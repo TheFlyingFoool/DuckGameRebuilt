@@ -6,8 +6,10 @@ namespace DuckGame
     public static partial class DevConsoleCommands
     {
         [Marker.DevConsoleCommand(Description = "Edit properties of the console")]
-        public static void Console(ConsoleProperty property, params string[] args)
+        public static void Console(ConsoleProperty property, string argString)
         {
+            string[] args = argString.Split(' ');
+            
             if (args.Length == 0)
                 throw new Exception("Missing arguments");
 
@@ -40,7 +42,7 @@ namespace DuckGame
                 // vile
                 case ConsoleProperty.Font:
                     {
-                        string newFont = string.Join(" ", args).ToLower();
+                        string newFont = argString.ToLower();
                         switch (newFont)
                         {
                             case "clear":
