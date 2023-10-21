@@ -30,6 +30,11 @@ namespace DuckGame
         }
         public void Pop(Duck duck)
         {
+            if (Level.current is TitleScreen ts)
+            {
+                ts.secondTitlescreen = false;
+                return;
+            }
             Bounce();
             if (!_hit)
             {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NAudio.MediaFoundation;
+using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -86,6 +87,14 @@ namespace DuckGame
             base.Update();
             if (goingUp)
             {
+                if (Level.current is DGRDevHall ddv)
+                {
+                    Graphics.fade = Lerp.Float(Graphics.fade, 0, 0.01f);
+                    if (Graphics.fade <= 0)
+                    {
+                        Level.current = new TitleScreen(ddv._duck.profile);
+                    }
+                }
                 if (isServerForObject)
                 {
                     if (y < Level.current.topLeft.y - 300)
