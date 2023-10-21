@@ -1623,8 +1623,8 @@ namespace DuckGame
                     if (File.Exists(@"../spriteatlas.png"))
                     {
                         DevConsole.Log("loading ../spriteatlass.png");
-                        DuckGame.Content.Thick = (Tex2D)DuckGame.Content.SpriteAtlasTextureFromStream(@"../spriteatlas.png", Graphics.device);
-                        DuckGame.Content.Thick.Namebase = "SpriteAtlas";
+                        DuckGame.Content.SpriteAtlasTex2D = (Tex2D)DuckGame.Content.SpriteAtlasTextureFromStream(@"../spriteatlas.png", Graphics.device);
+                        DuckGame.Content.SpriteAtlasTex2D.Namebase = "SpriteAtlas";
 
                         //RSplit("de mo", ' ', -1);
                         string[] lines = File.ReadAllLines(@"../spriteatlas_offsets.txt");
@@ -1650,8 +1650,8 @@ namespace DuckGame
                     else if (Directory.Exists(Program.GameDirectory + "spriteatlas") && File.Exists(Program.GameDirectory + "spriteatlas/spriteatlas.png"))
                     {
                         DevConsole.Log("loading " + Program.GameDirectory + "spriteatlas/spriteatlas.png");
-                        DuckGame.Content.Thick = (Tex2D)DuckGame.Content.SpriteAtlasTextureFromStream(Program.GameDirectory + "spriteatlas/spriteatlas.png", Graphics.device);
-                        DuckGame.Content.Thick.Namebase = "SpriteAtlas";
+                        DuckGame.Content.SpriteAtlasTex2D = (Tex2D)DuckGame.Content.SpriteAtlasTextureFromStream(Program.GameDirectory + "spriteatlas/spriteatlas.png", Graphics.device);
+                        DuckGame.Content.SpriteAtlasTex2D.Namebase = "SpriteAtlas";
 
                         //RSplit("de mo", ' ', -1);
                         string[] lines = File.ReadAllLines(Program.GameDirectory + "spriteatlas/spriteatlas_offsets.txt");

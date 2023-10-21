@@ -37,11 +37,11 @@ namespace DuckGame
                 SetValue("xpos", _thing.x);
                 SetValue("ypos", _thing.y);
 
-                SetValue("sasize", new Vec2(Content.Thick.width, Content.Thick.height));
-                SetValue("xoffset", r.X / (float)Content.Thick.width);
-                SetValue("yoffset", r.Y / (float)Content.Thick.height);
-                SetValue("spritesizex", r.Width / (float)Content.Thick.width);
-                SetValue("spritesizey", r.Height / (float)Content.Thick.height);
+                SetValue("sasize", new Vec2(Content.SpriteAtlasTex2D.width, Content.SpriteAtlasTex2D.height));
+                SetValue("xoffset", r.X / (float)Content.SpriteAtlasTex2D.width);
+                SetValue("yoffset", r.Y / (float)Content.SpriteAtlasTex2D.height);
+                SetValue("spritesizex", r.Width / (float)Content.SpriteAtlasTex2D.width);
+                SetValue("spritesizey", r.Height / (float)Content.SpriteAtlasTex2D.height);
                 SetValue("goldxoffset", r2.X);
                 SetValue("goldyoffset", r2.Y);
                 SetValue("goldsizex", r2.Width);

@@ -802,7 +802,7 @@ namespace DuckGame
             return split;
         }
         public static bool didsetbigboi;
-        public static Tex2D Thick;
+        public static Tex2D SpriteAtlasTex2D;
         public static Dictionary<string, Microsoft.Xna.Framework.Rectangle> offests = new Dictionary<string, Microsoft.Xna.Framework.Rectangle>();
         public static void Initialize(bool reverse)
         {
