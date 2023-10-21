@@ -30,6 +30,7 @@ namespace DuckGame
                     return;
                 while (_text.Length < minLength)
                     _text = " " + _text;
+                _prevtext = text;
             }
         }
 

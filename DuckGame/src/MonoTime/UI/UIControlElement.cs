@@ -91,37 +91,38 @@ namespace DuckGame
             _captionList.Clear();
             if (!_editing)
             {
-                string str = !(inputMapping.device is Keyboard) || !(_trigger == Triggers.LeftStick) && !(_trigger == Triggers.RightStick) && !(_trigger == Triggers.LeftTrigger) && !(_trigger == Triggers.RightTrigger) ? (_trigger == Triggers.LeftStick || _trigger == Triggers.RightStick || _trigger == Triggers.LeftTrigger || _trigger == Triggers.RightTrigger ? "|DGYELLOW|" : "|WHITE|") : "|GRAY|";
-                if (_trigger == Triggers.LeftStick)
+                string localtrigger = _trigger;
+                string str = !(inputMapping.device is Keyboard) || !(localtrigger == Triggers.LeftStick) && !(localtrigger == Triggers.RightStick) && !(localtrigger == Triggers.LeftTrigger) && !(localtrigger == Triggers.RightTrigger) ? (localtrigger == Triggers.LeftStick || localtrigger == Triggers.RightStick || localtrigger == Triggers.LeftTrigger || localtrigger == Triggers.RightTrigger ? "|DGYELLOW|" : "|WHITE|") : "|GRAY|";
+                if (localtrigger == Triggers.LeftStick)
                 {
                     _uiText.text = "|DGGREEN|MOVE STICK";
                     if (inputMapping.device is Keyboard)
                         _uiText.text = "|GRAY|MOVE STICK";
                 }
-                if (_trigger == Triggers.RightStick)
+                if (localtrigger == Triggers.RightStick)
                 {
                     _uiText.text = "|DGGREEN|LICK STICK";
                     if (inputMapping.device is Keyboard)
                         _uiText.text = "|GRAY|LICK STICK";
                 }
-                if (_trigger == Triggers.LeftTrigger)
+                if (localtrigger == Triggers.LeftTrigger)
                 {
                     _uiText.text = "|DGGREEN|QUACK PITCH";
                     if (inputMapping.device is Keyboard)
                         _uiText.text = "|GRAY|QUACK PITCH";
                 }
-                if (_trigger == Triggers.RightTrigger)
+                if (localtrigger == Triggers.RightTrigger)
                 {
                     _uiText.text = "|DGGREEN|ZOOM   ";
                     if (inputMapping.device is Keyboard)
                         _uiText.text = "|GRAY|ZOOM   ";
                 }
-                string mappingString = inputMapping.GetMappingString(_trigger);
-                if (_trigger == Triggers.Chat)
+                string mappingString = inputMapping.GetMappingString(localtrigger);
+                if (localtrigger == Triggers.Chat)
                     _uiText.text = "|PINK|CHAT      ";
-                if (_trigger == Triggers.VoiceRegister)
+                if (localtrigger == Triggers.VoiceRegister)
                     _uiText.text = "|PINK|JAM BUTTON";
-                if (_trigger == "PLAYERINDEX")
+                if (localtrigger == "PLAYERINDEX")
                 {
                     _uiText.text = "|LIME|PLAYER#";
                     if (inputMapping.device.productName == "KEYBOARD P1")
@@ -234,9 +235,10 @@ namespace DuckGame
                 else
                     _styleBubble.flipH = false;
                 Graphics.Draw(ref _styleBubble, vec2_1.x, vec2_1.y);
-                if (inputMapping.map.ContainsKey(_trigger))
+                string localtrigger = _trigger;
+                if (inputMapping.map.ContainsKey(localtrigger))
                 {
-                    Sprite g = inputMapping.GetSprite(inputMapping.map[_trigger]) ?? inputMapping.device.DoGetMapImage(inputMapping.map[_trigger], true);
+                    Sprite g = inputMapping.GetSprite(inputMapping.map[localtrigger]) ?? inputMapping.device.DoGetMapImage(inputMapping.map[localtrigger], true);
                     if (g != null)
                     {
                         g.depth = (Depth)0.95f;
@@ -264,9 +266,10 @@ namespace DuckGame
 
         public override void Activate(string trigger)
         {
+            string localtrigger = _trigger;
             if (trigger == Triggers.MenuRight)
             {
-                if (_trigger == "PLAYERINDEX")
+                if (localtrigger == "PLAYERINDEX")
                 {
                     if (inputMapping.device.productName == "KEYBOARD P1")
                     {
@@ -283,7 +286,7 @@ namespace DuckGame
                     SFX.Play("consoleSelect");
                 }
             }
-            else if (trigger == Triggers.MenuLeft && _trigger == "PLAYERINDEX")
+            else if (trigger == Triggers.MenuLeft && localtrigger == "PLAYERINDEX")
             {
                 if (inputMapping.device.productName == "KEYBOARD P1")
                 {
@@ -301,9 +304,9 @@ namespace DuckGame
             }
             if (trigger == Triggers.Select)
             {
-                if (inputMapping.device is Keyboard && (_trigger == Triggers.LeftStick || _trigger == Triggers.RightStick || _trigger == Triggers.LeftTrigger || _trigger == Triggers.RightTrigger))
+                if (inputMapping.device is Keyboard && (localtrigger == Triggers.LeftStick || localtrigger == Triggers.RightStick || localtrigger == Triggers.LeftTrigger || localtrigger == Triggers.RightTrigger))
                     SFX.Play("consoleError");
-                else if (_trigger == "PLAYERINDEX")
+                else if (localtrigger == "PLAYERINDEX")
                 {
                     if (inputMapping.device.productName == "KEYBOARD P1")
                     {
@@ -338,7 +341,7 @@ namespace DuckGame
                 _editing = true;
                 _skipStep = true;
                 int mapping;
-                if (inputMapping.map.TryGetValue(_trigger, out mapping))
+                if (inputMapping.map.TryGetValue(localtrigger, out mapping))
                 {
                     int num = 0;
                     Sprite sprite = inputMapping.GetSprite(mapping);
