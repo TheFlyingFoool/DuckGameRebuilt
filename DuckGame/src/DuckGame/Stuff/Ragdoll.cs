@@ -408,6 +408,7 @@ namespace DuckGame
                 _duck.position = _part2.position;
             if (num == 0)
                 _duck.position.y -= 20f;
+            _duck.SkipIntratick = 2;
             _duck.hSpeed = _part2.hSpeed;
             _duck.immobilized = false;
             _duck.enablePhysics = true;

@@ -222,7 +222,7 @@ namespace DuckGame
             _raiseArm = Lerp.Float(_raiseArm, 0f, 0.05f);
             _preachWait = Lerp.Float(_preachWait, 0f, 0.06f);
             _ringPulse = Lerp.Float(_ringPulse, 0f, 0.05f);
-            if (Network.isActive)
+            if (Network.isActive && !Network.isFakeActive)
             {
                 if (isServerForObject)
                 {

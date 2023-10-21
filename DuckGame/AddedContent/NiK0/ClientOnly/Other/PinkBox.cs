@@ -31,11 +31,6 @@ namespace DuckGame
         public void Pop(Duck duck)
         {
             Bounce();
-            if (Level.current is DGRDevHall dvh)
-            {
-                dvh.ascend = true;
-                return;
-            }
             if (!_hit)
             {
                 SuperFondle(this, DuckNetwork.localConnection);
@@ -165,7 +160,7 @@ namespace DuckGame
             SFX.Play("explode");
             ExplodeEffect(position);
             Send.Message(new NMPinkExplode(position));
-            Level.Remove(this);
+            if (Level.current is not DGRDevHall) Level.Remove(this);
         }
         public bool collision;
         public override void Update()

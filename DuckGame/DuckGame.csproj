@@ -332,6 +332,7 @@
     <Compile Include="AddedContent\Firebreak\Utilities\ProgressValue.cs" />
     <Compile Include="AddedContent\klof44\DartGrenade.cs" />
     <Compile Include="AddedContent\klof44\DiscordRichPresence.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\HatEditorBeam.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\DGRElevator.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\Rubble.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\SnowTile.cs" />
@@ -341,7 +342,6 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\RainTile.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\WindTile.cs" />
     <Compile Include="AddedContent\NiK0\ExplosionDecal.cs" />
-    <Compile Include="AddedContent\NiK0\SelectCircleParticle.cs" />
     <Compile Include="AddedContent\NiK0\BGLightning.cs" />
     <Compile Include="AddedContent\NiK0\ChangePlus.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\NMRobbedItemFrame.cs" />
@@ -417,9 +417,7 @@
     <Compile Include="AddedContent\NiK0\NMClientOnlyContent.cs" />
     <Compile Include="AddedContent\NiK0\RainbowConstant.cs" />
     <Compile Include="AddedContent\NiK0\RainParticel.cs" />
-    <Compile Include="AddedContent\NiK0\SelectCircle.cs" />
     <Compile Include="AddedContent\NiK0\SpaceMaterial.cs" />
-    <Compile Include="AddedContent\NiK0\TitleButton.cs" />
     <Compile Include="Recorderator\RecorderationSelector\FolderInfo.cs" />
     <Compile Include="Recorderator\RecorderationSelector\IRMenuItem.cs" />
     <Compile Include="Recorderator\RecorderationSelector\NullRMenuItem.cs" />

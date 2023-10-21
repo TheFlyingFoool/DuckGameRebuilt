@@ -1,5 +1,5 @@
 ﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.MultiBeam
+// Type: DuckGame.EditorBeam
 //removed for regex reasons Culture=neutral, PublicKeyToken=null
 // MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
@@ -11,20 +11,20 @@ using System.Linq;
 
 namespace DuckGame
 {
-    public class MultiBeam : MaterialThing
+    public class HatEditorBeam : MaterialThing
     {
         private Sprite _selectBeam;
         private float _spawnWait;
         private SinWave _wave = (SinWave)0.016f;
         private SinWave _wave2 = (SinWave)0.02f;
-        public List<BeamDuck> _ducks = new List<BeamDuck>();
+        private List<BeamDuck> _ducks = new List<BeamDuck>();
         private List<Thing> _guns = new List<Thing>();
         private float _beamHeight = 180f;
         private float _flash;
         private bool _leaveLeft;
         public bool entered;
 
-        public MultiBeam(float xpos, float ypos)
+        public HatEditorBeam(float xpos, float ypos)
           : base(xpos, ypos)
         {
             _selectBeam = new Sprite("selectBeam")
@@ -35,7 +35,7 @@ namespace DuckGame
             _selectBeam.center = new Vec2(_selectBeam.w / 2, 0f);
             depth = (Depth)0.5f;
             _collisionOffset = new Vec2((float)-(_selectBeam.w / 2 * 0.8f), 0f);
-            _collisionSize = new Vec2(_selectBeam.w * 0.8f, 180f);
+            _collisionSize = new Vec2(_selectBeam.w * 0.8f, 80);
             center = new Vec2(_selectBeam.w / 2);
             layer = Layer.Background;
             thickness = 10f;
@@ -45,13 +45,13 @@ namespace DuckGame
 
         public override void Update()
         {
-            _selectBeam.color = new Color(0.3f, (float)(0.3f + _wave2.normalized * 0.2f), (float)(0.5 + _wave.normalized * 0.3f)) * (1f + _flash);
+            _selectBeam.color = new Color(0.5f, 0.2f + _wave2.normalized * 0.2f, 0.3f + _wave.normalized * 0.3f) * (1f + _flash);
             _flash = Maths.CountDown(_flash, 0.1f);
             _spawnWait -= 0.025f * DGRSettings.ActualParticleMultiplier;
             if (_spawnWait < 0f)
             {
-                Level.Add(new MultiBeamParticle(x, y + 190f, -0.8f - _wave.normalized, false, Color.Cyan * 0.8f));
-                Level.Add(new MultiBeamParticle(x, y + 190f, -0.8f - _wave2.normalized, true, Color.LightBlue * 0.8f));
+                Level.Add(new MultiBeamParticle(x, y + 80, -0.8f - _wave.normalized, false, Color.Cyan * 0.8f) { high = true });
+                Level.Add(new MultiBeamParticle(x, y + 80, -0.8f - _wave2.normalized, true, Color.LightBlue * 0.8f) { high = true });
                 _spawnWait = 1f;
             }
             foreach (Duck duck in Level.CheckRectAll<Duck>(position - center, position - center + new Vec2(_collisionSize.x, _collisionSize.y)))
@@ -88,7 +88,7 @@ namespace DuckGame
             }
             int count = _ducks.Count;
             int num1 = 0;
-            float num2 = (float)(_beamHeight / count / 2f + 20f * (count > 1 ? 1f : 0f));
+            float num2 = 150f;
             float num3 = (float)((_beamHeight - num2 * 2f) / (count > 1 ? count - 1 : 1f));
             for (int index = 0; index < _ducks.Count; ++index)
             {
@@ -96,7 +96,7 @@ namespace DuckGame
                 if (duck.leaving)
                 {
                     duck.duck.solid = true;
-                    duck.duck.hSpeed = _leaveLeft ? -4f : 4f;
+                    duck.duck.hSpeed = -4;
                     duck.duck.vSpeed = 0f;
                     if (Math.Abs(duck.duck.position.x - x) > 24f)
                     {
@@ -109,26 +109,16 @@ namespace DuckGame
                 else
                 {
                     duck.duck.position.x = Lerp.FloatSmooth(duck.duck.position.x, position.x + (float)duck.sin2 * 1f, 0.2f);
-                    duck.duck.position.y = Lerp.FloatSmooth(duck.duck.position.y, (float)(num2 + num3 * index + (float)duck.sin * 2f), 0.08f);
+                    duck.duck.position.y = Lerp.FloatSmooth(duck.duck.position.y, 328, 0.08f);
                     duck.duck.vSpeed = 0f;
                     duck.duck.hSpeed = 0f;
                 }
-                if (duck.duck.inputProfile != null)
+                if (!TitleScreen.hasMenusOpen && duck.duck.inputProfile.Pressed(Triggers.Left))
                 {
-                    if (!TitleScreen.hasMenusOpen && duck.duck.inputProfile.Pressed(Triggers.Left))
-                    {
-                        duck.leaving = true;
-                        _leaveLeft = true;
-                        duck.duck.offDir = -1;
-                        entered = false;
-                    }
-                    else if (!TitleScreen.hasMenusOpen && duck.duck.inputProfile.Pressed(Triggers.Right))
-                    {
-                        duck.leaving = true;
-                        _leaveLeft = false;
-                        duck.duck.offDir = 1;
-                        entered = false;
-                    }
+                    duck.leaving = true;
+                    _leaveLeft = false;
+                    duck.duck.offDir = 1;
+                    entered = false;
                 }
                 ++num1;
             }
@@ -166,8 +156,10 @@ namespace DuckGame
         {
             base.Draw();
             _selectBeam.depth = depth;
-            for (int index = 0; index < 6; ++index)
-                Graphics.Draw(_selectBeam, x, y + index * 32);
+            for (int index = 0; index < 2; ++index)
+            {
+                Graphics.Draw(_selectBeam, x, y + index * 32 + 12);
+            }
         }
     }
 }

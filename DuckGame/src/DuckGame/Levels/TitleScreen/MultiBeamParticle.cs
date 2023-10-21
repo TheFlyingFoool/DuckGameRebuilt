@@ -39,7 +39,7 @@ namespace DuckGame
             _color = c;
             layer = Layer.Background;
         }
-
+        public bool high;
         public override void Update()
         {
             _wave += 0.1f;
@@ -49,7 +49,7 @@ namespace DuckGame
                 depth = -0.8f;
             else if (_sinVal > 0.8f && depth < 0f)
                 depth = (Depth)0.8f;
-            if (y < 0f)
+            if (y < 0f || (high && y < 254))
                 Level.Remove(this);
             base.Update();
         }

@@ -451,11 +451,11 @@ namespace DuckGame
 
             menu.Add(new UIMenuItemToggle("Uncap FPS", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.UncappedFPS)))
             {
-                dgrDescription = "Game will use interpolation to render at higher than 60fps"
+                dgrDescription = "Game will use interpolation to render at higher than 60fps (REQUIRES RESTART)"
             });
             menu.Add(new UIMenuItemToggle("Use V-Sync", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.UseVSync)))
             {
-                dgrDescription = "Verticaly synced drawing, overrides FPS target"
+                dgrDescription = "Verticaly synced drawing, overrides FPS target (REQUIRES RESTART)"
             });
 
             menu.Add(new UIMenuItemNumber("FPS Target", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.TargetFrameRate), 0, 1000, 60), step: 60)
