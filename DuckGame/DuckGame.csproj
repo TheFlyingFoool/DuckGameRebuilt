@@ -281,6 +281,7 @@
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\AutoCompl.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\CommandAutoCompl.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\ConfigAutoCompl.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\TeamAutoCompl.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\PrettyPrintAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\DuckInterpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\LayerInterpreter.cs" />
@@ -623,6 +624,8 @@
     <Compile Include="src\MonoTime\Console\Commands\Debug.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Accept.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\ClearMainProfile.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\Close.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\Console.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\ConstantSync.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Copy.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\DownPour.cs" />
@@ -638,6 +641,7 @@
     <Compile Include="src\MonoTime\Console\Commands\Default\ManageCloud.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Mem.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\ModHash.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\NetDebug.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\OldAngles.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\QwopMode.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\RandomEdit.cs" />
@@ -649,8 +653,10 @@
     <Compile Include="src\MonoTime\Console\Commands\Default\ShowCollision.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\ShowOrigin.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Sing.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\Spawn.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\SplitScreen.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\SteamId.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\Team.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Toggle.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\UserDir.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Wagnus.cs" />

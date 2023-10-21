@@ -15,7 +15,12 @@ namespace AddedContent.Firebreak.DuckShell.Implementation
     public class DevConsoleDSHWrapper : IDSHConsole
     {
         public CommandRunner Shell { get; set; }
-        public bool Active { get; set; }
+
+        public bool Active
+        {
+            get => DevConsole.core.open;
+            set => DevConsole.core.open = value;
+        }
         
         internal static readonly List<Marker.DevConsoleCommandAttribute> AttributeCommands = new();
         internal static readonly List<TypeInfo> TypeInterpreterInfos = new();
