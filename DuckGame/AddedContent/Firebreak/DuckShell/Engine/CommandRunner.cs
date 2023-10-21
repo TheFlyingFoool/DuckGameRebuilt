@@ -173,6 +173,9 @@ namespace DuckGame.ConsoleEngine
             
             if (!Commands.TryFirst(x => x.Name.CaselessEquals(commandName), out Marker.DevConsoleCommandAttribute command))
                 return new Exception($"Command not found: {commandName}");
+            
+            if (command.HostOnly && !Network.isServer)
+                return new Exception("Only the host can use this command");
 
             if (command.IsCheat && DevConsole.CheckCheats())
                 return new Exception("Can't use cheat commands here");

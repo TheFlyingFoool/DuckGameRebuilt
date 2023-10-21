@@ -5,7 +5,8 @@ namespace DuckGame
 
     public static partial class DevConsoleCommands
     {
-        [Marker.DevConsoleCommand(Description = "Wipes your main Duck Game profile of all data", To = ImplementTo.DuckHack)]
+        [Marker.DevConsoleCommand(Description = "Wipes your main Duck Game profile of all data"
+            , To = ImplementTo.DuckHack)]
         public static void ClearMainProfile()
         {
             DevConsole.Log("Your main account has been R U I N E D !", Color.Red);
