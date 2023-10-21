@@ -905,6 +905,11 @@ namespace DuckGame
                     };
 
                     SDL.SDL_SetClipboardText(inviteLink);
+                    HUD.AddPlayerChangeDisplay("@CLIPCOPY@Invite Link Copied!");
+                }
+                else if (Program.IsLinuxD)
+                {
+                    HUD.AddPlayerChangeDisplay("this doesn't work on linux :sob4k:");
                 }
                 else
                 {
@@ -912,9 +917,9 @@ namespace DuckGame
                     Bitmap qrCodeImage = Extensions.GenerateQRCode(inviteLink);
                     
                     Clipboard.SetImage(qrCodeImage);
+                    HUD.AddPlayerChangeDisplay("@CLIPCOPY@Invite Link Copied!");
                 }
                 
-                HUD.AddPlayerChangeDisplay("@CLIPCOPY@Invite Link Copied!");
             });
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
