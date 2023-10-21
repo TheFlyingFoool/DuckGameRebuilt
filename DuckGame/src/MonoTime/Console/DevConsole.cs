@@ -466,8 +466,8 @@ namespace DuckGame
                         
                         if (_raster != null)
                         {
-                            int maxCharsPerLine = (int)(width / _raster.GetWidth("M"));
-                            string[] lineParts = originalLineText.SplitByLength(maxCharsPerLine);
+                            int maxCharsPerLine = (int)((width - posX - lineNumWidth - 32f) / _raster.GetWidth("M"));
+                            string[] lineParts = originalLineText.SplitByLength(maxCharsPerLine, breakAtWordEnding: false);
                             int dcLineSize = lineParts.Length;
                             float blockHeight = lineHeight * dcLineSize;
                             float posY = height + lineHeight - blockHeight - vOffset + 2f;
@@ -487,7 +487,7 @@ namespace DuckGame
                         else
                         {
                             int maxCharsPerLine = (int)(width / _core.font.GetWidth("M"));
-                            string[] lineParts = originalLineText.SplitByLength(maxCharsPerLine);
+                            string[] lineParts = originalLineText.SplitByLength(maxCharsPerLine, breakAtWordEnding: false);
                             int dcLineSize = lineParts.Length;
                             float blockHeight = lineHeight * dcLineSize;
                             float posY = height - blockHeight - vOffset + 2f;

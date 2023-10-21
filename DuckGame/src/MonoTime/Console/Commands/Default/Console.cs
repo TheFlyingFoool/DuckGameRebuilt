@@ -17,24 +17,30 @@ namespace DuckGame
             {
                 case ConsoleProperty.Width:
                     {
-                        float newWidth = int.Parse(args[0]);
-                        Options.Data.consoleWidth = (int)Maths.Clamp(newWidth, 25, 100);
+                        if (!int.TryParse(args[0], out int newWidth))
+                            throw new Exception($"Unable to parse as integer: {args[0]}");
+                        
+                        Options.Data.consoleWidth = Maths.Clamp(newWidth, 25, 100);
                         Options.Save();
                         break;
                     }
 
                 case ConsoleProperty.Height:
                     {
-                        float newHeight = int.Parse(args[0]);
-                        Options.Data.consoleHeight = (int)Maths.Clamp(newHeight, 25, 100);
+                        if (!int.TryParse(args[0], out int newHeight))
+                            throw new Exception($"Unable to parse as integer: {args[0]}");
+                        
+                        Options.Data.consoleHeight = Maths.Clamp(newHeight, 25, 100);
                         Options.Save();
                         break;
                     }
 
                 case ConsoleProperty.Scale:
                     {
-                        float newScale = int.Parse(args[0]);
-                        Options.Data.consoleScale = (int)Maths.Clamp(newScale, 1, 5);
+                        if (!int.TryParse(args[0], out int newScale))
+                            throw new Exception($"Unable to parse as integer: {args[0]}");
+                        
+                        Options.Data.consoleScale = Maths.Clamp(newScale, 1, 5);
                         Options.Save();
                         break;
                     }
@@ -65,10 +71,10 @@ namespace DuckGame
                                     DevConsole.RasterFont.scale = new Vec2(0.5f);
                                     Options.Save();
                                     if (DevConsole.RasterFont.data.name == "Comic Sans MS")
-                                        Log($"|DGGREEN|Font is now {DevConsole.RasterFont.data.name}! What a laugh!");
-                                    else Log($"|DGGREEN|Font is now {DevConsole.RasterFont.data.name}!");
+                                        DevConsole.Log($"|DGGREEN|Font is now {DevConsole.RasterFont.data.name}! What a laugh!");
+                                    else DevConsole.Log($"|DGGREEN|Font is now {DevConsole.RasterFont.data.name}!");
                                 }
-                                else Log($"|DGRED|Could not find font ({newFont})!");
+                                else DevConsole.Log($"|DGRED|Could not find font ({newFont})!");
 
                                 break;
                         }
