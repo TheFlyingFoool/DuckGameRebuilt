@@ -486,7 +486,7 @@ namespace DuckGame
                         }
                         else
                         {
-                            int maxCharsPerLine = (int)(width / _core.font.GetWidth("M"));
+                            int maxCharsPerLine = (int)((width - posX - lineNumWidth - 32f) / _core.font.GetWidth("M"));
                             string[] lineParts = originalLineText.SplitByLength(maxCharsPerLine, breakAtWordEnding: false);
                             int dcLineSize = lineParts.Length;
                             float blockHeight = lineHeight * dcLineSize;
