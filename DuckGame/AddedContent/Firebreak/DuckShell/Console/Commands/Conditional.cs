@@ -1,4 +1,5 @@
 ﻿using AddedContent.Firebreak;
+using SDL2;
 using System;
 
 namespace DuckGame.ConsoleEngine

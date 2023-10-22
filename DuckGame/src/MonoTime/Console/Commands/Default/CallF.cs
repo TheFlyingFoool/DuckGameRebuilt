@@ -11,7 +11,7 @@ namespace DuckGame
         private const BindingFlags ALL_INSTANCE = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.IgnoreCase;
         
         [Marker.DevConsoleCommand(Description = "Calls a parameterless method in the duck class of the given player's duck", IsCheat = true)]
-        public static void Call(
+        public static void CallF(
             Duck duck,
             [ReflectionAutoCompl(typeof(Duck), MemberTypes.Method , ALL_INSTANCE)] string method,
             params string[] commandArgs)

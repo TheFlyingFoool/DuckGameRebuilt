@@ -355,6 +355,7 @@
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\UInt64Interpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\Vec2Interpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\ValueOrException.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\FieldOrPropertyInfo.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\IntRange.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\Markers\AdvancedConfigAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\Markers\AutoConfigAttribute.cs" />
@@ -625,7 +626,7 @@
     <Compile Include="src\MonoTime\Console\Commands\Config.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Debug.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Accept.cs" />
-    <Compile Include="src\MonoTime\Console\Commands\Default\Call.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\CallF.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\ClearMainProfile.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Close.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Console.cs" />
@@ -651,6 +652,7 @@
     <Compile Include="src\MonoTime\Console\Commands\Default\RequestLogs.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\RhythmMode.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\SaveDir.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\SetF.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\ShieldMode.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\ShowBounds.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\ShowCollision.cs" />

@@ -170,7 +170,7 @@ namespace DuckGame.ConsoleEngine
             if (o is not string && o is IEnumerable collection)
                 return collection.Cast<object>().ToReadableString();
 
-            return o.ToString();
+            return o?.ToString();
         }
 
         protected virtual ValueOrException<object?> RunFromTokens(string[] tokens)
@@ -266,7 +266,7 @@ namespace DuckGame.ConsoleEngine
             {
                 object? invokationValue = command.Command.Invoke(appliedParameters);
 
-                if (((MethodInfo)command.Member).ReturnTypeCustomAttributes
+                if (command.Member is not null && ((MethodInfo)command.Member).ReturnTypeCustomAttributes
                     .GetCustomAttributes(typeof(PrettyPrintAttribute), true)
                     .Any())
                 {

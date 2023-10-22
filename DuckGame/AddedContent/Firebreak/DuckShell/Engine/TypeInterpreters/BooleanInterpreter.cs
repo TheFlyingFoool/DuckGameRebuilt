@@ -28,7 +28,7 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
                     case "n":
                     case "no":
                     case "false":
-                        return true;
+                        return false;
 
                     default:
                         goto Failed;
