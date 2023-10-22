@@ -25,6 +25,7 @@ namespace DuckGame
         public List<DCLine> pendingLines = new List<DCLine>();
         public List<DCChartValue> pendingChartValues = new List<DCChartValue>();
         public BitmapFont font;
+        public BitmapFont fpsfont;
         public FancyBitmapFont fancyFont;
         public float alpha;
         public bool open;

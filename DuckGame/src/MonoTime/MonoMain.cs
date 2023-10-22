@@ -57,17 +57,24 @@ namespace DuckGame
             }
             set
             {
-                string text = value;
-                if (Debugger.IsAttached)
+                if (DGRSettings.SingleLoadLine)
                 {
-                    text = "|16,144,13|" + text;
+                    loadMessage = value;
                 }
-                if (!loadMessages.Contains(text))
+                else
                 {
-                    loadMessages.Push(text);
+                    string text = value;
+                    if (Debugger.IsAttached)
+                    {
+                        text = "|16,144,13|" + text;
+                    }
+                    if (!loadMessages.Contains(text))
+                    {
+                        loadMessages.Push(text);
+                    }
+                    loadMessage = text;
+                    lastLoadMessage = text;
                 }
-                loadMessage = text;
-                lastLoadMessage = text;
             }
         }
         private SpriteMap _duckRun;
@@ -1572,7 +1579,7 @@ namespace DuckGame
             }
         }
 
-        static Stack<string> loadMessages = new();
+        public static Stack<string> loadMessages = new Stack<string>();
         public static string lastLoadMessage = "";
 
         protected void RunDraw(GameTime gameTime)
@@ -1598,7 +1605,7 @@ namespace DuckGame
             Graphics.SetScissorRectangle(new Rectangle(0f, 0f, Graphics.width, Graphics.height));
             if (Recorder.currentRecording != null)
                 Recorder.currentRecording.NextFrame();
-            if (!_started) 
+            if (!_started)
             {
                 ++_loadingFramesRendered;
                 Graphics.SetRenderTarget(null);
@@ -1623,8 +1630,8 @@ namespace DuckGame
                     if (File.Exists(@"../spriteatlas.png"))
                     {
                         DevConsole.Log("loading ../spriteatlass.png");
-                        DuckGame.Content.Thick = (Tex2D)DuckGame.Content.SpriteAtlasTextureFromStream(@"../spriteatlas.png", Graphics.device);
-                        DuckGame.Content.Thick.Namebase = "SpriteAtlas";
+                        DuckGame.Content.SpriteAtlasTex2D = (Tex2D)DuckGame.Content.SpriteAtlasTextureFromStream(@"../spriteatlas.png", Graphics.device);
+                        DuckGame.Content.SpriteAtlasTex2D.Namebase = "SpriteAtlas";
 
                         //RSplit("de mo", ' ', -1);
                         string[] lines = File.ReadAllLines(@"../spriteatlas_offsets.txt");
@@ -1650,8 +1657,8 @@ namespace DuckGame
                     else if (Directory.Exists(Program.GameDirectory + "spriteatlas") && File.Exists(Program.GameDirectory + "spriteatlas/spriteatlas.png"))
                     {
                         DevConsole.Log("loading " + Program.GameDirectory + "spriteatlas/spriteatlas.png");
-                        DuckGame.Content.Thick = (Tex2D)DuckGame.Content.SpriteAtlasTextureFromStream(Program.GameDirectory + "spriteatlas/spriteatlas.png", Graphics.device);
-                        DuckGame.Content.Thick.Namebase = "SpriteAtlas";
+                        DuckGame.Content.SpriteAtlasTex2D = (Tex2D)DuckGame.Content.SpriteAtlasTextureFromStream(Program.GameDirectory + "spriteatlas/spriteatlas.png", Graphics.device);
+                        DuckGame.Content.SpriteAtlasTex2D.Namebase = "SpriteAtlas";
 
                         //RSplit("de mo", ' ', -1);
                         string[] lines = File.ReadAllLines(Program.GameDirectory + "spriteatlas/spriteatlas_offsets.txt");
@@ -1679,14 +1686,14 @@ namespace DuckGame
                 }
                 Camera camera = new Camera(0f, 0f, Graphics.width, Graphics.height);
                 Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.getMatrix());
-                Vec2 p1 = new Vec2(50f, Graphics.height - 50);
+                Vec2 loadBarPos = new Vec2(50f, Graphics.height - 50);
                 Vec2 vec2_1 = new Vec2(Graphics.width - 100, 20f);
-                Graphics.DrawRect(p1, p1 + vec2_1, Color.DarkGray * 0.1f, (Depth)0.5f);
+                Graphics.DrawRect(loadBarPos, loadBarPos + vec2_1, Color.DarkGray * 0.1f, (Depth)0.5f);
                 float loaded = loadyBits / (float)totalLoadyBits;
-				if (loaded > 1f)
-				{
-					loaded = 1f;
-				}
+                if (loaded > 1f)
+                {
+                    loaded = 1f;
+                }
                 if (loadMessages.Count == 0)
                 {
                     NloadMessage = NloadMessage;
@@ -1694,49 +1701,63 @@ namespace DuckGame
                 if (Program.gay)
                 {
                     int offset = 0;
-                    for (int i = 0; i < p1.y - p1.y + vec2_1.y; i++)
+                    for (int i = 0; i < loadBarPos.y - loadBarPos.y + vec2_1.y; i++)
                     {
                         if (i - offset >= Colors.Rainbow.Length)
                         {
                             offset += Colors.Rainbow.Length;
                             // i = 0;
                         }
-                        Graphics.DrawLine(new Vec2(p1.x, p1.y + i), p1 + new Vec2(vec2_1.x * loaded, vec2_1.y + i - 20), Colors.Rainbow[i - offset]);
+                        Graphics.DrawLine(new Vec2(loadBarPos.x, loadBarPos.y + i), loadBarPos + new Vec2(vec2_1.x * loaded, vec2_1.y + i - 20), Colors.Rainbow[i - offset]);
                     }
                 }
                 else if (Debugger.IsAttached)
                 {
-                    Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * loaded, vec2_1.y), Color.Green, (Depth)0.6f);
+                    Graphics.DrawRect(loadBarPos, loadBarPos + new Vec2(vec2_1.x * loaded, vec2_1.y), Color.Green, (Depth)0.6f);
                 }
                 else
                 {
-                    Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * loaded, vec2_1.y), Color.Red, (Depth)0.6f);
+                    Graphics.DrawRect(loadBarPos, loadBarPos + new Vec2(vec2_1.x * loaded, vec2_1.y), Color.Red, (Depth)0.6f);
                 }
                 //string text = loadMessage;
                 //if (loadMessage != lastLoadMessage)
                 //{
                 //    loadMessages.Push(lastLoadMessage = loadMessage);
                 //}
-                float textPadding = -24f;
-                if (Cloud.processing && Cloud.progress != 0 && Cloud.progress != 1)
+
+                if (DGRSettings.SingleLoadLine)
                 {
-                    Graphics.DrawString("Synchronizing Steam Cloud... (" + ((int)(Cloud.progress * 100)).ToString() + "%)", p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
-                    textPadding -= 20;
+                    string message = loadMessage;
+                    if (Cloud.processing && Cloud.progress != 0f && Cloud.progress != 1f)
+                    {
+                        message = "Synchronizing Steam Cloud... (" + ((int)(Cloud.progress * 100f)).ToString() + "%)";
+                    }
+                    Graphics.DrawString(message, loadBarPos + new Vec2(0f, -24f), Color.White, 1f, null, 2f);
+
                 }
-                if (loadMessage != lastLoadMessage)
+                else
                 {
-                    NloadMessage = loadMessage;
+                    float textPadding = -24f;
+                    if (Cloud.processing && Cloud.progress != 0 && Cloud.progress != 1)
+                    {
+                        Graphics.DrawString("Synchronizing Steam Cloud... (" + ((int)(Cloud.progress * 100)).ToString() + "%)", loadBarPos + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
+                        textPadding -= 20;
+                    }
+                    if (loadMessage != lastLoadMessage)
+                    {
+                        NloadMessage = loadMessage;
+                    }
+                    int iters = 0;
+                    foreach (string i in loadMessages)
+                    {
+                        iters++;
+                        if (iters > 50) break;
+                        Graphics.DrawString(i, loadBarPos + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
+                        textPadding -= 20;
+                    }
                 }
-                //if (text != loadMessage)
-                //{
-                //    Graphics.DrawString(text, p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
-                //    textPadding -= 20;
-                //}
-                foreach (string i in loadMessages)
-                {
-                    Graphics.DrawString(i, p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
-                    textPadding -= 20;
-                }
+
+
                 _duckRun.speed = 0.15f;
                 _duckRun.scale = new Vec2(4f, 4f);
                 _duckRun.depth = 0.7f;
@@ -1887,11 +1908,13 @@ namespace DuckGame
                             Layer.HUD.End(true);
                         }
                     }
-                    if (DevConsole.showFPS)
-                    {
-                        FPSCounter.Render(Graphics.device, index: 0, label: "UPS");
-                        FPSCounter.Render(Graphics.device, 100f, index: 1);
-                    }
+                    //if (DevConsole.showFPS)
+                    //{
+                    //    //FPSCounter.Tick(0);
+                    //    //FPSCounter.Tick(1);
+                    //    //    FPSCounter.Render(Graphics.device, index: 0, label: "UPS");
+                    //    //    FPSCounter.Render(Graphics.device, 100f, index: 1);
+                    //}
                     UpdateLerpState = false;
                 }
             }

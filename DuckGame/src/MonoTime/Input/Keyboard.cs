@@ -21,7 +21,10 @@ namespace DuckGame
             TextInputEXT.TextInput += new Action<char>(FNACharEnteredHandler);
             if (Environment.GetEnvironmentVariable("FNADROID") != "1")
                 TextInputEXT.StartTextInput();
+
+          
         }
+        public static Array KeyTypes = Enum.GetValues(typeof(Keys));
         private static KeyboardState _keyState;
         private static KeyboardState _keyStatePrev;
         public static KeyboardState KeyState => _keyState;
@@ -63,7 +66,7 @@ namespace DuckGame
             if (_triggerNames == null)
             {
                 _triggerNames = new Dictionary<int, string>();
-                foreach (Keys key in Enum.GetValues(typeof(Keys)).Cast<Keys>())
+                foreach (Keys key in KeyTypes)
                 {
                     char ch = KeyToChar(key);
                     if (ch == ' ')
@@ -194,7 +197,7 @@ namespace DuckGame
             _triggerImages[9999] = new Sprite("buttons/keyboard/arrows");
             _triggerImages[9998] = new Sprite("buttons/keyboard/wasd");
             _triggerImages[int.MaxValue] = new Sprite("buttons/keyboard/key");
-            foreach (Keys key1 in Enum.GetValues(typeof(Keys)).Cast<Keys>())
+            foreach (Keys key1 in KeyTypes)
             {
                 char key2 = KeyToChar(key1);
                 if (key2 == ' ')
@@ -750,7 +753,7 @@ namespace DuckGame
             ignoreCore = true;
             if (_repeat)
             {
-                foreach (Keys keys in Enum.GetValues(typeof(Keys)).Cast<Keys>())
+                foreach (Keys keys in KeyTypes)
                 {
                     Keys k = keys;
                     if (MapPressed((int)k, false) && (k < Keys.F1 || k > Keys.F12) && _repeatingKeys.FirstOrDefault(x => x.key == k) == null)

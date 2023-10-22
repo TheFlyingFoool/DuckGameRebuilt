@@ -740,6 +740,10 @@ namespace DuckGame
             {
                 dgrDescription = "Lowers render times using an atlas so buffer doesn't constantly switch sprites\n(Requires restart)"
             });
+            menu.Add(new UIMenuItemToggle("Single Load Line", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SingleLoadLine)))
+            {
+                dgrDescription = "Whether or not to render a single line of load progress at startup, in low end systems this might help"
+            });
 
 
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });

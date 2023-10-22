@@ -52,32 +52,32 @@ namespace DuckGame
         public static byte[] generatePreviewBytes;
         public static bool renderingToTarget = false;
         private static Dictionary<Type, string> _extensionList = new Dictionary<Type, string>()
-    {
-      {
-        typeof (Tex2D),
-        "*.png"
-      },
-      {
-        typeof (Texture2D),
-        "*.png"
-      },
-      {
-        typeof (SoundEffect),
-        "*.wav"
-      },
-      {
-        typeof (Song),
-        "*.ogg"
-      },
-      {
-        typeof (Level),
-        "*.lev"
-      },
-      {
-        typeof (Effect),
-        "*.xnb"
-      }
-    };
+        {
+          {
+            typeof (Tex2D),
+            "*.png"
+          },
+          {
+            typeof (Texture2D),
+            "*.png"
+          },
+          {
+            typeof (SoundEffect),
+            "*.wav"
+          },
+          {
+            typeof (Song),
+            "*.ogg"
+          },
+          {
+            typeof (Level),
+            "*.lev"
+          },
+          {
+            typeof (Effect),
+            "*.xnb"
+          }
+        };
         private static List<string> _texturesToProcess = new List<string>();
         private static ContentManager _base;
         private static string _path = "";
@@ -802,7 +802,7 @@ namespace DuckGame
             return split;
         }
         public static bool didsetbigboi;
-        public static Tex2D Thick;
+        public static Tex2D SpriteAtlasTex2D;
         public static Dictionary<string, Microsoft.Xna.Framework.Rectangle> offests = new Dictionary<string, Microsoft.Xna.Framework.Rectangle>();
         public static void Initialize(bool reverse)
         {
@@ -926,8 +926,15 @@ namespace DuckGame
                 string[] strArray1 = null;
                 if (ReskinPack.active.Count > 0)
                     strArray1 = ReskinPack.LoadAsset<string[]>(pName);
-                if (strArray1 == null && File.Exists(path))
-                    strArray1 = File.ReadAllLines(path);
+                if (strArray1 == null)
+                {
+                    if (pName == "background/office.txt")
+                    {
+                        strArray1 = OfficeBackground.backgroundtextdata.Split('\n');
+                    }
+                    else if (File.Exists(path))
+                        strArray1 = File.ReadAllLines(path);
+                }
                 if (strArray1 != null)
                 {
                     try
@@ -959,6 +966,10 @@ namespace DuckGame
                                     definition.zones.Add(zone);
                             }
                         }
+                        if (pName == "background/office.txt")
+                        {
+                            _parallaxDefinitions[pName] = definition;
+                        }
                         return definition;
                     }
                     catch (Exception ex)
@@ -973,6 +984,7 @@ namespace DuckGame
             }
             return null;
         }
+
 
         public static T Load<T>(string name)
         {

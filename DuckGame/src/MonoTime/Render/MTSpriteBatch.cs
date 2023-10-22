@@ -389,19 +389,19 @@ namespace DuckGame
             {
                 batchItem.usingspriteatlas = true;
                 batchItem.NormalTexture = texture;
-                batchItem.Texture = Content.Thick.Texbase;
+                batchItem.Texture = Content.SpriteAtlasTex2D.Texbase;
 
                 //float sizeoffsetx = (float)offset.Left / (float)Content.Thick.width;
                 //float sizeoffsety = (float)offset.Top / (float)Content.Thick.height;
-                t1.x = ((t1.x * texture.width) + offset.Left) / Content.Thick.height;
-                t2.x = ((t2.x * texture.width) + offset.Left) / Content.Thick.height;
-                t3.x = ((t3.x * texture.width) + offset.Left) / Content.Thick.height;
-                t4.x = ((t4.x * texture.width) + offset.Left) / Content.Thick.height;
+                t1.x = ((t1.x * texture.width) + offset.Left) / Content.SpriteAtlasTex2D.height;
+                t2.x = ((t2.x * texture.width) + offset.Left) / Content.SpriteAtlasTex2D.height;
+                t3.x = ((t3.x * texture.width) + offset.Left) / Content.SpriteAtlasTex2D.height;
+                t4.x = ((t4.x * texture.width) + offset.Left) / Content.SpriteAtlasTex2D.height;
 
-                t1.y = ((t1.y * texture.height) + offset.Top) / Content.Thick.height;
-                t2.y = ((t1.y * texture.height) + offset.Top) / Content.Thick.height;
-                t3.y = ((t1.y * texture.height) + offset.Top) / Content.Thick.height;
-                t4.y = ((t1.y * texture.height) + offset.Top) / Content.Thick.height;
+                t1.y = ((t1.y * texture.height) + offset.Top) / Content.SpriteAtlasTex2D.height;
+                t2.y = ((t1.y * texture.height) + offset.Top) / Content.SpriteAtlasTex2D.height;
+                t3.y = ((t1.y * texture.height) + offset.Top) / Content.SpriteAtlasTex2D.height;
+                t4.y = ((t1.y * texture.height) + offset.Top) / Content.SpriteAtlasTex2D.height;
                 //offset
                 //_tempRect.x += offset.Left;
                 //_tempRect.y += offset.Top;
@@ -461,15 +461,15 @@ namespace DuckGame
             {
                 batchItem.NormalTexture = texture;
                 batchItem.usingspriteatlas = true;
-                batchItem.Texture = Content.Thick.Texbase;
+                batchItem.Texture = Content.SpriteAtlasTex2D.Texbase;
                 batchItem.Material = fx;
                 //offset
                 _tempRect.x += offset.Left;
                 _tempRect.y += offset.Top;
-                _texCoordTL.x = _tempRect.x / Content.Thick.width + edgeBias;
-                _texCoordTL.y = _tempRect.y / Content.Thick.height + edgeBias;
-                _texCoordBR.x = (_tempRect.x + _tempRect.width) / Content.Thick.width - edgeBias;
-                _texCoordBR.y = (_tempRect.y + _tempRect.height) / Content.Thick.height - edgeBias;
+                _texCoordTL.x = _tempRect.x / Content.SpriteAtlasTex2D.width + edgeBias;
+                _texCoordTL.y = _tempRect.y / Content.SpriteAtlasTex2D.height + edgeBias;
+                _texCoordBR.x = (_tempRect.x + _tempRect.width) / Content.SpriteAtlasTex2D.width - edgeBias;
+                _texCoordBR.y = (_tempRect.y + _tempRect.height) / Content.SpriteAtlasTex2D.height - edgeBias;
                 if ((effect & SpriteEffects.FlipVertically) != SpriteEffects.None)
                 {
                     float y = _texCoordBR.y;
@@ -487,7 +487,7 @@ namespace DuckGame
                 {
                     batchItem.MetaData = new MTSpriteBatchItemMetaData
                     {
-                        texture = Content.Thick,
+                        texture = Content.SpriteAtlasTex2D,
                         rotation = rotation,
                         color = color,
                         tempRect = _tempRect,
@@ -496,7 +496,7 @@ namespace DuckGame
                     };
                 }
                 if (!Graphics.skipReplayRender && Recorder.currentRecording != null && Graphics.currentRenderTarget == null)
-                    Recorder.currentRecording.LogDraw(Content.Thick.textureIndex, new Vec2(batchItem.vertexTL.Position.X, batchItem.vertexTL.Position.Y), new Vec2(batchItem.vertexBR.Position.X, batchItem.vertexBR.Position.Y), rotation, color, (short)_tempRect.x, (short)_tempRect.y, (short)(_tempRect.width * ((effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1f : 1f)), (short)(_tempRect.height * ((effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1f : 1f)), depth);
+                    Recorder.currentRecording.LogDraw(Content.SpriteAtlasTex2D.textureIndex, new Vec2(batchItem.vertexTL.Position.X, batchItem.vertexTL.Position.Y), new Vec2(batchItem.vertexBR.Position.X, batchItem.vertexBR.Position.Y), rotation, color, (short)_tempRect.x, (short)_tempRect.y, (short)(_tempRect.width * ((effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1f : 1f)), (short)(_tempRect.height * ((effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1f : 1f)), depth);
                 if (!autoFlush)
                     return;
                 FlushIfNeeded();

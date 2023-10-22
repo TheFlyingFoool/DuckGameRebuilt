@@ -74,30 +74,30 @@ namespace DuckGame
                     }
                 }
             }
-            foreach (FluidPuddle litBy1 in Level.current.things[typeof(FluidPuddle)])
+            foreach (FluidPuddle puddle in Level.current.things[typeof(FluidPuddle)])
             {
-                if (litBy1.data.flammable <= 0.5)
-                    litBy1.onFire = false;
-                else if (litBy1.onFire && litBy1.fireID == _curUpdateID && litBy1.alpha > 0.5)
+                if (puddle.data.flammable <= 0.5)
+                    puddle.onFire = false;
+                else if (puddle.onFire && puddle.fireID == _curUpdateID && puddle.alpha > 0.5)
                 {
-                    foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(litBy1.topLeft + new Vec2(0f, -4f), litBy1.topRight + new Vec2(0f, 2f)))
+                    foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(puddle.topLeft + new Vec2(0f, -4f), puddle.topRight + new Vec2(0f, 2f)))
                     {
-                        if (materialThing != litBy1 && materialThing.isServerForObject)
+                        if (materialThing != puddle && materialThing.isServerForObject)
                         {
                             if ((!(materialThing is Duck duck) || duck.slideBuildup <= 0f) && Rando.Float(1000f) < materialThing.flammable * 1000f)
-                                materialThing.Burn(litBy1.position + new Vec2(0f, 4f), litBy1);
-                            materialThing.DoHeatUp(0.05f, litBy1.position);
+                                materialThing.Burn(puddle.position + new Vec2(0f, 4f), puddle);
+                            materialThing.DoHeatUp(0.05f, puddle.position);
                         }
                     }
                 }
-                else if (!litBy1.onFire)
+                else if (!puddle.onFire)
                 {
-                    Rectangle rectangle = litBy1.rectangle;
-                    foreach (Spark litBy2 in Level.current.things[typeof(Spark)])
+                    Rectangle rectangle = puddle.rectangle;
+                    foreach (Spark sparks in Level.current.things[typeof(Spark)])
                     {
-                        if (litBy2.x > rectangle.x && litBy2.x < rectangle.x + rectangle.width && litBy2.y > rectangle.y && litBy2.y < rectangle.y + rectangle.height)
+                        if (sparks.x > rectangle.x && sparks.x < rectangle.x + rectangle.width && sparks.y > rectangle.y && sparks.y < rectangle.y + rectangle.height)
                         {
-                            litBy1.Burn(litBy1.position, litBy2);
+                            puddle.Burn(puddle.position, sparks);
                             break;
                         }
                     }

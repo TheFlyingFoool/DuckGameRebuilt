@@ -1,4 +1,5 @@
 ﻿using Mono.Cecil;
+using NAudio.MediaFoundation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace DuckGame
         private float moveWait = 1f;
         private float flash;
         private bool _returnFromArcade;
+        private bool _returnFromDevHall;
         private Profile _arcadeProfile;
         private InputProfile _arcadeInputProfile;
         private TitleMenuSelection _selection = TitleMenuSelection.Play;
@@ -136,6 +138,15 @@ namespace DuckGame
             if (arcadeProfile == null)
                 return;
             _arcadeInputProfile = arcadeProfile.inputProfile;
+        }
+        public TitleScreen(Profile devHallProfile)
+        {
+            _centeredView = true;
+            _returnFromDevHall = true;
+            _arcadeProfile = devHallProfile;
+            if (devHallProfile == null)
+                return;
+            _arcadeInputProfile = devHallProfile.inputProfile;
         }
 
         public bool menuOpen => Options.menuOpen || _enterMultiplayer;
@@ -1006,6 +1017,7 @@ namespace DuckGame
             _things.RefreshState();
             Layer.Game.fade = 0f;
             Layer.Foreground.fade = 0f;
+            Add(new PinkBox(160, 274) { scale = new Vec2(2), collisionSize = new Vec2(32), collisionOffset = new Vec2(-16) });
             Add(new Block(317, 180, 16, 96, PhysicsMaterial.Metal));
             Add(new Block(-13, 180, 16, 96, PhysicsMaterial.Metal));
             Add(new Block(257, 242, 64, 66, PhysicsMaterial.Metal));
@@ -1454,13 +1466,17 @@ namespace DuckGame
             }
             if (secondTitlescreen)
             {
-                Level.current.camera.position = Lerp.Vec2Smooth(Level.current.camera.position, new Vec2(0, 180), 0.1f);
+                current.camera.position = Lerp.Vec2Smooth(current.camera.position, new Vec2(0, 180), 0.1f);
             }
             else
             {
-                 _bottomRight.y = 400;
+                _bottomRight.y = 400;
                 lowestPoint = 400;
-                Level.current.camera.position = Lerp.Vec2Smooth(Level.current.camera.position, Vec2.Zero, 0.1f);
+                if (First<Duck>() != null && First<Duck>().y > 176)
+                {
+                    First<Duck>().y = 90;
+                }
+                current.camera.position = Lerp.Vec2Smooth(current.camera.position, Vec2.Zero, 0.1f);
             }
             if (_multiBeam.entered)
             {
@@ -1475,7 +1491,7 @@ namespace DuckGame
                 if (_duck.inputProfile.Pressed(Triggers.Down) && MonoMain.pauseMenu == null)
                 {
                     secondTitlescreen = true;
-                    _multiBeam._ducks[0].duck.y = 290;
+                    _multiBeam._ducks[0].duck.y = 333;
                     _multiBeam._ducks[0].duck.solid = true;
                     _multiBeam._ducks[0].duck.immobilized = false;
                     _multiBeam._ducks[0].duck.vSpeed = 1;
@@ -1509,8 +1525,8 @@ namespace DuckGame
             }
             else if (_hatEditorBeam.entered)
             {
-                _selectionTextDesired = "LIBRARY";
-                _desiredSelection = TitleMenuSelection.Stats;
+                _selectionTextDesired = "HAT EDITOR";
+                _desiredSelection = TitleMenuSelection.FeatherFashion;
                 if (_duck.inputProfile.Pressed(Triggers.Select) && Profiles.allCustomProfiles.Count > 0 && MonoMain.pauseMenu == null)
                 {
                     SFX.Play("plasmaFire");
@@ -1586,10 +1602,43 @@ namespace DuckGame
                     _returnFromArcade = false;
                 }
             }
+            if (_returnFromDevHall)
+            {
+                if (!_fadeIn)
+                {
+                    _fadeIn = true;
+                    _title = new BigTitle();
+                    _title.x = (float)(Layer.HUD.camera.width / 2f - _title.graphic.w / 2 + 3f);
+                    _title.y = Layer.HUD.camera.height / 2f;
+                    AddThing(_title);
+                    _title.fade = true;
+                    _title.alpha = 0f;
+                    Layer.Game.fade = 1f;
+                    Layer.Foreground.fade = 1f;
+                    Layer.Background.fade = 1f;
+                    _arcadeProfile.inputProfile = _arcadeInputProfile;
+                    secondTitlescreen = true;
+                    current.camera.y = 180;
+
+                    _duck = new Duck(10, 333, _arcadeProfile)
+                    {
+                        offDir = 1
+                    };
+                    InputProfile.active = _duck.profile.inputProfile;
+                }
+                Graphics.fade = Lerp.Float(Graphics.fade, 1f, 0.05f);
+                if (Graphics.fade > 0.99f)
+                {
+                    Graphics.fade = 1f;
+                    _returnFromDevHall = false;
+                }
+            }
             if (_fadeIn && !_fadeInFull)
             {
-                if (!_returnFromArcade)
+                if (!_returnFromArcade && !_returnFromDevHall)
                     _duck = null;
+                //if (!_returnFromDevHall)
+                //    _duck = null;
                 //if (TitleScreen.firstStart && ParentalControls.AreParentalControlsActive())
                 //{
                 //    MonoMain.pauseMenu = _parentalControlsMenu;
@@ -1680,7 +1729,11 @@ namespace DuckGame
         private void DisplayUpperMonitorMessage(string message, float row=2f, Color color=default(Color))
         {
             if (color == default(Color)) color = Color.White;
-            _font.Draw(message, current.camera.PercentW(50f) - _font.GetWidth(message) / 2f, row * 11f - 7f, color, (Depth)0.95);
+            if (secondTitlescreen)
+            {
+                _font.Draw(message, current.camera.PercentW(50f) - _font.GetWidth(message) / 2f, row * 11f - 7f + 185, color, (Depth)0.95);
+            }
+            else _font.Draw(message, current.camera.PercentW(50f) - _font.GetWidth(message) / 2f, row * 11f - 7f, color, (Depth)0.95);
         }
 
         public override void PostDrawLayer(Layer layer)
@@ -1717,11 +1770,11 @@ namespace DuckGame
                     }
                     else if (_selection == TitleMenuSelection.Recorderator)
                     {
-                        DisplayUpperMonitorMessage("@SELECT@Recorderator");
+                        DisplayUpperMonitorMessage("@SELECT@RECORDERATOR");
                     }
                     else if (_selection == TitleMenuSelection.FeatherFashion)
                     {
-                        DisplayUpperMonitorMessage("@SELECT@FEATHER FASHION");
+                        DisplayUpperMonitorMessage("@SELECT@HAT EDITOR");
                     }
                 }
                 else

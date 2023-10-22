@@ -44,12 +44,14 @@ namespace DuckGame
                 if (_setting != null && _field.value is int && (int)_field.value == _setting.min && _setting.minString != null)
                 {
                     _text = _setting.minString;
+                    _prevtext = text;
                 }
                 else
                 {
                     _text = str + Change.ToString((int)_field.value) + _append;
                     if (_filterField != null && !(bool)_filterField.value)
                         _text = Triggers.Any;
+                    _prevtext = text;
                 }
             }
             base.Draw();

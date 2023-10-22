@@ -4,15 +4,24 @@
     {
         public RainParticel(Vec2 v, float mult = 1)
         {
-            lPos = v;
             position = v;
             rY = Rando.Float(6, 10);
             rX = Rando.Float(1, 2) * mult;
             Level.CheckRay<Block>(position, position + new Vec2(rX, rY) * 10000, null, out yEnd);
         }
+        public override void DoUpdate()
+        {
+            Update();
+            if (Buckets.Length > 0 && ((oldcollisionOffset != collisionOffset || oldcollisionSize != collisionSize) || (oldposition - position).LengthSquared() > 50f) && Level.current != null) //((oldposition - position)).length > 10
+            {
+                oldcollisionOffset = collisionOffset;
+                oldcollisionSize = collisionSize;
+                oldposition = position;
+                Level.current.things.UpdateObject(this);
+            }
+        }
         public override void Update()
         {
-            lPos = position;
             x += rX;
             y += rY;
             if (position.y > yEnd.y)
@@ -24,9 +33,8 @@
         }
         public override void Draw()
         {
-            Graphics.DrawLine(lPos, position, c, 1f, 1.1f);
+            Graphics.DrawLine(position - new Vec2(rX, rY), position, c, 1f, 1.1f);
         }
-        public Vec2 lPos;
         public Vec2 yEnd;
         public static FluidData flud = Fluid.Water;
         public static Color c = new Color(0, 112, 168);

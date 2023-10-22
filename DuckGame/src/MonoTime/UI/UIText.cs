@@ -13,6 +13,7 @@ namespace DuckGame
     {
         protected Color _color;
         public BitmapFont _font;
+        protected string _prevtext;
         protected string _text;
         protected Func<string> _textFunc;
         public int minLength;
@@ -36,7 +37,11 @@ namespace DuckGame
                     while (_text.Length < minLength)
                         _text = " " + _text;
                 }
-                _collisionSize = new Vec2(_font.GetWidth(_text), _font.height + _heightAdd);
+                if (_text != _prevtext)
+                {
+                    _collisionSize = new Vec2(_font.GetWidth(_text), _font.height + _heightAdd);
+                }
+                _prevtext = _text;
             }
         }
 
