@@ -1515,6 +1515,8 @@ namespace DuckGame
                                     {
                                         searchItems = _objectMenu.Search(Keyboard.KeyString);
                                         _prevSearchString = Keyboard.KeyString;
+                                        if (searchItems != null && searchItems.Count > 0)
+                                            _searchHoverIndex = 0;
                                     }
 
                                     if (_placementMenu == null)
