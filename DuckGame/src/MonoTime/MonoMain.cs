@@ -1572,7 +1572,7 @@ namespace DuckGame
             }
         }
 
-        static Stack<string> loadMessages = new();
+        public static Stack<string> loadMessages = new Stack<string>();
         public static string lastLoadMessage = "";
 
         protected void RunDraw(GameTime gameTime)
@@ -1598,7 +1598,7 @@ namespace DuckGame
             Graphics.SetScissorRectangle(new Rectangle(0f, 0f, Graphics.width, Graphics.height));
             if (Recorder.currentRecording != null)
                 Recorder.currentRecording.NextFrame();
-            if (!_started) 
+            if (!_started)
             {
                 ++_loadingFramesRendered;
                 Graphics.SetRenderTarget(null);
@@ -1679,14 +1679,14 @@ namespace DuckGame
                 }
                 Camera camera = new Camera(0f, 0f, Graphics.width, Graphics.height);
                 Graphics.screen.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, camera.getMatrix());
-                Vec2 p1 = new Vec2(50f, Graphics.height - 50);
+                Vec2 loadBarPos = new Vec2(50f, Graphics.height - 50);
                 Vec2 vec2_1 = new Vec2(Graphics.width - 100, 20f);
-                Graphics.DrawRect(p1, p1 + vec2_1, Color.DarkGray * 0.1f, (Depth)0.5f);
+                Graphics.DrawRect(loadBarPos, loadBarPos + vec2_1, Color.DarkGray * 0.1f, (Depth)0.5f);
                 float loaded = loadyBits / (float)totalLoadyBits;
-				if (loaded > 1f)
-				{
-					loaded = 1f;
-				}
+                if (loaded > 1f)
+                {
+                    loaded = 1f;
+                }
                 if (loadMessages.Count == 0)
                 {
                     NloadMessage = NloadMessage;
@@ -1694,49 +1694,63 @@ namespace DuckGame
                 if (Program.gay)
                 {
                     int offset = 0;
-                    for (int i = 0; i < p1.y - p1.y + vec2_1.y; i++)
+                    for (int i = 0; i < loadBarPos.y - loadBarPos.y + vec2_1.y; i++)
                     {
                         if (i - offset >= Colors.Rainbow.Length)
                         {
                             offset += Colors.Rainbow.Length;
                             // i = 0;
                         }
-                        Graphics.DrawLine(new Vec2(p1.x, p1.y + i), p1 + new Vec2(vec2_1.x * loaded, vec2_1.y + i - 20), Colors.Rainbow[i - offset]);
+                        Graphics.DrawLine(new Vec2(loadBarPos.x, loadBarPos.y + i), loadBarPos + new Vec2(vec2_1.x * loaded, vec2_1.y + i - 20), Colors.Rainbow[i - offset]);
                     }
                 }
                 else if (Debugger.IsAttached)
                 {
-                    Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * loaded, vec2_1.y), Color.Green, (Depth)0.6f);
+                    Graphics.DrawRect(loadBarPos, loadBarPos + new Vec2(vec2_1.x * loaded, vec2_1.y), Color.Green, (Depth)0.6f);
                 }
                 else
                 {
-                    Graphics.DrawRect(p1, p1 + new Vec2(vec2_1.x * loaded, vec2_1.y), Color.Red, (Depth)0.6f);
+                    Graphics.DrawRect(loadBarPos, loadBarPos + new Vec2(vec2_1.x * loaded, vec2_1.y), Color.Red, (Depth)0.6f);
                 }
                 //string text = loadMessage;
                 //if (loadMessage != lastLoadMessage)
                 //{
                 //    loadMessages.Push(lastLoadMessage = loadMessage);
                 //}
-                float textPadding = -24f;
-                if (Cloud.processing && Cloud.progress != 0 && Cloud.progress != 1)
+
+                if (DGRSettings.SingleLoadLine)
                 {
-                    Graphics.DrawString("Synchronizing Steam Cloud... (" + ((int)(Cloud.progress * 100)).ToString() + "%)", p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
-                    textPadding -= 20;
+                    string message = loadMessage;
+                    if (Cloud.processing && Cloud.progress != 0f && Cloud.progress != 1f)
+                    {
+                        message = "Synchronizing Steam Cloud... (" + ((int)(Cloud.progress * 100f)).ToString() + "%)";
+                    }
+                    Graphics.DrawString(message, loadBarPos + new Vec2(0f, -24f), Color.White, 1f, null, 2f);
+
                 }
-                if (loadMessage != lastLoadMessage)
+                else
                 {
-                    NloadMessage = loadMessage;
+                    float textPadding = -24f;
+                    if (Cloud.processing && Cloud.progress != 0 && Cloud.progress != 1)
+                    {
+                        Graphics.DrawString("Synchronizing Steam Cloud... (" + ((int)(Cloud.progress * 100)).ToString() + "%)", loadBarPos + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
+                        textPadding -= 20;
+                    }
+                    if (loadMessage != lastLoadMessage)
+                    {
+                        NloadMessage = loadMessage;
+                    }
+                    int iters = 0;
+                    foreach (string i in loadMessages)
+                    {
+                        iters++;
+                        if (iters > 50) break;
+                        Graphics.DrawString(i, loadBarPos + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
+                        textPadding -= 20;
+                    }
                 }
-                //if (text != loadMessage)
-                //{
-                //    Graphics.DrawString(text, p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
-                //    textPadding -= 20;
-                //}
-                foreach (string i in loadMessages)
-                {
-                    Graphics.DrawString(i, p1 + new Vec2(0f, textPadding), Color.White, (Depth)1f, scale: 2f);
-                    textPadding -= 20;
-                }
+
+
                 _duckRun.speed = 0.15f;
                 _duckRun.scale = new Vec2(4f, 4f);
                 _duckRun.depth = 0.7f;

@@ -297,6 +297,8 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool UncappedFPS = false;
 
+        [Marker.AutoConfig] public static bool SingleLoadLine = false;
+
         [Marker.AutoConfig] public static bool S_UseVSync = true;
         public static bool UseVSync
         {
