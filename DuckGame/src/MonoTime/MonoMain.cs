@@ -57,17 +57,24 @@ namespace DuckGame
             }
             set
             {
-                string text = value;
-                if (Debugger.IsAttached)
+                if (DGRSettings.SingleLoadLine)
                 {
-                    text = "|16,144,13|" + text;
+                    loadMessage = value;
                 }
-                if (!loadMessages.Contains(text))
+                else
                 {
-                    loadMessages.Push(text);
+                    string text = value;
+                    if (Debugger.IsAttached)
+                    {
+                        text = "|16,144,13|" + text;
+                    }
+                    if (!loadMessages.Contains(text))
+                    {
+                        loadMessages.Push(text);
+                    }
+                    loadMessage = text;
+                    lastLoadMessage = text;
                 }
-                loadMessage = text;
-                lastLoadMessage = text;
             }
         }
         private SpriteMap _duckRun;
