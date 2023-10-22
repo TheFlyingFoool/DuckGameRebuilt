@@ -1901,11 +1901,13 @@ namespace DuckGame
                             Layer.HUD.End(true);
                         }
                     }
-                    if (DevConsole.showFPS)
-                    {
-                        FPSCounter.Render(Graphics.device, index: 0, label: "UPS");
-                        FPSCounter.Render(Graphics.device, 100f, index: 1);
-                    }
+                    //if (DevConsole.showFPS)
+                    //{
+                    //    //FPSCounter.Tick(0);
+                    //    //FPSCounter.Tick(1);
+                    //    //    FPSCounter.Render(Graphics.device, index: 0, label: "UPS");
+                    //    //    FPSCounter.Render(Graphics.device, 100f, index: 1);
+                    //}
                     UpdateLerpState = false;
                 }
             }

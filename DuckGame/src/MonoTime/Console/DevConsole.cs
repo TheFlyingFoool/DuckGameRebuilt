@@ -24,6 +24,7 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Documents;
+using static DuckGame.CMD;
 
 namespace DuckGame
 {
@@ -275,8 +276,11 @@ namespace DuckGame
                 {
                     scale = new Vec2(2f, 2f)
                 };
+                _core.fpsfont = new BitmapFont("biosFont", 8)
+                {
+                    scale = new Vec2(0.5f, 0.5f)
+                };
             }
-
             if (_core.alpha > 0.01f)
             {
                 InitializeFont();
@@ -419,6 +423,11 @@ namespace DuckGame
                 }
 
                 _core.font.scale = new Vec2(2f);
+            }
+            if (DevConsole.showFPS)
+            {
+                _core.fpsfont.DrawOutline(Convert.ToString(FPSCounter.GetFPS(1), CultureInfo.InvariantCulture) + " FPS", new Vec2(50f, 8f), Color.White, Color.Black, 1.1f);
+                _core.fpsfont.DrawOutline(Convert.ToString(FPSCounter.GetFPS(0), CultureInfo.InvariantCulture) + " UPS", new Vec2(8f, 8f), Color.White, Color.Black, 1.1f);
             }
 
         }
