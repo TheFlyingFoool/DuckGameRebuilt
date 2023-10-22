@@ -23,7 +23,7 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
                 if (profile.duck is null || profile.duck.dead)
                     return new Exception($"{fromString}'s duck does not exist");
                 
-                return profile;
+                return profile.duck;
             }
 
             public IList<string> Options(string fromString, Type specificType, CommandRunner engine)

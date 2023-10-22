@@ -284,7 +284,7 @@
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnifeConnectionParticle.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\AutoCompl.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\CommandAutoCompl.cs" />
-    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\ConfigAutoCompl.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\ReflectionAutoCompl.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\TeamAutoCompl.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\PrettyPrintAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\DuckInterpreter.cs" />
@@ -625,6 +625,7 @@
     <Compile Include="src\MonoTime\Console\Commands\Config.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Debug.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Accept.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\Call.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\ClearMainProfile.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Close.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Console.cs" />

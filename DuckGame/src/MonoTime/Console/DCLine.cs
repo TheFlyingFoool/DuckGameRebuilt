@@ -39,48 +39,48 @@ namespace DuckGame
                 _ => Color.White
             };
 
-        private static readonly string[] s_colorTable = {
-            Color.White.ToDGColorString(),
-            Colors.DGBlue.ToDGColorString(),
-            Colors.DGPink2.ToDGColorString(), 
-            Colors.DGPurple.ToDGColorString(), 
-            Colors.DGOrange.ToDGColorString(),
-            Colors.DGGreen.ToDGColorString(), 
-            Colors.DGYellow.ToDGColorString(), 
-            Colors.DGGreen.ToDGColorString(),
-        };
-
-        private static readonly string[] s_nameTable = {
-            string.Empty,
-            DCSection.NetCore.ToString().ToUpper().SetLengthLogically(2),
-            DCSection.DuckNet.ToString().ToUpper().SetLengthLogically(2),
-            DCSection.GhostMan.ToString().ToUpper().SetLengthLogically(2),
-            DCSection.Steam.ToString().ToUpper().SetLengthLogically(2),
-            DCSection.Mod.ToString().ToUpper().SetLengthLogically(2),
-            DCSection.Connection.ToString().ToUpper().SetLengthLogically(2),
-            DCSection.Ack.ToString().ToUpper().SetLengthLogically(2),
-            string.Empty,
-            DCSection.NetCore.ToString().ToUpper().SetLengthLogically(4),
-            DCSection.DuckNet.ToString().ToUpper().SetLengthLogically(4),
-            DCSection.GhostMan.ToString().ToUpper().SetLengthLogically(4),
-            DCSection.Steam.ToString().ToUpper().SetLengthLogically(4),
-            DCSection.Mod.ToString().ToUpper().SetLengthLogically(4),
-            DCSection.Connection.ToString().ToUpper().SetLengthLogically(4),
-            DCSection.Ack.ToString().ToUpper().SetLengthLogically(4),
-        };
+        // private static readonly string[] s_colorTable = {
+        //     Color.White.ToDGColorString(),
+        //     Colors.DGBlue.ToDGColorString(),
+        //     Colors.DGPink2.ToDGColorString(), 
+        //     Colors.DGPurple.ToDGColorString(), 
+        //     Colors.DGOrange.ToDGColorString(),
+        //     Colors.DGGreen.ToDGColorString(), 
+        //     Colors.DGYellow.ToDGColorString(), 
+        //     Colors.DGGreen.ToDGColorString(),
+        // };
+        //
+        // private static readonly string[] s_nameTable = {
+        //     string.Empty,
+        //     DCSection.NetCore.ToString().ToUpper().SetLengthLogically(2),
+        //     DCSection.DuckNet.ToString().ToUpper().SetLengthLogically(2),
+        //     DCSection.GhostMan.ToString().ToUpper().SetLengthLogically(2),
+        //     DCSection.Steam.ToString().ToUpper().SetLengthLogically(2),
+        //     DCSection.Mod.ToString().ToUpper().SetLengthLogically(2),
+        //     DCSection.Connection.ToString().ToUpper().SetLengthLogically(2),
+        //     DCSection.Ack.ToString().ToUpper().SetLengthLogically(2),
+        //     string.Empty,
+        //     DCSection.NetCore.ToString().ToUpper().SetLengthLogically(4),
+        //     DCSection.DuckNet.ToString().ToUpper().SetLengthLogically(4),
+        //     DCSection.GhostMan.ToString().ToUpper().SetLengthLogically(4),
+        //     DCSection.Steam.ToString().ToUpper().SetLengthLogically(4),
+        //     DCSection.Mod.ToString().ToUpper().SetLengthLogically(4),
+        //     DCSection.Connection.ToString().ToUpper().SetLengthLogically(4),
+        //     DCSection.Ack.ToString().ToUpper().SetLengthLogically(4),
+        // };
         
         public static string StringForSection(DCSection s, bool colored, bool small, bool formatting = true)
         {
-            if (DGRSettings.UseDuckShell)
-            {
-                int sectionIndex = (int)s;
-                string colorTag = colored && s != DCSection.General ? s_colorTable[sectionIndex] : string.Empty;
-                string sectionCode = s_nameTable[sectionIndex + (small ? 0 : 8)];
-                string spacer = s == DCSection.General ? string.Empty : " ";
-                
-                // TODO: replace concatenation with precalculated values
-                return colorTag + sectionCode + spacer;
-            }
+            // if (DGRSettings.UseDuckShell)
+            // {
+            //     int sectionIndex = (int)s;
+            //     string colorTag = colored && s != DCSection.General ? s_colorTable[sectionIndex] : string.Empty;
+            //     string sectionCode = s_nameTable[sectionIndex + (small ? 0 : 8)];
+            //     string spacer = s == DCSection.General ? string.Empty : " ";
+            //     
+            //     // TODO: replace concatenation with precalculated values
+            //     return colorTag + sectionCode + spacer;
+            // }
             
             if (formatting)
             {

@@ -401,6 +401,21 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool UseDuckShell = true;
 
+        private static bool s_duckShellAutoCompletion = true;
+        
+        [Marker.AutoConfig]
+        public static bool DuckShellAutoCompletion 
+        {
+            get => s_duckShellAutoCompletion;
+            set
+            {
+                s_duckShellAutoCompletion = value;
+                
+                if (!value && DevConsole.LatestPredictionSuggestions?.Length > 0)
+                    DevConsole.LatestPredictionSuggestions = Array.Empty<string>();
+            }
+        }
+
         [Marker.AutoConfig] public static bool NoConsoleLineLimit = false;
     }
 }

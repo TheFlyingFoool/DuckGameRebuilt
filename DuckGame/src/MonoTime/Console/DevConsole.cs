@@ -79,7 +79,7 @@ namespace DuckGame
 
         private static void UpdateAutocomplete(string previous, string current)
         {
-            if (!DGRSettings.UseDuckShell)
+            if (!DGRSettings.UseDuckShell || !DGRSettings.DuckShellAutoCompletion)
                 return;
 
             ValueOrException<string[]> predictionResult;
@@ -98,14 +98,14 @@ namespace DuckGame
 
             if (predictionResult.Failed)
             {
-                s_latestPredictionSuggestions = new[] {$"|DGRED|{predictionResult.Error.Message}"};
+                LatestPredictionSuggestions = new[] {$"|DGRED|{predictionResult.Error.Message}"};
                 s_HighlightedSuggestionIndex = -1;
             }
             else
             {
-                s_latestPredictionSuggestions = predictionResult.Value;
+                LatestPredictionSuggestions = predictionResult.Value;
 
-                if (s_latestPredictionSuggestions.Length == 0)
+                if (LatestPredictionSuggestions.Length == 0)
                 {
                     s_HighlightedSuggestionIndex = -1;
                 }
@@ -422,12 +422,12 @@ namespace DuckGame
                         Graphics.DrawLine(p1, p1 + new Vec2(0.0f, 4f * _tray.scale.x), Color.White, 2f, 1f);
                     }
                     
-                    if (DGRSettings.UseDuckShell)
+                    if (DGRSettings.UseDuckShell && DGRSettings.DuckShellAutoCompletion)
                     {
-                        int length = Math.Min(CommandSuggestionLimit, s_latestPredictionSuggestions.Length);
+                        int length = Math.Min(CommandSuggestionLimit, LatestPredictionSuggestions.Length);
                         for (int i = 0; i < length; i++)
                         {
-                            string suggestion = s_latestPredictionSuggestions[i];
+                            string suggestion = LatestPredictionSuggestions[i];
 
                             const float fontSize = 1f;
                             Vec2 stringSize = Extensions.GetStringSize(suggestion, fontSize);
@@ -1515,7 +1515,7 @@ namespace DuckGame
         }
 
         private static bool WasDownLastFrame;
-        private static string[] s_latestPredictionSuggestions = Array.Empty<string>();
+        public static string[] LatestPredictionSuggestions = Array.Empty<string>();
         private static int s_HighlightedSuggestionIndex = -1;
 
         public static void Update()
@@ -1798,7 +1798,7 @@ namespace DuckGame
                 {
                     if (Keyboard.control)
                     {
-                        int length = Math.Min(CommandSuggestionLimit, s_latestPredictionSuggestions.Length);
+                        int length = Math.Min(CommandSuggestionLimit, LatestPredictionSuggestions.Length);
                         s_HighlightedSuggestionIndex++;
                         s_HighlightedSuggestionIndex %= length;
                     }
@@ -1877,7 +1877,7 @@ namespace DuckGame
             int caret = _core.cursorPosition;
 
             bool editCurrentWord = caret - 1 > -1 && !char.IsWhiteSpace(currentCommand[caret - 1]);
-            string newWord = s_latestPredictionSuggestions[s_HighlightedSuggestionIndex];
+            string newWord = LatestPredictionSuggestions[s_HighlightedSuggestionIndex];
 
             if (editCurrentWord)
             {

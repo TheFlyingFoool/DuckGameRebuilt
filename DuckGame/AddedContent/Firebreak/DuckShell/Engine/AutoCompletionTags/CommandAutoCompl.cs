@@ -14,7 +14,7 @@ namespace DuckGame.ConsoleEngine
         
         public override IList<string> Get(string word)
         {
-            if (!MereName)
+            if (!MereName) // todo
                 return Array.Empty<string>();
 
             return GetCommandNames();

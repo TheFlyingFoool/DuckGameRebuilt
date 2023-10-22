@@ -6,6 +6,7 @@
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
 using AddedContent.Firebreak;
+using DuckGame.ConsoleEngine;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -39,13 +40,16 @@ namespace DuckGame
         public bool HasArg(string pName)
         {
             Argument obj = arguments.FirstOrDefault(x => x.name == pName);
-            return obj is { value: { } };
+            return obj is not null;
         }
 
         public T Arg<T>(string pName)
         {
             Argument obj = arguments.FirstOrDefault(x => x.name == pName);
-            return obj is { value: { } } ? (T)obj.value : default;
+            if (obj is null)
+                return default;
+
+            return (T) (obj.optional && obj.value is null ? obj.defaultValue : obj.value);
         }
 
         public string fullCommandName => parent != null ? $"{parent.fullCommandName} {keyword}" : keyword;
@@ -216,6 +220,7 @@ namespace DuckGame
             public bool optional;
             public bool takesMultispaceString;
             protected string _parseFailMessage = "Argument was in wrong format. ";
+            public object defaultValue;
 
             public Argument(string pName, bool pOptional)
             {
@@ -327,6 +332,27 @@ namespace DuckGame
             public override object Parse(string pValue)
             {
                 return ChangePlus.ToSingle(pValue);
+            }
+        }
+
+        public class Array : Argument
+        {
+            private readonly Type _arrayType;
+
+            public Array(string pName, Type arrayType, bool pOptional) : base(pName, pOptional)
+            {
+                _arrayType = arrayType;
+            }
+
+            public override object Parse(string pValue)
+            {
+                ITypeInterpreter arrayInterpreter = Commands.console.Shell.TypeInterpreterModulesMap[typeof(System.Array)];
+                ValueOrException<object> parseResult = arrayInterpreter.ParseString(pValue, _arrayType, Commands.console.Shell);
+
+                if (parseResult.Failed)
+                    return Error(parseResult.Error.Message);
+
+                return parseResult.Value;
             }
         }
 
@@ -525,6 +551,8 @@ namespace DuckGame
                 arg = new Layer(name, optional);
             else if (typeof(System.Enum).IsAssignableFrom(type))
                 arg = new Enum(name, type, optional);
+            else if (typeof(System.Array).IsAssignableFrom(type))
+                arg = new Array(name, type, optional);
             else
                 throw new Exception($"Parameter type of [{type.FullName}] is not supported");
 

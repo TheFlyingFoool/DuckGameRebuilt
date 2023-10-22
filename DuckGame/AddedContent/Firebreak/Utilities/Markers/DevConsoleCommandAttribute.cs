@@ -113,11 +113,14 @@ namespace AddedContent.Firebreak
                 string name = parameter.Name;
                 bool optional = parameter.IsOptional;
                 object? defaultValue = parameter.DefaultValue;
+                bool isParams = parameter.IsDefined(typeof(ParamArrayAttribute), false);
 
-                arg = CMD.GetArgument(type, name, optional, isLast);
+                arg = CMD.GetArgument(type, name, optional || isParams, isLast);
 
                 if (optional)
-                    arg.value = defaultValue;
+                    arg.defaultValue = defaultValue;
+                else if (isParams)
+                    arg.defaultValue = Array.CreateInstance(type.GetElementType()!, 0);
 
                 return arg;
             }
