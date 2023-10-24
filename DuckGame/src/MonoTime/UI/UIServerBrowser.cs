@@ -119,8 +119,14 @@ namespace DuckGame
 
         public static void SubscribeAndRestart()
         {
-            foreach (Mod allMod in (IEnumerable<Mod>)ModLoader.allMods)
-                allMod.configuration.disabled = true;
+            foreach (Mod mod in ModLoader.allMods)
+            {
+                if (mod.clientMod || mod.configuration.modType is ModConfiguration.Type.Reskin or ModConfiguration.Type.MapPack)
+                    continue;
+                
+                mod.configuration.disabled = true;
+            }
+
             if (ConnectionError.joinLobby != null)
             {
                 _joiningLobby = new LobbyData
