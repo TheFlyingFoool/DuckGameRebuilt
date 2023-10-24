@@ -15,7 +15,7 @@ namespace DuckGame
         {
             _editorIcon.color = Color.Blue;
             _editorName = "Weleporter";
-            editorTooltip = "Place 2 weleporters pointing toward each other and Stuff can transport between them sometimes.";
+            editorTooltip = "Weleporters are just slow teleporters.";
             bloo = new Color(0, 100, 255);
             _bottom = new Sprite("wumpTeleBottom");
             _bottom.CenterOrigin();

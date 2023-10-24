@@ -14,10 +14,14 @@ namespace DuckGame
         public Sun(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            graphic = new Sprite("officeLight");
-            center = new Vec2(16f, 3f);
-            _collisionSize = new Vec2(30f, 6f);
-            _collisionOffset = new Vec2(-15f, -3f);
+            SpriteMap s = new SpriteMap("backgroundIcons", 16, 16);
+            s.frame = 0;
+            graphic = s;
+
+            center = new Vec2(8, 8);
+            _collisionSize = new Vec2(14, 14);
+            _collisionOffset = new Vec2(-7, -7);
+
             depth = (Depth)0.9f;
             hugWalls = WallHug.Ceiling;
             layer = Layer.Game;

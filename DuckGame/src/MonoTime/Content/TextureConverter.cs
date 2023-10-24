@@ -53,8 +53,8 @@ namespace DuckGame
                     graphics.SmoothingMode = SmoothingMode.AntiAlias;
                     ImageAttributes imageAttr = new ImageAttributes();
                     imageAttr.SetWrapMode(WrapMode.TileFlipXY);
-                    int width2 = bitmap.Width;
-                    int height2 = bitmap.Height;
+                    //int width2 = bitmap.Width;
+                    //int height2 = bitmap.Height;
                     System.Drawing.Rectangle destRect = new System.Drawing.Rectangle(0, 0, width3, height3);
                     graphics.DrawImage(bitmap, destRect, 0, 0, bitmap.Width, bitmap.Height, GraphicsUnit.Pixel, imageAttr);
                     bitmap.Dispose();

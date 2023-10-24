@@ -27,7 +27,7 @@ namespace DuckGame
             depth = -1;
 
             _editorName = "Conveyor";
-            editorTooltip = "Conveyors were presumably used in ancient industrial machinery. Nowadays we use teleporters";
+            editorTooltip = "These were presumably used in ancient indstruail machinery. Nowadays we use teleporters";
         }
         protected virtual Dictionary<Direction, ConveyorBelt> GetNeighbors()
         {
