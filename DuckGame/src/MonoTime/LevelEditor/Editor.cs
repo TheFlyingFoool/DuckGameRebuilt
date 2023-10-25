@@ -3766,21 +3766,22 @@ namespace DuckGame
                         if (searchItems != null && searchItems.Count > 0)
                         {
                             position.y -= 22f;
-                            for (int index = 0; index < 10 && index < searchItems.Count; ++index)
+                            for (int i = 0; i < 10 && i < searchItems.Count; ++i)
                             {
-                                Graphics.DrawString(searchItems[index].thing.thing.editorName,
+                                Graphics.DrawString(searchItems[i].thing.thing.editorName,
                                     new Vec2(position.x + 24f, position.y + 6f), Color.White, 0.95f);
-                                searchItems[index].thing.image.depth = 0.95f;
-                                searchItems[index].thing.image.x = position.x + 4f;
-                                searchItems[index].thing.image.y = position.y;
-                                searchItems[index].thing.image.color = Color.White;
-                                searchItems[index].thing.image.scale = new Vec2(1f);
-                                searchItems[index].thing.image.Draw();
+                                searchItems[i].thing.image.depth = 0.95f;
+                                searchItems[i].thing.image.x = position.x + 4f;
+                                searchItems[i].thing.image.y = position.y;
+                                searchItems[i].thing.image.color = Color.White;
+                                searchItems[i].thing.image.scale = new Vec2(1f);
+                                if (searchItems[i].thing._previewWidth > 16) Graphics.Draw(searchItems[i].thing.image, searchItems[i].thing.image.x, searchItems[i].thing.image.y, new Rectangle(8, 0, 16, 16));
+                                else searchItems[i].thing.image.Draw();
                                 if (inputMode == EditorInput.Mouse && Mouse.x > position.x &&
                                     Mouse.x < position.x + 200 && Mouse.y > position.y - 2 &&
-                                    Mouse.y < position.y + 19 || index == _searchHoverIndex)
+                                    Mouse.y < position.y + 19 || i == _searchHoverIndex)
                                 {
-                                    _searchHoverIndex = index;
+                                    _searchHoverIndex = i;
                                     Graphics.DrawRect(position + new Vec2(2f, -2f),
                                         position + new Vec2(num23 - 2f, 18f), new Color(70, 70, 70), 0.93f);
                                 }

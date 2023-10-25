@@ -26,7 +26,6 @@
             maxAccuracyLost = 1;
             _fireWait = 3;
             _barrelOffsetTL = new Vec2(60, 21.5f);
-            _editorPreviewWidth = 62;
         }
         public MaterialDev spawn;
         public float spawnSc;

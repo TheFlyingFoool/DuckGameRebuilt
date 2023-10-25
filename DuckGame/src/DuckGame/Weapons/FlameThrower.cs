@@ -83,7 +83,9 @@ namespace DuckGame
                 _barrelFlame.SetAnimation("puffOut");
             if (_barrelFlame.currentAnimation == "puffOut" && _barrelFlame.finished)
                 _barrelFlame.SetAnimation("idle");
-            _sound.lerpVolume = _firing ? 0.5f : 0f;
+
+            if (_sound != null) _sound.lerpVolume = _firing ? 0.5f : 0f;
+
             if (isServerForObject && _firing && _barrelFlame.imageIndex > 5)
             {
                 _flameWait -= 0.25f;

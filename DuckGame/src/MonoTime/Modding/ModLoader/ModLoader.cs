@@ -126,7 +126,7 @@ namespace DuckGame
         {
             foreach (Mod mod in allMods)
             {
-                if (mod.clientMod)
+                if (mod.clientMod || mod.configuration.modType is ModConfiguration.Type.Reskin or ModConfiguration.Type.MapPack)
                     continue;
                 
                 mod.configuration.Disable();
