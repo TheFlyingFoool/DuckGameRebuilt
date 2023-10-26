@@ -1841,23 +1841,26 @@ namespace DuckGame
             }
             else if (layer == Layer.Background)
             {
-                foreach (StarParticle particle in particles)
+                if (DGRSettings.S_ParticleMultiplier != 0)
                 {
-                    float num3 = Math.Max(1f - Math.Min(Math.Abs(particle.pos.x - particle.flicker) / 10f, 1f), 0f);
-                    float num4 = 0.2f;
-                    if (camera.y > 0)
-                        num4 += camera.y / 52f;
-                    Graphics.DrawRect(particle.pos, particle.pos + new Vec2(1f, 1f), Color.White * (float)((num4 + num3 * 0.6f) * (0.3f + (1f - extraFade) * 0.7f)), -0.3f);
-                    float num5 = 0.1f;
-                    if (camera.y > 0)
-                        num5 += camera.y / 52f;
-                    Vec2 pos = particle.pos;
-                    int num6 = 4;
-                    for (int index = 0; index < num6; ++index)
+                    foreach (StarParticle particle in particles)
                     {
-                        float num7 = particle.speed.x * 8f;
-                        Graphics.DrawLine(pos + new Vec2(-num7, 0.5f), pos + new Vec2(0f, 0.5f), particle.color * ((float)(1f - index / num6) * num5) * (float)(0.3f + (1f - extraFade) * 0.7f), depth: (-0.4f));
-                        pos.x -= num7;
+                        float num3 = Math.Max(1f - Math.Min(Math.Abs(particle.pos.x - particle.flicker) / 10f, 1f), 0f);
+                        float num4 = 0.2f;
+                        if (camera.y > 0)
+                            num4 += camera.y / 52f;
+                        Graphics.DrawRect(particle.pos, particle.pos + new Vec2(1f, 1f), Color.White * (float)((num4 + num3 * 0.6f) * (0.3f + (1f - extraFade) * 0.7f)), -0.3f);
+                        float num5 = 0.1f;
+                        if (camera.y > 0)
+                            num5 += camera.y / 52f;
+                        Vec2 pos = particle.pos;
+                        int num6 = 4;
+                        for (int index = 0; index < num6; ++index)
+                        {
+                            float num7 = particle.speed.x * 8f;
+                            Graphics.DrawLine(pos + new Vec2(-num7, 0.5f), pos + new Vec2(0f, 0.5f), particle.color * ((float)(1f - index / num6) * num5) * (float)(0.3f + (1f - extraFade) * 0.7f), depth: (-0.4f));
+                            pos.x -= num7;
+                        }
                     }
                 }
                 _background.depth = (Depth)0f;

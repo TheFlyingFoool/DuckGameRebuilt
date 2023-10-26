@@ -20,11 +20,14 @@
 
         public override void PopShell(float x, float y, int dir)
         {
-            MagnumShell magnumShell = new MagnumShell(x, y)
+            if (DGRSettings.S_ParticleMultiplier != 0)
             {
-                hSpeed = dir * (1.5f + Rando.Float(1f))
-            };
-            Level.Add(magnumShell);
+                MagnumShell magnumShell = new MagnumShell(x, y)
+                {
+                    hSpeed = dir * (1.5f + Rando.Float(1f))
+                };
+                Level.Add(magnumShell);
+            }
         }
     }
 }
