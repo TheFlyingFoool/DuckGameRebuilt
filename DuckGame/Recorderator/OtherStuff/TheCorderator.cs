@@ -311,6 +311,7 @@ namespace DuckGame
             BitBuffer metadataBuffer = new BitBuffer();
             BitBuffer hatsPreviewBuffer = new BitBuffer();
             buffer.Write(cFrame);
+            if (cFrame < 120) return null; //if replay is less than 2 seconds long dont even bother
 
             buffer.Write(gamemodeStarted);
 
@@ -1178,13 +1179,6 @@ namespace DuckGame
                 Level.current.camera.height = camSize[cFrame].y;
                 Main.SpecialCode = "the pain is eternal";
                 Level.current.camera.position = camPos[cFrame];
-            }
-            else
-            {
-                Recorderator.Playing = false;
-                PlayingThatShitBack = false;
-                if (Level.current is ReplayLevel rl && rl.prev != null) Level.current = rl.prev;
-                else Level.current = new RecorderationSelector();
             }
             SFX.enabled = true;
             //do sfx stuff here

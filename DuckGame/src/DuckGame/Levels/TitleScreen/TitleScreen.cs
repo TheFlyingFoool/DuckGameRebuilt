@@ -36,6 +36,7 @@ namespace DuckGame
         private Sprite _upperMonitor;
         private Sprite _optionsTV;
         private Sprite _libraryBookcase;
+        private Sprite _cord;
         private Sprite _editorBench;
         private Sprite _editorBenchPaint;
         private Sprite _bigUButton;
@@ -59,6 +60,7 @@ namespace DuckGame
         private MultiBeam _multiBeam;
         private EditorBeam _editorBeam;
         private HatEditorBeam _hatEditorBeam;
+        private RecorderatorBeam _recorderatorBeam;
         private Duck _duck;
         private bool _fastMultiplayer;
         private bool _enterMultiplayer;
@@ -963,6 +965,10 @@ namespace DuckGame
             {
                 depth = -0.9f
             };
+            _cord = new Sprite("title/cord")
+            {
+                depth = -0.9f
+            };
             _editorBench = new Sprite("title/editorBench")
             {
                 depth = -0.9f
@@ -988,6 +994,8 @@ namespace DuckGame
             Add(_editorBeam);
             _hatEditorBeam = new HatEditorBeam(292, 285);
             Add(_hatEditorBeam);
+            _recorderatorBeam = new RecorderatorBeam(29, 169);
+            Add(_recorderatorBeam);
             VersionSign vs = new VersionSign(176f, 18f);
             Add(vs);
             for (int index = 0; index < 21; ++index)
@@ -1534,6 +1542,17 @@ namespace DuckGame
                     _duck.immobilized = true;
                 }
             }
+            else if (_recorderatorBeam.entered)
+            {
+                _selectionTextDesired = "RECORDERATOR";
+                _desiredSelection = TitleMenuSelection.Recorderator;
+                if (_duck.inputProfile.Pressed(Triggers.Select) && Profiles.allCustomProfiles.Count > 0 && MonoMain.pauseMenu == null)
+                {
+                    SFX.Play("plasmaFire");
+                    _enterRecorderator = true;
+                    _duck.immobilized = true;
+                }
+            }
             else if (_editorBeam.entered)
             {
                 _selectionTextDesired = "LEVEL EDITOR";
@@ -1804,6 +1823,7 @@ namespace DuckGame
                 Graphics.Draw(_beamPlatform, 118f, 146f);
                 Graphics.Draw(_optionsTV, 0f, 19f);
                 Graphics.Draw(_libraryBookcase, 263f, 12f);
+                Graphics.Draw(_cord, 0, 200);
                 Graphics.Draw(_editorBench, 1f, 130f);
                 if (creditsScroll > 0.1)
                 {

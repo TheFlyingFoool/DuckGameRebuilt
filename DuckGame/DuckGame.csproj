@@ -336,6 +336,7 @@
     <Compile Include="AddedContent\Firebreak\Utilities\ProgressValue.cs" />
     <Compile Include="AddedContent\klof44\DartGrenade.cs" />
     <Compile Include="AddedContent\klof44\DiscordRichPresence.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\RecorderatorBeam.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\HatEditorBeam.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\DGRElevator.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\Rubble.cs" />

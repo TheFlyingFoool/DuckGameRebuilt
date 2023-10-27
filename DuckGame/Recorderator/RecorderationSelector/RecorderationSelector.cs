@@ -18,8 +18,10 @@ namespace DuckGame
             {
                 if (value < 0)
                     value = 0;
-                else if (value > MAX_ELEMENTS_ON_SCREEN - 1)
-                    value = MAX_ELEMENTS_ON_SCREEN - 1;
+                else if (value > MenuItems.Count - 1)
+                    value = MenuItems.Count - 1;
+                else if (value > 23)
+                    value = 23;//firebreak you idiot -NiK0
 
                 if (value != _selectedItemIndex)
                 {
@@ -120,6 +122,8 @@ namespace DuckGame
         
         public override void Update()
         {
+            camera.position = Vec2.Zero;
+            camera.size = new Vec2(320, 180);
             if (ReplayToLoadPreview != null)
             {
                 ReplayToLoadPreview.LoadPreview();
