@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.FlameThrower
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -90,7 +83,9 @@ namespace DuckGame
                 _barrelFlame.SetAnimation("puffOut");
             if (_barrelFlame.currentAnimation == "puffOut" && _barrelFlame.finished)
                 _barrelFlame.SetAnimation("idle");
-            _sound.lerpVolume = _firing ? 0.5f : 0f;
+
+            if (_sound != null) _sound.lerpVolume = _firing ? 0.5f : 0f;
+
             if (isServerForObject && _firing && _barrelFlame.imageIndex > 5)
             {
                 _flameWait -= 0.25f;

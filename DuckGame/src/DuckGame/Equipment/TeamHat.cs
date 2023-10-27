@@ -446,13 +446,16 @@ namespace DuckGame
             {
                 if (!(_sprite.texture.textureName == "hats/tube"))
                     return;
-                for (int index = 0; index < 4; ++index)
+                if (DGRSettings.S_ParticleMultiplier != 0)
                 {
-                    TinyBubble tinyBubble = new TinyBubble(x + Rando.Float(-4f, 4f), y + Rando.Float(0f, 4f), Rando.Float(-1.5f, 1.5f), y - 12f, true)
+                    for (int index = 0; index < 4; ++index)
                     {
-                        depth = depth + 1
-                    };
-                    Level.Add(tinyBubble);
+                        TinyBubble tinyBubble = new TinyBubble(x + Rando.Float(-4f, 4f), y + Rando.Float(0f, 4f), Rando.Float(-1.5f, 1.5f), y - 12f, true)
+                        {
+                            depth = depth + 1
+                        };
+                        Level.Add(tinyBubble);
+                    }
                 }
             }
         }

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.EditorBeam
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -47,13 +40,17 @@ namespace DuckGame
         {
             _selectBeam.color = new Color(0.5f, 0.2f + _wave2.normalized * 0.2f, 0.3f + _wave.normalized * 0.3f) * (1f + _flash);
             _flash = Maths.CountDown(_flash, 0.1f);
-            _spawnWait -= 0.025f * DGRSettings.ActualParticleMultiplier;
-            if (_spawnWait < 0f)
+            if (DGRSettings.S_ParticleMultiplier != 0)
             {
-                Level.Add(new MultiBeamParticle(x, y + 70f, -0.8f - _wave.normalized, false, Color.Cyan * 0.8f));
-                Level.Add(new MultiBeamParticle(x, y + 70f, -0.8f - _wave2.normalized, true, Color.LightBlue * 0.8f));
-                _spawnWait = 1f;
+                _spawnWait -= 0.025f * DGRSettings.ActualParticleMultiplier;
+                if (_spawnWait < 0f)
+                {
+                    Level.Add(new MultiBeamParticle(x, y + 70f, -0.8f - _wave.normalized, false, Color.Cyan * 0.8f));
+                    Level.Add(new MultiBeamParticle(x, y + 70f, -0.8f - _wave2.normalized, true, Color.LightBlue * 0.8f));
+                    _spawnWait = 1f;
+                }
             }
+            
             foreach (Duck duck in Level.CheckRectAll<Duck>(position - center, position - center + new Vec2(_collisionSize.x, _collisionSize.y)))
             {
                 Duck d = duck;
@@ -146,8 +143,11 @@ namespace DuckGame
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
-                Level.Add(new GlassParticle(hitPos.x, hitPos.y, new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
+            if (DGRSettings.S_ParticleMultiplier != 0)
+            {
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
+                    Level.Add(new GlassParticle(hitPos.x, hitPos.y, new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
+            }
             _flash = 1f;
             return true;
         }
