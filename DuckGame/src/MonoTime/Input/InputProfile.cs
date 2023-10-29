@@ -298,23 +298,13 @@ namespace DuckGame
         {
             if (press)
             {
-                if (_leftStickStates[b] == InputState.None)
-                {
-                    _leftStickStates[b] = InputState.Pressed;
-                    return;
-                }
-                _leftStickStates[b] = InputState.Down;
-                return;
+                _leftStickStates[b] = _leftStickStates[b] == InputState.None ? InputState.Pressed : InputState.Down;
             }
             else
             {
-                if (_leftStickStates[b] == InputState.Down || _leftStickStates[PadButton.DPadLeft] == InputState.Pressed)
-                {
-                    _leftStickStates[b] = InputState.Released;
-                    return;
-                }
-                _leftStickStates[b] = InputState.None;
-                return;
+                _leftStickStates[b] = (_leftStickStates[b] == InputState.Down || _leftStickStates[PadButton.DPadLeft] == InputState.Pressed)
+                    ? InputState.Released
+                    : InputState.None;
             }
         }
 
