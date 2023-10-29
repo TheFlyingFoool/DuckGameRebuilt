@@ -34,7 +34,6 @@ namespace DuckGame
         }
 
         public SpriteMap LoadingAnimation;
-        public SpriteMap IconSheet;
         public Sprite MainSprite;
         public Sprite DoorSprite;
         
@@ -53,8 +52,6 @@ namespace DuckGame
         
         public override void Initialize()
         {
-            IconSheet = new SpriteMap("iconSheet", 16, 16) {frame = 12};
-            IconSheet.CenterOrigin();
             MainSprite = new Sprite("RecorderatorMain");
             DoorSprite = new Sprite("RecorderatorDoor");
 
@@ -122,8 +119,15 @@ namespace DuckGame
         
         public override void Update()
         {
+            Graphics.fade = 1;
             camera.position = Vec2.Zero;
             camera.size = new Vec2(320, 180);
+            if (Input.Pressed("QUACK"))
+            {
+                Level.current = new TitleScreen();
+                return;
+            }
+            if (MenuItems.Count == 0) return;
             if (ReplayToLoadPreview != null)
             {
                 ReplayToLoadPreview.LoadPreview();
@@ -141,6 +145,7 @@ namespace DuckGame
             if (ReplayToPlay != null)
             {
                 Recorderator.PlayReplay(ReplayToPlay.ReplayFilePath);
+                (Level.current as ReplayLevel).prev = this;
                 ReplayToPlay = null;
             }
 
@@ -205,6 +210,13 @@ namespace DuckGame
 
         public override void Draw()
         {
+            if (MenuItems.Count == 0)
+            {
+                Graphics.DrawString("There are no replays!", Vec2.Zero, Color.White, 1);
+                Graphics.DrawString("Press @QUACK@ to leave", new Vec2(0, 12), Color.White, 1);
+                Graphics.DrawString("What is this? This is Recorderator, if replays are available they'll show up\nhere. To enable Recorderator go to the DGR Settings Recorderator and Record\nRecorderator might not work with certain mods and is still in beta", new Vec2(0, 24), Color.White, 1, null, 0.5f);
+                return;
+            }
             Layer.lighting = false;
 
             Graphics.Draw(MainSprite, 0, 0, -0.8f);
@@ -214,23 +226,9 @@ namespace DuckGame
                 Graphics.Draw(LoadingAnimation, 258, 46, (Depth)(-0.6f));
 
             Vec2 mousePos = Mouse.positionScreen;
-            Rectangle exitButtonBounds = new Rectangle(new Vec2(304, 160), new Vec2(318, 174));
-            
-            if (exitButtonBounds.Contains(mousePos))
-            {
-                IconSheet.frame = 12;
-                IconSheet.scale = new Vec2(1.2f);
-                Material prevMat = Graphics.material;
-                Graphics.material = new MaterialSelection();
-                Graphics.Draw(IconSheet, 311, 169);
-                Graphics.material = prevMat;
-            }
-            else
-            {
-                IconSheet.frame = 12;
-                IconSheet.scale = new Vec2(1.2f);
-                Graphics.Draw(IconSheet, 311, 169);
-            }
+
+            Graphics.DrawString("@QUACK@LEAVE", new Vec2(264, 163), Color.White, 1, InputProfile.active);
+            Graphics.DrawString("Recorderator BETA", new Vec2(250, 174), Color.SkyBlue, 1, null, 0.5f);
 
             if (DGRSettings.MenuMouse)
                 FeatherFashion.DrawCursor(mousePos);

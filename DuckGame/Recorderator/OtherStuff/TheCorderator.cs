@@ -838,17 +838,24 @@ namespace DuckGame
             }
             else
             {
-                string path = CordsPath + "cord_" + DateTime.Now.ToString().Replace('/', '-').Replace(':', '-').Replace(' ', '-') + ".crf";
-                int V = 0;
-                while (File.Exists(path))
-                {
-                    V++;
-                    path = CordsPath + "cord_" + DateTime.Now.ToString().Replace('/', '-').Replace(':', '-').Replace(' ', '-') + "_" + V + ".crf";
-                }
                 using (MemoryStream customFileStream = new MemoryStream(bf.ToArray()))
                 {
-                    string zipFilePath = CordsPath + "cord_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".crf";
+                    string extraPath = "";
+                    if (Recorderator.Clipped) extraPath = "Clips/";
+                    else
+                    {
+                        string host = "NOHOST";
+                        string date = DateTime.Now.ToString("yyyy-MM-dd");
+                        if (Network.isServer) host = "HOSTED";
+                        else
+                        {
+                            host = Extensions.SanitizeFolderName(Extensions.CleanStringFormatting(DuckNetwork.hostProfile.connection.name));
+                        }
+                        extraPath = $"{host}/{date}/";
+                    }
+                    string zipFilePath = CordsPath + extraPath + "cord_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".crf";
 
+                    Directory.CreateDirectory(CordsPath + extraPath);
                     using (FileStream zipStream = new FileStream(zipFilePath, FileMode.Create))
                     {
                         using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Create))
@@ -968,6 +975,13 @@ namespace DuckGame
             }
             else
             {
+                if (Keyboard.Pressed(Keys.F2))
+                {
+                    Recorderator.Clipped = true;
+                    SFX.DontSave = 1;
+                    if (DGRSettings.SyncChing) SFX.PlaySynchronized("ching");
+                    else SFX.Play("ching");
+                }
                 if (camPos.Count > 0 && camPos.Last() == Level.current.camera.position)
                 {
                     camPos.Add(new Vec2(0, -999999999));

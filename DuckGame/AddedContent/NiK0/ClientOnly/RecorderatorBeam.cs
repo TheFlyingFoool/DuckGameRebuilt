@@ -38,6 +38,10 @@ namespace DuckGame
 
         public override void Update()
         {
+            if (Level.current is TitleScreen ts)
+            {
+                if (!ts.secondTitlescreen) return;
+            }
             _selectBeam.color = new Color(0.5f, 0.2f + _wave2.normalized * 0.2f, 0.3f + _wave.normalized * 0.3f) * (1f + _flash);
             _flash = Maths.CountDown(_flash, 0.1f);
             if (DGRSettings.S_ParticleMultiplier != 0)

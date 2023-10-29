@@ -1696,15 +1696,18 @@ namespace DuckGame
                     Add(_duck);
                     HUD.AddInputChangeDisplay(" Cmon Now That Was Dumb, Dont You Agree? ");
                 }
-                foreach (Profile defaultProfile in Profiles.defaultProfiles)
+                if (DGRSettings.SwitchInput)
                 {
-                    foreach (string trigger in Triggers.SimpleTriggerList)
+                    foreach (Profile defaultProfile in Profiles.defaultProfiles)
                     {
-                        if (defaultProfile.inputProfile.Pressed(trigger, false))
+                        foreach (string trigger in Triggers.SimpleTriggerList)
                         {
-                            _duck.profile = defaultProfile;
-                            InputProfile.active = _duck.profile.inputProfile;
-                            break;
+                            if (defaultProfile.inputProfile.Pressed(trigger, false))
+                            {
+                                _duck.profile = defaultProfile;
+                                InputProfile.active = _duck.profile.inputProfile;
+                                break;
+                            }
                         }
                     }
                 }
