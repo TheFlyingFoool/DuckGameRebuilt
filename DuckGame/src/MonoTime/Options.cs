@@ -432,6 +432,11 @@ namespace DuckGame
                 dgrDescription = "If this is enabled hats, effects, devconsole, challenges, textures wont load on startup resulting in instability so use at your own risk"
             });
 
+            menu.Add(new UIMenuItemToggle("Sync Ching", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SyncChing)))
+            {
+                dgrDescription = "Want everyone to know that you just clipped them? Turn this on and other people will be able to hear the ching when you clip with Recorderator!"
+            });
+
             menu.Add(new UIMenuItemToggle("Alt SeqCrate Texture", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SequenceCrateRetexture)))
             {
                 dgrDescription = "Retextures the Sequence Crate so it doesn't look indentical to the regular crate"
@@ -565,6 +570,11 @@ namespace DuckGame
             menu.Add(new UIMenuItemToggle("Skip Excess Rounds", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SkipExcessRounds)))
             {
                 dgrDescription = "If a player has already definitely won extra rounds that wont change the outcome of the match will be skipped (HOST ONLY)"
+            });
+
+            menu.Add(new UIMenuItemToggle("Auto Input Switch", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SwitchInput)))
+            {
+                dgrDescription = "On the titlescreen all input profiles will work as the main duck adjusting them dynamically"
             });
             menu.Add(new UIMenuItemToggle("Skip XP", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SkipXP)))
             {
@@ -791,11 +801,8 @@ namespace DuckGame
             TEMPDGREDITOR = CreateDGREditorMenu(menu);
             menu.Add(new UIMenuItem("EDITOR", new UIMenuActionOpenMenu(menu, TEMPDGREDITOR), backButton: true));
 
-            if (Program.IS_DEV_BUILD)//WHEN RECORDERATOR IS A THING AGAIN MAKE THIS MENU ALWAYS SHOW UP -NiK0
-            {
-                TEMPDGRRECORDERATOR = Recorderator.CreateRecorderatorMenu(menu);
-                menu.Add(new UIMenuItem("RECORDERATOR", new UIMenuActionOpenMenu(menu, TEMPDGRRECORDERATOR), backButton: true));
-            }
+            TEMPDGRRECORDERATOR = Recorderator.CreateRecorderatorMenu(menu);
+            menu.Add(new UIMenuItem("RECORDERATOR", new UIMenuActionOpenMenu(menu, TEMPDGRRECORDERATOR), backButton: true));
 
             TEMPDGRMISC = CreateDGRDumbShitMenu(menu);
             menu.Add(new UIMenuItem("MISCELLANEOUS", new UIMenuActionOpenMenu(menu, TEMPDGRMISC), backButton: true));

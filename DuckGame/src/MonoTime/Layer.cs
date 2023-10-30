@@ -554,7 +554,7 @@ namespace DuckGame
                         {
                             if (this != Parallax && DGRSettings.GraphicsCulling)
                             {
-                                Vec2 Topleft = camera.transformInverse(new Vec2(0f, 0f));
+                                Vec2 Topleft = camera.transformInverse(Vec2.Zero);
                                 Vec2 Bottomright = camera.transformInverse(new Vec2(Graphics.viewport.Width, Graphics.viewport.Height));
                                 int top = (int)((Bottomright.y + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
                                 int left = (int)((Topleft.x + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
@@ -620,7 +620,8 @@ namespace DuckGame
                                             Vec3 source = new Vec3(position.x, thing.z, thing.bottom);
                                             Viewport viewport = new Viewport(0, 0, 320, 180);
                                             source = (Vec3)viewport.Project((Vector3)source, (Microsoft.Xna.Framework.Matrix)projection, (Microsoft.Xna.Framework.Matrix)view, (Microsoft.Xna.Framework.Matrix)Matrix.Identity);
-                                            thing.position = new Vec2(source.x, source.y - thing.centery);
+                                            thing.position.x = source.x;
+                                            thing.position.y = source.y - thing.centery;
                                             thing.DoDraw();
                                             Graphics.material = null;
                                             thing.position = position;
@@ -665,7 +666,7 @@ namespace DuckGame
                         {
                             if (this != Parallax && DGRSettings.GraphicsCulling)
                             {
-                                Vec2 Topleft = camera.transformInverse(new Vec2(0f, 0f));
+                                Vec2 Topleft = camera.transformInverse(Vec2.Zero);
                                 Vec2 Bottomright = camera.transformInverse(new Vec2(Graphics.viewport.Width, Graphics.viewport.Height));
                                 int top = (int)((Bottomright.y + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);
                                 int left = (int)((Topleft.x + QuadTreeObjectList.offset) / QuadTreeObjectList.cellsize);

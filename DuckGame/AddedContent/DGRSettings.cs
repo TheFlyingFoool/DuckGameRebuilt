@@ -169,11 +169,15 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool IgnoreLevRestrictions = false;
 
+        [Marker.AutoConfig] public static bool SyncChing = false; //this one is for you cah toah <3 -NiK0
+
         [Marker.AutoConfig] public static bool RememberMatchSettings = false;
 
         [Marker.AutoConfig] public static bool CustomHatTeams = false;
 
         [Marker.AutoConfig] public static bool skipOnlineBumper = false;
+
+        [Marker.AutoConfig] public static bool SwitchInput = false;
 
         [Marker.AutoConfig]
         public static bool HideFS = false;

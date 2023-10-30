@@ -74,6 +74,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
+
             TeamSelect2.QUACK3 = TeamSelect2.Enabled("QUACK3");
             Vote.ClearVotes();
             if (level == "RANDOM")

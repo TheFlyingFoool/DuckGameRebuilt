@@ -17,7 +17,7 @@ namespace DuckGame
 
           
         }
-        public static Array KeyTypes = Enum.GetValues(typeof(Keys));
+        public static Keys[] KeyTypes = (Keys[])Enum.GetValues(typeof(Keys));
         private static KeyboardState _keyState;
         private static KeyboardState _keyStatePrev;
         public static KeyboardState KeyState => _keyState;
