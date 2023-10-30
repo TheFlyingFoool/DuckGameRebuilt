@@ -208,6 +208,28 @@ namespace DuckGame
         //    usedfornonsense = 1 / usedfornonsense;
         //}
 
+        //SPItemPool Needs Additional testing
+        //[Marker.DevConsoleCommand(Name = "gc")]
+        //public static void gc(int size)
+        //{
+        //    for (int i = 0; i < MTSpriteBatcher.mTSpriteBatchers.Count; i++)
+        //    {
+        //        MTSpriteBatcher n = MTSpriteBatcher.mTSpriteBatchers[i];
+
+        //        n.ResetInitializePool(size);
+        //        DevConsole.Log(i, n.GetPool().Count);
+        //    }
+        //    DevConsole.Log("pool sizes reset");
+        //}
+        //[Marker.DevConsoleCommand(Name = "gcl")]
+        //public static void gcl()
+        //{
+        //    for (int i = 0; i < MTSpriteBatcher.mTSpriteBatchers.Count; i++)
+        //    {
+        //        MTSpriteBatcher n = MTSpriteBatcher.mTSpriteBatchers[i];
+        //        DevConsole.Log(i, n.GetPool().Count);
+        //    }
+        //}
         [Marker.DevConsoleCommand(Name = "steamjoin")]
         public static void Join(string id)
         {
