@@ -715,7 +715,7 @@ namespace DuckGame
             });
             menu.Add(new UIMenuItemToggle("Dubber Speed", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.dubberspeed)))
             {
-                dgrDescription = "For true vim users, adds keybinds from 1-9 for faster menu browsing"
+                dgrDescription = "For true vim users, adds keybinds from 1-9 for faster menu browsing\nHold SHIFT to unignore player names"
             });
 
             menu.Add(new UIMenuItemToggle("No Force Start Menu", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HideFS)))

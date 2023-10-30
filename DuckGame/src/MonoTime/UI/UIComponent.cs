@@ -12,6 +12,8 @@ namespace DuckGame
         protected Interp UILerp = new Interp(true);
         protected Interp AnimLerp = new Interp(true);
 
+        public string idStr = null;
+
         public bool manualFormatting = false;
         public string dgrDescription
         {
