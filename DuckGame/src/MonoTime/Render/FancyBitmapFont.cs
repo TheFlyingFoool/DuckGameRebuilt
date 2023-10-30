@@ -680,6 +680,92 @@ namespace DuckGame
             return width1;
         }
 
+        public List<string> ParseToList(string text)
+        {
+            text = LangHandler.Convert(text);
+            List<string> result = new List<string>();
+            for (_letterIndex = 0; _letterIndex < text.Length; ++_letterIndex)
+            {
+                bool processedSpecialCharacter = false;
+                if (text[_letterIndex] == '@' || chatFont && text[_letterIndex] == ':')
+                {
+                    int letterIndex = _letterIndex;
+                    Sprite sprite = ParseSprite(text, null);
+                    if (sprite != null)
+                    {
+                        result.Add(text.Substring(letterIndex, _letterIndex - letterIndex + (_letterIndex == text.Length ? 0 : 1)));
+                        processedSpecialCharacter = true;
+                    }
+                    else
+                        _letterIndex = letterIndex;
+                }
+                else if (text[_letterIndex] == '|')
+                {
+                    int letterIndex = _letterIndex;
+                    if (ParseColor(text) != Colors.Transparent)
+                    {
+                        result.Add(text.Substring(letterIndex, _letterIndex - letterIndex + (_letterIndex == text.Length ? 0 : 1)));
+                        processedSpecialCharacter = true;
+                    }
+                    else
+                        _letterIndex = letterIndex;
+                }
+                if (!processedSpecialCharacter)
+                {
+                    result.Add(text[_letterIndex].ToString());
+                }
+            }
+
+            return result;
+        }
+
+        public string ComposeToText(List<string> list)
+        {
+            return String.Join("", list);
+        }
+
+        protected int GetCompLength(string comp)
+        {
+            if (comp.Length == 1)
+                return 1;
+            if (comp[0] == '@')
+                return 2;
+            return 0;
+        }
+
+        public int GetLength(string text)
+        {
+            List<string> li = ParseToList(text);
+            int length = 0;
+            foreach (string comp in li)
+                length += GetCompLength(comp);
+            return length;
+        }
+
+        public string Crop(string text, int from, int to)
+        {
+            if (to < from || to > text.Length - 1)
+                return "";
+            List<string> li = ParseToList(text);
+            List<string> cropped = new List<string>();
+            int pos = 0;
+            string firstColorTag = null;
+            foreach (string comp in li)
+            {
+                if (pos >= to)
+                    break;
+                if (pos >= from)
+                    cropped.Add(comp);
+                else if (comp[0] == '|')
+                    firstColorTag = comp;
+                if (comp[0] != '|')
+                    pos += GetCompLength(comp);
+            }
+            if (firstColorTag != null)
+                cropped.Insert(0, firstColorTag);
+            return ComposeToText(cropped);
+        }
+
         public int GetCharacterIndex(
           string text,
           float xPosition,
