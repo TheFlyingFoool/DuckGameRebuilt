@@ -1,5 +1,4 @@
-﻿using NAudio.MediaFoundation;
-using System.Collections;
+﻿using System.Collections;
 
 namespace DuckGame
 {

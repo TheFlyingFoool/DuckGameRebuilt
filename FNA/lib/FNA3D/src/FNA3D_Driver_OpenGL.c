@@ -1329,7 +1329,7 @@ static void OPENGL_SwapBuffers(
 		{
 			dstX = 0;
 			dstY = 0;
-			SDL_GL_GetDrawableSize(
+			SDL_GetWindowSizeInPixels(
 				(SDL_Window*) overrideWindowHandle,
 				&dstW,
 				&dstH
@@ -2848,7 +2848,7 @@ static void OPENGL_INTERNAL_CreateBackbuffer(
 ) {
 	int32_t useFauxBackbuffer;
 	int32_t drawX, drawY;
-	SDL_GL_GetDrawableSize(
+	SDL_GetWindowSizeInPixels(
 		(SDL_Window*) parameters->deviceWindowHandle,
 		&drawX,
 		&drawY
@@ -5345,12 +5345,19 @@ static const char *debugTypeStr[] = {
 	"GL_DEBUG_TYPE_PERFORMANCE",
 	"GL_DEBUG_TYPE_OTHER"
 };
-static const char *debugSeverityStr[] = {
-	"GL_DEBUG_SEVERITY_HIGH",
-	"GL_DEBUG_SEVERITY_MEDIUM",
-	"GL_DEBUG_SEVERITY_LOW",
-	"GL_DEBUG_SEVERITY_NOTIFICATION"
-};
+/* Debug severity values are disjointed */
+static inline const char *GetSeverityString(GLenum severity)
+{
+	switch (severity)
+	{
+	case GL_DEBUG_SEVERITY_HIGH: return "GL_DEBUG_SEVERITY_HIGH";
+	case GL_DEBUG_SEVERITY_MEDIUM: return "GL_DEBUG_SEVERITY_MEDIUM";
+	case GL_DEBUG_SEVERITY_LOW: return "GL_DEBUG_SEVERITY_LOW";
+	case GL_DEBUG_SEVERITY_NOTIFICATION: return "GL_DEBUG_SEVERITY_NOTIFICATION";
+	default:
+		return "FNA3D_UNKNOWN_SEVERITY";
+	}
+}
 
 static void GLAPIENTRY DebugCall(
 	GLenum source,
@@ -5368,7 +5375,7 @@ static void GLAPIENTRY DebugCall(
 			message,
 			debugSourceStr[source - GL_DEBUG_SOURCE_API],
 			debugTypeStr[type - GL_DEBUG_TYPE_ERROR],
-			debugSeverityStr[severity - GL_DEBUG_SEVERITY_HIGH]
+			GetSeverityString(severity)
 		);
 	}
 	else
@@ -5378,7 +5385,7 @@ static void GLAPIENTRY DebugCall(
 			message,
 			debugSourceStr[source - GL_DEBUG_SOURCE_API],
 			debugTypeStr[type - GL_DEBUG_TYPE_ERROR],
-			debugSeverityStr[severity - GL_DEBUG_SEVERITY_HIGH]
+			GetSeverityString(severity)
 		);
 	}
 }
@@ -5797,22 +5804,6 @@ static uint8_t OPENGL_PrepareWindowAttributes(uint32_t *flags)
 	return 1;
 }
 
-void OPENGL_GetDrawableSize(void* window, int32_t *w, int32_t *h)
-{
-	/* When using OpenGL, iOS and tvOS require an active GL context to get
-	 * the drawable size of the screen.
-	 */
-#if defined(__IPHONEOS__) || defined(__TVOS__)
-	SDL_GLContext tempContext = SDL_GL_CreateContext(window);
-#endif
-
-	SDL_GL_GetDrawableSize((SDL_Window*) window, w, h);
-
-#if defined(__IPHONEOS__) || defined(__TVOS__)
-	SDL_GL_DeleteContext(tempContext);
-#endif
-}
-
 FNA3D_Device* OPENGL_CreateDevice(
 	FNA3D_PresentationParameters *presentationParameters,
 	uint8_t debugMode
@@ -6178,7 +6169,6 @@ FNA3D_Device* OPENGL_CreateDevice(
 FNA3D_Driver OpenGLDriver = {
 	"OpenGL",
 	OPENGL_PrepareWindowAttributes,
-	OPENGL_GetDrawableSize,
 	OPENGL_CreateDevice
 };
 

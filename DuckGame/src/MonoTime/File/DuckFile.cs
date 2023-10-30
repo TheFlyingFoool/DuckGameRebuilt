@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
-using XnaToFna;
+//using XnaToFna;
 
 namespace DuckGame
 {

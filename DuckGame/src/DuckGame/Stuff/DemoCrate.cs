@@ -1,5 +1,4 @@
-﻿using NAudio.Gui;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame

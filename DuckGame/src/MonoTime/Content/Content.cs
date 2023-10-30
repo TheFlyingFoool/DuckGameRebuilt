@@ -7,13 +7,12 @@
 
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using XnaToFna;
+//using XnaToFna;
 
 namespace DuckGame
 {

@@ -1,6 +1,4 @@
-﻿using Mono.Cecil;
-using NAudio.MediaFoundation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 #if AutoUpdater

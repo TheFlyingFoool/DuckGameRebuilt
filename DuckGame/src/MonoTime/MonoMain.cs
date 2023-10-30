@@ -25,7 +25,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using AddedContent.Hyeve;
-using XnaToFna;
+//using XnaToFna;
 
 namespace DuckGame
 {
@@ -620,9 +620,9 @@ namespace DuckGame
 
         public static string GetInfiniteLoopDetails()
         {
-            string str = new StackTrace(mainThread, true).ToString();
-            int length = str.IndexOf("at Microsoft.Xna.Framework.Game.Tick");
-            return length >= 0 ? str.Substring(0, length) : str;
+            //string str = new StackTrace(MonoMain.mainThread, true).ToString();
+            //int length = str.IndexOf("at Microsoft.Xna.Framework.Game.Tick");
+            return "";// >= 0 ? str.Substring(0, length) : str;
         }
 
         protected override void LoadContent() => base.LoadContent();

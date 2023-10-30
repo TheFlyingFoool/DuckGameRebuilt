@@ -35,7 +35,7 @@ namespace DuckGame
         {
             get
             {
-                if (Program.IsLinuxD || Program.isLinux)
+                if (true || true)
                     return null;
                 if (_speech == null)
                 {
@@ -52,47 +52,26 @@ namespace DuckGame
         {
             get
             {
-                return !Program.IsLinuxD && !Program.isLinux && speech != null && speech.GetSayVoices().Count > 0;
+                return false;
             }
         }
 
         public static void Say(string pString)
         {
-            if (Program.IsLinuxD || Program.isLinux || speech == null)
-                return;
-            speech.Say(pString);
         }
 
         public static void StopSaying()
         {
-            if (Program.IsLinuxD || Program.isLinux || speech == null)
-                return;
-            speech.StopSaying();
         }
 
         public static void SetSayVoice(string pName)
         {
-            if (Program.IsLinuxD || Program.isLinux)
-                return;
-            if (speech == null)
-                return;
-            try
-            {
-                speech.SetSayVoice(pName);
-            }
-            catch (Exception ex)
-            {
-                DevConsole.Log(DCSection.General, "|DGRED|SFX.SetSayVoice failed:" + ex.Message);
-            }
         }
 
-        public static List<string> GetSayVoices() => Program.isLinux || speech == null ? new List<string>() : speech.GetSayVoices();
+        public static List<string> GetSayVoices() => true || speech == null ? new List<string>() : speech.GetSayVoices();
 
         public static void ApplyTTSSettings()
         {
-            if (Program.IsLinuxD || Program.isLinux || speech == null)
-                return;
-            speech.ApplyTTSSettings();
         }
 
         public static int RegisterSound(string pSound, SoundEffect pEffect)

@@ -49,7 +49,7 @@ public abstract class WorkshopQueryBase : IDisposable {
 
     internal virtual unsafe void Destroy() 
     {
-        SteamUGC.ReleaseQueryUGCRequest(_handle);
+        //SteamUGC.ReleaseQueryUGCRequest(_handle);
         _handle = new UGCQueryHandle_t();
         _completedCallResult = CallResult<SteamUGCQueryCompleted_t>.Create(OnSteamUGCQueryCompleted);
     }

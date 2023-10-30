@@ -15,11 +15,11 @@ public abstract class WorkshopQueryUGC : WorkshopQueryBase {
     internal override unsafe void SetQueryData() {
         base.SetQueryData();
 
-        foreach (string tag in requiredTags)
-            SteamUGC.AddRequiredTag(_handle, tag);
+        //foreach (string tag in requiredTags)
+        //    SteamUGC.AddRequiredTag(_handle, tag);
 
-        foreach (string tag in excludedTags)
-            SteamUGC.AddExcludedTag(_handle, tag);
+        //foreach (string tag in excludedTags)
+        //    SteamUGC.AddExcludedTag(_handle, tag);
 
     }
 

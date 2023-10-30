@@ -726,7 +726,7 @@ public class Steam : IDisposable {
                 }
             }
         }
-        SteamUGC.ReleaseQueryUGCRequest(result.m_handle);
+        //SteamUGC.ReleaseQueryUGCRequest(result.m_handle);
     }
 
     private static unsafe void OnLobbyMemberStatus(LobbyChatUpdate_t result) {

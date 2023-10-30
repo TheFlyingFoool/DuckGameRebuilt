@@ -168,15 +168,16 @@ namespace DuckGame
             TaskScheduler.UnobservedTaskException += UnhandledExceptionUnobserved;
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
-            try
-            {
-                //DoSomeAccessViolation();
-                DoMain(args);
-            }
-            catch (Exception ex)
-            {
-                HandleGameCrash(ex);
-            }
+            DoMain(args);
+            //try
+            //{
+            //    //DoSomeAccessViolation();
+            //    DoMain(args);
+            //}
+            //catch (Exception ex)
+            //{
+            //    HandleGameCrash(ex);
+            //}
         }
         //public static Int32 newexceptionfilter(IntPtr a)
         //{
@@ -1505,10 +1506,7 @@ namespace DuckGame
                     string tempMsg = pException.Message;
 
                     string tempMsg2;
-                    if (!IsLinuxD) //PLEASE do not translate on linux. it dies -othello7
-                        tempMsg2 = TranslateMessage(pException);
-                    else
-                        tempMsg2 = pException.Message;
+                    tempMsg2 = pException.Message;
 
 
                     if (tempMsg2 != "" && tempMsg2 != tempMsg)

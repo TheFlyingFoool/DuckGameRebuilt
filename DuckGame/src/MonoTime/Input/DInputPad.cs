@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+//using XnaToFna.ProxyDInput;
 namespace DuckGame
 {
     public class DInputPad : AnalogGamePad
@@ -369,7 +369,7 @@ namespace DuckGame
             {
                 if (isConnected)
                 {
-                    string productName = DInput.GetProductName(index);
+                    string productName = null;//DInput.GetProductName(index);
                     if (productName != null)
                         _productName = productName.Trim();
                     else
@@ -386,7 +386,7 @@ namespace DuckGame
             {
                 if (isConnected)
                 {
-                    string productGuid = DInput.GetProductGUID(index);
+                    string productGuid = null;//DInput.GetProductGUID(index);
                     if (productGuid != null)
                         _productGUID = productGuid;
                     else
@@ -397,18 +397,18 @@ namespace DuckGame
             set => _productGUID = value;
         }
 
-        public override bool isConnected => DInput.IsConnected(index);
+        public override bool isConnected => false;
 
-        public bool isXInput => DInput.IsXInput(index);
+        public bool isXInput => false;
 
         public DInputPad(int idx)
           : base(idx)
         {
             _name = "dinput" + idx.ToString();
-            _productName = DInput.GetProductName(index);
+            _productName = null;//DInput.GetProductName(index);
             if (_productName != null)
                 _productName = _productName.Trim();
-            _productGUID = DInput.GetProductGUID(index);
+            _productGUID = null;//DInput.GetProductGUID(index);
         }
 
         public override Dictionary<int, string> GetTriggerNames()
@@ -438,107 +438,110 @@ namespace DuckGame
             return mapImage;
         }
 
-        private PadState ConvertDInputState(DInputState state)
-        {
-            PadState padState = new PadState();
-            if (state == null)
-                return padState;
-            if (isXInput)
-            {
-                if (state.buttons[0])
-                    padState.buttons |= PadButton.A;
-                if (state.buttons[3])
-                    padState.buttons |= PadButton.Y;
-                if (state.buttons[1])
-                    padState.buttons |= PadButton.B;
-                if (state.buttons[2])
-                    padState.buttons |= PadButton.X;
-                if (state.buttons[4])
-                    padState.buttons |= PadButton.LeftShoulder;
-                if (state.buttons[5])
-                    padState.buttons |= PadButton.RightShoulder;
-                if (state.buttons[6])
-                {
-                    padState.buttons |= PadButton.Back;
-                    padState.triggers.left = 1f;
-                }
-                if (state.buttons[7])
-                    padState.buttons |= PadButton.Start;
-                if (state.buttons[8])
-                    padState.buttons |= PadButton.LeftStick;
-                if (state.buttons[9])
-                    padState.buttons |= PadButton.RightStick;
-                if (state.buttons[11])
-                    padState.buttons |= PadButton.LeftStick;
-                if (state.buttons[12])
-                    padState.buttons |= PadButton.RightStick;
-                if (state.left)
-                    padState.buttons |= PadButton.DPadLeft;
-                if (state.right)
-                    padState.buttons |= PadButton.DPadRight;
-                if (state.up)
-                    padState.buttons |= PadButton.DPadUp;
-                if (state.down)
-                    padState.buttons |= PadButton.DPadDown;
-                padState.sticks.left = new Vec2(state.leftX, state.leftY * -1f);
-                padState.sticks.right = new Vec2(state.rightX, -state.rightY);
-                if (padState.sticks.left.Length() < 0.1f)
-                    padState.sticks.left = Vec2.Zero;
-                if (padState.sticks.right.Length() < 0.1f)
-                    padState.sticks.right = Vec2.Zero;
-                if (state.leftZ > 0f)
-                    padState.triggers.left = state.leftZ;
-            }
-            else
-            {
-                if (state.buttons[0])
-                    padState.buttons |= PadButton.X;
-                if (state.buttons[3])
-                    padState.buttons |= PadButton.Y;
-                if (state.buttons[1])
-                    padState.buttons |= PadButton.A;
-                if (state.buttons[2])
-                    padState.buttons |= PadButton.B;
-                if (state.buttons[4])
-                    padState.buttons |= PadButton.LeftShoulder;
-                if (state.buttons[5])
-                    padState.buttons |= PadButton.RightShoulder;
-                if (state.buttons[6])
-                {
-                    padState.buttons |= PadButton.LeftTrigger;
-                    padState.triggers.left = 1f;
-                }
-                if (state.buttons[7])
-                {
-                    padState.buttons |= PadButton.RightTrigger;
-                    padState.triggers.right = 1f;
-                }
-                if (state.buttons[8])
-                    padState.buttons |= PadButton.Back;
-                if (state.buttons[9])
-                    padState.buttons |= PadButton.Start;
-                if (state.buttons[11])
-                    padState.buttons |= PadButton.LeftStick;
-                if (state.buttons[12])
-                    padState.buttons |= PadButton.RightStick;
-                if (state.left)
-                    padState.buttons |= PadButton.DPadLeft;
-                if (state.right)
-                    padState.buttons |= PadButton.DPadRight;
-                if (state.up)
-                    padState.buttons |= PadButton.DPadUp;
-                if (state.down)
-                    padState.buttons |= PadButton.DPadDown;
-                padState.sticks.left = new Vec2(state.leftX, state.leftY * -1f);
-                padState.sticks.right = new Vec2(state.leftZ, -state.rightZ);
-                if (padState.sticks.left.Length() < 0.1f)
-                    padState.sticks.left = Vec2.Zero;
-                if (padState.sticks.right.Length() < 0.1f)
-                    padState.sticks.right = Vec2.Zero;
-            }
-            return padState;
-        }
+        //private PadState ConvertDInputState(DInputState state)
+        //{
+        //    PadState padState = new PadState();
+        //    if (state == null)
+        //        return padState;
+        //    if (isXInput)
+        //    {
+        //        if (state.buttons[0])
+        //            padState.buttons |= PadButton.A;
+        //        if (state.buttons[3])
+        //            padState.buttons |= PadButton.Y;
+        //        if (state.buttons[1])
+        //            padState.buttons |= PadButton.B;
+        //        if (state.buttons[2])
+        //            padState.buttons |= PadButton.X;
+        //        if (state.buttons[4])
+        //            padState.buttons |= PadButton.LeftShoulder;
+        //        if (state.buttons[5])
+        //            padState.buttons |= PadButton.RightShoulder;
+        //        if (state.buttons[6])
+        //        {
+        //            padState.buttons |= PadButton.Back;
+        //            padState.triggers.left = 1f;
+        //        }
+        //        if (state.buttons[7])
+        //            padState.buttons |= PadButton.Start;
+        //        if (state.buttons[8])
+        //            padState.buttons |= PadButton.LeftStick;
+        //        if (state.buttons[9])
+        //            padState.buttons |= PadButton.RightStick;
+        //        if (state.buttons[11])
+        //            padState.buttons |= PadButton.LeftStick;
+        //        if (state.buttons[12])
+        //            padState.buttons |= PadButton.RightStick;
+        //        if (state.left)
+        //            padState.buttons |= PadButton.DPadLeft;
+        //        if (state.right)
+        //            padState.buttons |= PadButton.DPadRight;
+        //        if (state.up)
+        //            padState.buttons |= PadButton.DPadUp;
+        //        if (state.down)
+        //            padState.buttons |= PadButton.DPadDown;
+        //        padState.sticks.left = new Vec2(state.leftX, state.leftY * -1f);
+        //        padState.sticks.right = new Vec2(state.rightX, -state.rightY);
+        //        if (padState.sticks.left.Length() < 0.1f)
+        //            padState.sticks.left = Vec2.Zero;
+        //        if (padState.sticks.right.Length() < 0.1f)
+        //            padState.sticks.right = Vec2.Zero;
+        //        if (state.leftZ > 0f)
+        //            padState.triggers.left = state.leftZ;
+        //    }
+        //    else
+        //    {
+        //        if (state.buttons[0])
+        //            padState.buttons |= PadButton.X;
+        //        if (state.buttons[3])
+        //            padState.buttons |= PadButton.Y;
+        //        if (state.buttons[1])
+        //            padState.buttons |= PadButton.A;
+        //        if (state.buttons[2])
+        //            padState.buttons |= PadButton.B;
+        //        if (state.buttons[4])
+        //            padState.buttons |= PadButton.LeftShoulder;
+        //        if (state.buttons[5])
+        //            padState.buttons |= PadButton.RightShoulder;
+        //        if (state.buttons[6])
+        //        {
+        //            padState.buttons |= PadButton.LeftTrigger;
+        //            padState.triggers.left = 1f;
+        //        }
+        //        if (state.buttons[7])
+        //        {
+        //            padState.buttons |= PadButton.RightTrigger;
+        //            padState.triggers.right = 1f;
+        //        }
+        //        if (state.buttons[8])
+        //            padState.buttons |= PadButton.Back;
+        //        if (state.buttons[9])
+        //            padState.buttons |= PadButton.Start;
+        //        if (state.buttons[11])
+        //            padState.buttons |= PadButton.LeftStick;
+        //        if (state.buttons[12])
+        //            padState.buttons |= PadButton.RightStick;
+        //        if (state.left)
+        //            padState.buttons |= PadButton.DPadLeft;
+        //        if (state.right)
+        //            padState.buttons |= PadButton.DPadRight;
+        //        if (state.up)
+        //            padState.buttons |= PadButton.DPadUp;
+        //        if (state.down)
+        //            padState.buttons |= PadButton.DPadDown;
+        //        padState.sticks.left = new Vec2(state.leftX, state.leftY * -1f);
+        //        padState.sticks.right = new Vec2(state.leftZ, -state.rightZ);
+        //        if (padState.sticks.left.Length() < 0.1f)
+        //            padState.sticks.left = Vec2.Zero;
+        //        if (padState.sticks.right.Length() < 0.1f)
+        //            padState.sticks.right = Vec2.Zero;
+        //    }
+        //    return padState;
+        //}
 
-        protected override PadState GetState(int index) => ConvertDInputState(DInput.GetState(index));
+        protected override PadState GetState(int index)
+        {
+            return new PadState();//ConvertDInputState(DInput.GetState(index));
+        }
     }
 }
