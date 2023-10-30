@@ -27,7 +27,6 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Documents;
-using static DuckGame.CMD;
 
 namespace DuckGame
 {
@@ -315,8 +314,7 @@ namespace DuckGame
 
         public static void Draw()
         {
-            // Graphics.DrawString(ConsoleLineOffset.ToString(), new Vec2(16, 16), Color.White, 2f);
-            // Graphics.DrawString($"{core.lines.Count + ConsoleLineOffset}", new Vec2(16, 32), Color.White, 2f);
+            Graphics.DrawString(core.viewOffset.ToString(), new Vec2(16, 16), Color.White, 2f);
 
             if (Layer.core._console != null)
             {
@@ -443,7 +441,7 @@ namespace DuckGame
                         }
                     }
 
-                    int index1 = _core.lines.Count - 1 - _core.viewOffset + ConsoleLineOffset;
+                    int index1 = _core.lines.Count - 1;
                     float vOffset = 0.0f;
                     _core.font.scale = new Vec2((float)Math.Max(Math.Round(_tray.scale.x / 4f), 1f));
                     float mul = _core.font.scale.x / 2f;
@@ -456,7 +454,10 @@ namespace DuckGame
                         lineNumWidth = _raster.GetWidth("HH:mm:ss 0000  ");
                     }
 
-                    for (int index2 = ConsoleLineOffset; index2 < (height - 2f * _tray.scale.y) / lineHeight - 1f && index1 >= 0; ++index2)
+                    vOffset -= lineHeight * core.viewOffset;
+
+                    int maxDrawnLines = (int) ((height - 2f * _tray.scale.y) / lineHeight - 1f);
+                    for (int index2 = 0; index2 < maxDrawnLines && index1 >= 0; ++index2)
                     {
                         DCLine dcLine = _core.lines.ElementAt(index1);
 
@@ -479,13 +480,20 @@ namespace DuckGame
                             _raster.maxWidth = (int)(width - 35f * _tray.scale.x);
                             _raster.singleLine = true;
                             _raster.enforceWidthByWord = false;
-                            
-                            _raster.Draw(lineNumber, posX, posY, lineNumColor, 0.9f);
-                            for (int i = 0; i < lineParts.Length; i++)
+
+                            if (posY <= height)
                             {
-                                _raster.Draw(lineParts[i], posX + lineNumWidth, posY + (i * lineHeight), dcLine.color * 0.8f, 0.9f);
+                                _raster.Draw(lineNumber, posX, posY, lineNumColor, 0.9f);
+                                for (int i = 0; i < lineParts.Length; i++)
+                                {
+                                    float partPosY = posY + (i * lineHeight);
+                                    if (partPosY <= height)
+                                    {
+                                        _raster.Draw(lineParts[i], posX + lineNumWidth, partPosY, dcLine.color * 0.8f, 0.9f);
+                                    }
+                                }
                             }
-                            
+
                             vOffset += blockHeight;
                         }
                         else
@@ -500,10 +508,17 @@ namespace DuckGame
                             _core.font.singleLine = true;
                             _core.font.enforceWidthByWord = false;
 
-                            _core.font.Draw(lineNumber, posX, posY, lineNumColor, 0.9f);
-                            for (int i = 0; i < lineParts.Length; i++)
+                            if (posY <= height)
                             {
-                                _core.font.Draw(lineParts[i], posX + lineNumWidth, posY + (i * lineHeight), dcLine.color * 0.8f, 0.9f);
+                                _core.font.Draw(lineNumber, posX, posY, lineNumColor, 0.9f);
+                                for (int i = 0; i < lineParts.Length; i++)
+                                {
+                                    float partPosY = posY + (i * lineHeight);
+                                    if (partPosY <= height)
+                                    {
+                                        _core.font.Draw(lineParts[i], posX + lineNumWidth, partPosY, dcLine.color * 0.8f, 0.9f);
+                                    }
+                                }
                             }
                             
                             vOffset += blockHeight;

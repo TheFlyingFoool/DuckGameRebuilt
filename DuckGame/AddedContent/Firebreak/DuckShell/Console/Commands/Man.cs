@@ -41,14 +41,14 @@ namespace DuckGame.ConsoleEngine
 
                 builder.Append(')');
                 
-                builder.Append(" {\n");
+                builder.Append(" [\n");
 
                 foreach (string line in commandAttribute.Description?.SplitByLength(50) ?? Array.Empty<string>())
                 {
                     builder.Append($"  // {line}\n");
                 }
 
-                builder.Append('}');
+                builder.Append(']');
 
                 return builder;
             }
