@@ -363,6 +363,11 @@ namespace DGWindows
 
         public static void AssemblyLoad(object sender, AssemblyLoadEventArgs args)
         {
+            if (Program.DotNetBuild)
+            {
+                Assembly assembly = args.LoadedAssembly;
+                AssemblyLocator.assemblies[assembly.FullName] = assembly;
+            }
             assemblyLoadStrings.Add(args.LoadedAssembly.FullName + ": " + args.LoadedAssembly.GetName().ProcessorArchitecture.ToString());
             if (!args.LoadedAssembly.FullName.Contains("HarmonySharedState") && !args.LoadedAssembly.FullName.Contains("HarmonyLoader") || ModLoader.loadingOldMod == null)
                 return;

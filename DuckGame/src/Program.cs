@@ -250,6 +250,14 @@ namespace DuckGame
         {
             if (!enteredMain)
                 return null;
+            if (Program.DotNetBuild && args.Name == "DuckGame, Version=1.1.8175.33388, Culture=neutral, PublicKeyToken=null")
+            {
+                return Program.gameAssembly;
+            }
+            if (Program.DotNetBuild && AssemblyLocator.assemblies.TryGetValue(args.Name, out Assembly assembly))
+            {
+                return assembly;
+            }
             if (args.Name.StartsWith("Steam,"))
             {
                 return Assembly.GetAssembly(typeof(Steam));
@@ -260,15 +268,15 @@ namespace DuckGame
                 if (enteredMain)
                 {
                     _attemptingResolve = true;
-                    Assembly assembly = null;
+                    Assembly modassembly = null;
                     try
                     {
-                        assembly = ModResolve(sender, args);
+                        modassembly = ModResolve(sender, args);
                     }
                     catch (Exception) { }
                     _attemptingResolve = false;
-                    if (assembly != null)
-                        return assembly;
+                    if (modassembly != null)
+                        return modassembly;
                     flag = true;
                 }
                 if (!_showedError && (!ModLoader.runningModloadCode || MonoMain.modDebugging) && !flag)
@@ -454,7 +462,7 @@ namespace DuckGame
                         MonoMain.infiniteLoopDebug = true;
                         break;
                     case "-nomods":
-                        MonoMain.nomodsMode = true;
+                        //MonoMain.nomodsMode = true;
                         break;
                     case "-linux":
                         if (MonoMain.audioModeOverride == AudioMode.None)
