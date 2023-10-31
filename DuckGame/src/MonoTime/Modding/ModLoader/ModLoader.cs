@@ -1,4 +1,6 @@
 ﻿using Microsoft.CSharp;
+using Mono.Cecil;
+using MonoMod.Utils;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections;
@@ -7,11 +9,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
-//using XnaToFna;
+using XnaToFna;
 using File = System.IO.File;
 
 namespace DuckGame
@@ -21,7 +24,7 @@ namespace DuckGame
     /// </summary>
     public static class ModLoader
     {
-        //private static XnaToFnaUtil xnaToFnaUtil;
+        private static XnaToFnaUtil xnaToFnaUtil;
         private static readonly Dictionary<string, Mod> _loadedMods = new Dictionary<string, Mod>();
         internal static readonly Dictionary<string, Mod> _modAssemblyNames = new Dictionary<string, Mod>();
         internal static readonly Dictionary<Assembly, Mod> _modAssemblies = new Dictionary<Assembly, Mod>();
@@ -126,7 +129,7 @@ namespace DuckGame
             {
                 if (mod.clientMod || mod.configuration.modType is ModConfiguration.Type.Reskin or ModConfiguration.Type.MapPack)
                     continue;
-                
+
                 mod.configuration.Disable();
             }
 
@@ -157,88 +160,88 @@ namespace DuckGame
         }
         public static void FixLoadAssembly(ModConfiguration modConfig, string path)
         {
-            //path = path.Replace("\\", "/");
-            //string pathprimer = path.Replace(".dll", "");
-            //string RebuiltDataPath = (pathprimer + "RebuiltData.txt");
-            //string RebuiltAssemblyPath = (pathprimer + "Rebuilt.dll");
-            //string modificationdatetime = File.GetLastWriteTime(path).ToString();
-            //string saveddata = "";
-            //string[] lines;
-            //if (File.Exists(RebuiltDataPath))
-            //{
-            //    if (File.Exists(RebuiltAssemblyPath))
-            //    {
-            //        saveddata = File.ReadAllText(RebuiltDataPath);
-            //        lines = saveddata.Split( new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            //        if (lines.Length  >  1)
-            //        {
-            //            string saveinfo = lines[0];
-            //            if (saveinfo.Contains("|") && lines[1] == "Type Order")
-            //            {
-            //                string[] splitdata = saveinfo.Split('|');
-            //                if (splitdata.Length > 1 && splitdata[0] == modificationdatetime && splitdata[1] == XnaToFnaUtil.RemapVersion.ToString())
-            //                {
-            //                    byte[] filebytes = File.ReadAllBytes(RebuiltAssemblyPath);
-            //                    if (filebytes.Length != 0)
-            //                    {
-            //                        modConfig.SortedTypeNames = new string[lines.Length - 2];
-            //                        for (int i = 2; i < lines.Length; i++)
-            //                        {
-            //                            modConfig.SortedTypeNames[i - 2] = lines[i];
-            //                        }
-            //                        modConfig.assembly = Assembly.Load(filebytes);
-            //                        return;
-            //                    }
-            //                }
-            //            }
-            //        }
-            //        File.Delete(RebuiltAssemblyPath);
-            //    }
-            //    File.Delete(RebuiltDataPath);
-            //}
-            ////assemblyDefinition = this.ResolveFailure(this, name);
-            //if (File.Exists(RebuiltAssemblyPath))
-            //{
-            //    File.Delete(RebuiltAssemblyPath);
-            //}
-            //Assembly normalmodassembly = Assembly.Load(File.ReadAllBytes(path));
-            //Type[] modtypes = normalmodassembly.GetTypes();
-            //modConfig.SortedTypeNames = new string[modtypes.Length];
-            //string typeorder = "\nType Order";
-            //for (int i = 0; i < modtypes.Length; i++)
-            //{
-            //    string typename = modtypes[i].FullName;
-            //    modConfig.SortedTypeNames[i] = typename;
-            //    typeorder += "\n" + typename;
-            //}
-            //normalmodassembly = null;
+            path = path.Replace("\\", "/");
+            string pathprimer = path.Replace(".dll", "");
+            string RebuiltDataPath = (pathprimer + "RebuiltData.txt");
+            string RebuiltAssemblyPath = (pathprimer + "Rebuilt.dll");
+            string modificationdatetime = File.GetLastWriteTime(path).ToString();
+            string saveddata = "";
+            string[] lines;
+            if (File.Exists(RebuiltDataPath))
+            {
+                if (File.Exists(RebuiltAssemblyPath))
+                {
+                    saveddata = File.ReadAllText(RebuiltDataPath);
+                    lines = saveddata.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (lines.Length > 1)
+                    {
+                        string saveinfo = lines[0];
+                        if (saveinfo.Contains("|") && lines[1] == "Type Order")
+                        {
+                            string[] splitdata = saveinfo.Split('|');
+                            if (splitdata.Length > 1 && splitdata[0] == modificationdatetime && splitdata[1] == XnaToFnaUtil.RemapVersion.ToString())
+                            {
+                                byte[] filebytes = File.ReadAllBytes(RebuiltAssemblyPath);
+                                if (filebytes.Length != 0)
+                                {
+                                    modConfig.SortedTypeNames = new string[lines.Length - 2];
+                                    for (int i = 2; i < lines.Length; i++)
+                                    {
+                                        modConfig.SortedTypeNames[i - 2] = lines[i];
+                                    }
+                                    modConfig.assembly = Assembly.Load(filebytes);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                    File.Delete(RebuiltAssemblyPath);
+                }
+                File.Delete(RebuiltDataPath);
+            }
+            //assemblyDefinition = this.ResolveFailure(this, name);
+            if (File.Exists(RebuiltAssemblyPath))
+            {
+                File.Delete(RebuiltAssemblyPath);
+            }
+            Assembly normalmodassembly = Assembly.Load(File.ReadAllBytes(path));
+            Type[] modtypes = normalmodassembly.GetTypes();
+            modConfig.SortedTypeNames = new string[modtypes.Length];
+            string typeorder = "\nType Order";
+            for (int i = 0; i < modtypes.Length; i++)
+            {
+                string typename = modtypes[i].FullName;
+                modConfig.SortedTypeNames[i] = typename;
+                typeorder += "\n" + typename;
+            }
+            normalmodassembly = null;
             //(modificationdatetime + " | " + XnaToFnaUtil.RemapVersion.ToString())
-           // File.WriteAllText(RebuiltDataPath, (modificationdatetime + "|" + XnaToFnaUtil.RemapVersion.ToString()) + typeorder);
-           // MonoMain.NloadMessage = "REMAPPING/LOADING MOD " + currentModLoadString + " " + saveddata;
-         //   string folderpath = Path.GetDirectoryName(path);
-        //    xnaToFnaUtil = new XnaToFnaUtil(folderpath); //Path.GetDirectoryName(path);
-        //    //xnaToFnaUtil.ScanPath(Program.GameDirectory + "DGSteamref.dll");
+            File.WriteAllText(RebuiltDataPath, (modificationdatetime + "|" + XnaToFnaUtil.RemapVersion.ToString()) + typeorder);
+            MonoMain.NloadMessage = "REMAPPING/LOADING MOD " + currentModLoadString + " " + saveddata;
+            string folderpath = Path.GetDirectoryName(path);
+            xnaToFnaUtil = new XnaToFnaUtil(folderpath); //Path.GetDirectoryName(path);
+                                                         //xnaToFnaUtil.ScanPath(Program.GameDirectory + "DGSteamref.dll");
 
-        ////    xnaToFnaUtil.ScanPath("D:\\Program Files (x86)\\Steam\\steamapps\\workshop\\content\\312530\\2674911202\\BrowseGamesPlus\\content\\0Harmony.dll");
-            
-        //    xnaToFnaUtil.ScanPath(Program.GameDirectory + "FNA.dll");
-        //    xnaToFnaUtil.ScanPath(Program.FilePath);
-        //    xnaToFnaUtil.RelinkAll();
+            //    xnaToFnaUtil.ScanPath("D:\\Program Files (x86)\\Steam\\steamapps\\workshop\\content\\312530\\2674911202\\BrowseGamesPlus\\content\\0Harmony.dll");
+
+            xnaToFnaUtil.ScanPath(Program.GameDirectory + "FNA.dll");
+            xnaToFnaUtil.ScanPath(Program.FilePath);
+            xnaToFnaUtil.RelinkAll();
 
 
-        //    really really = new really
-        //    {
-        //        name = AssemblyName.GetAssemblyName(path)
-        //    };
-        //    ReaderParameters rp = xnaToFnaUtil.Modder.GenReaderParameters(false);
-        //    (xnaToFnaUtil.Modder.AssemblyResolver as DefaultAssemblyResolver).AddSearchDirectory(folderpath);
-        //    rp.ReadWrite = path != XnaToFnaUtil.ThisAssembly.Location && !xnaToFnaUtil.Mappings.Exists(new Predicate<XnaToFnaMapping>(really.ScanPath));
-        //    rp.ReadSymbols = false;
-        //    ModuleDefinition mod = MonoMod.ReadModule(path, rp);
-        //    Assembly assembly = xnaToFnaUtil.RelinkToAssemblyToFile(mod, RebuiltAssemblyPath);
-        //    (xnaToFnaUtil.Modder.AssemblyResolver as DefaultAssemblyResolver).RemoveSearchDirectory(folderpath);
-        //    xnaToFnaUtil.Dispose();
-        //    modConfig.assembly = assembly;
+            really really = new really
+            {
+                name = AssemblyName.GetAssemblyName(path)
+            };
+            ReaderParameters rp = xnaToFnaUtil.Modder.GenReaderParameters(false);
+            (xnaToFnaUtil.Modder.AssemblyResolver as DefaultAssemblyResolver).AddSearchDirectory(folderpath);
+            rp.ReadWrite = path != XnaToFnaUtil.ThisAssembly.Location && !xnaToFnaUtil.Mappings.Exists(new Predicate<XnaToFnaMapping>(really.ScanPath));
+            rp.ReadSymbols = false;
+            Mono.Cecil.ModuleDefinition mod = MonoModExt.ReadModule(path, rp);
+            Assembly assembly = xnaToFnaUtil.RelinkToAssemblyToFile(mod, RebuiltAssemblyPath);
+            (xnaToFnaUtil.Modder.AssemblyResolver as DefaultAssemblyResolver).RemoveSearchDirectory(folderpath);
+            xnaToFnaUtil.Dispose();
+            modConfig.assembly = assembly;
         }
         private static ModConfiguration GetDependency(
           string pDependency,
@@ -343,7 +346,7 @@ namespace DuckGame
                     //    mod = new DisabledMod();
                     //}
                     if (modConfig.workshopID == 2480332949UL) //Delta Duck
-                    {                 
+                    {
                         modConfig.Disable();
                         modConfig.error = "!This mod does not currently work on Rebuilt, Just a Mess of Issues! @Tater";
                         mod = new DisabledMod();
@@ -426,14 +429,14 @@ namespace DuckGame
                                     GetOrLoad(dependency, ref modLoadStack, ref loadableMods);
                             }
                             string assemblypath = modConfig.isDynamic ? modConfig.tempAssemblyPath : modConfig.assemblyPath;
-                           // if (modConfig.noRecompilation)
-                           // {
-                            modConfig.assembly = Assembly.Load(File.ReadAllBytes(assemblypath));
-                           // }
-                            //else
-                            //{
-                            //    FixLoadAssembly(modConfig, assemblypath);
-                            //}
+                            if (modConfig.noRecompilation)
+                            {
+                                modConfig.assembly = Assembly.Load(File.ReadAllBytes(assemblypath));
+                            }
+                            else
+                            {
+                                FixLoadAssembly(modConfig, assemblypath);
+                            }
                             MonoMain.loadedModsWithAssemblies.Add(modConfig);
                             Type[] array1 = modConfig.assembly.GetExportedTypes().Where(type => type.IsSubclassOf(typeof(IManageContent)) && type.IsPublic && type.IsClass && !type.IsAbstract).ToArray();
                             modConfig.contentManager = array1.Length <= 1 ? ContentManagers.GetContentManager(array1.Length == 1 ? array1[0] : null) : throw new ModTypeMissingException(modConfig.uniqueID + " has more than one content manager class");
@@ -825,7 +828,7 @@ namespace DuckGame
                 };
                 attemptLoadMods.label = "Loading Mod stuff to load mod stuff";
             }
-            MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => ReskinPack.InitializeReskins(),null, "Initialize Reskins"));
+            MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => ReskinPack.InitializeReskins(), null, "Initialize Reskins"));
             MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => MapPack.InitializeMapPacks(), null, "Initialize MapPacks"));
             GetOrLoadMods(true);
         }
@@ -923,7 +926,7 @@ namespace DuckGame
             {
                 foreach (Mod initializationFailure in initializationFailures)
                     _sortedAccessibleMods.Remove(initializationFailure);
-                
+
                 modHash = GetModHash();
                 foreach (Mod sortedAccessibleMod in (IEnumerable<Mod>)_sortedAccessibleMods)
                 {
