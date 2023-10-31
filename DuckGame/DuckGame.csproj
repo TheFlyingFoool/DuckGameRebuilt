@@ -97,9 +97,18 @@
     <CodeAnalysisRuleSet>emptyfind.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DGInput">
+      <HintPath>..\bin\DGInput.dll</HintPath>
+    </Reference>
     <Reference Include="DiscordRPC, Version=1.0.175.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\DiscordRPC.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil">
+      <HintPath>..\deps\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoMod">
+      <HintPath>..\deps\MonoMod.exe</HintPath>
     </Reference>
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Speech" />
