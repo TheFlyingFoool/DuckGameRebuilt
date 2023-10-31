@@ -176,9 +176,8 @@ namespace DuckGame
                         strArray[6] = "|";
                         string colorString = string.Concat(strArray);
                         const int lim = 14;
-                        int coloredTagsLength = name.Length - Program.RemoveColorTags(name).Length;
-                        if (name.Length - coloredTagsLength > lim)
-                            name = name.Substring(0, lim + coloredTagsLength) + $"{colorString}..";
+                        if (_smallBios.GetLength(name) > lim)
+                            name = _smallBios.Crop(name, 0, lim) + $"{colorString}..";
                         if (bar.profile.connection != null && bar.profile.connection.isHost)
                             name = "@HOSTCROWN@" + name;
                         if (bar.profile.slotType == SlotType.Spectator || bar.profile.pendingSpectatorMode == SlotType.Spectator)

@@ -135,6 +135,7 @@ namespace DuckGame
       };
             BitmapFont bitmapFont = new BitmapFont("smallBiosFontUI", 7, 5);
             UIBox uiBox = new UIBox(isVisible: false);
+            uiBox.idStr = "cc";
             _configuringToggle = new UIMenuItemToggle("", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(SwitchConfigType)), new FieldBinding(this, nameof(inputConfigType)), multi: inputTypes, compressedMulti: true, tiny: true);
             uiBox.Add(_configuringToggle, true);
             UIText uiText = new UIText(" ", Color.White);

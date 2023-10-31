@@ -88,8 +88,8 @@ namespace DuckGame
                 else
                 {
                     globalUILock = true;
-                    if (Program.RemoveColorTags(Keyboard.KeyString).Length > _maxLength)
-                        Keyboard.KeyString = Keyboard.KeyString.Substring(0, _maxLength + Keyboard.KeyString.Length - Program.RemoveColorTags(Keyboard.KeyString).Length);
+                    if (Graphics._biosFont.GetLength(Keyboard.KeyString) > _maxLength)
+                        Keyboard.KeyString = Graphics._biosFont.Crop(Keyboard.KeyString, 0, _maxLength);
                     if (_numeric)
                         Keyboard.KeyString = Regex.Replace(Keyboard.KeyString, "[^0-9]", "");
                     InputProfile.ignoreKeyboard = true;
@@ -145,16 +145,16 @@ namespace DuckGame
         public override void Draw()
         {
             float textScale = 1f;
-            float len = Program.RemoveColorTags(text).Length;
-            if (len > 34)
+            float textWidth = Graphics._biosFont.GetWidth(text);
+            if (textWidth > 34 * 8)
                 textScale = 0.5f;
-            else if (len > 24)
+            else if (textWidth > 24 * 8)
                 textScale = 0.75f;
 
             if (_directional)
-                Graphics.DrawPassword(text, new Vec2(x - len * 8 / 2 * textScale, y - 6f * textScale), Color.White, depth + 10);
+                Graphics.DrawPassword(text, new Vec2(x - textWidth / 2 * textScale, y - 6f * textScale), Color.White, depth + 10);
             else
-                Graphics.DrawString(text + (blink % 1f > 0.5f ? "_" : ""), new Vec2(x - len * 8 / 2 * textScale, y - 6f * textScale), Color.White, depth + 10, scale: textScale);
+                Graphics.DrawString(text + (blink % 1f > 0.5f ? "_" : ""), new Vec2(x - textWidth / 2 * textScale, y - 6f * textScale), Color.White, depth + 10, scale: textScale);
             base.Draw();
         }
     }

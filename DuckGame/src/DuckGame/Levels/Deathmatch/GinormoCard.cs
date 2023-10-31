@@ -137,15 +137,14 @@ namespace DuckGame
             string name = _team.currentDisplayName;
             float num1 = 0f;
             float num2 = 0f;
-            int coloredTagsLength = name.Length - Program.RemoveColorTags(name).Length;
-            if (name.Length - coloredTagsLength > 16)
-                name = name.Substring(0, 16 + coloredTagsLength);
-            string text1 = "@ICONGRADIENT@" + name;
             if (_team != null && _team.activeProfiles != null && _team.activeProfiles.Count > 0)
             {
-                BitmapFont bitmapFont = _team.activeProfiles.Count <= 1 ? _team.activeProfiles[0].font : Profiles.EnvironmentProfile.font;
-                bitmapFont.scale = new Vec2(1f, 1f);
-                bitmapFont.Draw(text1, x + 182f + num1 - bitmapFont.GetWidth(text1), y + 2f + num2, Color.White, depth);
+                BitmapFont nameFont = _team.activeProfiles.Count <= 1 ? _team.activeProfiles[0].font : Profiles.EnvironmentProfile.font;
+                nameFont.scale = new Vec2(1f, 1f);
+                if (nameFont.GetLength(name) > 16)
+                    name = nameFont.Crop(name, 0, 16);
+                string nameText = "@ICONGRADIENT@" + name;
+                nameFont.Draw(nameText, x + 182f + num1 - nameFont.GetWidth(nameText), y + 2f + num2, Color.White, depth);
             }
             _font.scale = new Vec2(1f, 1f);
             _targetSprite.scale = new Vec2(1f, 1f);

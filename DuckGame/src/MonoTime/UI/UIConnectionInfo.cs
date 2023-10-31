@@ -70,9 +70,7 @@ namespace DuckGame
                 colorPrefixString = "|DGPURPLE|";
             string profileName = profile.nameUI;
 
-            int colorTagsLength = profileName.Length - Program.RemoveColorTags(profileName).Length;
-            
-            int nameLength = profileName.Length - colorTagsLength;
+            int nameLength = _littleFont.GetLength(profileName);
             bool isHost = false;
             if (profile.connection != null && profile.connection.isHost)
             {
@@ -80,12 +78,12 @@ namespace DuckGame
                 ++nameLength;
             }
 
-            int nameLengthLimit = 17;
+            int nameLengthLimit = 16;
             if (isHost)
                 nameLengthLimit--;
             if (nameLength > nameLengthLimit)
             {
-                profileName = profileName.Substring(0, nameLengthLimit - 1 + colorTagsLength) + $"{colorPrefixString}.";
+                profileName = _littleFont.Crop(profileName, 0, nameLengthLimit) + $"{colorPrefixString}..";
                 nameLength = nameLengthLimit;
             }
             for (; nameLength < nameLengthLimit + 2; ++nameLength)

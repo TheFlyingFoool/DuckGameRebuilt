@@ -914,6 +914,7 @@ namespace DuckGame
             component41.leftSection.Add(new UIMenuItem("CREDITS", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _enterCreditsMenuBool), UIAlign.Left), true);
             component41.leftSection.Add(new UIText("", Color.White), true);
             component41.leftSection.Add(new UIMenuItem("|DGRED|QUIT", new UIMenuActionOpenMenu(_mainPauseMenu, _quitMenu)), true);
+            component41.leftSection.idStr = "mpm";
             Options.openOnClose = _mainPauseMenu;
             Options.AddMenus(_pauseGroup);
             _mainPauseMenu.Close();

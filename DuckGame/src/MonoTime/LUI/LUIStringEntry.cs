@@ -18,9 +18,9 @@
 
         public override void Draw()
         {
-            if (_text.Length > 10)
+            if (_font.GetLength(_text) > 10)
             {
-                _text = _text.Substring(0, 8) + "..";
+                _text = _font.Crop(_text, 0, 8) + "..";
             }
 
             if (_directionalPassword && _text != "  NONE")
