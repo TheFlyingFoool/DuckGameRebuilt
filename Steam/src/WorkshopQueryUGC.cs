@@ -14,12 +14,15 @@ public abstract class WorkshopQueryUGC : WorkshopQueryBase {
 
     internal override unsafe void SetQueryData() {
         base.SetQueryData();
+        if (!Steam.DotNetBuild) //FIXME these have a weird memory issue on .net unsure probly way to do
+        {
+            foreach (string tag in requiredTags)
+                SteamUGC.AddRequiredTag(_handle, tag);
 
-        //foreach (string tag in requiredTags)
-        //    SteamUGC.AddRequiredTag(_handle, tag);
+            foreach (string tag in excludedTags)
+                SteamUGC.AddExcludedTag(_handle, tag);
+        }
 
-        //foreach (string tag in excludedTags)
-        //    SteamUGC.AddExcludedTag(_handle, tag);
 
     }
 

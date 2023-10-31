@@ -49,7 +49,10 @@ public abstract class WorkshopQueryBase : IDisposable {
 
     internal virtual unsafe void Destroy() 
     {
-        //SteamUGC.ReleaseQueryUGCRequest(_handle);
+        if (!Steam.DotNetBuild) //FIXME these have a weird memory issue on .net unsure probly way to do
+        {
+            SteamUGC.ReleaseQueryUGCRequest(_handle);
+        }
         _handle = new UGCQueryHandle_t();
         _completedCallResult = CallResult<SteamUGCQueryCompleted_t>.Create(OnSteamUGCQueryCompleted);
     }

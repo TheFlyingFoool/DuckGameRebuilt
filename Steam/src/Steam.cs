@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using Steamworks;
 
 public class Steam : IDisposable {
+    public static bool DotNetBuild = true;
     private static bool _textFilterEnabled = false;
     private static Dictionary<Type, object> _callResults = new Dictionary<Type, object>();
 
@@ -726,7 +727,10 @@ public class Steam : IDisposable {
                 }
             }
         }
-        //SteamUGC.ReleaseQueryUGCRequest(result.m_handle);
+        if (!Steam.DotNetBuild) //FIXME these have a weird memory issue on .net unsure probly way to do
+        {
+            SteamUGC.ReleaseQueryUGCRequest(result.m_handle);
+        }
     }
 
     private static unsafe void OnLobbyMemberStatus(LobbyChatUpdate_t result) {
