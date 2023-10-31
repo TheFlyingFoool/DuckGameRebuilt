@@ -35,7 +35,7 @@ namespace DuckGame
         {
             get
             {
-                if (true || true)
+                if (Program.DotNetBuild || Program.IsLinuxD || Program.isLinux)
                     return null;
                 if (_speech == null)
                 {
@@ -52,26 +52,47 @@ namespace DuckGame
         {
             get
             {
-                return false;
+                return !Program.IsLinuxD && !Program.isLinux && speech != null && speech.GetSayVoices().Count > 0;
             }
         }
 
         public static void Say(string pString)
         {
+            if (Program.DotNetBuild || Program.IsLinuxD || Program.isLinux || speech == null)
+                return;
+            speech.Say(pString);
         }
 
         public static void StopSaying()
         {
+            if (Program.DotNetBuild || Program.IsLinuxD || Program.isLinux || speech == null)
+                return;
+            speech.StopSaying();
         }
 
         public static void SetSayVoice(string pName)
         {
+            if (Program.DotNetBuild || Program.IsLinuxD || Program.isLinux)
+                return;
+            if (speech == null)
+                return;
+            try
+            {
+                speech.SetSayVoice(pName);
+            }
+            catch (Exception ex)
+            {
+                DevConsole.Log(DCSection.General, "|DGRED|SFX.SetSayVoice failed:" + ex.Message);
+            }
         }
 
-        public static List<string> GetSayVoices() => true || speech == null ? new List<string>() : speech.GetSayVoices();
+        public static List<string> GetSayVoices() => Program.isLinux || speech == null ? new List<string>() : speech.GetSayVoices();
 
         public static void ApplyTTSSettings()
         {
+            if (Program.DotNetBuild || Program.IsLinuxD || Program.isLinux || speech == null)
+                return;
+            speech.ApplyTTSSettings();
         }
 
         public static int RegisterSound(string pSound, SoundEffect pEffect)
@@ -334,12 +355,12 @@ namespace DuckGame
             string fileName = path.Substring(num + 8);
             fileName = fileName.Substring(0, fileName.Length - 4);
             MonoMain.lazyLoadActions.Enqueue(() =>
-           {
-               SoundEffect pEffect = Content.Load<SoundEffect>(fileName);
-               if (pEffect == null)
-                   return;
-               RegisterSound(fileName.Substring(fileName.IndexOf("/SFX/") + 5), pEffect);
-           });
+            {
+                SoundEffect pEffect = Content.Load<SoundEffect>(fileName);
+                if (pEffect == null)
+                    return;
+                RegisterSound(fileName.Substring(fileName.IndexOf("/SFX/") + 5), pEffect);
+            });
             ++MonoMain.lazyLoadyBits;
         }
     }

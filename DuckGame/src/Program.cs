@@ -28,6 +28,7 @@ namespace DuckGame
     /// <summary>The main class.</summary>
     public static class Program
     {
+        public static bool DotNetBuild = true;
         public static bool fullstop;
         public const bool IS_DEV_BUILD =
 #if AutoUpdater

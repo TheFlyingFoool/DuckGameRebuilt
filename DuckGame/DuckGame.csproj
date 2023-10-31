@@ -138,6 +138,8 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.4.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.Scripting.Common" Version="4.4.0" />
     <PackageReference Include="Microsoft.VisualStudio.Setup.Configuration.Interop" Version="3.2.2146" />
+    <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
     <PackageReference Include="QRCoder" Version="1.4.3" />
     <PackageReference Include="SixLabors.Fonts" Version="1.0.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="2.1.5" />

@@ -1,13 +1,17 @@
-﻿using Microsoft.VisualBasic;
-using Microsoft.Xna.Framework.Audio;
+﻿using Microsoft.Xna.Framework.Audio;
+using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
 using System;
-using NAudio2.Wave;
+
 namespace DuckGame
 {
     public class SoundEffectInstance : ISampleProvider
     {
         protected bool _isMusic;
         public ISampleProvider _chainEnd;
+        protected VolumeSampleProvider _volumeChain;
+        protected PitchShiftProvider _pitchChain;
+        protected PanningSampleProvider _panChain;
         protected SoundEffect _data;
         protected bool _inMixer;
         protected bool _loop;
@@ -18,13 +22,15 @@ namespace DuckGame
 
         public Action SoundEndEvent { get; set; }
 
+        public WaveFormat WaveFormat => _data.format;
+
         protected bool _IsDisposed;//dan
         public OggPlayer ogg;//dan
         public Microsoft.Xna.Framework.Audio.SoundEffectInstance soundEffectInstance;//dan
         public SoundState _State = SoundState.Stopped;//dan
         public void SetData(SoundEffect pData)
         {
-            if (true)
+            if (Program.IsLinuxD)
             {
                 if (pData == null)
                 {
@@ -50,6 +56,12 @@ namespace DuckGame
             }
             else
             {
+                _position = 0;
+                lock (this)
+                {
+                    _data = pData;
+                    RebuildChain();
+                }
             }
         }
 
@@ -57,18 +69,42 @@ namespace DuckGame
 
         private void RebuildChain()
         {
-            if (true)
+            if (Program.IsLinuxD)
                 return;
+            if (_chainEnd != null)
+                Windows_Audio.RemoveSound(_chainEnd);
+            _chainEnd = this;
+            if (_data == null)
+                return;
+            if (_data.format.Channels == 1 || _pan != 0.0)
+            {
+                _panChain = new PanningSampleProvider(_chainEnd);
+                _chainEnd = _panChain;
+                _panChain.Pan = _pan;
+            }
+            if (_volume != 1.0)
+            {
+                _volumeChain = new VolumeSampleProvider(_chainEnd);
+                _chainEnd = _volumeChain;
+                _volumeChain.Volume = _volume * _data.replaygainModifier;
+            }
+            if (_pitch != 0.0)
+            {
+                _pitchChain = new PitchShiftProvider(_chainEnd);
+                _chainEnd = _pitchChain;
+                _pitchChain.pitch = _pitch;
+            }
+            if (!_inMixer)
+                return;
+            Windows_Audio.AddSound(_chainEnd, _isMusic);
         }
 
         public bool IsDisposed
         {
             get
             {
-                if (!true)
-                {
-                }
-
+                if (!Program.IsLinuxD)
+                    return false;
                 if (soundEffectInstance == null && (ogg == null || ogg.instance != null))
                 {
                     return _IsDisposed;
@@ -99,7 +135,7 @@ namespace DuckGame
 
         public void Play()
         {
-            if (true)
+            if (Program.IsLinuxD)
             {
                 if (soundEffectInstance == null && ogg == null)
                 {
@@ -113,11 +149,17 @@ namespace DuckGame
                 soundEffectInstance.Play();
                 return;
             }
+            if (_data == null)
+                return;
+            if (_inMixer)
+                Stop();
+            _inMixer = true;
+            Windows_Audio.AddSound(_chainEnd, _isMusic);
         }
 
         public void Resume()
         {
-            if (true)
+            if (Program.IsLinuxD)
             {
                 if (soundEffectInstance == null && ogg == null)
                 {
@@ -131,11 +173,15 @@ namespace DuckGame
                 soundEffectInstance.Resume();
                 return;
             }
+            if (_data == null || _inMixer)
+                return;
+            _inMixer = true;
+            Windows_Audio.AddSound(_chainEnd, _isMusic);
         }
 
         public void Stop()
         {
-            if (true)
+            if (Program.IsLinuxD)
             {
                 if (soundEffectInstance == null && ogg == null)
                 {
@@ -149,13 +195,17 @@ namespace DuckGame
                 soundEffectInstance.Stop();
                 return;
             }
+            if (_data == null)
+                return;
+            Pause();
+            _position = 0;
         }
 
         public void Stop(bool immediate) => Stop();
 
         public void Pause()
         {
-            if (true)
+            if (Program.IsLinuxD)
             {
                 if (soundEffectInstance == null && ogg == null)
                 {
@@ -169,6 +219,9 @@ namespace DuckGame
                 soundEffectInstance.Pause();
                 return;
             }
+            if (_data == null)
+                return;
+            _inMixer = false;
         }
 
         public virtual bool IsLooped
@@ -177,6 +230,10 @@ namespace DuckGame
             //set => this._loop = value;
             get
             {
+                if (!Program.IsLinuxD)
+                {
+                    return _loop;
+                }
                 if (soundEffectInstance == null && ogg == null)
                 {
                     return _loop;
@@ -190,6 +247,10 @@ namespace DuckGame
             set
             {
                 _loop = value;
+                if (!Program.IsLinuxD)
+                {
+                    return;
+                }
                 if (soundEffectInstance == null && ogg == null)
                 {
                     return;
@@ -206,6 +267,10 @@ namespace DuckGame
         {
             get
             {
+                if (!Program.IsLinuxD)
+                {
+                    return _pitch;
+                }
                 if (soundEffectInstance == null && ogg == null)
                 {
                     return _pitch;
@@ -220,6 +285,16 @@ namespace DuckGame
             {
 
                 _pitch = value;
+                if (!Program.IsLinuxD)
+                {
+                    _pitch = value;
+                    if (_pitch != 0.0 && _pitchChain == null)
+                        RebuildChain();
+                    if (_pitchChain == null)
+                        return;
+                    _pitchChain.pitch = _pitch;
+                    return;
+                }
                 if (soundEffectInstance == null && ogg == null)
                 {
                     return;
@@ -238,6 +313,10 @@ namespace DuckGame
 
             get
             {
+                if (!Program.IsLinuxD)
+                {
+                    return _volume;
+                }
                 if (soundEffectInstance == null && ogg == null)
                 {
                     return _volume;
@@ -251,6 +330,15 @@ namespace DuckGame
             set
             {
                 _volume = value;
+                if (!Program.IsLinuxD)
+                {
+                    if (_volume != 1.0f && _volumeChain == null)
+                        RebuildChain();
+                    if (_volumeChain == null || _data == null)
+                        return;
+                    _volumeChain.Volume = _volume * _data.replaygainModifier;
+                    return;
+                }
                 if (soundEffectInstance == null && ogg == null)
                 {
                     return;
@@ -267,6 +355,10 @@ namespace DuckGame
         {
             get
             {
+                if (!Program.IsLinuxD)
+                {
+                    return _pan;
+                }
                 if (soundEffectInstance == null && ogg == null)
                 {
                     return _pan;
@@ -280,6 +372,15 @@ namespace DuckGame
             set
             {
                 _pan = value;
+                if (!Program.IsLinuxD)
+                {
+                    if (_pan != 0.0 && _panChain == null)
+                        RebuildChain();
+                    if (_panChain == null)
+                        return;
+                    _panChain.Pan = _pan;
+                    return;
+                }
                 if (soundEffectInstance == null && ogg == null)
                 {
                     return;
@@ -296,6 +397,10 @@ namespace DuckGame
         {
             get
             {
+                if (!Program.IsLinuxD)
+                {
+                    return !_inMixer ? SoundState.Stopped : SoundState.Playing;
+                }
                 if (soundEffectInstance == null && ogg == null)
                 {
                     return _State;
@@ -309,32 +414,119 @@ namespace DuckGame
         }
         public virtual int Read(float[] buffer, int offset, int count)
         {
-            return 0;
+            if (Program.IsLinuxD || _data == null || !_inMixer)
+            {
+                return 0;
+            }
+            int samplesToCopy = 0;
+            lock (this)
+            {
+                int availableSamples = _data.dataSize - _position;
+                if (_data.data == null)
+                {
+                    samplesToCopy = _data.Decode(buffer, offset, count);
+                }
+                else
+                {
+                    samplesToCopy = Math.Min(availableSamples, count);
+                    Array.Copy(_data.data, _position, buffer, offset, samplesToCopy);
+                }
+                _position += samplesToCopy;
+                if (samplesToCopy != count)
+                {
+                    if (SoundEndEvent != null)
+                    {
+                        SoundEndEvent();
+                    }
+                    if (_loop)
+                    {
+                        _position = 0;
+                        offset += samplesToCopy;
+                        if (_data.data == null)
+                        {
+                            _data.Rewind();
+                            samplesToCopy = _data.Decode(buffer, offset, count);
+                        }
+                        else
+                        {
+                            availableSamples = _data.dataSize - _position;
+                            samplesToCopy = Math.Min(availableSamples, count - samplesToCopy);
+                            Array.Copy(_data.data, _position, buffer, offset, samplesToCopy);
+                        }
+                        _position += samplesToCopy;
+                        samplesToCopy = count;
+                    }
+                }
+            }
+            _inMixer = (_inMixer && samplesToCopy == count);
+            return samplesToCopy;
         }
         protected void HandleLoop()
         {
         }
         public void Platform_SetProgress(float pProgress)
         {
-            return;
-
+            if (Program.IsLinuxD || _data == null)
+            {
+                return;
+            }
+            pProgress = Maths.Clamp(pProgress, 0f, 1f);
+            _position = (int)(pProgress * _data.data.Length);
         }
         public float Platform_GetProgress()
         {
-            return 0f;
+            if (Program.IsLinuxD)
+            {
+                return 0f;
+            }
+            if (_data == null)
+            {
+                return 1f;
+            }
+            return _position / (float)_data.data.Length;
         }
         public int Platform_GetLengthInMilliseconds()
         {
-            return 0;
+            if (Program.IsLinuxD || _data == null)
+            {
+                return 0;
+            }
+            return (int)(_data.data.Length * 4 / (float)WaveFormat.AverageBytesPerSecond) * 500;
         }
-    }
-}
+        public class PitchShiftProvider : ISampleProvider
+        {
+            public WaveFormat WaveFormat
+            {
+                get
+                {
+                    return _chain.WaveFormat;
+                }
+            }
 
-namespace NAudio2.Wave
-{
-    public interface ISampleProvider
-    {
+            public PitchShiftProvider(ISampleProvider pChain)
+            {
+                _chain = pChain;
+                _resampler = new WdlResamplingSampleProvider(pChain);
+            }
 
-        int Read(float[] buffer, int offset, int count);
+            public int Read(float[] buffer, int offset, int count)
+            {
+                //float num = this.pitch;
+                //if (this.pitch < 0f)
+                //{
+                //    float num2 = this.pitch;
+                //}
+                _resampler.sampleRate = (int)(44100.0 * Math.Pow(2.0, (double)(-(double)pitch)));
+                return _resampler.Read(buffer, offset, count);
+            }
+
+            private ISampleProvider _chain;
+
+            public float pitch;
+
+            public SoundEffectInstance instance;
+
+            private WdlResamplingSampleProvider _resampler;
+        }
     }
 }

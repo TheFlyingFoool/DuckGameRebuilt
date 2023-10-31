@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Audio;
+using NVorbis;
 using System;
 using System.Globalization;
 using System.IO;
@@ -21,6 +22,9 @@ namespace DuckGame
         private Thread _decoderThread;
         private bool _killDecodingThread;
         private bool _initialized;
+        private VorbisReader _activeSong;
+        private VorbisReader _decoderSong;
+        private VorbisReader _streamerSong;
         private object _decoderDataMutex = new object();
         private object _decoderMutex = new object();
         private object _streamingMutex = new object();
@@ -112,7 +116,7 @@ namespace DuckGame
             set => _shouldLoop = value;
         }
 
-        public TimeSpan position => _valid && _totalSamplesToDecode > 0 && _decodedSamplePosition < _totalSamplesToDecode ? new TimeSpan(0, 0, 0, 0, (int)(_decodedSamplePosition / _totalSamplesToDecode / 44100.0) * 500) : new TimeSpan();
+        public TimeSpan position => _activeSong != null && _valid && _totalSamplesToDecode > 0 && _decodedSamplePosition < _totalSamplesToDecode ? new TimeSpan(0, 0, 0, 0, (int)(_decodedSamplePosition / _totalSamplesToDecode / 44100.0) * 500) : new TimeSpan();
 
         public void Terminate()
         {
@@ -157,12 +161,46 @@ namespace DuckGame
 
         private void Thread_Decoder_LoadNewSong()
         {
-            
+            if (_decoderSong == _activeSong)
+                return;
+            lock (_decoderDataMutex)
+            {
+                lock (_decoderMutex)
+                {
+                    if (_decoderSong == _activeSong)
+                        return;
+                    if (_decoderSong != null)
+                        _decoderSong.Dispose();
+                    _decoderSong = _activeSong;
+                    _streamerSong = _activeSong;
+                    _decodedSamplePosition = 0;
+                    _samplesDecoded = 0;
+                    if (_decoderSong == null)
+                        return;
+                    _totalSamplesToDecode = (int)(_decoderSong.TotalSamples * 2L);
+                    _decodedData = new float[_totalSamplesToDecode];
+                }
+            }
         }
 
         private bool Thread_Decoder_DecodeChunk()
         {
-            
+            lock (_decoderMutex)
+            {
+                if (_decoderSong != null)
+                {
+                    if (volume != 0.0)
+                    {
+                        int count = Math.Min(176400, _totalSamplesToDecode - _samplesDecoded);
+                        if (count > 0)
+                        {
+                            _decoderSong.ReadSamples(_decodedData, _samplesDecoded, count);
+                            _samplesDecoded += count;
+                            return true;
+                        }
+                    }
+                }
+            }
             return false;
         }
 
@@ -210,6 +248,7 @@ namespace DuckGame
                     {
                         num = 0f;
                     }
+                    _activeSong = new VorbisReader(ogg, false);
                     _replaygainModifier = Math.Max(0f, Math.Min(1f, (float)((100f * (float)Math.Pow(10.0, num / 20.0)) / 100.0 * 1.9f)));
                     Thread_Decoder_LoadNewSong();
                     Thread_Decoder_DecodeChunk();
@@ -219,6 +258,7 @@ namespace DuckGame
             {
                 DevConsole.Log(DCSection.General, "OggPlayer.SetOgg failed with exception:");
                 DevConsole.Log(DCSection.General, ex.Message);
+                _activeSong = null;
             }
         }
 
@@ -281,59 +321,59 @@ namespace DuckGame
 
         private void Thread_Stream(object sender, EventArgs e)
         {
-            //lock (_streamingMutex)
-            //{
-            //    int length = 0;
-            //    lock (_decoderDataMutex)
-            //    {
-            //        Thread_Decoder_LoadNewSong();
-            //        if (volume == 0.0 || !_valid)
-            //        {
-            //            for (int index = 0; index < _buffer.Length; ++index)
-            //                _buffer[index] = 0;
-            //            _instance.SubmitBuffer(_buffer, 0, _buffer.Length);
-            //            return;
-            //        }
-            //        do
-            //            ;
-            //        while (_samplesDecoded - _decodedSamplePosition < _floatBuffer.Length && Thread_Decoder_DecodeChunk());
-            //        length = Math.Min(_totalSamplesToDecode - _decodedSamplePosition, _floatBuffer.Length);
-            //        if (length > 0)
-            //        {
-            //            Array.Copy(_decodedData, _decodedSamplePosition, _floatBuffer, 0, length);
-            //            _decodedSamplePosition += length;
-            //        }
-            //        if (length == 0)
-            //        {
-            //            if (_shouldLoop)
-            //            {
-            //                _decodedSamplePosition = 0;
-            //                Array.Copy(_decodedData, _decodedSamplePosition, _floatBuffer, 0, _floatBuffer.Length);
-            //                _decodedSamplePosition += _floatBuffer.Length;
-            //                length = _floatBuffer.Length;
-            //            }
-            //            else
-            //            {
-            //                for (int index = 0; index < _floatBuffer.Length / 2; ++index)
-            //                {
-            //                    _floatBuffer[index * 2] = 0f;
-            //                    _floatBuffer[index * 2 + 1] = 0f;
-            //                }
-            //                length = _floatBuffer.Length;
-            //                Stop();
-            //            }
-            //        }
-            //    }
-            //    if (length <= 0)
-            //        return;
-            //    for (int index = 0; index < length; ++index)
-            //    {
-            //        short num = (short)Math.Max(Math.Min(short.MaxValue * _floatBuffer[index], short.MaxValue), short.MinValue);
-            //        _buffer[index * 2] = (byte)((uint)num & byte.MaxValue);
-            //        _buffer[index * 2 + 1] = (byte)(num >> 8 & byte.MaxValue);
-            //    }
-            //    _instance.SubmitBuffer(_buffer, 0, length * 2);
-            //}
+            lock (_streamingMutex)
+            {
+                int length = 0;
+                lock (_decoderDataMutex)
+                {
+                    Thread_Decoder_LoadNewSong();
+                    if (volume == 0.0 || !_valid || _decoderSong == null)
+                    {
+                        for (int index = 0; index < _buffer.Length; ++index)
+                            _buffer[index] = 0;
+                        _instance.SubmitBuffer(_buffer, 0, _buffer.Length);
+                        return;
+                    }
+                    do
+                        ;
+                    while (_samplesDecoded - _decodedSamplePosition < _floatBuffer.Length && Thread_Decoder_DecodeChunk());
+                    length = Math.Min(_totalSamplesToDecode - _decodedSamplePosition, _floatBuffer.Length);
+                    if (length > 0)
+                    {
+                        Array.Copy(_decodedData, _decodedSamplePosition, _floatBuffer, 0, length);
+                        _decodedSamplePosition += length;
+                    }
+                    if (length == 0)
+                    {
+                        if (_shouldLoop)
+                        {
+                            _decodedSamplePosition = 0;
+                            Array.Copy(_decodedData, _decodedSamplePosition, _floatBuffer, 0, _floatBuffer.Length);
+                            _decodedSamplePosition += _floatBuffer.Length;
+                            length = _floatBuffer.Length;
+                        }
+                        else
+                        {
+                            for (int index = 0; index < _floatBuffer.Length / 2; ++index)
+                            {
+                                _floatBuffer[index * 2] = 0f;
+                                _floatBuffer[index * 2 + 1] = 0f;
+                            }
+                            length = _floatBuffer.Length;
+                            Stop();
+                        }
+                    }
+                }
+                if (length <= 0)
+                    return;
+                for (int index = 0; index < length; ++index)
+                {
+                    short num = (short)Math.Max(Math.Min(short.MaxValue * _floatBuffer[index], short.MaxValue), short.MinValue);
+                    _buffer[index * 2] = (byte)((uint)num & byte.MaxValue);
+                    _buffer[index * 2 + 1] = (byte)(num >> 8 & byte.MaxValue);
+                }
+                _instance.SubmitBuffer(_buffer, 0, length * 2);
+            }
         }
     }
 }
