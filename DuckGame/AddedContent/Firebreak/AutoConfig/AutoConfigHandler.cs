@@ -52,52 +52,57 @@ namespace DuckGame
 
         public static void SaveAll(bool isDangerous)
         {
-            Log(ACAction.TrySave);
-            bool failed = false;
-            
-            // quick fix to https://canary.discord.com/channels/1004557726082400378/1005054418636517537/1153024982390161448
-            HashSet<string> visitedExternalPaths = new();
-            
-            StringBuilder stringBuilder = new();
-            for (int i = 0; i < Marker.AutoConfigAttribute.All.Count; i++)
+            try
             {
-                Marker.AutoConfigAttribute attribute = Marker.AutoConfigAttribute.All[i];
+                Log(ACAction.TrySave);
+                bool failed = false;
 
-                if (isDangerous && attribute.PotentiallyDangerous)
-                    continue;
+                // quick fix to https://canary.discord.com/channels/1004557726082400378/1005054418636517537/1153024982390161448
+                HashSet<string> visitedExternalPaths = new();
 
-                if (!FireSerializer.IsSerializable(attribute.MemberType))
-                    throw new Exception($"No FireSerializer for type {attribute.MemberType} available. Code one yourself.");
-
-                if (!Extensions.Try(() => FireSerializer.Serialize(attribute.Value), out string writtenValue))
+                StringBuilder stringBuilder = new();
+                for (int i = 0; i < Marker.AutoConfigAttribute.All.Count; i++)
                 {
-                    failed = true;
-                    Log(ACAction.SaveFail, attribute.UsableName);
-                    continue;
-                }
-                
-                if (attribute.External is not null)
-                {
-                    string fileName = attribute.External + FileExtension;
-                    string fullPath = SaveDirPath + fileName;
-                    
-                    if (visitedExternalPaths.Add(fullPath))
-                        File.WriteAllText(fullPath, string.Empty);
-                    File.AppendAllLines(fullPath, new [] {$"{attribute.UsableName}={writtenValue}"});
+                    Marker.AutoConfigAttribute attribute = Marker.AutoConfigAttribute.All[i];
 
-                    writtenValue = fileName;
-                }
+                    if (isDangerous && attribute.PotentiallyDangerous)
+                        continue;
 
-                string dataLine = $"{attribute.UsableName}={writtenValue}";
-                
-                stringBuilder.Append(dataLine);
-                stringBuilder.Append("\n");
+                    if (!FireSerializer.IsSerializable(attribute.MemberType))
+                        throw new Exception($"No FireSerializer for type {attribute.MemberType} available. Code one yourself.");
+
+                    if (!Extensions.Try(() => FireSerializer.Serialize(attribute.Value), out string writtenValue))
+                    {
+                        failed = true;
+                        Log(ACAction.SaveFail, attribute.UsableName);
+                        continue;
+                    }
+
+                    if (attribute.External is not null)
+                    {
+                        string fileName = attribute.External + FileExtension;
+                        string fullPath = SaveDirPath + fileName;
+
+                        if (visitedExternalPaths.Add(fullPath))
+                            File.WriteAllText(fullPath, string.Empty);
+                        File.AppendAllLines(fullPath, new[] { $"{attribute.UsableName}={writtenValue}" });
+
+                        writtenValue = fileName;
+                    }
+
+                    string dataLine = $"{attribute.UsableName}={writtenValue}";
+
+                    stringBuilder.Append(dataLine);
+                    stringBuilder.Append("\n");
+                }
+                File.WriteAllText(MainSaveFilePath, stringBuilder.ToString());
+                if (!failed)
+                    Log(ACAction.SaveSuccess);
             }
-
-            File.WriteAllText(MainSaveFilePath, stringBuilder.ToString());
-            
-            if (!failed)
-                Log(ACAction.SaveSuccess);
+            catch (IOException ex)
+            {
+                //screw you firebreak -NiK0
+            }
         }
         
         /// <returns>True if loading succeeded</returns>
