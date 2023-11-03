@@ -16,6 +16,7 @@ using System.Drawing;
 using System.Web.UI.WebControls;
 using Image = SixLabors.ImageSharp.Image;
 using SizeF = System.Drawing.SizeF;
+using System.IO;
 
 namespace DuckGame
 {
@@ -759,7 +760,16 @@ namespace DuckGame
                     CleanMethod.Mojis),
                 _ => throw new NotImplementedException()
             };
+        public static string SanitizeFolderName(string folderName)
+        {
+            //string illegalChars = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
+            string regexSearch = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
 
+            Regex regex = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
+            string sanitizedName = regex.Replace(folderName, "");
+
+            return sanitizedName;
+        }
         public static string CleanFormatting(this string str, CleanMethod cleanMethod = CleanMethod.Both) =>
             CleanStringFormatting(str, cleanMethod);
 

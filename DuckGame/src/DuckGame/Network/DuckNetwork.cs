@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using AddedContent.Firebreak;
+using Microsoft.Xna.Framework.Graphics;
 using SDL2;
 using SixLabors.ImageSharp;
 using System;
@@ -1115,12 +1116,12 @@ namespace DuckGame
                 }
                 if (Level.current is TeamSelect2)
                 {
-                    if (!DGRSettings.HideFS) _core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|FORCE START", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmStartMenu)));
+                    if (!DGRSettings.HideFS) _core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|FORCE START", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmStartMenu), UIAlign.Left));
                     if (DGR) _core._ducknetMenu.Add(new UIMenuItemToggle("DGR Stuff", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DGRItems)), c: Colors.DGPink2));
                     else
                     {
                         DGRSettings.DGRItems = false;
-                        _core._ducknetMenu.Add(new UIText(" DGR Stuff        ON |WHITE|OFF", c: Color.Gray));
+                        _core._ducknetMenu.Add(new LUIText(" DGR Stuff        ON |WHITE|OFF", c: Color.Gray, UIAlign.Left));
                     }
                 }
             }
@@ -3320,7 +3321,7 @@ namespace DuckGame
                 int num5 = _core.cursorFlash >= 15 ? 1 : 0;
                 Profile localProfile = DuckNetwork.localProfile;
                 string currentEnterText = _core.currentEnterText;
-                string text = localProfile.name + ": " + (currentEnterText.StartsWith(">") ? "|0,153,0|" : "") +  currentEnterText;
+                string text = localProfile.name + ": " + (currentEnterText.StartsWith(">") && DGRSettings.GreenTextSupport ? "|0,153,0|" : "") +  currentEnterText;
                 string str = text;
                 if (num5 != 0)
                     text += "_";

@@ -60,10 +60,13 @@ namespace DuckGame
         }
 
         [Marker.AutoConfig]
-        public static int Record = 0;
+        public static int RecordType = 0;
 
         [Marker.AutoConfig]
-        public static int ClipLength = 5;
+        public static bool DoRecordMods;
+
+        public static bool Clipped;
+
         public static bool Playing;
         public static Map<byte, Type> autoBlockIDX = new Map<byte, Type>();
         public static Map<byte, Type> autoTileIDX = new Map<byte, Type>();
@@ -140,41 +143,19 @@ namespace DuckGame
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemNumber("Clip Length", field: new FieldBinding(instance, "ClipLength", 0, 11, 1), valStrings: new List<string>()
-            {
-                "5s ", //why duck game, why do i have to put spaces here for it to space out correctly -NiK0
-                "10s ",
-                "15s ",
-                "20s ",
-                "25s ",
-                "30s ",
-                "35s ",
-                "40s ",
-                "45s ",
-                "50s ",
-                "55s ",
-                "60s "
-            })
-            {
-                dgrDescription = "The amount of seconds a clip will save"
-            });
-
-            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
-
-            //menu.Add(new UIMenuItemToggle("Ambient Particles", field: new FieldBinding(instance, "AmbientParticles"))
-            //{
-            //    dgrDescription = "Extra cosmetic particles added by DGR, embers from lamps, leafs from trees, etc"
-            //});
-
-
-            menu.Add(new UIMenuItemNumber("Record", field: new FieldBinding(instance, "Record", 0, 2, 1), valStrings: new List<string>()
+            menu.Add(new UIMenuItemNumber("Record", field: new FieldBinding(instance, nameof(RecordType), 0, 2, 1), valStrings: new List<string>()
             {
                 "Never",
                 "Clip",
                 "Always",
             })
             {
-                dgrDescription = "When Recorderator should record stuff"
+                dgrDescription = "When Recorderator should record stuff, F2 to clip"
+            });
+
+            menu.Add(new UIMenuItemToggle("Record Modded", field: new FieldBinding(instance, nameof(DoRecordMods)))
+            {
+                dgrDescription = "Force Recorderator to record anyways even when content mods are enabled |DGRED|(RECORDERATOR MAY CRASH WITH MODS AND REPLAYS CAN BE BROKEN WITH MOD ITEMS)"
             });
 
 

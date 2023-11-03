@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Holdable
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -330,17 +323,20 @@ namespace DuckGame
 
         public virtual void UpdateMaterial()
         {
-            if (material == null && burnt >= charThreshold)
+            if (material == null)
             {
-                material = new MaterialCharred();
-                SFX.Play("flameExplode");
-                for (int index = 0; index < 3; ++index)
-                    Level.Add(SmallSmoke.New(x + Rando.Float(-2f, 2f), y + Rando.Float(-2f, 2f)));
+                if (burnt >= charThreshold)
+                {
+                    material = new MaterialCharred();
+                    SFX.Play("flameExplode");
+                    for (int index = 0; index < 3; ++index)
+                        Level.Add(SmallSmoke.New(x + Rando.Float(-2f, 2f), y + Rando.Float(-2f, 2f)));
+                }
+                else if (heat > 0.1f && physicsMaterial == PhysicsMaterial.Metal)
+                    material = new MaterialRedHot(this);
+                else if (heat < -0.1f)
+                    material = new MaterialFrozen(this);
             }
-            else if (material == null && heat > 0.1f && physicsMaterial == PhysicsMaterial.Metal)
-                material = new MaterialRedHot(this);
-            else if (material == null && heat < -0.1f)
-                material = new MaterialFrozen(this);
             if (material is MaterialRedHot)
             {
                 if (heat < 0.1f)
@@ -348,10 +344,8 @@ namespace DuckGame
                 else
                     (material as MaterialRedHot).intensity = Math.Min(heat - 0.1f, 1f);
             }
-            else
+            else if (material is MaterialFrozen)
             {
-                if (!(material is MaterialFrozen))
-                    return;
                 if (heat > -0.1f)
                     material = null;
                 else

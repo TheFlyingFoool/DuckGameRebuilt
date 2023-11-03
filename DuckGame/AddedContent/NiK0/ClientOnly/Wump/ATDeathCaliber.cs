@@ -20,10 +20,13 @@
 
         public override void PopShell(float x, float y, int dir)
         {
-            Level.Add(new SniperShell(x, y)
+            if (DGRSettings.S_ParticleMultiplier != 0)
             {
-                hSpeed = dir * (1.5f + Rando.Float(1f))
-            });
+                Level.Add(new SniperShell(x, y)
+                {
+                    hSpeed = dir * (1.5f + Rando.Float(1f))
+                });
+            }
         }
     }
 }

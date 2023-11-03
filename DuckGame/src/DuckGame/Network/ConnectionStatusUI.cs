@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ConnectionStatusUI
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -183,9 +176,8 @@ namespace DuckGame
                         strArray[6] = "|";
                         string colorString = string.Concat(strArray);
                         const int lim = 14;
-                        int coloredTagsLength = name.Length - Program.RemoveColorTags(name).Length;
-                        if (name.Length - coloredTagsLength > lim)
-                            name = name.Substring(0, lim + coloredTagsLength) + $"{colorString}..";
+                        if (_smallBios.GetLength(name) > lim)
+                            name = _smallBios.Crop(name, 0, lim) + $"{colorString}..";
                         if (bar.profile.connection != null && bar.profile.connection.isHost)
                             name = "@HOSTCROWN@" + name;
                         if (bar.profile.slotType == SlotType.Spectator || bar.profile.pendingSpectatorMode == SlotType.Spectator)

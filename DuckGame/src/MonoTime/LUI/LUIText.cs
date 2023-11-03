@@ -27,7 +27,7 @@ namespace DuckGame
                 _text = value;
                 if (minLength > 0)
                 {
-                    while (_text.Length < minLength)
+                    while (_font.GetLength(_text) < minLength)
                         _text = " " + _text;
                 }
                 _font.scale = new Vec2(1f);

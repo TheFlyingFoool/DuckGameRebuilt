@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.UIBox
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame
@@ -216,18 +209,18 @@ namespace DuckGame
             SFX.DontSave = 1;
             SFX.Play("textLetter", 0.7f);
         }
-        public static Keys[] keysOfInterest =
+        public static Keys[] DubberKeys =
         {
-                            Keys.D1,
-                            Keys.D2,
-                            Keys.D3,
-                            Keys.D4,
-                            Keys.D5,
-                            Keys.D6,
-                            Keys.D7,
-                            Keys.D8,
-                            Keys.D9,
-                            Keys.D0
+            Keys.D1,
+            Keys.D2,
+            Keys.D3,
+            Keys.D4,
+            Keys.D5,
+            Keys.D6,
+            Keys.D7,
+            Keys.D8,
+            Keys.D9,
+            Keys.D0
         };
         public override void Update()
         {
@@ -316,14 +309,15 @@ namespace DuckGame
                         int c = _currentMenuItemSelection.Count;
                         int dubberOffset = -1;
                         if (Keyboard.Down(Keys.LeftShift)) dubberOffset = 0;
-                        for (int i = 0; i < keysOfInterest.Length; i++)
+                        for (int i = 0; i < DubberKeys.Length; i++)
                         {
-                            if (Keyboard.Pressed(keysOfInterest[i]) && i < c)
+                            if (Keyboard.Pressed(DubberKeys[i]) && i < c)
                             {
                                 //optimal -NiK0
                                 if (dubberOffset == -1) dubberOffset = _currentMenuItemSelection.FindAll(ui => ui is UIConnectionInfo).Count;
                                 SFX.DontSave = 1;
                                 SFX.Play("rockHitGround");
+                                _selection = i + dubberOffset;
                                 ((UIMenuItem)_currentMenuItemSelection[i + dubberOffset]).Activate(Triggers.Select);
                             }
                         }
@@ -419,6 +413,33 @@ namespace DuckGame
                 _sections.frame = 7;
                 _sections.xscale = (_collisionSize.x - _sections.w * 2) / _sections.w * xscale;
                 Graphics.Draw(_sections, (float)(-halfWidth + UILerp.x + _sections.w * scale.x), (float)(halfHeight + UILerp.y - _sections.h * scale.y));
+            }
+
+            if (_isMenu && DGRSettings.dubberspeed && _currentMenuItemSelection != null)
+            {
+                bool isUIControlConfig = idStr == "cc";
+                bool isMainPauseMenu = idStr == "mpm";
+                if (!isUIControlConfig)
+                {
+                    int dubberOffset = _currentMenuItemSelection.FindAll(ui => ui is UIConnectionInfo).Count;
+                    if (Keyboard.Down(Keys.LeftShift))
+                        dubberOffset = 0;
+
+                    for (int i = dubberOffset, j = 0; i < _currentMenuItemSelection.Count; ++i, j = i - dubberOffset)
+                    {
+                        UIMenuItem item = (UIMenuItem)_currentMenuItemSelection[i];
+                        int index = -1;
+                        if (j == 9)
+                            index = 0;
+                        else if (j < 9)
+                            index = j + 1;
+                        float xAdjust = -1f;
+                        if (isMainPauseMenu)
+                            xAdjust = 0.25f;
+                        if (!item.selected && index != -1)
+                            Graphics.DrawString(index.ToString(), new Vec2(Layer.HUD.camera.width / 2f - parent.halfWidth - xAdjust, item.top - item.halfHeight), Color.White * 0.4f, 1);
+                    }
+                }
             }
             base.Draw();
         }

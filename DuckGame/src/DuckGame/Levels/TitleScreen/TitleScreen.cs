@@ -36,6 +36,7 @@ namespace DuckGame
         private Sprite _upperMonitor;
         private Sprite _optionsTV;
         private Sprite _libraryBookcase;
+        private Sprite _cord;
         private Sprite _editorBench;
         private Sprite _editorBenchPaint;
         private Sprite _bigUButton;
@@ -59,6 +60,7 @@ namespace DuckGame
         private MultiBeam _multiBeam;
         private EditorBeam _editorBeam;
         private HatEditorBeam _hatEditorBeam;
+        private RecorderatorBeam _recorderatorBeam;
         private Duck _duck;
         private bool _fastMultiplayer;
         private bool _enterMultiplayer;
@@ -914,6 +916,7 @@ namespace DuckGame
             component41.leftSection.Add(new UIMenuItem("CREDITS", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _enterCreditsMenuBool), UIAlign.Left), true);
             component41.leftSection.Add(new UIText("", Color.White), true);
             component41.leftSection.Add(new UIMenuItem("|DGRED|QUIT", new UIMenuActionOpenMenu(_mainPauseMenu, _quitMenu)), true);
+            component41.leftSection.idStr = "mpm";
             Options.openOnClose = _mainPauseMenu;
             Options.AddMenus(_pauseGroup);
             _mainPauseMenu.Close();
@@ -963,6 +966,10 @@ namespace DuckGame
             {
                 depth = -0.9f
             };
+            _cord = new Sprite("title/cord")
+            {
+                depth = -0.9f
+            };
             _editorBench = new Sprite("title/editorBench")
             {
                 depth = -0.9f
@@ -988,6 +995,8 @@ namespace DuckGame
             Add(_editorBeam);
             _hatEditorBeam = new HatEditorBeam(292, 285);
             Add(_hatEditorBeam);
+            _recorderatorBeam = new RecorderatorBeam(29, 169);
+            Add(_recorderatorBeam);
             VersionSign vs = new VersionSign(176f, 18f);
             Add(vs);
             for (int index = 0; index < 21; ++index)
@@ -1534,6 +1543,17 @@ namespace DuckGame
                     _duck.immobilized = true;
                 }
             }
+            else if (_recorderatorBeam.entered)
+            {
+                _selectionTextDesired = "RECORDERATOR";
+                _desiredSelection = TitleMenuSelection.Recorderator;
+                if (_duck.inputProfile.Pressed(Triggers.Select) && Profiles.allCustomProfiles.Count > 0 && MonoMain.pauseMenu == null)
+                {
+                    SFX.Play("plasmaFire");
+                    _enterRecorderator = true;
+                    _duck.immobilized = true;
+                }
+            }
             else if (_editorBeam.entered)
             {
                 _selectionTextDesired = "LEVEL EDITOR";
@@ -1677,15 +1697,18 @@ namespace DuckGame
                     Add(_duck);
                     HUD.AddInputChangeDisplay(" Cmon Now That Was Dumb, Dont You Agree? ");
                 }
-                foreach (Profile defaultProfile in Profiles.defaultProfiles)
+                if (DGRSettings.SwitchInput)
                 {
-                    foreach (string trigger in Triggers.SimpleTriggerList)
+                    foreach (Profile defaultProfile in Profiles.defaultProfiles)
                     {
-                        if (defaultProfile.inputProfile.Pressed(trigger, false))
+                        foreach (string trigger in Triggers.SimpleTriggerList)
                         {
-                            _duck.profile = defaultProfile;
-                            InputProfile.active = _duck.profile.inputProfile;
-                            break;
+                            if (defaultProfile.inputProfile.Pressed(trigger, false))
+                            {
+                                _duck.profile = defaultProfile;
+                                InputProfile.active = _duck.profile.inputProfile;
+                                break;
+                            }
                         }
                     }
                 }
@@ -1804,6 +1827,7 @@ namespace DuckGame
                 Graphics.Draw(_beamPlatform, 118f, 146f);
                 Graphics.Draw(_optionsTV, 0f, 19f);
                 Graphics.Draw(_libraryBookcase, 263f, 12f);
+                Graphics.Draw(_cord, 0, 200);
                 Graphics.Draw(_editorBench, 1f, 130f);
                 if (creditsScroll > 0.1)
                 {
@@ -1841,23 +1865,26 @@ namespace DuckGame
             }
             else if (layer == Layer.Background)
             {
-                foreach (StarParticle particle in particles)
+                if (DGRSettings.S_ParticleMultiplier != 0)
                 {
-                    float num3 = Math.Max(1f - Math.Min(Math.Abs(particle.pos.x - particle.flicker) / 10f, 1f), 0f);
-                    float num4 = 0.2f;
-                    if (camera.y > 0)
-                        num4 += camera.y / 52f;
-                    Graphics.DrawRect(particle.pos, particle.pos + new Vec2(1f, 1f), Color.White * (float)((num4 + num3 * 0.6f) * (0.3f + (1f - extraFade) * 0.7f)), -0.3f);
-                    float num5 = 0.1f;
-                    if (camera.y > 0)
-                        num5 += camera.y / 52f;
-                    Vec2 pos = particle.pos;
-                    int num6 = 4;
-                    for (int index = 0; index < num6; ++index)
+                    foreach (StarParticle particle in particles)
                     {
-                        float num7 = particle.speed.x * 8f;
-                        Graphics.DrawLine(pos + new Vec2(-num7, 0.5f), pos + new Vec2(0f, 0.5f), particle.color * ((float)(1f - index / num6) * num5) * (float)(0.3f + (1f - extraFade) * 0.7f), depth: (-0.4f));
-                        pos.x -= num7;
+                        float num3 = Math.Max(1f - Math.Min(Math.Abs(particle.pos.x - particle.flicker) / 10f, 1f), 0f);
+                        float num4 = 0.2f;
+                        if (camera.y > 0)
+                            num4 += camera.y / 52f;
+                        Graphics.DrawRect(particle.pos, particle.pos + new Vec2(1f, 1f), Color.White * (float)((num4 + num3 * 0.6f) * (0.3f + (1f - extraFade) * 0.7f)), -0.3f);
+                        float num5 = 0.1f;
+                        if (camera.y > 0)
+                            num5 += camera.y / 52f;
+                        Vec2 pos = particle.pos;
+                        int num6 = 4;
+                        for (int index = 0; index < num6; ++index)
+                        {
+                            float num7 = particle.speed.x * 8f;
+                            Graphics.DrawLine(pos + new Vec2(-num7, 0.5f), pos + new Vec2(0f, 0.5f), particle.color * ((float)(1f - index / num6) * num5) * (float)(0.3f + (1f - extraFade) * 0.7f), depth: (-0.4f));
+                            pos.x -= num7;
+                        }
                     }
                 }
                 _background.depth = (Depth)0f;

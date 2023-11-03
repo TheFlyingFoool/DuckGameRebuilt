@@ -520,6 +520,43 @@ namespace DuckGame
         {
             if (!Corderator.Paused)
             {
+                if (_quit != null)
+                {
+                    if (_quit.value)
+                    {
+                        Graphics.fade = Lerp.Float(Graphics.fade, 0, 0.05f);
+                        if (Graphics.fade <= 0)
+                        {
+                            //vs told me to use whatever this ?? function is dont scream at me im not firebreak i swear -NiK0
+                            current.Clear();
+                            current = prev ?? new RecorderationSelector();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        simulatePhysics = true;
+                        if (Input.Pressed(Triggers.Start))
+                        {
+                            _pauseGroup.Open();
+                            _pauseMenu.Open();
+                            MonoMain.pauseMenu = _pauseGroup;
+                            if (!_paused)
+                            {
+                                SFX.Play("pause", 0.6f);
+                                _paused = true;
+                            }
+                            simulatePhysics = false;
+                            return;
+                        }
+                        if (_paused && MonoMain.pauseMenu == null)
+                        {
+                            _paused = false;
+                            SFX.Play("resume", 0.6f);
+                        }
+                    }
+                }
+
                 timer += PlaybackSpeed;
                 MonoMain.UpdateLerpState = false;
 
@@ -533,44 +570,39 @@ namespace DuckGame
         }
         public override void Update()
         {
-            if (fake)
+            if (!_paused)
             {
-                if (frame == 0)
+                if (fake)
                 {
-                    List<AutoBlock> autoBlocks = Extensions.GetListOfThings<AutoBlock>();
-                    for (int i = 0; i < autoBlocks.Count; i++) autoBlocks[i].PlaceBlock();
-                    List<AutoPlatform> autoPlatforms = Extensions.GetListOfThings<AutoPlatform>();
-                    for (int i = 0; i < autoPlatforms.Count; i++) autoPlatforms[i].PlaceBlock();
-                    List<AutoTile> autoTiles = Extensions.GetListOfThings<AutoTile>();
-                    for (int i = 0; i < autoTiles.Count; i++) autoTiles[i].PlaceBlock();
+                    if (frame == 0)
+                    {
+                        List<AutoBlock> autoBlocks = Extensions.GetListOfThings<AutoBlock>();
+                        for (int i = 0; i < autoBlocks.Count; i++) autoBlocks[i].PlaceBlock();
+                        List<AutoPlatform> autoPlatforms = Extensions.GetListOfThings<AutoPlatform>();
+                        for (int i = 0; i < autoPlatforms.Count; i++) autoPlatforms[i].PlaceBlock();
+                        List<AutoTile> autoTiles = Extensions.GetListOfThings<AutoTile>();
+                        for (int i = 0; i < autoTiles.Count; i++) autoTiles[i].PlaceBlock();
+                    }
+                    frame++;
+                    SFX.enabled = false;
+                    base.Update();
+                    SFX.enabled = true;
                 }
-                frame++;
-                SFX.enabled = false;
-                base.Update();
-                SFX.enabled = true;
-            }
-            else
-            {
-                Recorderator.Playing = true;
-                if (CCorderr.cFrame == 0)
+                else
                 {
-                    List<AutoBlock> autoBlocks = Extensions.GetListOfThings<AutoBlock>();
-                    for (int i = 0; i < autoBlocks.Count; i++) autoBlocks[i].PlaceBlock();
-                    List<AutoPlatform> autoPlatforms = Extensions.GetListOfThings<AutoPlatform>();
-                    for (int i = 0; i < autoPlatforms.Count; i++) autoPlatforms[i].PlaceBlock();
-                    List<AutoTile> autoTiles = Extensions.GetListOfThings<AutoTile>();
-                    for (int i = 0; i < autoTiles.Count; i++) autoTiles[i].PlaceBlock();
-                }
+                    Recorderator.Playing = true;
+                    if (CCorderr.cFrame == 0)
+                    {
+                        List<AutoBlock> autoBlocks = Extensions.GetListOfThings<AutoBlock>();
+                        for (int i = 0; i < autoBlocks.Count; i++) autoBlocks[i].PlaceBlock();
+                        List<AutoPlatform> autoPlatforms = Extensions.GetListOfThings<AutoPlatform>();
+                        for (int i = 0; i < autoPlatforms.Count; i++) autoPlatforms[i].PlaceBlock();
+                        List<AutoTile> autoTiles = Extensions.GetListOfThings<AutoTile>();
+                        for (int i = 0; i < autoTiles.Count; i++) autoTiles[i].PlaceBlock();
+                    }
 
-                if (Keyboard.Pressed(Keys.Home))
-                {
-                    Recorderator.Playing = false;
-                    if (prev != null) current = prev;
-                    else current = new SendToLevel(new RecorderationSelector());
-                    return;
+                    base.Update();
                 }
-
-                base.Update();
             }
         }
 
@@ -583,8 +615,16 @@ namespace DuckGame
             }
             base.PostDrawLayer(layer);
         }
+        private UIDivider _pausebox;
+        private UIMenu _confirmMenu;
+        private MenuBoolean _quit = new MenuBoolean();
+        private UIMenu _pauseMenu;
+        private UIComponent _pauseGroup;
+        public bool _paused;
         public override void Initialize()
         {
+            _relp = 5;
+            ReplaySpeed = 5;
             if (fake)
             {
                 for (int i = 0; i < reAdd.Count; i++)
@@ -601,6 +641,81 @@ namespace DuckGame
                 }
             }
             base.Initialize();
+            _pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
+            _pauseMenu = new UIMenu("@LWING@ARCADE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE  @SELECT@SELECT");
+            _confirmMenu = new UIMenu("EXIT REPLAY?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK  @SELECT@SELECT");
+            _pausebox = new UIDivider(true, 0.8f);
+            _pausebox.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(_pauseGroup), UIAlign.Left), true);
+            _pausebox.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_pauseMenu, Options.optionsMenu), UIAlign.Left), true);
+            _pausebox.leftSection.Add(new UIMenuItemNumber("SPEED", field: new FieldBinding(typeof(ReplayLevel), nameof(ReplaySpeed), 0, 11, 1), valStrings: new List<string>()
+            {
+                "x0.01",
+                "x0.1",
+                "x0.25",
+                "x0.5",
+                "x0.75",
+                "x1",
+                "x1.25",
+                "x1.5",
+                "x1.75",
+                "x2",
+                "x4",
+                "x8"
+            }));
+            _pausebox.leftSection.Add(new UIText("", Color.White), true);
+            _pausebox.leftSection.Add(new UIMenuItem("|DGRED|EXIT REPLAY", new UIMenuActionOpenMenu(_pauseMenu, _confirmMenu), UIAlign.Left), true);
+            _pausebox.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
+            _pauseMenu.Add(_pausebox, true);
+            _pauseMenu.Close();
+            _pauseGroup.Add(_pauseMenu, false);
+            Options.AddMenus(_pauseGroup);
+            Options.openOnClose = _pauseMenu;
+            _confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_confirmMenu, _pauseMenu), UIAlign.Left, backButton: true), true);
+            _confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _quit)), true);
+            _confirmMenu.Close();
+            _pauseGroup.Add(_confirmMenu, false);
+            _pauseGroup.isPauseMenu = true;
+            _pauseGroup.Close();
+            Add(_pauseGroup);
         }
+        public static float ActualReplaySpeed
+        {
+            get
+            {
+                return ReplaySpeed switch
+                {
+                    0 => 0.0166666666666666f,
+                    1 => 0.1f,
+                    2 => 0.25f,
+                    3 => 0.5f,
+                    4 => 0.75f,
+                    5 => 1,
+                    6 => 1.25f,
+                    7 => 1.5f,
+                    8 => 1.75f,
+                    9 => 2,
+                    10 => 4,
+                    11 => 8,
+                    12 => 8,
+                    _ => 0.01f,
+                };
+            }
+        }
+        public static int ReplaySpeed
+        {
+            get
+            {
+                return _relp;
+            }
+            set
+            {
+                if (current is ReplayLevel rl)
+                {
+                    rl.PlaybackSpeed = ActualReplaySpeed;
+                }
+                _relp = value;
+            }
+        }
+        private static int _relp = 5;
     }
 }

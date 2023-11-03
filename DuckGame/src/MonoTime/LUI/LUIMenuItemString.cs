@@ -66,6 +66,10 @@
             }
             else
                 _stringEntry.text = (string)_field.value;
+            if (_stringEntry._font.GetLength(_stringEntry.text) > 10)
+            {
+                _stringEntry.text = _stringEntry._font.Crop(_stringEntry.text, 0, 8) + "..";
+            }
             base.Update();
         }
 

@@ -25,16 +25,15 @@ namespace DuckGame
         public static bool Patched;
         public static void OnLevelChange()
         {
-            if (zeCorder != null)
+            if (zeCorder != null && Recorderator.RecordType == 2 || (Recorderator.RecordType == 1 && Recorderator.Clipped))
             {
                 zeCorder.SaveToFile(lastLevel);
                 zeCorder = null;
 
-                //corders.Add(pels[i].Remove(0, p + 1), File.ReadAllBytes(pels[i]));
+                Recorderator.Clipped = false;
             }
             if (!(Level.current is ReplayLevel)) Corderator.instance = null;
             SomethingSomethingVessel.somethingIndex = 0;
-            TeamHatVessel.regTems.Clear();
             Recorderator.Playing = false;
         }
         public static Corderator zeCorder;
@@ -45,10 +44,14 @@ namespace DuckGame
             if (Level.current != null)
             {
                 if (lastLevel != Level.current) OnLevelChange();
-                if (Level.current is GameLevel && Level.current.things.OfType<Corderator>().Count() == 0)
+                if (Recorderator.RecordType != 0)
                 {
-                    zeCorder = new Corderator();
-                    Level.Add(zeCorder);
+                    bool modded = ModLoader.modHash != "nomods";
+                    if (Level.current is GameLevel && Level.current.things.OfType<Corderator>().Count() == 0 && (!modded || Recorderator.DoRecordMods))
+                    {
+                        zeCorder = new Corderator();
+                        Level.Add(zeCorder);
+                    }
                 }
                 lastLevel = Level.current;
             }

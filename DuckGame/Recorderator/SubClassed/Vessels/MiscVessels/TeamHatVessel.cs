@@ -10,7 +10,6 @@ namespace DuckGame
             AddSynncl("equipped", new SomethingSync(typeof(ushort)));
             AddSynncl("team", new SomethingSync(typeof(ushort)));
         }
-        public static Dictionary<ushort, Team> regTems = new Dictionary<ushort, Team>();
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
             Team team;

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.UIConnectionInfo
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using SDL2;
+﻿using SDL2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,9 +70,7 @@ namespace DuckGame
                 colorPrefixString = "|DGPURPLE|";
             string profileName = profile.nameUI;
 
-            int colorTagsLength = profileName.Length - Program.RemoveColorTags(profileName).Length;
-            
-            int nameLength = profileName.Length - colorTagsLength;
+            int nameLength = _littleFont.GetLength(profileName);
             bool isHost = false;
             if (profile.connection != null && profile.connection.isHost)
             {
@@ -87,12 +78,12 @@ namespace DuckGame
                 ++nameLength;
             }
 
-            int nameLengthLimit = 17;
+            int nameLengthLimit = 16;
             if (isHost)
                 nameLengthLimit--;
             if (nameLength > nameLengthLimit)
             {
-                profileName = profileName.Substring(0, nameLengthLimit - 1 + colorTagsLength) + $"{colorPrefixString}.";
+                profileName = _littleFont.Crop(profileName, 0, nameLengthLimit) + $"{colorPrefixString}..";
                 nameLength = nameLengthLimit;
             }
             for (; nameLength < nameLengthLimit + 2; ++nameLength)
