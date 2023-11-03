@@ -733,7 +733,7 @@ namespace DuckGame
                         if (!levelInit || Network.isServer)
                             _thing.connection = DuckNetwork.localConnection;
                     }
-                    DevConsole.Log(DCSection.GhostMan, "|DGBLUE|Creating|PREV| ghost (" + ghostObjectIndex.ToString() + "|PREV|)");
+                    DevConsole.Log(DCSection.GhostMan, $"|DGBLUE|Creating|PREV| ghost ({ghostObjectIndex})");
 
                     manager._ghostIndexMap[_ghostObjectIndex] = this;
                 }

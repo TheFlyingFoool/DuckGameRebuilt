@@ -441,7 +441,6 @@ namespace DuckGame
                         }
                     }
 
-                    int index1 = _core.lines.Count - 1;
                     float vOffset = 0.0f;
                     _core.font.scale = new Vec2((float)Math.Max(Math.Round(_tray.scale.x / 4f), 1f));
                     float mul = _core.font.scale.x / 2f;
@@ -456,16 +455,19 @@ namespace DuckGame
 
                     vOffset -= lineHeight * core.viewOffset;
 
-                    int maxDrawnLines = (int) ((height - 2f * _tray.scale.y) / lineHeight - 1f);
-                    for (int index2 = 0; index2 < maxDrawnLines && index1 >= 0; ++index2)
+                    int maxDrawnLines = (int) ((height - 2f * _tray.scale.y) / lineHeight);
+                    for (int itemDrawIndex = 0, itemTrueIndex = (_core.lines.Count - 1), skipNext = 0; itemTrueIndex >= 0; ++itemDrawIndex, --itemTrueIndex)
                     {
-                        DCLine dcLine = _core.lines.ElementAt(index1);
+                        if (itemDrawIndex >= maxDrawnLines - skipNext)
+                            break;
+                        
+                        DCLine dcLine = _core.lines.ElementAt(itemTrueIndex);
 
-                        string lineNumber = index1.ToString().PadLeft(4, '0');
+                        string lineNumber = itemTrueIndex.ToString().PadLeft(4, '0');
                         string timeString = $"{dcLine.timestamp:HH:mm:ss} ";
                         lineNumber = timeString + lineNumber;
                         float posX = 4f * _tray.scale.x;
-                        Color lineNumColor = index1 % 2 > 0 ? Color.Gray * 0.4f : Color.Gray * 0.6f;
+                        Color lineNumColor = itemTrueIndex % 2 > 0 ? Color.Gray * 0.4f : Color.Gray * 0.6f;
 
                         string originalLineText = dcLine.SectionString() + dcLine.line;
                         
@@ -490,6 +492,10 @@ namespace DuckGame
                                     if (partPosY <= height)
                                     {
                                         _raster.Draw(lineParts[i], posX + lineNumWidth, partPosY, dcLine.color * 0.8f, 0.9f);
+                                        if (i != 0)
+                                        {
+                                            skipNext++;
+                                        }
                                     }
                                 }
                             }
@@ -523,8 +529,6 @@ namespace DuckGame
                             
                             vOffset += blockHeight;
                         }
-
-                        --index1;
                     }
                 }
 
