@@ -458,7 +458,7 @@ namespace DuckGame
                     int maxDrawnLines = (int) ((height - 2f * _tray.scale.y) / lineHeight);
                     for (int itemDrawIndex = 0, itemTrueIndex = (_core.lines.Count - 1), skipNext = 0; itemTrueIndex >= 0; ++itemDrawIndex, --itemTrueIndex)
                     {
-                        if (itemDrawIndex >= maxDrawnLines - skipNext)
+                        if (itemDrawIndex - _core.viewOffset >= maxDrawnLines - skipNext)
                             break;
                         
                         DCLine dcLine = _core.lines.ElementAt(itemTrueIndex);
