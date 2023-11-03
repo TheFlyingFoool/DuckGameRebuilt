@@ -6,7 +6,7 @@ namespace DuckGame
     [BaggedProperty("isInDemo", true)]
     public class SequenceCrate : Crate, ISequenceItem
     {
-        public int _variant = Rando.Int(1, 4);
+        public int _variant;
         public static Dictionary<int, DuckPersona> _variantPersonaMap = new()
         {
             {1, Persona.Duck7},
@@ -18,22 +18,25 @@ namespace DuckGame
         public SequenceCrate(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            if (DGRSettings.SequenceCrateRetexture)
-            {
-                _spriteAccessor = new SpriteMap($"seq_crate_{_variant}", 16, 16);
-                graphic = _spriteAccessor;
-                _onHitSFX = "swipe";
-                _onCollideSFX = "presentLand";
-                _onDestroySFX = "rainpop"; // "page", "little_punch", "lightMatch"
-            }
-
             sequence = new SequenceItem(this)
             {
                 type = SequenceItemType.Goody
             };
             _editorName = "Seq Crate";
         }
-
+        public override void Initialize()
+        {
+            if (DGRSettings.SequenceCrateRetexture)
+            {
+                _variant = Rando.Int(1, 4);
+                _spriteAccessor = new SpriteMap($"seq_crate_{_variant}", 16, 16);
+                graphic = _spriteAccessor;
+                _onHitSFX = "swipe";
+                _onCollideSFX = "presentLand";
+                _onDestroySFX = "rainpop"; // "page", "little_punch", "lightMatch"
+            }
+            base.Initialize();
+        }
         protected override bool OnDestroy(DestroyType type = null)
         {
             if (sequence != null && sequence.isValid)

@@ -851,6 +851,7 @@ namespace DuckGame
                         {
                             host = Extensions.SanitizeFolderName(Extensions.CleanStringFormatting(DuckNetwork.hostProfile.connection.name));
                         }
+                        if (host.ToLower() == "clips") host += "s";
                         extraPath = $"{host}/{date}/";
                     }
                     string zipFilePath = CordsPath + extraPath + "cord_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".crf";
