@@ -129,6 +129,7 @@ namespace DuckGame
           bool network = true)
           : base()
         {
+            shouldbegraphicculled = false;
             _gravityAffected = type.affectedByGravity;
             gravityMultiplier = type.gravityMultiplier;
             _bulletLength = type.bulletLength;

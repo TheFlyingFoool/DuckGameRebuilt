@@ -77,63 +77,60 @@ namespace DuckGame
         {
             instance = new Recorderator();
         }
-        
+
         public static void PostInitialize()
         {
-            if (Program.IS_DEV_BUILD || Program.RecorderatorWatchMode)
-            {
-                SomethingSomethingVessel.YeahFillMeUpWithLists();
+            SomethingSomethingVessel.YeahFillMeUpWithLists();
 
-                List<Type> gtiles = Extensions.GetSubclassesList(typeof(AutoBlock));
-                byte b = 0;
-                for (int i = 0; i < gtiles.Count; i++)
-                {
-                    Type t = gtiles[i];
-                    if (t == typeof(BlockGroup)) continue;
-                    autoBlockIDX.Add(b, t);
-                    b++;
-                }
-                List<Type> atiles = Extensions.GetSubclassesList(typeof(AutoTile));
-                b = 0;
-                for (int i = 0; i < atiles.Count; i++)
-                {
-                    Type t = atiles[i];
-                    autoTileIDX.Add(b, t);
-                    b++;
-                }
-                List<Type> gplats = Extensions.GetSubclassesList(typeof(AutoPlatform));
-                b = 0;
-                for (int i = 0; i < gplats.Count; i++)
-                {
-                    Type t = gplats[i];
-                    autoPlatIDX.Add(b, t);
-                    b++;
-                }
-                List<Type> bgs = Extensions.GetSubclassesList(typeof(BackgroundUpdater));
-                b = 0;
-                for (int i = 0; i < bgs.Count; i++)
-                {
-                    Type t = bgs[i];
-                    bgIDX.Add(b, t);
-                    b++;
-                }
-                List<Type> bgts = Extensions.GetSubclassesList(typeof(BackgroundTile));
-                b = 0;
-                for (int i = 0; i < bgts.Count; i++)
-                {
-                    Type t = bgts[i];
-                    bgtileIDX.Add(b, t);
-                    b++;
-                }
-                bgts = Extensions.GetSubclassesList(typeof(ForegroundTile));
-                for (int i = 0; i < bgts.Count; i++)
-                {
-                    Type t = bgts[i];
-                    bgtileIDX.Add(b, t);
-                    b++;
-                }
-                if (!Program.RecorderatorWatchMode) (typeof(Game).GetField("updateableComponents", BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic).GetValue(MonoMain.instance) as List<IUpdateable>).Add(new updateCorderator());
+            List<Type> gtiles = Extensions.GetSubclassesList(typeof(AutoBlock));
+            byte b = 0;
+            for (int i = 0; i < gtiles.Count; i++)
+            {
+                Type t = gtiles[i];
+                if (t == typeof(BlockGroup)) continue;
+                autoBlockIDX.Add(b, t);
+                b++;
             }
+            List<Type> atiles = Extensions.GetSubclassesList(typeof(AutoTile));
+            b = 0;
+            for (int i = 0; i < atiles.Count; i++)
+            {
+                Type t = atiles[i];
+                autoTileIDX.Add(b, t);
+                b++;
+            }
+            List<Type> gplats = Extensions.GetSubclassesList(typeof(AutoPlatform));
+            b = 0;
+            for (int i = 0; i < gplats.Count; i++)
+            {
+                Type t = gplats[i];
+                autoPlatIDX.Add(b, t);
+                b++;
+            }
+            List<Type> bgs = Extensions.GetSubclassesList(typeof(BackgroundUpdater));
+            b = 0;
+            for (int i = 0; i < bgs.Count; i++)
+            {
+                Type t = bgs[i];
+                bgIDX.Add(b, t);
+                b++;
+            }
+            List<Type> bgts = Extensions.GetSubclassesList(typeof(BackgroundTile));
+            b = 0;
+            for (int i = 0; i < bgts.Count; i++)
+            {
+                Type t = bgts[i];
+                bgtileIDX.Add(b, t);
+                b++;
+            }
+            bgts = Extensions.GetSubclassesList(typeof(ForegroundTile));
+            for (int i = 0; i < bgts.Count; i++)
+            {
+                Type t = bgts[i];
+                bgtileIDX.Add(b, t);
+                b++;
+            }
+            if (!Program.RecorderatorWatchMode) (typeof(Game).GetField("updateableComponents", BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic).GetValue(MonoMain.instance) as List<IUpdateable>).Add(new updateCorderator());
         }
         public static Recorderator instance;
         public static UIMenu CreateRecorderatorMenu(UIMenu pPrev)
