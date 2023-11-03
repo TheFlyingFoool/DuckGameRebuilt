@@ -314,8 +314,6 @@ namespace DuckGame
 
         public static void Draw()
         {
-            Graphics.DrawString(core.viewOffset.ToString(), new Vec2(16, 16), Color.White, 2f);
-
             if (Layer.core._console != null)
             {
                 Layer.core._console.camera.width = Resolution.current.x / 2;
