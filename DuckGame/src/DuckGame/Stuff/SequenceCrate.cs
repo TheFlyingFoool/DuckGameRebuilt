@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -28,7 +29,8 @@ namespace DuckGame
         {
             if (DGRSettings.SequenceCrateRetexture)
             {
-                _variant = Rando.Int(1, 4);
+                int var = Math.Abs((int)(x / 11f) * 11 + (int)(y / 11f) * 11);
+                _variant = 1 + var % 4;
                 _spriteAccessor = new SpriteMap($"seq_crate_{_variant}", 16, 16);
                 graphic = _spriteAccessor;
                 _onHitSFX = "swipe";
