@@ -25,10 +25,12 @@ namespace DuckGame
             };
             _editorName = "Seq Crate";
         }
-        public override void Initialize()
+        public bool appliedSeq;
+        public override void Update()
         {
-            if (DGRSettings.SequenceCrateRetexture)
+            if (DGRSettings.SequenceCrateRetexture && !appliedSeq)
             {
+                appliedSeq = true;
                 int var = Math.Abs((int)(x / 11f) * 11 + (int)(y / 11f) * 11);
                 _variant = 1 + var % 4;
                 _spriteAccessor = new SpriteMap($"seq_crate_{_variant}", 16, 16);
@@ -37,7 +39,7 @@ namespace DuckGame
                 _onCollideSFX = "presentLand";
                 _onDestroySFX = "rainpop"; // "page", "little_punch", "lightMatch"
             }
-            base.Initialize();
+            base.Update();
         }
         protected override bool OnDestroy(DestroyType type = null)
         {
