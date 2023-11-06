@@ -485,6 +485,7 @@
     <Compile Include="AddedContent\NiK0\RainbowConstant.cs" />
     <Compile Include="AddedContent\NiK0\RainParticel.cs" />
     <Compile Include="AddedContent\NiK0\SpaceMaterial.cs" />
+    <Compile Include="AddedContent\NiK0\WeaponTaper.cs" />
     <Compile Include="Recorderator\RecorderationSelector\FolderInfo.cs" />
     <Compile Include="Recorderator\RecorderationSelector\IRMenuItem.cs" />
     <Compile Include="Recorderator\RecorderationSelector\NullRMenuItem.cs" />
