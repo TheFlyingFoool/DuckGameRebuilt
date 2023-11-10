@@ -1,10 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.DevConsoleCore
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
@@ -31,18 +25,20 @@ namespace DuckGame
 
         public string Typing
         {
-            get
-            {
-                OnConsoleTextChange?.Invoke(typing);
-                return typing;
-            }
+            get => typing;
             set
             {
+                if (value == typing)
+                    return;
+
+                string prevTyping = typing;
                 typing = value;
+                
+                OnTextChange?.Invoke(prevTyping, typing);
             }
         }
 
-        public event Action<string> OnConsoleTextChange;
+        public event Action<string, string> OnTextChange;
         public string typing = "";
         public List<string> previousLines = new List<string>();
         public bool splitScreen;
@@ -69,36 +65,5 @@ namespace DuckGame
             }
         }
         public string GetReceivedLogData(NetworkConnection pConnection) => receivingLogs.ContainsKey(pConnection) ? receivingLogs[pConnection] : null;
-
-        public Queue<DCLine> filteredLines
-        {
-            get
-            {
-                string filter = DevConsoleCommands.DCSectionFilter;
-                if (filter == "all")
-                    return lines;
-                
-                Queue<DCLine> q = new();
-                HashSet<DCSection> wantedSections = new();
-
-                foreach (string sectionName in filter.TrimSplit('|'))
-                {
-                    if (Enum.TryParse(sectionName, true, out DCSection result))
-                    {
-                        wantedSections.Add(result);
-                    }
-                }
-
-                foreach (DCLine line in lines)
-                {
-                    if (!wantedSections.Contains(line.section))
-                        continue;
-                    
-                    q.Enqueue(line);
-                }
-
-                return q;
-            }
-        }
     }
 }

@@ -72,6 +72,7 @@ namespace DuckGame
         private Type _killThingType;
         public float _hSpeed;
         public float _vSpeed;
+        private Vec2 _velocity = new Vec2(0f,0f);
         protected bool _active = true;
         public bool serverOnly;
         private bool _action;
@@ -617,7 +618,13 @@ namespace DuckGame
 
         public Vec2 velocity
         {
-            get => new Vec2(hSpeed, vSpeed);
+            get
+            {
+                _velocity.x = hSpeed;
+                _velocity.y = vSpeed;
+                return _velocity;
+            }
+
             set
             {
                 _hSpeed = value.x;

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.QuadTreeObjectList
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -258,13 +251,11 @@ namespace DuckGame
             }
             return false;
         }
-        public static bool NotinList(Vec2[] array, Vec2[] value, int count)
+        public static bool IsNotInHashSet(HashSet<Vec2> set, Vec2[] values)
         {
-            int startIndex = 0;
-            int num = startIndex + count;
-            for (int i = startIndex; i < num; i++)
+            foreach (var value in values)
             {
-                if (ValueinList(value, array[i], value.Length))
+                if (set.Contains(value))
                 {
                     return false;
                 }
@@ -287,7 +278,7 @@ namespace DuckGame
                 }
                 return new List<Thing>();
             }
-            Vec2[] usedids = new Vec2[ids.Length];
+            HashSet<Vec2> usedids = new HashSet<Vec2>(capacity: ids.Length);
             List<Thing> objects = new List<Thing>();
             for (int i = 0; i < ids.Length; i++)
             {
@@ -302,14 +293,14 @@ namespace DuckGame
                             {
                                 objects.Add(item);
                             }
-                            else if (NotinList(usedids, item.Buckets, i)) //n
+                            else if (IsNotInHashSet(usedids, item.Buckets)) //n
                             {
                                 objects.Add(item);
                             }
                         }
                     }
                 }
-                usedids[i] = bucket;
+                usedids.Add(bucket);
             }
             return objects;
         }
@@ -328,7 +319,7 @@ namespace DuckGame
                 }
                 return new List<Thing>();
             }
-            Vec2[] usedids = new Vec2[ids.Length];
+            HashSet<Vec2> usedIds = new HashSet<Vec2>(capacity: ids.Length);
             List<Thing> objects = new List<Thing>();
             for (int i = 0; i < ids.Length; i++)
             {
@@ -339,18 +330,14 @@ namespace DuckGame
                     {
                         foreach (Thing item in outputthings)
                         {
-                            if (item.Buckets.Length == 1)
-                            {
-                                objects.Add(item);
-                            }
-                            else if (NotinList(usedids, item.Buckets, i)) //n
+                            if (item.Buckets.Length == 1 || IsNotInHashSet(usedIds, item.Buckets))
                             {
                                 objects.Add(item);
                             }
                         }
                     }
                 }
-                usedids[i] = bucket;
+                usedIds.Add(bucket);
             }
             return objects;
         }

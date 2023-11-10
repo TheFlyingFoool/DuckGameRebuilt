@@ -1,10 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ItemCrate
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
+﻿using NAudio.MediaFoundation;
 using System;
 using System.Collections.Generic;
 
@@ -249,46 +243,49 @@ namespace DuckGame
                 musketSmoke.vSpeed -= Rando.Float(0.1f, 0.2f);
                 Level.Add(musketSmoke);
             }
-            for (int index = 0; index < 4; ++index)
+            if (!Recorderator.Playing)
             {
-                PhysicsObject physicsObject = _containedObjects[index];
-                if (!Network.isActive)
-                    physicsObject = GetSpawnItem();
-                if (physicsObject != null)
+                for (int index = 0; index < 4; ++index)
                 {
-                    if (_onFire)
-                        physicsObject.heat = 0.8f;
-                    physicsObject.position = position + new Vec2(-4f + index * 2.6666667f, 0f);
-                    switch (index)
+                    PhysicsObject physicsObject = _containedObjects[index];
+                    if (!Network.isActive)
+                        physicsObject = GetSpawnItem();
+                    if (physicsObject != null)
                     {
-                        case 0:
-                        case 3:
-                            if (index == 0)
-                                physicsObject.hSpeed = -2f;
-                            else
-                                physicsObject.hSpeed = 2f;
-                            physicsObject.vSpeed = -2.5f;
-                            goto label_20;
-                        case 1:
-                            physicsObject.hSpeed = -1.2f;
-                            break;
-                        default:
-                            physicsObject.hSpeed = 1.2f;
-                            break;
+                        if (_onFire)
+                            physicsObject.heat = 0.8f;
+                        physicsObject.position = position + new Vec2(-4f + index * 2.6666667f, 0f);
+                        switch (index)
+                        {
+                            case 0:
+                            case 3:
+                                if (index == 0)
+                                    physicsObject.hSpeed = -2f;
+                                else
+                                    physicsObject.hSpeed = 2f;
+                                physicsObject.vSpeed = -2.5f;
+                                goto label_20;
+                            case 1:
+                                physicsObject.hSpeed = -1.2f;
+                                break;
+                            default:
+                                physicsObject.hSpeed = 1.2f;
+                                break;
+                        }
+                        physicsObject.vSpeed = -3.5f;
+                    label_20:
+                        if (Network.isActive)
+                        {
+                            physicsObject.visible = true;
+                            physicsObject.solid = true;
+                            physicsObject.active = true;
+                        }
+                        else
+                            Level.Add(physicsObject);
                     }
-                    physicsObject.vSpeed = -3.5f;
-                label_20:
-                    if (Network.isActive)
-                    {
-                        physicsObject.visible = true;
-                        physicsObject.solid = true;
-                        physicsObject.active = true;
-                    }
-                    else
-                        Level.Add(physicsObject);
                 }
+                SFX.Play("crateDestroy");
             }
-            SFX.Play("crateDestroy");
             Level.Remove(this);
             return true;
         }

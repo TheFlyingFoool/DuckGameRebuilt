@@ -15,7 +15,8 @@ namespace DuckGame
         public Rectangle Draw(Vec2 position, bool selected)
         {
             Rectangle bounds = new Rectangle(position.x, position.y, Graphics._biosFont.height * FONT_SIZE, Graphics._biosFont.height * FONT_SIZE);
-            Graphics.DrawRect(bounds, selected ? Color.Magenta : Color.Purple, 1f);
+            //Graphics.DrawRect(bounds, selected ? Color.Magenta : Color.Purple, 1f);
+            //WHY MR BREAK -NiK0
             return bounds;
         }
 

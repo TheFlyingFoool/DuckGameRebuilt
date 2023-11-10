@@ -35,7 +35,7 @@ namespace DuckGame
             if (Network.isActive)
                 return "|RED|FAIL | Online with other players";
 
-            if (Level.current is ChallengeLevel or ArcadeLevel)
+            if (DuckGame.Level.current is ChallengeLevel or ArcadeLevel)
                 return "|RED|FAIL | Arcade";
 
             return "|DGBLUE|PASS | Passed all cheater checks";

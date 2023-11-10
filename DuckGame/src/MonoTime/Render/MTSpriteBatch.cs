@@ -385,7 +385,7 @@ namespace DuckGame
             MTSpriteBatchItem batchItem = _batcher.CreateBatchItemDepth(depth);
             batchItem.Depth = depth;
 
-            if (texture.Texbase != null && texture.Texbase.Name != null && Content.offests.TryGetValue(texture.Texbase.Name, out Microsoft.Xna.Framework.Rectangle offset))
+            if (!texture.skipSpriteAtlas && texture.Texbase != null && texture.Texbase.Name != null && Content.offests.TryGetValue(texture.Texbase.Name, out Microsoft.Xna.Framework.Rectangle offset))
             {
                 batchItem.usingspriteatlas = true;
                 batchItem.NormalTexture = texture;

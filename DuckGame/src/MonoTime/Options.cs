@@ -417,7 +417,7 @@ namespace DuckGame
         // go wild with option naming here
         public static UIMenu CreateDGRDeveloperMenu(UIMenu pPrev)
         {
-            UIMenu menu = new UIMenu("|PINK|♥|WHITE|DEVELOPER|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            UIMenu menu = new UIMenu("|PINK|♥|WHITE|DEVELOPER|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 260f, conString: "@CANCEL@BACK @SELECT@SELECT");
 
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
@@ -430,6 +430,11 @@ namespace DuckGame
             menu.Add(new UIMenuItemToggle("Faster Load", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.FasterLoad)))
             {
                 dgrDescription = "If this is enabled hats, effects, devconsole, challenges, textures wont load on startup resulting in instability so use at your own risk"
+            });
+
+            menu.Add(new UIMenuItemToggle("Sync Ching", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SyncChing)))
+            {
+                dgrDescription = "Want everyone to know that you just clipped them? Turn this on and other people will be able to hear the ching when you clip with Recorderator!"
             });
 
             menu.Add(new UIMenuItemToggle("Alt SeqCrate Texture", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SequenceCrateRetexture)))
@@ -566,6 +571,11 @@ namespace DuckGame
             {
                 dgrDescription = "If a player has already definitely won extra rounds that wont change the outcome of the match will be skipped (HOST ONLY)"
             });
+
+            menu.Add(new UIMenuItemToggle("Auto Input Switch", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SwitchInput)))
+            {
+                dgrDescription = "On the titlescreen all input profiles will work as the main duck adjusting them dynamically"
+            });
             menu.Add(new UIMenuItemToggle("Skip XP", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SkipXP)))
             {
                 dgrDescription = "Completely skips the XP level up and Vincent dialogue. You wont get the XP from it if this is ON"
@@ -581,7 +591,10 @@ namespace DuckGame
                 dgrDescription = "STEAM    - Regular steam link\nDGR      - Custom DGR link (https protocol)\nBOTH (D) - Both in one link, clickable on Discord\nBOTH (G) - Both copied but as seperate links",
                 manualFormatting = true
             });
-
+            menu.Add(new UIMenuItemToggle("DSH in console", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.UseDuckShell)))
+            {
+                dgrDescription = "Uses DGR's custom DuckShell language to run commands in the console, which provides more power-user and automation features"
+            });
 
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
@@ -705,7 +718,7 @@ namespace DuckGame
             });
             menu.Add(new UIMenuItemToggle("Dubber Speed", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.dubberspeed)))
             {
-                dgrDescription = "For true vim users, adds keybinds from 1-9 for faster menu browsing"
+                dgrDescription = "For true vim users, adds keybinds from 1-9 for faster menu browsing\nHold SHIFT to unignore player names"
             });
 
             menu.Add(new UIMenuItemToggle("No Force Start Menu", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HideFS)))
@@ -774,7 +787,7 @@ namespace DuckGame
         public static UIMenu TEMPDGRDEV;
         public static UIMenu CreateDGRMenu(UIMenu pOptionsMenu)
         {
-            UIMenu menu = new UIMenu("|PINK|♥|WHITE|REBUILT|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            UIMenu menu = new UIMenu("|PINK|♥|WHITE|REBUILT|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
 
             TEMPDGROPTIM = CreateDGROptimMenu(menu);
             menu.Add(new UIMenuItem("OPTIMIZATIONS", new UIMenuActionOpenMenu(menu, TEMPDGROPTIM), backButton: true));
@@ -791,11 +804,8 @@ namespace DuckGame
             TEMPDGREDITOR = CreateDGREditorMenu(menu);
             menu.Add(new UIMenuItem("EDITOR", new UIMenuActionOpenMenu(menu, TEMPDGREDITOR), backButton: true));
 
-            if (Program.IS_DEV_BUILD)//WHEN RECORDERATOR IS A THING AGAIN MAKE THIS MENU ALWAYS SHOW UP -NiK0
-            {
-                TEMPDGRRECORDERATOR = Recorderator.CreateRecorderatorMenu(menu);
-                menu.Add(new UIMenuItem("RECORDERATOR", new UIMenuActionOpenMenu(menu, TEMPDGRRECORDERATOR), backButton: true));
-            }
+            TEMPDGRRECORDERATOR = Recorderator.CreateRecorderatorMenu(menu);
+            menu.Add(new UIMenuItem("RECORDERATOR", new UIMenuActionOpenMenu(menu, TEMPDGRRECORDERATOR), backButton: true));
 
             TEMPDGRMISC = CreateDGRDumbShitMenu(menu);
             menu.Add(new UIMenuItem("MISCELLANEOUS", new UIMenuActionOpenMenu(menu, TEMPDGRMISC), backButton: true));

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Chainsaw
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -150,12 +143,15 @@ namespace DuckGame
             Vec2 normalized = (position - this.barrelPosition).normalized;
             Vec2 barrelPosition = this.barrelPosition;
 
-            int ix = (int)(DGRSettings.ActualParticleMultiplier * 6);
-            float f = 24f / ix;
-            for (int index = 0; index < ix; ++index)
+            if (DGRSettings.ActualParticleMultiplier != 0)
             {
-                Level.Add(Spark.New(barrelPosition.x, barrelPosition.y, new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
-                barrelPosition += normalized * f;
+                int ix = (int)(DGRSettings.ActualParticleMultiplier * 6);
+                float f = 24f / ix;
+                for (int index = 0; index < ix; ++index)
+                {
+                    Level.Add(Spark.New(barrelPosition.x, barrelPosition.y, new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
+                    barrelPosition += normalized * f;
+                }
             }
             _swordSwing.speed = 0f;
             if (Recorder.currentRecording != null)

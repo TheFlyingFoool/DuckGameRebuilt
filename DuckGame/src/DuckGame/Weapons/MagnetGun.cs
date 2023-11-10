@@ -394,10 +394,10 @@ namespace DuckGame
                 }
                 else _grabbed.position = Offset(barrelOffset) + barrelVector * _grabbed.halfWidth;
             }
-            else
-            {
-                int num1 = flag2 ? 1 : 0;
-            }
+            //else ??? -NiK0
+            //{
+            //    int num1 = flag2 ? 1 : 0;
+            //}
             base.Update();
         }
 

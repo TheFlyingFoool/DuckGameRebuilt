@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.TapedGun
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -107,10 +100,13 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            if (gun1 != null)
-                level.AddThing(gun1);
-            if (gun2 != null)
-                level.AddThing(gun2);
+            if (Level.current is not Editor)
+            {
+                if (gun1 != null)
+                    level.AddThing(gun1);
+                if (gun2 != null)
+                    level.AddThing(gun2);
+            }
             base.Initialize();
         }
 

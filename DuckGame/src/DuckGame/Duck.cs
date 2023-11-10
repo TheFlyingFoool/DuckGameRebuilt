@@ -1713,8 +1713,11 @@ namespace DuckGame
                 vec2 = ragdoll.part1.Offset(new Vec2(6f, 0f));
             else if (_trapped != null)
                 vec2 = _trapped.Offset(new Vec2(8f, -2f));
-            Level.Add(BreathSmoke.New(vec2.x, vec2.y));
-            Level.Add(BreathSmoke.New(vec2.x, vec2.y));
+            if (DGRSettings.S_ParticleMultiplier != 0)
+            {
+                Level.Add(BreathSmoke.New(vec2.x, vec2.y));
+                Level.Add(BreathSmoke.New(vec2.x, vec2.y));
+            }
         }
 
         private void UpdateQuack()
@@ -3078,17 +3081,20 @@ namespace DuckGame
                                 {
                                     onWall = true;
                                     SFX.Play("wallTouch", pitch: Rando.Float(-0.1f, 0.1f));
-                                    for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
+                                    if (DGRSettings.S_ParticleMultiplier != 0)
                                     {
-                                        Feather feather1 = Feather.New(x + (!leftWall ? -4f : 4f) + Rando.Float(-1f, 1f), y + Rando.Float(-4f, 4f), persona);
-                                        Feather feather2 = feather1;
-                                        feather2.velocity *= 0.9f;
-                                        if (leftWall)
-                                            feather1.hSpeed = Rando.Float(-1f, 2f);
-                                        else
-                                            feather1.hSpeed = Rando.Float(-2f, 1f);
-                                        feather1.vSpeed = Rando.Float(-2f, 1.5f);
-                                        Level.Add(feather1);
+                                        for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
+                                        {
+                                            Feather feather1 = Feather.New(x + (!leftWall ? -4f : 4f) + Rando.Float(-1f, 1f), y + Rando.Float(-4f, 4f), persona);
+                                            Feather feather2 = feather1;
+                                            feather2.velocity *= 0.9f;
+                                            if (leftWall)
+                                                feather1.hSpeed = Rando.Float(-1f, 2f);
+                                            else
+                                                feather1.hSpeed = Rando.Float(-2f, 1f);
+                                            feather1.vSpeed = Rando.Float(-2f, 1.5f);
+                                            Level.Add(feather1);
+                                        }
                                     }
                                 }
                             }
@@ -3101,17 +3107,20 @@ namespace DuckGame
                                 {
                                     onWall = true;
                                     SFX.Play("wallTouch", pitch: Rando.Float(-0.1f, 0.1f));
-                                    for (int index = 0; index < 2; ++index)
+                                    if (DGRSettings.S_ParticleMultiplier != 0)
                                     {
-                                        Feather feather3 = Feather.New(x + (!leftWall ? -4f : 4f) + Rando.Float(-1f, 1f), y + Rando.Float(-4f, 4f), persona);
-                                        feather3.vSpeed = Rando.Float(-2f, 1.5f);
-                                        Feather feather4 = feather3;
-                                        feather4.velocity *= 0.9f;
-                                        if (leftWall)
-                                            feather3.hSpeed = Rando.Float(-1f, 2f);
-                                        else
-                                            feather3.hSpeed = Rando.Float(-2f, 1f);
-                                        Level.Add(feather3);
+                                        for (int index = 0; index < 2; ++index)
+                                        {
+                                            Feather feather3 = Feather.New(x + (!leftWall ? -4f : 4f) + Rando.Float(-1f, 1f), y + Rando.Float(-4f, 4f), persona);
+                                            feather3.vSpeed = Rando.Float(-2f, 1.5f);
+                                            Feather feather4 = feather3;
+                                            feather4.velocity *= 0.9f;
+                                            if (leftWall)
+                                                feather3.hSpeed = Rando.Float(-1f, 2f);
+                                            else
+                                                feather3.hSpeed = Rando.Float(-2f, 1f);
+                                            Level.Add(feather3);
+                                        }
                                     }
                                 }
                             }
@@ -3119,17 +3128,20 @@ namespace DuckGame
                         if (onWall && _atWallFrames != wallJumpGiveFrames)
                         {
                             SFX.Play("wallLeave", pitch: Rando.Float(-0.1f, 0.1f));
-                            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
+                            if (DGRSettings.S_ParticleMultiplier != 0)
                             {
-                                Feather feather5 = Feather.New(x + (!leftWall ? -4f : 4f) + Rando.Float(-1f, 1f), y + Rando.Float(-4f, 4f), persona);
-                                feather5.vSpeed = Rando.Float(-2f, 1.5f);
-                                Feather feather6 = feather5;
-                                feather6.velocity *= 0.9f;
-                                if (leftWall)
-                                    feather5.hSpeed = Rando.Float(-1f, 2f);
-                                else
-                                    feather5.hSpeed = Rando.Float(-2f, 1f);
-                                Level.Add(feather5);
+                                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
+                                {
+                                    Feather feather5 = Feather.New(x + (!leftWall ? -4f : 4f) + Rando.Float(-1f, 1f), y + Rando.Float(-4f, 4f), persona);
+                                    feather5.vSpeed = Rando.Float(-2f, 1.5f);
+                                    Feather feather6 = feather5;
+                                    feather6.velocity *= 0.9f;
+                                    if (leftWall)
+                                        feather5.hSpeed = Rando.Float(-1f, 2f);
+                                    else
+                                        feather5.hSpeed = Rando.Float(-2f, 1f);
+                                    Level.Add(feather5);
+                                }
                             }
                             onWall = false;
                         }
@@ -3454,8 +3466,11 @@ namespace DuckGame
         {
             if (!underwater)
                 return;
-            for (int index = 0; index < num; ++index)
-                Level.Add(new TinyBubble(x + (offDir > 0 ? 6 : -6) * (sliding ? -1 : 1) + Rando.Float(-1f, 1f), top + 7f + Rando.Float(-1f, 1f), Rando.Float(hVel) * offDir, _curPuddle.top + 7f));
+            if (DGRSettings.S_ParticleMultiplier != 0)
+            {
+                for (int index = 0; index < num; ++index)
+                    Level.Add(new TinyBubble(x + (offDir > 0 ? 6 : -6) * (sliding ? -1 : 1) + Rando.Float(-1f, 1f), top + 7f + Rando.Float(-1f, 1f), Rando.Float(hVel) * offDir, _curPuddle.top + 7f));
+            }
         }
 
         public void MakeStars()

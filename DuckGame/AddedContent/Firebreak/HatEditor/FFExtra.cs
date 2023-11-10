@@ -21,6 +21,7 @@ namespace DuckGame
             public static SpriteMap AddMetapixelButton;
             public static SpriteMap Brush;
             public static SpriteMap Cape;
+            public static SpriteMap ColorPicker;
             public static SpriteMap Configuration;
             public static SpriteMap Copy;
             public static SpriteMap Eraser;
@@ -67,6 +68,7 @@ namespace DuckGame
                 AddMetapixelButton = new SpriteMap("ff_icons/add_metapixel", 68, 12);
                 Brush = new SpriteMap("ff_icons/brush", 8, 8);
                 Cape = new SpriteMap("ff_icons/cape", 8, 8);
+                ColorPicker = new SpriteMap("ff_icons/colorPicker", 8, 8);
                 Configuration = new SpriteMap("ff_icons/config", 8, 8);
                 Copy = new SpriteMap("ff_icons/copy", 8, 8);
                 Eraser = new SpriteMap("ff_icons/eraser", 8, 8);
@@ -129,7 +131,8 @@ namespace DuckGame
         public enum CanvasTool
         {
             Brush,
-            Eraser
+            Eraser,
+            ColorPicker
         }
 
         public enum WorkMode

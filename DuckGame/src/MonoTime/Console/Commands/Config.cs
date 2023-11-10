@@ -1,4 +1,5 @@
 ﻿using AddedContent.Firebreak;
+using DuckGame.ConsoleEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,8 @@ namespace DuckGame
     public static partial class DevConsoleCommands
     {
         [Marker.DevConsoleCommand(Description = "Get or Modify config fields from the console")]
-        public static object Config(string fieldId, string serializedValue = null)
+        [return: PrettyPrint]
+        public static object Config([ConfigAutoCompl] string fieldId, string serializedValue = null)
         {
             switch (fieldId.ToUpper())
             {
@@ -42,6 +44,25 @@ namespace DuckGame
             attribute.Value = newVal;
             
             return $"|PINK|{attribute.Member.Name}|WHITE|: |WHITE|[|GREEN|{oldReserializedValue}|WHITE|] to [|GREEN|{newReserializedValue}|WHITE|]";
+        }
+        
+        public class ConfigAutoCompl : AutoCompl
+        {
+            public override IList<string> Get(string word)
+            {
+                string[] suggestions = new string[Marker.AutoConfigAttribute.All.Count + 3];
+
+                suggestions[0] = "%SAVE";
+                suggestions[1] = "%LOAD";
+                suggestions[2] = "%LIST";
+            
+                for (int i = 3; i < suggestions.Length; i++)
+                {
+                    suggestions[i] = Marker.AutoConfigAttribute.All[i - 3].Member.Name;
+                }
+
+                return suggestions;
+            }
         }
     }
 }

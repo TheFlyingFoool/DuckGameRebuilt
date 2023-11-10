@@ -169,11 +169,15 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool IgnoreLevRestrictions = false;
 
+        [Marker.AutoConfig] public static bool SyncChing = false; //this one is for you cah toah <3 -NiK0
+
         [Marker.AutoConfig] public static bool RememberMatchSettings = false;
 
         [Marker.AutoConfig] public static bool CustomHatTeams = false;
 
         [Marker.AutoConfig] public static bool skipOnlineBumper = false;
+
+        [Marker.AutoConfig] public static bool SwitchInput = false;
 
         [Marker.AutoConfig]
         public static bool HideFS = false;
@@ -400,5 +404,24 @@ namespace DuckGame
         
         // the 4chan disease..
         [Marker.AutoConfig] public static bool GreenTextSupport = false;
+
+        [Marker.AutoConfig] public static bool UseDuckShell = true;
+
+        private static bool s_duckShellAutoCompletion = true;
+        
+        [Marker.AutoConfig]
+        public static bool DuckShellAutoCompletion 
+        {
+            get => s_duckShellAutoCompletion;
+            set
+            {
+                s_duckShellAutoCompletion = value;
+                
+                if (!value && DevConsole.LatestPredictionSuggestions?.Length > 0)
+                    DevConsole.LatestPredictionSuggestions = Array.Empty<string>();
+            }
+        }
+
+        [Marker.AutoConfig] public static bool NoConsoleLineLimit = false;
     }
 }
