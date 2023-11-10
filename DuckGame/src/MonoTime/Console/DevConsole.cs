@@ -1516,6 +1516,7 @@ namespace DuckGame
                 76561198416200652UL,    // landon alt
                 76561198104352795UL,    // dord
                 76561198114791325UL,    // collin
+                76561198797606383UL,    // othello7
             };
 
             if (Steam.user is null
