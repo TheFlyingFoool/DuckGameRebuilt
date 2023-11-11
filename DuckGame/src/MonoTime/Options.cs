@@ -118,13 +118,9 @@ namespace DuckGame
             to.Add(_lastCreatedDGRQOLMenu, false);
             to.Add(_lastCreatedDGRHudMenu, false);
             to.Add(_lastCreatedDGREditorMenu, false);
-            #if AutoUpdater
-            #else
             to.Add(_lastCreatedDGRRecorderatorMenu, false);
-            #endif
             to.Add(_lastCreatedDGRDumbShitMenu, false);
-            if (Program.IS_DEV_BUILD)
-                to.Add(_lastCreatedDGRDeveloperMenu, false);
+            if (Program.IS_DEV_BUILD) to.Add(_lastCreatedDGRDeveloperMenu, false);
 
 
             if (accessibilityMenu != null)
