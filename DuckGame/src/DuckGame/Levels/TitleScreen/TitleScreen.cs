@@ -1203,39 +1203,42 @@ namespace DuckGame
                     _enterMultiplayer = true;
                 }
             }
-            for (int index = 0; index < num; ++index)
+            if (DGRSettings.ActualParticleMultiplier != 0)
             {
-                starWait -= Maths.IncFrameTimer();
-                if (starWait < 0)
+                for (int index = 0; index < num; ++index)
                 {
-                    starWait = 0.1f + Rando.Float(0.2f);
-                    Color color = Colors.DGRed;
-                    if (cpick == 1)
-                        color = Colors.DGBlue;
-                    else if (cpick == 2)
-                        color = Colors.DGGreen;
-                    if (Rando.Float(1f) > 0.995f)
-                        color = Colors.DGPink;
-                    particles.Add(new StarParticle()
+                    starWait -= Maths.IncFrameTimer();
+                    if (starWait < 0)
                     {
-                        pos = new Vec2(0f, (int)(Rando.Float(0f, 150f) / 1f)),
-                        speed = new Vec2(Rando.Float(0.5f, 1f), 0f),
-                        color = color,
-                        flicker = Rando.Float(100f, 230f)
-                    });
-                    ++cpick;
-                    if (cpick > 2)
-                        cpick = 0;
+                        starWait = 0.1f + Rando.Float(0.2f);
+                        Color color = Colors.DGRed;
+                        if (cpick == 1)
+                            color = Colors.DGBlue;
+                        else if (cpick == 2)
+                            color = Colors.DGGreen;
+                        if (Rando.Float(1f) > 0.995f)
+                            color = Colors.DGPink;
+                        particles.Add(new StarParticle()
+                        {
+                            pos = new Vec2(0f, (int)(Rando.Float(0f, 150f) / 1f)),
+                            speed = new Vec2(Rando.Float(0.5f, 1f), 0f),
+                            color = color,
+                            flicker = Rando.Float(100f, 230f)
+                        });
+                        ++cpick;
+                        if (cpick > 2)
+                            cpick = 0;
+                    }
+                    List<StarParticle> starParticleList = new List<StarParticle>();
+                    foreach (StarParticle particle in particles)
+                    {
+                        particle.pos += particle.speed * (float)(0.5f + (1 - extraFade) * 0.5f);
+                        if (particle.pos.x > 300 && !_enterCredits || particle.pos.x > 680)
+                            starParticleList.Add(particle);
+                    }
+                    foreach (StarParticle starParticle in starParticleList)
+                        particles.Remove(starParticle);
                 }
-                List<StarParticle> starParticleList = new List<StarParticle>();
-                foreach (StarParticle particle in particles)
-                {
-                    particle.pos += particle.speed * (float)(0.5f + (1 - extraFade) * 0.5f);
-                    if (particle.pos.x > 300 && !_enterCredits || particle.pos.x > 680)
-                        starParticleList.Add(particle);
-                }
-                foreach (StarParticle starParticle in starParticleList)
-                    particles.Remove(starParticle);
             }
             if (!_enterMultiplayer && !_enterEditor && !_enterLibrary)
             {
