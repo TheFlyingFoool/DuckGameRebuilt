@@ -8,14 +8,14 @@ namespace DuckGame
     public class SequenceCrate : Crate, ISequenceItem
     {
         public int _variant;
-        public static Dictionary<int, DuckPersona> _variantPersonaMap = new()
+        public static DuckPersona[] _variantPersonas =
         {
-            {1, Persona.Duck7},
-            {2, Persona.Duck6},
-            {3, Persona.Duck2},
-            {4, Persona.Duck3},
+            Persona.Duck7,
+            Persona.Duck6,
+            Persona.Duck2,
+            Persona.Duck3
         };
-        
+
         public SequenceCrate(float xpos, float ypos)
           : base(xpos, ypos)
         {
@@ -30,7 +30,7 @@ namespace DuckGame
             if (DGRSettings.SequenceCrateRetexture)
             {
                 int var = Math.Abs((int)(x / 11f) * 11 + (int)(y / 11f) * 11);
-                _variant = 1 + var % 4;
+                _variant = var % 4;
                 _spriteAccessor = new SpriteMap($"seq_crate_{_variant}", 16, 16);
                 graphic = _spriteAccessor;
                 _onHitSFX = "swipe";

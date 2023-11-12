@@ -101,7 +101,7 @@ namespace DuckGame
             {
                 if (this is SequenceCrate sc)
                 {
-                    Feather woodDebris = Feather.New(hitPos.x, hitPos.y, SequenceCrate._variantPersonaMap[sc._variant]);
+                    Feather woodDebris = Feather.New(hitPos.x, hitPos.y, SequenceCrate._variantPersonas[sc._variant]);
                     woodDebris.hSpeed = -bullet.travelDirNormalized.x * 2f * (Rando.Float(1f) + 0.3f);
                     woodDebris.vSpeed = (-bullet.travelDirNormalized.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
                     Level.Add(woodDebris);
@@ -141,7 +141,7 @@ namespace DuckGame
             {
                 if (this is SequenceCrate sc)
                 {
-                    Feather woodDebris = Feather.New(exitPos.x, exitPos.y, SequenceCrate._variantPersonaMap[sc._variant]);
+                    Feather woodDebris = Feather.New(exitPos.x, exitPos.y, SequenceCrate._variantPersonas[sc._variant]);
                     woodDebris.hSpeed = (bullet.travelDirNormalized.x * 3f * (Rando.Float(1f) + 0.3f));
                     woodDebris.vSpeed = (bullet.travelDirNormalized.y * 3f * (Rando.Float(1f) + 0.3f) - (Rando.Float(2f) - 1f));
                     Level.Add(woodDebris);
