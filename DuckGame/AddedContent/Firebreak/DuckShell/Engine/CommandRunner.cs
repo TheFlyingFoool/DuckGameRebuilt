@@ -44,60 +44,67 @@ namespace DuckGame.ConsoleEngine
             if (commandSegments.Length == 0)
                 return ValueOrException<object>.FromValue(null);
 
-            if (commandSegments.Contains(";"))
+            try
             {
-                List<string>[] commandSequence = new List<string>[commandSegments.Count(x => x == ";") + 1];
+                if (commandSegments.Contains(";"))
+                {
+                    List<string>[] commandSequence = new List<string>[commandSegments.Count(x => x == ";") + 1];
 
-                for (int i = 0; i < commandSequence.Length; i++)
-                {
-                    commandSequence[i] = new List<string>();
-                }
-            
-                for (int i=0, j=0; i < commandSegments.Length; i++)
-                {
-                    string segment = commandSegments[i];
-                
-                    if (segment == ";")
+                    for (int i = 0; i < commandSequence.Length; i++)
                     {
-                        j++;
-                        continue;
+                        commandSequence[i] = new List<string>();
                     }
 
-                    commandSequence[j].Add(segment);
+                    for (int i = 0, j = 0; i < commandSegments.Length; i++)
+                    {
+                        string segment = commandSegments[i];
+
+                        if (segment == ";")
+                        {
+                            j++;
+                            continue;
+                        }
+
+                        commandSequence[j].Add(segment);
+                    }
+
+                    ValueOrException<string> accumulativeResult = "";
+                    foreach (List<string> cmd in commandSequence)
+                    {
+                        if (cmd.Count == 0)
+                            continue;
+
+                        ValueOrException<string[]> cmdParseResult = ParseCodeBlocks(cmd);
+
+                        ValueOrException<object?> result = null!;
+
+                        cmdParseResult.TryUse(
+                            tokens => result = RunFromTokens(tokens),
+                            exception => result = exception
+                        );
+
+                        ValueOrException<string> stringResult = result.Failed
+                            ? result.Error
+                            : result.Value?.ToString();
+
+                        accumulativeResult.AppendResult(stringResult);
+                    }
+
+                    return accumulativeResult.Failed
+                        ? accumulativeResult.Error
+                        : accumulativeResult.Value;
                 }
 
-                ValueOrException<string> accumulativeResult = "";
-                foreach (List<string> cmd in commandSequence)
-                {
-                    if (cmd.Count == 0)
-                        continue;
-                    
-                    ValueOrException<string[]> cmdParseResult = ParseCodeBlocks(cmd);
-                
-                    ValueOrException<object?> result = null!;
-                
-                    cmdParseResult.TryUse(
-                        tokens => result = RunFromTokens(tokens),
-                        exception => result = exception
-                    );
+                ValueOrException<string[]> parseResult = ParseCodeBlocks(commandSegments);
 
-                    ValueOrException<string> stringResult = result.Failed
-                        ? result.Error
-                        : result.Value?.ToString();
-
-                    accumulativeResult.AppendResult(stringResult);
-                }
-
-                return accumulativeResult.Failed
-                    ? accumulativeResult.Error
-                    : accumulativeResult.Value;
+                return parseResult.Failed
+                    ? parseResult.Error
+                    : RunFromTokens(parseResult.Value);
             }
-
-            ValueOrException<string[]> parseResult = ParseCodeBlocks(commandSegments);
-        
-            return parseResult.Failed 
-                ? parseResult.Error 
-                : RunFromTokens(parseResult.Value);
+            catch (Exception e)
+            {
+                return e;
+            }
         }
 
         /* ~Firebreak: TODO
@@ -237,11 +244,14 @@ namespace DuckGame.ConsoleEngine
                         }
                         else throw new InvalidOperationException();
                     }
-                    else if (commandArgs.Length == 0)
+                    else if (i >= commandArgs.Length)
                     {
                         return new Exception($"Missing Argument: {parameterInfo.Name}");
                     }
-                    else argString = commandArgs[i];
+                    else
+                    {
+                        argString = commandArgs[i];
+                    }
 
                     if (parseResult is null)
                     {

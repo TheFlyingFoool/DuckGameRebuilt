@@ -4,10 +4,6 @@ namespace DuckGame
 {
     public static class DGRDevs
     {
-        public static void DrawInfo(Vec2 position, DGRebuiltDeveloper dev)
-        {
-            string[] s = Extensions.SplitByLength(dev.Info);
-        }
         public static DGRebuiltDeveloper Collin = new()
         {
             DisplayName = "Collin",
@@ -35,7 +31,7 @@ namespace DuckGame
             DevRole = DGRebuiltDeveloper.Role.LeadDeveloper,
             DevItem = typeof(NiK0Gun),
             SteamID = 76561198806685720,
-            Info = "NiK0. One of the two lead developers, NiK0 made a lot of QOL additions and has fixed most DGR specific issues, he made almost every single DGR specific item and all the dev weapons, the VGM Music system, the ambient particle system, the weather system, the Heat Wave effect on lava, along with several optimizations to the code all around and guiding the DGR team"
+            Info = "NiK0. One of the two lead developers, NiK0 made a lot of QOL additions and fixed most DGR specific issues, he made almost every single DGR specific item and all the dev weapons, the VGM Music system, the ambient particle system, the weather system, the Heat Wave effect on lava, along with several optimizations to the code all around."
         };
 
         public static DGRebuiltDeveloper Firebreak = new()
@@ -55,7 +51,7 @@ namespace DuckGame
             DevRole = DGRebuiltDeveloper.Role.ActiveContributor,
             DevItem = typeof(othello7Gun),
             SteamID = 76561198797606383,
-            Info = "othello7. Active contributor othello7 has helped testing and optimizing the game, he has helped us optimize DGR to its fullest now being able to run it on a raspberry pi 3. othello7 transcribed most DG songs into VGM massively reducing DGR's filesize"
+            Info = "othello7. Active contributor othello7 has helped testing and optimizing the game, he has helped us optimize DGR to its fullest now being able to run it on a raspberry pi 3. othello7 also transcribed most DG songs into VGM massively reducing DGR's filesize"
         };
 
         public static DGRebuiltDeveloper Hyeve = new()

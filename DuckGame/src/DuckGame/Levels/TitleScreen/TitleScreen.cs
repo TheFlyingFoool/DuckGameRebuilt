@@ -578,13 +578,9 @@ namespace DuckGame
             _optionsGroup.Add(Options.TEMPDGREDITOR, false);
             _optionsGroup.Add(Options.TEMPDGRQOL, false);
             _optionsGroup.Add(Options.TEMPDGRMISC, false);
-            if (Program.IS_DEV_BUILD)
-                _optionsGroup.Add(Options.TEMPDGRDEV, false);
+            if (Program.IS_DEV_BUILD) _optionsGroup.Add(Options.TEMPDGRDEV, false);
             _optionsGroup.Add(Options.TEMPDGROPTIM, false);
-            #if AutoUpdater
-            #else
             _optionsGroup.Add(Options.TEMPDGRRECORDERATOR, false);
-            #endif
             _optionsGroup.Add(_audioMenu, false);
             if (_accessibilityMenu != null)
                 _optionsGroup.Add(_accessibilityMenu, false);
@@ -1040,10 +1036,6 @@ namespace DuckGame
             Add(new Spring(90f, 340, 0.32f));
             Add(new Spring(229f, 340, 0.32f));
             Add(new VerticalDoor(270f, 160f)
-            {
-                filterDefault = true
-            });
-            Add(new VerticalDoor(51, 340)
             {
                 filterDefault = true
             });
