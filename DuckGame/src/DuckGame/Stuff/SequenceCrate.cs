@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NAudio.MediaFoundation;
+using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -40,6 +41,20 @@ namespace DuckGame
                 _onDestroySFX = "rainpop"; // "page", "little_punch", "lightMatch"
             }
             base.Update();
+        }
+        public override void ExitHit(Bullet bullet, Vec2 exitPos)
+        {
+            if (DGRSettings.SequenceCrateRetexture)
+            {
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++index)
+                {
+                    Feather woodDebris = Feather.New(exitPos.x, exitPos.y, _variantPersonas[_variant]);
+                    woodDebris.hSpeed = (bullet.travelDirNormalized.x * 3f * (Rando.Float(1f) + 0.3f));
+                    woodDebris.vSpeed = (bullet.travelDirNormalized.y * 3f * (Rando.Float(1f) + 0.3f) - (Rando.Float(2f) - 1f));
+                    Level.Add(woodDebris);
+                }
+            }
+            else base.ExitHit(bullet, exitPos);
         }
         protected override bool OnDestroy(DestroyType type = null)
         {
