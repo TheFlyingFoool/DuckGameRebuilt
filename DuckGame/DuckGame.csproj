@@ -526,6 +526,10 @@
     <Compile Include="Recorderator\Priority\BitCrusher.cs" />
     <Compile Include="Recorderator\Priority\updateCorderator.cs" />
     <Compile Include="Recorderator\SubClassed\SomethingSomethingVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\DGRVessels\IceSpikeVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\DGRVessels\WumpBazookaVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\DGRVessels\WumpMagnumVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\DGRVessels\WumpPistolVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\GrappleVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\KnightHelmetVessel.cs" />
     <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\JetpackVessel.cs" />
@@ -2405,6 +2409,9 @@
       <Project>{d63ad3fc-dcf0-4db6-b944-5d828a10ccb8}</Project>
       <Name>Steam</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Recorderator\SubClassed\Vessels\a_OLD\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="BeforeBuild">

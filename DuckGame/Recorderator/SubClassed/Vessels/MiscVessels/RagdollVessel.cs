@@ -35,6 +35,14 @@ namespace DuckGame
             else prevBuffer.Write((byte)199);
             return prevBuffer;
         }
+        public override void DoUpdateThing()
+        {
+            Ragdoll rd = (Ragdoll)t;
+            if (rd._duck != null)
+            {
+                base.DoUpdateThing();
+            }
+        }
         public override void PlaybackUpdate()
         {
 

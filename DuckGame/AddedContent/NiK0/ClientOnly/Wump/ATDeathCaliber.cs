@@ -7,6 +7,7 @@
 
         public ATDeathCaliber()
         {
+            forcedIndex = 253;
             accuracy = 1f;
             range = 1200;
             penetration = 9f;

@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace DuckGame
 {
     public abstract class AmmoType
     {
+        public byte forcedIndex; //recorderator jank ignore it -NiK0 its just a terrible solution to a terrible problem
         public float accuracy;
         public float range;
         public float rangeVariation;

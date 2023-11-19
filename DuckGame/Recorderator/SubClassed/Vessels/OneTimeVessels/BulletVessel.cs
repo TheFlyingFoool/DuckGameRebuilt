@@ -16,6 +16,8 @@ namespace DuckGame
             tatchedTo.Add(typeof(PelletBullet));
             tatchedTo.Add(typeof(LaserBulletOrange));
             tatchedTo.Add(typeof(LaserBulletPurple));
+            tatchedTo.Add(typeof(WumpMagnumbullet));
+            tatchedTo.Add(typeof(WumpMissile));
             Bullet b = (Bullet)th;
             if (b != null)
             {
@@ -57,7 +59,27 @@ namespace DuckGame
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
             Vec2 v = b.ReadVec2();
-            AmmoType at = (AmmoType)Activator.CreateInstance(AmmoType.indexTypeMap[b.ReadByte()]);
+            byte ammotypeIndex = b.ReadByte();
+            AmmoType at;
+            if (ammotypeIndex > 240) //AHHHHHHHHH -nIk0
+            {
+                switch (ammotypeIndex)
+                {
+                    case 255:
+                        at = new ATWumpMagnum();
+                        break;
+                    case 254:
+                        at = new ATWumpMissile();
+                        break;
+                    case 253:
+                        at = new ATDeathCaliber();
+                        break;
+                    default:
+                        throw new Exception("This replay has some broken bullet type, please report it to a dev <3");
+                }
+
+            }
+            else at = (AmmoType)Activator.CreateInstance(AmmoType.indexTypeMap[ammotypeIndex]);
             float angle = b.ReadFloat();
             bulletRange = b.ReadFloat();
             bulletPenetration = b.ReadFloat();
@@ -91,7 +113,9 @@ namespace DuckGame
         public override BitBuffer RecSerialize(BitBuffer prevBuffer)
         {
             prevBuffer.Write(position);
-            prevBuffer.Write(AmmoType.indexTypeMap[zeAmmo.GetType()]);
+
+            if (zeAmmo.forcedIndex == 0) prevBuffer.Write(AmmoType.indexTypeMap[zeAmmo.GetType()]);
+            else prevBuffer.Write(zeAmmo.forcedIndex);
             prevBuffer.Write(ang);
             prevBuffer.Write(bulletRange);
             prevBuffer.Write(bulletPenetration);
