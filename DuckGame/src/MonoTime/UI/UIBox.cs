@@ -427,7 +427,6 @@ namespace DuckGame
             if (_isMenu && DGRSettings.dubberspeed && _currentMenuItemSelection != null)
             {
                 bool isUIControlConfig = idStr == "cc";
-                bool isMainPauseMenu = idStr == "mpm";
                 if (!isUIControlConfig)
                 {
                     int dubberOffset = _currentMenuItemSelection.FindAll(ui => ui is UIConnectionInfo).Count;
@@ -443,8 +442,6 @@ namespace DuckGame
                         else if (j < 9)
                             index = j + 1;
                         float xAdjust = -1f;
-                        if (isMainPauseMenu)
-                            xAdjust = 0.25f;
                         if (!item.selected && index != -1)
                             Graphics.DrawString(index.ToString(), new Vec2(Layer.HUD.camera.width / 2f - parent.halfWidth - xAdjust, item.top - item.halfHeight), Color.White * 0.4f, 1);
                     }

@@ -903,7 +903,7 @@ namespace DuckGame
             _modsDisabledMenu.SetBackFunction(new UIMenuActionCloseMenu(_pauseGroup));
             _modsDisabledMenu.Close();
             _pauseGroup.Add(_modsDisabledMenu, false);
-            UIDivider component41 = new UIDivider(true, 0.8f);
+            UIDivider component41 = new UIDivider(true, 0.75f);
             component41.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
             _mainPauseMenu.Add(component41, true);
             component41.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(_pauseGroup)), true);
