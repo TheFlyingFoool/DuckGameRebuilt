@@ -436,16 +436,19 @@ namespace DuckGame
 
             if (d.listening) value |= 2048;
             if (d.localSpawnVisible) value |= 1024;
-            if (d.inputProfile.Down("STRAFE") || d.inputProfile.Pressed("STRAFE")) value |= 512;
-            if (d.inputProfile.Down("RAGDOLL") || d.inputProfile.Pressed("RAGDOLL")) value |= 256;
-            if (d.inputProfile.Down("GRAB") || d.inputProfile.Pressed("GRAB")) value |= 128;
-            if (d.inputProfile.Down("SHOOT") || d.inputProfile.Pressed("SHOOT")) value |= 64;
-            if (d.inputProfile.Down("LEFT") || d.inputProfile.Pressed("LEFT")) value |= 32;
-            if (d.inputProfile.Down("RIGHT") || d.inputProfile.Pressed("RIGHT")) value |= 16;
-            if (d.inputProfile.Down("DOWN") || d.inputProfile.Pressed("DOWN")) value |= 8;
-            if (d.inputProfile.Down("UP") || d.inputProfile.Pressed("UP")) value |= 4;
-            if (d.inputProfile.Down("QUACK") || d.inputProfile.Pressed("QUACK")) value |= 2;
-            if (d.inputProfile.Down("JUMP") || d.inputProfile.Pressed("JUMP")) value |= 1;
+            if (d.inputProfile != null)
+            {
+                if (d.inputProfile.Down("STRAFE") || d.inputProfile.Pressed("STRAFE")) value |= 512;
+                if (d.inputProfile.Down("RAGDOLL") || d.inputProfile.Pressed("RAGDOLL")) value |= 256;
+                if (d.inputProfile.Down("GRAB") || d.inputProfile.Pressed("GRAB")) value |= 128;
+                if (d.inputProfile.Down("SHOOT") || d.inputProfile.Pressed("SHOOT")) value |= 64;
+                if (d.inputProfile.Down("LEFT") || d.inputProfile.Pressed("LEFT")) value |= 32;
+                if (d.inputProfile.Down("RIGHT") || d.inputProfile.Pressed("RIGHT")) value |= 16;
+                if (d.inputProfile.Down("DOWN") || d.inputProfile.Pressed("DOWN")) value |= 8;
+                if (d.inputProfile.Down("UP") || d.inputProfile.Pressed("UP")) value |= 4;
+                if (d.inputProfile.Down("QUACK") || d.inputProfile.Pressed("QUACK")) value |= 2;
+                if (d.inputProfile.Down("JUMP") || d.inputProfile.Pressed("JUMP")) value |= 1;
+            }
             addVal("input", value);
 
             Vec2 vc = d.tounge;

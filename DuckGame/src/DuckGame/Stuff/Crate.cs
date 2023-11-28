@@ -45,8 +45,7 @@ namespace DuckGame
             Level.Remove(this);
             SFX.Play(_onDestroySFX);
             Vec2 vec2 = Vec2.Zero;
-            if (type is DTShot)
-                vec2 = (type as DTShot).bullet.travelDirNormalized;
+            if (type is DTShot) vec2 = (type as DTShot).bullet.travelDirNormalized;
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(x - 8f + Rando.Float(16f), y - 8f + Rando.Float(16f));
@@ -69,49 +68,45 @@ namespace DuckGame
             if (with is PhysicalBullet)
             {
                 Bullet bullet = (with as PhysicalBullet).bullet;
-                if (bullet != null && bullet.ammo is ATGrenade)
-                    return true;
+                if (bullet != null && bullet.ammo is ATGrenade) return true;
             }
             return false;
         }
 
         public override void SolidImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (CheckForPhysicalBullet(with))
-                Destroy(new DTShot((with as PhysicalBullet).bullet));
-            else
-                base.SolidImpact(with, from);
+            if (CheckForPhysicalBullet(with)) Destroy(new DTShot((with as PhysicalBullet).bullet));
+            else base.SolidImpact(with, from);
         }
 
         public override void Impact(MaterialThing with, ImpactedFrom from, bool solidImpact)
         {
-            if (CheckForPhysicalBullet(with))
-                Destroy(new DTShot((with as PhysicalBullet).bullet));
-            else
-                base.Impact(with, from, solidImpact);
+            if (CheckForPhysicalBullet(with)) Destroy(new DTShot((with as PhysicalBullet).bullet));
+            else base.Impact(with, from, solidImpact);
         }
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (_hitPoints <= 0)
-                return base.Hit(bullet, hitPos);
-            if (bullet.isLocal && owner == null)
-                Fondle(this, DuckNetwork.localConnection);
-            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++index)
+            if (_hitPoints <= 0) return base.Hit(bullet, hitPos);
+            if (bullet.isLocal && owner == null) Fondle(this, DuckNetwork.localConnection);
+
+            if (this is SequenceCrate sc && DGRSettings.SequenceCrateRetexture)
             {
-                if (this is SequenceCrate sc)
+                for (int i = 0; i < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++i)
                 {
-                    Feather woodDebris = Feather.New(hitPos.x, hitPos.y, SequenceCrate._variantPersonaMap[sc._variant]);
+                    Feather woodDebris = Feather.New(hitPos.x, hitPos.y, SequenceCrate._variantPersonas[sc._variant]);
                     woodDebris.hSpeed = -bullet.travelDirNormalized.x * 2f * (Rando.Float(1f) + 0.3f);
                     woodDebris.vSpeed = (-bullet.travelDirNormalized.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
                     Level.Add(woodDebris);
                 }
-                else
+            }
+            else
+            {
+                for (int i = 0; i < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++i)
                 {
                     WoodDebris woodDebris = WoodDebris.New(hitPos.x, hitPos.y);
                     woodDebris.hSpeed = -bullet.travelDirNormalized.x * 2f * (Rando.Float(1f) + 0.3f);
-                    woodDebris.vSpeed = (-bullet.travelDirNormalized.y * 2f * (Rando.Float(1f) + 0.3f)) -
-                                        Rando.Float(2f);
+                    woodDebris.vSpeed = (-bullet.travelDirNormalized.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
                     Level.Add(woodDebris);
                 }
             }
@@ -139,20 +134,10 @@ namespace DuckGame
         {
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++index)
             {
-                if (this is SequenceCrate sc)
-                {
-                    Feather woodDebris = Feather.New(exitPos.x, exitPos.y, SequenceCrate._variantPersonaMap[sc._variant]);
-                    woodDebris.hSpeed = (bullet.travelDirNormalized.x * 3f * (Rando.Float(1f) + 0.3f));
-                    woodDebris.vSpeed = (bullet.travelDirNormalized.y * 3f * (Rando.Float(1f) + 0.3f) - (Rando.Float(2f) - 1f));
-                    Level.Add(woodDebris);
-                }
-                else
-                {
-                    WoodDebris woodDebris = WoodDebris.New(exitPos.x, exitPos.y);
-                    woodDebris.hSpeed = (bullet.travelDirNormalized.x * 3f * (Rando.Float(1f) + 0.3f));
-                    woodDebris.vSpeed = (bullet.travelDirNormalized.y * 3f * (Rando.Float(1f) + 0.3f) - (Rando.Float(2f) - 1f));
-                    Level.Add(woodDebris);
-                }
+                WoodDebris woodDebris = WoodDebris.New(exitPos.x, exitPos.y);
+                woodDebris.hSpeed = (bullet.travelDirNormalized.x * 3f * (Rando.Float(1f) + 0.3f));
+                woodDebris.vSpeed = (bullet.travelDirNormalized.y * 3f * (Rando.Float(1f) + 0.3f) - (Rando.Float(2f) - 1f));
+                Level.Add(woodDebris);
             }
         }
 

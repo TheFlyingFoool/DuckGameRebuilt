@@ -7,7 +7,8 @@ namespace DuckGame
     {
         [Marker.DevConsoleCommand(Description = "Like the [rep] command but allows you to " +
                                                 "declare a variable that'll be replaced with " +
-                                                "the current execution cycle")]
+                                                "the current execution cycle",
+            To = ImplementTo.DuckHack)]
         public static string For(string variableName, int times, string command)
         {
             for (int i = 0; i < times; i++)

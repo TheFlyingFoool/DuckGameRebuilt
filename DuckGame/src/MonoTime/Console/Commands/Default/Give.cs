@@ -1,4 +1,5 @@
 ﻿using AddedContent.Firebreak;
+using DuckGame.ConsoleEngine;
 
 namespace DuckGame
 {
@@ -6,7 +7,7 @@ namespace DuckGame
     public static partial class DevConsoleCommands
     {
         [Marker.DevConsoleCommand(Description = "Gives a player an item by name", IsCheat = true)]
-        public static void Give(Profile player, Holdable item, string arguments = "")
+        public static void Give(Profile player, Holdable item, [AutoCompl("i", "h", "ph", "e")] string arguments = "")
         {
             bool noHold = false;
             

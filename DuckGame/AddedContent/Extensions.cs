@@ -1,4 +1,5 @@
 ﻿using AddedContent.Firebreak;
+using DuckGame.ConsoleEngine;
 using QRCoder;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -73,6 +74,49 @@ namespace DuckGame
             }
 
             return th;
+        }
+        
+        // (Maths.FastSin((c * Maths.PI * t) - (Maths.PI * 0.5f)) + 1) * 0.5f
+        // where c = cycle constant
+        // where t = time
+        // -firebreak: someone implement this at some point for global cycles
+        
+        public static string SetLengthLogically(this string str, int newLength)
+        {
+            string originalJustInCase = str;
+            
+            if (LookingGood()) return str;
+            
+            // round one - fuck vowels
+            str = Regex.Replace(str, @"[iouae]", "", RegexOptions.IgnoreCase);
+            
+            if (LookingGood()) return str;
+            
+            // round two - merge duplicates
+            str = Regex.Replace(str, @"(.)\1{1,}", "$1");
+            
+            if (LookingGood()) return str;
+            
+            // round three - remove uncommon letters
+            str = Regex.Replace(str, @"(?<!^)[VKXJQZ]", "", RegexOptions.IgnoreCase);
+            
+            if (LookingGood()) return str;
+
+            // last ditch effort. just crop the damn thing
+            return str.Substring(0, newLength);
+            
+            bool LookingGood()
+            {
+                if (str.Length == newLength)
+                    return true;
+                else if (str.Length < newLength)
+                {
+                    str = str.PadLeft(newLength);
+                    return true;
+                }
+                
+                return false;
+            }
         }
 
         public static int AutoBlockSortred(AutoBlock b1, AutoBlock b2)
@@ -585,12 +629,7 @@ namespace DuckGame
                     return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 7);
 
                 case "me":
-                    return GetMe();
-
-                case "nearest":
-                    return Profiles.activeNonSpectators
-                        .OrderBy(x => Vec2.Distance(x.duck.position, GetMe().duck.position))
-                        .FirstOrDefault(x => x != GetMe());
+                    return Profiles.active.First(x => !Network.isActive || x.connection == DuckNetwork.localConnection);
 
                 default:
                     return Profiles.active.TryFirst(
@@ -638,6 +677,24 @@ namespace DuckGame
             }
 
             return null;
+        }
+        
+        public static void AppendResult(this ValueOrException<string> @this, ValueOrException<string> addedResult)
+        {
+            if (addedResult.Failed)
+            {
+                @this.Failed = true;
+                @this.Error = addedResult.Error;
+                @this.Value = null!;
+            }
+        
+            if (@this.Failed)
+                return;
+
+            if (string.IsNullOrWhiteSpace(@this.Value))
+                @this.Value = addedResult.Value;
+            else if (!string.IsNullOrWhiteSpace(addedResult.Value)) 
+                @this.Value += $"\n{addedResult.Value}";
         }
 
         public static T ChooseRandom<T>(this IEnumerable<T> collection)

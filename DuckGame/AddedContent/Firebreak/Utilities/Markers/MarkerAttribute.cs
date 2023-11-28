@@ -1,6 +1,7 @@
 using DuckGame;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace AddedContent.Firebreak
@@ -24,7 +25,7 @@ namespace AddedContent.Firebreak
                 MemberInfo[] typeMembers = type.GetMembers(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
                         
                 memberInfos.Add(type);
-                memberInfos.AddRange(typeMembers);
+                memberInfos.AddRange(typeMembers.Where(x => x is not TypeInfo));
             }
 
             for (int i = 0; i < memberInfos.Count; i++)

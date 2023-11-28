@@ -207,6 +207,7 @@ namespace DuckGame
             bool bust = false;
             if (_capeTexture != null)
             {
+                _capeTexture.skipSpriteAtlas = true;
                 float deep = Graphics.AdjustDepth(depth);
                 float uvPart = 1f / (capePeices.Count - 1);
                 float uvInc = 0f;

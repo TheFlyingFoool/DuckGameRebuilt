@@ -73,7 +73,13 @@ namespace DuckGame
         public string destroyedReason = "NONE";
         public static string somethingCrash;
 
-        public int IndexPriority = 0; //this is for backwards compatability stuff
+        //this is for backwards compatability stuff -NiK0
+
+        //stuff with higher IndexPriority gets indexed later
+        //theres like 50ish items at the time of writing this with IndxP 0 so if an item with IndxP 1 appears it'll
+        //be put at index 51 or something in the list, otherwise it'd be put somewhere random(not really) in the list moving every other
+        //item along with it and old replays dont like having their indexes messed with
+        public int IndexPriority = 0; 
 
         public virtual void OnRemove()
         {
@@ -204,6 +210,7 @@ namespace DuckGame
                 {
                     Type t = zTyped[i];
                     if (t == typeof(SomethingSomethingVessel) || t == typeof(NilVessel)) continue;
+                    Main.SpecialCode = $"vessel:{t.Name}  added:{added}  count:{count}  cPriori:{cPriori}";
                     object[] args = new object[] { null };
                     SomethingSomethingVessel vs = (SomethingSomethingVessel)Activator.CreateInstance(t, args);
                     if (vs.IndexPriority != cPriori) continue;

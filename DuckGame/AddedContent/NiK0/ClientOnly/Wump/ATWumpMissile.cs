@@ -15,6 +15,7 @@ namespace DuckGame
     {
         public ATWumpMissile()
         {
+            forcedIndex = 254;
             accuracy = 1f;
             range = 850f;
             penetration = 0.4f;

@@ -1,4 +1,6 @@
 ﻿using System;
+using AddedContent.Firebreak;
+using DuckGame.ConsoleEngine;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,13 +33,16 @@ namespace DuckGame
         public bool HasArg(string pName)
         {
             Argument obj = arguments.FirstOrDefault(x => x.name == pName);
-            return obj is { value: { } };
+            return obj is not null;
         }
 
         public T Arg<T>(string pName)
         {
             Argument obj = arguments.FirstOrDefault(x => x.name == pName);
-            return obj is { value: { } } ? (T)obj.value : default;
+            if (obj is null)
+                return default;
+
+            return (T) (obj.optional && obj.value is null ? obj.defaultValue : obj.value);
         }
 
         public string fullCommandName => parent != null ? $"{parent.fullCommandName} {keyword}" : keyword;
@@ -208,6 +213,7 @@ namespace DuckGame
             public bool optional;
             public bool takesMultispaceString;
             protected string _parseFailMessage = "Argument was in wrong format. ";
+            public object defaultValue;
 
             public Argument(string pName, bool pOptional)
             {
@@ -322,6 +328,27 @@ namespace DuckGame
             }
         }
 
+        public class Array : Argument
+        {
+            private readonly Type _arrayType;
+
+            public Array(string pName, Type arrayType, bool pOptional) : base(pName, pOptional)
+            {
+                _arrayType = arrayType;
+            }
+
+            public override object Parse(string pValue)
+            {
+                ITypeInterpreter arrayInterpreter = Commands.console.Shell.TypeInterpreterModulesMap[typeof(System.Array)];
+                ValueOrException<object> parseResult = arrayInterpreter.ParseString(pValue, _arrayType, Commands.console.Shell);
+
+                if (parseResult.Failed)
+                    return Error(parseResult.Error.Message);
+
+                return parseResult.Value;
+            }
+        }
+
         public class Enum : Argument
         {
             public Enum(string pName, Type pEnumType, bool pOptional = false)
@@ -396,6 +423,25 @@ namespace DuckGame
                 type = typeof(Level);
                 takesMultispaceString = true;
             }
+            
+            // this is so things outside can get this list too ~FB
+            public static Dictionary<string, Func<DuckGame.Level>> SpecialLevelLookup = new()
+            {
+                {"fb", () => new SimRenderer()},
+                {"fbtest", () => new TestLev()},
+                {"hatpreview", () => new HatPreviewLevel()},
+                {"ff", () => new FeatherFashion()},
+                {"cord", () => new RecorderationSelector()},
+                {"dev", () => new DevTestLev()},
+                {"title", () => new TitleScreen()},
+                {"rockintro", () => new RockIntro(new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel)))},
+                {"rockthrow", () => new RockScoreboard()},
+                {"finishscreen", () => new RockScoreboard(mode: ScoreBoardMode.ShowWinner, afterHighlights: true)},
+                {"highlights", () => new HighlightLevel()},
+                {"next", () => new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel))},
+                {"editor", () => Main.editor},
+                {"arcade", () => new ArcadeLevel(Content.GetLevelID("arcade"))}
+            };
 
             public override object Parse(string pValue)
             {
@@ -408,44 +454,9 @@ namespace DuckGame
 
                     return new GameLevel("RANDOM", seedVal);
                 }
-                switch (pValue)
-                {
-                    case "fb":
-                        return new SimRenderer();
-                    case "fbtest":
-                        return new TestLev();
-                    case "hatpreview":
-                        return new HatPreviewLevel();
-                    case "ff":
-                        return new FeatherFashion();
-                    case "rdt":
-                    case "cord":
-                    case "rec":
-                        return new RecorderationSelector();
-                    case "dev":
-                        string devfilepath = Program.GameDirectory + "Content\\levels\\devtestlev.lev";
-                        if (File.Exists(devfilepath))
-                        {
-                            return new DevTestLev();
-                        }
-                        return Error($"dev level was not found.");
-                    case "title":
-                        return new TitleScreen();
-                    case "rockintro":
-                        return new RockIntro(new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel)));
-                    case "rockthrow":
-                        return new RockScoreboard();
-                    case "finishscreen":
-                        return new RockScoreboard(mode: ScoreBoardMode.ShowWinner, afterHighlights: true);
-                    case "highlights":
-                        return new HighlightLevel();
-                    case "next":
-                        return new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel));
-                    case "editor":
-                        return Main.editor;
-                    case "arcade":
-                        return new ArcadeLevel(Content.GetLevelID("arcade"));
-                }
+
+                if (SpecialLevelLookup.TryGetValue(pValue, out Func<DuckGame.Level> specialLevelInitializer))
+                    return specialLevelInitializer.Invoke();
 
                 if (!pValue.EndsWith(".lev"))
                     pValue += ".lev";
@@ -533,6 +544,8 @@ namespace DuckGame
                 arg = new Layer(name, optional);
             else if (typeof(System.Enum).IsAssignableFrom(type))
                 arg = new Enum(name, type, optional);
+            else if (typeof(System.Array).IsAssignableFrom(type))
+                arg = new Array(name, type, optional);
             else
                 throw new Exception($"Parameter type of [{type.FullName}] is not supported");
 

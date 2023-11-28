@@ -7,6 +7,7 @@
 
         public ATWumpMagnum()
         {
+            forcedIndex = 255;
             accuracy = 1f;
             range = 400f;
             penetration = 2f;

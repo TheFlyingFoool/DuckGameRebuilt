@@ -24,6 +24,7 @@
 
         public static void Update()
         {
+            if (Recorderator.Playing) return;
             foreach (SmallFire litBy in Level.current.things[typeof(SmallFire)])
             {
                 if (litBy.y >= -2000f && litBy.fireID == _curUpdateID && litBy.alpha > 0.5f)

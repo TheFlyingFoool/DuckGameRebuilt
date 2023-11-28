@@ -100,10 +100,13 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            if (gun1 != null)
-                level.AddThing(gun1);
-            if (gun2 != null)
-                level.AddThing(gun2);
+            if (Level.current is not Editor)
+            {
+                if (gun1 != null)
+                    level.AddThing(gun1);
+                if (gun2 != null)
+                    level.AddThing(gun2);
+            }
             base.Initialize();
         }
 

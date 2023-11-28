@@ -9,6 +9,7 @@ namespace DuckGame
         public CannonGrenade(float xval, float yval)
           : base(xval, yval)
         {
+            shouldbegraphicculled = false;
         }
 
         public override void Update()

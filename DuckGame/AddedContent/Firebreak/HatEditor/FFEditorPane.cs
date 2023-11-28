@@ -458,6 +458,7 @@ namespace DuckGame
                 (SpriteMap, CanvasTool)[] iconTools = {
                     (FFIcons.Brush, CanvasTool.Brush),
                     (FFIcons.Eraser, CanvasTool.Eraser),
+                    (FFIcons.ColorPicker, CanvasTool.ColorPicker),
                 };
 
                 foreach ((SpriteMap icon, CanvasTool tool) in iconTools)
@@ -473,6 +474,8 @@ namespace DuckGame
                     CurrentCanvasTool = CanvasTool.Brush;
                 else if (Keyboard.Pressed(Keys.E))
                     CurrentCanvasTool = CanvasTool.Eraser;
+                else if (Keyboard.Pressed(Keys.C))
+                    CurrentCanvasTool = CanvasTool.ColorPicker;
             }
 
             private static void UpdateAnimationController(bool canvasBig)
@@ -572,12 +575,14 @@ namespace DuckGame
                 CanvasTool[] tools = {
                     CanvasTool.Brush,
                     CanvasTool.Eraser,
+                    CanvasTool.ColorPicker,
                 };
                 
                 Dictionary<CanvasTool, SpriteMap> toolIcons = new()
                 {
                     {CanvasTool.Brush, FFIcons.Brush},
                     {CanvasTool.Eraser, FFIcons.Eraser},
+                    {CanvasTool.ColorPicker, FFIcons.ColorPicker},
                 };
                 
                 Rectangle canvasToolsBounds = new(center - new Vec2(8, 36), center + new Vec2(8, 36));
@@ -590,7 +595,7 @@ namespace DuckGame
 
                     Rectangle iconBounds = new(
                         canvasToolsBounds.x + 4,
-                        canvasToolsBounds.y + 4 + ((icon.height + 8) * i),
+                        canvasToolsBounds.y + 4 + ((icon.height+8) * i),
                         icon.w,
                         icon.h
                     );
@@ -613,9 +618,9 @@ namespace DuckGame
                 }
 
                 // TODO: seperate this out to the update loop
-                Rectangle primaryColorPickerBounds = new(canvasToolsBounds.x + 4, canvasToolsBounds.Bottom - 28, 8, 8);
+                Rectangle primaryColorPickerBounds = new(canvasToolsBounds.x + 4, canvasToolsBounds.Bottom - 13, 8, 8);
                 Graphics.DrawRect(primaryColorPickerBounds, CanvasPrimaryColor, 1f);
-                Rectangle secondaryColorPickerBounds = new(canvasToolsBounds.x + 4, canvasToolsBounds.Bottom - 12, 8, 8);
+                Rectangle secondaryColorPickerBounds = new(canvasToolsBounds.x + 4, canvasToolsBounds.Bottom + 3, 8, 8);
                 Graphics.DrawRect(secondaryColorPickerBounds, CanvasSecondaryColor, 1f);
 
                 if (primaryColorPickerBounds.Contains(Mouse.positionScreen) && Mouse.left == InputState.Pressed)
@@ -751,6 +756,13 @@ namespace DuckGame
                                 if (Mouse.left == InputState.Down
                                     || Mouse.right == InputState.Down)
                                     buffer[i] = default;
+                                break;
+
+                            case CanvasTool.ColorPicker:
+                                if (Mouse.left == InputState.Pressed && buffer[i] != default)
+                                    CanvasPrimaryColor = buffer[i];
+                                else if (Mouse.right == InputState.Pressed && buffer[i] != default)
+                                    CanvasSecondaryColor = buffer[i];
                                 break;
 
                             default: throw new ArgumentOutOfRangeException();

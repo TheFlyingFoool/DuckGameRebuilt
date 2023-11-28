@@ -16,6 +16,8 @@ namespace DuckGame
             tatchedTo.Add(typeof(PelletBullet));
             tatchedTo.Add(typeof(LaserBulletOrange));
             tatchedTo.Add(typeof(LaserBulletPurple));
+            tatchedTo.Add(typeof(WumpMagnumbullet));
+            tatchedTo.Add(typeof(WumpMissile));
             Bullet b = (Bullet)th;
             if (b != null)
             {
@@ -23,22 +25,20 @@ namespace DuckGame
                 zeAmmo = b.ammo;
                 ang = b.angle;
                 owned = b.owner;
-                rangfe = b.range;
-                penetration = b.ammo.penetration;
-                speedo = b.ammo.bulletSpeed;
-                thickness = b.ammo.bulletThickness;
-                ACCURACY = b.ammo.accuracy;
+                bulletRange = b.range;
+                bulletPenetration = b.ammo.penetration;
+                bulletSpeed = b.ammo.bulletSpeed;
+                bulletThickness = b.ammo.bulletThickness;
                 if (doDestroy) b.active = false;
             }
         }
         public AmmoType zeAmmo;
         public float ang;
         public Thing owned;
-        public float rangfe;
-        public float penetration;
-        public float speedo;
-        public float thickness;
-        public float ACCURACY;
+        public float bulletRange;
+        public float bulletPenetration;
+        public float bulletSpeed;
+        public float bulletThickness;
 
         private int wowownerd;
         public override void OnAdd()
@@ -59,24 +59,43 @@ namespace DuckGame
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
             Vec2 v = b.ReadVec2();
-            AmmoType at = (AmmoType)Activator.CreateInstance(AmmoType.indexTypeMap[b.ReadByte()]);
-            float f = b.ReadFloat();
-            rangfe = b.ReadFloat();
-            penetration = b.ReadFloat();
-            speedo = b.ReadFloat();
-            thickness = b.ReadFloat();
-            ACCURACY = b.ReadFloat();
-            at.range = rangfe;
-            at.penetration = penetration;
-            at.bulletSpeed = speedo;
-            at.bulletThickness = thickness;
-            at.accuracy = ACCURACY;
+            byte ammotypeIndex = b.ReadByte();
+            AmmoType at;
+            if (ammotypeIndex > 240) //AHHHHHHHHH -nIk0
+            {
+                switch (ammotypeIndex)
+                {
+                    case 255:
+                        at = new ATWumpMagnum();
+                        break;
+                    case 254:
+                        at = new ATWumpMissile();
+                        break;
+                    case 253:
+                        at = new ATDeathCaliber();
+                        break;
+                    default:
+                        throw new Exception("This replay has some broken bullet type, please report it to a dev <3");
+                }
+
+            }
+            else at = (AmmoType)Activator.CreateInstance(AmmoType.indexTypeMap[ammotypeIndex]);
+            float angle = b.ReadFloat();
+            bulletRange = b.ReadFloat();
+            bulletPenetration = b.ReadFloat();
+            bulletSpeed = b.ReadFloat();
+            bulletThickness = b.ReadFloat();
+            at.range = bulletRange;
+            at.penetration = bulletPenetration;
+            at.bulletSpeed = bulletSpeed;
+            at.bulletThickness = bulletThickness;
+            at.accuracy = 1;
             int z = b.ReadUShort() - 1;
             
             BulletVessel vb;
             if (at.bulletType != typeof(Bullet))
             {
-                Bullet bullet = at.GetBullet(v.x, v.y, null, -f);
+                Bullet bullet = at.GetBullet(v.x, v.y, null, -angle);
                 bullet.rebound = false;
                 if (at.bulletType == typeof(GrenadeBullet) || at.bulletType == typeof(LaserBullet)) bullet.rebound = true;
                 vb = new BulletVessel(bullet);
@@ -84,7 +103,7 @@ namespace DuckGame
             }
             else
             {
-                vb = new BulletVessel(new Bullet(v.x, v.y, at, f, null));
+                vb = new BulletVessel(new Bullet(v.x, v.y, at, angle, null));
                 vb.wowownerd = z;
                 if (at is ATPlasmaBlaster) ((Bullet)vb.t).color = Color.Orange;
             }
@@ -94,13 +113,14 @@ namespace DuckGame
         public override BitBuffer RecSerialize(BitBuffer prevBuffer)
         {
             prevBuffer.Write(position);
-            prevBuffer.Write(AmmoType.indexTypeMap[zeAmmo.GetType()]);
+
+            if (zeAmmo.forcedIndex == 0) prevBuffer.Write(AmmoType.indexTypeMap[zeAmmo.GetType()]);
+            else prevBuffer.Write(zeAmmo.forcedIndex);
             prevBuffer.Write(ang);
-            prevBuffer.Write(rangfe);
-            prevBuffer.Write(penetration);
-            prevBuffer.Write(speedo);
-            prevBuffer.Write(thickness);
-            prevBuffer.Write(ACCURACY);
+            prevBuffer.Write(bulletRange);
+            prevBuffer.Write(bulletPenetration);
+            prevBuffer.Write(bulletSpeed);
+            prevBuffer.Write(bulletThickness);
             //owner cant even exist
             if (owned != null && Corderator.instance != null && Corderator.instance.somethingMap.Contains(owned)) prevBuffer.Write((ushort)(Corderator.instance.somethingMap[owned] + 1));
             else prevBuffer.Write((ushort)0);

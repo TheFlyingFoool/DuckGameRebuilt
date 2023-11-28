@@ -20,13 +20,28 @@ namespace DuckGame
         public override SomethingSomethingVessel RecDeserialize(BitBuffer b)
         {
             byte persona = b.ReadByte();
+            if (persona == 199)
+            {
+                //error handling stuff here prolly -NiK0
+                persona = 0;
+            }
             RagdollVessel v = new RagdollVessel(new Ragdoll(0, -2000, null, false, 0, 0, Vec2.Zero, Persona.all.ElementAt(persona)));
             return v;
         }
         public override BitBuffer RecSerialize(BitBuffer prevBuffer)
         {
-            prevBuffer.Write((byte)((Ragdoll)t)._duck.persona.index);
+            Ragdoll r = (Ragdoll)t;
+            if (r != null && r._duck != null && r._duck.persona != null) prevBuffer.Write((byte)r._duck.persona.index);
+            else prevBuffer.Write((byte)199);
             return prevBuffer;
+        }
+        public override void DoUpdateThing()
+        {
+            Ragdoll rd = (Ragdoll)t;
+            if (rd._duck != null)
+            {
+                base.DoUpdateThing();
+            }
         }
         public override void PlaybackUpdate()
         {

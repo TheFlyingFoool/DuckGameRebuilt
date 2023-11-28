@@ -61,21 +61,25 @@ namespace DuckGame
         public bool _entering = true;
         public override void PostDrawLayer(Layer layer)
         {
-            if (layer == Layer.HUD && currentDev.DisplayName != "tmob03")
+            if (layer == Layer.Foreground && currentDev.DisplayName != "tmob03")
             {
                 string[] st = Extensions.SplitByLength(currentDev.Info, 40);
                 int its = 0;
+
+                Vec2 vec = drawPos + new Vec2(28, -32);
+
                 foreach (string s in st)
                 {
-                    Graphics.DrawString(s, new Vec2(0, its * 6), Color.White, 1, null, 0.5f);
+                    Graphics.DrawString(s, vec + new Vec2(3, its * 6 + 3), Color.White, 1, null, 0.5f);
                     
                     its++;
                 }
-                Graphics.DrawRect(Vec2.Zero, new Vec2(158, its * 6), Color.Black);
-                Graphics.DrawRect(Vec2.Zero, new Vec2(160, its * 6 + 2), Color.White, -1);
+                Graphics.DrawRect(vec + new Vec2(2), vec + new Vec2(164, its * 6 + 2), Color.Black, 0.99f);
+                Graphics.DrawRect(vec, vec + new Vec2(166, its * 6 + 4), Color.White, 0.98f);
             }
             base.PostDrawLayer(layer);
         }
+        public Vec2 drawPos;
         public DGRebuiltDeveloper currentDev  = DGRDevs.Tmob03;
         public override void Update()
         {
@@ -129,6 +133,7 @@ namespace DuckGame
                 else if (d.holdObject is KlofGun) currentDev = DGRDevs.Klof44;
                 else if (d.holdObject is MoroGun) currentDev = DGRDevs.Moro;
                 else currentDev = DGRDevs.Tmob03; //use tmob in replacement of null
+                drawPos = d.holdObject.position;
             }
             else currentDev = DGRDevs.Tmob03;
             if (_entering)
