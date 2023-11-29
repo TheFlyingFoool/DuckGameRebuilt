@@ -196,6 +196,7 @@ namespace DuckGame
         public static bool Checked;
         public override void Initialize()
         {
+            Program.main.IsFixedTimeStep = true;
             if (Editor.clientonlycontent)
             {
                 Editor.DisableClientOnlyContent();
