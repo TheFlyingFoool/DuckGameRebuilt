@@ -464,7 +464,14 @@ namespace DuckGame
             {
                 dgrDescription = "Game will run at 61 updates per second instead of 60 to mimmick vanilla on >60hz monitors"
             });
-        
+            menu.Add(new UIMenuItemToggle("Fix Laggy Bullets", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.FixBulletPositions)))
+            {
+                dgrDescription = "|DGRED|[Experimental]|PINK| Teleports some bullets forward in time to account for ping"
+            });
+            menu.Add(new UIMenuItemNumber("Max Correction Frames", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.MaximumCorrectionTicks), 0, 20, 8), step: 1)
+            {
+                dgrDescription = "The maximum number of frames that a bullets will advance in time to correct its position"
+            });
 
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));

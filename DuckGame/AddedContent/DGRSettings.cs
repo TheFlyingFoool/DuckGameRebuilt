@@ -299,6 +299,10 @@ namespace DuckGame
             }
         }
 
+        [Marker.AutoConfig] public static bool FixBulletPositions = false;
+
+        [Marker.AutoConfig] public static int MaximumCorrectionTicks = 8;
+
         [Marker.AutoConfig] public static bool Use61UPS = false;
 
         public static bool Use61UPS_Setting
