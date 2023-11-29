@@ -676,7 +676,6 @@ namespace DuckGame
             accumulatedElapsedTimefieldinfo = typeof(Game).GetField("accumulatedElapsedTime", BindingFlags.NonPublic | BindingFlags.Instance);
             SetAccumulatedElapsedTime(main, main.TargetElapsedTime);
             main.IsFixedTimeStep = false; // ZOOOM
-            main.TargetElapsedTime = TimeSpan.FromTicks(163934);
             //FirebreakReflectionsht = Task.Factory.StartNew(() => { MemberAttributePairHandler.Init(); });
             main.Run();
         }
