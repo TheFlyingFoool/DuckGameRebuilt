@@ -46,7 +46,7 @@ public class User : IDisposable {
                 return null;
             if (_avatarDataSmall != null)
                 return _avatarDataSmall;
-            return _avatarDataSmall = _.GetImageRGBA(SteamFriends.GetSmallFriendAvatar(_id));
+            return _avatarDataSmall = SteamHelper.GetImageRGBA(SteamFriends.GetSmallFriendAvatar(_id));
         }
     }
 
@@ -57,7 +57,7 @@ public class User : IDisposable {
                 return null;
             if (_avatarDataMedium != null)
                 return _avatarDataMedium;
-            return _avatarDataMedium = _.GetImageRGBA(SteamFriends.GetMediumFriendAvatar(_id));
+            return _avatarDataMedium = SteamHelper.GetImageRGBA(SteamFriends.GetMediumFriendAvatar(_id));
         }
     }
 
