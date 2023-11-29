@@ -1069,7 +1069,6 @@ namespace DuckGame
                 initializedFPS = true;
                 DGRSettings.InitalizeFPSThings();
             }
-            Program.main.UnFixedDraw = DGRSettings.UncappedFPS;
 
 
             if (showingSaveTool && saveTool == null && File.Exists("SaveTool.dll"))

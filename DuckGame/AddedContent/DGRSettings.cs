@@ -324,7 +324,19 @@ namespace DuckGame
         }
 
 
-        [Marker.AutoConfig] public static bool UncappedFPS = false;
+        [Marker.AutoConfig] public static bool S_UncappedFPS = false;
+        public static bool UncappedFPS
+        {
+            get
+            {
+                return S_UncappedFPS;
+            }
+            set
+            {
+                Program.main.UnFixedDraw = value;
+                S_UncappedFPS = value;
+            }
+        }
 
         [Marker.AutoConfig] public static bool SingleLoadLine = false;
 
