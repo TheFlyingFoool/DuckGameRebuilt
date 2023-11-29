@@ -299,6 +299,25 @@ namespace DuckGame
             }
         }
 
+        [Marker.AutoConfig] public static bool Use61UPS = false;
+
+        public static bool Use61UPS_Setting
+        {
+            get
+            {
+                return Use61UPS;
+            }
+            set
+            {
+                if(value) 
+                    Program.main.TargetElapsedTime = TimeSpan.FromTicks(163934); // 61ups
+                else
+                    Program.main.TargetElapsedTime = TimeSpan.FromTicks(166667); // 60ups
+                Use61UPS = value;
+            }
+        }
+
+
         [Marker.AutoConfig] public static bool UncappedFPS = false;
 
         [Marker.AutoConfig] public static bool SingleLoadLine = false;
@@ -350,6 +369,10 @@ namespace DuckGame
             MonoMain.graphics.SynchronizeWithVerticalRetrace = UseVSync;
             Program.main.FrameLimiterTarget = Math.Max(TargetFrameRate,60);
             Program.main.UseDrawRateLimiter = !UseVSync && UncappedFPS && TargetFrameRate >= 60;
+            if (Use61UPS)
+                Program.main.TargetElapsedTime = TimeSpan.FromTicks(163934); // 61ups
+            else
+                Program.main.TargetElapsedTime = TimeSpan.FromTicks(166667); // 60ups
             MonoMain.graphics.ApplyChanges();
         }
 

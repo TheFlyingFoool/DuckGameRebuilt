@@ -31,6 +31,7 @@ namespace DuckGame
         public static UIMenu _lastCreatedDGRHudMenu;
         public static UIMenu _lastCreatedOptimizationsMenu;
         public static UIMenu _lastCreatedDGRGraphicsMenu;
+        public static UIMenu _lastCreatedDGRGameMenu;
         public static UIMenu _lastCreatedDGREditorMenu;
         public static UIMenu _lastCreatedDGRDumbShitMenu;
         public static UIMenu _lastCreatedDGRDeveloperMenu;
@@ -115,6 +116,7 @@ namespace DuckGame
             //Best. -NiK0
             to.Add(_lastCreatedOptimizationsMenu, false);
             to.Add(_lastCreatedDGRGraphicsMenu, false);
+            to.Add(_lastCreatedDGRGameMenu, false);
             to.Add(_lastCreatedDGRQOLMenu, false);
             to.Add(_lastCreatedDGRHudMenu, false);
             to.Add(_lastCreatedDGREditorMenu, false);
@@ -162,6 +164,7 @@ namespace DuckGame
             _lastCreatedDGRQOLMenu = TEMPDGRQOL;
             _lastCreatedDGRHudMenu = TEMPDGRHUD;
             _lastCreatedDGRGraphicsMenu = TEMPDGRGRAPHICS;
+            _lastCreatedDGRGameMenu = TEMPDGRGAME;
             _lastCreatedOptimizationsMenu = TEMPDGROPTIM;
             _lastCreatedDGREditorMenu = TEMPDGREDITOR;
             _lastCreatedDGRDumbShitMenu = TEMPDGRMISC;
@@ -198,6 +201,7 @@ namespace DuckGame
             _DGRQOLMenu = _lastCreatedDGRQOLMenu;
             _DGROptimMenu = _lastCreatedOptimizationsMenu;
             _DGRGraphicsMenu = _lastCreatedDGRGraphicsMenu;
+            _DGRGameMenu = _lastCreatedDGRGameMenu;
             _DGRRecorderatorMenu = _lastCreatedDGRRecorderatorMenu;
             _DGREditorMenu = _lastCreatedDGREditorMenu;
             _DGRDumbShitMenu = _lastCreatedDGRDumbShitMenu;
@@ -336,6 +340,7 @@ namespace DuckGame
         }
         public static UIMenu _DGRMenu;
         public static UIMenu _DGRGraphicsMenu;
+        public static UIMenu _DGRGameMenu;
         public static UIMenu _DGROptimMenu;
         public static UIMenu _DGRQOLMenu;
         public static UIMenu _DGRHudMenu;
@@ -448,6 +453,23 @@ namespace DuckGame
             return menu;
         }
 
+        public static UIMenu CreateDGRGameMenu(UIMenu pPrev)
+        {
+            UIMenu menu = new UIMenu("|PINK|♥|WHITE|GAME|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
+
+            menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
+
+            menu.Add(new UIMenuItemToggle("61 UPS", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.Use61UPS_Setting)))
+            {
+                dgrDescription = "Game will run at 61 updates per second instead of 60 to mimmick vanilla on >60hz monitors"
+            });
+        
+
+            menu.Add(new UIText(" ", Color.White));
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
+            return menu;
+        }
         public static UIMenu CreateDGRGraphicsMenu(UIMenu pPrev)
         {
             UIMenu menu = new UIMenu("|PINK|♥|WHITE|GRAPHICS|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
@@ -775,6 +797,7 @@ namespace DuckGame
         }
         public static UIMenu TEMPDGROPTIM;
         public static UIMenu TEMPDGRGRAPHICS;
+        public static UIMenu TEMPDGRGAME;
         public static UIMenu TEMPDGRQOL;
         public static UIMenu TEMPDGRHUD;
         public static UIMenu TEMPDGREDITOR;
@@ -790,6 +813,9 @@ namespace DuckGame
 
             TEMPDGRGRAPHICS = CreateDGRGraphicsMenu(menu);
             menu.Add(new UIMenuItem("GRAPHICS", new UIMenuActionOpenMenu(menu, TEMPDGRGRAPHICS), backButton: true));
+
+            TEMPDGRGAME = CreateDGRGameMenu(menu);
+            menu.Add(new UIMenuItem("GAME", new UIMenuActionOpenMenu(menu, TEMPDGRGAME), backButton: true));
 
             TEMPDGRQOL = CreateDGRQOLMenu(menu);
             menu.Add(new UIMenuItem("QOL", new UIMenuActionOpenMenu(menu, TEMPDGRQOL), backButton: true));
