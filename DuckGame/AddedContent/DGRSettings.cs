@@ -303,7 +303,7 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static int MaximumCorrectionTicks = 8;
 
-        [Marker.AutoConfig] public static bool Use61UPS = false;
+        [Marker.AutoConfig] public static bool Use61UPS = true;
 
         public static bool Use61UPS_Setting
         {
