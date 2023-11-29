@@ -482,6 +482,7 @@ namespace DuckGame
                 List<Team> list2 = new List<Team>(Teams.core.teams);
                 foreach (Team item2 in Teams.core.extraTeams)
                 {
+                    if (item2.NoDisplay) continue;
                     list2.Add(item2);
                 }
                 return list2;
@@ -503,6 +504,7 @@ namespace DuckGame
             for (int i = 0; i < Teams.core.extraTeams.Count; i++)
             {
                 Team t = Teams.core.extraTeams[i];
+                if (t.NoDisplay) continue;
                 if (t.favorited)
                 {
                     later.Add(t);

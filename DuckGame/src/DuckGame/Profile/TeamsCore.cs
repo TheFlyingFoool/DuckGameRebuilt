@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.IO;
 
 namespace DuckGame
 {
@@ -186,6 +187,23 @@ namespace DuckGame
             {
                 Teams.AddExtraTeam(DGRHat);
             }
+
+            //neonstuff
+            //DGRDD prefix = Duck Game Rebuilt Disabled Display
+            //just using that so dgr users can just ignore it and not display it in the hat selector -NiK0
+
+            neon1 = Team.DeserializeFromPNG(File.ReadAllBytes($"{Content.path}/neon1.png"), "DGRDD_neon1", $"{Content.path}/neon1.png");
+            if (neon1 != null)
+            {
+                Teams.AddExtraTeam(neon1);
+            }
+            neon2 = Team.DeserializeFromPNG(File.ReadAllBytes($"{Content.path}/neon2.png"), "DGRDD_neon2", $"{Content.path}/neon2.png");
+            if (neon2 != null)
+            {
+                Teams.AddExtraTeam(neon2);
+            }
         }
+        public static Team neon1;
+        public static Team neon2;
     }
 }

@@ -175,6 +175,8 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool CustomHatTeams = false;
 
+        [Marker.AutoConfig] public static bool DGRNeonSign = false;
+
         [Marker.AutoConfig] public static bool skipOnlineBumper = false;
 
         [Marker.AutoConfig] public static bool SwitchInput = false;

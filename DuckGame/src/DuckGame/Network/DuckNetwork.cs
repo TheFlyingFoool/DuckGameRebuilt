@@ -2450,8 +2450,12 @@ namespace DuckGame
                     Send.Message(new NMSpecialHat(who.team, who, to.profile != null && to.profile.muteHat), to);
                 Send.Message(new NMSetTeam(who, who.team, who.team.customData != null), to);
             }
-            if (who.furniturePositions.Count > 0)
-                Send.Message(new NMRoomData(who, who.furniturePositionData), to);
+
+            Send.Message(new NMSpecialHat(TeamsCore.neon1, who, false), to);
+            Send.Message(new NMSpecialHat(TeamsCore.neon2, who, false), to);
+
+            if (who.furniturePositions.Count > 0) Send.Message(new NMRoomData(who, who.furniturePositionData), to);
+
             Send.Message(new NMProfileInfo(who, who.stats.unloyalFans, who.stats.loyalFans, who.ParentalControlsActive, who.flagIndex, (ushort)Teams.core.extraTeams.Count, Teams.core.teams), to);
             Send.Message(new NMNumCustomLevels(Editor.activatedLevels.Count), to);
             Send.Message(new NMOldAngles(who, Options.Data.oldAngleCode), to);

@@ -382,7 +382,7 @@ namespace DuckGame
             return menu;
         }
         
-        public static UIMenu CreateDGRDumbShitMenu(UIMenu pPrev)
+        public static UIMenu CreateDGRMiscMenu(UIMenu pPrev)
         {
             UIMenu menu = new UIMenu("|PINK|♥|WHITE|MISCELLANEOUS|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
 
@@ -405,6 +405,10 @@ namespace DuckGame
             {
                 dgrDescription = "Allows for teams with custom hats that have the same name (HOST ONLY)"
             });
+            menu.Add(new UIMenuItemToggle("DGR Neon Sign", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DGRNeonSign)))
+            {
+                dgrDescription = "Puts a neon DGR sign on your room that anyone can see! (Including vanilla players)"
+            });
             menu.Add(new UIMenuItem("Reload Hats", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(ReloadHats)))
             {
                 dgrDescription = "Reloads all hats (OFFLINE ONLY, MIGHT REMOVE MODDED HATS, F6 QUICK RELOAD, F5 RELOADS CURRENTLY WORN ONE)"
@@ -415,7 +419,7 @@ namespace DuckGame
             return menu;
         }
         
-        // go wild with option naming here
+        // go wild with option naming here14564536 165345613 4561 345605614893489 1 8301030489
         public static UIMenu CreateDGRDeveloperMenu(UIMenu pPrev)
         {
             UIMenu menu = new UIMenu("|PINK|♥|WHITE|DEVELOPER|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 260f, conString: "@CANCEL@BACK @SELECT@SELECT");
@@ -836,7 +840,7 @@ namespace DuckGame
             TEMPDGRRECORDERATOR = Recorderator.CreateRecorderatorMenu(menu);
             menu.Add(new UIMenuItem("RECORDERATOR", new UIMenuActionOpenMenu(menu, TEMPDGRRECORDERATOR), backButton: true));
 
-            TEMPDGRMISC = CreateDGRDumbShitMenu(menu);
+            TEMPDGRMISC = CreateDGRMiscMenu(menu);
             menu.Add(new UIMenuItem("MISCELLANEOUS", new UIMenuActionOpenMenu(menu, TEMPDGRMISC), backButton: true));
 
             TEMPDGRDEV = CreateDGRDeveloperMenu(menu);
