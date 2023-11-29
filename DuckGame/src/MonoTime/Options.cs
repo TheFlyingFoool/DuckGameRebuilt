@@ -466,7 +466,7 @@ namespace DuckGame
             });
             menu.Add(new UIMenuItemToggle("Fix Laggy Bullets", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.FixBulletPositions)))
             {
-                dgrDescription = "|DGRED|[Experimental]|PINK| Teleports some bullets forward in time to account for ping"
+                dgrDescription = "|DGRED|[Experimental]|PINK| Visually teleports some bullets forward in time to account for ping"
             });
             menu.Add(new UIMenuItemNumber("Max Correction Frames", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.MaximumCorrectionTicks), 0, 20, 8), step: 1)
             {
