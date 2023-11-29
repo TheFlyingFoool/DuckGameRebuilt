@@ -748,16 +748,16 @@ namespace DuckGame
                     //x + 22.5f, y + 6.5f reft room
                     if (rightRoom)
                     {
-                        neon1 = new TeamHat(x + 20, y + 20, TeamsCore.neon1) { enablePhysics = false, canPickUp = false, velocity = Vec2.Zero, grounded = true, sleeping = true, indestructible = true };
+                        neon1 = new TeamHat(x + 100, y + 8, TeamsCore.neon1) { enablePhysics = false, canPickUp = false, velocity = Vec2.Zero, grounded = true, sleeping = true, indestructible = true };
                         Level.Add(neon1);
-                        neon2 = new TeamHat(x + 52, y + 20, TeamsCore.neon2) { enablePhysics = false, canPickUp = false, velocity = Vec2.Zero, grounded = true, sleeping = true, indestructible = true };
+                        neon2 = new TeamHat(x + 132, y + 8, TeamsCore.neon2) { enablePhysics = false, canPickUp = false, velocity = Vec2.Zero, grounded = true, sleeping = true, indestructible = true };
                         Level.Add(neon2);
                     }
                     else
                     {
-                        neon1 = new TeamHat(x + 100, y + 20, TeamsCore.neon1) { enablePhysics = false, canPickUp = false, velocity = Vec2.Zero, grounded = true, sleeping = true, indestructible = true };
+                        neon1 = new TeamHat(x + 20, y + 8, TeamsCore.neon1) { enablePhysics = false, canPickUp = false, velocity = Vec2.Zero, grounded = true, sleeping = true, indestructible = true };
                         Level.Add(neon1);
-                        neon2 = new TeamHat(x + 132, y + 20, TeamsCore.neon2) { enablePhysics = false, canPickUp = false, velocity = Vec2.Zero, grounded = true, sleeping = true, indestructible = true };
+                        neon2 = new TeamHat(x + 52, y + 8, TeamsCore.neon2) { enablePhysics = false, canPickUp = false, velocity = Vec2.Zero, grounded = true, sleeping = true, indestructible = true };
                         Level.Add(neon2);
                     }
                 }

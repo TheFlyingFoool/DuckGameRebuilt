@@ -476,6 +476,15 @@ namespace DuckGame
             {
                 dgrDescription = "The maximum number of frames that a bullets will advance in time to correct its position"
             });
+            menu.Add(new UIMenuItemToggle("Camera unfollow", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.CameraUnfollow)))
+            {
+                dgrDescription = "When the camera is big enough it stops following distant players"
+            });
+            menu.Add(new UIMenuItemToggle("Skip Excess Rounds", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SkipExcessRounds)))
+            {
+                dgrDescription = "If a player has already definitely won extra rounds that wont change the outcome of the match will be skipped (HOST ONLY)"
+            });
+
 
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
@@ -572,10 +581,6 @@ namespace DuckGame
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemToggle("Camera unfollow", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.CameraUnfollow)))
-            {
-                dgrDescription = "When the camera is big enough it stops following distant players"
-            });
             menu.Add(new UIMenuItemNumber("Start in", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.StartIn), 0, 3), valStrings: new List<string>
             {
                 "TITLE",
@@ -594,11 +599,6 @@ namespace DuckGame
             menu.Add(new UIMenuItemToggle("Lobby data", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.LobbyData)))
             {
                 dgrDescription = "Shows the percentage of maps and the list of people in the lobby if host uses Rebuilt"
-            });
-            //SkipXP
-            menu.Add(new UIMenuItemToggle("Skip Excess Rounds", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SkipExcessRounds)))
-            {
-                dgrDescription = "If a player has already definitely won extra rounds that wont change the outcome of the match will be skipped (HOST ONLY)"
             });
 
             menu.Add(new UIMenuItemToggle("Auto Input Switch", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SwitchInput)))
