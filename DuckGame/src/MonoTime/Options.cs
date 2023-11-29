@@ -31,6 +31,7 @@ namespace DuckGame
         public static UIMenu _lastCreatedDGRHudMenu;
         public static UIMenu _lastCreatedOptimizationsMenu;
         public static UIMenu _lastCreatedDGRGraphicsMenu;
+        public static UIMenu _lastCreatedDGRGameMenu;
         public static UIMenu _lastCreatedDGREditorMenu;
         public static UIMenu _lastCreatedDGRDumbShitMenu;
         public static UIMenu _lastCreatedDGRDeveloperMenu;
@@ -115,6 +116,7 @@ namespace DuckGame
             //Best. -NiK0
             to.Add(_lastCreatedOptimizationsMenu, false);
             to.Add(_lastCreatedDGRGraphicsMenu, false);
+            to.Add(_lastCreatedDGRGameMenu, false);
             to.Add(_lastCreatedDGRQOLMenu, false);
             to.Add(_lastCreatedDGRHudMenu, false);
             to.Add(_lastCreatedDGREditorMenu, false);
@@ -162,6 +164,7 @@ namespace DuckGame
             _lastCreatedDGRQOLMenu = TEMPDGRQOL;
             _lastCreatedDGRHudMenu = TEMPDGRHUD;
             _lastCreatedDGRGraphicsMenu = TEMPDGRGRAPHICS;
+            _lastCreatedDGRGameMenu = TEMPDGRGAME;
             _lastCreatedOptimizationsMenu = TEMPDGROPTIM;
             _lastCreatedDGREditorMenu = TEMPDGREDITOR;
             _lastCreatedDGRDumbShitMenu = TEMPDGRMISC;
@@ -198,6 +201,7 @@ namespace DuckGame
             _DGRQOLMenu = _lastCreatedDGRQOLMenu;
             _DGROptimMenu = _lastCreatedOptimizationsMenu;
             _DGRGraphicsMenu = _lastCreatedDGRGraphicsMenu;
+            _DGRGameMenu = _lastCreatedDGRGameMenu;
             _DGRRecorderatorMenu = _lastCreatedDGRRecorderatorMenu;
             _DGREditorMenu = _lastCreatedDGREditorMenu;
             _DGRDumbShitMenu = _lastCreatedDGRDumbShitMenu;
@@ -336,6 +340,7 @@ namespace DuckGame
         }
         public static UIMenu _DGRMenu;
         public static UIMenu _DGRGraphicsMenu;
+        public static UIMenu _DGRGameMenu;
         public static UIMenu _DGROptimMenu;
         public static UIMenu _DGRQOLMenu;
         public static UIMenu _DGRHudMenu;
@@ -377,7 +382,7 @@ namespace DuckGame
             return menu;
         }
         
-        public static UIMenu CreateDGRDumbShitMenu(UIMenu pPrev)
+        public static UIMenu CreateDGRMiscMenu(UIMenu pPrev)
         {
             UIMenu menu = new UIMenu("|PINK|♥|WHITE|MISCELLANEOUS|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
 
@@ -400,6 +405,10 @@ namespace DuckGame
             {
                 dgrDescription = "Allows for teams with custom hats that have the same name (HOST ONLY)"
             });
+            menu.Add(new UIMenuItemToggle("DGR Neon Sign", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DGRNeonSign)))
+            {
+                dgrDescription = "Puts a neon DGR sign on your room that anyone can see! (Including vanilla players)"
+            });
             menu.Add(new UIMenuItem("Reload Hats", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(ReloadHats)))
             {
                 dgrDescription = "Reloads all hats (OFFLINE ONLY, MIGHT REMOVE MODDED HATS, F6 QUICK RELOAD, F5 RELOADS CURRENTLY WORN ONE)"
@@ -410,7 +419,7 @@ namespace DuckGame
             return menu;
         }
         
-        // go wild with option naming here
+        // go wild with option naming here14564536 165345613 4561 345605614893489 1 8301030489
         public static UIMenu CreateDGRDeveloperMenu(UIMenu pPrev)
         {
             UIMenu menu = new UIMenu("|PINK|♥|WHITE|DEVELOPER|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 260f, conString: "@CANCEL@BACK @SELECT@SELECT");
@@ -448,6 +457,39 @@ namespace DuckGame
             return menu;
         }
 
+        public static UIMenu CreateDGRGameMenu(UIMenu pPrev)
+        {
+            UIMenu menu = new UIMenu("|PINK|♥|WHITE|GAME|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
+
+            menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
+
+            menu.Add(new UIMenuItemToggle("61 UPS", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.Use61UPS_Setting)))
+            {
+                dgrDescription = "Game will run at 61 updates per second instead of 60 to mimmick vanilla on >60hz monitors"
+            });
+            menu.Add(new UIMenuItemToggle("Fix Laggy Bullets", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.FixBulletPositions)))
+            {
+                dgrDescription = "|DGRED|[Experimental]|PINK| Visually teleports some bullets forward in time to account for ping"
+            });
+            menu.Add(new UIMenuItemNumber("Max Correction Frames", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.MaximumCorrectionTicks), 0, 20, 8), step: 1)
+            {
+                dgrDescription = "The maximum number of frames that a bullets will advance in time to correct its position"
+            });
+            menu.Add(new UIMenuItemToggle("Camera unfollow", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.CameraUnfollow)))
+            {
+                dgrDescription = "When the camera is big enough it stops following distant players"
+            });
+            menu.Add(new UIMenuItemToggle("Skip Excess Rounds", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SkipExcessRounds)))
+            {
+                dgrDescription = "If a player has already definitely won extra rounds that wont change the outcome of the match will be skipped (HOST ONLY)"
+            });
+
+
+            menu.Add(new UIText(" ", Color.White));
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
+            return menu;
+        }
         public static UIMenu CreateDGRGraphicsMenu(UIMenu pPrev)
         {
             UIMenu menu = new UIMenu("|PINK|♥|WHITE|GRAPHICS|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
@@ -539,10 +581,6 @@ namespace DuckGame
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemToggle("Camera unfollow", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.CameraUnfollow)))
-            {
-                dgrDescription = "When the camera is big enough it stops following distant players"
-            });
             menu.Add(new UIMenuItemNumber("Start in", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.StartIn), 0, 3), valStrings: new List<string>
             {
                 "TITLE",
@@ -561,11 +599,6 @@ namespace DuckGame
             menu.Add(new UIMenuItemToggle("Lobby data", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.LobbyData)))
             {
                 dgrDescription = "Shows the percentage of maps and the list of people in the lobby if host uses Rebuilt"
-            });
-            //SkipXP
-            menu.Add(new UIMenuItemToggle("Skip Excess Rounds", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SkipExcessRounds)))
-            {
-                dgrDescription = "If a player has already definitely won extra rounds that wont change the outcome of the match will be skipped (HOST ONLY)"
             });
 
             menu.Add(new UIMenuItemToggle("Auto Input Switch", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SwitchInput)))
@@ -775,6 +808,7 @@ namespace DuckGame
         }
         public static UIMenu TEMPDGROPTIM;
         public static UIMenu TEMPDGRGRAPHICS;
+        public static UIMenu TEMPDGRGAME;
         public static UIMenu TEMPDGRQOL;
         public static UIMenu TEMPDGRHUD;
         public static UIMenu TEMPDGREDITOR;
@@ -791,6 +825,9 @@ namespace DuckGame
             TEMPDGRGRAPHICS = CreateDGRGraphicsMenu(menu);
             menu.Add(new UIMenuItem("GRAPHICS", new UIMenuActionOpenMenu(menu, TEMPDGRGRAPHICS), backButton: true));
 
+            TEMPDGRGAME = CreateDGRGameMenu(menu);
+            menu.Add(new UIMenuItem("GAME", new UIMenuActionOpenMenu(menu, TEMPDGRGAME), backButton: true));
+
             TEMPDGRQOL = CreateDGRQOLMenu(menu);
             menu.Add(new UIMenuItem("QOL", new UIMenuActionOpenMenu(menu, TEMPDGRQOL), backButton: true));
 
@@ -803,7 +840,7 @@ namespace DuckGame
             TEMPDGRRECORDERATOR = Recorderator.CreateRecorderatorMenu(menu);
             menu.Add(new UIMenuItem("RECORDERATOR", new UIMenuActionOpenMenu(menu, TEMPDGRRECORDERATOR), backButton: true));
 
-            TEMPDGRMISC = CreateDGRDumbShitMenu(menu);
+            TEMPDGRMISC = CreateDGRMiscMenu(menu);
             menu.Add(new UIMenuItem("MISCELLANEOUS", new UIMenuActionOpenMenu(menu, TEMPDGRMISC), backButton: true));
 
             TEMPDGRDEV = CreateDGRDeveloperMenu(menu);

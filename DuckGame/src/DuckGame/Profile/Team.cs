@@ -18,6 +18,14 @@ namespace DuckGame
         public bool favorited;
         public int recordIndex = -1;
 
+        public bool NoDisplay
+        {
+            get
+            {
+                return name == null || name.StartsWith("DGRDD_");
+            }
+        }
+
         public NetworkConnection customConnection;
         private Dictionary<DuckPersona, SpriteMap> _recolors = new Dictionary<DuckPersona, SpriteMap>();
         public string customHatPath;
