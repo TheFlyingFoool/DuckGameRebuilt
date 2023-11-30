@@ -186,14 +186,14 @@ namespace DuckGame
             get
             {
                 return true;
-                if (DuckNetwork.isDedicatedServer)
-                    return false;
-                bool canSetObservers = Network.isServer && Network.lanMode;
-                if (Network.isServer && Steam.lobby != null && Steam.lobby.type != SteamLobbyType.Public)
-                    canSetObservers = true;
-                if (!Network.InLobby())
-                    canSetObservers = false;
-                return canSetObservers;
+                //if (DuckNetwork.isDedicatedServer)
+                //    return false;
+                //bool canSetObservers = Network.isServer && Network.lanMode;
+                //if (Network.isServer && Steam.lobby != null && Steam.lobby.type != SteamLobbyType.Public)
+                //    canSetObservers = true;
+                //if (!Network.InLobby())
+                //    canSetObservers = false;
+                //return canSetObservers;
             }
         }
 
