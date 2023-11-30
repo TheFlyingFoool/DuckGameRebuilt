@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.PlasmaLayer
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
@@ -22,15 +15,14 @@ namespace DuckGame
             _plasma = new Sprite("arcade/plasma");
             camera = new Camera();
             _plasmaMaterial = new MaterialPlasma();
-            _target = new RenderTarget2D(320, (int)(320.0 * Graphics.aspect));
+            _target = new RenderTarget2D(320, (int)(320 * Graphics.aspect));
             visible = false;
         }
 
         public override void Update()
         {
             visible = alpha > 0.01f;
-            if (!visible)
-                return;
+            if (!visible) return;
             _plasmaMaterial.offset = 0.5f;
             _plasmaMaterial.offset2 = 0.3f;
             _plasmaMaterial.scroll += 0.0009f;
@@ -48,7 +40,7 @@ namespace DuckGame
             _plasma.depth = -0.9f;
             _plasma.alpha = 1f;
             Graphics.device.SamplerStates[0] = SamplerState.PointWrap;
-            Graphics.Draw(_plasma, -30f, -30f);
+            Graphics.Draw(ref _plasma, -30f, -30f);
             _batch.End();
             Graphics.SetRenderTarget(null);
             Graphics.viewport = viewport;
@@ -64,8 +56,7 @@ namespace DuckGame
 
         public override void Draw(bool transparent, bool isTargetDraw = false)
         {
-            if (!visible)
-                return;
+            if (!visible) return;
             Graphics.currentLayer = this;
             Graphics.screen = _batch;
             _batch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.DepthRead, _state, null, camera.getMatrix());

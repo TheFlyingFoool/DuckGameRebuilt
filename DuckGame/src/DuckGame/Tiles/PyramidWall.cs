@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.PyramidWall
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class PyramidWall : Block, IBigStupidWall
     {
@@ -37,7 +30,7 @@ namespace DuckGame
             {
                 for (int index = -1; index < 13; ++index)
                 {
-                    Vec2 point = new Vec2((float)(left + index * 16 + 12.0), top - 4f);
+                    Vec2 point = new Vec2((float)(left + index * 16 + 12), top - 4f);
                     switch (Level.current.CollisionPoint<Thing>(point, this))
                     {
                         case null:
@@ -52,7 +45,7 @@ namespace DuckGame
             {
                 for (int index = -1; index < 13; ++index)
                 {
-                    Vec2 point = new Vec2((float)(left + index * 16 + 12.0), bottom + 4f);
+                    Vec2 point = new Vec2((float)(left + index * 16 + 12), bottom + 4f);
                     switch (Level.current.CollisionPoint<Thing>(point, this))
                     {
                         case null:
@@ -67,7 +60,7 @@ namespace DuckGame
             {
                 for (int index = 0; index < 9; ++index)
                 {
-                    Vec2 point = new Vec2(left - 4f, (float)(top + index * 16 + 12.0));
+                    Vec2 point = new Vec2(left - 4f, (float)(top + index * 16 + 12));
                     switch (Level.current.CollisionPoint<Thing>(point, this))
                     {
                         case null:
@@ -82,7 +75,7 @@ namespace DuckGame
                 return;
             for (int index = 0; index < 9; ++index)
             {
-                Vec2 point = new Vec2(right + 4f, (float)(top + index * 16 + 12.0));
+                Vec2 point = new Vec2(right + 4f, (float)(top + index * 16 + 12));
                 switch (Level.current.CollisionPoint<Thing>(point, this))
                 {
                     case null:
@@ -116,7 +109,7 @@ namespace DuckGame
             {
                 for (int index = 0; index < 12; ++index)
                 {
-                    Vec2 vec2 = new Vec2((float)(left + index * 16 + 12.0), top - 2f);
+                    Vec2 vec2 = new Vec2((float)(left + index * 16 + 12), top - 2f);
                     Graphics.DrawRect(vec2 + new Vec2(-2f, -2f), vec2 + new Vec2(2f, 2f), Color.Orange, (Depth)1f);
                 }
             }
@@ -124,7 +117,7 @@ namespace DuckGame
             {
                 for (int index = -1; index < 13; ++index)
                 {
-                    Vec2 vec2 = new Vec2((float)(left + index * 16 + 12.0), bottom + 2f);
+                    Vec2 vec2 = new Vec2((float)(left + index * 16 + 12), bottom + 2f);
                     Graphics.DrawRect(vec2 + new Vec2(-2f, -2f), vec2 + new Vec2(2f, 2f), Color.Orange, (Depth)1f);
                 }
             }
@@ -132,7 +125,7 @@ namespace DuckGame
             {
                 for (int index = 0; index < 9; ++index)
                 {
-                    Vec2 vec2 = new Vec2(left - 2f, (float)(top + index * 16 + 12.0));
+                    Vec2 vec2 = new Vec2(left - 2f, (float)(top + index * 16 + 12));
                     Graphics.DrawRect(vec2 + new Vec2(-2f, -2f), vec2 + new Vec2(2f, 2f), Color.Orange, (Depth)1f);
                 }
             }
@@ -140,7 +133,7 @@ namespace DuckGame
                 return;
             for (int index = 0; index < 9; ++index)
             {
-                Vec2 vec2 = new Vec2(right + 2f, (float)(top + index * 16 + 12.0));
+                Vec2 vec2 = new Vec2(right + 2f, (float)(top + index * 16 + 12));
                 Graphics.DrawRect(vec2 + new Vec2(-2f, -2f), vec2 + new Vec2(2f, 2f), Color.Orange, (Depth)1f);
             }
         }

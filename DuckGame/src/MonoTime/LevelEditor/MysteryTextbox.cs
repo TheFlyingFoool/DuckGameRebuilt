@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.MysteryTextbox
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using SDL2;
+﻿using SDL2;
 using System.IO;
 using System.Threading;
 
@@ -80,7 +73,7 @@ namespace DuckGame
             _size = new Vec2(width, height);
             _maxLines = maxLines;
             _emptyText = emptyText;
-            Keyboard.keyString = "";
+            Keyboard.KeyString = "";
             invalidPathChars = Path.GetInvalidPathChars();
         }
 
@@ -131,7 +124,7 @@ namespace DuckGame
                 flag = true;
                 Editor.hoverTextBox = true;
                 if (Mouse.left == InputState.Pressed)
-                    Keyboard.keyString = "";
+                    Keyboard.KeyString = "";
             }
             //this.allowFocusStealing = true;
             Vec2 position2 = _position;
@@ -169,15 +162,15 @@ namespace DuckGame
                     if (Keyboard.Pressed(Keys.X))
                         DeleteHighlight();
                 }
-                Keyboard.keyString = "";
+                Keyboard.KeyString = "";
             }
-            if (Keyboard.keyString.Length > 0 && _font._highlightStart != _font._highlightEnd)
+            if (Keyboard.KeyString.Length > 0 && _font._highlightStart != _font._highlightEnd)
                 DeleteHighlight();
             if (_cursorPosition >= this.text.Length)
                 _cursorPosition = this.text.Length;
             if (filename)
-                Keyboard.keyString = DuckFile.FixInvalidPath(Keyboard.keyString, true);
-            this.text = this.text.Insert(_cursorPosition, Keyboard.keyString);
+                Keyboard.KeyString = DuckFile.FixInvalidPath(Keyboard.KeyString, true);
+            this.text = this.text.Insert(_cursorPosition, Keyboard.KeyString);
             if (Keyboard.Pressed(Keys.Back) && this.text.Length > 0)
             {
                 if (_font._highlightStart != _font._highlightEnd)
@@ -210,8 +203,8 @@ namespace DuckGame
                 }
             }
             int length2 = this.text.Length;
-            _cursorPosition += Keyboard.keyString.Length;
-            Keyboard.keyString = "";
+            _cursorPosition += Keyboard.KeyString.Length;
+            Keyboard.KeyString = "";
             if (Keyboard.Pressed(Keys.Left))
             {
                 --_cursorPosition;

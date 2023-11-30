@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Stuff")]
+    [EditorGroup("Stuff|Props")]
     public class TheDishes : Holdable
     {
         public Sprite dirty;
@@ -32,7 +32,8 @@ namespace DuckGame
             Content.textures[dirty.Namebase] = dirty.texture;
             Content.textures[bubbles.Namebase] = bubbles.texture;
             _editorName = "Dishes";
-            editorTooltip = "DO THE FUCKING DISHES COLLIN";
+            editorTooltip = "To this day scientists don't know why dishes are unbreakable";
+            //editorTooltip = "There was a typo when this virtual simulation was made that made it so dishes are unbreakable";
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)

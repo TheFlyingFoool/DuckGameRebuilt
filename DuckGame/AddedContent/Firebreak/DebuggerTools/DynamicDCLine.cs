@@ -1,3 +1,4 @@
+using AddedContent.Firebreak;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace DuckGame
         {
             string line = GetLine(_iteration--);
             
-            if (line is not null)
+            if (line != null)
             {
                 LineIndex = DevConsole.core.lines.Count;
                 DevConsole.Log(line);
@@ -37,7 +38,7 @@ namespace DuckGame
 
         private static List<DynamicDCLine> s_allDynamicLines = new();
 
-        [DrawingContext(CustomID = "dyn_dc_update")]
+        [Marker.UpdateContext]
         public static void UpdateLines()
         {
             for (int i = 0; i < s_allDynamicLines.Count; i++)
@@ -46,7 +47,7 @@ namespace DuckGame
 
                 string line = item.GetLine(item._iteration++);
 
-                if (line is not null && item._iteration > 0)
+                if (line != null && item._iteration > 0)
                     DevConsole.core.lines.ElementAt(item.LineIndex).line = line;
                 else if (item._iteration != 0)
                     item.Done();

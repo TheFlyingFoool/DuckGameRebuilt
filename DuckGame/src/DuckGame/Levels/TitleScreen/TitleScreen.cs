@@ -1,13 +1,11 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.TitleScreen
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
+﻿using Mono.Cecil;
+using NAudio.MediaFoundation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+#if AutoUpdater
+using System.Threading;
+#endif
 
 namespace DuckGame
 {
@@ -20,6 +18,7 @@ namespace DuckGame
         private float moveWait = 1f;
         private float flash;
         private bool _returnFromArcade;
+        private bool _returnFromDevHall;
         private Profile _arcadeProfile;
         private InputProfile _arcadeInputProfile;
         private TitleMenuSelection _selection = TitleMenuSelection.Play;
@@ -27,13 +26,17 @@ namespace DuckGame
         private BigTitle _title;
         private BitmapFont _font;
         private Sprite _background;
+        private Sprite _background2;
         //private Sprite _optionsPlatform;
         private Sprite _rightPlatform;
         private Sprite _leftPlatform;
+        private Sprite _DGRrightPlatform;
+        private Sprite _DGRleftPlatform;
         private Sprite _beamPlatform;
         private Sprite _upperMonitor;
         private Sprite _optionsTV;
         private Sprite _libraryBookcase;
+        private Sprite _cord;
         private Sprite _editorBench;
         private Sprite _editorBenchPaint;
         private Sprite _bigUButton;
@@ -56,6 +59,8 @@ namespace DuckGame
         private LibraryBeam _libraryBeam;
         private MultiBeam _multiBeam;
         private EditorBeam _editorBeam;
+        private HatEditorBeam _hatEditorBeam;
+        private RecorderatorBeam _recorderatorBeam;
         private Duck _duck;
         private bool _fastMultiplayer;
         private bool _enterMultiplayer;
@@ -75,6 +80,7 @@ namespace DuckGame
         private UIMenu _steamWarningMessage;
         private UIComponent _pauseGroup;
         private UIMenu _mainPauseMenu;
+        private UIMenu _updaterPromptMenu;
         private MenuBoolean _enterCreditsMenuBool = new MenuBoolean();
         private UIMenu _betaMenu;
         private UIMenu _cloudConfigMenu;
@@ -84,9 +90,13 @@ namespace DuckGame
         private UIMenu _blockMenu;
         private UIMenu _modConfigMenu;
         private UICloudManagement _cloudManagerMenu;
+        private bool _shouldUpdateRebuilt;
         private bool _enterEditor;
         private bool _enterCredits;
         private bool _enterArcade;
+        private bool _enterDevHall;
+        public bool _enterRecorderator;
+        public bool _enterFeatherFashion;
         private static bool _hasMenusOpen = false;
         public static bool modsChanged = false;
         private static bool firstStart = true;
@@ -108,6 +118,9 @@ namespace DuckGame
         private bool quittingCredits;
         private bool showedNewVersionStartup;
         private bool showedModsDisabled;
+
+        private UIMenuAction prevbackFunction;
+
         // private int time;
         //  private static bool _showedSteamFailMessage = false;
 
@@ -127,6 +140,15 @@ namespace DuckGame
             if (arcadeProfile == null)
                 return;
             _arcadeInputProfile = arcadeProfile.inputProfile;
+        }
+        public TitleScreen(Profile devHallProfile)
+        {
+            _centeredView = true;
+            _returnFromDevHall = true;
+            _arcadeProfile = devHallProfile;
+            if (devHallProfile == null)
+                return;
+            _arcadeInputProfile = devHallProfile.inputProfile;
         }
 
         public bool menuOpen => Options.menuOpen || _enterMultiplayer;
@@ -148,9 +170,46 @@ namespace DuckGame
         {
             creditsRoll.Add(new List<string>(line));
         }
+        public void PauseMenuOpenLogic() //Jank-ish fix for issues improve later
+        {
+            if (!Options.menuOpen)
+            {
+                _mainPauseMenu.Close();
+                _optionsGroup.Open();
+                _optionsMenu.Open();
+                prevbackFunction = _optionsMenu.backFunction;
+                _optionsMenu.SetBackFunction(new UIMenuActionCloseMenuCallFunction(_optionsMenu, new UIMenuActionCloseMenuCallFunction.Function(OptionsSaveAndCloseDan)));
+                MonoMain.pauseMenu = _optionsGroup;
+            }
+        }
+        private void OptionsSaveAndCloseDan()
+        {
+            Options.Save();
+            Options.SaveLocalData();
+            _optionsMenu.SetBackFunction(prevbackFunction); //reset backfunction 
+            _optionsGroup.Close();
+            _mainPauseMenu.Open();
 
+            MonoMain.pauseMenu = _mainPauseMenu;
+
+        }
+        public static bool Checked;
         public override void Initialize()
         {
+            Program.main.IsFixedTimeStep = true;
+            if (Editor.clientonlycontent)
+            {
+                Editor.DisableClientOnlyContent();
+            }
+            #if AutoUpdater
+            if (!Checked)
+            {
+                Checked = true;
+                if (MonoMain.ForceDGRUpdate | !MonoMain.IgnoreDGRUpdates & Program.CheckForNewVersion())
+                    _shouldUpdateRebuilt = true;
+            }
+            #endif
+            
             Vote.ClearVotes();
             Program.gameLoadedSuccessfully = true;
             Global.Save();
@@ -268,16 +327,19 @@ namespace DuckGame
             AddCreditLine("Landon Podbielski");
             AddCreditLine("");
             AddCreditLine("|CREDITSGRAY|@LWINGGRAY@DGR TEAM@RWINGGRAY@");
-            AddCreditLine("NiK0");
-            AddCreditLine("Dan");
-            AddCreditLine("Collin");
-            AddCreditLine("|RED|Fire|WHITE|break|CREDITSGRAY|");
-            AddCreditLine("|BLACK|Erik|GRAY|7302");
-            AddCreditLine("|DGBLUE|othello|PURPLE|7");
-            AddCreditLine("|GREEN|klof44|CREDITSGRAY|");
-            AddCreditLine("");
-            AddCreditLine("|CREDITSGRAY|@LWINGGRAY@GITHUB CONTRIBUTOR@RWINGGRAY@");
-            AddCreditLine("Lutalli");
+            // AddCreditLine("NiK0");
+            // AddCreditLine("Dan");
+            // AddCreditLine("Collin");
+            // AddCreditLine("|RED|Fire|WHITE|break|CREDITSGRAY|");
+            // AddCreditLine("|BLACK|Erik|GRAY|7302");
+            // AddCreditLine("|DGBLUE|othello|PURPLE|7");
+            // AddCreditLine("|GREEN|klof44|CREDITSGRAY|");
+            // AddCreditLine("|PURPLE|Hyeve");
+            // AddCreditLine("|ORANGE|Lutalli");
+            foreach (DGRebuiltDeveloper dgrDev in DGRDevs.AllWithGuns)
+            {
+                AddCreditLine($"{dgrDev.ColorTag}{dgrDev.DisplayName}|CREDITSGRAY|");
+            }
             AddCreditLine("");
             AddCreditLine("|CREDITSGRAY|@LWINGGRAY@ROOM FURNITURE@RWINGGRAY@");
             AddCreditLine("|CREDITSGRAY|@LWINGGRAY@HOME UPDATE HAT ART@RWINGGRAY@");
@@ -442,10 +504,10 @@ namespace DuckGame
             TeamSelect2.DefaultSettings();
             if (Network.isActive)
                 Network.EndNetworkingSession(new DuckNetErrorInfo(DuckNetError.ControlledDisconnect, "Returned to title screen."));
-            if (Music.currentSong != "Title" && Music.currentSong != "TitleDemo" || Music.finished)
+            if (DGRSettings.StartIn == 0 && (Music.currentSong != "Title" && Music.currentSong != "TitleDemo" || Music.finished))
                 Music.Play("Title");
             if (GameMode.playedGame)
-                GameMode.playedGame = false;
+                GameMode.playedGame = false; 
             _optionsGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
             _optionsMenu = new UIMenu("@WRENCH@OPTIONS@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
             _controlConfigMenu = new UIControlConfig(_optionsMenu, "@WRENCH@DEVICE DEFAULTS@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 194f, conString: "@WASD@@SELECT@ADJUST @CANCEL@BACK");
@@ -463,7 +525,7 @@ namespace DuckGame
             _optionsMenu.Add(new UIText(" ", Color.White), true);
             _optionsMenu.Add(new UIMenuItemToggle("SHENANIGANS", field: new FieldBinding(Options.Data, "shennanigans")), true);
             _optionsMenu.Add(new UIText(" ", Color.White), true);
-            _optionsMenu.Add(new UIMenuItem("REBUILT", new UIMenuActionOpenMenu(_optionsMenu, _dgrMenu), backButton: true), true);
+            _optionsMenu.Add(new UIMenuItem("REBUILT|PINK|♠", new UIMenuActionOpenMenu(_optionsMenu, _dgrMenu), backButton: true), true);
             _optionsMenu.Add(new UIMenuItem("EDIT CONTROLS", new UIMenuActionOpenMenuCallFunction(_optionsMenu, _controlConfigMenu, new UIMenuActionOpenMenuCallFunction.Function(UIControlConfig.ResetWarning)), backButton: true), true);
             _optionsMenu.Add(new UIMenuItem("GRAPHICS", new UIMenuActionOpenMenu(_optionsMenu, _graphicsMenu), backButton: true), true);
             _optionsMenu.Add(new UIMenuItem("AUDIO", new UIMenuActionOpenMenu(_optionsMenu, _audioMenu), backButton: true), true);
@@ -512,10 +574,15 @@ namespace DuckGame
             _optionsGroup.Add(_flagMenu, false);
             _optionsGroup.Add(_graphicsMenu, false);
             _optionsGroup.Add(_dgrMenu, false);
-            _optionsGroup.Add(Options._DGRGraphicsMenu, false);
-            _optionsGroup.Add(Options._DGRHudMenu, false);
-            _optionsGroup.Add(Options._DGRMiscMenu, false);
-            _optionsGroup.Add(Options._DGROptimMenu, false);
+            _optionsGroup.Add(Options.TEMPDGRGRAPHICS, false);
+            _optionsGroup.Add(Options.TEMPDGRGAME, false);
+            _optionsGroup.Add(Options.TEMPDGRHUD, false);
+            _optionsGroup.Add(Options.TEMPDGREDITOR, false);
+            _optionsGroup.Add(Options.TEMPDGRQOL, false);
+            _optionsGroup.Add(Options.TEMPDGRMISC, false);
+            if (Program.IS_DEV_BUILD) _optionsGroup.Add(Options.TEMPDGRDEV, false);
+            _optionsGroup.Add(Options.TEMPDGROPTIM, false);
+            _optionsGroup.Add(Options.TEMPDGRRECORDERATOR, false);
             _optionsGroup.Add(_audioMenu, false);
             if (_accessibilityMenu != null)
                 _optionsGroup.Add(_accessibilityMenu, false);
@@ -546,6 +613,28 @@ namespace DuckGame
             {
                 isPauseMenu = true
             };
+            if (_shouldUpdateRebuilt)
+            {
+                _updaterPromptMenu = new UIMenu("@DGR@DGR UPDATER@WRENCH@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f);
+                _updaterPromptMenu.Add(new LUIText("A new version of DGR", Colors.DGPink));
+                _updaterPromptMenu.Add(new LUIText("has been found", Colors.DGPink));
+                if (Program.NewerRebuiltVersionExists)
+                {
+                    _updaterPromptMenu.Add(new LUIText(Program.LatestRebuiltVersion.VersionStringFormatted, Colors.Platinum));
+                }
+                _updaterPromptMenu.Add(new LUIText("", Colors.DGPink));
+                _updaterPromptMenu.Add(new LUIText("-- UPDATING --", Colors.DGPink));
+                _updaterPromptMenu.Add(new LUIText("", Colors.DGPink));
+                _updaterPromptMenu.Add(new LUIText(() =>
+                {
+                    ProgressValue progress = Program.AutoUpdaterCompletionProgress;
+                    return $"[{progress.Value}/{progress.MaximumValue} {progress.GenerateBar(16, formatFunction: (w, b) => $"|DGGREEN|{w}|GRAY|{b}")}|255,246,214|]";
+                }, Colors.DGVanilla));
+                _updaterPromptMenu.Add(new LUIText(() => $"{Program.AutoUpdaterProgressMessage}", Colors.DGVanilla));
+                _updaterPromptMenu.Close();
+                _pauseGroup.Add(_updaterPromptMenu, false);
+            }
+
             _mainPauseMenu = new UIMenu("@LWING@DUCK GAME@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
             _quitMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
             _quitMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_quitMenu, _mainPauseMenu)), true);
@@ -820,10 +909,12 @@ namespace DuckGame
             component41.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
             _mainPauseMenu.Add(component41, true);
             component41.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(_pauseGroup)), true);
-            component41.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_mainPauseMenu, Options.optionsMenu), UIAlign.Left), true);
+            //component41.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_mainPauseMenu, Options.optionsMenu), UIAlign.Left), true);
+            component41.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(PauseMenuOpenLogic)), UIAlign.Left), true);
             component41.leftSection.Add(new UIMenuItem("CREDITS", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _enterCreditsMenuBool), UIAlign.Left), true);
             component41.leftSection.Add(new UIText("", Color.White), true);
             component41.leftSection.Add(new UIMenuItem("|DGRED|QUIT", new UIMenuActionOpenMenu(_mainPauseMenu, _quitMenu)), true);
+            component41.leftSection.idStr = "mpm";
             Options.openOnClose = _mainPauseMenu;
             Options.AddMenus(_pauseGroup);
             _mainPauseMenu.Close();
@@ -832,6 +923,7 @@ namespace DuckGame
             Add(_pauseGroup);
             _font = new BitmapFont("biosFont", 8);
             _background = new Sprite("title/background");
+            _background2 = new Sprite("title/dgrTitle");
             //this._optionsPlatform = new Sprite("title/optionsPlatform")
             //{
             //    depth = (Depth)0.9f
@@ -840,7 +932,7 @@ namespace DuckGame
             {
                 depth = (Depth)0.9f
             };
-            _beamPlatform = new Sprite("title/beamPlatform")
+            _beamPlatform = new SpriteMap("title/beamPlatform", 84,22)
             {
                 depth = (Depth)0.9f
             };
@@ -856,11 +948,23 @@ namespace DuckGame
             {
                 depth = (Depth)0.9f
             };
+            _DGRleftPlatform = new Sprite("title/dgrLeftPlatform")
+            {
+                depth = (Depth)0.9f
+            };
+            _DGRrightPlatform = new Sprite("title/dgrRightPlatform")
+            {
+                depth = (Depth)0.9f
+            };
             _optionsTV = new Sprite("title/optionsTV")
             {
                 depth = -0.9f
             };
             _libraryBookcase = new Sprite("title/libraryBookcase")
+            {
+                depth = -0.9f
+            };
+            _cord = new Sprite("title/cord")
             {
                 depth = -0.9f
             };
@@ -880,17 +984,30 @@ namespace DuckGame
             _controls.depth = (Depth)0.95f;
             _multiBeam = new MultiBeam(160f, -30f);
             Add(_multiBeam);
+
             _optionsBeam = new OptionsBeam(28f, -110f);
             Add(_optionsBeam);
             _libraryBeam = new LibraryBeam(292f, -110f);
             Add(_libraryBeam);
             _editorBeam = new EditorBeam(28f, 100f);
             Add(_editorBeam);
+            _hatEditorBeam = new HatEditorBeam(292, 285);
+            Add(_hatEditorBeam);
+            _recorderatorBeam = new RecorderatorBeam(29, 169);
+            Add(_recorderatorBeam);
             VersionSign vs = new VersionSign(176f, 18f);
             Add(vs);
             for (int index = 0; index < 21; ++index)
             {
                 SpaceTileset t = new SpaceTileset(index * 16 - 6, 176f)
+                {
+                    frame = 3,
+                    layer = Layer.Game,
+                    setLayer = false
+                };
+                AddThing(t);
+
+                t = new SpaceTileset(index * 16 - 6, 356f)
                 {
                     frame = 3,
                     layer = Layer.Game,
@@ -907,12 +1024,19 @@ namespace DuckGame
             _things.RefreshState();
             Layer.Game.fade = 0f;
             Layer.Foreground.fade = 0f;
+            Add(new PinkBox(160, 274) { scale = new Vec2(2), collisionSize = new Vec2(32), collisionOffset = new Vec2(-16) });
+            Add(new Block(317, 180, 16, 96, PhysicsMaterial.Metal));
+            Add(new Block(-13, 180, 16, 96, PhysicsMaterial.Metal));
+            Add(new Block(257, 242, 64, 66, PhysicsMaterial.Metal));
+            Add(new Block(0, 242, 63, 66, PhysicsMaterial.Metal));
             Add(new Block(120f, 155f, 80f, 30f, PhysicsMaterial.Metal));
             Add(new Block(134f, 148f, 52f, 30f, PhysicsMaterial.Metal));
             Add(new Block(0f, 61f, 63f, 70f, PhysicsMaterial.Metal));
             Add(new Block(257f, 61f, 63f, 60f, PhysicsMaterial.Metal));
             Add(new Spring(90f, 160f, 0.32f));
             Add(new Spring(229f, 160f, 0.32f));
+            Add(new Spring(90f, 340, 0.32f));
+            Add(new Spring(229f, 340, 0.32f));
             Add(new VerticalDoor(270f, 160f)
             {
                 filterDefault = true
@@ -947,6 +1071,14 @@ namespace DuckGame
             Input.lastActiveProfile = InputProfile.DefaultPlayer1;
             if (!DuckNetwork.ShowUserXPGain() && Unlockables.HasPendingUnlocks())
                 MonoMain.pauseMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
+
+            if (_shouldUpdateRebuilt)
+            {
+                _updaterPromptMenu.Open();
+                MonoMain.pauseMenu = _updaterPromptMenu;
+                SFX.Play("pause", 0.6f);
+            }
+            
             base.Initialize();
         }
 
@@ -969,9 +1101,32 @@ namespace DuckGame
             Teams.Player4.Join(Profiles.DefaultPlayer4);
             InputProfile.ReassignDefaultInputProfiles();
         }
-
+        public bool secondTitlescreen;
         public override void Update()
         {
+            #if AutoUpdater
+            if (_shouldUpdateRebuilt)
+            {
+                new Thread(() =>
+                {
+                    try
+                    {
+                        Program.HandleAutoUpdater();
+                    }
+                    catch (Exception e)
+                    {
+                        DevConsole.Log("AutoUpdater Failed:");
+                        DevConsole.LogComplexMessage(e.ToString(), Colors.DGRed);
+                        if (MonoMain.pauseMenu != null)
+                        {
+                            MonoMain.pauseMenu.Close();
+                        }
+                    }
+                }).Start();
+                return;
+            }
+            #endif
+            
             if (_duck != null && DGSave.showOnePointFiveMessages)
             {
                 if (!showedNewVersionStartup && !DuckFile.freshInstall && DGSave.upgradingFromVanilla)
@@ -1009,7 +1164,7 @@ namespace DuckGame
                     }
                 }
             }
-            if (!_enterCredits && !_enterMultiplayer && _duck != null && _duck.inputProfile.Pressed(Triggers.Start))
+            if (!_enterCredits && !_enterMultiplayer && _duck != null && _duck.inputProfile.Pressed(Triggers.Start) && _duck.y < 600)
             {
                 _pauseGroup.Open();
                 _mainPauseMenu.Open();
@@ -1017,7 +1172,7 @@ namespace DuckGame
                 MonoMain.pauseMenu = _pauseGroup;
             }
 
-            if ((_multiBeam.entered || !_fadeInFull))
+            if ((_multiBeam.entered || !_fadeInFull) && !_enterCredits)
             {
                 if (Input.Pressed(Triggers.Grab))
                 {
@@ -1042,51 +1197,57 @@ namespace DuckGame
                     _enterMultiplayer = true;
                 }
             }
-            for (int index = 0; index < num; ++index)
+            if (DGRSettings.ActualParticleMultiplier != 0)
             {
-                starWait -= Maths.IncFrameTimer();
-                if (starWait < 0.0)
+                for (int index = 0; index < num; ++index)
                 {
-                    starWait = 0.1f + Rando.Float(0.2f);
-                    Color color = Colors.DGRed;
-                    if (cpick == 1)
-                        color = Colors.DGBlue;
-                    else if (cpick == 2)
-                        color = Colors.DGGreen;
-                    if (Rando.Float(1f) > 0.995f)
-                        color = Colors.DGPink;
-                    particles.Add(new StarParticle()
+                    starWait -= Maths.IncFrameTimer();
+                    if (starWait < 0)
                     {
-                        pos = new Vec2(0f, (int)(Rando.Float(0f, 150f) / 1.0)),
-                        speed = new Vec2(Rando.Float(0.5f, 1f), 0f),
-                        color = color,
-                        flicker = Rando.Float(100f, 230f)
-                    });
-                    ++cpick;
-                    if (cpick > 2)
-                        cpick = 0;
+                        starWait = 0.1f + Rando.Float(0.2f);
+                        Color color = Colors.DGRed;
+                        if (cpick == 1)
+                            color = Colors.DGBlue;
+                        else if (cpick == 2)
+                            color = Colors.DGGreen;
+                        if (Rando.Float(1f) > 0.995f)
+                            color = Colors.DGPink;
+                        particles.Add(new StarParticle()
+                        {
+                            pos = new Vec2(0f, (int)(Rando.Float(0f, 150f) / 1f)),
+                            speed = new Vec2(Rando.Float(0.5f, 1f), 0f),
+                            color = color,
+                            flicker = Rando.Float(100f, 230f)
+                        });
+                        ++cpick;
+                        if (cpick > 2)
+                            cpick = 0;
+                    }
+                    List<StarParticle> starParticleList = new List<StarParticle>();
+                    foreach (StarParticle particle in particles)
+                    {
+                        particle.pos += particle.speed * (float)(0.5f + (1 - extraFade) * 0.5f);
+                        if (particle.pos.x > 300 && !_enterCredits || particle.pos.x > 680)
+                            starParticleList.Add(particle);
+                    }
+                    foreach (StarParticle starParticle in starParticleList)
+                        particles.Remove(starParticle);
                 }
-                List<StarParticle> starParticleList = new List<StarParticle>();
-                foreach (StarParticle particle in particles)
+            }
+            if (!_enterMultiplayer && !_enterEditor && !_enterLibrary)
+            {
+                if (menuOpen)
                 {
-                    particle.pos += particle.speed * (float)(0.5 + (1.0 - extraFade) * 0.5);
-                    if (particle.pos.x > 300.0 && !_enterCredits || particle.pos.x > 680.0)
-                        starParticleList.Add(particle);
+                    Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0.2f, 0.02f);
+                    Layer.Foreground.fade = Lerp.Float(Layer.Foreground.fade, 0.2f, 0.02f);
+                    Layer.Background.fade = Lerp.Float(Layer.Foreground.fade, 0.2f, 0.02f);
                 }
-                foreach (StarParticle starParticle in starParticleList)
-                    particles.Remove(starParticle);
-            }
-            if (menuOpen)
-            {
-                Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0.2f, 0.02f);
-                Layer.Foreground.fade = Lerp.Float(Layer.Foreground.fade, 0.2f, 0.02f);
-                Layer.Background.fade = Lerp.Float(Layer.Foreground.fade, 0.2f, 0.02f);
-            }
-            else
-            {
-                Layer.Game.fade = Lerp.Float(Layer.Game.fade, _fadeInFull ? 1f : (_fadeIn ? 0.5f : 0f), _fadeInFull ? 0.01f : 3f / 500f);
-                Layer.Foreground.fade = Lerp.Float(Layer.Foreground.fade, _fadeIn ? 1f : 0f, 0.01f);
-                Layer.Background.fade = Lerp.Float(Layer.Background.fade, _fadeBackground ? 0f : 1f, 0.02f);
+                else
+                {
+                    Layer.Game.fade = Lerp.Float(Layer.Game.fade, _fadeInFull ? 1f : (_fadeIn ? 0.5f : 0f), _fadeInFull ? 0.01f : 3f / 500f);
+                    Layer.Foreground.fade = Lerp.Float(Layer.Foreground.fade, _fadeIn ? 1f : 0f, 0.01f);
+                    Layer.Background.fade = Lerp.Float(Layer.Background.fade, _fadeBackground ? 0f : 1f, 0.02f);
+                }
             }
             if (_enterArcade)
             {
@@ -1100,13 +1261,47 @@ namespace DuckGame
                     current = new ArcadeLevel(Content.GetLevelID("arcade"));
                 }
             }
+            else if (_enterDevHall)
+            {
+                --_duck.x;
+                _duck.immobilized = true;
+                _duck.enablePhysics = false;
+                Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.05f);
+                if (Graphics.fade < 0.01f)
+                {
+                    current.Clear();
+                    current = new DGRDevHall(Content.GetLevelID("devHall"));
+                }
+            }
+            else if (_enterRecorderator)
+            {
+                _duck.immobilized = true;
+                _duck.enablePhysics = false;
+                Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.05f);
+                if (Graphics.fade < 0.01f)
+                {
+                    current.Clear();
+                    current = new RecorderationSelector();
+                }
+            }
+            else if (_enterFeatherFashion)
+            {
+                _duck.immobilized = true;
+                _duck.enablePhysics = false;
+                Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.05f);
+                if (Graphics.fade < 0.01f)
+                {
+                    current.Clear();
+                    current = new FeatherFashion();
+                }
+            }
             else
             {
                 if (_enterCredits)
                 {
                     _duck.immobilized = true;
                     _duck.updatePhysics = false;
-                    if (camera.x < 140.0)
+                    if (camera.x < 140)
                     {
                         flashDissipationSpeed = 0.08f;
                         Graphics.flashAdd = 2f;
@@ -1117,11 +1312,11 @@ namespace DuckGame
                     else
                     {
                         switchWait -= 0.04f;
-                        if (switchWait <= 0.0)
+                        if (switchWait <= 0f)
                         {
                             if (!_startedMusic)
                                 Music.volumeMult = Lerp.Float(Music.volumeMult, 0f, 3f / 500f);
-                            if (Layer.Parallax.camera.y > -12.0)
+                            if (Layer.Parallax.camera.y > -12f)
                             {
                                 camera.y += 0.064f;
                                 Layer.Parallax.camera.y -= 0.08f;
@@ -1134,28 +1329,28 @@ namespace DuckGame
                                     Music.Play("tabledoodles", false);
                                     _startedMusic = true;
                                 }
-                                if (creditsScroll > 939.0)
+                                if (creditsScroll > 939f)
                                 {
-                                    if (Layer.Parallax.camera.y > -22.0)
+                                    if (Layer.Parallax.camera.y > -22f)
                                     {
                                         camera.y += 0.064f;
                                         Layer.Parallax.camera.y -= 0.08f;
                                     }
                                     extraFade -= 0.01f;
-                                    if (extraFade < 0.0)
+                                    if (extraFade < 0f)
                                         extraFade = 0f;
                                 }
-                                if (creditsScroll > 2650.0 && !shownPrompt)
+                                if (creditsScroll > 2650f && !shownPrompt)
                                 {
                                     shownPrompt = true;
                                     HUD.AddCornerControl(HUDCorner.BottomLeft, "@CANCEL@Exit");
                                 }
-                                if (creditsScroll < 100.0 && !shownPromptF)
+                                if (creditsScroll < 100f && !shownPromptF)
                                 {
                                     HUD.AddCornerControl(HUDCorner.BottomRight, "@SHOOT@Fast");
                                     shownPromptF = true;
                                 }
-                                else if (creditsScroll > 100.0 && shownPromptF)
+                                else if (creditsScroll > 100f && shownPromptF)
                                 {
                                     HUD.CloseCorner(HUDCorner.BottomRight);
                                     shownPromptF = false;
@@ -1177,8 +1372,10 @@ namespace DuckGame
                 if (_duck != null)
                 {
                     _duck.updatePhysics = true;
-                    if (_duck.x > 324.0)
+                    if (_duck.x > 324)
                         _enterArcade = true;
+                    if (_duck.x < -4)
+                        _enterDevHall = true;
                 }
                 if (quittingCredits)
                 {
@@ -1208,15 +1405,16 @@ namespace DuckGame
             _hasMenusOpen = menuOpen;
             if (!_enterMultiplayer && !_enterEditor && !_enterLibrary) // && !this._enterBuyScreen
             {
-                if (Graphics.fade < 1.0)
+                if (Graphics.fade < 1)
                     Graphics.fade += 1f / 1000f;
                 else
                     Graphics.fade = 1f;
             }
             else
             {
+                _levelStart = false;
                 Graphics.fade -= 0.05f;
-                if (Graphics.fade <= 0.0)
+                if (Graphics.fade <= 0)
                 {
                     Graphics.fade = 0f;
                     Music.Stop();
@@ -1246,7 +1444,7 @@ namespace DuckGame
                 }
             }
             _pressStartBlink += 0.01f;
-            if (_pressStartBlink > 1.0)
+            if (_pressStartBlink > 1)
                 --_pressStartBlink;
             if (_duck != null)
             {
@@ -1272,6 +1470,20 @@ namespace DuckGame
                 _enterCredits = true;
                 _duck.immobilized = true;
             }
+            if (secondTitlescreen)
+            {
+                current.camera.position = Lerp.Vec2Smooth(current.camera.position, new Vec2(0, 180), 0.1f);
+            }
+            else
+            {
+                _bottomRight.y = 400;
+                lowestPoint = 400;
+                if (First<Duck>() != null && First<Duck>().y > 176)
+                {
+                    First<Duck>().y = 90;
+                }
+                current.camera.position = Lerp.Vec2Smooth(current.camera.position, Vec2.Zero, 0.1f);
+            }
             if (_multiBeam.entered)
             {
                 _selectionTextDesired = "MULTIPLAYER";
@@ -1281,6 +1493,16 @@ namespace DuckGame
                     SFX.Play("plasmaFire");
                     _enterMultiplayer = true;
                     _duck.immobilized = true;
+                }
+                if (_duck.inputProfile.Pressed(Triggers.Down) && MonoMain.pauseMenu == null)
+                {
+                    secondTitlescreen = true;
+                    _multiBeam._ducks[0].duck.y = 333;
+                    _multiBeam._ducks[0].duck.solid = true;
+                    _multiBeam._ducks[0].duck.immobilized = false;
+                    _multiBeam._ducks[0].duck.vSpeed = 1;
+                    _multiBeam._ducks.Clear();
+                    _multiBeam.entered = false;
                 }
             }
             else if (_optionsBeam.entered)
@@ -1307,6 +1529,28 @@ namespace DuckGame
                     _duck.immobilized = true;
                 }
             }
+            else if (_hatEditorBeam.entered)
+            {
+                _selectionTextDesired = "HAT EDITOR";
+                _desiredSelection = TitleMenuSelection.FeatherFashion;
+                if (_duck.inputProfile.Pressed(Triggers.Select) && Profiles.allCustomProfiles.Count > 0 && MonoMain.pauseMenu == null)
+                {
+                    SFX.Play("plasmaFire");
+                    _enterFeatherFashion = true;
+                    _duck.immobilized = true;
+                }
+            }
+            else if (_recorderatorBeam.entered)
+            {
+                _selectionTextDesired = "RECORDERATOR";
+                _desiredSelection = TitleMenuSelection.Recorderator;
+                if (_duck.inputProfile.Pressed(Triggers.Select) && Profiles.allCustomProfiles.Count > 0 && MonoMain.pauseMenu == null)
+                {
+                    SFX.Play("plasmaFire");
+                    _enterRecorderator = true;
+                    _duck.immobilized = true;
+                }
+            }
             else if (_editorBeam.entered)
             {
                 _selectionTextDesired = "LEVEL EDITOR";
@@ -1327,7 +1571,7 @@ namespace DuckGame
             if (_selectionText != _selectionTextDesired)
             {
                 _selectionFade -= 0.1f;
-                if (_selectionFade <= 0.0)
+                if (_selectionFade <= 0)
                 {
                     _selectionFade = 0f;
                     _selectionText = _selectionTextDesired;
@@ -1339,7 +1583,7 @@ namespace DuckGame
             if (_controlsFrame != _controlsFrameDesired)
             {
                 _controlsFade -= 0.1f;
-                if (_controlsFade <= 0.0)
+                if (_controlsFade <= 0)
                 {
                     _controlsFade = 0f;
                     _controlsFrame = _controlsFrameDesired;
@@ -1353,7 +1597,7 @@ namespace DuckGame
                 {
                     _fadeIn = true;
                     _title = new BigTitle();
-                    _title.x = (float)(Layer.HUD.camera.width / 2.0 - _title.graphic.w / 2 + 3.0);
+                    _title.x = (float)(Layer.HUD.camera.width / 2f - _title.graphic.w / 2 + 3f);
                     _title.y = Layer.HUD.camera.height / 2f;
                     AddThing(_title);
                     _title.fade = true;
@@ -1375,10 +1619,43 @@ namespace DuckGame
                     _returnFromArcade = false;
                 }
             }
+            if (_returnFromDevHall)
+            {
+                if (!_fadeIn)
+                {
+                    _fadeIn = true;
+                    _title = new BigTitle();
+                    _title.x = (float)(Layer.HUD.camera.width / 2f - _title.graphic.w / 2 + 3f);
+                    _title.y = Layer.HUD.camera.height / 2f;
+                    AddThing(_title);
+                    _title.fade = true;
+                    _title.alpha = 0f;
+                    Layer.Game.fade = 1f;
+                    Layer.Foreground.fade = 1f;
+                    Layer.Background.fade = 1f;
+                    _arcadeProfile.inputProfile = _arcadeInputProfile;
+                    secondTitlescreen = true;
+                    current.camera.y = 180;
+
+                    _duck = new Duck(10, 333, _arcadeProfile)
+                    {
+                        offDir = 1
+                    };
+                    InputProfile.active = _duck.profile.inputProfile;
+                }
+                Graphics.fade = Lerp.Float(Graphics.fade, 1f, 0.05f);
+                if (Graphics.fade > 0.99f)
+                {
+                    Graphics.fade = 1f;
+                    _returnFromDevHall = false;
+                }
+            }
             if (_fadeIn && !_fadeInFull)
             {
-                if (!_returnFromArcade)
+                if (!_returnFromArcade && !_returnFromDevHall)
                     _duck = null;
+                //if (!_returnFromDevHall)
+                //    _duck = null;
                 //if (TitleScreen.firstStart && ParentalControls.AreParentalControlsActive())
                 //{
                 //    MonoMain.pauseMenu = _parentalControlsMenu;
@@ -1417,27 +1694,30 @@ namespace DuckGame
                     Add(_duck);
                     HUD.AddInputChangeDisplay(" Cmon Now That Was Dumb, Dont You Agree? ");
                 }
-                foreach (Profile defaultProfile in Profiles.defaultProfiles)
+                if (DGRSettings.SwitchInput)
                 {
-                    foreach (string trigger in Triggers.SimpleTriggerList)
+                    foreach (Profile defaultProfile in Profiles.defaultProfiles)
                     {
-                        if (defaultProfile.inputProfile.Pressed(trigger, false))
+                        foreach (string trigger in Triggers.SimpleTriggerList)
                         {
-                            _duck.profile = defaultProfile;
-                            InputProfile.active = _duck.profile.inputProfile;
-                            break;
+                            if (defaultProfile.inputProfile.Pressed(trigger, false))
+                            {
+                                _duck.profile = defaultProfile;
+                                InputProfile.active = _duck.profile.inputProfile;
+                                break;
+                            }
                         }
                     }
                 }
             }
             _space.parallax.y = -80f;
             moveWait -= 0.02f;
-            if (moveWait < 0.0)
+            if (moveWait < 0)
             {
                 if (_title == null)
                 {
                     _title = new BigTitle();
-                    _title.x = (float)(Layer.HUD.camera.width / 2.0 - _title.graphic.w / 2 + 3.0);
+                    _title.x = (float)(Layer.HUD.camera.width / 2f - _title.graphic.w / 2 + 3);
                     _title.y = Layer.HUD.camera.height / 2f;
                     AddThing(_title);
                 }
@@ -1454,11 +1734,11 @@ namespace DuckGame
                 _title.alpha = 1f;
                 _fadeIn = true;
             }
-            if (flash > 0.0)
+            if (flash > 0)
             {
                 flash -= 0.016f;
                 dim -= 0.08f;
-                if (dim >= 0.0)
+                if (dim >= 0)
                     return;
                 dim = 0f;
             }
@@ -1466,66 +1746,70 @@ namespace DuckGame
                 flash = 0f;
         }
 
+        private void DisplayUpperMonitorMessage(string message, float row=2f, Color color=default(Color))
+        {
+            if (color == default(Color)) color = Color.White;
+            if (secondTitlescreen)
+            {
+                _font.Draw(message, current.camera.PercentW(50f) - _font.GetWidth(message) / 2f, row * 11f - 7f + 185, color, (Depth)0.95);
+            }
+            else _font.Draw(message, current.camera.PercentW(50f) - _font.GetWidth(message) / 2f, row * 11f - 7f, color, (Depth)0.95);
+        }
+
         public override void PostDrawLayer(Layer layer)
         {
             if (layer == Layer.Foreground)
             {
                 Graphics.Draw(_upperMonitor, 84f, 0f);
+                _font.inputProfile = InputProfile.FirstProfileWithDevice; // comparing to _duck.inputProfile
                 if (_fadeInFull)
                 {
                     _font.alpha = _selectionFade;
-                    _font.inputProfile = _duck.inputProfile;
                     if (_selection == TitleMenuSelection.None)
                     {
-                        string text = "@WASD@MOVE @JUMP@JUMP";
-                        _font.Draw(text, current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
+                        DisplayUpperMonitorMessage("@WASD@MOVE @JUMP@JUMP");
                     }
                     else if (_selection == TitleMenuSelection.Play)
                     {
-                        string text = "@SELECT@PLAY GAME";
-                        _font.Draw(text, current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
+                        _font.Draw("@SELECT@PLAY", current.camera.PercentW(50f) - _font.GetWidth("@SELECT@PLAY") / 2f, 8, Color.White, (Depth)0.95);
+                        _font.Draw("@DOWN@DGR", current.camera.PercentW(50f) - _font.GetWidth("@DOWN@DGR") / 2f, 22, Color.White, (Depth)0.95);
+                        //DisplayUpperMonitorMessage("@SELECT@PLAY");
                     }
                     else if (_selection == TitleMenuSelection.Stats)
                     {
                         if (Profiles.allCustomProfiles.Count > 0)
-                        {
-                            string text = "@SELECT@LIBRARY";
-                            _font.Draw(text, current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
-                        }
+                            DisplayUpperMonitorMessage("@SELECT@LIBRARY");
                     }
                     else if (_selection == TitleMenuSelection.Options)
                     {
-                        string text = "@SELECT@OPTIONS";
-                        _font.Draw(text, current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
+                        DisplayUpperMonitorMessage("@SELECT@OPTIONS");
                     }
                     else if (_selection == TitleMenuSelection.Editor)
                     {
-                        string text = "@SELECT@EDITOR";
-                        _font.Draw(text, current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 16f, Color.White, (Depth)0.95f);
+                        DisplayUpperMonitorMessage("@SELECT@EDITOR");
                     }
-                    //Graphics.Draw(_editorBenchPaint, 45f, 168f);
+                    else if (_selection == TitleMenuSelection.Recorderator)
+                    {
+                        DisplayUpperMonitorMessage("@SELECT@RECORDERATOR");
+                    }
+                    else if (_selection == TitleMenuSelection.FeatherFashion)
+                    {
+                        DisplayUpperMonitorMessage("@SELECT@HAT EDITOR");
+                    }
                 }
                 else
                 {
-                    string text = "PRESS START";
-                    string text2 = "@GRAB@";
-                    string text3 = "@SHOOT@";
-
-                    InputProfile profileWithDevice = InputProfile.FirstProfileWithDevice;
-
                     if (_pressStartBlink >= 0.5)
                     {
-                        _font.Draw(text, current.camera.PercentW(50f) - _font.GetWidth(text) / 2f, 15f, Color.White, (Depth)0.95f);
-                        text2 = "GO TO EDITOR";
-                        text3 = "GO TO LOBBY";
-                        _font.Draw(text2, current.camera.PercentW(50f) - _font.GetWidth(text2) / 2f, 4f, Color.White, (Depth)0.95f, profileWithDevice);
-                        _font.Draw(text3, current.camera.PercentW(50f) - _font.GetWidth(text3) / 2f, 26f, Color.White, (Depth)0.95f, profileWithDevice);
+                        DisplayUpperMonitorMessage("GO TO EDITOR", 1);
+                        DisplayUpperMonitorMessage("PRESS START", 2);
+                        DisplayUpperMonitorMessage("GO TO LOBBY", 3);
                     }
                     else
                     {
-                        Graphics.DrawString("@START@", new Vec2(current.camera.PercentW(50f) - (_font.GetWidth("@START@", false, profileWithDevice) - 1f) / 2f, 15f), Color.White, (Depth)0.9f, profileWithDevice);
-                        _font.Draw(text2, current.camera.PercentW(50f) - (_font.GetWidth(text2, false, profileWithDevice) - 1f) / 2f, 3f, Color.White, (Depth)0.95f, profileWithDevice);
-                        _font.Draw(text3, current.camera.PercentW(50f) - (_font.GetWidth(text3, false, profileWithDevice) - 1f) / 2f, 27f, Color.White, (Depth)0.95f, profileWithDevice);
+                        DisplayUpperMonitorMessage("@GRAB@", 1);
+                        DisplayUpperMonitorMessage("@START@", 2);
+                        DisplayUpperMonitorMessage("@SHOOT@", 3);
                     }
                 }
             }
@@ -1535,9 +1819,12 @@ namespace DuckGame
                 Graphics.Draw(_leftPlatform, 0f, 61f);
                 Graphics.Draw(_airlock, 266f, 135f);
                 Graphics.Draw(_rightPlatform, byte.MaxValue, 61f);
+                Graphics.Draw(_DGRleftPlatform, 0, 242);
+                Graphics.Draw(_DGRrightPlatform, byte.MaxValue, 242);
                 Graphics.Draw(_beamPlatform, 118f, 146f);
                 Graphics.Draw(_optionsTV, 0f, 19f);
                 Graphics.Draw(_libraryBookcase, 263f, 12f);
+                Graphics.Draw(_cord, 0, 200);
                 Graphics.Draw(_editorBench, 1f, 130f);
                 if (creditsScroll > 0.1)
                 {
@@ -1545,12 +1832,12 @@ namespace DuckGame
                     foreach (List<string> stringList in creditsRoll)
                     {
                         float num2 = num1 + (200f - creditsScroll);
-                        if (num2 >= -11.0 && num2 < 200.0)
+                        if (num2 >= -11 && num2 < 200)
                         {
                             if (stringList.Count == 1)
                             {
                                 float stringWidth = Graphics.GetStringWidth(stringList[0]);
-                                Graphics.DrawStringColoredSymbols(stringList[0], new Vec2((float)(490.0 - stringWidth / 2.0), num1 + (200f - creditsScroll)), Color.White, (Depth)1f);
+                                Graphics.DrawStringColoredSymbols(stringList[0], new Vec2((float)(490f - stringWidth / 2f), num1 + (200f - creditsScroll)), Color.White, (Depth)1f);
                             }
                             else
                             {
@@ -1567,36 +1854,41 @@ namespace DuckGame
             else if (layer == Layer.Parallax)
             {
                 float num = 0f;
-                if (camera.y > 4.0)
+                if (camera.y > 4)
                 {
-                    _starField.alpha = num + (float)((camera.y - 4.0) / 13.0) - extraFade * 0.7f;
+                    _starField.alpha = num + (float)((camera.y - 4f) / 13) - extraFade * 0.7f;
                     Graphics.Draw(_starField, 0f, layer.camera.y - 58f, -0.99f);
                 }
             }
             else if (layer == Layer.Background)
             {
-                foreach (StarParticle particle in particles)
+                if (DGRSettings.S_ParticleMultiplier != 0)
                 {
-                    float num3 = Math.Max(1f - Math.Min(Math.Abs(particle.pos.x - particle.flicker) / 10f, 1f), 0f);
-                    float num4 = 0.2f;
-                    if (camera.y > 0.0)
-                        num4 += camera.y / 52f;
-                    Graphics.DrawRect(particle.pos, particle.pos + new Vec2(1f, 1f), Color.White * (float)((num4 + num3 * 0.6f) * (0.3f + (1.0 - extraFade) * 0.7f)), -0.3f);
-                    float num5 = 0.1f;
-                    if (camera.y > 0.0)
-                        num5 += camera.y / 52f;
-                    Vec2 pos = particle.pos;
-                    int num6 = 4;
-                    for (int index = 0; index < num6; ++index)
+                    foreach (StarParticle particle in particles)
                     {
-                        float num7 = particle.speed.x * 8f;
-                        Graphics.DrawLine(pos + new Vec2(-num7, 0.5f), pos + new Vec2(0f, 0.5f), particle.color * ((float)(1.0 - index / num6) * num5) * (float)(0.3f + (1.0 - extraFade) * 0.7f), depth: (-0.4f));
-                        pos.x -= num7;
+                        float num3 = Math.Max(1f - Math.Min(Math.Abs(particle.pos.x - particle.flicker) / 10f, 1f), 0f);
+                        float num4 = 0.2f;
+                        if (camera.y > 0)
+                            num4 += camera.y / 52f;
+                        Graphics.DrawRect(particle.pos, particle.pos + new Vec2(1f, 1f), Color.White * (float)((num4 + num3 * 0.6f) * (0.3f + (1f - extraFade) * 0.7f)), -0.3f);
+                        float num5 = 0.1f;
+                        if (camera.y > 0)
+                            num5 += camera.y / 52f;
+                        Vec2 pos = particle.pos;
+                        int num6 = 4;
+                        for (int index = 0; index < num6; ++index)
+                        {
+                            float num7 = particle.speed.x * 8f;
+                            Graphics.DrawLine(pos + new Vec2(-num7, 0.5f), pos + new Vec2(0f, 0.5f), particle.color * ((float)(1f - index / num6) * num5) * (float)(0.3f + (1f - extraFade) * 0.7f), depth: (-0.4f));
+                            pos.x -= num7;
+                        }
                     }
                 }
                 _background.depth = (Depth)0f;
                 Rectangle sourceRectangle = new Rectangle(0f, 0f, 90f, _background.height);
                 Graphics.Draw(_background, 0f, 0f, sourceRectangle);
+
+                Graphics.Draw(_background2, 0, 184);
                 sourceRectangle = new Rectangle(63f, 107f, 194f, 61f);
                 Graphics.Draw(_background, sourceRectangle.x, sourceRectangle.y, sourceRectangle);
                 sourceRectangle = new Rectangle(230f, 61f, 28f, 61f);

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Grapple
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -157,7 +150,7 @@ namespace DuckGame
                 duck.frictionMult = 1f;
                 duck.gravMultiplier = 1f;
                 duck._double = false;
-                if (duck.vSpeed < 0.0 && duck.framesSinceJump > 3)
+                if (duck.vSpeed < 0 && duck.framesSinceJump > 3)
                     duck.vSpeed *= 1.75f;
                 if (duck.vSpeed >= duck.jumpSpeed * 0.95f && Math.Abs(duck.vSpeed) + Math.Abs(duck.hSpeed) < 2.0f)
                 {
@@ -178,7 +171,7 @@ namespace DuckGame
         {
             if (_harpoon == null)
                 return;
-            if (isServerForObject)
+            if (isServerForObject && !Recorderator.Playing)
             {
                 ropeData.Clear();
                 SerializeRope(_rope);
@@ -217,7 +210,7 @@ namespace DuckGame
                     _grappleTravel = bullet.travelDirNormalized;
                     num = (p1 - _wallPoint).length;
                 }
-                if (num < _grappleLength - 2.0 && num <= _grappleDist + 16.0)
+                if (num < _grappleLength - 2 && num <= _grappleDist + 16)
                 {
                     _lastHit = _wallPoint;
                     _canGrab = true;
@@ -289,11 +282,11 @@ namespace DuckGame
                     duck.frictionMult = 1f;
                     duck.gravMultiplier = 1f;
                 }
-                if (_rope.properLength > 0.0)
+                if (_rope.properLength > 0)
                 {
-                    if (duck.inputProfile.Down(Triggers.Up) && _rope.properLength >= 16.0)
+                    if (duck.inputProfile.Down(Triggers.Up) && _rope.properLength >= 16)
                         _rope.properLength -= 2f;
-                    if (duck.inputProfile.Down(Triggers.Down) && _rope.properLength <= 256.0)
+                    if (duck.inputProfile.Down(Triggers.Down) && _rope.properLength <= 256)
                         _rope.properLength += 2f;
                     _rope.properLength = Maths.Clamp(_rope.properLength, 16f, 256f);
                 }
@@ -308,19 +301,14 @@ namespace DuckGame
                 gravMultiplier = 1f;
             }
             Vec2 vec2_1 = _rope.attach1.position - _rope.attach2.position;
-            if (_rope.properLength < 0.0)
-                _rope.properLength = _rope.startLength = vec2_1.length;
-            if (vec2_1.length <= _rope.properLength)
-                return;
+            if (_rope.properLength < 0f) _rope.properLength = _rope.startLength = vec2_1.length;
+            if (vec2_1.length <= _rope.properLength) return;
             vec2_1 = vec2_1.normalized;
             if (duck != null)
             {
                 this.duck.grappleMul = true;
                 PhysicsObject duck = this.duck;
-                if (this.duck.ragdoll != null)
-                {
-                    Degrapple();
-                }
+                if (this.duck.ragdoll != null) Degrapple();
                 else
                 {
                     Vec2 position = duck.position;
@@ -369,7 +357,7 @@ namespace DuckGame
                 if (_sightHit != null)
                 {
                     _sightHit.color = Color.Red;
-                    Graphics.Draw(_sightHit, _wallPoint.x, _wallPoint.y);
+                    Graphics.Draw(ref _sightHit, _wallPoint.x, _wallPoint.y);
                 }
             }
             base.DrawGlow();

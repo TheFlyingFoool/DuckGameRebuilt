@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ContextBackgroundTile
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 
 namespace DuckGame
@@ -101,9 +94,9 @@ namespace DuckGame
                     p1.x += itemSize.x + 4f;
                     p1.y -= 2f;
                 }
-                Vec2 vec2_1 = new Vec2(graphic.position);
-                _thing.x = (float)(p1.x + 1.0 + graphic.w / 2.0);
-                _thing.y = (float)(p1.y + 1.0 + graphic.h / 2.0);
+                //Vec2 vec2_1 = new Vec2(graphic.position); WHAT -NIK0
+                _thing.x = (float)(p1.x + 1f + graphic.w / 2f);
+                _thing.y = (float)(p1.y + 1f + graphic.h / 2f);
                 _thing.depth = (Depth)0.7f;
                 Graphics.DrawRect(p1, p1 + new Vec2(x, y), new Color(70, 70, 70), (Depth)0.5f);
                 Graphics.DrawRect(p1 + new Vec2(1f, 1f), p1 + new Vec2(x - 1f, y - 1f), new Color(30, 30, 30), (Depth)0.6f);
@@ -112,7 +105,7 @@ namespace DuckGame
                 if (_root && _file != null)
                 {
                     Vec2 vec2_2 = new Vec2(p1 + new Vec2(x + 4f, 0f));
-                    Vec2 vec2_3 = new Vec2(p1 + new Vec2(x + 97f, 12f));
+                    //Vec2 vec2_3 = new Vec2(p1 + new Vec2(x + 97f, 12f)); what -NiK0
                     _file.position = vec2_2;
                     _file.Update();
                     _file.Draw();

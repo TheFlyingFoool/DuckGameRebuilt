@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.NetDebugDropdown
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -46,7 +39,7 @@ namespace DuckGame
             if (_dropped)
             {
                 flag1 = true;
-                Rectangle r2 = new Rectangle(position.x, (float)(position.y + vec2.y + 4.0), vec2.x, vec2.y * elementList.Count);
+                Rectangle r2 = new Rectangle(position.x, (float)(position.y + vec2.y + 4), vec2.x, vec2.y * elementList.Count);
                 Graphics.DrawRect(r2, Color.White, depth + 2, false);
                 Graphics.DrawRect(r2, Color.Black * 0.8f, depth + 1);
                 foreach (Element element in elementList)
@@ -77,7 +70,7 @@ namespace DuckGame
             Graphics.DrawRect(position, position + vec2, Color.Black * 0.8f, depth + 1);
             Graphics.DrawRect(r1, Color.White, depth + 6, false);
             Graphics.DrawRect(r1, flag2 ? Color.White * 0.6f : Color.Gray * 0.5f, depth + 5);
-            Graphics.Draw(_downArrow, r1.Center.x, r1.Center.y, depth + 8);
+            Graphics.Draw(ref _downArrow, r1.Center.x, r1.Center.y, depth + 8);
             string text = "-";
             if (selected != null)
                 text = selected.name;

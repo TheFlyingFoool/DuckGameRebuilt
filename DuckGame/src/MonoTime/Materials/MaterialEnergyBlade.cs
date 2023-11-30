@@ -40,7 +40,8 @@ namespace DuckGame
         }
         public override void Apply()
         {
-            _time += 0.016f;
+            if (MonoMain.UpdateLerpState)
+                _time += 0.016f;
             bool isspritebatch = false;
             if (batchItem != null && batchItem.NormalTexture != null && batchItem.NormalTexture.Namebase != null && Content.offests.ContainsKey("energyTex") && Content.offests.ContainsKey(batchItem.NormalTexture.Namebase))
             {
@@ -66,11 +67,11 @@ namespace DuckGame
                         SetValue("time", _time);
                         SetValue("glow", glow);
                         SetValue("bladeColor", _thing.swordColor);
-                        SetValue("sasize", new Vec2(Content.Thick.width, Content.Thick.height));
-                        SetValue("xoffset", r.X / (float)Content.Thick.width);
-                        SetValue("yoffset", r.Y / (float)Content.Thick.height);
-                        SetValue("spritesizex", r.Width / (float)Content.Thick.width);
-                        SetValue("spritesizey", r.Height / (float)Content.Thick.height);
+                        SetValue("sasize", new Vec2(Content.SpriteAtlasTex2D.width, Content.SpriteAtlasTex2D.height));
+                        SetValue("xoffset", r.X / (float)Content.SpriteAtlasTex2D.width);
+                        SetValue("yoffset", r.Y / (float)Content.SpriteAtlasTex2D.height);
+                        SetValue("spritesizex", r.Width / (float)Content.SpriteAtlasTex2D.width);
+                        SetValue("spritesizey", r.Height / (float)Content.SpriteAtlasTex2D.height);
                         SetValue("goldxoffset", r2.X);
                         SetValue("goldyoffset", r2.Y);
                         SetValue("goldsizex", r2.Width);
@@ -87,11 +88,11 @@ namespace DuckGame
                         SetValue("time", _time); // _time
                         SetValue("glow", glow);
                         SetValue("bladeColor", _thing2.swordColor);
-                        SetValue("sasize", new Vec2(Content.Thick.width, Content.Thick.height));
-                        SetValue("xoffset", r.X / (float)Content.Thick.width);
-                        SetValue("yoffset", r.Y / (float)Content.Thick.height);
-                        SetValue("spritesizex", r.Width / (float)Content.Thick.width);
-                        SetValue("spritesizey", r.Height / (float)Content.Thick.height);
+                        SetValue("sasize", new Vec2(Content.SpriteAtlasTex2D.width, Content.SpriteAtlasTex2D.height));
+                        SetValue("xoffset", r.X / (float)Content.SpriteAtlasTex2D.width);
+                        SetValue("yoffset", r.Y / (float)Content.SpriteAtlasTex2D.height);
+                        SetValue("spritesizex", r.Width / (float)Content.SpriteAtlasTex2D.width);
+                        SetValue("spritesizey", r.Height / (float)Content.SpriteAtlasTex2D.height);
                         SetValue("goldxoffset", r2.X);
                         SetValue("goldyoffset", r2.Y);
                         SetValue("goldsizex", r2.Width);

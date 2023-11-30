@@ -30,14 +30,14 @@
 //            UIBox component3 = new UIBox(isVisible: false);
 //            component3.Add(new UIText("AMMO: " + (gun.ammo > 900 ? "INFINITE" : gun.ammo.ToString()), Color.White, UIAlign.Left), true);
 //            string str1 = "SHORT";
-//            if (gun.ammoType.range > 150.0)
+//            if (gun.ammoType.range > 150)
 //                str1 = "MEDIUM";
-//            if (gun.ammoType.range > 300.0)
+//            if (gun.ammoType.range > 300)
 //                str1 = "LONG";
-//            if (gun.ammoType.range > 600.0)
+//            if (gun.ammoType.range > 600)
 //                str1 = "EXTREME";
 //            component3.Add(new UIText("RANGE: " + str1, Color.White, UIAlign.Left), true);
-//            if (gun.ammoType.penetration > 0.0)
+//            if (gun.ammoType.penetration > 0)
 //                component3.Add(new UIText("PENETRATION: " + gun.ammoType.penetration.ToString(), Color.White, UIAlign.Left), true);
 //            else
 //                component3.Add(new UIText("SPECIAL AMMO", Color.White, UIAlign.Left), true);

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.CandleBall
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Linq;
+﻿using System.Linq;
 
 namespace DuckGame
 {
@@ -47,7 +40,7 @@ namespace DuckGame
 
         protected override bool OnDestroy(DestroyType type = null)
         {
-            if (isServerForObject)
+            if (isServerForObject && !Recorderator.Playing)
             {
                 for (int index = 0; index < _numFlames; ++index)
                     Level.Add(SmallFire.New(x - hSpeed, y - vSpeed, Rando.Float(6f) - 3f, Rando.Float(6f) - 3f, firedFrom: this));
@@ -68,8 +61,8 @@ namespace DuckGame
             if (Rando.Float(25f) < 0.1f)
                 vSpeed += Rando.Float(6f) - 7f;
 
-            if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(SmallSmoke.New(x, y));
-            else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(x, y));
+            if (DGRSettings.ActualParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++) Level.Add(SmallSmoke.New(x, y));
+            else if (Rando.Float(1) < DGRSettings.ActualParticleMultiplier) Level.Add(SmallSmoke.New(x, y));
             if (hSpeed > 0f)
                 _sprite.angleDegrees = 90f;
             else if (hSpeed < 0f)

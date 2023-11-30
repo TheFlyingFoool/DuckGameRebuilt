@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.PositronShooter
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -74,7 +67,7 @@ namespace DuckGame
         private int _prevInc;
         private bool _winding;
         private float _windVelocity;
-        private float _wind;
+        public float _wind;
         private int _noteIndex;
         public static bool inFire;
 
@@ -147,8 +140,10 @@ namespace DuckGame
                 {
                     if (_noteIndex < _notes.Count)
                     {
-                        if (_notes[_noteIndex] != "")
+                        if (_notes[_noteIndex] != "" && !Recorderator.Playing)
+                        {
                             SFX.Play("musicBox" + _notes[_noteIndex]);
+                        }
                         ++_noteIndex;
                     }
                     else
@@ -174,7 +169,7 @@ namespace DuckGame
         {
             Vec2 vec2 = Offset(new Vec2(0.5f, 0.5f));
             _positronWinder.angle = _wind * offDir;
-            Graphics.Draw(_positronWinder, vec2.x, vec2.y, depth + 10);
+            Graphics.Draw(ref _positronWinder, vec2.x, vec2.y, depth + 10);
             base.Draw();
         }
 

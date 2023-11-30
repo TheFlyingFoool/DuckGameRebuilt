@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Feather
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class Feather : Thing
     {
@@ -56,7 +49,7 @@ namespace DuckGame
             position.y = ypos;
             alpha = 1f;
             hSpeed = Rando.Float(6f) - 3f;
-            vSpeed = (float)(Rando.Float(2f) - 1.0 - 1.0);
+            vSpeed = (float)(Rando.Float(2f) - 1 - 1);
             _sprite = who.featherSprite.CloneMap();
             _sprite.SetAnimation("feather");
             _sprite.frame = Rando.Int(3);

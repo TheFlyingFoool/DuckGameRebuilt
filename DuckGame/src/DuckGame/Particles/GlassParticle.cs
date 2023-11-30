@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.GlassParticle
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class GlassParticle : PhysicsParticle
     {
@@ -28,6 +21,11 @@ namespace DuckGame
             base.Update();
         }
 
-        public override void Draw() => Graphics.DrawRect(position, position + new Vec2(1f, 1f), (_tint > 0 ? Window.windowColors[_tint] : Color.LightBlue) * alpha, depth);
+        public override void Draw()
+        {
+            ParticleLerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
+            Graphics.DrawRect(ParticleLerp.Position, ParticleLerp.Position + new Vec2(1f, 1f), (_tint > 0 ? Window.windowColors[_tint] : Color.LightBlue) * alpha, depth);
+        }
     }
 }

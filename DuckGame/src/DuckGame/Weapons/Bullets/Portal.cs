@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Portal
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame
@@ -72,7 +65,7 @@ namespace DuckGame
                 if (topLeft.y < door.bottom)
                     topLeft.y = door.bottom;
                 float hi = autoBlock1.bottom - topLeft.y;
-                if (hi < 8.0)
+                if (hi < 8f)
                     hi = 8f;
                 door.collision.Add(new Block(topLeft.x, topLeft.y, autoBlock1.width, hi));
             }
@@ -83,7 +76,7 @@ namespace DuckGame
                 if (bottomLeft.y > door.top)
                     bottomLeft.y = door.top;
                 float hi = bottomLeft.y - autoBlock2.top;
-                if (hi < 8.0)
+                if (hi < 8f)
                     hi = 8f;
                 door.collision.Add(new Block(bottomLeft.x, bottomLeft.y - hi, autoBlock2.width, hi));
             }

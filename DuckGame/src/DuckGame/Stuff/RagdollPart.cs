@@ -39,7 +39,7 @@ namespace DuckGame
         private int _ownTime;
         private Vec2 _stickLerp;
         private Vec2 _stickSlowLerp;
-
+        public Interp RagLerp = new Interp(true);
         public override NetworkConnection connection
         {
             get => _doll != null ? _doll.connection : base.connection;
@@ -286,7 +286,7 @@ namespace DuckGame
             if (DGRSettings.ActualParticleMultiplier != 0)
             {
                 Feather feather = Feather.New(0f, 0f, _persona);
-                feather.hSpeed = (float)(-bullet.travelDirNormalized.x * (1.0 + Rando.Float(1f)));
+                feather.hSpeed = (float)(-bullet.travelDirNormalized.x * (1 + Rando.Float(1f)));
                 feather.vSpeed = -Rando.Float(2f);
                 feather.position = hitPos;
                 Level.Add(feather);
@@ -343,7 +343,7 @@ namespace DuckGame
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (_doll.captureDuck != null && !_doll.captureDuck.dead && (part == 0 || part == 1) && totalImpactPower > 5.0 && _doll.captureDuck.quack < 0.25)
+            if (_doll.captureDuck != null && !_doll.captureDuck.dead && (part == 0 || part == 1) && totalImpactPower > 5 && _doll.captureDuck.quack < 0.25f)
             {
                 _doll.captureDuck.Swear();
                 float intensityToSet = Math.Min(totalImpactPower * 0.01f, 1f);
@@ -375,14 +375,14 @@ namespace DuckGame
 
         public void UpdateLastReasonablePosition(Vec2 pPosition)
         {
-            if (pPosition.y <= -7000.0 || pPosition.y >= Level.activeLevel.lowestPoint + 400.0)
+            if (pPosition.y <= -7000 || pPosition.y >= Level.activeLevel.lowestPoint + 400)
                 return;
             _lastReasonablePosition = pPosition;
         }
 
         public override void Update()
         {
-            if (_doll == null || y > Level.activeLevel.lowestPoint + 1000.0 && isOffBottomOfLevel)
+            if (_doll == null || y > Level.activeLevel.lowestPoint + 1000 && isOffBottomOfLevel)
                 return;
             UpdateLastReasonablePosition(position);
             if (clipFrames > 0)
@@ -480,19 +480,19 @@ namespace DuckGame
             FluidPuddle fluidPuddle = Level.CheckPoint<FluidPuddle>(position + new Vec2(0f, 4f));
             if (fluidPuddle != null)
             {
-                if (y + 4.0 - fluidPuddle.top > 8.0)
+                if (y + 4 - fluidPuddle.top > 8)
                 {
                     gravMultiplier = -0.5f;
                     grounded = false;
                 }
                 else
                 {
-                    if (y + 4.0 - fluidPuddle.top < 3.0)
+                    if (y + 4 - fluidPuddle.top < 3)
                     {
                         gravMultiplier = 0.2f;
                         grounded = true;
                     }
-                    else if (y + 4.0 - fluidPuddle.top > 4.0)
+                    else if (y + 4 - fluidPuddle.top > 4)
                     {
                         gravMultiplier = -0.2f;
                         grounded = true;
@@ -511,14 +511,14 @@ namespace DuckGame
                 if (isServerForObject)
                 {
                     if (offDir < 0)
-                        angleDegrees = (float)(-Maths.PointDirection(position, _joint.position) + 180.0 + 90.0);
+                        angleDegrees = (float)(-Maths.PointDirection(position, _joint.position) + 180 + 90);
                     else
-                        angleDegrees = (float)(-Maths.PointDirection(position, _joint.position) - 90.0);
+                        angleDegrees = (float)(-Maths.PointDirection(position, _joint.position) - 90);
                 }
             }
             if (_part == 3 && connect != null)
             {
-                angleDegrees = (float)(-Maths.PointDirection(position, connect.position) + 180.0);
+                angleDegrees = (float)(-Maths.PointDirection(position, connect.position) + 180);
                 depth = connect.depth + 2;
             }
             visible = _part != 2;
@@ -539,6 +539,8 @@ namespace DuckGame
 
         public override void Draw()
         {
+            RagLerp.UpdateLerpState(this.position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
             addWeight = 0f;
             extraGravMultiplier = 1f;
             if (_part == 2 || _joint == null)
@@ -546,7 +548,7 @@ namespace DuckGame
             Vec2 position = this.position;
             Vec2 vec2_1 = this.position - _joint.position;
             float num1 = vec2_1.length;
-            if (num1 > 8.0)
+            if (num1 > 8)
                 num1 = 8f;
             this.position = _joint.position + vec2_1.normalized * num1;
             if (_part == 0 && _doll != null && _doll.captureDuck != null && (_doll.captureDuck.quack > 0 || doll != null && doll.tongueStuck != Vec2.Zero))
@@ -640,10 +642,8 @@ namespace DuckGame
                 graphic = _campDuck;
             }
             float angleDegrees = this.angleDegrees;
-            if (offDir < 0)
-                this.angleDegrees = (float)(-Maths.PointDirection(this.position, _joint.position) + 180.0 + 90.0);
-            else
-                this.angleDegrees = (float)(-Maths.PointDirection(this.position, _joint.position) - 90.0);
+            if (offDir < 0) this.angleDegrees = (float)(-Maths.PointDirection(this.position, _joint.position) + 180 + 90);
+            else this.angleDegrees = (float)(-Maths.PointDirection(this.position, _joint.position) - 90);
             base.Draw();
             this.angleDegrees = angleDegrees;
             graphic = graphic1;

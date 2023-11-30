@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ConsoleScreen
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
@@ -97,15 +90,11 @@ namespace DuckGame
             if (_flashTransition)
             {
                 _darken -= 0.2f;
-                if (_darken < 0.2f)
-                    _flashTransition = false;
+                if (_darken < 0.2f) _flashTransition = false;
             }
-            if (_flashTransition)
-                return;
-            if (_darken < 1.0)
-                _darken += 0.2f;
-            else
-                _darken = 1f;
+            if (_flashTransition) return;
+            if (_darken < 1f) _darken += 0.2f;
+            else _darken = 1f;
         }
     }
 }

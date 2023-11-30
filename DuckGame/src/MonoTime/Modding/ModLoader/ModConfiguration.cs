@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ModConfiguration
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Xml;
@@ -25,6 +18,7 @@ namespace DuckGame
         private string _contentDirectory;
         private string _uniqueID;
         private Assembly _assembly;
+        public string[] SortedTypeNames = new string[0]; // for DG Compatiablity as DGR rebuilding mods alters the order
 
         /// <summary>The type of mod this is.</summary>
         public Type modType { get; internal set; }
@@ -171,6 +165,7 @@ namespace DuckGame
         ///   <c>true</c> if mod will not try to compile itself; otherwise, <c>false</c>.
         /// </value>
         public bool noRecompilation { get; internal set; }
+        public bool noPreloadAssets { get; internal set; }
         public bool noCompilation { get; internal set; }
 
         /// <summary>
@@ -277,6 +272,7 @@ namespace DuckGame
                     }, StringSplitOptions.RemoveEmptyEntries);
                 }
                 noRecompilation = documentElement["NoRecompilation"] != null && documentElement["NoRecompilation"].InnerText.ToLower() == "true";
+                noPreloadAssets = documentElement["NoPreloadAssets"] != null && documentElement["NoPreloadAssets"].InnerText.ToLower() == "true";
                 noCompilation = documentElement["NoCompilation"] != null && documentElement["NoCompilation"].InnerText.ToLower() == "true";
                 preloadContent = documentElement["PreloadContent"] == null || !(documentElement["PreloadContent"].InnerText.ToLower() == "false");
                 processPinkTransparency = documentElement["PinkTransparency"] == null || !(documentElement["PinkTransparency"].InnerText.ToLower() == "false");

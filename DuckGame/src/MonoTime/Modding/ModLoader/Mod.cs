@@ -1,13 +1,8 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Mod
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -18,7 +13,7 @@ namespace DuckGame
     /// </summary>
     public abstract class Mod
     {
-        private Dictionary<System.Type, List<System.Type>> _typeLists = new Dictionary<System.Type, List<System.Type>>();
+        private Dictionary<Type, List<Type>> _typeLists = new Dictionary<Type, List<Type>>();
         private uint _dataHash;
         private uint _thingHash;
         private uint _netMessageHash;
@@ -32,7 +27,7 @@ namespace DuckGame
         public bool clientMod;
         private Tex2D _previewTexture;
         private Tex2D _screenshot;
-        private Map<ushort, System.Type> _typeToMessageID = new Map<ushort, System.Type>();
+        private Map<ushort, Type> _typeToMessageID = new Map<ushort, Type>();
         private Map<ushort, ConstructorInfo> _constructorToMessageID = new Map<ushort, ConstructorInfo>();
         public ushort currentMessageIDIndex = 1;
         private uint _identifierHash;
@@ -64,7 +59,7 @@ namespace DuckGame
                 if (_thingHash == 0U)
                 {
                     string str = "";
-                    foreach (System.Type type in GetTypeList(typeof(Thing)))
+                    foreach (Type type in GetTypeList(typeof(Thing)))
                         str += type.Name;
                     _thingHash = CRC32.Generate(str);
                 }
@@ -80,7 +75,7 @@ namespace DuckGame
                 if (_netMessageHash == 0U)
                 {
                     string str = "";
-                    foreach (KeyValuePair<ushort, System.Type> keyValuePair in typeToMessageID)
+                    foreach (KeyValuePair<ushort, Type> keyValuePair in typeToMessageID)
                         str += keyValuePair.Value.Name;
                     _netMessageHash = CRC32.Generate(str);
                 }
@@ -88,14 +83,38 @@ namespace DuckGame
             }
         }
 
-        public List<System.Type> GetTypeList(System.Type pType)
+        public List<Type> GetTypeList(Type pType)
         {
-            List<System.Type> typeList;
+            List<Type> typeList;
             if (!_typeLists.TryGetValue(pType, out typeList))
-                typeList = _typeLists[pType] = new List<System.Type>();
+                typeList = _typeLists[pType] = new List<Type>();
             return typeList;
         }
+        public IEnumerable<Type> SortTypeOrder(IEnumerable<Type> types)
+        {
+            if (configuration.SortedTypeNames.Length == 0)
+            {
+                return types;
+            }
+            List<Type> unsortedTypes = new List<Type>(types);
+            List<Type> sortedTypes = new List<Type>(unsortedTypes.Count);
 
+            foreach (string typeName in configuration.SortedTypeNames)
+            {
+                for (int i = 0; i < unsortedTypes.Count; i++)
+                {
+                    if (unsortedTypes[i].FullName == typeName)
+                    {
+                        sortedTypes.Add(unsortedTypes[i]);
+                        unsortedTypes.RemoveAt(i);
+                        break;
+                    }
+                }
+            }
+            sortedTypes.AddRange(unsortedTypes);
+
+            return sortedTypes;
+        }
         /// <summary>
         /// Used by the mod upload window, you shouldn't need this.
         /// </summary>
@@ -258,7 +277,7 @@ namespace DuckGame
 
         internal void InvokeStart() => OnStart();
 
-        public Map<ushort, System.Type> typeToMessageID => _typeToMessageID;
+        public Map<ushort, Type> typeToMessageID => _typeToMessageID;
 
         public Map<ushort, ConstructorInfo> constructorToMessageID => _constructorToMessageID;
 

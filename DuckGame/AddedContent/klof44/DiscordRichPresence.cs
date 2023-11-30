@@ -14,12 +14,19 @@ namespace DuckGame
 
         private static System.Timers.Timer tryReconnect;
 
-        public static DiscordRpcClient client;
+        public static DiscordRpcClient client { get; private set;}
 
         public static bool connected;
 
+        public static bool noRPC = false;
+
         public static void Initialize()
         {
+            if (noRPC)
+            {
+                return;
+            }
+
             client = new DiscordRpcClient("1006027196613267568"); // klof44, Dan and Firebreak have access
 
             tryReconnect = new System.Timers.Timer(30000)
@@ -30,11 +37,11 @@ namespace DuckGame
             {
                 AutoReset = true
             };
-            
+
             client.OnReady += (sender, e) =>
             {
                 tryReconnect.Enabled = false;
-                DevConsole.Log("|DGRED|DGREBUILT |PREV|Connected to discord", Color.LightGreen);
+                DevConsole.Log("|PINK|DGR |PREV|Connected to discord");
                 connected = true;
             };
 
@@ -79,7 +86,6 @@ namespace DuckGame
         }
         public static string ToTitleCase(string str)
         {
-
             TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
             return textInfo.ToTitleCase(str);
         }
@@ -174,15 +180,20 @@ namespace DuckGame
                     }
                     if (Level.current is GameLevel)
                     {
+                        assets.LargeImageKey = "netgun";
                         if ((Level.current as GameLevel).displayName == null)
                         {
                             rpc.State = "Random Level";
                         }
                         else
                         {
+                            if (!(Level.current as GameLevel).isCustomLevel)
+                            {
+                                assets.LargeImageKey = $"https://klof44.github.io/static/img/DGR/{(Level.current as GameLevel).displayName}.png";
+                            }
                             rpc.State = $"Playing {(Level.current as GameLevel).displayName}";
                         }
-                        assets.LargeImageKey = "netgun"; // Placeholder Image
+
                     }
                     if (Level.current is TeamSelect2)
                     {

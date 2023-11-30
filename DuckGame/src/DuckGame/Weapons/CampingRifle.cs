@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.CampingRifle
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -56,10 +49,18 @@ namespace DuckGame
             _clickSound = "campingEmpty";
             physicsMaterial = PhysicsMaterial.Plastic;
         }
-
+        //i'll come back to this later when i finish the camp netgun -NiK0
+        /*public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is CampingRifle && pTaped.gun2 is NetGun ? new CampNetgun(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }*/
         public override void Update()
         {
-            if (!burntOut && burnt >= 1.0)
+            if (!burntOut && burnt >= 1f)
             {
                 _sprite = new SpriteMap("campingMelted", 23, 15);
                 for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
@@ -71,21 +72,21 @@ namespace DuckGame
                 burntOut = true;
             }
             base.Update();
-            if (_loadAnimation == -1.0)
+            if (_loadAnimation == -1f)
             {
                 SFX.Play("click");
                 _loadAnimation = 0f;
             }
-            if (_loadAnimation >= 0.0)
+            if (_loadAnimation >= 0f)
             {
                 if (_loadProgress < 0)
                 {
-                    if (_loadAnimation < 1.0)
+                    if (_loadAnimation < 1f)
                         _loadAnimation += 0.1f;
                     else
                         _loadAnimation = 1f;
                 }
-                else if (_loadAnimation < 0.5)
+                else if (_loadAnimation < 0.5f)
                     _loadAnimation += 0.2f;
                 else
                     _loadAnimation = 0.5f;
@@ -152,7 +153,7 @@ namespace DuckGame
                             t.responsibleProfile = owner.responsibleProfile;
                         t.clip.Add(owner as MaterialThing);
                         t.hSpeed = barrelVector.x * 10f;
-                        t.vSpeed = (float)(barrelVector.y * 7.0 - 0.75);
+                        t.vSpeed = (float)(barrelVector.y * 7 - 0.75);
                     }
                 }
                 _loadProgress = -1;
@@ -175,7 +176,7 @@ namespace DuckGame
             base.Draw();
             Vec2 vec2 = new Vec2(13f, -2f);
             float num = (float)Math.Sin(_loadAnimation * 3.14f) * 3f;
-            Draw(_loaderSprite, new Vec2(vec2.x - 8f - num, vec2.y + 4f));
+            Draw(ref _loaderSprite, new Vec2(vec2.x - 8f - num, vec2.y + 4f));
         }
     }
 }

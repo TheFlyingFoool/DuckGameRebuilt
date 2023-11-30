@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Crowd
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -301,13 +294,13 @@ namespace DuckGame
 
         public static FanNum GetFan()
         {
-            if (Crowd.extraFans > 0 && Rando.Float(1f) > 0.5f)
+            if (extraFans > 0 && Rando.Float(1f) > 0.5f)
             {
-                Crowd.extraFans--;
+                extraFans--;
                 return null;
             }
             List<FanNum> fanNumList = new List<FanNum>();
-            foreach (KeyValuePair<Profile, FanNum> pair in Crowd.fanList)
+            foreach (KeyValuePair<Profile, FanNum> pair in fanList)
             {
                 if (pair.Value.totalFans > 0)
                 {
@@ -441,11 +434,9 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (_core._newMood == _core._mood)
-                return;
+            if (_core._newMood == _core._mood) return;
             _core._moodWait -= 0.15f;
-            if (_core._moodWait >= 0.0)
-                return;
+            if (_core._moodWait >= 0f) return;
             _core._mood = _core._newMood;
             _core._moodWait = 1f;
         }

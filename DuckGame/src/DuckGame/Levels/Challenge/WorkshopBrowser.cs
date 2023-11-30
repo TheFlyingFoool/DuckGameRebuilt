@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.WorkshopBrowser
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -96,7 +89,7 @@ namespace DuckGame
                     _font.scale = new Vec2(1f, 1f);
                     _font.Draw(_openedItem.name, new Vec2(16f, 16f), Color.White, (Depth)0.5f);
                     if (_openedItem.preview != null)
-                        Graphics.Draw(_openedItem.preview, 16f, 32f, (float)(256.0 / _openedItem.preview.height * 0.5), (float)(256.0 / _openedItem.preview.height * 0.5), (Depth)0.5f);
+                        Graphics.Draw(_openedItem.preview, 16f, 32f, (float)(256f / _openedItem.preview.height * 0.5f), (float)(256f / _openedItem.preview.height * 0.5f), (Depth)0.5f);
                     _font.maxWidth = 300;
                     _font.Draw(_openedItem.description, new Vec2(16f, 170f), Color.White, (Depth)0.5f);
                     _font.maxWidth = 0;

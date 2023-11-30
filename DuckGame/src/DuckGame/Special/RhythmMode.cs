@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.RhythmMode
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -37,7 +30,7 @@ namespace DuckGame
                 _ball.CenterOrigin();
             }
             Vec2 barPos = new Vec2(Layer.HUD.camera.width / 2f - _bar.w / 2, 10f);
-            Graphics.Draw(_bar, barPos.x, barPos.y);
+            Graphics.Draw(ref _bar, barPos.x, barPos.y);
             for (int i = 0; i < 5; i++)
             {
                 float xpos = ((barPos.x + 2 + ((i * (_bar.w / 4)) + 1))) + (_pos * (_bar.w / 4.0f));
@@ -49,7 +42,7 @@ namespace DuckGame
                 else
                     _ball.scale = new Vec2(1, 1);
 
-                Graphics.Draw(_ball, xpos, (barPos.y + 4));
+                Graphics.Draw(ref _ball, xpos, (barPos.y + 4));
             }
         }
     }

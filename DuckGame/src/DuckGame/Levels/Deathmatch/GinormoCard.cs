@@ -68,8 +68,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (_slideWait < 0.0)
-                position = Vec2.Lerp(position, _end, 0.15f);
+            if (_slideWait < 0f) position = Vec2.Lerp(position, _end, 0.15f);
             _slideWait -= 0.4f;
             Graphics.SetRenderTarget(_faceTarget);
             Graphics.Clear(Color.Transparent);
@@ -97,10 +96,10 @@ namespace DuckGame
             }
             if (_smallMode)
                 _gradient.yscale = 0.5f;
-            Graphics.Draw(_gradient, 0f, 0f);
+            Graphics.Draw(ref _gradient, 0f, 0f);
             _edgeOverlay.depth = (Depth)0.9f;
             _edgeOverlay.alpha = 0.5f;
-            Graphics.Draw(_edgeOverlay, 0f, 0f);
+            Graphics.Draw(ref _edgeOverlay, 0f, 0f);
             int num = 0;
             foreach (Profile activeProfile in _team.activeProfiles)
             {
@@ -119,12 +118,9 @@ namespace DuckGame
                 hat.depth = (Depth)0.8f;
                 hat.center = new Vec2(16f, 16f) + activeProfile.team.hatOffset;
                 hat.scale = new Vec2(2f, 2f);
-                if (hat.texture.width > 16.0)
-                    hat.frame = 1;
-                if (_smallMode)
-                    Graphics.Draw(hat, hat.frame, (float)(x + hatPoint.x - 8.0), (float)(y + hatPoint.y - 8.0));
-                else
-                    Graphics.Draw(hat, hat.frame, x + hatPoint.x * 2f, y + hatPoint.y * 2f, 2f, 2f);
+                if (hat.texture.width > 16f) hat.frame = 1;
+                if (_smallMode) Graphics.Draw(hat, hat.frame, (float)(x + hatPoint.x - 8f), (float)(y + hatPoint.y - 8f));
+                else Graphics.Draw(hat, hat.frame, x + hatPoint.x * 2f, y + hatPoint.y * 2f, 2f, 2f);
                 hat.color = Color.White;
                 hat.scale = new Vec2(1f, 1f);
                 hat.frame = 0;
@@ -141,19 +137,18 @@ namespace DuckGame
             string name = _team.currentDisplayName;
             float num1 = 0f;
             float num2 = 0f;
-            int coloredTagsLength = name.Length - Program.RemoveColorTags(name).Length;
-            if (name.Length - coloredTagsLength > 16)
-                name = name.Substring(0, 16 + coloredTagsLength);
-            string text1 = "@ICONGRADIENT@" + name;
             if (_team != null && _team.activeProfiles != null && _team.activeProfiles.Count > 0)
             {
-                BitmapFont bitmapFont = _team.activeProfiles.Count <= 1 ? _team.activeProfiles[0].font : Profiles.EnvironmentProfile.font;
-                bitmapFont.scale = new Vec2(1f, 1f);
-                bitmapFont.Draw(text1, x + 182f + num1 - bitmapFont.GetWidth(text1), y + 2f + num2, Color.White, depth);
+                BitmapFont nameFont = _team.activeProfiles.Count <= 1 ? _team.activeProfiles[0].font : Profiles.EnvironmentProfile.font;
+                nameFont.scale = new Vec2(1f, 1f);
+                if (nameFont.GetLength(name) > 16)
+                    name = nameFont.Crop(name, 0, 16);
+                string nameText = "@ICONGRADIENT@" + name;
+                nameFont.Draw(nameText, x + 182f + num1 - nameFont.GetWidth(nameText), y + 2f + num2, Color.White, depth);
             }
             _font.scale = new Vec2(1f, 1f);
             _targetSprite.scale = new Vec2(1f, 1f);
-            Graphics.Draw(_targetSprite, x, y);
+            Graphics.Draw(ref _targetSprite, x, y);
             if (_mode == BoardMode.Points)
             {
                 string text2 = Change.ToString(_team.score);

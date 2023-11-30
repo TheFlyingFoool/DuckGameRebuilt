@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -22,17 +22,17 @@ namespace Microsoft.Xna.Framework.Graphics
 		/// Each sprite is drawing at individual draw call, instead of <see cref="SpriteBatch.End"/>. Depth is ignored.
 		/// </summary>
 		Immediate = 1,
-        /// <summary>
-        /// Same as <see cref="Deferred"/>, except sprites are sorted by texture prior to drawing. Depth is ignored.
-        /// </summary>
-        Texture = 2,
-        /// <summary>
-        /// Same as <see cref="Deferred"/>, except sprites are sorted by depth in back-to-front order prior to drawing.
-        /// </summary>
-        BackToFront = 3,
-        /// <summary>
-        /// Same as <see cref="Deferred"/>, except sprites are sorted by depth in front-to-back order prior to drawing.
-        /// </summary>
-        FrontToBack = 4
+		/// <summary>
+		/// Same as <see cref="SpriteSortMode.Deferred"/>, except sprites are sorted by texture prior to drawing. Depth is ignored.
+		/// </summary>
+		Texture = 2,
+		/// <summary>
+		/// Same as <see cref="SpriteSortMode.Deferred"/>, except sprites are sorted by depth in back-to-front order prior to drawing.
+		/// </summary>
+		BackToFront = 3,
+		/// <summary>
+		/// Same as <see cref="SpriteSortMode.Deferred"/>, except sprites are sorted by depth in front-to-back order prior to drawing.
+		/// </summary>
+		FrontToBack = 4
 	}
 }

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Musket
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Guns|Rifles")]
     [BaggedProperty("isInDemo", true)]
@@ -32,6 +25,8 @@ namespace DuckGame
             _fireRumble = RumbleIntensity.Light;
             _holdOffset = new Vec2(3f, 0f);
             editorTooltip = "Old-timey rifle, takes approximately 150 years to reload.";
+            _editorPreviewOffset.x -= 1;
+            _editorPreviewWidth = 41;
         }
 
         public override void Update() => base.Update();

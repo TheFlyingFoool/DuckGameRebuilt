@@ -30,6 +30,10 @@
             _editorName = "Blunderbuss";
             editorTooltip = "A new and frosty blunderbuss, and yet it still takes 150 years to reload.";
         }
+        protected override void PlayFireSound()
+        {
+            SFX.PlaySynchronized(_fireSound, pitch: (Rando.Float(0.2f) - 0.1f + _fireSoundPitch));
+        }
         public override void Fire()
         {
             if (!loaded)

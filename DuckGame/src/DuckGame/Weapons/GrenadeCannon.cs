@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.GrenadeCannon
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -26,6 +19,17 @@ namespace DuckGame
         public bool _aiming;
         public float _cooldown;
         private SpriteMap _sprite;
+        public SpriteMap sprite
+        {
+            get
+            {
+                return _sprite;
+            }
+            set
+            {
+                _sprite = value;
+            }
+        }
 
         public override float angle
         {
@@ -70,24 +74,30 @@ namespace DuckGame
             base.Update();
             if (_doLoad && _sprite.finished)
             {
-                GrenadePin grenadePin = new GrenadePin(x, y)
+                if (DGRSettings.ActualParticleMultiplier > 0)
                 {
-                    hSpeed = -offDir * (1.5f + Rando.Float(0.5f)),
-                    vSpeed = -2f
-                };
-                Level.Add(grenadePin);
+                    for (int i = 0; i < Maths.Clamp(DGRSettings.ActualParticleMultiplier, 1, 1000); i++)
+                    {
+                        GrenadePin grenadePin = new GrenadePin(x, y)
+                        {
+                            hSpeed = -offDir * (1.5f + Rando.Float(0.5f)),
+                            vSpeed = -2f
+                        };
+                        Level.Add(grenadePin);
+                    }
+                }
                 SFX.Play("pullPin");
                 _doneLoad = true;
                 _doLoad = false;
             }
             if (_doneLoad)
                 _timer -= 0.01f;
-            if (_timer <= 0.0)
+            if (_timer <= 0)
             {
                 _timer = 1.2f;
                 _doneLoad = false;
                 _doLoad = false;
-                if (isServerForObject)
+                if (isServerForObject && !Recorderator.Playing)
                 {
                     Vec2 vec2 = Offset(barrelOffset);
                     --ammo;
@@ -98,6 +108,7 @@ namespace DuckGame
                         Level.Add(SmallSmoke.New(vec2.x + Rando.Float(-2f, 2f), vec2.y + Rando.Float(-2f, 2f)));
                     _sprite.SetAnimation("idle" + Math.Min(ammo, 4).ToString());
                     kick = 1f;
+                    recordKick = true;
                     _aiming = false;
                     _cooldown = 1f;
                     _fireAngle = 0f;
@@ -117,11 +128,11 @@ namespace DuckGame
             }
             if (_doneLoad && _aiming)
                 laserSight = true;
-            if (_aiming && _aimWait <= 0.0 && _fireAngle < 90.0)
+            if (_aiming && _aimWait <= 0 && _fireAngle < 90)
                 _fireAngle += 3f;
-            if (_aimWait > 0.0)
+            if (_aimWait > 0)
                 _aimWait -= 0.9f;
-            if (_cooldown > 0.0)
+            if (_cooldown > 0)
                 _cooldown -= 0.1f;
             else
                 _cooldown = 0f;
@@ -150,7 +161,7 @@ namespace DuckGame
                 _sprite.SetAnimation("load" + Math.Min(ammo, 4).ToString());
                 _doLoad = true;
             }
-            if (!_doneLoad || _cooldown != 0.0)
+            if (!_doneLoad || _cooldown != 0)
                 return;
             if (ammo > 0)
             {
@@ -163,7 +174,7 @@ namespace DuckGame
 
         public override void OnReleaseAction()
         {
-            if (!_doneLoad || _cooldown != 0.0 || !_aiming || ammo <= 0)
+            if (!_doneLoad || _cooldown != 0 || !_aiming || ammo <= 0)
                 return;
             _aiming = false;
             --ammo;

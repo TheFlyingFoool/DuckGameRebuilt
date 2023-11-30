@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.NetGraph
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -118,8 +111,8 @@ namespace DuckGame
                 _currentMaxSize = num2;
             else
                 _currentMaxSize -= 2;
-            _biosFont.Draw(batch, "in: " + (_currentMaxSize / 8).ToString() + " bytes - " + ((int)(num3 / _packets.Count / 8.0)).ToString() + " avg", p1_1.x, (float)(p1_1.y - 9.0), Color.White);
-            _biosFont.Draw(batch, "fps: " + fps.ToString() + "    ping: " + ((int)(ping * 1000.0)).ToString() + "ms", p1_1.x, (float)(p1_1.y + _maxHeightPerPacket + 8.0), Color.White);
+            _biosFont.Draw(batch, "in: " + (_currentMaxSize / 8).ToString() + " bytes - " + ((int)(num3 / _packets.Count / 8)).ToString() + " avg", p1_1.x, (float)(p1_1.y - 9), Color.White);
+            _biosFont.Draw(batch, "fps: " + fps.ToString() + "    ping: " + ((int)(ping * 1000)).ToString() + "ms", p1_1.x, (float)(p1_1.y + _maxHeightPerPacket + 8), Color.White);
         }
 
         public void DrawChart(Vec2 pos)
@@ -175,8 +168,8 @@ namespace DuckGame
                 numAckBytes = 0;
                 numFrames = 0;
             }
-            Graphics.DrawString("in: " + (_currentMaxSize / 8).ToString() + " bytes - " + ((int)(num3 / _packets.Count / 8.0)).ToString() + " avg", new Vec2(pos.x, pos.y - 9f), Color.White, (Depth)0.9f);
-            Graphics.DrawString("fps: " + fps.ToString() + "    ping: " + ((int)(ping * 1000.0)).ToString() + "ms     bytes out:" + avgBytes.ToString("0.00") + " hdr:" + avgHeaderBytes.ToString("0.00") + " ack:" + avgAckBytes.ToString("0.00") + " gst:" + avgGhostBytes.ToString("0.00"), new Vec2(pos.x, (float)(pos.y + _maxHeightPerPacket + 8.0)), Color.White, (Depth)0.9f);
+            Graphics.DrawString("in: " + (_currentMaxSize / 8).ToString() + " bytes - " + ((int)(num3 / _packets.Count / 8)).ToString() + " avg", new Vec2(pos.x, pos.y - 9f), Color.White, (Depth)0.9f);
+            Graphics.DrawString("fps: " + fps.ToString() + "    ping: " + ((int)(ping * 1000)).ToString() + "ms     bytes out:" + avgBytes.ToString("0.00") + " hdr:" + avgHeaderBytes.ToString("0.00") + " ack:" + avgAckBytes.ToString("0.00") + " gst:" + avgGhostBytes.ToString("0.00"), new Vec2(pos.x, (float)(pos.y + _maxHeightPerPacket + 8f)), Color.White, (Depth)0.9f);
         }
 
         public void PreUpdate()

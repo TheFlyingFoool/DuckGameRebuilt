@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -448,7 +448,7 @@ namespace Microsoft.Xna.Framework.Audio
 					parentEffect.Instances.Remove(selfReference);
 				}
 				selfReference = null;
-				Marshal.FreeHGlobal(dspSettings.pMatrixCoefficients);
+				FNAPlatform.Free(dspSettings.pMatrixCoefficients);
 				IsDisposed = true;
 			}
 		}
@@ -459,19 +459,17 @@ namespace Microsoft.Xna.Framework.Audio
 
 		internal void InitDSPSettings(uint srcChannels)
 		{
-            dspSettings = new FAudio.F3DAUDIO_DSP_SETTINGS
-            {
-                DopplerFactor = 1.0f,
-                SrcChannelCount = srcChannels,
-                DstChannelCount = SoundEffect.Device().DeviceDetails.OutputFormat.Format.nChannels
-            };
+			dspSettings = new FAudio.F3DAUDIO_DSP_SETTINGS();
+			dspSettings.DopplerFactor = 1.0f;
+			dspSettings.SrcChannelCount = srcChannels;
+			dspSettings.DstChannelCount = SoundEffect.Device().DeviceDetails.OutputFormat.Format.nChannels;
 
-            int memsize = (
+			int memsize = (
 				4 *
 				(int) dspSettings.SrcChannelCount *
 				(int) dspSettings.DstChannelCount
 			);
-			dspSettings.pMatrixCoefficients = Marshal.AllocHGlobal(memsize);
+			dspSettings.pMatrixCoefficients = FNAPlatform.Malloc(memsize);
 			unsafe
 			{
 				byte* memPtr = (byte*) dspSettings.pMatrixCoefficients;
@@ -520,13 +518,11 @@ namespace Microsoft.Xna.Framework.Audio
 				return;
 			}
 
-            FAudio.FAudioFilterParameters p = new FAudio.FAudioFilterParameters
-            {
-                Type = FAudio.FAudioFilterType.FAudioLowPassFilter,
-                Frequency = cutoff,
-                OneOverQ = 1.0f
-            };
-            FAudio.FAudioVoice_SetFilterParameters(
+			FAudio.FAudioFilterParameters p = new FAudio.FAudioFilterParameters();
+			p.Type = FAudio.FAudioFilterType.FAudioLowPassFilter;
+			p.Frequency = cutoff;
+			p.OneOverQ = 1.0f;
+			FAudio.FAudioVoice_SetFilterParameters(
 				handle,
 				ref p,
 				0
@@ -540,13 +536,11 @@ namespace Microsoft.Xna.Framework.Audio
 				return;
 			}
 
-            FAudio.FAudioFilterParameters p = new FAudio.FAudioFilterParameters
-            {
-                Type = FAudio.FAudioFilterType.FAudioHighPassFilter,
-                Frequency = cutoff,
-                OneOverQ = 1.0f
-            };
-            FAudio.FAudioVoice_SetFilterParameters(
+			FAudio.FAudioFilterParameters p = new FAudio.FAudioFilterParameters();
+			p.Type = FAudio.FAudioFilterType.FAudioHighPassFilter;
+			p.Frequency = cutoff;
+			p.OneOverQ = 1.0f;
+			FAudio.FAudioVoice_SetFilterParameters(
 				handle,
 				ref p,
 				0
@@ -560,13 +554,11 @@ namespace Microsoft.Xna.Framework.Audio
 				return;
 			}
 
-            FAudio.FAudioFilterParameters p = new FAudio.FAudioFilterParameters
-            {
-                Type = FAudio.FAudioFilterType.FAudioBandPassFilter,
-                Frequency = center,
-                OneOverQ = 1.0f
-            };
-            FAudio.FAudioVoice_SetFilterParameters(
+			FAudio.FAudioFilterParameters p = new FAudio.FAudioFilterParameters();
+			p.Type = FAudio.FAudioFilterType.FAudioBandPassFilter;
+			p.Frequency = center;
+			p.OneOverQ = 1.0f;
+			FAudio.FAudioVoice_SetFilterParameters(
 				handle,
 				ref p,
 				0

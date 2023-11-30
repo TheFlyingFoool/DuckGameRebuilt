@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ProfileBox2
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame
@@ -71,7 +64,7 @@ namespace DuckGame
 
         public bool ready => _ready;
 
-        public bool doorIsOpen => _doorX > 82.0;
+        public bool doorIsOpen => _doorX > 82f;
 
         public Profile profile => _playerProfile;
 
@@ -161,11 +154,11 @@ namespace DuckGame
                 };
                 _roomLeftBackground = new Sprite("rightRoomBackground");
                 _roomLeftForeground = new Sprite("rightRoomForeground");
-                Level.Add(new InvisibleBlock((float)(x - 2.0 + 142.0 - 138.0), y + 69f, 138f, 16f, PhysicsMaterial.Metal));
-                Level.Add(new InvisibleBlock((float)(x - 2.0 + 142.0 - 138.0), y - 11f, 138f, 12f, PhysicsMaterial.Metal));
-                Level.Add(new InvisibleBlock((float)(x + 142.0 - 98.0 - 46.0), y + 56f, 50f, 16f, PhysicsMaterial.Metal));
-                Level.Add(new InvisibleBlock((float)(x + 142.0 + 2.0 - 8.0), y, 8f, 100f, PhysicsMaterial.Metal));
-                Level.Add(new InvisibleBlock((float)(x + 142.0 - 136.0 - 9.0), y, 8f, 25f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock((float)(x - 2 + 142 - 138), y + 69f, 138f, 16f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock((float)(x - 2 + 142 - 138), y - 11f, 138f, 12f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock((float)(x + 142 - 98 - 46), y + 56f, 50f, 16f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock((float)(x + 142 + 2 - 8), y, 8f, 100f, PhysicsMaterial.Metal));
+                Level.Add(new InvisibleBlock((float)(x + 142 - 136 - 9), y, 8f, 25f, PhysicsMaterial.Metal));
                 ScaffoldingTileset scaffoldingTileset = new ScaffoldingTileset(x + 126f, y + 63f)
                 {
                     neverCheap = true
@@ -197,7 +190,7 @@ namespace DuckGame
                 Level.Add(new Platform(x + 89f, y + 56f, 3f, 5f));
                 _readySign = new Sprite("readyRight");
             }
-            _gunSpawnPoint = !rightRoom ? new Vec2(x + 113f, y + 50f) : new Vec2((float)(x + 142.0 - 118.0), y + 50f);
+            _gunSpawnPoint = !rightRoom ? new Vec2(x + 113f, y + 50f) : new Vec2((float)(x + 142f - 118f), y + 50f);
             _readySign.depth = (Depth)0.2f;
             _readySign.center = new Vec2(21.5f, 3.5f);
             _roomLeftBackground.depth = -0.85f;
@@ -409,7 +402,7 @@ namespace DuckGame
             if (_duck != null)
                 _duck.immobilized = true;
             _playerActive = false;
-            if (_doorX != 0.0)
+            if (_doorX != 0f)
                 return;
             OnDoorClosed();
         }
@@ -438,9 +431,16 @@ namespace DuckGame
                     Level.Remove(thing);
                 _turret = null;
             }
+            if (neon1 != null)
+            {
+                Level.Remove(neon1);
+                Level.Remove(neon2);
+            }
             Despawn();
             //this._doorClosing = false;
         }
+        public TeamHat neon1;
+        public TeamHat neon2;
 
         public void Spawn()
         {
@@ -460,8 +460,8 @@ namespace DuckGame
                 Level.Add(_gun);
                 if (rightRoom)
                 {
-                    _duck = new Duck((float)(x + 142.0 - 48.0), y + 40f, _playerProfile);
-                    _window = new Window((float)(x + 142.0 - 141.0), y + 49f)
+                    _duck = new Duck((float)(x + 142f - 48f), y + 40f, _playerProfile);
+                    _window = new Window((float)(x + 142f - 141f), y + 49f)
                     {
                         noframe = true
                     };
@@ -587,7 +587,7 @@ namespace DuckGame
                 _hatSelector.Reset();
             foreach (VirtualShotgun virtualShotgun in Level.current.things[typeof(VirtualShotgun)])
             {
-                if (virtualShotgun.roomIndex == _controllerIndex && virtualShotgun.isServerForObject && virtualShotgun.alpha <= 0.0)
+                if (virtualShotgun.roomIndex == _controllerIndex && virtualShotgun.isServerForObject && virtualShotgun.alpha <= 0)
                 {
                     virtualShotgun.position = _gunSpawnPoint;
                     virtualShotgun.alpha = 1f;
@@ -635,12 +635,12 @@ namespace DuckGame
                 SelectTeam();
                 Spawn();
             }
-            _ready = doorIsOpen && _duck != null && (_duck.dead || _duck.beammode || _duck.cameraPosition.y < -100.0 || _duck.cameraPosition.y > 400.0);
+            _ready = doorIsOpen && _duck != null && (_duck.dead || _duck.beammode || _duck.cameraPosition.y < -100f || _duck.cameraPosition.y > 400f);
             if (_duck != null)
             {
                 _currentMessage = 0;
                 Vec2 vec2 = _duck.position - _consolePos;
-                bool flag2 = vec2.length < 20.0;
+                bool flag2 = vec2.length < 20f;
                 _consoleFade = Lerp.Float(_consoleFade, flag2 ? 1f : 0f, 0.1f);
                 if (_teamSelect != null & flag2)
                 {
@@ -676,7 +676,7 @@ namespace DuckGame
                     if (_gun != null)
                     {
                         vec2 = _gun.position - _duck.position;
-                        if (vec2.length < 30.0)
+                        if (vec2.length < 30)
                         {
                             if (_duck.holdObject != null)
                             {
@@ -742,11 +742,30 @@ namespace DuckGame
                     Level.Remove(_turret);
                     _turret = null;
                 }
+                if (DGRSettings.DGRNeonSign && neon1 == null)
+                {
+                    //x + 117.5f, y + 6.5f left room
+                    //x + 22.5f, y + 6.5f reft room
+                    if (rightRoom)
+                    {
+                        neon1 = new TeamHat(x + 100, y + 8, TeamsCore.neon1) { enablePhysics = false, canPickUp = false, velocity = Vec2.Zero, grounded = true, sleeping = true, indestructible = true };
+                        Level.Add(neon1);
+                        neon2 = new TeamHat(x + 132, y + 8, TeamsCore.neon2) { enablePhysics = false, canPickUp = false, velocity = Vec2.Zero, grounded = true, sleeping = true, indestructible = true };
+                        Level.Add(neon2);
+                    }
+                    else
+                    {
+                        neon1 = new TeamHat(x + 20, y + 8, TeamsCore.neon1) { enablePhysics = false, canPickUp = false, velocity = Vec2.Zero, grounded = true, sleeping = true, indestructible = true };
+                        Level.Add(neon1);
+                        neon2 = new TeamHat(x + 52, y + 8, TeamsCore.neon2) { enablePhysics = false, canPickUp = false, velocity = Vec2.Zero, grounded = true, sleeping = true, indestructible = true };
+                        Level.Add(neon2);
+                    }
+                }
             }
             if (_turret != null)
                 _turret._friendly = duck;
             _doorX = Maths.LerpTowards(_doorX, flag3 ? 83f : 0f, 4f);
-            if (Network.isActive && (profile.networkStatus == DuckNetStatus.Disconnected && _prevStatus != DuckNetStatus.Disconnected || profile.slotType == SlotType.Spectator) || _doorX == 0.0 && _prevDoorX != 0.0)
+            if (Network.isActive && (profile.networkStatus == DuckNetStatus.Disconnected && _prevStatus != DuckNetStatus.Disconnected || profile.slotType == SlotType.Spectator) || _doorX == 0 && _prevDoorX != 0)
                 OnDoorClosed();
             if (_playerActive && controllerIndex > 3 && !(Level.current.camera is FollowCam))
                 TeamSelect2.growCamera = true;
@@ -816,13 +835,16 @@ namespace DuckGame
                     }
                     Sprite doorLeftBlank = _doorLeftBlank;
                     Sprite doorRightBlank = _doorRightBlank;
+                    doorLeftBlank.texture.skipSpriteAtlas = true;
+                    doorRightBlank.texture.skipSpriteAtlas = true;
+
                     if (rightRoom)
                     {
-                        Rectangle sourceRectangle1 = new Rectangle(_doorX, 0f, doorLeftBlank.width - _doorX, _doorLeft.height);
-                        Graphics.Draw(doorLeftBlank, x - 1f, y, sourceRectangle1);
-                        Rectangle sourceRectangle2 = new Rectangle(0f, 0f, _doorRight.width + _doorX, _doorRight.height);
-                        Graphics.Draw(doorRightBlank, (x - 1f + 68f) + _doorX, y, sourceRectangle2);
-                        if (_doorX == 0.0)
+                        Rectangle leftRect = new Rectangle(_doorX, 0f, doorLeftBlank.width - _doorX, _doorLeft.height);
+                        Graphics.Draw(doorLeftBlank, x - 1f, y, leftRect);
+                        Rectangle rightRect = new Rectangle(-_doorX, 0f, _doorRight.width, _doorRight.height);
+                        Graphics.Draw(doorRightBlank, x - 1f + 68f, y, rightRect);
+                        if (_doorX == 0)
                         {
                             _fontSmall.depth = doorLeftBlank.depth + 10;
 
@@ -929,109 +951,109 @@ namespace DuckGame
                         Graphics.Draw(doorLeftBlank, x, y, sourceRectangle3);
                         Rectangle sourceRectangle4 = new Rectangle(0f, 0f, _doorRight.width - _doorX, _doorRight.height); //-_doorX + 
                         Graphics.Draw(doorRightBlank, x + 68f + _doorX, y, sourceRectangle4);
-                        if (_doorX == 0.0)
-                            if (_doorX == 0.0)
+                        //if (_doorX == 0) ??? -NiK0
+                        if (_doorX == 0)
+                        {
+                            _fontSmall.depth = doorLeftBlank.depth + 10;
+                            if (!Network.isActive || flag6 && Network.isServer)
                             {
-                                _fontSmall.depth = doorLeftBlank.depth + 10;
-                                if (!Network.isActive || flag6 && Network.isServer)
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 10;
+                                Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
+                                _fontSmall.DrawOutline("PRESS", new Vec2(x + 20f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                _fontSmall.DrawOutline(Triggers.Start, new Vec2(x + 86f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                            }
+                            else if (flag2)
+                            {
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 8;
+                                Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
+                            }
+                            else if (flag1)
+                            {
+                                _doorSpinner.depth = doorLeftBlank.depth + 10;
+                                Graphics.Draw(_doorSpinner, (int)x + 58, y + 31f);
+                            }
+                            else if (flag3)
+                            {
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 11;
+                                Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
+                                if (LangHandler.reverse)
                                 {
-                                    _doorIcon.depth = doorLeftBlank.depth + 10;
-                                    _doorIcon.frame = 10;
-                                    Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
-                                    _fontSmall.DrawOutline("PRESS", new Vec2(x + 20f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                    _fontSmall.DrawOutline(Triggers.Start, new Vec2(x + 86f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
-                                }
-                                else if (flag2)
-                                {
-                                    _doorIcon.depth = doorLeftBlank.depth + 10;
-                                    _doorIcon.frame = 8;
-                                    Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
-                                }
-                                else if (flag1)
-                                {
-                                    _doorSpinner.depth = doorLeftBlank.depth + 10;
-                                    Graphics.Draw(_doorSpinner, (int)x + 58, y + 31f);
-                                }
-                                else if (flag3)
-                                {
-                                    _doorIcon.depth = doorLeftBlank.depth + 10;
-                                    _doorIcon.frame = 11;
-                                    Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
-                                    if (LangHandler.reverse)
-                                    {
-                                        _fontSmall.DrawOutline("ONLY", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                        _fontSmall.DrawOutline("PALS", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
-                                    }
-                                    else
-                                    {
-                                        _fontSmall.DrawOutline("PALS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                        _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
-                                    }
-
-                                }
-                                else if (flag4)
-                                {
-                                    _doorIcon.depth = doorLeftBlank.depth + 10;
-                                    _doorIcon.frame = 12;
-                                    Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
-                                    if (LangHandler.reverse)
-                                    {
-                                        _fontSmall.DrawOutline("ONLY", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                        _fontSmall.DrawOutline("VIPS", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
-                                    }
-                                    else
-                                    {
-                                        _fontSmall.DrawOutline("VIPS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                        _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
-                                    }
-                                }
-                                else if (flag5 && profile.reservedUser != null)
-                                {
-                                    _doorIcon.depth = doorLeftBlank.depth + 10;
-                                    _doorIcon.frame = 12;
-                                    Graphics.Draw(_doorIcon, (int)this.x + 58, y + 31f);
-                                    float num = 120f;
-                                    float x = this.x + 10f;
-                                    Graphics.DrawRect(new Vec2(x, y + 35f), new Vec2(x + num, y + 52f), Color.Black, doorLeftBlank.depth + 20);
-                                    string text3 = "WAITING FOR";
-                                    _fontSmall.Draw(text3, new Vec2((float)(x + num / 2.0 - _fontSmall.GetWidth(text3) / 2.0), y + 36f), Color.White, doorLeftBlank.depth + 30);
-                                    string text4 = profile.name;
-
-                                    if (profile.muteName)
-                                        text4 = "Player " + (profile.networkIndex + 1).ToString();
-                                    if (profile.isUsingRebuilt && DGRSettings.RebuiltEffect == 1) text4 += "|PINK|♥|WHITE|";
-                                    if (text4.Length > 16)
-                                        text4 = text4.Substring(0, 16);
-                                    _fontSmall.Draw(text4, new Vec2((float)(x + num / 2.0 - _fontSmall.GetWidth(text4) / 2.0), y + 44f), Color.White, doorLeftBlank.depth + 30);
-                                }
-                                else if (flag6)
-                                {
-                                    _doorIcon.depth = doorLeftBlank.depth + 10;
-                                    _doorIcon.frame = 13;
-                                    Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
-                                    if (LangHandler.reverse)
-                                    {
-                                        _fontSmall.DrawOutline("SLOT", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                        _fontSmall.DrawOutline("HOST", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
-                                    }
-                                    else
-                                    {
-                                        _fontSmall.DrawOutline("HOST", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
-                                        _fontSmall.DrawOutline("SLOT", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
-                                    }
+                                    _fontSmall.DrawOutline("ONLY", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                    _fontSmall.DrawOutline("PALS", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                                 }
                                 else
                                 {
-                                    _doorIcon.depth = doorLeftBlank.depth + 10;
-                                    _doorIcon.frame = 9;
-                                    Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
-                                    _fontSmall.DrawOutline("OPEN", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                    _fontSmall.DrawOutline("PALS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                    _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                }
+
+                            }
+                            else if (flag4)
+                            {
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 12;
+                                Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
+                                if (LangHandler.reverse)
+                                {
+                                    _fontSmall.DrawOutline("ONLY", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                    _fontSmall.DrawOutline("VIPS", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                }
+                                else
+                                {
+                                    _fontSmall.DrawOutline("VIPS", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                    _fontSmall.DrawOutline("ONLY", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                }
+                            }
+                            else if (flag5 && profile.reservedUser != null)
+                            {
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 12;
+                                Graphics.Draw(_doorIcon, (int)this.x + 58, y + 31f);
+                                float num = 120f;
+                                float x = this.x + 10f;
+                                Graphics.DrawRect(new Vec2(x, y + 35f), new Vec2(x + num, y + 52f), Color.Black, doorLeftBlank.depth + 20);
+                                string text3 = "WAITING FOR";
+                                _fontSmall.Draw(text3, new Vec2((float)(x + num / 2f - _fontSmall.GetWidth(text3) / 2f), y + 36f), Color.White, doorLeftBlank.depth + 30);
+                                string text4 = profile.name;
+
+                                if (profile.muteName)
+                                    text4 = "Player " + (profile.networkIndex + 1).ToString();
+                                if (profile.isUsingRebuilt && DGRSettings.RebuiltEffect == 1) text4 += "|PINK|♥|WHITE|";
+                                if (text4.Length > 16)
+                                    text4 = text4.Substring(0, 16);
+                                _fontSmall.Draw(text4, new Vec2((float)(x + num / 2f - _fontSmall.GetWidth(text4) / 2f), y + 44f), Color.White, doorLeftBlank.depth + 30);
+                            }
+                            else if (flag6)
+                            {
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 13;
+                                Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
+                                if (LangHandler.reverse)
+                                {
+                                    _fontSmall.DrawOutline("SLOT", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                    _fontSmall.DrawOutline("HOST", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                                }
+                                else
+                                {
+                                    _fontSmall.DrawOutline("HOST", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
                                     _fontSmall.DrawOutline("SLOT", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
                                 }
                             }
+                            else
+                            {
+                                _doorIcon.depth = doorLeftBlank.depth + 10;
+                                _doorIcon.frame = 9;
+                                Graphics.Draw(_doorIcon, (int)x + 58, y + 31f);
+                                _fontSmall.DrawOutline("OPEN", new Vec2(x + 22f, y + 40f), Color.White, Colors.BlueGray, doorLeftBlank.depth + 10);
+                                _fontSmall.DrawOutline("SLOT", new Vec2(x + 90f, y + 40f), Color.White, Colors.BlueGray, doorRightBlank.depth + 10);
+                            }
+                        }
                     }
                 }
-                if (_playerProfile.team == null || _doorX <= 0.0)
+                if (_playerProfile.team == null || _doorX <= 0)
                     return;
                 Furniture furniture1 = null;
                 if (Profiles.experienceProfile != null)
@@ -1173,13 +1195,13 @@ namespace DuckGame
                         furniture3.sprite.scale = new Vec2(1f);
                         furniture3.background.scale = new Vec2(1f);
                         Graphics.Draw(furniture3.sprite, x + 70f, y + 44f, new Rectangle(0f, 0f, 4f, 87f));
-                        Graphics.Draw(furniture3.sprite, x + 70f, (float)(y + 44.0 + 68.0), new Rectangle(0f, 68f, 141f, 19f));
+                        Graphics.Draw(furniture3.sprite, x + 70f, (float)(y + 44f + 68f), new Rectangle(0f, 68f, 141f, 19f));
                         Graphics.Draw(furniture3.sprite, x + 70f, y + 44f, new Rectangle(0f, 0f, 141f, 16f));
                         Graphics.Draw(furniture3.sprite, x + 21f, y + 44f, new Rectangle(49f, 0f, 92f, 68f));
                         furniture3.sprite.depth = _selectConsole.depth - 20;
-                        Graphics.Draw(furniture3.sprite, (float)(x + 70.0 - 4.0), y + 44f, new Rectangle(4f, 0f, 44f, 54f));
+                        Graphics.Draw(furniture3.sprite, (float)(x + 70f - 4f), y + 44f, new Rectangle(4f, 0f, 44f, 54f));
                         furniture3.sprite.depth = (Depth)0.31f;
-                        Graphics.Draw(furniture3.sprite, (float)(x + 70.0 - 4.0), (float)(y + 44.0 + 54.0), new Rectangle(4f, 54f, 44f, 14f));
+                        Graphics.Draw(furniture3.sprite, (float)(x + 70f - 4f), (float)(y + 44f + 54f), new Rectangle(4f, 54f, 44f, 14f));
                         furniture3.sprite.flipH = false;
                         furniture3.background.flipH = true;
                         Graphics.Draw(furniture3.background, x + 70f, y + 45f);
@@ -1189,10 +1211,10 @@ namespace DuckGame
                     {
                         Graphics.Draw(_roomLeftBackground, x - 1f, y + 1f);
                         Graphics.Draw(_roomLeftForeground, x - 1f, y + 1f, new Rectangle(0f, 0f, 49f, 16f));
-                        Graphics.Draw(_roomLeftForeground, x - 1f, (float)(y + 1.0 + 16.0), new Rectangle(0f, 16f, 6f, 8f));
-                        Graphics.Draw(_roomLeftForeground, x - 1f, (float)(y + 1.0 + 55.0), new Rectangle(0f, 55f, 53f, 13f));
-                        Graphics.Draw(_roomLeftForeground, x - 1f, (float)(y + 1.0 + 68.0), new Rectangle(0f, 68f, 141f, 19f));
-                        Graphics.Draw(_roomLeftForeground, (float)(x - 1.0 + 137.0), y + 1f, new Rectangle(137f, 0f, 4f, 87f));
+                        Graphics.Draw(_roomLeftForeground, x - 1f, (float)(y + 1f + 16f), new Rectangle(0f, 16f, 6f, 8f));
+                        Graphics.Draw(_roomLeftForeground, x - 1f, (float)(y + 1f + 55f), new Rectangle(0f, 55f, 53f, 13f));
+                        Graphics.Draw(_roomLeftForeground, x - 1f, (float)(y + 1f + 68f), new Rectangle(0f, 68f, 141f, 19f));
+                        Graphics.Draw(_roomLeftForeground, (float)(x - 1f + 137f), y + 1f, new Rectangle(137f, 0f, 4f, 87f));
                     }
                     if (Network.isActive && (Network.isServer && profile.connection == DuckNetwork.localConnection || profile.connection == Network.host))
                     {
@@ -1225,23 +1247,23 @@ namespace DuckGame
                         furniture4.sprite.scale = new Vec2(1f);
                         furniture4.background.scale = new Vec2(1f);
                         Graphics.Draw(furniture4.sprite, x + 70f, y + 44f, new Rectangle(0f, 0f, 4f, 87f));
-                        Graphics.Draw(furniture4.sprite, x + 70f, (float)(y + 44.0 + 68.0), new Rectangle(0f, 68f, 141f, 19f));
+                        Graphics.Draw(furniture4.sprite, x + 70f, (float)(y + 44f + 68f), new Rectangle(0f, 68f, 141f, 19f));
                         Graphics.Draw(furniture4.sprite, x + 70f, y + 44f, new Rectangle(0f, 0f, 141f, 16f));
-                        Graphics.Draw(furniture4.sprite, (float)(x + 70.0 + 49.0), y + 44f, new Rectangle(49f, 0f, 92f, 68f));
+                        Graphics.Draw(furniture4.sprite, (float)(x + 70f + 49f), y + 44f, new Rectangle(49f, 0f, 92f, 68f));
                         furniture4.sprite.depth = _selectConsole.depth - 20;
-                        Graphics.Draw(furniture4.sprite, (float)(x + 70.0 + 4.0), y + 44f, new Rectangle(4f, 0f, 44f, 54f));
+                        Graphics.Draw(furniture4.sprite, (float)(x + 70f + 4f), y + 44f, new Rectangle(4f, 0f, 44f, 54f));
                         furniture4.sprite.depth = (Depth)0.31f;
-                        Graphics.Draw(furniture4.sprite, (float)(x + 70.0 + 4.0), (float)(y + 44.0 + 54.0), new Rectangle(4f, 54f, 44f, 14f));
+                        Graphics.Draw(furniture4.sprite, (float)(x + 70f + 4f), (float)(y + 44f + 54f), new Rectangle(4f, 54f, 44f, 14f));
                         Graphics.Draw(furniture4.background, x + 70f, y + 45f);
                     }
                     else
                     {
                         Graphics.Draw(_roomLeftBackground, x + 4f, y + 1f);
                         Graphics.Draw(_roomLeftForeground, x, y + 1f, new Rectangle(0f, 0f, 4f, 87f));
-                        Graphics.Draw(_roomLeftForeground, x + 4f, (float)(y + 1.0 + 68.0), new Rectangle(4f, 68f, 137f, 19f));
+                        Graphics.Draw(_roomLeftForeground, x + 4f, (float)(y + 1f + 68f), new Rectangle(4f, 68f, 137f, 19f));
                         Graphics.Draw(_roomLeftForeground, x + 92f, y + 1f, new Rectangle(92f, 0f, 49f, 16f));
-                        Graphics.Draw(_roomLeftForeground, x + 135f, (float)(y + 1.0 + 16.0), new Rectangle(135f, 16f, 6f, 8f));
-                        Graphics.Draw(_roomLeftForeground, x + 89f, (float)(y + 1.0 + 55.0), new Rectangle(89f, 55f, 52f, 13f));
+                        Graphics.Draw(_roomLeftForeground, x + 135f, (float)(y + 1f + 16f), new Rectangle(135f, 16f, 6f, 8f));
+                        Graphics.Draw(_roomLeftForeground, x + 89f, (float)(y + 1f + 55f), new Rectangle(89f, 55f, 52f, 13f));
                     }
                     if (Network.isActive && (Network.isServer && profile.connection == DuckNetwork.localConnection || profile.connection == Network.host))
                     {
@@ -1349,41 +1371,48 @@ namespace DuckGame
                         string text = "PLAYER 1";
                         float num8 = 47f;
                         x += num8;
+                        string realText = "";
+                        float cenX = x + 48f;
+                        float cenY = y + 80f;
                         Furniture furniture5 = _hatSelector._roomEditor.CurFurni();
                         if (furniture5.type == FurnitureType.Font)
                         {
                             furniture5.font.scale = new Vec2(0.5f, 0.5f);
-                            furniture5.font.spriteScale = new Vec2(0.5f, 0.5f);
-                            furniture5.font.Draw("@SELECT@ACCEPT @CANCEL@CANCEL", (float)(x + 24.0 - furniture5.font.GetWidth(text) / 2.0) - num6, y + 75f + num7, Color.White, (Depth)0.7f, profile.inputProfile);
+                            furniture5.font.spriteScale = new Vec2(1f, 1f);
+                            realText = "@SELECT@ACCEPT @CANCEL@CANCEL";
+                            furniture5.font.Draw(realText, cenX - furniture5.font.GetWidth(realText) / 2f, cenY - furniture5.font.height / 2f, Color.White, (Depth)0.7f, profile.inputProfile);
                             furniture5.font.scale = new Vec2(1f, 1f);
                         }
                         else if (furniture5.type == FurnitureType.Theme)
                         {
                             profile.font.scale = new Vec2(0.5f, 0.5f);
-                            profile.font.spriteScale = new Vec2(0.5f, 0.5f);
-                            profile.font.Draw("@SELECT@ACCEPT @CANCEL@CANCEL", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num6, y + 75f + num7, Color.White, (Depth)0.7f, profile.inputProfile);
+                            profile.font.spriteScale = new Vec2(1f, 1f);
+                            realText = "@SELECT@ACCEPT @CANCEL@CANCEL";
+                            profile.font.Draw(realText, cenX - profile.font.GetWidth(realText) / 2f, cenY - 1f - profile.font.height / 2f, Color.White, (Depth)0.7f, profile.inputProfile);
                         }
                         else if (furniture5.name == "CLEAR ROOM")
                         {
                             profile.font.scale = new Vec2(0.5f, 0.5f);
-                            profile.font.spriteScale = new Vec2(0.5f, 0.5f);
-                            profile.font.Draw("@MENU2@CLEAR @CANCEL@BACK", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num6, y + 75f + num7, Color.White, (Depth)0.7f, profile.inputProfile);
+                            profile.font.spriteScale = new Vec2(1f, 1f);
+                            realText = "@MENU2@CLEAR @CANCEL@BACK";
+                            profile.font.Draw(realText, cenX - profile.font.GetWidth(realText) / 2f, cenY - profile.font.height / 2f, Color.White, (Depth)0.7f, profile.inputProfile);
                         }
                         else
                         {
                             profile.font.scale = new Vec2(0.5f, 0.5f);
-                            profile.font.spriteScale = new Vec2(0.5f, 0.5f);
+                            profile.font.spriteScale = new Vec2(0.8f, 0.8f);
                             if (_hatSelector._roomEditor._hover != null)
-                                profile.font.Draw("@SELECT@DEL @MENU2@GRAB @CANCEL@DONE", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num6, y + 75f + num7, Color.White, (Depth)0.7f, profile.inputProfile);
+                                realText = "@SELECT@DEL @MENU2@GRAB @CANCEL@DONE";
                             else
-                                profile.font.Draw("@SELECT@ADD @MENU2@MOD @CANCEL@DONE", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num6, y + 75f + num7, Color.White, (Depth)0.7f, profile.inputProfile);
+                                realText = "@SELECT@ADD @MENU2@MOD @CANCEL@DONE";
+                            profile.font.Draw(realText, cenX + 2f - profile.font.GetWidth(realText) / 2f, cenY - 4f, Color.White, (Depth)0.7f, profile.inputProfile);
                             profile.font.scale = new Vec2(0.25f, 0.25f);
                             int num9 = Profiles.experienceProfile.GetNumFurnitures(furniture5.index) - profile.GetNumFurnituresPlaced(furniture5.index);
-                            profile.font.Draw(furniture5.name + (num9 > 0 ? " |DGGREEN|" : " |DGRED|") + "x" + num9.ToString(), (float)(x + 17.0 - profile.font.GetWidth(text) / 2.0) - num6, (float)(y + 75.0 + 6.5) + num7, Color.White, (Depth)0.7f);
+                            profile.font.Draw(furniture5.name + (num9 > 0 ? " |DGGREEN|" : " |DGRED|") + "x" + num9.ToString(), (float)(x + 15f - profile.font.GetWidth(text) / 2f) - num6, (float)(y + 75f + 6.5f) + num7, Color.White, (Depth)0.7f);
                             int furnituresPlaced = profile.GetTotalFurnituresPlaced();
                             float num10 = furnituresPlaced / (float)RoomEditor.maxFurnitures;
-                            profile.font.Draw(furnituresPlaced.ToString() + "/" + RoomEditor.maxFurnitures.ToString(), (float)(x + 68.0 - profile.font.GetWidth(text) / 2.0) - num6, (float)(y + 75.0 + 6.5) + num7, Color.Black, (Depth)0.7f);
-                            Vec2 p1 = new Vec2((float)(x + 56.0 - profile.font.GetWidth(text) / 2.0) - num6, (float)(y + 75.0 + 6.0) + num7);
+                            profile.font.Draw(furnituresPlaced.ToString() + "/" + RoomEditor.maxFurnitures.ToString(), (float)(x + 66f - profile.font.GetWidth(text) / 2f) - num6, (float)(y + 75f + 6.5f) + num7, Color.Black, (Depth)0.7f);
+                            Vec2 p1 = new Vec2((float)(x + 52f - profile.font.GetWidth(text) / 2f) - num6, (float)(y + 75f + 6f) + num7);
                             Graphics.DrawRect(p1, p1 + new Vec2(37f, 3f), Colors.BlueGray, (Depth)0.66f, borderWidth: 0.5f);
                             Graphics.DrawRect(p1, p1 + new Vec2(37f * num10, 3f), num10 < 0.04f ? Colors.DGGreen : (num10 < 0.8f ? Colors.DGYellow : Colors.DGRed), (Depth)0.68f, borderWidth: 0.5f);
                         }
@@ -1481,41 +1510,48 @@ namespace DuckGame
                         string text = "PLAYER 1";
                         float num14 = 0f;
                         float num15 = 0f;
+                        string realText = "";
+                        float cenX = x + 48f;
+                        float cenY = y + 80f;
                         Furniture furniture6 = _hatSelector._roomEditor.CurFurni();
                         if (furniture6.type == FurnitureType.Font)
                         {
                             furniture6.font.scale = new Vec2(0.5f, 0.5f);
-                            furniture6.font.spriteScale = new Vec2(0.5f, 0.5f);
-                            furniture6.font.Draw("@SELECT@ACCEPT @CANCEL@CANCEL", (float)(x + 24.0 - furniture6.font.GetWidth(text) / 2.0) - num14, y + 75f + num15, Color.White, (Depth)0.7f, profile.inputProfile);
+                            furniture6.font.spriteScale = new Vec2(1f, 1f);
+                            realText = "@SELECT@ACCEPT @CANCEL@CANCEL";
+                            furniture6.font.Draw(realText, cenX - furniture6.font.GetWidth(realText) / 2f, cenY - furniture6.font.height / 2f, Color.White, (Depth)0.7f, profile.inputProfile);
                             furniture6.font.scale = new Vec2(1f, 1f);
                         }
                         else if (furniture6.type == FurnitureType.Theme)
                         {
                             profile.font.scale = new Vec2(0.5f, 0.5f);
-                            profile.font.spriteScale = new Vec2(0.5f, 0.5f);
-                            profile.font.Draw("@SELECT@ACCEPT @CANCEL@CANCEL", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num14, y + 75f + num15, Color.White, (Depth)0.7f, profile.inputProfile);
+                            profile.font.spriteScale = new Vec2(1f, 1f);
+                            realText = "@SELECT@ACCEPT @CANCEL@CANCEL";
+                            profile.font.Draw(realText, cenX - profile.font.GetWidth(realText) / 2f, cenY - 1f - profile.font.height / 2f, Color.White, (Depth)0.7f, profile.inputProfile);
                         }
                         else if (furniture6.name == "CLEAR ROOM")
                         {
                             profile.font.scale = new Vec2(0.5f, 0.5f);
-                            profile.font.spriteScale = new Vec2(0.5f, 0.5f);
-                            profile.font.Draw("@MENU2@CLEAR @CANCEL@BACK", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num14, y + 75f + num15, Color.White, (Depth)0.7f, profile.inputProfile);
+                            profile.font.spriteScale = new Vec2(1f, 1f);
+                            realText = "@MENU2@CLEAR @CANCEL@BACK";
+                            profile.font.Draw(realText, cenX - profile.font.GetWidth(realText) / 2f, cenY - profile.font.height / 2f, Color.White, (Depth)0.7f, profile.inputProfile);
                         }
                         else
                         {
                             profile.font.scale = new Vec2(0.5f, 0.5f);
-                            profile.font.spriteScale = new Vec2(0.5f, 0.5f);
+                            profile.font.spriteScale = new Vec2(0.8f, 0.8f);
                             if (_hatSelector._roomEditor._hover != null)
-                                profile.font.Draw("@SELECT@DEL @MENU2@GRAB @CANCEL@DONE", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num14, y + 75f + num15, Color.White, (Depth)0.7f, profile.inputProfile);
+                                realText = "@SELECT@DEL @MENU2@GRAB @CANCEL@DONE";
                             else
-                                profile.font.Draw("@SELECT@ADD @MENU2@MOD @CANCEL@DONE", (float)(x + 24.0 - profile.font.GetWidth(text) / 2.0) - num14, y + 75f + num15, Color.White, (Depth)0.7f, profile.inputProfile);
+                                realText = "@SELECT@ADD @MENU2@MOD @CANCEL@DONE";
+                            profile.font.Draw(realText, cenX + 2f - profile.font.GetWidth(realText) / 2f, cenY - 4f, Color.White, (Depth)0.7f, profile.inputProfile);
                             profile.font.scale = new Vec2(0.25f, 0.25f);
                             int num16 = Profiles.experienceProfile.GetNumFurnitures(furniture6.index) - profile.GetNumFurnituresPlaced(furniture6.index);
-                            profile.font.Draw(furniture6.name + (num16 > 0 ? " |DGGREEN|" : " |DGRED|") + "x" + num16.ToString(), (float)(x + 17.0 - profile.font.GetWidth(text) / 2.0) - num14, (float)(y + 75.0 + 6.5) + num15, Color.White, (Depth)0.7f);
+                            profile.font.Draw(furniture6.name + (num16 > 0 ? " |DGGREEN|" : " |DGRED|") + "x" + num16.ToString(), (float)(x + 15f) - num14, (float)(y + 75f + 6.5f) + num15, Color.White, (Depth)0.7f);
                             int furnituresPlaced = profile.GetTotalFurnituresPlaced();
                             float num17 = furnituresPlaced / (float)RoomEditor.maxFurnitures;
-                            profile.font.Draw(furnituresPlaced.ToString() + "/" + RoomEditor.maxFurnitures.ToString(), (float)(x + 68.0 - profile.font.GetWidth(text) / 2.0) - num14, (float)(y + 75.0 + 6.5) + num15, Color.Black, (Depth)0.7f);
-                            Vec2 p1 = new Vec2((float)(x + 56.0 - profile.font.GetWidth(text) / 2.0) - num14, (float)(y + 75.0 + 6.0) + num15);
+                            profile.font.Draw(furnituresPlaced.ToString() + "/" + RoomEditor.maxFurnitures.ToString(), (float)(x + 66f - profile.font.GetWidth(text) / 2f) - num14, (float)(y + 75f + 6.5f) + num15, Color.Black, (Depth)0.7f);
+                            Vec2 p1 = new Vec2((float)(x + 52f - profile.font.GetWidth(text) / 2f) - num14, (float)(y + 75f + 6f) + num15);
                             Graphics.DrawRect(p1, p1 + new Vec2(37f, 3f), Colors.BlueGray, (Depth)0.66f, borderWidth: 0.5f);
                             Graphics.DrawRect(p1, p1 + new Vec2(37f * num17, 3f), num17 < 0.04f ? Colors.DGGreen : (num17 < 0.8f ? Colors.DGYellow : Colors.DGRed), (Depth)0.68f, borderWidth: 0.5f);
                         }
@@ -1525,7 +1561,7 @@ namespace DuckGame
                     else
                     {
                         _playerProfile.font.scale = vec2;
-                        _playerProfile.font.Draw(currentDisplayName, (float)(x + 48.0 - _playerProfile.font.GetWidth(currentDisplayName) / 2.0) - num13, y + 75f + num12, Color.White, (Depth)0.7f);
+                        _playerProfile.font.Draw(currentDisplayName, (float)(x + 48f - _playerProfile.font.GetWidth(currentDisplayName) / 2f) - num13, y + 75f + num12, Color.White, (Depth)0.7f);
                         _font.scale = new Vec2(1f, 1f);
                     }
                 }

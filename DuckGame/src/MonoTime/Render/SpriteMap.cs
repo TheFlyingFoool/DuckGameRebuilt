@@ -8,6 +8,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Security.Policy;
 
 namespace DuckGame
 {
@@ -16,9 +17,18 @@ namespace DuckGame
         private int _globalIndex = Thing.GetGlobalIndex();
         private int _width;
         private int _height;
+
+        public bool canRegress;
+        public bool canMultiframeSkip;
+
         public float _speed = 1f;
         private bool _finished;
         private List<Animation> _animations = new List<Animation>();
+        public List<Animation> animations
+        {
+            get { return _animations; }
+            set { _animations = value; }
+        }
         private Animation? _currentAnimation;
         private bool _hasAnimation;
         public int _frame;
@@ -206,13 +216,43 @@ namespace DuckGame
         {
             if (!valid)
                 return false;
+            if (!MonoMain.UpdateLerpState)
+            {
+                if (_lastImageIndex != _imageIndex)
+                    UpdateSpriteBox();
+
+                return true;
+            }
             if (_currentAnimation.HasValue && (ignoreFlipFlop || _flipFlop != Graphics.frameFlipFlop) && !VirtualTransition.doingVirtualTransition)
             {
                 _frameInc += _currentAnimation.Value.speed * _speed;
-                if (_frameInc >= 1.0)
+                if (_frameInc >= 1)
                 {
-                    _frameInc = 0f;
+                    if (canMultiframeSkip)
+                    {
+                        _frameInc--;
+                        if (_frameInc <= -1)
+                        {
+                            _frameInc--;
+                            ++_frame;
+                        }
+                    }
+                    else _frameInc = 0;
                     ++_frame;
+                }
+                else if (canRegress && _frameInc <= -1)
+                {
+                    if (canMultiframeSkip)
+                    {
+                        _frameInc++;
+                        if (_frameInc <= -1)
+                        {
+                            _frameInc++;
+                            --_frame;
+                        }
+                    }
+                    else _frameInc = 0;
+                    --_frame;
                 }
                 if (_lastFrame != _frame)
                 {
@@ -225,6 +265,18 @@ namespace DuckGame
                         else
                         {
                             frame = _currentAnimation.Value.frames.Length - 1;
+                            finished = true;
+                        }
+                    }
+                    else if (canRegress && _frame < 0)
+                    {
+                        if (_currentAnimation.Value.looping)
+                        {
+                            frame = _currentAnimation.Value.frames.Length - 1;
+                        }
+                        else
+                        {
+                            frame = 0;
                             finished = true;
                         }
                     }
@@ -245,7 +297,7 @@ namespace DuckGame
             if (_currentAnimation.HasValue && !VirtualTransition.doingVirtualTransition)
             {
                 _frameInc += _currentAnimation.Value.speed * _speed;
-                if (_frameInc >= 1.0)
+                if (_frameInc >= 1)
                 {
                     _frameInc = 0f;
                     ++_frame;
@@ -284,7 +336,10 @@ namespace DuckGame
             _texture.currentObjectIndex = _globalIndex;
             if (w <= 0)
                 return;
-            Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color * alpha, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : (flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
+
+            LerpState.UpdateLerpState(new Interp.InterpState(position, angle), SkipIntraTick > 0 ? 1 : MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
+            Graphics.Draw(_texture, LerpState.Position, new Rectangle?(_spriteBox), _color * alpha, LerpState.Angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : (flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }
 
         public override void Draw(Rectangle r)
@@ -294,7 +349,10 @@ namespace DuckGame
             r.x += _spriteBox.x;
             r.y += _spriteBox.y;
             _texture.currentObjectIndex = _globalIndex;
-            Graphics.Draw(_texture, position, new Rectangle?(r), _color * alpha, angle, center, scale, _flipH ? SpriteEffects.FlipHorizontally : (_flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
+
+            LerpState.UpdateLerpState(new Interp.InterpState(position, angle), SkipIntraTick > 0 ? 1 : MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
+            Graphics.Draw(_texture, LerpState.Position, new Rectangle?(r), _color * alpha, LerpState.Angle, center, scale, _flipH ? SpriteEffects.FlipHorizontally : (_flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }
 
         public void DrawWithoutUpdate()
@@ -304,7 +362,10 @@ namespace DuckGame
             _texture.currentObjectIndex = _globalIndex;
             if (w <= 0)
                 return;
-            Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color * alpha, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : (flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
+
+            LerpState.UpdateLerpState(new Interp.InterpState(position, angle), SkipIntraTick > 0 ? 1 : MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
+            Graphics.Draw(_texture, LerpState.Position, new Rectangle?(_spriteBox), _color * alpha, LerpState.Angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : (flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }
 
         public override void CheapDraw(bool flipH = false)

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Curve
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -25,24 +18,24 @@ namespace DuckGame
 
         private static void CreateFactorialTable() => kFactorialLookup = new double[33]
         {
-      1.0,
-      1.0,
-      2.0,
-      6.0,
-      24.0,
-      120.0,
-      720.0,
-      5040.0,
-      40320.0,
-      362880.0,
-      3628800.0,
-      39916800.0,
-      479001600.0,
-      6227020800.0,
-      87178291200.0,
-      1307674368000.0,
-      20922789888000.0,
-      355687428096000.0,
+      1,
+      1,
+      2,
+      6,
+      24,
+      120,
+      720,
+      5040,
+      40320,
+      362880,
+      3628800,
+      39916800,
+      479001600,
+      6227020800,
+      87178291200,
+      1307674368000,
+      20922789888000,
+      355687428096000,
       6.402373705728E+15,
       1.21645100408832E+17,
       2.43290200817664E+18,
@@ -64,8 +57,8 @@ namespace DuckGame
 
         private static double Bernstein(int n, int i, double t)
         {
-            double num1 = t != 0.0 || i != 0 ? Math.Pow(t, i) : 1.0;
-            double num2 = n != i || t != 1.0 ? Math.Pow(1.0 - t, n - i) : 1.0;
+            double num1 = t != 0d || i != 0 ? Math.Pow(t, i) : 1d;
+            double num2 = n != i || t != 1d ? Math.Pow(1d - t, n - i) : 1d;
             return Ni(n, i) * num1 * num2;
         }
 
@@ -96,14 +89,14 @@ namespace DuckGame
         public static List<Vec2> Bezier(int cpts, params Vec2[] points)
         {
             int length = points.Length;
-            double t = 0.0;
-            double num1 = 1.0 / (cpts - 1);
+            double t = 0d;
+            double num1 = 1d / (cpts - 1);
             List<Vec2> vec2List = new List<Vec2>();
             for (int index = 0; index != cpts; ++index)
             {
                 Vec2 vec2 = new Vec2();
-                if (1.0 - t < 5E-06)
-                    t = 1.0;
+                if (1d - t < 5E-06)
+                    t = 1d;
                 for (int i = 0; i != length; ++i)
                 {
                     float num2 = (float)Bernstein(length - 1, i, t);

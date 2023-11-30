@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NewsStory name="Demo Closing">
+	<Section name="DemoClosing"/>
+	<Cycle value="Once"/>
+	
+	<SubStory name="DEMO">	
+		<Requirement><![CDATA[  isDemo() ]]></Requirement>
+		<Dialogue value="|EXCITED|Dude, you can get |RED|40+|WHITE| weapons and |RED|50+|WHITE| levels!*"/>	
+		<SubStory name = "">
+			<Dialogue value="|EXCITED|You could control other ducks with the mind control ray!*"/>		
+			<Dialogue value="|EXCITED|You could blast everyone at once with the death ray!*"/>		
+			<Dialogue value="|EXCITED|You could fly in style with the jetpack!*"/>		
+			<Dialogue value="|EXCITED|You could swing like a pro with the grappling hook!*"/>		
+			<Dialogue value="|EXCITED|You could convert ducks to your team with the good book!*"/>		
+			<Dialogue value="|EXCITED|You could douse levels in gas and light them up!*"/>		
+			<Dialogue value="|EXCITED|You could throw someone a burning roman candle!*"/>		
+			<Dialogue value="|EXCITED|You could blow up someone with an RC car!*"/>	
+			<Dialogue value="|EXCITED|You could get em on an angle with the ricochet laser!*"/>		
+			<Dialogue value="|EXCITED|You could jam out on the drumset!*"/>		
+			<Dialogue value="|EXCITED|You could smash someone with the sledge hammer!*"/>	
+			<Dialogue value="|EXCITED|You could build levels with 80+ weapons and items!*"/>	
+			<Dialogue value="|EXCITED|You could arc shot with the grenade launcher!*"/>		
+			<Dialogue value="|EXCITED|You could get some serious distance with the sniper!*"/>		
+			<Dialogue value="|EXCITED|You could set mines!*"/>		
+			<Dialogue value="|EXCITED|You could burn everything with a flamethrower!*"/>		
+			<Dialogue value="|EXCITED|You could travel into space!*"/>		
+			<Dialogue value="|EXCITED|You could travel to an industrial wasteland!*"/>		
+
+			<SubStory name="">	
+				<Requirement><![CDATA[  hasPurchaseInfo() ]]></Requirement>
+				<Dialogue value="What do you say? Wanna buy Duck Game for %PRICE%?|DEMOWAIT|!!"/>
+			</SubStory>	
+			
+			<SubStory name="">	
+				<Requirement><![CDATA[  doesNotHavePurchaseInfo() ]]></Requirement>
+				<Dialogue value="You should consider it next time you're online!"/>
+			</SubStory>		
+			
+			<SubStory name="">	
+				<Dialogue value="And that's |EXCITED|Duck Game |RED|DEMO|WHITE|!|CALM| Thanks for tuning in!"/>
+			</SubStory>				
+		</SubStory>		
+
+		
+	</SubStory>	
+</NewsStory>

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.UIInviteMenu
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -123,7 +116,8 @@ namespace DuckGame
             _users.Clear();
             if (Steam.IsInitialized())
             {
-                IOrderedEnumerable<User> source1 = Steam.friends.OrderBy(u => _sortDictionary[(int)u.state]);
+                IOrderedEnumerable<User> source1 = Steam.friends.OrderBy(u => _sortDictionary[(int)u.state])
+                                                                .ThenBy(u => u.name);
                 int num = source1.Count();
                 for (int index = 0; index < num; ++index)
                 {
@@ -162,11 +156,13 @@ namespace DuckGame
                 if (Input.Pressed(Triggers.MenuUp) && _selection > 0)
                 {
                     --_selection;
+                    SFX.DontSave = 1;
                     SFX.Play("textLetter", 0.7f);
                 }
                 if (Input.Pressed(Triggers.MenuDown) && _selection < _users.Count - 1)
                 {
                     ++_selection;
+                    SFX.DontSave = 1;
                     SFX.Play("textLetter", 0.7f);
                 }
                 if (_selection >= _viewTop + _maxShow)
@@ -238,13 +234,13 @@ namespace DuckGame
             {
                 _moreArrow.depth = depth + 2;
                 _moreArrow.flipV = false;
-                Graphics.Draw(_moreArrow, x, (float)(y + num2 / 2.0 + 13.0));
+                Graphics.Draw(ref _moreArrow, x, (float)(y + num2 / 2.0 + 13.0));
             }
             if (_viewTop > 0)
             {
                 _moreArrow.depth = depth + 2;
                 _moreArrow.flipV = true;
-                Graphics.Draw(_moreArrow, x, (float)(y - num2 / 2.0 - 2.0));
+                Graphics.Draw(ref _moreArrow, x, (float)(y - num2 / 2.0 - 2.0));
             }
             base.Draw();
         }

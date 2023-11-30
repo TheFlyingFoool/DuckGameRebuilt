@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.MysteryGun
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -38,7 +31,7 @@ namespace DuckGame
         public static Type PickType(int chanceGroup, List<TypeProbPair> contains)
         {
             ItemBox.GetPhysicsObjects(Editor.Placeables);
-            Random random = new Random((int)(Level.GetChanceGroup2(chanceGroup) * 2147483648.0 - 1.0));
+            Random random = new Random((int)(Level.GetChanceGroup2(chanceGroup) * 2147483648 - 1));
             Random generator = Rando.generator;
             Rando.generator = random;
             List<TypeProbPair> typeProbPairList = Utils.Shuffle(contains);
@@ -46,7 +39,7 @@ namespace DuckGame
             float num = 0f;
             foreach (TypeProbPair typeProbPair in typeProbPairList)
             {
-                if (Rando.Float(1f) > 1.0 - typeProbPair.probability)
+                if (Rando.Float(1f) > 1 - typeProbPair.probability)
                 {
                     type = typeProbPair.type;
                     break;

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.HotnessAnimation
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -77,7 +70,7 @@ namespace DuckGame
 
         public void Draw()
         {
-            if (_wait > 1.0)
+            if (_wait > 1f)
             {
                 bool flag = true;
                 for (int index = 0; index < _cool.Count; ++index)
@@ -92,27 +85,25 @@ namespace DuckGame
                         ++_cool[index];
                         flag = false;
                     }
-                    if (_upScale[index] > 0.0)
+                    if (_upScale[index] > 0f)
                         _upScale[index] -= 0.05f;
                 }
                 if (flag)
                 {
                     _wait += 0.015f;
-                    if (_wait > 2.0)
-                        _readyToTalk = true;
+                    if (_wait > 2f) _readyToTalk = true;
                 }
             }
-            else
-                _wait += 0.01f;
+            else _wait += 0.01f;
             _redBar.depth = (Depth)0.2f;
-            Graphics.Draw(_redBar, 30f, 25f);
+            Graphics.Draw(ref _redBar, 30f, 25f);
             _font.depth = (Depth)0.25f;
             if (DG.isHalloween)
                 _font.Draw("SPOOKY  REPORT", 44f, 28f, Color.White, (Depth)0.25f);
             else
                 _font.Draw("HOTNESS REPORT", 44f, 28f, Color.White, (Depth)0.25f);
             _blueBar.depth = (Depth)0.1f;
-            Graphics.Draw(_blueBar, 30f, 18f);
+            Graphics.Draw(ref _blueBar, 30f, 18f);
             Graphics.DrawRect(new Vec2(20f, 135f), new Vec2(260f, 160f), new Color(12, 90, 182), (Depth)0.1f);
             Vec2 vec2_1 = new Vec2(60f, 50f);
             Vec2 vec2_2 = new Vec2(200f, 150f);
@@ -121,7 +112,7 @@ namespace DuckGame
             int index1 = 0;
             foreach (Profile profile in active)
             {
-                float num1 = active.Count != 1 ? (active.Count != 2 ? index1 * (vec2_3.x / (active.Count - 1)) : (float)(vec2_3.x / 2.0 - vec2_3.x / 4.0 + index1 * (vec2_3.x / 2.0))) : vec2_3.x / 2f;
+                float num1 = active.Count != 1 ? (active.Count != 2 ? index1 * (vec2_3.x / (active.Count - 1)) : (float)(vec2_3.x / 2f - vec2_3.x / 4f + index1 * (vec2_3.x / 2f))) : vec2_3.x / 2f;
                 float num2 = (_cool[index1] + 50) / 250f;
                 float num3 = 1f / (_tempMap.Count - 2);
                 int index2 = (int)(num2 * (_tempMap.Count - 2));
@@ -133,7 +124,7 @@ namespace DuckGame
                 float num6 = 50f;
                 float num7 = num2 + 0.28f;
                 float x = vec2_1.x + num1;
-                float y = (float)(vec2_2.y - 32.0 - num7 * num6);
+                float y = (float)(vec2_2.y - 32f - num7 * num6);
                 profile.persona.sprite.depth = (Depth)0.3f;
                 profile.persona.sprite.color = Color.White;
                 Graphics.Draw(profile.persona.sprite, 0, x, y);
@@ -149,7 +140,7 @@ namespace DuckGame
                 _font.depth = (Depth)0.25f;
                 if (_cool.Count > 4)
                     _font.scale = new Vec2(0.5f);
-                _font.Draw(text, new Vec2((float)(x - _font.GetWidth(text) / 2.0 + 3.0), 140f), Color.White, (Depth)0.25f);
+                _font.Draw(text, new Vec2((float)(x - _font.GetWidth(text) / 2f + 3f), 140f), Color.White, (Depth)0.25f);
                 _font.scale = new Vec2(1f);
                 _icon.depth = (Depth)0.3f;
                 _icon.frame = (int)Math.Floor(num2 * 8.99f);

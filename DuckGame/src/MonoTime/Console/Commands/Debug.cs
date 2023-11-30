@@ -1,14 +1,14 @@
-﻿using Newtonsoft.Json;
-using System.Threading.Tasks;
+﻿using AddedContent.Firebreak;
 
 namespace DuckGame
 {
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand]
-        public static string Debug()
+        [Marker.DevConsoleCommand(DebugOnly = true,
+            To = ImplementTo.DuckHack)]
+        public static void Debug()
         {
-            return JsonConvert.SerializeObject(new Rectangle(0, 0, 24, 24), Formatting.Indented);
+            DevConsole.Log("UwU");
         }
     }
 }

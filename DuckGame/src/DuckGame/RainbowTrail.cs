@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.RainbowTrail
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
@@ -67,9 +60,9 @@ namespace DuckGame
                 }
             }
             float num2 = thing.velocity.length;
-            if (num2 > 3.0)
+            if (num2 > 3f)
                 num2 = 3f;
-            float num3 = (float)(1.0 - num2 / 3.0);
+            float num3 = (float)(1f - num2 / 3f);
             _capeWave += num2 * 0.1f;
             _inverseWave += num3 * 0.09f;
             _inverseWave2 += num3 * 0.06f;
@@ -91,12 +84,12 @@ namespace DuckGame
             capePeices.Add(new TrailPiece(thing.x - offDir * -10, thing.y + 6f, 0.5f, position, _p2));
             foreach (TrailPiece capePeice in capePeices)
             {
-                if (capePeice.wide < 1.0)
+                if (capePeice.wide < 1f)
                     capePeice.wide += 0.05f;
-                capePeice.p1.x += (float)(num5 * num7 * (capePeice.wide - 0.5) * 0.9f);
-                capePeice.p2.x += (float)(num5 * num7 * (capePeice.wide - 0.5) * 0.9f);
-                capePeice.p1.y += (float)(num6 * num7 * (capePeice.wide - 0.5) * 0.8f);
-                capePeice.p2.y += (float)(num6 * num7 * (capePeice.wide - 0.5) * 0.8f);
+                capePeice.p1.x += (float)(num5 * num7 * (capePeice.wide - 0.5f) * 0.9f);
+                capePeice.p2.x += (float)(num5 * num7 * (capePeice.wide - 0.5f) * 0.9f);
+                capePeice.p1.y += (float)(num6 * num7 * (capePeice.wide - 0.5f) * 0.8f);
+                capePeice.p2.y += (float)(num6 * num7 * (capePeice.wide - 0.5f) * 0.8f);
                 ++capePeice.p1.y;
                 ++capePeice.p2.y;
                 capePeice.p1.x += 0.3f * offDir;
@@ -150,7 +143,7 @@ namespace DuckGame
                         vec2_5 = vec2_1 + vec2_6 * (length - (num2 - num1));
                         flag2 = true;
                     }
-                    Graphics.screen.DrawQuad(vec2_5 - vec2_3 * (float)(num3 * capePeice.wide / 2.0), vec2_5 + vec2_3 * (float)(num3 * capePeice.wide / 2.0), vec2_1 - vec2_2 * (float)(num3 * capePeice.wide / 2.0), vec2_1 + vec2_2 * (float)(num3 * capePeice.wide / 2.0), t1, t2, t3, t4, depth, _capeTexture, Color.White);
+                    Graphics.screen.DrawQuad(vec2_5 - vec2_3 * (float)(num3 * capePeice.wide / 2f), vec2_5 + vec2_3 * (float)(num3 * capePeice.wide / 2f), vec2_1 - vec2_2 * (float)(num3 * capePeice.wide / 2f), vec2_1 + vec2_2 * (float)(num3 * capePeice.wide / 2f), t1, t2, t3, t4, depth, _capeTexture, Color.White);
                     if (flag2)
                         break;
                 }

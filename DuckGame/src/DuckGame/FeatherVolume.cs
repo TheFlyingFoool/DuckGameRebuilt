@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.FeatherVolume
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class FeatherVolume : MaterialThing
     {
@@ -31,13 +24,13 @@ namespace DuckGame
             if (DGRSettings.ActualParticleMultiplier != 0)
             {
                 Feather feather = Feather.New(0f, 0f, _duckOwner.persona);
-                feather.hSpeed = (float)(-bullet.travelDirNormalized.x * (1.0 + Rando.Float(1f)));
+                feather.hSpeed = (float)(-bullet.travelDirNormalized.x * (1f + Rando.Float(1f)));
                 feather.vSpeed = -Rando.Float(2f);
                 feather.position = hitPos;
                 Level.Add(feather);
             }
             Vec2 point = hitPos + bullet.travelDirNormalized * 3f;
-            if (bullet.isLocal && _duckOwner.sliding && _duckOwner.ragdoll == null && point.x > left + 2.0 && point.x < right - 2.0 && point.y > top + 2.0 && point.y < bottom - 2.0)
+            if (bullet.isLocal && _duckOwner.sliding && _duckOwner.ragdoll == null && point.x > left + 2f && point.x < right - 2f && point.y > top + 2f && point.y < bottom - 2f)
             {
                 foreach (Equipment equipment in Level.CheckPointAll<Equipment>(point))
                 {
@@ -55,7 +48,7 @@ namespace DuckGame
             if (DGRSettings.ActualParticleMultiplier == 0 || (bullet.owner != null && (bullet.owner == _duckOwner || owner != null && owner.owner == _duckOwner)))
                 return;
             Feather feather = Feather.New(0f, 0f, _duckOwner.persona);
-            feather.hSpeed = (float)(-bullet.travelDirNormalized.x * (1.0 + Rando.Float(1f)));
+            feather.hSpeed = (float)(-bullet.travelDirNormalized.x * (1f + Rando.Float(1f)));
             feather.vSpeed = -Rando.Float(2f);
             feather.position = exitPos;
             Level.Add(feather);

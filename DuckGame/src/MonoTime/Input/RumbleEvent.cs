@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.RumbleEvent
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     /// <summary>
     /// Create a RumbleEvent and call RumbleManager.AddRumbleEvent with the event to add a rumble.
@@ -117,7 +110,7 @@ namespace DuckGame
         /// <summary>
         /// Updates the intensity of a RumbleEvent based on the time remaining in the falloff portion of the full duration.
         /// </summary>
-        public void FallOffLinear() => intensityCurrent = (float)(1.0 - (timeElapsed - timeDuration) / timeFalloff) * intensityInitial;
+        public void FallOffLinear() => intensityCurrent = (float)(1f - (timeElapsed - timeDuration) / timeFalloff) * intensityInitial;
 
         /// <summary>
         /// Updates the elapsed time and updates the intensity for any falloff. Returns false if the rumble is completed and should be cleaned up by RumbleManager

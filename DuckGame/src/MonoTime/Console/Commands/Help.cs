@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using AddedContent.Firebreak;
+using System.Linq;
 using System.Text;
 
 namespace DuckGame
@@ -15,15 +16,15 @@ namespace DuckGame
         public static readonly Color SyntaxColorFields = Color.FromHexString("FCFCFA"); // white
         public static readonly Color SyntaxColorStrings = Color.FromHexString("FFD866"); // yellow
 
-        [DevConsoleCommand(
+        [Marker.DevConsoleCommand(
             Aliases = new[] { "?" },
-            Description = "Gives general help about every command")]
-        public static void Help(bool includeDescriptions = false, bool verboseParameters = false)
+            Description = "Gives general help about every command",
+            To = ImplementTo.DuckHack)]
+        public static void Help()
         {
             string s1 = SyntaxColorBraces.ToDGColorString();
             string s2 = SyntaxColorMethods.ToDGColorString();
             string s3 = SyntaxColorParams.ToDGColorString();
-            string s4 = SyntaxColorKeywords.ToDGColorString();
             string s5 = SyntaxColorComments.ToDGColorString();
 
             string fullHelpString = string.Join("\n",
@@ -38,14 +39,14 @@ namespace DuckGame
                 builder.Append(cmd.keyword);
                 builder.Append(s1);
                 builder.Append('(');
-                if (cmd.arguments is not null)
+                if (cmd.arguments != null)
                     builder.Append(string.Join(", ",
                         cmd.arguments.Select(x =>
                         {
                             StringBuilder parameterBuilder = new();
 
                             if (x.optional) parameterBuilder.Append($"{s1}[");
-                            if (verboseParameters) parameterBuilder.Append($"{s4}{x.type.Name} ");
+                            parameterBuilder.Append($"{s2}{x.type.Name} ");
                             parameterBuilder.Append($"{s3}{x.name}");
                             if (x.optional) parameterBuilder.Append($"{s1}]");
 
@@ -54,7 +55,7 @@ namespace DuckGame
                 builder.Append(s1);
                 builder.Append(')');
 
-                if (string.IsNullOrEmpty(cmd.description) || !includeDescriptions)
+                if (string.IsNullOrEmpty(cmd.description))
                     return builder.ToString();
 
                 builder.Append('\n');

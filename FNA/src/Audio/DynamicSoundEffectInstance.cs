@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -80,14 +80,12 @@ namespace Microsoft.Xna.Framework.Audio
 			this.channels = channels;
 			isDynamic = true;
 
-            format = new FAudio.FAudioWaveFormatEx
-            {
-                wFormatTag = 1,
-                nChannels = (ushort)channels,
-                nSamplesPerSec = (uint)sampleRate,
-                wBitsPerSample = 16
-            };
-            format.nBlockAlign = (ushort) (2 * format.nChannels);
+			format = new FAudio.FAudioWaveFormatEx();
+			format.wFormatTag = 1;
+			format.nChannels = (ushort) channels;
+			format.nSamplesPerSec = (uint) sampleRate;
+			format.wBitsPerSample = 16;
+			format.nBlockAlign = (ushort) (2 * format.nChannels);
 			format.nAvgBytesPerSec = format.nBlockAlign * format.nSamplesPerSec;
 			format.cbSize = 0;
 
@@ -152,19 +150,17 @@ namespace Microsoft.Xna.Framework.Audio
 
 		public void SubmitBuffer(byte[] buffer, int offset, int count)
 		{
-			IntPtr next = Marshal.AllocHGlobal(count);
+			IntPtr next = FNAPlatform.Malloc(count);
 			Marshal.Copy(buffer, offset, next, count);
 			lock (queuedBuffers)
 			{
 				queuedBuffers.Add(next);
 				if (State != SoundState.Stopped)
 				{
-                    FAudio.FAudioBuffer buf = new FAudio.FAudioBuffer
-                    {
-                        AudioBytes = (uint)count,
-                        pAudioData = next
-                    };
-                    buf.PlayLength = (
+					FAudio.FAudioBuffer buf = new FAudio.FAudioBuffer();
+					buf.AudioBytes = (uint) count;
+					buf.pAudioData = next;
+					buf.PlayLength = (
 						buf.AudioBytes /
 						(uint) channels /
 						(uint) (format.wBitsPerSample / 8)
@@ -204,19 +200,17 @@ namespace Microsoft.Xna.Framework.Audio
 			format.nBlockAlign = (ushort) (4 * format.nChannels);
 			format.nAvgBytesPerSec = format.nBlockAlign * format.nSamplesPerSec;
 
-			IntPtr next = Marshal.AllocHGlobal(count * sizeof(float));
+			IntPtr next = FNAPlatform.Malloc(count * sizeof(float));
 			Marshal.Copy(buffer, offset, next, count);
 			lock (queuedBuffers)
 			{
 				queuedBuffers.Add(next);
 				if (State != SoundState.Stopped)
 				{
-                    FAudio.FAudioBuffer buf = new FAudio.FAudioBuffer
-                    {
-                        AudioBytes = (uint)count * sizeof(float),
-                        pAudioData = next
-                    };
-                    buf.PlayLength = (
+					FAudio.FAudioBuffer buf = new FAudio.FAudioBuffer();
+					buf.AudioBytes = (uint) count * sizeof(float);
+					buf.pAudioData = next;
+					buf.PlayLength = (
 						buf.AudioBytes /
 						(uint) channels /
 						(uint) (format.wBitsPerSample / 8)
@@ -278,7 +272,7 @@ namespace Microsoft.Xna.Framework.Audio
 			{
 				foreach (IntPtr buf in queuedBuffers)
 				{
-					Marshal.FreeHGlobal(buf);
+					FNAPlatform.Free(buf);
 				}
 				queuedBuffers.Clear();
 				queuedSizes.Clear();
@@ -304,7 +298,7 @@ namespace Microsoft.Xna.Framework.Audio
 				while (PendingBufferCount > state.BuffersQueued)
 				lock (queuedBuffers)
 				{
-					Marshal.FreeHGlobal(queuedBuffers[0]);
+					FNAPlatform.Free(queuedBuffers[0]);
 					queuedBuffers.RemoveAt(0);
 				}
 			}

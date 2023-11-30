@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.TutorialGunJump
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Details|Signs|Tutorial", EditorItemType.PowerUser)]
     public class TutorialGunJump : TutorialSign
@@ -13,6 +6,7 @@ namespace DuckGame
         public TutorialGunJump(float xpos, float ypos)
           : base(xpos, ypos, "tutorial/gunjump", "Gun Jump")
         {
+            editorCycleType = typeof(TutorialSign00);
         }
 
         public override void Draw()

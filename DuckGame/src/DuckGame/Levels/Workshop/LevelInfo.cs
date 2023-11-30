@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.LevelInfo
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class LevelInfo : Card
     {
@@ -67,16 +60,16 @@ namespace DuckGame
             if (_specialText != null)
             {
                 _font.scale = new Vec2(0.5f, 0.5f);
-                _font.Draw(_specialText, (float)(position.x + width / 2.0 - _font.GetWidth(_specialText) / 2.0), (float)(position.y + height / 2.0 - 3.0), Color.White * alpha, (Depth)0.95f);
+                _font.Draw(_specialText, (float)(position.x + width / 2 - _font.GetWidth(_specialText) / 2), (float)(position.y + height / 2 - 3), Color.White * alpha, (Depth)0.95f);
             }
             else
             {
                 _font.scale = new Vec2(0.5f, 0.5f);
-                _font.Draw(_name, position.x + 3f, (float)(position.y + height - 6.0), Color.White * alpha, (Depth)0.95f);
+                _font.Draw(_name, position.x + 3f, (float)(position.y + height - 6), Color.White * alpha, (Depth)0.95f);
                 _sprite.xscale = _sprite.yscale = width / _sprite.width;
                 _sprite.depth = (Depth)0.95f;
                 _sprite.alpha = alpha;
-                Graphics.Draw(_sprite, position.x, position.y);
+                Graphics.Draw(ref _sprite, position.x, position.y);
             }
         }
     }

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.CardStrip
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -104,9 +97,9 @@ namespace DuckGame
                 _selectedCardIndex = 0;
             if (_levelIndex + (_numCardsPerScreen - 1) < _selectedCardIndex)
             {
-                if (_indexSlide > -1.0)
+                if (_indexSlide > -1f)
                     _indexSlide = Lerp.FloatSmooth(_indexSlide, -1.2f, 0.2f);
-                if (_indexSlide <= -1.0)
+                if (_indexSlide <= -1f)
                 {
                     ++_levelIndex;
                     _indexSlide = 0f;
@@ -114,9 +107,9 @@ namespace DuckGame
             }
             if (_levelIndex <= _selectedCardIndex)
                 return;
-            if (_indexSlide < 1.0)
+            if (_indexSlide < 1f)
                 _indexSlide = Lerp.FloatSmooth(_indexSlide, 1.2f, 0.2f);
-            if (_indexSlide < 1.0)
+            if (_indexSlide < 1f)
                 return;
             --_levelIndex;
             _indexSlide = 0f;
@@ -180,12 +173,12 @@ namespace DuckGame
             if (_levelIndex + _numCardsPerScreen < _cards.Count)
             {
                 _arrow.flipH = false;
-                Graphics.Draw(_arrow, 312f, y + vec2_2.y / 2f);
+                Graphics.Draw(ref _arrow, 312f, y + vec2_2.y / 2f);
             }
             if (_levelIndex <= 0)
                 return;
             _arrow.flipH = true;
-            Graphics.Draw(_arrow, 8f, y + vec2_2.y / 2f);
+            Graphics.Draw(ref _arrow, 8f, y + vec2_2.y / 2f);
         }
     }
 }

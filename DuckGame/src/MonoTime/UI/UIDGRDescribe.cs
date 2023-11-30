@@ -1,52 +1,61 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.UIText
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame
 {
-    public class UIDGRDescribe : UIText
+    public class UIDGRDescribe : LUIText
     {
         public UIDGRDescribe(Color c) : base("", c)
         {
-
         }
-        public UIDGRDescribe(Func<string> textFunc, Color c) : base(textFunc, c)
+
+        public UIDGRDescribe(Func<string> textFunc, Color c) : base(textFunc, c) 
         {
-
         }
+
         public override void Draw()
         {
-
-
             int sel = ((UIBox)_parent).selection;
 
             List<UIComponent> uis = _parent.components.Where(t => t.dgrDescription != "").ToList();
 
-            if (uis.Count > sel) text = uis[sel].dgrDescription;
-            else text = "";
+            if (uis.Count > sel)
+                text = uis[sel].dgrDescription;
+            else
+                text = "";
+
+
+            x = parent.x;
+            _font.scale = new Vec2(1f, 1f);
+            _collisionSize.x = _font.GetWidth(_text);
 
             _font.scale = scale;
             _font.alpha = alpha;
-            float width = _font.GetWidth(text);
-            float num1 = (align & UIAlign.Left) <= UIAlign.Center ? ((align & UIAlign.Right) <= UIAlign.Center ? (float)(-width / 2.0) : this.width / 2f - width) : (float)-(this.width / 2.0);
-            float num2 = (align & UIAlign.Top) <= UIAlign.Center ? ((align & UIAlign.Bottom) <= UIAlign.Center ? (float)(-_font.height / 2.0) : height / 2f - _font.height) : (float)-(height / 2.0);
-            if (specialScale != 0.0)
+            _font.ySpacing = 0.5f;
+            UILerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
+            Vec2 alignOffset = calcAlignOffset();
+            _font.Draw(text, UILerp.x + alignOffset.x, UILerp.y + alignOffset.y, UIMenu.disabledDraw ? Colors.BlueGray : _color, depth, _controlProfile);
+
+            if (HUD.hide)
+                return;
+            foreach (UIComponent component in _components)
             {
-                Vec2 scale = _font.scale;
-                _font.scale = new Vec2(specialScale);
-                _font.Draw(text, x + num1, y + num2, UIMenu.disabledDraw ? Colors.BlueGray : _color, depth, _controlProfile);
-                _font.scale = scale;
+                if (component.condition == null || component.condition())
+                {
+                    if (component is UIMenuItem)
+                        UIMenu.disabledDraw = component.mode == MenuItemMode.Disabled;
+                    component.depth = depth + 10;
+                    if (component.visible && component.mode != MenuItemMode.Hidden)
+                    {
+                        component.Draw();
+                    }
+                    if (component is UIMenuItem)
+                        UIMenu.disabledDraw = false;
+                }
             }
-            else
-                _font.Draw(text, x + num1, y + num2, UIMenu.disabledDraw ? Colors.BlueGray : _color, depth, _controlProfile);
-            base.Draw();
+            int num = debug ? 1 : 0;
         }
     }
 }

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.PopEffect
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -51,7 +44,7 @@ namespace DuckGame
                 _sprite.xscale = _sprite.yscale = xscale * part.scale;
                 _sprite.center = new Vec2(_sprite.w / 2, _sprite.h / 2);
                 _sprite.alpha = 0.8f;
-                Graphics.Draw(_sprite, x, y);
+                Graphics.Draw(ref _sprite, x, y);
             }
             base.Draw();
         }

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ArcadeLevel
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -291,10 +284,7 @@ namespace DuckGame
             }
             if (spawnKey)
             {
-                if (spawnKeyWait > 0.0)
-                {
-                    spawnKeyWait -= Maths.IncFrameTimer();
-                }
+                if (spawnKeyWait > 0f) spawnKeyWait -= Maths.IncFrameTimer();
                 else
                 {
                     SFX.Play("ching");
@@ -408,7 +398,7 @@ namespace DuckGame
                 {
                     _duck.alpha = Lerp.FloatSmooth(_duck.alpha, 0f, 0.1f);
                     _followCam.manualViewSize = Lerp.FloatSmooth(_followCam.manualViewSize, 2f, 0.16f);
-                    if (_followCam.manualViewSize < 30.0)
+                    if (_followCam.manualViewSize < 30f)
                     {
                         Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
                         Layer.Background.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
@@ -500,7 +490,7 @@ namespace DuckGame
                 {
                     _duck.alpha = Lerp.FloatSmooth(_duck.alpha, 0f, 0.1f);
                     _followCam.manualViewSize = Lerp.FloatSmooth(_followCam.manualViewSize, 2f, 0.16f);
-                    if (_followCam.manualViewSize < 30.0)
+                    if (_followCam.manualViewSize < 30f)
                     {
                         Layer.Game.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
                         Layer.Background.fade = Lerp.Float(Layer.Game.fade, 0f, 0.08f);
@@ -805,7 +795,7 @@ namespace DuckGame
                 else if (_state == ArcadeState.UnlockMachine)
                 {
                     _unlockMachineWait -= 0.02f;
-                    if (_unlockMachineWait < 0.0)
+                    if (_unlockMachineWait < 0f)
                     {
                         if (_unlockingMachine)
                         {

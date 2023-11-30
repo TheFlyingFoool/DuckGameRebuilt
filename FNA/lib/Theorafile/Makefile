@@ -28,7 +28,11 @@ endif
 # this requires the compiler to support the ARM Neon, Media, and EDSP extensions
 ifneq (,$(findstring armv7,$(TRIPLET)))
 	DEFINES += -DOC_ARM_ASM -DOC_ARM_ASM_EDSP -DOC_ARM_ASM_MEDIA -DOC_ARM_ASM_NEON
-	TFSRC_ARCH_OPT = $(TFSRC_ARCH_AARCH32)
+	TFSRC_ARCH_OPT = $(TFSRC_ARCH_ARM)
+endif
+ifneq (,$(findstring aarch64,$(TRIPLET)))
+	DEFINES += -DOC_ARM_ASM -DOC_ARM_ASM_EDSP -DOC_ARM_ASM_MEDIA -DOC_ARM_ASM_NEON
+	TFSRC_ARCH_OPT = $(TFSRC_ARCH_ARM)
 endif
 
 # Compiler
@@ -102,20 +106,19 @@ TFSRC_ARCH_X86 = \
 	lib/theora/x86/sse2idct.c \
 	lib/theora/x86/x86cpu.c \
 	lib/theora/x86/x86state.c
-AARCH32_ASSEMBLY_NAMES = bits frag idct loop
-AARCH32_ASSEMBLY_GNU_SOURCES = $(foreach name,$(AARCH32_ASSEMBLY_NAMES) opts,lib/theora/arm/arm$(name)-gnu.S)
-AARCH32_ASSEMBLY_OBJS = $(foreach name,$(AARCH32_ASSEMBLY_NAMES),lib/theora/arm/arm$(name).o)
-TFSRC_ARCH_AARCH32 = \
-	lib/theora/arm/armstate.c \
-	lib/theora/arm/armcpu.c \
-	$(AARCH32_ASSEMBLY_OBJS)
+TFSRC_ARCH_ARM = \
+	lib/theora/arm-intrinsics/armcpu.c \
+	lib/theora/arm-intrinsics/armfrag.c \
+	lib/theora/arm-intrinsics/armidct.c \
+	lib/theora/arm-intrinsics/armloop.c \
+	lib/theora/arm-intrinsics/armstate.c
 
 # Targets
 .PHONY: lib all clean test
 lib: $(LIB)
 all: $(LIB) theorafile-test
 clean:
-	rm -f $(LIB) theorafile-test $(AARCH32_ASSEMBLY_OBJS) $(AARCH32_ASSEMBLY_GNU_SOURCES)
+	rm -f $(LIB) theorafile-test
 test: theorafile-test
 $(LIB): $(TFSRC)
 	$(CC) $(CFLAGS) -shared -o $@ $^ $(INCLUDES) $(DEFINES) -lm $(LDFLAGS)

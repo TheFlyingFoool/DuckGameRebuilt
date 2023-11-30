@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Tex2D
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System.IO;
 
 namespace DuckGame
@@ -13,6 +6,7 @@ namespace DuckGame
     public class Tex2D : Tex2DBase
     {
         protected Texture2D _base;
+        public bool skipSpriteAtlas;
         private RenderTarget2D _effectTexture;
 
         public RenderTarget2D effectTexture
@@ -78,6 +72,22 @@ namespace DuckGame
             Color[] data = new Color[_base.Width * _base.Height];
             _base.GetData(data);
             return data;
+        }
+
+        public Color[,] GetData2D()
+        {
+            Color[] rawData = GetData();
+            Color[,] data2D = new Color[_base.Width, _base.Height];
+            
+            for (int y = 0, i = 0; y < h; y++)
+            {
+                for (int x = 0; x < w; x++, i++)
+                {
+                    data2D[x, y] = rawData[i];
+                }
+            }
+
+            return data2D;
         }
 
         public override void SetData<T>(T[] colors)

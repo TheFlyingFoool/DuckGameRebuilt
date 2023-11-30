@@ -1,15 +1,8 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.XInputPad
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using SDL2;
 using System;
 using System.Collections.Generic;
-using static SDL2.SDL;
 
 namespace DuckGame
 {
@@ -273,7 +266,7 @@ namespace DuckGame
           }
         };
         private bool _connectedState;
-        public SDL_GameControllerType SDLControllerType = SDL_GameControllerType.SDL_CONTROLLER_TYPE_XBOX360;
+        public SDL.SDL_GameControllerType SDLControllerType = SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_XBOX360;
         public override bool isConnected => _connectedState;
 
         public override bool allowStartRemap => true;
@@ -298,7 +291,7 @@ namespace DuckGame
         public override Sprite GetMapImage(int map)
         {
             Sprite mapImage;
-            if (SDLControllerType == SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS3 || SDLControllerType == SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS4 || SDLControllerType == SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS5)
+            if (SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS3 || SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS4 || SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS5)
             {
                 _triggerImagesPS.TryGetValue(map, out mapImage);
             }
@@ -316,11 +309,15 @@ namespace DuckGame
             GamePadState state1 = FNAPlatform.GetGamePadState(index, GamePadDeadZone.Circular);
             if (_connectedState != state1.IsConnected && state1.IsConnected)
             {
-                string productname = SDL_GameControllerNameForIndex(index);
-                SDLControllerType = SDL_GameControllerTypeForIndex(index);
+                string productname = SDL.SDL_GameControllerNameForIndex(index);
+                SDLControllerType = SDL.SDL_GameControllerTypeForIndex(index);
                 if (productname != null && productname != "")
                 {
                     _productName = productname;
+                }
+                else if (SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_UNKNOWN)
+                {
+                    _productName = FNAPlatform.GetGameControllerName(index);
                 }
             }
             PadState state2 = new PadState();

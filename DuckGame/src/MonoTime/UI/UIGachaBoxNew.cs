@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.UIGachaBoxNew
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -512,8 +505,11 @@ namespace DuckGame
             Graphics.Draw(_gachaTwisterShadow, x - 14f + vec2_2.x + vec2_3.x, y + vec2_2.y + vec2_3.y);
             Material material1 = Graphics.material;
             Graphics.material = _rainbowMaterial;
-            _rainbowMaterial.offset += 0.05f;
-            _rainbowMaterial.offset2 += 0.02f;
+            if (MonoMain.UpdateLerpState)
+            {
+                _rainbowMaterial.offset += 0.05f;
+                _rainbowMaterial.offset2 += 0.02f;
+            }
             _rainbow.alpha = 0.25f;
             _rainbow.depth = -0.95f;
             Graphics.Draw(_rainbow, 0f, 0f);

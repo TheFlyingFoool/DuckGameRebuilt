@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Jetpack
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -81,14 +74,14 @@ namespace DuckGame
                         float angle = this.angle;
                         this.angle = propel.angle;
                         Vec2 offset = Offset(new Vec2(0f, 8f));
-                        Level.Add(new JetpackSmoke(offset.x, offset.y));
+                        for (float i = 0; i < DGRSettings.ActualParticleMultiplier; i++) Level.Add(new JetpackSmoke(offset.x, offset.y));
                         this.angle = angle;
                         if (propel.velocity.length < 7f)
                         {
                             RagdollPart ragdollPart = propel as RagdollPart;
                             ragdollPart.addWeight = 0.2f;
                             _equippedDuck.ragdoll.jetting = true;
-                            float ang = -(propel.angle - (float)(Math.PI / 2.0f));
+                            float ang = -(propel.angle - (float)(Math.PI / 2f));
                             Vec2 dir = Vec2.Zero;
                             if (_equippedDuck.inputProfile.leftStick.length > 0.1f)
                             {
@@ -120,7 +113,7 @@ namespace DuckGame
                     }
                     else
                     {
-                        Level.Add(new JetpackSmoke(x, y + 8f + smokeOff));
+                        for (float i = 0; i < DGRSettings.ActualParticleMultiplier; i++) Level.Add(new JetpackSmoke(x, y + 8f + smokeOff));
                         if (angle > 0f)
                         {
                             if (propel.hSpeed < 6f)

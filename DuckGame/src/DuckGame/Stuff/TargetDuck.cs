@@ -85,7 +85,7 @@ namespace DuckGame
                 ChallengeLevel.allTargetsShot = false;
                 _autoFireWait = autofire.value;
             }
-            if ((float)speediness == 0.0)
+            if ((float)speediness == 0f)
                 speediness.value = 1f;
             _waitFire = (float)speediness;
             UpdateCollision();
@@ -235,7 +235,7 @@ namespace DuckGame
                 for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 4; ++index)
                 {
                     WoodDebris woodDebris = WoodDebris.New(x - 8f + Rando.Float(16f), y - 20f + Rando.Float(16f));
-                    woodDebris.hSpeed = (float)((Rando.Float(1f) > 0.5 ? 1.0 : -1.0) * Rando.Float(3f) + Math.Sign(vec2.x) * 0.5);
+                    woodDebris.hSpeed = (float)((Rando.Float(1f) > 0.5f ? 1 : -1) * Rando.Float(3f) + Math.Sign(vec2.x) * 0.5f);
                     woodDebris.vSpeed = -Rando.Float(1f);
                     Level.Add(woodDebris);
                 }
@@ -255,15 +255,15 @@ namespace DuckGame
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(hitPos.x, hitPos.y);
-                woodDebris.hSpeed = (float)(-bullet.travelDirNormalized.x * 2.0 * (Rando.Float(1f) + 0.3f));
-                woodDebris.vSpeed = (float)(-bullet.travelDirNormalized.y * 2.0 * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
+                woodDebris.hSpeed = (float)(-bullet.travelDirNormalized.x * 2f * (Rando.Float(1f) + 0.3f));
+                woodDebris.vSpeed = (float)(-bullet.travelDirNormalized.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
                 Level.Add(woodDebris);
             }
         }
 
         public override bool Hurt(float points)
         {
-            if (!_popup || _maxHealth == 0.0)
+            if (!_popup || _maxHealth == 0f)
                 return false;
             _hitPoints -= points;
             return true;
@@ -337,7 +337,7 @@ namespace DuckGame
             if (holdObject.ammoType != null)
                 num = holdObject.ammoType.range;
             Vec2 vec2 = this.holdObject.Offset(new Vec2(num * this.holdObject.angleMul, 0f));
-            if (_autoFireWait <= 0.0)
+            if (_autoFireWait <= 0)
             {
                 foreach (Duck duck in Level.current.things[typeof(Duck)].Where(d => !(d is TargetDuck)))
                 {
@@ -349,13 +349,13 @@ namespace DuckGame
                 }
             }
             bool flag = false;
-            if (_autoFireWait > 0.0)
+            if (_autoFireWait > 0)
             {
                 _autoFireWait -= Maths.IncFrameTimer();
-                if (_autoFireWait <= 0.0)
+                if (_autoFireWait <= 0)
                     flag = true;
             }
-            if (_waitFire <= 0.0 | flag)
+            if (_waitFire <= 0 | flag)
             {
                 holdObject.PressAction();
                 _waitFire = (float)speediness;
@@ -372,7 +372,7 @@ namespace DuckGame
                 UpdateFire();
             UpdateCollision();
             UpdateSkeleton();
-            if (_hitPoints <= 0.0)
+            if (_hitPoints <= 0f)
                 Destroy(new DTCrush(null));
             if (!_up)
             {
@@ -382,7 +382,7 @@ namespace DuckGame
                 if (_stance != TargetStance.Fly)
                 {
                     yscale += _upSpeed;
-                    if (yscale < 1.0)
+                    if (yscale < 1f)
                         return;
                     yscale = 1f;
                     _upSpeed = 0f;
@@ -409,7 +409,7 @@ namespace DuckGame
                 else
                 {
                     xscale += _upSpeed;
-                    if (xscale < 1.0)
+                    if (xscale < 1f)
                         return;
                     xscale = 1f;
                     _upSpeed = 0f;
@@ -436,7 +436,7 @@ namespace DuckGame
             else
             {
                 _timeCount += Maths.IncFrameTimer();
-                if (_popup && time.value != 0.0 && _timeCount >= time.value)
+                if (_popup && time.value != 0 && _timeCount >= time.value)
                 {
                     SFX.Play("grappleHook", 0.2f, Rando.Float(-0.2f, 0.2f));
                     PopDown();
@@ -448,7 +448,7 @@ namespace DuckGame
                     if (_stance != TargetStance.Fly)
                     {
                         yscale -= _upSpeed;
-                        if (yscale >= 0.0)
+                        if (yscale >= 0)
                             return;
                         yscale = 0f;
                         _upSpeed = 0f;
@@ -464,7 +464,7 @@ namespace DuckGame
                     else
                     {
                         xscale -= _upSpeed;
-                        if (xscale >= 0.0)
+                        if (xscale >= 0)
                             return;
                         xscale = 0f;
                         _upSpeed = 0f;
@@ -492,7 +492,7 @@ namespace DuckGame
                 position1 = ragdoll.part1.position;
             else if (_trapped != null)
                 position1 = _trapped.position;
-            if ((position1 - Level.current.camera.position).length > Level.current.camera.width * 2.0)
+            if ((position1 - Level.current.camera.position).length > Level.current.camera.width * 2f)
                 return;
             float num = 14f;
             if (position1.x < Level.current.camera.left + num)

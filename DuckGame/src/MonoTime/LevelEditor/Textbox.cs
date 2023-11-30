@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Textbox
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using SDL2;
+﻿using SDL2;
 using System.Threading;
 
 namespace DuckGame
@@ -111,7 +104,7 @@ namespace DuckGame
         public void GainFocus()
         {
             _inFocus = true;
-            Keyboard.keyString = "";
+            Keyboard.KeyString = "";
             Editor.PushFocus(this);
         }
 
@@ -130,7 +123,7 @@ namespace DuckGame
                         Editor.PopFocusNow();
                     }
                     _inFocus = true;
-                    Keyboard.keyString = "";
+                    Keyboard.KeyString = "";
                     Editor.PushFocus(this);
                 }
             }
@@ -170,11 +163,11 @@ namespace DuckGame
                         if (Keyboard.Pressed(Keys.X))
                             DeleteHighlight();
                     }
-                    Keyboard.keyString = "";
+                    Keyboard.KeyString = "";
                 }
-                if (Keyboard.keyString.Length > 0 && _font._highlightStart != _font._highlightEnd)
+                if (Keyboard.KeyString.Length > 0 && _font._highlightStart != _font._highlightEnd)
                     DeleteHighlight();
-                text = text.Insert(_cursorPosition, Keyboard.keyString);
+                text = text.Insert(_cursorPosition, Keyboard.KeyString);
                 if (Keyboard.Pressed(Keys.Back) && text.Length > 0)
                 {
                     if (_font._highlightStart != _font._highlightEnd)
@@ -200,8 +193,8 @@ namespace DuckGame
                     ++_cursorPosition;
                 }
                 int length2 = text.Length;
-                _cursorPosition += Keyboard.keyString.Length;
-                Keyboard.keyString = "";
+                _cursorPosition += Keyboard.KeyString.Length;
+                Keyboard.KeyString = "";
                 if (Keyboard.Pressed(Keys.Left))
                 {
                     --_cursorPosition;
@@ -263,7 +256,7 @@ namespace DuckGame
             _drawText = text;
             if (text.Length == 0 && !_inFocus)
                 _drawText = _emptyText;
-            _blink = (float)((_blink + 0.02f) % 1.0);
+            _blink = (float)((_blink + 0.02f) % 1f);
         }
 
         public void Draw()

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Mine
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -164,7 +157,7 @@ namespace DuckGame
                 previousThings.Clear();
                 foreach (PhysicsObject physicsObject in physicsObjects)
                 {
-                    if (physicsObject != this && physicsObject.owner == null && (!(physicsObject is Holdable) || (physicsObject as Holdable).canPickUp && (physicsObject as Holdable).hoverSpawner == null) && Math.Abs(physicsObject.bottom - bottom) <= 6.0)
+                    if (physicsObject != this && physicsObject.owner == null && (!(physicsObject is Holdable) || (physicsObject as Holdable).canPickUp && (physicsObject as Holdable).hoverSpawner == null) && Math.Abs(physicsObject.bottom - bottom) <= 6)
                     {
                         if (physicsObject.isServerForObject)
                             flag1 = true;
@@ -194,8 +187,8 @@ namespace DuckGame
                                 addWeight += physicsObject.weight;
                                 break;
                         }
-                        foreach (PhysicsObject previousThing in previousThings)
-                            ;
+                        //foreach (PhysicsObject previousThing in previousThings)
+                        //    ; what
                     }
                 }
                 List<Duck> duckList2 = new List<Duck>();
@@ -225,7 +218,7 @@ namespace DuckGame
                 }
                 _holdingWeight = addWeight;
             }
-            if (_timer < 0.0 && isServerForObject)
+            if (_timer < 0 && isServerForObject)
             {
                 _timer = 1f;
                 BlowUp();
@@ -246,7 +239,7 @@ namespace DuckGame
                 if (t != this)
                 {
                     Vec2 vec2 = t.position - position;
-                    float num1 = (float)(1.0 - Math.Min(vec2.length, 22f) / 22.0);
+                    float num1 = (float)(1 - Math.Min(vec2.length, 22f) / 22);
                     float num2 = num1 * 4f;
                     vec2.Normalize();
                     t.hSpeed += num2 * vec2.x;
@@ -255,30 +248,33 @@ namespace DuckGame
                     Fondle(t);
                 }
             }
-            float x = position.x;
-            float y = position.y;
-            for (int index = 0; index < 20; ++index)
+            if (!Recorderator.Playing)
             {
-                float ang = (float)(index * 18.0 - 5.0) + Rando.Float(10f);
-                ATShrapnel type = new ATShrapnel
+                float x = position.x;
+                float y = position.y;
+                for (int index = 0; index < 20; ++index)
                 {
-                    range = 60f + Rando.Float(18f)
-                };
-                Bullet bullet = new Bullet(x, y, type, ang)
+                    float ang = (float)(index * 18 - 5) + Rando.Float(10f);
+                    ATShrapnel type = new ATShrapnel
+                    {
+                        range = 60f + Rando.Float(18f)
+                    };
+                    Bullet bullet = new Bullet(x, y, type, ang)
+                    {
+                        firedFrom = this
+                    };
+                    firedBullets.Add(bullet);
+                    Level.Add(bullet);
+                }
+                bulletFireIndex += 20;
+                if (Network.isActive && isServerForObject)
                 {
-                    firedFrom = this
-                };
-                firedBullets.Add(bullet);
-                Level.Add(bullet);
+                    Send.Message(new NMFireGun(this, firedBullets, bulletFireIndex, false), NetMessagePriority.ReliableOrdered);
+                    firedBullets.Clear();
+                }
+                if (Recorder.currentRecording != null)
+                    Recorder.currentRecording.LogBonus();
             }
-            bulletFireIndex += 20;
-            if (Network.isActive && isServerForObject)
-            {
-                Send.Message(new NMFireGun(this, firedBullets, bulletFireIndex, false), NetMessagePriority.ReliableOrdered);
-                firedBullets.Clear();
-            }
-            if (Recorder.currentRecording != null)
-                Recorder.currentRecording.LogBonus();
             Level.Remove(this);
         }
 
@@ -286,7 +282,19 @@ namespace DuckGame
         {
             if (blownUp)
                 return;
+            if (currentVessel != null && currentVessel is MineVessel mv && !Recorderator.Playing)
+            {
+                mv.explodeFrame = mv.exFrames;
+                mv.v = pos;
+            }
             blownUp = true;
+            if (DGRSettings.ExplosionDecals)
+            {
+                Level.Add(new ExplosionDecal(pos.x - 8, pos.y - 8));
+                Level.Add(new ExplosionDecal(pos.x + 8, pos.y - 8));
+                Level.Add(new ExplosionDecal(pos.x + 8, pos.y + 8));
+                Level.Add(new ExplosionDecal(pos.x - 8, pos.y + 8));
+            }
             SFX.Play("explode");
             RumbleManager.AddRumbleEvent(pos, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));
             Graphics.FlashScreen();
@@ -312,7 +320,7 @@ namespace DuckGame
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (bullet.isLocal && owner == null && !canPickUp && _timer > 0.0)
+            if (bullet.isLocal && owner == null && !canPickUp && _timer > 0)
             {
                 Fondle(this, DuckNetwork.localConnection);
                 BlowUp();

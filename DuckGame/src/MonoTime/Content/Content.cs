@@ -7,6 +7,7 @@
 
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -51,32 +52,32 @@ namespace DuckGame
         public static byte[] generatePreviewBytes;
         public static bool renderingToTarget = false;
         private static Dictionary<Type, string> _extensionList = new Dictionary<Type, string>()
-    {
-      {
-        typeof (Tex2D),
-        "*.png"
-      },
-      {
-        typeof (Texture2D),
-        "*.png"
-      },
-      {
-        typeof (SoundEffect),
-        "*.wav"
-      },
-      {
-        typeof (Song),
-        "*.ogg"
-      },
-      {
-        typeof (Level),
-        "*.lev"
-      },
-      {
-        typeof (Effect),
-        "*.xnb"
-      }
-    };
+        {
+          {
+            typeof (Tex2D),
+            "*.png"
+          },
+          {
+            typeof (Texture2D),
+            "*.png"
+          },
+          {
+            typeof (SoundEffect),
+            "*.wav"
+          },
+          {
+            typeof (Song),
+            "*.ogg"
+          },
+          {
+            typeof (Level),
+            "*.lev"
+          },
+          {
+            typeof (Effect),
+            "*.xnb"
+          }
+        };
         private static List<string> _texturesToProcess = new List<string>();
         private static ContentManager _base;
         private static string _path = "";
@@ -801,7 +802,7 @@ namespace DuckGame
             return split;
         }
         public static bool didsetbigboi;
-        public static Tex2D Thick;
+        public static Tex2D SpriteAtlasTex2D;
         public static Dictionary<string, Microsoft.Xna.Framework.Rectangle> offests = new Dictionary<string, Microsoft.Xna.Framework.Rectangle>();
         public static void Initialize(bool reverse)
         {
@@ -846,6 +847,39 @@ namespace DuckGame
                 }
             }
             return stringList.ToArray();
+        }
+        //hi -NiK0
+        public static List<string> ReGetFiles(string path, string filter = "*.*")
+        {
+            path = path.Replace('\\', '/');
+            if (Path.IsPathRooted(path) && Program.IsLinuxD)
+            {
+                while (path.EndsWith("/"))
+                {
+                    path = path.Substring(0, path.Length - 1);
+                }
+            }
+            else
+            {
+                path = path.Trim('/');
+            }
+            string str1 = (Directory.GetCurrentDirectory() + "/").Replace('\\', '/');
+            List<string> stringList = new List<string>();
+
+            List<string> paths = DuckFile.GetFilesNoCloud(path, filter);
+            for (int i = 0; i < paths.Count; i++)
+            {
+                string path1 = paths[i];
+                if (!Path.GetFileName(path1).Contains("._"))
+                {
+                    string str2 = path1.Replace('\\', '/');
+                    int startIndex = str2.IndexOf(str1);
+                    if (startIndex != -1)
+                        str2 = str2.Remove(startIndex, str1.Length);
+                    stringList.Add(str2);
+                }
+            }
+            return stringList;
         }
 
         public static string[] GetDirectories(string path, string filter = "*.*")
@@ -892,8 +926,15 @@ namespace DuckGame
                 string[] strArray1 = null;
                 if (ReskinPack.active.Count > 0)
                     strArray1 = ReskinPack.LoadAsset<string[]>(pName);
-                if (strArray1 == null && File.Exists(path))
-                    strArray1 = File.ReadAllLines(path);
+                if (strArray1 == null)
+                {
+                    if (pName == "background/office.txt")
+                    {
+                        strArray1 = OfficeBackground.backgroundtextdata.Split('\n');
+                    }
+                    else if (File.Exists(path))
+                        strArray1 = File.ReadAllLines(path);
+                }
                 if (strArray1 != null)
                 {
                     try
@@ -925,6 +966,10 @@ namespace DuckGame
                                     definition.zones.Add(zone);
                             }
                         }
+                        if (pName == "background/office.txt")
+                        {
+                            _parallaxDefinitions[pName] = definition;
+                        }
                         return definition;
                     }
                     catch (Exception ex)
@@ -939,6 +984,7 @@ namespace DuckGame
             }
             return null;
         }
+
 
         public static T Load<T>(string name)
         {
@@ -1081,6 +1127,16 @@ namespace DuckGame
                     _sounds.TryGetValue(name, out soundEffect);
                 if (soundEffect == null)
                 {
+                    //TODO this eventually -NiK0
+                    /*if (File.Exists("./" + DuckFile.contentDirectory + name + ".qoa"))
+                    {
+                        byte[] bb = File.ReadAllBytes("./" + DuckFile.contentDirectory + name + ".qoa");
+                        QOASoundBase qsb = new QOASoundBase();
+                        if (qsb.Load(bb))
+                        {
+                            //WaveFormat
+                        }
+                    }*/
                     if (!name.Contains(":") && !name.EndsWith(".wav"))
                     {
                         lock (_loadLock)

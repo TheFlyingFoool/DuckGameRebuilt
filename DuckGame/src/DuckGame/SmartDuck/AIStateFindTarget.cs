@@ -47,7 +47,7 @@ namespace DuckGame
                 if ((duck.position - _target.position).length < 10f)
                 {
                     _scatterWait -= 0.01f;
-                    if (_scatterWait < 0.0)
+                    if (_scatterWait < 0)
                     {
                         List<Thing> list = Level.current.things[typeof(PathNode)].ToList();
                         ai.SetTarget(list[Rando.Int(list.Count - 1)].position);
@@ -55,7 +55,7 @@ namespace DuckGame
                         _scatterWait = 1f;
                     }
                 }
-                if (Math.Abs(duck.y - _target.y) < 16f && Math.Abs(duck.x - _target.x) < 150.0 && Level.CheckRay<Duck>(duck.position + new Vec2(duck.offDir * 10, 0f), _target.position) == _target)
+                if (Math.Abs(duck.y - _target.y) < 16f && Math.Abs(duck.x - _target.x) < 150 && Level.CheckRay<Duck>(duck.position + new Vec2(duck.offDir * 10, 0f), _target.position) == _target)
                 {
                     if (Level.CheckLine<Block>(duck.position, _target.position) == null)
                     {

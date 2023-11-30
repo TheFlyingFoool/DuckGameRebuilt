@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.RandomControllerNew
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame
@@ -41,6 +34,7 @@ namespace DuckGame
             collisionOffset = new Vec2(-8f, -8f);
             _canFlip = false;
             _visibleInGame = false;
+            editorCycleType = typeof(TargetDuckNew);
             _editorName = "Random Controller";
             editorTooltip = "Allows you to make it so Targets/Goodies appear randomly.";
             Max_Up._tooltip = "How many Targets/Goodies can be active at once.";

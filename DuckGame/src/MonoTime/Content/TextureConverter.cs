@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.TextureConverter
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -53,8 +46,8 @@ namespace DuckGame
                     graphics.SmoothingMode = SmoothingMode.AntiAlias;
                     ImageAttributes imageAttr = new ImageAttributes();
                     imageAttr.SetWrapMode(WrapMode.TileFlipXY);
-                    int width2 = bitmap.Width;
-                    int height2 = bitmap.Height;
+                    //int width2 = bitmap.Width;
+                    //int height2 = bitmap.Height;
                     System.Drawing.Rectangle destRect = new System.Drawing.Rectangle(0, 0, width3, height3);
                     graphics.DrawImage(bitmap, destRect, 0, 0, bitmap.Width, bitmap.Height, GraphicsUnit.Pixel, imageAttr);
                     bitmap.Dispose();
@@ -62,15 +55,12 @@ namespace DuckGame
                     bitmap = bitmap1;
                 }
             }
-            DirectBitmap DB = new DirectBitmap(bitmap.Width, bitmap.Height)
-            {
-                Bitmap = bitmap
-            };
-            DB.UnPink();
+            if (process)
+                bitmap.MakeTransparent(System.Drawing.Color.Magenta);
             Texture2D Tex;
             using (MemoryStream ms = new MemoryStream())
             {
-                DB.Bitmap.Save(ms, ImageFormat.Png);
+                bitmap.Save(ms, ImageFormat.Png);
                 ms.Seek(0, SeekOrigin.Begin);
                 Tex = Texture2D.FromStream(device, ms);
                 Color[] buffer = new Color[Tex.Width * Tex.Height];

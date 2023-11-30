@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Donuroid
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -39,11 +32,11 @@ namespace DuckGame
             _image.frame = _frame;
             _image.depth = _depth;
             _image.xscale = _image.yscale = _scale;
-            if (_scale == 1.0)
+            if (_scale == 1f)
                 _image.color = new Color(0.8f, 0.8f, 0.8f, 1f);
             else
                 _image.color = Color.White * _scale;
-            Graphics.Draw(_image, pos.x + _position.x, (float)(pos.y + _position.y + Math.Sin(_sin) * (_scale * 2.0)));
+            Graphics.Draw(_image, pos.x + _position.x, (float)(pos.y + _position.y + Math.Sin(_sin) * (_scale * 2f)));
             _sin += 0.01f;
         }
     }

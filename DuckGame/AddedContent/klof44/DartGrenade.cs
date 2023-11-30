@@ -2,8 +2,8 @@
 
 namespace DuckGame
 {
-    [ClientOnly]
-    [EditorGroup("Rebuilt|Guns")]
+    [ClientOnly]//im sorry klof but this aint it
+    //[EditorGroup("Rebuilt|Guns")]
     internal class DartGrenade : Gun // All this code is taken from normal grenades but changed as to not create shrapnel
     {//RRAHHHH SHUT THE FUKC UP RRAHHHHHH
         public StateBinding _timerBinding = new StateBinding(nameof(_timer), -1f, 1.2f);
@@ -73,7 +73,7 @@ namespace DuckGame
                 if (Recorder.currentRecording != null)
                     Recorder.currentRecording.LogBonus();
             }
-            if (!_localDidExplode && _timer < 0.0)
+            if (!_localDidExplode && _timer < 0f)
             {
                 if (_explodeFrames < 0)
                 {
@@ -92,7 +92,7 @@ namespace DuckGame
                             for (int index = 0; index < 10; ++index)
                             {
                                 float fireAngle = (index * 45);
-                                Dart dart = new Dart(x + (float)(Math.Cos(Maths.DegToRad(fireAngle)) * 15.0), y - (float)(Math.Sin(Maths.DegToRad(fireAngle)) * 15.0), owner as Duck, fireAngle);
+                                Dart dart = new Dart(x + (float)(Math.Cos(Maths.DegToRad(fireAngle)) * 15f), y - (float)(Math.Sin(Maths.DegToRad(fireAngle)) * 15f), owner as Duck, fireAngle);
                                 Vec2 vec = Maths.AngleToVec(fireAngle);
                                 dart.hSpeed = vec.x * 14f;
                                 dart.hMax = 30;

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.GridBackground
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
@@ -50,7 +43,7 @@ namespace DuckGame
         public override void Update()
         {
             _scroll += 0.4f;
-            if (_scroll <= 32.0)
+            if (_scroll <= 32f)
                 return;
             _scroll -= 32f;
         }
@@ -68,7 +61,7 @@ namespace DuckGame
             _effect.World = (Microsoft.Xna.Framework.Matrix)Matrix.CreateTranslation(new Vec3(190f, -75f, 300f));
             Begin(transparent, false);
             _planet.flipH = true;
-            Graphics.Draw(_planet, 0f, 0f);
+            Graphics.Draw(ref _planet, 0f, 0f);
             _batch.End();
             _effect.World = (Microsoft.Xna.Framework.Matrix)(Matrix.CreateRotationX(Maths.DegToRad(90f)) * Matrix.CreateTranslation(new Vec3(-400f, 52f, 0f)));
             Begin(transparent, false);

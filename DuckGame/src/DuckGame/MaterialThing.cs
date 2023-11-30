@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.MaterialThing
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -32,7 +25,7 @@ namespace DuckGame
         private HashSet<MaterialThing> _solidImpacting = new HashSet<MaterialThing>();
         private byte _planeOfExistence = 4;
         public bool _didImpactSound;
-        protected bool _grounded;
+        public bool _grounded;
         protected float _bouncy;
         protected float _breakForce = 999f;
         protected float _impactThreshold = 0.5f;
@@ -86,7 +79,7 @@ namespace DuckGame
             get => _destroyedReal;
             set
             {
-                int num = value ? 1 : 0;
+                //int num = value ? 1 : 0; ??? -NiK0
                 _destroyedReal = value;
             }
         }
@@ -95,8 +88,7 @@ namespace DuckGame
 
         public virtual bool Hurt(float points)
         {
-            if (_maxHealth == 0.0)
-                return false;
+            if (_maxHealth == 0) return false;
             _hitPoints -= points;
             return true;
         }
@@ -168,7 +160,7 @@ namespace DuckGame
             get
             {
                 float num = weight;
-                if (num < 5.0)
+                if (num < 5)
                     num = 5f;
                 return 5f / num;
             }
@@ -179,7 +171,7 @@ namespace DuckGame
             get
             {
                 float num = weight * 0.75f;
-                if (num < 5.0)
+                if (num < 5)
                     num = 5f;
                 return 5f / num;
             }
@@ -190,7 +182,7 @@ namespace DuckGame
             get
             {
                 float num = weight;
-                if (num < 5.0)
+                if (num < 5)
                     num = 5f;
                 return num / 5f;
             }
@@ -291,9 +283,9 @@ namespace DuckGame
 
         public virtual void UpdateOnFire()
         {
-            if (burnt < 1.0)
+            if (burnt < 1)
             {
-                if (_flameWait > 1.0)
+                if (_flameWait > 1)
                 {
                     AddFire();
                     _flameWait = 0f;
@@ -307,7 +299,7 @@ namespace DuckGame
 
         public override void DoUpdate()
         {
-            if (spreadExtinguisherSmoke > 0.0)
+            if (spreadExtinguisherSmoke > 0)
             {
                 spreadExtinguisherSmoke -= 0.15f;
                 if (Math.Abs(hSpeed) + Math.Abs(vSpeed) > 2f)
@@ -349,9 +341,10 @@ namespace DuckGame
 
         public void NetworkDestroy() => OnDestroy(new DTImpact(this));
 
+        public bool indestructible;
         public virtual bool Destroy(DestroyType type = null)
         {
-            if (!_destroyed)
+            if (!_destroyed && !indestructible)
             {
                 _destroyed = OnDestroy(type);
                 if (isServerForObject && (_destroyed || _sendDestroyMessage && !_sentDestroyMessage) && isStateObject)
@@ -373,10 +366,13 @@ namespace DuckGame
         {
             if (physicsMaterial == PhysicsMaterial.Metal)
             {
-                Level.Add(MetalRebound.New(hitPos.x, hitPos.y, bullet.travelDirNormalized.x > 0f ? 1 : -1));
-                hitPos -= bullet.travelDirNormalized;
-                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 3; ++index)
-                    Level.Add(Spark.New(hitPos.x, hitPos.y, bullet.travelDirNormalized));
+                if (DGRSettings.ActualParticleMultiplier > 0)
+                {
+                    Level.Add(MetalRebound.New(hitPos.x, hitPos.y, bullet.travelDirNormalized.x > 0f ? 1 : -1));
+                    hitPos -= bullet.travelDirNormalized;
+                    for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 3; ++index)
+                        Level.Add(Spark.New(hitPos.x, hitPos.y, bullet.travelDirNormalized));
+                }
             }
             else if (physicsMaterial == PhysicsMaterial.Wood)
             {
@@ -406,6 +402,7 @@ namespace DuckGame
 
         public virtual void Burn(Vec2 firePosition, Thing litBy)
         {
+            if (Recorderator.Playing) return;
             if (Network.isActive && !isServerForObject && !isBurnMessage && !_onFire && this is Duck && (this as Duck).profile != null)
                 Send.Message(new NMLightDuck(this as Duck));
             if (!isServerForObject && !isBurnMessage || _onFire || _burnWaitTimer != null && !(bool)_burnWaitTimer)
@@ -443,7 +440,7 @@ namespace DuckGame
                 if (!flag && heat < 0f)
                     heat = 0f;
             }
-            if (val <= 0f)
+            if (val <= 0f || Recorderator.Playing)
                 return;
             HeatUp(location);
         }

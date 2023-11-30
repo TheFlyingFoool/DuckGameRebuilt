@@ -45,27 +45,33 @@ namespace DuckGame
         {
             if (_tracer || _bulletDistance <= 0.1f)
                 return;
+
+            BulletStart.UpdateLerpState(this.drawStart, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            BulletEnd.UpdateLerpState(this.drawEnd, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            Vec2 drawStart = BulletStart.Position;
+            Vec2 drawEnd = BulletEnd.Position;
+
             float length = (drawStart - drawEnd).length;
-            float val = 0f;
-            float num1 = (1f / (length / 8f));
-            float num2 = 0f;
-            float num3 = 8f;
+            float dist = 0f;
+            float incs = (1f / (length / 8f));
+            float alph = 1f;
+            float drawLength = 8f;
             if (Program.nikogay)
             {
                 color = Colors.Rainbow[colorindex];
             }
             while (true)
             {
-                bool flag = false;
-                if (val + num3 > length)
+                bool bulletDrawn = false;
+                if (dist + drawLength > length)
                 {
-                    num3 = length - Maths.Clamp(val, 0f, 99f);
-                    flag = true;
+                    drawLength = length - Maths.Clamp(dist, 0f, 99f);
+                    bulletDrawn = true;
                 }
-                num2 += num1;
-                Graphics.DrawTexturedLine((Tex2D)_beem, drawStart + travelDirNormalized * val, drawStart + travelDirNormalized * (val + num3), color * num2, _thickness, (Depth)0.6f);
-                if (!flag)
-                    val += 8f;
+                alph -= incs;
+                Graphics.DrawTexturedLine((Tex2D)_beem, drawStart + travelDirNormalized * length - travelDirNormalized * dist, drawStart + travelDirNormalized * length - travelDirNormalized * (dist + drawLength), color * alph, _thickness, (Depth)0.6f);
+                if (!bulletDrawn)
+                    dist += 8f;
                 else
                     break;
             }
@@ -75,10 +81,13 @@ namespace DuckGame
         {
             if (!destroyed)
                 return;
-            ExplosionPart explosionPart = new ExplosionPart(x, y);
-            explosionPart.xscale *= 0.7f;
-            explosionPart.yscale *= 0.7f;
-            Level.Add(explosionPart);
+            if (DGRSettings.ActualParticleMultiplier > 0)
+            {
+                ExplosionPart explosionPart = new ExplosionPart(x, y);
+                explosionPart.xscale *= 0.7f;
+                explosionPart.yscale *= 0.7f;
+                Level.Add(explosionPart);
+            }
             SFX.Play("magPop", 0.7f, Rando.Float(-0.5f, -0.3f));
             if (!isLocal)
                 return;

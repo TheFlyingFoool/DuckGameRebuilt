@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Network
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -116,11 +109,11 @@ namespace DuckGame
         {
             if (!(activeNetwork._lastReceivedTime < pTime))
                 return;
-            activeNetwork._synchronizedTime = pTime + (ushort)(host.manager.ping / 2.0 / Maths.IncFrameTimer());
+            activeNetwork._synchronizedTime = pTime + (ushort)(host.manager.ping / 2f / Maths.IncFrameTimer());
             activeNetwork._lastReceivedTime = pTime;
         }
 
-        public static double Time => 0.0;
+        public static double Time => 0;
 
         public static uint Tick => activeNetwork._currentTick;
 
@@ -206,19 +199,8 @@ namespace DuckGame
 
         public static bool isServer
         {
-            get
-            {
-                if (Network.activeNetwork != null && Network.activeNetwork.core != null)
-                {
-                    return Network.activeNetwork.core.isServer;
-                }
-                return false;
-            }
-
-            set
-            {
-                Network.activeNetwork.core.isServer = value;
-            }
+            get => activeNetwork.core.isServer || (isFakeActive);
+            set => activeNetwork.core.isServer = value;
         }
 
         public static bool isClient => !isServer;
@@ -227,7 +209,8 @@ namespace DuckGame
 
         public static void MakeInactive() => activeNetwork._networkActive = false;
 
-        public static bool isActive => activeNetwork._networkActive;
+        public static bool isActive => activeNetwork._networkActive || isFakeActive;
+        public static bool isFakeActive => (Level.current is DuckGameTestArea || (Level.current is GameLevel gv && gv._editorTestMode)) && DGRSettings.EditorOnlinePhysics;
 
         public static bool connected => connections.Count > 0;
 
@@ -395,19 +378,22 @@ namespace DuckGame
             QueueMessageForAllBut(msg, who);
         }
 
-        public static bool InLobby() => Level.current is TeamSelect2;
+        public static bool inLobby => Level.current is TeamSelect2;
 
-        public static bool InGameLevel() => Level.current is GameLevel;
+        public static bool inGameLevel => Level.current is GameLevel;
 
-        public static bool InMatch()
+        public static bool inMatch
         {
-            switch (Level.current)
+            get
             {
-                case GameLevel _:
-                case RockScoreboard _:
-                    return true;
-                default:
-                    return Level.current is RockIntro;
+                switch (Level.current)
+                {
+                    case GameLevel _:
+                    case RockScoreboard _:
+                        return true;
+                    default:
+                        return Level.current is RockIntro;
+                }
             }
         }
 

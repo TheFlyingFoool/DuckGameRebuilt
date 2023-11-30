@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.CookedDuck
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -72,7 +65,7 @@ namespace DuckGame
         public override void Draw()
         {
             base.Draw();
-            if (_hotAlpha <= 0.0)
+            if (_hotAlpha <= 0)
                 return;
             if (_timeHot <= 0)
                 _hotAlpha -= 0.01f;
@@ -83,7 +76,8 @@ namespace DuckGame
             {
                 _flavourLines[index].depth = depth;
                 _flavourLines[index].color = Color.White * _hotAlpha;
-                Graphics.Draw(_flavourLines[index], x - 4f + index * 4 + num, y - 3f);
+                SpriteMap g = _flavourLines[index];
+                Graphics.Draw(ref g, x - 4f + index * 4 + num, y - 3f);
             }
         }
     }

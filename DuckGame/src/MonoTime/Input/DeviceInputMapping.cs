@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.DeviceInputMapping
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -192,7 +185,7 @@ namespace DuckGame
             }
             if (device is Keyboard)
             {
-                foreach (Keys b2 in Enum.GetValues(typeof(Keys)).Cast<Keys>())
+                foreach (Keys b2 in Keyboard.KeyTypes)
                 {
                     if (device.MapPressed((int)b2, false))
                     {

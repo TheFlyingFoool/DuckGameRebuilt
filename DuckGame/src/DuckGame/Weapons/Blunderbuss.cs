@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Blunderbuss
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Guns|Shotguns")]
     public class Blunderbuss : TampingWeapon
@@ -34,6 +27,8 @@ namespace DuckGame
             _fireRumble = RumbleIntensity.Light;
             _holdOffset = new Vec2(4f, 1f);
             editorTooltip = "Old-timey shotgun, takes approximately 150 years to reload.";
+            _editorPreviewOffset.x += 3;
+            _editorPreviewWidth = 33;
         }
 
         public override void Update() => base.Update();

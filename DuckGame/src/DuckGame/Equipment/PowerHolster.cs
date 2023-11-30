@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.PowerHolster
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Equipment")]
     [BaggedProperty("isInDemo", true)]
@@ -39,7 +32,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (isServerForObject)
+            if (isServerForObject && !Recorderator.Playing)
             {
                 if (_equippedDuck != null && _equippedDuck.inputProfile != null)
                     trigger = _equippedDuck.inputProfile.Down(Triggers.Quack);
@@ -68,7 +61,7 @@ namespace DuckGame
                 _overPart.scale = scale;
                 _overPart.depth = thing.depth + 5;
                 _overPart.frame = _equippedDuck.quack > 0 ? 1 : 0;
-                Graphics.Draw(_overPart, x, y);
+                Graphics.Draw(ref _overPart, x, y);
                 _underPart.flipH = owner.offDir <= 0;
                 _underPart.angle = angle;
                 _underPart.alpha = alpha;
@@ -79,7 +72,7 @@ namespace DuckGame
                     _underPart.depth = thing.depth + -7;
                 _underPart.frame = trigger ? 1 : 0;
                 Vec2 vec2 = Offset(new Vec2(-2f, 0f));
-                Graphics.Draw(_underPart, vec2.x, vec2.y);
+                Graphics.Draw(ref _underPart, vec2.x, vec2.y);
             }
             else
                 _sprite.frame = trigger ? 1 : 0;

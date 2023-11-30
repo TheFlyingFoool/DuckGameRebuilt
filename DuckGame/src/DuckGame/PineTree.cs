@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.PineTree
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -54,7 +47,7 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             shiftTime = 1f;
-            shiftAmount = bullet.travelDirNormalized.x > 0.0 ? 1 : -1;
+            shiftAmount = bullet.travelDirNormalized.x > 0 ? 1 : -1;
             KnockOffSnow(bullet.travelDirNormalized, false);
             return false;
         }
@@ -96,7 +89,7 @@ namespace DuckGame
         public override void Draw()
         {
             depth = -0.12f;
-            if (_vertPush > 0.0)
+            if (_vertPush > 0)
                 depth = -0.11f;
             if (_graphic != null)
             {
@@ -112,7 +105,7 @@ namespace DuckGame
                 _graphic.center = center;
                 _graphic.Draw();
             }
-            if (shiftTime > 0.0)
+            if (shiftTime > 0)
             {
                 _graphic.position = position + new Vec2(shiftAmount * 2 * shiftTime, 0f);
                 _graphic.alpha = alpha;

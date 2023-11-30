@@ -7,3 +7,4 @@ libvorbis: Version 1.3.6
 	- info.c has been renamed to vinfo.c
 libtheora: git commit 7180717276af1ebc7da15c83162d6c5d6203aabf
 	- info.c has been renamed to tinfo.c
+	- AArch64 NEON support from https://github.com/linnaea/theora

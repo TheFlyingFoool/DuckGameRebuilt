@@ -1,11 +1,16 @@
-﻿namespace DuckGame
+﻿using System.Diagnostics;
+
+namespace DuckGame
 {
+    [DebuggerDisplay("{VersionStringFormatted}")]
     public class DGVersion
     {
         public int[] VersionSegments;
         public string VersionString;
+        public string VersionStringFormatted;
         public DGVersion(string version)
         {
+            VersionStringFormatted = version;
             VersionString = version.Replace("v", "").Replace("-", "").Replace("beta", "");
             string[] VersionStringSegments = VersionString.Split('.');
             VersionSegments = new int[VersionStringSegments.Length];

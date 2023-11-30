@@ -28,6 +28,10 @@ namespace DuckGame
             Vec2 attachOffset = Vec2.Zero;
             if (_attach != null)
             {
+                //this is needed because otherwise capes will just stay at the point they were spawned into
+                //its usually not an issue but graphics culling will cull them turning them invisible when they shoudln't be
+                //-NiK0
+                position = _attach.position;
                 attachOffset = _attach.OffsetLocal(metadata.CapeOffset.value);
                 if (_attach.removeFromLevel)
                 {
@@ -135,10 +139,9 @@ namespace DuckGame
                 }
                 idx++;
             }
-            if (_trail)
-            {
-                maxLength = 16;
-            }
+
+            if (_trail && !overrideCapeLength) maxLength = 16;
+
             while (capePeices.Count > maxLength + 1 && capePeices.Count > 0)
             {
                 capePeices.RemoveAt(0);
@@ -159,13 +162,22 @@ namespace DuckGame
             }
         }
 
+        public bool overrideCapeLength;
         public void SetCapeTexture(Texture2D tex)
         {
             _capeTexture = tex;
-            maxLength = _capeTexture.height / 2 - 6;
-            if (halfFlag)
+            if (metadata.CapeLength.value != -1)
             {
-                maxLength = (int)(_capeTexture.width * 0.28f) - 6;
+                overrideCapeLength = true;
+                maxLength = Maths.Clamp(metadata.CapeLength.value, 1, 24);
+            }
+            else
+            {
+                maxLength = _capeTexture.height / 2 - 6;
+                if (halfFlag)
+                {
+                    maxLength = (int)(_capeTexture.width * 0.28f) - 6;
+                }
             }
         }
 
@@ -195,9 +207,24 @@ namespace DuckGame
             bool bust = false;
             if (_capeTexture != null)
             {
+                _capeTexture.skipSpriteAtlas = true;
                 float deep = Graphics.AdjustDepth(depth);
                 float uvPart = 1f / (capePeices.Count - 1);
                 float uvInc = 0f;
+
+                //Tater: This sucks but the cape is an insane snake-like object so it will do for now
+                Vec2 AveragePosition = Vec2.Zero;
+                for (int i = capePeices.Count - 1; i >= 0; i--)
+                {
+                    AveragePosition += (capePeices[i].p1 / (float)capePeices.Count);
+                }
+                CapeLerp.UpdateLerpState(AveragePosition, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+                CapeLerp.UpdateLerpState(AveragePosition, MonoMain.IntraTick, false);
+                Vec2 CapeOffset = CapeLerp.Position;
+                CapeLerp.UpdateLerpState(AveragePosition, 0.0f, false);
+
+                CapeOffset -= CapeLerp.Position;
+
                 for (int i = capePeices.Count - 1; i >= 0; i--)
                 {
                     Vec2 texTL = new Vec2(0f, Math.Min(uvInc + uvPart, 1f));
@@ -221,6 +248,7 @@ namespace DuckGame
                         texBR = bbl;
                     }
                     CapePeice cp = capePeices[i];
+
                     Vec2 edgeOffset = lastEdgeOffset;
                     if (i > 0)
                     {
@@ -229,8 +257,11 @@ namespace DuckGame
                         edgeOffset = v.Rotate(Maths.DegToRad(90f), Vec2.Zero);
                     }
                     Vec2 pos = cp.p1;
+
+
                     if (hasLastPart)
                     {
+
                         Vec2 v2 = pos - lastPart;
                         float length = v2.length;
                         v2.Normalize();
@@ -239,7 +270,14 @@ namespace DuckGame
                             pos = lastPart + v2 * 2f;
                         }
                         float drawAlpha = Lerp.Float(metadata.CapeAlphaStart.value, metadata.CapeAlphaEnd.value, i / (float)(capePeices.Count - 1));
-                        Graphics.screen.DrawQuad(pos - edgeOffset * (capeWide * cp.wide / 2f), pos + edgeOffset * (capeWide * cp.wide / 2f), lastPart - lastEdgeOffset * (capeWide * cp.wide / 2f), lastPart + lastEdgeOffset * (capeWide * cp.wide / 2f), texTL, texTR, texBL, texBR, deep, _capeTexture, Color.White * drawAlpha);
+                        
+                        Graphics.screen.DrawQuad(
+                            pos - edgeOffset * (capeWide * cp.wide / 2f) + CapeOffset, 
+                            pos + edgeOffset * (capeWide * cp.wide / 2f) + CapeOffset, 
+                            lastPart - lastEdgeOffset * (capeWide * cp.wide / 2f) + CapeOffset, 
+                            lastPart + lastEdgeOffset * (capeWide * cp.wide / 2f) + CapeOffset, 
+                            texTL, texTR, texBL, texBR, deep, _capeTexture, Color.White * drawAlpha);
+
                         if (bust)
                         {
                             break;
@@ -255,6 +293,7 @@ namespace DuckGame
                 }
             }
         }
+        internal Interp CapeLerp = new Interp(true);
 
         private float killTime = 0.0001f;
 

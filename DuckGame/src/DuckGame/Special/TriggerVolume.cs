@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.TriggerVolume
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -45,6 +38,7 @@ namespace DuckGame
             (graphic as SpriteMap).frame = 3;
             collisionOffset = new Vec2(-4f, -4f);
             collisionSize = new Vec2(8f, 8f);
+            editorCycleType = typeof(GoodyNew);
             _contextMenuFilter.Add("Sequence");
             _editorName = "Trigger Volume";
             editorTooltip = "Pretty much an invisible Goody that you can resize.";
@@ -146,7 +140,7 @@ namespace DuckGame
                 return;
             float num1 = Wide.value;
             float num2 = High.value;
-            Graphics.DrawRect(position + new Vec2((float)(-num1 / 2.0), (float)(-num2 / 2.0)), position + new Vec2(num1 / 2f, num2 / 2f), Colors.DGGreen * 0.5f, (Depth)1f, false);
+            Graphics.DrawRect(position + new Vec2((float)(-num1 / 2f), (float)(-num2 / 2f)), position + new Vec2(num1 / 2f, num2 / 2f), Colors.DGGreen * 0.5f, (Depth)1f, false);
         }
     }
 }

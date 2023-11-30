@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -186,14 +186,14 @@ namespace Microsoft.Xna.Framework
 		/// <returns><c>true</c> if the instances are equal; <c>false</c> otherwise.</returns>
 		public static bool operator ==(CurveKey a, CurveKey b)
 		{
-			if (Equals(a, null))
+			if (object.Equals(a, null))
 			{
-				return Equals(b, null);
+				return object.Equals(b, null);
 			}
 
-			if (Equals(b, null))
+			if (object.Equals(b, null))
 			{
-				return Equals(a, null);
+				return object.Equals(a, null);
 			}
 
 			return (	(a.Position == b.Position) &&

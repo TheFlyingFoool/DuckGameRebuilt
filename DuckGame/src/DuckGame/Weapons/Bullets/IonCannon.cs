@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.IonCannon
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -19,6 +12,7 @@ namespace DuckGame
           : base(pos.x, pos.y)
         {
             _target = target;
+            shouldbegraphicculled = false;
         }
 
         public override void Initialize()
@@ -107,15 +101,15 @@ namespace DuckGame
         public override void Update()
         {
             _blast = Maths.CountDown(_blast, 0.05f);
-            if (_blast >= 0.0)
+            if (_blast >= 0)
                 return;
             Level.Remove(this);
         }
 
         public override void Draw()
         {
-            double num1 = Maths.NormalizeSection(_blast, 0f, 0.2f);
-            double num2 = Maths.NormalizeSection(_blast, 0.6f, 1f);
+            //double num1 = Maths.NormalizeSection(_blast, 0f, 0.2f); what -NiK0
+            //double num2 = Maths.NormalizeSection(_blast, 0.6f, 1f);
             Vec2 vec2_1 = position - _target;
             vec2_1 = vec2_1.Rotate(Maths.DegToRad(-90f), Vec2.Zero);
             Vec2 normalized1 = vec2_1.normalized;

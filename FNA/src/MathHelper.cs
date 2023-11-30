@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -272,8 +272,8 @@ namespace Microsoft.Xna.Framework
 			 * If amount < 0, return value1.
 			 * If amount > 1, return value2.
 			 */
-			float result = Clamp(amount, 0f, 1f);
-			result = Hermite(value1, 0f, value2, 0f, result);
+			float result = MathHelper.Clamp(amount, 0f, 1f);
+			result = MathHelper.Hermite(value1, 0f, value2, 0f, result);
 
 			return result;
 		}

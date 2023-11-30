@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Quaternion
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Text;
 
 namespace DuckGame
@@ -106,10 +99,10 @@ namespace DuckGame
         public static Quaternion CreateFromYawPitchRoll(float yaw, float pitch, float roll)
         {
             Quaternion fromYawPitchRoll;
-            fromYawPitchRoll.x = (float)(Math.Cos(yaw * 0.5) * Math.Sin(pitch * 0.5) * Math.Cos(roll * 0.5) + Math.Sin(yaw * 0.5) * Math.Cos(pitch * 0.5) * Math.Sin(roll * 0.5));
-            fromYawPitchRoll.y = (float)(Math.Sin(yaw * 0.5) * Math.Cos(pitch * 0.5) * Math.Cos(roll * 0.5) - Math.Cos(yaw * 0.5) * Math.Sin(pitch * 0.5) * Math.Sin(roll * 0.5));
-            fromYawPitchRoll.z = (float)(Math.Cos(yaw * 0.5) * Math.Cos(pitch * 0.5) * Math.Sin(roll * 0.5) - Math.Sin(yaw * 0.5) * Math.Sin(pitch * 0.5) * Math.Cos(roll * 0.5));
-            fromYawPitchRoll.w = (float)(Math.Cos(yaw * 0.5) * Math.Cos(pitch * 0.5) * Math.Cos(roll * 0.5) + Math.Sin(yaw * 0.5) * Math.Sin(pitch * 0.5) * Math.Sin(roll * 0.5));
+            fromYawPitchRoll.x = (float)(Math.Cos(yaw * 0.5f) * Math.Sin(pitch * 0.5f) * Math.Cos(roll * 0.5f) + Math.Sin(yaw * 0.5f) * Math.Cos(pitch * 0.5f) * Math.Sin(roll * 0.5f));
+            fromYawPitchRoll.y = (float)(Math.Sin(yaw * 0.5f) * Math.Cos(pitch * 0.5f) * Math.Cos(roll * 0.5f) - Math.Cos(yaw * 0.5f) * Math.Sin(pitch * 0.5f) * Math.Sin(roll * 0.5f));
+            fromYawPitchRoll.z = (float)(Math.Cos(yaw * 0.5f) * Math.Cos(pitch * 0.5f) * Math.Sin(roll * 0.5f) - Math.Sin(yaw * 0.5f) * Math.Sin(pitch * 0.5f) * Math.Cos(roll * 0.5f));
+            fromYawPitchRoll.w = (float)(Math.Cos(yaw * 0.5f) * Math.Cos(pitch * 0.5f) * Math.Cos(roll * 0.5f) + Math.Sin(yaw * 0.5f) * Math.Sin(pitch * 0.5f) * Math.Sin(roll * 0.5f));
             return fromYawPitchRoll;
         }
 
@@ -119,32 +112,32 @@ namespace DuckGame
           float roll,
           out Quaternion result)
         {
-            result.x = (float)(Math.Cos(yaw * 0.5) * Math.Sin(pitch * 0.5) * Math.Cos(roll * 0.5) + Math.Sin(yaw * 0.5) * Math.Cos(pitch * 0.5) * Math.Sin(roll * 0.5));
-            result.y = (float)(Math.Sin(yaw * 0.5) * Math.Cos(pitch * 0.5) * Math.Cos(roll * 0.5) - Math.Cos(yaw * 0.5) * Math.Sin(pitch * 0.5) * Math.Sin(roll * 0.5));
-            result.z = (float)(Math.Cos(yaw * 0.5) * Math.Cos(pitch * 0.5) * Math.Sin(roll * 0.5) - Math.Sin(yaw * 0.5) * Math.Sin(pitch * 0.5) * Math.Cos(roll * 0.5));
-            result.w = (float)(Math.Cos(yaw * 0.5) * Math.Cos(pitch * 0.5) * Math.Cos(roll * 0.5) + Math.Sin(yaw * 0.5) * Math.Sin(pitch * 0.5) * Math.Sin(roll * 0.5));
+            result.x = (float)(Math.Cos(yaw * 0.5f) * Math.Sin(pitch * 0.5f) * Math.Cos(roll * 0.5f) + Math.Sin(yaw * 0.5f) * Math.Cos(pitch * 0.5f) * Math.Sin(roll * 0.5f));
+            result.y = (float)(Math.Sin(yaw * 0.5f) * Math.Cos(pitch * 0.5f) * Math.Cos(roll * 0.5f) - Math.Cos(yaw * 0.5f) * Math.Sin(pitch * 0.5f) * Math.Sin(roll * 0.5f));
+            result.z = (float)(Math.Cos(yaw * 0.5f) * Math.Cos(pitch * 0.5f) * Math.Sin(roll * 0.5f) - Math.Sin(yaw * 0.5f) * Math.Sin(pitch * 0.5f) * Math.Cos(roll * 0.5f));
+            result.w = (float)(Math.Cos(yaw * 0.5f) * Math.Cos(pitch * 0.5f) * Math.Cos(roll * 0.5f) + Math.Sin(yaw * 0.5f) * Math.Sin(pitch * 0.5f) * Math.Sin(roll * 0.5f));
         }
 
         public static Quaternion CreateFromAxisAngle(Vec3 axis, float angle)
         {
-            float num = (float)Math.Sin(angle / 2.0);
-            return new Quaternion(axis.x * num, axis.y * num, axis.z * num, (float)Math.Cos(angle / 2.0));
+            float num = (float)Math.Sin(angle / 2f);
+            return new Quaternion(axis.x * num, axis.y * num, axis.z * num, (float)Math.Cos(angle / 2f));
         }
 
         public static void CreateFromAxisAngle(ref Vec3 axis, float angle, out Quaternion result)
         {
-            float num = (float)Math.Sin(angle / 2.0);
+            float num = (float)Math.Sin(angle / 2f);
             result.x = axis.x * num;
             result.y = axis.y * num;
             result.z = axis.z * num;
-            result.w = (float)Math.Cos(angle / 2.0);
+            result.w = (float)Math.Cos(angle / 2f);
         }
 
         public static Quaternion CreateFromRotationMatrix(Matrix matrix)
         {
-            if (matrix.M11 + matrix.M22 + matrix.M33 > 0.0)
+            if (matrix.M11 + matrix.M22 + matrix.M33 > 0)
             {
-                float num1 = (float)Math.Sqrt(matrix.M11 + matrix.M22 + matrix.M33 + 1.0);
+                float num1 = (float)Math.Sqrt(matrix.M11 + matrix.M22 + matrix.M33 + 1f);
                 Quaternion fromRotationMatrix;
                 fromRotationMatrix.w = num1 * 0.5f;
                 float num2 = 0.5f / num1;
@@ -155,7 +148,7 @@ namespace DuckGame
             }
             if (matrix.M11 >= matrix.M22 && matrix.M11 >= matrix.M33)
             {
-                float num3 = (float)Math.Sqrt(1.0 + matrix.M11 - matrix.M22 - matrix.M33);
+                float num3 = (float)Math.Sqrt(1f + matrix.M11 - matrix.M22 - matrix.M33);
                 float num4 = 0.5f / num3;
                 Quaternion fromRotationMatrix;
                 fromRotationMatrix.x = 0.5f * num3;
@@ -166,7 +159,7 @@ namespace DuckGame
             }
             if (matrix.M22 > matrix.M33)
             {
-                float num5 = (float)Math.Sqrt(1.0 + matrix.M22 - matrix.M11 - matrix.M33);
+                float num5 = (float)Math.Sqrt(1f + matrix.M22 - matrix.M11 - matrix.M33);
                 float num6 = 0.5f / num5;
                 Quaternion fromRotationMatrix;
                 fromRotationMatrix.x = (matrix.M21 + matrix.M12) * num6;
@@ -175,7 +168,7 @@ namespace DuckGame
                 fromRotationMatrix.w = (matrix.M31 - matrix.M13) * num6;
                 return fromRotationMatrix;
             }
-            float num7 = (float)Math.Sqrt(1.0 + matrix.M33 - matrix.M11 - matrix.M22);
+            float num7 = (float)Math.Sqrt(1f + matrix.M33 - matrix.M11 - matrix.M22);
             float num8 = 0.5f / num7;
             Quaternion fromRotationMatrix1;
             fromRotationMatrix1.x = (matrix.M31 + matrix.M13) * num8;
@@ -187,9 +180,9 @@ namespace DuckGame
 
         public static void CreateFromRotationMatrix(ref Matrix matrix, out Quaternion result)
         {
-            if (matrix.M11 + matrix.M22 + matrix.M33 > 0.0)
+            if (matrix.M11 + matrix.M22 + matrix.M33 > 0)
             {
-                float num1 = (float)Math.Sqrt(matrix.M11 + matrix.M22 + matrix.M33 + 1.0);
+                float num1 = (float)Math.Sqrt(matrix.M11 + matrix.M22 + matrix.M33 + 1f);
                 result.w = num1 * 0.5f;
                 float num2 = 0.5f / num1;
                 result.x = (matrix.M23 - matrix.M32) * num2;
@@ -198,7 +191,7 @@ namespace DuckGame
             }
             else if (matrix.M11 >= matrix.M22 && matrix.M11 >= matrix.M33)
             {
-                float num3 = (float)Math.Sqrt(1.0 + matrix.M11 - matrix.M22 - matrix.M33);
+                float num3 = (float)Math.Sqrt(1f + matrix.M11 - matrix.M22 - matrix.M33);
                 float num4 = 0.5f / num3;
                 result.x = 0.5f * num3;
                 result.y = (matrix.M12 + matrix.M21) * num4;
@@ -207,7 +200,7 @@ namespace DuckGame
             }
             else if (matrix.M22 > matrix.M33)
             {
-                float num5 = (float)Math.Sqrt(1.0 + matrix.M22 - matrix.M11 - matrix.M33);
+                float num5 = (float)Math.Sqrt(1f + matrix.M22 - matrix.M11 - matrix.M33);
                 float num6 = 0.5f / num5;
                 result.x = (matrix.M21 + matrix.M12) * num6;
                 result.y = 0.5f * num5;
@@ -216,7 +209,7 @@ namespace DuckGame
             }
             else
             {
-                float num7 = (float)Math.Sqrt(1.0 + matrix.M33 - matrix.M11 - matrix.M22);
+                float num7 = (float)Math.Sqrt(1f + matrix.M33 - matrix.M11 - matrix.M22);
                 float num8 = 0.5f / num7;
                 result.x = (matrix.M31 + matrix.M13) * num8;
                 result.y = (matrix.M32 + matrix.M23) * num8;
@@ -227,7 +220,7 @@ namespace DuckGame
 
         public static Quaternion Divide(Quaternion quaternion1, Quaternion quaternion2)
         {
-            float num1 = (float)(1.0 / (quaternion2.x * quaternion2.x + quaternion2.y * quaternion2.y + quaternion2.z * quaternion2.z + quaternion2.w * quaternion2.w));
+            float num1 = (float)(1f / (quaternion2.x * quaternion2.x + quaternion2.y * quaternion2.y + quaternion2.z * quaternion2.z + quaternion2.w * quaternion2.w));
             float num2 = -quaternion2.x * num1;
             float num3 = -quaternion2.y * num1;
             float num4 = -quaternion2.z * num1;
@@ -245,7 +238,7 @@ namespace DuckGame
           ref Quaternion quaternion2,
           out Quaternion result)
         {
-            float num1 = (float)(1.0 / (quaternion2.x * quaternion2.x + quaternion2.y * quaternion2.y + quaternion2.z * quaternion2.z + quaternion2.w * quaternion2.w));
+            float num1 = (float)(1f / (quaternion2.x * quaternion2.x + quaternion2.y * quaternion2.y + quaternion2.z * quaternion2.z + quaternion2.w * quaternion2.w));
             float num2 = -quaternion2.x * num1;
             float num3 = -quaternion2.y * num1;
             float num4 = -quaternion2.z * num1;
@@ -274,7 +267,7 @@ namespace DuckGame
 
         public static Quaternion Inverse(Quaternion quaternion)
         {
-            float num = (float)(1.0 / (quaternion.x * quaternion.x + quaternion.y * quaternion.y + quaternion.z * quaternion.z + quaternion.w * quaternion.w));
+            float num = (float)(1f / (quaternion.x * quaternion.x + quaternion.y * quaternion.y + quaternion.z * quaternion.z + quaternion.w * quaternion.w));
             Quaternion quaternion1;
             quaternion1.x = -quaternion.x * num;
             quaternion1.y = -quaternion.y * num;
@@ -285,7 +278,7 @@ namespace DuckGame
 
         public static void Inverse(ref Quaternion quaternion, out Quaternion result)
         {
-            float num = (float)(1.0 / (quaternion.x * quaternion.x + quaternion.y * quaternion.y + quaternion.z * quaternion.z + quaternion.w * quaternion.w));
+            float num = (float)(1f / (quaternion.x * quaternion.x + quaternion.y * quaternion.y + quaternion.z * quaternion.z + quaternion.w * quaternion.w));
             result.x = -quaternion.x * num;
             result.y = -quaternion.y * num;
             result.z = -quaternion.z * num;
@@ -332,7 +325,7 @@ namespace DuckGame
           out Quaternion result)
         {
             float num1 = 1f - amount;
-            if (quaternion1.x * quaternion2.x + quaternion1.y * quaternion2.y + quaternion1.z * quaternion2.z + quaternion1.w * quaternion2.w >= 0.0)
+            if (quaternion1.x * quaternion2.x + quaternion1.y * quaternion2.y + quaternion1.z * quaternion2.z + quaternion1.w * quaternion2.w >= 0)
             {
                 result.x = num1 * quaternion1.x + amount * quaternion2.x;
                 result.y = num1 * quaternion1.y + amount * quaternion2.y;
@@ -360,7 +353,7 @@ namespace DuckGame
         {
             float d = (float)(quaternion1.x * quaternion2.x + quaternion1.y * quaternion2.y + quaternion1.z * quaternion2.z + quaternion1.w * quaternion2.w);
             bool flag = false;
-            if (d < 0.0)
+            if (d < 0)
             {
                 flag = true;
                 d = -d;
@@ -375,8 +368,8 @@ namespace DuckGame
             else
             {
                 float a = (float)Math.Acos(d);
-                float num3 = (float)(1.0 / Math.Sin(a));
-                num1 = (float)Math.Sin((1.0 - amount) * a) * num3;
+                float num3 = (float)(1f / Math.Sin(a));
+                num1 = (float)Math.Sin((1f - amount) * a) * num3;
                 num2 = flag ? (float)-Math.Sin(amount * a) * num3 : (float)Math.Sin(amount * a) * num3;
             }
             Quaternion quaternion;
@@ -395,7 +388,7 @@ namespace DuckGame
         {
             float d = (float)(quaternion1.x * quaternion2.x + quaternion1.y * quaternion2.y + quaternion1.z * quaternion2.z + quaternion1.w * quaternion2.w);
             bool flag = false;
-            if (d < 0.0)
+            if (d < 0)
             {
                 flag = true;
                 d = -d;
@@ -410,8 +403,8 @@ namespace DuckGame
             else
             {
                 float a = (float)Math.Acos(d);
-                float num3 = (float)(1.0 / Math.Sin(a));
-                num1 = (float)Math.Sin((1.0 - amount) * a) * num3;
+                float num3 = (float)(1f / Math.Sin(a));
+                num1 = (float)Math.Sin((1f - amount) * a) * num3;
                 num2 = flag ? (float)-Math.Sin(amount * a) * num3 : (float)Math.Sin(amount * a) * num3;
             }
             result.x = num1 * quaternion1.x + num2 * quaternion2.x;
@@ -547,7 +540,7 @@ namespace DuckGame
 
         public static Quaternion operator /(Quaternion quaternion1, Quaternion quaternion2)
         {
-            float num1 = (float)(1.0 / (quaternion2.x * quaternion2.x + quaternion2.y * quaternion2.y + quaternion2.z * quaternion2.z + quaternion2.w * quaternion2.w));
+            float num1 = (float)(1f / (quaternion2.x * quaternion2.x + quaternion2.y * quaternion2.y + quaternion2.z * quaternion2.z + quaternion2.w * quaternion2.w));
             float num2 = -quaternion2.x * num1;
             float num3 = -quaternion2.y * num1;
             float num4 = -quaternion2.z * num1;

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ItemBox
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -58,6 +51,7 @@ namespace DuckGame
             _canFlip = false;
             _placementCost += 4;
             editorTooltip = "Spawns a copy of the contained item any time it's used. Recharges after a short duration.";
+            editorCycleType = typeof(ItemBoxOneTime);
         }
 
         public override void Initialize()
@@ -86,22 +80,23 @@ namespace DuckGame
             }
             else
             {
+                //on the edges of collision cells dan's CheckRectAll wouldn't properly return some items -NiK0
+
+                //reverted the reversal back to optimized collision checks now that i've fixed the issue with collision cells and edging -NiK0
                 _aboveList = Level
                     .CheckRectAll<PhysicsObject>(topLeft + new Vec2(1f, -4f), bottomRight + new Vec2(-1f, -12f))
                     .ToList();
                 foreach (PhysicsObject above in _aboveList)
                 {
-                    if (above.grounded || above.vSpeed > 0.0 || above.vSpeed == 0.0)
+                    if (above.grounded || above.vSpeed > 0 || above.vSpeed == 0)
                     {
                         Fondle(above);
                         above.y -= 2f;
                         above.vSpeed = -3f;
                         if (above is Duck pTarget)
                         {
-                            if (!pTarget.isServerForObject)
-                                Send.Message(new NMDisarmVertical(pTarget, -3f), pTarget.connection);
-                            else
-                                pTarget.Disarm(this);
+                            if (!pTarget.isServerForObject) Send.Message(new NMDisarmVertical(pTarget, -3f), pTarget.connection);
+                            else pTarget.Disarm(this);
                         }
                     }
                 }
@@ -151,6 +146,15 @@ namespace DuckGame
 
         public virtual void UpdateContainedObject()
         {
+            if (Recorderator.Playing)
+            {
+                if (containedObject == null)
+                    return;
+                containedObject.visible = false;
+                containedObject.active = false;
+                containedObject.position = position;
+                return;
+            }
             if (!Network.isActive || !isServerForObject && loadingLevel == null || containedObject != null)
                 return;
             containedObject = GetSpawnItem();
@@ -166,7 +170,7 @@ namespace DuckGame
         {
             UpdateContainedObject();
             _aboveList.Clear();
-            if (startY < -9999.0)
+            if (startY < -9999)
                 startY = y;
             _sprite.frame = _hit ? 1 : 0;
             if (contains == null && containedObject == null && !(this is ItemBoxRandom))
@@ -181,7 +185,7 @@ namespace DuckGame
                 {
                     if (isServerForObject && above.owner == null)
                         Fondle(above);
-                    if (above.isServerForObject && (above.grounded || above.vSpeed > 0.0 || above.vSpeed == 0.0))
+                    if (above.isServerForObject && (above.grounded || above.vSpeed > 0 || above.vSpeed == 0))
                     {
                         above.y -= 2f;
                         above.vSpeed = -3f;
@@ -256,7 +260,10 @@ namespace DuckGame
                 t.clip.Add(above);
             t.x = x;
             t.bottom = bottom;
-            t.y -= 12f;
+            if (this is PurpleBlock)
+                t.y -= 16f;
+            else
+                t.y -= 12f;
             t.vSpeed = -3.5f;
             t.clip.Add(this);
             if (t is Gun)
@@ -348,7 +355,7 @@ namespace DuckGame
             string text = "EMPTY";
             if (contains != null)
                 text = contains.Name;
-            Graphics.DrawString(text, position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2.0), -16f),
+            Graphics.DrawString(text, position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2), -16f),
                 Color.White, 0.9f);
         }
     }

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.UIFuneral
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class UIFuneral : UIMenu
     {
@@ -102,7 +95,7 @@ namespace DuckGame
         {
             y += yOffset;
             _frame.depth = depth;
-            Graphics.Draw(_frame, x, y);
+            Graphics.Draw(ref _frame, x, y);
             string text1 = "FAREWELL";
             Vec2 vec2_1 = new Vec2((float)-(_font.GetWidth(text1) / 2.0), -34f);
             _font.DrawOutline(text1, position + vec2_1, Color.White, Color.Black, depth + 2);
@@ -113,8 +106,8 @@ namespace DuckGame
             Vec2 vec2_3 = new Vec2(-53f, -4f);
             _portraitSprite.depth = depth + 2;
             _portraitFrame.depth = depth + 4;
-            Graphics.Draw(_portraitSprite, (float)(position.x + vec2_3.x + 1.0), (float)(position.y + vec2_3.y + 1.0), new Rectangle(2f, 0f, 12f, 10f));
-            Graphics.Draw(_portraitFrame, (float)(position.x + vec2_3.x - 2.0), (float)(position.y + vec2_3.y - 2.0));
+            Graphics.Draw(ref _portraitSprite, (float)(position.x + vec2_3.x + 1.0), (float)(position.y + vec2_3.y + 1.0), new Rectangle(2f, 0f, 12f, 10f));
+            Graphics.Draw(ref _portraitFrame, (float)(position.x + vec2_3.x - 2.0), (float)(position.y + vec2_3.y - 2.0));
             Graphics.DrawRect(position + vec2_3, position + vec2_3 + new Vec2(13f, 13f), Colors.DGBlue, depth + 1);
             y -= yOffset;
         }

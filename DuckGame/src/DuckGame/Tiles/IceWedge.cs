@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.IceWedge
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -31,14 +24,14 @@ namespace DuckGame
         {
             if (flipVertical)
             {
-                if (with.vSpeed < -1.0 && (offDir > 0 && with.hSpeed < 1.0 || offDir < 0 && with.hSpeed >= -1.0))
+                if (with.vSpeed < -1 && (offDir > 0 && with.hSpeed < 1 || offDir < 0 && with.hSpeed >= -1))
                     with.hSpeed = (float)(-with.vSpeed * 1.5) * offDir;
-                else if ((offDir < 0 && with.right > left + 4.0 || offDir > 0 && with.left < right - 4.0) && (offDir > 0 && with.hSpeed < -1.0 || offDir < 0 && with.hSpeed > 1.0) && with.vSpeed < 0.5)
+                else if ((offDir < 0 && with.right > left + 4 || offDir > 0 && with.left < right - 4) && (offDir > 0 && with.hSpeed < -1 || offDir < 0 && with.hSpeed > 1) && with.vSpeed < 0.5f)
                     with.vSpeed = Math.Abs(with.hSpeed * 1.6f);
             }
-            else if (with.vSpeed > 1.0 && (offDir > 0 && with.hSpeed < 1.0 || offDir < 0 && with.hSpeed >= -1.0))
+            else if (with.vSpeed > 1 && (offDir > 0 && with.hSpeed < 1 || offDir < 0 && with.hSpeed >= -1))
                 with.hSpeed = with.vSpeed * 1.5f * offDir;
-            else if ((offDir < 0 && with.right > left + 4.0 || offDir > 0 && with.left < right - 4.0) && (offDir > 0 && with.hSpeed < -1.0 || offDir < 0 && with.hSpeed > 1.0) && with.vSpeed > -0.5)
+            else if ((offDir < 0 && with.right > left + 4 || offDir > 0 && with.left < right - 4) && (offDir > 0 && with.hSpeed < -1 || offDir < 0 && with.hSpeed > 1) && with.vSpeed > -0.5f)
                 with.vSpeed = -Math.Abs(with.hSpeed * 1.6f);
             base.OnSoftImpact(with, from);
         }

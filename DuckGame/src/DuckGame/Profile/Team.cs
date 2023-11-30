@@ -16,6 +16,15 @@ namespace DuckGame
         //YUH YEAH AYUYH YUH YYUH ELETI GUEWHYUH YUH YUH
         public float shake;
         public bool favorited;
+        public int recordIndex = -1;
+
+        public bool NoDisplay
+        {
+            get
+            {
+                return name == null || name.StartsWith("DGRDD_");
+            }
+        }
 
         public NetworkConnection customConnection;
         private Dictionary<DuckPersona, SpriteMap> _recolors = new Dictionary<DuckPersona, SpriteMap>();
@@ -141,7 +150,7 @@ namespace DuckGame
             try
             {
                 Texture2D texture2D1 = TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, new Bitmap(new MemoryStream(pData)), true);
-                double num = texture2D1.Width / 32.0 % 1.0;
+                double num = texture2D1.Width / 32f % 1f;
                 Team pTeam = deserializeInto;
                 if (pTeam == null)
                     pTeam = new Team(pName, texture2D1);
@@ -846,6 +855,28 @@ namespace DuckGame
             [Metapixel(71, "Mechanical Lips", "If this metapixel exists, the hat will have 'mechanical lips'.")]
             public MDBool MechanicalLips = new MDBool();
 
+            [Metapixel(80, "Sticky Hat", "If this metapixel exists, the hat will not fall off when ragdolling.")]
+            public MDBool StickyHat = new MDBool();
+
+            [Metapixel(81, "Fade On Death", "If this metapixel exists, the hat will fade when the wearer dies.")]
+            public MDBool FadeOnDeath = new MDBool();
+
+            [Metapixel(82, "Roll", "If this metapixel exists, the hat will roll when on the ground.")]
+            public MDBool Roll = new MDBool();
+
+
+
+            [Metapixel(90, "Cape Length", "Amount of segments the cape will have from 0 to 20 (Default 10)")]
+            public MDInt CapeLength = new MDInt
+            {
+                range = 24,
+                value = -1, //its -1 by default because dg automatically assigns a cape length -NiK0
+                allowNegative = false
+            };
+
+            [Metapixel(91, "Bounciness", "How bouncy the hat should be from 0 to 1")]
+            public MDFloat Bouncyness = new MDFloat();
+
             [Metapixel(100, "Randomize Parameter X", "If present, the previously defined metapixel value will have it's X value multiplied by a random normalized number between G and B each time it's used. This will generally only work with particles..")]
             public MDRandomizer RandomizeParameterX = new MDRandomizer
             {
@@ -867,6 +898,29 @@ namespace DuckGame
                 range = 1f,
                 allowNegative = true,
                 randomizeBoth = true
+            };
+
+            [Metapixel(110, "Passive particle spawn rate", "The rate at which particles should passively spawn, minimum 0.1s, maximum 2.5s")]
+            public MDFloat PassiveParticleRate = new MDFloat
+            {
+                value = 0f,
+                range = 2.5f,
+            };
+            [Metapixel(111, "Passive particle quack toggle", "If present, passive particles will be toggled on and off when quacking")]
+            public MDBool PassiveParticleToggle = new MDBool
+            {
+                value = false
+            };
+            [Metapixel(112, "Passive particle condition", "The condition to when particles should spawn in passively, 0 = Always, 1 = Hat is being worn, 2 = Hat is not being worn, 3 = Currently quacking, 4 Currently not quacking, 5 Hat is held")]
+            public MDInt PassiveParticleCondition = new MDInt
+            {
+                value = 0,
+                range = 5
+            };
+            [Metapixel(113, "Passive particle override quack", "If present, quacking will not generate particles")]
+            public MDBool PassiveParticleOverrideQuack = new MDBool
+            {
+                value = false
             };
             public Team team;
             private static CustomHatMetadata kCurrentMetadata;
@@ -1101,7 +1155,8 @@ namespace DuckGame
             {
                 if (base.Deserialize(pColor))
                     return true;
-                DevConsole.Log(DCSection.General, "Metapixel with invalid ID value (" + pColor.r.ToString() + ") found in custom hat.");
+                // CAN YOU PLEASE SHUT THE FUCK UP
+                // DevConsole.Log(DCSection.General, "Metapixel with invalid ID value (" + pColor.r.ToString() + ") found in custom hat.");
                 return false;
             }
 

@@ -183,7 +183,7 @@ public abstract class WorkshopQueryBase : IDisposable {
             {
                 PublishedFileId_t[] children = new PublishedFileId_t[resultDetails.numChildren];
                 if (SteamUGC.GetQueryUGCChildren(queryCompleted.m_handle, resulti, children, (uint)children.Length))
-                    result.fileList = _.GetArray(children, id => WorkshopItem.GetItem(id));
+                    result.fileList = SteamHelper.GetArray(children, id => WorkshopItem.GetItem(id));
             }
 
             if ((_dataToFetch & WorkshopQueryData.Metadata) != 0)

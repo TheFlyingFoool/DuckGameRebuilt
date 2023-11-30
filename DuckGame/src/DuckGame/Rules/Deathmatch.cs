@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Deathmatch
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -50,6 +43,7 @@ namespace DuckGame
         public static int clientLevelRoundRobin;
         private static bool _prevNetworkSetting;
         private static bool _prevEightPlayerSetting;
+        private static bool _prevClientItems;
         private static List<string> _fourPlayerLevels;
         private static List<string> _eightPlayerNonRestrictedLevels;
         private static List<string> _eightPlayerAllLevels;
@@ -127,13 +121,15 @@ namespace DuckGame
 
         public static string RandomLevelString(string ignore = "", string folder = "deathmatch") => RandomLevelString(ignore, folder, false);
 
+        
         public static string RandomLevelString(string ignore, string folder, bool forceCustom)
         {
             List<string> stringList1 = new List<string>();
-            if (_fourPlayerLevels == null || Network.isActive != _prevNetworkSetting || TeamSelect2.eightPlayersActive != _prevEightPlayerSetting)
+            if (_fourPlayerLevels == null || Network.isActive != _prevNetworkSetting || TeamSelect2.eightPlayersActive != _prevEightPlayerSetting || Editor.clientonlycontent != _prevClientItems || true)
             {
                 _prevNetworkSetting = Network.isActive;
                 _prevEightPlayerSetting = TeamSelect2.eightPlayersActive;
+                _prevClientItems = Editor.clientonlycontent;
                 _fourPlayerLevels = Content.GetLevels(folder, LevelLocation.Content, false, Network.isActive, false);
                 _eightPlayerNonRestrictedLevels = Content.GetLevels(folder, LevelLocation.Content, false, Network.isActive, true, true);
                 _eightPlayerAllLevels = Content.GetLevels(folder, LevelLocation.Content, false, Network.isActive, true);
@@ -143,6 +139,12 @@ namespace DuckGame
                     _fourPlayerLevels.AddRange(Content.GetLevels(folder + "/online_only", LevelLocation.Content, false, Network.isActive, false));
                     _eightPlayerNonRestrictedLevels.AddRange(Content.GetLevels(folder + "/online_only", LevelLocation.Content, false, Network.isActive, false, true));
                     _eightPlayerAllLevels.AddRange(Content.GetLevels(folder + "/online_only", LevelLocation.Content, false, Network.isActive, true));
+                }
+                if (Editor.clientonlycontent)
+                {
+                    _fourPlayerLevels.AddRange(Content.GetLevels(folder + "/DGR", LevelLocation.Content, false, Network.isActive, false));
+                    _eightPlayerNonRestrictedLevels.AddRange(Content.GetLevels(folder + "/DGR", LevelLocation.Content, false, Network.isActive, true, true));
+                    _eightPlayerAllLevels.AddRange(Content.GetLevels(folder + "/DGR", LevelLocation.Content, false, Network.isActive, true));
                 }
             }
             if (TeamSelect2.eightPlayersActive)
@@ -343,6 +345,7 @@ namespace DuckGame
                 if (_paused)
                     return;
                 Music.Pause();
+                SFX.DontSave = 1;
                 SFX.Play("pause", 0.6f);
                 _paused = true;
             }
@@ -351,6 +354,7 @@ namespace DuckGame
                 if (_paused && MonoMain.pauseMenu == null)
                 {
                     _paused = false;
+                    SFX.DontSave = 1;
                     SFX.Play("resume", 0.6f);
                     Music.Resume();
                 }
@@ -478,7 +482,7 @@ namespace DuckGame
                         _endedHighlights = true;
                         Highlights.FinishRound();
                     }
-                    if (_deadTimer >= 0.0 || switched || Network.isActive)
+                    if (_deadTimer >= 0f || switched || Network.isActive)
                         return;
                     foreach (Team team in Teams.all)
                     {
@@ -556,12 +560,12 @@ namespace DuckGame
         //        if (team.numMembers == 2)
         //        {
         //            float num = 18.82353f;
-        //            position.x = (float)(teamSpawn1.position.x - 16.0 + num * index);
+        //            position.x = (float)(teamSpawn1.position.x - 16 + num * index);
         //        }
         //        else if (team.numMembers == 3)
         //        {
         //            float num = 9.411764f;
-        //            position.x = (float)(teamSpawn1.position.x - 16.0 + num * index);
+        //            position.x = (float)(teamSpawn1.position.x - 16 + num * index);
         //        }
         //        Duck duck = new Duck(position.x, position.y - 7f, team.activeProfiles[index]);
         //        duck.offDir = teamSpawn1.offDir;

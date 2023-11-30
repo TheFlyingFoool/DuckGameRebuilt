@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.TapedGun
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -107,10 +100,13 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            if (gun1 != null)
-                level.AddThing(gun1);
-            if (gun2 != null)
-                level.AddThing(gun2);
+            if (Level.current is not Editor)
+            {
+                if (gun1 != null)
+                    level.AddThing(gun1);
+                if (gun2 != null)
+                    level.AddThing(gun2);
+            }
             base.Initialize();
         }
 
@@ -130,7 +126,25 @@ namespace DuckGame
             _tape = new Sprite("tapePiece");
             _tape.CenterOrigin();
         }
-
+        public void ReorderTapedGunsByPreference()
+        {
+            if (gun1 != null && gun2 != null)
+            {
+                //Swap indexes if the two guns prefer to be taped a certain way
+                if (gun1.tapedIndexPreference >= 0 && gun1.tapedIndexPreference != 0)
+                {
+                    Holdable g2 = gun2;
+                    gun2 = gun1;
+                    gun1 = g2;
+                }
+                else if (gun2.tapedIndexPreference >= 0 && gun2.tapedIndexPreference != 1)
+                {
+                    Holdable g1 = gun1;
+                    gun1 = gun2;
+                    gun2 = g1;
+                }
+            }
+        }
         public void UpdateChildren()
         {
             if (gun2 != null)
@@ -189,7 +203,7 @@ namespace DuckGame
             float y2 = num2 - y1 * 2f;
             if (gun1 != null)
             {
-                if (gun1.angleMul != 1.0)
+                if (gun1.angleMul != 1f)
                     angleMul = gun1.angleMul;
                 if (gun1.addVerticalTapeOffset)
                     gun1.position = Offset(new Vec2(0f, y1) + gun1.tapedOffset);
@@ -225,12 +239,12 @@ namespace DuckGame
                     flammable += gun1.flammable;
                     weight = Math.Max(gun1.weight, weight);
                     heat += gun1.heat / 2f;
-                    if (!gun1.dontCrush && gun1.weight >= 5.0)
+                    if (!gun1.dontCrush && gun1.weight >= 5)
                         dontCrush = false;
                 }
                 gun1.UpdateTapedPositioning(this);
                 if (!(gun1 is Gun))
-                    gun1._extraOffset.y = (float)(1.0 - (Math.Sin(Maths.DegToRad(gun1.angleDegrees + 90f)) + 1.0) / 2.0) * (gun1.collisionOffset.y + gun1.collisionSize.y + gun1.collisionOffset.y);
+                    gun1._extraOffset.y = (float)(1 - (Math.Sin(Maths.DegToRad(gun1.angleDegrees + 90f)) + 1) / 2) * (gun1.collisionOffset.y + gun1.collisionSize.y + gun1.collisionOffset.y);
                 if (gun1 is Gun)
                     kick += (gun1 as Gun).kick;
                 if (gun1.bouncy > bouncy)
@@ -238,7 +252,7 @@ namespace DuckGame
             }
             if (gun2 != null)
             {
-                if (gun2.angleMul != 1.0)
+                if (gun2.angleMul != 1)
                     angleMul = gun2.angleMul;
                 if (gun2.addVerticalTapeOffset)
                     gun2.position = Offset(new Vec2(0f, -y1) + gun2.tapedOffset);
@@ -266,12 +280,12 @@ namespace DuckGame
                     flammable += gun2.flammable;
                     weight = Math.Max(gun2.weight, weight);
                     heat += gun2.heat / 2f;
-                    if (!gun2.dontCrush && gun2.weight >= 5.0)
+                    if (!gun2.dontCrush && gun2.weight >= 5f)
                         dontCrush = false;
                 }
                 gun2.UpdateTapedPositioning(this);
                 if (!(gun2 is Gun))
-                    gun2._extraOffset.y = (float)(1.0 - (Math.Sin(Maths.DegToRad(gun2.angleDegrees + 90f)) + 1.0) / 2.0) * (gun2.collisionOffset.y + gun2.collisionSize.y + gun2.collisionOffset.y);
+                    gun2._extraOffset.y = (float)(1 - (Math.Sin(Maths.DegToRad(gun2.angleDegrees + 90f)) + 1) / 2) * (gun2.collisionOffset.y + gun2.collisionSize.y + gun2.collisionOffset.y);
                 if (gun2 is Gun)
                     kick += (gun2 as Gun).kick;
                 if (gun2.bouncy > bouncy)
@@ -279,15 +293,15 @@ namespace DuckGame
             }
             if (ammo > 100)
                 ammo = 100;
-            if (weight > 8.0)
+            if (weight > 8)
                 weight = 8f;
             center = new Vec2(16f, 16f);
             if (gun1 != null && gun2 != null)
             {
                 if (!_firstCalc)
                     return;
-                gun1._extraOffset.y = (float)(1.0 - (Math.Sin(Maths.DegToRad(gun1.angleDegrees + 90f)) + 1.0) / 2.0) * (gun1.collisionOffset.y + gun1.collisionSize.y + gun1.collisionOffset.y);
-                gun2._extraOffset.y = (float)(1.0 - (Math.Sin(Maths.DegToRad(gun2.angleDegrees + 90f)) + 1.0) / 2.0) * (gun2.collisionOffset.y + gun2.collisionSize.y + gun2.collisionOffset.y);
+                gun1._extraOffset.y = (float)(1 - (Math.Sin(Maths.DegToRad(gun1.angleDegrees + 90f)) + 1) / 2) * (gun1.collisionOffset.y + gun1.collisionSize.y + gun1.collisionOffset.y);
+                gun2._extraOffset.y = (float)(1 - (Math.Sin(Maths.DegToRad(gun2.angleDegrees + 90f)) + 1) / 2) * (gun2.collisionOffset.y + gun2.collisionSize.y + gun2.collisionOffset.y);
                 float num3 = Math.Min(gun1.top - gun1._extraOffset.y, gun2.top - gun2._extraOffset.y);
                 float num4 = Math.Max(gun1.bottom - gun1._extraOffset.y, gun2.bottom - gun2._extraOffset.y);
                 collisionOffset = new Vec2(-6f, -(y - num3));
@@ -296,7 +310,7 @@ namespace DuckGame
             }
             else
             {
-                collisionOffset = new Vec2(-6f, (float)-(y2 / 2.0));
+                collisionOffset = new Vec2(-6f, (float)-(y2 / 2));
                 collisionSize = new Vec2(12f, y2);
             }
         }
@@ -386,7 +400,7 @@ namespace DuckGame
                                        }
                                        return false;
                                    });
-                                    if (Distance(holdable1) < 16.0)
+                                    if (Distance(holdable1) < 16)
                                     {
                                         if (DGRSettings.S_ParticleMultiplier != 0)
                                         {
@@ -457,20 +471,16 @@ namespace DuckGame
             _tape.depth = depth + 16;
             _tape.angleDegrees = angleDegrees;
             _tape.flipH = offDir < 0;
-            Vec2 vec2_1 = new Vec2(0f, bottom - top);
+            //Vec2 vec2_1 = new Vec2(0f, bottom - top); what -NiK0
             if (gun2 != null)
             {
-                Vec2 vec2_2 = gun2.Offset(new Vec2(0f, (float)-(collisionOffset.y / 2.0)));
-                Graphics.Draw(_tape, vec2_2.x, vec2_2.y);
+                Vec2 vec2_2 = gun2.Offset(new Vec2(0f, (float)-(collisionOffset.y / 2f)));
+                Graphics.Draw(ref _tape, vec2_2.x, vec2_2.y);
             }
-            else
-                Graphics.Draw(_tape, position.x, position.y);
-            if (level != null && !Duck.renderingIcon)
-                return;
-            if (gun1 != null)
-                gun1.Draw();
-            if (gun2 == null)
-                return;
+            else Graphics.Draw(ref _tape, position.x, position.y);
+            if (level != null && !Duck.renderingIcon) return;
+            if (gun1 != null) gun1.Draw();
+            if (gun2 == null) return;
             gun2.Draw();
         }
 
@@ -478,10 +488,8 @@ namespace DuckGame
         {
             try
             {
-                if (gun1 != null && gun1.flammable > 0.0)
-                    gun1.Burn(firePosition, litBy);
-                if (gun2 == null || gun2.flammable <= 0.0)
-                    return;
+                if (gun1 != null && gun1.flammable > 0f) gun1.Burn(firePosition, litBy);
+                if (gun2 == null || gun2.flammable <= 0f) return;
                 gun2.Burn(firePosition, litBy);
             }
             catch (Exception ex)
@@ -495,10 +503,8 @@ namespace DuckGame
         {
             try
             {
-                if (gun1 != null)
-                    gun1.DoHeatUp(val, location);
-                if (gun2 == null)
-                    return;
+                if (gun1 != null) gun1.DoHeatUp(val, location);
+                if (gun2 == null) return;
                 gun2.DoHeatUp(val, location);
             }
             catch (Exception ex)

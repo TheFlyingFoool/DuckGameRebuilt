@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Main
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Globalization;
 using XnaToFna;
@@ -98,6 +91,7 @@ namespace DuckGame
 
         protected override void OnStart()
         {
+            Recorderator.Initialize();
             Options.Initialize();
             Teams.PostInitialize();
             Unlocks.Initialize();
@@ -154,7 +148,11 @@ namespace DuckGame
                 }
                 else
                 {
-                    if (startInEditor)
+                    if (Program.CheckForNewVersion() && !IgnoreDGRUpdates)
+                    {
+                        Level.current = new TitleScreen();
+                    }
+                    else if (startInEditor)
                     {
                         Level.current = editor;
                     }

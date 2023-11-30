@@ -1,25 +1,26 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Profile
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DuckGame
 {
     public class Profile
     {
+        public bool ReplayRebuilt;
         public bool isUsingRebuilt
         {
             get
             {
                 if (netData == null) return false;
                 return netData.Get("REBUILT", false);
+            }
+        }
+        public bool inSameRebuiltVersion
+        {
+            get
+            {
+                if (netData == null) return false;
+                return netData.Get<string>("rVer", "?") == Program.CURRENT_VERSION_ID;
             }
         }
         public HatSelector hatSelector;
@@ -118,7 +119,7 @@ namespace DuckGame
         public DuckPersona defaultPersona;
         public bool isNetworkProfile;
         public string fileName = "";
-        private bool isDefaultProfile;
+        public bool isDefaultProfile;
 
         public void ReportConnectionTrouble(NetworkConnection pFrom) => connectionTrouble[pFrom] = 200;
 
@@ -245,6 +246,7 @@ namespace DuckGame
             }
         }
 
+        public bool ReplaySpectator;
         public bool spectator => slotType == SlotType.Spectator;
 
         public ushort customTeamIndexOffset => (ushort)(Teams.kCustomOffset + fixedGhostIndex * Teams.kCustomSpread);
@@ -640,21 +642,29 @@ namespace DuckGame
             get
             {
                 string nameUi = name;
+                
                 if (muteName)
-                    nameUi = "Player " + (networkIndex + 1).ToString();
-                if (isUsingRebuilt && DGRSettings.RebuiltEffect == 1) nameUi += "@DGR@";
+                    nameUi = $"Player {networkIndex + 1}";
+                
+                if (isUsingRebuilt && DGRSettings.RebuiltEffect == 1)
+                    nameUi += inSameRebuiltVersion ? "@DGR@" : "@DGRDIM@";
+                
                 return nameUi;
             }
         }
-        //alright so hear me out, DUCK GAME FUCKING SUCKS
+        //alright so hear me out, DUCK GAME FUCKING SUCKS -NiK0
         public string nameUIBodge
         {
             get
             {
                 string nameUi = name;
+                
                 if (muteName)
-                    nameUi = "Player " + (networkIndex + 1).ToString();
-                if (isUsingRebuilt && DGRSettings.RebuiltEffect == 1) nameUi += "@DGRBIG@";
+                    nameUi = $"Player {networkIndex + 1}";
+                
+                if (isUsingRebuilt && DGRSettings.RebuiltEffect == 1)
+                    nameUi += inSameRebuiltVersion ? "@DGRBIG@" : "@DGRBIGDIM@";
+                
                 return nameUi;
             }
         }
@@ -856,8 +866,8 @@ namespace DuckGame
                         }
                         else
                         {
-                            float num14 = num13 != 1.0 ? 1f : 0.9f;
-                            if (num11 > 0.0)
+                            float num14 = num13 != 1f ? 1f : 0.9f;
+                            if (num11 > 0f)
                                 data[index3 + index2 * t.width] = new Color((byte)(color1.r * 0.6f * num14), (byte)(color1.g * 0.6f * num14), (byte)(color1.b * 0.6f * num14));
                             else
                                 data[index3 + index2 * t.width] = new Color((byte)(color2.r * 0.6f * num14), (byte)(color2.g * 0.6f * num14), (byte)(color2.b * 0.6f * num14));
@@ -880,12 +890,12 @@ namespace DuckGame
                     }
                     else if (color4.r < byte.MaxValue)
                     {
-                        if (num11 > 0.0)
+                        if (num11 > 0)
                             data[index3 + index2 * t.width] = new Color((byte)(color2.r * 0.6f * num13), (byte)(color2.g * 0.6f * num13), (byte)(color2.b * 0.6f * num13));
                         else
                             data[index3 + index2 * t.width] = new Color((byte)(color1.r * 0.6f * num13), (byte)(color1.g * 0.6f * num13), (byte)(color1.b * 0.6f * num13));
                     }
-                    else if (num11 > 0.0)
+                    else if (num11 > 0)
                         data[index3 + index2 * t.width] = new Color((byte)(color2.r * num13), (byte)(color2.g * num13), (byte)(color2.b * num13));
                     else
                         data[index3 + index2 * t.width] = new Color((byte)(color1.r * num13), (byte)(color1.g * num13), (byte)(color1.b * num13));
@@ -1024,8 +1034,8 @@ namespace DuckGame
                         }
                         else
                         {
-                            float num14 = num12 != 1.0 ? 1f : 0.9f;
-                            if (num10 > 0.0)
+                            float num14 = num12 != 1f ? 1f : 0.9f;
+                            if (num10 > 0)
                                 data[index3 + index2 * t.width] = new Color((byte)(color1.r * num14), (byte)(color1.g * num14), (byte)(color1.b * num14));
                             else
                                 data[index3 + index2 * t.width] = new Color((byte)(color2.r * num14), (byte)(color2.g * num14), (byte)(color2.b * num14));
@@ -1184,7 +1194,7 @@ namespace DuckGame
                 if (!flag2)
                     break;
             }
-            return (byte)((byte)((byte)((uint)(byte)((byte)((uint)(byte)((byte)((uint)(byte)((byte)((uint)(byte)(0 | (flag1 ? 1 : 0)) << 1) | ((int)Global.data.onlineWins >= 50 ? 1 : 0)) << 1) | ((int)Global.data.matchesPlayed >= 100 ? 1 : 0)) << 1) | (flag2 ? 1 : 0)) << 1) | (Options.Data.shennanigans ? 1 : 0)) | (Options.Data.rumbleIntensity > 0.0 ? 1 : 0));
+            return (byte)((byte)((byte)((uint)(byte)((byte)((uint)(byte)((byte)((uint)(byte)((byte)((uint)(byte)(0 | (flag1 ? 1 : 0)) << 1) | ((int)Global.data.onlineWins >= 50 ? 1 : 0)) << 1) | ((int)Global.data.matchesPlayed >= 100 ? 1 : 0)) << 1) | (flag2 ? 1 : 0)) << 1) | (Options.Data.shennanigans ? 1 : 0)) | (Options.Data.rumbleIntensity > 0 ? 1 : 0));
         }
 
         public bool switchStatus => (flippers & 1U) > 0U;
@@ -1389,6 +1399,7 @@ namespace DuckGame
             set => _linkedProfile = value;
         }
 
+        public bool ReplayHost;
         public bool isHost => connection == Network.host;
 
         public bool ready
@@ -1405,6 +1416,7 @@ namespace DuckGame
 
         public void SetFixedGhostIndex(byte idx) => _fixedGhostIndex = idx;
 
+        public bool ReplayLocal;
         public bool localPlayer => !Network.isActive || _connection == DuckNetwork.localConnection;
 
         public byte remoteSpectatorChangeIndex
@@ -1579,6 +1591,7 @@ namespace DuckGame
           string varID,
           bool pDefaultProfile)
         {
+            Main.SpecialCode = "can";
             _name = varName;
             _inputProfile = varProfile;
             if (_inputProfile != null)
@@ -1588,6 +1601,7 @@ namespace DuckGame
                 varStartTeam.Join(this);
                 defaultTeam = varStartTeam;
             }
+            Main.SpecialCode = "you";
             _persona = varDefaultPersona;
             defaultPersona = varDefaultPersona;
             _id = varID != null ? varID : Guid.NewGuid().ToString();

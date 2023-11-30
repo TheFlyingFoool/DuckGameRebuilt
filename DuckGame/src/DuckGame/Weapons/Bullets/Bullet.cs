@@ -1,13 +1,6 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Bullet
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -15,7 +8,7 @@ namespace DuckGame
     {
         public static int bulletcolorindex;
         private new NetworkConnection _connection;
-        protected Teleporter _teleporter;
+        public Teleporter _teleporter;
         public AmmoType ammo;
         public bool randomDir;
         public Vec2 start;
@@ -48,7 +41,7 @@ namespace DuckGame
         public float range;
         private PhysicalBullet _physicalBullet;
         public bool trickshot;
-        protected int timesRebounded;
+        public int timesRebounded;
         protected int reboundBulletsCreated;
         protected Bullet _reboundedBullet;
         public bool reboundCalled;
@@ -71,6 +64,10 @@ namespace DuckGame
         protected float drawdist;
         protected bool _initializedDraw;
         //private byte networkKillWait = 60;
+        protected Interp BulletStart = new Interp(true);
+        protected Interp BulletEnd = new Interp(true);
+        protected Interp BulletLerp = new Interp(true);
+        public int BonusUpdateTicks = 0;
 
         public new NetworkConnection connection
         {
@@ -125,6 +122,7 @@ namespace DuckGame
           bool network = true)
           : base()
         {
+            shouldbegraphicculled = false;
             _gravityAffected = type.affectedByGravity;
             gravityMultiplier = type.gravityMultiplier;
             _bulletLength = type.bulletLength;
@@ -231,6 +229,7 @@ namespace DuckGame
 
         public virtual void DoRebound(Vec2 pos, float dir, float rng) => Rebound(pos, dir, rng);
 
+        public static bool specialRebound;
         protected virtual void Rebound(Vec2 pos, float dir, float rng)
         {
             ++reboundBulletsCreated;
@@ -239,9 +238,14 @@ namespace DuckGame
             bullet.timesRebounded = timesRebounded + 1;
             bullet.lastReboundSource = lastReboundSource;
             bullet.isLocal = isLocal;
+            if (specialRebound) bullet.owner = owner;
             _reboundedBullet = bullet;
             reboundCalled = true;
             Level.Add(bullet);
+            if (specialRebound)
+            {
+                Send.Message(new NMFireGun(null, new List<Bullet> { bullet }, 1, false));
+            }
         }
 
         public virtual void OnCollide(Vec2 pos, Thing t, bool willBeStopped)
@@ -561,59 +565,67 @@ namespace DuckGame
                 vel.Add(0f);
                 _initializedDraw = true;
             }
-            _travelTime += Maths.IncFrameTimer();
-            _bulletDistance += _bulletSpeed;
-            startpoint = Maths.Clamp(_bulletDistance - _bulletLength, 0f, 99999f);
-            float num = _bulletDistance;
-            if (_gravityAffected)
+            int iterNum = 1;
+            if (BonusUpdateTicks > 0)
+                iterNum += BonusUpdateTicks;
+            for (int i = 0; i < iterNum; ++i)
             {
-                end = start + velocity;
-                vSpeed += PhysicsObject.gravity * gravityMultiplier;
-                hSpeed *= ammo.airFrictionMultiplier;
-                if (vSpeed > 8f)
-                    vSpeed = 8f;
+                _travelTime += Maths.IncFrameTimer();
+                _bulletDistance += _bulletSpeed;
+                startpoint = Maths.Clamp(_bulletDistance - _bulletLength, 0f, 99999f);
+                float num = _bulletDistance;
+                if (_gravityAffected)
+                {
+                    end = start + velocity;
+                    vSpeed += PhysicsObject.gravity * gravityMultiplier;
+                    hSpeed *= ammo.airFrictionMultiplier;
+                    if (vSpeed > 8f)
+                        vSpeed = 8f;
+                    if (!doneTravelling)
+                    {
+                        prev.Add(end);
+                        float length = (end - start).length;
+                        _totalArc += length;
+                        vel.Add(length);
+                    }
+                }
+                else
+                    end = start + travelDirNormalized * _bulletSpeed;
                 if (!doneTravelling)
                 {
-                    prev.Add(end);
-                    float length = (end - start).length;
-                    _totalArc += length;
-                    vel.Add(length);
+                    TravelBullet();
+                    _totalLength = (travelStart - travelEnd).length;
+                    if (_bulletDistance >= _totalLength)
+                    {
+                        doneTravelling = true;
+                        travelEnd = end;
+                        _totalLength = (travelStart - end).length;
+                    }
+                    if (_gravityAffected && doneTravelling)
+                    {
+                        prev[prev.Count - 1] = travelEnd;
+                        float length = (travelEnd - start).length;
+                        _totalArc += length;
+                        vel[vel.Count - 1] = length;
+                    }
                 }
-            }
-            else
-                end = start + travelDirNormalized * _bulletSpeed;
-            if (!doneTravelling)
-            {
-                TravelBullet();
-                _totalLength = (travelStart - travelEnd).length;
-                if (_bulletDistance >= _totalLength)
+                else
                 {
-                    doneTravelling = true;
-                    travelEnd = end;
-                    _totalLength = (travelStart - end).length;
+                    alpha -= 0.1f;
+                    if (alpha <= 0f)
+                        Level.Remove(this);
                 }
-                if (_gravityAffected && doneTravelling)
-                {
-                    prev[prev.Count - 1] = travelEnd;
-                    float length = (travelEnd - start).length;
-                    _totalArc += length;
-                    vel[vel.Count - 1] = length;
-                }
+                start = end;
+                if (num > _totalLength)
+                    num = _totalLength;
+                if (startpoint > num)
+                    startpoint = num;
+                if(i == 0)
+                    drawStart = travelStart + travelDirNormalized * startpoint;
+                drawEnd = travelStart + travelDirNormalized * num;
+                drawdist = num;
             }
-            else
-            {
-                alpha -= 0.1f;
-                if (alpha <= 0f)
-                    Level.Remove(this);
-            }
-            start = end;
-            if (num > _totalLength)
-                num = _totalLength;
-            if (startpoint > num)
-                startpoint = num;
-            drawStart = travelStart + travelDirNormalized * startpoint;
-            drawEnd = travelStart + travelDirNormalized * num;
-            drawdist = num;
+            BonusUpdateTicks = 0;
         }
 
         public Vec2 GetPointOnArc(float distanceBack)
@@ -642,6 +654,12 @@ namespace DuckGame
         {
             if (_tracer || _bulletDistance <= 0.1f)
                 return;
+
+            BulletStart.UpdateLerpState(this.drawStart, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            BulletEnd.UpdateLerpState(this.drawEnd, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            Vec2 drawStart = BulletStart.Position;
+            Vec2 drawEnd = BulletEnd.Position;
+
             if (gravityAffected)
             {
                 if (prev.Count < 1)
@@ -668,7 +686,8 @@ namespace DuckGame
                         //could just be setting the angle direction skipping two operations 
                         //-NiK0
                         ammo.sprite.angle = -Maths.PointDirectionRad(Vec2.Zero, travelDirNormalized);
-                        Graphics.Draw(ammo.sprite, p2.x, p2.y);
+                        BulletLerp.UpdateLerpState(p2, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+                        Graphics.Draw(ammo.sprite, BulletLerp.x, BulletLerp.y);
                     }
                 }
             }
@@ -679,7 +698,8 @@ namespace DuckGame
                     //same optimization here
                     ammo.sprite.depth = depth + 10;
                     ammo.sprite.angle = -Maths.PointDirectionRad(Vec2.Zero, travelDirNormalized);
-                    Graphics.Draw(ammo.sprite, drawEnd.x, drawEnd.y);
+                    Sprite ammoSprite = ammo.sprite;
+                    Graphics.Draw(ammoSprite, drawEnd.x, drawEnd.y);
                 }
                 float length = (drawStart - drawEnd).length;
                 float dist = 0f;
@@ -688,16 +708,17 @@ namespace DuckGame
                 float drawLength = 8f;
                 while (true)
                 {
-                    bool flag = false;
+                    bool bulletDrawn = false;
                     if (dist + drawLength > length)
                     {
                         drawLength = length - Maths.Clamp(dist, 0f, 99f);
-                        flag = true;
+                        bulletDrawn = true;
                     }
                     alph -= incs;
+
                     --Graphics.currentDrawIndex;
                     Graphics.DrawLine(drawStart + travelDirNormalized * length - travelDirNormalized * dist, drawStart + travelDirNormalized * length - travelDirNormalized * (dist + drawLength), color * alph, ammo.bulletThickness, depth);
-                    if (!flag)
+                    if (!bulletDrawn)
                         dist += 8f;
                     else
                         break;

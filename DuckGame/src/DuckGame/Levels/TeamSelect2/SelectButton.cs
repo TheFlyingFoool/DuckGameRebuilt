@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.SelectButton
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class SelectButton : MaterialThing, IPlatform
     {
@@ -37,7 +30,7 @@ namespace DuckGame
         public override void Draw()
         {
             base.Draw();
-            Graphics.Draw(_button, x, (float)(y + 2.0 - _hit * 4.0));
+            Graphics.Draw(_button, x, (float)(y + 2f - _hit * 4f));
         }
     }
 }

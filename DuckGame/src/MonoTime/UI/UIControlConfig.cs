@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.UIControlConfig
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -34,12 +27,12 @@ namespace DuckGame
         {
             inputTypes.Clear();
             inputMaps.Clear();
-            for (int index = 0; index < 4; ++index)
+            for (int index = 0; index < MonoMain.MaximumGamepadCount; ++index)
             {
                 XInputPad device = Input.GetDevice<XInputPad>(index);
                 if (device != null && device.isConnected)
                 {
-                    inputTypes.Add("XBOX GAMEPAD");
+                    inputTypes.Add(device.productName);
                     inputMaps.Add(Input.GetDefaultMapping(device.productName, device.productGUID).Clone());
                     break;
                 }
@@ -142,6 +135,7 @@ namespace DuckGame
       };
             BitmapFont bitmapFont = new BitmapFont("smallBiosFontUI", 7, 5);
             UIBox uiBox = new UIBox(isVisible: false);
+            uiBox.idStr = "cc";
             _configuringToggle = new UIMenuItemToggle("", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(SwitchConfigType)), new FieldBinding(this, nameof(inputConfigType)), multi: inputTypes, compressedMulti: true, tiny: true);
             uiBox.Add(_configuringToggle, true);
             UIText uiText = new UIText(" ", Color.White);

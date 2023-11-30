@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.FluidPuddle
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -24,7 +17,7 @@ namespace DuckGame
         private BlockCorner _topRightCorner;
         private bool _initializedUpperCorners;
         private List<SpriteMap> _surfaceFire = new List<SpriteMap>();
-        private Block _block;
+        public Block _block;
         private SpriteMap _lava;
         private SpriteMap _lavaAlternate;
         private int _framesSinceFeed;
@@ -50,7 +43,7 @@ namespace DuckGame
             _rightCorner = null;
             foreach (BlockCorner blockCorner in groupCorners)
             {
-                if (Math.Abs(ypos - blockCorner.corner.y) < 4.0)
+                if (Math.Abs(ypos - blockCorner.corner.y) < 4)
                 {
                     if (blockCorner.corner.x > xpos)
                     {
@@ -94,10 +87,8 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            if (_leftCorner == null || _rightCorner == null)
-                Level.Remove(this);
-            else
-                y = _leftCorner.corner.y;
+            if (_leftCorner == null || _rightCorner == null) Level.Remove(this);
+            else y = _leftCorner.corner.y;
         }
 
         public void Feed(FluidData dat)
@@ -117,25 +108,25 @@ namespace DuckGame
             }
             if (_lightRect == null && Layer.lighting)
             {
-                _lightRect = new WhiteRectangle(x, y, width, height, dat.heat <= 0.0);
+                _lightRect = new WhiteRectangle(x, y, width, height, dat.heat <= 0);
                 Level.Add(_lightRect);
             }
-            if (dat.amount > 0.0)
+            if (dat.amount > 0)
                 _framesSinceFeed = 0;
             data.Mix(dat);
             data.amount = Maths.Clamp(data.amount, 0f, MaxFluidFill());
             _wide = FeedAmountToDistance(data.amount);
             float num1 = _wide + 4f;
-            _collisionOffset.x = (float)-(num1 / 2.0);
+            _collisionOffset.x = (float)-(num1 / 2);
             _collisionSize.x = num1;
             FeedEdges();
             if (_leftCorner != null && _rightCorner != null && _wide > _rightCorner.corner.x - _leftCorner.corner.x)
             {
                 _wide = _rightCorner.corner.x - _leftCorner.corner.x;
-                x = _leftCorner.corner.x + (float)((_rightCorner.corner.x - _leftCorner.corner.x) / 2.0);
+                x = _leftCorner.corner.x + (float)((_rightCorner.corner.x - _leftCorner.corner.x) / 2);
             }
             float num2 = _wide + 4f;
-            _collisionOffset.x = (float)-(num2 / 2.0);
+            _collisionOffset.x = (float)-(num2 / 2);
             _collisionSize.x = num2;
             if (!(data.sprite == "water") || _leftCorner == null)
                 return;
@@ -147,14 +138,14 @@ namespace DuckGame
                     case null:
                         goto label_19;
                     case SnowTileset _:
-                        if (block.left + 2.0 > left && block.right - 2.0 < right)
+                        if (block.left + 2 > left && block.right - 2 < right)
                         {
                             (block as SnowTileset).Freeze();
                             break;
                         }
                         break;
                     case SnowIceTileset _:
-                        if (block.left + 2.0 > left && block.right - 2.0 < right)
+                        if (block.left + 2 > left && block.right - 2 < right)
                         {
                             (block as SnowIceTileset).Freeze();
                             break;
@@ -235,9 +226,60 @@ namespace DuckGame
                 physicsObject.DoFloat();
             }
         }
-
+        public float timer;
+        public MaterialLavaWobble mt;
         public override void Update()
         {
+            //1 per frame if 1000 wide
+
+            if (DGRSettings.HeatWaveMultiplier > 0)
+            {
+                if (data.heat > 0)
+                {
+                    if (mt == null) mt = new MaterialLavaWobble(this);
+                    mt.mult = Maths.Clamp(data.amount / 3f, 0, 0.5f) + Maths.Clamp(data.amount / 50, 0, 0.25f) - 0.1f;
+                    if (mt.mult > 0.1f)
+                    {
+                        mt.thing = this;
+                        mt.active = true;
+                        if (!mt.added) Level.AddFullscreenMaterial(mt);
+                    }
+                    else mt.active = false;
+                }
+                else if (onFire)
+                {
+                    if (mt == null) mt = new MaterialLavaWobble(this);
+                    mt.mult = Maths.Clamp(data.amount / 3f, 0, 1) + Maths.Clamp(data.amount / 50, 0, 0.5f) - 0.15f;
+                    if (mt.mult > 0.1f)
+                    {
+                        mt.thing = this;
+                        mt.active = true;
+                        if (!mt.added) Level.AddFullscreenMaterial(mt);
+                    }
+                    else mt.active = false;
+                }
+            }
+            if (DGRSettings.AmbientParticles)
+            {
+                if (data.heat > 0)
+                {
+                    timer += 0.001f * collisionSize.x * DGRSettings.ActualParticleMultiplier * data.heat;
+                    while (timer >= 1)
+                    {
+                        Level.Add(new Ember(Rando.Float(left, right), top));
+                        timer--;
+                    }
+                }
+                else if (onFire)
+                {
+                    timer += 0.0005f * collisionSize.x * DGRSettings.ActualParticleMultiplier;
+                    while (timer >= 1)
+                    {
+                        Level.Add(new Ember(Rando.Float(left, right), top));
+                        timer--;
+                    }
+                }
+            }
             ++_framesSinceFeed;
             fluidWave += 0.1f;
             if (data.amount < 0.0001f)
@@ -261,10 +303,7 @@ namespace DuckGame
                 Level.CheckRectAll(topLeft, bottomRight, _coll);
                 foreach (PhysicsObject physicsObject in _coll)
                 {
-                    if (physicsObject.buoyancy > 0f)
-                    {
-                        physicsObject.sleeping = false;
-                    }
+                    physicsObject.sleeping = false;
                 }
             }
             FluidPuddle fluidPuddle = Level.CheckLine<FluidPuddle>(new Vec2(left, y), new Vec2(right, y), this);
@@ -319,7 +358,7 @@ namespace DuckGame
             else
             {
                 alpha = Lerp.Float(alpha, 1f, 0.04f);
-                if (num < 3.0)
+                if (num < 3)
                 {
                     FluidData dat2 = data;
                     dat2.amount = -0.0001f;
@@ -330,7 +369,7 @@ namespace DuckGame
 
             }
             float depth = CalculateDepth();
-            if (depth > 4.0 && !_initializedUpperCorners)
+            if (depth > 4 && !_initializedUpperCorners)
             {
                 _initializedUpperCorners = true;
                 foreach (BlockCorner groupCorner in _block.GetGroupCorners())
@@ -355,7 +394,7 @@ namespace DuckGame
                 _leftStream.position.y = y - _collisionOffset.y;
             if (_rightStream != null)
                 _rightStream.position.y = y - _collisionOffset.y;
-            _collisionOffset.y = (float)(-depth - 1.0);
+            _collisionOffset.y = (float)(-depth - 1);
             _collisionSize.y = depth;
         }
 
@@ -382,7 +421,8 @@ namespace DuckGame
                     _surfaceFire[index].alpha = alpha;
                     _surfaceFire[index].yscale = _fireRise;
                     _surfaceFire[index].depth = depth + 1;
-                    Graphics.Draw(_surfaceFire[index], (left + 8f + index * num2), (y + _collisionOffset.y + 1f) - num3);
+                    SpriteMap g = _surfaceFire[index];
+                    Graphics.Draw(g, (left + 8f + index * num2), (y + _collisionOffset.y + 1f) - num3);
                 }
             }
             if (_lava != null && collisionSize.y > 2f)
@@ -408,8 +448,8 @@ namespace DuckGame
 
         public override void Terminate()
         {
-            if (_lightRect != null)
-                Level.Remove(_lightRect);
+            if (mt != null) mt.removed = true;
+            if (_lightRect != null) Level.Remove(_lightRect);
             base.Terminate();
         }
     }

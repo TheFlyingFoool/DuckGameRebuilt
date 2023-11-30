@@ -1,14 +1,7 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.VerticalDoor
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Stuff|Doors")]
+    //[EditorGroup("Stuff|Doors")]
     public class TestVerticalDoor : Block, IPlatform
     {
         protected SpriteMap _sprite;
@@ -88,8 +81,8 @@ namespace DuckGame
             }
             graphic = _sprite;
             _open = Maths.LerpTowards(_open, _desiredOpen, 0.15f);
-            _sprite.frame = (int)(_open * 32.0);
-            _collisionSize.y = (float)((1.0 - _open) * 32.0);
+            _sprite.frame = (int)(_open * 32f);
+            _collisionSize.y = ((1f - _open) * 32f);
         }
         public override void Removed()
         {

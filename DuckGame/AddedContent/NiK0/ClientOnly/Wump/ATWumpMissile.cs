@@ -15,6 +15,7 @@ namespace DuckGame
     {
         public ATWumpMissile()
         {
+            forcedIndex = 254;
             accuracy = 1f;
             range = 850f;
             penetration = 0.4f;
@@ -29,16 +30,17 @@ namespace DuckGame
         }
         public override void PopShell(float x, float y, int dir)
         {
-            PistolShell pistolShell = new PistolShell(x, y)
+            if (DGRSettings.S_ParticleMultiplier != 0)
             {
-                hSpeed = dir * (1.5f + Rando.Float(1f))
-            };
-            Level.Add(pistolShell);
+                PistolShell pistolShell = new PistolShell(x, y)
+                {
+                    hSpeed = dir * (1.5f + Rando.Float(1f))
+                };
+                Level.Add(pistolShell);
+            }
         }
-        public static int lol = 1;
         public override Bullet FireBullet(Vec2 position, Thing owner = null, float angle = 0, Thing firedFrom = null)
         {
-            lol *= -1;
             return base.FireBullet(position, owner, angle, firedFrom);
         }
         public override void OnHit(bool destroyed, Bullet b)
@@ -58,7 +60,7 @@ namespace DuckGame
                 List<Bullet> varBullets = new List<Bullet>();
                 for (int index = 0; index < 12; ++index)
                 {
-                    float num = (float)(index * 30.0 - 10.0) + Rando.Float(20f);
+                    float num = (float)(index * 30f - 10f) + Rando.Float(20f);
                     ATMissileShrapnel type = new ATMissileShrapnel
                     {
                         range = 15f + Rando.Float(5f)

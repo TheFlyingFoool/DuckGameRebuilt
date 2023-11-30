@@ -1,17 +1,10 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.DCGasFire
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class DCGasFire : DeathCrateSetting
     {
         public override void Activate(DeathCrate c, bool server = true)
         {
-            Level.Add(new ExplosionPart(c.x, c.y - 2f));
+            if (DGRSettings.ActualParticleMultiplier > 0) Level.Add(new ExplosionPart(c.x, c.y - 2f));
             if (server)
             {
                 YellowBarrel yellowBarrel = new YellowBarrel(c.x, c.y)
@@ -31,7 +24,7 @@ namespace DuckGame
                 Level.Add(grenade2);
                 Level.Remove(c);
             }
-            for (int i = 0; i < Maths.Clamp(DGRSettings.ActualParticleMultiplier, 0, 100000); i++) Level.Add(new MusketSmoke(c.x, c.y));
+            for (int i = 0; i < Maths.Clamp(DGRSettings.ActualParticleMultiplier, 1, 100000); i++) Level.Add(new MusketSmoke(c.x, c.y));
         }
     }
 }

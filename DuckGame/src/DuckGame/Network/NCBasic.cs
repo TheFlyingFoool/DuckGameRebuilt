@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.NCBasic
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -226,12 +219,12 @@ namespace DuckGame
                 if (basicConnection.status != NCBasicStatus.Disconnected)
                 {
                     TimeSpan elapsed = basicConnection.heartbeat.elapsed;
-                    if (elapsed.TotalSeconds > 1.0 || basicConnection.status == NCBasicStatus.TryingToConnect)
+                    if (elapsed.TotalSeconds > 1 || basicConnection.status == NCBasicStatus.TryingToConnect)
                     {
                         if (basicConnection.status == NCBasicStatus.Disconnecting)
                         {
                             elapsed = basicConnection.heartbeat.elapsed;
-                            if (elapsed.TotalSeconds > 3.0)
+                            if (elapsed.TotalSeconds > 3)
                             {
                                 basicConnection.status = NCBasicStatus.Disconnected;
                                 basicConnection.packets = 0;

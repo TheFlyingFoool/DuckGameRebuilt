@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.EnergyScimitarBlast
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class EnergyScimitarBlast : Thing
     {
@@ -58,7 +51,7 @@ namespace DuckGame
         public override void Update()
         {
             _blast = Maths.CountDown(_blast, 0.1f);
-            if (_blast >= 0.0)
+            if (_blast >= 0)
                 return;
             Level.Remove(this);
         }

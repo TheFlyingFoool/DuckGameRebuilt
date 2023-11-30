@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.BeamParticle
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -17,6 +10,7 @@ namespace DuckGame
         private bool _inverse;
         private float _size;
         private Color _color;
+        protected Interp ParticleLerp = new Interp(true);
 
         public BeamParticle(float xpos, float ypos, float spd, bool inverse, Color c)
           : base(xpos, ypos)
@@ -55,7 +49,10 @@ namespace DuckGame
         public override void Draw()
         {
             Vec2 vec2 = position + new Vec2((float)(16f * _sinVal * (_inverse ? -1f : 1f)), 0f);
-            Graphics.DrawRect(vec2 - new Vec2(_size, _size), vec2 + new Vec2(_size, _size), _color * 0.4f, depth);
+            ParticleLerp.UpdateLerpState(vec2, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
+            Graphics.DrawRect(ParticleLerp.Position - new Vec2(_size, _size), ParticleLerp.Position + new Vec2(_size, _size), _color * 0.4f, depth);
+
             base.Draw();
         }
     }

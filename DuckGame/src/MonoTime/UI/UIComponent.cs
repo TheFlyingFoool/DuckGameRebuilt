@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.UIComponent
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,11 +9,19 @@ namespace DuckGame
         public MenuItemMode mode;
         public bool debug;
         public Func<bool> condition;
+        protected Interp UILerp = new Interp(true);
+        protected Interp AnimLerp = new Interp(true);
 
+        public string idStr = null;
+
+        public bool manualFormatting = false;
         public string dgrDescription
         {
             get
             {
+                if (manualFormatting)
+                    return _dgrDescription;
+                
                 if (_dgrDescription is null or {Length: 0})
                     return "";
                 
@@ -66,7 +67,10 @@ namespace DuckGame
         public UIMenuAction _backFunction;
         public UIMenuAction _closeFunction;
         public UIMenuAction _acceptFunction;
+        public UIMenuAction _openFunction;
         private bool _isPauseMenu;
+
+        public bool ignoreSeperation = false;
 
         public UIComponent parent => _parent;
 
@@ -79,7 +83,13 @@ namespace DuckGame
                 return _parent != null ? _parent.rootMenu : null;
             }
         }
-
+        public UIMenuAction backFunction
+        { 
+            get 
+            { 
+                return _backFunction; 
+            } 
+        }
         public bool dirty
         {
             get => _dirty;
@@ -164,6 +174,9 @@ namespace DuckGame
                     component.Open();
             }
             _initialSizingComplete = false;
+
+            if (_openFunction != null)
+                _openFunction.Activate();
         }
 
         public virtual void Close()
@@ -218,10 +231,17 @@ namespace DuckGame
             if (anchor == null)
             {
                 float to = _close ? layer.camera.height * 2f : _startPosition.y;
-                position.y = Lerp.FloatSmooth(position.y, to, 0.2f, 1.05f);
+                if (animating)
+                    position.y = Lerp.FloatSmooth(position.y, to, 0.2f, 1.05f);
                 bool flag = position.y != to;
-                if (animating != flag)
-                    animating = flag;
+                //stuff might look weird but i have to introduce a 1 frame delay cuz otherwise the open menu input can go through
+                //multiple menus and do bad stuff -NiK0
+                if (DGRSettings.ReducedMovement) 
+                {
+                    if (position.y == to) animating = false;
+                    position.y = to;
+                }
+                else if (animating != flag) animating = flag;
             }
             if (open && !animating)
                 UpdateParts();

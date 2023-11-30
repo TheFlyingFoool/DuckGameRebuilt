@@ -1,10 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.MTSpriteBatch
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
+﻿
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -371,7 +365,7 @@ namespace DuckGame
           float depth)
         {
             //CheckValid(texture);
-            DoDrawInternal(texture, new Vec4(destinationRectangle.x, destinationRectangle.y, destinationRectangle.width, destinationRectangle.height), sourceRectangle, color, rotation, new Vec2(origin.x * (destinationRectangle.width / (!sourceRectangle.HasValue || sourceRectangle.Value.width == 0.0 ? texture.width : sourceRectangle.Value.width)), (float)(origin.y * destinationRectangle.height / (!sourceRectangle.HasValue || sourceRectangle.Value.height == 0.0 ? texture.height : sourceRectangle.Value.height))), effect, depth, true, null);
+            DoDrawInternal(texture, new Vec4(destinationRectangle.x, destinationRectangle.y, destinationRectangle.width, destinationRectangle.height), sourceRectangle, color, rotation, new Vec2(origin.x * (destinationRectangle.width / (!sourceRectangle.HasValue || sourceRectangle.Value.width == 0f ? texture.width : sourceRectangle.Value.width)), (float)(origin.y * destinationRectangle.height / (!sourceRectangle.HasValue || sourceRectangle.Value.height == 0f ? texture.height : sourceRectangle.Value.height))), effect, depth, true, null);
         }
 
         public void DrawQuad(
@@ -391,23 +385,23 @@ namespace DuckGame
             MTSpriteBatchItem batchItem = _batcher.CreateBatchItemDepth(depth);
             batchItem.Depth = depth;
 
-            if (texture.Texbase != null && texture.Texbase.Name != null && Content.offests.TryGetValue(texture.Texbase.Name, out Microsoft.Xna.Framework.Rectangle offset))
+            if (!texture.skipSpriteAtlas && texture.Texbase != null && texture.Texbase.Name != null && Content.offests.TryGetValue(texture.Texbase.Name, out Microsoft.Xna.Framework.Rectangle offset))
             {
                 batchItem.usingspriteatlas = true;
                 batchItem.NormalTexture = texture;
-                batchItem.Texture = Content.Thick.Texbase;
+                batchItem.Texture = Content.SpriteAtlasTex2D.Texbase;
 
                 //float sizeoffsetx = (float)offset.Left / (float)Content.Thick.width;
                 //float sizeoffsety = (float)offset.Top / (float)Content.Thick.height;
-                t1.x = ((t1.x * texture.width) + offset.Left) / Content.Thick.height;
-                t2.x = ((t2.x * texture.width) + offset.Left) / Content.Thick.height;
-                t3.x = ((t3.x * texture.width) + offset.Left) / Content.Thick.height;
-                t4.x = ((t4.x * texture.width) + offset.Left) / Content.Thick.height;
+                t1.x = ((t1.x * texture.width) + offset.Left) / Content.SpriteAtlasTex2D.height;
+                t2.x = ((t2.x * texture.width) + offset.Left) / Content.SpriteAtlasTex2D.height;
+                t3.x = ((t3.x * texture.width) + offset.Left) / Content.SpriteAtlasTex2D.height;
+                t4.x = ((t4.x * texture.width) + offset.Left) / Content.SpriteAtlasTex2D.height;
 
-                t1.y = ((t1.y * texture.height) + offset.Top) / Content.Thick.height;
-                t2.y = ((t1.y * texture.height) + offset.Top) / Content.Thick.height;
-                t3.y = ((t1.y * texture.height) + offset.Top) / Content.Thick.height;
-                t4.y = ((t1.y * texture.height) + offset.Top) / Content.Thick.height;
+                t1.y = ((t1.y * texture.height) + offset.Top) / Content.SpriteAtlasTex2D.height;
+                t2.y = ((t1.y * texture.height) + offset.Top) / Content.SpriteAtlasTex2D.height;
+                t3.y = ((t1.y * texture.height) + offset.Top) / Content.SpriteAtlasTex2D.height;
+                t4.y = ((t1.y * texture.height) + offset.Top) / Content.SpriteAtlasTex2D.height;
                 //offset
                 //_tempRect.x += offset.Left;
                 //_tempRect.y += offset.Top;
@@ -463,19 +457,19 @@ namespace DuckGame
                 _tempRect.width = texture.width;
                 _tempRect.height = texture.height;
             }
-            if ((fx == null || fx.spsupport) && texture.Texbase != null && texture.Texbase.Name != null && Content.offests.TryGetValue(texture.Texbase.Name, out Microsoft.Xna.Framework.Rectangle offset))
+            if ((fx == null || fx.spsupport) && !texture.skipSpriteAtlas && texture.Texbase != null && texture.Texbase.Name != null && Content.offests.TryGetValue(texture.Texbase.Name, out Microsoft.Xna.Framework.Rectangle offset))
             {
                 batchItem.NormalTexture = texture;
                 batchItem.usingspriteatlas = true;
-                batchItem.Texture = Content.Thick.Texbase;
+                batchItem.Texture = Content.SpriteAtlasTex2D.Texbase;
                 batchItem.Material = fx;
                 //offset
                 _tempRect.x += offset.Left;
                 _tempRect.y += offset.Top;
-                _texCoordTL.x = _tempRect.x / Content.Thick.width + edgeBias;
-                _texCoordTL.y = _tempRect.y / Content.Thick.height + edgeBias;
-                _texCoordBR.x = (_tempRect.x + _tempRect.width) / Content.Thick.width - edgeBias;
-                _texCoordBR.y = (_tempRect.y + _tempRect.height) / Content.Thick.height - edgeBias;
+                _texCoordTL.x = _tempRect.x / Content.SpriteAtlasTex2D.width + edgeBias;
+                _texCoordTL.y = _tempRect.y / Content.SpriteAtlasTex2D.height + edgeBias;
+                _texCoordBR.x = (_tempRect.x + _tempRect.width) / Content.SpriteAtlasTex2D.width - edgeBias;
+                _texCoordBR.y = (_tempRect.y + _tempRect.height) / Content.SpriteAtlasTex2D.height - edgeBias;
                 if ((effect & SpriteEffects.FlipVertically) != SpriteEffects.None)
                 {
                     float y = _texCoordBR.y;
@@ -493,7 +487,7 @@ namespace DuckGame
                 {
                     batchItem.MetaData = new MTSpriteBatchItemMetaData
                     {
-                        texture = Content.Thick,
+                        texture = Content.SpriteAtlasTex2D,
                         rotation = rotation,
                         color = color,
                         tempRect = _tempRect,
@@ -502,7 +496,7 @@ namespace DuckGame
                     };
                 }
                 if (!Graphics.skipReplayRender && Recorder.currentRecording != null && Graphics.currentRenderTarget == null)
-                    Recorder.currentRecording.LogDraw(Content.Thick.textureIndex, new Vec2(batchItem.vertexTL.Position.X, batchItem.vertexTL.Position.Y), new Vec2(batchItem.vertexBR.Position.X, batchItem.vertexBR.Position.Y), rotation, color, (short)_tempRect.x, (short)_tempRect.y, (short)(_tempRect.width * ((effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1.0 : 1.0)), (short)(_tempRect.height * ((effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1.0 : 1.0)), depth);
+                    Recorder.currentRecording.LogDraw(Content.SpriteAtlasTex2D.textureIndex, new Vec2(batchItem.vertexTL.Position.X, batchItem.vertexTL.Position.Y), new Vec2(batchItem.vertexBR.Position.X, batchItem.vertexBR.Position.Y), rotation, color, (short)_tempRect.x, (short)_tempRect.y, (short)(_tempRect.width * ((effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1f : 1f)), (short)(_tempRect.height * ((effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1f : 1f)), depth);
                 if (!autoFlush)
                     return;
                 FlushIfNeeded();
@@ -579,7 +573,7 @@ namespace DuckGame
                 };
             }
             if (!Graphics.skipReplayRender && Recorder.currentRecording != null && Graphics.currentRenderTarget == null)
-                Recorder.currentRecording.LogDraw(texture.textureIndex, new Vec2(batchItem.vertexTL.Position.X, batchItem.vertexTL.Position.Y), new Vec2(batchItem.vertexBR.Position.X, batchItem.vertexBR.Position.Y), rotation, color, (short)_tempRect.x, (short)_tempRect.y, (short)(_tempRect.width * ((effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1.0 : 1.0)), (short)(_tempRect.height * ((effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1.0 : 1.0)), depth);
+                Recorder.currentRecording.LogDraw(texture.textureIndex, new Vec2(batchItem.vertexTL.Position.X, batchItem.vertexTL.Position.Y), new Vec2(batchItem.vertexBR.Position.X, batchItem.vertexBR.Position.Y), rotation, color, (short)_tempRect.x, (short)_tempRect.y, (short)(_tempRect.width * ((effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1f : 1f)), (short)(_tempRect.height * ((effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1f : 1f)), depth);
             if (!autoFlush)
                 return;
             FlushIfNeeded();
@@ -610,7 +604,7 @@ namespace DuckGame
             //}
             //  if (Recorder.currentRecording == null)
             //      return;
-            //  Recorder.currentRecording.LogDraw(item.MetaData.texture.textureIndex, new Vec2(item.vertexTL.Position.X, item.vertexTL.Position.Y), new Vec2(item.vertexBR.Position.X, item.vertexBR.Position.Y), item.MetaData.rotation, item.MetaData.color, (short)item.MetaData.tempRect.x, (short)item.MetaData.tempRect.y, (short)(item.MetaData.tempRect.width * ((item.MetaData.effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1.0 : 1.0)), (short)(item.MetaData.tempRect.height * ((item.MetaData.effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1.0 : 1.0)), item.MetaData.depth);
+            //  Recorder.currentRecording.LogDraw(item.MetaData.texture.textureIndex, new Vec2(item.vertexTL.Position.X, item.vertexTL.Position.Y), new Vec2(item.vertexBR.Position.X, item.vertexBR.Position.Y), item.MetaData.rotation, item.MetaData.color, (short)item.MetaData.tempRect.x, (short)item.MetaData.tempRect.y, (short)(item.MetaData.tempRect.width * ((item.MetaData.effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1f : 1f)), (short)(item.MetaData.tempRect.height * ((item.MetaData.effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1f : 1f)), item.MetaData.depth);
         }
 
         public void DrawRecorderItem(ref RecorderFrameItem frame)

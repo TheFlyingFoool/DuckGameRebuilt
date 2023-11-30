@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.WhiteRectangle
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class WhiteRectangle : Thing
     {
@@ -53,7 +46,7 @@ namespace DuckGame
                 edge.flipH = true;
                 Graphics.Draw(edge, x + size.x, y);
                 edgeVert.flipH = true;
-                Graphics.Draw(edgeVert, (float)(x + size.x + 16.0), y + size.y);
+                Graphics.Draw(edgeVert, (float)(x + size.x + 16), y + size.y);
                 edgeVert.flipH = false;
                 Graphics.Draw(edgeVert, x - 16f, y + size.y);
                 base.Draw();

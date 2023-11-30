@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Trophy
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -71,30 +64,30 @@ namespace DuckGame
                 angleDegrees = _throwSpin;
                 bool flag1 = false;
                 bool flag2 = false;
-                if ((Math.Abs(hSpeed) + Math.Abs(vSpeed) > 2.0 || !grounded) && gravMultiplier > 0.0 && !flag2 && !_grounded)
+                if ((Math.Abs(hSpeed) + Math.Abs(vSpeed) > 2 || !grounded) && gravMultiplier > 0 && !flag2 && !_grounded)
                 {
                     if (offDir > 0)
-                        _throwSpin += (float)((Math.Abs(hSpeed * 2f) + Math.Abs(vSpeed)) * 1.0 + 5.0);
+                        _throwSpin += (float)((Math.Abs(hSpeed * 2f) + Math.Abs(vSpeed)) * 1f + 5f);
                     else
-                        _throwSpin -= (float)((Math.Abs(hSpeed * 2f) + Math.Abs(vSpeed)) * 1.0 + 5.0);
+                        _throwSpin -= (float)((Math.Abs(hSpeed * 2f) + Math.Abs(vSpeed)) * 1f + 5f);
                     flag1 = true;
                 }
                 if (!flag1 | flag2)
                 {
                     _throwSpin %= 360f;
-                    if (_throwSpin < 0.0)
+                    if (_throwSpin < 0)
                         _throwSpin += 360f;
                     if (flag2)
                         _throwSpin = Math.Abs(_throwSpin - 90f) >= Math.Abs(_throwSpin + 90f) ? Lerp.Float(-90f, 0f, 16f) : Lerp.Float(_throwSpin, 90f, 16f);
-                    else if (_throwSpin > 90.0 && _throwSpin < 270.0)
+                    else if (_throwSpin > 90 && _throwSpin < 270)
                     {
                         _throwSpin = Lerp.Float(_throwSpin, 180f, 14f);
                     }
                     else
                     {
-                        if (_throwSpin > 180.0)
+                        if (_throwSpin > 180)
                             _throwSpin -= 360f;
-                        else if (_throwSpin < -180.0)
+                        else if (_throwSpin < -180)
                             _throwSpin += 360f;
                         _throwSpin = Lerp.Float(_throwSpin, 0f, 14f);
                     }

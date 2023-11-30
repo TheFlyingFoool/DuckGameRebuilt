@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Net
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -46,7 +39,7 @@ namespace DuckGame
         }
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (Network.isActive && this.connection != DuckNetwork.localConnection)
+            if (Network.isActive && connection != DuckNetwork.localConnection)
             {
                 return;
             }
@@ -76,7 +69,7 @@ namespace DuckGame
                 if (p != null && p.doll.captureDuck != null && !p.doll.captureDuck.dead)
                 {
                     duck = p.doll.captureDuck;
-                    base.Fondle(p.doll);
+                    Fondle(p.doll);
                     p.doll.Unragdoll();
                     duck.Netted(this);
                     if (duck._trapped != null)

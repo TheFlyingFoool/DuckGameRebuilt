@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.SteamUploadDialog
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame
@@ -222,7 +215,7 @@ namespace DuckGame
             else if (!opened || _opening || _confirm.opened || _upload.opened || _deathmatchTest.opened || _arcadeTest.opened || _testSuccess.opened)
             {
                 if (opened)
-                    Keyboard.keyString = "";
+                    Keyboard.KeyString = "";
                 if (opened)
                     Editor.lockInput = this;
                 _opening = false;
@@ -239,7 +232,7 @@ namespace DuckGame
             }
             else if (_testing)
             {
-                Keyboard.keyString = "";
+                Keyboard.KeyString = "";
                 if (DeathmatchTestDialogue.success)
                 {
                     _testSuccess.Open("Test success! The level can now be published as a deathmatch level!");
@@ -328,10 +321,10 @@ namespace DuckGame
             {
                 if (_tagMenu != null)
                     return;
-                Vec2 vec2 = new Vec2((float)(layer.width / 2.0 - width / 2.0) + hOffset, (float)(layer.height / 2.0 - height / 2.0 - 15.0)) + new Vec2(7f, 276f);
+                Vec2 vec2 = new Vec2((float)(layer.width / 2f - width / 2f) + hOffset, (float)(layer.height / 2f - height / 2f - 15f)) + new Vec2(7f, 276f);
                 foreach (KeyValuePair<string, Vec2> tagPosition in tagPositions)
                 {
-                    if (Mouse.x > tagPosition.Value.x && Mouse.x < tagPosition.Value.x + 8.0 && Mouse.y > tagPosition.Value.y && Mouse.y < tagPosition.Value.y + 8.0 && Mouse.left == InputState.Pressed)
+                    if (Mouse.x > tagPosition.Value.x && Mouse.x < tagPosition.Value.x + 8f && Mouse.y > tagPosition.Value.y && Mouse.y < tagPosition.Value.y + 8f && Mouse.left == InputState.Pressed)
                     {
                         _publishItem.RemoveTag(tagPosition.Key);
                         return;
@@ -340,7 +333,7 @@ namespace DuckGame
                 if (tagPositions.Count != possibleTags.Count)
                 {
                     bool flag = false;
-                    if (Mouse.x > _plusPosition.x && Mouse.x < _plusPosition.x + 8.0 && Mouse.y > _plusPosition.y && Mouse.y < _plusPosition.y + 8.0)
+                    if (Mouse.x > _plusPosition.x && Mouse.x < _plusPosition.x + 8f && Mouse.y > _plusPosition.y && Mouse.y < _plusPosition.y + 8f)
                         flag = true;
                     if (flag && Mouse.left == InputState.Pressed)
                     {
@@ -405,8 +398,8 @@ namespace DuckGame
             base.Draw();
             float num1 = 328f;
             float num2 = _fdHeight + 22f;
-            Vec2 p1 = new Vec2((float)(layer.width / 2.0 - num1 / 2.0) + hOffset, (float)(layer.height / 2.0 - num2 / 2.0 - 15.0));
-            Vec2 p2 = new Vec2((float)(layer.width / 2.0 + num1 / 2.0) + hOffset, (float)(layer.height / 2.0 + num2 / 2.0 - 12.0));
+            Vec2 p1 = new Vec2((float)(layer.width / 2f - num1 / 2f) + hOffset, (float)(layer.height / 2f - num2 / 2f - 15f));
+            Vec2 p2 = new Vec2((float)(layer.width / 2f + num1 / 2f) + hOffset, (float)(layer.height / 2f + num2 / 2f - 12f));
             Graphics.DrawRect(p1, p2, new Color(70, 70, 70), depth, false);
             Graphics.DrawRect(p1, p2, new Color(30, 30, 30), depth - 8);
             Graphics.DrawRect(p1 + new Vec2(4f, 23f), p2 + new Vec2(-4f, -160f), new Color(10, 10, 10), depth - 4);
@@ -450,7 +443,7 @@ namespace DuckGame
                     Graphics.DrawString("x", position, Color.Red, depth + 14, scale: 0.5f);
                 }
                 _workshopTag.frame = 1;
-                Graphics.Draw(_workshopTag, (float)(vec2.x + num6 + 4.0) + stringWidth, vec2.y);
+                Graphics.Draw(_workshopTag, (float)(vec2.x + num6 + 4f) + stringWidth, vec2.y);
                 vec2.x += stringWidth + 11f + num6;
                 ++num3;
             }
@@ -473,7 +466,7 @@ namespace DuckGame
             {
                 _previewTarget.depth = depth + 10;
                 _previewTarget.scale = new Vec2(0.5f, 0.5f);
-                Graphics.Draw(_previewTarget, (float)(p1.x + (p2.x - p1.x) / 2.0 - _previewTarget.width * _previewTarget.scale.x / 2.0), (float)(p1.y + (p2.y - p1.y) / 2.0 - _previewTarget.height * _previewTarget.scale.y / 2.0 - 20.0));
+                Graphics.Draw(_previewTarget, (float)(p1.x + (p2.x - p1.x) / 2f - _previewTarget.width * _previewTarget.scale.x / 2f), (float)(p1.y + (p2.y - p1.y) / 2f - _previewTarget.height * _previewTarget.scale.y / 2f - 20f));
             }
             else
             {

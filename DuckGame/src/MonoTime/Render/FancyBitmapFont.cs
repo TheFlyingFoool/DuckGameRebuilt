@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.FancyBitmapFont
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -474,13 +467,13 @@ namespace DuckGame
             if (text.StartsWith("_!"))
                 return null;
             ++_letterIndex;
-            string str = "";
-            bool flag = false;
+            string trigger = "";
+            bool brokeWithAt = false;
             for (; _letterIndex != text.Length; ++_letterIndex)
             {
                 if (text[_letterIndex] == '@' || chatFont && text[_letterIndex] == ':')
                 {
-                    flag = true;
+                    brokeWithAt = true;
                     break;
                 }
                 if (text[_letterIndex] == ' ' || text[_letterIndex] == '\n')
@@ -488,22 +481,31 @@ namespace DuckGame
                     --_letterIndex;
                     break;
                 }
-                str += text[_letterIndex].ToString();
+                trigger += text[_letterIndex].ToString();
             }
-            if (chatFont && !flag)
+            if (chatFont && !brokeWithAt)
                 return null;
             Sprite sprite = null;
             if (input != null)
-                sprite = input.GetTriggerImage(str);
+                sprite = input.GetTriggerImage(trigger);
             if (sprite == null)
-                sprite = Input.GetTriggerSprite(str);
+                sprite = Input.GetTriggerSprite(trigger);
             if (sprite == null && Options.Data.mojiFilter != 0)
             {
-                sprite = DuckFile.GetMoji(str, _currentConnection);
-                if (sprite == null && str.Contains("!"))
+                sprite = DuckFile.GetMoji(trigger, _currentConnection);
+                if (sprite == null && trigger.Contains("!"))
                     return Input.GetTriggerSprite("blankface");
             }
-            return sprite;
+
+            Sprite spriteClone = null;
+            if (sprite != null)
+            {
+                spriteClone = sprite.Clone();
+                spriteClone.xscale = sprite.xscale * xscale;
+                spriteClone.yscale = sprite.yscale * yscale;
+            }
+
+            return spriteClone;
         }
 
         public Color ParseColor(string text)
@@ -512,7 +514,14 @@ namespace DuckGame
             string color = "";
             for (; _letterIndex != text.Length && text[_letterIndex] != ' ' && text[_letterIndex] != '|'; ++_letterIndex)
                 color += text[_letterIndex].ToString();
-            return color == "PREV" ? new Color(_previousColor.r, _previousColor.g, _previousColor.b) : Colors.ParseColor(color);
+            if (color == "PREV")
+            {
+                return new Color(_previousColor.r, _previousColor.g, _previousColor.b);
+            }
+            else
+            {
+                return Colors.ParseColor(color);
+            }
         }
 
         public InputProfile GetInputProfile(InputProfile input)
@@ -609,16 +618,16 @@ namespace DuckGame
                             sprite2.scale *= (this.scale.x / 2f);
                             if (this is RasterFont)
                             {
-                                float num2 = (float)((this as RasterFont).data.fontSize * RasterFont.fontScaleFactor / 10.0);
+                                float num2 = (float)((this as RasterFont).data.fontSize * RasterFont.fontScaleFactor / 10);
                                 Sprite sprite3 = sprite1;
                                 sprite3.scale *= num2;
-                                sprite1.scale = new Vec2((float)Math.Round(sprite1.scale.x * 2.0) / 2f);
+                                sprite1.scale = new Vec2((float)Math.Round(sprite1.scale.x * 2) / 2f);
                             }
-                            num1 += (float)(sprite1.width * sprite1.scale.x + 1.0);
+                            num1 += (float)(sprite1.width * sprite1.scale.x + 1);
                             sprite1.scale = scale;
                         }
                         else
-                            num1 += thinButtons ? 6f : (float)(sprite1.width * sprite1.scale.x + 1.0);
+                            num1 += thinButtons ? 6f : (float)(sprite1.width * sprite1.scale.x + 1);
                         flag = true;
                     }
                     else
@@ -669,6 +678,92 @@ namespace DuckGame
             if (num1 > width1)
                 width1 = num1;
             return width1;
+        }
+
+        public List<string> ParseToList(string text)
+        {
+            text = LangHandler.Convert(text);
+            List<string> result = new List<string>();
+            for (_letterIndex = 0; _letterIndex < text.Length; ++_letterIndex)
+            {
+                bool processedSpecialCharacter = false;
+                if (text[_letterIndex] == '@' || chatFont && text[_letterIndex] == ':')
+                {
+                    int letterIndex = _letterIndex;
+                    Sprite sprite = ParseSprite(text, null);
+                    if (sprite != null)
+                    {
+                        result.Add(text.Substring(letterIndex, _letterIndex - letterIndex + (_letterIndex == text.Length ? 0 : 1)));
+                        processedSpecialCharacter = true;
+                    }
+                    else
+                        _letterIndex = letterIndex;
+                }
+                else if (text[_letterIndex] == '|')
+                {
+                    int letterIndex = _letterIndex;
+                    if (ParseColor(text) != Colors.Transparent)
+                    {
+                        result.Add(text.Substring(letterIndex, _letterIndex - letterIndex + (_letterIndex == text.Length ? 0 : 1)));
+                        processedSpecialCharacter = true;
+                    }
+                    else
+                        _letterIndex = letterIndex;
+                }
+                if (!processedSpecialCharacter)
+                {
+                    result.Add(text[_letterIndex].ToString());
+                }
+            }
+
+            return result;
+        }
+
+        public string ComposeToText(List<string> list)
+        {
+            return String.Join("", list);
+        }
+
+        protected int GetCompLength(string comp)
+        {
+            if (comp.Length == 1)
+                return 1;
+            if (comp[0] == '@')
+                return 2;
+            return 0;
+        }
+
+        public int GetLength(string text)
+        {
+            List<string> li = ParseToList(text);
+            int length = 0;
+            foreach (string comp in li)
+                length += GetCompLength(comp);
+            return length;
+        }
+
+        public string Crop(string text, int from, int to)
+        {
+            if (to < from || to > text.Length - 1)
+                return "";
+            List<string> li = ParseToList(text);
+            List<string> cropped = new List<string>();
+            int pos = 0;
+            string firstColorTag = null;
+            foreach (string comp in li)
+            {
+                if (pos >= to)
+                    break;
+                if (pos >= from)
+                    cropped.Add(comp);
+                else if (comp[0] == '|')
+                    firstColorTag = comp;
+                if (comp[0] != '|')
+                    pos += GetCompLength(comp);
+            }
+            if (firstColorTag != null)
+                cropped.Insert(0, firstColorTag);
+            return ComposeToText(cropped);
         }
 
         public int GetCharacterIndex(
@@ -1046,24 +1141,20 @@ namespace DuckGame
                 }
                 else if (text[_letterIndex] == '|')
                 {
-                    int letterIndex = _letterIndex;
-                    if (color2 != Colors.Transparent)
+                    int iPos2 = _letterIndex;
+                    Color col = ParseColor(text);
+                    if (col != Colors.Transparent)
                     {
-                        _previousColor = color2;
-                    }
-                    color2 = ParseColor(text);
-                    if (color2 != Colors.Transparent)
-                    {
+                        _previousColor = c;
                         if (!_drawingOutline)
                         {
-                            float w = c.ToVector4().w;
-                            c = color2;
-                            c *= w;
+                            float al2 = c.ToVector4().w;
+                            c = col;
+                            c *= al2;
                         }
                         flag1 = true;
                     }
-                    else
-                        _letterIndex = letterIndex;
+                    else _letterIndex = iPos2;
                 }
                 if (!flag1)
                 {
@@ -1177,7 +1268,6 @@ namespace DuckGame
                 }
             }
         }
-
         public RichTextBox MakeRTF(string text)
         {
             RichTextBox richTextBox = new RichTextBox();

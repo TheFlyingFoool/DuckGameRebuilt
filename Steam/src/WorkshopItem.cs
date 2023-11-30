@@ -29,6 +29,8 @@ public class WorkshopItem : IDisposable {
         }
 
     }
+    public List<object> subItems;
+    public List<WorkshopItem> dependencies;
 
     private PublishedFileId_t _id;
     public ulong id => _id.m_PublishedFileId;

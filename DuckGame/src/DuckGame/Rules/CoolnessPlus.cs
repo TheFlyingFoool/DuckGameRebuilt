@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.CoolnessPlus
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class CoolnessPlus : Thing
     {
@@ -45,7 +38,7 @@ namespace DuckGame
         public override void Update()
         {
             _wait -= 0.01f;
-            if (_wait >= 0.0)
+            if (_wait >= 0)
                 return;
             Level.Remove(this);
         }

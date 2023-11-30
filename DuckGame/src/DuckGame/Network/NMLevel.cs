@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.NMLevel
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -201,7 +194,7 @@ namespace DuckGame
                     if (_level != null && _level is XMLLevel)
                         (_level as XMLLevel).seed = seed;
                 }
-                if (Network.InLobby() || Level.current is RockScoreboard && !(_level is RockScoreboard))
+                if (Network.inLobby || Level.current is RockScoreboard && !(_level is RockScoreboard))
                     Music.Stop();
                 Level.current = _level;
                 _level.transferCompleteCalled = false;

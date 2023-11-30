@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.OptionsData
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -140,7 +133,7 @@ namespace DuckGame
                     if (MonoMain.started)
                     {
                         SFX.StopSaying();
-                        SFX.Say("Volume " + ((int)(value * 100.0)).ToString());
+                        SFX.Say("Volume " + ((int)(value * 100)).ToString());
                     }
                 }
                 _textToSpeechVolume = value;
@@ -160,7 +153,7 @@ namespace DuckGame
                     if (MonoMain.started)
                     {
                         SFX.StopSaying();
-                        SFX.Say("Speed " + ((int)Math.Round((value - 0.5) * 20.0)).ToString());
+                        SFX.Say("Speed " + ((int)Math.Round((value - 0.5f) * 20)).ToString());
                     }
                 }
                 _textToSpeechRate = value;

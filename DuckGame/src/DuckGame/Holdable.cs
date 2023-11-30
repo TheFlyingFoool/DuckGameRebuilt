@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Holdable
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -102,9 +95,9 @@ namespace DuckGame
             set
             {
                 double num = Math.Abs(value.x);
-                if (value.x <= -9000.0)
+                if (value.x <= -9000f)
                     return;
-                if (hoverSpawner == null || _lastReceivedPosition != value || (_lastReceivedPosition - position).length > 25.0)
+                if (hoverSpawner == null || _lastReceivedPosition != value || (_lastReceivedPosition - position).length > 25f)
                     position = value;
                 _lastReceivedPosition = value;
             }
@@ -158,7 +151,8 @@ namespace DuckGame
             return vec2;
         }
 
-        public override bool action => (_owner == null || _owner.owner == this || _owner is Duck && !(_owner as Duck).Held(this, true) ? 0 : (_owner.action ? 1 : 0)) != 0 || triggerAction;
+        public bool forceAction;//this is for recorderator -NiK0
+        public override bool action => forceAction || ((_owner == null || _owner.owner == this || _owner is Duck && !(_owner as Duck).Held(this, true) ? 0 : (_owner.action ? 1 : 0)) != 0 || triggerAction);
 
         public Duck equippedDuck => _equippedDuck;
 
@@ -221,14 +215,14 @@ namespace DuckGame
             if (offDir > 0)
             {
                 Block block = Level.CheckLine<Block>(new Vec2(owner.x, y), new Vec2(right, y));
-                if (block is Door && ((block as Door)._jam == 1.0 || (block as Door)._jam == -1.0))
+                if (block is Door && ((block as Door)._jam == 1f || (block as Door)._jam == -1f))
                     block = null;
                 owner.holdObstructed = block != null;
             }
             else
             {
                 Block block = Level.CheckLine<Block>(new Vec2(left, y), new Vec2(owner.x, y));
-                if (block is Door && ((block as Door)._jam == 1.0 || (block as Door)._jam == -1.0))
+                if (block is Door && ((block as Door)._jam == 1f || (block as Door)._jam == -1f))
                     block = null;
                 owner.holdObstructed = block != null;
             }
@@ -329,17 +323,20 @@ namespace DuckGame
 
         public virtual void UpdateMaterial()
         {
-            if (material == null && burnt >= charThreshold)
+            if (material == null)
             {
-                material = new MaterialCharred();
-                SFX.Play("flameExplode");
-                for (int index = 0; index < 3; ++index)
-                    Level.Add(SmallSmoke.New(x + Rando.Float(-2f, 2f), y + Rando.Float(-2f, 2f)));
+                if (burnt >= charThreshold)
+                {
+                    material = new MaterialCharred();
+                    SFX.Play("flameExplode");
+                    for (int index = 0; index < 3; ++index)
+                        Level.Add(SmallSmoke.New(x + Rando.Float(-2f, 2f), y + Rando.Float(-2f, 2f)));
+                }
+                else if (heat > 0.1f && physicsMaterial == PhysicsMaterial.Metal)
+                    material = new MaterialRedHot(this);
+                else if (heat < -0.1f)
+                    material = new MaterialFrozen(this);
             }
-            else if (material == null && heat > 0.1f && physicsMaterial == PhysicsMaterial.Metal)
-                material = new MaterialRedHot(this);
-            else if (material == null && heat < -0.1f)
-                material = new MaterialFrozen(this);
             if (material is MaterialRedHot)
             {
                 if (heat < 0.1f)
@@ -347,10 +344,8 @@ namespace DuckGame
                 else
                     (material as MaterialRedHot).intensity = Math.Min(heat - 0.1f, 1f);
             }
-            else
+            else if (material is MaterialFrozen)
             {
-                if (!(material is MaterialFrozen))
-                    return;
                 if (heat > -0.1f)
                     material = null;
                 else
@@ -358,6 +353,7 @@ namespace DuckGame
             }
         }
 
+        
         public override void Update()
         {
             UpdateMaterial();

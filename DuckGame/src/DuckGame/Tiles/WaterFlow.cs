@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.WaterFlow
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame
@@ -14,6 +7,17 @@ namespace DuckGame
     public class WaterFlow : Thing
     {
         protected HashSet<WaterFlow> _extraWater = new HashSet<WaterFlow>();
+        public HashSet<WaterFlow> extraWater
+        {
+            get
+            {
+                return _extraWater;
+            }
+            set
+            {
+                _extraWater = value;
+            }
+        }
         public static int waterFrame;
         public static int waterFrameInc;
         public static bool updatedWaterFrame;
@@ -103,9 +107,9 @@ namespace DuckGame
             IEnumerable<PhysicsObject> source = Level.CheckRectAll<PhysicsObject>(topLeft, bottomRight);
             foreach (PhysicsObject physicsObject in source)
             {
-                if (flipHorizontal && physicsObject.hSpeed > -2.0)
+                if (flipHorizontal && physicsObject.hSpeed > -2)
                     physicsObject.hSpeed -= 0.3f;
-                else if (!flipHorizontal && physicsObject.hSpeed < 2.0)
+                else if (!flipHorizontal && physicsObject.hSpeed < 2)
                     physicsObject.hSpeed += 0.3f;
                 physicsObject.sleeping = false;
                 physicsObject.frictionMult = 0.3f;
@@ -128,9 +132,9 @@ namespace DuckGame
 
         public override void Draw()
         {
-            (graphic as SpriteMap).frame = (int)(Graphics.frame / 3.0 % 4.0);
+            (graphic as SpriteMap).frame = (int)(Graphics.frame / 3 % 4);
             foreach (Thing thing in _extraWater)
-                (thing.graphic as SpriteMap).frame = (int)(Graphics.frame / 3.0 % 4.0);
+                (thing.graphic as SpriteMap).frame = (int)(Graphics.frame / 3 % 4);
             graphic.flipH = offDir <= 0;
             base.Draw();
             if (!flipHorizontal)

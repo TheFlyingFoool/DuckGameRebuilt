@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.UIBox
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame
@@ -115,24 +108,25 @@ namespace DuckGame
         {
             if (_vertical)
             {
-                float num1 = 0f;
-                float num2 = 0f;
+                float wide = 0f;
+                float high = 0f;
                 foreach (UIComponent component in _components)
                 {
                     if (component.condition == null || component.condition())
                     {
-                        num2 += component.collisionSize.y + _seperation;
-                        if (component.collisionSize.x > num1)
-                            num1 = component.collisionSize.x;
+                        if (!component.ignoreSeperation)
+                            high += component.collisionSize.y + _seperation;
+                        if (component.collisionSize.x > wide)
+                            wide = component.collisionSize.x;
                     }
                 }
-                float num3 = num1 + borderSize.x * 2f;
-                float num4 = num2 - _seperation + borderSize.y * 2f;
-                if (_autoSizeHor && (fit & UIFit.Horizontal) == UIFit.None && num3 > _collisionSize.x)
-                    _collisionSize.x = num3;
-                if (_autoSizeVert && (fit & UIFit.Vertical) == UIFit.None && num4 > _collisionSize.y)
-                    _collisionSize.y = num4;
-                float num5 = (float)(-num4 / 2.0) + borderSize.y;
+                float wide2 = wide + borderSize.x * 2f;
+                float high2 = high - _seperation + borderSize.y * 2f;
+                if (_autoSizeHor && (fit & UIFit.Horizontal) == UIFit.None && wide2 > _collisionSize.x)
+                    _collisionSize.x = wide2;
+                if (_autoSizeVert && (fit & UIFit.Vertical) == UIFit.None && high2 > _collisionSize.y)
+                    _collisionSize.y = high2;
+                float yDraw = (float)(-high2 / 2.0) + borderSize.y;
                 foreach (UIComponent component in _components)
                 {
                     if (component.condition == null || component.condition())
@@ -142,38 +136,41 @@ namespace DuckGame
                             component.anchor.offset.x = (float)(-collisionSize.x / 2.0 + borderSize.x + component.collisionSize.x / 2.0);
                         else if ((component.align & UIAlign.Right) > UIAlign.Center)
                             component.anchor.offset.x = (float)(collisionSize.x / 2.0 - borderSize.x - component.collisionSize.x / 2.0);
-                        component.anchor.offset.y = (float)(num5 * scale.y + component.height / 2.0);
-                        num5 += component.collisionSize.y + _seperation;
+                        component.anchor.offset.y = (float)(yDraw * scale.y + component.height / 2.0);
+                        if (!component.ignoreSeperation)
+                            yDraw += component.collisionSize.y + _seperation;
                     }
                 }
             }
             else
             {
-                float num6 = 0f;
-                float num7 = 0f;
+                float wide = 0f;
+                float high = 0f;
                 foreach (UIComponent component in _components)
                 {
                     if (component.condition == null || component.condition())
                     {
-                        num6 += component.collisionSize.x + _seperation;
-                        if (component.collisionSize.y > num7)
-                            num7 = component.collisionSize.y;
+                        if (!component.ignoreSeperation)
+                            wide += component.collisionSize.x + _seperation;
+                        if (component.collisionSize.y > high)
+                            high = component.collisionSize.y;
                     }
                 }
-                float num8 = num7 + borderSize.y * 2f;
-                float num9 = num6 - _seperation + borderSize.x * 2f;
-                if (_autoSizeHor && (fit & UIFit.Horizontal) == UIFit.None && num9 > _collisionSize.x)
-                    _collisionSize.x = num9;
-                if (_autoSizeVert && (fit & UIFit.Vertical) == UIFit.None && num8 > _collisionSize.y)
-                    _collisionSize.y = num8;
-                float num10 = (float)(-num9 / 2.0) + borderSize.x;
+                float wide2 = high + borderSize.y * 2f;
+                float high2 = wide - _seperation + borderSize.x * 2f;
+                if (_autoSizeHor && (fit & UIFit.Horizontal) == UIFit.None && high2 > _collisionSize.x)
+                    _collisionSize.x = high2;
+                if (_autoSizeVert && (fit & UIFit.Vertical) == UIFit.None && wide2 > _collisionSize.y)
+                    _collisionSize.y = wide2;
+                float xDraw = (float)(-high2 / 2.0) + borderSize.x;
                 foreach (UIComponent component in _components)
                 {
                     if (component.condition == null || component.condition())
                     {
-                        component.anchor.offset.x = (float)(num10 * scale.x + component.width / 2.0);
+                        component.anchor.offset.x = (float)(xDraw * scale.x + component.width / 2.0);
                         component.anchor.offset.y = 0f;
-                        num10 += component.collisionSize.x + _seperation;
+                        if (!component.ignoreSeperation)
+                            xDraw += component.collisionSize.x + _seperation;
                     }
                 }
             }
@@ -195,6 +192,7 @@ namespace DuckGame
                     _selection = _currentMenuItemSelection.Count - 1;
             }
             while (_currentMenuItemSelection[_selection].mode != MenuItemMode.Normal && selection != _selection);
+            SFX.DontSave = 1;
             SFX.Play("textLetter", 0.7f);
         }
 
@@ -208,20 +206,21 @@ namespace DuckGame
                     _selection = 0;
             }
             while (_currentMenuItemSelection[_selection].mode != MenuItemMode.Normal && selection != _selection);
+            SFX.DontSave = 1;
             SFX.Play("textLetter", 0.7f);
         }
-        public static Keys[] keysOfInterest =
+        public static Keys[] DubberKeys =
         {
-                            Keys.D1,
-                            Keys.D2,
-                            Keys.D3,
-                            Keys.D4,
-                            Keys.D5,
-                            Keys.D6,
-                            Keys.D7,
-                            Keys.D8,
-                            Keys.D9,
-                            Keys.D0
+            Keys.D1,
+            Keys.D2,
+            Keys.D3,
+            Keys.D4,
+            Keys.D5,
+            Keys.D6,
+            Keys.D7,
+            Keys.D8,
+            Keys.D9,
+            Keys.D0
         };
         public override void Update()
         {
@@ -307,19 +306,30 @@ namespace DuckGame
                 {
                     if (DGRSettings.dubberspeed && _currentMenuItemSelection != null)
                     {
+                        Main.SpecialCode = "DubberSpeed Logic I";
                         int c = _currentMenuItemSelection.Count;
                         int dubberOffset = -1;
                         if (Keyboard.Down(Keys.LeftShift)) dubberOffset = 0;
-                        for (int i = 0; i < keysOfInterest.Length; i++)
+                        Main.SpecialCode = "DubberSpeed Logic II";
+                        for (int i = 0; i < DubberKeys.Length; i++)
                         {
-                            if (Keyboard.Pressed(keysOfInterest[i]) && i < c)
+                            Main.SpecialCode = "DubberSpeed Logic III";
+                            if (Keyboard.Pressed(DubberKeys[i]) && i < c)
                             {
                                 //optimal -NiK0
+                                Main.SpecialCode = "DubberSpeed Logic IV";
                                 if (dubberOffset == -1) dubberOffset = _currentMenuItemSelection.FindAll(ui => ui is UIConnectionInfo).Count;
+                                SFX.DontSave = 1;
                                 SFX.Play("rockHitGround");
-                                ((UIMenuItem)_currentMenuItemSelection[i + dubberOffset]).Activate(Triggers.Select);
+                                Main.SpecialCode = "DubberSpeed Logic V";
+                                if (i + dubberOffset < c)
+                                {
+                                _selection = i + dubberOffset;
+                                    ((UIMenuItem)_currentMenuItemSelection[i + dubberOffset]).Activate(Triggers.Select);
+                                }
                             }
                         }
+                        Main.SpecialCode = "DubberSpeed Logic VI";
                     }
 
                     _currentMenuItemSelection = _components.Where(val =>
@@ -355,6 +365,7 @@ namespace DuckGame
                                 if (!_animating && Input.Pressed(Triggers.Select))
                                 {
                                     uiMenuItem.Activate(Triggers.Select);
+                                    SFX.DontSave = 1;
                                     SFX.Play("rockHitGround", 0.7f);
                                 }
                                 else if (!_animating && Input.Pressed(Triggers.Menu1))
@@ -381,34 +392,63 @@ namespace DuckGame
         {
             if (_borderVisible)
             {
+                UILerp.UpdateLerpState(new Interp.InterpState(position, angle), MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
                 _sections.scale = scale;
                 _sections.alpha = alpha;
                 _sections.depth = depth;
                 _sections.frame = 0;
-                Graphics.Draw(_sections, -halfWidth + x, -halfHeight + y);
+                Graphics.Draw(_sections, -halfWidth + UILerp.x, -halfHeight + UILerp.y);
                 _sections.frame = 2;
-                Graphics.Draw(_sections, (float)(halfWidth + x - _sections.w * scale.x), -halfHeight + y);
+                Graphics.Draw(_sections, (float)(halfWidth + UILerp.x - _sections.w * scale.x), -halfHeight + UILerp.y);
                 _sections.frame = 1;
                 _sections.xscale = (_collisionSize.x - _sections.w * 2) / _sections.w * xscale;
-                Graphics.Draw(_sections, (float)(-halfWidth + x + _sections.w * scale.x), -halfHeight + y);
+                Graphics.Draw(_sections, (float)(-halfWidth + UILerp.x + _sections.w * scale.x), -halfHeight + UILerp.y);
                 _sections.xscale = xscale;
                 _sections.frame = 3;
                 _sections.yscale = (_collisionSize.y - _sections.h * 2) / _sections.h * yscale;
-                Graphics.Draw(_sections, -halfWidth + x, (float)(-halfHeight + y + _sections.h * scale.y));
+                Graphics.Draw(_sections, -halfWidth + UILerp.x, (float)(-halfHeight + UILerp.y + _sections.h * scale.y));
                 _sections.frame = 5;
-                Graphics.Draw(_sections, (float)(halfWidth + x - _sections.w * scale.x), (float)(-halfHeight + y + _sections.h * scale.y));
+                Graphics.Draw(_sections, (float)(halfWidth + UILerp.x - _sections.w * scale.x), (float)(-halfHeight + UILerp.y + _sections.h * scale.y));
                 _sections.frame = 4;
                 _sections.xscale = (_collisionSize.x - _sections.w * 2) / _sections.w * xscale;
-                Graphics.Draw(_sections, (float)(-halfWidth + x + _sections.w * scale.x), (float)(-halfHeight + y + _sections.h * scale.y));
+                Graphics.Draw(_sections, (float)(-halfWidth + UILerp.x + _sections.w * scale.x), (float)(-halfHeight + UILerp.y + _sections.h * scale.y));
                 _sections.xscale = xscale;
                 _sections.yscale = yscale;
                 _sections.frame = 6;
-                Graphics.Draw(_sections, -halfWidth + x, (float)(halfHeight + y - _sections.h * scale.y));
+                Graphics.Draw(_sections, -halfWidth + UILerp.x, (float)(halfHeight + UILerp.y - _sections.h * scale.y));
                 _sections.frame = 8;
-                Graphics.Draw(_sections, (float)(halfWidth + x - _sections.w * scale.x), (float)(halfHeight + y - _sections.h * scale.y));
+                Graphics.Draw(_sections, (float)(halfWidth + UILerp.x - _sections.w * scale.x), (float)(halfHeight + UILerp.y - _sections.h * scale.y));
                 _sections.frame = 7;
                 _sections.xscale = (_collisionSize.x - _sections.w * 2) / _sections.w * xscale;
-                Graphics.Draw(_sections, (float)(-halfWidth + x + _sections.w * scale.x), (float)(halfHeight + y - _sections.h * scale.y));
+                Graphics.Draw(_sections, (float)(-halfWidth + UILerp.x + _sections.w * scale.x), (float)(halfHeight + UILerp.y - _sections.h * scale.y));
+            }
+
+            if (_isMenu && DGRSettings.dubberspeed && _currentMenuItemSelection != null)
+            {
+                bool isUIControlConfig = idStr == "cc";
+                bool isMainPauseMenu = idStr == "mpm";
+                if (!isUIControlConfig)
+                {
+                    int dubberOffset = _currentMenuItemSelection.FindAll(ui => ui is UIConnectionInfo).Count;
+                    if (Keyboard.Down(Keys.LeftShift))
+                        dubberOffset = 0;
+
+                    for (int i = dubberOffset, j = 0; i < _currentMenuItemSelection.Count; ++i, j = i - dubberOffset)
+                    {
+                        UIMenuItem item = (UIMenuItem)_currentMenuItemSelection[i];
+                        int index = -1;
+                        if (j == 9)
+                            index = 0;
+                        else if (j < 9)
+                            index = j + 1;
+                        float xAdjust = -1f;
+                        if (isMainPauseMenu)
+                            xAdjust = 0.25f;
+                        if (!item.selected && index != -1)
+                            Graphics.DrawString(index.ToString(), new Vec2(Layer.HUD.camera.width / 2f - parent.halfWidth - xAdjust, item.top - item.halfHeight), Color.White * 0.4f, 1);
+                    }
+                }
             }
             base.Draw();
         }

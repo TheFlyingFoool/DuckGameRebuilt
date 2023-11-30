@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.MathHelper
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -25,13 +18,13 @@ namespace DuckGame
         /// <summary>
         /// Represents the value of pi divided by two(1.57079637).
         /// </summary>
-        public const float PiOver2 = (float)(Math.PI / 2.0);
+        public const float PiOver2 = (float)(Math.PI / 2d);
         /// <summary>
         /// Represents the value of pi divided by four(0.7853982).
         /// </summary>
-        public const float PiOver4 = (float)(Math.PI / 4.0);
+        public const float PiOver4 = (float)(Math.PI / 4d);
         /// <summary>Represents the value of pi times two(6.28318548).</summary>
-        public const float TwoPi = (float)(Math.PI * 2.0);
+        public const float TwoPi = (float)(Math.PI * 2d);
 
         /// <summary>
         /// Returns the Cartesian coordinate for one axis of a point that is defined by a given triangle and two normalized barycentric (areal) coordinates.
@@ -70,7 +63,7 @@ namespace DuckGame
         {
             double num1 = amount * amount;
             double num2 = num1 * amount;
-            return (float)(0.5 * (2.0 * value2 + (value3 - value1) * amount + (2.0 * value1 - 5.0 * value2 + 4.0 * value3 - value4) * num1 + (3.0 * value2 - value1 - 3.0 * value3 + value4) * num2));
+            return (float)(0.5f * (2f * value2 + (value3 - value1) * amount + (2f * value1 - 5f * value2 + 4f * value3 - value4) * num1 + (3f * value2 - value1 - 3f * value3 + value4) * num2));
         }
 
         /// <summary>Restricts a value to be within a specified range.</summary>
@@ -126,7 +119,7 @@ namespace DuckGame
             double num5 = amount;
             double num6 = num5 * num5 * num5;
             double num7 = num5 * num5;
-            return amount != 0.0 ? (amount != 1.0 ? (float)((2.0 * num1 - 2.0 * num2 + num4 + num3) * num6 + (3.0 * num2 - 3.0 * num1 - 2.0 * num3 - num4) * num7 + num3 * num5 + num1) : value2) : value1;
+            return amount != 0f ? (amount != 1f ? (float)((2f * num1 - 2f * num2 + num4 + num3) * num6 + (3f * num2 - 3f * num1 - 2f * num3 - num4) * num7 + num3 * num5 + num1) : value2) : value1;
         }
 
         /// <summary>Linearly interpolates between two values.</summary>

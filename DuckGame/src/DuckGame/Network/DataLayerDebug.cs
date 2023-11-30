@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.DataLayerDebug
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -62,25 +55,25 @@ namespace DuckGame
 
             public float latency
             {
-                get => _latency == 0.0 ? DuckNetwork.localConnection.debuggerContext._latency : _latency;
+                get => _latency == 0 ? DuckNetwork.localConnection.debuggerContext._latency : _latency;
                 set => _latency = value;
             }
 
             public float jitter
             {
-                get => _jitter == 0.0 ? DuckNetwork.localConnection.debuggerContext._jitter : _jitter;
+                get => _jitter == 0 ? DuckNetwork.localConnection.debuggerContext._jitter : _jitter;
                 set => _jitter = value;
             }
 
             public float loss
             {
-                get => _loss == 0.0 ? DuckNetwork.localConnection.debuggerContext._loss : _loss;
+                get => _loss == 0 ? DuckNetwork.localConnection.debuggerContext._loss : _loss;
                 set => _loss = value;
             }
 
             public float duplicate
             {
-                get => _duplicate == 0.0 ? DuckNetwork.localConnection.debuggerContext._duplicate : _duplicate;
+                get => _duplicate == 0 ? DuckNetwork.localConnection.debuggerContext._duplicate : _duplicate;
                 set => _duplicate = value;
             }
 
@@ -106,7 +99,7 @@ namespace DuckGame
                 foreach (DelayedPacket packet in packets)
                 {
                     packet.time -= Maths.IncFrameTimer();
-                    if (packet.time <= 0.0 && connection.debuggerContext.lagSpike <= 0)
+                    if (packet.time <= 0f && connection.debuggerContext.lagSpike <= 0)
                     {
                         pNetwork.OnSendPacket(packet.data.buffer, packet.data.lengthInBytes, connection.data);
                         delayedPacketList.Add(packet);

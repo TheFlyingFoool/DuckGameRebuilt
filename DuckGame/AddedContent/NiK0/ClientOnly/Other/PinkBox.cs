@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Stuff")]
+    [EditorGroup("Spawns")]
     public class PinkBox : Block
     {
         public bool canBounce
@@ -17,7 +17,7 @@ namespace DuckGame
         }
         public PinkBox(float xpos, float ypos) : base(xpos, ypos)
         {
-            _sprite = new SpriteMap("pinkbox", 16, 16); // im cool with this box, im not
+            _sprite = new SpriteMap("pinkbox", 16, 16); // im cool with this box -YupDanielThatsMe, im not -??? the mistery man
             graphic = _sprite;
             layer = Layer.Foreground;
             center = new Vec2(8f, 8f);
@@ -30,16 +30,21 @@ namespace DuckGame
         }
         public void Pop(Duck duck)
         {
+            if (Level.current is TitleScreen ts)
+            {
+                ts.secondTitlescreen = false;
+                return;
+            }
             Bounce();
             if (!_hit)
             {
                 SuperFondle(this, DuckNetwork.localConnection);
                 _hit = true;
-                D = duck;
+                d = duck;
                 lD = duck;
             }
         }
-        public Duck D;
+        public Duck d;
         public Duck lD;
         public void Bounce()
         {
@@ -80,11 +85,11 @@ namespace DuckGame
         public SinWave SIN = new SinWave(0.1f);
         public override void Draw()
         {
-            if (D != null)
+            if (d != null)
             {
-                if (D.team.hasHat)
+                if (d.team.hasHat)
                 {
-                    SpriteMap spr = D.team.hat;
+                    SpriteMap spr = d.team.hat;
                     float prev = spr.alpha;
                     spr.alpha = 0.5f;
                     Graphics.Draw(spr, x, top - 16, 1);
@@ -92,10 +97,10 @@ namespace DuckGame
                 }
                 else
                 {
-                    SpriteMap spr = D.persona.defaultHead;
+                    SpriteMap spr = d.persona.defaultHead;
                     float prev = spr.alpha;
                     spr.alpha = 0.5f;
-                    spr.frame = D.quack > 0 ? 1 : 0;
+                    spr.frame = d.quack > 0 ? 1 : 0;
                     Graphics.Draw(spr, x - 2, top - 16 + SIN * 3, 1);
                     spr.alpha = prev;
                 }
@@ -104,7 +109,7 @@ namespace DuckGame
         }
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (from == ImpactedFrom.Bottom && with.isServerForObject && D == null)
+            if (from == ImpactedFrom.Bottom && with.isServerForObject && d == null)
             {
                 Holdable h = with as Holdable;
                 if (h != null && (h.lastThrownBy != null || (h is RagdollPart && !Network.isActive)))
@@ -160,32 +165,70 @@ namespace DuckGame
             SFX.Play("explode");
             ExplodeEffect(position);
             Send.Message(new NMPinkExplode(position));
-            Level.Remove(this);
+            if (Level.current is not DGRDevHall) Level.Remove(this);
         }
         public bool collision;
         public override void Update()
         {
-            if (D != null && isServerForObject)
+            if (d != null && (!Network.isActive || (d.profile != null && d.profile.connection == DuckNetwork.localConnection)))
             {
                 Fondle(this);
                 //Failsafe for if multiple people happen to hit the box it explodes
-                if (D != lD && !collision)
+                if (d != lD && !collision)
                 {
                     collision = true;
                     Send.Message(new NMPinkCollision(this));
                 }
-                if (D.dead)
+                if (d.dead)
                 {
-                    Fondle(this);
-                    UnstoppableFondle(D, DuckNetwork.localConnection);
-                    D.position = position;
-                    D.Ressurect();
-                    D.dead = false;
-                    D.position = position;
-                    UnstoppableFondle(D, DuckNetwork.localConnection);
+                    UnstoppableFondle(d, DuckNetwork.localConnection);
+                    UnstoppableFondle(this, DuckNetwork.localConnection);
+                    d.Ressurect();
+                    if (d._cooked != null) d.position = position;
+                    if (d.onFire)
+                    {
+                        d.onFire = false;
+                        d.moveLock = false;
+                        d.dead = false;
+                    }
+                    d.dead = false;
+                    d.ResetNonServerDeathState();
+                    d.Regenerate();
+                    d.crouch = false;
+                    d.sliding = false;
+                    d.burnt = 0f;
+                    d.hSpeed = 0f;
+                    d.vSpeed = 0f;
+                    if (d.ragdoll != null)
+                    {
+                        d.ragdoll.Unragdoll();
+                    }
+                    if (d._trapped != null)
+                    {
+                        d._trapped.position = position;
+                        d._trapped._trapTime = 0;
+                    }
+                    d.position = position;
+                    if (d._ragdollInstance != null)
+                    {
+                        if (d._ragdollInstance.removeFromLevel)
+                        {
+                            d._ragdollInstance = new Ragdoll(d.x, d.y - 9999, d, false, 0, 0, Vec2.Zero);
+                            d._ragdollInstance.npi = d.netProfileIndex;
+                            d._ragdollInstance.RunInit();
+                            d._ragdollInstance.active = false;
+                            d._ragdollInstance.visible = false;
+                            d._ragdollInstance.authority = 80;
+                            Level.Add(d._ragdollInstance);
+                            Fondle(d._ragdollInstance);
+                        }
+                    }
+                    d.position = position;
+                    d.visible = true;
+                    UnstoppableFondle(d, DuckNetwork.localConnection);
                     Explode();
                 }
-                lD = D;
+                lD = d;
             }
             _aboveList.Clear();
             if (startY < -9999f)
@@ -248,7 +291,7 @@ namespace DuckGame
                 }
             }
         }
-        public StateBinding _DBinding = new StateBinding("D");
+        public StateBinding _DBinding = new StateBinding("d");
         public StateBinding _positionBinding = new StateBinding("position", -1, false, false);
         public StateBinding _hitBinding = new StateBinding("_hit");
         public StateBinding _netDisarmIndexBinding = new StateBinding("netDisarmIndex", -1, false, false);

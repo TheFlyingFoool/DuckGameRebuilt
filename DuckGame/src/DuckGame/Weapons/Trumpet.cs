@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Trumpet
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -20,7 +13,7 @@ namespace DuckGame
         private float hitPitch;
         private Sound noteSound;
         private List<InstrumentNote> _notes = new List<InstrumentNote>();
-        private int currentPitch = -1;
+        public int currentPitch = -1;
         private bool leftPressed;
         private bool rightPressed;
 
@@ -60,7 +53,7 @@ namespace DuckGame
             if (this.owner is Duck owner && owner.inputProfile != null)
             {
                 hideLeftWing = ignoreHands = !raised;
-                if (isServerForObject)
+                if (isServerForObject && !Recorderator.Playing)
                 {
                     if (owner.inputProfile.Pressed(Triggers.Shoot))
                         currentPitch = 2;
@@ -96,18 +89,22 @@ namespace DuckGame
                             currentPitch = -1;
                         rightPressed = false;
                     }
-                    notePitch = currentPitch < 0 || _raised ? 0f : (float)(currentPitch / 3.0 + 0.01f);
+                    notePitch = currentPitch < 0 || _raised ? 0f : (float)(currentPitch / 3f + 0.01f);
+                }
+                if (Recorderator.Playing)
+                {
+                    notePitch = currentPitch < 0 || _raised ? 0f : (float)(currentPitch / 3f + 0.01f);
                 }
                 if (notePitch != prevNotePitch)
                 {
-                    if (notePitch != 0.0)
+                    if (notePitch != 0)
                     {
                         if (noteSound != null)
                         {
                             noteSound.Stop();
                             noteSound = null;
                         }
-                        int num = (int)Math.Round(notePitch * 3.0);
+                        int num = (int)Math.Round(notePitch * 3f);
                         if (num < 0)
                             num = 0;
                         if (num > 12)
@@ -115,6 +112,7 @@ namespace DuckGame
                         if (noteSound == null)
                         {
                             hitPitch = notePitch;
+                            SFX.DontSave = 1;
                             noteSound = SFX.Play("trumpet0" + Change.ToString(num + 1), 0.8f);
                             Level.Add(new MusicNote(barrelPosition.x, barrelPosition.y, barrelVector));
                         }

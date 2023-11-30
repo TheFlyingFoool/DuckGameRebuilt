@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.InputCode
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -55,7 +48,7 @@ namespace DuckGame
                 return status.lastResult;
             status.lastUpdateFrame = Graphics.frame;
             status.breakTimer -= breakSpeed;
-            if (status.breakTimer <= 0.0)
+            if (status.breakTimer <= 0f)
                 status.Break();
             if (status.currentIndex > triggers.Count || status.currentIndex < 0)//dan check into later, caused a crash on weird linux machine ArgumentOutOfRangeException triggers
             {

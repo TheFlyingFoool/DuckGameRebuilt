@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ConfettiParticle
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -95,7 +88,7 @@ namespace DuckGame
         {
             if (_stringConfetti)
             {
-                Vec2 p2 = this.position + velocity.normalized * (velocity.length * (float)(3.0 + sinMult * 3.0));
+                Vec2 p2 = this.position + velocity.normalized * (velocity.length * (float)(3 + sinMult * 3));
                 Vec2 position;
                 Graphics.DrawLine(this.position, Level.CheckLine<Block>(this.position, p2, out position) != null ? position : p2, _color * alpha, _width, depth);
             }

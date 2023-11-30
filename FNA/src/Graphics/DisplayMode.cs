@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -13,11 +13,12 @@
 
 #region Using Statements
 using System;
+using System.Globalization;
 #endregion
 
 namespace Microsoft.Xna.Framework.Graphics
 {
-    [Serializable]
+	[Serializable]
 	public class DisplayMode
 	{
 		#region Public Properties
@@ -26,7 +27,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
 			get
 			{
-				return Width / (float) Height;
+				return (float) Width / (float) Height;
 			}
 		}
 

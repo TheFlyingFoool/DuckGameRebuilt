@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.VirtualTransitionCore
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -46,7 +39,7 @@ namespace DuckGame
             _parallax.AddZone(2, distance1, speed1);
             _parallax.AddZone(3, distance1, speed1);
             float distance2 = 0.6f;
-            float num = (float)((distance1 - distance2) / 4.0);
+            float num = (float)((distance1 - distance2) / 4f);
             float speed2 = 0.6f;
             _parallax.AddZone(4, distance1 - num * 1f, speed2, true);
             _parallax.AddZone(5, distance1 - num * 2f, -speed2, true);
@@ -81,7 +74,7 @@ namespace DuckGame
         {
             _parallax.scissor = _scissor;
             _parallax.visible = vis;
-            if (_scissor.width == 0.0)
+            if (_scissor.width == 0f)
                 return;
             _parallax.layer.scissor = _scissor;
         }
@@ -163,10 +156,10 @@ namespace DuckGame
                     Level.activeLevel.backgroundColor = Lerp.ColorSmoothNoAlpha(_backgroundColor, Color.Black, 0.1f);
                 if (_scanStage < 2)
                     num = 0f;
-                Rectangle rectangle1 = new Rectangle((int)((1.0 - num) * Resolution.current.x), 0f, Resolution.current.x - (int)((1.0 - num) * Resolution.current.x), Resolution.current.y);
+                Rectangle rectangle1 = new Rectangle((int)((1f - num) * Resolution.current.x), 0f, Resolution.current.x - (int)((1f - num) * Resolution.current.x), Resolution.current.y);
                 if (_realBackground != null)
                 {
-                    if (rectangle1.width == 0.0)
+                    if (rectangle1.width == 0f)
                     {
                         _realBackground.SetVisible(false);
                     }
@@ -177,7 +170,7 @@ namespace DuckGame
                     }
                 }
                 Rectangle rectangle2 = new Rectangle(0f, 0f, Resolution.current.x - rectangle1.width, Resolution.current.y);
-                if (rectangle2.width == 0.0)
+                if (rectangle2.width == 0f)
                 {
                     SetVisible(false);
                     _visible = false;
@@ -285,7 +278,7 @@ namespace DuckGame
                 else if (_scanStage == -1)
                     _fullyVirtual = true;
                 _lastCameraX = Level.activeLevel.camera.centerX;
-                if (_scissor.width == 0.0)
+                if (_scissor.width == 0f)
                     return;
                 _parallax.scissor = _scissor;
             }
@@ -304,17 +297,18 @@ namespace DuckGame
                 Graphics.PushMarker("TransitionDraw");
                 _position = _parallax.position;
                 float num1 = _stick * 300f;
-                float x = (float)(360.0 - _stick * 400.0);
+                float x = (float)(360f - _stick * 400f);
                 Vec2 vec2_1 = new Vec2(_position.x + num1, _position.y + 72f);
                 Graphics.Draw(_scanner, vec2_1.x, vec2_1.y);
                 float num2 = Math.Abs(_stick - 0.5f);
                 float num3 = 0.5f - num2;
-                Graphics.DrawLine(vec2_1 + new Vec2(18f, 20f), new Vec2(x, (float)(vec2_1.y - 100.0 + num2 * 250.0)), Color.Red * num3, 2f, (Depth)0.9f);
-                Graphics.DrawLine(vec2_1 + new Vec2(18f, 34f), new Vec2(x, (float)(vec2_1.y - 10.0 + 80.0 * num2)), Color.Red * num3, 2f, (Depth)0.9f);
+                Graphics.DrawLine(vec2_1 + new Vec2(18f, 20f), new Vec2(x, (float)(vec2_1.y - 100f + num2 * 250f)), Color.Red * num3, 2f, (Depth)0.9f);
+                Graphics.DrawLine(vec2_1 + new Vec2(18f, 34f), new Vec2(x, (float)(vec2_1.y - 10f + 80f * num2)), Color.Red * num3, 2f, (Depth)0.9f);
                 Vec2 vec2_2 = vec2_1 + new Vec2(0f, _scanner.height);
-                Graphics.DrawLine(vec2_2 + new Vec2(18f, -20f), new Vec2(x, (float)(vec2_2.y + 100.0 - num2 * 250.0)), Color.Red * num3, 2f, (Depth)0.9f);
-                Graphics.DrawLine(vec2_2 + new Vec2(18f, -34f), new Vec2(x, (float)(vec2_2.y + 10.0 - 80.0 * num2)), Color.Red * num3, 2f, (Depth)0.9f);
-                _parallax.Update();
+                Graphics.DrawLine(vec2_2 + new Vec2(18f, -20f), new Vec2(x, (float)(vec2_2.y + 100f - num2 * 250f)), Color.Red * num3, 2f, (Depth)0.9f);
+                Graphics.DrawLine(vec2_2 + new Vec2(18f, -34f), new Vec2(x, (float)(vec2_2.y + 10f - 80f * num2)), Color.Red * num3, 2f, (Depth)0.9f);
+                if(MonoMain.UpdateLerpState)
+                    _parallax.Update();
                 _parallax.Draw();
                 Graphics.PopMarker();
             }

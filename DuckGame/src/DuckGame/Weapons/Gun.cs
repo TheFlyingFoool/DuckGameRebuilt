@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Gun
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -57,7 +50,7 @@ namespace DuckGame
         protected bool _manualLoad;
         public bool laserSight;
         protected SpriteMap _flare;
-        protected float _flareAlpha;
+        public float _flareAlpha;
         private SpriteMap _barrelSmoke;
         public float _barrelHeat;
         protected float _smokeWait;
@@ -70,11 +63,13 @@ namespace DuckGame
         protected Vec2 _wallPoint;
         protected Sprite _sightHit;
         private bool _doPuff;
+        public bool recordPuff;
+        public bool recordPopShell;
         public byte _framesSinceThrown;
         public bool explode;
         public List<Bullet> firedBullets = new List<Bullet>();
         //private Material _additiveMaterial;
-
+        Interp LaserSightLerp = new Interp(true);
         public bool CanSpawnInfinite()
         {
             return !(this is FlareGun) && !(this is QuadLaser) && !(this is RomanCandle) && !(this is Matchbox) && !(this is FireCrackers) && !(this is NetGun);
@@ -133,8 +128,24 @@ namespace DuckGame
                 material = new MaterialGold(this);
             }
             else
-                base.UpdateMaterial();
+            {
+                if (funTime > 0)
+                {
+                    if (material is MaterialFunBeam fb)
+                    {
+                        funTime -= 0.05f;
+                        fb.intensity = funTime;
+                    }
+                    else material = new MaterialFunBeam(this);
+                }
+                else
+                {
+                    if (material is MaterialFunBeam) material = null;
+                    base.UpdateMaterial();
+                }
+            }
         }
+        public float funTime;
 
         public bool fullAuto => _fullAuto;
 
@@ -170,17 +181,30 @@ namespace DuckGame
             };
             collideSounds.Add("smallMetalCollide");
             impactVolume = 0.3f;
+
             holsterAngle = 90f;
-            coolingFactor = 1f / 500f;
+            coolingFactor = 0.002f;
+            _editorPreviewWidth = 32;
+        }
+        public override int GetEditorPreviewWidth()
+        {
+            if (_editorPreviewWidth != 0)
+                return _editorPreviewWidth;
+
+            if (width > 16)
+                return 32;
+            return 16;
         }
 
         public void DoAmmoClick()
         {
             _doPuff = true;
+            recordPuff = true;
             _clickPuff.frame = 0;
             _clickPuff.SetAnimation("puff");
             _barrelHeat = 0f;
             _barrelSmoke.SetAnimation("finish");
+            SFX.DontSave = 1;
             SFX.Play(_clickSound);
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
             {
@@ -255,7 +279,7 @@ namespace DuckGame
                 if (_barrelSmoke.speed > 0f && _barrelSmoke.currentAnimation == "loop" && _barrelSmoke.frame == 5 && _barrelHeat < 0.1f)
                     _barrelSmoke.SetAnimation("finish");
             }
-            if (_smokeWait > 0.0 && _barrelSmoke.speed > 0.0)
+            if (_smokeWait > 0 && _barrelSmoke.speed > 0)
                 _barrelSmoke.SetAnimation("finish");
             if (_barrelSmoke.currentAnimation == "finish" && _barrelSmoke.finished)
                 _barrelSmoke.speed = 0f;
@@ -285,7 +309,7 @@ namespace DuckGame
                 if (_framesSinceThrown > 25)
                     _framesSinceThrown = 25;
             }
-            if (!(this is Sword) && owner == null && CanSpin() && Level.current.simulatePhysics)
+            if (!(this is Sword) && owner == null && CanSpin() && Level.current.simulatePhysics && !Recorderator.Playing)
             {
                 bool flag1 = false;
                 bool flag2 = false;
@@ -309,15 +333,15 @@ namespace DuckGame
                         else
                             angleDegrees = Lerp.Float(-90f, 0f, 16f);
                     }
-                    else if (angleDegrees > 90.0 && angleDegrees < 270.0)
+                    else if (angleDegrees > 90 && angleDegrees < 270)
                     {
                         angleDegrees = Lerp.Float(angleDegrees, 180f, 14f);
                     }
                     else
                     {
-                        if (angleDegrees > 180.0)
+                        if (angleDegrees > 180)
                             angleDegrees -= 360f;
-                        else if (angleDegrees < -180.0)
+                        else if (angleDegrees < -180)
                             angleDegrees += 360f;
                         angleDegrees = Lerp.Float(angleDegrees, 0f, 14f);
                     }
@@ -443,11 +467,13 @@ namespace DuckGame
             Fire();
         }
 
+        public bool recordKick;
         public virtual void ApplyKick()
         {
+            recordKick = true;
             if (owner == null || !isServerForObject)
                 return;
-            if (_kickForce != 0.0)
+            if (_kickForce != 0)
             {
                 Duck owner = this.owner as Duck;
                 Thing thing = this.owner;
@@ -485,7 +511,7 @@ namespace DuckGame
         {
             if (!loaded)
                 return;
-            if (ammo > 0 && _wait == 0.0)
+            if (ammo > 0 && _wait == 0)
             {
                 firedBullets.Clear();
                 if (duck != null)
@@ -507,7 +533,7 @@ namespace DuckGame
                                 Vec2 vec2 = Offset(barrelOffset);
                                 Dart dart = new Dart(vec2.x, vec2.y, owner as Duck, -angle);
                                 Fondle(dart);
-                                if (onFire || _barrelHeat > 6.0)
+                                if (onFire || _barrelHeat > 6f)
                                 {
                                     Level.Add(SmallFire.New(0f, 0f, 0f, 0f, stick: dart, firedFrom: this));
                                     dart.burning = true;
@@ -569,7 +595,7 @@ namespace DuckGame
             }
             else
             {
-                if (ammo > 0 || _wait != 0.0)
+                if (ammo > 0 || _wait != 0)
                     return;
                 firedBullets.Clear();
                 DoAmmoClick();
@@ -587,6 +613,7 @@ namespace DuckGame
             {
                 _ammoType.PopShell(x, y, -offDir);
             }
+            recordPopShell = true;
             if (isMessage) return;
             Send.Message(new NMPopShell(this), NetMessagePriority.UnreliableUnordered);
         }
@@ -621,35 +648,32 @@ namespace DuckGame
             Material material = Graphics.material;
             if (graphic != null)
             {
-                if (owner != null && owner.graphic != null)
-                    graphic.flipH = owner.graphic.flipH;
-                else
-                    graphic.flipH = offDir <= 0;
+                if (owner != null && owner.graphic != null) graphic.flipH = owner.graphic.flipH;
+                else graphic.flipH = offDir <= 0;
             }
             if (_doPuff)
             {
                 _clickPuff.alpha = 0.6f;
                 _clickPuff.angle = angle + _smokeAngle;
                 _clickPuff.flipH = offDir < 0;
-                Draw(_clickPuff, barrelOffset);
+                Draw(ref _clickPuff, barrelOffset);
             }
-            if (!VirtualTransition.active && Graphics.material == null)
-                Graphics.material = this.material;
+            if (!VirtualTransition.active && Graphics.material == null) Graphics.material = this.material;
             base.Draw();
             Graphics.material = null;
-            if (_flareAlpha > 0.0)
-                Draw(_flare, barrelOffset);
-            if (_barrelSmoke.speed > 0.0 && !raised)
+            if (_flareAlpha > 0)
+                Draw(ref _flare, barrelOffset);
+            if (_barrelSmoke.speed > 0 && !raised)
             {
                 _barrelSmoke.alpha = 0.7f;
                 _barrelSmoke.angle = _smokeAngle;
                 _barrelSmoke.flipH = offDir < 0;
-                if (offDir > 0 && angleDegrees > 90.0 && angleDegrees < 270.0)
+                if (offDir > 0 && angleDegrees > 90 && angleDegrees < 270)
                     _barrelSmoke.flipH = true;
-                if (offDir < 0 && angleDegrees > 90.0 && angleDegrees < 270.0)
+                if (offDir < 0 && angleDegrees > 90 && angleDegrees < 270)
                     _barrelSmoke.flipH = false;
                 _barrelSmoke.yscale = 1f - _smokeFlatten;
-                DrawIgnoreAngle(_barrelSmoke, barrelOffset);
+                DrawIgnoreAngle(ref _barrelSmoke, barrelOffset);
             }
             if (!Options.Data.fireGlow)
                 DrawGlow();
@@ -665,6 +689,11 @@ namespace DuckGame
                 if (!Options.Data.fireGlow)
                     num = 0.4f;
                 Vec2 p1 = Offset(laserOffset);
+
+                LaserSightLerp.UpdateLerpState(p1, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+                if(angleDegrees == -90.0f || angleDegrees == 0.0f)
+                    p1 = LaserSightLerp.Position;
+
                 float length = (p1 - _wallPoint).length;
                 float val1 = 100f;
                 if (ammoType != null)
@@ -684,7 +713,7 @@ namespace DuckGame
                 {
                     _sightHit.alpha = num;
                     _sightHit.color = Color.Red * num;
-                    Graphics.Draw(_sightHit, _wallPoint.x, _wallPoint.y);
+                    Graphics.Draw(ref _sightHit, _wallPoint.x, _wallPoint.y);
                 }
             }
             base.DrawGlow();

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.DuckFile
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -841,6 +834,51 @@ namespace DuckGame
             }
             stringList.Sort();
             return stringList.ToArray();
+        }
+
+        public static List<string> ReGetFiles(string path, string filter = "*.*", SearchOption option = SearchOption.TopDirectoryOnly)
+        {
+            List<string> stringList = new List<string>();
+            if (Directory.Exists(path))
+            {
+                stringList = GetFilesNoCloud(path, filter, option);
+                for (int index = 0; index < stringList.Count; ++index)
+                    stringList[index] = stringList[index].Replace('\\', '/');
+            }
+            if (DGRSettings.SortLevels) stringList.Sort();
+            return stringList;
+        }
+
+        public static List<string> ReGetDirectories(string path)
+        {
+            path = path.Replace('\\', '/');
+            List<string> stringList = new List<string>();
+            if (Path.IsPathRooted(path) && Program.IsLinuxD)
+            {
+                while (path.EndsWith("/"))
+                {
+                    path = path.Substring(0, path.Length - 1);
+                }
+            }
+            else
+            {
+                path = path.Trim('/');
+            }
+            if (Directory.Exists(path))
+            {
+                List<string> paths = GetDirectoriesNoCloud(path);
+                for (int i = 0; i < paths.Count; i++)
+                {
+                    string path1 = paths[i];
+                    if (!Path.GetFileName(path1).Contains("._"))
+                    {
+                        string str = path1.Replace('\\', '/');
+                        if (!stringList.Contains(str))
+                            stringList.Add(str);
+                    }
+                }
+            }
+            return stringList;
         }
 
         public static string[] GetDirectories(string path)

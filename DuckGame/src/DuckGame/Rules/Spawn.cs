@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Spawn
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame
@@ -36,12 +29,12 @@ namespace DuckGame
                 if (team.numMembers == 2)
                 {
                     float num = 18.82353f;
-                    position.x = (float)(teamSpawn1.position.x - 16.0 + num * index);
+                    position.x = (float)(teamSpawn1.position.x - 16 + num * index);
                 }
                 else if (team.numMembers == 3)
                 {
                     float num = 9.411764f;
-                    position.x = (float)(teamSpawn1.position.x - 16.0 + num * index);
+                    position.x = (float)(teamSpawn1.position.x - 16 + num * index);
                 }
                 Duck duck = new Duck(position.x, position.y - 7f, team.activeProfiles[index])
                 {

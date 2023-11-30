@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.SledgeHammer
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -16,6 +9,17 @@ namespace DuckGame
         private SpriteMap _sprite;
         private SpriteMap _sledgeSwing;
         private Vec2 _offset;
+        public float swing
+        {
+            get
+            {
+                return _swing;
+            }
+            set
+            {
+                _swing = value;
+            }
+        }
         private float _swing;
         private float _swingLast;
         private float _swingVelocity;
@@ -62,8 +66,17 @@ namespace DuckGame
             holsterAngle = 180f;
             holsterOffset = new Vec2(11f, 0f);
             editorTooltip = "For big nails.";
+            _editorPreviewOffset.x -= 8;
+            _editorPreviewRotation = -90;
         }
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is SledgeHammer && pTaped.gun2 is EnergyScimitar ? new EnergyHammer(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
             if (!(with is IPlatform))
@@ -124,7 +137,7 @@ namespace DuckGame
             }
             collisionOffset = new Vec2(-2f, 0f);
             collisionSize = new Vec2(4f, 18f);
-            if (_swing > 0.0)
+            if (_swing > 0)
             {
                 collisionOffset = new Vec2(-9999f, 0f);
                 collisionSize = new Vec2(4f, 18f);
@@ -136,9 +149,9 @@ namespace DuckGame
                 _swing += _swingVelocity;
                 float num1 = _swing - _swingLast;
                 _swingLast = _swing;
-                if (_swing > 1.0)
+                if (_swing > 1)
                     _swing = 1f;
-                if (_swing < 0.0)
+                if (_swing < 0)
                     _swing = 0f;
                 _sprite.flipH = false;
                 _sprite.flipV = false;
@@ -149,38 +162,38 @@ namespace DuckGame
                     if (Math.Abs(owner.hSpeed) < 0.1f)
                         _hPull = 0f;
                     float num2 = Math.Abs(_hPull) / 2.5f;
-                    if (num2 > 1.0)
+                    if (num2 > 1)
                         num2 = 1f;
-                    weight = (float)(8.0 - num2 * 3.0);
-                    if (weight <= 5.0)
+                    weight = (float)(8 - num2 * 3);
+                    if (weight <= 5)
                         weight = 5.1f;
                     float num3 = Math.Abs(owner.hSpeed - _hPull);
                     owner.frictionMod = 0f;
-                    if (owner.hSpeed > 0.0 && _hPull > owner.hSpeed)
+                    if (owner.hSpeed > 0 && _hPull > owner.hSpeed)
                         owner.frictionMod = -num3 * 1.8f;
-                    if (owner.hSpeed < 0.0 && _hPull < owner.hSpeed)
+                    if (owner.hSpeed < 0 && _hPull < owner.hSpeed)
                         owner.frictionMod = -num3 * 1.8f;
                     _lastDir = owner.offDir;
                     _lastSpeed = hSpeed;
-                    if (_swing != 0.0 && num1 > 0.0)
+                    if (_swing != 0 && num1 > 0)
                     {
                         owner.hSpeed += owner.offDir * (num1 * 3f) * weightMultiplier;
                         owner.vSpeed -= num1 * 2f * weightMultiplier;
                     }
                 }
             }
-            if (_sparkWait > 0.0)
+            if (_sparkWait > 0)
                 _sparkWait -= 0.1f;
             else
                 _sparkWait = 0f;
-            if (owner != null && held && _sparkWait == 0.0 && _swing == 0.0 && owner.Held(this, true) && DGRSettings.S_ParticleMultiplier != 0)
+            if (owner != null && held && _sparkWait == 0 && _swing == 0 && owner.Held(this, true) && DGRSettings.S_ParticleMultiplier != 0)
             {
-                if (owner.grounded && owner.offDir > 0 && owner.hSpeed > 1.0)
+                if (owner.grounded && owner.offDir > 0 && owner.hSpeed > 1)
                 {
                     _sparkWait = 0.25f / DGRSettings.ActualParticleMultiplier;
                     Level.Add(Spark.New(x - 22f, y + 6f, new Vec2(0f, 0.5f)));
                 }
-                else if (owner.grounded && owner.offDir < 0 && owner.hSpeed < -1.0)
+                else if (owner.grounded && owner.offDir < 0 && owner.hSpeed < -1)
                 {
                     _sparkWait = 0.25f / DGRSettings.ActualParticleMultiplier;
                     Level.Add(Spark.New(x + 22f, y + 6f, new Vec2(0f, 0.5f)));
@@ -189,16 +202,16 @@ namespace DuckGame
             if (_swing < 0.5)
             {
                 float num = _swing * 2f;
-                _sprite.imageIndex = (int)(num * 10.0);
-                _sprite.angle = (float)(1.2f - num * 1.5);
-                _sprite.yscale = (float)(1.0 - num * 0.1f);
+                _sprite.imageIndex = (int)(num * 10);
+                _sprite.angle = (float)(1.2f - num * 1.5f);
+                _sprite.yscale = (float)(1 - num * 0.1f);
             }
             else if (_swing >= 0.5)
             {
-                float num = (float)((_swing - 0.5) * 2.0);
-                _sprite.imageIndex = 10 - (int)(num * 10.0);
+                float num = (float)((_swing - 0.5f) * 2);
+                _sprite.imageIndex = 10 - (int)(num * 10);
                 _sprite.angle = (float)(-0.3f - num * 1.5);
-                _sprite.yscale = (float)(1.0 - (1.0 - num) * 0.1f);
+                _sprite.yscale = (float)(1 - (1 - num) * 0.1f);
                 _fullSwing += 0.16f;
                 if (!_swung)
                 {
@@ -207,9 +220,9 @@ namespace DuckGame
                         Level.Add(new ForceWave(x + offDir * 4f + this.owner.hSpeed, y + 8f, offDir, 0.15f, 4f + Math.Abs(this.owner.hSpeed), this.owner.vSpeed, duck));
                 }
             }
-            if (_swing == 1.0)
+            if (_swing == 1)
                 _pressed = false;
-            if (_swing == 1.0 && !_pressed && _fullSwing > 1.0)
+            if (_swing == 1 && !_pressed && _fullSwing > 1)
             {
                 _swingForce = -0.08f;
                 _fullSwing = 0f;
@@ -219,7 +232,7 @@ namespace DuckGame
             _lastOwner = this.owner as PhysicsObject;
             if (duck != null && held)
             {
-                if ((duck.Held(this, true) ? duck.action : triggerAction) && !_held && _swing == 0.0)
+                if ((duck.Held(this, true) ? duck.action : triggerAction) && !_held && _swing == 0)
                 {
                     RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(RumbleIntensity.Kick, RumbleDuration.Pulse, RumbleFalloff.Short));
                     _fullSwing = 0f;
@@ -238,8 +251,8 @@ namespace DuckGame
                     _held = false;
                 }
             }
-            handOffset = new Vec2(_swing * 3f, (float)(0.0 - _swing * 4.0));
-            handAngle = (float)(1.4f + (_sprite.angle * 0.5 - 1.0));
+            handOffset = new Vec2(_swing * 3f, (float)(0 - _swing * 4));
+            handAngle = (float)(1.4f + (_sprite.angle * 0.5f - 1));
             if (owner != null && owner.offDir < 0)
             {
                 _sprite.angle = -_sprite.angle;
@@ -254,12 +267,12 @@ namespace DuckGame
                 base.Draw();
             else if (owner != null && _drawOnce)
             {
-                _offset = new Vec2((float)(offDir * -6.0 + _swing * 5.0 * offDir), (float)(_swing * 5.0 - 3.0));
+                _offset = new Vec2((float)(offDir * -6 + _swing * 5 * offDir), (float)(_swing * 5 - 3));
                 graphic.position = position + _offset;
                 graphic.depth = depth;
                 graphic.Draw();
                 Duck owner = this.owner as Duck;
-                if (_sledgeSwing.speed <= 0.0)
+                if (_sledgeSwing.speed <= 0)
                     return;
                 if (owner != null)
                     _sledgeSwing.flipH = owner.offDir <= 0;

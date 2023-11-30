@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.PlasmaBlaster
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Guns|Lasers")]
     [BaggedProperty("isSuperWeapon", true)]
@@ -38,12 +31,17 @@ namespace DuckGame
             _bio = "Originally found in a crater next to a burnt power suit. It's origin and mechanism of action are unknown, but tests indicate that it is seriously badass.";
             _editorName = "Plasma Blaster";
             editorTooltip = "Out of control rapid-fire blaster. Seriously, be careful with this one.";
+
+            //this is here because an omega edge case where a plasmablaster can fire at lightning speed if being graphic culled
+            //because there is functionality in the draw function. i could of moved that into update but it might change the way
+            //it works ever so slightly so just gotta deal with the mess that is duck game by duct taping stuff on top -NiK0
+            shouldbegraphicculled = false;
         }
 
         public override void Update()
         {
             ammo = 99;
-            if (_fireWait > 6.0)
+            if (_fireWait > 6)
                 _fireWait = 6f;
             _fireWait = Maths.LerpTowards(_fireWait, 0.3f, 0.01f);
             base.Update();
@@ -52,7 +50,7 @@ namespace DuckGame
         public override void Draw()
         {
             _barrelHeat = 0f;
-            if (_flareAlpha > 0.0 && !_flared)
+            if (_flareAlpha > 0 && !_flared)
             {
                 _flared = true;
                 _bigFlare.SetAnimation("idle");
@@ -61,7 +59,7 @@ namespace DuckGame
             }
             if (_flared)
             {
-                Draw(_bigFlare, barrelOffset + new Vec2(-8f, -1f));
+                Draw(ref _bigFlare, barrelOffset + new Vec2(-8f, -1f));
                 if (_bigFlare.finished)
                 {
                     _flared = false;

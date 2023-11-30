@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.QuadLaser
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Guns|Lasers")]
     public class QuadLaser : Gun
@@ -32,6 +25,16 @@ namespace DuckGame
             editorTooltip = "Shoots a slow-moving science block of doom that passes through walls.";
         }
 
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is QuadLaser && pTaped.gun2 is QuadLaser ? new OctoLaser(x, y) :
+                    pTaped.gun1 is QuadLaser && pTaped.gun2 is Phaser ? new QuadPhaser(x, y) :
+                    pTaped.gun1 is QuadLaser && pTaped.gun2 is Sniper ? new QuadSniper(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void OnPressAction()
         {
             if (ammo <= 0)
@@ -47,8 +50,8 @@ namespace DuckGame
                 if (duck != null)
                 {
                     RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(_fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));
-                    duck.hSpeed = (float)(-barrelVector.x * 8.0);
-                    duck.vSpeed = (float)(-barrelVector.y * 4.0 - 2.0);
+                    duck.hSpeed = (float)(-barrelVector.x * 8);
+                    duck.vSpeed = (float)(-barrelVector.y * 4 - 2);
                     quadLaserBullet.responsibleProfile = duck.profile;
                 }
             }

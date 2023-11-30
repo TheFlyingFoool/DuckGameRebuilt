@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -131,12 +131,12 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void GetData<T>(T[] data) where T : struct
 		{
-            GetData(
+			GetData<T>(
 				0,
 				data,
 				0,
 				data.Length,
-				Marshal.SizeOf(typeof(T))
+				MarshalHelper.SizeOf<T>()
 			);
 		}
 
@@ -145,12 +145,12 @@ namespace Microsoft.Xna.Framework.Graphics
 			int startIndex,
 			int elementCount
 		) where T : struct {
-            GetData(
+			GetData<T>(
 				0,
 				data,
 				startIndex,
 				elementCount,
-				Marshal.SizeOf(typeof(T))
+				MarshalHelper.SizeOf<T>()
 			);
 		}
 
@@ -177,7 +177,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				throw new NotSupportedException("Calling GetData on a resource that was created with BufferUsage.WriteOnly is not supported.");
 			}
 
-			int elementSizeInBytes = Marshal.SizeOf(typeof(T));
+			int elementSizeInBytes = MarshalHelper.SizeOf<T>();
 			if (vertexStride == 0)
 			{
 				vertexStride = elementSizeInBytes;
@@ -219,7 +219,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				data,
 				0,
 				data.Length,
-				Marshal.SizeOf(typeof(T))
+				MarshalHelper.SizeOf<T>()
 			);
 		}
 
@@ -233,7 +233,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				data,
 				startIndex,
 				elementCount,
-				Marshal.SizeOf(typeof(T))
+				MarshalHelper.SizeOf<T>()
 			);
 		}
 
@@ -246,7 +246,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		) where T : struct {
 			ErrorCheck(data, startIndex, elementCount, vertexStride);
 
-			int elementSizeInBytes = Marshal.SizeOf(typeof(T));
+			int elementSizeInBytes = MarshalHelper.SizeOf<T>();
 			GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
 			FNA3D.FNA3D_SetVertexBufferData(
 				GraphicsDevice.GLDevice,
@@ -314,7 +314,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				);
 			}
 
-			int elementSizeInBytes = Marshal.SizeOf(typeof(T));
+			int elementSizeInBytes = MarshalHelper.SizeOf<T>();
 			if (vertexStride == 0)
 			{
 				vertexStride = elementSizeInBytes;
@@ -336,7 +336,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		/// <summary>
 		/// The GraphicsDevice is resetting, so GPU resources must be recreated.
 		/// </summary>
-		protected internal override void GraphicsDeviceResetting()
+		internal protected override void GraphicsDeviceResetting()
 		{
 			// FIXME: Do we even want to bother with DeviceResetting for GL? -flibit
 		}

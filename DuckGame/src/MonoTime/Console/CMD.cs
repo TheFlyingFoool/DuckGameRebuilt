@@ -1,11 +1,6 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.CMD
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
+using AddedContent.Firebreak;
+using DuckGame.ConsoleEngine;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -38,13 +33,16 @@ namespace DuckGame
         public bool HasArg(string pName)
         {
             Argument obj = arguments.FirstOrDefault(x => x.name == pName);
-            return obj is { value: { } };
+            return obj is not null;
         }
 
         public T Arg<T>(string pName)
         {
             Argument obj = arguments.FirstOrDefault(x => x.name == pName);
-            return obj is { value: { } } ? (T)obj.value : default;
+            if (obj is null)
+                return default;
+
+            return (T) (obj.optional && obj.value is null ? obj.defaultValue : obj.value);
         }
 
         public string fullCommandName => parent != null ? $"{parent.fullCommandName} {keyword}" : keyword;
@@ -154,7 +152,7 @@ namespace DuckGame
                     ++index1;
                 }
             }
-            if (this.cancrash)
+            if (cancrash)
             {
                 if (action != null)
                     action(this);
@@ -215,6 +213,7 @@ namespace DuckGame
             public bool optional;
             public bool takesMultispaceString;
             protected string _parseFailMessage = "Argument was in wrong format. ";
+            public object defaultValue;
 
             public Argument(string pName, bool pOptional)
             {
@@ -329,6 +328,27 @@ namespace DuckGame
             }
         }
 
+        public class Array : Argument
+        {
+            private readonly Type _arrayType;
+
+            public Array(string pName, Type arrayType, bool pOptional) : base(pName, pOptional)
+            {
+                _arrayType = arrayType;
+            }
+
+            public override object Parse(string pValue)
+            {
+                ITypeInterpreter arrayInterpreter = Commands.console.Shell.TypeInterpreterModulesMap[typeof(System.Array)];
+                ValueOrException<object> parseResult = arrayInterpreter.ParseString(pValue, _arrayType, Commands.console.Shell);
+
+                if (parseResult.Failed)
+                    return Error(parseResult.Error.Message);
+
+                return parseResult.Value;
+            }
+        }
+
         public class Enum : Argument
         {
             public Enum(string pName, Type pEnumType, bool pOptional = false)
@@ -403,6 +423,25 @@ namespace DuckGame
                 type = typeof(Level);
                 takesMultispaceString = true;
             }
+            
+            // this is so things outside can get this list too ~FB
+            public static Dictionary<string, Func<DuckGame.Level>> SpecialLevelLookup = new()
+            {
+                {"fb", () => new SimRenderer()},
+                {"fbtest", () => new TestLev()},
+                {"hatpreview", () => new HatPreviewLevel()},
+                {"ff", () => new FeatherFashion()},
+                {"cord", () => new RecorderationSelector()},
+                {"dev", () => new DevTestLev()},
+                {"title", () => new TitleScreen()},
+                {"rockintro", () => new RockIntro(new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel)))},
+                {"rockthrow", () => new RockScoreboard()},
+                {"finishscreen", () => new RockScoreboard(mode: ScoreBoardMode.ShowWinner, afterHighlights: true)},
+                {"highlights", () => new HighlightLevel()},
+                {"next", () => new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel))},
+                {"editor", () => Main.editor},
+                {"arcade", () => new ArcadeLevel(Content.GetLevelID("arcade"))}
+            };
 
             public override object Parse(string pValue)
             {
@@ -415,36 +454,9 @@ namespace DuckGame
 
                     return new GameLevel("RANDOM", seedVal);
                 }
-                switch (pValue)
-                {
-                    case "fb":
-                        return new TestLev();
-                    // case "fb":
-                    // return new TestLev();
-                    case "dev":
-                        string devfilepath = Program.GameDirectory + "Content\\levels\\devtestlev.lev";
-                        if (File.Exists(devfilepath))
-                        {
-                            return new DevTestLev();
-                        }
-                        return Error($"dev level was not found.");
-                    case "title":
-                        return new TitleScreen();
-                    case "rockintro":
-                        return new RockIntro(new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel)));
-                    case "rockthrow":
-                        return new RockScoreboard();
-                    case "finishscreen":
-                        return new RockScoreboard(mode: ScoreBoardMode.ShowWinner, afterHighlights: true);
-                    case "highlights":
-                        return new HighlightLevel();
-                    case "next":
-                        return new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel));
-                    case "editor":
-                        return Main.editor;
-                    case "arcade":
-                        return new ArcadeLevel(Content.GetLevelID("arcade"));
-                }
+
+                if (SpecialLevelLookup.TryGetValue(pValue, out Func<DuckGame.Level> specialLevelInitializer))
+                    return specialLevelInitializer.Invoke();
 
                 if (!pValue.EndsWith(".lev"))
                     pValue += ".lev";
@@ -510,9 +522,9 @@ namespace DuckGame
         {
             Argument arg;
             
-            if (type == typeof(System.Int32))
+            if (type == typeof(Int32))
                 arg = new Integer(name, optional);
-            else if (type == typeof(System.Single))
+            else if (type == typeof(Single))
                 arg = new Float(name, optional);
             else if (type == typeof(System.Boolean))
                 arg = new Boolean(name, optional);
@@ -524,7 +536,7 @@ namespace DuckGame
                 arg = new Duck(name, optional);
             else if (type == typeof(DuckGame.Profile))
                 arg = new Profile(name, optional);
-            else if (typeof(DuckGame.Thing).IsAssignableFrom(type))
+            else if (typeof(Thing).IsAssignableFrom(type))
                 arg = new Thing<Thing>(name, optional);
             else if (typeof(DuckGame.Level).IsAssignableFrom(type))
                 arg = new Level(name, optional);
@@ -532,6 +544,8 @@ namespace DuckGame
                 arg = new Layer(name, optional);
             else if (typeof(System.Enum).IsAssignableFrom(type))
                 arg = new Enum(name, type, optional);
+            else if (typeof(System.Array).IsAssignableFrom(type))
+                arg = new Array(name, type, optional);
             else
                 throw new Exception($"Parameter type of [{type.FullName}] is not supported");
 

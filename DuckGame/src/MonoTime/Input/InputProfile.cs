@@ -298,23 +298,13 @@ namespace DuckGame
         {
             if (press)
             {
-                if (_leftStickStates[b] == InputState.None)
-                {
-                    _leftStickStates[b] = InputState.Pressed;
-                    return;
-                }
-                _leftStickStates[b] = InputState.Down;
-                return;
+                _leftStickStates[b] = _leftStickStates[b] == InputState.None ? InputState.Pressed : InputState.Down;
             }
             else
             {
-                if (_leftStickStates[b] == InputState.Down || _leftStickStates[PadButton.DPadLeft] == InputState.Pressed)
-                {
-                    _leftStickStates[b] = InputState.Released;
-                    return;
-                }
-                _leftStickStates[b] = InputState.None;
-                return;
+                _leftStickStates[b] = (_leftStickStates[b] == InputState.Down || _leftStickStates[PadButton.DPadLeft] == InputState.Pressed)
+                    ? InputState.Released
+                    : InputState.None;
             }
         }
 
@@ -1150,11 +1140,15 @@ namespace DuckGame
             UpdateStickPress();
             _prevState = _state;
             _state = 0;
-            foreach (string t in Network.synchronizedTriggers)
+            if (Network.isActive || NetworkDebugger.enabled)//Dan, this will probly be fine, threw this in the if check
             {
-                _state |= (Down(t) ? (ushort)1 : (ushort)0);
-                _state = (ushort)(_state << 1);
+                foreach (string t in Network.synchronizedTriggers)
+                {
+                    _state |= (Down(t) ? (ushort)1 : (ushort)0);
+                    _state = (ushort)(_state << 1);
+                }
             }
+
         }
         public List<string> doInputs = new List<string>();
         // Note: this type is marked as 'beforefieldinit'.

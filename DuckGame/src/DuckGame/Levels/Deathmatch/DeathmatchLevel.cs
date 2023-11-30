@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.DeathmatchLevel
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame
@@ -120,10 +113,10 @@ namespace DuckGame
                 }
             }
             _waitFade -= 0.04f;
-            if (_waitFade > 0.0)
+            if (_waitFade > 0f)
                 return;
             _waitSpawn -= 0.06f;
-            if (_waitSpawn > 0.0)
+            if (_waitSpawn > 0f)
                 return;
             if (_pendingSpawns != null && _pendingSpawns.Count > 0)
             {
@@ -136,11 +129,13 @@ namespace DuckGame
                 _pendingSpawns.RemoveAt(0);
                 if (Network.isServer && Network.isActive)
                     Send.Message(new NMSpawnDuck(pendingSpawn.netProfileIndex));
+
                 Vec3 color = pendingSpawn.profile.persona.color;
                 Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 0f, new Color((int)color.x, (int)color.y, (int)color.z), 32f));
                 Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, -4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
                 Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
                 Add(new SpawnAimer(pendingSpawn.x, pendingSpawn.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), pendingSpawn.persona, 4f));
+                SFX.DontSave = 1;
                 SFX.Play("pullPin", 0.7f);
                 if (Party.HasPerk(pendingSpawn.profile, PartyPerks.Present) || TeamSelect2.Enabled("WINPRES") && Deathmatch.lastWinners.Contains(pendingSpawn.profile))
                 {
@@ -202,8 +197,7 @@ namespace DuckGame
                     SFX.Play("ding");
                     Event.Log(new RoundStartEvent());
                 }
-                else
-                    SFX.Play("preStartDing");
+                else SFX.Play("preStartDing");
                 _waitSpawn = 1.1f;
             }
             else

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Equipment
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public abstract class Equipment : Holdable
     {
@@ -124,13 +117,11 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (autoEquipTime > 0.0)
-                autoEquipTime -= 0.016f;
-            else
-                autoEquipTime = 0f;
+            if (autoEquipTime > 0) autoEquipTime -= 0.016f;
+            else autoEquipTime = 0f;
             if (isServerForObject)
             {
-                if (_equipmentHealth <= 0.0 && _equippedDuck != null && duck != null)
+                if (_equipmentHealth <= 0 && _equippedDuck != null && duck != null)
                 {
                     duck.KnockOffEquipment(this);
                     if (Network.isActive)
@@ -142,13 +133,14 @@ namespace DuckGame
             if (destroyed)
             {
                 alpha -= 0.1f;
-                if (alpha < 0.0)
+                if (alpha < 0)
                     Level.Remove(this);
             }
             if (localEquipIndex < equipIndex)
             {
                 for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
                     Level.Add(SmallSmoke.New(x + Rando.Float(-2f, 2f), y + Rando.Float(-2f, 2f)));
+                SFX.DontSave = 1;
                 SFX.Play("equip", 0.8f);
                 localEquipIndex = equipIndex;
             }
@@ -265,9 +257,12 @@ namespace DuckGame
             if (bullet.isLocal && Network.isActive)
                 NetSoundEffect.Play("equipmentTing");
             bullet.hitArmor = true;
-            Level.Add(MetalRebound.New(hitPos.x, hitPos.y, bullet.travelDirNormalized.x > 0.0 ? 1 : -1));
-            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
-                Level.Add(Spark.New(x, y, bullet.travelDirNormalized));
+            if (DGRSettings.ActualParticleMultiplier > 0)
+            {
+                Level.Add(MetalRebound.New(hitPos.x, hitPos.y, bullet.travelDirNormalized.x > 0 ? 1 : -1));
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
+                    Level.Add(Spark.New(x, y, bullet.travelDirNormalized));
+            }
             return base.Hit(bullet, hitPos);
         }
     }

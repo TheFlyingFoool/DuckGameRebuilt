@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.NetDebugSlider
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -56,7 +49,7 @@ namespace DuckGame
             for (int index = 0; index < num2; ++index)
             {
                 Color col = Color.Gray;
-                if (num4 >= index && num4 != -1.0)
+                if (num4 >= index && num4 != -1)
                     col = Color.White;
                 else if (num3 >= index)
                     col = new Color(200, 200, 200);

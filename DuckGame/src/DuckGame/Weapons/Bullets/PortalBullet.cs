@@ -78,7 +78,7 @@ namespace DuckGame
                 return;
             float length = (drawStart - drawEnd).length;
             float val = 0f;
-            float num1 = (float)(1.0 / (length / 8.0));
+            float num1 = (float)(1f / (length / 8f));
             float num2 = 0f;
             float num3 = 8f;
             while (true)

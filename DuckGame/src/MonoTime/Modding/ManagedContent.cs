@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ManagedContent
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,7 +20,7 @@ namespace DuckGame
                 foreach (Mod accessibleMod in (IEnumerable<Mod>)ModLoader.accessibleMods)
                 {
                     List<Type> typeList = accessibleMod.GetTypeList(typeof(T));
-                    foreach (Type type in accessibleMod.configuration.contentManager.Compile<T>(accessibleMod))
+                    foreach (Type type in accessibleMod.SortTypeOrder(accessibleMod.configuration.contentManager.Compile<T>(accessibleMod)))
                     {
                         list.Add(type);
                         typeList.Add(type);

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.CorkGun
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class CorkGun : Gun
     {
@@ -48,7 +41,7 @@ namespace DuckGame
                     _firedCork = 0;
                     scale = new Vec2(1.5f, 1.5f);
                 }
-                if (num < 16.0)
+                if (num < 16)
                     windingVelocity = 1f;
             }
             scale = Lerp.Vec2Smooth(scale, Vec2.One, 0.1f);

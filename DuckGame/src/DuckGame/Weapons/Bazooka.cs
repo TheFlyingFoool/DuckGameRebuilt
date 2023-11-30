@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Bazooka
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Guns|Explosives")]
     [BaggedProperty("isInDemo", true)]
@@ -33,7 +26,14 @@ namespace DuckGame
             editorTooltip = "Funny name, serious firepower. Launches an explosive missile that can destroy terrain.";
             physicsMaterial = PhysicsMaterial.Metal;
         }
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is Bazooka && pTaped.gun2 is Sniper ? new SniperZooka(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void OnPressAction()
         {
             if (_tamped)

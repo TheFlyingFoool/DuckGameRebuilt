@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.UndergroundBackground
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Background|Parallax")]
     public class UndergroundBackground : BackgroundUpdater
@@ -32,6 +25,7 @@ namespace DuckGame
             _moving = moving;
             _editorName = "Bunker BG";
             _yParallax = false;
+            editorCycleType = typeof(CityBackground);
         }
 
         public override void Initialize()

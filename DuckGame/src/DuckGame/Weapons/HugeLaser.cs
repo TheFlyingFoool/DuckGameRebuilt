@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.HugeLaser
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Audio;
+﻿using Microsoft.Xna.Framework.Audio;
 
 namespace DuckGame
 {
@@ -35,6 +28,7 @@ namespace DuckGame
         private Sound _unchargeSound;
         private Sound _unchargeSoundShort;
         private int _framesSinceBlast;
+        Interp DeathBeamLerp = new Interp(true);
 
         public byte netAnimationIndex
         {
@@ -88,8 +82,19 @@ namespace DuckGame
             _editorName = "Death Ray";
             editorTooltip = "Hold the trigger to charge a beam of pure death and destruction. You know, for kids!";
             _bio = "Invented by Dr.Death for scanning items at your local super market. Also has some military application.";
-        }
+            shouldbegraphicculled = false;
 
+            _editorPreviewOffset.x += 1;
+            _editorPreviewWidth = 35;
+        }
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is HugeLaser && pTaped.gun2 is HugeLaser ? new HugerLaser(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void Initialize()
         {
             _chargeSound = SFX.Get("laserCharge", 0f);
@@ -132,26 +137,26 @@ namespace DuckGame
                     _chargeSoundShort.Volume = _chargeVolumeShort;
                     _unchargeSound.Volume = _unchargeVolume;
                     _unchargeSoundShort.Volume = _unchargeVolumeShort;
-                    if (_chargeVolume > 0.0 && _chargeSound.State != SoundState.Playing)
+                    if (_chargeVolume > 0 && _chargeSound.State != SoundState.Playing)
                         _chargeSound.Play();
-                    else if (_chargeVolume <= 0.0)
+                    else if (_chargeVolume <= 0)
                         _chargeSound.Stop();
-                    if (_chargeVolumeShort > 0.0 && _chargeSoundShort.State != SoundState.Playing)
+                    if (_chargeVolumeShort > 0 && _chargeSoundShort.State != SoundState.Playing)
                         _chargeSoundShort.Play();
-                    else if (_chargeVolumeShort <= 0.0)
+                    else if (_chargeVolumeShort <= 0)
                         _chargeSoundShort.Stop();
-                    if (_unchargeVolume > 0.0 && _unchargeSound.State != SoundState.Playing)
+                    if (_unchargeVolume > 0 && _unchargeSound.State != SoundState.Playing)
                         _unchargeSound.Play();
-                    else if (_unchargeVolume <= 0.0)
+                    else if (_unchargeVolume <= 0)
                         _unchargeSound.Stop();
-                    if (_unchargeVolumeShort > 0.0 && _unchargeSoundShort.State != SoundState.Playing)
+                    if (_unchargeVolumeShort > 0 && _unchargeSoundShort.State != SoundState.Playing)
                         _unchargeSoundShort.Play();
-                    else if (_unchargeVolumeShort <= 0.0)
+                    else if (_unchargeVolumeShort <= 0)
                         _unchargeSoundShort.Stop();
                 }
             }
             base.Update();
-            if (_charge > 0.0)
+            if (_charge > 0)
                 _charge -= 0.1f;
             else
                 _charge = 0f;
@@ -160,46 +165,49 @@ namespace DuckGame
             if (_chargeAnim.currentAnimation == "charge" && _chargeAnim.finished && isServerForObject)
             {
                 PostFireLogic();
-                if (this.owner is Duck owner)
+                if (!Recorderator.Playing)
                 {
-                    RumbleManager.AddRumbleEvent(owner.profile, new RumbleEvent(RumbleIntensity.Medium, RumbleDuration.Pulse, RumbleFalloff.Short));
-                    owner.sliding = true;
-                    owner.crouch = true;
-                    Vec2 vec2 = barrelVector * 9f;
-                    if (owner.ragdoll != null && owner.ragdoll.part2 != null && owner.ragdoll.part1 != null && owner.ragdoll.part3 != null)
+                    if (this.owner is Duck owner)
                     {
-                        owner.ragdoll.part2.hSpeed -= vec2.x;
-                        owner.ragdoll.part2.vSpeed -= vec2.y;
-                        owner.ragdoll.part1.hSpeed -= vec2.x;
-                        owner.ragdoll.part1.vSpeed -= vec2.y;
-                        owner.ragdoll.part3.hSpeed -= vec2.x;
-                        owner.ragdoll.part3.vSpeed -= vec2.y;
+                        RumbleManager.AddRumbleEvent(owner.profile, new RumbleEvent(RumbleIntensity.Medium, RumbleDuration.Pulse, RumbleFalloff.Short));
+                        owner.sliding = true;
+                        owner.crouch = true;
+                        Vec2 vec2 = barrelVector * 9f;
+                        if (owner.ragdoll != null && owner.ragdoll.part2 != null && owner.ragdoll.part1 != null && owner.ragdoll.part3 != null)
+                        {
+                            owner.ragdoll.part2.hSpeed -= vec2.x;
+                            owner.ragdoll.part2.vSpeed -= vec2.y;
+                            owner.ragdoll.part1.hSpeed -= vec2.x;
+                            owner.ragdoll.part1.vSpeed -= vec2.y;
+                            owner.ragdoll.part3.hSpeed -= vec2.x;
+                            owner.ragdoll.part3.vSpeed -= vec2.y;
+                        }
+                        else
+                        {
+                            owner.hSpeed -= vec2.x;
+                            owner.vSpeed -= vec2.y + 3f;
+                            owner.CancelFlapping();
+                        }
                     }
                     else
                     {
-                        owner.hSpeed -= vec2.x;
-                        owner.vSpeed -= vec2.y + 3f;
-                        owner.CancelFlapping();
+                        Vec2 barrelVector = this.barrelVector;
+                        hSpeed -= barrelVector.x * 9f;
+                        vSpeed -= (float)(barrelVector.y * 9 + 3);
                     }
+                    Vec2 vec2_1 = Offset(barrelOffset);
+                    Vec2 vec2_2 = Offset(barrelOffset + new Vec2(1200f, 0f)) - vec2_1;
+                    if (isServerForObject)
+                        ++Global.data.laserBulletsFired.valueInt;
+                    if (Network.isActive)
+                        Send.Message(new NMDeathBeam(this, vec2_1, vec2_2));
+                    DeathBeam deathBeam = new DeathBeam(vec2_1, vec2_2, this.owner)
+                    {
+                        isLocal = isServerForObject
+                    };
+                    Level.Add(deathBeam);
+                    doBlast = true;
                 }
-                else
-                {
-                    Vec2 barrelVector = this.barrelVector;
-                    hSpeed -= barrelVector.x * 9f;
-                    vSpeed -= (float)(barrelVector.y * 9.0 + 3.0);
-                }
-                Vec2 vec2_1 = Offset(barrelOffset);
-                Vec2 vec2_2 = Offset(barrelOffset + new Vec2(1200f, 0f)) - vec2_1;
-                if (isServerForObject)
-                    ++Global.data.laserBulletsFired.valueInt;
-                if (Network.isActive)
-                    Send.Message(new NMDeathBeam(this, vec2_1, vec2_2));
-                DeathBeam deathBeam = new DeathBeam(vec2_1, vec2_2, this.owner)
-                {
-                    isLocal = isServerForObject
-                };
-                Level.Add(deathBeam);
-                doBlast = true;
             }
             if (doBlast && isServerForObject)
             {
@@ -228,22 +236,31 @@ namespace DuckGame
                 _tip.alpha = (24 - _chargeAnim.frame) / 24f;
             else
                 _tip.alpha = 0f;
-            Graphics.Draw(_tip, barrelPosition.x, barrelPosition.y);
+            Graphics.Draw(ref _tip, barrelPosition.x, barrelPosition.y);
             _chargeAnim.flipH = graphic.flipH;
             _chargeAnim.depth = depth + 1;
             _chargeAnim.angle = angle;
             _chargeAnim.alpha = alpha;
-            Graphics.Draw(_chargeAnim, x, y);
+            Graphics.Draw(ref _chargeAnim, x, y);
             Graphics.material = material;
             float num1 = Maths.NormalizeSection(_tip.alpha, 0f, 0.7f);
             float num2 = Maths.NormalizeSection(_tip.alpha, 0.6f, 1f);
             float num3 = Maths.NormalizeSection(_tip.alpha, 0.75f, 1f);
             float num4 = Maths.NormalizeSection(_tip.alpha, 0.9f, 1f);
             float num5 = Maths.NormalizeSection(_tip.alpha, 0.8f, 1f) * 0.5f;
-            if (num1 <= 0.0)
+            if (num1 <= 0)
                 return;
+
+            Vec2 barrelOffset = this.barrelOffset;
+            DeathBeamLerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
             Vec2 p1 = Offset(barrelOffset);
             Vec2 p2 = Offset(barrelOffset + new Vec2(num1 * 1200f, 0f));
+            if (angleDegrees == -90.0f || angleDegrees == 0.0f)
+            {
+                p1 = DeathBeamLerp.Position + OffsetLocal(barrelOffset);
+                p2 = DeathBeamLerp.Position + OffsetLocal(barrelOffset + new Vec2(num1 * 1200f, 0f));
+            }
             Graphics.DrawLine(p1, p2, new Color((_tip.alpha * 0.7f + 0.3f), _tip.alpha, _tip.alpha) * (0.3f + num5), (1f + num2 * 12f));
             Graphics.DrawLine(p1, p2, Color.Red * (0.2f + num5), (1f + num3 * 28f));
             Graphics.DrawLine(p1, p2, Color.Red * (0.1f + num5), (0.2f + num4 * 40f));

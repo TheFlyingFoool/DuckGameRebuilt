@@ -30,14 +30,12 @@ namespace Microsoft.Xna.Framework.Content
 			
 			// Setup proper exception.
 			if(window < 15 || window > 21) throw new UnsupportedWindowSizeRange();
-
-            // Let's initialize our state.
-            m_state = new LzxState
-            {
-                actual_size = 0,
-                window = new byte[wndsize]
-            };
-            for (int i = 0; i < wndsize; i++) m_state.window[i] = 0xDC;
+			
+			// Let's initialize our state.
+			m_state = new LzxState();
+			m_state.actual_size = 0;
+			m_state.window = new byte[wndsize];
+			for(int i = 0; i < wndsize; i++) m_state.window[i] = 0xDC;
 			m_state.actual_size = wndsize;
 			m_state.window_size = wndsize;
 			m_state.window_posn = 0;
@@ -138,7 +136,7 @@ namespace Microsoft.Xna.Framework.Content
 					m_state.block_type = (LzxConstants.BLOCKTYPE)bitbuf.ReadBits(3);
 					i = bitbuf.ReadBits(16);
 					j = bitbuf.ReadBits(8);
-					m_state.block_remaining = m_state.block_length = (i << 8) | j;
+					m_state.block_remaining = m_state.block_length = (uint)((i << 8) | j);
 					
 					switch(m_state.block_type)
 					{

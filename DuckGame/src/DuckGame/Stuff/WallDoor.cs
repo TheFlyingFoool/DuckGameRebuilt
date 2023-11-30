@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.WallDoor
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -32,6 +25,9 @@ namespace DuckGame
             depth = -0.5f;
             _editorName = "Wall Door";
             _canFlip = false;
+
+            //a lot of stuff is tied to the sprite animation so this shall never be graphic culled -NiK0
+            shouldbegraphicculled = false;
         }
 
         public void AddDuck(Duck d)
@@ -90,7 +86,7 @@ namespace DuckGame
                         transportingDuck.autoExitDoorFrames = 0;
                     }
                 }
-                if (Math.Abs(transportingDuck.x - x) < 3.0 && transportingDuck.wallDoorAI != null)
+                if (Math.Abs(transportingDuck.x - x) < 3 && transportingDuck.wallDoorAI != null)
                 {
                     transportingDuck.hSpeed *= 0.5f;
                     transportingDuck.moveLock = true;
@@ -98,9 +94,9 @@ namespace DuckGame
                 }
                 else if (transportingDuck.wallDoorAI != null)
                 {
-                    if (transportingDuck.x > x + 2.0)
+                    if (transportingDuck.x > x + 2)
                         transportingDuck.wallDoorAI.Press(Triggers.Left);
-                    if (transportingDuck.x < x - 2.0)
+                    if (transportingDuck.x < x - 2)
                         transportingDuck.wallDoorAI.Press(Triggers.Right);
                 }
                 if (transportingDuck.transportDoor != null)

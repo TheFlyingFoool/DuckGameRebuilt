@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.DartGun
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Guns|Misc")]
     [BaggedProperty("isFatal", false)]
@@ -56,24 +49,24 @@ namespace DuckGame
             if (!onFire)
                 return;
             _burnWait -= 0.01f;
-            if (_burnWait < 0.0)
+            if (_burnWait < 0)
             {
                 Level.Add(SmallFire.New(10f, 0f, 0f, 0f, stick: this, canMultiply: false, firedFrom: this));
                 _burnWait = 1f;
             }
-            if (burnt >= 1.0)
+            if (burnt >= 1f)
                 return;
             burnt += 1f / 1000f;
         }
 
         public override void Update()
         {
-            if (!burntOut && burnt >= 1.0)
+            if (!burntOut && burnt >= 1f)
             {
                 _sprite.frame = 1;
                 Vec2 vec2 = Offset(new Vec2(10f, 0f));
-                if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
-                else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
+                if (DGRSettings.ActualParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
+                else if (Rando.Float(1) < DGRSettings.ActualParticleMultiplier) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
                 _onFire = false;
                 flammable = 0f;
                 burntOut = true;
@@ -93,7 +86,7 @@ namespace DuckGame
         {
             if (ammo > 0)
             {
-                if (_burnLife <= 0.0)
+                if (_burnLife <= 0)
                 {
                     SFX.Play("dartStick", 0.5f, Rando.Float(0.2f) - 0.1f);
                 }
@@ -102,6 +95,7 @@ namespace DuckGame
                     --ammo;
                     SFX.Play("dartGunFire", 0.5f, Rando.Float(0.2f) - 0.1f);
                     kick = 1f;
+                    recordKick = true;
                     if (receivingPress || !isServerForObject)
                         return;
                     Vec2 vec2 = Offset(barrelOffset + new Vec2(-8f, 0f));

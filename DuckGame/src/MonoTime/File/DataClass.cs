@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.DataClass
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -251,7 +244,7 @@ namespace DuckGame
                         {
                             if (Steam.IsInitialized())
                             {
-                                if (Steam.GetStat(property.Name) >= -99999.0)
+                                if (Steam.GetStat(property.Name) >= -99999f)
                                     continue;
                             }
                             if (property.GetValue(output, null) is StatBinding statBinding)
@@ -302,7 +295,7 @@ namespace DuckGame
                             {
                                 if (Steam.IsInitialized())
                                 {
-                                    if (Steam.GetStat(field.Name) >= -99999.0)
+                                    if (Steam.GetStat(field.Name) >= -99999f)
                                         continue;
                                 }
                                 if (field.GetValue(output) is StatBinding statBinding)

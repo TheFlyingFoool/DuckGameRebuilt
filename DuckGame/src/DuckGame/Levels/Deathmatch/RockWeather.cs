@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.RockWeather
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -524,6 +517,17 @@ namespace DuckGame
 
         private RockWeatherState GetWeatherState(float time, bool lerp = true)
         {
+            if (Program.BirthdayDGR)
+            {
+                RockWeatherState WH = new RockWeatherState();
+                WH.add = Vec3.Zero;
+                WH.multiply = Vec3.One;
+                WH.sky = new Vec3(0.05f);
+                WH.lightOpacity = 0.3F;
+                WH.sunGlow = 0;
+                WH.sunOpacity = 0;
+                return WH;
+            }
             RockWeatherState rockWeatherState1 = null;
             RockWeatherState rockWeatherState2 = null;
             float num1 = 0f;
@@ -644,7 +648,7 @@ namespace DuckGame
             _weatherTime += 6.17284E-06f;
             if (_weather == Weather.Raining)
                 _timeRaining += Maths.IncFrameTimer();
-            if (_timeOfDay <= 1.0)
+            if (_timeOfDay <= 1f)
                 return;
             _timeOfDay = 0f;
         }
@@ -771,14 +775,11 @@ namespace DuckGame
                 rainbowFade = 1f;
                 rainbowTime = 1f;
             }
-            rainbowFade = Lerp.Float(rainbowFade, rainbowTime > 0.0 ? 1f : 0f, 1f / 1000f);
+            rainbowFade = Lerp.Float(rainbowFade, rainbowTime > 0f ? 1f : 0f, 1f / 1000f);
             rainbowTime -= Maths.IncFrameTimer();
-            if (_weather != Weather.Sunny)
-                rainbowTime -= Maths.IncFrameTimer() * 8f;
-            if (rainbowTime < 0.0)
-                rainbowTime = 0f;
-            if (neverRainbow)
-                rainbowFade = 0f;
+            if (_weather != Weather.Sunny) rainbowTime -= Maths.IncFrameTimer() * 8f;
+            if (rainbowTime < 0f) rainbowTime = 0f;
+            if (neverRainbow) rainbowFade = 0f;
             RockWeatherState weatherState = GetWeatherState(_timeOfDay);
             rainbowLight = weatherState.rainbowLight * rainbowFade;
             rainbowLight2 = weatherState.rainbowLight2 * rainbowFade;
@@ -787,12 +788,12 @@ namespace DuckGame
             if (Network.isServer)
             {
                 wait += 0.003f;
-                if (wait > 1.0)
+                if (wait > 1f)
                 {
                     wait = 0f;
                     if (_weatherTime > 0.1f)
                     {
-                        if (snowChance > 0.0 && _weather != Weather.Snowing && Rando.Float(1f) > 1.0 - snowChance)
+                        if (snowChance > 0f && _weather != Weather.Snowing && Rando.Float(1f) > 1f - snowChance)
                         {
                             _prevWeatherLerp = 1f;
                             sunshowers = 0f;
@@ -802,7 +803,7 @@ namespace DuckGame
                                 Send.Message(new NMChangeWeather((byte)_weather));
                             _weatherTime = 0f;
                         }
-                        if (rainChance > 0.0 && _weather != Weather.Raining && Rando.Float(1f) > 1.0 - rainChance)
+                        if (rainChance > 0f && _weather != Weather.Raining && Rando.Float(1f) > 1f - rainChance)
                         {
                             _prevWeatherLerp = 1f;
                             sunshowers = 0f;
@@ -817,7 +818,7 @@ namespace DuckGame
                             _prevWeatherLerp = 1f;
                             if (_weather == Weather.Raining)
                             {
-                                if (_timeRaining > 900.0 && Rando.Float(1f) > 0.45f || Rando.Float(1f) > 0.95f)
+                                if (_timeRaining > 900f && Rando.Float(1f) > 0.45f || Rando.Float(1f) > 0.95f)
                                     rainbowTime = Rando.Float(30f, 240f);
                                 if (Rando.Float(1f) > 0.04f)
                                     sunshowers = Rando.Float(0.1f, 60f);
@@ -833,12 +834,12 @@ namespace DuckGame
                 }
             }
             sunshowers -= Maths.IncFrameTimer();
-            if (sunshowers <= 0.0)
+            if (sunshowers <= 0f)
                 sunshowers = 0f;
             switch (_weather)
             {
                 case Weather.Snowing:
-                    while (_particleWait <= 0.0)
+                    while (_particleWait <= 0f)
                     {
                         ++_particleWait;
                         SnowParticle snowParticle = new SnowParticle(new Vec2(Rando.Float(-100f, 400f), Rando.Float(-500f, -550f)))
@@ -850,7 +851,7 @@ namespace DuckGame
                     _particleWait -= 0.5f;
                     break;
                 case Weather.Raining:
-                    while (_particleWait <= 0.0)
+                    while (_particleWait <= 0f)
                     {
                         ++_particleWait;
                         RainParticle rainParticle = new RainParticle(new Vec2(Rando.Float(-100f, 900f), Rando.Float(-500f, -550f)))
@@ -862,7 +863,7 @@ namespace DuckGame
                     --_particleWait;
                     break;
                 default:
-                    if (sunshowers <= 0.0)
+                    if (sunshowers <= 0f)
                         break;
                     goto case Weather.Raining;
             }
@@ -870,19 +871,19 @@ namespace DuckGame
             foreach (WeatherParticle particle in _particles)
             {
                 particle.Update();
-                if (particle.position.y > 0.0)
+                if (particle.position.y > 0f)
                     particle.die = true;
                 switch (particle)
                 {
-                    case RainParticle _ when particle.z < 70.0 && particle.position.y > -62.0:
+                    case RainParticle _ when particle.z < 70f && particle.position.y > -62f:
                         particle.die = true;
                         particle.position.y = -58f;
                         break;
-                    case RainParticle _ when particle.z < 40.0 && particle.position.y > -98.0:
+                    case RainParticle _ when particle.z < 40f && particle.position.y > -98f:
                         particle.die = true;
                         particle.position.y = -98f;
                         break;
-                    case RainParticle _ when particle.z < 25.0 && particle.position.x > 175.0 && particle.position.x < 430.0 && particle.position.y > -362.0 && particle.position.y < -352.0:
+                    case RainParticle _ when particle.z < 25f && particle.position.x > 175f && particle.position.x < 430f && particle.position.y > -362f && particle.position.y < -352f:
                         particle.die = true;
                         particle.position.y = -362f;
                         break;

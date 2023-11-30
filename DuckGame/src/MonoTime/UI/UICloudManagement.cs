@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.UICloudManagement
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -182,6 +175,7 @@ namespace DuckGame
                     --_selection;
                     if (_selection < _topOffset)
                         --_topOffset;
+                    SFX.DontSave = 1;
                     SFX.Play("textLetter", 0.7f);
                 }
                 if (Input.Pressed(Triggers.MenuDown) && _selection < currentFolder.files.Count - 1)
@@ -189,6 +183,7 @@ namespace DuckGame
                     ++_selection;
                     if (_selection > _topOffset + kMaxInView)
                         ++_topOffset;
+                    SFX.DontSave = 1;
                     SFX.Play("textLetter", 0.7f);
                 }
                 if (Input.Pressed(Triggers.Select) && currentFolder.files.Count > 0)
@@ -204,6 +199,7 @@ namespace DuckGame
                         _flagged.Remove(currentFolder.files[_selection]);
                     else
                         _flagged.Add(currentFolder.files[_selection]);
+                    SFX.DontSave = 1;
                     SFX.Play("textLetter", 0.7f);
                 }
                 if (Input.Pressed(Triggers.Menu2) && _flagged.Count > 0)
@@ -230,6 +226,7 @@ namespace DuckGame
             currentFolder = pFolder;
             _selection = 0;
             _topOffset = 0;
+            SFX.DontSave = 1;
             SFX.Play("textLetter", 0.7f);
         }
 
@@ -252,12 +249,12 @@ namespace DuckGame
                         if (_topOffset > 0)
                         {
                             _downArrow.flipV = true;
-                            Graphics.Draw(_downArrow, x, vec2.y - 2f, (Depth)0.5f);
+                            Graphics.Draw(ref _downArrow, x, vec2.y - 2f, (Depth)0.5f);
                         }
                         if (num2 > kMaxInView)
                         {
                             _downArrow.flipV = false;
-                            Graphics.Draw(_downArrow, x, vec2.y + y, (Depth)0.5f);
+                            Graphics.Draw(ref _downArrow, x, vec2.y + y, (Depth)0.5f);
                             break;
                         }
                         string str1 = file.name;

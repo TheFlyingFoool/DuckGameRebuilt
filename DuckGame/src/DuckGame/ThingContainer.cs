@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ThingContainer
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -136,7 +129,7 @@ namespace DuckGame
             {
                 bool flag2 = false;
                 float num2 = property1.ReadFloat();
-                if (!flag1 && property2 && num2 < -99999.0)
+                if (!flag1 && property2 && num2 < -99999)
                 {
                     num2 = property1.ReadFloat();
                     flag2 = true;
@@ -214,9 +207,9 @@ namespace DuckGame
                 bool flag5 = true;
                 if (Level.symmetry)
                 {
-                    if (Level.leftSymmetry && num2 > 80.0)
+                    if (Level.leftSymmetry && num2 > 80)
                         flag5 = false;
-                    if (!Level.leftSymmetry && num2 < 96.0)
+                    if (!Level.leftSymmetry && num2 < 96)
                         flag5 = false;
                 }
                 if (flag5)
@@ -253,7 +246,7 @@ namespace DuckGame
                         if (Level.loadingOppositeSymmetry)
                             flag6 = !flag6;
                         if (flag6)
-                            blockGroup.position.x = (float)(192.0 - blockGroup.position.x - 16.0);
+                            blockGroup.position.x = (float)(192 - blockGroup.position.x - 16);
                         blockGroup.collisionOffset = new Vec2(property3.ReadFloat(), property3.ReadFloat());
                         blockGroup.collisionSize = new Vec2(property3.ReadFloat(), property3.ReadFloat());
                         float num11 = 88f;
@@ -268,7 +261,7 @@ namespace DuckGame
                                     blockGroup.position.x -= num12;
                                     blockGroup.position.x += x / 2f;
                                     blockGroup.collisionSize = new Vec2(x, blockGroup.collisionSize.y);
-                                    blockGroup.collisionOffset = new Vec2((float)-(x / 2.0), blockGroup.collisionOffset.y);
+                                    blockGroup.collisionOffset = new Vec2((float)-(x / 2), blockGroup.collisionOffset.y);
                                     blockGroup.right = num11;
                                 }
                             }
@@ -282,7 +275,7 @@ namespace DuckGame
                                     blockGroup.position.x += num13;
                                     blockGroup.position.x -= x / 2f;
                                     blockGroup.collisionSize = new Vec2(x, blockGroup.collisionSize.y);
-                                    blockGroup.collisionOffset = new Vec2((float)-(x / 2.0), blockGroup.collisionOffset.y);
+                                    blockGroup.collisionOffset = new Vec2((float)-(x / 2), blockGroup.collisionOffset.y);
                                     blockGroup.left = num11;
                                 }
                             }
@@ -297,9 +290,9 @@ namespace DuckGame
                                 bool flag7 = true;
                                 if (Level.symmetry)
                                 {
-                                    if (Level.leftSymmetry && b.x > 80.0)
+                                    if (Level.leftSymmetry && b.x > 80)
                                         flag7 = false;
-                                    if (!Level.leftSymmetry && b.x < 96.0)
+                                    if (!Level.leftSymmetry && b.x < 96)
                                         flag7 = false;
                                 }
                                 if (flag7)
@@ -430,7 +423,7 @@ namespace DuckGame
                 if (Level.loadingOppositeSymmetry)
                     flag2 = !flag2;
                 if (flag2)
-                    num2 = (float)(192.0 - num2 - 16.0);
+                    num2 = (float)(192 - num2 - 16);
                 Thing thing = Editor.CreateThing(type);
                 if (flag2 && thing is AutoBlock)
                 {
@@ -465,9 +458,9 @@ namespace DuckGame
                 bool flag3 = true;
                 if (Level.symmetry)
                 {
-                    if (Level.leftSymmetry && num2 > 80.0)
+                    if (Level.leftSymmetry && num2 > 80)
                         flag3 = false;
-                    if (!Level.leftSymmetry && num2 < 96.0)
+                    if (!Level.leftSymmetry && num2 < 96)
                         flag3 = false;
                 }
                 if (flag3)
@@ -505,7 +498,7 @@ namespace DuckGame
                         if (Level.loadingOppositeSymmetry)
                             flag4 = !flag4;
                         if (flag4)
-                            blockGroup.position.x = (float)(192.0 - blockGroup.position.x - 16.0);
+                            blockGroup.position.x = (float)(192 - blockGroup.position.x - 16);
                         blockGroup.collisionOffset = new Vec2(Change.ToSingle(source2[index1 + 2]), Change.ToSingle(source2[index1 + 3]));
                         blockGroup.collisionSize = new Vec2(Change.ToSingle(source2[index1 + 4]), Change.ToSingle(source2[index1 + 5]));
                         float num4 = 88f;
@@ -520,7 +513,7 @@ namespace DuckGame
                                     blockGroup.position.x -= num5;
                                     blockGroup.position.x += x / 2f;
                                     blockGroup.collisionSize = new Vec2(x, blockGroup.collisionSize.y);
-                                    blockGroup.collisionOffset = new Vec2((float)-(x / 2.0), blockGroup.collisionOffset.y);
+                                    blockGroup.collisionOffset = new Vec2((float)-(x / 2), blockGroup.collisionOffset.y);
                                     blockGroup.right = num4;
                                 }
                             }
@@ -534,7 +527,7 @@ namespace DuckGame
                                     blockGroup.position.x += num6;
                                     blockGroup.position.x -= x / 2f;
                                     blockGroup.collisionSize = new Vec2(x, blockGroup.collisionSize.y);
-                                    blockGroup.collisionOffset = new Vec2((float)-(x / 2.0), blockGroup.collisionOffset.y);
+                                    blockGroup.collisionOffset = new Vec2((float)-(x / 2), blockGroup.collisionOffset.y);
                                     blockGroup.left = num4;
                                 }
                             }
@@ -547,9 +540,9 @@ namespace DuckGame
                             bool flag5 = true;
                             if (Level.symmetry)
                             {
-                                if (Level.leftSymmetry && b.x > 80.0)
+                                if (Level.leftSymmetry && b.x > 80)
                                     flag5 = false;
-                                if (!Level.leftSymmetry && b.x < 96.0)
+                                if (!Level.leftSymmetry && b.x < 96)
                                     flag5 = false;
                             }
                             if (flag5)

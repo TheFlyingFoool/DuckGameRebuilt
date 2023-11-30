@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.NetworkDebugger
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -343,7 +336,7 @@ namespace DuckGame
                 _currentIndex = index1;
                 LockInstance(instance1);
                 bool flag1 = false;
-                if (_lastRect == _currentIndex || instance1.rect.Contains(Mouse.mousePos) || Math.Abs(Graphics.width / 2 - Mouse.mousePos.x) < 32.0 && Math.Abs(Graphics.height / 2 - Mouse.mousePos.y) < 32.0)
+                if (_lastRect == _currentIndex || instance1.rect.Contains(Mouse.mousePos) || Math.Abs(Graphics.width / 2 - Mouse.mousePos.x) < 32 && Math.Abs(Graphics.height / 2 - Mouse.mousePos.y) < 32)
                 {
                     _lastRect = _currentIndex;
                     InputProfile.active = InputProfile.DefaultPlayer1;
@@ -683,10 +676,10 @@ namespace DuckGame
         {
             if (!_sentPulse.ContainsKey(key) || !_sentPulse[key].ContainsKey(to))
                 return 0f;
-            if (_sentPulse[key][to] > 1.0)
+            if (_sentPulse[key][to] > 1)
                 _sentPulse[key][to] = 1f;
             _sentPulse[key][to] -= 0.1f;
-            if (_sentPulse[key][to] < 0.0)
+            if (_sentPulse[key][to] < 0)
                 _sentPulse[key][to] = 0f;
             return _sentPulse[key][to];
         }
@@ -704,10 +697,10 @@ namespace DuckGame
         {
             if (!_receivedPulse.ContainsKey(key) || !_receivedPulse[key].ContainsKey(from))
                 return 0f;
-            if (_receivedPulse[key][from] > 1.0)
+            if (_receivedPulse[key][from] > 1)
                 _receivedPulse[key][from] = 1f;
             _receivedPulse[key][from] -= 0.1f;
-            if (_receivedPulse[key][from] < 0.0)
+            if (_receivedPulse[key][from] < 0)
                 _receivedPulse[key][from] = 0f;
             return _receivedPulse[key][from];
         }
@@ -734,7 +727,7 @@ namespace DuckGame
             if (_instances.Count <= page)
                 return;
             int num1 = 97;
-            if (size.y < 300.0)
+            if (size.y < 300)
                 num1 = num1 / 2 - 2;
             Queue<DCLine> lines = _instances[page].consoleCore.lines;
             Vec2 p1_1 = pos;
@@ -796,9 +789,9 @@ namespace DuckGame
             Graphics.DrawRect(p1_2, p2_2, Color.White * (flag || scrollerDrag[index] ? 0.8f : 0.5f), (Depth)0.82f);
             if (Mouse.xConsole > p1_1.x && Mouse.xConsole < p2_1.x && Mouse.yConsole > p1_1.y && Mouse.yConsole < p2_1.y)
             {
-                if (Mouse.scroll > 0.0)
+                if (Mouse.scroll > 0)
                     logsScroll[index] += 5;
-                else if (Mouse.scroll < 0.0)
+                else if (Mouse.scroll < 0)
                     logsScroll[index] -= 5;
             }
             if (logsScroll[index] < 0)
@@ -891,12 +884,12 @@ namespace DuckGame
                     Vec2 size = new Vec2(Layer.Console.width - 40f, Layer.Console.height - 100f);
                     if (num > 1)
                     {
-                        size = new Vec2((float)(size.x / 2.0 - 4.0), Layer.Console.height - 100f);
+                        size = new Vec2((float)(size.x / 2 - 4), Layer.Console.height - 100f);
                         vec2Array[1] = vec2 + new Vec2(size.x + 4f, 0f);
                     }
                     if (num > 2)
                     {
-                        size = new Vec2(size.x, (float)(size.y / 2.0 - 16.0));
+                        size = new Vec2(size.x, (float)(size.y / 2 - 16));
                         vec2Array[2] = vec2 + new Vec2(0f, size.y + 16f);
                         vec2Array[3] = vec2 + new Vec2(size.x + 4f, size.y + 16f);
                     }

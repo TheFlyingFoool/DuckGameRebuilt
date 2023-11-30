@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.UnlockScreen
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -237,7 +230,7 @@ namespace DuckGame
             string text = _tree.selected.GetNameForDisplay();
             if (!flag2)
                 text = "???";
-            Graphics.DrawString(text, p1 + new Vec2((float)((vec2.x - 27.0) / 2.0 - Graphics.GetStringWidth(text) / 2.0), 2f), (flag1 ? new Color(163, 206, 39) : Color.Red) * alpha, (Depth)0.5f);
+            Graphics.DrawString(text, p1 + new Vec2((float)((vec2.x - 27f) / 2f - Graphics.GetStringWidth(text) / 2f), 2f), (flag1 ? new Color(163, 206, 39) : Color.Red) * alpha, (Depth)0.5f);
             _tail.depth = (Depth)0.5f;
             _tail.alpha = alpha;
             _tail.flipH = false;

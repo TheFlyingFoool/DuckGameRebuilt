@@ -1,14 +1,8 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.TeamSelect2
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Text;
+using System.Collections.Generic;
+using System.Runtime;
 
 namespace DuckGame
 {
@@ -17,14 +11,14 @@ namespace DuckGame
         public static bool didcreatelanlobby;
         public static bool KillsForPoints = false;
         public static bool QUACK3;
-        private float dim;
+        public float dim;
         public static bool fakeOnlineImmediately = false;
         public static int customLevels = 0;
         public static int prevCustomLevels = 0;
         public static int prevNumModifiers = 0;
         private BitmapFont _font;
         private SpriteMap _countdown;
-        private float _countTime = 1.5f;
+        public float _countTime = 1.5f;
         public List<ProfileBox2> _profiles = new List<ProfileBox2>();
         private SpriteMap _buttons;
         private bool _matchSetup;
@@ -101,7 +95,8 @@ namespace DuckGame
         private float _waitToShow = 1f;
         private static bool _showedPS4Warning = false;
         private float _afkTimeout;
-        private static bool _showedOnlineBumper = false;
+        //keep this its important although it may not seem like it and may never be used -NiK0
+        private static bool _showedOnlineBumper = false; 
         private float _timeoutFade;
         private float _topScroll;
         private float _afkMaxTimeout = 300f;
@@ -121,16 +116,23 @@ namespace DuckGame
 
         public static string DefaultGameName()
         {
-            if (GetSettingInt("type") >= 3)
+            List<Profile> activep = Profiles.active;
+            if (GetSettingInt("type") >= 3 && Profiles.active.Count > 0)
             {
-                List<Profile> activep = Profiles.active;
                 if (activep.Count > 0)
                 {
                     return activep[0].name + "'s LAN Game";
                 }
             }
+            string hostName = "";
+            activep.ForEach((profile) =>
+            {
+                if (profile.isHost)
+                    hostName = profile.name;
+            });
+            if (hostName != "")
+                return hostName + "'s Game";
             return Profiles.experienceProfile.name + "'s Game";
-            
         }
 
         public static void DefaultSettings(bool resetMatchSettings = true)
@@ -256,7 +258,7 @@ namespace DuckGame
 
         public static bool Enabled(string id, bool ignoreTeamSelect = false)
         {
-            if (!ignoreTeamSelect && !Network.InGameLevel())
+            if (!ignoreTeamSelect && !Network.inGameLevel)
                 return false;
             UnlockData unlock = Unlocks.GetUnlock(id);
             if (unlock == null || Network.isActive && !unlock.onlineEnabled)
@@ -464,7 +466,7 @@ namespace DuckGame
 
         public static string GetMatchSettingString()
         {
-            string matchSettingString = "" + GetSettingInt("requiredwins").ToString() + GetSettingInt("restsevery").ToString() + GetSettingInt("randommaps").ToString() + GetSettingInt("workshopmaps").ToString() + GetSettingInt("normalmaps").ToString() + ((bool)GetOnlineSetting("teams").value).ToString() + GetSettingInt("custommaps").ToString() + Editor.activatedLevels.Count.ToString() + GetSettingBool("wallmode").ToString() + GetSettingBool("clientlevelsenabled").ToString();
+            string matchSettingString = "" + GetSettingInt("requiredwins").ToString() + GetSettingInt("|every").ToString() + GetSettingInt("randommaps").ToString() + GetSettingInt("workshopmaps").ToString() + GetSettingInt("normalmaps").ToString() + ((bool)GetOnlineSetting("teams").value).ToString() + GetSettingInt("custommaps").ToString() + Editor.activatedLevels.Count.ToString() + GetSettingBool("wallmode").ToString() + GetSettingBool("clientlevelsenabled").ToString();
             foreach (byte networkModifier in GetNetworkModifierList())
                 matchSettingString += networkModifier.ToString();
             return matchSettingString;
@@ -472,6 +474,62 @@ namespace DuckGame
 
         public static void SendMatchSettings(NetworkConnection c = null, bool initial = false)
         {
+            BitBuffer bf = new BitBuffer();
+            bf.Write((byte)GetSettingInt("requiredwins"));
+            bf.Write((byte)GetSettingInt("restsevery"));
+            bf.Write((byte)GetSettingInt("randommaps"));
+            bf.Write((byte)GetSettingInt("workshopmaps"));
+            bf.Write((byte)GetSettingInt("normalmaps"));
+            bf.Write((bool)GetOnlineSetting("teams").value);
+            bf.Write((byte)GetSettingInt("custommaps"));
+            bf.Write((bool)GetSettingBool("wallmode"));
+            bf.Write((bool)GetSettingBool("clientlevelsenabled"));
+
+            List<byte> bs = GetNetworkModifierList();
+            bf.Write(bs.Count);
+            for (int i = 0; i < bs.Count; i++) bf.Write(bs[i]);
+
+
+            /*bf.Write(Editor.activatedLevels.Count);
+            for (int i = 0; i < Editor.activatedLevels.Count; i++)
+            {
+                string s = Editor.activatedLevels[i];
+                bf.Write(s);
+            }*/
+
+            List<byte> buffer = bf.buffer.ToList();
+            if (bf.position + 13 < bf.buffer.Count())
+            {
+                buffer.RemoveRange(bf.position + 10, bf.buffer.Count() - bf.position - 11);
+            }
+            switch (DGRSettings.mMatch)
+            {
+                case 0:
+                    if (DGRSettings.MatchSetSave1 != bf.buffer)
+                    {
+                        HUD.AddPlayerChangeDisplay(" |MENUORANGE|SAVED MATCH SETTINGS TO PRESET 1!");
+                    }
+                    DGRSettings.bMatchSetSave1 = new List<string>(Editor.activatedLevels);
+                    DGRSettings.MatchSetSave1 = buffer.ToArray();
+                    break;
+                case 1:
+                    if (DGRSettings.MatchSetSave2 != bf.buffer)
+                    {
+                        HUD.AddPlayerChangeDisplay(" |MENUORANGE|SAVED MATCH SETTINGS TO PRESET 2!");
+                    }
+                    DGRSettings.bMatchSetSave2 = new List<string>(Editor.activatedLevels);
+                    DGRSettings.MatchSetSave2 = buffer.ToArray();
+                    break;
+                case 2:
+                    if (DGRSettings.MatchSetSave3 != bf.buffer)
+                    {
+                        HUD.AddPlayerChangeDisplay(" |MENUORANGE|SAVED MATCH SETTINGS TO PRESET 3!");
+                    }
+                    DGRSettings.bMatchSetSave3 = new List<string>(Editor.activatedLevels);
+                    DGRSettings.MatchSetSave3 = buffer.ToArray();
+                    break;
+            }
+            
             UpdateModifierStatus();
             if (!Network.isActive)
                 return;
@@ -522,15 +580,13 @@ namespace DuckGame
         private void SetMatchSettingsOpenedFromHostGame()
         {
             _hostGameEditedMatchSettings = true;
-            _hostMatchSettingsMenu.SetBackFunction(new UIMenuActionOpenMenu(_hostMatchSettingsMenu, _hostSettingsMenu));
+            _hostMatchSettingsMenu.SetBackFunction(new UIMenuActionOpenMenuCallFunction(_hostMatchSettingsMenu, _hostSettingsMenu, HUD.CloseAllCorners));
         }
 
         private void BuildHostMatchSettingsMenu()
         {
-            float num1 = 320f;
-            float num2 = 180f;
             _hostMatchSettingsMenu = new UIMenu("@LWING@MATCH SETTINGS@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
-            _hostLevelSelectMenu = new LevelSelectCompanionMenu(num1 / 2f, num2 / 2f, _hostMatchSettingsMenu);
+            _hostLevelSelectMenu = new LevelSelectCompanionMenu(160f, 90f, _hostMatchSettingsMenu);
             _playOnlineGroup.Add(_hostLevelSelectMenu, false);
             _hostModifiersMenu = new UIMenu("MODIFIERS", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
             foreach (UnlockData unlock in Unlocks.GetUnlocks(UnlockType.Modifier))
@@ -547,12 +603,28 @@ namespace DuckGame
             _hostModifiersMenu.Close();
             _playOnlineGroup.Add(_hostModifiersMenu, false);
             _hostMatchSettingsMenu.AddMatchSetting(GetOnlineSetting("teams"), false);
+
+
+            int z = 0;
             foreach (MatchSetting matchSetting in matchSettings)
             {
+                z++;
+                if (z == 2)
+                {
+                    _hostMatchSettingsMenu.Add(new UISideButton(66, -60, 60, 0, "P1@MENU1@"));
+                }
+                if (z == 4)
+                {
+                    _hostMatchSettingsMenu.Add(new UISideButton(66, -60, 60, 0, "P2@MENU2@"));
+                }
+                if (z == 7)
+                {
+                    _hostMatchSettingsMenu.Add(new UISideButton(66, -60, 60, 0, "P3@RAGDOLL@"));
+                }
                 if (!(matchSetting.id == "workshopmaps") || Network.available) //if ((!(matchSetting.id == "workshopmaps") || Network.available) && (!(matchSetting.id == "custommaps") || !ParentalControls.AreParentalControlsActive()))
                 {
                     if (matchSetting.id != "partymode")
-                        _hostMatchSettingsMenu.AddMatchSetting(matchSetting, false);
+                        _hostMatchSettingsMenu.AddMatchSettingL(matchSetting, false);
                     if (matchSetting.id == "wallmode")
                         _hostMatchSettingsMenu.Add(new UIText(" ", Color.White), true);
                 }
@@ -561,7 +633,13 @@ namespace DuckGame
             //if (!ParentalControls.AreParentalControlsActive()) and move the below block back into place
             _hostMatchSettingsMenu.Add(new UICustomLevelMenu(new UIMenuActionOpenMenu(_hostMatchSettingsMenu, _hostLevelSelectMenu)), true);
             _hostMatchSettingsMenu.Add(new UIModifierMenuItem(new UIMenuActionOpenMenu(_hostMatchSettingsMenu, _hostModifiersMenu)), true);
-            _hostMatchSettingsMenu.SetBackFunction(new UIMenuActionOpenMenu(_hostMatchSettingsMenu, _hostSettingsMenu));
+
+            _hostMatchSettingsMenu.SetBackFunction(new UIMenuActionOpenMenuCallFunction(_hostMatchSettingsMenu, _hostSettingsMenu, HUD.CloseAllCorners));
+            _hostMatchSettingsMenu.SetOpenFunction(new UIMenuActionCallFunction(() =>
+            {
+                HUD.CloseAllCorners();
+                HUD.AddCornerControl(HUDCorner.BottomRight, "@ALT@FINE ADJUST");
+            }));
             _hostMatchSettingsMenu.Close();
             _playOnlineGroup.Add(_hostMatchSettingsMenu, false);
         }
@@ -605,11 +683,16 @@ namespace DuckGame
 
         public override void Initialize()
         {
+            Program.main.IsFixedTimeStep = true;
+            if (Editor.clientonlycontent)
+            {
+                Editor.DisableClientOnlyContent();
+            }
+            DGRSettings.InitializeFavoritedHats();
             if (sign)
             {
                 Add(new VersionSign(32, -20) { fadeTime = 300 });
             }
-            Program.main.IsFixedTimeStep = true;
             Program.gameLoadedSuccessfully = true;
             Vote.ClearVotes();
             ControllerLayoutsChanged();
@@ -644,6 +727,7 @@ namespace DuckGame
                     }
                 }
             }
+            else DGRSettings.mMatch = -1;
             _littleFont = new BitmapFont("smallBiosFontUI", 7, 5);
             _countdownScreen = new Sprite("title/wideScreen");
             backgroundColor = Color.Black;
@@ -714,8 +798,23 @@ namespace DuckGame
                     _modifierMenu.Add(new UIMenuItem("@TINYLOCK@LOCKED", c: Color.Red), true);
             }
             _modifierMenu.Close();
+
+            int z = 0;
             foreach (MatchSetting matchSetting in matchSettings)
             {
+                z++;
+                if (z == 2)
+                {
+                    _multiplayerMenu.Add(new UISideButton(66, -60, 60, 0, "P1@MENU1@"));
+                }
+                if (z == 4)
+                {
+                    _multiplayerMenu.Add(new UISideButton(66, -60, 60, 0, "P2@MENU2@"));
+                }
+                if (z == 7)
+                {
+                    _multiplayerMenu.Add(new UISideButton(66, -60, 60, 0, "P3@RAGDOLL@"));
+                }
                 if (!(matchSetting.id == "clientlevelsenabled") && (!(matchSetting.id == "workshopmaps") || Network.available))
                 {
                     _multiplayerMenu.AddMatchSetting(matchSetting, false);
@@ -737,118 +836,102 @@ namespace DuckGame
             _hostGameMenu = new UIMenu("@LWING@CREATE GAME@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
             _hostSettingsMenu = new UIMenu("@LWING@HOST SETTINGS@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
             int pMinLength = 50;
-            float num2 = 3f;
+            float heightAdd = 3f;
             _playOnlineBumper = new UIMenu("PLAYING ONLINE", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 220f, conString: "@SELECT@OK!");
-            UIMenu playOnlineBumper1 = _playOnlineBumper;
             UIText component1 = new UIText("", Color.White, heightAdd: -3f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper1.Add(component1, true);
-            UIMenu playOnlineBumper2 = _playOnlineBumper;
+            _playOnlineBumper.Add(component1, true);
             UIText component2 = new UIText("There are many tools of expression", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper2.Add(component2, true);
-            UIMenu playOnlineBumper3 = _playOnlineBumper;
+            _playOnlineBumper.Add(component2, true);
             UIText component3 = new UIText("in Duck Game. Please use them for", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper3.Add(component3, true);
-            UIMenu playOnlineBumper4 = _playOnlineBumper;
+            _playOnlineBumper.Add(component3, true);
             UIText component4 = new UIText("|PINK|love|WHITE| and not for |DGRED|hate...|WHITE|", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper4.Add(component4, true);
-            UIMenu playOnlineBumper5 = _playOnlineBumper;
+            _playOnlineBumper.Add(component4, true);
             UIText component5 = new UIText("", Color.White, heightAdd: -3f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper5.Add(component5, true);
-            UIMenu playOnlineBumper6 = _playOnlineBumper;
+            _playOnlineBumper.Add(component5, true);
             UIText component6 = new UIText("Things every Duck aught to remember:", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper6.Add(component6, true);
-            UIMenu playOnlineBumper7 = _playOnlineBumper;
+            _playOnlineBumper.Add(component6, true);
             UIText component7 = new UIText("", Color.White, heightAdd: -3f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper7.Add(component7, true);
-            UIMenu playOnlineBumper8 = _playOnlineBumper;
-            UIText component8 = new UIText("-Trolling and hate appear exactly the same online.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2))
+            _playOnlineBumper.Add(component7, true);
+            UIText component8 = new UIText("-Trolling and hate appear exactly the same online.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper8.Add(component8, true);
-            UIMenu playOnlineBumper9 = _playOnlineBumper;
-            UIText component9 = new UIText("-Please! be kind to one another.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2))
+            _playOnlineBumper.Add(component8, true);
+            UIText component9 = new UIText("-Please! be kind to one another.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper9.Add(component9, true);
-            UIMenu playOnlineBumper10 = _playOnlineBumper;
-            UIText component10 = new UIText("-Please! don't use hate speech or strong words.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2))
+            _playOnlineBumper.Add(component9, true);
+            UIText component10 = new UIText("-Please! don't use hate speech or strong words.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper10.Add(component10, true);
-            UIMenu playOnlineBumper11 = _playOnlineBumper;
-            UIText component11 = new UIText("-Please! don't use hacks in public lobbies.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2))
+            _playOnlineBumper.Add(component10, true);
+            UIText component11 = new UIText("-Please! don't use hacks in public lobbies.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper11.Add(component11, true);
-            UIMenu playOnlineBumper12 = _playOnlineBumper;
-            UIText component12 = new UIText("-Please! keep custom content tasteful.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2))
+            _playOnlineBumper.Add(component11, true);
+            UIText component12 = new UIText("-Please! keep custom content tasteful.".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper12.Add(component12, true);
-            UIMenu playOnlineBumper13 = _playOnlineBumper;
-            UIText component13 = new UIText("-Angle shots are neat (and are not hacks).".Padded(pMinLength), Colors.DGBlue, heightAdd: (-num2))
+            _playOnlineBumper.Add(component12, true);
+            UIText component13 = new UIText("-Angle shots are neat (and are not hacks).".Padded(pMinLength), Colors.DGBlue, heightAdd: (-heightAdd))
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper13.Add(component13, true);
-            UIMenu playOnlineBumper14 = _playOnlineBumper;
+            _playOnlineBumper.Add(component13, true);
             UIText component14 = new UIText("", Color.White, heightAdd: -3f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper14.Add(component14, true);
-            UIMenu playOnlineBumper15 = _playOnlineBumper;
+            _playOnlineBumper.Add(component14, true);
             UIText component15 = new UIText("If anyone is hacking or being unkind, please", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper15.Add(component15, true);
-            UIMenu playOnlineBumper16 = _playOnlineBumper;
+            _playOnlineBumper.Add(component15, true);
             UIText component16 = new UIText("hover their name in the pause menu", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper16.Add(component16, true);
-            UIMenu playOnlineBumper17 = _playOnlineBumper;
+            _playOnlineBumper.Add(component16, true);
             UIText component17 = new UIText("and go 'Mute -> Block'.", Color.White, heightAdd: -4f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper17.Add(component17, true);
-            UIMenu playOnlineBumper18 = _playOnlineBumper;
+            _playOnlineBumper.Add(component17, true);
             UIText component18 = new UIText("", Color.White, heightAdd: -3f)
             {
                 scale = new Vec2(0.5f)
             };
-            playOnlineBumper18.Add(component18, true);
+            _playOnlineBumper.Add(component18, true);
             _playOnlineBumper.SetAcceptFunction(new UIMenuActionOpenMenu(_playOnlineBumper, _playOnlineMenu));
             _playOnlineBumper.SetBackFunction(new UIMenuActionOpenMenu(_playOnlineBumper, _playOnlineMenu));
+
+
             _browseGamesMenu = new UIServerBrowser(_playOnlineMenu, "SERVER BROWSER", Layer.HUD.camera.width, Layer.HUD.camera.height, 550f);
             if (Network.available)
             {
@@ -981,6 +1064,8 @@ namespace DuckGame
             if (!DuckNetwork.isDedicatedServer && !DuckNetwork.ShowUserXPGain() && Unlockables.HasPendingUnlocks())
                 MonoMain.pauseMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
             core.endedGameInProgress = false;
+
+            
         }
 
         public void OpenPauseMenu(ProfileBox2 pProfile)
@@ -1039,7 +1124,7 @@ namespace DuckGame
 
         public static void InvitedFriend(User u)
         {
-            if (!Network.InLobby() || u == null)
+            if (!Network.inLobby || u == null)
                 return;
             _invitedUsers.Add(u);
             DuckNetwork.core._invitedFriends.Add(u.id);
@@ -1048,8 +1133,147 @@ namespace DuckGame
             DevConsole.Log(DCSection.Connection, Main.SpecialCode);
         }
 
+        public static bool CheckForCTeams(Profile p2)
+        {
+            try
+            {
+                foreach (Profile p in Profiles.activeNonSpectators)
+                {
+                    if (p != p2)
+                    {
+                        if (p.team.name == p2.team.name && !p.team.defaultTeam && p.team != p2.team)
+                        {
+                            p2.team = p.team;
+                            DuckNetwork.SendToEveryone(new NMSetTeam(p2, p.team, true));
+                            return true;
+                        }
+                    }
+                }
+            }
+            catch { }
+            return false;
+        }
+        //yes this logic is ran in draw calls which is inherently bad but i do not care anymore -NiK0
+        public void MatchsettingsPresetLogic()
+        {
+            BitBuffer bf = new BitBuffer();
+            bool doBf = false;
+            if (Input.Pressed(Triggers.Menu1))
+            {
+                doBf = true;
+                bf = DGRSettings.MatchsettingsPreset1;
+                SFX.Play("click");
+                if (DGRSettings.mMatch == 0) DGRSettings.mMatch = -1;
+                else DGRSettings.mMatch = 0;
+            }
+            if (Input.Pressed(Triggers.Menu2))
+            {
+                doBf = true;
+                bf = DGRSettings.MatchsettingsPreset2;
+                SFX.Play("click");
+                if (DGRSettings.mMatch == 1) DGRSettings.mMatch = -1;
+                else DGRSettings.mMatch = 1;
+            }
+            if (Input.Pressed(Triggers.Ragdoll))
+            {
+                doBf = true;
+                bf = DGRSettings.MatchsettingsPreset3;
+                SFX.Play("click");
+                if (DGRSettings.mMatch == 2) DGRSettings.mMatch = -1;
+                else
+                {
+                    DGRSettings.mMatch = 2;
+                }
+            }
+            if (doBf)
+            {
+                if (bf != null && DGRSettings.mMatch != -1)
+                {
+                    bf.position = 0;
+                    bf.bitOffset = 0;
+
+                    //by-by-by-by-by-bo-bo-by-int-bys-bo-int-strings
+                    int varWinsPerSet = bf.ReadByte();
+                    if (varWinsPerSet == 0)
+                    {
+                        DefaultSettings();
+                        return; //anti match setting destruction system -NiK0
+                    }
+                    GetMatchSetting("requiredwins").value = varWinsPerSet;
+                    int varRoundsPerIntermission = bf.ReadByte();
+                    GetMatchSetting("restsevery").value = varRoundsPerIntermission;
+                    int varRandomPercent = bf.ReadByte();
+                    GetMatchSetting("randommaps").value = varRandomPercent;
+                    int varWorkshopPercent = bf.ReadByte();
+                    GetMatchSetting("workshopmaps").value = varWorkshopPercent;
+                    int varNormalPercent = bf.ReadByte();
+                    GetMatchSetting("normalmaps").value = varNormalPercent;
+                    GetOnlineSetting("teams").value = bf.ReadBool();
+                    int varCustomPercent = bf.ReadByte();
+                    GetMatchSetting("custommaps").value = varCustomPercent;
+
+                    bool varWallmode = bf.ReadBool();
+                    GetMatchSetting("wallmode").value = varWallmode;
+
+                    GetMatchSetting("clientlevelsenabled").value = bf.ReadBool();
+
+                    int c = bf.ReadInt();
+                    List<byte> enabledModifiers = new List<byte>();
+                    for (int i = 0; i < c; i++)
+                    {
+                        enabledModifiers.Add(bf.ReadByte());
+                    }
+                    foreach (UnlockData unlock in Unlocks.GetUnlocks(UnlockType.Modifier))
+                    {
+                        if (Unlocks.modifierToByte.ContainsKey(unlock.id))
+                        {
+                            byte num2 = Unlocks.modifierToByte[unlock.id];
+                            if (enabledModifiers.Contains(num2)) unlock.enabled = true;
+                            else unlock.enabled = false;
+                            unlock.prevEnabled = unlock.enabled;
+                        }
+                    }
+
+                    GameMode.roundsBetweenIntermission = varRoundsPerIntermission;
+                    GameMode.winsPerSet = varWinsPerSet;
+                    Deathmatch.userMapsPercent = varCustomPercent;
+                    randomMapPercent = varRandomPercent;
+                    normalMapPercent = varNormalPercent;
+                    workshopMapPercent = varWorkshopPercent;
+                    UpdateModifierStatus();
+                    RockScoreboard.wallMode = varWallmode;
+
+
+                    switch (DGRSettings.mMatch)
+                    {
+                        case 0:
+                            DuckNetwork.core._activatedLevels = new List<string>(DGRSettings.bMatchSetSave1);
+                            break;
+                        case 1:
+                            DuckNetwork.core._activatedLevels = new List<string>(DGRSettings.bMatchSetSave2);
+                            break;
+                        case 2:
+                            DuckNetwork.core._activatedLevels = new List<string>(DGRSettings.bMatchSetSave3);
+                            break;
+                    }
+                    /*c = bf.ReadInt();
+                    DuckNetwork.core._activatedLevels = new List<string>();
+                    for (int i = 0; i < c; i++)
+                    {
+                        string s = bf.ReadString();
+                        DuckNetwork.core._activatedLevels.Add(s);
+                    }*/
+                }
+                else
+                {
+                    DefaultSettings();
+                }
+            }
+        }
+        public bool forcestart;
         public override void Update()
         {
+            if (Keyboard.Pressed(Keys.F6)) Options.ReloadHats();
             if (MonoMain.pauseMenu == null && Options.Data.showControllerWarning && Input.mightHavePlaystationController && !_showedPS4Warning)
             {
                 _showedPS4Warning = true;
@@ -1059,7 +1283,7 @@ namespace DuckGame
             if (core.endedGameInProgress && !DuckNetwork.isDedicatedServer)
             {
                 _waitToShow -= Maths.IncFrameTimer();
-                if (_waitToShow <= 0.0 && MonoMain.pauseMenu == null)
+                if (_waitToShow <= 0 && MonoMain.pauseMenu == null)
                 {
                     if (!DuckNetwork.ShowUserXPGain() && Unlockables.HasPendingUnlocks())
                         MonoMain.pauseMenu = new UIUnlockBox(Unlockables.GetPendingUnlocks().ToList(), Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f);
@@ -1085,7 +1309,7 @@ namespace DuckGame
 
                 Lobby lobby = Steam.lobby;
 
-                if (Network.isServer && lobby is not null)
+                if (Network.isServer && lobby != null)
                 {
                     List<Profile> profiles = Profiles.active;
 
@@ -1279,7 +1503,7 @@ namespace DuckGame
                         }
                     }
                 }
-                if (Graphics.fade <= 0.0 && _returnToMenu.value)
+                if (Graphics.fade <= 0 && _returnToMenu.value)
                     current = new TitleScreen();
                 if (!Network.isActive)
                     DuckNetwork.core.startCountdown = _starting;
@@ -1299,15 +1523,15 @@ namespace DuckGame
                     activePlayers = 2;
                     num2 = 0;
                 }
-                if (activePlayers == num1 && !_returnToMenu.value && (!Network.isActive && num1 > 0 || Network.isActive && num1 > num2))
+                if ((activePlayers == num1 && !_returnToMenu.value && (!Network.isActive && num1 > 0 || Network.isActive && num1 > num2)) || forcestart)
                 {
                     _singlePlayer = num1 == 1;
-                    if (DuckNetwork.core.startCountdown)
+                    if (DuckNetwork.core.startCountdown || forcestart)
                     {
                         DuckNetwork.inGame = true;
                         dim = Maths.LerpTowards(dim, 0.8f, 0.02f);
                         _countTime -= 0.006666667f;
-                        if (_countTime <= 0.0 && Network.isServer && (Graphics.fade <= 0.0 || NetworkDebugger.enabled))
+                        if ((_countTime <= 0 && Network.isServer && (Graphics.fade <= 0 || NetworkDebugger.enabled)) || forcestart)
                         {
                             UpdateModifierStatus();
                             DevConsole.qwopMode = Enabled("QWOPPY", true);
@@ -1323,13 +1547,13 @@ namespace DuckGame
                                         profile.slotType = SlotType.Closed;
                                 }
                             }
-                            if (Network.isActive)
+                            if (Network.isActive || DGRSettings.mMatch != -1)
                                 SendMatchSettings();
                             if (!core.gameInProgress)
                                 Main.ResetMatchStuff();
                             Music.Stop();
                             MonoMain.FinishLazyLoad();
-                            if (_singlePlayer)
+                            if (_singlePlayer && !forcestart)
                             {
                                 current.Clear();
                                 current = new ArcadeLevel(Content.GetLevelID("arcade"));
@@ -1338,6 +1562,28 @@ namespace DuckGame
                             {
                                 if (!Network.isServer)
                                     return;
+                                if (DGRSettings.DGRItems)
+                                {
+                                    bool DGR = true;
+                                    for (int i = 0; i < Profiles.active.Count(); i++)
+                                    {
+                                        Profile p = Profiles.active.ElementAt(i);
+                                        if (!p.isUsingRebuilt)
+                                        {
+                                            DGR = false;
+                                            break;
+                                        }
+                                    }
+                                    if (!DGR)
+                                    {
+                                        DGRSettings.DGRItems = false;
+                                    }
+                                    if (DGRSettings.DGRItems)
+                                    {
+                                        Editor.EnableClientOnlyContent();
+                                        Send.Message(new NMClientOnlyContent());
+                                    }
+                                }
                                 foreach (Profile profile in DuckNetwork.profiles)
                                 {
                                     profile.reservedUser = null;
@@ -1385,14 +1631,17 @@ namespace DuckGame
                         }
                         if (!menuOpen && Input.Pressed(Triggers.Select) && (!_singlePlayer || Profiles.active.Count > 0 && !Profiles.IsDefault(Profiles.active[0])) || DuckNetwork.isDedicatedServer && !_sentDedicatedCountdown && !_spectatorCountdownStop)
                         {
+                            if ((_starting || _sentDedicatedCountdown) && !_singlePlayer)
+                            {
+                                forcestart = true;
+                            }
                             if (Network.isActive)
                             {
                                 Send.Message(new NMBeginCountdown());
                                 _sentDedicatedCountdown = true;
                                 _spectatorCountdownStop = false;
                             }
-                            else
-                                _starting = true;
+                            else _starting = true;
                         }
                         if (Network.isActive && DuckNetwork.isDedicatedServer && !_spectatorCountdownStop && Input.Pressed(Triggers.Cancel))
                         {
@@ -1435,9 +1684,13 @@ namespace DuckGame
                     if (_afkTimeout > _afkMaxTimeout)
                         current = new DisconnectFromGame();
                 }
-                else
-                    _afkTimeout = 0f;
-                Graphics.fade = Lerp.Float(Graphics.fade, _returnToMenu.value || _countTime <= 0.0 ? 0f : 1f, 0.02f);
+                else _afkTimeout = 0f;
+                Graphics.fade = Lerp.Float(Graphics.fade, _returnToMenu.value || _countTime <= 0f ? 0f : 1f, 0.02f);
+                if (_countTime < -100)
+                {
+                    Graphics.fade = Lerp.Float(Graphics.fade, _returnToMenu.value || _countTime <= 0f ? 0f : 1f, 0.04f);
+
+                }
                 _setupFade = Lerp.Float(_setupFade, !_matchSetup || menuOpen || DuckNetwork.core.startCountdown ? 0f : 1f, 0.05f);
                 Layer.Game.fade = Lerp.Float(Layer.Game.fade, _matchSetup ? 0.5f : 1f, 0.05f);
             }
@@ -1453,13 +1706,12 @@ namespace DuckGame
         {
             FillMatchmakingProfiles();
             _playOnlineGroup.Open();
-            if (!_showedOnlineBumper)
+            if (!DGRSettings.skipOnlineBumper)
             {
-                _showedOnlineBumper = true;
+                DGRSettings.skipOnlineBumper = true;
                 _playOnlineBumper.Open();
             }
-            else
-                _playOnlineMenu.Open();
+            else _playOnlineMenu.Open();
             MonoMain.pauseMenu = _playOnlineGroup;
         }
 
@@ -1516,10 +1768,12 @@ namespace DuckGame
 
         public override void Draw()
         {
+            if (MonoMain.UpdateLerpState && Network.isActive && DuckNetwork.core._matchSettingMenu != null && DuckNetwork.core._matchSettingMenu.open) MatchsettingsPresetLogic();
         }
 
         public override void PostDrawLayer(Layer layer)
         {
+            if (MonoMain.UpdateLerpState && (_hostMatchSettingsMenu != null && _hostMatchSettingsMenu.open && !_hostMatchSettingsMenu.animating) || (_multiplayerMenu != null && _multiplayerMenu.open && !_multiplayerMenu.animating)) MatchsettingsPresetLogic();
             if (_levelSelector != null)
             {
                 if (!_levelSelector.isInitialized)
@@ -1549,8 +1803,8 @@ namespace DuckGame
                         Graphics.DrawRect(new Vec2(-1000f, -1000f), new Vec2(10000f, 10000f), Color.Black * 0.7f * _timeoutFade, (Depth)0.95f);
                         string text1 = "AFK TIMEOUT IN";
                         string text2 = ((int)(_afkMaxTimeout - _afkTimeout)).ToString();
-                        Graphics.DrawString(text1, new Vec2((float)(layer.width / 2.0 - Graphics.GetStringWidth(text1) / 2.0), (float)(layer.height / 2.0 - 8.0)), Color.White * _timeoutFade, (Depth)0.96f);
-                        Graphics.DrawString(text2, new Vec2(layer.width / 2f - Graphics.GetStringWidth(text2), (float)(layer.height / 2.0 + 4.0)), Color.White * _timeoutFade, (Depth)0.96f, scale: 2f);
+                        Graphics.DrawString(text1, new Vec2((float)(layer.width / 2f - Graphics.GetStringWidth(text1) / 2f), (float)(layer.height / 2f - 8f)), Color.White * _timeoutFade, (Depth)0.96f);
+                        Graphics.DrawString(text2, new Vec2(layer.width / 2f - Graphics.GetStringWidth(text2), (float)(layer.height / 2f + 4f)), Color.White * _timeoutFade, (Depth)0.96f, scale: 2f);
                     }
                     else
                         _timeoutFade = Lerp.Float(_timeoutFade, 0f, 0.05f);
@@ -1591,16 +1845,19 @@ namespace DuckGame
                             num1 = 0.005f;
                         if (text3.Length > 30)
                             num1 = 1f / 500f;
-                        _topScroll += num1;
-                        if (_topScroll > 1.0)
-                            --_topScroll;
-                        if (_topScroll < 0.0)
-                            ++_topScroll;
-                        _littleFont.Draw(text4, new Vec2((float)(1.0 - _topScroll * (_littleFont.GetWidth(text3) + 7.0)), vec2.y + 3f), Color.White, (Depth)0.95f);
+                        if (MonoMain.UpdateLerpState)
+                        {
+                            _topScroll += num1;
+                            if (_topScroll > 1)
+                                --_topScroll;
+                            if (_topScroll < 0)
+                                ++_topScroll;
+                        }
+                        _littleFont.Draw(text4, new Vec2((float)(1f - _topScroll * (_littleFont.GetWidth(text3) + 7f)), vec2.y + 3f), Color.White, (Depth)0.95f);
                     }
                     if (_setupFade > 0.01f)
                     {
-                        float num = (float)(Layer.HUD.camera.height / 2.0 - 28.0);
+                        float num = (float)(Layer.HUD.camera.height / 2f - 28f);
                         string str1 = "@MENU2@PLAY ONLINE";
                         if (!Network.available)
                         {
@@ -1619,19 +1876,19 @@ namespace DuckGame
                             {
                                 string text5 = str2;
                                 _font.alpha = _setupFade;
-                                _font.Draw(text5, (float)(Layer.HUD.width / 2.0 - _font.GetWidth(text5) / 2.0), num + 15f, Color.White, (Depth)0.81f);
+                                _font.Draw(text5, (float)(Layer.HUD.width / 2f - _font.GetWidth(text5) / 2f), num + 15f, Color.White, (Depth)0.81f);
                                 string text6 = str1;
                                 _font.alpha = _setupFade;
-                                _font.Draw(text6, (float)(Layer.HUD.width / 2.0 - _font.GetWidth(text6) / 2.0), (float)(num + 12.0 + 17.0), Color.White, (Depth)0.81f);
+                                _font.Draw(text6, (float)(Layer.HUD.width / 2f - _font.GetWidth(text6) / 2f), (float)(num + 12f + 17f), Color.White, (Depth)0.81f);
                             }
                             else
                             {
                                 string text7 = str2;
                                 _font.alpha = _setupFade;
-                                _font.Draw(text7, (float)(Layer.HUD.width / 2.0 - _font.GetWidth(text7) / 2.0), num + 15f, Color.White, (Depth)0.81f);
+                                _font.Draw(text7, (float)(Layer.HUD.width / 2f - _font.GetWidth(text7) / 2f), num + 15f, Color.White, (Depth)0.81f);
                                 string text8 = str1;
                                 _font.alpha = _setupFade;
-                                _font.Draw(text8, (float)(Layer.HUD.width / 2.0 - _font.GetWidth(text8) / 2.0), (float)(num + 12.0 + 17.0), Color.White, (Depth)0.81f);
+                                _font.Draw(text8, (float)(Layer.HUD.width / 2f - _font.GetWidth(text8) / 2f), (float)(num + 12f + 17f), Color.White, (Depth)0.81f);
                             }
                         }
                         else
@@ -1642,23 +1899,23 @@ namespace DuckGame
                                 string text = "WAITING FOR HOST TO START";
                                 if (core.gameInProgress)
                                     text = "WAITING FOR HOST TO RESUME";
-                                _font.Draw(text, (float)(Layer.HUD.width / 2.0 - _font.GetWidth(text) / 2.0), num + 22f, Color.White, (Depth)0.81f);
+                                _font.Draw(text, (float)(Layer.HUD.width / 2f - _font.GetWidth(text) / 2f), num + 22f, Color.White, (Depth)0.81f);
                             }
                             else if (!Network.isActive)
                             {
                                 string text9 = "@SELECT@START MATCH";
-                                _font.Draw(text9, (float)(Layer.HUD.width / 2.0 - _font.GetWidth(text9) / 2.0), num + 9f, Color.White, (Depth)0.81f);
+                                _font.Draw(text9, (float)(Layer.HUD.width / 2f - _font.GetWidth(text9) / 2f), num + 9f, Color.White, (Depth)0.81f);
                                 string text10 = "@MENU1@MATCH SETTINGS";
-                                _font.Draw(text10, (float)(Layer.HUD.width / 2.0 - _font.GetWidth(text10) / 2.0), num + 22f, Color.White, (Depth)0.81f);
+                                _font.Draw(text10, (float)(Layer.HUD.width / 2f - _font.GetWidth(text10) / 2f), num + 22f, Color.White, (Depth)0.81f);
                                 string text11 = str1;
-                                _font.Draw(text11, (float)(Layer.HUD.width / 2.0 - _font.GetWidth(text11) / 2.0), num + 35f, Color.White, (Depth)0.81f);
+                                _font.Draw(text11, (float)(Layer.HUD.width / 2f - _font.GetWidth(text11) / 2f), num + 35f, Color.White, (Depth)0.81f);
                             }
                             else
                             {
                                 string text = "@SELECT@START MATCH";
                                 if (core.gameInProgress)
                                     text = "@SELECT@RESUME MATCH";
-                                _font.Draw(text, (float)(Layer.HUD.width / 2.0 - _font.GetWidth(text) / 2.0), num + 22f, Color.White, (Depth)0.81f);
+                                _font.Draw(text, (float)(Layer.HUD.width / 2f - _font.GetWidth(text) / 2f), num + 22f, Color.White, (Depth)0.81f);
                             }
                         }
                         _countdownScreen.alpha = _setupFade;
@@ -1674,17 +1931,23 @@ namespace DuckGame
                         Graphics.Draw(_countdownScreen, Layer.HUD.camera.x, Layer.HUD.camera.height / 2f);
                         _countdown.alpha = dim * 1.2f;
                         _countdown.depth = (Depth)0.81f;
-                        _countdown.frame = (int)(float)Math.Ceiling((1.0 - _countTime) * 2.0);
+                        _countdown.frame = (int)(float)Math.Ceiling((1f - _countTime) * 2f);
                         _countdown.centery = _countdown.height / 2;
                         if (DuckNetwork.isDedicatedServer)
                         {
-                            Graphics.Draw(_countdown, 160f, (float)(Layer.HUD.camera.height / 2.0 - 8.0));
+                            Graphics.Draw(_countdown, 160f, (float)(Layer.HUD.camera.height / 2f - 8f));
                             string text = "@CANCEL@STOP COUNTDOWN";
                             _font.alpha = dim * 1.2f;
-                            _font.Draw(text, (float)(Layer.HUD.width / 2.0 - _font.GetWidth(text) / 2.0), (float)(Layer.HUD.camera.height / 2.0 + 8.0), Color.White, (Depth)0.81f);
+                            _font.Draw(text, (float)(Layer.HUD.width / 2f - _font.GetWidth(text) / 2f), (float)(Layer.HUD.camera.height / 2f + 8f), Color.White, (Depth)0.81f);
                         }
-                        else
-                            Graphics.Draw(_countdown, 160f, (float)(Layer.HUD.camera.height / 2.0 - 3.0));
+                        else Graphics.Draw(_countdown, 160f, (float)(Layer.HUD.camera.height / 2f - 3f));
+
+                        if (!_singlePlayer && (!Network.isActive || Network.isServer))
+                        {
+                            string t = "@SELECT@START NOW";
+                            _font.alpha = dim * 1.2f;
+                            _font.Draw(t, (float)(Layer.HUD.width / 2f - 144), (float)(Layer.HUD.camera.height / 2f - 20f), Color.White, (Depth)0.81f);
+                        }
                     }
                 }
                 base.PostDrawLayer(layer);

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ToolbarButton
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class ToolbarButton : Thing
     {
@@ -46,7 +39,7 @@ namespace DuckGame
             switch (Editor.inputMode)
             {
                 case EditorInput.Mouse:
-                    if (Mouse.x > x && Mouse.x < x + 16.0 && Mouse.y > y && Mouse.y < y + 16.0)
+                    if (Mouse.x > x && Mouse.x < x + 16f && Mouse.y > y && Mouse.y < y + 16f)
                     {
                         _owner.toolBarToolTip = hoverText;
                         _hover = true;

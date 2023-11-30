@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.TargetDuckNew
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -42,6 +35,7 @@ namespace DuckGame
             _contextMenuFilter.Add("speediness");
             _contextMenuFilter.Add("Sequence");
             sequence._resetLikelyhood = false;
+            editorCycleType = typeof(TriggerVolume);
         }
 
         public override void OnSequenceActivate()
@@ -69,7 +63,7 @@ namespace DuckGame
             if (holdObject.ammoType != null)
                 num = holdObject.ammoType.range;
             Vec2 vec2 = this.holdObject.Offset(new Vec2(num * this.holdObject.angleMul, 0f));
-            if (_waitFire <= 0.0)
+            if (_waitFire <= 0)
             {
                 foreach (Duck duck in Level.current.things[typeof(Duck)].Where(d => !(d is TargetDuck)))
                 {
@@ -95,10 +89,10 @@ namespace DuckGame
                 }
             }
             _holdAction = false;
-            if (_waitFire < 0.0)
+            if (_waitFire < 0)
                 return;
             _waitFire -= Maths.IncFrameTimer();
-            if (_waitFire > 0.0)
+            if (_waitFire > 0)
                 return;
             holdObject.PressAction();
             _holdAction = true;
@@ -107,16 +101,16 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (holdObject is Gun && (holdObject as Gun).ammoType != null && _waitFire < 1.0 && _waitFire > 0.0)
+            if (holdObject is Gun && (holdObject as Gun).ammoType != null && _waitFire < 1f && _waitFire > 0)
             {
                 float num = _waitFire * _waitFire;
                 Vec2 barrelPosition = (holdObject as Gun).barrelPosition;
-                Vec2 p1_1 = barrelPosition + new Vec2(0f, (float)(-num * 64.0));
+                Vec2 p1_1 = barrelPosition + new Vec2(0f, (float)(-num * 64f));
                 Vec2 p1_2 = barrelPosition + new Vec2(0f, num * 64f);
-                float amount = (float)(1.0 - Math.Min(_waitFire, 0.08f) / 0.08f);
+                float amount = (float)(1f - Math.Min(_waitFire, 0.08f) / 0.08f);
                 Color color = Lerp.ColorSmooth(Color.White, Color.Red, amount);
-                Graphics.DrawLine(p1_1, p1_1 + new Vec2((holdObject as Gun).ammoType.range * offDir, 0f), color * Math.Max((float)(1.0 - _waitFire - 0.5), 0f), 1f + amount, (Depth)0.99f);
-                Graphics.DrawLine(p1_2, p1_2 + new Vec2((holdObject as Gun).ammoType.range * offDir, 0f), color * Math.Max((float)(1.0 - _waitFire - 0.5), 0f), 1f + amount, (Depth)0.99f);
+                Graphics.DrawLine(p1_1, p1_1 + new Vec2((holdObject as Gun).ammoType.range * offDir, 0f), color * Math.Max((float)(1f - _waitFire - 0.5f), 0f), 1f + amount, (Depth)0.99f);
+                Graphics.DrawLine(p1_2, p1_2 + new Vec2((holdObject as Gun).ammoType.range * offDir, 0f), color * Math.Max((float)(1f - _waitFire - 0.5f), 0f), 1f + amount, (Depth)0.99f);
             }
             base.Draw();
         }

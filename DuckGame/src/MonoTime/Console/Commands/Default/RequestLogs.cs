@@ -1,9 +1,11 @@
-﻿namespace DuckGame
+﻿using AddedContent.Firebreak;
+
+namespace DuckGame
 {
 
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand(Description = "Request the logs of (god knows) from everyone in the lobby")]
+        [Marker.DevConsoleCommand(Description = "Set your network status to await incoming netlogs")]
         public static void RequestLogs()
         {
             Send.Message(new NMRequestLogs());

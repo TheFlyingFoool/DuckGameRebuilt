@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.SpaceDonut
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -34,10 +27,10 @@ namespace DuckGame
             for (int index = 0; index < 20; ++index)
             {
                 _roids.Add(new Donuroid(vec2_2.x + Rando.Float(-6f, 6f), vec2_2.y + Rando.Float(-18f, 18f), _donuroid, Rando.Int(0, 7), (Depth)1f, 1f));
-                _roids.Add(new Donuroid(vec2_2.x + Rando.Float(-6f, -1f), (float)(vec2_2.y + Rando.Float(-10f, 0f) - 10.0), _donuroid, Rando.Int(0, 7), depth - 20, 0.5f));
-                _roids.Add(new Donuroid(vec2_2.x + Rando.Float(6f, 1f), (float)(vec2_2.y + Rando.Float(10f, 0f) - 10.0), _donuroid, Rando.Int(0, 7), depth - 20, 0.5f));
-                _roids.Add(new Donuroid(vec2_2.x + Rando.Float(-6f, -1f), (float)(vec2_2.y + Rando.Float(-10f, 0f) - 20.0), _donuroid, Rando.Int(0, 7), depth - 30, 0.25f));
-                _roids.Add(new Donuroid(vec2_2.x + Rando.Float(6f, 1f), (float)(vec2_2.y + Rando.Float(10f, 0f) - 20.0), _donuroid, Rando.Int(0, 7), depth - 30, 0.25f));
+                _roids.Add(new Donuroid(vec2_2.x + Rando.Float(-6f, -1f), (float)(vec2_2.y + Rando.Float(-10f, 0f) - 10f), _donuroid, Rando.Int(0, 7), depth - 20, 0.5f));
+                _roids.Add(new Donuroid(vec2_2.x + Rando.Float(6f, 1f), (float)(vec2_2.y + Rando.Float(10f, 0f) - 10f), _donuroid, Rando.Int(0, 7), depth - 20, 0.5f));
+                _roids.Add(new Donuroid(vec2_2.x + Rando.Float(-6f, -1f), (float)(vec2_2.y + Rando.Float(-10f, 0f) - 20f), _donuroid, Rando.Int(0, 7), depth - 30, 0.25f));
+                _roids.Add(new Donuroid(vec2_2.x + Rando.Float(6f, 1f), (float)(vec2_2.y + Rando.Float(10f, 0f) - 20f), _donuroid, Rando.Int(0, 7), depth - 30, 0.25f));
                 vec2_2 += vec2_1;
                 vec2_1.y += 1.4f;
             }

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ChestPlate
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Equipment")]
     [BaggedProperty("isInDemo", true)]
@@ -81,13 +74,14 @@ namespace DuckGame
             base.Draw();
             if (_equippedDuck != null && duck == null || _equippedDuck == null)
                 return;
+            _spriteOver.SkipIntraTick = graphic.SkipIntraTick;
             _spriteOver.flipH = graphic.flipH;
             _spriteOver.angle = angle;
             _spriteOver.alpha = alpha;
             _spriteOver.scale = scale;
             _spriteOver.depth = owner.depth + (duck.holdObject != null ? 5 : 12);
             _spriteOver.center = center;
-            Graphics.Draw(_spriteOver, x, y);
+            Graphics.Draw(ref _spriteOver, x, y);
         }
     }
 }

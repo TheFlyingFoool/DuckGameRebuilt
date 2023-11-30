@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Spring
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -17,7 +10,7 @@ namespace DuckGame
         public bool purple;
         protected SpriteMap _sprite;
         protected float _soundWait;
-        protected float _mult;
+        public float _mult;
         protected float _setMult;
         private bool _prevPurple;
 
@@ -107,7 +100,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (_soundWait > 0.0)
+            if (_soundWait > 0)
                 _soundWait -= 0.1f;
             base.Update();
         }
@@ -127,7 +120,7 @@ namespace DuckGame
         {
             _sprite.currentAnimation = "spring";
             _sprite.frame = 0;
-            if (_soundWait > 0.0)
+            if (_soundWait > 0)
                 return;
             SFX.Play("spring", 0.2f, Rando.Float(0.2f) - 0.1f);
             _soundWait = 1f;
@@ -139,7 +132,7 @@ namespace DuckGame
         {
             if (with.isServerForObject && with.Sprung(this))
             {
-                if (with.vSpeed > -22.0 * _mult)
+                if (with.vSpeed > -22f * _mult)
                     with.vSpeed = -22f * _mult;
                 if (with is RagdollPart)
                 {

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Thing
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -20,7 +13,12 @@ namespace DuckGame
     /// </summary>
     public abstract class Thing : Transform
     {
+        public bool SpawnCannonUpdate;
+        public int SkipIntratick;
+        public SomethingSomethingVessel currentVessel;
+        public bool shouldhavevessel = true;
         public bool shouldbegraphicculled = true;
+        public bool currentlyDrawing;
         public bool shouldbeinupdateloop = true;
         public int hashcodeindex; // dont touch :)
         public Vec2 oldposition = Vec2.Zero;
@@ -74,6 +72,7 @@ namespace DuckGame
         private Type _killThingType;
         public float _hSpeed;
         public float _vSpeed;
+        private Vec2 _velocity = new Vec2(0f,0f);
         protected bool _active = true;
         public bool serverOnly;
         private bool _action;
@@ -106,10 +105,7 @@ namespace DuckGame
         /// This is useful for removing undesired inherited EditorProperty members from the right click menu.
         /// </summary>
         protected HashSet<string> _contextMenuFilter = new HashSet<string>();
-        public static Effect _alphaTestEffect;
-        private bool _skipPositioning;
-        private static Dictionary<Type, Sprite> _editorIcons = new Dictionary<Type, Sprite>();
-        protected Sprite _editorIcon;
+        public Sprite _editorIcon;
         protected bool _solid = true;
         protected Vec2 _collisionOffset;
         protected Vec2 _collisionSize;
@@ -262,18 +258,69 @@ namespace DuckGame
 
         public virtual bool TransferControl(NetworkConnection to, NetIndex8 auth)
         {
+            Main.SpecialCode2 = "to conn";
             if (to == connection)
             {
+                Main.SpecialCode2 = "to conn 4";
                 if (auth > authority)
+                {
+                    Main.SpecialCode2 = "to conn 8";
+
                     authority = auth;
+                }
                 return true;
             }
-            if (connection.profile != null && connection.profile.slotType != SlotType.Spectator && (auth < authority || connection != null && CanBeControlled() && connection.profile != null && connection.profile.slotType != SlotType.Spectator && auth == authority && (connection.profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks < (to.profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks))
-                return false;
+            Main.SpecialCode2 = "to conn 16";
+            if (connection != null && connection.profile != null && connection.profile.slotType != SlotType.Spectator)
+            {
+                Main.SpecialCode2 = "to conn 18";
+                if (auth < authority)
+                {
+                    return false;
+                }
+                Main.SpecialCode2 = $"to conn 20";
+                int s = 0;
+                try
+                {
+                    Main.SpecialCode += connection != null;
+                    Main.SpecialCode += " ";
+                    s++;
+                    Main.SpecialCode += connection.profile != null;
+                    Main.SpecialCode += " ";
+                    s++;
+                    Main.SpecialCode += auth != null;
+                    Main.SpecialCode += " ";
+                    s++;
+                    Main.SpecialCode += authority != null;
+                    Main.SpecialCode += " ";
+                    s++;
+                    Main.SpecialCode += connection.profile.networkIndex;
+                    Main.SpecialCode += " ";
+                    s++;
+                    Main.SpecialCode += to != null;
+                    Main.SpecialCode += " ";
+                    s++;
+                    Main.SpecialCode += to.profile != null;
+                    s++;
+                }
+                catch
+                {
+
+                }
+                Main.SpecialCode2 += $" sVal:{s}";
+                if (connection != null && CanBeControlled() && connection.profile != null && connection.profile.slotType != SlotType.Spectator && auth == authority && (connection.profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks < (to.profile.networkIndex + DuckNetwork.levelIndex) % GameLevel.NumberOfDucks)
+                {
+                    return false;
+                }
+            }
+            Main.SpecialCode2 = "to conn 24";
             if (NetIndex8.Difference(auth, authority) > 19)
                 wasSuperFondled = 120;
+            Main.SpecialCode2 = "to conn 32";
             _framesSinceTransfer = 0;
+            Main.SpecialCode2 = "to conn 40";
             connection = to;
+            Main.SpecialCode2 = "to conn 44";
             authority = auth;
             return true;
         }
@@ -575,7 +622,13 @@ namespace DuckGame
 
         public Vec2 velocity
         {
-            get => new Vec2(hSpeed, vSpeed);
+            get
+            {
+                _velocity.x = hSpeed;
+                _velocity.y = vSpeed;
+                return _velocity;
+            }
+
             set
             {
                 _hSpeed = value.x;
@@ -592,9 +645,9 @@ namespace DuckGame
         public void ApplyForce(Vec2 force, Vec2 limits)
         {
             limits = new Vec2(Math.Abs(limits.x), Math.Abs(limits.y));
-            if (force.x < 0.0 && _hSpeed > -limits.x || force.x > 0.0 && _hSpeed < limits.x)
+            if (force.x < 0 && _hSpeed > -limits.x || force.x > 0 && _hSpeed < limits.x)
                 _hSpeed += force.x;
-            if ((force.y >= 0.0 || _vSpeed <= -limits.y) && (force.y <= 0.0 || _vSpeed >= limits.y))
+            if ((force.y >= 0 || _vSpeed <= -limits.y) && (force.y <= 0 || _vSpeed >= limits.y))
                 return;
             _vSpeed += force.y;
         }
@@ -602,10 +655,10 @@ namespace DuckGame
         public void ApplyForceLimited(Vec2 force)
         {
             _hSpeed += force.x;
-            if (force.x < 0.0 && _hSpeed < force.x || force.x > 0.0 && _hSpeed > force.x)
+            if (force.x < 0 && _hSpeed < force.x || force.x > 0 && _hSpeed > force.x)
                 _hSpeed = force.x;
             _vSpeed += force.y;
-            if ((force.y >= 0.0 || _vSpeed >= force.y) && (force.y <= 0.0 || _vSpeed <= force.y))
+            if ((force.y >= 0 || _vSpeed >= force.y) && (force.y <= 0 || _vSpeed <= force.y))
                 return;
             _vSpeed = force.y;
         }
@@ -709,6 +762,12 @@ namespace DuckGame
             flipHorizontal = !flipHorizontal;
         }
 
+        public virtual Type TabRotate(bool control) // Hack: overloaded function to have dynamicly changing editor types on pressing tab
+        {
+            TabRotate();
+            return editorCycleType;
+        }
+
         public Layer placementLayer => placementLayerOverride != null ? placementLayerOverride : layer;
 
         public float likelyhoodToExist
@@ -743,7 +802,7 @@ namespace DuckGame
 
         public static bool CheckForBozoData(Thing pThing)
         {
-            if (pThing == null || Math.Abs(pThing.y) > 99999.0 || Math.Abs(pThing.x) > 99999.0)
+            if (pThing == null || Math.Abs(pThing.y) > 99999 || Math.Abs(pThing.x) > 99999)
                 return true;
             if (!(pThing is ThingContainer))
                 return false;
@@ -760,13 +819,14 @@ namespace DuckGame
 
         public static Thing LoadThing(BinaryClassChunk node, bool chance = true)
         {
+            if (node == null) return null;
             Type type = Editor.GetType(node.GetProperty<string>("type"));
             if (!(type != null))
                 return null;
             Thing thing = Editor.CreateThing(type);
             if (!thing.Deserialize(node))
                 return null;
-            if (!(Level.current is Editor) && chance && thing.likelyhoodToExist != 1.0 && !Level.PassedChanceGroup(thing.chanceGroup, thing.likelyhoodToExist))
+            if (!(Level.current is Editor) && chance && thing.likelyhoodToExist != 1 && !Level.PassedChanceGroup(thing.chanceGroup, thing.likelyhoodToExist))
                 return null;
             if (thing is IContainPossibleThings)
                 (thing as IContainPossibleThings).PreparePossibilities();
@@ -839,7 +899,7 @@ namespace DuckGame
             Thing thing = Editor.CreateThing(type);
             if (!thing.LegacyDeserialize(node))
                 thing = null;
-            return Level.current is Editor || !chance || thing.likelyhoodToExist == 1.0 || Level.PassedChanceGroup(thing.chanceGroup, thing.likelyhoodToExist) ? thing : null;
+            return Level.current is Editor || !chance || thing.likelyhoodToExist == 1 || Level.PassedChanceGroup(thing.chanceGroup, thing.likelyhoodToExist) ? thing : null;
         }
 
         public bool isAccessible
@@ -1075,32 +1135,27 @@ namespace DuckGame
         {
         }
 
-        public Sprite GetEditorImage(
-          int wide = 16,
-          int high = 16,
-          bool transparentBack = false,
-          Effect effect = null,
-          RenderTarget2D target = null)
+        public static Effect _alphaTestEffect;
+        private bool _skipPositioning;
+        public static Dictionary<Type, Sprite> _editorIcons = new Dictionary<Type, Sprite>();
+        public Sprite GetEditorImage(int wide = 16, int high = 16, bool transparentBack = false, Effect effect = null, RenderTarget2D target = null)
         {
             return GetEditorImage(wide, high, transparentBack, effect, target, false);
         }
 
-        public Sprite GetEditorImage(
-          int wide,
-          int high,
-          bool transparentBack,
-          Effect effect,
-          RenderTarget2D target,
-          bool pUseCollisionSize)
+        public Sprite GetEditorImage(int wide, int high, bool transparentBack, Effect effect, RenderTarget2D target, bool pUseCollisionSize)
         {
-            Sprite editorImage1;
-            if (_editorIcons.TryGetValue(GetType(), out editorImage1))
-                return editorImage1;
-            if (Thread.CurrentThread != MonoMain.mainThread)
+            Sprite tex = null;
+            if (_editorIcons.TryGetValue(GetType(), out tex))
+                return tex;
+
+            if (Thread.CurrentThread != Main.mainThread)
                 return new Sprite("basketBall");
+
             if (_alphaTestEffect == null)
-                _alphaTestEffect = (Effect)Content.Load<MTEffect>("Shaders/alphatest");
-            if (pUseCollisionSize && collisionSize.x > 0.0)
+                _alphaTestEffect = Content.Load<MTEffect>("Shaders/alphatest");
+
+            if (pUseCollisionSize && collisionSize.x > 0)
             {
                 if (wide <= 0)
                     wide = (int)collisionSize.x;
@@ -1114,57 +1169,83 @@ namespace DuckGame
                 if (high <= 0)
                     high = graphic.h;
             }
-            int num1 = wide > high ? wide : high;
+
+
+            int scalar = wide > high ? wide : high;
+
             if (target == null)
                 target = new RenderTarget2D(wide, high, true);
+
             if (graphic == null)
-                return new Sprite(target, 0f, 0f);
-            float num2 = num1 / (collisionSize.x > 0.0 & pUseCollisionSize ? collisionSize.x : graphic.width);
-            Camera camera = new Camera(0f, 0f, wide, high)
-            {
-                position = new Vec2(x - centerx * num2, y - centery * num2)
-            };
-            if (pUseCollisionSize && collisionSize.x > 0.0)
-                camera.center = new Vec2((int)((left + right) / 2.0), (int)((top + bottom) / 2.0));
-            RenderTarget2D currentRenderTarget = Graphics.currentRenderTarget;
+                return new Sprite(target);
+
+            float s = (float)scalar / ((collisionSize.x > 0 && pUseCollisionSize) ? collisionSize.x : (float)graphic.width);
+            Camera cam = new Camera(0, 0, wide, high);
+
+            cam.position = new Vec2(x - (centerx * s), y - (centery * s));
+
+            if (pUseCollisionSize && collisionSize.x > 0)
+                cam.center = new Vec2((int)((left + right) / 2), (int)((top + bottom) / 2));
+
+
+            RenderTarget2D curTarg = Graphics.currentRenderTarget;
             Graphics.SetRenderTarget(target);
-            DepthStencilState depthStencilState = new DepthStencilState()
+
+            DepthStencilState state = new DepthStencilState()
             {
                 StencilEnable = true,
                 StencilFunction = CompareFunction.Always,
                 StencilPass = StencilOperation.Replace,
                 ReferenceStencil = 1,
-                DepthBufferEnable = false
+                DepthBufferEnable = false,
             };
-            Graphics.Clear(transparentBack ? Color.Transparent : new Color(15, 4, 16));
-            Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)(effect == null ? _alphaTestEffect : effect), camera.getMatrix());
+
+            Graphics.Clear(transparentBack ? new Color(0, 0, 0, 0) : new Color(15, 4, 16));
+
+            Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, state, RasterizerState.CullNone, effect == null ? _alphaTestEffect : effect, cam.getMatrix());
             Draw();
             Graphics.screen.End();
-            if (currentRenderTarget == null || currentRenderTarget.IsDisposed)
+
+            if (curTarg == null || curTarg.IsDisposed)
                 Graphics.SetRenderTarget(null);
             else
-                Graphics.SetRenderTarget(currentRenderTarget);
-            Texture2D tex = new Texture2D(Graphics.device, target.width, target.height);
-            tex.SetData(target.GetData());
-            Sprite editorImage2 = new Sprite((Tex2D)tex);
-            _editorIcons[GetType()] = editorImage2;
-            return editorImage2;
+                Graphics.SetRenderTarget(curTarg);
+
+            Texture2D newTex = new Texture2D(Graphics.device, target.width, target.height);
+            newTex.SetData(target.GetData());
+
+            Sprite spr = new Sprite(newTex);
+            _editorIcons[GetType()] = spr;
+            return spr;
+
         }
 
-        public virtual Sprite GeneratePreview(
-          int wide = 16,
-          int high = 16,
-          bool transparentBack = false,
-          Effect effect = null,
-          RenderTarget2D target = null)
+        protected Vec2 _editorPreviewOffset;
+        protected float _editorPreviewRotation;
+        protected int _editorPreviewWidth = 0;
+        public virtual int GetEditorPreviewWidth()
         {
-            bool flag = ((wide != 16 ? 0 : (high == 16 ? 1 : 0)) & (transparentBack ? 1 : 0)) != 0 && effect == null && target == null;
-            if (flag && _editorIcon != null)
+            if (_editorPreviewWidth == 0)
+                return 16;
+
+            return _editorPreviewWidth;
+        }
+
+        public bool forceEditorPreview;
+
+        virtual public Sprite GeneratePreview(int wide = 16, int high = 16, bool transparentBack = false, Effect effect = null, RenderTarget2D target = null)
+        {
+            bool editorPreview = wide == 16 && high == 16 && transparentBack && effect == null && target == null;
+            if (forceEditorPreview) editorPreview = true;
+            if (editorPreview && _editorIcon != null) // this seems to be unused?
                 return _editorIcon;
-            if (Thread.CurrentThread != MonoMain.mainThread)
+
+            if (Thread.CurrentThread != Main.mainThread)
                 return new Sprite("basketBall");
+
             if (_alphaTestEffect == null)
-                _alphaTestEffect = (Effect)Content.Load<MTEffect>("Shaders/alphatest");
+                _alphaTestEffect = Content.Load<MTEffect>("Shaders/alphatest");
+
             if (graphic != null)
             {
                 if (wide <= 0)
@@ -1172,38 +1253,47 @@ namespace DuckGame
                 if (high <= 0)
                     high = graphic.h;
             }
+
             if (target == null)
                 target = new RenderTarget2D(wide, high, true);
+
             if (graphic == null)
-                return new Sprite(target, 0f, 0f);
-            Camera camera = new Camera(0f, 0f, wide, high)
-            {
-                position = new Vec2(x - wide / 2, y - high / 2)
-            };
+                return new Sprite(target);
+
+            Camera cam = new Camera(0, 0, wide, high);
+            cam.position = new Vec2(x - (wide / 2), y - (high / 2)) - _editorPreviewOffset;
             Graphics.SetRenderTarget(target);
-            DepthStencilState depthStencilState = new DepthStencilState()
+
+            DepthStencilState state = new DepthStencilState()
             {
                 StencilEnable = true,
                 StencilFunction = CompareFunction.Always,
                 StencilPass = StencilOperation.Replace,
                 ReferenceStencil = 1,
-                DepthBufferEnable = false
+                DepthBufferEnable = false,
             };
-            Graphics.Clear(transparentBack ? Color.Transparent : new Color(30, 30, 30));
-            Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, depthStencilState, RasterizerState.CullNone, (MTEffect)(effect == null ? _alphaTestEffect : effect), camera.getMatrix());
+
+            Graphics.Clear(transparentBack ? new Color(0, 0, 0, 0) : new Color(30, 30, 30));
+
+            Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, state, RasterizerState.CullNone, effect == null ? _alphaTestEffect : effect, cam.getMatrix());
+
+            float a = angle;
+            if (_editorPreviewRotation != 0) angleDegrees = _editorPreviewRotation;
             Draw();
+            angle = a;
+
             Graphics.screen.End();
+
             Graphics.SetRenderTarget(null);
+
             Texture2D tex = new Texture2D(Graphics.device, target.width, target.height);
             tex.SetData(target.GetData());
-            List<string> text = Content.RSplit(GetType().AssemblyQualifiedName, ',', -1);
-            string texname = text[0] + text[1] + wide.ToString() + " " + high.ToString();
-            tex.Name = texname;
-            Content.textures[texname] = tex; //spritea las stuff
-            Sprite preview = new Sprite((Tex2D)tex);
-            if (flag)
-                _editorIcon = preview;
-            return preview;
+            Sprite spr = new Sprite(tex);
+
+            if (editorPreview)
+                _editorIcon = spr;
+
+            return spr;
         }
 
         public virtual bool solid
@@ -1238,9 +1328,9 @@ namespace DuckGame
 
         public virtual string GetDetailsString()
         {
-            if (_likelyhoodToExist == 1.0 && _chanceGroup == -1)
+            if (_likelyhoodToExist == 1 && _chanceGroup == -1)
                 return GetPropertyDetails();
-            return "Chance: " + Math.Round(likelyhoodToExist / 1.0 * 100.0).ToString() + "%\nChance Group: " + (_chanceGroup == -1 ? "None" : _chanceGroup.ToString(CultureInfo.InvariantCulture)) + "\n" + GetPropertyDetails();
+            return "Chance: " + Math.Round(likelyhoodToExist / 1f * 100f).ToString() + "%\nChance Group: " + (_chanceGroup == -1 ? "None" : _chanceGroup.ToString(CultureInfo.InvariantCulture)) + "\n" + GetPropertyDetails();
         }
 
         public virtual void ReturnItemToWorld(Thing t)
@@ -1259,8 +1349,25 @@ namespace DuckGame
                 return;
             t.bottom = block4.top;
         }
+        //useless now -NiK0
+        public void OldReturnItemToWorld(Thing t)
+        {
+            Block block1 = Level.OldCheckLine<Block>(position, position + new Vec2(16f, 0f));
+            if (block1 != null && block1.solid && t.right > block1.left)
+                t.right = block1.left;
+            Block block2 = Level.OldCheckLine<Block>(position, position - new Vec2(16f, 0f));
+            if (block2 != null && block2.solid && t.left < block2.right)
+                t.left = block2.right;
+            Block block3 = Level.OldCheckLine<Block>(position, position + new Vec2(0f, -16f));
+            if (block3 != null && block3.solid && t.top < block3.bottom)
+                t.top = block3.bottom;
+            Block block4 = Level.OldCheckLine<Block>(position, position + new Vec2(0f, 16f));
+            if (block4 == null || !block4.solid || t.bottom <= block4.top)
+                return;
+            t.bottom = block4.top;
+        }
 
-        public bool isOffBottomOfLevel => y > Level.activeLevel.lowestPoint + 100.0 && top > Level.current.camera.bottom + 8.0;
+        public bool isOffBottomOfLevel => y > Level.activeLevel.lowestPoint + 100 && top > Level.current.camera.bottom + 8;
 
         public virtual Vec2 collisionOffset
         {
@@ -1490,6 +1597,7 @@ namespace DuckGame
                 return;
             if (Network.isActive)
                 DoNetworkInitialize();
+            if (!ModLoader.ShouldOptimizations) shouldbegraphicculled = false;
             _networkDrawIndex = NetworkDebugger.currentIndex;
             Initialize();
             _initialized = true;
@@ -1501,12 +1609,14 @@ namespace DuckGame
 
         public virtual void DoUpdate()
         {
+            if (SkipIntratick > 0)
+                SkipIntratick--;
             if (wasSuperFondled > 0)
                 --wasSuperFondled;
             if (_anchor != null)
                 position = _anchor.position;
             Update();
-            if (Buckets.Length > 0 && ((oldcollisionOffset != collisionOffset || oldcollisionSize != collisionSize) || (oldposition - position).LengthSquared() > 100f) && Level.current != null) //((oldposition - position)).length > 10
+            if (Buckets.Length > 0 && ((oldcollisionOffset != collisionOffset || oldcollisionSize != collisionSize) || (oldposition - position).LengthSquared() > 50f) && Level.current != null) //((oldposition - position)).length > 10
             {
                 oldcollisionOffset = collisionOffset;
                 oldcollisionSize = collisionSize;
@@ -1625,6 +1735,25 @@ namespace DuckGame
                 _graphic.depth = depth;
                 _graphic.scale = scale;
                 _graphic.center = center;
+                _graphic.LerpState.CanLerp = true;
+                _graphic.SkipIntraTick = SkipIntratick;
+            }
+            _graphic.Draw();
+        }
+        public virtual void DrawLerpLess()
+        {
+            if (_graphic == null)
+                return;
+            if (!_skipPositioning)
+            {
+                _graphic.position = position;
+                _graphic.alpha = alpha;
+                _graphic.angle = angle;
+                _graphic.depth = depth;
+                _graphic.scale = scale;
+                _graphic.center = center;
+                _graphic.LerpState.CanLerp = false;
+                _graphic.SkipIntraTick = SkipIntratick;
             }
             _graphic.Draw();
         }
@@ -1700,6 +1829,19 @@ namespace DuckGame
             spr.flipH = offDir < 0;
             Graphics.Draw(spr, vec2.x, vec2.y);
         }
+        public void Draw<T>(ref T spr, Vec2 pos, int d = 1) where T : Sprite
+        {
+            Vec2 vec2 = Offset(pos);
+            if (graphic != null)
+                spr.flipH = graphic.flipH;
+            spr.angle = angle;
+            spr.alpha = alpha;
+            spr.depth = depth + d;
+            spr.scale = scale;
+            spr.flipH = offDir < 0;
+            spr.LerpState.CanLerp = true;
+            Graphics.Draw(ref spr, vec2.x, vec2.y);
+        }
 
         public void DrawIgnoreAngle(Sprite spr, Vec2 pos, int d = 1)
         {
@@ -1709,9 +1851,21 @@ namespace DuckGame
             spr.scale = scale;
             Graphics.Draw(spr, vec2.x, vec2.y);
         }
+        public void DrawIgnoreAngle<T>(ref T spr, Vec2 pos, int d = 1) where T : Sprite
+        {
+            Vec2 vec2 = Offset(pos);
+            spr.alpha = alpha;
+            spr.depth = depth + d;
+            spr.scale = scale;
+            spr.LerpState.CanLerp = true;
+            Graphics.Draw(ref spr, vec2.x, vec2.y);
+        }
 
         public virtual void OnTeleport()
         {
+            SkipIntratick = 3;
+            //need to update cells here because teleporters teleport wrongly otherwise -NiK0
+            Level.current.things.UpdateObject(this);
         }
 
         public virtual void DoTerminate() => Terminate();
@@ -1752,6 +1906,11 @@ namespace DuckGame
 
         public virtual void OnSequenceActivate()
         {
+        }
+
+        public Thing Clone()
+        {
+            return (Thing)MemberwiseClone();
         }
     }
 }

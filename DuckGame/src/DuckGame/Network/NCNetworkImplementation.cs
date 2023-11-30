@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.NCNetworkImplementation
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -362,7 +355,7 @@ namespace DuckGame
                 connection.Reset("Client Disconnected.");
                 if (currentMainDisconnectError != null && currentMainDisconnectError.error == DuckNetError.EveryoneDisconnected)
                     currentMainDisconnectError = error;
-                if (sessionConnections.Count != 0 && (sessionConnections.Count != 1 || sessionConnections[0] != DuckNetwork.localConnection || Network.InLobby()))
+                if (sessionConnections.Count != 0 && (sessionConnections.Count != 1 || sessionConnections[0] != DuckNetwork.localConnection || Network.inLobby))
                     return;
                 if (!Network.isServer || sessionConnections.Count == 0)
                     OnSessionEnded(currentMainDisconnectError != null ? currentMainDisconnectError : error);
@@ -512,9 +505,15 @@ namespace DuckGame
                         {
                             networkPacket.Unpack();
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
                             DevConsole.Log(DCSection.NetCore, "|DGRED|Message unpack failure, possible corruption");
+                            DevConsole.Log("");
+                            DevConsole.Log(DCSection.NetCore, ex.ToString());
+                            DevConsole.Log("");
+                            DevConsole.Log("");
+                            DevConsole.Log(DCSection.NetCore, $"special:{Main.SpecialCode} hyperSpecial:{Main.SpecialCode2}");
+                            DevConsole.Log(DCSection.NetCore, "IF YOU SEE THIS, PLEASE REPORT IT TO A DGR DEV");
                             Program.LogLine("Message unpack failure, possible corruption.");
                             return;
                         }
@@ -640,9 +639,15 @@ namespace DuckGame
                         {
                             packet.Unpack();
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
                             DevConsole.Log(DCSection.NetCore, "|DGRED|Message unpack failure, possible corruption");
+                            DevConsole.Log("");
+                            DevConsole.Log(DCSection.NetCore, ex.ToString());
+                            DevConsole.Log("");
+                            DevConsole.Log("");
+                            DevConsole.Log(DCSection.NetCore, $"special:{Main.SpecialCode} hyperSpecial:{Main.SpecialCode2}");
+                            DevConsole.Log(DCSection.NetCore, "IF YOU SEE THIS, PLEASE REPORT IT TO A DGR DEV");
                             Program.LogLine("Message unpack failure, possible corruption.");
                             continue;
                         }
@@ -760,7 +765,7 @@ namespace DuckGame
                     num1 += networkConnection.manager.losses;
                     num2 += networkConnection.manager.sent;
                 }
-                return num1 == 0 ? 0 : (int)Math.Round(num1 / connections.Count / (num2 / connections.Count) * 100.0);
+                return num1 == 0 ? 0 : (int)Math.Round(num1 / connections.Count / (num2 / connections.Count) * 100f);
             }
         }
 

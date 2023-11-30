@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.DeathCrate
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -66,16 +59,22 @@ namespace DuckGame
             for (int index = 0; index < 100; ++index)
             {
                 settingIndex = (byte)Rando.Int(_settings.Count - 1);
-                if (_settings[settingIndex].likelyhood == 1.0 || Rando.Float(1f) < _settings[settingIndex].likelyhood)
+                if (_settings[settingIndex].likelyhood == 1 || Rando.Float(1f) < _settings[settingIndex].likelyhood)
                     break;
             }
+
+            //this is here because the deathcrate timer is tied to the sprite animation and sprite animations
+            //are executed in the draw cycle, so if the deathcrate is activated and goes offscreen it wont do draw calls
+            //making the sprite animation freeze resulting in the deathcrate never exploding until being unculled
+            //which is fucking idiotic -NiK0
+            shouldbegraphicculled = false;
         }
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
             if (with.isStateObject)
                 with.Fondle(this);
-            if (from == ImpactedFrom.Top || Math.Abs(angleDegrees) > 90f && Math.Abs(angleDegrees) < 270.0 && from == ImpactedFrom.Bottom && with.totalImpactPower + totalImpactPower > 0.1f && _sprite.currentAnimation == "idle")
+            if (from == ImpactedFrom.Top || Math.Abs(angleDegrees) > 90f && Math.Abs(angleDegrees) < 270 && from == ImpactedFrom.Bottom && with.totalImpactPower + totalImpactPower > 0.1f && _sprite.currentAnimation == "idle")
             {
                 activated = true;
                 _sprite.SetAnimation("activate");

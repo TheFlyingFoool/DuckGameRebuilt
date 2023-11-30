@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -236,7 +236,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			// Use native memory for changes, .NET loves moving this around
 			unsafe
 			{
-				stateChangesPtr = Marshal.AllocHGlobal(
+				stateChangesPtr = FNAPlatform.Malloc(
 					sizeof(MOJOSHADER_effectStateChanges)
 				);
 				MOJOSHADER_effectStateChanges *stateChanges =
@@ -285,7 +285,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			// Use native memory for changes, .NET loves moving this around
 			unsafe
 			{
-				stateChangesPtr = Marshal.AllocHGlobal(
+				stateChangesPtr = FNAPlatform.Malloc(
 					sizeof(MOJOSHADER_effectStateChanges)
 				);
 				MOJOSHADER_effectStateChanges *stateChanges =
@@ -322,7 +322,7 @@ namespace Microsoft.Xna.Framework.Graphics
 				}
 				if (stateChangesPtr != IntPtr.Zero)
 				{
-					Marshal.FreeHGlobal(stateChangesPtr);
+					FNAPlatform.Free(stateChangesPtr);
 					stateChangesPtr = IntPtr.Zero;
 				}
 			}

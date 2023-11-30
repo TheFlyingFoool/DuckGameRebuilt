@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.UnlockTree
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame
@@ -161,7 +154,7 @@ namespace DuckGame
             if (_desiredLayer < _topLayer)
             {
                 _layerScroll -= 0.1f;
-                if (_layerScroll > -1.0)
+                if (_layerScroll > -1f)
                     return;
                 _layerScroll = 0f;
                 --_topLayer;
@@ -171,7 +164,7 @@ namespace DuckGame
                 if (_desiredLayer <= _topLayer + 1)
                     return;
                 _layerScroll += 0.1f;
-                if (_layerScroll < 1.0)
+                if (_layerScroll < 1f)
                     return;
                 _layerScroll = 0f;
                 ++_topLayer;
@@ -195,7 +188,7 @@ namespace DuckGame
             float num3 = 0f;
             if (layer < _topLayer)
                 num3 += (_topLayer - layer) * 60f;
-            Vec2 vec2_1 = new Vec2(50f, (float)(45.0 - _layerScroll * 67.0) - num3);
+            Vec2 vec2_1 = new Vec2(50f, (float)(45f - _layerScroll * 67f) - num3);
             Vec2 vec2_2 = new Vec2(Layer.HUD.width - 180f, 100f);
             List<UnlockData> collection = new List<UnlockData>();
             int num4 = 0;
@@ -216,7 +209,7 @@ namespace DuckGame
                     num5 = unlockData1 == _selected ? 0.8f : 0.2f;
                 }
                 color1 = new Color((byte)(color1.r * num5), (byte)(color1.g * num5), (byte)(color1.b * num5));
-                float num6 = treeLayer.Count != 1 ? (treeLayer.Count != 2 ? index1 * (vec2_2.x / (treeLayer.Count - 1)) : (float)(vec2_2.x / 2.0 - vec2_2.x / 4.0 + index1 * (vec2_2.x / 2.0))) : vec2_2.x / 2f;
+                float num6 = treeLayer.Count != 1 ? (treeLayer.Count != 2 ? index1 * (vec2_2.x / (treeLayer.Count - 1)) : (float)(vec2_2.x / 2f - vec2_2.x / 4f + index1 * (vec2_2.x / 2f))) : vec2_2.x / 2f;
                 Vec2 p1 = new Vec2(vec2_1.x + num6, vec2_1.y + num4 * 60);
                 _box.depth = (Depth)0.1f;
                 _box.frame = 2;
@@ -261,7 +254,7 @@ namespace DuckGame
                             if (!unlockData2.AllParentsUnlocked(Profiles.active[0]))
                                 color2 = new Color(90, 90, 90);
                             color2 = new Color((byte)(color2.r * num7), (byte)(color2.g * num7), (byte)(color2.b * num7));
-                            float num8 = treeLayer.Count != 1 ? (treeLayer.Count != 2 ? index2 * (vec2_2.x / (treeLayer.Count - 1)) : (float)(vec2_2.x / 2.0 - vec2_2.x / 4.0 + index2 * (vec2_2.x / 2.0))) : vec2_2.x / 2f;
+                            float num8 = treeLayer.Count != 1 ? (treeLayer.Count != 2 ? index2 * (vec2_2.x / (treeLayer.Count - 1)) : (float)(vec2_2.x / 2f - vec2_2.x / 4f + index2 * (vec2_2.x / 2f))) : vec2_2.x / 2f;
                             p1 = new Vec2(vec2_1.x + num8, vec2_1.y + num4 * 60);
                             Graphics.DrawLine(p1, p1 + new Vec2(0f, 30f), color2 * alpha, 6f, -0.2f);
                             Color color3 = new Color(50, 50, 50);
@@ -279,7 +272,7 @@ namespace DuckGame
                                 UnlockData unlockData3 = collection[index3];
                                 if (unlockData2.children.Contains(unlockData3))
                                 {
-                                    float num9 = collection.Count != 1 ? (collection.Count != 2 ? index3 * (vec2_2.x / (collection.Count - 1)) : (float)(vec2_2.x / 2.0 - vec2_2.x / 4.0 + index3 * (vec2_2.x / 2.0))) : vec2_2.x / 2f;
+                                    float num9 = collection.Count != 1 ? (collection.Count != 2 ? index3 * (vec2_2.x / (collection.Count - 1)) : (float)(vec2_2.x / 2f - vec2_2.x / 4f + index3 * (vec2_2.x / 2f))) : vec2_2.x / 2f;
                                     Vec2 vec2_3 = new Vec2(vec2_1.x + num9, vec2_1.y + (num4 + 1) * 60);
                                     float num10 = 0f;
                                     if (vec2_3.x < p1.x)

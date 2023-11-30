@@ -1,6 +1,6 @@
 /* FNA3D - 3D Graphics Library for FNA
  *
- * Copyright (c) 2020-2022 Ethan Lee
+ * Copyright (c) 2020-2023 Ethan Lee
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
@@ -462,8 +462,8 @@ typedef struct FNA3D_RenderTargetBinding
 /* Version API */
 
 #define FNA3D_ABI_VERSION	 0
-#define FNA3D_MAJOR_VERSION	22
-#define FNA3D_MINOR_VERSION	10
+#define FNA3D_MAJOR_VERSION	23
+#define FNA3D_MINOR_VERSION	 8
 #define FNA3D_PATCH_VERSION	 0
 
 #define FNA3D_COMPILED_VERSION ( \

@@ -1,20 +1,13 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Phaser
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Guns|Lasers")]
     public class Phaser : Gun
     {
-        private float _charge;
-        private int _chargeLevel;
-        private float _chargeFade;
+        protected float _charge;
+        protected int _chargeLevel;
+        public float _chargeFade;
         private SinWave _chargeWaver = (SinWave)0.4f;
-        private SpriteMap _phaserCharge;
+        protected SpriteMap _phaserCharge;
 
         public Phaser(float xval, float yval)
           : base(xval, yval)
@@ -42,7 +35,14 @@ namespace DuckGame
             };
             editorTooltip = "Like a laser, only...phasery? Hold the trigger to charge a more powerful shot.";
         }
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is Phaser && pTaped.gun2 is QuadLaser ? new QuadPhaser(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void Update()
         {
             if (owner == null || ammo <= 0)
@@ -65,7 +65,7 @@ namespace DuckGame
                 return;
             float alpha = this.alpha;
             this.alpha = ((_chargeFade * 0.6f + _chargeFade * _chargeWaver.normalized * 0.4f) * 0.8f);
-            Draw(_phaserCharge, new Vec2((3f + _chargeFade * _chargeWaver * 0.5f), -4f), -1);
+            Draw(ref _phaserCharge, new Vec2((3f + _chargeFade * _chargeWaver * 0.5f), -4f), -1);
             this.alpha = alpha;
         }
 

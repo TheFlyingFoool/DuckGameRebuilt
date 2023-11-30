@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.DuctTape
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -24,6 +17,10 @@ namespace DuckGame
             wearable = false;
             _editorName = "Tape";
             editorTooltip = "Taping things together is always a good time!";
+            //if (Editor.clientonlycontent)
+            //{nvm its ugly -NiK0
+            //    graphic.color = Color.Red; //dan peer pressured me into this -NiK0
+            //}
         }
 
         public override void PressAction()

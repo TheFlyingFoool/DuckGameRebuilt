@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.InvisiGoody
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Special|Goodies", EditorItemType.Arcade)]
     [BaggedProperty("isOnlineCapable", false)]
@@ -30,7 +23,7 @@ namespace DuckGame
             float num = size.value;
             center = new Vec2(8f, 8f);
             collisionSize = new Vec2(num * 16f);
-            collisionOffset = new Vec2((float)(-(num * 16.0) / 2.0));
+            collisionOffset = new Vec2((float)(-(num * 16f) / 2f));
             scale = new Vec2(num);
         }
 

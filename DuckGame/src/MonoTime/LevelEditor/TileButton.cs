@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.TileButton
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -70,9 +63,9 @@ namespace DuckGame
             float num = 1f;
             if (Editor.inputMode == EditorInput.Mouse && _hover)
             {
-                if (Mouse.scroll > 0.0)
+                if (Mouse.scroll > 0)
                     flag2 = true;
-                else if (Mouse.scroll < 0.0)
+                else if (Mouse.scroll < 0)
                     flag1 = true;
                 if (Mouse.middle == InputState.Down)
                     num = 0.1f;

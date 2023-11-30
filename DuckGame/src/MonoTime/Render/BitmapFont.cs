@@ -1,23 +1,19 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.BitmapFont
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame
 {
     public class BitmapFont : Transform
     {
+        public float ySpacing = 0;
         private SpriteMap _texture;
         public static SpriteMap _japaneseCharacters;
         public int charcolorindex;
         public int startingcoloroverride = -1;
         public int startingcolorindex = -1;
         private static bool _mapInitialized = false;
+        
         public static char[] _characters = new char[317]
         {
           ' ',
@@ -394,19 +390,29 @@ namespace DuckGame
             if (!allowBigSprites && text.StartsWith("_!"))
                 return null;
             ++_letterIndex;
-            string str = "";
+            string trigger = "";
             for (; _letterIndex != text.Length && text[_letterIndex] != ' ' && text[_letterIndex] != spritechar; ++_letterIndex)
-                str += text[_letterIndex].ToString();
+                trigger += text[_letterIndex].ToString();
             Sprite sprite = null;
             if (input != null)
             {
-                sprite = input.GetTriggerImage(str);
-                if (sprite == null && Triggers.IsTrigger(str))
+                sprite = input.GetTriggerImage(trigger);
+                if (sprite == null && Triggers.IsTrigger(trigger))
                     return new Sprite();
             }
+
             if (sprite == null)
-                sprite = Input.GetTriggerSprite(str);
-            return sprite;
+                sprite = Input.GetTriggerSprite(trigger);
+
+            Sprite spriteClone = null;
+            if (sprite != null)
+            {
+                spriteClone = sprite.Clone();
+                spriteClone.xscale = sprite.xscale * xscale;
+                spriteClone.yscale = sprite.yscale * yscale;
+            }
+            
+            return spriteClone;
         }
 
         public Color ParseColor(string text)
@@ -415,7 +421,14 @@ namespace DuckGame
             string color = "";
             for (; _letterIndex != text.Length && text[_letterIndex] != ' ' && text[_letterIndex] != colorchar; ++_letterIndex)
                 color += text[_letterIndex].ToString();
-            return color == "PREV" ? new Color(_previousColor.r, _previousColor.g, _previousColor.b) : Colors.ParseColor(color);
+            if (color == "PREV")
+            {
+                return new Color(_previousColor.r, _previousColor.g, _previousColor.b);
+            }
+            else
+            {
+                return Colors.ParseColor(color);
+            }
         }
 
         public InputProfile GetInputProfile(InputProfile input)
@@ -491,6 +504,91 @@ namespace DuckGame
             return width;
         }
 
+        public List<string> ParseToList(string text)
+        {
+            text = LangHandler.Convert(text);
+            List<string> result = new List<string>();
+            for (_letterIndex = 0; _letterIndex < text.Length; ++_letterIndex)
+            {
+                bool processedSpecialCharacter = false;
+                if (text[_letterIndex] == spritechar)
+                {
+                    int letterIndex = _letterIndex;
+                    Sprite sprite = ParseSprite(text, null);
+                    if (sprite != null)
+                    {
+                        result.Add(text.Substring(letterIndex, _letterIndex - letterIndex + (_letterIndex == text.Length ? 0 : 1)));
+                        processedSpecialCharacter = true;
+                    }
+                    else
+                        _letterIndex = letterIndex;
+                }
+                else if (text[_letterIndex] == colorchar)
+                {
+                    int letterIndex = _letterIndex;
+                    if (ParseColor(text) != Colors.Transparent)
+                    {
+                        result.Add(text.Substring(letterIndex, _letterIndex - letterIndex + (_letterIndex == text.Length ? 0 : 1)));
+                        processedSpecialCharacter = true;
+                    }
+                    else
+                        _letterIndex = letterIndex;
+                }
+                if (!processedSpecialCharacter)
+                {
+                    result.Add(text[_letterIndex].ToString());
+                }
+            }
+
+            return result;
+        }
+
+        public string ComposeToText(List<string> list)
+        {
+            return String.Join("", list);
+        }
+
+        protected int GetCompLength(string comp)
+        {
+            if (comp.Length == 1)
+                return 1;
+            if (comp[0] == spritechar)
+                return 2;
+            return 0;
+        }
+
+        public int GetLength(string text)
+        {
+            List<string> li = ParseToList(text);
+            int length = 0;
+            foreach (string comp in li)
+                length += GetCompLength(comp);
+            return length;
+        }
+
+        public string Crop(string text, int from, int to)
+        {
+            if (to < from || to > text.Length - 1)
+                return "";
+            List<string> li = ParseToList(text);
+            List<string> cropped = new List<string>();
+            int pos = 0;
+            string firstColorTag = null;
+            foreach (string comp in li)
+            {
+                if (pos >= to)
+                    break;
+                if (pos >= from)
+                    cropped.Add(comp);
+                else if (comp[0] == colorchar)
+                    firstColorTag = comp;
+                pos += GetCompLength(comp);
+            }
+            if (firstColorTag != null)
+                cropped.Insert(0, firstColorTag);
+            return ComposeToText(cropped);
+        }
+
         public void DrawOutline(string text, Vec2 pos, Color c, Color outline, Depth deep = default(Depth))
         {
             if (Program.gay)
@@ -550,7 +648,6 @@ namespace DuckGame
         {
             Draw(text, pos.x, pos.y, c, deep, input, colorSymbols);
         }
-
         public void Draw(
           string text,
           float xpos,
@@ -582,7 +679,7 @@ namespace DuckGame
                 charcolorindex = startingcolorindex;
             }
             text = LangHandler.Convert(text);
-            if (colorOverride != new Color())
+            if (colorOverride != default)
                 c = colorOverride;
             _previousColor = c;
             Color color = c;
@@ -670,23 +767,24 @@ namespace DuckGame
                 }
                 else if (text[_letterIndex] == colorchar)
                 {
-                    int letterIndex = _letterIndex;
-                    if (color != Colors.Transparent)
+                    int iPos2 = _letterIndex;
+                    Color col = ParseColor(text);
+                    if (colorOverride != default(Color))
                     {
-                        _previousColor = color;
+                        col = colorOverride;
                     }
-                    color = ParseColor(text);
-                    if (colorOverride != new Color())
-                        color = colorOverride;
-                    if (color != Colors.Transparent)
+                    if (col != Colors.Transparent)
                     {
-                        float w = c.ToVector4().w;
-                        c = color;
-                        c *= w;
+                        _previousColor = c;
+                        float al2 = c.ToVector4().w;
+                        c = col;
+                        c *= al2;
                         flag = true;
                     }
                     else
-                        _letterIndex = letterIndex;
+                    {
+                        _letterIndex = iPos2;
+                    }
                 }
                 if (!flag)
                 {
@@ -711,7 +809,7 @@ namespace DuckGame
                     }
                     if (text[_letterIndex] == '\n')
                     {
-                        num1 += _texture.height * scale.y;
+                        num1 += _texture.height * scale.y + ySpacing;
                         num2 = 0f;
                     }
                     else

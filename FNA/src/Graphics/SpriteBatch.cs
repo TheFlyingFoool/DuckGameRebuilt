@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -277,7 +277,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			DepthStencilState depthStencilState,
 			RasterizerState rasterizerState,
 			Effect effect,
-			Matrix transformationMatrix
+			Matrix transformMatrix
 		) {
 			if (beginCalled)
 			{
@@ -298,7 +298,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			this.rasterizerState = rasterizerState ?? RasterizerState.CullCounterClockwise;
 
 			customEffect = effect;
-			transformMatrix = transformationMatrix;
+			this.transformMatrix = transformMatrix;
 
 			if (sortMode == SpriteSortMode.Immediate)
 			{
@@ -428,11 +428,11 @@ namespace Microsoft.Xna.Framework.Graphics
 				sourceW = Math.Sign(sourceRectangle.Value.Width) * Math.Max(
 					Math.Abs(sourceRectangle.Value.Width),
 					MathHelper.MachineEpsilonFloat
-				) / texture.Width;
+				) / (float) texture.Width;
 				sourceH = Math.Sign(sourceRectangle.Value.Height) * Math.Max(
 					Math.Abs(sourceRectangle.Value.Height),
 					MathHelper.MachineEpsilonFloat
-				) / texture.Height;
+				) / (float) texture.Height;
 				destW *= sourceRectangle.Value.Width;
 				destH *= sourceRectangle.Value.Height;
 			}
@@ -456,8 +456,8 @@ namespace Microsoft.Xna.Framework.Graphics
 				destW,
 				destH,
 				color,
-				origin.X / sourceW / texture.Width,
-				origin.Y / sourceH / texture.Height,
+				origin.X / sourceW / (float) texture.Width,
+				origin.Y / sourceH / (float) texture.Height,
 				(float) Math.Sin(rotation),
 				(float) Math.Cos(rotation),
 				layerDepth,
@@ -485,11 +485,11 @@ namespace Microsoft.Xna.Framework.Graphics
 				sourceW = Math.Sign(sourceRectangle.Value.Width) * Math.Max(
 					Math.Abs(sourceRectangle.Value.Width),
 					MathHelper.MachineEpsilonFloat
-				) / texture.Width;
+				) / (float) texture.Width;
 				sourceH = Math.Sign(sourceRectangle.Value.Height) * Math.Max(
 					Math.Abs(sourceRectangle.Value.Height),
 					MathHelper.MachineEpsilonFloat
-				) / texture.Height;
+				) / (float) texture.Height;
 				scale.X *= sourceRectangle.Value.Width;
 				scale.Y *= sourceRectangle.Value.Height;
 			}
@@ -513,8 +513,8 @@ namespace Microsoft.Xna.Framework.Graphics
 				scale.X,
 				scale.Y,
 				color,
-				origin.X / sourceW / texture.Width,
-				origin.Y / sourceH / texture.Height,
+				origin.X / sourceW / (float) texture.Width,
+				origin.Y / sourceH / (float) texture.Height,
 				(float) Math.Sin(rotation),
 				(float) Math.Cos(rotation),
 				layerDepth,
@@ -609,11 +609,11 @@ namespace Microsoft.Xna.Framework.Graphics
 				sourceW = Math.Sign(sourceRectangle.Value.Width) * Math.Max(
 					Math.Abs(sourceRectangle.Value.Width),
 					MathHelper.MachineEpsilonFloat
-				) / texture.Width;
+				) / (float) texture.Width;
 				sourceH = Math.Sign(sourceRectangle.Value.Height) * Math.Max(
 					Math.Abs(sourceRectangle.Value.Height),
 					MathHelper.MachineEpsilonFloat
-				) / texture.Height;
+				) / (float) texture.Height;
 			}
 			else
 			{
@@ -633,8 +633,8 @@ namespace Microsoft.Xna.Framework.Graphics
 				destinationRectangle.Width,
 				destinationRectangle.Height,
 				color,
-				origin.X / sourceW / texture.Width,
-				origin.Y / sourceH / texture.Height,
+				origin.X / sourceW / (float) texture.Width,
+				origin.Y / sourceH / (float) texture.Height,
 				(float) Math.Sin(rotation),
 				(float) Math.Cos(rotation),
 				layerDepth,
@@ -822,11 +822,11 @@ namespace Microsoft.Xna.Framework.Graphics
 				float sourceW = Math.Sign(cGlyph.Width) * Math.Max(
 					Math.Abs(cGlyph.Width),
 					MathHelper.MachineEpsilonFloat
-				) / textureValue.Width;
+				) / (float) textureValue.Width;
 				float sourceH = Math.Sign(cGlyph.Height) * Math.Max(
 					Math.Abs(cGlyph.Height),
 					MathHelper.MachineEpsilonFloat
-				) / textureValue.Height;
+				) / (float) textureValue.Height;
 				PushSprite(
 					textureValue,
 					cGlyph.X / (float) textureValue.Width,
@@ -838,8 +838,8 @@ namespace Microsoft.Xna.Framework.Graphics
 					cGlyph.Width * scale.X,
 					cGlyph.Height * scale.Y,
 					color,
-					offsetX / sourceW / textureValue.Width,
-					offsetY / sourceH / textureValue.Height,
+					offsetX / sourceW / (float) textureValue.Width,
+					offsetY / sourceH / (float) textureValue.Height,
 					(float) Math.Sin(rotation),
 					(float) Math.Cos(rotation),
 					layerDepth,
@@ -1018,11 +1018,11 @@ namespace Microsoft.Xna.Framework.Graphics
 				float sourceW = Math.Sign(cGlyph.Width) * Math.Max(
 					Math.Abs(cGlyph.Width),
 					MathHelper.MachineEpsilonFloat
-				) / textureValue.Width;
+				) / (float) textureValue.Width;
 				float sourceH = Math.Sign(cGlyph.Height) * Math.Max(
 					Math.Abs(cGlyph.Height),
 					MathHelper.MachineEpsilonFloat
-				) / textureValue.Height;
+				) / (float) textureValue.Height;
 				PushSprite(
 					textureValue,
 					cGlyph.X / (float) textureValue.Width,
@@ -1034,8 +1034,8 @@ namespace Microsoft.Xna.Framework.Graphics
 					cGlyph.Width * scale.X,
 					cGlyph.Height * scale.Y,
 					color,
-					offsetX / sourceW / textureValue.Width,
-					offsetY / sourceH / textureValue.Height,
+					offsetX / sourceW / (float) textureValue.Width,
+					offsetY / sourceH / (float) textureValue.Height,
 					(float) Math.Sin(rotation),
 					(float) Math.Cos(rotation),
 					layerDepth,
@@ -1433,8 +1433,8 @@ namespace Microsoft.Xna.Framework.Graphics
 			Viewport viewport = GraphicsDevice.Viewport;
 
 			// Inlined CreateOrthographicOffCenter * transformMatrix
-			float tfWidth = (float) (2.0 / viewport.Width);
-			float tfHeight = (float) (-2.0 / viewport.Height);
+			float tfWidth = (float) (2.0 / (double) viewport.Width);
+			float tfHeight = (float) (-2.0 / (double) viewport.Height);
 			unsafe
 			{
 				float* dstPtr = (float*) spriteMatrixTransform;

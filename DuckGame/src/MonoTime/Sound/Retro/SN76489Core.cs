@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.SN76489Core
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public sealed class SN76489Core
     {
@@ -105,7 +98,7 @@ namespace DuckGame
             reset();
         }
 
-        public void clock(float f) => ticksPerSample = (float)(f / 16.0 / 44100.0);
+        public void clock(float f) => ticksPerSample = (float)(f / 16f / 44100f);
 
         public void reset()
         {
@@ -229,7 +222,7 @@ namespace DuckGame
         {
             if (0U >= 1U)
                 return 0f;
-            for (; ticksCount > 0.0; --ticksCount)
+            for (; ticksCount > 0; --ticksCount)
             {
                 --cntA;
                 if (cntA < 0)

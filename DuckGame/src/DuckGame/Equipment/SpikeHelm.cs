@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.SpikeHelm
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -161,10 +154,10 @@ namespace DuckGame
                 collisionSize = new Vec2(11f, 10f);
             }
             base.Update();
-            if (oldPokeCooldown > 0.0)
+            if (oldPokeCooldown > 0)
             {
                 oldPokeCooldown -= Maths.IncFrameTimer();
-                if (oldPokeCooldown <= 0.0)
+                if (oldPokeCooldown <= 0)
                     oldPoke = null;
             }
             if (poked == null || !isServerForObject)
@@ -176,7 +169,7 @@ namespace DuckGame
             poked.visible = false;
             poked.solid = false;
             poked.grounded = true;
-            if (poked.removeFromLevel || poked.y < level.topLeft.y - 2000.0 || !poked.active)
+            if (poked.removeFromLevel || poked.y < level.topLeft.y - 2000 || !poked.active)
             {
                 ReleasePokedObject();
             }
@@ -194,7 +187,7 @@ namespace DuckGame
             }
         }
 
-        private void ReleasePokedObject()
+        public void ReleasePokedObject()
         {
             if (poked != null)
             {
@@ -218,6 +211,7 @@ namespace DuckGame
         {
             int frame = _sprite.frame;
             _sprite.frame = crushed ? 1 : 0;
+            _sprite.SkipIntraTick = SkipIntratick;
             (_pickupSprite as SpriteMap).frame = _sprite.frame;
             base.Draw();
             _sprite.frame = frame;

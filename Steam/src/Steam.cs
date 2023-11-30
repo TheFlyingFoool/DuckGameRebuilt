@@ -66,7 +66,7 @@ public class Steam : IDisposable {
     public static User user { get; private set; }
 
     // private static List<User> _friends; // unused
-    public static unsafe List<User> friends => _.GetList(SteamFriends.GetFriendCount(EFriendFlags.k_EFriendFlagAll), i => User.GetUser(SteamFriends.GetFriendByIndex(i, EFriendFlags.k_EFriendFlagAll)));
+    public static unsafe List<User> friends => SteamHelper.GetList(SteamFriends.GetFriendCount(EFriendFlags.k_EFriendFlagAll), i => User.GetUser(SteamFriends.GetFriendByIndex(i, EFriendFlags.k_EFriendFlagAll)));
 
     public Steam() {
         _initialized = false;
@@ -296,8 +296,11 @@ public class Steam : IDisposable {
         if (!_initialized)
             return 0f;
         float val;
-        SteamUserStats.GetStat(id, out val);
-        return val;
+        if (SteamUserStats.GetStat(id, out val))
+        {
+            return val;
+        }
+        return -999999.0f;
     }
 
     public static unsafe void SetStat(string id, float val) {
@@ -395,7 +398,7 @@ public class Steam : IDisposable {
     public static unsafe void RequestWorkshopInfo(List<WorkshopItem> items) {
         if (!_initialized)
             return;
-        UGCQueryHandle_t query = SteamUGC.CreateQueryUGCDetailsRequest(_.GetArray(items, item => new PublishedFileId_t(item.id)), (uint) items.Count);
+        UGCQueryHandle_t query = SteamUGC.CreateQueryUGCDetailsRequest(SteamHelper.GetArray(items, item => new PublishedFileId_t(item.id)), (uint) items.Count);
         SetCallResult<SteamUGCQueryCompleted_t>(SteamUGC.SendQueryUGCRequest(query));
     }
 
@@ -715,11 +718,33 @@ public class Steam : IDisposable {
             if (SteamUGC.GetQueryUGCResult(result.m_handle, i, out details)) {
                 WorkshopItem item = WorkshopItem.GetItem(details.m_nPublishedFileId.m_PublishedFileId);
                 if (item != null) {
-                    WorkshopItemData workshopItemData = new WorkshopItemData();
-                    SteamUGC.GetQueryUGCPreviewURL(result.m_handle, i, out workshopItemData.previewPath, 256);
-                    workshopItemData.description = details.m_rgchDescription;
-                    workshopItemData.votesUp = (int) details.m_unVotesUp;
-                    item.SetDetails(details.m_pchFileName, workshopItemData);
+                    WorkshopItemData workshopData = new WorkshopItemData();
+                    SteamUGC.GetQueryUGCPreviewURL(result.m_handle, i, out workshopData.previewPath, 256);
+                    workshopData.description = details.m_rgchDescription;
+                    workshopData.votesUp = (int) details.m_unVotesUp;
+                    workshopData.name = details.m_rgchTitle;
+
+                    string tagstring = details.m_rgchTags;
+                    workshopData.tags = new List<string>();
+
+                    string[] parts = tagstring.Split(',');
+                    for (int j = 0; j < parts.Length; j++)
+                    {
+                        workshopData.tags.Add(parts[j]);
+                    }
+                    item.SetDetails(details.m_rgchTitle, workshopData);
+
+                    //Add all workshop dependencies
+                    item.dependencies = new List<WorkshopItem>();
+                    PublishedFileId_t[] dependencies = new PublishedFileId_t[details.m_unNumChildren];
+                    int dependencyCount = 0;
+                    SteamUGC.GetQueryUGCChildren(result.m_handle, i, dependencies, (uint)dependencyCount);
+                    for (int iDepend = 0; iDepend < dependencyCount; iDepend++)
+                    {
+                        item.dependencies.Add(WorkshopItem.GetItem(dependencies[iDepend]));
+                    }
+
+                    item.finishedProcessing = true;
                 }
             }
         }

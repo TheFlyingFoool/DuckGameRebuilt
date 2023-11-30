@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ProfileSelector
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -499,11 +492,8 @@ namespace DuckGame
         private void RebuildProfileList()
         {
             _profiles = Profiles.allCustomProfiles;
-            if (_box.controllerIndex != 0 || !Options.Data.defaultAccountMerged)
-                _profiles.Add(Profiles.universalProfileList.ElementAt(_box.controllerIndex));
-            if (!Network.isActive)
-                return;
-            _profiles.Remove(Profiles.experienceProfile);
+            if (_box.controllerIndex != 0 || !Options.Data.defaultAccountMerged) _profiles.Add(Profiles.universalProfileList.ElementAt(_box.controllerIndex));
+            if (Network.isActive) _profiles.Remove(Profiles.experienceProfile);
         }
 
         private void SaveSettings(bool pIsEditing, bool pAccepted)
@@ -612,6 +602,17 @@ namespace DuckGame
                             RebuildProfileList();
                             _slide = _slideTo;
                             _deleteContext = null;
+
+                            _box.ChangeProfile(_profiles[_selectorPosition]);
+                            _profile = _profiles[_selectorPosition];
+                            _profile.inputProfile = null;
+                            _profile.inputProfile = _inputProfile;
+                            Input.ApplyDefaultMapping(_inputProfile, _profile);
+                            _selector.ConfirmProfile();
+                            _open = false;
+                            _selector.fade = 1f;
+                            _fade = 0f;
+                            _selector.screen.DoFlashTransition();
                         }
                     }
                     if (_inputProfile.Pressed(Triggers.Cancel))
@@ -737,11 +738,11 @@ namespace DuckGame
                             {
                                 if ((controlSetting2.condition == null || controlSetting2.condition(d)) && !controlSetting2.caption)
                                 {
-                                    if (zero.x != 0.0)
+                                    if (zero.x != 0)
                                     {
                                         if (controlSetting2.position.y == _selectedSetting.position.y)
                                         {
-                                            if (zero.x > 0.0)
+                                            if (zero.x > 0)
                                             {
                                                 if (controlSetting2.position.x > _selectedSetting.position.x && (controlSetting1 == null || controlSetting2.position.x < controlSetting1.position.x))
                                                     controlSetting1 = controlSetting2;
@@ -752,7 +753,7 @@ namespace DuckGame
                                     }
                                     else if (controlSetting2.position.x == _selectedSetting.position.x || controlSetting2.column == _selectedSetting.column)
                                     {
-                                        if (zero.y > 0.0)
+                                        if (zero.y > 0)
                                         {
                                             if (controlSetting2.position.y > _selectedSetting.position.y && (controlSetting1 == null || controlSetting2.position.y < controlSetting1.position.y))
                                                 controlSetting1 = controlSetting2;
@@ -1013,9 +1014,9 @@ namespace DuckGame
                         }
                     }
                 }
-                if (_slideTo != 0.0 && _slide != _slideTo)
+                if (_slideTo != 0 && _slide != _slideTo)
                     _slide = Lerp.Float(_slide, _slideTo, 0.1f);
-                else if (_slideTo != 0.0 && _slide == _slideTo)
+                else if (_slideTo != 0 && _slide == _slideTo)
                 {
                     _slide = 0f;
                     _slideTo = 0f;
@@ -1054,10 +1055,10 @@ namespace DuckGame
                     this.position = Vec2.Zero;
                     _selector.screen.BeginDraw();
                     string text = "SAVE CHANGES?";
-                    _smallFont.Draw(text, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _smallFont.GetWidth(text) / 2.0), y + 22f)), Colors.MenuOption * (_controlPosition == 0 ? 1f : 0.6f), (Depth)0.95f);
-                    Vec2 vec2 = new Vec2((float)(x + width / 2.0 - 66.0), y + 18f) + new Vec2(0.5f, 0f);
-                    _smallFont.Draw("YES", Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _smallFont.GetWidth("YES") / 2.0), y + 34f)), Colors.MenuOption * (_editControlSelection == 0 ? 1f : 0.6f), (Depth)0.95f);
-                    _smallFont.Draw("NO", Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _smallFont.GetWidth("NO") / 2.0), (float)(y + 34.0 + 8.0))), Colors.MenuOption * (_editControlSelection == 1 ? 1f : 0.6f), (Depth)0.95f);
+                    _smallFont.Draw(text, Maths.RoundToPixel(new Vec2((float)(x + width / 2 - _smallFont.GetWidth(text) / 2), y + 22f)), Colors.MenuOption * (_controlPosition == 0 ? 1f : 0.6f), (Depth)0.95f);
+                    Vec2 vec2 = new Vec2((float)(x + width / 2 - 66), y + 18f) + new Vec2(0.5f, 0f);
+                    _smallFont.Draw("YES", Maths.RoundToPixel(new Vec2((float)(x + width / 2 - _smallFont.GetWidth("YES") / 2), y + 34f)), Colors.MenuOption * (_editControlSelection == 0 ? 1f : 0.6f), (Depth)0.95f);
+                    _smallFont.Draw("NO", Maths.RoundToPixel(new Vec2((float)(x + width / 2 - _smallFont.GetWidth("NO") / 2), (float)(y + 34 + 8))), Colors.MenuOption * (_editControlSelection == 1 ? 1f : 0.6f), (Depth)0.95f);
                     _font.Draw("@SELECT@", 4f, 79f, new Color(180, 180, 180), (Depth)0.95f, _inputProfile);
                     _font.Draw("@CANCEL@", 122f, 79f, new Color(180, 180, 180), (Depth)0.95f, _inputProfile);
                     this.position = position;
@@ -1085,8 +1086,8 @@ namespace DuckGame
                             text = text.Substring(0, 15) + "...";
                         if (_controlPosition == 0)
                             text = "< " + text + " >";
-                        _smallFont.Draw(text, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _smallFont.GetWidth(text) / 2.0), y + num)), Colors.MenuOption * (_controlPosition == 0 ? 1f : 0.6f), (Depth)0.95f);
-                        Vec2 vec2 = new Vec2((float)(x + width / 2.0 - 66.0), (float)(y + num + 9.0)) + new Vec2(0.5f, 0f);
+                        _smallFont.Draw(text, Maths.RoundToPixel(new Vec2((float)(x + width / 2 - _smallFont.GetWidth(text) / 2), y + num)), Colors.MenuOption * (_controlPosition == 0 ? 1f : 0.6f), (Depth)0.95f);
+                        Vec2 vec2 = new Vec2((float)(x + width / 2 - 66), (float)(y + num + 9)) + new Vec2(0.5f, 0f);
                         bool flag = false;
                         foreach (ControlSetting controlSetting in _controlSettingPages[_controlPage])
                         {
@@ -1097,7 +1098,7 @@ namespace DuckGame
                             {
                                 string name = controlSetting.name;
                                 Vec2 position2 = controlSetting.position;
-                                if (position2.y == 0.0)
+                                if (position2.y == 0)
                                     flag = true;
                                 else if (!flag && (_controlPage != 0 || controlSetting != _controlSettingPages[_controlPage][_controlSettingPages[_controlPage].Count - 1]))
                                     position2.y -= 12f;
@@ -1105,7 +1106,7 @@ namespace DuckGame
                                 {
                                     name += ":|DGBLUE|";
                                     if (!_editControl || _selectedSetting != controlSetting)
-                                        Graphics.Draw(inputProfile.lastActiveDevice.GetMapImage(_configInputMapping.map[controlSetting.trigger]), (float)(vec2.x + position2.x + _smallFont.GetWidth(name) - 2.0), (float)(vec2.y + position2.y - 3.0));
+                                        Graphics.Draw(inputProfile.lastActiveDevice.GetMapImage(_configInputMapping.map[controlSetting.trigger]), (float)(vec2.x + position2.x + _smallFont.GetWidth(name) - 2), (float)(vec2.y + position2.y - 3));
                                     else
                                         name += "_";
                                 }
@@ -1130,7 +1131,7 @@ namespace DuckGame
                     this.position = Vec2.Zero;
                     _selector.screen.BeginDraw();
                     string text1 = "@LWING@PICK PROFILE@RWING@";
-                    _font.Draw(text1, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _font.GetWidth(text1) / 2.0), y + 8f)), Color.White, (Depth)0.95f);
+                    _font.Draw(text1, Maths.RoundToPixel(new Vec2((float)(x + width / 2 - _font.GetWidth(text1) / 2), y + 8f)), Color.White, (Depth)0.95f);
                     float num1 = 8f;
                     for (int index1 = 0; index1 < 7; ++index1)
                     {
@@ -1154,11 +1155,11 @@ namespace DuckGame
                                 text2 = "@STEAMICON@|DGBLUE|" + text2 + "|WHITE|";
                         }
                         string text3 = null;
-                        if (_desiredSelectorPosition == index && (index1 == 3 || _slideTo > 0.0 && index1 == 4 || _slideTo < 0.0 && index1 == 2))
+                        if (_desiredSelectorPosition == index && (index1 == 3 || _slideTo > 0 && index1 == 4 || _slideTo < 0 && index1 == 2))
                             text3 = "> " + text2 + " <";
-                        float num2 = (float)(this.y + num1 + 33.0);
-                        float y = (float)(this.y + num1 + index1 * 11 + -_slide * 11.0);
-                        float num3 = Maths.Clamp((float)((33.0 - Math.Abs(y - num2)) / 33.0), 0f, 1f);
+                        float num2 = (float)(this.y + num1 + 33);
+                        float y = (float)(this.y + num1 + index1 * 11 + -_slide * 11);
+                        float num3 = Maths.Clamp((float)((33 - Math.Abs(y - num2)) / 33), 0f, 1f);
                         float num4 = num3 * Maths.NormalizeSection(num3, 0f, 0.9f);
                         float num5 = 0.2f;
                         float num6 = Maths.Clamp(num3 >= 0.3f ? (num3 >= 0.8f ? Maths.NormalizeSection(num3, 0.8f, 1f) + num5 : num5) : Maths.NormalizeSection(num3, 0f, 0.3f) * num5, 0f, 1f);
@@ -1167,9 +1168,9 @@ namespace DuckGame
                             flag3 = true;
                         if (flag3)
                             text2 = text2.Replace("|DGBLUE|", "");
-                        _font.Draw(text2, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _font.GetWidth(text2) / 2.0), y)), (flag3 ? Color.Red : (flag1 ? Color.Lime : (flag2 ? Colors.DGYellow : Colors.MenuOption))) * num6, (Depth)0.95f);
+                        _font.Draw(text2, Maths.RoundToPixel(new Vec2((float)(x + width / 2 - _font.GetWidth(text2) / 2), y)), (flag3 ? Color.Red : (flag1 ? Color.Lime : (flag2 ? Colors.DGYellow : Colors.MenuOption))) * num6, (Depth)0.95f);
                         if (text3 != null)
-                            _font.Draw(text3, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _font.GetWidth(text3) / 2.0), y)), Color.White, (Depth)0.92f);
+                            _font.Draw(text3, Maths.RoundToPixel(new Vec2((float)(x + width / 2 - _font.GetWidth(text3) / 2), y)), Color.White, (Depth)0.92f);
                     }
                     float y1 = num1 + 32f;
                     Graphics.DrawRect(this.position + new Vec2(2f, y1), this.position + new Vec2(138f, y1 + 9f), new Color(30, 30, 30) * _fade, (Depth)0.8f);
@@ -1213,45 +1214,45 @@ namespace DuckGame
                             _font.Draw(str1, Maths.RoundToPixel(pos), Color.Lime * (_createSelection == PSCreateSelection.ChangeName ? 1f : 0.6f), (Depth)0.95f);
                             pos.x += 2f;
                             string text4 = ">              <";
-                            _font.Draw(text4, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _font.GetWidth(text4) / 2.0), pos.y)), Color.White * (_createSelection == PSCreateSelection.ChangeName ? 1f : 0.6f), (Depth)0.95f);
+                            _font.Draw(text4, Maths.RoundToPixel(new Vec2((float)(x + width / 2 - _font.GetWidth(text4) / 2), pos.y)), Color.White * (_createSelection == PSCreateSelection.ChangeName ? 1f : 0.6f), (Depth)0.95f);
                             if (_takenFlash > 0.05f)
                             {
                                 string text5 = "Name Taken";
-                                _font.Draw(text5, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _font.GetWidth(text5) / 2.0), pos.y)), Color.Red * _takenFlash, (Depth)0.97f);
-                                Graphics.DrawRect(new Vec2(x + 20f, pos.y), new Vec2((float)(x + width - 20.0), pos.y + 8f), Color.Black, (Depth)0.96f);
+                                _font.Draw(text5, Maths.RoundToPixel(new Vec2((float)(x + width / 2 - _font.GetWidth(text5) / 2), pos.y)), Color.Red * _takenFlash, (Depth)0.97f);
+                                Graphics.DrawRect(new Vec2(x + 20f, pos.y), new Vec2((float)(x + width - 20), pos.y + 8f), Color.Black, (Depth)0.96f);
                             }
                         }
                         else
                         {
                             string str2 = str1.Replace(" ", "");
                             string text = _createSelection != PSCreateSelection.ChangeName ? "@LWING@" + str2.Reduced(12) + "@RWING@" : "> " + str2.Reduced(12) + " <";
-                            _font.Draw(text, Maths.RoundToPixel(new Vec2((float)(x + 2.0 + width / 2.0 - _font.GetWidth(text) / 2.0), pos.y)), Color.White * (_createSelection == PSCreateSelection.ChangeName ? 1f : 0.6f), (Depth)0.95f);
+                            _font.Draw(text, Maths.RoundToPixel(new Vec2((float)(x + 2 + width / 2 - _font.GetWidth(text) / 2), pos.y)), Color.White * (_createSelection == PSCreateSelection.ChangeName ? 1f : 0.6f), (Depth)0.95f);
                         }
                     }
                     else
                     {
                         string text = "@LWING@" + str1.Reduced(12) + "@RWING@";
-                        _font.Draw(text, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _font.GetWidth(text) / 2.0), y + 8f)), Color.White * (1f - Math.Min(1f, _takenFlash * 2f)), (Depth)0.95f);
+                        _font.Draw(text, Maths.RoundToPixel(new Vec2((float)(x + width / 2 - _font.GetWidth(text) / 2), y + 8f)), Color.White * (1f - Math.Min(1f, _takenFlash * 2f)), (Depth)0.95f);
                     }
                     pos.y += 14f;
                     string text6 = "            ";
                     if (_createSelection == PSCreateSelection.Mood)
                         text6 = "< " + text6 + " >";
-                    _font.Draw(text6, (float)(x + width / 2.0 - _font.GetWidth(text6) / 2.0), pos.y, Color.White * (_createSelection == PSCreateSelection.Mood ? 1f : 0.6f), (Depth)0.95f);
-                    Graphics.DrawLine(new Vec2((float)(x + width / 4.0 + 4.0), pos.y + 5f), new Vec2(x + (float)(width / 4.0 * 3.0), pos.y + 5f), Colors.MenuOption * (_createSelection == PSCreateSelection.Mood ? 1f : 0.6f), 2f, (Depth)0.95f);
+                    _font.Draw(text6, (float)(x + width / 2 - _font.GetWidth(text6) / 2), pos.y, Color.White * (_createSelection == PSCreateSelection.Mood ? 1f : 0.6f), (Depth)0.95f);
+                    Graphics.DrawLine(new Vec2((float)(x + width / 4 + 4), pos.y + 5f), new Vec2(x + (float)(width / 4 * 3), pos.y + 5f), Colors.MenuOption * (_createSelection == PSCreateSelection.Mood ? 1f : 0.6f), 2f, (Depth)0.95f);
                     float num = 60f;
-                    Graphics.DrawLine(new Vec2((float)(x + width / 2.0 - num / 2.0 + num * _moodVal + 2.0), pos.y + 1f), new Vec2((float)(x + width / 2.0 - num / 2.0 + num * _moodVal + 2.0), pos.y + 4f), Colors.MenuOption * (_createSelection == PSCreateSelection.Mood ? 1f : 0.6f), 3f, (Depth)0.95f);
-                    Graphics.DrawLine(new Vec2((float)(x + width / 2.0 - num / 2.0 + num * _moodVal + 2.0), pos.y + 6f), new Vec2((float)(x + width / 2.0 - num / 2.0 + num * _moodVal + 2.0), pos.y + 9f), Colors.MenuOption * (_createSelection == PSCreateSelection.Mood ? 1f : 0.6f), 3f, (Depth)0.95f);
+                    Graphics.DrawLine(new Vec2((float)(x + width / 2 - num / 2 + num * _moodVal + 2), pos.y + 1f), new Vec2((float)(x + width / 2 - num / 2 + num * _moodVal + 2), pos.y + 4f), Colors.MenuOption * (_createSelection == PSCreateSelection.Mood ? 1f : 0.6f), 3f, (Depth)0.95f);
+                    Graphics.DrawLine(new Vec2((float)(x + width / 2 - num / 2 + num * _moodVal + 2), pos.y + 6f), new Vec2((float)(x + width / 2 - num / 2 + num * _moodVal + 2), pos.y + 9f), Colors.MenuOption * (_createSelection == PSCreateSelection.Mood ? 1f : 0.6f), 3f, (Depth)0.95f);
                     _happyIcons.color = Color.White * (_createSelection == PSCreateSelection.Mood ? 1f : 0.6f);
                     _happyIcons.alpha = _fade;
-                    _happyIcons.frame = (int)Math.Round(_moodVal * 4.0);
+                    _happyIcons.frame = (int)Math.Round(_moodVal * 4);
                     _happyIcons.depth = (Depth)0.95f;
-                    Graphics.Draw(_happyIcons, (float)(x + width / 6.0 + 2.0), pos.y + 4f);
+                    Graphics.Draw(_happyIcons, (float)(x + width / 6 + 2), pos.y + 4f);
                     _angryIcons.color = Color.White * (_createSelection == PSCreateSelection.Mood ? 1f : 0.6f);
                     _angryIcons.alpha = _fade;
-                    _angryIcons.frame = (int)Math.Round((1.0 - _moodVal) * 4.0);
+                    _angryIcons.frame = (int)Math.Round((1f - _moodVal) * 4f);
                     _angryIcons.depth = (Depth)0.95f;
-                    Graphics.Draw(_angryIcons, x + (float)(width / 6.0 * 5.0), pos.y + 4f);
+                    Graphics.Draw(_angryIcons, x + (float)(width / 6 * 5), pos.y + 4f);
                     pos.y += 16f;
                     string text7 = _preferredColor >= 0 ? "COLOR" : "NO COLOR";
                     if (_createSelection == PSCreateSelection.Color)
@@ -1259,23 +1260,23 @@ namespace DuckGame
                     if (_preferredColor >= 0)
                     {
                         Graphics.DrawRect(new Vec2(x + 20f, pos.y - 2f), new Vec2(x + (width - 20f), pos.y + 9f), Persona.alllist[_preferredColor].colorDark.ToColor() * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.93f, false);
-                        _font.Draw(text7, Maths.RoundToPixel(new Vec2((float)(x + 2.0 + width / 2.0 - _font.GetWidth(text7) / 2.0), pos.y)), Persona.alllist[_preferredColor].color.ToColor() * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.95f);
+                        _font.Draw(text7, Maths.RoundToPixel(new Vec2((float)(x + 2 + width / 2 - _font.GetWidth(text7) / 2), pos.y)), Persona.alllist[_preferredColor].color.ToColor() * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.95f);
                     }
                     else
                     {
                         Graphics.DrawRect(new Vec2(x + 20f, pos.y - 2f), new Vec2(x + (width - 20f), pos.y + 9f), Colors.BlueGray * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.93f, false);
-                        _font.Draw(text7, Maths.RoundToPixel(new Vec2((float)(x + 2.0 + width / 2.0 - _font.GetWidth(text7) / 2.0), pos.y)), Colors.BlueGray * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.95f);
+                        _font.Draw(text7, Maths.RoundToPixel(new Vec2((float)(x + 2 + width / 2 - _font.GetWidth(text7) / 2), pos.y)), Colors.BlueGray * (_createSelection == PSCreateSelection.Color ? 1f : 0.6f), (Depth)0.95f);
                     }
                     pos.y += 12f;
                     string text8 = "CONTROLS";
                     if (_createSelection == PSCreateSelection.Controls)
                         text8 = "> " + text8 + " <";
-                    _font.Draw(text8, Maths.RoundToPixel(new Vec2((float)(x + 2.0 + width / 2.0 - _font.GetWidth(text8) / 2.0), pos.y)), Colors.MenuOption * (_createSelection == PSCreateSelection.Controls ? 1f : 0.6f), (Depth)0.95f);
+                    _font.Draw(text8, Maths.RoundToPixel(new Vec2((float)(x + 2 + width / 2 - _font.GetWidth(text8) / 2), pos.y)), Colors.MenuOption * (_createSelection == PSCreateSelection.Controls ? 1f : 0.6f), (Depth)0.95f);
                     string text9 = "OK";
                     if (_createSelection == PSCreateSelection.Accept)
                         text9 = "> " + text9 + " <";
                     pos.y += 12f;
-                    _font.Draw(text9, Maths.RoundToPixel(new Vec2((float)(x + 2.0 + width / 2.0 - _font.GetWidth(text9) / 2.0), pos.y)), Colors.MenuOption * (_createSelection == PSCreateSelection.Accept ? 1f : 0.6f), (Depth)0.95f);
+                    _font.Draw(text9, Maths.RoundToPixel(new Vec2((float)(x + 2 + width / 2 - _font.GetWidth(text9) / 2), pos.y)), Colors.MenuOption * (_createSelection == PSCreateSelection.Accept ? 1f : 0.6f), (Depth)0.95f);
                     if (_changeName)
                     {
                         string text10 = "@DPAD@";

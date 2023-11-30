@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.LauncherGrenade
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -62,7 +55,7 @@ namespace DuckGame
             {
                 --_numTrail;
                 _fadeVal -= 0.1f;
-                if (_fadeVal <= 0.0)
+                if (_fadeVal <= 0)
                     Level.Remove(this);
             }
             _prevPosition.x = position.x;
@@ -71,11 +64,11 @@ namespace DuckGame
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (_fade || with is Gun || (with is AutoPlatform || with is Nubber) && vSpeed <= 0.0)
+            if (_fade || with is Gun || (with is AutoPlatform || with is Nubber) && vSpeed <= 0)
                 return;
             if (with is PhysicsObject)
                 _isVolatile = -1f;
-            if (_startWait <= 0.0 && !_fade && (totalImpactPower > 2.0 && (_isVolatile <= 0.0 || !(with is Block)) || _blowUp))
+            if (_startWait <= 0 && !_fade && (totalImpactPower > 2 && (_isVolatile <= 0 || !(with is Block)) || _blowUp))
             {
                 int num1 = 0;
                 for (int index = 0; index < 1; ++index)

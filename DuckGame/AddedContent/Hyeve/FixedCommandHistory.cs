@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 using System.Collections.Generic;
 using DuckGame;
 
@@ -6,20 +7,14 @@ namespace AddedContent.Hyeve
 {
     public static class FixedCommandHistory
     {
-        [AutoConfigField(External = "CommandHistory")]
+        [Marker.AutoConfig(External = "CommandHistory")]
         public static List<string> SavedCommandHistory
         {
             get => DevConsole.core.previousLines.FastTakeFromEnd(25);
             set
             {
-                foreach (string line in DevConsole.core.previousLines)
-                { 
-                    if (!DevConsole.core.previousLines.Contains(line)) 
-                    {
-                        DevConsole.core.previousLines.Add(line);
-                        DevConsole.core.lastCommandIndex += 1;
-                    }
-                }
+                DevConsole.core.previousLines.AddRange(value);
+                DevConsole.core.lastCommandIndex = value.Count - 1;
             }
         }
 

@@ -1,10 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ForceWave
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -31,6 +25,7 @@ namespace DuckGame
           Duck own)
           : base(xpos, ypos)
         {
+            shouldbegraphicculled = false; //theres a glitch that makes these invisible adding this just incase? -NiK0
             offDir = (sbyte)dir;
             graphic = new Sprite("sledgeForce");
             center = new Vec2(graphic.w, graphic.h);
@@ -51,6 +46,44 @@ namespace DuckGame
             {
                 foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(topLeft, bottomRight))
                 {
+                    if (materialThing is Coin c && !c.used && isServerForObject && c.frames > 6)
+                    {
+                        SFX.PlaySynchronized("coin");
+                        Fondle(c);
+                        Duck d = null;
+                        if (_waveOwner != null) d = (Duck)_waveOwner;
+                        Vec2 v = c.TargetNear(d)[0];
+
+                        HitscanBullet bb = new HitscanBullet(c.x, c.y, v);
+                        bb.c = Color.Yellow;
+                        IEnumerable<MaterialThing> mts = Level.CheckLineAll<MaterialThing>(c.position, v);
+                        foreach (MaterialThing mt in mts)
+                        {
+                            if (mt == _waveOwner) continue;
+                            if (mt is IAmADuck)
+                            {
+                                SuperFondle(mt, DuckNetwork.localConnection);
+                                mt.Destroy(new DTShot(null));
+                            }
+                            else
+                            {
+                                Fondle(mt);
+                                mt.Hurt(0.1f);
+                            }
+                        }
+
+                        Level.Add(bb);
+                        c.trail.Clear();
+                        c.used = false;
+                        c.position = v;
+                        c.frames = 0;
+                        if (c.coinFly != null) c.coinFly.Kill();
+                        c.coinFly = null;
+                        c.velocity = new Vec2(0, -6);
+                        c.gravMultiplier = 0.8f;
+
+                        continue;
+                    }
                     if ((materialThing is PhysicsObject || materialThing is Icicles) && !_hits.Contains(materialThing) && materialThing != _waveOwner && materialThing.owner != _waveOwner && Duck.GetAssociatedDuck(materialThing) != _waveOwner)
                     {
                         if (materialThing.owner != null)
@@ -66,7 +99,7 @@ namespace DuckGame
                             grenade.PressAction();
                         if (materialThing is PhysicsObject)
                         {
-                            materialThing.hSpeed = (float)((_speed - 3.0) * offDir * 1.5 + offDir * 4.0) * alpha;
+                            materialThing.hSpeed = (float)((_speed - 3) * offDir * 1.5 + offDir * 4) * alpha;
                             materialThing.vSpeed = (_speedv - 4.5f) * alpha;
                             materialThing.clip.Add(_waveOwner as MaterialThing);
                         }
@@ -98,7 +131,7 @@ namespace DuckGame
             x += offDir * _speed;
             y += _speedv;
             alpha -= _alphaSub;
-            if (alpha > 0.0)
+            if (alpha > 0)
                 return;
             Level.Remove(this);
         }

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Color
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -177,6 +170,11 @@ namespace DuckGame
             this.a = a;
         }
 
+        public Color(string hex) : this()
+        {
+            (r, g, b, a) = FromHexString(hex);
+        }
+
         public Color(byte r, byte g, byte b)
           : this(r, g, b, byte.MaxValue)
         {
@@ -318,7 +316,7 @@ namespace DuckGame
              * 3. non pure color (non zero rgb) will eventually return white
              */
 
-            int i = (int)(1.0 / (1.0 - factor));
+            int i = (int)(1f / (1f - factor));
             switch (r)
             {
                 case 0 when g == 0 && b == 0:

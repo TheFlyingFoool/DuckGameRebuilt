@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.DuckChannelLogo
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -63,9 +56,9 @@ namespace DuckGame
             if (_playSwipe)
             {
                 _transitionWait += 0.02f;
-                if (_transitionWait > 1.0)
+                if (_transitionWait > 1f)
                     _doTransition = true;
-                if (_slideOutWait < 1.0)
+                if (_slideOutWait < 1f)
                 {
                     _duckLerp = Lerp.FloatSmooth(_duckLerp, 1f, 0.1f, 1.1f);
                     _channelLerp = Lerp.FloatSmooth(_channelLerp, 1f, 0.1f, 1.1f);
@@ -94,11 +87,11 @@ namespace DuckGame
             Vec2 vec2_3 = new Vec2((200f * (1f - _channelLerp)), 0f);
             Vec2 vec2_4 = new Vec2((300f * (1f - _channelLerp)), 0f);
             _duck.depth = (Depth)0.85f;
-            Graphics.Draw(_duck, vec2_1.x + 80f + vec2_2.x, vec2_1.y + 60f + vec2_2.y);
+            Graphics.Draw(ref _duck, vec2_1.x + 80f + vec2_2.x, vec2_1.y + 60f + vec2_2.y);
             _channel.depth = (Depth)0.86f;
-            Graphics.Draw(_channel, vec2_1.x + 64f + vec2_3.x, vec2_1.y + 74f + vec2_3.y);
+            Graphics.Draw(ref _channel, vec2_1.x + 64f + vec2_3.x, vec2_1.y + 74f + vec2_3.y);
             _five.depth = (Depth)0.85f;
-            Graphics.Draw(_five, vec2_1.x + 144f + vec2_4.x, vec2_1.y + 64f + vec2_4.y);
+            Graphics.Draw(ref _five, vec2_1.x + 144f + vec2_4.x, vec2_1.y + 64f + vec2_4.y);
             Vec2 vec2_5 = new Vec2(30f, 20f);
             float num1 = 500f;
             float num2 = 16f;

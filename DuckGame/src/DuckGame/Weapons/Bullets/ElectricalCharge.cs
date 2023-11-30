@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ElectricalCharge
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -31,7 +24,7 @@ namespace DuckGame
             _travelVec = new Vec2(offDir * Rando.Float(6f, 10f), Rando.Float(-10f, 10f));
             _prevPositions.Insert(0, position);
             alpha -= 0.1f;
-            if (alpha < 0.0)
+            if (alpha < 0)
                 Level.Remove(this);
             Vec2 position2 = position;
             foreach (IAmADuck amAduck in Level.CheckLineAll<IAmADuck>(position1, position2))
@@ -59,7 +52,7 @@ namespace DuckGame
                     Graphics.DrawLine(prevPosition, p2, Colors.DGYellow * num, depth: ((Depth)0.9f));
                     num -= 0.25f;
                 }
-                if (num <= 0.0)
+                if (num <= 0)
                     break;
             }
             base.Draw();

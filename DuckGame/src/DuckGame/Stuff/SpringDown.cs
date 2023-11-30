@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.SpringDown
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Stuff|Springs")]
     [BaggedProperty("isInDemo", false)]
@@ -32,7 +25,7 @@ namespace DuckGame
         {
             if (with.isServerForObject && with.Sprung(this))
             {
-                if (with.vSpeed < 12.0 * _mult)
+                if (with.vSpeed < 12f * _mult)
                     with.vSpeed = 12f * _mult;
                 if (with is Gun)
                     (with as Gun).PressAction();

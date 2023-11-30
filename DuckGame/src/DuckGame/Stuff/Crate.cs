@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Crate
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -19,6 +12,10 @@ namespace DuckGame
         public StateBinding _damageMultiplierBinding = new StateBinding(nameof(damageMultiplier));
         public float damageMultiplier = 1f;
         private SpriteMap _sprite;
+        internal SpriteMap _spriteAccessor { get => _sprite; set => _sprite = value; }
+        internal string _onHitSFX = "woodHit";
+        internal string _onCollideSFX = "crateHit";
+        internal string _onDestroySFX = "crateDestroy";
         private float _burnt;
 
         public Crate(float xpos, float ypos)
@@ -38,7 +35,7 @@ namespace DuckGame
             buoyancy = 1f;
             _holdOffset = new Vec2(2f, 0f);
             flammable = 0.3f;
-            collideSounds.Add("crateHit");
+            collideSounds.Add(_onCollideSFX);
             editorTooltip = "It's made of wood. That's...pretty much it.";
         }
 
@@ -46,14 +43,13 @@ namespace DuckGame
         {
             _hitPoints = 0f;
             Level.Remove(this);
-            SFX.Play("crateDestroy");
+            SFX.Play(_onDestroySFX);
             Vec2 vec2 = Vec2.Zero;
-            if (type is DTShot)
-                vec2 = (type as DTShot).bullet.travelDirNormalized;
+            if (type is DTShot) vec2 = (type as DTShot).bullet.travelDirNormalized;
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 6; ++index)
             {
                 WoodDebris woodDebris = WoodDebris.New(x - 8f + Rando.Float(16f), y - 8f + Rando.Float(16f));
-                woodDebris.hSpeed = (float)((Rando.Float(1f) > 0.5 ? 1.0 : -1.0) * Rando.Float(3f) + Math.Sign(vec2.x) * 0.5);
+                woodDebris.hSpeed = (float)((Rando.Float(1f) > 0.5f ? 1 : -1) * Rando.Float(3f) + Math.Sign(vec2.x) * 0.5f);
                 woodDebris.vSpeed = -Rando.Float(1f);
                 Level.Add(woodDebris);
             }
@@ -72,42 +68,49 @@ namespace DuckGame
             if (with is PhysicalBullet)
             {
                 Bullet bullet = (with as PhysicalBullet).bullet;
-                if (bullet != null && bullet.ammo is ATGrenade)
-                    return true;
+                if (bullet != null && bullet.ammo is ATGrenade) return true;
             }
             return false;
         }
 
         public override void SolidImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (CheckForPhysicalBullet(with))
-                Destroy(new DTShot((with as PhysicalBullet).bullet));
-            else
-                base.SolidImpact(with, from);
+            if (CheckForPhysicalBullet(with)) Destroy(new DTShot((with as PhysicalBullet).bullet));
+            else base.SolidImpact(with, from);
         }
 
         public override void Impact(MaterialThing with, ImpactedFrom from, bool solidImpact)
         {
-            if (CheckForPhysicalBullet(with))
-                Destroy(new DTShot((with as PhysicalBullet).bullet));
-            else
-                base.Impact(with, from, solidImpact);
+            if (CheckForPhysicalBullet(with)) Destroy(new DTShot((with as PhysicalBullet).bullet));
+            else base.Impact(with, from, solidImpact);
         }
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (_hitPoints <= 0.0)
-                return base.Hit(bullet, hitPos);
-            if (bullet.isLocal && owner == null)
-                Fondle(this, DuckNetwork.localConnection);
-            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++index)
+            if (_hitPoints <= 0) return base.Hit(bullet, hitPos);
+            if (bullet.isLocal && owner == null) Fondle(this, DuckNetwork.localConnection);
+
+            if (this is SequenceCrate sc && DGRSettings.SequenceCrateRetexture)
             {
-                WoodDebris woodDebris = WoodDebris.New(hitPos.x, hitPos.y);
-                woodDebris.hSpeed = -bullet.travelDirNormalized.x * 2f * (Rando.Float(1f) + 0.3f);
-                woodDebris.vSpeed = (-bullet.travelDirNormalized.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
-                Level.Add(woodDebris);
+                for (int i = 0; i < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++i)
+                {
+                    Feather woodDebris = Feather.New(hitPos.x, hitPos.y, SequenceCrate._variantPersonas[sc._variant]);
+                    woodDebris.hSpeed = -bullet.travelDirNormalized.x * 2f * (Rando.Float(1f) + 0.3f);
+                    woodDebris.vSpeed = (-bullet.travelDirNormalized.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
+                    Level.Add(woodDebris);
+                }
             }
-            SFX.Play("woodHit");
+            else
+            {
+                for (int i = 0; i < DGRSettings.ActualParticleMultiplier * (1f + damageMultiplier / 2f); ++i)
+                {
+                    WoodDebris woodDebris = WoodDebris.New(hitPos.x, hitPos.y);
+                    woodDebris.hSpeed = -bullet.travelDirNormalized.x * 2f * (Rando.Float(1f) + 0.3f);
+                    woodDebris.vSpeed = (-bullet.travelDirNormalized.y * 2f * (Rando.Float(1f) + 0.3f)) - Rando.Float(2f);
+                    Level.Add(woodDebris);
+                }
+            }
+            SFX.Play(_onHitSFX);
             if (isServerForObject && TeamSelect2.Enabled("EXPLODEYCRATES"))
             {
                 Fondle(this, DuckNetwork.localConnection);
@@ -118,7 +121,7 @@ namespace DuckGame
             }
             _hitPoints -= damageMultiplier;
             damageMultiplier += 2f;
-            if (_hitPoints <= 0.0)
+            if (_hitPoints <= 0)
             {
                 if (bullet.isLocal)
                     SuperFondle(this, DuckNetwork.localConnection);

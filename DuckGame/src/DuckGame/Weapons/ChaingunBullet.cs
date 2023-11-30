@@ -63,11 +63,11 @@ namespace DuckGame
                 desiredSway = 0f;
                 desiredSway = !(parentThing is Gun parentThing1) || parentThing1.owner == null ? -parentThing.hSpeed : -parentThing1.owner.hSpeed;
                 shake += Math.Abs(lastDesiredSway - desiredSway) * 0.3f;
-                if (shake > 0.0)
+                if (shake > 0f)
                     shake -= 0.01f;
                 else
                     shake = 0f;
-                if (shake > 1.5)
+                if (shake > 1.5f)
                 {
                     shake = 1.5f;
                     waveSpeed += 0.02f;

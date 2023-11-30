@@ -1,11 +1,6 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ItemBoxRandom
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -18,6 +13,7 @@ namespace DuckGame
           : base(xpos, ypos)
         {
             editorTooltip = "Spawns a random object each time it's used. Recharges after a short duration.";
+            editorCycleType = typeof(ItemBox);
         }
 
         public override void Draw()
@@ -29,33 +25,79 @@ namespace DuckGame
 
         public static PhysicsObject GetRandomItem()
         {
-            List<System.Type> physicsObjects = GetPhysicsObjects(Editor.Placeables);
-            physicsObjects.RemoveAll(t => t == typeof(LavaBarrel) || t == typeof(Grapple) || t == typeof(Slag) || t == typeof(Holster));
-            System.Type t1;
-            if (Rando.Int(10000) == 0)
+            return GetRandomItem<PhysicsObject>();
+        }
+
+        static bool _gettingTaped = false;
+        public static T GetRandomItem<T>()
+        {
+            List<Type> things = GetPhysicsObjects(Editor.Placeables);
+            things.RemoveAll(t => t == typeof(LavaBarrel) || t == typeof(Grapple) || t == typeof(Slag) || t == typeof(Holster) || typeof(T).IsAssignableFrom(t) == false);
+
+            Type contains = things[Rando.Int(things.Count - 1)];
+            if (Rando.Int(10000) == 0 && typeof(T).IsAssignableFrom(typeof(PositronShooter)))
             {
-                t1 = typeof(PositronShooter);
+                contains = typeof(PositronShooter);
                 Options.Data.specialTimes = 100;
             }
             else
             {
-                if (Options.Data.specialTimes > 0)
+                //Allow PositronShooter to have a double chance to spawn 100 times
+                //after the initial super rare spawning
+                if (Options.Data.specialTimes > 0 && typeof(T).IsAssignableFrom(typeof(PositronShooter)))
                 {
-                    physicsObjects.Add(typeof(PositronShooter));
-                    physicsObjects.Add(typeof(PositronShooter));
-                    --Options.Data.specialTimes;
+                    things.Add(typeof(PositronShooter));
+                    things.Add(typeof(PositronShooter));
+                    Options.Data.specialTimes--;
                 }
-                t1 = physicsObjects[Rando.Int(physicsObjects.Count - 1)];
+
+                if (Editor.clientonlycontent)
+                {
+                    if (_gettingTaped == false && Rando.Int(1500) == 0 && typeof(T).IsAssignableFrom(typeof(TapedGun)))
+                    {
+                        //Chance for spawning two guns taped together
+                        _gettingTaped = true;
+
+                        TapedGun t = new TapedGun(0, 0);
+                        t.gun1 = GetRandomItem<Gun>();
+                        t.gun2 = GetRandomItem<Gun>();
+                        t.ReorderTapedGunsByPreference();
+
+
+                        _gettingTaped = false;
+                        Holdable choldable = t.gun1.BecomeTapedMonster(t);
+                        if (choldable != null)
+                        {
+                            return (T)(object)choldable;
+                        }
+                        return (T)(object)t;
+                    }
+                    else if (Rando.Int(2000) == 1 && typeof(T).IsAssignableFrom(typeof(Gun)))
+                    {
+                        if (Rando.Int(50) == 0) // 1/100000 lmao
+                            contains = typeof(SohRock);
+                        else
+                        {
+                            contains = DGRDevs.AllWithGuns.ChooseRandom().DevItem;
+
+                            // to be removed when all devs get their gun
+                            if (contains == typeof(PositronShooter)) contains = typeof(DanGun);
+                        }
+                    }
+                }
             }
-            PhysicsObject thing = Editor.CreateThing(t1) as PhysicsObject;
-            if (Rando.Int(1000) == 1 && thing is Gun && (thing as Gun).CanSpawnInfinite())
+
+            T newThing = (T)(object)Editor.CreateThing(contains);
+            if (Rando.Int(1000) == 1 && newThing is Gun && (newThing as Gun).CanSpawnInfinite())
             {
-                (thing as Gun).infiniteAmmoVal = true;
-                (thing as Gun).infinite.value = true;
+                (newThing as Gun).infiniteAmmoVal = true;
+                (newThing as Gun).infinite.value = true;
             }
-            if (thing is Rock && Rando.Int(1000000) == 0)
-                thing = Editor.CreateThing(typeof(SpawnedGoldRock)) as PhysicsObject;
-            return thing;
+
+            if (newThing is Rock && Rando.Int(1000000) == 0) //The fabled golden stone
+                newThing = (T)(object)Editor.CreateThing(typeof(SpawnedGoldRock));
+
+            return newThing;
         }
 
         public override PhysicsObject GetSpawnItem()

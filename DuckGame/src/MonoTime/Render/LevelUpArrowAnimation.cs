@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.LevelUpArrowAnimation
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -26,7 +19,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (_startWait > 0.0)
+            if (_startWait > 0)
             {
                 _startWait -= 0.1f;
             }
@@ -36,7 +29,7 @@ namespace DuckGame
                 y += _vel;
                 _alph -= 0.1f;
                 alpha = Math.Min(_alph, 1f);
-                if (alpha <= 0.0)
+                if (alpha <= 0)
                     Level.Remove(this);
             }
             base.Update();

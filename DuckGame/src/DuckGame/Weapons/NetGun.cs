@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.NetGun
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -15,7 +8,7 @@ namespace DuckGame
     [BaggedProperty("previewPriority", true)]
     public class NetGun : Gun
     {
-        private SpriteMap _barrelSteam;
+        public SpriteMap _barrelSteam;
         private SpriteMap _netGunGuage;
 
         public NetGun(float xval, float yval)
@@ -52,13 +45,20 @@ namespace DuckGame
             editorTooltip = "Fires entangling nets that hold Ducks in place *evil moustache twirl*";
             isFatal = false;
         }
-
+        /*public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is NetGun && pTaped.gun2 is CampingRifle ? new CampNetgun(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }*/
         public override void Initialize() => base.Initialize();
 
         public override void Update()
         {
             _netGunGuage.frame = 4 - Math.Min(ammo + 1, 4);
-            if (_barrelSteam.speed > 0.0 && _barrelSteam.finished)
+            if (_barrelSteam.speed > 0 && _barrelSteam.finished)
                 _barrelSteam.speed = 0f;
             base.Update();
         }
@@ -66,12 +66,12 @@ namespace DuckGame
         public override void Draw()
         {
             base.Draw();
-            if (_barrelSteam.speed > 0.0)
+            if (_barrelSteam.speed > 0)
             {
                 _barrelSteam.alpha = 0.6f;
-                Draw(_barrelSteam, new Vec2(9f, 1f));
+                Draw(ref _barrelSteam, new Vec2(9f, 1f));
             }
-            Draw(_netGunGuage, new Vec2(-4f, -4f));
+            Draw(ref _netGunGuage, new Vec2(-4f, -4f));
         }
 
         public override void OnPressAction()
@@ -95,7 +95,7 @@ namespace DuckGame
                     t.responsibleProfile = owner.responsibleProfile;
                 t.clip.Add(owner as MaterialThing);
                 t.hSpeed = barrelVector.x * 10f;
-                t.vSpeed = (float)(barrelVector.y * 7.0 - 1.5);
+                t.vSpeed = (float)(barrelVector.y * 7 - 1.5f);
             }
             else
                 DoAmmoClick();

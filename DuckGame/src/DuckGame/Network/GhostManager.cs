@@ -155,37 +155,45 @@ namespace DuckGame
 
         public GhostObject GetGhost(Thing thing) => thing.ghostObject;
 
+        public int crashIndex;
         public void OnMessage(NetMessage m)
         {
+            crashIndex = -1;
+            string specialCode = "";
             try
             {
                 switch (m)
                 {
                     case NMParticles _:
+                        crashIndex = 18;
                         NMParticles m1 = m as NMParticles;
                         if (m1.levelIndex != DuckNetwork.levelIndex)
                             break;
                         particleManager.OnMessage(m1);
                         break;
                     case NMParticlesRemoved _:
+                        crashIndex = 17;
                         NMParticlesRemoved m2 = m as NMParticlesRemoved;
                         if (m2.levelIndex != DuckNetwork.levelIndex)
                             break;
                         particleManager.OnMessage(m2);
                         break;
                     case NMProfileNetData _:
+                        crashIndex = 16;
                         NMProfileNetData nmProfileNetData = m as NMProfileNetData;
                         if (nmProfileNetData._profile == null || nmProfileNetData._netData == null)
                             break;
                         nmProfileNetData._profile.netData.Deserialize(nmProfileNetData._netData, nmProfileNetData.connection, false);
                         break;
                     case NMObjectNetData _:
+                        crashIndex = 15;
                         NMObjectNetData nmObjectNetData = m as NMObjectNetData;
                         if (nmObjectNetData.thing == null || nmObjectNetData._netData == null)
                             break;
                         nmObjectNetData.thing.GetOrCreateNetData().Deserialize(nmObjectNetData._netData, nmObjectNetData.connection, !nmObjectNetData.thing.TransferControl(nmObjectNetData.connection, nmObjectNetData.authority));
                         break;
                     case NMRemoveGhosts _:
+                        crashIndex = 14;
                         NMRemoveGhosts nmRemoveGhosts = m as NMRemoveGhosts;
                         if (nmRemoveGhosts.levelIndex != DuckNetwork.levelIndex)
                             break;
@@ -202,19 +210,26 @@ namespace DuckGame
                         receivingDestroyMessage = false;
                         break;
                     case NMGhostData _:
+                        specialCode = "NMGD01";
                         NMGhostData nmGhostData = m as NMGhostData;
+                        specialCode = "NMGD02";
                         if (nmGhostData.levelIndex != DuckNetwork.levelIndex)
                             break;
+                        specialCode = "NMGD03";
                         using (List<NMGhostState>.Enumerator enumerator = nmGhostData.states.GetEnumerator())
                         {
+                            specialCode = "NMGD04";
                             while (enumerator.MoveNext())
                                 ProcessGhostState(enumerator.Current);
                             break;
                         }
                     case NMGhostState _:
+                        specialCode = "NMGS01";
                         NMGhostState pState = m as NMGhostState;
+                        specialCode = "NMGS02";
                         if (pState.levelIndex != DuckNetwork.levelIndex)
                             break;
+                        specialCode = "NMGS03";
                         ProcessGhostState(pState);
                         break;
                 }
@@ -222,502 +237,128 @@ namespace DuckGame
             catch (Exception ex)
             {
                 DevConsole.Log(DCSection.GhostMan, "@error !! GHOST MANAGER UPDATE EXCEPTION", m.connection);
+                DevConsole.Log("");
                 DevConsole.Log(DCSection.GhostMan, ex.ToString(), m.connection);
+                DevConsole.Log("");
+                DevConsole.Log("");
+                DevConsole.Log(DCSection.GhostMan, $"NM {m} specialCode:{specialCode} CCI:{crashIndex} hyperSpecial:{Main.SpecialCode2}");
+                DevConsole.Log(DCSection.GhostMan, "IF YOU SEE THIS, PLEASE REPORT IT TO A DGR DEV");
                 receivingDestroyMessage = false;
             }
         }
-        private bool CheckCreationKill(GhostObject obj, Vec2 position, Type t, NMGhostState pState)
+
+        private void ProcessGhostState(NMGhostState pState)
         {
-            if (!Network.isServer)
+            crashIndex = 0;
+            Profile profile = GhostObject.IndexToProfile(pState.id);
+            crashIndex = 1;
+            if (profile != null && profile.removedGhosts.TryGetValue(pState.id, out GhostObject removedGhost))
             {
-                return true;
-            }
-            bool flag = false;
-            foreach (ItemBoxRandom itemBoxRandom in Level.CheckPointAll<ItemBoxRandom>(position))
-            {
-                if (itemBoxRandom.position.x == position.x && itemBoxRandom.position.y == position.y)
+                crashIndex = 2;
+                if (removedGhost != null)
                 {
-                    flag = true;
-                    break;
+                    if (removedGhost.removeLogCooldown == 0)
+                    {
+                        DevConsole.Log(DCSection.GhostMan, "Ignoring removed ghost(" + removedGhost.ToString() + ")", pState.connection);
+                        removedGhost.removeLogCooldown = 5;
+                    }
+                    else
+                        --removedGhost.removeLogCooldown;
                 }
+                else
+                    DevConsole.Log(DCSection.GhostMan, "Ignoring removed ghost(" + pState.ToString() + ")", pState.connection);
             }
-            bool flag2 = false;
-            foreach (ItemBoxOneTime itemBoxOneTime in Level.CheckPointAll<ItemBoxOneTime>(position))
+            else
             {
-                if (itemBoxOneTime.position.x == position.x && itemBoxOneTime.position.y == position.y)
+                crashIndex = 3;
+                GhostObject ghostObject = GetGhost(pState.id);
+                if (pState.classID == 0)
                 {
-                    flag2 = true;
-                    break;
-                }
-            }
-            bool flag3 = false;
-            foreach (ItemBox itemBox in Level.CheckPointAll<ItemBox>(position))
-            {
-                if (itemBox.position.x == position.x && itemBox.position.y == position.y)
-                {
-                    flag3 = true;
-                    break;
-                }
-            }
-            bool flag4 = false;
-            foreach (PurpleBlock purpleBlock in Level.CheckPointAll<PurpleBlock>(position.x, position.y + 10f))
-            {
-                if (purpleBlock.position.x == position.x && purpleBlock.position.y == position.y + 12f)
-                {
-                    flag4 = true;
-                    break;
-                }
-                DevConsole.Log("purple " + purpleBlock.position.x.ToString() + " " + purpleBlock.position.y.ToString(), Color.Green, 2f, -1);
-            }
-            if (position.x == -10000f && position.y == -8999f)
-            {
-                DevConsole.Log("present ?", Color.Green, 2f, -1);
-            }
-            else if (flag)
-            {
-                DevConsole.Log("redbox ?", Color.Green, 2f, -1);
-            }
-            else if (flag2)
-            {
-                DevConsole.Log("ItemBoxOneTime ?", Color.Green, 2f, -1);
-            }
-            else if (flag4)
-            {
-                DevConsole.Log("PurpleBlock ?", Color.Green, 2f, -1);
-            }
-            else if (flag3)
-            {
-                DevConsole.Log("ItemBox ?", Color.Green, 2f, -1);
-            }
-            else if (!typeof(Mine).IsAssignableFrom(t) && !typeof(DeadlyIcicle).IsAssignableFrom(t) && !typeof(CampingBall).IsAssignableFrom(t) && !typeof(Dart).IsAssignableFrom(t) && !typeof(QuadLaserBullet).IsAssignableFrom(t) && !typeof(ForceWave).IsAssignableFrom(t) && !typeof(Flare).IsAssignableFrom(t) && !typeof(Net).IsAssignableFrom(t))
-            {
-                obj.thing.removeFromLevel = true;
-                obj.ClearStateMask(pState.connection);
-                this._destroyedGhosts.Add(obj);
-                DevConsole.Log(string.Concat(new string[]
-                {
-                    "that sht anti bustin ",
-                    t.Name,
-                    " ",
-                    position.x.ToString(),
-                    " ",
-                    position.y.ToString()
-                }), Color.Green, 2f, -1);
-                return false;
-            }
-            return true;
-        }
-        private static BufferedGhostProperty MakeBufferedProperty(StateBinding state, object value, int index = 0, NetIndex16 tick = default(NetIndex16)) // from old anticheat system
-        {
-            if (state.type == typeof(float))
-            {
-                return new BufferedGhostProperty<float>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state.type == typeof(bool))
-            {
-                return new BufferedGhostProperty<bool>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state.type == typeof(byte))
-            {
-                return new BufferedGhostProperty<byte>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state.type == typeof(ushort))
-            {
-                return new BufferedGhostProperty<ushort>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state.type == typeof(short))
-            {
-                return new BufferedGhostProperty<short>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state is CompressedVec2Binding || state is InterpolatedVec2Binding)
-            {
-                return new BufferedGhostProperty<Vec2>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state is CompressedFloatBinding)
-            {
-                return new BufferedGhostProperty<float>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state.type == typeof(int))
-            {
-                return new BufferedGhostProperty<int>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state.type == typeof(Vec2))
-            {
-                return new BufferedGhostProperty<Vec2>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state.type == typeof(NetIndex4))
-            {
-                return new BufferedGhostProperty<NetIndex4>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state.type == typeof(NetIndex8))
-            {
-                return new BufferedGhostProperty<NetIndex8>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state.type == typeof(NetIndex16))
-            {
-                return new BufferedGhostProperty<NetIndex16>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            if (state.type == typeof(sbyte))
-            {
-                return new BufferedGhostProperty<sbyte>
-                {
-                    binding = state,
-                    value = value,
-                    index = index,
-                    tick = tick
-                };
-            }
-            return new BufferedGhostProperty<object>
-            {
-                binding = state,
-                value = value,
-                index = index,
-                tick = tick
-            };
-        }
-        public static Vec2 ReadNetworkPosition(GhostObject ghost, Type t, NMGhostState ghostState, long mask, NetworkConnection c, bool constructed)
-        {
-            Vec2 result = new Vec2(0f, 0f);
-            BitBuffer data = ghostState.data.Instance();
-            NetworkDebugger.ghostsReceived[NetworkDebugger.currentIndex]++;
-            GhostConnectionData connectionData = ghost.GetConnectionData(c);
-            ghostState.mask = mask;
-            ghostState.ghost = ghost;
-            BufferedGhostState bufferedGhostState = new BufferedGhostState();
-            bufferedGhostState.tick = ghostState.tick;
-            bufferedGhostState.mask = mask;
-            bufferedGhostState.authority = ghostState.authority;
-            if (ghostState.header.delta && ghostState.data.ReadBool())
-            {
-                bufferedGhostState.inputStates.Clear();
-                for (int i = 0; i < NetworkConnection.packetsEvery; i++)
-                {
-                    bufferedGhostState.inputStates.Add(ghostState.data.ReadUShort());
-                }
-            }
-            short num = 0;
-            foreach (StateBinding stateBinding in ghost.fields)
-            {
-                long num2 = 1L << (int)num;
-                if ((ghostState.mask & num2) != 0L)
-                {
-                    bufferedGhostState.properties.Add(MakeBufferedProperty(stateBinding, stateBinding.ReadNetValue(ghostState.data), (int)num, bufferedGhostState.tick));
-                    stateBinding.initialized = true;
+                    crashIndex = 4;
+                    RemoveGhost(ghostObject, pState.id);
                 }
                 else
                 {
-                    bufferedGhostState.properties.Add(ghost.networkState.properties[(int)num]);
-                }
-                num += 1;
-            }
-            foreach (BufferedGhostProperty bufferedGhostProperty in bufferedGhostState.properties)
-            {
-                if (bufferedGhostProperty.binding.name == "netPosition")
-                {
-                    Vec2 vec = (Vec2)bufferedGhostProperty.value;
-                    result = vec;
-                    DevConsole.Log(string.Concat(new string[]
+                    crashIndex = 5;
+                    Type t = Editor.IDToType[pState.classID];
+                    long mask = pState.header.delta ? GhostObject.ReadMask(t, pState.data) : long.MaxValue;
+                    crashIndex = 6;
+                    if (ghostObject != null && (t != ghostObject.thing.GetType() || ghostObject.isDestroyed && mask == long.MaxValue))
                     {
-                        t.Name,
-                        " ",
-                        vec.x.ToString(),
-                        " ",
-                        vec.y.ToString()
-                    }));
-                }
-            }
-            ghostState.data = data;
-            return result;
-        }
-        private void ProcessGhostState(NMGhostState pState) //anticheat & //anticrash
-        {
-            try
-            {
-                bool flag = false;
-                foreach (Thing thing in Level.current.things)
-                {
-                    if (thing is PurpleBlock || thing is ItemBox || thing is Present || thing is ItemCrate || thing is DeathCrate || thing is BananaCluster)
-                    {
-                        flag = true;
-                        break;
+                        crashIndex = 7;
+                        receivingDestroyMessage = true;
+                        changingGhostType = true;
+                        RemoveGhost(ghostObject, ghostObject.ghostObjectIndex);
+                        ghostObject = null;
+                        receivingDestroyMessage = false;
+                        changingGhostType = false;
+                        crashIndex = 9;
                     }
-                    else if (thing is IceBlock)
+                    if (ghostObject == null)
                     {
-                        IceBlock iceBlock = thing as IceBlock;
-                        if (iceBlock != null && iceBlock.contains != null)
-                        {
-                            flag = true;
-                            break;
-                        }
-                    }
-                }
-                Profile profile = GhostObject.IndexToProfile(pState.id);
-                Type type = Editor.IDToType[pState.classID];
-                if (profile != null && profile.removedGhosts.TryGetValue(pState.id, out GhostObject removedGhost))
-                {
-                    if (removedGhost != null)
-                    {
-                        if (removedGhost.removeLogCooldown == 0)
-                        {
-                            DevConsole.Log(DCSection.GhostMan, "Ignoring removed ghost(" + removedGhost.ToString() + ")", pState.connection);
-                            removedGhost.removeLogCooldown = 5;
-                        }
-                        else
-                            --removedGhost.removeLogCooldown;
-                    }
-                    else
-                        DevConsole.Log(DCSection.GhostMan, "Ignoring removed ghost(" + pState.ToString() + ")", pState.connection);
-                }
-                else
-                {
-                    GhostObject ghostObject = GetGhost(pState.id);
-                    if (pState.classID == 0)
-                    {
-                        RemoveGhost(ghostObject, pState.id);
+                        crashIndex = 8;
+                        Thing thing = Editor.CreateThing(t);
+                        thing.position = new Vec2(-2000f, -2000f);
+                        Level.Add(thing);
+                        thing.connection = pState.connection;
+                        ghostObject = new GhostObject(thing, this, (int)pState.id);
+                        ghostObject.ClearStateMask(pState.connection);
+                        pState.ghost = ghostObject;
+                        crashIndex = 10;
+                        AddGhost(ghostObject);
+                        if (pState.connection.profile != null && pState.id > pState.connection.profile.latestGhostIndex)
+                            pState.connection.profile.latestGhostIndex = pState.id;
                     }
                     else
                     {
-                        System.Type t = Editor.IDToType[pState.classID];
-                        long mask = pState.header.delta ? GhostObject.ReadMask(t, pState.data) : long.MaxValue;
-                        if (ghostObject != null && (t != ghostObject.thing.GetType() || ghostObject.isDestroyed && mask == long.MaxValue))
+                        crashIndex = 100;
+                        if (ghostObject.isDestroyed)
                         {
-                            GhostManager.receivingDestroyMessage = true;
-                            GhostManager.changingGhostType = true;
-                            RemoveGhost(ghostObject, ghostObject.ghostObjectIndex);
-                            ghostObject = null;
-                            GhostManager.receivingDestroyMessage = false;
-                            GhostManager.changingGhostType = false;
+                            DevConsole.Log(DCSection.GhostMan, "Skipped ghost data (DESTROYED)(" + ghostObject.ghostObjectIndex.ToString() + ")", pState.connection);
+                            return;
                         }
-                        if (ghostObject == null)
+                        crashIndex = 101;
+                        if (ghostObject.thing.isBitBufferCreatedGhostThing)
                         {
-                            if (Network.isServer)
-                            {
-                                if (Level.current is TeamSelect2)
-                                {
-                                    if (!typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type))
-                                    {
-                                        DevConsole.Log("blocked Ghost1T " + type.Name, Color.Red, 2f, -1);
-                                        Thing thing2 = Editor.CreateThing(type);
-                                        thing2.position = new Vec2(-2000f, -2000f);
-                                        thing2.removeFromLevel = true;
-                                        ghostObject = new GhostObject(thing2, this, pState.id, false);
-                                        ghostObject.ClearStateMask(pState.connection);
-                                        this._destroyedGhosts.Add(ghostObject);
-                                        return;
-                                    }
-                                }
-                                else if (!flag)
-                                {
-                                    if (!typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type) && !typeof(CampingBall).IsAssignableFrom(type) && !typeof(Dart).IsAssignableFrom(type) && !typeof(QuadLaserBullet).IsAssignableFrom(type) && !typeof(ForceWave).IsAssignableFrom(type) && !typeof(Flare).IsAssignableFrom(type) && !typeof(Net).IsAssignableFrom(type))
-                                    {
-                                        DevConsole.Log("blocked Ghost1N " + type.Name, Color.Red, 2f, -1);
-                                        Thing thing3 = Editor.CreateThing(type);
-                                        thing3.position = new Vec2(-2000f, -2000f);
-                                        thing3.removeFromLevel = true;
-                                        ghostObject = new GhostObject(thing3, this, pState.id, false);
-                                        ghostObject.ClearStateMask(pState.connection);
-                                        this._destroyedGhosts.Add(ghostObject);
-                                        return;
-                                    }
-                                }
-                                else if (!typeof(Holdable).IsAssignableFrom(type) && !typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type) && !typeof(CampingBall).IsAssignableFrom(type) && !typeof(Dart).IsAssignableFrom(type) && !typeof(QuadLaserBullet).IsAssignableFrom(type) && !typeof(ForceWave).IsAssignableFrom(type) && !typeof(Flare).IsAssignableFrom(type) && !typeof(Net).IsAssignableFrom(type))
-                                {
-                                    DevConsole.Log("blocked Ghost1A " + type.Name, Color.Red, 2f, -1);
-                                    Thing thing4 = Editor.CreateThing(type);
-                                    thing4.position = new Vec2(-2000f, -2000f);
-                                    thing4.removeFromLevel = true;
-                                    ghostObject = new GhostObject(thing4, this, pState.id, false);
-                                    ghostObject.ClearStateMask(pState.connection);
-                                    this._destroyedGhosts.Add(ghostObject);
-                                    return;
-                                }
-                            }
-                            if (Network.isServer)
-                            {
-                                Thing thing = Editor.CreateThing(t);
-                                DevConsole.Log(type.Name);
-                                thing.position = new Vec2(-2000f, -2000f);
-                                thing.connection = pState.connection;
-                                ghostObject = new GhostObject(thing, this, (int)pState.id);
-                                Vec2 position = ReadNetworkPosition(ghostObject, type, pState, mask, pState.connection, false);
-                                if (!CheckCreationKill(ghostObject, position, type, pState))
-                                {
-                                    return;
-                                }
-                                Level.Add(thing);
-                                ghostObject.ClearStateMask(pState.connection);
-                                pState.ghost = ghostObject;
-                                AddGhost(ghostObject);
-                                if (pState.connection.profile != null && pState.id > pState.connection.profile.latestGhostIndex)
-                                    pState.connection.profile.latestGhostIndex = pState.id;
-                            }
-                            else
-                            {
-                                Thing thing = Editor.CreateThing(t);
-                                thing.position = new Vec2(-2000f, -2000f);
-                                Level.Add(thing);
-                                thing.connection = pState.connection;
-                                ghostObject = new GhostObject(thing, this, pState.id, false);
-                                ghostObject.ClearStateMask(pState.connection);
-                                pState.ghost = ghostObject;
-                                this.AddGhost(ghostObject);
-                                if (pState.connection.profile != null && pState.id > pState.connection.profile.latestGhostIndex)
-                                {
-                                    pState.connection.profile.latestGhostIndex = pState.id;
-                                }
-                            }
+                            crashIndex = 102;
+                            ghostObject.thing.isBitBufferCreatedGhostThing = false;
+                            crashIndex = 103;
+                            ghostObject.thing.level = null;
+                            crashIndex = 104;
+                            Level.Add(ghostObject.thing);
+                        }
+                        crashIndex = 105;
+                        if (pState.header.connection != null)
+                        {
+                            crashIndex = 800;
+                            ghostObject.thing.TransferControl(pState.header.connection, pState.authority);
                         }
                         else
                         {
-                            if (ghostObject.isDestroyed)
-                            {
-                                DevConsole.Log(DCSection.GhostMan, "Skipped ghost data (DESTROYED)(" + ghostObject.ghostObjectIndex.ToString() + ")", pState.connection);
-                                return;
-                            }
-                            if (ghostObject.thing.isBitBufferCreatedGhostThing)
-                            {
-                                ghostObject.thing.isBitBufferCreatedGhostThing = false;
-                                ghostObject.thing.level = null;
-                                if (Network.isServer)
-                                {
-                                    if (Level.current is TeamSelect2)
-                                    {
-                                        if (!typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type))
-                                        {
-                                            DevConsole.Log("blocked Ghost2T " + type.Name, Color.Red, 2f, -1);
-                                            ghostObject.thing.removeFromLevel = true;
-                                            ghostObject.ClearStateMask(pState.connection);
-                                            this._destroyedGhosts.Add(ghostObject);
-                                            return;
-                                        }
-                                    }
-                                    else if (!flag)
-                                    {
-                                        if (!typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type) && !typeof(QuadLaserBullet).IsAssignableFrom(type) && !typeof(ForceWave).IsAssignableFrom(type) && !typeof(Flare).IsAssignableFrom(type) && !typeof(Net).IsAssignableFrom(type))
-                                        {
-                                            DevConsole.Log("blocked Ghost2N " + type.Name, Color.Red, 2f, -1);
-                                            ghostObject.thing.removeFromLevel = true;
-                                            ghostObject.ClearStateMask(pState.connection);
-                                            this._destroyedGhosts.Add(ghostObject);
-                                            return;
-                                        }
-                                    }
-                                    else if (!typeof(Holdable).IsAssignableFrom(type) && !typeof(Duck).IsAssignableFrom(type) && !typeof(Ragdoll).IsAssignableFrom(type) && !typeof(QuadLaserBullet).IsAssignableFrom(type) && !typeof(ForceWave).IsAssignableFrom(type) && !typeof(Flare).IsAssignableFrom(type) && !typeof(Net).IsAssignableFrom(type))
-                                    {
-                                        DevConsole.Log("blocked Ghost2A " + type.Name, Color.Red, 2f, -1);
-                                        ghostObject.thing.removeFromLevel = true;
-                                        ghostObject.ClearStateMask(pState.connection);
-                                        this._destroyedGhosts.Add(ghostObject);
-                                        return;
-                                    }
-                                }
-                                Vec2 position2 = ReadNetworkPosition(ghostObject, type, pState, mask, pState.connection, false);
-                                if (!CheckCreationKill(ghostObject, position2, type, pState))
-                                {
-                                    return;
-                                }
-                                Level.Add(ghostObject.thing);
-                            }
-                            if (pState.header.connection != null)
-                                ghostObject.thing.TransferControl(pState.header.connection, pState.authority);
-                            else
-                                ghostObject.thing.TransferControl(pState.connection, pState.authority);
+                            crashIndex = 500;
+                            ghostObject.thing.TransferControl(pState.connection, pState.authority);
                         }
-                        if (NetworkDebugger.enabled && pState.connection.profile != null)
-                            NetworkDebugger.GetGhost(ghostObject).dataReceivedFrames[pState.connection.profile.persona] = Graphics.frame;
-                        if (ghostObject.thing.connection == pState.connection || ghostObject.thing.connection == pState.header.connection)
-                        {
-                            ghostObject.ReadInNetworkData(pState, mask, pState.connection, false);
-                        }
-                        else
-                        {
-                            for (int index = 0; index < Network.connections.Count; ++index)
-                            {
-                                NetworkConnection connection = Network.connections[index];
-                                ghostObject.DirtyStateMask(mask, connection);
-                            }
-                        }
-                        double x = ghostObject.thing.position.x;
+                        crashIndex = 106;
                     }
+                    if (NetworkDebugger.enabled && pState.connection.profile != null)
+                        NetworkDebugger.GetGhost(ghostObject).dataReceivedFrames[pState.connection.profile.persona] = Graphics.frame;
+                    crashIndex = 12;
+                    if (ghostObject.thing.connection == pState.connection || ghostObject.thing.connection == pState.header.connection)
+                    {
+                        ghostObject.ReadInNetworkData(pState, mask, pState.connection, false);
+                    }
+                    else
+                    {
+                        for (int index = 0; index < Network.connections.Count; ++index)
+                        {
+                            NetworkConnection connection = Network.connections[index];
+                            ghostObject.DirtyStateMask(mask, connection);
+                        }
+                    }
+                    double x = ghostObject.thing.position.x;
                 }
             }
-            catch(Exception e)
-            {
-                DevConsole.Log("GhostManager ProcessGhostState Catch", Color.Green, 2f, -1);
-            }
-           
+            crashIndex = 13;
         }
 
         public void Notify(StreamManager pManager, NetMessage pMessage, bool pDropped)
@@ -908,10 +549,14 @@ namespace DuckGame
 
         public GhostObject MakeGhost(Thing t, int index = -1, bool initLevel = false)
         {
+            Main.SpecialCode2 = "1011801";
             if (t.ghostObject != null)
                 return t.ghostObject;
+            Main.SpecialCode2 = "1011802";
             GhostObject pGhost = new GhostObject(t, this, index, initLevel);
+            Main.SpecialCode2 = "1011803";
             AddGhost(pGhost);
+            Main.SpecialCode2 = "1011804";
             return pGhost;
         }
 
@@ -926,17 +571,22 @@ namespace DuckGame
 
         internal void AddGhost(GhostObject pGhost)
         {
+            Main.SpecialCode2 = "10118031";
             if (inGhostLerpLoop)
             {
+            Main.SpecialCode2 = "10118032";
                 _tempGhosts.Add(pGhost);
             }
             else
             {
+                Main.SpecialCode2 = "10118033";
                 if (_ghosts.Contains(pGhost) || pGhost.thing == null)
                     return;
                 _ghosts.Add(pGhost);
+                Main.SpecialCode2 = "10118034";
                 pGhost.thing.OnGhostObjectAdded();
             }
+            Main.SpecialCode2 = "10118035";
         }
 
         public void MapGhost(Thing pThing, GhostObject pGhost) => AddGhost(pGhost);

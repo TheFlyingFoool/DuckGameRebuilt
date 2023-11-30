@@ -33,6 +33,7 @@ namespace DuckGame
         public Layer _glow;
         public Layer _lighting;
         public Layer _foreground;
+        public Layer _ffcursor;
         public Layer _hud;
         public Layer _console;
         public List<Layer> _layers = new List<Layer>();
@@ -97,6 +98,14 @@ namespace DuckGame
             _layers.Add(new Layer("FOREGROUND", -19));
             _foreground = _layers[_layers.Count - 1];
             _foreground.allowTallAspect = true;
+            _layers.Add(new Layer("FFCURSOR", -25));
+            _ffcursor = _layers[_layers.Count - 1];
+            _ffcursor.allowTallAspect = true;
+            _ffcursor.blend = new BlendState()
+            {
+                ColorSourceBlend = Blend.InverseDestinationColor,
+                ColorDestinationBlend = Blend.InverseSourceColor
+            };
             _layers.Add(new Layer("HUD", -90));
             _hud = _layers[_layers.Count - 1];
             _layers.Add(new Layer("CONSOLE", -100, new Camera(Resolution.current.x / 2, Resolution.current.y / 2)));
@@ -208,8 +217,8 @@ namespace DuckGame
                 Layer hybrid = _hybridList[_layerMap[index].index];
                 if (hybrid.visible && hybrid.isTargetLayer && (Layer.lighting && !NetworkDebugger.enabled || hybrid != _lighting))
                 {
-                    double num2 = 2.0 / _hybridList.Count * index / 2.0;
-                    double num3 = 2.0 / _hybridList.Count * (index + 1) / 2.0;
+                    //double num2 = 2 / _hybridList.Count * index / 2; what -NiK0
+                    //double num3 = 2 / _hybridList.Count * (index + 1) / 2;
                     hybrid.Draw(true, true);
                     ++num1;
                 }
@@ -230,8 +239,8 @@ namespace DuckGame
                     int num2 = 1;
                     if (hybrid == Layer.Game)
                         num2 = 3;
-                    double num3 = 2.0 / _lastDrawIndexCount * num1 / 2.0;
-                    double num4 = 2.0 / _lastDrawIndexCount * (num1 + num2) / 2.0;
+                    //double num3 = 2 / _lastDrawIndexCount * num1 / 2; what -NiK0
+                    //double num4 = 2 / _lastDrawIndexCount * (num1 + num2) / 2;
                     hybrid.Draw(true);
                     num1 += num2;
                 }
@@ -257,7 +266,7 @@ namespace DuckGame
                 layer.fadeAdd = 0f;
                 layer.colorAdd = Vec3.Zero;
                 layer.colorMul = Vec3.One;
-                if (layer != _glow && layer != _lighting)
+                if (layer != _glow && layer != _lighting && layer != _ffcursor)
                 {
                     layer.blend = BlendState.AlphaBlend;
                     layer.targetBlend = BlendState.AlphaBlend;

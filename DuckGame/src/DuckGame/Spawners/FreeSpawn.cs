@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.FreeSpawn
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Spawns")]
     [BaggedProperty("isInDemo", true)]
@@ -46,7 +39,7 @@ namespace DuckGame
                     _eight = new SpriteMap("redEight", 10, 10);
                     _eight.CenterOrigin();
                 }
-                Graphics.Draw(_eight, x - 5f, y + 7f, (Depth)1f);
+                Graphics.Draw(ref _eight, x - 5f, y + 7f, (Depth)1f);
             }
             base.Draw();
         }

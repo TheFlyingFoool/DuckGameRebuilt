@@ -570,7 +570,7 @@ namespace DuckGame
 
                     if (op.Key == "-" && opPlace == 0)
                     {
-                        double result = op.Value(0.0, rhs);
+                        double result = op.Value(0d, rhs);
                         tokens[0] = result.ToString();
                         tokens.RemoveRange(opPlace + 1, 1);
                     }

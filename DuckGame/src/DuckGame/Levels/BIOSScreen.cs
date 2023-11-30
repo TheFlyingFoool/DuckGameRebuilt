@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.BIOSScreen
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class BIOSScreen : Level
     {
@@ -37,19 +30,16 @@ namespace DuckGame
             TitleScreen.SpargLogic();
 
             _wait -= 0.008f;
-            if (_wait >= 0.0)
-                return;
+            if (_wait >= 0f) return;
             if (!_playedMusic)
             {
                 Music.Play("Title");
                 _playedMusic = true;
             }
             _moveWait -= 0.015f;
-            if (_moveWait >= 0.0)
-                return;
+            if (_moveWait >= 0f) return;
             _shiftText += 3.5f;
-            if (_shiftText <= 300.0)
-                return;
+            if (_shiftText <= 300f) return;
             current = new CorptronLogo();
         }
 

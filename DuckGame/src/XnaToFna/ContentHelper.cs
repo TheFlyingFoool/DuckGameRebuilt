@@ -1135,7 +1135,7 @@
 //        {
 //          short num1 = (long) align >= (long) ContentHelper.XWMAInfo.BlockAlign.Length ? ContentHelper.XWMAInfo.BlockAlign[(int) align & 15] : ContentHelper.XWMAInfo.BlockAlign[(int) align];
 //          int num2 = playLength / (int) num1;
-//          int num3 = (int) Math.Ceiling((double) duration / 2048.0);
+//          int num3 = (int) Math.Ceiling((double) duration / 2048);
 //          int num4 = num3 / num2;
 //          int num5 = num3 - num4 * num2;
 //          binaryWriter.Write("RIFF".ToCharArray());

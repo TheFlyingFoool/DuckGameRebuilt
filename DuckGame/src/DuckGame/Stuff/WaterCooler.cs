@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.WaterCooler
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -51,14 +44,14 @@ namespace DuckGame
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             hitPos += bullet.travelDirNormalized * 2f;
-            if (1.0 - (hitPos.y - top) / (bottom - top) < _fluidLevel)
+            if (1 - (hitPos.y - top) / (bottom - top) < _fluidLevel)
             {
                 thickness = 2f;
                 Vec2 off = hitPos - position;
                 bool flag = false;
                 foreach (FluidStream hole in _holes)
                 {
-                    if ((hole.offset - off).length < 2.0)
+                    if ((hole.offset - off).length < 2)
                     {
                         hole.offset = off;
                         hole.holeThickness += 0.5f;
@@ -87,7 +80,7 @@ namespace DuckGame
             bool flag = false;
             foreach (FluidStream hole in _holes)
             {
-                if ((hole.offset - off).length < 2.0)
+                if ((hole.offset - off).length < 2)
                 {
                     hole.offset = off;
                     hole.holeThickness += 0.5f;
@@ -115,8 +108,8 @@ namespace DuckGame
                     hole.DoUpdate();
                     hole.position = Offset(hole.offset);
                     hole.sprayAngle = OffsetLocal(hole.startSprayAngle);
-                    float num1 = (float)(1.0 - (hole.offset.y - topLocal) / (bottomLocal - topLocal));
-                    if (hole.x > left - 2.0 && hole.x < right + 2.0 && num1 < _fluidLevel)
+                    float num1 = (float)(1 - (hole.offset.y - topLocal) / (bottomLocal - topLocal));
+                    if (hole.x > left - 2 && hole.x < right + 2 && num1 < _fluidLevel)
                     {
                         float num2 = Maths.Clamp(_fluidLevel - num1, 0.1f, 1f) * 0.0012f * hole.holeThickness;
                         FluidData fluid = _fluid;
@@ -135,18 +128,18 @@ namespace DuckGame
 
         public override void Draw()
         {
-            _sprite.frame = (int)((1.0 - _fluidLevel) * 10.0);
+            _sprite.frame = (int)((1 - _fluidLevel) * 10);
             Vec2 position = this.position;
-            float num = (float)(Math.Sin(_shakeInc) * _shakeMult * 1.0);
+            float num = (float)(Math.Sin(_shakeInc) * _shakeMult * 1);
             this.position.x += num;
             base.Draw();
             this.position = position;
             _bottom.depth = depth + 1;
-            Graphics.Draw(_bottom, x, y + 9f);
+            Graphics.Draw(ref _bottom, x, y + 9f);
             _jugLine.depth = depth + 1;
             _jugLine.imageIndex = _sprite.imageIndex;
-            _jugLine.alpha = (float)(_fluidLevel * 10.0 % 1.0);
-            Graphics.Draw(_jugLine, x + num, y);
+            _jugLine.alpha = (float)(_fluidLevel * 10 % 1);
+            Graphics.Draw(ref _jugLine, x + num, y);
         }
     }
 }

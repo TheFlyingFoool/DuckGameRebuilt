@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.FieldBackground
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -60,12 +53,12 @@ namespace DuckGame
 
         public override void Begin(bool transparent, bool isTargetDraw = false)
         {
-            Vec3 vec3_1 = new Vec3((float)(Graphics.fade * _fade * (1.0 - _darken))) * colorMul;
+            Vec3 vec3_1 = new Vec3((float)(Graphics.fade * _fade * (1f - _darken))) * colorMul;
             Vec3 vec3_2 = _colorAdd + new Vec3(_fadeAdd) + new Vec3(Graphics.flashAddRenderValue) + new Vec3(Graphics.fadeAddRenderValue) - new Vec3(darken);
             vec3_2 = new Vec3(Maths.Clamp(vec3_2.x, -1f, 1f), Maths.Clamp(vec3_2.y, -1f, 1f), Maths.Clamp(vec3_2.z, -1f, 1f));
             if (!Options.Data.flashing)
                 vec3_2 = new Vec3(0f, 0f, 0f);
-            if (_darken > 0.0)
+            if (_darken > 0f)
                 _darken -= 0.15f;
             else
                 _darken = 0f;

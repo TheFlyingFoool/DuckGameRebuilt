@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.MTSpriteBatcher
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
@@ -57,6 +50,7 @@ namespace DuckGame
         private VertexPositionColor[] _geometryVertexArray;
         private VertexPositionColorTexture[] _geometryVertexArrayTextured;
         private MTSpriteBatch _batch;
+        //public static List<MTSpriteBatcher> mTSpriteBatchers = new List<MTSpriteBatcher>();
         private Comparison<MTSpriteBatchItem> CompareTexture = new Comparison<MTSpriteBatchItem>(CompareTextureFunc);
         private static Comparison<MTSpriteBatchItem> CompareDepth = new Comparison<MTSpriteBatchItem>(CompareDepthFunc);
         private static Comparison<MTSimpleSpriteBatchItem> CompareSimpleDepth = new Comparison<MTSimpleSpriteBatchItem>(CompareSimpleDepthFunc);
@@ -68,11 +62,10 @@ namespace DuckGame
         private static Comparison<GeometryItemTexture> CompareTexturedGeometryReverseDepth = new Comparison<GeometryItemTexture>(CompareTexturedGeometryReverseDepthFunc);
         public MTSpriteBatcher(GraphicsDevice device, MTSpriteBatch batch)
         {
-
             _device = device;
             _batch = batch;
             _batchItemList = new List<MTSpriteBatchItem>(256);
-            _freeBatchItemQueue = new Queue<MTSpriteBatchItem>(256);
+            //_freeBatchItemQueue = new Queue<MTSpriteBatchItem>(256);
             _simpleBatchItemList = new List<MTSimpleSpriteBatchItem>(256);
             _freeSimpleBatchItemQueue = new Queue<MTSimpleSpriteBatchItem>(256);
             _geometryBatch = new List<GeometryItem>(1);
@@ -83,8 +76,36 @@ namespace DuckGame
             EnsureSimpleArrayCapacity(256);
             EnsureGeometryArrayCapacity(256);
             EnsureTexturedGeometryArrayCapacity(256);
+            //InitializePool(400);SPItemPool Needs Additional testing 
+            //mTSpriteBatchers.Add(this);
         }
-
+        //SPItemPool Needs Additional testing
+        //public void InitializePool(int initialSize = 100)
+        //{
+        //    for (int i = 0; i < initialSize; i++)
+        //    {
+        //        MTSpriteBatchItem item = new MTSpriteBatchItem();
+        //        item.inPool = true;
+        //        _freeBatchItemQueue.Enqueue(item);
+        //    }
+        //}
+        //public Queue<MTSpriteBatchItem> GetPool()
+        //{
+        //    return _freeBatchItemQueue;
+        //}
+        //public void ResetInitializePool(int initialSize = 100)
+        //{
+        //    while (_freeBatchItemQueue.Count > 0)
+        //    {
+        //        _freeBatchItemQueue.Dequeue();
+        //    }
+        //    for (int i = 0; i < initialSize; i++)
+        //    {
+        //        MTSpriteBatchItem item = new MTSpriteBatchItem();
+        //        item.inPool = true;
+        //        _freeBatchItemQueue.Enqueue(item);
+        //    }
+        //}
         public bool hasSimpleItems => _simpleBatchItemList.Count != 0;
 
         public bool hasGeometryItems => _geometryBatch.Count != 0;
@@ -234,25 +255,41 @@ namespace DuckGame
             _batchItemList.Add(batchItem); // add something to later for fixing if a mod uses CreateBatchItem()
             return batchItem;
         }
-
-
+        //SPItemPool Needs Additional testing
+        //public MTSpriteBatchItem GetBatchItemFromPool()
+        //{
+        //    if (_freeBatchItemQueue.Count > 0)
+        //    {
+        //        return _freeBatchItemQueue.Dequeue();
+        //    }
+        //    else
+        //    {
+        //        // If the pool is empty, create a new item
+        //        return new MTSpriteBatchItem();
+        //    }
+        //}
 
         public MTSpriteBatchItem CreateBatchItemDepth(float Depth)
         {
-            batchlistCount += 1;
-            // MTSpriteBatchItem batchItem = _freeBatchItemQueue.Count <= 0 ? new MTSpriteBatchItem() : _freeBatchItemQueue.Dequeue();
+            batchlistCount++;
+
+            // Fetch item from pool
             MTSpriteBatchItem batchItem = new MTSpriteBatchItem();
+
             LastSpriteBatchItem = batchItem;
-            // _batchItemList.Add(batchItem);
-            Depth *= depthmod;
-            if (!_batchItemListv2.TryGetValue(Depth, out List<MTSpriteBatchItem> LbatchItemList))
+
+            float modifiedDepth = Depth * depthmod;
+
+            if (!_batchItemListv2.TryGetValue(modifiedDepth, out List<MTSpriteBatchItem> LbatchItemList))
             {
-                keys.Add(Depth);
-                _batchItemListv2.Add(Depth, new List<MTSpriteBatchItem> { batchItem });
-                return batchItem;
+                keys.Add(modifiedDepth);
+                _batchItemListv2[modifiedDepth] = new List<MTSpriteBatchItem> { batchItem };
+            }
+            else
+            {
+                LbatchItemList.Add(batchItem);
             }
 
-            LbatchItemList.Add(batchItem);
             return batchItem;
         }
 
@@ -270,7 +307,7 @@ namespace DuckGame
         public MTSpriteBatchItem StealLastBatchItem()
         {
             MTSpriteBatchItem batchItem = LastSpriteBatchItem;//_batchItemList[_batchItemList.Count - 1];
-            //batchItem.inPool = false;
+            batchItem.inPool = false;
             return batchItem;
         }
 
@@ -543,13 +580,6 @@ namespace DuckGame
         {
             if (batchlistCount == 0)
                 return;
-            //IEnumerator<KeyValuePair<float, List<MTSpriteBatchItem>>> enumerator = _batchItemListv2.GetEnumerator();
-            //enumerator.MoveNext();
-            //if (batchlistCount > biggestcount)
-            //{
-            //    biggestcount = batchlistCount;
-            //    DevConsole.Log(biggestcount, "SpriteBatcher Count");
-            //}
             keys.Sort();
             int keyindex = 0;
             int index1 = 0;
@@ -569,13 +599,13 @@ namespace DuckGame
                 int num1 = 0;
                 while (num1 < numBatchItems)
                 {
-                    while (index1 >= mTSpriteBatchItems.Count)//CollectionLengths[pagenumber])   //int[] N = fixindex(CollectionLengths, index1);//_batchItemListv2[keys[N[0]][N[1]];
+                    while (index1 >= mTSpriteBatchItems.Count)
                     {
                         index1 = 0;
                         keyindex += 1;
                         mTSpriteBatchItems = _batchItemListv2[keys[keyindex]];
                     }
-                    MTSpriteBatchItem batchItem = mTSpriteBatchItems[index1];//_batchItemListv2[keys[pagenumber]][index1];//_subbatchItemList[index1];
+                    MTSpriteBatchItem batchItem = mTSpriteBatchItems[index1];
                     if (batchItem.Texture != texture2D || (batchItem.Material != null && batchItem.NormalTexture != Realtex2D) || batchItem.Material != material)//(batchItem.Texture != texture2D ? 1 : (batchItem.Material != material ? 1 : 0)) != 0
                     {
                         FlushVertexArray(start, end);
@@ -600,34 +630,24 @@ namespace DuckGame
                         }
                     }
 
-                    VertexPositionColorTexture[] vertexArray1 = _vertexArray;
-                    int index2 = end;
-                    int num2 = index2 + 1;
-                    VertexPositionColorTexture vertexTl = batchItem.vertexTL;
-                    vertexArray1[index2] = vertexTl;
-                    VertexPositionColorTexture[] vertexArray2 = _vertexArray;
-                    int index3 = num2;
-                    int num3 = index3 + 1;
-                    VertexPositionColorTexture vertexTr = batchItem.vertexTR;
-                    vertexArray2[index3] = vertexTr;
-                    VertexPositionColorTexture[] vertexArray3 = _vertexArray;
-                    int index4 = num3;
-                    int num4 = index4 + 1;
-                    VertexPositionColorTexture vertexBl = batchItem.vertexBL;
-                    vertexArray3[index4] = vertexBl;
-                    VertexPositionColorTexture[] vertexArray4 = _vertexArray;
-                    int index5 = num4;
-                    end = index5 + 1;
-                    VertexPositionColorTexture vertexBr = batchItem.vertexBR;
-                    vertexArray4[index5] = vertexBr;
+                    _vertexArray[end++] = batchItem.vertexTL;
+                    _vertexArray[end++] = batchItem.vertexTR;
+                    _vertexArray[end++] = batchItem.vertexBL;
+                    _vertexArray[end++] = batchItem.vertexBR;
+                    //SPItemPool Needs Additional testing
+                    // Return the batchItem to the pool after processing
                     //if (batchItem.inPool)
                     //{
-                    //    batchItem.Texture = null;
-                    //    batchItem.Material = null;
-                    //    _freeBatchItemQueue.Enqueue(batchItem);
-                    //}
-                    ++num1;
-                    ++index1;
+                        //    batchItem.Texture = null;
+                        //    batchItem.Material = null;
+                        //    _freeBatchItemQueue.Enqueue(batchItem);
+                        //batchItem.Texture = null;
+                        //batchItem.Material = null;
+                        //_freeBatchItemQueue.Enqueue(batchItem);
+                        //}
+                   // }
+                    num1++;
+                    index1++;
                 }
                 FlushVertexArray(start, end);
             }

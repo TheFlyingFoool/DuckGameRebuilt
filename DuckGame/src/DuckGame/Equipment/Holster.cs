@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Holster
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Linq;
 
 namespace DuckGame
@@ -190,7 +183,7 @@ namespace DuckGame
             string text = "EMPTY";
             if (contains != null)
                 text = contains.Name;
-            Graphics.DrawString(text, position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2.0), -16f), Color.White, (Depth)0.9f);
+            Graphics.DrawString(text, position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2), -16f), Color.White, (Depth)0.9f);
         }
 
         public Holster(float xpos, float ypos)
@@ -239,12 +232,9 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (_equippedDuck != null && duck == null)
-                return;
-            if (destroyed)
-                alpha -= 0.05f;
-            if (alpha < 0.0)
-                Level.Remove(this);
+            if (_equippedDuck != null && duck == null) return;
+            if (destroyed) alpha -= 0.05f;
+            if (alpha < 0f) Level.Remove(this);
             if (isServerForObject)
             {
                 netRaise = false;
@@ -287,16 +277,16 @@ namespace DuckGame
                     }
                     if (!containedObject.isServerForObject && !(containedObject is IAmADuck))
                         Fondle(containedObject);
-                    if (containedObject.removeFromLevel || containedObject.y < level.topLeft.y - 2000.0 || !containedObject.active || !containedObject.isServerForObject)
+                    if (containedObject.removeFromLevel || containedObject.y < level.topLeft.y - 2000f || !containedObject.active || !containedObject.isServerForObject)
                         SetContainedObject(null);
                 }
                 if (containedObject is Gun && Level.CheckRect<FunBeam>(containedObject.position + new Vec2(-4f, -4f), containedObject.position + new Vec2(4f, 4f)) != null)
                     (containedObject as Gun).triggerAction = true;
                 if (containedObject is RagdollPart && (containedObject as RagdollPart).doll != null && (containedObject as RagdollPart).doll.part1 != null && (containedObject as RagdollPart).doll.part2 != null && (containedObject as RagdollPart).doll.part3 != null)
                 {
-                    if ((containedObject as RagdollPart).doll.part1.x < (containedObject as RagdollPart).doll.part3.x - 4.0)
+                    if ((containedObject as RagdollPart).doll.part1.x < (containedObject as RagdollPart).doll.part3.x - 4f)
                         (containedObject as RagdollPart).doll.part1.x = (containedObject as RagdollPart).doll.part3.x - 4f;
-                    if ((containedObject as RagdollPart).doll.part1.x > (containedObject as RagdollPart).doll.part3.x + 4.0)
+                    if ((containedObject as RagdollPart).doll.part1.x > (containedObject as RagdollPart).doll.part3.x + 4f)
                         (containedObject as RagdollPart).doll.part1.x = (containedObject as RagdollPart).doll.part3.x + 4f;
                     Vec2 vec2_2 = (containedObject as RagdollPart).doll.part3.position + new Vec2(0f, -11f);
                     Vec2 vec2_3 = (containedObject as RagdollPart).doll.part3.position + new Vec2(0f, -5f);
@@ -335,7 +325,7 @@ namespace DuckGame
             _overPart.alpha = alpha;
             _overPart.scale = scale;
             _overPart.depth = owner.depth + 5;
-            Graphics.Draw(_overPart, x, y);
+            Graphics.Draw(ref _overPart, x, y);
             _underPart.flipH = owner.offDir <= 0;
             _underPart.angle = angle;
             _underPart.alpha = alpha;
@@ -344,7 +334,7 @@ namespace DuckGame
                 _underPart.depth = _equippedDuck.ragdoll.part2.depth + -11;
             else
                 _underPart.depth = owner.depth + -7;
-            Graphics.Draw(_underPart, x, y);
+            Graphics.Draw(ref _underPart, x, y);
         }
 
         private void PositionContainedObject()
@@ -388,7 +378,7 @@ namespace DuckGame
                 _previewSprite.depth = depth + 1;
                 _previewSprite.scale = new Vec2(0.5f, 0.5f);
                 _previewSprite.center = new Vec2(16f, 16f);
-                Graphics.Draw(_previewSprite, x, y);
+                Graphics.Draw(ref _previewSprite, x, y);
             }
             if (_equippedDuck != null)
                 graphic = null;
@@ -409,14 +399,14 @@ namespace DuckGame
                     _chain.depth = _underPart.depth + 1;
                     _chain.angleDegrees = angleDegrees - 45 * this.offDir;
                     Vec2 vec2 = Offset(new Vec2(num - 11f, -3f));
-                    Graphics.Draw(_chain, vec2.x, vec2.y);
+                    Graphics.Draw(ref _chain, vec2.x, vec2.y);
                     _lock.angleDegrees = _chainSway;
                     _chainSwayVel -= ((_lock.angleDegrees - (owner != null ? owner.hSpeed : hSpeed) * 10f) * 0.1f);
                     _chainSwayVel *= 0.95f;
                     _chainSway += _chainSwayVel;
                     _lock.depth = _underPart.depth + 2;
                     Offset(new Vec2(num - 9f, -5f));
-                    Graphics.Draw(_lock, vec2.x, vec2.y);
+                    Graphics.Draw(ref _lock, vec2.x, vec2.y);
                 }
                 if (!(containedObject is RagdollPart) || !Network.isActive)
                     _containedObject.Draw();
@@ -433,7 +423,7 @@ namespace DuckGame
                 if (equippedDuck != null)
                     vec2 = Offset(new Vec2(-9f, -2f));
                 _chain.center = new Vec2(3f, 3f);
-                Graphics.Draw(_chain, vec2.x, vec2.y);
+                Graphics.Draw(ref _chain, vec2.x, vec2.y);
                 Offset(new Vec2(0f, -8f));
                 _chain.angleDegrees = 90f + _chainSway;
                 _chainSwayVel -= ((_chain.angleDegrees - (90f + (owner != null ? owner.hSpeed : hSpeed) * 10f)) * 0.1f);

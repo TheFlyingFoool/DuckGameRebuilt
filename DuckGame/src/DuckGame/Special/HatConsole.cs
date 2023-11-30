@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ArcadeHatConsole
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -58,18 +51,22 @@ namespace DuckGame
             };
             _profileBox._hatSelector.layer = Layer.HUD;
             _profileBox._hatSelector.isArcadeHatSelector = true;
-            if (RoomEditorExtra.arcadeHat != "")
+            if (DGRSettings.arcadeHat != "")
             {
-                Team t = Teams.all.Find(t => t.name == RoomEditorExtra.arcadeHat);
+                Team t = Teams.all.Find(t => t.name == DGRSettings.arcadeHat);
                 if (t != null)
                 {
                     Hat equipment = d.GetEquipment(typeof(Hat)) as Hat;
                     Hat hat = new TeamHat(0f, 0f, t, d.profile);
                     Level.Add(hat);
                     d.Equip(hat, false);
+                    d.profile.team = t;
                     if (equipment != null) Level.Remove(equipment);
                 }
             }
+
+            d.profile.persona = Persona.alllist[DGRSettings.arcadeDuckColor];
+            
             _profile = d.profile;
             _duck = d;
             Level.Add(_profileBox);
@@ -122,14 +119,14 @@ namespace DuckGame
                 }
             }
             _consoleFlash.depth = depth + 10;
-            Graphics.Draw(_consoleFlash, x + 9f, y + 7f);
+            Graphics.Draw(ref _consoleFlash, x + 9f, y + 7f);
             _base.depth = depth - 10;
-            Graphics.Draw(_base, x + 3f, y + 13f);
+            Graphics.Draw(ref _base, x + 3f, y + 13f);
             if (_consoleFade > 0.01f)
             {
                 _consoleHighlight.depth = depth + 5;
                 _consoleHighlight.alpha = _consoleFade;
-                Graphics.Draw(_consoleHighlight, x, y);
+                Graphics.Draw(ref _consoleHighlight, x, y);
             }
             base.Draw();
         }

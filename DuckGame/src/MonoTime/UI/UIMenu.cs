@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.UIMenu
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class UIMenu : UIBox
     {
@@ -51,6 +44,12 @@ namespace DuckGame
             _acceptFunction = pAction;
         }
 
+        public void SetOpenFunction(UIMenuAction pAction)
+        {
+            _section._openFunction = pAction;
+            _openFunction = pAction;
+        }
+
         public void RunBackFunction()
         {
             if (_section._backFunction == null)
@@ -65,21 +64,21 @@ namespace DuckGame
           float high = -1f,
           string conString = "",
           InputProfile conProfile = null,
-          bool tiny = false)
+          bool tinyTitle = false)
           : base(xpos, ypos, wide, high)
         {
             _cursor = new SpriteMap("cursors", 16, 16);
             _controlProfile = conProfile;
             _splitter = new UIDivider(false, 0f, 4f);
             _section = _splitter.rightSection;
-            UIText component1 = new UIText(title, Color.White);
-            if (tiny)
+            UIText titleComponent = new UIText(title, Color.White);
+            if (tinyTitle)
             {
                 BitmapFont f = new BitmapFont("smallBiosFontUI", 7, 5);
-                component1.SetFont(f);
+                titleComponent.SetFont(f);
             }
-            component1.align |= UIAlign.Top;
-            _splitter.topSection.Add(component1, true);
+            titleComponent.align |= UIAlign.Center;
+            _splitter.topSection.Add(titleComponent, true);
             _controlString = conString;
             if (_controlString != "" && _controlString != null)
             {
@@ -90,12 +89,29 @@ namespace DuckGame
                 _section = component2.topSection;
             }
             base.Add(_splitter, true);
+            AdjustTitleScale();
         }
 
         public string title
         {
             get => ((UIText)_splitter.topSection.components[0]).text;
-            set => ((UIText)_splitter.topSection.components[0]).text = value;
+            set
+            {
+                ((UIText)_splitter.topSection.components[0]).text = value;
+                AdjustTitleScale();
+            }
+        }
+
+        protected void AdjustTitleScale()
+        {
+            UIText titleComponent = (UIText)_splitter.topSection.components[0];
+            titleComponent.scale = new Vec2(1f);
+            titleComponent._font.scale = new Vec2(1f);
+            for (int i = 0; i < 3; i++)
+                if (titleComponent.width > width - borderSize.x * 2f)
+                    titleComponent.scale -= new Vec2(0.25f);
+                else
+                    break;
         }
 
         public override void SelectLastMenuItem() => _section.SelectLastMenuItem();
@@ -130,7 +146,7 @@ namespace DuckGame
                 }
                 if (gamepadMode)
                 {
-                    if ((_oldPos - Mouse.positionScreen).lengthSq > 120.0)
+                    if ((_oldPos - Mouse.positionScreen).lengthSq > 120)
                     {
                         storeinputState = Mouse.left;
                         gamepadMode = false;
@@ -207,6 +223,53 @@ namespace DuckGame
                 component = new UIMenuItemToggle(m.name, field: new FieldBinding(m, "value"), filterBinding: (filterMenu ? new FieldBinding(m, "filtered") : null));
             else if (m.value is string)
                 component = new UIMenuItemString(m.name, m.id, field: new FieldBinding(m, "value"), filterBinding: (filterMenu ? new FieldBinding(m, "filtered") : null));
+            component.condition = m.condition;
+            if (component != null)
+            {
+                component.isEnabled = enabled;
+                _section.Add(component, true);
+                _dirty = true;
+            }
+            return component;
+        }
+
+        public UIComponent AddMatchSettingL(MatchSetting m, bool filterMenu, bool enabled = true)
+        {
+            UIComponent component = null;
+            if (m.value is int)
+            {
+                FieldBinding upperBoundField = null;
+                if (m.maxSyncID != null)
+                {
+                    foreach (MatchSetting matchSetting in TeamSelect2.matchSettings)
+                    {
+                        if (matchSetting.id == m.maxSyncID)
+                            upperBoundField = new FieldBinding(matchSetting, "value");
+                    }
+                }
+                FieldBinding lowerBoundField = null;
+                if (m.minSyncID != null)
+                {
+                    foreach (MatchSetting matchSetting in TeamSelect2.matchSettings)
+                    {
+                        if (matchSetting.id == m.minSyncID)
+                            lowerBoundField = new FieldBinding(matchSetting, "value");
+                    }
+                }
+                component = new LUIMenuItemNumber(m.name, field: new FieldBinding(m, "value", m.min, m.max), step: m.step, upperBoundField: upperBoundField, lowerBoundField: lowerBoundField, append: m.suffix, filterField: (filterMenu ? new FieldBinding(m, "filtered") : null), valStrings: m.valueStrings, setting: m);
+                if (m.percentageLinks != null)
+                {
+                    foreach (string percentageLink in m.percentageLinks)
+                    {
+                        MatchSetting matchSetting = TeamSelect2.GetMatchSetting(percentageLink);
+                        (component as LUIMenuItemNumber).percentageGroup.Add(new FieldBinding(matchSetting, "value", matchSetting.min, matchSetting.max, matchSetting.step));
+                    }
+                }
+            }
+            else if (m.value is bool)
+                component = new LUIMenuItemToggle(m.name, field: new FieldBinding(m, "value"), filterBinding: (filterMenu ? new FieldBinding(m, "filtered") : null));
+            else if (m.value is string)
+                component = new LUIMenuItemString(m.name, m.id, field: new FieldBinding(m, "value"), filterBinding: (filterMenu ? new FieldBinding(m, "filtered") : null));
             component.condition = m.condition;
             if (component != null)
             {

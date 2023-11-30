@@ -157,7 +157,7 @@ namespace DuckGame
                 _chargeSoundShort.Volume = 0f;
             }
             _chargeAnim.SetAnimation("drain");
-            SFX.Play("laserBlast", 1f, 0f, 0f, false);
+            SFX.PlaySynchronized("laserBlast", 1f, 0f, 0f, false);
         }
         public override void Update()
         {
@@ -264,7 +264,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    Vec2 barrelVector = base.barrelVector;
+                    Vec2 barrelVector = this.barrelVector;
                     hSpeed -= barrelVector.x * 9f;
                     vSpeed -= barrelVector.y * 9f + 3f;
                 }
@@ -302,7 +302,7 @@ namespace DuckGame
         {
             base.Draw();
             Material material = Graphics.material;
-            Graphics.material = base.material;
+            Graphics.material = this.material;
             _tip.depth = depth + 1;
             _tip.alpha = _charge;
             if (_chargeAnim.currentAnimation == "charge")
@@ -328,7 +328,7 @@ namespace DuckGame
         }
         public void OnDrawLayer(Layer l)
         {
-            if (l == Layer.Foreground)
+            if (l == Layer.Foreground && visible) 
             {
                 float num = Maths.NormalizeSection(_tip.alpha, 0f, 0.7f);
                 float num2 = Maths.NormalizeSection(_tip.alpha, 0.6f, 1f);
@@ -339,9 +339,9 @@ namespace DuckGame
                 {
                     Vec2 p = Offset(barrelOffset);
                     Vec2 p2 = Offset(barrelOffset + new Vec2(num * 1200f, 0f));
-                    Graphics.DrawLine(p, p2, new Color(_tip.alpha * 0.7f + 0.3f, _tip.alpha, _tip.alpha) * (0.3f + num5), 1f + num2 * 12f, default(Depth));
-                    Graphics.DrawLine(p, p2, Color.LightBlue * (0.2f + num5), 1f + num3 * 28f, default(Depth));
-                    Graphics.DrawLine(p, p2, Color.LightBlue * (0.1f + num5), 0.2f + num4 * 40f, default(Depth));
+                    Graphics.DrawLine(p, p2, new Color(_tip.alpha * 0.7f + 0.3f, _tip.alpha, _tip.alpha) * (0.3f + num5), 1f + num2 * 12f, default);
+                    Graphics.DrawLine(p, p2, Color.LightBlue * (0.2f + num5), 1f + num3 * 28f, default);
+                    Graphics.DrawLine(p, p2, Color.LightBlue * (0.1f + num5), 0.2f + num4 * 40f, default);
                 }
             }
         }

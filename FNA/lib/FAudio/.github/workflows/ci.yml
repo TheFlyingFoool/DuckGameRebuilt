@@ -1,0 +1,166 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  linux:
+    name: Linux
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+
+    - name: Install dependencies
+      run: |
+        sudo apt-add-repository ppa:hrzhu/sdl2-backport
+        sudo apt-get update
+        sudo apt-get install ninja-build libsdl2-dev
+
+    - name: CMake configure (Debug)
+      run: cmake -B debug -G Ninja . -DCMAKE_BUILD_TYPE=Debug
+
+    - name: Build (Debug)
+      run: ninja -C debug
+
+    - name: CMake configure (Release)
+      run: cmake -B release -G Ninja . -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build (Release)
+      run: ninja -C release
+
+  macos:
+    name: macOS (CMake)
+    runs-on: macos-latest
+    env:
+      CXXFLAGS: -I/usr/local/include/SDL2
+      LDFLAGS: -L/usr/local/lib
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+
+    - name: Install dependencies
+      run: brew install ninja sdl2
+
+    - name: CMake configure (Debug)
+      run: cmake -B debug -G Ninja . -DCMAKE_BUILD_TYPE=Debug
+
+    - name: Build (Debug)
+      run: ninja -C debug
+
+    - name: CMake configure (Release)
+      run: cmake -B release -G Ninja . -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build (Release)
+      run: ninja -C release
+
+  windows-msvc:
+    name: Windows (MSVC)
+    runs-on: windows-latest
+    env:
+      SDL_VERSION: 2.26.0
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+
+    - name: Cache SDL
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-sdl
+      with:
+        path: C:\SDL
+        key: ${{ runner.os }}-build-${{ env.cache-name }}
+
+    - name: Download SDL if not cached
+      run: |
+        if (-Not (Test-Path C:\SDL))
+        {
+            Invoke-WebRequest "https://github.com/libsdl-org/SDL/releases/download/release-$env:SDL_VERSION/SDL2-devel-$env:SDL_VERSION-VC.zip" -o C:\SDL.zip
+            Expand-Archive C:\SDL.zip -DestinationPath C:\
+        }
+
+    - name: CMake configure (Debug)
+      run: |
+        $env:LDFLAGS =  "/LIBPATH:C:\SDL2-$env:SDL_VERSION\lib\x86 "
+        cmake -B debug -G "Visual Studio 17 2022" . -DCMAKE_BUILD_TYPE=Debug `
+          -A Win32 `
+          -DSDL2_INCLUDE_DIRS="C:\SDL2-$env:SDL_VERSION\include" `
+          -DSDL2_LIBRARIES="SDL2;SDL2main"
+
+    - name: Build (Debug)
+      run: cmake --build debug
+
+    - name: CMake configure (Release)
+      run: |
+        $env:LDFLAGS =  "/LIBPATH:C:\SDL2-$env:SDL_VERSION\lib\x86 "
+        cmake -B release -G "Visual Studio 17 2022" . -DCMAKE_BUILD_TYPE=Release `
+          -A Win32 `
+          -DSDL2_INCLUDE_DIRS="C:\SDL2-$env:SDL_VERSION\include" `
+          -DSDL2_LIBRARIES="SDL2;SDL2main"
+
+    - name: Build (Release)
+      run: cmake --build release
+
+  windows-mingw:
+    name: Windows (MinGW)
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+
+    - name: Set up MSYS2
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: mingw32
+        install: >-
+          mingw-w64-i686-cc
+          mingw-w64-i686-cmake
+          mingw-w64-i686-ninja
+          mingw-w64-i686-pkg-config
+          mingw-w64-i686-SDL2
+
+    - name: CMake configure (Debug)
+      run: cmake -B debug -G Ninja . -DCMAKE_BUILD_TYPE=Debug
+
+    - name: Build (Debug)
+      run: cmake --build debug
+
+    - name: CMake configure (Release)
+      run: cmake -B release -G Ninja . -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build (Release)
+      run: cmake --build release
+
+    - name: CMake configure (Debug Wine)
+      run: cmake -B debugwine -G Ninja . -DCMAKE_BUILD_TYPE=Debug -DPLATFORM_WIN32=ON
+
+    - name: Build (Debug Wine)
+      run: cmake --build debugwine
+
+    - name: CMake configure (Release Wine)
+      run: cmake -B releasewine -G Ninja . -DCMAKE_BUILD_TYPE=Release -DPLATFORM_WIN32=ON
+
+    - name: Build (Release Wine)
+      run: cmake --build releasewine
+
+  freebsd:
+    runs-on: macos-12
+    name: FreeBSD
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+    - name: Build
+      uses: vmactions/freebsd-vm@v0
+      with:
+        usesh: true
+        prepare: pkg install -y cmake ninja sdl2
+        run: |
+          cmake -B build -G Ninja .
+          cmake --build build --verbose -- -j`sysctl -n hw.ncpu`

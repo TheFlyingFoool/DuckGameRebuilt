@@ -1,9 +1,11 @@
-﻿namespace DuckGame
+﻿using AddedContent.Firebreak;
+
+namespace DuckGame
 {
 
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand(Description = "Prints your Steam ID")]
+        [Marker.DevConsoleCommand(Description = "Prints your Steam ID")]
         public static string SteamId()
         {
             return $"Your steam ID is: {Profiles.experienceProfile.steamID}";

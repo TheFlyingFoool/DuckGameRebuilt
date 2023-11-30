@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ChallengeTimer
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -18,8 +11,8 @@ namespace DuckGame
         {
             get
             {
-                TimeSpan timeSpan = new TimeSpan(0, 0, 0, 0, (int)(_time * 1000.0));
-                return _maxTime.TotalSeconds == 0.0 || timeSpan < _maxTime ? timeSpan : _maxTime;
+                TimeSpan timeSpan = new TimeSpan(0, 0, 0, 0, (int)(_time * 1000f));
+                return _maxTime.TotalSeconds == 0f || timeSpan < _maxTime ? timeSpan : _maxTime;
             }
         }
 

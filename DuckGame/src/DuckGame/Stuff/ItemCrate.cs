@@ -1,10 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ItemCrate
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
+﻿using NAudio.MediaFoundation;
 using System;
 using System.Collections.Generic;
 
@@ -156,11 +150,11 @@ namespace DuckGame
             _containedObjects[3] = _containedObject4;
             if (isServerForObject)
             {
-                if (damageMultiplier > 1.0)
+                if (damageMultiplier > 1)
                     damageMultiplier -= 0.2f;
                 else
                     damageMultiplier = 1f;
-                if (_hitPoints <= 0.0 && !_destroyed)
+                if (_hitPoints <= 0 && !_destroyed)
                     Destroy(new DTImpact(this));
                 if (_onFire)
                     _hitPoints = Math.Min(_hitPoints, (1f - burnt) * _maxHealth);
@@ -181,7 +175,7 @@ namespace DuckGame
                 Vec2 vec2 = Offset(new Vec2(0f, -8f));
                 _randomMark.angle = angle;
                 _randomMark.flipH = offDir <= 0;
-                Graphics.Draw(_randomMark, vec2.x, vec2.y, depth + 10);
+                Graphics.Draw(ref _randomMark, vec2.x, vec2.y, depth + 10);
             }
             else if (_containedSprite != null)
             {
@@ -190,11 +184,11 @@ namespace DuckGame
                 Vec2 vec2 = Offset(new Vec2(0f, -8f));
                 _containedSprite.angle = angle;
                 _containedSprite.flipH = offDir <= 0;
-                Graphics.Draw(_containedSprite, vec2.x, vec2.y, depth + 10);
+                Graphics.Draw(ref _containedSprite, vec2.x, vec2.y, depth + 10);
             }
             else
                 _sprite.frame = 0;
-            _sprite.frame += (int)((1.0 - _hitPoints / _maxHealth) * 3.5);
+            _sprite.frame += (int)((1 - _hitPoints / _maxHealth) * 3.5F);
             base.Draw();
         }
 
@@ -249,46 +243,49 @@ namespace DuckGame
                 musketSmoke.vSpeed -= Rando.Float(0.1f, 0.2f);
                 Level.Add(musketSmoke);
             }
-            for (int index = 0; index < 4; ++index)
+            if (!Recorderator.Playing)
             {
-                PhysicsObject physicsObject = _containedObjects[index];
-                if (!Network.isActive)
-                    physicsObject = GetSpawnItem();
-                if (physicsObject != null)
+                for (int index = 0; index < 4; ++index)
                 {
-                    if (_onFire)
-                        physicsObject.heat = 0.8f;
-                    physicsObject.position = position + new Vec2(-4f + index * 2.6666667f, 0f);
-                    switch (index)
+                    PhysicsObject physicsObject = _containedObjects[index];
+                    if (!Network.isActive)
+                        physicsObject = GetSpawnItem();
+                    if (physicsObject != null)
                     {
-                        case 0:
-                        case 3:
-                            if (index == 0)
-                                physicsObject.hSpeed = -2f;
-                            else
-                                physicsObject.hSpeed = 2f;
-                            physicsObject.vSpeed = -2.5f;
-                            goto label_20;
-                        case 1:
-                            physicsObject.hSpeed = -1.2f;
-                            break;
-                        default:
-                            physicsObject.hSpeed = 1.2f;
-                            break;
+                        if (_onFire)
+                            physicsObject.heat = 0.8f;
+                        physicsObject.position = position + new Vec2(-4f + index * 2.6666667f, 0f);
+                        switch (index)
+                        {
+                            case 0:
+                            case 3:
+                                if (index == 0)
+                                    physicsObject.hSpeed = -2f;
+                                else
+                                    physicsObject.hSpeed = 2f;
+                                physicsObject.vSpeed = -2.5f;
+                                goto label_20;
+                            case 1:
+                                physicsObject.hSpeed = -1.2f;
+                                break;
+                            default:
+                                physicsObject.hSpeed = 1.2f;
+                                break;
+                        }
+                        physicsObject.vSpeed = -3.5f;
+                    label_20:
+                        if (Network.isActive)
+                        {
+                            physicsObject.visible = true;
+                            physicsObject.solid = true;
+                            physicsObject.active = true;
+                        }
+                        else
+                            Level.Add(physicsObject);
                     }
-                    physicsObject.vSpeed = -3.5f;
-                label_20:
-                    if (Network.isActive)
-                    {
-                        physicsObject.visible = true;
-                        physicsObject.solid = true;
-                        physicsObject.active = true;
-                    }
-                    else
-                        Level.Add(physicsObject);
                 }
+                SFX.Play("crateDestroy");
             }
-            SFX.Play("crateDestroy");
             Level.Remove(this);
             return true;
         }

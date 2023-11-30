@@ -1,18 +1,11 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.WaterParticle
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class WaterParticle : Thing
     {
         public WaterParticle(float xpos, float ypos, Vec2 hitAngle)
           : base(xpos, ypos)
         {
-            hSpeed = (float)(-hitAngle.x * 2.0 * (Rando.Float(1f) + 0.3f));
+            hSpeed = (float)(-hitAngle.x * 2 * (Rando.Float(1f) + 0.3f));
         }
 
         public override void Update()
@@ -22,7 +15,7 @@ namespace DuckGame
             x += hSpeed;
             y += vSpeed;
             alpha -= 0.06f;
-            if (alpha < 0.0)
+            if (alpha < 0)
                 Level.Remove(this);
             base.Update();
         }

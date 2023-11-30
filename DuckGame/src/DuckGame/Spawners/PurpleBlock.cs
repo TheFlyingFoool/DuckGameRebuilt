@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.PurpleBlock
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -90,6 +83,11 @@ namespace DuckGame
 
         public static void StoreItem(Profile p, Thing t)
         {
+            if (Recorderator.Playing)
+            {
+                SFX.Play("scanBeep");
+                return;
+            }
             switch (t)
             {
                 case RagdollPart _:
@@ -164,16 +162,14 @@ namespace DuckGame
             Vec2 vec2;
             if (_hoverItem == null)
             {
-                Holdable holdable = Level.Nearest<Holdable>(position, 24f);
-                if (holdable != null && holdable.owner == null && holdable != null && holdable.canPickUp && holdable.bottom <= top && Math.Abs(holdable.hSpeed) + Math.Abs(holdable.vSpeed) < 2.0)
+                float maxDist = 24f;
+                Holdable holdable = Level.Nearest<Holdable>(position, maxDist);
+                if (holdable != null && holdable.owner == null && holdable != null && holdable.canPickUp && holdable.bottom <= top && Math.Abs(holdable.hSpeed) + Math.Abs(holdable.vSpeed) < 2)
                 {
-                    float num = 999f;
+                    float dist = 999f;
                     if (holdable != null)
-                    {
-                        vec2 = position - holdable.position;
-                        num = vec2.length;
-                    }
-                    if (num < 24f)
+                        dist = (position - holdable.position).length;
+                    if (dist < maxDist)
                         _hoverItem = holdable;
                 }
             }
@@ -237,7 +233,8 @@ namespace DuckGame
             }
             else
             {
-                _currentProjection = GetStoredItem(_close[_closeIndex]).thing;
+                Thing storedThing = GetStoredItem(_close[_closeIndex]).thing;
+                _currentProjection = storedThing is null ? null : storedThing.Clone();
                 _projectorAlpha = Maths.CountUp(_projectorAlpha, 0.1f);
             }
             _projectorGlitch.alpha = _glitch * _projectorAlpha;
@@ -251,11 +248,11 @@ namespace DuckGame
             if (pLayer != Layer.Background)
                 return;
             if (_alternate)
-                Graphics.Draw(_scanner, x, y + 9f);
+                Graphics.Draw(ref _scanner, x, y + 9f);
             if (!_alternate)
-                Graphics.Draw(_projector, x, y - 8f);
+                Graphics.Draw(ref _projector, x, y - 8f);
             float num = (float)(_useWave ? _projectionWave : _projectionWave2);
-            if (_double > 0.0)
+            if (_double > 0f)
             {
                 if (_currentProjection != null)
                 {
@@ -275,8 +272,8 @@ namespace DuckGame
                 else
                 {
                     _none.alpha = (0.2f + _projectionFlashWave.normalized * 0.2f + _glitch * 1f) * _projectorAlpha;
-                    Graphics.Draw(_none, x - _double * 2f, y - 16f - num);
-                    Graphics.Draw(_none, x + _double * 2f, y - 16f - num);
+                    Graphics.Draw(ref _none, x - _double * 2f, y - 16f - num);
+                    Graphics.Draw(ref _none, x + _double * 2f, y - 16f - num);
                 }
             }
             else if (_currentProjection != null)
@@ -292,15 +289,15 @@ namespace DuckGame
                 Duck.renderingIcon = false;
             }
             else
-                Graphics.Draw(_none, x, y - 16f - num);
+                Graphics.Draw(ref _none, x, y - 16f - num);
             if (_currentProjection != null && _served.Contains(_close[_closeIndex]))
             {
                 _none.alpha = (float)(0.2f + _projectionFlashWave.normalized * 0.2f + _glitch * 1f) * _projectorAlpha;
-                Graphics.Draw(_none, x, y - 16f - num, depth + 5);
+                Graphics.Draw(ref _none, x, y - 16f - num, depth + 5);
             }
             if (_glitch <= 0f)
                 return;
-            Graphics.Draw(_projectorGlitch, x, y - 16f);
+            Graphics.Draw(ref _projectorGlitch, x, y - 16f);
         }
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)

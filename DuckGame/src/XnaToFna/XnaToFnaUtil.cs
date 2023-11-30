@@ -72,7 +72,7 @@ namespace XnaToFna
         public List<string> FixPathsFor;
         public ILPlatform PreferredPlatform;
         public static Assembly Aassembly;
-        public static int RemapVersion = 16;
+        public static int RemapVersion = 19;
         public void Stub(ModuleDefinition mod)
         {
             Log(string.Format("[Stub] Stubbing {0}", mod.Assembly.Name.Name));
@@ -183,7 +183,12 @@ namespace XnaToFna
             Modder.RelinkMap["System.Void System.IO.File::WriteAllLines(System.String,System.String[])"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void FileWriteAllLines(System.String,System.String[])");
             Modder.RelinkMap["System.String[] System.IO.File::ReadAllLines(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String[] FileReadAllLines(System.String)");
             Modder.RelinkMap["System.Boolean System.IO.File::Exists(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Boolean FileExists(System.String)");
+
+            Modder.RelinkMap["System.Void System.IO.File::Copy(System.String,System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void FileCopy(System.String,System.String)");
             Modder.RelinkMap["System.Void System.IO.File::Copy(System.String,System.String,System.Boolean)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void FileCopy(System.String,System.String,System.Boolean)");
+
+            Modder.RelinkMap["System.String System.IO.Path::Combine(System.String,System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String Combine(System.String,System.String)");
+
             Modder.RelinkMap["System.Byte[] System.IO.File::ReadAllBytes(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Byte[] FileReadAllBytes(System.String)"); //idk
             Modder.RelinkMap["System.String System.IO.File::ReadAllText(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String FileReadAllText(System.String)");
             Modder.RelinkMap["System.String System.IO.File::ReadAllText(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String FileReadAllText(System.String)");
@@ -192,8 +197,8 @@ namespace XnaToFna
             Modder.RelinkMap["System.Reflection.MethodInfo System.Type::GetMethod(System.String,System.Reflection.BindingFlags)"] = new RelinkMapEntry("XnaToFna.ProxyReflection.FieldInfoHelper", "System.Reflection.MethodInfo GetMethod(System.Type,System.String,System.Reflection.BindingFlags)");
 
             Modder.RelinkMap["System.Reflection.FieldInfo System.Type::GetField(System.String,System.Reflection.BindingFlags)"] = new RelinkMapEntry("XnaToFna.ProxyReflection.FieldInfoHelper", "System.Reflection.FieldInfo GetField(System.Type,System.String,System.Reflection.BindingFlags)");
-
-
+            //Mod Stuff 
+            Modder.RelinkMap["System.Void DuckGame.HaloWeapons.Resources::LoadShaders()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void DoNothing()");
 
             if (HookIsTrialMode)
                 Modder.RelinkMap["System.Boolean Microsoft.Xna.Framework.GamerServices.Guide::get_IsTrialMode()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.IntPtr get_IsTrialMode()");

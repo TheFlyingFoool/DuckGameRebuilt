@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.PyramidDoor
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Stuff|Pyramid", EditorItemType.Pyramid)]
     public class PyramidDoor : VerticalDoor, IPlatform
@@ -45,16 +38,18 @@ namespace DuckGame
             if (_desiredOpen > 0.5 && !_opened)
             {
                 _opened = true;
+                SFX.DontSave = 1;
                 SFX.Play("pyramidOpen", 0.6f);
             }
             if (_desiredOpen < 0.5 && _opened)
             {
                 _opened = false;
+                SFX.DontSave = 1;
                 SFX.Play("pyramidClose", 0.6f);
             }
             _open = Maths.LerpTowards(_open, _desiredOpen, 0.15f);
-            _sprite.frame = (int)(_open * 32.0);
-            _collisionSize.y = (float)((1.0 - _open) * 32.0);
+            _sprite.frame = (int)(_open * 32);
+            _collisionSize.y = (float)((1 - _open) * 32);
         }
     }
 }

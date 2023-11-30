@@ -24,6 +24,8 @@ namespace DuckGame
         public UIBox topSection => _leftBox;
 
         public UIBox bottomSection => _rightBox;
+        private Interp LeftLerp = new Interp(true);
+        private Interp RightLerp = new Interp(true);
 
         public UIDivider(bool vert, float splitVal, float sep = 1f)
           : base(0f, 0f, 0f, 0f)
@@ -174,7 +176,10 @@ namespace DuckGame
                 else
                 {
                 }
-                Graphics.DrawLine(new Vec2(vec2_1.x, vec2_1.y), new Vec2(vec2_3.x, vec2_1.y), Color.White, depth: (depth + 10));
+                LeftLerp.UpdateLerpState(vec2_1, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+                RightLerp.UpdateLerpState(vec2_3, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
+                Graphics.DrawLine(new Vec2(LeftLerp.x, LeftLerp.y), new Vec2(RightLerp.x, LeftLerp.y), Color.White, depth: (depth + 10));
             }
             int num = debug ? 1 : 0;
             base.Draw();

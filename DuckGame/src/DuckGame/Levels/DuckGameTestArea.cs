@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.DuckGameTestArea
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -155,6 +148,11 @@ namespace DuckGame
             foreach (Duck spawnPlayer in new Deathmatch(this).SpawnPlayers(false))
             {
                 Add(spawnPlayer);
+                if (spawnPlayer.inputProfile == null && DGRSettings.EditorOnlinePhysics)
+                {
+                    current = _editor;
+                    _editor.needInputRefresh = true;
+                }
                 followCam.Add(spawnPlayer);
             }
         }
@@ -180,9 +178,22 @@ namespace DuckGame
                 _started = false;
             }
         }
-
+        public int playtestTime;
+        public override void PostDrawLayer(Layer layer)
+        {
+            if (DGRSettings.EditorTimer && layer == Layer.HUD)
+            {
+                if (layer.fade <= 0)
+                    return;
+                TimeSpan timeSpan = TimeSpan.FromSeconds((float)playtestTime / 60f);
+                string formattedTime = string.Format("{0:D2}:{1:D2}:{2:D2}", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+                Graphics.DrawString(formattedTime, new Vec2(Layer.HUD.width / 2f - formattedTime.Length * 4, 0), Color.White * 0.5f, 1);
+            }
+            base.PostDrawLayer(layer);
+        }
         public override void Update()
         {
+            playtestTime++;
             if (_startTestMode.value)
             {
                 foreach (Profile profile in Profiles.active)

@@ -28,8 +28,8 @@ endif()
 
 # Version
 SET(LIB_MAJOR_VERSION "0")
-SET(LIB_MINOR_VERSION "22")
-SET(LIB_REVISION "10")
+SET(LIB_MINOR_VERSION "23")
+SET(LIB_REVISION "08")
 SET(LIB_VERSION "${LIB_MAJOR_VERSION}.${LIB_MINOR_VERSION}.${LIB_REVISION}")
 
 # Build Type
@@ -79,6 +79,7 @@ add_library(FAudio
 	src/FAudio_internal.h
 	src/stb.h
 	src/stb_vorbis.h
+	src/qoa_decoder.h
 	# Source Files
 	src/F3DAudio.c
 	src/FACT3D.c
@@ -249,6 +250,10 @@ if(BUILD_UTILS)
 		utils/testvolumemeter/testvolumemeter.cpp
 	)
 	target_link_libraries(testvolumemeter PRIVATE uicommon wavs)
+	add_executable(voicepool
+		utils/voicepool/voicepool.cpp
+	)
+	target_link_libraries(voicepool PRIVATE uicommon wavs)
 endif()
 
 # define install directories
@@ -268,6 +273,7 @@ endif()
 # tests/ Folder
 if(BUILD_TESTS)
 	add_executable(faudio_tests tests/xaudio2.c)
+	target_compile_definitions(faudio_tests PRIVATE _DEFAULT_SOURCE _BSD_SOURCE)
 	target_link_libraries(faudio_tests PRIVATE FAudio)
 endif()
 

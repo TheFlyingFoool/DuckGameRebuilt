@@ -1,9 +1,12 @@
-﻿namespace DuckGame
+﻿using AddedContent.Firebreak;
+
+namespace DuckGame
 {
 
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand(Description = "Wipes your main Duck Game profile of all data")]
+        [Marker.DevConsoleCommand(Description = "Wipes your main Duck Game profile of all data"
+            , To = ImplementTo.DuckHack)]
         public static void ClearMainProfile()
         {
             DevConsole.Log("Your main account has been R U I N E D !", Color.Red);

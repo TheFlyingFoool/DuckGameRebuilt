@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Banana
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -75,6 +68,7 @@ namespace DuckGame
                 _sprite.frame = 2;
                 weight = 0.1f;
             }
+            else if (_pin) _sprite.frame = 0; //Potential fix for bananas having the incorrect frame sometimes? -NiK0
             if (_fade)
             {
                 alpha -= 0.1f;
@@ -151,7 +145,7 @@ namespace DuckGame
                         }
                         _sprite.frame = 3;
                         _fade = true;
-                        Level.Add(new BananaSlip(x, y + 2f, duck.offDir > 0));
+                        if (DGRSettings.ActualParticleMultiplier > 0) Level.Add(new BananaSlip(x, y + 2f, duck.offDir > 0));
                     }
                 }
             }

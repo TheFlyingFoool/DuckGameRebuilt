@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.CustomTileset
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Blocks|custom", EditorItemType.Custom)]
     [BaggedProperty("isInDemo", false)]
@@ -60,11 +53,11 @@ namespace DuckGame
                 verticalWidth = 14f;
                 horizontalHeight = 16f;
             }
-            if (horizontalHeight == 0.0)
+            if (horizontalHeight == 0)
                 horizontalHeight = 16f;
-            if (verticalWidth == 0.0)
+            if (verticalWidth == 0)
                 verticalWidth = 14f;
-            if (verticalWidthThick == 0.0)
+            if (verticalWidthThick == 0)
                 verticalWidthThick = 16f;
             _sprite.frame = num;
             _tileset = "CUSTOM0" + (customIndex + 1).ToString();

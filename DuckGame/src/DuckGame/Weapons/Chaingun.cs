@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Chaingun
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -23,9 +16,42 @@ namespace DuckGame
         private ChaingunBullet _topBullet;
         private Sound _spinUp;
         private Sound _spinDown;
+        public Sound spinDown
+        {
+            get
+            {
+                return _spinDown;
+            }
+            set
+            {
+                _spinDown = value;
+            }
+        }
+        public Sound spinUp
+        {
+            get
+            {
+                return _spinUp;
+            }
+            set
+            {
+                _spinUp = value;
+            }
+        }
         private int bulletsTillRemove = 10;
         private int numHanging = 10;
         private bool _spinning;
+        public bool spinning
+        {
+            get
+            {
+                return _spinning;
+            }
+            set
+            {
+                _spinning = value;
+            }
+        }
         private float spinAmount;
 
         public Chaingun(float xval, float yval)
@@ -55,6 +81,8 @@ namespace DuckGame
             weight = 8f;
             _holdOffset = new Vec2(0f, 2f);
             editorTooltip = "Like a chaingun, but for adults. Fires mean pointy metal things.";
+			_editorPreviewOffset.x -= 8;
+            _editorPreviewOffset.y -= 1;
         }
 
         public override void Initialize()
@@ -100,7 +128,7 @@ namespace DuckGame
                 _spinUp.Volume = 1f;
                 _spinUp.Play();
             }
-            if (_spin < 1.0)
+            if (_spin < 1f)
             {
                 _spin += 0.04f;
             }
@@ -169,9 +197,9 @@ namespace DuckGame
             _tip.flipH = graphic.flipH;
             _tip.center = graphic.center;
             _tip.depth = depth + 1;
-            _tip.alpha = (float)Math.Min((_barrelHeat * 1.5 / 10f), 1f);
+            _tip.alpha = (float)Math.Min((_barrelHeat * 1.5f / 10f), 1f);
             _tip.angle = angle;
-            Graphics.Draw(_tip, x, y);
+            Graphics.Draw(ref _tip, x, y);
             if (_topBullet != null)
             {
                 _topBullet.material = this.material;

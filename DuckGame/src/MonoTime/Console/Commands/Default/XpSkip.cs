@@ -1,9 +1,11 @@
-﻿namespace DuckGame
+﻿using AddedContent.Firebreak;
+
+namespace DuckGame
 {
 
     public static partial class DevConsoleCommands
     {
-        [DevConsoleCommand(Description = "Displays your current Frames Per Second for Duck Game")]
+        [Marker.DevConsoleCommand(Description = "Gives you a Voodoo Vincent")]
         public static void XpSkip()
         {
             if (Profiles.experienceProfile.GetNumFurnitures(RoomEditor.GetFurniture("VOODOO VINCENT").index) > 0)

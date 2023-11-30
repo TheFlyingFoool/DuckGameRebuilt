@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Hat
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public abstract class Hat : Equipment
     {
@@ -74,26 +67,19 @@ namespace DuckGame
             else
             {
                 _sprite.frame = 0;
-                if (!_hasUnequippedCenter)
-                    center = new Vec2(_pickupSprite.w / 2, _pickupSprite.h / 2);
+                if (!_hasUnequippedCenter) center = new Vec2(_pickupSprite.w / 2f, _pickupSprite.h / 2f);
                 graphic = _pickupSprite;
                 solid = true;
                 _sprite.flipH = false;
-                visible = true;
+                if (!Recorderator.Playing) visible = true;
             }
-            if (destroyed)
-                alpha -= 0.05f;
-            if (alpha < 0.0)
-                Level.Remove(this);
+            if (destroyed) alpha -= 0.05f;
+            if (alpha < 0) Level.Remove(this);
             base.Update();
-            if (_equippedDuck != null && _equippedDuck._trapped != null)
-            {
-                depth = _equippedDuck._trapped.depth + 2;
-            }
+            if (_equippedDuck != null && _equippedDuck._trapped != null) depth = _equippedDuck._trapped.depth + 2;
             else
             {
-                if (owner != null || !(this is TeamHat))
-                    return;
+                if (owner != null || !(this is TeamHat)) return;
                 depth = -0.2f;
             }
         }

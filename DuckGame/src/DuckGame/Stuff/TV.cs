@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.TV
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -79,18 +72,21 @@ namespace DuckGame
             base.Initialize();
         }
 
+        public bool playedBroken;
         protected override bool OnDestroy(DestroyType type = null)
         {
-            if (!isServerForObject || type.thing != null && type.thing is Duck || _ruined)
-                return false;
-            _ruined = true;
-            graphic = _damaged;
-            SFX.Play("breakTV");
-            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 8; ++index)
-                Level.Add(new GlassParticle(x + Rando.Float(-8f, 8f), y + Rando.Float(-8f, 8f), new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
-            collideSounds.Clear();
-            collideSounds.Add("deadTVLand");
-            _sendDestroyMessage = true;
+            if (!isServerForObject || (type.thing != null && type.thing is Duck)) return false;
+            if (!_ruined)
+            {
+                _ruined = true;
+                graphic = _damaged;
+                playedBroken = true;
+                SFX.Play("breakTV", 1f, 0f, 0f, false);
+                for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 8; ++index) Level.Add(new GlassParticle(x + Rando.Float(-8f, 8f), y + Rando.Float(-8f, 8f), new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
+                collideSounds.Clear();
+                collideSounds.Add("deadTVLand");
+                _sendDestroyMessage = true;
+            }
             return false;
         }
 
@@ -106,6 +102,13 @@ namespace DuckGame
 
         public override void Update()
         {
+            if (_ruined && !playedBroken)
+            {
+                playedBroken = true;
+                SFX.Play("breakTV", 1f, 0f, 0f, false);
+                collideSounds.Clear();
+                collideSounds.Add("deadTVLand");
+            }
             if (_switchFrames > 0)
                 --_switchFrames;
             if (_ruined)
@@ -116,7 +119,7 @@ namespace DuckGame
                     _cape = null;
                 }
                 graphic = _damaged;
-                if (_ghostWait > 0.0)
+                if (_ghostWait > 0)
                 {
                     _ghostWait -= 0.4f;
                 }
@@ -124,9 +127,12 @@ namespace DuckGame
                 {
                     if (!_madeGhost)
                     {
-                        Level.Add(new EscapingGhost(x, y - 6f));
-                        for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 8; ++index)
-                            Level.Add(Spark.New(x + Rando.Float(-8f, 8f), y + Rando.Float(-8f, 8f), new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
+                        if (DGRSettings.ActualParticleMultiplier > 0)
+                        {
+                            Level.Add(new EscapingGhost(x, y - 6f));
+                            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 8; ++index)
+                                Level.Add(Spark.New(x + Rando.Float(-8f, 8f), y + Rando.Float(-8f, 8f), new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
+                        }
                     }
                     _madeGhost = true;
                 }
@@ -136,7 +142,7 @@ namespace DuckGame
                 duck = _owner.owner as Duck;
             if (duck != null)
             {
-                if (duck.vSpeed < -1.0 && prevVSpeed > 0.0 && !duck.tvJumped)
+                if (duck.vSpeed < -1 && prevVSpeed > 0 && !duck.tvJumped)
                     fakeGrounded = true;
                 jumpReady = jumpReady || duck.grounded || fakeGrounded || duck._vine != null;
                 prevVSpeed = duck.vSpeed;
@@ -155,6 +161,7 @@ namespace DuckGame
         public void SwitchChannelEffect()
         {
             _switchFrames = 8;
+            SFX.DontSave = 1;
             SFX.Play("switchchannel", 0.7f, 0.5f);
         }
 
@@ -176,12 +183,12 @@ namespace DuckGame
             _frame.angle = _channels.angle = _tvNoise.angle = angle;
             _frame.flipH = _channels.flipH = _tvNoise.flipH = offDir < 0;
             _frame.depth = depth + 1;
-            Graphics.Draw(_frame, x, y);
+            Graphics.Draw(ref _frame, x, y);
             _channels.alpha = Lerp.Float(_channels.alpha, owner != null ? 1f : 0f, 0.1f);
             _channels.depth = depth + 4;
             _channels.frame = channel ? (jumpReady ? 1 : 2) : 0;
             Vec2 vec2 = Offset(new Vec2(-4f, -4f));
-            Graphics.Draw(_channels, vec2.x, vec2.y);
+            Graphics.Draw(ref _channels, vec2.x, vec2.y);
             if (owner != null)
             {
                 Vec2 p1 = Vec2.Zero;
@@ -200,7 +207,7 @@ namespace DuckGame
             else
                 _tvNoise.alpha = 0.2f;
             _tvNoise.depth = depth + 8;
-            Graphics.Draw(_tvNoise, vec2.x, vec2.y);
+            Graphics.Draw(ref _tvNoise, vec2.x, vec2.y);
         }
     }
 }

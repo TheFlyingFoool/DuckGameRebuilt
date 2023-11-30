@@ -1,6 +1,6 @@
 /* FNA3D - 3D Graphics Library for FNA
  *
- * Copyright (c) 2020-2022 Ethan Lee
+ * Copyright (c) 2020-2023 Ethan Lee
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
@@ -82,6 +82,7 @@ extern void FNA3D_LogWarn(const char *fmt, ...);
 #define STBI_ONLY_GIF
 #define STBI_ONLY_PNG
 #define STBI_ONLY_JPEG
+#define STBI_ONLY_QOI
 
 /* These are per the Texture2D.SaveAs* spec */
 #define STBIW_ONLY_PNG

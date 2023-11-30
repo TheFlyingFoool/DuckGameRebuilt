@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Sharpshot
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Guns|Rifles")]
     public class Sharpshot : Gun
@@ -72,7 +65,7 @@ namespace DuckGame
                 else if (_loadState == 2)
                 {
                     handOffset.x += 0.8f;
-                    if (handOffset.x > 4.0)
+                    if (handOffset.x > 4)
                     {
                         ++_loadState;
                         Reload();
@@ -82,7 +75,7 @@ namespace DuckGame
                 else if (_loadState == 3)
                 {
                     handOffset.x -= 0.8f;
-                    if (handOffset.x <= 0.0)
+                    if (handOffset.x <= 0)
                     {
                         ++_loadState;
                         handOffset.x = 0f;

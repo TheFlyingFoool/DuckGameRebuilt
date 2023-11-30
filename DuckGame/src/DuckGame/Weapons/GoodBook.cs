@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.GoodBook
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -222,7 +215,7 @@ namespace DuckGame
             _raiseArm = Lerp.Float(_raiseArm, 0f, 0.05f);
             _preachWait = Lerp.Float(_preachWait, 0f, 0.06f);
             _ringPulse = Lerp.Float(_ringPulse, 0f, 0.05f);
-            if (Network.isActive)
+            if (Network.isActive && !Network.isFakeActive)
             {
                 if (isServerForObject)
                 {
@@ -273,7 +266,7 @@ namespace DuckGame
                     }
                 }
             }
-            if (_triggerHeld && isServerForObject && duck != null && _preachWait <= 0.0 & duck.quack < 1 && duck.grounded)
+            if (_triggerHeld && isServerForObject && duck != null && _preachWait <= 0 & duck.quack < 1 && duck.grounded)
             {
                 if (Network.isActive)
                     _netPreach.Play();
@@ -306,7 +299,7 @@ namespace DuckGame
                     if (duck1 is TargetDuck && (duck1 as TargetDuck).stanceSetting == 3)
                     {
                         for (int index = 0; index < 3 * Maths.Clamp(DGRSettings.ActualParticleMultiplier, 1, 100000); ++index)
-                            Level.Add(new MusketSmoke(duck1.x - 5f + Rando.Float(10f), (float)(duck1.y + 6.0 - 3.0 + Rando.Float(6f) - index * 1.0))
+                            Level.Add(new MusketSmoke(duck1.x - 5f + Rando.Float(10f), (float)(duck1.y + 6 - 0 + Rando.Float(6f) - index * 1))
                             {
                                 move = {
                   x = (Rando.Float(0.4f) - 0.2f),
@@ -381,7 +374,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (duck != null && !_raised && _raiseArm > 0.0)
+            if (duck != null && !_raised && _raiseArm > 0)
             {
                 Material mat = Graphics.material;
                 Graphics.material = null;
@@ -404,7 +397,7 @@ namespace DuckGame
                 _halo.depth = -0.2f;
                 _halo.xscale = _halo.yscale = (float)(0.95f + (float)_haloWave * 0.05f);
                 _halo.angle += 0.01f;
-                Graphics.Draw(_halo, owner.x, owner.y);
+                Graphics.Draw(ref _halo, owner.x, owner.y);
                 if (_ringPulse > 0f)
                 {
                     int num1 = 16;

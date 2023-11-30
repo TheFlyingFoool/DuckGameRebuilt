@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.UIUnlockBox
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -58,7 +51,7 @@ namespace DuckGame
                 else
                 {
                     _downWait -= 0.06f;
-                    if (_downWait <= 0.0)
+                    if (_downWait <= 0f)
                     {
                         _openWait = 1f;
                         _wrapped = true;
@@ -73,7 +66,7 @@ namespace DuckGame
             else
             {
                 _openWait -= 0.06f;
-                if (_openWait <= 0.0 && _wrapped && !_flash)
+                if (_openWait <= 0f && _wrapped && !_flash)
                     _flash = true;
                 if (_flash)
                 {
@@ -115,24 +108,24 @@ namespace DuckGame
             if (_wrapped)
             {
                 _wrappedFrame.depth = depth;
-                Graphics.Draw(_wrappedFrame, x, y);
+                Graphics.Draw(ref _wrappedFrame, x, y);
             }
             else
             {
                 _frame.depth = -0.9f;
-                Graphics.Draw(_frame, x, y);
+                Graphics.Draw(ref _frame, x, y);
                 string text1 = "@LWING@UNLOCK@RWING@";
                 if (_unlock.name == "UR THE BEST")
                     text1 = "@LWING@WOAH!@RWING@";
-                Vec2 vec2_1 = new Vec2((float)-(_font.GetWidth(text1) / 2.0), -42f);
+                Vec2 vec2_1 = new Vec2((float)-(_font.GetWidth(text1) / 2f), -42f);
                 _font.DrawOutline(text1, position + vec2_1, Color.White, Color.Black, depth + 2);
                 string text2 = "} " + _unlock.name + " }";
                 _fancyFont.scale = new Vec2(1f, 1f);
-                Vec2 vec2_2 = new Vec2((float)-(_fancyFont.GetWidth(text2) / 2.0), -25f);
+                Vec2 vec2_2 = new Vec2((float)-(_fancyFont.GetWidth(text2) / 2f), -25f);
                 _fancyFont.DrawOutline(text2, position + vec2_2, Colors.DGYellow, Color.Black, depth + 2);
                 _fancyFont.scale = new Vec2(0.5f, 0.5f);
                 string description = _unlock.description;
-                Vec2 vec2_3 = new Vec2((float)-(_fancyFont.GetWidth(description) / 2.0), 38f);
+                Vec2 vec2_3 = new Vec2((float)-(_fancyFont.GetWidth(description) / 2f), 38f);
                 _fancyFont.DrawOutline(description, position + vec2_3, Colors.DGGreen, Color.Black, depth + 2, 0.5f);
                 _unlock.Draw(x, y + 10f, depth + 4);
             }

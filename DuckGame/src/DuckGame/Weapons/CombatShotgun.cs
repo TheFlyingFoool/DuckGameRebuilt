@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.CombatShotgun
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -62,14 +55,14 @@ namespace DuckGame
                 _loadProgress = 1f;
                 _loadWait = 0f;
             }
-            if (_loadWait > 0.0)
+            if (_loadWait > 0)
                 return;
-            if (_loadProgress == 0.0)
+            if (_loadProgress == 0)
                 SFX.Play("shotgunLoad");
             if (_loadProgress == 0.5)
                 Reload();
             _loadWait = 0f;
-            if (_loadProgress < 1.0)
+            if (_loadProgress < 1f)
             {
                 _loadProgress += 0.1f;
             }
@@ -83,7 +76,7 @@ namespace DuckGame
 
         public override void OnPressAction()
         {
-            if (_loadProgress >= 1.0)
+            if (_loadProgress >= 1f)
             {
                 base.OnPressAction();
                 _loadProgress = 0f;
@@ -91,7 +84,7 @@ namespace DuckGame
             }
             else
             {
-                if (_loadWait != 1.0)
+                if (_loadWait != 1f)
                     return;
                 _loadWait = 0f;
             }
@@ -102,8 +95,8 @@ namespace DuckGame
             base.Draw();
             Vec2 vec2 = new Vec2(13f, -1f);
             float num = (float)Math.Sin(_loadProgress * 3.14f) * 3f;
-            Draw(_loaderSprite, new Vec2(vec2.x - 12f - num, vec2.y + 4f));
-            Draw(_ammoSprite, new Vec2(-3f, -2f), 2);
+            Draw(ref _loaderSprite, new Vec2(vec2.x - 12f - num, vec2.y + 4f));
+            Draw(ref _ammoSprite, new Vec2(-3f, -2f), 2);
         }
     }
 }

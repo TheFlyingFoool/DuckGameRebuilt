@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Shotgun
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -40,20 +33,28 @@ namespace DuckGame
             };
             editorTooltip = "It's...a shotgun. I don't really have anything more to say about it.";
         }
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is Shotgun && pTaped.gun2 is Shotgun ? new DoubleShotgun(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void Update()
         {
             base.Update();
-            if (_loadAnimation == -1.0)
+            if (_loadAnimation == -1)
             {
+                SFX.DontSave = 1;
                 SFX.Play("shotgunLoad");
                 _loadAnimation = 0f;
             }
-            if (_loadAnimation >= 0.0)
+            if (_loadAnimation >= 0)
             {
-                if (_loadAnimation == 0.5 && ammo != 0)
+                if (_loadAnimation == 0.5 && ammo != 0 && !Recorderator.Playing)
                     PopShell();
-                if (_loadAnimation < 1.0)
+                if (_loadAnimation < 1)
                     _loadAnimation += 0.1f;
                 else
                     _loadAnimation = 1f;
@@ -90,7 +91,7 @@ namespace DuckGame
             base.Draw();
             Vec2 vec2 = new Vec2(13f, -2f);
             float num = (float)Math.Sin(_loadAnimation * 3.14f) * 3f;
-            Draw(_loaderSprite, new Vec2(vec2.x - 8f - num, vec2.y + 4f));
+            Draw(ref _loaderSprite, new Vec2(vec2.x - 8f - num, vec2.y + 4f));
         }
     }
 }

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Grenade
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -73,6 +66,20 @@ namespace DuckGame
         {
             if (_explosionCreated)
                 return;
+            if (currentVessel != null && currentVessel is GrenadeVessel gv && !Recorderator.Playing)
+            {
+                gv.explodeFrame = gv.exFrames;
+                gv.v = pos;
+            }
+
+            if (DGRSettings.ExplosionDecals)
+            {
+                Level.Add(new ExplosionDecal(pos.x - 12, pos.y - 12));
+                Level.Add(new ExplosionDecal(pos.x + 12, pos.y - 12));
+                Level.Add(new ExplosionDecal(pos.x + 12, pos.y + 12));
+                Level.Add(new ExplosionDecal(pos.x - 12, pos.y + 12));
+            }
+
             float x = pos.x;
             float ypos = pos.y - 2f;
             Level.Add(new ExplosionPart(x, ypos));
@@ -86,6 +93,7 @@ namespace DuckGame
                 Level.Add(new ExplosionPart(x + (float)Math.Cos(Maths.DegToRad(deg)) * num2, ypos - (float)Math.Sin(Maths.DegToRad(deg)) * num2));
             }
             _explosionCreated = true;
+            SFX.DontSave = 1;
             SFX.Play("explode");
             RumbleManager.AddRumbleEvent(pos, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));
         }
@@ -104,7 +112,7 @@ namespace DuckGame
                 if (Recorder.currentRecording != null)
                     Recorder.currentRecording.LogBonus();
             }
-            if (!_localDidExplode && _timer < 0.0)
+            if (!_localDidExplode && _timer < 0)
             {
                 if (_explodeFrames < 0)
                 {
@@ -123,12 +131,12 @@ namespace DuckGame
                         {
                             for (int index = 0; index < 20; ++index)
                             {
-                                float num2 = (float)(index * 18.0 - 5.0) + Rando.Float(10f);
+                                float num2 = (float)(index * 18 - 5) + Rando.Float(10f);
                                 ATShrapnel type = new ATShrapnel
                                 {
                                     range = 60f + Rando.Float(18f)
                                 };
-                                Bullet bullet = new Bullet(x + (float)(Math.Cos(Maths.DegToRad(num2)) * 6.0), num1 - (float)(Math.Sin(Maths.DegToRad(num2)) * 6.0), type, num2)
+                                Bullet bullet = new Bullet(x + (float)(Math.Cos(Maths.DegToRad(num2)) * 6), num1 - (float)(Math.Sin(Maths.DegToRad(num2)) * 6), type, num2)
                                 {
                                     firedFrom = this
                                 };
@@ -173,14 +181,18 @@ namespace DuckGame
             if (!_pin)
                 return;
             _pin = false;
-            GrenadePin grenadePin = new GrenadePin(x, y)
+            for (float i = 0; i < DGRSettings.ActualParticleMultiplier; i++)
             {
-                hSpeed = -offDir * (1.5f + Rando.Float(0.5f)),
-                vSpeed = -2f
-            };
-            Level.Add(grenadePin);
+                GrenadePin grenadePin = new GrenadePin(x, y)
+                {
+                    hSpeed = -offDir * (1.5f + Rando.Float(0.5f)),
+                    vSpeed = -2f
+                };
+                Level.Add(grenadePin);
+            }
             if (duck != null)
                 RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(_fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));
+            SFX.DontSave = 1;
             SFX.Play("pullPin");
         }
     }

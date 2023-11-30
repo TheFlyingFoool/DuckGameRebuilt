@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ExtinguisherSmoke
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -123,6 +116,9 @@ namespace DuckGame
                 xscale = yscale = Maths.LerpTowards(xscale, _fullScale * 0.8f, 0.04f);
             s1 = xscale;
             s2 = xscale;
+
+            if (!currentlyDrawing) _sprite.UpdateFrame(true);
+
             if (!isLocal)
             {
                 base.Update();
@@ -136,6 +132,7 @@ namespace DuckGame
                     if (extinguisherSmoke != null && _groundedTime < extinguisherSmoke._groundedTime - 0.1f)
                         extinguisherSmoke.y -= 0.1f;
                 }
+
                 if (_life < 0f && _sprite.currentAnimation != "puff")
                     _sprite.SetAnimation("puff");
                 if (_sprite.currentAnimation == "puff" && _sprite.finished)
@@ -161,27 +158,27 @@ namespace DuckGame
             _sprite.depth = depth;
             _sprite.scale = new Vec2(s1);
             _sprite.center = center;
-            Graphics.Draw(_sprite, x + num2, y + num3);
+            Graphics.Draw(ref _sprite, x + num2, y + num3);
             _sprite2.imageIndex = _sprite.imageIndex;
             _sprite2.angle = _sprite.angle;
             _sprite2.depth = -0.5f;
             _sprite2.scale = _sprite.scale;
             _sprite2.center = center;
             _sprite2.color = edgecolor;
-            Graphics.Draw(_sprite2, x + num2, y + num3);
+            Graphics.Draw(ref _sprite2, x + num2, y + num3);
             _orbiter.imageIndex = _sprite.imageIndex;
             _orbiter.color = _sprite.color;
             _orbiter.depth = depth;
             _orbiter.scale = new Vec2(s2);
             _orbiter.center = center;
-            Graphics.Draw(_orbiter, x - num2, y - num3);
+            Graphics.Draw(ref _orbiter, x - num2, y - num3);
             _sprite2.imageIndex = _orbiter.imageIndex;
             _sprite2.angle = _orbiter.angle;
             _sprite2.depth = -0.5f;
             _sprite2.scale = _orbiter.scale;
             _sprite2.center = center;
             _sprite2.color = edgecolor;
-            Graphics.Draw(_sprite2, x - num2, y - num3);
+            Graphics.Draw(ref _sprite2, x - num2, y - num3);
         }
     }
 }

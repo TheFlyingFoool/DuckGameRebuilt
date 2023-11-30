@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Resolution
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SDL2;
 using System;
@@ -21,7 +14,7 @@ namespace DuckGame
         private static IntPtr _window;
         private static float _screenDPI;
         private static int _takeFocus;
-        private static GraphicsDeviceManager _device;
+        public static GraphicsDeviceManager _device;
         private static Resolution _pendingResolution;
         //private static Matrix _matrix;
         public bool isDefault;
@@ -385,7 +378,7 @@ namespace DuckGame
                 float num2 = Math.Abs(nearestInternal.aspect - pAspect);
                 bool flag1 = num1 < num2 && Math.Abs(num1 - num2) > 0.05f;
                 bool flag2 = Math.Abs(num1 - num2) < 0.05f;
-                if ((nearestInternal == null || Math.Abs(resolution.x - pX) + Math.Abs(resolution.y - pY) < Math.Abs(nearestInternal.x - pX) + Math.Abs(nearestInternal.y - pY) || flag1 && pAspect > 0.0 || pRecommended && resolution.recommended && !nearestInternal.recommended) && (nearestInternal == null || pAspect < 0.0 || flag1 | flag2 && (resolution.recommended || !pRecommended)))
+                if ((nearestInternal == null || Math.Abs(resolution.x - pX) + Math.Abs(resolution.y - pY) < Math.Abs(nearestInternal.x - pX) + Math.Abs(nearestInternal.y - pY) || flag1 && pAspect > 0 || pRecommended && resolution.recommended && !nearestInternal.recommended) && (nearestInternal == null || pAspect < 0f || flag1 | flag2 && (resolution.recommended || !pRecommended)))
                     nearestInternal = resolution;
             }
             return nearestInternal;

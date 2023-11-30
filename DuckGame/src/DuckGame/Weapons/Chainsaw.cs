@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Chainsaw
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -20,7 +13,7 @@ namespace DuckGame
         public StateBinding _floodBinding = new StateBinding(nameof(_flood));
         public StateBinding _chainsawStateBinding = new ChainsawFlagBinding();
         public EditorProperty<bool> souped = new EditorProperty<bool>(false);
-        private float _hold;
+        public float _hold;
         private bool _shing;
         private static bool _playedShing;
         public float _throwSpin;
@@ -30,8 +23,8 @@ namespace DuckGame
         private SpriteMap _sprite;
         private float _rotSway;
         public bool _started;
-        private int _pullState = -1;
-        private float _animRot;
+        public int _pullState = -1;
+        public float _animRot;
         private float _upWait;
         private float _engineSpin;
         private float _bladeSpin;
@@ -46,7 +39,7 @@ namespace DuckGame
         private bool _releasePull;
         public float _gas = 1f;
         private bool _struggling;
-        private bool _throttle;
+        public bool _throttle;
         private float _throttleWait;
         private bool _releasedSincePull;
         private int _skipDebris;
@@ -107,8 +100,16 @@ namespace DuckGame
             collideSounds.Add("landTV");
             holsterAngle = -10f;
             editorTooltip = "The perfect tool for cutting wood or carving decorative ice sculptures.";
+			_editorPreviewOffset.x -= 5;
         }
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is Chainsaw && pTaped.gun2 is EnergyScimitar ? new EnergyChainsaw(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void Initialize()
         {
             _sound = new LoopingSound("chainsawIdle", multiSound: "chainsawIdleMulti");
@@ -142,12 +143,15 @@ namespace DuckGame
             Vec2 normalized = (position - this.barrelPosition).normalized;
             Vec2 barrelPosition = this.barrelPosition;
 
-            int ix = (int)(DGRSettings.ActualParticleMultiplier * 6);
-            float f = 24f / ix;
-            for (int index = 0; index < ix; ++index)
+            if (DGRSettings.ActualParticleMultiplier != 0)
             {
-                Level.Add(Spark.New(barrelPosition.x, barrelPosition.y, new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
-                barrelPosition += normalized * f;
+                int ix = (int)(DGRSettings.ActualParticleMultiplier * 6);
+                float f = 24f / ix;
+                for (int index = 0; index < ix; ++index)
+                {
+                    Level.Add(Spark.New(barrelPosition.x, barrelPosition.y, new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
+                    barrelPosition += normalized * f;
+                }
             }
             _swordSwing.speed = 0f;
             if (Recorder.currentRecording != null)
@@ -289,8 +293,8 @@ namespace DuckGame
                     _skipSmoke = !_skipSmoke;
                     if (_throttle || !_skipSmoke)
                     {
-                        if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(SmallSmoke.New(x + offDir * 4, y + 5f, _smokeFlipper ? -0.1f : 0.8f, 0.7f));
-                        else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(x + offDir * 4, y + 5f, _smokeFlipper ? -0.1f : 0.8f, 0.7f));
+                        if (DGRSettings.ActualParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++) Level.Add(SmallSmoke.New(x + offDir * 4, y + 5f, _smokeFlipper ? -0.1f : 0.8f, 0.7f));
+                        else if (Rando.Float(1) < DGRSettings.ActualParticleMultiplier) Level.Add(SmallSmoke.New(x + offDir * 4, y + 5f, _smokeFlipper ? -0.1f : 0.8f, 0.7f));
                         _smokeFlipper = !_smokeFlipper;
                         _puffClick = true;
                     }
@@ -451,11 +455,11 @@ namespace DuckGame
                 {
                     _releasePull = false;
                     _upWait += 0.1f;
-                    if (_upWait > 6.0)
+                    if (_upWait > 6f)
                         _pullState = -1;
                 }
                 _bladeSpin += _engineSpin;
-                while (_bladeSpin >= 1.0)
+                while (_bladeSpin >= 1f)
                 {
                     --_bladeSpin;
                     int num4 = _sprite.frame + 1;
@@ -507,9 +511,9 @@ namespace DuckGame
                     }
                     else
                     {
-                        if (_throwSpin > 180.0)
+                        if (_throwSpin > 180f)
                             _throwSpin -= 360f;
-                        else if (_throwSpin < -180.0)
+                        else if (_throwSpin < -180f)
                             _throwSpin += 360f;
                         _throwSpin = Lerp.Float(_throwSpin, 0f, 14f);
                     }
@@ -532,7 +536,7 @@ namespace DuckGame
                     FluidData gas = Fluid.Gas;
                     gas.amount = 0.003f;
                     _gas -= 0.005f;
-                    if (_gas < 0.0)
+                    if (_gas < 0)
                         _gas = 0f;
                     Level.Add(new Fluid(x, y, Vec2.Zero, gas));
                     _gasDripFrames = 0;
@@ -569,7 +573,7 @@ namespace DuckGame
                         {
                             vec2 += barrelVector * 2f;
                             _fireTrailWait -= 0.5f;
-                            if ((bool)souped && _fireTrailWait <= 0.0)
+                            if ((bool)souped && _fireTrailWait <= 0f)
                             {
                                 _fireTrailWait = 1f;
                                 SmallFire smallFire = SmallFire.New(vec2.x, vec2.y, offDir * Rando.Float(0f, 2f), Rando.Float(0.5f, 1.5f));
@@ -664,25 +668,31 @@ namespace DuckGame
                                     {
                                         Vec2 vec2_2 = vec2_1 + barrelVector * Rando.Float(0f, 3f);
                                         Vec2 vec2_3 = -barrelVector.Rotate(Rando.Float(-0.2f, 0.2f), Vec2.Zero);
-                                        if (DGRSettings.S_ParticleMultiplier >= 1)
+                                        if (DGRSettings.ActualParticleMultiplier >= 1)
                                         {
-                                            for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++)//once again bad code someone else fix it -NiK0
+                                            if (materialThing.physicsMaterial == PhysicsMaterial.Wood)
                                             {
-                                                if (materialThing.physicsMaterial == PhysicsMaterial.Wood)
+                                                for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++)//not a great fix but better on performance -NiK0 talking to older niko
                                                 {
                                                     WoodDebris woodDebris = WoodDebris.New(vec2_2.x, vec2_2.y);
                                                     woodDebris.hSpeed = vec2_3.x * 3f;
                                                     woodDebris.vSpeed = vec2_3.y * 3f;
                                                     Level.Add(woodDebris);
                                                 }
-                                                else if (materialThing.physicsMaterial == PhysicsMaterial.Metal)
+                                            }
+                                            else if (materialThing.physicsMaterial == PhysicsMaterial.Metal)
+                                            {
+                                                for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++)
                                                 {
                                                     Spark spark = Spark.New(vec2_2.x, vec2_2.y, Vec2.Zero);
                                                     spark.hSpeed = vec2_3.x * 3f;
                                                     spark.vSpeed = vec2_3.y * 3f;
                                                     Level.Add(spark);
                                                 }
-                                                else if (materialThing.physicsMaterial == PhysicsMaterial.Glass)
+                                            }
+                                            else if (materialThing.physicsMaterial == PhysicsMaterial.Glass)
+                                            {
+                                                for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++)
                                                 {
                                                     GlassParticle glassParticle = new GlassParticle(vec2_2.x, vec2_2.y, Vec2.Zero)
                                                     {
@@ -693,7 +703,7 @@ namespace DuckGame
                                                 }
                                             }
                                         }
-                                        else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0)
+                                        else if (Rando.Float(1) < DGRSettings.ActualParticleMultiplier)
                                         {
                                             if (materialThing.physicsMaterial == PhysicsMaterial.Wood)
                                             {
@@ -758,9 +768,9 @@ namespace DuckGame
                                 Vec2 vec2 = wall3.travel;
                                 float length = vec2.length;
                                 float num5 = 1f;
-                                if (offDir > 0 && vec2.x < 0.0)
+                                if (offDir > 0 && vec2.x < 0f)
                                     num5 = 1.5f;
-                                else if (offDir < 0 && vec2.x > 0.0)
+                                else if (offDir < 0 && vec2.x > 0f)
                                     num5 = 1.5f;
                                 vec2 = offDir <= 0 ? new Vec2(-length * num5, 0f) : new Vec2(length * num5, 0f);
                                 wall3.travel = vec2;

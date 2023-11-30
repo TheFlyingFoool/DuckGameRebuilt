@@ -1,18 +1,12 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.AmmoType
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace DuckGame
 {
     public abstract class AmmoType
     {
+        public byte forcedIndex; //recorderator jank ignore it -NiK0 its just a terrible solution to a terrible problem
         public float accuracy;
         public float range;
         public float rangeVariation;

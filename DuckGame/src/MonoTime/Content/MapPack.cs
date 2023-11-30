@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.MapPack
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -147,7 +140,7 @@ namespace DuckGame
             string[] files = Directory.GetFiles(_mod.configuration.directory, "*.lev", SearchOption.AllDirectories);
             int num3 = 0;
             int num4 = (int)Math.Ceiling(Math.Sqrt(files.Length));
-            float num5 = (float)(1280.0 / num4 / 1280.0 * 4.0);
+            float num5 = (float)(1280f / num4 / 1280f * 4f);
             Vec2 zero = Vec2.Zero;
             foreach (string levelPath in files)
             {
@@ -165,7 +158,7 @@ namespace DuckGame
                                     float num6 = 0.95f;
                                     Vec2 vec2_1 = new Vec2(preview.preview.Width * num5 * num6, preview.preview.Height * num5 * num6);
                                     Vec2 vec2_2 = new Vec2(preview.preview.Width * num5, preview.preview.Height * num5);
-                                    Graphics.Draw((Tex2D)preview.preview, new Vec2((float)(zero.x + vec2_2.x / 2.0 - vec2_1.x / 2.0), (float)(zero.y + vec2_2.y / 2.0 - vec2_1.y / 2.0)), new Rectangle?(new Rectangle(0f, 10f, 320f, 180f)), Color.White, 0f, Vec2.Zero, new Vec2(num6 * num5), SpriteEffects.None, (Depth)0.9f);
+                                    Graphics.Draw((Tex2D)preview.preview, new Vec2((float)(zero.x + vec2_2.x / 2f - vec2_1.x / 2f), (float)(zero.y + vec2_2.y / 2f - vec2_1.y / 2f)), new Rectangle?(new Rectangle(0f, 10f, 320f, 180f)), Color.White, 0f, Vec2.Zero, new Vec2(num6 * num5), SpriteEffects.None, (Depth)0.9f);
                                 }
                             }
                         }

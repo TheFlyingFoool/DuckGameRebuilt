@@ -833,7 +833,7 @@ namespace DuckGame
             }
             for (int m = 0; m < 24; m++)
             {
-                SpriteThing spriteThing = new SpriteThing(100 + m * (cs.w + 13), cs.h + 15, cs)
+                SpriteThing spriteThing = new SpriteThing(100 + m * (cs.w + 13), cs.h + 15, cs.Clone())
                 {
                     shouldbegraphicculled = false,
                     center = new Vec2(cs.w / 2, cs.h - 1)
@@ -1012,6 +1012,21 @@ namespace DuckGame
 
         public override void Update()
         {
+            if (Program.BirthdayDGR)
+            {
+                _confettiDelay++;
+                if (_confettiDelay >= 10) // for going less than once per tick -othello7
+                {
+                    int bottom = (int)Layer.Console.height;
+                    int width = (int)Layer.Console.width;
+                    int noSplodeRegionHeight = bottom / 6;
+                    int extraAccelRegionHeight = bottom / 2;
+
+                    Add(new Firework(Rando.Float(width), Rando.Int(bottom, bottom + extraAccelRegionHeight), Rando.Int(bottom - noSplodeRegionHeight)));
+                    _confettiDelay = 0;
+                }
+            }
+
             if (Network.isActive)
             {
                 if (_netCountdown == null)
@@ -1063,8 +1078,18 @@ namespace DuckGame
             bool isServer = Network.isServer;
             Network.isServer = true;
             backgroundColor = new Color(139, 204, 248) * _backgroundFade;
-            Layer.Game.fade = _backgroundFade;
-            Layer.Background.fade = _backgroundFade;
+
+
+            if (Program.BirthdayDGR)
+            {
+                Layer.Game.fade = _backgroundFade;
+                Layer.Background.fade = _backgroundFade - 0.2f;
+            }
+            else
+            {
+                Layer.Game.fade = _backgroundFade;
+                Layer.Background.fade = _backgroundFade;
+            }
             _backgroundFade = Lerp.Float(_backgroundFade, 1f, 0.02f);
             _field.rise = _fieldScroll;
             _fieldForeground.rise = _fieldScroll;
@@ -2175,6 +2200,6 @@ namespace DuckGame
 
         private Material _sunshineMaterialBare;
 
-
+        private int _confettiDelay = 0;
     }
 }

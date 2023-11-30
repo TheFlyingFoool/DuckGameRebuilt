@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Keytar
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
@@ -47,7 +40,7 @@ namespace DuckGame
         public StateBinding _colorVariationBinding = new StateBinding(nameof(colorVariation));
         private bool _prevRuined;
         private sbyte _prevPreset;
-        private byte brokenKey;
+        public byte brokenKey;
         private List<Sound> _prevSounds = new List<Sound>();
         public bool duckMoving;
 
@@ -127,7 +120,7 @@ namespace DuckGame
         {
             get
             {
-                int currentNote = (int)Math.Round(handPitch * 13.0);
+                int currentNote = (int)Math.Round(handPitch * 13);
                 if (currentNote < 0)
                     currentNote = 0;
                 if (currentNote > 12)
@@ -145,7 +138,7 @@ namespace DuckGame
 
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (isServerForObject && (Math.Abs(hSpeed) > 4.0 || Math.Abs(vSpeed) > 4.0) && !_ruined && owner == null)
+            if (isServerForObject && (Math.Abs(hSpeed) > 4 || Math.Abs(vSpeed) > 4) && !_ruined && owner == null)
                 _ruined = true;
             base.OnSolidImpact(with, from);
         }
@@ -176,8 +169,9 @@ namespace DuckGame
             _prevColorVariation = colorVariation;
             if (!_prevRuined && _ruined)
             {
+                SFX.DontSave = 1;
                 SFX.Play("smallElectronicBreak", 0.8f, Rando.Float(-0.1f, 0.1f));
-                for (int index = 0; index < 8; ++index)
+                for (int index = 0; index < 8f * DGRSettings.ActualParticleMultiplier; ++index)
                     Level.Add(Spark.New(x + Rando.Float(-8f, 8f), y + Rando.Float(-4f, 4f), new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
                 if (isServerForObject && Rando.Int(5) == 0)
                     brokenKey = (byte)(1 + Rando.Int(12));
@@ -185,7 +179,7 @@ namespace DuckGame
             _prevRuined = _ruined;
             if (this.owner is Duck owner)
             {
-                if (isServerForObject && owner.inputProfile != null)
+                if (isServerForObject && owner.inputProfile != null && !Recorderator.Playing)
                 {
                     if (_ruined && Rando.Int(20) == 0)
                         _benderOffset += Rando.Float(-0.05f, 0.05f);
@@ -223,10 +217,10 @@ namespace DuckGame
                 }
                 int num1 = currentNote;
                 if (preset == presets.Length - 1)
-                    num1 = (int)Math.Round(currentNote / 2.0);
-                if (notePitch == 0.0 || (num1 != prevNote || noteSound != null && noteSound.Pitch + 1.0 != bender / 12.0) && !owner._hovering)
+                    num1 = (int)Math.Round(currentNote / 2f);
+                if (notePitch == 0 || (num1 != prevNote || noteSound != null && noteSound.Pitch + 1 != bender / 12) && !owner._hovering)
                 {
-                    if (notePitch != 0.0)
+                    if (notePitch != 0)
                     {
                         if (noteSound == null || num1 != prevNote)
                         {
@@ -245,6 +239,7 @@ namespace DuckGame
                             }
                             if (noteSound != null)
                                 _prevSounds.Add(noteSound);
+                            SFX.DontSave = 1;
                             noteSound = SFX.Play(presets[preset] + "-" + (num1 < 10 ? "0" : "") + Change.ToString(num1), vol, -1f);
                             playPitch = notePitch;
                             prevNote = num1;
@@ -260,7 +255,7 @@ namespace DuckGame
                                 Level.Add(new MusicNote(barrelPosition.x, barrelPosition.y, barrelVector));
                         }
                         else
-                            noteSound.Pitch = (float)(bender / 12.0 - 1.0);
+                            noteSound.Pitch = (float)(bender / 12 - 1);
                     }
                     else
                     {
@@ -300,7 +295,10 @@ namespace DuckGame
                     _prevSounds[index].Volume = Lerp.Float(_prevSounds[index].Volume, 0f, 0.15f);
             }
             if (preset != _prevPreset)
+            {
+                SFX.DontSave = 1;
                 SFX.Play("click");
+            }
             _prevPreset = preset;
             prevNotePitch = notePitch;
             base.Update();
@@ -355,13 +353,13 @@ namespace DuckGame
             _keybed.angle = angle;
             _keybed.frame = notePitch != 0f ? currentNote + 1 : 0;
             Vec2 vec2_2 = Offset(new Vec2(-5f, -2f));
-            Graphics.Draw(_keybed, vec2_2.x, vec2_2.y);
+            Graphics.Draw(ref _keybed, vec2_2.x, vec2_2.y);
             _settingStrip.depth = depth + 2;
             _settingStrip.flipH = offDir <= 0;
             _settingStrip.angle = angle;
             _settingStrip.frame = preset;
             Vec2 vec2_3 = Offset(new Vec2(-1f, 3f));
-            Graphics.Draw(_settingStrip, vec2_3.x, vec2_3.y);
+            Graphics.Draw(ref _settingStrip, vec2_3.x, vec2_3.y);
             base.Draw();
         }
     }

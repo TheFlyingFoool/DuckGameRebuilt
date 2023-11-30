@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Furniture
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -142,10 +135,10 @@ namespace DuckGame
             get
             {
                 if (type == FurnitureType.Prop)
-                    return (int)Math.Ceiling(sprite.width * sprite.height / 12.0 * group.priceMultiplier * (1.0 + rarity / 100.0));
+                    return (int)Math.Ceiling(sprite.width * sprite.height / 12f * group.priceMultiplier * (1f + rarity / 100f));
                 if (type == FurnitureType.Theme)
-                    return (int)Math.Ceiling(100.0 * group.priceMultiplier * (1.0 + rarity / 100.0));
-                return type == FurnitureType.Font ? (int)Math.Ceiling(60.0 * group.priceMultiplier * (1.0 + rarity / 100.0)) : 9999;
+                    return (int)Math.Ceiling(100f * group.priceMultiplier * (1f + rarity / 100f));
+                return type == FurnitureType.Font ? (int)Math.Ceiling(60f * group.priceMultiplier * (1f + rarity / 100f)) : 9999;
             }
         }
 
@@ -294,27 +287,21 @@ namespace DuckGame
             max = maxval;
             _rarity = rarityval;
             description = desc;
-            if (spr != null)
-                sprite = new SpriteMap("furni/" + gr.name + "/" + spr, wide, high);
-            if (bak != null)
-                background = new SpriteMap("furni/" + gr.name + "/" + bak, wide, high);
+            if (spr != null) sprite = new SpriteMap("furni/" + gr.name + "/" + spr, wide, high);
+            if (bak != null) background = new SpriteMap("furni/" + gr.name + "/" + bak, wide, high);
             name = nam;
             icon = ico;
             type = t;
             font = f;
             group = gr;
             deep = deepval;
-            if (stickToroof)
-                deep += 20;
-            if (!stickToroof && !stickTofloor)
-                --deep;
+            if (stickToroof) deep += 20;
+            if (!stickToroof && !stickTofloor) deep--;
             if (sprite != null)
             {
                 sprite.CenterOrigin();
-                if (sprite.height / 2.0 - Math.Floor(sprite.height / 2.0) == 0.0)
-                    --sprite.centery;
-                else
-                    sprite.centery = (float)Math.Floor(sprite.height / 2.0);
+                if (sprite.height / 2f - Math.Floor(sprite.height / 2f) == 0f) sprite.centery--;
+                else sprite.centery = (float)Math.Floor(sprite.height / 2f);
             }
             if (icon != null)
                 icon.CenterOrigin();
@@ -351,12 +338,9 @@ namespace DuckGame
             description = desc;
             max = maxval;
             _rarity = rarityval;
-            if (spr != null)
-                sprite = new SpriteMap("furni/" + gr.name + "/" + spr, wide, high);
-            if (stickToroof)
-                deep += 20;
-            if (!stickToroof && !stickTofloor)
-                --deep;
+            if (spr != null) sprite = new SpriteMap("furni/" + gr.name + "/" + spr, wide, high);
+            if (stickToroof) deep += 20;
+            if (!stickToroof && !stickTofloor) deep--;
             name = nam;
             icon = ico;
             type = FurnitureType.Prop;
@@ -364,15 +348,11 @@ namespace DuckGame
             if (sprite != null)
             {
                 sprite.CenterOrigin();
-                if (sprite.height / 2.0 - Math.Floor(sprite.height / 2.0) == 0.0)
-                    --sprite.centery;
-                else
-                    sprite.centery = (float)Math.Floor(sprite.height / 2.0);
+                if (sprite.height / 2f - Math.Floor(sprite.height / 2f) == 0f) --sprite.centery;
+                else sprite.centery = (float)Math.Floor(sprite.height / 2f);
             }
-            if (icon != null)
-                icon.CenterOrigin();
-            if (background == null)
-                return;
+            if (icon != null) icon.CenterOrigin();
+            if (background == null) return;
             background.CenterOrigin();
         }
     }

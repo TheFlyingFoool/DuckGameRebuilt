@@ -1,6 +1,8 @@
 using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Resources;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
@@ -14,7 +16,7 @@ using System.Runtime.InteropServices;
 #endif
 [assembly: AssemblyCompany("Ethan \"flibitijibibo\" Lee")]
 [assembly: AssemblyProduct("FNA")]
-[assembly: AssemblyCopyright("Copyright (c) 2009-2022")]
+[assembly: AssemblyCopyright("Copyright (c) 2009-2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -37,4 +39,4 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("22.10.0.0")]
+[assembly: AssemblyVersion("23.08.0.0")]

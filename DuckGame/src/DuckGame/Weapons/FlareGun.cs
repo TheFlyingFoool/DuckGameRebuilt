@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.FlareGun
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Guns|Fire")]
     public class FlareGun : Gun
@@ -34,7 +27,14 @@ namespace DuckGame
             editorTooltip = "Shoots a flare at long range that spits fire on impact. Fun at parties!";
             _bio = "For safety purposes, used to call help. What? No it's not a weapon. NO DON'T USE IT LIKE THAT!";
         }
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is FlareGun && pTaped.gun2 is FlameThrower ? new FlareFlameThrower(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void Initialize() => base.Initialize();
 
         public override void Update() => base.Update();

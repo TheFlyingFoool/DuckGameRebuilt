@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Pedestal
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -86,10 +79,10 @@ namespace DuckGame
             if (_sprite.frame == 0)
             {
                 _trophy.depth = depth + 1;
-                Graphics.Draw(_trophy, x, y - 14f);
+                Graphics.Draw(ref _trophy, x, y - 14f);
             }
             _scoreCard.depth = (Depth)1f;
-            Graphics.Draw(_scoreCard, x, y + 2f);
+            Graphics.Draw(ref _scoreCard, x, y + 2f);
             string text = Change.ToString(_team.score);
             _font.Draw(text, x - _font.GetWidth(text) / 2f, y, Color.DarkSlateGray, _scoreCard.depth + 1);
         }

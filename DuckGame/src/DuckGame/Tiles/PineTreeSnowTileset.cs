@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.PineTreeSnowTileset
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Blocks|Snow")]
     public class PineTreeSnowTileset : PineTree
@@ -32,6 +25,11 @@ namespace DuckGame
             snowWait = Rando.Float(4f);
         }
 
+        public override void Initialize()
+        {
+            DoPositioning();
+            //this override is here because pine tree's need to update, normal initialize makes them not be in the update loop -N
+        }
         public override void KnockOffSnow(Vec2 dir, bool vertShake)
         {
             iterated = true;
@@ -64,14 +62,15 @@ namespace DuckGame
             if (!edge && !didChange)
             {
                 snowWait -= 0.01f;
-                if (snowWait <= 0.0)
+                if (snowWait <= 0)
                 {
                     //bad code lol but idc as of now -NiK0
 
                     //old bad code was changed for a better solution -NiK0 again
-                    snowWait = Rando.Float(2f, 3f) / DGRSettings.S_ParticleMultiplier;
-                    if (Rando.Float(1f) > 0.92)
-                        Level.Add(new SnowFallParticle(x + Rando.Float(-4f, 4f), y + Rando.Float(-4f, 4f), new Vec2(0f, 0f)));
+
+                    //the new code was also wrong -NiK0 yet again
+                    snowWait = Rando.Float(2f, 3f) / DGRSettings.ActualParticleMultiplier;
+                    if (Rando.Float(1f) > 0.92f) Level.Add(new SnowFallParticle(x + Rando.Float(-4f, 4f), y + Rando.Float(-4f, 4f), new Vec2(0f, 0f)));
                 }
             }
             base.Update();
@@ -82,9 +81,9 @@ namespace DuckGame
             if (!edge && _snowFall.currentAnimation != "idle" && !_snowFall.finished)
             {
                 _snowFall.depth = -0.1f;
-                _snowFall.scale = new Vec2(1f, (float)(_snowFall.frame / 5.0 * 0.04f + 0.2f));
-                _snowFall.alpha = (float)(1.0 - _snowFall.frame / 5.0 * 1.0);
-                Graphics.Draw(_snowFall, x, (float)(y - 7.0 + _snowFall.frame / 5.0 * 3.0));
+                _snowFall.scale = new Vec2(1f, (float)(_snowFall.frame / 5 * 0.04f + 0.2f));
+                _snowFall.alpha = (float)(1 - _snowFall.frame / 5 * 1);
+                Graphics.Draw(ref _snowFall, x, (float)(y - 7 + _snowFall.frame / 5 * 3));
             }
             if (_snowFall.currentAnimation != "idle" && (edge || _snowFall.frame == 1 && !didChange))
             {

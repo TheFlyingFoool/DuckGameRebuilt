@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.AutoTile
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public abstract class AutoTile : MaterialThing, IAutoTile, IDontMove, IPathNodeBlocker
     {
@@ -158,7 +151,7 @@ namespace DuckGame
                 case 18:
                 case 26:
                     _collisionSize.x = verticalWidthThick;
-                    _collisionOffset.x = (float)(16.0 - verticalWidthThick - 8.0);
+                    _collisionOffset.x = (float)(16f - verticalWidthThick - 8f);
                     break;
                 case 4:
                 case 5:

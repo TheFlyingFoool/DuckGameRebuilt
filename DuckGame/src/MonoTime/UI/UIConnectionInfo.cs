@@ -1,10 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.UIConnectionInfo
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
+﻿using SDL2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,9 +70,7 @@ namespace DuckGame
                 colorPrefixString = "|DGPURPLE|";
             string profileName = profile.nameUI;
 
-            int colorTagsLength = profileName.Length - Program.RemoveColorTags(profileName).Length;
-            
-            int nameLength = profileName.Length - colorTagsLength;
+            int nameLength = _littleFont.GetLength(profileName);
             bool isHost = false;
             if (profile.connection != null && profile.connection.isHost)
             {
@@ -86,12 +78,12 @@ namespace DuckGame
                 ++nameLength;
             }
 
-            int nameLengthLimit = 17;
+            int nameLengthLimit = 16;
             if (isHost)
                 nameLengthLimit--;
             if (nameLength > nameLengthLimit)
             {
-                profileName = profileName.Substring(0, nameLengthLimit - 1 + colorTagsLength) + $"{colorPrefixString}.";
+                profileName = _littleFont.Crop(profileName, 0, nameLengthLimit) + $"{colorPrefixString}..";
                 nameLength = nameLengthLimit;
             }
             for (; nameLength < nameLengthLimit + 2; ++nameLength)
@@ -204,9 +196,9 @@ namespace DuckGame
                 if (trigger == Triggers.Select)
                 {
                     if (_profile.connection.data is User)
-                        Steam.OverlayOpenURL("http://steamcommunity.com/profiles/" + (_profile.connection.data as User).id.ToString());
+                        AddedContent.othello7.HelperMethods.OpenURL("http://steamcommunity.com/profiles/" + (_profile.connection.data as User).id.ToString());
                     else if (NetworkDebugger.enabled && Steam.user != null)
-                        Steam.OverlayOpenURL("http://steamcommunity.com/profiles/" + Steam.user.id.ToString());
+                        AddedContent.othello7.HelperMethods.OpenURL("http://steamcommunity.com/profiles/" + Steam.user.id.ToString());
                 }
             }
             base.Activate(trigger);
@@ -236,6 +228,7 @@ namespace DuckGame
                     if (_muteOptionIndex > 0)
                     {
                         --_muteOptionIndex;
+                        SFX.DontSave = 1;
                         SFX.Play("textLetter", 0.7f);
                     }
                 }
@@ -244,6 +237,7 @@ namespace DuckGame
                     if (_muteOptionIndex < _muteOptions.Count - 1)
                     {
                         ++_muteOptionIndex;
+                        SFX.DontSave = 1;
                         SFX.Play("textLetter", 0.7f);
                     }
                 }
@@ -258,6 +252,7 @@ namespace DuckGame
                     else if (_muteOptionIndex == 3)
                         _profile.muteName = !_profile.muteName;
                     _profile._blockStatusDirty = true;
+                    SFX.DontSave = 1;
                     SFX.Play("textLetter", 0.7f);
                 }
             }
@@ -321,12 +316,14 @@ namespace DuckGame
                     if (_additionalOptionIndex > 0)
                     {
                         --_additionalOptionIndex;
+                        SFX.DontSave = 1;
                         SFX.Play("textLetter", 0.7f);
                     }
                 }
                 else if (Input.Pressed(Triggers.Down) && _additionalOptionIndex < _additionalOptions.Count - 1)
                 {
                     ++_additionalOptionIndex;
+                    SFX.DontSave = 1;
                     SFX.Play("textLetter", 0.7f);
                 }
             }
@@ -366,7 +363,7 @@ namespace DuckGame
                 {
                     _littleFont.Draw(_additionalOptions[index1], p1_1 + new Vec2(10f, 3 + index1 * 8), _additionalOptionIndex == index1 ? Color.White : Color.White * 0.6f, (Depth)0.91f);
                     if (_additionalOptionIndex == index1)
-                        Graphics.Draw(_arrow._image, p1_1.x + 4f, p1_1.y + 6f + index1 * 8, (Depth)0.91f);
+                        Graphics.Draw(ref _arrow._image, p1_1.x + 4f, p1_1.y + 6f + index1 * 8, (Depth)0.91f);
                     if (index1 == _aoMuteIndex && _showMuteMenu)
                     {
                         Graphics.DrawRect(new Vec2(0f, 0f), new Vec2(Layer.HUD.width, Layer.HUD.height), Color.Black * 0.5f, (Depth)0.92f);
@@ -379,7 +376,7 @@ namespace DuckGame
                             string muteOption = _muteOptions[index2];
                             _littleFont.Draw(index2 != 0 || !_profile.muteChat ? (index2 != 1 || !_profile.muteHat ? (index2 != 2 || !_profile.muteRoom ? (index2 != 3 || !_profile.muteName ? "@DELETEFLAG_OFF@" + muteOption : "@DELETEFLAG_ON@" + muteOption) : "@DELETEFLAG_ON@" + muteOption) : "@DELETEFLAG_ON@" + muteOption) : "@DELETEFLAG_ON@" + muteOption, p1_2 + new Vec2(10f, 4 + index2 * 8), _muteOptionIndex == index2 ? Color.White : Color.White * 0.6f, (Depth)0.94f);
                             if (_muteOptionIndex == index2)
-                                Graphics.Draw(_arrow._image, p1_2.x + 4f, p1_2.y + 6f + index2 * 8, (Depth)0.94f);
+                                Graphics.Draw(ref _arrow._image, p1_2.x + 4f, p1_2.y + 6f + index2 * 8, (Depth)0.94f);
                         }
                     }
                 }

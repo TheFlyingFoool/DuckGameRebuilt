@@ -1,9 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.NMFireBullet
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
+﻿using System;
 
 namespace DuckGame
 {
@@ -34,6 +29,11 @@ namespace DuckGame
             Bullet bullet = typeInstance.GetBullet(position.x, position.y, owner?.duck, -angle, distance: range, network: false);
             bullet.isLocal = false;
             bullet.connection = connection;
+            if (DGRSettings.FixBulletPositions)
+            {
+                bullet.BonusUpdateTicks = Math.Min((int)(connection.manager.ping*60.0), DGRSettings.MaximumCorrectionTicks);
+                //DevConsole.Log(((int)(connection.manager.ping * 60.0)).ToString());
+            }
             Level.current.AddThing(bullet);
         }
     }

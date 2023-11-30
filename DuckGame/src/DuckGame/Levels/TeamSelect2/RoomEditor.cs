@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.RoomEditor
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -433,23 +426,23 @@ namespace DuckGame
                 if (_fade > 0.9f)
                 {
                     int furniSelection = _furniSelection;
-                    if (_slideTo != 0.0 && _slide != _slideTo)
+                    if (_slideTo != 0 && _slide != _slideTo)
                         _slide = Lerp.Float(_slide, _slideTo, 0.1f);
-                    else if (_slideTo != 0.0 && _slide == _slideTo)
+                    else if (_slideTo != 0 && _slide == _slideTo)
                     {
                         _slide = 0f;
                         _slideTo = 0f;
                         _furniSelection = _desiredFurniSelection;
                     }
-                    if (_upSlideTo != 0.0 && _upSlide != _upSlideTo)
+                    if (_upSlideTo != 0 && _upSlide != _upSlideTo)
                         _upSlide = Lerp.Float(_upSlide, _upSlideTo, 0.1f);
-                    else if (_upSlideTo != 0.0 && _upSlide == _upSlideTo)
+                    else if (_upSlideTo != 0 && _upSlide == _upSlideTo)
                     {
                         _upSlide = 0f;
                         _upSlideTo = 0f;
                         _furniSelection = _desiredFurniSelection;
                     }
-                    if (_desiredFurniSelection == _furniSelection && _slideTo == 0.0 && _upSlideTo == 0.0 && _mode == REMode.Main)
+                    if (_desiredFurniSelection == _furniSelection && _slideTo == 0 && _upSlideTo == 0 && _mode == REMode.Main)
                     {
                         if (_selector.inputProfile.Down(Triggers.MenuLeft))
                         {
@@ -514,7 +507,7 @@ namespace DuckGame
                     else if (_mode == REMode.Place)
                     {
                         position = _box.position;
-                        if (_furniCursor.x < 0.0)
+                        if (_furniCursor.x < 0)
                             _furniCursor = position + new Vec2(30f, 30f);
                         if (_selector.inputProfile.Down(Triggers.Ragdoll))
                         {
@@ -564,20 +557,20 @@ namespace DuckGame
                                     if (_selector.box.rightRoom)
                                         vec2_3.x = roomSize - vec2_3.x;
                                     vec2_3 += _selector.box.position;
-                                    rectangleList.Add(new Rectangle(vec2_3.x - furniture.sprite.width / 2, (float)(vec2_3.y - Math.Ceiling(furniture.sprite.height / 2.0) + 1.0) + furniture.topOffset, furniture.sprite.width, furniture.sprite.height - furniture.topOffset));
+                                    rectangleList.Add(new Rectangle(vec2_3.x - furniture.sprite.width / 2, (float)(vec2_3.y - Math.Ceiling(furniture.sprite.height / 2f) + 1) + furniture.topOffset, furniture.sprite.width, furniture.sprite.height - furniture.topOffset));
                                 }
                             }
                             _furniPos.x = _furniCursor.x;
                             _furniPos.y = _furniCursor.y;
-                            float num1 = (float)Math.Floor(availableFurni.sprite.height / 2.0);
+                            float num1 = (float)Math.Floor(availableFurni.sprite.height / 2f);
                             if (availableFurni.stickToFloor)
                             {
-                                float y = (float)(_furniCursor.y + num1 - 2.0);
+                                float y = (float)(_furniCursor.y + num1 - 2);
                                 Vec2 hitPos = Vec2.Zero;
                                 float num2 = 999f;
                                 foreach (Rectangle rect in rectangleList)
                                 {
-                                    if (rect.Top >= y - 2.0 && rect.Top - num1 < num2 && Collision.Line(new Vec2(_furniCursor.x, y), new Vec2(_furniCursor.x, y + 100f), rect))
+                                    if (rect.Top >= y - 2 && rect.Top - num1 < num2 && Collision.Line(new Vec2(_furniCursor.x, y), new Vec2(_furniCursor.x, y + 100f), rect))
                                         num2 = rect.Top - num1;
                                 }
                                 if (Level.CheckRay<IPlatform>(new Vec2(_furniCursor.x, y), new Vec2(_furniCursor.x, y + 100f), out hitPos) is Thing thing)
@@ -587,19 +580,19 @@ namespace DuckGame
                             }
                             else if (availableFurni.stickToRoof)
                             {
-                                float y = (float)(_furniPos.y - num1 + 2.0);
+                                float y = (float)(_furniPos.y - num1 + 2);
                                 Vec2 furniCursor = _furniCursor;
                                 int num3 = availableFurni.sprite.height / 2;
                                 Vec2 hitPos = Vec2.Zero;
                                 if (Level.CheckRay<IPlatform>(new Vec2(_furniCursor.x, y), new Vec2(_furniCursor.x, y - 100f), out hitPos) is Thing thing)
                                 {
-                                    _furniPos.y = (float)(thing.bottom + availableFurni.sprite.height / 2 - 2.0);
+                                    _furniPos.y = (float)(thing.bottom + availableFurni.sprite.height / 2 - 2);
                                     if (_box.rightRoom)
                                     {
-                                        if (thing is Block && _furniPos.x < 226.0)
+                                        if (thing is Block && _furniPos.x < 226)
                                             _furniPos.y += 11f;
                                     }
-                                    else if (thing is Block && _furniPos.x > 93.0 && _furniPos.x < 160.0)
+                                    else if (thing is Block && _furniPos.x > 93 && _furniPos.x < 160)
                                         _furniPos.y += 11f;
                                 }
                             }
@@ -616,7 +609,7 @@ namespace DuckGame
                                     if (_selector.box.rightRoom)
                                         vec2_4.x = roomSize - vec2_4.x;
                                     vec2_4 += position;
-                                    if ((_furniCursor - vec2_4).length < 4.0)
+                                    if ((_furniCursor - vec2_4).length < 4)
                                         _hover = furniturePosition;
                                 }
                             }
@@ -653,7 +646,7 @@ namespace DuckGame
                         }
                         invalidPlacement = false;
                         bool flag1 = false;
-                        if (_furniPos.y < y || _furniPos.y > y + 70.0 || _furniPos.x < x || _furniPos.x > x + roomSize)
+                        if (_furniPos.y < y || _furniPos.y > y + 70 || _furniPos.x < x || _furniPos.x > x + roomSize)
                         {
                             invalidPlacement = true;
                             flag1 = true;
@@ -784,11 +777,11 @@ namespace DuckGame
                     {
                         font.scale = new Vec2(1f);
                         font.characterYOffset = 1;
-                        font.Draw(text1, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _font.GetWidth(text1) / 2.0), (float)(y + 7.0 - 2.0))), Color.White, (Depth)0.95f);
+                        font.Draw(text1, Maths.RoundToPixel(new Vec2((float)(x + width / 2 - _font.GetWidth(text1) / 2), (float)(y + 7 - 2))), Color.White, (Depth)0.95f);
                         font.characterYOffset = 0;
                     }
                     else
-                        _font.Draw(text1, Maths.RoundToPixel(new Vec2((float)(x + width / 2.0 - _font.GetWidth(text1) / 2.0), (float)(y + 8.0 - 2.0))), Color.White, (Depth)0.95f);
+                        _font.Draw(text1, Maths.RoundToPixel(new Vec2((float)(x + width / 2 - _font.GetWidth(text1) / 2), (float)(y + 8 - 2))), Color.White, (Depth)0.95f);
                     Graphics.DrawRect(new Vec2(x, y), new Vec2(x + 400f, y + 14f), Color.Black, (Depth)0.94f);
                     Graphics.DrawRect(new Vec2(x, y + 74f), new Vec2(x + 400f, y + 90f), Color.Black, (Depth)0.98f);
                     float num6 = -18f;
@@ -800,12 +793,12 @@ namespace DuckGame
                         for (int index2 = 0; index2 < 11; ++index2)
                         {
                             int plus = index2 - 5 + (index1 - 2) * 5;
-                            float x1 = (float)(x + 2.0 + index2 * 22 + -_slide * 20.0);
-                            float num9 = (float)(y + 37.0 + -_upSlide * 20.0);
+                            float x1 = (float)(x + 2 + index2 * 22 + -_slide * 20);
+                            float num9 = (float)(y + 37 + -_upSlide * 20);
                             int index3 = FurniIndexAdd(_furniSelection, plus);
                             Furniture availableFurni = Profiles.experienceProfile.GetAvailableFurnis()[index3];
-                            float x2 = (float)(x + (x + 2.0 + 242.0 - (x + 2f)) / 2.0 - 9.0);
-                            double num10 = Maths.Clamp((float)((50.0 - Math.Abs(x1 - x2)) / 50.0), 0f, 1f);
+                            float x2 = (float)(x + (x + 2 + 242 - (x + 2f)) / 2 - 9);
+                            double num10 = Maths.Clamp((float)((50 - Math.Abs(x1 - x2)) / 50), 0f, 1f);
                             DuckRig.GetHatPoint(_profile.persona.sprite.imageIndex);
                             SpriteMap g = availableFurni.sprite;
                             if (availableFurni.icon != null)
@@ -815,9 +808,9 @@ namespace DuckGame
                             Vec2 zero = Vec2.Zero;
                             g.alpha = _profile.persona.sprite.alpha;
                             Vec2 pos1 = Vec2.Zero;
-                            pos1 = new Vec2(x1, (float)(num9 + num6 + index1 * 20 - 14.0));
-                            float num11 = 1f - Math.Min((float)(((pos1 - new Vec2(x2, (float)(y + 35.0 + 10.0))).length + 10.0) / 40.0), 1f);
-                            g.scale = new Vec2(Math.Min((float)(0.5 + Math.Max(num11 - 0.5f, 0f) * 2.0), 1f));
+                            pos1 = new Vec2(x1, (float)(num9 + num6 + index1 * 20 - 14));
+                            float num11 = 1f - Math.Min((float)(((pos1 - new Vec2(x2, (float)(y + 35 + 10))).length + 10) / 40), 1f);
+                            g.scale = new Vec2(Math.Min((float)(0.5 + Math.Max(num11 - 0.5f, 0f) * 2), 1f));
                             pos1.x -= 44f;
                             pos1.y -= 6f;
                             g.depth = (Depth)(float)(0.85f + g.xscale * 0.1f);
@@ -846,7 +839,7 @@ namespace DuckGame
                                 if (availableFurni.font != null && availableFurni.sprite == null)
                                 {
                                     availableFurni.font.scale = new Vec2(g.xscale * 2f);
-                                    availableFurni.font.Draw("F", pos1 + new Vec2(-3.5f, -3f) + (float)((g.xscale - 0.5) * 2.0) * new Vec2(-3f, -3f), Color.Black, g.depth + 10);
+                                    availableFurni.font.Draw("F", pos1 + new Vec2(-3.5f, -3f) + (float)((g.xscale - 0.5) * 2) * new Vec2(-3f, -3f), Color.Black, g.depth + 10);
                                     Graphics.Draw(g, pos1.x, pos1.y);
                                 }
                                 else if (availableFurni.type == FurnitureType.Theme && index2 == 5 && index1 == 2)
@@ -908,18 +901,18 @@ namespace DuckGame
                                     if (_desiredFurniSelection == _furniSelection)
                                     {
                                         float num13 = (float)Math.Floor(_fancyFont.GetWidth(text2));
-                                        float num14 = (float)Math.Floor(_fancyFont.GetWidth(text2) / 2.0);
+                                        float num14 = (float)Math.Floor(_fancyFont.GetWidth(text2) / 2);
                                         Vec2 pos2 = new Vec2(pos1.x - num14, pos1.y + 18f);
                                         _fancyFont.Draw(text2, pos2, new Color((byte)(availableFurni.group.color.r * 0.5), (byte)(availableFurni.group.color.g * 0.5), (byte)(availableFurni.group.color.b * 0.5)), (Depth)0.99f);
                                         _whiteCircle.scale = new Vec2(0.06f);
                                         _whiteCircle.depth = (Depth)0.98f;
                                         Graphics.Draw(_whiteCircle, pos2.x - 1f, pos2.y + 1f);
-                                        Graphics.Draw(_whiteCircle, (float)(pos2.x + num13 + 1.0), pos2.y + 1f);
+                                        Graphics.Draw(_whiteCircle, (float)(pos2.x + num13 + 1f), pos2.y + 1f);
                                         _whiteCircle.scale = new Vec2(0.075f);
                                         _whiteCircle.depth = (Depth)0.94f;
                                         _whiteCircle.color = new Color((byte)(availableFurni.group.color.r * 0.75), (byte)(availableFurni.group.color.g * 0.75), (byte)(availableFurni.group.color.b * 0.75));
                                         Graphics.Draw(_whiteCircle, pos2.x - 1f, pos2.y + 1f);
-                                        Graphics.Draw(_whiteCircle, (float)(pos2.x + num13 + 1.0), pos2.y + 1f);
+                                        Graphics.Draw(_whiteCircle, (float)(pos2.x + num13 + 1f), pos2.y + 1f);
                                         Graphics.DrawRect(pos2 + new Vec2(-1f, -1f), pos2 + new Vec2(num13 + 1f, 3f), availableFurni.group.color, (Depth)0.98f);
                                         Graphics.DrawRect(pos2 + new Vec2(-1.5f, -1.5f), pos2 + new Vec2(num13 + 1.5f, 3.5f), new Color((byte)(availableFurni.group.color.r * 0.75), (byte)(availableFurni.group.color.g * 0.75), (byte)(availableFurni.group.color.b * 0.75)), (Depth)0.94f);
                                         _whiteCircle.color = availableFurni.group.color;
@@ -973,7 +966,7 @@ namespace DuckGame
 
         public void Open(Profile p)
         {
-            if (_box == null && Network.InLobby())
+            if (_box == null && Network.inLobby)
                 _box = (Level.current as TeamSelect2).GetBox(p.networkIndex);
             if (_box == null)
                 return;

@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.GrenadeBullet
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -38,6 +31,8 @@ namespace DuckGame
                 explosionPart.yscale *= 0.7f;
                 Level.Add(explosionPart);
             }
+            if (DGRSettings.ExplosionDecals) Level.Add(new ExplosionDecal(x, y));
+            if (Recorderator.Playing) return; //recorderator
             SFX.Play("explode");
             RumbleManager.AddRumbleEvent(position, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));
             foreach (MaterialThing materialThing in Level.CheckCircleAll<TV>(position, 20f))
@@ -46,7 +41,7 @@ namespace DuckGame
             Vec2 vec2 = position - travelDirNormalized;
             for (int index = 0; index < 12; ++index)
             {
-                float ang = (float)(index * 30.0 - 10.0) + Rando.Float(20f);
+                float ang = (float)(index * 30 - 10) + Rando.Float(20f);
                 ATGrenadeLauncherShrapnel type = new ATGrenadeLauncherShrapnel
                 {
                     range = 25f + Rando.Float(10f)
@@ -55,6 +50,7 @@ namespace DuckGame
                 {
                     firedFrom = this
                 };
+                bullet.shouldhavevessel = false;
                 varBullets.Add(bullet);
                 Level.Add(bullet);
             }
@@ -72,6 +68,7 @@ namespace DuckGame
 
         protected override void Rebound(Vec2 pos, float dir, float rng)
         {
+            if (Recorderator.Playing) return;
             GrenadeBullet bullet = ammo.GetBullet(pos.x, pos.y, angle: (-dir), firedFrom: firedFrom, distance: rng, tracer: _tracer) as GrenadeBullet;
             bullet._teleporter = _teleporter;
             bullet._isVolatile = _isVolatile;
@@ -86,7 +83,7 @@ namespace DuckGame
         public override void Update()
         {
             _isVolatile -= 0.06f;
-            if (_isVolatile <= 0.0)
+            if (_isVolatile <= 0)
                 rebound = false;
             base.Update();
         }

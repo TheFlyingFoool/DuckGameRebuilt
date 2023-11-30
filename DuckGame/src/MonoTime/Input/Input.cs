@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Input
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -580,8 +573,12 @@ namespace DuckGame
             _triggerImageMap.Add("TICKET", new Sprite("arcade/ticket"));
             _triggerImageMap.Add("CHECK", new Sprite("checkIcon"));
             _triggerImageMap.Add("F1", new Sprite("buttons/keyboard/f1"));
+            _triggerImageMap.Add("ALT", new Sprite("buttons/keyboard/alt"));
+            _triggerImageMap.Add("COMMA", new KeyImage(','));
             _triggerImageMap.Add("DGR", new Sprite("DGR") { center = new Vec2(0, 0.75f) });
+            _triggerImageMap.Add("DGRDIM", new Sprite("DGR") { center = new Vec2(0, 0.75f), color = new Color(75, 75, 75) });
             _triggerImageMap.Add("DGRBIG", new Sprite("DGRBIG"));
+            _triggerImageMap.Add("DGRBIGDIM", new Sprite("DGRBIG") { color = new Color(75, 75, 75) });
             Dictionary<string, Sprite> triggerImageMap = _triggerImageMap;
             Sprite sprite1 = new Sprite("checkIcon")
             {

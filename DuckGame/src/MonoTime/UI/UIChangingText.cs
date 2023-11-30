@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.UIChangingText
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class UIChangingText : UIText
     {
@@ -30,11 +23,14 @@ namespace DuckGame
                     return;
                 while (_text.Length < minLength)
                     _text = " " + _text;
+                _prevtext = text;
             }
         }
 
         public override void Draw()
         {
+            UILerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
             _font.scale = scale;
             _font.alpha = alpha;
             float width = _font.GetWidth(defaultSizeString);
@@ -44,7 +40,7 @@ namespace DuckGame
             while (text.Length < 8)
                 text = " " + text;
             _font.colorOverride = UIMenu.disabledDraw ? Colors.BlueGray : new Color();
-            _font.Draw(text, x + num1, y + num2, Color.White, depth);
+            _font.Draw(text, UILerp.x + num1, UILerp.y + num2, Color.White, depth);
         }
     }
 }

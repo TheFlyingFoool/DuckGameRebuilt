@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.RomanCandle
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Guns|Fire")]
     public class RomanCandle : FlareGun
@@ -14,6 +7,17 @@ namespace DuckGame
         private SpriteMap _sprite;
         private bool _lit;
         private int _flip = 1;
+        public bool lit
+        {
+            get
+            {
+                return _lit;
+            }
+            set
+            {
+                _lit = value;
+            }
+        }
         private ActionTimer _timer = (ActionTimer)0.5f;
         private ActionTimer _litTimer;
         private ActionTimer _litStartTimer;
@@ -49,10 +53,10 @@ namespace DuckGame
             Vec2 vec2_1 = Offset(new Vec2(-6f, -4f));
             if (_lit && (bool)_timer)
             {
-                if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(Spark.New(vec2_1.x, vec2_1.y, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.1f));
-                else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(Spark.New(vec2_1.x, vec2_1.y, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.1f));
+                if (DGRSettings.ActualParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++) Level.Add(Spark.New(vec2_1.x, vec2_1.y, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.1f));
+                else if (Rando.Float(1) < DGRSettings.ActualParticleMultiplier) Level.Add(Spark.New(vec2_1.x, vec2_1.y, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.1f));
             }
-            if (_lit && _litTimer != null && (bool)_litTimer && _litStartTimer != null && (bool)_litStartTimer)
+            if (_lit && _litTimer != null && (bool)_litTimer && _litStartTimer != null && (bool)_litStartTimer && !Recorderator.Playing)
             {
                 if (_sprite.frame == 0)
                     _sprite.frame = 1;
@@ -61,6 +65,7 @@ namespace DuckGame
                 --ammo;
                 SFX.Play("netGunFire", 0.5f, Rando.Float(0.2f) - 0.4f);
                 kick = 1f;
+                recordKick = true;
                 if (duck != null)
                     RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(_fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));
                 if (isServerForObject)

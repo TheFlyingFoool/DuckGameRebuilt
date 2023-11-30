@@ -11,7 +11,7 @@ namespace DuckGame
     [BaggedProperty("isInDemo", true)]
     public class MagBlaster : Gun
     {
-        private SpriteMap _sprite;
+        public SpriteMap _sprite;
 
         public MagBlaster(float xval, float yval)
           : base(xval, yval)

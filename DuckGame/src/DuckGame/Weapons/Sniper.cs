@@ -40,7 +40,15 @@ namespace DuckGame
             _manualLoad = true;
             editorTooltip = "Long range rifle - equipped with a laser sight so you look real cool.";
         }
-
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is Sniper && pTaped.gun2 is Bazooka ? new SniperZooka(x, y) :
+                    pTaped.gun1 is Sniper && pTaped.gun2 is QuadLaser ? new QuadSniper(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
         public override void Update()
         {
             base.Update();
@@ -75,7 +83,7 @@ namespace DuckGame
                 else if (_loadState == 2)
                 {
                     handOffset.x += 0.4f;
-                    if (handOffset.x > 4.0)
+                    if (handOffset.x > 4)
                     {
                         ++_loadState;
                         Reload();
@@ -85,7 +93,7 @@ namespace DuckGame
                 else if (_loadState == 3)
                 {
                     handOffset.x -= 0.4f;
-                    if (handOffset.x <= 0.0)
+                    if (handOffset.x <= 0)
                     {
                         ++_loadState;
                         handOffset.x = 0f;

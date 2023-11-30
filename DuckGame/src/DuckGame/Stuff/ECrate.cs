@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ECrate
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -58,7 +51,7 @@ namespace DuckGame
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
-            if (_hitPoints <= 0.0)
+            if (_hitPoints <= 0)
                 return false;
             if (bullet.isLocal && owner == null)
                 Fondle(this, DuckNetwork.localConnection);
@@ -75,7 +68,7 @@ namespace DuckGame
             }
             _hitPoints -= damageMultiplier;
             damageMultiplier += 2f;
-            if (_hitPoints <= 0.0)
+            if (_hitPoints <= 0)
             {
                 if (bullet.isLocal)
                     SuperFondle(this, DuckNetwork.localConnection);
@@ -122,7 +115,7 @@ namespace DuckGame
                 num2 = 0.4f;
             }
             _light.color = new Color(1f - g, g, 0.2f) * Maths.Clamp(num2 + _colorFlux.normalized * (1f - num2), 0f, 1f);
-            Graphics.Draw(_light, x, y);
+            Graphics.Draw(ref _light, x, y);
         }
     }
 }

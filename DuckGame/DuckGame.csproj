@@ -41,7 +41,6 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <AssemblyName>DuckGame</AssemblyName>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -54,7 +53,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <AssemblyName>DuckGame</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -66,7 +64,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <AssemblyName>DuckGame</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -78,7 +75,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <AssemblyName>DuckGame</AssemblyName>
     <OutputPath>..\bin\</OutputPath>
     <DefineConstants>DuckGame</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -95,11 +91,10 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <AssemblyName>DuckGame</AssemblyName>
     <OutputPath>..\bin\</OutputPath>
     <DefineConstants>TRACE;DuckGame</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -109,7 +104,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
-    <AssemblyName>DuckGame</AssemblyName>
     <OutputPath>..\bin\</OutputPath>
     <DefineConstants>TRACE;DuckGame</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -136,7 +130,7 @@
     <DefineConstants>AutoUpdater</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <LangVersion>9.0</LangVersion>
     <ErrorReport>prompt</ErrorReport>
@@ -197,7 +191,17 @@
     <Reference Include="NVorbis.NAudioSupport">
       <HintPath>lib\NVorbis.NAudioSupport.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="QRCoder, Version=1.4.3.0, Culture=neutral, PublicKeyToken=c4ed5b9ae8358a28, processorArchitecture=MSIL">
+      <HintPath>..\packages\QRCoder.1.4.3\lib\net40\QRCoder.dll</HintPath>
+    </Reference>
+    <Reference Include="SixLabors.Fonts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
+      <HintPath>..\packages\SixLabors.Fonts.1.0.0\lib\netstandard2.0\SixLabors.Fonts.dll</HintPath>
+    </Reference>
+    <Reference Include="SixLabors.ImageSharp.Drawing, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
+      <HintPath>..\packages\SixLabors.ImageSharp.Drawing.1.0.0\lib\net472\SixLabors.ImageSharp.Drawing.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -223,13 +227,147 @@
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="SixLabors.ImageSharp, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
+      <HintPath>..\packages\SixLabors.ImageSharp.2.1.5\lib\net472\SixLabors.ImageSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddedContent\CorinthianPillar.cs" />
+    <Compile Include="AddedContent\DevWeapons\FirebreakGun.cs" />
+    <Compile Include="AddedContent\DevWeapons\KlofGun.cs" />
+    <Compile Include="AddedContent\DevWeapons\LutalliGun.cs" />
+    <Compile Include="AddedContent\DevWeapons\MoroGun.cs" />
+    <Compile Include="AddedContent\DevWeapons\othello7Gun.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\ATMagicalInk.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\BFGBall.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\BrainRotBubble.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\BrainRotBullet.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\Coin.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\DodgeblockCurse.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\InkSpike.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\MagicalInkBullet.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\MagicalInkSplat.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\MaterialDev.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\NMDodgeBlockCurse.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\NMPortalEffect.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\NMHitscanBullet.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\LPortal.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\OthProjectile.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\PortalProjectile.cs" />
+    <Compile Include="AddedContent\DevWeapons\SohRock.cs" />
+    <Compile Include="AddedContent\DGRDevHall.cs" />
+    <Compile Include="AddedContent\DevWeapons\CollinGun.cs" />
+    <Compile Include="AddedContent\DevWeapons\DanGun.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\aWobbleMaterial.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\FakeCrashPopup.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\GlitchProjectile.cs" />
+    <Compile Include="AddedContent\DevWeapons\HyeveGun.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\HitscanBullet.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\IcerIcyBlcok.cs" />
+    <Compile Include="AddedContent\DevWeapons\NiK0Gun.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\LightBullet.cs" />
+    <Compile Include="AddedContent\DevWeapons\Stuff\NMCrashPopup.cs" />
+    <Compile Include="AddedContent\DGRDevs.cs" />
     <Compile Include="AddedContent\DGRSettings.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\AdvancedConfigAttribute.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\ConfigClasses\NameDisplayConfig.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\IAdvancedConfig.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\NameDisplayConfig.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\FireSerializer.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\IFireSerializerModule.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\ColorSerializerModule.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\ConsoleBindSerializerModule.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\DateTimeSerializeModule.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\StringSerializerModule.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\Vec2SerializerModule.cs" />
+    <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnife.cs" />
+    <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingRopeHandle.cs" />
+    <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnifeConnectionParticle.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\AutoCompl.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\CommandAutoCompl.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\ReflectionAutoCompl.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\TeamAutoCompl.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\PrettyPrintAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\DuckInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\LayerInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\LevelInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\ProfileInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\ThingInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Implementation\DevConsoleDSHWrapper.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\FFEditorPane.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\FFExtra.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\FeatherFashion.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\FFPreviewAnimations.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\FFPreviewPane.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\FFPromptMenu.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\HatPreviewLevel.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\MetapixelInfo.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\SimRenderer.cs" />
     <Compile Include="AddedContent\Firebreak\Internet.cs" />
+    <Compile Include="AddedContent\Firebreak\LockMovementQueue.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\BooleanStuff.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Clear.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Close.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Conditional.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Def.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Drop.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Echo.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Error.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Exec.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Exit.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\For.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Help.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Join.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\JoinWith.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Length.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Loop.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Man.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\MathStuff.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Ping.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Source.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\StringStuff.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Test.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Time.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Var.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\While.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\ConsoleInstance.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\DSHConsoleLine.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\DSHVariable.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\IDSHConsole.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\ShellCommand.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\CommandRunner.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\ITypeInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\ArrayInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\BooleanInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\ByteInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\CharInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\DecimalInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\DoubleInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\DSHVariableInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\EnumInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\Int16Interpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\Int32Interpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\Int64Interpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\SByteInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\SingleInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\StringInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\UInt16Interpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\UInt32Interpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\UInt64Interpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\Vec2Interpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\ValueOrException.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\FieldOrPropertyInfo.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\IntRange.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\AdvancedConfigAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\AutoConfigAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\DevConsoleCommandAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\DrawingContextAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\DSHTypeInterpreterAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\FireSerializerAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\MarkerAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\PostInitializeAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\Markers\UpdateContextAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\SendToLevel.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\WordBoundary.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\IAmUi.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\UiBasic.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\UiGroup.cs" />
@@ -254,42 +392,60 @@
     <Compile Include="AddedContent\Hyeve\Utils\InputData.cs" />
     <Compile Include="AddedContent\Hyeve\Utils\VectorMath.cs" />
     <Compile Include="AddedContent\Extensions.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\AutoConfigFieldAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AutoConfigHandler.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\FireSerializer.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\FireSerializerModuleAttribute.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\IFireSerializerModule.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\SerializerModules\ColorSerializerModule.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\SerializerModules\ConsoleBindSerializerModule.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\SerializerModules\DateTimeSerializeModule.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\SerializerModules\StringSerializerModule.cs" />
-    <Compile Include="AddedContent\Firebreak\AutoConfig\SerializerModules\Vec2SerializerModule.cs" />
     <Compile Include="AddedContent\Firebreak\Content\SinkingBlock.cs" />
-    <Compile Include="AddedContent\Firebreak\Cursor\CursorHandler.cs" />
-    <Compile Include="AddedContent\Firebreak\Cursor\GameCursor.cs" />
-    <Compile Include="AddedContent\Firebreak\Cursor\OpalCursor.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\DynamicDCLine.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\FireDebug.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\Levels\TestLev.cs" />
-    <Compile Include="AddedContent\Firebreak\DebuggerTools\Levels\TestLev.FireBlock.cs" />
-    <Compile Include="AddedContent\Firebreak\DebuggerTools\Levels\TestLev.SelectionPad.cs" />
-    <Compile Include="AddedContent\Firebreak\DevConsoleCommandAttribute.cs" />
-    <Compile Include="AddedContent\Firebreak\DrawingContextAttribute.cs" />
-    <Compile Include="AddedContent\Firebreak\PostInitializeAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\CustomKeyBinds.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\EasingHelper.cs" />
-    <Compile Include="AddedContent\Firebreak\Utilities\MemberAttributePair.cs" />
-    <Compile Include="AddedContent\Firebreak\Utilities\MemberAttributePairHandler.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\ProgressValue.cs" />
     <Compile Include="AddedContent\klof44\DartGrenade.cs" />
     <Compile Include="AddedContent\klof44\DiscordRichPresence.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\RecorderatorBeam.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\HatEditorBeam.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\DGRElevator.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\Rubble.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\SnowTile.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\SpotLights.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\SummerTreeTop.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\GoldenTreeTop.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\WinterTreeTop.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\RainTile.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\WindTile.cs" />
+    <Compile Include="AddedContent\NiK0\ExplosionDecal.cs" />
     <Compile Include="AddedContent\NiK0\BGLightning.cs" />
     <Compile Include="AddedContent\NiK0\ChangePlus.cs" />
-    <Compile Include="AddedContent\NiK0\ClientOnly\NMPush.cs" />
-    <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigDuck.cs" />
-    <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigRagdollPart.cs" />
-    <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigRagdoll.cs" />
-    <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigTrapped.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\NMRobbedItemFrame.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\BigFan.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\BlizzardThing.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\ConveyorBelt.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\EnergyForceWave.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\ItemFrame.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\ReDemoBlaster.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\TapeBlock.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\FadingAwayThing.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\CampNetgun.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\DoubleShotgun.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\EnergyChainsaw.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\EnergyHammer.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\FlareFlameThrower.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\HugerLaser.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\OctoLaser.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\QuadPhaser.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\QuadSniper.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\SniperZooka.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\SuperRCCar.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\WarpScimitar.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\WarpSword.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\LaserDiskParticle.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\MaterialEnergyChainsaw.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\MaterialRedFade.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\NMDeathCone.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Projectile\LaserConeBlast.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Projectile\OctoLaserBullet.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\WarpBeam.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\WarpSlash.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATDeathCaliber.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\ATWumpMagnum.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\Bubble.cs" />
@@ -320,10 +476,24 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpQuadLaserBullet.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpSniper.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Wump\WumpTeleporter.cs" />
+    <Compile Include="AddedContent\NiK0\GlassPlatform.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Tape\MaterialEnergy.cs" />
+    <Compile Include="AddedContent\NiK0\MaterialLavaWobble.cs" />
     <Compile Include="AddedContent\NiK0\MathParser.cs" />
+    <Compile Include="AddedContent\NiK0\ModDebug.cs" />
+    <Compile Include="AddedContent\NiK0\NMClientOnlyContent.cs" />
     <Compile Include="AddedContent\NiK0\RainbowConstant.cs" />
     <Compile Include="AddedContent\NiK0\RainParticel.cs" />
-    <Compile Include="AddedContent\NiK0\RoomEditorExtra.cs" />
+    <Compile Include="AddedContent\NiK0\SpaceMaterial.cs" />
+    <Compile Include="AddedContent\NiK0\WeaponTaper.cs" />
+    <Compile Include="Recorderator\RecorderationSelector\FolderInfo.cs" />
+    <Compile Include="Recorderator\RecorderationSelector\IRMenuItem.cs" />
+    <Compile Include="Recorderator\RecorderationSelector\NullRMenuItem.cs" />
+    <Compile Include="Recorderator\RecorderationSelector\ProfileInfo.cs" />
+    <Compile Include="Recorderator\RecorderationSelector\RecorderationSelector.cs" />
+    <Compile Include="Recorderator\RecorderationSelector\ReplayInfo.cs" />
+    <Compile Include="Recorderator\Recorderator.cs" />
+    <Compile Include="AddedContent\NiK0\TreeLeaf.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\ClientOnlyAttribute.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\CodeButton.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\ContextButton.cs" />
@@ -350,17 +520,121 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Recorderator\OtherStuff\NilVessel.cs" />
+    <Compile Include="Recorderator\OtherStuff\ReplayLevel.cs" />
+    <Compile Include="Recorderator\OtherStuff\TheCorderator.cs" />
+    <Compile Include="Recorderator\Priority\BitCrusher.cs" />
+    <Compile Include="Recorderator\Priority\updateCorderator.cs" />
+    <Compile Include="Recorderator\SubClassed\SomethingSomethingVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\DGRVessels\IceSpikeVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\DGRVessels\WumpBazookaVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\DGRVessels\WumpMagnumVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\DGRVessels\WumpPistolVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\GrappleVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\KnightHelmetVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\JetpackVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\HelmetVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\HolsterVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\SpikeHelmVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\BootsVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\ChestplateVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\DartGunVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\ChaindartVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\GoodBookVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\GrenadeCannonVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\ShotgunVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SuicidePistolVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SMGVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\RomanCandleVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\PelletGunVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\KeytarVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\ChaingunVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\MindControlRayVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\TrumpetVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SaxaphoneVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\TromboneVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\TapedGunVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\WAGNUSVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\FlamethrowerVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\CampingRifleVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\PositronShooterVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\ChainsawVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\BananaVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\EnergyscimitarVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\MagnetGunVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\MagBlasterVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SnubbyPistolVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\NetGunVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\GrenadeLauncherVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\GrenadeVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\GunVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\HugeLaserVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\MagnumVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\MineVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\PistolVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\OldPistolVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\PhaserVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\PlasmaBlasterVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SharpshotVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SledgeHammerVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SniperVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SwordVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\TampingWeaponVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\FluidPuddleVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\DoorVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\IciclesVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\PinkBoxVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\ItemBoxVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\WireActivatorVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\WireButtonVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\WiremountVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\WindowVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\DuckVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\EquipmentVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\ExtinguisherSmokeVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\DartVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\CandleBallVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\RagdollPartVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\RCCarVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\RCControllerVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\SmallFireVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\FlareVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\RagdollVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\TrappedDuckVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\ForceWaveVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\HoldableVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\ItemSpawnerVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\QuadLaserBulletVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\TeamHatVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\OneTimeVessels\BulletVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\OneTimeVessels\DeathBeamVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\CampingBallVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\DeathCrateVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\DeskVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\DoorOffHingesVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\ItemCrateVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\NetVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\PresentVessel.cs" />
+    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\TVVessel.cs" />
     <Compile Include="src\DuckGame\DirectBitmap.cs" />
+    <Compile Include="src\DuckGame\Interp.cs" />
     <Compile Include="src\DuckGame\LangHandler.cs" />
     <Compile Include="src\DuckGame\Network\ConcurrentStack.cs" />
+    <Compile Include="src\DuckGame\Stuff\StandingFluid.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\AdvancedConfig.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Bind.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\CheckCheats.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Clear.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Config.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Debug.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Accept.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\CallF.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\ClearMainProfile.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\Close.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\Console.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\ConstantSync.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Copy.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\DownPour.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Eight.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\FancyMode.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Fps.cs" />
@@ -370,36 +644,64 @@
     <Compile Include="src\MonoTime\Console\Commands\Default\Level.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\LocalId.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Log.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\ManageCloud.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Mem.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\ModHash.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\NetDebug.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\OldAngles.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\QwopMode.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\RandomEdit.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\RequestLogs.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\RhythmMode.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\SaveDir.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\SetF.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\ShieldMode.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\ShowBounds.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\ShowCollision.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\ShowOrigin.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\Sing.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\Spawn.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\SplitScreen.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\SteamId.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\Team.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Toggle.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\UserDir.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Wagnus.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\XpSkip.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\ZipCloud.cs" />
     <Compile Include="src\MonoTime\Console\Commands\DoDraw.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Dsh.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Exit.cs" />
-    <Compile Include="src\MonoTime\Console\Commands\Filter.cs" />
     <Compile Include="src\MonoTime\Console\Commands\For.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Help.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\LaunchArguments.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Rep.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Echo.cs" />
     <Compile Include="src\MonoTime\Console\Commands\DansTestArea.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Restart.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\SkipMap.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Version.cs" />
     <Compile Include="src\MonoTime\ExecuteOnAttribute.cs" />
     <Compile Include="src\MonoTime\Input\InputMan.cs" />
     <Compile Include="src\MonoTime\Input\1InputMan.cs" />
     <Compile Include="src\MonoTime\Input\CharEnteredHandler.cs" />
     <Compile Include="src\MonoTime\Input\KeyEventHandler.cs" />
     <Compile Include="src\MonoTime\Input\2InputMan.cs" />
+    <Compile Include="src\MonoTime\LUI\LUIChangingText.cs" />
+    <Compile Include="src\MonoTime\LUI\LUIControlElement.cs" />
+    <Compile Include="src\MonoTime\LUI\LUIMenuItemNumber.cs" />
+    <Compile Include="src\MonoTime\LUI\LUIMenuItemString.cs" />
+    <Compile Include="src\MonoTime\LUI\LUIMenuItemToggle.cs" />
+    <Compile Include="src\MonoTime\LUI\LUIMultiToggle.cs" />
+    <Compile Include="src\MonoTime\LUI\LUINumber.cs" />
+    <Compile Include="src\MonoTime\LUI\LUIOnOff.cs" />
+    <Compile Include="src\MonoTime\LUI\LUIStringEntry.cs" />
+    <Compile Include="src\MonoTime\LUI\LUIText.cs" />
+    <Compile Include="src\MonoTime\Materials\FullscreenMaterial.cs" />
+    <Compile Include="src\MonoTime\Materials\MaterialFunBeam.cs" />
+    <Compile Include="src\MonoTime\Sound\QOA.cs" />
     <Compile Include="src\MonoTime\UI\UIDGRDescribe.cs" />
+    <Compile Include="src\MonoTime\UI\UISideButton.cs" />
     <Compile Include="src\WindowsPlatformStartup.cs" />
     <Compile Include="src\MonoTime\Console\ServiceContainer.cs" />
     <Compile Include="src\OnOutputDebugStringHandler.cs" />
@@ -1230,7 +1532,7 @@
     <Compile Include="src\DuckGame\Stuff\SpringRight.cs" />
     <Compile Include="src\DuckGame\Stuff\SpringUpLeft.cs" />
     <Compile Include="src\DuckGame\Stuff\SpringUpRight.cs" />
-    <Compile Include="src\DuckGame\Stuff\StandingFluid.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\Other\DGRStandingFluid.cs" />
     <Compile Include="src\MonoTime\Windows\TargetStance.cs" />
     <Compile Include="src\DuckGame\Stuff\TargetDuckNew.cs" />
     <Compile Include="src\DuckGame\Stuff\TargetDuck.cs" />
@@ -1918,7 +2220,7 @@
     <Compile Include="src\MonoTime\UI\UIMatchmakerMark2.cs" />
     <Compile Include="src\MonoTime\UI\UIMenuItemResolution.cs" />
     <Compile Include="src\MonoTime\UI\UIMenuItemStringPicker.cs" />
-    <Compile Include="src\MonoTime\UI\UIPasswordMenu.cs" />
+    <Compile Include="src\MonoTime\UI\UIStringEntryMenu.cs" />
     <Compile Include="src\MonoTime\UI\CompareUsers.cs" />
     <Compile Include="src\MonoTime\Windows\UIInviteUser.cs" />
     <Compile Include="src\MonoTime\UI\UIInviteMenu.cs" />
@@ -1949,7 +2251,7 @@
     <Compile Include="src\MonoTime\UI\UIMenuItem.cs" />
     <Compile Include="src\MonoTime\UI\UIMenuItemNumber.cs" />
     <Compile Include="src\MonoTime\UI\UIMenuItemSlider.cs" />
-    <Compile Include="src\MonoTime\UI\UIMenuItemPassword.cs" />
+    <Compile Include="src\MonoTime\UI\UIMenuItemString.cs" />
     <Compile Include="src\MonoTime\UI\UIMenuItemToggle.cs" />
     <Compile Include="src\MonoTime\UI\UIModifierMenuItem.cs" />
     <Compile Include="src\MonoTime\UI\UIFlagSelection.cs" />
@@ -1961,7 +2263,7 @@
     <Compile Include="src\MonoTime\UI\UIProgressBar.cs" />
     <Compile Include="src\MonoTime\UI\UIServerBrowser.cs" />
     <Compile Include="src\MonoTime\UI\UISlotEditor.cs" />
-    <Compile Include="src\MonoTime\UI\UIPassword.cs" />
+    <Compile Include="src\MonoTime\UI\UIStringEntry.cs" />
     <Compile Include="src\MonoTime\UI\UIText.cs" />
     <Compile Include="src\MonoTime\UI\UIUnlockBox.cs" />
     <Compile Include="src\MonoTime\UI\UIWillBox.cs" />
@@ -2058,6 +2360,9 @@
     <Compile Include="src\XnaToFna\__NetworkMachine__.cs" />
     <Compile Include="src\XnaToFna\__NetworkSession__.cs" />
     <Compile Include="src\XnaToFna\__PropertyDictionary__.cs" />
+    <Compile Include="AddedContent\othello7\HelperMethods.cs" />
+    <Compile Include="AddedContent\othello7\Firework.cs" />
+    <Compile Include="src\MonoTime\Sound\Retro\DGMSong.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -2079,9 +2384,6 @@
     <Content Include="DuckGame.ico" />
     <EmbeddedResource Include="version.txt" />
     <EmbeddedResource Include="SlnPath.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="shaders_source\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="DuckGame.ico" />
@@ -2107,6 +2409,9 @@
       <Project>{d63ad3fc-dcf0-4db6-b944-5d828a10ccb8}</Project>
       <Name>Steam</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Recorderator\SubClassed\Vessels\a_OLD\" />
   </ItemGroup>
   <ItemGroup>
     <DepsFolder Include="$(SolutionDir)\deps\**\*.*" />

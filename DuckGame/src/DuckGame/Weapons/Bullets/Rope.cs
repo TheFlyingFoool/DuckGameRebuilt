@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Rope
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -160,7 +153,7 @@ namespace DuckGame
                 return;
             Rope at2 = _attach2 as Rope;
             bool regroup = false;
-            if ((attach1Point - attach2Point).length < 4.0)
+            if ((attach1Point - attach2Point).length < 4f)
             {
                 regroup = true;
             }
@@ -274,7 +267,7 @@ namespace DuckGame
                     attach1Point += vec2_2;
                     --num3;
                 }
-                if (num3 > 8.0)
+                if (num3 > 8f)
                 {
                     Vec2 position;
                     AutoBlock autoBlock = Level.CheckLine<AutoBlock>(attach1Point, attach1Point + vec2_2 * num3, out position);
@@ -288,7 +281,7 @@ namespace DuckGame
                             vec2_3.Normalize();
                             blockCorner.corner += vec2_3 * 1f;
                             Vec2 vec2_4 = blockCorner.corner - attach2.position;
-                            if (vec2_4.length > 4.0)
+                            if (vec2_4.length > 4f)
                             {
                                 vec2_4 = this.attach2Point - this.attach1Point;
                                 linkVector = vec2_4.normalized;
@@ -296,7 +289,7 @@ namespace DuckGame
                                 {
                                     cornerVector = cornerVector
                                 };
-                                vec2_4 = new Vec2(vec2_3.x > 0.0 ? 1f : -1f, vec2_3.y > 0.0 ? 1f : -1f);
+                                vec2_4 = new Vec2(vec2_3.x > 0f ? 1f : -1f, vec2_3.y > 0f ? 1f : -1f);
                                 cornerVector = vec2_4.normalized;
                                 rope._corner = blockCorner;
                                 rope._belongsTo = _belongsTo;

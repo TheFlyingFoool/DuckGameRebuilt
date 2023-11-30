@@ -1,6 +1,6 @@
 /* FAudio# - C# Wrapper for FAudio
  *
- * Copyright (c) 2018-2022 Ethan Lee.
+ * Copyright (c) 2018-2023 Ethan Lee.
  *
  * This software is provided 'as-is', without any express or implied warranty.
  * In no event will the authors be held liable for any damages arising from
@@ -68,7 +68,7 @@ public static class FAudio
 		}
 		return buffer;
 	}
-	
+
 	#endregion
 
 	#region FAudio API
@@ -78,8 +78,8 @@ public static class FAudio
 	public const uint FAUDIO_TARGET_VERSION = 8;
 
 	public const uint FAUDIO_ABI_VERSION =		 0;
-	public const uint FAUDIO_MAJOR_VERSION =	22;
-	public const uint FAUDIO_MINOR_VERSION =	10;
+	public const uint FAUDIO_MAJOR_VERSION =	23;
+	public const uint FAUDIO_MINOR_VERSION =	 8;
 	public const uint FAUDIO_PATCH_VERSION =	 0;
 
 	public const uint FAUDIO_COMPILED_VERSION = (
@@ -2383,6 +2383,45 @@ public static class FAudio
 		float[][] buffer,
 		int num_samples
 	);
+
+	#endregion
+
+	#region qoa
+
+	/* Because, again, why not? */
+
+	[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+	public extern static unsafe IntPtr qoa_open_from_memory(char *bytes, uint size, int free_on_close);
+
+	[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+	private static extern unsafe IntPtr qoa_open_from_filename(
+		byte* filename
+	);
+
+	public static unsafe IntPtr qoa_open_from_filename(
+		string filename
+	) {
+		int utf8BufSize = Utf8Size(filename);
+		byte* utf8Buf = stackalloc byte[utf8BufSize];
+		return qoa_open_from_filename(
+			Utf8Encode(filename, utf8Buf, utf8BufSize)
+		);
+	}
+
+	[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+	public extern static unsafe void qoa_attributes(IntPtr qoa, out uint channels, out uint samplerate, out uint samples_per_channel_per_frame, out uint total_samples_per_channel);
+
+	[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+	public extern static unsafe uint qoa_decode_next_frame(IntPtr qoa, short *sample_data);
+
+	[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+	public extern static unsafe void qoa_seek_frame(IntPtr qoa, int frame_index);
+
+	[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+	public extern static unsafe void qoa_decode_entire(IntPtr qoa, short *sample_data);
+
+	[DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
+	public extern static unsafe void qoa_close(IntPtr qoa);
 
 	#endregion
 }

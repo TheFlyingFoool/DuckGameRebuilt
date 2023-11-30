@@ -1,12 +1,6 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.TeamsCore
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.IO;
 
 namespace DuckGame
 {
@@ -187,6 +181,29 @@ namespace DuckGame
             new Team("johnnygrey", "hats/johnnys"),
             new Team("wolfy", "hats/werewolves")
           };
+
+            Team DGRHat = Team.Deserialize(Content.path + "/DGRHat.png"); //the fabled DGR hat -NiK0
+            if (DGRHat != null)
+            {
+                Teams.AddExtraTeam(DGRHat);
+            }
+
+            //neonstuff
+            //DGRDD prefix = Duck Game Rebuilt Disabled Display
+            //just using that so dgr users can just ignore it and not display it in the hat selector -NiK0
+
+            neon1 = Team.DeserializeFromPNG(File.ReadAllBytes($"{Content.path}/neon1.png"), "DGRDD_neon1", $"{Content.path}/neon1.png");
+            if (neon1 != null)
+            {
+                Teams.AddExtraTeam(neon1);
+            }
+            neon2 = Team.DeserializeFromPNG(File.ReadAllBytes($"{Content.path}/neon2.png"), "DGRDD_neon2", $"{Content.path}/neon2.png");
+            if (neon2 != null)
+            {
+                Teams.AddExtraTeam(neon2);
+            }
         }
+        public static Team neon1;
+        public static Team neon2;
     }
 }

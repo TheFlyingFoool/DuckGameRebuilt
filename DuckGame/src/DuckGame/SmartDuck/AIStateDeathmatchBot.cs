@@ -11,7 +11,7 @@ namespace DuckGame
     {
         public override AIState Update(Duck duck, DuckAI ai)
         {
-            if (Network.InLobby() && !duck.pickedHat)
+            if (Network.inLobby && !duck.pickedHat)
             {
                 duck.pickedHat = true;
                 _state.Push(new AIStatePickHat());

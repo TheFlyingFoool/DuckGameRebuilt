@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.WireTileset
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -226,13 +219,10 @@ namespace DuckGame
                 signal.position.y -= travelSpeed;
                 overshoot = signal.travel.position.y - signal.position.y;
             }
-            else
-                overshoot = 0f;
-            signal.life -= (float)(travelSpeed / 16.0 * 0.01f);
-            if (overshoot >= 0.0 && signal.life > 0.0)
-                Emit(signal, overshoot, signal.signalType);
-            if (signal.life > 0.0)
-                return;
+            else overshoot = 0f;
+            signal.life -= (float)(travelSpeed / 16 * 0.01f);
+            if (overshoot >= 0 && signal.life > 0) Emit(signal, overshoot, signal.signalType);
+            if (signal.life > 0) return;
             _removeSignals.Add(signal);
         }
 

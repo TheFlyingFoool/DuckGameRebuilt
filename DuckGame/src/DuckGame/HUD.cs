@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.HUD
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -211,7 +204,7 @@ namespace DuckGame
                 {
                     inputChangeDisplay.life -= Maths.IncFrameTimer();
                     inputChangeDisplay.slide = Lerp.FloatSmooth(inputChangeDisplay.slide, 1f, 0.15f, 1.2f);
-                    if (inputChangeDisplay.life <= 0.0)
+                    if (inputChangeDisplay.life <= 0f)
                         inputChangeDisplay.closing = true;
                 }
             }
@@ -231,7 +224,7 @@ namespace DuckGame
                 {
                     playerChangeDisplay.life -= Maths.IncFrameTimer();
                     playerChangeDisplay.slide = Lerp.FloatSmooth(playerChangeDisplay.slide, 1f, 0.15f, 1.2f);
-                    if (playerChangeDisplay.life <= 0.0)
+                    if (playerChangeDisplay.life <= 0f)
                         playerChangeDisplay.closing = true;
                 }
             }

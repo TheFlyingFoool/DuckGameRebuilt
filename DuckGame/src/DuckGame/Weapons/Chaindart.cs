@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Chaindart
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 
 namespace DuckGame
 {
@@ -27,8 +20,29 @@ namespace DuckGame
         private ChaingunBullet _topBullet;
         private Sound _spinUp;
         private Sound _spinDown;
+        public Sound spinUp
+        {
+            get { return _spinUp; }
+            set { _spinUp = value; }
+        }
+        public Sound spinDown
+        {
+            get { return _spinDown; }
+            set { _spinDown = value; }
+        }
         private int bulletsTillRemove = 10;
         private int numHanging = 10;
+        public bool spinning
+        {
+            get
+            {
+                return _spinning;
+            }
+            set
+            {
+                _spinning = value;
+            }
+        }
         private bool _spinning;
         private float spinAmount;
         private bool burntOut;
@@ -64,12 +78,16 @@ namespace DuckGame
             flammable = 0.8f;
             physicsMaterial = PhysicsMaterial.Plastic;
             editorTooltip = "Like a chaingun, but for babies. Fires safety-capped sponge darts.";
+            _editorPreviewOffset.x = -5;
+            _editorPreviewWidth = 38;
         }
 
         public override void Initialize()
         {
             _spinUp = SFX.Get("chaingunSpinUp");
             _spinDown = SFX.Get("chaingunSpinDown");
+            _spinUp.saveToRecording = false;
+            _spinDown.saveToRecording = false;
             base.Initialize();
             _bullets = new ChaingunBullet(x, y, true)
             {
@@ -119,7 +137,7 @@ namespace DuckGame
                 _spinUp.Volume = 1f;
                 _spinUp.Play();
             }
-            if (_spin < 1.0)
+            if (_spin < 1f)
             {
                 _spin += 0.04f;
             }
@@ -148,23 +166,23 @@ namespace DuckGame
             if (!onFire)
                 return;
             _burnWait -= 0.01f;
-            if (_burnWait < 0.0)
+            if (_burnWait < 0f)
             {
                 Level.Add(SmallFire.New(22f, 0f, 0f, 0f, stick: this, canMultiply: false, firedFrom: this));
                 _burnWait = 1f;
             }
-            if (burnt >= 1.0)
+            if (burnt >= 1f)
                 return;
             burnt += 1f / 1000f;
         }
 
         public override void Update()
         {
-            if (!burntOut && burnt >= 1.0)
+            if (!burntOut && burnt >= 1f)
             {
                 Vec2 vec2 = Offset(new Vec2(10f, 0f));
-                if (DGRSettings.S_ParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.S_ParticleMultiplier; i++) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
-                else if (Rando.Int(DGRSettings.S_ParticleMultiplier) > 0) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
+                if (DGRSettings.ActualParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
+                else if (Rando.Float(1) < DGRSettings.ActualParticleMultiplier) Level.Add(SmallSmoke.New(vec2.x, vec2.y));
                 _onFire = false;
                 flammable = 0f;
                 burntOut = true;
@@ -202,7 +220,7 @@ namespace DuckGame
                 else
                     _spin = 0f;
                 spinAmount += _spin;
-                barrelInsertOffset = new Vec2(0f, (float)(2.0 + Math.Sin(spinAmount / 9f * 3.14f) * 2f));
+                barrelInsertOffset = new Vec2(0f, (float)(2f + Math.Sin(spinAmount / 9f * 3.14f) * 2f));
             }
             base.Update();
             if (_topBullet == null)
@@ -216,9 +234,11 @@ namespace DuckGame
         public override void Fire()
         {
             if (burnt >= 1f || burntOut)
-                SFX.Play("dartStick", 0.5f, Rando.Float(0.2f) - 0.1f);
-            else
-                base.Fire();
+            {
+                SFX.Play("dartStick", 0.5f, -0.1f + Rando.Float(0.2f), 0f, false);
+                return;
+            }
+            base.Fire();
         }
 
         protected override bool OnBurn(Vec2 firePosition, Thing litBy)
@@ -246,9 +266,9 @@ namespace DuckGame
                 _tip.flipH = graphic.flipH;
                 _tip.center = graphic.center;
                 _tip.depth = depth + 1;
-                _tip.alpha = Math.Min((float)(_barrelHeat * 1.5 / 10.0), 1f);
+                _tip.alpha = Math.Min((float)(_barrelHeat * 1.5f / 10f), 1f);
                 _tip.angle = angle;
-                Graphics.Draw(_tip, x, y);
+                Graphics.Draw(ref _tip, x, y);
                 Graphics.material = material;
             }
             if (_topBullet == null)

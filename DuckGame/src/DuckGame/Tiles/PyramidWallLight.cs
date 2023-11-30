@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.PyramidWallLight
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -34,8 +27,19 @@ namespace DuckGame
             layer = Layer.Game;
             placementLayerOverride = Layer.Blocks;
             hugWalls = WallHug.Left | WallHug.Right;
+            editorCycleType = typeof(PyramidBLight);
+            shouldbeinupdateloop = DGRSettings.AmbientParticles;
         }
-
+        public float timer;
+        public override void Update()
+        {
+            timer += 0.02f * DGRSettings.ActualParticleMultiplier;
+            if (timer >= 0.6f)
+            {
+                timer = Rando.Float(0.1f, 0.2f);
+                Level.Add(new Ember(x + Rando.Float(-4, 4), y - Rando.Float(3.5f, 6)));
+            }
+        }
         public override void Draw()
         {
             graphic.flipH = flipHorizontal;

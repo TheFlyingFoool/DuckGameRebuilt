@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -77,12 +77,12 @@ namespace Microsoft.Xna.Framework.Design
 			ITypeDescriptorContext context,
 			IDictionary propertyValues
 		) {
-			return new Color(
-                (int)propertyValues["R"],
-                (int)propertyValues["G"],
-                (int)propertyValues["B"],
-                (int)propertyValues["A"]
-            );
+			return (object) new Color(
+				(int) propertyValues["R"],
+				(int) propertyValues["G"],
+				(int) propertyValues["B"],
+				(int) propertyValues["A"]
+			);
 		}
 
 		#endregion

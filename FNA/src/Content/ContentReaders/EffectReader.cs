@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -37,14 +37,12 @@ namespace Microsoft.Xna.Framework.Content
 			Effect existingInstance
 		) {
 			int length = input.ReadInt32();
-            Effect effect = new Effect(
-                input.ContentManager.GetGraphicsDevice(),
-                input.ReadBytes(length)
-            )
-            {
-                Name = input.AssetName
-            };
-            return effect;
+			Effect effect = new Effect(
+				input.ContentManager.GetGraphicsDevice(),
+				input.ReadBytes(length)
+			);
+			effect.Name = input.AssetName;
+			return effect;
 		}
 
 		#endregion

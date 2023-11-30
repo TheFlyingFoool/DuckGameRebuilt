@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Spark
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class Spark : PhysicsParticle, IFactory
     {
@@ -26,7 +19,10 @@ namespace DuckGame
                 _sparks[_lastActiveSpark] = spark;
             }
             else
+            {
                 spark = _sparks[_lastActiveSpark];
+                spark.SkipIntratick = 2;
+            }
             _lastActiveSpark = (_lastActiveSpark + 1) % kMaxSparks;
             spark.ResetProperties();
             spark.Init(xpos, ypos, hitAngle, killSpeed);
@@ -64,16 +60,18 @@ namespace DuckGame
         public override void Update()
         {
             alpha -= _killSpeed;
-            if (alpha < 0.0)
+            if (alpha < 0)
                 Level.Remove(this);
             base.Update();
         }
 
         public override void Draw()
         {
-            Vec2 p2 = this.position + velocity.normalized * (velocity.length * 2f);
+            ParticleLerp.UpdateLerpState(this.position, SkipIntratick > 0 ? 1 : MonoMain.IntraTick, MonoMain.UpdateLerpState);
+
+            Vec2 p2 = ParticleLerp.Position + velocity.normalized * (velocity.length * 2f);
             Vec2 position;
-            Graphics.DrawLine(this.position, Level.CheckLine<Block>(this.position, p2, out position) != null ? position : p2, _color * alpha, _width, depth);
+            Graphics.DrawLine(ParticleLerp.Position, Level.CheckLine<Block>(ParticleLerp.Position, p2, out position) != null ? position : p2, _color * alpha, _width, depth);
         }
     }
 }

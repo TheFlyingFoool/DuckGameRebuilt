@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.FluidData
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public struct FluidData
     {
@@ -31,7 +24,7 @@ namespace DuckGame
         public void Mix(FluidData with)
         {
             float num1 = with.amount + amount;
-            if (with.amount > 0.0)
+            if (with.amount > 0)
             {
                 float num2 = amount / num1;
                 float num3 = with.amount / num1;

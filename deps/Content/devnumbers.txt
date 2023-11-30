@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Numbers>
+  <One>0.0</One>
+  <Two>0.0</Two>
+  <Three>0.0</Three>
+  <Four>0.0</Four>
+  <Five>0.0</Five>
+  <Six>0.0</Six>
+  <Seven>0.0</Seven>
+  <Eight>0.0</Eight>
+</Numbers>

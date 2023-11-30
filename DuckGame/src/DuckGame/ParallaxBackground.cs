@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ParallaxBackground
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -15,7 +8,7 @@ namespace DuckGame
         public float FUCKINGYOFFSET;
         public Color color = Color.White;
         public Sprite _sprite;
-        private Dictionary<int, ParallaxZone> _zones = new Dictionary<int, ParallaxZone>();
+        public Dictionary<int, ParallaxZone> _zones = new Dictionary<int, ParallaxZone>();
         private int _hRepeat = 1;
         public float xmove;
         public Rectangle scissor;
@@ -91,9 +84,9 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (scissor.width != 0.0)
+            if (scissor.width != 0)
                 layer.scissor = scissor;
-            if (position.y > 0.0)
+            if (position.y > 0)
                 position.y = 0f;
             if (restrictBottom && position.y + _sprite.texture.height < Layer.Parallax.camera.bottom)
                 position.y = Layer.Parallax.camera.bottom - _sprite.texture.height;

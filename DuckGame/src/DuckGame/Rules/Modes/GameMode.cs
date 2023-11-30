@@ -1,10 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.GameMode
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
+﻿using AddedContent.Firebreak;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -149,7 +143,7 @@ namespace DuckGame
         {
             if (!(Level.current is GameLevel) || (Level.current as GameLevel).data == null || (Level.current as GameLevel).data.metaData.workshopID == 0UL)
                 return;
-            Steam.OverlayOpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" + (Level.current as GameLevel).data.metaData.workshopID.ToString());
+            AddedContent.othello7.HelperMethods.OpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" + (Level.current as GameLevel).data.metaData.workshopID.ToString());
         }
 
         public static void Blacklist()
@@ -342,7 +336,7 @@ namespace DuckGame
                     _watch = new Stopwatch();
                 _watch.Start();
             }
-            if (Graphics.fade > 0.9f && Input.Pressed(Triggers.Start) && !Network.isActive)
+            if (Graphics.fade > 0.9f && Input.Pressed(Triggers.Start) && (!Network.isActive || Network.isFakeActive))
             {
                 if (_watch != null)
                     _watch.Stop();
@@ -406,10 +400,10 @@ namespace DuckGame
                     if (Music.finished)
                         _wait -= 0.0006f;
                     _waitFade -= 0.04f;
-                    if (_waitFade > 0.0 || !getReady || Network.isActive && Network.isClient && !Level.current.transferCompleteCalled)
+                    if (_waitFade > 0 || !getReady || Network.isActive && Network.isClient && !Level.current.transferCompleteCalled)
                         return;
                     _waitSpawn -= 0.06f;
-                    if (_waitSpawn <= 0.0)
+                    if (_waitSpawn <= 0)
                     {
                         if (Network.isServer && _pendingSpawns == null)
                             _pendingSpawns = AssignSpawns();
@@ -430,6 +424,7 @@ namespace DuckGame
                             {
                                 dugg = pendingSpawn
                             });
+                            SFX.DontSave = 1;
                             SFX.Play("pullPin", 0.7f);
                             if (pendingSpawn.isServerForObject && !_editorTestMode)
                             {
@@ -531,7 +526,7 @@ namespace DuckGame
                         else if (!_started)
                         {
                             _waitAfterSpawn -= 0.05f;
-                            if (_waitAfterSpawn <= 0.0)
+                            if (_waitAfterSpawn <= 0)
                             {
                                 ++_waitAfterSpawnDings;
                                 if (_waitAfterSpawnDings > 2)
@@ -558,7 +553,7 @@ namespace DuckGame
                         else
                         {
                             _fontFade -= 0.1f;
-                            if (_fontFade < 0.0)
+                            if (_fontFade < 0)
                                 _fontFade = 0f;
                         }
                     }
@@ -669,8 +664,8 @@ namespace DuckGame
                     }
                     if (_validityTest && _watch != null)
                     {
-                        long elapsedMilliseconds = _watch.ElapsedMilliseconds;
-                        if (frames / (_watch.ElapsedMilliseconds / 1000.0) < 30.0)
+                        //long elapsedMilliseconds = _watch.ElapsedMilliseconds; what -NiK0
+                        if (frames / (_watch.ElapsedMilliseconds / 1000) < 30)
                         {
                             DeathmatchTestDialogue.success = false;
                             DeathmatchTestDialogue.tooSlow = true;
@@ -696,6 +691,7 @@ namespace DuckGame
                             if (_doScore && !skippedLevel)
                             {
                                 _doScore = false;
+
                                 if (showdown)
                                 {
                                     if (_roundHadWinner)
@@ -718,11 +714,66 @@ namespace DuckGame
                                     Level.current = new RockIntro(nextLevel);
                                     _doScore = false;
                                 }
+
                             }
                             else
                             {
                                 _endedHighlights = false;
                                 Level.current = !TeamSelect2.partyMode || skippedLevel ? nextLevel : new DrinkRoom(nextLevel);
+                            }
+
+                            if (Network.isActive && Network.isServer && DGRSettings.SkipExcessRounds)
+                            {
+                                bool teamWon = false;
+                                int winsPerS = winsPerSet;
+                                int difference = roundsBetweenIntermission - numMatchesPlayed;
+                                int teamsWon = 0;
+                                foreach (Team team in Teams.all)
+                                {
+                                    if (team.activeProfiles.Count > 0 && team.score >= winsPerS)
+                                    {
+                                        teamWon = true;
+                                        winsPerS = team.score;
+                                    }
+                                }
+                                if (teamWon)
+                                {
+                                    foreach (Team team2 in Teams.all)
+                                    {
+                                        if (team2.activeProfiles.Count > 0 && team2.score + difference >= winsPerS)
+                                        {
+                                            teamsWon++;
+                                        }
+                                    }
+                                }
+                                if (teamsWon == 1)
+                                {
+                                    GameLevel gameLevel = new GameLevel(Deathmatch.RandomLevelString(previousLevel, "deathmatch"), 0, false, false);
+                                    previousLevel = gameLevel.level;
+                                    if (Network.isServer)
+                                    {
+                                        List<int> list = new List<int>();
+                                        foreach (Profile profile in DuckNetwork.profiles)
+                                        {
+                                            profile.ready = true;
+                                            if (profile.team != null)
+                                            {
+                                                list.Add(profile.team.score);
+                                                if (profile.connection != null)
+                                                {
+                                                    profile.ready = false;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                list.Add(0);
+                                            }
+                                        }
+                                        Send.Message(new NMTransferScores(list));
+                                        RunPostRound(false);
+                                    }
+                                    Level.current = new RockIntro(gameLevel);
+                                }
                             }
                         }
                         _switchedLevel = true;
@@ -741,7 +792,7 @@ namespace DuckGame
                 {
                     foreach (KeyValuePair<Duck, float> keyValuePair in mine.ducksOnMine)
                     {
-                        if (!keyValuePair.Key.dead && keyValuePair.Value > 5.0 && keyValuePair.Key.profile != null && (!Network.isActive || keyValuePair.Key.profile.connection == DuckNetwork.localConnection))
+                        if (!keyValuePair.Key.dead && keyValuePair.Value > 5 && keyValuePair.Key.profile != null && (!Network.isActive || keyValuePair.Key.profile.connection == DuckNetwork.localConnection))
                         {
                             Global.GiveAchievement("mine");
                             break;
@@ -853,29 +904,30 @@ namespace DuckGame
                 else if (_waitAfterSpawnDings == 3)
                     text = "";
                 float width = _font.GetWidth(text);
-                _font.Draw(text, (float)(Layer.HUD.camera.width / 2.0 - width / 2.0), (float)(Layer.HUD.camera.height / 2.0 - _font.height / 2.0), Color.White);
+                _font.Draw(text, (float)(Layer.HUD.camera.width / 2 - width / 2), (float)(Layer.HUD.camera.height / 2 - _font.height / 2), Color.White);
             }
             if (!_validityTest || _waitAfterSpawnDings <= 0 || _fontFade >= 0.5)
                 return;
             _pulse += 0.08f;
             string text1 = "WIN THE MATCH";
             float width1 = _font.GetWidth(text1);
-            _font.alpha = (float)((Math.Sin(_pulse) + 1.0) / 2.0);
-            _font.Draw(text1, (float)(Layer.HUD.camera.width / 2.0 - width1 / 2.0), (float)(Layer.HUD.camera.height - _font.height - 16.0), Color.Red);
+            _font.alpha = (float)((Math.Sin(_pulse) + 1) / 2);
+            _font.Draw(text1, (float)(Layer.HUD.camera.width / 2 - width1 / 2), (float)(Layer.HUD.camera.height - _font.height - 16), Color.Red);
         }
 
         private void drawNameDisplay()
         {
-            NameDisplayConfig config = AdvancedConfigAttribute.Get<NameDisplayConfig>();
+            NameDisplayConfig config = Marker.AdvancedConfigAttribute.Get<NameDisplayConfig>();
 
             float fontSize = config.FontSize;
             float vSpacing = config.VerticalSpacing;
             float hSpacing = config.HorizontalSpacing;
             float opacity = config.Opacity;
             float teamLineWidth = config.TeamLineWidth;
-            bool removeDeadPlayers = config.RemoveDeadPlayers;
+            NameDisplayConfig.DeadPlayerRemoval removeDeadPlayers = config.RemoveDeadPlayers;
             float xOffset = config.XOffset;
             float yOffset = config.YOffset;
+            NameDisplayConfig.ScoreShowing showScore = config.ShowScores;
 
             bool doTeams = Extensions.MultiPlayerTeamsExist() && teamLineWidth > 0;
             IEnumerable<Profile> profileList = Profiles.activeNonSpectators;
@@ -890,8 +942,14 @@ namespace DuckGame
                     Color.Orange,
                 };
 
-            if (removeDeadPlayers)
+            if (showScore != NameDisplayConfig.ScoreShowing.False)
+                profileList = profileList.OrderByDescending(x => x?.team.score);
+
+            if (removeDeadPlayers == NameDisplayConfig.DeadPlayerRemoval.True)
                 profileList = profileList.Where(x => x?.duck?.dead == false);
+
+            if (removeDeadPlayers == NameDisplayConfig.DeadPlayerRemoval.Ghost)
+                profileList = profileList.OrderByDescending(x => x?.duck?.dead == false);
 
             float xPos = xOffset + hSpacing;
             float yPos = yOffset + vSpacing;
@@ -924,20 +982,55 @@ namespace DuckGame
                 xPos += hSpacing * 2 + teamLineWidth;
             }
 
+            float longestNameWidth = 0f;
+            int highestScore = 0;
+            
+            Dictionary<Profile, Vec2> profileNameSizeMapping = new();
+            foreach (Profile prof in profileList)
+            {
+                Vec2 size = Extensions.GetStringSize(prof.name.CleanFormatting(), fontSize);
+                profileNameSizeMapping[prof] = size;
+
+                if (size.x > longestNameWidth)
+                    longestNameWidth = size.x;
+
+                if (prof.team.score > highestScore)
+                    highestScore = prof.team.score;
+            }
+
             foreach (Profile prof in profileList)
             {
                 int teamHashCode = prof.team.GetHashCode();
 
-                (float nameW, float nameH) = Extensions.GetStringSize(prof.name.CleanFormatting(), fontSize);
+                (float nameW, float nameH) = profileNameSizeMapping[prof];
                 Color duckColor = prof.persona.colorUsable * opacity;
                 Color teamColor = doTeams ? (teamColors[teamColorMapping[teamHashCode]] * opacity) : Color.Transparent;
                 Color borderColor = Color.Black * opacity;
                 float addedHeight = nameH + vSpacing;
-
-                Graphics.DrawStringOutline(prof.name, new Vec2(xPos + hSpacing + nameH, yPos), duckColor, borderColor, 1.1f, scale: fontSize);
+                bool isGhost = removeDeadPlayers == NameDisplayConfig.DeadPlayerRemoval.Ghost &&
+                               prof?.duck?.dead == true;
+                
+                Graphics.DrawStringOutline(prof.name, new Vec2(xPos + hSpacing + nameH, yPos), isGhost ? Color.DarkRed * 0.6f * opacity : duckColor, borderColor, 1.1f, scale: fontSize);
 
                 Rectangle colorBox = new(xPos, yPos, nameH, nameH - 0.5f);
                 Graphics.DrawOutlinedRect(colorBox, duckColor, borderColor, 1.1f, fontSize);
+
+                if (showScore == NameDisplayConfig.ScoreShowing.Bar)
+                {
+                    for (int i = 0; i < prof.team.score; i++)
+                    {
+                        float barPartX = xPos + nameH / 2 * (i + 1) - fontSize * (i + 1) + longestNameWidth + hSpacing * 3;
+                        float barPartY = yPos - 0.5f;
+                        Graphics.DrawOutlinedRect(new Rectangle(barPartX, barPartY, nameH / 2, nameH + 0.5f), duckColor, borderColor, 1.1f, fontSize);
+                    }
+                }
+                else if (showScore == NameDisplayConfig.ScoreShowing.Value)
+                {
+                    float scoreTextPos = xPos + hSpacing * 3 + nameH + longestNameWidth;
+                    string scoreText = $"{prof.team.score}";
+                    
+                    Graphics.DrawStringOutline(scoreText, new Vec2(scoreTextPos, yPos), duckColor, borderColor, 1.1f, scale: fontSize);
+                }
 
                 if (doTeams)
                 {

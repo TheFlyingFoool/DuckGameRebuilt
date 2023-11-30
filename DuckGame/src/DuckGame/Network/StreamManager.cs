@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.StreamManager
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -81,7 +74,7 @@ namespace DuckGame
 
         public void LogPing(float pingVal)
         {
-            if (pingVal < 0.0)
+            if (pingVal < 0)
                 pingVal = 0f;
             _previousPings[_currentPing % 32] = pingVal;
             ++_currentPing;
@@ -172,7 +165,7 @@ namespace DuckGame
                 foreach (NetMessage unreliableMessage in _unreliableMessages)
                 {
                     unreliableMessage.timeout -= Maths.IncFrameTimer();
-                    if (unreliableMessage.timeout <= 0.0)
+                    if (unreliableMessage.timeout <= 0)
                         netMessageList.Add(unreliableMessage);
                 }
                 foreach (NetMessage m in netMessageList)
@@ -199,8 +192,10 @@ namespace DuckGame
 
         public uint GetExistingReceivedReliableMessageSize(ushort pMessageOrder)
         {
+            Main.SpecialCode2 = "hyp 1";
             uint reliableMessageSize;
             _previousReliableMessageSizes.TryGetValue(pMessageOrder, out reliableMessageSize);
+            Main.SpecialCode2 = "hyp 2";
             return reliableMessageSize;
         }
 
@@ -426,7 +421,7 @@ namespace DuckGame
                     NetMessage orderedPacket = _orderedPackets[index];
                     orderedPacket.timeout += Maths.IncFrameTimer();
                     ushort expectedReliableOrder;
-                    if (orderedPacket.timeout > 2.0 && orderedPacket.timeout < 3.0)
+                    if (orderedPacket.timeout > 2 && orderedPacket.timeout < 3)
                     {
                         orderedPacket.timeout = 1000f;
                         string[] strArray = new string[7]
@@ -601,7 +596,7 @@ namespace DuckGame
                             // DevConsole.Log("Sending unacknowledged " + unacknowledgedMessage.GetType().Name);
                             if (unacknowledgedMessage.priority != NetMessagePriority.Urgent || unacknowledgedMessage.timesRetransmitted >= 2)
                             {
-                                int num = (int)(MathHelper.Clamp(ping, 0.064f, 1f) * 60.0) + 1;
+                                int num = (int)(MathHelper.Clamp(ping, 0.064f, 1f) * 60) + 1;
                                 if (unacknowledgedMessage.serializedData.lengthInBytes > 500)
                                     num += 30;
                                 if (unacknowledgedMessage.lastTransmitted + num > Graphics.frame)

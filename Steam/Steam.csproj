@@ -130,7 +130,7 @@
     <Compile Include="src\WorkshopResultStatistic.cs" />
     <Compile Include="src\WorkshopSortOrder.cs" />
     <Compile Include="src\WorkshopType.cs" />
-    <Compile Include="src\_.cs" />
+    <Compile Include="src\SteamHelper.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

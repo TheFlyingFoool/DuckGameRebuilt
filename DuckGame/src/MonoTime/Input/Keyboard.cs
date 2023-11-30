@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Keyboard
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +14,19 @@ namespace DuckGame
             TextInputEXT.TextInput += new Action<char>(FNACharEnteredHandler);
             if (Environment.GetEnvironmentVariable("FNADROID") != "1")
                 TextInputEXT.StartTextInput();
+
+          
         }
+        public static Keys[] KeyTypes = (Keys[])Enum.GetValues(typeof(Keys));
         private static KeyboardState _keyState;
         private static KeyboardState _keyStatePrev;
+        public static KeyboardState KeyState => _keyState;
+        public static KeyboardState KeyStatePrev => _keyStatePrev;
         private static bool _keyboardPress = false;
         private static int _lastKeyCount = 0;
         private static int _flipper = 0;
+
+        public static string KeyString { get => keyString; set => keyString = value; }
         public static string keyString = "";
         private bool _fakeDisconnect;
         private Dictionary<int, string> _triggerNames;
@@ -41,7 +41,7 @@ namespace DuckGame
         private static Thing _registerSetThing;
         private static bool _registerLock = false;
         //private static int _currentNote = 0;
-
+        
         public static bool NothingPressed() => _keyState.GetPressedKeys().Length == 0 && _keyStatePrev.GetPressedKeys().Length == 0;
 
         public override bool isConnected => !_fakeDisconnect;
@@ -59,7 +59,7 @@ namespace DuckGame
             if (_triggerNames == null)
             {
                 _triggerNames = new Dictionary<int, string>();
-                foreach (Keys key in Enum.GetValues(typeof(Keys)).Cast<Keys>())
+                foreach (Keys key in KeyTypes)
                 {
                     char ch = KeyToChar(key);
                     if (ch == ' ')
@@ -190,7 +190,7 @@ namespace DuckGame
             _triggerImages[9999] = new Sprite("buttons/keyboard/arrows");
             _triggerImages[9998] = new Sprite("buttons/keyboard/wasd");
             _triggerImages[int.MaxValue] = new Sprite("buttons/keyboard/key");
-            foreach (Keys key1 in Enum.GetValues(typeof(Keys)).Cast<Keys>())
+            foreach (Keys key1 in KeyTypes)
             {
                 char key2 = KeyToChar(key1);
                 if (key2 == ' ')
@@ -733,7 +733,7 @@ namespace DuckGame
                 _lastKeyCount = num;
                 updateKeyboardString();
                 _flipper = 1;
-                if (_registerLock && (_registerSetThing == null || _registerSetThing.removeFromLevel || _registerSetThing.owner == null || DevConsole.open || DuckNetwork.core.enteringText))
+                if (_registerLock && (_registerSetThing == null || _registerSetThing.removeFromLevel || _registerSetThing.owner == null || DevConsole.open || DuckNetwork.core.enteringText || !LockMovementQueue.Empty))
                 {
                     _registerLock = false;
                     //Keyboard._currentNote = 0;
@@ -746,7 +746,7 @@ namespace DuckGame
             ignoreCore = true;
             if (_repeat)
             {
-                foreach (Keys keys in Enum.GetValues(typeof(Keys)).Cast<Keys>())
+                foreach (Keys keys in KeyTypes)
                 {
                     Keys k = keys;
                     if (MapPressed((int)k, false) && (k < Keys.F1 || k > Keys.F12) && _repeatingKeys.FirstOrDefault(x => x.key == k) == null)
@@ -761,9 +761,9 @@ namespace DuckGame
                 {
                     repeatingKey.repeatTime -= 0.1f;
                     bool flag = MapDown((int)repeatingKey.key, false);
-                    if (flag && repeatingKey.repeatTime < 0.0)
+                    if (flag && repeatingKey.repeatTime < 0)
                         _repeatList.Add(repeatingKey.key);
-                    if (repeatingKey.repeatTime <= 0.0 & flag)
+                    if (repeatingKey.repeatTime <= 0 & flag)
                         repeatingKey.repeatTime = 0.25f;
                     if (!flag)
                         repeatKeyList.Add(repeatingKey);
@@ -903,7 +903,7 @@ namespace DuckGame
 
         public static void IMECharEnteredHandler(object sender, CharacterEventArgs e)
         {
-            keyString = e.Character != '　' ? keyString + e.Character.ToString() : keyString + " ";
+            KeyString = e.Character != '　' ? KeyString + e.Character.ToString() : KeyString + " ";
             ignoreEnter = 4;
         }
 
@@ -912,9 +912,9 @@ namespace DuckGame
             if (!e.ExtendedKey)
                 return;
             if (e.Character == '　')
-                keyString += " ";
+                KeyString += " ";
             else
-                keyString += e.Character.ToString();
+                KeyString += e.Character.ToString();
         }
         public static List<char> TextInputCharacters = new List<char>(FNAPlatform.TextInputCharacters);
         public static void FNACharEnteredHandler(char c) // FNA SDL call back for key char pressed sht
@@ -923,14 +923,14 @@ namespace DuckGame
             {
                 if (c == '\b') // Keys.Back
                 {
-                    if (keyString.Length > 0)
+                    if (KeyString.Length > 0)
                     {
-                        keyString = keyString.Remove(keyString.Length - 1, 1);
+                        KeyString = KeyString.Remove(KeyString.Length - 1, 1);
                     }
                 }
                 return;
             }
-            keyString += c.ToString();
+            KeyString += c.ToString();
         }
 
         private void updateKeyboardString() // old way to get keyboard inputs, idk maby implementing it optionally? idk man
@@ -1027,7 +1027,7 @@ namespace DuckGame
 
         public override bool MapPressed(int mapping, bool any = false)
         {
-            if (!ignoreCore && (DevConsole.open || DuckNetwork.enteringText || Editor.enteringText))
+            if (!ignoreCore && (DevConsole.open || DuckNetwork.enteringText || Editor.enteringText || !LockMovementQueue.Empty))
                 return false;
             Keys key = (Keys)mapping;
             return Pressed(key, any) || _repeatList.Contains(key);
@@ -1052,7 +1052,7 @@ namespace DuckGame
             return _keyState.IsKeyDown((Microsoft.Xna.Framework.Input.Keys)key) && !_keyStatePrev.IsKeyDown((Microsoft.Xna.Framework.Input.Keys)key) || _repeatList.Contains(key);
         }
 
-        public override bool MapReleased(int mapping) => (ignoreCore || !DevConsole.open && !DuckNetwork.enteringText && !Editor.enteringText) && Released((Keys)mapping);
+        public override bool MapReleased(int mapping) => (ignoreCore || !DevConsole.open && !DuckNetwork.enteringText && !Editor.enteringText && LockMovementQueue.Empty) && Released((Keys)mapping);
 
         public static bool Released(Keys key)
         {
@@ -1069,7 +1069,7 @@ namespace DuckGame
             return !_keyState.IsKeyDown((Microsoft.Xna.Framework.Input.Keys)key) && _keyStatePrev.IsKeyDown((Microsoft.Xna.Framework.Input.Keys)key);
         }
 
-        public override bool MapDown(int mapping, bool any = false) => (ignoreCore || !DevConsole.open && !DuckNetwork.enteringText && !Editor.enteringText) && Down((Keys)mapping);
+        public override bool MapDown(int mapping, bool any = false) => (ignoreCore || !DevConsole.open && !DuckNetwork.enteringText && !Editor.enteringText && LockMovementQueue.Empty) && Down((Keys)mapping);
 
         public static bool control => Down(Keys.LeftControl) || Down(Keys.RightControl);
 

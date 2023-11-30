@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.NatureBackground
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Background|Parallax")]
     [BaggedProperty("isInDemo", true)]
@@ -26,6 +19,7 @@ namespace DuckGame
             layer = Layer.Foreground;
             _visibleInGame = false;
             _editorName = "Nature BG";
+            editorCycleType = typeof(NatureBackgroundNight);
         }
 
         public override void Initialize()
@@ -160,7 +154,27 @@ namespace DuckGame
             }
         }
 
-        public override void Update() => base.Update();
+        public override void Update()
+        {
+            if (GameLevel.rainwind != 0)
+            {
+                float mult = GameLevel.rainwind * 0.3f;
+
+                if (mult > 0) mult += 0.5f;
+                else if (mult < 0) mult -= 0.5f;
+
+                //DevConsole.Log(mult);
+
+                float f1 = 0.72f * mult;
+                float f2 = 0.82f * mult;
+                _parallax._zones[6].speed = f1;
+                _parallax._zones[5].speed = f1;
+                _parallax._zones[8].speed = f2;//6 5 8 4 7
+                //_parallax._zones[4].speed = f2; removed this -NiK0
+                _parallax._zones[7].speed = 0.91f * mult;
+            }
+            base.Update();
+        }
 
         public override void Terminate() => Level.Remove(_parallax);
     }

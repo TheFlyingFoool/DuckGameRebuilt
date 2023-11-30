@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Plug
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -70,19 +63,19 @@ namespace DuckGame
             bool flag2 = !_allowMovement && Input.Down(Triggers.Select);
             if (_lines.Count > 0 && _currentLine == "")
             {
-                int num = _waitAfterLine <= 0.0 ? 1 : 0;
+                int num = _waitAfterLine <= 0f ? 1 : 0;
                 _waitAfterLine -= 0.045f;
                 if (flag2)
                     _waitAfterLine -= 0.045f;
                 if (killSkip)
                     _waitAfterLine -= 0.1f;
                 _talkMove += 0.75f;
-                if (_talkMove > 1.0)
+                if (_talkMove > 1f)
                 {
                     frame = 0;
                     _talkMove = 0f;
                 }
-                if (num == 0 && _waitAfterLine <= 0.0)
+                if (num == 0 && _waitAfterLine <= 0f)
                     HUD.AddCornerMessage(HUDCorner.BottomRight, "@SELECT@CONTINUE");
                 if (_lineProgress.Count == 0 || Input.Pressed(Triggers.Select))
                 {
@@ -99,12 +92,12 @@ namespace DuckGame
                 _waitLetter -= 0.8f;
                 if (flag2)
                     _waitLetter -= 0.8f;
-                if (_waitLetter >= 0.0)
+                if (_waitLetter >= 0f)
                     return;
                 _talkMove += 0.75f;
-                if (_talkMove > 1.0)
+                if (_talkMove > 1f)
                 {
-                    frame = _currentLine[0] == ' ' || frame != 1 || _extraWait > 0.0 ? 1 : 2;
+                    frame = _currentLine[0] == ' ' || frame != 1 || _extraWait > 0f ? 1 : 2;
                     _talkMove = 0f;
                 }
                 _waitLetter = 1f;
@@ -250,7 +243,7 @@ namespace DuckGame
             else
             {
                 _talkMove += 0.75f;
-                if (_talkMove <= 1.0)
+                if (_talkMove <= 1f)
                     return;
                 frame = 0;
                 _talkMove = 0f;
@@ -260,7 +253,7 @@ namespace DuckGame
         public static void Draw()
         {
             Initialize();
-            Vec2 vec2_1 = new Vec2((float)(100.0 * (1.0 - _chancyLerp)), (float)(100.0 * (1.0 - _chancyLerp) - 4.0));
+            Vec2 vec2_1 = new Vec2((float)(100f * (1f - _chancyLerp)), (float)(100f * (1f - _chancyLerp) - 4f));
             Vec2 vec2_2 = new Vec2(280f, 30f);
             Vec2 vec2_3 = new Vec2(20f, 132f) + vec2_1;
             int num = 0;
@@ -268,7 +261,7 @@ namespace DuckGame
             {
                 float width = _font.GetWidth(_lineProgress[index1].text);
                 float y = vec2_3.y + 2f + num * 9;
-                float x = (float)(vec2_3.x + vec2_2.x / 2.0 - width / 2.0);
+                float x = (float)(vec2_3.x + vec2_2.x / 2f - width / 2f);
                 for (int index2 = _lineProgress[index1].segments.Count - 1; index2 >= 0; --index2)
                 {
                     _font.Draw(_lineProgress[index1].segments[index2].text, new Vec2(x, y), _lineProgress[index1].segments[index2].color, (Depth)0.98f);

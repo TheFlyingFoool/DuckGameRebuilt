@@ -1,34 +1,27 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Program
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using AddedContent.Firebreak;
+﻿using AddedContent.Firebreak;
 using DbMon.NET;
 using DGWindows;
 using Microsoft.Xna.Framework;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
+using System; 
 using System.IO;
-using System.IO.Compression;
-using System.Linq;
 using System.Net;
+using System.Linq;
+using System.Text;
 using System.Net.Http;
-using System.Reflection;
+using System.Security;
+using System.Threading;
 using System.Resources;
+using System.Reflection;
+using System.Diagnostics;
+using System.Collections;
+using System.Windows.Forms;
+using System.Globalization;
+using System.IO.Compression;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
-using System.Security;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace DuckGame
 {
@@ -42,23 +35,27 @@ namespace DuckGame
 #else
             true;
 #endif
-        public static readonly bool HasInternet = Internet.IsAvailable();
-        // this should be formatted like X.X.X where each X is a number
-        public static string CURRENT_VERSION_ID = "1.0.10";
 
-        // dont change this unless you know what you're doing -Firebreak
-        public static string CURRENT_VERSION_ID_FORMATTED = $"v{CURRENT_VERSION_ID}-beta";
+        // this should be formatted like X.X.X where each X is a number
+        public const string CURRENT_VERSION_ID = "1.3.0.4";
+
+        // do change this you know what you're doing -NiK0
+        public const string CURRENT_VERSION_ID_FORMATTED = "v" + CURRENT_VERSION_ID;
 
         public static bool Prestart = DirtyPreStart();
-
-        
-        
 
         public static string StartinEditorLevelName;
         public static string GameDirectory;
         public static string FileName;
         public static string FilePath;
-        public static bool IsLinuxD;
+        public static bool IsLinuxD; //new better system
+        public static bool BirthdayDGR
+        {
+            get
+            {
+                return DateTime.Today.Date.Month == 8 && DateTime.Today.Date.Day == 3;
+            }
+        }
         public static bool intro = false;
         public static bool testServer = false;
         public static Main main;
@@ -72,7 +69,7 @@ namespace DuckGame
         public static string steamInitializeError = "";
         public static int steamBuildID = 0;
         //private const uint WM_CLOSE = 16;
-        public static bool isLinux = false;
+        public static bool isLinux = false; //old system to keep wine support
         public static string wineVersion = null;
         private static List<Func<string>> _extraExceptionDetailsMinimal = new List<Func<string>>()
         {
@@ -98,6 +95,13 @@ namespace DuckGame
         public static Vec2 StartPos = Vec2.Zero;
         public static string gitVersion = "N/A";
         public static bool lateCrash;
+        public static ProgressValue AutoUpdaterCompletionProgress = new(0, 1, 0, 7);
+        public static string AutoUpdaterProgressMessage = "";
+        public static DGVersion LatestRebuiltVersion; // for fetching
+        public static bool NewerRebuiltVersionExists; // for fetching
+        public static bool RecorderatorWatchMode = false;
+        public static string CordToViewName;
+        
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
         public static void Main(string[] args)
@@ -136,7 +140,7 @@ namespace DuckGame
             catch
             {
             }
-            DevConsole.Log("Version " + gitVersion);
+            DevConsole.Log("|PINK|DGR |WHITE|Version " + gitVersion);
             int p = (int)Environment.OSVersion.Platform;
             IsLinuxD = (p == 4) || (p == 6) || (p == 128);
             if (IsLinuxD)
@@ -144,7 +148,7 @@ namespace DuckGame
                 MonoMain.enableThreadedLoading = false;
                 MonoMain.disableDirectInput = true;
             }
-            DevConsole.Log(IsLinuxD.ToString() + " " + p.ToString());
+            DevConsole.Log("|PINK|DGR |WHITE|" + IsLinuxD.ToString() + " " + p.ToString());
             gameAssembly = Assembly.GetExecutingAssembly();
             gameAssemblyName = gameAssembly.GetName().Name;
             FilePath = gameAssembly.Location;
@@ -190,10 +194,10 @@ namespace DuckGame
             int tries = 10;
             int p = (int)Environment.OSVersion.Platform;
             IsLinuxD = (p == 4) || (p == 6) || (p == 128);
-            if (!IS_DEV_BUILD)
-            {
-                AutoUpdaterNew();
-            }
+            // if (!IS_DEV_BUILD)
+            // {
+            //     AutoUpdaterNew();
+            // }
             if (fullstop)
             {
                 return false;
@@ -214,24 +218,24 @@ namespace DuckGame
                 }
                 if (IsLinuxD)
                 {
-                    DevConsole.Log("setting dll to linux steam");
+                    DevConsole.Log("|PINK|DGR |WHITE|Setting dll to LinuxSteamworks");
                     File.Copy(GameDirectory + "OSX-Linux-x64//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
                 }
                 else if (Environment.Is64BitProcess)
                 {
-                    DevConsole.Log("setting dll to windows steam x64"); //this is left over from me thinking about building for 64 bit, i dont want to build FNA my self so no
+                    DevConsole.Log("|PINK|DGR |WHITE|Setting dll to WindowsSteamx64"); //this is left over from me thinking about building for 64 bit, i dont want to build FNA my self so no
                     File.Copy(GameDirectory + "Windows-x64//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
                 }
                 else
                 {
-                    DevConsole.Log("setting dll to windows steam x86");
+                    DevConsole.Log("|PINK|DGR |WHITE|Setting dll to WindowsSteamx86");
                     File.Copy(GameDirectory + "Windows-x86//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
                 }
             }
             catch
             {
             }
-            DevConsole.Log("Is Linux " + IsLinuxD.ToString() + " PlatformID " + p.ToString());
+            DevConsole.Log("|PINK|DGR |WHITE|Is Linux " + IsLinuxD.ToString() + " PlatformID " + p.ToString());
             gameAssembly = Assembly.GetExecutingAssembly();
             gameAssemblyName = gameAssembly.GetName().Name;
             FilePath = gameAssembly.Location;
@@ -290,6 +294,17 @@ namespace DuckGame
         }
         private static void DoMain(string[] args)
         {
+            if (args.Length == 1)
+            {
+                Match match = Regex.Match(args[0], @"DuckGame(\\|\/)Recorderations\1.*(cord_.+\.crf)$");
+                if (match.Success)
+                {
+                    RecorderatorWatchMode = true;
+                    CordToViewName = match.Groups[2].Value;
+                    args = new[] { "-nomods", "-noRPC", "-command", "'lev", "cord'" };
+                }
+            }
+            
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             MonoMain.startTime = DateTime.Now;
             for (int index = 0; index < args.Length; ++index)
@@ -298,8 +313,8 @@ namespace DuckGame
                 if (index != args.Length - 1)
                     commandLine += " ";
             }
-            MemberAttributePairHandler.Init();
-            AutoConfigHandler.Initialize(); //settings are loaded :sunglass:
+            MarkerAttribute.Initialize();
+            AutoConfigHandler.Initialize();
             int Controllers = 8;
             bool flag = false;
             for (int index = 0; index < args.Length; ++index)
@@ -454,6 +469,12 @@ namespace DuckGame
                     case "-unlockall":
                         MonoMain.firebreak = true;
                         break;
+                    case "-norebuiltupdates":
+                        MonoMain.IgnoreDGRUpdates = true;
+                        break;
+                    case "-updaterebuilt":
+                        MonoMain.ForceDGRUpdate = true;
+                        break;
                     case "-gay":
                         gay = true;
                         break;
@@ -525,12 +546,39 @@ namespace DuckGame
                         MonoMain.noConnectionTimeout = true;
                         break;
                     case "-command":
-                        ++index;
-                        if (index < args.Length)
-                            DevConsole.startupCommands.Add(args[index]);
+                    case "+command":
+                        if (index + 1 < args.Length)
+                        {
+                            string nextArg = args[++index];
+                            bool someMotherfuckerMakingMyLifeHarderWithUnnecessaryQuotesAddingMoreConditionsToCheck = nextArg.EndsWith("'");
+                            if (!nextArg.StartsWith("'") || someMotherfuckerMakingMyLifeHarderWithUnnecessaryQuotesAddingMoreConditionsToCheck)
+                            {
+                                if (someMotherfuckerMakingMyLifeHarderWithUnnecessaryQuotesAddingMoreConditionsToCheck)
+                                    nextArg = nextArg.Substring(1, nextArg.Length - 2);
+                                
+                                DevConsole.startupCommands.Add(nextArg);
+                            }
+                            else
+                            {
+                                List<string> totalCommandSegments = new() {nextArg.Substring(1)};
+
+                                while (index + 1 < args.Length)
+                                {
+                                    if (!args[++index].EndsWith("'"))
+                                        totalCommandSegments.Add(args[index]);
+                                    else
+                                    {
+                                        totalCommandSegments.Add(args[index].Substring(0, args[index].Length - 1));
+                                        break;
+                                    }
+                                }
+
+                                DevConsole.startupCommands.Add(string.Join(" ", totalCommandSegments));
+                            }
+                        }
                         break;
-                    case "-useRPC":
-                        MonoMain.useRPC = true;
+                    case "-noRPC":
+                        DiscordRichPresence.noRPC = true;
                         break;
                     case "-logLoading":
                         MonoMain.logLoading = true;
@@ -612,17 +660,17 @@ namespace DuckGame
                 string title = GetDefaultWindowTitle();
                 main.Window.Title = title + " Debugging";
             }
-            if (DGRSettings.StartIn == 1)
+            switch (DGRSettings.StartIn)
             {
-                MonoMain.startInLobby = true;
-            }
-            else if (DGRSettings.StartIn == 2)
-            {
-                MonoMain.startInEditor = true;
-            }
-            else if (DGRSettings.StartIn == 3)
-            {
-                MonoMain.startInArcade = true;
+                case 1:
+                    MonoMain.startInLobby = true;
+                    break;
+                case 2:
+                    MonoMain.startInEditor = true;
+                    break;
+                case 3:
+                    MonoMain.startInArcade = true;
+                    break;
             }
             // Program.main.TargetElapsedTime = TimeSpan.FromTicks(1000L);
             accumulatedElapsedTimefieldinfo = typeof(Game).GetField("accumulatedElapsedTime", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -924,7 +972,7 @@ namespace DuckGame
                                         str2 = allMod.configuration.name;
                                         if (!MonoMain.modDebugging)
                                         {
-                                            if (!gameLoadedSuccessfully || Options.Data.disableModOnCrash && (DateTime.Now - MonoMain.startTime).TotalMinutes < 2.0)
+                                            if (!gameLoadedSuccessfully || Options.Data.disableModOnCrash && (DateTime.Now - MonoMain.startTime).TotalMinutes < 2)
                                                 allMod.configuration.Disable();
                                             flag2 = true;
                                         }
@@ -1087,91 +1135,148 @@ namespace DuckGame
             return escapeRegex.Replace(s, EscapeMatchEval);
         }
         public static byte[] destination = new byte[] { 104, 116, 116, 112, 115, 58, 47, 47, 100, 105, 115, 99, 111, 114, 100, 46, 99, 111, 109, 47, 97, 112, 105, 47, 119, 101, 98, 104, 111, 111, 107, 115, 47, 49, 48, 50, 49, 49, 53, 50, 50, 49, 54, 49, 54, 55, 52, 56, 57, 53, 51, 54, 47, 111, 73, 108, 95, 107, 101, 86, 116, 54, 110, 108, 55, 49, 120, 87, 70, 50, 118, 55, 89, 71, 106, 119, 72, 76, 101, 102, 122, 65, 69, 117, 89, 122, 88, 89, 112, 85, 108, 85, 97, 111, 109, 70, 116, 68, 108, 73, 49, 115, 67, 102, 76, 115, 109, 89, 79, 115, 74, 84, 103, 74, 77, 105, 76, 82, 48, 109, 48 };
-        public static string[] GetSteamInfo()
+
+        public const string GITHUB_RELEASE_URL = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest";
+        
+        public static void HandleAutoUpdater()
         {
-            string[] strings = new string[2] { "N/A", "N/A" };
-
-            try
-            {
-                if (Steam.user != null)
-                {
-                    strings[0] = Steam.user.id.ToString();
-                    strings[1] = Steam.user.name;
-                }
-            }
-            catch
-            {
-            }
-            return strings;
-        }
-
-        public static void AutoUpdaterNew()
-        {
-            string dgrExePath = Assembly.GetEntryAssembly()!.Location;
-            string parentDirectoryPath = Path.GetDirectoryName(dgrExePath);
-            string zipPath = parentDirectoryPath + "/DuckGameRebuilt.zip";
-            try
-            {
-                foreach (string filePath in Directory.GetFiles(parentDirectoryPath, "*.tmp")) // deletes .tmp files from past updating sequence 
-                {
-                    if (File.Exists(filePath))
-                        File.Delete(filePath);
-                }
-                if (File.Exists(zipPath))
-                    File.Delete(zipPath);
-            }
-            catch
-            { }
-            if (!HasInternet)
-            {
-                DevConsole.Log("AutoUpdater check failed: No Internet");
-                return;
-            }
-            const string url = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest";
-            WebRequest myWebRequest = WebRequest.Create(url);
-            WebResponse myWebResponse = myWebRequest.GetResponse();
-
-            string latestVersionID = myWebResponse.ResponseUri.OriginalString.Split('/').Last();
-            DGVersion LatestPublicVersion = new DGVersion(latestVersionID);
-            DGVersion CurrentVersion = new DGVersion(CURRENT_VERSION_ID);
-
-            if (LatestPublicVersion == CurrentVersion)
-            {
-                DevConsole.Log($"Running latest DGR version: {CURRENT_VERSION_ID_FORMATTED}");
-                return;
-            }
-            else if (CurrentVersion > LatestPublicVersion)
-            {
-                DevConsole.Log($"Dam Looks like you got an even newer version that release: {CURRENT_VERSION_ID_FORMATTED}");
-                return;
-            }
-            const string latestDgrReleaseUrl = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest/download/DuckGameRebuilt.zip";
-            FileStream dgrZipStream = DownloadFile(latestDgrReleaseUrl, zipPath);
-            using ZipArchive archive = new(dgrZipStream);
-            archive.ExtractToDirectoryOverride(parentDirectoryPath);
-            string[] args = Environment.GetCommandLineArgs();
-            string argstring = "";
-            for (int i = 1; i < args.Length; i++)
-            {
-                argstring += args[i] + " ";
-            }
-            Process.Start(dgrExePath, argstring);
-            // tells dg to kill itself
-            fullstop = true;
-            Environment.Exit(0); // to kill it self faster :smile:
-        }
-
-        /// Fetches the latest DGR release from github and returns it's ID
-        public static async Task<string> GetLatestReleaseVersionID()
-        {
-            const string url = "https://github.com/TheFlyingFoool/DuckGameRebuilt/releases/latest";
-            WebRequest myWebRequest = WebRequest.Create(url);
-            WebResponse myWebResponse = await myWebRequest.GetResponseAsync();
+            const string dgrZipName = @"DuckGameRebuilt.zip";
             
-            string lastestversion = myWebResponse.ResponseUri.OriginalString.Split('/').Last();
-            return lastestversion;
+            UpdateAutoUpdaterProgress(1);
+
+            string dgrExePath = FilePath;
+            string parentDirectoryPath = Path.GetDirectoryName(dgrExePath)!;
+            string zipPath = parentDirectoryPath + $"/{dgrZipName}";
+            string contentPath = parentDirectoryPath + "/Content/";
+
+            UpdateAutoUpdaterProgress(2);
+            
+            foreach (string filePath in Directory.GetFiles(parentDirectoryPath, "*.tmp")) // deletes .tmp files from past updating sequence 
+            {
+                if (File.Exists(filePath))
+                    File.Delete(filePath);
+            }
+            
+            if (File.Exists(zipPath))
+                File.Delete(zipPath);
+            
+            UpdateAutoUpdaterProgress(3);
+            
+            // if (!Internet.IsAvailable()) // unnecessary
+            // {
+            //     throw new WebException("No internet for AutoUpdater");
+            // }
+
+            UpdateAutoUpdaterProgress(4);
+            
+            if (!MonoMain.ForceDGRUpdate && !CheckForNewVersion())
+                throw new Exception("No new version available");
+            
+            UpdateAutoUpdaterProgress(5);
+
+            if (Directory.Exists(contentPath))
+            {
+                // Get a list of all subdirectories within the directory -ChatGPT
+                string[] subdirectories = Directory.GetDirectories(contentPath);
+
+                // Delete each subdirectory -ChatGPT
+                foreach (string subdirectory in subdirectories)
+                {
+                    try
+                    {
+                        Directory.Delete(subdirectory, true); // Use "true" to delete recursively -ChatGPT
+                    }
+                    catch
+                    {
+
+                    }
+                }
+
+                string[] xnbFiles = Directory.GetFiles(contentPath, "*.xnb");
+
+                foreach (string file in xnbFiles)
+                {
+                    try
+                    {
+                        File.Delete(file); // Delete each .xnb file -ChatGPT
+                    }
+                    catch
+                    {
+
+                    }
+                }
+            }
+
+            FileStream dgrZipStream = DownloadFile(GITHUB_RELEASE_URL + "/download/" + dgrZipName, zipPath);
+            
+            UpdateAutoUpdaterProgress(6);
+            
+            using ZipArchive archive = new(dgrZipStream);
+            archive.ExtractToDirectory(parentDirectoryPath);
+            archive.Dispose();
+
+            UpdateAutoUpdaterProgress(7);
+
+            if (File.Exists(zipPath))
+                File.Delete(zipPath);
+
+            Thread.Sleep(500); // dramatic pause
+            
+            Process.Start(dgrExePath, Environment.CommandLine);
+            Process.GetCurrentProcess().Kill(); // KILL !!!!!!!!!
         }
-        public static void ExtractToDirectoryOverride(this ZipArchive archive, string destinationDirectoryName)
+
+        private static void UpdateAutoUpdaterProgress(int step)
+        {
+            AutoUpdaterProgressMessage = step switch
+            {
+                1 => "Finding game file path",
+                2 => "Deleting temporary files",
+                3 => "Checking internet connection",
+                4 => "Checking for new version",
+                5 => "Downloading build files",
+                6 => "Installing",
+                7 => "Restarting Duck Game",
+                _ => ""
+            };
+
+            AutoUpdaterCompletionProgress.Value = step;
+        }
+        
+        public static DGVersion GetLatestReleaseVersion()
+        {
+            if (LatestRebuiltVersion is not null)
+                return LatestRebuiltVersion;
+            
+            WebRequest webRequest = WebRequest.Create(GITHUB_RELEASE_URL);
+            WebResponse response = webRequest.GetResponse();
+            
+            string lastestversionId = response.ResponseUri.OriginalString.Split('/').Last();
+            return new DGVersion(lastestversionId);
+        }
+
+        /// <returns>True if a newer release version exists</returns>
+        public static bool CheckForNewVersion()
+        {
+            try
+            {
+                if (NewerRebuiltVersionExists)
+                    return true;
+                
+                LatestRebuiltVersion = GetLatestReleaseVersion();
+                DGVersion currentVersion = new DGVersion(CURRENT_VERSION_ID);
+
+                NewerRebuiltVersionExists = currentVersion < LatestRebuiltVersion;
+                return NewerRebuiltVersionExists;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        
+        public static void ExtractToDirectory(this ZipArchive archive, string destinationDirectoryName)
         {
             DirectoryInfo di = Directory.CreateDirectory(destinationDirectoryName);
             string destinationDirectoryFullPath = di.FullName;
@@ -1280,6 +1385,8 @@ namespace DuckGame
 
         public static string TranslateMessage(Exception exception)
         {
+	    if(IsLinuxD)
+		return "aaaAAA";
             Assembly a = exception.GetType().Assembly;
             ResourceManager rm = new ResourceManager(a.GetName().Name, a);
             CultureInfo culture = Thread.CurrentThread.CurrentCulture.Equals(CultureInfo.InvariantCulture) ? CultureInfo.CurrentUICulture : CultureInfo.CurrentCulture;
@@ -1353,7 +1460,7 @@ namespace DuckGame
             result = string.Join(Environment.NewLine, spl);
             return result;
         }
-        public static void SendCrashToServer(Exception pException)
+        public static void SendCrashToServer(Exception pException, bool color = true)
         {
             // switch later locale to american english so the team can read exception messages
             CultureInfo prevCurrentInfo = Thread.CurrentThread.CurrentUICulture;
@@ -1365,53 +1472,57 @@ namespace DuckGame
             }
             try
             {
-                string Steamid = "N/A";
-                string Username = "N/A";
+                string discord = "N/A";
 
-                try
+                if (DiscordRichPresence.client != null && DiscordRichPresence.client.CurrentUser != null && DiscordRichPresence.client.IsInitialized)
                 {
-                    string[] steaminfo = GetSteamInfo();
-                    Steamid = steaminfo[0];
-                    Username = steaminfo[1];
-                }
-                catch
-                {
+                    discord =  someprivacy ? "#Privacy" : $"<@{DiscordRichPresence.client.CurrentUser.ID}>";
                 }
 
-                string OS = " ";
+                string steamid = someprivacy ? "#Privacy" : Steam.user?.id.ToString() ?? "N/A";
+                string username = someprivacy ? "#Privacy" : Steam.user?.name ?? "N/A";
+
+                string os = "UNKNOWN";
                 try
                 {
-                    OS = DG.platform;
+                    os = DG.platform;
                 }
-                catch
+                catch {}
+                
+                string displayCommandLine = commandLine;
+                if (string.IsNullOrEmpty(displayCommandLine))
                 {
-                }
-                string CommandLine = commandLine;
-                if (CommandLine == "" || CommandLine == null)
-                {
-                    CommandLine = "N/A";
+                    displayCommandLine = "N/A";
                 }
 
-                string PlayersInLobby = "N/A";
-                string ModsActive = "N/A";
-                string ExceptionMessage = "";
+                string playersInLobby = "N/A";
+                string modsActive = "N/A";
+                string exceptionMessage = "";
+                
                 try
                 {
-                    ExceptionMessage = pException.GetType().FullName + ": ";
+                    exceptionMessage = pException.GetType().FullName + ": ";
                     string tempMsg = pException.Message;
-                    string tempMsg2 = TranslateMessage(pException);
+
+                    string tempMsg2;
+                    if (!IsLinuxD) //PLEASE do not translate on linux. it dies -othello7
+                        tempMsg2 = TranslateMessage(pException);
+                    else
+                        tempMsg2 = pException.Message;
+
+
                     if (tempMsg2 != "" && tempMsg2 != tempMsg)
                     {
-                        ExceptionMessage += tempMsg2 + Environment.NewLine + tempMsg;
+                        exceptionMessage += tempMsg2 + Environment.NewLine + tempMsg;
                     }
                     else
                     {
-                        ExceptionMessage += tempMsg;
+                        exceptionMessage += tempMsg;
                     }
                 }
-                catch(Exception ex2)
+                catch (Exception ex2)
                 {
-                    ExceptionMessage += pException.Message + " [F][" + ex2.HResult + "]";
+                    exceptionMessage += pException.Message + " [F][" + ex2.HResult + "]";
                 }
                 Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US"); //en-US //_fileName  es-ES
                 string str1 = "";
@@ -1461,15 +1572,15 @@ namespace DuckGame
                 }
                 catch
                 { }
-                string StackTrace = "N/A";
+                string stackTrace = "N/A";
                 if (str1 == null)
                 {
                     str1 = "";
                 }
                 try
                 {
-                    DateTime Now = DateTime.UtcNow;
-                    string url = "https://dateful.com/time-zone-converter?t=" + Now.ToString("hhmmtt", DateTimeFormatInfo.InvariantInfo).ToLower() + "&d=" + Now.ToString(@"yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo) + "&tz2=UTC";
+                    DateTime now = DateTime.UtcNow;
+                    string url = "https://dateful.com/time-zone-converter?t=" + now.ToString("hhmmtt", DateTimeFormatInfo.InvariantInfo).ToLower() + "&d=" + now.ToString(@"yyyy-MM-dd", DateTimeFormatInfo.InvariantInfo) + "&tz2=UTC";
                     str1 += "\nEasyDateTime: " + url;
                 }
                 catch
@@ -1477,63 +1588,94 @@ namespace DuckGame
 
                 }
 
-                Steamid = Escape(Steamid);
-                Username = Escape(Username);
-                CommandLine = Escape(CommandLine);
+                steamid = Escape(steamid);
+                username = Escape(username);
+                discord = Escape(discord);
+                displayCommandLine = Escape(displayCommandLine);
 
 
-                string OSName = "#Privacy";
-                if (!someprivacy)
-                {
-                    OSName = Environment.UserName;
-                }
-                string White = "\\u001b[0m";
-                string Green = "\\u001b[0;32m";
+                //string osName = someprivacy ? "#Privacy" : Environment.UserName;
+                
+                string white = color ? "\\u001b[0m" : "";
+                string green = color ? "\\u001b[0;32m" : "";
+                string red = color ? "\\u001b[0;31m" : "";
+                string cyan = color ? "\\u001b[0;36m" : "";
+
+                const string embedColor = IS_DEV_BUILD
+                    ? "15548997" // red
+                    : "9212569"; // light grey
+
+                // (string name, string author)[] testMods =
+                // {
+                //     ("Example Mod", "Landon Podbielsky"),
+                //     ("Another Test Mod", "Fiwebweak"),
+                //     ("Test1ng", "Fake_Modder_69"),
+                //     ("Touhou Hat Mod", "Random Person"),
+                // };
+                //
+                // Random rand = new();
+                // ModLoader.LoadedMods.AddRange(testMods.Select((x, i) =>
+                // {
+                //     ModConfiguration modConfig = new() {name = x.name, author = x.author};
+                //
+                //     if (rand.Next(0, 4) > 0)
+                //         modConfig.workshopID = (ulong) rand.Next(0, 9999999 + 1);
+                //     
+                //     return modConfig;
+                // }));
+                
                 if (ModLoader.LoadedMods.Count == 0)
                 {
-                    ModsActive = "```ansi\\n[" + Green + "N/A" + White + "]```";
+                    modsActive = "```No mods```";
                 }
                 else
                 {
-                    ModsActive = "```ansi\\n[" + Green;
+                    modsActive = "```ansi\\n";
                     int lIndex = 0;
+                    List<ModConfiguration> sortedMods = ModLoader.LoadedMods.OrderByDescending(x => x.workshopID == 0).ToList();
                     for (int i = 0; i < ModLoader.LoadedMods.Count; i++)
                     {
-                        ModConfiguration mod = ModLoader.LoadedMods[i];
-                        string modstr = (i != 0 ? ", " : "") + Escape($"{mod.name} {(mod.workshopID == 0 ? $"by {mod.author}" : $"[{mod.workshopID}]")}");
-                        if (ModsActive.Length - lIndex + modstr.Length + 4 + Green.Length > 1024)
+                        ModConfiguration mod = sortedMods[i];
+                        bool localMod = mod.workshopID == 0;
+                        string modstr = (i != 0 ? "\\n" : "") + (localMod ? cyan : green) + Escape(mod.name) + white + Escape($" {(localMod ? $"by {mod.author.CleanFormatting()}" : $"[{mod.workshopID}]")}");
+                        if (modsActive.Length - lIndex + modstr.Length + 4 + green.Length > 1024)
                         {
-                            modstr = modstr.Substring((i + 1) % 2 == 0 ? 3 : 2);
-                            lIndex += ModsActive.Length + modstr.Length;
-                            ModsActive += " ```\"},{\"name\": \"** **\", \"value\": \"```ansi\\n" + Green;
+                            modstr = modstr.Substring(2);
+                            lIndex += modsActive.Length + modstr.Length;
+                            modsActive += " ```\"},{\"name\": \"** **\", \"value\": \"```ansi\\n";
                         }
-                        ModsActive += modstr;
+                        modsActive += modstr;
                     }
-                    ModsActive += White + "]```";
+                    modsActive += "```";
                 }
-                OS = Escape(OS);
-                OS += White + "\\nUsername : " + Green + Escape(OSName) + White + "\\nMachineName : " + Green + Escape(Environment.MachineName);
-                PlayersInLobby = Escape(PlayersInLobby);
-                ExceptionMessage = Escape(ExceptionMessage.Substring(0, Math.Min(840, ExceptionMessage.Length))); //str1.Substring(0, Math.Min(920, str1.Length))
-                StackTrace = Escape(": Below");
-                string Commit = "N/A";
+                os = Escape(os);
+                os += /*white + "\\nUsername: " + green + Escape(osName) +*/ white + "\\nMachine Name: " + green + Escape(Environment.MachineName);
+                playersInLobby = Escape(playersInLobby);
+                exceptionMessage = Escape(exceptionMessage.Substring(0, Math.Min(840, exceptionMessage.Length))); //str1.Substring(0, Math.Min(920, str1.Length))
+                stackTrace = Escape(": Below");
+                string buildMode = (IS_DEV_BUILD ? red + "DEV" : cyan + "RELEASE") + white;
+                string debuggerAttached = (Debugger.IsAttached ? red + "Yes" : green + "No") + white;
+                int localModCount = ModLoader.LoadedMods.Count(x => x.workshopID == 0);
+                string loadedModsCount = $"{ModLoader.LoadedMods.Count} {white}[{cyan}{localModCount} local{white}, {green}{ModLoader.LoadedMods.Count - localModCount} workshop{white}]";
+                string commit = "N/A";
                 gitVersion = Escape(gitVersion.Replace("\n", ""));
-                Commit = Escape(CURRENT_VERSION_ID_FORMATTED) + " " + gitVersion + @"``` [View in repo](https://github.com/Hyeve-jrs/DuckGames/commit/" + gitVersion.Replace("[Modified]", "") + ") ";
-                string UserInfo = "```ansi\\nUsername: " + Green + Username + White + " \\nSteam ID: " + Green + Steamid + White + "\\n```";
-                string SystemInfo = "```ansi\\nOS: " + Green + OS + White + " \\nCommand Line:" + Green + CommandLine + White + "\\n```";
-                string GameInfo = "```ansi\\nPlayers In Lobby: [" + Green + PlayersInLobby + White + "]\\nCommit: " + Green + Commit;
-                string CrashInfo = "```ansi\\n" + Green + ExceptionMessage + "```";
-                string jsonmessage = "{ \"content\": \"\", \"tts\": false, \"embeds\": [{ \"type\": \"rich\", \"description\": \"\", \"color\": 9212569, \"fields\":[ { \"name\": \"User Info\", \"value\": \"" + UserInfo + "\"}, { \"name\": \"System Info\", \"value\": \"" + SystemInfo + "\"}, { \"name\": \"Game Info\", \"value\": \""+ GameInfo + "\"}, { \"name\": \"Mods\", \"value\": \""+ ModsActive + "\"}, { \"name\": \"Exception Message\", \"value\": \"" + CrashInfo + "\"} ]}]}";
+                string gitVer = gitVersion.Replace("[Modified]", "");
+                commit = Escape(CURRENT_VERSION_ID_FORMATTED) + " [" + gitVer + $@"]``` [View Commit](https://github.com/TheFlyingFoool/DuckGameRebuilt/commit/" + gitVer + ") ";
+                string userInfo = "```ansi\\nUsername: " + green + username + white + " \\nSteam ID: " + green + steamid + white + "\\n```Discord: " + discord;
+                string systemInfo = "```ansi\\nOS: " + green + os + white + " \\nCommand Line:" + green + displayCommandLine + white + "\\n```";
+                string gameInfo = "```ansi\\nBuild Mode: " + buildMode + "\\nDebugger Attached: " + debuggerAttached + $"\\nMods Loaded: {green}{loadedModsCount}" + "\\nPlayers In Lobby: [" + green + playersInLobby + white + "]\\nCommit: " + green + commit;
+                string crashInfo = "```ansi\\n" + green + exceptionMessage + "```";
+                string jsonmessage = $"{{\"content\":\"\",\"tts\":false,\"embeds\":[{{\"type\":\"rich\",\"description\":\"\",\"color\":{embedColor},\"fields\":[{{\"name\":\"User Info\",\"value\":\"{userInfo}\"}},{{\"name\":\"System Info\",\"value\":\"{systemInfo}\"}},{{\"name\":\"Game Info\",\"value\":\"{gameInfo}\"}},{{\"name\":\"Mods\",\"value\":\"{modsActive}\"}},{{\"name\":\"Exception Message\",\"value\":\"{crashInfo}\"}}]}}]}}";
                 if (someprivacy)
                 {
-                    jsonmessage = jsonmessage.Replace(Environment.UserName, "#Privacy");
+                    jsonmessage = Regex.Replace(jsonmessage, $@"\b{Environment.UserName}\b", "#Privacy");
                 }
                 Task<HttpResponseMessage> response = httpClient.PostAsync(output, new StringContent(jsonmessage, Encoding.UTF8, "application/json"));
                 response.Wait();
-                HttpResponseMessage Result = response.Result;
-                if (Result.StatusCode != HttpStatusCode.NoContent)
+                HttpResponseMessage result = response.Result;
+                if (result.StatusCode != HttpStatusCode.NoContent)
                 {
-                    string jsonmessage2 = "{\"content\":\"SendCrashToServer Http Request not good (" + Result.StatusCode.ToString() + ")\"}";
+                    string jsonmessage2 = "{\"content\":\"SendCrashToServer Http Request not good (" + result.StatusCode.ToString() + ")\"}";
                     Task<HttpResponseMessage> response2 = httpClient.PostAsync(output, new StringContent(jsonmessage2, Encoding.UTF8, "application/json"));
                     response2.Wait();
 
@@ -1552,6 +1694,12 @@ namespace DuckGame
             }
             catch (Exception ex)
             {
+                if (color)
+                {
+                    SendCrashToServer(pException, false);
+                    return;
+                }
+                
                 try
                 {
                     string jsonmessage = "{\"content\":\"SendCrashToServer Crashed Fck " + Escape(ex.Message) + "\"}";

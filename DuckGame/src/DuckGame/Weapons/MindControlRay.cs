@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.MindControlRay
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     [EditorGroup("Guns|Misc")]
     [BaggedProperty("isFatal", false)]
@@ -82,7 +75,7 @@ namespace DuckGame
             immobilizeOwner = _controlledDuck != null;
             if (isServerForObject)
             {
-                if (_beamTime > 1.0 || this.owner == null)
+                if (_beamTime > 1 || this.owner == null)
                 {
                     _beamTime = 0f;
                     _triggerHeld = false;
@@ -158,7 +151,7 @@ namespace DuckGame
             }
             _beamSound.lerpVolume = _triggerHeld ? 0.55f : 0f;
             _beamSound.Update();
-            if (_canConvert > 0.0)
+            if (_canConvert > 0)
                 _canConvert -= 0.02f;
             else
                 _canConvert = 0f;
@@ -183,7 +176,7 @@ namespace DuckGame
             else
                 _hat.angleDegrees = 0f;
             Vec2 hatPoint = DuckRig.GetHatPoint(owner._sprite.imageIndex);
-            Graphics.Draw(_hat, owner.x + hatPoint.x * owner._sprite.flipMultH, owner.y + hatPoint.y * owner._sprite.flipMultV);
+            Graphics.Draw(ref _hat, owner.x + hatPoint.x * owner._sprite.flipMultH, owner.y + hatPoint.y * owner._sprite.flipMultV);
         }
 
         public void ControlDuck(Duck d)
@@ -210,6 +203,7 @@ namespace DuckGame
             _controlledDuck.mindControl = owner.inputProfile;
             _controlledDuck.controlledBy = owner;
             immobilizeOwner = true;
+            SFX.DontSave = 1;
             SFX.Play("radioNoise", 0.8f);
             Event.Log(new MindControlEvent(responsibleProfile, d.profile));
             if (Recorder.currentRecording == null)

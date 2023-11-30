@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.RoomDefenceTurret
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-namespace DuckGame
+﻿namespace DuckGame
 {
     public class RoomDefenceTurret : Gun
     {
@@ -89,7 +82,7 @@ namespace DuckGame
         private void LoseTarget()
         {
             _target = null;
-            if (_charge > 0.0)
+            if (_charge > 0)
                 SFX.PlaySynchronized("chaingunSpinDown", 0.95f, 0.1f);
             _charge = 0f;
         }

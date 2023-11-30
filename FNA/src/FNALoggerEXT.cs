@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2022 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2023 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -43,17 +43,17 @@ namespace Microsoft.Xna.Framework
 		internal static void Initialize()
 		{
 			/* Don't overwrite application log hooks! */
-			if (LogInfo == null)
+			if (FNALoggerEXT.LogInfo == null)
 			{
-                LogInfo = Console.WriteLine;
+				FNALoggerEXT.LogInfo = Console.WriteLine;
 			}
-			if (LogWarn == null)
+			if (FNALoggerEXT.LogWarn == null)
 			{
-                LogWarn = Console.WriteLine;
+				FNALoggerEXT.LogWarn = Console.WriteLine;
 			}
-			if (LogError == null)
+			if (FNALoggerEXT.LogError == null)
 			{
-                LogError = Console.WriteLine;
+				FNALoggerEXT.LogError = Console.WriteLine;
 			}
 		}
 

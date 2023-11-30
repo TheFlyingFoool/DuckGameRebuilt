@@ -1,17 +1,21 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.ConstantSound
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using Microsoft.Xna.Framework.Audio;
+﻿using Microsoft.Xna.Framework.Audio;
 
 namespace DuckGame
 {
     public class ConstantSound : IAutoUpdate
     {
         private Sound _effect;
+        public Sound effect
+        {
+            get
+            {
+                return _effect;
+            }
+            set
+            {
+                _effect = value;
+            }
+        }
         private float _lerpVolume;
         private float _lerpSpeed = 0.1f;
         private bool _killSound;
