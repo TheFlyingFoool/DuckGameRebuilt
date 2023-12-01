@@ -196,6 +196,7 @@ namespace DuckGame
         public static bool Checked;
         public override void Initialize()
         {
+            Program.main.IsFixedTimeStep = true;
             if (Editor.clientonlycontent)
             {
                 Editor.DisableClientOnlyContent();
@@ -574,6 +575,7 @@ namespace DuckGame
             _optionsGroup.Add(_graphicsMenu, false);
             _optionsGroup.Add(_dgrMenu, false);
             _optionsGroup.Add(Options.TEMPDGRGRAPHICS, false);
+            _optionsGroup.Add(Options.TEMPDGRGAME, false);
             _optionsGroup.Add(Options.TEMPDGRHUD, false);
             _optionsGroup.Add(Options.TEMPDGREDITOR, false);
             _optionsGroup.Add(Options.TEMPDGRQOL, false);

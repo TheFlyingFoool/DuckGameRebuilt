@@ -841,6 +841,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
+            Program.main.IsFixedTimeStep = true;
             while (!_listLoaded)
                 Thread.Sleep(16);
             _editorCam = new EditorCam();

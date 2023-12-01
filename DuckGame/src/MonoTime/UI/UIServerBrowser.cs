@@ -771,10 +771,10 @@ namespace DuckGame
                                         lobby.downloadedWorkshopItems = true;
                                     }
                                     string str2 = !lobby.hasFirstMod ? "|RED|Requires " + workshopItem1.name : "|DGGREEN|Requires " + workshopItem1.name;
-                                    if (Keyboard.Down(Keys.LeftControl) && Debugger.IsAttached)
-                                    {
-                                        nikostuff(ref str2, workshopItem1, lobby);   
-                                    }
+                                    //if (Keyboard.Down(Keys.LeftControl) && Debugger.IsAttached)
+                                    //{
+                                    //    nikostuff(ref str2, workshopItem1, lobby);   
+                                    //}
                                     string str3 = lobby.hasRestOfMods ? "|DGGREEN|" : "|RED|";
                                     if (lobby.workshopItems.Count == 2)
                                         str2 = str2 + str3 + " +" + (lobby.workshopItems.Count - 1).ToString() + " other mod.";
