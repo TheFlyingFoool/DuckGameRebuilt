@@ -761,6 +761,11 @@ namespace DuckGame
                         Level.Add(neon2);
                     }
                 }
+                else if (!DGRSettings.DGRNeonSign && neon1 != null)
+                {
+                    Level.Remove(neon1);
+                    Level.Remove(neon2);
+                }
             }
             if (_turret != null)
                 _turret._friendly = duck;

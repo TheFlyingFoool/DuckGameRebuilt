@@ -494,6 +494,15 @@ namespace DuckGame
                     case "-downloadmods":
                         MonoMain.downloadWorkshopMods = true;
                         break;
+                    case "-tempMods":
+                        {
+                            MonoMain.downloadWorkshopMods = true;
+
+                            index++;
+                            if (args.Count() > index)
+                                MonoMain.serverModList = args[index];
+                            break;
+                        }
                     case "-editsave":
                         MonoMain.editSave = true;
                         break;

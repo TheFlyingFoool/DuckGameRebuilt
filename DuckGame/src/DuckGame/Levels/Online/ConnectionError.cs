@@ -30,26 +30,29 @@ namespace DuckGame
             ConnectionStatusUI.Hide();
             if (joinLobby != null)
             {
-                string lobbyData = joinLobby.GetLobbyData("mods");
-                if (lobbyData != null && lobbyData != "" && lobbyData.Split('|').Contains("LOCAL"))
-                {
+                string loadedMods = joinLobby.GetLobbyData("mods");
+                if (loadedMods != null && loadedMods != "" && loadedMods.Split('|').Contains("LOCAL"))
                     _text = "Host has non-workshop mods enabled!";
-                }
-                else if (_text == "Host has different Mods enabled!")
+                else
                 {
-                    _downloadModsMenu = new UIMenu("MOD LIST INCOMPATIBLE!", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 274f, conString: "@SELECT@SELECT");
-                    _downloadModsMenu.Add(new UIText("Your mods don't match with", Colors.DGBlue), true);
-                    _downloadModsMenu.Add(new UIText("this game. Would you like to", Colors.DGBlue), true);
-                    _downloadModsMenu.Add(new UIText("automatically subscribe to all", Colors.DGBlue), true);
-                    _downloadModsMenu.Add(new UIText("missing mods, disable all", Colors.DGBlue), true);
-                    _downloadModsMenu.Add(new UIText("unneeded mods (excl. clients),", Colors.DGBlue), true);
-                    _downloadModsMenu.Add(new UIText("restart and join the game?", Colors.DGBlue), true);
-                    _downloadModsMenu.Add(new UIText("", Colors.DGBlue), true);
-                    _downloadModsMenu.Add(new UIMenuItem("NO!", new UIMenuActionCloseMenu(_downloadModsMenu)), true);
-                    _downloadModsMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuCallFunction(_downloadModsMenu, new UIMenuActionCloseMenuCallFunction.Function(UIServerBrowser.SubscribeAndRestart))), true);
-                    _downloadModsMenu.Close();
-                    _downloadModsMenu.Open();
-                    MonoMain.pauseMenu = _downloadModsMenu;
+                    if (_text == "INCOMPATIBLE MOD SETUP!" || _text == "Host has different Mods enabled!")
+                    {
+                        _downloadModsMenu = new UIMenu("MODS REQUIRED!", Layer.HUD.camera.width / 2, Layer.HUD.camera.height / 2, 290, -1, "@SELECT@SELECT");
+                        _downloadModsMenu.Add(new UIText("You're missing the mods required", Colors.DGBlue));
+                        _downloadModsMenu.Add(new UIText("to join this game!", Colors.DGBlue));
+                        _downloadModsMenu.Add(new UIText("", Colors.DGBlue));
+                        _downloadModsMenu.Add(new UIText("Would you like to restart the", Colors.DGBlue));
+                        _downloadModsMenu.Add(new UIText("game, automatically download the", Colors.DGBlue));
+                        _downloadModsMenu.Add(new UIText("required mods and join the game?", Colors.DGBlue));
+                        _downloadModsMenu.Add(new UIText("", Colors.DGBlue));
+
+                        _downloadModsMenu.Add(new UIMenuItem("CANCEL", new UIMenuActionCloseMenu(_downloadModsMenu)));
+                        _downloadModsMenu.Add(new UIMenuItem("RESTART AND DOWNLOAD", new UIMenuActionCloseMenuCallFunction(_downloadModsMenu, UIServerBrowser.DownloadRequiredMods)));
+                        _downloadModsMenu.Close();
+
+                        _downloadModsMenu.Open();
+                        Main.pauseMenu = _downloadModsMenu;
+                    }
                 }
             }
             core.gameFinished = true;

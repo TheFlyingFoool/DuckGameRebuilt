@@ -269,8 +269,10 @@ namespace DuckGame
             try
             {
                 Mod mod;
+                // already loaded, return what we got
                 if (_loadedMods.TryGetValue(modConfig.uniqueID, out mod))
                     return mod;
+
                 if (_preloading)
                 {
                     if (DGSave.upgradingFromVanilla)
@@ -278,8 +280,13 @@ namespace DuckGame
                         modConfig.Disable();
                         DGSave.showModsDisabledMessage = true;
                     }
-                    if (modConfig.error != null)
+                    //Temporary disable if this isn't a server mod
+                    if (MonoMain.serverMods.Count > 0 && MonoMain.serverMods.Contains(modConfig.workshopID) == false)
+                    {
                         mod = new ErrorMod();
+                        modConfig.error = "Temporarily disabled due to current server's mod list.";
+                    }
+                    else if (modConfig.error != null) mod = new ErrorMod();
                     else if (MonoMain.nomodsMode)
                     {
                         mod = new ErrorMod();
@@ -732,32 +739,48 @@ namespace DuckGame
 
         internal static string modConfigFile => modDirectory + "/mods.conf";
 
-        private static void ResultFetched(object value0, WorkshopQueryResult result)
+        static void ResultFetched(object value0, WorkshopQueryResult result)
         {
-            if (result == null || result.details == null)
-                return;
-            WorkshopItem publishedFile = result.details.publishedFile;
-            if (publishedFile == null)
-                return;
-            try
+            if (result != null && result.details != null)
             {
-                if ((publishedFile.stateFlags & WorkshopItemState.Installed) == WorkshopItemState.None || !Directory.Exists(publishedFile.path))
-                    return;
-                foreach (string folder in DuckFile.GetDirectoriesNoCloud(publishedFile.path))
+                WorkshopItem item = result.details.publishedFile;
+                LoadWorkshopItem(item);
+            }
+        }
+
+        static void LoadWorkshopItem(WorkshopItem item)
+        {
+            if (item != null)
+            {
+                try
                 {
-                    ModConfiguration modConfiguration = AttemptModLoad(folder);
-                    if (modConfiguration != null)
+                    if ((item.stateFlags & WorkshopItemState.Installed) != 0 && Directory.Exists(item.path))
                     {
-                        try
+                        foreach (var folder in DuckFile.GetDirectoriesNoCloud(item.path))
                         {
-                            modConfiguration.isWorkshop = true;
-                            loadableMods.Add(modConfiguration.uniqueID, modConfiguration);
+                            var config = AttemptModLoad(folder);
+
+                            if (config != null)
+                            {
+                                try
+                                {
+                                    config.isWorkshop = true;
+                                    loadableMods.Add(config.uniqueID, config);
+                                }
+                                catch (Exception q)
+                                {
+                                    int qq = 1;
+                                }
+
+                            }
                         }
-                        catch (Exception) { }
                     }
                 }
+                catch (Exception e)
+                {
+                    int qq = 1;
+                }
             }
-            catch (Exception) { }
         }
 
         public static void FailWithHarmonyException()
@@ -780,21 +803,38 @@ namespace DuckGame
                     LoadingAction steamLoad = new LoadingAction();
                     steamLoad.action = () =>
                     {
-                        runningModloadCode = true;//WorkshopList.Subscribed
-                        WorkshopQueryUser queryUser = Steam.CreateQueryUser(Steam.user.id, WorkshopList.Subscribed, WorkshopType.UsableInGame, WorkshopSortOrder.TitleAsc);
-                        queryUser.requiredTags.Add("Mod");
-                        queryUser.onlyQueryIDs = true;
-                        queryUser.QueryFinished += sender => steamLoad.flag = true;
-                        queryUser.ResultFetched += new WorkshopQueryResultFetched(ResultFetched);
-                        queryUser.Request();
-                        Steam.Update();
+                        runningModloadCode = true;
+
+                        if (MonoMain.serverMods.Count > 0)
+                        {
+                            foreach (ulong u in MonoMain.serverMods)
+                            {
+                                WorkshopItem w = WorkshopItem.GetItem(u);
+                                if (w != null)
+                                    LoadWorkshopItem(w);
+                            }
+
+                            steamLoad.flag = true;
+                        }
+                        else
+                        {
+                            WorkshopQueryUser query = Steam.CreateQueryUser(Steam.user.id, WorkshopList.Subscribed, WorkshopType.UsableInGame, WorkshopSortOrder.TitleAsc);
+                            query.requiredTags.Add("Mod");
+                            query.onlyQueryIDs = true;
+
+                            query.QueryFinished += (sender) => { steamLoad.flag = true; };
+                            query.ResultFetched += ResultFetched;
+
+                            query.Request();
+                            Steam.Update();
+                        }
                     };
                     steamLoad.waitAction = () =>
                     {
                         Steam.Update();
                         return steamLoad.flag;
                     };
-                    steamLoad.label = "Querying WorkShop";
+
                     MonoMain.currentActionQueue.Enqueue(steamLoad);
                 }
                 LoadingAction attemptLoadMods = new LoadingAction();

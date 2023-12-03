@@ -125,6 +125,8 @@ namespace DuckGame
         public static bool cancelLazyLoad = false;
         private static Thread _lazyLoadThread;
         public static Queue<Action> lazyLoadActions = new Queue<Action>();
+        public static List<ulong> serverMods = new List<ulong>();
+        public static string serverModList = null;
         public static string lobbyPassword = "";
         public static int forceFullscreenMode = 0;
         public static bool moddingEnabled = true;
@@ -838,7 +840,98 @@ namespace DuckGame
                 return;
             availableModsToDownload.Add(publishedFile);
         }
+        private void DownloadTemporaryMods()
+        {
+            loadMessage = "Downloading server mods...";
+            if (Steam.IsInitialized())
+            {
+                LoadingAction steamLoad = new LoadingAction();
+                steamLoad.action = () =>
+                {
+                    totalLoadyBits = 0;
+                    loadyBits = 0;
 
+                    if (serverModList != null)
+                    {
+                        string[] mods = serverModList.Split('|');
+                        foreach (string s in mods)
+                        {
+                            if (s != null && s.Contains("LOCAL") == false)
+                            {
+                                string[] s2 = s.Split(',');
+                                if (s2.Length == 2)
+                                {
+                                    string workshopID = s2[0].Trim();
+
+
+                                    totalLoadyBits++;
+
+                                    WorkshopItem it = null;
+                                    LoadingAction itemDownload = new LoadingAction();
+                                    itemDownload.action = () =>
+                                    {
+                                        loadMessage = "Downloading server mods (" + loadyBits.ToString() + "/" + totalLoadyBits.ToString() + ")";
+
+                                        try
+                                        {
+                                            it = WorkshopItem.GetItem(Convert.ToUInt64(workshopID));
+                                            Steam.RequestWorkshopInfo(new List<WorkshopItem>() { it });
+                                            while (it.finishedProcessing == false)
+                                            {
+                                                Steam.Update();
+                                            }
+
+                                            Steam.DownloadWorkshopItem(it);
+                                            itemDownload.context = it;
+                                            serverMods.Add(it.id);
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            DevConsole.Log(DCSection.General, "DownloadTemporaryMods failed to download workshop item (" + s.ToString() + ")");
+                                        }
+                                        loadyBits += 1;
+                                    };
+                                    itemDownload.waitAction = () =>
+                                    {
+                                        loadMessage = "Downloading server mods (" + loadyBits.ToString() + "/" + totalLoadyBits.ToString() + ")";
+                                        if (it != null)
+                                        {
+                                            if (it.name != null)
+                                                loadMessage += " (" + it.name + ")";
+
+                                            TransferProgress prog = it.GetDownloadProgress();
+
+
+
+                                            float progress = (float)prog.bytesDownloaded / prog.bytesTotal;
+                                            float kb = prog.bytesTotal / 1000.0f;
+
+
+
+                                            loadMessage += "(" + (progress * kb).ToString("0.00") + "/" + kb.ToString("0.00") + " kb downloaded" + ")";
+                                        }
+
+                                        Steam.Update();
+                                        if (it == null || it.finishedProcessing)
+                                            return true;
+                                        return false;
+                                    };
+                                    steamLoad.actions.Enqueue(itemDownload);
+                                }
+                            }
+                        }
+                    }
+                };
+
+                steamLoad.waitAction = () =>
+                {
+                    Steam.Update();
+                    return true;
+                };
+
+                _thingsToLoad.Enqueue(steamLoad);
+            }
+        }
         private void DownloadWorkshopItems()
         {
             NloadMessage = "Downloading workshop mods...";
@@ -922,7 +1015,8 @@ namespace DuckGame
             }, "Cluster Initialize");
             AddLoadingAction(Keyboard.InitTriggerImages, "Keyboard InitTriggerImages");
             AddLoadingAction(Input.Initialize);
-            if (downloadWorkshopMods)
+            if (serverModList != null) DownloadTemporaryMods();
+            else if (downloadWorkshopMods)
             {
                 DevConsole.Log("DDownloadWorkshopItems");
                 DownloadWorkshopItems();

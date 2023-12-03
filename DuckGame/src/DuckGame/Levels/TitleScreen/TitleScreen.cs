@@ -1472,7 +1472,7 @@ namespace DuckGame
             }
             if (secondTitlescreen)
             {
-                current.camera.position = Lerp.Vec2Smooth(current.camera.position, new Vec2(0, 180), 0.1f);
+                camera.position = Lerp.Vec2Smooth(camera.position, new Vec2(0, 180), 0.1f);
             }
             else
             {
@@ -1482,7 +1482,7 @@ namespace DuckGame
                 {
                     First<Duck>().y = 90;
                 }
-                current.camera.position = Lerp.Vec2Smooth(current.camera.position, Vec2.Zero, 0.1f);
+                camera.position = Lerp.Vec2Smooth(camera.position, Vec2.Zero, 0.1f);
             }
             if (_multiBeam.entered)
             {
