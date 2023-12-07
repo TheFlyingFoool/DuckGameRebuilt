@@ -565,6 +565,7 @@ namespace DuckGame
             {
                 _provider = new CSharpCodeProvider();
                 _parameters = new CompilerParameters(AppDomain.CurrentDomain.GetAssemblies().Select(assembly => assembly.Location).ToArray());
+                _parameters.CompilerOptions = "/define:DGR";
                 _parameters.GenerateExecutable = _parameters.GenerateInMemory = false;
             }
             if (File.Exists(config.buildLogPath))
