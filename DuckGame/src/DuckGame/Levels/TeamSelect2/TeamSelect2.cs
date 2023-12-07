@@ -1003,6 +1003,7 @@ namespace DuckGame
             _playOnlineGroup.Add(_browseGamesMenu, false);
             _playOnlineGroup.Add(_browseGamesMenu._passwordEntryMenu, false);
             _playOnlineGroup.Add(_browseGamesMenu._portEntryMenu, false);
+            _playOnlineGroup.Add(_browseGamesMenu._modsInfoMenu, false);
             _playOnlineGroup.Add(_hostGameMenu, false);
             _hostSettingsMenu.Close();
             _playOnlineGroup.Add(_hostSettingsMenu, false);
