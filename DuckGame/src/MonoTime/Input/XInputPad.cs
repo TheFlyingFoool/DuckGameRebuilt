@@ -214,6 +214,61 @@ namespace DuckGame
         "R3"
       }
     };
+        private Dictionary<int, string> _triggerNamesWii = new Dictionary<int, string>()
+        {
+          {
+            4096,
+            "B"
+          },
+          {
+            8192,
+            "A"
+          },
+          {
+            16384,
+            "1"
+          },
+          {
+            32768,
+            "2"
+          },
+          {
+            16,
+            "+"
+          },
+          {
+            32,
+            "-"
+          },
+          {
+            4,
+            Triggers.Left
+          },
+          {
+            8,
+            Triggers.Right
+          },
+          {
+            1,
+            Triggers.Up
+          },
+          {
+            2,
+            Triggers.Down
+          },
+          {
+            2048,
+            "HOME"
+          },
+          {
+            9999,
+            "DPAD"
+          },
+          {
+            9998,
+            "WASD"
+          }
+        };
         public Dictionary<int, Sprite> _triggerImages = new Dictionary<int, Sprite>()
         {
           {
@@ -445,6 +500,11 @@ namespace DuckGame
             if (SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS3 || SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS4 || SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS5)
             {
                 return _triggerNamesPS;
+            }
+            else if (_productName == "Nintendo Wii Remote")
+            {
+                //Console.WriteLine("TryGetValue: " + map);
+                return _triggerNamesWii;
             }
             else
             {
