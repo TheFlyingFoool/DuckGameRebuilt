@@ -265,6 +265,61 @@ namespace DuckGame
             new Sprite("buttons/ps4/dPad")
           }
         };
+        private Dictionary<int, Sprite> _triggerImagesWii = new Dictionary<int, Sprite>()
+        {
+          {
+            4096,
+            new Sprite("buttons/wii/bButton")
+          },
+          {
+            8192,
+            new Sprite("buttons/wii/aButton")
+          },
+          {
+            16384,
+            new Sprite("buttons/wii/1button")
+          },
+          {
+            32768,
+            new Sprite("buttons/wii/2button")
+          },
+          {
+            16,
+            new Sprite("buttons/wii/plusButton")
+          },
+          {
+            32,
+            new Sprite("buttons/wii/minusButton")
+          },
+          {
+            4,
+            new Sprite("buttons/wii/dPadLeft")
+          },
+          {
+            8,
+            new Sprite("buttons/wii/dPadRight")
+          },
+          {
+            1,
+            new Sprite("buttons/wii/dPadUp")
+          },
+          {
+            2,
+            new Sprite("buttons/wii/dPadDown")
+          },
+          {
+            2048,
+            new Sprite("buttons/wii/homeButton")
+          },
+          {
+            9999,
+            new Sprite("buttons/wii/dPad")
+          },
+          {
+            9998,
+            new Sprite("buttons/wii/dPad")
+          }
+        };
         private bool _connectedState;
         public SDL.SDL_GameControllerType SDLControllerType = SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_XBOX360;
         public override bool isConnected => _connectedState;
@@ -294,6 +349,15 @@ namespace DuckGame
             if (SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS3 || SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS4 || SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS5)
             {
                 _triggerImagesPS.TryGetValue(map, out mapImage);
+            }
+            /*if (SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_PRO)
+            {
+                //you should do things here
+            }*/
+            else if (_productName == "Nintendo Wii Remote")
+            {
+                //Console.WriteLine("TryGetValue: " + map);
+                _triggerImagesWii.TryGetValue(map, out mapImage);
             }
             else
             {
