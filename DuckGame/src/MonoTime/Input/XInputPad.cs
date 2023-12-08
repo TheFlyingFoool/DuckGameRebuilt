@@ -115,6 +115,105 @@ namespace DuckGame
             "WASD"
           }
         };
+        private Dictionary<int, string> _triggerNamesPS = new Dictionary<int, string>()
+    {
+      {
+        4096,
+        "CROSS"
+      },
+      {
+        8192,
+        "CIRCLE"
+      },
+      {
+        16384,
+        "SQUARE"
+      },
+      {
+        32768,
+        "TRIANGLE"
+      },
+      {
+        16,
+        Triggers.Start
+      },
+      {
+        32,
+        "BACK"
+      },
+      {
+        4,
+        Triggers.Left
+      },
+      {
+        8,
+        Triggers.Right
+      },
+      {
+        1,
+        Triggers.Up
+      },
+      {
+        2,
+        Triggers.Down
+      },
+      {
+        2097152,
+        "L{"
+      },
+      {
+        1073741824,
+        "L/"
+      },
+      {
+        268435456,
+        "L}"
+      },
+      {
+        536870912,
+        "L~"
+      },
+      {
+        134217728,
+        "R{"
+      },
+      {
+        67108864,
+        "R/"
+      },
+      {
+        16777216,
+        "R}"
+      },
+      {
+        33554432,
+        "R~"
+      },
+      {
+        256,
+        "L1"
+      },
+      {
+        512,
+        "R1"
+      },
+      {
+        8388608,
+        "L2"
+      },
+      {
+        4194304,
+        "R2"
+      },
+      {
+        64,
+        "L3"
+      },
+      {
+        128,
+        "R3"
+      }
+    };
         public Dictionary<int, Sprite> _triggerImages = new Dictionary<int, Sprite>()
         {
           {
@@ -341,7 +440,17 @@ namespace DuckGame
             _productName = "XBOX GAMEPAD";
             _productGUID = "";
         }
-        public override Dictionary<int, string> GetTriggerNames() => _triggerNames;
+        public override Dictionary<int, string> GetTriggerNames()
+        {
+            if (SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS3 || SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS4 || SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS5)
+            {
+                return _triggerNamesPS;
+            }
+            else
+            {
+                return _triggerNames;
+            }
+        }
 
         public override Sprite GetMapImage(int map)
         {
