@@ -127,7 +127,7 @@ namespace DuckGame
             _captureMenu = new UICaptureBox(_pauseMenu, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
             _captureMenu.Close();
             _pauseGroup.Add(_captureMenu, false);
-            UIDivider component = new UIDivider(true, 0.8f);
+            UIDivider component = new UIDivider(true, 0.75f);
             component.leftSection.Add(new UIMenuItem("RESTART!", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _restart), UIAlign.Left), true);
             component.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(_pauseGroup), UIAlign.Left), true);
             component.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_pauseMenu, Options.optionsMenu), UIAlign.Left), true);

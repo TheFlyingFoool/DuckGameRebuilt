@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 
@@ -42,6 +43,7 @@ namespace DuckGame
         private Tex2D defaultImage;
         private Tex2D defaultImageLan;
         private UIMenu _downloadModsMenu;
+        public UIModManagement _modsInfoMenu;
         private bool _enteringPort;
         private long _lobbySearchCooldownNextAvailable;
         //private const long MIN_FRAMES_BETWEEN_SEARCHES = 0;
@@ -109,6 +111,30 @@ namespace DuckGame
         //    this._yesNoYes.menuAction = (UIMenuAction)new UIMenuActionCallFunction(onYes);
         //    new UIMenuActionOpenMenu((UIComponent)this._editModMenu, (UIComponent)this._yesNoMenu).Activate();
         //}
+
+        public static void DownloadRequiredMods()
+        {
+            string modList = "";
+            if (ConnectionError.joinLobby != null)
+            {
+                _joiningLobby = new LobbyData();
+                _joiningLobby.lobby = ConnectionError.joinLobby;
+            }
+
+            if (_joiningLobby != null)
+            {
+                string loadedMods = _joiningLobby.lobby.GetLobbyData("mods");
+                if (loadedMods != null && loadedMods != "")
+                    modList = loadedMods;
+
+                Program.commandLine += " -downloadmods -tempMods " + modList + " +connect_lobby " + _joiningLobby.lobby.id;
+                Program.commandLine = Program.commandLine.Replace("-nomods", "");
+
+                if (MonoMain.lobbyPassword != "")
+                    Program.commandLine += " +password " + MonoMain.lobbyPassword;
+                ModLoader.RestartGame();
+            }
+        }
 
         public static void SubscribeAndRestart()
         {
@@ -232,21 +258,23 @@ namespace DuckGame
             //    depth = (Depth)0.9f,
             //    maxLength = 5000
             //};
-            _downloadModsMenu = new UIMenu("MOD LIST INCOMPATIBLE!", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 274f, conString: "@SELECT@SELECT");
-            _downloadModsMenu.Add(new UIText("Your mods don't match with", Colors.DGBlue), true);
-            _downloadModsMenu.Add(new UIText("this game. Would you like to", Colors.DGBlue), true);
-            _downloadModsMenu.Add(new UIText("automatically subscribe to all", Colors.DGBlue), true);
-            _downloadModsMenu.Add(new UIText("missing mods, disable all", Colors.DGBlue), true);
-            _downloadModsMenu.Add(new UIText("unneeded mods (excl. clients),", Colors.DGBlue), true);
-            _downloadModsMenu.Add(new UIText("restart and join the game?", Colors.DGBlue), true);
-            _downloadModsMenu.Add(new UIText("", Colors.DGBlue), true);
-            _downloadModsMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_downloadModsMenu, this)), true);
-            _downloadModsMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuCallFunction(_downloadModsMenu, new UIMenuActionCloseMenuCallFunction.Function(SubscribeAndRestart))), true);
+            _downloadModsMenu = new UIMenu("MODS REQUIRED!", Layer.HUD.camera.width / 2, Layer.HUD.camera.height / 2, 290, -1, "@SELECT@SELECT");
+            _downloadModsMenu.Add(new UIText("You're missing the mods required", Colors.DGBlue));
+            _downloadModsMenu.Add(new UIText("to join this game!", Colors.DGBlue));
+            _downloadModsMenu.Add(new UIText("", Colors.DGBlue));
+            _downloadModsMenu.Add(new UIText("Would you like to restart the", Colors.DGBlue));
+            _downloadModsMenu.Add(new UIText("game, automatically download the", Colors.DGBlue));
+            _downloadModsMenu.Add(new UIText("required mods and join the game?", Colors.DGBlue));
+            _downloadModsMenu.Add(new UIText("", Colors.DGBlue));
+
+            _downloadModsMenu.Add(new UIMenuItem("CANCEL", new UIMenuActionOpenMenu(_downloadModsMenu, this)));
+            _downloadModsMenu.Add(new UIMenuItem("RESTART AND DOWNLOAD", new UIMenuActionCloseMenuCallFunction(_downloadModsMenu, DownloadRequiredMods)));
             _downloadModsMenu.Close();
-            if (!Network.available)
-                _controlString = "@WASD@@SELECT@JOIN @MENU1@REFRESH @CANCEL@BACK";
-            else
-                _controlString = "@WASD@@SELECT@JOIN @MENU1@REFRESH @CANCEL@BACK @MENU2@REFRESH LAN";
+
+            _modsInfoMenu = new UIModManagement(this, "@WRENCH@ACTIVE SERVER MODS@SCREWDRIVER@", Layer.HUD.camera.width, Layer.HUD.camera.height, 550, -1, "@WASD@@SELECT@ADJUST @MENU1@TOGGLE @CANCEL@BACK", null, true);
+
+
+
             _passwordEntryMenu = new UIStringEntryMenu(false, "ENTER PASSWORD", new FieldBinding(this, nameof(enteredPassword)));
             _portEntryMenu = new UIStringEntryMenu(false, "ENTER PORT", new FieldBinding(this, nameof(enteredPort)), 6, true, 1337, 55535);
             _portEntryMenu.SetBackFunction(new UIMenuActionOpenMenu(_portEntryMenu, this));
@@ -461,6 +489,13 @@ namespace DuckGame
                     _passwordLobby = null;
                     return;
                 }
+
+                if (!Network.available) _controlString = "@WASD@@SELECT@JOIN @MENU1@REFRESH @CANCEL@BACK";
+                else _controlString = "@WASD@@SELECT@JOIN @MENU1@REFRESH @CANCEL@BACK @RAGDOLL@REFRESH LAN";
+
+                if (_selectedLobby != null && _selectedLobby.modHash != "nomods")
+                    _controlString += " @MENU2@VIEW MODS";
+
                 UpdateLobbySearch();
             }
             if (_pressWait > 0)
@@ -502,7 +537,7 @@ namespace DuckGame
                         RefreshLobbySearch(SearchMode.Near, SearchMode.Global, SearchMode.LAN);
                         SFX.Play("rockHitGround", 0.8f);
                     }
-                    else if (Input.Pressed(Triggers.Menu2) || enteredPort != "")
+                    else if (Input.Pressed(Triggers.Ragdoll) || enteredPort != "")
                     {
                         if (enteredPort == "")
                         {
@@ -523,6 +558,12 @@ namespace DuckGame
                             RefreshLobbySearch(SearchMode.LAN);
                             SFX.Play("rockHitGround", 0.8f);
                         }
+                    }
+                    else if (Input.Pressed(Triggers.Menu2) && _selectedLobby != null && _selectedLobby.modHash != "nomods")
+                    {
+                        _modsInfoMenu._lobby = _selectedLobby;
+                        _modsInfoMenu.RebuildModList();
+                        (new UIMenuActionOpenMenu(this, _modsInfoMenu)).Activate();
                     }
                     if (_lobbies.Count > 0 && _hoverIndex < _lobbies.Count)
                     {
@@ -654,10 +695,62 @@ namespace DuckGame
                 return;
             _previewMap[client] = tex2D;
         }
+        private static void WorkshopPreviewCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            if (_clientMap.ContainsKey(sender))
+            {
+                ulong id = _clientMap[sender];
+                _clientMap.Remove(sender);
+
+                if (_previewMap.ContainsKey(id))
+                {
+                    string path = PreviewPathForWorkshopItem(id);
+                    Texture2D texture = ContentPack.LoadTexture2D(path, false);
+                    if (texture != null)
+                    {
+                        Tex2D tex = texture;
+                        if (tex != null)
+                            _previewMap[id] = tex;
+                    }
+                }
+            }
+        }
+            public static Tex2D GetWorkshopPreview(WorkshopItem w)
+        {
+            Tex2D tex = null;
+            if (!_previewMap.TryGetValue(w.id, out tex))
+            {
+                if (w.data.previewPath != null && w.data.previewPath != "")
+                {
+                    try
+                    {
+                        WebClient client = new WebClient();
+                        string file = PreviewPathForWorkshopItem(w.id);
+
+                        DuckFile.CreatePath(file);
+                        if (File.Exists(file))
+                            DuckFile.Delete(file);
+
+                        client.DownloadFileAsync(new Uri(w.data.previewPath), file);
+                        client.DownloadFileCompleted += new AsyncCompletedEventHandler(WorkshopPreviewCompleted);
+                        _clientMap[client] = w.id;
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                }
+
+                _previewMap[w.id] = null;
+            }
+
+            return tex;
+        }
 
         public static string PreviewPathForWorkshopItem(ulong id) => DuckFile.workshopDirectory + "/modPreview" + id.ToString() + "preview.png";
 
-        public void nikostuff(ref string str2, WorkshopItem workshopItem1, LobbyData lobby)
+        //no longer needed -NiK0
+        /*public void nikostuff(ref string str2, WorkshopItem workshopItem1, LobbyData lobby)
         {
             //str2 = !lobby.hasFirstMod ? "|RED|Requires " + workshopItem1.data.name : "|DGGREEN|Requires " + workshopItem1.data.name;
 
@@ -666,7 +759,7 @@ namespace DuckGame
             
 
             str2 = $"id:{workshopItem1.id} name:{workshopItem1.name} dataname:{workshopItem1.data.name} itdName:{itd2.name} itd2DataName:{itd2.data.name}";
-        }
+        }*/
         public override void Draw()
         {
             if (_downloadModsMenu.open)
@@ -738,7 +831,7 @@ namespace DuckGame
                             if (lobby.lobby == null)
                                 _noImage.texture = defaultImageLan;
                             _noImage.scale = new Vec2(1f, 1f);
-                            List<Tex2D> tex2DList = new List<Tex2D>();
+                            List<Tex2D> workshopTextures = new List<Tex2D>();
                             string titleString = lobby.name;
                             if (lobby.lobby == null)
                                 titleString += !lobby.dedicated ? " (LAN)" : " |DGGREEN|(DEDICATED LAN SERVER)";
@@ -771,46 +864,20 @@ namespace DuckGame
                                         lobby.downloadedWorkshopItems = true;
                                     }
                                     string str2 = !lobby.hasFirstMod ? "|RED|Requires " + workshopItem1.name : "|DGGREEN|Requires " + workshopItem1.name;
-                                    if (Keyboard.Down(Keys.LeftControl) && Debugger.IsAttached)
-                                    {
-                                        nikostuff(ref str2, workshopItem1, lobby);   
-                                    }
+                                    //if (Keyboard.Down(Keys.LeftControl) && Debugger.IsAttached)
+                                    //{
+                                    //    nikostuff(ref str2, workshopItem1, lobby);   
+                                    //}
                                     string str3 = lobby.hasRestOfMods ? "|DGGREEN|" : "|RED|";
                                     if (lobby.workshopItems.Count == 2)
                                         str2 = str2 + str3 + " +" + (lobby.workshopItems.Count - 1).ToString() + " other mod.";
                                     else if (lobby.workshopItems.Count > 2)
                                         str2 = str2 + str3 + " +" + (lobby.workshopItems.Count - 1).ToString() + " other mods.";
                                     text1 = str2 + "\n|GRAY|";
-                                    if (!_previewMap.ContainsKey(workshopItem1.id))
-                                    {
-                                        if (workshopItem1.data.previewPath != null)
-                                        {
-                                            if (workshopItem1.data.previewPath != "")
-                                            {
-                                                try
-                                                {
-                                                    WebClient key = new WebClient();
-                                                    string str4 = PreviewPathForWorkshopItem(workshopItem1.id);
-                                                    DuckFile.CreatePath(str4);
-                                                    if (System.IO.File.Exists(str4))
-                                                        DuckFile.Delete(str4);
-                                                    key.DownloadFileAsync(new Uri(workshopItem1.data.previewPath), str4);
-                                                    key.DownloadFileCompleted += new AsyncCompletedEventHandler(Completed);
-                                                    _clientMap[key] = workshopItem1.id;
-                                                }
-                                                catch (Exception)
-                                                {
-                                                }
-                                            }
-                                        }
-                                        _previewMap[workshopItem1.id] = null;
-                                    }
-                                    else
-                                    {
-                                        Tex2D preview = _previewMap[workshopItem1.id];
-                                        if (preview != null)
-                                            tex2DList.Add(preview);
-                                    }
+
+                                    Tex2D tex = GetWorkshopPreview(workshopItem1);
+                                    if (tex != null)
+                                        workshopTextures.Add(tex);
                                 }
                             }
                             if (!string.IsNullOrWhiteSpace(lobby.requiredWins))
@@ -824,15 +891,15 @@ namespace DuckGame
                             if (!string.IsNullOrWhiteSpace(lobby.hasModifiers) && lobby.hasModifiers != "false")
                                 text1 += "Modifiers: ACTIVE.";
                             Graphics.DrawRect(new Vec2(x1 + 2f, y + 2f), new Vec2((float)(x1 + 36.0 - 2.0), (float)(y + 36.0 - 2.0)), Color.Gray, (Depth)0.5f, false, 2f);
-                            if (tex2DList.Count > 0)
+                            if (workshopTextures.Count > 0)
                             {
                                 Vec2 zero = Vec2.Zero;
                                 for (int index3 = 0; index3 < 4; ++index3)
                                 {
-                                    if (index3 < tex2DList.Count)
+                                    if (index3 < workshopTextures.Count)
                                     {
-                                        _noImage.texture = tex2DList[index3];
-                                        if (tex2DList.Count > 1)
+                                        _noImage.texture = workshopTextures[index3];
+                                        if (workshopTextures.Count > 1)
                                             _noImage.scale = new Vec2(16f / _noImage.texture.width);
                                         else
                                             _noImage.scale = new Vec2(32f / _noImage.texture.width);

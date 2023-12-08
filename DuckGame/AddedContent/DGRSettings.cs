@@ -175,6 +175,8 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool CustomHatTeams = false;
 
+        [Marker.AutoConfig] public static bool DGRNeonSign = false;
+
         [Marker.AutoConfig] public static bool skipOnlineBumper = false;
 
         [Marker.AutoConfig] public static bool SwitchInput = false;
@@ -299,7 +301,42 @@ namespace DuckGame
             }
         }
 
-        [Marker.AutoConfig] public static bool UncappedFPS = false;
+        [Marker.AutoConfig] public static bool FixBulletPositions = false;
+
+        [Marker.AutoConfig] public static int MaximumCorrectionTicks = 8;
+
+        [Marker.AutoConfig] public static bool Use61UPS = true;
+
+        public static bool Use61UPS_Setting
+        {
+            get
+            {
+                return Use61UPS;
+            }
+            set
+            {
+                if(value) 
+                    Program.main.TargetElapsedTime = TimeSpan.FromTicks(163934); // 61ups
+                else
+                    Program.main.TargetElapsedTime = TimeSpan.FromTicks(166667); // 60ups
+                Use61UPS = value;
+            }
+        }
+
+
+        [Marker.AutoConfig] public static bool S_UncappedFPS = false;
+        public static bool UncappedFPS
+        {
+            get
+            {
+                return S_UncappedFPS;
+            }
+            set
+            {
+                Program.main.UnFixedDraw = value;
+                S_UncappedFPS = value;
+            }
+        }
 
         [Marker.AutoConfig] public static bool SingleLoadLine = false;
 
@@ -350,6 +387,10 @@ namespace DuckGame
             MonoMain.graphics.SynchronizeWithVerticalRetrace = UseVSync;
             Program.main.FrameLimiterTarget = Math.Max(TargetFrameRate,60);
             Program.main.UseDrawRateLimiter = !UseVSync && UncappedFPS && TargetFrameRate >= 60;
+            if (Use61UPS)
+                Program.main.TargetElapsedTime = TimeSpan.FromTicks(163934); // 61ups
+            else
+                Program.main.TargetElapsedTime = TimeSpan.FromTicks(166667); // 60ups
             MonoMain.graphics.ApplyChanges();
         }
 

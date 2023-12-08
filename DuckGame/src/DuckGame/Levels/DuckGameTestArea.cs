@@ -49,7 +49,7 @@ namespace DuckGame
             _pauseMenu = new UIMenu("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE  @SELECT@SELECT");
             _confirmMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK  @SELECT@SELECT");
             _testMode = new UIMenu("TEST MODE", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK  @SELECT@SELECT");
-            UIDivider component = new UIDivider(true, 0.8f);
+            UIDivider component = new UIDivider(true, 0.75f);
             component.leftSection.Add(new UIMenuItem("RESTART", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _restart), UIAlign.Left), true);
             component.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_pauseMenu, Options.optionsMenu), UIAlign.Left), true);
             component.leftSection.Add(new UIMenuItem("TEST MODE", new UIMenuActionOpenMenu(_pauseMenu, _testMode), UIAlign.Left), true);

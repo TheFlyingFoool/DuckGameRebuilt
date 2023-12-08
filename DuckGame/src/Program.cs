@@ -494,6 +494,15 @@ namespace DuckGame
                     case "-downloadmods":
                         MonoMain.downloadWorkshopMods = true;
                         break;
+                    case "-tempMods":
+                        {
+                            MonoMain.downloadWorkshopMods = true;
+
+                            index++;
+                            if (args.Count() > index)
+                                MonoMain.serverModList = args[index];
+                            break;
+                        }
                     case "-editsave":
                         MonoMain.editSave = true;
                         break;
@@ -1594,7 +1603,7 @@ namespace DuckGame
                 displayCommandLine = Escape(displayCommandLine);
 
 
-                string osName = someprivacy ? "#Privacy" : Environment.UserName;
+                //string osName = someprivacy ? "#Privacy" : Environment.UserName;
                 
                 string white = color ? "\\u001b[0m" : "";
                 string green = color ? "\\u001b[0;32m" : "";
@@ -1649,7 +1658,7 @@ namespace DuckGame
                     modsActive += "```";
                 }
                 os = Escape(os);
-                os += white + "\\nUsername: " + green + Escape(osName) + white + "\\nMachine Name: " + green + Escape(Environment.MachineName);
+                os += /*white + "\\nUsername: " + green + Escape(osName) +*/ white + "\\nMachine Name: " + green + Escape(Environment.MachineName);
                 playersInLobby = Escape(playersInLobby);
                 exceptionMessage = Escape(exceptionMessage.Substring(0, Math.Min(840, exceptionMessage.Length))); //str1.Substring(0, Math.Min(920, str1.Length))
                 stackTrace = Escape(": Below");

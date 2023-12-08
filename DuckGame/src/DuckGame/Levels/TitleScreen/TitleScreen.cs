@@ -196,6 +196,7 @@ namespace DuckGame
         public static bool Checked;
         public override void Initialize()
         {
+            Program.main.IsFixedTimeStep = true;
             if (Editor.clientonlycontent)
             {
                 Editor.DisableClientOnlyContent();
@@ -574,6 +575,7 @@ namespace DuckGame
             _optionsGroup.Add(_graphicsMenu, false);
             _optionsGroup.Add(_dgrMenu, false);
             _optionsGroup.Add(Options.TEMPDGRGRAPHICS, false);
+            _optionsGroup.Add(Options.TEMPDGRGAME, false);
             _optionsGroup.Add(Options.TEMPDGRHUD, false);
             _optionsGroup.Add(Options.TEMPDGREDITOR, false);
             _optionsGroup.Add(Options.TEMPDGRQOL, false);
@@ -903,7 +905,7 @@ namespace DuckGame
             _modsDisabledMenu.SetBackFunction(new UIMenuActionCloseMenu(_pauseGroup));
             _modsDisabledMenu.Close();
             _pauseGroup.Add(_modsDisabledMenu, false);
-            UIDivider component41 = new UIDivider(true, 0.8f);
+            UIDivider component41 = new UIDivider(true, 0.75f);
             component41.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
             _mainPauseMenu.Add(component41, true);
             component41.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(_pauseGroup)), true);
@@ -1470,7 +1472,7 @@ namespace DuckGame
             }
             if (secondTitlescreen)
             {
-                current.camera.position = Lerp.Vec2Smooth(current.camera.position, new Vec2(0, 180), 0.1f);
+                camera.position = Lerp.Vec2Smooth(camera.position, new Vec2(0, 180), 0.1f);
             }
             else
             {
@@ -1480,7 +1482,7 @@ namespace DuckGame
                 {
                     First<Duck>().y = 90;
                 }
-                current.camera.position = Lerp.Vec2Smooth(current.camera.position, Vec2.Zero, 0.1f);
+                camera.position = Lerp.Vec2Smooth(camera.position, Vec2.Zero, 0.1f);
             }
             if (_multiBeam.entered)
             {

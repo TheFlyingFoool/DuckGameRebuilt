@@ -683,6 +683,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
+            Program.main.IsFixedTimeStep = true;
             if (Editor.clientonlycontent)
             {
                 Editor.DisableClientOnlyContent();
@@ -692,7 +693,6 @@ namespace DuckGame
             {
                 Add(new VersionSign(32, -20) { fadeTime = 300 });
             }
-            Program.main.IsFixedTimeStep = true;
             Program.gameLoadedSuccessfully = true;
             Vote.ClearVotes();
             ControllerLayoutsChanged();
@@ -1003,6 +1003,7 @@ namespace DuckGame
             _playOnlineGroup.Add(_browseGamesMenu, false);
             _playOnlineGroup.Add(_browseGamesMenu._passwordEntryMenu, false);
             _playOnlineGroup.Add(_browseGamesMenu._portEntryMenu, false);
+            _playOnlineGroup.Add(_browseGamesMenu._modsInfoMenu, false);
             _playOnlineGroup.Add(_hostGameMenu, false);
             _hostSettingsMenu.Close();
             _playOnlineGroup.Add(_hostSettingsMenu, false);

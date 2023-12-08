@@ -431,9 +431,16 @@ namespace DuckGame
                     Level.Remove(thing);
                 _turret = null;
             }
+            if (neon1 != null)
+            {
+                Level.Remove(neon1);
+                Level.Remove(neon2);
+            }
             Despawn();
             //this._doorClosing = false;
         }
+        public TeamHat neon1;
+        public TeamHat neon2;
 
         public void Spawn()
         {
@@ -734,6 +741,30 @@ namespace DuckGame
                 {
                     Level.Remove(_turret);
                     _turret = null;
+                }
+                if (DGRSettings.DGRNeonSign && neon1 == null)
+                {
+                    //x + 117.5f, y + 6.5f left room
+                    //x + 22.5f, y + 6.5f reft room
+                    if (rightRoom)
+                    {
+                        neon1 = new TeamHat(x + 100, y + 8, TeamsCore.neon1) { enablePhysics = false, canPickUp = false, velocity = Vec2.Zero, grounded = true, sleeping = true, indestructible = true };
+                        Level.Add(neon1);
+                        neon2 = new TeamHat(x + 132, y + 8, TeamsCore.neon2) { enablePhysics = false, canPickUp = false, velocity = Vec2.Zero, grounded = true, sleeping = true, indestructible = true };
+                        Level.Add(neon2);
+                    }
+                    else
+                    {
+                        neon1 = new TeamHat(x + 20, y + 8, TeamsCore.neon1) { enablePhysics = false, canPickUp = false, velocity = Vec2.Zero, grounded = true, sleeping = true, indestructible = true };
+                        Level.Add(neon1);
+                        neon2 = new TeamHat(x + 52, y + 8, TeamsCore.neon2) { enablePhysics = false, canPickUp = false, velocity = Vec2.Zero, grounded = true, sleeping = true, indestructible = true };
+                        Level.Add(neon2);
+                    }
+                }
+                else if (!DGRSettings.DGRNeonSign && neon1 != null)
+                {
+                    Level.Remove(neon1);
+                    Level.Remove(neon2);
                 }
             }
             if (_turret != null)

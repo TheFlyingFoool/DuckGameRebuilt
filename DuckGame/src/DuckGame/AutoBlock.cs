@@ -715,6 +715,7 @@ namespace DuckGame
             {
                 (graphic as SpriteMap).ClearCache();
             }
+
             graphic.position = position;
             graphic.scale = scale;
             graphic.center = center;
@@ -723,7 +724,7 @@ namespace DuckGame
             graphic.angle = angle;
             graphic.cheapmaterial = material;
             (graphic as SpriteMap).UpdateFrame();
-            graphic.UltraCheapStaticDraw(flipHorizontal);
+            graphic.UltraCheapStaticDraw(false);
             //  graphic.Draw() FUCK NORMAL DRAWING I AM CHEAP BASTERD 
         }
 
