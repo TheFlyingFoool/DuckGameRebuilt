@@ -1650,7 +1650,7 @@ namespace DuckGame
             IEnumerable<Profile> source = profiles.Where(x => x.connection == null && x.reservedUser != null && pConnection.data == x.reservedUser);
             if (source.Count() == 0)
                 source = !pSpectator ? profiles.Where(x => x.connection == null && (x.slotType == SlotType.Invite && pInvited | pLocal || x.slotType == SlotType.Friend && pFriend | pLocal || pLocal && x.slotType == SlotType.Local || x.slotType == SlotType.Open) && x.slotType != SlotType.Spectator && x.networkIndex <= 7) : profiles.Where(x => x.connection == null && x.slotType == SlotType.Spectator);
-            if (Level.current is GameLevel)
+            if (Level.current is GameLevel && DGRSettings.MidGameJoining)
             {
                 source = profiles.Where(x => x.connection == null && x.slotType != SlotType.Spectator);
             }
@@ -2669,54 +2669,48 @@ namespace DuckGame
                 switch (m)
                 {
                     case NMRequestJoin _:
-                        if (true)
+                        if (!inGame || DGRSettings.MidGameJoining)
                         {
-                            switch (Level.current)
+                            NMRequestJoin nmRequestJoin = m as NMRequestJoin;
+                            if (nmRequestJoin.names == null || nmRequestJoin.names.Count == 0)
+                                return new NMErrorEmptyJoinMessage();
+                            DevConsole.Log(DCSection.DuckNet, "Join attempt from " + nmRequestJoin.names[0]);
+                            if (GetOpenProfiles(m.connection, nmRequestJoin.wasInvited, false, false).Count() < nmRequestJoin.names.Count)
                             {
-                                case TeamSelect2 _:
-                                case IConnectionScreen _:
-                                default:
-                                    NMRequestJoin nmRequestJoin = m as NMRequestJoin;
-                                    if (nmRequestJoin.names == null || nmRequestJoin.names.Count == 0)
-                                        return new NMErrorEmptyJoinMessage();
-                                    DevConsole.Log(DCSection.DuckNet, "Join attempt from " + nmRequestJoin.names[0]);
-                                    if (GetOpenProfiles(m.connection, nmRequestJoin.wasInvited, false, false).Count() < nmRequestJoin.names.Count)
-                                    {
-                                        DevConsole.Log(DCSection.DuckNet, "@error " + nmRequestJoin.names[0] + " could not join, server is full.@error");
-                                        return new NMServerFull();
-                                    }
-                                    if (nmRequestJoin.password != core.serverPassword && !core._invitedFriends.Contains(nmRequestJoin.localID))
-                                    {
-                                        DevConsole.Log(DCSection.DuckNet, "@error " + nmRequestJoin.names[0] + " could not join, password was incorrect.@error");
-                                        return new NMInvalidPassword();
-                                    }
-                                    List<Profile> pJoinedProfiles = new List<Profile>();
-                                    int index = 0;
-                                    foreach (string name in nmRequestJoin.names)
-                                    {
-                                        Profile profile = ServerCreateProfile(m.connection, null, null, name, false, nmRequestJoin.wasInvited, false);
-                                        profile.ParentalControlsActive = nmRequestJoin.info.parentalControlsActive;
-                                        profile.flippers = nmRequestJoin.info.roomFlippers;
-                                        profile.flagIndex = nmRequestJoin.info.flagIndex;
-                                        profile.networkStatus = DuckNetStatus.Connected;
-                                        profile.steamID = nmRequestJoin.localID;
-                                        if (nmRequestJoin.personas.Count > index)
-                                        {
-                                            byte persona = nmRequestJoin.personas[index];
-                                            if (persona >= 0 && persona < Persona.alllist.Count)
-                                            {
-                                                profile.preferredColor = persona;
-                                                RequestPersona(profile, Persona.alllist[persona], false);
-                                            }
-                                        }
-                                        _core.status = DuckNetStatus.Connected;
-                                        Level.current.OnNetworkConnecting(profile);
-                                        pJoinedProfiles.Add(profile);
-                                        ++index;
-                                    }
-                                    Server_AcceptJoinRequest(pJoinedProfiles);
-                                    return null;
+                                DevConsole.Log(DCSection.DuckNet, "@error " + nmRequestJoin.names[0] + " could not join, server is full.@error");
+                                return new NMServerFull();
                             }
+                            if (nmRequestJoin.password != core.serverPassword && !core._invitedFriends.Contains(nmRequestJoin.localID))
+                            {
+                                DevConsole.Log(DCSection.DuckNet, "@error " + nmRequestJoin.names[0] + " could not join, password was incorrect.@error");
+                                return new NMInvalidPassword();
+                            }
+                            List<Profile> pJoinedProfiles = new List<Profile>();
+                            int index = 0;
+                            foreach (string name in nmRequestJoin.names)
+                            {
+                                Profile profile = ServerCreateProfile(m.connection, null, null, name, false, nmRequestJoin.wasInvited, false);
+                                profile.ParentalControlsActive = nmRequestJoin.info.parentalControlsActive;
+                                profile.flippers = nmRequestJoin.info.roomFlippers;
+                                profile.flagIndex = nmRequestJoin.info.flagIndex;
+                                profile.networkStatus = DuckNetStatus.Connected;
+                                profile.steamID = nmRequestJoin.localID;
+                                if (nmRequestJoin.personas.Count > index)
+                                {
+                                    byte persona = nmRequestJoin.personas[index];
+                                    if (persona >= 0 && persona < Persona.alllist.Count)
+                                    {
+                                        profile.preferredColor = persona;
+                                        RequestPersona(profile, Persona.alllist[persona], false);
+                                    }
+                                }
+                                _core.status = DuckNetStatus.Connected;
+                                Level.current.OnNetworkConnecting(profile);
+                                pJoinedProfiles.Add(profile);
+                                ++index;
+                            }
+                            Server_AcceptJoinRequest(pJoinedProfiles);
+                            return null;
                         }
                         return new NMGameInProgress();
                     case NMMessageIgnored _:
