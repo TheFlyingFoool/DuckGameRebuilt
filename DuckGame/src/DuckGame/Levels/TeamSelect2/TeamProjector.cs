@@ -93,6 +93,7 @@ namespace DuckGame
                 {
                     Vec2 hatPoint = DuckRig.GetHatPoint(profile.persona.sprite.imageIndex);
                     SpriteMap hat = profile.team.GetHat(profile.persona);
+                    hat.scale = new Vec2(1);
                     hat.depth = profile.persona.sprite.depth + 1;
                     hat.alpha = profile.persona.sprite.alpha;
                     hat.color = profile.persona.sprite.color;

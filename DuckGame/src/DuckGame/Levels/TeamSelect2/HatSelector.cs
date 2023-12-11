@@ -1119,11 +1119,11 @@ namespace DuckGame
             }
         }
 
-        public static float scaleMultiplier
+        public float scaleMultiplier
         {
             get
             {
-                return DGRSettings.ActualHatSelectorSize;
+                return isServerForObject ? DGRSettings.ActualHatSelectorSize : 1;
             }
         }
         public void HatsDrawLogic()
@@ -1236,7 +1236,6 @@ namespace DuckGame
                         g.depth = (Depth)0.95f;
                         g.alpha = _profile.persona.sprite.alpha;
                         g.color = Color.White * num7;
-                        g.scale = new Vec2(scaleMultiplier);
                         g.center = new Vec2(16f, 16f) + vec2;
                         if (index3 > DG.MaxPlayers - 1 && _fade > 0.01f)
                         {
@@ -1252,14 +1251,18 @@ namespace DuckGame
                                 if (_outlineMaterial == null)
                                     _outlineMaterial = new MaterialSecretOutline();
                                 Graphics.material = _outlineMaterial;
+                                g.scale = new Vec2(scaleMultiplier);
                                 Graphics.Draw(g, pixel.x, pixel.y);
+                                g.scale = new Vec2(1);
                                 Graphics.material = null;
                             }
                             else
                             {
                                 if (allTeam.favorited) Graphics.DrawDottedRect(pixel - new Vec2(16 * scaleMultiplier), pixel + new Vec2(16 * scaleMultiplier), Color.White, 0.95f, 1, 6 * scaleMultiplier);
                                 if (allTeam.metadata != null && allTeam.metadata.UseDuckColor.value) Graphics.material = _profile.persona.material;
+                                g.scale = new Vec2(scaleMultiplier);
                                 Graphics.Draw(g, pixel.x, pixel.y);
+                                g.scale = new Vec2(1);
                                 Graphics.material = null;
                             }
                         }
