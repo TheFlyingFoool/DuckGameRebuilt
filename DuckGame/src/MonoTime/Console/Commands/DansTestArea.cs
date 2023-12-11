@@ -337,8 +337,7 @@ namespace DuckGame
             double d = rand.NextDouble();
             DevConsole.Log(d.ToString() + " random");
         }
-        [Marker.DevConsoleCommand(Name = "testdg",
-            To = ImplementTo.DuckHack)]
+        [Marker.DevConsoleCommand(Name = "testdg")]
         public static void starttestdg()
         {
             Process.Start(Application.ExecutablePath, Program.commandLine + " -lanjoiner");
