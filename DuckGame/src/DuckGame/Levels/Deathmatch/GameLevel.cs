@@ -9,6 +9,13 @@ namespace DuckGame
     {
         protected FollowCam _followCam;
         protected GameMode _mode;
+        public GameMode mode
+        {
+            get
+            {
+                return _mode;
+            }
+        }
         private RandomLevelNode _randomLevel;
         private bool _validityTest;
         private float _infoSlide;
@@ -313,7 +320,7 @@ namespace DuckGame
             List<Duck> duckList = new List<Duck>();
             foreach (Duck t in things[typeof(Duck)])
             {
-                t.localSpawnVisible = false;
+                //t.localSpawnVisible = false;
                 followCam.Add(t);
                 //if (t.x < vec2_1.x)
                 //    vec2_1 = t.position;
@@ -335,6 +342,11 @@ namespace DuckGame
             if (Network.isServer)
                 Send.Message(new NMBeginLevel());
             base.OnAllClientsReady();
+        }
+        public override void OnNetworkConnecting(Profile p)
+        {
+            Send.Message(new NMGetReady(), p.connection);
+            base.OnNetworkConnecting(p);
         }
 
         public float snowTimer;

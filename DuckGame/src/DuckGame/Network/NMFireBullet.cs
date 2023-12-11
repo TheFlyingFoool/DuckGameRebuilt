@@ -26,10 +26,10 @@ namespace DuckGame
             typeInstance.accuracy = 1f;
             typeInstance.bulletSpeed = speed;
             typeInstance.speedVariation = 0f;
-            Bullet bullet = typeInstance.GetBullet(position.x, position.y, owner?.duck, -angle, distance: range, network: false);
+            Bullet bullet = typeInstance.GetBullet(position.x, position.y, (owner != null) ? owner.duck : null, -angle, null, range, false, false);
             bullet.isLocal = false;
             bullet.connection = connection;
-            if (DGRSettings.FixBulletPositions)
+            if (DGRSettings.FixBulletPositions && bullet != null && connection != null && connection.manager != null) //extra null checks for safety -NiK0
             {
                 bullet.BonusUpdateTicks = Math.Min((int)(connection.manager.ping*60.0), DGRSettings.MaximumCorrectionTicks);
                 //DevConsole.Log(((int)(connection.manager.ping * 60.0)).ToString());

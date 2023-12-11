@@ -1,15 +1,14 @@
 ﻿using AddedContent.Firebreak;
-using Microsoft.Xna.Framework.Graphics;
 using SDL2;
 using SixLabors.ImageSharp;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime;
+using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
 {
@@ -936,7 +935,10 @@ namespace DuckGame
                 Graphics.fade = 0;
             }
         }
-        private static void OpenMenu(Profile whoOpen)
+
+        public static bool speedOpen;
+        public static int prevIndex;
+        public static void OpenMenu(Profile whoOpen)
         {
             if (_ducknetUIGroup != null)
                 Level.Remove(_ducknetUIGroup);
@@ -964,6 +966,7 @@ namespace DuckGame
             }
             core._ducknetMenu = new UIMenu(title, wide / 2f, high / 2f, 210f, conString: "@CANCEL@CLOSE @SELECT@SELECT", tinyTitle: tiny);
             _ducknetMenu = core._ducknetMenu;
+            core._ducknetMenu.reducedMovementFrames = speedOpen ? 10 : 0;
             core._confirmStartMenu = new UIMenu("REALLY START?", wide / 2f, high / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
             core._confirmMenu = whoOpen.slotType != SlotType.Local ? new UIMenu("REALLY QUIT?", wide / 2f, high / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT") : new UIMenu("REALLY BACK OUT?", wide / 2f, high / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
             core._confirmBlacklistMenu = new UIMenu("AVOID LEVEL?", wide / 2f, high / 2f, 10f, conString: "@CANCEL@BACK @SELECT@SELECT");
@@ -1124,6 +1127,15 @@ namespace DuckGame
                         _core._ducknetMenu.Add(new LUIText(" DGR Stuff        ON |WHITE|OFF", c: Color.Gray, UIAlign.Left));
                     }
                 }
+                else if (Level.current is GameLevel)
+                {
+                    _core._ducknetMenu.Add(new UIMenuItemToggle("MID GAME JOINING", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.MidGameJoining)), c: Colors.DGPink));
+                    if (DGRSettings.MidGameJoining && Steam.user != null && Steam.lobby != null)
+                    {
+                        _core._ducknetMenu.Add(new UIMenuItem("|DGGREEN|INVITE FRIENDS", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._inviteMenu), UIAlign.Left), true);
+                        _core._ducknetMenu.Add(new UIMenuItem("|DGGREEN|COPY INVITE LINK", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(CopyInviteLink)), UIAlign.Left), true);
+                    }
+                }
             }
 
             Main.SpecialCode = "men7";
@@ -1141,7 +1153,7 @@ namespace DuckGame
             }
             Main.SpecialCode = "men10";
             if (Level.current is GameLevel)
-			{
+            {
                 GameLevel gameLevel = (Level.current as GameLevel);
                 bool blankAdded = false;
                 if (Level.current.isCustomLevel)
@@ -1300,7 +1312,7 @@ namespace DuckGame
                 _ducknetUIGroup.Add(Options._lastCreatedControlsMenu, false);
             if (Options._lastCreatedDGRMenu != null)
                 _ducknetUIGroup.Add(Options._lastCreatedDGRMenu, false);
-                Main.SpecialCode = "men20";
+            Main.SpecialCode = "men20";
             _ducknetUIGroup.Close();
             Level.Add(_ducknetUIGroup);
             _ducknetUIGroup.Update();
@@ -1311,8 +1323,12 @@ namespace DuckGame
             MonoMain.pauseMenu = _ducknetUIGroup;
 
             _core._pauseOpen = true;
-            SFX.DontSave = 1;
-            SFX.Play("pause", 0.6f);
+            if (speedOpen) _core._ducknetMenu.section.selection = prevIndex;
+            else
+            {
+                SFX.DontSave = 1;
+                SFX.Play("pause", 0.6f);
+            }
         }
 
         public static void SendCurrentLevelData(ushort session, NetworkConnection c)
@@ -1634,6 +1650,10 @@ namespace DuckGame
             IEnumerable<Profile> source = profiles.Where(x => x.connection == null && x.reservedUser != null && pConnection.data == x.reservedUser);
             if (source.Count() == 0)
                 source = !pSpectator ? profiles.Where(x => x.connection == null && (x.slotType == SlotType.Invite && pInvited | pLocal || x.slotType == SlotType.Friend && pFriend | pLocal || pLocal && x.slotType == SlotType.Local || x.slotType == SlotType.Open) && x.slotType != SlotType.Spectator && x.networkIndex <= 7) : profiles.Where(x => x.connection == null && x.slotType == SlotType.Spectator);
+            if (Level.current is GameLevel)
+            {
+                source = profiles.Where(x => x.connection == null && x.slotType != SlotType.Spectator);
+            }
             return source;
         }
 
@@ -1991,8 +2011,36 @@ namespace DuckGame
             }
         }
 
+        public static bool prevMG;
+        public static void NiK0Test()
+        {
+            try
+            {
+                if (DGRSettings.MidGameJoining != prevMG)
+                {
+                    speedOpen = true;
+                    prevIndex = _core._ducknetMenu.section.selection;
+                    _core._ducknetMenu.reducedMovement = true;
+
+                    OpenMenu(_core._menuOpenProfile);
+                    speedOpen = false;
+                }
+                prevMG = DGRSettings.MidGameJoining;
+
+                DuckNetwork.inGame = false;
+                Network.activeNetwork.core.lobby.joinable = true;
+
+                Network.activeNetwork.core.lobby.SetLobbyData("started", "false");
+            }
+            catch
+            {
+
+            }
+        }
         public static void Update()
         {
+            //stuff'sn
+            NiK0Test();
             if (MonoMain.pauseMenu == null && _core._pauseOpen)
             {
                 HUD.CloseAllCorners();
@@ -2608,12 +2656,13 @@ namespace DuckGame
                 switch (m)
                 {
                     case NMRequestJoin _:
-                        if (!inGame)
+                        if (true)
                         {
                             switch (Level.current)
                             {
                                 case TeamSelect2 _:
                                 case IConnectionScreen _:
+                                default:
                                     NMRequestJoin nmRequestJoin = m as NMRequestJoin;
                                     if (nmRequestJoin.names == null || nmRequestJoin.names.Count == 0)
                                         return new NMErrorEmptyJoinMessage();

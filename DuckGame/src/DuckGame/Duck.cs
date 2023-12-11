@@ -3572,6 +3572,10 @@ namespace DuckGame
         {
             if (Network.isActive && _trappedInstance != null && _trappedInstance.ghostObject != null && !_trappedInstance.ghostObject.IsInitialized())
                 return;
+            if (!localSpawnVisible && Level.current is GameLevel gl && gl.mode != null)
+            {
+
+            }
             tilt = Lerp.FloatSmooth(tilt, 0f, 0.25f);
             verticalOffset = Lerp.FloatSmooth(verticalOffset, 0f, 0.25f);
             if (swordInvincibility > 0)

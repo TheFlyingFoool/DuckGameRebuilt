@@ -441,7 +441,14 @@ namespace DuckGame
             {
                 if (DGRSettings.favoriteHats.Count == 0)
                 {
-                    return Teams.all;
+                    List<Team> filtered = new List<Team>();
+                    for (int i = 0; i < Teams.all.Count; i++)
+                    {
+                        Team t = Teams.all[i];
+                        if (t.NoDisplay) continue;
+                        filtered.Add(t);
+                    }
+                    return filtered;
                 }
                 if (remember == null)
                 {
@@ -451,6 +458,7 @@ namespace DuckGame
                     for (int i = 0; i < Teams.all.Count; i++)
                     {
                         Team t = Teams.all[i];
+                        if (t.NoDisplay) continue;
                         if (t.favorited)
                         {
                             laterer.Add(t);
@@ -473,7 +481,10 @@ namespace DuckGame
             {
                 List<Team> teamList = new List<Team>(Teams.core.teams);
                 foreach (Team customTeam in _profile.customTeams)
+                {
+                    if (customTeam.NoDisplay) continue;
                     teamList.Add(customTeam);
+                }
                 return teamList;
             }
 
@@ -492,10 +503,11 @@ namespace DuckGame
             for (int i = 0; i < Teams.core.teams.Count; i++)
             {
                 Team t = Teams.core.teams[i];
+                if (t.NoDisplay) continue;
                 if (t.favorited)
                 {
                     later.Add(t);
-                }
+                } 
                 else
                 {
                     ttss.Add(t);

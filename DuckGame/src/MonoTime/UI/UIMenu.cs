@@ -6,6 +6,13 @@
         public static bool globalUILock;
         protected UIDivider _splitter;
         private UIBox _section;
+        public UIBox section
+        {
+            get
+            {
+                return _section;
+            }
+        }
         private UIText _controlText;
         protected string _controlString;
         private InputProfile _controlProfile;

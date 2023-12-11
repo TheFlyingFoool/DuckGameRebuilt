@@ -219,9 +219,15 @@ namespace DuckGame
             }
             set => _isPauseMenu = value;
         }
-
+        public bool reducedMovement;
+        public int reducedMovementFrames; //jank jank jank jank jank
         public override void Update()
         {
+            if (reducedMovementFrames > 0)
+            {
+                reducedMovementFrames--;
+                reducedMovement = reducedMovementFrames > 0;
+            }
             if (!_startInitialized)
             {
                 _startInitialized = true;
@@ -236,7 +242,7 @@ namespace DuckGame
                 bool flag = position.y != to;
                 //stuff might look weird but i have to introduce a 1 frame delay cuz otherwise the open menu input can go through
                 //multiple menus and do bad stuff -NiK0
-                if (DGRSettings.ReducedMovement) 
+                if (DGRSettings.ReducedMovement || reducedMovement) 
                 {
                     if (position.y == to) animating = false;
                     position.y = to;

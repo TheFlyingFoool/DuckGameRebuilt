@@ -197,6 +197,8 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool DGRItems = false;
 
+        public static bool MidGameJoining = false;
+
         [Marker.AutoConfig] public static string PreferredLevel = "";
 
         [Marker.AutoConfig] public static bool PreloadLevels;

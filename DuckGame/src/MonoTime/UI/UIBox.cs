@@ -18,7 +18,17 @@ namespace DuckGame
         public bool allowBackButton = true;
         protected bool _inputLock;
 
-        public int selection => _selection;
+        public int selection
+        {
+            get
+            {
+                return _selection;
+            }
+            set
+            {
+                _selection = value;
+            }
+        }
 
         public UIBox(float xpos, float ypos, float wide = -1f, float high = -1f, bool vert = true, bool isVisible = true)
           : base(xpos, ypos, wide, high)
