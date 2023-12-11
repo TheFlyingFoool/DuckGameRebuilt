@@ -2024,19 +2024,26 @@ namespace DuckGame
 
                     OpenMenu(_core._menuOpenProfile);
                     speedOpen = false;
+                }
+                if (Level.current is GameLevel)
+                {
                     if (DGRSettings.MidGameJoining)
                     {
                         inGame = false;
-                        Network.activeNetwork.core.lobby.joinable = true;
-
-                        Network.activeNetwork.core.lobby.SetLobbyData("started", "false");
+                        if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
+                        {
+                            Network.activeNetwork.core.lobby.joinable = true;
+                            Network.activeNetwork.core.lobby.SetLobbyData("started", "false");
+                        }
                     }
                     else
                     {
                         inGame = true;
-                        Network.activeNetwork.core.lobby.joinable = false;
-
-                        Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
+                        if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
+                        {
+                            Network.activeNetwork.core.lobby.joinable = false;
+                            Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
+                        }
                     }
                 }
                 prevMG = DGRSettings.MidGameJoining;
