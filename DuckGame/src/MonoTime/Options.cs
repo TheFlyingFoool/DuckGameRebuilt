@@ -736,6 +736,16 @@ namespace DuckGame
 
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
+            menu.Add(new UIMenuItemNumber("Hat Selector Zoom", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HatSelectorSize), 0, 2, 1), valStrings: new List<string>()
+            {
+                "Normal",
+                "Big",
+                "WUMBO"
+            })
+            {
+                dgrDescription = "The zoom on the hat selector"
+            });
+
             menu.Add(new UIMenuItemToggle("Lobby Name", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.LobbyNameOnPause)))
             {
                 dgrDescription = "Displays lobby name on pause screen (not supporting LAN lobbies)"
