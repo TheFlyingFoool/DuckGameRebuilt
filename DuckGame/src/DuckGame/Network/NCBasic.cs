@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading;
 
@@ -162,6 +163,20 @@ namespace DuckGame
                     _socket.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
                     _port = port;
                     int port1 = 1336;
+                    // checks all used udp ports and with 1336 skipping 1337 as servers use that and incrementing until found
+                    IPGlobalProperties ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
+                    IPEndPoint[] tcpConnInfoArray = ipGlobalProperties.GetActiveUdpListeners();
+                    int portoffset = 1337;
+                    List<int> usedPorts = new List<int>(tcpConnInfoArray.Length);
+                    foreach (IPEndPoint tcpi in tcpConnInfoArray)
+                    {
+                        usedPorts.Add(tcpi.Port);
+                    }
+                    while (usedPorts.Contains(port1))
+                    { 
+                        portoffset += 1;
+                        port1 = portoffset;
+                    }
                     if (NetworkDebugger.enabled)
                     {
                         int port2 = 1330 + NetworkDebugger.currentIndex;
