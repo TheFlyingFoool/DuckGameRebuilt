@@ -2012,9 +2012,9 @@ namespace DuckGame
         }
 
         public static bool prevMG;
-        public static void NiK0Test()
+        public static void MidGameJoiningLogic()
         {
-            try
+            if (Network.isActive)
             {
                 if (DGRSettings.MidGameJoining != prevMG)
                 {
@@ -2024,23 +2024,29 @@ namespace DuckGame
 
                     OpenMenu(_core._menuOpenProfile);
                     speedOpen = false;
+                    if (DGRSettings.MidGameJoining)
+                    {
+                        inGame = false;
+                        Network.activeNetwork.core.lobby.joinable = true;
+
+                        Network.activeNetwork.core.lobby.SetLobbyData("started", "false");
+                    }
+                    else
+                    {
+                        inGame = true;
+                        Network.activeNetwork.core.lobby.joinable = false;
+
+                        Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
+                    }
                 }
                 prevMG = DGRSettings.MidGameJoining;
-
-                DuckNetwork.inGame = false;
-                Network.activeNetwork.core.lobby.joinable = true;
-
-                Network.activeNetwork.core.lobby.SetLobbyData("started", "false");
-            }
-            catch
-            {
 
             }
         }
         public static void Update()
         {
             //stuff'sn
-            NiK0Test();
+            MidGameJoiningLogic();
             if (MonoMain.pauseMenu == null && _core._pauseOpen)
             {
                 HUD.CloseAllCorners();
