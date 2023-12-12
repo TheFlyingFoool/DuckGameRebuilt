@@ -22,13 +22,28 @@ namespace DuckGame
         }
         public float rainTimer;
         public float rainDarken;
+        public LoopingSound rainSound;
         public override void Initialize()
         {
+            rainSound = new LoopingSound("sizzle", 1, -3)
+            {
+                volume = 0.2f
+            };
+            rainSound._effect.saveToRecording = false;
             rainDarken = dark?0.8f:1;
             base.Initialize();
         }
         public override void Update()
         {
+            if (rainSound != null)
+            {
+                if (dark.value) rainSound.volume = Lerp.Float(rainSound.volume, 0.5f, 0.01f);
+                else rainSound.volume = Lerp.Float(rainSound.volume, 0.2f, 0.01f);
+
+                rainSound.pitch = Rando.Float(-3f, -3.1f);
+
+                if (rainSound._effect != null && rainSound._effect._instance != null && rainSound._effect._instance.Platform_GetProgress() > 0.5f) rainSound._effect._instance._position = 0;
+            }
             if (thunder > 0 && DGRSettings.WeatherLighting > 0 && (int)Math.Round(Rando.Int((int)(2400 / thunder)) / DGRSettings.WeatherLighting) == 0)
             {
                 rainDarken = 1.2f;

@@ -85,7 +85,7 @@ namespace DuckGame
 
         public static bool shouldusespriteatlas = true;
         public static bool someprivacy;
-        public static bool lanjoiner;
+        public static bool IsLanTestUser;
         public static Assembly gameAssembly;
         public static string gameAssemblyName;
         public static bool doscreentileing; //just a fun showing off thing
@@ -408,7 +408,7 @@ namespace DuckGame
                         break;
                     case "-lanjoiner":
                         Network.lanMode = true;
-                        lanjoiner = true;
+                        IsLanTestUser = true;
                         break;
                     case "-startinlobby":
                         MonoMain.startInLobby = true;
@@ -429,7 +429,7 @@ namespace DuckGame
                     case "-testserverclient":
                         Process.Start(Application.ExecutablePath, commandLine.Replace("-testserverclient", " -testserver2"));
                         Network.lanMode = true;
-                        lanjoiner = true;
+                        IsLanTestUser = true;
                         break;
                     case "-nothreading":
                         MonoMain.enableThreadedLoading = false;

@@ -427,10 +427,7 @@ namespace DuckGame
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
             
-            menu.Add(new UIMenuItemToggle("No Level Restrictions", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.IgnoreLevRestrictions)))
-            {
-                dgrDescription = "When enabled, you'll be able to turn on any custom level on an online match"
-            });
+            
 
             menu.Add(new UIMenuItemToggle("Faster Load", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.FasterLoad)))
             {
@@ -793,7 +790,10 @@ namespace DuckGame
             {
                 dgrDescription = "Whether or not to render a single line of load progress at startup, in low end systems this might help"
             });
-
+            menu.Add(new UIMenuItemToggle("Fast Level loading", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.IgnoreLevRestrictions)))
+            {
+                dgrDescription = "Disables the custom level filter making custom levels load instantly when looking at them in the match settings"
+            });
 
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 

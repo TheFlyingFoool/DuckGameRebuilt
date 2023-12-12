@@ -325,8 +325,7 @@ namespace DuckGame
 
         protected override void OnAllClientsReady()
         {
-            if (Network.isServer)
-                Send.Message(new NMBeginLevel());
+            if (Network.isServer) Send.Message(new NMBeginLevel());
             base.OnAllClientsReady();
         }
         public List<Profile> toSend = new List<Profile>();

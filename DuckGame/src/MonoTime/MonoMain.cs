@@ -1086,7 +1086,7 @@ namespace DuckGame
             OnStart();
             _started = true;
 
-            Recorderator.PostInitialize();
+            if (!Program.IsLanTestUser) Recorderator.PostInitialize();
             // this is basically the lifeline of all attributes so i cant
             // use the PostInitialize attribute for it since it wont even
             // work without this lol

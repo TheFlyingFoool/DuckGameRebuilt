@@ -535,8 +535,7 @@ namespace DuckGame
         public override void Update()
         {
             bool flag1 = true;
-            if (_profileBoxNumber < 0 || inputProfile == null || _box == null || _profile == null)
-                return;
+            if (_profileBoxNumber < 0 || inputProfile == null || _box == null || _profile == null) return;
             if (connection == DuckNetwork.localConnection && inputProfile.Pressed(Triggers.Any))
             {
                 NetIndex8 authority = this.authority;
@@ -555,10 +554,8 @@ namespace DuckGame
                     else
                     {
                         _gettingXPCompletion = 0.7f;
-                        if (MonoMain.pauseMenu is UIFuneral)
-                            _gettingXPCompletion = 0.8f;
-                        else if (MonoMain.pauseMenu is UIGachaBox)
-                            _gettingXPCompletion = 0.9f;
+                        if (MonoMain.pauseMenu is UIFuneral) _gettingXPCompletion = 0.8f;
+                        else if (MonoMain.pauseMenu is UIGachaBox) _gettingXPCompletion = 0.9f;
                     }
                 }
                 else
@@ -572,26 +569,17 @@ namespace DuckGame
                 _experienceProfileCheck = null;
                 _gettingXP = false;
                 _open = false;
-                if (_profile != null)
-                {
-                    _profile.hatSelector = null;
-                }
+                if (_profile != null) _profile.hatSelector = null;
             }
             _fade = Lerp.Float(_fade, !_open || _profileSelector.open || _roomEditor.open ? 0f : 1f, 0.1f);
             _blackFade = Lerp.Float(_blackFade, _open ? 1f : 0f, 0.1f);
             _screen.Update();
-            if (_screen.transitioning)
-                _experienceProfileCheck = null;
-            else if (_profileSelector.open || _roomEditor.open)
-            {
-                _experienceProfileCheck = null;
-            }
+            if (_screen.transitioning) _experienceProfileCheck = null;
+            else if (_profileSelector.open || _roomEditor.open) _experienceProfileCheck = null;
             else
             {
-                if (Profiles.IsDefault(_profile))
-                    flag1 = false;
-                if (Profiles.experienceProfile == null)
-                    flag1 = false;
+                if (Profiles.IsDefault(_profile)) flag1 = false;
+                if (Profiles.experienceProfile == null) flag1 = false;
                 _editRoomDisabled = false;
                 if (NetworkDebugger.enabled)
                 {
@@ -603,36 +591,27 @@ namespace DuckGame
                     flag1 = true;
                     _editRoomDisabled = true;
                 }
-                if (isArcadeHatSelector)
-                    flag1 = false;
+                if (isArcadeHatSelector) flag1 = false;
                 if (!_open)
                 {
                     if (_fade < 0.01f && _closing)
                     {
                         _closing = false;
-                        if (_box != null)
-                            _box.ReturnControl();
+                        if (_box != null) _box.ReturnControl();
                     }
                     _experienceProfileCheck = null;
                 }
-                else if (_profile.team == null || _inputSkip)
-                {
-                    _inputSkip = false;
-                }
+                else if (_profile.team == null || _inputSkip) _inputSkip = false;
                 else
                 {
                     _lcdFlashInc += Rando.Float(0.3f, 0.6f);
                     _lcdFlash = (0.9f + (float)(Math.Sin(_lcdFlashInc) + 1f) / 2f * 0.1f);
                     if (_prevDesiredTeam != _desiredTeamSelection && !isServerForObject)
                     {
-                        if (TeamIndexAddSpecial(_desiredTeamSelection, 5) == _prevDesiredTeam)
-                            _upSlideTo = -1f;
-                        else if (TeamIndexAddSpecial(_desiredTeamSelection, -5) == _prevDesiredTeam)
-                            _upSlideTo = 1f;
-                        else if (TeamIndexAddSpecial(_desiredTeamSelection, -1) == _prevDesiredTeam)
-                            _slideTo = 1f;
-                        else if (TeamIndexAddSpecial(_desiredTeamSelection, 1) == _prevDesiredTeam)
-                            _slideTo = -1f;
+                        if (TeamIndexAddSpecial(_desiredTeamSelection, 5) == _prevDesiredTeam) _upSlideTo = -1f;
+                        else if (TeamIndexAddSpecial(_desiredTeamSelection, -5) == _prevDesiredTeam) _upSlideTo = 1f;
+                        else if (TeamIndexAddSpecial(_desiredTeamSelection, -1) == _prevDesiredTeam) _slideTo = 1f;
+                        else if (TeamIndexAddSpecial(_desiredTeamSelection, 1) == _prevDesiredTeam) _slideTo = -1f;
                         else if (TeamIndexAddSpecial(_desiredTeamSelection, -6) == _prevDesiredTeam)
                         {
                             _slideTo = 1f;
@@ -653,8 +632,7 @@ namespace DuckGame
                             _slideTo = 1f;
                             _upSlideTo = -1f;
                         }
-                        else
-                            _teamSelection = _desiredTeamSelection;
+                        else _teamSelection = _desiredTeamSelection;
                         SFX.Play("consoleTick", 0.6f);
                         List<Team> teamList = AllTeams();
                         if (_desiredTeamSelection < teamList.Count)
@@ -664,33 +642,21 @@ namespace DuckGame
                         }
                         _prevDesiredTeam = _desiredTeamSelection;
                     }
-                    if (_slideTo != 0 && _slide != _slideTo)
-                        _slide = Lerp.Float(_slide, _slideTo, 0.1f);
+                    if (_slideTo != 0 && _slide != _slideTo) _slide = Lerp.Float(_slide, _slideTo, 0.1f);
                     else if (_slideTo != 0 && _slide == _slideTo)
                     {
                         _slide = 0f;
                         _slideTo = 0f;
                         _teamSelection = _desiredTeamSelection;
-                        if (isServerForObject)
-                        {
-                            Team allTeam = AllTeams()[_desiredTeamSelection];
-                            //if (!Main.isDemo || allTeam.inDemo) that was under this
-                            SelectTeam();
-                        }
+                        if (isServerForObject) SelectTeam();
                     }
-                    if (_upSlideTo != 0 && _upSlide != _upSlideTo)
-                        _upSlide = Lerp.Float(_upSlide, _upSlideTo, 0.1f);
+                    if (_upSlideTo != 0 && _upSlide != _upSlideTo) _upSlide = Lerp.Float(_upSlide, _upSlideTo, 0.1f);
                     else if (_upSlideTo != 0 && _upSlide == _upSlideTo)
                     {
                         _upSlide = 0f;
                         _upSlideTo = 0f;
                         _teamSelection = _desiredTeamSelection;
-                        if (isServerForObject)
-                        {
-                            Team allTeam = AllTeams()[_desiredTeamSelection];
-                            //if (!Main.isDemo || allTeam.inDemo) that was under this
-                            SelectTeam();
-                        }
+                        if (isServerForObject) SelectTeam();
                     }
                     if (_selection == HSSelection.ChooseTeam)
                     {
@@ -702,51 +668,38 @@ namespace DuckGame
                             bool flag2 = false;
                             if (inputProfile.Down(Triggers.MenuLeft))
                             {
-                                if (_desiredTeamSelection < DG.MaxPlayers)
-                                    _desiredTeamSelection = (short)(AllTeams().Count - 1);
-                                else if (_desiredTeamSelection == DG.MaxPlayers)
-                                    _desiredTeamSelection = (short)ControllerNumber();
-                                else
-                                    --_desiredTeamSelection;
+                                if (_desiredTeamSelection < DG.MaxPlayers) _desiredTeamSelection = (short)(AllTeams().Count - 1);
+                                else if (_desiredTeamSelection == DG.MaxPlayers) _desiredTeamSelection = (short)ControllerNumber();
+                                else _desiredTeamSelection--;
                                 _slideTo = -1f;
                                 flag2 = true;
                                 SFX.Play("consoleTick", 0.7f);
                             }
                             if (inputProfile.Down(Triggers.MenuRight))
                             {
-                                if (_desiredTeamSelection >= AllTeams().Count - 1)
-                                    _desiredTeamSelection = (short)ControllerNumber();
-                                else if (_desiredTeamSelection < DG.MaxPlayers)
-                                    _desiredTeamSelection = (short)DG.MaxPlayers;
-                                else
-                                    ++_desiredTeamSelection;
+                                if (_desiredTeamSelection >= AllTeams().Count - 1) _desiredTeamSelection = (short)ControllerNumber();
+                                else if (_desiredTeamSelection < DG.MaxPlayers) _desiredTeamSelection = (short)DG.MaxPlayers;
+                                else _desiredTeamSelection++;
                                 _slideTo = 1f;
                                 flag2 = true;
                                 SFX.Play("consoleTick", 0.7f);
                             }
                             if (inputProfile.Down(Triggers.MenuUp))
                             {
-                                if (_desiredTeamSelection < DG.MaxPlayers)
-                                    _desiredTeamSelection = 0;
-                                else
-                                    _desiredTeamSelection -= (short)(DG.MaxPlayers - 1);
+                                if (_desiredTeamSelection < DG.MaxPlayers) _desiredTeamSelection = 0;
+                                else _desiredTeamSelection -= (short)(DG.MaxPlayers - 1);
                                 _desiredTeamSelection -= 5;
-                                if (_desiredTeamSelection < 0)
-                                    _desiredTeamSelection += (short)(AllTeams().Count - (DG.MaxPlayers - 1));
-                                if (_desiredTeamSelection == 0)
-                                    _desiredTeamSelection = (short)ControllerNumber();
-                                else
-                                    _desiredTeamSelection += (short)(DG.MaxPlayers - 1);
+                                if (_desiredTeamSelection < 0) _desiredTeamSelection += (short)(AllTeams().Count - (DG.MaxPlayers - 1));
+                                if (_desiredTeamSelection == 0) _desiredTeamSelection = (short)ControllerNumber();
+                                else _desiredTeamSelection += (short)(DG.MaxPlayers - 1);
                                 _upSlideTo = -1f;
                                 flag2 = true;
                                 SFX.Play("consoleTick", 0.7f);
                             }
                             if (inputProfile.Down(Triggers.MenuDown))
                             {
-                                if (_desiredTeamSelection < DG.MaxPlayers)
-                                    _desiredTeamSelection = 0;
-                                else
-                                    _desiredTeamSelection -= (short)(DG.MaxPlayers - 1);
+                                if (_desiredTeamSelection < DG.MaxPlayers) _desiredTeamSelection = 0;
+                                else _desiredTeamSelection -= (short)(DG.MaxPlayers - 1);
                                 _desiredTeamSelection += 5;
                                 if (_desiredTeamSelection >= AllTeams().Count - (DG.MaxPlayers - 1))
                                     _desiredTeamSelection -= (short)(AllTeams().Count - (DG.MaxPlayers - 1));
@@ -794,8 +747,7 @@ namespace DuckGame
                             }
                             if (inputProfile.Pressed(Triggers.Ragdoll))
                             {
-                                if (profile.requestedColor == -1)
-                                    profile.requestedColor = profile.currentColor;
+                                if (profile.requestedColor == -1) profile.requestedColor = profile.currentColor;
                                 profile.IncrementRequestedColor();
                                 SFX.Play("consoleTick", 0.7f);
                                 profile.UpdatePersona();
@@ -859,13 +811,6 @@ namespace DuckGame
                         HatsDrawLogic();
                         _font.alpha = _fade;
                         _font.depth = (Depth)0.96f;
-                        //string str1 = "NO PROFILE"; what -NiK0
-                        //if (!Profiles.IsDefault(_profile))
-                        //    str1 = _profile.name;
-                        //if (_selection == HSSelection.ChooseProfile) 
-                        //{
-                        //    string str2 = "> " + str1 + " <";
-                        //}
                         if (_selection == HSSelection.ChooseTeam)
                         {
                             string text = "<              >";
@@ -882,10 +827,8 @@ namespace DuckGame
                             flag6 = _profile.networkHatUnlockStatuses[_desiredTeamSelection];
                             flag7 = true;
                         }
-                        if (flag6)
-                            text1 = "LOCKED";
-                        else if (flag7 && _netHoveringTeam != null && _netHoveringTeam.locked)
-                            text1 = "UNKNOWN";
+                        if (flag6) text1 = "LOCKED";
+                        else if (flag7 && _netHoveringTeam != null && _netHoveringTeam.locked) text1 = "UNKNOWN";
                         _font.scale = new Vec2(1f, 1f);
                         float width = _font.GetWidth(text1);
                         Vec2 pixel1 = Maths.RoundToPixel(new Vec2((float)(x + this.width / 2 - width / 2), y + 25f + num1));
