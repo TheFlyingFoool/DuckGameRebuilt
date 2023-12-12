@@ -332,7 +332,7 @@ namespace DuckGame
         public override void OnNetworkConnecting(Profile p)
         {
             toSend.Add(p);
-            toSendDelay = 20;
+            toSendDelay = 30;
             base.OnNetworkConnecting(p);
         }
         public override void OnNetworkConnected(Profile p)
@@ -365,7 +365,7 @@ namespace DuckGame
                         Profile p = toSend[i];
                         if (p != null && p.connection != null) Send.Message(new NMBeginLevel(), p.connection);
                     }
-                    if (toSendDelay <= -10) toSend.Clear();
+                    if (toSendDelay <= -20) toSend.Clear();
                 }
             }
             if (DGRBirthday)

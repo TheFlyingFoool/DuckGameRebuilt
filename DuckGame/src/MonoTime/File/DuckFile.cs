@@ -1068,6 +1068,7 @@ namespace DuckGame
 
         public static void SaveDuckXML(DuckXML doc, string path)
         {
+            if (Program.IsLanTestUser) return;
             path = PreparePath(path, true);
             string docString = doc.ToString();
             if (string.IsNullOrWhiteSpace(docString))
