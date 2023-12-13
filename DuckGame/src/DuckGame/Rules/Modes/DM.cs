@@ -24,25 +24,33 @@ namespace DuckGame
         {
             List<Team> aliveTeamList = new List<Team>();
             List<Team> totalTeamList = new List<Team>();
+            bool someoneDeath = false;
             foreach (Team team in Teams.all)
             {
                 foreach (Profile activeProfile in team.activeProfiles)
                 {
-                    if (activeProfile.duck != null && !activeProfile.duck.dead)
+                    if (activeProfile.duck != null)
                     {
-                        if (activeProfile.duck.converted != null && activeProfile.duck.converted.profile.team != activeProfile.team)
-                        {
-                            if (!aliveTeamList.Contains(activeProfile.duck.converted.profile.team))
-                                aliveTeamList.Add(activeProfile.duck.converted.profile.team);
-                        }
-                        else if (!aliveTeamList.Contains(team))
-                            aliveTeamList.Add(team);
+                       if (!activeProfile.duck.dead)
+                       {
+                            if (activeProfile.duck.converted != null && activeProfile.duck.converted.profile.team != activeProfile.team)
+                            {
+                                if (!aliveTeamList.Contains(activeProfile.duck.converted.profile.team))
+                                    aliveTeamList.Add(activeProfile.duck.converted.profile.team);
+                            }
+                            else if (!aliveTeamList.Contains(team))
+                                aliveTeamList.Add(team);
+                       }
+                       else
+                       {
+                            someoneDeath = true;
+                       }
                     }
                     if (!totalTeamList.Contains(team))
                         totalTeamList.Add(team);
                 }
             }
-            if (aliveTeamList.Count <= 1 && (!DuckNetwork.forcedstartedalone || totalTeamList.Count > 1 || aliveTeamList.Count == 0))
+            if (aliveTeamList.Count <= 1 && (!DuckNetwork.forcedstartedalone || (totalTeamList.Count > 1 && someoneDeath) || aliveTeamList.Count == 0))
             {
                 EndMatch();
             }
