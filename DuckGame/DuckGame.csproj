@@ -657,6 +657,7 @@
     <Compile Include="src\DuckGame\Interp.cs" />
     <Compile Include="src\DuckGame\LangHandler.cs" />
     <Compile Include="src\DuckGame\Network\ConcurrentStack.cs" />
+    <Compile Include="src\DuckGame\Network\NMEnableFiftyPlayerMode.cs" />
     <Compile Include="src\DuckGame\Stuff\StandingFluid.cs" />
     <Compile Include="src\MonoTime\Console\Commands\AdvancedConfig.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Bind.cs" />

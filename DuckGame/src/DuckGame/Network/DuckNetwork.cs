@@ -2558,6 +2558,7 @@ namespace DuckGame
             Send.Message(new NMNetworkIndexSync());
             if (!pLocal)
             {
+                if (FiftyPlayerMode) Send.Message(new NMEnableFiftyPlayerMode(), pJoinedProfiles[0].connection);
                 Send.Message(new NMJoinDuckNetSuccess(pJoinedProfiles), pJoinedProfiles[0].connection);
                 List<byte> byteList = new List<byte>();
                 for (int index = 0; index < DG.MaxPlayers; ++index)
@@ -2702,6 +2703,11 @@ namespace DuckGame
                             if (nmRequestJoin.names == null || nmRequestJoin.names.Count == 0)
                                 return new NMErrorEmptyJoinMessage();
                             DevConsole.Log(DCSection.DuckNet, "Join attempt from " + nmRequestJoin.names[0]);
+                            if (FiftyPlayerMode && !nmRequestJoin.isRebuiltUser) //this filters out non rebuilt users trying to join somehow when 50p mode is enabled -NiK0
+                            {
+                                DevConsole.Log(DCSection.DuckNet, "@error " + nmRequestJoin.names[0] + " could not join, not a rebuilt user.@error");
+                                return new NMVersionMismatch(NMVersionMismatch.Type.Error, Program.CURRENT_VERSION_ID + "REBUILT");
+                            }
                             if (GetOpenProfiles(m.connection, nmRequestJoin.wasInvited, false, false).Count() < nmRequestJoin.names.Count)
                             {
                                 DevConsole.Log(DCSection.DuckNet, "@error " + nmRequestJoin.names[0] + " could not join, server is full.@error");
