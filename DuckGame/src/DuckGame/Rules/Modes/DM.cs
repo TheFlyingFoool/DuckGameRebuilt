@@ -22,7 +22,8 @@ namespace DuckGame
 
         protected override void Update()
         {
-            List<Team> teamList = new List<Team>();
+            List<Team> aliveTeamList = new List<Team>();
+            List<Team> totalTeamList = new List<Team>();
             foreach (Team team in Teams.all)
             {
                 foreach (Profile activeProfile in team.activeProfiles)
@@ -31,15 +32,17 @@ namespace DuckGame
                     {
                         if (activeProfile.duck.converted != null && activeProfile.duck.converted.profile.team != activeProfile.team)
                         {
-                            if (!teamList.Contains(activeProfile.duck.converted.profile.team))
-                                teamList.Add(activeProfile.duck.converted.profile.team);
+                            if (!aliveTeamList.Contains(activeProfile.duck.converted.profile.team))
+                                aliveTeamList.Add(activeProfile.duck.converted.profile.team);
                         }
-                        else if (!teamList.Contains(team))
-                            teamList.Add(team);
+                        else if (!aliveTeamList.Contains(team))
+                            aliveTeamList.Add(team);
                     }
+                    if (!totalTeamList.Contains(team))
+                        totalTeamList.Add(team);
                 }
             }
-            if (teamList.Count <= 1)
+            if (aliveTeamList.Count <= 1 && (!DuckNetwork.forcedstartedalone || totalTeamList.Count > 1 || aliveTeamList.Count == 0))
             {
                 EndMatch();
             }

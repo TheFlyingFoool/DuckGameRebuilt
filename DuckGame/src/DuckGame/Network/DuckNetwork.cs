@@ -40,6 +40,7 @@ namespace DuckGame
                 core.RecreateProfiles();
             }
         }
+        private static bool forcedstartedalone;
         private static bool _fiftyPlayerMode = false;
         private static List<OnlineLevel> _levels = new List<OnlineLevel>()
         {
@@ -956,6 +957,18 @@ namespace DuckGame
         {
             if (Level.current is TeamSelect2 ts2)
             {
+                int activecount = 0;
+                foreach (Team team in Teams.all)
+                {
+                    foreach (Profile activeProfile in team.activeProfiles)
+                    {
+                        activecount += 1;
+                    }
+                }
+                if (activecount == 1)
+                {
+                    forcedstartedalone = true;
+                }
                 ts2.forcestart = true;
                 ts2._countTime = 0;
                 ts2.dim = 0.8f;
@@ -2411,7 +2424,7 @@ namespace DuckGame
                     if (team.activeProfiles.Count > 0)
                         ++num;
                 }
-                if (num <= 1)
+                if (num <= 1 && !DuckNetwork.forcedstartedalone)
                 {
                     if (pDoLevelSwitch && Network.isServer)
                     {
