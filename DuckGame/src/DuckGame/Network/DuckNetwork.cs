@@ -40,7 +40,7 @@ namespace DuckGame
                 core.RecreateProfiles();
             }
         }
-        private static bool forcedstartedalone;
+        public static bool forcedstartedalone;
         private static bool _fiftyPlayerMode = false;
         private static List<OnlineLevel> _levels = new List<OnlineLevel>()
         {
