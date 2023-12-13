@@ -456,8 +456,81 @@ namespace DuckGame
             return roundStatRankings;
         }
 
+
+        public static bool didaddprofiles;
+        public static bool IsDefault(ProfilesCore profilescore, Profile p)
+        {
+            if (p == null)
+            {
+                return false;
+            }
+            if (p.linkedProfile != null)
+            {
+                return IsDefault(profilescore, p.linkedProfile);
+            }
+            for (int i = 0; i < DG.MaxPlayers; i++)
+            {
+                if (profilescore._profiles[i] == p)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public bool IsDefault50p(Profile p)
+        {
+            if (!didaddprofiles)
+            {
+                didaddprofiles = true;
+                List<DuckPersona> duckPersonas = Persona.all.ToList();
+                try
+                {
+                    for (int i = 8; i < 50; i++)
+                    {
+                        Profile p2 = new Profile("Player" + (i + 1).ToString(), InputProfile.Get("MPPlayer" + (i + 1).ToString()), Teams.core.teams[i], duckPersonas[i], false, "PLAYER" + (i + 1).ToString(), true);
+                        Profiles.core._profiles.Add(p2);
+                        if (i >= Profiles.core.defaultProfileMappings.Count)
+                        {
+                            Profiles.core.defaultProfileMappings.Add(null);
+                        }
+                        Profiles.core.defaultProfileMappings[i] = p2;
+                    }
+                }
+                catch
+                {
+                    DevConsole.Log("Fck PrefixIsDefault");
+                }
+
+
+            }
+            if (p == null)
+            {
+                return false;
+            }
+            if (p.linkedProfile != null)
+            {
+                return IsDefault(this, p.linkedProfile);
+            }
+            try
+            {
+                for (int i = 0; i < DG.MaxPlayers; i++)
+                {
+                    if (_profiles[i] == p)
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch
+            {
+
+                DevConsole.Log("Fck PrefixIsDefault inside");
+            }
+            return false;
+        }
         public bool IsDefault(Profile p)
         {
+            if (DuckNetwork.FiftyPlayerMode) return IsDefault50p(p);
             if (p == null)
                 return false;
             if (p.linkedProfile != null)

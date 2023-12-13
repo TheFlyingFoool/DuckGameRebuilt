@@ -1166,7 +1166,7 @@ namespace DuckGame
 
         public const string SinglePlayer = "SinglePlayer";
 
-        private static string[] _defaultPlayerMappingStrings = new string[]
+        public static string[] vanillaPlayerMappingStrings = new string[]
         {
             "MPPlayer1",
             "MPPlayer2",
@@ -1177,6 +1177,71 @@ namespace DuckGame
             "MPPlayer7",
             "MPPlayer8"
         };
+        public static string[] fiftyPlayerMappingStrings = new string[]
+        {
+            "MPPlayer1",
+            "MPPlayer2",
+            "MPPlayer3",
+            "MPPlayer4",
+            "MPPlayer5",
+            "MPPlayer6",
+            "MPPlayer7",
+            "MPPlayer8",
+            "MPPlayer9",
+            "MPPlayer10",
+            "MPPlayer11",
+            "MPPlayer12",
+            "MPPlayer13",
+            "MPPlayer14",
+            "MPPlayer15",
+            "MPPlayer16",
+            "MPPlayer17",
+            "MPPlayer18",
+            "MPPlayer19",
+            "MPPlayer20",
+            "MPPlayer21",
+            "MPPlayer22",
+            "MPPlayer23",
+            "MPPlayer24",
+            "MPPlayer25",
+            "MPPlayer26",
+            "MPPlayer27",
+            "MPPlayer28",
+            "MPPlayer29",
+            "MPPlayer30",
+            "MPPlayer31",
+            "MPPlayer32",
+            "MPPlayer33",
+            "MPPlayer34",
+            "MPPlayer35",
+            "MPPlayer36",
+            "MPPlayer37",
+            "MPPlayer38",
+            "MPPlayer39",
+            "MPPlayer40",
+            "MPPlayer41",
+            "MPPlayer42",
+            "MPPlayer43",
+            "MPPlayer44",
+            "MPPlayer45",
+            "MPPlayer46",
+            "MPPlayer47",
+            "MPPlayer48",
+            "MPPlayer49",
+            "MPPlayer50"
+        };
+        private static string[] _defaultPlayerMappingStrings = vanillaPlayerMappingStrings;
+        public static string[] defaultPlayerMappingStrings
+        {
+            get
+            {
+                return _defaultPlayerMappingStrings;
+            }
+            set
+            {
+                _defaultPlayerMappingStrings = value;
+            }
+        }
 
         public const string Blank = "Blank";
 
