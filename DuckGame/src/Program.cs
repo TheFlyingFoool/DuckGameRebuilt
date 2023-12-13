@@ -361,6 +361,7 @@ namespace DuckGame
                         }
                         break;
                     case "+screentile":
+                        IsLanTestUser = true;
                         doscreentileing = true;
                         ++index;
                         if (args.Length > index)
