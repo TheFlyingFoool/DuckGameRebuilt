@@ -52,6 +52,7 @@ namespace DuckGame
 
         public static void SaveAll(bool isDangerous)
         {
+            if (Program.IsLanTestUser) return;
             try
             {
                 Log(ACAction.TrySave);

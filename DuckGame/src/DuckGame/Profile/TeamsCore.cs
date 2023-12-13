@@ -68,39 +68,57 @@ namespace DuckGame
                 center = new Vec2(16f, 16f)
             };
             teams = new List<Team>()
-          {
-            new Team("Player 1", "hats/noHat", true)
             {
-              defaultTeam = true
-            },
-            new Team("Player 2", "hats/noHat", true)
-            {
-              defaultTeam = true
-            },
-            new Team("Player 3", "hats/noHat", true)
-            {
-              defaultTeam = true
-            },
-            new Team("Player 4", "hats/noHat", true)
-            {
-              defaultTeam = true
-            },
-            new Team("Player 5", "hats/noHat", true)
-            {
-              defaultTeam = true
-            },
-            new Team("Player 6", "hats/noHat", true)
-            {
-              defaultTeam = true
-            },
-            new Team("Player 7", "hats/noHat", true)
-            {
-              defaultTeam = true
-            },
-            new Team("Player 8", "hats/noHat", true)
-            {
-              defaultTeam = true
-            },
+            new Team("Player 1", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 2", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 3", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 4", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 5", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 6", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 7", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 8", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 9", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 10", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 11", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 12", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 13", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 14", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 15", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 16", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 17", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 18", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 19", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 20", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 21", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 22", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 23", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 24", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 25", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 26", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 27", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 28", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 29", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 30", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 31", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 32", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 33", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 34", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 35", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 36", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 37", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 38", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 39", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 40", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 41", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 42", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 43", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 44", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 45", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 46", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 47", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 48", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 49", "hats/noHat", true) { defaultTeam = true },
+            new Team("Player 50", "hats/noHat", true) { defaultTeam = true },
             new Team("Sombreros", "hats/sombrero", true),
             new Team("Dappers", "hats/dapper", true),
             new Team("Dicks", "hats/dicks", true),
@@ -181,7 +199,6 @@ namespace DuckGame
             new Team("johnnygrey", "hats/johnnys"),
             new Team("wolfy", "hats/werewolves")
           };
-
             Team DGRHat = Team.Deserialize(Content.path + "/DGRHat.png"); //the fabled DGR hat -NiK0
             if (DGRHat != null)
             {

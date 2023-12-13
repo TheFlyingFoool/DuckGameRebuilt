@@ -1138,6 +1138,14 @@ namespace DuckGame
             _devices.Add(genericController6);
             _devices.Add(genericController7);
             _devices.Add(genericController8);
+            #if FiftyPRelease
+            for (int i = 8; i < 50; i++)
+            {
+                GenericController genericController50 = new GenericController(i);
+                _gamePads.Add(genericController50);
+                _devices.Add(genericController50);
+            }
+            #endif
             InputProfile.Default.Map(device, Triggers.Left, 37);
             InputProfile.Default.Map(device, Triggers.Right, 39);
             InputProfile.Default.Map(device, Triggers.Up, 38);
