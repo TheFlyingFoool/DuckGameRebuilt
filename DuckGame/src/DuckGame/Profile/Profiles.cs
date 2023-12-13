@@ -35,7 +35,7 @@ namespace DuckGame
                     DefaultPlayer7,
                     DefaultPlayer8
                 };
-
+                #if FiftyPRelease
                 try
                 {
                     for (int i = 8; i < 50; i++)
@@ -56,6 +56,7 @@ namespace DuckGame
                 {
                     DevConsole.Log("F get_defaultProfilesPrefix");
                 }
+                #endif
                 return profiles;
             }
         }

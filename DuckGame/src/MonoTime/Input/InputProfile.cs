@@ -1176,6 +1176,7 @@ namespace DuckGame
             "MPPlayer6",
             "MPPlayer7",
             "MPPlayer8",
+#if FiftyPRelease
             "MPPlayer9",
             "MPPlayer10",
             "MPPlayer11",
@@ -1218,6 +1219,7 @@ namespace DuckGame
             "MPPlayer48",
             "MPPlayer49",
             "MPPlayer50"
+#endif
         };
 
 

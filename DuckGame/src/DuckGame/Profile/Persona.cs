@@ -16,6 +16,7 @@ namespace DuckGame
           new DuckPersona(new Vec3( byte.MaxValue, 105f, 117f), new Vec3(207f, 84f, 94f), new Vec3( byte.MaxValue, 158f, 166f),5),
           new DuckPersona(new Vec3(49f, 162f, 242f), new Vec3(13f, 123f, 181f), new Vec3(148f, 207f, 245f),6),
           new DuckPersona(new Vec3(175f, 85f, 221f), new Vec3(141f, 36f, 194f), new Vec3(213f, 165f, 238f),7),
+          #if FiftyPRelease
           new DuckPersona(new Vec3(128f,0f,0f)), 
           new DuckPersona(new Vec3(0f,95f,0f)), 
           new DuckPersona(new Vec3(255f,255f,0f)),
@@ -59,6 +60,7 @@ namespace DuckGame
           new DuckPersona(new Vec3(0f,255f,66f)),
           new DuckPersona(new Vec3(0f,0f,46f)),
           new DuckPersona(new Vec3(157f,169f,179f))
+          #endif
         };
         private static List<DuckPersona> _personasShuffled;
         public static int seed;

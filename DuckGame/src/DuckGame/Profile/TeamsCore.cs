@@ -77,6 +77,7 @@ namespace DuckGame
             new Team("Player 6", "hats/noHat", true) { defaultTeam = true },
             new Team("Player 7", "hats/noHat", true) { defaultTeam = true },
             new Team("Player 8", "hats/noHat", true) { defaultTeam = true },
+            #if FiftyPRelease
             new Team("Player 9", "hats/noHat", true) { defaultTeam = true },
             new Team("Player 10", "hats/noHat", true) { defaultTeam = true },
             new Team("Player 11", "hats/noHat", true) { defaultTeam = true },
@@ -119,6 +120,7 @@ namespace DuckGame
             new Team("Player 48", "hats/noHat", true) { defaultTeam = true },
             new Team("Player 49", "hats/noHat", true) { defaultTeam = true },
             new Team("Player 50", "hats/noHat", true) { defaultTeam = true },
+            #endif
             new Team("Sombreros", "hats/sombrero", true),
             new Team("Dappers", "hats/dapper", true),
             new Team("Dicks", "hats/dicks", true),
