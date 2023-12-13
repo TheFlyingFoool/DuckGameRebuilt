@@ -456,7 +456,6 @@ namespace DuckGame
             return roundStatRankings;
         }
 
-        #if FiftyPRelease
 
         public static bool didaddprofiles;
         public static bool IsDefault(ProfilesCore profilescore, Profile p)
@@ -529,12 +528,9 @@ namespace DuckGame
             }
             return false;
         }
-        #endif
         public bool IsDefault(Profile p)
         {
-            #if FiftyPRelease
-            return IsDefault50p(p);
-            #endif
+            if (DuckNetwork.FiftyPlayerMode) return IsDefault50p(p);
             if (p == null)
                 return false;
             if (p.linkedProfile != null)

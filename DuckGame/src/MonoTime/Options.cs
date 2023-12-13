@@ -449,6 +449,12 @@ namespace DuckGame
                 dgrDescription = "Copies a QR code representing the join link"
             });
 
+
+            menu.Add(new UIMenuItemToggle("50p Mode", field: new FieldBinding(typeof(DuckNetwork), nameof(DuckNetwork.FiftyPlayerMode)))
+            {
+                dgrDescription = "Toggles 50p mode, will always reset to false after game restart"
+            });
+
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
             return menu;

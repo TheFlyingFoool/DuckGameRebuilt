@@ -6,62 +6,78 @@ namespace DuckGame
 {
     public static class Persona
     {
-        private static List<DuckPersona> _personasOriginalOrder = new List<DuckPersona>()
+        private static List<DuckPersona> _vanillaDuckPersonas = new List<DuckPersona>()
         {
-          new DuckPersona(new Vec3( byte.MaxValue,  byte.MaxValue,  byte.MaxValue),0),
+          new DuckPersona(new Vec3(byte.MaxValue, byte.MaxValue, byte.MaxValue),0),
           new DuckPersona(new Vec3(125f, 125f, 125f),1),
           new DuckPersona(new Vec3(247f, 224f, 90f),2),
           new DuckPersona(new Vec3(205f, 107f, 29f),3),
           new DuckPersona(new Vec3(0f, 133f, 74f), new Vec3(0f, 102f, 57f), new Vec3(0f, 173f, 97f),4),
-          new DuckPersona(new Vec3( byte.MaxValue, 105f, 117f), new Vec3(207f, 84f, 94f), new Vec3( byte.MaxValue, 158f, 166f),5),
+          new DuckPersona(new Vec3(byte.MaxValue, 105f, 117f), new Vec3(207f, 84f, 94f), new Vec3(byte.MaxValue, 158f, 166f),5),
+          new DuckPersona(new Vec3(49f, 162f, 242f), new Vec3(13f, 123f, 181f), new Vec3(148f, 207f, 245f),6),
+          new DuckPersona(new Vec3(175f, 85f, 221f), new Vec3(141f, 36f, 194f), new Vec3(213f, 165f, 238f),7)
+        };
+        private static List<DuckPersona> _fiftyDuckPersonas = new List<DuckPersona>()
+        {
+          new DuckPersona(new Vec3(byte.MaxValue, byte.MaxValue, byte.MaxValue),0),
+          new DuckPersona(new Vec3(125f, 125f, 125f),1),
+          new DuckPersona(new Vec3(247f, 224f, 90f),2),
+          new DuckPersona(new Vec3(205f, 107f, 29f),3),
+          new DuckPersona(new Vec3(0f, 133f, 74f), new Vec3(0f, 102f, 57f), new Vec3(0f, 173f, 97f),4),
+          new DuckPersona(new Vec3(byte.MaxValue, 105f, 117f), new Vec3(207f, 84f, 94f), new Vec3( byte.MaxValue, 158f, 166f),5),
           new DuckPersona(new Vec3(49f, 162f, 242f), new Vec3(13f, 123f, 181f), new Vec3(148f, 207f, 245f),6),
           new DuckPersona(new Vec3(175f, 85f, 221f), new Vec3(141f, 36f, 194f), new Vec3(213f, 165f, 238f),7),
-          #if FiftyPRelease
-          new DuckPersona(new Vec3(128f,0f,0f)), 
-          new DuckPersona(new Vec3(0f,95f,0f)), 
-          new DuckPersona(new Vec3(255f,255f,0f)),
-          new DuckPersona(new Vec3(127, 255, 0)),
-          new DuckPersona(new Vec3(16,16,16)), 
-          new DuckPersona(new Vec3(0f,0f,128)), 
-          new DuckPersona(new Vec3(74f,0f,43f)),
-          new DuckPersona(new Vec3(255f,0f,0f)),
-          new DuckPersona(new Vec3(212f,175f,55f)), 
-          new DuckPersona(new Vec3(255f,0f,255f)), 
-          new DuckPersona(new Vec3(0f,30f,0f)),
-          new DuckPersona(new Vec3(145f, 255f, 212f)),
-          new DuckPersona(new Vec3(255f,120f,0f)),
-          new DuckPersona(new Vec3(255f,121f,102f)),
-          new DuckPersona(new Vec3(210f,245f,60f)),
-          new DuckPersona(new Vec3(127f,0f,255f)),
-          new DuckPersona(new Vec3(130f,0f,130f)),
-          new DuckPersona(new Vec3(0f,128f,128f)),
-          new DuckPersona(new Vec3(255f,26f,88f)),
-          new DuckPersona(new Vec3(0f,255f,255f)),
-          new DuckPersona(new Vec3(0f,0f,255f)),
-          new DuckPersona(new Vec3(212f,175f,55f)),
-          new DuckPersona(new Vec3(213f,212f,185f)),
-          new DuckPersona(new Vec3(56f,69f,66f)),
-          new DuckPersona(new Vec3(128f,128f,0)),
-          new DuckPersona(new Vec3(99f,51f,0f)),
-          new DuckPersona(new Vec3(255f,159f,255f)),
-          new DuckPersona(new Vec3(137f,175f,255f)),
-          new DuckPersona(new Vec3(255f,190f,141f)),
-          new DuckPersona(new Vec3(239f,84f,48f)),
-          new DuckPersona(new Vec3(154f,205f,50f)),
-          new DuckPersona(new Vec3(0f,250f,127f)),
-          new DuckPersona(new Vec3(29f,129f,70f)),
-          new DuckPersona(new Vec3(255f,85f,214f)),
-          new DuckPersona(new Vec3(85f,53f,116f)),
-          new DuckPersona(new Vec3(246f,34f,0f)),
-          new DuckPersona(new Vec3(46f,62f,126f)),
-          new DuckPersona(new Vec3(40f,138f,184f)),
-          new DuckPersona(new Vec3(106f,47f,77f)),
-          new DuckPersona(new Vec3(118f,87f,0f)),
-          new DuckPersona(new Vec3(0f,255f,66f)),
-          new DuckPersona(new Vec3(0f,0f,46f)),
-          new DuckPersona(new Vec3(157f,169f,179f))
-          #endif
+          new DuckPersona(new Vec3(128f,0f,0f), 8), 
+          new DuckPersona(new Vec3(0f,95f,0f), 9), 
+          new DuckPersona(new Vec3(255f,255f,0f), 10),
+          new DuckPersona(new Vec3(127, 255, 0), 11),
+          new DuckPersona(new Vec3(16,16,16), 12), 
+          new DuckPersona(new Vec3(0f,0f,128), 13), 
+          new DuckPersona(new Vec3(74f,0f,43f), 14),
+          new DuckPersona(new Vec3(255f,0f,0f), 15),
+          new DuckPersona(new Vec3(212f,175f,55f), 16), 
+          new DuckPersona(new Vec3(255f,0f,255f), 17), 
+          new DuckPersona(new Vec3(0f,30f,0f), 18),
+          new DuckPersona(new Vec3(145f, 255f, 212f), 19),
+          new DuckPersona(new Vec3(255f,120f,0f), 20),
+          new DuckPersona(new Vec3(255f,121f,102f), 21),
+          new DuckPersona(new Vec3(210f,245f,60f), 22),
+          new DuckPersona(new Vec3(127f,0f,255f), 23),
+          new DuckPersona(new Vec3(130f,0f,130f), 24),
+          new DuckPersona(new Vec3(0f,128f,128f), 25),
+          new DuckPersona(new Vec3(255f,26f,88f), 26),
+          new DuckPersona(new Vec3(0f,255f,255f), 27),
+          new DuckPersona(new Vec3(0f,0f,255f), 28),
+          new DuckPersona(new Vec3(212f,175f,55f), 29),
+          new DuckPersona(new Vec3(213f,212f,185f), 30),
+          new DuckPersona(new Vec3(56f,69f,66f), 31),
+          new DuckPersona(new Vec3(128f,128f,0), 32),
+          new DuckPersona(new Vec3(99f,51f,0f), 33),
+          new DuckPersona(new Vec3(255f,159f,255f), 34),
+          new DuckPersona(new Vec3(137f,175f,255f), 35),
+          new DuckPersona(new Vec3(255f,190f,141f), 36),
+          new DuckPersona(new Vec3(239f,84f,48f), 37),
+          new DuckPersona(new Vec3(154f,205f,50f), 38),
+          new DuckPersona(new Vec3(0f,250f,127f), 39),
+          new DuckPersona(new Vec3(29f,129f,70f), 40),
+          new DuckPersona(new Vec3(255f,85f,214f), 41),
+          new DuckPersona(new Vec3(85f,53f,116f), 42),
+          new DuckPersona(new Vec3(246f,34f,0f), 43),
+          new DuckPersona(new Vec3(46f,62f,126f), 44),
+          new DuckPersona(new Vec3(40f,138f,184f), 45),
+          new DuckPersona(new Vec3(106f,47f,77f), 46),
+          new DuckPersona(new Vec3(118f,87f,0f), 47),
+          new DuckPersona(new Vec3(0f,255f,66f), 48),
+          new DuckPersona(new Vec3(0f,0f,46f), 49),
+          new DuckPersona(new Vec3(157f,169f,179f), 50)
         };
+        private static List<DuckPersona> _personasOriginalOrder
+        {
+            get
+            {
+                return DuckNetwork.FiftyPlayerMode ? _fiftyDuckPersonas : _vanillaDuckPersonas;
+            }
+        }
         private static List<DuckPersona> _personasShuffled;
         public static int seed;
 

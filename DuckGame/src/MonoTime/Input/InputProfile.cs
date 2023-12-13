@@ -1166,7 +1166,18 @@ namespace DuckGame
 
         public const string SinglePlayer = "SinglePlayer";
 
-        private static string[] _defaultPlayerMappingStrings = new string[]
+        public static string[] vanillaPlayerMappingStrings = new string[]
+        {
+            "MPPlayer1",
+            "MPPlayer2",
+            "MPPlayer3",
+            "MPPlayer4",
+            "MPPlayer5",
+            "MPPlayer6",
+            "MPPlayer7",
+            "MPPlayer8"
+        };
+        public static string[] fiftyPlayerMappingStrings = new string[]
         {
             "MPPlayer1",
             "MPPlayer2",
@@ -1176,7 +1187,6 @@ namespace DuckGame
             "MPPlayer6",
             "MPPlayer7",
             "MPPlayer8",
-#if FiftyPRelease
             "MPPlayer9",
             "MPPlayer10",
             "MPPlayer11",
@@ -1219,9 +1229,19 @@ namespace DuckGame
             "MPPlayer48",
             "MPPlayer49",
             "MPPlayer50"
-#endif
         };
-
+        private static string[] _defaultPlayerMappingStrings = vanillaPlayerMappingStrings;
+        public static string[] defaultPlayerMappingStrings
+        {
+            get
+            {
+                return _defaultPlayerMappingStrings;
+            }
+            set
+            {
+                _defaultPlayerMappingStrings = value;
+            }
+        }
 
         public const string Blank = "Blank";
 
