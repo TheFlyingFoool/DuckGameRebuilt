@@ -14,6 +14,33 @@ namespace DuckGame
 {
     public class DuckNetwork
     {
+        public static bool FiftyPlayerMode
+        {
+            get
+            {
+                return _fiftyPlayerMode;
+            }
+            set
+            {
+                _fiftyPlayerMode = value;
+                if (value)
+                {
+                    InputProfile.defaultPlayerMappingStrings = InputProfile.fiftyPlayerMappingStrings;
+                    Teams.core.teams = Teams.core._fiftyTeams;
+                }
+                else
+                {
+                    InputProfile.defaultPlayerMappingStrings = InputProfile.vanillaPlayerMappingStrings;
+                    Teams.core.teams = Teams.core._vanillaTeams;
+                }
+                Persona.Shuffle();
+                Input.InitDefaultProfiles();
+                Profiles.core.Initialize();
+                Profiles.core.IsDefault50p(null);
+                core.RecreateProfiles();
+            }
+        }
+        private static bool _fiftyPlayerMode = false;
         private static List<OnlineLevel> _levels = new List<OnlineLevel>()
         {
           new OnlineLevel() { num = 1, xpRequired = 0 },

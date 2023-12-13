@@ -35,28 +35,27 @@ namespace DuckGame
                     DefaultPlayer7,
                     DefaultPlayer8
                 };
-                #if FiftyPRelease
-                try
+                if (DuckNetwork.FiftyPlayerMode)
                 {
-                    for (int i = 8; i < 50; i++)
+                    try
                     {
-                        Profile p = GetProfile(i);
-                        if (Level.current is TitleScreen || !didsetinputs)
+                        for (int i = 8; i < 50; i++)
                         {
-                            didsetinputs = true;
-                            p.inputProfile = InputProfile.Get("MPPlayer" + (i + 1).ToString());
+                            Profile p = GetProfile(i);
+                            if (Level.current is TitleScreen || !didsetinputs)
+                            {
+                                didsetinputs = true;
+                                p.inputProfile = InputProfile.Get("MPPlayer" + (i + 1).ToString());
+                            }
+
+                            profiles.Add(p);
                         }
-
-                        profiles.Add(p);
-
-
+                    }
+                    catch
+                    {
+                        DevConsole.Log("F get_defaultProfilesPrefix");
                     }
                 }
-                catch
-                {
-                    DevConsole.Log("F get_defaultProfilesPrefix");
-                }
-                #endif
                 return profiles;
             }
         }

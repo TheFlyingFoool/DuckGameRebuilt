@@ -11,12 +11,13 @@ namespace DuckGame
         private static int _versionLow = 16376;
         private static int _versionMajor = 1;
         private static ulong _localID = 0;
-        public static int MaxPlayers =
-        #if FiftyPRelease
-            50;
-        #else
-        8;
-        #endif
+        public static int MaxPlayers
+        {
+            get
+            {
+                return DuckNetwork.FiftyPlayerMode ? 50 : 8;
+            }
+        }
         public static int MaxSpectators = 4;
         private static bool _drmFailure = false;
         private static bool _devBuild = false;

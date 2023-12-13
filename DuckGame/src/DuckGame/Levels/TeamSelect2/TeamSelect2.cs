@@ -769,14 +769,15 @@ namespace DuckGame
             _profiles.Add(profileBox2_8);
             Add(profileBox2_8);
 
-            #if FiftyPRelease
-            for (int i = 8; i < 50; i++)
+            if (DuckNetwork.FiftyPlayerMode)
             {
-                ProfileBox2 profileBox2_50 = new ProfileBox2(0, -600 + 240 * i, InputProfile.Get(InputProfile.MPPlayers[i]), defaultProfiles[i], this, i);
-                _profiles.Add(profileBox2_50);
-                Add(profileBox2_50);
+                for (int i = 8; i < 50; i++)
+                {
+                    ProfileBox2 profileBox2_50 = new ProfileBox2(0, -600 + 240 * i, InputProfile.Get(InputProfile.MPPlayers[i]), defaultProfiles[i], this, i);
+                    _profiles.Add(profileBox2_50);
+                    Add(profileBox2_50);
+                }
             }
-            #endif
             Add(new BlankDoor(178f, 179f));
             Add(new HostTable(160f, 170f));
             if (Network.isActive)
