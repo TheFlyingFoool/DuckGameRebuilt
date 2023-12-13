@@ -289,16 +289,17 @@ namespace DuckGame
             SDL.SDL_SetWindowPosition(MonoMain.instance.Window.Handle, x, y);
             DevConsole.Log("Set Window Pos is " + x.ToString() + " " + y.ToString());
         }
-        [Marker.DevConsoleCommand(Name = "tilescreen",
-            To = ImplementTo.DuckHack)]
+        [Marker.DevConsoleCommand(Name = "tilescreen")]
         public static void tilescreen()
         {
             int width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             int height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             string tileinfo = "+screentile";
-            for (int x = 0; x < width; x += 321)
+            int minmwidth = 321;//321
+            int minmheight = 181;//181;
+            for (int x = 0; x < width; x += minmwidth)
             {
-                for (int y = 0; y < height; y += 181)
+                for (int y = 0; y < height; y += minmheight)
                 {
                     Process.Start(Application.ExecutablePath, Program.commandLine + " +screentile " + x.ToString() + " " + y.ToString());
                 }
@@ -306,9 +307,9 @@ namespace DuckGame
             //Process.Start(Application.ExecutablePath, Program.commandLine + " +screentile 0 0");
             //Process.Start(Application.ExecutablePath, Program.commandLine + " +screentile 321 0"); //+screentile 0 0
             DevConsole.Log("Tiling with DGs" + GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width.ToString() + " " + GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height.ToString());
-            Application.Exit();
-            Program.main.KillEverything();
-            Program.main.Exit();
+            //Application.Exit();
+           // Program.main.KillEverything();
+           // Program.main.Exit();
         }
         [Marker.DevConsoleCommand(Name = "crashtest", CanCrash = true,
             To = ImplementTo.DuckHack)]
