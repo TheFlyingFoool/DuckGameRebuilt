@@ -290,26 +290,54 @@ namespace DuckGame
             DevConsole.Log("Set Window Pos is " + x.ToString() + " " + y.ToString());
         }
         [Marker.DevConsoleCommand(Name = "tilescreen")]
-        public static void tilescreen()
+        public static void tilescreen(int n)
         {
             int width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             int height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            string tileinfo = "+screentile";
-            int minmwidth = 321;//321
-            int minmheight = 181;//181;
-            for (int x = 0; x < width; x += minmwidth)
+            int boxWidth = 321;
+            int boxHeight = 181;
+            if (n != 0)
             {
-                for (int y = 0; y < height; y += minmheight)
+                // Given dimensions of the plane
+                double planeWidth = 1920;
+                double planeHeight = 1080;
+
+                // Total number of boxes
+                int numBoxes = n;
+
+                // Aspect ratio of each box
+                double aspectRatio = 1.77777777778;
+
+                // Calculate the total area of the plane
+                double totalArea = planeWidth * planeHeight;
+
+                // Area of each box
+                double areaPerBox = totalArea / numBoxes;
+
+                // Calculate the height and width of each box
+                // Height (H) is the square root of (Area of Each Box / Aspect Ratio)
+                double _boxHeight = Math.Sqrt(areaPerBox / aspectRatio);
+
+                // Width (W) is Aspect Ratio * Height
+                double _boxWidth = aspectRatio * _boxHeight;
+                boxHeight = (int)_boxHeight + 1;
+                boxWidth = (int)_boxWidth + 1;
+
+
+            }
+            for (int x = 0; x < width; x += boxWidth)
+            {
+                for (int y = 0; y < height; y += boxHeight)
                 {
-                    Process.Start(Application.ExecutablePath, Program.commandLine + " +screentile " + x.ToString() + " " + y.ToString());
+                    Process.Start(Application.ExecutablePath, Program.commandLine + " -lanjoiner +screentile " + x.ToString() + " " + y.ToString() + " " + boxWidth.ToString() + " " + boxHeight.ToString());
                 }
             }
             //Process.Start(Application.ExecutablePath, Program.commandLine + " +screentile 0 0");
             //Process.Start(Application.ExecutablePath, Program.commandLine + " +screentile 321 0"); //+screentile 0 0
             DevConsole.Log("Tiling with DGs" + GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width.ToString() + " " + GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height.ToString());
-            //Application.Exit();
-           // Program.main.KillEverything();
-           // Program.main.Exit();
+           // Application.Exit();
+         //   Program.main.KillEverything();
+          //  Program.main.Exit();
         }
         [Marker.DevConsoleCommand(Name = "crashtest", CanCrash = true,
             To = ImplementTo.DuckHack)]

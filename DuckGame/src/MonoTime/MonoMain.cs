@@ -651,7 +651,7 @@ namespace DuckGame
             {
                 Resolution r = new Resolution
                 {
-                    dimensions = new Vec2(321, 181),
+                    dimensions = new Vec2(Program.StartRes.x, Program.StartRes.y),
                     mode = ScreenMode.Windowed
                 };
                 Resolution.Set(r);
