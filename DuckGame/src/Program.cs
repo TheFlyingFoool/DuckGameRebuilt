@@ -431,6 +431,10 @@ namespace DuckGame
                     case "-crash":
                         throw new Exception("you threw it idk");
                         break;
+                    case "-nomusic":
+                        DGRSettings.LoadMusic = false;
+                        DGRSettings.LoaderMusic = false;
+                        break;
                     case "-latecrash":
                         lateCrash = true;
                         break;

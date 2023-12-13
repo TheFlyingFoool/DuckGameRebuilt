@@ -213,7 +213,7 @@ namespace DuckGame
                     isHost = isHost
                 };
                 _basicConnections.Add(ncBasicConnection2);
-                _pendingMessages.Enqueue(new NCError("client connecting to " + endPoint.ToString() + ".", NCErrorType.Message));
+                _pendingMessagesList.Add(new NCError("client connecting to " + endPoint.ToString() + ".", NCErrorType.Message));
                 return ncBasicConnection2;
             }
         }
@@ -278,7 +278,7 @@ namespace DuckGame
                                     status = NCBasicStatus.Connecting
                                 };
                                 _basicConnections.Add(ncBasicConnection);
-                                _pendingMessages.Enqueue(new NCError("connection attempt from " + ncBasicConnection.connection.ToString(), NCErrorType.Message));
+                                _pendingMessagesList.Add(new NCError("connection attempt from " + ncBasicConnection.connection.ToString(), NCErrorType.Message));
                             }
                             if (ncBasicConnection != null)
                             {
@@ -341,7 +341,7 @@ namespace DuckGame
                     NCBasicConnection basicConnection = _basicConnections[index];
                     if (basicConnection.status != NCBasicStatus.Connected && basicConnection.packets > 0 && basicConnection.status != NCBasicStatus.Disconnecting)
                     {
-                        _pendingMessages.Enqueue(new NCError("connection to " + basicConnection.connection.ToString() + " succeeded!", NCErrorType.Success));
+                        _pendingMessagesList.Add(new NCError("connection to " + basicConnection.connection.ToString() + " succeeded!", NCErrorType.Success));
                         basicConnection.status = NCBasicStatus.Connected;
                         AttemptConnection(basicConnection.connection, basicConnection.isHost);
                         basicConnection.isHost = false;

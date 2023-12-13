@@ -329,7 +329,7 @@ namespace DuckGame
             {
                 for (int y = 0; y < height; y += boxHeight)
                 {
-                    Process.Start(Application.ExecutablePath, Program.commandLine + " -lanjoiner +screentile " + x.ToString() + " " + y.ToString() + " " + boxWidth.ToString() + " " + boxHeight.ToString());
+                    Process.Start(Application.ExecutablePath, Program.commandLine + "-nomusic -lanjoiner +screentile " + x.ToString() + " " + y.ToString() + " " + boxWidth.ToString() + " " + boxHeight.ToString());
                 }
             }
             //Process.Start(Application.ExecutablePath, Program.commandLine + " +screentile 0 0");

@@ -241,8 +241,10 @@ namespace DuckGame
 
             public void MakeDirty()
             {
-                foreach (NetworkConnection connection in Network.connections)
-                    dirtyConnections[connection] = true;
+                for (int i = 0; i < Network.connections.Count; i++)
+                {
+                    dirtyConnections[Network.connections[i]] = true;
+                }
             }
 
             public void Clean(NetworkConnection pConnection)
