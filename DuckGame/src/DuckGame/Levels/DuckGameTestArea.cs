@@ -65,7 +65,7 @@ namespace DuckGame
             _confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _quit)), true);
             _confirmMenu.Close();
             _pauseGroup.Add(_confirmMenu, false);
-            _testMode.Add(new UIMenuItemNumber("PLAYERS", field: new FieldBinding(this, "numPlayers", 2f, 8f, 1f)), true);
+            _testMode.Add(new UIMenuItemNumber("PLAYERS", field: new FieldBinding(this, "numPlayers", 2f, DuckNetwork.FiftyPlayerMode?50f:8f, 1f)), true);
             _testMode.Add(new UIMenuItem(Triggers.Start, new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _startTestMode)), true);
             _testMode.SetBackFunction(new UIMenuActionOpenMenu(_testMode, _pauseMenu));
             _testMode.Close();
@@ -198,6 +198,18 @@ namespace DuckGame
             {
                 foreach (Profile profile in Profiles.active)
                     profile.team = null;
+                if (numPlayers > 8)
+                {
+                    for (int i = 8; i < numPlayers; i++)
+                    {
+                        Profile prof = Profiles.core.defaultProfileMappings[i];
+                        prof.team = Teams.all[i];
+                        if (prof.inputProfile == null)
+                        {
+                            prof.inputProfile = InputProfile.core.Get(InputProfile.defaultPlayerMappingStrings[i]);
+                        }
+                    }
+                }
                 if (numPlayers > 7)
                 {
                     Profiles.DefaultPlayer8.team = Teams.Player8;
