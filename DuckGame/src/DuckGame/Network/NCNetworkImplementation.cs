@@ -308,7 +308,8 @@ namespace DuckGame
         protected NetworkConnection GetConnection(object context)
         {
             string id = GetConnectionIdentifier(context);
-            for (int i = 0; i < allConnections.Count; i++)
+            NetworkConnection[] _allConnections = allConnections.ToArray();
+            for (int i = 0; i < _allConnections.Length; i++)
             {
                 if (allConnections[i].identifier == id)
                 {
