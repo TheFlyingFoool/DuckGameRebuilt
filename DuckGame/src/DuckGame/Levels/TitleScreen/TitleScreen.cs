@@ -1746,14 +1746,17 @@ namespace DuckGame
                 flash = 0f;
         }
 
-        private void DisplayUpperMonitorMessage(string message, float row=2f, Color color=default(Color))
+        private void DisplayUpperMonitorMessage(string message, float row=2f, Color color=default(Color), float scaleVal=1f)
         {
             if (color == default(Color)) color = Color.White;
+            Vec2 oldScale = _font.scale;
+            _font.scale = new Vec2(scaleVal);
             if (secondTitlescreen)
             {
                 _font.Draw(message, current.camera.PercentW(50f) - _font.GetWidth(message) / 2f, row * 11f - 7f + 185, color, (Depth)0.95);
             }
             else _font.Draw(message, current.camera.PercentW(50f) - _font.GetWidth(message) / 2f, row * 11f - 7f, color, (Depth)0.95);
+            _font.scale = oldScale;
         }
 
         public override void PostDrawLayer(Layer layer)
@@ -1790,7 +1793,7 @@ namespace DuckGame
                     }
                     else if (_selection == TitleMenuSelection.Recorderator)
                     {
-                        DisplayUpperMonitorMessage("@SELECT@RECORDERATOR");
+                        DisplayUpperMonitorMessage("@SELECT@RECORDERATOR", scaleVal: 0.9f);
                     }
                     else if (_selection == TitleMenuSelection.FeatherFashion)
                     {
