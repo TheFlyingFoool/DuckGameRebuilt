@@ -356,7 +356,7 @@ namespace DuckGame
             _pauseMenu = new UIMenu("@LWING@MULTIPLAYER@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 200f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
             _inviteMenu = new UIInviteMenu("INVITE FRIENDS", null, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
             ((UIInviteMenu)_inviteMenu).SetAction(new UIMenuActionOpenMenu(_inviteMenu, _pauseMenu));
-            UIDivider component1 = new UIDivider(true, 0.8f);
+            UIDivider component1 = new UIDivider(true, 0.75f);
             component1.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
             _pauseMenu.Add(component1, true);
             component1.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(_pauseGroup)), true);
@@ -408,7 +408,7 @@ namespace DuckGame
                 Remove(_localPauseGroup);
             _localPauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
             _localPauseMenu = new UIMenu("MULTIPLAYER", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
-            UIDivider component2 = new UIDivider(true, 0.8f);
+            UIDivider component2 = new UIDivider(true, 0.75f);
             component2.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
             _localPauseMenu.Add(component2, true);
             component2.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(_localPauseGroup)), true);
