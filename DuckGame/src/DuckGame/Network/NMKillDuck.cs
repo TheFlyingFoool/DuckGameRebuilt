@@ -26,11 +26,10 @@ namespace DuckGame
         {
             Profile killed = DuckNetwork.profiles[index];
             NetworkConnection conn = connection;
-            Profile killer = null;
             if (conn.profile != null && conn.profile.team != null && killed != null && killed.team != null)
             {
 
-                killer = conn.profile;
+                Profile killer = conn.profile;
                 if (killer.duck != null && killer.duck.converted != null)
                 {
                     killer = killer.duck.converted.profile;
@@ -39,6 +38,7 @@ namespace DuckGame
                 {
                     killed = killed.duck.converted.profile;
                 }
+
                 if (killer.team != killed.team)
                 {
                     killer.team.score++;
@@ -73,7 +73,7 @@ namespace DuckGame
             if (profile.duck == null || !profile.duck.WillAcceptLifeChange(lifeChange))
                 return;
             DestroyType type = !crush ? (!fall ? new DTImpact(null) : new DTFall()) : new DTCrush(null);
-
+            profile.duck.isKillMessage = true;
             if (Network.isServer && TeamSelect2.KillsForPoints)
             {
                 K4PLogic();

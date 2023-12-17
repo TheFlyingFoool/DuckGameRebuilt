@@ -1522,8 +1522,6 @@ namespace DuckGame
 
                     if (responsible != null)
                     {
-                        DevConsole.Log((responsible.team.name));
-                        DevConsole.Log((profile.team.name));
                         if (responsible != null && (!Network.isActive || (Network.isServer && responsible.team != profile.team)))
                         {
                             responsible.team.score++;
