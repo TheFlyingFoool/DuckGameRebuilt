@@ -27,17 +27,19 @@ namespace DuckGame
                 {
                     InputProfile.defaultPlayerMappingStrings = InputProfile.fiftyPlayerMappingStrings;
                     Teams.core.teams = Teams.core._fiftyTeams;
+
+                    Persona.Shuffle();
+                    Input.InitDefaultProfiles();
+                    Profiles.core.Initialize();
+                    Profiles.core.IsDefault50p(null);
+                    core.RecreateProfiles();
                 }
                 else
                 {
                     InputProfile.defaultPlayerMappingStrings = InputProfile.vanillaPlayerMappingStrings;
                     Teams.core.teams = Teams.core._vanillaTeams;
+                    Persona.Shuffle();
                 }
-                Persona.Shuffle();
-                Input.InitDefaultProfiles();
-                Profiles.core.Initialize();
-                Profiles.core.IsDefault50p(null);
-                core.RecreateProfiles();
             }
         }
         public static bool forcedstartedalone;
@@ -1071,6 +1073,7 @@ namespace DuckGame
                 Main.SpecialCode = "men2";
                 _core._matchModifierMenu.SetBackFunction(new UIMenuActionOpenMenu(_core._matchModifierMenu, _core._matchSettingMenu));
                 _core._matchModifierMenu.Close();
+                _core._matchSettingMenu.Add(new UIMenuItemToggle("Kills Scoring", field: new FieldBinding(typeof(TeamSelect2), nameof(TeamSelect2.KillsForPoints)), c: Colors.DGPink));
                 _core._matchSettingMenu.AddMatchSetting(TeamSelect2.GetOnlineSetting("teams"), false);
                 //_core._matchSettingMenu.Add(new UISideButton(66, -50, 50, 0, "@SHOOT@"));
                 //_core._matchSettingMenu.Add(new UISideButton(66, -50, 50, 0, "@SHOOT@"));
@@ -2054,7 +2057,7 @@ namespace DuckGame
         public static bool prevMG;
         public static void MidGameJoiningLogic()
         {
-            if (Network.isActive)
+            if (Network.isActive && Network.isServer)
             {
                 if (DGRSettings.MidGameJoining != prevMG)
                 {

@@ -1,4 +1,6 @@
-﻿namespace DuckGame
+﻿using static DuckGame.CMD;
+
+namespace DuckGame
 {
     public class NMDestroyProp : NMEvent
     {

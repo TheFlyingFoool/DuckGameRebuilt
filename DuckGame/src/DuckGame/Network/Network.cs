@@ -193,7 +193,11 @@ namespace DuckGame
 
         public static void MakeActive() => activeNetwork._networkActive = true;
 
-        public static void MakeInactive() => activeNetwork._networkActive = false;
+        public static void MakeInactive()
+        {
+            activeNetwork._networkActive = false;
+            DuckNetwork.FiftyPlayerMode = false;
+        }
 
         public static bool isActive => activeNetwork._networkActive || isFakeActive;
         public static bool isFakeActive => (Level.current is DuckGameTestArea || (Level.current is GameLevel gv && gv._editorTestMode)) && DGRSettings.EditorOnlinePhysics;

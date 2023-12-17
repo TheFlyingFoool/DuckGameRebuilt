@@ -582,7 +582,6 @@ namespace DuckGame
             _hostGameEditedMatchSettings = true;
             _hostMatchSettingsMenu.SetBackFunction(new UIMenuActionOpenMenuCallFunction(_hostMatchSettingsMenu, _hostSettingsMenu, HUD.CloseAllCorners));
         }
-
         private void BuildHostMatchSettingsMenu()
         {
             _hostMatchSettingsMenu = new UIMenu("@LWING@MATCH SETTINGS@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
@@ -602,6 +601,7 @@ namespace DuckGame
             _hostModifiersMenu.SetBackFunction(new UIMenuActionOpenMenu(_hostModifiersMenu, _hostMatchSettingsMenu));
             _hostModifiersMenu.Close();
             _playOnlineGroup.Add(_hostModifiersMenu, false);
+            _hostMatchSettingsMenu.Add(new UIMenuItemToggle("Kills Scoring", field: new FieldBinding(typeof(TeamSelect2), nameof(TeamSelect2.KillsForPoints)), c: Colors.DGPink));
             _hostMatchSettingsMenu.AddMatchSetting(GetOnlineSetting("teams"), false);
 
 
@@ -808,6 +808,7 @@ namespace DuckGame
                     _modifierMenu.Add(new UIMenuItem("@TINYLOCK@LOCKED", c: Color.Red), true);
             }
             _modifierMenu.Close();
+            _multiplayerMenu.Add(new UIMenuItemToggle("Kills Scoring", field: new FieldBinding(typeof(TeamSelect2), nameof(TeamSelect2.KillsForPoints)), c: Colors.DGPink));
 
             int z = 0;
             foreach (MatchSetting matchSetting in matchSettings)
