@@ -21,6 +21,7 @@ namespace DuckGame
         private Thread _timeThread;
         private bool _isServer = true;
         private bool _isServerP2P = true;
+        protected List<NCError> _pendingMessagesList = new List<NCError>();
         protected Queue<NCError> _pendingMessages = new Queue<NCError>();
         protected Lobby _lobby;
         private GhostManager _ghostManager;
@@ -188,9 +189,17 @@ namespace DuckGame
             NCError ncError = !_isServer ? OnSpinClientThread() : OnSpinServerThread();
             lock (_threadPendingMessages)
             {
-                foreach (NCError pendingMessage in _pendingMessages)
-                    _threadPendingMessages.Enqueue(pendingMessage);
-                _pendingMessages.Clear();
+                if (_pendingMessages.Count > 0)
+                {
+                    foreach (NCError pendingMessage in _pendingMessages)
+                        _threadPendingMessages.Enqueue(pendingMessage);
+                    _pendingMessages.Clear();
+                }
+                for (int i = 0; i < _pendingMessagesList.Count; i++)
+                {
+                    _threadPendingMessages.Enqueue(_pendingMessagesList[i]);
+                }
+                _pendingMessagesList.Clear();
             }
             if (ncError == null)
                 return;
@@ -205,7 +214,7 @@ namespace DuckGame
                 Thread.Sleep(8);
                 Thread_Loop();
             }
-            _pendingMessages.Enqueue(new NCError("|DGBLUE|NETCORE |DGRED|Network thread ended", NCErrorType.Debug));
+            _pendingMessagesList.Add(new NCError("|DGBLUE|NETCORE |DGRED|Network thread ended", NCErrorType.Debug));
             _killThread = false;
         }
 
@@ -299,7 +308,15 @@ namespace DuckGame
         protected NetworkConnection GetConnection(object context)
         {
             string id = GetConnectionIdentifier(context);
-            return allConnections.FirstOrDefault(x => x.identifier == id);
+            NetworkConnection[] _allConnections = allConnections.ToArray();
+            for (int i = 0; i < _allConnections.Length; i++)
+            {
+                if (allConnections[i].identifier == id)
+                {
+                    return allConnections[i];
+                }
+            }
+            return default;
         }
 
         public void DisconnectClient(NetworkConnection connection, DuckNetErrorInfo error, bool kicked = false)
@@ -455,9 +472,9 @@ namespace DuckGame
             if (connection == null)
             {
                 if (context != null && context is User)
-                    _pendingMessages.Enqueue(new NCError("|DGBLUE|NETCORE |DGRED|Packet received from unknown connection(" + (context as User).id.ToString() + "," + (context as User).name + ").", NCErrorType.Debug));
+                    _pendingMessagesList.Add(new NCError("|DGBLUE|NETCORE |DGRED|Packet received from unknown connection(" + (context as User).id.ToString() + "," + (context as User).name + ").", NCErrorType.Debug));
                 else
-                    _pendingMessages.Enqueue(new NCError("|DGBLUE|NETCORE |DGRED|Packet received from unknown connection.", NCErrorType.Debug));
+                    _pendingMessagesList.Add(new NCError("|DGBLUE|NETCORE |DGRED|Packet received from unknown connection.", NCErrorType.Debug));
             }
             else if (connection.banned)
             {
@@ -465,7 +482,7 @@ namespace DuckGame
                     return;
                 if (Network.activeNetwork.core.lobby != null && connection.data is User)
                     Steam_LobbyMessage.Send("COM_FAIL", connection.data as User);
-                _pendingMessages.Enqueue(new NCError("|DGBLUE|NETCORE |DGRED|Ignoring packet (banned)(" + connection.ToString() + ").", NCErrorType.Debug));
+                _pendingMessagesList.Add(new NCError("|DGBLUE|NETCORE |DGRED|Ignoring packet (banned)(" + connection.ToString() + ").", NCErrorType.Debug));
                 connection.failureNotificationCooldown = 60;
             }
             else
@@ -495,7 +512,7 @@ namespace DuckGame
                     networkPacket.valid = true;
                     if (_pendingPackets.Count > 200)
                     {
-                        _pendingMessages.Enqueue(new NCError("|DGRED|Discarding packets due to overflow..", NCErrorType.Debug));
+                        _pendingMessagesList.Add(new NCError("|DGRED|Discarding packets due to overflow..", NCErrorType.Debug));
                         //this._discardMessagePlayed = true;
                     }
                     else
@@ -523,8 +540,8 @@ namespace DuckGame
                 }
                 catch (Exception ex)
                 {
-                    _pendingMessages.Enqueue(new NCError("@error |DGRED|OnPacket exception:", NCErrorType.Debug));
-                    _pendingMessages.Enqueue(new NCError(ex.Message, NCErrorType.Debug));
+                    _pendingMessagesList.Add(new NCError("@error |DGRED|OnPacket exception:", NCErrorType.Debug));
+                    _pendingMessagesList.Add(new NCError(ex.Message, NCErrorType.Debug));
                 }
             }
         }

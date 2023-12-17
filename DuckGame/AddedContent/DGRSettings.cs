@@ -280,8 +280,7 @@ namespace DuckGame
             }
         }
 
-        [Marker.AutoConfig]
-        public static int S_ParticleMultiplier = 3;
+        [Marker.AutoConfig] public static int S_ParticleMultiplier = 3;
 
         //listen if you wanna make better code go for it i cant bother to personally
         //-NiK0
@@ -299,6 +298,23 @@ namespace DuckGame
                     6 => 8, //WUMBO
                     7 => 16, //UNCONTAUNBLE
                     _ => 0, //NONE
+                };
+            }
+        }
+
+
+        [Marker.AutoConfig] public static int HatSelectorSize = 0;
+
+        public static float ActualHatSelectorSize
+        {
+            get
+            {
+                return HatSelectorSize switch
+                {
+                    0 => 1, //NORMAL 
+                    1 => 0.7f, //BIG
+                    2 => 0.5f, //WUMBO
+                    _ => 1, //NONE
                 };
             }
         }

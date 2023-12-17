@@ -64,7 +64,7 @@ namespace DuckGame
                     if (equipment != null) Level.Remove(equipment);
                 }
             }
-
+            if (DGRSettings.arcadeDuckColor > 7) DGRSettings.arcadeDuckColor = 0; //this crashes sometimes -NiK0
             d.profile.persona = Persona.alllist[DGRSettings.arcadeDuckColor];
             
             _profile = d.profile;

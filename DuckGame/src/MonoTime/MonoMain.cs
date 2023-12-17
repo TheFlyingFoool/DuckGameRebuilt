@@ -651,7 +651,7 @@ namespace DuckGame
             {
                 Resolution r = new Resolution
                 {
-                    dimensions = new Vec2(321, 181),
+                    dimensions = new Vec2(Program.StartRes.x, Program.StartRes.y),
                     mode = ScreenMode.Windowed
                 };
                 Resolution.Set(r);
@@ -1086,7 +1086,7 @@ namespace DuckGame
             OnStart();
             _started = true;
 
-            Recorderator.PostInitialize();
+            if (!Program.IsLanTestUser) Recorderator.PostInitialize();
             // this is basically the lifeline of all attributes so i cant
             // use the PostInitialize attribute for it since it wont even
             // work without this lol

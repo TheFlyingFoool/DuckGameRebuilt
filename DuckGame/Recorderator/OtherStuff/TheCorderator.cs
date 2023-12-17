@@ -857,48 +857,55 @@ namespace DuckGame
                     string zipFilePath = CordsPath + extraPath + "cord_" + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".crf";
 
                     Directory.CreateDirectory(CordsPath + extraPath);
-                    using (FileStream zipStream = new FileStream(zipFilePath, FileMode.Create))
+                    try
                     {
-                        using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Create))
+                        using (FileStream zipStream = new FileStream(zipFilePath, FileMode.Create))
                         {
-                            ZipArchiveEntry entry = archive.CreateEntry("replaydata.rdt");
-
-                            using (Stream entryStream = entry.Open())
+                            using (ZipArchive archive = new ZipArchive(zipStream, ZipArchiveMode.Create))
                             {
-                                customFileStream.CopyTo(entryStream);
-                            }
-                            //Lbf
+                                ZipArchiveEntry entry = archive.CreateEntry("replaydata.rdt");
 
-
-                            ZipArchiveEntry entry3 = archive.CreateEntry("level.lbf");
-                            using (Stream entryStream3 = entry3.Open())
-                            {
-                                using (MemoryStream customFileStream3 = new MemoryStream(Lbf.ToArray()))
+                                using (Stream entryStream = entry.Open())
                                 {
-                                    customFileStream3.CopyTo(entryStream3);
+                                    customFileStream.CopyTo(entryStream);
                                 }
-                            }
+                                //Lbf
 
-                            ZipArchiveEntry entry4 = archive.CreateEntry("hatpreview.hpb");
-                            using (Stream entryStream4 = entry4.Open())
-                            {
-                                using (MemoryStream customFileStream4 = new MemoryStream(bf4.ToArray()))
+
+                                ZipArchiveEntry entry3 = archive.CreateEntry("level.lbf");
+                                using (Stream entryStream3 = entry3.Open())
                                 {
-                                    customFileStream4.CopyTo(entryStream4);
+                                    using (MemoryStream customFileStream3 = new MemoryStream(Lbf.ToArray()))
+                                    {
+                                        customFileStream3.CopyTo(entryStream3);
+                                    }
                                 }
-                            }
 
-                            //save metadata last -NiK0
-                            // Second entry from bf2 with the name "metadata.rmt" -ChatGPT
-                            ZipArchiveEntry entry2 = archive.CreateEntry("metadata.rmt");
-                            using (Stream entryStream2 = entry2.Open())
-                            {
-                                using (MemoryStream customFileStream2 = new MemoryStream(bf2.ToArray()))
+                                ZipArchiveEntry entry4 = archive.CreateEntry("hatpreview.hpb");
+                                using (Stream entryStream4 = entry4.Open())
                                 {
-                                    customFileStream2.CopyTo(entryStream2);
+                                    using (MemoryStream customFileStream4 = new MemoryStream(bf4.ToArray()))
+                                    {
+                                        customFileStream4.CopyTo(entryStream4);
+                                    }
+                                }
+
+                                //save metadata last -NiK0
+                                // Second entry from bf2 with the name "metadata.rmt" -ChatGPT
+                                ZipArchiveEntry entry2 = archive.CreateEntry("metadata.rmt");
+                                using (Stream entryStream2 = entry2.Open())
+                                {
+                                    using (MemoryStream customFileStream2 = new MemoryStream(bf2.ToArray()))
+                                    {
+                                        customFileStream2.CopyTo(entryStream2);
+                                    }
                                 }
                             }
                         }
+                    }
+                    catch
+                    {
+                        //this should never happen anyways, im just putting this here because it happens when debugging with multiple LAN instances -NiK0
                     }
                 }
                 //File.WriteAllBytes(path, bf.ToArray());

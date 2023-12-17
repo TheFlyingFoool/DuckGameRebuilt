@@ -427,10 +427,7 @@ namespace DuckGame
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
             
-            menu.Add(new UIMenuItemToggle("No Level Restrictions", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.IgnoreLevRestrictions)))
-            {
-                dgrDescription = "When enabled, you'll be able to turn on any custom level on an online match"
-            });
+            
 
             menu.Add(new UIMenuItemToggle("Faster Load", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.FasterLoad)))
             {
@@ -450,6 +447,12 @@ namespace DuckGame
             menu.Add(new UIMenuItemToggle("QR Code Join Links", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.QRCodeJoinLinks)))
             {
                 dgrDescription = "Copies a QR code representing the join link"
+            });
+
+
+            menu.Add(new UIMenuItemToggle("50p Mode", field: new FieldBinding(typeof(DuckNetwork), nameof(DuckNetwork.FiftyPlayerMode)))
+            {
+                dgrDescription = "Toggles 50p mode, will always reset to false after game restart"
             });
 
             menu.Add(new UIText(" ", Color.White));
@@ -736,6 +739,16 @@ namespace DuckGame
 
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
+            menu.Add(new UIMenuItemNumber("Hat Selector Zoom", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HatSelectorSize), 0, 2, 1), valStrings: new List<string>()
+            {
+                "Normal",
+                "Big",
+                "WUMBO"
+            })
+            {
+                dgrDescription = "The zoom on the hat selector"
+            });
+
             menu.Add(new UIMenuItemToggle("Lobby Name", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.LobbyNameOnPause)))
             {
                 dgrDescription = "Displays lobby name on pause screen (not supporting LAN lobbies)"
@@ -783,7 +796,10 @@ namespace DuckGame
             {
                 dgrDescription = "Whether or not to render a single line of load progress at startup, in low end systems this might help"
             });
-
+            menu.Add(new UIMenuItemToggle("Fast Level loading", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.IgnoreLevRestrictions)))
+            {
+                dgrDescription = "Disables the custom level filter making custom levels load instantly when looking at them in the match settings"
+            });
 
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 

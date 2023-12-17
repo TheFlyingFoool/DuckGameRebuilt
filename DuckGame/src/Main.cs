@@ -126,7 +126,7 @@ namespace DuckGame
                 NCSteam.inviteLobbyID = connectID;
                 Level.current = new JoinServer(connectID, lobbyPassword);
             }
-            else if (Program.lanjoiner)
+            else if (Program.IsLanTestUser)
             {
                 SpecialCode = "Joining lobby on startup (127.0.0.1:1337)";
                 NCSteam.PrepareProfilesForJoin();

@@ -251,7 +251,7 @@ namespace DuckGame
         [Marker.DevConsoleCommand(Name = "playdgm")]
         public static void PlayDGM()
         {
-            DGMSong vs = new DGMSong("Content/Audio/test.dgm");
+            DGMSong vs = new DGMSong("Content/Audio/testdgm");
             vs.Play();
             vs.looped = false;
         }

@@ -43,6 +43,7 @@ namespace DuckGame
                 _serializedData.Write(name);
             foreach (byte persona in personas)
                 _serializedData.Write(persona);
+            _serializedData.Write(true); //this is here to signify this is a rebuilt user -NiK0
         }
 
         public override void OnDeserialize(BitBuffer d)
@@ -62,7 +63,16 @@ namespace DuckGame
                 names.Add(d.ReadString());
             for (int index = 0; index < num; ++index)
                 personas.Add(d.ReadByte());
+            try//try catch just in case you never know -NiK0
+            {
+                isRebuiltUser = d.ReadBool();
+            }
+            catch
+            {
+                isRebuiltUser = false;
+            }
         }
+        public bool isRebuiltUser;
 
         public struct Info
         {

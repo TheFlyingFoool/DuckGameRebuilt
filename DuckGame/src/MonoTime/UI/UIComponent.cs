@@ -234,7 +234,7 @@ namespace DuckGame
                 _startPosition = position;
                 position.y = layer.camera.height * 2f;
             }
-            if (anchor == null)
+            if (!isAnchored)
             {
                 float to = _close ? layer.camera.height * 2f : _startPosition.y;
                 if (animating)

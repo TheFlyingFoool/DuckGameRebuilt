@@ -49,7 +49,7 @@ namespace DuckGame
             foreach (Profile profile in Profiles.active)
                 profile.duck = null;
         }
-
+        public int spawnAmount;
         public override void Initialize()
         {
             firstDead = false;
@@ -64,6 +64,11 @@ namespace DuckGame
             AddThing(_deathmatch);
             _pendingSpawns = _deathmatch.SpawnPlayers(true);
             _pendingSpawns = _pendingSpawns.OrderBy(sp => sp.x).ToList();
+            spawnAmount = 1;
+            if (_pendingSpawns.Count > 8)
+            {
+                spawnAmount += _pendingSpawns.Count / 8;
+            }
             foreach (Thing pendingSpawn in _pendingSpawns)
                 followCam.Add(pendingSpawn);
             followCam.Adjust();
@@ -123,64 +128,74 @@ namespace DuckGame
                 _waitSpawn = 1.1f;
                 if (_pendingSpawns.Count == 1)
                     _waitSpawn = 2f;
-                Duck pendingSpawn = _pendingSpawns[0];
-                pendingSpawn.visible = true;
-                AddThing(pendingSpawn);
-                _pendingSpawns.RemoveAt(0);
-                if (Network.isServer && Network.isActive)
-                    Send.Message(new NMSpawnDuck(pendingSpawn.netProfileIndex));
+                int loops = 1;
+                if (spawnAmount > 1)
+                {
+                    _waitSpawn -= spawnAmount / 10f;
+                    if (_pendingSpawns.Count > spawnAmount) loops = spawnAmount;
+                    else loops = _pendingSpawns.Count;
+                }
+                for (int i = 0; i < loops; i++)
+                {
+                    Duck pendingSpawn = _pendingSpawns[0];
+                    pendingSpawn.visible = true;
+                    AddThing(pendingSpawn);
+                    _pendingSpawns.RemoveAt(0);
+                    if (Network.isServer && Network.isActive)
+                        Send.Message(new NMSpawnDuck(pendingSpawn.netProfileIndex));
 
-                Vec3 color = pendingSpawn.profile.persona.color;
-                Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 0f, new Color((int)color.x, (int)color.y, (int)color.z), 32f));
-                Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, -4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
-                Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
-                Add(new SpawnAimer(pendingSpawn.x, pendingSpawn.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), pendingSpawn.persona, 4f));
-                SFX.DontSave = 1;
-                SFX.Play("pullPin", 0.7f);
-                if (Party.HasPerk(pendingSpawn.profile, PartyPerks.Present) || TeamSelect2.Enabled("WINPRES") && Deathmatch.lastWinners.Contains(pendingSpawn.profile))
-                {
-                    Present h = new Present(pendingSpawn.x, pendingSpawn.y);
-                    Add(h);
-                    pendingSpawn.GiveHoldable(h);
+                    Vec3 color = pendingSpawn.profile.persona.color;
+                    Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 0f, new Color((int)color.x, (int)color.y, (int)color.z), 32f));
+                    Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, -4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
+                    Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
+                    Add(new SpawnAimer(pendingSpawn.x, pendingSpawn.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), pendingSpawn.persona, 4f));
+                    SFX.DontSave = 1;
+                    SFX.Play("pullPin", 0.7f);
+                    if (Party.HasPerk(pendingSpawn.profile, PartyPerks.Present) || TeamSelect2.Enabled("WINPRES") && Deathmatch.lastWinners.Contains(pendingSpawn.profile))
+                    {
+                        Present h = new Present(pendingSpawn.x, pendingSpawn.y);
+                        Add(h);
+                        pendingSpawn.GiveHoldable(h);
+                    }
+                    if (Party.HasPerk(pendingSpawn.profile, PartyPerks.Jetpack) || TeamSelect2.Enabled("JETTY"))
+                    {
+                        Jetpack e = new Jetpack(pendingSpawn.x, pendingSpawn.y);
+                        Add(e);
+                        pendingSpawn.Equip(e);
+                    }
+                    if (TeamSelect2.Enabled("HELMY"))
+                    {
+                        Helmet e = new Helmet(pendingSpawn.x, pendingSpawn.y);
+                        Add(e);
+                        pendingSpawn.Equip(e);
+                    }
+                    if (TeamSelect2.Enabled("SHOESTAR"))
+                    {
+                        Boots e = new Boots(pendingSpawn.x, pendingSpawn.y);
+                        Add(e);
+                        pendingSpawn.Equip(e);
+                    }
+                    if (Party.HasPerk(pendingSpawn.profile, PartyPerks.Armor))
+                    {
+                        Helmet e1 = new Helmet(pendingSpawn.x, pendingSpawn.y);
+                        Add(e1);
+                        pendingSpawn.Equip(e1);
+                        ChestPlate e2 = new ChestPlate(pendingSpawn.x, pendingSpawn.y);
+                        Add(e2);
+                        pendingSpawn.Equip(e2);
+                    }
+                    if (Party.HasPerk(pendingSpawn.profile, PartyPerks.Pistol))
+                    {
+                        Pistol h = new Pistol(pendingSpawn.x, pendingSpawn.y);
+                        Add(h);
+                        pendingSpawn.GiveHoldable(h);
+                    }
+                    if (!Party.HasPerk(pendingSpawn.profile, PartyPerks.NetGun))
+                        return;
+                    NetGun h1 = new NetGun(pendingSpawn.x, pendingSpawn.y);
+                    Add(h1);
+                    pendingSpawn.GiveHoldable(h1);
                 }
-                if (Party.HasPerk(pendingSpawn.profile, PartyPerks.Jetpack) || TeamSelect2.Enabled("JETTY"))
-                {
-                    Jetpack e = new Jetpack(pendingSpawn.x, pendingSpawn.y);
-                    Add(e);
-                    pendingSpawn.Equip(e);
-                }
-                if (TeamSelect2.Enabled("HELMY"))
-                {
-                    Helmet e = new Helmet(pendingSpawn.x, pendingSpawn.y);
-                    Add(e);
-                    pendingSpawn.Equip(e);
-                }
-                if (TeamSelect2.Enabled("SHOESTAR"))
-                {
-                    Boots e = new Boots(pendingSpawn.x, pendingSpawn.y);
-                    Add(e);
-                    pendingSpawn.Equip(e);
-                }
-                if (Party.HasPerk(pendingSpawn.profile, PartyPerks.Armor))
-                {
-                    Helmet e1 = new Helmet(pendingSpawn.x, pendingSpawn.y);
-                    Add(e1);
-                    pendingSpawn.Equip(e1);
-                    ChestPlate e2 = new ChestPlate(pendingSpawn.x, pendingSpawn.y);
-                    Add(e2);
-                    pendingSpawn.Equip(e2);
-                }
-                if (Party.HasPerk(pendingSpawn.profile, PartyPerks.Pistol))
-                {
-                    Pistol h = new Pistol(pendingSpawn.x, pendingSpawn.y);
-                    Add(h);
-                    pendingSpawn.GiveHoldable(h);
-                }
-                if (!Party.HasPerk(pendingSpawn.profile, PartyPerks.NetGun))
-                    return;
-                NetGun h1 = new NetGun(pendingSpawn.x, pendingSpawn.y);
-                Add(h1);
-                pendingSpawn.GiveHoldable(h1);
             }
             else if (!_started)
             {

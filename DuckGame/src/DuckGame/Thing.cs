@@ -13,6 +13,7 @@ namespace DuckGame
     /// </summary>
     public abstract class Thing : Transform
     {
+        public bool isAnchored;
         public bool SpawnCannonUpdate;
         public int SkipIntratick;
         public SomethingSomethingVessel currentVessel;
@@ -676,7 +677,11 @@ namespace DuckGame
         public Anchor anchor
         {
             get => _anchor;
-            set => _anchor = value;
+            set
+            {
+                isAnchored = value != null;
+                _anchor = value;
+            }
         }
 
         public virtual Vec2 anchorPosition => position;

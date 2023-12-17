@@ -62,7 +62,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (_profile == null || _profile.persona == null || anchor == null)
+            if (_profile == null || _profile.persona == null || !isAnchored)
                 return;
             position = anchor.position;
             _font.scale = new Vec2((float)(1f + pulse * 0.5f));

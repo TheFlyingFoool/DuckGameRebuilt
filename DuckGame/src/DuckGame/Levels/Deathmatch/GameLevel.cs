@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Web.UI.WebControls;
 
 namespace DuckGame
 {
@@ -24,7 +25,7 @@ namespace DuckGame
         public bool _editorTestMode;
         public string levelInputString;
         private static bool first;
-        //private bool _startedMatch;
+        private bool _startedMatch;
         private static int _numberOfDucksSpawned;
         private int wait;
         public override string networkIdentifier => level;
@@ -151,8 +152,8 @@ namespace DuckGame
                 Add(prepareSpawn);
             }
         }
-
-        public virtual void MatchStart() { } //=> this._startedMatch = true;
+        
+        public virtual void MatchStart() => this._startedMatch = true; 
 
         public static int NumberOfDucks
         {
@@ -163,18 +164,10 @@ namespace DuckGame
         public override void Start()
         {
             _things.RefreshState();
-            //Vec2 vec2_1 = new Vec2(9999f, -9999f);
-            //Vec2 zero = Vec2.Zero; why does this code just exist -NiK0
-            //int num = 0;
             foreach (Duck t in things[typeof(Duck)])
             {
                 followCam.Add(t);
-                //if (t.x < vec2_1.x)
-                //    vec2_1 = t.position;
-                //zero += t.position;
-                //++num;
             }
-            //Vec2 vec2_2 = zero / num; whys this code the fuck here
             followCam.Adjust();
 
 
@@ -314,24 +307,17 @@ namespace DuckGame
         protected override void OnTransferComplete(NetworkConnection c)
         {
             current.things.RefreshState();
-            //Vec2 vec2_1 = new Vec2(9999f, -9999f);
-            //Vec2 zero = Vec2.Zero;
             int num = 0;
             List<Duck> duckList = new List<Duck>();
             foreach (Duck t in things[typeof(Duck)])
             {
-                //t.localSpawnVisible = false;
+                t.localSpawnVisible = false;
                 followCam.Add(t);
-                //if (t.x < vec2_1.x)
-                //    vec2_1 = t.position;
-                //zero += t.position;
-                ++num;
+                num++;
                 duckList.Add(t);
             }
-            //Vec2 vec2_2 = zero / num; WHY -NiK0
             _numberOfDucksSpawned = num;
-            if (_numberOfDucksSpawned > 4)
-                TeamSelect2.eightPlayersActive = true;
+            if (_numberOfDucksSpawned > 4) TeamSelect2.eightPlayersActive = true;
             followCam.Adjust();
             _mode.pendingSpawns = duckList;
             base.OnTransferComplete(c);
@@ -339,14 +325,19 @@ namespace DuckGame
 
         protected override void OnAllClientsReady()
         {
-            if (Network.isServer)
-                Send.Message(new NMBeginLevel());
+            if (Network.isServer) Send.Message(new NMBeginLevel());
             base.OnAllClientsReady();
         }
+        public List<Profile> toSend = new List<Profile>();
         public override void OnNetworkConnecting(Profile p)
         {
-            Send.Message(new NMGetReady(), p.connection);
+            toSend.Add(p);
+            toSendDelay = 30;
             base.OnNetworkConnecting(p);
+        }
+        public override void OnNetworkConnected(Profile p)
+        {
+            base.OnNetworkConnected(p);
         }
 
         public float snowTimer;
@@ -359,9 +350,24 @@ namespace DuckGame
         public bool acider;
         //DGR was made on the 3rd of august, if weather is enabled and its currently the date all weather will be replaced by
         //confetti falling from the sky -NiK0
-        public bool DGRBirthday; 
+        public bool DGRBirthday;
+
+        public int toSendDelay;
         public override void Update()
         {
+            if (toSend.Count > 0)
+            {
+                toSendDelay--;
+                if (toSendDelay <= 0)
+                {
+                    for (int i = 0; i < toSend.Count; i++)
+                    {
+                        Profile p = toSend[i];
+                        if (p != null && p.connection != null) Send.Message(new NMBeginLevel(), p.connection);
+                    }
+                    if (toSendDelay <= -20) toSend.Clear();
+                }
+            }
             if (DGRBirthday)
             {
                 rainTimer += DGRSettings.WeatherMultiplier / 8f;

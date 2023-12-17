@@ -336,7 +336,7 @@ namespace DuckGame
             }
 
             DGRSettings.arcadeDuckColor = _profile.persona.index;
-            
+
             if (team.hasHat)
             {
                 if (_box.duck != null)
@@ -380,14 +380,15 @@ namespace DuckGame
             DuckNetwork.OnTeamSwitch(_box.duck.profile);
         }
 
+        public List<Team> indexedAllTeams = new List<Team>();
         private int TeamIndexAdd(int index, int plus, bool alwaysThree = true)
         {
             if (alwaysThree && index < DG.MaxPlayers && index >= 0)
                 index = DG.MaxPlayers - 1;
             int num = index + plus;
-            if (num >= AllTeams().Count)
-                return num - AllTeams().Count + (DG.MaxPlayers - 1);
-            return num < DG.MaxPlayers - 1 ? AllTeams().Count + (num - (DG.MaxPlayers - 1)) : num;
+            if (num >= indexedAllTeams.Count)
+                return num - indexedAllTeams.Count + (DG.MaxPlayers - 1);
+            return num < DG.MaxPlayers - 1 ? indexedAllTeams.Count + (num - (DG.MaxPlayers - 1)) : num;
         }
 
         private int TeamIndexAddSpecial(int index, int plus, bool alwaysThree = true)
@@ -507,7 +508,7 @@ namespace DuckGame
                 if (t.favorited)
                 {
                     later.Add(t);
-                } 
+                }
                 else
                 {
                     ttss.Add(t);
@@ -534,8 +535,7 @@ namespace DuckGame
         public override void Update()
         {
             bool flag1 = true;
-            if (_profileBoxNumber < 0 || inputProfile == null || _box == null || _profile == null)
-                return;
+            if (_profileBoxNumber < 0 || inputProfile == null || _box == null || _profile == null) return;
             if (connection == DuckNetwork.localConnection && inputProfile.Pressed(Triggers.Any))
             {
                 NetIndex8 authority = this.authority;
@@ -554,10 +554,8 @@ namespace DuckGame
                     else
                     {
                         _gettingXPCompletion = 0.7f;
-                        if (MonoMain.pauseMenu is UIFuneral)
-                            _gettingXPCompletion = 0.8f;
-                        else if (MonoMain.pauseMenu is UIGachaBox)
-                            _gettingXPCompletion = 0.9f;
+                        if (MonoMain.pauseMenu is UIFuneral) _gettingXPCompletion = 0.8f;
+                        else if (MonoMain.pauseMenu is UIGachaBox) _gettingXPCompletion = 0.9f;
                     }
                 }
                 else
@@ -571,26 +569,17 @@ namespace DuckGame
                 _experienceProfileCheck = null;
                 _gettingXP = false;
                 _open = false;
-                if (_profile != null)
-                {
-                    _profile.hatSelector = null;
-                }
+                if (_profile != null) _profile.hatSelector = null;
             }
             _fade = Lerp.Float(_fade, !_open || _profileSelector.open || _roomEditor.open ? 0f : 1f, 0.1f);
             _blackFade = Lerp.Float(_blackFade, _open ? 1f : 0f, 0.1f);
             _screen.Update();
-            if (_screen.transitioning)
-                _experienceProfileCheck = null;
-            else if (_profileSelector.open || _roomEditor.open)
-            {
-                _experienceProfileCheck = null;
-            }
+            if (_screen.transitioning) _experienceProfileCheck = null;
+            else if (_profileSelector.open || _roomEditor.open) _experienceProfileCheck = null;
             else
             {
-                if (Profiles.IsDefault(_profile))
-                    flag1 = false;
-                if (Profiles.experienceProfile == null)
-                    flag1 = false;
+                if (Profiles.IsDefault(_profile)) flag1 = false;
+                if (Profiles.experienceProfile == null) flag1 = false;
                 _editRoomDisabled = false;
                 if (NetworkDebugger.enabled)
                 {
@@ -602,36 +591,27 @@ namespace DuckGame
                     flag1 = true;
                     _editRoomDisabled = true;
                 }
-                if (isArcadeHatSelector)
-                    flag1 = false;
+                if (isArcadeHatSelector) flag1 = false;
                 if (!_open)
                 {
                     if (_fade < 0.01f && _closing)
                     {
                         _closing = false;
-                        if (_box != null)
-                            _box.ReturnControl();
+                        if (_box != null) _box.ReturnControl();
                     }
                     _experienceProfileCheck = null;
                 }
-                else if (_profile.team == null || _inputSkip)
-                {
-                    _inputSkip = false;
-                }
+                else if (_profile.team == null || _inputSkip) _inputSkip = false;
                 else
                 {
                     _lcdFlashInc += Rando.Float(0.3f, 0.6f);
                     _lcdFlash = (0.9f + (float)(Math.Sin(_lcdFlashInc) + 1f) / 2f * 0.1f);
                     if (_prevDesiredTeam != _desiredTeamSelection && !isServerForObject)
                     {
-                        if (TeamIndexAddSpecial(_desiredTeamSelection, 5) == _prevDesiredTeam)
-                            _upSlideTo = -1f;
-                        else if (TeamIndexAddSpecial(_desiredTeamSelection, -5) == _prevDesiredTeam)
-                            _upSlideTo = 1f;
-                        else if (TeamIndexAddSpecial(_desiredTeamSelection, -1) == _prevDesiredTeam)
-                            _slideTo = 1f;
-                        else if (TeamIndexAddSpecial(_desiredTeamSelection, 1) == _prevDesiredTeam)
-                            _slideTo = -1f;
+                        if (TeamIndexAddSpecial(_desiredTeamSelection, 5) == _prevDesiredTeam) _upSlideTo = -1f;
+                        else if (TeamIndexAddSpecial(_desiredTeamSelection, -5) == _prevDesiredTeam) _upSlideTo = 1f;
+                        else if (TeamIndexAddSpecial(_desiredTeamSelection, -1) == _prevDesiredTeam) _slideTo = 1f;
+                        else if (TeamIndexAddSpecial(_desiredTeamSelection, 1) == _prevDesiredTeam) _slideTo = -1f;
                         else if (TeamIndexAddSpecial(_desiredTeamSelection, -6) == _prevDesiredTeam)
                         {
                             _slideTo = 1f;
@@ -652,8 +632,7 @@ namespace DuckGame
                             _slideTo = 1f;
                             _upSlideTo = -1f;
                         }
-                        else
-                            _teamSelection = _desiredTeamSelection;
+                        else _teamSelection = _desiredTeamSelection;
                         SFX.Play("consoleTick", 0.6f);
                         List<Team> teamList = AllTeams();
                         if (_desiredTeamSelection < teamList.Count)
@@ -663,33 +642,21 @@ namespace DuckGame
                         }
                         _prevDesiredTeam = _desiredTeamSelection;
                     }
-                    if (_slideTo != 0 && _slide != _slideTo)
-                        _slide = Lerp.Float(_slide, _slideTo, 0.1f);
+                    if (_slideTo != 0 && _slide != _slideTo) _slide = Lerp.Float(_slide, _slideTo, 0.1f);
                     else if (_slideTo != 0 && _slide == _slideTo)
                     {
                         _slide = 0f;
                         _slideTo = 0f;
                         _teamSelection = _desiredTeamSelection;
-                        if (isServerForObject)
-                        {
-                            Team allTeam = AllTeams()[_desiredTeamSelection];
-                            //if (!Main.isDemo || allTeam.inDemo) that was under this
-                            SelectTeam();
-                        }
+                        if (isServerForObject) SelectTeam();
                     }
-                    if (_upSlideTo != 0 && _upSlide != _upSlideTo)
-                        _upSlide = Lerp.Float(_upSlide, _upSlideTo, 0.1f);
+                    if (_upSlideTo != 0 && _upSlide != _upSlideTo) _upSlide = Lerp.Float(_upSlide, _upSlideTo, 0.1f);
                     else if (_upSlideTo != 0 && _upSlide == _upSlideTo)
                     {
                         _upSlide = 0f;
                         _upSlideTo = 0f;
                         _teamSelection = _desiredTeamSelection;
-                        if (isServerForObject)
-                        {
-                            Team allTeam = AllTeams()[_desiredTeamSelection];
-                            //if (!Main.isDemo || allTeam.inDemo) that was under this
-                            SelectTeam();
-                        }
+                        if (isServerForObject) SelectTeam();
                     }
                     if (_selection == HSSelection.ChooseTeam)
                     {
@@ -701,51 +668,38 @@ namespace DuckGame
                             bool flag2 = false;
                             if (inputProfile.Down(Triggers.MenuLeft))
                             {
-                                if (_desiredTeamSelection < DG.MaxPlayers)
-                                    _desiredTeamSelection = (short)(AllTeams().Count - 1);
-                                else if (_desiredTeamSelection == DG.MaxPlayers)
-                                    _desiredTeamSelection = (short)ControllerNumber();
-                                else
-                                    --_desiredTeamSelection;
+                                if (_desiredTeamSelection < DG.MaxPlayers) _desiredTeamSelection = (short)(AllTeams().Count - 1);
+                                else if (_desiredTeamSelection == DG.MaxPlayers) _desiredTeamSelection = (short)ControllerNumber();
+                                else _desiredTeamSelection--;
                                 _slideTo = -1f;
                                 flag2 = true;
                                 SFX.Play("consoleTick", 0.7f);
                             }
                             if (inputProfile.Down(Triggers.MenuRight))
                             {
-                                if (_desiredTeamSelection >= AllTeams().Count - 1)
-                                    _desiredTeamSelection = (short)ControllerNumber();
-                                else if (_desiredTeamSelection < DG.MaxPlayers)
-                                    _desiredTeamSelection = (short)DG.MaxPlayers;
-                                else
-                                    ++_desiredTeamSelection;
+                                if (_desiredTeamSelection >= AllTeams().Count - 1) _desiredTeamSelection = (short)ControllerNumber();
+                                else if (_desiredTeamSelection < DG.MaxPlayers) _desiredTeamSelection = (short)DG.MaxPlayers;
+                                else _desiredTeamSelection++;
                                 _slideTo = 1f;
                                 flag2 = true;
                                 SFX.Play("consoleTick", 0.7f);
                             }
                             if (inputProfile.Down(Triggers.MenuUp))
                             {
-                                if (_desiredTeamSelection < DG.MaxPlayers)
-                                    _desiredTeamSelection = 0;
-                                else
-                                    _desiredTeamSelection -= (short)(DG.MaxPlayers - 1);
+                                if (_desiredTeamSelection < DG.MaxPlayers) _desiredTeamSelection = 0;
+                                else _desiredTeamSelection -= (short)(DG.MaxPlayers - 1);
                                 _desiredTeamSelection -= 5;
-                                if (_desiredTeamSelection < 0)
-                                    _desiredTeamSelection += (short)(AllTeams().Count - (DG.MaxPlayers - 1));
-                                if (_desiredTeamSelection == 0)
-                                    _desiredTeamSelection = (short)ControllerNumber();
-                                else
-                                    _desiredTeamSelection += (short)(DG.MaxPlayers - 1);
+                                if (_desiredTeamSelection < 0) _desiredTeamSelection += (short)(AllTeams().Count - (DG.MaxPlayers - 1));
+                                if (_desiredTeamSelection == 0) _desiredTeamSelection = (short)ControllerNumber();
+                                else _desiredTeamSelection += (short)(DG.MaxPlayers - 1);
                                 _upSlideTo = -1f;
                                 flag2 = true;
                                 SFX.Play("consoleTick", 0.7f);
                             }
                             if (inputProfile.Down(Triggers.MenuDown))
                             {
-                                if (_desiredTeamSelection < DG.MaxPlayers)
-                                    _desiredTeamSelection = 0;
-                                else
-                                    _desiredTeamSelection -= (short)(DG.MaxPlayers - 1);
+                                if (_desiredTeamSelection < DG.MaxPlayers) _desiredTeamSelection = 0;
+                                else _desiredTeamSelection -= (short)(DG.MaxPlayers - 1);
                                 _desiredTeamSelection += 5;
                                 if (_desiredTeamSelection >= AllTeams().Count - (DG.MaxPlayers - 1))
                                     _desiredTeamSelection -= (short)(AllTeams().Count - (DG.MaxPlayers - 1));
@@ -787,14 +741,13 @@ namespace DuckGame
                                     t.favorited = !t.favorited;
 
                                     DGRSettings.ReloadFavHats();
-                                    _desiredTeamSelection = (short) AllTeams().IndexOf(t);
+                                    _desiredTeamSelection = (short)AllTeams().IndexOf(t);
                                     _slideTo = float.Epsilon;
                                 }
                             }
                             if (inputProfile.Pressed(Triggers.Ragdoll))
                             {
-                                if (profile.requestedColor == -1)
-                                    profile.requestedColor = profile.currentColor;
+                                if (profile.requestedColor == -1) profile.requestedColor = profile.currentColor;
                                 profile.IncrementRequestedColor();
                                 SFX.Play("consoleTick", 0.7f);
                                 profile.UpdatePersona();
@@ -833,7 +786,7 @@ namespace DuckGame
                         _profile.persona.sprite.color = Color.White;
                         _profile.persona.sprite.color = new Color(_profile.persona.sprite.color.r, _profile.persona.sprite.color.g, _profile.persona.sprite.color.b);
                         _profile.persona.sprite.depth = (Depth)0.9f;
-                        _profile.persona.sprite.scale = new Vec2(1f, 1f);
+                        _profile.persona.sprite.scale = new Vec2(scaleMultiplier);
                         Graphics.Draw(_profile.persona.sprite, x + 70f, y + 60f + num1, (Depth)0.9f);
                         short num2 = 0;
                         bool flag3 = false;
@@ -855,132 +808,9 @@ namespace DuckGame
                             _font.Draw("@STARGOODY@", x + 27, y + 61, new Color(180, 180, 180) * 0.3f, (Depth)1, profileInput);
                         }
 
-                        for (int index1 = 0; index1 < 5; ++index1)
-                        {
-                            for (int index2 = 0; index2 < 7; ++index2)
-                            {
-                                int plus = index2 - 3 + (index1 - 2) * 5;
-                                float x = (this.x + 2f + index2 * 22 + -_slide * 20f);
-                                float num3 = (float)(y + 37f + -_upSlide * 20f);
-                                int index3 = TeamIndexAdd(_teamSelection, plus);
-                                if (index3 == 3)
-                                    index3 = ControllerNumber();
-                                Team allTeam = AllTeams()[index3];
-                                float num4 = (this.x + (this.x + 2f + 154f - (this.x + 2f)) / 2f - 9f);
-                                float num5 = Maths.Clamp((float)((50f - Math.Abs(x - num4)) / 50f), 0f, 1f);
-                                float num6 = (Maths.NormalizeSection(num5, 0.9f, 1f) * 0.8f + 0.2f);
-                                if (num5 < 0.5f)
-                                    num6 = Maths.NormalizeSection(num5, 0.1f, 0.2f) * 0.3f;
-                                float num7 = Maths.NormalizeSection(num5, 0f, 0.1f) * 0.3f;
-                                switch (index1)
-                                {
-                                    case 0:
-                                        num3 -= num5 * 3f;
-                                        num7 = _upSlide >= 0f ? 0f : Math.Abs(_upSlide) * num7;
-                                        break;
-                                    case 1:
-                                        num3 -= num5 * 3f;
-                                        if (_upSlide > 0f)
-                                        {
-                                            num7 = (1f - Math.Abs(_upSlide)) * num7;
-                                            break;
-                                        }
-                                        break;
-                                    case 2:
-                                        float num8 = num3 - (num5 * 4f * (1f - Math.Abs(_upSlide)));
-                                        num3 = _upSlide <= 0f ? num8 + num5 * 4f * Math.Abs(_upSlide) : num8 - num5 * 3f * Math.Abs(_upSlide);
-                                        num7 = Maths.NormalizeSection(num5, 0.9f, 1f) * 0.7f + num7;
-                                        break;
-                                    case 3:
-                                        float num9 = Math.Max(0f, _upSlide);
-                                        num3 += (num5 * 4f * (1f - num9) + -num5 * 4f * num9);
-                                        if (_upSlide < 0f)
-                                        {
-                                            num7 = (1f - Math.Abs(_upSlide)) * num7;
-                                            break;
-                                        }
-                                        break;
-                                    case 4:
-                                        num3 += num5 * 4f;
-                                        num7 = _upSlide <= 0f ? 0f : Math.Abs(_upSlide) * num7;
-                                        break;
-                                }
-                                if (num7 >= 0.01f)
-                                {
-                                    _profile.persona.sprite.alpha = _fade;
-                                    _profile.persona.sprite.color = Color.White;
-                                    _profile.persona.sprite.color = new Color(_profile.persona.sprite.color.r, _profile.persona.sprite.color.g, _profile.persona.sprite.color.b);
-                                    _profile.persona.sprite.depth = (Depth)0.9f;
-                                    _profile.persona.sprite.scale = new Vec2(1f, 1f);
-                                    DuckRig.GetHatPoint(_profile.persona.sprite.imageIndex);
-                                    SpriteMap g = allTeam.GetHat(_profile.persona);
-                                    Vec2 vec2 = allTeam.hatOffset;
-                                    bool flag4 = allTeam.locked;
-                                    int index4 = -1;
-                                    if (Network.isActive && !isServerForObject && _profile.networkHatUnlockStatuses != null)
-                                    {
-                                        index4 = Teams.core.teams.IndexOf(allTeam);
-                                        if (index4 >= 0 && index4 < _profile.networkHatUnlockStatuses.Count)
-                                            flag4 = _profile.networkHatUnlockStatuses[index4];
-                                    }
-                                    if (flag4)
-                                    {
-                                        g = _lock;
-                                        if (allTeam.name == "Chancy")
-                                            g = _goldLock;
-                                        vec2 = new Vec2(-10f, -10f);
-                                    }
-                                    //bool flag5 = Main.isDemo && !allTeam.inDemo;
-                                    //if (flag5)
-                                    //    g = this._demoBox;
-                                    g.depth = (Depth)0.95f;
-                                    g.alpha = _profile.persona.sprite.alpha;
-                                    g.color = Color.White * num7;
-                                    g.scale = new Vec2(1f, 1f);
-                                    //if (!flag5) was under
-                                    g.center = new Vec2(16f, 16f) + vec2;
-                                    if (index3 > DG.MaxPlayers - 1 && _fade > 0.01f)
-                                    {
-                                        //Vec2 pos = Vec2.Zero;
-                                        Vec2 pos = new Vec2(x, (num3 + num1 + index1 * 20 - 20f)); //!flag5 ? new Vec2(x, (float)(num3 + num1 + index1 * 20 - 20f)) : new Vec2(x + 2f, (float)(num3 + num1 + index1 * 20 - 20 + 1));
-                                        Vec2 pixel = Maths.RoundToPixel(pos);
-                                        if (allTeam.shake > 0)
-                                        {
-                                            pixel.x += Rando.Float(-allTeam.shake, allTeam.shake);
-                                            allTeam.shake -= 0.1f;
-                                        }
-                                        if (index4 != -1 && !flag4 && allTeam.locked)
-                                        {
-                                            if (_outlineMaterial == null)
-                                                _outlineMaterial = new MaterialSecretOutline();
-                                            Graphics.material = _outlineMaterial;
-                                            Graphics.Draw(g, pixel.x, pixel.y);
-                                            Graphics.material = null;
-                                        }
-                                        else
-                                        {
-                                            if (allTeam.favorited) Graphics.DrawDottedRect(pixel - new Vec2(16), pixel + new Vec2(16), Color.White, 0.95f, 1, 6);
-                                            if (allTeam.metadata != null && allTeam.metadata.UseDuckColor.value) Graphics.material = _profile.persona.material;
-                                            Graphics.Draw(g, pixel.x, pixel.y);
-                                            Graphics.material = null;
-                                        }
-                                    }
-                                    _profile.persona.sprite.color = Color.White;
-                                    g.color = Color.White;
-                                    _profile.persona.sprite.scale = new Vec2(1f, 1f);
-                                    g.scale = new Vec2(1f, 1f);
-                                }
-                            }
-                        }
+                        HatsDrawLogic();
                         _font.alpha = _fade;
                         _font.depth = (Depth)0.96f;
-                        //string str1 = "NO PROFILE"; what -NiK0
-                        //if (!Profiles.IsDefault(_profile))
-                        //    str1 = _profile.name;
-                        //if (_selection == HSSelection.ChooseProfile) 
-                        //{
-                        //    string str2 = "> " + str1 + " <";
-                        //}
                         if (_selection == HSSelection.ChooseTeam)
                         {
                             string text = "<              >";
@@ -997,10 +827,8 @@ namespace DuckGame
                             flag6 = _profile.networkHatUnlockStatuses[_desiredTeamSelection];
                             flag7 = true;
                         }
-                        if (flag6)
-                            text1 = "LOCKED";
-                        else if (flag7 && _netHoveringTeam != null && _netHoveringTeam.locked)
-                            text1 = "UNKNOWN";
+                        if (flag6) text1 = "LOCKED";
+                        else if (flag7 && _netHoveringTeam != null && _netHoveringTeam.locked) text1 = "UNKNOWN";
                         _font.scale = new Vec2(1f, 1f);
                         float width = _font.GetWidth(text1);
                         Vec2 pixel1 = Maths.RoundToPixel(new Vec2((float)(x + this.width / 2 - width / 2), y + 25f + num1));
@@ -1231,6 +1059,162 @@ namespace DuckGame
                     _secondWord = "EDIT";
                 else
                     _secondWord = "EXIT";
+            }
+        }
+
+        public float scaleMultiplier
+        {
+            get
+            {
+                return isServerForObject ? DGRSettings.ActualHatSelectorSize : 1;
+            }
+        }
+        public void HatsDrawLogic()
+        {
+            float yAdd2 = -18f;
+            float xAdd2 = 0;
+            float shineAdd = 0;
+
+            float dissen = 50;
+
+            int lowerxIndex = 0;
+            int loweryIndex = 0;
+            int xIndex = 7;
+            int yIndex = 5;
+            if (scaleMultiplier == 0.7f)
+            {
+                shineAdd = 0.2f;
+                dissen = 100;
+                xAdd2 = 29.85f;
+                yAdd2 += 30;
+                xIndex = 8;
+            }
+            else if (scaleMultiplier == 0.5f)
+            {
+                shineAdd = 0.2f;
+                xIndex = 9;
+                loweryIndex = -1;
+                yIndex = 6;
+                lowerxIndex = -3;
+                dissen = 140;
+                xAdd2 = 70;
+                yAdd2 += 60;
+            }
+
+
+            indexedAllTeams = AllTeams();
+            for (int yPos = loweryIndex; yPos < yIndex; yPos++)
+            {
+                for (int xPos = lowerxIndex; xPos < xIndex; xPos++)
+                {
+                    int plus = xPos - 3 + (yPos - 2) * 5;
+                    float x = this.x + 2f + xPos * 22 + -_slide * 20f;
+                    float yAdd1 = (float)(y + 37f + -_upSlide * 20f) * scaleMultiplier;
+                    int index3 = TeamIndexAdd(_teamSelection, plus);
+                    if (index3 == 3)
+                        index3 = ControllerNumber();
+                    Team allTeam = indexedAllTeams[index3];
+                    float num4 = (this.x + (this.x + 2f + 154f - (this.x + 2f)) / 2f - 9f);
+                    float num5 = Maths.Clamp((float)((dissen - Math.Abs(x - num4)) / dissen), 0, 1);
+                    float num7 = Maths.NormalizeSection(num5, 0f, 0.1f) * 0.3f;
+                    switch (yPos)
+                    {
+                        case 0:
+                            yAdd1 -= num5 * 3f;
+                            num7 = _upSlide >= 0f ? 0f : Math.Abs(_upSlide) * num7;
+                            break;
+                        case 1:
+                            yAdd1 -= num5 * 3f;
+                            if (_upSlide > 0f)
+                            {
+                                num7 = (1f - Math.Abs(_upSlide)) * num7;
+                                break;
+                            }
+                            break;
+                        case 2:
+                            float num8 = yAdd1 - (num5 * 4f * (1f - Math.Abs(_upSlide)));
+                            yAdd1 = _upSlide <= 0f ? num8 + num5 * 4f * Math.Abs(_upSlide) : num8 - num5 * 3f * Math.Abs(_upSlide);
+                            num7 = Maths.NormalizeSection(num5, 0.9f, 1f) * 0.7f + num7;
+                            break;
+                        case 3:
+                            float num9 = Math.Max(0f, _upSlide);
+                            yAdd1 += (num5 * 4f * (1f - num9) + -num5 * 4f * num9);
+                            if (_upSlide < 0f)
+                            {
+                                num7 = (1f - Math.Abs(_upSlide)) * num7;
+                                break;
+                            }
+                            break;
+                        case 4:
+                            yAdd1 += num5 * 4f;
+                            num7 = _upSlide <= 0f ? 0f : Math.Abs(_upSlide) * num7;
+                            break;
+                    }
+                    num7 += shineAdd;
+                    if (num7 >= 0.01f)
+                    {
+                        _profile.persona.sprite.alpha = _fade;
+                        _profile.persona.sprite.color = Color.White;
+                        _profile.persona.sprite.color = new Color(_profile.persona.sprite.color.r, _profile.persona.sprite.color.g, _profile.persona.sprite.color.b);
+                        _profile.persona.sprite.depth = (Depth)0.9f;
+                        _profile.persona.sprite.scale = new Vec2(1);
+                        //DuckRig.GetHatPoint(_profile.persona.sprite.imageIndex);
+                        SpriteMap g = allTeam.GetHat(_profile.persona);
+                        Vec2 vec2 = allTeam.hatOffset;
+                        bool isLocked = allTeam.locked;
+                        int allTeamIndex = -1;
+                        if (Network.isActive && !isServerForObject && _profile.networkHatUnlockStatuses != null)
+                        {
+                            allTeamIndex = Teams.core.teams.IndexOf(allTeam);
+                            if (allTeamIndex >= 0 && allTeamIndex < _profile.networkHatUnlockStatuses.Count)
+                                isLocked = _profile.networkHatUnlockStatuses[allTeamIndex];
+                        }
+                        if (isLocked)
+                        {
+                            g = _lock;
+                            if (allTeam.name == "Chancy")
+                                g = _goldLock;
+                            vec2 = new Vec2(-10f, -10f);
+                        }
+                        g.depth = (Depth)0.95f;
+                        g.alpha = _profile.persona.sprite.alpha;
+                        g.color = Color.White * num7;
+                        g.center = new Vec2(16f, 16f) + vec2;
+                        if (index3 > DG.MaxPlayers - 1 && _fade > 0.01f)
+                        {
+                            Vec2 pos = new Vec2(x + xAdd2, yAdd1 + yAdd2 + yPos * 20 - 20f) * scaleMultiplier;
+                            Vec2 pixel = Maths.RoundToPixel(pos);
+                            if (allTeam.shake > 0)
+                            {
+                                pixel.x += Rando.Float(-allTeam.shake, allTeam.shake);
+                                allTeam.shake -= 0.1f;
+                            }
+                            if (allTeamIndex != -1 && !isLocked && allTeam.locked)
+                            {
+                                if (_outlineMaterial == null)
+                                    _outlineMaterial = new MaterialSecretOutline();
+                                Graphics.material = _outlineMaterial;
+                                g.scale = new Vec2(scaleMultiplier);
+                                Graphics.Draw(g, pixel.x, pixel.y);
+                                g.scale = new Vec2(1);
+                                Graphics.material = null;
+                            }
+                            else
+                            {
+                                if (allTeam.favorited) Graphics.DrawDottedRect(pixel - new Vec2(16 * scaleMultiplier), pixel + new Vec2(16 * scaleMultiplier), Color.White, 0.95f, 1, 6 * scaleMultiplier);
+                                if (allTeam.metadata != null && allTeam.metadata.UseDuckColor.value) Graphics.material = _profile.persona.material;
+                                g.scale = new Vec2(scaleMultiplier);
+                                Graphics.Draw(g, pixel.x, pixel.y);
+                                g.scale = new Vec2(1);
+                                Graphics.material = null;
+                            }
+                        }
+                        _profile.persona.sprite.color = Color.White;
+                        g.color = Color.White;
+                        _profile.persona.sprite.scale = new Vec2(scaleMultiplier);
+                        g.scale = new Vec2(scaleMultiplier);
+                    }
+                }
             }
         }
     }

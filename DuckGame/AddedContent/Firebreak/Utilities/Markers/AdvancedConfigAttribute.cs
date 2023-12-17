@@ -57,7 +57,15 @@ namespace AddedContent.Firebreak
                 }
                 else
                 {
-                    SaveToFile();
+                    try
+                    {
+                        SaveToFile();
+                    }
+                    catch(Exception e)
+                    {
+                        DevConsole.Log("Error when trying to Save AdvancedConfigAttribute", Color.Red);
+                        DevConsole.Log(e.ToString());
+                    }
                 }
             }
 

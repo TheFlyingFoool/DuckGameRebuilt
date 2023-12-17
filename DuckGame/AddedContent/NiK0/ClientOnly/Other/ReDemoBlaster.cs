@@ -1,5 +1,5 @@
-﻿using System;
-
+﻿//maybe not for now -NiK0
+/*using System;
 namespace DuckGame
 {
     [ClientOnly]
@@ -150,4 +150,4 @@ namespace DuckGame
             }
         }
     }
-}
+}*/

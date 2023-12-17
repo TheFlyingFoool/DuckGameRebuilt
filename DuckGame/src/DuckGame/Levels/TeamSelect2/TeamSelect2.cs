@@ -356,7 +356,7 @@ namespace DuckGame
             _pauseMenu = new UIMenu("@LWING@MULTIPLAYER@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 200f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
             _inviteMenu = new UIInviteMenu("INVITE FRIENDS", null, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
             ((UIInviteMenu)_inviteMenu).SetAction(new UIMenuActionOpenMenu(_inviteMenu, _pauseMenu));
-            UIDivider component1 = new UIDivider(true, 0.8f);
+            UIDivider component1 = new UIDivider(true, 0.75f);
             component1.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
             _pauseMenu.Add(component1, true);
             component1.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(_pauseGroup)), true);
@@ -408,7 +408,7 @@ namespace DuckGame
                 Remove(_localPauseGroup);
             _localPauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
             _localPauseMenu = new UIMenu("MULTIPLAYER", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
-            UIDivider component2 = new UIDivider(true, 0.8f);
+            UIDivider component2 = new UIDivider(true, 0.75f);
             component2.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
             _localPauseMenu.Add(component2, true);
             component2.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(_localPauseGroup)), true);
@@ -768,6 +768,16 @@ namespace DuckGame
             ProfileBox2 profileBox2_8 = new ProfileBox2(356, 179, InputProfile.Get(InputProfile.MPPlayer8), defaultProfiles[7], this, 7);
             _profiles.Add(profileBox2_8);
             Add(profileBox2_8);
+
+            if (DuckNetwork.FiftyPlayerMode)
+            {
+                for (int i = 8; i < 50; i++)
+                {
+                    ProfileBox2 profileBox2_50 = new ProfileBox2(0, -600 + 240 * i, InputProfile.Get(InputProfile.MPPlayers[i]), defaultProfiles[i], this, i);
+                    _profiles.Add(profileBox2_50);
+                    Add(profileBox2_50);
+                }
+            }
             Add(new BlankDoor(178f, 179f));
             Add(new HostTable(160f, 170f));
             if (Network.isActive)

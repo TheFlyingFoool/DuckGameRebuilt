@@ -14,6 +14,34 @@ namespace DuckGame
 {
     public class DuckNetwork
     {
+        public static bool FiftyPlayerMode
+        {
+            get
+            {
+                return _fiftyPlayerMode;
+            }
+            set
+            {
+                _fiftyPlayerMode = value;
+                if (value)
+                {
+                    InputProfile.defaultPlayerMappingStrings = InputProfile.fiftyPlayerMappingStrings;
+                    Teams.core.teams = Teams.core._fiftyTeams;
+                }
+                else
+                {
+                    InputProfile.defaultPlayerMappingStrings = InputProfile.vanillaPlayerMappingStrings;
+                    Teams.core.teams = Teams.core._vanillaTeams;
+                }
+                Persona.Shuffle();
+                Input.InitDefaultProfiles();
+                Profiles.core.Initialize();
+                Profiles.core.IsDefault50p(null);
+                core.RecreateProfiles();
+            }
+        }
+        public static bool forcedstartedalone;
+        private static bool _fiftyPlayerMode = false;
         private static List<OnlineLevel> _levels = new List<OnlineLevel>()
         {
           new OnlineLevel() { num = 1, xpRequired = 0 },
@@ -929,6 +957,18 @@ namespace DuckGame
         {
             if (Level.current is TeamSelect2 ts2)
             {
+                int activecount = 0;
+                foreach (Team team in Teams.all)
+                {
+                    foreach (Profile activeProfile in team.activeProfiles)
+                    {
+                        activecount += 1;
+                    }
+                }
+                if (activecount == 1)
+                {
+                    forcedstartedalone = true;
+                }
                 ts2.forcestart = true;
                 ts2._countTime = 0;
                 ts2.dim = 0.8f;
@@ -1650,7 +1690,7 @@ namespace DuckGame
             IEnumerable<Profile> source = profiles.Where(x => x.connection == null && x.reservedUser != null && pConnection.data == x.reservedUser);
             if (source.Count() == 0)
                 source = !pSpectator ? profiles.Where(x => x.connection == null && (x.slotType == SlotType.Invite && pInvited | pLocal || x.slotType == SlotType.Friend && pFriend | pLocal || pLocal && x.slotType == SlotType.Local || x.slotType == SlotType.Open) && x.slotType != SlotType.Spectator && x.networkIndex <= 7) : profiles.Where(x => x.connection == null && x.slotType == SlotType.Spectator);
-            if (Level.current is GameLevel)
+            if (Level.current is GameLevel && DGRSettings.MidGameJoining)
             {
                 source = profiles.Where(x => x.connection == null && x.slotType != SlotType.Spectator);
             }
@@ -2024,19 +2064,26 @@ namespace DuckGame
 
                     OpenMenu(_core._menuOpenProfile);
                     speedOpen = false;
+                }
+                if (Level.current is GameLevel)
+                {
                     if (DGRSettings.MidGameJoining)
                     {
                         inGame = false;
-                        Network.activeNetwork.core.lobby.joinable = true;
-
-                        Network.activeNetwork.core.lobby.SetLobbyData("started", "false");
+                        if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
+                        {
+                            Network.activeNetwork.core.lobby.joinable = true;
+                            Network.activeNetwork.core.lobby.SetLobbyData("started", "false");
+                        }
                     }
                     else
                     {
                         inGame = true;
-                        Network.activeNetwork.core.lobby.joinable = false;
-
-                        Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
+                        if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
+                        {
+                            Network.activeNetwork.core.lobby.joinable = false;
+                            Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
+                        }
                     }
                 }
                 prevMG = DGRSettings.MidGameJoining;
@@ -2377,7 +2424,7 @@ namespace DuckGame
                     if (team.activeProfiles.Count > 0)
                         ++num;
                 }
-                if (num <= 1)
+                if (num <= 1 && !DuckNetwork.forcedstartedalone)
                 {
                     if (pDoLevelSwitch && Network.isServer)
                     {
@@ -2524,6 +2571,7 @@ namespace DuckGame
             Send.Message(new NMNetworkIndexSync());
             if (!pLocal)
             {
+                if (FiftyPlayerMode) Send.Message(new NMEnableFiftyPlayerMode(), pJoinedProfiles[0].connection);
                 Send.Message(new NMJoinDuckNetSuccess(pJoinedProfiles), pJoinedProfiles[0].connection);
                 List<byte> byteList = new List<byte>();
                 for (int index = 0; index < DG.MaxPlayers; ++index)
@@ -2662,54 +2710,53 @@ namespace DuckGame
                 switch (m)
                 {
                     case NMRequestJoin _:
-                        if (true)
+                        if (!inGame || DGRSettings.MidGameJoining)
                         {
-                            switch (Level.current)
+                            NMRequestJoin nmRequestJoin = m as NMRequestJoin;
+                            if (nmRequestJoin.names == null || nmRequestJoin.names.Count == 0)
+                                return new NMErrorEmptyJoinMessage();
+                            DevConsole.Log(DCSection.DuckNet, "Join attempt from " + nmRequestJoin.names[0]);
+                            if (FiftyPlayerMode && !nmRequestJoin.isRebuiltUser) //this filters out non rebuilt users trying to join somehow when 50p mode is enabled -NiK0
                             {
-                                case TeamSelect2 _:
-                                case IConnectionScreen _:
-                                default:
-                                    NMRequestJoin nmRequestJoin = m as NMRequestJoin;
-                                    if (nmRequestJoin.names == null || nmRequestJoin.names.Count == 0)
-                                        return new NMErrorEmptyJoinMessage();
-                                    DevConsole.Log(DCSection.DuckNet, "Join attempt from " + nmRequestJoin.names[0]);
-                                    if (GetOpenProfiles(m.connection, nmRequestJoin.wasInvited, false, false).Count() < nmRequestJoin.names.Count)
-                                    {
-                                        DevConsole.Log(DCSection.DuckNet, "@error " + nmRequestJoin.names[0] + " could not join, server is full.@error");
-                                        return new NMServerFull();
-                                    }
-                                    if (nmRequestJoin.password != core.serverPassword && !core._invitedFriends.Contains(nmRequestJoin.localID))
-                                    {
-                                        DevConsole.Log(DCSection.DuckNet, "@error " + nmRequestJoin.names[0] + " could not join, password was incorrect.@error");
-                                        return new NMInvalidPassword();
-                                    }
-                                    List<Profile> pJoinedProfiles = new List<Profile>();
-                                    int index = 0;
-                                    foreach (string name in nmRequestJoin.names)
-                                    {
-                                        Profile profile = ServerCreateProfile(m.connection, null, null, name, false, nmRequestJoin.wasInvited, false);
-                                        profile.ParentalControlsActive = nmRequestJoin.info.parentalControlsActive;
-                                        profile.flippers = nmRequestJoin.info.roomFlippers;
-                                        profile.flagIndex = nmRequestJoin.info.flagIndex;
-                                        profile.networkStatus = DuckNetStatus.Connected;
-                                        profile.steamID = nmRequestJoin.localID;
-                                        if (nmRequestJoin.personas.Count > index)
-                                        {
-                                            byte persona = nmRequestJoin.personas[index];
-                                            if (persona >= 0 && persona < Persona.alllist.Count)
-                                            {
-                                                profile.preferredColor = persona;
-                                                RequestPersona(profile, Persona.alllist[persona], false);
-                                            }
-                                        }
-                                        _core.status = DuckNetStatus.Connected;
-                                        Level.current.OnNetworkConnecting(profile);
-                                        pJoinedProfiles.Add(profile);
-                                        ++index;
-                                    }
-                                    Server_AcceptJoinRequest(pJoinedProfiles);
-                                    return null;
+                                DevConsole.Log(DCSection.DuckNet, "@error " + nmRequestJoin.names[0] + " could not join, not a rebuilt user.@error");
+                                return new NMVersionMismatch(NMVersionMismatch.Type.Error, Program.CURRENT_VERSION_ID + "REBUILT");
                             }
+                            if (GetOpenProfiles(m.connection, nmRequestJoin.wasInvited, false, false).Count() < nmRequestJoin.names.Count)
+                            {
+                                DevConsole.Log(DCSection.DuckNet, "@error " + nmRequestJoin.names[0] + " could not join, server is full.@error");
+                                return new NMServerFull();
+                            }
+                            if (nmRequestJoin.password != core.serverPassword && !core._invitedFriends.Contains(nmRequestJoin.localID))
+                            {
+                                DevConsole.Log(DCSection.DuckNet, "@error " + nmRequestJoin.names[0] + " could not join, password was incorrect.@error");
+                                return new NMInvalidPassword();
+                            }
+                            List<Profile> pJoinedProfiles = new List<Profile>();
+                            int index = 0;
+                            foreach (string name in nmRequestJoin.names)
+                            {
+                                Profile profile = ServerCreateProfile(m.connection, null, null, name, false, nmRequestJoin.wasInvited, false);
+                                profile.ParentalControlsActive = nmRequestJoin.info.parentalControlsActive;
+                                profile.flippers = nmRequestJoin.info.roomFlippers;
+                                profile.flagIndex = nmRequestJoin.info.flagIndex;
+                                profile.networkStatus = DuckNetStatus.Connected;
+                                profile.steamID = nmRequestJoin.localID;
+                                if (nmRequestJoin.personas.Count > index)
+                                {
+                                    byte persona = nmRequestJoin.personas[index];
+                                    if (persona >= 0 && persona < Persona.alllist.Count)
+                                    {
+                                        profile.preferredColor = persona;
+                                        RequestPersona(profile, Persona.alllist[persona], false);
+                                    }
+                                }
+                                _core.status = DuckNetStatus.Connected;
+                                Level.current.OnNetworkConnecting(profile);
+                                pJoinedProfiles.Add(profile);
+                                ++index;
+                            }
+                            Server_AcceptJoinRequest(pJoinedProfiles);
+                            return null;
                         }
                         return new NMGameInProgress();
                     case NMMessageIgnored _:

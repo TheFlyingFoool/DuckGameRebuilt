@@ -85,7 +85,7 @@ namespace DuckGame
 
         public static bool shouldusespriteatlas = true;
         public static bool someprivacy;
-        public static bool lanjoiner;
+        public static bool IsLanTestUser;
         public static Assembly gameAssembly;
         public static string gameAssemblyName;
         public static bool doscreentileing; //just a fun showing off thing
@@ -93,6 +93,7 @@ namespace DuckGame
         public static bool nikogay; // sht about to get real colorful
         /// <summary>The main entry point for the application.</summary>\
         public static Vec2 StartPos = Vec2.Zero;
+        public static Vec2 StartRes = Vec2.Zero;
         public static string gitVersion = "N/A";
         public static bool lateCrash;
         public static ProgressValue AutoUpdaterCompletionProgress = new(0, 1, 0, 7);
@@ -361,6 +362,7 @@ namespace DuckGame
                         }
                         break;
                     case "+screentile":
+                        IsLanTestUser = true;
                         doscreentileing = true;
                         ++index;
                         if (args.Length > index)
@@ -371,6 +373,7 @@ namespace DuckGame
                             }
                             catch
                             {
+                                --index;
                                 doscreentileing = false;
                                 break;
                             }
@@ -385,17 +388,52 @@ namespace DuckGame
                             }
                             catch
                             {
+                                --index;
                                 doscreentileing = false;
                                 break;
                             }
                         }
-                        DevConsole.Log(StartPos.x.ToString() + " " + StartPos.y.ToString() + " " + doscreentileing.ToString());
+                        ++index;
+                        if (args.Length > index)
+                        {
+                            try
+                            {
+                                StartRes = new Vec2(Convert.ToInt32(args[index]), StartRes.y);
+                            }
+                            catch
+                            {
+                                --index;
+                                doscreentileing = false;
+                                break;
+                            }
+
+                        }
+                        ++index;
+                        if (args.Length > index)
+                        {
+                            try
+                            {
+                                StartRes = new Vec2(StartRes.x, Convert.ToInt32(args[index]));
+                            }
+                            catch
+                            {
+                                --index;
+                                doscreentileing = false;
+                                break;
+                            }
+                        }
+
+                        DevConsole.Log(StartPos.x.ToString() + " " + StartPos.y.ToString() + " " + StartRes.x.ToString() + " " + StartRes.x.ToString() +  " " + doscreentileing.ToString());
                         break;
                     case "-nosa":
                         shouldusespriteatlas = false;
                         break;
                     case "-crash":
                         throw new Exception("you threw it idk");
+                        break;
+                    case "-nomusic":
+                        DGRSettings.LoadMusic = false;
+                        DGRSettings.LoaderMusic = false;
                         break;
                     case "-latecrash":
                         lateCrash = true;
@@ -408,7 +446,7 @@ namespace DuckGame
                         break;
                     case "-lanjoiner":
                         Network.lanMode = true;
-                        lanjoiner = true;
+                        IsLanTestUser = true;
                         break;
                     case "-startinlobby":
                         MonoMain.startInLobby = true;
@@ -429,7 +467,7 @@ namespace DuckGame
                     case "-testserverclient":
                         Process.Start(Application.ExecutablePath, commandLine.Replace("-testserverclient", " -testserver2"));
                         Network.lanMode = true;
-                        lanjoiner = true;
+                        IsLanTestUser = true;
                         break;
                     case "-nothreading":
                         MonoMain.enableThreadedLoading = false;

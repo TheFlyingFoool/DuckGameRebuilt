@@ -29,7 +29,7 @@ namespace DuckGame
 
         public static void Reset() => _recentSongs.Clear();
 
-        public static bool stopped => DGRSettings.LoaderMusic && (_musicPlayer.State == SoundState.Stopped || _musicPlayer.State == SoundState.Paused 
+        public static bool stopped => DGRSettings.LoaderMusic && (_musicPlayer.State == SoundState.Stopped || _musicPlayer.State == SoundState.Paused
             || (_vgmPlayer != null && (_vgmPlayer.state == SoundState.Stopped || _vgmPlayer.state == SoundState.Paused)))
             || (_dgmPlayer != null && (_dgmPlayer.state == SoundState.Stopped || _dgmPlayer.state == SoundState.Paused));
 
@@ -73,8 +73,8 @@ namespace DuckGame
 
         public static TimeSpan position => new TimeSpan(0, 0, 0, 0, (int)(_musicPlayer.Platform_GetProgress() * _musicPlayer.Platform_GetLengthInMilliseconds()));
 
-        public static bool finished => DGRSettings.LoaderMusic && _musicPlayer.State == SoundState.Stopped && 
-            (_vgmPlayer == null || _vgmPlayer.state == SoundState.Stopped) && 
+        public static bool finished => DGRSettings.LoaderMusic && _musicPlayer.State == SoundState.Stopped &&
+            (_vgmPlayer == null || _vgmPlayer.state == SoundState.Stopped) &&
             (_dgmPlayer == null || _dgmPlayer.state == SoundState.Stopped);
 
         public static void Initialize()
@@ -207,20 +207,20 @@ namespace DuckGame
                 if (_musicPlayer != null) _musicPlayer.Stop();
                 if (_dgmPlayer != null) _dgmPlayer.Stop();
             }
-            else if (File.Exists("./Content/Audio/Music/InGame/" + music + ".dgm"))
+            else if (Directory.Exists("./Content/Audio/Music/InGame/" + music + "dgm"))
             {
                 if (_dgmPlayer != null) _dgmPlayer.Stop();
-                _dgmPlayer = new DGMSong("./Content/Audio/Music/InGame/" + music + ".dgm");
+                _dgmPlayer = new DGMSong("./Content/Audio/Music/InGame/" + music + "dgm");
                 _dgmPlayer.Play();
                 _dgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
                 _dgmPlayer.looped = looping;
                 if (_musicPlayer != null) _musicPlayer.Stop();
                 if (_vgmPlayer != null) _vgmPlayer.Stop();
             }
-            else if (File.Exists("./Content/Audio/Music/" + music + ".dgm"))
+            else if (File.Exists("./Content/Audio/Music/" + music + "dgm"))
             {
                 if (_dgmPlayer != null) _dgmPlayer.Stop();
-                _dgmPlayer = new DGMSong("./Content/Audio/Music/" + music + ".dgm");
+                _dgmPlayer = new DGMSong("./Content/Audio/Music/" + music + "dgm");
                 _dgmPlayer.Play();
                 _dgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
                 _dgmPlayer.looped = looping;

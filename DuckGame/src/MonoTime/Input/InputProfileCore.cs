@@ -33,17 +33,47 @@ namespace DuckGame
 
         public InputProfile DefaultPlayer8 => Get(InputProfile.MPPlayer8);
 
-        public List<InputProfile> defaultProfiles => new List<InputProfile>()
-    {
-      DefaultPlayer1,
-      DefaultPlayer2,
-      DefaultPlayer3,
-      DefaultPlayer4,
-      DefaultPlayer5,
-      DefaultPlayer6,
-      DefaultPlayer7,
-      DefaultPlayer8
-    };
+        public List<InputProfile> defaultProfiles
+        {
+            get
+            {
+                List<InputProfile> inputprofile = new List<InputProfile>
+                {
+                    DefaultPlayer1,
+                    DefaultPlayer2,
+                    DefaultPlayer3,
+                    DefaultPlayer4,
+                    DefaultPlayer5,
+                    DefaultPlayer6,
+                    DefaultPlayer7,
+                    DefaultPlayer8
+                };
+                if (DuckNetwork.FiftyPlayerMode)
+                {
+                    try
+                    {
+                        for (int i = 8; i < 50; i++)
+                        {
+                            inputprofile.Add(GetInputProfile(this, "MPPlayer" + (i + 1).ToString()));
+                        }
+                    }
+                    catch
+                    {
+                        DevConsole.Log("F get_defaultProfilesPrefixInput");
+                    }
+                }
+                return inputprofile;
+            }
+        }
+        public static InputProfile GetInputProfile(InputProfileCore inputprofilecore, string name)
+        {
+            InputProfile existing;
+            if (inputprofilecore._profiles.TryGetValue(name, out existing))
+            {
+                return existing;
+            }
+            return null;
+        }
 
         public InputProfile Get(string name)
         {
