@@ -638,6 +638,7 @@
     <Compile Include="src\MonoTime\Console\Commands\Default\Eight.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\FancyMode.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Fps.cs" />
+    <Compile Include="src\MonoTime\Console\Commands\Default\GetF.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Give.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\JohnnyGrey.cs" />
     <Compile Include="src\MonoTime\Console\Commands\Default\Kill.cs" />
