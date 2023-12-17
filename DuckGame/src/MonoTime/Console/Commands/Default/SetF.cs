@@ -42,10 +42,11 @@ namespace DuckGame
                 string newSerialized = FireSerializer.Serialize(parseResult.Value);
                 
                 DevConsole.Log($"{state.Name}: [{oldSerialized}] -> [{newSerialized}]");
-                
-                // kill
-                break;
+
+                return;
             }
+            
+            throw new Exception("State not found: " + stateName);
         }
     }
 }
