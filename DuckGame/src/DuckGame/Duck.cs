@@ -1407,7 +1407,7 @@ namespace DuckGame
                     killedBy.duck.AddCoolness(yourCoolness);
                 }
                 AddCoolness(myCoolness);
-                if (killedBy != null && killedBy.duck != null)
+                /*if (killedBy != null && killedBy.duck != null)
                 {
                     killedBy.duck.killMultiplier += 1f;
                     if (TeamSelect2.KillsForPoints)
@@ -1453,6 +1453,7 @@ namespace DuckGame
                         }
                     }
                 }
+                */
             }
             if (Highlights.highlightRatingMultiplier != 0f)
             {
@@ -1508,6 +1509,34 @@ namespace DuckGame
             if (Network.isActive && !isKillMessage)
             {
                 lastAppliedLifeChange += 1;
+
+                if (TeamSelect2.KillsForPoints && Network.isServer)
+                {
+                    Profile responsible = killedBy;
+                    if (type is DTCrush d && d.thing != null && d.thing.responsibleProfile != null) responsible = d.thing.responsibleProfile;
+
+                    if (responsible != null && responsible.duck != null && responsible.duck.converted != null)
+                    {
+                        responsible = responsible.duck.converted.profile;
+                    }
+
+                    if (responsible != null)
+                    {
+                        if (responsible != null && (!Network.isActive || (Network.isServer && responsible.team != profile.team)))
+                        {
+                            responsible.team.score++;
+
+                            List<int> scores = new List<int>();
+                            foreach (Profile p3 in DuckNetwork.profiles)
+                            {
+                                p3.ready = true;
+                                if (p3.team != null) scores.Add(p3.team.score);
+                                else scores.Add(0);
+                            }
+                            Send.Message(new NMTransferScores(scores));
+                        }
+                    }
+                }
                 Send.Message(new NMKillDuck(profile.networkIndex, type is DTCrush, type is DTIncinerate, type is DTFall, lastAppliedLifeChange));
             }
             if (!(this is TargetDuck))
