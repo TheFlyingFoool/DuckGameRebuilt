@@ -766,6 +766,12 @@ namespace DuckGame
                 _profile = Profiles.EnvironmentProfile;
             if (profile != null)
                 InitProfile();
+
+            // the color change works here for now, would rather have a better place
+            if (_profile != null && _profile.inputProfile != null && _profile.inputProfile.lastActiveDevice != null && profile.persona != null)
+            {
+                _profile.inputProfile.lastActiveDevice.SetLightBar(profile.persona.colorUsable);
+            }
             centerx = 16f;
             centery = 16f;
             friction = 0.25f;
