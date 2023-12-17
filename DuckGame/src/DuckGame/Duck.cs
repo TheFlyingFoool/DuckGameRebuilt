@@ -4480,6 +4480,11 @@ namespace DuckGame
         {
             if (_converted != to && to != null && to.profile != null)
                 ++to.profile.stats.conversions;
+            //Changes LightBar Color on Convert
+            if (_profile != null && _profile.inputProfile != null && _profile.inputProfile.lastActiveDevice != null && to != null && to.persona != null)
+            {
+                _profile.inputProfile.lastActiveDevice.SetLightBar(to.persona.colorUsable);
+            }
             RumbleManager.AddRumbleEvent(profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Short, RumbleFalloff.Short));
             _converted = to;
             _spriteArms = to._spriteArms.CloneMap();
