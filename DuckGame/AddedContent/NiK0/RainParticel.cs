@@ -62,7 +62,6 @@
         }
         public bool die;
         public Vec2 yEnd;
-        public static FluidData flud = Fluid.Water;
         public static Color c = Color.White * 0.8f;
         public float rY;
         public float rX;
