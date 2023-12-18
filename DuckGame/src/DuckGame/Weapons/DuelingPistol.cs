@@ -1,0 +1,60 @@
+﻿namespace DuckGame
+{
+    [EditorGroup("Guns|Pistols")]
+    [BaggedProperty("isInDemo", true)]
+    [BaggedProperty("isFatal", false)]
+    public class DuelingPistol : Gun
+    {
+        public DuelingPistol(float xval, float yval)
+          : base(xval, yval)
+        {
+            ammo = 1;
+            _ammoType = new ATShrapnel
+            {
+                range = 70f,
+                accuracy = 0.5f,
+                penetration = 0.4f
+            };
+            wideBarrel = true;
+            _type = "gun";
+            graphic = new Sprite("tinyGun");
+            center = new Vec2(16f, 16f);
+            collisionOffset = new Vec2(-6f, -4f);
+            collisionSize = new Vec2(12f, 8f);
+            _barrelOffsetTL = new Vec2(20f, 15f);
+            _fireSound = "littleGun";
+            _kickForce = 0f;
+            _fireRumble = RumbleIntensity.Kick;
+            editorTooltip = "The perfect weapon when a Duck has dishonored your family. One shot only.";
+        }
+
+        public static void ExplodeEffect(Vec2 position)
+        {
+            if (DGRSettings.S_ParticleMultiplier != 0)
+            {
+                Level.Add(SmallSmoke.New(position.x, position.y));
+                Level.Add(SmallSmoke.New(position.x, position.y));
+            }
+            for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 8; ++index)
+                Level.Add(Spark.New(position.x + Rando.Float(-3f, 3f), position.y + Rando.Float(-3f, 3f), new Vec2(Rando.Float(-3f, 3f), -Rando.Float(-3f, 3f)), 0.05f));
+            SFX.Play("shotgun", pitch: 0.3f);
+        }
+
+        public override void OnPressAction()
+        {
+            if (plugged && isServerForObject)
+            {
+                _kickForce = 3f;
+                ApplyKick();
+                ExplodeEffect(position);
+                if (Network.isActive)
+                    Send.Message(new NMPistolExplode(position));
+                if (duck != null)
+                    duck.Swear();
+                Level.Remove(this);
+            }
+            else
+                base.OnPressAction();
+        }
+    }
+}

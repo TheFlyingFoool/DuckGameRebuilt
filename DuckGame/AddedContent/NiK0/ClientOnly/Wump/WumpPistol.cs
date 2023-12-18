@@ -1,7 +1,6 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.IO.IsolatedStorage;
 using System.Linq;
 
 namespace DuckGame
@@ -10,7 +9,6 @@ namespace DuckGame
     [EditorGroup("Rebuilt|Wump|Pistols")]
     public class WumpPistol : Gun
     {
-        public const string wumppistol = "iVBORw0KGgoAAAANSUhEUgAAAKAAAAAgCAYAAACVf3P1AAAAAXNSR0IArs4c6QAAAqZJREFUeF7tmjFOwzAUhp0DUOACLLAiVAYkOAESomsnurNwAViQOAErGyywVkLiDAxUiJWJCyBgRkF+SUzipMl7iWNL0Z8lVfXs3/78v2cnbaRwgUBAAlFAbUiDgIIBYYKgBGDAoPghDgPCA0EJwIBB8UO8zoBxiieUSaGfLEAo/l6yY9nk4jiO1e7dj1rMRvZAfACBfmD+vopPYwUc337TWBaP18mYHi58ZSVVQOh75+81+TnVLFbTKzU+OquqhpwyzdGo66eNflfN/Hja6LtM0rb6XcbASX4doznbd44nTEzTQtHk06qnjBF1Nfx4M52MT2/o88vJCm3b2T3dvps0Gs1n9PenXM0srou27qM0f8G8uxggG39BX+8GtBP5YW/mX1V8aCyzkZq/f6rJ1rq5S7fu2i24sP3prVcbYGO71uE7X8/qdXVP0f1p3mUR4pK+ToaKy9bcOZxQlC99rVU1Bp/6VWOQmsFCWzK/LixRFNGxKP9Zt7s8+KXmx5trFJO7aovA0oeQvIioppaD21QhMl82yQ76bbQp86GfO3sm537Jxebe+BBi9vm0+sT35/bTMVtMMoP0bJFV0CQb9ZfQ75t/dfL1xJ9rnuKhNHk1kz+ACr0lDod+/o1A//ztd7C98ecYkDKCDr/lUsxpL3abfRaB/nD5cw1kl2Vuu67my9pDv3gmHgx/7kSSKvhf+l0Zi9sP9AfKn2NAs/iBTAj91HxD5M8yoPW7MKcNt7Jx4uyfhqDPoeYuplf+nMXE9jfQ7Y/p0V7Xn2NAev0W+G9B0A/7t6ze+HMNyEwWhIGAjAAMKOOFaMcEYEDHQNGdjAAMKOOFaMcEYEDHQNGdjAAMKOOFaMcEYEDHQNGdjAAMKOOFaMcEYEDHQNGdjAAMKOOFaMcE/gDJHuwwoNaG8gAAAABJRU5ErkJgggAA";
         public WumpPistol(float xval, float yval) : base(xval, yval)
         {
             ammo = 9;
@@ -18,9 +16,7 @@ namespace DuckGame
             wideBarrel = true;
             barrelInsertOffset = new Vec2(0f, -1f);
             _type = "gun";
-            _sprite = new SpriteMap(new Tex2D(Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(wumppistol))), "wumppistol"), 32, 32);
-            _sprite.Namebase = "wumppistol";
-            Content.textures[_sprite.Namebase] = _sprite.texture;
+            _sprite = new SpriteMap("wumppistol", 32, 32);
             _sprite.AddAnimation("idle", 1f, true, new int[1]);
             _sprite.AddAnimation("fire", 0.8f, false, new int[]
             {
@@ -54,22 +50,26 @@ namespace DuckGame
             editorTooltip = "A frozen pistol that holds dark secrets within.";
             physicsMaterial = PhysicsMaterial.Metal;
         }
+        public StateBinding _brokenBinding = new StateBinding("broken");
+        public StateBinding _breakAgainCooldown = new StateBinding("breakAgainCooldown");
+        public float breakAgainCooldown;
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
             if (Network.isActive && connection != DuckNetwork.localConnection)
             {
                 return;
             }
-            if (with is Block && CalculateImpactPower(with, from) > 4)
+            if (with is Block && CalculateImpactPower(with, from) > 4 && breakAgainCooldown <= 0)
             {
                 if (broken)
                 {
                     Level.Remove(this);
                 }
                 ammo = 1;
-                SFX.Play("glassBreak");
+                SFX.PlaySynchronized("glassBreak");
                 broken = true;
                 _sprite.SetAnimation("broken");
+                breakAgainCooldown = 1;
                 for (int i = 0; i < DGRSettings.ActualParticleMultiplier * 14; i++)
                 {
                     Level.Add(new GlassParticle(x, y, new Vec2(Rando.Float(-1, 1), Rando.Float(-1, 1))));
@@ -79,8 +79,13 @@ namespace DuckGame
         }
         public override void Update()
         {
-            if (broken && (Math.Abs(hSpeed) > 3 || Math.Abs(vSpeed) > 2))
+            if (isServerForObject)
             {
+                breakAgainCooldown -= 0.017f;
+            }
+            if (broken && (Math.Abs(hSpeed) > 3 || Math.Abs(vSpeed) > 2) && isServerForObject)
+            {
+                _sprite.SetAnimation("broken");
                 List<IAmADuck> iaads = Level.CheckCircleAll<IAmADuck>(position + velocity, 12).ToList();
                 for (int i = 0; i < iaads.Count; i++)
                 {
@@ -95,6 +100,10 @@ namespace DuckGame
                 _sprite.SetAnimation("idle");
             }
             base.Update();
+        }
+        protected override void PlayFireSound()
+        {
+            SFX.PlaySynchronized(_fireSound, pitch: (Rando.Float(0.2f) - 0.1f + _fireSoundPitch));
         }
         public override void Fire()
         {
@@ -113,9 +122,11 @@ namespace DuckGame
                 ApplyKick();
                 for (int i = 0; i < _numBulletsPerFire; i++)
                 {
-                    IceSpike ss = new IceSpike(barrelPosition.x, barrelPosition.y);
-                    ss.velocity = barrelVector.Rotate(Rando.Float(-0.1f, 0.1f), Vec2.Zero) * 12;
-                    ss.ignore = duck;
+                    IceSpike ss = new IceSpike(barrelPosition.x, barrelPosition.y)
+                    {
+                        velocity = barrelVector.Rotate(Rando.Float(-0.1f, 0.1f), Vec2.Zero) * 12,
+                        ignore = duck
+                    };
                     if (duck != null) ss.velocity += duck.velocity;
                     Level.Add(ss);
                 }

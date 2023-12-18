@@ -1,0 +1,44 @@
+name: Build, Zip, and Release
+
+on:
+  release:
+    branches: [ "master" ]
+    types: [published]
+
+jobs:
+  build_and_release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install MSBuild
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y msbuild
+
+      - name: Restore NuGet packages
+        run: nuget restore .
+
+      - name: Add Project Dependencies
+        run: |
+          mkdir ./bin
+          cp ./DuckGame/lib/* ./bin
+
+      - name: Build
+        run: msbuild /m /p:Configuration=ReleaseAutoUpdater .
+
+      - name: Zip binaries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y zip
+          mv ./bin ./DuckGameRebuilt
+          cd ./DuckGameRebuilt && zip -r ../DuckGameRebuilt.zip ./* && cd ..
+
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ./DuckGameRebuilt.zip
+          overwrite: true

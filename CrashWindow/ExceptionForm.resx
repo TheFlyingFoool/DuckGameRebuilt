@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="pictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAADwAAABACAYAAABGHBTIAAAABGdBTUEAALGPC/xhBQAAAAd0SU1FB+AE
+        CxUbOGPIgnwAAAAXdEVYdFNvZnR3YXJlAEdMRFBORyB2ZXIgMy40cYWk4QAAAuNJREFUaEPtlsGNE0EU
+        RDcNQuBEACTAiRjIggupbBLEQw6EsMzXv7x+KqnN2G1rvb2lh0pj/6mqi8XL25U6/uqfu8HsM4I9Jxda
+        DbPPCPacXGg1zD4j2HNyodUw+4xgL5ML/P7zd+D19XXgy7fvN8X57HaJYC+TA/fgPTgXP4vz2e0SwWY5
+        4H8H/vj566b4/e7H7kmwWX7hHrwHj4VS6Wvw+92P3ZNgW37BowfOcL77c1sJtuWDPXgPHgNTqZU43/25
+        rQTb8sG1g/35tcze7/7cVoJt+WAP3oPHwFmha5m93/25rQTb8oEHGge60Gqc7/7cVoJt+SCNJA5MpVbi
+        fPfnthJsywdpJHFgKrUS57s/t5VgWz5II4kDU6mVON/9ua0E2/LBvX+0Zvezz92f20qwLR/swXvwGDgr
+        NGN2P/vc/bmtBNvygQcaB7rQapzv/txWgm35II0kDkylVuJ89+e2EmzLB2kkcWAqtRLnuz+3lWBbPkgj
+        iQNTqZU43/25rQTb8kEaSRw4K2Ru/X3357YSbMsHaSRx4KyQufX33Z/bSrAtH6SRxIGzQubW33d/bivB
+        tnyQRhIHzgqZW3/f/bmtBNvyQRpJHOhCq3G++3NbCbblgzSSODCVWonz3Z/bSrAtH6SRxIGp1Eqc7/7c
+        VoJt+SCNJA5MpVbifPfnthJsywdpJHFgKrUS57s/t5VgWz5II4kDU6mVON/9ua0E2/JBGkkcmEqtxPnu
+        z20l2JYP0kjiwFRqJc53f24rwbZ8kEKIAx+N+3NbCbblgzSSpNBH4v7cVoJt+SCNJCn0kbg/t5VgWz5I
+        I0kKfSTuz22l+hu+8PnT16fC+w7GB+noPeN9B+ODdPSe8b6D8UE6es9438H4wP+xSD9UxAHph+SeuI/3
+        HYwP9uAwkjgglbgn7uN9B+ODPTiMJA5IJe6J+3jfwfhgDw4jiQNSiXviPt53MD74cIM/APHhMxMfPjPx
+        4ZPy8vYP7aXX1pOzmLMAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="richTextBox2.Text" xml:space="preserve">
+    <value>Unfortunately Duck Game has stopped working! The error is outlined below, and has also been logged into "ducklog.txt" which can be found next to the games executable in your steam folder. If you have any mods enabled, it's possible that a version difference is causing your mod to crash. If the crash was related to a mod, it will be mentioned in this dialogue. If this crash is giving you trouble, please post it on the Duck Game support forums!</value>
+  </data>
+</root>

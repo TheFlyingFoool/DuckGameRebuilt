@@ -102,7 +102,7 @@ public class Lobby : IDisposable {
                 return new List<User>();
             }
 
-            return _.GetList(SteamMatchmaking.GetNumLobbyMembers(_id), i => User.GetUser(SteamMatchmaking.GetLobbyMemberByIndex(_id, i)));
+            return SteamHelper.GetList(SteamMatchmaking.GetNumLobbyMembers(_id), i => User.GetUser(SteamMatchmaking.GetLobbyMemberByIndex(_id, i)));
         }
     }
 

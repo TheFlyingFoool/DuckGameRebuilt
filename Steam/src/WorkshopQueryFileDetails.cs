@@ -9,8 +9,8 @@ public class WorkshopQueryFileDetails : WorkshopQueryBase {
         files = new List<ulong>();
     }
 
-    internal unsafe override void Create() {
-        _handle = SteamUGC.CreateQueryUGCDetailsRequest(_.GetArray(files, id => new PublishedFileId_t(id)), (uint) files.Count);
+    internal override unsafe void Create() {
+        _handle = SteamUGC.CreateQueryUGCDetailsRequest(SteamHelper.GetArray(files, id => new PublishedFileId_t(id)), (uint) files.Count);
     }
 
 }

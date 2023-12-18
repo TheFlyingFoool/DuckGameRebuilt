@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NewsStory name="Title Change News Story">
+	<Section name="PlayerComments"/>
+	<Requirement><![CDATA[  "stat(currentTitle) != prevStat(currentTitle)"  ]]></Requirement>
+		
+	<SubStory name="Title Stolen">
+		<Requirement><![CDATA[  "previousTitleOwner(stat(currentTitle)) != """  ]]></Requirement>
+		<Dialogue value="%NAME% has taken %NAME2%'s place as %NICKNAME%"/>
+	</SubStory>
+	
+	<SubStory name="Title Given">
+		<Requirement><![CDATA[  "previousTitleOwner(stat(currentTitle)) == "" && prevStat(currentTitle) == """  ]]></Requirement>
+		<Dialogue value="Fans have taken a liking to the nickname %NICKNAME%"/>
+	</SubStory>
+	
+	<SubStory name="Title Changed">
+		<Requirement><![CDATA[  "previousTitleOwner(stat(currentTitle)) == "" && prevStat(currentTitle) != """  ]]></Requirement>
+		<Dialogue value="%NAME% has lost the nickname %OLDNICKNAME%, and is now known as %NICKNAME%"/>
+	</SubStory>
+
+</NewsStory>

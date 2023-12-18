@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NewsStory name="Closing">
+	<Section name="Closing"/>
+	<Cycle value="Once"/>
+	<SubStory name="">	
+		<Requirement><![CDATA[  isNotDemo() ]]></Requirement>
+		<Dialogue value="And that's |EXCITED|Duck Game!|CALM| Thanks for tuning in!"/>
+	</SubStory>
+	
+	<NewsStoryHalloween name="Closing">
+		<Section name="Closing"/>
+		<Cycle value="Once"/>
+		<SubStory name="">	
+			<Requirement><![CDATA[  isNotDemo() ]]></Requirement>
+			<Dialogue value="BOO! That's |EXCITED|SPOOKY Duck Game!|CALM| Thanks for tuning in!"/>
+		</SubStory>
+	</NewsStoryHalloween>
+</NewsStory>

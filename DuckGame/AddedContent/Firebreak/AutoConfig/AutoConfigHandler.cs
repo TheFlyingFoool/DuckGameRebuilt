@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AddedContent.Firebreak;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 
 namespace DuckGame
@@ -12,277 +12,222 @@ namespace DuckGame
         private const string SaveDirName = "Data/";
         private const string MainSaveFileName = "Config" + FileExtension;
         private const string FileExtension = ".quack";
-        public static string SaveDirPath => DuckFile.oldSaveLocation + "DuckGame/" + SaveDirName;
+        public static string SaveDirPath = DuckFile.newSaveLocation + "DuckGame/" + SaveDirName;
         public static string MainSaveFilePath => SaveDirPath + MainSaveFileName;
 
         public static void Initialize()
         {
-            DevConsole.Log("|240,164,65|ACFG|WHITE| ATTEMPTING TO LOAD CONFIG FIELD DATA...");
-
+            if (Marker.AutoConfigAttribute.All.Count == 0)
+                return;
+            
             if (!Directory.Exists(SaveDirPath))
                 Directory.CreateDirectory(SaveDirPath);
 
             if (!File.Exists(MainSaveFilePath))
                 SaveAll(false);
-
+            // else CleanForgottenFields(); // unnecessary
+            
             if (!LoadAll())
-                DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD CONFIG FIELDS");
+                SaveAll(false);
 
-            MonoMain.OnGameExit += SaveAllClosing;
+            MonoMain.OnGameExit += SaveAll;
+        }
+
+        // this doesn't clean external files but it doesn't really matter
+        // since saving cleans the file anyway
+        public static void CleanForgottenFields()
+        {
+            List<string> keepLines = new();
+            string[] allLines = File.ReadAllLines(MainSaveFilePath);
+
+            foreach (string line in allLines)
+            {
+                string[] spl = line.Split(new[] {'='}, 2);
+                if (Marker.AutoConfigAttribute.All.Any(x => x.UsableName == spl[0]))
+                    keepLines.Add(line);
+            }
+
+            File.WriteAllLines(MainSaveFilePath, keepLines);
         }
 
         public static void SaveAll(bool isDangerous)
         {
-            StringBuilder stringBuilder = new StringBuilder();
-            int length = AutoConfigFieldAttribute.All.Count;
-            for (int i = 0; i < length; i++)
-            {
-                AutoConfigFieldAttribute attribute = AutoConfigFieldAttribute.All[i];
-                MemberInfo field = attribute.field;
-                bool isfield = true;
-                Type fieldType;
-                PropertyInfo pi = null;
-                FieldInfo fi = field as FieldInfo;
-                if (fi == null)
-                {
-                    pi = field as PropertyInfo;
-                    if (pi == null)
-                    {
-                        throw new Exception("Unsupported AutoConfig field type");
-                    }
-                    isfield = false;
-                    fieldType = pi.PropertyType;
-                }
-                else
-                {
-                    fieldType = fi.FieldType;
-                }
-
-                if (isDangerous && attribute.PotentiallyDangerous)
-                    continue;
-
-                if (!FireSerializer.IsSerializable(fieldType))
-                    continue;
-                object fieldValue;
-                if (isfield)
-                {
-                    fieldValue = fi.GetValue(null);
-                }
-                else
-                {
-                    fieldValue = pi.GetMethod?.Invoke(null, null);
-                }
-                string fullName = attribute.Id ?? field.GetFullName();
-
-                string writtenValue = FireSerializer.Serialize(fieldValue);
-
-                if (attribute.External is not null)
-                {
-                    string fileName = attribute.External + FileExtension;
-                    string fullPath = SaveDirPath + fileName;
-                    File.WriteAllText(fullPath, writtenValue);
-
-                    writtenValue = fileName;
-                }
-
-                string dataLine = $"{fullName}={writtenValue}";
-                stringBuilder.Append(dataLine);
-
-                if (i != length)
-                    stringBuilder.Append("\n");
-            }
-            File.WriteAllText(MainSaveFilePath, stringBuilder.ToString());
-            DevConsole.Log("|240,164,65|ACFG|DGGREEN| SAVED ALL CUSTOM CONFIG SUCCESSFULLY!");
-        }
-        public static void SaveAllClosing(bool isDangerous)
-        {
-            int length = AutoConfigFieldAttribute.All.Count;
-            StringBuilder stringBuilder = new StringBuilder();
-
-            for (int i = 0; i < length; i++)
-            {
-                AutoConfigFieldAttribute attribute = AutoConfigFieldAttribute.All[i];
-                MemberInfo field = attribute.field;
-
-                bool isfield = true;
-                PropertyInfo pi = null;
-                FieldInfo fi = field as FieldInfo;
-                Type fieldType;
-                if (fi == null)
-                {
-                    pi = field as PropertyInfo;
-                    if (pi == null)
-                    {
-                        throw new Exception("Unsupported AutoConfig field type");
-                    }
-                    isfield = false;
-                    fieldType = pi.PropertyType;
-                }
-                else
-                {
-                    fieldType = fi.FieldType;
-                }
-                if (isDangerous && attribute.PotentiallyDangerous)
-                    continue;
-
-                if (!FireSerializer.IsSerializable(fieldType))
-                    continue;
-
-                object fieldValue;
-                if (isfield)
-                {
-                    fieldValue = fi.GetValue(null);
-                }
-                else
-                {
-                    fieldValue = pi.GetMethod?.Invoke(null, null);
-                }
-                string fullName = attribute.Id ?? field.GetFullName();
-
-                string writtenValue = FireSerializer.Serialize(fieldValue);
-
-                if (attribute.External is not null)
-                {
-                    string fileName = attribute.External + FileExtension;
-                    string fullPath = SaveDirPath + fileName;
-                    File.WriteAllText(fullPath, writtenValue);
-
-                    writtenValue = fileName;
-                }
-
-                string dataLine = $"{fullName}={writtenValue}";
-                stringBuilder.Append(dataLine);
-
-                if (i != length)
-                    stringBuilder.Append("\n");
-            }
-            File.WriteAllText(MainSaveFilePath, stringBuilder.ToString());
-            //DevConsole.Log("|240,164,65|ACFG|DGGREEN| SAVED ALL CUSTOM CONFIG SUCCESSFULLY!"); did i make another one just to removed this log to stop and error related to some closing stuff on linux, the answer is yes //
-        }
-        public static bool LoadAll()
-        {
-            IReadOnlyList<AutoConfigFieldAttribute> all = AutoConfigFieldAttribute.All;
-            Extensions.Try(() => File.ReadAllLines(MainSaveFilePath), out string[] lines);
-
-            if (lines is null || lines.Length == 0)
-                SaveAll(false);
-
-            // tries to load all via indexing. if that fails, tries to
-            // load all via searching. if that false, returns false, 
-            // otherwise returns true
-            if (LoadAllIndex(all, lines) || LoadAllSearch(all, lines))
-            {
-                DevConsole.Log("|240,164,65|ACFG|DGGREEN| LOADED ALL CUSTOM CONFIG SUCCESSFULLY!");
-                return true;
-            }
-
-            return false;
-        }
-
-        private static bool LoadAllIndex(IReadOnlyList<AutoConfigFieldAttribute> all, string[] lines)
-        {
-            DevConsole.Log("|240,164,65|ACFG|WHITE| ATTEMPTING CONFIG INDEX LOADING...");
-            lines = lines.Where(Enumerable.Any).ToArray();
-
-            if (all.Count != lines.Length)
-                DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD CONFIG FIELDS VIA INDEX");
-            return false;
-
+            if (Program.IsLanTestUser) return;
             try
             {
-                for (int i = 0; i < all.Count; i++)
+                Log(ACAction.TrySave);
+                bool failed = false;
+
+                // quick fix to https://canary.discord.com/channels/1004557726082400378/1005054418636517537/1153024982390161448
+                HashSet<string> visitedExternalPaths = new();
+
+                StringBuilder stringBuilder = new();
+                for (int i = 0; i < Marker.AutoConfigAttribute.All.Count; i++)
                 {
-                    AutoConfigFieldAttribute _ = all[i];
-                    PropertyInfo pi = null;
-                    FieldInfo fi = _.field as FieldInfo;
-                    Type type;
-                    if (fi == null)
-                    {
-                        pi = _.field as PropertyInfo;
-                        if (pi == null)
-                        {
-                            throw new Exception("Unsupported AutoConfig field type");
-                        }
-                        type = pi.PropertyType;
-                    }
-                    else
-                    {
-                        type = fi.FieldType;
-                    }
-                    string[] sides = lines[i].Split('=');
+                    Marker.AutoConfigAttribute attribute = Marker.AutoConfigAttribute.All[i];
 
-                    if (sides[0] != type.GetFullName())
-                        DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD CONFIG FIELDS VIA INDEX");
-                    return false;
-
-                    SetFieldValue(all[i], sides[1]);
-                }
-            }
-            catch
-            {
-                DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD CONFIG FIELDS VIA INDEX");
-                return false;
-            }
-            return true;
-        }
-
-        private static bool LoadAllSearch(IReadOnlyList<AutoConfigFieldAttribute> all, string[] lines)
-        {
-            DevConsole.Log("|240,164,65|ACFG|WHITE| ATTEMPTING CONFIG SEARCH LOADING...");
-            try
-            {
-                for (int i = 0; i < all.Count; i++)
-                {
-                    AutoConfigFieldAttribute attribute = all[i];
-                    string fullName = attribute.Id ?? attribute.field.GetFullName();
-
-                    if (!lines.TryFirst(x => fullName == x.Split('=')[0], out string line))
+                    if (isDangerous && attribute.PotentiallyDangerous)
                         continue;
 
-                    string[] sides = line.Split('=');
+                    if (!FireSerializer.IsSerializable(attribute.MemberType))
+                        throw new Exception($"No FireSerializer for type {attribute.MemberType} available. Code one yourself.");
 
-                    SetFieldValue(all[i], sides[1]);
+                    if (!Extensions.Try(() => FireSerializer.Serialize(attribute.Value), out string writtenValue))
+                    {
+                        failed = true;
+                        Log(ACAction.SaveFail, attribute.UsableName);
+                        continue;
+                    }
+
+                    if (attribute.External is not null)
+                    {
+                        string fileName = attribute.External + FileExtension;
+                        string fullPath = SaveDirPath + fileName;
+
+                        if (visitedExternalPaths.Add(fullPath))
+                            File.WriteAllText(fullPath, string.Empty);
+                        File.AppendAllLines(fullPath, new[] { $"{attribute.UsableName}={writtenValue}" });
+
+                        writtenValue = fileName;
+                    }
+
+                    string dataLine = $"{attribute.UsableName}={writtenValue}";
+
+                    stringBuilder.Append(dataLine);
+                    stringBuilder.Append("\n");
                 }
+                File.WriteAllText(MainSaveFilePath, stringBuilder.ToString());
+                if (!failed)
+                    Log(ACAction.SaveSuccess);
             }
-            catch
+            catch (IOException ex)
             {
-                DevConsole.Log("|240,164,65|ACFG|DGRED| FAILED TO LOAD CONFIG FIELDS VIA SEARCH");
-                return false;
+                //screw you firebreak -NiK0
             }
+        }
+        
+        /// <returns>True if loading succeeded</returns>
+        public static bool LoadAll()
+        {
+            Log(ACAction.TryLoad);
+            
+            List<Marker.AutoConfigAttribute> all = Marker.AutoConfigAttribute.All;
 
+            if (!Extensions.Try(() => File.ReadAllLines(MainSaveFilePath), out string[] lines))
+                SaveAll(false);
+
+            if (!LoadAllInternal(all, lines))
+                return false;
+
+            Log(ACAction.LoadSuccess);
             return true;
         }
 
-        private static void SetFieldValue(AutoConfigFieldAttribute pair, string newValue)
+        private static bool LoadAllInternal(List<Marker.AutoConfigAttribute> all, string[] lines)
         {
-            MemberInfo field = pair.field;
-            Type type;
-            PropertyInfo pi = null;
-            FieldInfo fi = field as FieldInfo;
-            bool isfield = true;
-            if (fi == null)
+            bool failed = false;
+            Dictionary<string, Marker.AutoConfigAttribute> dic = all.ToDictionary(x => x.UsableName, x => x);
+            
+            foreach (string line in lines)
             {
-                pi = field as PropertyInfo;
-                if (pi == null)
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
+
+                string[] lineSplit = line.Split(new[] {'='}, 2);
+
+                if (lineSplit.Length != 2)
                 {
-                    throw new Exception("Unsupported AutoConfig field type");
+                    Log(ACAction.LoadFail, line);
+                    failed = true;
+                    continue;
                 }
-                isfield = false;
-                type = pi.PropertyType;
+                
+                string name = lineSplit[0];
+                string serializedValue = lineSplit[1];
+
+                if (!dic.TryGetValue(name, out Marker.AutoConfigAttribute attribute))
+                    continue;
+
+                if (!Extensions.Try(() => DeserializeAndSet(attribute, serializedValue)))
+                {
+                    Log(ACAction.LoadFail, attribute.UsableName);
+                    failed = true;
+                    continue;
+                }
             }
+
+            return !failed;
+        }
+
+        private static void DeserializeAndSet(Marker.AutoConfigAttribute attribute, string newValue)
+        {
+            string serializedValue;
+            if (attribute.External is null)
+                serializedValue = newValue;
             else
             {
-                type = fi.FieldType;
+                // fix this garbage sloppy code -firebreak
+                string[] lines = File.ReadAllLines(SaveDirPath + newValue);
+
+                int i = 0;
+                foreach (string line in lines)
+                {
+                    i++;
+                    // ... `=`s in the actual value will cause problems
+                    string[] spl = line.Split(new[] {'='}, 2);
+
+                    if (spl[0] != attribute.UsableName)
+                        continue;
+
+                    serializedValue = spl[1];
+
+                    if (lines.Skip(i).Any(x => x.Split(new[] {'='}, 2)[0] == spl[0]))
+                    {
+                        File.WriteAllText(SaveDirPath + newValue, string.Empty);
+                        throw new Exception("Duplicate AutoConfig entries for the same field");
+                    }
+                            
+                    goto Deserialize_And_Set;
+                }
+
+                if (lines.Select(x => x.Length > 0).Count() == 1)
+                    serializedValue = lines.First(x => x.Length > 0);
+                else throw new Exception("External AutoConfig field not present in external file");
             }
-            object val = FireSerializer.Deserialize(type, pair.External is not null ? File.ReadAllText(SaveDirPath + newValue) : newValue);
-            if (isfield)
+
+            Deserialize_And_Set:
+            object deserializedValue = FireSerializer.Deserialize(attribute.MemberType, serializedValue);
+            attribute.Value = deserializedValue;
+        }
+
+        private static void Log(ACAction action, string reason = "")
+        {
+            string color = action switch
             {
-                fi.SetValue(null, val);
-            }
-            else
+                ACAction.TryLoad or ACAction.TrySave => Color.Wheat.ToDGColorString(),
+                ACAction.LoadFail or ACAction.SaveFail => Colors.DGRed.ToDGColorString(),
+                ACAction.LoadSuccess or ACAction.SaveSuccess => Colors.DGGreen.ToDGColorString()
+            };
+            
+            DevConsole.Log("|240,164,65|ACFG " + color + action switch
             {
-                pi.SetMethod?.Invoke(null, new[] { val });
-            }
+                ACAction.TryLoad => "Attempting load",
+                ACAction.TrySave => "Attempting save",
+                ACAction.LoadFail => "Load failed",
+                ACAction.SaveFail => "Save failed",
+                ACAction.LoadSuccess => "Load success",
+                ACAction.SaveSuccess => "Save success",
+            } + (reason == string.Empty ? reason : $": {reason}"));
+        }
+
+        private enum ACAction
+        {
+            TryLoad,
+            TrySave,
+            LoadFail,
+            SaveFail,
+            LoadSuccess,
+            SaveSuccess,
         }
     }
 }

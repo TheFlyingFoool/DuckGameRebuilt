@@ -132,7 +132,7 @@ public class SharpSteam : IDisposable {
         throw new NotImplementedException();
     }
 
-    protected unsafe virtual void Dispose(bool flag) {
+    protected virtual unsafe void Dispose(bool flag) {
     }
 
     public void Dispose() {

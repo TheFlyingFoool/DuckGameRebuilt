@@ -9,10 +9,10 @@ namespace RectpackSharp
     {
         private static void Initialize(out uint v1, out uint v2, out uint v3, out uint v4)
         {
-            v1 = HashCode.s_seed + 2654435761U + 2246822519U;
-            v2 = HashCode.s_seed + 2246822519U;
-            v3 = HashCode.s_seed;
-            v4 = HashCode.s_seed - 2654435761U;
+            v1 = s_seed + 2654435761U + 2246822519U;
+            v2 = s_seed + 2246822519U;
+            v3 = s_seed;
+            v4 = s_seed - 2654435761U;
         }
         public static int Combine<T1, T2, T3, T4, T5>(T1 value1, T2 value2, T3 value3, T4 value4, T5 value5)
         {
@@ -25,15 +25,15 @@ namespace RectpackSharp
             uint num2;
             uint num3;
             uint num4;
-            HashCode.Initialize(out num, out num2, out num3, out num4);
-            num = HashCode.Round(num, input);
-            num2 = HashCode.Round(num2, input2);
-            num3 = HashCode.Round(num3, input3);
-            num4 = HashCode.Round(num4, input4);
-            uint num5 = HashCode.MixState(num, num2, num3, num4);
+            Initialize(out num, out num2, out num3, out num4);
+            num = Round(num, input);
+            num2 = Round(num2, input2);
+            num3 = Round(num3, input3);
+            num4 = Round(num4, input4);
+            uint num5 = MixState(num, num2, num3, num4);
             num5 += 20U;
-            num5 = HashCode.QueueRound(num5, queuedValue);
-            return (int)HashCode.MixFinal(num5);
+            num5 = QueueRound(num5, queuedValue);
+            return (int)MixFinal(num5);
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static uint Round(uint hash, uint input)
@@ -70,13 +70,13 @@ namespace RectpackSharp
             hash ^= hash >> 16;
             return hash;
         }
-        private unsafe static uint GenerateGlobalSeed()
+        private static unsafe uint GenerateGlobalSeed()
         {
             uint result;
             GetRandomBytes((byte*)(&result), 4);
             return result;
         }
-        internal unsafe static void GetRandomBytes(byte* buffer, int length)
+        internal static unsafe void GetRandomBytes(byte* buffer, int length)
         {
             if (!UseNonRandomizedHashSeed)
             {
@@ -88,7 +88,7 @@ namespace RectpackSharp
                 }
             }
         }
-        private static readonly uint s_seed = HashCode.GenerateGlobalSeed();
+        private static readonly uint s_seed = GenerateGlobalSeed();
 
         public static bool UseNonRandomizedHashSeed
         {

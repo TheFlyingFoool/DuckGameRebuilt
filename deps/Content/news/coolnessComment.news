@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NewsStory name="Coolness Story">
+	<Section name="CoolestDuckComments"/>
+	<Cycle value="Once"/>
+		<SubStory name="First Place">	
+			<VALUE><![CDATA[  profileScore()  ]]></VALUE>
+			<VALUE2><![CDATA[  coolnessString()  ]]></VALUE2>
+			<Cycle value="PerPosition"/>
+			<Requirement><![CDATA[  place() == 0  ]]></Requirement>
+			<SubStory name = "Coolest Duck Single">
+				<Requirement><![CDATA[  numInPlace(place()) == 1  ]]></Requirement>
+				<SubStory name = "">
+					<Requirement><![CDATA[  floatVALUE() > 100  ]]></Requirement>
+					<Dialogue value="|EXCITED||RED|%VALUE2%|WHITE|!"/>	
+						
+					<SubStory name = "">
+						<Dialogue value="Way to go %NAME%, you're an inspiration to all of us!"/>			
+						<Dialogue value="Right on %NAME%!"/>			
+						<Dialogue value="%NAME% is awesome!"/>	
+						<Dialogue value="Pretty nifty %NAME%!"/>							
+					</SubStory>						
+				</SubStory>	
+
+				<SubStory name = "">
+					<Requirement><![CDATA[  floatVALUE() > 10 and floatVALUE() < 101  ]]></Requirement>
+					<Dialogue value="|EXCITED||RED|%VALUE2%|WHITE|!"/>		
+					<SubStory name = "">
+						<Dialogue value="Way to go %NAME%, you're an inspiration to all of us!"/>			
+						<Dialogue value="Right on %NAME%!"/>			
+						<Dialogue value="Very cool, %NAME%!"/>	
+						<Dialogue value="Pretty nifty %NAME%!"/>							
+					</SubStory>						
+				</SubStory>
+				
+				<SubStory name = "">	
+					<Requirement><![CDATA[  floatVALUE() < 11 ]]></Requirement>
+					<Dialogue value="|RED|%VALUE2%|WHITE|... Wow..."/>		
+					<SubStory name = "">	
+						<VALUE><![CDATA[  random()  ]]></VALUE>					
+						<Requirement><![CDATA[  floatVALUE() > 0.5  ]]></Requirement>
+						<Dialogue value="|EXCITED|Let's flip it around. Who was the |RED|COLDEST?"/>	
+						<SubStory name = "">	
+							<VALUE><![CDATA[  negProfileScore()  ]]></VALUE>
+							<VALUE2><![CDATA[  coolnessString()  ]]></VALUE2>
+						
+							<Cycle value="PerPosition"/>
+							<Requirement><![CDATA[  place() == 0  ]]></Requirement>
+							<SubStory name = "">
+								<Requirement><![CDATA[  numInPlace(place()) == 1  ]]></Requirement>
+								<Dialogue value="|EXCITED||RED|%VALUE2%|WHITE|!"/>
+								<SubStory name = "">
+									<Dialogue value="|SUAVE|Nicely done %NAME%, very professional."/>
+									<Dialogue value="|SUAVE|%NAME% you really do know how to impress."/>
+									<Dialogue value="|SUAVE|What do our |RED|fans|WHITE| know anyway, right %NAME%?"/>
+								</SubStory>	
+							</SubStory>		
+
+							<SubStory name = "Coolest Duck Double">
+								<Requirement><![CDATA[  numInPlace(place()) == 2  ]]></Requirement>
+								<Dialogue value="%NAME% and %NAME2% are both the coldest, |RED|%VALUE2%|WHITE|."/>
+								
+								<SubStory name = "">
+									<Dialogue value="Neat."/>									
+								</SubStory>		
+							</SubStory>		
+							
+							<SubStory name = "Coolest Duck Triple">
+								<Requirement><![CDATA[  numInPlace(place()) == 3  ]]></Requirement>
+								<Dialogue value="%NAME%, %NAME2%, and %NAME3% were all cold as |RED|%VALUE2%|WHITE|!"/>
+								
+								<SubStory name = "">
+									<Dialogue value="Huh!"/>									
+								</SubStory>		
+							</SubStory>
+						</SubStory>	
+					</SubStory>				
+				</SubStory>			
+			</SubStory>
+			<SubStory name = "Coolest Duck Double">
+				<Requirement><![CDATA[  numInPlace(place()) == 2  ]]></Requirement>
+				<Dialogue value="%NAME% and %NAME2% are both as hot as |RED|%VALUE2%|WHITE|!"/>
+				
+				<SubStory name = "">
+					<Dialogue value="Good job you two, pretty cool!"/>									
+				</SubStory>		
+			</SubStory>
+			<SubStory name = "Coolest Duck Triple">
+				<Requirement><![CDATA[  numInPlace(place()) == 3  ]]></Requirement>
+				<Dialogue value="%NAME%, %NAME2%, and %NAME3% are all as hot as |RED|%VALUE2%|WHITE|!"/>
+				
+				<SubStory name = "">
+					<Dialogue value="You three really nailed it!"/>									
+				</SubStory>		
+			</SubStory>
+			<SubStory name = "Coolest Duck Quadruple">
+				<Requirement><![CDATA[  numInPlace(place()) == 4  ]]></Requirement>
+				<Dialogue value="What!! Everyone is as hot as |RED|%VALUE2%|WHITE|!"/>
+				
+				<SubStory name = "">
+					<Dialogue value="I've never seen anything like it!"/>									
+				</SubStory>	
+			</SubStory>
+		</SubStory>
+		<SubStory name = "End Hotness">
+			<Dialogue value="CUE%ENDHOTNESS%"/>
+		</SubStory>
+</NewsStory>

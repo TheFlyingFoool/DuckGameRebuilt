@@ -3,29 +3,28 @@
 namespace DuckGame
 {
 
-    public class ProgressValue
+    public struct ProgressValue
     {
-        public double Value = 0;
+        public double Value;
+        public double MaximumValue;
+        public double MinimumValue;
+        public double IncrementSize;
 
         public double NormalizedValue
         {
             get => (Value - MinimumValue) / (MaximumValue - MinimumValue);
             set => Value = value * (MaximumValue - MinimumValue) + MinimumValue;
         }
+        
+        public static double Normalize(double value, double min, double max) => (value - min) / (max - min);
 
-        public double MaximumValue = 1;
-        public double MinimumValue = 0;
-        public double IncrementSize = 0.05;
-
-        public bool Completed => NormalizedValue >= 1;
-
-        public ProgressValue() : this(0D) { }
+        public bool Completed => IncrementSize >= 0 ? NormalizedValue >= 1 : NormalizedValue <= 0;
 
         public ProgressValue(ProgressValue p) : this(p.Value, p.IncrementSize, p.MinimumValue, p.MaximumValue) { }
 
-        public ProgressValue(double value, double incrementSize = 0.05, double min = 0, double max = 1)
+        public ProgressValue(double value, double incrementSize, double min, double max)
         {
-            if (MinimumValue > MaximumValue)
+            if (min > max)
                 throw new Exception("Minimum size cannot be less than the maximum size");
 
             Value = value;
@@ -33,17 +32,29 @@ namespace DuckGame
             MinimumValue = min;
             IncrementSize = incrementSize;
         }
-
-        public string GenerateBar(int characterCount = 30, char filled = '#', char empty = '-')
+        
+        public ProgressValue(double value, double min, double max)
         {
-            this.Value = ~this;
+            if (min > max)
+                throw new Exception("Minimum size cannot be less than the maximum size");
+
+            Value = value;
+            MaximumValue = max;
+            MinimumValue = min;
+            IncrementSize = Normalize(value, min, max) * (max - min);
+        }
+
+        public string GenerateBar(int characterCount = 30, char filled = '#', char empty = '-', Func<string, string, string>? formatFunction = null)
+        {
+            formatFunction ??= (done, left) => $"[{done}{left}]";
+            Value = ~this;
 
             double fillPercentage = NormalizedValue * characterCount;
 
             string whiteBar = new(filled, (int)fillPercentage);
             string blackBar = new(empty, (int)(characterCount - fillPercentage));
 
-            string fullBar = $"{whiteBar}{blackBar}";
+            string fullBar = formatFunction(whiteBar, blackBar);
             fullBar = fullBar.Length == characterCount - 1
                 ? fullBar + empty
                 : fullBar;
@@ -58,7 +69,7 @@ namespace DuckGame
 
         // From T to Progress
         public static implicit operator ProgressValue(float f) => new((double)f);
-        public static implicit operator ProgressValue(double f) => new(f);
+        public static implicit operator ProgressValue(double f) => new(f, 0, double.MinValue, double.MaxValue);
         public static implicit operator ProgressValue(int f) => new((double)f);
 
         // Positive/Negative
@@ -69,26 +80,26 @@ namespace DuckGame
 
         public static ProgressValue operator +(ProgressValue a, ProgressValue b)
         {
-            a.Value = a.Value + b.Value;
+            a.Value += b.Value;
             return a;
         }
 
         public static ProgressValue operator -(ProgressValue a, ProgressValue b)
         {
 
-            a.Value = a.Value - b.Value;
+            a.Value -= b.Value;
             return a;
         }
 
         public static ProgressValue operator *(ProgressValue a, ProgressValue b)
         {
-            a.Value = a.Value * b.Value;
+            a.Value *= b.Value;
             return a;
         }
 
         public static ProgressValue operator /(ProgressValue a, ProgressValue b)
         {
-            a.Value = a.Value / b.Value;
+            a.Value /= b.Value;
             return a;
         }
 
@@ -101,8 +112,17 @@ namespace DuckGame
         public static bool operator <=(ProgressValue a, ProgressValue b) => a.Value <= b.Value;
 
         // Increment/Decrement
-        public static ProgressValue operator ++(ProgressValue p) => p += p.IncrementSize;
-        public static ProgressValue operator --(ProgressValue p) => p -= p.IncrementSize;
+        public static ProgressValue operator ++(ProgressValue p)
+        {
+            p += p.IncrementSize;
+            return p;
+        }
+
+        public static ProgressValue operator --(ProgressValue p)
+        {
+            p -= p.IncrementSize;
+            return p;
+        }
 
         // Inversion
         public static ProgressValue operator !(ProgressValue p)
@@ -133,11 +153,13 @@ namespace DuckGame
         }
         public ProgressValue Clone()
         {
-            ProgressValue progressValue = new ProgressValue();
-            progressValue.Value = this.Value;
-            progressValue.MaximumValue = this.MaximumValue;
-            progressValue.MinimumValue = this.MinimumValue;
-            progressValue.IncrementSize = this.IncrementSize;
+            ProgressValue progressValue = new ProgressValue
+            {
+                Value = Value,
+                MaximumValue = MaximumValue,
+                MinimumValue = MinimumValue,
+                IncrementSize = IncrementSize
+            };
             return progressValue;
         }
 

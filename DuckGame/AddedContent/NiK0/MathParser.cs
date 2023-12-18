@@ -263,7 +263,7 @@ namespace DuckGame
                         6.28318530717959
                     }
                 };
-                for (int i = 0; i < Profiles.alllist.Count(); i++)
+                for (int i = 0; i < Profiles.alllist.Count; i++)
                 {
                     Duck d = Profiles.alllist[i].duck;
                     if (d != null)
@@ -570,7 +570,7 @@ namespace DuckGame
 
                     if (op.Key == "-" && opPlace == 0)
                     {
-                        double result = op.Value(0.0, rhs);
+                        double result = op.Value(0d, rhs);
                         tokens[0] = result.ToString();
                         tokens.RemoveRange(opPlace + 1, 1);
                     }

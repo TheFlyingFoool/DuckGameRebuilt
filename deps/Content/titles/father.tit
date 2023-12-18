@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Title name="Father">
+	<StatRequirement name="timePreacing" value="20" />
+	<StatRequirement name="conversions" value="10" />
+	<StatRequirement name="funeralsPerformed" value="5" />
+	<StatRequirement name="respectGivenToDead" value="20" />
+</Title>
