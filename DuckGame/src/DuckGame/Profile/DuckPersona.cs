@@ -74,7 +74,7 @@ namespace DuckGame
         {
             get
             {
-                return colorUsable;
+                return _colorUsable;
             }
         }
 
