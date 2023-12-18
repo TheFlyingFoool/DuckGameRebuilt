@@ -2137,8 +2137,12 @@ namespace DuckGame
             gravMultiplier = 1f;
             if (!(Level.current is TeamSelect2) || (Level.current as TeamSelect2)._beam == null || (Level.current as TeamSelect2)._beam2 == null)
                 return;
-            (Level.current as TeamSelect2)._beam.RemoveDuck(this);
-            (Level.current as TeamSelect2)._beam2.RemoveDuck(this);
+            //(Level.current as TeamSelect2)._beam.RemoveDuck(this);
+           // (Level.current as TeamSelect2)._beam2.RemoveDuck(this);
+            foreach(TeamBeam teamBeam in (Level.current as TeamSelect2).teamBeams)
+            {
+                teamBeam.RemoveDuck(this);
+            }
         }
 
         public void Ressurect()

@@ -1,4 +1,6 @@
-﻿namespace DuckGame
+﻿using System;
+
+namespace DuckGame
 {
     public class UISlotEditor : UIMenu
     {
@@ -17,26 +19,28 @@
         private bool _justOpened;
         private Profile _profileThatJustStartedBeingSpectatorSwapped = null;
         //private bool _showedWarning;
-        public static int[,] kIndexMap = new int[3, 3]
-        {
-      {
-        0,
-        1,
-        4
-      },
-      {
-        2,
-        3,
-        5
-      },
-      {
-        6,
-        -1,
-        7
-      }
-        };
-        public static int hoveringSlot = -1;
+        public int[,] kIndexMap;
+        public int maxside;
 
+        public static int hoveringSlot = -1;
+        //= new int[3, 3]
+        //{
+        //  {
+        //    0,
+        //    1,
+        //    4
+        //  },
+        //  {
+        //    2,
+        //    3,
+        //    5
+        //  },
+        //  {
+        //    6,
+        //    -1,
+        //    7
+        //  }
+        //}
         public UISlotEditor(UIMenu closeMenu, float xpos, float ypos, float wide = -1f, float high = -1f)
           : base("", xpos, ypos, wide, high)
         {
@@ -45,6 +49,50 @@
             _closeMenu = closeMenu;
             //this._littleFont = new BitmapFont("smallBiosFontUI", 7, 5);
             //this._littleFont2 = new BitmapFont("smallBiosFont", 7, 6);
+            int total = DG.MaxPlayers;
+            maxside = (int)Math.Ceiling(Math.Sqrt(total + 1));
+            Vec2 Position = new Vec2(0f, 0f);
+            kIndexMap = new int[maxside, maxside];
+            for (int i = 0; i < maxside; i++)
+            {
+                for (int j = 0; j < maxside; j++)
+                {
+                    kIndexMap[i, j] = -1;
+                }
+            }
+            int slotindex = 0;
+            for (int i = 0; i < total + 1; i++)
+            {
+                if (i != 7)
+                {
+                    try
+                    {
+                        kIndexMap[(int)Position.y, (int)Position.x] = slotindex;
+                    }
+                    catch
+                    {
+                        DevConsole.Log("uhh");
+                    }
+                    slotindex += 1;
+                }
+                if (Position.x == Position.y + 1) //reset one lower and all the way to to the left
+                {
+                    Position.x = 0;
+                    Position.y += 1;
+                }
+                else if (Position.x > Position.y)//go down
+                {
+                    Position.y += 1;
+                }
+                else
+                {
+                    if (Position.x == Position.y)//reset to top row
+                    {
+                        Position.y = 0;
+                    }
+                    Position.x += 1; //go right
+                }
+            }
         }
 
         public override void Open()
@@ -82,9 +130,11 @@
                         --_indexX;
                         if (_indexX < 0)
                             _indexX = 0;
+                        if (kIndexMap[_indexY, _indexX] == -1)
+                            ++_indexX;
                     }
                 }
-                if (Input.Pressed(Triggers.MenuRight))
+                else if (Input.Pressed(Triggers.MenuRight))
                 {
                     if (_indexX == 0 && _indexY == 2)
                     {
@@ -93,17 +143,21 @@
                     else
                     {
                         ++_indexX;
-                        if (_indexX > 2)
-                            _indexX = 2;
+                        if (_indexX > maxside - 1)
+                            _indexX = maxside - 1;
+                        if (kIndexMap[_indexY, _indexX] == -1)
+                            --_indexX;
                     }
                 }
-                if (Input.Pressed(Triggers.MenuUp))
+                else if(Input.Pressed(Triggers.MenuUp))
                 {
                     --_indexY;
                     if (_indexY < 0)
                         _indexY = 0;
+                    if (kIndexMap[_indexY, _indexX] == -1)
+                        ++_indexY;
                 }
-                if (Input.Pressed(Triggers.MenuDown))
+                else if(Input.Pressed(Triggers.MenuDown))
                 {
                     if (_indexX == 1 && _indexY == 1)
                     {
@@ -112,8 +166,10 @@
                     else
                     {
                         ++_indexY;
-                        if (_indexY > 2)
-                            _indexY = 2;
+                        if (_indexY > maxside - 1)
+                            _indexY = maxside - 1;
+                        if (kIndexMap[_indexY, _indexX] == -1)
+                            --_indexY;
                     }
                 }
                 _slot = kIndexMap[_indexY, _indexX];
@@ -122,7 +178,7 @@
                 {
                     _selectionChanged = true;
                 }
-                        
+
                 if (_slot >= 0)
                 {
                     if (_selectionChanged || _justOpened || (DuckNetwork.SpectatorSwapFinished(_profileThatJustStartedBeingSpectatorSwapped) && _selectionChangedDueToSpectatorSwap))
@@ -172,14 +228,15 @@
                         else if (Input.Pressed(Triggers.Grab))
                         {
                             SlotType currentSlotType = DuckNetwork.profiles[_slot].slotType;
-                            for (int x = 0; x < 3; x++)
-                                for (int y = 0; y < 3; y++)
-                                    if (!(x == 1 && y == 2))
-                                    {
-                                        int sl = kIndexMap[y, x];
-                                        if (sl != _slot && DuckNetwork.profiles[sl].connection == null)
-                                            DuckNetwork.profiles[sl].slotType = currentSlotType;
-                                    }
+                            for (int x = 0; x < maxside; x++)
+                            {
+                                for (int y = 0; y < maxside; y++)
+                                {
+                                    int sl = kIndexMap[y, x];
+                                    if (sl != -1 && sl != _slot && DuckNetwork.profiles[sl].connection == null)
+                                        DuckNetwork.profiles[sl].slotType = currentSlotType;
+                                }
+                            }
                             SFX.Play("menuBlip01");
                         }
                         else if (DGRSettings.dubberspeed)

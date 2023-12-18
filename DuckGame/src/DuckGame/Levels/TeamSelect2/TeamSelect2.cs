@@ -40,6 +40,7 @@ namespace DuckGame
         private UIMenu _multiplayerMenu;
         private UIMenu _modifierMenu;
         public TeamBeam _beam;
+        public TeamBeam[] teamBeams = new TeamBeam[0];
         public TeamBeam _beam2;
         private Sprite _countdownScreen;
         private UIComponent _pauseGroup;
@@ -743,42 +744,82 @@ namespace DuckGame
             };
             showEightPlayerSelected = false;
             List<Profile> defaultProfiles = this.defaultProfiles;
-            ProfileBox2 profileBox2_1 = new ProfileBox2(1, 1f, InputProfile.Get(InputProfile.MPPlayer1), defaultProfiles[0], this, 0);
-            _profiles.Add(profileBox2_1);
-            Add(profileBox2_1);
-            ProfileBox2 profileBox2_2 = new ProfileBox2(179, 1f, InputProfile.Get(InputProfile.MPPlayer2), defaultProfiles[1], this, 1);
-            _profiles.Add(profileBox2_2);
-            Add(profileBox2_2);
-            ProfileBox2 profileBox2_3 = new ProfileBox2(1, 90f, InputProfile.Get(InputProfile.MPPlayer3), defaultProfiles[2], this, 2);
-            _profiles.Add(profileBox2_3);
-            Add(profileBox2_3);
-            ProfileBox2 profileBox2_4 = new ProfileBox2(179, 90f, InputProfile.Get(InputProfile.MPPlayer4), defaultProfiles[3], this, 3);
-            _profiles.Add(profileBox2_4);
-            Add(profileBox2_4);
-            growCamera = false;
-            ProfileBox2 profileBox2_5 = new ProfileBox2(357, 1f, InputProfile.Get(InputProfile.MPPlayer5), defaultProfiles[4], this, 4);
-            _profiles.Add(profileBox2_5);
-            Add(profileBox2_5);
-            ProfileBox2 profileBox2_6 = new ProfileBox2(357, 90f, InputProfile.Get(InputProfile.MPPlayer6), defaultProfiles[5], this, 5);
-            _profiles.Add(profileBox2_6);
-            Add(profileBox2_6);
-            ProfileBox2 profileBox2_7 = new ProfileBox2(2f, 179, InputProfile.Get(InputProfile.MPPlayer7), defaultProfiles[6], this, 6);
-            _profiles.Add(profileBox2_7);
-            Add(profileBox2_7);
-            ProfileBox2 profileBox2_8 = new ProfileBox2(356, 179, InputProfile.Get(InputProfile.MPPlayer8), defaultProfiles[7], this, 7);
-            _profiles.Add(profileBox2_8);
-            Add(profileBox2_8);
-
             if (DuckNetwork.FiftyPlayerMode)
             {
-                for (int i = 8; i < 50; i++)
+                Vec2 Position = new Vec2(0f, 0f);
+                int profileindex = 0;
+                for (int i = 0; i < DG.MaxPlayers + 1; i++)
                 {
-                    ProfileBox2 profileBox2_50 = new ProfileBox2(0, -600 + 240 * i, InputProfile.Get(InputProfile.MPPlayers[i]), defaultProfiles[i], this, i);
-                    _profiles.Add(profileBox2_50);
-                    Add(profileBox2_50);
+                    DevConsole.Log(i.ToString() + " " + Position.x.ToString() + " " + Position.y.ToString());
+                    Vec2 CreatePosition = new Vec2(1f + (Position.x * 178f), 1f + (Position.y * 89f));
+                    if (i != 7)
+                    {
+                        ProfileBox2 profileBox2 = new ProfileBox2(CreatePosition.x, CreatePosition.y, InputProfile.Get(InputProfile.MPPlayers[profileindex]), defaultProfiles[profileindex], this, profileindex);
+                        _profiles.Add(profileBox2);
+                        Add(profileBox2);
+                        profileindex += 1;
+                    }
+                    else
+                    {
+                        Add(new BlankDoor(CreatePosition.x, CreatePosition.y));
+                    }
+                    if (Position.x == Position.y + 1) //reset one lower and all the way to to the left
+                    {
+                        Position.x = 0;
+                        Position.y += 1;
+                    }
+                    else if (Position.x > Position.y)//go down
+                    {
+                        Position.y += 1;
+                    }
+                    else
+                    {
+                        if (Position.x == Position.y)//reset to top row
+                        {
+                            Position.y = 0;
+                        }
+                        Position.x += 1; //go right
+                    }
                 }
             }
-            Add(new BlankDoor(178f, 179f));
+            else
+            {
+                ProfileBox2 profileBox2_1 = new ProfileBox2(1, 1f, InputProfile.Get(InputProfile.MPPlayer1), defaultProfiles[0], this, 0);
+                _profiles.Add(profileBox2_1);
+                Add(profileBox2_1);
+                ProfileBox2 profileBox2_2 = new ProfileBox2(179, 1f, InputProfile.Get(InputProfile.MPPlayer2), defaultProfiles[1], this, 1);
+                _profiles.Add(profileBox2_2);
+                Add(profileBox2_2);
+                ProfileBox2 profileBox2_3 = new ProfileBox2(1, 90f, InputProfile.Get(InputProfile.MPPlayer3), defaultProfiles[2], this, 2);
+                _profiles.Add(profileBox2_3);
+                Add(profileBox2_3);
+                ProfileBox2 profileBox2_4 = new ProfileBox2(179, 90f, InputProfile.Get(InputProfile.MPPlayer4), defaultProfiles[3], this, 3);
+                _profiles.Add(profileBox2_4);
+                Add(profileBox2_4);
+                growCamera = false;
+                ProfileBox2 profileBox2_5 = new ProfileBox2(357, 1f, InputProfile.Get(InputProfile.MPPlayer5), defaultProfiles[4], this, 4);
+                _profiles.Add(profileBox2_5);
+                Add(profileBox2_5);
+                ProfileBox2 profileBox2_6 = new ProfileBox2(357, 90f, InputProfile.Get(InputProfile.MPPlayer6), defaultProfiles[5], this, 5);
+                _profiles.Add(profileBox2_6);
+                Add(profileBox2_6);
+                ProfileBox2 profileBox2_7 = new ProfileBox2(2f, 179, InputProfile.Get(InputProfile.MPPlayer7), defaultProfiles[6], this, 6);
+                _profiles.Add(profileBox2_7);
+                Add(profileBox2_7);
+                ProfileBox2 profileBox2_8 = new ProfileBox2(356, 179, InputProfile.Get(InputProfile.MPPlayer8), defaultProfiles[7], this, 7);
+                _profiles.Add(profileBox2_8);
+                Add(profileBox2_8);
+                Add(new BlankDoor(178f, 179f));
+            }
+            //if (DuckNetwork.FiftyPlayerMode)
+            //{
+            //    for (int i = 8; i < 50; i++)
+            //    {
+            //        ProfileBox2 profileBox2_50 = new ProfileBox2(0, -600 + 240 * i, InputProfile.Get(InputProfile.MPPlayers[i]), defaultProfiles[i], this, i);
+            //        _profiles.Add(profileBox2_50);
+            //        Add(profileBox2_50);
+            //    }
+            //}
             Add(new HostTable(160f, 170f));
             if (Network.isActive)
                 PrepareForOnline();
@@ -790,10 +831,18 @@ namespace DuckGame
             _buttons.CenterOrigin();
             _buttons.depth = (Depth)0.9f;
             Music.Play("CharacterSelect");
-            _beam = new TeamBeam(160f, 0f);
-            _beam2 = new TeamBeam(338f, 0f);
-            Add(_beam);
-            Add(_beam2);
+            int colnums = (int)Math.Ceiling(Math.Sqrt(DG.MaxPlayers)) - 1;
+            teamBeams = new TeamBeam[colnums];
+            for (int i = 0; i < colnums; i++)
+            {
+                TeamBeam beam = new TeamBeam((178 * i) + 160f, 0f);
+                teamBeams[i] = beam;
+                Add(beam);
+            }
+            if (teamBeams.Length > 1)
+                _beam = teamBeams[0];
+            if (teamBeams.Length > 2)
+                _beam2 = teamBeams[1];
             UpdateModifierStatus();
             _configGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
             _multiplayerMenu = new UIMenu("@LWING@MATCH SETTINGS@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 190f, conString: "@CANCEL@BACK @SELECT@SELECT");
@@ -1349,10 +1398,18 @@ namespace DuckGame
                 {
                     oldCameraSize = current.camera.size;
                     oldCameraPos = current.camera.position;
-                }
+                }// new Vec2(-1f, -7f)
                 float x = 500f;
-                current.camera.size = Lerp.Vec2Smooth(current.camera.size, new Vec2(x, x / 1.77777f), 0.1f, 0.08f);
-                current.camera.position = Lerp.Vec2Smooth(current.camera.position, new Vec2(-1f, -7f), 0.1f, 0.08f);
+                float rowncolumns = 8;
+                float m = 0.5625f * rowncolumns - 0.125f;
+
+                float xoffset = -1.5f * rowncolumns + 3f;
+                //float yoffset = -7f * rowncolumns + 14f;
+                // float m = 1.5625f; // 1.5625
+                current.camera.size = Lerp.Vec2Smooth(current.camera.size, new Vec2(320f * m, 180f * m) + new Vec2(0f, 0f), 0.1f, 0.08f);
+                // current.camera.size = Lerp.Vec2Smooth(current.camera.size, new Vec2(x, x / 1.77777f), 0.1f, 0.08f);
+                current.camera.position = Lerp.Vec2Smooth(current.camera.position, new Vec2(0f, 0f), 0.1f, 0.08f); //new Vec2(-1.5f, -7f)
+                //current.camera.position = Lerp.Vec2Smooth(current.camera.position, new Vec2(-1f, -7f), 0.1f, 0.08f);
                 eightPlayersActive = true;
                 zoomedOut = true;
             }

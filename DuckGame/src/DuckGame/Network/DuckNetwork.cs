@@ -1691,8 +1691,8 @@ namespace DuckGame
                     pFriend = true;
             }
             IEnumerable<Profile> source = profiles.Where(x => x.connection == null && x.reservedUser != null && pConnection.data == x.reservedUser);
-            if (source.Count() == 0)
-                source = !pSpectator ? profiles.Where(x => x.connection == null && (x.slotType == SlotType.Invite && pInvited | pLocal || x.slotType == SlotType.Friend && pFriend | pLocal || pLocal && x.slotType == SlotType.Local || x.slotType == SlotType.Open) && x.slotType != SlotType.Spectator && x.networkIndex <= 7) : profiles.Where(x => x.connection == null && x.slotType == SlotType.Spectator);
+            if (source.Count() == 0)//&& x.networkIndex <= 7
+                source = !pSpectator ? profiles.Where(x => x.connection == null && (x.slotType == SlotType.Invite && pInvited | pLocal || x.slotType == SlotType.Friend && pFriend | pLocal || pLocal && x.slotType == SlotType.Local || x.slotType == SlotType.Open) && x.slotType != SlotType.Spectator) : profiles.Where(x => x.connection == null && x.slotType == SlotType.Spectator);
             if (Level.current is GameLevel && DGRSettings.MidGameJoining)
             {
                 source = profiles.Where(x => x.connection == null && x.slotType != SlotType.Spectator);
