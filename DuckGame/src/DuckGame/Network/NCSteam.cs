@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DiscordRPC;
+using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -366,6 +367,28 @@ namespace DuckGame
                     {
                         if (_lobby.joinResult == SteamLobbyJoinResult.Success)
                         {
+                            if (DGRSettings.RPC)
+                            {
+                                DiscordRichPresence.presence.Secrets = new DiscordRPC.Secrets()
+                                {
+                                    //These secrets should contain enough data for external clients to be able to know which
+                                    // game to connect too. A simple approach would be just to use IP address, but this is highly discouraged
+                                    // and can leave your players vulnerable!
+                                    JoinSecret = Steam.user.id.ToString() + "\\" + _lobby.id.ToString(),
+                                    SpectateSecret = "spectate_myuniquegameid"
+                                };
+
+                                //We also need to generate a initial party. This is because Join requires the party to be created too.
+                                // If no party is set, the join feature will not work and may cause errors within the discord client itself.
+                                DiscordRichPresence.presence.Party = new DiscordRPC.Party()
+                                {
+                                    ID = Secrets.CreateFriendlySecret(new Random((int)_lobby.id)),
+                                    Max = _lobby.maxMembers,
+                                    Size = _lobby.users.Count,
+                                    Privacy = DiscordRPC.Party.PrivacySetting.Public
+                                };
+
+                            }
                             DevConsole.Log(DCSection.Steam, "|DGGREEN|Lobby created.");
                         }
                         else
