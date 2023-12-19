@@ -173,38 +173,7 @@ namespace DuckGame
 
         public static void SetDefaultProfile(int idx, InputProfile p)
         {
-            if (idx == 0)
-            {
-                _core._profiles[MPPlayer1] = p;
-            }
-            if (idx == 1)
-            {
-                _core._profiles[MPPlayer2] = p;
-            }
-            if (idx == 2)
-            {
-                _core._profiles[MPPlayer3] = p;
-            }
-            if (idx == 3)
-            {
-                _core._profiles[MPPlayer4] = p;
-            }
-            if (idx == 4)
-            {
-                _core._profiles[MPPlayer5] = p;
-            }
-            if (idx == 5)
-            {
-                _core._profiles[MPPlayer6] = p;
-            }
-            if (idx == 6)
-            {
-                _core._profiles[MPPlayer7] = p;
-            }
-            if (idx == 7)
-            {
-                _core._profiles[MPPlayer8] = p;
-            }
+            _core._profiles[MPPlayers[idx]] = p;
         }
 
         public static InputProfile DefaultPlayer1

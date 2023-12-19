@@ -151,17 +151,28 @@ namespace DuckGame
                 }
                 else if(Input.Pressed(Triggers.MenuUp))
                 {
-                    --_indexY;
-                    if (_indexY < 0)
-                        _indexY = 0;
-                    if (kIndexMap[_indexY, _indexX] == -1)
-                        ++_indexY;
+                    if (_indexX == 1 && _indexY == 3 && DuckNetwork.FiftyPlayerMode)
+                    {
+                        _indexY = 1;
+                    }
+                    else
+                    {
+                        --_indexY;
+                        if (_indexY < 0)
+                            _indexY = 0;
+                        if (kIndexMap[_indexY, _indexX] == -1)
+                            ++_indexY;
+                    }
                 }
                 else if(Input.Pressed(Triggers.MenuDown))
                 {
                     if (_indexX == 1 && _indexY == 1)
                     {
                         _indexY = 1;
+                        if (DuckNetwork.FiftyPlayerMode)
+                        {
+                            _indexY = 3;
+                        }
                     }
                     else
                     {

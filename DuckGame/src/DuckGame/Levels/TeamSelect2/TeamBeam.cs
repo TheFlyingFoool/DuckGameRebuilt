@@ -40,6 +40,24 @@ namespace DuckGame
             if (_ducks.Any(t => t.duck == d))
                 return;
             float num = d.y >= 100f ? (d.y >= 150f ? 220f : 130f) : 40f;
+            if (DuckNetwork.FiftyPlayerMode)
+            {
+                if (d.y >= 100f)
+                {
+                    if (d.y >= 150f)
+                    {
+                        num = (90 * ((float)Math.Ceiling((d.y - 40) / 90))) + 36;
+                    }
+                    else
+                    {
+                        num = 130f;
+                    }
+                }
+                else
+                {
+                    num = 40f;
+                }
+            }
             SFX.Play("stepInBeam");
             d.beammode = true;
             d.immobilized = true;
@@ -260,6 +278,11 @@ namespace DuckGame
                 int maxslots = (int)Math.Ceiling(Math.Sqrt(DG.MaxPlayers));
                 for (int index = 0; index < (maxslots * 3) + 1; ++index)
                     Graphics.Draw(_selectBeam, x, y - 32f + index * 32);
+
+                for (int index = 0; index < maxslots; ++index)
+                {
+                    Graphics.DrawCircle(new Vec2(x, y + (90 * index) + 38), 5, Color.Green);
+                }
             }
             else
             {
