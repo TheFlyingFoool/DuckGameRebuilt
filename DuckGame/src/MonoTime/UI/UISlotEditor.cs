@@ -151,7 +151,7 @@ namespace DuckGame
                 }
                 else if(Input.Pressed(Triggers.MenuUp))
                 {
-                    if (_indexX == 1 && _indexY == 3 && DuckNetwork.FiftyPlayerMode)
+                    if (_indexX == 1 && _indexY == 3)
                     {
                         _indexY = 1;
                     }
@@ -169,7 +169,7 @@ namespace DuckGame
                     if (_indexX == 1 && _indexY == 1)
                     {
                         _indexY = 1;
-                        if (DuckNetwork.FiftyPlayerMode)
+                        if (maxside > 3 && kIndexMap[3, _indexX] != -1)
                         {
                             _indexY = 3;
                         }

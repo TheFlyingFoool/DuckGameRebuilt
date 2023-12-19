@@ -1392,7 +1392,7 @@ namespace DuckGame
             }
             eightPlayersActive = Profiles.activeNonSpectators.Count > 4;
             zoomedOut = false;
-            if (((growCamera ? 1 : (UISlotEditor.editingSlots ? 1 : 0)) | (flag1 ? 1 : 0)) != 0 || eightPlayersActive || showEightPlayerSelected)
+            if (((growCamera ? 1 : (UISlotEditor.editingSlots ? 1 : 0)) | (flag1 ? 1 : 0)) != 0 || eightPlayersActive || showEightPlayerSelected || DuckNetwork.FiftyPlayerMode)
             {
                 if (oldCameraSize == Vec2.Zero)
                 {
@@ -1400,15 +1400,24 @@ namespace DuckGame
                     oldCameraPos = current.camera.position;
                 }// new Vec2(-1f, -7f)
                 float x = 500f;
-                float rowncolumns = 8;
+                float rowncolumns = (int)Math.Ceiling(Math.Sqrt(DG.MaxPlayers));
                 float m = 0.5625f * rowncolumns - 0.125f;
 
                 float xoffset = -1.5f * rowncolumns + 3f;
                 //float yoffset = -7f * rowncolumns + 14f;
                 // float m = 1.5625f; // 1.5625
-                current.camera.size = Lerp.Vec2Smooth(current.camera.size, new Vec2(320f * m, 180f * m) + new Vec2(0f, 0f), 0.1f, 0.08f);
+                if (DuckNetwork.FiftyPlayerMode)
+                {
+                    current.camera.size = Lerp.Vec2Smooth(current.camera.size, new Vec2(320f * m, 180f * m) + new Vec2(0f, 0f), 0.1f, 0.08f);
+                    current.camera.position = Lerp.Vec2Smooth(current.camera.position, new Vec2(0f, 0f), 0.1f, 0.08f);
+                }
+                else
+                {
+                    current.camera.size = Lerp.Vec2Smooth(current.camera.size, new Vec2(x, x / 1.77777f), 0.1f, 0.08f);
+                    current.camera.position = Lerp.Vec2Smooth(current.camera.position, new Vec2(-1f, -7f), 0.1f, 0.08f);
+                }
                 // current.camera.size = Lerp.Vec2Smooth(current.camera.size, new Vec2(x, x / 1.77777f), 0.1f, 0.08f);
-                current.camera.position = Lerp.Vec2Smooth(current.camera.position, new Vec2(0f, 0f), 0.1f, 0.08f); //new Vec2(-1.5f, -7f)
+                //new Vec2(-1.5f, -7f)
                 //current.camera.position = Lerp.Vec2Smooth(current.camera.position, new Vec2(-1f, -7f), 0.1f, 0.08f);
                 eightPlayersActive = true;
                 zoomedOut = true;
