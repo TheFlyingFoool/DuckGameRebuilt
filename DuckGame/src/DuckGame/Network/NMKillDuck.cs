@@ -21,7 +21,7 @@ namespace DuckGame
             fall = wasFall;
             lifeChange = pLifeChange;
         }
-        public bool forceConnection;
+        //public bool forceConnection; no adding fields to pre-existing net messages
         public void K4PLogic()
         {
             Profile killed = DuckNetwork.profiles[index];
