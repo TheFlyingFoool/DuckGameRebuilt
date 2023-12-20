@@ -65,7 +65,7 @@ namespace DuckGame
             _confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _quit)), true);
             _confirmMenu.Close();
             _pauseGroup.Add(_confirmMenu, false);
-            _testMode.Add(new UIMenuItemNumber("PLAYERS", field: new FieldBinding(this, "numPlayers", 2f, DuckNetwork.FiftyPlayerMode?50f:8f, 1f)), true);
+            _testMode.Add(new UIMenuItemNumber("PLAYERS", field: new FieldBinding(this, "numPlayers", 2f, DG.FiftyPlayerMode?DG.MaxPlayers: 8f, 1f)), true);
             _testMode.Add(new UIMenuItem(Triggers.Start, new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _startTestMode)), true);
             _testMode.SetBackFunction(new UIMenuActionOpenMenu(_testMode, _pauseMenu));
             _testMode.Close();
@@ -198,59 +198,12 @@ namespace DuckGame
             {
                 foreach (Profile profile in Profiles.active)
                     profile.team = null;
-                if (numPlayers > 8)
+                for (int i = 1; i < numPlayers; i++)
                 {
-                    for (int i = 8; i < numPlayers; i++)
-                    {
-                        Profile prof = Profiles.core.defaultProfileMappings[i];
-                        prof.team = Teams.all[i];
-                        if (prof.inputProfile == null)
-                        {
-                            prof.inputProfile = InputProfile.core.Get(InputProfile.defaultPlayerMappingStrings[i]);
-                        }
-                    }
-                }
-                if (numPlayers > 7)
-                {
-                    Profiles.DefaultPlayer8.team = Teams.Player8;
-                    if (Profiles.DefaultPlayer8.inputProfile == null)
-                        Profiles.DefaultPlayer8.inputProfile = InputProfile.DefaultPlayer8;
-                }
-                if (numPlayers > 6)
-                {
-                    Profiles.DefaultPlayer7.team = Teams.Player7;
-                    if (Profiles.DefaultPlayer7.inputProfile == null)
-                        Profiles.DefaultPlayer7.inputProfile = InputProfile.DefaultPlayer7;
-                }
-                if (numPlayers > 5)
-                {
-                    Profiles.DefaultPlayer6.team = Teams.Player6;
-                    if (Profiles.DefaultPlayer6.inputProfile == null)
-                        Profiles.DefaultPlayer6.inputProfile = InputProfile.DefaultPlayer6;
-                }
-                if (numPlayers > 4)
-                {
-                    Profiles.DefaultPlayer5.team = Teams.Player5;
-                    if (Profiles.DefaultPlayer5.inputProfile == null)
-                        Profiles.DefaultPlayer5.inputProfile = InputProfile.DefaultPlayer5;
-                }
-                if (numPlayers > 3)
-                {
-                    Profiles.DefaultPlayer4.team = Teams.Player4;
-                    if (Profiles.DefaultPlayer4.inputProfile == null)
-                        Profiles.DefaultPlayer4.inputProfile = InputProfile.DefaultPlayer4;
-                }
-                if (numPlayers > 2)
-                {
-                    Profiles.DefaultPlayer3.team = Teams.Player3;
-                    if (Profiles.DefaultPlayer3.inputProfile == null)
-                        Profiles.DefaultPlayer3.inputProfile = InputProfile.DefaultPlayer3;
-                }
-                if (numPlayers > 1)
-                {
-                    Profiles.DefaultPlayer2.team = Teams.Player2;
-                    if (Profiles.DefaultPlayer2.inputProfile == null)
-                        Profiles.DefaultPlayer2.inputProfile = InputProfile.DefaultPlayer2;
+                    Profile profile = Profiles.GetProfile(i);
+                    profile.team = Teams.core.teams[i];
+                    if (profile.inputProfile == null)
+                        profile.inputProfile = InputProfile.Get(InputProfile.MPPlayers[i]);
                 }
                 if (numPlayers > 0)
                     Profiles.experienceProfile.team = Teams.Player1;

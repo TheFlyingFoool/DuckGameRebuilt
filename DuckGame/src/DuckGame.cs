@@ -15,9 +15,43 @@ namespace DuckGame
         {
             get
             {
-                return DuckNetwork.FiftyPlayerMode ? 50 : 8;
+                return FiftyPlayerMode ? 50 : 8;
             }
         }
+        public static bool FiftyPlayerMode
+        {
+            get
+            {
+                return _fiftyPlayerMode;
+            }
+            set
+            {
+                _fiftyPlayerMode = value;
+                if (value)
+                {
+                    Persona.ReInitializePersonas();
+                    InputProfile.defaultPlayerMappingStrings = InputProfile.GetPlayerMappingStrings();
+                    if (Teams.core != null)
+                        Teams.core.ReInitializeDefaultTeams();
+                    Input.ReInitialize();
+                    if (Profiles.core != null)
+                        Profiles.core.Initialize();
+                    if (DuckNetwork.core != null)
+                        DuckNetwork.core.RecreateProfiles();
+                }
+                else
+                {
+                    Persona.ReInitializePersonas();
+                    InputProfile.defaultPlayerMappingStrings = InputProfile.GetPlayerMappingStrings();
+                    if (Teams.core != null)
+                        Teams.core.ReInitializeDefaultTeams();
+                    Input.ReInitialize();
+                    if (Profiles.core != null)
+                        Profiles.core.Initialize();
+                }
+            }
+        }
+        private static bool _fiftyPlayerMode = false;
         public static int MaxSpectators = 4;
         private static bool _drmFailure = false;
         private static bool _devBuild = false;

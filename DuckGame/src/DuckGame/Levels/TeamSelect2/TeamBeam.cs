@@ -40,7 +40,7 @@ namespace DuckGame
             if (_ducks.Any(t => t.duck == d))
                 return;
             float num = d.y >= 100f ? (d.y >= 150f ? 220f : 130f) : 40f;
-            if (DuckNetwork.FiftyPlayerMode)
+            if (DG.FiftyPlayerMode)
             {
                 if (d.y >= 100f)
                 {
@@ -104,9 +104,9 @@ namespace DuckGame
             if (TeamSelect2.zoomedOut)
             {
                 
-                if (DuckNetwork.FiftyPlayerMode)
+                if (DG.FiftyPlayerMode)
                 {
-                    int maxslots = (int)Math.Ceiling(Math.Sqrt(DG.MaxPlayers));
+                    int maxslots = (int)Math.Ceiling(Math.Sqrt(DG.MaxPlayers + 1));
                     _beamHeight = 90f * maxslots;
                     _collisionSize = new Vec2(_selectBeam.w * 0.8f, 90f * maxslots);
                 }
@@ -273,16 +273,11 @@ namespace DuckGame
         public override void Draw()
         {
             base.Draw();
-            if (DuckNetwork.FiftyPlayerMode)
+            if (DG.FiftyPlayerMode)
             {
-                int maxslots = (int)Math.Ceiling(Math.Sqrt(DG.MaxPlayers));
+                int maxslots = (int)Math.Ceiling(Math.Sqrt(DG.MaxPlayers + 1));
                 for (int index = 0; index < (maxslots * 3) + 1; ++index)
                     Graphics.Draw(_selectBeam, x, y - 32f + index * 32);
-
-                for (int index = 0; index < maxslots; ++index)
-                {
-                    Graphics.DrawCircle(new Vec2(x, y + (90 * index) + 38), 5, Color.Green);
-                }
             }
             else
             {

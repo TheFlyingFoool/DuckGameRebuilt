@@ -1092,6 +1092,42 @@ namespace DuckGame
             ApplyDefaultMappings();
             InputProfile.Add("Blank");
         }
+        public static void ReInitialize()
+        {
+            _devices.Clear();
+            _gamePads.Clear();
+            MonoMain.NloadMessage = "ReInitializing Input System...";
+            DevConsole.Log(DCSection.General, "ReInitializing Input...");
+            InputDevice device = new Keyboard("KEYBOARD P1", 0);
+            _devices.Add(device);
+            _devices.Add(new Keyboard("KEYBOARD P2", 1));
+            _devices.Add(new Mouse());
+
+            for (int index = 0; index < MonoMain.MaximumGamepadCount; index++)
+            {
+                XInputPad XInputDevice = new XInputPad(index);
+                _devices.Add(XInputDevice);
+                XInputDevice.InitializeState();
+            }
+            InputProfile.Default = new InputProfile("Default");
+            for (int i = 0; i < DG.MaxPlayers; i++)
+            {
+                GenericController genericController = new GenericController(i);
+                _gamePads.Add(genericController);
+                _devices.Add(genericController);
+            }
+            InputProfile.Default.Map(device, Triggers.Left, 37);
+            InputProfile.Default.Map(device, Triggers.Right, 39);
+            InputProfile.Default.Map(device, Triggers.Up, 38);
+            InputProfile.Default.Map(device, Triggers.Down, 40);
+            InputProfile.Default.Map(GetDevice<XInputPad>(), Triggers.Left, 4);
+            InputProfile.Default.Map(GetDevice<XInputPad>(), Triggers.Right, 8);
+            InputProfile.Default.Map(GetDevice<XInputPad>(), Triggers.Up, 1);
+            InputProfile.Default.Map(GetDevice<XInputPad>(), Triggers.Down, 2);
+            _profiles[InputProfile.Default.name] = InputProfile.Default;
+            EnumerateGamepads();
+            InitDefaultProfiles();
+        }
         public static void Initialize()
         {
             FNAPlatform.DeviceChangeEvent += OnDeviceChange;
@@ -1101,10 +1137,8 @@ namespace DuckGame
                 _defaultInputMapping.Add(inputMappingPreset.Clone());
             InputDevice device = new Keyboard("KEYBOARD P1", 0);
             _devices.Add(device);
-            InputDevice inputDevice1 = new Keyboard("KEYBOARD P2", 1);
-            _devices.Add(inputDevice1);
-            InputDevice inputDevice2 = new Mouse();
-            _devices.Add(inputDevice2);
+            _devices.Add(new Keyboard("KEYBOARD P2", 1));
+            _devices.Add(new Mouse());
 
             for (int index = 0; index < MonoMain.MaximumGamepadCount; index++)
             {
@@ -1112,37 +1146,13 @@ namespace DuckGame
                 _devices.Add(XInputDevice);
                 XInputDevice.InitializeState();
             }
-            GenericController genericController1 = new GenericController(0);
-            _gamePads.Add(genericController1);
-            GenericController genericController2 = new GenericController(1);
-            _gamePads.Add(genericController2);
-            GenericController genericController3 = new GenericController(2);
-            _gamePads.Add(genericController3);
-            GenericController genericController4 = new GenericController(3);
-            _gamePads.Add(genericController4);
-            GenericController genericController5 = new GenericController(4);
-            _gamePads.Add(genericController5);
-            GenericController genericController6 = new GenericController(5);
-            _gamePads.Add(genericController6);
-            GenericController genericController7 = new GenericController(6);
-            _gamePads.Add(genericController7);
-            GenericController genericController8 = new GenericController(7);
-            _gamePads.Add(genericController8);
             InputProfile.Default = new InputProfile("Default");
             //DuckGame.Input.InitializeDInputAsync();
-            _devices.Add(genericController1);
-            _devices.Add(genericController2);
-            _devices.Add(genericController3);
-            _devices.Add(genericController4);
-            _devices.Add(genericController5);
-            _devices.Add(genericController6);
-            _devices.Add(genericController7);
-            _devices.Add(genericController8);
-            for (int i = 8; i < 50; i++)
+            for (int i = 0; i < DG.MaxPlayers; i++)
             {
-                GenericController genericController50 = new GenericController(i);
-                _gamePads.Add(genericController50);
-                _devices.Add(genericController50);
+                GenericController genericController = new GenericController(i);
+                _gamePads.Add(genericController);
+                _devices.Add(genericController);
             }
             InputProfile.Default.Map(device, Triggers.Left, 37);
             InputProfile.Default.Map(device, Triggers.Right, 39);

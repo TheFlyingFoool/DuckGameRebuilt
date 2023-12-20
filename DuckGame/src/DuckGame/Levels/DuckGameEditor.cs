@@ -47,13 +47,10 @@
                         prof.team.Leave(prof);
                 }
                 Profiles.experienceProfile.team = Teams.Player1;
-                Profiles.DefaultPlayer2.team = Teams.Player2;
-                Profiles.DefaultPlayer3.team = Teams.Player3;
-                Profiles.DefaultPlayer4.team = Teams.Player4;
-                Profiles.DefaultPlayer5.team = Teams.Player5;
-                Profiles.DefaultPlayer6.team = Teams.Player6;
-                Profiles.DefaultPlayer7.team = Teams.Player7;
-                Profiles.DefaultPlayer8.team = Teams.Player8;
+                for(int i = 1; i < DG.MaxPlayers; i++)
+                {
+                    Profiles.GetProfile(i).team = Teams.core.teams[i];
+                }
                 current = new DuckGameTestArea(this, name, _procSeed, _centerTile, genType);
             }
             current.AddThing(new EditorTestLevel(this));

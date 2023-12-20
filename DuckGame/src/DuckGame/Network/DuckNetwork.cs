@@ -14,36 +14,8 @@ namespace DuckGame
 {
     public class DuckNetwork
     {
-        public static bool FiftyPlayerMode
-        {
-            get
-            {
-                return _fiftyPlayerMode;
-            }
-            set
-            {
-                _fiftyPlayerMode = value;
-                if (value)
-                {
-                    InputProfile.defaultPlayerMappingStrings = InputProfile.fiftyPlayerMappingStrings;
-                    Teams.core.teams = Teams.core._fiftyTeams;
 
-                    Persona.Shuffle();
-                    Input.InitDefaultProfiles();
-                    Profiles.core.Initialize();
-                    Profiles.core.IsDefault50p(null);
-                    core.RecreateProfiles();
-                }
-                else
-                {
-                    InputProfile.defaultPlayerMappingStrings = InputProfile.vanillaPlayerMappingStrings;
-                    Teams.core.teams = Teams.core._vanillaTeams;
-                    Persona.Shuffle();
-                }
-            }
-        }
         public static bool forcedstartedalone;
-        private static bool _fiftyPlayerMode = false;
         private static List<OnlineLevel> _levels = new List<OnlineLevel>()
         {
           new OnlineLevel() { num = 1, xpRequired = 0 },
@@ -2574,7 +2546,7 @@ namespace DuckGame
             Send.Message(new NMNetworkIndexSync());
             if (!pLocal)
             {
-                if (FiftyPlayerMode) Send.Message(new NMEnableFiftyPlayerMode(), pJoinedProfiles[0].connection);
+                if (DG.FiftyPlayerMode) Send.Message(new NMEnableFiftyPlayerMode(), pJoinedProfiles[0].connection);
                 Send.Message(new NMJoinDuckNetSuccess(pJoinedProfiles), pJoinedProfiles[0].connection);
                 List<byte> byteList = new List<byte>();
                 for (int index = 0; index < DG.MaxPlayers; ++index)
@@ -2719,7 +2691,7 @@ namespace DuckGame
                             if (nmRequestJoin.names == null || nmRequestJoin.names.Count == 0)
                                 return new NMErrorEmptyJoinMessage();
                             DevConsole.Log(DCSection.DuckNet, "Join attempt from " + nmRequestJoin.names[0]);
-                            if (FiftyPlayerMode && !nmRequestJoin.isRebuiltUser) //this filters out non rebuilt users trying to join somehow when 50p mode is enabled -NiK0
+                            if (DG.FiftyPlayerMode && !nmRequestJoin.isRebuiltUser) //this filters out non rebuilt users trying to join somehow when 50p mode is enabled -NiK0
                             {
                                 DevConsole.Log(DCSection.DuckNet, "@error " + nmRequestJoin.names[0] + " could not join, not a rebuilt user.@error");
                                 return new NMVersionMismatch(NMVersionMismatch.Type.Error, Program.CURRENT_VERSION_ID + "REBUILT");
