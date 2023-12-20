@@ -458,7 +458,24 @@ namespace DuckGame
                         MonoMain.forceFullscreenMode = 2;
                         break;
                     case "-testserver":
-                        Process.Start(Application.ExecutablePath, commandLine.Replace("-testserver", " -lanjoiner"));
+                        int amount = 1;
+                        if (args.Length > index + 1)
+                        {
+                            ++index;
+                            try
+                            {
+                                amount = Convert.ToInt32(args[index]);
+                            }
+                            catch
+                            {
+                                --index;
+                                break;
+                            }
+                        }
+                        for (int i = 0; i < amount; i++)
+                        {
+                            Process.Start(Application.ExecutablePath, commandLine.Replace("-testserver", " -lanjoiner"));
+                        }
                         testServer = true;
                         break;
                     case "-testserver2":

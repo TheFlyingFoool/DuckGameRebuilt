@@ -327,9 +327,18 @@ namespace DuckGame
             DevConsole.Log("joining");
             Level.current = new JoinServer(id2);
         }
-        [Marker.DevConsoleCommand(Name = "lanjoin")]
-        public static void LanJoin(string id)
+        [Marker.DevConsoleCommand(Name = "levelindex")]
+        public static void levelindex()
         {
+            DevConsole.Log(DuckNetwork.levelIndex.ToString());
+        }
+        [Marker.DevConsoleCommand(Name = "lanjoin")]
+        public static void LanJoin(string id = "")
+        {
+            if (id == "")
+            {
+                id = "127.0.0.1";
+            }
             DevConsole.Log("Trying to join " + id);
             Level.current = new JoinServer(id);
         }
