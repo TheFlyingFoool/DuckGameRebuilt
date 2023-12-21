@@ -251,11 +251,11 @@ namespace DuckGame
             }
             return false;
         }
-        public static bool IsNotInHashSet(HashSet<Vec2> set, Vec2[] values)
+        public bool IsNotInHashSet(Vec2[] values)
         {
             foreach (var value in values)
             {
-                if (set.Contains(value))
+                if (usedIds.Contains(value))
                 {
                     return false;
                 }
@@ -263,7 +263,7 @@ namespace DuckGame
             return true;
         }
 
-        public ICollection<Thing> GetThings(Vec2 Position, float width, float height, Type t)
+        public IEnumerable<Thing> GetThings(Vec2 Position, float width, float height, Type t)
         {
             Vec2[] ids = GetIdForObj(Position, width, height);
             int typekey = t.GetHashCode();
@@ -273,38 +273,38 @@ namespace DuckGame
                 {
                     if (output.TryGetValue(typekey, out List<Thing> outputthings))
                     {
-                        return outputthings;
-                    }
-                }
-                return new List<Thing>();
-            }
-            HashSet<Vec2> usedids = new HashSet<Vec2>(capacity: ids.Length);
-            List<Thing> objects = new List<Thing>();
-            for (int i = 0; i < ids.Length; i++)
-            {
-                Vec2 bucket = ids[i];
-                if (Buckets.TryGetValue(bucket, out Dictionary<int, List<Thing>> output))
-                {
-                    if (output.TryGetValue(typekey, out List<Thing> outputthings))
-                    {
-                        foreach (Thing item in outputthings)
+                        foreach (Thing thing in outputthings)
                         {
-                            if (item.Buckets.Length == 1)
-                            {
-                                objects.Add(item);
-                            }
-                            else if (IsNotInHashSet(usedids, item.Buckets)) //n
-                            {
-                                objects.Add(item);
-                            }
+                            yield return thing;
                         }
                     }
                 }
-                usedids.Add(bucket);
             }
-            return objects;
+            else
+            {
+                for (int i = 0; i < ids.Length; i++)
+                {
+                    Vec2 bucket = ids[i];
+                    if (Buckets.TryGetValue(bucket, out Dictionary<int, List<Thing>> output))
+                    {
+                        if (output.TryGetValue(typekey, out List<Thing> outputthings))
+                        {
+                            foreach (Thing item in outputthings)
+                            {
+                                if (item.Buckets.Length == 1 || IsNotInHashSet(item.Buckets))
+                                {
+                                    yield return item;
+                                }
+                            }
+                        }
+                    }
+                    usedIds.Add(bucket);
+                }
+                usedIds.Clear();// For re-use
+            }
         }
-        public ICollection<Thing> GetThings(Vec2 p1, Vec2 p2, Type t) //Line
+        private HashSet<Vec2> usedIds = new HashSet<Vec2>(capacity: 40); // For re-use
+        public IEnumerable<Thing> GetThings(Vec2 p1, Vec2 p2, Type t) //Line
         {
             Vec2[] ids = GetIdForLine(p1, p2);
             int typekey = t.GetHashCode();
@@ -314,32 +314,35 @@ namespace DuckGame
                 {
                     if (output.TryGetValue(typekey, out List<Thing> outputthings))
                     {
-                        return outputthings;
-                    }
-                }
-                return new List<Thing>();
-            }
-            HashSet<Vec2> usedIds = new HashSet<Vec2>(capacity: ids.Length);
-            List<Thing> objects = new List<Thing>();
-            for (int i = 0; i < ids.Length; i++)
-            {
-                Vec2 bucket = ids[i];
-                if (Buckets.TryGetValue(bucket, out Dictionary<int, List<Thing>> output))
-                {
-                    if (output.TryGetValue(typekey, out List<Thing> outputthings))
-                    {
-                        foreach (Thing item in outputthings)
+                        foreach (Thing thing in outputthings)
                         {
-                            if (item.Buckets.Length == 1 || IsNotInHashSet(usedIds, item.Buckets))
-                            {
-                                objects.Add(item);
-                            }
+                            yield return thing;
                         }
                     }
                 }
-                usedIds.Add(bucket);
             }
-            return objects;
+            else
+            {
+                for (int i = 0; i < ids.Length; i++)
+                {
+                    Vec2 bucket = ids[i];
+                    if (Buckets.TryGetValue(bucket, out Dictionary<int, List<Thing>> output))
+                    {
+                        if (output.TryGetValue(typekey, out List<Thing> outputthings))
+                        {
+                            foreach (Thing item in outputthings)
+                            {
+                                if (item.Buckets.Length == 1 || IsNotInHashSet(item.Buckets))
+                                {
+                                    yield return item;
+                                }
+                            }
+                        }
+                    }
+                    usedIds.Add(bucket);
+                }
+                usedIds.Clear();// For re-use
+            }
         }
         // public Dictionary<Vec2, List<Thing>> Buckets = new Dictionary<Vec2, List<Thing>>();
         public Dictionary<Vec2, Dictionary<int, List<Thing>>> Buckets = new Dictionary<Vec2, Dictionary<int, List<Thing>>>();
@@ -495,11 +498,11 @@ namespace DuckGame
             }
         }
         // HashSet<int> objects;
-        public ICollection<Thing> GetNearby(Thing thing, Type t)
+        public IEnumerable<Thing> GetNearby(Thing thing, Type t)
         {
             return GetThings(thing.position, thing.right - thing.left, thing.bottom - thing.top, t);
         }
-        public ICollection<Thing> CollisionRectAll(Vec2 p1, Vec2 p2, Type t)
+        public IEnumerable<Thing> CollisionRectAll(Vec2 p1, Vec2 p2, Type t)
         {
             float Width = p1.x - p2.x;
             float Height = p1.y - p2.y;
@@ -510,7 +513,7 @@ namespace DuckGame
             Vec2 position = new Vec2(p1.x + (Width / 2), p1.y + (Height / 2));
             return GetThings(position, Width, Height, t);
         }
-        public ICollection<Thing> CollisionLineAll(Vec2 p1, Vec2 p2, Type t)
+        public IEnumerable<Thing> CollisionLineAll(Vec2 p1, Vec2 p2, Type t)
         {
             return GetThings(p1, p2, t);
         }
@@ -570,7 +573,7 @@ namespace DuckGame
             ////}
             //return Chunk.ToArray();
         }
-        public ICollection<Thing> CollisionCircleAll(Vec2 position, float radius, Type t)
+        public IEnumerable<Thing> CollisionCircleAll(Vec2 position, float radius, Type t)
         {
             return GetThings(position, radius * 2, radius * 2, t);
         }
