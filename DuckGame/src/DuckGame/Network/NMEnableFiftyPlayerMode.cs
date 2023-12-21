@@ -10,7 +10,8 @@
 
         public override void Activate()
         {
-            if (!DG.FiftyPlayerMode) DG.FiftyPlayerMode = true;
+            if (!DG.FiftyPlayerMode) 
+                DG.FiftyPlayerMode = true;
             base.Activate();
         }
     }

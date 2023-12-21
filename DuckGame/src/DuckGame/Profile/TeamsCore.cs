@@ -65,12 +65,18 @@ namespace DuckGame
         public List<Team> allStock => new List<Team>(teams);
         public void ReInitializeDefaultTeams()
         {
+            int teamcount = 0;
+            List<Team> DefaultTeams = new List<Team>(DG.MaxPlayers);
             while (teams.Count > 0 && teams[0].defaultTeam)
             {
+                teamcount++;
+                if (DG.MaxPlayers >= teamcount)
+                {
+                    DefaultTeams.Add(teams[0]);
+                }
                 teams.RemoveAt(0);
             }
-            List<Team> DefaultTeams = new List<Team>(DG.MaxPlayers);
-            for (int i = 0; i < DG.MaxPlayers; i++)
+            for (int i = DefaultTeams.Count; i < DG.MaxPlayers; i++)
             {
                 DefaultTeams.Add(new Team("Player " + (i + 1).ToString(), "hats/noHat", true) { defaultTeam = true });
             }

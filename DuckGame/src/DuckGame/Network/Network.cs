@@ -196,7 +196,8 @@ namespace DuckGame
         public static void MakeInactive()
         {
             activeNetwork._networkActive = false;
-            DG.FiftyPlayerMode = false;
+            if (DG.FiftyPlayerMode)
+                DG.FiftyPlayerMode = false;
         }
 
         public static bool isActive => activeNetwork._networkActive || isFakeActive;

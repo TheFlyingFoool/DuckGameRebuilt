@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using static DuckGame.CMD;
 
 namespace DuckGame
 {
@@ -103,8 +104,20 @@ namespace DuckGame
 
         public void Initialize()
         {
-            defaultProfileMappings = new List<Profile>(DG.MaxPlayers);
+            if (_profiles != null && _profiles.Count > 0) // for when its called again by 50 player
+            {
+                List<Profile> newprofiles = new List<Profile>();
+                for (int i = defaultProfileMappings.Count; i < DG.MaxPlayers; i++)
+                {
+                    Profile profile = new Profile("Player" + (i + 1).ToString(), InputProfile.Get("MPPlayer" + (i + 1).ToString()), Teams.core.teams[i], Persona.alllist[i], false, "PLAYER" + (i + 1).ToString(), true);
+                    newprofiles.Add(profile);
+                }
+                _profiles.InsertRange(defaultProfileMappings.Count -1, newprofiles);
+                defaultProfileMappings.InsertRange(defaultProfileMappings.Count - 1, newprofiles);
+                return;
+            }
             _profiles = new List<Profile>(DG.MaxPlayers);
+            defaultProfileMappings = new List<Profile>(DG.MaxPlayers);
             for (int i = 0; i < DG.MaxPlayers; i++)
             {
                 Profile profile = new Profile("Player" + (i + 1).ToString(), InputProfile.Get("MPPlayer" + (i + 1).ToString()), Teams.core.teams[i], Persona.alllist[i], false, "PLAYER" + (i + 1).ToString(), true);
