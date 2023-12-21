@@ -1067,6 +1067,15 @@ namespace DuckGame
 
         public static void InitDefaultProfiles()
         {
+            string[] keys = InputProfile.profiles.Keys.ToArray();
+            for (int i = 0; i < keys.Length; i++)
+            {
+                string key = keys[i];
+                if (key.StartsWith("MPPlayer"))
+                {
+                    InputProfile.profiles.Remove(key);
+                }
+            }
             for (int index = 0; index < DG.MaxPlayers; ++index)
             {
                 InputProfile inputProfile = InputProfile.Add("MPPlayer" + (index + 1).ToString());
