@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NAudio.Wave;
+using System;
 using System.Collections.Generic;
 
 namespace DuckGame
@@ -93,24 +94,16 @@ namespace DuckGame
         {
             if (fullRemap)
             {
-                Profiles.DefaultPlayer1.inputProfile = Get(MPPlayer1);
-                Profiles.DefaultPlayer2.inputProfile = Get(MPPlayer2);
-                Profiles.DefaultPlayer3.inputProfile = Get(MPPlayer3);
-                Profiles.DefaultPlayer4.inputProfile = Get(MPPlayer4);
-                Profiles.DefaultPlayer5.inputProfile = Get(MPPlayer5);
-                Profiles.DefaultPlayer6.inputProfile = Get(MPPlayer6);
-                Profiles.DefaultPlayer7.inputProfile = Get(MPPlayer7);
-                Profiles.DefaultPlayer8.inputProfile = Get(MPPlayer8);
+                for (int i = 0; i < DG.MaxPlayers; i++)
+                {
+                    Profiles.GetProfile(i).inputProfile = Get(MPPlayers[i]);
+                }
                 return;
             }
-            Profiles.DefaultPlayer1.SetInputProfileLink(Get(MPPlayer1));
-            Profiles.DefaultPlayer2.SetInputProfileLink(Get(MPPlayer2));
-            Profiles.DefaultPlayer3.SetInputProfileLink(Get(MPPlayer3));
-            Profiles.DefaultPlayer4.SetInputProfileLink(Get(MPPlayer4));
-            Profiles.DefaultPlayer5.SetInputProfileLink(Get(MPPlayer5));
-            Profiles.DefaultPlayer6.SetInputProfileLink(Get(MPPlayer6));
-            Profiles.DefaultPlayer7.SetInputProfileLink(Get(MPPlayer7));
-            Profiles.DefaultPlayer8.SetInputProfileLink(Get(MPPlayer8));
+            for (int i = 0; i < DG.MaxPlayers; i++)
+            {
+                Profiles.GetProfile(i).SetInputProfileLink(Get(MPPlayers[i]));
+            }
         }
 
         public static void SwapDefaultInputStrings(string from, string to)
@@ -173,38 +166,7 @@ namespace DuckGame
 
         public static void SetDefaultProfile(int idx, InputProfile p)
         {
-            if (idx == 0)
-            {
-                _core._profiles[MPPlayer1] = p;
-            }
-            if (idx == 1)
-            {
-                _core._profiles[MPPlayer2] = p;
-            }
-            if (idx == 2)
-            {
-                _core._profiles[MPPlayer3] = p;
-            }
-            if (idx == 3)
-            {
-                _core._profiles[MPPlayer4] = p;
-            }
-            if (idx == 4)
-            {
-                _core._profiles[MPPlayer5] = p;
-            }
-            if (idx == 5)
-            {
-                _core._profiles[MPPlayer6] = p;
-            }
-            if (idx == 6)
-            {
-                _core._profiles[MPPlayer7] = p;
-            }
-            if (idx == 7)
-            {
-                _core._profiles[MPPlayer8] = p;
-            }
+            _core._profiles[MPPlayers[idx]] = p;
         }
 
         public static InputProfile DefaultPlayer1
@@ -1155,7 +1117,15 @@ namespace DuckGame
         static InputProfile()
         {
         }
-
+        public static string[] GetPlayerMappingStrings()
+        {
+            string[] PlayerMappingStrings = new string[DG.MaxPlayers];
+            for (int index = 0; index < DG.MaxPlayers; ++index)
+            {
+                PlayerMappingStrings[index] = "MPPlayer" + (index + 1).ToString();
+            }
+            return PlayerMappingStrings;
+        }
         public int mpIndex = -1;
 
         public bool oldAngles;
@@ -1166,71 +1136,7 @@ namespace DuckGame
 
         public const string SinglePlayer = "SinglePlayer";
 
-        public static string[] vanillaPlayerMappingStrings = new string[]
-        {
-            "MPPlayer1",
-            "MPPlayer2",
-            "MPPlayer3",
-            "MPPlayer4",
-            "MPPlayer5",
-            "MPPlayer6",
-            "MPPlayer7",
-            "MPPlayer8"
-        };
-        public static string[] fiftyPlayerMappingStrings = new string[]
-        {
-            "MPPlayer1",
-            "MPPlayer2",
-            "MPPlayer3",
-            "MPPlayer4",
-            "MPPlayer5",
-            "MPPlayer6",
-            "MPPlayer7",
-            "MPPlayer8",
-            "MPPlayer9",
-            "MPPlayer10",
-            "MPPlayer11",
-            "MPPlayer12",
-            "MPPlayer13",
-            "MPPlayer14",
-            "MPPlayer15",
-            "MPPlayer16",
-            "MPPlayer17",
-            "MPPlayer18",
-            "MPPlayer19",
-            "MPPlayer20",
-            "MPPlayer21",
-            "MPPlayer22",
-            "MPPlayer23",
-            "MPPlayer24",
-            "MPPlayer25",
-            "MPPlayer26",
-            "MPPlayer27",
-            "MPPlayer28",
-            "MPPlayer29",
-            "MPPlayer30",
-            "MPPlayer31",
-            "MPPlayer32",
-            "MPPlayer33",
-            "MPPlayer34",
-            "MPPlayer35",
-            "MPPlayer36",
-            "MPPlayer37",
-            "MPPlayer38",
-            "MPPlayer39",
-            "MPPlayer40",
-            "MPPlayer41",
-            "MPPlayer42",
-            "MPPlayer43",
-            "MPPlayer44",
-            "MPPlayer45",
-            "MPPlayer46",
-            "MPPlayer47",
-            "MPPlayer48",
-            "MPPlayer49",
-            "MPPlayer50"
-        };
-        private static string[] _defaultPlayerMappingStrings = vanillaPlayerMappingStrings;
+        private static string[] _defaultPlayerMappingStrings = GetPlayerMappingStrings();
         public static string[] defaultPlayerMappingStrings
         {
             get

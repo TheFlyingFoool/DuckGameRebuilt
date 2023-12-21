@@ -766,6 +766,12 @@ namespace DuckGame
                 _profile = Profiles.EnvironmentProfile;
             if (profile != null)
                 InitProfile();
+
+            // the color change works here for now, would rather have a better place
+            if (_profile != null && _profile.inputProfile != null && _profile.inputProfile.lastActiveDevice != null && profile.persona != null)
+            {
+                _profile.inputProfile.lastActiveDevice.SetLightBar(profile.persona.colorUsable);
+            }
             centerx = 16f;
             centery = 16f;
             friction = 0.25f;
@@ -1407,7 +1413,7 @@ namespace DuckGame
                     killedBy.duck.AddCoolness(yourCoolness);
                 }
                 AddCoolness(myCoolness);
-                if (killedBy != null && killedBy.duck != null)
+                /*if (killedBy != null && killedBy.duck != null)
                 {
                     killedBy.duck.killMultiplier += 1f;
                     if (TeamSelect2.KillsForPoints)
@@ -1453,6 +1459,7 @@ namespace DuckGame
                         }
                     }
                 }
+                */
             }
             if (Highlights.highlightRatingMultiplier != 0f)
             {
@@ -1508,6 +1515,34 @@ namespace DuckGame
             if (Network.isActive && !isKillMessage)
             {
                 lastAppliedLifeChange += 1;
+
+                if (TeamSelect2.KillsForPoints && Network.isServer)
+                {
+                    Profile responsible = killedBy;
+                    if (type is DTCrush d && d.thing != null && d.thing.responsibleProfile != null) responsible = d.thing.responsibleProfile;
+
+                    if (responsible != null && responsible.duck != null && responsible.duck.converted != null)
+                    {
+                        responsible = responsible.duck.converted.profile;
+                    }
+
+                    if (responsible != null)
+                    {
+                        if (responsible != null && (!Network.isActive || (Network.isServer && responsible.team != profile.team)))
+                        {
+                            responsible.team.score++;
+
+                            List<int> scores = new List<int>();
+                            foreach (Profile p3 in DuckNetwork.profiles)
+                            {
+                                p3.ready = true;
+                                if (p3.team != null) scores.Add(p3.team.score);
+                                else scores.Add(0);
+                            }
+                            Send.Message(new NMTransferScores(scores));
+                        }
+                    }
+                }
                 Send.Message(new NMKillDuck(profile.networkIndex, type is DTCrush, type is DTIncinerate, type is DTFall, lastAppliedLifeChange));
             }
             if (!(this is TargetDuck))
@@ -2102,8 +2137,12 @@ namespace DuckGame
             gravMultiplier = 1f;
             if (!(Level.current is TeamSelect2) || (Level.current as TeamSelect2)._beam == null || (Level.current as TeamSelect2)._beam2 == null)
                 return;
-            (Level.current as TeamSelect2)._beam.RemoveDuck(this);
-            (Level.current as TeamSelect2)._beam2.RemoveDuck(this);
+            //(Level.current as TeamSelect2)._beam.RemoveDuck(this);
+           // (Level.current as TeamSelect2)._beam2.RemoveDuck(this);
+            foreach(TeamBeam teamBeam in (Level.current as TeamSelect2).teamBeams)
+            {
+                teamBeam.RemoveDuck(this);
+            }
         }
 
         public void Ressurect()
@@ -4445,6 +4484,11 @@ namespace DuckGame
         {
             if (_converted != to && to != null && to.profile != null)
                 ++to.profile.stats.conversions;
+            //Changes LightBar Color on Convert
+            if (_profile != null && _profile.inputProfile != null && _profile.inputProfile.lastActiveDevice != null && to != null && to.persona != null)
+            {
+                _profile.inputProfile.lastActiveDevice.SetLightBar(to.persona.colorUsable);
+            }
             RumbleManager.AddRumbleEvent(profile, new RumbleEvent(RumbleIntensity.Light, RumbleDuration.Short, RumbleFalloff.Short));
             _converted = to;
             _spriteArms = to._spriteArms.CloneMap();

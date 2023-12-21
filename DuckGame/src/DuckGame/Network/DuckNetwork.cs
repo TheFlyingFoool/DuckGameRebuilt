@@ -14,34 +14,8 @@ namespace DuckGame
 {
     public class DuckNetwork
     {
-        public static bool FiftyPlayerMode
-        {
-            get
-            {
-                return _fiftyPlayerMode;
-            }
-            set
-            {
-                _fiftyPlayerMode = value;
-                if (value)
-                {
-                    InputProfile.defaultPlayerMappingStrings = InputProfile.fiftyPlayerMappingStrings;
-                    Teams.core.teams = Teams.core._fiftyTeams;
-                }
-                else
-                {
-                    InputProfile.defaultPlayerMappingStrings = InputProfile.vanillaPlayerMappingStrings;
-                    Teams.core.teams = Teams.core._vanillaTeams;
-                }
-                Persona.Shuffle();
-                Input.InitDefaultProfiles();
-                Profiles.core.Initialize();
-                Profiles.core.IsDefault50p(null);
-                core.RecreateProfiles();
-            }
-        }
+
         public static bool forcedstartedalone;
-        private static bool _fiftyPlayerMode = false;
         private static List<OnlineLevel> _levels = new List<OnlineLevel>()
         {
           new OnlineLevel() { num = 1, xpRequired = 0 },
@@ -1071,6 +1045,7 @@ namespace DuckGame
                 Main.SpecialCode = "men2";
                 _core._matchModifierMenu.SetBackFunction(new UIMenuActionOpenMenu(_core._matchModifierMenu, _core._matchSettingMenu));
                 _core._matchModifierMenu.Close();
+                _core._matchSettingMenu.Add(new UIMenuItemToggle("Kills Scoring", field: new FieldBinding(typeof(TeamSelect2), nameof(TeamSelect2.KillsForPoints)), c: Colors.DGPink));
                 _core._matchSettingMenu.AddMatchSetting(TeamSelect2.GetOnlineSetting("teams"), false);
                 //_core._matchSettingMenu.Add(new UISideButton(66, -50, 50, 0, "@SHOOT@"));
                 //_core._matchSettingMenu.Add(new UISideButton(66, -50, 50, 0, "@SHOOT@"));
@@ -1688,8 +1663,8 @@ namespace DuckGame
                     pFriend = true;
             }
             IEnumerable<Profile> source = profiles.Where(x => x.connection == null && x.reservedUser != null && pConnection.data == x.reservedUser);
-            if (source.Count() == 0)
-                source = !pSpectator ? profiles.Where(x => x.connection == null && (x.slotType == SlotType.Invite && pInvited | pLocal || x.slotType == SlotType.Friend && pFriend | pLocal || pLocal && x.slotType == SlotType.Local || x.slotType == SlotType.Open) && x.slotType != SlotType.Spectator && x.networkIndex <= 7) : profiles.Where(x => x.connection == null && x.slotType == SlotType.Spectator);
+            if (source.Count() == 0)//&& x.networkIndex <= 7
+                source = !pSpectator ? profiles.Where(x => x.connection == null && (x.slotType == SlotType.Invite && pInvited | pLocal || x.slotType == SlotType.Friend && pFriend | pLocal || pLocal && x.slotType == SlotType.Local || x.slotType == SlotType.Open) && x.slotType != SlotType.Spectator) : profiles.Where(x => x.connection == null && x.slotType == SlotType.Spectator);
             if (Level.current is GameLevel && DGRSettings.MidGameJoining)
             {
                 source = profiles.Where(x => x.connection == null && x.slotType != SlotType.Spectator);
@@ -2054,7 +2029,7 @@ namespace DuckGame
         public static bool prevMG;
         public static void MidGameJoiningLogic()
         {
-            if (Network.isActive)
+            if (Network.isActive && Network.isServer)
             {
                 if (DGRSettings.MidGameJoining != prevMG)
                 {
@@ -2571,7 +2546,7 @@ namespace DuckGame
             Send.Message(new NMNetworkIndexSync());
             if (!pLocal)
             {
-                if (FiftyPlayerMode) Send.Message(new NMEnableFiftyPlayerMode(), pJoinedProfiles[0].connection);
+                if (DG.FiftyPlayerMode) Send.Message(new NMEnableFiftyPlayerMode(), pJoinedProfiles[0].connection);
                 Send.Message(new NMJoinDuckNetSuccess(pJoinedProfiles), pJoinedProfiles[0].connection);
                 List<byte> byteList = new List<byte>();
                 for (int index = 0; index < DG.MaxPlayers; ++index)
@@ -2716,7 +2691,7 @@ namespace DuckGame
                             if (nmRequestJoin.names == null || nmRequestJoin.names.Count == 0)
                                 return new NMErrorEmptyJoinMessage();
                             DevConsole.Log(DCSection.DuckNet, "Join attempt from " + nmRequestJoin.names[0]);
-                            if (FiftyPlayerMode && !nmRequestJoin.isRebuiltUser) //this filters out non rebuilt users trying to join somehow when 50p mode is enabled -NiK0
+                            if (DG.FiftyPlayerMode && !nmRequestJoin.isRebuiltUser) //this filters out non rebuilt users trying to join somehow when 50p mode is enabled -NiK0
                             {
                                 DevConsole.Log(DCSection.DuckNet, "@error " + nmRequestJoin.names[0] + " could not join, not a rebuilt user.@error");
                                 return new NMVersionMismatch(NMVersionMismatch.Type.Error, Program.CURRENT_VERSION_ID + "REBUILT");

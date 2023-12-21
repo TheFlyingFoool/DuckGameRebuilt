@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -267,21 +268,10 @@ namespace DuckGame
         {
             if (Network.isActive)
                 return Maths.Clamp(_profileBoxNumber, 0, DG.MaxPlayers - 1);
-            if (inputProfile.name == InputProfile.MPPlayer1)
-                return 0;
-            if (inputProfile.name == InputProfile.MPPlayer2)
-                return 1;
-            if (inputProfile.name == InputProfile.MPPlayer3)
-                return 2;
-            if (inputProfile.name == InputProfile.MPPlayer4)
-                return 3;
-            if (inputProfile.name == InputProfile.MPPlayer5)
-                return 4;
-            if (inputProfile.name == InputProfile.MPPlayer6)
-                return 5;
-            if (inputProfile.name == InputProfile.MPPlayer7)
-                return 6;
-            return inputProfile.name == InputProfile.MPPlayer8 ? 7 : 0;
+            int index = Array.IndexOf(InputProfile.MPPlayers, inputProfile.name);
+            if (index == -1)
+                index = 0;
+            return index;
         }
 
         private void SelectTeam()

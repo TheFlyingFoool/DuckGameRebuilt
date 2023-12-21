@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace DuckGame
@@ -230,6 +231,85 @@ namespace DuckGame
         //        DevConsole.Log(i, n.GetPool().Count);
         //    }
         //}
+        // DuckNetwork.profiles[_slot].slotType 
+
+
+        [Marker.DevConsoleCommand(Name = "openslots")]
+        public static void openslots(string id)
+        {
+            foreach(Profile profile in DuckNetwork.profiles)
+            {
+                if (profile.slotType == SlotType.Closed)
+                {
+                    profile.slotType = SlotType.Open;
+                }
+            }
+        }
+        [Marker.DevConsoleCommand(Name = "slottest")]
+        public static void slottest(int total)
+        {
+            Vec2 Position = new Vec2(0f,0f);
+            for (int i =0; i < total; i++)
+            {
+                DevConsole.Log(i.ToString() + " " + Position.x.ToString() + " " + Position.y.ToString());
+                if (Position.x == Position.y + 1) //#reset one lower and all the way to to the left
+                {
+                    Position.x = 0;
+                    Position.y += 1;
+                }
+                else if (Position.x > Position.y)// # go down
+                {
+                    Position.y += 1;
+                }
+                else
+                {
+                    if (Position.x == Position.y)// # reset to top row
+                    {
+                        Position.y = 0;
+                    }
+                    Position.x += 1; //# go right
+                }
+            }
+        }
+        public static void CreateDuckInstance(Profile botPlayer, int index, bool teamed)
+        {
+            InputProfile toAssignInput;
+            InputProfile.core._profiles.TryGetValue("MPPlayer" + (index + 1).ToString(), out toAssignInput);
+            botPlayer.inputProfile = toAssignInput;
+            if (Level.current is TeamSelect2)
+            {
+                botPlayer = DuckNetwork.JoinLocalDuck(toAssignInput);
+                botPlayer.keepSetName = true;
+                botPlayer.name = "DeltaDuck" + (index + 1).ToString();
+                typeof(ProfileBox2).GetField("_inputProfile", BindingFlags.Instance | BindingFlags.NonPublic).SetValue((Level.current as TeamSelect2)._profiles[index], toAssignInput);
+            }
+            Team t = null;
+            foreach (Team team in Teams.all)
+            {
+                if (team.name == "Agents")
+                {
+                    t = team;
+                    break;
+                }
+            }
+        }
+        [Marker.DevConsoleCommand(Name = "localfill")]
+        public static void localfill()
+        {
+            if (Level.current is TeamSelect2)
+            {
+                TeamSelect2 t = Level.current as TeamSelect2;
+                for (int i = 1; i < DG.MaxPlayers; i++)
+                {
+                    Profile botPlayer = Profiles.core._profiles[i];
+                    DevConsole.Log(Profiles.core._profiles.Count.ToString());
+                    DevConsole.Log(t._profiles.Count.ToString());
+                    CreateDuckInstance(botPlayer, i, false);
+                    DevConsole.Log(i.ToString());
+                }
+
+            }
+        }
         [Marker.DevConsoleCommand(Name = "steamjoin")]
         public static void Join(string id)
         {
@@ -247,9 +327,18 @@ namespace DuckGame
             DevConsole.Log("joining");
             Level.current = new JoinServer(id2);
         }
-        [Marker.DevConsoleCommand(Name = "lanjoin")]
-        public static void LanJoin(string id)
+        [Marker.DevConsoleCommand(Name = "levelindex")]
+        public static void levelindex()
         {
+            DevConsole.Log(DuckNetwork.levelIndex.ToString());
+        }
+        [Marker.DevConsoleCommand(Name = "lanjoin")]
+        public static void LanJoin(string id = "")
+        {
+            if (id == "")
+            {
+                id = "127.0.0.1";
+            }
             DevConsole.Log("Trying to join " + id);
             Level.current = new JoinServer(id);
         }

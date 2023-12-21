@@ -635,7 +635,7 @@ namespace DuckGame
                 SelectTeam();
                 Spawn();
             }
-            _ready = doorIsOpen && _duck != null && (_duck.dead || _duck.beammode || _duck.cameraPosition.y < -100f || _duck.cameraPosition.y > 400f);
+            _ready = doorIsOpen && _duck != null && (_duck.dead || _duck.beammode); // || _duck.cameraPosition.y < -100f || _duck.cameraPosition.y > 400f
             if (_duck != null)
             {
                 _currentMessage = 0;

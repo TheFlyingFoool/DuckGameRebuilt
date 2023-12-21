@@ -1,4 +1,8 @@
-﻿namespace DuckGame
+﻿using Microsoft.Win32.SafeHandles;
+using System.Collections.Generic;
+using static DuckGame.CMD;
+
+namespace DuckGame
 {
     public class NMKillDuck : NMEvent
     {
@@ -17,7 +21,39 @@
             fall = wasFall;
             lifeChange = pLifeChange;
         }
+        //public bool forceConnection; no adding fields to pre-existing net messages
+        public void K4PLogic()
+        {
+            Profile killed = DuckNetwork.profiles[index];
+            NetworkConnection conn = connection;
+            if (conn.profile != null && conn.profile.team != null && killed != null && killed.team != null)
+            {
 
+                Profile killer = conn.profile;
+                if (killer.duck != null && killer.duck.converted != null)
+                {
+                    killer = killer.duck.converted.profile;
+                }
+                if (killed.duck != null && killed.duck.converted != null)
+                {
+                    killed = killed.duck.converted.profile;
+                }
+
+                if (killer.team != killed.team)
+                {
+                    killer.team.score++;
+
+                    List<int> scores = new List<int>();
+                    foreach (Profile p3 in DuckNetwork.profiles)
+                    {
+                        if (p3 == null) continue;
+                        if (p3.team != null) scores.Add(p3.team.score);
+                        else scores.Add(0);
+                    }
+                    Send.Message(new NMTransferScores(scores));
+                }
+            }
+        }
         public NMKillDuck(byte idx, bool wasCrush, bool wasCook)
         {
             index = idx;
@@ -38,6 +74,10 @@
                 return;
             DestroyType type = !crush ? (!fall ? new DTImpact(null) : new DTFall()) : new DTCrush(null);
             profile.duck.isKillMessage = true;
+            if (Network.isServer && TeamSelect2.KillsForPoints)
+            {
+                K4PLogic();
+            }
             if (profile.duck.Kill(type))
             {
                 if (!cook)

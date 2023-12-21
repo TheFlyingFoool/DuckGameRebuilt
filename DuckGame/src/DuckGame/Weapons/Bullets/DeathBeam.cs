@@ -7,6 +7,13 @@ namespace DuckGame
         public float _blast = 1f;
         private Vec2 _target;
         private Thing _blastOwner;
+        public Thing blastOwner
+        {
+            get
+            {
+                return _blastOwner;
+            }
+        }
 
         public DeathBeam(Vec2 pos, Vec2 target, Thing blastOwner)
           : base(pos.x, pos.y)

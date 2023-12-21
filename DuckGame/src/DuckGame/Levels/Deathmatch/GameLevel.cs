@@ -188,8 +188,7 @@ namespace DuckGame
                     }
                     else
                     {
-                        RainParticel.c = new Color(0, 112, 168);
-                        RainParticel.flud = Fluid.Water;
+                        RainParticel.c = Color.White * 0.8f;
                         if (cold)
                         {
                             Snowing = true;
@@ -477,7 +476,6 @@ namespace DuckGame
                     if (acidTimer < 60)
                     {
                         RainParticel.c = Lerp.Color(RainParticel.c, Color.Yellow, 0.1f);
-                        RainParticel.flud = new FluidData(0, RainParticel.c.ToVector4(), 0, "acid");
                         rainwindto *= 1.01f;
                     }
                 }

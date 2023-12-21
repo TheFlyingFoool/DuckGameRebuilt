@@ -1716,7 +1716,7 @@ namespace DuckGame
                 //    //Level.current.PostDrawLayer(Layer.Console);
                 //    Layer.Console.End(true);
                 //}
-                if (!DuckGame.Content.didsetbigboi && Program.shouldusespriteatlas)
+                if (!DuckGame.Content.didsetbigboi && DGRSettings.SpriteAtlas && Program.shouldusespriteatlas)
                 {
                     DuckGame.Content.didsetbigboi = true;
                     DuckGame.Content.offests = new Dictionary<string, Microsoft.Xna.Framework.Rectangle>();

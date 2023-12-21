@@ -10,7 +10,7 @@
 
         public override void Activate()
         {
-            if (!DuckNetwork.FiftyPlayerMode) DuckNetwork.FiftyPlayerMode = true;
+            if (!DG.FiftyPlayerMode) DG.FiftyPlayerMode = true;
             base.Activate();
         }
     }

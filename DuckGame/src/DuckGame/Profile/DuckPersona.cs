@@ -57,14 +57,26 @@ namespace DuckGame
         public Vec3 color
         {
             get => _color;
-            set => _color = value;
+            set
+            {
+                _colorUsable.r = (byte)value.x;
+                _colorUsable.g = (byte)value.y;
+                _colorUsable.b = (byte)value.z;
+                _color = value;
+            }
         }
 
         public Vec3 colorDark => _colorDark == Vec3.Zero ? _color * 0.7f : _colorDark;
 
         public Vec3 colorLight => _colorLight;
-
-        public Color colorUsable => new Color((byte)_color.x, (byte)_color.y, (byte)_color.z);
+        private Color _colorUsable = new Color((byte)0, (byte)0, (byte)0);
+        public Color colorUsable
+        {
+            get
+            {
+                return _colorUsable;
+            }
+        }
 
         public SpriteMap skipSprite
         {
@@ -148,7 +160,7 @@ namespace DuckGame
 
         public DuckPersona(Vec3 varCol, Vec3 varCol2, Vec3 varCol3)
         {
-            _color = varCol;
+            color = varCol;
             _colorDark = varCol2;
             _colorLight = varCol3;
             material = new MaterialPersona(this);
@@ -244,7 +256,7 @@ namespace DuckGame
         public DuckPersona(Vec3 varCol, Vec3 varCol2, Vec3 varCol3, int i)
         {
             index = i;
-            _color = varCol;
+            color = varCol;
             _colorDark = varCol2;
             _colorLight = varCol3;
             material = new MaterialPersona(this);

@@ -25,12 +25,15 @@ namespace DuckGame
         public LoopingSound rainSound;
         public override void Initialize()
         {
-            rainSound = new LoopingSound("sizzle", 1, -3)
+            if (Level.current is not Editor)
             {
-                volume = 0.2f
-            };
-            rainSound._effect.saveToRecording = false;
-            rainDarken = dark?0.8f:1;
+                rainSound = new LoopingSound("sizzle", 1, -3)
+                {
+                    volume = 0.2f
+                };
+                rainSound._effect.saveToRecording = false;
+                rainDarken = dark ? 0.8f : 1;
+            }
             base.Initialize();
         }
         public override void Update()

@@ -37,7 +37,7 @@ namespace DuckGame
 #endif
 
         // this should be formatted like X.X.X where each X is a number
-        public const string CURRENT_VERSION_ID = "1.3.1";
+        public const string CURRENT_VERSION_ID = "1.3.2.1";
 
         // do change this you know what you're doing -NiK0
         public const string CURRENT_VERSION_ID_FORMATTED = "v" + CURRENT_VERSION_ID;
@@ -458,7 +458,24 @@ namespace DuckGame
                         MonoMain.forceFullscreenMode = 2;
                         break;
                     case "-testserver":
-                        Process.Start(Application.ExecutablePath, commandLine.Replace("-testserver", " -lanjoiner"));
+                        int amount = 1;
+                        if (args.Length > index + 1)
+                        {
+                            ++index;
+                            try
+                            {
+                                amount = Convert.ToInt32(args[index]);
+                            }
+                            catch
+                            {
+                                --index;
+                                break;
+                            }
+                        }
+                        for (int i = 0; i < amount; i++)
+                        {
+                            Process.Start(Application.ExecutablePath, commandLine.Replace("-testserver", " -lanjoiner"));
+                        }
                         testServer = true;
                         break;
                     case "-testserver2":

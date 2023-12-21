@@ -450,7 +450,7 @@ namespace DuckGame
             });
 
 
-            menu.Add(new UIMenuItemToggle("50p Mode", field: new FieldBinding(typeof(DuckNetwork), nameof(DuckNetwork.FiftyPlayerMode)))
+            menu.Add(new UIMenuItemToggle("50p Mode", field: new FieldBinding(typeof(DG), nameof(DG.FiftyPlayerMode)))
             {
                 dgrDescription = "Toggles 50p mode, will always reset to false after game restart"
             });

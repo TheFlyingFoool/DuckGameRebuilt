@@ -2,8 +2,13 @@
 {
     public class RainParticel : Thing
     {
+        public static SpriteMap splash;
         public RainParticel(Vec2 v, float mult = 1)
         {
+            if (splash == null)
+            {
+                splash = new SpriteMap("rainSplash", 8, 8);
+            }
             position = v;
             rY = Rando.Float(6, 10);
             rX = Rando.Float(1, 2) * mult;
@@ -22,22 +27,42 @@
         }
         public override void Update()
         {
-            x += rX;
-            y += rY;
-            if (position.y > yEnd.y)
+            if (!die)
             {
-                Level.Add(new WaterSplash(position.x, yEnd.y, flud) {scale = new Vec2(0.6f) });
-                Level.Remove(this);
+                x += rX;
+                y += rY;
+                if (position.y > yEnd.y)
+                {
+                    die = true;
+                    y = yEnd.y;
+                }
+                else if (position.y > Level.current.bottomRight.y + 200) Level.Remove(this);
             }
-            else if (position.y > Level.current.bottomRight.y + 200) Level.Remove(this);
+            else
+            {
+                sub++;
+                if (splashFrame < 5 && sub % 4 == 0) splashFrame++;
+                
+                alpha -= 0.05f;
+                if (alpha <= 0) Level.Remove(this);
+            }
         }
+        public int sub;
+        public int splashFrame;
         public override void Draw()
         {
-            Graphics.DrawLine(position - new Vec2(rX, rY), position, c, 1f, 1.1f);
+            if (die)
+            {
+                splash.alpha = alpha;
+                splash.frame = splashFrame;
+                splash.color = Color.White * 0.8f;
+                Graphics.Draw(splash, x, y - 9, -1);
+            }
+            else Graphics.DrawLine(position - new Vec2(rX, rY), position, c, 1f, -1);
         }
+        public bool die;
         public Vec2 yEnd;
-        public static FluidData flud = Fluid.Water;
-        public static Color c = new Color(0, 112, 168);
+        public static Color c = Color.White * 0.8f;
         public float rY;
         public float rX;
     }

@@ -53,21 +53,21 @@ namespace DuckGame
 
         public Profile DefaultExperienceProfile => _experienceProfile;
 
-        public Profile DefaultPlayer1 => !Network.isActive ? Profile.defaultProfileMappings[0] : all.ElementAt(0);
+        public Profile DefaultPlayer1 => !Network.isActive ? Profile.defaultProfileMappings[0] : alllist[0];
 
-        public Profile DefaultPlayer2 => !Network.isActive ? Profile.defaultProfileMappings[1] : all.ElementAt(1);
+        public Profile DefaultPlayer2 => !Network.isActive ? Profile.defaultProfileMappings[1] : alllist[1];
 
-        public Profile DefaultPlayer3 => !Network.isActive ? Profile.defaultProfileMappings[2] : all.ElementAt(2);
+        public Profile DefaultPlayer3 => !Network.isActive ? Profile.defaultProfileMappings[2] : alllist[2];
 
-        public Profile DefaultPlayer4 => !Network.isActive ? Profile.defaultProfileMappings[3] : all.ElementAt(3);
+        public Profile DefaultPlayer4 => !Network.isActive ? Profile.defaultProfileMappings[3] : alllist[3];
 
-        public Profile DefaultPlayer5 => !Network.isActive ? Profile.defaultProfileMappings[4] : all.ElementAt(4);
+        public Profile DefaultPlayer5 => !Network.isActive ? Profile.defaultProfileMappings[4] : alllist[4];
 
-        public Profile DefaultPlayer6 => !Network.isActive ? Profile.defaultProfileMappings[5] : all.ElementAt(5);
+        public Profile DefaultPlayer6 => !Network.isActive ? Profile.defaultProfileMappings[5] : alllist[5];
 
-        public Profile DefaultPlayer7 => !Network.isActive ? Profile.defaultProfileMappings[6] : all.ElementAt(6);
+        public Profile DefaultPlayer7 => !Network.isActive ? Profile.defaultProfileMappings[6] : alllist[6];
 
-        public Profile DefaultPlayer8 => !Network.isActive ? Profile.defaultProfileMappings[7] : all.ElementAt(7);
+        public Profile DefaultPlayer8 => !Network.isActive ? Profile.defaultProfileMappings[7] : alllist[7];
 
         public ProfilesCore() => EnvironmentProfile = new Profile("Environment", InputProfile.Get("Blank"), EnvironmentTeam, Persona.Duck1);
 
@@ -103,29 +103,17 @@ namespace DuckGame
 
         public void Initialize()
         {
-            _profiles = new List<Profile>()
+            defaultProfileMappings = new List<Profile>(DG.MaxPlayers);
+            _profiles = new List<Profile>(DG.MaxPlayers);
+            for (int i = 0; i < DG.MaxPlayers; i++)
             {
-                new Profile("Player1", InputProfile.Get("MPPlayer1"), Teams.Player1, Persona.Duck1, false, "PLAYER1", true),
-                new Profile("Player2", InputProfile.Get("MPPlayer2"), Teams.Player2, Persona.Duck2, false, "PLAYER2", true),
-                new Profile("Player3", InputProfile.Get("MPPlayer3"), Teams.Player3, Persona.Duck3, false, "PLAYER3", true),
-                new Profile("Player4", InputProfile.Get("MPPlayer4"), Teams.Player4, Persona.Duck4, false, "PLAYER4", true),
-                new Profile("Player5", InputProfile.Get("MPPlayer5"), Teams.Player5, Persona.Duck5, false, "PLAYER5", true),
-                new Profile("Player6", InputProfile.Get("MPPlayer6"), Teams.Player6, Persona.Duck6, false, "PLAYER6", true),
-                new Profile("Player7", InputProfile.Get("MPPlayer7"), Teams.Player7, Persona.Duck7, false, "PLAYER7", true),
-                new Profile("Player8", InputProfile.Get("MPPlayer8"), Teams.Player8, Persona.Duck8, false, "PLAYER8", true)
-            };
-            Profile.defaultProfileMappings[0] = _profiles[0];
-            Profile.defaultProfileMappings[1] = _profiles[1];
-            Profile.defaultProfileMappings[2] = _profiles[2];
-            Profile.defaultProfileMappings[3] = _profiles[3];
-            Profile.defaultProfileMappings[4] = _profiles[4];
-            Profile.defaultProfileMappings[5] = _profiles[5];
-            Profile.defaultProfileMappings[6] = _profiles[6];
-            Profile.defaultProfileMappings[7] = _profiles[7];
+                Profile profile = new Profile("Player" + (i + 1).ToString(), InputProfile.Get("MPPlayer" + (i + 1).ToString()), Teams.core.teams[i], Persona.alllist[i], false, "PLAYER" + (i + 1).ToString(), true);
+                _profiles.Add(profile);
+                defaultProfileMappings.Add(profile);
+            }
             Profile.loading = true;
             DevConsole.Log(DCSection.General, "Loading profiles from (" + DuckFile.profileDirectory + ")");
-            string[] files = DuckFile.GetFiles(DuckFile.profileDirectory, "*.pro"); // NO YOU NICE GUY NIKO, I JUST DID IT WRONG AND FORGOT THE * -Dan
-            //string[] files = DuckFile.GetFiles(DuckFile.profileDirectory, ".pro"); // added ".pro" so it doesnt just loop over all files
+            string[] files = DuckFile.GetFiles(DuckFile.profileDirectory, "*.pro");
             DevConsole.Log(DCSection.General, "Found (" + files.Length.ToString() + ") profiles.");
             List<Profile> profileList = new List<Profile>();
             foreach (string path in files)
@@ -455,82 +443,8 @@ namespace DuckGame
             }
             return roundStatRankings;
         }
-
-
-        public static bool didaddprofiles;
-        public static bool IsDefault(ProfilesCore profilescore, Profile p)
-        {
-            if (p == null)
-            {
-                return false;
-            }
-            if (p.linkedProfile != null)
-            {
-                return IsDefault(profilescore, p.linkedProfile);
-            }
-            for (int i = 0; i < DG.MaxPlayers; i++)
-            {
-                if (profilescore._profiles[i] == p)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        public bool IsDefault50p(Profile p)
-        {
-            if (!didaddprofiles)
-            {
-                didaddprofiles = true;
-                List<DuckPersona> duckPersonas = Persona.all.ToList();
-                try
-                {
-                    for (int i = 8; i < 50; i++)
-                    {
-                        Profile p2 = new Profile("Player" + (i + 1).ToString(), InputProfile.Get("MPPlayer" + (i + 1).ToString()), Teams.core.teams[i], duckPersonas[i], false, "PLAYER" + (i + 1).ToString(), true);
-                        Profiles.core._profiles.Add(p2);
-                        if (i >= Profiles.core.defaultProfileMappings.Count)
-                        {
-                            Profiles.core.defaultProfileMappings.Add(null);
-                        }
-                        Profiles.core.defaultProfileMappings[i] = p2;
-                    }
-                }
-                catch
-                {
-                    DevConsole.Log("Fck PrefixIsDefault");
-                }
-
-
-            }
-            if (p == null)
-            {
-                return false;
-            }
-            if (p.linkedProfile != null)
-            {
-                return IsDefault(this, p.linkedProfile);
-            }
-            try
-            {
-                for (int i = 0; i < DG.MaxPlayers; i++)
-                {
-                    if (_profiles[i] == p)
-                    {
-                        return true;
-                    }
-                }
-            }
-            catch
-            {
-
-                DevConsole.Log("Fck PrefixIsDefault inside");
-            }
-            return false;
-        }
         public bool IsDefault(Profile p)
         {
-            if (DuckNetwork.FiftyPlayerMode) return IsDefault50p(p);
             if (p == null)
                 return false;
             if (p.linkedProfile != null)

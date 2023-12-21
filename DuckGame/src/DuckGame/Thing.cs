@@ -574,6 +574,14 @@ namespace DuckGame
                         return b.firedFrom.responsibleProfile;
                     }
                 }
+                if (d == null && this is DeathBeam)
+                {
+                    DeathBeam b = this as DeathBeam;
+                    if (b.blastOwner != null)
+                    {
+                        return b.blastOwner.responsibleProfile;
+                    }
+                }
                 if (d == null)
                 {
                     return null;

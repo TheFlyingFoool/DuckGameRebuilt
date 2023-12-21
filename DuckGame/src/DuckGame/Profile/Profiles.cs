@@ -24,50 +24,17 @@ namespace DuckGame
         {
             get
             {
-                List<Profile> profiles = new List<Profile>
+                List<Profile> profiles = new List<Profile>(DG.MaxPlayers);
+                for (int i = 0; i < DG.MaxPlayers; i++)
                 {
-                    DefaultPlayer1,
-                    DefaultPlayer2,
-                    DefaultPlayer3,
-                    DefaultPlayer4,
-                    DefaultPlayer5,
-                    DefaultPlayer6,
-                    DefaultPlayer7,
-                    DefaultPlayer8
-                };
-                if (DuckNetwork.FiftyPlayerMode)
-                {
-                    try
-                    {
-                        for (int i = 8; i < 50; i++)
-                        {
-                            Profile p = GetProfile(i);
-                            if (Level.current is TitleScreen || !didsetinputs)
-                            {
-                                didsetinputs = true;
-                                p.inputProfile = InputProfile.Get("MPPlayer" + (i + 1).ToString());
-                            }
-
-                            profiles.Add(p);
-                        }
-                    }
-                    catch
-                    {
-                        DevConsole.Log("F get_defaultProfilesPrefix");
-                    }
+                    profiles.Add(GetProfile(i));                
                 }
                 return profiles;
             }
         }
-        public static bool didsetinputs;
         public static Profile GetProfile(int index)
         {
-
-            if (!Network.isActive)
-            {
-                return Profile.defaultProfileMappings[index];
-            }
-            return Profiles.core.all.ElementAt(index);
+            return !Network.isActive ? Profile.defaultProfileMappings[index] : alllist[index];
         }
 
         public static Profile DefaultPlayer1 => _core.DefaultPlayer1;
