@@ -342,8 +342,7 @@ namespace DuckGame
             DevConsole.Log("Trying to join " + id);
             Level.current = new JoinServer(id);
         }
-        [Marker.DevConsoleCommand(Name = "res",
-            To = ImplementTo.DuckHack)]
+        [Marker.DevConsoleCommand]
         public static void Res(int width, int height, int screenmode)
         {
             if (screenmode < 1 || screenmode > 4)
