@@ -342,23 +342,19 @@ namespace DuckGame
             DevConsole.Log("Trying to join " + id);
             Level.current = new JoinServer(id);
         }
+        
         [Marker.DevConsoleCommand]
-        public static void Res(int width, int height, int screenmode)
+        public static void Res(int width, int height, ScreenMode mode)
         {
-            if (screenmode < 1 || screenmode > 4)
+            Resolution r = new()
             {
-                DevConsole.Log("Invalid input 1 - 4 = Windowed, Fullscreen, Borderless, Max", Color.Red);
-                return;
-            }
-            Resolution r = new Resolution()
-            {
-                dimensions = new Vec2(width, height)
+                dimensions = new Vec2(width, height), mode = mode,
             };
-            ScreenMode mode = (ScreenMode)(screenmode - 1);
-            r.mode = mode;
+            
             Resolution.Set(r);
             Resolution.Apply();
         }
+        
         [Marker.DevConsoleCommand(Name = "windowtoggle",
             To = ImplementTo.DuckHack)]
         public static void windowtoggle()

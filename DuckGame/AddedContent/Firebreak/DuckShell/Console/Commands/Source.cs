@@ -8,17 +8,25 @@ namespace DuckGame.ConsoleEngine
     public static partial class Commands
     {
         public static string ScriptsDirPath = $"{DuckFile.newSaveLocation}DuckGame/Scripts/";
-        public const string SCRIPT_FILE_EXTENSION = "dsh";
+        public const string SCRIPT_FILE_EXTENSION = ".dsh";
         
-        [Marker.DevConsoleCommand(Description = "Runs a script (by extensionless name) from your ~DuckGame/Scripts/ folder", To = ImplementTo.DuckShell)]
-        public static void Source(string scriptName)
+        [Marker.DevConsoleCommand(Description = "Runs a script from your ~DuckGame/Scripts/ folder", To = ImplementTo.DuckShell)]
+        public static void Source(
+            [FilePathAutoCompl(
+                "|newSaveLocation|DuckGame/Scripts",
+                SystemEntryType.File,
+                SearchOption.TopDirectoryOnly, // todo: support recursive directory search
+                FilePathAutoComplAttribute.Return.EntryNameNoExtension)] string scriptName)
         {
             if (!Directory.Exists(ScriptsDirPath))
                 Directory.CreateDirectory(ScriptsDirPath);
             
             scriptName = Regex.Replace(scriptName, @"[^\w \/\\]", "");
             
-            string fullScriptName = $"{scriptName}.{SCRIPT_FILE_EXTENSION}";
+            string fullScriptName = scriptName;
+            if (!fullScriptName.EndsWith(SCRIPT_FILE_EXTENSION))
+                fullScriptName += SCRIPT_FILE_EXTENSION;
+            
             string scriptPath = $"{ScriptsDirPath}{fullScriptName}";
 
             if (!File.Exists(scriptPath))

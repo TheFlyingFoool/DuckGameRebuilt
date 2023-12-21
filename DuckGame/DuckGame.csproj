@@ -319,8 +319,11 @@
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnife.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingRopeHandle.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnifeConnectionParticle.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\ExecLegacy.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\RNG.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\AutoCompl.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\CommandAutoCompl.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\FilePathAutoCompl.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\ReflectionAutoCompl.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\TeamAutoCompl.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\PrettyPrintAttribute.cs" />

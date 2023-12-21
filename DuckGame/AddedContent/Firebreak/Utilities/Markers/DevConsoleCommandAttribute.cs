@@ -34,7 +34,7 @@ namespace AddedContent.Firebreak
                     return;
                 
                 MethodInfo method = (MethodInfo)Member;
-                
+                    
                 Command = ShellCommand.FromMethodInfo(method);
                 Name ??= method.Name;
 
