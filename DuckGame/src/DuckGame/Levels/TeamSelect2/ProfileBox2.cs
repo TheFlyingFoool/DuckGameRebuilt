@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame
@@ -631,6 +632,11 @@ namespace DuckGame
                         break;
                 }
                 _teamSelection = Teams.all.IndexOf(_playerProfile.team);
+                if (_teamSelection == -1) //fall back incase team is wonky
+                {
+                    _playerProfile.team = Teams.all[0];
+                    _teamSelection = 0;
+                }
                 _playerActive = true;
                 SelectTeam();
                 Spawn();
