@@ -12,10 +12,10 @@ namespace DuckGame
         private Sprite _none;
         private Sprite _projectorGlitch;
         private Thing _currentProjection;
-        private SinWave _wave = (SinWave)1f;
-        private SinWave _projectionWave = (SinWave)0.04f;
-        private SinWave _projectionWave2 = (SinWave)0.05f;
-        private SinWave _projectionFlashWave = (SinWave)0.8f;
+        private SinWave _wave;
+        private SinWave _projectionWave;
+        private SinWave _projectionWave2;
+        private SinWave _projectionFlashWave;
         private bool _useWave;
         private bool _alternate;
         private float _double;
@@ -37,6 +37,10 @@ namespace DuckGame
         public PurpleBlock(float xpos, float ypos)
           : base(xpos, ypos)
         {
+            _wave = new SinWave(this, 1f);
+            _projectionWave = new SinWave(this, 0.04f);
+            _projectionWave2 = new SinWave(this, 0.05f);
+            _projectionFlashWave = new SinWave(this, 0.8f);
             graphic = new Sprite("purpleBlock")
             {
                 center = new Vec2(8f, 8f)

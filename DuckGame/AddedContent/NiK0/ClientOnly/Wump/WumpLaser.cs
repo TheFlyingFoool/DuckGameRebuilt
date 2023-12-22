@@ -5,6 +5,7 @@
     {
         public WumpBeam(Vec2 pos, Vec2 target, WumpHugeLaser blastOwner) : base(pos.x, pos.y, null)
         {
+            sin = new SinWave(this, 0.1f);
             _target = target;
             _blastOwner = blastOwner;
             layer = Layer.Foreground;
@@ -12,6 +13,7 @@
 
         public WumpBeam(Vec2 pos, Vec2 target) : base(pos.x, pos.y, null)
         {
+            sin = new SinWave(this, 0.1f);
             _target = target;
         }
         public override void Initialize()
@@ -114,7 +116,7 @@
             Graphics.DrawLine(p, p2, Color.LightBlue * (0.1f + num5), 0.2f + num4 * 40f, default(Depth));
         }
 
-        public SinWave sin = new SinWave(0.1f);
+        public SinWave sin;
         public int life;
         public float _blast = 1f;
 

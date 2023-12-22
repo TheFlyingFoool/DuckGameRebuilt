@@ -34,7 +34,7 @@
         }
         public override void Initialize()
         {
-            _sound = new ConstantSound("flameThrowing");
+            _sound = new ConstantSound(this, "flameThrowing");
             base.Initialize();
         }
         public override void Update()

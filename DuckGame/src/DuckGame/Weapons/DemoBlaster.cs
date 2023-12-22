@@ -36,7 +36,7 @@
 
         public override void Initialize()
         {
-            _sound = new ConstantSound("demoBlaster");
+            _sound = new ConstantSound(this, "demoBlaster");
             Level.Add(_stream);
         }
 

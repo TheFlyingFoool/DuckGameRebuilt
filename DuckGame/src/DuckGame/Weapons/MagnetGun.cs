@@ -23,7 +23,7 @@ namespace DuckGame
         public NetIndex4 attachIndex = new NetIndex4(0);
         public NetIndex4 localAttachIndex = new NetIndex4(0);
         private Sprite _magnet;
-        private SinWave _wave = (SinWave)0.8f;
+        private SinWave _wave;
         private float _waveMult;
         public Thing _grabbed;
         private Block _stuck;
@@ -52,6 +52,7 @@ namespace DuckGame
         public MagnetGun(float xval, float yval)
           : base(xval, yval)
         {
+            _wave = new SinWave(this, 0.8f);
             ammo = 99;
             _ammoType = new ATLaser
             {

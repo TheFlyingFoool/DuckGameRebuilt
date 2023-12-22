@@ -29,8 +29,8 @@ namespace DuckGame
         private float _engineSpin;
         private float _bladeSpin;
         private float _engineResistance = 1f;
-        private SinWave _idleWave = (SinWave)0.6f;
-        private SinWave _spinWave = (SinWave)1f;
+        private SinWave _idleWave;
+        private SinWave _spinWave;
         private bool _puffClick;
         private float _warmUp;
         public bool _flooded;
@@ -68,6 +68,8 @@ namespace DuckGame
         public Chainsaw(float xval, float yval)
           : base(xval, yval)
         {
+            _idleWave = new SinWave(this, 0.6f);
+            _spinWave = new SinWave(this, 1f);
             ammo = 4;
             _ammoType = new ATLaser
             {

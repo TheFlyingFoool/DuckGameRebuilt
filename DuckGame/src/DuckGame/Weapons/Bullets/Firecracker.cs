@@ -5,13 +5,15 @@ namespace DuckGame
 {
     public class Firecracker : PhysicsParticle, ITeleport
     {
-        private ActionTimer _sparkTimer = (ActionTimer)0.2f;
-        private ActionTimer _explodeTimer = (ActionTimer)Rando.Float(0.01f, 0.012f);
+        private ActionTimer _sparkTimer;
+        private ActionTimer _explodeTimer;
         private bool didRemove;
 
         public Firecracker(float xpos, float ypos, float ang = 0f)
           : base(xpos, ypos)
         {
+            _sparkTimer = new ActionTimer(this, 0.2f);
+            _explodeTimer = new ActionTimer(this, Rando.Float(0.01f, 0.012f));
             graphic = new Sprite("fireCracker");
             center = new Vec2(4f, 4f);
             _bounceSound = "plasticBounce";

@@ -17,6 +17,7 @@ namespace DuckGame
         }
         public PinkBox(float xpos, float ypos) : base(xpos, ypos)
         {
+            SIN = new SinWave(this, 0.1f);
             _sprite = new SpriteMap("pinkbox", 16, 16); // im cool with this box -YupDanielThatsMe, im not -??? the mistery man
             graphic = _sprite;
             layer = Layer.Foreground;
@@ -82,7 +83,7 @@ namespace DuckGame
             }
         }
 
-        public SinWave SIN = new SinWave(0.1f);
+        public SinWave SIN;
         public override void Draw()
         {
             if (d != null)

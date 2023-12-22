@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using static DuckGame.CMD;
 
 namespace DuckGame
 {
@@ -8,8 +9,8 @@ namespace DuckGame
     {
         private Sprite _selectBeam;
         private float _spawnWait;
-        private SinWave _wave = (SinWave)0.016f;
-        private SinWave _wave2 = (SinWave)0.02f;
+        private SinWave _wave;
+        private SinWave _wave2;
         public List<BeamDuck> _ducks = new List<BeamDuck>();
         private List<Thing> _guns = new List<Thing>();
         private float _beamHeight = 180f;
@@ -20,6 +21,8 @@ namespace DuckGame
         public MultiBeam(float xpos, float ypos)
           : base(xpos, ypos)
         {
+            _wave = new SinWave(this, 0.016f);
+            _wave2 = new SinWave(this, 0.02f);
             _selectBeam = new Sprite("selectBeam")
             {
                 alpha = 0.9f,
@@ -71,8 +74,8 @@ namespace DuckGame
                         entryHeight = num,
                         leaving = false,
                         entryDir = d.x < x ? -1 : 1,
-                        sin = new SinWave(0.1f),
-                        sin2 = new SinWave(0.05f)
+                        sin = new SinWave(this, 0.1f),
+                        sin2 = new SinWave(this, 0.05f)
                     });
                     entered = true;
                 }

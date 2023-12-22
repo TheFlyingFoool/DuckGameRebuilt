@@ -6,7 +6,7 @@ namespace DuckGame
     {
         private Sprite _selectPlatform;
         private Sprite _selectProjector;
-        private SinWave _projectorSin = (SinWave)0.5f;
+        private SinWave _projectorSin;
         private Profile _profile;
         private List<Profile> _profiles = new List<Profile>();
         private bool _swap;
@@ -15,6 +15,7 @@ namespace DuckGame
         public TeamProjector(float xpos, float ypos, Profile profile)
           : base(xpos, ypos)
         {
+            _projectorSin = new SinWave(this, 0.5f);
             _selectPlatform = new Sprite("selectPlatform");
             _selectPlatform.CenterOrigin();
             _selectProjector = new Sprite("selectProjector");

@@ -7,6 +7,8 @@ namespace DuckGame
         private float _increment;
         private float _wave;
         private float _value;
+        private Thing parent;
+        private WeakReference weakref;
 
         public float value
         {
@@ -22,7 +24,13 @@ namespace DuckGame
             _wave = start;
             AutoUpdatables.Add(this);
         }
-
+        public SinWave(Thing thing, float inc, float start = 0f)
+        {
+            _increment = inc;
+            _wave = start;
+            parent = thing;
+            weakref = AutoUpdatables.AddWithReturn(this);
+        }
         public SinWave()
         {
             _increment = 0.1f;
@@ -31,6 +39,10 @@ namespace DuckGame
 
         public void Update()
         {
+            if (parent != null && weakref != null && (parent.removeFromLevel || parent.level != Level.current))  // parent.removeFromLevel
+            {
+                AutoUpdatables.Remove(weakref);
+            }
             _wave += _increment;
             _value = (float)Math.Sin(_wave);
         }

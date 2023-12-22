@@ -89,7 +89,7 @@ namespace DuckGame
         }
         public override void Initialize()
         {
-            _idle = new ConstantSound("rcDrive");
+            _idle = new ConstantSound(this, "rcDrive");
         }
 
         public override void Terminate()

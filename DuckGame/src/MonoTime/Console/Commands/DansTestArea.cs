@@ -2,6 +2,7 @@ using AddedContent.Firebreak;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json.Linq;
 using RectpackSharp;
 using SDL2;
 using System;
@@ -221,6 +222,38 @@ namespace DuckGame
             }
 
         }
+        [Marker.DevConsoleCommand(Name = "sinwavecheck")]
+        public static void sinwavecheck()
+        {
+            if (Level.current != null)
+            {
+                Dictionary<Type, int> typeCounts = new Dictionary<Type, int>();
+
+                foreach (WeakReference updateable in AutoUpdatables.core._updateables)
+                {
+                    Type thingType = updateable.Target.GetType();
+
+                    // If the type is already in the dictionary, increment its count
+                    if (typeCounts.ContainsKey(thingType))
+                    {
+                        typeCounts[thingType]++;
+                    }
+                    else
+                    {
+                        // Otherwise, add the type to the dictionary with a count of 1
+                        typeCounts.Add(thingType, 1);
+                    }
+                }
+
+                // Display the top 10 types with the highest count
+                foreach (KeyValuePair<Type, int> item in typeCounts.OrderByDescending(item => item.Value).Take(10))
+                {
+                    DevConsole.Log("Type: " + item.Key.Name + ", Count: " + item.Value);
+                }
+            }
+
+
+        }
         [Marker.DevConsoleCommand(Name = "buckettypes")]
         public static void buckettypes()
         {
@@ -251,7 +284,7 @@ namespace DuckGame
                 }
 
                 // Display the top 10 types with the highest count
-                foreach (var item in typeCounts.OrderByDescending(item => item.Value).Take(10))
+                foreach (KeyValuePair<Type, int> item in typeCounts.OrderByDescending(item => item.Value).Take(10))
                 {
                     DevConsole.Log("Type: " + item.Key.Name + ", Count: " + item.Value);
                 }
@@ -283,7 +316,7 @@ namespace DuckGame
                 }
 
                 // Display the top 10 types with the highest count
-                foreach (var item in typeCounts.OrderByDescending(item => item.Value).Take(10))
+                foreach (KeyValuePair<Type, int> item in typeCounts.OrderByDescending(item => item.Value).Take(10))
                 {
                     DevConsole.Log("Type: " + item.Key.Name + ", Count: " + item.Value);
                 }
