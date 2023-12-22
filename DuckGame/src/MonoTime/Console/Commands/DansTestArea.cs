@@ -171,6 +171,126 @@ namespace DuckGame
             }
 
         }
+        [Marker.DevConsoleCommand(Name = "bucketremove")]
+        public static void bucketremove()
+        {
+            if (Level.current != null)
+            {
+                List<(Vec2, int)> bucketList = new List<(Vec2, int)>();
+                foreach (Vec2 bucket in Level.current.things.Buckets.Keys)
+                {
+                    int bucketcount = 0;
+                    foreach (List<Thing> values in Level.current.things.Buckets[bucket].Values)
+                    {
+                        foreach (Thing thing in values)
+                        {
+                            if (thing.removeFromLevel)
+                            {
+                                bucketcount++;
+                            }
+                        }
+                    }
+                    bucketList.Add((bucket, bucketcount));
+                }
+                foreach ((Vec2, int) item in bucketList.OrderByDescending(item => item.Item2).Take(10))
+                {
+                    DevConsole.Log("Bucket: " + item.Item1.x + " " + item.Item1.y + ", Count: " + item.Item2);
+                }
+            }
+
+        }
+        [Marker.DevConsoleCommand(Name = "buckettest")]
+        public static void buckettest()
+        {
+            if (Level.current != null)
+            {
+                List<(Vec2, int)> bucketList = new List<(Vec2, int)>();
+                foreach (Vec2 bucket in Level.current.things.Buckets.Keys)
+                {
+                    int bucketcount = 0;
+                    foreach (List<Thing> values in Level.current.things.Buckets[bucket].Values)
+                    {
+                        bucketcount += values.Count;
+                    }
+                    bucketList.Add((bucket, bucketcount));
+                }
+                foreach ((Vec2, int) item in bucketList.OrderByDescending(item => item.Item2).Take(10))
+                {
+                    DevConsole.Log("Bucket: " + item.Item1.x + " " + item.Item1.y + ", Count: " + item.Item2);
+                }
+            }
+
+        }
+        [Marker.DevConsoleCommand(Name = "buckettypes")]
+        public static void buckettypes()
+        {
+            if (Level.current != null)
+            {
+                Dictionary<Type, int> typeCounts = new Dictionary<Type, int>();
+
+                foreach (Vec2 bucket in Level.current.things.Buckets.Keys)
+                {
+                    foreach (List<Thing> values in Level.current.things.Buckets[bucket].Values)
+                    {
+                        foreach (Thing thing in values)
+                        {
+                            Type thingType = thing.GetType();
+
+                            // If the type is already in the dictionary, increment its count
+                            if (typeCounts.ContainsKey(thingType))
+                            {
+                                typeCounts[thingType]++;
+                            }
+                            else
+                            {
+                                // Otherwise, add the type to the dictionary with a count of 1
+                                typeCounts.Add(thingType, 1);
+                            }
+                        }
+                    }
+                }
+
+                // Display the top 10 types with the highest count
+                foreach (var item in typeCounts.OrderByDescending(item => item.Value).Take(10))
+                {
+                    DevConsole.Log("Type: " + item.Key.Name + ", Count: " + item.Value);
+                }
+            }
+
+
+        }
+        [Marker.DevConsoleCommand(Name = "leveltypes")]
+        public static void leveltypes()
+        {
+            if (Level.current != null)
+            {
+                Dictionary<Type, int> typeCounts = new Dictionary<Type, int>();
+
+                foreach (Thing thing in Level.current.things)
+                {
+                    Type thingType = thing.GetType();
+
+                    // If the type is already in the dictionary, increment its count
+                    if (typeCounts.ContainsKey(thingType))
+                    {
+                        typeCounts[thingType]++;
+                    }
+                    else
+                    {
+                        // Otherwise, add the type to the dictionary with a count of 1
+                        typeCounts.Add(thingType, 1);
+                    }
+                }
+
+                // Display the top 10 types with the highest count
+                foreach (var item in typeCounts.OrderByDescending(item => item.Value).Take(10))
+                {
+                    DevConsole.Log("Type: " + item.Key.Name + ", Count: " + item.Value);
+                }
+            }
+
+
+        }
         [Marker.DevConsoleCommand]
         public static void graphiccull()
         {
