@@ -449,7 +449,10 @@ namespace DuckGame
                 dgrDescription = "Copies a QR code representing the join link"
             });
 
-
+            menu.Add(new UIMenuItemNumber("Total Player Num", field: new FieldBinding(typeof(DG), nameof(DG.ExtraPlayerCount), 1, 300, 1), step: 1)
+            {
+                dgrDescription = "Amount of Players 50p Mode Adds, yes i know i should rename it"
+            });
             menu.Add(new UIMenuItemToggle("50p Mode", field: new FieldBinding(typeof(DG), nameof(DG.FiftyPlayerMode)))
             {
                 dgrDescription = "Toggles 50p mode, will always reset to false after game restart"

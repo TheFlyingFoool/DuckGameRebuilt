@@ -2546,7 +2546,7 @@ namespace DuckGame
             Send.Message(new NMNetworkIndexSync());
             if (!pLocal)
             {
-                if (DG.FiftyPlayerMode) Send.Message(new NMEnableFiftyPlayerMode(), pJoinedProfiles[0].connection);
+                if (DG.FiftyPlayerMode) Send.Message(new NMEnableFiftyPlayerMode(DG.ExtraPlayerCount), pJoinedProfiles[0].connection);
                 Send.Message(new NMJoinDuckNetSuccess(pJoinedProfiles), pJoinedProfiles[0].connection);
                 List<byte> byteList = new List<byte>();
                 for (int index = 0; index < DG.MaxPlayers; ++index)
