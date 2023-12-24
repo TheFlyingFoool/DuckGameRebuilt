@@ -588,6 +588,17 @@ namespace DuckGame
             }
             return new List<Thing>();
         }
+        public List<Thing> CollisionPointAllFast(Vec2 point, Type t)
+        {
+            if (Buckets.TryGetValue(new Vec2((int)((point.x + offset) / cellsize), (int)((point.y + offset) / cellsize)), out Dictionary<int, List<Thing>> output))
+            {
+                if (output.TryGetValue(t.GetHashCode(), out List<Thing> output2))
+                {
+                    return output2;
+                }
+            }
+            return new List<Thing>();
+        }
         public void RemoveDan(Thing thing)
         {
             //Vec2 p1 = thing.topLeft;

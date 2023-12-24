@@ -10,6 +10,8 @@ namespace DuckGame
 
         public static bool Point(Vec2 point, Thing t) => point.x >= t.left && point.x <= t.right && point.y >= t.top && point.y <= t.bottom;
 
+        public static bool PointFast(Vec2 point, Thing t) => Point(point, t);
+
         public static bool Point(Vec2 point, Rectangle r) => point.x >= r.Left && point.x <= r.Right && point.y >= r.Top && point.y <= r.Bottom;
 
         public static bool Line(Vec2 point1, Vec2 point2, Thing t)

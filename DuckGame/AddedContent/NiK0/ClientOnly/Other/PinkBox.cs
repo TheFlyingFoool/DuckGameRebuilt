@@ -171,7 +171,7 @@ namespace DuckGame
         public bool collision;
         public override void Update()
         {
-            if (d != null && (!Network.isActive || (d.profile != null && d.profile.connection == DuckNetwork.localConnection)))
+            if (d != null && d.profile != null && d.profile.localPlayer)
             {
                 Fondle(this);
                 //Failsafe for if multiple people happen to hit the box it explodes
@@ -183,50 +183,14 @@ namespace DuckGame
                 if (d.dead)
                 {
                     UnstoppableFondle(d, DuckNetwork.localConnection);
-                    UnstoppableFondle(this, DuckNetwork.localConnection);
-                    d.Ressurect();
-                    if (d._cooked != null) d.position = position;
-                    if (d.onFire)
-                    {
-                        d.onFire = false;
-                        d.moveLock = false;
-                        d.dead = false;
-                    }
-                    d.dead = false;
-                    d.ResetNonServerDeathState();
-                    d.Regenerate();
-                    d.crouch = false;
-                    d.sliding = false;
-                    d.burnt = 0f;
-                    d.hSpeed = 0f;
-                    d.vSpeed = 0f;
                     if (d.ragdoll != null)
-                    {
                         d.ragdoll.Unragdoll();
-                    }
-                    if (d._trapped != null)
-                    {
-                        d._trapped.position = position;
-                        d._trapped._trapTime = 0;
-                    }
+
                     d.position = position;
-                    if (d._ragdollInstance != null)
-                    {
-                        if (d._ragdollInstance.removeFromLevel)
-                        {
-                            d._ragdollInstance = new Ragdoll(d.x, d.y - 9999, d, false, 0, 0, Vec2.Zero);
-                            d._ragdollInstance.npi = d.netProfileIndex;
-                            d._ragdollInstance.RunInit();
-                            d._ragdollInstance.active = false;
-                            d._ragdollInstance.visible = false;
-                            d._ragdollInstance.authority = 80;
-                            Level.Add(d._ragdollInstance);
-                            Fondle(d._ragdollInstance);
-                        }
-                    }
-                    d.position = position;
-                    d.visible = true;
-                    UnstoppableFondle(d, DuckNetwork.localConnection);
+
+                    d.velocity = Vec2.Zero;
+                    d.Ressurect();
+
                     Explode();
                 }
                 lD = d;

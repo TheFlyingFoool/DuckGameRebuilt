@@ -1285,6 +1285,8 @@ namespace DuckGame
 
         public static T CheckPoint<T>(float x, float y) => current.CollisionPoint<T>(new Vec2(x, y));
 
+        public static T CheckPointFast<T>(float x, float y) => current.CollisionPointFast<T>(new Vec2(x, y));
+
         public static T CheckPointPlacementLayer<T>(float x, float y, Thing ignore = null, Layer layer = null) => current.CollisionPointPlacementLayer<T>(new Vec2(x, y), ignore, layer);
 
         public static T CheckPoint<T>(Vec2 point, Thing ignore, Layer layer) => current.CollisionPoint<T>(point, ignore, layer);
@@ -1999,6 +2001,17 @@ namespace DuckGame
             foreach (Thing thing in things.CollisionPointAll(point, typeof(T)))
             {
                 if (!thing.removeFromLevel && Collision.Point(point, thing))
+                    return (T)(object)thing;
+            }
+            return default(T);
+        }
+        public T CollisionPointFast<T>(Vec2 point)
+        {
+            List<Thing> t = things.CollisionPointAllFast(point, typeof(T));
+            for (int i = 0; i < t.Count; i++)
+            {
+                Thing thing = t[i];
+                if (!thing.removeFromLevel && Collision.PointFast(point, thing))
                     return (T)(object)thing;
             }
             return default(T);
