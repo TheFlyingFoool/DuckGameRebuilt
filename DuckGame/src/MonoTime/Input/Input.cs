@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using NAudio.CoreAudioApi;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Windows.Documents;
 
 namespace DuckGame
 {
@@ -1068,15 +1070,16 @@ namespace DuckGame
         public static void InitDefaultProfiles()
         {
             string[] keys = InputProfile.profiles.Keys.ToArray();
+            int MPPlayerCount = 0;
             for (int i = 0; i < keys.Length; i++)
             {
                 string key = keys[i];
                 if (key.StartsWith("MPPlayer"))
                 {
-                    InputProfile.profiles.Remove(key);
+                    MPPlayerCount += 1;
                 }
             }
-            for (int index = 0; index < DG.MaxPlayers; ++index)
+            for (int index = MPPlayerCount; index < DG.MaxPlayers; ++index)
             {
                 InputProfile inputProfile = InputProfile.Add("MPPlayer" + (index + 1).ToString());
                 inputProfile.mpIndex = index;
@@ -1103,37 +1106,52 @@ namespace DuckGame
         }
         public static void ReInitialize()
         {
-            _devices.Clear();
-            _gamePads.Clear();
             MonoMain.NloadMessage = "ReInitializing Input System...";
             DevConsole.Log(DCSection.General, "ReInitializing Input...");
-            InputDevice device = new Keyboard("KEYBOARD P1", 0);
-            _devices.Add(device);
-            _devices.Add(new Keyboard("KEYBOARD P2", 1));
-            _devices.Add(new Mouse());
-
-            for (int index = 0; index < MonoMain.MaximumGamepadCount; index++)
+            List<InputDevice> XInputPads = new List<InputDevice>(MonoMain.MaximumGamepadCount);
+            List<GenericController> genericControllers = new List<GenericController>(DG.MaxPlayers);
+            _gamePads.Clear();
+            int index = 0;
+            while (index < _devices.Count)
             {
-                XInputPad XInputDevice = new XInputPad(index);
-                _devices.Add(XInputDevice);
+                InputDevice device = _devices[index];
+                if (device is XInputPad)
+                {
+                    if (XInputPads.Count < MonoMain.MaximumGamepadCount)
+                    {
+                        XInputPads.Add(device);
+                    }
+                    _devices.RemoveAt(index);
+                }
+                else if (device is GenericController)
+                {
+                    if (genericControllers.Count < DG.MaxPlayers)
+                    {
+                        genericControllers.Add(device as GenericController);
+                    }
+                    _devices.RemoveAt(index);
+                }
+                else
+                {
+                    index++;
+                }
+            }
+
+            for (int i = XInputPads.Count; i < MonoMain.MaximumGamepadCount; i++)
+            {
+                XInputPad XInputDevice = new XInputPad(i);
+                XInputPads.Add(XInputDevice);
                 XInputDevice.InitializeState();
             }
-            InputProfile.Default = new InputProfile("Default");
-            for (int i = 0; i < DG.MaxPlayers; i++)
+            _devices.AddRange(XInputPads);
+            _devices.AddRange(genericControllers);
+            _gamePads.AddRange(genericControllers);
+            for (int i = genericControllers.Count; i < DG.MaxPlayers; i++)
             {
                 GenericController genericController = new GenericController(i);
                 _gamePads.Add(genericController);
                 _devices.Add(genericController);
             }
-            InputProfile.Default.Map(device, Triggers.Left, 37);
-            InputProfile.Default.Map(device, Triggers.Right, 39);
-            InputProfile.Default.Map(device, Triggers.Up, 38);
-            InputProfile.Default.Map(device, Triggers.Down, 40);
-            InputProfile.Default.Map(GetDevice<XInputPad>(), Triggers.Left, 4);
-            InputProfile.Default.Map(GetDevice<XInputPad>(), Triggers.Right, 8);
-            InputProfile.Default.Map(GetDevice<XInputPad>(), Triggers.Up, 1);
-            InputProfile.Default.Map(GetDevice<XInputPad>(), Triggers.Down, 2);
-            _profiles[InputProfile.Default.name] = InputProfile.Default;
             EnumerateGamepads();
             InitDefaultProfiles();
         }
