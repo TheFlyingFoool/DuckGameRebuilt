@@ -1432,8 +1432,19 @@ namespace DuckGame
                 else if (Keyboard.Pressed(Keys.Tab) && s_canUsePrediction)
                 {
                     int practicalLimit = Math.Min(CommandSuggestionLimit, LatestPredictionSuggestions.Length);
-                    s_HighlightedSuggestionIndex++;
-                    s_HighlightedSuggestionIndex %= practicalLimit;
+
+                    if (Keyboard.control)
+                    {
+                        if (s_HighlightedSuggestionIndex == 0)
+                            s_HighlightedSuggestionIndex = practicalLimit;
+                        
+                        s_HighlightedSuggestionIndex--;
+                    }
+                    else
+                    {
+                        s_HighlightedSuggestionIndex++;
+                        s_HighlightedSuggestionIndex %= practicalLimit;
+                    }
                 }
 
                 if (Keyboard.Pressed(Keys.PageUp))
