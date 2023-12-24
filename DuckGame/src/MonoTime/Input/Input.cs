@@ -1082,6 +1082,8 @@ namespace DuckGame
             for (int index = MPPlayerCount; index < DG.MaxPlayers; ++index)
             {
                 InputProfile inputProfile = InputProfile.Add("MPPlayer" + (index + 1).ToString());
+                if (inputProfile.mpIndex != -1) // Prevents remapping of inputprofiles
+                    continue;
                 inputProfile.mpIndex = index;
                 inputProfile.Map(GetDevice<GenericController>(index), Triggers.Left, 4);
                 inputProfile.Map(GetDevice<GenericController>(index), Triggers.Right, 8);
