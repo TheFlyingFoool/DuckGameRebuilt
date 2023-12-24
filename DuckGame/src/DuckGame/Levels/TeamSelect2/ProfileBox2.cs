@@ -101,6 +101,7 @@ namespace DuckGame
           int pIndex)
           : base(xpos, ypos)
         {
+            sin = new SinWave(this, 0.05f, Rando.Float(3.14f));
             _hostCrown = new Sprite("hostCrown");
             _hostCrown.CenterOrigin();
             _lightBar = new SpriteMap("lightBar", 2, 1)
@@ -540,7 +541,7 @@ namespace DuckGame
         public void OpenDoor(Duck d) => _duck = d;
 
 
-        public SinWave sin = new SinWave(0.05f, Rando.Float(3.14f));
+        public SinWave sin;
         public override void Update()
         {
             if (Network.isActive && Network.isServer && _duck != null && profile.connection == null)

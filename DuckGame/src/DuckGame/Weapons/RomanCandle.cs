@@ -18,7 +18,7 @@
                 _lit = value;
             }
         }
-        private ActionTimer _timer = (ActionTimer)0.5f;
+        private ActionTimer _timer;
         private ActionTimer _litTimer;
         private ActionTimer _litStartTimer;
         private Sound _burnSound;
@@ -26,6 +26,7 @@
         public RomanCandle(float xval, float yval)
           : base(xval, yval)
         {
+            _timer = new ActionTimer(this, 0.5f);
             ammo = 9;
             _type = "gun";
             _sprite = new SpriteMap("romanCandle", 16, 16);
@@ -123,8 +124,8 @@
             if (_lit || ammo <= 0)
                 return;
             _lit = true;
-            _litTimer = (ActionTimer)0.03f;
-            _litStartTimer = new ActionTimer(0.01f, reset: false);
+            _litTimer = new ActionTimer(this, 0.03f);
+            _litStartTimer = new ActionTimer(this, 0.01f, reset: false);
             _burnSound = SFX.Play("fuseBurn", 0.5f, looped: true);
         }
 

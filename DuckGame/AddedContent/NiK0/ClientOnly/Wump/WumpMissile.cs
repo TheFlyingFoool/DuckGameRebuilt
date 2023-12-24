@@ -11,7 +11,7 @@
         {
             v = velocity.Rotate(0.01f * angMultiplier, Vec2.Zero);
             color = Color.Purple;
-            sw = new SinWave(0.1f * angMultiplier);
+            sw = new SinWave(this, 0.1f * angMultiplier);
             angMultiplier *= -1; //jank but should work -NiK0
             base.Initialize();
         }

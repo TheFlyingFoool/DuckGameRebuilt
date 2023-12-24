@@ -22,12 +22,12 @@ namespace DuckGame
         public Duck[] prevControlling = new Duck[8];
         public NetSoundEffect _netPreach = new NetSoundEffect(new string[6]
         {
-      "preach0",
-      "preach1",
-      "preach2",
-      "preach3",
-      "preach4",
-      "preach5"
+          "preach0",
+          "preach1",
+          "preach2",
+          "preach3",
+          "preach4",
+          "preach5"
         })
         {
             pitchVariationLow = -0.3f,
@@ -39,7 +39,7 @@ namespace DuckGame
         private Sprite _halo;
         private float _preachWait;
         private float _haloAlpha;
-        private SinWave _haloWave = (SinWave)0.05f;
+        private SinWave _haloWave;
         public float _ringPulse;
 
         public Duck controlling1
@@ -141,6 +141,7 @@ namespace DuckGame
         public GoodBook(float xval, float yval)
           : base(xval, yval)
         {
+            _haloWave = new SinWave(this, 0.05f);
             ammo = 1;
             _ammoType = new ATShrapnel
             {
@@ -168,14 +169,14 @@ namespace DuckGame
             _netPreach.function = new NetSoundEffect.Function(DoPreach);
             controlling = new Duck[8]
             {
-        controlling1,
-        controlling2,
-        controlling3,
-        controlling4,
-        controlling5,
-        controlling6,
-        controlling7,
-        controlling8
+                controlling1,
+                controlling2,
+                controlling3,
+                controlling4,
+                controlling5,
+                controlling6,
+                controlling7,
+                controlling8
             };
         }
 

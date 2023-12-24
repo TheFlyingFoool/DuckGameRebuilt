@@ -6,6 +6,7 @@
     {
         public WumpSniper(float xval, float yval) : base(xval, yval)
         {
+            sinner = new SinWave(this, 0.1f);
             ammo = 3;
             _ammoType = new ATSniper
             {
@@ -178,7 +179,7 @@
                 }
             }
         }
-        public SinWave sinner = new SinWave(0.1f);
+        public SinWave sinner;
 
         public override void Draw()
         {

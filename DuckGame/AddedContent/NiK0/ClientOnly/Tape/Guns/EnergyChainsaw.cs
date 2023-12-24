@@ -19,6 +19,7 @@ namespace DuckGame
         public SpriteMap spin;
         public EnergyChainsaw(float xpos, float ypos) : base(xpos, ypos)
         {
+            _idleWave = new SinWave(this, 0.6f);
             tapeable = false;
 
             ammo = 10;
@@ -55,7 +56,7 @@ namespace DuckGame
         public Color properColor = new Color(178, 220, 239);
         public Color bladeColor;
         public MaterialEnergyChainsaw mt;
-        private SinWave _idleWave = (SinWave)0.6f;
+        private SinWave _idleWave;
 
         public float animTime;
         public float time;

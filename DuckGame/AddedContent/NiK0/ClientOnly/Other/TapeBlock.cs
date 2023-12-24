@@ -8,10 +8,10 @@
         private Sprite _projector;
         private Sprite _none;
         private Sprite _projectorGlitch;
-        private SinWave _wave = (SinWave)1f;
-        private SinWave _projectionWave = (SinWave)0.04f;
-        private SinWave _projectionWave2 = (SinWave)0.05f;
-        private SinWave _projectionFlashWave = (SinWave)0.8f;
+        private SinWave _wave;
+        private SinWave _projectionWave;
+        private SinWave _projectionWave2;
+        private SinWave _projectionFlashWave;
         private float _projectorAlpha;
         private bool _useWave;
         public static Material _grayscale = new Material("Shaders/greyscale");
@@ -23,6 +23,10 @@
         private bool _alternate;
         public TapeBlock(float xpos, float ypos) : base(xpos, ypos)
         {
+            _wave = new SinWave(this, 1f);
+            _projectionWave = new SinWave(this, 0.04f);
+            _projectionWave2 = new SinWave(this, 0.05f);
+            _projectionFlashWave = new SinWave(this, 0.8f);
             graphic = new Sprite("TapeBlock");
             center = new Vec2(16, 8);
             collisionSize = new Vec2(32, 16);

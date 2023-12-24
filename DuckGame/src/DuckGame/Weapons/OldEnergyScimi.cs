@@ -105,7 +105,7 @@ namespace DuckGame
                 thickness = 0.01f
             };
             Level.Add(_platform);
-            _hum = new ConstantSound("scimiHum")
+            _hum = new ConstantSound(this, "scimiHum")
             {
                 volume = 0f,
                 lerpSpeed = 1f

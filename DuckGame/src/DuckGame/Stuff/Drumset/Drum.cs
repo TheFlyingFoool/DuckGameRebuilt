@@ -5,11 +5,12 @@
         protected string _sound = "";
         protected string _alternateSound = "";
         protected float _shake;
-        private SinWave _shakeWave = (SinWave)1.1f;
+        private SinWave _shakeWave;
 
         public Drum(float xpos, float ypos)
           : base(xpos, ypos)
         {
+            _shakeWave = new SinWave(this, 1.1f);
             layer = Layer.Blocks;
         }
 

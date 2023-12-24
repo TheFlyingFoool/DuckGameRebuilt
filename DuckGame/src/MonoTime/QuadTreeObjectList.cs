@@ -652,8 +652,11 @@ namespace DuckGame
                 hashcodeindex += 1;
                 addThing.hashcodeindex = hashcodeindex;
                 AddUpdateList(addThing);
-                RegisterObject(addThing);
-                _bigList.Add(addThing);
+                if (!_bigList.Contains(addThing))
+                {
+                    RegisterObject(addThing);
+                    _bigList.Add(addThing);
+                }
                 addThing.level = Level.current;
                 if (addThing is IDontMove && _useTree)
                 {

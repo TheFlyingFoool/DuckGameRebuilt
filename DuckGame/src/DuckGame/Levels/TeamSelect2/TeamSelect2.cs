@@ -1042,6 +1042,10 @@ namespace DuckGame
                         }
                         else
                         {
+                            if (onlineSetting.id == "maxplayers")
+                            {
+                                onlineSetting.max = DG.MaxPlayers;
+                            }
                             UIComponent uiComponent = _hostGameMenu.AddMatchSetting(onlineSetting, false);
                             if (uiComponent != null && uiComponent is UIMenuItemString && uiComponent is UIMenuItemString uiMenuItemString)
                                 uiMenuItemString.InitializeEntryMenu(_playOnlineGroup, _hostGameMenu);

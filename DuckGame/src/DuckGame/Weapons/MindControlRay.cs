@@ -8,7 +8,7 @@
         private Duck _prevControlDuck;
         private SpriteMap _sprite;
         private SpriteMap _hat;
-        private ActionTimer _beamTimer = (ActionTimer)0.2f;
+        private ActionTimer _beamTimer;
         public Duck _controlledDuck;
         private float _beamTime;
         private float _canConvert;
@@ -20,6 +20,7 @@
         public MindControlRay(float xval, float yval)
           : base(xval, yval)
         {
+            _beamTimer = new ActionTimer(this, 0.2f);
             ammo = 99;
             _ammoType = new ATLaser
             {

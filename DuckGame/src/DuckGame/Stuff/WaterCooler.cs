@@ -9,7 +9,7 @@ namespace DuckGame
         private SpriteMap _sprite;
         private SpriteMap _jugLine;
         private Sprite _bottom;
-        private SinWave _colorFlux = (SinWave)0.1f;
+        private SinWave _colorFlux;
         protected float _fluidLevel = 1f;
         protected int _alternate;
         private List<FluidStream> _holes = new List<FluidStream>();
@@ -20,6 +20,7 @@ namespace DuckGame
         public WaterCooler(float xpos, float ypos)
           : base(xpos, ypos)
         {
+            _colorFlux = new SinWave(this, 0.1f);
             _sprite = new SpriteMap("waterCoolerJug", 16, 16);
             graphic = _sprite;
             center = new Vec2(8f, 8f);

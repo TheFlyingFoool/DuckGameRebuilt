@@ -475,7 +475,7 @@ namespace DuckGame
                     Level.Remove(smallFire);
             }
             _onFire = false;
-            _burnWaitTimer = new ActionTimer(0.05f, reset: false);
+            _burnWaitTimer = new ActionTimer(this, 0.05f, reset: false);
         }
 
         protected float CalculateImpactPower(MaterialThing with, ImpactedFrom from) => from == ImpactedFrom.Left || from == ImpactedFrom.Right ? impactPowerH + with.impactPowerH : impactPowerV + with.impactPowerV;
