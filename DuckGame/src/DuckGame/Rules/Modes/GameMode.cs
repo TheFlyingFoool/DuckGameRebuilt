@@ -174,7 +174,25 @@ namespace DuckGame
                 Music.LoadAlternateSong(str);
                 Music.CancelLooping();
                 if (Network.isActive)
-                    Send.Message(new NMSwitchMusic(str));
+                {
+                    if (str.Contains("f_"))
+                    {
+                        DGRSettings.ExtraMusic = false;
+                        string str2 = Music.RandomTrack("InGame", Music.currentSong);
+                        DGRSettings.ExtraMusic = true;
+
+                        for (int i = 0; i < Network.connections.Count; i++)
+                        {
+                            NetworkConnection c = Network.connections[i];
+                            if (c.profile != null && c.profile.isUsingRebuilt) Send.Message(new NMSwitchMusic(str), c);
+                            else
+                            {
+                                Send.Message(new NMSwitchMusic(str2), c);
+                            }
+                        }
+                    }
+                    else Send.Message(new NMSwitchMusic(str));
+                }
             }
             Initialize();
             if (Network.isActive)
