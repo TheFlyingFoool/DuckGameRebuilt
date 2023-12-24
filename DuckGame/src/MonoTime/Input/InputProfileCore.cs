@@ -9,10 +9,10 @@ namespace DuckGame
 
         public InputProfile Add(string name)
         {
-            InputProfile inputProfile1 = new InputProfile(name);
             InputProfile inputProfile2;
             if (_profiles.TryGetValue(name, out inputProfile2))
                 return inputProfile2;
+            InputProfile inputProfile1 = new InputProfile(name);
             _profiles[name] = inputProfile1;
             return inputProfile1;
         }
