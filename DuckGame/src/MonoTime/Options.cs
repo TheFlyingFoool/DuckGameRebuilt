@@ -474,6 +474,10 @@ namespace DuckGame
             {
                 dgrDescription = "Game will run at 61 updates per second instead of 60 to mimmick vanilla on >60hz monitors"
             });
+            menu.Add(new UIMenuItemToggle("DGR Music", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ExtraMusic)))
+            {
+                dgrDescription = "Adds 7 new songs to the pool. Songs made by Firch"
+            });
             menu.Add(new UIMenuItemToggle("Fix Laggy Bullets", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.FixBulletPositions)))
             {
                 dgrDescription = "|DGRED|[Experimental]|PINK| Visually teleports some bullets forward in time to account for ping"

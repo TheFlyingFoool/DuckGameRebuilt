@@ -183,6 +183,7 @@ namespace DuckGame
                 if (d.dead)
                 {
                     UnstoppableFondle(d, DuckNetwork.localConnection);
+                    UnstoppableFondle(this, DuckNetwork.localConnection);
                     if (d.ragdoll != null)
                         d.ragdoll.Unragdoll();
 

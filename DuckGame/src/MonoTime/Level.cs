@@ -2011,7 +2011,7 @@ namespace DuckGame
             for (int i = 0; i < t.Count; i++)
             {
                 Thing thing = t[i];
-                if (!thing.removeFromLevel && Collision.PointFast(point, thing))
+                if (!thing.removeFromLevel && Collision.Point(point, thing))
                     return (T)(object)thing;
             }
             return default(T);
