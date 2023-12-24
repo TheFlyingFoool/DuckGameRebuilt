@@ -8,7 +8,9 @@ namespace DuckGame.ConsoleEngine
         private static List<DelayedCommand> s_delayedCommands = new();
         
         [Marker.DevConsoleCommand(Description = "Executes a command after a given delay in frames", To = ImplementTo.DuckShell)]
-        public static void Wait(uint frames, [CommandAutoCompl] string commandString)
+        public static void Wait(
+            [AutoCompl("1", "2", "30", "60", "300", "600")] uint frames,
+            [CommandAutoCompl] string commandString)
         {
             s_delayedCommands.Add(new DelayedCommand(frames, commandString));
         }
@@ -28,7 +30,6 @@ namespace DuckGame.ConsoleEngine
                 else
                 {
                     delayedCommand.FramesLeft--;
-                    break;
                 }
             }
         }

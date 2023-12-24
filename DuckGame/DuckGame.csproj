@@ -320,6 +320,7 @@
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingRopeHandle.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnifeConnectionParticle.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\ExecLegacy.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Queue.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\RNG.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Wait.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\AutoCompl.cs" />
