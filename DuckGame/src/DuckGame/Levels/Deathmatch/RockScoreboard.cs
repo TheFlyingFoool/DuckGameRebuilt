@@ -192,7 +192,14 @@ namespace DuckGame
             }
             return _inputs[index].duckProfile.inputProfile;
         }
-
+        public InputProfile GetNetInput(byte index)
+        {
+            if (index >= _inputs.Count || _inputs[index].duckProfile == null || _inputs[index].duckProfile.inputProfile == null)
+            {
+                return new InputProfile("");
+            }
+            return _inputs[index].duckProfile.inputProfile;
+        }
         public override void Initialize()
         {
             if (Network.isActive && Network.isServer && _mode == ScoreBoardMode.ShowScores)
@@ -443,7 +450,7 @@ namespace DuckGame
                             _slots[_slots.Count - 1].ai = new DuckAI(p3.inputProfile);
                             if (Network.isActive && p3.connection != DuckNetwork.localConnection)
                             {
-                                _slots[_slots.Count - 1].ai._manualQuack = GetNetInput((sbyte)p3.networkIndex);
+                                _slots[_slots.Count - 1].ai._manualQuack = GetNetInput(p3.networkIndex);
                             }
                             _slots[_slots.Count - 1].duck.derpMindControl = false;
                             _slots[_slots.Count - 1].duck.mindControl = _slots[_slots.Count - 1].ai;
@@ -476,7 +483,7 @@ namespace DuckGame
                             DuckAI ai = new DuckAI(p3.inputProfile);
                             if (Network.isActive && p3.connection != DuckNetwork.localConnection)
                             {
-                                ai._manualQuack = GetNetInput((sbyte)p3.networkIndex);
+                                ai._manualQuack = GetNetInput(p3.networkIndex);
                             }
                             d.mindControl = ai;
                             d.isRockThrowDuck = true;
