@@ -93,21 +93,21 @@ namespace AddedContent.Firebreak
                 }
             }
         }
-
-        [Flags]
-        public enum DrawingLayer
-        {
-            PreDrawLayer = 1,
-            Parallax = 2,
-            Virtual = 4,
-            Background = 8,
-            Game = 16,
-            Blocks = 32,
-            Glow = 64,
-            Lighting = 128,
-            Foreground = 256,
-            HUD = 512,
-            Console = 1024,
-        }
+    }
+    
+    [Flags]
+    public enum DrawingLayer
+    {
+        PreDrawLayer = 1,
+        Parallax = 2,
+        Virtual = 4,
+        Background = 8,
+        Game = 16,
+        Blocks = 32,
+        Glow = 64,
+        Lighting = 128,
+        Foreground = 256,
+        HUD = 512,
+        Console = 1024,
     }
 }
