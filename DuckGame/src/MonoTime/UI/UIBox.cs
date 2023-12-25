@@ -314,7 +314,7 @@ namespace DuckGame
                 }
                 if (_isMenu)
                 {
-                    if (DGRSettings.dubberspeed && _currentMenuItemSelection != null)
+                    if (DGRSettings.dubberspeed && _currentMenuItemSelection != null && !_animating)
                     {
                         Main.SpecialCode = "DubberSpeed Logic I";
                         int c = _currentMenuItemSelection.Count;
@@ -334,8 +334,9 @@ namespace DuckGame
                                 Main.SpecialCode = "DubberSpeed Logic V";
                                 if (i + dubberOffset < c)
                                 {
-                                _selection = i + dubberOffset;
+                                    _selection = i + dubberOffset;
                                     ((UIMenuItem)_currentMenuItemSelection[i + dubberOffset]).Activate(Triggers.Select);
+                                    break;
                                 }
                             }
                         }
