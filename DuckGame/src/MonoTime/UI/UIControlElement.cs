@@ -16,6 +16,7 @@ namespace DuckGame
         private bool _selectStyle;
         private int _selectionIndex;
         private UIText _uiText;
+        public bool dirty = false;
 
         public override Vec2 collisionSize
         {
@@ -154,7 +155,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    bool flag = false;
+                    bool finished = false;
                     if (Input.Pressed(Triggers.MenuLeft))
                     {
                         --_selectionIndex;
@@ -185,12 +186,12 @@ namespace DuckGame
                         _selectionIndex = Input.buttonStyles.Count - 1;
                     if (Input.Pressed(Triggers.Cancel))
                     {
-                        flag = true;
+                        finished = true;
                         SFX.Play("consoleError");
                     }
                     if (Input.Pressed(Triggers.Select))
                     {
-                        flag = true;
+                        finished = true;
                         int key;
                         if (inputMapping.map.TryGetValue(_trigger, out key))
                         {
@@ -198,7 +199,7 @@ namespace DuckGame
                             SFX.Play("consoleSelect");
                         }
                     }
-                    if (flag)
+                    if (finished)
                     {
                         _editing = false;
                         _selectStyle = false;
@@ -318,6 +319,7 @@ namespace DuckGame
                 else
                 {
                     UIMenu.globalUILock = true;
+                    dirty = true;
                     _editing = true;
                     _skipStep = true;
                     SFX.Play("consoleSelect");
@@ -331,6 +333,7 @@ namespace DuckGame
                     return;
                 _selectStyle = true;
                 UIMenu.globalUILock = true;
+                dirty = true;
                 _editing = true;
                 _skipStep = true;
                 int mapping;
