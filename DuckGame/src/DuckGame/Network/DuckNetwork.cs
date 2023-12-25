@@ -132,7 +132,7 @@ namespace DuckGame
             if (DGRSettings.SkipXP) return false;
             if (!Level.core.gameFinished || _xpEarned.Count <= 0)
                 return false;
-            _xpMenu = new UILevelBox("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
+            _xpMenu = new UILevelBox("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 175f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
             MonoMain.pauseMenu = _xpMenu;
             Level.core.gameFinished = false;
             return true;

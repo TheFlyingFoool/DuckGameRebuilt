@@ -25,7 +25,7 @@ namespace XnaToFna
         {
             for (int i = 0; i < IsGamepadConnected.Length; ++i)
             {
-                bool isConnected = FNAPlatform.GetGamePadState(i, GamePadDeadZone.IndependentAxes).IsConnected;
+                bool isConnected = GamePad.GetState(i, GamePadDeadZone.IndependentAxes).IsConnected;
                 if (isConnected && !IsGamepadConnected[i])
                     GamepadConnected(i);
                 else if (!isConnected && IsGamepadConnected[i])

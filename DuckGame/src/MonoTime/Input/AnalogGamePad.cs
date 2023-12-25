@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 
@@ -66,12 +67,12 @@ namespace DuckGame
         }
         public override void SetLightBar(Color color)
         {
-            FNAPlatform.SetGamePadLightBar(index, (Microsoft.Xna.Framework.Color)color);
+            GamePad.SetLightBarEXT(index, (Microsoft.Xna.Framework.Color)color);
         }
 
         private void RumbleNow(float pLeft, float pRight)
         {
-            FNAPlatform.SetGamePadVibration(index, pLeft, pRight);
+            GamePad.SetVibration(index, pLeft, pRight);
             _prevRumble = new Vec2(pLeft, pRight);
             _rumble = _prevRumble;
             _highestRumble = Vec2.Zero;

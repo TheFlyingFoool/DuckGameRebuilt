@@ -613,9 +613,9 @@ namespace DuckGame
 
         public static void SetControllerLightBar(int index, Color color)
         {
-            GamePadState state = FNAPlatform.GetGamePadState(index, GamePadDeadZone.IndependentAxes);
+            GamePadState state = GamePad.GetState(index, GamePadDeadZone.IndependentAxes);
             if (state.IsConnected)
-                FNAPlatform.SetGamePadLightBar(index, (Microsoft.Xna.Framework.Color)color);
+                GamePad.SetLightBarEXT(index, (Microsoft.Xna.Framework.Color)color);
         }
 
         [Marker.DevConsoleCommand(Name = "dr",

@@ -539,7 +539,7 @@ namespace DuckGame
 
         protected override PadState GetState(int index)
         {
-            GamePadState state1 = FNAPlatform.GetGamePadState(index, GamePadDeadZone.Circular);
+            GamePadState state1 = GamePad.GetState(index, GamePadDeadZone.Circular);
             if (_connectedState != state1.IsConnected && state1.IsConnected)
             {
                 string productname = SDL.SDL_GameControllerNameForIndex(index);
@@ -550,7 +550,7 @@ namespace DuckGame
                 }
                 else if (SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_UNKNOWN)
                 {
-                    _productName = FNAPlatform.GetGameControllerName(index);
+                    _productName = GamePad.GetControllerName(index);
                 }
             }
             PadState state2 = new PadState();

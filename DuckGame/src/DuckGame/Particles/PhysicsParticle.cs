@@ -98,35 +98,28 @@ namespace DuckGame
             netRemove = false;
             base.ResetProperties();
         }
-
         public override void Update()
         {
             if (!isLocal)
             {
                 Vec2 position = this.position;
                 Vec2 netLerpPosition = this.netLerpPosition;
-                if ((position - netLerpPosition).lengthSq > 2048 || (position - netLerpPosition).lengthSq < 1)
-                    this.position = netLerpPosition;
-                else
-                    this.position = Lerp.Vec2Smooth(position, netLerpPosition, 0.5f);
+                if ((position - netLerpPosition).lengthSq > 2048 || (position - netLerpPosition).lengthSq < 1) this.position = netLerpPosition;
+                else this.position = Lerp.Vec2Smooth(position, netLerpPosition, 0.5f);
             }
-            else if (Network.isActive && (y < Level.current.highestPoint - 200 || y > Level.current.lowestPoint + 200))
-            {
-                Level.Remove(this);
-            }
+            else if (Network.isActive && (y < Level.current.highestPoint - 200 || y > Level.current.lowestPoint + 200)) Level.Remove(this);
             else
             {
                 _hit = false;
                 _touchedFloor = false;
-                ++_framesAlive;
+                _framesAlive++;
                 if (!onlyDieWhenGrounded || _grounded || _framesAlive > 400)
                 {
                     _life -= 0.005f;
                     if (_life < 0)
                     {
                         alpha -= 0.1f;
-                        if (alpha < 0)
-                            Level.Remove(this);
+                        if (alpha < 0) Level.Remove(this);
                     }
                 }
                 if (_foreverGrounded)
@@ -152,13 +145,14 @@ namespace DuckGame
                     if (float.IsNaN(hSpeed))
                         hSpeed = 0f;
                     _spinAngle -= 10 * Math.Sign(hSpeed);
-                    Thing thing = Level.CheckPoint<Block>(x + hSpeed, y + vSpeed);
-                    if (thing != null && _framesAlive < 2)
-                        _waitForNoCollide = true;
-                    if (thing != null && _waitForNoCollide)
-                        thing = null;
-                    else if (thing == null && _waitForNoCollide)
-                        _waitForNoCollide = false;
+
+                    Thing thing = Level.CheckPointFast<Block>(x + hSpeed, y + vSpeed);
+
+                    if (thing != null && _framesAlive < 2) _waitForNoCollide = true;
+                    if (thing != null && _waitForNoCollide) thing = null;
+                    else if (thing == null && _waitForNoCollide) _waitForNoCollide = false;
+
+
                     if (thing != null)
                     {
                         _touchedFloor = true;
@@ -206,8 +200,7 @@ namespace DuckGame
                                 _stickDir = -1f;
                             }
                         }
-                        if (!_hit)
-                            _grounded = true;
+                        if (!_hit) _grounded = true;
                     }
                     else
                     {
@@ -215,10 +208,8 @@ namespace DuckGame
                         y += vSpeed;
                     }
                 }
-                if (_spinAngle > 360)
-                    _spinAngle -= 360f;
-                if (_spinAngle >= 0)
-                    return;
+                if (_spinAngle > 360) _spinAngle -= 360f;
+                if (_spinAngle >= 0) return;
                 _spinAngle += 360f;
             }
         }

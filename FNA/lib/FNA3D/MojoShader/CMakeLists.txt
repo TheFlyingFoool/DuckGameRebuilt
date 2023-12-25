@@ -1,5 +1,7 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.12.0)
 PROJECT(MojoShader)
+
+# !!! FIXME: can we lowercase this file, if nothing else?
 
 INCLUDE(CheckIncludeFile)
 CHECK_INCLUDE_FILE(d3d11.h HAS_D3D11_H)
@@ -28,7 +30,7 @@ INCLUDE_DIRECTORIES(.)
 # This was a Mercurial thing. In Git, it's always -1.
 SET(MOJOSHADER_VERSION -1)
 
-# If Mercurial is installed and we are in a mercurial repository, include the rev# and changeset as version information.
+# If Git is installed and we are in a git repository, include the changeset as version information.
 FIND_PROGRAM(GIT git DOC "Path to git command line app: https://git-scm.com/")
 IF(NOT GIT)
     MESSAGE(STATUS "Git not found. You can go on, but version info will be wrong.")
@@ -123,6 +125,9 @@ ENDIF(NOT PROFILE_GLSL120)
 IF(NOT PROFILE_GLSLES)
     ADD_DEFINITIONS(-DSUPPORT_PROFILE_GLSLES=0)
 ENDIF(NOT PROFILE_GLSLES)
+IF(NOT PROFILE_GLSLES3)
+    ADD_DEFINITIONS(-DSUPPORT_PROFILE_GLSLES3=0)
+ENDIF(NOT PROFILE_GLSLES3)
 IF(NOT PROFILE_GLSL)
     ADD_DEFINITIONS(-DSUPPORT_PROFILE_GLSL=0)
 ENDIF(NOT PROFILE_GLSL)
@@ -222,31 +227,30 @@ ELSE(NOT RE2C)
     )
 ENDIF(NOT RE2C)
 
-find_path(SDL2_INCLUDE_DIR SDL.h PATH_SUFFIXES include/SDL2)
-find_library(SDL2 NAMES SDL2 PATH_SUFFIXES lib)
-IF(SDL2)
-    INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIR})
+find_package(SDL2)
+IF(SDL2_FOUND)
+    INCLUDE_DIRECTORIES(${SDL2_INCLUDE_DIRS})
     ADD_EXECUTABLE(glcaps utils/glcaps.c)
-    TARGET_LINK_LIBRARIES(glcaps ${SDL2} ${LIBM} ${LOBJC} ${CARBON_FRAMEWORK})
+    TARGET_LINK_LIBRARIES(glcaps ${SDL2_LIBRARIES} ${LIBM} ${LOBJC} ${CARBON_FRAMEWORK})
     ADD_EXECUTABLE(bestprofile utils/bestprofile.c)
-    TARGET_LINK_LIBRARIES(bestprofile mojoshader ${SDL2} ${LIBM} ${LOBJC} ${CARBON_FRAMEWORK})
+    TARGET_LINK_LIBRARIES(bestprofile mojoshader ${SDL2_LIBRARIES} ${LIBM} ${LOBJC} ${CARBON_FRAMEWORK})
     ADD_EXECUTABLE(availableprofiles utils/availableprofiles.c)
-    TARGET_LINK_LIBRARIES(availableprofiles mojoshader ${SDL2} ${LIBM} ${LOBJC} ${CARBON_FRAMEWORK})
+    TARGET_LINK_LIBRARIES(availableprofiles mojoshader ${SDL2_LIBRARIES} ${LIBM} ${LOBJC} ${CARBON_FRAMEWORK})
     ADD_EXECUTABLE(testglcompile utils/testglcompile.c)
-    TARGET_LINK_LIBRARIES(testglcompile mojoshader ${SDL2} ${LIBM} ${LOBJC} ${CARBON_FRAMEWORK})
-ENDIF(SDL2)
+    TARGET_LINK_LIBRARIES(testglcompile mojoshader ${SDL2_LIBRARIES} ${LIBM} ${LOBJC} ${CARBON_FRAMEWORK})
+ENDIF(SDL2_FOUND)
 
 IF(COMPILER_SUPPORT)
     ADD_EXECUTABLE(finderrors utils/finderrors.c)
-    IF(SDL2)
-        TARGET_LINK_LIBRARIES(finderrors mojoshader ${SDL2} ${LIBM} ${LOBJC} ${CARBON_FRAMEWORK})
+    IF(SDL2_FOUND)
+        TARGET_LINK_LIBRARIES(finderrors mojoshader ${SDL2_LIBRARIES} ${LIBM} ${LOBJC} ${CARBON_FRAMEWORK})
         SET_SOURCE_FILES_PROPERTIES(
             utils/finderrors.c
             PROPERTIES COMPILE_FLAGS "-DFINDERRORS_COMPILE_SHADERS=1"
         )
-    ELSE(SDL2)
+    ELSE(SDL2_FOUND)
         TARGET_LINK_LIBRARIES(finderrors mojoshader ${LIBM} ${LOBJC} ${CARBON_FRAMEWORK})
-    ENDIF(SDL2)
+    ENDIF(SDL2_FOUND)
 ENDIF(COMPILER_SUPPORT)
 
 FIND_PATH(SPIRV_TOOLS_INCLUDE_DIR "spirv-tools/libspirv.h" PATH_SUFFIXES "include")

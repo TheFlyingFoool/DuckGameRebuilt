@@ -32,11 +32,9 @@
 #include "FNA3D_Driver_D3D11_shaders.h"
 
 #include <SDL.h>
-#ifdef FNA3D_DXVK_NATIVE
-#include <SDL_vulkan.h>
-#else
+#ifndef FNA3D_DXVK_NATIVE
 #include <SDL_syswm.h>
-#endif /* FNA3D_DXVK_NATIVE */
+#endif /* !FNA3D_DXVK_NATIVE */
 
 /* D3D11 Libraries */
 
@@ -57,6 +55,10 @@
 #else
 #include <dxgi.h>
 #endif
+
+#ifndef DXGI_PRESENT_ALLOW_TEARING
+#define DXGI_PRESENT_ALLOW_TEARING 0x00000200UL
+#endif /* DXGI_PRESENT_ALLOW_TEARING */
 
 #define ERROR_CHECK(msg) \
 	if (FAILED(res)) \
@@ -214,6 +216,7 @@ typedef struct D3D11Renderer /* Cast FNA3D_Renderer* to this! */
 	void* factory; /* IDXGIFactory1 or IDXGIFactory2 */
 	IDXGIAdapter1 *adapter;
 	ID3DUserDefinedAnnotation *annotation;
+	BOOL supportsTearing;
 	SDL_mutex *ctxLock;
 	SDL_iconv_t iconv;
 
@@ -1027,8 +1030,6 @@ static void D3D11_GetTextureData2D(
 	int32_t dataLength
 );
 
-static void D3D11_GetDrawableSize(void *window, int32_t *w, int32_t *h);
-
 static void* D3D11_PLATFORM_LoadD3D11();
 static void D3D11_PLATFORM_UnloadD3D11(void* module);
 static PFN_D3D11_CREATE_DEVICE D3D11_PLATFORM_GetCreateDeviceFunc(void* module);
@@ -1493,6 +1494,7 @@ static void D3D11_SwapBuffers(
 	int32_t drawableWidth, drawableHeight;
 	FNA3D_Rect srcRect, dstRect;
 	D3D11SwapchainData *swapchainData;
+	uint32_t presentFlags;
 
 	/* Only the faux-backbuffer supports presenting
 	 * specific regions given to Present().
@@ -1501,8 +1503,8 @@ static void D3D11_SwapBuffers(
 	if (renderer->backbuffer->type == BACKBUFFER_TYPE_D3D11)
 	{
 		/* Determine the regions to present */
-		D3D11_GetDrawableSize(
-			overrideWindowHandle,
+		SDL_GetWindowSizeInPixels(
+			(SDL_Window*) overrideWindowHandle,
 			&drawableWidth,
 			&drawableHeight
 		);
@@ -1605,7 +1607,19 @@ static void D3D11_SwapBuffers(
 	}
 
 	/* Present! */
-	IDXGISwapChain_Present(swapchainData->swapchain, renderer->syncInterval, 0);
+	if (renderer->syncInterval == 0 && renderer->supportsTearing)
+	{
+		presentFlags = DXGI_PRESENT_ALLOW_TEARING;
+	}
+	else
+	{
+		presentFlags = 0;
+	}
+	IDXGISwapChain_Present(
+		swapchainData->swapchain,
+		renderer->syncInterval,
+		presentFlags
+	);
 
 	/* Bind the faux-backbuffer now, in case DXGI unsets target state */
 	D3D11_SetRenderTargets(
@@ -2640,7 +2654,7 @@ static void D3D11_INTERNAL_CreateBackbuffer(
 	if (!useFauxBackbuffer)
 	{
 		int32_t drawX, drawY;
-		D3D11_GetDrawableSize(
+		SDL_GetWindowSizeInPixels(
 			(SDL_Window*) parameters->deviceWindowHandle,
 			&drawX,
 			&drawY
@@ -3331,6 +3345,12 @@ static void D3D11_AddDisposeTexture(
 			}
 			SDL_free(tex->cube.rtViews);
 		}
+	}
+
+	if (tex->staging)
+	{
+		ID3D11Resource_Release(tex->staging);
+		tex->staging = NULL;
 	}
 
 	/* Release the shader resource view and texture */
@@ -4799,6 +4819,15 @@ static void D3D11_SetStringMarker(FNA3D_Renderer *driverData, const char *text)
 	ID3DUserDefinedAnnotation_SetMarker(renderer->annotation, wstr);
 }
 
+static const GUID GUID_D3DDebugObjectName = { 0x429b8c22, 0x9188, 0x4b0c, 0x87, 0x42, 0xac, 0xb0, 0xbf, 0x85, 0xc2, 0x00 };
+
+static void D3D11_SetTextureName(FNA3D_Renderer* driverData, FNA3D_Texture* texture, const char* text)
+{
+	D3D11Texture* d3dTexture = (D3D11Texture*)texture;
+
+	ID3D11DeviceChild_SetPrivateData(d3dTexture->handle, &GUID_D3DDebugObjectName, SDL_strlen(text), text);
+}
+
 /* External Interop */
 
 static void D3D11_GetSysRenderer(
@@ -4852,6 +4881,10 @@ static uint8_t D3D11_PrepareWindowAttributes(uint32_t *flags)
 	};
 	HRESULT res;
 
+	const uint32_t driverType = SDL_GetHintBoolean("FNA3D_D3D11_USE_WARP", SDL_FALSE)
+		? D3D_DRIVER_TYPE_WARP
+		: D3D_DRIVER_TYPE_HARDWARE;
+
 #ifdef FNA3D_DXVK_NATIVE
 	const char *forceDriver = SDL_GetHint("FNA3D_FORCE_DRIVER");
 	if ((forceDriver == NULL) || (SDL_strcmp(forceDriver, "D3D11") != 0))
@@ -4889,7 +4922,7 @@ static uint8_t D3D11_PrepareWindowAttributes(uint32_t *flags)
 
 	res = D3D11CreateDeviceFunc(
 		NULL,
-		D3D_DRIVER_TYPE_HARDWARE,
+		driverType,
 		NULL,
 		D3D11_CREATE_DEVICE_BGRA_SUPPORT,
 		levels,
@@ -4905,7 +4938,7 @@ static uint8_t D3D11_PrepareWindowAttributes(uint32_t *flags)
 		FNA3D_LogWarn("Creating device with feature level 11_1 failed. Lowering feature level.", res);
 		res = D3D11CreateDeviceFunc(
 			NULL,
-			D3D_DRIVER_TYPE_HARDWARE,
+			driverType,
 			NULL,
 			D3D11_CREATE_DEVICE_BGRA_SUPPORT,
 			&levels[1],
@@ -4932,34 +4965,6 @@ static uint8_t D3D11_PrepareWindowAttributes(uint32_t *flags)
 	*flags = SDL_WINDOW_VULKAN;
 #endif /* FNA3D_DXVK_NATIVE */
 	return 1;
-}
-
-static void D3D11_GetDrawableSize(void* window, int32_t *w, int32_t *h)
-{
-	/* TODO: Replace this blobulous mess with SDL_GetWindowSizeInPixels */
-
-#ifdef FNA3D_DXVK_NATIVE
-	SDL_Vulkan_GetDrawableSize((SDL_Window*) window, w, h);
-#elif defined(__WINRT__)
-	/* WinRT doesn't support DPI awareness the same way Win32 does */
-	SDL_GetWindowSize((SDL_Window*) window, w, h);
-#else
-	RECT rect;
-	SDL_SysWMinfo info;
-	SDL_VERSION(&info.version);
-	SDL_GetWindowWMInfo((SDL_Window*) window, &info);
-	SDL_assert(info.subsystem == SDL_SYSWM_WINDOWS);
-	if (GetClientRect(info.info.win.window, &rect))
-	{
-		*w = rect.right;
-		*h = rect.bottom;
-	}
-	else
-	{
-		*w = 0;
-		*h = 0;
-	}
-#endif /* FNA3D_DXVK_NATIVE */
 }
 
 static void D3D11_INTERNAL_InitializeFauxBackbufferResources(
@@ -5139,8 +5144,13 @@ static FNA3D_Device* D3D11_CreateDevice(
 		D3D_FEATURE_LEVEL_10_0
 	};
 	uint32_t flags, supportsDxt3, supportsDxt5, supportsSrgb;
+	void* factory5;
 	int32_t i;
 	HRESULT res;
+
+	const uint32_t driverType = SDL_GetHintBoolean("FNA3D_D3D11_USE_WARP", SDL_FALSE)
+		? D3D_DRIVER_TYPE_WARP
+		: D3D_DRIVER_TYPE_UNKNOWN; /* Must be UNKNOWN if adapter is non-null according to spec */
 
 	/* Allocate and zero out the renderer */
 	renderer = (D3D11Renderer*) SDL_malloc(sizeof(D3D11Renderer));
@@ -5152,6 +5162,28 @@ static FNA3D_Device* D3D11_CreateDevice(
 		&renderer->factory
 	);
 	ERROR_CHECK_RETURN("Could not create DXGIFactory", NULL)
+
+	/* Check for explicit tearing support */
+	if (!SDL_GetHintBoolean("FNA3D_D3D11_FORCE_BITBLT", SDL_FALSE))
+	{
+		if (SUCCEEDED(IDXGIFactory1_QueryInterface(
+			(IDXGIFactory1*) renderer->factory,
+			&D3D_IID_IDXGIFactory5,
+			(void**) &factory5
+		))) {
+			if (FAILED(IDXGIFactory5_CheckFeatureSupport(
+				(IDXGIFactory5*) factory5,
+				DXGI_FEATURE_PRESENT_ALLOW_TEARING,
+				&renderer->supportsTearing,
+				sizeof(renderer->supportsTearing)
+			))) {
+				renderer->supportsTearing = FALSE;
+			}
+			IDXGIFactory5_Release((IDXGIFactory5*) factory5);
+		}
+	}
+
+	/* Select the appropriate device for rendering */
 	D3D11_PLATFORM_GetDefaultAdapter(
 		renderer->factory,
 		&renderer->adapter
@@ -5209,8 +5241,8 @@ try_create_device:
 	for (i = 0; i < 2; i += 1)
 	{
 		res = D3D11CreateDeviceFunc(
-			(IDXGIAdapter*) renderer->adapter,
-			D3D_DRIVER_TYPE_UNKNOWN, /* Must be UNKNOWN if adapter is non-null according to spec */
+			(driverType == D3D_DRIVER_TYPE_WARP) ? NULL : (IDXGIAdapter*) renderer->adapter,
+			driverType, 
 			NULL,
 			flags,
 			&levels[i],
@@ -5565,6 +5597,7 @@ static void D3D11_PLATFORM_GetDefaultAdapter(
 			&D3D_IID_IDXGIAdapter1,
 			(void**) adapter
 		);
+		IDXGIFactory6_Release((IDXGIFactory6*) factory6);
 	}
 	else
 	{
@@ -5576,58 +5609,6 @@ static void D3D11_PLATFORM_GetDefaultAdapter(
 	}
 }
 
-static void ResolveSwapChainModeDescription(
-	IUnknown* device,
-	IDXGIAdapter* adapter,
-	IDXGIFactory1 *factory,
-	HWND window,
-	DXGI_MODE_DESC* modeDescription,
-	DXGI_MODE_DESC* swapChainDescription
-) {
-#ifdef FNA3D_DXVK_NATIVE
-	IDXGIOutput *output;
-	IDXGIAdapter_EnumOutputs(
-		adapter,
-		0,
-		&output
-	);
-	IDXGIOutput_FindClosestMatchingMode(
-		output,
-		modeDescription,
-		swapChainDescription,
-		device
-	);
-#else
-	HMONITOR monitor;
-	int iAdapter = 0, iOutput;
-	IDXGIAdapter1* pAdapter;
-	IDXGIOutput *output;
-	DXGI_OUTPUT_DESC description;
-
-	/* Find the output (on any adapter) attached to the monitor that holds our window */
-	monitor = MonitorFromWindow(window, MONITOR_DEFAULTTOPRIMARY);
-	while (SUCCEEDED(IDXGIFactory1_EnumAdapters1(factory, iAdapter++, &pAdapter)))
-	{
-		iOutput = 0;
-		while (SUCCEEDED(IDXGIAdapter_EnumOutputs(pAdapter, iOutput++, &output)))
-		{
-			IDXGIOutput_GetDesc(output, &description);
-			if (description.Monitor == monitor)
-			{
-				if (SUCCEEDED(IDXGIOutput_FindClosestMatchingMode(output, modeDescription, swapChainDescription, device)))
-				{
-					IDXGIOutput_Release(output);
-					IDXGIAdapter1_Release(pAdapter);
-					return;
-				}
-			}
-			IDXGIOutput_Release(output);
-		}
-		IDXGIAdapter1_Release(pAdapter);
-	}
-#endif /* FNA3D_DXVK_NATIVE */
-}
-
 static void D3D11_PLATFORM_CreateSwapChain(
 	D3D11Renderer *renderer,
 	FNA3D_SurfaceFormat backBufferFormat,
@@ -5635,10 +5616,10 @@ static void D3D11_PLATFORM_CreateSwapChain(
 ) {
 	IDXGIFactory1* pParent;
 	DXGI_SWAP_CHAIN_DESC swapchainDesc;
-	DXGI_MODE_DESC swapchainBufferDesc;
 	IDXGISwapChain *swapchain;
 	D3D11SwapchainData *swapchainData;
 	HWND dxgiHandle;
+	void* factory4;
 	HRESULT res;
 
 #ifdef FNA3D_DXVK_NATIVE
@@ -5651,33 +5632,51 @@ static void D3D11_PLATFORM_CreateSwapChain(
 #endif /* FNA3D_DXVK_NATIVE */
 
 	/* Initialize swapchain buffer descriptor */
-	swapchainBufferDesc.Width = 0;
-	swapchainBufferDesc.Height = 0;
-	swapchainBufferDesc.RefreshRate.Numerator = 0;
-	swapchainBufferDesc.RefreshRate.Denominator = 0;
-	swapchainBufferDesc.Format = XNAToD3D_TextureFormat[backBufferFormat];
-	swapchainBufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-	swapchainBufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-
-	ResolveSwapChainModeDescription(
-		(IUnknown*) renderer->device,
-		(IDXGIAdapter*) renderer->adapter,
-		(IDXGIFactory1*) renderer->factory,
-		dxgiHandle,
-		&swapchainBufferDesc,
-		&swapchainDesc.BufferDesc
-	);
+	swapchainDesc.BufferDesc.Width = 0;
+	swapchainDesc.BufferDesc.Height = 0;
+	swapchainDesc.BufferDesc.RefreshRate.Numerator = 0;
+	swapchainDesc.BufferDesc.RefreshRate.Denominator = 0;
+	swapchainDesc.BufferDesc.Format = XNAToD3D_TextureFormat[backBufferFormat];
+	swapchainDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+	swapchainDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
 
 	/* Initialize the swapchain descriptor */
-	swapchainDesc.BufferDesc = swapchainBufferDesc;
 	swapchainDesc.SampleDesc.Count = 1;
 	swapchainDesc.SampleDesc.Quality = 0;
 	swapchainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swapchainDesc.BufferCount = 3;
 	swapchainDesc.OutputWindow = dxgiHandle;
 	swapchainDesc.Windowed = 1;
-	swapchainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
-	swapchainDesc.Flags = 0;
+	if (renderer->supportsTearing)
+	{
+		/* This enum may not be complete, so use the magic number */
+		swapchainDesc.Flags = 2048; /* DXGI_SWAP_CHAIN_FLAG_ALLOW_TEARING; */
+
+		/* To support tearing we needed DXGI 1.5, so this is always available */
+		swapchainDesc.SwapEffect = (DXGI_SWAP_EFFECT) 4; /* DXGI_SWAP_EFFECT_FLIP_DISCARD */
+	}
+	else
+	{
+		swapchainDesc.Flags = 0;
+
+		/* For Windows 10+, use a better form of discard swap behavior */
+		if (!SDL_GetHintBoolean(
+			"FNA3D_D3D11_FORCE_BITBLT",
+			SDL_FALSE
+		) && SUCCEEDED(IDXGIFactory1_QueryInterface(
+			(IDXGIFactory1*) renderer->factory,
+			&D3D_IID_IDXGIFactory4,
+			(void**) &factory4
+		))) {
+			/* This enum may not be complete, so use the magic number */
+			swapchainDesc.SwapEffect = (DXGI_SWAP_EFFECT) 4; /* DXGI_SWAP_EFFECT_FLIP_DISCARD */
+			IDXGIFactory4_Release((IDXGIFactory4*) factory4);
+		}
+		else
+		{
+			swapchainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+		}
+	}
 
 	/* Create the swapchain! */
 	res = IDXGIFactory1_CreateSwapChain(
@@ -5751,7 +5750,7 @@ static HRESULT D3D11_PLATFORM_ResizeSwapChain(
 		0,			/* get width from window */
 		0,			/* get height from window */
 		DXGI_FORMAT_UNKNOWN,	/* keep the old format */
-		0
+		renderer->supportsTearing ? 2048 : 0 /* See CreateSwapChain */
 	);
 }
 
@@ -5760,7 +5759,6 @@ static HRESULT D3D11_PLATFORM_ResizeSwapChain(
 FNA3D_Driver D3D11Driver = {
 	"D3D11",
 	D3D11_PrepareWindowAttributes,
-	D3D11_GetDrawableSize,
 	D3D11_CreateDevice
 };
 

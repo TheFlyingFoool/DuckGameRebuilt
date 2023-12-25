@@ -147,21 +147,23 @@ namespace DuckGame
                 else
                 {
                     str1 = stringList1[Rando.Int(stringList1.Count - 1)];
-                    if (str1 == ignore && stringList1.Count > 1)
+
+                    //the "f_" is the marker for Firch's songs -NiK0
+                    if ((str1 == ignore || (str1.Contains("f_") && !DGRSettings.ExtraMusic)) && stringList1.Count > 1)
                     {
+                        //DevConsole.DebugLog("|RED|" + str1);
                         stringList1.Remove(str1);
                         str1 = "";
                     }
                     else if (stringQueue.Contains(str1))
                     {
+                        //DevConsole.DebugLog(str1);
                         if (Rando.Float(1f) > 0.25)
                         {
                             stringList1.Remove(str1);
-                            if (stringList1.Count > 0)
-                                str1 = "";
+                            if (stringList1.Count > 0) str1 = "";
                         }
-                        else
-                            str1 = "";
+                        else str1 = "";
                     }
                 }
             }
