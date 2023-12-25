@@ -58,9 +58,8 @@ typedef struct VulkanExtensions
 
 	/* Globally supported */
 	uint8_t KHR_swapchain;
-	/* Core since 1.1 */
+	/* Core since 1.1, needed for negative VkViewport::height */
 	uint8_t KHR_maintenance1;
-	uint8_t KHR_get_memory_requirements2;
 
 	/* These extensions are optional! */
 
@@ -92,7 +91,6 @@ static inline uint8_t CheckDeviceExtensions(
 			}
 		CHECK(KHR_swapchain)
 		else CHECK(KHR_maintenance1)
-		else CHECK(KHR_get_memory_requirements2)
 		else CHECK(KHR_driver_properties)
 		else CHECK(EXT_vertex_attribute_divisor)
 		else CHECK(KHR_portability_subset)
@@ -101,8 +99,7 @@ static inline uint8_t CheckDeviceExtensions(
 	}
 
 	return (	supports->KHR_swapchain &&
-			supports->KHR_maintenance1 &&
-			supports->KHR_get_memory_requirements2	);
+			supports->KHR_maintenance1	);
 }
 
 static inline uint32_t GetDeviceExtensionCount(VulkanExtensions *supports)
@@ -110,7 +107,6 @@ static inline uint32_t GetDeviceExtensionCount(VulkanExtensions *supports)
 	return (
 		supports->KHR_swapchain +
 		supports->KHR_maintenance1 +
-		supports->KHR_get_memory_requirements2 +
 		supports->KHR_driver_properties +
 		supports->EXT_vertex_attribute_divisor +
 		supports->KHR_portability_subset +
@@ -130,7 +126,6 @@ static inline void CreateDeviceExtensionArray(
 		}
 	CHECK(KHR_swapchain)
 	CHECK(KHR_maintenance1)
-	CHECK(KHR_get_memory_requirements2)
 	CHECK(KHR_driver_properties)
 	CHECK(EXT_vertex_attribute_divisor)
 	CHECK(KHR_portability_subset)
@@ -1275,6 +1270,7 @@ typedef struct VulkanRenderer
 	uint8_t supportsS3tc;
 	uint8_t supportsBc7;
 	uint8_t supportsDebugUtils;
+	uint8_t supportsDeviceProperties2;
 	uint8_t supportsSRGBRenderTarget;
 	uint8_t debugMode;
 	VulkanExtensions supports;
@@ -1701,8 +1697,10 @@ static inline uint8_t SupportsInstanceExtension(
 }
 
 static uint8_t VULKAN_INTERNAL_CheckInstanceExtensions(
+	uint8_t debugMode,
 	const char **requiredExtensions,
 	uint32_t requiredExtensionsLength,
+	uint8_t *supportsDeviceProperties2,
 	uint8_t *supportsDebugUtils
 ) {
 	uint32_t extensionCount, i;
@@ -1735,8 +1733,13 @@ static uint8_t VULKAN_INTERNAL_CheckInstanceExtensions(
 		}
 	}
 
-	/* This is optional, but nice to have! */
-	*supportsDebugUtils = SupportsInstanceExtension(
+	/* These are optional, but nice to have! */
+	*supportsDeviceProperties2 = SupportsInstanceExtension(
+		VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME,
+		availableExtensions,
+		extensionCount
+	);
+	*supportsDebugUtils = debugMode && SupportsInstanceExtension(
 		VK_EXT_DEBUG_UTILS_EXTENSION_NAME,
 		availableExtensions,
 		extensionCount
@@ -1839,15 +1842,15 @@ static uint8_t VULKAN_INTERNAL_QuerySwapChainSupport(
 		&supportsPresent
 	);
 
+	/* Initialize these in case anything fails */
+	outputDetails->formatsLength = 0;
+	outputDetails->presentModesLength = 0;
+
 	if (!supportsPresent)
 	{
 		FNA3D_LogWarn("This surface does not support presenting!");
 		return 0;
 	}
-
-	/* Initialize these in case anything fails */
-	outputDetails->formatsLength = 0;
-	outputDetails->presentModesLength = 0;
 
 	/* Run the device surface queries */
 	result = renderer->vkGetPhysicalDeviceSurfaceCapabilitiesKHR(
@@ -2296,13 +2299,11 @@ static uint8_t VULKAN_INTERNAL_CreateInstance(
 		goto create_instance_fail;
 	}
 
-	/* Core since 1.1 */
-	instanceExtensionNames[instanceExtensionCount++] =
-		VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME;
-
 	if (!VULKAN_INTERNAL_CheckInstanceExtensions(
+		renderer->debugMode,
 		instanceExtensionNames,
 		instanceExtensionCount,
+		&renderer->supportsDeviceProperties2,
 		&renderer->supportsDebugUtils
 	)) {
 		FNA3D_LogWarn(
@@ -2311,39 +2312,30 @@ static uint8_t VULKAN_INTERNAL_CreateInstance(
 		goto create_instance_fail;
 	}
 
-	if (renderer->debugMode)
+	if (renderer->supportsDeviceProperties2)
 	{
-		if (renderer->supportsDebugUtils)
-		{
-			/* Append the debug extension to the end */
-			instanceExtensionNames[instanceExtensionCount++] =
-				VK_EXT_DEBUG_UTILS_EXTENSION_NAME;
+		instanceExtensionNames[instanceExtensionCount++] =
+			VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME;
+	}
+	else
+	{
+		FNA3D_LogWarn(
+			"%s is not supported!",
+			VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME
+		);
+	}
 
-			debugMessengerCreateInfo.sType =
-				VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-			debugMessengerCreateInfo.pNext = NULL;
-			debugMessengerCreateInfo.flags = 0;
-			debugMessengerCreateInfo.messageSeverity = (
-				VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
-				VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT |
-				VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
-				VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT
-			);
-			debugMessengerCreateInfo.messageType = (
-				VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
-				VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
-				VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT
-			);
-			debugMessengerCreateInfo.pfnUserCallback = VULKAN_INTERNAL_DebugCallback;
-			debugMessengerCreateInfo.pUserData = NULL;
-		}
-		else
-		{
-			FNA3D_LogWarn(
-				"%s is not supported!",
-				VK_EXT_DEBUG_UTILS_EXTENSION_NAME
-			);
-		}
+	if (renderer->supportsDebugUtils)
+	{
+		instanceExtensionNames[instanceExtensionCount++] =
+			VK_EXT_DEBUG_UTILS_EXTENSION_NAME;
+	}
+	else if (renderer->debugMode)
+	{
+		FNA3D_LogWarn(
+			"%s is not supported!",
+			VK_EXT_DEBUG_UTILS_EXTENSION_NAME
+		);
 	}
 
 	createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -2367,15 +2359,32 @@ static uint8_t VULKAN_INTERNAL_CreateInstance(
 			FNA3D_LogWarn("Validation layers not found, continuing without validation");
 			createInfo.enabledLayerCount = 0;
 		}
-
-		if (renderer->supportsDebugUtils)
-		{
-			createInfo.pNext = &debugMessengerCreateInfo;
-		}
 	}
 	else
 	{
 		createInfo.enabledLayerCount = 0;
+	}
+	if (renderer->supportsDebugUtils)
+	{
+		debugMessengerCreateInfo.sType =
+			VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+		debugMessengerCreateInfo.pNext = NULL;
+		debugMessengerCreateInfo.flags = 0;
+		debugMessengerCreateInfo.messageSeverity = (
+			VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
+			VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT |
+			VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
+			VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT
+		);
+		debugMessengerCreateInfo.messageType = (
+			VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
+			VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
+			VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT
+		);
+		debugMessengerCreateInfo.pfnUserCallback = VULKAN_INTERNAL_DebugCallback;
+		debugMessengerCreateInfo.pUserData = NULL;
+
+		createInfo.pNext = &debugMessengerCreateInfo;
 	}
 
 	vulkanResult = vkCreateInstance(&createInfo, NULL, &renderer->instance);
@@ -2502,26 +2511,34 @@ static uint8_t VULKAN_INTERNAL_DeterminePhysicalDevice(VulkanRenderer *renderer,
 		return 0;
 	}
 
-	renderer->physicalDeviceProperties.sType =
-		VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
-	if (renderer->supports.KHR_driver_properties)
+	if (	renderer->supportsDeviceProperties2 &&
+		renderer->supports.KHR_driver_properties	)
 	{
+		renderer->physicalDeviceProperties.sType =
+			VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+		renderer->physicalDeviceProperties.pNext =
+			&renderer->physicalDeviceDriverProperties;
+
 		renderer->physicalDeviceDriverProperties.sType =
 			VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES_KHR;
 		renderer->physicalDeviceDriverProperties.pNext = NULL;
 
-		renderer->physicalDeviceProperties.pNext =
-			&renderer->physicalDeviceDriverProperties;
+		renderer->vkGetPhysicalDeviceProperties2KHR(
+			renderer->physicalDevice,
+			&renderer->physicalDeviceProperties
+		);
 	}
 	else
 	{
+		/* These won't be used, just initialize them to something */
+		renderer->physicalDeviceProperties.sType = ~0;
 		renderer->physicalDeviceProperties.pNext = NULL;
-	}
 
-	renderer->vkGetPhysicalDeviceProperties2KHR(
-		renderer->physicalDevice,
-		&renderer->physicalDeviceProperties
-	);
+		renderer->vkGetPhysicalDeviceProperties(
+			renderer->physicalDevice,
+			&renderer->physicalDeviceProperties.properties
+		);
+	}
 
 	renderer->vkGetPhysicalDeviceMemoryProperties(
 		renderer->physicalDevice,
@@ -2671,24 +2688,18 @@ static uint8_t VULKAN_INTERNAL_FindBufferMemoryRequirements(
 	VkBuffer buffer,
 	VkMemoryPropertyFlags requiredMemoryProperties,
 	VkMemoryPropertyFlags ignoredMemoryProperties,
-	VkMemoryRequirements2KHR *pMemoryRequirements,
+	VkMemoryRequirements *pMemoryRequirements,
 	uint32_t *pMemoryTypeIndex
 ) {
-	VkBufferMemoryRequirementsInfo2KHR bufferRequirementsInfo;
-	bufferRequirementsInfo.sType =
-		VK_STRUCTURE_TYPE_BUFFER_MEMORY_REQUIREMENTS_INFO_2_KHR;
-	bufferRequirementsInfo.pNext = NULL;
-	bufferRequirementsInfo.buffer = buffer;
-
-	renderer->vkGetBufferMemoryRequirements2KHR(
+	renderer->vkGetBufferMemoryRequirements(
 		renderer->logicalDevice,
-		&bufferRequirementsInfo,
+		buffer,
 		pMemoryRequirements
 	);
 
 	return VULKAN_INTERNAL_FindMemoryType(
 		renderer,
-		pMemoryRequirements->memoryRequirements.memoryTypeBits,
+		pMemoryRequirements->memoryTypeBits,
 		requiredMemoryProperties,
 		ignoredMemoryProperties,
 		pMemoryTypeIndex
@@ -2700,24 +2711,18 @@ static uint8_t VULKAN_INTERNAL_FindImageMemoryRequirements(
 	VkImage image,
 	VkMemoryPropertyFlags requiredMemoryPropertyFlags,
 	VkMemoryPropertyFlags ignoredMemoryPropertyFlags,
-	VkMemoryRequirements2KHR *pMemoryRequirements,
+	VkMemoryRequirements *pMemoryRequirements,
 	uint32_t *pMemoryTypeIndex
 ) {
-	VkImageMemoryRequirementsInfo2KHR imageRequirementsInfo;
-	imageRequirementsInfo.sType =
-		VK_STRUCTURE_TYPE_IMAGE_MEMORY_REQUIREMENTS_INFO_2_KHR;
-	imageRequirementsInfo.pNext = NULL;
-	imageRequirementsInfo.image = image;
-
-	renderer->vkGetImageMemoryRequirements2KHR(
+	renderer->vkGetImageMemoryRequirements(
 		renderer->logicalDevice,
-		&imageRequirementsInfo,
+		image,
 		pMemoryRequirements
 	);
 
 	return VULKAN_INTERNAL_FindMemoryType(
 		renderer,
-		pMemoryRequirements->memoryRequirements.memoryTypeBits,
+		pMemoryRequirements->memoryTypeBits,
 		requiredMemoryPropertyFlags,
 		ignoredMemoryPropertyFlags,
 		pMemoryTypeIndex
@@ -2735,11 +2740,7 @@ static uint8_t VULKAN_INTERNAL_BindMemoryForImage(
 	uint32_t memoryTypeIndex = 0;
 	VkMemoryPropertyFlags requiredMemoryPropertyFlags;
 	VkMemoryPropertyFlags ignoredMemoryPropertyFlags;
-	VkMemoryRequirements2KHR memoryRequirements =
-	{
-		VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2_KHR,
-		NULL
-	};
+	VkMemoryRequirements memoryRequirements;
 
 	/* Prefer GPU allocation */
 	requiredMemoryPropertyFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
@@ -2756,14 +2757,14 @@ static uint8_t VULKAN_INTERNAL_BindMemoryForImage(
 		bindResult = FNA3D_Memory_BindResource(
 			renderer->allocator,
 			memoryTypeIndex,
-			memoryRequirements.memoryRequirements.size,
-			memoryRequirements.memoryRequirements.alignment,
+			memoryRequirements.size,
+			memoryRequirements.alignment,
 			(renderer->memoryProperties.memoryTypes[memoryTypeIndex].propertyFlags &
 				VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0,
 			(renderer->memoryProperties.memoryTypes[memoryTypeIndex].propertyFlags &
 				VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) != 0,
 			isRenderTarget,
-			memoryRequirements.memoryRequirements.size,
+			memoryRequirements.size,
 			1,
 			(FNA3D_MemoryPlatformHandle) (size_t) image,
 			imageHandle,
@@ -2805,14 +2806,14 @@ static uint8_t VULKAN_INTERNAL_BindMemoryForImage(
 			bindResult = FNA3D_Memory_BindResource(
 				renderer->allocator,
 				memoryTypeIndex,
-				memoryRequirements.memoryRequirements.size,
-				memoryRequirements.memoryRequirements.alignment,
+				memoryRequirements.size,
+				memoryRequirements.alignment,
 				(renderer->memoryProperties.memoryTypes[memoryTypeIndex].propertyFlags &
 					VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0,
 				(renderer->memoryProperties.memoryTypes[memoryTypeIndex].propertyFlags &
 					VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT) != 0,
 				isRenderTarget,
-				memoryRequirements.memoryRequirements.size,
+				memoryRequirements.size,
 				1,
 				(FNA3D_MemoryPlatformHandle) (size_t) image,
 				imageHandle,
@@ -2846,11 +2847,7 @@ static uint8_t VULKAN_INTERNAL_BindMemoryForBuffer(
 	uint32_t memoryTypeIndex = 0;
 	VkMemoryPropertyFlags requiredMemoryPropertyFlags;
 	VkMemoryPropertyFlags ignoredMemoryPropertyFlags;
-	VkMemoryRequirements2KHR memoryRequirements =
-	{
-		VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2_KHR,
-		NULL
-	};
+	VkMemoryRequirements memoryRequirements;
 
 	requiredMemoryPropertyFlags =
 		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
@@ -2874,8 +2871,8 @@ static uint8_t VULKAN_INTERNAL_BindMemoryForBuffer(
 		bindResult = FNA3D_Memory_BindResource(
 			renderer->allocator,
 			memoryTypeIndex,
-			memoryRequirements.memoryRequirements.size,
-			memoryRequirements.memoryRequirements.alignment,
+			memoryRequirements.size,
+			memoryRequirements.alignment,
 			(renderer->memoryProperties.memoryTypes[memoryTypeIndex].propertyFlags &
 				VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0,
 			(renderer->memoryProperties.memoryTypes[memoryTypeIndex].propertyFlags &
@@ -2924,8 +2921,8 @@ static uint8_t VULKAN_INTERNAL_BindMemoryForBuffer(
 			bindResult = FNA3D_Memory_BindResource(
 				renderer->allocator,
 				memoryTypeIndex,
-				memoryRequirements.memoryRequirements.size,
-				memoryRequirements.memoryRequirements.alignment,
+				memoryRequirements.size,
+				memoryRequirements.alignment,
 				(renderer->memoryProperties.memoryTypes[memoryTypeIndex].propertyFlags &
 					VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT) != 0,
 				(renderer->memoryProperties.memoryTypes[memoryTypeIndex].propertyFlags &
@@ -4741,7 +4738,7 @@ static CreateSwapchainResult VULKAN_INTERNAL_CreateSwapchain(
 		return CREATE_SWAPCHAIN_FAIL;
 	}
 
-	SDL_Vulkan_GetDrawableSize(
+	SDL_GetWindowSizeInPixels(
 		(SDL_Window*) windowHandle,
 		&drawableWidth,
 		&drawableHeight
@@ -5360,13 +5357,16 @@ static uint8_t VULKAN_INTERNAL_CreateTexture(
 	SDL_memset(texture->rtViews, '\0', sizeof(texture->rtViews));
 	if (isRenderTarget)
 	{
-		if (!isCube && levelCount == 1)
+		if (!isCube)
 		{
 			/* Framebuffer views don't like swizzling */
 			imageViewCreateInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
 			imageViewCreateInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
 			imageViewCreateInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
 			imageViewCreateInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+
+			/* The view should only contain one level */
+			imageViewCreateInfo.subresourceRange.levelCount = 1;
 
 			result = renderer->vkCreateImageView(
 				renderer->logicalDevice,
@@ -5442,7 +5442,10 @@ static void VULKAN_INTERNAL_GetTextureData(
 	VULKAN_INTERNAL_PrepareCopyFromTransferBuffer(
 		renderer,
 		dataLength,
-		(VkDeviceSize)Texture_GetFormatSize(vulkanTexture->colorFormat),
+		/* The Vulkan spec states: bufferOffset must be a multiple of 4
+		 * https://vulkan.lunarg.com/doc/view/1.2.141.0/windows/1.2-extensions/vkspec.html#VUID-VkBufferImageCopy-bufferOffset-00194
+		 */
+		(VkDeviceSize)SDL_max(Texture_GetFormatSize(vulkanTexture->colorFormat), 4),
 		&transferBuffer,
 		(void**) &transferBufferPointer
 	);
@@ -6860,6 +6863,12 @@ static void VULKAN_INTERNAL_BeginRenderPass(
 		renderer->attachmentCubeFaces[i] = renderer->nextRenderPassAttachmentCubeFaces[i];
 		renderer->colorMultiSampleAttachments[i] = renderer->nextRenderPassColorMultiSampleAttachments[i]; /* may be NULL */
 	}
+	for (; i < MAX_RENDERTARGET_BINDINGS; i += 1)
+	{
+		renderer->colorAttachments[i] = NULL;
+		renderer->attachmentCubeFaces[i] = 0;
+		renderer->colorMultiSampleAttachments[i] = NULL;
+	}
 
 	renderer->colorAttachmentCount = renderer->nextRenderPassColorAttachmentCount;
 	renderer->multiSampleCount = renderer->nextRenderPassMultiSampleCount;
@@ -6897,7 +6906,7 @@ static void VULKAN_INTERNAL_BeginRenderPass(
 			0,
 			renderer->colorAttachments[i]->layerCount,
 			0,
-			1,
+			renderer->colorAttachments[i]->levelCount,
 			0,
 			renderer->colorAttachments[i]->image,
 			&renderer->colorAttachments[i]->resourceAccessType
@@ -6952,7 +6961,7 @@ static void VULKAN_INTERNAL_BeginRenderPass(
 			0,
 			renderer->depthStencilAttachment->layerCount,
 			0,
-			1,
+			renderer->depthStencilAttachment->levelCount,
 			0,
 			renderer->depthStencilAttachment->image,
 			&renderer->depthStencilAttachment->resourceAccessType
@@ -8292,10 +8301,10 @@ static void VULKAN_ResolveTarget(
 	VulkanCommandBuffer *commandBuffer;
 	int32_t layerCount = (target->type == FNA3D_RENDERTARGET_TYPE_CUBE) ? 6 : 1;
 	int32_t level;
-	VulkanResourceAccessType *origAccessType;
+	VulkanResourceAccessType *levelAccessType;
 	VkImageBlit blit;
 
-	/* The target is resolved during the render pass. */
+	/* The target is resolved during the render pass */
 
 	/* If the target has mipmaps, regenerate them now */
 	if (target->levelCount > 1)
@@ -8303,13 +8312,13 @@ static void VULKAN_ResolveTarget(
 		VULKAN_INTERNAL_MaybeEndRenderPass(renderer);
 
 		/* Store the original image layout... */
-		origAccessType = SDL_stack_alloc(
+		levelAccessType = SDL_stack_alloc(
 			VulkanResourceAccessType,
 			target->levelCount
 		);
 		for (level = 0; level < target->levelCount; level += 1)
 		{
-			origAccessType[level] = vulkanTexture->resourceAccessType;
+			levelAccessType[level] = vulkanTexture->resourceAccessType;
 		}
 
 		/* Blit each mip sequentially. Barriers, barriers everywhere! */
@@ -8351,7 +8360,7 @@ static void VULKAN_ResolveTarget(
 				1,
 				0,
 				vulkanTexture->image,
-				&origAccessType[level - 1]
+				&levelAccessType[level - 1]
 			);
 
 			VULKAN_INTERNAL_ImageMemoryBarrier(
@@ -8364,7 +8373,7 @@ static void VULKAN_ResolveTarget(
 				1,
 				1,
 				vulkanTexture->image,
-				&origAccessType[level]
+				&levelAccessType[level]
 			);
 
 			commandBuffer = (VulkanCommandBuffer*) FNA3D_CommandBuffer_GetCurrent(
@@ -8382,26 +8391,41 @@ static void VULKAN_ResolveTarget(
 			));
 		}
 
-		/* Revert to the old image layout.
-		 * Not as graceful as a single barrier call, but oh well
-		 */
-		for (level = 0; level < target->levelCount; level += 1)
+		/* Transition final level to READ */
+		VULKAN_INTERNAL_ImageMemoryBarrier(
+			renderer,
+			RESOURCE_ACCESS_TRANSFER_READ,
+			VK_IMAGE_ASPECT_COLOR_BIT,
+			0,
+			layerCount,
+			target->levelCount - 1,
+			1,
+			1,
+			vulkanTexture->image,
+			&levelAccessType[target->levelCount - 1]
+		);
+
+		/* The whole texture is in READ layout now, so set the access type on the texture */
+		vulkanTexture->resourceAccessType = RESOURCE_ACCESS_TRANSFER_READ;
+
+		/* Transition to sampler read if necessary */
+		if (vulkanTexture->imageCreateInfo.usage & VK_IMAGE_USAGE_SAMPLED_BIT)
 		{
 			VULKAN_INTERNAL_ImageMemoryBarrier(
 				renderer,
-				vulkanTexture->resourceAccessType,
+				RESOURCE_ACCESS_ANY_SHADER_READ_SAMPLED_IMAGE,
 				VK_IMAGE_ASPECT_COLOR_BIT,
 				0,
 				layerCount,
-				level,
-				1,
+				0,
+				target->levelCount,
 				0,
 				vulkanTexture->image,
-				&origAccessType[level]
+				&vulkanTexture->resourceAccessType
 			);
 		}
 
-		SDL_stack_free(origAccessType);
+		SDL_stack_free(levelAccessType);
 	}
 }
 
@@ -8682,6 +8706,12 @@ static void VULKAN_INTERNAL_SetTextureData(
 	int32_t bufferImageHeight = h;
 	int32_t blockSize = Texture_GetBlockSize(texture->colorFormat);
 
+	if (blockSize > 1)
+	{
+		bufferRowLength = (bufferRowLength + blockSize - 1) & ~(blockSize - 1);
+		bufferImageHeight = (bufferImageHeight + blockSize - 1) & ~(blockSize - 1);
+	}
+
 	if (dataLength > uploadLength)
 	{
 		FNA3D_LogWarn(
@@ -8729,8 +8759,8 @@ static void VULKAN_INTERNAL_SetTextureData(
 	);
 
 	/* Block compressed texture buffers must be at least 1 block in width and height */
-	bufferRowLength = SDL_max(blockSize, w);
-	bufferImageHeight = SDL_max(blockSize, h);
+	bufferRowLength = SDL_max(blockSize, bufferRowLength);
+	bufferImageHeight = SDL_max(blockSize, bufferImageHeight);
 
 	imageCopy.imageExtent.width = w;
 	imageCopy.imageExtent.height = h;
@@ -9998,6 +10028,27 @@ static void VULKAN_SetStringMarker(FNA3D_Renderer *driverData, const char *text)
 	}
 }
 
+static void VULKAN_SetTextureName(FNA3D_Renderer* driverData, FNA3D_Texture* texture, const char* text)
+{
+	VulkanRenderer* renderer = (VulkanRenderer*)driverData;
+	VulkanTexture* vkTexture = (VulkanTexture*)texture;
+	VkDebugUtilsObjectNameInfoEXT nameInfo;
+
+	if (renderer->supportsDebugUtils)
+	{
+		nameInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_NAME_INFO_EXT;
+		nameInfo.pNext = NULL;
+		nameInfo.pObjectName = text;
+		nameInfo.objectType = VK_OBJECT_TYPE_IMAGE;
+		nameInfo.objectHandle = (uint64_t) vkTexture->image;
+
+		renderer->vkSetDebugUtilsObjectNameEXT(
+			renderer->logicalDevice,
+			&nameInfo
+		);
+	}
+}
+
 /* External Interop */
 
 static void VULKAN_GetSysRenderer(
@@ -11019,11 +11070,6 @@ static uint8_t VULKAN_PrepareWindowAttributes(uint32_t *flags)
 	return result;
 }
 
-static void VULKAN_GetDrawableSize(void* window, int32_t *w, int32_t *h)
-{
-	SDL_Vulkan_GetDrawableSize((SDL_Window*) window, w, h);
-}
-
 static FNA3D_Device* VULKAN_CreateDevice(
 	FNA3D_PresentationParameters *presentationParameters,
 	uint8_t debugMode
@@ -11154,7 +11200,8 @@ static FNA3D_Device* VULKAN_CreateDevice(
 		"Vulkan Device: %s",
 		renderer->physicalDeviceProperties.properties.deviceName
 	);
-	if (renderer->supports.KHR_driver_properties)
+	if (	renderer->supportsDeviceProperties2 &&
+		renderer->supports.KHR_driver_properties	)
 	{
 		FNA3D_LogInfo(
 			"Vulkan Driver: %s %s",
@@ -11323,11 +11370,7 @@ static FNA3D_Device* VULKAN_CreateDevice(
 	}
 	else
 	{
-#if SDL_VERSION_ATLEAST(2, 0, 10)
 		pipelineCacheBytes = SDL_LoadFile(pipelineCacheFileName, &pipelineCacheSize);
-#else
-		pipelineCacheBytes = SDL_LoadFile_RW(SDL_RWFromFile(pipelineCacheFileName, "rb"), &pipelineCacheSize, 1);
-#endif /* SDL_VERSION_ATLEAST(2, 0, 10) */
 	}
 
 	if (pipelineCacheBytes != NULL)
@@ -11880,7 +11923,6 @@ static FNA3D_Device* VULKAN_CreateDevice(
 FNA3D_Driver VulkanDriver = {
 	"Vulkan",
 	VULKAN_PrepareWindowAttributes,
-	VULKAN_GetDrawableSize,
 	VULKAN_CreateDevice
 };
 

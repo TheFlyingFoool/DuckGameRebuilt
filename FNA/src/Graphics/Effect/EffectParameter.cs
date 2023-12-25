@@ -57,14 +57,26 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public EffectParameterCollection Elements
 		{
-			get;
-			private set;
+			get
+			{
+				if ((elementCount > 0) && (elements == null))
+				{
+					BuildElementList();
+				}
+				return elements;
+			}
 		}
 
 		public EffectParameterCollection StructureMembers
 		{
-			get;
-			private set;
+			get
+			{
+				if ((mojoType != IntPtr.Zero) && (members == null))
+				{
+					BuildMemberList();
+				}
+				return members;
+			}
 		}
 
 		public EffectAnnotationCollection Annotations
@@ -78,9 +90,22 @@ namespace Microsoft.Xna.Framework.Graphics
 		#region Internal Variables
 
 		internal Texture texture;
+		internal string cachedString = string.Empty;
 
 		internal IntPtr values;
 		internal uint valuesSizeBytes;
+
+		internal IntPtr mojoType;
+
+		internal int elementCount;
+		internal EffectParameterCollection elements;
+		internal EffectParameterCollection members;
+		#endregion
+
+		#region Private Variables
+
+		// Ugly as all heck, but I had to do it for structures. - MrSoup678
+		private Effect outer;
 
 		#endregion
 
@@ -94,10 +119,11 @@ namespace Microsoft.Xna.Framework.Graphics
 			int elementCount,
 			EffectParameterClass parameterClass,
 			EffectParameterType parameterType,
-			EffectParameterCollection structureMembers,
+			IntPtr mojoType,
 			EffectAnnotationCollection annotations,
 			IntPtr data,
-			uint dataSizeBytes
+			uint dataSizeBytes,
+			Effect effect
 		) {
 			if (data == IntPtr.Zero)
 			{
@@ -108,10 +134,65 @@ namespace Microsoft.Xna.Framework.Graphics
 			Semantic = semantic ?? string.Empty;
 			RowCount = rowCount;
 			ColumnCount = columnCount;
+			this.elementCount = elementCount;
+			ParameterClass = parameterClass;
+			ParameterType = parameterType;
+			this.mojoType = mojoType;
+			Annotations = annotations;
+			values = data;
+			valuesSizeBytes = dataSizeBytes;
+			outer = effect;
+		}
+
+		internal EffectParameter(
+			string name,
+			string semantic,
+			int rowCount,
+			int columnCount,
+			int elementCount,
+			EffectParameterClass parameterClass,
+			EffectParameterType parameterType,
+			EffectParameterCollection structureMembers,
+			EffectAnnotationCollection annotations,
+			IntPtr data,
+			uint dataSizeBytes,
+			Effect effect
+		) {
+			if (data == IntPtr.Zero)
+			{
+				throw new ArgumentNullException("data");
+			}
+
+			Name = name;
+			Semantic = semantic ?? string.Empty;
+			RowCount = rowCount;
+			ColumnCount = columnCount;
+			this.elementCount = elementCount;
+			ParameterClass = parameterClass;
+			ParameterType = parameterType;
+			members = structureMembers;
+			Annotations = annotations;
+			values = data;
+			valuesSizeBytes = dataSizeBytes;
+			outer = effect;
+		}
+
+		#endregion
+
+		#region Allocation Optimizations
+
+		internal void BuildMemberList()
+		{
+			members = Effect.INTERNAL_readEffectParameterStructureMembers(this, mojoType, outer);
+		}
+
+		internal void BuildElementList()
+		{
 			if (elementCount > 0)
 			{
 				int curOffset = 0;
 				List<EffectParameter> elements = new List<EffectParameter>(elementCount);
+				EffectParameterCollection structureMembers = StructureMembers;
 				for (int i = 0; i < elementCount; i += 1)
 				{
 					EffectParameterCollection elementMembers = null;
@@ -138,10 +219,11 @@ namespace Microsoft.Xna.Framework.Graphics
 								memElems,
 								structureMembers[j].ParameterClass,
 								structureMembers[j].ParameterType,
-								null, // FIXME: Nested structs! -flibit
+								IntPtr.Zero, // FIXME: Nested structs! -flibit
 								structureMembers[j].Annotations,
-								new IntPtr(data.ToInt64() + curOffset),
-								(uint) memSize * 4
+								new IntPtr(values.ToInt64() + curOffset),
+								(uint) memSize * 4,
+								outer
 							));
 							curOffset += memSize * 4;
 						}
@@ -151,28 +233,23 @@ namespace Microsoft.Xna.Framework.Graphics
 					elements.Add(new EffectParameter(
 						null,
 						null,
-						rowCount,
-						columnCount,
+						RowCount,
+						ColumnCount,
 						0,
 						ParameterClass,
-						parameterType,
+						ParameterType,
 						elementMembers,
 						null,
 						new IntPtr(
-							data.ToInt64() + (i * rowCount * 16)
+							values.ToInt64() + (i * RowCount * 16)
 						),
 						// FIXME: Not obvious to me how to compute this -kg
-						0
+						0,
+						outer
 					));
 				}
-				Elements = new EffectParameterCollection(elements);
+				this.elements = new EffectParameterCollection(elements);
 			}
-			ParameterClass = parameterClass;
-			ParameterType = parameterType;
-			StructureMembers = structureMembers;
-			Annotations = annotations;
-			values = data;
-			valuesSizeBytes = dataSizeBytes;
 		}
 
 		#endregion
@@ -393,11 +470,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public string GetValueString()
 		{
-			/* FIXME: This requires digging into the effect->objects list.
-			 * We've got the data, we just need to hook it up to FNA.
-			 * -flibit
-			 */
-			throw new NotImplementedException("effect->objects[?]");
+			return cachedString;
 		}
 
 		public Texture2D GetValueTexture2D()
@@ -505,6 +578,14 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		#region Public Set Methods
 
+		internal void BoundsCheckArray(Array value)
+		{
+			if (value == null)
+				throw new ArgumentNullException("value");
+			else if (value.Length > elementCount)
+				throw new ArgumentOutOfRangeException("value.Length");
+		}
+
 		public void SetValue(bool value)
 		{
 			unsafe
@@ -517,6 +598,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(bool[] value)
 		{
+			BoundsCheckArray(value);
+
 			unsafe
 			{
 				int* dstPtr = (int*) values;
@@ -553,6 +636,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(int[] value)
 		{
+			BoundsCheckArray(value);
+
 			for (int i = 0, j = 0; i < value.Length; i += ColumnCount, j += 16)
 			{
 				Marshal.Copy(value, i, values + j, ColumnCount);
@@ -649,6 +734,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValueTranspose(Matrix[] value)
 		{
+			BoundsCheckArray(value);
+
 			// FIXME: All Matrix sizes... this will get ugly. -flibit
 			unsafe
 			{
@@ -852,6 +939,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(Matrix[] value)
 		{
+			BoundsCheckArray(value);
+
 			// FIXME: All Matrix sizes... this will get ugly. -flibit
 			unsafe
 			{
@@ -982,6 +1071,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(Quaternion[] value)
 		{
+			BoundsCheckArray(value);
+
 			unsafe
 			{
 				float* dstPtr = (float*) values;
@@ -1015,6 +1106,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(float[] value)
 		{
+			BoundsCheckArray(value);
+
 #if DEBUG
 			foreach (float f in value)
 			{
@@ -1059,6 +1152,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(Vector2[] value)
 		{
+			BoundsCheckArray(value);
+
 			unsafe
 			{
 				float* dstPtr = (float*) values;
@@ -1089,6 +1184,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(Vector3[] value)
 		{
+			BoundsCheckArray(value);
+
 			unsafe
 			{
 				float* dstPtr = (float*) values;
@@ -1121,6 +1218,8 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(Vector4[] value)
 		{
+			BoundsCheckArray(value);
+
 			unsafe
 			{
 				float* dstPtr = (float*) values;

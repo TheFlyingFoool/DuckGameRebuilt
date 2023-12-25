@@ -20,7 +20,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Microsoft.Xna.Framework
 {
-	public static class FNAPlatform
+	internal static class FNAPlatform
 	{
 		#region Static Constructor
 
@@ -38,6 +38,8 @@ namespace Microsoft.Xna.Framework
 
 			// Environment.GetEnvironmentVariable("FNA_PLATFORM_BACKEND");
 
+			SetEnv = SDL2_FNAPlatform.SetEnv;
+
 			// Built-in command line arguments
 			LaunchParameters args = new LaunchParameters();
 			string arg;
@@ -50,28 +52,28 @@ namespace Microsoft.Xna.Framework
 			}
 			if (args.TryGetValue("gldevice", out arg))
 			{
-				Environment.SetEnvironmentVariable(
+				SetEnv(
 					"FNA3D_FORCE_DRIVER",
 					arg
 				);
 			}
 			if (args.TryGetValue("enablelateswaptear", out arg) && arg == "1")
 			{
-				Environment.SetEnvironmentVariable(
+				SetEnv(
 					"FNA3D_ENABLE_LATESWAPTEAR",
 					"1"
 				);
 			}
 			if (args.TryGetValue("mojoshaderprofile", out arg))
 			{
-				Environment.SetEnvironmentVariable(
+				SetEnv(
 					"FNA3D_MOJOSHADER_PROFILE",
 					arg
 				);
 			}
 			if (args.TryGetValue("backbufferscalenearest", out arg) && arg == "1")
 			{
-				Environment.SetEnvironmentVariable(
+				SetEnv(
 					"FNA3D_BACKBUFFER_SCALE_NEAREST",
 					"1"
 				);
@@ -121,10 +123,10 @@ namespace Microsoft.Xna.Framework
 			SetRelativeMouseMode =		SDL2_FNAPlatform.SetRelativeMouseMode;
 			GetGamePadCapabilities =	SDL2_FNAPlatform.GetGamePadCapabilities;
 			GetGamePadState =		SDL2_FNAPlatform.GetGamePadState;
-			GetGameControllerName = SDL2_FNAPlatform.GetGameControllerName;
 			SetGamePadVibration =		SDL2_FNAPlatform.SetGamePadVibration;
 			SetGamePadTriggerVibration =	SDL2_FNAPlatform.SetGamePadTriggerVibration;
 			GetGamePadGUID =		SDL2_FNAPlatform.GetGamePadGUID;
+			GetGameControllerName = SDL2_FNAPlatform.GetGameControllerName;
 			SetGamePadLightBar =		SDL2_FNAPlatform.SetGamePadLightBar;
 			GetGamePadGyro = 		SDL2_FNAPlatform.GetGamePadGyro;
 			GetGamePadAccelerometer =	SDL2_FNAPlatform.GetGamePadAccelerometer;
@@ -189,13 +191,6 @@ namespace Microsoft.Xna.Framework
 		#endregion
 
 		#region Public Static Methods
-		/* Dan's stuff improve later */
-		public delegate void OnDeviceChangeEvent(int dev, bool removed);
-		public static event OnDeviceChangeEvent DeviceChangeEvent;
-		public static void OnDeviceChange(int dev, bool removed)
-		{
-			DeviceChangeEvent?.Invoke(dev, removed);
-		}
 
 		/* Technically this should be IntPtr, but oh well... */
 		public delegate IntPtr MallocFunc(int size);
@@ -203,6 +198,9 @@ namespace Microsoft.Xna.Framework
 
 		public delegate void FreeFunc(IntPtr ptr);
 		public static readonly FreeFunc Free;
+
+		public delegate void SetEnvFunc(string name, string value);
+		public static readonly SetEnvFunc SetEnv;
 
 		public delegate GameWindow CreateWindowFunc();
 		public static readonly CreateWindowFunc CreateWindow;
@@ -316,11 +314,6 @@ namespace Microsoft.Xna.Framework
 		);
 		public static readonly GetGamePadStateFunc GetGamePadState;
 
-		public delegate string GetGameControllerNameFunc(
-			int index
-		);
-		public static readonly GetGameControllerNameFunc GetGameControllerName;
-
 		public delegate bool SetGamePadVibrationFunc(
 			int index,
 			float leftMotor,
@@ -337,6 +330,9 @@ namespace Microsoft.Xna.Framework
 
 		public delegate string GetGamePadGUIDFunc(int index);
 		public static readonly GetGamePadGUIDFunc GetGamePadGUID;
+
+		public delegate string GetGameControllerNameFunc(int index);
+		public static readonly GetGameControllerNameFunc GetGameControllerName;
 
 		public delegate void SetGamePadLightBarFunc(int index, Color color);
 		public static readonly SetGamePadLightBarFunc SetGamePadLightBar;

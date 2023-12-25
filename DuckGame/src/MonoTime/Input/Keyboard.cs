@@ -916,7 +916,7 @@ namespace DuckGame
             else
                 KeyString += e.Character.ToString();
         }
-        public static List<char> TextInputCharacters = new List<char>(FNAPlatform.TextInputCharacters);
+        public static List<char> TextInputCharacters = new List<char>(TextInputEXT.TextInputCharacters);
         public static void FNACharEnteredHandler(char c) // FNA SDL call back for key char pressed sht
         {
             if (TextInputCharacters.Contains(c)) // Not Chars

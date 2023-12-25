@@ -1159,7 +1159,7 @@ namespace DuckGame
         }
         public static void Initialize()
         {
-            FNAPlatform.DeviceChangeEvent += OnDeviceChange;
+            GamePad.DeviceChangeEvent += OnDeviceChange;
             MonoMain.NloadMessage = "Initializing Input System...";
             DevConsole.Log(DCSection.General, "Initializing Input...");
             foreach (DeviceInputMapping inputMappingPreset in _defaultInputMappingPresets)
@@ -1567,9 +1567,9 @@ namespace DuckGame
             InputSystem.Terminate();
             for (int index = 0; index < MonoMain.MaximumGamepadCount; index++)
             {
-                GamePadState state = FNAPlatform.GetGamePadState(index, GamePadDeadZone.IndependentAxes);
+                GamePadState state = GamePad.GetState(index, GamePadDeadZone.IndependentAxes);
                 if (state.IsConnected)
-                    FNAPlatform.SetGamePadVibration(index, 0f, 0f);
+                    GamePad.SetVibration(index, 0f, 0f);
             }
         }
 

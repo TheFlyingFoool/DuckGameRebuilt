@@ -11,7 +11,7 @@ option(BUILD_DXVK_NATIVE "Enable support for dxvk-native" OFF)
 # Version
 SET(LIB_MAJOR_VERSION "0")
 SET(LIB_MINOR_VERSION "23")
-SET(LIB_REVISION "08")
+SET(LIB_REVISION "12")
 SET(LIB_VERSION "${LIB_MAJOR_VERSION}.${LIB_MINOR_VERSION}.${LIB_REVISION}")
 
 # Build Type
@@ -141,14 +141,14 @@ target_include_directories(FNA3D PUBLIC
 if(BUILD_DXVK_NATIVE)
 	add_definitions(-DFNA3D_DXVK_NATIVE)
 	target_include_directories(FNA3D PUBLIC
-		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../dxvk-native/include/native/directx>
-		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../dxvk-native/include/native/windows>
-		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../dxvk-native/include/native/wsi>
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../dxvk/include/native/directx>
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../dxvk/include/native/windows>
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../dxvk/include/native/wsi>
 	)
 	target_include_directories(mojoshader PUBLIC
-		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../dxvk-native/include/native/directx>
-		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../dxvk-native/include/native/windows>
-		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../dxvk-native/include/native/wsi>
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../dxvk/include/native/directx>
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../dxvk/include/native/windows>
+		$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../dxvk/include/native/wsi>
 	)
 endif()
 target_include_directories(mojoshader PUBLIC
