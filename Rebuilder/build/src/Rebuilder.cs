@@ -20,7 +20,7 @@ namespace DuckGame.Cobalt
 
             OnDGR = IsOnDGR();
 
-            if (!OnDGR && Program.commandLine.Contains("-dgrmodhyperlinkdysfunction"))
+            if (!OnDGR && !Program.commandLine.Contains("-dgrmodhyperlinkdysfunction"))
             {
                 PatchForDGRQuickload();
                 RestartToDGR();
