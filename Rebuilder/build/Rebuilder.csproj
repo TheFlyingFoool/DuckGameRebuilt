@@ -104,11 +104,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\*.cs" />
-    <Compile Include="src\Harmony\Harmony.cs" />
-    <Compile Include="src\Harmony\PatchAttribute.cs" />
-    <Compile Include="src\Harmony\Patches.Apply.cs" />
-    <Compile Include="src\Harmony\Patches\Level.PostDrawLayer.cs" />
+    <Compile Include="src\*" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

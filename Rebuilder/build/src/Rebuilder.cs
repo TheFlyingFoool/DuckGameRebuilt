@@ -9,15 +9,12 @@ using System.Reflection;
 
 namespace DuckGame.Cobalt
 {
-    public sealed class Rebuilder : ClientMod, IEngineUpdatable
+    public sealed class Rebuilder : ClientMod
     {
         public static bool OnDGR;
         
         protected override void OnPreInitialize()
         {
-            MonoMain.RegisterEngineUpdatable(this);
-            Harmony.Initialize();
-
             OnDGR = IsOnDGR();
 
             if (!OnDGR && !Program.commandLine.Contains("-dgrmodhyperlinkdysfunction"))
@@ -27,22 +24,6 @@ namespace DuckGame.Cobalt
             }
             
             base.OnPreInitialize();
-        }
-        
-        public void PreUpdate()
-        {
-        }
-
-        public void Update()
-        {
-        }
-
-        public void PostUpdate()
-        {
-        }
-
-        public void OnDrawLayer(Layer pLayer)
-        {
         }
 
         private static bool IsOnDGR()
@@ -55,16 +36,11 @@ namespace DuckGame.Cobalt
         {
             string dgrPath = configuration.directory + "/DGR/DuckGame.exe";
             
-            Process.Start(dgrPath, Environment.CommandLine);
+            Process.Start(dgrPath, Program.commandLine + $" -from \"{configuration.directory}\"");
             Process.GetCurrentProcess().Kill();
         }
 
         private static void PatchForDGRQuickload()
-        {
-            
-        }
-
-        private static void RawDetectAndRestartDGR()
         {
             
         }
