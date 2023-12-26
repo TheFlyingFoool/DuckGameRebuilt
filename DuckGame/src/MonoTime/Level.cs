@@ -1056,10 +1056,13 @@ namespace DuckGame
             foreach (IDrawToDifferentLayers toDifferentLayers in things[typeof(IDrawToDifferentLayers)])
                 toDifferentLayers.OnDrawLayer(layer);
 
-            Marker.DrawingLayer? drawingLayer = Marker.DrawingContextAttribute.DrawingLayerFromLayer(layer);
+            DrawingLayer? drawingLayer = Marker.DrawingContextAttribute.DrawingLayerFromLayer(layer);
 
             if (drawingLayer != null)
+            {
                 Marker.DrawingContextAttribute.ExecuteAll(drawingLayer.Value);
+                Marker.ComplexDrawingContextAttribute.ExecuteAll(layer);
+            }
             
             RenderDelegates.Layers.InvokeFor(layer);
             

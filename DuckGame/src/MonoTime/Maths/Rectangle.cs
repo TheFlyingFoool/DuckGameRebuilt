@@ -98,6 +98,22 @@ namespace DuckGame
             width = br.x - tl.x;
             height = br.y - tl.y;
         }
+        
+        public static bool TryParse(string s, out Rectangle result)
+        {
+            if (s.Split(',') is { Length: 4 } values
+                && float.TryParse(values[0], out float x)
+                && float.TryParse(values[1], out float y)
+                && float.TryParse(values[2], out float w)
+                && float.TryParse(values[3], out float h))
+            {
+                result = new Rectangle(x, y, w, h);
+                return true;
+            }
+
+            result = default;
+            return false;
+        }
 
         public static implicit operator Microsoft.Xna.Framework.Rectangle(Rectangle r) => new Microsoft.Xna.Framework.Rectangle((int)r.x, (int)r.y, (int)r.width, (int)r.height);
 
