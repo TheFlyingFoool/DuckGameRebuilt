@@ -9,6 +9,7 @@ namespace DuckGame
     public class DGRElevator : PhysicsObject, IPlatform
     {
         private SpriteMap _sprite;
+        private float _fade;
 
         public EditorProperty<float> maxSpeed = new EditorProperty<float>(6, null, 0, 6);
 
@@ -89,11 +90,13 @@ namespace DuckGame
             {
                 if (Level.current is DGRDevHall ddv)
                 {
-                    Graphics.fade = Lerp.Float(Graphics.fade, 0, 0.01f);
-                    if (Graphics.fade <= 0)
+                    _fade = Lerp.Float(_fade, 0, 0.01f);
+                    if (_fade <= 0)
                     {
                         Level.current = new TitleScreen(ddv._duck.profile);
                     }
+                    if (!MonoMain.menuOpenedThisFrame)
+                        Graphics.fade = _fade;
                 }
                 if (isServerForObject)
                 {
@@ -155,6 +158,7 @@ namespace DuckGame
                         goingUp = true;
                         vSpeed = -0.1f;
                         gravMultiplier = 0;
+                        _fade = Graphics.fade;
                     }
                     else
                     {
