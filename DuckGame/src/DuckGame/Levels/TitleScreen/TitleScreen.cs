@@ -26,7 +26,8 @@ namespace DuckGame
         private BigTitle _title;
         private BitmapFont _font;
         private Sprite _background;
-        private Sprite _background2;
+        private Sprite _dgrCore;
+        private Sprite _dgrBackground;
         //private Sprite _optionsPlatform;
         private Sprite _rightPlatform;
         private Sprite _leftPlatform;
@@ -923,7 +924,8 @@ namespace DuckGame
             Add(_pauseGroup);
             _font = new BitmapFont("biosFont", 8);
             _background = new Sprite("title/background");
-            _background2 = new Sprite("title/dgrTitle");
+            _dgrCore = new Sprite("title/dgrCore");
+            _dgrBackground = new Sprite("title/dgrBackground");
             //this._optionsPlatform = new Sprite("title/optionsPlatform")
             //{
             //    depth = (Depth)0.9f
@@ -1038,6 +1040,10 @@ namespace DuckGame
             Add(new Spring(90f, 340, 0.32f));
             Add(new Spring(229f, 340, 0.32f));
             Add(new VerticalDoor(270f, 160f)
+            {
+                filterDefault = true
+            });
+            Add(new VerticalDoor(50f, 340f)
             {
                 filterDefault = true
             });
@@ -1753,7 +1759,7 @@ namespace DuckGame
             _font.scale = new Vec2(scaleVal);
             if (secondTitlescreen)
             {
-                _font.Draw(message, current.camera.PercentW(50f) - _font.GetWidth(message) / 2f, row * 11f - 7f + 185, color, (Depth)0.95);
+                _font.Draw(message, current.camera.PercentW(50f) - _font.GetWidth(message) / 2f, row * 11f - 7f + 184f, color, (Depth)0.95);
             }
             else _font.Draw(message, current.camera.PercentW(50f) - _font.GetWidth(message) / 2f, row * 11f - 7f, color, (Depth)0.95);
             _font.scale = oldScale;
@@ -1764,6 +1770,7 @@ namespace DuckGame
             if (layer == Layer.Foreground)
             {
                 Graphics.Draw(_upperMonitor, 84f, 0f);
+                Graphics.Draw(_upperMonitor, 84f, 184f);
                 _font.inputProfile = InputProfile.FirstProfileWithDevice; // comparing to _duck.inputProfile
                 if (_fadeInFull)
                 {
@@ -1820,7 +1827,7 @@ namespace DuckGame
             {
                 Graphics.Draw(_editorBenchPaint, 45f, 168f);
                 Graphics.Draw(_leftPlatform, 0f, 61f);
-                Graphics.Draw(_airlock, 266f, 135f);
+                Graphics.Draw(_airlock, 266f, 135f, scaleX: 1f, scaleY: 1f);
                 Graphics.Draw(_rightPlatform, byte.MaxValue, 61f);
                 Graphics.Draw(_DGRleftPlatform, 0, 242);
                 Graphics.Draw(_DGRrightPlatform, byte.MaxValue, 242);
@@ -1829,6 +1836,7 @@ namespace DuckGame
                 Graphics.Draw(_libraryBookcase, 263f, 12f);
                 Graphics.Draw(_cord, 0, 200);
                 Graphics.Draw(_editorBench, 1f, 130f);
+                Graphics.Draw(_airlock, 54f, 315f, scaleX: -1f, scaleY: 1f);
                 if (creditsScroll > 0.1)
                 {
                     float num1 = 0f;
@@ -1887,11 +1895,14 @@ namespace DuckGame
                         }
                     }
                 }
+
+                _dgrCore.depth = (Depth)0.5f;
+                Graphics.Draw(_dgrCore, 129f, 228f);
+                _dgrBackground.depth = (Depth)0f;
+                Graphics.Draw(_dgrBackground, 0f, 184f);
                 _background.depth = (Depth)0f;
                 Rectangle sourceRectangle = new Rectangle(0f, 0f, 90f, _background.height);
                 Graphics.Draw(_background, 0f, 0f, sourceRectangle);
-
-                Graphics.Draw(_background2, 0, 184);
                 sourceRectangle = new Rectangle(63f, 107f, 194f, 61f);
                 Graphics.Draw(_background, sourceRectangle.x, sourceRectangle.y, sourceRectangle);
                 sourceRectangle = new Rectangle(230f, 61f, 28f, 61f);

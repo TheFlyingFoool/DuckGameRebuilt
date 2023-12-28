@@ -311,9 +311,9 @@ namespace DuckGame
             NetworkConnection[] _allConnections = allConnections.ToArray();
             for (int i = 0; i < _allConnections.Length; i++)
             {
-                if (allConnections[i].identifier == id)
+                if (_allConnections[i].identifier == id)
                 {
-                    return allConnections[i];
+                    return _allConnections[i];
                 }
             }
             return default;

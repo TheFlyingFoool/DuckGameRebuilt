@@ -316,7 +316,21 @@ namespace DuckGame
                 }
                 if (!globalUILock && (Input.Pressed(Triggers.Cancel) || Keyboard.Pressed(Keys.OemTilde)))
                 {
-                    new UIMenuActionOpenMenu(this, _confirmMenu).Activate();
+                    bool dirty = false;
+                    foreach (UIControlElement controlEl in _controlElements)
+                    {
+                        if (controlEl.dirty)
+                        {
+                            dirty = true;
+                            controlEl.dirty = false;
+                        }
+                    }
+                    if (dirty)
+                    {
+                        new UIMenuActionOpenMenu(this, _confirmMenu).Activate();
+                        return;
+                    }
+                    CloseMenu();
                     return;
                 }
                 if (Input.uiDevicesHaveChanged)
