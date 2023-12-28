@@ -8,7 +8,6 @@ namespace DuckGame
 {
     public class QuadTreeObjectList : IEnumerable<Thing>, IEnumerable
     {
-        private int hashcodeindex;
         private HashSet<Thing> _emptyList = new HashSet<Thing>();
         private HashSet<Thing> _bigList = new HashSet<Thing>();
         private HashSet<Thing> _addThings = new HashSet<Thing>();
@@ -238,30 +237,17 @@ namespace DuckGame
             }
             return Chunk;
         }
-        public static bool ValueinList(Vec2[] array, Vec2 value, int count)
-        {
-            int startIndex = 0;
-            int num = startIndex + count;
-            for (int i = startIndex; i < num; i++)
-            {
-                if (array[i] == value)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        public bool IsNotInHashSet(Vec2[] values)
-        {
-            foreach (var value in values)
-            {
-                if (usedIds.Contains(value))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
+        //public bool IsNotInHashSet(Vec2[] values)
+        //{
+        //    foreach (var value in values)
+        //    {
+        //        if (usedIds.Contains(value))
+        //        {
+        //            return false;
+        //        }
+        //    }
+        //    return true;
+        //}
 
         public IEnumerable<Thing> GetThings(Vec2 Position, float width, float height, Type t)
         {
@@ -282,6 +268,11 @@ namespace DuckGame
             }
             else
             {
+                if (_queryIds > Int32.MaxValue - 1)
+                {
+                    _queryIds = 0;
+                }
+                int queryId = _queryIds++;
                 for (int i = 0; i < ids.Length; i++)
                 {
                     Vec2 bucket = ids[i];
@@ -291,19 +282,18 @@ namespace DuckGame
                         {
                             foreach (Thing item in outputthings)
                             {
-                                if (item.Buckets.Length == 1 || IsNotInHashSet(item.Buckets))
+                                if (item._queryId != queryId)
                                 {
+                                    item._queryId = queryId;
                                     yield return item;
                                 }
                             }
                         }
                     }
-                    usedIds.Add(bucket);
                 }
-                usedIds.Clear();// For re-use
             }
         }
-        private HashSet<Vec2> usedIds = new HashSet<Vec2>(capacity: 40); // For re-use
+        private int _queryIds = 0;
         public IEnumerable<Thing> GetThings(Vec2 p1, Vec2 p2, Type t) //Line
         {
             Vec2[] ids = GetIdForLine(p1, p2);
@@ -323,6 +313,11 @@ namespace DuckGame
             }
             else
             {
+                if (_queryIds > Int32.MaxValue - 1)
+                {
+                    _queryIds = 0;
+                }
+                int queryId = _queryIds++;
                 for (int i = 0; i < ids.Length; i++)
                 {
                     Vec2 bucket = ids[i];
@@ -332,16 +327,15 @@ namespace DuckGame
                         {
                             foreach (Thing item in outputthings)
                             {
-                                if (item.Buckets.Length == 1 || IsNotInHashSet(item.Buckets))
+                                if (item._queryId != queryId)
                                 {
+                                    item._queryId = queryId;
                                     yield return item;
                                 }
                             }
                         }
                     }
-                    usedIds.Add(bucket);
                 }
-                usedIds.Clear();// For re-use
             }
         }
         // public Dictionary<Vec2, List<Thing>> Buckets = new Dictionary<Vec2, List<Thing>>();
@@ -660,8 +654,6 @@ namespace DuckGame
             _removeThings.Clear();
             foreach (Thing addThing in _addThings)
             {
-                hashcodeindex += 1;
-                addThing.hashcodeindex = hashcodeindex;
                 AddUpdateList(addThing);
                 if (!_bigList.Contains(addThing))
                 {

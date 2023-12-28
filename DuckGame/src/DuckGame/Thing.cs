@@ -21,7 +21,7 @@ namespace DuckGame
         public bool shouldbegraphicculled = true;
         public bool currentlyDrawing;
         public bool shouldbeinupdateloop = true;
-        public int hashcodeindex; // dont touch :)
+        public int _queryId = -1;
         public Vec2 oldposition = Vec2.Zero;
         public Vec2 oldcollisionOffset = Vec2.Zero;
         public Vec2 oldcollisionSize = Vec2.Zero;
