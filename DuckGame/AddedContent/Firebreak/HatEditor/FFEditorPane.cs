@@ -276,7 +276,7 @@ namespace DuckGame
                 s_scrollLimit = 0;
                 Graphics.DrawRect(innerBounds, Color.Black, 0.9f);
                 
-                int i = s_currentlyEditingMetapixelIndex;
+                int i = Maths.Clamp(s_currentlyEditingMetapixelIndex, 0, Metapixels.Count - 1);
                 Color pixel = Metapixels[i];
                 MetapixelInfo info = MetapixelInfo[pixel.r];
                 
