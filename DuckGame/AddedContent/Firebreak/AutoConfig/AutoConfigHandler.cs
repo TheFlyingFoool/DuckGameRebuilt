@@ -12,21 +12,28 @@ namespace DuckGame
         private const string SaveDirName = "Data/";
         private const string MainSaveFileName = "Config" + FileExtension;
         private const string FileExtension = ".quack";
-        public static string SaveDirPath = DuckFile.saveDirectory + SaveDirName;
+        public static string DecidedPath = "";
+        public static string SaveDirPath => DecidedPath + SaveDirName;
         public static string MainSaveFilePath => SaveDirPath + MainSaveFileName;
 
         public static void Initialize()
         {
-            if (Marker.AutoConfigAttribute.All.Count == 0)
-                return;
-            
-            if (!Directory.Exists(SaveDirPath))
-                Directory.CreateDirectory(SaveDirPath);
+            if (Marker.AutoConfigAttribute.All.Count == 0) return;
 
-            if (!File.Exists(MainSaveFilePath))
-                SaveAll(false);
-            // else CleanForgottenFields(); // unnecessary
+            //hi hello yes, DecidedPath must be the proper one, if we force it to use the new save
+            //then for people who played pre 1.5 and have their save in "Documents" this will create
+            //a new save in appdata and DuckFile will try and fail to transfer the savefile making
+            //it so your savefile seemingly gets deleted so be careful with this ok? okay thanks -NiK0
+            string dir = "DuckGame/";
+            DecidedPath = DuckFile.newSaveLocation + dir;
+            if (!DuckFile.DirectoryExists(DecidedPath) && !Program.alternateSaveLocation && DuckFile.DirectoryExists(DuckFile.oldSaveLocation)) DecidedPath = DuckFile.oldSaveLocation + dir;
             
+
+            if (!Directory.Exists(SaveDirPath)) Directory.CreateDirectory(SaveDirPath);
+
+
+            if (!File.Exists(MainSaveFilePath)) SaveAll(false);
+
             if (!LoadAll())
                 SaveAll(false);
 
