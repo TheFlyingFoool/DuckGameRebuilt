@@ -12,7 +12,7 @@ namespace DuckGame
         private const string SaveDirName = "Data/";
         private const string MainSaveFileName = "Config" + FileExtension;
         private const string FileExtension = ".quack";
-        public static string SaveDirPath = DuckFile.newSaveLocation + "DuckGame/" + SaveDirName;
+        public static string SaveDirPath = DuckFile.saveDirectory + SaveDirName;
         public static string MainSaveFilePath => SaveDirPath + MainSaveFileName;
 
         public static void Initialize()
