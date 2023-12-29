@@ -314,6 +314,7 @@ namespace DuckGame
                 if (index != args.Length - 1)
                     commandLine += " ";
             }
+            DuckFile.Initialize();
             MarkerAttribute.Initialize();
             AutoConfigHandler.Initialize();
             int Controllers = 8;

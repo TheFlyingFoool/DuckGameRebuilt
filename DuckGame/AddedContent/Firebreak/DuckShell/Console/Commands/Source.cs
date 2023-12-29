@@ -7,7 +7,7 @@ namespace DuckGame.ConsoleEngine
 {
     public static partial class Commands
     {
-        public static string ScriptsDirPath = $"{DuckFile.saveDirectory}DuckGame/Scripts/";
+        public static string ScriptsDirPath => $"{DuckFile.saveDirectory}DuckGame/Scripts/";
         public const string SCRIPT_FILE_EXTENSION = ".dsh";
         
         [Marker.DevConsoleCommand(Description = "Runs a script from your ~DuckGame/Scripts/ folder", To = ImplementTo.DuckShell)]

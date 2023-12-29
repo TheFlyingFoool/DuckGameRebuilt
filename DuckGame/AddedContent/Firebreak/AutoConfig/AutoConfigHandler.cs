@@ -12,8 +12,7 @@ namespace DuckGame
         private const string SaveDirName = "Data/";
         private const string MainSaveFileName = "Config" + FileExtension;
         private const string FileExtension = ".quack";
-        public static string DecidedPath = "";
-        public static string SaveDirPath => DecidedPath + SaveDirName;
+        public static string SaveDirPath => DuckFile.saveDirectory + SaveDirName;
         public static string MainSaveFilePath => SaveDirPath + MainSaveFileName;
 
         public static void Initialize()
@@ -24,15 +23,14 @@ namespace DuckGame
             //then for people who played pre 1.5 and have their save in "Documents" this will create
             //a new save in appdata and DuckFile will try and fail to transfer the savefile making
             //it so your savefile seemingly gets deleted so be careful with this ok? okay thanks -NiK0
-            string dir = "DuckGame/";
-            DecidedPath = DuckFile.newSaveLocation + dir;
-            if (!DuckFile.DirectoryExists(DecidedPath) && !Program.alternateSaveLocation && DuckFile.DirectoryExists(DuckFile.oldSaveLocation)) DecidedPath = DuckFile.oldSaveLocation + dir;
+
+            // called DuckFile.init sooner so could just use DuckFile.saveDirectory instead -Dan
             
+            if (!Directory.Exists(SaveDirPath)) 
+                Directory.CreateDirectory(SaveDirPath);
 
-            if (!Directory.Exists(SaveDirPath)) Directory.CreateDirectory(SaveDirPath);
-
-
-            if (!File.Exists(MainSaveFilePath)) SaveAll(false);
+            if (!File.Exists(MainSaveFilePath)) 
+                SaveAll(false);
 
             if (!LoadAll())
                 SaveAll(false);

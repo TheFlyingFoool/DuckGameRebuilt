@@ -299,7 +299,7 @@ namespace DuckGame
         public List<Thing> TheThings = new List<Thing>();
         public List<Thing> theLevelDetailsETC = new List<Thing>();
         public List<string> names = new List<string>();
-        public static string CordsPath = DuckFile.saveDirectory + "Recorderations/";
+        public static string CordsPath => DuckFile.saveDirectory + "Recorderations/";
         public List<Profile> profiles = new List<Profile>();
         public List<Team> teams = new List<Team>();
         public byte[] SaveToFile(Level lastLevel)
