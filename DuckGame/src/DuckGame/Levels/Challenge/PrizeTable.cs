@@ -90,10 +90,14 @@ namespace DuckGame
             {
                 Vec2 vec2 = new Vec2(40f, 0f);
                 Duck duck2 = Level.Nearest<Duck>(x + vec2.x, y + vec2.y);
-                if (duck2 != null) hoverChancyChallenge = duck2.grounded && (duck2.position - (position + vec2)).length < 20f;
+                if (duck2 != null) 
+                    hoverChancyChallenge = duck2.grounded && (duck2.position - (position + vec2)).length < 20f;
             }
-            _dust.fade = 0.5f;
-            _dust.visible = _unlocked && visible;
+            if (_dust != null)
+            {
+                _dust.fade = 0.5f;
+                _dust.visible = _unlocked && visible;
+            }
         }
 
         public override void Draw()
