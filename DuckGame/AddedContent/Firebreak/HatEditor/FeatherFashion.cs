@@ -54,7 +54,16 @@ namespace DuckGame
                 .ToDictionary(x => x.Index, x => x);
 
             s_fileWatcher.Changed += OnFileChanged;
-            // s_fileWatcher.Renamed += OnFileChanged;
+            s_fileWatcher.Renamed += OnFileChanged;
+
+            MonoMain.OnGameExit += crashed =>
+            {
+                if (!crashed)
+                    return;
+
+                s_filePath = Path.GetDirectoryName(s_filePath) + Path.GetFileNameWithoutExtension(s_filePath) + "_autosave.png";
+                GlobalActionSave();
+            };
         }
 
         private static void OnFileChanged(object source, FileSystemEventArgs args)
