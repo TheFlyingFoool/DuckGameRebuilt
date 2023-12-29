@@ -12,15 +12,21 @@ namespace DuckGame
         private const string SaveDirName = "Data/";
         private const string MainSaveFileName = "Config" + FileExtension;
         private const string FileExtension = ".quack";
-        public static string SaveDirPath = DuckFile.saveDirectory + SaveDirName;
+        public static string DecidedPath = "";
+        public static string SaveDirPath = DecidedPath + SaveDirName;
         public static string MainSaveFilePath => SaveDirPath + MainSaveFileName;
 
         public static void Initialize()
         {
             if (Marker.AutoConfigAttribute.All.Count == 0)
                 return;
-            
-            if (!Directory.Exists(SaveDirPath))
+            DecidedPath = DuckFile.newSaveLocation;
+            string dir = "DuckGame/"; 
+            if (!DuckFile.DirectoryExists(DecidedPath + dir) && !Program.alternateSaveLocation && DuckFile.DirectoryExists(DuckFile.oldSaveLocation + dir))
+            {
+                DecidedPath = DuckFile.oldSaveLocation;
+            }
+                if (!Directory.Exists(SaveDirPath))
                 Directory.CreateDirectory(SaveDirPath);
 
             if (!File.Exists(MainSaveFilePath))
