@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Xml;
 
 [assembly: AssemblyTitle("Duck Game Rebuilt")]
 [assembly: AssemblyCompany("DGR Team")]
@@ -11,7 +12,7 @@ using System.Reflection;
 
 namespace DuckGame.Cobalt
 {
-    public sealed class Rebuilder : ClientMod
+    public sealed class Mod : ClientMod
     {
         public static bool OnDGR;
         
@@ -52,25 +53,47 @@ namespace DuckGame.Cobalt
             string root = Path.GetDirectoryName(gamePath);
             string tempGamePath = gamePath + ".tmp";
 
+            // generate files
+            if (File.Exists(tempGamePath))
+                File.Delete(tempGamePath);
             File.Move(gamePath, tempGamePath);
 
             using FileStream vanilla = File.OpenRead(tempGamePath);
             using FileStream patched = File.Create(gamePath);
 
             // load BsDiff and apply patch
-            Directory.SetCurrentDirectory(configuration.directory + "/patch");
-
             string sharpZipLibNewPath = root + "/ICSharpCode.SharpZipLib.dll";
             if (!File.Exists(sharpZipLibNewPath))
                 File.Copy(SharpZipLibFilePath, sharpZipLibNewPath);
-            
-            Assembly.LoadFile(BsDiffFilePath)
-                .ExportedTypes.First()
-                .GetMethod("Apply", BindingFlags.Public | BindingFlags.Static)!
-                .Invoke(null, new object[] {vanilla, new Func<Stream>(() => File.OpenRead(PatchFilePath)), patched});
+
+            try
+            {
+                Assembly.LoadFile(BsDiffFilePath)
+                    .ExportedTypes.First()
+                    .GetMethod("Apply", BindingFlags.Public | BindingFlags.Static)!
+                    .Invoke(null, new object[] {vanilla, new Func<Stream>(() => File.OpenRead(PatchFilePath)), patched});
+            }
+            catch
+            {
+                vanilla.Close();
+                patched.Close();
+                
+                File.Delete(gamePath);
+                File.Move(tempGamePath, gamePath);
+                
+                throw;
+            }
 
             // indicator for DGR quickloading
-            File.WriteAllText(root + "/rebuilt.enabled", DGRFilePath);
+            File.WriteAllLines(root + "/rebuilt.quack", new[]
+            {
+                DGRFilePath,
+                
+                // WHY WAS THIS INTERNAL AND NOT PUBLIC, PARIL ??!
+                (string) typeof(ModLoader).GetProperty("modConfigFile", BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null),
+                
+                configuration.uniqueID
+            });
         }
     }
 }
