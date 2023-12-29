@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BsDiff;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -22,6 +23,8 @@ namespace DuckGame.Cobalt
 
             if (!OnDGR)
             {
+                AppDomain.CurrentDomain.AssemblyResolve += OnCurrentDomainOnAssemblyResolve;
+                
                 PatchForDGRQuickload();
                 RestartToDGR();
             }
@@ -61,20 +64,14 @@ namespace DuckGame.Cobalt
             using FileStream vanilla = File.OpenRead(tempGamePath);
             using FileStream patched = File.Create(gamePath);
 
-            // load BsDiff and apply patch
-            string sharpZipLibNewPath = root + "/ICSharpCode.SharpZipLib.dll";
-            if (!File.Exists(sharpZipLibNewPath))
-                File.Copy(SharpZipLibFilePath, sharpZipLibNewPath);
-
+            // apply patch
             try
             {
-                Assembly.LoadFile(BsDiffFilePath)
-                    .ExportedTypes.First()
-                    .GetMethod("Apply", BindingFlags.Public | BindingFlags.Static)!
-                    .Invoke(null, new object[] {vanilla, new Func<Stream>(() => File.OpenRead(PatchFilePath)), patched});
+                BinaryPatch.Apply(vanilla, () => File.OpenRead(PatchFilePath), patched);
             }
             catch
             {
+                // unfuck it
                 vanilla.Close();
                 patched.Close();
                 
@@ -94,6 +91,20 @@ namespace DuckGame.Cobalt
                 
                 configuration.uniqueID
             });
+        }
+
+        private Assembly OnCurrentDomainOnAssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            if (args.Name.StartsWith("ICSharpCode.SharpZipLib"))
+            {
+                return Assembly.LoadFile(SharpZipLibFilePath);
+            }
+            else if (args.Name.StartsWith("BsDiff"))
+            {
+                return Assembly.LoadFile(BsDiffFilePath);
+            }
+
+            return null;
         }
     }
 }

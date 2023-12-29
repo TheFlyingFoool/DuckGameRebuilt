@@ -35,6 +35,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BsDiff">
+      <HintPath>..\patch\BsDiff.dll</HintPath>
+    </Reference>
     <Reference Include="DGSteam">
       <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Duck Game\DGSteam.dll</HintPath>
       <Private>False</Private>
