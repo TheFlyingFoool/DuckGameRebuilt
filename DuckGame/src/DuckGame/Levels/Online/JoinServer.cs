@@ -6,6 +6,7 @@
         private ulong _lobbyID;
         private float _dots;
         private ulong _timeout;
+        private ulong _timeoutMax = 1200UL;
         private bool _teamSelect;
         private string password = "";
         private bool _startedJoining;
@@ -15,6 +16,10 @@
             _lobbyID = lobbyAddress;
             _centeredView = true;
             _teamSelect = current is TeamSelect2;
+            if (Program.IsLanTestUser)
+            {
+                _timeoutMax = 3600UL;
+            }
         }
 
         public JoinServer(ulong lobbyAddress, string pPassword)
@@ -77,7 +82,7 @@
 
         public override void Update()
         {
-            if (_timeout++ > 1200UL)
+            if (_timeout++ > _timeoutMax)
             {
                 Network.DisconnectClient(DuckNetwork.localConnection, new DuckNetErrorInfo(DuckNetError.ConnectionTimeout, "Connection timeout!"));
                 current = new ConnectionError("|RED|CONNECTION FAILED!");
