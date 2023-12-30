@@ -66,38 +66,36 @@ namespace DuckGame
         {
             if (with is IPlatform && _ropeHandle is not null && _ropeHandle.Retracting)
                 return;
-            
+            bool Stuck = true;
             if (_ropeHandle is not null && _ropeHandle.Retracting)
-                goto SkipStuck;
-            
-            if (held || grounded || !(with is Block || (with is IPlatform && ((with is Holdable && from != ImpactedFrom.Top) || from == ImpactedFrom.Bottom))))
-                goto SkipStuck;
-            
-            if (with is ThrowingKnife)
-                goto SkipStuck; // :)
-            
-            if (with is ItemBox && from == ImpactedFrom.Top)
-                goto SkipStuck;
-            
-            if (with is Window && velocity.lengthSq > 16)
+                Stuck = false;
+            else if (held || grounded || !(with.isBlock || (with is IPlatform && ((with is Holdable && from != ImpactedFrom.Top) || from == ImpactedFrom.Bottom))))
+                Stuck = false;
+
+            else if (with is ThrowingKnife)
+                Stuck = false;
+
+            else if (with is ItemBox && from == ImpactedFrom.Top)
+                Stuck = false;
+            else if (with is Window && velocity.lengthSq > 16)
             {
                 with.Destroy(new DTImpact(this));
-                goto SkipStuck;
+                Stuck = false;
             }
+            if (Stuck)
+            {
+                _stuckAngle = angle;
+                Stuck = true;
+                _wasStuck = false;
+                vSpeed = 0f;
+                gravMultiplier = 0f;
+                grounded = true;
+                _wasStuck = true;
+                StuckThing = with;
+                _stuckThingEtchOffset = position - StuckThing.position;
 
-            _stuckAngle = angle;
-            Stuck = true;
-            _wasStuck = false;
-            vSpeed = 0f;
-            gravMultiplier = 0f;
-            grounded = true;
-            _wasStuck = true;
-            StuckThing = with;
-            _stuckThingEtchOffset = position - StuckThing.position;
-
-            SFX.Play("dartStick", 0.8f, -0.1f + Rando.Float(0.2f), 0f, false);
-
-            SkipStuck:
+                SFX.Play("dartStick", 0.8f, -0.1f + Rando.Float(0.2f), 0f, false);
+            }
             base.Impact(with, from, solidImpact);
         }
 
