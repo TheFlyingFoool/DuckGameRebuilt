@@ -597,7 +597,7 @@ namespace DuckGame
                     // lastGrounded = DateTime.Now;
                     framesSinceGrounded = 0;// mmmm remove i shall !(_collideBottom is PhysicsObject) // !doFloat &&  !doFloat && 
 
-                    if ((!doFloat || buoyancy <= 0f) && hSpeed == 0 && this.vSpeed == 0 && (((_collideBottom.isBlock || _collideBottom is IPlatform) && (!(_collideBottom is ItemBox) || (_collideBottom as ItemBox).canBounce)) || initemspawner) && (!(_collideBottom is PhysicsObject) || ((_collideBottom as PhysicsObject).sleeping))) // !(_collideBottom as PhysicsObject).modifiedGravForFloat && _collideBottom.grounded && 
+                    if ((!doFloat || buoyancy <= 0f) && hSpeed == 0 && this.vSpeed == 0 && (((_collideBottom is Block || _collideBottom is IPlatform) && (!(_collideBottom is ItemBox) || (_collideBottom as ItemBox).canBounce)) || initemspawner) && (!(_collideBottom is PhysicsObject) || ((_collideBottom as PhysicsObject).sleeping))) // !(_collideBottom as PhysicsObject).modifiedGravForFloat && _collideBottom.grounded && 
                         // (this._lastrealcollideBottom as PhysicsObject)._lastrealcollideBottom is PhysicsObject
                         _sleeping = true;
                 }
