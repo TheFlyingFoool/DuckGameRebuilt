@@ -104,7 +104,7 @@
                 lastthing = thing;
                 vSpeed = 0f;
                 _sprite.speed = 0f;
-                if (thing is Block) _rested = true;
+                if (thing.isBlock) _rested = true;
             }
             else _sprite.speed = 0.3f;
             x += hSpeed;

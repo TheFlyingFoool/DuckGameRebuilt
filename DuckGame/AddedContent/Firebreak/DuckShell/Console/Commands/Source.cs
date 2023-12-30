@@ -7,13 +7,13 @@ namespace DuckGame.ConsoleEngine
 {
     public static partial class Commands
     {
-        public static string ScriptsDirPath = $"{DuckFile.newSaveLocation}DuckGame/Scripts/";
+        public static string ScriptsDirPath => $"{DuckFile.saveDirectory}DuckGame/Scripts/";
         public const string SCRIPT_FILE_EXTENSION = ".dsh";
         
         [Marker.DevConsoleCommand(Description = "Runs a script from your ~DuckGame/Scripts/ folder", To = ImplementTo.DuckShell)]
         public static void Source(
             [FilePathAutoCompl(
-                "|newSaveLocation|DuckGame/Scripts",
+                "|saveDirectory|DuckGame/Scripts",
                 SystemEntryType.File,
                 SearchOption.TopDirectoryOnly, // todo: support recursive directory search
                 FilePathAutoComplAttribute.Return.EntryNameNoExtension)] string scriptName)

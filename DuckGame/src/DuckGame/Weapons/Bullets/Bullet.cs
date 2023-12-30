@@ -323,7 +323,7 @@ namespace DuckGame
                                         ImpactedFrom from = currentTravel.y < bulletImpact.top + 1f || currentTravel.y > bulletImpact.bottom - 1f ? (travelDirNormalized.y > 0f ? ImpactedFrom.Top : ImpactedFrom.Bottom) : (travelDirNormalized.x > 0f ? ImpactedFrom.Left : ImpactedFrom.Right);
                                         _physicalBullet.position = currentTravel;
                                         _physicalBullet.velocity = velocity;
-                                        if (bulletImpact is Block || bulletImpact is IPlatform && travelDirNormalized.y > 0f)
+                                        if (bulletImpact.isBlock || bulletImpact is IPlatform && travelDirNormalized.y > 0f)
                                             bulletImpact.SolidImpact(_physicalBullet, from);
                                         else if (bulletImpact.thickness > ammo.penetration)
                                             bulletImpact.Impact(_physicalBullet, from, false);
@@ -413,7 +413,7 @@ namespace DuckGame
                                         }
                                     }
                                 }
-                                else if (!flag3 && (rebound && (!ammo.softRebound || bulletImpact.physicsMaterial != PhysicsMaterial.Wood) && bulletImpact is Block || reboundOnce))
+                                else if (!flag3 && (rebound && (!ammo.softRebound || bulletImpact.physicsMaterial != PhysicsMaterial.Wood) && bulletImpact.isBlock || reboundOnce))
                                 {
                                     float length1 = (_actualStart - currentTravel).length;
                                     if (length1 > 2f)

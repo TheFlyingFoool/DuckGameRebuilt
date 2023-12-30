@@ -13,6 +13,7 @@ namespace DuckGame
     /// </summary>
     public abstract class Thing : Transform
     {
+        public bool isBlock;
         public bool isAnchored;
         public bool SpawnCannonUpdate;
         public int SkipIntratick;
@@ -1517,6 +1518,7 @@ namespace DuckGame
 
         public Thing(float xval = 0f, float yval = 0f, Sprite sprite = null)
         {
+            isBlock = this is Block;
             x = xval;
             y = yval;
             graphic = sprite;

@@ -152,7 +152,7 @@ namespace DuckGame
                                 if (best != null && duck.grounded)
                                 {
                                     float hs;
-                                    if (best is Block)
+                                    if (best.isBlock)
                                     {
                                         hs = 10;
                                     }

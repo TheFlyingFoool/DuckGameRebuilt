@@ -97,7 +97,7 @@ namespace DuckGame
         }
         public override void OnSolidImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (isServerForObject && dragSpin && with is Block)
+            if (isServerForObject && dragSpin && with.isBlock)
             {
                 dragSpin = false;
                 yscale = 1;
@@ -113,7 +113,7 @@ namespace DuckGame
                     Level.Add(spark);
                 }
             }
-            if (isServerForObject && spin && with is Block)
+            if (isServerForObject && spin && with.isBlock)
             {
                 SFX.PlaySynchronized("schammerHitsAWall");
                 stuck = true;

@@ -60,9 +60,11 @@ namespace DuckGame
             {
                 if (!crashed)
                     return;
-
-                s_filePath = Path.GetDirectoryName(s_filePath) + "/" + Path.GetFileNameWithoutExtension(s_filePath) + "_autosave.png";
-                GlobalActionSave();
+                if (s_filePath != null)
+                {
+                    s_filePath = Path.GetDirectoryName(s_filePath) + "/" + Path.GetFileNameWithoutExtension(s_filePath) + "_autosave.png";
+                    GlobalActionSave();
+                }
             };
         }
 
