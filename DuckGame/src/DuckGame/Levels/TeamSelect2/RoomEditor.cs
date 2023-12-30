@@ -589,10 +589,10 @@ namespace DuckGame
                                     _furniPos.y = (float)(thing.bottom + availableFurni.sprite.height / 2 - 2);
                                     if (_box.rightRoom)
                                     {
-                                        if (thing is Block && _furniPos.x < 226)
+                                        if (thing.isBlock && _furniPos.x < 226)
                                             _furniPos.y += 11f;
                                     }
-                                    else if (thing is Block && _furniPos.x > 93 && _furniPos.x < 160)
+                                    else if (thing.isBlock && _furniPos.x > 93 && _furniPos.x < 160)
                                         _furniPos.y += 11f;
                                 }
                             }

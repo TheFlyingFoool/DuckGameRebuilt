@@ -33,7 +33,7 @@ namespace DuckGame
 
         public override void OnCollide(Vec2 pos, Thing t, bool willBeStopped)
         {
-            if (!(t is Block & willBeStopped) || !(this.owner is PortalGun owner))
+            if (!(t.isBlock & willBeStopped) || !(this.owner is PortalGun owner))
                 return;
             if (!(Level.current.things[typeof(Portal)].FirstOrDefault(p => (p as Portal).gun == this.owner) is Portal portal))
             {

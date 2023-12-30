@@ -59,7 +59,7 @@ namespace DuckGame
             {
                 return;
             }
-            if (with is Block && CalculateImpactPower(with, from) > 4 && breakAgainCooldown <= 0)
+            if (with.isBlock && CalculateImpactPower(with, from) > 4 && breakAgainCooldown <= 0)
             {
                 if (broken)
                 {

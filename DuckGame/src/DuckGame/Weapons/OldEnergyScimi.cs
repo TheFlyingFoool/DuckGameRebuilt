@@ -163,7 +163,7 @@ namespace DuckGame
         {
             if (!_wasLifted || owner != null)
                 return;
-            if (with is Block || with is IPlatform && from == ImpactedFrom.Bottom && vSpeed > 0)
+            if (with.isBlock || with is IPlatform && from == ImpactedFrom.Bottom && vSpeed > 0)
             {
                 Shing();
                 if (_framesSinceThrown <= 5)
