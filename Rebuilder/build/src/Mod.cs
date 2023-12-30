@@ -20,8 +20,9 @@ namespace DuckGame.Cobalt
         protected override void OnPreInitialize()
         {
             OnDGR = IsOnDGR();
+            bool alreadyPatched = File.Exists(Path.GetDirectoryName(typeof(ItemBox).Assembly.Location) + "/rebuilt.quack");
 
-            if (!OnDGR)
+            if (!OnDGR && !alreadyPatched)
             {
                 AppDomain.CurrentDomain.AssemblyResolve += OnCurrentDomainOnAssemblyResolve;
                 
@@ -64,14 +65,13 @@ namespace DuckGame.Cobalt
             using FileStream vanilla = File.OpenRead(tempGamePath);
             using FileStream patched = File.Create(gamePath);
 
-            // apply patch
             try
             {
                 BinaryPatch.Apply(vanilla, () => File.OpenRead(PatchFilePath), patched);
             }
             catch
             {
-                // unfuck it
+                // unfuck stuff in case it crashes
                 vanilla.Close();
                 patched.Close();
                 
