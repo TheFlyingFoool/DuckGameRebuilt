@@ -255,15 +255,15 @@ namespace DuckGame
             int typekey = t.GetHashCode();
             if (ids.Length == 1)
             {
-                if (Buckets.TryGetValue(ids[0], out Dictionary<int, List<Thing>> output))
+                if (Buckets.TryGetValue(ids[0], out Dictionary<int, List<Thing>> output) && 
+                    output.TryGetValue(typekey, out List<Thing> outputthings))
                 {
-                    if (output.TryGetValue(typekey, out List<Thing> outputthings))
+                    
+                    foreach (Thing thing in outputthings)
                     {
-                        foreach (Thing thing in outputthings)
-                        {
-                            yield return thing;
-                        }
+                        yield return thing;
                     }
+                   
                 }
             }
             else
@@ -276,19 +276,18 @@ namespace DuckGame
                 for (int i = 0; i < ids.Length; i++)
                 {
                     Vec2 bucket = ids[i];
-                    if (Buckets.TryGetValue(bucket, out Dictionary<int, List<Thing>> output))
+                    if (Buckets.TryGetValue(bucket, out Dictionary<int, List<Thing>> output) && 
+                        output.TryGetValue(typekey, out List<Thing> outputthings))
                     {
-                        if (output.TryGetValue(typekey, out List<Thing> outputthings))
-                        {
-                            foreach (Thing item in outputthings)
+                       foreach (Thing item in outputthings)
+                       {
+                            if (item._queryId != queryId)
                             {
-                                if (item._queryId != queryId)
-                                {
-                                    item._queryId = queryId;
-                                    yield return item;
-                                }
+                                item._queryId = queryId;
+                                yield return item;
                             }
-                        }
+                       }
+                        
                     }
                 }
             }
@@ -300,14 +299,12 @@ namespace DuckGame
             int typekey = t.GetHashCode();
             if (ids.Length == 1)
             {
-                if (Buckets.TryGetValue(ids[0], out Dictionary<int, List<Thing>> output))
+                if (Buckets.TryGetValue(ids[0], out Dictionary<int, List<Thing>> output) &&
+                    output.TryGetValue(typekey, out List<Thing> outputthings))
                 {
-                    if (output.TryGetValue(typekey, out List<Thing> outputthings))
+                    foreach (Thing thing in outputthings)
                     {
-                        foreach (Thing thing in outputthings)
-                        {
-                            yield return thing;
-                        }
+                        yield return thing;
                     }
                 }
             }
@@ -321,17 +318,15 @@ namespace DuckGame
                 for (int i = 0; i < ids.Length; i++)
                 {
                     Vec2 bucket = ids[i];
-                    if (Buckets.TryGetValue(bucket, out Dictionary<int, List<Thing>> output))
+                    if (Buckets.TryGetValue(bucket, out Dictionary<int, List<Thing>> output) &&
+                        output.TryGetValue(typekey, out List<Thing> outputthings))
                     {
-                        if (output.TryGetValue(typekey, out List<Thing> outputthings))
+                        foreach (Thing item in outputthings)
                         {
-                            foreach (Thing item in outputthings)
+                            if (item._queryId != queryId)
                             {
-                                if (item._queryId != queryId)
-                                {
-                                    item._queryId = queryId;
-                                    yield return item;
-                                }
+                                item._queryId = queryId;
+                                yield return item;
                             }
                         }
                     }
@@ -349,6 +344,7 @@ namespace DuckGame
             {
                 return;
             }
+            int ThingHashCode = typeof(Thing).GetHashCode();
             foreach (Vec2 item in thing.Buckets)
             {
                 if (Buckets.TryGetValue(item, out Dictionary<int, List<Thing>> output))
@@ -367,14 +363,14 @@ namespace DuckGame
                         }
                         //_allObjectsByType.Add(key, obj);
                     }
-                    if (output.TryGetValue(typeof(Thing).GetHashCode(), out List<Thing> output3))
+                    if (output.TryGetValue(ThingHashCode, out List<Thing> output3))
                     {
-                        output[typeof(Thing).GetHashCode()].Remove(thing);
+                        output[ThingHashCode].Remove(thing);
                     }
                     continue;
                 }
                 output = new Dictionary<int, List<Thing>>();
-                output[typeof(Thing).GetHashCode()] = new List<Thing>() { };
+                output[ThingHashCode] = new List<Thing>() { };
                 //foreach (System.Type key in Editor.AllBaseTypes[thing.GetType()])
                 //{
                 //    //output[key].Add(thing);
@@ -411,11 +407,11 @@ namespace DuckGame
 
                         //_allObjectsByType.Add(key, obj);
                     }
-                    output[typeof(Thing).GetHashCode()].Add(thing);
+                    output[ThingHashCode].Add(thing);
                     continue;
                 }
                 output = new Dictionary<int, List<Thing>>();
-                output[typeof(Thing).GetHashCode()] = new List<Thing>() { thing };
+                output[ThingHashCode] = new List<Thing>() { thing };
                 foreach (Type key in Editor.AllBaseTypes[thing.GetType()])
                 {
                     //output[key].Add(thing);
