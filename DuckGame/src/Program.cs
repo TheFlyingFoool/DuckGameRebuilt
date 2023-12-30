@@ -308,12 +308,7 @@ namespace DuckGame
             
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             MonoMain.startTime = DateTime.Now;
-            for (int index = 0; index < args.Length; ++index)
-            {
-                commandLine += args[index];
-                if (index != args.Length - 1)
-                    commandLine += " ";
-            }
+            commandLine = string.Join(" ", args.Select(x => x.Contains(' ') ? $"\"{x}\"" : x));
             MarkerAttribute.Initialize();
             AutoConfigHandler.Initialize();
             int Controllers = 8;
