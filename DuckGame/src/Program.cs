@@ -29,11 +29,10 @@ namespace DuckGame
     public static class Program
     {
         public static bool fullstop;
-        public const bool IS_DEV_BUILD =
-#if AutoUpdater
-          false;
+#if DEBUG
+        public const bool IS_DEV_BUILD = true;
 #else
-            true;
+        public const bool IS_DEV_BUILD = false;
 #endif
 
         // this should be formatted like X.X.X where each X is a number
