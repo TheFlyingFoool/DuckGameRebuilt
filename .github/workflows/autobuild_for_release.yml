@@ -45,11 +45,12 @@ jobs:
 
       - name: Build with AutoUpdater
         run: msbuild /m /p:Configuration=Release .
-      
+
+      - name: Relocate binaries to inside DGR mod
+        run: mv ./bin ./Rebuilder/dgr
+
       - name: Update DGR mod
-      - run: |
-          mv ./bin ./Rebuilder/dgr
-      - uses: AnarkisGaming/workshop@v1
+        uses: AnarkisGaming/workshop@v1
         with:
           appID: 312530
           publishedFileID: 3122448918
