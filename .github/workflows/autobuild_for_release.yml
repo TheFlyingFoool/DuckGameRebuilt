@@ -51,8 +51,11 @@ jobs:
       - name: Build without AutoUpdater
         run: msbuild /m /p:Configuration=Release .
 
-      - name: Relocate binaries to inside DGR mod
-        run: mv ./bin ./Rebuilder/dgr
+      - name: Reorganize files for DGR mod
+        run: | 
+          mv ./bin ./Rebuilder/dgr
+          find ./Rebuilder -type f ! \( -name 'mod.conf' -o -name 'Rebuilder.dll' \) -delete
+          rm -r ./Rebuilder/build
 
       - name: Update DGR mod
         uses: AnarkisGaming/workshop@v1
@@ -60,6 +63,7 @@ jobs:
           appID: 312530
           publishedFileID: 3122448918
           path: ./Rebuilder
+          changelog: hi
         env:
           STEAM_ACCOUNT_NAME: "DuckGameRebuilt"
           STEAM_PASSWORD: ${{ secrets.STEAM_PASS }}
