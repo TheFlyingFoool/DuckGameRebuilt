@@ -56,13 +56,15 @@ jobs:
           mv ./bin ./Rebuilder/dgr
           find ./Rebuilder -type f ! \( -name 'mod.conf' -o -name 'Rebuilder.dll' \) -delete
           rm -r ./Rebuilder/build
+          mkdir ./steammod
+          mv ./Rebuilder ./steammod/Rebuilder
 
       - name: Update DGR mod
         uses: AnarkisGaming/workshop@v1
         with:
           appID: 312530
           publishedFileID: 3122448918
-          path: ./Rebuilder
+          path: ./steammod
           changelog: hi
         env:
           STEAM_ACCOUNT_NAME: "DuckGameRebuilt"
