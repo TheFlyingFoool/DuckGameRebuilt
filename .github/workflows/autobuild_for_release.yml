@@ -54,7 +54,7 @@ jobs:
       - name: Reorganize files for DGR mod
         run: | 
           mv ./bin ./Rebuilder/dgr
-          find ./Rebuilder -type f ! \( -name 'mod.conf' -o -name 'Rebuilder.dll' \) -exec rm {} +
+          find ./Rebuilder -maxdepth 1 ! \( -name "mod.conf" -o -name "Rebuilder.dll" \) -type f -exec rm {} +
           rm -r ./Rebuilder/build
           mkdir ./steammod
           mv ./Rebuilder ./steammod/Rebuilder
