@@ -19,6 +19,8 @@ namespace DuckGame.Cobalt
         
         protected override void OnPreInitialize()
         {
+            _properties.Set("isDgrMod", true);
+            
             OnDGR = IsOnDGR();
             bool alreadyPatched = File.Exists(Path.GetDirectoryName(typeof(ItemBox).Assembly.Location) + "/rebuilt.quack");
 
@@ -27,6 +29,7 @@ namespace DuckGame.Cobalt
                 AppDomain.CurrentDomain.AssemblyResolve += OnCurrentDomainOnAssemblyResolve;
                 
                 PatchForDGRQuickload();
+                SaveVanillaPath();
                 RestartToDGR();
             }
             
@@ -50,7 +53,12 @@ namespace DuckGame.Cobalt
             Process.GetCurrentProcess().Kill();
         }
 
-        // assuming this is currently vanilla dg...
+        private void SaveVanillaPath()
+        {
+            File.WriteAllText(DuckFile.saveDirectory + "/vanilla_dg.path", typeof(ItemBox).Assembly.Location);
+        }
+
+        // assuming this isn't already-patched dg...
         private void PatchForDGRQuickload()
         {
             string gamePath = typeof(ItemBox).Assembly.Location;

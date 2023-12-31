@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Xml;
 
@@ -286,11 +287,19 @@ namespace DuckGame
                 configDocument.Save(configFilePath);
             }
         }
-
+        
         internal void Disable()
         {
             if (disabled)
                 return;
+            
+            if (ModLoader.allMods.TryFirst(x => x.configuration == this, out Mod mod)
+                && mod.properties.Contains("isDgrMod") && File.Exists(DuckFile.saveDirectory + "/vanilla_dg.path"))
+            {
+                ModLoader.RestartToVanillaDg = true;
+                ModLoader.VanillaDgPath = File.ReadAllText(DuckFile.saveDirectory + "/vanilla_dg.path");
+            }
+            
             DevConsole.Log(DCSection.Mod, name + " Was Disabled!");
             disabled = true;
             ModLoader.SetModDisabled(this, true);
@@ -300,6 +309,13 @@ namespace DuckGame
         {
             if (!disabled)
                 return;
+            
+            if (ModLoader.allMods.TryFirst(x => x.configuration == this, out Mod mod)
+                && mod.properties.Contains("isDgrMod"))
+            {
+                ModLoader.RestartToVanillaDg = false;
+            }
+            
             disabled = false;
             ModLoader.SetModDisabled(this, false);
         }
