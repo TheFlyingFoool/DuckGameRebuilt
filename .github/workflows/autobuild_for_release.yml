@@ -26,7 +26,7 @@ jobs:
           mkdir ./bin
           cp ./DuckGame/lib/* ./bin
 
-      - name: Build
+      - name: Build with AutoUpdater
         run: msbuild /m /p:Configuration=ReleaseAutoUpdater .
 
       - name: Zip binaries
@@ -42,3 +42,18 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: ./DuckGameRebuilt.zip
           overwrite: true
+
+      - name: Build with AutoUpdater
+        run: msbuild /m /p:Configuration=Release .
+      
+      - name: Update DGR mod
+      - run: |
+          mv ./bin ./Rebuilder/dgr
+      - uses: AnarkisGaming/workshop@v1
+        with:
+          appID: 312530
+          publishedFileID: 3122448918
+          path: ./Rebuilder
+        env:
+          STEAM_ACCOUNT_NAME: "DuckGameRebuilt"
+          STEAM_PASSWORD: ${{ secrets.STEAM_PASS }}
