@@ -21,7 +21,7 @@ jobs:
       - name: Restore NuGet packages
         run: nuget restore .
 
-      - name: Add Project Dependencies
+      - name: Add Project Dependencies [#1]
         run: |
           mkdir ./bin
           cp ./DuckGame/lib/* ./bin
@@ -43,18 +43,29 @@ jobs:
           file: ./DuckGameRebuilt.zip
           overwrite: true
 
-      - name: Build with AutoUpdater
+      - name: Add Project Dependencies [#2]
+        run: |
+          mkdir ./bin
+          cp ./DuckGame/lib/* ./bin
+
+      - name: Build without AutoUpdater
         run: msbuild /m /p:Configuration=Release .
 
-      - name: Relocate binaries to inside DGR mod
-        run: mv ./bin ./Rebuilder/dgr
+      - name: Reorganize files for DGR mod
+        run: | 
+          mv ./bin ./Rebuilder/dgr
+          find ./Rebuilder -maxdepth 1 ! \( -name "mod.conf" -o -name "Rebuilder.dll" \) -type f -exec rm {} +
+          rm -r ./Rebuilder/build
+          mkdir ./steammod
+          mv ./Rebuilder ./steammod/Rebuilder
 
       - name: Update DGR mod
         uses: AnarkisGaming/workshop@v1
         with:
           appID: 312530
           publishedFileID: 3122448918
-          path: ./Rebuilder
+          path: ./steammod
+          changelog: hi
         env:
           STEAM_ACCOUNT_NAME: "DuckGameRebuilt"
           STEAM_PASSWORD: ${{ secrets.STEAM_PASS }}
