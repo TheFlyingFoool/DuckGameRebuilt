@@ -84,7 +84,7 @@ namespace AddedContent.Hyeve
             _uiDead = false;
         }
 
-        [Marker.DrawingContext(Marker.DrawingLayer.HUD, DoDraw = false)]
+        [Marker.DrawingContext(DrawingLayer.HUD, DoDraw = false)]
         public static void PolyDrawTest()
         {
             if(InputData.KeyPressed(Keys.F10) && MonoMain.UpdateLerpState) 
@@ -127,7 +127,7 @@ namespace AddedContent.Hyeve
         }
 
 
-        [Marker.DrawingContext(Marker.DrawingLayer.HUD, DoDraw = false)]
+        [Marker.DrawingContext(DrawingLayer.HUD, DoDraw = false)]
         public static void TexTest()
         {
             PolyRenderer.Rect(Vector2.Zero, Vector2.One * 50, Color.Aqua);

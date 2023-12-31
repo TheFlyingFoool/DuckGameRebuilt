@@ -35,7 +35,7 @@
                 SFX.Play("glassBreak");
                 Level.Remove(this);
             }
-            else if (with is Block && CalculateImpactPower(with, from) > 1)
+            else if (with.isBlock && CalculateImpactPower(with, from) > 1)
             {
                 Level.Remove(this);
                 SFX.Play("glassBreak");

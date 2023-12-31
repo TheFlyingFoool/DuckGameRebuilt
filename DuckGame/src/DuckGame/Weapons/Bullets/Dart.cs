@@ -151,17 +151,17 @@
                     deg += 360f;
                 }
                 bool stick = false;
-                if ((with is Block || with is Spikes || with is Saws) && from == ImpactedFrom.Right && (deg < 45f || deg > 315f))
+                if ((with.isBlock || with is Spikes || with is Saws) && from == ImpactedFrom.Right && (deg < 45f || deg > 315f))
                 {
                     stick = true;
                     angleDegrees = 0f;
                 }
-                else if ((with is Block || with is Spikes || with is Saws) && from == ImpactedFrom.Top && deg > 45f && deg < 135f)
+                else if ((with.isBlock || with is Spikes || with is Saws) && from == ImpactedFrom.Top && deg > 45f && deg < 135f)
                 {
                     stick = true;
                     angleDegrees = 270f;
                 }
-                else if ((with is Block || with is Spikes || with is Saws) && from == ImpactedFrom.Left && deg > 135f && deg < 225f)
+                else if ((with.isBlock || with is Spikes || with is Saws) && from == ImpactedFrom.Left && deg > 135f && deg < 225f)
                 {
                     stick = true;
                     angleDegrees = 180f;

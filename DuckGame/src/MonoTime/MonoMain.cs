@@ -565,7 +565,7 @@ namespace DuckGame
                 num3 = 1200;
             _screenWidth = num1;
             _screenHeight = num3;
-            DuckFile.Initialize();
+            //DuckFile.Initialize(); moved to Program.cs
             Options.Load();
             Cloud.Initialize();
             instance = this;
