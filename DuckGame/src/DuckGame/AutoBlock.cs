@@ -45,6 +45,7 @@ namespace DuckGame
         private AutoBlock topbRight;
         private AutoBlock bottombLeft;
         private AutoBlock bottombRight;
+        public int brokenSptiteIndex = 0;
 
         public override void SetTranslation(Vec2 translation)
         {
@@ -686,7 +687,8 @@ namespace DuckGame
             {
                 if (_brokenSprite == null)
                 {
-                    _brokenSprite = new Sprite("brokeEdge");
+                    _brokenSprite = new SpriteMap("brokeEdgeVariants", 16, 16);
+                    (_brokenSprite as SpriteMap).frame = brokenSptiteIndex;
                     _brokenSprite.CenterOrigin();
                     _brokenSprite.depth = depth;
                 }

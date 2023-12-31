@@ -16,6 +16,7 @@
             layer = Layer.Blocks;
             depth = -0.5f;
             placementLayerOverride = Layer.Game;
+            brokenSptiteIndex = 6;
         }
 
         public override void Draw() => base.Draw();
