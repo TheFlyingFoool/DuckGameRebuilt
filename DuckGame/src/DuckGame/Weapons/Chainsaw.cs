@@ -186,7 +186,7 @@ namespace DuckGame
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (owner != null || !(with is Block))
+            if (owner != null || !(with.isBlock))
                 return;
             Shing(with);
             if (totalImpactPower <= 3f)

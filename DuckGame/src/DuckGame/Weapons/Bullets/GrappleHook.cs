@@ -33,7 +33,7 @@
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (_inGun || !(with is Block))
+            if (_inGun || !(with.isBlock))
                 return;
             _stuck = true;
         }

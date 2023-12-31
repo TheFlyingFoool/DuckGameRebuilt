@@ -19,7 +19,7 @@ namespace DuckGame.ConsoleEngine
         }
         
         [Marker.UpdateContext]
-        public static void UpdatePipleineDelayedCommands()
+        private static void UpdatePipleineDelayedCommands()
         {
             List<string> markedForDeletion = new();
             

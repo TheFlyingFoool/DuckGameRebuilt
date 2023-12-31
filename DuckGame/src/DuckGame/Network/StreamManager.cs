@@ -517,7 +517,7 @@ namespace DuckGame
                     }
                     for (int index = 0; index < _freshMessages.Count; ++index)
                     {
-                        if (true)//if (currentPacket.data.lengthInBytes <= 1000)
+                        if (currentPacket.data.lengthInBytes <= 1000 || !Network.lanMode)//if (currentPacket.data.lengthInBytes <= 1000)
                         {
                             NetMessage freshMessage = _freshMessages[index];
                             if (connection.status != ConnectionStatus.Connected && !(freshMessage is IConnectionMessage))
@@ -580,8 +580,8 @@ namespace DuckGame
                                 --index;
                             }
                         }
-                        // else
-                        //      break;
+                        else
+                              break;
                     }
                 }
             }

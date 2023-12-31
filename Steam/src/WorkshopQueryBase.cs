@@ -49,9 +49,18 @@ public abstract class WorkshopQueryBase : IDisposable {
 
     internal virtual unsafe void Destroy() 
     {
-        SteamUGC.ReleaseQueryUGCRequest(_handle);
-        _handle = new UGCQueryHandle_t();
-        _completedCallResult = CallResult<SteamUGCQueryCompleted_t>.Create(OnSteamUGCQueryCompleted);
+        if (!Steam.initialized)
+            return;
+        try // this segment seems to get triggered when game closing and can cause another crash ontop of closing so Try catched, the above should cover it as well though.
+        {
+            SteamUGC.ReleaseQueryUGCRequest(_handle);
+            _handle = new UGCQueryHandle_t();
+            _completedCallResult = CallResult<SteamUGCQueryCompleted_t>.Create(OnSteamUGCQueryCompleted);
+        }
+        catch
+        {
+
+        }
     }
 
     internal virtual unsafe void SetQueryData() 
@@ -232,8 +241,7 @@ public abstract class WorkshopQueryBase : IDisposable {
     }
 
     protected virtual void Dispose(bool flag) {
-        Destroy();
-
+         Destroy();
         _completedCallResult?.Cancel();
         (_completedCallResult as IDisposable)?.Dispose();
         _completedCallResult = null;

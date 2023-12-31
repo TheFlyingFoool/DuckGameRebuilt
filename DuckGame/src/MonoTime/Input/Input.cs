@@ -1318,8 +1318,9 @@ namespace DuckGame
             }
             return null;
         }
-        public static void OnDeviceChange(int dev, bool removed)
+        public static void OnDeviceChange(int dev, bool removed, string info)
         {
+            DevConsole.Log(info);
             devicesChanged = true;
         }
         private static void CheckDInputChanges()

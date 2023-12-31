@@ -269,8 +269,8 @@ namespace DuckGame
 
         public static int SortCollisionXHspeedPositive(MaterialThing t1, MaterialThing t2)
         {
-            float num1 = t1.x + (t1 is Block ? -10000f : 0f);
-            float num2 = t2.x + (t2 is Block ? -10000f : 0f);
+            float num1 = t1.x + (t1.isBlock ? -10000f : 0f);
+            float num2 = t2.x + (t2.isBlock ? -10000f : 0f);
             if (num1 > num2)
                 return 1;
             return num1 < num2 ? -1 : 0;
@@ -278,8 +278,8 @@ namespace DuckGame
 
         public static int SortCollisionXHspeedNegative(MaterialThing t1, MaterialThing t2)
         {
-            float num1 = (float)(-t1.x + (t1 is Block ? 10000f : 0));
-            float num2 = (float)(-t2.x + (t2 is Block ? 10000f : 0));
+            float num1 = -t1.x + (t1.isBlock ? 10000f : 0);
+            float num2 = -t2.x + (t2.isBlock ? 10000f : 0);
             if (num1 > num2)
                 return 1;
             return num1 < num2 ? -1 : 0;
@@ -287,8 +287,8 @@ namespace DuckGame
 
         public static int SortCollisionYVspeedPositive(MaterialThing t1, MaterialThing t2)
         {
-            float num1 = t1.y + (t1 is Block ? 10000f : 0f);
-            float num2 = t2.y + (t2 is Block ? 10000f : 0f);
+            float num1 = t1.y + (t1.isBlock ? 10000f : 0f);
+            float num2 = t2.y + (t2.isBlock ? 10000f : 0f);
             if (num1 > num2)
                 return 1;
             return num1 < num2 ? -1 : 0;
@@ -296,8 +296,8 @@ namespace DuckGame
 
         public static int SortCollisionYVspeedNegative(MaterialThing t1, MaterialThing t2)
         {
-            float num1 = (float)(-t1.y + (t1 is Block ? -10000 : 0));
-            float num2 = (float)(-t2.y + (t2 is Block ? -10000 : 0));
+            float num1 = -t1.y + (t1.isBlock ? -10000f : 0f);
+            float num2 = -t2.y + (t2.isBlock ? -10000f : 0f);
             if (num1 > num2)
                 return 1;
             return num1 < num2 ? -1 : 0;
@@ -424,8 +424,10 @@ namespace DuckGame
                             else if (this.hSpeed < 0) hitDuck.Impact(this, ImpactedFrom.Right, true);
                         }
                     }
-                    if (this.hSpeed > 0) DGList.Sort(_hitThings, XHspeedPositive);
-                    else DGList.Sort(_hitThings, XHspeedNegative);
+                    if (this.hSpeed > 0) 
+                        DGList.Sort(_hitThings, XHspeedPositive);
+                    else 
+                        DGList.Sort(_hitThings, XHspeedNegative);
                     for (int index = 0; index < num3; ++index)
                     {
                         float num4 = this.hSpeed / num3;
@@ -436,7 +438,7 @@ namespace DuckGame
                             bool flag2 = false;
                             foreach (MaterialThing hitThing in _hitThings)
                             {
-                                if (hitThing != this && !clip.Contains(hitThing) && !hitThing.clip.Contains(this) && hitThing.solid && (planeOfExistence == 4 || hitThing.planeOfExistence == planeOfExistence) && (!flag2 || hitThing is Block))
+                                if (hitThing != this && !clip.Contains(hitThing) && !hitThing.clip.Contains(this) && hitThing.solid && (planeOfExistence == 4 || hitThing.planeOfExistence == planeOfExistence) && (!flag2 || hitThing.isBlock))
                                 {
                                     Vec2 position = this.position;
                                     bool flag3 = false;
@@ -446,7 +448,7 @@ namespace DuckGame
                                         if (this.hSpeed > 0)
                                         {
                                             _collideRight = hitThing;
-                                            if (hitThing is Block)
+                                            if (hitThing.isBlock)
                                             {
                                                 _wallCollideRight = hitThing;
                                                 flag2 = true;
@@ -461,7 +463,7 @@ namespace DuckGame
                                         if (this.hSpeed < 0)
                                         {
                                             _collideLeft = hitThing;
-                                            if (hitThing is Block)
+                                            if (hitThing.isBlock)
                                             {
                                                 _wallCollideLeft = hitThing;
                                                 flag2 = true;
@@ -511,8 +513,10 @@ namespace DuckGame
                 }
                 _hitThings.Clear();
                 Level.CheckRectAll(p1_2, p2_2, _hitThings);
-                if (this.vSpeed > 0) DGList.Sort(_hitThings, YVspeedPositive);
-                else DGList.Sort(_hitThings, YVspeedNegative);
+                if (this.vSpeed > 0) 
+                    DGList.Sort(_hitThings, YVspeedPositive);
+                else 
+                    DGList.Sort(_hitThings, YVspeedNegative);
 
                 //double top = this.top; WHATS THE POINT OF THIS?????????? -NiK0
                 //double bottom = this.bottom;
@@ -592,6 +596,7 @@ namespace DuckGame
                     //!(this._lastrealcollideBottom as PhysicsObject)._lastrealcollideBottom is PhysicsObject || !((this._lastrealcollideBottom as PhysicsObject)._lastrealcollideBottom as PhysicsObject).modifiedGravForFloat
                     // lastGrounded = DateTime.Now;
                     framesSinceGrounded = 0;// mmmm remove i shall !(_collideBottom is PhysicsObject) // !doFloat &&  !doFloat && 
+
                     if ((!doFloat || buoyancy <= 0f) && hSpeed == 0 && this.vSpeed == 0 && (((_collideBottom is Block || _collideBottom is IPlatform) && (!(_collideBottom is ItemBox) || (_collideBottom as ItemBox).canBounce)) || initemspawner) && (!(_collideBottom is PhysicsObject) || ((_collideBottom as PhysicsObject).sleeping))) // !(_collideBottom as PhysicsObject).modifiedGravForFloat && _collideBottom.grounded && 
                         // (this._lastrealcollideBottom as PhysicsObject)._lastrealcollideBottom is PhysicsObject
                         _sleeping = true;

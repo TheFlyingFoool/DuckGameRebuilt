@@ -16,7 +16,7 @@ namespace DuckGame.ConsoleEngine
         }
 
         [Marker.UpdateContext]
-        public static void UpdateDelayedCommands()
+        private static void UpdateDelayedCommands()
         {
             for (int i = 0; i < s_delayedCommands.Count; i++)
             {

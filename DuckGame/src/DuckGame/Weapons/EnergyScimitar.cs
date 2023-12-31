@@ -621,7 +621,7 @@ namespace DuckGame
                     offset = position - duck.ragdoll.part2.position
                 });
             }
-            else if (with is Block || with is IPlatform && from == ImpactedFrom.Bottom && vSpeed > 0)
+            else if (with.isBlock || with is IPlatform && from == ImpactedFrom.Bottom && vSpeed > 0)
             {
                 if (with is Nubber)
                     return;
