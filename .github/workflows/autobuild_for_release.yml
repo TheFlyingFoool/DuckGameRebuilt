@@ -59,13 +59,29 @@ jobs:
           mkdir ./steammod
           mv ./Rebuilder ./steammod/Rebuilder
 
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '14'
+
+      - name: Install markdown to steam formatter
+        run: npm install steamdown
+
+      - name: Parse changelog from markdown to steam format
+        id: parse_body
+        run: |
+          release_body="${{ github.event.release.body }}"
+          parsed_body=$(node -e "const parse = require('steamdown'); console.log(parse('$release_body'));")
+
+          echo "::set-output name=parsed_body::${parsed_body}"
+
       - name: Update DGR mod
         uses: AnarkisGaming/workshop@v1
         with:
           appID: 312530
           publishedFileID: ${{ vars.WORKSHOP_ID }}
           path: ./steammod
-          changelog: ${{ github.event.release.body }}
+          changelog: ${{ steps.parse_body.outputs.parsed_body }}
         env:
           STEAM_ACCOUNT_NAME: "DuckGameRebuilt"
           STEAM_PASSWORD: ${{ secrets.STEAM_PASS }}
