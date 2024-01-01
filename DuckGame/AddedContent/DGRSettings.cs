@@ -421,6 +421,8 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool ExplosionDecals;
 
+        [Marker.AutoConfig] public static bool EnhancedTextures = true;
+
         [Marker.AutoConfig] public static bool GraphicsCulling = true;
 
         [Marker.AutoConfig] public static int StartIn = 0;

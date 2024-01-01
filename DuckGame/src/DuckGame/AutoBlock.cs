@@ -687,8 +687,15 @@ namespace DuckGame
             {
                 if (_brokenSprite == null)
                 {
-                    _brokenSprite = new SpriteMap("brokeEdgeVariants", 16, 16);
-                    (_brokenSprite as SpriteMap).frame = brokenSptiteIndex;
+                    if (DGRSettings.EnhancedTextures)
+                    {
+                        _brokenSprite = new SpriteMap("brokeEdgeVariants", 16, 16);
+                        (_brokenSprite as SpriteMap).frame = brokenSptiteIndex;
+                    }
+                    else
+                    {
+                        _brokenSprite = new Sprite("brokeEdge");
+                    }
                     _brokenSprite.CenterOrigin();
                     _brokenSprite.depth = depth;
                 }
