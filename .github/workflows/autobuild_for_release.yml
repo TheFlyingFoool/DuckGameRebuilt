@@ -72,8 +72,7 @@ jobs:
         run: |
           release_body="${{ github.event.release.body }}"
           parsed_body=$(node -e "const parse = require('steamdown'); console.log(parse('$release_body'));")
-
-          echo "::set-output name=parsed_body::${parsed_body}"
+          echo "::set-output name=parsed_body::\"${parsed_body}\""
 
       - name: Update DGR mod
         uses: AnarkisGaming/workshop@v1
