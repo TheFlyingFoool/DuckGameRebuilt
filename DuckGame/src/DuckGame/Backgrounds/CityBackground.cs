@@ -157,8 +157,6 @@ namespace DuckGame
                 text = "WHERE IS JOHN MALLARD";
             else if (Rando.Int(1000) == 1)
                 text = "I SEE YOU";
-            else if (Rando.Int(100000) == 1)
-                text = "WHO MUST GO? THE ONE THAT DID NOT DO THE DISHES.";
             else if (Rando.Int(200) == 1)
                 text = "LET'S DANCE";
             else if (Global.data.timesSpawned > 300 && Rando.Int(200) == 1)

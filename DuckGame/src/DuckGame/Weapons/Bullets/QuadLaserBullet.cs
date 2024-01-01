@@ -11,7 +11,7 @@
         public Duck safeDuck;
         public float timeAlive;
         private Interp QuadLerp = new Interp(true);
-
+        public bool invincible;
         public Vec2 travel
         {
             get => _travel;
@@ -32,7 +32,7 @@
             _wave2.Update();
             timeAlive += 0.016f;
             position += _travel * 0.5f;
-            if (isServerForObject && (x > Level.current.bottomRight.x + 200 || x < Level.current.topLeft.x - 200))
+            if (isServerForObject && !invincible && (x > Level.current.bottomRight.x + 200 || x < Level.current.topLeft.x - 200))
                 Level.Remove(this);
             foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(topLeft, bottomRight))
             {
