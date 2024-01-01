@@ -70,9 +70,9 @@ jobs:
       - name: Parse changelog from markdown to steam format
         id: parse_body
         run: |
-          release_body="${{ github.event.release.body }}"
-          echo "$release_body" > release_body.txt
-          echo "::set-output name=parsed_body::$(node -e \"const parse = require('steamdown'); console.log(parse(require('fs').readFileSync('release_body.txt', 'utf-8')));\")"
+          echo "${{ github.event.release.body }}" > release_body.txt
+          parsed_body=$(node -e "const parse=require('steamdown'); console.log(parse(require('fs').readFileSync('release_body.txt','utf-8')))")
+          echo "::set-output name=parsed_body::$parsed_body"
           rm release_body.txt
 
       - name: Update DGR mod
