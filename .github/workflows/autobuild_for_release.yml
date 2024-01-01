@@ -63,9 +63,9 @@ jobs:
         uses: AnarkisGaming/workshop@v1
         with:
           appID: 312530
-          publishedFileID: 3122448918
+          publishedFileID: ${{ vars.WORKSHOP_ID }}
           path: ./steammod
-          changelog: hi
+          changelog: ${{ github.event.release.body }}
         env:
           STEAM_ACCOUNT_NAME: "DuckGameRebuilt"
           STEAM_PASSWORD: ${{ secrets.STEAM_PASS }}
