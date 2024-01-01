@@ -23,6 +23,7 @@
             _hasNubs = false;
             meltedTileset = "nublessSnow";
             frozenTileset = "nublessIceTileset";
+            brokenSptiteIndex = 14;
         }
     }
 }
