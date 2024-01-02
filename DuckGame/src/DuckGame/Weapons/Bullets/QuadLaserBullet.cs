@@ -32,8 +32,7 @@
             _wave2.Update();
             timeAlive += 0.016f;
             position += _travel * 0.5f;
-            if (isServerForObject && !invincible && (x > Level.current.bottomRight.x + 200 || x < Level.current.topLeft.x - 200))
-                Level.Remove(this);
+            if (isServerForObject && !invincible && (x > Level.current.bottomRight.x + 200 || x < Level.current.topLeft.x - 200)) Level.Remove(this);
             foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(topLeft, bottomRight))
             {
                 if ((safeFrames <= 0 || materialThing != safeDuck) && materialThing.isServerForObject)
@@ -42,15 +41,12 @@
                     materialThing.Destroy(new DTIncinerate(this));
                     if (materialThing.destroyed && !destroyed)
                     {
-                        if (Recorder.currentRecording != null)
-                            Recorder.currentRecording.LogAction(2);
-                        if (materialThing is Duck && !(materialThing as Duck).dead)
-                            Recorder.currentRecording.LogBonus();
+                        if (Recorder.currentRecording != null) Recorder.currentRecording.LogAction(2);
+                        if (materialThing is Duck && !(materialThing as Duck).dead) Recorder.currentRecording.LogBonus();
                     }
                 }
             }
-            if (safeFrames > 0)
-                --safeFrames;
+            if (safeFrames > 0) safeFrames--;
             base.Update();
         }
 
