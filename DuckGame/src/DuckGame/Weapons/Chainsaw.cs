@@ -1,5 +1,7 @@
-﻿using System;
+﻿using AddedContent.Biverom.TreeSawing;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -649,6 +651,46 @@ namespace DuckGame
                 Block wall1 = Level.CheckLine<Block>(barrelStartPos, barrelPosition);
                 if (owner != null)
                 {
+                    if (DGRSettings.DGRItems)
+                    {
+                        TreeStump stump = Level.CheckLineAll<TreeStump>(barrelStartPos, barrelPosition).Where(stump => !stump.wasSawed).FirstOrDefault();
+                        if (stump != null)
+                        {
+                            _struggling = true;
+                            if (duck != null)
+                                duck.frictionMult = 4f;
+                            Vec2 vec2_2 = position + barrelVector * Rando.Float(0f, 3f);
+                            Vec2 vec2_3 = -barrelVector.Rotate(Rando.Float(-0.2f, 0.2f), Vec2.Zero);
+                            if (DGRSettings.ActualParticleMultiplier >= 1)
+                            {
+                                for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++)
+                                {
+                                    WoodDebris woodDebris = WoodDebris.New(vec2_2.x, vec2_2.y);
+                                    woodDebris.hSpeed = vec2_3.x * 3f;
+                                    woodDebris.vSpeed = vec2_3.y * 3f;
+                                    Level.Add(woodDebris);
+                                }
+                            }
+                            else if (Rando.Float(1) < DGRSettings.ActualParticleMultiplier)
+                            {
+                                WoodDebris woodDebris = WoodDebris.New(vec2_2.x, vec2_2.y);
+                                woodDebris.hSpeed = vec2_3.x * 3f;
+                                woodDebris.vSpeed = vec2_3.y * 3f;
+                                Level.Add(woodDebris);
+                            }
+                            stump.Saw(this.graphic.flipH, false);
+                        }
+                        else
+                        {
+                            AutoPlatform platformStump = Level.CheckLineAll<AutoPlatform>(barrelStartPos, barrelPosition)
+                                .Where(tree => (tree is TreeTileset || tree is CityTreeTileset || tree is PineTrunkTileset) && (tree.frame == 44)).FirstOrDefault();
+                            if (platformStump != null)
+                            {
+                                Level.Add(new TreeStump(platformStump.x, platformStump.y, platformStump));
+                            }
+                        }
+                    }
+
                     foreach (MaterialThing materialThing in Level.CheckLineAll<MaterialThing>(barrelStartPos, barrelPosition))
                     {
                         if (materialThing.Hurt(materialThing is Door ? 1.8f : 0.5f))

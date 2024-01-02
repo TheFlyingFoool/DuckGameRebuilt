@@ -271,6 +271,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddedContent\Biverom\TreeSawing\FallingTree.cs" />
+    <Compile Include="AddedContent\Biverom\TreeSawing\TreeEnd.cs" />
+    <Compile Include="AddedContent\Biverom\TreeSawing\TreeStump.cs" />
     <Compile Include="AddedContent\CorinthianPillar.cs" />
     <Compile Include="AddedContent\DevWeapons\FirebreakGun.cs" />
     <Compile Include="AddedContent\DevWeapons\KlofGun.cs" />
