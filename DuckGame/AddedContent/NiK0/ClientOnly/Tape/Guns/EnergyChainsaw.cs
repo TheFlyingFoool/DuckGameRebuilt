@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AddedContent.Biverom.TreeSawing;
+using System;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -102,6 +104,25 @@ namespace DuckGame
                             Level.Add(spark);
                         }
                     }
+
+                    if (DGRSettings.DGRItems)
+                    {
+                        TreeStump stump = Level.CheckLineAll<TreeStump>(Offset(new Vec2(7, 0)), Offset(new Vec2(27, 0))).Where(stump => !stump.wasSawed).FirstOrDefault();
+                        if (stump != null)
+                        {
+                            stump.Saw(!this.graphic.flipH, true);
+                        }
+                        else
+                        {
+                            AutoPlatform platformStump = Level.CheckLineAll<AutoPlatform>(Offset(new Vec2(7, 0)), Offset(new Vec2(27, 0)))
+                                .Where(tree => (tree is TreeTileset || tree is CityTreeTileset || tree is PineTrunkTileset) && (tree.frame == 44)).FirstOrDefault();
+                            if (platformStump != null)
+                            {
+                                Level.Add(new TreeStump(platformStump.x, platformStump.y, platformStump));
+                            }
+                        }
+                    }
+
                     if (isServerForObject)
                     {
 
@@ -126,6 +147,7 @@ namespace DuckGame
                             }
                             materialThing.Destroy(new DTIncinerate(this));
                         }
+
                         if (playsurge && surgeDel <= 0)
                         {
                             surgeDel = 10;
