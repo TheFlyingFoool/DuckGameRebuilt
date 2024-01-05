@@ -379,5 +379,23 @@ namespace DuckGame
 
         public static Color RandomRanged(int rMin, int rMax, int gMin, int gMax, int bMin, int bMax, int aMin = 255, int aMax = 255) => new Color(_random.Next(rMin, rMax), _random.Next(gMin, gMax), _random.Next(bMin, bMax), _random.Next(aMin, aMax));
 
+        public static bool TryParse(string s, out Color result)
+        {
+            if (s.Split(',') is { Length: 3 or 4 } values
+                && byte.TryParse(values[0], out byte r)
+                && byte.TryParse(values[1], out byte g)
+                && byte.TryParse(values[2], out byte b))
+            {
+                result = new Color(r, g, b);
+
+                if (values.Length == 4 && byte.TryParse(values[3], out byte a))
+                    result.a = a;
+
+                return true;
+            }
+
+            result = default;
+            return false;
+        }
     }
 }

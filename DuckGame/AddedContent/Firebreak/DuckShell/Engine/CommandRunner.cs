@@ -120,8 +120,8 @@ namespace DuckGame.ConsoleEngine
                 caretPosition = partialCommand.Length;
             
             if (caretPosition < 0 || caretPosition > partialCommand.Length)
-                throw new ArgumentOutOfRangeException(nameof(caretPosition), "Caret position cannot be outside the range of the command");
-
+                throw new ArgumentOutOfRangeException(nameof(caretPosition), "todev: Caret position cannot be outside the range of the command");
+            
             partialCommand = partialCommand.Substring(0, caretPosition);
 
             string[] tokens = Tokenize(partialCommand + "[]");

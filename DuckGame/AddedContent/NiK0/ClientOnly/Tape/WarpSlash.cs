@@ -49,7 +49,8 @@ namespace DuckGame
                     foreach (MaterialThing mt in Level.CheckLineAll<MaterialThing>(position, position + (Maths.AngleToVec(angle - 1.7f) * 24 * yscale) * new Vec2(1, -1)))
                     {
                         if (Duck.GetAssociatedDuck(mt) == ignore) continue;
-                        if (mt is Block) BlockBehind = true;
+                        if (mt.isBlock) 
+                            BlockBehind = true;
                         Fondle(mt);
                         mt.Destroy(new DTIncinerate(this));
                     }
@@ -73,7 +74,7 @@ namespace DuckGame
                     killFrames--;
                     foreach (MaterialThing mt in Level.CheckLineAll<MaterialThing>(position, position + (Maths.AngleToVec(angle - 1.7f) * 24 * yscale) * new Vec2(1, -1)))
                     {
-                        if (mt is Block)
+                        if (mt.isBlock)
                         {
                             BlockBehind = true;
                             break;

@@ -6,12 +6,13 @@
         protected float _charge;
         protected int _chargeLevel;
         public float _chargeFade;
-        private SinWave _chargeWaver = (SinWave)0.4f;
+        private SinWave _chargeWaver;
         protected SpriteMap _phaserCharge;
 
         public Phaser(float xval, float yval)
           : base(xval, yval)
         {
+            _chargeWaver = new SinWave(this, 0.4f);
             ammo = 30;
             _ammoType = new ATPhaser();
             _type = "gun";

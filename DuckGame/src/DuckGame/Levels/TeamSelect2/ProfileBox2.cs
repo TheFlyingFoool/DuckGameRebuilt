@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame
@@ -100,6 +101,7 @@ namespace DuckGame
           int pIndex)
           : base(xpos, ypos)
         {
+            sin = new SinWave(this, 0.05f, Rando.Float(3.14f));
             _hostCrown = new Sprite("hostCrown");
             _hostCrown.CenterOrigin();
             _lightBar = new SpriteMap("lightBar", 2, 1)
@@ -539,7 +541,7 @@ namespace DuckGame
         public void OpenDoor(Duck d) => _duck = d;
 
 
-        public SinWave sin = new SinWave(0.05f, Rando.Float(3.14f));
+        public SinWave sin;
         public override void Update()
         {
             if (Network.isActive && Network.isServer && _duck != null && profile.connection == null)
@@ -631,6 +633,11 @@ namespace DuckGame
                         break;
                 }
                 _teamSelection = Teams.all.IndexOf(_playerProfile.team);
+                if (_teamSelection == -1) //fall back incase team is wonky
+                {
+                    _playerProfile.team = Teams.all[0];
+                    _teamSelection = 0;
+                }
                 _playerActive = true;
                 SelectTeam();
                 Spawn();

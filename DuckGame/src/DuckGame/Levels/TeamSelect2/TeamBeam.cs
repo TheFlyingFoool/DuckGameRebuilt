@@ -8,8 +8,8 @@ namespace DuckGame
     {
         private Sprite _selectBeam;
         private float _spawnWait;
-        private SinWave _wave = (SinWave)0.016f;
-        private SinWave _wave2 = (SinWave)0.02f;
+        private SinWave _wave;
+        private SinWave _wave2;
         private List<BeamDuck> _ducks = new List<BeamDuck>();
         private List<Thing> _guns = new List<Thing>();
         private float _beamHeight = 180f;
@@ -20,6 +20,8 @@ namespace DuckGame
         public TeamBeam(float xpos, float ypos)
           : base(xpos, ypos)
         {
+            _wave = new SinWave(this, 0.016f);
+            _wave2 = new SinWave(this, 0.02f);
             _selectBeam = new Sprite("selectBeam")
             {
                 alpha = 0.9f,
@@ -40,7 +42,7 @@ namespace DuckGame
             if (_ducks.Any(t => t.duck == d))
                 return;
             float num = d.y >= 100f ? (d.y >= 150f ? 220f : 130f) : 40f;
-            if (DuckNetwork.FiftyPlayerMode)
+            if (DG.FiftyPlayerMode)
             {
                 if (d.y >= 100f)
                 {
@@ -75,8 +77,8 @@ namespace DuckGame
                 entryHeight = num,
                 leaving = false,
                 entryDir = d.x < x ? -1 : 1,
-                sin = new SinWave(0.1f),
-                sin2 = new SinWave(0.05f)
+                sin = new SinWave(this, 0.1f),
+                sin2 = new SinWave(this, 0.05f)
             });
             if (_ducks.Count <= 0)
                 return;
@@ -104,9 +106,9 @@ namespace DuckGame
             if (TeamSelect2.zoomedOut)
             {
                 
-                if (DuckNetwork.FiftyPlayerMode)
+                if (DG.FiftyPlayerMode)
                 {
-                    int maxslots = (int)Math.Ceiling(Math.Sqrt(DG.MaxPlayers));
+                    int maxslots = (int)Math.Ceiling(Math.Sqrt(DG.MaxPlayers + 1));
                     _beamHeight = 90f * maxslots;
                     _collisionSize = new Vec2(_selectBeam.w * 0.8f, 90f * maxslots);
                 }
@@ -273,16 +275,11 @@ namespace DuckGame
         public override void Draw()
         {
             base.Draw();
-            if (DuckNetwork.FiftyPlayerMode)
+            if (DG.FiftyPlayerMode)
             {
-                int maxslots = (int)Math.Ceiling(Math.Sqrt(DG.MaxPlayers));
+                int maxslots = (int)Math.Ceiling(Math.Sqrt(DG.MaxPlayers + 1));
                 for (int index = 0; index < (maxslots * 3) + 1; ++index)
                     Graphics.Draw(_selectBeam, x, y - 32f + index * 32);
-
-                for (int index = 0; index < maxslots; ++index)
-                {
-                    Graphics.DrawCircle(new Vec2(x, y + (90 * index) + 38), 5, Color.Green);
-                }
             }
             else
             {

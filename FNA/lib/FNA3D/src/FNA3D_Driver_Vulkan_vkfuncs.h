@@ -56,7 +56,7 @@ VULKAN_INSTANCE_FUNCTION(vkGetPhysicalDeviceImageFormatProperties)
 VULKAN_INSTANCE_FUNCTION(vkGetPhysicalDeviceMemoryProperties)
 VULKAN_INSTANCE_FUNCTION(vkGetPhysicalDeviceProperties)
 
-/* VK_KHR_get_physical_device_properties2 */
+/* VK_KHR_get_physical_device_properties2, needed for KHR_driver_properties */
 VULKAN_INSTANCE_FUNCTION(vkGetPhysicalDeviceProperties2KHR)
 
 /* VK_KHR_surface */
@@ -68,6 +68,7 @@ VULKAN_INSTANCE_FUNCTION(vkGetPhysicalDeviceSurfaceSupportKHR)
 
 /* VK_EXT_debug_utils, Optional debug feature used by SetStringMarker */
 VULKAN_INSTANCE_FUNCTION(vkCmdInsertDebugUtilsLabelEXT)
+VULKAN_INSTANCE_FUNCTION(vkSetDebugUtilsObjectNameEXT)
 
 /*
  * vkDevice, created by a vkInstance
@@ -146,6 +147,8 @@ VULKAN_DEVICE_FUNCTION(vkFreeMemory)
 VULKAN_DEVICE_FUNCTION(vkGetDeviceQueue)
 VULKAN_DEVICE_FUNCTION(vkGetPipelineCacheData)
 VULKAN_DEVICE_FUNCTION(vkGetFenceStatus)
+VULKAN_DEVICE_FUNCTION(vkGetBufferMemoryRequirements)
+VULKAN_DEVICE_FUNCTION(vkGetImageMemoryRequirements)
 VULKAN_DEVICE_FUNCTION(vkMapMemory)
 VULKAN_DEVICE_FUNCTION(vkQueueSubmit)
 VULKAN_DEVICE_FUNCTION(vkQueueWaitIdle)
@@ -167,10 +170,6 @@ VULKAN_DEVICE_FUNCTION(vkCreateSwapchainKHR)
 VULKAN_DEVICE_FUNCTION(vkDestroySwapchainKHR)
 VULKAN_DEVICE_FUNCTION(vkQueuePresentKHR)
 VULKAN_DEVICE_FUNCTION(vkGetSwapchainImagesKHR)
-
-/* VK_KHR_get_memory_requirements2 */
-VULKAN_DEVICE_FUNCTION(vkGetBufferMemoryRequirements2KHR)
-VULKAN_DEVICE_FUNCTION(vkGetImageMemoryRequirements2KHR)
 
 /*
  * Redefine these every time you include this header!

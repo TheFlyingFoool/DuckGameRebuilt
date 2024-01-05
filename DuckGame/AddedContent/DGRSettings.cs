@@ -166,6 +166,7 @@ namespace DuckGame
                 DevConsole.Log("Failed to preload levels: " + ex.ToString(), Colors.DGRed);
             }
         }
+        [Marker.AutoConfig] public static bool ExtraMusic = true;
 
         [Marker.AutoConfig] public static bool IgnoreLevRestrictions = false;
 
@@ -432,6 +433,8 @@ namespace DuckGame
         [Marker.AutoConfig] public static bool AmbientParticles = true;
 
         [Marker.AutoConfig] public static bool ExplosionDecals;
+
+        [Marker.AutoConfig] public static bool EnhancedTextures = true;
 
         [Marker.AutoConfig] public static bool GraphicsCulling = true;
 

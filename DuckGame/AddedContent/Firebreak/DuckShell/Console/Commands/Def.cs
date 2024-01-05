@@ -8,6 +8,13 @@ namespace DuckGame.ConsoleEngine
         [Marker.DevConsoleCommand(Description = "Creates a temporary command.", To = ImplementTo.DuckShell)]
         public static void Def(string name, string[] definedArgs, [CommandAutoCompl(false)] string command)
         {
+            // ensures no collision
+            // will also overrite real commands if you want which is funny
+            console.Shell.RemoveCommand(name);
+
+            if (command == string.Empty)
+                return;
+
             ShellCommand.Parameter[] parameters = definedArgs.Select(x => new ShellCommand.Parameter()
             {
                 Name = x,
@@ -15,11 +22,7 @@ namespace DuckGame.ConsoleEngine
                 IsOptional = true,
                 DefaultValue = "",
             }).ToArray();
-
-            // ensures no collision
-            // will also overrite real commands if you want which is funny
-            console.Shell.RemoveCommand(name);
-
+            
             console.Shell.AddCommand(new ShellCommand(name, parameters, givenArgs =>
             {
                 for (int i = 0; i < givenArgs.Length; i++)

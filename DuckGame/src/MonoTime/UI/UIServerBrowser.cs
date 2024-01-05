@@ -926,7 +926,7 @@ namespace DuckGame
                             }
                             else
                                 Graphics.Draw(_noImage, x1 + 2f, y + 2f, (Depth)0.5f);
-                            titleString += " (" + Math.Min(lobby._userCount - (lobby.dedicated ? 1 : 0), 8).ToString() + "/" + Math.Min(lobby.numSlots, 8).ToString() + ")";
+                            titleString += " (" + (lobby._userCount - (lobby.dedicated ? 1 : 0)).ToString() + "/" + lobby.numSlots.ToString() + ")";
                             if (lobby.hasFriends)
                                 titleString += " |DGGREEN|FRIEND";
                             if (lobby.hasPassword)

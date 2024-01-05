@@ -10,6 +10,7 @@
         public WinterTreeTop(float xpos, float ypos)
           : base(xpos, ypos)
         {
+            sw = new SinWave(this, Rando.Float(0.03f, 0.05f), Rando.Float(-5, 5));
             sprite = new SpriteMap("winterTreeTop", 48, 48);
             graphic = sprite;
             center = new Vec2(24f, 24f);
@@ -31,7 +32,7 @@
                 Level.Add(TreeLeaf.New(x + Rando.Float(-16, 16), y + Rando.Float(-16, 16), 3));
             }
         }
-        public SinWave sw = new SinWave(Rando.Float(0.03f, 0.05f), Rando.Float(-5, 5));
+        public SinWave sw;
         public override void Draw()
         {
             sprite.frame = snow ? 1 : 0;

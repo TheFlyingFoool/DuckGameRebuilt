@@ -667,7 +667,7 @@ namespace DuckGame
 
         private static void ProcessTexture(string path)
         {
-            if (!path.EndsWith(".xnb"))
+            if (!path.EndsWith(".xnb") && !path.EndsWith(".png"))
                 return;
             path = path.Replace('\\', '/');
             if (path.StartsWith("Content/"))

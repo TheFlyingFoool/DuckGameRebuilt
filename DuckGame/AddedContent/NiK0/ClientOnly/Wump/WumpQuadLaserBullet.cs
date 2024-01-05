@@ -1,4 +1,6 @@
-﻿namespace DuckGame
+﻿using static DuckGame.CMD;
+
+namespace DuckGame
 {
     [ClientOnly]
     public class WumpQuadLaserBullet : Thing, ITeleport, IDrawToDifferentLayers
@@ -17,6 +19,8 @@
 
         public WumpQuadLaserBullet(float xpos, float ypos, Vec2 travel) : base(xpos, ypos, null)
         {
+            sw = new SinWave(this, 0.1f);
+            swr = new SinWave(this, 0.05f);
             _travel = travel;
             collisionOffset = new Vec2(-14);
             _collisionSize = new Vec2(28);
@@ -125,8 +129,8 @@
             Graphics.DrawRect(position + new Vec2(-16), position + new Vec2(16), new Color(0, 255 - (int)(_wave2.normalized * 50), 200 + (int)(_wave2.normalized * 50f)), depth + 1, false, 4f);
             base.Draw();
         }
-        public SinWave sw = new SinWave(0.1f);
-        public SinWave swr = new SinWave(0.05f);
+        public SinWave sw;
+        public SinWave swr;
         public bool theholysee;//THE HOLY SEE
         public StateBinding _positionBinding = new CompressedVec2Binding("position", int.MaxValue, false, true);
         public StateBinding _travelBinding = new CompressedVec2Binding("travel", 20);

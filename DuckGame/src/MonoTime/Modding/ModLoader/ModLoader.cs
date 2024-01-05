@@ -75,6 +75,9 @@ namespace DuckGame
         public static string currentModLoadString = "";
 
         public static Assembly[] modAssemblyArray => _modAssemblyArray;
+        
+        public static bool RestartToVanillaDg = false;
+        public static string? VanillaDgPath = null;
 
         public static void InitializeAssemblyArray()
         {
@@ -137,7 +140,8 @@ namespace DuckGame
 
         public static void RestartGame()
         {
-            Process.Start(Application.ExecutablePath, Program.commandLine);
+            string executablePath = RestartToVanillaDg ? VanillaDgPath : Application.ExecutablePath;
+            Process.Start(executablePath, Program.commandLine);
             Application.Exit();
             Program.main.KillEverything();
             Program.main.Exit();

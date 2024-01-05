@@ -29,15 +29,14 @@ namespace DuckGame
     public static class Program
     {
         public static bool fullstop;
-        public const bool IS_DEV_BUILD =
-#if AutoUpdater
-          false;
+#if DEBUG
+        public const bool IS_DEV_BUILD = true;
 #else
-            true;
+        public const bool IS_DEV_BUILD = false;
 #endif
 
         // this should be formatted like X.X.X where each X is a number
-        public const string CURRENT_VERSION_ID = "1.3.2";
+        public const string CURRENT_VERSION_ID = "1.4.0";
 
         // do change this you know what you're doing -NiK0
         public const string CURRENT_VERSION_ID_FORMATTED = "v" + CURRENT_VERSION_ID;
@@ -308,12 +307,8 @@ namespace DuckGame
             
             Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
             MonoMain.startTime = DateTime.Now;
-            for (int index = 0; index < args.Length; ++index)
-            {
-                commandLine += args[index];
-                if (index != args.Length - 1)
-                    commandLine += " ";
-            }
+            commandLine = string.Join(" ", args.Select(x => x.Contains(' ') ? $"\"{x}\"" : x));
+            DuckFile.Initialize();
             MarkerAttribute.Initialize();
             AutoConfigHandler.Initialize();
             int Controllers = 8;
@@ -458,7 +453,24 @@ namespace DuckGame
                         MonoMain.forceFullscreenMode = 2;
                         break;
                     case "-testserver":
-                        Process.Start(Application.ExecutablePath, commandLine.Replace("-testserver", " -lanjoiner"));
+                        int amount = 1;
+                        if (args.Length > index + 1)
+                        {
+                            ++index;
+                            try
+                            {
+                                amount = Convert.ToInt32(args[index]);
+                            }
+                            catch
+                            {
+                                --index;
+                                break;
+                            }
+                        }
+                        for (int i = 0; i < amount; i++)
+                        {
+                            Process.Start(Application.ExecutablePath, commandLine.Replace("-testserver", " -lanjoiner"));
+                        }
                         testServer = true;
                         break;
                     case "-testserver2":

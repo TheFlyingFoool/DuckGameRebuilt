@@ -9,10 +9,10 @@ namespace DuckGame
 
         public InputProfile Add(string name)
         {
-            InputProfile inputProfile1 = new InputProfile(name);
             InputProfile inputProfile2;
             if (_profiles.TryGetValue(name, out inputProfile2))
                 return inputProfile2;
+            InputProfile inputProfile1 = new InputProfile(name);
             _profiles[name] = inputProfile1;
             return inputProfile1;
         }
@@ -37,44 +37,14 @@ namespace DuckGame
         {
             get
             {
-                List<InputProfile> inputprofile = new List<InputProfile>
+                List<InputProfile> inputprofiles = new List<InputProfile>(DG.MaxPlayers);
+                for (int i = 0; i < DG.MaxPlayers; i++)
                 {
-                    DefaultPlayer1,
-                    DefaultPlayer2,
-                    DefaultPlayer3,
-                    DefaultPlayer4,
-                    DefaultPlayer5,
-                    DefaultPlayer6,
-                    DefaultPlayer7,
-                    DefaultPlayer8
-                };
-                if (DuckNetwork.FiftyPlayerMode)
-                {
-                    try
-                    {
-                        for (int i = 8; i < 50; i++)
-                        {
-                            inputprofile.Add(GetInputProfile(this, "MPPlayer" + (i + 1).ToString()));
-                        }
-                    }
-                    catch
-                    {
-                        DevConsole.Log("F get_defaultProfilesPrefixInput");
-                    }
+                    inputprofiles.Add(Get(InputProfile.MPPlayers[i]));
                 }
-                return inputprofile;
+                return inputprofiles;
             }
         }
-        public static InputProfile GetInputProfile(InputProfileCore inputprofilecore, string name)
-        {
-            InputProfile existing;
-            if (inputprofilecore._profiles.TryGetValue(name, out existing))
-            {
-                return existing;
-            }
-            return null;
-        }
-
         public InputProfile Get(string name)
         {
             InputProfile inputProfile;

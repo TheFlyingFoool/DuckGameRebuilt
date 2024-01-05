@@ -68,7 +68,7 @@ namespace DuckGame
                 return;
             if (with is PhysicsObject)
                 _isVolatile = -1f;
-            if (_startWait <= 0 && !_fade && (totalImpactPower > 2 && (_isVolatile <= 0 || !(with is Block)) || _blowUp))
+            if (_startWait <= 0 && !_fade && (totalImpactPower > 2 && (_isVolatile <= 0 || !(with.isBlock)) || _blowUp))
             {
                 int num1 = 0;
                 for (int index = 0; index < 1; ++index)

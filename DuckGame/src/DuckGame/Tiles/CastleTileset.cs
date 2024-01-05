@@ -12,6 +12,7 @@
             verticalWidthThick = 14f;
             horizontalHeight = 14f;
             _hasNubs = false;
+            brokenSptiteIndex = 3;
         }
     }
 }

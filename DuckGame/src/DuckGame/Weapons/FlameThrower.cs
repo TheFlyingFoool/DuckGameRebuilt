@@ -63,7 +63,7 @@ namespace DuckGame
         }
         public override void Initialize()
         {
-            _sound = new ConstantSound("flameThrowing");
+            _sound = new ConstantSound(this, "flameThrowing");
             _sound.effect.saveToRecording = false;
             base.Initialize();
         }

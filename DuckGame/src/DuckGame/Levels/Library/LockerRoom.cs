@@ -8,7 +8,7 @@ namespace DuckGame
         private Sprite _background;
         private Sprite _boardHighlight;
         private Sprite _trophiesHighlight;
-        private SinWave _pulse = (SinWave)0.1f;
+        private SinWave _pulse;
         private LockerSelection _selection;
         private LockerScreen _screen = LockerScreen.Stats;
         private LockerScreen _desiredScreen = LockerScreen.Stats;
@@ -22,6 +22,7 @@ namespace DuckGame
 
         public LockerRoom(Profile p)
         {
+            _pulse = (SinWave)0.1f;
             _centeredView = true;
             _profile = p;
         }

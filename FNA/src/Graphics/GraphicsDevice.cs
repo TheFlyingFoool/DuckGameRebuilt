@@ -275,14 +275,24 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		#endregion
 
+		#region Internal State Changes Pointer
+
+		internal IntPtr effectStateChangesPtr;
+
+		#endregion
+
 		#region Private Disposal Variables
 
-		/* Use WeakReference for the global resources list as we do not
+		/* 
+		 * Use weak GCHandles for the global resources list as we do not
 		 * know when a resource may be disposed and collected. We do not
 		 * want to prevent a resource from being collected by holding a
-		 * strong reference to it in this list.
+		 * strong reference to it in this list. Using the WeakReference
+		 * class would produce unnecessary allocations - we don't need
+		 * its finalizer or shareability for this scenario since every
+		 * GraphicsResource has a finalizer.
 		 */
-		private readonly List<WeakReference> resources = new List<WeakReference>();
+		private readonly List<GCHandle> resources = new List<GCHandle>();
 		private readonly object resourcesLock = new object();
 
 		#endregion
@@ -461,6 +471,19 @@ namespace Microsoft.Xna.Framework.Graphics
 
 			// Allocate the pipeline cache to be used by Effects
 			PipelineCache = new PipelineCache(this);
+
+			// Set up the effect state changes pointer.
+			unsafe
+			{
+				effectStateChangesPtr = FNAPlatform.Malloc(
+					sizeof(Effect.MOJOSHADER_effectStateChanges)
+				);
+                Effect.MOJOSHADER_effectStateChanges* stateChanges =
+					(Effect.MOJOSHADER_effectStateChanges*) effectStateChangesPtr;
+				stateChanges->render_state_change_count = 0;
+				stateChanges->sampler_state_change_count = 0;
+				stateChanges->vertex_sampler_state_change_count = 0;
+			}
 		}
 
 		~GraphicsDevice()
@@ -491,7 +514,7 @@ namespace Microsoft.Xna.Framework.Graphics
 					 */
 					lock (resourcesLock)
 					{
-						foreach (WeakReference resource in resources.ToArray())
+						foreach (GCHandle resource in resources.ToArray())
 						{
 							object target = resource.Target;
 							if (target != null)
@@ -517,6 +540,8 @@ namespace Microsoft.Xna.Framework.Graphics
 						);
 					}
 
+					FNAPlatform.Free(effectStateChangesPtr);
+
 					// Dispose of the GL Device/Context
 					FNA3D.FNA3D_DestroyDevice(GLDevice);
 				}
@@ -529,7 +554,7 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		#region Internal Resource Management Methods
 
-		internal void AddResourceReference(WeakReference resourceReference)
+		internal void AddResourceReference(GCHandle resourceReference)
 		{
 			lock (resourcesLock)
 			{
@@ -537,11 +562,21 @@ namespace Microsoft.Xna.Framework.Graphics
 			}
 		}
 
-		internal void RemoveResourceReference(WeakReference resourceReference)
+		internal void RemoveResourceReference(GCHandle resourceReference)
 		{
 			lock (resourcesLock)
 			{
-				resources.Remove(resourceReference);
+				// Scan the list and do value comparisons (List.Remove will box the handles)
+				for (int i = 0, c = resources.Count; i < c; i++)
+				{
+					if (resources[i] != resourceReference)
+						continue;
+
+					// Perform an unordered removal, the order of items in this list does not matter
+					resources[i] = resources[resources.Count - 1];
+					resources.RemoveAt(resources.Count - 1);
+					return;
+				}
 			}
 		}
 
@@ -975,12 +1010,34 @@ namespace Microsoft.Xna.Framework.Graphics
 			}
 		}
 
+		/// <summary>
+		/// Returns a new array containing all of the render target(s) currently bound to the device.
+		/// </summary>
 		public RenderTargetBinding[] GetRenderTargets()
 		{
 			// Return a correctly sized copy our internal array.
 			RenderTargetBinding[] bindings = new RenderTargetBinding[renderTargetCount];
 			Array.Copy(renderTargetBindings, bindings, renderTargetCount);
 			return bindings;
+		}
+
+		/// <summary>
+		/// Copies the currently bound render target(s) into an output buffer (if provided), and returns the number of bound render targets.
+		/// </summary>
+		/// <param name="output">A buffer sized to contain all of the currently bound render targets, or null.</param>
+		/// <returns>The number of render targets currently bound.</returns>
+		public int GetRenderTargetsNoAllocEXT(RenderTargetBinding[] output)
+		{
+			if (output == null)
+			{
+				return renderTargetCount;
+			}
+			else if (output.Length != renderTargetCount)
+			{
+				throw new ArgumentException("Output buffer size incorrect");
+			}
+			Array.Copy(renderTargetBindings, output, renderTargetCount);
+			return renderTargetCount;
 		}
 
 		#endregion

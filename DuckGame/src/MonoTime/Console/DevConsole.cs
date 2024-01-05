@@ -74,7 +74,20 @@ namespace DuckGame
 
         static DevConsole()
         {
+            core.OnTextChange += UpdateTextWithCompletion;
             core.OnTextChange += UpdateAutocomplete;
+        }
+
+        private static void UpdateTextWithCompletion(string previous, string current)
+        {
+            int changeLength = current.Length - previous.Length;
+            bool addedWhitespace = current.Length > previous.Length 
+                                   && string.IsNullOrWhiteSpace(current.Substring(previous.Length, changeLength));
+            
+            if (!addedWhitespace)
+                return;
+            
+            ImplementCompletionSuggestion(previous, _core.cursorPosition);
         }
 
         private static void UpdateAutocomplete(string previous, string current)
@@ -82,14 +95,25 @@ namespace DuckGame
             if (!DGRSettings.UseDuckShell || !DGRSettings.DuckShellAutoCompletion)
                 return;
 
+            if (s_suppressAutocompletionForNow)
+            {
+                s_suppressAutocompletionForNow = false;
+                return;
+            }
+
             ValueOrException<string[]> predictionResult;
 
             // damn this firebreak guy seems pretty fucking lazy
             try
             {
-                bool newHasMore = current.Length > previous.Length;
-                bool newHasWAYMore = current.Length > previous.Length + 1;
-                predictionResult = Commands.console.Shell.Predict(current, _core.cursorPosition + (newHasMore ? (newHasWAYMore ? 0 : 1) : -1));
+                int truCaretPos = _core.cursorPosition;
+
+                if (current.Length > previous.Length)
+                    truCaretPos++;
+                else if (current.Length < previous.Length)
+                    truCaretPos--;
+                
+                predictionResult = Commands.console.Shell.Predict(current, truCaretPos);
             }
             catch (Exception e)
             {
@@ -99,7 +123,7 @@ namespace DuckGame
             if (predictionResult.Failed)
             {
                 LatestPredictionSuggestions = new[] {$"|DGRED|{predictionResult.Error.Message}"};
-                s_HighlightedSuggestionIndex = -1;
+                s_canUsePrediction = false;
             }
             else
             {
@@ -107,13 +131,16 @@ namespace DuckGame
 
                 if (LatestPredictionSuggestions.Length == 0)
                 {
-                    s_HighlightedSuggestionIndex = -1;
+                    s_canUsePrediction = false;
                 }
                 else
                 {
-                    s_HighlightedSuggestionIndex = 0;
+                    s_canUsePrediction = true;
                 }
             }
+            
+            // reset choice
+            s_HighlightedSuggestionIndex = -1;
         }
 
         public static void SubmitSaveData(string pMessage)
@@ -1117,6 +1144,8 @@ namespace DuckGame
         private static bool WasDownLastFrame;
         public static string[] LatestPredictionSuggestions = Array.Empty<string>();
         private static int s_HighlightedSuggestionIndex = -1;
+        private static bool s_canUsePrediction;
+        private static bool s_suppressAutocompletionForNow;
 
         public static void Update()
         {
@@ -1311,6 +1340,12 @@ namespace DuckGame
                     }
                     else if (!string.IsNullOrWhiteSpace(_core.Typing))
                     {
+                        s_suppressAutocompletionForNow = true;
+                        ImplementCompletionSuggestion(_core.Typing, _core.cursorPosition);
+                        
+                        s_canUsePrediction = false;
+                        LatestPredictionSuggestions = Array.Empty<string>();
+                        
                         RunAsUser = true;
                         RunCommand(_core.Typing);
 
@@ -1394,17 +1429,21 @@ namespace DuckGame
                     
                     UpdateAutocomplete(_core.Typing, _core.Typing);
                 }
-                else if (Keyboard.Pressed(Keys.Tab) && s_HighlightedSuggestionIndex != -1)
+                else if (Keyboard.Pressed(Keys.Tab) && s_canUsePrediction)
                 {
+                    int practicalLimit = Math.Min(CommandSuggestionLimit, LatestPredictionSuggestions.Length);
+
                     if (Keyboard.control)
                     {
-                        int length = Math.Min(CommandSuggestionLimit, LatestPredictionSuggestions.Length);
-                        s_HighlightedSuggestionIndex++;
-                        s_HighlightedSuggestionIndex %= length;
+                        if (s_HighlightedSuggestionIndex == 0)
+                            s_HighlightedSuggestionIndex = practicalLimit;
+                        
+                        s_HighlightedSuggestionIndex--;
                     }
                     else
                     {
-                        ImplementSuggestion();
+                        s_HighlightedSuggestionIndex++;
+                        s_HighlightedSuggestionIndex %= practicalLimit;
                     }
                 }
 
@@ -1468,31 +1507,29 @@ namespace DuckGame
                 lastCommand = null;
         }
 
-        private static void ImplementSuggestion()
+        private static void ImplementCompletionSuggestion(string currentCommand, int caretPosition)
         {
-            if (s_HighlightedSuggestionIndex == -1)
+            if (s_HighlightedSuggestionIndex == -1 || !s_canUsePrediction)
                 return;
 
-            string currentCommand = _core.Typing;
-            int caret = _core.cursorPosition;
-
-            bool editCurrentWord = caret - 1 > -1 && !char.IsWhiteSpace(currentCommand[caret - 1]);
+            bool editCurrentWord = caretPosition - 1 > -1 && !char.IsWhiteSpace(currentCommand[caretPosition - 1]);
             string newWord = LatestPredictionSuggestions[s_HighlightedSuggestionIndex];
 
             if (editCurrentWord)
             {
-                IntRange deletionRange = WordBoundary.GetNextRange(currentCommand, caret, HorizontalDirection.Left);
+                IntRange deletionRange = WordBoundary.GetNextRange_Hard(currentCommand, caretPosition, HorizontalDirection.Left);
 
                 _core.typing = _core.Typing.Remove(deletionRange.Start, deletionRange.Length).Insert(deletionRange.Start, newWord);
                 _core.cursorPosition = deletionRange.Start + newWord.Length;
             }
             else
             {
-                _core.typing = _core.Typing.Insert(caret, newWord);
+                _core.typing = _core.Typing.Insert(caretPosition, newWord);
                 _core.cursorPosition += newWord.Length;
             }
-            
+
             UpdateAutocomplete(currentCommand, _core.Typing);
+            s_suppressAutocompletionForNow = true;
         }
 
         private static void HitBackspace(int times)

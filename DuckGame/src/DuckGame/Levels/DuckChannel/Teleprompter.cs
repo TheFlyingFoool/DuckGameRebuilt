@@ -15,7 +15,7 @@ namespace DuckGame
         private CasterMood _mood;
         private float _talkMove;
         private bool _paused;
-        private SinWave _pitchSin = (SinWave)0.15f;
+        private SinWave _pitchSin;
         private bool _demoWait;
         private bool _tried;
         private Sound s;
@@ -25,6 +25,7 @@ namespace DuckGame
         public Teleprompter(float xpos, float ypos, SpriteMap newsCaster)
           : base(xpos, ypos)
         {
+            _pitchSin = new SinWave(this, 0.15f);
             _newsCaster = newsCaster;
         }
 

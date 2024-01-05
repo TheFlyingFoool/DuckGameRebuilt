@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading;
 using AddedContent.Hyeve;
 using DuckGame;
+using System.Dynamic;
 
 namespace DuckGame
 {
@@ -1055,10 +1056,13 @@ namespace DuckGame
             foreach (IDrawToDifferentLayers toDifferentLayers in things[typeof(IDrawToDifferentLayers)])
                 toDifferentLayers.OnDrawLayer(layer);
 
-            Marker.DrawingLayer? drawingLayer = Marker.DrawingContextAttribute.DrawingLayerFromLayer(layer);
+            DrawingLayer? drawingLayer = Marker.DrawingContextAttribute.DrawingLayerFromLayer(layer);
 
             if (drawingLayer != null)
+            {
                 Marker.DrawingContextAttribute.ExecuteAll(drawingLayer.Value);
+                Marker.ComplexDrawingContextAttribute.ExecuteAll(layer);
+            }
             
             RenderDelegates.Layers.InvokeFor(layer);
             
@@ -1283,6 +1287,8 @@ namespace DuckGame
         public static Thing CheckPoint(Type pType, float x, float y, Thing ignore) => current.CollisionPoint(pType, new Vec2(x, y), ignore);
 
         public static T CheckPoint<T>(float x, float y) => current.CollisionPoint<T>(new Vec2(x, y));
+
+        public static T CheckPointFast<T>(float x, float y) => current.CollisionPointFast<T>(new Vec2(x, y));
 
         public static T CheckPointPlacementLayer<T>(float x, float y, Thing ignore = null, Layer layer = null) => current.CollisionPointPlacementLayer<T>(new Vec2(x, y), ignore, layer);
 
@@ -1900,17 +1906,23 @@ namespace DuckGame
         {
             List<object> nextCollisionList = GetNextCollisionList();
             Type key = typeof(T);
-            foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
+            foreach (Thing thing in things.CollisionLineAll(p1, p2, key))
             {
-                if (!dynamicObject.removeFromLevel && Collision.Line(p1, p2, dynamicObject))
-                    nextCollisionList.Add(dynamicObject);
+                if (!thing.removeFromLevel && Collision.Line(p1, p2, thing))
+                    nextCollisionList.Add(thing);
             }
-            if (_things.HasStaticObjects(key))
-            {
-                List<T> source = _things.quadTree.CheckLineAll<T>(p1, p2);
-                nextCollisionList.AddRange(source.Cast<object>());
-            }
-            return nextCollisionList.AsEnumerable().Cast<T>();
+            return nextCollisionList.Cast<T>();
+            //foreach (Thing dynamicObject in _things.GetDynamicObjects(key))
+            //{
+            //    if (!dynamicObject.removeFromLevel && Collision.Line(p1, p2, dynamicObject))
+            //        nextCollisionList.Add(dynamicObject);
+            //}
+            //if (_things.HasStaticObjects(key))
+            //{
+            //    List<T> source = _things.quadTree.CheckLineAll<T>(p1, p2);
+            //    nextCollisionList.AddRange(source.Cast<object>());
+            //}
+            //return nextCollisionList.AsEnumerable().Cast<T>();
         }
 
         public T CollisionPoint<T>(Vec2 point, Thing ignore, Layer layer)
@@ -1991,6 +2003,17 @@ namespace DuckGame
         {
             foreach (Thing thing in things.CollisionPointAll(point, typeof(T)))
             {
+                if (!thing.removeFromLevel && Collision.Point(point, thing))
+                    return (T)(object)thing;
+            }
+            return default(T);
+        }
+        public T CollisionPointFast<T>(Vec2 point)
+        {
+            List<Thing> t = things.CollisionPointAllFast(point, typeof(T));
+            for (int i = 0; i < t.Count; i++)
+            {
+                Thing thing = t[i];
                 if (!thing.removeFromLevel && Collision.Point(point, thing))
                     return (T)(object)thing;
             }

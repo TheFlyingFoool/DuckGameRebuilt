@@ -667,7 +667,7 @@ namespace DuckGame
         {
             get
             {
-                List<Profile> defaultProfiles = new List<Profile>();
+                List<Profile> defaultProfiles = new List<Profile>(DG.MaxPlayers);
                 if (Network.isActive)
                 {
                     for (int index = 0; index < DG.MaxPlayers; ++index)
@@ -744,13 +744,12 @@ namespace DuckGame
             };
             showEightPlayerSelected = false;
             List<Profile> defaultProfiles = this.defaultProfiles;
-            if (DuckNetwork.FiftyPlayerMode)
+            if (DG.FiftyPlayerMode)
             {
                 Vec2 Position = new Vec2(0f, 0f);
                 int profileindex = 0;
                 for (int i = 0; i < DG.MaxPlayers + 1; i++)
                 {
-                    DevConsole.Log(i.ToString() + " " + Position.x.ToString() + " " + Position.y.ToString());
                     Vec2 CreatePosition = new Vec2(1f + (Position.x * 178f), 1f + (Position.y * 89f));
                     if (i != 7)
                     {
@@ -831,7 +830,7 @@ namespace DuckGame
             _buttons.CenterOrigin();
             _buttons.depth = (Depth)0.9f;
             Music.Play("CharacterSelect");
-            int colnums = (int)Math.Ceiling(Math.Sqrt(DG.MaxPlayers)) - 1;
+            int colnums = (int)Math.Ceiling(Math.Sqrt(DG.MaxPlayers + 1)) - 1;
             teamBeams = new TeamBeam[colnums];
             for (int i = 0; i < colnums; i++)
             {
@@ -1043,6 +1042,10 @@ namespace DuckGame
                         }
                         else
                         {
+                            if (onlineSetting.id == "maxplayers")
+                            {
+                                onlineSetting.max = DG.MaxPlayers;
+                            }
                             UIComponent uiComponent = _hostGameMenu.AddMatchSetting(onlineSetting, false);
                             if (uiComponent != null && uiComponent is UIMenuItemString && uiComponent is UIMenuItemString uiMenuItemString)
                                 uiMenuItemString.InitializeEntryMenu(_playOnlineGroup, _hostGameMenu);
@@ -1392,7 +1395,7 @@ namespace DuckGame
             }
             eightPlayersActive = Profiles.activeNonSpectators.Count > 4;
             zoomedOut = false;
-            if (((growCamera ? 1 : (UISlotEditor.editingSlots ? 1 : 0)) | (flag1 ? 1 : 0)) != 0 || eightPlayersActive || showEightPlayerSelected || DuckNetwork.FiftyPlayerMode)
+            if (((growCamera ? 1 : (UISlotEditor.editingSlots ? 1 : 0)) | (flag1 ? 1 : 0)) != 0 || eightPlayersActive || showEightPlayerSelected || DG.FiftyPlayerMode)
             {
                 if (oldCameraSize == Vec2.Zero)
                 {
@@ -1400,13 +1403,13 @@ namespace DuckGame
                     oldCameraPos = current.camera.position;
                 }// new Vec2(-1f, -7f)
                 float x = 500f;
-                float rowncolumns = (int)Math.Ceiling(Math.Sqrt(DG.MaxPlayers));
-                float m = 0.5625f * rowncolumns - 0.125f;
+                float rowncolumns = (int)Math.Ceiling(Math.Sqrt(DG.MaxPlayers + 1));
+                float m = 0.5625f * rowncolumns - 0.125f;//0.5625f * rowncolumns - 0.125f;
 
                 float xoffset = -1.5f * rowncolumns + 3f;
                 //float yoffset = -7f * rowncolumns + 14f;
                 // float m = 1.5625f; // 1.5625
-                if (DuckNetwork.FiftyPlayerMode)
+                if (DG.FiftyPlayerMode)
                 {
                     current.camera.size = Lerp.Vec2Smooth(current.camera.size, new Vec2(320f * m, 180f * m) + new Vec2(0f, 0f), 0.1f, 0.08f);
                     current.camera.position = Lerp.Vec2Smooth(current.camera.position, new Vec2(0f, 0f), 0.1f, 0.08f);

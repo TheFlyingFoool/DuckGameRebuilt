@@ -9,6 +9,7 @@
         public TreeTopDead(float xpos, float ypos)
           : base(xpos, ypos)
         {
+            sw = new SinWave(this, Rando.Float(0.05f, 0.15f), Rando.Float(-5, 5));
             graphic = new Sprite("treeTopDead");
             _treeInside = new Sprite("treeTopInsideDead")
             {
@@ -33,7 +34,7 @@
                 Level.Add(TreeLeaf.New(x + Rando.Float(-16, 16), y + Rando.Float(-16, 16), 1));
             }
         }
-        public SinWave sw = new SinWave(Rando.Float(0.05f, 0.15f), Rando.Float(-5, 5));
+        public SinWave sw;
         public override void Draw()
         {
             graphic.flipH = offDir <= 0;

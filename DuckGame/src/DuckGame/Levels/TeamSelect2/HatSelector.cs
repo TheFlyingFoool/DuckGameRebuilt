@@ -285,18 +285,16 @@ namespace DuckGame
         {
             _teamWasCustomHat = false;
             _teamName = "";
+            List<Team> teamList = AllTeams();
+            Team team = _desiredTeamSelection < 0 || _desiredTeamSelection >= teamList.Count ? teamList[0] : teamList[_desiredTeamSelection];
             if (Network.isActive)
             {
-                if (_desiredTeamSelection >= AllTeams().Count)
-                    ControllerNumber();
-                Team allTeam = AllTeams()[_desiredTeamSelection];
-                _teamName = allTeam.name.ToUpperInvariant();
-                if (Teams.core.extraTeams.Contains(allTeam))
+                _teamName = team.name.ToUpperInvariant();
+                if (Teams.core.extraTeams.Contains(team))
                     _teamWasCustomHat = true;
-                return allTeam;
+                return team;
             }
-            List<Team> teamList = AllTeams();
-            return _desiredTeamSelection < 0 || _desiredTeamSelection >= teamList.Count ? teamList[0] : teamList[_desiredTeamSelection];
+            return team;
         }
 
         public override void Terminate() => base.Terminate();

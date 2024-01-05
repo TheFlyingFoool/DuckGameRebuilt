@@ -449,8 +449,11 @@ namespace DuckGame
                 dgrDescription = "Copies a QR code representing the join link"
             });
 
-
-            menu.Add(new UIMenuItemToggle("50p Mode", field: new FieldBinding(typeof(DuckNetwork), nameof(DuckNetwork.FiftyPlayerMode)))
+            menu.Add(new UIMenuItemNumber("Total Player Num", field: new FieldBinding(typeof(DG), nameof(DG.ExtraPlayerCount), 1, 300, 1), step: 1)
+            {
+                dgrDescription = "Amount of Players 50p Mode Adds, yes i know i should rename it"
+            });
+            menu.Add(new UIMenuItemToggle("50p Mode", field: new FieldBinding(typeof(DG), nameof(DG.FiftyPlayerMode)))
             {
                 dgrDescription = "Toggles 50p mode, will always reset to false after game restart"
             });
@@ -470,6 +473,10 @@ namespace DuckGame
             menu.Add(new UIMenuItemToggle("61 UPS", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.Use61UPS_Setting)))
             {
                 dgrDescription = "Game will run at 61 updates per second instead of 60 to mimmick vanilla on >60hz monitors"
+            });
+            menu.Add(new UIMenuItemToggle("DGR Music", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ExtraMusic)))
+            {
+                dgrDescription = "Adds 7 new songs to the pool. Songs made by Firch"
             });
             menu.Add(new UIMenuItemToggle("Fix Laggy Bullets", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.FixBulletPositions)))
             {
@@ -546,6 +553,10 @@ namespace DuckGame
                 dgrDescription = "Toggles comestic dust decals when explosions happen"
             });
 
+            menu.Add(new UIMenuItemToggle("Enhanced Textures", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.EnhancedTextures)))
+            {
+                dgrDescription = "Adds more texture variants and details"
+            });
 
             menu.Add(new UIMenuItemNumber("Particle Level", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ParticleMultiplier), 0, 7, 1), valStrings: new List<string>()
             {
@@ -561,6 +572,7 @@ namespace DuckGame
             {
                 dgrDescription = "Global particle multiplier from x0 to x16"
             });
+
             menu.Add(new UIMenuItemNumber("Rebuilt Effect", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.RebuiltEffect), 0, 2, 1), valStrings: new List<string>()
             {
                 "HEART",

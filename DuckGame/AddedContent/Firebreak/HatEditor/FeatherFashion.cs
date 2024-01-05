@@ -19,8 +19,23 @@ namespace DuckGame
         private static string s_toolTipMessage = string.Empty;
         private static bool s_iconBeingHovered;
         private static string s_iconHoveredID = string.Empty;
-        public static string? FilePath = null;
+        private static string? s_filePath = null;
+        private static FileSystemWatcher s_fileWatcher = new();
         public static string? HatName => Path.GetFileNameWithoutExtension(FilePath);
+
+        public static string FilePath
+        {
+            get => s_filePath;
+            set
+            {
+                s_filePath = value;
+                s_fileWatcher.Path = Path.GetDirectoryName(value);
+                s_fileWatcher.Filter = Path.GetFileName(value);
+                
+                s_fileWatcher.EnableRaisingEvents = File.Exists(value);
+            }
+        }
+
         
         [Marker.PostInitialize]
         public static void StaticInitialize()
@@ -37,6 +52,26 @@ namespace DuckGame
                     return new MetapixelInfo((byte)attribute.index, attribute.name, attribute.description, x.FieldType);
                 })
                 .ToDictionary(x => x.Index, x => x);
+
+            s_fileWatcher.Changed += OnFileChanged;
+            s_fileWatcher.Renamed += OnFileChanged;
+
+            MonoMain.OnGameExit += crashed =>
+            {
+                if (!crashed)
+                    return;
+                if (s_filePath != null)
+                {
+                    s_filePath = Path.GetDirectoryName(s_filePath) + "/" + Path.GetFileNameWithoutExtension(s_filePath) + "_autosave.png";
+                    GlobalActionSave();
+                }
+            };
+        }
+
+        private static void OnFileChanged(object source, FileSystemEventArgs args)
+        {
+            FilePath = args.FullPath;
+            GlobalActionImport(true);
         }
 
         public override void Initialize()
@@ -318,6 +353,9 @@ namespace DuckGame
             if (rightClick && FilePath is not null)
             {
                 Texture2D texture = TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, FilePath, true);
+                
+                if (texture is null)
+                    return;
 
                 if (texture.Width > 100 || texture.Height > 56)
                     throw new Exception("Image file too big to be a vanilla hat");

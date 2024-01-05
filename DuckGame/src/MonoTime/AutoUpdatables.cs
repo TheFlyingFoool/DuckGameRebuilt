@@ -31,7 +31,18 @@ namespace DuckGame
                 return;
             _updateables.Add(new WeakReference(update));
         }
-
+        public static WeakReference AddWithReturn(IAutoUpdate update)
+        {
+            if (ignoreAdditions)
+                return null;
+            WeakReference weakref = new WeakReference(update);
+            _updateables.Add(weakref);
+            return weakref;
+        }
+        public static void Remove(WeakReference weakref)
+        {
+            _updateables.Remove(weakref);
+        }
         public static void Clear() => _updateables.Clear();
 
         public static void ClearSounds()

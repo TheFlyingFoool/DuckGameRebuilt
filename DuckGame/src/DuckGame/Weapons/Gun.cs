@@ -56,7 +56,7 @@ namespace DuckGame
         protected float _smokeWait;
         protected float _smokeAngle;
         protected float _smokeFlatten;
-        private SinWave _accuracyWave = (SinWave)0.3f;
+        private SinWave _accuracyWave;
         private SpriteMap _clickPuff;
         protected Tex2D _laserTex;
         public bool isFatal = true;
@@ -152,6 +152,7 @@ namespace DuckGame
         public Gun(float xval, float yval)
           : base(xval, yval)
         {
+            _accuracyWave = new SinWave(this, 0.3f);
             _flare = new SpriteMap("smallFlare", 11, 10)
             {
                 center = new Vec2(0f, 5f)

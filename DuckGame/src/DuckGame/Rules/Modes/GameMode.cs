@@ -174,7 +174,25 @@ namespace DuckGame
                 Music.LoadAlternateSong(str);
                 Music.CancelLooping();
                 if (Network.isActive)
-                    Send.Message(new NMSwitchMusic(str));
+                {
+                    if (str.Contains("f_"))
+                    {
+                        DGRSettings.ExtraMusic = false;
+                        string str2 = Music.RandomTrack("InGame", Music.currentSong);
+                        DGRSettings.ExtraMusic = true;
+
+                        for (int i = 0; i < Network.connections.Count; i++)
+                        {
+                            NetworkConnection c = Network.connections[i];
+                            if (c.profile != null && c.profile.isUsingRebuilt) Send.Message(new NMSwitchMusic(str), c);
+                            else
+                            {
+                                Send.Message(new NMSwitchMusic(str2), c);
+                            }
+                        }
+                    }
+                    else Send.Message(new NMSwitchMusic(str));
+                }
             }
             Initialize();
             if (Network.isActive)
@@ -190,7 +208,7 @@ namespace DuckGame
             if (_editorTestMode)
             {
                 _pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
-                _pauseMenu = new UIMenu("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
+                _pauseMenu = new UIMenu("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 175f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
                 _confirmMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
                 UIDivider component = new UIDivider(true, 0.75f);
                 component.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(_pauseGroup), UIAlign.Left), true);
@@ -217,7 +235,7 @@ namespace DuckGame
             else
             {
                 _pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
-                _pauseMenu = new UIMenu("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
+                _pauseMenu = new UIMenu("@LWING@PAUSE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 175f, conString: "@CANCEL@CLOSE @SELECT@SELECT");
                 _confirmMenu = new UIMenu("REALLY QUIT?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
                 _confirmBlacklistMenu = new UIMenu("AVOID LEVEL?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK @SELECT@SELECT");
                 _confirmReturnToLobby = new UIMenu("RETURN TO LOBBY?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 230f, conString: "@CANCEL@BACK @SELECT@SELECT");

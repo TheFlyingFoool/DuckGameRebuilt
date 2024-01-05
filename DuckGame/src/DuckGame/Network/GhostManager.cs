@@ -1,11 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.GhostManager
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -107,9 +100,12 @@ namespace DuckGame
 
         public void Clear()
         {
-            foreach (GhostObject ghost in _ghosts)
-                ghost.ReleaseReferences();
-            _ghosts.Clear();
+            lock (_ghosts)
+            {
+                foreach (GhostObject ghost in _ghosts)
+                    ghost.ReleaseReferences();
+                _ghosts.Clear();
+            }
             _ghostIndexMap.Clear();
             foreach (Profile profile in DuckNetwork.profiles)
                 profile.removedGhosts.Clear();
@@ -125,19 +121,22 @@ namespace DuckGame
         public void Clear(NetworkConnection c)
         {
             bool flag = false;
-            foreach (GhostObject ghost in _ghosts)
-            {
-                ghost.ClearConnectionData(c);
-                flag = true;
-            }
-            if (Network.host != null)
+            lock (_ghosts)
             {
                 foreach (GhostObject ghost in _ghosts)
                 {
-                    if (ghost.thing.connection == c)
+                    ghost.ClearConnectionData(c);
+                    flag = true;
+                }
+                if (Network.host != null)
+                {
+                    foreach (GhostObject ghost in _ghosts)
                     {
-                        Thing.SuperFondle(ghost.thing, Network.host);
-                        flag = true;
+                        if (ghost.thing.connection == c)
+                        {
+                            Thing.SuperFondle(ghost.thing, Network.host);
+                            flag = true;
+                        }
                     }
                 }
             }
@@ -435,7 +434,10 @@ namespace DuckGame
         {
             if (receivingDestroyMessage)
                 return;
-            _removeList.Add(g);
+            lock(_removeList)
+            {
+                _removeList.Add(g);
+            }
         }
 
         public void PostUpdate() => particleManager.Update();
@@ -446,39 +448,43 @@ namespace DuckGame
             inGhostLoop = true;
             inGhostLerpLoop = true;
             int num = 0;
-            foreach (GhostObject ghost in _ghosts)
-            {
-                if (ghost.thing is IComplexUpdate)
-                {
-                    if (ghost.IsInitialized())
-                        (ghost.thing as IComplexUpdate).OnPreUpdate();
-                    ++num;
-                }
-            }
-            foreach (GhostObject ghost in _ghosts)
-            {
-                if (ghost.thing.connection != DuckNetwork.localConnection)
-                {
-                    for (int index = 0; index < ghost.constipation; ++index)
-                        ghost.UpdateState();
-                    ghost.Update();
-                }
-                else
-                    ghost.UpdateTick();
-            }
-            if (num > 0)
+            lock (_ghosts)
             {
                 foreach (GhostObject ghost in _ghosts)
                 {
-                    if (ghost.thing is IComplexUpdate && ghost.IsInitialized())
-                        (ghost.thing as IComplexUpdate).OnPostUpdate();
+                    if (ghost.thing is IComplexUpdate)
+                    {
+                        if (ghost.IsInitialized())
+                            (ghost.thing as IComplexUpdate).OnPreUpdate();
+                        ++num;
+                    }
                 }
+                foreach (GhostObject ghost in _ghosts)
+                {
+                    if (ghost.thing.connection != DuckNetwork.localConnection)
+                    {
+                        for (int index = 0; index < ghost.constipation; ++index)
+                            ghost.UpdateState();
+                        ghost.Update();
+                    }
+                    else
+                        ghost.UpdateTick();
+                }
+                if (num > 0)
+                {
+                    foreach (GhostObject ghost in _ghosts)
+                    {
+                        if (ghost.thing is IComplexUpdate && ghost.IsInitialized())
+                            (ghost.thing as IComplexUpdate).OnPostUpdate();
+                    }
+                }
+                inGhostLerpLoop = false;
+                foreach (GhostObject tempGhost in _tempGhosts)
+                    _ghosts.Add(tempGhost);
             }
-            inGhostLerpLoop = false;
-            foreach (GhostObject tempGhost in _tempGhosts)
-                _ghosts.Add(tempGhost);
             _tempGhosts.Clear();
             inGhostLoop = false;
+
         }
 
         public void PostDraw()
@@ -512,7 +518,10 @@ namespace DuckGame
         {
             if (ghost == null)
                 return;
-            _ghosts.Remove(ghost);
+            lock (_ghosts)
+            {
+                _ghosts.Remove(ghost);
+            }
             if (ghost.thing != null && !ghost.thing.removeFromLevel)
                 Level.Remove(ghost.thing);
             if (!receivingDestroyMessage && ghost.thing != null && ghost.thing.isServerForObject)
@@ -575,9 +584,12 @@ namespace DuckGame
             else
             {
                 Main.SpecialCode2 = "10118033";
-                if (_ghosts.Contains(pGhost) || pGhost.thing == null)
-                    return;
-                _ghosts.Add(pGhost);
+                lock (_ghosts)
+                {
+                    if (_ghosts.Contains(pGhost) || pGhost.thing == null)
+                        return;
+                    _ghosts.Add(pGhost);
+                }
                 Main.SpecialCode2 = "10118034";
                 pGhost.thing.OnGhostObjectAdded();
             }
@@ -609,28 +621,34 @@ namespace DuckGame
             }
             int num1 = 0;
             List<NetworkConnection> connections = Network.activeNetwork.core.connections;
-            foreach (GhostObject ghost in _ghosts)
+            lock (_ghosts)
             {
-                if (ghost.thing.isServerForObject)
-                    ghost.RefreshStateMask(connections);
-                ++num1;
-            }
-            foreach (GhostObject ghost in _ghosts)
-            {
-                if (ghost.shouldRemove && ghost.thing != null)
+                foreach (GhostObject ghost in _ghosts)
                 {
-                    if (!ghost.thing.removeFromLevel)
-                        Level.Remove(ghost.thing);
-                    RemoveLater(ghost);
+                    if (ghost.thing.isServerForObject)
+                        ghost.RefreshStateMask(connections);
+                    ++num1;
+                }
+                foreach (GhostObject ghost in _ghosts)
+                {
+                    if (ghost.shouldRemove && ghost.thing != null)
+                    {
+                        if (!ghost.thing.removeFromLevel)
+                            Level.Remove(ghost.thing);
+                        RemoveLater(ghost);
+                    }
                 }
             }
-            foreach (GhostObject remove in _removeList)
+            lock(_removeList)
             {
-                if (remove.thing != null)
-                    remove.thing.ghostType = 0;
-                RemoveGhost(remove, remove.ghostObjectIndex);
+                foreach (GhostObject remove in _removeList)
+                {
+                    if (remove.thing != null)
+                        remove.thing.ghostType = 0;
+                    RemoveGhost(remove, remove.ghostObjectIndex);
+                }
+                _removeList.Clear();
             }
-            _removeList.Clear();
             if (Level.core.nextLevel != null || !Level.current.initializeFunctionHasBeenRun)
                 return;
             UpdateRemoval();
@@ -645,11 +663,14 @@ namespace DuckGame
 
         public void OnDisconnect(NetworkConnection connection)
         {
-            foreach (GhostObject ghost in _ghosts)
+            lock (_ghosts)
             {
-                ghost.DirtyStateMask(long.MaxValue, connection);
-                if (ghost.thing._netData != null)
-                    ghost.thing._netData.MakeDirty(int.MaxValue, connection, (NetIndex16)0);
+                foreach (GhostObject ghost in _ghosts)
+                {
+                    ghost.DirtyStateMask(long.MaxValue, connection);
+                    if (ghost.thing._netData != null)
+                        ghost.thing._netData.MakeDirty(int.MaxValue, connection, (NetIndex16)0);
+                }
             }
             foreach (Profile profile in DuckNetwork.profiles)
                 profile.netData.MakeDirty(int.MaxValue, connection, (NetIndex16)0);
@@ -678,52 +699,55 @@ namespace DuckGame
         {
             List<NMGhostData> nmGhostDataList = new List<NMGhostData>();
             List<GhostObject> pGhosts = new List<GhostObject>();
-            foreach (GhostObject ghost in _ghosts)
+            lock (_ghosts)
             {
-                if (ghost.thing.connection == null)
-                    ghost.thing.connection = Network.host;
-                if (!pDelta || ghost.thing.connection == DuckNetwork.localConnection || ghost.thing.connection == null && Network.isServer)
+                foreach (GhostObject ghost in _ghosts)
                 {
-                    if (!ghost.thing.isInitialized)
-                        ghost.thing.DoInitialize();
-                    if (pDelta & pSendMessages && ghost.thing._netData != null && ghost.thing._netData.IsDirty(pConnection))
+                    if (ghost.thing.connection == null)
+                        ghost.thing.connection = Network.host;
+                    if (!pDelta || ghost.thing.connection == DuckNetwork.localConnection || ghost.thing.connection == null && Network.isServer)
                     {
-                        Send.Message(new NMObjectNetData(ghost.thing, pConnection), NetMessagePriority.Volatile, pConnection);
-                        ghost.thing._netData.Clean(pConnection);
-                    }
-                    if (!pDelta || ghost.NeedsSync(pConnection))
-                    {
-                        if (pDelta)
+                        if (!ghost.thing.isInitialized)
+                            ghost.thing.DoInitialize();
+                        if (pDelta & pSendMessages && ghost.thing._netData != null && ghost.thing._netData.IsDirty(pConnection))
                         {
-                            ghost.previouslySerializedData = ghost.GetNetworkStateData(pConnection, true);
+                            Send.Message(new NMObjectNetData(ghost.thing, pConnection), NetMessagePriority.Volatile, pConnection);
+                            ghost.thing._netData.Clean(pConnection);
                         }
-                        else
+                        if (!pDelta || ghost.NeedsSync(pConnection))
                         {
-                            ghost.previouslySerializedData = ghost.GetNetworkStateData();
-                            ghost.ClearStateMask(pConnection, ghost.thing.authority);
-                        }
-                        if (pDelta)
-                        {
-                            int index1 = 0;
-                            for (int index2 = 0; index2 < pGhosts.Count; ++index2)
+                            if (pDelta)
                             {
-                                if (ghost.thing is Duck)
-                                {
-                                    index1 = 0;
-                                    break;
-                                }
-                                if (pGhosts[index2].thing is Duck)
-                                    ++index1;
-                                if (pGhosts[index2].thing.GetType() == ghost.thing.GetType())
-                                {
-                                    index1 = index2;
-                                    break;
-                                }
+                                ghost.previouslySerializedData = ghost.GetNetworkStateData(pConnection, true);
                             }
-                            pGhosts.Insert(index1, ghost);
+                            else
+                            {
+                                ghost.previouslySerializedData = ghost.GetNetworkStateData();
+                                ghost.ClearStateMask(pConnection, ghost.thing.authority);
+                            }
+                            if (pDelta)
+                            {
+                                int index1 = 0;
+                                for (int index2 = 0; index2 < pGhosts.Count; ++index2)
+                                {
+                                    if (ghost.thing is Duck)
+                                    {
+                                        index1 = 0;
+                                        break;
+                                    }
+                                    if (pGhosts[index2].thing is Duck)
+                                        ++index1;
+                                    if (pGhosts[index2].thing.GetType() == ghost.thing.GetType())
+                                    {
+                                        index1 = index2;
+                                        break;
+                                    }
+                                }
+                                pGhosts.Insert(index1, ghost);
+                            }
+                            else
+                                pGhosts.Add(ghost);
                         }
-                        else
-                            pGhosts.Add(ghost);
                     }
                 }
             }

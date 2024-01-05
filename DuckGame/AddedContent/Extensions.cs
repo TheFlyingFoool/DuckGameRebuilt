@@ -420,7 +420,19 @@ namespace DuckGame
             }
             catch
             {
-                return mi.Name;
+                if (mi == null)
+                {
+                    return "";
+
+                }
+                try
+                {
+                    return mi.Name;
+                }
+                catch
+                {
+                    return "";
+                }
             }
         }
 

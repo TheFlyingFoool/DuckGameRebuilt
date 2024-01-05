@@ -866,7 +866,7 @@ namespace DuckGame
 
 
 
-            [Metapixel(90, "Cape Length", "Amount of segments the cape will have from 0 to 20 (Default 10)")]
+            [Metapixel(90, "Cape Length", "Amount of segments the cape will have from 0 to 24 (Default 10)")]
             public MDInt CapeLength = new MDInt
             {
                 range = 24,

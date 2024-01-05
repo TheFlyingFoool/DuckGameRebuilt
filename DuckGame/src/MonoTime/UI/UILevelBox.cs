@@ -140,43 +140,43 @@ namespace DuckGame
         private List<string> sayQueue = new List<string>();
         public int _eggFeedIndex;
         public List<string> _eggFeedLines = new List<string>()
-    {
-      "..",
-      "...",
-      "EGGS CANNOT\nTALK.",
-      "EGGS CANNOT\nTALK..",
-      "EGGS CANNOT\nTALK!",
-      "I SAID, EGGS\nCANNOT TALK!",
-      "LOOK AT YOURSELF,\nTRYING TO TALK\nTO AN EGG.",
-      "I GUESS I'VE\nBEEN THERE.",
-      "YOU KNOW, PEOPLE\nARE GONNA CALL\nYOU CRAZY..",
-      "CRAZY FOR TALKING\nTO AN EGG.",
-      "BUT IF IT WASN'T\nFOR DUCKS LIKE\nYOU, WELL..",
-      "THIS EGG WOULD\nHAVE NOBODY\nTO TALK TO.",
-      "PEOPLE DON'T\nREALLY TAKE EGGS\nSERIOUSLY.",
-      "MAYBE THEY'RE\nTHINKING,",
-      "WHAT WOULD AN\nEGG SAY? IT'S\nJUST AN EGG.",
-      "EGGS DON'T\nKNOW MUCH OF\nANYTHING!",
-      "WELL..\nTHAT MAY BE\nTRUE.",
-      "I KNOW ONLY\nWHAT'S INSIDE\nMY SHELL!",
-      "BUT..",
-      "EGGS HAVE\nA LOT OF TIME\nTO THINK ABOUT\nTHINGS.",
-      "I THINK A LOT\nABOUT HOW TO\nBE A GOOD EGG.",
-      "...",
-      "I KNOW THAT\nI SHOULD BE\nKIND.",
-      "KIND TO\nEVERYONE, EGG\nOR OTHERWISE.",
-      "AND THE KEY\nTO KINDNESS IS\nREMEMBERING:",
-      "WE DON'T KNOW\nWHAT'S GOING ON\nINSIDE ANYONE\nELSE'S SHELL!",
-      "...",
-      "PEOPLE WHO THINK\nTHEY KNOW,",
-      "THEY MIGHT THINK\nTHAT EGGS DON'T\nTALK!",
-      "...",
-      "WELL, THANKS FOR\nLISTENING TO\nTHIS EGG.",
-      "THANKS FOR\nCARING ABOUT\nWHAT GOES ON\nIN MY SHELL.",
-      "THAT'S ALL I\nHAVE TO SAY.",
-      "I NEED TO\nGET BACK TO\nGROWING UP!",
-      "SO LONG BUDDY!"
-    };
+        {
+          "..",
+          "...",
+          "EGGS CANNOT\nTALK.",
+          "EGGS CANNOT\nTALK..",
+          "EGGS CANNOT\nTALK!",
+          "I SAID, EGGS\nCANNOT TALK!",
+          "LOOK AT YOURSELF,\nTRYING TO TALK\nTO AN EGG.",
+          "I GUESS I'VE\nBEEN THERE.",
+          "YOU KNOW, PEOPLE\nARE GONNA CALL\nYOU CRAZY..",
+          "CRAZY FOR TALKING\nTO AN EGG.",
+          "BUT IF IT WASN'T\nFOR DUCKS LIKE\nYOU, WELL..",
+          "THIS EGG WOULD\nHAVE NOBODY\nTO TALK TO.",
+          "PEOPLE DON'T\nREALLY TAKE EGGS\nSERIOUSLY.",
+          "MAYBE THEY'RE\nTHINKING,",
+          "WHAT WOULD AN\nEGG SAY? IT'S\nJUST AN EGG.",
+          "EGGS DON'T\nKNOW MUCH OF\nANYTHING!",
+          "WELL..\nTHAT MAY BE\nTRUE.",
+          "I KNOW ONLY\nWHAT'S INSIDE\nMY SHELL!",
+          "BUT..",
+          "EGGS HAVE\nA LOT OF TIME\nTO THINK ABOUT\nTHINGS.",
+          "I THINK A LOT\nABOUT HOW TO\nBE A GOOD EGG.",
+          "...",
+          "I KNOW THAT\nI SHOULD BE\nKIND.",
+          "KIND TO\nEVERYONE, EGG\nOR OTHERWISE.",
+          "AND THE KEY\nTO KINDNESS IS\nREMEMBERING:",
+          "WE DON'T KNOW\nWHAT'S GOING ON\nINSIDE ANYONE\nELSE'S SHELL!",
+          "...",
+          "PEOPLE WHO THINK\nTHEY KNOW,",
+          "THEY MIGHT THINK\nTHAT EGGS DON'T\nTALK!",
+          "...",
+          "WELL, THANKS FOR\nLISTENING TO\nTHIS EGG.",
+          "THANKS FOR\nCARING ABOUT\nWHAT GOES ON\nIN MY SHELL.",
+          "THAT'S ALL I\nHAVE TO SAY.",
+          "I NEED TO\nGET BACK TO\nGROWING UP!",
+          "SO LONG BUDDY!"
+        };
         public bool eggTalk;
         public float _xpProgress;
         public float _dayProgress;
@@ -187,7 +187,7 @@ namespace DuckGame
         private float _levelSlideWait;
         private bool _driveAway;
         private bool _attemptingGive;
-        private ConstantSound _sound = new ConstantSound("chainsawIdle", multiSound: "chainsawIdleMulti");
+        private ConstantSound _sound;
         private List<Sprite> littleEggs = new List<Sprite>();
         private bool playedSound;
         private bool _prevShopOpen;
@@ -235,6 +235,7 @@ namespace DuckGame
           string conString = "")
           : base(title, xpos, ypos, wide, high, conString)
         {
+            _sound = new ConstantSound(this, "chainsawIdle", multiSound: "chainsawIdleMulti");
             Graphics.fade = 1f;
             //UILevelBox._firstOpen = true;
             _frames.Add(new Sprite("levWindow_lev0"));

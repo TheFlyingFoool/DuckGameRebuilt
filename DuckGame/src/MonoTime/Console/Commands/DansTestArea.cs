@@ -2,6 +2,7 @@ using AddedContent.Firebreak;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json.Linq;
 using RectpackSharp;
 using SDL2;
 using System;
@@ -141,7 +142,7 @@ namespace DuckGame
         //        Graphics.DrawRect(ingamepos, ingamepos + new Vec2(10f), Color.Green);
         //    }
         //}
-        [Marker.DrawingContext(Marker.DrawingLayer.Foreground, CustomID = "cells", DoDraw = false)]
+        [Marker.DrawingContext(DrawingLayer.Foreground, CustomID = "cells", DoDraw = false)]
         public static void DrawCells()
         {
             //Buckets.Keys
@@ -169,6 +170,158 @@ namespace DuckGame
                     Graphics.DrawRect(new Vec2((bucket.x - offset) * QuadTreeObjectList.cellsize, (bucket.y - offset) * QuadTreeObjectList.cellsize), new Vec2((bucket.x - offset + 1) * QuadTreeObjectList.cellsize, (bucket.y - offset + 1) * QuadTreeObjectList.cellsize), Color.Orange * 0.8f, (Depth)1f, false, 0.5f);
                 }
             }
+
+        }
+        [Marker.DevConsoleCommand(Name = "bucketremove")]
+        public static void bucketremove()
+        {
+            if (Level.current != null)
+            {
+                List<(Vec2, int)> bucketList = new List<(Vec2, int)>();
+                foreach (Vec2 bucket in Level.current.things.Buckets.Keys)
+                {
+                    int bucketcount = 0;
+                    foreach (List<Thing> values in Level.current.things.Buckets[bucket].Values)
+                    {
+                        foreach (Thing thing in values)
+                        {
+                            if (thing.removeFromLevel)
+                            {
+                                bucketcount++;
+                            }
+                        }
+                    }
+                    bucketList.Add((bucket, bucketcount));
+                }
+                foreach ((Vec2, int) item in bucketList.OrderByDescending(item => item.Item2).Take(10))
+                {
+                    DevConsole.Log("Bucket: " + item.Item1.x + " " + item.Item1.y + ", Count: " + item.Item2);
+                }
+            }
+
+        }
+        [Marker.DevConsoleCommand(Name = "buckettest")]
+        public static void buckettest()
+        {
+            if (Level.current != null)
+            {
+                List<(Vec2, int)> bucketList = new List<(Vec2, int)>();
+                foreach (Vec2 bucket in Level.current.things.Buckets.Keys)
+                {
+                    int bucketcount = 0;
+                    foreach (List<Thing> values in Level.current.things.Buckets[bucket].Values)
+                    {
+                        bucketcount += values.Count;
+                    }
+                    bucketList.Add((bucket, bucketcount));
+                }
+                foreach ((Vec2, int) item in bucketList.OrderByDescending(item => item.Item2).Take(10))
+                {
+                    DevConsole.Log("Bucket: " + item.Item1.x + " " + item.Item1.y + ", Count: " + item.Item2);
+                }
+            }
+
+        }
+        [Marker.DevConsoleCommand(Name = "sinwavecheck")]
+        public static void sinwavecheck()
+        {
+            if (Level.current != null)
+            {
+                Dictionary<Type, int> typeCounts = new Dictionary<Type, int>();
+
+                foreach (WeakReference updateable in AutoUpdatables.core._updateables)
+                {
+                    Type thingType = updateable.Target.GetType();
+
+                    // If the type is already in the dictionary, increment its count
+                    if (typeCounts.ContainsKey(thingType))
+                    {
+                        typeCounts[thingType]++;
+                    }
+                    else
+                    {
+                        // Otherwise, add the type to the dictionary with a count of 1
+                        typeCounts.Add(thingType, 1);
+                    }
+                }
+
+                // Display the top 10 types with the highest count
+                foreach (KeyValuePair<Type, int> item in typeCounts.OrderByDescending(item => item.Value).Take(10))
+                {
+                    DevConsole.Log("Type: " + item.Key.Name + ", Count: " + item.Value);
+                }
+            }
+
+
+        }
+        [Marker.DevConsoleCommand(Name = "buckettypes")]
+        public static void buckettypes()
+        {
+            if (Level.current != null)
+            {
+                Dictionary<Type, int> typeCounts = new Dictionary<Type, int>();
+
+                foreach (Vec2 bucket in Level.current.things.Buckets.Keys)
+                {
+                    foreach (List<Thing> values in Level.current.things.Buckets[bucket].Values)
+                    {
+                        foreach (Thing thing in values)
+                        {
+                            Type thingType = thing.GetType();
+
+                            // If the type is already in the dictionary, increment its count
+                            if (typeCounts.ContainsKey(thingType))
+                            {
+                                typeCounts[thingType]++;
+                            }
+                            else
+                            {
+                                // Otherwise, add the type to the dictionary with a count of 1
+                                typeCounts.Add(thingType, 1);
+                            }
+                        }
+                    }
+                }
+
+                // Display the top 10 types with the highest count
+                foreach (KeyValuePair<Type, int> item in typeCounts.OrderByDescending(item => item.Value).Take(10))
+                {
+                    DevConsole.Log("Type: " + item.Key.Name + ", Count: " + item.Value);
+                }
+            }
+
+
+        }
+        [Marker.DevConsoleCommand(Name = "leveltypes")]
+        public static void leveltypes()
+        {
+            if (Level.current != null)
+            {
+                Dictionary<Type, int> typeCounts = new Dictionary<Type, int>();
+
+                foreach (Thing thing in Level.current.things)
+                {
+                    Type thingType = thing.GetType();
+
+                    // If the type is already in the dictionary, increment its count
+                    if (typeCounts.ContainsKey(thingType))
+                    {
+                        typeCounts[thingType]++;
+                    }
+                    else
+                    {
+                        // Otherwise, add the type to the dictionary with a count of 1
+                        typeCounts.Add(thingType, 1);
+                    }
+                }
+
+                // Display the top 10 types with the highest count
+                foreach (KeyValuePair<Type, int> item in typeCounts.OrderByDescending(item => item.Value).Take(10))
+                {
+                    DevConsole.Log("Type: " + item.Key.Name + ", Count: " + item.Value);
+                }
+            }
+
 
         }
         [Marker.DevConsoleCommand]
@@ -327,30 +480,34 @@ namespace DuckGame
             DevConsole.Log("joining");
             Level.current = new JoinServer(id2);
         }
-        [Marker.DevConsoleCommand(Name = "lanjoin")]
-        public static void LanJoin(string id)
+        [Marker.DevConsoleCommand(Name = "levelindex")]
+        public static void levelindex()
         {
+            DevConsole.Log(DuckNetwork.levelIndex.ToString());
+        }
+        [Marker.DevConsoleCommand(Name = "lanjoin")]
+        public static void LanJoin(string id = "")
+        {
+            if (id == "")
+            {
+                id = "127.0.0.1";
+            }
             DevConsole.Log("Trying to join " + id);
             Level.current = new JoinServer(id);
         }
-        [Marker.DevConsoleCommand(Name = "res",
-            To = ImplementTo.DuckHack)]
-        public static void Res(int width, int height, int screenmode)
+        
+        [Marker.DevConsoleCommand]
+        public static void Res(int width, int height, ScreenMode mode)
         {
-            if (screenmode < 1 || screenmode > 4)
+            Resolution r = new()
             {
-                DevConsole.Log("Invalid input 1 - 4 = Windowed, Fullscreen, Borderless, Max", Color.Red);
-                return;
-            }
-            Resolution r = new Resolution()
-            {
-                dimensions = new Vec2(width, height)
+                dimensions = new Vec2(width, height), mode = mode,
             };
-            ScreenMode mode = (ScreenMode)(screenmode - 1);
-            r.mode = mode;
+            
             Resolution.Set(r);
             Resolution.Apply();
         }
+        
         [Marker.DevConsoleCommand(Name = "windowtoggle",
             To = ImplementTo.DuckHack)]
         public static void windowtoggle()
@@ -456,9 +613,9 @@ namespace DuckGame
 
         public static void SetControllerLightBar(int index, Color color)
         {
-            GamePadState state = FNAPlatform.GetGamePadState(index, GamePadDeadZone.IndependentAxes);
+            GamePadState state = GamePad.GetState(index, GamePadDeadZone.IndependentAxes);
             if (state.IsConnected)
-                FNAPlatform.SetGamePadLightBar(index, (Microsoft.Xna.Framework.Color)color);
+                GamePad.SetLightBarEXT(index, (Microsoft.Xna.Framework.Color)color);
         }
 
         [Marker.DevConsoleCommand(Name = "dr",

@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Audio;
+using System;
+using static DuckGame.CMD;
 
 namespace DuckGame
 {
@@ -20,6 +22,8 @@ namespace DuckGame
         private float _lerpSpeed = 0.1f;
         private bool _killSound;
         private Level _startLevel;
+        private Thing parent;
+        private WeakReference weakref;
 
         public float volume
         {
@@ -64,6 +68,16 @@ namespace DuckGame
             DevConsole.Log("ConstantSound not found! (" + sound + ")");
             _effect = new InvalidSound(sound, startVolume, startPitch, 0f, true);
         }
+        public ConstantSound(Thing thing, string sound, float startVolume = 0f, float startPitch = 0f, string multiSound = null)
+        {
+            parent = thing;
+            weakref = AutoUpdatables.AddWithReturn(this);
+            _effect = startVolume <= 0f ? (multiSound == null ? SFX.Get(sound, startVolume * SFX.volume, startPitch, looped: true) : SFX.GetMultiSound(sound, multiSound)) : SFX.Play(sound, startVolume * SFX.volume, startPitch, looped: true);
+            if (_effect != null)
+                return;
+            DevConsole.Log("ConstantSound not found! (" + sound + ")");
+            _effect = new InvalidSound(sound, startVolume, startPitch, 0f, true);
+        }
 
         ~ConstantSound()
         {
@@ -82,6 +96,12 @@ namespace DuckGame
 
         public void Update()
         {
+            if (parent != null && weakref != null && (parent.removeFromLevel || parent.level != Level.current))
+            {
+                _lerpSpeed = 0f;
+                _lerpVolume = 0f;
+                AutoUpdatables.Remove(weakref);
+            }
             if (_effect != null && _effect.IsDisposed)
                 _effect = null;
             else if (_effect == null || _startLevel != null && Level.current != _startLevel)

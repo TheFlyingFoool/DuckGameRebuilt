@@ -125,26 +125,24 @@ namespace Microsoft.Xna.Framework
 			get;
 			set;
 		}
-
 		private int INTERAL_TargetFrameRate = 1000;
 		public int DrawRateLimiterTarget
 		{
-            get
-            {
+			get
+			{
 				return INTERAL_TargetFrameRate;
-            }
-            set
-            {
+			}
+			set
+			{
 				INTERAL_TargetFrameRate = value;
-				targetDrawTimeTicks = (long)(Stopwatch.Frequency / (double)INTERAL_TargetFrameRate);
+				targetDrawTimeTicks = (long) (Stopwatch.Frequency / (double) INTERAL_TargetFrameRate);
 			}
 		}
 
 		public bool UseDrawRateLimiter = false;
 		private Stopwatch drawTimer = new Stopwatch();
-		private long targetDrawTimeTicks = (long)(Stopwatch.Frequency / 1000.0);
-		private long drawSpinWaitThresholdTicks = (long)(Stopwatch.Frequency / 500.0); // SpinWait for up to 2ms
-		
+		private long targetDrawTimeTicks = (long) (Stopwatch.Frequency / 1000.0);
+		private long drawSpinWaitThresholdTicks = (long) (Stopwatch.Frequency / 500.0); // SpinWait for up to 2ms
 
 		private bool INTERNAL_isMouseVisible;
 		public bool IsMouseVisible
@@ -279,7 +277,6 @@ namespace Microsoft.Xna.Framework
 
 			IsMouseVisible = false;
 			IsFixedTimeStep = true;
-			UnFixedDraw = false;
 			TargetElapsedTime = TimeSpan.FromTicks(166667); // 60fps
 			InactiveSleepTime = TimeSpan.FromSeconds(0.02);
 			for (int i = 0; i < previousSleepTimes.Length; i += 1)
@@ -562,11 +559,11 @@ namespace Microsoft.Xna.Framework
 					}
 					gameTime.ElapsedGameTime = accumulatedElapsedTime;
 				}
-				/* Draw needs to know the total elapsed time
-				 * that occured for the fixed length updates.
-				 */
 				else
 				{
+					/* Draw needs to know the total elapsed time
+					* that occured for the fixed length updates.
+					*/
 					gameTime.ElapsedGameTime = TimeSpan.FromTicks(TargetElapsedTime.Ticks * stepCount);
 				}
 			}
@@ -607,7 +604,6 @@ namespace Microsoft.Xna.Framework
 				 */
 				if (BeginDraw())
 				{
-					drawTimer.Restart(); // Restart the draw timer after drawing
 					Draw(gameTime);
 					EndDraw();
 				}

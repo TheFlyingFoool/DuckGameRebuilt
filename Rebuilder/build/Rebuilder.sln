@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rebuilder", "Rebuilder.csproj", "{B07BDC3C-3770-4A07-90D8-5C2A68E2172B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B07BDC3C-3770-4A07-90D8-5C2A68E2172B}.Debug|x86.ActiveCfg = Debug|x86
+		{B07BDC3C-3770-4A07-90D8-5C2A68E2172B}.Debug|x86.Build.0 = Debug|x86
+		{B07BDC3C-3770-4A07-90D8-5C2A68E2172B}.Release|x86.ActiveCfg = Release|x86
+		{B07BDC3C-3770-4A07-90D8-5C2A68E2172B}.Release|x86.Build.0 = Release|x86
+		{ACF13DE3-8030-4C54-9EF5-5058B2B36855}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ACF13DE3-8030-4C54-9EF5-5058B2B36855}.Debug|x86.Build.0 = Debug|Any CPU
+		{ACF13DE3-8030-4C54-9EF5-5058B2B36855}.Release|x86.ActiveCfg = Release|Any CPU
+		{ACF13DE3-8030-4C54-9EF5-5058B2B36855}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {24677D64-1D0E-40B5-A8DF-F90A4575C4A6}
+	EndGlobalSection
+EndGlobal

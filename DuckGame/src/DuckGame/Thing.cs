@@ -13,6 +13,7 @@ namespace DuckGame
     /// </summary>
     public abstract class Thing : Transform
     {
+        public bool isBlock;
         public bool isAnchored;
         public bool SpawnCannonUpdate;
         public int SkipIntratick;
@@ -21,7 +22,7 @@ namespace DuckGame
         public bool shouldbegraphicculled = true;
         public bool currentlyDrawing;
         public bool shouldbeinupdateloop = true;
-        public int hashcodeindex; // dont touch :)
+        public int _queryId = -1;
         public Vec2 oldposition = Vec2.Zero;
         public Vec2 oldcollisionOffset = Vec2.Zero;
         public Vec2 oldcollisionSize = Vec2.Zero;
@@ -1517,6 +1518,7 @@ namespace DuckGame
 
         public Thing(float xval = 0f, float yval = 0f, Sprite sprite = null)
         {
+            isBlock = this is Block;
             x = xval;
             y = yval;
             graphic = sprite;
