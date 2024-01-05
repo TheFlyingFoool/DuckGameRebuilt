@@ -1026,7 +1026,7 @@ namespace DuckGame
             _things.RefreshState();
             Layer.Game.fade = 0f;
             Layer.Foreground.fade = 0f;
-            Add(new PinkBox(160, 274) { scale = new Vec2(2), collisionSize = new Vec2(32), collisionOffset = new Vec2(-16) });
+            Add(new PinkBox(160, 276) { scale = new Vec2(2), collisionSize = new Vec2(32), collisionOffset = new Vec2(-16) });
             Add(new Block(317, 180, 16, 96, PhysicsMaterial.Metal));
             Add(new Block(-13, 180, 16, 96, PhysicsMaterial.Metal));
             Add(new Block(257, 242, 64, 66, PhysicsMaterial.Metal));
@@ -1108,6 +1108,7 @@ namespace DuckGame
             InputProfile.ReassignDefaultInputProfiles();
         }
         public bool secondTitlescreen;
+        public Vec2 forcedCamPos;
         public override void Update()
         {
             #if AutoUpdater
@@ -1476,19 +1477,40 @@ namespace DuckGame
                 _enterCredits = true;
                 _duck.immobilized = true;
             }
-            if (secondTitlescreen)
+            if (ModLoader._modsByWorkshopID.ContainsKey(945664816)) //DWEP -NiK0
             {
-                camera.position = Lerp.Vec2Smooth(camera.position, new Vec2(0, 180), 0.1f);
+                if (secondTitlescreen)
+                {
+                    forcedCamPos = Lerp.Vec2Smooth(forcedCamPos, new Vec2(0, 180), 0.1f);
+                    camera.position = forcedCamPos;
+                }
+                else
+                {
+                    _bottomRight.y = 400;
+                    lowestPoint = 400;
+                    if (First<Duck>() != null && First<Duck>().y > 176)
+                    {
+                        First<Duck>().y = 90;
+                    }
+                    forcedCamPos = camera.position;
+                }
             }
             else
             {
-                _bottomRight.y = 400;
-                lowestPoint = 400;
-                if (First<Duck>() != null && First<Duck>().y > 176)
+                if (secondTitlescreen)
                 {
-                    First<Duck>().y = 90;
+                    camera.position = Lerp.Vec2Smooth(camera.position, new Vec2(0, 180), 0.1f);
                 }
-                camera.position = Lerp.Vec2Smooth(camera.position, Vec2.Zero, 0.1f);
+                else
+                {
+                    _bottomRight.y = 400;
+                    lowestPoint = 400;
+                    if (First<Duck>() != null && First<Duck>().y > 176)
+                    {
+                        First<Duck>().y = 90;
+                    }
+                    camera.position = Lerp.Vec2Smooth(camera.position, Vec2.Zero, 0.1f);
+                }
             }
             if (_multiBeam.entered)
             {

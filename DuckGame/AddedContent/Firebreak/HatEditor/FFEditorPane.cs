@@ -28,6 +28,7 @@ namespace DuckGame
             private static bool s_secColPickerOpen = false;
             private static Rectangle s_colPickSliderBounds;
             private static int s_colPickSliderUsedIndex = -1;
+            private static Vec2 s_prevMousePos = Vec2.Zero;
 
             // TODO: update those to use 2D arrays (Color[,]). makes the code a lot less hell
             public static Color[][] HatAnimationBuffer =
@@ -156,6 +157,8 @@ namespace DuckGame
 
                     default: throw new InvalidOperationException();
                 }
+                
+                s_prevMousePos = Mouse.positionScreen;
             }
 
             public static void Draw()
@@ -741,7 +744,9 @@ namespace DuckGame
                         pixelScale, pixelScale
                     );
 
-                    if (pixel.Shrink(0.1f).Contains(Mouse.positionScreen))
+                    Rectangle pixelPracticalBound = pixel.Shrink(0.05f);
+                    
+                    if (Collision.Line(Mouse.positionScreen, s_prevMousePos, pixelPracticalBound))
                     {
                         switch (CurrentCanvasTool)
                         {

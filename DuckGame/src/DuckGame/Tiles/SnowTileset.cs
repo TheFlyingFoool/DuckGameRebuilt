@@ -26,6 +26,7 @@
             willHeat = true;
             _impactThreshold = -1f;
             meltedTileset = tset;
+            brokenSptiteIndex = 14;
         }
 
         public override void Initialize()

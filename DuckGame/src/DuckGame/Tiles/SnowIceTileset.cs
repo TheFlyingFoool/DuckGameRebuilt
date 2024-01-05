@@ -26,6 +26,7 @@
             };
             graphic = _sprite;
             frozenTileset = tset;
+            brokenSptiteIndex = 14;
         }
 
         public override void Initialize()

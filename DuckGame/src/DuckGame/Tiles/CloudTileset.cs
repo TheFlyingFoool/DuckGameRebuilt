@@ -11,6 +11,7 @@
             verticalWidth = 12f;
             verticalWidthThick = 14f;
             horizontalHeight = 13f;
+            brokenSptiteIndex = 8;
         }
 
         public override void Draw() => base.Draw();

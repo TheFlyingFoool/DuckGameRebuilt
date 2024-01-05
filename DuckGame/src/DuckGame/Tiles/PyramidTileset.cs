@@ -12,6 +12,7 @@
             verticalWidthThick = 14f;
             verticalWidth = 12f;
             horizontalHeight = 13f;
+            brokenSptiteIndex = 11;
         }
     }
 }

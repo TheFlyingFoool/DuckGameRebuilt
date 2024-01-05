@@ -553,6 +553,10 @@ namespace DuckGame
                 dgrDescription = "Toggles comestic dust decals when explosions happen"
             });
 
+            menu.Add(new UIMenuItemToggle("Enhanced Textures", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.EnhancedTextures)))
+            {
+                dgrDescription = "Adds more texture variants and details"
+            });
 
             menu.Add(new UIMenuItemNumber("Particle Level", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ParticleMultiplier), 0, 7, 1), valStrings: new List<string>()
             {
@@ -568,6 +572,7 @@ namespace DuckGame
             {
                 dgrDescription = "Global particle multiplier from x0 to x16"
             });
+
             menu.Add(new UIMenuItemNumber("Rebuilt Effect", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.RebuiltEffect), 0, 2, 1), valStrings: new List<string>()
             {
                 "HEART",

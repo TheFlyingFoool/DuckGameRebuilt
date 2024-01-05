@@ -31,8 +31,7 @@ namespace DuckGame
 
         public override void Initialize()
         {
-            if (Level.current is Editor)
-                return;
+            if (Level.current is Editor) return;
             backgroundColor = new Color(24, 0, 31);
             Level.current.backgroundColor = backgroundColor;
             _parallax = new ParallaxBackground("background/city", 0f, 0f, 3);
@@ -80,31 +79,24 @@ namespace DuckGame
                     stringList.Add(str);
                     str = "";
                 }
-                else
-                    str += text[index].ToString();
+                else str += text[index].ToString();
             }
-            if (!string.IsNullOrWhiteSpace(str))
-                stringList.Add(str);
-            if (stringList.Count <= 0)
-                return;
-            bool flag = false;
-            if (Rando.Float(1f) > 0.5f || stringList.Count > 1 || stringList[0].Length > 80)
-                flag = true;
-            Vec2 vec2 = new Vec2(flag ? 350f : -50f, 60f + Rando.Float(80f));
+            if (!string.IsNullOrWhiteSpace(str)) stringList.Add(str);
+            if (stringList.Count <= 0) return;
+            bool doFlyLeft = false;
+            if (Rando.Float(1f) > 0.5f || stringList.Count > 1 || stringList[0].Length > 80) doFlyLeft = true;
+            Vec2 vec2 = new Vec2(doFlyLeft ? 350f : -50f, 60f + Rando.Float(80f));
             if (spawn != Vec2.Zero)
             {
                 vec2 = spawn;
-                flag = pFlyLeft;
+                doFlyLeft = pFlyLeft;
             }
-            else if (Network.isActive && Network.isServer)
-                Send.Message(new NMSkySay(text, vec2, flag));
+            else if (Network.isActive && Network.isServer) Send.Message(new NMSkySay(text, vec2, doFlyLeft));
             foreach (string text1 in stringList)
             {
-                Plane plane = new Plane(vec2, text1, flag);
-                if (flag)
-                    vec2.x += (plane.textWidth * 0.5f + 80f);
-                else
-                    vec2.x -= (plane.textWidth * 0.5f + 80f);
+                Plane plane = new Plane(vec2, text1, doFlyLeft);
+                if (doFlyLeft) vec2.x += (plane.textWidth * 0.5f + 80f);
+                else vec2.x -= (plane.textWidth * 0.5f + 80f);
                 _planes.Add(plane);
             }
         }
@@ -157,8 +149,6 @@ namespace DuckGame
                 text = "WHERE IS JOHN MALLARD";
             else if (Rando.Int(1000) == 1)
                 text = "I SEE YOU";
-            else if (Rando.Int(100000) == 1)
-                text = "WHO MUST GO? THE ONE THAT DID NOT DO THE DISHES.";
             else if (Rando.Int(200) == 1)
                 text = "LET'S DANCE";
             else if (Global.data.timesSpawned > 300 && Rando.Int(200) == 1)
