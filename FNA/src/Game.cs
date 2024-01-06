@@ -126,7 +126,7 @@ namespace Microsoft.Xna.Framework
 			set;
 		}
 		private int INTERAL_TargetFrameRate = 1000;
-		public int FrameLimiterTarget
+		public int DrawRateLimiterTarget
 		{
 			get
 			{

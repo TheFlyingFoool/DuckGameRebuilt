@@ -677,6 +677,8 @@ namespace DuckGame
                             else
                             {
                                 int num4 = Profiles.experienceProfile.GetNumFurnitures(availableFurni.index);
+                                if (DGRSettings.TemporaryUnlockAll)
+                                    num4 = 9999;
                                 int furnituresPlaced = _selector.profile.GetNumFurnituresPlaced(availableFurni.index);
                                 bool flag2 = false;
                                 if (_selector.profile.GetTotalFurnituresPlaced() >= maxFurnitures && availableFurni.type == FurnitureType.Prop)
@@ -828,6 +830,8 @@ namespace DuckGame
                                 }
                                 pos1 = Maths.RoundToPixel(pos1);
                                 int numFurnitures = Profiles.experienceProfile.GetNumFurnitures(availableFurni.index);
+                                if (DGRSettings.TemporaryUnlockAll)
+                                    numFurnitures = 9999;
                                 if (_selector.profile.GetNumFurnituresPlaced(availableFurni.index) >= numFurnitures)
                                 {
                                     _cantPlaceLarge.depth = g.depth + 5;
@@ -1024,6 +1028,8 @@ namespace DuckGame
                     if (availableFurni.type != FurnitureType.Prop)
                         return;
                     int num = Profiles.experienceProfile.GetNumFurnitures(availableFurni.index);
+                    if (DGRSettings.TemporaryUnlockAll)
+                        num = 9999;
                     if (_selector.profile.GetTotalFurnituresPlaced() >= maxFurnitures)
                         num = 0;
                     int furnituresPlaced = _selector.profile.GetNumFurnituresPlaced(availableFurni.index);

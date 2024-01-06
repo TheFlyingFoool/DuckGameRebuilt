@@ -369,7 +369,18 @@ namespace DuckGame
             set
             {
                 MonoMain.graphics.SynchronizeWithVerticalRetrace = value;
-                Program.main.UseDrawRateLimiter = !value;
+                //when vsync is ON we never want to use the draw rate limiter because vsync will do that
+                if (value)
+                {
+                    Program.main.UseDrawRateLimiter = false;
+                }
+                //when vsync is OFF we only want to use the rate limiter if:
+                //Uncapped FPS is on && The user has set a target fps that is not 0
+                else
+                {
+                    Program.main.UseDrawRateLimiter = (UncappedFPS && TargetFrameRate != 0);
+                }
+
                 S_UseVSync = value;
                 MonoMain.graphics.ApplyChanges();
             }
@@ -389,7 +400,7 @@ namespace DuckGame
             {
                 if (value >= 60)
                 {
-                    Program.main.FrameLimiterTarget = S_TargetFrameRate;
+                    Program.main.DrawRateLimiterTarget = S_TargetFrameRate;
                     Program.main.UseDrawRateLimiter = true;
                     S_TargetFrameRate = value;
                 }
@@ -404,14 +415,18 @@ namespace DuckGame
         public static void InitalizeFPSThings()
         {
             MonoMain.graphics.SynchronizeWithVerticalRetrace = UseVSync;
-            Program.main.FrameLimiterTarget = Math.Max(TargetFrameRate,60);
+            Program.main.UnFixedDraw = UncappedFPS;
+            Program.main.DrawRateLimiterTarget = Math.Max(TargetFrameRate,60);
             Program.main.UseDrawRateLimiter = !UseVSync && UncappedFPS && TargetFrameRate >= 60;
+
             if (Use61UPS)
                 Program.main.TargetElapsedTime = TimeSpan.FromTicks(163934); // 61ups
             else
                 Program.main.TargetElapsedTime = TimeSpan.FromTicks(166667); // 60ups
             MonoMain.graphics.ApplyChanges();
         }
+
+        [Marker.AutoConfig] public static bool TemporaryUnlockAll = false;
 
         [Marker.AutoConfig] public static float WeatherMultiplier = 1;
 

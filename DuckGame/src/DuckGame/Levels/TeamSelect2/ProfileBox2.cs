@@ -1420,6 +1420,8 @@ namespace DuckGame
                             profile.font.Draw(realText, cenX + 2f - profile.font.GetWidth(realText) / 2f, cenY - 4f, Color.White, (Depth)0.7f, profile.inputProfile);
                             profile.font.scale = new Vec2(0.25f, 0.25f);
                             int num9 = Profiles.experienceProfile.GetNumFurnitures(furniture5.index) - profile.GetNumFurnituresPlaced(furniture5.index);
+                            if (DGRSettings.TemporaryUnlockAll)
+                                num9 = 99;
                             profile.font.Draw(furniture5.name + (num9 > 0 ? " |DGGREEN|" : " |DGRED|") + "x" + num9.ToString(), (float)(x + 15f - profile.font.GetWidth(text) / 2f) - num6, (float)(y + 75f + 6.5f) + num7, Color.White, (Depth)0.7f);
                             int furnituresPlaced = profile.GetTotalFurnituresPlaced();
                             float num10 = furnituresPlaced / (float)RoomEditor.maxFurnitures;
@@ -1559,6 +1561,8 @@ namespace DuckGame
                             profile.font.Draw(realText, cenX + 2f - profile.font.GetWidth(realText) / 2f, cenY - 4f, Color.White, (Depth)0.7f, profile.inputProfile);
                             profile.font.scale = new Vec2(0.25f, 0.25f);
                             int num16 = Profiles.experienceProfile.GetNumFurnitures(furniture6.index) - profile.GetNumFurnituresPlaced(furniture6.index);
+                            if (DGRSettings.TemporaryUnlockAll)
+                                num16 = 99;
                             profile.font.Draw(furniture6.name + (num16 > 0 ? " |DGGREEN|" : " |DGRED|") + "x" + num16.ToString(), (float)(x + 15f) - num14, (float)(y + 75f + 6.5f) + num15, Color.White, (Depth)0.7f);
                             int furnituresPlaced = profile.GetTotalFurnituresPlaced();
                             float num17 = furnituresPlaced / (float)RoomEditor.maxFurnitures;
