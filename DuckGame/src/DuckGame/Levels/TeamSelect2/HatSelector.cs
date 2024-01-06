@@ -701,7 +701,7 @@ namespace DuckGame
                             }
                             if (inputProfile.Pressed(Triggers.Select) && !flag2)
                             {
-                                if (_profile.team.locked)
+                                if (_profile.team.locked && !DGRSettings.TemporaryUnlockAll)
                                 {
                                     _profile.team.shake = 2;
                                     SFX.Play("consoleError");
@@ -718,7 +718,7 @@ namespace DuckGame
                             if (inputProfile.Pressed(Triggers.Menu2) && text1 != "NO TEAM")
                             {
                                 Team t = FilterTeam();
-                                if (t.locked)
+                                if (t.locked && !DGRSettings.TemporaryUnlockAll)
                                 {
                                     SFX.Play("consoleError");
                                     t.shake = 2;
@@ -808,11 +808,11 @@ namespace DuckGame
 
                         if (_teamName != "")
                             text1 = _teamName;
-                        bool flag6 = _profile.team.locked;
+                        bool flag6 = _profile.team.locked && !DGRSettings.TemporaryUnlockAll;
                         bool flag7 = false;
                         if (Network.isActive && !isServerForObject && _profile.networkHatUnlockStatuses != null && _desiredTeamSelection < _profile.networkHatUnlockStatuses.Count)
                         {
-                            flag6 = _profile.networkHatUnlockStatuses[_desiredTeamSelection];
+                            flag6 = _profile.networkHatUnlockStatuses[_desiredTeamSelection] && !DGRSettings.TemporaryUnlockAll;
                             flag7 = true;
                         }
                         if (flag6) text1 = "LOCKED";
@@ -1149,13 +1149,13 @@ namespace DuckGame
                         //DuckRig.GetHatPoint(_profile.persona.sprite.imageIndex);
                         SpriteMap g = allTeam.GetHat(_profile.persona);
                         Vec2 vec2 = allTeam.hatOffset;
-                        bool isLocked = allTeam.locked;
+                        bool isLocked = allTeam.locked && !DGRSettings.TemporaryUnlockAll;
                         int allTeamIndex = -1;
                         if (Network.isActive && !isServerForObject && _profile.networkHatUnlockStatuses != null)
                         {
                             allTeamIndex = Teams.core.teams.IndexOf(allTeam);
                             if (allTeamIndex >= 0 && allTeamIndex < _profile.networkHatUnlockStatuses.Count)
-                                isLocked = _profile.networkHatUnlockStatuses[allTeamIndex];
+                                isLocked = _profile.networkHatUnlockStatuses[allTeamIndex] && !DGRSettings.TemporaryUnlockAll;
                         }
                         if (isLocked)
                         {

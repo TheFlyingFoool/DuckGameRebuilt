@@ -517,18 +517,21 @@ namespace DuckGame
             if (_availableList == null)
             {
                 _availableList = new List<Furniture>();
-                foreach (KeyValuePair<int, int> furniture1 in _furnitures)
+                if (!DGRSettings.TemporaryUnlockAll)
                 {
-                    if (furniture1.Value > 0)
+                    foreach (KeyValuePair<int, int> furniture1 in _furnitures)
                     {
-                        Furniture furniture2 = RoomEditor.GetFurniture(furniture1.Key);
-                        if (furniture2 != null)
-                            _availableList.Add(furniture2);
+                        if (furniture1.Value > 0)
+                        {
+                            Furniture furniture2 = RoomEditor.GetFurniture(furniture1.Key);
+                            if (furniture2 != null)
+                                _availableList.Add(furniture2);
+                        }
                     }
                 }
                 foreach (Furniture allFurni in RoomEditor.AllFurnis())
                 {
-                    if (allFurni.alwaysHave)
+                    if (allFurni.alwaysHave || DGRSettings.TemporaryUnlockAll)
                         _availableList.Add(allFurni);
                 }
                 _availableList.Sort((x, y) => AvailFurniSortKey(x).CompareTo(AvailFurniSortKey(y)));

@@ -426,6 +426,8 @@ namespace DuckGame
             MonoMain.graphics.ApplyChanges();
         }
 
+        [Marker.AutoConfig] public static bool TemporaryUnlockAll = false;
+
         [Marker.AutoConfig] public static float WeatherMultiplier = 1;
 
         [Marker.AutoConfig] public static float HeatWaveMultiplier = 1;

@@ -494,6 +494,10 @@ namespace DuckGame
             {
                 dgrDescription = "If a player has already definitely won extra rounds that wont change the outcome of the match will be skipped (HOST ONLY)"
             });
+            menu.Add(new UIMenuItemToggle("Unlock All", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.TemporaryUnlockAll)))
+            {
+                dgrDescription = "Temporarily enables all unlocks on hats, furniture, modifiers, and arcade machines without modifying your save file."
+            });
 
 
             menu.Add(new UIText(" ", Color.White));

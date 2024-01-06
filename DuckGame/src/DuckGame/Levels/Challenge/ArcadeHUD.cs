@@ -109,6 +109,11 @@ namespace DuckGame
                     card.unlocked = true;
                     continue;
                 }
+                if (DGRSettings.TemporaryUnlockAll)
+                {
+                    card.unlocked = true;
+                    continue;
+                }
                 if (first)
                     card.unlocked = true;
                 else if (!card.unlocked && prevWon)

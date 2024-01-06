@@ -151,6 +151,9 @@ namespace DuckGame
                 return false;
             // if (FireDebug.Debugging)
             //     return true;
+            if (DGRSettings.TemporaryUnlockAll)
+                return true;
+
             if (_data.required.Count > 0)
             {
                 foreach (string name in _data.required)

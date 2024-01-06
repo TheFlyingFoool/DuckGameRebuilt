@@ -114,7 +114,7 @@ namespace DuckGame
         {
             get
             {
-                if (_unlocked || FireDebug.Debugging)
+                if (_unlocked || FireDebug.Debugging || DGRSettings.TemporaryUnlockAll)
                     return true;
                 foreach (Profile universalProfile in Profiles.universalProfileList)
                 {

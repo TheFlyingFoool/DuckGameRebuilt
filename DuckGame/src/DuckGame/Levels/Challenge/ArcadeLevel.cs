@@ -69,7 +69,11 @@ namespace DuckGame
             foreach (Door door in current.things[typeof(Door)])
             {
                 if (door._lockDoor)
+                {
                     door.locked = !Unlocks.IsUnlocked("BASEMENTKEY", Profiles.active[0]);
+                    if (DGRSettings.TemporaryUnlockAll)
+                        door.locked = false;
+                }
             }
         }
 
