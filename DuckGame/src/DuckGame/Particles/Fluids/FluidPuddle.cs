@@ -163,26 +163,21 @@ namespace DuckGame
 
         public float MaxFluidFill()
         {
-            if (_topLeftCorner == null || _topRightCorner == null)
-                return 999999f;
+            if (_topLeftCorner == null || _topRightCorner == null) return 999999f;
             float num = _topLeftCorner.corner.y + 8f;
-            if (_topRightCorner.corner.y > num)
-                num = _topRightCorner.corner.y + 8f;
+            if (_topRightCorner.corner.y > num) num = _topRightCorner.corner.y + 8f;
             return DistanceToFeedAmount((_leftCorner.corner.y - num) * _collisionSize.x);
         }
 
         public void FeedEdges()
         {
-            if (_rightCorner != null && right > _rightCorner.corner.x && _rightCorner.wallCorner)
-                x -= right - _rightCorner.corner.x;
-            if (_leftCorner != null && left < _leftCorner.corner.x && _leftCorner.wallCorner)
-                x += _leftCorner.corner.x - left;
+            if (_rightCorner != null && right > _rightCorner.corner.x && _rightCorner.wallCorner) x -= right - _rightCorner.corner.x;
+            if (_leftCorner != null && left < _leftCorner.corner.x && _leftCorner.wallCorner) x += _leftCorner.corner.x - left;
             if (_rightCorner != null && right > _rightCorner.corner.x && !_rightCorner.wallCorner)
             {
                 float feedAmount = DistanceToFeedAmount(right - _rightCorner.corner.x);
                 x -= ((right - _rightCorner.corner.x) / 2f);
-                if (_rightStream == null)
-                    _rightStream = new FluidStream(_rightCorner.corner.x - 2f, y, new Vec2(1f, 0f), 1f);
+                if (_rightStream == null) _rightStream = new FluidStream(_rightCorner.corner.x - 2f, y, new Vec2(1f, 0f), 1f);
                 _rightStream.position.y = y - _collisionOffset.y;
                 _rightStream.position.x = _rightCorner.corner.x + 2f;
                 _rightStream.Feed(data.Take(feedAmount));
@@ -194,9 +189,8 @@ namespace DuckGame
             if (_leftCorner != null && left < _leftCorner.corner.x && !_leftCorner.wallCorner)
             {
                 float feedAmount = DistanceToFeedAmount(_leftCorner.corner.x - left);
-                x += ((_leftCorner.corner.x - left) / 2f);
-                if (_leftStream == null)
-                    _leftStream = new FluidStream(_leftCorner.corner.x - 2f, y, new Vec2(-1f, 0f), 1f);
+                x += (_leftCorner.corner.x - left) / 2f;
+                if (_leftStream == null) _leftStream = new FluidStream(_leftCorner.corner.x - 2f, y, new Vec2(-1f, 0f), 1f);
                 _leftStream.position.y = y - _collisionOffset.y;
                 _leftStream.position.x = _leftCorner.corner.x - 2f;
                 _leftStream.Feed(data.Take(feedAmount));
@@ -210,16 +204,14 @@ namespace DuckGame
         public float CalculateDepth()
         {
             double distance = FeedAmountToDistance(data.amount);
-            if (_wide == 0f)
-                _wide = 1f / 1000f;
+            if (_wide == 0f) _wide = 1f / 1000f;
             double wide = _wide;
             return Maths.Clamp((float)(distance / wide), 1f, 99999f);
         }
 
         public void PrepareFloaters()
         {
-            if (collisionSize.y <= 10f)
-                return;
+            if (collisionSize.y <= 10f) return;
             foreach (PhysicsObject physicsObject in Level.CheckLineAll<PhysicsObject>(topLeft + new Vec2(0f, -8f), topRight + new Vec2(0f, -8f)))
             {
                 physicsObject.position.y = top;
@@ -230,10 +222,9 @@ namespace DuckGame
         public MaterialLavaWobble mt;
         public override void Update()
         {
-            //1 per frame if 1000 wide
-
             if (DGRSettings.HeatWaveMultiplier > 0)
             {
+                if (DGRSettings.HeatWaveMultiplier > 1) DGRSettings.HeatWaveMultiplier = 1;
                 if (data.heat > 0)
                 {
                     if (mt == null) mt = new MaterialLavaWobble(this);
@@ -261,6 +252,7 @@ namespace DuckGame
             }
             if (DGRSettings.AmbientParticles)
             {
+                //1 ember particle per frame if 1000 (63 blocks) wide -NiK0
                 if (data.heat > 0)
                 {
                     timer += 0.001f * collisionSize.x * DGRSettings.ActualParticleMultiplier * data.heat;
@@ -280,10 +272,9 @@ namespace DuckGame
                     }
                 }
             }
-            ++_framesSinceFeed;
+            _framesSinceFeed++;
             fluidWave += 0.1f;
-            if (data.amount < 0.0001f)
-                Level.Remove(this);
+            if (data.amount < 0.0001f) Level.Remove(this);
             if (collisionSize.y > 10f)
             {
                 if (DGRSettings.S_ParticleMultiplier != 0)
@@ -293,8 +284,7 @@ namespace DuckGame
                     {
                         for (int index = 0; index < (int)Math.Floor(collisionSize.x / 16f); ++index)
                         {
-                            if (Rando.Float(1f) > 0.85f)
-                                Level.Add(new TinyBubble(left + index * 16 + Rando.Float(-4f, 4f), bottom + Rando.Float(-4f), 0f, top + 10f));
+                            if (Rando.Float(1f) > 0.85f) Level.Add(new TinyBubble(left + index * 16 + Rando.Float(-4f, 4f), bottom + Rando.Float(-4f), 0f, top + 10f));
                         }
                         bubbleWait = 0;
                     }
@@ -327,8 +317,7 @@ namespace DuckGame
                 _rightStream.onFire = onFire;
             }
             double distance = FeedAmountToDistance(data.amount);
-            if (_wide == 0f)
-                _wide = 1f / 1000f;
+            if (_wide == 0f) _wide = 1f / 1000f;
             double wide = _wide;
             float num = Maths.Clamp((float)(distance / wide), 1f, 99999f);
             if (onFire)
@@ -345,14 +334,8 @@ namespace DuckGame
                         data.amount = 0f;
                         alpha = Lerp.Float(alpha, 0f, 0.04f);
                     }
-                    else
-                    {
-                        alpha = Lerp.Float(alpha, 1f, 0.04f);
-                    }
-                    if (alpha <= 0f)
-                    {
-                        Level.Remove(this);
-                    }
+                    else alpha = Lerp.Float(alpha, 1f, 0.04f);
+                    if (alpha <= 0f) Level.Remove(this);
                 }
             }
             else
@@ -376,25 +359,19 @@ namespace DuckGame
                 {
                     if (_leftCorner != null && groupCorner.corner.x == _leftCorner.corner.x && groupCorner.corner.y < _leftCorner.corner.y)
                     {
-                        if (_topLeftCorner == null)
-                            _topLeftCorner = groupCorner;
-                        else if (groupCorner.corner.y > _topLeftCorner.corner.y)
-                            _topLeftCorner = groupCorner;
+                        if (_topLeftCorner == null) _topLeftCorner = groupCorner;
+                        else if (groupCorner.corner.y > _topLeftCorner.corner.y) _topLeftCorner = groupCorner;
                     }
                     else if (_rightCorner != null && groupCorner.corner.x == _rightCorner.corner.x && groupCorner.corner.y < _rightCorner.corner.y)
                     {
-                        if (_topRightCorner == null)
-                            _topRightCorner = groupCorner;
-                        else if (groupCorner.corner.y > _topRightCorner.corner.y)
-                            _topRightCorner = groupCorner;
+                        if (_topRightCorner == null) _topRightCorner = groupCorner;
+                        else if (groupCorner.corner.y > _topRightCorner.corner.y) _topRightCorner = groupCorner;
                     }
                 }
             }
-            if (_leftStream != null)
-                _leftStream.position.y = y - _collisionOffset.y;
-            if (_rightStream != null)
-                _rightStream.position.y = y - _collisionOffset.y;
-            _collisionOffset.y = (float)(-depth - 1);
+            if (_leftStream != null) _leftStream.position.y = y - _collisionOffset.y;
+            if (_rightStream != null) _rightStream.position.y = y - _collisionOffset.y;
+            _collisionOffset.y = (-depth - 1);
             _collisionSize.y = depth;
         }
 

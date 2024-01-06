@@ -1147,6 +1147,7 @@ namespace DuckGame
                     _core._ducknetMenu.Add(new UIMenuItemToggle("MID GAME JOINING", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.MidGameJoining)), c: Colors.DGPink));
                     if (DGRSettings.MidGameJoining && Steam.user != null && Steam.lobby != null)
                     {
+                        _core._ducknetMenu.Add(new UIMenuItemToggle("SHOW IN BROWSER", field: new FieldBinding(typeof(DuckNetwork), nameof(ShowGameInBrowser)), c: Colors.DGPink));
                         _core._ducknetMenu.Add(new UIMenuItem("|DGGREEN|INVITE FRIENDS", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._inviteMenu), UIAlign.Left), true);
                         _core._ducknetMenu.Add(new UIMenuItem("|DGGREEN|COPY INVITE LINK", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(CopyInviteLink)), UIAlign.Left), true);
                     }
@@ -2027,6 +2028,8 @@ namespace DuckGame
         }
 
         public static bool prevMG;
+
+        public static bool ShowGameInBrowser;
         public static void MidGameJoiningLogic()
         {
             if (Network.isActive && Network.isServer)
@@ -2048,7 +2051,17 @@ namespace DuckGame
                         if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
                         {
                             Network.activeNetwork.core.lobby.joinable = true;
-                            Network.activeNetwork.core.lobby.SetLobbyData("started", "false");
+                            if (ShowGameInBrowser)
+                            {
+                                //set this to true for auhsduhasd -NiK0
+                                Network.activeNetwork.core.lobby.SetLobbyData("started", "false");
+                                Network.activeNetwork.core.lobby.SetLobbyData("name", "|PINK|[MIDGAME] |PREV|" + Steam.user.name + "'s Lobby");
+                            }
+                            else
+                            {
+                                Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
+                                Network.activeNetwork.core.lobby.SetLobbyData("name", Steam.user.name + "'s Lobby");
+                            }
                         }
                     }
                     else
@@ -2058,9 +2071,11 @@ namespace DuckGame
                         {
                             Network.activeNetwork.core.lobby.joinable = false;
                             Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
+                            Network.activeNetwork.core.lobby.SetLobbyData("name", Steam.user.name + "'s Lobby");
                         }
                     }
                 }
+                else if (DGRSettings.MidGameJoining && Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null && Network.activeNetwork.core.lobby.GetLobbyData("name").StartsWith("|PINK|[MIDGAME]")) Network.activeNetwork.core.lobby.SetLobbyData("name", Steam.user.name + "'s Lobby");
                 prevMG = DGRSettings.MidGameJoining;
 
             }

@@ -38,21 +38,15 @@ namespace DuckGame
             Vec2 alignOffset = calcAlignOffset();
             _font.Draw(text, UILerp.x + alignOffset.x, UILerp.y + alignOffset.y, UIMenu.disabledDraw ? Colors.BlueGray : _color, depth, _controlProfile);
 
-            if (HUD.hide)
-                return;
+            if (HUD.hide) return;
             foreach (UIComponent component in _components)
             {
                 if (component.condition == null || component.condition())
                 {
-                    if (component is UIMenuItem)
-                        UIMenu.disabledDraw = component.mode == MenuItemMode.Disabled;
+                    if (component is UIMenuItem) UIMenu.disabledDraw = component.mode == MenuItemMode.Disabled;
                     component.depth = depth + 10;
-                    if (component.visible && component.mode != MenuItemMode.Hidden)
-                    {
-                        component.Draw();
-                    }
-                    if (component is UIMenuItem)
-                        UIMenu.disabledDraw = false;
+                    if (component.visible && component.mode != MenuItemMode.Hidden) component.Draw();
+                    if (component is UIMenuItem) UIMenu.disabledDraw = false;
                 }
             }
             int num = debug ? 1 : 0;
