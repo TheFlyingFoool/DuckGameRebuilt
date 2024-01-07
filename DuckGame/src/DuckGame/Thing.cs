@@ -1728,7 +1728,7 @@ namespace DuckGame
             //if (NetworkDebugger.currentIndex >= 0 && NetworkDebugger.currentIndex != _networkDrawIndex)
             //     return;
             Graphics.material = _material;
-            if (_material != null)
+            if (_material != null && MonoMain.UpdateLerpState)
                 _material.Update();
             Draw();
             Graphics.material = null;

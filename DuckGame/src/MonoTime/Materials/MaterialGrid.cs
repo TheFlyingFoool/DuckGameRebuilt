@@ -26,8 +26,7 @@ namespace DuckGame
                 secondScan = true;
                 transWave -= 2f;
             }
-            else if (Math.Sin(transWave) > 0.9f && secondScan)
-                finished = true;
+            else if (Math.Sin(transWave) > 0.9f && secondScan) finished = true;
             base.Update();
         }
 

@@ -384,6 +384,7 @@ namespace DuckGame
                 float angle = spriteArms.angle;
                 spriteArms.flipH = offDir * -1 < 0;
                 spriteArms.angle = 0.7f * offDir;
+                spriteArms.LerpState.CanLerp = false;
                 Graphics.Draw(spriteArms, owner.x - 5 * offDir, (float)(owner.y + 3f + (duck.crouch ? 3f : 0f) + (duck.sliding ? 3f : 0f)));
                 spriteArms.angle = angle;
                 spriteArms.flipH = flipH;
@@ -397,7 +398,7 @@ namespace DuckGame
                 _halo.alpha = (float)(_haloAlpha * 0.4f + (float)_haloWave * 0.1f);
                 _halo.depth = -0.2f;
                 _halo.xscale = _halo.yscale = (float)(0.95f + (float)_haloWave * 0.05f);
-                _halo.angle += 0.01f;
+                if (MonoMain.UpdateLerpState) _halo.angle += 0.01f;
                 Graphics.Draw(ref _halo, owner.x, owner.y);
                 if (_ringPulse > 0f)
                 {
