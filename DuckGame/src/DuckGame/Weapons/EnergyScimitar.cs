@@ -1335,21 +1335,25 @@ namespace DuckGame
                             vec2 += owner.velocity * 0.5f;
                         _bladeTrail.angle = num2;
                         _bladeTrail.alpha = Math.Min(Math.Max((float)((_humAmount - 0.1f) * 4f), 0f), 1f) * 0.7f;
-                        Graphics.Draw(ref _bladeTrail, vec2.x, vec2.y, this.depth - 2);
+                        _bladeTrail.LerpState.CanLerp = false;
+                        Graphics.Draw(_bladeTrail, vec2.x, vec2.y, this.depth - 2);
                     }
                     num3 -= 0.15f;
                 }
             }
-            addHistory(angle, position);
-            if (_lastSize > 2)
+            if (MonoMain.UpdateLerpState)
             {
-                int index3 = historyIndex(0);
-                int index4 = historyIndex(2);
-                addHistory((float)((_lastAngles[index3] + _lastAngles[index4]) / 2), (_lastPositions[index3] + _lastPositions[index4]) / 2f);
+                addHistory(angle, position);
+                if (_lastSize > 2)
+                {
+                    int index3 = historyIndex(0);
+                    int index4 = historyIndex(2);
+                    addHistory((float)((_lastAngles[index3] + _lastAngles[index4]) / 2), (_lastPositions[index3] + _lastPositions[index4]) / 2f);
+                }
+                if (_lastSize <= 8)
+                    return;
+                _lastSize = 8;
             }
-            if (_lastSize <= 8)
-                return;
-            _lastSize = 8;
         }
 
         public enum Stance

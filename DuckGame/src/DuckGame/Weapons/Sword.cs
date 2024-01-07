@@ -941,8 +941,7 @@ namespace DuckGame
             }
             else
                 base.Draw();
-            if(MonoMain.UpdateLerpState)
-                addHistory(angle, this.position);
+            if (MonoMain.UpdateLerpState) addHistory(angle, this.position);
         }
 
         protected virtual void OnSwing()
