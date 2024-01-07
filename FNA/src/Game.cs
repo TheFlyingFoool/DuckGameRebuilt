@@ -551,6 +551,8 @@ namespace Microsoft.Xna.Framework
 							System.Threading.Thread.Sleep(1);
 						}
 
+						if (!drawTimer.IsRunning) drawTimer.Start(); //for whatever reason drawTimer wasn't started, issue with uncapped FPS and no VSYNC settings in DGR -NiK0
+
 						// SpinWait for the remaining time.
 						while (drawTimer.ElapsedTicks < targetDrawTimeTicks)
 						{
