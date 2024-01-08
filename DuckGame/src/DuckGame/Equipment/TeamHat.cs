@@ -533,6 +533,8 @@ namespace DuckGame
                     _graphic.depth = depth;
                     _graphic.scale = scale;
                     _graphic.center = center;
+                     _graphic.LerpState.CanLerp = true;
+                    _graphic.SkipIntraTick = SkipIntratick;
                     _graphic.Draw();
                 }
             }
