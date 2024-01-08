@@ -47,7 +47,7 @@ namespace DuckGame
                         _downloadModsMenu.Add(new UIText("", Colors.DGBlue));
 
                         _downloadModsMenu.Add(new UIMenuItem("CANCEL", new UIMenuActionCloseMenu(_downloadModsMenu)));
-                        _downloadModsMenu.Add(new UIMenuItem("RESTART AND DOWNLOAD", new UIMenuActionCloseMenuCallFunction(_downloadModsMenu, UIServerBrowser.DownloadRequiredMods)));
+                        _downloadModsMenu.Add(new UIMenuItem("RESTART AND DOWNLOAD", new UIMenuActionCloseMenuCallFunction(_downloadModsMenu, UIServerBrowser.SubscribeAndRestart)));
                         _downloadModsMenu.Close();
 
                         _downloadModsMenu.Open();

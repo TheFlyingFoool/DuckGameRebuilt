@@ -348,8 +348,7 @@ namespace DuckGame
             {
                 string localPingString = Steam.GetLocalPingString();
                 _lobby.SetLobbyData("pingstring", localPingString);
-                if (localPingString != null && localPingString != "")
-                    gotPingString = true;
+                if (localPingString != null && localPingString != "") gotPingString = true;
                 pingWaitTimeout = 60;
             }
             --pingWaitTimeout;
@@ -485,19 +484,19 @@ namespace DuckGame
                         _lobby.name = _serverIdentifier;
                         if (_lobby.name != TeamSelect2.DefaultGameName())
                             _lobby.SetLobbyData("customName", "true");
-                        string str = "";
-                        bool flag = true;
-                        foreach (Mod accessibleMod in (IEnumerable<Mod>)ModLoader.accessibleMods)
+                        string modList = "";
+                        bool first = true;
+                        foreach (Mod m in ModLoader.accessibleMods)
                         {
-                            if (!(accessibleMod is CoreMod) && !(accessibleMod is DisabledMod) && accessibleMod.configuration != null && !accessibleMod.configuration.disabled)
+                            if (m is not CoreMod && m is not DisabledMod && m.configuration != null && !m.configuration.disabled)
                             {
-                                if (!flag)
-                                    str += "|";
-                                str = accessibleMod.configuration.isWorkshop ? str + accessibleMod.configuration.workshopID.ToString() + "," + accessibleMod.dataHash.ToString() : str + "LOCAL";
-                                flag = false;
+                                if (!first)
+                                    modList += "|";
+                                modList += m.configuration.isWorkshop ? m.configuration.workshopID.ToString() + "," + m.dataHash : "LOCAL";
+                                first = false;
                             }
                         }
-                        _lobby.SetLobbyModsData(str);
+                        _lobby.SetLobbyModsData(modList);
                         ApplyLobbyData();
                         _initializedSettings = true;
                     }
