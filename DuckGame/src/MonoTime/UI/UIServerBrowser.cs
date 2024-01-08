@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using static DuckGame.UIServerBrowser;
 
 namespace DuckGame
 {
@@ -156,6 +157,8 @@ namespace DuckGame
                 string lobbyData = ConnectionError.joinLobby.GetLobbyData("mods");
                 if (lobbyData != null && lobbyData != "")
                 {
+                    lobbyData = lobbyData.Replace("|3132351890,0", ""); //dumb but works -NiK0
+                    lobbyData = lobbyData.Replace("3132351890,0", "");
                     string str1 = lobbyData;
                     char[] chArray = new char[1] { '|' };
                     foreach (string str2 in str1.Split(chArray))
@@ -431,8 +434,11 @@ namespace DuckGame
                                 }
                             }
                             string loadedMods = lobby.GetLobbyData("mods");
+
                             if (loadedMods != null && loadedMods != "")
                             {
+                                    loadedMods = loadedMods.Replace("|3132351890,0", ""); //dumb but works -NiK0
+                                    loadedMods = loadedMods.Replace("3132351890,0", "");
                                 string[] mods = loadedMods.Split('|');
 
                                 foreach (string s in mods)
