@@ -440,8 +440,7 @@ namespace DuckGame
                 if (shotsSinceGrounded < maxUngroundedShots || (bool)infinite)
                 {
                     float num = -angle;
-                    if (offDir < 0)
-                        num += 3.141593f;
+                    if (offDir < 0) num += 3.141593f;
                     Vec2 laserOffset = this.laserOffset;
                     Vec2 p2 = laserOffset - new Vec2((float)Math.Cos(num) * 122f, (float)-Math.Sin(num) * 122f);
                     Vec2 vec2 = -(laserOffset - p2).normalized;
@@ -451,13 +450,13 @@ namespace DuckGame
                         _warpPoint = hitPos + vec2 * -9f;
                         p2 = hitPos;
                     }
-                    else
-                        _warpPoint = p2 + new Vec2(-5f, 0f);
+                    else _warpPoint = p2 + new Vec2(-5f, 0f);
                     Graphics.DrawTexturedLine(_laserTex, laserOffset, p2, Color.Red, 0.5f, depth - 1);
                     if (_sightHit != null)
                     {
                         _sightHit.color = Color.Red;
-                        Graphics.Draw(ref _sightHit, p2.x, p2.y);
+                        _sightHit.SkipIntraTick = 10;
+                        Graphics.Draw(_sightHit, p2.x, p2.y);
                     }
                 }
             }
