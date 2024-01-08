@@ -10,7 +10,7 @@ Notable wiki pages:
 
 ## Installation
 
-For **Windows** users, download the [Latest Release](https://github.com/TheFlyingFoool/DuckGameRebuilt/releases), and run the executable.
+For **Windows** users, subscribe to [the steam workshop mod](https://steamcommunity.com/sharedfiles/filedetails/?id=3132351890).
 
 For **Linux** users, follow the [Linux Installation Guide](https://github.com/TheFlyingFoool/DuckGameRebuilt/wiki/Linux-Installation-Guide)
 
