@@ -935,58 +935,69 @@ namespace DuckGame
         private void DownloadWorkshopItems()
         {
             NloadMessage = "Downloading workshop mods...";
-            if (!Steam.IsInitialized())
-                return;
-            LoadingAction steamLoad = new LoadingAction();
-            steamLoad.action = () =>
+            if (Steam.IsInitialized())
             {
-                WorkshopQueryUser queryUser = Steam.CreateQueryUser(Steam.user.id, WorkshopList.Subscribed, WorkshopType.UsableInGame, WorkshopSortOrder.TitleAsc);
-                queryUser.requiredTags.Add("Mod");
-                queryUser.onlyQueryIDs = true;
-                queryUser.QueryFinished += sender => steamLoad.flag = true;
-                queryUser.ResultFetched += new WorkshopQueryResultFetched(ResultFetched);
-                queryUser.Request();
-                Steam.Update();
-            };
-            steamLoad.waitAction = () =>
-            {
-                Steam.Update();
-                return steamLoad.flag;
-            };
-            steamLoad.label = "steamLoad query";
-            _thingsToLoad.Enqueue(steamLoad);
-            steamLoad = new LoadingAction();
-            steamLoad.action = () =>
-            {
-                totalLoadyBits = availableModsToDownload.Count;
-                loadyBits = 0;
-                foreach (WorkshopItem workshopItem in availableModsToDownload)
+                LoadingAction steamLoad = new LoadingAction();
+                steamLoad.action = () =>
                 {
-                    WorkshopItem u = workshopItem;
-                    LoadingAction itemDownload = new LoadingAction();
-                    itemDownload.action = () =>
+                    WorkshopQueryUser query = Steam.CreateQueryUser(Steam.user.id, WorkshopList.Subscribed, WorkshopType.UsableInGame, WorkshopSortOrder.TitleAsc);
+                    query.requiredTags.Add("Mod");
+                    query.onlyQueryIDs = true;
+
+                    query.QueryFinished += (sender) => { steamLoad.flag = true; };
+                    query.ResultFetched += ResultFetched;
+
+                    query.Request();
+                    Steam.Update();
+
+                };
+                steamLoad.waitAction = () =>
+                {
+                    Steam.Update();
+                    return steamLoad.flag;
+                };
+
+                _thingsToLoad.Enqueue(steamLoad);
+
+
+                steamLoad = new LoadingAction();
+                steamLoad.action = () =>
+                {
+                    //availableModsToDownload = new List<WorkshopItem>();
+                    //availableModsToDownload.Add(WorkshopItem.GetItem(970509222));
+
+                    totalLoadyBits = availableModsToDownload.Count;
+                    loadyBits = 0;
+                    foreach (WorkshopItem u in availableModsToDownload)
                     {
-                        NloadMessage = "Downloading workshop mods (" + loadyBits.ToString() + "/" + totalLoadyBits.ToString() + ")";
-                        if (Steam.DownloadWorkshopItem(u))
-                            itemDownload.context = u;
-                        ++loadyBits;
-                    };
-                    itemDownload.waitAction = () =>
-                    {
-                        Steam.Update();
-                        return u == null || u.finishedProcessing;
-                    };
-                    itemDownload.label = "Downloading workshop mods action / Steam.Update finishedProcessing waitAction";
-                    steamLoad.actions.Enqueue(itemDownload);
-                }
-            };
-            steamLoad.waitAction = () =>
-            {
-                Steam.Update();
-                return steamLoad.flag;
-            };
-            steamLoad.label = "setup steam downloading workshop items";
-            _thingsToLoad.Enqueue(steamLoad);
+                        LoadingAction itemDownload = new LoadingAction();
+                        itemDownload.action = () =>
+                        {
+                            NloadMessage = "Downloading workshop mods (" + loadyBits.ToString() + "/" + totalLoadyBits.ToString() + ")";
+                            if (Steam.DownloadWorkshopItem(u))
+                                itemDownload.context = u;
+
+                            loadyBits += 1;
+                        };
+                        itemDownload.waitAction = () =>
+                        {
+                            Steam.Update();
+                            if (u == null || (u as WorkshopItem).finishedProcessing)
+                                return true;
+                            return false;
+                        };
+                        steamLoad.actions.Enqueue(itemDownload);
+                    }
+                };
+                steamLoad.waitAction = () =>
+                {
+                    Steam.Update();
+                    return steamLoad.flag;
+                };
+
+                steamLoad.label = "NSteam Load";
+                MonoMain._thingsToLoad.Enqueue(steamLoad);
+            }
         }
         private void AddNamedLoadingAction(Action pAction) => _thingsToLoad.Enqueue((LoadingAction)pAction);
         private void AddLoadingAction(Action pAction, string label = "")

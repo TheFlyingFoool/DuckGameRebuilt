@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -16,6 +17,7 @@ namespace DuckGame
         //private int _port;
         //private ulong _connectionPacketIdentifier = 6094567099491692639;
         private bool _initializedSettings;
+        private bool _isDGRLocked;
         private bool _lobbyCreationComplete;
         public static ulong inviteLobbyID;
         private bool gotPingString;
@@ -348,8 +350,7 @@ namespace DuckGame
             {
                 string localPingString = Steam.GetLocalPingString();
                 _lobby.SetLobbyData("pingstring", localPingString);
-                if (localPingString != null && localPingString != "")
-                    gotPingString = true;
+                if (localPingString != null && localPingString != "") gotPingString = true;
                 pingWaitTimeout = 60;
             }
             --pingWaitTimeout;
@@ -411,6 +412,8 @@ namespace DuckGame
                             string lobbyData2 = _lobby.GetLobbyData("mods");
                             if (lobbyData2 != null && lobbyData2 != "")
                             {
+                                lobbyData2 = lobbyData2.Replace("|3132351890,0", ""); //dumb but works -NiK0
+                                lobbyData2 = lobbyData2.Replace("3132351890,0", "");
                                 string str2 = lobbyData2;
                                 char[] chArray = new char[1] { '|' };
                                 foreach (string str3 in str2.Split(chArray))
@@ -485,21 +488,49 @@ namespace DuckGame
                         _lobby.name = _serverIdentifier;
                         if (_lobby.name != TeamSelect2.DefaultGameName())
                             _lobby.SetLobbyData("customName", "true");
-                        string str = "";
-                        bool flag = true;
-                        foreach (Mod accessibleMod in (IEnumerable<Mod>)ModLoader.accessibleMods)
+                        string modList = "";
+                        bool first = true;
+                        foreach (Mod m in ModLoader.accessibleMods)
                         {
-                            if (!(accessibleMod is CoreMod) && !(accessibleMod is DisabledMod) && accessibleMod.configuration != null && !accessibleMod.configuration.disabled)
+                            if (m is not CoreMod && m is not DisabledMod && m.configuration != null && !m.configuration.disabled)
                             {
-                                if (!flag)
-                                    str += "|";
-                                str = accessibleMod.configuration.isWorkshop ? str + accessibleMod.configuration.workshopID.ToString() + "," + accessibleMod.dataHash.ToString() : str + "LOCAL";
-                                flag = false;
+                                if (!first)
+                                    modList += "|";
+                                modList += m.configuration.isWorkshop ? m.configuration.workshopID.ToString() + "," + m.dataHash : "LOCAL";
+                                first = false;
                             }
                         }
-                        _lobby.SetLobbyModsData(str);
+                        if (DGRSettings.DGRItems || DG.FiftyPlayerMode)
+                        {
+                            modList += "3132351890,0";
+                        }
+                        _lobby.SetLobbyModsData(modList);
                         ApplyLobbyData();
                         _initializedSettings = true;
+                    }
+                    if (((!_isDGRLocked && (DGRSettings.DGRItems || DG.FiftyPlayerMode)) || (_isDGRLocked && !(DGRSettings.DGRItems || DG.FiftyPlayerMode))) && _lobby.id != 0UL)
+                    {
+                        string modList = "";
+                        bool first = true;
+                        foreach (Mod m in ModLoader.accessibleMods)
+                        {
+                            if (m is not CoreMod && m is not DisabledMod && m.configuration != null && !m.configuration.disabled)
+                            {
+                                if (!first)
+                                    modList += "|";
+                                modList += m.configuration.isWorkshop ? m.configuration.workshopID.ToString() + "," + m.dataHash : "LOCAL";
+                                first = false;
+                            }
+                        }
+                        _isDGRLocked = false;
+                        if (DGRSettings.DGRItems || DG.FiftyPlayerMode)
+                        {
+                            //https://steamcommunity.com/sharedfiles/filedetails/?id=3132351890
+                            if (!first) modList += "|";
+                            modList += "3132351890,0";
+                            _isDGRLocked = true;
+                        }
+                        _lobby.SetLobbyModsData(modList);
                     }
                     if (!gotPingString)
                         TryGettingPingString();

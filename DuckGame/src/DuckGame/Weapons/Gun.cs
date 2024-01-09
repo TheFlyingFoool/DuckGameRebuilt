@@ -686,35 +686,34 @@ namespace DuckGame
         {
             if (laserSight && held && _laserTex != null && _laserInit)
             {
-                float num = 1f;
-                if (!Options.Data.fireGlow)
-                    num = 0.4f;
-                Vec2 p1 = Offset(laserOffset);
+                float alpha = 1f;
+                if (!Options.Data.fireGlow) alpha = 0.4f;
+                Vec2 startPos = Offset(laserOffset);
 
-                LaserSightLerp.UpdateLerpState(p1, MonoMain.IntraTick, MonoMain.UpdateLerpState);
-                if(angleDegrees == -90.0f || angleDegrees == 0.0f)
-                    p1 = LaserSightLerp.Position;
+                LaserSightLerp.UpdateLerpState(startPos, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+                if (angleDegrees == -90.0f || angleDegrees == 0.0f) startPos = LaserSightLerp.Position;
 
-                float length = (p1 - _wallPoint).length;
-                float val1 = 100f;
-                if (ammoType != null)
-                    val1 = ammoType.range;
-                Vec2 normalized = (_wallPoint - p1).normalized;
-                Vec2 vec2 = p1 + normalized * Math.Min(val1, length);
-                Graphics.DrawTexturedLine(_laserTex, p1, vec2, Color.Red * num, 0.5f, depth - 1);
-                if (length > val1)
+                float length = (startPos - _wallPoint).length;
+                float range = 100f;
+                if (ammoType != null) range = ammoType.range;
+
+                Vec2 travel = (_wallPoint - startPos).normalized;
+                Vec2 endPos = startPos + travel * Math.Min(range, length);
+                Graphics.DrawTexturedLine(_laserTex, startPos, endPos, Color.Red * alpha, 0.5f, depth - 1);
+                if (length > range)
                 {
-                    for (int index = 1; index < 4; ++index)
+                    for (int i = 1; i < 4; i++)
                     {
-                        Graphics.DrawTexturedLine(_laserTex, vec2, vec2 + normalized * 2f, Color.Red * (1f - index * 0.2f) * num, 0.5f, depth - 1);
-                        vec2 += normalized * 2f;
+                        Graphics.DrawTexturedLine(_laserTex, endPos, endPos + travel * 2f, Color.Red * (1f - i * 0.2f) * alpha, 0.5f, depth - 1);
+                        endPos += travel * 2f;
                     }
                 }
-                if (_sightHit != null && length < val1)
+                if (_sightHit != null && length < range)
                 {
-                    _sightHit.alpha = num;
-                    _sightHit.color = Color.Red * num;
-                    Graphics.Draw(ref _sightHit, _wallPoint.x, _wallPoint.y);
+                    _sightHit.alpha = alpha;
+                    _sightHit.SkipIntraTick = 10;
+                    _sightHit.color = Color.Red * alpha;
+                    Graphics.Draw(_sightHit, _wallPoint.x, _wallPoint.y);
                 }
             }
             base.DrawGlow();

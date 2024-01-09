@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using static DuckGame.UIServerBrowser;
 
 namespace DuckGame
 {
@@ -111,7 +112,8 @@ namespace DuckGame
         //    this._yesNoYes.menuAction = (UIMenuAction)new UIMenuActionCallFunction(onYes);
         //    new UIMenuActionOpenMenu((UIComponent)this._editModMenu, (UIComponent)this._yesNoMenu).Activate();
         //}
-
+        
+        //maybe later -NiK0
         public static void DownloadRequiredMods()
         {
             string modList = "";
@@ -129,7 +131,7 @@ namespace DuckGame
 
                 Program.commandLine += " -downloadmods -tempMods " + modList + " +connect_lobby " + _joiningLobby.lobby.id;
                 Program.commandLine = Program.commandLine.Replace("-nomods", "");
-
+                ModLoader.RestartToVanillaDg = false;
                 if (MonoMain.lobbyPassword != "")
                     Program.commandLine += " +password " + MonoMain.lobbyPassword;
                 ModLoader.RestartGame();
@@ -155,6 +157,8 @@ namespace DuckGame
                 string lobbyData = ConnectionError.joinLobby.GetLobbyData("mods");
                 if (lobbyData != null && lobbyData != "")
                 {
+                    lobbyData = lobbyData.Replace("|3132351890,0", ""); //dumb but works -NiK0
+                    lobbyData = lobbyData.Replace("3132351890,0", "");
                     string str1 = lobbyData;
                     char[] chArray = new char[1] { '|' };
                     foreach (string str2 in str1.Split(chArray))
@@ -268,7 +272,7 @@ namespace DuckGame
             _downloadModsMenu.Add(new UIText("", Colors.DGBlue));
 
             _downloadModsMenu.Add(new UIMenuItem("CANCEL", new UIMenuActionOpenMenu(_downloadModsMenu, this)));
-            _downloadModsMenu.Add(new UIMenuItem("RESTART AND DOWNLOAD", new UIMenuActionCloseMenuCallFunction(_downloadModsMenu, DownloadRequiredMods)));
+            _downloadModsMenu.Add(new UIMenuItem("RESTART AND DOWNLOAD", new UIMenuActionCloseMenuCallFunction(_downloadModsMenu, SubscribeAndRestart)));
             _downloadModsMenu.Close();
 
             _modsInfoMenu = new UIModManagement(this, "@WRENCH@ACTIVE SERVER MODS@SCREWDRIVER@", Layer.HUD.camera.width, Layer.HUD.camera.height, 550, -1, "@WASD@@SELECT@ADJUST @MENU1@TOGGLE @CANCEL@BACK", null, true);
@@ -368,7 +372,7 @@ namespace DuckGame
                 return;
             _searching = false;
             int numLobbiesFound = Network.activeNetwork.core.NumLobbiesFound();
-            List<WorkshopItem> items = new List<WorkshopItem>();
+            List<WorkshopItem> queryItems = new List<WorkshopItem>();
             if (Network.lanMode)
             {
                 foreach (LobbyData foundLobby in (Network.activeNetwork.core as NCBasic)._foundLobbies)
@@ -384,7 +388,7 @@ namespace DuckGame
                         string lobbyData1 = lobby.GetLobbyData("name");
                         if (!string.IsNullOrEmpty(lobbyData1))
                         {
-                            LobbyData lobbyData2 = new LobbyData
+                            LobbyData d = new LobbyData
                             {
                                 lobby = lobby,
                                 name = DuckNetwork.core.FilterText(lobbyData1, null),
@@ -400,82 +404,87 @@ namespace DuckGame
                             };
                             try
                             {
-                                lobbyData2.numSlots = Convert.ToInt32(lobby.GetLobbyData("numSlots"));
+                                d.numSlots = Convert.ToInt32(lobby.GetLobbyData("numSlots"));
                             }
                             catch (Exception)
                             {
-                                lobbyData2.numSlots = 0;
+                                d.numSlots = 0;
                             }
-                            lobbyData2.hasModifiers = lobby.GetLobbyData("modifiers");
-                            lobbyData2.hasPassword = lobby.GetLobbyData("password") == "true";
-                            lobbyData2.dedicated = lobby.GetLobbyData("dedicated") == "true";
-                            lobbyData2.pingstring = lobby.GetLobbyData("pingstring");
-                            if (lobbyData2.pingstring != "" && lobbyData2.pingstring != null)
-                                lobbyData2.estimatedPing = Steam.EstimatePing(lobbyData2.pingstring);
+                            d.hasModifiers = lobby.GetLobbyData("modifiers");
+                            d.hasPassword = lobby.GetLobbyData("password") == "true";
+                            d.dedicated = lobby.GetLobbyData("dedicated") == "true";
+                            d.pingstring = lobby.GetLobbyData("pingstring");
+                            if (d.pingstring != "" && d.pingstring != null)
+                                d.estimatedPing = Steam.EstimatePing(d.pingstring);
                             try
                             {
-                                lobbyData2.datahash = Convert.ToInt64(lobby.GetLobbyData("datahash"));
+                                d.datahash = Convert.ToInt64(lobby.GetLobbyData("datahash"));
                             }
                             catch (Exception)
                             {
                             }
-                            lobbyData2.isGlobalLobby = mode == SearchMode.Global;
-                            lobbyData2.hasFriends = false;
+                            d.isGlobalLobby = mode == SearchMode.Global;
+                            d.hasFriends = false;
                             foreach (User user in lobby.users)
                             {
                                 if (Steam.friends.Contains(user))
                                 {
-                                    lobbyData2.hasFriends = true;
+                                    d.hasFriends = true;
                                     break;
                                 }
                             }
-                            string lobbyData3 = lobby.GetLobbyData("mods");
-                            if (lobbyData3 != null && lobbyData3 != "")
+                            string loadedMods = lobby.GetLobbyData("mods");
+
+                            if (loadedMods != null && loadedMods != "")
                             {
-                                string str1 = lobbyData3;
-                                char[] chArray = new char[1] { '|' };
-                                foreach (string str2 in str1.Split(chArray))
+                                    loadedMods = loadedMods.Replace("|3132351890,0", ""); //dumb but works -NiK0
+                                    loadedMods = loadedMods.Replace("3132351890,0", "");
+                                string[] mods = loadedMods.Split('|');
+
+                                foreach (string s in mods)
                                 {
                                     try
                                     {
-                                        if (!(str2 == ""))
+                                        if (s == "")
+                                            continue;
+
+                                        if (s == "LOCAL") d.hasLocalMods = true;
+                                        else
                                         {
-                                            if (str2 == "LOCAL")
+                                            string[] s2 = s.Split(',');
+                                            string workshopID = "";
+                                            if (s2.Length == 2) workshopID = s2[0].Trim();
+                                            else workshopID = s;
+
+                                            WorkshopItem w = WorkshopItem.GetItem(Convert.ToUInt64(workshopID));
+                                            if (w != null)
                                             {
-                                                lobbyData2.hasLocalMods = true;
-                                            }
-                                            else
-                                            {
-                                                string[] strArray = str2.Split(',');
-                                                WorkshopItem workshopItem = WorkshopItem.GetItem(Convert.ToUInt64(strArray.Length != 2 ? str2 : strArray[0].Trim()));
-                                                if (workshopItem != null)
-                                                {
-                                                    items.Add(workshopItem);
-                                                    lobbyData2.workshopItems.Add(workshopItem);
-                                                }
+                                                queryItems.Add(w);
+                                                d.workshopItems.Add(w);
                                             }
                                         }
                                     }
-                                    catch (Exception)
+                                    catch (Exception e)
                                     {
+                                        //how u doin daniel
                                     }
                                 }
                             }
                             try
                             {
-                                lobbyData2.maxPlayers = Convert.ToInt32(lobby.GetLobbyData("maxplayers"));
+                                d.maxPlayers = Convert.ToInt32(lobby.GetLobbyData("maxplayers"));
                             }
                             catch (Exception)
                             {
-                                lobbyData2.maxPlayers = 0;
+                                d.maxPlayers = 0;
                             }
-                            _lobbies.Add(lobbyData2);
+                            _lobbies.Add(d);
                         }
                     }
                 }
             }
-            if (items.Count > 0)
-                Steam.RequestWorkshopInfo(items);
+            if (queryItems.Count > 0)
+                Steam.RequestWorkshopInfo(queryItems);
             int num2 = (int)_modeQueue.Dequeue();
         }
 

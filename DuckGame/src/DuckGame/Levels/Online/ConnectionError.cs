@@ -31,6 +31,12 @@ namespace DuckGame
             if (joinLobby != null)
             {
                 string loadedMods = joinLobby.GetLobbyData("mods");
+                if (loadedMods != null && loadedMods != "")
+                {
+                    loadedMods = loadedMods.Replace("|3132351890,0", ""); //dumb but works -NiK0
+                    loadedMods = loadedMods.Replace("3132351890,0", "");
+                }
+
                 if (loadedMods != null && loadedMods != "" && loadedMods.Split('|').Contains("LOCAL"))
                     _text = "Host has non-workshop mods enabled!";
                 else
@@ -47,7 +53,7 @@ namespace DuckGame
                         _downloadModsMenu.Add(new UIText("", Colors.DGBlue));
 
                         _downloadModsMenu.Add(new UIMenuItem("CANCEL", new UIMenuActionCloseMenu(_downloadModsMenu)));
-                        _downloadModsMenu.Add(new UIMenuItem("RESTART AND DOWNLOAD", new UIMenuActionCloseMenuCallFunction(_downloadModsMenu, UIServerBrowser.DownloadRequiredMods)));
+                        _downloadModsMenu.Add(new UIMenuItem("RESTART AND DOWNLOAD", new UIMenuActionCloseMenuCallFunction(_downloadModsMenu, UIServerBrowser.SubscribeAndRestart)));
                         _downloadModsMenu.Close();
 
                         _downloadModsMenu.Open();

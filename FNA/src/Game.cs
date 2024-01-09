@@ -277,6 +277,7 @@ namespace Microsoft.Xna.Framework
 
 			IsMouseVisible = false;
 			IsFixedTimeStep = true;
+			UnFixedDraw = false;
 			TargetElapsedTime = TimeSpan.FromTicks(166667); // 60fps
 			InactiveSleepTime = TimeSpan.FromSeconds(0.02);
 			for (int i = 0; i < previousSleepTimes.Length; i += 1)
@@ -551,8 +552,6 @@ namespace Microsoft.Xna.Framework
 							System.Threading.Thread.Sleep(1);
 						}
 
-						if (!drawTimer.IsRunning) drawTimer.Start(); //for whatever reason drawTimer wasn't started, issue with uncapped FPS and no VSYNC settings in DGR -NiK0
-
 						// SpinWait for the remaining time.
 						while (drawTimer.ElapsedTicks < targetDrawTimeTicks)
 						{
@@ -606,6 +605,7 @@ namespace Microsoft.Xna.Framework
 				 */
 				if (BeginDraw())
 				{
+					drawTimer.Restart(); // Restart the draw timer after drawing
 					Draw(gameTime);
 					EndDraw();
 				}
