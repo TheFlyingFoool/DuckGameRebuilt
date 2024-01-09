@@ -1325,7 +1325,11 @@ namespace DuckGame
             if (Options._lastCreatedBlockMenu != null)
                 _ducknetUIGroup.Add(Options._lastCreatedBlockMenu, false);
             if (Options._lastCreatedControlsMenu != null)
+            {
                 _ducknetUIGroup.Add(Options._lastCreatedControlsMenu, false);
+                _ducknetUIGroup.Add((Options._lastCreatedControlsMenu as UIControlConfig)._confirmMenu, false);
+                _ducknetUIGroup.Add((Options._lastCreatedControlsMenu as UIControlConfig)._warningMenu, false);
+            }
             if (Options._lastCreatedDGRMenu != null)
             {
                 Options.AddLastDGRToUIComp(_ducknetUIGroup);

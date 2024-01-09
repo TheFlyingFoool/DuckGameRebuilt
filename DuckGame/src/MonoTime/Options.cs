@@ -184,17 +184,6 @@ namespace DuckGame
             _lastCreatedDGRMiscMenu = tempDGRMiscMenu;
             if (Program.IS_DEV_BUILD) _lastCreatedDGRDevMenu = tempDGRDevMenu;
 
-
-            /*
-         *  ui.Add(tempDGROptimizationsMenu, false);
-            ui.Add(tempDGRGraphicsMenu, false);
-            ui.Add(tempDGRGameMenu, false);
-            ui.Add(tempDGRQOLMenu, false);
-            ui.Add(tempDGRHUDMenu, false);
-            ui.Add(tempDGREditorMenu, false);
-            ui.Add(tempDGRRecorderatorMenu, false);
-            ui.Add(tempDGRMiscMenu, false);
-         * */
             _lastCreatedControlsMenu = CreateControlsMenu(optionsMenu);
             _lastCreatedGraphicsMenu = CreateGraphicsMenu(optionsMenu);
             _lastCreatedAccessibilityMenu = CreateAccessibilityMenu(optionsMenu);
@@ -235,16 +224,6 @@ namespace DuckGame
             _dgrRecorderatorMenu = _lastCreatedDGRRecorderatorMenu;
             _dgrMiscMenu = _lastCreatedDGRMiscMenu;
             if (Program.IS_DEV_BUILD) _dgrDevMenu = _lastCreatedDGRDevMenu;
-            /*
-         *  ui.Add(tempDGROptimizationsMenu, false);
-            ui.Add(tempDGRGraphicsMenu, false);
-            ui.Add(tempDGRGameMenu, false);
-            ui.Add(tempDGRQOLMenu, false);
-            ui.Add(tempDGRHUDMenu, false);
-            ui.Add(tempDGREditorMenu, false);
-            ui.Add(tempDGRRecorderatorMenu, false);
-            ui.Add(tempDGRMiscMenu, false);
-         * */
             _blockMenu = _lastCreatedBlockMenu;
         }
 
