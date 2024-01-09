@@ -1,19 +1,10 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.Level
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using AddedContent.Firebreak;
+﻿using AddedContent.Firebreak;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using AddedContent.Hyeve;
-using DuckGame;
-using System.Dynamic;
 
 namespace DuckGame
 {

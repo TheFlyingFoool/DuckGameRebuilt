@@ -3131,6 +3131,7 @@ namespace DuckGame
                             current.things.UpdateObject(t);
 
                         });
+                        t.UpdateBuckets();
                     }
 
                     UpdateSelection();

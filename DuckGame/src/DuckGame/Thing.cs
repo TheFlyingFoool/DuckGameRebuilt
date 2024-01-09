@@ -1639,7 +1639,16 @@ namespace DuckGame
             //_leftQuick = left;
             //_rightQuick = right;
         }
-
+        public void UpdateBuckets()
+        {
+            if (Buckets.Length > 0 && ((oldcollisionOffset != collisionOffset || oldcollisionSize != collisionSize) || (oldposition - position).LengthSquared() > 50f) && Level.current != null) //((oldposition - position)).length > 10
+            {
+                oldcollisionOffset = collisionOffset;
+                oldcollisionSize = collisionSize;
+                oldposition = position;
+                Level.current.things.UpdateObject(this);
+            }
+        }
         public virtual void Update()
         {
         }
