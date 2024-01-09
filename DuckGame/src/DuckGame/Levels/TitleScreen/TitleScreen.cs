@@ -516,8 +516,8 @@ namespace DuckGame
             _optionsMenu.Add(new UIMenuItemSlider("SFX Volume", field: new FieldBinding(Options.Data, "sfxVolume"), step: 0.06666667f), true);
             _optionsMenu.Add(new UIMenuItemSlider("Music Volume", field: new FieldBinding(Options.Data, "musicVolume"), step: 0.06666667f), true);
 
-            _graphicsMenu = Options.CreateGraphicsMenu(_optionsMenu);
             _dgrMenu = Options.CreateDGRMenu(_optionsMenu);
+            _graphicsMenu = Options.CreateGraphicsMenu(_optionsMenu);
             _audioMenu = Options.CreateAudioMenu(_optionsMenu);
             _accessibilityMenu = Options.CreateAccessibilityMenu(_optionsMenu);
             _ttsMenu = Options.tempTTSMenu;
@@ -573,18 +573,10 @@ namespace DuckGame
             _optionsGroup.Add((_controlConfigMenu as UIControlConfig)._confirmMenu, false);
             _optionsGroup.Add((_controlConfigMenu as UIControlConfig)._warningMenu, false);
             _optionsGroup.Add(_flagMenu, false);
-            _optionsGroup.Add(_graphicsMenu, false);
             _optionsGroup.Add(_dgrMenu, false);
-            _optionsGroup.Add(Options.TEMPDGRGRAPHICS, false);
-            _optionsGroup.Add(Options.TEMPDGRGAME, false);
-            _optionsGroup.Add(Options.TEMPDGRHUD, false);
-            _optionsGroup.Add(Options.TEMPDGREDITOR, false);
-            _optionsGroup.Add(Options.TEMPDGRQOL, false);
-            _optionsGroup.Add(Options.TEMPDGRMISC, false);
-            if (Program.IS_DEV_BUILD) _optionsGroup.Add(Options.TEMPDGRDEV, false);
-            _optionsGroup.Add(Options.TEMPDGROPTIM, false);
-            _optionsGroup.Add(Options.TEMPDGRRECORDERATOR, false);
+            _optionsGroup.Add(_graphicsMenu, false);
             _optionsGroup.Add(_audioMenu, false);
+            Options.AddDGRToUIComp(_optionsGroup);
             if (_accessibilityMenu != null)
                 _optionsGroup.Add(_accessibilityMenu, false);
             if (_ttsMenu != null)

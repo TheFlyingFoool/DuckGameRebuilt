@@ -1327,7 +1327,10 @@ namespace DuckGame
             if (Options._lastCreatedControlsMenu != null)
                 _ducknetUIGroup.Add(Options._lastCreatedControlsMenu, false);
             if (Options._lastCreatedDGRMenu != null)
+            {
+                Options.AddLastDGRToUIComp(_ducknetUIGroup);
                 _ducknetUIGroup.Add(Options._lastCreatedDGRMenu, false);
+            }
             Main.SpecialCode = "men20";
             _ducknetUIGroup.Close();
             Level.Add(_ducknetUIGroup);
