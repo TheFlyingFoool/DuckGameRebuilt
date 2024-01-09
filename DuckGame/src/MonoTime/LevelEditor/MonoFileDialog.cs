@@ -7,6 +7,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
+using System.Reflection;
 
 namespace DuckGame
 {
@@ -623,6 +624,10 @@ namespace DuckGame
                 }
                 if (Input.Pressed(Triggers.Shoot))
                 {
+                    if (_selectedIndex < 0 || _selectedIndex >= _items.Count) // crashed found related to _selectedIndex being out of bounds
+                    {
+                        _selectedIndex = 0;
+                    }
                     ContextMenu cm = _items[_selectedIndex];
                     if (cm.text.Contains("@"))
                     {
