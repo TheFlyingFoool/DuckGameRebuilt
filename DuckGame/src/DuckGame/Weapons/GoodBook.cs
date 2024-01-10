@@ -351,7 +351,7 @@ namespace DuckGame
                                     if (duck1.conversionResistance <= 0)
                                     {
                                         duck1.ConvertDuck(duck2);
-                                        if (Network.isActive)
+                                        if (Network.isActive && !Network.isFakeActive)
                                         {
                                             Send.Message(new NMConversion(duck1, duck2));
                                             controlling[duck1.profile.networkIndex] = null;
