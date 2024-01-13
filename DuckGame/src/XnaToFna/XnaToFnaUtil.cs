@@ -10,8 +10,10 @@ using Mono.Cecil.Cil;
 using Mono.Collections.Generic;
 using MonoMod;
 using MonoMod.Utils;
+using src.XnaToFna;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -131,7 +133,10 @@ namespace XnaToFna
             foreach (TypeDefinition nestedType in type.NestedTypes)
                 StubType(nestedType);
         }
-
+        //public static List<Instruction> JamTranspile(List<Instruction> instructions) example
+        //{
+        //    return new List<Instruction>() { new Instruction(OpCodes.Ret, null) };
+        //}
         public void SetupHelperRelinker()
         {
             Modder.RelinkMap["System.Void Microsoft.Xna.Framework.Game::.ctor()"] = new RelinkMapEntry("XnaToFna.XnaToFnaGame", "System.Void .ctor()");
@@ -199,6 +204,8 @@ namespace XnaToFna
             Modder.RelinkMap["System.Reflection.FieldInfo System.Type::GetField(System.String,System.Reflection.BindingFlags)"] = new RelinkMapEntry("XnaToFna.ProxyReflection.FieldInfoHelper", "System.Reflection.FieldInfo GetField(System.Type,System.String,System.Reflection.BindingFlags)");
             //Mod Stuff 
             Modder.RelinkMap["System.Void DuckGame.HaloWeapons.Resources::LoadShaders()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void DoNothing()");
+
+            //Modder.TranspilerMap["System.Void DuckGame.JamMod.AK47W::OnHoldAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod("JamTranspile")); example
 
             if (HookIsTrialMode)
                 Modder.RelinkMap["System.Boolean Microsoft.Xna.Framework.GamerServices.Guide::get_IsTrialMode()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.IntPtr get_IsTrialMode()");
@@ -314,6 +321,7 @@ namespace XnaToFna
                 if (method.HasBody)
                 {
                     string findableId = method.GetFindableID(withType: false);
+                    string methodId = method.GetFindableID(withType: true);
                     if (flag && findableId == "System.Void Update(Microsoft.Xna.Framework.GameTime)")
                     {
                         Log("[PostProcess] Injecting call to XnaToFnaHelper.PreUpdate into game Update");
@@ -321,6 +329,10 @@ namespace XnaToFna
                         ilProcessor.InsertBefore(method.Body.Instructions[0], ilProcessor.Create(OpCodes.Ldarg_1));
                         ilProcessor.InsertAfter(method.Body.Instructions[0], ilProcessor.Create(OpCodes.Callvirt, method.Module.ImportReference(m_XnaToFnaHelper_PreUpdate)));
                         method.Body.UpdateOffsets(1, 2);
+                    }
+                    if (Modder.TranspilerMap.TryGetValue(methodId, out TranspilerMapEntry mapEntry))
+                    {
+                        method.Body.Instructions = mapEntry.ProcessILCode(method.Body.Instructions.ToList(), method);
                     }
                     for (int instri = 0; instri < method.Body.Instructions.Count; ++instri)
                     {
@@ -431,7 +443,7 @@ namespace XnaToFna
 
         public void CheckAndInjectFixPath(MethodDefinition method, ref int instri)
         {
-            Collection<Instruction> instructions = method.Body.Instructions;
+            Mono.Collections.Generic.Collection<Instruction> instructions = method.Body.Instructions;
             Instruction instruction = instructions[instri];
             if (instruction.OpCode != OpCodes.Call && instruction.OpCode != OpCodes.Callvirt && instruction.OpCode != OpCodes.Newobj)
                 return;
