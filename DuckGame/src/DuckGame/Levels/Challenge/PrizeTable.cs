@@ -5,6 +5,8 @@
 // Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
 // XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
 
+using static DuckGame.CMD;
+
 namespace DuckGame
 {
     [EditorGroup("Special|Arcade", EditorItemType.Arcade)]
@@ -69,9 +71,15 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (Profiles.active.Count == 0)
+            Profile activeprofile = null;
+            foreach(Profile profile in Profiles.active)
+            {
+                activeprofile = profile;
+                break;
+            }
+            if (activeprofile == null)
                 return;
-            _hasEligibleChallenges = Challenges.GetEligibleChancyChallenges(Profiles.active[0]).Count > 0;
+            _hasEligibleChallenges = Challenges.GetEligibleChancyChallenges(activeprofile).Count > 0;
             Duck duck1 = Level.Nearest<Duck>(x, y);
             if (duck1 != null)
             {
