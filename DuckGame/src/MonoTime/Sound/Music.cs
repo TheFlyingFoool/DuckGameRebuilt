@@ -191,50 +191,40 @@ namespace DuckGame
             //not great code also welcome to my hell for .vgz music loading -NiK0
             if (File.Exists("./Content/Audio/Music/InGame/" + music + ".vgz"))
             {
-                if (_vgmPlayer != null) _vgmPlayer.Stop();
-                _vgmPlayer = new VGMSong("./Content/Audio/Music/InGame/" + music + ".vgz");
+                if (!LoadVGM("./Content/Audio/Music/InGame/" + music + ".vgz"))
+                    return;
                 _vgmPlayer.Play();
                 _vgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
                 _vgmPlayer.looped = looping;
-                if (_musicPlayer != null) _musicPlayer.Stop();
-                if (_dgmPlayer != null) _dgmPlayer.Stop();
             }
             else if (File.Exists("./Content/Audio/Music/" + music + ".vgz"))
             {
-                if (_vgmPlayer != null) _vgmPlayer.Stop();
-                _vgmPlayer = new VGMSong("./Content/Audio/Music/" + music + ".vgz");
+                if (!LoadVGM("./Content/Audio/Music/" + music + ".vgz"))
+                    return;
                 _vgmPlayer.Play();
                 _vgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
                 _vgmPlayer.looped = looping;
-                if (_musicPlayer != null) _musicPlayer.Stop();
-                if (_dgmPlayer != null) _dgmPlayer.Stop();
             }
             else if (Directory.Exists("./Content/Audio/Music/InGame/" + music + "dgm"))
             {
-                if (_dgmPlayer != null) _dgmPlayer.Stop();
-                _dgmPlayer = new DGMSong("./Content/Audio/Music/InGame/" + music + "dgm");
+                if (!LoadDGM("./Content/Audio/Music/InGame/" + music + "dgm"))
+                    return;
                 _dgmPlayer.Play();
                 _dgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
                 _dgmPlayer.looped = looping;
-                if (_musicPlayer != null) _musicPlayer.Stop();
-                if (_vgmPlayer != null) _vgmPlayer.Stop();
             }
             else if (File.Exists("./Content/Audio/Music/" + music + "dgm"))
             {
-                if (_dgmPlayer != null) _dgmPlayer.Stop();
-                _dgmPlayer = new DGMSong("./Content/Audio/Music/" + music + "dgm");
+                if (!LoadDGM("./Content/Audio/Music/InGame/" + music + "dgm"))
+                    return;
                 _dgmPlayer.Play();
                 _dgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
                 _dgmPlayer.looped = looping;
-                if (_musicPlayer != null) _musicPlayer.Stop();
-                if (_vgmPlayer != null) _vgmPlayer.Stop();
             }
             else if (Load(music))
             {
                 _musicPlayer.Play();
                 _musicPlayer.IsLooped = looping;
-                if (_vgmPlayer != null) _vgmPlayer.Stop();
-                if (_dgmPlayer != null) _dgmPlayer.Stop();
             }
         }
 
@@ -247,6 +237,10 @@ namespace DuckGame
             if (!DGRSettings.LoaderMusic) return false;
             _currentSong = music;
             _musicPlayer.Stop();
+            if (_vgmPlayer != null)
+                _vgmPlayer.Stop();
+            if (_dgmPlayer != null)
+                _dgmPlayer.Stop();
             if (!music.Contains(":"))
             {
                 if (!music.EndsWith(".wav"))
@@ -286,6 +280,54 @@ namespace DuckGame
             return true;
         }
 
+        public static bool LoadVGM(string music)
+        {
+            if (!DGRSettings.LoaderMusic) 
+                return false;
+            _currentSong = music;
+            if (_musicPlayer != null)
+                _musicPlayer.Stop();
+            if (_vgmPlayer != null)
+                _vgmPlayer.Stop();
+            if (_dgmPlayer != null)
+                _dgmPlayer.Stop();
+            try
+            {
+                _vgmPlayer = new VGMSong(music);
+            }
+            catch (Exception ex)
+            {
+                DevConsole.Log(DCSection.General, "|DGRED|Failed to load music (" + music + "):");
+                DevConsole.Log(DCSection.General, "|DGRED|" + ex.Message);
+            }
+            if (_vgmPlayer == null)
+                return false; //added because are system unlike _musicPlayer isnt never null
+            return true;
+        }
+        public static bool LoadDGM(string music)
+        {
+            if (!DGRSettings.LoaderMusic)
+                return false;
+            _currentSong = music;
+            if (_musicPlayer != null)
+                _musicPlayer.Stop();
+            if (_vgmPlayer != null)
+                _vgmPlayer.Stop();
+            if (_dgmPlayer != null)
+                _dgmPlayer.Stop();
+            try
+            {
+                _dgmPlayer = new DGMSong(music);
+            }
+            catch (Exception ex)
+            {
+                DevConsole.Log(DCSection.General, "|DGRED|Failed to load music (" + music + "):");
+                DevConsole.Log(DCSection.General, "|DGRED|" + ex.Message);
+            }
+            if (_dgmPlayer == null)
+                return false; //added because are system unlike _musicPlayer isnt never null
+            return true;
+        }
         public static void PlayLoaded()
         {
             if (DGRSettings.LoaderMusic) _musicPlayer.Play();
