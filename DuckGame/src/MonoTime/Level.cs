@@ -1195,7 +1195,12 @@ namespace DuckGame
 
         public static T CheckCircle<T>(Vec2 p1, float radius) => current.CollisionCircle<T>(p1, radius);
 
-        public static IEnumerable<T> CheckCircleAll<T>(Vec2 p1, float radius) => current.CollisionCircleAll<T>(p1, radius);
+        public static IEnumerable<T> CheckCircleAll<T>(Vec2 p1, float radius)
+        {
+            if (radius > Int32.MaxValue - 1000) // for JadeMod MegaBuster, Why the fuck do they use 2.1474836E+09f for the radius. *pain
+                return CheckCircleAllOld<T>(p1, radius);
+            return current.CollisionCircleAll<T>(p1, radius);
+        }
 
         public static IEnumerable<T> CheckCircleAllOld<T>(Vec2 p1, float radius) => current.CollisionCircleAllOld<T>(p1, radius);
 
