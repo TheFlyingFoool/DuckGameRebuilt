@@ -196,7 +196,7 @@ namespace DuckGame
 
         public static bool LoaderMusic; //this is so you wont crash immediately when changing the setting, only gets set on startup -NiK0
 
-        [Marker.AutoConfig] public static bool DGRItems = false;
+        public static bool DGRItems = false;
 
         public static bool MidGameJoining = false;
 
