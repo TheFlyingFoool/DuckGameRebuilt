@@ -23,9 +23,14 @@ public class Lobby : IDisposable {
 
     public unsafe User owner {
         get {
-            if (id != 0) {
-                return User.GetUser(SteamMatchmaking.GetLobbyOwner(_id));
+            try
+            {
+                if (id != 0)
+                {
+                    return User.GetUser(SteamMatchmaking.GetLobbyOwner(_id));
+                }
             }
+            catch { }
             return null;
         }
         set
