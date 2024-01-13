@@ -29,7 +29,12 @@ namespace DuckGame
 
         public string text
         {
-            get => _textElement.text;
+            get
+            {
+                if (_textElement == null)
+                    return "";
+                return _textElement.text;
+            }
             set
             {
                 _textElement.text = value;
