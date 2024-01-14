@@ -1,4 +1,4 @@
-﻿namespace DuckGame
+﻿/*namespace DuckGame
 {
     [ClientOnly]
     public class DeathCaliber : Bullet
@@ -21,4 +21,4 @@
             base.Update();
         }
     }
-}
+}*/

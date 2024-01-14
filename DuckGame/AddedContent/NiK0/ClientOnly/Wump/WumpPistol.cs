@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.IO.IsolatedStorage;
 using System.Linq;
@@ -184,4 +184,4 @@ namespace DuckGame
         public bool broken;
         private SpriteMap _sprite;
     }
-}
+}*/

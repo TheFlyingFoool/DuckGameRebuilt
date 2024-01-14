@@ -1,4 +1,4 @@
-﻿namespace DuckGame
+﻿/*namespace DuckGame
 {
     [ClientOnly]
     [EditorGroup("Rebuilt|Wump|Shotguns")]
@@ -129,4 +129,4 @@
             }
         }
     }
-}
+}*/

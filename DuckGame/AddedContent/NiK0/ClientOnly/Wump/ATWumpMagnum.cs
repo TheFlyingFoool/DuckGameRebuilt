@@ -1,4 +1,4 @@
-﻿namespace DuckGame
+﻿/*namespace DuckGame
 {
     [ClientOnly]
     public class ATWumpMagnum : AmmoType
@@ -31,4 +31,4 @@
             }
         }
     }
-}
+}*/

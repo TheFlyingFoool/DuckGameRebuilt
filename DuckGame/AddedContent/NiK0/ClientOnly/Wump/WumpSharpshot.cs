@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 
 namespace DuckGame
 {
@@ -133,19 +133,6 @@ namespace DuckGame
                 {
                     _sightHit.color = Color.Red * alpha;
                     Graphics.Draw(_sightHit, vec2.x, vec2.y);
-
-                    /*for (float z = 0; z < 12f + Math.Cos(other) * 6; z += r)
-                    {
-                        Vec2 reNorm = -normalized.Rotate((float)Math.Sin(fUp + z), Vec2.Zero);
-                        Vec2 vec3 = vec2 + reNorm * 8;
-
-
-                        for (int i = 1; i < 4; i++)
-                        {
-                            Graphics.DrawTexturedLine(_laserTex, vec3, vec3 + reNorm * ((float)Math.Cos((float)i + (float)z + (float)Math.Sin(fUp - other)) * 9), c * (1f - i * 0.2f), f, depth - 1);
-                            vec3 += reNorm * ((float)Math.Cos(fUp * normalized.x * (Math.Sin(other * z / 12) + 1)) * 3);
-                        }
-                    }*/
                 }
                 for (float z = 0; z < 9 + Math.Cos(other) * 3; z += r)
                 {
@@ -205,4 +192,4 @@ namespace DuckGame
             this.angle = angle;
         }
     }
-}
+}*/

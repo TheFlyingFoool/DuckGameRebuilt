@@ -5,7 +5,7 @@ namespace DuckGame
 {
     [ClientOnly]
     #if DEBUG
-    [EditorGroup("Rebuilt|DEV")]
+    [EditorGroup("Guns|DEV")]
     [BaggedProperty("canSpawn", false)]
     #endif
     public class CollinGun : Gun

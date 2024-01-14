@@ -1,7 +1,7 @@
 ﻿namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Wump|Lasers")]
+    [EditorGroup("Guns|Wump @DGR@")]
     public class WumpQuadLaser : Gun
     {
         public WumpQuadLaser(float xval, float yval) : base(xval, yval)

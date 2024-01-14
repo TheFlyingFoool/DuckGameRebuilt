@@ -1,4 +1,4 @@
-﻿namespace DuckGame
+﻿/*namespace DuckGame
 {
     public class WumpMagnumVessel : GunVessel
     {
@@ -25,4 +25,4 @@
             else g._flareAlpha = 0f;
         }
     }
-}
+}*/

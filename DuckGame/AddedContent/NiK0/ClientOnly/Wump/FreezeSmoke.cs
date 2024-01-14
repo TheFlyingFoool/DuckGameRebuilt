@@ -1,4 +1,4 @@
-﻿namespace DuckGame
+﻿/*namespace DuckGame
 {
     [ClientOnly]//It is client only :D
     public class FreezeSmoke : Thing
@@ -72,4 +72,4 @@
             Level.Remove(this);
         }
     }
-}
+}*/

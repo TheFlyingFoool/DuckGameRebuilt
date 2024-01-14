@@ -1,5 +1,5 @@
-﻿namespace DuckGame
-{
+﻿/*namespace DuckGame
+{ EDGE!??!? -NiK0
     [ClientOnly]
     public class ATDeathCaliber : AmmoType
     {
@@ -30,4 +30,4 @@
             }
         }
     }
-}
+}*/

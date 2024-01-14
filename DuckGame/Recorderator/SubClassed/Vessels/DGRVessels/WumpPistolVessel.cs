@@ -1,4 +1,4 @@
-﻿namespace DuckGame
+﻿/*namespace DuckGame
 {
     public class WumpPistolVessel : GunVessel
     {
@@ -18,4 +18,4 @@
         }
         
     }
-}
+}*/

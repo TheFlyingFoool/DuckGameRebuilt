@@ -1,4 +1,5 @@
-﻿namespace DuckGame
+﻿//KEPT FOR BACKWARDS COMPATABILITY WITH RECORDERATOR
+namespace DuckGame
 {
     [ClientOnly]
     public class IceSpike : PhysicsObject

@@ -1,7 +1,7 @@
 ﻿namespace DuckGame
 {
     [ClientOnly]
-    [EditorGroup("Rebuilt|Wump|Explosives")]
+    [EditorGroup("Guns|Wump @DGR@")]
     public class WumpBazooka : TampingWeapon
     {
         public WumpBazooka(float xval, float yval)
@@ -21,7 +21,7 @@
             _holdOffset = new Vec2(-2f, -3.5f);
             loseAccuracy = 0.1f;
             maxAccuracyLost = 0.6f;
-            _editorName = "Wump Bazooka";
+            _editorName = "Bazooka";
             editorTooltip = "Funnier name, the missiles this gun are greatly explosive and volatile. Wouldn't recommend.";
             physicsMaterial = PhysicsMaterial.Metal;
             _numBulletsPerFire = 2;

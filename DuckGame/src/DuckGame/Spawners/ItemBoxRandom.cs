@@ -72,7 +72,7 @@ namespace DuckGame
                         }
                         return (T)(object)t;
                     }
-                    else if (Rando.Int(2000) == 1 && typeof(T).IsAssignableFrom(typeof(Gun)))
+                    else if (Rando.Int(5000) == 1 && typeof(T).IsAssignableFrom(typeof(Gun)))
                     {
                         if (Rando.Int(50) == 0) // 1/100000 lmao
                             contains = typeof(SohRock);

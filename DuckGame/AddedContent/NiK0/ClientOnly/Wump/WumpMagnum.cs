@@ -1,4 +1,4 @@
-﻿namespace DuckGame
+﻿/*namespace DuckGame
 {
     [ClientOnly]
     [EditorGroup("Rebuilt|Wump|Pistols")]
@@ -56,4 +56,4 @@
             rise += 0.6f;
         }
     }
-}
+}*/

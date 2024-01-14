@@ -1,4 +1,4 @@
-﻿namespace DuckGame
+﻿/*namespace DuckGame
 {
     [ClientOnly]
     public class WumpMagnumbullet : Bullet
@@ -41,4 +41,4 @@
         }
         public static bool reboundstop;
     }
-}
+}*/
