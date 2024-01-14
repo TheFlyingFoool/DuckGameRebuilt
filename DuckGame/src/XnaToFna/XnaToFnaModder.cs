@@ -8,12 +8,16 @@ using DuckGame;
 using Mono.Cecil;
 using MonoMod;
 using MonoMod.Utils;
+using src.XnaToFna;
 using System;
+using System.Collections.Generic;
 
 namespace XnaToFna
 {
     public class XnaToFnaModder : MonoModder
     {
+        public Dictionary<string, TranspilerMapEntry> TranspilerMap = new Dictionary<string, TranspilerMapEntry>();
+
         public XnaToFnaUtil XTF;
 
         public XnaToFnaModder(XnaToFnaUtil xtf) => XTF = xtf;

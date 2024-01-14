@@ -2422,6 +2422,7 @@
     <Compile Include="src\XnaToFna\TitleServiceConnectionStatus.cs" />
     <Compile Include="src\XnaToFna\TitleServiceDescription.cs" />
     <Compile Include="src\XnaToFna\TitleServiceDirectory.cs" />
+    <Compile Include="src\XnaToFna\TranspilerMapEntry.cs" />
     <Compile Include="src\XnaToFna\WndProc.cs" />
     <Compile Include="src\XnaToFna\X360Helper.cs" />
     <Compile Include="src\XnaToFna\XEXImageData.cs" />
