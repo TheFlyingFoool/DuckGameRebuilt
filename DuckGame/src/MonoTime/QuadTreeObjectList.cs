@@ -198,7 +198,7 @@ namespace DuckGame
 
         public static float offset = 4000000.0f;
         public static float cellsize = 100f;
-        private Vec2[] GetIdForObj(Vec2 Topleft, Vec2 Bottomright)
+        private Vec2[] GetIdForObjThing(Vec2 Topleft, Vec2 Bottomright)
         {
             int top = (int)((Bottomright.y + offset) / cellsize);
             int left = (int)((Topleft.x + offset) / cellsize);
@@ -220,11 +220,25 @@ namespace DuckGame
         {
             height = height * 0.5f;
             width = width * 0.5f;
-
             int top = (int)((Position.y + height + offset) / cellsize);
             int bottom = (int)((Position.y - height + offset) / cellsize);
             int right = (int)((Position.x + width + offset) / cellsize);
             int left = (int)((Position.x - width + offset) / cellsize);
+            if (MostAssigned)
+            {
+                top = (int)Math.Min(TopLeftMost.y, top);
+                bottom = (int)Math.Max(BottomRightMost.y, bottom);
+                right = (int)Math.Min(BottomRightMost.x, right);
+                left = (int)Math.Max(TopLeftMost.x, left);
+                if (top < bottom)
+                {
+                    top = bottom;
+                }
+                if (right < left)
+                {
+                    right = left;
+                }
+            }
             Vec2[] Chunk = new Vec2[(right - left + 1) * (top - bottom + 1)];
             int N = -1;
             for (int x = left; x <= right; x++)
@@ -251,7 +265,16 @@ namespace DuckGame
 
         public IEnumerable<Thing> GetThings(Vec2 Position, float width, float height, Type t)
         {
-            Vec2[] ids = GetIdForObj(Position, width, height);
+            Vec2[] ids;
+            try
+            {
+                ids = GetIdForObj(Position, width, height);
+            }
+            catch
+            {
+                DevConsole.Log("bro");
+                ids = GetIdForObj(Position, width, height);
+            }
             int typekey = t.GetHashCode();
             if (ids.Length == 1)
             {
@@ -335,11 +358,14 @@ namespace DuckGame
         }
         // public Dictionary<Vec2, List<Thing>> Buckets = new Dictionary<Vec2, List<Thing>>();
         public Dictionary<Vec2, Dictionary<int, List<Thing>>> Buckets = new Dictionary<Vec2, Dictionary<int, List<Thing>>>();
+        private Vec2 TopLeftMost = new Vec2(0,0);
+        private Vec2 BottomRightMost = new Vec2(0,0);
+        private bool MostAssigned;
         public static float Leniancy = 9f;
         public static int LineLeniancy = 0;
         public void UpdateObject(Thing thing)  //float size = Math.Max(Math.Max(thing.right - thing.left, thing.bottom - thing.top), 16);
         {
-            Vec2[] buckets = GetIdForObj(thing.topLeft - new Vec2(Leniancy), thing.bottomRight + new Vec2(Leniancy));//GetIdForObj(thing.position, thing.right - thing.left, thing.bottom - thing.top);
+            Vec2[] buckets = GetIdForObjThing(thing.topLeft - new Vec2(Leniancy), thing.bottomRight + new Vec2(Leniancy));//GetIdForObj(thing.position, thing.right - thing.left, thing.bottom - thing.top);
             if (thing.Buckets.SequenceEqual(buckets))
             {
                 return;
@@ -384,7 +410,6 @@ namespace DuckGame
                 //    }
                 //    //_allObjectsByType.Add(key, obj);
                 //}
-                Buckets[item] = output;
                 //Console.WriteLine(item);
             }
             thing.Buckets = buckets;
@@ -428,7 +453,26 @@ namespace DuckGame
                 }
                 Buckets[item] = output;
                 //Console.WriteLine(item);
+                if (!MostAssigned)
+                {
+                    MostAssigned = true;
+                    TopLeftMost = item;
+                    BottomRightMost = item;
+                }
+                else
+                {
+                    if (item.x < TopLeftMost.x)
+                        TopLeftMost.x = item.x;
+                    if (item.x > TopLeftMost.y)
+                        TopLeftMost.y = item.y;
+                    if (item.x > BottomRightMost.x)
+                        BottomRightMost.x = item.x;
+                    if (item.x < BottomRightMost.y)
+                        BottomRightMost.y = item.y;
+                }
+                Buckets[item] = output;
             }
+
 
         }
         public void RegisterObject(Thing thing)
@@ -443,7 +487,7 @@ namespace DuckGame
                 return;
             }
 
-            thing.Buckets = GetIdForObj(thing.topLeft, thing.bottomRight); // float size = Math.Max(Math.Max(thing.right - thing.left, thing.bottom - thing.top), 16);
+            thing.Buckets = GetIdForObjThing(thing.topLeft, thing.bottomRight); // float size = Math.Max(Math.Max(thing.right - thing.left, thing.bottom - thing.top), 16);
             thing.oldposition = thing.position;
             foreach (Vec2 item in thing.Buckets)
             {
@@ -482,6 +526,23 @@ namespace DuckGame
                     }
 
                     //_allObjectsByType.Add(key, obj);
+                }
+                if (!MostAssigned)
+                {
+                    MostAssigned = true;
+                    TopLeftMost = item;
+                    BottomRightMost = item;
+                }
+                else
+                {
+                    if (item.x < TopLeftMost.x)
+                        TopLeftMost.x = item.x;
+                    if (item.x > TopLeftMost.y)
+                        TopLeftMost.y = item.y;
+                    if (item.x > BottomRightMost.x)
+                        BottomRightMost.x = item.x;
+                    if (item.x < BottomRightMost.y)
+                        BottomRightMost.y = item.y;
                 }
                 Buckets[item] = TypeList;
                 //Console.WriteLine(item);
