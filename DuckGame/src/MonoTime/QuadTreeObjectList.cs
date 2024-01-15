@@ -265,16 +265,7 @@ namespace DuckGame
 
         public IEnumerable<Thing> GetThings(Vec2 Position, float width, float height, Type t)
         {
-            Vec2[] ids;
-            try
-            {
-                ids = GetIdForObj(Position, width, height);
-            }
-            catch
-            {
-                DevConsole.Log("bro");
-                ids = GetIdForObj(Position, width, height);
-            }
+            Vec2[] ids = GetIdForObj(Position, width, height);
             int typekey = t.GetHashCode();
             if (ids.Length == 1)
             {
