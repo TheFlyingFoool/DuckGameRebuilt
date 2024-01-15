@@ -889,6 +889,7 @@ namespace DuckGame
                 }
 
                 Layer.Console.visible = false;
+                Layer.HUD.visible = false;
                 rd2 = new RenderTarget2D(width, height);
                 Graphics.SettingForShader = true;
                 Graphics.SetRenderTarget(rd2);
@@ -1004,6 +1005,8 @@ namespace DuckGame
                 }
                 Layer.Console.visible = true;
                 Layer.Console.Draw(true);
+                Layer.HUD.visible = true;
+                Layer.HUD.Draw(true);
                 for (int i = 0; i < dispose.Count; i++)
                 {
                     dispose[i].Dispose();
