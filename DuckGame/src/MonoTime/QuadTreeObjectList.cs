@@ -238,6 +238,10 @@ namespace DuckGame
                 {
                     right = left;
                 }
+                bottom -= 1;
+                top += 1;
+                right += 1;
+                left -= 1;
             }
             Vec2[] Chunk = new Vec2[(right - left + 1) * (top - bottom + 1)];
             int N = -1;
