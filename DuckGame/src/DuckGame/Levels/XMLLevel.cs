@@ -43,15 +43,14 @@ namespace DuckGame
 
         private void InitializeSeed()
         {
-            if (NetworkDebugger.enabled && NetworkDebugger.Recorder.active != null)
-                seed = NetworkDebugger.Recorder.active.seed;
-            else
-                seed = Rando.Int(2147483646);
+            if (NetworkDebugger.enabled && NetworkDebugger.Recorder.active != null) seed = NetworkDebugger.Recorder.active.seed;
+            else seed = Rando.Int(2147483646);
         }
 
         public XMLLevel(string level)
         {
-            InitializeSeed();
+            InitializeSeed(); //added these special codes here becuase crashes happen often around here -NiK0
+            Main.SpecialCode = ".client";
             if (level.EndsWith(".client"))
             {
                 isCustomLevel = true;
@@ -59,43 +58,61 @@ namespace DuckGame
                 _clientLevel = true;
                 _customLoad = true;
             }
+            Main.SpecialCode = ".custom";
             if (level.EndsWith(".custom"))
             {
+                Main.SpecialCode2 = "010";
                 DevConsole.Log(DCSection.General, "Loading Level " + level);
                 isCustomLevel = true;
                 _customLevel = true;
+                Main.SpecialCode2 = "020";
                 level = level.Substring(0, level.Length - 7);
                 if (Network.isActive)
                 {
+                    Main.SpecialCode2 = "021";
                     LevelData level1 = Content.GetLevel(level);
+                    Main.SpecialCode2 = "022";
                     _checksum = level1.GetChecksum();
+                    Main.SpecialCode2 = "023";
                     _data = level1;
                     _customLoad = true;
-                    if (Network.isServer)
-                        _compressedData = GetCompressedLevelData(level1, level);
+                    Main.SpecialCode2 = "024";
+                    if (Network.isServer) _compressedData = GetCompressedLevelData(level1, level);
                 }
             }
+            Main.SpecialCode = "WORKSHOP";
             if (level == "WORKSHOP")
             {
+                Main.SpecialCode2 = "000";
                 _customLevel = true;
                 isCustomLevel = true;
+                Main.SpecialCode2 = "100";
                 level = level.Substring(0, level.Length - 7);
                 LevelData nextLevel = RandomLevelDownloader.GetNextLevel();
+                Main.SpecialCode2 = "101";
                 _checksum = nextLevel.GetChecksum();
                 _data = nextLevel;
                 _customLoad = true;
+                Main.SpecialCode2 = "200";
                 if (Network.isServer && Network.isActive)
                 {
+                    Main.SpecialCode2 = "201";
                     MemoryStream memoryStream = new MemoryStream();
                     BinaryWriter binaryWriter = new BinaryWriter(new GZipStream(memoryStream, CompressionMode.Compress));
+                    Main.SpecialCode2 = "202";
                     binaryWriter.Write(nextLevel.metaData.guid.ToString());
                     BitBuffer data = nextLevel.GetData();
+                    Main.SpecialCode2 = "203";
                     binaryWriter.Write(data.lengthInBytes);
                     binaryWriter.Write(data.buffer, 0, data.lengthInBytes);
+                    Main.SpecialCode2 = "204";
                     binaryWriter.Close();
                     _compressedData = memoryStream.ToArray();
+                    Main.SpecialCode2 = "205";
                 }
             }
+            Main.SpecialCode = "END";
+            Main.SpecialCode2 = "";
             _level = level;
         }
 

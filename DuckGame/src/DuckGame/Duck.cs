@@ -2147,9 +2147,9 @@ namespace DuckGame
 
         public void Ressurect()
         {
+            Main.SpecialCode = "CCC1"; //added these special codes here for now since Ressurect crashes are very common apparently -NiK0
             dead = false;
-            if (ragdoll != null)
-                ragdoll.Unragdoll();
+            if (ragdoll != null) ragdoll.Unragdoll();
             ResetNonServerDeathState();
             Regenerate();
             crouch = false;
@@ -2158,18 +2158,22 @@ namespace DuckGame
             _onFire = false;
             hSpeed = 0f;
             vSpeed = 0f;
-            if (Level.current != null && Level.current.camera is FollowCam)
-                (Level.current.camera as FollowCam).Add(this);
+            Main.SpecialCode = "CCC2";
+            if (Level.current != null && Level.current.camera is FollowCam) (Level.current.camera as FollowCam).Add(this);
             _cooked = null;
             ResurrectEffect(position);
             vSpeed = -3f;
-            if (!Network.isActive || !isServerForObject)
-                return;
+            Main.SpecialCode = "CCC3";
+            if (!Network.isActive || !isServerForObject) return;
+            Main.SpecialCode = "CCC4";
             if (_cookedInstance != null)
+            {
                 SuperFondle(_cookedInstance, DuckNetwork.localConnection);
                 _cookedInstance.visible = false;
                 _cookedInstance.active = false;
-            ++lastAppliedLifeChange;
+            }
+            Main.SpecialCode = "CCC5";
+            lastAppliedLifeChange++;
             Send.Message(new NMRessurect(position, this, lastAppliedLifeChange));
         }
 

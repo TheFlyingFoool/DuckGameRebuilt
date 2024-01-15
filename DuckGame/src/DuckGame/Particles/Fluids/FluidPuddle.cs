@@ -222,7 +222,7 @@ namespace DuckGame
         public MaterialLavaWobble mt;
         public override void Update()
         {
-            if (DGRSettings.HeatWaveMultiplier > 0)
+            if (DGRSettings.HeatWaveMultiplier > 0.05f)
             {
                 if (DGRSettings.HeatWaveMultiplier > 1) DGRSettings.HeatWaveMultiplier = 1;
                 if (data.heat > 0)
