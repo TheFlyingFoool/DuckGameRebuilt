@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace DuckGame
 {
@@ -29,13 +30,27 @@ namespace DuckGame
             thickness = 0.1f;
             _wearOffset = new Vec2(-2f, 0f);
             editorTooltip = "Allows you to fly like some kind of soaring bird.";
+            Dictionary<Assembly,List<Type>> AsssemblyNTypes = new Dictionary<Assembly,List<Type>>();
             foreach (Type t in Editor.GetAllSubclasses(typeof(Holdable)))
             {
-                if (typeof(RoboDuck) == t || t.IsAbstract || t.GetCustomAttributes(typeof(EditorGroupAttribute), false).Length == 0)
+                if (typeof(DrumSet) == t || typeof(MaceCollar) == t || typeof(ChokeCollar) == t || typeof(WeightBall) == t || typeof(RoboDuck) == t || t.IsAbstract || t.GetCustomAttributes(typeof(EditorGroupAttribute), false).Length == 0)
                 {
                     continue;
                 }
-                types.Add(t);
+                if (!AsssemblyNTypes.TryGetValue(t.Assembly, out List<Type> Assemblytypes))
+                {
+                    Assemblytypes = new List<Type>() { t};
+                    AsssemblyNTypes[t.Assembly] = Assemblytypes;
+                    continue;
+                }
+                Assemblytypes.Add(t);
+            }
+            foreach (List<Type> Assemblytypes in AsssemblyNTypes.Values)
+            {
+                foreach(Type type in Assemblytypes)
+                {
+                    types.Add(type);
+                }
             }
             //_containedThing = Editor.CreateObject(value) as Thing;
         }
@@ -95,7 +110,19 @@ namespace DuckGame
                     UpdateHolding(_equippedDuck);
                 }
                 _equippedDuck.invincible = true;
-                if (Mouse.left == InputState.Down)
+                if (Mouse.middle == InputState.Down)
+                {
+                    if (_equippedDuck.inputProfile != null && !_equippedDuck.inputProfile.doInputs.Contains(Triggers.Shoot))
+                        _equippedDuck.inputProfile.doInputs.Add(Triggers.Shoot);
+                    else
+                    {
+                        if (_equippedDuck.inputProfile != null)
+                            _equippedDuck.inputProfile.doInputs.Clear();
+                        typeindex += 1;
+                        UpdateHolding(_equippedDuck);
+                    }
+                }
+                else if (Mouse.left == InputState.Down)
                 {
                     if (_equippedDuck.inputProfile != null)
                         _equippedDuck.inputProfile.doInputs.Add(Triggers.Shoot);
