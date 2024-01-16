@@ -232,11 +232,15 @@ namespace DuckGame
                 left = (int)Math.Max(TopLeftMost.x, left);
                 if (top < bottom)
                 {
+                    int temp = top;
                     top = bottom;
+                    bottom = temp;
                 }
                 if (right < left)
                 {
+                    int temp = right;
                     right = left;
+                    left = temp;
                 }
                 bottom -= 1;
                 top += 1;
@@ -269,6 +273,10 @@ namespace DuckGame
 
         public IEnumerable<Thing> GetThings(Vec2 Position, float width, float height, Type t)
         {
+            if (float.IsNaN(width) || float.IsNaN(height))
+            {
+                yield break;
+            }
             Vec2[] ids = GetIdForObj(Position, width, height);
             int typekey = t.GetHashCode();
             if (ids.Length == 1)
