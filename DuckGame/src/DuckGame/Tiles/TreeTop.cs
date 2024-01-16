@@ -42,12 +42,15 @@ namespace DuckGame
         public override void Draw()
         {
             graphic.flipH = offDir <= 0;
-            float myX = x;
 
-            angle += GameLevel.rainwind * sw * 0.02f;
-            base.Draw();
-            angle = 0;
-            x = myX;
+            if (DGRSettings.AmbientParticles)
+            {
+                float pAng = angle;
+                angle += GameLevel.rainwind * sw * 0.02f;
+                base.Draw();
+                angle = pAng;
+            }
+            else base.Draw();
         }
     }
 }

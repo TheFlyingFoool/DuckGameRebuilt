@@ -6,7 +6,6 @@
     public class GoldenTreeTop : Thing
     {
         public SpriteMap sprite;
-        public EditorProperty<bool> snow = new EditorProperty<bool>(false);
         public GoldenTreeTop(float xpos, float ypos)
           : base(xpos, ypos)
         {
@@ -36,14 +35,15 @@
         public SinWave sw;
         public override void Draw()
         {
-            sprite.frame = snow ? 1 : 0;
             graphic.flipH = offDir <= 0;
-            float myX = x;
-
-            angle += GameLevel.rainwind * sw * 0.03f;
-            base.Draw();
-            angle = 0;
-            x = myX;
+            if (DGRSettings.AmbientParticles)
+            {
+                float pAng = angle;
+                angle += GameLevel.rainwind * sw * 0.03f;
+                base.Draw();
+                angle = pAng;
+            }
+            else base.Draw();
         }
     }
 }

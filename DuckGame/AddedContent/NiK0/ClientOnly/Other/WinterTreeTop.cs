@@ -37,12 +37,14 @@
         {
             sprite.frame = snow ? 1 : 0;
             graphic.flipH = offDir <= 0;
-            float myX = x;
-
-            angle += GameLevel.rainwind * sw * 0.028f;
-            base.Draw();
-            angle = 0;
-            x = myX;
+            if (DGRSettings.AmbientParticles)
+            {
+                float pAng = angle;
+                angle += GameLevel.rainwind * sw * 0.028f;
+                base.Draw();
+                angle = pAng;
+            }
+            else base.Draw();
         }
     }
 }
