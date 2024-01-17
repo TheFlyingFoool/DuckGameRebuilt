@@ -33,6 +33,7 @@ namespace DuckGame
         public static bool networkDeserialize = false;
         public static List<string> hatSearchPaths = new List<string>()
         {
+          Directory.GetCurrentDirectory(),
           Directory.GetCurrentDirectory() + "/Hats",
           DuckFile.saveDirectory + "/Hats",
           DuckFile.saveDirectory + "/Custom/Hats"
@@ -225,7 +226,6 @@ namespace DuckGame
 
         public static void DeserializeCustomHats()
         {
-            LoadCustomHatsFromFolder(Directory.GetCurrentDirectory(), "hat");
             foreach (string hatSearchPath in hatSearchPaths)
             {
                 LoadCustomHatsFromFolder(hatSearchPath, "hat");
