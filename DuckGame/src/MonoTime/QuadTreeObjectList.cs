@@ -230,22 +230,6 @@ namespace DuckGame
                 bottom = (int)Math.Max(BottomRightMost.y, bottom);
                 right = (int)Math.Min(BottomRightMost.x, right);
                 left = (int)Math.Max(TopLeftMost.x, left);
-                if (top < bottom)
-                {
-                    int temp = top;
-                    top = bottom;
-                    bottom = temp;
-                }
-                if (right < left)
-                {
-                    int temp = right;
-                    right = left;
-                    left = temp;
-                }
-                bottom -= 1;
-                top += 1;
-                right += 1;
-                left -= 1;
             }
             Vec2[] Chunk = new Vec2[(right - left + 1) * (top - bottom + 1)];
             int N = -1;
@@ -466,11 +450,11 @@ namespace DuckGame
                 {
                     if (item.x < TopLeftMost.x)
                         TopLeftMost.x = item.x;
-                    if (item.x > TopLeftMost.y)
+                    if (item.y > TopLeftMost.y)
                         TopLeftMost.y = item.y;
                     if (item.x > BottomRightMost.x)
                         BottomRightMost.x = item.x;
-                    if (item.x < BottomRightMost.y)
+                    if (item.y < BottomRightMost.y)
                         BottomRightMost.y = item.y;
                 }
                 Buckets[item] = output;
@@ -540,11 +524,11 @@ namespace DuckGame
                 {
                     if (item.x < TopLeftMost.x)
                         TopLeftMost.x = item.x;
-                    if (item.x > TopLeftMost.y)
+                    if (item.y > TopLeftMost.y)
                         TopLeftMost.y = item.y;
                     if (item.x > BottomRightMost.x)
                         BottomRightMost.x = item.x;
-                    if (item.x < BottomRightMost.y)
+                    if (item.y < BottomRightMost.y)
                         BottomRightMost.y = item.y;
                 }
                 Buckets[item] = TypeList;
