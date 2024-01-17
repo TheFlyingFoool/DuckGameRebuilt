@@ -36,7 +36,7 @@ namespace DuckGame
 
         public virtual void Apply()
         {
-            if (_effect == null)
+            if (_effect == null || _effect.effect == null)
                 return;
             foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
                 pass.Apply();

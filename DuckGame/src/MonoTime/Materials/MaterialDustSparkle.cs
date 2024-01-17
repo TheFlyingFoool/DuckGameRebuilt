@@ -32,8 +32,7 @@ namespace DuckGame
             SetValue("fade", Layer.Game.fade * fade);
             SetValue("viewMatrix", Graphics.screen.viewMatrix);
             SetValue("projMatrix", Graphics.screen.projMatrix);
-            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
-                pass.Apply();
+            base.Apply();
         }
     }
 }

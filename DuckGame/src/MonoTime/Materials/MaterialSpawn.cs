@@ -14,8 +14,7 @@ namespace DuckGame
             }
             effect.effect.Parameters["screenCross"].SetValue(0.5f);
             effect.effect.Parameters["scanMul"].SetValue(1f);
-            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
-                pass.Apply();
+            base.Apply();
         }
     }
 }

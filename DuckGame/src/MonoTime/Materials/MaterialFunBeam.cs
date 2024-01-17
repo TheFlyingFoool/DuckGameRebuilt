@@ -22,8 +22,7 @@ namespace DuckGame
                 SetValue("intensity", intensity);
             }
             Graphics.device.SamplerStates[1] = SamplerState.PointWrap;
-            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
-                pass.Apply();
+            base.Apply();
         }
     }
 }

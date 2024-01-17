@@ -30,10 +30,7 @@ namespace DuckGame
                 }
             }
             Graphics.device.SamplerStates[1] = SamplerState.PointClamp;
-            foreach (EffectPass effectPass in _effect.effect.CurrentTechnique.Passes)
-            {
-                effectPass.Apply();
-            }
+            base.Apply();
         }
 
         public float timeMult = 1;

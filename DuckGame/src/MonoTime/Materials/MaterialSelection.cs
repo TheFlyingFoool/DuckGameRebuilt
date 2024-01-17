@@ -15,8 +15,7 @@ namespace DuckGame
         public override void Apply()
         {
             SetValue("fade", fade);
-            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
-                pass.Apply();
+            base.Apply();
         }
     }
 }

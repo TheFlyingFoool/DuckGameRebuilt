@@ -13,8 +13,7 @@ namespace DuckGame
         {
             _effect.effect.Parameters["offset"].SetValue(offset);
             _effect.effect.Parameters["offset2"].SetValue(offset2);
-            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
-                pass.Apply();
+            base.Apply();
         }
     }
 }

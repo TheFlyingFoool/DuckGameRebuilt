@@ -49,8 +49,7 @@ namespace DuckGame
                 _scrollX = _rot;
                 _scrollY = -_rot2;
             }
-            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
-                pass.Apply();
+            base.Apply();
         }
     }
 }

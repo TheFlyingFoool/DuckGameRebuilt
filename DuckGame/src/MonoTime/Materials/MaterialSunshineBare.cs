@@ -9,8 +9,7 @@ namespace DuckGame
         public override void Apply()
         {
             Graphics.device.SamplerStates[0] = SamplerState.LinearClamp;
-            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
-                pass.Apply();
+            base.Apply();
         }
     }
 }

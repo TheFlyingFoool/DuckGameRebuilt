@@ -12,8 +12,7 @@ namespace DuckGame
 
         public override void Apply()
         {
-            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
-                pass.Apply();
+            base.Apply();
         }
     }
 }

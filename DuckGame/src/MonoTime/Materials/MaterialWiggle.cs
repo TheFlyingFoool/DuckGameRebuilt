@@ -21,8 +21,7 @@ namespace DuckGame
                 SetValue("xpos", _sprite.x);
                 SetValue("ypos", _sprite.y);
             }
-            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
-                pass.Apply();
+            base.Apply();
         }
     }
 }

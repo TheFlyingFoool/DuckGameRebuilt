@@ -46,8 +46,7 @@ namespace DuckGame
             SetValue("R", IN.r / 255f);
             SetValue("G", IN.g / 255f);
             SetValue("B", IN.b / 255f);
-            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
-                pass.Apply();
+            base.Apply();
         }
     }
 }

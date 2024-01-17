@@ -17,8 +17,7 @@ namespace DuckGame
             Graphics.device.Textures[1] = (Texture2D)_colorMap;
             Graphics.device.SamplerStates[1] = SamplerState.PointClamp;
             Graphics.device.SamplerStates[0] = SamplerState.PointClamp;
-            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
-                pass.Apply();
+            base.Apply();
         }
     }
 }

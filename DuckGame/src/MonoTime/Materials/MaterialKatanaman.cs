@@ -39,8 +39,7 @@ namespace DuckGame
             SetValue("light3y", vec2_6.y + vec2_5.y);
             SetValue("add", Layer.kGameLayerAdd);
             SetValue("fade", Layer.kGameLayerFade);
-            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
-                pass.Apply();
+            base.Apply();
         }
     }
 }

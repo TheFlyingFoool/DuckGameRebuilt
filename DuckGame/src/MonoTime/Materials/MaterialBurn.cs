@@ -27,8 +27,7 @@ namespace DuckGame
             SetValue("width", texture.frameWidth / texture.width);
             SetValue("height", texture.frameHeight / texture.height);
             SetValue("burn", _burnVal);
-            foreach (EffectPass pass in _effect.effect.CurrentTechnique.Passes)
-                pass.Apply();
+            base.Apply();
         }
     }
 }
