@@ -69,6 +69,7 @@ namespace DuckGame
 
         public override void Update()
         {
+            if (poked == this) poked = null;
             if (isServerForObject && equippedDuck != null && poked == null && !crushed)
             {
                 if (throwCooldown > 0)

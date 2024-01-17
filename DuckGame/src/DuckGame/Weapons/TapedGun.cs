@@ -362,6 +362,8 @@ namespace DuckGame
 
         public override void Update()
         {
+            if (gun1 == this) gun1 = null;
+            if (gun2 == this) gun2 = null;
             UpdateGunOwners();
             if (isServerForObject)
             {
