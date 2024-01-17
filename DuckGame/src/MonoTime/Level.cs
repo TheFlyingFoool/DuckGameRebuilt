@@ -1200,7 +1200,7 @@ namespace DuckGame
 
         public static IEnumerable<T> CheckCircleAll<T>(Vec2 p1, float radius)
         {
-            if (radius > Int32.MaxValue - 1000) // for JadeMod MegaBuster, Why the fuck do they use 2.1474836E+09f for the radius. *pain
+            if (radius > 100000) // for JadeMod MegaBuster, Why the fuck do they use 2.1474836E+09f for the radius. *pain
                 return CheckCircleAllOld<T>(p1, radius);
             return current.CollisionCircleAll<T>(p1, radius);
         }
@@ -1225,6 +1225,10 @@ namespace DuckGame
 
         public static IEnumerable<T> CheckRectAll<T>(Vec2 p1, Vec2 p2)
         {
+            if (p1.Distance(p2) > 100000)
+            {
+                return current.CollisionRectAll<T>(p1, p2, null);
+            }
             return current.CollisionRectAllDan<T>(p1, p2, null); // spooky time
             //return Level.current.CollisionRectAll<T>(p1, p2, null);
         }
