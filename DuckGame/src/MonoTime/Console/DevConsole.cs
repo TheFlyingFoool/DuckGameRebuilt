@@ -1534,15 +1534,20 @@ namespace DuckGame
 
         private static void HitBackspace(int times)
         {
-            for (int i = 0; i < times; i++)
+            string TypeingString = _core.Typing;
+            try
             {
-                if (_core.Typing.Length > 0 && _core.cursorPosition > 0)
+                for (int i = 0; i < times; i++)
                 {
-                    _core.Typing = _core.Typing.Remove(_core.cursorPosition - 1, 1);
-                    --_core.cursorPosition;
+                    if (TypeingString.Length > 0 && _core.cursorPosition > 0)
+                    {
+                        TypeingString = _core.Typing.Remove(_core.cursorPosition - 1, 1);
+                        --_core.cursorPosition;
+                    }
                 }
             }
-
+            catch { }
+            _core.Typing = TypeingString;
             _core.lastCommandIndex = -1;
         }
 
