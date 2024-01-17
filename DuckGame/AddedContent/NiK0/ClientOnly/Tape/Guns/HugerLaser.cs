@@ -145,7 +145,7 @@ namespace DuckGame
         public Sound s;
         public override void OnPressAction()
         {
-            s = SFX.Play("Audio/SFX/DeltaLaserCharge", 1);
+            s = SFX.Play("HugerLaserCharge", 1);
             _chargeAnim.SetAnimation("charge");
         }
         public override void OnHoldAction()
