@@ -224,13 +224,13 @@ namespace DuckGame
             int bottom = (int)((Position.y - height + offset) / cellsize);
             int right = (int)((Position.x + width + offset) / cellsize);
             int left = (int)((Position.x - width + offset) / cellsize);
-            if (MostAssigned)
-            {
-                top = (int)Math.Min(TopLeftMost.y, top);
-                bottom = (int)Math.Max(BottomRightMost.y, bottom);
-                right = (int)Math.Min(BottomRightMost.x, right);
-                left = (int)Math.Max(TopLeftMost.x, left);
-            }
+            //if (MostAssigned)
+            //{
+            //    top = (int)Math.Min(TopLeftMost.y, top);
+            //    bottom = (int)Math.Max(BottomRightMost.y, bottom);
+            //    right = (int)Math.Min(BottomRightMost.x, right);
+            //    left = (int)Math.Max(TopLeftMost.x, left);
+            //}
             Vec2[] Chunk = new Vec2[(right - left + 1) * (top - bottom + 1)];
             int N = -1;
             for (int x = left; x <= right; x++)
@@ -345,9 +345,9 @@ namespace DuckGame
         }
         // public Dictionary<Vec2, List<Thing>> Buckets = new Dictionary<Vec2, List<Thing>>();
         public Dictionary<Vec2, Dictionary<int, List<Thing>>> Buckets = new Dictionary<Vec2, Dictionary<int, List<Thing>>>();
-        private Vec2 TopLeftMost = new Vec2(0,0);
-        private Vec2 BottomRightMost = new Vec2(0,0);
-        private bool MostAssigned;
+        //private Vec2 TopLeftMost = new Vec2(0,0);
+        //private Vec2 BottomRightMost = new Vec2(0,0);
+        //private bool MostAssigned;
         public static float Leniancy = 9f;
         public static int LineLeniancy = 0;
         public void UpdateObject(Thing thing)  //float size = Math.Max(Math.Max(thing.right - thing.left, thing.bottom - thing.top), 16);
@@ -440,23 +440,23 @@ namespace DuckGame
                 }
                 Buckets[item] = output;
                 //Console.WriteLine(item);
-                if (!MostAssigned)
-                {
-                    MostAssigned = true;
-                    TopLeftMost = item;
-                    BottomRightMost = item;
-                }
-                else
-                {
-                    if (item.x < TopLeftMost.x)
-                        TopLeftMost.x = item.x;
-                    if (item.y > TopLeftMost.y)
-                        TopLeftMost.y = item.y;
-                    if (item.x > BottomRightMost.x)
-                        BottomRightMost.x = item.x;
-                    if (item.y < BottomRightMost.y)
-                        BottomRightMost.y = item.y;
-                }
+                //if (!MostAssigned)
+                //{
+                //    MostAssigned = true;
+                //    TopLeftMost = item;
+                //    BottomRightMost = item;
+                //}
+                //else
+                //{
+                //    if (item.x < TopLeftMost.x)
+                //        TopLeftMost.x = item.x;
+                //    if (item.y > TopLeftMost.y)
+                //        TopLeftMost.y = item.y;
+                //    if (item.x > BottomRightMost.x)
+                //        BottomRightMost.x = item.x;
+                //    if (item.y < BottomRightMost.y)
+                //        BottomRightMost.y = item.y;
+                //}
                 Buckets[item] = output;
             }
 
@@ -514,23 +514,23 @@ namespace DuckGame
 
                     //_allObjectsByType.Add(key, obj);
                 }
-                if (!MostAssigned)
-                {
-                    MostAssigned = true;
-                    TopLeftMost = item;
-                    BottomRightMost = item;
-                }
-                else
-                {
-                    if (item.x < TopLeftMost.x)
-                        TopLeftMost.x = item.x;
-                    if (item.y > TopLeftMost.y)
-                        TopLeftMost.y = item.y;
-                    if (item.x > BottomRightMost.x)
-                        BottomRightMost.x = item.x;
-                    if (item.y < BottomRightMost.y)
-                        BottomRightMost.y = item.y;
-                }
+                //if (!MostAssigned)
+                //{
+                //    MostAssigned = true;
+                //    TopLeftMost = item;
+                //    BottomRightMost = item;
+                //}
+                //else
+                //{
+                //    if (item.x < TopLeftMost.x)
+                //        TopLeftMost.x = item.x;
+                //    if (item.y > TopLeftMost.y)
+                //        TopLeftMost.y = item.y;
+                //    if (item.x > BottomRightMost.x)
+                //        BottomRightMost.x = item.x;
+                //    if (item.y < BottomRightMost.y)
+                //        BottomRightMost.y = item.y;
+                //}
                 Buckets[item] = TypeList;
                 //Console.WriteLine(item);
             }
