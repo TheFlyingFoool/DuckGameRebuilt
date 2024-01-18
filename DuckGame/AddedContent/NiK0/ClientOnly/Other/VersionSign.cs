@@ -93,11 +93,13 @@ namespace DuckGame
             {
                 s = "DEBUG";
                 c = Color.Green * Rando.Float(0.3f, 1f);
+                Graphics.DrawString(Program.CURRENT_VERSION_ID, position + new Vec2(9, 38f) - center, c, depth + 3, null, 0.35f);
             }
             else if (Program.IS_DEV_BUILD)
             {
                 s = "DEV♥VER";
                 c = Color.DeepPink;
+                Graphics.DrawString(Program.CURRENT_VERSION_ID, position + new Vec2(9, 38) - center, c, depth + 3, null, 0.35f);
             }
             Vec2 v = new Vec2(x + 8, y + 35) - center;
 

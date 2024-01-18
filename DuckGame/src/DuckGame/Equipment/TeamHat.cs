@@ -634,6 +634,8 @@ namespace DuckGame
                 //this._prevOwnerPosition = this._owner.position;
                 _particleAlpha = _metadata.ParticleAlpha.value;
                 _particleScale = _metadata.ParticleScale.value;
+                if (_metadata.NoAirFriction.value) _airFriction = 0;
+                uncappedSpeed = _metadata.UncappedSpeed.value;
                 _particleGravity = new Vec2(_owner.OffsetLocal(_metadata.ParticleGravity.value).x, _metadata.ParticleGravity.value.y);
                 _particleFriction = _metadata.ParticleFriction.value;
                 _particleRotation = _metadata.ParticleRotation.value;
@@ -661,13 +663,22 @@ namespace DuckGame
                 alpha = Lerp.FloatSmooth(_particleAlpha.x, _particleAlpha.y, 1f - _life);
                 angleDegrees = Lerp.FloatSmooth(_particleRotation.x, _particleRotation.y, 1f - _life) * 10f;
             }
-
+            public bool uncappedSpeed;
             public override void Update()
             {
+                
                 velocity += _particleGravity;
                 velocity *= _particleFriction;
-                hSpeed = Maths.Clamp(hSpeed, -4f, 4f);
-                vSpeed = Maths.Clamp(vSpeed, -4f, 4f);
+                if (uncappedSpeed)
+                {
+                    hSpeed = Maths.Clamp(hSpeed, -8f, 8f);
+                    vSpeed = Maths.Clamp(vSpeed, -8f, 8f);
+                }
+                else
+                {
+                    hSpeed = Maths.Clamp(hSpeed, -4f, 4f);
+                    vSpeed = Maths.Clamp(vSpeed, -4f, 4f);
+                }
                 _life -= (float)(60 / (60 * _lifespan)) * Maths.IncFrameTimer();
                 UpdateAppearance();
                 if (_life <= 0)

@@ -864,6 +864,12 @@ namespace DuckGame
             [Metapixel(82, "Roll", "If this metapixel exists, the hat will roll when on the ground.")]
             public MDBool Roll = new MDBool();
 
+            [Metapixel(83, "No Particle Air Friction", "Removes the particles air friction.")]
+            public MDBool NoAirFriction = new MDBool();
+
+            [Metapixel(84, "Uncapped Particle Speed", "Uncaps the speed of particles.")]
+            public MDBool UncappedSpeed = new MDBool();
+
 
 
             [Metapixel(90, "Cape Length", "Amount of segments the cape will have from 0 to 24 (Default 10)")]
