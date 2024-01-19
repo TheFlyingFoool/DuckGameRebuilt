@@ -922,11 +922,7 @@ namespace DuckGame
             {
                 return;
             }
-            
-            if (DGRSettings.QOLScoreThingButWithoutScore)
-            {
-                drawNameDisplay();
-            }
+           
 
             if (_waitAfterSpawnDings > 0 && _fontFade > 0.01f)
             {
@@ -951,21 +947,23 @@ namespace DuckGame
 
         private void drawNameDisplay()
         {
-            NameDisplayConfig config = Marker.AdvancedConfigAttribute.Get<NameDisplayConfig>();
+            
+            /*
+            
+                NameDisplayConfig config = Marker.AdvancedConfigAttribute.Get<NameDisplayConfig>();
 
-            float fontSize = config.FontSize;
-            float vSpacing = config.VerticalSpacing;
-            float hSpacing = config.HorizontalSpacing;
-            float opacity = config.Opacity;
-            float teamLineWidth = config.TeamLineWidth;
-            NameDisplayConfig.DeadPlayerRemoval removeDeadPlayers = config.RemoveDeadPlayers;
-            float xOffset = config.XOffset;
-            float yOffset = config.YOffset;
-            NameDisplayConfig.ScoreShowing showScore = config.ShowScores;
-
-            bool doTeams = Extensions.MultiPlayerTeamsExist() && teamLineWidth > 0;
-            IEnumerable<Profile> profileList = Profiles.activeNonSpectators;
-            Color[] teamColors = { // yoinked from hypixel bedwars teams
+                float fontSize = config.FontSize;
+                float vSpacing = config.VerticalSpacing;
+                float hSpacing = config.HorizontalSpacing;
+                float opacity = config.Opacity;
+                float teamLineWidth = config.TeamLineWidth;
+                NameDisplayConfig.DeadPlayerRemoval removeDeadPlayers = config.RemoveDeadPlayers;
+                float xOffset = config.XOffset;
+                float yOffset = config.YOffset;
+                NameDisplayConfig.ScoreShowing showScore = config.ShowScores;
+                bool doTeams = Extensions.MultiPlayerTeamsExist() && teamLineWidth > 0;
+                IEnumerable<Profile> profileList = Profiles.activeNonSpectators;
+                Color[] teamColors = { // yoinked from hypixel bedwars teams
                     Color.Blue,
                     Color.Red,
                     Color.Green,
@@ -976,110 +974,111 @@ namespace DuckGame
                     Color.Orange,
                 };
 
-            if (showScore != NameDisplayConfig.ScoreShowing.False)
-                profileList = profileList.OrderByDescending(x => x?.team.score);
+                if (showScore != NameDisplayConfig.ScoreShowing.False)
+                    profileList = profileList.OrderByDescending(x => x?.team.score);
 
-            if (removeDeadPlayers == NameDisplayConfig.DeadPlayerRemoval.True)
-                profileList = profileList.Where(x => x?.duck?.dead == false);
+                if (removeDeadPlayers == NameDisplayConfig.DeadPlayerRemoval.True)
+                    profileList = profileList.Where(x => x?.duck?.dead == false);
 
-            if (removeDeadPlayers == NameDisplayConfig.DeadPlayerRemoval.Ghost)
-                profileList = profileList.OrderByDescending(x => x?.duck?.dead == false);
+                if (removeDeadPlayers == NameDisplayConfig.DeadPlayerRemoval.Ghost)
+                    profileList = profileList.OrderByDescending(x => x?.duck?.dead == false);
 
-            float xPos = xOffset + hSpacing;
-            float yPos = yOffset + vSpacing;
+                float xPos = xOffset + hSpacing;
+                float yPos = yOffset + vSpacing;
 
-            Dictionary<int, int> teamColorMapping = new();
-            Dictionary<int, List<Profile>> profileTeamMembersMapping = new();
-            if (doTeams)
-            {
-                int index = 0;
-                foreach (Profile prof in Profiles.activeNonSpectators)
+                Dictionary<int, int> teamColorMapping = new();
+                Dictionary<int, List<Profile>> profileTeamMembersMapping = new();
+                if (doTeams)
+                {
+                    int index = 0;
+                    foreach (Profile prof in Profiles.activeNonSpectators)
+                    {
+                        int teamHashCode = prof.team.GetHashCode();
+
+                        if (!profileTeamMembersMapping.ContainsKey(teamHashCode))
+                            profileTeamMembersMapping.Add(teamHashCode, new List<Profile>());
+                        profileTeamMembersMapping[teamHashCode].Add(prof);
+
+                        if (teamColorMapping.ContainsKey(teamHashCode))
+                            continue;
+
+                        teamColorMapping[teamHashCode] = index;
+
+                        // increment index by one
+                        // makes sure if teams.length > 8 that colors overflow instead of crashing
+                        index = (index + 1) % teamColors.Length;
+                    }
+
+                    profileList = profileList.OrderBy(x => x.team.GetHashCode());
+
+                    xPos += hSpacing * 2 + teamLineWidth;
+                }
+
+                float longestNameWidth = 0f;
+                int highestScore = 0;
+
+                Dictionary<Profile, Vec2> profileNameSizeMapping = new();
+                foreach (Profile prof in profileList)
+                {
+                    Vec2 size = Extensions.GetStringSize(prof.name.CleanFormatting(), fontSize);
+                    profileNameSizeMapping[prof] = size;
+
+                    if (size.x > longestNameWidth)
+                        longestNameWidth = size.x;
+
+                    if (prof.team.score > highestScore)
+                        highestScore = prof.team.score;
+                }
+
+                foreach (Profile prof in profileList)
                 {
                     int teamHashCode = prof.team.GetHashCode();
 
-                    if (!profileTeamMembersMapping.ContainsKey(teamHashCode))
-                        profileTeamMembersMapping.Add(teamHashCode, new List<Profile>());
-                    profileTeamMembersMapping[teamHashCode].Add(prof);
+                    (float nameW, float nameH) = profileNameSizeMapping[prof];
+                    Color duckColor = prof.persona.colorUsable * opacity;
+                    Color teamColor = doTeams ? (teamColors[teamColorMapping[teamHashCode]] * opacity) : Color.Transparent;
+                    Color borderColor = Color.Black * opacity;
+                    float addedHeight = nameH + vSpacing;
+                    bool isGhost = removeDeadPlayers == NameDisplayConfig.DeadPlayerRemoval.Ghost &&
+                                   prof?.duck?.dead == true;
 
-                    if (teamColorMapping.ContainsKey(teamHashCode))
-                        continue;
+                    Graphics.DrawStringOutline(prof.name, new Vec2(xPos + hSpacing + nameH, yPos), isGhost ? Color.DarkRed * 0.6f * opacity : duckColor, borderColor, 1.1f, scale: fontSize);
 
-                    teamColorMapping[teamHashCode] = index;
+                    Rectangle colorBox = new(xPos, yPos, nameH, nameH - 0.5f);
+                    Graphics.DrawOutlinedRect(colorBox, duckColor, borderColor, 1.1f, fontSize);
 
-                    // increment index by one
-                    // makes sure if teams.length > 8 that colors overflow instead of crashing
-                    index = (index + 1) % teamColors.Length;
-                }
-
-                profileList = profileList.OrderBy(x => x.team.GetHashCode());
-
-                xPos += hSpacing * 2 + teamLineWidth;
-            }
-
-            float longestNameWidth = 0f;
-            int highestScore = 0;
-            
-            Dictionary<Profile, Vec2> profileNameSizeMapping = new();
-            foreach (Profile prof in profileList)
-            {
-                Vec2 size = Extensions.GetStringSize(prof.name.CleanFormatting(), fontSize);
-                profileNameSizeMapping[prof] = size;
-
-                if (size.x > longestNameWidth)
-                    longestNameWidth = size.x;
-
-                if (prof.team.score > highestScore)
-                    highestScore = prof.team.score;
-            }
-
-            foreach (Profile prof in profileList)
-            {
-                int teamHashCode = prof.team.GetHashCode();
-
-                (float nameW, float nameH) = profileNameSizeMapping[prof];
-                Color duckColor = prof.persona.colorUsable * opacity;
-                Color teamColor = doTeams ? (teamColors[teamColorMapping[teamHashCode]] * opacity) : Color.Transparent;
-                Color borderColor = Color.Black * opacity;
-                float addedHeight = nameH + vSpacing;
-                bool isGhost = removeDeadPlayers == NameDisplayConfig.DeadPlayerRemoval.Ghost &&
-                               prof?.duck?.dead == true;
-                
-                Graphics.DrawStringOutline(prof.name, new Vec2(xPos + hSpacing + nameH, yPos), isGhost ? Color.DarkRed * 0.6f * opacity : duckColor, borderColor, 1.1f, scale: fontSize);
-
-                Rectangle colorBox = new(xPos, yPos, nameH, nameH - 0.5f);
-                Graphics.DrawOutlinedRect(colorBox, duckColor, borderColor, 1.1f, fontSize);
-
-                if (showScore == NameDisplayConfig.ScoreShowing.Bar)
-                {
-                    for (int i = 0; i < prof.team.score; i++)
+                    if (showScore == NameDisplayConfig.ScoreShowing.Bar)
                     {
-                        float barPartX = xPos + nameH / 2 * (i + 1) - fontSize * (i + 1) + longestNameWidth + hSpacing * 3;
-                        float barPartY = yPos - 0.5f;
-                        Graphics.DrawOutlinedRect(new Rectangle(barPartX, barPartY, nameH / 2, nameH + 0.5f), duckColor, borderColor, 1.1f, fontSize);
+                        for (int i = 0; i < prof.team.score; i++)
+                        {
+                            float barPartX = xPos + nameH / 2 * (i + 1) - fontSize * (i + 1) + longestNameWidth + hSpacing * 3;
+                            float barPartY = yPos - 0.5f;
+                            Graphics.DrawOutlinedRect(new Rectangle(barPartX, barPartY, nameH / 2, nameH + 0.5f), duckColor, borderColor, 1.1f, fontSize);
+                        }
                     }
+                    else if (showScore == NameDisplayConfig.ScoreShowing.Value)
+                    {
+                        float scoreTextPos = xPos + hSpacing * 3 + nameH + longestNameWidth;
+                        string scoreText = $"{prof.team.score}";
+
+                        Graphics.DrawStringOutline(scoreText, new Vec2(scoreTextPos, yPos), duckColor, borderColor, 1.1f, scale: fontSize);
+                    }
+
+                    if (doTeams)
+                    {
+                        Vec2 lineStartPos = new(xPos - (hSpacing + teamLineWidth / 2), yPos);
+                        Vec2 lineEndOffset = new(0, nameH + vSpacing);
+
+                        List<Profile> teamMembers = profileTeamMembersMapping[teamHashCode];
+                        if (teamMembers.IndexOf(prof) == teamMembers.Count - 1)
+                            lineEndOffset.y -= vSpacing;
+
+                        Graphics.DrawLine(lineStartPos + lineEndOffset, lineStartPos, teamColor, teamLineWidth, 1.1f);
+                    }
+
+                    yPos += addedHeight;
                 }
-                else if (showScore == NameDisplayConfig.ScoreShowing.Value)
-                {
-                    float scoreTextPos = xPos + hSpacing * 3 + nameH + longestNameWidth;
-                    string scoreText = $"{prof.team.score}";
-                    
-                    Graphics.DrawStringOutline(scoreText, new Vec2(scoreTextPos, yPos), duckColor, borderColor, 1.1f, scale: fontSize);
-                }
-
-                if (doTeams)
-                {
-                    Vec2 lineStartPos = new(xPos - (hSpacing + teamLineWidth / 2), yPos);
-                    Vec2 lineEndOffset = new(0, nameH + vSpacing);
-
-                    List<Profile> teamMembers = profileTeamMembersMapping[teamHashCode];
-                    if (teamMembers.IndexOf(prof) == teamMembers.Count - 1)
-                        lineEndOffset.y -= vSpacing;
-
-                    Graphics.DrawLine(lineStartPos + lineEndOffset, lineStartPos, teamColor, teamLineWidth, 1.1f);
-                }
-
-                yPos += addedHeight;
-            }
+            */
         }
 
         private void drawNameTags()

@@ -879,6 +879,10 @@ namespace DuckGame
             public MDBool UncappedSpeed = new MDBool();
 
             [DGR]
+            [Metapixel(85, "No Quack Sound", "Removes the quack sound.")]
+            public MDBool NoQuackSFX = new MDBool();
+
+             [DGR]
             [Metapixel(90, "Cape Length", "Amount of segments the cape will have from 0 to 24 (Default 10)")]
             public MDInt CapeLength = new MDInt
             {

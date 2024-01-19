@@ -40,6 +40,7 @@
                 }
                 else
                 {
+                    Main.SpecialCode = _field.value.ToString();
                     _text = str + Change.ToString((int)_field.value) + _append;
                     if (_filterField != null && !(bool)_filterField.value)
                         _text = Triggers.Any;

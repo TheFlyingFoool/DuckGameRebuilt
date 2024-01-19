@@ -199,6 +199,7 @@ namespace DuckGame
                     if (grounded) angleDegrees += hSpeed * 3;
                     else angleDegrees += hSpeed * 2;
                 }
+                if (team.metadata.NoQuackSFX.value) quacks = false;
                 if (team.metadata.PassiveParticleRate.value > 0 && (duck == null || duck.localSpawnVisible))
                 {
                     if (PassiveParticleTimer < -100)

@@ -28,6 +28,7 @@ namespace DuckGame
         private static UIMenu _dgrGameMenu;
         private static UIMenu _dgrQOLMenu;
         private static UIMenu _dgrHUDMenu;
+        private static UIMenu _dgrNameDisplayMenu;
         private static UIMenu _dgrEditorMenu;
         private static UIMenu _dgrRecorderatorMenu;
         private static UIMenu _dgrMiscMenu;
@@ -44,6 +45,7 @@ namespace DuckGame
         public static UIMenu _lastCreatedDGRGameMenu;
         public static UIMenu _lastCreatedDGRQOLMenu;
         public static UIMenu _lastCreatedDGRHUDMenu;
+        public static UIMenu _lastCreatedDGRGUINameDisplayMenu;
         public static UIMenu _lastCreatedDGREditorMenu;
         public static UIMenu _lastCreatedDGRRecorderatorMenu;
         public static UIMenu _lastCreatedDGRMiscMenu;
@@ -117,6 +119,7 @@ namespace DuckGame
         public static UIMenu DGRGameMenu => _dgrGameMenu;
         public static UIMenu DGRQOLMenu => _dgrQOLMenu;
         public static UIMenu DGRHUDMenu => _dgrHUDMenu;
+        public static UIMenu DGRNameDisplayMenu => _dgrNameDisplayMenu;
         public static UIMenu DGREditorMenu => _dgrEditorMenu;
         public static UIMenu DGRRecorderatorMenu => _dgrRecorderatorMenu;
         public static UIMenu DGRMiscMenu => _dgrMiscMenu;
@@ -138,6 +141,7 @@ namespace DuckGame
             to.Add(DGRGameMenu, false);
             to.Add(DGRQOLMenu, false);
             to.Add(DGRHUDMenu, false);
+            to.Add(DGRNameDisplayMenu, false);
             to.Add(DGREditorMenu, false);
             to.Add(DGRRecorderatorMenu, false);
             to.Add(DGRMiscMenu, false);
@@ -178,6 +182,7 @@ namespace DuckGame
             _lastCreatedDGRGraphicsMenu = tempDGRGraphicsMenu;
             _lastCreatedDGRGameMenu = tempDGRGameMenu;
             _lastCreatedDGRQOLMenu = tempDGRQOLMenu;
+            _lastCreatedDGRGUINameDisplayMenu = tempDGRGUINameDisplayMenu;
             _lastCreatedDGRHUDMenu = tempDGRHUDMenu;
             _lastCreatedDGREditorMenu = tempDGREditorMenu;
             _lastCreatedDGRRecorderatorMenu = tempDGRRecorderatorMenu;
@@ -220,6 +225,7 @@ namespace DuckGame
             _dgrGameMenu = _lastCreatedDGRGameMenu;
             _dgrQOLMenu = _lastCreatedDGRQOLMenu;
             _dgrHUDMenu = _lastCreatedDGRHUDMenu;
+            _dgrNameDisplayMenu = _lastCreatedDGRGUINameDisplayMenu;
             _dgrEditorMenu = _lastCreatedDGREditorMenu;
             _dgrRecorderatorMenu = _lastCreatedDGRRecorderatorMenu;
             _dgrMiscMenu = _lastCreatedDGRMiscMenu;
@@ -652,6 +658,57 @@ namespace DuckGame
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
             return menu;
         }
+        public static UIMenu CreateGUINameDisplayMenu(UIMenu pPrev)
+        {
+            UIMenu menu = new UIMenu("|PINK|♥|WHITE|Name Display Config|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
+            menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
+            menu.Add(new UIMenuItemNumber("Spacing", null, new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDSpacing), 0f, 50, 1f), 1)
+            {
+                dgrDescription = "The spacing between each name displayed"
+            });
+            menu.Add(new UIMenuItemNumber("X offset", null, new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDXoffset), 0f, 200, 1f), 1)
+            {
+                dgrDescription = "The horizontal offset from the top left of the screen"
+            });
+            menu.Add(new UIMenuItemNumber("Y offset", null, new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDYoffset), 0f, 200, 1f), 1)
+            {
+                dgrDescription = "The vertical offset from the top left of the screen"
+            });
+            menu.Add(new UIMenuItemNumber("Opacity", null, new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDOpacity), 0f, 100, 1), 1)
+            {
+                dgrDescription = "The opacity of the text displayed"
+            });
+            menu.Add(new UIMenuItemNumber("Text Scale", null, new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDFontScale), 0f, 200, 1), 1)
+            {
+                dgrDescription = "The scale of the text displayed"
+            });
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
+            menu.Add(new UIMenuItemToggle("Horizontal", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDHorizontal)))
+            {
+                dgrDescription = "Whether or not to align the text horizontally, if disabled it will be aligned veritcally"
+            });
+            menu.Add(new UIMenuItemToggle("Show Score", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDShowScore)))
+            {
+                dgrDescription = "Enables the display of score alongside the name of the player"
+            });
+            menu.Add(new UIMenuItemToggle("Show Colors", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDShowColors)))
+            {
+                dgrDescription = "If the text should be colored after the player's duck color"
+            });
+            menu.Add(new UIMenuItemToggle("Bundle Teams", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDBundleTeams)))
+            {
+                dgrDescription = "Organizes the list to have team members be next to eachother"
+            });
+            menu.Add(new UIMenuItemToggle("Black Outline", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDBlackOutline)))
+            {
+                dgrDescription = "Adds a black outline to the text"
+            });
+
+            menu.Add(new UIText(" ", Color.White));
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
+            return menu;
+        }
         public static UIMenu CreateDGRHudMenu(UIMenu pPrev)
         {
             UIMenu menu = new UIMenu("|PINK|♥|WHITE|HUD|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
@@ -659,15 +716,26 @@ namespace DuckGame
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemToggle("GUI Name Display", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.QOLScoreThingButWithoutScore)))
-            {
-                dgrDescription = "Displays every participating duck in the game's name and color above"
-            });
-
             menu.Add(new UIMenuItemToggle("Name Tags", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.NameTags)))
             {
                 dgrDescription = "Before the round starts or when you're dead/spectating, display the name of every duck above their heads"
             });
+
+            menu.Add(new UIMenuItemToggle("GUI Name Display", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.QOLScoreThingButWithoutScore)))
+            {
+                dgrDescription = "Displays every participating duck in the game's name and color above"
+            });
+            tempDGRGUINameDisplayMenu = CreateGUINameDisplayMenu(menu);
+            menu.Add(new UIMenuItem("Name Display Config", new UIMenuActionOpenMenu(menu, tempDGRGUINameDisplayMenu), backButton: true));
+            /*menu.Add(new UIMenuItemNumber("Name Display Style", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HUDScoreDisplayStyle), 0, 1, 1), valStrings: new List<string>()
+            {
+                "DGR",
+                "QOL"
+            })
+            {
+                dgrDescription = "The style of the name display GUI"
+            });*/
+
 
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
@@ -797,6 +865,7 @@ namespace DuckGame
             ui.Add(tempDGROptimizationsMenu, false);
             ui.Add(tempDGRGraphicsMenu, false);
             ui.Add(tempDGRGameMenu, false);
+            ui.Add(tempDGRGUINameDisplayMenu, false);
             ui.Add(tempDGRQOLMenu, false);
             ui.Add(tempDGRHUDMenu, false);
             ui.Add(tempDGREditorMenu, false);
@@ -811,6 +880,7 @@ namespace DuckGame
             ui.Add(_lastCreatedDGRGameMenu, false);
             ui.Add(_lastCreatedDGRQOLMenu, false);
             ui.Add(_lastCreatedDGRHUDMenu, false);
+            ui.Add(_lastCreatedDGRGUINameDisplayMenu, false);
             ui.Add(_lastCreatedDGREditorMenu, false);
             ui.Add(_lastCreatedDGRRecorderatorMenu, false);
             ui.Add(_lastCreatedDGRMiscMenu, false);
@@ -909,6 +979,7 @@ namespace DuckGame
         public static UIMenu tempDGRGameMenu;
         public static UIMenu tempDGRQOLMenu;
         public static UIMenu tempDGRHUDMenu;
+        public static UIMenu tempDGRGUINameDisplayMenu;
         public static UIMenu tempDGREditorMenu;
         public static UIMenu tempDGRRecorderatorMenu;
         public static UIMenu tempDGRMiscMenu;

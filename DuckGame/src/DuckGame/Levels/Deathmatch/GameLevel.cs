@@ -604,6 +604,39 @@ namespace DuckGame
         {
             if (_mode != null)
                 _mode.PostDrawLayer(layer);
+            if (layer == Layer.Console)
+            {
+                List<Profile> profileList = Profiles.activeNonSpectators;
+                float opacity = DGRSettings.HSDOpacity / 100f;
+                float fontScale = DGRSettings.HSDFontScale / 100f;
+                float spacing = DGRSettings.HSDSpacing;
+                if (DGRSettings.HSDHorizontal)
+                {
+                    float xs = 0;
+                    for (int i = 0; i < profileList.Count; i++)
+                    {
+                        Profile p = profileList[i];
+                        string s = Extensions.CleanFormatting(p.name) + (DGRSettings.HSDShowScore ? " " + p.team.score : "");
+                        Color c = Color.White;
+                        if (DGRSettings.HSDShowColors) c = p.persona.colorUsable;
+                        if (DGRSettings.HSDBlackOutline) Graphics.DrawStringOutline(s, new Vec2(DGRSettings.HSDXoffset + spacing * i + xs, DGRSettings.HSDYoffset), c * opacity, Color.Black, 1, null, fontScale);
+                        else Graphics.DrawString(s, new Vec2(DGRSettings.HSDXoffset + spacing * i + xs, DGRSettings.HSDYoffset), c * opacity, 1, null, fontScale);
+                        xs += s.Length * 8 * fontScale;
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < profileList.Count; i++)
+                    {
+                        Profile p = profileList[i];
+                        string s = Extensions.CleanFormatting(p.name) + (DGRSettings.HSDShowScore ? " " + p.team.score : "");
+                        Color c = Color.White;
+                        if (DGRSettings.HSDShowColors) c = p.persona.colorUsable;
+                        if (DGRSettings.HSDBlackOutline) Graphics.DrawStringOutline(s, new Vec2(DGRSettings.HSDXoffset, DGRSettings.HSDYoffset + spacing * i), c * opacity, Color.Black, 1, null, fontScale);
+                        else Graphics.DrawString(s, new Vec2(DGRSettings.HSDXoffset, DGRSettings.HSDYoffset + spacing * i), c * opacity, 1, null, fontScale);
+                    }
+                }
+            }
             if (layer == Layer.HUD && data != null && customLevel && !_waitingOnTransition)
             {
                 drawsOverPauseMenu = true;

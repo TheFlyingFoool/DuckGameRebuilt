@@ -458,7 +458,18 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool StickyHats { get; set; }
 
-        [Marker.AutoConfig] public static bool QOLScoreThingButWithoutScore { get; set; }
+        [Marker.AutoConfig] public static bool QOLScoreThingButWithoutScore { get; set; } //why. -NiK0
+
+        [Marker.AutoConfig] public static int HSDSpacing = 10;
+        [Marker.AutoConfig] public static int HSDXoffset = 2;
+        [Marker.AutoConfig] public static int HSDYoffset = 2;
+        [Marker.AutoConfig] public static int HSDOpacity = 100;
+        [Marker.AutoConfig] public static int HSDFontScale = 50;
+        [Marker.AutoConfig] public static bool HSDHorizontal = false;
+        [Marker.AutoConfig] public static bool HSDShowScore = true;
+        [Marker.AutoConfig] public static bool HSDShowColors = true;
+        [Marker.AutoConfig] public static bool HSDBundleTeams = true;
+        [Marker.AutoConfig] public static bool HSDBlackOutline = true;
 
         [Marker.AutoConfig] public static bool NameTags { get; set; }
 
@@ -466,8 +477,7 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool LobbyNameOnPause = true;
 
-        [Marker.AutoConfig]
-        public static bool EditorOnlinePhysics = false; //for the love of god be off by default jesus christ -NiK0
+        [Marker.AutoConfig] public static bool EditorOnlinePhysics = false;
 
         [Marker.AutoConfig] public static bool EditorInstructions = true;
 
