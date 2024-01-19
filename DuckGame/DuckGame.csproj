@@ -430,6 +430,7 @@
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\UInt64Interpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\Vec2Interpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\ValueOrException.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\DGRAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\FieldOrPropertyInfo.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\IntRange.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\Markers\AdvancedConfigAttribute.cs" />
@@ -443,6 +444,7 @@
     <Compile Include="AddedContent\Firebreak\Utilities\Markers\PostInitializeAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\Markers\UpdateContextAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\SendToLevel.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\VanillaSyncedAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\WordBoundary.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\IAmUi.cs" />
     <Compile Include="AddedContent\Hyeve\DebugUI\Basic\UiBasic.cs" />

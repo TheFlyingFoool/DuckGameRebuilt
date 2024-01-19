@@ -237,7 +237,7 @@ namespace DuckGame
                 
                 float textH = Extensions.GetStringSize("H", 0.6f).Height;
                 
-                Graphics.DrawFancyString("you can scroll here btw", innerBounds.tl + (Vec2.One * 2), Color.Red, 1.1f, 0.6f);
+                Graphics.DrawFancyString("you can scroll here btw", innerBounds.tl + (Vec2.One * 2), Colors.DGOrange, 1.1f, 0.6f);
                 Graphics.DrawLine(innerBounds.tl + new Vec2(2, 4 + textH), innerBounds.width - 4, 90, Color.Red, depth: 1f);
 
                 Vec2 posPastLine = innerBounds.tl + new Vec2(2, 6 + textH);
@@ -254,7 +254,7 @@ namespace DuckGame
                     if (i - s_scrollIndex >= 17)
                         break;
 
-                    string text = $"[{index:000}] {info.Name}";
+                    string text = $"[{index:000}]{(info.DGRExclusive ? " [@DGR@]" : "")}{(info.VanillaSynced ? " [@VANILLAICON@]" : "")} {info.Name}";
                     float textW = Graphics.GetFancyStringWidth(text, scale: 0.6f);
                     Vec2 textDrawPos = posPastLine + new Vec2(0, (i - s_scrollIndex) * (textH + 2));
                     Rectangle textBounds = new(textDrawPos.x, textDrawPos.y, textW, textH);
@@ -290,7 +290,7 @@ namespace DuckGame
                 Graphics.DrawFancyString(title, innerBounds.tl + (Vec2.One * 2), Color.Red, 1.1f, 0.6f);
                 Graphics.DrawLine(innerBounds.tl + new Vec2(2, 4 + textH), innerBounds.width - 4, 90, Color.Red, depth: 1f);
                 
-                string mpDescription = $"Type: {info.MDType.Name.Substring(2)}\n\n{string.Join("\n", info.Description.SplitByLength(50))}";
+                string mpDescription = $"Type: {info.MDType.Name.Substring(2)}\n{(info.DGRExclusive ? "|PINK|[DGR]|PREV|\n" : "")}{(info.VanillaSynced ? "|DGORANGE|[VANILLA SYNCED]|PREV|\n" : "")}\n{string.Join("\n", info.Description.SplitByLength(50))}";
                 Graphics.DrawFancyString(mpDescription, innerBounds.tl + new Vec2(2, 6 + textH), Color.Red, 1.1f, scale: 0.6f);
 
                 float yDescriptionLine = innerBounds.y + 10 + (textH * (mpDescription.Count(x => x == '\n') + 2));

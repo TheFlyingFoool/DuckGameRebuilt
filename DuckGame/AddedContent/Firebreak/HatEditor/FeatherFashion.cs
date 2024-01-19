@@ -49,7 +49,10 @@ namespace DuckGame
                 .Select(x =>
                 {
                     Team.Metapixel attribute = x.GetCustomAttribute<Team.Metapixel>();
-                    return new MetapixelInfo((byte)attribute.index, attribute.name, attribute.description, x.FieldType);
+                    bool dgr = x.GetCustomAttribute<DGRAttribute>() is not null;
+                    bool synced = x.GetCustomAttribute<VanillaSyncedAttribute>() is not null;
+                    
+                    return new MetapixelInfo((byte)attribute.index, attribute.name, attribute.description, x.FieldType, dgr, synced);
                 })
                 .ToDictionary(x => x.Index, x => x);
 

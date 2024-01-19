@@ -855,23 +855,30 @@ namespace DuckGame
             [Metapixel(71, "Mechanical Lips", "If this metapixel exists, the hat will have 'mechanical lips'.")]
             public MDBool MechanicalLips = new MDBool();
 
+            [DGR]
+            [VanillaSynced]
             [Metapixel(80, "Sticky Hat", "If this metapixel exists, the hat will not fall off when ragdolling.")]
             public MDBool StickyHat = new MDBool();
 
+            [DGR]
+            [VanillaSynced]
             [Metapixel(81, "Fade On Death", "If this metapixel exists, the hat will fade when the wearer dies.")]
             public MDBool FadeOnDeath = new MDBool();
 
+            [DGR]
+            [VanillaSynced]
             [Metapixel(82, "Roll", "If this metapixel exists, the hat will roll when on the ground.")]
             public MDBool Roll = new MDBool();
 
+            [DGR]
             [Metapixel(83, "No Particle Air Friction", "Removes the particles air friction.")]
             public MDBool NoAirFriction = new MDBool();
 
+            [DGR]
             [Metapixel(84, "Uncapped Particle Speed", "Uncaps the speed of particles.")]
             public MDBool UncappedSpeed = new MDBool();
 
-
-
+            [DGR]
             [Metapixel(90, "Cape Length", "Amount of segments the cape will have from 0 to 24 (Default 10)")]
             public MDInt CapeLength = new MDInt
             {
@@ -880,6 +887,8 @@ namespace DuckGame
                 allowNegative = false
             };
 
+            [DGR]
+            [VanillaSynced]
             [Metapixel(91, "Bounciness", "How bouncy the hat should be from 0 to 1")]
             public MDFloat Bouncyness = new MDFloat();
 
@@ -906,23 +915,30 @@ namespace DuckGame
                 randomizeBoth = true
             };
 
+            [DGR]
             [Metapixel(110, "Passive particle spawn rate", "The rate at which particles should passively spawn, minimum 0.1s, maximum 2.5s")]
             public MDFloat PassiveParticleRate = new MDFloat
             {
                 value = 0f,
                 range = 2.5f,
             };
+            
+            [DGR]
             [Metapixel(111, "Passive particle quack toggle", "If present, passive particles will be toggled on and off when quacking")]
             public MDBool PassiveParticleToggle = new MDBool
             {
                 value = false
             };
+            
+            [DGR]
             [Metapixel(112, "Passive particle condition", "The condition to when particles should spawn in passively, 0 = Always, 1 = Hat is being worn, 2 = Hat is not being worn, 3 = Currently quacking, 4 Currently not quacking, 5 Hat is held")]
             public MDInt PassiveParticleCondition = new MDInt
             {
                 value = 0,
                 range = 5
             };
+            
+            [DGR]
             [Metapixel(113, "Passive particle override quack", "If present, quacking will not generate particles")]
             public MDBool PassiveParticleOverrideQuack = new MDBool
             {
