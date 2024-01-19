@@ -279,6 +279,14 @@ namespace DuckGame
         {
         }
 
+        public static void DrawRightAlignedString(string text, Vec2 position, Color color, Depth depth = default, InputProfile pro = null, float scale = 1f)
+        {
+            DrawString(text, new Vec2(position.x - (GetStringWidth(text) * scale), position.y), color, depth, pro, scale);
+        }
+        public static void DrawRightAllignedOutlinedString(string text, Vec2 position, Color color, Color outline, Depth depth = default, InputProfile pro = null, float scale = 1f)
+        {
+            DrawStringOutline(text, new Vec2(position.x - (GetStringWidth(text) * scale), position.y), color, outline, depth, pro, scale);
+        }
         public static void DrawString(
           string text,
           Vec2 position,

@@ -3,6 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Web.UI.WebControls;
+using System.Web.Profile;
+using System.Windows.Forms;
 
 namespace DuckGame
 {
@@ -606,34 +608,70 @@ namespace DuckGame
                 _mode.PostDrawLayer(layer);
             if (layer == Layer.Console)
             {
-                List<Profile> profileList = Profiles.activeNonSpectators;
+                IEnumerable<Profile> profileList = Profiles.activeNonSpectators;
                 float opacity = DGRSettings.HSDOpacity / 100f;
-                float fontScale = DGRSettings.HSDFontScale / 100f;
+                float fontScale = DGRSettings.HSDFontScale / 50f;
                 float spacing = DGRSettings.HSDSpacing;
-                if (DGRSettings.HSDHorizontal)
+
+                if (DGRSettings.HSDSorting == 1 || DGRSettings.HSDSorting == 3) profileList = profileList.OrderByDescending(x => x?.team.score);
+                if (DGRSettings.HSDSorting == 2 || DGRSettings.HSDSorting == 3) profileList = profileList.OrderByDescending(x => x?.duck?.dead);
+
+                int highestScore = 0;
+                Team t = null;
+                if (DGRSettings.HSDStarForHighestScore)
                 {
-                    float xs = 0;
-                    for (int i = 0; i < profileList.Count; i++)
+                    foreach (Profile p in profileList)
                     {
-                        Profile p = profileList[i];
-                        string s = Extensions.CleanFormatting(p.name) + (DGRSettings.HSDShowScore ? " " + p.team.score : "");
-                        Color c = Color.White;
-                        if (DGRSettings.HSDShowColors) c = p.persona.colorUsable;
-                        if (DGRSettings.HSDBlackOutline) Graphics.DrawStringOutline(s, new Vec2(DGRSettings.HSDXoffset + spacing * i + xs, DGRSettings.HSDYoffset), c * opacity, Color.Black, 1, null, fontScale);
-                        else Graphics.DrawString(s, new Vec2(DGRSettings.HSDXoffset + spacing * i + xs, DGRSettings.HSDYoffset), c * opacity, 1, null, fontScale);
-                        xs += s.Length * 8 * fontScale;
+                        if (p.team.score > highestScore)
+                        {
+                            highestScore = p.team.score;
+                            t = p.team;
+                        }
                     }
                 }
-                else
+
+                int i = 0;
+                float xs = 0;
+                float ys = 0;
+                Vec2 vAlign = DGRSettings.HSDHorizontal? new Vec2(spacing, 0): new Vec2(0, spacing);
+
+                Vec2 generalOffset = new Vec2(DGRSettings.HSDXoffset * 4, DGRSettings.HSDYoffset * 4);
+
+                foreach (Profile p in profileList)
                 {
-                    for (int i = 0; i < profileList.Count; i++)
+                    string s = DGRSettings.HSDRightToLeft?((p.team == t?"@STARGOODY@":"") + (DGRSettings.HSDShowScore ? p.team.score + " " : "") + (DGRSettings.HSDClearNames ? Extensions.CleanFormatting(p.name) : p.name)):((DGRSettings.HSDClearNames ? Extensions.CleanFormatting(p.name) : p.name) + (DGRSettings.HSDShowScore ? " " + p.team.score : "") + (p.team == t ? "@STARGOODY@" : ""));
+                    Color c = DGRSettings.HSDShowColors?p.persona.colorUsable:Color.White;
+
+                    if (DGRSettings.HSDRightToLeft)
                     {
-                        Profile p = profileList[i];
-                        string s = Extensions.CleanFormatting(p.name) + (DGRSettings.HSDShowScore ? " " + p.team.score : "");
-                        Color c = Color.White;
-                        if (DGRSettings.HSDShowColors) c = p.persona.colorUsable;
-                        if (DGRSettings.HSDBlackOutline) Graphics.DrawStringOutline(s, new Vec2(DGRSettings.HSDXoffset, DGRSettings.HSDYoffset + spacing * i), c * opacity, Color.Black, 1, null, fontScale);
-                        else Graphics.DrawString(s, new Vec2(DGRSettings.HSDXoffset, DGRSettings.HSDYoffset + spacing * i), c * opacity, 1, null, fontScale);
+                        if (DGRSettings.HSDBlackOutline) Graphics.DrawRightAllignedOutlinedString(s, new Vec2(generalOffset.x + xs + vAlign.x * i, generalOffset.y + ys + vAlign.y * i), c * opacity, Color.Black, 1, null, fontScale);
+                        else Graphics.DrawRightAlignedString(s, new Vec2(generalOffset.x + xs + vAlign.x * i, generalOffset.y + ys + vAlign.y * i), c * opacity, 1, null, fontScale);
+                    }
+                    else
+                    {
+                        if (DGRSettings.HSDBlackOutline) Graphics.DrawStringOutline(s, new Vec2(generalOffset.x + xs + vAlign.x * i, generalOffset.y + ys + vAlign.y * i), c * opacity, Color.Black, 1, null, fontScale);
+                        else Graphics.DrawString(s, new Vec2(generalOffset.x + xs + vAlign.x * i, generalOffset.y + ys + vAlign.y * i), c * opacity, 1, null, fontScale);
+                    }
+
+                    if (DGRSettings.HSDHorizontal) xs += Graphics.GetStringWidth(s, false, fontScale) * (DGRSettings.HSDRightToLeft ? -1 : 1);
+                    else ys += Graphics.GetStringHeight(s) * fontScale;
+                    i++;
+                }
+                if (DGRSettings.HSDShowRoundsLeft)
+                {
+                    i+= 2;
+                    int num = GameMode.roundsBetweenIntermission - GameMode.numMatchesPlayed;
+                    string s = DGRSettings.HSDRightToLeft?(num.ToString() + " :rounds left") :("rounds left: " + num.ToString());
+                    Color c = Color.White;
+                    if (DGRSettings.HSDRightToLeft)
+                    {
+                        if (DGRSettings.HSDBlackOutline) Graphics.DrawRightAllignedOutlinedString(s, new Vec2(generalOffset.x + xs + vAlign.x * i, generalOffset.y + ys + vAlign.y * i), c * opacity, Color.Black, 1, null, fontScale);
+                        else Graphics.DrawRightAlignedString(s, new Vec2(generalOffset.x + xs + vAlign.x * i, generalOffset.y + ys + vAlign.y * i), c * opacity, 1, null, fontScale);
+                    }
+                    else
+                    {
+                        if (DGRSettings.HSDBlackOutline) Graphics.DrawStringOutline(s, new Vec2(generalOffset.x + xs + vAlign.x * i, generalOffset.y + ys + vAlign.y * i), c * opacity, Color.Black, 1, null, fontScale);
+                        else Graphics.DrawString(s, new Vec2(generalOffset.x + xs + vAlign.x * i, generalOffset.y + ys + vAlign.y * i), c * opacity, 1, null, fontScale);
                     }
                 }
             }

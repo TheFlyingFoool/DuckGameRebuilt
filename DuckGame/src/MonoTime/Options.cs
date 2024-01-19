@@ -679,14 +679,36 @@ namespace DuckGame
             {
                 dgrDescription = "The opacity of the text displayed"
             });
-            menu.Add(new UIMenuItemNumber("Text Scale", null, new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDFontScale), 0f, 200, 1), 1)
+            menu.Add(new UIMenuItemNumber("Text Scale", null, new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDFontScale), 0f, 100, 1), 1)
             {
                 dgrDescription = "The scale of the text displayed"
+            });
+            menu.Add(new UIMenuItemNumber("Sorting", null, new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDSorting), 0f, 4, 1f), 1, valStrings: new List<string>()
+            {
+                "None",
+                "Score",
+                "Alive",
+                "Score and Alive"
+            })
+            {
+                dgrDescription = "How the player list should be sorted"
             });
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
             menu.Add(new UIMenuItemToggle("Horizontal", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDHorizontal)))
             {
-                dgrDescription = "Whether or not to align the text horizontally, if disabled it will be aligned veritcally"
+                dgrDescription = "Whether or not to align the text horizontally, if disabled it will be aligned vertically"
+            });
+            menu.Add(new UIMenuItemToggle("Right To Left", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDRightToLeft)))
+            {
+                dgrDescription = "If enabled text will be drawn right to left instead of left to right"
+            });
+            menu.Add(new UIMenuItemToggle("Rounds Left", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDShowRoundsLeft)))
+            {
+                dgrDescription = "Whether or not to display how many rounds are left until the intermission"
+            });
+            menu.Add(new UIMenuItemToggle("Clear Name", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDClearNames)))
+            {
+                dgrDescription = "Removes color tags and emojis from names"
             });
             menu.Add(new UIMenuItemToggle("Show Score", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDShowScore)))
             {
@@ -696,13 +718,13 @@ namespace DuckGame
             {
                 dgrDescription = "If the text should be colored after the player's duck color"
             });
-            menu.Add(new UIMenuItemToggle("Bundle Teams", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDBundleTeams)))
-            {
-                dgrDescription = "Organizes the list to have team members be next to eachother"
-            });
             menu.Add(new UIMenuItemToggle("Black Outline", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDBlackOutline)))
             {
                 dgrDescription = "Adds a black outline to the text"
+            });
+            menu.Add(new UIMenuItemToggle("Star For Winner", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDStarForHighestScore)))
+            {
+                dgrDescription = "Puts a star right next to the player(s) with the highest score"
             });
 
             menu.Add(new UIText(" ", Color.White));
