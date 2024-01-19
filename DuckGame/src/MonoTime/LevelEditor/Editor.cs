@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
 using Microsoft.Xna.Framework.Graphics;
+using SDL2;
 //using System.Windows.Forms;
 namespace DuckGame
 {
@@ -3754,8 +3755,27 @@ namespace DuckGame
 
                     if (searching)
                     {
-                        Graphics.DrawRect(Vec2.Zero, new Vec2(layer.width, layer.height), Color.Black * 0.5f,
-                            0.9f);
+                        if (Keyboard.control)
+                        {
+                            if (Keyboard.Pressed(Keys.C))
+                            {
+                                Thread thread = new(() => SDL.SDL_SetClipboardText(Keyboard.KeyString));
+                                thread.SetApartmentState(ApartmentState.STA);
+                                thread.Start();
+                                thread.Join();
+                            }
+                            else if (Keyboard.Pressed(Keys.V))
+                            {
+                                string paste = "";
+                                Thread thread = new(() => paste = SDL.SDL_GetClipboardText());
+                                thread.SetApartmentState(ApartmentState.STA);
+                                thread.Start();
+                                thread.Join();
+                                Keyboard.KeyString += paste;
+                            }
+                        }
+                        
+                        Graphics.DrawRect(Vec2.Zero, new Vec2(layer.width, layer.height), Color.Black * 0.5f, 0.9f);
                         Vec2 position = new Vec2(8f, layer.height - 26f);
                         Graphics.DrawString("@searchiconwhitebig@", position, Color.White, 0.95f);
                         if (Keyboard.KeyString == "")
