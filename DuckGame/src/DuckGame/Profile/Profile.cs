@@ -20,7 +20,7 @@ namespace DuckGame
             get
             {
                 if (netData == null) return false;
-                return netData.Get<string>("rVer", "?") == Program.CURRENT_VERSION_ID;
+                return netData.Get("rVer", "?") == Program.CURRENT_VERSION_ID;
             }
         }
         public HatSelector hatSelector;

@@ -414,6 +414,7 @@ namespace DuckGame
                             d.hasPassword = lobby.GetLobbyData("password") == "true";
                             d.dedicated = lobby.GetLobbyData("dedicated") == "true";
                             d.pingstring = lobby.GetLobbyData("pingstring");
+                            d.DGR = lobby.GetLobbyData("DGR") == "true";
                             if (d.pingstring != "" && d.pingstring != null)
                                 d.estimatedPing = Steam.EstimatePing(d.pingstring);
                             try
@@ -842,6 +843,10 @@ namespace DuckGame
                             _noImage.scale = new Vec2(1f, 1f);
                             List<Tex2D> workshopTextures = new List<Tex2D>();
                             string titleString = lobby.name;
+                            if (lobby.DGR)
+                            {
+                                titleString += "@DGR@";
+                            }
                             if (lobby.lobby == null)
                                 titleString += !lobby.dedicated ? " (LAN)" : " |DGGREEN|(DEDICATED LAN SERVER)";
                             else if (lobby.dedicated)
@@ -1150,6 +1155,7 @@ namespace DuckGame
             public string type;
             public string hasModifiers;
             public long datahash;
+            public bool DGR;
             public int numSlots;
             public string modHash;
             public bool hasLocalMods;

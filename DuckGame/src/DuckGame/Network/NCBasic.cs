@@ -74,6 +74,7 @@ namespace DuckGame
             bitBuffer.Write((bool)TeamSelect2.GetOnlineSetting("dedicated").value);
             bitBuffer.Write(true);
             bitBuffer.Write(Network.gameDataHash);
+            if (!NCSteam.NoDGRBroadcast) bitBuffer.Write(123456789); //the dgr number -niko
             if (!TrySend(bitBuffer, "255.255.255.255"))
             {
                 List<IPAddress> ips = Dns.GetHostAddresses(Dns.GetHostName())
@@ -475,6 +476,10 @@ namespace DuckGame
                                     lobbyData1.dedicated = bitBuffer.ReadBool();
                                     if (bitBuffer.positionInBits != bitBuffer.lengthInBits && bitBuffer.ReadBool())
                                         lobbyData1.datahash = bitBuffer.ReadLong();
+                                    if (bitBuffer.ReadInt() == 123456789) //the dgr number -niko
+                                    {
+                                        lobbyData1.DGR = true;
+                                    }
                                     _threadLobbies.Add(lobbyData1);
                                     --index;
                                 }

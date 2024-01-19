@@ -1721,7 +1721,7 @@ namespace DuckGame
                 if (_core.localProfile == null)
                 {
                     _core.localProfile = pProfile;
-                    pProfile.netData.Set("REBUILT", true);
+                    if (!NCSteam.NoDGRBroadcast) pProfile.netData.Set("REBUILT", true);
                     pProfile.netData.Set("rVer", Program.CURRENT_VERSION_ID);
                 }
                 _core.localDuckIndex = _core.localProfile == null ? 0 : _core.profiles.IndexOf(_core.localProfile);
@@ -1734,7 +1734,7 @@ namespace DuckGame
                 {
                     pProfile.slotType = SlotType.Local;
                     pProfile.isRemoteLocalDuck = true;
-                    pProfile.netData.Set("REBUILT", true);
+                    if (!NCSteam.NoDGRBroadcast) pProfile.netData.Set("REBUILT", true);
                     pProfile.netData.Set("rVer", Program.CURRENT_VERSION_ID);
                 }
                 pProfile.flagIndex = Global.data.flag;

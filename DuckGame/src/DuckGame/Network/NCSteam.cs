@@ -19,6 +19,7 @@ namespace DuckGame
         private bool _initializedSettings;
         private bool _isDGRLocked;
         private bool _lobbyCreationComplete;
+        public static bool NoDGRBroadcast;
         public static ulong inviteLobbyID;
         private bool gotPingString;
         private int pingWaitTimeout;
@@ -485,6 +486,7 @@ namespace DuckGame
                         _lobby.SetLobbyData("datahash", Network.gameDataHash.ToString());
                         _lobby.SetLobbyData("name", Steam.user.name + "'s Lobby");
                         _lobby.SetLobbyData("numSlots", DuckNetwork.numSlots.ToString());
+                        if (!NoDGRBroadcast) _lobby.SetLobbyData("DGR", "true");
                         _lobby.name = _serverIdentifier;
                         if (_lobby.name != TeamSelect2.DefaultGameName())
                             _lobby.SetLobbyData("customName", "true");
