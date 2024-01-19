@@ -24,11 +24,15 @@ namespace DuckGame
             {
                 List<ResultData> teams = Results.teams;
                 teams.Sort((a, b) =>
-               {
+                {
                    if (a.score == b.score)
                        return 0;
                    return a.score >= b.score ? -1 : 1;
-               });
+                });
+                if (teams.Count == 0) // I have no idea why, but saw a crash report where teams count had to be 0. so figured id throw this in
+                {
+                    return new ResultData(null);
+                }
                 return teams[0];
             }
         }
@@ -39,11 +43,15 @@ namespace DuckGame
             {
                 List<ResultData> teams = Results.teams;
                 teams.Sort((a, b) =>
-               {
+                {
                    if (a.score == b.score)
                        return 0;
                    return a.score >= b.score ? -1 : 1;
-               });
+                });
+                if (teams.Count < 2) // Added because of the above
+                {
+                    return new ResultData(null);
+                }
                 return teams[1];
             }
         }
@@ -54,11 +62,15 @@ namespace DuckGame
             {
                 List<ResultData> teams = Results.teams;
                 teams.Sort((a, b) =>
-               {
+                {
                    if (a.score == b.score)
                        return 0;
                    return a.score <= b.score ? -1 : 1;
-               });
+                });
+                if (teams.Count == 0) // Added because of the above
+                {
+                    return new ResultData(null);
+                }
                 return teams[0];
             }
         }

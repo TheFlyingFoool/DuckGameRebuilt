@@ -11,6 +11,14 @@
         public ResultData(Team t)
         {
             font = Profiles.EnvironmentProfile.font;
+            if (t == null)
+            {
+                multi = false;
+                name = "";
+                score = 0;
+                data = null;
+                return;
+            }
             if (t.activeProfiles.Count > 1)
             {
                 name = t.GetNameForDisplay();
