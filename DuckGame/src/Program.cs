@@ -1007,7 +1007,7 @@ namespace DuckGame
                             {
                                 if (!(allMod is CoreMod) && allMod.configuration != null && allMod.configuration.assembly != null && allMod.configuration.assembly != Assembly.GetExecutingAssembly())
                                 {
-                                    bool flag3 = crashAssembly == null && allMod.configuration.assembly == exception.TargetSite.DeclaringType.Assembly || allMod.configuration.assembly == crashAssembly;
+                                    bool flag3 = crashAssembly == null && exception.TargetSite.DeclaringType != null && allMod.configuration.assembly == exception.TargetSite.DeclaringType.Assembly || allMod.configuration.assembly == crashAssembly;
                                     if (!flag3)
                                     {
                                         foreach (Type type in allMod.configuration.assembly.GetTypes())
