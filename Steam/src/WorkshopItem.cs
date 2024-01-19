@@ -63,6 +63,21 @@ public class WorkshopItem : IDisposable {
             return "";
         }
     }
+    public unsafe uint timestamp
+    {
+        get
+        {
+            ulong SizeOnDisk;
+            string Folder;
+            uint punTimeStamp;
+            bool can = SteamUGC.GetItemInstallInfo(_id, out SizeOnDisk, out Folder, 256, out punTimeStamp);
+            if (can)
+            {
+                return punTimeStamp;
+            }
+            return 0;
+        }
+    }
 
     // private object _tags; // unused
 
@@ -102,15 +117,15 @@ public class WorkshopItem : IDisposable {
             return false;
         }
         this.data = data;
-        if (data.name != null) {
+        if (data.name != null && data.name != "") {
             SteamUGC.SetItemTitle(handle, data.name);
             SteamUGC.SetItemVisibility(handle, (ERemoteStoragePublishedFileVisibility) data.visibility);
         }
-        if (data.description != null) {
+        if (data.description != null && data.description != "") {
             SteamUGC.SetItemDescription(handle, data.description);
         }
         List<string> tags = data.tags;
-        if (tags != null && tags.Count != 0) {
+        if (tags != null && tags.Count > 0) {
             SteamUGC.SetItemTags(handle, data.tags);
         }
         SteamUGC.SetItemPreview(handle, data.previewPath);
@@ -132,7 +147,9 @@ public class WorkshopItem : IDisposable {
 
     public unsafe TransferProgress GetDownloadProgress() {
         ulong bytesDownloaded, bytesTotal;
-        EItemUpdateStatus status = SteamUGC.GetItemUpdateProgress(_currentUpdateHandle, out bytesDownloaded, out bytesTotal);
+        bool status = SteamUGC.GetItemDownloadInfo(_id, out bytesDownloaded, out bytesTotal);
+        if (!status)
+            bytesDownloaded = bytesTotal = 0;
         return new TransferProgress {
             status = ItemUpdateStatus.Invalid,
             bytesDownloaded = bytesDownloaded,
