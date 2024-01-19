@@ -226,9 +226,10 @@ namespace DuckGame
                 }
                 else
                 {
-                    if (things[typeof(EditorTestLevel)].Count() > 0)
+                    EditorTestLevel t = things[typeof(EditorTestLevel)].FirstOrNull() as EditorTestLevel;
+                    if (t != null)
                     {
-                        current = (things[typeof(EditorTestLevel)].First() as EditorTestLevel).editor;
+                        current = t.editor;
                         Music.Stop();
                     }
                     else
@@ -256,9 +257,7 @@ namespace DuckGame
                 {
                     running = false;
                     transitionSpeedMultiplier = 2f;
-                    EditorTestLevel t = null;
-                    if (things[typeof(EditorTestLevel)].Count() > 0)
-                        t = things[typeof(EditorTestLevel)].First() as EditorTestLevel;
+                    EditorTestLevel t = things[typeof(EditorTestLevel)].FirstOrNull() as EditorTestLevel;
                     current = !(_level != "") ? new ChallengeLevel(_levelData, _validityTest) : (Level)new ChallengeLevel(_level);
                     current.transitionSpeedMultiplier = 2f;
                     ((ChallengeLevel)current)._waitSpawn = 0f;

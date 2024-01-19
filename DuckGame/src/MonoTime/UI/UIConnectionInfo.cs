@@ -196,9 +196,9 @@ namespace DuckGame
                 if (trigger == Triggers.Select)
                 {
                     if (_profile.connection.data is User)
-                        AddedContent.othello7.HelperMethods.OpenURL("http://steamcommunity.com/profiles/" + (_profile.connection.data as User).id.ToString());
+                        HelperMethods.OpenURL("http://steamcommunity.com/profiles/" + (_profile.connection.data as User).id.ToString());
                     else if (NetworkDebugger.enabled && Steam.user != null)
-                        AddedContent.othello7.HelperMethods.OpenURL("http://steamcommunity.com/profiles/" + Steam.user.id.ToString());
+                        HelperMethods.OpenURL("http://steamcommunity.com/profiles/" + Steam.user.id.ToString());
                 }
             }
             base.Activate(trigger);

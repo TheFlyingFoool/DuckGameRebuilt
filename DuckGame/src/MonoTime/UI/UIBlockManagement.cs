@@ -114,7 +114,7 @@ namespace DuckGame
                     }
                 }
                 if (Input.Pressed(Triggers.Select))
-                    AddedContent.othello7.HelperMethods.OpenURL("http://steamcommunity.com/profiles/" + items[_selection].Key.ToString());
+                    HelperMethods.OpenURL("http://steamcommunity.com/profiles/" + items[_selection].Key.ToString());
                 if (Input.Pressed(Triggers.Cancel))
                 {
                     if (_openOnClose != null)
