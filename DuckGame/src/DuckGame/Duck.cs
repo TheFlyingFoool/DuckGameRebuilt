@@ -43,6 +43,7 @@ namespace DuckGame
         public bool forceChatting;
         public bool forceAFK;
         public int coinTargetted; //hi whats good -NiK0
+        private Vec2 spawnedposition = new Vec2(0f,0f);
         private byte _quackPitch;
         public NetSoundEffect _netQuack = new NetSoundEffect(new string[1]
         {
@@ -1025,7 +1026,11 @@ namespace DuckGame
                 return false;
             return t == ragdoll.part1 || t == ragdoll.part2 || t == ragdoll.part3;
         }
-
+        public override void Added(Level parent, bool redoLayer, bool reinit)
+        {
+            spawnedposition = position;
+            base.Added(parent, redoLayer, reinit);
+        }
         public override bool Hit(Bullet bullet, Vec2 hitPos)
         {
             if (_trapped != null || _trappedInstance != null && _trappedInstance.visible || ragdoll != null || _ragdollInstance != null && _ragdollInstance.visible)
@@ -3953,8 +3958,11 @@ namespace DuckGame
                 {
                     if (!grounded && _lives > 0)
                     {
-                        IEnumerable<Thing> thing = Level.current.things[typeof(SpawnPoint)];
-                        position = thing.ElementAt(Rando.Int(thing.Count() - 1)).position;
+                        Thing[] spawnpoints = Level.current.things[typeof(SpawnPoint)].ToArray();
+                        if (spawnpoints.Length == 0)
+                            position = spawnedposition;
+                        else
+                            position = spawnpoints[Rando.Int(spawnpoints.Length - 1)].position;
                     }
                     if (profile != null && profile.localPlayer && Level.current is TeamSelect2)
                     {
