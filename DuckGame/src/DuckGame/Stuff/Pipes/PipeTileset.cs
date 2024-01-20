@@ -1379,34 +1379,67 @@ namespace DuckGame
 
         private void DrawParticles()
         {
+            if (DGRSettings.ActualParticleMultiplier == 0) return;
             if (partWait == -100)
                 partRot = Rando.Float(10f);
             Vec2 vec2_1 = endNormal;
             Vec2 vec2_2 = vec2_1.Rotate(Maths.DegToRad(Up() != null || Right() != null ? 90f : -90f), Vec2.Zero);
-            if(MonoMain.UpdateLerpState)
-                --partWait;
+            if (MonoMain.UpdateLerpState)
+            {
+                partWait--;
+            }
             if (partWait <= 0)
             {
-                PipeParticle pipeParticle = null;
-                foreach (PipeParticle particle in _particles)
+                if (DGRSettings.ActualParticleMultiplier >= 1)
                 {
-                    if (particle.alpha >= 1)
+                    for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++)
                     {
-                        pipeParticle = particle;
-                        break;
+                        PipeParticle pipeParticle = null;
+                        foreach (PipeParticle particle in _particles)
+                        {
+                            if (particle.alpha >= 1)
+                            {
+                                pipeParticle = particle;
+                                break;
+                            }
+                        }
+                        if (pipeParticle == null)
+                        {
+                            pipeParticle = new PipeParticle();
+                            _particles.Add(pipeParticle);
+                        }
+                        pipeParticle.position = position + endNormal * 20f + Maths.AngleToVec(partRot) * (10f + Rando.Float(24f)) * vec2_2;
+                        pipeParticle.alpha = 0f;
+                        pipeParticle.velocity = Vec2.Zero;
                     }
                 }
-                if (pipeParticle == null)
+                else if (DGRSettings.ActualParticleMultiplier > 0)
                 {
-                    pipeParticle = new PipeParticle();
-                    _particles.Add(pipeParticle);
+                    if (Rando.Float(1) < DGRSettings.ActualParticleMultiplier)
+                    {
+                        PipeParticle pipeParticle = null;
+                        foreach (PipeParticle particle in _particles)
+                        {
+                            if (particle.alpha >= 1)
+                            {
+                                pipeParticle = particle;
+                                break;
+                            }
+                        }
+                        if (pipeParticle == null)
+                        {
+                            pipeParticle = new PipeParticle();
+                            _particles.Add(pipeParticle);
+                        }
+                        pipeParticle.position = position + endNormal * 20f + Maths.AngleToVec(partRot) * (10f + Rando.Float(24f)) * vec2_2;
+                        pipeParticle.alpha = 0f;
+                        pipeParticle.velocity = Vec2.Zero;
+                    }
                 }
-                pipeParticle.position = position + endNormal * 20f + Maths.AngleToVec(partRot) * (10f + Rando.Float(24f)) * vec2_2;
-                pipeParticle.alpha = 0f;
-                pipeParticle.velocity = Vec2.Zero;
                 partWait = 5;
                 partRot += 1.72152f;
             }
+            DevConsole.Log(_particles.Count);
             for (int index = 0; index < _particles.Count; ++index)
             {
                 if (_particles[index].alpha < 1)
