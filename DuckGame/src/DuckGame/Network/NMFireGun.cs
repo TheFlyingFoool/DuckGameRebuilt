@@ -113,7 +113,7 @@ namespace DuckGame
                 NMFireBullet nmFireBullet = new NMFireBullet();
                 BitBuffer msg = d.ReadBitBuffer();
                 nmFireBullet.OnDeserialize(msg);
-                if (ammoType > 0 && ammoType < AmmoType.indexTypeMap.Count)
+                if (ammoType >= 0 && ammoType < AmmoType.indexTypeMap.Count)
                 {
                     AmmoType instance = Activator.CreateInstance(AmmoType.indexTypeMap[ammoType]) as AmmoType;
                     instance.ReadAdditionalData(d);
