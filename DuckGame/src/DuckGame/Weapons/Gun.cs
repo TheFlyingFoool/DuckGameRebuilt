@@ -243,31 +243,21 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (infiniteAmmoVal)
-                ammo = 99;
+            if (infiniteAmmoVal) ammo = 99;
             if (TeamSelect2.Enabled("INFAMMO"))
             {
                 infinite.value = true;
                 infiniteAmmoVal = true;
             }
             base.Update();
-            if (_clickPuff.finished)
-                _doPuff = false;
+            if (_clickPuff.finished) _doPuff = false;
             _accuracyLost = Maths.CountDown(_accuracyLost, 0.015f);
-            if (_flareAlpha > 0f)
-                _flareAlpha -= 0.5f;
-            else
-                _flareAlpha = 0f;
-            if (_barrelHeat > 0f)
-                _barrelHeat -= 0.01f;
-            else
-                _barrelHeat = 0f;
-            if (_barrelHeat > 10f)
-                _barrelHeat = 10f;
-            if (_smokeWait > 0f)
-            {
-                _smokeWait -= 0.1f;
-            }
+            if (_flareAlpha > 0f) _flareAlpha -= 0.5f;
+            else _flareAlpha = 0f;
+            if (_barrelHeat > 0f) _barrelHeat -= 0.01f;
+            else _barrelHeat = 0f;
+            if (_barrelHeat > 10f) _barrelHeat = 10f;
+            if (_smokeWait > 0f) _smokeWait -= 0.1f;
             else
             {
                 if (_barrelHeat > 0.1f && _barrelSmoke.speed == 0f)
@@ -275,106 +265,73 @@ namespace DuckGame
                     _barrelSmoke.SetAnimation("puff");
                     _barrelSmoke.speed = 0.1f;
                 }
-                if (_barrelSmoke.speed > 0f && _barrelSmoke.currentAnimation == "puff" && _barrelSmoke.finished)
-                    _barrelSmoke.SetAnimation("loop");
-                if (_barrelSmoke.speed > 0f && _barrelSmoke.currentAnimation == "loop" && _barrelSmoke.frame == 5 && _barrelHeat < 0.1f)
-                    _barrelSmoke.SetAnimation("finish");
+                if (_barrelSmoke.speed > 0f && _barrelSmoke.currentAnimation == "puff" && _barrelSmoke.finished) _barrelSmoke.SetAnimation("loop");
+                if (_barrelSmoke.speed > 0f && _barrelSmoke.currentAnimation == "loop" && _barrelSmoke.frame == 5 && _barrelHeat < 0.1f) _barrelSmoke.SetAnimation("finish");
             }
-            if (_smokeWait > 0 && _barrelSmoke.speed > 0)
-                _barrelSmoke.SetAnimation("finish");
-            if (_barrelSmoke.currentAnimation == "finish" && _barrelSmoke.finished)
-                _barrelSmoke.speed = 0f;
+            if (_smokeWait > 0 && _barrelSmoke.speed > 0) _barrelSmoke.SetAnimation("finish");
+            if (_barrelSmoke.currentAnimation == "finish" && _barrelSmoke.finished) _barrelSmoke.speed = 0f;
             if (owner != null)
             {
-                if (owner.hSpeed > 0.1f)
-                    _smokeAngle -= 0.1f;
-                else if (owner.hSpeed < -0.1f)
-                    _smokeAngle += 0.1f;
-                if (_smokeAngle > 0.4f)
-                    _smokeAngle = 0.4f;
-                if (_smokeAngle < -0.4f)
-                    _smokeAngle = -0.4f;
-                if (owner.vSpeed > 0.1f)
-                    _smokeFlatten -= 0.1f;
-                else if (owner.vSpeed < -0.1f)
-                    _smokeFlatten += 0.1f;
-                if (_smokeFlatten > 0.5f)
-                    _smokeFlatten = 0.5f;
-                if (_smokeFlatten < -0.5f)
-                    _smokeFlatten = -0.5f;
+                if (owner.hSpeed > 0.1f) _smokeAngle -= 0.1f;
+                else if (owner.hSpeed < -0.1f) _smokeAngle += 0.1f;
+                if (_smokeAngle > 0.4f) _smokeAngle = 0.4f;
+                if (_smokeAngle < -0.4f) _smokeAngle = -0.4f;
+                if (owner.vSpeed > 0.1f) _smokeFlatten -= 0.1f;
+                else if (owner.vSpeed < -0.1f) _smokeFlatten += 0.1f;
+                if (_smokeFlatten > 0.5f) _smokeFlatten = 0.5f;
+                if (_smokeFlatten < -0.5f) _smokeFlatten = -0.5f;
                 _framesSinceThrown = 0;
             }
             else
             {
-                ++_framesSinceThrown;
-                if (_framesSinceThrown > 25)
-                    _framesSinceThrown = 25;
+                _framesSinceThrown++;
+                if (_framesSinceThrown > 25) _framesSinceThrown = 25;
             }
             if (!(this is Sword) && owner == null && CanSpin() && Level.current.simulatePhysics && !Recorderator.Playing)
             {
-                bool flag1 = false;
-                bool flag2 = false;
-                if ((Math.Abs(hSpeed) + Math.Abs(vSpeed) > 2f || !grounded) && gravMultiplier > 0f && !flag2 && !_grounded)
+                bool spinning = false;
+                bool agaisntWall = false;
+                if ((Math.Abs(hSpeed) + Math.Abs(vSpeed) > 2f || !grounded) && gravMultiplier > 0f && !agaisntWall && !_grounded)
                 {
-                    if (offDir > 0)
-                        angleDegrees += (float)((Math.Abs(hSpeed * 2f) + Math.Abs(vSpeed)) * 1f + 5f);
-                    else
-                        angleDegrees -= (float)((Math.Abs(hSpeed * 2f) + Math.Abs(vSpeed)) * 1f + 5f);
-                    flag1 = true;
+                    if (offDir > 0) angleDegrees += (float)((Math.Abs(hSpeed * 2f) + Math.Abs(vSpeed)) * 1f + 5f);
+                    else angleDegrees -= (float)((Math.Abs(hSpeed * 2f) + Math.Abs(vSpeed)) * 1f + 5f);
+                    spinning = true;
                 }
-                if (!flag1 | flag2)
+                if (!spinning || agaisntWall)
                 {
                     angleDegrees %= 360f;
-                    if (angleDegrees < 0f)
-                        angleDegrees += 360f;
-                    if (flag2)
+                    if (angleDegrees < 0f) angleDegrees += 360f;
+                    if (agaisntWall)
                     {
-                        if (Math.Abs(angleDegrees - 90f) < Math.Abs(angleDegrees + 90f))
-                            angleDegrees = Lerp.Float(angleDegrees, 90f, 16f);
-                        else
-                            angleDegrees = Lerp.Float(-90f, 0f, 16f);
+                        if (Math.Abs(angleDegrees - 90f) < Math.Abs(angleDegrees + 90f)) angleDegrees = Lerp.Float(angleDegrees, 90f, 16f);
+                        else angleDegrees = Lerp.Float(-90f, 0f, 16f);
                     }
-                    else if (angleDegrees > 90 && angleDegrees < 270)
-                    {
-                        angleDegrees = Lerp.Float(angleDegrees, 180f, 14f);
-                    }
+                    else if (angleDegrees > 90 && angleDegrees < 270) angleDegrees = Lerp.Float(angleDegrees, 180f, 14f);
                     else
                     {
-                        if (angleDegrees > 180)
-                            angleDegrees -= 360f;
-                        else if (angleDegrees < -180)
-                            angleDegrees += 360f;
+                        if (angleDegrees > 180) angleDegrees -= 360f;
+                        else if (angleDegrees < -180) angleDegrees += 360f;
                         angleDegrees = Lerp.Float(angleDegrees, 0f, 14f);
                     }
                 }
             }
             float num = (float)(1f - (Math.Sin(Maths.DegToRad(angleDegrees + 90f)) + 1f) / 2f);
-            if (_owner == null)
-                _extraOffset.y = num * (_collisionOffset.y + _collisionSize.y + _collisionOffset.y);
-            else
-                _extraOffset.y = 0f;
+            if (_owner == null) _extraOffset.y = num * (_collisionOffset.y + _collisionSize.y + _collisionOffset.y);
+            else _extraOffset.y = 0f;
             if (owner == null || owner.hSpeed > -0.1f && owner.hSpeed < 0.1f)
             {
-                if (_smokeAngle >= 0.1f)
-                    _smokeAngle -= 0.1f;
-                else if (_smokeAngle <= -0.1f)
-                    _smokeAngle += 0.1f;
-                else
-                    _smokeAngle = 0f;
+                if (_smokeAngle >= 0.1f) _smokeAngle -= 0.1f;
+                else if (_smokeAngle <= -0.1f) _smokeAngle += 0.1f;
+                else _smokeAngle = 0f;
             }
             if (owner == null || owner.vSpeed > -0.1f && owner.vSpeed < 0.1f)
             {
-                if (_smokeFlatten >= 0.1f)
-                    _smokeFlatten -= 0.1f;
-                else if (_smokeFlatten <= -0.1f)
-                    _smokeFlatten += 0.1f;
-                else
-                    _smokeFlatten = 0f;
+                if (_smokeFlatten >= 0.1f) _smokeFlatten -= 0.1f;
+                else if (_smokeFlatten <= -0.1f) _smokeFlatten += 0.1f;
+                else _smokeFlatten = 0f;
             }
-            if (kick > 0f)
-                kick -= 0.2f;
-            else
-                kick = 0f;
+            if (kick > 0f) kick -= 0.2f;
+            else kick = 0f;
             if (owner == null)
             {
                 if (ammo <= 0 && (alpha < 0.99f || grounded && Math.Abs(hSpeed) + Math.Abs(vSpeed) < 0.3f))
@@ -383,15 +340,11 @@ namespace DuckGame
                     alpha -= 10.2f;
                     weight = 0.01f;
                 }
-                if (alpha < 0f)
-                    Level.Remove(this);
+                if (alpha < 0f) Level.Remove(this);
             }
-            if (owner != null && owner.graphic != null)
-                graphic.flipH = owner.graphic.flipH;
-            if (_wait > 0f)
-                _wait -= 0.15f;
-            if (_wait >= 0f)
-                return;
+            if (owner != null && graphic != null && owner.graphic != null) graphic.flipH = owner.graphic.flipH;
+            if (_wait > 0f) _wait -= 0.15f;
+            if (_wait >= 0f) return;
             _wait = 0f;
         }
 
@@ -412,12 +365,9 @@ namespace DuckGame
         {
             if (isServerForObject && (TeamSelect2.Enabled("GUNEXPL") && ammo <= 0 || explode))
             {
-                if (duck == null)
-                    return;
-                if (this is Warpgun)
-                    duck.Kill(new DTImpale(this));
-                else
-                    duck.ThrowItem();
+                if (duck == null) return;
+                if (this is Warpgun) duck.Kill(new DTImpale(this));
+                else duck.ThrowItem();
                 Level.Remove(this);
                 for (int index = 0; index < 1; ++index)
                 {
@@ -443,28 +393,23 @@ namespace DuckGame
                     varBullets.Add(bullet);
                     Level.Add(bullet);
                 }
-                if (!Network.isActive)
-                    return;
+                if (!Network.isActive) return;
                 Send.Message(new NMExplodingProp(varBullets), NetMessagePriority.ReliableOrdered);
                 varBullets.Clear();
             }
-            else
-                base.PressAction();
+            else base.PressAction();
         }
 
         public override void OnPressAction()
         {
-            if (_fullAuto)
-                return;
-            if (isServerForObject)
-                _fireActivated = true;
+            if (_fullAuto) return;
+            if (isServerForObject) _fireActivated = true;
             Fire();
         }
 
         public override void OnHoldAction()
         {
-            if (!_fullAuto)
-                return;
+            if (!_fullAuto) return;
             Fire();
         }
 
@@ -472,14 +417,12 @@ namespace DuckGame
         public virtual void ApplyKick()
         {
             recordKick = true;
-            if (owner == null || !isServerForObject)
-                return;
+            if (owner == null || !isServerForObject) return;
             if (_kickForce != 0)
             {
                 Duck owner = this.owner as Duck;
                 Thing thing = this.owner;
-                if (owner != null && owner._trapped != null)
-                    thing = owner._trapped;
+                if (owner != null && owner._trapped != null) thing = owner._trapped;
                 if (owner != null && owner.ragdoll != null && owner.ragdoll.part2 != null && owner.ragdoll.part1 != null && owner.ragdoll.part3 != null)
                 {
                     Vec2 vec2 = -barrelVector * (_kickForce / 2f);
@@ -493,16 +436,13 @@ namespace DuckGame
                 else
                 {
                     Vec2 vec2 = -barrelVector * _kickForce;
-                    if (Math.Sign(thing.hSpeed) != Math.Sign(vec2.x) || Math.Abs(vec2.x) > Math.Abs(thing.hSpeed))
-                        thing.hSpeed = vec2.x;
+                    if (Math.Sign(thing.hSpeed) != Math.Sign(vec2.x) || Math.Abs(vec2.x) > Math.Abs(thing.hSpeed)) thing.hSpeed = vec2.x;
                     if (owner != null)
                     {
-                        if (owner.crouch)
-                            owner.sliding = true;
+                        if (owner.crouch) owner.sliding = true;
                         thing.vSpeed += vec2.y - _kickForce * 0.333f;
                     }
-                    else
-                        thing.vSpeed += vec2.y - _kickForce * 0.333f;
+                    else thing.vSpeed += vec2.y - _kickForce * 0.333f;
                 }
             }
             kick = 1f;
@@ -510,13 +450,11 @@ namespace DuckGame
 
         public virtual void Fire()
         {
-            if (!loaded)
-                return;
+            if (!loaded) return;
             if (ammo > 0 && _wait == 0)
             {
                 firedBullets.Clear();
-                if (duck != null)
-                    RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(_fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));
+                if (duck != null) RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(_fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));
                 ApplyKick();
                 for (int index = 0; index < _numBulletsPerFire; ++index)
                 {
@@ -554,8 +492,7 @@ namespace DuckGame
                             if (Network.isActive && isServerForObject)
                             {
                                 firedBullets.Add(bullet);
-                                if (duck != null && duck.profile.connection != null)
-                                    bullet.connection = duck.profile.connection;
+                                if (duck != null && duck.profile.connection != null) bullet.connection = duck.profile.connection;
                             }
                             if (isServerForObject)
                             {
@@ -564,40 +501,37 @@ namespace DuckGame
                                     case LaserRifle _:
                                     case PewPewLaser _:
                                     case Phaser _:
-                                        ++Global.data.laserBulletsFired.valueInt;
+                                        Global.data.laserBulletsFired.valueInt++;
                                         break;
                                 }
                             }
                         }
                     }
-                    ++bulletFireIndex;
+                    bulletFireIndex++;
                     _ammoType.accuracy = accuracy;
                     _barrelHeat += 0.3f;
                 }
                 _smokeWait = 3f;
                 loaded = false;
                 _flareAlpha = 1.5f;
-                if (!_manualLoad)
-                    Reload();
+                if (!_manualLoad) Reload();
                 firing = true;
                 _wait = _fireWait;
                 PlayFireSound();
                 if (owner == null)
                 {
-                    Vec2 vec2 = barrelVector * Rando.Float(1f, 3f);
-                    vec2.y += Rando.Float(2f);
-                    hSpeed -= vec2.x;
-                    vSpeed -= vec2.y;
+                    Vec2 fly = barrelVector * Rando.Float(1f, 3f);
+                    fly.y += Rando.Float(2f);
+                    hSpeed -= fly.x;
+                    vSpeed -= fly.y;
                 }
                 _accuracyLost += loseAccuracy;
-                if (_accuracyLost <= maxAccuracyLost)
-                    return;
+                if (_accuracyLost <= maxAccuracyLost) return;
                 _accuracyLost = maxAccuracyLost;
             }
             else
             {
-                if (ammo > 0 || _wait != 0)
-                    return;
+                if (ammo > 0 || _wait != 0) return;
                 firedBullets.Clear();
                 DoAmmoClick();
                 _wait = _fireWait;
@@ -623,9 +557,8 @@ namespace DuckGame
         {
             if (ammo != 0)
             {
-                if (shell)
-                    PopShell();
-                --ammo;
+                if (shell) PopShell();
+                ammo--;
             }
             loaded = true;
         }
@@ -639,8 +572,7 @@ namespace DuckGame
                     range = 2000f
                 };
                 float ang = angleDegrees * -1f;
-                if (offDir < 0)
-                    ang += 180f;
+                if (offDir < 0) ang += 180f;
                 Vec2 vec2 = Offset(laserOffset);
                 type.penetration = 0.4f;
                 _wallPoint = new Bullet(vec2.x, vec2.y, type, ang, owner, tracer: true).end;
@@ -662,24 +594,22 @@ namespace DuckGame
             if (!VirtualTransition.active && Graphics.material == null) Graphics.material = this.material;
             base.Draw();
             Graphics.material = null;
-            if (_flareAlpha > 0)
-                Draw(ref _flare, barrelOffset);
+            if (_flareAlpha > 0) Draw(ref _flare, barrelOffset);
             if (_barrelSmoke.speed > 0 && !raised)
             {
                 _barrelSmoke.alpha = 0.7f;
                 _barrelSmoke.angle = _smokeAngle;
                 _barrelSmoke.flipH = offDir < 0;
-                if (offDir > 0 && angleDegrees > 90 && angleDegrees < 270)
-                    _barrelSmoke.flipH = true;
-                if (offDir < 0 && angleDegrees > 90 && angleDegrees < 270)
-                    _barrelSmoke.flipH = false;
+                if (offDir > 0 && angleDegrees > 90 && angleDegrees < 270) _barrelSmoke.flipH = true;
+                if (offDir < 0 && angleDegrees > 90 && angleDegrees < 270) _barrelSmoke.flipH = false;
                 _barrelSmoke.yscale = 1f - _smokeFlatten;
                 DrawIgnoreAngle(ref _barrelSmoke, barrelOffset);
             }
-            if (!Options.Data.fireGlow)
-                DrawGlow();
+            if (!Options.Data.fireGlow) DrawGlow();
+
             Graphics.material = material;
-            int num = DevConsole.showCollision ? 1 : 0;
+            //why the fuck is this here anyways -NiK0
+            //int num = DevConsole.showCollision ? 1 : 0;
         }
 
         public override void DrawGlow()
