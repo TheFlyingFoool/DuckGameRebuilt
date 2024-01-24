@@ -130,7 +130,9 @@
         {
             //if (Level.current is Editor || graphic == null)
             //    return;
-            cheap = !neverCheap; //&& !RandomLevelNode.editorLoad;
+            if (graphic == null)
+                return;
+            cheap = !neverCheap && !RandomLevelNode.editorLoad;
             graphic.position = position;
             graphic.scale = scale;
             graphic.center = center;

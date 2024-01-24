@@ -636,8 +636,10 @@ namespace DuckGame
         {
             //  if (Level.current is Editor || graphic == null)
             //    return;
-            //if (!RandomLevelNode.editorLoad)
-            cheap = true;
+            if (graphic == null)
+                return;
+            if (!RandomLevelNode.editorLoad)
+                cheap = true;
             graphic.position = position;
             graphic.scale = scale;
             graphic.center = center;
