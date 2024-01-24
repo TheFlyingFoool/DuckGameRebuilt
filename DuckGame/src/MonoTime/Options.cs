@@ -748,7 +748,10 @@ namespace DuckGame
                 dgrDescription = "Displays every participating duck in the game's name and color above"
             });
             tempDGRGUINameDisplayMenu = CreateGUINameDisplayMenu(menu);
-            menu.Add(new UIMenuItem("Name Display Config", new UIMenuActionOpenMenu(menu, tempDGRGUINameDisplayMenu), backButton: true));
+            menu.Add(new UIMenuItem("Name Display Config", new UIMenuActionOpenMenu(menu, tempDGRGUINameDisplayMenu), backButton: true)
+            {
+                dgrDescription = " "
+            });
             /*menu.Add(new UIMenuItemNumber("Name Display Style", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HUDScoreDisplayStyle), 0, 1, 1), valStrings: new List<string>()
             {
                 "DGR",
