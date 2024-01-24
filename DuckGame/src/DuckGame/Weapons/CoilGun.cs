@@ -83,10 +83,13 @@
                 _charge -= 0.1f;
             else
                 _charge = 0f;
-            if (_chargeAnim.currentAnimation == "uncharge" && _chargeAnim.finished)
-                _chargeAnim.SetAnimation("idle");
-            if (Network.isActive && doBlast && !_lastDoBlast || _chargeAnim.currentAnimation == "charge" && _chargeAnim.finished && isServerForObject)
-                _chargeAnim.SetAnimation("charged");
+            if (_chargeAnim != null)
+            {
+                if (_chargeAnim.currentAnimation == "uncharge" && _chargeAnim.finished)
+                    _chargeAnim.SetAnimation("idle");
+                if (Network.isActive && doBlast && !_lastDoBlast || _chargeAnim.currentAnimation == "charge" && _chargeAnim.finished && isServerForObject)
+                    _chargeAnim.SetAnimation("charged");
+            }
             if (doBlast && isServerForObject)
             {
                 ++_framesSinceBlast;
@@ -96,7 +99,7 @@
                     doBlast = false;
                 }
             }
-            if (_chargeAnim.currentAnimation == "drain" && _chargeAnim.finished)
+            if (_chargeAnim != null && _chargeAnim.currentAnimation == "drain" && _chargeAnim.finished)
                 _chargeAnim.SetAnimation("idle");
             _lastDoBlast = doBlast;
         }
@@ -105,6 +108,8 @@
 
         public override void OnPressAction()
         {
+            if (_chargeAnim == null)
+                return;
             if (_chargeAnim.currentAnimation == "idle")
             {
                 _chargeSound.Volume = 1f;
@@ -115,10 +120,8 @@
                 _unchargeSoundShort.Stop();
                 _unchargeSoundShort.Volume = 0f;
             }
-            else
+            else if (_chargeAnim.currentAnimation == "uncharge")
             {
-                if (!(_chargeAnim.currentAnimation == "uncharge"))
-                    return;
                 if (_chargeAnim.frame > 18)
                 {
                     _chargeSound.Volume = 1f;
@@ -145,6 +148,8 @@
 
         public override void OnReleaseAction()
         {
+            if (_chargeAnim == null)
+                return;
             if (_chargeAnim.currentAnimation == "charge")
             {
                 if (_chargeAnim.frame > 20)
@@ -165,13 +170,14 @@
                 _chargeSoundShort.Stop();
                 _chargeSoundShort.Volume = 0f;
             }
-            if (!(_chargeAnim.currentAnimation == "charged"))
-                return;
-            Graphics.FlashScreen();
-            _chargeAnim.SetAnimation("drain");
-            SFX.Play("laserBlast");
-            for (int index = 0; index < 4; ++index)
-                Level.Add(new ElectricalCharge(barrelPosition.x, barrelPosition.y, offDir, this));
+            if (_chargeAnim.currentAnimation == "charged")
+            {
+                Graphics.FlashScreen();
+                _chargeAnim.SetAnimation("drain");
+                SFX.Play("laserBlast");
+                for (int index = 0; index < 4; ++index)
+                    Level.Add(new ElectricalCharge(barrelPosition.x, barrelPosition.y, offDir, this));
+            }
         }
     }
 }

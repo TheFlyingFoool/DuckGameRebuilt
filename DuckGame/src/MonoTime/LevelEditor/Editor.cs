@@ -261,9 +261,8 @@ namespace DuckGame
 
         public static void PopFocusNow()
         {
-            if (focusStack.Count <= 0)
-                return;
-            focusStack.Pop();
+            if (focusStack.Count > 0)
+                focusStack.Pop();
         }
 
         public static object PeekFocus() => focusStack.Count > 0 ? focusStack.Peek() : null;
@@ -555,9 +554,8 @@ namespace DuckGame
                 _bottomRightMost.x = pObject.x;
             if (pObject.y < _topLeftMost.y)
                 _topLeftMost.y = pObject.y;
-            if (pObject.y <= _bottomRightMost.y)
-                return;
-            _bottomRightMost.y = pObject.y;
+            if (pObject.y > _bottomRightMost.y)
+                _bottomRightMost.y = pObject.y;
         }
 
         public void RecalculateSizeLimits()
@@ -787,9 +785,8 @@ namespace DuckGame
             get => current is Editor && (current as Editor)._miniMode;
             set
             {
-                if (!(current is Editor))
-                    return;
-                (current as Editor)._miniMode = value;
+                if (current is Editor)
+                    (current as Editor)._miniMode = value;
             }
         }
 
@@ -1187,14 +1184,14 @@ namespace DuckGame
                 CollisionLine<IPlatform>(_tilePosition, _tilePosition + new Vec2(0f, -16f), _placementType) is Thing
                     thing3 && thing3.GetType() != _placementType.GetType())
                 _tilePosition.y = thing3.bottom - _placementType.collisionOffset.y;
-            if ((_placementType.hugWalls & WallHug.Floor) == WallHug.None ||
-                !(CollisionLine<IPlatform>(_tilePosition, _tilePosition + new Vec2(0f, 16f), _placementType) is Thing
-                    thing4) || !(thing4.GetType() != _placementType.GetType()))
-                return;
-            _tilePosition.y = thing4.top - _placementType.collisionSize.y - _placementType.collisionOffset.y;
-            if (!(_placementType is ItemSpawner))
-                return;
-            (_placementType as ItemSpawner)._seated = true;
+            if ((_placementType.hugWalls & WallHug.Floor) != WallHug.None &&
+                CollisionLine<IPlatform>(_tilePosition, _tilePosition + new Vec2(0f, 16f), _placementType) is Thing
+                    thing4 && thing4.GetType() != _placementType.GetType())
+            {
+                _tilePosition.y = thing4.top - _placementType.collisionSize.y - _placementType.collisionOffset.y;
+                if (_placementType is ItemSpawner)
+                    (_placementType as ItemSpawner)._seated = true;
+            }
         }
 
         public static float interfaceSizeMultiplier => inputMode != EditorInput.Touch ? 1f : 2f;
@@ -1444,9 +1441,8 @@ namespace DuckGame
                                 _placementMenu.visible = _lockInput == null;
                             if (lockInput != null)
                             {
-                                if (_lockInputChange == lockInput)
-                                    return;
-                                _lockInput = _lockInputChange;
+                                if (_lockInputChange != lockInput)
+                                    _lockInput = _lockInputChange;
                             }
                             else
                             {
@@ -2825,18 +2821,20 @@ namespace DuckGame
                         {
                             Thing thing2 = t;
                             thing2.position += dif;
-                            if (!(t is IDontMove))
-                                return;
-                            current.things.quadTree.Remove(t);
-                            current.things.quadTree.Add(t);
+                            if (t is IDontMove)
+                            {
+                                current.things.quadTree.Remove(t);
+                                current.things.quadTree.Add(t);
+                            }
                         }, () =>
                         {
                             Thing thing3 = t;
                             thing3.position -= dif;
-                            if (!(t is IDontMove))
-                                return;
-                            current.things.quadTree.Remove(t);
-                            current.things.quadTree.Add(t);
+                            if (t is IDontMove)
+                            {
+                                current.things.quadTree.Remove(t);
+                                current.things.quadTree.Add(t);
+                            }
                         });
                     }
                 }
@@ -2986,21 +2984,23 @@ namespace DuckGame
                                 t.SetTranslation(new Vec2((float)(-dif * 2f), 0f));
                                 t.EditorFlip(false);
                                 t.flipHorizontal = !t.flipHorizontal;
-                                if (!(t is IDontMove))
-                                    return;
-                                current.things.quadTree.Remove(t);
-                                current.things.quadTree.Add(t);
-                                current.things.UpdateObject(t);
+                                if (t is IDontMove)
+                                {
+                                    current.things.quadTree.Remove(t);
+                                    current.things.quadTree.Add(t);
+                                    current.things.UpdateObject(t);
+                                }
                             }, () =>
                             {
                                 t.SetTranslation(new Vec2(dif * 2f, 0f));
                                 t.EditorFlip(false);
                                 t.flipHorizontal = !t.flipHorizontal;
-                                if (!(t is IDontMove))
-                                    return;
-                                current.things.quadTree.Remove(t);
-                                current.things.quadTree.Add(t);
-                                current.things.UpdateObject(t);
+                                if (t is IDontMove)
+                                {
+                                    current.things.quadTree.Remove(t);
+                                    current.things.quadTree.Add(t);
+                                    current.things.UpdateObject(t);
+                                }
                             });
                         }
 
@@ -3107,42 +3107,43 @@ namespace DuckGame
                         offset.x -= nudgeDistance;
                     if (Keyboard.Pressed(Keys.Right))
                         offset.x += nudgeDistance;
-                    if (!(offset != Vec2.Zero))
-                        return;
-                    hasUnsavedChanges = true;
-                    History.BeginUndoSection();
-                    foreach (Thing thing in _selection)
+                    if (offset != Vec2.Zero)
                     {
-                        Thing t = thing;
-                        History.Add(() =>
+                        hasUnsavedChanges = true;
+                        History.BeginUndoSection();
+                        foreach (Thing thing in _selection)
                         {
-                            t.SetTranslation(offset);
-                            if (!(t is IDontMove))
-                                return;
-                            current.things.quadTree.Remove(t);
-                            current.things.quadTree.Add(t);
-                            current.things.UpdateObject(t);
-                        }, () =>
-                        {
-                            t.SetTranslation(-offset);
-                            if (!(t is IDontMove))
-                                return;
-                            current.things.quadTree.Remove(t);
-                            current.things.quadTree.Add(t);
-                            current.things.UpdateObject(t);
+                            Thing t = thing;
+                            History.Add(() =>
+                            {
+                                t.SetTranslation(offset);
+                                if (t is IDontMove)
+                                {
+                                    current.things.quadTree.Remove(t);
+                                    current.things.quadTree.Add(t);
+                                    current.things.UpdateObject(t);
+                                }
+                            }, () =>
+                            {
+                                t.SetTranslation(-offset);
+                                if (t is IDontMove)
+                                {
+                                    current.things.quadTree.Remove(t);
+                                    current.things.quadTree.Add(t);
+                                    current.things.UpdateObject(t);
+                                }
+                            });
+                            t.UpdateBuckets();
+                        }
 
-                        });
-                        t.UpdateBuckets();
+                        UpdateSelection();
+                        History.EndUndoSection();
                     }
-
-                    UpdateSelection();
-                    History.EndUndoSection();
                 }
                 else
                 {
-                    if (_cursorMode != CursorMode.HasSelection)
-                        return;
-                    _cursorMode = CursorMode.Normal;
+                    if (_cursorMode == CursorMode.HasSelection)
+                        _cursorMode = CursorMode.Normal;
                 }
             }
         }
@@ -3242,12 +3243,12 @@ namespace DuckGame
                 }
             }
 
-            if (_secondaryHover != null || !(_hover is Block) || source2.Count <= 0)
-                return;
-            _secondaryHover = source2.FirstOrDefault(x => x is PipeTileset);
-            if (_secondaryHover == null || (_secondaryHover as PipeTileset)._foregroundDraw)
-                return;
-            _secondaryHover = null;
+            if (_secondaryHover == null && _hover is Block && source2.Count > 0)
+            {
+                _secondaryHover = source2.FirstOrDefault(x => x is PipeTileset);
+                if (_secondaryHover != null && !(_secondaryHover as PipeTileset)._foregroundDraw)
+                    _secondaryHover = null;
+            }
         }
 
         public override void Draw() => base.Draw();
@@ -3909,7 +3910,7 @@ namespace DuckGame
                     return;
                 if (inputMode == EditorInput.Mouse && !DebugTablet.Open)
                 {
-                     _cursor.depth = 1f;
+                    _cursor.depth = 1f;
                     _cursor.scale = new Vec2(1f, 1f);
                     _cursor.position = Mouse.position;
                     if (_cursorMode == CursorMode.Normal)
@@ -3932,28 +3933,29 @@ namespace DuckGame
                     _cursor.Draw();
                 }
 
-                if (inputMode != EditorInput.Touch)
-                    return;
-                if (TouchScreen.GetTouches().Count == 0)
+                if (inputMode == EditorInput.Touch)
                 {
-                    Vec2 pos1 = _objectMenuLayer.camera.transformScreenVector(Mouse.positionConsole +
-                                                                              new Vec2(TouchScreen._spoofFingerDistance,
-                                                                                  0f));
-                    Vec2 pos2 = _objectMenuLayer.camera.transformScreenVector(Mouse.positionConsole -
-                                                                              new Vec2(TouchScreen._spoofFingerDistance,
-                                                                                  0f));
-                    Graphics.DrawCircle(pos1, 4f, Color.White * 0.2f, 2f, 1f);
-                    Graphics.DrawCircle(pos2, 4f, Color.White * 0.2f, 2f, 1f);
-                    Graphics.DrawRect(pos1 + new Vec2(-0.5f, -0.5f), pos1 + new Vec2(0.5f, 0.5f), Color.White,
-                        1f);
-                    Graphics.DrawRect(pos2 + new Vec2(-0.5f, -0.5f), pos2 + new Vec2(0.5f, 0.5f), Color.White,
-                        1f);
-                }
-                else
-                {
-                    foreach (Touch touch in TouchScreen.GetTouches())
-                        Graphics.DrawCircle(touch.Transform(_objectMenuLayer.camera), 4f, Color.White, 2f,
+                    if (TouchScreen.GetTouches().Count == 0)
+                    {
+                        Vec2 pos1 = _objectMenuLayer.camera.transformScreenVector(Mouse.positionConsole +
+                                                                                  new Vec2(TouchScreen._spoofFingerDistance,
+                                                                                      0f));
+                        Vec2 pos2 = _objectMenuLayer.camera.transformScreenVector(Mouse.positionConsole -
+                                                                                  new Vec2(TouchScreen._spoofFingerDistance,
+                                                                                      0f));
+                        Graphics.DrawCircle(pos1, 4f, Color.White * 0.2f, 2f, 1f);
+                        Graphics.DrawCircle(pos2, 4f, Color.White * 0.2f, 2f, 1f);
+                        Graphics.DrawRect(pos1 + new Vec2(-0.5f, -0.5f), pos1 + new Vec2(0.5f, 0.5f), Color.White,
                             1f);
+                        Graphics.DrawRect(pos2 + new Vec2(-0.5f, -0.5f), pos2 + new Vec2(0.5f, 0.5f), Color.White,
+                            1f);
+                    }
+                    else
+                    {
+                        foreach (Touch touch in TouchScreen.GetTouches())
+                            Graphics.DrawCircle(touch.Transform(_objectMenuLayer.camera), 4f, Color.White, 2f,
+                                1f);
+                    }
                 }
             }
         }
@@ -3962,9 +3964,8 @@ namespace DuckGame
         {
             if (_procTarget == null)
                 _procTarget = new RenderTarget2D(Graphics.width, Graphics.height);
-            if (_procContext == null)
-                return;
-            _procContext.Draw(_procTarget, current.camera, _procDrawOffset);
+            if (_procContext != null)
+                _procContext.Draw(_procTarget, current.camera, _procDrawOffset);
         }
 
         public void CloseMenu() => _closeMenu = true;
@@ -4227,9 +4228,8 @@ namespace DuckGame
             camera.height *= 0.3f;
             camera.centerX -= (float)((camera.width - width) / 2);
             camera.centerY -= (float)((camera.height - height) / 2);
-            if (_sizeRestriction.x <= 0)
-                return;
-            camera.center = (_topLeftMost + _bottomRightMost) / 2f;
+            if (_sizeRestriction.x > 0)
+                camera.center = (_topLeftMost + _bottomRightMost) / 2f;
         }
 
         public static Texture2D LoadPreview(string s)
@@ -4916,10 +4916,11 @@ namespace DuckGame
 
             File.SetAttributes(file, FileAttributes.Normal);
             DuckFile.Delete(file);
-            if (!File.Exists(path))
-                return;
-            File.SetAttributes(path, FileAttributes.Normal);
-            File.Delete(path);
+            if (File.Exists(path))
+            {
+                File.SetAttributes(path, FileAttributes.Normal);
+                File.Delete(path);
+            }
         }
 
         public void SaveAs()
@@ -5441,10 +5442,11 @@ namespace DuckGame
 
         public static void InitializePlaceableList()
         {
-            if (_placeables != null)
-                return;
-            InitializeConstructorLists();
-            InitializePlaceableGroup();
+            if (_placeables == null)
+            {
+                InitializeConstructorLists();
+                InitializePlaceableGroup();
+            }
         }
 
         public static void InitializePlaceableGroup()
