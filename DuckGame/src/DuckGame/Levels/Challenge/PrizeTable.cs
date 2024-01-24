@@ -71,15 +71,18 @@ namespace DuckGame
 
         public override void Update()
         {
+            Main.SpecialCode = "Prize Table 1";
             Profile activeprofile = null;
             foreach(Profile profile in Profiles.active)
             {
                 activeprofile = profile;
                 break;
             }
+            Main.SpecialCode = "Prize Table 2";
             if (activeprofile == null)
                 return;
             _hasEligibleChallenges = Challenges.GetEligibleChancyChallenges(activeprofile).Count > 0;
+            Main.SpecialCode = "Prize Table 3";
             Duck duck1 = Level.Nearest<Duck>(x, y);
             if (duck1 != null)
             {
@@ -94,6 +97,7 @@ namespace DuckGame
                     hover = false;
                 }
             }
+            Main.SpecialCode = "Prize Table 4";
             if (_hasEligibleChallenges)
             {
                 Vec2 vec2 = new Vec2(40f, 0f);
@@ -101,11 +105,13 @@ namespace DuckGame
                 if (duck2 != null) 
                     hoverChancyChallenge = duck2.grounded && (duck2.position - (position + vec2)).length < 20f;
             }
+            Main.SpecialCode = "Prize Table 5";
             if (_dust != null)
             {
                 _dust.fade = 0.5f;
                 _dust.visible = _unlocked && visible;
             }
+            Main.SpecialCode = "Prize Table 6";
         }
 
         public override void Draw()
