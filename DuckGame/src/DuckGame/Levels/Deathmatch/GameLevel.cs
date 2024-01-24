@@ -639,7 +639,9 @@ namespace DuckGame
 
                 foreach (Profile p in profileList)
                 {
-                    string s = DGRSettings.HSDRightToLeft?((p.team.score == t.score?"@STARGOODY@":"") + (DGRSettings.HSDShowScore ? p.team.score + " " : "") + (DGRSettings.HSDClearNames ? Extensions.CleanFormatting(p.name) : p.name)):((DGRSettings.HSDClearNames ? Extensions.CleanFormatting(p.name) : p.name) + (DGRSettings.HSDShowScore ? " " + p.team.score : "") + (p.team == t ? "@STARGOODY@" : ""));
+                    string s = DGRSettings.HSDRightToLeft?
+                        ((p.team.score == t?.score?"@STARGOODY@":"") + (DGRSettings.HSDShowScore ? p.team.score + " " : "") + (DGRSettings.HSDClearNames ? Extensions.CleanFormatting(p.name) : p.name)):
+                        ((DGRSettings.HSDClearNames ? Extensions.CleanFormatting(p.name) : p.name) + (DGRSettings.HSDShowScore ? " " + p.team.score : "") + (p.team.score == t?.score ? "@STARGOODY@" : ""));
                     Color c = DGRSettings.HSDShowColors?p.persona.colorUsable:Color.White;
 
                     if (DGRSettings.HSDRightToLeft)
