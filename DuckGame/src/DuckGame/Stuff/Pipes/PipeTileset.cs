@@ -1439,7 +1439,6 @@ namespace DuckGame
                 partWait = 5;
                 partRot += 1.72152f;
             }
-            DevConsole.Log(_particles.Count);
             for (int index = 0; index < _particles.Count; ++index)
             {
                 if (_particles[index].alpha < 1)
