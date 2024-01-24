@@ -633,7 +633,7 @@ namespace DuckGame
                 int i = 0;
                 float xs = 0;
                 float ys = 0;
-                Vec2 vAlign = DGRSettings.HSDHorizontal? new Vec2(spacing, 0): new Vec2(0, spacing);
+                Vec2 vAlign = DGRSettings.HSDHorizontal? new Vec2(DGRSettings.HSDRightToLeft?-spacing:spacing, 0): new Vec2(0, spacing);
 
                 Vec2 generalOffset = new Vec2(DGRSettings.HSDXoffset * 4, DGRSettings.HSDYoffset * 4);
 
