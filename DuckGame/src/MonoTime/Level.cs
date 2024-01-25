@@ -129,7 +129,7 @@ namespace DuckGame
 
         public static void Remove(Thing thing)
         {
-            if (Corderator.instance != null && !Recorderator.Playing && thing.shouldhavevessel)
+            if (Corderator.instance != null && !Recorderator.Playing && thing != null && thing.shouldhavevessel)
             {
                 if (Corderator.instance.somethingMap.Contains(thing))
                 {

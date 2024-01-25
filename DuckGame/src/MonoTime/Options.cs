@@ -752,15 +752,6 @@ namespace DuckGame
             {
                 dgrDescription = " "
             });
-            /*menu.Add(new UIMenuItemNumber("Name Display Style", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HUDScoreDisplayStyle), 0, 1, 1), valStrings: new List<string>()
-            {
-                "DGR",
-                "QOL"
-            })
-            {
-                dgrDescription = "The style of the name display GUI"
-            });*/
-
 
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 

@@ -226,6 +226,14 @@ namespace DuckGame
 
         public static void DeserializeCustomHats()
         {
+            if (ModLoader.VanillaDgPath != null)
+            {
+                string s = ModLoader.VanillaDgPath.Replace("DuckGame.exe", "");
+                LoadCustomHatsFromFolder(s, "hat");
+                LoadCustomHatsFromFolder(s, "png");
+                LoadCustomHatsFromFolder(s + "/Hats", "hat");
+                LoadCustomHatsFromFolder(s + "/Hats", "png");
+            }
             foreach (string hatSearchPath in hatSearchPaths)
             {
                 LoadCustomHatsFromFolder(hatSearchPath, "hat");
