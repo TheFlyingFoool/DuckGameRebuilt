@@ -132,10 +132,16 @@ namespace DuckGame
             if (!_spinning)
             {
                 _spinning = true;
-                _spinDown.Volume = 0f;
-                _spinDown.Stop();
-                _spinUp.Volume = 1f;
-                _spinUp.Play();
+                if (_spinDown != null)
+                {
+                    _spinDown.Volume = 0f;
+                    _spinDown.Stop();
+                }
+                if (_spinUp != null)
+                {
+                    _spinUp.Volume = 1f;
+                    _spinUp.Play();
+                }
             }
             if (_spin < 1f)
             {
@@ -153,12 +159,18 @@ namespace DuckGame
             if (!_spinning)
                 return;
             _spinning = false;
-            _spinUp.Volume = 0f;
-            _spinUp.Stop();
+            if (_spinUp != null)
+            {
+                _spinUp.Volume = 0f;
+                _spinUp.Stop();
+            }
             if (_spin <= 0.9f)
                 return;
-            _spinDown.Volume = 1f;
-            _spinDown.Play();
+            if (_spinDown != null)
+            {
+                _spinDown.Volume = 1f;
+                _spinDown.Play();
+            }
         }
 
         public override void UpdateOnFire()
@@ -223,12 +235,13 @@ namespace DuckGame
                 barrelInsertOffset = new Vec2(0f, (float)(2f + Math.Sin(spinAmount / 9f * 3.14f) * 2f));
             }
             base.Update();
-            if (_topBullet == null)
-                return;
-            if (!graphic.flipH)
-                _topBullet.chainOffset = new Vec2(1f, 5f);
-            else
-                _topBullet.chainOffset = new Vec2(-1f, 5f);
+            if (_topBullet != null)
+            {
+                if (!graphic.flipH)
+                    _topBullet.chainOffset = new Vec2(1f, 5f);
+                else
+                    _topBullet.chainOffset = new Vec2(-1f, 5f);
+            }
         }
 
         public override void Fire()
@@ -271,10 +284,11 @@ namespace DuckGame
                 Graphics.Draw(ref _tip, x, y);
                 Graphics.material = material;
             }
-            if (_topBullet == null)
-                return;
-            _topBullet.material = this.material;
-            _topBullet.DoDraw();
+            if (_topBullet != null)
+            {
+                _topBullet.material = this.material;
+                _topBullet.DoDraw();
+            }
         }
     }
 }

@@ -248,20 +248,22 @@ namespace DuckGame
             {
                 collisionOffset = new Vec2(-4f, 0f);
                 collisionSize = new Vec2(4f, 4f);
-                if (!_crouchStance || _jabStance)
-                    return;
-                collisionOffset = new Vec2(-2f, -19f);
-                collisionSize = new Vec2(4f, 16f);
-                thickness = 3f;
+                if (_crouchStance && !_jabStance)
+                {
+                    collisionOffset = new Vec2(-2f, -19f);
+                    collisionSize = new Vec2(4f, 16f);
+                    thickness = 3f;
+                }
             }
             else
             {
                 collisionOffset = new Vec2(-2f, -16f);
                 collisionSize = new Vec2(4f, 18f);
-                if (!_wasLifted)
-                    return;
-                collisionOffset = new Vec2(-4f, -2f);
-                collisionSize = new Vec2(8f, 4f);
+                if (_wasLifted)
+                {
+                    collisionOffset = new Vec2(-4f, -2f);
+                    collisionSize = new Vec2(8f, 4f);
+                }
             }
         }
 
@@ -952,26 +954,27 @@ namespace DuckGame
         {
             if (_crouchStance && _jabStance && !_swinging || !_crouchStance && !_swinging && _swing < 0.1f)
             {
-                if (_jabStance && !_allowJabMotion)
-                    return;
-                _afterSwingCounter = 0f;
-                _pullBack = true;
-                _swung = true;
-                _shing = false;
-                _timeSinceSwing = 0f;
-                OnSwing();
-                if (_swingSound != null)
-                    SFX.Play(_swingSound, Rando.Float(0.8f, 1f), Rando.Float(-0.1f, 0.1f));
-                if (_jabStance)
-                    return;
-                _swordSwing.speed = 1f;
-                _swordSwing.frame = 0;
+                if (!_jabStance || _allowJabMotion)
+                {
+                    _afterSwingCounter = 0f;
+                    _pullBack = true;
+                    _swung = true;
+                    _shing = false;
+                    _timeSinceSwing = 0f;
+                    OnSwing();
+                    if (_swingSound != null)
+                        SFX.Play(_swingSound, Rando.Float(0.8f, 1f), Rando.Float(-0.1f, 0.1f));
+                    if (!_jabStance)
+                    {
+                        _swordSwing.speed = 1f;
+                        _swordSwing.frame = 0;
+                    }
+                }
             }
             else
             {
-                if (!_crouchStance || _jabStance || duck == null || duck.grounded)
-                    return;
-                _slamStance = true;
+                if (_crouchStance && !_jabStance && duck != null && !duck.grounded)
+                    _slamStance = true;
             }
         }
 

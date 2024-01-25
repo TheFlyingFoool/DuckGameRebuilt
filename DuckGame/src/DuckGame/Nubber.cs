@@ -73,6 +73,8 @@
         {
             //if (Level.current is Editor || graphic == null)
             //     return;
+            if (graphic == null)
+                return;
             graphic.position = position;
             graphic.scale = scale;
             graphic.center = center;

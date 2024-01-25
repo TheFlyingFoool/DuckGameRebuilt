@@ -123,10 +123,16 @@ namespace DuckGame
             if (!_spinning)
             {
                 _spinning = true;
-                _spinDown.Volume = 0f;
-                _spinDown.Stop();
-                _spinUp.Volume = 1f;
-                _spinUp.Play();
+                if (_spinDown != null)
+                {
+                    _spinDown.Volume = 0f;
+                    _spinDown.Stop();
+                }
+                if (_spinUp != null)
+                {
+                    _spinUp.Volume = 1f;
+                    _spinUp.Play();
+                }
             }
             if (_spin < 1f)
             {
@@ -144,12 +150,18 @@ namespace DuckGame
             if (!_spinning)
                 return;
             _spinning = false;
-            _spinUp.Volume = 0f;
-            _spinUp.Stop();
+            if (_spinUp != null)
+            {
+                _spinUp.Volume = 0f;
+                _spinUp.Stop();
+            }
             if (_spin <= 0.9f)
                 return;
-            _spinDown.Volume = 1f;
-            _spinDown.Play();
+            if (_spinDown != null)
+            {
+                _spinDown.Volume = 1f;
+                _spinDown.Play();
+            }
         }
 
         public override void Update()
@@ -181,12 +193,13 @@ namespace DuckGame
             else
                 _spin = 0f;
             base.Update();
-            if (_topBullet == null)
-                return;
-            if (!graphic.flipH)
-                _topBullet.chainOffset = new Vec2(1f, 5f);
-            else
-                _topBullet.chainOffset = new Vec2(-1f, 5f);
+            if (_topBullet != null)
+            {
+                if (!graphic.flipH)
+                    _topBullet.chainOffset = new Vec2(1f, 5f);
+                else
+                    _topBullet.chainOffset = new Vec2(-1f, 5f);
+            }
         }
 
         public override void Draw()

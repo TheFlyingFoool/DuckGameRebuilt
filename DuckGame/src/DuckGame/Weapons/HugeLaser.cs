@@ -273,41 +273,44 @@ namespace DuckGame
             if (_chargeAnim.currentAnimation == "loaded")
             {
                 _chargeAnim.SetAnimation("charge");
-                if (!isServerForObject)
-                    return;
-                _chargeSound.Volume = 1f;
-                _chargeSound.Play();
-                _unchargeSound.Stop();
-                _unchargeSound.Volume = 0f;
-                _unchargeSoundShort.Stop();
-                _unchargeSoundShort.Volume = 0f;
+                if (isServerForObject)
+                {
+                    _chargeSound.Volume = 1f;
+                    _chargeSound.Play();
+                    _unchargeSound.Stop();
+                    _unchargeSound.Volume = 0f;
+                    _unchargeSoundShort.Stop();
+                    _unchargeSoundShort.Volume = 0f;
+                }
             }
             else
             {
-                if (!(_chargeAnim.currentAnimation == "uncharge"))
-                    return;
-                if (isServerForObject)
+                if (_chargeAnim.currentAnimation == "uncharge")
                 {
-                    if (_chargeAnim.frame > 18)
+                    if (isServerForObject)
                     {
-                        _chargeSound.Volume = 1f;
-                        _chargeSound.Play();
+                        if (_chargeAnim.frame > 18)
+                        {
+                            _chargeSound.Volume = 1f;
+                            _chargeSound.Play();
+                        }
+                        else
+                        {
+                            _chargeSoundShort.Volume = 1f;
+                            _chargeSoundShort.Play();
+                        }
                     }
-                    else
+                    int frame = _chargeAnim.frame;
+                    _chargeAnim.SetAnimation("charge");
+                    _chargeAnim.frame = 22 - frame;
+                    if (isServerForObject)
                     {
-                        _chargeSoundShort.Volume = 1f;
-                        _chargeSoundShort.Play();
+                        _unchargeSound.Stop();
+                        _unchargeSound.Volume = 0f;
+                        _unchargeSoundShort.Stop();
+                        _unchargeSoundShort.Volume = 0f;
                     }
                 }
-                int frame = _chargeAnim.frame;
-                _chargeAnim.SetAnimation("charge");
-                _chargeAnim.frame = 22 - frame;
-                if (!isServerForObject)
-                    return;
-                _unchargeSound.Stop();
-                _unchargeSound.Volume = 0f;
-                _unchargeSoundShort.Stop();
-                _unchargeSoundShort.Volume = 0f;
             }
         }
 
@@ -317,32 +320,34 @@ namespace DuckGame
 
         public override void OnReleaseAction()
         {
-            if (!(_chargeAnim.currentAnimation == "charge"))
-                return;
-            if (isServerForObject)
+            if (_chargeAnim.currentAnimation == "charge")
             {
-                if (_chargeAnim.frame > 20)
+                if (isServerForObject)
                 {
-                    _unchargeSound.Stop();
-                    _unchargeSound.Volume = 1f;
-                    _unchargeSound.Play();
+                    if (_chargeAnim.frame > 20)
+                    {
+                        _unchargeSound.Stop();
+                        _unchargeSound.Volume = 1f;
+                        _unchargeSound.Play();
+                    }
+                    else
+                    {
+                        _unchargeSoundShort.Stop();
+                        _unchargeSoundShort.Volume = 1f;
+                        _unchargeSoundShort.Play();
+                    }
                 }
-                else
+                int frame = _chargeAnim.frame;
+                _chargeAnim.SetAnimation("uncharge");
+                _chargeAnim.frame = 22 - frame;
+                if (isServerForObject)
                 {
-                    _unchargeSoundShort.Stop();
-                    _unchargeSoundShort.Volume = 1f;
-                    _unchargeSoundShort.Play();
+                    _chargeSound.Stop();
+                    _chargeSound.Volume = 0f;
+                    _chargeSoundShort.Stop();
+                    _chargeSoundShort.Volume = 0f;
                 }
             }
-            int frame = _chargeAnim.frame;
-            _chargeAnim.SetAnimation("uncharge");
-            _chargeAnim.frame = 22 - frame;
-            if (!isServerForObject)
-                return;
-            _chargeSound.Stop();
-            _chargeSound.Volume = 0f;
-            _chargeSoundShort.Stop();
-            _chargeSoundShort.Volume = 0f;
         }
     }
 }
