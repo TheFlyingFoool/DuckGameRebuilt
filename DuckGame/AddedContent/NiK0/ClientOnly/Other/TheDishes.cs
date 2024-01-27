@@ -129,7 +129,7 @@ namespace DuckGame
                 {
                     dirtyness += Math.Abs(hSpeed) / 250;
                     angleDegrees += hSpeed * 3;
-                    if (dirtyness < 0.7f && Rando.Int(16 - (int)Math.Abs(hSpeed)) == 0)
+                    if (dirtyness < 0.7f && Rando.Int(Maths.Clamp(16 - (int)Math.Abs(hSpeed), 1, 16)) == 0)
                     {
                         Level.Add(new Bubble(x + Rando.Float(-6, 6), y + Rando.Float(-4, 4), bubbles));
                     }
