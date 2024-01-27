@@ -23,28 +23,30 @@ namespace DuckGame
 
         public void Update()
         {
-            Vec2 vec2 = Vec2.Transform(new Vec2(center.x, center.y), Level.current.camera.getMatrix());
-            int num1 = (int)vec2.x;
-            if (num1 < 0)
-                num1 = 0;
-            if (num1 > Graphics.width)
-                num1 = Graphics.width;
-            int num2 = (int)vec2.y;
-            if (num2 < 0)
-                num2 = 0;
-            if (num2 > Graphics.height)
-                num2 = Graphics.height;
+            if (Level.current == null || Level.current.camera == null || layer == null)
+                return;
+            Vec2 pos = Vec2.Transform(new Vec2(center.x, center.y), Level.current.camera.getMatrix());
+            int xScissor = (int)pos.x;
+            if (xScissor < 0)
+                xScissor = 0;
+            if (xScissor > Graphics.width)
+                xScissor = Graphics.width;
+            int yScissor = (int)pos.y;
+            if (yScissor < 0)
+                yScissor = 0;
+            if (yScissor > Graphics.height)
+                yScissor = Graphics.height;
             if (horizontal)
             {
                 if (isLeft)
-                    layer.scissor = new Rectangle(0f, num2, Graphics.width, Graphics.height - num2);
+                    layer.scissor = new Rectangle(0f, yScissor, Graphics.width, Graphics.height - yScissor);
                 else
-                    layer.scissor = new Rectangle(0f, 0f, Graphics.width, num2);
+                    layer.scissor = new Rectangle(0f, 0f, Graphics.width, yScissor);
             }
             else if (isLeft)
-                layer.scissor = new Rectangle(num1, 0f, Graphics.width - num1, Graphics.height);
+                layer.scissor = new Rectangle(xScissor, 0f, Graphics.width - xScissor, Graphics.height);
             else
-                layer.scissor = new Rectangle(0f, 0f, num1, Graphics.height);
+                layer.scissor = new Rectangle(0f, 0f, xScissor, Graphics.height);
         }
 
         public void Draw() => Graphics.DrawLine(point1, point2, Color.Orange, 2f, (Depth)1f);
