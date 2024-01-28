@@ -19,7 +19,7 @@ namespace DuckGame
 
         public override void Apply()
         {
-            if (Graphics.device.Textures[0] != null)
+            if (Graphics.device.Textures[0] != null && _thing != null && _thing.graphic != null && _thing.graphic.texture != null)
             {
                 //Tex2D texture = (Tex2D)(DuckGame.Graphics.device.Textures[0] as Texture2D);
                 SetValue("width", _thing.graphic.texture.frameWidth / _thing.graphic.texture.width);
