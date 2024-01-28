@@ -137,7 +137,7 @@ namespace DuckGame
 
         public static bool Rect(Vec2 tl1, Vec2 br1, Rectangle t)
         {
-            return !(br1.y < t.y && tl1.y > t.Bottom && tl1.x > t.Right && br1.x < t.x);//br1.y >= t.y && tl1.y <= t.Bottom && tl1.x <= t.Right && br1.x >= t.x;
+            return br1.y >= t.y && tl1.y <= t.Bottom && tl1.x <= t.Right && br1.x >= t.x;
         }
 
         public static bool Rect(Rectangle r1, Rectangle r2)
