@@ -122,7 +122,7 @@ namespace DuckGame
 
         public static void Add(Thing thing)
         {
-            if (_core.currentLevel == null)
+            if (_core.currentLevel == null || thing == null)
                 return;
             _core.currentLevel.AddThing(thing);
         }
@@ -137,7 +137,7 @@ namespace DuckGame
                     Corderator.instance.somethingMapped[z].deleteTime = Corderator.instance.cFrame;
                 }
             }
-            if (_core.currentLevel == null)
+            if (_core.currentLevel == null || thing == null)
                 return;
             _core.currentLevel.RemoveThing(thing);
         }
