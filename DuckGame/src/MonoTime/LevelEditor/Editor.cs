@@ -4913,8 +4913,8 @@ namespace DuckGame
                 activatedLevels.RemoveAll(x => x == data.guid);
                 path = DuckFile.editorPreviewDirectory + data.guid;
             }
-
-            File.SetAttributes(file, FileAttributes.Normal);
+            if (File.Exists(file))
+                File.SetAttributes(file, FileAttributes.Normal);
             DuckFile.Delete(file);
             if (File.Exists(path))
             {
