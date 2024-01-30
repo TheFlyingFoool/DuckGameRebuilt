@@ -606,7 +606,7 @@ namespace DuckGame
         {
             if (_mode != null)
                 _mode.PostDrawLayer(layer);
-            if (layer == Layer.Console)
+            if (layer == Layer.Console && DGRSettings.QOLScoreThingButWithoutScore)
             {
                 IEnumerable<Profile> profileList = Profiles.activeNonSpectators;
                 float opacity = DGRSettings.HSDOpacity / 100f;
