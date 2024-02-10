@@ -71,30 +71,33 @@ namespace DuckGame
             if (_neighborsInitialized)
                 return;
             _neighborsInitialized = true;
-            if (_leftBlock == null)
+            if (_level != null)
             {
-                _leftBlock = _level.QuadTreePointFilter<AutoBlock>(new Vec2(left - 2f, position.y), checkFilter);
-                if (_leftBlock != null)
-                    _leftBlock.InitializeNeighbors();
+                if (_leftBlock == null)
+                {
+                    _leftBlock = _level.QuadTreePointFilter<AutoBlock>(new Vec2(left - 2f, position.y), checkFilter);
+                    if (_leftBlock != null)
+                        _leftBlock.InitializeNeighbors();
+                }
+                if (_rightBlock == null)
+                {
+                    _rightBlock = _level.QuadTreePointFilter<AutoBlock>(new Vec2(right + 2f, position.y), checkFilter);
+                    if (_rightBlock != null)
+                        _rightBlock.InitializeNeighbors();
+                }
+                if (_upBlock == null)
+                {
+                    _upBlock = _level.QuadTreePointFilter<AutoBlock>(new Vec2(position.x, top - 2f), checkFilter);
+                    if (_upBlock != null)
+                        _upBlock.InitializeNeighbors();
+                }
+                if (_downBlock != null)
+                    return;
+                _downBlock = _level.QuadTreePointFilter<AutoBlock>(new Vec2(position.x, bottom + 2f), checkFilter);
+                if (_downBlock == null)
+                    return;
+                _downBlock.InitializeNeighbors();
             }
-            if (_rightBlock == null)
-            {
-                _rightBlock = _level.QuadTreePointFilter<AutoBlock>(new Vec2(right + 2f, position.y), checkFilter);
-                if (_rightBlock != null)
-                    _rightBlock.InitializeNeighbors();
-            }
-            if (_upBlock == null)
-            {
-                _upBlock = _level.QuadTreePointFilter<AutoBlock>(new Vec2(position.x, top - 2f), checkFilter);
-                if (_upBlock != null)
-                    _upBlock.InitializeNeighbors();
-            }
-            if (_downBlock != null)
-                return;
-            _downBlock = _level.QuadTreePointFilter<AutoBlock>(new Vec2(position.x, bottom + 2f), checkFilter);
-            if (_downBlock == null)
-                return;
-            _downBlock.InitializeNeighbors();
         }
 
         public override BinaryClassChunk Serialize()
