@@ -124,7 +124,9 @@ namespace DuckGame
                 portalDrawTransformer.thing.portal = null;
                 portalDrawTransformer.thing.layer = Layer.Game;
                 foreach (PortalDoor door in _doors)
-                    door.layer.Remove(portalDrawTransformer);
+                {
+                    if (door.layer != null) door.layer.Add(portalDrawTransformer);
+                }
             }
             foreach (ITeleport teleport in teleports)
             {
@@ -136,7 +138,9 @@ namespace DuckGame
                     (t as Thing).portal = this;
                     (t as Thing).layer = _fakeLayer;
                     foreach (PortalDoor door in _doors)
-                        door.layer.Add(portalDrawTransformer);
+                    {
+                        if (door.layer != null) door.layer.Add(portalDrawTransformer);
+                    }
                 }
             }
             foreach (PortalDoor door in _doors)

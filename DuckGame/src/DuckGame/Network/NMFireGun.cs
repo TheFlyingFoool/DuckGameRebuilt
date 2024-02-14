@@ -113,12 +113,16 @@ namespace DuckGame
                 NMFireBullet nmFireBullet = new NMFireBullet();
                 BitBuffer msg = d.ReadBitBuffer();
                 nmFireBullet.OnDeserialize(msg);
-                if (ammoType >= 0 && ammoType < AmmoType.indexTypeMap.Count)
+                if (ammoType < AmmoType.indexTypeMap.Count)
                 {
-                    AmmoType instance = Activator.CreateInstance(AmmoType.indexTypeMap[ammoType]) as AmmoType;
-                    instance.ReadAdditionalData(d);
-                    nmFireBullet.typeInstance = instance;
-                    _fireEvents.Add(nmFireBullet);
+                    Type t = AmmoType.indexTypeMap[ammoType];
+                    if (t != typeof(ATPortal))
+                    {
+                        AmmoType instance = Activator.CreateInstance(t) as AmmoType;
+                        instance.ReadAdditionalData(d);
+                        nmFireBullet.typeInstance = instance;
+                        _fireEvents.Add(nmFireBullet);
+                    }
                 }
             }
         }
