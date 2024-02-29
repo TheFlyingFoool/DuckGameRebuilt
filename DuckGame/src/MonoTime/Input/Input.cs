@@ -145,6 +145,7 @@ namespace DuckGame
                     {Triggers.RightStick, (int)Keys.Tab},
                     {Triggers.VoiceRegister, (int)Keys.Home},
                     {Triggers.KeyboardF, (int)Keys.F},
+                    {Triggers.DevConsoleTrigger, (int)Keys.OemTilde }
                 }
             },
             new DeviceInputMapping() 

@@ -34,6 +34,7 @@ namespace DuckGame
         public const string LeftStick = "LSTICK";
         public const string RightStick = "RSTICK";
         public const string VoiceRegister = "VOICEREG";
+        public const string DevConsoleTrigger = "CSOPEN";
         public const string Any = "ANY";
 
         public const string LeftBumper = "LBUMPER";

@@ -33,6 +33,8 @@ namespace DuckGame
                     return Triggers.Chat;
                 if (_realTrigger == Triggers.RightStick && inputMapping != null && inputMapping.device is Keyboard)
                     return Triggers.VoiceRegister;
+                if (_realTrigger == Triggers.DevConsoleTrigger && inputMapping != null && inputMapping.device is Keyboard)
+                    return Triggers.DevConsoleTrigger;
                 return _realTrigger == Triggers.RightTrigger && inputMapping != null && inputMapping.device is Keyboard ? "PLAYERINDEX" : _realTrigger;
             }
         }
@@ -116,6 +118,8 @@ namespace DuckGame
                     _uiText.text = "|PINK|CHAT      ";
                 if (localtrigger == Triggers.VoiceRegister)
                     _uiText.text = "|PINK|JAM BUTTON";
+                if (localtrigger == Triggers.DevConsoleTrigger)
+                    _uiText.text = "|DGRED|OPEN CONSOLE";
                 if (localtrigger == "PLAYERINDEX")
                 {
                     _uiText.text = "|LIME|PLAYER#";

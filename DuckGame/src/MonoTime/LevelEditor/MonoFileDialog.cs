@@ -622,7 +622,7 @@ namespace DuckGame
                         }
                     }
                 }
-                if (Input.Pressed(Triggers.Shoot))
+                if (Input.Pressed(Triggers.Shoot) && _items.Count > 0)
                 {
                     if (_selectedIndex < 0 || _selectedIndex >= _items.Count) // crashed found related to _selectedIndex being out of bounds
                     {

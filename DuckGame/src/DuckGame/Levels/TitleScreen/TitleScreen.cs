@@ -1173,7 +1173,7 @@ namespace DuckGame
 
             if ((_multiBeam.entered || !_fadeInFull) && !_enterCredits)
             {
-                if (Input.Pressed(Triggers.Grab))
+                if (Input.Pressed(Triggers.Grab) && !DevConsole.open)
                 {
                     if (_enterEditor)
                     {
@@ -1181,7 +1181,7 @@ namespace DuckGame
                     }
                     _enterEditor = true;
                 }
-                if (Input.Pressed(Triggers.Shoot))
+                if (Input.Pressed(Triggers.Shoot) && !DevConsole.open)
                 {
                     if (_enterMultiplayer)
                     {

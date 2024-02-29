@@ -14,7 +14,7 @@
         {
             base.ApplyKick();
             hSpeed *= 1.5f;
-            duck.vSpeed *= 0.5f;
+            if (duck != null) duck.vSpeed *= 0.5f;
         }
         public override void Update()
         {

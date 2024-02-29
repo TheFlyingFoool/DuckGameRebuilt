@@ -179,6 +179,8 @@ namespace DuckGame
             _controlElements.Add(new UIControlElement("|DGPURPLE|START", Triggers.Start, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
             uiBox.Add(_controlElements[_controlElements.Count - 1], true);
             uiBox.Add(new UIText(" ", Color.White, heightAdd: -6f), true);
+            _controlElements.Add(new UIControlElement("|DGGREEN|CONSOLE TRIGGER", Triggers.DevConsoleTrigger, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
+            uiBox.Add(_controlElements[_controlElements.Count - 1], true);
             _controlElements.Add(new UIControlElement("|DGGREEN|MOVE STICK", Triggers.LeftStick, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
             uiBox.Add(_controlElements[_controlElements.Count - 1], true);
             _controlElements.Add(new UIControlElement("|DGGREEN|LICK STICK", Triggers.RightStick, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));

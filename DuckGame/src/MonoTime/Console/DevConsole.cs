@@ -1,14 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: DuckGame.DevConsole
-//removed for regex reasons Culture=neutral, PublicKeyToken=null
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// MVID: C907F20B-C12B-4773-9B1E-25290117C0E4
-// Assembly location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.exe
-// XML documentation location: D:\Program Files (x86)\Steam\steamapps\common\Duck Game\DuckGame.xml
-
-using AddedContent.Firebreak;
-using AddedContent.Firebreak.DuckShell.Implementation;
-using AddedContent.Hyeve.Utils;
+﻿using AddedContent.Firebreak;
 using DuckGame.ConsoleEngine;
 using System;
 using System.Collections.Generic;
@@ -18,15 +8,12 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using SDL2;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Documents;
 
 namespace DuckGame
 {
@@ -1174,24 +1161,20 @@ namespace DuckGame
 
             FlushPendingLines();
             bool flag = Keyboard.Down(Keys.LeftShift) || Keyboard.Down(Keys.RightShift);
-            int num1 = !(Keyboard.Down(Keys.OemTilde) && !WasDownLastFrame)
-                ? 0
-                : (!flag
-                    ? 1
-                    : 0); // Replaced !(Keyboard.Pressed(Keys.OemTilde)) ? with that because Press can cause issues with it auto trying to close 
 
-            //Just for NiK0 Purposes
-            if (Steam.user != null && Steam.user.id == DGRDevs.NiK0.SteamID && Keyboard.Down(Keys.LeftControl) && Keyboard.Pressed(Keys.NumPad2)) 
-                num1 = 1;
-
-            WasDownLastFrame = Keyboard.Down(Keys.OemTilde);
             if (core.pendingSends.Count > 0)
             {
                 NetMessage msg = core.pendingSends.Dequeue();
                 Send.Message(msg, msg.connection);
             }
+            bool open = _core.open;
 
-            if (num1 != 0 && !DuckNetwork.core.enteringText && LockMovementQueue.Empty && NetworkDebugger.hoveringInstance)
+            //jank workaround -NiK0
+
+            _core.open = false;
+            bool pressedTrigger = Input.Pressed(Triggers.DevConsoleTrigger);
+            _core.open = open;
+            if (pressedTrigger && !DuckNetwork.core.enteringText && LockMovementQueue.Empty && NetworkDebugger.hoveringInstance)
             {
                 if (_tray == null)
                 {
