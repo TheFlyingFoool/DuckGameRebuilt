@@ -1119,7 +1119,10 @@ namespace DuckGame
 
         private int GetLobbyData(Lobby lobby, string name)
         {
-            return int.Parse(lobby.GetLobbyData(name));
+            string s = lobby.GetLobbyData(name);
+            int result;
+            int.TryParse(s, out result);
+            return result;
         }
 
         private Sprite CreateMapSprite(string name)
