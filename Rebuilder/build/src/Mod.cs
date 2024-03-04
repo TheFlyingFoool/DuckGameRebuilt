@@ -1,10 +1,8 @@
 ﻿using BsDiff;
 using System;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Xml;
+using System.Diagnostics;
 
 [assembly: AssemblyTitle("Duck Game Rebuilt")]
 [assembly: AssemblyCompany("DGR Team")]
@@ -22,7 +20,7 @@ namespace DuckGame.Cobalt
             _properties.Set("isDgrMod", true);
             
             OnDGR = IsOnDGR();
-            bool alreadyPatched = File.Exists(Path.GetDirectoryName(typeof(ItemBox).Assembly.Location) + "/rebuilt.quack");
+            alreadyPatched = File.Exists(Path.GetDirectoryName(typeof(ItemBox).Assembly.Location) + "/rebuilt.quack");
 
             if (!OnDGR && !alreadyPatched)
             {
@@ -35,7 +33,19 @@ namespace DuckGame.Cobalt
             
             base.OnPreInitialize();
         }
+        public bool alreadyPatched;
+        protected override void OnPostInitialize()
+        {
+            if (!OnDGR && alreadyPatched)
+            {
+                AppDomain.CurrentDomain.AssemblyResolve += OnCurrentDomainOnAssemblyResolve;
 
+                PatchForDGRQuickload();
+                SaveVanillaPath();
+                RestartToDGR();
+            }
+            base.OnPostInitialize();
+        }
         private static bool IsOnDGR()
         {
             // dan will probably kill me for this ~Firebreak

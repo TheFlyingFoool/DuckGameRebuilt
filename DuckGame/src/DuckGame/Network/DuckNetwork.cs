@@ -1358,6 +1358,7 @@ namespace DuckGame
         {
             int val2 = 512;
             MemoryStream compressedLevelData = DuckNetwork.compressedLevelData;
+            if (compressedLevelData == null) return;
             long length1 = compressedLevelData.Length;
             int offset = 0;
             Math.Ceiling((double)(length1 / val2));
@@ -3359,7 +3360,7 @@ namespace DuckGame
                                     return;
                                 case NMTeamSetDenied _:
                                     NMTeamSetDenied nmTeamSetDenied = m as NMTeamSetDenied;
-                                    if (nmTeamSetDenied.profile == null || nmTeamSetDenied.profile.connection != localConnection || nmTeamSetDenied.profile.team == null || nmTeamSetDenied.profile.team != nmTeamSetDenied.team)
+                                    if (nmTeamSetDenied.profile == null || nmTeamSetDenied.profile.connection != localConnection || nmTeamSetDenied.profile.team == null || nmTeamSetDenied.profile.team != nmTeamSetDenied.team || !m.connection.isHost)
                                         return;
                                     OpenTeamSwitchDialogue(nmTeamSetDenied.profile);
                                     return;
