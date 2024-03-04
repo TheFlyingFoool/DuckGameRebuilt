@@ -226,6 +226,8 @@ namespace DuckGame
 
         public static void DeserializeCustomHats()
         {
+            if (ModLoader.VanillaDgPath == null && File.Exists(DuckFile.saveDirectory + "/vanilla_dg.path")) ModLoader.VanillaDgPath = File.ReadAllText(DuckFile.saveDirectory + "/vanilla_dg.path");
+
             if (ModLoader.VanillaDgPath != null)
             {
                 string s = ModLoader.VanillaDgPath.Replace("DuckGame.exe", "");
