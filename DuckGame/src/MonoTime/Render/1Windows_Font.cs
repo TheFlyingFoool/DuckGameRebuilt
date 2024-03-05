@@ -162,6 +162,9 @@ namespace DuckGame
 
         public static string GetName(string fontFamilyName)
         {
+            if (Program.IsLinuxD)
+                return null;
+
             fontFamilyName = fontFamilyName.Replace("@BOLD@", "");
             fontFamilyName = fontFamilyName.Replace("@ITALIC@", "");
             try
