@@ -348,11 +348,19 @@ namespace DuckGame
         //private Vec2 TopLeftMost = new Vec2(0,0);
         //private Vec2 BottomRightMost = new Vec2(0,0);
         //private bool MostAssigned;
-        //public static float Leniancy = 9f;
+        public static float Leniancy = 9f;
         public static int LineLeniancy = 0;
         public void UpdateObject(Thing thing)  //float size = Math.Max(Math.Max(thing.right - thing.left, thing.bottom - thing.top), 16);
         {
-            Vec2[] buckets = GetIdForObjThing(thing.topLeft, thing.bottomRight);//GetIdForObj(thing.position, thing.right - thing.left, thing.bottom - thing.top);
+
+            Leniancy = 9f;
+            if(thing is AutoBlock || thing is BlockGroup)
+            {
+                Leniancy = 0f;
+            }
+
+            Vec2[] buckets = GetIdForObjThing(thing.topLeft - new Vec2(Leniancy), thing.bottomRight + new Vec2(Leniancy));//GetIdForObj(thing.position, thing.right - thing.left, thing.bottom - thing.top);
+            
             if (thing.Buckets.SequenceEqual(buckets))
             {
                 return;
