@@ -653,6 +653,10 @@ namespace DuckGame
             {
                 dgrDescription = "Uses DGR's custom DuckShell language to run commands in the console, which provides more power-user and automation features"
             });
+            menu.Add(new UIMenuItemToggle("Disable \"More...\"", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DisableMoreInEditor)))
+            {
+                dgrDescription = "Shows all menus at once, instead of having \"More...\" menu in editor (REQUIRES RESTART)"
+            });
 
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));

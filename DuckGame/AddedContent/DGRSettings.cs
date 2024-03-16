@@ -457,6 +457,7 @@ namespace DuckGame
         [Marker.AutoConfig] public static int RebuiltEffect = 1;
 
         [Marker.AutoConfig] public static bool StickyHats { get; set; }
+        [Marker.AutoConfig] public static bool DisableMoreInEditor { get; set; }
 
         [Marker.AutoConfig] public static bool QOLScoreThingButWithoutScore { get; set; } //why. -NiK0
 
