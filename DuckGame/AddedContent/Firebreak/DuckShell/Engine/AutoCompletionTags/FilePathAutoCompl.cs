@@ -39,15 +39,15 @@ namespace DuckGame.ConsoleEngine
                 }
             }
             
-            string path = $"{_parentDirectory}/{word}";
+            string path = $"{_parentDirectory}";
             
-            string[] entries = _type switch
+            IEnumerable<string> entries = (_type switch
             {
                 SystemEntryType.Both => Directory.GetFileSystemEntries(path, "*", _searchOption),
                 SystemEntryType.File => Directory.GetFiles(path, "*", _searchOption),
                 SystemEntryType.Directory => Directory.GetDirectories(path, "*", _searchOption),
                 _ => throw new InvalidOperationException()
-            };
+            }).Where(x => Path.GetFileName(x).StartsWith(word));
 
             return (_returnValue switch
             {
