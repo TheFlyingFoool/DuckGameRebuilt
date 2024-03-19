@@ -13,6 +13,11 @@ namespace DuckGame
     {
         public WeaponTaper()
         {
+            graphic = new SpriteMap("backgroundIcons", 16, 16)
+            {
+                frame = 6
+            };
+            center = new Vec2(8f, 8f);
 
             editorTooltip = "Put 2 props in the level and place this on top to tape them";
         }
