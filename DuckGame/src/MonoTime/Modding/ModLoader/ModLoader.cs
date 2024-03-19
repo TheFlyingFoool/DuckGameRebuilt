@@ -1,4 +1,5 @@
-﻿using Microsoft.CSharp;
+﻿using AddedContent.Firebreak;
+using Microsoft.CSharp;
 using Mono.Cecil;
 using MonoMod.Utils;
 using System;
@@ -156,6 +157,8 @@ namespace DuckGame
                 return;
             _modAssemblyNames.Add(mod.configuration.assembly.FullName, mod);
             _modAssemblies.Add(mod.configuration.assembly, mod);
+            if (mod is not CoreMod)
+                MarkerAttribute.Initialize(mod.configuration.assembly);
             _modsByHash.Add(mod.identifierHash, mod);
             if (mod.configuration.workshopID != 0UL)
                 _modsByWorkshopID[mod.configuration.workshopID] = mod;

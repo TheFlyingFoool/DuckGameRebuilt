@@ -12,11 +12,11 @@ namespace AddedContent.Firebreak
 
         public MemberInfo Member;
 
-        public static void Initialize()
+        public static void Initialize(Assembly assembly)
         {
             Type[] registeredMarkers = typeof(Marker).GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic);
 
-            Type[] types = Assembly.GetExecutingAssembly().GetTypes();
+            Type[] types = assembly.GetTypes();
             List<MemberInfo> memberInfos = new();
             
             for (int i = 0; i < types.Length; i++)
