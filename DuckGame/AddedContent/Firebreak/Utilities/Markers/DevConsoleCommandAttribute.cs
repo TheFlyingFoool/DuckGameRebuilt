@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace AddedContent.Firebreak
 {
-    internal static partial class Marker
+    public static partial class Marker
     {
         /// <summary>
         ///     Marks the method using the attribute as a console command.
@@ -16,7 +16,7 @@ namespace AddedContent.Firebreak
         ///     then be used in the DevConsole or DuckShell.
         /// </summary>
         [AttributeUsage(AttributeTargets.Method | AttributeTargets.ReturnValue, Inherited = false)]
-        internal class DevConsoleCommandAttribute : MarkerAttribute
+        public class DevConsoleCommandAttribute : MarkerAttribute
         {
             public string Name { get; set; } = null;
             public string? Description { get; set; } = null;

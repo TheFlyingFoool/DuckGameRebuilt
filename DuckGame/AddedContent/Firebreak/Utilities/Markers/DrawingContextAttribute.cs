@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace AddedContent.Firebreak
 {
-    internal static partial class Marker
+    public static partial class Marker
     {
         /// <summary>
         /// Makes the method using this attribute a DrawingContext. This
@@ -28,7 +28,7 @@ namespace AddedContent.Firebreak
         /// the method. Please just keep it parameter-less, thanks.
         /// </remarks>
         [AttributeUsage(AttributeTargets.Method, Inherited = false)]
-        internal sealed class DrawingContextAttribute : MarkerAttribute
+        public sealed class DrawingContextAttribute : MarkerAttribute
         {
             public static List<DrawingContextAttribute> AllDrawingContexts = new();
 

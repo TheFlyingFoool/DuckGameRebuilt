@@ -4,10 +4,10 @@ using System.Reflection;
 
 namespace AddedContent.Firebreak
 {
-    internal static partial class Marker
+    public static partial class Marker
     {
         [AttributeUsage(AttributeTargets.Method)]
-        internal class UpdateContextAttribute : MarkerAttribute
+        public class UpdateContextAttribute : MarkerAttribute
         {
             public static List<UpdateContextAttribute> All = new();
 

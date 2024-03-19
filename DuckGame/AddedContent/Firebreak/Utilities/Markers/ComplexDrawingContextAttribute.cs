@@ -5,13 +5,13 @@ using System.Reflection;
 
 namespace AddedContent.Firebreak
 {
-    internal static partial class Marker
+    public static partial class Marker
     {
         /// <summary>
         /// like a drawing context... but complex...
         /// </summary>
         [AttributeUsage(AttributeTargets.Method, Inherited = false)]
-        internal sealed class ComplexDrawingContextAttribute : MarkerAttribute
+        public sealed class ComplexDrawingContextAttribute : MarkerAttribute
         {
             public static List<ComplexDrawingContextAttribute> AllDrawingContexts = new();
 

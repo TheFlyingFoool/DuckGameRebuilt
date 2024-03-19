@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace AddedContent.Firebreak
 {
-    internal static partial class Marker
+    public static partial class Marker
     {
         /// <summary>
         /// Use this attribute on a field or property and it will be saved
@@ -17,7 +17,7 @@ namespace AddedContent.Firebreak
         /// The setter will be invoked when the value is being loaded
         /// </remarks>
         [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-        internal sealed class AutoConfigAttribute : MarkerAttribute
+        public sealed class AutoConfigAttribute : MarkerAttribute
         {
             public static List<AutoConfigAttribute> All = new();
             

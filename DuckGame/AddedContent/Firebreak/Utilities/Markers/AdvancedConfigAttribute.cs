@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace AddedContent.Firebreak
 {
-    internal static partial class Marker
+    public static partial class Marker
     {
         /// <summary>
         /// Marks the class for Advanced Config.
@@ -17,7 +17,7 @@ namespace AddedContent.Firebreak
         /// this way it will be easier to store wackier values.
         /// </summary>
         [AttributeUsage(AttributeTargets.Class)]
-        internal sealed class AdvancedConfigAttribute : MarkerAttribute
+        public sealed class AdvancedConfigAttribute : MarkerAttribute
         {
             private static Dictionary<Type, object> s_configs = new();
             public static List<AdvancedConfigAttribute> All = new();

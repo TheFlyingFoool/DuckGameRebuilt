@@ -6,10 +6,10 @@ using System.Reflection;
 
 namespace AddedContent.Firebreak
 {
-    internal static partial class Marker
+    public static partial class Marker
     {
         [AttributeUsage(AttributeTargets.Class)]
-        internal class FireSerializerAttribute : MarkerAttribute
+        public class FireSerializerAttribute : MarkerAttribute
         {
             public static List<IFireSerializerModule> Serializers = new();
 

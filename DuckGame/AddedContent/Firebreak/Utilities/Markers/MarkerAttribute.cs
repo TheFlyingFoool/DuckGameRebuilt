@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace AddedContent.Firebreak
 {
-    internal abstract class MarkerAttribute : Attribute
+    public abstract class MarkerAttribute : Attribute
     {
         public static Dictionary<Type, List<MarkerAttribute>> AllMarked = new();
 
