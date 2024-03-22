@@ -352,7 +352,6 @@
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\DrawString.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\DrawStringOutline.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\ExecLegacy.cs" />
-    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Mousepos.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Queue.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\ReplaceRegex.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\RNG.cs" />
