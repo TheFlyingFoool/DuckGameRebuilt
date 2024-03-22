@@ -459,6 +459,11 @@ namespace DuckGame
         [Marker.AutoConfig] public static bool StickyHats { get; set; }
         [Marker.AutoConfig] public static bool DisableMoreInEditor { get; set; }
 
+
+        private static bool _useEnabledModsConfig = false;
+        [Marker.AutoConfig] public static bool UseEnabledModsConfig { get => _useEnabledModsConfig; set {
+                if (value == true) { ModLoader.GenerateEnabledXml(); }; _useEnabledModsConfig = value; } }
+
         [Marker.AutoConfig] public static bool QOLScoreThingButWithoutScore { get; set; } //why. -NiK0
 
         [Marker.AutoConfig] public static int HSDSpacing = 5;
