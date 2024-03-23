@@ -174,10 +174,16 @@ namespace DuckGame.ConsoleEngine
 
         protected virtual string MakeTheOutputNicer_Colon3(object o)
         {
+            if (o is null)
+                return null;
+            
             if (o is not string && o is IEnumerable collection)
                 return collection.Cast<object>().ToReadableString();
 
-            return o?.ToString();
+            if (FireSerializer.IsSerializable(o.GetType()))
+                return FireSerializer.Serialize(o);
+            
+            return o.ToString();
         }
 
         protected virtual ValueOrException<object?> RunFromTokens(string[] tokens)

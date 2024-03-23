@@ -8,8 +8,9 @@ namespace DuckGame
 
     public static partial class DevConsoleCommands
     {
+        [return: PrettyPrint]
         [Marker.DevConsoleCommand(Description = "Get the current value of a state of the duck")]
-        public static string GetF(
+        public static object? GetF(
             Duck duck,
             [ReflectionAutoCompl(typeof(Duck), MemberTypes.Property | MemberTypes.Field , ALL_INSTANCE)] string stateName)
         {
@@ -26,10 +27,7 @@ namespace DuckGame
                 // found
                 
                 FieldOrPropertyInfo state = new(member);
-                object value = state.GetValue(duck);
-
-                string serialized = FireSerializer.Serialize(value);
-                return serialized;
+                return state.GetValue(duck);
             }
 
             throw new Exception("State not found: " + stateName);

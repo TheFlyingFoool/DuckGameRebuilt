@@ -6,6 +6,7 @@ namespace DuckGame.ConsoleEngine
     public static partial class Commands
     {
         [Marker.DevConsoleCommand(Description = "Returns the current mouse position")]
+        [return: PrettyPrint]
         public static Vec2 MousePos(MousePositionDimension dimension = default)
         {
             return dimension switch
