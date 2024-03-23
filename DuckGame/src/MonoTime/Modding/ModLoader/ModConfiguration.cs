@@ -249,7 +249,8 @@ namespace DuckGame
 
         internal void LoadConfiguration()
         {
-            disabled = ModLoader.disabledMods.Contains(name) || ModLoader.disabledMods.Contains(uniqueID);
+            if (ModLoader.useEnabled) disabled = !(ModLoader.enabledMods.Contains(name) || ModLoader.enabledMods.Contains(uniqueID));
+            else disabled = ModLoader.disabledMods.Contains(name) || ModLoader.disabledMods.Contains(uniqueID);
             forceHarmonyLegacyLoad = ModLoader.forceLegacyLoad.Contains(name) || ModLoader.forceLegacyLoad.Contains(uniqueID);
             if (System.IO.File.Exists(configFilePath))
             {
