@@ -64,6 +64,8 @@ namespace DuckGame
         private static string _buildErrorText = null;
         private static string _buildErrorFile = null;
         internal static HashSet<string> disabledMods;
+        internal static HashSet<string> enabledMods;
+        internal static bool useEnabled = false;
         internal static HashSet<string> forceLegacyLoad;
         internal static bool forceRecompilation = false;
         internal static string modDirectory;
@@ -669,11 +671,17 @@ namespace DuckGame
                 pDoc = new XmlDocument();
                 newChild = pDoc.CreateElement("Mods");
                 newChild.AppendChild(pDoc.CreateElement("Disabled"));
+                newChild.AppendChild(pDoc.CreateElement("Enabled"));
                 newChild.AppendChild(pDoc.CreateElement("ForceLegacyLoad"));
                 newChild.AppendChild(pDoc.CreateElement("CompiledFor"));
                 newChild["CompiledFor"].InnerText = DG.version;
                 pDoc.AppendChild(newChild);
                 DuckFile.SaveSharpXML(pDoc, modConfigFile);
+            }
+            if (newChild["Enabled"] != null && DGRSettings.UseEnabledModsConfig)
+            {
+                enabledMods = new HashSet<string>(newChild["Enabled"].InnerText.Split(new char[1] {'|'}, StringSplitOptions.RemoveEmptyEntries).Select(a => a.Trim()));
+                useEnabled = true;
             }
             if (newChild["Disabled"] != null)
                 disabledMods = new HashSet<string>(newChild["Disabled"].InnerText.Split(new char[1] {
@@ -698,34 +706,66 @@ namespace DuckGame
 
         internal static void SetModDisabled(ModConfiguration pMod, bool pDisabled)
         {
+            string uniqueId = pMod.uniqueID;
             XmlDocument pDoc = DuckFile.LoadSharpXML(modConfigFile);
             XmlElement xmlElement = pDoc["Mods"];
-            if (xmlElement["Disabled"] == null)
-                xmlElement.AppendChild(pDoc.CreateElement("Disabled"));
-            string uniqueId = pMod.uniqueID;
-            List<string> list = xmlElement["Disabled"].InnerText.Split('|').ToList();
-            if (!pDisabled)
+            if (DGRSettings.UseEnabledModsConfig)
             {
-                string str1 = uniqueId;
-                char[] chArray = new char[1] {
+                if (xmlElement["Enabled"] == null)
+                    xmlElement.AppendChild(pDoc.CreateElement("Enabled"));
+                List<string> list = xmlElement["Enabled"].InnerText.Split('|').ToList();
+                if (pDisabled)
+                {
+                    string str1 = uniqueId;
+                    char[] chArray = new char[1] {
           '|'
         };
-                foreach (string str2 in str1.Split(chArray))
-                    list.Remove(str2);
+                    foreach (string str2 in str1.Split(chArray))
+                        list.Remove(str2);
+                }
+                else
+                {
+                    string str3 = uniqueId;
+                    char[] chArray = new char[1] {
+          '|'
+        };
+                    foreach (string str4 in str3.Split(chArray))
+                    {
+                        if (!list.Contains(str4))
+                            list.Add(str4);
+                    }
+                }
+                xmlElement["Enabled"].InnerText = string.Join("|", list);
             }
             else
             {
-                string str3 = uniqueId;
-                char[] chArray = new char[1] {
+                if (xmlElement["Disabled"] == null)
+                    xmlElement.AppendChild(pDoc.CreateElement("Disabled"));
+
+                List<string> list = xmlElement["Disabled"].InnerText.Split('|').ToList();
+                if (!pDisabled)
+                {
+                    string str1 = uniqueId;
+                    char[] chArray = new char[1] {
           '|'
         };
-                foreach (string str4 in str3.Split(chArray))
-                {
-                    if (!list.Contains(str4))
-                        list.Add(str4);
+                    foreach (string str2 in str1.Split(chArray))
+                        list.Remove(str2);
                 }
+                else
+                {
+                    string str3 = uniqueId;
+                    char[] chArray = new char[1] {
+          '|'
+        };
+                    foreach (string str4 in str3.Split(chArray))
+                    {
+                        if (!list.Contains(str4))
+                            list.Add(str4);
+                    }
+                }
+                xmlElement["Disabled"].InnerText = string.Join("|", list);
             }
-            xmlElement["Disabled"].InnerText = string.Join("|", list);
             if (xmlElement["ForceLegacyLoad"] == null)
                 xmlElement.AppendChild(pDoc.CreateElement("ForceLegacyLoad"));
             xmlElement["ForceLegacyLoad"].InnerText = string.Join("|", _sortedMods.Where(a => a.configuration.forceHarmonyLegacyLoad).Select(a => a.configuration.uniqueID));
@@ -736,12 +776,31 @@ namespace DuckGame
         {
             XmlDocument pDoc = DuckFile.LoadSharpXML(modConfigFile);
             XmlElement xmlElement = pDoc["Mods"];
-            if (xmlElement["Disabled"] == null)
-                xmlElement.AppendChild(pDoc.CreateElement("Disabled"));
-            xmlElement["Disabled"].InnerText = string.Join("|", _sortedMods.Where(a => a.configuration.disabled).Select(a => a.configuration.uniqueID));
+            if (DGRSettings.UseEnabledModsConfig)
+            {
+                if (xmlElement["Enabled"] == null)
+                    xmlElement.AppendChild(pDoc.CreateElement("Enabled"));
+                xmlElement["Enabled"].InnerText = string.Join("|", _sortedMods.Where(a => !a.configuration.disabled).Select(a => a.configuration.uniqueID));
+            }
+            else
+            {
+                if (xmlElement["Disabled"] == null)
+                    xmlElement.AppendChild(pDoc.CreateElement("Disabled"));
+                xmlElement["Disabled"].InnerText = string.Join("|", _sortedMods.Where(a => a.configuration.disabled).Select(a => a.configuration.uniqueID));
+            }
             if (xmlElement["ForceLegacyLoad"] == null)
                 xmlElement.AppendChild(pDoc.CreateElement("ForceLegacyLoad"));
             xmlElement["ForceLegacyLoad"].InnerText = string.Join("|", _sortedMods.Where(a => a.configuration.forceHarmonyLegacyLoad).Select(a => a.configuration.uniqueID));
+            DuckFile.SaveSharpXML(pDoc, modConfigFile);
+        }
+
+        internal static void GenerateEnabledXml()
+        {
+            XmlDocument pDoc = DuckFile.LoadSharpXML(modConfigFile);
+            XmlElement xmlElement = pDoc["Mods"];
+            if (xmlElement["Enabled"] == null)
+                xmlElement.AppendChild(pDoc.CreateElement("Enabled"));
+            xmlElement["Enabled"].InnerText = string.Join("|", _sortedMods.Where(a => !a.configuration.disabled).Select(a => a.configuration.uniqueID));
             DuckFile.SaveSharpXML(pDoc, modConfigFile);
         }
 

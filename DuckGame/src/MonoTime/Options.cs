@@ -658,6 +658,11 @@ namespace DuckGame
                 dgrDescription = "Uses DGR's custom DuckShell language to run commands in the console, which provides more power-user and automation features"
             });
 
+            menu.Add(new UIMenuItemToggle("Use <Enabled>", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.UseEnabledModsConfig)))
+            {
+                dgrDescription = "Uses <Enabled> from mod's config\n instead of <Disabled>, which allows to have presets"
+            });
+
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
             return menu;
