@@ -24,6 +24,7 @@ namespace DuckGame
         public int priority;
         public string description = "";
         public string logMessage;
+        public bool noDsh = false;
 
         public object[] GetParameterValues(string[] stringValues)
         {
