@@ -35,10 +35,11 @@ namespace DuckGame.ConsoleEngine
             return variable.Value;
         }
         
+        [return: PrettyPrint]
         [Marker.DevConsoleCommand(Description = "Lists all the currently registered variables", To = ImplementTo.DuckShell)]
-        public static string VarList()
+        public static Dictionary<string, string> VarList()
         {
-            return JsonConvert.SerializeObject(VariableRegister.ToDictionary(x => x.Key, x => x.Value.Value), Formatting.Indented);
+            return VariableRegister.ToDictionary(x => x.Key, x => x.Value.Value);
         }
     }
 }
