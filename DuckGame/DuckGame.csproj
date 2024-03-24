@@ -356,6 +356,7 @@
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\MousePos.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Queue.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Range.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Regex.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\ReplaceRegex.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\RNG.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Wait.cs" />
