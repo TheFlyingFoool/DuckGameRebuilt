@@ -62,7 +62,7 @@ namespace DuckGame.ConsoleEngine
             if (Commands.console.Shell.TypeInterpreterModules
                 .TryFirst(x => type.InheritsFrom(x.ParsingType), out ITypeInterpreter module))
             {
-                return module.Options(word, type, Commands.console.Shell);
+                return module.Options(word, type, new(Commands.console.Shell, null));
             }
 
             return Array.Empty<string>();

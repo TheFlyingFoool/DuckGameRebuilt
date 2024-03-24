@@ -11,14 +11,14 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
         {
             public Type ParsingType { get; } = typeof(float);
 
-            public ValueOrException<object> ParseString(string fromString, Type specificType, CommandRunner engine)
+            public ValueOrException<object> ParseString(string fromString, Type specificType, TypeInterpreterParseContext context)
             {
                 return float.TryParse(fromString, out var val)
                     ? val
                     : new Exception($"Unable to parse to float: {fromString}");
             }
 
-            public IList<string> Options(string fromString, Type specificType, CommandRunner engine)
+            public IList<string> Options(string fromString, Type specificType, TypeInterpreterParseContext context)
             {
                 return Array.Empty<string>();
             }

@@ -33,7 +33,7 @@ namespace DuckGame
                 if (!Commands.console.Shell.TypeInterpreterModules.TryFirst(x => t.InheritsFrom(x.ParsingType), out ITypeInterpreter parser))
                     throw new Exception($"No parsing module found for type: {t.Name}");
 
-                ValueOrException<object> parseResult = parser.ParseString(newValue, t, Commands.console.Shell);
+                ValueOrException<object> parseResult = parser.ParseString(newValue, t, new(Commands.console.Shell, null));
 
                 object oldValue = state.GetValue(duck);
                 state.SetValue(duck, parseResult.Unpack());

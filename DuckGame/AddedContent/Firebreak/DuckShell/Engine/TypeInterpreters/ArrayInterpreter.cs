@@ -12,7 +12,7 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
         {
             public Type ParsingType { get; } = typeof(Array);
 
-            public ValueOrException<object> ParseString(string fromString, Type specificType, CommandRunner engine)
+            public ValueOrException<object> ParseString(string fromString, Type specificType, TypeInterpreterParseContext context)
             {
                 string[] items;
 
@@ -58,7 +58,7 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
 
                 Type elementType = specificType.GetElementType()!;
 
-                if (!engine.TypeInterpreterModules.TryFirst(x => x.ParsingType.IsAssignableFrom(elementType),
+                if (!context.ExecutionEngine.TypeInterpreterModules.TryFirst(x => x.ParsingType.IsAssignableFrom(elementType),
                         out ITypeInterpreter interpreter))
                     return new Exception($"No conversion module found: {elementType.Name}");
 
@@ -66,7 +66,7 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
                 {
                     var argString = items[i];
 
-                    var parseResult = interpreter.ParseString(argString, elementType, engine);
+                    var parseResult = interpreter.ParseString(argString, elementType, context);
 
                     if (parseResult.Failed)
                         return new Exception($"Parsing Error: {parseResult.Error.Message}");
@@ -80,7 +80,7 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
                 return convertedArray;
             }
 
-            public IList<string> Options(string fromString, Type specificType, CommandRunner engine)
+            public IList<string> Options(string fromString, Type specificType, TypeInterpreterParseContext context)
             {
                 return Array.Empty<string>();
             }

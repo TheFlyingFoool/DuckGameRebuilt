@@ -362,9 +362,12 @@
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\FilePathAutoCompl.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\ReflectionAutoCompl.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\TeamAutoCompl.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\DSHKeyword.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\PrettyPrintAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreterParseContext.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\ColorInterpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\DuckInterpreter.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\DSHKeywordInterpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\LayerInterpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\LevelInterpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\ProfileInterpreter.cs" />

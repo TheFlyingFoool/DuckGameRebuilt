@@ -265,7 +265,7 @@ namespace DuckGame.ConsoleEngine
                                 out ITypeInterpreter interpreter))
                             return new Exception($"No conversion module found: {parseType.Name}");
 
-                        parseResult = interpreter.ParseString(argString, parseType, this);
+                        parseResult = interpreter.ParseString(argString, parseType, new TypeInterpreterParseContext(this, parameterInfo));
                     }
 
                     if (parseResult.Failed)

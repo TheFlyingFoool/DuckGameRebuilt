@@ -12,7 +12,7 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
         {
             public Type ParsingType { get; } = typeof(Thing);
 
-            public ValueOrException<object> ParseString(string fromString, Type specificType, CommandRunner engine)
+            public ValueOrException<object> ParseString(string fromString, Type specificType, TypeInterpreterParseContext context)
             {
                 fromString = fromString.ToLowerInvariant();
 
@@ -38,7 +38,7 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
                 return new Exception($"{specificType.Name} of type ({fromString}) was not found.");
             }
 
-            public IList<string> Options(string fromString, Type specificType, CommandRunner engine)
+            public IList<string> Options(string fromString, Type specificType, TypeInterpreterParseContext context)
             {
                 List<string> options = new() { "%r" };
 

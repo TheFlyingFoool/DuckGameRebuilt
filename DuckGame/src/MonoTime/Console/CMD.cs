@@ -341,7 +341,7 @@ namespace DuckGame
             public override object Parse(string pValue)
             {
                 ITypeInterpreter arrayInterpreter = Commands.console.Shell.TypeInterpreterModulesMap[typeof(System.Array)];
-                ValueOrException<object> parseResult = arrayInterpreter.ParseString(pValue, _arrayType, Commands.console.Shell);
+                ValueOrException<object> parseResult = arrayInterpreter.ParseString(pValue, _arrayType, new(Commands.console.Shell, null));
 
                 if (parseResult.Failed)
                     return Error(parseResult.Error.Message);

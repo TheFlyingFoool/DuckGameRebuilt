@@ -33,8 +33,23 @@ namespace DuckGame.ConsoleEngine
                     IsOptional = pInfo.IsOptional,
                     DefaultValue = pInfo.DefaultValue,
                     IsParams = pInfo.IsDefined(typeof(ParamArrayAttribute), false),
-                    Autocompletion = pInfo.GetCustomAttribute<AutoCompl>() ?? new AutoCompl(pInfo.ParameterType)
                 };
+
+                AutoCompl autoCompletion = pInfo.GetCustomAttribute<AutoCompl>();
+                
+                if (autoCompletion is null)
+                {
+                    if (pInfo.ParameterType == typeof(DSHKeyword))
+                    {
+                        autoCompletion = new AutoCompl(pInfo.Name);
+                    }
+                    else
+                    {
+                        autoCompletion = new AutoCompl(pInfo.ParameterType);
+                    }
+                }
+
+                parameters[i].Autocompletion = autoCompletion;
             }
 
             return new ShellCommand(methodInfo.Name, parameters, args => methodInfo.Invoke(null, args));

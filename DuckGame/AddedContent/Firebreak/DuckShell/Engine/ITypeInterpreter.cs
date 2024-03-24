@@ -9,7 +9,7 @@ namespace DuckGame.ConsoleEngine
         /// The type the interpreter is designed to parse for.
         /// </summary>
         Type ParsingType { get; }
-        ValueOrException<object> ParseString(string fromString, Type specificType, CommandRunner engine);
-        IList<string> Options(string fromString, Type specificType, CommandRunner engine);
+        ValueOrException<object> ParseString(string fromString, Type specificType, TypeInterpreterParseContext context);
+        IList<string> Options(string fromString, Type specificType, TypeInterpreterParseContext context);
     }
 }

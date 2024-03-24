@@ -13,7 +13,7 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
         {
             public Type ParsingType { get; } = typeof(Level);
 
-            public ValueOrException<object> ParseString(string fromString, Type specificType, CommandRunner engine)
+            public ValueOrException<object> ParseString(string fromString, Type specificType, TypeInterpreterParseContext context)
             {
                 CMD.Level levelArg = new("");
                 object parseResult = levelArg.Parse(fromString);
@@ -24,7 +24,7 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
                 return parseResult;
             }
 
-            public IList<string> Options(string fromString, Type specificType, CommandRunner engine)
+            public IList<string> Options(string fromString, Type specificType, TypeInterpreterParseContext context)
             {
                 string[] searchPaths =
                 {

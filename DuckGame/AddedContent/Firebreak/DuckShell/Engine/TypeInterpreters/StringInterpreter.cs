@@ -11,12 +11,12 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
         {
             public Type ParsingType { get; } = typeof(string);
 
-            public ValueOrException<object> ParseString(string fromString, Type specificType, CommandRunner engine)
+            public ValueOrException<object> ParseString(string fromString, Type specificType, TypeInterpreterParseContext context)
             {
                 return fromString;
             }
 
-            public IList<string> Options(string fromString, Type specificType, CommandRunner engine)
+            public IList<string> Options(string fromString, Type specificType, TypeInterpreterParseContext context)
             {
                 return Array.Empty<string>();
             }

@@ -11,7 +11,7 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
         {
             public Type ParsingType { get; } = typeof(bool);
 
-            public ValueOrException<object> ParseString(string fromString, Type specificType, CommandRunner engine)
+            public ValueOrException<object> ParseString(string fromString, Type specificType, TypeInterpreterParseContext context)
             {
                 if (string.IsNullOrEmpty(fromString))
                     goto Failed;
@@ -37,7 +37,7 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
                 Failed: return new Exception($"Unable to parse to bool: {fromString}");
             }
 
-            public IList<string> Options(string fromString, Type specificType, CommandRunner engine)
+            public IList<string> Options(string fromString, Type specificType, TypeInterpreterParseContext context)
             {
                 return new [] {"true", "false"};
             }
