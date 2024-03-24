@@ -347,6 +347,7 @@
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnife.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingRopeHandle.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnifeConnectionParticle.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Ascii.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\DrawRect.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\DrawRectOutline.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\DrawString.cs" />
