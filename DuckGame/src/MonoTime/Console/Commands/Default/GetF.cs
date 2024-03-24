@@ -8,7 +8,7 @@ namespace DuckGame
 
     public static partial class DevConsoleCommands
     {
-        [return: PrettyPrint]
+        [return: PrintSerialized]
         [Marker.DevConsoleCommand(Description = "Get the current value of a state of the duck")]
         public static object? GetF(
             Duck duck,

@@ -35,7 +35,7 @@ namespace DuckGame.ConsoleEngine
             return variable.Value;
         }
         
-        [return: PrettyPrint]
+        [return: PrintReadableCollection]
         [Marker.DevConsoleCommand(Description = "Lists all the currently registered variables", To = ImplementTo.DuckShell)]
         public static Dictionary<string, string> VarList()
         {

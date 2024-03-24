@@ -172,18 +172,26 @@ namespace DuckGame.ConsoleEngine
             }
         }
 
-        protected virtual string MakeTheOutputNicer_Colon3(object o)
+        protected virtual string SerializeForPrint(object o)
         {
             if (o is null)
                 return null;
-            
-            if (o is not string && o is IEnumerable collection)
-                return collection.Cast<object>().ToReadableString();
 
+            if (o is IEnumerable collection)
+                return string.Join(",", collection.Cast<object>());
+            
             if (FireSerializer.IsSerializable(o.GetType()))
                 return FireSerializer.Serialize(o);
             
             return o.ToString();
+        }
+
+        protected virtual string ReadableCollectionForPrint(IEnumerable collection)
+        {
+            if (collection is not string)
+                return collection.Cast<object>().ToReadableString();
+
+            return collection.ToString();
         }
 
         protected virtual ValueOrException<object?> RunFromTokens(string[] tokens)
@@ -283,10 +291,16 @@ namespace DuckGame.ConsoleEngine
                 object? invokationValue = command.Command.Invoke(appliedParameters);
 
                 if (command.Member is not null && ((MethodInfo)command.Member).ReturnTypeCustomAttributes
-                    .GetCustomAttributes(typeof(PrettyPrintAttribute), true)
+                    .GetCustomAttributes(typeof(PrintSerializedAttribute), true)
                     .Any())
                 {
-                    invokationValue = MakeTheOutputNicer_Colon3(invokationValue);
+                    invokationValue = SerializeForPrint(invokationValue);
+                }
+                else if (command.Member is not null && ((MethodInfo)command.Member).ReturnTypeCustomAttributes
+                         .GetCustomAttributes(typeof(PrintReadableCollectionAttribute), true)
+                         .Any() && invokationValue is IEnumerable)
+                {
+                    invokationValue = ReadableCollectionForPrint((IEnumerable) invokationValue);
                 }
 
                 result = ValueOrException<object?>.FromValue(invokationValue);
