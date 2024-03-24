@@ -40,7 +40,7 @@ namespace DuckGame.ConsoleEngine
             
             console.Run(fileContent, false);
 
-            Pop(VariableRegister["__arg__"]);
+            VariableRegister.Remove("__arg__");
         }
     }
 }
