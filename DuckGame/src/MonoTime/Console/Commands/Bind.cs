@@ -17,7 +17,7 @@ namespace DuckGame
         [Marker.DevConsoleCommand(
             Description = "Binds a command to a hotkey to be executed when pressed",
             Aliases = new[] { "binds" })]
-        [return: PrettyPrint]
+        [return: PrintReadableCollection]
         public static object Bind(BindAction action, string? hotkey = null, string? command = null)
         {
             switch (action)

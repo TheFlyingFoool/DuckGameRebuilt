@@ -42,7 +42,7 @@ namespace DuckGame.ConsoleEngine
                     case 1:
                     {
                         ITypeInterpreter booleanInterpreter = console.Shell.TypeInterpreterModulesMap[typeof(bool)];
-                        failed = !(bool) booleanInterpreter.ParseString(word, typeof(bool), console.Shell).Unpack();
+                        failed = !(bool) booleanInterpreter.ParseString(word, typeof(bool), new(console.Shell, null)).Unpack();
 
                         expecting = 2;
 

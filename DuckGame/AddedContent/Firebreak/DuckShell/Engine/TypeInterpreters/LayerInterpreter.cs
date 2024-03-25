@@ -12,12 +12,12 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
         {
             public Type ParsingType { get; } = typeof(Layer);
 
-            public ValueOrException<object> ParseString(string fromString, Type specificType, CommandRunner engine)
+            public ValueOrException<object> ParseString(string fromString, Type specificType, TypeInterpreterParseContext context)
             {
                 return Layer.core._layers.TryFirst(x => x.name.ToLower() == fromString, out Layer layer) ? layer : new Exception($"No layer found with name: {fromString}");
             }
 
-            public IList<string> Options(string fromString, Type specificType, CommandRunner engine)
+            public IList<string> Options(string fromString, Type specificType, TypeInterpreterParseContext context)
             {
                 List<Layer> layers = Layer.core._layers;
                 string[] options = new string[layers.Count];

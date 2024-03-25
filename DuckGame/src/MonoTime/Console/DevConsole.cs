@@ -1,4 +1,5 @@
 ﻿using AddedContent.Firebreak;
+using AddedContent.Firebreak.DuckShell.Implementation;
 using DuckGame.ConsoleEngine;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using SDL2;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
@@ -596,10 +598,51 @@ namespace DuckGame
         public static void AddCommand(CMD pCommand)
         {
             GetCommands(pCommand.keyword).Add(pCommand);
-            if (pCommand.aliases == null)
+            
+            if (pCommand.aliases != null)
+            {
+                foreach (string alias in pCommand.aliases)
+                    GetCommands(alias).Add(pCommand);
+            }
+
+            if (pCommand.noDsh)
                 return;
-            foreach (string alias in pCommand.aliases)
-                GetCommands(alias).Add(pCommand);
+            
+            // support DSH too
+            CMD.Argument[] arguments = pCommand.arguments;
+            ShellCommand.Parameter[] parameters = new ShellCommand.Parameter[arguments.Length];
+
+            for (int i = 0; i < arguments.Length; i++)
+            {
+                CMD.Argument argument = arguments[i];
+            
+                parameters[i] = new ShellCommand.Parameter()
+                {
+                    Name = argument.name ?? "<NULL>",
+                    ParameterType = argument.type,
+                    IsOptional = argument.optional,
+                    DefaultValue = argument.defaultValue
+                };
+            }
+            
+            ShellCommand shellCommand = new(pCommand.keyword, parameters, args =>
+            {
+                for (int i = 0; i < pCommand.arguments.Length; i++)
+                {
+                    pCommand.arguments[i].value = args[i];
+                }
+                
+                pCommand.action(pCommand);
+                return null;
+            });
+
+            DevConsoleDSHWrapper.AttributeCommands.Add(new Marker.DevConsoleCommandAttribute()
+            {
+                Name = pCommand.keyword,
+                Description = pCommand.description,
+                IsCheat = pCommand.cheat,
+                Command = shellCommand
+            });
         }
 
         public static List<CMD> GetCommands(string pKeyword)
@@ -1517,20 +1560,16 @@ namespace DuckGame
 
         private static void HitBackspace(int times)
         {
-            string TypeingString = _core.Typing;
-            try
+            for (int i = 0; i < times; i++)
             {
-                for (int i = 0; i < times; i++)
+                if (_core.Typing.Length > 0 && _core.cursorPosition > 0)
                 {
-                    if (TypeingString.Length > 0 && _core.cursorPosition > 0)
-                    {
-                        TypeingString = _core.Typing.Remove(_core.cursorPosition - 1, 1);
-                        --_core.cursorPosition;
-                    }
+                    _core.cursorPosition = Maths.Clamp(_core.cursorPosition, 0, _core.Typing.Length);
+                    _core.Typing = _core.Typing.Remove(_core.cursorPosition - 1, 1);
+                    --_core.cursorPosition;
                 }
             }
-            catch { }
-            _core.Typing = TypeingString;
+
             _core.lastCommandIndex = -1;
         }
 

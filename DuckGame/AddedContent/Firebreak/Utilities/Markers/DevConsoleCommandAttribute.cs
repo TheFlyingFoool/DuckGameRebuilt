@@ -46,6 +46,7 @@ namespace AddedContent.Firebreak
                 {
                     DevConsoleDSHWrapper.AttributeCommands.Add(this);
                 }
+                
                 if (To is ImplementTo.Both or ImplementTo.DuckHack)
                 {
                     int parameterLength = parameters.Length;
@@ -101,12 +102,13 @@ namespace AddedContent.Firebreak
                         cancrash = CanCrash,
                         description = Description ?? "",
                         cheat = IsCheat,
-                        aliases = Aliases.ToList()
+                        aliases = Aliases.ToList(),
+                        noDsh = true, // prevent recursive DSH adding
                     });
                 }
             }
 
-            private static CMD.Argument ParameterInfoToCmdArgument(ParameterInfo parameter, bool isLast)
+            public static CMD.Argument ParameterInfoToCmdArgument(ParameterInfo parameter, bool isLast)
             {
                 CMD.Argument arg;
                 Type type = parameter.ParameterType;

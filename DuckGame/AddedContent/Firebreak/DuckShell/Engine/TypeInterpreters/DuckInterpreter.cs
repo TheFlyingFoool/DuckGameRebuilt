@@ -13,7 +13,7 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
         {
             public virtual Type ParsingType { get; } = typeof(Duck);
 
-            public virtual ValueOrException<object> ParseString(string fromString, Type specificType, CommandRunner engine)
+            public virtual ValueOrException<object> ParseString(string fromString, Type specificType, TypeInterpreterParseContext context)
             {
                 Profile profile = Extensions.GetProfSafe(fromString);
 
@@ -26,7 +26,7 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
                 return profile.duck;
             }
 
-            public IList<string> Options(string fromString, Type specificType, CommandRunner engine)
+            public IList<string> Options(string fromString, Type specificType, TypeInterpreterParseContext context)
             {
                 List<string> options = new() {
                     "p1",

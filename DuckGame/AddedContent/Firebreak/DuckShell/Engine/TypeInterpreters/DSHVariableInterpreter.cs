@@ -12,14 +12,14 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
         {
             public Type ParsingType { get; } = typeof(DSHVariable);
 
-            public ValueOrException<object> ParseString(string fromString, Type specificType, CommandRunner engine)
+            public ValueOrException<object> ParseString(string fromString, Type specificType, TypeInterpreterParseContext context)
             {
                 return Commands.VariableRegister.TryGetValue(fromString, out DSHVariable value)
                     ? value
                     : new Exception($"Variable doesn't exist: {fromString}");
             }
 
-            public IList<string> Options(string fromString, Type specificType, CommandRunner engine)
+            public IList<string> Options(string fromString, Type specificType, TypeInterpreterParseContext context)
             {
                 string[] options = new string[Commands.VariableRegister.Count];
                 Commands.VariableRegister.Keys.CopyTo(options, 0);

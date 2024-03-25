@@ -1,4 +1,5 @@
 ﻿using AddedContent.Firebreak;
+using AddedContent.Firebreak.DebuggerTools.Manager.Interface.Console;
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -16,7 +17,8 @@ namespace DuckGame.ConsoleEngine
                 "|saveDirectory|Scripts",
                 SystemEntryType.File,
                 SearchOption.TopDirectoryOnly, // todo: support recursive directory search
-                FilePathAutoComplAttribute.Return.EntryNameNoExtension)] string scriptName)
+                FilePathAutoComplAttribute.Return.EntryNameNoExtension)] string scriptName,
+            string arg = null)
         {
             if (!Directory.Exists(ScriptsDirPath))
                 Directory.CreateDirectory(ScriptsDirPath);
@@ -34,7 +36,11 @@ namespace DuckGame.ConsoleEngine
 
             string fileContent = File.ReadAllText(scriptPath);
             
+            Set("__arg__", arg ?? string.Empty);
+            
             console.Run(fileContent, false);
+
+            VariableRegister.Remove("__arg__");
         }
     }
 }
