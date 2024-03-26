@@ -607,7 +607,7 @@ namespace DuckGame
                         GetCommands(alias).Add(pCommand);
                 }
 
-                if (pCommand.noDsh)
+                if (pCommand.noDsh || !DGRSettings.ConvertModdedCommands)
                     return;
 
                 // support DSH too
