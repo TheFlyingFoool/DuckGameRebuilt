@@ -103,6 +103,7 @@ namespace DuckGame.ConsoleEngine
             }
             catch (Exception e)
             {
+                DevConsole.Log(e + "\n" + e.StackTrace);
                 return e;
             }
         }
@@ -217,73 +218,78 @@ namespace DuckGame.ConsoleEngine
                 return new Exception("Can't use cheat commands here");
             
             ShellCommand.Parameter[] parameterInfos = command.Command.Parameters;
-            object?[] appliedParameters = new object?[parameterInfos.Length]; // parsed and juiced
-            bool lastIsParams = parameterInfos.Length != 0 && parameterInfos[parameterInfos.Length - 1].IsParams;
-
-            for (int i = 0; i < appliedParameters.Length; i++)
+            object?[] appliedParameters = new object?[0];
+            if (parameterInfos != null)
             {
-                ShellCommand.Parameter parameterInfo = parameterInfos[i];
-                object? appliedParameterValue;
+                appliedParameters = new object?[parameterInfos.Length]; // parsed and juiced
+                bool lastIsParams = parameterInfos.Length != 0 && parameterInfos[parameterInfos.Length - 1].IsParams;
 
-                if (i >= commandArgs.Length && !lastIsParams)
+                for (int i = 0; i < appliedParameters.Length; i++)
                 {
-                    if (parameterInfo.IsOptional)
-                        appliedParameterValue = parameterInfo.DefaultValue;
-                    else return new Exception($"Missing Argument: {parameterInfo.Name}");
-                }
-                else
-                {
-                    Type parseType = parameterInfo.ParameterType;
-                    string argString;
-                    ValueOrException<object> parseResult = null;
+                    ShellCommand.Parameter parameterInfo = parameterInfos[i];
+                    object? appliedParameterValue;
 
-                    bool isLast = i == appliedParameters.Length - 1;
-
-                    if (isLast && (parameterInfo.IsParams || parseType == typeof(string)))
+                    if (i >= commandArgs.Length && !lastIsParams)
                     {
-                        int length = commandArgs.Length - i;
-                        string[] resultArray = new string[length];
-                        Array.Copy(commandArgs, i, resultArray, 0, length);
-
-                        if (parseType == typeof(string))
-                            argString = string.Join(" ", resultArray);
-                        else if (parameterInfo.IsParams)
-                        {
-                            if (length != 0)
-                            {
-                                parseResult = ValueOrException<object>.FromValue(resultArray);
-                            }
-
-                            argString = null;
-                        }
-                        else throw new InvalidOperationException();
-                    }
-                    else if (i >= commandArgs.Length)
-                    {
-                        return new Exception($"Missing Argument: {parameterInfo.Name}");
+                        if (parameterInfo.IsOptional)
+                            appliedParameterValue = parameterInfo.DefaultValue;
+                        else return new Exception($"Missing Argument: {parameterInfo.Name}");
                     }
                     else
                     {
-                        argString = commandArgs[i];
+                        Type parseType = parameterInfo.ParameterType;
+                        string argString;
+                        ValueOrException<object> parseResult = null;
+
+                        bool isLast = i == appliedParameters.Length - 1;
+
+                        if (isLast && (parameterInfo.IsParams || parseType == typeof(string)))
+                        {
+                            int length = commandArgs.Length - i;
+                            string[] resultArray = new string[length];
+                            Array.Copy(commandArgs, i, resultArray, 0, length);
+
+                            if (parseType == typeof(string))
+                                argString = string.Join(" ", resultArray);
+                            else if (parameterInfo.IsParams)
+                            {
+                                if (length != 0)
+                                {
+                                    parseResult = ValueOrException<object>.FromValue(resultArray);
+                                }
+
+                                argString = null;
+                            }
+                            else throw new InvalidOperationException();
+                        }
+                        else if (i >= commandArgs.Length)
+                        {
+                            return new Exception($"Missing Argument: {parameterInfo.Name}");
+                        }
+                        else
+                        {
+                            argString = commandArgs[i];
+                        }
+
+                        if (parseResult is null)
+                        {
+                            if (!TypeInterpreterModules.TryFirst(x => x.ParsingType.IsAssignableFrom(parseType),
+                                    out ITypeInterpreter interpreter))
+                                return new Exception($"No conversion module found: {parseType.Name}");
+
+                            parseResult = interpreter.ParseString(argString, parseType, new TypeInterpreterParseContext(this, parameterInfo));
+                        }
+
+                        if (parseResult.Failed)
+                            return new Exception($"Parsing Error: {parseResult.Error.Message}");
+
+                        appliedParameterValue = parseResult.Value;
                     }
 
-                    if (parseResult is null)
-                    {
-                        if (!TypeInterpreterModules.TryFirst(x => x.ParsingType.IsAssignableFrom(parseType),
-                                out ITypeInterpreter interpreter))
-                            return new Exception($"No conversion module found: {parseType.Name}");
-
-                        parseResult = interpreter.ParseString(argString, parseType, new TypeInterpreterParseContext(this, parameterInfo));
-                    }
-
-                    if (parseResult.Failed)
-                        return new Exception($"Parsing Error: {parseResult.Error.Message}");
-
-                    appliedParameterValue = parseResult.Value;
+                    appliedParameters[i] = appliedParameterValue;
                 }
-
-                appliedParameters[i] = appliedParameterValue;
             }
+            
 
             ValueOrException<object?> result;
             try
@@ -307,10 +313,12 @@ namespace DuckGame.ConsoleEngine
             }
             catch (TargetInvocationException e)
             {
+                DevConsole.Log(e + "\n" + e.StackTrace);
                 return e.InnerException ?? e;
             }
             catch (Exception e)
             {
+                DevConsole.Log(e + "\n" + e.StackTrace);
                 result = ValueOrException<object>.FromError(e);
             }
 

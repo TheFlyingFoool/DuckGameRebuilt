@@ -597,52 +597,73 @@ namespace DuckGame
 
         public static void AddCommand(CMD pCommand)
         {
-            GetCommands(pCommand.keyword).Add(pCommand);
-            
-            if (pCommand.aliases != null)
+            try
             {
-                foreach (string alias in pCommand.aliases)
-                    GetCommands(alias).Add(pCommand);
-            }
+                GetCommands(pCommand.keyword).Add(pCommand);
 
-            if (pCommand.noDsh)
-                return;
-            
-            // support DSH too
-            CMD.Argument[] arguments = pCommand.arguments;
-            ShellCommand.Parameter[] parameters = new ShellCommand.Parameter[arguments.Length];
+                if (pCommand.aliases != null)
+                {
+                    foreach (string alias in pCommand.aliases)
+                        GetCommands(alias).Add(pCommand);
+                }
 
-            for (int i = 0; i < arguments.Length; i++)
-            {
-                CMD.Argument argument = arguments[i];
-            
-                parameters[i] = new ShellCommand.Parameter()
+                if (pCommand.noDsh || !DGRSettings.ConvertModdedCommands)
+                    return;
+
+                // support DSH too
+                ShellCommand shellCommand;
+
+                if (pCommand.arguments != null)
                 {
-                    Name = argument.name ?? "<NULL>",
-                    ParameterType = argument.type,
-                    IsOptional = argument.optional,
-                    DefaultValue = argument.defaultValue
-                };
-            }
-            
-            ShellCommand shellCommand = new(pCommand.keyword, parameters, args =>
-            {
-                for (int i = 0; i < pCommand.arguments.Length; i++)
+                    CMD.Argument[] arguments = pCommand.arguments;
+                    ShellCommand.Parameter[] parameters = new ShellCommand.Parameter[arguments.Length];
+
+                    for (int i = 0; i < arguments.Length; i++)
+                    {
+                        CMD.Argument argument = arguments[i];
+
+                        parameters[i] = new ShellCommand.Parameter()
+                        {
+                            Name = argument.name ?? "<NULL>",
+                            ParameterType = argument.type,
+                            IsOptional = argument.optional,
+                            DefaultValue = argument.defaultValue
+                        };
+                    }
+
+                    shellCommand = new(pCommand.keyword, parameters, args =>
+                    {
+                        for (int i = 0; i < pCommand.arguments.Length; i++)
+                        {
+                            pCommand.arguments[i].value = args[i];
+                        }
+
+                        pCommand.action(pCommand);
+                        return null;
+                    });
+                } else
                 {
-                    pCommand.arguments[i].value = args[i];
+                    shellCommand = new(pCommand.keyword, null, args =>
+                    {
+                        pCommand.alternateAction();
+                        
+                        return null;
+                    });
                 }
                 
-                pCommand.action(pCommand);
-                return null;
-            });
 
-            DevConsoleDSHWrapper.AttributeCommands.Add(new Marker.DevConsoleCommandAttribute()
+                DevConsoleDSHWrapper.AttributeCommands.Add(new Marker.DevConsoleCommandAttribute()
+                {
+                    Name = pCommand.keyword,
+                    Description = pCommand.description,
+                    IsCheat = pCommand.cheat,
+                    Command = shellCommand
+                });
+            } catch (Exception e)
             {
-                Name = pCommand.keyword,
-                Description = pCommand.description,
-                IsCheat = pCommand.cheat,
-                Command = shellCommand
-            });
+                DevConsole.Log(e);
+            }
+            
         }
 
         public static List<CMD> GetCommands(string pKeyword)
