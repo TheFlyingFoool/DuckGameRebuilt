@@ -269,6 +269,97 @@ namespace DuckGame
             "WASD"
           }
         };
+        public Dictionary<int, string> _triggerNamesN64 = new Dictionary<int, string>()
+        {
+          {
+            4096,
+            "A"
+          },
+          {
+            8192,
+            "B"
+          },
+          {
+            16,
+            Triggers.Start
+          },
+          {
+            4,
+            Triggers.Left
+          },
+          {
+            8,
+            Triggers.Right
+          },
+          {
+            1,
+            Triggers.Up
+          },
+          {
+            2,
+            Triggers.Down
+          },
+          {
+            2097152,
+            "L{"
+          },
+          {
+            1073741824,
+            "L/"
+          },
+          {
+            268435456,
+            "L}"
+          },
+          {
+            536870912,
+            "L~"
+          },
+          {
+            134217728,
+            "R{"
+          },
+          {
+            67108864,
+            "R/"
+          },
+          {
+            16777216,
+            "R}"
+          },
+          {
+            33554432,
+            "R~"
+          },
+          {
+            256,
+            "L"
+          },
+          {
+            512,
+            "R"
+          },
+          {
+            8388608,
+            "Z"
+          },
+          {
+            64,
+            "CS"
+          },
+          {
+            128,
+            "C"
+          },
+          {
+            9999,
+            "DPAD"
+          },
+          {
+            9998,
+            "WASD"
+          }
+        };
         public Dictionary<int, Sprite> _triggerImages = new Dictionary<int, Sprite>()
         {
           {
@@ -474,6 +565,65 @@ namespace DuckGame
             new Sprite("buttons/wii/dPad")
           }
         };
+        private Dictionary<int, Sprite> _triggerImagesN64 = new Dictionary<int, Sprite>()
+        {
+          {
+            4,
+            new Sprite("buttons/n64/dPadLeft")
+          },
+          {
+            8,
+            new Sprite("buttons/n64/dPadRight")
+          },
+          {
+            1,
+            new Sprite("buttons/n64/dPadUp")
+          },
+          {
+            2,
+            new Sprite("buttons/n64/dPadDown")
+          },
+          {
+            4096,
+            new Sprite("buttons/n64/aButton")
+          },
+          {
+            8192,
+            new Sprite("buttons/n64/bButton")
+          },
+          {
+            256,
+            new Sprite("buttons/n64/leftBumper")
+          },
+          {
+            512,
+            new Sprite("buttons/n64/rightBumper")
+          },
+          {
+            8388608,
+            new Sprite("buttons/n64/zTrigger")
+          },
+          {
+            16,
+            new Sprite("buttons/n64/startButton")
+          },
+          {
+            128,
+            new Sprite("buttons/n64/cPad")
+          },
+          {
+            64,
+            new Sprite("buttons/n64/controlStick")
+          },
+          {
+            9999,
+            new Sprite("buttons/n64/dPad")
+          },
+          {
+            9998,
+            new Sprite("buttons/n64/dPad")
+          }
+        };
         private bool _connectedState;
         public SDL.SDL_GameControllerType SDLControllerType = SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_XBOX360;
         public override bool isConnected => _connectedState;
@@ -503,8 +653,11 @@ namespace DuckGame
             }
             else if (_productName == "Nintendo Wii Remote")
             {
-                //Console.WriteLine("TryGetValue: " + map);
                 return _triggerNamesWii;
+            }
+            else if (_productName == "Nintendo 64 Controller")
+            {
+                return _triggerNamesN64;
             }
             else
             {
@@ -525,8 +678,12 @@ namespace DuckGame
             }*/
             else if (_productName == "Nintendo Wii Remote")
             {
-                //Console.WriteLine("TryGetValue: " + map);
                 _triggerImagesWii.TryGetValue(map, out mapImage);
+            }
+            else if (_productName == "Nintendo 64 Controller")
+            {
+                //Console.WriteLine("TryGetValue: " + map);
+                _triggerImagesN64.TryGetValue(map, out mapImage);
             }
             else
             {

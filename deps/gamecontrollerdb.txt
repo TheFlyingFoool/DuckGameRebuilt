@@ -1,0 +1,2 @@
+# Linux 2x N64 Controller Adapter
+0300be1e790000004618000010010000,Nintendo 64 Controller,a:b1,b:b2,start:b9,leftshoulder:b4,rightshoulder:b5,dpup:h0.1,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,leftx:a0,lefty:a1,rightx:a2,righty:a5,lefttrigger:b7,platform:Linux,crc:1ebe
