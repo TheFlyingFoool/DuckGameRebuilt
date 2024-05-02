@@ -269,6 +269,7 @@ namespace DuckGame
             {
                 if (localtrigger == "PLAYERINDEX")
                 {
+                    dirty = true;
                     if (inputMapping.device.productName == "KEYBOARD P1")
                     {
                         ++Options.Data.keyboard1PlayerIndex;
@@ -286,6 +287,7 @@ namespace DuckGame
             }
             else if (trigger == Triggers.MenuLeft && localtrigger == "PLAYERINDEX")
             {
+                dirty = true;
                 if (inputMapping.device.productName == "KEYBOARD P1")
                 {
                     --Options.Data.keyboard1PlayerIndex;
@@ -306,6 +308,7 @@ namespace DuckGame
                     SFX.Play("consoleError");
                 else if (localtrigger == "PLAYERINDEX")
                 {
+                    dirty = true;
                     if (inputMapping.device.productName == "KEYBOARD P1")
                     {
                         ++Options.Data.keyboard1PlayerIndex;
@@ -322,8 +325,8 @@ namespace DuckGame
                 }
                 else
                 {
-                    UIMenu.globalUILock = true;
                     dirty = true;
+                    UIMenu.globalUILock = true;
                     _editing = true;
                     _skipStep = true;
                     SFX.Play("consoleSelect");
