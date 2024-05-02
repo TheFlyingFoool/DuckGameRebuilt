@@ -316,7 +316,7 @@ namespace DuckGame
                     showWarning = false;
                     return;
                 }
-                if (!globalUILock && (Input.Pressed(Triggers.Cancel) || Keyboard.Pressed(Keys.OemTilde)))
+                if (!globalUILock && Input.Pressed(Triggers.Cancel))
                 {
                     bool dirty = false;
                     foreach (UIControlElement controlEl in _controlElements)
