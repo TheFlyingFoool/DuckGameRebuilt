@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -45,6 +46,15 @@ namespace DuckGame
             weight = 1f;
             _signalSprite = new Sprite("wireBulge");
             _signalSprite.CenterOrigin();
+        }
+
+        public override Type TabRotate(bool control)
+        {
+            if (control)
+                editorCycleType = typeof(WireActivator);
+            else
+                base.TabRotate(control);
+            return editorCycleType;
         }
 
         public void Emit(WireSignal signal = null, float overshoot = 0f, int type = 0)

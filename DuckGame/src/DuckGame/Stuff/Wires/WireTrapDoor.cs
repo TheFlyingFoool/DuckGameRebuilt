@@ -1,4 +1,6 @@
-﻿namespace DuckGame
+﻿using System;
+
+namespace DuckGame
 {
     [EditorGroup("Stuff|Wires")]
     [BaggedProperty("isOnlineCapable", true)]
@@ -15,6 +17,8 @@
         public EditorProperty<bool> fallthrough;
         private bool _lastFallthrough = true;
         public bool newTrapdoorVersion = true;
+        private float oldX;
+        private float oldY;
 
         public override bool flipHorizontal
         {
@@ -32,6 +36,16 @@
             }
         }
 
+        public override Type TabRotate(bool control)
+        {
+            if (control)
+                editorCycleType = typeof(WireTileset);
+            else
+                base.TabRotate();
+            return editorCycleType;
+        }
+
+
         public override void EditorPropertyChanged(object property)
         {
             if (!_initialized)
@@ -43,7 +57,8 @@
 
         private void UpdateShutter()
         {
-            if (_lastFallthrough != fallthrough.value)
+            bool inEditor = (Level.current is Editor);
+            if ( _lastFallthrough != fallthrough.value || (inEditor && (oldX != x || oldY != y)))
             {
                 Level.Remove(_shutter);
                 _shutter = null;
@@ -55,12 +70,14 @@
                 CreateShutter();
             }
             _lastFallthrough = fallthrough.value;
-            if (flag || Level.current is Editor)
+            if (flag || inEditor)
             {
                 if (_open)
                     _shutter.angleDegrees = 90f * offDir;
                 else
                     _shutter.angleDegrees = 0f;
+                oldX = x;
+                oldY = y;
             }
             else if (_open)
                 _shutter.angleDegrees = Lerp.Float(_shutter.angleDegrees, 90f * offDir, 10f);
@@ -132,6 +149,12 @@
         {
             UpdateShutter();
             base.Update();
+        }
+
+        public override void EditorUpdate()
+        {
+            UpdateShutter();
+            base.EditorUpdate();
         }
 
         public override void Terminate()

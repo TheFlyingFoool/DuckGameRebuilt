@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -103,6 +104,15 @@ namespace DuckGame
                     action = true;
                     break;
             }
+        }
+
+        public override Type TabRotate(bool control)
+        {
+            if (control)
+                editorCycleType = typeof(WireButton);
+            else 
+                base.TabRotate();
+            return editorCycleType;
         }
     }
 }
