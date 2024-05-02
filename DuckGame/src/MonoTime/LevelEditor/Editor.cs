@@ -3866,12 +3866,12 @@ namespace DuckGame
                         if (vec2.y < 32)
                             vec2.y = 32f;
                         Vec2 p1 = new Vec2(19f, (float)(layer.height - 19 - vec2.y - (num24 + 10)) + num22);
-                        string str10 = thing.GetDetailsString();
-                        while (str10.Count(x => x == '\n') > 5)
-                            str10 = str10.Substring(0, str10.LastIndexOf('\n'));
-                        float x2 = _font.GetWidth(str10) + 8f;
-                        if (str10 != "")
-                            _font.Draw(str10, (float)(p1.x + vec2.x + 4), p1.y + 4f, Color.White, 0.7f);
+                        string detailsString = thing.GetDetailsString();
+                        while (detailsString.Count(x => x == '\n') > 5)
+                            detailsString = detailsString.Substring(0, detailsString.LastIndexOf('\n'));
+                        float x2 = _font.GetWidth(detailsString) + 8f;
+                        if (detailsString != "")
+                            _font.Draw(detailsString, (float)(p1.x + vec2.x + 4), p1.y + 4f, Color.White, 0.7f);
                         else
                             x2 = 0f;
                         Graphics.DrawRect(p1, p1 + vec2 + new Vec2(x2, 0f), Color.Black * 0.5f, 0.6f);
@@ -4699,16 +4699,16 @@ namespace DuckGame
             _currentLevelData.proceduralData.sideMask = 0;
             if (_miniMode)
             {
-                int num7 = 0;
+                int pathSidesMask = 0;
                 if (_pathNorth)
-                    num7 |= 1;
+                    pathSidesMask |= 1;
                 if (_pathEast)
-                    num7 |= 2;
+                    pathSidesMask |= 2;
                 if (_pathSouth)
-                    num7 |= 4;
+                    pathSidesMask |= 4;
                 if (_pathWest)
-                    num7 |= 8;
-                _currentLevelData.proceduralData.sideMask = num7;
+                    pathSidesMask |= 8;
+                _currentLevelData.proceduralData.sideMask = pathSidesMask;
                 _currentLevelData.proceduralData.weaponConfig = weaponConfig;
                 _currentLevelData.proceduralData.spawnerConfig = spawnerConfig;
                 _currentLevelData.proceduralData.numArmor = numArmor;
