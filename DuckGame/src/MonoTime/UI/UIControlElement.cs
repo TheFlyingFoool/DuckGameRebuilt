@@ -221,7 +221,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (_arrow.visible)
+            if (_arrow.visible && _uiText.text != "|LIME|PLAYER#")
             {
                 _styleBubble.depth = (Depth)0.9f;
                 Vec2 vec2_1 = new Vec2(x + 76f, y);
