@@ -1,4 +1,6 @@
-﻿namespace DuckGame
+﻿using System.Windows.Media.Media3D;
+
+namespace DuckGame
 {
     public abstract class AutoPlatform :
     MaterialThing,
@@ -68,6 +70,7 @@
             (graphic as SpriteMap).UpdateFrame();
             graphic.UltraCheapStaticDraw(flipHorizontal);
             //  graphic.Draw() FUCK NORMAL DRAWING I AM CHEAP BASTERD 
+            Graphics.DrawString((graphic as SpriteMap).frame.ToString(), this.position, Color.White);
         }
 
         public bool pathed
@@ -411,312 +414,51 @@
             _rightNub.material = material;
         }
 
+        public static readonly byte[] neighborFrameLookupList = new byte[256]
+{
+            40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
+            37, 37, 43, 43, 37, 37, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43,
+            49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49,
+            52, 52, 4, 4, 52, 52, 52, 52, 52, 52, 4, 5, 52, 52, 52, 52,
+            32, 41, 32, 41, 41, 41, 41, 41, 32, 41, 32, 41, 41, 41, 41, 41,
+            36, 33, 35, 59, 33, 33, 59, 59, 35, 59, 35, 59, 59, 59, 59, 59,
+            51, 2, 51, 2, 51, 2, 51, 1, 51, 2, 51, 2, 51, 2, 51, 2,
+            34, 8, 14, 3, 34, 0, 255, 3, 34, 255, 6, 3, 34, 3, 3, 3,
+            44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44,
+            60, 60, 60, 60, 60, 60, 60, 60, 28, 28, 28, 28, 28, 28, 28, 28,
+            50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
+            45, 45, 4, 4, 45, 45, 45, 45, 15, 15, 20, 20, 15, 15, 20, 20,
+            58, 58, 58, 58, 26, 26, 26, 26, 58, 58, 58, 58, 26, 26, 26, 26,
+            57, 57, 57, 57, 25, 25, 25, 25, 29, 29, 29, 29, 27, 27, 27, 27,
+            53, 2, 53, 2, 7, 18, 7, 18, 53, 53, 53, 53, 7, 18, 7, 18,
+            42, 8, 255, 3, 24, 16, 24, 10, 30, 255, 22, 12, 23, 17, 21, 11
+};
         public virtual void FindFrame()
         {
             float num = 16f;
             if (!treeLike)
                 num = 10f;
-            AutoPlatform autoPlatform1 = Level.CheckPointPlacementLayer<AutoPlatform>(x, y - 17f, this, placementLayer);
-            AutoPlatform autoPlatform2 = Level.CheckPointPlacementLayer<AutoPlatform>(x, y + num, this, placementLayer);
-            AutoPlatform autoPlatform3 = Level.CheckPointPlacementLayer<AutoPlatform>(x - 16f, y, this, placementLayer);
-            AutoPlatform autoPlatform4 = Level.CheckPointPlacementLayer<AutoPlatform>(x + 16f, y, this, placementLayer);
-            AutoPlatform autoPlatform5 = Level.CheckPointPlacementLayer<AutoPlatform>(x - 16f, y - 17f, this, placementLayer);
-            AutoPlatform autoPlatform6 = Level.CheckPointPlacementLayer<AutoPlatform>(x + 16f, y - 17f, this, placementLayer);
-            AutoPlatform autoPlatform7 = Level.CheckPointPlacementLayer<AutoPlatform>(x - 16f, y + num, this, placementLayer);
-            AutoPlatform autoPlatform8 = Level.CheckPointPlacementLayer<AutoPlatform>(x + 16f, y + num, this, placementLayer);
-            if (autoPlatform1 != null && autoPlatform1._tileset != _tileset)
-                autoPlatform1 = null;
-            if (autoPlatform2 != null && autoPlatform2._tileset != _tileset)
-                autoPlatform2 = null;
-            if (autoPlatform3 != null && autoPlatform3._tileset != _tileset)
-                autoPlatform3 = null;
-            if (autoPlatform4 != null && autoPlatform4._tileset != _tileset)
-                autoPlatform4 = null;
-            if (autoPlatform5 != null && autoPlatform5._tileset != _tileset)
-                autoPlatform5 = null;
-            if (autoPlatform6 != null && autoPlatform6._tileset != _tileset)
-                autoPlatform6 = null;
-            if (autoPlatform7 != null && autoPlatform7._tileset != _tileset)
-                autoPlatform7 = null;
-            if (autoPlatform8 != null && autoPlatform8._tileset != _tileset)
-                autoPlatform8 = null;
-            if (autoPlatform1 != null)
+            AutoPlatform up = Level.CheckPointPlacementLayer<AutoPlatform>(x, y - 17f, this, placementLayer);
+            AutoPlatform down = Level.CheckPointPlacementLayer<AutoPlatform>(x, y + num, this, placementLayer);
+            AutoPlatform bLeft = Level.CheckPointPlacementLayer<AutoPlatform>(x - 16f, y, this, placementLayer);
+            AutoPlatform bRight = Level.CheckPointPlacementLayer<AutoPlatform>(x + 16f, y, this, placementLayer);
+            AutoPlatform topbLeft = Level.CheckPointPlacementLayer<AutoPlatform>(x - 16f, y - 17f, this, placementLayer);
+            AutoPlatform topbRight = Level.CheckPointPlacementLayer<AutoPlatform>(x + 16f, y - 17f, this, placementLayer);
+            AutoPlatform bottombLeft = Level.CheckPointPlacementLayer<AutoPlatform>(x - 16f, y + num, this, placementLayer);
+            AutoPlatform bottombRight = Level.CheckPointPlacementLayer<AutoPlatform>(x + 16f, y + num, this, placementLayer);
+
+            bool[] neighbors = new bool[8] { up != null, bRight != null, down != null, bLeft != null, topbLeft != null, topbRight != null, bottombLeft != null, bottombRight != null };
+            byte neighborValue = 0;
+            for (int i = neighbors.Length - 1; i >= 0; i--)
             {
-                if (autoPlatform4 != null)
+                if (neighbors[i])
                 {
-                    if (autoPlatform2 != null)
-                    {
-                        if (autoPlatform3 != null)
-                        {
-                            if (autoPlatform5 != null)
-                            {
-                                if (autoPlatform6 != null)
-                                {
-                                    if (autoPlatform7 != null)
-                                    {
-                                        if (autoPlatform8 != null)
-                                            _sprite.frame = 11;
-                                        else
-                                            _sprite.frame = 21;
-                                    }
-                                    else if (autoPlatform8 != null)
-                                        _sprite.frame = 17;
-                                    else
-                                        _sprite.frame = 23;
-                                }
-                                else if (autoPlatform8 != null)
-                                {
-                                    if (autoPlatform7 == null)
-                                        return;
-                                    _sprite.frame = 12;
-                                }
-                                else if (autoPlatform7 != null)
-                                    _sprite.frame = 22;
-                                else
-                                    _sprite.frame = 30;
-                            }
-                            else if (autoPlatform6 != null)
-                            {
-                                if (autoPlatform8 != null)
-                                {
-                                    if (autoPlatform7 != null)
-                                        _sprite.frame = 10;
-                                    else
-                                        _sprite.frame = 16;
-                                }
-                                else
-                                    _sprite.frame = 24;
-                            }
-                            else if (autoPlatform8 != null)
-                            {
-                                if (autoPlatform7 != null)
-                                    _sprite.frame = 3;
-                                else
-                                    _sprite.frame = 8;
-                            }
-                            else
-                            {
-                                if (autoPlatform7 != null)
-                                    return;
-                                _sprite.frame = 42;
-                            }
-                        }
-                        else if (autoPlatform6 != null)
-                        {
-                            if (autoPlatform8 != null)
-                            {
-                                _sprite.frame = 18;
-                            }
-                            else
-                            {
-                                if (autoPlatform5 == null)
-                                    ;
-                                _sprite.frame = 7;
-                            }
-                        }
-                        else
-                        {
-                            if (autoPlatform5 == null)
-                            {
-                                if (autoPlatform8 != null)
-                                {
-                                    _sprite.frame = 2;
-                                    return;
-                                }
-                            }
-                            _sprite.frame = 53;
-                        }
-                    }
-                    else if (autoPlatform3 != null)
-                    {
-                        if (autoPlatform5 != null)
-                        {
-                            if (autoPlatform6 != null)
-                                _sprite.frame = 27;
-                            else
-                                _sprite.frame = 29;
-                        }
-                        else if (autoPlatform6 != null)
-                            _sprite.frame = 25;
-                        else
-                            _sprite.frame = 57;
-                    }
-                    else if (autoPlatform6 != null)
-                        _sprite.frame = 26;
-                    else
-                        _sprite.frame = 58;
+                    neighborValue |= (byte)(1 << (neighbors.Length - 1 - i));
                 }
-                else if (autoPlatform2 != null)
-                {
-                    if (autoPlatform3 != null)
-                    {
-                        if (autoPlatform5 != null)
-                        {
-                            if (autoPlatform7 != null)
-                            {
-                                _sprite.frame = 20;
-                            }
-                            else
-                            {
-                                if (autoPlatform8 == null)
-                                    ;
-                                _sprite.frame = 15;
-                            }
-                        }
-                        else
-                        {
-                            if (autoPlatform6 == null)
-                            {
-                                if (autoPlatform8 != null)
-                                {
-                                    if (autoPlatform7 != null)
-                                    {
-                                        _sprite.frame = 4;
-                                        return;
-                                    }
-                                    _sprite.frame = 45;
-                                    return;
-                                }
-                                if (autoPlatform7 != null)
-                                {
-                                    _sprite.frame = 4;
-                                    return;
-                                }
-                            }
-                            _sprite.frame = 45;
-                        }
-                    }
-                    else
-                        _sprite.frame = 50;
-                }
-                else if (autoPlatform3 != null)
-                {
-                    if (autoPlatform5 != null)
-                        _sprite.frame = 28;
-                    else
-                        _sprite.frame = 60;
-                }
-                else
-                    _sprite.frame = 44;
             }
-            else if (autoPlatform4 != null)
-            {
-                if (autoPlatform2 != null)
-                {
-                    if (autoPlatform3 != null)
-                    {
-                        if (autoPlatform7 == null && autoPlatform8 == null)
-                            _sprite.frame = 34;
-                        else if (autoPlatform5 != null)
-                        {
-                            if (autoPlatform6 != null)
-                                _sprite.frame = 3;
-                            else if (autoPlatform8 != null)
-                            {
-                                if (autoPlatform7 == null)
-                                    return;
-                                _sprite.frame = 3;
-                            }
-                            else if (autoPlatform7 != null)
-                                _sprite.frame = 6;
-                            else
-                                _sprite.frame = 24;
-                        }
-                        else if (autoPlatform6 != null)
-                        {
-                            if (autoPlatform8 != null)
-                            {
-                                if (autoPlatform7 != null)
-                                    _sprite.frame = 3;
-                                else
-                                    _sprite.frame = 0;
-                            }
-                            else
-                            {
-                                if (autoPlatform7 != null)
-                                    return;
-                                _sprite.frame = 25;
-                            }
-                        }
-                        else if (autoPlatform8 != null)
-                        {
-                            if (autoPlatform7 != null)
-                                _sprite.frame = 3;
-                            else
-                                _sprite.frame = 8;
-                        }
-                        else if (autoPlatform7 != null)
-                            _sprite.frame = 14;
-                        else
-                            _sprite.frame = 34;
-                    }
-                    else if (autoPlatform5 == null && autoPlatform6 != null && autoPlatform7 != null && autoPlatform8 != null)
-                        _sprite.frame = 1;
-                    else if (autoPlatform8 != null)
-                        _sprite.frame = 2;
-                    else
-                        _sprite.frame = 51;
-                }
-                else if (autoPlatform3 != null)
-                {
-                    if ((autoPlatform7 != null || autoPlatform5 != null) && (autoPlatform6 != null || autoPlatform8 != null))
-                        _sprite.frame = 59;
-                    else if (autoPlatform8 != null || autoPlatform6 != null)
-                        _sprite.frame = 33;
-                    else if (autoPlatform7 != null || autoPlatform5 != null)
-                        _sprite.frame = 35;
-                    else
-                        _sprite.frame = 36;
-                }
-                else if (autoPlatform8 != null || autoPlatform6 != null)
-                    _sprite.frame = 41;
-                else
-                    _sprite.frame = 32;
-            }
-            else if (autoPlatform2 != null)
-            {
-                if (autoPlatform3 != null)
-                {
-                    if (autoPlatform5 != null)
-                    {
-                        if (autoPlatform6 == null)
-                        {
-                            if (autoPlatform7 != null)
-                            {
-                                if (autoPlatform8 != null)
-                                {
-                                    _sprite.frame = 5;
-                                    return;
-                                }
-                                _sprite.frame = 4;
-                                return;
-                            }
-                            _sprite.frame = 52;
-                            return;
-                        }
-                    }
-                    else if (autoPlatform6 == null)
-                    {
-                        if (autoPlatform7 != null)
-                        {
-                            _sprite.frame = 4;
-                            return;
-                        }
-                    }
-                    _sprite.frame = 52;
-                }
-                else
-                    _sprite.frame = 49;
-            }
-            else if (autoPlatform3 != null)
-            {
-                if (autoPlatform7 != null || autoPlatform5 != null)
-                    _sprite.frame = 43;
-                else
-                    _sprite.frame = 37;
-            }
-            else
-                _sprite.frame = 40;
+            byte newFrame = neighborFrameLookupList[neighborValue];
+            if (newFrame != 255)
+                _sprite.frame = newFrame;
         }
 
         public override ContextMenu GetContextMenu() => null;
