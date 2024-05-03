@@ -1,5 +1,4 @@
-﻿// Decompiled with JetBrains decompiler
-using System;
+﻿using System;
 
 namespace DuckGame
 {

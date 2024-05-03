@@ -1,4 +1,6 @@
-﻿namespace DuckGame
+﻿using System;
+
+namespace DuckGame
 {
     [EditorGroup("Stuff|Wires")]
     [BaggedProperty("isOnlineCapable", true)]
@@ -23,15 +25,21 @@
             _canFlip = true;
         }
 
+        public override Type TabRotate(bool control)
+        {
+            if (control)
+                editorCycleType = typeof(WireMount);
+            else
+                base.TabRotate();
+            return editorCycleType;
+        }
+
         public override void Initialize() => base.Initialize();
 
         public override void Draw()
         {
-            bool flipHorizontal = this.flipHorizontal;
-            _sprite.frame = offDir >= 0 ? 0 : 1;
-            this.flipHorizontal = false;
+           _sprite.frame = offDir >= 0 ? 0 : 1;
             base.Draw();
-            this.flipHorizontal = flipHorizontal;
         }
 
         public override void Update() => base.Update();
