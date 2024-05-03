@@ -393,7 +393,8 @@ namespace DuckGame
                     _connections.Add(wireConnection4);
                     _connections.Add(wireConnection5);
                     break;
-                case 47:
+                case 47: // I don't know what frame this is or if it was a typo of 42 but i'm keeping it here just in case
+                case 42:
                     _centerWire = new WireConnection()
                     {
                         position = position + new Vec2(0f, -4f)
