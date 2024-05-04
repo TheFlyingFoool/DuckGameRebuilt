@@ -70,7 +70,6 @@ namespace DuckGame
             (graphic as SpriteMap).UpdateFrame();
             graphic.UltraCheapStaticDraw(flipHorizontal);
             //  graphic.Draw() FUCK NORMAL DRAWING I AM CHEAP BASTERD 
-            Graphics.DrawString((graphic as SpriteMap).frame.ToString(), this.position, Color.White);
         }
 
         public bool pathed

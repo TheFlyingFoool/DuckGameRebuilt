@@ -431,6 +431,8 @@ namespace DuckGame
                 }
                 foreach (Thing thing in Level.CheckRectAll<RoomDefenceTurret>(topLeft, bottomRight))
                     Level.Remove(thing);
+                foreach (Thing thing in Level.CheckRectAll<TeamHat>(topLeft, bottomRight))
+                    if (!thing.enablePhysics) Level.Remove(thing);
                 _turret = null;
             }
             if (neon1 != null)

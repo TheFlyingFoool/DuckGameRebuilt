@@ -9,6 +9,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
+using System.Text;
 
 namespace DuckGame
 {
@@ -2038,6 +2039,8 @@ namespace DuckGame
         public static bool prevMG;
 
         public static bool ShowGameInBrowser;
+
+        public static int cycle;
         public static void MidGameJoiningLogic()
         {
             if (Network.isActive && Network.isServer)
@@ -2050,6 +2053,24 @@ namespace DuckGame
 
                     OpenMenu(_core._menuOpenProfile);
                     speedOpen = false;
+                }
+                cycle++;
+                if (cycle > 30)
+                {
+                    cycle = 0;
+                    Network.activeNetwork.core.ApplyLobbyData();
+                    Steam.lobby.SetLobbyData("maxplayers", DG.MaxPlayers.ToString());
+                    Steam.lobby.SetLobbyData("numSlots", DG.MaxPlayers.ToString());
+                    StringBuilder builder = new StringBuilder();
+
+                    foreach (Profile profile in Profiles.active)
+                    {
+                        string name = profile.name.Replace("\n", "_");
+
+                        builder.Append(name);
+                        builder.Append("\n");
+                    }
+                    Steam.lobby.SetLobbyData("players", builder.ToString());
                 }
                 if (Level.current is GameLevel)
                 {

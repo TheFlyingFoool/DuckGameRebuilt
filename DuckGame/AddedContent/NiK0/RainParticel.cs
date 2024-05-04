@@ -55,7 +55,7 @@
             {
                 splash.alpha = alpha;
                 splash.frame = splashFrame;
-                splash.color = Color.White * 0.8f;
+                splash.color = c;
                 Graphics.Draw(splash, x, y - 9, -1);
             }
             else Graphics.DrawLine(position - new Vec2(rX, rY), position, c, 1f, -1);
