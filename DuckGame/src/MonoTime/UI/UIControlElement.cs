@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 
 namespace DuckGame
 {
@@ -128,6 +129,10 @@ namespace DuckGame
                     else if (inputMapping.device.productName == "KEYBOARD P2")
                         mappingString = (Options.Data.keyboard2PlayerIndex + 1).ToString();
                 }
+                if (mappingString == "~")
+                    mappingString = "TILDE";
+                else if (mappingString == "/")
+                    mappingString = "SLASH";
                 _captionList.Add(str + mappingString + "  ");
             }
             else
@@ -139,8 +144,8 @@ namespace DuckGame
                 }
                 if (!_selectStyle)
                 {
-                    _captionList.Add("_");
-                    if (Keyboard.Pressed(Keys.OemTilde))
+                    _captionList.Add("_  ");
+                    if (Keyboard.Pressed(Keys.F1))
                     {
                         _editing = false;
                         UIMenu.globalUILock = false;
@@ -221,7 +226,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (_arrow.visible)
+            if (_arrow.visible && _uiText.text != "|LIME|PLAYER#")
             {
                 _styleBubble.depth = (Depth)0.9f;
                 Vec2 vec2_1 = new Vec2(x + 76f, y);
@@ -236,11 +241,18 @@ namespace DuckGame
                 string localtrigger = _trigger;
                 if (inputMapping.map.ContainsKey(localtrigger))
                 {
-                    Sprite g = inputMapping.GetSprite(inputMapping.map[localtrigger]) ?? inputMapping.device.DoGetMapImage(inputMapping.map[localtrigger], true);
-                    if (g != null)
+                    if (inputMapping.map[localtrigger] == 192)
                     {
-                        g.depth = (Depth)0.95f;
-                        Graphics.Draw(g, vec2_1.x + (_selectStyle ? -22f : 9f), vec2_1.y - 7f);
+                        Graphics.DrawString("@CONSOLE@", new Vec2(vec2_1.x + (_selectStyle ? -23f : 8f), vec2_1.y - 4f), Color.Black, 0.95f);
+                    }
+                    else
+                    {
+                        Sprite g = inputMapping.GetSprite(inputMapping.map[localtrigger]) ?? inputMapping.device.DoGetMapImage(inputMapping.map[localtrigger], true);
+                        if (g != null)
+                        {
+                            g.depth = (Depth)0.95f;
+                            Graphics.Draw(g, vec2_1.x + (_selectStyle ? -16f : 15f) - g.width / 2, vec2_1.y - 7f);
+                        }
                     }
                 }
                 if (_selectStyle)
@@ -269,6 +281,7 @@ namespace DuckGame
             {
                 if (localtrigger == "PLAYERINDEX")
                 {
+                    dirty = true;
                     if (inputMapping.device.productName == "KEYBOARD P1")
                     {
                         ++Options.Data.keyboard1PlayerIndex;
@@ -286,6 +299,7 @@ namespace DuckGame
             }
             else if (trigger == Triggers.MenuLeft && localtrigger == "PLAYERINDEX")
             {
+                dirty = true;
                 if (inputMapping.device.productName == "KEYBOARD P1")
                 {
                     --Options.Data.keyboard1PlayerIndex;
@@ -306,6 +320,7 @@ namespace DuckGame
                     SFX.Play("consoleError");
                 else if (localtrigger == "PLAYERINDEX")
                 {
+                    dirty = true;
                     if (inputMapping.device.productName == "KEYBOARD P1")
                     {
                         ++Options.Data.keyboard1PlayerIndex;
@@ -322,13 +337,13 @@ namespace DuckGame
                 }
                 else
                 {
-                    UIMenu.globalUILock = true;
                     dirty = true;
+                    UIMenu.globalUILock = true;
                     _editing = true;
                     _skipStep = true;
                     SFX.Play("consoleSelect");
                     HUD.CloseAllCorners();
-                    HUD.AddCornerControl(HUDCorner.TopLeft, "@CONSOLE@CANCEL");
+                    HUD.AddCornerControl(HUDCorner.TopLeft, "@F1@CANCEL");
                 }
             }
             else

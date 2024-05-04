@@ -782,7 +782,6 @@
     <Compile Include="src\MonoTime\Input\KeyEventHandler.cs" />
     <Compile Include="src\MonoTime\Input\2InputMan.cs" />
     <Compile Include="src\MonoTime\LUI\LUIChangingText.cs" />
-    <Compile Include="src\MonoTime\LUI\LUIControlElement.cs" />
     <Compile Include="src\MonoTime\LUI\LUIMenuItemNumber.cs" />
     <Compile Include="src\MonoTime\LUI\LUIMenuItemString.cs" />
     <Compile Include="src\MonoTime\LUI\LUIMenuItemToggle.cs" />
