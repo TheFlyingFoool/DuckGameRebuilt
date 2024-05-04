@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -45,6 +46,15 @@ namespace DuckGame
             weight = 1f;
             _signalSprite = new Sprite("wireBulge");
             _signalSprite.CenterOrigin();
+        }
+
+        public override Type TabRotate(bool control)
+        {
+            if (control)
+                editorCycleType = typeof(WireActivator);
+            else
+                base.TabRotate(control);
+            return editorCycleType;
         }
 
         public void Emit(WireSignal signal = null, float overshoot = 0f, int type = 0)
@@ -383,7 +393,8 @@ namespace DuckGame
                     _connections.Add(wireConnection4);
                     _connections.Add(wireConnection5);
                     break;
-                case 47:
+                case 47: // I don't know what frame this is or if it was a typo of 42 but i'm keeping it here just in case
+                case 42:
                     _centerWire = new WireConnection()
                     {
                         position = position + new Vec2(0f, -4f)

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -46,6 +47,15 @@ namespace DuckGame
             if ((int)orientation <= 3)
                 return;
             orientation = (EditorProperty<int>)0;
+        }
+
+        public override Type TabRotate(bool control)
+        {
+            if (control)
+                editorCycleType = typeof(WireFlipper);
+            else
+                TabRotate();
+            return editorCycleType;
         }
 
         public override void Initialize()

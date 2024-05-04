@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Documents;
+using static DuckGame.GoalType;
 
 namespace DuckGame
 {
@@ -46,6 +48,7 @@ namespace DuckGame
         private AutoBlock bottombLeft;
         private AutoBlock bottombRight;
         public int brokenSptiteIndex = 0;
+        private int hitboxFrame = 40;
 
         public override void SetTranslation(Vec2 translation)
         {
@@ -744,7 +747,7 @@ namespace DuckGame
 
         public void UpdateCollision()
         {
-            switch (_sprite.frame)
+            switch (hitboxFrame)
             {
                 case 32:
                 case 41:
@@ -832,6 +835,44 @@ namespace DuckGame
             DoPositioning();
         }
 
+        public static readonly byte[] neighborFrameLookupList = new byte[256]
+        {
+            40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
+            37, 37, 43, 43, 37, 37, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43,
+            49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49,
+            52, 52, 4, 4, 52, 52, 52, 52, 52, 52, 4, 5, 52, 52, 52, 52,
+            32, 41, 32, 41, 41, 41, 41, 41, 32, 41, 32, 41, 41, 41, 41, 41,
+            36, 33, 35, 59, 33, 33, 59, 59, 35, 59, 35, 59, 59, 59, 59, 59,
+            51, 2, 51, 2, 51, 2, 51, 1, 51, 2, 51, 2, 51, 2, 51, 2,
+            34, 8, 14, 3, 34, 0, 255, 3, 34, 255, 6, 3, 34, 3, 3, 3,
+            44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44,
+            60, 60, 60, 60, 60, 60, 60, 60, 28, 28, 28, 28, 28, 28, 28, 28,
+            50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
+            45, 45, 4, 4, 45, 45, 45, 45, 15, 15, 20, 20, 15, 15, 20, 20,
+            58, 58, 58, 58, 26, 26, 26, 26, 58, 58, 58, 58, 26, 26, 26, 26,
+            57, 57, 57, 57, 25, 25, 25, 25, 29, 29, 29, 29, 27, 27, 27, 27,
+            53, 2, 53, 2, 7, 18, 7, 18, 53, 53, 53, 53, 7, 18, 7, 18,
+            42, 8, 255, 3, 24, 16, 24, 10, 30, 255, 22, 12, 23, 17, 21, 11
+        };
+        public static readonly byte[] fixedNeighborFrameLookupList = new byte[256]
+        {
+            40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
+            37, 37, 43, 43, 37, 37, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43,
+            49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49, 49,
+            52, 52, 4, 4, 52, 52, 4, 4, 52, 52, 4, 5, 52, 52, 4, 5,
+            32, 41, 32, 41, 41, 41, 41, 41, 32, 41, 32, 41, 41, 41, 41, 41,
+            36, 33, 35, 59, 33, 33, 59, 59, 35, 59, 35, 59, 59, 59, 59, 59,
+            51, 2, 51, 2, 51, 2, 51, 1, 51, 2, 51, 2, 51, 2, 51, 2,
+            34, 8, 14, 3, 34, 0, 6, 3, 34, 8, 6, 3, 34, 8, 14, 3,
+            44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44,
+            60, 60, 60, 60, 60, 60, 60, 60, 28, 28, 28, 28, 28, 28, 28, 28,
+            50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50,
+            45, 45, 4, 4, 45, 45, 4, 4, 15, 15, 20, 20, 15, 15, 20, 20,
+            58, 58, 58, 58, 26, 26, 26, 26, 58, 58, 58, 58, 26, 26, 26, 26,
+            57, 57, 57, 57, 25, 25, 25, 25, 29, 29, 29, 29, 27, 27, 27, 27,
+            53, 2, 53, 2, 7, 18, 7, 18, 53, 2, 53, 2, 7, 18, 7, 18,
+            42, 8, 14, 3, 24, 16, 24, 10, 30, 30, 22, 12, 23, 17, 21, 11
+        };
         public void FindFrame()
         {
             up = Level.current.QuadTreePointFilter<AutoBlock>(new Vec2(x, y - 16f), checkFilter);
@@ -842,287 +883,27 @@ namespace DuckGame
             topbRight = Level.current.QuadTreePointFilter<AutoBlock>(new Vec2(x + 16f, y - 16f), checkFilter);
             bottombLeft = Level.current.QuadTreePointFilter<AutoBlock>(new Vec2(x - 16f, y + 16f), checkFilter);
             bottombRight = Level.current.QuadTreePointFilter<AutoBlock>(new Vec2(x + 16f, y + 16f), checkFilter);
-            if (up != null)
+
+            bool[] neighbors = new bool[8] { up != null, bRight != null, down != null, bLeft != null, topbLeft != null, topbRight != null, bottombLeft != null, bottombRight != null };
+            byte neighborValue = 0;
+            for (int i = neighbors.Length - 1; i >= 0; i--)
             {
-                if (bRight != null)
+                if (neighbors[i])
                 {
-                    if (down != null)
-                    {
-                        if (bLeft != null)
-                        {
-                            if (topbLeft != null)
-                            {
-                                if (topbRight != null)
-                                {
-                                    if (bottombLeft != null)
-                                    {
-                                        if (bottombRight != null)
-                                            _sprite.frame = 11;
-                                        else
-                                            _sprite.frame = 21;
-                                    }
-                                    else if (bottombRight != null)
-                                        _sprite.frame = 17;
-                                    else
-                                        _sprite.frame = 23;
-                                }
-                                else if (bottombRight != null)
-                                {
-                                    if (bottombLeft == null)
-                                        return;
-                                    _sprite.frame = 12;
-                                }
-                                else if (bottombLeft != null)
-                                    _sprite.frame = 22;
-                                else
-                                    _sprite.frame = 30;
-                            }
-                            else if (topbRight != null)
-                            {
-                                if (bottombRight != null)
-                                {
-                                    if (bottombLeft != null)
-                                        _sprite.frame = 10;
-                                    else
-                                        _sprite.frame = 16;
-                                }
-                                else
-                                {
-                                    _sprite.frame = 24;
-                                }
-                            }
-                            else if (bottombRight != null)
-                            {
-                                if (bottombLeft != null)
-                                    _sprite.frame = 3;
-                                else
-                                    _sprite.frame = 8;
-                            }
-                            else
-                            {
-                                if (bottombLeft != null)
-                                    return;
-                                _sprite.frame = 42;
-                            }
-                        }
-                        else if (topbRight != null)
-                        {
-                            if (bottombRight != null)
-                            {
-                                _sprite.frame = 18;
-                            }
-                            else
-                            {
-                                if (topbLeft == null)
-                                {
-                                }
-                                _sprite.frame = 7;
-                            }
-                        }
-                        else
-                        {
-                            if (topbLeft == null)
-                            {
-                                if (bottombRight != null)
-                                {
-                                    _sprite.frame = 2;
-                                    return;
-                                }
-                            }
-                            _sprite.frame = 53;
-                        }
-                    }
-                    else if (bLeft != null)
-                    {
-                        if (topbLeft != null)
-                        {
-                            if (topbRight != null)
-                                _sprite.frame = 27;
-                            else
-                                _sprite.frame = 29;
-                        }
-                        else if (topbRight != null)
-                            _sprite.frame = 25;
-                        else
-                            _sprite.frame = 57;
-                    }
-                    else if (topbRight != null)
-                        _sprite.frame = 26;
-                    else
-                        _sprite.frame = 58;
+                    neighborValue |= (byte)(1 << (neighbors.Length - 1 - i));
                 }
-                else if (down != null)
-                {
-                    if (bLeft != null)
-                    {
-                        if (topbLeft != null)
-                        {
-                            if (bottombLeft != null)
-                            {
-                                _sprite.frame = 20;
-                            }
-                            else
-                            {
-                                if (bottombRight == null)
-                                {
-                                }
-                                _sprite.frame = 15;
-                            }
-                        }
-                        else
-                        {
-                            if (topbRight == null)
-                            {
-                                if (bottombRight != null)
-                                {
-                                    if (bottombLeft != null)
-                                    {
-                                        _sprite.frame = 4;
-                                        return;
-                                    }
-                                    _sprite.frame = 45;
-                                    return;
-                                }
-                                if (bottombLeft != null)
-                                {
-                                    _sprite.frame = 4;
-                                    return;
-                                }
-                            }
-                            _sprite.frame = 45;
-                        }
-                    }
-                    else
-                        _sprite.frame = 50;
-                }
-                else if (bLeft != null)
-                {
-                    if (topbLeft != null)
-                        _sprite.frame = 28;
-                    else
-                        _sprite.frame = 60;
-                }
-                else
-                    _sprite.frame = 44;
             }
-            else if (bRight != null)
+            byte newFrame = neighborFrameLookupList[neighborValue];
+            if (newFrame != 255)
+                hitboxFrame = newFrame;
+            if (DGRSettings.EnhancedTextures)
             {
-                if (down != null)
-                {
-                    if (bLeft != null)
-                    {
-                        if (bottombLeft == null && bottombRight == null)
-                            _sprite.frame = 34;
-                        else if (topbLeft != null)
-                        {
-                            if (topbRight != null)
-                                _sprite.frame = 3;
-                            else if (bottombRight != null)
-                            {
-                                if (bottombLeft == null)
-                                    return;
-                                _sprite.frame = 3;
-                            }
-                            else if (bottombLeft != null)
-                                _sprite.frame = 6;
-                            else
-                                _sprite.frame = 24;
-                        }
-                        else if (topbRight != null)
-                        {
-                            if (bottombRight != null)
-                            {
-                                if (bottombLeft != null)
-                                    _sprite.frame = 3;
-                                else
-                                    _sprite.frame = 0;
-                            }
-                            else
-                            {
-                                if (bottombLeft != null)
-                                    return;
-                                _sprite.frame = 25;
-                            }
-                        }
-                        else if (bottombRight != null)
-                        {
-                            if (bottombLeft != null)
-                                _sprite.frame = 3;
-                            else
-                                _sprite.frame = 8;
-                        }
-                        else if (bottombLeft != null)
-                            _sprite.frame = 14;
-                        else
-                            _sprite.frame = 34;
-                    }
-                    else if (topbLeft == null && topbRight != null && bottombLeft != null && bottombRight != null)
-                        _sprite.frame = 1;
-                    else if (bottombRight != null)
-                        _sprite.frame = 2;
-                    else
-                        _sprite.frame = 51;
-                }
-                else if (bLeft != null)
-                {
-                    if ((bottombLeft != null || topbLeft != null) && (topbRight != null || bottombRight != null))
-                        _sprite.frame = 59;
-                    else if (bottombRight != null || topbRight != null)
-                        _sprite.frame = 33;
-                    else if (bottombLeft != null || topbLeft != null)
-                        _sprite.frame = 35;
-                    else
-                        _sprite.frame = 36;
-                }
-                else if (bottombRight != null || topbRight != null)
-                    _sprite.frame = 41;
-                else
-                    _sprite.frame = 32;
-            }
-            else if (down != null)
-            {
-                if (bLeft != null)
-                {
-                    if (topbLeft != null)
-                    {
-                        if (topbRight == null)
-                        {
-                            if (bottombLeft != null)
-                            {
-                                if (bottombRight != null)
-                                {
-                                    _sprite.frame = 5;
-                                    return;
-                                }
-                                _sprite.frame = 4;
-                                return;
-                            }
-                            _sprite.frame = 52;
-                            return;
-                        }
-                    }
-                    else if (topbRight == null)
-                    {
-                        if (bottombLeft != null)
-                        {
-                            _sprite.frame = 4;
-                            return;
-                        }
-                    }
-                    _sprite.frame = 52;
-                }
-                else
-                    _sprite.frame = 49;
-            }
-            else if (bLeft != null)
-            {
-                if (bottombLeft != null || topbLeft != null)
-                    _sprite.frame = 43;
-                else
-                    _sprite.frame = 37;
+                _sprite.frame = fixedNeighborFrameLookupList[neighborValue];
             }
             else
-                _sprite.frame = 40;
+            {
+                _sprite.frame = hitboxFrame;
+            }
         }
 
         public override ContextMenu GetContextMenu() => null;

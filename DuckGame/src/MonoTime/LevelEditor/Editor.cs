@@ -2277,22 +2277,22 @@ namespace DuckGame
                                             break;
                                     }
 
-                                    bool flag3 = Keyboard.Down(Keys.LeftAlt) || Keyboard.Down(Keys.RightAlt);
-                                    bool flag4 = Keyboard.Down(Keys.LeftControl) || Keyboard.Down(Keys.RightControl);
-                                    bool flag5 = false;
-                                    if (flag3 & flag4)
+                                    bool altDown = Keyboard.Down(Keys.LeftAlt) || Keyboard.Down(Keys.RightAlt);
+                                    bool controlDown = Keyboard.Down(Keys.LeftControl) || Keyboard.Down(Keys.RightControl);
+                                    bool altAndControlDown = false;
+                                    if (altDown & controlDown)
                                     {
                                         _hover = null;
                                         _secondaryHover = null;
-                                        flag5 = true;
+                                        altAndControlDown = true;
                                     }
 
                                     if ((inputMode == EditorInput.Gamepad ||
                                          inputMode == EditorInput.Touch) && _placementMenu == null)
                                     {
-                                        int num13 = 1;
+                                        int stickSpeedModifier = 1;
                                         if (_input.Down(Triggers.LeftStick))
-                                            num13 = 4;
+                                            stickSpeedModifier = 4;
                                         _tilePosition = _tilePositionPrev;
                                         if (_tilePosition.x < camera.left)
                                             _tilePosition.x = camera.left + 32f;
@@ -2316,8 +2316,8 @@ namespace DuckGame
                                                 num14 = 1;
                                         }
 
-                                        float num16 = _cellSize * num13 * num15;
-                                        float num17 = _cellSize * num13 * num14;
+                                        float num16 = _cellSize * stickSpeedModifier * num15;
+                                        float num17 = _cellSize * stickSpeedModifier * num14;
                                         _tilePosition.x += num16;
                                         _tilePosition.y += num17;
                                         if (_tilePosition.x < camera.left || _tilePosition.x > camera.right)
@@ -2345,7 +2345,7 @@ namespace DuckGame
                                     }
                                     else if (inputMode == EditorInput.Mouse)
                                     {
-                                        if (flag3)
+                                        if (altDown)
                                         {
                                             _tilePosition.x = (float)Math.Round(Mouse.positionScreen.x / 1f) * 1f;
                                             _tilePosition.y = (float)Math.Round(Mouse.positionScreen.y / 1f) * 1f;
@@ -2362,7 +2362,7 @@ namespace DuckGame
                                     if (_placementType != null && _placementMenu == null)
                                     {
                                         _tilePosition += _placementType.editorOffset;
-                                        if (!flag3)
+                                        if (!altDown)
                                             HugObjectPlacement();
                                     }
 
@@ -2456,7 +2456,7 @@ namespace DuckGame
                                                             thing = null;
                                                         else if (thing != null && !_levelThings.Contains(thing))
                                                             thing = null;
-                                                        else if (flag4 & flag3)
+                                                        else if (altAndControlDown)
                                                             thing = null;
                                                         else if (_placementType is BackgroundTile &&
                                                                  !(thing is BackgroundTile))
@@ -2505,7 +2505,7 @@ namespace DuckGame
                                                                 () => RemoveObject(newThing));
                                                             if (newThing is PathNode)
                                                                 _editorLoadFinished = true;
-                                                            if (flag5)
+                                                            if (altAndControlDown)
                                                                 disableDragMode();
                                                         }
                                                     }
@@ -3866,12 +3866,12 @@ namespace DuckGame
                         if (vec2.y < 32)
                             vec2.y = 32f;
                         Vec2 p1 = new Vec2(19f, (float)(layer.height - 19 - vec2.y - (num24 + 10)) + num22);
-                        string str10 = thing.GetDetailsString();
-                        while (str10.Count(x => x == '\n') > 5)
-                            str10 = str10.Substring(0, str10.LastIndexOf('\n'));
-                        float x2 = _font.GetWidth(str10) + 8f;
-                        if (str10 != "")
-                            _font.Draw(str10, (float)(p1.x + vec2.x + 4), p1.y + 4f, Color.White, 0.7f);
+                        string detailsString = thing.GetDetailsString();
+                        while (detailsString.Count(x => x == '\n') > 5)
+                            detailsString = detailsString.Substring(0, detailsString.LastIndexOf('\n'));
+                        float x2 = _font.GetWidth(detailsString) + 8f;
+                        if (detailsString != "")
+                            _font.Draw(detailsString, (float)(p1.x + vec2.x + 4), p1.y + 4f, Color.White, 0.7f);
                         else
                             x2 = 0f;
                         Graphics.DrawRect(p1, p1 + vec2 + new Vec2(x2, 0f), Color.Black * 0.5f, 0.6f);
@@ -4593,14 +4593,14 @@ namespace DuckGame
                 }
             }
 
-            string str1 = "";
-            string str2 = "";
-            int num1 = 0;
-            int num2 = 0;
-            int num3 = 0;
-            int num4 = 0;
-            int num5 = 0;
-            int num6 = 0;
+            string weaponConfig = "";
+            string spawnerConfig = "";
+            int numArmor = 0;
+            int numEquipment = 0;
+            int numSpawns = 0;
+            int numTeamSpawns = 0;
+            int numLockedDoors = 0;
+            int numKeys = 0;
             _currentLevelData.metaData.eightPlayer = false;
             _currentLevelData.metaData.eightPlayerRestricted = false;
             _currentLevelData.objects.objects.Clear();
@@ -4623,24 +4623,24 @@ namespace DuckGame
                             switch (levelThing)
                             {
                                 case Key _:
-                                    ++num6;
+                                    ++numKeys;
                                     break;
                                 case Door _ when (levelThing as Door).locked:
-                                    ++num5;
+                                    ++numLockedDoors;
                                     break;
                                 case Equipment _:
                                     if (levelThing is ChestPlate || levelThing is Helmet || levelThing is KnightHelmet)
                                     {
-                                        ++num1;
+                                        ++numArmor;
                                         break;
                                     }
 
-                                    ++num2;
+                                    ++numEquipment;
                                     break;
                                 case Gun _:
-                                    if (str1 != "")
-                                        str1 += "|";
-                                    str1 += ModLoader.SmallTypeName(levelThing.GetType());
+                                    if (weaponConfig != "")
+                                        weaponConfig += "|";
+                                    weaponConfig += ModLoader.SmallTypeName(levelThing.GetType());
                                     break;
                                 case ItemSpawner _:
                                     ItemSpawner itemSpawner = levelThing as ItemSpawner;
@@ -4650,14 +4650,14 @@ namespace DuckGame
                                         if (itemSpawner.spawnNum < 1 && itemSpawner.spawnTime < 8f &&
                                             itemSpawner.isAccessible)
                                         {
-                                            if (str2 != "")
-                                                str2 += "|";
-                                            str2 += ModLoader.SmallTypeName(itemSpawner.contains);
+                                            if (spawnerConfig != "")
+                                                spawnerConfig += "|";
+                                            spawnerConfig += ModLoader.SmallTypeName(itemSpawner.contains);
                                         }
 
-                                        if (str1 != "")
-                                            str1 += "|";
-                                        str1 += ModLoader.SmallTypeName(itemSpawner.contains);
+                                        if (weaponConfig != "")
+                                            weaponConfig += "|";
+                                        weaponConfig += ModLoader.SmallTypeName(itemSpawner.contains);
                                     }
 
                                     break;
@@ -4668,21 +4668,21 @@ namespace DuckGame
                                         if (typeof(Gun).IsAssignableFrom(itemBox.contains) &&
                                             itemBox.likelyhoodToExist == 1f && itemBox.isAccessible)
                                         {
-                                            if (str2 != "")
-                                                str2 += "|";
-                                            str2 += ModLoader.SmallTypeName(itemBox.contains);
-                                            if (str1 != "")
-                                                str1 += "|";
-                                            str1 += ModLoader.SmallTypeName(itemBox.contains);
+                                            if (spawnerConfig != "")
+                                                spawnerConfig += "|";
+                                            spawnerConfig += ModLoader.SmallTypeName(itemBox.contains);
+                                            if (weaponConfig != "")
+                                                weaponConfig += "|";
+                                            weaponConfig += ModLoader.SmallTypeName(itemBox.contains);
                                         }
                                     }
                                     else if (levelThing is SpawnPoint)
                                     {
-                                        ++num3;
+                                        ++numSpawns;
                                     }
                                     else if (levelThing is TeamSpawn)
                                     {
-                                        ++num4;
+                                        ++numTeamSpawns;
                                     }
 
                                     break;
@@ -4699,24 +4699,24 @@ namespace DuckGame
             _currentLevelData.proceduralData.sideMask = 0;
             if (_miniMode)
             {
-                int num7 = 0;
+                int pathSidesMask = 0;
                 if (_pathNorth)
-                    num7 |= 1;
+                    pathSidesMask |= 1;
                 if (_pathEast)
-                    num7 |= 2;
+                    pathSidesMask |= 2;
                 if (_pathSouth)
-                    num7 |= 4;
+                    pathSidesMask |= 4;
                 if (_pathWest)
-                    num7 |= 8;
-                _currentLevelData.proceduralData.sideMask = num7;
-                _currentLevelData.proceduralData.weaponConfig = str1;
-                _currentLevelData.proceduralData.spawnerConfig = str2;
-                _currentLevelData.proceduralData.numArmor = num1;
-                _currentLevelData.proceduralData.numEquipment = num2;
-                _currentLevelData.proceduralData.numSpawns = num3;
-                _currentLevelData.proceduralData.numTeamSpawns = num4;
-                _currentLevelData.proceduralData.numLockedDoors = num5;
-                _currentLevelData.proceduralData.numKeys = num6;
+                    pathSidesMask |= 8;
+                _currentLevelData.proceduralData.sideMask = pathSidesMask;
+                _currentLevelData.proceduralData.weaponConfig = weaponConfig;
+                _currentLevelData.proceduralData.spawnerConfig = spawnerConfig;
+                _currentLevelData.proceduralData.numArmor = numArmor;
+                _currentLevelData.proceduralData.numEquipment = numEquipment;
+                _currentLevelData.proceduralData.numSpawns = numSpawns;
+                _currentLevelData.proceduralData.numTeamSpawns = numTeamSpawns;
+                _currentLevelData.proceduralData.numLockedDoors = numLockedDoors;
+                _currentLevelData.proceduralData.numKeys = numKeys;
             }
 
             if (previewCapture != null)

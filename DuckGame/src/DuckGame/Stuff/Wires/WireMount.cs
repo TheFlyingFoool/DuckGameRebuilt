@@ -1,4 +1,6 @@
-﻿namespace DuckGame
+﻿using System;
+
+namespace DuckGame
 {
     [EditorGroup("Stuff|Wires")]
     [BaggedProperty("isOnlineCapable", true)]
@@ -106,6 +108,15 @@
             if (contains != null)
                 text = contains.Name;
             Graphics.DrawString(text, position + new Vec2((float)(-Graphics.GetStringWidth(text) / 2), -16f), Color.White, (Depth)0.9f);
+        }
+
+        public override Type TabRotate(bool control)
+        {
+            if (control)
+                editorCycleType = typeof(WireTrapDoor);
+            else
+                base.TabRotate(control);
+            return editorCycleType;
         }
 
         public override void Initialize()
