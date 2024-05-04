@@ -140,7 +140,7 @@ namespace DuckGame
                 if (!_selectStyle)
                 {
                     _captionList.Add("_");
-                    if (Keyboard.Pressed(Keys.OemTilde))
+                    if (Keyboard.Pressed(Keys.F1))
                     {
                         _editing = false;
                         UIMenu.globalUILock = false;
@@ -331,7 +331,7 @@ namespace DuckGame
                     _skipStep = true;
                     SFX.Play("consoleSelect");
                     HUD.CloseAllCorners();
-                    HUD.AddCornerControl(HUDCorner.TopLeft, "@CONSOLE@CANCEL");
+                    HUD.AddCornerControl(HUDCorner.TopLeft, "@F1@CANCEL");
                 }
             }
             else
