@@ -747,7 +747,7 @@ namespace DuckGame
 
         public void UpdateCollision()
         {
-            switch (hitboxFrame)
+            switch (_sprite.frame)
             {
                 case 32:
                 case 41:
