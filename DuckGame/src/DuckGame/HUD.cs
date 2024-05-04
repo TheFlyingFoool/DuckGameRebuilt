@@ -42,13 +42,37 @@ namespace DuckGame
             return null;
         }
 
-        public static CornerDisplay AddCornerMessage(HUDCorner corner, string text, float scale=1f) => AddCornerMessage(corner, text, false, scale);
+        public static CornerDisplay AddCornerMessage(HUDCorner corner, string text) => AddCornerMessage(corner, text, false);
 
         public static CornerDisplay AddCornerMessage(
           HUDCorner corner,
           string text,
-          bool allowStacking,
-          float scale = 1f)
+          bool allowStacking)
+        {
+            CornerDisplay cornerDisplay1 = FindDuplicateActiveCorner(corner, text, allowStacking);
+            if (cornerDisplay1 == null)
+            {
+                cornerDisplay1 = new CornerDisplay
+                {
+                    corner = corner,
+                    text = text
+                };
+                _core._cornerDisplays.Add(cornerDisplay1);
+            }
+            if (!allowStacking)
+            {
+                foreach (CornerDisplay cornerDisplay2 in _core._cornerDisplays)
+                {
+                    if (cornerDisplay2.corner == corner && cornerDisplay2 != cornerDisplay1)
+                        cornerDisplay2.closing = true;
+                }
+            }
+            return cornerDisplay1;
+        }
+
+        public static CornerDisplay AddCornerMessageWithScale(HUDCorner corner, string text, float scale) => AddCornerMessageWithScale(corner, text, false, scale);
+
+        public static CornerDisplay AddCornerMessageWithScale(HUDCorner corner, string text, bool allowStacking, float scale)
         {
             CornerDisplay cornerDisplay1 = FindDuplicateActiveCorner(corner, text, allowStacking);
             if (cornerDisplay1 == null)

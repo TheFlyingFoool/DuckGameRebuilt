@@ -295,7 +295,7 @@ namespace DuckGame
 
         public override void Open()
         {
-            HUD.AddCornerMessage(HUDCorner.BottomRight, "Personal controls can be set in profile screen!", scale: 0.5f);
+            HUD.AddCornerMessageWithScale(HUDCorner.BottomRight, "Personal controls can be set in profile screen!", 0.5f);
             SwitchPlayerProfile();
             base.Open();
         }
