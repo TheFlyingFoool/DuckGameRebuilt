@@ -21,5 +21,6 @@
         public bool stack;
         public float life = 1f;
         public bool willDie;
+        public float scale = 1f;
     }
 }

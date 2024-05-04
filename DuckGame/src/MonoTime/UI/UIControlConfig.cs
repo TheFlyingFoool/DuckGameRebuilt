@@ -139,6 +139,7 @@ namespace DuckGame
             _configuringToggle = new UIMenuItemToggle("", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(SwitchConfigType)), new FieldBinding(this, nameof(inputConfigType)), multi: inputTypes, compressedMulti: true, tiny: true);
             uiBox.Add(_configuringToggle, true);
             UIText uiText = new UIText(" ", Color.White);
+            uiBox.Add(new UIText(" ", Color.White, heightAdd: -6f), true);
             _controlElements.Add(new UIControlElement("|DGBLUE|{LEFT", Triggers.Left, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
             uiBox.Add(_controlElements[_controlElements.Count - 1], true);
             _controlElements.Add(new UIControlElement("|DGBLUE|/RIGHT", Triggers.Right, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
@@ -189,18 +190,10 @@ namespace DuckGame
             uiBox.Add(_controlElements[_controlElements.Count - 1], true);
             _controlElements.Add(new UIControlElement("|DGGREEN|ZOOM   ", Triggers.RightTrigger, new DeviceInputMapping(), field: new FieldBinding(Options.Data, "sfxVolume")));
             uiBox.Add(_controlElements[_controlElements.Count - 1], true);
+            uiBox.Add(new UIText(" ", Color.White, heightAdd: -6f), true);
             UIMenuItem component1 = new UIMenuItem("|RED|REVERT TO DEFAULT", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(ResetToDefault)));
             component1.SetFont(bitmapFont);
             uiBox.Add(component1, true);
-            UIText component2 = new UIText(" ", Color.White);
-            component2.SetFont(bitmapFont);
-            uiBox.Add(component2, true);
-            UIText component3 = new UIText("Personal controls can be", Color.White);
-            component3.SetFont(bitmapFont);
-            uiBox.Add(component3, true);
-            UIText component4 = new UIText("set in profile screen.", Color.White);
-            component4.SetFont(bitmapFont);
-            uiBox.Add(component4, true);
             _controlBox = uiBox;
             _playerBoxes.Add(uiBox);
             Add(_playerBoxes[0], true);
@@ -302,6 +295,7 @@ namespace DuckGame
 
         public override void Open()
         {
+            HUD.AddCornerMessage(HUDCorner.BottomRight, "Personal controls can be set in profile screen!", scale: 0.5f);
             SwitchPlayerProfile();
             base.Open();
         }

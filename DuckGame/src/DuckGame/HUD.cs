@@ -42,12 +42,13 @@ namespace DuckGame
             return null;
         }
 
-        public static CornerDisplay AddCornerMessage(HUDCorner corner, string text) => AddCornerMessage(corner, text, false);
+        public static CornerDisplay AddCornerMessage(HUDCorner corner, string text, float scale=1f) => AddCornerMessage(corner, text, false, scale);
 
         public static CornerDisplay AddCornerMessage(
           HUDCorner corner,
           string text,
-          bool allowStacking)
+          bool allowStacking,
+          float scale = 1f)
         {
             CornerDisplay cornerDisplay1 = FindDuplicateActiveCorner(corner, text, allowStacking);
             if (cornerDisplay1 == null)
@@ -55,7 +56,8 @@ namespace DuckGame
                 cornerDisplay1 = new CornerDisplay
                 {
                     corner = corner,
-                    text = text
+                    text = text,
+                    scale = scale
                 };
                 _core._cornerDisplays.Add(cornerDisplay1);
             }
@@ -421,11 +423,11 @@ namespace DuckGame
                     else
                         text = cornerDisplay.maxCount == 0 ? text + Convert.ToString(curCount) : text + Convert.ToString(curCount) + "/" + Convert.ToString(cornerDisplay.maxCount);
                 }
-                float stringWidth1 = Graphics.GetStringWidth(text);
-                double stringWidth2 = Graphics.GetStringWidth(text, cornerDisplay.isControl);
+                float stringWidth1 = Graphics.GetStringWidth(text, scale: cornerDisplay.scale);
+                double stringWidth2 = Graphics.GetStringWidth(text, cornerDisplay.isControl, scale: cornerDisplay.scale);
                 float num12 = stringWidth1 + 8f;
                 float x = (float)(stringWidth2 + 8f);
-                float stringHeight = Graphics.GetStringHeight(text);
+                float stringHeight = Graphics.GetStringHeight(text) * cornerDisplay.scale;
                 float num13 = stringHeight + 4f;
                 Vec2 vec2_10 = vec2_9;
                 Vec2 vec2_11 = vec2_9;
@@ -473,7 +475,7 @@ namespace DuckGame
                 Graphics.DrawRect(vec2_11 + vec2_12 * cornerDisplay.slide, vec2_11 + new Vec2(x, num13 - 1f) + vec2_12 * cornerDisplay.slide, Color.Black, (Depth)0.95f);
                 Graphics.DrawRect(vec2_11 + new Vec2(x, 1f) + vec2_12 * cornerDisplay.slide, vec2_11 + new Vec2(x + 1f, num13 - 2f) + vec2_12 * cornerDisplay.slide, Color.Black, (Depth)0.95f);
                 Graphics.DrawRect(vec2_11 + new Vec2(0f, 1f) + vec2_12 * cornerDisplay.slide, vec2_11 + new Vec2(-1f, num13 - 2f) + vec2_12 * cornerDisplay.slide, Color.Black, (Depth)0.95f);
-                Graphics.DrawString(text, vec2_10 + new Vec2((float)((num12 - stringWidth1) / 2f), (float)((num13 - stringHeight) / 2f)) + vec2_12 * cornerDisplay.slide, flag ? Color.Red : Color.White, (Depth)0.98f, cornerDisplay.profile);
+                Graphics.DrawString(text, vec2_10 + new Vec2((float)((num12 - stringWidth1) / 2f), (float)((num13 - stringHeight) / 2f)) + vec2_12 * cornerDisplay.slide, flag ? Color.Red : Color.White, (Depth)0.98f, cornerDisplay.profile, cornerDisplay.scale);
             }
             if (!(Level.current is ChallengeLevel))
                 return;
