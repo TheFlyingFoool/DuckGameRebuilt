@@ -1238,7 +1238,7 @@ namespace DuckGame
             _core.open = false;
             bool pressedTrigger = Input.Pressed(Triggers.DevConsoleTrigger);
             _core.open = open;
-            if (pressedTrigger && !DuckNetwork.core.enteringText && LockMovementQueue.Empty && NetworkDebugger.hoveringInstance)
+            if (pressedTrigger && !UIMenu.globalUILock && !DuckNetwork.core.enteringText && LockMovementQueue.Empty && NetworkDebugger.hoveringInstance)
             {
                 if (_tray == null)
                 {
