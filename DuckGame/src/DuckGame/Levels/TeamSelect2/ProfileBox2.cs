@@ -60,6 +60,8 @@ namespace DuckGame
         public float _tooManyPulse;
         public float _noMorePulse;
         private float _prevDoorX;
+        private float _roomRelatedXAdjust = 0f;
+        private float _roomRelatedYAdjust = 0f;
 
         public bool playerActive => _playerActive;
 
@@ -1069,7 +1071,7 @@ namespace DuckGame
                 }
                 if (_playerProfile.team == null || _doorX <= 0)
                     return;
-                Furniture furniture1 = null;
+                Furniture roomTheme = null;
                 if (Profiles.experienceProfile != null)
                 {
                     bool shouldDisplayFurniture = true;
@@ -1100,7 +1102,7 @@ namespace DuckGame
                                     }
                                 }
                                 if (furniture2.type == FurnitureType.Theme)
-                                    furniture1 = furniture2;
+                                    roomTheme = furniture2;
                                 else if (furniture2.type != FurnitureType.Font)
                                 {
                                     furniture2.sprite.depth = -0.56f + (furniture2.deep * 0.001f);
@@ -1181,11 +1183,28 @@ namespace DuckGame
                         }
                     }
                     if (_hatSelector._roomEditor._mode == REMode.Place && _hatSelector._roomEditor.CurFurni().type == FurnitureType.Theme)
-                        furniture1 = _hatSelector._roomEditor.CurFurni();
+                        roomTheme = _hatSelector._roomEditor.CurFurni();
+                    _roomRelatedXAdjust = 0f;
+                    _roomRelatedYAdjust = 0f;
+                    if (roomTheme != null)
+                    {
+                        if (roomTheme.name == "BAR ROOM" ||
+                            roomTheme.name == "GREENHOUSE ROOM" ||
+                            roomTheme.name == "MUSIC ROOM" ||
+                            roomTheme.name == "OFFICE ROOM")
+                        {
+                            _roomRelatedXAdjust = 1f;
+                            if (rightRoom)
+                                _roomRelatedXAdjust -= 3f;
+                        }
+                        if (roomTheme.name == "BAR ROOM" ||
+                            roomTheme.name == "BATH ROOM")
+                            _roomRelatedYAdjust = 1f;
+                    }
                 }
                 if (rightRoom)
                 {
-                    if (furniture1 == null)
+                    if (roomTheme == null)
                     {
                         for (int index = 0; index < 4; ++index)
                         {
@@ -1200,26 +1219,26 @@ namespace DuckGame
                         _roomSwitch.frame = profile.switchStatus ? 1 : 0;
                         Graphics.Draw(_roomSwitch, x + 52f, y + 47f);
                     }
-                    if (furniture1 != null)
+                    if (roomTheme != null)
                     {
-                        Furniture furniture3 = furniture1;
-                        furniture3.sprite.flipH = true;
-                        furniture3.sprite.depth = _roomLeftForeground.depth;
-                        furniture3.background.depth = _roomLeftBackground.depth;
-                        furniture3.sprite.scale = new Vec2(1f);
-                        furniture3.background.scale = new Vec2(1f);
-                        Graphics.Draw(furniture3.sprite, x + 70f, y + 44f, new Rectangle(0f, 0f, 4f, 87f));
-                        Graphics.Draw(furniture3.sprite, x + 70f, (float)(y + 44f + 68f), new Rectangle(0f, 68f, 141f, 19f));
-                        Graphics.Draw(furniture3.sprite, x + 70f, y + 44f, new Rectangle(0f, 0f, 141f, 16f));
-                        Graphics.Draw(furniture3.sprite, x + 21f, y + 44f, new Rectangle(49f, 0f, 92f, 68f));
-                        furniture3.sprite.depth = _selectConsole.depth - 20;
-                        Graphics.Draw(furniture3.sprite, (float)(x + 70f - 4f), y + 44f, new Rectangle(4f, 0f, 44f, 54f));
-                        furniture3.sprite.depth = (Depth)0.31f;
-                        Graphics.Draw(furniture3.sprite, (float)(x + 70f - 4f), (float)(y + 44f + 54f), new Rectangle(4f, 54f, 44f, 14f));
-                        furniture3.sprite.flipH = false;
-                        furniture3.background.flipH = true;
-                        Graphics.Draw(furniture3.background, x + 70f, y + 45f);
-                        furniture3.background.flipH = false;
+                        Furniture theme = roomTheme;
+                        theme.sprite.flipH = true;
+                        theme.sprite.depth = _roomLeftForeground.depth;
+                        theme.background.depth = _roomLeftBackground.depth;
+                        theme.sprite.scale = new Vec2(1f);
+                        theme.background.scale = new Vec2(1f);
+                        Graphics.Draw(theme.sprite, x + 70f, y + 44f, new Rectangle(0f, 0f, 4f, 87f));
+                        Graphics.Draw(theme.sprite, x + 70f, (float)(y + 44f + 68f), new Rectangle(0f, 68f, 141f, 19f));
+                        Graphics.Draw(theme.sprite, x + 70f, y + 44f, new Rectangle(0f, 0f, 141f, 16f));
+                        Graphics.Draw(theme.sprite, x + 21f, y + 44f, new Rectangle(49f, 0f, 92f, 68f));
+                        theme.sprite.depth = _selectConsole.depth - 20;
+                        Graphics.Draw(theme.sprite, (float)(x + 70f - 4f), y + 44f, new Rectangle(4f, 0f, 44f, 54f));
+                        theme.sprite.depth = (Depth)0.31f;
+                        Graphics.Draw(theme.sprite, (float)(x + 70f - 4f), (float)(y + 44f + 54f), new Rectangle(4f, 54f, 44f, 14f));
+                        theme.sprite.flipH = false;
+                        theme.background.flipH = true;
+                        Graphics.Draw(theme.background, x + 70f, y + 45f);
+                        theme.background.flipH = false;
                     }
                     else
                     {
@@ -1238,7 +1257,7 @@ namespace DuckGame
                 }
                 else
                 {
-                    if (furniture1 == null)
+                    if (roomTheme == null)
                     {
                         for (int index = 0; index < 4; ++index)
                         {
@@ -1253,22 +1272,22 @@ namespace DuckGame
                         _roomSwitch.frame = profile.switchStatus ? 1 : 0;
                         Graphics.Draw(_roomSwitch, x + 81f, y + 47f);
                     }
-                    if (furniture1 != null)
+                    if (roomTheme != null)
                     {
-                        Furniture furniture4 = furniture1;
-                        furniture4.sprite.depth = _roomLeftForeground.depth;
-                        furniture4.background.depth = _roomLeftBackground.depth;
-                        furniture4.sprite.scale = new Vec2(1f);
-                        furniture4.background.scale = new Vec2(1f);
-                        Graphics.Draw(furniture4.sprite, x + 70f, y + 44f, new Rectangle(0f, 0f, 4f, 87f));
-                        Graphics.Draw(furniture4.sprite, x + 70f, (float)(y + 44f + 68f), new Rectangle(0f, 68f, 141f, 19f));
-                        Graphics.Draw(furniture4.sprite, x + 70f, y + 44f, new Rectangle(0f, 0f, 141f, 16f));
-                        Graphics.Draw(furniture4.sprite, (float)(x + 70f + 49f), y + 44f, new Rectangle(49f, 0f, 92f, 68f));
-                        furniture4.sprite.depth = _selectConsole.depth - 20;
-                        Graphics.Draw(furniture4.sprite, (float)(x + 70f + 4f), y + 44f, new Rectangle(4f, 0f, 44f, 54f));
-                        furniture4.sprite.depth = (Depth)0.31f;
-                        Graphics.Draw(furniture4.sprite, (float)(x + 70f + 4f), (float)(y + 44f + 54f), new Rectangle(4f, 54f, 44f, 14f));
-                        Graphics.Draw(furniture4.background, x + 70f, y + 45f);
+                        Furniture theme = roomTheme;
+                        theme.sprite.depth = _roomLeftForeground.depth;
+                        theme.background.depth = _roomLeftBackground.depth;
+                        theme.sprite.scale = new Vec2(1f);
+                        theme.background.scale = new Vec2(1f);
+                        Graphics.Draw(theme.sprite, x + 70f, y + 44f, new Rectangle(0f, 0f, 4f, 87f));
+                        Graphics.Draw(theme.sprite, x + 70f, (float)(y + 44f + 68f), new Rectangle(0f, 68f, 141f, 19f));
+                        Graphics.Draw(theme.sprite, x + 70f, y + 44f, new Rectangle(0f, 0f, 141f, 16f));
+                        Graphics.Draw(theme.sprite, (float)(x + 70f + 49f), y + 44f, new Rectangle(49f, 0f, 92f, 68f));
+                        theme.sprite.depth = _selectConsole.depth - 20;
+                        Graphics.Draw(theme.sprite, (float)(x + 70f + 4f), y + 44f, new Rectangle(4f, 0f, 44f, 54f));
+                        theme.sprite.depth = (Depth)0.31f;
+                        Graphics.Draw(theme.sprite, (float)(x + 70f + 4f), (float)(y + 44f + 54f), new Rectangle(4f, 54f, 44f, 14f));
+                        Graphics.Draw(theme.background, x + 70f, y + 45f);
                     }
                     else
                     {
@@ -1290,7 +1309,7 @@ namespace DuckGame
                 _tutorialMessages.alpha = _screenFade;
                 _font.alpha = 1f;
                 _font.depth = (Depth)0.6f;
-                if (furniture1 != null)
+                if (roomTheme != null)
                 {
                     _tutorialTV.depth = -0.8f;
                     _tutorialMessages.depth = -0.8f;
@@ -1316,12 +1335,13 @@ namespace DuckGame
                         _consoleHighlight.alpha = _consoleFade;
                         Graphics.Draw(_consoleHighlight, _consolePos.x, _consolePos.y);
                     }
-                    Graphics.Draw(_readySign, x + 22.5f, y + 6.5f);
+                    if (_hatSelector._roomEditor._mode != REMode.Place)
+                        Graphics.Draw(_readySign, x + 22.5f, y + 6.5f);
                     float num2 = -0.57f;
-                    if (furniture1 != null)
+                    if (roomTheme != null)
                         num2 = -0.8f;
                     bool flag8 = true;
-                    if (furniture1 == null)
+                    if (roomTheme == null)
                     {
                         Graphics.Draw(_tutorialTV, x + 57f - num1, y + 8f);
                         float num3 = 27f;
@@ -1362,84 +1382,115 @@ namespace DuckGame
                             Graphics.Draw(_onlineIcon, (int)x + 72, y + 19f, (Depth)num2);
                     }
                     _font.depth = (Depth)0.6f;
-                    float num4 = 0f;
-                    float num5 = 0f;
-                    Vec2 vec2 = new Vec2(1f, 1f);
-                    if (currentDisplayName.Length > 9)
+                    Vec2 displayNameScale = new Vec2(1f);
+                    float displayNameXAdjust = 0f;
+                    float displayNameYAdjust = 0f;
+                    int displayNameLength = _playerProfile.font.GetLength(currentDisplayName);
+
+                    if (displayNameLength > 27) // That is really long...
                     {
-                        vec2 = new Vec2(0.75f, 0.75f);
-                        num4 = 1f;
-                        num5 = 1f;
+                        displayNameScale = new Vec2(0.25f);
+                        displayNameXAdjust = 1f;
+                        displayNameYAdjust = 3f;
                     }
-                    if (currentDisplayName.Length > 12)
+                    else if (displayNameLength > 20)
                     {
-                        vec2 = new Vec2(0.5f, 0.5f);
-                        num4 = 2f;
-                        num5 = 1f;
+                        displayNameScale = new Vec2(0.32f);
+                        displayNameXAdjust = 1f;
+                        displayNameYAdjust = 3f;
                     }
-                    _font.scale = vec2;
+                    else if (displayNameLength > 12)
+                    {
+                        displayNameScale = new Vec2(0.5f);
+                        displayNameXAdjust = 1f;
+                        displayNameYAdjust = 2f;
+                    }
+                    else if (displayNameLength > 9)
+                    {
+                        displayNameScale = new Vec2(0.75f);
+                        displayNameXAdjust = 1f;
+                        displayNameYAdjust = 1f;
+                    }
+                    _font.scale = displayNameScale;
                     if (_hatSelector._roomEditor._mode == REMode.Place)
                     {
-                        float num6 = 0f;
-                        float num7 = 0f;
-                        string text = "PLAYER 1";
-                        float num8 = 47f;
-                        x += num8;
-                        string realText = "";
-                        float cenX = x + 48f;
+                        const float tempShift = 47f;
+                        x += tempShift;
+                        float cenX = x + 47f;
                         float cenY = y + 80f;
-                        Furniture furniture5 = _hatSelector._roomEditor.CurFurni();
-                        if (furniture5.type == FurnitureType.Font)
+                        Furniture curFurni = _hatSelector._roomEditor.CurFurni();
+                        if (curFurni.type == FurnitureType.Font)
                         {
-                            furniture5.font.scale = new Vec2(0.5f, 0.5f);
-                            furniture5.font.spriteScale = new Vec2(1f, 1f);
-                            realText = "@SELECT@ACCEPT @CANCEL@CANCEL";
-                            furniture5.font.Draw(realText, cenX - furniture5.font.GetWidth(realText) / 2f, cenY - furniture5.font.height / 2f, Color.White, (Depth)0.7f, profile.inputProfile);
-                            furniture5.font.scale = new Vec2(1f, 1f);
+                            Graphics.Draw(_readySign, x - tempShift + 22.5f, y + 6.5f);
+                            curFurni.font.scale = new Vec2(0.5f);
+                            curFurni.font.characterYOffset = -1;
+                            string displayText = "@SELECT@ACCEPT @CANCEL@CANCEL";
+                            curFurni.font.Draw(displayText, cenX - curFurni.font.GetWidth(displayText) / 2f + _roomRelatedXAdjust, cenY - curFurni.font.height / 2f + _roomRelatedYAdjust, Color.White, (Depth)0.7f, profile.inputProfile);
+                            curFurni.font.scale = new Vec2(1f);
+                            curFurni.font.characterYOffset = 0;
                         }
-                        else if (furniture5.type == FurnitureType.Theme)
+                        else if (curFurni.type == FurnitureType.Theme)
                         {
-                            profile.font.scale = new Vec2(0.5f, 0.5f);
-                            profile.font.spriteScale = new Vec2(1f, 1f);
-                            realText = "@SELECT@ACCEPT @CANCEL@CANCEL";
-                            profile.font.Draw(realText, cenX - profile.font.GetWidth(realText) / 2f, cenY - 1f - profile.font.height / 2f, Color.White, (Depth)0.7f, profile.inputProfile);
+                            Graphics.Draw(_readySign, x - tempShift + 22.5f, y + 6.5f);
+                            profile.font.scale = new Vec2(0.5f);
+                            profile.font.characterYOffset = -1;
+                            string displayText = "@SELECT@ACCEPT @CANCEL@CANCEL";
+                            profile.font.Draw(displayText, cenX - profile.font.GetWidth(displayText) / 2f + _roomRelatedXAdjust, cenY - profile.font.height / 2f + _roomRelatedYAdjust, Color.White, (Depth)0.7f, profile.inputProfile);
+                            profile.font.characterYOffset = 0;
                         }
-                        else if (furniture5.name == "CLEAR ROOM")
+                        else if (curFurni.name == "CLEAR ROOM")
                         {
-                            profile.font.scale = new Vec2(0.5f, 0.5f);
-                            profile.font.spriteScale = new Vec2(1f, 1f);
-                            realText = "@MENU2@CLEAR @CANCEL@BACK";
-                            profile.font.Draw(realText, cenX - profile.font.GetWidth(realText) / 2f, cenY - profile.font.height / 2f, Color.White, (Depth)0.7f, profile.inputProfile);
+                            Graphics.Draw(_readySign, x - tempShift + 22.5f, y + 6.5f);
+                            profile.font.scale = new Vec2(0.5f);
+                            profile.font.characterYOffset = -1;
+                            string displayText = "@MENU2@CLEAR @CANCEL@BACK";
+                            profile.font.Draw(displayText, cenX - profile.font.GetWidth(displayText) / 2f + _roomRelatedXAdjust, cenY - profile.font.height / 2f + _roomRelatedYAdjust, Color.White, (Depth)0.7f, profile.inputProfile);
+                            profile.font.characterYOffset = 0;
                         }
                         else
                         {
-                            profile.font.scale = new Vec2(0.5f, 0.5f);
-                            profile.font.spriteScale = new Vec2(0.8f, 0.8f);
+                            profile.font.scale = new Vec2(0.5f);
+                            profile.font.spriteScale = new Vec2(0.8f);
+                            profile.font.characterYOffset = -1;
+                            string instruction = "";
                             if (_hatSelector._roomEditor._hover != null)
-                                realText = "@SELECT@DEL @MENU2@GRAB @CANCEL@DONE";
+                                instruction = "@SELECT@DEL @MENU2@GRAB @CANCEL@DONE";
                             else
-                                realText = "@SELECT@ADD @MENU2@MOD @CANCEL@DONE";
-                            profile.font.Draw(realText, cenX + 2f - profile.font.GetWidth(realText) / 2f, cenY - 4f, Color.White, (Depth)0.7f, profile.inputProfile);
-                            profile.font.scale = new Vec2(0.25f, 0.25f);
-                            int num9 = Profiles.experienceProfile.GetNumFurnitures(furniture5.index) - profile.GetNumFurnituresPlaced(furniture5.index);
+                                instruction = "@SELECT@ADD @MENU2@VARY @CANCEL@DONE";
+                            float instructionWidth = profile.font.GetWidth("@SELECT@ADD @MENU2@VARY @CANCEL@XYZ");
+                            profile.font.Draw(instruction, cenX - instructionWidth / 2f + _roomRelatedXAdjust, cenY - 4f + _roomRelatedYAdjust, Color.White, (Depth)0.7f, profile.inputProfile);
+
+                            profile.font.characterYOffset = 0;
+                            profile.font.scale = new Vec2(0.32f);
+                            int numFur = Profiles.experienceProfile.GetNumFurnitures(curFurni.index) - profile.GetNumFurnituresPlaced(curFurni.index);
                             if (DGRSettings.TemporaryUnlockAll)
-                                num9 = 99;
-                            profile.font.Draw(furniture5.name + (num9 > 0 ? " |DGGREEN|" : " |DGRED|") + "x" + num9.ToString(), (float)(x + 15f - profile.font.GetWidth(text) / 2f) - num6, (float)(y + 75f + 6.5f) + num7, Color.White, (Depth)0.7f);
-                            int furnituresPlaced = profile.GetTotalFurnituresPlaced();
-                            float num10 = furnituresPlaced / (float)RoomEditor.maxFurnitures;
-                            profile.font.Draw(furnituresPlaced.ToString() + "/" + RoomEditor.maxFurnitures.ToString(), (float)(x + 66f - profile.font.GetWidth(text) / 2f) - num6, (float)(y + 75f + 6.5f) + num7, Color.Black, (Depth)0.7f);
-                            Vec2 p1 = new Vec2((float)(x + 52f - profile.font.GetWidth(text) / 2f) - num6, (float)(y + 75f + 6f) + num7);
-                            Graphics.DrawRect(p1, p1 + new Vec2(37f, 3f), Colors.BlueGray, (Depth)0.66f, borderWidth: 0.5f);
-                            Graphics.DrawRect(p1, p1 + new Vec2(37f * num10, 3f), num10 < 0.04f ? Colors.DGGreen : (num10 < 0.8f ? Colors.DGYellow : Colors.DGRed), (Depth)0.68f, borderWidth: 0.5f);
+                                numFur = 99;
+                            string numFurText = curFurni.name + (numFur > 0 ? " |DGGREEN|" : " |DGRED|") + "x" + numFur.ToString();
+                            float numFurTextWidth = profile.font.GetWidth(numFurText);
+                            profile.font.Draw(numFurText, cenX - numFurTextWidth / 2f + _roomRelatedXAdjust, cenY + 1f + _roomRelatedYAdjust, Color.White, (Depth)0.7f);
+
+                            profile.font.scale = new Vec2(0.5f);
+                            int numFurPlaced = profile.GetTotalFurnituresPlaced();
+                            float ratio = numFurPlaced / (float)RoomEditor.maxFurnitures;
+                            float barWidth = 44f;
+                            float barHeight = 9f;
+                            string ratioText = numFurPlaced.ToString() + "/" + RoomEditor.maxFurnitures.ToString();
+                            float ratioTextWidth = profile.font.GetWidth(ratioText);
+                            float ratioTextHeight = profile.font.height;
+                            Vec2 barLeftTop = new Vec2(x - 46f, y + 2f);
+                            profile.font.Draw(ratioText, barLeftTop.x + barWidth / 2 - ratioTextWidth / 2, barLeftTop.y + barHeight / 2f - ratioTextHeight / 2f, Color.White, (Depth)0.7f);
+                            Graphics.DrawRect(barLeftTop, barLeftTop + new Vec2(barWidth * ratio, barHeight), (ratio < 0.4f ? Colors.DGGreen : (ratio < 0.8f ? Colors.DGYellow : Colors.DGRed)) * 0.8f, (Depth)0.68f, borderWidth: 0.5f);
                         }
                         profile.font.spriteScale = new Vec2(1f, 1f);
                         profile.font.scale = new Vec2(1f, 1f);
-                        x -= num8;
+                        profile.font.spriteScale = new Vec2(1f, 1f);
+                        profile.font.scale = new Vec2(1f, 1f);
+                        x -= tempShift;
                     }
                     else
                     {
-                        _playerProfile.font.scale = vec2;
-                        _playerProfile.font.Draw(currentDisplayName, (x + 94f - _playerProfile.font.GetWidth(currentDisplayName) / 2f) - num5, y + 75f + num4, Color.White, (Depth)0.7f);
+                        _playerProfile.font.scale = displayNameScale;
+                        _playerProfile.font.Draw(currentDisplayName, (x + 94f - _playerProfile.font.GetWidth(currentDisplayName) / 2f) + displayNameXAdjust + _roomRelatedXAdjust, y + 75f + displayNameYAdjust + _roomRelatedYAdjust, Color.White, (Depth)0.7f);
                         _font.scale = new Vec2(1f, 1f);
                     }
                 }
@@ -1460,12 +1511,13 @@ namespace DuckGame
                         _consoleHighlight.alpha = _consoleFade;
                         Graphics.Draw(_consoleHighlight, _consolePos.x, _consolePos.y);
                     }
-                    Graphics.Draw(_readySign, x + 117.5f, y + 6.5f);
+                    if (_hatSelector._roomEditor._mode != REMode.Place)
+                        Graphics.Draw(_readySign, x + 117.5f, y + 6.5f);
                     float num11 = -0.57f;
-                    if (furniture1 != null)
+                    if (roomTheme != null)
                         num11 = -0.8f;
                     bool flag9 = true;
-                    if (furniture1 == null)
+                    if (roomTheme == null)
                     {
                         Graphics.Draw(_tutorialTV, x + 22f + num1, y + 8f);
                         if (flag9)
@@ -1506,80 +1558,108 @@ namespace DuckGame
                     }
                     _font.depth = (Depth)0.6f;
                     _aButton.position = new Vec2(x + 39f, y + 71f);
-                    float num12 = 0f;
-                    float num13 = 0f;
-                    Vec2 vec2 = new Vec2(1f, 1f);
-                    if (currentDisplayName.Length > 9)
+                    Vec2 displayNameScale = new Vec2(1f);
+                    float displayNameXAdjust = 0f;
+                    float displayNameYAdjust = 0f;
+                    int displayNameLength = _playerProfile.font.GetLength(currentDisplayName);
+                    if (displayNameLength > 28) // That is really long...
                     {
-                        vec2 = new Vec2(0.75f, 0.75f);
-                        num12 = 1f;
-                        num13 = 1f;
+                        displayNameScale = new Vec2(0.25f);
+                        displayNameXAdjust = -1f;
+                        displayNameYAdjust = 3f;
                     }
-                    if (currentDisplayName.Length > 12)
+                    else if (displayNameLength > 20)
                     {
-                        vec2 = new Vec2(0.5f, 0.5f);
-                        num12 = 2f;
-                        num13 = 1f;
+                        displayNameScale = new Vec2(0.32f);
+                        displayNameXAdjust = -1f;
+                        displayNameYAdjust = 3f;
+                    }
+                    else if (displayNameLength > 12)
+                    {
+                        displayNameScale = new Vec2(0.5f);
+                        displayNameXAdjust = -1f;
+                        displayNameYAdjust = 2f;
+                    }
+                    else if (displayNameLength > 9)
+                    {
+                        displayNameScale = new Vec2(0.75f);
+                        displayNameXAdjust = -1f;
+                        displayNameYAdjust = 1f;
                     }
                     if (_hatSelector._roomEditor._mode == REMode.Place && Profiles.experienceProfile != null)
                     {
-                        string text = "PLAYER 1";
-                        float num14 = 0f;
-                        float num15 = 0f;
-                        string realText = "";
-                        float cenX = x + 48f;
+                        float cenX = x + 47f;
                         float cenY = y + 80f;
-                        Furniture furniture6 = _hatSelector._roomEditor.CurFurni();
-                        if (furniture6.type == FurnitureType.Font)
+                        Furniture curFurni = _hatSelector._roomEditor.CurFurni();
+                        if (curFurni.type == FurnitureType.Font)
                         {
-                            furniture6.font.scale = new Vec2(0.5f, 0.5f);
-                            furniture6.font.spriteScale = new Vec2(1f, 1f);
-                            realText = "@SELECT@ACCEPT @CANCEL@CANCEL";
-                            furniture6.font.Draw(realText, cenX - furniture6.font.GetWidth(realText) / 2f, cenY - furniture6.font.height / 2f, Color.White, (Depth)0.7f, profile.inputProfile);
-                            furniture6.font.scale = new Vec2(1f, 1f);
+                            Graphics.Draw(_readySign, x + 117.5f, y + 6.5f);
+                            curFurni.font.scale = new Vec2(0.5f);
+                            curFurni.font.characterYOffset = -1;
+                            string displayText = "@SELECT@ACCEPT @CANCEL@CANCEL";
+                            curFurni.font.Draw(displayText, cenX - curFurni.font.GetWidth(displayText) / 2f + _roomRelatedXAdjust, cenY - curFurni.font.height / 2f + _roomRelatedYAdjust, Color.White, (Depth)0.7f, profile.inputProfile);
+                            curFurni.font.scale = new Vec2(1f);
+                            curFurni.font.characterYOffset = 0;
                         }
-                        else if (furniture6.type == FurnitureType.Theme)
+                        else if (curFurni.type == FurnitureType.Theme)
                         {
-                            profile.font.scale = new Vec2(0.5f, 0.5f);
-                            profile.font.spriteScale = new Vec2(1f, 1f);
-                            realText = "@SELECT@ACCEPT @CANCEL@CANCEL";
-                            profile.font.Draw(realText, cenX - profile.font.GetWidth(realText) / 2f, cenY - 1f - profile.font.height / 2f, Color.White, (Depth)0.7f, profile.inputProfile);
+                            Graphics.Draw(_readySign, x + 117.5f, y + 6.5f);
+                            profile.font.scale = new Vec2(0.5f);
+                            profile.font.characterYOffset = -1;
+                            string displayText = "@SELECT@ACCEPT @CANCEL@CANCEL";
+                            profile.font.Draw(displayText, cenX - profile.font.GetWidth(displayText) / 2f + _roomRelatedXAdjust, cenY - profile.font.height / 2f + _roomRelatedYAdjust, Color.White, (Depth)0.7f, profile.inputProfile);
+                            profile.font.characterYOffset = 0;
                         }
-                        else if (furniture6.name == "CLEAR ROOM")
+                        else if (curFurni.name == "CLEAR ROOM")
                         {
-                            profile.font.scale = new Vec2(0.5f, 0.5f);
-                            profile.font.spriteScale = new Vec2(1f, 1f);
-                            realText = "@MENU2@CLEAR @CANCEL@BACK";
-                            profile.font.Draw(realText, cenX - profile.font.GetWidth(realText) / 2f, cenY - profile.font.height / 2f, Color.White, (Depth)0.7f, profile.inputProfile);
+                            Graphics.Draw(_readySign, x + 117.5f, y + 6.5f);
+                            profile.font.scale = new Vec2(0.5f);
+                            profile.font.characterYOffset = -1;
+                            string displayText = "@MENU2@CLEAR @CANCEL@BACK";
+                            profile.font.Draw(displayText, cenX - profile.font.GetWidth(displayText) / 2f + _roomRelatedXAdjust, cenY - profile.font.height / 2f + _roomRelatedYAdjust, Color.White, (Depth)0.7f, profile.inputProfile);
+                            profile.font.characterYOffset = 0;
                         }
                         else
                         {
-                            profile.font.scale = new Vec2(0.5f, 0.5f);
-                            profile.font.spriteScale = new Vec2(0.8f, 0.8f);
+                            profile.font.scale = new Vec2(0.5f);
+                            profile.font.spriteScale = new Vec2(0.8f);
+                            profile.font.characterYOffset = -1;
+                            string instruction = "";
                             if (_hatSelector._roomEditor._hover != null)
-                                realText = "@SELECT@DEL @MENU2@GRAB @CANCEL@DONE";
+                                instruction = "@SELECT@DEL @MENU2@GRAB @CANCEL@DONE";
                             else
-                                realText = "@SELECT@ADD @MENU2@MOD @CANCEL@DONE";
-                            profile.font.Draw(realText, cenX + 2f - profile.font.GetWidth(realText) / 2f, cenY - 4f, Color.White, (Depth)0.7f, profile.inputProfile);
-                            profile.font.scale = new Vec2(0.25f, 0.25f);
-                            int num16 = Profiles.experienceProfile.GetNumFurnitures(furniture6.index) - profile.GetNumFurnituresPlaced(furniture6.index);
+                                instruction = "@SELECT@ADD @MENU2@VARY @CANCEL@DONE";
+                            float instructionWidth = profile.font.GetWidth("@SELECT@ADD @MENU2@VARY @CANCEL@XYZ");
+                            profile.font.Draw(instruction, cenX - instructionWidth / 2f + _roomRelatedXAdjust, cenY - 4f + _roomRelatedYAdjust, Color.White, (Depth)0.7f, profile.inputProfile);
+
+                            profile.font.characterYOffset = 0;
+                            profile.font.scale = new Vec2(0.32f);
+                            int numFur = Profiles.experienceProfile.GetNumFurnitures(curFurni.index) - profile.GetNumFurnituresPlaced(curFurni.index);
                             if (DGRSettings.TemporaryUnlockAll)
-                                num16 = 99;
-                            profile.font.Draw(furniture6.name + (num16 > 0 ? " |DGGREEN|" : " |DGRED|") + "x" + num16.ToString(), (float)(x + 15f) - num14, (float)(y + 75f + 6.5f) + num15, Color.White, (Depth)0.7f);
-                            int furnituresPlaced = profile.GetTotalFurnituresPlaced();
-                            float num17 = furnituresPlaced / (float)RoomEditor.maxFurnitures;
-                            profile.font.Draw(furnituresPlaced.ToString() + "/" + RoomEditor.maxFurnitures.ToString(), (float)(x + 66f - profile.font.GetWidth(text) / 2f) - num14, (float)(y + 75f + 6.5f) + num15, Color.Black, (Depth)0.7f);
-                            Vec2 p1 = new Vec2((float)(x + 52f - profile.font.GetWidth(text) / 2f) - num14, (float)(y + 75f + 6f) + num15);
-                            Graphics.DrawRect(p1, p1 + new Vec2(37f, 3f), Colors.BlueGray, (Depth)0.66f, borderWidth: 0.5f);
-                            Graphics.DrawRect(p1, p1 + new Vec2(37f * num17, 3f), num17 < 0.04f ? Colors.DGGreen : (num17 < 0.8f ? Colors.DGYellow : Colors.DGRed), (Depth)0.68f, borderWidth: 0.5f);
+                                numFur = 99;
+                            string numFurText = curFurni.name + (numFur > 0 ? " |DGGREEN|" : " |DGRED|") + "x" + numFur.ToString();
+                            float numFurTextWidth = profile.font.GetWidth(numFurText);
+                            profile.font.Draw(numFurText, cenX - numFurTextWidth / 2f + _roomRelatedXAdjust, cenY + 1f + _roomRelatedYAdjust, Color.White, (Depth)0.7f);
+
+                            profile.font.scale = new Vec2(0.5f);
+                            int numFurPlaced = profile.GetTotalFurnituresPlaced();
+                            float ratio = numFurPlaced / (float)RoomEditor.maxFurnitures;
+                            float barWidth = 44f;
+                            float barHeight = 9f;
+                            string ratioText = numFurPlaced.ToString() + "/" + RoomEditor.maxFurnitures.ToString();
+                            float ratioTextWidth = profile.font.GetWidth(ratioText);
+                            float ratioTextHeight = profile.font.height;
+                            Vec2 barLeftTop = new Vec2(x + 95f, y + 2f);
+                            profile.font.Draw(ratioText, barLeftTop.x + barWidth / 2 - ratioTextWidth / 2, barLeftTop.y + barHeight / 2f - ratioTextHeight / 2f, Color.White, (Depth)0.7f);
+                            Graphics.DrawRect(barLeftTop, barLeftTop + new Vec2(barWidth * ratio, barHeight), (ratio < 0.4f ? Colors.DGGreen : (ratio < 0.8f ? Colors.DGYellow : Colors.DGRed)) * 0.8f, (Depth)0.68f, borderWidth: 0.5f);
                         }
                         profile.font.spriteScale = new Vec2(1f, 1f);
                         profile.font.scale = new Vec2(1f, 1f);
                     }
                     else
                     {
-                        _playerProfile.font.scale = vec2;
-                        _playerProfile.font.Draw(currentDisplayName, (float)(x + 48f - _playerProfile.font.GetWidth(currentDisplayName) / 2f) - num13, y + 75f + num12, Color.White, (Depth)0.7f);
+                        _playerProfile.font.scale = displayNameScale;
+                        _playerProfile.font.Draw(currentDisplayName, (float)(x + 48f - _playerProfile.font.GetWidth(currentDisplayName) / 2f) + displayNameXAdjust + _roomRelatedXAdjust, y + 75f + displayNameYAdjust + _roomRelatedYAdjust, Color.White, (Depth)0.7f);
                         _font.scale = new Vec2(1f, 1f);
                     }
                 }
