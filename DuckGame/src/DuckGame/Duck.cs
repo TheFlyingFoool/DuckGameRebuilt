@@ -891,6 +891,16 @@ namespace DuckGame
             if (ting && !Network.isActive)
                 SFX.Play("ting2");
             _equipment.Remove(e);
+            if (DGRSettings.StickyHats && (e is Hat) && !(e is TeamHat) && profile.team != null && profile.team.hasHat)
+            {
+                DevConsole.Log("*You should get hat here*");
+                Hat hat = new TeamHat(0f, 0f, team, profile);
+                Level.Add(hat);
+                Equip(hat, false);
+                Fondle(hat);
+                if (Network.isActive)
+                    Send.Message(new NMEquip(this, this.hat), NetMessagePriority.ReliableOrdered);
+            }
             e.Destroy(new DTImpact(null));
             e.solid = false;
             if (b != null)
@@ -1035,6 +1045,7 @@ namespace DuckGame
         {
             if (_trapped != null || _trappedInstance != null && _trappedInstance.visible || ragdoll != null || _ragdollInstance != null && _ragdollInstance.visible)
                 return false;
+            DevConsole.Log("Hm");
             if (bullet.isLocal && !HitArmor(bullet, hitPos))
             {
                 Kill(new DTShot(bullet));
@@ -1053,7 +1064,19 @@ namespace DuckGame
                     {
                         bullet._currentlyImpacting.Add(t);
                         if (t.DoHit(bullet, hitPos))
+                        {
+                            if (DGRSettings.StickyHats && (t is Hat) && !(t is TeamHat) && profile.team != null && profile.team.hasHat)
+                            {
+                                DevConsole.Log("*You should get hat here*");
+                                Hat hat = new TeamHat(0f, 0f, team, profile);
+                                Level.Add(hat);
+                                Equip(hat, false);
+                                Fondle(hat);
+                                if (Network.isActive)
+                                    Send.Message(new NMEquip(this, this.hat), NetMessagePriority.ReliableOrdered);
+                            }
                             return true;
+                        }
                     }
                 }
             }
