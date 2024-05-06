@@ -893,7 +893,6 @@ namespace DuckGame
             _equipment.Remove(e);
             if (DGRSettings.StickyHats && (e is Hat) && !(e is TeamHat) && profile.team != null && profile.team.hasHat)
             {
-                DevConsole.Log("*You should get hat here*");
                 Hat hat = new TeamHat(0f, 0f, team, profile);
                 Level.Add(hat);
                 Equip(hat, false);
@@ -1045,7 +1044,6 @@ namespace DuckGame
         {
             if (_trapped != null || _trappedInstance != null && _trappedInstance.visible || ragdoll != null || _ragdollInstance != null && _ragdollInstance.visible)
                 return false;
-            DevConsole.Log("Hm");
             if (bullet.isLocal && !HitArmor(bullet, hitPos))
             {
                 Kill(new DTShot(bullet));
@@ -1067,7 +1065,6 @@ namespace DuckGame
                         {
                             if (DGRSettings.StickyHats && (t is Hat) && !(t is TeamHat) && profile.team != null && profile.team.hasHat)
                             {
-                                DevConsole.Log("*You should get hat here*");
                                 Hat hat = new TeamHat(0f, 0f, team, profile);
                                 Level.Add(hat);
                                 Equip(hat, false);
