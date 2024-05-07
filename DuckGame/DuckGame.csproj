@@ -386,6 +386,7 @@
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Rendering\DrawStringOutline.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\World\EditorPlace.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\World\MousePos.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\World\SnapVec.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\AutoCompl.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\CommandAutoCompl.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\FilePathAutoCompl.cs" />
