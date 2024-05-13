@@ -9,7 +9,12 @@ namespace DuckGame
     public class TeamSelect2 : Level, IHaveAVirtualTransition
     {
         public static bool didcreatelanlobby;
-        public static bool KillsForPoints = false;
+
+        public enum ScoringOption
+        {
+            Normal, Kills, Both
+        }
+        public static ScoringOption KillsForPoints = ScoringOption.Normal;
         public static bool QUACK3;
         public float dim;
         public static bool fakeOnlineImmediately = false;
@@ -602,7 +607,12 @@ namespace DuckGame
             _hostModifiersMenu.SetBackFunction(new UIMenuActionOpenMenu(_hostModifiersMenu, _hostMatchSettingsMenu));
             _hostModifiersMenu.Close();
             _playOnlineGroup.Add(_hostModifiersMenu, false);
-            _hostMatchSettingsMenu.Add(new UIMenuItemToggle("Kills Scoring", field: new FieldBinding(typeof(TeamSelect2), nameof(TeamSelect2.KillsForPoints)), c: Colors.DGPink));
+            _hostMatchSettingsMenu.Add(new UIMenuItemNumber("Scoring type", field: new FieldBinding(typeof(TeamSelect2), nameof(KillsForPoints), 0, 2, 1), valStrings: new List<string>()
+            {
+                "Normal",
+                "Kills ",
+                "Both  ",
+            }, c: Colors.DGPink));
             _hostMatchSettingsMenu.AddMatchSetting(GetOnlineSetting("teams"), false);
 
 
@@ -856,7 +866,12 @@ namespace DuckGame
                     _modifierMenu.Add(new UIMenuItem("@TINYLOCK@LOCKED", c: Color.Red), true);
             }
             _modifierMenu.Close();
-            _multiplayerMenu.Add(new UIMenuItemToggle("Kills Scoring", field: new FieldBinding(typeof(TeamSelect2), nameof(TeamSelect2.KillsForPoints)), c: Colors.DGPink));
+            _multiplayerMenu.Add(new UIMenuItemNumber("Scoring type", field: new FieldBinding(typeof(TeamSelect2), nameof(KillsForPoints), 0, 2, 1), valStrings: new List<string>()
+            {
+                "Normal",
+                "Kills ",
+                "Both  ",
+            }, c: Colors.DGPink));
 
             int z = 0;
             foreach (MatchSetting matchSetting in matchSettings)

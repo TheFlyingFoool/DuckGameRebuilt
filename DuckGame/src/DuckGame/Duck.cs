@@ -1541,7 +1541,7 @@ namespace DuckGame
             {
                 lastAppliedLifeChange += 1;
 
-                if (TeamSelect2.KillsForPoints && Network.isServer)
+                if ((TeamSelect2.KillsForPoints == TeamSelect2.ScoringOption.Kills || TeamSelect2.KillsForPoints == TeamSelect2.ScoringOption.Both) && Network.isServer)
                 {
                     Profile responsible = killedBy;
                     if (type is DTCrush d && d.thing != null && d.thing.responsibleProfile != null) responsible = d.thing.responsibleProfile;

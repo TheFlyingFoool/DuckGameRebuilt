@@ -74,7 +74,7 @@ namespace DuckGame
                 return;
             DestroyType type = !crush ? (!fall ? new DTImpact(null) : new DTFall()) : new DTCrush(null);
             profile.duck.isKillMessage = true;
-            if (Network.isServer && TeamSelect2.KillsForPoints)
+            if (Network.isServer && (TeamSelect2.KillsForPoints == TeamSelect2.ScoringOption.Kills || TeamSelect2.KillsForPoints == TeamSelect2.ScoringOption.Both))
             {
                 K4PLogic();
             }
