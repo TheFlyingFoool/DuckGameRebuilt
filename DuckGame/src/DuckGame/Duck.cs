@@ -2666,6 +2666,15 @@ namespace DuckGame
                     Unequip(hatt);
                     hatt.hSpeed = hSpeed * 1.2f;
                     hatt.vSpeed = vSpeed - 2f;
+                    if (DGRSettings.StickyHats) // Sticky hats is on, so you just lost non-vanity hat   -- Dzhake
+                    {
+                        Hat hat = new TeamHat(0f, 0f, team, profile);
+                        Level.Add(hat);
+                        Equip(hat, false);
+                        Fondle(hat);
+                        if (Network.isActive)
+                            Send.Message(new NMEquip(this, this.hat), NetMessagePriority.ReliableOrdered);
+                    }
                 }
                 ThrowItem(false);
             }
