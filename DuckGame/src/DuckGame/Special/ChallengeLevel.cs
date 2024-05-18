@@ -132,7 +132,7 @@ namespace DuckGame
             component.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(_pauseGroup), UIAlign.Left), true);
             component.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_pauseMenu, Options.optionsMenu), UIAlign.Left), true);
             component.leftSection.Add(new UIText("", Color.White), true);
-            component.leftSection.Add(new UIMenuItem("|DGRED|QUIT", new UIMenuActionOpenMenu(_pauseMenu, _confirmMenu), UIAlign.Left), true);
+            component.leftSection.Add(new UIMenuItem("|DGRED|QUIT", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _quit), UIAlign.Left), true);
             if (things[typeof(EditorTestLevel)].Count() > 0)
             {
                 component.leftSection.Add(new UIText("", Color.White), true);
