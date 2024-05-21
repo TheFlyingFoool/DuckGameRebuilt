@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows;
 
 namespace DuckGame
 {
@@ -122,7 +121,6 @@ namespace DuckGame
                     if (this.leftTile is WireTileset)
                         Level.Remove(this.leftTile);
 
-                    MessageBox.Show($"Infinite wire loop terminated at: { this.position.ToString()}", "Infinite Wire Error");
                     Level.Remove(this);
                     _removeSignals.Clear();
                     return;
