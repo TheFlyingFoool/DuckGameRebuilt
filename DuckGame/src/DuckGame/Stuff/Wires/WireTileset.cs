@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace DuckGame
 {
@@ -109,6 +110,24 @@ namespace DuckGame
             {
                 WireConnection travel = signal.travel;
                 _removeSignals.Add(signal);
+
+                if (Editor.current is DuckGameTestArea && _removeSignals.Count > 400) // Catch an infinite loop (only in playtest mode) and abort before stack overflow
+                {
+                    if (this.upTile is WireTileset)
+                        Level.Remove(this.upTile);
+                    if (this.downTile is WireTileset)
+                        Level.Remove(this.downTile);
+                    if (this.rightTile is WireTileset)
+                        Level.Remove(this.rightTile);
+                    if (this.leftTile is WireTileset)
+                        Level.Remove(this.leftTile);
+
+                    MessageBox.Show($"Infinite wire loop terminated at: { this.position.ToString()}", "Infinite Wire Error");
+                    Level.Remove(this);
+                    _removeSignals.Clear();
+                    return;
+                }
+
                 signal.finished = true;
                 if (travel == _centerWire)
                     Level.CheckCircle<IWirePeripheral>(_centerWire.position, 3f)?.Pulse(signal.signalType, this);

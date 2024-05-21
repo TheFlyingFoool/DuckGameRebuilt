@@ -415,6 +415,7 @@ namespace DuckGame
             {
                 _preferredColor = sel.profile.preferredColor;
             }
+            shouldbegraphicculled = false;
         }
 
         public override void Initialize()
