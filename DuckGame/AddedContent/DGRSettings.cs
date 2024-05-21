@@ -491,6 +491,8 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool EditorOnlinePhysics = false;
 
+        [Marker.AutoConfig] public static bool DrawOffscreenArrowsOnEditor = false;
+
         [Marker.AutoConfig] public static bool EditorInstructions = true;
 
         [Marker.AutoConfig] public static bool EditorLevelName = true;
