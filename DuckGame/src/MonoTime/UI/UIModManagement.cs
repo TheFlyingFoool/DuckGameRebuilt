@@ -784,7 +784,7 @@ namespace DuckGame
 							var heightScrolled = (float)scrollBarOffset / scrollBarScrollableHeight;
 							_scrollItemOffset = (int)((_mods.Count - _maxModsToShow) * heightScrolled);
 						}
-					}
+                    }
 
 					if (Input.Pressed(Triggers.Any))
 					{
@@ -805,10 +805,13 @@ namespace DuckGame
 				else if (_hoverIndex >= 0 && _hoverIndex < _scrollItemOffset)
 					_scrollItemOffset -= (_scrollItemOffset - _hoverIndex);
 
-				if (_scrollItemOffset != 0)
-					scrollBarOffset = (int)Lerp.FloatSmooth(0, scrollBarScrollableHeight, _scrollItemOffset / (float)(_mods.Count - _maxModsToShow));
-				else
-					scrollBarOffset = 0;
+                if (!_draggingScrollbar)
+                {
+                    if (_scrollItemOffset != 0)
+                        scrollBarOffset = (int)Lerp.FloatSmooth(0, scrollBarScrollableHeight, _scrollItemOffset / (float)(_mods.Count - _maxModsToShow));
+                    else
+                        scrollBarOffset = 0;
+                }
 
 				if (Editor.hoverTextBox == false && UIMenu.globalUILock == false && (Input.Pressed(Triggers.Cancel) || Keyboard.Pressed(Keys.Escape)))
 				{
