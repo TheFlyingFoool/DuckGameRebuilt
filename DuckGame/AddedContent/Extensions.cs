@@ -632,6 +632,7 @@ namespace DuckGame
                     return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 4);
 
                 case "pink":
+                case "rose":
                     return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 5);
 
                 case "blue":
