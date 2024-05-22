@@ -997,8 +997,11 @@ namespace DuckGame
                             if(mod.configuration.error != null || mod.configuration.disabled)
                                 Graphics.DrawRect(new Vec2(boxLeft, boxTop), new Vec2(boxLeft + _box.width - boxSideMargin, boxTop + boxHeight), Color.Black * 0.4f, 0.85f);
 
+                            if (mod.clientMod)
+                                Graphics.DrawRect(new Vec2(boxLeft, boxTop), new Vec2(boxLeft + _box.width - boxSideMargin, boxTop + boxHeight), Color.Yellow * 0.1f, 0.85f);
 
-							bool reskin = mod.configuration.modType == ModConfiguration.Type.Reskin || mod.configuration.isExistingReskinMod;
+
+                            bool reskin = mod.configuration.modType == ModConfiguration.Type.Reskin || mod.configuration.isExistingReskinMod;
 
 
 							if (!mod.configuration.loaded)
