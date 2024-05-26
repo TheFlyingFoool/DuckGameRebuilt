@@ -40,6 +40,7 @@ namespace DuckGame
         private float _fdHeight = 262f;
         private string modRootPath;
         private string prevDirectory;
+        private float prevScrollPosition = -1;
         private ZipArchive _openedArchive;
         private int _framesSinceSelected = 999;
         private ContextMenu _lastItemSelected;
@@ -110,6 +111,10 @@ namespace DuckGame
             if (prevDirectory != null)
                 _currentDirectory = prevDirectory;
             SetDirectory(_currentDirectory);
+            if (prevScrollPosition != -1)
+            {
+                _scrollPosition = prevScrollPosition;
+            }
             Editor.lockInput = this;
             ComputeAvailableStorageSpace();
             SFX.Play("openClick", 0.4f);
@@ -396,6 +401,7 @@ namespace DuckGame
                 }
                 else if (item.data.EndsWith(TypeExtension()) && _type != ContextFileType.All)
                 {
+                    prevScrollPosition = _scrollPosition;
                     if (!_selectLevels)
                     {
                         if (!_save)
