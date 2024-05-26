@@ -463,9 +463,9 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool SkipOnBlacklist = true;
 
-
+        [Marker.AutoConfig]
         private static bool _useEnabledModsConfig = false;
-        [Marker.AutoConfig] public static bool UseEnabledModsConfig { get => _useEnabledModsConfig; set {
+        public static bool UseEnabledModsConfig { get => _useEnabledModsConfig; set {
                 if (value == true) { ModLoader.GenerateEnabledXml(); }; _useEnabledModsConfig = value; } }
 
         [Marker.AutoConfig] public static bool QOLScoreThingButWithoutScore { get; set; } //why. -NiK0
