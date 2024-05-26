@@ -34,7 +34,7 @@ namespace DuckGame
                 appliedSeq = true;
                 int var = Math.Abs((int)(x / 11f) * 11 + (int)(y / 11f) * 11);
                 _variant = var % 4;
-                _spriteAccessor = new SpriteMap($"seq_crate_{_variant}", 16, 16);
+                _spriteAccessor = new SpriteMap($"seq_crate_{_variant + 1}", 16, 16);
                 graphic = _spriteAccessor;
                 _onHitSFX = "swipe";
                 _onCollideSFX = "presentLand";
