@@ -518,6 +518,10 @@ namespace DuckGame
             {
                 dgrDescription = "Temporarily enables all unlocks on hats, furniture, modifiers, and arcade machines without modifying your save file."
             });
+            menu.Add(new UIMenuItemToggle("Skip on blacklist", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SkipOnBlacklist)))
+            {
+                dgrDescription = "Skips level when \"Never again\" is pressed if you are host."
+            });
 
 
             menu.Add(new UIText(" ", Color.White));
