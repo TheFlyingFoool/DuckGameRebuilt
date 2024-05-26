@@ -4675,6 +4675,11 @@ namespace DuckGame
                         break;
                 }
             }
+            if (DGRSettings.DrawOffscreenArrowsOnEditor && Level.current is DuckGameTestArea)
+            {
+                if (Level.current.simulatePhysics)
+                    return position.x < level.camera.left + num || position.x > level.camera.right - num || position.y < level.camera.top + num || position.y > level.camera.bottom - num;
+            }
             return false;
         }
 

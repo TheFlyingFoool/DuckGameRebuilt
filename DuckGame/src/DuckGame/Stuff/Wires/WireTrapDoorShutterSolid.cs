@@ -41,8 +41,6 @@
             }
             else
             {
-                if (angleDegrees == 0)
-                    return;
                 if (!_open)
                 {
                     if (!(Level.current is Editor))
