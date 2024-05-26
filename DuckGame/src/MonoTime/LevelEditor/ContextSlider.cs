@@ -14,6 +14,7 @@ namespace DuckGame
         private bool _adjust;
         private bool _time;
         private Type _myType;
+        private TextEntryDialog _dialog;
 
         public bool adjust
         {
@@ -44,6 +45,7 @@ namespace DuckGame
             _time = time;
             _myType = myType;
             tooltip = valTooltip;
+            _dialog = new();
             if (_field == null || _field.value == null || !_field.value.GetType().IsEnum)
                 return;
             _step = 1f;
@@ -70,9 +72,17 @@ namespace DuckGame
             _adjusterHand = new SpriteMap("adjusterHand", 18, 17);
             _time = time;
             _myType = myType;
+            _dialog = new();
             if (_field == null || _field.value == null || !_field.value.GetType().IsEnum)
                 return;
             _step = 1f;
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+            _dialog.DoInitialize();
+            Level.Add(_dialog);
         }
 
         protected override void OnClose()
@@ -257,55 +267,97 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (Editor.inputMode == EditorInput.Gamepad)
+            _dialog.DoUpdate();
+            if (_dialog.opened)
+                return;
+            Editor.lockInput = null;
+            if (_dialog.result != null && _dialog.result != "")
             {
-                if (_hover || _adjust)
+                try // I have feeling this can crash easily
                 {
-                    if (Input.Pressed(Triggers.Select))
-                        _adjust = true;
-                    if (Input.Released(Triggers.Select))
-                        _adjust = false;
-                }
-                if (_adjust)
-                {
-                    Editor.tookInput = true;
-                    int num = 1;
-                    float step = _step;
-                    if (Input.Down(Triggers.Ragdoll))
-                        num = 5;
-                    if (Input.Down(Triggers.Strafe))
-                        _step *= 0.1f;
-                    if (Input.Pressed(Triggers.MenuLeft))
+                    string result = _dialog.result;
+                    if (_field.value is float)
                     {
-                        for (int index = 0; index < num; ++index)
-                            Decrement();
+                        if (float.TryParse(result, out float value))
+                        {
+                            _field.value = value;
+                            Maths.Clamp((float)_field.value, _field.min, _field.max);
+                        }
+                        
                     }
-                    if (Input.Pressed(Triggers.MenuRight))
+                    else if (_field.value is int)
                     {
-                        for (int index = 0; index < num; ++index)
-                            Increment();
+                        if (int.TryParse(result, out int value))
+                        {
+                            _field.value = value;
+                            Maths.Clamp((int)_field.value, _field.min, _field.max);
+                        }
                     }
-                    _step = step;
+                    _dialog.result = null;
                 }
-            }
-            else if (_hover)
-            {
-                _adjust = true;
-                if (Mouse.scroll > 0f)
+                catch (Exception e)
                 {
-                    Editor.didUIScroll = true;
-                    Decrement();
-                    _didContextScroll = true;
-                }
-                if (Mouse.scroll < 0f)
-                {
-                    Editor.didUIScroll = true;
-                    Increment();
-                    _didContextScroll = true;
+                    DevConsole.Log(e);
                 }
             }
             else
-                _adjust = false;
+            {
+                if (Editor.inputMode == EditorInput.Gamepad)
+                {
+                    if (_hover || _adjust)
+                    {
+                        if (Input.Pressed(Triggers.Select))
+                            _adjust = true;
+                        if (Input.Released(Triggers.Select))
+                            _adjust = false;
+                    }
+                    if (_adjust)
+                    {
+                        Editor.tookInput = true;
+                        int num = 1;
+                        float step = _step;
+                        if (Input.Down(Triggers.Ragdoll))
+                            num = 5;
+                        if (Input.Down(Triggers.Strafe))
+                            _step *= 0.1f;
+                        if (Input.Pressed(Triggers.MenuLeft))
+                        {
+                            for (int index = 0; index < num; ++index)
+                                Decrement();
+                        }
+                        if (Input.Pressed(Triggers.MenuRight))
+                        {
+                            for (int index = 0; index < num; ++index)
+                                Increment();
+                        }
+                        _step = step;
+                    }
+                }
+                else if (_hover)
+                {
+                    _adjust = true;
+                    if (Mouse.scroll > 0f)
+                    {
+                        Editor.didUIScroll = true;
+                        Decrement();
+                        _didContextScroll = true;
+                    }
+                    if (Mouse.scroll < 0f)
+                    {
+                        Editor.didUIScroll = true;
+                        Increment();
+                        _didContextScroll = true;
+                    }
+
+                    if (Mouse.right == InputState.Pressed)
+                    {
+                        _dialog.Open("Value", _field.value.ToString());
+                        Editor.lockInput = _dialog;
+                    }
+                }
+                else
+                    _adjust = false;
+            }
             base.Update();
         }
 
@@ -392,6 +444,7 @@ namespace DuckGame
                 Graphics.DrawString(_text, position + new Vec2(2f, 5f), color, (Depth)0.82f);
                 Graphics.DrawString(text1, position + new Vec2(itemSize.x - 4f - Graphics.GetStringWidth(text1), 5f), Color.White, (Depth)0.82f);
             }
+            _dialog.DoDraw();
         }
     }
 }
