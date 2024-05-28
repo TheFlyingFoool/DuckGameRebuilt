@@ -267,7 +267,6 @@ namespace DuckGame
 
         public override void Update()
         {
-            _dialog.DoUpdate();
             if (_dialog.opened)
                 return;
             Editor.lockInput = null;
@@ -444,7 +443,6 @@ namespace DuckGame
                 Graphics.DrawString(_text, position + new Vec2(2f, 5f), color, (Depth)0.82f);
                 Graphics.DrawString(text1, position + new Vec2(itemSize.x - 4f - Graphics.GetStringWidth(text1), 5f), Color.White, (Depth)0.82f);
             }
-            _dialog.DoDraw();
         }
     }
 }
