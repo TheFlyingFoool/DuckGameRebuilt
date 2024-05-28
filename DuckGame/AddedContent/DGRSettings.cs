@@ -463,6 +463,8 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool SkipOnBlacklist = true;
 
+        [Marker.AutoConfig] public static bool Scroll8Mods = false;
+
         [Marker.AutoConfig]
         private static bool _useEnabledModsConfig = false;
         public static bool UseEnabledModsConfig { get => _useEnabledModsConfig; set {

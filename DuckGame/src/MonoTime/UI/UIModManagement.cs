@@ -731,9 +731,9 @@ namespace DuckGame
 					else if (Input.Pressed(Triggers.MenuUp))
 						_hoverIndex--;
 					if (Input.Pressed(Triggers.Strafe))
-						_hoverIndex -= 10;
+						_hoverIndex -= DGRSettings.Scroll8Mods ? 8 : 10;
 					else if (Input.Pressed(Triggers.Ragdoll))
-						_hoverIndex += 10;
+						_hoverIndex += DGRSettings.Scroll8Mods ? 8 : 10;
 
 					if (_hoverIndex < 0)
 						_hoverIndex = 0;
