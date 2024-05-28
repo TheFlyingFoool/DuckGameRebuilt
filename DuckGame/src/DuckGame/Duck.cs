@@ -297,6 +297,7 @@ namespace DuckGame
         public int waitGhost;
         private ConnectionIndicators _indicators;
         private bool _protectedFromFire;
+        private TeamHat lastHat;
         public override bool destroyed => _destroyed || forceDead;
 
         private Interp DuckLerp = new Interp { };
@@ -893,12 +894,7 @@ namespace DuckGame
             _equipment.Remove(e);
             if (DGRSettings.StickyHats && (e is Hat) && !(e is TeamHat) && profile.team != null && profile.team.hasHat)
             {
-                Hat hat = new TeamHat(0f, 0f, team, profile);
-                Level.Add(hat);
-                Equip(hat, false);
-                Fondle(hat);
-                if (Network.isActive)
-                    Send.Message(new NMEquip(this, this.hat), NetMessagePriority.ReliableOrdered);
+                EquipLastHat();
             }
             e.Destroy(new DTImpact(null));
             e.solid = false;
@@ -1065,12 +1061,7 @@ namespace DuckGame
                         {
                             if (DGRSettings.StickyHats && (t is Hat) && !(t is TeamHat) && profile.team != null && profile.team.hasHat)
                             {
-                                Hat hat = new TeamHat(0f, 0f, team, profile);
-                                Level.Add(hat);
-                                Equip(hat, false);
-                                Fondle(hat);
-                                if (Network.isActive)
-                                    Send.Message(new NMEquip(this, this.hat), NetMessagePriority.ReliableOrdered);
+                                EquipLastHat();
                             }
                             return true;
                         }
@@ -2668,12 +2659,7 @@ namespace DuckGame
                     hatt.vSpeed = vSpeed - 2f;
                     if (DGRSettings.StickyHats) // Sticky hats is on, so you just lost non-vanity hat   -- Dzhake
                     {
-                        Hat hat = new TeamHat(0f, 0f, team, profile);
-                        Level.Add(hat);
-                        Equip(hat, false);
-                        Fondle(hat);
-                        if (Network.isActive)
-                            Send.Message(new NMEquip(this, this.hat), NetMessagePriority.ReliableOrdered);
+                        EquipLastHat();
                     }
                 }
                 ThrowItem(false);
@@ -2683,6 +2669,22 @@ namespace DuckGame
                 y -= 5000f;
             sliding = false;
             crouch = false;
+        }
+
+        public void EquipLastHat()
+        {
+            if (lastHat != null)
+            {
+                if (lastHat.equippedDuck != null)
+                {
+                    lastHat.UnEquip();
+                    if (Network.isActive)
+                        Send.Message(new NMUnequip(this, lastHat), NetMessagePriority.ReliableOrdered);
+                }
+                Equip(lastHat, false);
+                if (Network.isActive)
+                    Send.Message(new NMEquip(this, this.hat), NetMessagePriority.ReliableOrdered);
+            }
         }
 
         public virtual void UpdateSkeleton()
@@ -4137,7 +4139,10 @@ namespace DuckGame
             _gripped = false;
             if (hasBrainRot) UpdateBrainRot();
 
-
+            if (hat is TeamHat teamHat)
+            {
+                lastHat = teamHat;
+            }
         }
 
         public void GiveBrainRot()
