@@ -2065,7 +2065,8 @@ namespace DuckGame
                                         int right = (int)Mouse.right;
                                     }
 
-                                    if (_cursorMode == CursorMode.Normal)
+                                    // CursorMode changes later, check for ctrl+v exists, because someone dumb (like me) could have V binded to menu, without opening menu when pasting -- Dzhake
+                                    if (_cursorMode == CursorMode.Normal && !((Keyboard.Down(Keys.LeftControl) || Keyboard.Down(Keys.RightControl)) && Keyboard.Down(Keys.V)))
                                     {
                                         if (_hoverMenu != null && !_placingTiles &&
                                             (inputMode == EditorInput.Mouse &&
