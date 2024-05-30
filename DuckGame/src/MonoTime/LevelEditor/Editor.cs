@@ -1254,7 +1254,7 @@ namespace DuckGame
                         !InputProfile.active.Pressed(Triggers.RightStick) && !InputProfile.active.Pressed(Triggers.Cancel) &&
                         !InputProfile.active.Pressed(Triggers.Menu1) && !Keyboard.Down(Keys.LeftShift) &&
                         !Keyboard.Down(Keys.RightShift) && !Keyboard.Down(Keys.LeftControl) &&
-                        !Keyboard.Down(Keys.RightControl) && DGRSettings.AnyKeyMovement)
+                        !Keyboard.Down(Keys.RightControl) && (DGRSettings.AnyKeyMovement || hoverUI))
                     {
                         if (inputMode == EditorInput.Mouse)
                         {
