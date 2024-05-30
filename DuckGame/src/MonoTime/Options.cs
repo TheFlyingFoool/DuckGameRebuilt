@@ -400,6 +400,10 @@ namespace DuckGame
             {
                 dgrDescription = "Shows all menus at once, instead of having \"More...\" menu in editor (REQUIRES RESTART)"
             });
+            menu.Add(new UIMenuItemToggle("Any key movement", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.AnyKeyMovement)))
+            {
+                dgrDescription = "When you press any key editor enters gamepad/wasd movement mode, which may annoy users who use mouse only."
+            });
 
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
