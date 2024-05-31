@@ -2808,7 +2808,12 @@ namespace DuckGame
             }
             else if (_cursorMode == CursorMode.Drag)
             {
+                bool altDown = Keyboard.Down(Keys.LeftAlt) || Keyboard.Down(Keys.RightAlt);
                 Vec2 vec2 = Maths.Snap(Mouse.positionScreen + new Vec2(_cellSize / 2f), _cellSize, _cellSize);
+                if (altDown)
+                {
+                    vec2 = Mouse.positionScreen + new Vec2(_cellSize / 2f);
+                }
                 if (inputMode == EditorInput.Gamepad)
                     vec2 = Maths.Snap(_tilePosition + new Vec2(_cellSize / 2f), _cellSize, _cellSize);
                 if (vec2 != _moveDragStart)
