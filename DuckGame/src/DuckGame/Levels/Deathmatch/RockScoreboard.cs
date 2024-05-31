@@ -610,7 +610,7 @@ namespace DuckGame
                     }
                     int placeIndex = 0;
                     int pedestalIndex = 0;
-                    string matchResult = "";
+                    string matchResult = "\u2b50 ";
                     for (int i = 0; i < positions.Count; i++)
                     {
                         List<Team> list = positions[i];
