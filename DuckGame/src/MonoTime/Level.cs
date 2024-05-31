@@ -1140,12 +1140,10 @@ namespace DuckGame
                                         }
                                         break;
                                     }
-                                    Graphics.doSnap = false;
                                     _burnGlowWide.xscale = fluidPuddle.collisionSize.x;
                                     Graphics.Draw(_burnGlowWide, fluidPuddle.left, fluidPuddle.bottom - 2f);
                                     Graphics.Draw(_burnGlowWideLeft, fluidPuddle.left, fluidPuddle.bottom - 2f);
                                     Graphics.Draw(_burnGlowWideRight, fluidPuddle.right, fluidPuddle.bottom - 2f);
-                                    Graphics.doSnap = true;
                                     break;
                                 }
                                 break;
