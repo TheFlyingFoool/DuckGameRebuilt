@@ -440,6 +440,10 @@ namespace DuckGame
             {
                 dgrDescription = "Reloads all hats (OFFLINE ONLY, MIGHT REMOVE MODDED HATS, F6 QUICK RELOAD, F5 RELOADS CURRENTLY WORN ONE)"
             });
+            menu.Add(new UIMenuItemToggle("Copy match results", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.CopyMatchResults)))
+            {
+                dgrDescription = "Copies match results to clipboard when match ends"
+            });
 
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));

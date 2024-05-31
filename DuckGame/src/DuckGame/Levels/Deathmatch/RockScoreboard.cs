@@ -610,15 +610,33 @@ namespace DuckGame
                     }
                     int placeIndex = 0;
                     int pedestalIndex = 0;
-                    foreach (List<Team> list in positions)
+                    string matchResult = "";
+                    for (int i = 0; i < positions.Count; i++)
                     {
+                        List<Team> list = positions[i];
                         foreach (Team t5 in list)
                         {
-                            Add(new Pedestal(center + pedestalIndex * (smallMode ? 24 : 42), 150f, t5, placeIndex, smallMode));
+                            Add(new Pedestal(center + pedestalIndex * (smallMode ? 24 : 42), 150f, t5, placeIndex,
+                                smallMode));
                             pedestalIndex++;
+                            foreach (Profile p in t5.activeProfiles)
+                            {
+                                matchResult += $"{p.nameUI.CleanFormatting()} ";
+                            }
+                            
+                            matchResult += t5.score.ToString();
                         }
+
                         placeIndex++;
+                        if (i != positions.Count - 1)
+                            matchResult += "\n";
                     }
+
+                    if (DGRSettings.CopyMatchResults)
+                    {
+                        SDL2.SDL.SDL_SetClipboardText(matchResult);
+                    }
+
                     if (_winningTeam.activeProfiles.Count > 1)
                     {
                         _winningTeam.wins++;

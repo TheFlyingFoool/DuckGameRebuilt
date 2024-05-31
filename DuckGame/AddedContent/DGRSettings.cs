@@ -178,6 +178,8 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool DGRNeonSign = true;
 
+        [Marker.AutoConfig] public static bool CopyMatchResults = false;
+
         [Marker.AutoConfig] public static bool skipOnlineBumper = false;
 
         [Marker.AutoConfig] public static bool SwitchInput = false;
