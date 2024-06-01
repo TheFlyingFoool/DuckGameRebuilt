@@ -180,6 +180,15 @@ namespace DuckGame
             };
         }
 
+        public override Holdable BecomeTapedMonster(TapedGun pTaped)
+        {
+            if (Editor.clientonlycontent)
+            {
+                return pTaped.gun1 is GoodBook && pTaped.gun2 is HugeLaser ? new Propaganda(x, y) : null;
+            }
+            return base.BecomeTapedMonster(pTaped);
+        }
+
         public void DoPreach()
         {
         }
