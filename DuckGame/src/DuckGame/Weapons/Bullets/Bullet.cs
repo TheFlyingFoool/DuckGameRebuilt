@@ -354,63 +354,45 @@ namespace DuckGame
                                 willBeStopped = true;
                                 if (bulletImpact is Teleporter t)
                                 {
-                                    WumpTeleporter wt = t as WumpTeleporter;
                                     _teleporter = bulletImpact as Teleporter;
                                     if (_teleporter.link != null)
                                     {
-                                        if (wt == null || wt.charge <= 0)
+                                        float rng = _totalLength - (_actualStart - currentTravel).length;
+                                        if (rng > 0f)
                                         {
-                                            if (wt != null)
+                                            float dir1 = Maths.PointDirection(_actualStart, currentTravel);
+                                            if ((int)_teleporter.teleHeight == 2 && (int)_teleporter._link.teleHeight == 2)
                                             {
-                                                Fondle(wt);
-                                                wt.charge = wt.chargeTime;
-                                                if (wt._link is WumpTeleporter wtt)
-                                                {
-                                                    Fondle(wtt);
-                                                    wtt.charge = wt.chargeTime;
-                                                }
+                                                Vec2 vec2 = _teleporter.position - currentTravel;
+                                                _teleporter = _teleporter.link;
+                                                Rebound(_teleporter.position - vec2, dir1, rng);
                                             }
-                                            float rng = _totalLength - (_actualStart - currentTravel).length;
-                                            if (rng > 0f)
+                                            else
                                             {
-                                                float dir1 = Maths.PointDirection(_actualStart, currentTravel);
-                                                if ((int)_teleporter.teleHeight == 2 && (int)_teleporter._link.teleHeight == 2)
+                                                Vec2 currentTravel = this.currentTravel;
+                                                if (_teleporter._dir.y == 0f)
+                                                    currentTravel.x = _teleporter._link.x - (_teleporter.x - this.currentTravel.x) + travelDirNormalized.x;
+                                                else if (_teleporter._dir.x == 0f)
+                                                    currentTravel.y = _teleporter._link.y - (_teleporter.y - this.currentTravel.y) + travelDirNormalized.y;
+                                                if ((bool)_teleporter._link.horizontal)
                                                 {
-                                                    Vec2 vec2 = _teleporter.position - currentTravel;
-                                                    _teleporter = _teleporter.link;
-                                                    Rebound(_teleporter.position - vec2, dir1, rng);
+                                                    if (currentTravel.x < _teleporter._link.left + 2f)
+                                                        currentTravel.x = _teleporter._link.left + 2f;
+                                                    if (currentTravel.x > _teleporter._link.right - 2f)
+                                                        currentTravel.x = _teleporter._link.right - 2f;
                                                 }
                                                 else
                                                 {
-                                                    Vec2 currentTravel = this.currentTravel;
-                                                    if (_teleporter._dir.y == 0f)
-                                                        currentTravel.x = _teleporter._link.x - (_teleporter.x - this.currentTravel.x) + travelDirNormalized.x;
-                                                    else if (_teleporter._dir.x == 0f)
-                                                        currentTravel.y = _teleporter._link.y - (_teleporter.y - this.currentTravel.y) + travelDirNormalized.y;
-                                                    if ((bool)_teleporter._link.horizontal)
-                                                    {
-                                                        if (currentTravel.x < _teleporter._link.left + 2f)
-                                                            currentTravel.x = _teleporter._link.left + 2f;
-                                                        if (currentTravel.x > _teleporter._link.right - 2f)
-                                                            currentTravel.x = _teleporter._link.right - 2f;
-                                                    }
-                                                    else
-                                                    {
-                                                        if (currentTravel.y < _teleporter._link.top + 2f)
-                                                            currentTravel.y = _teleporter._link.top + 2f;
-                                                        if (currentTravel.y > _teleporter._link.bottom - 2f)
-                                                            currentTravel.y = _teleporter._link.bottom - 2f;
-                                                    }
-                                                    _teleporter = _teleporter.link;
-                                                    Rebound(currentTravel, dir1, rng);
+                                                    if (currentTravel.y < _teleporter._link.top + 2f)
+                                                        currentTravel.y = _teleporter._link.top + 2f;
+                                                    if (currentTravel.y > _teleporter._link.bottom - 2f)
+                                                        currentTravel.y = _teleporter._link.bottom - 2f;
                                                 }
+                                                _teleporter = _teleporter.link;
+                                                Rebound(currentTravel, dir1, rng);
                                             }
-                                            flag3 = true;
                                         }
-                                        else if (wt.charge > 0)
-                                        {
-                                            break;
-                                        }
+                                        flag3 = true;
                                     }
                                 }
                                 else if (!flag3 && (rebound && (!ammo.softRebound || bulletImpact.physicsMaterial != PhysicsMaterial.Wood) && bulletImpact.isBlock || reboundOnce))

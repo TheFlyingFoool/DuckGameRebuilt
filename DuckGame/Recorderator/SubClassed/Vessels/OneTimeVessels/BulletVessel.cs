@@ -16,8 +16,6 @@ namespace DuckGame
             tatchedTo.Add(typeof(PelletBullet));
             tatchedTo.Add(typeof(LaserBulletOrange));
             tatchedTo.Add(typeof(LaserBulletPurple));
-            //tatchedTo.Add(typeof(WumpMagnumbullet));
-            tatchedTo.Add(typeof(WumpMissile));
             Bullet b = (Bullet)th;
             if (b != null)
             {
@@ -66,12 +64,13 @@ namespace DuckGame
                 switch (ammotypeIndex)
                 {
                     //bring these back later maybe
+                    //bring who back? who? who must go?
                     /*case 255:
                         at = new ATWumpMagnum();
                         break;*/
-                    case 254:
+                    /*case 254:
                         at = new ATWumpMissile();
-                        break;
+                        break;*/
                     /*case 253:
                         at = new ATDeathCaliber();
                         break;*/
