@@ -376,6 +376,11 @@ namespace DuckGame
                 dgrDescription = "WARNING This may be highly unstable but it'll make it so online physics apply while testing levels in the editor (Ragdoll rng, etc)"
             });
 
+            menu.Add(new UIMenuItemToggle("Duck Arrows", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DrawOffscreenArrowsOnEditor)))
+            {
+                dgrDescription = "If enabled the offscreen arrows for ducks will draw in the Editor test zone"
+            });
+
             menu.Add(new UIMenuItemToggle("Test Timer", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.EditorTimer)))
             {
                 dgrDescription = "Displays a timer of how much time the current level has been running for while testing it in the editor"

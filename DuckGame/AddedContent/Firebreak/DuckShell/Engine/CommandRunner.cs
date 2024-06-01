@@ -103,7 +103,6 @@ namespace DuckGame.ConsoleEngine
             }
             catch (Exception e)
             {
-                DevConsole.Log(e + "\n" + e.StackTrace);
                 return e;
             }
         }
@@ -289,7 +288,6 @@ namespace DuckGame.ConsoleEngine
                     appliedParameters[i] = appliedParameterValue;
                 }
             }
-            
 
             ValueOrException<object?> result;
             try
@@ -313,12 +311,10 @@ namespace DuckGame.ConsoleEngine
             }
             catch (TargetInvocationException e)
             {
-                DevConsole.Log(e + "\n" + e.StackTrace);
                 return e.InnerException ?? e;
             }
             catch (Exception e)
             {
-                DevConsole.Log(e + "\n" + e.StackTrace);
                 result = ValueOrException<object>.FromError(e);
             }
 

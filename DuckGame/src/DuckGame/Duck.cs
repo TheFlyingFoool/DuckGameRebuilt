@@ -891,6 +891,15 @@ namespace DuckGame
             if (ting && !Network.isActive)
                 SFX.Play("ting2");
             _equipment.Remove(e);
+            if (DGRSettings.StickyHats && (e is Hat) && !(e is TeamHat) && profile.team != null && profile.team.hasHat)
+            {
+                Hat hat = new TeamHat(0f, 0f, team, profile);
+                Level.Add(hat);
+                Equip(hat, false);
+                Fondle(hat);
+                if (Network.isActive)
+                    Send.Message(new NMEquip(this, this.hat), NetMessagePriority.ReliableOrdered);
+            }
             e.Destroy(new DTImpact(null));
             e.solid = false;
             if (b != null)
@@ -1053,7 +1062,18 @@ namespace DuckGame
                     {
                         bullet._currentlyImpacting.Add(t);
                         if (t.DoHit(bullet, hitPos))
+                        {
+                            if (DGRSettings.StickyHats && (t is Hat) && !(t is TeamHat) && profile.team != null && profile.team.hasHat)
+                            {
+                                Hat hat = new TeamHat(0f, 0f, team, profile);
+                                Level.Add(hat);
+                                Equip(hat, false);
+                                Fondle(hat);
+                                if (Network.isActive)
+                                    Send.Message(new NMEquip(this, this.hat), NetMessagePriority.ReliableOrdered);
+                            }
                             return true;
+                        }
                     }
                 }
             }
@@ -4654,6 +4674,11 @@ namespace DuckGame
                             return position.x < level.camera.left + num || position.x > level.camera.right - num || position.y < level.camera.top + num || position.y > level.camera.bottom - num;
                         break;
                 }
+            }
+            if (DGRSettings.DrawOffscreenArrowsOnEditor && Level.current is DuckGameTestArea)
+            {
+                if (Level.current.simulatePhysics)
+                    return position.x < level.camera.left + num || position.x > level.camera.right - num || position.y < level.camera.top + num || position.y > level.camera.bottom - num;
             }
             return false;
         }
