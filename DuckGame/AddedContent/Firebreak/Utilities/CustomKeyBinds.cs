@@ -147,14 +147,47 @@ namespace DuckGame
                 return keys.Where((_, i) => i < keys.Count() - 1).All(x => CheckInput(x, CheckInputMethod.Down)) && CheckInput(keys.Last(), CheckInputMethod.Pressed);
             }
         }
+
         /// <summary>
         /// Checks if the keyboard key(s) ha(ve) been inputed
         /// </summary>
         /// <param name="keys">the keys as a strings to be checked</param>
         /// <param name="method">what returns <see langword="true"/> when checked (<see langword="CheckInputMethod.Pressed"/> would check if every input is down except the last being checked as pressed)</param>
         /// <returns>a boolean describing if the input has happened</returns>
-        public static bool CheckInput(IEnumerable<string> keys, CheckInputMethod method = CheckInputMethod.Pressed) // string, multiple
-                                                                            => CheckInput(keys.Select(CharToKeys), method);
+        public static bool CheckInput(IEnumerable<string> keys, CheckInputMethod method = CheckInputMethod.Pressed)
+        {
+            foreach (string key2 in keys)
+            {
+                string key = key2;  // CS1656 Cannot assign to 'variable' because it is a 'read-only variable type'
+                bool invert = false;
+                CheckInputMethod method2 = method;
+
+                if (key.StartsWith("!"))
+                {
+                    invert = true;
+                    key = key.Substring(1);
+                }
+
+                if (key.StartsWith("*"))
+                {
+                    method2 = method switch
+                    {
+                        CheckInputMethod.Pressed => CheckInputMethod.Down,
+                        CheckInputMethod.Down => CheckInputMethod.Pressed,
+                        _ => CheckInputMethod.Pressed,
+                    };
+                    key = key.Substring(1);
+                }
+
+                if (CheckInput(CharToKeys(key), method2) == invert)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        } // string, multiple
+
         public enum CheckInputMethod
         {
             Pressed,
@@ -164,7 +197,23 @@ namespace DuckGame
 
         public static bool IsValidInput(string input)
         {
-            return KeyDict.ContainsKey(input.ToLower());
+            if (!input.Contains("+")) 
+                return KeyDict.ContainsKey(input.ToLower());
+
+            foreach (string hotkey2 in input.Split('+'))
+            {
+                string hotkey = hotkey2;
+                if (hotkey.StartsWith(("!")))
+                    hotkey = hotkey.Remove(0, 1);
+
+                if (hotkey.StartsWith(("*")))
+                    hotkey = hotkey.Remove(0, 1);
+
+                if (!KeyDict.ContainsKey(hotkey.ToLower()))
+                    return false;
+            }
+
+            return true;
         }
     }
 }

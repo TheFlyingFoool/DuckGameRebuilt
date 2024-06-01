@@ -31,7 +31,7 @@ namespace DuckGame
                             throw new Exception("No command provided");
 
                         if (!CustomKeyBinds.IsValidInput(hotkey))
-                            return $"|DGRED|Key [{hotkey}] does not exist. Try running `bind keys` for a list of usable keys";
+                            return $"|DGRED|Key [{hotkey}] is not valid hotkey. Try running `bind keys` for a list of usable keys";
                         
                         Binds.Add(new ConsoleBind(hotkey, command));
                         return $"|DGBLUE|Added new binding at index [{Binds.Count - 1}] with hotkey [{hotkey}]";
@@ -64,7 +64,7 @@ namespace DuckGame
                             string keyName = keyNames[i];
                             
                             if (i > 0)
-                                builder.Append('\n');
+                                builder.Append(", ");
                             builder.Append(keyName);
                         }
 
@@ -83,28 +83,48 @@ namespace DuckGame
             Keys
         }
 
-        public record ConsoleBind(string hotkey, string command)
+        public record ConsoleBind
         {
-            public string hotkey { get; set; } = hotkey;
-            public string command { get; set; } = command;
+            public string hotkey { get; set; }
+            public string command { get; set; }
+
+            public List<string> hotkeys;
+
+            public ConsoleBind(string hotkey, string command)
+            {
+                this.hotkey = hotkey;
+                this.command = command;
+
+                if (hotkey.Contains("+"))
+                {
+                    hotkeys = new(hotkey.Split('+'));
+                }
+                else
+                {
+                    hotkeys = new()
+                    {
+                        hotkey
+                    };
+                }
+            }
 
             public override string ToString()
             {
-                return $"[{hotkey}]({command})";
+                if (!(hotkeys.Count > 1)) 
+                    return $"[{hotkey}]({command})";
+
+                string result = "{";
+
+                foreach (string s in hotkeys)
+                {
+                    result += $"{s},";
+                }
+                result += $"}}({command}";
+
+                return result;
             }
 
-            private static readonly Regex _parseRegex = new(@"\[.+\]\((.+)\)", RegexOptions.Compiled);
-
-            public static ConsoleBind? Parse(string s)
-            {
-                Match m = _parseRegex.Match(s);
-
-                return m.Success
-                    ? new ConsoleBind(m.Groups[1].Value, m.Groups[2].Value)
-                    : null;
-            }
-
-            public bool Activated => CustomKeyBinds.CheckInput(hotkey, CustomKeyBinds.CheckInputMethod.Pressed);
+            public bool Activated => CustomKeyBinds.CheckInput(hotkeys, CustomKeyBinds.CheckInputMethod.Pressed);
 
             public bool TryExecute()
             {
