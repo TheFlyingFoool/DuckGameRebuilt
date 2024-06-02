@@ -400,6 +400,10 @@ namespace DuckGame
             {
                 dgrDescription = "Shows all menus at once, instead of having \"More...\" menu in editor (REQUIRES RESTART)"
             });
+            menu.Add(new UIMenuItemToggle("Any key movement", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.AnyKeyMovement)))
+            {
+                dgrDescription = "When you press any key editor enters gamepad/wasd movement mode, which may annoy users who use mouse only."
+            });
 
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
@@ -435,6 +439,10 @@ namespace DuckGame
             menu.Add(new UIMenuItem("Reload Hats", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(ReloadHats)))
             {
                 dgrDescription = "Reloads all hats (OFFLINE ONLY, MIGHT REMOVE MODDED HATS, F6 QUICK RELOAD, F5 RELOADS CURRENTLY WORN ONE)"
+            });
+            menu.Add(new UIMenuItemToggle("Copy match results", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.CopyMatchResults)))
+            {
+                dgrDescription = "Copies match results to clipboard when match ends"
             });
 
             menu.Add(new UIText(" ", Color.White));
@@ -677,6 +685,11 @@ namespace DuckGame
                 dgrDescription = "Uses <Enabled> from mod's config\n instead of <Disabled>, which allows to have presets"
             });
 
+            menu.Add(new UIMenuItemToggle("Scroll 8 mods", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.Scroll8Mods)))
+            {
+                dgrDescription = "By default pressing ragdoll/strafe in mods UI scrolls 10 mods, but you can see only 8 on screen at same time, so you easily miss mod you're looking for."
+            });
+            
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
             return menu;

@@ -607,11 +607,11 @@ namespace DuckGame
             _hostModifiersMenu.SetBackFunction(new UIMenuActionOpenMenu(_hostModifiersMenu, _hostMatchSettingsMenu));
             _hostModifiersMenu.Close();
             _playOnlineGroup.Add(_hostModifiersMenu, false);
-            _hostMatchSettingsMenu.Add(new UIMenuItemNumber("Scoring type", field: new FieldBinding(typeof(TeamSelect2), nameof(KillsForPoints), 0, 2, 1), valStrings: new List<string>()
+            _hostMatchSettingsMenu.Add(new UIMenuItemNumber("Scoring", field: new FieldBinding(typeof(TeamSelect2), nameof(KillsForPoints), 0, 2, 1), valStrings: new List<string>()
             {
                 "Normal",
-                "Kills ",
-                "Both  ",
+                "Kills",
+                "Both",
             }, c: Colors.DGPink));
             _hostMatchSettingsMenu.AddMatchSetting(GetOnlineSetting("teams"), false);
 
@@ -866,11 +866,11 @@ namespace DuckGame
                     _modifierMenu.Add(new UIMenuItem("@TINYLOCK@LOCKED", c: Color.Red), true);
             }
             _modifierMenu.Close();
-            _multiplayerMenu.Add(new UIMenuItemNumber("Scoring type", field: new FieldBinding(typeof(TeamSelect2), nameof(KillsForPoints), 0, 2, 1), valStrings: new List<string>()
+            _multiplayerMenu.Add(new UIMenuItemNumber("Scoring", field: new FieldBinding(typeof(TeamSelect2), nameof(KillsForPoints), 0, 2, 1), valStrings: new List<string>()
             {
                 "Normal",
-                "Kills ",
-                "Both  ",
+                "Kills",
+                "Both",
             }, c: Colors.DGPink));
 
             int z = 0;

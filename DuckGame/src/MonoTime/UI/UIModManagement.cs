@@ -731,9 +731,9 @@ namespace DuckGame
 					else if (Input.Pressed(Triggers.MenuUp))
 						_hoverIndex--;
 					if (Input.Pressed(Triggers.Strafe))
-						_hoverIndex -= 10;
+						_hoverIndex -= DGRSettings.Scroll8Mods ? 8 : 10;
 					else if (Input.Pressed(Triggers.Ragdoll))
-						_hoverIndex += 10;
+						_hoverIndex += DGRSettings.Scroll8Mods ? 8 : 10;
 
 					if (_hoverIndex < 0)
 						_hoverIndex = 0;
@@ -987,8 +987,10 @@ namespace DuckGame
                             Graphics.DrawRect(new Vec2(boxLeft + 2, boxTop + 2), new Vec2(boxLeft + boxHeight - 2, boxTop + boxHeight - 2), Color.Gray, 0.44f, false, 2);
                             Graphics.Draw(_noImage, boxLeft + 2, boxTop + 2, 0.5f);
 
-
                             string titleString = "#" + modIndex + ": ";
+                            if (mod.clientMod)
+                                titleString = titleString.Insert(0,"|DGYELLOW|");
+                                
 
                             if (mod.configuration.error != null)
                             {
@@ -999,9 +1001,6 @@ namespace DuckGame
 
                             if(mod.configuration.error != null || mod.configuration.disabled)
                                 Graphics.DrawRect(new Vec2(boxLeft, boxTop), new Vec2(boxLeft + _box.width - boxSideMargin, boxTop + boxHeight), Color.Black * 0.4f, 0.85f);
-
-                            if (mod.clientMod)
-                                Graphics.DrawRect(new Vec2(boxLeft, boxTop), new Vec2(boxLeft + _box.width - boxSideMargin, boxTop + boxHeight), Color.Yellow * 0.1f, 0.85f);
 
 
                             bool reskin = mod.configuration.modType == ModConfiguration.Type.Reskin || mod.configuration.isExistingReskinMod;

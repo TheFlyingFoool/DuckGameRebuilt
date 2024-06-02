@@ -178,6 +178,8 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool DGRNeonSign = true;
 
+        [Marker.AutoConfig] public static bool CopyMatchResults = false;
+
         [Marker.AutoConfig] public static bool skipOnlineBumper = false;
 
         [Marker.AutoConfig] public static bool SwitchInput = false;
@@ -459,9 +461,13 @@ namespace DuckGame
         [Marker.AutoConfig] public static bool StickyHats { get; set; }
         [Marker.AutoConfig] public static bool DisableMoreInEditor { get; set; }
 
+        [Marker.AutoConfig] public static bool AnyKeyMovement = true;
+
         [Marker.AutoConfig] public static bool ConvertModdedCommands = true;
 
         [Marker.AutoConfig] public static bool SkipOnBlacklist = true;
+
+        [Marker.AutoConfig] public static bool Scroll8Mods = false;
 
         [Marker.AutoConfig]
         private static bool _useEnabledModsConfig = false;

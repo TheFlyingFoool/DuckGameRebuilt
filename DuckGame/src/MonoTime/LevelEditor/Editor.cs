@@ -1254,7 +1254,7 @@ namespace DuckGame
                         !InputProfile.active.Pressed(Triggers.RightStick) && !InputProfile.active.Pressed(Triggers.Cancel) &&
                         !InputProfile.active.Pressed(Triggers.Menu1) && !Keyboard.Down(Keys.LeftShift) &&
                         !Keyboard.Down(Keys.RightShift) && !Keyboard.Down(Keys.LeftControl) &&
-                        !Keyboard.Down(Keys.RightControl))
+                        !Keyboard.Down(Keys.RightControl) && (DGRSettings.AnyKeyMovement || hoverUI))
                     {
                         if (inputMode == EditorInput.Mouse)
                         {
@@ -2065,7 +2065,8 @@ namespace DuckGame
                                         int right = (int)Mouse.right;
                                     }
 
-                                    if (_cursorMode == CursorMode.Normal)
+                                    // CursorMode changes later, check for ctrl+v exists, because someone dumb (like me) could have V binded to menu, without opening menu when pasting -- Dzhake
+                                    if (_cursorMode == CursorMode.Normal && !((Keyboard.Down(Keys.LeftControl) || Keyboard.Down(Keys.RightControl)) && Keyboard.Down(Keys.V)))
                                     {
                                         if (_hoverMenu != null && !_placingTiles &&
                                             (inputMode == EditorInput.Mouse &&
@@ -2807,7 +2808,12 @@ namespace DuckGame
             }
             else if (_cursorMode == CursorMode.Drag)
             {
+                bool altDown = Keyboard.Down(Keys.LeftAlt) || Keyboard.Down(Keys.RightAlt);
                 Vec2 vec2 = Maths.Snap(Mouse.positionScreen + new Vec2(_cellSize / 2f), _cellSize, _cellSize);
+                if (altDown)
+                {
+                    vec2 = Mouse.positionScreen + new Vec2(_cellSize / 2f);
+                }
                 if (inputMode == EditorInput.Gamepad)
                     vec2 = Maths.Snap(_tilePosition + new Vec2(_cellSize / 2f), _cellSize, _cellSize);
                 if (vec2 != _moveDragStart)
@@ -2946,6 +2952,7 @@ namespace DuckGame
                 if (_selection.Count > 0 && _cursorMode != CursorMode.Pasting && (Keyboard.Pressed(Keys.F) ||
                         _input.Pressed(Triggers.Menu1) && inputMode == EditorInput.Gamepad))
                 {
+                    bool vertical = Keyboard.shift;
                     Vec2 zero = Vec2.Zero;
                     Vec2 pPosition;
                     if (_cursorMode == CursorMode.Pasting)
@@ -2966,9 +2973,18 @@ namespace DuckGame
                     {
                         foreach (Thing thing in _pasteBatch)
                         {
-                            thing.SetTranslation(new Vec2((float)(-(thing.position.x - vec2.x) * 2f), 0f));
-                            thing.EditorFlip(false);
-                            thing.flipHorizontal = !thing.flipHorizontal;
+                            if (vertical)
+                            {
+                                thing.SetTranslation(new Vec2(0f, (float)(-(thing.position.y - vec2.y) * 2f)));
+                                thing.EditorFlip(true);
+                                thing.flipVertical = !thing.flipVertical;
+                            }
+                            else
+                            {
+                                thing.SetTranslation(new Vec2((float)(-(thing.position.x - vec2.x) * 2f), 0f));
+                                thing.EditorFlip(false);
+                                thing.flipHorizontal = !thing.flipHorizontal;
+                            }
                             current.things.UpdateObject(thing);
                         }
                     }
@@ -2978,30 +2994,60 @@ namespace DuckGame
                         foreach (Thing thing in _selection)
                         {
                             Thing t = thing;
-                            float dif = t.position.x - vec2.x;
-                            History.Add(() =>
+                            if (vertical)
                             {
-                                t.SetTranslation(new Vec2((float)(-dif * 2f), 0f));
-                                t.EditorFlip(false);
-                                t.flipHorizontal = !t.flipHorizontal;
-                                if (t is IDontMove)
+                                float dif = t.position.y - vec2.y;
+                                History.Add(() =>
                                 {
-                                    current.things.quadTree.Remove(t);
-                                    current.things.quadTree.Add(t);
-                                    current.things.UpdateObject(t);
-                                }
-                            }, () =>
+                                    t.SetTranslation(new Vec2(0f,(float)(-dif * 2f)));
+                                    t.EditorFlip(true);
+                                    t.flipVertical = !t.flipVertical;
+                                    if (t is IDontMove)
+                                    {
+                                        current.things.quadTree.Remove(t);
+                                        current.things.quadTree.Add(t);
+                                        current.things.UpdateObject(t);
+                                    }
+                                }, () =>
+                                {
+                                    t.SetTranslation(new Vec2(0f,dif * 2f));
+                                    t.EditorFlip(true);
+                                    t.flipVertical = !t.flipVertical;
+                                    if (t is IDontMove)
+                                    {
+                                        current.things.quadTree.Remove(t);
+                                        current.things.quadTree.Add(t);
+                                        current.things.UpdateObject(t);
+                                    }
+                                });
+                            }
+                            else
                             {
-                                t.SetTranslation(new Vec2(dif * 2f, 0f));
-                                t.EditorFlip(false);
-                                t.flipHorizontal = !t.flipHorizontal;
-                                if (t is IDontMove)
+                                float dif = t.position.x - vec2.x;
+                                History.Add(() =>
                                 {
-                                    current.things.quadTree.Remove(t);
-                                    current.things.quadTree.Add(t);
-                                    current.things.UpdateObject(t);
-                                }
-                            });
+                                    t.SetTranslation(new Vec2((float)(-dif * 2f), 0f));
+                                    t.EditorFlip(false);
+                                    t.flipHorizontal = !t.flipHorizontal;
+                                    if (t is IDontMove)
+                                    {
+                                        current.things.quadTree.Remove(t);
+                                        current.things.quadTree.Add(t);
+                                        current.things.UpdateObject(t);
+                                    }
+                                }, () =>
+                                {
+                                    t.SetTranslation(new Vec2(dif * 2f, 0f));
+                                    t.EditorFlip(false);
+                                    t.flipHorizontal = !t.flipHorizontal;
+                                    if (t is IDontMove)
+                                    {
+                                        current.things.quadTree.Remove(t);
+                                        current.things.quadTree.Add(t);
+                                        current.things.UpdateObject(t);
+                                    }
+                                });
+                            }
                         }
 
                         UpdateSelection();

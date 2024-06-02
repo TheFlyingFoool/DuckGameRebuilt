@@ -54,7 +54,7 @@ namespace DuckGame
         public static float snap = 4f;
         public static bool skipReplayRender = false;
         public static bool recordMetadata = false;
-        public static bool doSnap = true;
+        public static bool doSnap;
         public static long frame;
         private static Dictionary<Tex2D, Dictionary<Vec3, Tex2D>> _recolorMap = new Dictionary<Tex2D, Dictionary<Vec3, Tex2D>>();
         private static float _baseDeviceWidth = 0f;
