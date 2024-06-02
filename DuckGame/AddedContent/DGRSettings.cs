@@ -465,8 +465,6 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool ConvertModdedCommands = true;
 
-        [Marker.AutoConfig] public static bool SkipOnBlacklist = true;
-
         [Marker.AutoConfig] public static bool Scroll8Mods = false;
 
         [Marker.AutoConfig]

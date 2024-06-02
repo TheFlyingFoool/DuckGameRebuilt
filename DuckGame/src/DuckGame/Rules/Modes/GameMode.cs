@@ -151,8 +151,9 @@ namespace DuckGame
             if (Level.current is GameLevel && (Level.current as GameLevel).data != null && (Level.current as GameLevel).data.metaData.workshopID != 0UL)
                 Global.data.blacklist.Add((Level.current as GameLevel).data.metaData.workshopID);
 
-            if (DGRSettings.SkipOnBlacklist)
-                Skip();
+            // some fellows don't wanna skip instantly
+            // host can skip manually if they want to
+            // Skip();
         }
 
         public static void Skip()
