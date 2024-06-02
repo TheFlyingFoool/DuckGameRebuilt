@@ -680,11 +680,6 @@ namespace DuckGame
             {
                 dgrDescription = "Uses <Enabled> from mod's config\n instead of <Disabled>, which allows to have presets"
             });
-
-            menu.Add(new UIMenuItemToggle("Scroll 8 mods", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.Scroll8Mods)))
-            {
-                dgrDescription = "By default pressing ragdoll/strafe in mods UI scrolls 10 mods, but you can see only 8 on screen at same time, so you easily miss mod you're looking for."
-            });
             
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
