@@ -461,7 +461,7 @@ namespace DuckGame
         [Marker.AutoConfig] public static bool StickyHats { get; set; }
         [Marker.AutoConfig] public static bool DisableMoreInEditor { get; set; }
 
-        [Marker.AutoConfig] public static bool AnyKeyMovement = true;
+        [Marker.AutoConfig] public static bool EditorMousePriority = false;
 
         [Marker.AutoConfig] public static bool ConvertModdedCommands = true;
 
