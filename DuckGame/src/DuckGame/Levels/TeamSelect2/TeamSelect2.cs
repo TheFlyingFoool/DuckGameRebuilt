@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 using System.Runtime;
+using System.IO;
 
 namespace DuckGame
 {
@@ -1320,6 +1321,15 @@ namespace DuckGame
                             DuckNetwork.core._activatedLevels = new List<string>(DGRSettings.bMatchSetSave3);
                             break;
                     }
+                    List<string> newLevels = new List<string>();
+                    for (int i = 0; i < Editor.activatedLevels.Count; i++)
+                    {
+                        if (File.Exists(Editor.activatedLevels[i]))
+                        {
+                            newLevels.Add(Editor.activatedLevels[i]);
+                        }
+                    }
+                    DuckNetwork.core._activatedLevels = newLevels;
                     /*c = bf.ReadInt();
                     DuckNetwork.core._activatedLevels = new List<string>();
                     for (int i = 0; i < c; i++)
