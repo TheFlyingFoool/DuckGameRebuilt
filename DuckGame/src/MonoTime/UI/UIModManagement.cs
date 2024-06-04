@@ -731,9 +731,9 @@ namespace DuckGame
 					else if (Input.Pressed(Triggers.MenuUp))
 						_hoverIndex--;
 					if (Input.Pressed(Triggers.Strafe))
-						_hoverIndex -= 10;
+						_hoverIndex -= 8;
 					else if (Input.Pressed(Triggers.Ragdoll))
-						_hoverIndex += 10;
+						_hoverIndex += 8;
 
 					if (_hoverIndex < 0)
 						_hoverIndex = 0;
@@ -784,7 +784,7 @@ namespace DuckGame
 							var heightScrolled = (float)scrollBarOffset / scrollBarScrollableHeight;
 							_scrollItemOffset = (int)((_mods.Count - _maxModsToShow) * heightScrolled);
 						}
-					}
+                    }
 
 					if (Input.Pressed(Triggers.Any))
 					{
@@ -805,10 +805,13 @@ namespace DuckGame
 				else if (_hoverIndex >= 0 && _hoverIndex < _scrollItemOffset)
 					_scrollItemOffset -= (_scrollItemOffset - _hoverIndex);
 
-				if (_scrollItemOffset != 0)
-					scrollBarOffset = (int)Lerp.FloatSmooth(0, scrollBarScrollableHeight, _scrollItemOffset / (float)(_mods.Count - _maxModsToShow));
-				else
-					scrollBarOffset = 0;
+                if (!_draggingScrollbar)
+                {
+                    if (_scrollItemOffset != 0)
+                        scrollBarOffset = (int)Lerp.FloatSmooth(0, scrollBarScrollableHeight, _scrollItemOffset / (float)(_mods.Count - _maxModsToShow));
+                    else
+                        scrollBarOffset = 0;
+                }
 
 				if (Editor.hoverTextBox == false && UIMenu.globalUILock == false && (Input.Pressed(Triggers.Cancel) || Keyboard.Pressed(Keys.Escape)))
 				{
@@ -984,8 +987,10 @@ namespace DuckGame
                             Graphics.DrawRect(new Vec2(boxLeft + 2, boxTop + 2), new Vec2(boxLeft + boxHeight - 2, boxTop + boxHeight - 2), Color.Gray, 0.44f, false, 2);
                             Graphics.Draw(_noImage, boxLeft + 2, boxTop + 2, 0.5f);
 
-
                             string titleString = "#" + modIndex + ": ";
+                            if (mod.clientMod)
+                                titleString = titleString.Insert(0,"|DGYELLOW|");
+                                
 
                             if (mod.configuration.error != null)
                             {
@@ -998,7 +1003,7 @@ namespace DuckGame
                                 Graphics.DrawRect(new Vec2(boxLeft, boxTop), new Vec2(boxLeft + _box.width - boxSideMargin, boxTop + boxHeight), Color.Black * 0.4f, 0.85f);
 
 
-							bool reskin = mod.configuration.modType == ModConfiguration.Type.Reskin || mod.configuration.isExistingReskinMod;
+                            bool reskin = mod.configuration.modType == ModConfiguration.Type.Reskin || mod.configuration.isExistingReskinMod;
 
 
 							if (!mod.configuration.loaded)

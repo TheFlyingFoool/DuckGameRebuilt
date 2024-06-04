@@ -632,6 +632,7 @@ namespace DuckGame
                     return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 4);
 
                 case "pink":
+                case "rose":
                     return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 5);
 
                 case "blue":
@@ -641,7 +642,7 @@ namespace DuckGame
                     return Profiles.activeNonSpectators.FirstOrDefault(x => x.persona.index == 7);
 
                 case "me":
-                    return Profiles.active.First(x => !Network.isActive || x.connection == DuckNetwork.localConnection);
+                    return Profiles.active.FirstOrDefault(x => !Network.isActive || x.connection == DuckNetwork.localConnection);
 
                 default:
                     return Profiles.active.TryFirst(

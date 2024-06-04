@@ -444,7 +444,7 @@ namespace DuckGame
                             {
                                 Event.Log(new RoundEndEvent());
                                 SFX.Play("scoreDing", 0.8f);
-                                if (!TeamSelect2.KillsForPoints)
+                                if (TeamSelect2.KillsForPoints == TeamSelect2.ScoringOption.Normal || TeamSelect2.KillsForPoints == TeamSelect2.ScoringOption.Both)
                                 {
                                     source.AddRange(collection);
                                     foreach (Team team in source)

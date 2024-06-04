@@ -178,6 +178,8 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool DGRNeonSign = true;
 
+        [Marker.AutoConfig] public static bool CopyMatchResults = false;
+
         [Marker.AutoConfig] public static bool skipOnlineBumper = false;
 
         [Marker.AutoConfig] public static bool SwitchInput = false;
@@ -459,11 +461,13 @@ namespace DuckGame
         [Marker.AutoConfig] public static bool StickyHats { get; set; }
         [Marker.AutoConfig] public static bool DisableMoreInEditor { get; set; }
 
+        [Marker.AutoConfig] public static bool EditorMousePriority = false;
+
         [Marker.AutoConfig] public static bool ConvertModdedCommands = true;
 
-
+        [Marker.AutoConfig]
         private static bool _useEnabledModsConfig = false;
-        [Marker.AutoConfig] public static bool UseEnabledModsConfig { get => _useEnabledModsConfig; set {
+        public static bool UseEnabledModsConfig { get => _useEnabledModsConfig; set {
                 if (value == true) { ModLoader.GenerateEnabledXml(); }; _useEnabledModsConfig = value; } }
 
         [Marker.AutoConfig] public static bool QOLScoreThingButWithoutScore { get; set; } //why. -NiK0

@@ -385,22 +385,32 @@ namespace DuckGame
                         mod = new DisabledMod();
                     }
 
-                    //Patchs in these mods Dont Like the Debugger
-                    if (Debugger.IsAttached)
-                    {
+                    //Patchs in these mods Dont Like the Debugger or debug configuration
+#if DEBUG
+                        if (true)
+                        #else
+                        if (Debugger.IsAttached)
+#endif
+                        {
                         if (modConfig.name == "QOL")
                         {
                             modConfig.Disable();
                             modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
                             mod = new DisabledMod();
                         }
-                        else if (modConfig.workshopID == 2411996803UL)
+                        else if (modConfig.workshopID == 2411996803UL) //CLIENT | Competitive Tools https://steamcommunity.com/sharedfiles/filedetails/?id=2411996803
                         {
                             modConfig.Disable();
                             modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
                             mod = new DisabledMod();
                         }
-                        else if (modConfig.workshopID == 2381384850UL)
+                        else if (modConfig.workshopID == 2381384850UL) //Extrastuff https://steamcommunity.com/sharedfiles/filedetails/?id=2381384850
+                        {
+                            modConfig.Disable();
+                            modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
+                            mod = new DisabledMod();
+                        }
+                        else if (modConfig.workshopID == 2586315559) //Extrastuff v2 https://steamcommunity.com/sharedfiles/filedetails/?id=2586315559
                         {
                             modConfig.Disable();
                             modConfig.error = "!This is Disabled mod is Disabled when Debugging!";

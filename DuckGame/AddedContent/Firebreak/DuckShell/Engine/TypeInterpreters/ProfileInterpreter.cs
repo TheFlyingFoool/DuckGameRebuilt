@@ -57,6 +57,7 @@ namespace DuckGame.ConsoleEngine.TypeInterpreters
                     "brown",
                     "green",
                     "pink",
+                    "rose",
                     "blue",
                     "purple",
                     "me",

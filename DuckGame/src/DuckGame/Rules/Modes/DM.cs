@@ -68,7 +68,7 @@ namespace DuckGame
 
         protected override List<Profile> AddPoints()
         {
-            if (TeamSelect2.KillsForPoints)
+            if (TeamSelect2.KillsForPoints == TeamSelect2.ScoringOption.Kills)
                 return new List<Profile>();
             List<Profile> profileList = new List<Profile>();
             List<Team> collection = new List<Team>();

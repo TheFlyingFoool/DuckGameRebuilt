@@ -1046,7 +1046,12 @@ namespace DuckGame
                 Main.SpecialCode = "men2";
                 _core._matchModifierMenu.SetBackFunction(new UIMenuActionOpenMenu(_core._matchModifierMenu, _core._matchSettingMenu));
                 _core._matchModifierMenu.Close();
-                _core._matchSettingMenu.Add(new UIMenuItemToggle("Kills Scoring", field: new FieldBinding(typeof(TeamSelect2), nameof(TeamSelect2.KillsForPoints)), c: Colors.DGPink));
+                _core._matchSettingMenu.Add(new UIMenuItemNumber("Scoring", field: new FieldBinding(typeof(TeamSelect2), nameof(TeamSelect2.KillsForPoints), 0, 2, 1), valStrings: new List<string>()
+                {
+                    "Normal",
+                    "Kills",
+                    "Both",
+                }, c: Colors.DGPink));
                 _core._matchSettingMenu.AddMatchSetting(TeamSelect2.GetOnlineSetting("teams"), false);
                 //_core._matchSettingMenu.Add(new UISideButton(66, -50, 50, 0, "@SHOOT@"));
                 //_core._matchSettingMenu.Add(new UISideButton(66, -50, 50, 0, "@SHOOT@"));
