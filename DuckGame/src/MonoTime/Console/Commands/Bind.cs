@@ -70,6 +70,23 @@ namespace DuckGame
 
                         return builder.ToString();
                     }
+                case BindAction.Rebind:
+                    {
+                        if (hotkey is null)
+                            throw new Exception("No index provided");
+
+                        if (command is null)
+                            throw new Exception("No new hotkey provided");
+
+                        if (!int.TryParse(hotkey, out int index)
+                            || index < 0
+                            || index >= Binds.Count)
+                            throw new Exception($"Cannot cast [{hotkey}] to a valid index");
+
+                        Binds[index] = new(command, Binds[index].command);
+
+                        return $"|DGBLUE|Rebinded [{index}] to [{command}]";
+                    }
                 default:
                     throw new Exception($"Invalid action [{action.ToString()}]");
             }
@@ -80,7 +97,8 @@ namespace DuckGame
             Add,
             Remove,
             List,
-            Keys
+            Keys,
+            Rebind
         }
 
         public record ConsoleBind
@@ -95,17 +113,7 @@ namespace DuckGame
                 this.hotkey = hotkey;
                 this.command = command;
 
-                if (hotkey.Contains("+"))
-                {
-                    hotkeys = new(hotkey.Split('+'));
-                }
-                else
-                {
-                    hotkeys = new()
-                    {
-                        hotkey
-                    };
-                }
+                hotkeys = new(hotkey.Split('+'));
             }
 
             public override string ToString()
