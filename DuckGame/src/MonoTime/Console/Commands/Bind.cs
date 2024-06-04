@@ -31,7 +31,10 @@ namespace DuckGame
                             throw new Exception("No command provided");
 
                         if (!CustomKeyBinds.IsValidInput(hotkey))
-                            return $"|DGRED|Key [{hotkey}] is not valid hotkey. Try running `bind keys` for a list of usable keys";
+                            return $"|DGRED|Key [{hotkey}] is not valid hotkey. Try running `bind keys` for a list of usable keys,\n" +
+                                   $"|DGRED|combine them with \"+\", invert check with \"!\" before key, and check if key is down with \"*\" before key.\n" +
+                                   $"|DGRED|Ex. of valid input: \"F1+*F2+!F3+*!F4\".\n" +
+                                   $"|DGRED|It checks that F1 was just pressed, F2 is down, F3 wasn't just pressed, and F4 is not down.";
                         
                         Binds.Add(new ConsoleBind(hotkey, command));
                         return $"|DGBLUE|Added new binding at index [{Binds.Count - 1}] with hotkey [{hotkey}]";
@@ -82,6 +85,12 @@ namespace DuckGame
                             || index < 0
                             || index >= Binds.Count)
                             throw new Exception($"Cannot cast [{hotkey}] to a valid index");
+
+                        if (!CustomKeyBinds.IsValidInput(command))
+                            return $"|DGRED|Key [{command}] is not valid hotkey. Try running `bind keys` for a list of usable keys,\n" +
+                                   $"|DGRED|combine them with \"+\", invert check with \"!\" before key, and check if key is down with \"*\" before key.\n" +
+                                   $"|DGRED|Ex. of valid input: \"F1+*F2+!F3+*!F4\".\n" +
+                                   $"|DGRED|It checks that F1 was just pressed, F2 is down, F3 wasn't just pressed, and F4 is not down.";
 
                         Binds[index] = new(command, Binds[index].command);
 
