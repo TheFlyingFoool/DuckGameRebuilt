@@ -1,6 +1,7 @@
 ﻿using SDL2;
 using System.IO;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace DuckGame
 {
@@ -35,6 +36,11 @@ namespace DuckGame
         public int currentPage;
         public Color color = Color.Black;
         public Color cursorColor = Color.Black;
+
+        private List<string> textHistory = new();
+        private List<int> cursorHistory = new();
+        private float secondsNotTyped;
+        private bool firstUpdate;
 
         public Vec2 position
         {
@@ -75,6 +81,7 @@ namespace DuckGame
             _emptyText = emptyText;
             Keyboard.KeyString = "";
             invalidPathChars = Path.GetInvalidPathChars();
+            firstUpdate = true;
         }
 
         private void ConstrainSelection()
@@ -115,8 +122,23 @@ namespace DuckGame
             _clipboardText = SDL.SDL_GetClipboardText();
         }
 
+        private void AddUndo(bool force = false)
+        {
+            if (force || secondsNotTyped > 2f && (textHistory.Count == 0 || text != textHistory[textHistory.Count - 1]))
+            {
+                cursorHistory.Add(_cursorPosition);
+                textHistory.Add(text);
+            }
+        }
+
         public void Update(int page = 0, int rowsPerPage = -1, int firstPageRows = 0)
         {
+            if (firstUpdate)
+            {
+                firstUpdate = false;
+                AddUndo(true);
+            }
+            bool typed = false;
             bool flag = false;
             Vec2 position1 = Mouse.position;
             if (position1.x > _position.x && position1.y > _position.y && position1.x < _position.x + _size.x && position1.y < _position.y + _size.y)
@@ -131,11 +153,12 @@ namespace DuckGame
             Keyboard.repeat = true;
             Input._imeAllowed = true;
             int length1 = this.text.Length;
-            string text = this.text;
             if (Keyboard.Down(Keys.LeftControl) || Keyboard.Down(Keys.RightControl))
             {
                 if (Keyboard.Pressed(Keys.V))
                 {
+                    AddUndo(true);
+                    typed = true;
                     Thread thread = new Thread(() => ReadClipboardText());
                     thread.SetApartmentState(ApartmentState.STA);
                     thread.Start();
@@ -159,20 +182,48 @@ namespace DuckGame
                         thread.Start();
                         thread.Join();
                     }
+
                     if (Keyboard.Pressed(Keys.X))
+                    {
+                        AddUndo(true);
+                        typed = true;
                         DeleteHighlight();
+                    }
+                }
+                else if (Keyboard.Pressed(Keys.Z) && textHistory.Count > 0)
+                {
+                    text = textHistory[textHistory.Count - 1];
+                    _cursorPosition = cursorHistory[cursorHistory.Count - 1];
+
+                    if (textHistory.Count > 1)
+                    {
+                        textHistory.RemoveAt(textHistory.Count - 1);
+                        cursorHistory.RemoveAt(cursorHistory.Count - 1);
+                    }
                 }
                 Keyboard.KeyString = "";
             }
+
             if (Keyboard.KeyString.Length > 0 && _font._highlightStart != _font._highlightEnd)
+            {
+                AddUndo();
                 DeleteHighlight();
+                typed = true;
+            }
             if (_cursorPosition >= this.text.Length)
                 _cursorPosition = this.text.Length;
             if (filename)
                 Keyboard.KeyString = DuckFile.FixInvalidPath(Keyboard.KeyString, true);
+            if (Keyboard.KeyString.Length > 0)
+            {
+                AddUndo();
+                typed = true;
+            } 
             this.text = this.text.Insert(_cursorPosition, Keyboard.KeyString);
             if (Keyboard.Pressed(Keys.Back) && this.text.Length > 0)
             {
+                AddUndo();
+                typed = true;
                 if (_font._highlightStart != _font._highlightEnd)
                     DeleteHighlight();
                 else if (_cursorPosition > 0)
@@ -183,6 +234,8 @@ namespace DuckGame
             }
             if (Keyboard.Pressed(Keys.Delete) && this.text.Length > 0)
             {
+                AddUndo();
+                typed = true;
                 if (_font._highlightStart != _font._highlightEnd)
                     DeleteHighlight();
                 else if (_cursorPosition > -1 && _cursorPosition < this.text.Length)
@@ -262,6 +315,14 @@ namespace DuckGame
             _cursorPos = _font.GetCharacterPosition(_drawText, _cursorPosition);
             _drawText = this.text;
             _blink = (_blink + 0.02f) % 1f;
+            if (typed)
+            {
+                secondsNotTyped = 0f;
+            }
+            else
+            {
+                secondsNotTyped += Maths.IncFrameTimer();
+            }
         }
 
         public float textWidth => _font.GetWidth(_drawText);
