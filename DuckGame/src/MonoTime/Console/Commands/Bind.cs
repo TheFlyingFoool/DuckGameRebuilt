@@ -31,7 +31,10 @@ namespace DuckGame
                             throw new Exception("No command provided");
 
                         if (!CustomKeyBinds.IsValidInput(hotkey))
-                            return $"|DGRED|Key [{hotkey}] does not exist. Try running `bind keys` for a list of usable keys";
+                            return $"|DGRED|Key [{hotkey}] is not valid hotkey. Try running `bind keys` for a list of usable keys,\n" +
+                                   $"|DGRED|combine them with \"+\", invert check with \"!\" before key, and check if key is down with \"*\" before key.\n" +
+                                   $"|DGRED|Ex. of valid input: \"F1+*F2+!F3+*!F4\".\n" +
+                                   $"|DGRED|It checks that F1 was just pressed, F2 is down, F3 wasn't just pressed, and F4 is not down.";
                         
                         Binds.Add(new ConsoleBind(hotkey, command));
                         return $"|DGBLUE|Added new binding at index [{Binds.Count - 1}] with hotkey [{hotkey}]";
@@ -64,11 +67,34 @@ namespace DuckGame
                             string keyName = keyNames[i];
                             
                             if (i > 0)
-                                builder.Append('\n');
+                                builder.Append(", ");
                             builder.Append(keyName);
                         }
 
                         return builder.ToString();
+                    }
+                case BindAction.Rebind:
+                    {
+                        if (hotkey is null)
+                            throw new Exception("No index provided");
+
+                        if (command is null)
+                            throw new Exception("No new hotkey provided");
+
+                        if (!int.TryParse(hotkey, out int index)
+                            || index < 0
+                            || index >= Binds.Count)
+                            throw new Exception($"Cannot cast [{hotkey}] to a valid index");
+
+                        if (!CustomKeyBinds.IsValidInput(command))
+                            return $"|DGRED|Key [{command}] is not valid hotkey. Try running `bind keys` for a list of usable keys,\n" +
+                                   $"|DGRED|combine them with \"+\", invert check with \"!\" before key, and check if key is down with \"*\" before key.\n" +
+                                   $"|DGRED|Ex. of valid input: \"F1+*F2+!F3+*!F4\".\n" +
+                                   $"|DGRED|It checks that F1 was just pressed, F2 is down, F3 wasn't just pressed, and F4 is not down.";
+
+                        Binds[index] = new(command, Binds[index].command);
+
+                        return $"|DGBLUE|Rebinded [{index}] to [{command}]";
                     }
                 default:
                     throw new Exception($"Invalid action [{action.ToString()}]");
@@ -80,31 +106,42 @@ namespace DuckGame
             Add,
             Remove,
             List,
-            Keys
+            Keys,
+            Rebind
         }
 
-        public record ConsoleBind(string hotkey, string command)
+        public record ConsoleBind
         {
-            public string hotkey { get; set; } = hotkey;
-            public string command { get; set; } = command;
+            public string hotkey { get; set; }
+            public string command { get; set; }
+
+            public List<string> hotkeys;
+
+            public ConsoleBind(string hotkey, string command)
+            {
+                this.hotkey = hotkey;
+                this.command = command;
+
+                hotkeys = new(hotkey.Split('+'));
+            }
 
             public override string ToString()
             {
-                return $"[{hotkey}]({command})";
+                if (!(hotkeys.Count > 1)) 
+                    return $"[{hotkey}]({command})";
+
+                string result = "{";
+
+                foreach (string s in hotkeys)
+                {
+                    result += $"{s},";
+                }
+                result += $"}}({command}";
+
+                return result;
             }
 
-            private static readonly Regex _parseRegex = new(@"\[.+\]\((.+)\)", RegexOptions.Compiled);
-
-            public static ConsoleBind? Parse(string s)
-            {
-                Match m = _parseRegex.Match(s);
-
-                return m.Success
-                    ? new ConsoleBind(m.Groups[1].Value, m.Groups[2].Value)
-                    : null;
-            }
-
-            public bool Activated => CustomKeyBinds.CheckInput(hotkey, CustomKeyBinds.CheckInputMethod.Pressed);
+            public bool Activated => CustomKeyBinds.CheckInput(hotkeys, CustomKeyBinds.CheckInputMethod.Pressed);
 
             public bool TryExecute()
             {
