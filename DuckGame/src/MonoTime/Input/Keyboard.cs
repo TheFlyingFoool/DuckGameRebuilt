@@ -722,7 +722,7 @@ namespace DuckGame
                 if (Pressed(Keys.D9) && index == 1)
                     _fakeDisconnect = !_fakeDisconnect;
             }
-            if (_flipper == 0)
+            if (index == 0)
             {
                 _keyStatePrev = _keyState;
                 _keyState = Microsoft.Xna.Framework.Input.Keyboard.GetState();
