@@ -108,6 +108,46 @@ namespace DuckGame
                     {Triggers.Quack, (int)Keys.P},
                     {Triggers.Select, (int)Keys.RightShift},
                 }
+            },
+            new DeviceInputMapping()
+            {
+                deviceName = "KEYBOARD P3",
+                deviceGUID = "",
+                map = new Dictionary<string,int>()
+                {
+                    {Triggers.Left, (int)Keys.Left},
+                    {Triggers.Right, (int)Keys.Right},
+                    {Triggers.Up, (int)Keys.Up},
+                    {Triggers.Down, (int)Keys.Down},
+                    {Triggers.Jump, (int)Keys.RightControl},
+                    {Triggers.Shoot, (int)Keys.OemQuotes},
+                    {Triggers.Grab, (int)Keys.OemSemicolon},
+                    {Triggers.Start, (int)Keys.OemPlus},
+                    {Triggers.Ragdoll, (int)Keys.O},
+                    {Triggers.Strafe, (int)Keys.L},
+                    {Triggers.Quack, (int)Keys.P},
+                    {Triggers.Select, (int)Keys.RightShift},
+                }
+            },
+            new DeviceInputMapping()
+            {
+                deviceName = "KEYBOARD P4",
+                deviceGUID = "",
+                map = new Dictionary<string,int>()
+                {
+                    {Triggers.Left, (int)Keys.Left},
+                    {Triggers.Right, (int)Keys.Right},
+                    {Triggers.Up, (int)Keys.Up},
+                    {Triggers.Down, (int)Keys.Down},
+                    {Triggers.Jump, (int)Keys.RightControl},
+                    {Triggers.Shoot, (int)Keys.OemQuotes},
+                    {Triggers.Grab, (int)Keys.OemSemicolon},
+                    {Triggers.Start, (int)Keys.OemPlus},
+                    {Triggers.Ragdoll, (int)Keys.O},
+                    {Triggers.Strafe, (int)Keys.L},
+                    {Triggers.Quack, (int)Keys.P},
+                    {Triggers.Select, (int)Keys.RightShift},
+                }
             }
         };
 
@@ -116,7 +156,7 @@ namespace DuckGame
 
         public static List<DeviceInputMapping> _defaultInputMappingPresets = new List<DeviceInputMapping>()
         {
-            new DeviceInputMapping() 
+            new DeviceInputMapping()
             {
                 deviceName = "KEYBOARD P1",
                 deviceGUID = "",
@@ -130,10 +170,10 @@ namespace DuckGame
                     {Triggers.Shoot, (int)Keys.H},
                     {Triggers.Grab, (int)Keys.G},
                     {Triggers.Start, (int)Keys.Escape},
-                    {Triggers.Ragdoll, (int)Keys.F},          
+                    {Triggers.Ragdoll, (int)Keys.F},
                     {Triggers.Strafe, (int)Keys.LeftShift},
                     {Triggers.Quack, (int)Keys.E},
-                    {Triggers.Select, (int)Keys.Space},           
+                    {Triggers.Select, (int)Keys.Space},
                     {Triggers.Chat, (int)Keys.Enter},
                     {Triggers.Cancel, (int)Keys.E},
                     {Triggers.Menu1, (int)Keys.H},
@@ -148,7 +188,7 @@ namespace DuckGame
                     {Triggers.DevConsoleTrigger, (int)Keys.OemTilde }
                 }
             },
-            new DeviceInputMapping() 
+            new DeviceInputMapping()
             {
                 deviceName = "KEYBOARD P2",
                 deviceGUID = "",
@@ -173,7 +213,63 @@ namespace DuckGame
                     {Triggers.MenuRight, (int)Keys.Right},
                     {Triggers.MenuUp, (int)Keys.Up},
                     {Triggers.MenuDown, (int)Keys.Down},
-                    {Triggers.RightStick, (int)Keys.Tab}, 
+                    {Triggers.RightStick, (int)Keys.Tab},
+                }
+            },
+            new DeviceInputMapping()
+            {
+                deviceName = "KEYBOARD P3",
+                deviceGUID = "",
+                map = new Dictionary<string,int>()
+                {
+                    {Triggers.Left, (int)Keys.Left},
+                    {Triggers.Right, (int)Keys.Right},
+                    {Triggers.Up, (int)Keys.Up},
+                    {Triggers.Down, (int)Keys.Down},
+                    {Triggers.Jump, (int)Keys.RightControl},
+                    {Triggers.Shoot, (int)Keys.OemQuotes},
+                    {Triggers.Grab, (int)Keys.OemSemicolon},
+                    {Triggers.Start, (int)Keys.OemPlus},
+                    {Triggers.Ragdoll, (int)Keys.O},
+                    {Triggers.Strafe, (int)Keys.L},
+                    {Triggers.Quack, (int)Keys.P},
+                    {Triggers.Select, (int)Keys.RightShift},
+                    {Triggers.Cancel, (int)Keys.P},
+                    {Triggers.Menu1, (int)Keys.OemQuotes},
+                    {Triggers.Menu2, (int)Keys.OemSemicolon},
+                    {Triggers.MenuLeft, (int)Keys.Left},
+                    {Triggers.MenuRight, (int)Keys.Right},
+                    {Triggers.MenuUp, (int)Keys.Up},
+                    {Triggers.MenuDown, (int)Keys.Down},
+                    {Triggers.RightStick, (int)Keys.Tab},
+                }
+            },
+            new DeviceInputMapping()
+            {
+                deviceName = "KEYBOARD P4",
+                deviceGUID = "",
+                map = new Dictionary<string,int>()
+                {
+                    {Triggers.Left, (int)Keys.Left},
+                    {Triggers.Right, (int)Keys.Right},
+                    {Triggers.Up, (int)Keys.Up},
+                    {Triggers.Down, (int)Keys.Down},
+                    {Triggers.Jump, (int)Keys.RightControl},
+                    {Triggers.Shoot, (int)Keys.OemQuotes},
+                    {Triggers.Grab, (int)Keys.OemSemicolon},
+                    {Triggers.Start, (int)Keys.OemPlus},
+                    {Triggers.Ragdoll, (int)Keys.O},
+                    {Triggers.Strafe, (int)Keys.L},
+                    {Triggers.Quack, (int)Keys.P},
+                    {Triggers.Select, (int)Keys.RightShift},
+                    {Triggers.Cancel, (int)Keys.P},
+                    {Triggers.Menu1, (int)Keys.OemQuotes},
+                    {Triggers.Menu2, (int)Keys.OemSemicolon},
+                    {Triggers.MenuLeft, (int)Keys.Left},
+                    {Triggers.MenuRight, (int)Keys.Right},
+                    {Triggers.MenuUp, (int)Keys.Up},
+                    {Triggers.MenuDown, (int)Keys.Down},
+                    {Triggers.RightStick, (int)Keys.Tab},
                 }
             },
             new DeviceInputMapping()
@@ -534,16 +630,31 @@ namespace DuckGame
                     foreach (KeyValuePair<string, int> keyValuePair in deviceInputMapping.map)
                         p.Map(GetDevice<Keyboard>(), keyValuePair.Key, keyValuePair.Value);
                 }
-                else
+                else if (p == InputProfile.defaultProfiles[Options.Data.keyboard2PlayerIndex])
                 {
-                    if (p != InputProfile.defaultProfiles[Options.Data.keyboard2PlayerIndex])
-                        return;
                     DeviceInputMapping deviceInputMapping = GetDefaultMapping("KEYBOARD P2", "", p: duckProfile) ?? GetDefaultMapping("KEYBOARD P2", "");
                     if (deviceInputMapping == null)
                         return;
                     foreach (KeyValuePair<string, int> keyValuePair in deviceInputMapping.map)
                         p.Map(GetDevice<Keyboard>(1), keyValuePair.Key, keyValuePair.Value);
                 }
+                else if (p == InputProfile.defaultProfiles[Options.Data.keyboard3PlayerIndex])
+                {
+                    DeviceInputMapping deviceInputMapping = GetDefaultMapping("KEYBOARD P3", "", p: duckProfile) ?? GetDefaultMapping("KEYBOARD P2", "");
+                    if (deviceInputMapping == null)
+                        return;
+                    foreach (KeyValuePair<string, int> keyValuePair in deviceInputMapping.map)
+                        p.Map(GetDevice<Keyboard>(1), keyValuePair.Key, keyValuePair.Value);
+                }
+                else if (p == InputProfile.defaultProfiles[Options.Data.keyboard4PlayerIndex])
+                {
+                    DeviceInputMapping deviceInputMapping = GetDefaultMapping("KEYBOARD P4", "", p: duckProfile) ?? GetDefaultMapping("KEYBOARD P2", "");
+                    if (deviceInputMapping == null)
+                        return;
+                    foreach (KeyValuePair<string, int> keyValuePair in deviceInputMapping.map)
+                        p.Map(GetDevice<Keyboard>(1), keyValuePair.Key, keyValuePair.Value);
+                }
+
             }
         }
 
@@ -1182,6 +1293,9 @@ namespace DuckGame
             InputDevice device = new Keyboard("KEYBOARD P1", 0);
             _devices.Add(device);
             _devices.Add(new Keyboard("KEYBOARD P2", 1));
+            _devices.Add(new Keyboard("KEYBOARD P3", 2));
+            _devices.Add(new Keyboard("KEYBOARD P4", 3));
+
             _devices.Add(new Mouse());
 
             for (int index = 0; index < MonoMain.MaximumGamepadCount; index++)

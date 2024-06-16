@@ -128,6 +128,11 @@ namespace DuckGame
                         mappingString = (Options.Data.keyboard1PlayerIndex + 1).ToString();
                     else if (inputMapping.device.productName == "KEYBOARD P2")
                         mappingString = (Options.Data.keyboard2PlayerIndex + 1).ToString();
+                    else if (inputMapping.device.productName == "KEYBOARD P3")
+                        mappingString = (Options.Data.keyboard3PlayerIndex + 1).ToString();
+                    else if (inputMapping.device.productName == "KEYBOARD P4")
+                        mappingString = (Options.Data.keyboard4PlayerIndex + 1).ToString();
+
                 }
                 if (mappingString == "~")
                     mappingString = "TILDE";
@@ -294,6 +299,19 @@ namespace DuckGame
                         if (Options.Data.keyboard2PlayerIndex > 7)
                             Options.Data.keyboard2PlayerIndex = 0;
                     }
+                    else if (inputMapping.device.productName == "KEYBOARD P3")
+                    {
+                        ++Options.Data.keyboard3PlayerIndex;
+                        if (Options.Data.keyboard3PlayerIndex > 7)
+                            Options.Data.keyboard3PlayerIndex = 0;
+                    }
+                    else if (inputMapping.device.productName == "KEYBOARD P4")
+                    {
+                        ++Options.Data.keyboard4PlayerIndex;
+                        if (Options.Data.keyboard4PlayerIndex > 7)
+                            Options.Data.keyboard4PlayerIndex = 0;
+                    }
+
                     SFX.Play("consoleSelect");
                 }
             }
@@ -312,6 +330,19 @@ namespace DuckGame
                     if (Options.Data.keyboard2PlayerIndex < 0)
                         Options.Data.keyboard2PlayerIndex = 7;
                 }
+                else if (inputMapping.device.productName == "KEYBOARD P3")
+                {
+                    --Options.Data.keyboard3PlayerIndex;
+                    if (Options.Data.keyboard3PlayerIndex < 0)
+                        Options.Data.keyboard3PlayerIndex = 7;
+                }
+                else if (inputMapping.device.productName == "KEYBOARD P4")
+                {
+                    --Options.Data.keyboard4PlayerIndex;
+                    if (Options.Data.keyboard4PlayerIndex < 0)
+                        Options.Data.keyboard4PlayerIndex = 7;
+                }
+
                 SFX.Play("consoleSelect");
             }
             if (trigger == Triggers.Select)
@@ -333,6 +364,18 @@ namespace DuckGame
                         if (Options.Data.keyboard2PlayerIndex > 7)
                             Options.Data.keyboard2PlayerIndex = 0;
                     }
+                    else if (inputMapping.device.productName == "KEYBOARD P3")
+                    {
+                        ++Options.Data.keyboard3PlayerIndex;
+                        if (Options.Data.keyboard3PlayerIndex > 7)
+                            Options.Data.keyboard3PlayerIndex = 0;
+                    }
+                    else if (inputMapping.device.productName == "KEYBOARD P4")
+                    {
+                        ++Options.Data.keyboard4PlayerIndex;
+                        if (Options.Data.keyboard4PlayerIndex > 7)
+                            Options.Data.keyboard4PlayerIndex = 0;
+                    }
                     SFX.Play("consoleSelect");
                 }
                 else
@@ -348,7 +391,7 @@ namespace DuckGame
             }
             else
             {
-                if (!(trigger == Triggers.Menu2) || !(inputMapping.deviceName != "KEYBOARD P1") || !(inputMapping.deviceName != "KEYBOARD P2"))
+                if (!(trigger == Triggers.Menu2) || !(inputMapping.deviceName != "KEYBOARD P1") || !(inputMapping.deviceName != "KEYBOARD P2") || !(inputMapping.deviceName != "KEYBOARD P3") || !(inputMapping.deviceName != "KEYBOARD P4"))
                     return;
                 _selectStyle = true;
                 UIMenu.globalUILock = true;

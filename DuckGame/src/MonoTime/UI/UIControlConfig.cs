@@ -62,6 +62,11 @@ namespace DuckGame
             inputMaps.Add(Input.GetDefaultMapping("KEYBOARD P1", "").Clone());
             inputTypes.Add("KEYBOARD P2");
             inputMaps.Add(Input.GetDefaultMapping("KEYBOARD P2", "").Clone());
+            inputTypes.Add("KEYBOARD P3");
+            inputMaps.Add(Input.GetDefaultMapping("KEYBOARD P3", "").Clone());
+            inputTypes.Add("KEYBOARD P4");
+            inputMaps.Add(Input.GetDefaultMapping("KEYBOARD P4", "").Clone());
+
             inputConfigType = 0;
             SwitchConfigType();
         }
@@ -337,7 +342,7 @@ namespace DuckGame
             }
             if (_controlBox.selection > 0 && _controlBox.selection < 17)
             {
-                if (!_showingMenu && inputConfigType < inputMaps.Count && inputMaps[inputConfigType].deviceName != "KEYBOARD P1" && inputMaps[inputConfigType].deviceName != "KEYBOARD P2")
+                if (!_showingMenu && inputConfigType < inputMaps.Count && inputMaps[inputConfigType].deviceName != "KEYBOARD P1" && inputMaps[inputConfigType].deviceName != "KEYBOARD P2" && inputMaps[inputConfigType].deviceName != "KEYBOARD P3" && inputMaps[inputConfigType].deviceName != "KEYBOARD P4")
                 {
                     HUD.AddCornerControl(HUDCorner.BottomLeft, "@MENU2@STYLE");
                     _showingMenu = true;
