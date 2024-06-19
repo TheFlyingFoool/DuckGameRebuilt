@@ -115,7 +115,18 @@ namespace DuckGame
                 deviceGUID = "",
                 map = new Dictionary<string,int>()
                 {
-
+                    {Triggers.Left, (int)Keys.Left},
+                    {Triggers.Right, (int)Keys.Right},
+                    {Triggers.Up, (int)Keys.Up},
+                    {Triggers.Down, (int)Keys.Down},
+                    {Triggers.Jump, (int)Keys.RightControl},
+                    {Triggers.Shoot, (int)Keys.OemQuotes},
+                    {Triggers.Grab, (int)Keys.OemSemicolon},
+                    {Triggers.Start, (int)Keys.OemPlus},
+                    {Triggers.Ragdoll, (int)Keys.O},
+                    {Triggers.Strafe, (int)Keys.L},
+                    {Triggers.Quack, (int)Keys.P},
+                    {Triggers.Select, (int)Keys.RightShift},
                 }
             },
             new DeviceInputMapping()
@@ -124,7 +135,18 @@ namespace DuckGame
                 deviceGUID = "",
                 map = new Dictionary<string,int>()
                 {
-
+                    {Triggers.Left, (int)Keys.Left},
+                    {Triggers.Right, (int)Keys.Right},
+                    {Triggers.Up, (int)Keys.Up},
+                    {Triggers.Down, (int)Keys.Down},
+                    {Triggers.Jump, (int)Keys.RightControl},
+                    {Triggers.Shoot, (int)Keys.OemQuotes},
+                    {Triggers.Grab, (int)Keys.OemSemicolon},
+                    {Triggers.Start, (int)Keys.OemPlus},
+                    {Triggers.Ragdoll, (int)Keys.O},
+                    {Triggers.Strafe, (int)Keys.L},
+                    {Triggers.Quack, (int)Keys.P},
+                    {Triggers.Select, (int)Keys.RightShift},
                 }
             }
         };
@@ -200,7 +222,26 @@ namespace DuckGame
                 deviceGUID = "",
                 map = new Dictionary<string,int>()
                 {
-
+                    {Triggers.Left, (int)Keys.Left},
+                    {Triggers.Right, (int)Keys.Right},
+                    {Triggers.Up, (int)Keys.Up},
+                    {Triggers.Down, (int)Keys.Down},
+                    {Triggers.Jump, (int)Keys.RightControl},
+                    {Triggers.Shoot, (int)Keys.OemQuotes},
+                    {Triggers.Grab, (int)Keys.OemSemicolon},
+                    {Triggers.Start, (int)Keys.OemPlus},
+                    {Triggers.Ragdoll, (int)Keys.O},
+                    {Triggers.Strafe, (int)Keys.L},
+                    {Triggers.Quack, (int)Keys.P},
+                    {Triggers.Select, (int)Keys.RightShift},
+                    {Triggers.Cancel, (int)Keys.P},
+                    {Triggers.Menu1, (int)Keys.OemQuotes},
+                    {Triggers.Menu2, (int)Keys.OemSemicolon},
+                    {Triggers.MenuLeft, (int)Keys.Left},
+                    {Triggers.MenuRight, (int)Keys.Right},
+                    {Triggers.MenuUp, (int)Keys.Up},
+                    {Triggers.MenuDown, (int)Keys.Down},
+                    {Triggers.RightStick, (int)Keys.Tab},
                 }
             },
             new DeviceInputMapping()
@@ -209,7 +250,26 @@ namespace DuckGame
                 deviceGUID = "",
                 map = new Dictionary<string,int>()
                 {
-
+                    {Triggers.Left, (int)Keys.Left},
+                    {Triggers.Right, (int)Keys.Right},
+                    {Triggers.Up, (int)Keys.Up},
+                    {Triggers.Down, (int)Keys.Down},
+                    {Triggers.Jump, (int)Keys.RightControl},
+                    {Triggers.Shoot, (int)Keys.OemQuotes},
+                    {Triggers.Grab, (int)Keys.OemSemicolon},
+                    {Triggers.Start, (int)Keys.OemPlus},
+                    {Triggers.Ragdoll, (int)Keys.O},
+                    {Triggers.Strafe, (int)Keys.L},
+                    {Triggers.Quack, (int)Keys.P},
+                    {Triggers.Select, (int)Keys.RightShift},
+                    {Triggers.Cancel, (int)Keys.P},
+                    {Triggers.Menu1, (int)Keys.OemQuotes},
+                    {Triggers.Menu2, (int)Keys.OemSemicolon},
+                    {Triggers.MenuLeft, (int)Keys.Left},
+                    {Triggers.MenuRight, (int)Keys.Right},
+                    {Triggers.MenuUp, (int)Keys.Up},
+                    {Triggers.MenuDown, (int)Keys.Down},
+                    {Triggers.RightStick, (int)Keys.Tab},
                 }
             },
             new DeviceInputMapping()
