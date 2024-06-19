@@ -7,7 +7,8 @@ namespace DuckGame.ConsoleEngine
         [Marker.DevConsoleCommand(DebugOnly = true, To = ImplementTo.DuckShell)]
         public static string Test()
         {
-            return "This\nis\na\ntest";
+            Vec2 vector = (0, 1);
+            return $"x: {vector.x}, y: {vector.y}";
         }
     }
 }
