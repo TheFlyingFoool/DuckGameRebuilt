@@ -516,8 +516,6 @@ namespace DuckGame
 
         public static void ReloadLevels(string s) => SearchDirLevels("Content/levels/" + s, LevelLocation.Content);
 
-        public static void LoadCustomLevels() => SearchDirLevels(DuckFile.levelDirectory, LevelLocation.Custom);
-
         private static void SearchDirTextures(string dir, bool reverse = false)
         {
             if (reverse)

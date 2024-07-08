@@ -13,7 +13,6 @@ namespace DuckGame
         public static int valuePlatinum = 12;
         private static Dictionary<string, ChallengeData> _challenges = new Dictionary<string, ChallengeData>();
         private static List<ChallengeData> _challengesInArcade;
-        public static bool LoadedCustomLevel = false;
 
         public static Dictionary<string, ChallengeData> challenges => _challenges;
 
@@ -24,12 +23,6 @@ namespace DuckGame
             ChallengeData challengeData;
             if (_challenges.TryGetValue(pLevel, out challengeData))
                 return challengeData;
-            if (!LoadedCustomLevel)
-            {
-                Content.LoadCustomLevels();
-                LoadedCustomLevel = true;
-            }
-                
             LevelData levelData = Content.GetLevel(pLevel) ?? DuckFile.LoadLevel(pLevel);
             if (levelData != null)
             {
