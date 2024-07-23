@@ -614,6 +614,24 @@ namespace DuckGame
                 "Kills",
                 "Both",
             }, c: Colors.DGPink));
+
+            bool DGR = true;
+            for (int i = 0; i < Profiles.active.Count(); i++)
+            {
+                Profile p = Profiles.active.ElementAt(i);
+                if (!p.isUsingRebuilt || !p.inSameRebuiltVersion)
+                {
+                    DGR = false;
+                    break;
+                }
+            }
+            if (DGR) _hostMatchSettingsMenu.Add(new UIMenuItemToggle("DGR Stuff", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DGRItems)), c: Colors.DGPink));
+            else
+            {
+                DGRSettings.DGRItems = false;
+                _hostMatchSettingsMenu.Add(new LUIText(" DGR Stuff        ON |WHITE|OFF", c: Color.Gray, UIAlign.Left));
+            }
+
             _hostMatchSettingsMenu.AddMatchSetting(GetOnlineSetting("teams"), false);
 
 
@@ -873,6 +891,23 @@ namespace DuckGame
                 "Kills",
                 "Both",
             }, c: Colors.DGPink));
+
+            bool DGR = true;
+            for (int i = 0; i < Profiles.active.Count(); i++)
+            {
+                Profile p = Profiles.active.ElementAt(i);
+                if (!p.isUsingRebuilt || !p.inSameRebuiltVersion)
+                {
+                    DGR = false;
+                    break;
+                }
+            }
+            if (DGR) _multiplayerMenu.Add(new UIMenuItemToggle("DGR Stuff", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DGRItems)), c: Colors.DGPink));
+            else
+            {
+                DGRSettings.DGRItems = false;
+                _multiplayerMenu.Add(new LUIText(" DGR Stuff        ON |WHITE|OFF", c: Color.Gray, UIAlign.Left));
+            }
 
             int z = 0;
             foreach (MatchSetting matchSetting in matchSettings)

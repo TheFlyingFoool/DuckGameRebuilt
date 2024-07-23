@@ -195,7 +195,7 @@ namespace DuckGame
             }
             _font = new BitmapFont("biosFont", 8);
             DiscordRichPresence.whenGameStarted = DateTime.UtcNow;
-            if (DGRSettings.S_RPC)
+            if (!DiscordRichPresence.noRPC)
             {
                 DiscordRichPresence.Initialize();
             }

@@ -1052,6 +1052,22 @@ namespace DuckGame
                     "Kills",
                     "Both",
                 }, c: Colors.DGPink));
+                bool DGR = true;
+                for (int i = 0; i < Profiles.active.Count(); i++)
+                {
+                    Profile p = Profiles.active.ElementAt(i);
+                    if (!p.isUsingRebuilt || !p.inSameRebuiltVersion)
+                    {
+                        DGR = false;
+                        break;
+                    }
+                }
+                if (DGR) _core._matchSettingMenu.Add(new UIMenuItemToggle("DGR Stuff", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DGRItems)), c: Colors.DGPink));
+                else
+                {
+                    DGRSettings.DGRItems = false;
+                    _core._matchSettingMenu.Add(new LUIText(" DGR Stuff        ON |WHITE|OFF", c: Color.Gray, UIAlign.Left));
+                }
                 _core._matchSettingMenu.AddMatchSetting(TeamSelect2.GetOnlineSetting("teams"), false);
                 //_core._matchSettingMenu.Add(new UISideButton(66, -50, 50, 0, "@SHOOT@"));
                 //_core._matchSettingMenu.Add(new UISideButton(66, -50, 50, 0, "@SHOOT@"));
@@ -1128,25 +1144,9 @@ namespace DuckGame
 
             if (Network.isServer)
             {
-                bool DGR = true;
-                for (int i = 0; i < Profiles.active.Count(); i++)
-                {
-                    Profile p = Profiles.active.ElementAt(i);
-                    if (!p.isUsingRebuilt || !p.inSameRebuiltVersion)
-                    {
-                        DGR = false;
-                        break;
-                    }
-                }
                 if (Level.current is TeamSelect2)
                 {
                     if (!DGRSettings.HideFS) _core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|FORCE START", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmStartMenu), UIAlign.Left));
-                    if (DGR) _core._ducknetMenu.Add(new UIMenuItemToggle("DGR Stuff", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DGRItems)), c: Colors.DGPink));
-                    else
-                    {
-                        DGRSettings.DGRItems = false;
-                        _core._ducknetMenu.Add(new LUIText(" DGR Stuff        ON |WHITE|OFF", c: Color.Gray, UIAlign.Left));
-                    }
                 }
                 else if (Level.current is GameLevel)
                 {
@@ -2577,9 +2577,6 @@ namespace DuckGame
                 Send.Message(new NMSetTeam(who, who.team, who.team.customData != null), to);
             }
 
-            Send.Message(new NMSpecialHat(TeamsCore.neon1, who, false), to);
-            Send.Message(new NMSpecialHat(TeamsCore.neon2, who, false), to);
-
             if (who.furniturePositions.Count > 0) Send.Message(new NMRoomData(who, who.furniturePositionData), to);
 
             Send.Message(new NMProfileInfo(who, who.stats.unloyalFans, who.stats.loyalFans, who.ParentalControlsActive, who.flagIndex, (ushort)Teams.core.extraTeams.Count, Teams.core.teams), to);
@@ -3452,7 +3449,7 @@ namespace DuckGame
                 int num5 = _core.cursorFlash >= 15 ? 1 : 0;
                 Profile localProfile = DuckNetwork.localProfile;
                 string currentEnterText = _core.currentEnterText;
-                string text = localProfile.name + ": " + (currentEnterText.StartsWith(">") && DGRSettings.GreenTextSupport ? "|0,153,0|" : "") +  currentEnterText;
+                string text = localProfile.name + ": " + currentEnterText;
                 string str = text;
                 if (num5 != 0)
                     text += "_";

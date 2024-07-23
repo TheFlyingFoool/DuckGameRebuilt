@@ -649,7 +649,7 @@ namespace DuckGame
                 if (muteName)
                     nameUi = $"Player {networkIndex + 1}";
                 
-                if (isUsingRebuilt && DGRSettings.RebuiltEffect == 1)
+                if (isUsingRebuilt)
                     nameUi += inSameRebuiltVersion ? "@DGR@" : "@DGRDIM@";
                 
                 return nameUi;
@@ -665,7 +665,7 @@ namespace DuckGame
                 if (muteName)
                     nameUi = $"Player {networkIndex + 1}";
                 
-                if (isUsingRebuilt && DGRSettings.RebuiltEffect == 1)
+                if (isUsingRebuilt)
                     nameUi += inSameRebuiltVersion ? "@DGRBIG@" : "@DGRBIGDIM@";
                 
                 return nameUi;
