@@ -3,7 +3,7 @@ using System;
 
 namespace DuckGame
 {
-    [EditorGroup("Guns|Lasers")]
+    //[EditorGroup("Guns|Lasers")]
     [ClientOnly]
     public class Propaganda : Gun
     {
@@ -105,7 +105,8 @@ namespace DuckGame
                 this._flipHorizontal = false;
                 angle = lockedAngle;
             }
-            if (isServerForObject) {
+            if (isServerForObject)
+            {
                 if (!blasting)
                 {
                     if (cooldown > 0)
@@ -114,8 +115,8 @@ namespace DuckGame
                         if (cooldown <= 0)
                         {
                             cooldown = 0;
-                            if (charging) 
-                            { 
+                            if (charging)
+                            {
                                 _chargeAnim.SetAnimation("charge");
                                 _chargeSound.Volume = 1f;
                                 _chargeSound.Play();
@@ -186,7 +187,14 @@ namespace DuckGame
                     }
                 }
             }
-            base.Update();
+            if (!isServerForObject && !action && _chargeSound.State == SoundState.Playing)
+            {
+                _unchargeSound.Volume = 1f;
+                _unchargeSound.Play();
+                _chargeSound.Stop();
+                _chargeSound.Volume = 0f;
+            }
+                base.Update();
         }
 
         public override void OnPressAction()
@@ -195,13 +203,10 @@ namespace DuckGame
             {
                 charging = true;
 
-                if (isServerForObject)
-                {
-                    _chargeSound.Volume = 1f;
-                    _chargeSound.Play();
-                    _unchargeSound.Stop();
-                    _unchargeSound.Volume = 0f;
-                }
+                _chargeSound.Volume = 1f;
+                _chargeSound.Play();
+                _unchargeSound.Stop();
+                _unchargeSound.Volume = 0f;
 
                 if (_chargeAnim.currentAnimation == "uncharge")
                 {
@@ -227,13 +232,10 @@ namespace DuckGame
 
             if (!blasting)
             {
-                if (isServerForObject)
-                {
-                    _unchargeSound.Volume = 1f;
-                    _unchargeSound.Play();
-                    _chargeSound.Stop();
-                    _chargeSound.Volume = 0f;
-                }
+                _unchargeSound.Volume = 1f;
+                _unchargeSound.Play();
+                _chargeSound.Stop();
+                _chargeSound.Volume = 0f;
 
                 if (_chargeAnim.currentAnimation == "charge")
                 {
