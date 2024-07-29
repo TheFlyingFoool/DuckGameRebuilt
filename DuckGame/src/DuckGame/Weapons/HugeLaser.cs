@@ -91,10 +91,12 @@ namespace DuckGame
         {
             if (Editor.clientonlycontent)
             {
-                return pTaped.gun1 is HugeLaser && pTaped.gun2 is HugeLaser ? new HugerLaser(x, y) : null;
+                return pTaped.gun1 is HugeLaser && pTaped.gun2 is HugeLaser ? new HugerLaser(x, y) :
+                    pTaped.gun1 is HugeLaser && pTaped.gun2 is GoodBook ? new Propaganda(x, y) : null;
             }
             return base.BecomeTapedMonster(pTaped);
         }
+
         public override void Initialize()
         {
             _chargeSound = SFX.Get("laserCharge", 0f);
