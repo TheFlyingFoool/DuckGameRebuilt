@@ -57,7 +57,7 @@ namespace DuckGame
         public static DGRebuiltDeveloper Hyeve = new()
         {
             DisplayName = "Hyeve",
-            Color = new Color("#ED32A8"),
+            Color = new Color("#FF3763"),
             DevRole = DGRebuiltDeveloper.Role.HelpingHand,
             DevItem = typeof(HyeveGun),
             SteamID = 76561198138278564,
@@ -114,12 +114,19 @@ namespace DuckGame
             Info = "Tater. A helping hand, Tater made the entirety of the uncapped FPS system, fixed some issues and managed part of the github making the README and build instructions"
         };
 
+        public static DGRebuiltDeveloper Dzhake = new()
+        {
+            DisplayName = "Dzhake",
+            Color = new Color("#3da45c"),
+            DevRole = DGRebuiltDeveloper.Role.HelpingHand,
+            SteamID = 76561198894480395,
+        };
+
         public static DGRebuiltDeveloper Tmob03 = new()
         {
             DisplayName = "tmob03",
             Color = new Color("#1F5733"),
             DevRole = DGRebuiltDeveloper.Role.MinorContributor,
-            DevItem = typeof(PositronShooter),
             SteamID = 76561198799204731,
         };
 
@@ -128,12 +135,10 @@ namespace DuckGame
             DisplayName = "TheKingOfCringe11",
             Color = new Color("#6ADE7E"),
             DevRole = DGRebuiltDeveloper.Role.MinorContributor,
-            DevItem = typeof(PositronShooter),
             SteamID = 76561199015640200,
         };
         
-        // sorted by importance
-        public static readonly DGRebuiltDeveloper[] All =
+        public static readonly DGRebuiltDeveloper[] Contributors =
         {
             Collin,
             Dan,
@@ -148,10 +153,11 @@ namespace DuckGame
             Moro,
             Tmob03,
             TheKingOfCringe11,
+            Dzhake,
         };
         
         //NiK0 stuff
-        public static readonly DGRebuiltDeveloper[] AllWithGuns =
+        public static readonly DGRebuiltDeveloper[] CoreTeam =
         {
             Collin,
             Dan,

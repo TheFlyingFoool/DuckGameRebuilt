@@ -903,8 +903,8 @@ namespace DuckGame
             };
 
             if (Steam.user is null
-                || specialUsers.Contains(Steam.user.id)              // landon exemption
-                || DGRDevs.All.Any(x => x.SteamID == Steam.user.id)) // tater exemption
+                || specialUsers.Contains(Steam.user.id)                   // landon exemption
+                || DGRDevs.CoreTeam.Any(x => x.SteamID == Steam.user.id)) // tater exemption
                 return false;
             
             return Network.isActive || Level.current is ChallengeLevel or ArcadeLevel;

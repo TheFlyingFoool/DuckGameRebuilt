@@ -578,10 +578,20 @@ namespace DuckGame
             _triggerImageMap.Add("F1", new Sprite("buttons/keyboard/f1"));
             _triggerImageMap.Add("ALT", new Sprite("buttons/keyboard/alt"));
             _triggerImageMap.Add("COMMA", new KeyImage(','));
-            _triggerImageMap.Add("DGR", new Sprite("DGR") { center = new Vec2(0, 0.75f) });
-            _triggerImageMap.Add("DGRDIM", new Sprite("DGR") { center = new Vec2(0, 0.75f), color = new Color(75, 75, 75) });
-            _triggerImageMap.Add("DGRBIG", new Sprite("DGRBIG"));
-            _triggerImageMap.Add("DGRBIGDIM", new Sprite("DGRBIG") { color = new Color(75, 75, 75) });
+            _triggerImageMap.Add("DGR", new Sprite("DGR") { center = new Vec2(0, 0.75f), color = new Color(246, 68, 191)});
+            _triggerImageMap.Add("DGRDIM", new Sprite("DGR") { center = new Vec2(0, 0.75f), color = new Color(120, 14, 87) });
+            _triggerImageMap.Add("DGRBIG", new Sprite("DGRBIG") { color = new Color(246, 68, 191) });
+            _triggerImageMap.Add("DGRBIGDIM", new Sprite("DGRBIG") { color = new Color(120, 14, 87) });
+
+            // developer heart variations
+            foreach (DGRebuiltDeveloper dev in DGRDevs.Contributors)
+            {
+                _triggerImageMap.Add($"DGR_{dev.SteamID}", new Sprite("DGR") { center = new Vec2(0, 0.75f), color = dev.Color});
+                _triggerImageMap.Add($"DGRDIM_{dev.SteamID}", new Sprite("DGR") { center = new Vec2(0, 0.75f), color = dev.Color * 0.3f });
+                _triggerImageMap.Add($"DGRBIG_{dev.SteamID}", new Sprite("DGRBIG") { color = dev.Color });
+                _triggerImageMap.Add($"DGRBIGDIM_{dev.SteamID}", new Sprite("DGRBIG") { color = dev.Color * 0.3f });
+            }
+            
             Dictionary<string, Sprite> triggerImageMap = _triggerImageMap;
             Sprite sprite1 = new Sprite("checkIcon")
             {
