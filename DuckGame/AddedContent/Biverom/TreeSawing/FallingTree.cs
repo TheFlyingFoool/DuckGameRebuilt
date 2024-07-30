@@ -1,8 +1,8 @@
-﻿using DuckGame;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows.Automation.Peers;
-namespace AddedContent.Biverom.TreeSawing
+
+namespace DuckGame
 {
     public class FallingTree : Thing
     {

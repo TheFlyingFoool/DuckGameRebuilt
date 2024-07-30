@@ -1,5 +1,4 @@
-﻿using AddedContent.Biverom.TreeSawing;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -66,6 +65,8 @@ namespace DuckGame
         public override Vec2 tapedOffset => !tapedIsGun1 ? Vec2.Zero : new Vec2(6f, 0f);
 
         public bool throttle => _throttle;
+
+        public float sawingProgress = 0f;
 
         public Chainsaw(float xval, float yval)
           : base(xval, yval)
@@ -355,6 +356,7 @@ namespace DuckGame
             }
             else
             {
+                sawingProgress = 0f;
                 _warmUp -= 0.001f;
                 if (_warmUp < 0f)
                     _warmUp = 0f;
@@ -653,17 +655,30 @@ namespace DuckGame
                 {
                     if (DGRSettings.DGRItems)
                     {
-                        TreeStump stump = Level.CheckLineAll<TreeStump>(barrelStartPos, barrelPosition).Where(stump => !stump.wasSawed).FirstOrDefault();
-                        if (stump != null)
+                        AutoPlatform platformStump = Level.CheckLineAll<AutoPlatform>(Offset(new Vec2(7, 0)), Offset(new Vec2(27, 0)))
+                            .Where(tree => (tree is TreeTileset || tree is CityTreeTileset || tree is PineTrunkTileset) && (tree.frame == 44)).FirstOrDefault();
+                        if (platformStump != null)
                         {
-                            _struggling = true;
-                            if (duck != null)
-                                duck.frictionMult = 4f;
-                            Vec2 vec2_2 = position + barrelVector * Rando.Float(0f, 3f);
-                            Vec2 vec2_3 = -barrelVector.Rotate(Rando.Float(-0.2f, 0.2f), Vec2.Zero);
-                            if (DGRSettings.ActualParticleMultiplier >= 1)
+                            if (sawingProgress < 1f)
                             {
-                                for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++)
+                                if (isServerForObject)
+                                    sawingProgress += 0.01f;
+                                _struggling = true;
+                                if (duck != null)
+                                    duck.frictionMult = 4f;
+                                Vec2 vec2_2 = position + barrelVector * Rando.Float(0f, 3f);
+                                Vec2 vec2_3 = -barrelVector.Rotate(Rando.Float(-0.2f, 0.2f), Vec2.Zero);
+                                if (DGRSettings.ActualParticleMultiplier >= 1)
+                                {
+                                    for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++)
+                                    {
+                                        WoodDebris woodDebris = WoodDebris.New(vec2_2.x, vec2_2.y);
+                                        woodDebris.hSpeed = vec2_3.x * 3f;
+                                        woodDebris.vSpeed = vec2_3.y * 3f;
+                                        Level.Add(woodDebris);
+                                    }
+                                }
+                                else if (Rando.Float(1) < DGRSettings.ActualParticleMultiplier)
                                 {
                                     WoodDebris woodDebris = WoodDebris.New(vec2_2.x, vec2_2.y);
                                     woodDebris.hSpeed = vec2_3.x * 3f;
@@ -671,23 +686,17 @@ namespace DuckGame
                                     Level.Add(woodDebris);
                                 }
                             }
-                            else if (Rando.Float(1) < DGRSettings.ActualParticleMultiplier)
+                            else if (isServerForObject)
                             {
-                                WoodDebris woodDebris = WoodDebris.New(vec2_2.x, vec2_2.y);
-                                woodDebris.hSpeed = vec2_3.x * 3f;
-                                woodDebris.vSpeed = vec2_3.y * 3f;
-                                Level.Add(woodDebris);
+                                TreeStump stump = new TreeStump(platformStump.x, platformStump.y, platformStump);
+                                Level.Add(stump);
+                                stump.Saw(!this.graphic.flipH, false);
+                                Send.Message(new NMSawTree(platformStump.position, !this.graphic.flipH, false));
                             }
-                            stump.Saw(this.graphic.flipH, false);
                         }
                         else
                         {
-                            AutoPlatform platformStump = Level.CheckLineAll<AutoPlatform>(barrelStartPos, barrelPosition)
-                                .Where(tree => (tree is TreeTileset || tree is CityTreeTileset || tree is PineTrunkTileset) && (tree.frame == 44)).FirstOrDefault();
-                            if (platformStump != null)
-                            {
-                                Level.Add(new TreeStump(platformStump.x, platformStump.y, platformStump));
-                            }
+                            sawingProgress = 0f;
                         }
                     }
 

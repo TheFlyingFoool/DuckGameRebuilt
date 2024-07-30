@@ -1,8 +1,7 @@
-﻿using DuckGame;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Windows.Automation.Peers;
-namespace AddedContent.Biverom.TreeSawing
+
+namespace DuckGame
 {
     public class TreeStump : Thing
     {
@@ -17,58 +16,43 @@ namespace AddedContent.Biverom.TreeSawing
             _sourcePlatform = sourcePlatform;
         }
 
-        public float sawProgress = 0;
         public AutoPlatform _sourcePlatform;
-        public bool wasSawed = false;
 
         public void Saw(bool flipped = false, bool energy = false)
         {
-            sawProgress += energy ? 1f : 0.01f;
             if (energy) Explode();
-            if (sawProgress >= 1f)
+
+            string tex = "treeStump";
+            if (_sourcePlatform is CityTreeTileset) tex = "cityTreeStump";
+            if (_sourcePlatform is PineTrunkTileset) tex = "pineTreeStump";
+            this.graphic = new SpriteMap(tex, 16, 16);
+            (this.graphic as SpriteMap).frame = energy ? 2 : 0;
+
+            Level.Remove(_sourcePlatform);
+            TreeData td = new TreeData(_sourcePlatform);
+            GroupTree(_sourcePlatform, td);
+            SFX.Play(td.failedToSaw ? "doorBreak" : "treeBreak", 1, 0.5f);
+            if (td.failedToSaw)
             {
-                wasSawed = true;
-
-
-                string tex = "treeStump";
-                if (_sourcePlatform is CityTreeTileset) tex = "cityTreeStump";
-                if (_sourcePlatform is PineTrunkTileset) tex = "pineTreeStump";
-                this.graphic = new SpriteMap(tex, 16, 16);
-                (this.graphic as SpriteMap).frame = energy ? 2 : 0;
-
-                Level.Remove(_sourcePlatform);
-                TreeData td = new TreeData(_sourcePlatform);
-                GroupTree(_sourcePlatform, td);
-                SFX.Play(td.failedToSaw ? "doorBreak" : "treeBreak", 1, 0.5f);
-                if (td.failedToSaw)
+                Level.Add(new TreeEnd(_sourcePlatform.x, _sourcePlatform.y, _sourcePlatform is CityTreeTileset, energy));
+            }
+            else
+            {
+                foreach (PhysicsObject thing in td.affectedThings)
                 {
-                    Level.Add(new TreeEnd(_sourcePlatform.x, _sourcePlatform.y, _sourcePlatform is CityTreeTileset, energy));
-                }
-                else
-                {
-                    foreach (PhysicsObject thing in td.affectedThings)
+                    if (thing.Distance(this) >= 32)
                     {
-                        if (thing.Distance(this) >= 32)
-                        {
-                            thing.vSpeed -= energy ? 1f : 0.2f;
-                            if (thing is Duck duck) duck.GoRagdoll(); 
-                        }
+                        thing.vSpeed -= energy ? 1f : 0.2f;
+                        if (thing is Duck duck) duck.GoRagdoll(); 
                     }
-                    td.treeList.Remove(_sourcePlatform);
-                    foreach (Thing tree in td.treeList)
+                }
+                td.treeList.Remove(_sourcePlatform);
+                foreach (Thing tree in td.treeList)
+                {
+                    Level.Remove(tree);
+                    if (DGRSettings.ActualParticleMultiplier >= 1)
                     {
-                        Level.Remove(tree);
-                        if (DGRSettings.ActualParticleMultiplier >= 1)
-                        {
-                            for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++)
-                            {
-                                WoodDebris woodDebris = WoodDebris.New(tree.x, tree.y);
-                                woodDebris.hSpeed = Rando.Float(-1f, 1f);
-                                woodDebris.vSpeed = Rando.Float(-1f, 1f);
-                                Level.Add(woodDebris);
-                            }
-                        }
-                        else if (Rando.Float(1) < DGRSettings.ActualParticleMultiplier)
+                        for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++)
                         {
                             WoodDebris woodDebris = WoodDebris.New(tree.x, tree.y);
                             woodDebris.hSpeed = Rando.Float(-1f, 1f);
@@ -76,9 +60,16 @@ namespace AddedContent.Biverom.TreeSawing
                             Level.Add(woodDebris);
                         }
                     }
-                    td.treeList.Add(new TreeEnd(_sourcePlatform.x, _sourcePlatform.y, _sourcePlatform is CityTreeTileset, energy));
-                    Level.Add(new FallingTree(_sourcePlatform.x, _sourcePlatform.y, td.treeList, flipped, energy));
+                    else if (Rando.Float(1) < DGRSettings.ActualParticleMultiplier)
+                    {
+                        WoodDebris woodDebris = WoodDebris.New(tree.x, tree.y);
+                        woodDebris.hSpeed = Rando.Float(-1f, 1f);
+                        woodDebris.vSpeed = Rando.Float(-1f, 1f);
+                        Level.Add(woodDebris);
+                    }
                 }
+                td.treeList.Add(new TreeEnd(_sourcePlatform.x, _sourcePlatform.y, _sourcePlatform is CityTreeTileset, energy));
+                Level.Add(new FallingTree(_sourcePlatform.x, _sourcePlatform.y, td.treeList, flipped, energy));
             }
         }
 
