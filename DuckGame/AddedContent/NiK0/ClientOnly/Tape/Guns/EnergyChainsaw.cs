@@ -104,7 +104,7 @@ namespace DuckGame
                         }
                     }
 
-                    if (DGRSettings.DGRItems && isServerForObject)
+                    if (Editor.clientonlycontent && isServerForObject)
                     {
                         AutoPlatform platformStump = Level.CheckLineAll<AutoPlatform>(Offset(new Vec2(7, 0)), Offset(new Vec2(27, 0)))
                             .Where(tree => (tree is TreeTileset || tree is CityTreeTileset || tree is PineTrunkTileset) && (tree.frame == 44)).FirstOrDefault();

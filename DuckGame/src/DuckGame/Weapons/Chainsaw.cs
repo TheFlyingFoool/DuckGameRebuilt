@@ -653,7 +653,7 @@ namespace DuckGame
                 Block wall1 = Level.CheckLine<Block>(barrelStartPos, barrelPosition);
                 if (owner != null)
                 {
-                    if (DGRSettings.DGRItems)
+                    if (Editor.clientonlycontent)
                     {
                         AutoPlatform platformStump = Level.CheckLineAll<AutoPlatform>(Offset(new Vec2(7, 0)), Offset(new Vec2(27, 0)))
                             .Where(tree => (tree is TreeTileset || tree is CityTreeTileset || tree is PineTrunkTileset) && (tree.frame == 44)).FirstOrDefault();
