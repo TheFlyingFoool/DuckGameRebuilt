@@ -194,7 +194,7 @@ namespace DuckGame
                 _chargeSound.Stop();
                 _chargeSound.Volume = 0f;
             }
-                base.Update();
+            base.Update();
         }
 
         public override void OnPressAction()
