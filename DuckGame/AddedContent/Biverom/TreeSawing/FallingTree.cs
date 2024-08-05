@@ -4,6 +4,7 @@ using System.Windows.Automation.Peers;
 
 namespace DuckGame
 {
+    [ClientOnly]
     public class FallingTree : Thing
     {
         public FallingTree(float xpos, float ypos, List<Thing> treeList, bool flip, bool explode)

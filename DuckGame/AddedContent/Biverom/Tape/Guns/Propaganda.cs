@@ -3,7 +3,6 @@ using System;
 
 namespace DuckGame
 {
-    //[EditorGroup("Guns|Lasers")]
     [ClientOnly]
     public class Propaganda : Gun
     {

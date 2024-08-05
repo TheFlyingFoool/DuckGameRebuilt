@@ -4,6 +4,7 @@ using System.Windows.Automation.Peers;
 
 namespace DuckGame
 {
+    [ClientOnly]
     public class TreeEnd : Thing
     {
         public TreeEnd(float xpos, float ypos, bool isCity, bool explode)
