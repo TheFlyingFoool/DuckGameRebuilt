@@ -1,5 +1,4 @@
-﻿using AddedContent.Biverom.TreeSawing;
-using System;
+﻿using System;
 using System.Linq;
 
 namespace DuckGame
@@ -105,21 +104,16 @@ namespace DuckGame
                         }
                     }
 
-                    if (DGRSettings.DGRItems)
+                    if (Editor.clientonlycontent && isServerForObject)
                     {
-                        TreeStump stump = Level.CheckLineAll<TreeStump>(Offset(new Vec2(7, 0)), Offset(new Vec2(27, 0))).Where(stump => !stump.wasSawed).FirstOrDefault();
-                        if (stump != null)
+                        AutoPlatform platformStump = Level.CheckLineAll<AutoPlatform>(Offset(new Vec2(7, 0)), Offset(new Vec2(27, 0)))
+                            .Where(tree => (tree is TreeTileset || tree is CityTreeTileset || tree is PineTrunkTileset) && (tree.frame == 44)).FirstOrDefault();
+                        if (platformStump != null)
                         {
+                            TreeStump stump = new TreeStump(platformStump.x, platformStump.y, platformStump);
+                            Level.Add(stump);
                             stump.Saw(!this.graphic.flipH, true);
-                        }
-                        else
-                        {
-                            AutoPlatform platformStump = Level.CheckLineAll<AutoPlatform>(Offset(new Vec2(7, 0)), Offset(new Vec2(27, 0)))
-                                .Where(tree => (tree is TreeTileset || tree is CityTreeTileset || tree is PineTrunkTileset) && (tree.frame == 44)).FirstOrDefault();
-                            if (platformStump != null)
-                            {
-                                Level.Add(new TreeStump(platformStump.x, platformStump.y, platformStump));
-                            }
+                            Send.Message(new NMSawTree(platformStump.position, !this.graphic.flipH, false));
                         }
                     }
 
