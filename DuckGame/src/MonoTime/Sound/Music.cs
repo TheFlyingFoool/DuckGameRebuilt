@@ -77,6 +77,9 @@ namespace DuckGame
 
         public static bool Finished()
         {
+            if (!DGRSettings.LoadMusic || _musicPlayer == null)
+                return false;
+            
             if (CurrentType == 0) return _musicPlayer.State == SoundState.Stopped;
             else if (CurrentType == 1) return _vgmPlayer.state == SoundState.Stopped;
             else if (CurrentType == 2) return _dgmPlayer.state == SoundState.Stopped;
