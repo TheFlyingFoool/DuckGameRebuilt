@@ -272,7 +272,7 @@ namespace DuckGame
                 Tex2D[] renderFrames = CurrentDuckAnimation;
                 Tex2D currentFrame = renderFrames[s_currentAnimationFrame];
 
-                if (IsPlayingAnimation && !s_clickedInProgressBar)
+                if (IsPlayingAnimation && !s_clickedInProgressBar && MonoMain.UpdateLerpState)
                 {
                     s_currentAnimationFrame++;
 
