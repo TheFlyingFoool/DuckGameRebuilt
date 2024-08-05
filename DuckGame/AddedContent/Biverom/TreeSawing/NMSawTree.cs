@@ -1,5 +1,6 @@
 ﻿namespace DuckGame
 {
+    [ClientOnly]
     public class NMSawTree : NMEvent
     {
         public Vec2 position;
