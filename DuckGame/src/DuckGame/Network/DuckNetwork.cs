@@ -1749,7 +1749,18 @@ namespace DuckGame
             }
             else
                 pProfile.inputProfile = InputProfile.GetVirtualInput(pProfile.networkIndex);
-            pProfile.team = reservedTeam == null ? pProfile.networkDefaultTeam : reservedTeam;
+            pProfile.team = reservedTeam ?? pProfile.networkDefaultTeam;
+            if (active &&
+                !Network.lanMode && // explodes in lan for some reason
+                pConnection == localConnection &&
+                (reservedTeam is null || reservedTeam.defaultTeam) &&
+                (Network.activeNetwork?.core?.lobby?.GetLobbyData("name")?.StartsWith("|PINK|[MIDGAME]") ?? false) &&
+                DGRSettings.favoriteHats.Count > 0)
+            {
+                DGRSettings.InitializeFavoritedHats();
+                Team randomFavorite = Teams.all.Where(x => x.favorited).ChooseRandom();
+                pProfile.team = randomFavorite;
+            }
             pProfile.reservedUser = null;
             pProfile.reservedTeam = null;
             if (pProfile.slotType == SlotType.Reserved)
