@@ -448,6 +448,15 @@ namespace DuckGame
             AutoPlatform bottombLeft = Level.CheckPointPlacementLayer<AutoPlatform>(x - 16f, y + num, this, placementLayer);
             AutoPlatform bottombRight = Level.CheckPointPlacementLayer<AutoPlatform>(x + 16f, y + num, this, placementLayer);
 
+            if (up != null && up._tileset != _tileset) up = null;
+            if (down != null && down._tileset != _tileset) down = null;
+            if (bLeft != null && bLeft._tileset != _tileset) bLeft = null;
+            if (bRight != null && bRight._tileset != _tileset) bRight = null;
+            if (topbLeft != null && topbLeft._tileset != _tileset) topbLeft = null;
+            if (topbRight != null && topbRight._tileset != _tileset) topbRight = null;
+            if (bottombLeft != null && bottombLeft._tileset != _tileset) bottombLeft = null;
+            if (bottombRight != null && bottombRight._tileset != _tileset) bottombRight = null;
+
             bool[] neighbors = new bool[8] { up != null, bRight != null, down != null, bLeft != null, topbLeft != null, topbRight != null, bottombLeft != null, bottombRight != null };
             byte neighborValue = 0;
             for (int i = neighbors.Length - 1; i >= 0; i--)
