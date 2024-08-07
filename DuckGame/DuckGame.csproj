@@ -345,6 +345,8 @@
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\ConsoleBindSerializerModule.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\DateTimeSerializeModule.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\StringSerializerModule.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\ThingSerializerModule.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\TypeSerializerModule.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\Vec2SerializerModule.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnife.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingRopeHandle.cs" />
