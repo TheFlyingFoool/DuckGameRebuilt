@@ -369,14 +369,13 @@ namespace DuckGame
         private void UpdateEntryPipe()
         {
             IEnumerable<PhysicsObject> physicsObjects = null;
-            if (Down() != null)
-                physicsObjects = Level.CheckRectAll<PhysicsObject>(topLeft + new Vec2(1f, -32f), bottomRight + new Vec2(-1f, 4f));
-            else if (Up() != null)
-                physicsObjects = Level.CheckRectAll<PhysicsObject>(topLeft + new Vec2(1f, -4f), bottomRight + new Vec2(-1f, 32f));
-            else if (Left() != null)
-                physicsObjects = Level.CheckRectAll<PhysicsObject>(topLeft + new Vec2(-4f, 3f), bottomRight + new Vec2(32f, -3f));
-            else if (Right() != null)
-                physicsObjects = Level.CheckRectAll<PhysicsObject>(topLeft + new Vec2(-32f, 3f), bottomRight + new Vec2(4f, -3f));
+
+            //TODO, using the DGR collision method breaks some very specific interactions. maybe figure out a way to make this
+            //use the better code rather than old DG's code in the future? -NiK0
+            if (Down() != null) physicsObjects = Level.OldCheckRectAll<PhysicsObject>(topLeft + new Vec2(1f, -32f), bottomRight + new Vec2(-1f, 4f));
+            else if (Up() != null) physicsObjects = Level.OldCheckRectAll<PhysicsObject>(topLeft + new Vec2(1f, -4f), bottomRight + new Vec2(-1f, 32f));
+            else if (Left() != null) physicsObjects = Level.OldCheckRectAll<PhysicsObject>(topLeft + new Vec2(-4f, 3f), bottomRight + new Vec2(32f, -3f));
+            else if (Right() != null) physicsObjects = Level.OldCheckRectAll<PhysicsObject>(topLeft + new Vec2(-32f, 3f), bottomRight + new Vec2(4f, -3f));
             foreach (PhysicsObject physicsObject in physicsObjects)
             {
                 if (physicsObject.owner == null && !physicsObject.inPipe)
