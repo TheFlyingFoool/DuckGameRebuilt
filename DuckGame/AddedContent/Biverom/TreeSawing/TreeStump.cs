@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace DuckGame
 {
-    [ClientOnly]
     public class TreeStump : Thing
     {
         public TreeStump(float xpos, float ypos, AutoPlatform sourcePlatform)
