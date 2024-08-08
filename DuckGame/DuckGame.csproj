@@ -420,7 +420,6 @@
     <Compile Include="AddedContent\Firebreak\HatEditor\HatPreviewLevel.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\MetapixelInfo.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\SimRenderer.cs" />
-    <Compile Include="AddedContent\Firebreak\Internet.cs" />
     <Compile Include="AddedContent\Firebreak\LockMovementQueue.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Test.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\ConsoleInstance.cs" />
