@@ -1,7 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System;
-using System.IO;
 
 namespace DuckGame
 {
@@ -22,7 +20,7 @@ namespace DuckGame
             if (MonoMain.UpdateLerpState) time += 0.07f;
 
             topLeft = theOne.topLeft - new Vec2(Maths.Clamp(theOne.collisionSize.x / 2f, 0, 16), Maths.Clamp(theOne.collisionSize.y, 16, 48));
-            bottomRight = theOne.bottomRight  + new Vec2(Maths.Clamp(theOne.collisionSize.x / 2f, 0, 16), 0);
+            bottomRight = theOne.bottomRight + new Vec2(Maths.Clamp(theOne.collisionSize.x / 2f, 0, 16), 0);
 
             //24 0
 

@@ -47,6 +47,8 @@ namespace DuckGame
         public PhysicsParticle(float xpos, float ypos)
           : base(xpos, ypos)
         {
+            hTop = Level.current.highestPoint - 200;
+            hBottom = Level.current.lowestPoint + 200;
         }
 
         public void LerpPosition(Vec2 pos) => lerpPos = pos;
@@ -98,6 +100,8 @@ namespace DuckGame
             netRemove = false;
             base.ResetProperties();
         }
+        public float hTop;
+        public float hBottom;
         public override void Update()
         {
             if (!isLocal)
@@ -107,7 +111,7 @@ namespace DuckGame
                 if ((position - netLerpPosition).lengthSq > 2048 || (position - netLerpPosition).lengthSq < 1) this.position = netLerpPosition;
                 else this.position = Lerp.Vec2Smooth(position, netLerpPosition, 0.5f);
             }
-            else if (Network.isActive && (y < Level.current.highestPoint - 200 || y > Level.current.lowestPoint + 200)) Level.Remove(this);
+            else if (Network.isActive && (y < hTop || y > hBottom)) Level.Remove(this);
             else
             {
                 _hit = false;

@@ -190,8 +190,11 @@
             _alternate = kAlternate;
             kAlternate = !kAlternate;
             _canMultiply = canMultiply;
+            lBom = Level.current.bottomRight.y + 200;
+            lTop = Level.current.topLeft.y - 500;
         }
-
+        public float lBom;
+        public float lTop;
         public void UpdateStick()
         {
             if (_stick == null)
@@ -250,12 +253,12 @@
                     }
                     else _groundLife--;
                 }
-                if (y > Level.current.bottomRight.y + 200) Level.Remove(this);
+                if (y > lBom) Level.Remove(this);
                 _airFire.xscale = _airFire.yscale = _airFireScale;
                 _airFire.depth = depth - 1;
                 _airFire.alpha = 0.5f;
                 _airFire.angle += hSpeed * _spinSpeed;
-                if (isLocal && _canMultiply && !_multiplied && Rando.Float(310f) < 1 && y > level.topLeft.y - 500)
+                if (isLocal && _canMultiply && !_multiplied && Rando.Float(310f) < 1 && y > lTop)
                 {
                     Level.Add(New(x, y, Rando.Float(1f) - 0.5f, (float)-(0.5 + Rando.Float(0.5f))));
                     _multiplied = true;
