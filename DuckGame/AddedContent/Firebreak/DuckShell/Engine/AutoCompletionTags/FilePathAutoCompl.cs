@@ -40,6 +40,16 @@ namespace DuckGame.ConsoleEngine
             }
             
             string path = $"{_parentDirectory}";
+
+            Func<string, string> pathFixerMethod = _returnValue switch
+            {
+                Return.EntryName                       => FixPath_EntryName,
+                Return.EntryNameNoExtension            => FixPath_EntryNameNoExtension,
+                Return.FullPath                        => FixPath_FullPath,
+                Return.PathRelativeToParent            => FixPath_PathRelativeToParent,
+                Return.PathRelativeToParentNoExtension => FixPath_PathRelativeToParentNoExtension,
+                _                                      => throw new NotImplementedException()
+            };
             
             IEnumerable<string> entries = (_type switch
             {
@@ -47,17 +57,20 @@ namespace DuckGame.ConsoleEngine
                 SystemEntryType.File => Directory.GetFiles(path, "*", _searchOption),
                 SystemEntryType.Directory => Directory.GetDirectories(path, "*", _searchOption),
                 _ => throw new InvalidOperationException()
-            }).Where(x => Path.GetFileName(x).StartsWith(word));
-
-            return (_returnValue switch
+            }).Where(x =>
             {
-                Return.EntryName => entries.Select(FixPath_EntryName),
-                Return.EntryNameNoExtension => entries.Select(FixPath_EntryNameNoExtension),
-                Return.FullPath => entries.Select(FixPath_FullPath),
-                Return.PathRelativeToParent => entries.Select(FixPath_PathRelativeToParent),
-                Return.PathRelativeToParentNoExtension => entries.Select(FixPath_PathRelativeToParentNoExtension),
-                _ => throw new InvalidOperationException()
-            }).ToArray();
+                string fixedPath = pathFixerMethod(x);
+                string fileName = Path.GetFileName(x);
+                
+                return fixedPath.StartsWith(word)
+                       || fileName.StartsWith(word)
+                       || fixedPath.Contains(word);
+            });
+
+            return entries
+                .Select(pathFixerMethod)
+                .Select(x => x.Replace('\\', '/'))
+                .ToArray();
         }
 
         private string FixPath_EntryName(string fullPath)
@@ -77,12 +90,17 @@ namespace DuckGame.ConsoleEngine
 
         private string FixPath_PathRelativeToParent(string fullPath)
         {
-            throw new NotImplementedException();
+            return fullPath.Substring(_parentDirectory.Length + 1);
         }
 
         private string FixPath_PathRelativeToParentNoExtension(string fullPath)
         {
-            throw new NotImplementedException();
+            string relativePath = FixPath_PathRelativeToParent(fullPath);
+            
+            int length;
+            return (length = relativePath.LastIndexOf('.')) == -1
+                ? relativePath
+                : relativePath.Substring(0, length);
         }
 
         public enum Return

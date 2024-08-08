@@ -16,8 +16,9 @@ namespace DuckGame.ConsoleEngine
             [FilePathAutoCompl(
                 "|saveDirectory|Scripts",
                 SystemEntryType.File,
-                SearchOption.TopDirectoryOnly, // todo: support recursive directory search
-                FilePathAutoComplAttribute.Return.EntryNameNoExtension)] string scriptName,
+                SearchOption.AllDirectories,
+                FilePathAutoComplAttribute.Return.PathRelativeToParentNoExtension)]
+            string scriptName,
             string arg = null)
         {
             if (!Directory.Exists(ScriptsDirPath))
