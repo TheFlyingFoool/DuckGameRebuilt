@@ -53,8 +53,9 @@ namespace DuckGame
             _thickness = Maths.Clamp(data.amount * 600f, 0.2f, 8f) * _thickMult;
             startThick = _thickness;
             _glob = new SpriteMap("bigGlob", 8, 8, false);
+            c = new Color(data.color);
         }
-
+        public Color c;
         public override void Update()
         {
             if (fireset)
@@ -133,7 +134,7 @@ namespace DuckGame
             if (_stream != null)
             {
                 Graphics.currentDrawIndex++;
-                Graphics.DrawLine(position, _stream.position, new Color(data.color) * alpha, _thickness, depth);
+                Graphics.DrawLine(position, _stream.position, c, _thickness, depth);
                 return;
             }
             if (_child == null)
@@ -142,13 +143,14 @@ namespace DuckGame
                 {
                     _glob.depth = depth;
                     _glob.frame = 2;
-                    _glob.color = new Color(data.color) * alpha;
+                    _glob.color = c;
                     _glob.CenterOrigin();
                     _glob.angle = Maths.DegToRad(-Maths.PointDirection(position, position + velocity) + 90f);
                     Graphics.Draw(ref _glob, x, y);
                     return;
                 }
-                Graphics.DrawRect(position - new Vec2(_thickness / 2f, _thickness / 2f), position + new Vec2(_thickness / 2f, _thickness / 2f), new Color(data.color) * alpha, depth, true, 1f);
+                Vec2 v = new Vec2(_thickness / 2);
+                Graphics.DrawRect(position - v, position + v, c, depth, true, 1f);
             }
         }
 

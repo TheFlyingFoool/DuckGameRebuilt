@@ -392,7 +392,7 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static float WeatherMultiplier = 1;
 
-        [Marker.AutoConfig] public static float HeatWaveMultiplier = 1;
+        [Marker.AutoConfig] public static float HeatWaveMultiplier = 0;
 
         [Marker.AutoConfig] public static bool AmbientParticles = true;
 
