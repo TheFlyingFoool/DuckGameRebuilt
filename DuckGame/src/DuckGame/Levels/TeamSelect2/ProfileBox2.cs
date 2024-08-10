@@ -888,7 +888,7 @@ namespace DuckGame
 
                                 if (profile.muteName)
                                     text2 = "Player " + (profile.networkIndex + 1).ToString();
-                                if (profile.isUsingRebuilt && !DGRSettings.HSDClearNames) text2 += "|PINK|♥|WHITE|";
+                                if (profile.isUsingRebuilt) text2 += "|PINK|♥|WHITE|";
 
                                 if (text2.Length > 16)
                                     text2 = text2.Substring(0, 16);
@@ -996,7 +996,7 @@ namespace DuckGame
 
                                 if (profile.muteName)
                                     text4 = "Player " + (profile.networkIndex + 1).ToString();
-                                if (profile.isUsingRebuilt && !DGRSettings.HSDClearNames) text4 += "|PINK|♥|WHITE|";
+                                if (profile.isUsingRebuilt) text4 += "|PINK|♥|WHITE|";
                                 if (text4.Length > 16)
                                     text4 = text4.Substring(0, 16);
                                 _fontSmall.Draw(text4, new Vec2((float)(x + num / 2f - _fontSmall.GetWidth(text4) / 2f), y + 44f), Color.White, doorLeftBlank.depth + 30);
