@@ -492,7 +492,6 @@
     <Compile Include="AddedContent\Firebreak\Content\SinkingBlock.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\DynamicDCLine.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\FireDebug.cs" />
-    <Compile Include="AddedContent\Firebreak\DebuggerTools\Levels\TestLev.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\CustomKeyBinds.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\EasingHelper.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\ProgressValue.cs" />
