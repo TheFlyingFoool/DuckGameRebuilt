@@ -3438,45 +3438,50 @@ namespace DuckGame
 
         public static void Draw()
         {
-            if (localProfile == null && !Recorderator.Playing)
-                return;
+            if (localProfile == null && !Recorderator.Playing) return;
             Vec2 vec2_1 = new Vec2(Layer.Console.width, Layer.Console.height);
             float num1 = 0f;
             int num2 = 8;
             float chatScale = DuckNetwork.chatScale;
             float num3 = Resolution.current.x > 1920 ? 2f : 1f;
-            _core._chatFont.scale = new Vec2(Resolution.fontSizeMultiplier * chatScale);
-            _core._chatFont.scale = new Vec2(num3, num3);
-            if (_core._chatFont is RasterFont)
-                _core._chatFont.scale = new Vec2(0.5f);
-            float num4 = Options.Data.chatOpacity / 100f;
+
+
+            //hi hello yes, this is a somewhat messy fix but TLDR
+            //'RockScoreBoard' puts everything in a massive render target then draws it to the screen adding black bars to the top and bottom
+            //this includes the DuckNetwork.cs Draw function which draws the chat, usually this function draws outside and onto the black bars
+            //if they're present but because it gets bundled in the render target its all drawn inside them making chat be squished
+            //this fix just stretches the chat vertically so it looks normally but doesn't fix the underlying issue 
+            //maybe improve it later? this works for now though -NiK0
+            float ratioFixMult = Level.current is RockScoreboard ? (1 / (Resolution.current.aspect / 1.777777778f))  : 1;
+
+            if (_core._chatFont is RasterFont) _core._chatFont.scale = new Vec2(0.5f);
+            else _core._chatFont.scale = new Vec2(num3);
+
+            _core._chatFont.scale *= new Vec2(1, ratioFixMult);
+
+            float alpha = Options.Data.chatOpacity / 100f;
             if (_core.enteringText && !_core.stopEnteringText)
             {
-                if(MonoMain.UpdateLerpState)
-                    ++_core.cursorFlash;
+                if(MonoMain.UpdateLerpState) _core.cursorFlash++;
 
-                if (_core.cursorFlash > 30)
-                    _core.cursorFlash = 0;
-                int num5 = _core.cursorFlash >= 15 ? 1 : 0;
+                if (_core.cursorFlash > 30) _core.cursorFlash = 0;
+
                 Profile localProfile = DuckNetwork.localProfile;
                 string currentEnterText = _core.currentEnterText;
                 string text = localProfile.name + ": " + currentEnterText;
                 string str = text;
-                if (num5 != 0)
-                    text += "_";
+                if ((_core.cursorFlash >= 15 ? 1 : 0) != 0) text += "_";
+
                 float x = _core._chatFont.GetWidth(str + "_") + 8f * chatScale;
                 float y = (_core._chatFont.characterHeight + 2) * _core._chatFont.scale.y;
                 Vec2 p1 = new Vec2(14f, num1 + (vec2_1.y - (_core._chatFont.characterHeight + 10) * _core._chatFont.scale.y));
-                Graphics.DrawRect(p1 + new Vec2(-1f, -1f), p1 + new Vec2(x, y) + new Vec2(1f, 1f), Color.Black * num4, (Depth)0.7f, false, 1f * chatScale);
+                Graphics.DrawRect(p1 + new Vec2(-1f, -1f), p1 + new Vec2(x, y) + new Vec2(1f, 1f), Color.Black * alpha, (Depth)0.7f, false, 1f * chatScale);
                 Color color = Color.White;
-                Color black = Color.Black;
-                if (localProfile.persona != null)
-                    color = localProfile.persona.colorUsable;
-                if (localProfile.slotType == SlotType.Spectator)
-                    color = Colors.DGPurple;
-                Graphics.DrawRect(p1, p1 + new Vec2(x, y), color * 0.85f * num4, (Depth)0.8f);
+                if (localProfile.persona != null) color = localProfile.persona.colorUsable;
+                if (localProfile.slotType == SlotType.Spectator) color = Colors.DGPurple;
+                Graphics.DrawRect(p1, p1 + new Vec2(x, y), color * 0.85f * alpha, (Depth)0.8f);
                 _core._chatFont.symbolYOffset = 4f;
-                _core._chatFont.Draw(text, p1 + new Vec2(2f, 2f), black * num4, (Depth)1f);
+                _core._chatFont.Draw(text, p1 + new Vec2(2f, 2f), Color.Black * alpha, (Depth)1f);
                 num1 -= y + 4f * _core._chatFont.scale.y;
             }
             float num6 = 0.1f;
@@ -3484,10 +3489,9 @@ namespace DuckGame
             {
                 float num7 = 10 * (Options.Data.chatHeadScale + 1) * num3;
                 _core._chatFont._currentConnection = chatMessage.who.connection == localConnection ? null : chatMessage.who.connection;
-                _core._chatFont.scale = new Vec2(Resolution.fontSizeMultiplier * chatMessage.scale * chatScale);
-                _core._chatFont.scale = new Vec2(num3, num3) * chatMessage.scale;
-                if (_core._chatFont is RasterFont)
-                    _core._chatFont.scale = new Vec2(0.5f);
+                if (_core._chatFont is RasterFont) _core._chatFont.scale = new Vec2(0.5f);
+                else _core._chatFont.scale = new Vec2(num3, num3) * chatMessage.scale;
+                _core._chatFont.scale *= new Vec2(1, ratioFixMult);
                 float x = (float)(_core._chatFont.GetWidth(chatMessage.text) + num7 + 8 * chatScale);
                 if (chatMessage.who.slotType == SlotType.Spectator)
                 {
@@ -3501,10 +3505,9 @@ namespace DuckGame
                 float y = chatMessage.newlines * (_core._chatFont.characterHeight + 2) * _core._chatFont.scale.y;
                 Vec2 p1 = new Vec2(14f, num1 + (vec2_1.y - (y + 10f)));
                 Vec2 p2 = p1 + new Vec2(x, y);
-                Graphics.DrawRect(p1 + new Vec2(-1f, -1f), p2 + new Vec2(1f, 1f), Color.Black * 0.8f * chatMessage.alpha * num4, (Depth)(num6 - 0.0015f), false, 1f * chatScale);
-                float num9 = (0.3f + chatMessage.text.Length * 0.007f);
-                if (num9 > 0.5f)
-                    num9 = 0.5f;
+                Graphics.DrawRect(p1 + new Vec2(-1f, -1f), p2 + new Vec2(1f, 1f), Color.Black * 0.8f * chatMessage.alpha * alpha, (Depth)(num6 - 0.0015f), false, 1f * chatScale);
+                float num9 = 0.3f + chatMessage.text.Length * 0.007f;
+                if (num9 > 0.5f) num9 = 0.5f;
                 if (MonoMain.UpdateLerpState)
                 {
                     if (chatMessage.slide > 0.8f)
@@ -3524,8 +3527,7 @@ namespace DuckGame
                         color.g += 30;
                         color.b += 30;
                     }
-                    if (chatMessage.who.slotType == SlotType.Spectator)
-                        color = Colors.DGPurple;
+                    if (chatMessage.who.slotType == SlotType.Spectator) color = Colors.DGPurple;
                     SpriteMap g = null;
                     SpriteMap chatBust = chatMessage.who.persona.chatBust;
                     Vec2 vec2_2 = Vec2.Zero;
@@ -3535,41 +3537,39 @@ namespace DuckGame
                         g = chatMessage.who.team.GetHat(chatMessage.who.persona);
                     }
                     bool flag = chatMessage.who.netData.Get<bool>("quack");
-                    if (chatMessage.who.duck != null && !chatMessage.who.duck.dead && !chatMessage.who.duck.removeFromLevel)
-                        flag = chatMessage.who.duck.quack > 0;
+                    if (chatMessage.who.duck != null && !chatMessage.who.duck.dead && !chatMessage.who.duck.removeFromLevel) flag = chatMessage.who.duck.quack > 0;
                     Vec2 vec2_3 = new Vec2(p1.x, p1.y + -2 * (Options.Data.chatHeadScale + 1));
                     if (g != null)
                     {
                         g.CenterOrigin();
                         g.depth = (Depth)(num6 - 1f / 1000f);
-                        g.alpha = chatMessage.alpha * num4;
+                        g.alpha = chatMessage.alpha * alpha;
                         g.frame = !flag || g.texture == null || g.texture.width <= 32 ? 0 : 1;
                         g.scale = new Vec2(num3, num3) * (Options.Data.chatHeadScale + 1);
+                        g.scale *= new Vec2(1, ratioFixMult);
                         Graphics.Draw(g, vec2_3.x - vec2_2.x, vec2_3.y - vec2_2.y);
                         g.scale = new Vec2(1f, 1f);
                         g.alpha = 1f;
                     }
                     chatBust.frame = !flag ? 0 : 1;
                     chatBust.depth = (Depth)(num6 - 0.0015f);
-                    chatBust.alpha = chatMessage.alpha * num4;
+                    chatBust.alpha = chatMessage.alpha * alpha;
                     chatBust.scale = new Vec2(num3, num3) * (Options.Data.chatHeadScale + 1);
+                    chatBust.scale *= new Vec2(1, ratioFixMult);
                     Graphics.Draw(chatBust, vec2_3.x + 2f * chatBust.scale.x, vec2_3.y + 5f * chatBust.scale.y);
                     color *= 0.85f;
                     color.a = byte.MaxValue;
                 }
-                Graphics.DrawRect(p1, p2, color * 0.85f * chatMessage.alpha * num4, (Depth)(num6 - 1f / 500f));
+                Graphics.DrawRect(p1, p2, color * 0.85f * chatMessage.alpha * alpha, (Depth)(num6 - 1f / 500f));
                 _core._chatFont.symbolYOffset = 4f;
                 _core._chatFont.lineGap = 2f;
-                if (chatMessage.who.slotType == SlotType.Spectator)
-                    _core._chatFont.Draw("@SPECTATORBIG@" + chatMessage.text, p1 + new Vec2(2f + num7, 1f * _core._chatFont.scale.y), black * chatMessage.alpha * num4, (Depth)1f);
-                else
-                    _core._chatFont.Draw(chatMessage.text, p1 + new Vec2(2f + num7, 1f * _core._chatFont.scale.y), black * chatMessage.alpha * num4, (Depth)1f);
+                if (chatMessage.who.slotType == SlotType.Spectator) _core._chatFont.Draw("@SPECTATORBIG@" + chatMessage.text, p1 + new Vec2(2f + num7, 1f * _core._chatFont.scale.y), black * chatMessage.alpha * alpha, (Depth)1f);
+                else _core._chatFont.Draw(chatMessage.text, p1 + new Vec2(2f + num7, 1f * _core._chatFont.scale.y), black * chatMessage.alpha * alpha, (Depth)1f);
                 _core._chatFont._currentConnection = null;
                 num1 -= y + 4f;
                 num6 -= 0.01f;
-                if (num2 == 0)
-                    break;
-                --num2;
+                if (num2 == 0) break;
+                num2--;
             }
         }
 
