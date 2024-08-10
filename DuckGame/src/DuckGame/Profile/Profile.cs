@@ -676,7 +676,7 @@ namespace DuckGame
                 if (muteName)
                     nameUi = $"Player {networkIndex + 1}";
                 
-                if (isUsingRebuilt && !DGRSettings.HSDClearNames)
+                if (isUsingRebuilt)
                 {
                     string dgrMojiName = "DGRBIG";
 
