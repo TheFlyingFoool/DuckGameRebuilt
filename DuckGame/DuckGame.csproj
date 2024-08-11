@@ -386,7 +386,6 @@
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Miscellaneous\RNG.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Miscellaneous\Source.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Miscellaneous\Time.cs" />
-    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Rendering\CommandRenderManager.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Rendering\DrawRect.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Rendering\DrawRectOutline.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Rendering\DrawString.cs" />
