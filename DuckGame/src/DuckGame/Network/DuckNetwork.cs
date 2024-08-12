@@ -1142,6 +1142,7 @@ namespace DuckGame
                 }
             }
 
+            bool forceInv = false;
             if (Network.isServer)
             {
                 if (Level.current is TeamSelect2)
@@ -1153,19 +1154,18 @@ namespace DuckGame
                     _core._ducknetMenu.Add(new UIMenuItemToggle("MID GAME JOINING", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.MidGameJoining)), c: Colors.DGPink));
                     if (DGRSettings.MidGameJoining && Steam.user != null && Steam.lobby != null)
                     {
-                        _core._ducknetMenu.Add(new UIMenuItemToggle("SHOW IN BROWSER", field: new FieldBinding(typeof(DuckNetwork), nameof(ShowGameInBrowser)), c: Colors.DGPink));
-                        _core._ducknetMenu.Add(new UIMenuItem("|DGGREEN|INVITE FRIENDS", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._inviteMenu), UIAlign.Left), true);
-                        _core._ducknetMenu.Add(new UIMenuItem("|DGGREEN|COPY INVITE LINK", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(CopyInviteLink)), UIAlign.Left), true);
+                        
+                        forceInv = true;
                     }
                 }
             }
 
             Main.SpecialCode = "men7";
-            if (Network.inLobby && whoOpen.slotType != SlotType.Local && Network.available)
+            if (forceInv || (Network.inLobby && whoOpen.slotType != SlotType.Local && Network.available))
             {
                 Main.SpecialCode = "men8";
                 _core._ducknetMenu.Add(new UIText("", Color.White), true);
-                _core._inviteMenu = new UIInviteMenu("INVITE FRIENDS", null, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
+                core._inviteMenu = new UIInviteMenu("INVITE FRIENDS", null, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
                 ((UIInviteMenu)_core._inviteMenu).SetAction(new UIMenuActionOpenMenu(_core._inviteMenu, _core._ducknetMenu));
                 _core._inviteMenu.Close();
                 _ducknetUIGroup.Add(_core._inviteMenu, false);
@@ -2075,7 +2075,7 @@ namespace DuckGame
                     if (DGRSettings.MidGameJoining)
                     {
                         cycle++;
-                        if (cycle > 30)
+                        if (cycle > 30 && Steam.lobby != null)
                         {
                             cycle = 0;
                             Network.activeNetwork.core.ApplyLobbyData();

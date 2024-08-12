@@ -178,7 +178,11 @@ namespace DuckGame
                 {
                     SFX.Play("rockHitGround", 0.8f);
                     _users[_selection].triedInvite = true;
-                    TeamSelect2.InvitedFriend(_users[_selection].user);
+                    if (DGRSettings.MidGameJoining && Level.current is not TeamSelect2)
+                    {
+                        Steam.InviteUser(_users[_selection].user, Steam.lobby);
+                    }
+                    else  TeamSelect2.InvitedFriend(_users[_selection].user);
                 }
             }
             base.Update();

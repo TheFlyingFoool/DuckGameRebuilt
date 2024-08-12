@@ -1239,7 +1239,7 @@ namespace DuckGame
 
         public static void InvitedFriend(User u)
         {
-            if (!Network.inLobby || u == null)
+            if (u == null)
                 return;
             _invitedUsers.Add(u);
             DuckNetwork.core._invitedFriends.Add(u.id);
