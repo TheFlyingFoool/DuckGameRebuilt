@@ -38,7 +38,6 @@
             _collisionOffset = new Vec2(-10, -4.5f);
 
             ammo = 07;
-            barrelAng = 6.283f;
 
             wobble.timeMult = 0.3f;
             _holdOffset = new Vec2(3, -1);
@@ -109,11 +108,13 @@
         {
             if (!spawn.finished) { Graphics.material = spawn; spawn.Update(); }
 
-            Vec2 barPos = Offset(new Vec2(-5 + barrelAng * 8, -3.5f) + barrelPos);
+
+            bool fliPH = offDir < 0;
+            Vec2 barPos = Offset(new Vec2(-5 + barrelAng * 8, -3.5f));
             gBarrel.angle = graphic.angle + barrelAng * offDir;
             gBarrel.alpha = graphic.alpha;
             gBarrel.scale = graphic.scale;
-            gBarrel.flipH = graphic.flipH;
+            gBarrel.flipH = fliPH;
             Graphics.Draw(gBarrel, barPos.x, barPos.y, depth - 1);
 
             float ang = angle;
@@ -123,7 +124,7 @@
             gSpin.angle = graphic.angle + spinAng;
             gSpin.alpha = graphic.alpha;
             gSpin.scale = graphic.scale;
-            gSpin.flipH = graphic.flipH;
+            gSpin.flipH = fliPH;
             gSpin.center = new Vec2(4);
             Graphics.Draw(gSpin, spinPos.x, spinPos.y, depth + 1);
             base.Draw();
@@ -148,22 +149,22 @@
                 gBarrelOut.angle = graphic.angle + barrelAng * offDir;
                 gBarrelOut.alpha = graphic.alpha;
                 gBarrelOut.scale = graphic.scale;
-                gBarrelOut.flipH = graphic.flipH;
-                Graphics.Draw(gBarrelOut, barPos.x, barPos.y, depth - 2);
+                gBarrelOut.flipH = fliPH;
+                Graphics.Draw(gBarrelOut, barPos.x, barPos.y, depth - 4);
 
                 gSpinOut.angle = graphic.angle + spinAng;
                 gSpinOut.alpha = graphic.alpha;
                 gSpinOut.scale = graphic.scale;
-                gSpinOut.flipH = graphic.flipH;
+                gSpinOut.flipH = fliPH;
                 gSpinOut.center = new Vec2(5);
-                Graphics.Draw(gSpinOut, spinPos.x, spinPos.y, depth - 2);
+                Graphics.Draw(gSpinOut, spinPos.x, spinPos.y, depth - 4);
 
                 gBaseOut.angle = graphic.angle;
                 gBaseOut.alpha = graphic.alpha;
                 gBaseOut.scale = graphic.scale;
-                gBaseOut.flipH = graphic.flipH;
+                gBaseOut.flipH = fliPH;
 
-                Graphics.Draw(gBaseOut, x, y, depth - 2);
+                Graphics.Draw(gBaseOut, x, y, depth - 4);
 
                 Graphics.material = null;
                 graphic.alpha = 1;
