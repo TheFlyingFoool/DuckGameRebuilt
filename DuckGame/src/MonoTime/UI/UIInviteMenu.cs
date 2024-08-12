@@ -234,13 +234,13 @@ namespace DuckGame
             {
                 _moreArrow.depth = depth + 2;
                 _moreArrow.flipV = false;
-                Graphics.Draw(ref _moreArrow, x, (float)(y + num2 / 2.0 + 13.0));
+                Graphics.Draw(_moreArrow, x, (float)(y + num2 / 2f + 13));
             }
             if (_viewTop > 0)
             {
                 _moreArrow.depth = depth + 2;
                 _moreArrow.flipV = true;
-                Graphics.Draw(ref _moreArrow, x, (float)(y - num2 / 2.0 - 2.0));
+                Graphics.Draw(_moreArrow, x, (float)(y - num2 / 2f - 2));
             }
             base.Draw();
         }
