@@ -652,8 +652,15 @@ namespace DuckGame
                 lowestPoint = _bottomRight.y;
                 highestPoint = topLeft.y;
             }
+            ExtendedRight = _bottomRight.x + 200;
+            ExtendedBottom = _bottomRight.y + 200;
+            ExtendedLeft = _topLeft.x - 200;
+            ExtendedTop = _topLeft.y - 200;
         }
-
+        public float ExtendedRight;
+        public float ExtendedLeft;
+        public float ExtendedTop;
+        public float ExtendedBottom;
         public bool HasChecksumReply(NetworkConnection pConnection)
         {
             bool flag;

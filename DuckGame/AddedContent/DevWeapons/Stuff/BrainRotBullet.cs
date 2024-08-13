@@ -26,7 +26,7 @@
         public override void Update()
         {
             position += _travel * 1f;
-            if (isServerForObject && (x > Level.current.bottomRight.x + 200f || x < Level.current.topLeft.x - 200f))
+            if (isServerForObject && (x > Level.current.ExtendedRight || x < Level.current.ExtendedLeft))
             {
                 Level.Remove(this);
             }

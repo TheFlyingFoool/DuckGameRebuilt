@@ -56,7 +56,7 @@
             position += travel;
             _wave.Update();
             _wave2.Update();
-            if (isServerForObject && (x > Level.current.bottomRight.x + 200 || x < Level.current.topLeft.x - 200))
+            if (isServerForObject && (x > Level.current.ExtendedRight || x < Level.current.ExtendedLeft))
                 Level.Remove(this);
             foreach (MaterialThing materialThing in Level.CheckLineAll<MaterialThing>(position, position + travel.normalized * 30))
             {

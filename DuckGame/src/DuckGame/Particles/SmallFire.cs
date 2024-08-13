@@ -190,10 +190,8 @@
             _alternate = kAlternate;
             kAlternate = !kAlternate;
             _canMultiply = canMultiply;
-            lBom = Level.current.bottomRight.y + 200;
             lTop = Level.current.topLeft.y - 500;
         }
-        public float lBom;
         public float lTop;
         public void UpdateStick()
         {
@@ -253,7 +251,7 @@
                     }
                     else _groundLife--;
                 }
-                if (y > lBom) Level.Remove(this);
+                if (y > Level.current.ExtendedBottom) Level.Remove(this);
                 _airFire.xscale = _airFire.yscale = _airFireScale;
                 _airFire.depth = depth - 1;
                 _airFire.alpha = 0.5f;

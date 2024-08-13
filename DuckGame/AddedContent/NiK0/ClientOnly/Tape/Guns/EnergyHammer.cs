@@ -333,7 +333,7 @@ namespace DuckGame
                 else _hum.volume = Lerp.Float(_hum.volume, 0, 0.1f);
             }
 
-            if (x > Level.current.bottomRight.x + 300 || x < Level.current.topLeft.x - 300)
+            if (x > Level.current.ExtendedRight || x < Level.current.ExtendedLeft)
             {
                 if (spin)
                 {
