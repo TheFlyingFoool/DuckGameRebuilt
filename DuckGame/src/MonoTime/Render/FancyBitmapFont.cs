@@ -12,7 +12,7 @@ namespace DuckGame
         private SpriteMap swearSprites = new SpriteMap("lagturtle", 16, 16);
         protected Sprite _textureInternal;
         private static bool _mapInitialized = false;
-        public static char[] _characters = new char[317]
+        public static char[] _characters = new char[325]
         {
       ' ',
       '!',
@@ -330,7 +330,15 @@ namespace DuckGame
       'ю',
       'я',
       '¡',
-      '¿'
+      '¿',
+      'Ґ',
+      'ґ',
+      'Є',
+      'є',
+      'І',
+      'і',
+      'Ї',
+      'ї'
         };
         public static SpriteMap _kanjiSprite;
         public static ushort[] _kanjiMap;
