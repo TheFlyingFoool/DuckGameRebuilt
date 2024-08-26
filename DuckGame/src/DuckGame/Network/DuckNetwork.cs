@@ -2074,6 +2074,7 @@ namespace DuckGame
                 {
                     if (DGRSettings.MidGameJoining)
                     {
+                        TeamSelect2.eightPlayersActive = Profiles.activeNonSpectators.Count > 4;
                         cycle++;
                         if (cycle > 30 && Steam.lobby != null)
                         {
@@ -2097,17 +2098,17 @@ namespace DuckGame
                         if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
                         {
                             Network.activeNetwork.core.lobby.joinable = true;
-                            if (ShowGameInBrowser)
-                            {
+                            //if (ShowGameInBrowser)
+                            //{
                                 //set this to true for auhsduhasd -NiK0
                                 Network.activeNetwork.core.lobby.SetLobbyData("started", "false");
                                 Network.activeNetwork.core.lobby.SetLobbyData("name", "|PINK|[MIDGAME] |PREV|" + Steam.user.name + "'s Lobby");
-                            }
+                            /*}
                             else
                             {
                                 Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
                                 Network.activeNetwork.core.lobby.SetLobbyData("name", Steam.user.name + "'s Lobby");
-                            }
+                            }*/
                         }
                     }
                     else
@@ -2156,6 +2157,16 @@ namespace DuckGame
             {
                 if (_core._quit.value)
                 {
+                    if (Network.isServer && DGRSettings.MidGameJoining)
+                    {
+                        inGame = true;
+                        if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
+                        {
+                            Network.activeNetwork.core.lobby.joinable = false;
+                            Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
+                            Network.activeNetwork.core.lobby.SetLobbyData("name", Steam.user.name + "'s Lobby");
+                        }
+                    }
                     if (_core._menuOpenProfile != null && _core._menuOpenProfile.slotType == SlotType.Local)
                     {
                         Kick(_core._menuOpenProfile);
