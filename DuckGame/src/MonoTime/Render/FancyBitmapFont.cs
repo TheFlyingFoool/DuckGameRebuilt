@@ -509,8 +509,8 @@ namespace DuckGame
             if (sprite != null)
             {
                 spriteClone = sprite.Clone();
-                spriteClone.xscale = sprite.xscale * xscale;
-                spriteClone.yscale = sprite.yscale * yscale;
+                spriteClone.xscale = sprite.xscale /* xscale*/;
+                spriteClone.yscale = sprite.yscale /* yscale*/;
             }
 
             return spriteClone;
@@ -629,7 +629,7 @@ namespace DuckGame
                                 float num2 = (float)((this as RasterFont).data.fontSize * RasterFont.fontScaleFactor / 10);
                                 Sprite sprite3 = sprite1;
                                 sprite3.scale *= num2;
-                                sprite1.scale = new Vec2((float)Math.Round(sprite1.scale.x * 2) / 2f);
+                                // sprite1.scale = new Vec2((float)Math.Round(sprite1.scale.x * 2) / 2f);
                             }
                             num1 += (float)(sprite1.width * sprite1.scale.x + 1);
                             sprite1.scale = scale;
@@ -659,6 +659,20 @@ namespace DuckGame
                 if (!flag)
                 {
                     char index1 = text[_letterIndex];
+                    // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⣤⣤⣤⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                    // ⠀⠀⠀⠀⠀⠀⠀⠀⣠⡶⡿⢿⣿⣛⣟⣿⡿⢿⢿⣷⣦⡀⠀⠀⠀⠀⠀⠀
+                    // ⠀⠀⠀⠀⠀⠀⢰⣯⣷⣿⣿⣿⢟⠃⢿⣟⣿⣿⣾⣷⣽⣺⢆⠀⠀⠀⠀⠀
+                    // ⠀⠀⠀⠀⠀⠀⢸⣿⢿⣾⢧⣏⡴⠀⠈⢿⣘⣿⢿⣿⣿⣿⣿⡆⠀⠀⠀⠀
+                    // ⠀⠀⠀⠀⠀⠀⢹⣿⢠⡶⠒⢶⠀⠀⣠⠒⠒⠢⡀⢿⣿⣿⣿⡇⠀⠀⠀⠀
+                    // ⠀⠀⠀⠀⠀⠀⣿⣿⠸⣄⣠⡾⠀⠀⠻⣀⣀⡼⠁⢸⣿⣿⣿⣿⠀⠀⠀⠀
+                    // ⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⠀⠀⠀
+                    // ⠀⠀⠀⠀⠀⢰⣿⣿⠀⠀⠀⡔⠢⠤⠔⠒⢄⠀⠀⢸⣿⣿⣿⣿⡇⠀⠀⠀
+                    // ⠀⠀⠀⠀⠀⢸⣿⣿⣄⠀⠸⡀⠀⠀⠀⠀⢀⡇⠠⣸⣿⣿⣿⣿⡇⠀⠀⠀
+                    // ⠀⠀⠀⠀⠀⢸⣿⣿⣿⣷⣦⣮⣉⢉⠉⠩⠄⢴⣾⣿⣿⣿⣿⡇⠀⠀⠀⠀
+                    // ⠀⠀⠀⠀⠀⢸⣿⣿⢻⣿⣟⢟⡁⠀⠀⠀⠀⢇⠻⣿⣿⣿⣿⣿⠀⠀⠀⠀
+                    // ⠀⠀⠀⠀⠀⢸⠿⣿⡈⠋⠀⠀⡇⠀⠀⠀⢰⠃⢠⣿⡟⣿⣿⢻⠀⠀⠀⠀
+                    // ⠀⠀⠀⠀⠀⠸⡆⠛⠇⢀⡀⠀⡇⠀⠀⡞⠀⠀⣸⠟⡊⠁⠚⠌⠀⠀⠀⠀
+                    // ⠀⠀⠀⠀⠀⠀⡍⠨⠊⣒⠴⠀⡇⡴⠋⡋⢐⠐⠅⡀⠐⢠⠕⠂⢂⠀⠀⠀
                     if (index1 >= 'ぁ')
                     {
                         num1 += 8f * scale.x;
@@ -1117,7 +1131,7 @@ namespace DuckGame
                                     float num5 = (float)((this as RasterFont).data.fontSize * RasterFont.fontScaleFactor / 10.0);
                                     Sprite sprite3 = sprite1;
                                     sprite3.scale *= num5;
-                                    sprite1.scale = new Vec2((float)Math.Round(sprite1.scale.x * 2.0) / 2f);
+                                    // sprite1.scale = new Vec2((float)Math.Round(sprite1.scale.x * 2.0) / 2f);
                                 }
                                 float num6 = (float)(characterHeight * this.scale.y / 2.0 - sprite1.height * sprite1.scale.y / 2.0);
                                 Graphics.Draw(sprite1, xpos + num2, ypos + num1 + num6, deep + 10 + (int)((ypos + num1) / 10.0));
