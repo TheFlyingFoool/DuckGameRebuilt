@@ -6,7 +6,7 @@ namespace DuckGame
     {
         private Duck _duck;
 
-        public CompareHoldablePriorities(Duck d) => _duck = d;
+        public  CompareHoldablePriorities(Duck d) => _duck = d;
 
         public int Compare(Holdable h1, Holdable h2)
         {

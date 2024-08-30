@@ -27,7 +27,7 @@ namespace DuckGame
 
             public static void OnSwitch()
             {
-                s_hatTexture = FFEditorPane.FullHatTexture;
+                s_hatTexture = GetFullHatTexture();
                 InitializeAnimations();
                 
                 if (AllowUserControl)
@@ -75,13 +75,13 @@ namespace DuckGame
                 Team team = new(HatName ?? string.Empty, s_hatTexture);
 
                 team._capeTexture = new Tex2D(32, 32);
-                team._capeTexture.SetData(FFEditorPane.CapeFrameBuffer);
+                team._capeTexture.SetData(CapeFrameBuffer);
                 team._rockTexture = new Tex2D(24, 24);
-                team._rockTexture.SetData(FFEditorPane.RockFrameBuffer);
+                team._rockTexture.SetData(RockFrameBuffer);
                 for (int i = 0; i < 4; i++)
                 {
                     Tex2D particle = new(12, 12);
-                    particle.SetData(FFEditorPane.ParticleAnimationBuffer[i]);
+                    particle.SetData(ParticleAnimationBuffer[i]);
                     team._customParticles.Add(particle);
                 }
 
@@ -91,44 +91,7 @@ namespace DuckGame
 
             public static void Update()
             {
-                if (s_scheduleAnimationChange)
-                {
-                    GoNextAnimation();
-                    s_scheduleAnimationChange = false;
-                }
                 
-                (SpriteMap, Action)[] iconActionPairs =
-                {
-                    (FFIcons.Loop, () => IsLoopingAnimation ^= true),
-                    (FFIcons.Play, () => IsPlayingAnimation ^= true),
-                    (FFIcons.PreviousAnimation, GoPreviousAnimation),
-                    (FFIcons.NextAnimation, GoNextAnimation),
-                    (FFIcons.PlayTest, TogglePlayerControl),
-                };
-
-                foreach ((SpriteMap icon, Action action) in iconActionPairs)
-                {
-                    if (s_iconHoveredID == icon.Namebase && icon.frame == 1 && Mouse.left == InputState.Pressed)
-                        action();
-                }
-
-                if (s_hoveringProgressBar && Mouse.left == InputState.Pressed)
-                    s_clickedInProgressBar = true;
-
-                if (s_clickedInProgressBar && Mouse.left == InputState.Released)
-                    s_clickedInProgressBar = false;
-
-                if (s_clickedInProgressBar)
-                {
-                    // :flushed:
-                    float top = s_progressBarRect.y;
-                    float bottom = top + s_progressBarRect.height;
-                    
-                    float mouseY = Maths.Clamp(Mouse.yScreen, top, bottom);
-                    int nearestFrameSelected = (int)(CurrentDuckAnimation.Length * ProgressValue.Normalize(mouseY, top, bottom));
-
-                    s_currentAnimationFrame = Maths.Clamp(nearestFrameSelected, 0, CurrentDuckAnimation.Length - 1);
-                }
             }
 
             private static void TogglePlayerControl()
@@ -245,7 +208,6 @@ namespace DuckGame
                     if (bounds.Contains(Mouse.positionScreen))
                     {
                         icon.frame = 1;
-                        RegisterButtonHover(icon.Namebase, tooltip);
                     }
                     else if (toggle is not null && toggle.Value)
                         icon.frame = 1;

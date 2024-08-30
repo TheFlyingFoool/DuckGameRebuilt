@@ -41,7 +41,12 @@ namespace DuckGame
             public static SpriteMap Particles;
             public static SpriteMap Pause;
             public static SpriteMap Play;
+            public static SpriteMap PlayPause;
             public static SpriteMap PlayTest;
+            public static SpriteMap Kill;
+            public static SpriteMap SpawnProp;
+            public static SpriteMap SpawnRandom;
+            public static SpriteMap Fullscreen;
             public static SpriteMap Rock;
             public static SpriteMap NextAnimation;
             public static SpriteMap PreviousAnimation;
@@ -62,6 +67,9 @@ namespace DuckGame
             public static Sprite FFLogo;
             public static Sprite Watermark;
             public static Sprite Watermark_Beta;
+            
+            public static Sprite UploadBackground;
+            public static Sprite UploadHatFrame;
 
             public static void Initialize()
             {
@@ -88,10 +96,15 @@ namespace DuckGame
                 Particles = new SpriteMap("ff_icons/particles", 8, 8);
                 Pause = new SpriteMap("ff_icons/pause", 8, 8);
                 Play = new SpriteMap("ff_icons/play", 8, 8);
-                PlayTest = new SpriteMap("ff_icons/playetest", 24, 8);
+                PlayPause = new SpriteMap("ff_icons/playpause", 8, 8);
+                PlayTest = new SpriteMap("ff_icons/playetest", 10, 8);
+                Kill = new SpriteMap("ff_icons/kill", 8, 8);
+                SpawnProp = new SpriteMap("ff_icons/spawnprop", 8, 8);
+                SpawnRandom = new SpriteMap("ff_icons/spawnrandom", 8, 8);
+                Fullscreen = new SpriteMap("ff_icons/fullscreenMinimize", 8, 8);
                 Rock = new SpriteMap("ff_icons/rock", 8, 8);
                 NextAnimation = new SpriteMap("ff_icons/skip", 8, 8);
-                PreviousAnimation = new SpriteMap("ff_icons/skip_flipH", 8, 8);
+                PreviousAnimation = new SpriteMap("ff_icons/skip", 8, 8) { flipH = true, center = (8, 0) };
                 GlobalActionSwitchEditor = new SpriteMap("ff_icons/mode_editor", 48, 11);
                 GlobalActionSwitchPreview = new SpriteMap("ff_icons/mode_preview", 48, 11);
                 GlobalActionImport = new SpriteMap("ff_icons/menu_import", 48, 11);
@@ -109,6 +122,9 @@ namespace DuckGame
                 FFLogo = new Sprite("ff_icons/FFLogo");
                 Watermark = new Sprite("ff_icons/watermark");
                 Watermark_Beta = new Sprite("ff_icons/watermark_beta");
+                
+                UploadBackground = new Sprite("ff_icons/upload/bg");
+                UploadHatFrame = new Sprite("ff_icons/upload/hatframe");
             }
         }
 

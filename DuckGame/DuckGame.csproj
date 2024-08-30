@@ -410,15 +410,36 @@
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\RectangleInterpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\TypeInterpreters\ThingInterpreter.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Implementation\DevConsoleDSHWrapper.cs" />
-    <Compile Include="AddedContent\Firebreak\HatEditor\FFEditorPane.cs" />
-    <Compile Include="AddedContent\Firebreak\HatEditor\FFExtra.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\FeatherFashion.cs" />
-    <Compile Include="AddedContent\Firebreak\HatEditor\FFPreviewAnimations.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\FFExtra.cs">
+      <DependentUpon>FeatherFashion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AddedContent\Firebreak\HatEditor\FFHatData.cs">
+      <DependentUpon>FeatherFashion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AddedContent\Firebreak\HatEditor\FFPreviewAnimations.cs">
+      <DependentUpon>FeatherFashion.cs</DependentUpon>
+    </Compile>
     <Compile Include="AddedContent\Firebreak\HatEditor\FFPreviewPane.cs" />
-    <Compile Include="AddedContent\Firebreak\HatEditor\FFPromptMenu.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\HatPreviewLevel.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\FFMetapixelEditor.cs">
+      <DependentUpon>FeatherFashion.cs</DependentUpon>
+    </Compile>
     <Compile Include="AddedContent\Firebreak\HatEditor\MetapixelInfo.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\SimRenderer.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\UITransitions\FFUI01Transition.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\UITransitions\FFUI03Transition.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\UITransitions\FFUI13Transition.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\UITransitions\FFUITransition.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\Windows\FFBoundary.BorderStyle.cs">
+      <DependentUpon>FFBoundary.Boundary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AddedContent\Firebreak\HatEditor\Windows\FFBoundary.Boundary.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\Windows\FFButton.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\Windows\FFHatPreview.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\Windows\FFMainWindow.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\Windows\FFMetapixelList.cs" />
+    <Compile Include="AddedContent\Firebreak\HatEditor\Windows\FFSlider.cs" />
     <Compile Include="AddedContent\Firebreak\LockMovementQueue.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Test.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\ConsoleInstance.cs" />
