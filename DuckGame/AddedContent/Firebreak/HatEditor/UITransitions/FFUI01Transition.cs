@@ -46,7 +46,7 @@ namespace DuckGame
                 FFButton ffButton = topButtons[i];
                 
                 ffButton.Alpha = 1 - easedValue;
-                ffButton.Bounds.x = ptButton.Bounds.Right + 16 + (i * 16);
+                ffButton.Bounds.x = lerp(228, 276, easedValue) + (i * 16);
             }
             
             // hat preview rescaling to fit new bottom buttons
@@ -62,7 +62,6 @@ namespace DuckGame
             {
                 FFButton ffButton = bottomButtons[i];
                 
-                // ffButton.Alpha = easedValue;
                 ffButton.Bounds.x = hatPreview.Bounds.Center.x - 28 + (i * 16);
                 ffButton.Bounds.y = slider.Bounds.y - 16;
             }

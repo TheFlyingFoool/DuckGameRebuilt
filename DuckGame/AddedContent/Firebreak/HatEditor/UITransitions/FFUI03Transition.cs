@@ -35,17 +35,40 @@ namespace DuckGame
             FFButton fsButton = bottomButtons[3];
             
             ptButton.Bounds.width = lerp(24, 48, easedValue);
-            ptButton.Bounds.x = lerp(hatPreview.Bounds.Center.x - ptButton.Bounds.width / 2, hatPreview.Bounds.Center.x - 4, easedValue);
+            ptButton.Bounds.x = lerp(188, 154, easedValue);
             ptButton.Bounds.y = lerp(36, 144, easedValue);
             
-            hatPreview.Bounds.height = lerp(88, 92, easedValue);
+            for (int i = 0; i < topButtons.Length; i++)
+            {
+                FFButton ffButton = topButtons[i];
+                
+                ffButton.Alpha = 1 - easedValue;
+                ffButton.Bounds.x = lerp(228, 276, easedValue) + (i * 16);
+            }
+            
             hatPreview.Bounds = new Rectangle(
-                Vec2.Lerp((188, 52), (32, 36), easedValue),
+                lerp((188, 52), (32, 36), easedValue),
                 hatPreview.Bounds.br
             );
+            hatPreview.Bounds.height = lerp(88, 100, easedValue);
             
             metapixelList.Bounds.x = hatPreview.Bounds.x - (metapixelList.Bounds.width + 12);
             metapixelList.Alpha = 1 - easedValue;
+            
+            slider.Alpha = 1 - easedValue;
+            slider.Bounds.y = hatPreview.Bounds.Bottom + 8 + (16 * easedValue);
+            slider.Bounds.x = hatPreview.Bounds.Center.x - slider.Bounds.width / 2;
+            
+            for (int i = 0; i < bottomButtons.Length; i++)
+            {
+                FFButton ffButton = bottomButtons[i];
+                
+                ffButton.Bounds.y = slider.Bounds.y - 16;
+                if (ffButton != fsButton)
+                    ffButton.Bounds.x = lerp(208, ptButton.Bounds.x - (48 + 8), easedValue) + (16 * i);
+            }
+            
+            fsButton.Bounds.x = lerp(256, ptButton.Bounds.Right + 8, easedValue);
         }
 
         public override void End()

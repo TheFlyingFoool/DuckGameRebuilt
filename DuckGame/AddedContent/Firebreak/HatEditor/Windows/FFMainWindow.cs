@@ -23,14 +23,18 @@ namespace DuckGame
         {
             Components.Add(_metapixelList = new FFMetapixelList(new Rectangle(32, 36, 144, 116)));
             
-            Components.Add(_hatPreview = new FFHatPreview(new Rectangle(188, 52, 96, 88)));
+            Components.Add(_hatPreview = new FFHatPreview(new Rectangle(188, 52, 96, 88))
+            {
+                Depth = 1.2f
+            });
             
             Components.Add(_playtestButton = new FFButton(
                 new Rectangle(188, 36, 24, 8),
                 FeatherFashion.FFIcons.PlayTest,
                 typeof(FFHatPreview).GetField(nameof(FFHatPreview.Playtest)), _hatPreview)
                 {
-                    ButtonToggleAction = StartTransitionAnimation
+                    ButtonToggleAction = StartTransitionAnimation,
+                    Depth = 1.5f
                 }
             );
 
@@ -63,32 +67,28 @@ namespace DuckGame
             Components.AddRange(_bottomPlaytestControlButtons = new []
             {
                 new FFButton(
-                    new Rectangle(0, 0, 8, 8),
+                    new Rectangle(9999, 0, 8, 8),
                     FeatherFashion.FFIcons.Kill,
                     null) {
                         Disable = true,
-                        Depth = 0.5f
                     },
                 new FFButton(
-                    new Rectangle(0, 0, 8, 8),
+                    new Rectangle(9999, 0, 8, 8),
                     FeatherFashion.FFIcons.SpawnProp,
                     null) {
                         Disable = true,
-                        Depth = 0.5f
                     },
                 new FFButton(
-                    new Rectangle(0, 0, 8, 8),
+                    new Rectangle(9999, 0, 8, 8),
                     FeatherFashion.FFIcons.SpawnRandom,
                     null) {
                         Disable = true,
-                        Depth = 0.5f
                     },
                 new FFButton(
-                    new Rectangle(0, 0, 8, 8),
+                    new Rectangle(9999, 0, 8, 8),
                     FeatherFashion.FFIcons.Fullscreen,
                     typeof(FFHatPreview).GetField(nameof(FFHatPreview.Fullscreen)), _hatPreview) {
                         Disable = true,
-                        Depth = 0.5f,
                         ButtonToggleAction = StartTransitionAnimation
                     },
             });

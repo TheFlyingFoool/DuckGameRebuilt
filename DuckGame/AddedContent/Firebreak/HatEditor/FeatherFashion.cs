@@ -115,10 +115,16 @@ namespace DuckGame
             {
                 foreach (FFBoundary component in MainWindow.Components)
                 {
+                    bool important = component.Bounds.Contains(Mouse.positionScreen);
+                    
                     string rectReadable = $"{component.Bounds.x:0},{component.Bounds.y:0} {component.Bounds.width:0}:{component.Bounds.height:0}";
-                    Graphics.DrawString(rectReadable, component.Bounds.tl + (0, -8), Color.Red, 3f, scale: 0.5f);
-                    Graphics.DrawDottedLine((component.Bounds.Center.x, component.Bounds.Top), (component.Bounds.Center.x, component.Bounds.Bottom), Color.Red, 0.5f, 1f, 2f);
-                    Graphics.DrawDottedLine((component.Bounds.x, component.Bounds.Center.y), (component.Bounds.Right, component.Bounds.Center.y), Color.Red, 0.5f, 1f, 2f);
+                    if (important)
+                        Graphics.DrawStringOutline(rectReadable, component.Bounds.tl + (0, -8), Color.Cyan, Color.Black, 3f, scale: 0.5f);
+                    else
+                        Graphics.DrawString(rectReadable, component.Bounds.tl + (0, -8), Color.Red, 2.4f, scale: 0.5f);
+                        
+                    Graphics.DrawDottedLine((component.Bounds.Center.x, component.Bounds.Top), (component.Bounds.Center.x, component.Bounds.Bottom), (important ? Color.Cyan : Color.Red), 0.5f, 1f, 2f);
+                    Graphics.DrawDottedLine((component.Bounds.x, component.Bounds.Center.y), (component.Bounds.Right, component.Bounds.Center.y), (important ? Color.Cyan : Color.Red), 0.5f, 1f, 2f);
                 }
             }
 
