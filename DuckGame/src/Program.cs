@@ -36,7 +36,7 @@ namespace DuckGame
 #endif
 
         // this should be formatted like X.X.X where each X is a number
-        public const string CURRENT_VERSION_ID = "1.4.2.2";
+        public const string CURRENT_VERSION_ID = "1.4.3.0";
 
         // do change this you know what you're doing -NiK0
         public const string CURRENT_VERSION_ID_FORMATTED = "v" + CURRENT_VERSION_ID;
