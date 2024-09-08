@@ -256,6 +256,8 @@ namespace DuckGame
 
         public virtual void Hook_OnDucknetJoined()
         {
+            DuckNetwork.HandleMidgameJoinAutoHat(DuckNetwork.localProfile);
+            
             if (Level.current is TeamSelect2)
                 (Level.current as TeamSelect2).CloseAllDialogs();
             if (Network.isServer)
