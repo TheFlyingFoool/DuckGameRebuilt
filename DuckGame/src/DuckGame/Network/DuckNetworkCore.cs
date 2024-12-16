@@ -277,6 +277,7 @@ namespace DuckGame
         public bool inGame;
         public bool stopEnteringText;
         public List<ChatMessage> chatMessages = new List<ChatMessage>();
+        public int chatMessageOffset = 0;
         private int swearCharOffset;
         private string[] swearChars = new string[7]
         {

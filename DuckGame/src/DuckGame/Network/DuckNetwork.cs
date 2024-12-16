@@ -2138,8 +2138,38 @@ namespace DuckGame
 
             }
         }
+
+        public static void ChatMessageOffset()
+        {
+            if (DevConsole.core.open)
+                return;
+
+            if (Keyboard.Pressed(Keys.PageUp))
+            {
+                _core.chatMessageOffset += Keyboard.shift ? 4 : 1;
+                if (_core.chatMessageOffset > _core.chatMessages.Count - 1)
+                    _core.chatMessageOffset = _core.chatMessages.Count - 1;
+            }
+
+            if (Keyboard.Pressed(Keys.PageDown))
+            {
+                _core.chatMessageOffset -= Keyboard.shift ? 4 : 1;
+                if (_core.chatMessageOffset < 0)
+                    _core.chatMessageOffset = 0;
+            }
+
+            if (Mouse.isScrolling)
+            {
+                _core.chatMessageOffset -= (Keyboard.shift ? 4 : 1) * (int)(Mouse.scroll / 120f);
+                if (_core.chatMessageOffset < 0) 
+                    _core.chatMessageOffset = 0;
+                if (_core.chatMessageOffset > _core.chatMessages.Count - 1) 
+                    _core.chatMessageOffset = _core.chatMessages.Count - 1;
+            }
+        }
         public static void Update()
         {
+            ChatMessageOffset();
             //stuff'sn
             MidGameJoiningLogic();
             if (MonoMain.pauseMenu == null && _core._pauseOpen)
@@ -2249,8 +2279,17 @@ namespace DuckGame
                         if (chatMessage.alpha < 0)
                             chatMessageList.Add(chatMessage);
                     }
-                    foreach (ChatMessage chatMessage in chatMessageList)
-                        _core.chatMessages.Remove(chatMessage);
+
+                    //foreach (ChatMessage chatMessage in chatMessageList)
+                    //    _core.chatMessages.Remove(chatMessage);
+
+                    // Once per tick is enough idc -Tater
+                    if (chatMessageList.Count > 300 && _core.chatMessages.Count > 0)
+                    {
+                        ChatMessage removeMessage = chatMessageList[0];
+                        _core.chatMessages.Remove(removeMessage);
+                    }
+
                     if (_core.stopEnteringText)
                     {
                         _core.enteringText = false;
@@ -3463,7 +3502,7 @@ namespace DuckGame
             if (localProfile == null && !Recorderator.Playing) return;
             Vec2 vec2_1 = new Vec2(Layer.Console.width, Layer.Console.height);
             float num1 = 0f;
-            int num2 = 8;
+            int MaxMessages = 8;
             float chatScale = DuckNetwork.chatScale;
             float num3 = Resolution.current.x > 1920 ? 2f : 1f;
 
@@ -3507,8 +3546,21 @@ namespace DuckGame
                 num1 -= y + 4f * _core._chatFont.scale.y;
             }
             float num6 = 0.1f;
+            int Index = -1;
             foreach (ChatMessage chatMessage in _core.chatMessages)
             {
+                Index++;
+                // Show chat if we are typing or dev console is open
+                if (_core.enteringText || DevConsole.core.open)
+                {
+                    chatMessage.alpha = 1.0f;
+                    if (_core.chatMessageOffset > Index)
+                        continue;
+                }
+                else if (chatMessage.alpha < 0)
+                    continue;
+                
+
                 float num7 = 10 * (Options.Data.chatHeadScale + 1) * num3;
                 _core._chatFont._currentConnection = chatMessage.who.connection == localConnection ? null : chatMessage.who.connection;
                 if (_core._chatFont is RasterFont) _core._chatFont.scale = new Vec2(0.5f);
@@ -3590,8 +3642,8 @@ namespace DuckGame
                 _core._chatFont._currentConnection = null;
                 num1 -= y + 4f;
                 num6 -= 0.01f;
-                if (num2 == 0) break;
-                num2--;
+                if (MaxMessages == 0) break;
+                MaxMessages--;
             }
         }
 
