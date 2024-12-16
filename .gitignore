@@ -375,5 +375,4 @@ version.txt
 .editorconfig
 /DuckGame/SlnPath.txt
 .idea
-Rebuilder/
-Rebuilder/Rebuilder.dll
+DGR-Mod/DGR-Mod.dll
