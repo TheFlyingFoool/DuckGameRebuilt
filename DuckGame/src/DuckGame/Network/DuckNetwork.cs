@@ -1750,6 +1750,17 @@ namespace DuckGame
             else
                 pProfile.inputProfile = InputProfile.GetVirtualInput(pProfile.networkIndex);
             pProfile.team = reservedTeam ?? pProfile.networkDefaultTeam;
+            if (active &&
+                !Network.lanMode && // explodes in lan for some reason
+                pConnection == localConnection &&
+                (reservedTeam is null || reservedTeam.defaultTeam) &&
+                (Network.activeNetwork?.core?.lobby?.GetLobbyData("name")?.StartsWith("|PINK|[MIDGAME]") ?? false) &&
+                DGRSettings.favoriteHats.Count > 0)
+            {
+                DGRSettings.InitializeFavoritedHats();
+                Team randomFavorite = Teams.all.Where(x => x.favorited).ChooseRandom();
+                pProfile.team = randomFavorite;
+            }
             pProfile.reservedUser = null;
             pProfile.reservedTeam = null;
             if (pProfile.slotType == SlotType.Reserved)
@@ -1766,28 +1777,6 @@ namespace DuckGame
             while (Options.Data.recentPlayers.Count > 10)
                 Options.Data.recentPlayers.RemoveAt(Options.Data.recentPlayers.Count - 1);
             Options.flagForSave = 60;
-        }
-
-        public static void HandleMidgameJoinAutoHat(Profile myProfile)
-        {
-            if (active &&
-                !Network.lanMode && // explodes in lan for some reason
-                (Network.activeNetwork?.core?.lobby?.GetLobbyData("name")?.StartsWith("|PINK|[MIDGAME]") ?? false))
-            {
-                DGRSettings.InitializeFavoritedHats();
-
-                IEnumerable<Team> teamPool = Teams.all
-                    .Where(x => Profiles.activeNonSpectators.All(y => y.team.name != x.name)
-                        && !x.defaultTeam
-                        && !x.locked);
-                
-                if (teamPool.Any(x => x.favorited))
-                    teamPool = teamPool.Where(x => x.favorited);
-                
-                Team randomUnusedIdeallyFavoriteTeam = teamPool.ChooseRandom();
-
-                myProfile.team = randomUnusedIdeallyFavoriteTeam;
-            }
         }
 
         public static void Reset()
