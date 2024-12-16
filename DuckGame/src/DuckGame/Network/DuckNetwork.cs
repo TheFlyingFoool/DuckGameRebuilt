@@ -1164,7 +1164,7 @@ namespace DuckGame
             if (forceInv || (Network.inLobby && whoOpen.slotType != SlotType.Local && Network.available))
             {
                 Main.SpecialCode = "men8";
-                _core._ducknetMenu.Add(new UIText("", Color.White), true);
+                if (!forceInv) _core._ducknetMenu.Add(new UIText("", Color.White), true);
                 core._inviteMenu = new UIInviteMenu("INVITE FRIENDS", null, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
                 ((UIInviteMenu)_core._inviteMenu).SetAction(new UIMenuActionOpenMenu(_core._inviteMenu, _core._ducknetMenu));
                 _core._inviteMenu.Close();
@@ -1206,7 +1206,7 @@ namespace DuckGame
                 {
                     if (Network.isServer)
                     {
-                        if (!blankAdded)
+                        if (!blankAdded && !forceInv)
                             _core._ducknetMenu.Add(new UIText("", Color.White), true);
                         _core._ducknetMenu.Add(new UIMenuItem("@SKIPSPIN@|DGRED|SKIP", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Skip)), UIAlign.Left), true);
                     }
@@ -1215,7 +1215,7 @@ namespace DuckGame
             Main.SpecialCode = "men13";
             if (whoOpen.slotType != SlotType.Local || Network.inLobby)
             {
-                _core._ducknetMenu.Add(new UIText(" ", Color.White), true);
+                if (!forceInv) _core._ducknetMenu.Add(new UIText(" ", Color.White), true);
                 if (whoOpen.slotType == SlotType.Local)
                     _core._ducknetMenu.Add(new UIMenuItem("|DGRED|BACK OUT", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmMenu), UIAlign.Left), true);
                 else
@@ -2065,8 +2065,6 @@ namespace DuckGame
 
         public static bool prevMG;
 
-        public static bool ShowGameInBrowser;
-
         public static int cycle;
         public static void MidGameJoiningLogic()
         {
@@ -2109,10 +2107,11 @@ namespace DuckGame
                         if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
                         {
                             Network.activeNetwork.core.lobby.joinable = true;
+                            Network.activeNetwork.core.lobby.type = SteamLobbyType.Private;
                             //if (ShowGameInBrowser)
                             //{
-                                //set this to true for auhsduhasd -NiK0
-                                Network.activeNetwork.core.lobby.SetLobbyData("started", "false");
+                            //set this to true for auhsduhasd -NiK0
+                            Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
                                 Network.activeNetwork.core.lobby.SetLobbyData("name", "|PINK|[MIDGAME] |PREV|" + Steam.user.name + "'s Lobby");
                             /*}
                             else

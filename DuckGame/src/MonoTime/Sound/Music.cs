@@ -49,8 +49,6 @@ namespace DuckGame
             set
             {
                 _volume = value;
-                if (_vgmPlayer != null) _vgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
-                if (_dgmPlayer != null) _dgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
                 if (_musicPlayer == null)
                     return;
                 _musicPlayer.Volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
@@ -378,7 +376,8 @@ namespace DuckGame
 
         public static void Pause()
         {
-            if (DGRSettings.LoaderMusic) _musicPlayer.Pause();
+            if (!DGRSettings.LoaderMusic) return;
+            _musicPlayer.Pause();
             if (_vgmPlayer != null) _vgmPlayer.Pause();
             if (_dgmPlayer != null) _dgmPlayer.Pause();
         }
@@ -457,6 +456,8 @@ namespace DuckGame
 
         public static void Update()
         {
+            if (_vgmPlayer != null) _vgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
+            if (_dgmPlayer != null) _dgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
             if (_dgmPlayer != null) _dgmPlayer.Update();
         }
     }

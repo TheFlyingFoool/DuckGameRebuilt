@@ -629,7 +629,7 @@ namespace DuckGame
             else
             {
                 DGRSettings.DGRItems = false;
-                _hostMatchSettingsMenu.Add(new LUIText(" DGR Stuff        ON |WHITE|OFF", c: Color.Gray, UIAlign.Left));
+                _hostMatchSettingsMenu.Add(new LUIText(" DGR Stuff      ON |WHITE|OFF", c: Color.Gray, UIAlign.Left));
             }
 
             _hostMatchSettingsMenu.AddMatchSetting(GetOnlineSetting("teams"), false);
@@ -906,7 +906,7 @@ namespace DuckGame
             else
             {
                 DGRSettings.DGRItems = false;
-                _multiplayerMenu.Add(new LUIText(" DGR Stuff        ON |WHITE|OFF", c: Color.Gray, UIAlign.Left));
+                _multiplayerMenu.Add(new LUIText(" DGR Stuff      ON |WHITE|OFF", c: Color.Gray, UIAlign.Left));
             }
 
             int z = 0;
