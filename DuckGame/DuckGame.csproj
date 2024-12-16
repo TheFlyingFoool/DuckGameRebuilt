@@ -2500,7 +2500,7 @@
   </Target>
   <Target Name="AfterBuild">
     <Exec Command="cp -rv $(SolutionDir)deps/* $(SolutionDir)bin/" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'" />
-    <Exec Command="sh $(SolutionDir)shaders_source/buildshaders.sh" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'" />
+<!--    <Exec Command="sh $(SolutionDir)shaders_source/buildshaders.sh" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'" />-->
     <Exec Command="Xcopy &quot;$(SolutionDir)\deps&quot; &quot;$(SolutionDir)\bin&quot; /E /H /C /I /Y" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'" />
     <Exec Command="call &quot;$(SolutionDir)shaders_source\buildshaders.bat&quot;" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'" />
   </Target>
