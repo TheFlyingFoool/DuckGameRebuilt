@@ -137,7 +137,22 @@ namespace DuckGame
             DevRole = DGRebuiltDeveloper.Role.MinorContributor,
             SteamID = 76561199015640200,
         };
-        
+        public static DGRebuiltDeveloper Firch = new()
+        {
+            DisplayName = "Firch",
+            Color = new Color("#232d3f"),
+            DevRole = DGRebuiltDeveloper.Role.MinorContributor,
+            SteamID = 76561198420901896,
+        };
+        public static DGRebuiltDeveloper Biverom = new()
+        {
+            DisplayName = "Biverom",
+            Color = new Color("#600F25"),
+            DevRole = DGRebuiltDeveloper.Role.MinorContributor,
+            SteamID = 76561198849781683,
+        };
+
+
         public static readonly DGRebuiltDeveloper[] Contributors =
         {
             Collin,
@@ -154,6 +169,8 @@ namespace DuckGame
             Tmob03,
             TheKingOfCringe11,
             Dzhake,
+            Firch,
+            Biverom
         };
         
         //NiK0 stuff
