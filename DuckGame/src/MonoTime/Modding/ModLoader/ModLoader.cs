@@ -384,6 +384,12 @@ namespace DuckGame
                         modConfig.error = "!This mod does not currently work on Linux!";
                         mod = new DisabledMod();
                     }
+                    else if (modConfig.workshopID == 3386030767UL)
+                    {
+                        modConfig.Disable();
+                        modConfig.error = "!This mod does not currently work on Rebuilt!";
+                        mod = new DisabledMod();
+                    }
 
                     //Patchs in these mods Dont Like the Debugger or debug configuration
 #if DEBUG

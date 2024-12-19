@@ -1965,6 +1965,10 @@ namespace DuckGame
             {
                 DevConsole.Log(DCSection.General, "|DGRED|Skipping host migration (DuckNetwork.status = " + status.ToString() + ").");
             }
+            else if (DGRSettings.MidGameJoining)
+            {
+                DevConsole.Log(DCSection.General, "|DGRED|Skipping host migration.");
+            }
             else
             {
                 bool flag1 = pLocal;
@@ -2096,7 +2100,7 @@ namespace DuckGame
                         if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
                         {
                             Network.activeNetwork.core.lobby.joinable = true;
-                            Network.activeNetwork.core.lobby.type = SteamLobbyType.Private;
+                            // Network.activeNetwork.core.lobby.type = SteamLobbyType.Private;
                             //if (ShowGameInBrowser)
                             //{
                             //set this to true for auhsduhasd -NiK0
