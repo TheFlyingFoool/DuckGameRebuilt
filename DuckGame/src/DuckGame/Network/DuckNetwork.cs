@@ -2133,6 +2133,9 @@ namespace DuckGame
 
         public static void ChatMessageOffset()
         {
+            if (!_core.enteringText)
+                _core.chatMessageOffset = 0;
+
             if (DevConsole.core.open)
                 return;
 
