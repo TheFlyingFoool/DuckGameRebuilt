@@ -2281,7 +2281,7 @@ namespace DuckGame
                     // Once per tick is enough idc -Tater
                     if (chatMessageList.Count > 300 && _core.chatMessages.Count > 0)
                     {
-                        ChatMessage removeMessage = chatMessageList[0];
+                        ChatMessage removeMessage = chatMessageList[chatMessageList.Count - 1];
                         _core.chatMessages.Remove(removeMessage);
                     }
 
