@@ -1965,6 +1965,10 @@ namespace DuckGame
             {
                 DevConsole.Log(DCSection.General, "|DGRED|Skipping host migration (DuckNetwork.status = " + status.ToString() + ").");
             }
+            else if (DGRSettings.MidGameJoining)
+            {
+                DevConsole.Log(DCSection.General, "|DGRED|Skipping host migration.");
+            }
             else
             {
                 bool flag1 = pLocal;
@@ -2096,7 +2100,7 @@ namespace DuckGame
                         if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
                         {
                             Network.activeNetwork.core.lobby.joinable = true;
-                            Network.activeNetwork.core.lobby.type = SteamLobbyType.Private;
+                            // Network.activeNetwork.core.lobby.type = SteamLobbyType.Private;
                             //if (ShowGameInBrowser)
                             //{
                             //set this to true for auhsduhasd -NiK0
@@ -2129,6 +2133,9 @@ namespace DuckGame
 
         public static void ChatMessageOffset()
         {
+            if (!_core.enteringText)
+                _core.chatMessageOffset = 0;
+
             if (DevConsole.core.open)
                 return;
 
@@ -2274,7 +2281,7 @@ namespace DuckGame
                     // Once per tick is enough idc -Tater
                     if (chatMessageList.Count > 300 && _core.chatMessages.Count > 0)
                     {
-                        ChatMessage removeMessage = chatMessageList[0];
+                        ChatMessage removeMessage = chatMessageList[chatMessageList.Count - 1];
                         _core.chatMessages.Remove(removeMessage);
                     }
 

@@ -502,7 +502,7 @@ namespace DuckGame
                                 first = false;
                             }
                         }
-                        if (DGRSettings.DGRItems || DG.FiftyPlayerMode)
+                        if (DGRSettings.DGROnly)
                         {
                             modList += "3132351890,0";
                         }
@@ -510,7 +510,7 @@ namespace DuckGame
                         ApplyLobbyData();
                         _initializedSettings = true;
                     }
-                    if (((!_isDGRLocked && (DGRSettings.DGRItems || DG.FiftyPlayerMode)) || (_isDGRLocked && !(DGRSettings.DGRItems || DG.FiftyPlayerMode))) && _lobby.id != 0UL)
+                    if (((!_isDGRLocked && (DGRSettings.DGROnly)) || (_isDGRLocked && !(DGRSettings.DGROnly))) && _lobby.id != 0UL)
                     {
                         string modList = "";
                         bool first = true;
@@ -525,7 +525,7 @@ namespace DuckGame
                             }
                         }
                         _isDGRLocked = false;
-                        if (DGRSettings.DGRItems || DG.FiftyPlayerMode)
+                        if (DGRSettings.DGROnly)
                         {
                             //https://steamcommunity.com/sharedfiles/filedetails/?id=3132351890
                             if (!first) modList += "|";

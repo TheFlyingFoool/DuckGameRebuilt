@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNA", "FNA\FNA.csproj", "{3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrashWindow", "CrashWindow\CrashWindow.csproj", "{761C4668-CBBD-4C8F-BC40-742BD3103932}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rebuilder", "Rebuilder\build\Rebuilder.csproj", "{B07BDC3C-3770-4A07-90D8-5C2A68E2172B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DGR-Mod", "DGR-Mod\build\DGR-Mod.csproj", "{B07BDC3C-3770-4A07-90D8-5C2A68E2172B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
