@@ -191,6 +191,7 @@ namespace DuckGame
             };
             _tinyStars = new SpriteMap("arcade/tinyStars", 10, 8);
             _tinyStars.CenterOrigin();
+            _tinyStars.LerpState.CanLerp = false;
             _completeStamp = new Sprite("arcade/completeStamp");
             _completeStamp.CenterOrigin();
             _pencil = new Sprite("arcade/pencil")
@@ -684,7 +685,7 @@ namespace DuckGame
                     {
                         _tinyStars.frame = (int)(saveData.trophy - 1);
                         _tinyStars.depth = (Depth)0.85f;
-                        Graphics.Draw(ref _tinyStars, vec2_2.x + 2f, vec2_2.y);
+                        Graphics.Draw(_tinyStars, vec2_2.x + 2f, vec2_2.y);
                     }
                     num += 9f;
                     ++index;
