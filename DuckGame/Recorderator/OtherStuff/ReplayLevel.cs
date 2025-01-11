@@ -660,6 +660,7 @@ namespace DuckGame
                 "x4",
                 "x8"
             }));
+            _pausebox.leftSection.Add(new UIMenuItem("|DGRED|RESTART", new UIMenuActionCallFunction(RestartReplay), UIAlign.Left));
             _pausebox.leftSection.Add(new UIText("", Color.White), true);
             _pausebox.leftSection.Add(new UIMenuItem("|DGRED|EXIT REPLAY", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _quit), UIAlign.Left), true);
             _pausebox.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
@@ -672,6 +673,19 @@ namespace DuckGame
             _pauseGroup.Close();
             Add(_pauseGroup);
         }
+
+        public void RestartReplay()
+        {
+            current.Clear();
+            current = prev ?? new RecorderationSelector();
+            var selector = current as RecorderationSelector;
+            selector.MenuItems[selector.SelectedItemIndex + selector.ScrollIndex].OnSelect();
+            _pauseMenu.Close();
+            MonoMain.pauseMenu = null;
+            _paused = false;
+            SFX.Play("resume", 0.6f);
+        }
+
         public static float ActualReplaySpeed
         {
             get
