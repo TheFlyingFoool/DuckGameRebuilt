@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web.UI.WebControls;
 
 namespace DuckGame
 {
@@ -49,6 +48,9 @@ namespace DuckGame
         private int _selectedItemIndex;
         private string[] _replayPaths;
         private string[] _folderPaths;
+
+        private float holdSeconds;
+        private float totalHoldSeconds;
         
         public override void Initialize()
         {
@@ -154,22 +156,26 @@ namespace DuckGame
 
         private void UpdateInputs()
         {
+            bool menuDownIsDown = Input.Down(Triggers.MenuDown);
             if (Input.Pressed(Triggers.MenuDown))
             {
-                int prev = SelectedItemIndex++;
-                if (prev == _selectedItemIndex)
-                {
-                    ScrollDown();
-                    SelectedItemIndex++;
-                }
+                Move(1);
+                totalHoldSeconds = 0;
             }
             else if (Input.Pressed(Triggers.MenuUp))
             {
-                int prev = SelectedItemIndex--;
-                if (prev == _selectedItemIndex)
+                Move(-1);
+                totalHoldSeconds = 0;
+            }
+            else if (menuDownIsDown || Input.Down(Triggers.MenuUp))
+            {
+                
+                holdSeconds += Maths.IncFrameTimer();
+                totalHoldSeconds += Maths.IncFrameTimer();
+                if (holdSeconds >= Math.Max(0.7f / totalHoldSeconds, 0.05f))
                 {
-                    ScrollUp();
-                    SelectedItemIndex--;
+                    if (menuDownIsDown) Move(1);
+                    else Move(-1);
                 }
             }
             else if ((Input.Pressed(Triggers.Select) || (DGRSettings.MenuMouse && Mouse.left == InputState.Pressed)) && SelectedItemIndex != -1)
@@ -194,6 +200,19 @@ namespace DuckGame
                     }
                 }
             }
+        }
+
+        private void Move(int amount)
+        {
+            DevConsole.Log($"Moving by {amount}");
+            int prev = SelectedItemIndex;
+            SelectedItemIndex += amount;
+            holdSeconds = 0;
+            if (prev != _selectedItemIndex) return;
+
+            if (amount < 0) ScrollUp();
+            else ScrollDown();
+            SelectedItemIndex += amount;
         }
 
         private void ScrollUp()
