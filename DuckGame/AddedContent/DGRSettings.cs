@@ -431,6 +431,8 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool EditorMousePriority = false;
 
+        [Marker.AutoConfig] public static bool ShowWorkshopModsInEditor = false;
+
         [Marker.AutoConfig] public static bool ConvertModdedCommands = true;
 
         [Marker.AutoConfig]
