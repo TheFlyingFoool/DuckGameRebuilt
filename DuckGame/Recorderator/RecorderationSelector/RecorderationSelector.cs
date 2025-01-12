@@ -76,7 +76,6 @@ namespace DuckGame
 
             MenuItems.AddRange(_folderPaths.Select(x => new FolderInfo(x)));
             MenuItems.AddRange(_replayPaths.OrderByDescending(x => new FileInfo(x).CreationTime).Select(x => new ReplayInfo(x)));
-            
             base.Initialize();
         }
 
@@ -87,6 +86,8 @@ namespace DuckGame
             for (int i = 0; i < MenuItems.Count; i++)
             {
                 IRMenuItem item = MenuItems[i];
+
+                if (item is null) continue;
 
                 if (item.Parent is FolderInfo parentFolder && !parentFolder.Open)
                 {
@@ -182,6 +183,15 @@ namespace DuckGame
             {
                 MenuItems[SelectedItemIndex + ScrollIndex].OnSelect();
             }
+            else if ((Input.Pressed(Triggers.Grab) || (DGRSettings.MenuMouse && Mouse.right == InputState.Pressed)) && SelectedItemIndex != -1)
+            {
+                if (MenuItems[SelectedItemIndex + ScrollIndex] is ReplayInfo info)
+                {
+                    File.Delete(info.ReplayFilePath);
+                    MenuItems[SelectedItemIndex + ScrollIndex] = null;
+                    UpdateMenuItemList();
+                }
+            }
 
             if (DGRSettings.MenuMouse)
             {
@@ -246,7 +256,7 @@ namespace DuckGame
 
             Vec2 mousePos = Mouse.positionScreen;
 
-            Graphics.DrawString("@QUACK@LEAVE", new Vec2(264, 163), Color.White, 1, InputProfile.active);
+            Graphics.DrawString("@GRAB@DELETE@QUACK@LEAVE", new Vec2(200, 163), Color.White, 1, InputProfile.active);
             Graphics.DrawString("Recorderator BETA", new Vec2(250, 174), Color.SkyBlue, 1, null, 0.5f);
 
             if (DGRSettings.MenuMouse)
