@@ -220,9 +220,10 @@ namespace DuckGame
             }
             else
             {
-                foreach (Mod accessibleMod in (IEnumerable<Mod>)ModLoader.accessibleMods)
+                foreach (Mod accessibleMod in ModLoader.accessibleMods)
                 {
-                    if (accessibleMod.configuration != null && accessibleMod.configuration.content != null && accessibleMod.configuration.content.levels.Count > 0 && accessibleMod.configuration.contentDirectory.Contains(DuckFile.saveDirectory))
+                    if (accessibleMod.configuration != null && accessibleMod.configuration.content != null && accessibleMod.configuration.content.levels.Count > 0
+                        && (accessibleMod.configuration.contentDirectory.Contains(DuckFile.saveDirectory) || DGRSettings.ShowWorkshopModsInEditor))
                     {
                         ContextMenu contextMenu = new ContextMenu(this)
                         {

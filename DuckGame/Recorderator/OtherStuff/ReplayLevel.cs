@@ -616,7 +616,6 @@ namespace DuckGame
             base.PostDrawLayer(layer);
         }
         private UIDivider _pausebox;
-        private UIMenu _confirmMenu;
         private MenuBoolean _quit = new MenuBoolean();
         private UIMenu _pauseMenu;
         private UIComponent _pauseGroup;
@@ -643,7 +642,6 @@ namespace DuckGame
             base.Initialize();
             _pauseGroup = new UIComponent(Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 0f, 0f);
             _pauseMenu = new UIMenu("@LWING@ARCADE@RWING@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@CLOSE  @SELECT@SELECT");
-            _confirmMenu = new UIMenu("EXIT REPLAY?", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f, conString: "@CANCEL@BACK  @SELECT@SELECT");
             _pausebox = new UIDivider(true, 0.75f);
             _pausebox.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(_pauseGroup), UIAlign.Left), true);
             _pausebox.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_pauseMenu, Options.optionsMenu), UIAlign.Left), true);
@@ -662,22 +660,32 @@ namespace DuckGame
                 "x4",
                 "x8"
             }));
+            _pausebox.leftSection.Add(new UIMenuItem("|DGRED|RESTART", new UIMenuActionCallFunction(RestartReplay), UIAlign.Left));
             _pausebox.leftSection.Add(new UIText("", Color.White), true);
-            _pausebox.leftSection.Add(new UIMenuItem("|DGRED|EXIT REPLAY", new UIMenuActionOpenMenu(_pauseMenu, _confirmMenu), UIAlign.Left), true);
+            _pausebox.leftSection.Add(new UIMenuItem("|DGRED|EXIT REPLAY", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _quit), UIAlign.Left), true);
             _pausebox.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
             _pauseMenu.Add(_pausebox, true);
             _pauseMenu.Close();
             _pauseGroup.Add(_pauseMenu, false);
             Options.AddMenus(_pauseGroup);
             Options.openOnClose = _pauseMenu;
-            _confirmMenu.Add(new UIMenuItem("NO!", new UIMenuActionOpenMenu(_confirmMenu, _pauseMenu), UIAlign.Left, backButton: true), true);
-            _confirmMenu.Add(new UIMenuItem("YES!", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _quit)), true);
-            _confirmMenu.Close();
-            _pauseGroup.Add(_confirmMenu, false);
             _pauseGroup.isPauseMenu = true;
             _pauseGroup.Close();
             Add(_pauseGroup);
         }
+
+        public void RestartReplay()
+        {
+            current.Clear();
+            current = prev ?? new RecorderationSelector();
+            var selector = current as RecorderationSelector;
+            selector.MenuItems[selector.SelectedItemIndex + selector.ScrollIndex].OnSelect();
+            _pauseMenu.Close();
+            MonoMain.pauseMenu = null;
+            _paused = false;
+            SFX.Play("resume", 0.6f);
+        }
+
         public static float ActualReplaySpeed
         {
             get

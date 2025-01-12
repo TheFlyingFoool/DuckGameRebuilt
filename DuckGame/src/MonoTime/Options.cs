@@ -396,6 +396,11 @@ namespace DuckGame
                 dgrDescription = "Disables keyboard/gamepad mode switching in the editor. Ideal for creators who mainly use the mouse"
             });
 
+            menu.Add(new UIMenuItemToggle("Show Workshop Mods", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ShowWorkshopModsInEditor)))
+            {
+                dgrDescription = "Allows you to see levels from workshop mods in level select"
+            });
+
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
             return menu;
