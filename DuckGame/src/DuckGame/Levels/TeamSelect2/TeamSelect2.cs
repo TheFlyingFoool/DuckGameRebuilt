@@ -67,7 +67,7 @@ namespace DuckGame
         //private UIMenu _hostSettingsWirelessGameMenu;
         private UIServerBrowser _browseGamesMenu;
         private UIMatchmakerMark2 _matchmaker;
-        private MenuBoolean _returnToMenu = new MenuBoolean();
+        public MenuBoolean _returnToMenu = new MenuBoolean();
         private MenuBoolean _inviteFriends = new MenuBoolean();
         private MenuBoolean _findGame = new MenuBoolean();
         private MenuBoolean _backOut = new MenuBoolean();

@@ -615,7 +615,7 @@ namespace DuckGame
                     }
                 }
             }
-            if (_teamSelect != null && !ready && !Network.isActive && _inputProfile.Pressed(Triggers.Start) && !flag1)
+            if (_teamSelect != null && !ready && !Network.isActive && _inputProfile.Pressed(Triggers.Start) && !flag1 && !_teamSelect._returnToMenu.value)
                 _teamSelect.OpenPauseMenu(this);
             if (!Network.isActive && _duck != null && !_duck.immobilized)
                 _playerActive = true;
