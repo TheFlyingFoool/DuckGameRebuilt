@@ -138,7 +138,7 @@ namespace XnaToFna
                 Modder.RelinkMap[method.GetFindableID(type: "Microsoft.Xna.Framework.Game")] = new RelinkMapEntry("XnaToFna.XnaToFnaGame", method.GetFindableID(withType: false));
             Modder.RelinkMap["System.IntPtr Microsoft.Xna.Framework.GameWindow::get_Handle()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.IntPtr GetProxyFormHandle(Microsoft.Xna.Framework.GameWindow)");
             Modder.RelinkMap["System.Void Microsoft.Xna.Framework.GraphicsDeviceManager::ApplyChanges()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void ApplyChanges(Microsoft.Xna.Framework.GraphicsDeviceManager)");
-            foreach (Type type in typeof(Form).Assembly.GetTypes())
+            foreach (Type type in typeof(Form).Assembly.SaferGetTypes())
             {
                  //else if (fullName.StartsWith("XnaToFna.ProxyDrawing."))
                  //   this.Modder.RelinkMap["System.Drawing." + fullName.Substring(22)] = fullName;

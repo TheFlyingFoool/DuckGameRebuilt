@@ -854,7 +854,7 @@ namespace DuckGame
 		        Assembly assembly = results.CompiledAssembly;
 		        Type t2 = null;//assembly.GetType("MyAssembly.Evaluator");
 		        targetmethod = null;
-		        foreach(Type type in assembly.GetTypes())
+		        foreach(Type type in assembly.SaferGetTypes())
 		        {
 		            foreach (MethodInfo m in type.GetMethods())
 		            {

@@ -5182,7 +5182,7 @@ namespace DuckGame
 
         public static IEnumerable<Type> GetSubclasses(Type parentType)
         {
-            return DG.assemblies.SelectMany(assembly => assembly.GetTypes())
+            return DG.assemblies.SelectMany(assembly => assembly.SaferGetTypes())
                 .Where(type =>
                     (type.IsSubclassOf(parentType) &&
                      (clientonlycontent || !type.IsDefined(typeof(ClientOnlyAttribute), false))))
@@ -5192,13 +5192,13 @@ namespace DuckGame
 
         public static IEnumerable<Type> GetAllSubclasses(Type parentType) // Dan
         {
-            return DG.assemblies.SelectMany(assembly => assembly.GetTypes())
+            return DG.assemblies.SelectMany(assembly => assembly.SaferGetTypes())
                 .Where(type => type.IsSubclassOf(parentType)).OrderBy(t => t.FullName)
                 .OrderBy(type => type.IsDefined(typeof(ClientOnlyAttribute), false) ? 1 : 0).ToArray();
         }
 
         public static IEnumerable<Type> GetSubclassesAndInterfaces(Type parentType) => DG.assemblies
-            .SelectMany(assembly => assembly.GetTypes())
+            .SelectMany(assembly => assembly.SaferGetTypes())
             .Where(type =>
                 (parentType.IsAssignableFrom(type) &&
                  (clientonlycontent || !type.IsDefined(typeof(ClientOnlyAttribute), false))))
