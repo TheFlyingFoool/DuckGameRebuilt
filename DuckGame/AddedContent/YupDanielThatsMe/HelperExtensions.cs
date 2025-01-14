@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace DuckGame
 {
-    public static class DanExtensions
+    public static class MyExtensions
     {
-        public static Type[] SaferGetTypes(Assembly assembly)
+        public static Type[] SaferGetTypes(this Assembly assembly)
         {
             Module[] modules = assembly.GetModules(false);
             int moduleLength = modules.Length;

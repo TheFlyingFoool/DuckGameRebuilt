@@ -12,7 +12,7 @@ namespace DuckGame
         public static void Initialize()
         {
             Type newsType = typeof(NewsStory);
-            foreach (Type type in DanExtensions.SaferGetTypes(Assembly.GetAssembly(typeof(NewsStory))).Where(t => newsType.IsAssignableFrom(t)))
+            foreach (Type type in Assembly.GetAssembly(typeof(NewsStory)).SaferGetTypes().Where(t => newsType.IsAssignableFrom(t)))
                 _availableStories.Add(Activator.CreateInstance(type) as NewsStory);
         }
 
