@@ -1,4 +1,5 @@
-﻿namespace DuckGame
+﻿
+namespace DuckGame
 {
     public class UIMenuActionCloseMenu : UIMenuAction
     {

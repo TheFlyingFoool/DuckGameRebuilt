@@ -214,7 +214,7 @@ namespace DuckGame
             }
             Assembly normalmodassembly = Assembly.Load(File.ReadAllBytes(path));
 
-            Type[] modtypes = normalmodassembly.SaferGetTypes();
+            Type[] modtypes = DanExtensions.SaferGetTypes(normalmodassembly);
             modConfig.SortedTypeNames = new string[modtypes.Length];
             string typeorder = "\nType Order";
             for (int i = 0; i < modtypes.Length; i++)
@@ -1069,7 +1069,7 @@ namespace DuckGame
                     }
                     try
                     {
-                        foreach (Type type in sortedAccessibleMod.configuration.assembly.SaferGetTypes())
+                        foreach (Type type in DanExtensions.SaferGetTypes(sortedAccessibleMod.configuration.assembly))
                         {
                             string key1 = SmallTypeName(type.AssemblyQualifiedName);
                             _typesByNameUnprocessed[key1] = type;

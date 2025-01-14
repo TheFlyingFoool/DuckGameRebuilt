@@ -1010,7 +1010,7 @@ namespace DuckGame
                                     bool flag3 = crashAssembly == null && exception.TargetSite.DeclaringType != null && allMod.configuration.assembly == exception.TargetSite.DeclaringType.Assembly || allMod.configuration.assembly == crashAssembly;
                                     if (!flag3)
                                     {
-                                        foreach (Type type in allMod.configuration.assembly.SaferGetTypes())
+                                        foreach (Type type in DanExtensions.SaferGetTypes(allMod.configuration.assembly))
                                         {
                                             if (pException.StackTrace.Contains(type.ToString()))
                                             {

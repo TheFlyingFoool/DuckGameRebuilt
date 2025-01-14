@@ -16,7 +16,7 @@ namespace AddedContent.Firebreak
         {
             Type[] registeredMarkers = typeof(Marker).GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic);
 
-            Type[] types = assembly.SaferGetTypes();
+            Type[] types = DanExtensions.SaferGetTypes(assembly);
             List<MemberInfo> memberInfos = new();
             
             for (int i = 0; i < types.Length; i++)
