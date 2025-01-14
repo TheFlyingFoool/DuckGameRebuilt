@@ -580,6 +580,7 @@
     <Compile Include="AddedContent\YupDanielThatsMe\DebugTablet.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\DevTestLevel.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\FunctionBinding.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\HelperExtensions.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\TestingTileset.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\RectPackSharp\HashCode.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\RectPackSharp\PackingHints.cs" />
