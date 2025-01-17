@@ -963,6 +963,8 @@ namespace DuckGame
                 bool multiLayering = false;
                 if (activeFS.Count > 1) multiLayering = true;
                 List<RenderTarget2D> dispose = new List<RenderTarget2D>() { rd2 };
+
+                RenderTarget2D rrTrack = rd2;
                 for (int i = 0; i < activeFS.Count; i++)
                 {
                     RenderTarget2D rd3 = null;
@@ -999,7 +1001,7 @@ namespace DuckGame
                     }
 #endif
                     Graphics.material = activeFS[i];
-                    Graphics.Draw(rd2, 0, 0, 1, 1);
+                    Graphics.Draw(rrTrack, 0, 0, 1, 1);
                     Graphics.material = null;
                     Graphics.screen.End();
                     if (multiLayering)
@@ -1007,7 +1009,7 @@ namespace DuckGame
                         if (!cameraD) Graphics.SettingForShader = true;
                         Graphics.SetRenderTarget(null);
                         Graphics.SettingForShader = true;
-                        rd2 = rd3;
+                        rrTrack = rd3;
                     }
                 }
                 Layer.Console.visible = true;
