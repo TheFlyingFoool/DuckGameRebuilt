@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web.UI.WebControls;
 
 namespace DuckGame
 {
@@ -49,6 +48,9 @@ namespace DuckGame
         private int _selectedItemIndex;
         private string[] _replayPaths;
         private string[] _folderPaths;
+
+        private float holdSeconds;
+        private float totalHoldSeconds;
         
         public override void Initialize()
         {
@@ -74,7 +76,6 @@ namespace DuckGame
 
             MenuItems.AddRange(_folderPaths.Select(x => new FolderInfo(x)));
             MenuItems.AddRange(_replayPaths.OrderByDescending(x => new FileInfo(x).CreationTime).Select(x => new ReplayInfo(x)));
-            
             base.Initialize();
         }
 
@@ -85,6 +86,8 @@ namespace DuckGame
             for (int i = 0; i < MenuItems.Count; i++)
             {
                 IRMenuItem item = MenuItems[i];
+
+                if (item is null) continue;
 
                 if (item.Parent is FolderInfo parentFolder && !parentFolder.Open)
                 {
@@ -154,27 +157,40 @@ namespace DuckGame
 
         private void UpdateInputs()
         {
+            bool menuDownIsDown = Input.Down(Triggers.MenuDown);
             if (Input.Pressed(Triggers.MenuDown))
             {
-                int prev = SelectedItemIndex++;
-                if (prev == _selectedItemIndex)
-                {
-                    ScrollDown();
-                    SelectedItemIndex++;
-                }
+                Move(1);
+                totalHoldSeconds = 0;
             }
             else if (Input.Pressed(Triggers.MenuUp))
             {
-                int prev = SelectedItemIndex--;
-                if (prev == _selectedItemIndex)
+                Move(-1);
+                totalHoldSeconds = 0;
+            }
+            else if (menuDownIsDown || Input.Down(Triggers.MenuUp))
+            {
+                
+                holdSeconds += Maths.IncFrameTimer();
+                totalHoldSeconds += Maths.IncFrameTimer();
+                if (holdSeconds >= Math.Max(0.7f / totalHoldSeconds, 0.05f))
                 {
-                    ScrollUp();
-                    SelectedItemIndex--;
+                    if (menuDownIsDown) Move(1);
+                    else Move(-1);
                 }
             }
             else if ((Input.Pressed(Triggers.Select) || (DGRSettings.MenuMouse && Mouse.left == InputState.Pressed)) && SelectedItemIndex != -1)
             {
                 MenuItems[SelectedItemIndex + ScrollIndex].OnSelect();
+            }
+            else if ((Input.Pressed(Triggers.Grab) || (DGRSettings.MenuMouse && Mouse.right == InputState.Pressed)) && SelectedItemIndex != -1)
+            {
+                if (MenuItems[SelectedItemIndex + ScrollIndex] is ReplayInfo info)
+                {
+                    File.Delete(info.ReplayFilePath);
+                    MenuItems[SelectedItemIndex + ScrollIndex] = null;
+                    UpdateMenuItemList();
+                }
             }
 
             if (DGRSettings.MenuMouse)
@@ -194,6 +210,19 @@ namespace DuckGame
                     }
                 }
             }
+        }
+
+        private void Move(int amount)
+        {
+            DevConsole.Log($"Moving by {amount}");
+            int prev = SelectedItemIndex;
+            SelectedItemIndex += amount;
+            holdSeconds = 0;
+            if (prev != _selectedItemIndex) return;
+
+            if (amount < 0) ScrollUp();
+            else ScrollDown();
+            SelectedItemIndex += amount;
         }
 
         private void ScrollUp()
@@ -227,7 +256,7 @@ namespace DuckGame
 
             Vec2 mousePos = Mouse.positionScreen;
 
-            Graphics.DrawString("@QUACK@LEAVE", new Vec2(264, 163), Color.White, 1, InputProfile.active);
+            Graphics.DrawString("@GRAB@DELETE@QUACK@LEAVE", new Vec2(200, 163), Color.White, 1, InputProfile.active);
             Graphics.DrawString("Recorderator BETA", new Vec2(250, 174), Color.SkyBlue, 1, null, 0.5f);
 
             if (DGRSettings.MenuMouse)

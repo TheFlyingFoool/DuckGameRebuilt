@@ -142,7 +142,7 @@ namespace DuckGame
             {
                 try
                 {
-                    foreach (Type type in assembly.GetTypes())
+                    foreach (Type type in assembly.SaferGetTypes())
                     {
                         if (type.IsSubclassOf(t))
                         {
@@ -173,7 +173,7 @@ namespace DuckGame
             {
                 try
                 {
-                    foreach (Type type in assembly.GetTypes())
+                    foreach (Type type in assembly.SaferGetTypes())
                     {
                         if (type.IsSubclassOf(t))
                         {
