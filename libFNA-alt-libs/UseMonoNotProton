@@ -1,0 +1,30 @@
+#!/bin/bash
+#fixes some weird locale issues
+while IFS='=' read -r -d '' n v; do
+    if [[ "$v" =~ "Default.UTF-8" ]]; then
+      export $n="\"$LC_ALL\""
+    fi
+done < <(env -0)
+newargs=()
+skipnext=""
+for var in "$@"
+do
+  if [ -n "${skipnext}" ]; then
+    skipnext=""
+    continue
+  fi
+  if [[ "$var" == *"proton" ]]; then
+    var="mono"
+  fi
+  
+  if [[ $var == "--verb=waitforexitandrun" ]]; then
+    skipnext=1
+    continue
+  fi
+  #waitforexitandrun appears a second time, but we don't skip the next --
+  if [[ "$var" =~ .*entry-point.* ]] || [[ "$var" == "waitforexitandrun" ]]; then
+    continue
+  fi
+  newargs+=("$var")
+done
+"${newargs[@]}"
