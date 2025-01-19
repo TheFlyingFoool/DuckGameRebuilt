@@ -215,18 +215,18 @@ namespace DuckGame
                 _vgmPlayer.looped = looping;
                 CurrentType = 1;
             }
-            else if (Directory.Exists("./Content/Audio/Music/InGame/" + music + "dgm"))
+            else if (Directory.Exists("./Content/Audio/Music/InGame/" + music) && music.Contains("dgm"))
             {
-                if (!LoadDGM("./Content/Audio/Music/InGame/" + music + "dgm"))
+                if (!LoadDGM("./Content/Audio/Music/InGame/" + music))
                     return;
                 _dgmPlayer.Play();
                 _dgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
                 _dgmPlayer.looped = looping;
                 CurrentType = 2;
             }
-            else if (File.Exists("./Content/Audio/Music/" + music + "dgm"))
+            else if (File.Exists("./Content/Audio/Music/" + music) && music.Contains("dgm"))
             {
-                if (!LoadDGM("./Content/Audio/Music/InGame/" + music + "dgm"))
+                if (!LoadDGM("./Content/Audio/Music/" + music))
                     return;
                 _dgmPlayer.Play();
                 _dgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
