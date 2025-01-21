@@ -49,7 +49,12 @@ namespace DuckGame
             _owner.Selected(this);
         }
 
-        public override void Closed() => base.Closed();
+        public override void Update()
+        {
+            base.Update();
+            if (opened && position.y + menuSize.y + _openedOffset > 350)
+                _openedOffset = 350 - position.y - menuSize.y;
+        }
 
         public override void Draw()
         {
@@ -86,7 +91,7 @@ namespace DuckGame
                 menuSize = new Vec2(graphic.texture.width + 2, graphic.texture.height + 2);
                 float x = menuSize.x;
                 float y = menuSize.y;
-                Vec2 p1 = new Vec2(this.x, this.y);
+                Vec2 p1 = new Vec2(this.x, this.y + _openedOffset);
                 if (Editor.inputMode != EditorInput.Mouse && !_root)
                     p1.y = 16f;
                 if (!_root)
