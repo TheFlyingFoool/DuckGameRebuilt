@@ -598,9 +598,9 @@ namespace DuckGame
                 if (ragdoll.part1 != null && ragdoll.part1.owner is Duck)
                     return ragdoll.part1.owner as Duck;
                 if (ragdoll.part2 != null && ragdoll.part2.owner is Duck)
-                    return ragdoll.part1.owner as Duck;
+                    return ragdoll.part2.owner as Duck;
                 if (ragdoll.part3 != null && ragdoll.part3.owner is Duck)
-                    return ragdoll.part1.owner as Duck;
+                    return ragdoll.part3.owner as Duck;
             }
             else if (_trapped != null && _trapped.owner is Duck)
                 return _trapped.owner as Duck;
