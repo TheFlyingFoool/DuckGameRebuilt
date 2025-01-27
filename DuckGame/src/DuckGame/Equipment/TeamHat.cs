@@ -535,12 +535,26 @@ namespace DuckGame
                     _graphic.scale = scale;
                     _graphic.center = center;
                     _graphic.LerpState.CanLerp = true;
+                    if (_graphic != null && duck != null)
+                    {
+                        _graphic.LerpState.CanAngleLerp = false;
+                        _graphic.LerpState.ParentInterp = duck.DuckLerp;
+                        _graphic.LerpState.SpecialAngleResetParentTrackingForHat = true;
+                    }
                     _graphic.SkipIntraTick = SkipIntratick;
                     _graphic.Draw();
                 }
             }
             else
+            {
+                if (_graphic != null && duck != null)
+                {
+                    _graphic.LerpState.CanAngleLerp = false;
+                    _graphic.LerpState.ParentInterp = duck.DuckLerp;
+                    _graphic.LerpState.SpecialAngleResetParentTrackingForHat = true;
+                }
                 base.Draw();
+            }
             _hatOffset = hatOffset;
             if (duck != null)
             {
