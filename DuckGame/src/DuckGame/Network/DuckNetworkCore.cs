@@ -277,6 +277,7 @@ namespace DuckGame
         public bool inGame;
         public bool stopEnteringText;
         public List<ChatMessage> chatMessages = new List<ChatMessage>();
+        public int chatMessageOffset = 0;
         private int swearCharOffset;
         private string[] swearChars = new string[7]
         {
@@ -472,12 +473,9 @@ namespace DuckGame
                 pMessage.text = "??????";
             }
             int num = pMessage.text.Count(x => x == '\n');
-            string colorTag = pMessage.text.StartsWith(">") && DGRSettings.GreenTextSupport
-                ? "0,153,0"
-                : "BLACK";
             if (chatMessage != null && num == 0 && chatMessage.newlines < 3 && chatMessage.timeout > 2 && chatMessage.who == pMessage.who)
             {
-                pMessage.text = "|GRAY|" + pMessage.who.nameUIBodge + $": |{colorTag}|" + pMessage.text;
+                pMessage.text = "|GRAY|" + pMessage.who.nameUIBodge + $": |BLACK|" + pMessage.text;
                 chatMessage.timeout = 10f;
                 chatMessage.text += "\n";
                 chatMessage.text += pMessage.text;
@@ -489,7 +487,7 @@ namespace DuckGame
             else
             {
                 pMessage.newlines = num + 1;
-                pMessage.text = "|WHITE|" + pMessage.who.nameUIBodge + $": |{colorTag}|" + pMessage.text;
+                pMessage.text = "|WHITE|" + pMessage.who.nameUIBodge + $": |BLACK|" + pMessage.text;
                 chatMessages.Add(pMessage);
             }
             chatMessages = chatMessages.OrderBy(x => -x.index).ToList();

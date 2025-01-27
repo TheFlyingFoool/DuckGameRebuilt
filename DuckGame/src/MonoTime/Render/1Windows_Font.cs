@@ -217,7 +217,7 @@ namespace DuckGame
             rasterFontData2.name = _systemFont.Name;
             _graphicsContext = System.Drawing.Graphics.FromImage(new Bitmap(32, 32, PixelFormat.Format32bppArgb));
             _graphicsContext.PageUnit = GraphicsUnit.Pixel;
-            ABCFloat[] charAbcWidthsRange = GetCharABCWidthsRange(char.MinValue, 'ё', _systemFont, _graphicsContext);
+            ABCFloat[] charAbcWidthsRange = GetCharABCWidthsRange(char.MinValue, 'ґ', _systemFont, _graphicsContext);
             ABCFloat abcFloat1 = charAbcWidthsRange[87];
             float num2 = abcFloat1.abcB + Math.Abs(abcFloat1.abcA) + Math.Abs(abcFloat1.abcC);
             float val1 = (int)(num2 * Math.Sqrt(FancyBitmapFont._characters.Length) / num2) * (_systemFont.GetHeight() + 8f);

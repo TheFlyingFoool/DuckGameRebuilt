@@ -107,7 +107,7 @@ namespace DuckGame
                 if ((position - netLerpPosition).lengthSq > 2048 || (position - netLerpPosition).lengthSq < 1) this.position = netLerpPosition;
                 else this.position = Lerp.Vec2Smooth(position, netLerpPosition, 0.5f);
             }
-            else if (Network.isActive && (y < Level.current.highestPoint - 200 || y > Level.current.lowestPoint + 200)) Level.Remove(this);
+            else if (Network.isActive && (y < Level.current.ExtendedTop || y > Level.current.ExtendedBottom)) Level.Remove(this);
             else
             {
                 _hit = false;

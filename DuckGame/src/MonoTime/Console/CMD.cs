@@ -429,7 +429,7 @@ namespace DuckGame
             public static Dictionary<string, Func<DuckGame.Level>> SpecialLevelLookup = new()
             {
                 {"fb", () => new SimRenderer()},
-                {"fbtest", () => new TestLev()},
+                // {"fbtest", () => new TestLev()}, // apparently someone booted up dg and got this level somehow
                 {"hatpreview", () => new HatPreviewLevel()},
                 {"ff", () => new FeatherFashion()},
                 {"cord", () => new RecorderationSelector()},

@@ -1052,6 +1052,22 @@ namespace DuckGame
                     "Kills",
                     "Both",
                 }, c: Colors.DGPink));
+                bool DGR = true;
+                for (int i = 0; i < Profiles.active.Count(); i++)
+                {
+                    Profile p = Profiles.active.ElementAt(i);
+                    if (!p.isUsingRebuilt || !p.inSameRebuiltVersion)
+                    {
+                        DGR = false;
+                        break;
+                    }
+                }
+                if (DGR) _core._matchSettingMenu.Add(new UIMenuItemToggle("DGR Stuff", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DGRItems)), c: Colors.DGPink));
+                else
+                {
+                    DGRSettings.DGRItems = false;
+                    _core._matchSettingMenu.Add(new LUIText(" DGR Stuff        ON |WHITE|OFF", c: Color.Gray, UIAlign.Left));
+                }
                 _core._matchSettingMenu.AddMatchSetting(TeamSelect2.GetOnlineSetting("teams"), false);
                 //_core._matchSettingMenu.Add(new UISideButton(66, -50, 50, 0, "@SHOOT@"));
                 //_core._matchSettingMenu.Add(new UISideButton(66, -50, 50, 0, "@SHOOT@"));
@@ -1126,46 +1142,30 @@ namespace DuckGame
                 }
             }
 
+            bool forceInv = false;
             if (Network.isServer)
             {
-                bool DGR = true;
-                for (int i = 0; i < Profiles.active.Count(); i++)
-                {
-                    Profile p = Profiles.active.ElementAt(i);
-                    if (!p.isUsingRebuilt || !p.inSameRebuiltVersion)
-                    {
-                        DGR = false;
-                        break;
-                    }
-                }
                 if (Level.current is TeamSelect2)
                 {
                     if (!DGRSettings.HideFS) _core._ducknetMenu.Add(new UIMenuItem("|DGBLUE|FORCE START", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmStartMenu), UIAlign.Left));
-                    if (DGR) _core._ducknetMenu.Add(new UIMenuItemToggle("DGR Stuff", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DGRItems)), c: Colors.DGPink));
-                    else
-                    {
-                        DGRSettings.DGRItems = false;
-                        _core._ducknetMenu.Add(new LUIText(" DGR Stuff        ON |WHITE|OFF", c: Color.Gray, UIAlign.Left));
-                    }
                 }
                 else if (Level.current is GameLevel)
                 {
                     _core._ducknetMenu.Add(new UIMenuItemToggle("MID GAME JOINING", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.MidGameJoining)), c: Colors.DGPink));
                     if (DGRSettings.MidGameJoining && Steam.user != null && Steam.lobby != null)
                     {
-                        _core._ducknetMenu.Add(new UIMenuItemToggle("SHOW IN BROWSER", field: new FieldBinding(typeof(DuckNetwork), nameof(ShowGameInBrowser)), c: Colors.DGPink));
-                        _core._ducknetMenu.Add(new UIMenuItem("|DGGREEN|INVITE FRIENDS", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._inviteMenu), UIAlign.Left), true);
-                        _core._ducknetMenu.Add(new UIMenuItem("|DGGREEN|COPY INVITE LINK", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(CopyInviteLink)), UIAlign.Left), true);
+                        
+                        forceInv = true;
                     }
                 }
             }
 
             Main.SpecialCode = "men7";
-            if (Network.inLobby && whoOpen.slotType != SlotType.Local && Network.available)
+            if (forceInv || (Network.inLobby && whoOpen.slotType != SlotType.Local && Network.available))
             {
                 Main.SpecialCode = "men8";
-                _core._ducknetMenu.Add(new UIText("", Color.White), true);
-                _core._inviteMenu = new UIInviteMenu("INVITE FRIENDS", null, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
+                if (!forceInv) _core._ducknetMenu.Add(new UIText("", Color.White), true);
+                core._inviteMenu = new UIInviteMenu("INVITE FRIENDS", null, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 160f);
                 ((UIInviteMenu)_core._inviteMenu).SetAction(new UIMenuActionOpenMenu(_core._inviteMenu, _core._ducknetMenu));
                 _core._inviteMenu.Close();
                 _ducknetUIGroup.Add(_core._inviteMenu, false);
@@ -1206,7 +1206,7 @@ namespace DuckGame
                 {
                     if (Network.isServer)
                     {
-                        if (!blankAdded)
+                        if (!blankAdded && !forceInv)
                             _core._ducknetMenu.Add(new UIText("", Color.White), true);
                         _core._ducknetMenu.Add(new UIMenuItem("@SKIPSPIN@|DGRED|SKIP", new UIMenuActionCloseMenuCallFunction(_ducknetUIGroup, new UIMenuActionCloseMenuCallFunction.Function(GameMode.Skip)), UIAlign.Left), true);
                     }
@@ -1215,7 +1215,7 @@ namespace DuckGame
             Main.SpecialCode = "men13";
             if (whoOpen.slotType != SlotType.Local || Network.inLobby)
             {
-                _core._ducknetMenu.Add(new UIText(" ", Color.White), true);
+                if (!forceInv) _core._ducknetMenu.Add(new UIText(" ", Color.White), true);
                 if (whoOpen.slotType == SlotType.Local)
                     _core._ducknetMenu.Add(new UIMenuItem("|DGRED|BACK OUT", new UIMenuActionOpenMenu(_core._ducknetMenu, _core._confirmMenu), UIAlign.Left), true);
                 else
@@ -1749,7 +1749,18 @@ namespace DuckGame
             }
             else
                 pProfile.inputProfile = InputProfile.GetVirtualInput(pProfile.networkIndex);
-            pProfile.team = reservedTeam == null ? pProfile.networkDefaultTeam : reservedTeam;
+            pProfile.team = reservedTeam ?? pProfile.networkDefaultTeam;
+            if (active &&
+                !Network.lanMode && // explodes in lan for some reason
+                pConnection == localConnection &&
+                (reservedTeam is null || reservedTeam.defaultTeam) &&
+                (Network.activeNetwork?.core?.lobby?.GetLobbyData("name")?.StartsWith("|PINK|[MIDGAME]") ?? false) &&
+                DGRSettings.favoriteHats.Count > 0)
+            {
+                DGRSettings.InitializeFavoritedHats();
+                Team randomFavorite = Teams.all.Where(x => x.favorited).ChooseRandom();
+                pProfile.team = randomFavorite;
+            }
             pProfile.reservedUser = null;
             pProfile.reservedTeam = null;
             if (pProfile.slotType == SlotType.Reserved)
@@ -1954,6 +1965,10 @@ namespace DuckGame
             {
                 DevConsole.Log(DCSection.General, "|DGRED|Skipping host migration (DuckNetwork.status = " + status.ToString() + ").");
             }
+            else if (DGRSettings.MidGameJoining)
+            {
+                DevConsole.Log(DCSection.General, "|DGRED|Skipping host migration.");
+            }
             else
             {
                 bool flag1 = pLocal;
@@ -2043,8 +2058,6 @@ namespace DuckGame
 
         public static bool prevMG;
 
-        public static bool ShowGameInBrowser;
-
         public static int cycle;
         public static void MidGameJoiningLogic()
         {
@@ -2063,8 +2076,9 @@ namespace DuckGame
                 {
                     if (DGRSettings.MidGameJoining)
                     {
+                        TeamSelect2.eightPlayersActive = Profiles.activeNonSpectators.Count > 4;
                         cycle++;
-                        if (cycle > 30)
+                        if (cycle > 30 && Steam.lobby != null)
                         {
                             cycle = 0;
                             Network.activeNetwork.core.ApplyLobbyData();
@@ -2086,17 +2100,18 @@ namespace DuckGame
                         if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
                         {
                             Network.activeNetwork.core.lobby.joinable = true;
-                            if (ShowGameInBrowser)
-                            {
-                                //set this to true for auhsduhasd -NiK0
-                                Network.activeNetwork.core.lobby.SetLobbyData("started", "false");
+                            // Network.activeNetwork.core.lobby.type = SteamLobbyType.Private;
+                            //if (ShowGameInBrowser)
+                            //{
+                            //set this to true for auhsduhasd -NiK0
+                            Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
                                 Network.activeNetwork.core.lobby.SetLobbyData("name", "|PINK|[MIDGAME] |PREV|" + Steam.user.name + "'s Lobby");
-                            }
+                            /*}
                             else
                             {
                                 Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
                                 Network.activeNetwork.core.lobby.SetLobbyData("name", Steam.user.name + "'s Lobby");
-                            }
+                            }*/
                         }
                     }
                     else
@@ -2115,8 +2130,41 @@ namespace DuckGame
 
             }
         }
+
+        public static void ChatMessageOffset()
+        {
+            if (!_core.enteringText)
+                _core.chatMessageOffset = 0;
+
+            if (DevConsole.core.open)
+                return;
+
+            if (Keyboard.Pressed(Keys.PageUp))
+            {
+                _core.chatMessageOffset += Keyboard.shift ? 4 : 1;
+                if (_core.chatMessageOffset > _core.chatMessages.Count - 1)
+                    _core.chatMessageOffset = _core.chatMessages.Count - 1;
+            }
+
+            if (Keyboard.Pressed(Keys.PageDown))
+            {
+                _core.chatMessageOffset -= Keyboard.shift ? 4 : 1;
+                if (_core.chatMessageOffset < 0)
+                    _core.chatMessageOffset = 0;
+            }
+
+            if (Mouse.isScrolling)
+            {
+                _core.chatMessageOffset -= (Keyboard.shift ? 4 : 1) * (int)(Mouse.scroll / 120f);
+                if (_core.chatMessageOffset < 0) 
+                    _core.chatMessageOffset = 0;
+                if (_core.chatMessageOffset > _core.chatMessages.Count - 1) 
+                    _core.chatMessageOffset = _core.chatMessages.Count - 1;
+            }
+        }
         public static void Update()
         {
+            ChatMessageOffset();
             //stuff'sn
             MidGameJoiningLogic();
             if (MonoMain.pauseMenu == null && _core._pauseOpen)
@@ -2145,6 +2193,16 @@ namespace DuckGame
             {
                 if (_core._quit.value)
                 {
+                    if (Network.isServer && DGRSettings.MidGameJoining)
+                    {
+                        inGame = true;
+                        if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
+                        {
+                            Network.activeNetwork.core.lobby.joinable = false;
+                            Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
+                            Network.activeNetwork.core.lobby.SetLobbyData("name", Steam.user.name + "'s Lobby");
+                        }
+                    }
                     if (_core._menuOpenProfile != null && _core._menuOpenProfile.slotType == SlotType.Local)
                     {
                         Kick(_core._menuOpenProfile);
@@ -2216,8 +2274,17 @@ namespace DuckGame
                         if (chatMessage.alpha < 0)
                             chatMessageList.Add(chatMessage);
                     }
-                    foreach (ChatMessage chatMessage in chatMessageList)
-                        _core.chatMessages.Remove(chatMessage);
+
+                    //foreach (ChatMessage chatMessage in chatMessageList)
+                    //    _core.chatMessages.Remove(chatMessage);
+
+                    // Once per tick is enough idc -Tater
+                    if (chatMessageList.Count > 300 && _core.chatMessages.Count > 0)
+                    {
+                        ChatMessage removeMessage = chatMessageList[chatMessageList.Count - 1];
+                        _core.chatMessages.Remove(removeMessage);
+                    }
+
                     if (_core.stopEnteringText)
                     {
                         _core.enteringText = false;
@@ -2297,6 +2364,8 @@ namespace DuckGame
                     if (_core.enteringText)
                     {
                         Input._imeAllowed = true;
+                        if (Keyboard.control && Keyboard.Pressed(Keys.V) && SDL.SDL_HasClipboardText() == SDL.SDL_bool.SDL_TRUE)
+                            Keyboard.KeyString += SDL.SDL_GetClipboardText();
                         if (Keyboard.KeyString.Length > 90)
                             Keyboard.KeyString = Keyboard.KeyString.Substring(0, 90);
                         Keyboard.KeyString = Keyboard.KeyString.Replace("\n", "");
@@ -2576,9 +2645,6 @@ namespace DuckGame
                     Send.Message(new NMSpecialHat(who.team, who, to.profile != null && to.profile.muteHat), to);
                 Send.Message(new NMSetTeam(who, who.team, who.team.customData != null), to);
             }
-
-            Send.Message(new NMSpecialHat(TeamsCore.neon1, who, false), to);
-            Send.Message(new NMSpecialHat(TeamsCore.neon2, who, false), to);
 
             if (who.furniturePositions.Count > 0) Send.Message(new NMRoomData(who, who.furniturePositionData), to);
 
@@ -3430,56 +3496,73 @@ namespace DuckGame
 
         public static void Draw()
         {
-            if (localProfile == null && !Recorderator.Playing)
-                return;
+            if (localProfile == null && !Recorderator.Playing) return;
             Vec2 vec2_1 = new Vec2(Layer.Console.width, Layer.Console.height);
             float num1 = 0f;
-            int num2 = 8;
+            int MaxMessages = 8;
             float chatScale = DuckNetwork.chatScale;
             float num3 = Resolution.current.x > 1920 ? 2f : 1f;
-            _core._chatFont.scale = new Vec2(Resolution.fontSizeMultiplier * chatScale);
-            _core._chatFont.scale = new Vec2(num3, num3);
-            if (_core._chatFont is RasterFont)
-                _core._chatFont.scale = new Vec2(0.5f);
-            float num4 = Options.Data.chatOpacity / 100f;
+
+
+            //hi hello yes, this is a somewhat messy fix but TLDR
+            //'RockScoreBoard' puts everything in a massive render target then draws it to the screen adding black bars to the top and bottom
+            //this includes the DuckNetwork.cs Draw function which draws the chat, usually this function draws outside and onto the black bars
+            //if they're present but because it gets bundled in the render target its all drawn inside them making chat be squished
+            //this fix just stretches the chat vertically so it looks normally but doesn't fix the underlying issue 
+            //maybe improve it later? this works for now though -NiK0
+            float ratioFixMult = Level.current is RockScoreboard ? (1 / (Resolution.current.aspect / 1.777777778f))  : 1;
+
+            if (_core._chatFont is RasterFont) _core._chatFont.scale = new Vec2(0.5f);
+            else _core._chatFont.scale = new Vec2(num3);
+
+            _core._chatFont.scale *= new Vec2(1, ratioFixMult);
+
+            float alpha = Options.Data.chatOpacity / 100f;
             if (_core.enteringText && !_core.stopEnteringText)
             {
-                if(MonoMain.UpdateLerpState)
-                    ++_core.cursorFlash;
+                if(MonoMain.UpdateLerpState) _core.cursorFlash++;
 
-                if (_core.cursorFlash > 30)
-                    _core.cursorFlash = 0;
-                int num5 = _core.cursorFlash >= 15 ? 1 : 0;
+                if (_core.cursorFlash > 30) _core.cursorFlash = 0;
+
                 Profile localProfile = DuckNetwork.localProfile;
                 string currentEnterText = _core.currentEnterText;
-                string text = localProfile.name + ": " + (currentEnterText.StartsWith(">") && DGRSettings.GreenTextSupport ? "|0,153,0|" : "") +  currentEnterText;
+                string text = localProfile.name + ": " + currentEnterText;
                 string str = text;
-                if (num5 != 0)
-                    text += "_";
+                if ((_core.cursorFlash >= 15 ? 1 : 0) != 0) text += "_";
+
                 float x = _core._chatFont.GetWidth(str + "_") + 8f * chatScale;
                 float y = (_core._chatFont.characterHeight + 2) * _core._chatFont.scale.y;
                 Vec2 p1 = new Vec2(14f, num1 + (vec2_1.y - (_core._chatFont.characterHeight + 10) * _core._chatFont.scale.y));
-                Graphics.DrawRect(p1 + new Vec2(-1f, -1f), p1 + new Vec2(x, y) + new Vec2(1f, 1f), Color.Black * num4, (Depth)0.7f, false, 1f * chatScale);
+                Graphics.DrawRect(p1 + new Vec2(-1f, -1f), p1 + new Vec2(x, y) + new Vec2(1f, 1f), Color.Black * alpha, (Depth)0.7f, false, 1f * chatScale);
                 Color color = Color.White;
-                Color black = Color.Black;
-                if (localProfile.persona != null)
-                    color = localProfile.persona.colorUsable;
-                if (localProfile.slotType == SlotType.Spectator)
-                    color = Colors.DGPurple;
-                Graphics.DrawRect(p1, p1 + new Vec2(x, y), color * 0.85f * num4, (Depth)0.8f);
+                if (localProfile.persona != null) color = localProfile.persona.colorUsable;
+                if (localProfile.slotType == SlotType.Spectator) color = Colors.DGPurple;
+                Graphics.DrawRect(p1, p1 + new Vec2(x, y), color * 0.85f * alpha, (Depth)0.8f);
                 _core._chatFont.symbolYOffset = 4f;
-                _core._chatFont.Draw(text, p1 + new Vec2(2f, 2f), black * num4, (Depth)1f);
+                _core._chatFont.Draw(text, p1 + new Vec2(2f, 2f), Color.Black * alpha, (Depth)1f);
                 num1 -= y + 4f * _core._chatFont.scale.y;
             }
             float num6 = 0.1f;
+            int Index = -1;
             foreach (ChatMessage chatMessage in _core.chatMessages)
             {
+                Index++;
+                // Show chat if we are typing or dev console is open
+                if (_core.enteringText || DevConsole.core.open)
+                {
+                    chatMessage.alpha = 1.0f;
+                    if (_core.chatMessageOffset > Index)
+                        continue;
+                }
+                else if (chatMessage.alpha < 0)
+                    continue;
+                
+
                 float num7 = 10 * (Options.Data.chatHeadScale + 1) * num3;
                 _core._chatFont._currentConnection = chatMessage.who.connection == localConnection ? null : chatMessage.who.connection;
-                _core._chatFont.scale = new Vec2(Resolution.fontSizeMultiplier * chatMessage.scale * chatScale);
-                _core._chatFont.scale = new Vec2(num3, num3) * chatMessage.scale;
-                if (_core._chatFont is RasterFont)
-                    _core._chatFont.scale = new Vec2(0.5f);
+                if (_core._chatFont is RasterFont) _core._chatFont.scale = new Vec2(0.5f);
+                else _core._chatFont.scale = new Vec2(num3, num3) * chatMessage.scale;
+                _core._chatFont.scale *= new Vec2(1, ratioFixMult);
                 float x = (float)(_core._chatFont.GetWidth(chatMessage.text) + num7 + 8 * chatScale);
                 if (chatMessage.who.slotType == SlotType.Spectator)
                 {
@@ -3493,10 +3576,9 @@ namespace DuckGame
                 float y = chatMessage.newlines * (_core._chatFont.characterHeight + 2) * _core._chatFont.scale.y;
                 Vec2 p1 = new Vec2(14f, num1 + (vec2_1.y - (y + 10f)));
                 Vec2 p2 = p1 + new Vec2(x, y);
-                Graphics.DrawRect(p1 + new Vec2(-1f, -1f), p2 + new Vec2(1f, 1f), Color.Black * 0.8f * chatMessage.alpha * num4, (Depth)(num6 - 0.0015f), false, 1f * chatScale);
-                float num9 = (0.3f + chatMessage.text.Length * 0.007f);
-                if (num9 > 0.5f)
-                    num9 = 0.5f;
+                Graphics.DrawRect(p1 + new Vec2(-1f, -1f), p2 + new Vec2(1f, 1f), Color.Black * 0.8f * chatMessage.alpha * alpha, (Depth)(num6 - 0.0015f), false, 1f * chatScale);
+                float num9 = 0.3f + chatMessage.text.Length * 0.007f;
+                if (num9 > 0.5f) num9 = 0.5f;
                 if (MonoMain.UpdateLerpState)
                 {
                     if (chatMessage.slide > 0.8f)
@@ -3516,8 +3598,7 @@ namespace DuckGame
                         color.g += 30;
                         color.b += 30;
                     }
-                    if (chatMessage.who.slotType == SlotType.Spectator)
-                        color = Colors.DGPurple;
+                    if (chatMessage.who.slotType == SlotType.Spectator) color = Colors.DGPurple;
                     SpriteMap g = null;
                     SpriteMap chatBust = chatMessage.who.persona.chatBust;
                     Vec2 vec2_2 = Vec2.Zero;
@@ -3527,41 +3608,39 @@ namespace DuckGame
                         g = chatMessage.who.team.GetHat(chatMessage.who.persona);
                     }
                     bool flag = chatMessage.who.netData.Get<bool>("quack");
-                    if (chatMessage.who.duck != null && !chatMessage.who.duck.dead && !chatMessage.who.duck.removeFromLevel)
-                        flag = chatMessage.who.duck.quack > 0;
+                    if (chatMessage.who.duck != null && !chatMessage.who.duck.dead && !chatMessage.who.duck.removeFromLevel) flag = chatMessage.who.duck.quack > 0;
                     Vec2 vec2_3 = new Vec2(p1.x, p1.y + -2 * (Options.Data.chatHeadScale + 1));
                     if (g != null)
                     {
                         g.CenterOrigin();
                         g.depth = (Depth)(num6 - 1f / 1000f);
-                        g.alpha = chatMessage.alpha * num4;
+                        g.alpha = chatMessage.alpha * alpha;
                         g.frame = !flag || g.texture == null || g.texture.width <= 32 ? 0 : 1;
                         g.scale = new Vec2(num3, num3) * (Options.Data.chatHeadScale + 1);
+                        g.scale *= new Vec2(1, ratioFixMult);
                         Graphics.Draw(g, vec2_3.x - vec2_2.x, vec2_3.y - vec2_2.y);
                         g.scale = new Vec2(1f, 1f);
                         g.alpha = 1f;
                     }
                     chatBust.frame = !flag ? 0 : 1;
                     chatBust.depth = (Depth)(num6 - 0.0015f);
-                    chatBust.alpha = chatMessage.alpha * num4;
+                    chatBust.alpha = chatMessage.alpha * alpha;
                     chatBust.scale = new Vec2(num3, num3) * (Options.Data.chatHeadScale + 1);
+                    chatBust.scale *= new Vec2(1, ratioFixMult);
                     Graphics.Draw(chatBust, vec2_3.x + 2f * chatBust.scale.x, vec2_3.y + 5f * chatBust.scale.y);
                     color *= 0.85f;
                     color.a = byte.MaxValue;
                 }
-                Graphics.DrawRect(p1, p2, color * 0.85f * chatMessage.alpha * num4, (Depth)(num6 - 1f / 500f));
+                Graphics.DrawRect(p1, p2, color * 0.85f * chatMessage.alpha * alpha, (Depth)(num6 - 1f / 500f));
                 _core._chatFont.symbolYOffset = 4f;
                 _core._chatFont.lineGap = 2f;
-                if (chatMessage.who.slotType == SlotType.Spectator)
-                    _core._chatFont.Draw("@SPECTATORBIG@" + chatMessage.text, p1 + new Vec2(2f + num7, 1f * _core._chatFont.scale.y), black * chatMessage.alpha * num4, (Depth)1f);
-                else
-                    _core._chatFont.Draw(chatMessage.text, p1 + new Vec2(2f + num7, 1f * _core._chatFont.scale.y), black * chatMessage.alpha * num4, (Depth)1f);
+                if (chatMessage.who.slotType == SlotType.Spectator) _core._chatFont.Draw("@SPECTATORBIG@" + chatMessage.text, p1 + new Vec2(2f + num7, 1f * _core._chatFont.scale.y), black * chatMessage.alpha * alpha, (Depth)1f);
+                else _core._chatFont.Draw(chatMessage.text, p1 + new Vec2(2f + num7, 1f * _core._chatFont.scale.y), black * chatMessage.alpha * alpha, (Depth)1f);
                 _core._chatFont._currentConnection = null;
                 num1 -= y + 4f;
                 num6 -= 0.01f;
-                if (num2 == 0)
-                    break;
-                --num2;
+                if (MaxMessages == 0) break;
+                MaxMessages--;
             }
         }
 

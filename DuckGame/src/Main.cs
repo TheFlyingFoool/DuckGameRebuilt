@@ -182,23 +182,14 @@ namespace DuckGame
                         }
                         Level.current = new ArcadeLevel(DuckGame.Content.GetLevelID("arcade", LevelLocation.Content)) { sign = true };
                     }
-                    else if (!Program.intro || noIntro)
-                    {
-                        Level.current = (new TitleScreen());
-                    }
-                    else
-                    {
-                        Level.current = (new BIOSScreen());
-                    }
+                    else if (!Program.intro || noIntro) Level.current = new TitleScreen();
+                    else Level.current = new BIOSScreen();
 
                 }
             }
             _font = new BitmapFont("biosFont", 8);
             DiscordRichPresence.whenGameStarted = DateTime.UtcNow;
-            if (DGRSettings.S_RPC)
-            {
-                DiscordRichPresence.Initialize();
-            }
+            if (!DiscordRichPresence.noRPC) DiscordRichPresence.Initialize();
             ModLoader.Start();
         }
         public RainbowConstant rbc = new RainbowConstant();

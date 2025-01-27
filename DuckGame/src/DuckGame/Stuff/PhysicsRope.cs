@@ -110,14 +110,14 @@ namespace DuckGame
                     int num1 = index - _lowestVineSection;
                     Vine lowestVine = _lowestVine;
                     Vec2 vec2_1 = new Vec2(x, y + 8f);
-                    if (_lowestVine != null)
+                    if (_lowestVine != null && _lowestVine._rope != null)
                         vec2_1 = _lowestVine._rope.attach1Point;
                     _lowestVine = GetSection(vec2_1.x, vec2_1.y, num1 * 8);
                     _lowestVine.length.value = num1 / 2;
                     _lowestVine.owner = d;
                     _lowestVine.sectionIndex = index;
                     Level.Add(_lowestVine);
-                    if (lowestVine != null)
+                    if (lowestVine != null && lowestVine._rope != null)
                     {
                         _lowestVine._rope.attach2 = lowestVine.owner;
                         lowestVine.nextVine = _lowestVine;

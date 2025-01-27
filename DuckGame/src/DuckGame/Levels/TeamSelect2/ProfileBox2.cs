@@ -437,16 +437,9 @@ namespace DuckGame
                     if (!thing.enablePhysics) Level.Remove(thing);
                 _turret = null;
             }
-            if (neon1 != null)
-            {
-                Level.Remove(neon1);
-                Level.Remove(neon2);
-            }
             Despawn();
             //this._doorClosing = false;
         }
-        public TeamHat neon1;
-        public TeamHat neon2;
 
         public void Spawn()
         {
@@ -622,7 +615,7 @@ namespace DuckGame
                     }
                 }
             }
-            if (_teamSelect != null && !ready && !Network.isActive && _inputProfile.Pressed(Triggers.Start) && !flag1)
+            if (_teamSelect != null && !ready && !Network.isActive && _inputProfile.Pressed(Triggers.Start) && !flag1 && !_teamSelect._returnToMenu.value)
                 _teamSelect.OpenPauseMenu(this);
             if (!Network.isActive && _duck != null && !_duck.immobilized)
                 _playerActive = true;
@@ -753,30 +746,6 @@ namespace DuckGame
                     Level.Remove(_turret);
                     _turret = null;
                 }
-                if (DGRSettings.DGRNeonSign && neon1 == null)
-                {
-                    //x + 117.5f, y + 6.5f left room
-                    //x + 22.5f, y + 6.5f reft room
-                    if (rightRoom)
-                    {
-                        neon1 = new TeamHat(x + 100, y + 8, TeamsCore.neon1) { enablePhysics = false, canPickUp = false, velocity = Vec2.Zero, grounded = true, sleeping = true, indestructible = true };
-                        Level.Add(neon1);
-                        neon2 = new TeamHat(x + 132, y + 8, TeamsCore.neon2) { enablePhysics = false, canPickUp = false, velocity = Vec2.Zero, grounded = true, sleeping = true, indestructible = true };
-                        Level.Add(neon2);
-                    }
-                    else
-                    {
-                        neon1 = new TeamHat(x + 20, y + 8, TeamsCore.neon1) { enablePhysics = false, canPickUp = false, velocity = Vec2.Zero, grounded = true, sleeping = true, indestructible = true };
-                        Level.Add(neon1);
-                        neon2 = new TeamHat(x + 52, y + 8, TeamsCore.neon2) { enablePhysics = false, canPickUp = false, velocity = Vec2.Zero, grounded = true, sleeping = true, indestructible = true };
-                        Level.Add(neon2);
-                    }
-                }
-                else if (!DGRSettings.DGRNeonSign && neon1 != null)
-                {
-                    Level.Remove(neon1);
-                    Level.Remove(neon2);
-                }
             }
             if (_turret != null)
                 _turret._friendly = duck;
@@ -798,16 +767,6 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (DGRSettings.RebuiltEffect == 0 && profile != null && profile.isUsingRebuilt && profile.duck != null)
-            {
-                Vec2 v = profile.duck.position;
-                if (profile.duck.ragdoll != null && profile.duck.ragdoll.part2 != null) v = profile.duck.ragdoll.part2.position;
-                else if (profile.duck.crouch) v.y += 5;
-                Graphics.DrawString("♥", v - new Vec2(14 + 4 * sin), Color.Red * 0.2f, 0, null, 4 + sin);
-                Graphics.DrawString("♥", v - new Vec2(12 + 4 * sin), Color.Red * 0.2f, 0, null, 3.5f + sin);
-                Graphics.DrawString("♥", v - new Vec2(9 + 4 * sin), Color.DarkRed * 0.2f, 0, null, 2.6f + sin);
-                //_readySign.yscale -= sin2 / 100;
-            }
             if (_hatSelector != null && _hatSelector.fadeVal > 0.9f && _hatSelector._roomEditor._mode != REMode.Place)
             {
                 _projector.visible = false;
@@ -929,7 +888,7 @@ namespace DuckGame
 
                                 if (profile.muteName)
                                     text2 = "Player " + (profile.networkIndex + 1).ToString();
-                                if (profile.isUsingRebuilt && DGRSettings.RebuiltEffect == 1) text2 += "|PINK|♥|WHITE|";
+                                if (profile.isUsingRebuilt) text2 += "|PINK|♥|WHITE|";
 
                                 if (text2.Length > 16)
                                     text2 = text2.Substring(0, 16);
@@ -1037,7 +996,7 @@ namespace DuckGame
 
                                 if (profile.muteName)
                                     text4 = "Player " + (profile.networkIndex + 1).ToString();
-                                if (profile.isUsingRebuilt && DGRSettings.RebuiltEffect == 1) text4 += "|PINK|♥|WHITE|";
+                                if (profile.isUsingRebuilt) text4 += "|PINK|♥|WHITE|";
                                 if (text4.Length > 16)
                                     text4 = text4.Substring(0, 16);
                                 _fontSmall.Draw(text4, new Vec2((float)(x + num / 2f - _fontSmall.GetWidth(text4) / 2f), y + 44f), Color.White, doorLeftBlank.depth + 30);

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -649,8 +650,18 @@ namespace DuckGame
                 if (muteName)
                     nameUi = $"Player {networkIndex + 1}";
                 
-                if (isUsingRebuilt && DGRSettings.RebuiltEffect == 1)
-                    nameUi += inSameRebuiltVersion ? "@DGR@" : "@DGRDIM@";
+                if (isUsingRebuilt)
+                {
+                    string dgrMojiName = "DGR";
+
+                    if (!inSameRebuiltVersion)
+                        dgrMojiName += "DIM";
+
+                    if (DGRDevs.Contributors.Any(x => x.SteamID == steamID))
+                        dgrMojiName += $"_{steamID}";
+                    
+                    nameUi += $"@{dgrMojiName}@";
+                }
                 
                 return nameUi;
             }
@@ -665,8 +676,18 @@ namespace DuckGame
                 if (muteName)
                     nameUi = $"Player {networkIndex + 1}";
                 
-                if (isUsingRebuilt && DGRSettings.RebuiltEffect == 1)
-                    nameUi += inSameRebuiltVersion ? "@DGRBIG@" : "@DGRBIGDIM@";
+                if (isUsingRebuilt)
+                {
+                    string dgrMojiName = "DGRBIG";
+
+                    if (!inSameRebuiltVersion)
+                        dgrMojiName += "DIM";
+
+                    if (DGRDevs.Contributors.Any(x => x.SteamID == steamID))
+                        dgrMojiName += $"_{steamID}";
+                    
+                    nameUi += $"@{dgrMojiName}@";
+                }
                 
                 return nameUi;
             }

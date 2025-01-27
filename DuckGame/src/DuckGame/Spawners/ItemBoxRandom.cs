@@ -78,7 +78,7 @@ namespace DuckGame
                             contains = typeof(SohRock);
                         else
                         {
-                            contains = DGRDevs.AllWithGuns.ChooseRandom().DevItem;
+                            contains = DGRDevs.CoreTeam.ChooseRandom().DevItem;
 
                             // to be removed when all devs get their gun
                             if (contains == typeof(PositronShooter)) contains = typeof(DanGun);

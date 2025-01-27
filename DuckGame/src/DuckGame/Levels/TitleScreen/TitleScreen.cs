@@ -337,7 +337,7 @@ namespace DuckGame
             // AddCreditLine("|GREEN|klof44|CREDITSGRAY|");
             // AddCreditLine("|PURPLE|Hyeve");
             // AddCreditLine("|ORANGE|Lutalli");
-            foreach (DGRebuiltDeveloper dgrDev in DGRDevs.AllWithGuns)
+            foreach (DGRebuiltDeveloper dgrDev in DGRDevs.CoreTeam)
             {
                 AddCreditLine($"{dgrDev.ColorTag}{dgrDev.DisplayName}|CREDITSGRAY|");
             }

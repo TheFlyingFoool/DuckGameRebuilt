@@ -11,7 +11,7 @@ namespace DuckGame
     {
         public IEnumerable<System.Type> Compile<T>(Mod mod)
         {
-            return mod.configuration.assembly.GetTypes().Where(type => type.IsSubclassOf(typeof(T)));
+            return mod.configuration.assembly.SaferGetTypes().Where(type => type.IsSubclassOf(typeof(T)));
         }
     }
 }

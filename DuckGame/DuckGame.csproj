@@ -251,9 +251,8 @@
     <Reference Include="SixLabors.Fonts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
       <HintPath>..\packages\SixLabors.Fonts.1.0.1\lib\netstandard2.0\SixLabors.Fonts.dll</HintPath>
     </Reference>
-    <Reference Include="SixLabors.ImageSharp, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13">
-      <HintPath>..\packages/SixLabors.ImageSharp.2.1.8/lib/net472/SixLabors.ImageSharp.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SixLabors.ImageSharp, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
+      <HintPath>..\packages\SixLabors.ImageSharp.2.1.9\lib\net472\SixLabors.ImageSharp.dll</HintPath>
     </Reference>
     <Reference Include="SixLabors.ImageSharp.Drawing, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
       <HintPath>..\packages\SixLabors.ImageSharp.Drawing.1.0.0\lib\net472\SixLabors.ImageSharp.Drawing.dll</HintPath>
@@ -296,7 +295,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddedContent\Biverom\Tape\Guns\Propaganda.cs" />
     <Compile Include="AddedContent\Biverom\TreeSawing\FallingTree.cs" />
+    <Compile Include="AddedContent\Biverom\TreeSawing\NMSawTree.cs" />
     <Compile Include="AddedContent\Biverom\TreeSawing\TreeEnd.cs" />
     <Compile Include="AddedContent\Biverom\TreeSawing\TreeStump.cs" />
     <Compile Include="AddedContent\CorinthianPillar.cs" />
@@ -343,6 +344,8 @@
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\ConsoleBindSerializerModule.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\DateTimeSerializeModule.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\StringSerializerModule.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\ThingSerializerModule.cs" />
+    <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\TypeSerializerModule.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\SerializerModules\Vec2SerializerModule.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingKnife.cs" />
     <Compile Include="AddedContent\Firebreak\Content\ThrowingKnife\ThrowingRopeHandle.cs" />
@@ -376,6 +379,8 @@
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Core\Var.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Core\Wait.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Core\While.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Editor\EditorCellSize.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Editor\EditorPlace.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Miscellaneous\Ascii.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Miscellaneous\RNG.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Miscellaneous\Source.cs" />
@@ -384,7 +389,7 @@
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Rendering\DrawRectOutline.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Rendering\DrawString.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Rendering\DrawStringOutline.cs" />
-    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\World\EditorPlace.cs" />
+    <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\World\Hat.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\World\MousePos.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\World\SnapVec.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Engine\AutoCompletionTags\AutoCompl.cs" />
@@ -414,7 +419,6 @@
     <Compile Include="AddedContent\Firebreak\HatEditor\HatPreviewLevel.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\MetapixelInfo.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\SimRenderer.cs" />
-    <Compile Include="AddedContent\Firebreak\Internet.cs" />
     <Compile Include="AddedContent\Firebreak\LockMovementQueue.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\Commands\Test.cs" />
     <Compile Include="AddedContent\Firebreak\DuckShell\Console\ConsoleInstance.cs" />
@@ -487,7 +491,6 @@
     <Compile Include="AddedContent\Firebreak\Content\SinkingBlock.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\DynamicDCLine.cs" />
     <Compile Include="AddedContent\Firebreak\DebuggerTools\FireDebug.cs" />
-    <Compile Include="AddedContent\Firebreak\DebuggerTools\Levels\TestLev.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\CustomKeyBinds.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\EasingHelper.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\ProgressValue.cs" />
@@ -577,6 +580,7 @@
     <Compile Include="AddedContent\YupDanielThatsMe\DebugTablet.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\DevTestLevel.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\FunctionBinding.cs" />
+    <Compile Include="AddedContent\YupDanielThatsMe\HelperExtensions.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\TestingTileset.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\RectPackSharp\HashCode.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\RectPackSharp\PackingHints.cs" />
@@ -2497,6 +2501,7 @@
   </Target>
   <Target Name="AfterBuild">
     <Exec Command="cp -rv $(SolutionDir)deps/* $(SolutionDir)bin/" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'" />
+<!--    <Exec Command="sh $(SolutionDir)shaders_source/buildshaders.sh" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'" />-->
     <Exec Command="Xcopy &quot;$(SolutionDir)\deps&quot; &quot;$(SolutionDir)\bin&quot; /E /H /C /I /Y" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'" />
     <Exec Command="call &quot;$(SolutionDir)shaders_source\buildshaders.bat&quot;" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'" />
   </Target>

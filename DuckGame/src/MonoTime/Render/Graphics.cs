@@ -470,11 +470,6 @@ namespace DuckGame
                 if (texture.textureIndex == 0)
                     Content.AssignTextureIndex(texture);
             }
-            if (doSnap)
-            {
-                position.x = (float)Math.Round(position.x * snap) / snap;
-                position.y = (float)Math.Round(position.y * snap) / snap;
-            }
             if (effects == SpriteEffects.FlipHorizontally)
                 origin.x = (sourceRectangle.HasValue ? sourceRectangle.Value.width : texture.w) - origin.x;
             float depth1 = AdjustDepth(depth);

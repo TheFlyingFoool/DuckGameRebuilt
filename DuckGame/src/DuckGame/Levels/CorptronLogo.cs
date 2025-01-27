@@ -35,7 +35,7 @@
                 Graphics.fade = 0f;
                 current = new AdultSwimLogo();
             }
-            _wait -= 0.06f;
+            _wait -= 0.006f;
             if (_wait >= 0f)
                 return;
             _fading = true;

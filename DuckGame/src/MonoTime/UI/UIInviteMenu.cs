@@ -178,7 +178,11 @@ namespace DuckGame
                 {
                     SFX.Play("rockHitGround", 0.8f);
                     _users[_selection].triedInvite = true;
-                    TeamSelect2.InvitedFriend(_users[_selection].user);
+                    if (DGRSettings.MidGameJoining && Level.current is not TeamSelect2)
+                    {
+                        Steam.InviteUser(_users[_selection].user, Steam.lobby);
+                    }
+                    else  TeamSelect2.InvitedFriend(_users[_selection].user);
                 }
             }
             base.Update();
@@ -234,13 +238,13 @@ namespace DuckGame
             {
                 _moreArrow.depth = depth + 2;
                 _moreArrow.flipV = false;
-                Graphics.Draw(ref _moreArrow, x, (float)(y + num2 / 2.0 + 13.0));
+                Graphics.Draw(_moreArrow, x, (float)(y + num2 / 2f + 13));
             }
             if (_viewTop > 0)
             {
                 _moreArrow.depth = depth + 2;
                 _moreArrow.flipV = true;
-                Graphics.Draw(ref _moreArrow, x, (float)(y - num2 / 2.0 - 2.0));
+                Graphics.Draw(_moreArrow, x, (float)(y - num2 / 2f - 2));
             }
             base.Draw();
         }

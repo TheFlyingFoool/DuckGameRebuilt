@@ -67,7 +67,7 @@ namespace DuckGame
         //private UIMenu _hostSettingsWirelessGameMenu;
         private UIServerBrowser _browseGamesMenu;
         private UIMatchmakerMark2 _matchmaker;
-        private MenuBoolean _returnToMenu = new MenuBoolean();
+        public MenuBoolean _returnToMenu = new MenuBoolean();
         private MenuBoolean _inviteFriends = new MenuBoolean();
         private MenuBoolean _findGame = new MenuBoolean();
         private MenuBoolean _backOut = new MenuBoolean();
@@ -614,6 +614,24 @@ namespace DuckGame
                 "Kills",
                 "Both",
             }, c: Colors.DGPink));
+
+            bool DGR = true;
+            for (int i = 0; i < Profiles.active.Count(); i++)
+            {
+                Profile p = Profiles.active.ElementAt(i);
+                if (!p.isUsingRebuilt || !p.inSameRebuiltVersion)
+                {
+                    DGR = false;
+                    break;
+                }
+            }
+            if (DGR) _hostMatchSettingsMenu.Add(new UIMenuItemToggle("DGR Stuff", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DGRItems)), c: Colors.DGPink));
+            else
+            {
+                DGRSettings.DGRItems = false;
+                _hostMatchSettingsMenu.Add(new LUIText(" DGR Stuff      ON |WHITE|OFF", c: Color.Gray, UIAlign.Left));
+            }
+
             _hostMatchSettingsMenu.AddMatchSetting(GetOnlineSetting("teams"), false);
 
 
@@ -873,6 +891,23 @@ namespace DuckGame
                 "Kills",
                 "Both",
             }, c: Colors.DGPink));
+
+            bool DGR = true;
+            for (int i = 0; i < Profiles.active.Count(); i++)
+            {
+                Profile p = Profiles.active.ElementAt(i);
+                if (!p.isUsingRebuilt || !p.inSameRebuiltVersion)
+                {
+                    DGR = false;
+                    break;
+                }
+            }
+            if (DGR) _multiplayerMenu.Add(new UIMenuItemToggle("DGR Stuff", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DGRItems)), c: Colors.DGPink));
+            else
+            {
+                DGRSettings.DGRItems = false;
+                _multiplayerMenu.Add(new LUIText(" DGR Stuff      ON |WHITE|OFF", c: Color.Gray, UIAlign.Left));
+            }
 
             int z = 0;
             foreach (MatchSetting matchSetting in matchSettings)
@@ -1204,7 +1239,7 @@ namespace DuckGame
 
         public static void InvitedFriend(User u)
         {
-            if (!Network.inLobby || u == null)
+            if (u == null)
                 return;
             _invitedUsers.Add(u);
             DuckNetwork.core._invitedFriends.Add(u.id);

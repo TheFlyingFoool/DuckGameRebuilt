@@ -376,19 +376,9 @@ namespace DuckGame
                 dgrDescription = "WARNING This may be highly unstable but it'll make it so online physics apply while testing levels in the editor (Ragdoll rng, etc)"
             });
 
-            menu.Add(new UIMenuItemToggle("Duck Arrows", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DrawOffscreenArrowsOnEditor)))
-            {
-                dgrDescription = "If enabled the offscreen arrows for ducks will draw in the Editor test zone"
-            });
-
             menu.Add(new UIMenuItemToggle("Test Timer", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.EditorTimer)))
             {
                 dgrDescription = "Displays a timer of how much time the current level has been running for while testing it in the editor"
-            });
-
-            menu.Add(new UIMenuItemToggle("Instructions", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.EditorInstructions)))
-            {
-                dgrDescription = "Displays real-time instructions on how to operate the editor. You might not need them anymore if you're already familiar with everything"
             });
 
             menu.Add(new UIMenuItemToggle("Level Name", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.EditorLevelName)))
@@ -406,6 +396,11 @@ namespace DuckGame
                 dgrDescription = "Disables keyboard/gamepad mode switching in the editor. Ideal for creators who mainly use the mouse"
             });
 
+            menu.Add(new UIMenuItemToggle("Show Workshop Mods", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ShowWorkshopModsInEditor)))
+            {
+                dgrDescription = "Allows you to see levels from workshop mods in level select"
+            });
+
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
             return menu;
@@ -417,14 +412,6 @@ namespace DuckGame
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemToggle("Green Text Support", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.GreenTextSupport)))
-            {
-                dgrDescription = "Chat messages beginning with a \">\" will be green (only for your game)"
-            });
-            menu.Add(new UIMenuItemToggle("Discord RPC", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.RPC)))
-            {
-                dgrDescription = "Toggles discord rich presence displaying the current level, if you're in the editor, etc\n(May take a few seconds to connect)"
-            });
             menu.Add(new UIMenuItemToggle("Open URLs in Browser", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.OpenURLsInBrowser)))
             {
                 dgrDescription = "URLs will open in your web browser instead of the Steam Overlay."
@@ -432,10 +419,6 @@ namespace DuckGame
             menu.Add(new UIMenuItemToggle("Custom Hat Teams", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.CustomHatTeams)))
             {
                 dgrDescription = "Allows for teams with custom hats that have the same name (HOST ONLY)"
-            });
-            menu.Add(new UIMenuItemToggle("DGR Neon Sign", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DGRNeonSign)))
-            {
-                dgrDescription = "Puts a neon DGR sign on your room that anyone can see! (Including vanilla players)"
             });
             menu.Add(new UIMenuItem("Reload Hats", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(ReloadHats)))
             {
@@ -456,12 +439,21 @@ namespace DuckGame
 
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
-            
-            
+
+
+            menu.Add(new UIMenuItemToggle("Dubber Speed", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.dubberspeed)))
+            {
+                dgrDescription = "For true vim users, adds keybinds from 1-9 for faster menu browsing\nHold SHIFT to unignore player names"
+            });
 
             menu.Add(new UIMenuItemToggle("Faster Load", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.FasterLoad)))
             {
                 dgrDescription = "If this is enabled hats, effects, devconsole, challenges, textures wont load on startup resulting in instability so use at your own risk"
+            });
+
+             menu.Add(new UIMenuItemToggle("Duck Arrows", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DrawOffscreenArrowsOnEditor)))
+            {
+                dgrDescription = "If enabled the offscreen arrows for ducks will draw in the Editor test zone"
             });
 
             menu.Add(new UIMenuItemToggle("Sync Ching", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SyncChing)))
@@ -477,6 +469,10 @@ namespace DuckGame
             menu.Add(new UIMenuItemToggle("QR Code Join Links", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.QRCodeJoinLinks)))
             {
                 dgrDescription = "Copies a QR code representing the join link"
+            });
+            menu.Add(new UIMenuItemToggle("No Force Start Menu", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HideFS)))
+            {
+                dgrDescription = "Disables the force start button from the pause menu while hosting."
             });
 
             menu.Add(new UIMenuItemNumber("Total Player Num", field: new FieldBinding(typeof(DG), nameof(DG.ExtraPlayerCount), 1, 300, 1), step: 1)
@@ -499,10 +495,6 @@ namespace DuckGame
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemToggle("61 UPS", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.Use61UPS_Setting)))
-            {
-                dgrDescription = "Game will run at 61 updates per second instead of 60 to mimmick vanilla on >60hz monitors"
-            });
             menu.Add(new UIMenuItemToggle("DGR Music", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ExtraMusic)))
             {
                 dgrDescription = "Adds 7 new songs to the pool. Songs made by Firch"
@@ -606,16 +598,6 @@ namespace DuckGame
                 dgrDescription = "Global particle multiplier from x0 to x16"
             });
 
-            menu.Add(new UIMenuItemNumber("Rebuilt Effect", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.RebuiltEffect), 0, 2, 1), valStrings: new List<string>()
-            {
-                "HEART",
-                "NAME",
-                "NONE :(",
-            })
-            {
-                dgrDescription = "The effect displayed for other rebuilt users"
-            });
-
 
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
@@ -643,10 +625,6 @@ namespace DuckGame
                 dgrDescription = "Vanity hats no longer fall off when ragdolling"
             });
 
-            menu.Add(new UIMenuItemToggle("Lobby data", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.LobbyData)))
-            {
-                dgrDescription = "Shows the percentage of maps and the list of people in the lobby if host uses Rebuilt"
-            });
 
             menu.Add(new UIMenuItemToggle("Auto Input Switch", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SwitchInput)))
             {
@@ -802,15 +780,7 @@ namespace DuckGame
             {
                 dgrDescription = "Toggles the menu mouse"
             });
-            menu.Add(new UIMenuItemToggle("Dubber Speed", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.dubberspeed)))
-            {
-                dgrDescription = "For true vim users, adds keybinds from 1-9 for faster menu browsing\nHold SHIFT to unignore player names"
-            });
 
-            menu.Add(new UIMenuItemToggle("No Force Start Menu", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HideFS)))
-            {
-                dgrDescription = "Disables the force start button from the pause menu while hosting."
-            });
             menu.Add(new UIMenuItemToggle("Reduced Movement", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ReducedMovement)))
             {
                 dgrDescription = "If on, menu animations will be skipped."

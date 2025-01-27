@@ -4116,7 +4116,7 @@ namespace DuckGame
             if (!hasBrainRot)
             {
                 hasBrainRot = true;
-                bubble = new(Level.current.topLeft.x - 200f, Level.current.topLeft.y - 200f, this);
+                bubble = new(Level.current.ExtendedLeft, Level.current.ExtendedTop, this);
                 Level.Add(bubble);
                 SFX.Play("radioNoise", 0.8f);
             }

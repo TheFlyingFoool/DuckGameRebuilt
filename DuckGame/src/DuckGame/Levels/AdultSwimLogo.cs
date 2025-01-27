@@ -33,6 +33,7 @@
                 Graphics.fade = 0f;
                 current = !MonoMain.startInEditor ? new TitleScreen() : Main.editor;
             }
+            _wait -= 0.006f;
             if (_wait < 0.0f || Input.Pressed(Triggers.Start) || Input.Pressed(Triggers.Select))
             {
                 _fading = true;

@@ -3771,7 +3771,7 @@ namespace DuckGame
 
                     if (inputMode == EditorInput.Touch)
                         instructionText = "";
-                    if ((instructionText != "" && DGRSettings.EditorInstructions) || _fileDialog.opened)
+                    if ((instructionText != "") || _fileDialog.opened)
                     {
                         float width = _font.GetWidth(instructionText);
                         Vec2 vec2 = new Vec2(layer.width - 22f - width, layer.height - 28f);
@@ -5182,7 +5182,7 @@ namespace DuckGame
 
         public static IEnumerable<Type> GetSubclasses(Type parentType)
         {
-            return DG.assemblies.SelectMany(assembly => assembly.GetTypes())
+            return DG.assemblies.SelectMany(assembly => assembly.SaferGetTypes())
                 .Where(type =>
                     (type.IsSubclassOf(parentType) &&
                      (clientonlycontent || !type.IsDefined(typeof(ClientOnlyAttribute), false))))
@@ -5192,13 +5192,13 @@ namespace DuckGame
 
         public static IEnumerable<Type> GetAllSubclasses(Type parentType) // Dan
         {
-            return DG.assemblies.SelectMany(assembly => assembly.GetTypes())
+            return DG.assemblies.SelectMany(assembly => assembly.SaferGetTypes())
                 .Where(type => type.IsSubclassOf(parentType)).OrderBy(t => t.FullName)
                 .OrderBy(type => type.IsDefined(typeof(ClientOnlyAttribute), false) ? 1 : 0).ToArray();
         }
 
         public static IEnumerable<Type> GetSubclassesAndInterfaces(Type parentType) => DG.assemblies
-            .SelectMany(assembly => assembly.GetTypes())
+            .SelectMany(assembly => assembly.SaferGetTypes())
             .Where(type =>
                 (parentType.IsAssignableFrom(type) &&
                  (clientonlycontent || !type.IsDefined(typeof(ClientOnlyAttribute), false))))

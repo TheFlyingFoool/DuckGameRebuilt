@@ -32,7 +32,9 @@
             _wave2.Update();
             timeAlive += 0.016f;
             position += _travel * 0.5f;
-            if (isServerForObject && !invincible && (x > Level.current.bottomRight.x + 200 || x < Level.current.topLeft.x - 200)) Level.Remove(this);
+            //QuadLasers dont get removed off the top or bottom of the level so any quadlasers that go straight vertical never get deleted
+            //currently i made it so they can get deleted off the bottom and hopefully this shoudln't create any issues, if it does then FUCK -NiK0
+            if (isServerForObject && !invincible && (x > Level.current.ExtendedRight || x < Level.current.ExtendedLeft || y > Level.current.ExtendedBottom)) Level.Remove(this);
             foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(topLeft, bottomRight))
             {
                 if ((safeFrames <= 0 || materialThing != safeDuck) && materialThing.isServerForObject)

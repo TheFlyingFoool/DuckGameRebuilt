@@ -36,7 +36,7 @@
                     die = true;
                     y = yEnd.y;
                 }
-                else if (position.y > Level.current.bottomRight.y + 200) Level.Remove(this);
+                else if (position.y > Level.current.ExtendedRight) Level.Remove(this);
             }
             else
             {

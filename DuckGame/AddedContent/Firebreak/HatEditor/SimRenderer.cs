@@ -137,6 +137,8 @@ namespace DuckGame
                 isolatedLevel.DoUpdate();
                 isolatedLevel.DoDraw();
                 animationFrames[currentFrame] = target.ToTex2D();
+                
+                Graphics.frameFlipFlop ^= true;
             }
 
             SFX.enabled = sfxEnabled;

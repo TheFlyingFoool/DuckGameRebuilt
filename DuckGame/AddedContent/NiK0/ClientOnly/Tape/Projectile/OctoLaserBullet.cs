@@ -18,7 +18,7 @@
             _wave2.Update();
             timeAlive += 0.016f;
             position += _travel * 0.5f;
-            if (isServerForObject && (x > Level.current.bottomRight.x + 200 || x < Level.current.topLeft.x - 200 || y < Level.current.topLeft.y - 300 || y > Level.current.bottomRight.y + 200)) Level.Remove(this);
+            if (isServerForObject && (x > Level.current.ExtendedRight || x < Level.current.ExtendedLeft || y < Level.current.ExtendedTop || y > Level.current.ExtendedBottom)) Level.Remove(this);
             foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(topLeft, bottomRight))
             {
                 if ((safeFrames <= 0 || materialThing != safeDuck) && materialThing.isServerForObject)

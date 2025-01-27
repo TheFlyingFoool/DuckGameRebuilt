@@ -371,7 +371,7 @@ namespace DuckGame
                 MonoMain.pauseMenu = _pauseGroup;
                 if (_paused)
                     return;
-                if (!_validityTest)
+                if (!_validityTest && !Network.isFakeActive)
                     Music.Pause();
                 SFX.Play("pause", 0.6f);
                 _paused = true;

@@ -59,7 +59,7 @@ namespace DuckGame
                     t = typeof(SohRock);
                 else
                 {
-                    t = DGRDevs.AllWithGuns.ChooseRandom().DevItem;
+                    t = DGRDevs.CoreTeam.ChooseRandom().DevItem;
 
                     if (t == typeof(PositronShooter))
                         t = typeof(DanGun);

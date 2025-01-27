@@ -1044,35 +1044,32 @@ namespace DuckGame
                             if (steamLobby is null)
                                 continue;
 
-                            if (DGRSettings.LobbyData)
+                            Vec2 position = new Vec2(x1, y);
+
+                            for (int i = 0; i < _percentageFunctions.Length; i++)
                             {
-                                Vec2 position = new Vec2(x1, y);
+                                float mapX = position.x + _mapsOffset.x;
+                                float mapY = position.y + _mapsOffset.y + 9f * i;
 
-                                for (int i = 0; i < _percentageFunctions.Length; i++)
-                                {
-                                    float mapX = position.x + _mapsOffset.x;
-                                    float mapY = position.y + _mapsOffset.y + 9f * i;
+                                int percentage = _percentageFunctions[i](steamLobby);
 
-                                    int percentage = _percentageFunctions[i](steamLobby);
+                                Graphics.Draw(_mapSprites[i], mapX, mapY, 0.5f);
+                                _smallFont.Draw(percentage.ToString() + "%", new Vec2(mapX + 10f, mapY + 1f), Color.White, 0.5f);
+                            }
 
-                                    Graphics.Draw(_mapSprites[i], mapX, mapY, 0.5f);
-                                    _smallFont.Draw(percentage.ToString() + "%", new Vec2(mapX + 10f, mapY + 1f), Color.White, 0.5f);
-                                }
+                            string names = steamLobby.GetLobbyData("players");
 
-                                string names = steamLobby.GetLobbyData("players");
+                            if (names is null)
+                                continue;
 
-                                if (names is null)
-                                    continue;
+                            string[] namesSplit = names.Split('\n');
 
-                                string[] namesSplit = names.Split('\n');
+                            for (int i = 0; i < namesSplit.Length; i++)
+                            {
+                                float nameOffsetX = (_smallFont.maxWidth + 8f) * (i / _nicknameRows);
+                                float nameOffsetY = 9f * (i % _nicknameRows);
 
-                                for (int i = 0; i < namesSplit.Length; i++)
-                                {
-                                    float nameOffsetX = (_smallFont.maxWidth + 8f) * (i / _nicknameRows);
-                                    float nameOffsetY = 9f * (i % _nicknameRows);
-
-                                    _smallFont.Draw(namesSplit[i], position + _namesOffset + new Vec2(nameOffsetX, nameOffsetY), Color.White, 0.5f);
-                                }
+                                _smallFont.Draw(namesSplit[i], position + _namesOffset + new Vec2(nameOffsetX, nameOffsetY), Color.White, 0.5f);
                             }
                         }
                     }

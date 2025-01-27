@@ -49,8 +49,6 @@ namespace DuckGame
             set
             {
                 _volume = value;
-                if (_vgmPlayer != null) _vgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
-                if (_dgmPlayer != null) _dgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
                 if (_musicPlayer == null)
                     return;
                 _musicPlayer.Volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
@@ -73,9 +71,18 @@ namespace DuckGame
 
         public static TimeSpan position => new TimeSpan(0, 0, 0, 0, (int)(_musicPlayer.Platform_GetProgress() * _musicPlayer.Platform_GetLengthInMilliseconds()));
 
-        public static bool finished => DGRSettings.LoaderMusic && _musicPlayer.State == SoundState.Stopped &&
-            (_vgmPlayer == null || _vgmPlayer.state == SoundState.Stopped) &&
-            (_dgmPlayer == null || _dgmPlayer.state == SoundState.Stopped);
+        public static bool finished => Finished();
+
+        public static bool Finished()
+        {
+            if (!DGRSettings.LoadMusic || _musicPlayer == null)
+                return false;
+            
+            if (CurrentType == 0) return _musicPlayer.State == SoundState.Stopped;
+            else if (CurrentType == 1) return _vgmPlayer.state == SoundState.Stopped;
+            else if (CurrentType == 2) return _dgmPlayer.state == SoundState.Stopped;
+            return false;
+        }
 
         public static void Initialize()
         {
@@ -185,6 +192,7 @@ namespace DuckGame
             return "Challenging";
         }
 
+        public static int CurrentType;
         public static void Play(string music, bool looping = true, float crossFadeTime = 0f)
         {
             if (!DGRSettings.LoaderMusic) return;
@@ -196,6 +204,7 @@ namespace DuckGame
                 _vgmPlayer.Play();
                 _vgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
                 _vgmPlayer.looped = looping;
+                CurrentType = 1;
             }
             else if (File.Exists("./Content/Audio/Music/" + music + ".vgz"))
             {
@@ -204,27 +213,31 @@ namespace DuckGame
                 _vgmPlayer.Play();
                 _vgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
                 _vgmPlayer.looped = looping;
+                CurrentType = 1;
             }
-            else if (Directory.Exists("./Content/Audio/Music/InGame/" + music + "dgm"))
+            else if (Directory.Exists("./Content/Audio/Music/InGame/" + music) && music.Contains("dgm"))
             {
-                if (!LoadDGM("./Content/Audio/Music/InGame/" + music + "dgm"))
+                if (!LoadDGM("./Content/Audio/Music/InGame/" + music))
                     return;
                 _dgmPlayer.Play();
                 _dgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
                 _dgmPlayer.looped = looping;
+                CurrentType = 2;
             }
-            else if (File.Exists("./Content/Audio/Music/" + music + "dgm"))
+            else if (File.Exists("./Content/Audio/Music/" + music) && music.Contains("dgm"))
             {
-                if (!LoadDGM("./Content/Audio/Music/InGame/" + music + "dgm"))
+                if (!LoadDGM("./Content/Audio/Music/" + music))
                     return;
                 _dgmPlayer.Play();
                 _dgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
                 _dgmPlayer.looped = looping;
+                CurrentType = 2;
             }
             else if (Load(music))
             {
                 _musicPlayer.Play();
                 _musicPlayer.IsLooped = looping;
+                CurrentType = 0;
             }
         }
 
@@ -363,16 +376,30 @@ namespace DuckGame
 
         public static void Pause()
         {
-            if (DGRSettings.LoaderMusic) _musicPlayer.Pause();
+            if (!DGRSettings.LoaderMusic) return;
+            _musicPlayer.Pause();
             if (_vgmPlayer != null) _vgmPlayer.Pause();
             if (_dgmPlayer != null) _dgmPlayer.Pause();
         }
 
         public static void Resume()
         {
-            if (DGRSettings.LoaderMusic) _musicPlayer.Resume();
-            if (_vgmPlayer != null) _vgmPlayer.Resume();
-            if (_dgmPlayer != null) _dgmPlayer.Resume();
+            if (DGRSettings.LoaderMusic)
+            {
+                switch (CurrentType)
+                {
+                    case 0:
+                    default:
+                        _musicPlayer.Resume();
+                        break;
+                    case 1:
+                        if (_vgmPlayer != null) _vgmPlayer.Resume();
+                        break;
+                    case 2:
+                        if (_dgmPlayer != null) _dgmPlayer.Resume();
+                        break;
+                }
+            }
         }
 
         public static void Stop()
@@ -429,6 +456,8 @@ namespace DuckGame
 
         public static void Update()
         {
+            if (_vgmPlayer != null) _vgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
+            if (_dgmPlayer != null) _dgmPlayer.volume = _volume * (_masterVolume * _masterVolume) * _volumeMult;
             if (_dgmPlayer != null) _dgmPlayer.Update();
         }
     }

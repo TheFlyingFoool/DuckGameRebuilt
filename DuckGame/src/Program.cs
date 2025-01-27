@@ -36,7 +36,7 @@ namespace DuckGame
 #endif
 
         // this should be formatted like X.X.X where each X is a number
-        public const string CURRENT_VERSION_ID = "1.4.2.1";
+        public const string CURRENT_VERSION_ID = "1.4.4.0";
 
         // do change this you know what you're doing -NiK0
         public const string CURRENT_VERSION_ID_FORMATTED = "v" + CURRENT_VERSION_ID;
@@ -636,7 +636,7 @@ namespace DuckGame
                             }
                         }
                         break;
-                    case "-noRPC":
+                    case "-noRP":
                         DiscordRichPresence.noRPC = true;
                         break;
                     case "-logLoading":
@@ -1010,7 +1010,7 @@ namespace DuckGame
                                     bool flag3 = crashAssembly == null && exception.TargetSite.DeclaringType != null && allMod.configuration.assembly == exception.TargetSite.DeclaringType.Assembly || allMod.configuration.assembly == crashAssembly;
                                     if (!flag3)
                                     {
-                                        foreach (Type type in allMod.configuration.assembly.GetTypes())
+                                        foreach (Type type in allMod.configuration.assembly.SaferGetTypes())
                                         {
                                             if (pException.StackTrace.Contains(type.ToString()))
                                             {

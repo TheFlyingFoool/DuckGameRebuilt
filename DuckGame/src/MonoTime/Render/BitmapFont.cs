@@ -14,7 +14,7 @@ namespace DuckGame
         public int startingcolorindex = -1;
         private static bool _mapInitialized = false;
         
-        public static char[] _characters = new char[317]
+        public static char[] _characters = new char[325]
         {
           ' ',
           '!',
@@ -332,7 +332,15 @@ namespace DuckGame
           '¡',
           '¿',
           'Ё',
-          'ё'
+          'ё',
+          'Ґ',
+          'ґ',
+          'Є',
+          'є',
+          'І',
+          'і',
+          'Ї',
+          'ї'
         };
         private static int[] _characterMap = new int[ushort.MaxValue];
         private const int kTilesPerRow = 16;

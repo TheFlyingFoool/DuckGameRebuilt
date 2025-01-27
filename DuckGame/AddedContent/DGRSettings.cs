@@ -166,6 +166,14 @@ namespace DuckGame
                 DevConsole.Log("Failed to preload levels: " + ex.ToString(), Colors.DGRed);
             }
         }
+        public static bool DGROnly
+        {
+            get
+            {
+                return DGRSettings.DGRItems || DG.FiftyPlayerMode || DGRSettings.MidGameJoining;
+            }
+        }
+
         [Marker.AutoConfig] public static bool ExtraMusic = true;
 
         [Marker.AutoConfig] public static bool IgnoreLevRestrictions = false;
@@ -175,8 +183,6 @@ namespace DuckGame
         [Marker.AutoConfig] public static bool RememberMatchSettings = false;
 
         [Marker.AutoConfig] public static bool CustomHatTeams = false;
-
-        [Marker.AutoConfig] public static bool DGRNeonSign = true;
 
         [Marker.AutoConfig] public static bool CopyMatchResults = false;
 
@@ -219,24 +225,6 @@ namespace DuckGame
         [Marker.AutoConfig] public static bool EditorTimer = true;
 
         [Marker.AutoConfig] public static bool SkipXP = false;
-
-        public static bool RPC
-        {
-            get => S_RPC;
-
-            set
-            {
-                S_RPC = value;
-                if (S_RPC)
-                {
-                    DiscordRichPresence.Initialize();
-                }
-                else
-                {
-                    DiscordRichPresence.Deinitialize();
-                }
-            }
-        }
 
         public static int ParticleMultiplier
         {
@@ -326,24 +314,6 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static int MaximumCorrectionTicks = 8;
 
-        [Marker.AutoConfig] public static bool Use61UPS = true;
-
-        public static bool Use61UPS_Setting
-        {
-            get
-            {
-                return Use61UPS;
-            }
-            set
-            {
-                if(value) 
-                    Program.main.TargetElapsedTime = TimeSpan.FromTicks(163934); // 61ups
-                else
-                    Program.main.TargetElapsedTime = TimeSpan.FromTicks(166667); // 60ups
-                Use61UPS = value;
-            }
-        }
-
 
         [Marker.AutoConfig] public static bool S_UncappedFPS = false;
         public static bool UncappedFPS
@@ -421,10 +391,8 @@ namespace DuckGame
             Program.main.DrawRateLimiterTarget = Math.Max(TargetFrameRate,60);
             Program.main.UseDrawRateLimiter = !UseVSync && UncappedFPS && TargetFrameRate >= 60;
 
-            if (Use61UPS)
-                Program.main.TargetElapsedTime = TimeSpan.FromTicks(163934); // 61ups
-            else
-                Program.main.TargetElapsedTime = TimeSpan.FromTicks(166667); // 60ups
+
+            Program.main.TargetElapsedTime = TimeSpan.FromTicks(163934); // Default to 61ups -NiK0
             MonoMain.graphics.ApplyChanges();
         }
 
@@ -432,7 +400,7 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static float WeatherMultiplier = 1;
 
-        [Marker.AutoConfig] public static float HeatWaveMultiplier = 1;
+        [Marker.AutoConfig] public static float HeatWaveMultiplier = 0;
 
         [Marker.AutoConfig] public static bool AmbientParticles = true;
 
@@ -463,6 +431,8 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool EditorMousePriority = false;
 
+        [Marker.AutoConfig] public static bool ShowWorkshopModsInEditor = false;
+
         [Marker.AutoConfig] public static bool ConvertModdedCommands = true;
 
         [Marker.AutoConfig]
@@ -489,15 +459,11 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool NameTags { get; set; }
 
-        [Marker.AutoConfig] public static bool LobbyData { get; set; }
-
         [Marker.AutoConfig] public static bool LobbyNameOnPause = true;
 
         [Marker.AutoConfig] public static bool EditorOnlinePhysics = false;
 
         [Marker.AutoConfig] public static bool DrawOffscreenArrowsOnEditor = false;
-
-        [Marker.AutoConfig] public static bool EditorInstructions = true;
 
         [Marker.AutoConfig] public static bool EditorLevelName = true;
 
@@ -506,9 +472,6 @@ namespace DuckGame
         [Marker.AutoConfig] public static int DGRJoinLink = 0;
 
         [Marker.AutoConfig] public static bool QRCodeJoinLinks = false;
-        
-        // the 4chan disease..
-        [Marker.AutoConfig] public static bool GreenTextSupport = false;
 
         [Marker.AutoConfig] public static bool UseDuckShell = true;
 

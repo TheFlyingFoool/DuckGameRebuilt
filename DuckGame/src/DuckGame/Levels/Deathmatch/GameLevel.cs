@@ -377,7 +377,7 @@ namespace DuckGame
                     for (int i = 0; i < rainTimer; i++)
                     {
                         rainTimer -= 1;
-                        Vec2 pPosition = new Vec2(Rando.Float(topLeft.x - 200, bottomRight.x + 200), topLeft.y - 150);
+                        Vec2 pPosition = new Vec2(Rando.Float(ExtendedLeft, ExtendedRight), ExtendedTop);
                         ConfettiParticle confettiParticle = new ConfettiParticle();
                         confettiParticle.Init(pPosition.x + Rando.Float(-4f, 0f), pPosition.y + Rando.Float(-4f, 6f), new Vec2(Rando.Float(-1f, 0f), Rando.Float(-1f, 1f)), 0.01f);
                         confettiParticle._color = Color.Pink;

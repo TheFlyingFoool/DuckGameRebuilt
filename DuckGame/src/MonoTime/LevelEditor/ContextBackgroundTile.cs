@@ -49,7 +49,12 @@ namespace DuckGame
             _owner.Selected(this);
         }
 
-        public override void Closed() => base.Closed();
+        public override void Update()
+        {
+            base.Update();
+            if (opened && position.y + menuSize.y + _openedOffset > 350)
+                _openedOffset = 350 - position.y - menuSize.y;
+        }
 
         public override void Draw()
         {
@@ -86,7 +91,7 @@ namespace DuckGame
                 menuSize = new Vec2(graphic.texture.width + 2, graphic.texture.height + 2);
                 float x = menuSize.x;
                 float y = menuSize.y;
-                Vec2 p1 = new Vec2(this.x, this.y);
+                Vec2 p1 = new Vec2(this.x, this.y + _openedOffset);
                 if (Editor.inputMode != EditorInput.Mouse && !_root)
                     p1.y = 16f;
                 if (!_root)
@@ -122,7 +127,7 @@ namespace DuckGame
                 else if (Editor.inputMode == EditorInput.Gamepad && (_file == null || !_file.hover) && !Editor.clickedMenu)
                 {
                     _hoverPos = new Vec2(_selectedIndex % num1 * graphic.w, _selectedIndex / num1 * graphic.h);
-                    if (Input.Pressed(Triggers.MenuLeft))
+                    if (Input.Pressed(Triggers.MenuLeft) && MonoMain.UpdateLerpState)
                     {
                         if (_selectedIndex == 0 && _owner != null)
                         {
@@ -132,16 +137,16 @@ namespace DuckGame
                         else
                             --_selectedIndex;
                     }
-                    if (Input.Pressed(Triggers.MenuRight))
+                    if (Input.Pressed(Triggers.MenuRight) && MonoMain.UpdateLerpState)
                     {
                         if (_file != null && _selectedIndex == num1 - 1)
                             _file.hover = true;
                         else
                             ++_selectedIndex;
                     }
-                    if (Input.Pressed(Triggers.MenuUp))
+                    if (Input.Pressed(Triggers.MenuUp) && MonoMain.UpdateLerpState)
                         _selectedIndex -= num1;
-                    if (Input.Pressed(Triggers.MenuDown))
+                    if (Input.Pressed(Triggers.MenuDown) && MonoMain.UpdateLerpState)
                         _selectedIndex += num1;
                     if (_selectedIndex < 0)
                         _selectedIndex = 0;
@@ -150,7 +155,7 @@ namespace DuckGame
                 }
                 else if (Editor.inputMode == EditorInput.Mouse)
                     _hoverPos = new Vec2(Mouse.x - _thing.x, Mouse.y - _thing.y);
-                if (_file != null && _file.hover && Input.Pressed(Triggers.MenuLeft))
+                if (_file != null && _file.hover && Input.Pressed(Triggers.MenuLeft) && MonoMain.UpdateLerpState)
                 {
                     _file.hover = false;
                     _selectedIndex = num1 - 1;
@@ -161,7 +166,7 @@ namespace DuckGame
                 if ((_file == null || !_file.hover) && _hoverPos.x >= 0f && _hoverPos.x < graphic.texture.width && _hoverPos.y >= 0f && _hoverPos.y < graphic.texture.height)
                 {
                     Graphics.DrawRect(_hoverPos + p1, _hoverPos + p1 + new Vec2(graphic.w + 2, graphic.h + 2), Color.Lime * 0.8f, (Depth)0.8f, false);
-                    if (Editor.inputMode == EditorInput.Mouse && Mouse.left == InputState.Pressed || Editor.inputMode == EditorInput.Gamepad && Input.Pressed(Triggers.Select) && !justOpened || Editor.inputMode == EditorInput.Touch && TouchScreen.GetTap() != Touch.None)
+                    if (Editor.inputMode == EditorInput.Mouse && Mouse.left == InputState.Pressed || Editor.inputMode == EditorInput.Gamepad && Input.Pressed(Triggers.Select) && MonoMain.UpdateLerpState && !justOpened || Editor.inputMode == EditorInput.Touch && TouchScreen.GetTap() != Touch.None)
                     {
                         if (_thing is BackgroundTile)
                             (_thing as BackgroundTile).frame = (int)(_hoverPos.x / graphic.w + _hoverPos.y / graphic.h * (graphic.texture.width / graphic.w));
@@ -176,7 +181,7 @@ namespace DuckGame
                         }
                     }
                 }
-                if (!justOpened && Input.Pressed(Triggers.Menu1) && owner == null)
+                if (!justOpened && Input.Pressed(Triggers.Menu1) && owner == null && MonoMain.UpdateLerpState)
                 {
                     Disappear();
                     current.CloseMenu();
