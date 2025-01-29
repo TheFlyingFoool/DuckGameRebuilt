@@ -65,6 +65,7 @@ namespace DuckGame
             }
         }
 
+
         public static string currentSong => _currentSong;
 
         public static string pendingSong => _pendingSong;

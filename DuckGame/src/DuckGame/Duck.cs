@@ -299,7 +299,7 @@ namespace DuckGame
         private bool _protectedFromFire;
         public override bool destroyed => _destroyed || forceDead;
 
-        private Interp DuckLerp = new Interp { };
+        public Interp DuckLerp = new Interp { };
         protected Interp DuckCamLerp = new Interp(true);
 
         public byte quackPitch
