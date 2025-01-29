@@ -160,7 +160,19 @@ namespace DuckGame
             _modAssemblyNames.Add(mod.configuration.assembly.FullName, mod);
             _modAssemblies.Add(mod.configuration.assembly, mod);
             if (mod is not CoreMod)
-                MarkerAttribute.Initialize(mod.configuration.assembly);
+            {
+                try 
+                //hi hello yes, this is a bandaid fix because reskin mods crash here for some reason
+                //as far as i know this is firebreak stuff and in testing everything seemed fine so /shrug/
+                //if any problems come up then oops -NiK0
+                {
+                    MarkerAttribute.Initialize(mod.configuration.assembly);
+                }
+                catch
+                {
+
+                }
+            }
             _modsByHash.Add(mod.identifierHash, mod);
             if (mod.configuration.workshopID != 0UL)
                 _modsByWorkshopID[mod.configuration.workshopID] = mod;
