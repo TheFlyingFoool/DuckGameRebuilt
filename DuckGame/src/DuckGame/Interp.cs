@@ -45,8 +45,14 @@ namespace DuckGame
         protected InterpState CurrentState;
         protected InterpState LerpState;
         public bool CanLerp = false;
+        public bool CanAngleLerp = true;
+
         private bool UpdatedOnce = false;
         public bool FlipUpdate = false;
+
+        // oh god
+        public Interp ParentInterp = null;
+        public bool SpecialAngleResetParentTrackingForHat = false;
 
         //TODO: replace this with a tick counting system instead.
         protected TimeSpan PreviousStateUpdate = TimeSpan.Zero;
@@ -136,6 +142,12 @@ namespace DuckGame
             {
                 LerpState.Position = Lerp.Vec2Smooth(PreviousState.Position, CurrentState.Position, IntraTick);
                 LerpState.Angle = LerpAngle(PreviousState.Angle, CurrentState.Angle, IntraTick);
+                if(SpecialAngleResetParentTrackingForHat && ParentInterp != null && PreviousState.Angle != CurrentState.Angle)
+                {
+                    LerpState.Position = CurrentState.Position - (ParentInterp.CurrentState.Position - Lerp.Vec2Smooth(ParentInterp.PreviousState.Position, ParentInterp.CurrentState.Position, IntraTick));
+                }
+                if (!CanAngleLerp)
+                    LerpState.Angle = CurrentState.Angle;
             }
         }
         public void UpdateLerpState(Vec2 Pos, float IntraTick, bool UpdateState)
@@ -195,6 +207,12 @@ namespace DuckGame
             {
                 LerpState.Position = Lerp.Vec2Smooth(PreviousState.Position, CurrentState.Position, IntraTick);
                 LerpState.Angle = LerpAngle(PreviousState.Angle, CurrentState.Angle, IntraTick);
+                if (SpecialAngleResetParentTrackingForHat && ParentInterp != null && PreviousState.Angle != CurrentState.Angle)
+                {
+                    LerpState.Position = CurrentState.Position - (ParentInterp.CurrentState.Position - Lerp.Vec2Smooth(ParentInterp.PreviousState.Position, ParentInterp.CurrentState.Position, IntraTick));
+                }
+                if (!CanAngleLerp)
+                    LerpState.Angle = CurrentState.Angle;
             }
         }
         public void UpdateLerpState(Vec2 Pos, Vec2 Size, float IntraTick, bool UpdateState)
