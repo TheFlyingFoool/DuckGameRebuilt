@@ -172,7 +172,7 @@ namespace DuckGame
             {
                 
                 holdSeconds += Maths.IncFrameTimer();
-                totalHoldSeconds += Maths.IncFrameTimer();
+                totalHoldSeconds += Maths.IncFrameTimer() * 2;
                 if (holdSeconds >= Math.Max(0.7f / totalHoldSeconds, 0.05f))
                 {
                     if (menuDownIsDown) Move(1);
@@ -190,6 +190,7 @@ namespace DuckGame
                     File.Delete(info.ReplayFilePath);
                     MenuItems[SelectedItemIndex + ScrollIndex] = null;
                     UpdateMenuItemList();
+                    ScrollUp();
                 }
             }
 
@@ -214,7 +215,7 @@ namespace DuckGame
 
         private void Move(int amount)
         {
-            DevConsole.Log($"Moving by {amount}");
+            //DevConsole.Log($"Moving by {amount}");
             int prev = SelectedItemIndex;
             SelectedItemIndex += amount;
             holdSeconds = 0;
