@@ -1,4 +1,4 @@
-# Duck Game Rebuilt
+# <img src="https://github.com/user-attachments/assets/1a6306e6-0fbb-4c3f-b1bd-1a96070efdd3" height="32"> Duck Game Rebuilt
 Duck Game Rebuilt is a decompilation of Duck Game with massive improvements to performance, compatibility, and quality of life features.
 
 Join [our Discord server](https://discord.gg/XkAjt744hz) if you have any questions, need help, or want to report bugs
@@ -8,13 +8,13 @@ Notable wiki pages:
 * [A list of all improvements to Duck Game Rebuilt](https://github.com/TheFlyingFoool/DuckGameRebuilt/wiki/Changelog)
 * [Hardware and software compatibility](https://github.com/TheFlyingFoool/DuckGameRebuilt/wiki/Architectures-and-Devices)
 
-## Installation
+## Installation 📥
 
 For **Windows** users, subscribe to [the steam workshop mod](https://steamcommunity.com/sharedfiles/filedetails/?id=3132351890).
 
 For **Linux** users, follow the [Linux Installation Guide](https://github.com/TheFlyingFoool/DuckGameRebuilt/wiki/Linux-Installation-Guide)
 
-## For Developers
+## For Developers 🚧
 Welcome to the repo, enjoy your stay, please unfuck the code. thanks
 
 Note: your IDE will scream at you with 200+ warnings when building, which is normal
