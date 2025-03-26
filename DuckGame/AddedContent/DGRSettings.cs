@@ -220,8 +220,6 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool SpriteAtlas = true;
 
-        [Marker.AutoConfig] public static bool S_RPC = true;
-
         [Marker.AutoConfig] public static bool EditorTimer = true;
 
         [Marker.AutoConfig] public static bool SkipXP = false;

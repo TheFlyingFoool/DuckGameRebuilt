@@ -636,6 +636,7 @@ namespace DuckGame
                             }
                         }
                         break;
+                    case "-noRPC":
                     case "-noRP":
                         DiscordRichPresence.noRPC = true;
                         break;
