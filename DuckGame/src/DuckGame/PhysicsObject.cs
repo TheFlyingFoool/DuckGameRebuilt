@@ -389,8 +389,6 @@ namespace DuckGame
                 Vec2 p1_1 = topLeft + new Vec2(0f, 0.5f);
                 Vec2 p2_1 = bottomRight + new Vec2(0f, -0.5f);
                 lastHSpeed = hSpeed;
-                //float num2 = 0f; THESE ARENT EVEN DOING ANYTHING?? -NiK0
-                //bool flag1 = false;
                 if (hSpeed != 0)
                 {
                     int num3 = (int)Math.Ceiling(Math.Abs(this.hSpeed) / 4);
@@ -483,7 +481,6 @@ namespace DuckGame
                 if (this.vSpeed > vMax) this.vSpeed = vMax;
                 if (this.vSpeed < -vMax) this.vSpeed = -vMax;
                 this.vSpeed += currentGravity;
-                if (this.vSpeed < 0) grounded = false;
                 grounded = false;
                 framesSinceGrounded++;
                 if (this.vSpeed <= 0) Math.Floor(this.vSpeed);
