@@ -516,7 +516,6 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\ConveyorBelt.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\EnergyForceWave.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\ItemFrame.cs" />
-    <Compile Include="AddedContent\NiK0\ClientOnly\Other\ReDemoBlaster.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\TapeBlock.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\FadingAwayThing.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Guns\CampNetgun.cs" />
@@ -546,7 +545,6 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\NMPinkExplode.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\NMSetScale.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\PinkBox.cs" />
-    <Compile Include="AddedContent\NiK0\ClientOnly\Other\PizzaLauncher.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\ShatterDuck.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\TheDishes.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\VersionSign.cs" />
