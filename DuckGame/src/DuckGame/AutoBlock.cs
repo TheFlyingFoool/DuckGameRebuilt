@@ -244,6 +244,7 @@ namespace DuckGame
         public AutoBlock(float x, float y, string tileset)
           : base(x, y)
         {
+            overrideLeniancy = 22;
             checkFilter = blok => blok != this && (blok as AutoBlock)._tileset == _tileset;
             if (tileset == null)
                 tileset = "";
