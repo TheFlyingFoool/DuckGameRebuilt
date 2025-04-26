@@ -245,9 +245,6 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="QRCoder, Version=1.4.3.0, Culture=neutral, PublicKeyToken=c4ed5b9ae8358a28, processorArchitecture=MSIL">
-      <HintPath>..\packages\QRCoder.1.4.3\lib\net40\QRCoder.dll</HintPath>
-    </Reference>
     <Reference Include="SixLabors.Fonts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
       <HintPath>..\packages\SixLabors.Fonts.1.0.1\lib\netstandard2.0\SixLabors.Fonts.dll</HintPath>
     </Reference>
@@ -322,7 +319,6 @@
     <Compile Include="AddedContent\DevWeapons\Stuff\LPortal.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\OthProjectile.cs" />
     <Compile Include="AddedContent\DevWeapons\Stuff\PortalProjectile.cs" />
-    <Compile Include="AddedContent\DevWeapons\SohRock.cs" />
     <Compile Include="AddedContent\DGRDevHall.cs" />
     <Compile Include="AddedContent\DevWeapons\CollinGun.cs" />
     <Compile Include="AddedContent\DevWeapons\DanGun.cs" />
@@ -496,6 +492,8 @@
     <Compile Include="AddedContent\Firebreak\Utilities\ProgressValue.cs" />
     <Compile Include="AddedContent\klof44\DartGrenade.cs" />
     <Compile Include="AddedContent\klof44\DiscordRichPresence.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\NMSetColor.cs" />
+    <Compile Include="AddedContent\NiK0\ClientOnly\NMSyncVar.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\CampNetRagdoll.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\Florbius.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\RecorderatorBeam.cs" />
@@ -510,7 +508,6 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\RainTile.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\WindTile.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\Projectile\CampingNet.cs" />
-    <Compile Include="AddedContent\NiK0\ExplosionDecal.cs" />
     <Compile Include="AddedContent\NiK0\BGLightning.cs" />
     <Compile Include="AddedContent\NiK0\ChangePlus.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\NMRobbedItemFrame.cs" />
@@ -553,7 +550,6 @@
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\ShatterDuck.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\TheDishes.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Other\VersionSign.cs" />
-    <Compile Include="AddedContent\NiK0\GlassPlatform.cs" />
     <Compile Include="AddedContent\NiK0\ClientOnly\Tape\MaterialEnergy.cs" />
     <Compile Include="AddedContent\NiK0\MaterialLavaWobble.cs" />
     <Compile Include="AddedContent\NiK0\MathParser.cs" />
@@ -561,7 +557,6 @@
     <Compile Include="AddedContent\NiK0\NMClientOnlyContent.cs" />
     <Compile Include="AddedContent\NiK0\RainbowConstant.cs" />
     <Compile Include="AddedContent\NiK0\RainParticel.cs" />
-    <Compile Include="AddedContent\NiK0\SpaceMaterial.cs" />
     <Compile Include="AddedContent\NiK0\WeaponTaper.cs" />
     <Compile Include="Recorderator\RecorderationSelector\FolderInfo.cs" />
     <Compile Include="Recorderator\RecorderationSelector\IRMenuItem.cs" />
@@ -2501,7 +2496,7 @@
   </Target>
   <Target Name="AfterBuild">
     <Exec Command="cp -rv $(SolutionDir)deps/* $(SolutionDir)bin/" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'" />
-<!--    <Exec Command="sh $(SolutionDir)shaders_source/buildshaders.sh" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'" />-->
+    <!--    <Exec Command="sh $(SolutionDir)shaders_source/buildshaders.sh" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'" />-->
     <Exec Command="Xcopy &quot;$(SolutionDir)\deps&quot; &quot;$(SolutionDir)\bin&quot; /E /H /C /I /Y" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'" />
     <Exec Command="call &quot;$(SolutionDir)shaders_source\buildshaders.bat&quot;" Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))'" />
   </Target>

@@ -373,22 +373,12 @@ namespace DuckGame
 
             menu.Add(new UIMenuItemToggle("Online Physics", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.EditorOnlinePhysics)))
             {
-                dgrDescription = "WARNING This may be highly unstable but it'll make it so online physics apply while testing levels in the editor (Ragdoll rng, etc)"
-            });
-
-            menu.Add(new UIMenuItemToggle("Test Timer", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.EditorTimer)))
-            {
-                dgrDescription = "Displays a timer of how much time the current level has been running for while testing it in the editor"
+                dgrDescription = "WARNING Unstable Makes it so online physics apply while testing levels in the editor (Ragdoll rng, etc)"
             });
 
             menu.Add(new UIMenuItemToggle("Level Name", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.EditorLevelName)))
             {
                 dgrDescription = "Displays current level name at top left of the screen"
-            });
-            //EditorTimer
-            menu.Add(new UIMenuItemToggle("Disable \"More...\"", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DisableMoreInEditor)))
-            {
-                dgrDescription = "Shows all menus at once, instead of having \"More...\" menu in editor (REQUIRES RESTART)"
             });
             
             menu.Add(new UIMenuItemToggle("Mouse Priority", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.EditorMousePriority)))
@@ -424,9 +414,19 @@ namespace DuckGame
             {
                 dgrDescription = "Reloads all hats (OFFLINE ONLY, MIGHT REMOVE MODDED HATS, F6 QUICK RELOAD, F5 RELOADS CURRENTLY WORN ONE)"
             });
-            menu.Add(new UIMenuItemToggle("Copy match results", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.CopyMatchResults)))
+            menu.Add(new UIMenuItemToggle("DSH in console", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.UseDuckShell)))
             {
-                dgrDescription = "Copies match results to clipboard when match ends"
+                dgrDescription = "Uses DGR's custom DuckShell language to run commands in the console, which provides more power-user and automation features"
+            });
+
+            menu.Add(new UIMenuItemToggle("Convert commands", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ConvertModdedCommands)))
+            {
+                dgrDescription = "Game tries to add CMD commands from mods to DuckShell\n(REQUIRES RESTART)"
+            });
+
+            menu.Add(new UIMenuItemToggle("Use <Enabled>", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.UseEnabledModsConfig)))
+            {
+                dgrDescription = "Uses <Enabled> from mod's config\n instead of <Disabled>, which allows to have presets"
             });
 
             menu.Add(new UIText(" ", Color.White));
@@ -456,9 +456,9 @@ namespace DuckGame
                 dgrDescription = "If enabled the offscreen arrows for ducks will draw in the Editor test zone"
             });
 
-            menu.Add(new UIMenuItemToggle("Sync Ching", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SyncChing)))
+            menu.Add(new UIMenuItemToggle("Test Timer", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.EditorTimer)))
             {
-                dgrDescription = "Want everyone to know that you just clipped them? Turn this on and other people will be able to hear the ching when you clip with Recorderator!"
+                dgrDescription = "Displays a timer of how much time the current level has been running for while testing it in the editor"
             });
 
             menu.Add(new UIMenuItemToggle("Alt SeqCrate Texture", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SequenceCrateRetexture)))
@@ -466,10 +466,6 @@ namespace DuckGame
                 dgrDescription = "Retextures the Sequence Crate so it doesn't look indentical to the regular crate"
             });
 
-            menu.Add(new UIMenuItemToggle("QR Code Join Links", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.QRCodeJoinLinks)))
-            {
-                dgrDescription = "Copies a QR code representing the join link"
-            });
             menu.Add(new UIMenuItemToggle("No Force Start Menu", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HideFS)))
             {
                 dgrDescription = "Disables the force start button from the pause menu while hosting."
@@ -495,10 +491,6 @@ namespace DuckGame
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemToggle("DGR Music", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ExtraMusic)))
-            {
-                dgrDescription = "Adds 7 new songs to the pool. Songs made by Firch"
-            });
             menu.Add(new UIMenuItemToggle("Fix Laggy Bullets", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.FixBulletPositions)))
             {
                 dgrDescription = "|DGRED|[Experimental]|PINK| Visually teleports some bullets forward in time to account for ping"
@@ -558,7 +550,7 @@ namespace DuckGame
             });
             menu.Add(new UIMenuItemSlider("Weather Thunder Chance", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.WeatherLighting), 0, 16, 1), step: 1f)
             {
-                dgrDescription = "Chance for thunder to occur in levels from x0 to x16"
+                dgrDescription = "Chance for thunder to occur in weather"
             });
 
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
@@ -573,29 +565,24 @@ namespace DuckGame
                 dgrDescription = "Extra cosmetic particles added by DGR, embers from lamps, leafs from trees, etc"
             });
 
-            menu.Add(new UIMenuItemToggle("Explosion Decals", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ExplosionDecals)))
-            {
-                dgrDescription = "Toggles comestic dust decals when explosions happen"
-            });
-
             menu.Add(new UIMenuItemToggle("Enhanced Textures", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.EnhancedTextures)))
             {
                 dgrDescription = "Adds more texture variants and details"
             });
 
-            menu.Add(new UIMenuItemNumber("Particle Level", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ParticleMultiplier), 0, 7, 1), valStrings: new List<string>()
+            menu.Add(new UIMenuItemNumber("Particle Level", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ParticleMultiplier), 0, 3, 1), valStrings: new List<string>()
             {
-                "None     ",
-                "Minimum     ",
-                "Low     ",
-                "Default     ",
-                "Many     ",
-                "EXTREME     ",
-                "WUMBO     ",
-                "|RED|UNCOUNTABLE"
+                "None",
+                "Minimum",
+                "Low",
+                "Default",
+                //"Many     ",
+                //"EXTREME     ",
+                //"WUMBO     ",
+                //"|RED|UNCOUNTABLE"
             })
             {
-                dgrDescription = "Global particle multiplier from x0 to x16"
+                dgrDescription = "Global particle multiplier"
             });
 
 
@@ -644,20 +631,6 @@ namespace DuckGame
             {
                 dgrDescription = "STEAM    - Regular steam link\nDGR      - Custom DGR link (https protocol)\nBOTH (D) - Both in one link, clickable on Discord\nBOTH (G) - Both copied but as seperate links",
                 manualFormatting = true
-            });
-            menu.Add(new UIMenuItemToggle("DSH in console", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.UseDuckShell)))
-            {
-                dgrDescription = "Uses DGR's custom DuckShell language to run commands in the console, which provides more power-user and automation features"
-            });
-
-            menu.Add(new UIMenuItemToggle("Convert commands", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ConvertModdedCommands)))
-            {
-                dgrDescription = "Game tries to add CMD commands from mods to DuckShell\n(REQUIRES RESTART)"
-            });
-
-            menu.Add(new UIMenuItemToggle("Use <Enabled>", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.UseEnabledModsConfig)))
-            {
-                dgrDescription = "Uses <Enabled> from mod's config\n instead of <Disabled>, which allows to have presets"
             });
             
             menu.Add(new UIText(" ", Color.White));
@@ -760,16 +733,6 @@ namespace DuckGame
             });
 
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
-
-            menu.Add(new UIMenuItemNumber("Hat Selector Zoom", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HatSelectorSize), 0, 2, 1), valStrings: new List<string>()
-            {
-                "Normal",
-                "Big",
-                "WUMBO"
-            })
-            {
-                dgrDescription = "The zoom on the hat selector"
-            });
 
             menu.Add(new UIMenuItemToggle("Lobby Name", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.LobbyNameOnPause)))
             {
@@ -1054,6 +1017,7 @@ namespace DuckGame
           }));
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItemToggle("Mute If In The Background", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(MuteOnBackground)), new FieldBinding(Data, "muteOnBackground")));
+            menu.Add(new UIMenuItemToggle("DGR Music|PINK|♠", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ExtraMusic))));
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pOptionsMenu), backButton: true));
             return menu;

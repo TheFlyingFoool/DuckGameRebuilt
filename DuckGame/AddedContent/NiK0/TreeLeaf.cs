@@ -12,9 +12,7 @@
         public static TreeLeaf New(float xpos, float ypos, int lT = 0)
         {
             TreeLeaf feather;
-            if (NetworkDebugger.enabled)
-                feather = new TreeLeaf();
-            else if (_objects[_lastActiveObject] == null)
+            if (_objects[_lastActiveObject] == null)
             {
                 feather = new TreeLeaf();
                 _objects[_lastActiveObject] = feather;

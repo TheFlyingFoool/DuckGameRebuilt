@@ -548,6 +548,13 @@ namespace DuckGame
             g.depth = depth;
             g.Draw();
         }
+        public static void DrawNoLerp(Sprite g, float x, float y, Depth depth = default(Depth))
+        {
+            g.x = x;
+            g.y = y;
+            g.depth = depth;
+            g.DrawNoLerp();
+        }
         public static void Draw<T>(ref T g, float x, float y, Depth depth = default(Depth)) where T : Sprite
         {
             g.x = x;

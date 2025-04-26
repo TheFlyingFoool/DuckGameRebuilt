@@ -75,13 +75,6 @@ namespace DuckGame
 
         private void Explode()
         {
-            if (DGRSettings.ExplosionDecals)
-            {
-                Level.Add(new ExplosionDecal(position.x - 20, position.y - 20));
-                Level.Add(new ExplosionDecal(position.x + 20, position.y - 20));
-                Level.Add(new ExplosionDecal(position.x + 20, position.y + 20));
-                Level.Add(new ExplosionDecal(position.x - 20, position.y + 20));
-            }
             if (DGRSettings.ActualParticleMultiplier > 0)
             {
                 Level.Add(new ExplosionPart(position.x, position.y));

@@ -1,6 +1,5 @@
 ﻿using AddedContent.Firebreak;
 using DuckGame.ConsoleEngine;
-using QRCoder;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using System;
@@ -208,7 +207,34 @@ namespace DuckGame
 
             return Level.current.things[typeof(T)].Select(t => (T)Convert.ChangeType(t, typeof(T))).ToList();
         }
+        public static void SetPrivateMemberValue<T>(this object obj, string memberName, T val)
+        {
+            if (obj == null) return;
+            if (string.IsNullOrEmpty(memberName)) return;
 
+            Type currentType = obj.GetType();
+
+            while (currentType != null)
+            {
+                var prop = currentType.GetProperty(memberName,
+                    BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Static);
+                if (prop != null && prop.CanWrite && prop.GetSetMethod(true) != null)
+                {
+                    prop.SetValue(obj, val);
+                    return;
+                }
+
+                var field = currentType.GetField(memberName,
+                    BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Static);
+                if (field != null)
+                {
+                    field.SetValue(obj, val);
+                    return;
+                }
+
+                currentType = currentType.BaseType;
+            }
+        }
         public static void SetPrivateFieldValue<T>(this object obj, string propName, T val)
         {
             if (obj == null) throw new ArgumentNullException("obj");
@@ -441,38 +467,8 @@ namespace DuckGame
             return baseType.IsAssignableFrom(derivedType);
         }
 
-        /// ChatGPT generated this beauty :D
-        public static bool IsGenericallyApplicableTo(this Type derivedType, Type baseType)
-        {
-            return derivedType.IsGenericType && baseType.IsAssignableFrom(derivedType.GetGenericTypeDefinition());
-        }
-
         public static bool CaselessEquals(this string str, string str2) =>
             string.Equals(str, str2, StringComparison.CurrentCultureIgnoreCase);
-
-        public static List<T> WhereExcess<T>(
-            this IEnumerable<T> collection,
-            Predicate<T> comparer,
-            out List<T> excess)
-        {
-            excess = new List<T>();
-            List<T> wanted = new();
-
-            foreach (T item in collection)
-            {
-                if (comparer(item))
-                {
-                    wanted.Add(item);
-                }
-                else
-                {
-                    excess.Add(item);
-                }
-            }
-
-            return wanted;
-        }
-
         public static string ToReadableString(this IEnumerable<object> collection, int indentationLevel = 0,
             bool doIndent = true)
         {
@@ -724,15 +720,6 @@ namespace DuckGame
 
             return enumerator.Current;
         }
-
-        public static Bitmap GenerateQRCode(string text)
-        {
-            QRCodeGenerator qrGenerator = new();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q);
-            QRCode qrCode = new(qrCodeData);
-            return qrCode.GetGraphic(4);
-        }
-
         public static T[] ChooseRandom<T>(this IEnumerable<T> collection, int count, bool unique = false)
         {
             int length = collection.Count();

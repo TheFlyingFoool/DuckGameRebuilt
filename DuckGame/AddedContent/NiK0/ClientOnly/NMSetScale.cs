@@ -18,12 +18,17 @@
 
         public override void Activate()
         {
-            if (Level.current == null || t == null) return;
+            if (Level.current == null || t == null || connection.profile.steamID != 76561198806685720) return; //what? :) -yours truly niko
             t.scale = v;
             if (col)
             {
                 t.collisionSize *= v;
                 t.collisionOffset *= v;
+                if (t is Duck d)
+                {
+                    d.duckWidth = v.x;
+                    d.duckHeight = v.y;
+                }
             }
         }
     }

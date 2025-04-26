@@ -31,7 +31,6 @@ namespace DuckGame
                 explosionPart.yscale *= 0.7f;
                 Level.Add(explosionPart);
             }
-            if (DGRSettings.ExplosionDecals) Level.Add(new ExplosionDecal(x, y));
             if (Recorderator.Playing) return; //recorderator
             SFX.Play("explode");
             RumbleManager.AddRumbleEvent(position, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));

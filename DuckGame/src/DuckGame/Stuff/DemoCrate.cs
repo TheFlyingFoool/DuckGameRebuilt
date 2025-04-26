@@ -38,13 +38,6 @@ namespace DuckGame
         [NetworkAction]
         private void BlowUp(Vec2 pPosition, float pFlyX)
         {
-            if (DGRSettings.ExplosionDecals)
-            {
-                Level.Add(new ExplosionDecal(pPosition.x - 20, pPosition.y - 20));
-                Level.Add(new ExplosionDecal(pPosition.x + 20, pPosition.y - 20));
-                Level.Add(new ExplosionDecal(pPosition.x + 20, pPosition.y + 20));
-                Level.Add(new ExplosionDecal(pPosition.x - 20, pPosition.y + 20));
-            }
             if (DGRSettings.ActualParticleMultiplier > 0)
             {
                 Level.Add(new ExplosionPart(pPosition.x, pPosition.y));

@@ -128,6 +128,12 @@ namespace DuckGame
 
             Graphics.Draw(_texture, LerpState.Position, new Rectangle?(), _color * alpha, LerpState.Angle, center, scale, _flipH ? SpriteEffects.FlipHorizontally : (_flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
         }
+        public virtual void DrawNoLerp()
+        {
+            _texture.currentObjectIndex = _globalIndex;
+
+            Graphics.Draw(_texture, position, new Rectangle?(), _color * alpha, angle, center, scale, _flipH ? SpriteEffects.FlipHorizontally : (_flipV ? SpriteEffects.FlipVertically : SpriteEffects.None), depth);
+        }
 
         public virtual void Draw(Rectangle r)
         {
