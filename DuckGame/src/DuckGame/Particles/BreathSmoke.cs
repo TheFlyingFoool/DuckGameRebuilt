@@ -103,15 +103,6 @@ namespace DuckGame
             vSpeed = Rando.Float(-0.1f, -0.05f);
             //this._life += Rando.Float(0.2f);
             _sprite.color = Color.White;
-            if (Program.gay)
-            {
-                _sprite.color = Colors.Rainbow[colorindex];
-                colorindex += 1;
-                if (colorindex >= Colors.Rainbow.Length)
-                {
-                    colorindex = 0;
-                }
-            }
             depth = (Depth)0.8f;
             alpha = 0.15f;
             layer = Layer.Game;

@@ -45,15 +45,6 @@
             depth = 0.9f;
             _killSpeed = killSpeed;
             _color = new Color(byte.MaxValue, (byte)Rando.Int(180, byte.MaxValue), (byte)0);
-            if (Program.gay)
-            {
-                _color = Colors.Rainbow[sparkcolorindex];
-                sparkcolorindex += 1;
-                if (sparkcolorindex >= Colors.Rainbow.Length)
-                {
-                    sparkcolorindex = 0;
-                }
-            }
             _width = 0.5f;
         }
 

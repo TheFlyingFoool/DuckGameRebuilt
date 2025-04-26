@@ -19,8 +19,6 @@ namespace DuckGame
         private float s2 = 1f;
         private bool didRemove;
         private float _groundedTime;
-        private static int colorindex;
-        private int _colorindex;
         public Color edgecolor = new Color(0.4f, 0.4f, 0.4f);
         public Color maincolor = Color.White;
         //private float lifeTake = 0.05f;
@@ -72,20 +70,6 @@ namespace DuckGame
             layer = Layer.Game;
             s1 = xscale;
             s2 = xscale;
-            if (Program.gay) //Program.gay
-            {
-                _colorindex = colorindex;
-                Color selectedcolor = Colors.Rainbow[colorindex];
-                edgecolor = new Color((byte)(selectedcolor.r / 2.5f), (byte)(selectedcolor.g / 2.5f), (byte)(selectedcolor.b / 2.5f));
-                maincolor = selectedcolor;
-                colorindex += 1;
-                if (colorindex >= Colors.Rainbow.Length)
-                {
-                    colorindex = 0;
-                }
-                _orbiter.color = edgecolor;
-                _sprite.color = maincolor;
-            }
         }
 
         public override void Removed()
@@ -143,14 +127,6 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (Program.nikogay)
-            {
-                Color selectedcolor = Colors.Rainbow[_colorindex];
-                edgecolor = new Color((byte)(selectedcolor.r / 2.5f), (byte)(selectedcolor.g / 2.5f), (byte)(selectedcolor.b / 2.5f));
-                maincolor = selectedcolor;
-                _orbiter.color = edgecolor;
-                _sprite.color = maincolor;
-            }
             float num1 = (float)Math.Sin(_distPulse);
             float num2 = (float)-(Math.Sin(_orbitInc) * num1) * s1;
             float num3 = (float)Math.Cos(_orbitInc) * num1 * s1;

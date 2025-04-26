@@ -1795,20 +1795,7 @@ namespace DuckGame
                 {
                     NloadMessage = NloadMessage;
                 }
-                if (Program.gay)
-                {
-                    int offset = 0;
-                    for (int i = 0; i < loadBarPos.y - loadBarPos.y + vec2_1.y; i++)
-                    {
-                        if (i - offset >= Colors.Rainbow.Length)
-                        {
-                            offset += Colors.Rainbow.Length;
-                            // i = 0;
-                        }
-                        Graphics.DrawLine(new Vec2(loadBarPos.x, loadBarPos.y + i), loadBarPos + new Vec2(vec2_1.x * loaded, vec2_1.y + i - 20), Colors.Rainbow[i - offset]);
-                    }
-                }
-                else if (Debugger.IsAttached)
+                if (Debugger.IsAttached)
                 {
                     Graphics.DrawRect(loadBarPos, loadBarPos + new Vec2(vec2_1.x * loaded, vec2_1.y), Color.Green, (Depth)0.6f);
                 }

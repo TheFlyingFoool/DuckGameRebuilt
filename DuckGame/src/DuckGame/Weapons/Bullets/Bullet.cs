@@ -191,20 +191,6 @@ namespace DuckGame
                 return;
             double x = travelDirNormalized.x;
         }
-        public override void Initialize()
-        {
-            if (Program.gay)
-            {
-                color = Colors.Rainbow[bulletcolorindex];
-                bulletcolorindex += 1;
-                if (bulletcolorindex >= Colors.Rainbow.Length)
-                {
-                    bulletcolorindex = 0;
-                }
-            }
-            base.Initialize();
-        }
-
         public Bullet ReverseTravel()
         {
             ++reboundBulletsCreated;
