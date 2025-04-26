@@ -1714,6 +1714,7 @@ namespace DuckGame
                     _core.localProfile = pProfile;
                     if (!NCSteam.NoDGRBroadcast) pProfile.netData.Set("REBUILT", true);
                     pProfile.netData.Set("rVer", Program.CURRENT_VERSION_ID);
+                    pProfile.netData.Set("linux", Program.isLinux || Program.IsLinuxD);
                 }
                 _core.localDuckIndex = _core.localProfile == null ? 0 : _core.profiles.IndexOf(_core.localProfile);
                 if (Network.isServer && _core.hostProfile == null)
@@ -1727,6 +1728,7 @@ namespace DuckGame
                     pProfile.isRemoteLocalDuck = true;
                     if (!NCSteam.NoDGRBroadcast) pProfile.netData.Set("REBUILT", true);
                     pProfile.netData.Set("rVer", Program.CURRENT_VERSION_ID);
+                    pProfile.netData.Set("linux", Program.isLinux || Program.IsLinuxD);
                 }
                 pProfile.flagIndex = Global.data.flag;
                 pProfile.inputProfile = pLocalInput;
