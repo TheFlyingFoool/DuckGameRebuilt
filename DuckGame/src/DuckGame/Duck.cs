@@ -933,6 +933,27 @@ namespace DuckGame
                 return;
             t.bottom = block4.top;
         }
+        public void LegacyReturnItemToWorld(Thing t)
+        {
+            Vec2 position = this.position;
+            if (sliding)
+                position.y += 10f;
+            else if (crouch)
+                position.y += 8f;
+            Block block1 = Level.OldCheckLine<Block>(position, position + new Vec2(16f, 0f));
+            if (block1 != null && block1.solid && t.right > block1.left)
+                t.right = block1.left;
+            Block block2 = Level.OldCheckLine<Block>(position, position - new Vec2(16f, 0f));
+            if (block2 != null && block2.solid && t.left < block2.right)
+                t.left = block2.right;
+            Block block3 = Level.OldCheckLine<Block>(position, position + new Vec2(0f, -16f));
+            if (block3 != null && block3.solid && t.top < block3.bottom)
+                t.top = block3.bottom;
+            Block block4 = Level.OldCheckLine<Block>(position, position + new Vec2(0f, 16f));
+            if (block4 == null || !block4.solid || t.bottom <= block4.top)
+                return;
+            t.bottom = block4.top;
+        }
 
         public void Unequip(Equipment e, bool forceNetwork = false)
         {
@@ -1823,7 +1844,9 @@ namespace DuckGame
             h.lastGrounded = DateTime.Now;
             h.solid = true;
             h.ReturnToWorld();
-            ReturnItemToWorld(h);
+            
+            //runs old collision code because otherwise clipping items into pyramid walls doesn't work -NiK0
+            LegacyReturnItemToWorld(h);
         }
 
         public override float holdWeightMultiplier

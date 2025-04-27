@@ -87,9 +87,9 @@ namespace DuckGame
             MappedNetdata.Add("spectatorPersona", 100000009);
             MappedNetdata.Add("spectatorTongue", 100000010);
             MappedNetdata.Add("spectatorBob", 100000011);
-            MappedNetdata.Add("spectatorTilt", 100000011);
-            MappedNetdata.Add("quack", 100000012);
-            MappedNetdata.Add("linux", 100000013);
+            MappedNetdata.Add("spectatorTilt", 100000012);
+            MappedNetdata.Add("quack", 100000013);
+            MappedNetdata.Add("linux", 100000014);
         }
         /// <summary>
         /// Set a property to a value. This property will be synchronized over the network
