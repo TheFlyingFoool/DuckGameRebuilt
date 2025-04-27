@@ -170,6 +170,7 @@
                 graphic.alpha = 1;
                 alpha = 1;
             }
+            Graphics.material = null;
         }
     }
 }

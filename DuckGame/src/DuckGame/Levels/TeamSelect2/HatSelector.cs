@@ -983,7 +983,7 @@ namespace DuckGame
             fakefade = false;
             if (Network.isActive && _box.profile != null && _box.profile.connection != DuckNetwork.localConnection)
             {
-                _blindLerp = Lerp.Float(_blindLerp, _editingRoom || _gettingXP ? 1f : 0f, 0.05f);
+                if (MonoMain.UpdateLerpState) _blindLerp = Lerp.Float(_blindLerp, _editingRoom || _gettingXP ? 1f : 0f, 0.05f);
                 if (_blindLerp > 0.01f)
                 {
                     for (int i = 0; i < 8; ++i)
