@@ -72,6 +72,7 @@ namespace DuckGame
         public override void Update()
         {
             base.Update();
+            if (!currentlyDrawing) _sprite.UpdateFrame(true);
             if (_doLoad && _sprite.finished)
             {
                 if (DGRSettings.ActualParticleMultiplier > 0)

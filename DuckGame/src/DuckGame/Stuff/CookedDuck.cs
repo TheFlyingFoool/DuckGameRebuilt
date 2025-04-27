@@ -67,7 +67,7 @@ namespace DuckGame
             base.Draw();
             if (_hotAlpha <= 0)
                 return;
-            if (_timeHot <= 0)
+            if (_timeHot <= 0 && MonoMain.UpdateLerpState)
                 _hotAlpha -= 0.01f;
             float num = 0f;
             if (offDir < 0)

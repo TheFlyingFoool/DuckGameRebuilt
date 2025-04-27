@@ -4941,8 +4941,12 @@ namespace DuckGame
                             if (tounge.y > 0.4f)
                                 tounge.y = 0.4f;
                         }
-                        _stickLerp = Lerp.Vec2Smooth(_stickLerp, tounge, 0.2f);
-                        _stickSlowLerp = Lerp.Vec2Smooth(_stickSlowLerp, tounge, 0.1f);
+
+                        if (MonoMain.UpdateLerpState)
+                        {
+                            _stickLerp = Lerp.Vec2Smooth(_stickLerp, tounge, 0.2f);
+                            _stickSlowLerp = Lerp.Vec2Smooth(_stickSlowLerp, tounge, 0.1f);
+                        }
                         Vec2 stickLerp = _stickLerp;
                         stickLerp.y *= -1f;
                         Vec2 stickSlowLerp = _stickSlowLerp;
