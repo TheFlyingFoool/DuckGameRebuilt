@@ -379,8 +379,6 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool EnhancedTextures = true;
 
-        [Marker.AutoConfig] public static bool GraphicsCulling = true;
-
         [Marker.AutoConfig] public static int StartIn = 0;
 
         [Marker.AutoConfig] public static float WeatherLighting = 1;

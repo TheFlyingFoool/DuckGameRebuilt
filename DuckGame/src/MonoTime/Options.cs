@@ -760,10 +760,10 @@ namespace DuckGame
             menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemToggle("Graphics Culling", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.GraphicsCulling)))
+            /*menu.Add(new UIMenuItemToggle("Graphics Culling", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.GraphicsCulling)))
             {
                 dgrDescription = "If on, anything outside the camera wont render"
-            });
+            });*/
             menu.Add(new UIMenuItemToggle("Use sprite atlas", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.SpriteAtlas)))
             {
                 dgrDescription = "Lowers render times using an atlas so buffer doesn't constantly switch sprites\n(Requires restart)"

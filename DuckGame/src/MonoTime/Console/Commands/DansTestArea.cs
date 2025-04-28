@@ -325,10 +325,10 @@ namespace DuckGame
 
         }
         [Marker.DevConsoleCommand]
-        public static void graphiccull()
+        public static void optimizations()
         {
-            DGRSettings.GraphicsCulling = !DGRSettings.GraphicsCulling;
-            DevConsole.Log("grahpic culling " + DGRSettings.GraphicsCulling.ToString());
+            ModLoader.ShouldOptimizations = !ModLoader.ShouldOptimizations;
+            DevConsole.Log("Optimizations " + ModLoader.ShouldOptimizations.ToString());
 
         }
         public static bool looking;

@@ -209,12 +209,12 @@ namespace DuckGame
                                 volume = 0.2f
                             };
                             rainSound._effect.saveToRecording = false;
-                            darkenRainer = 0.8f;
+                            darkenRainer = 0.9f;
                             rainwind = Rando.Float(-2, 2);
                             lightningRNG = Rando.Int(1200, 2400);
                             if (Rando.Int(2) == 0)
                             {
-                                darkenRainer = 0.8f;
+                                darkenRainer = 0.85f;
                                 rainSound.volume = 0.5f;
                                 rainwind = Rando.Float(4, 5) * Rando.ChooseInt(-1, 1);
                                 lightningRNG = (int)Math.Floor(0.2f * lightningRNG);
@@ -230,13 +230,13 @@ namespace DuckGame
                                 volume = 0.2f
                             };
                             rainSound._effect.saveToRecording = false;
-                            darkenRainer = 0.8f;
+                            darkenRainer = 0.9f;
                             Raining = true;
                             rainwind = Rando.Float(-2, 2);
                             lightningRNG = Rando.Int(2400, 4800);
                             if (Rando.Int(2) == 0)
                             {
-                                darkenRainer = 0.8f;
+                                darkenRainer = 0.85f;
                                 rainSound.volume = 0.5f;
                                 rainwind = Rando.Float(4, 5) * Rando.ChooseInt(-1, 1);
                                 lightningRNG = (int)Math.Floor(0.2f * lightningRNG);
@@ -256,22 +256,22 @@ namespace DuckGame
                                     volume = 0.2f
                                 };
                                 rainSound._effect.saveToRecording = false;
-                                darkenRainer = 0.8f;
+                                darkenRainer = 0.9f;
                                 cityRaining = true;
                                 rainwind = Rando.Float(-2, 2);
                                 lightningRNG = Rando.Int(1200, 2400);
                                 if (Rando.Int(2) == 0)
                                 {
                                     forecast = "HEAVY RAIN";
-                                    darkenRainer = 0.8f;
+                                    darkenRainer = 0.85f;
                                     rainSound.volume = 0.5f;
                                     rainwind = Rando.Float(4, 5) * Rando.ChooseInt(-1, 1);
                                     lightningRNG = (int)Math.Floor(0.4f * lightningRNG);
                                     if (Rando.Int(1) == 0)
                                     {
-                                        lightningRNG = (int)Math.Floor(0.3f * lightningRNG);
+                                        lightningRNG = (int)Math.Floor(0.5f * lightningRNG);
                                         forecast = "THUNDERSTORM";
-                                        darkenRainer = 0.55f;
+                                        darkenRainer = 0.8f;
                                     }
                                     heavyRain = true;
                                 }
