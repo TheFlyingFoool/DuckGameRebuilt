@@ -22,6 +22,7 @@ namespace DuckGame
         private List<UIControlElement> _controlElements = new List<UIControlElement>();
         private static bool showWarning;
         private bool _showingMenu;
+        private bool _configDirty = false;
 
         public void SwitchPlayerProfile()
         {
@@ -80,6 +81,7 @@ namespace DuckGame
             if (inputConfigType < inputMaps.Count)
                 inputMaps[inputConfigType] = Input.GetDefaultMapping(inputMaps[inputConfigType].deviceName, inputMaps[inputConfigType].deviceGUID, true).Clone();
             SwitchConfigType();
+            _configDirty = true;
         }
 
         public void CloseMenu()
@@ -298,6 +300,7 @@ namespace DuckGame
             HUD.AddCornerMessageWithScale(HUDCorner.BottomRight, "Personal controls can be set in profile screen!", 0.5f);
             SwitchPlayerProfile();
             base.Open();
+            _configDirty = false;
         }
 
         public override void Update()
@@ -312,16 +315,15 @@ namespace DuckGame
                 }
                 if (!globalUILock && Input.Pressed(Triggers.Cancel))
                 {
-                    bool dirty = false;
                     foreach (UIControlElement controlEl in _controlElements)
                     {
                         if (controlEl.dirty)
                         {
-                            dirty = true;
+                            _configDirty = true;
                             controlEl.dirty = false;
                         }
                     }
-                    if (dirty)
+                    if (_configDirty)
                     {
                         new UIMenuActionOpenMenu(this, _confirmMenu).Activate();
                         return;
