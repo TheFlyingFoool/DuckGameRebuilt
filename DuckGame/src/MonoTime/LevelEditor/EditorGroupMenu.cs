@@ -17,7 +17,7 @@ namespace DuckGame
             _root = root;
             if (!_root)
                 greyOut = Editor._currentLevelData.metaData.onlineMode; //Main.isDemo || 
-            _maxNumToDraw = DGRSettings.DisableMoreInEditor ? 17 : 20;
+            _maxNumToDraw = 20;
         }
 
         public override void Update()
@@ -25,7 +25,7 @@ namespace DuckGame
             if (Editor.bigInterfaceMode)
                 _maxNumToDraw = 13;
             else
-                _maxNumToDraw = DGRSettings.DisableMoreInEditor ? 17 : 20;
+                _maxNumToDraw = 20;
             base.Update();
         }
 

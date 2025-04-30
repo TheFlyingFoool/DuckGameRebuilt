@@ -17,14 +17,15 @@ namespace DuckGame
             _bouncy = 0.7f;
             gravMultiplier = 0.9f;
             frictionMult = 0.5f;
+
+            tail.Add(position);
+            if (tail.Count > 10)
+                tail.RemoveAt(0);
             base.Update();
         }
 
         public override void Draw()
         {
-            tail.Add(position);
-            if (tail.Count > 10)
-                tail.RemoveAt(0);
             if (tail.Count > 1)
             {
                 for (int index = 1; index < tail.Count; ++index)

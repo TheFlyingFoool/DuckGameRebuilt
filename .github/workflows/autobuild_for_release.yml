@@ -53,11 +53,11 @@ jobs:
 
       - name: Reorganize files for DGR mod
         run: | 
-          mv ./bin ./DGR-Mod/dgr
-          find ./DGR-Mod -maxdepth 1 ! \( -name "mod.conf" -o -name "DGR-Mod.dll" \) -type f -exec rm {} +
-          rm -r ./DGR-Mod/build
+          mv ./bin ./Rebuilder/dgr
+          find ./Rebuilder -maxdepth 1 ! \( -name "mod.conf" -o -name "Rebuilder.dll" \) -type f -exec rm {} +
+          rm -r ./Rebuilder/build
           mkdir ./steammod
-          mv ./DGR-Mod ./steammod/DGR-Mod
+          mv ./Rebuilder ./steammod/Rebuilder
 
       - name: Update DGR mod
         uses: AnarkisGaming/workshop@v1

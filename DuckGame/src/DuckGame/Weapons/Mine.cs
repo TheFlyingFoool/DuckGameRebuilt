@@ -288,13 +288,6 @@ namespace DuckGame
                 mv.v = pos;
             }
             blownUp = true;
-            if (DGRSettings.ExplosionDecals)
-            {
-                Level.Add(new ExplosionDecal(pos.x - 8, pos.y - 8));
-                Level.Add(new ExplosionDecal(pos.x + 8, pos.y - 8));
-                Level.Add(new ExplosionDecal(pos.x + 8, pos.y + 8));
-                Level.Add(new ExplosionDecal(pos.x - 8, pos.y + 8));
-            }
             SFX.Play("explode");
             RumbleManager.AddRumbleEvent(pos, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));
             Graphics.FlashScreen();

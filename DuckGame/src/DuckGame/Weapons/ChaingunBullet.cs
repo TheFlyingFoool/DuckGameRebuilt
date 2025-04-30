@@ -49,7 +49,7 @@ namespace DuckGame
 
         public override void Draw()
         {
-            if (parentThing != null)
+            if (parentThing != null && MonoMain.UpdateLerpState)
             {
                 position = parentThing.position + chainOffset + new Vec2(0f, 2f);
                 graphic.flipH = parentThing.graphic.flipH;

@@ -924,9 +924,8 @@ namespace DuckGame
                     {
                         Rectangle sourceRectangle3 = new Rectangle(_doorX, 0f, _doorLeft.width - _doorX, _doorLeft.height);
                         Graphics.Draw(doorLeftBlank, x, y, sourceRectangle3);
-                        Rectangle sourceRectangle4 = new Rectangle(0f, 0f, _doorRight.width - _doorX, _doorRight.height); //-_doorX + 
+                        Rectangle sourceRectangle4 = new Rectangle(0f, 0f, _doorRight.width - _doorX, _doorRight.height);
                         Graphics.Draw(doorRightBlank, x + 68f + _doorX, y, sourceRectangle4);
-                        //if (_doorX == 0) ??? -NiK0
                         if (_doorX == 0)
                         {
                             _fontSmall.depth = doorLeftBlank.depth + 10;

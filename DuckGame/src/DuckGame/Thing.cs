@@ -17,6 +17,7 @@ namespace DuckGame
         public bool isAnchored;
         public bool SpawnCannonUpdate;
         public int SkipIntratick;
+        public float overrideLeniancy = -1;
         public SomethingSomethingVessel currentVessel;
         public bool shouldhavevessel = true;
         public bool shouldbegraphicculled = true;
@@ -1608,7 +1609,6 @@ namespace DuckGame
                 return;
             if (Network.isActive)
                 DoNetworkInitialize();
-            if (!ModLoader.ShouldOptimizations) shouldbegraphicculled = false;
             _networkDrawIndex = NetworkDebugger.currentIndex;
             Initialize();
             _initialized = true;

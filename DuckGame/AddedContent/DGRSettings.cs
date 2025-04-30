@@ -178,13 +178,7 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool IgnoreLevRestrictions = false;
 
-        [Marker.AutoConfig] public static bool SyncChing = false; //this one is for you cah toah <3 -NiK0
-
-        [Marker.AutoConfig] public static bool RememberMatchSettings = false;
-
         [Marker.AutoConfig] public static bool CustomHatTeams = false;
-
-        [Marker.AutoConfig] public static bool CopyMatchResults = false;
 
         [Marker.AutoConfig] public static bool skipOnlineBumper = false;
 
@@ -213,10 +207,7 @@ namespace DuckGame
         [Marker.AutoConfig] public static bool PreloadLevels;
 
         [Marker.AutoConfig]
-        public static bool SortLevels = true; //do you care about levels being sorted? no? turn this off for faster load times -NiK0
-
-        //[Marker.AutoConfig] nvm im not smart enough for async stuff -NiK0
-        //public static bool ThreadedLevelLoading = true;
+        public static bool SortLevels = true;
 
         [Marker.AutoConfig] public static bool SpriteAtlas = true;
 
@@ -291,22 +282,6 @@ namespace DuckGame
             }
         }
 
-
-        [Marker.AutoConfig] public static int HatSelectorSize = 0;
-
-        public static float ActualHatSelectorSize
-        {
-            get
-            {
-                return HatSelectorSize switch
-                {
-                    0 => 1, //NORMAL 
-                    1 => 0.7f, //BIG
-                    2 => 0.5f, //WUMBO
-                    _ => 1, //NONE
-                };
-            }
-        }
 
         [Marker.AutoConfig] public static bool FixBulletPositions = false;
 
@@ -402,11 +377,7 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool AmbientParticles = true;
 
-        [Marker.AutoConfig] public static bool ExplosionDecals;
-
         [Marker.AutoConfig] public static bool EnhancedTextures = true;
-
-        [Marker.AutoConfig] public static bool GraphicsCulling = true;
 
         [Marker.AutoConfig] public static int StartIn = 0;
 
@@ -425,8 +396,7 @@ namespace DuckGame
         [Marker.AutoConfig] public static int RebuiltEffect = 1;
 
         [Marker.AutoConfig] public static bool StickyHats { get; set; }
-        [Marker.AutoConfig] public static bool DisableMoreInEditor { get; set; }
-
+        
         [Marker.AutoConfig] public static bool EditorMousePriority = false;
 
         [Marker.AutoConfig] public static bool ShowWorkshopModsInEditor = false;
@@ -468,8 +438,6 @@ namespace DuckGame
         [Marker.AutoConfig] public static bool OpenURLsInBrowser = false;
 
         [Marker.AutoConfig] public static int DGRJoinLink = 0;
-
-        [Marker.AutoConfig] public static bool QRCodeJoinLinks = false;
 
         [Marker.AutoConfig] public static bool UseDuckShell = true;
 

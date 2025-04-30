@@ -8,6 +8,7 @@
         }
         public NMEnableFiftyPlayerMode(int num)
         {
+            extraplayercount = num;
         }
         public int extraplayercount = 50;
         public override void Activate()

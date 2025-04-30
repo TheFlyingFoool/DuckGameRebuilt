@@ -363,7 +363,7 @@ namespace DuckGame
                 {
                     _littleFont.Draw(_additionalOptions[index1], p1_1 + new Vec2(10f, 3 + index1 * 8), _additionalOptionIndex == index1 ? Color.White : Color.White * 0.6f, (Depth)0.91f);
                     if (_additionalOptionIndex == index1)
-                        Graphics.Draw(ref _arrow._image, p1_1.x + 4f, p1_1.y + 6f + index1 * 8, (Depth)0.91f);
+                        Graphics.DrawNoLerp(_arrow._image, p1_1.x + 4f, p1_1.y + 6f + index1 * 8, (Depth)0.91f);
                     if (index1 == _aoMuteIndex && _showMuteMenu)
                     {
                         Graphics.DrawRect(new Vec2(0f, 0f), new Vec2(Layer.HUD.width, Layer.HUD.height), Color.Black * 0.5f, (Depth)0.92f);
@@ -376,7 +376,7 @@ namespace DuckGame
                             string muteOption = _muteOptions[index2];
                             _littleFont.Draw(index2 != 0 || !_profile.muteChat ? (index2 != 1 || !_profile.muteHat ? (index2 != 2 || !_profile.muteRoom ? (index2 != 3 || !_profile.muteName ? "@DELETEFLAG_OFF@" + muteOption : "@DELETEFLAG_ON@" + muteOption) : "@DELETEFLAG_ON@" + muteOption) : "@DELETEFLAG_ON@" + muteOption) : "@DELETEFLAG_ON@" + muteOption, p1_2 + new Vec2(10f, 4 + index2 * 8), _muteOptionIndex == index2 ? Color.White : Color.White * 0.6f, (Depth)0.94f);
                             if (_muteOptionIndex == index2)
-                                Graphics.Draw(ref _arrow._image, p1_2.x + 4f, p1_2.y + 6f + index2 * 8, (Depth)0.94f);
+                                Graphics.DrawNoLerp(_arrow._image, p1_2.x + 4f, p1_2.y + 6f + index2 * 8, (Depth)0.94f);
                         }
                     }
                 }

@@ -74,15 +74,10 @@ namespace DuckGame
                     }
                     else if (Rando.Int(5000) == 1 && typeof(T).IsAssignableFrom(typeof(Gun)))
                     {
-                        if (Rando.Int(50) == 0) // 1/100000 lmao
-                            contains = typeof(SohRock);
-                        else
-                        {
-                            contains = DGRDevs.CoreTeam.ChooseRandom().DevItem;
+                        contains = DGRDevs.CoreTeam.ChooseRandom().DevItem;
 
-                            // to be removed when all devs get their gun
-                            if (contains == typeof(PositronShooter)) contains = typeof(DanGun);
-                        }
+                        // to be removed when all devs get their gun
+                        if (contains == typeof(PositronShooter)) contains = typeof(DanGun);
                     }
                 }
             }

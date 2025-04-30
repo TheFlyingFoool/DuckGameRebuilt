@@ -53,15 +53,6 @@ namespace DuckGame
             //float num1 = 0.6f - Rando.Float(0.2f);
             float lightness = 1f;
             _sprite.color = new Color(lightness, lightness, lightness);
-            if (Program.gay) //Program.gay
-            {
-                _sprite.color = Colors.Rainbow[colorindex];
-                colorindex += 1;
-                if (colorindex >= Colors.Rainbow.Length)
-                {
-                    colorindex = 0;
-                }
-            }
             depth = -0.4f;
             alpha = 1f;
             layer = Layer.Game;

@@ -23,15 +23,6 @@ namespace DuckGame
         {
             _thickness = type.bulletThickness;
             _beem = Content.Load<Texture2D>("magBeam");
-            if (Program.gay)
-            {
-                color = Colors.Rainbow[colorindex];
-                colorindex += 1;
-                if (colorindex >= Colors.Rainbow.Length)
-                {
-                    colorindex = 0;
-                }
-            }
         }
 
         public override void Draw()
@@ -49,10 +40,6 @@ namespace DuckGame
             float incs = (1f / (length / 8f));
             float alph = 1f;
             float drawLength = 8f;
-            if (Program.nikogay)
-            {
-                color = Colors.Rainbow[colorindex];
-            }
             while (true)
             {
                 bool bulletDrawn = false;

@@ -95,7 +95,7 @@ namespace DuckGame
             foreach (EditorGroup subGroup in SubGroups)
                 subGroup.Sort();
             int index1 = 12;
-            if (SubGroups.Count <= index1 || !rootGroup || DGRSettings.DisableMoreInEditor)
+            if (SubGroups.Count <= index1 || !rootGroup)
                 return;
             EditorGroup editorGroup = new EditorGroup
             {

@@ -987,8 +987,7 @@ namespace DuckGame
                 {
                     Recorderator.Clipped = true;
                     SFX.DontSave = 1;
-                    if (DGRSettings.SyncChing) SFX.PlaySynchronized("ching");
-                    else SFX.Play("ching");
+                    SFX.Play("ching");
                 }
                 if (camPos.Count > 0 && camPos.Last() == Level.current.camera.position)
                 {

@@ -81,12 +81,15 @@ namespace DuckGame
             MappedNetdata.Add("chatting", 100000004);
             MappedNetdata.Add("consoleOpen", 100000005);
 
-            /*
-             * profile2.netData.Set("gamePaused", MonoMain.pauseMenu != null); 
-                    profile2.netData.Set("gameInFocus", Graphics.inFocus);
-                    profile2.netData.SetFiltered("chatting", _core.enteringText);
-                    profile2.netData.Set("consoleOpen", DevConsole.open);*/
-
+            MappedNetdata.Add("quackPitch", 100000006);
+            MappedNetdata.Add("spectatorFlip", 100000007);
+            MappedNetdata.Add("spectatorBeverage", 100000008);
+            MappedNetdata.Add("spectatorPersona", 100000009);
+            MappedNetdata.Add("spectatorTongue", 100000010);
+            MappedNetdata.Add("spectatorBob", 100000011);
+            MappedNetdata.Add("spectatorTilt", 100000012);
+            MappedNetdata.Add("quack", 100000013);
+            MappedNetdata.Add("linux", 100000014);
         }
         /// <summary>
         /// Set a property to a value. This property will be synchronized over the network

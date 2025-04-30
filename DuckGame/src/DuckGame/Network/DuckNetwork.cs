@@ -897,32 +897,16 @@ namespace DuckGame
                 return;
             Thread thread = new Thread(() =>
             {
-                if (!DGRSettings.QRCodeJoinLinks)
+                string inviteLink = DGRSettings.DGRJoinLink switch
                 {
-                    string inviteLink = DGRSettings.DGRJoinLink switch
-                    {
-                        0 => $"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}",
-                        1 => $"https://dgr-join.github.io/?lobby={Steam.lobby.id}&user={Steam.user.id}",
-                        2 => $"[steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}](https://dgr-join.github.io/?lobby={Steam.lobby.id}&user={Steam.user.id})",
-                        _ => $"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}  https://dgr-join.github.io/?lobby={Steam.lobby.id}&user={Steam.user.id}"
-                    };
+                    0 => $"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}",
+                    1 => $"https://dgr-join.github.io/?lobby={Steam.lobby.id}&user={Steam.user.id}",
+                    2 => $"[steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}](https://dgr-join.github.io/?lobby={Steam.lobby.id}&user={Steam.user.id})",
+                    _ => $"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}  https://dgr-join.github.io/?lobby={Steam.lobby.id}&user={Steam.user.id}"
+                };
 
-                    SDL.SDL_SetClipboardText(inviteLink);
-                    HUD.AddPlayerChangeDisplay("@CLIPCOPY@Invite Link Copied!");
-                }
-                else if (Program.IsLinuxD)
-                {
-                    HUD.AddPlayerChangeDisplay("this doesn't work on linux :sob4k:");
-                }
-                else
-                {
-                    string inviteLink = $"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}";
-                    Bitmap qrCodeImage = Extensions.GenerateQRCode(inviteLink);
-                    
-                    Clipboard.SetImage(qrCodeImage);
-                    HUD.AddPlayerChangeDisplay("@CLIPCOPY@Invite Link Copied!");
-                }
-                
+                SDL.SDL_SetClipboardText(inviteLink);
+                HUD.AddPlayerChangeDisplay("@CLIPCOPY@Invite Link Copied!");
             });
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
@@ -1730,6 +1714,7 @@ namespace DuckGame
                     _core.localProfile = pProfile;
                     if (!NCSteam.NoDGRBroadcast) pProfile.netData.Set("REBUILT", true);
                     pProfile.netData.Set("rVer", Program.CURRENT_VERSION_ID);
+                    pProfile.netData.Set("linux", Program.isLinux || Program.IsLinuxD);
                 }
                 _core.localDuckIndex = _core.localProfile == null ? 0 : _core.profiles.IndexOf(_core.localProfile);
                 if (Network.isServer && _core.hostProfile == null)
@@ -1743,6 +1728,7 @@ namespace DuckGame
                     pProfile.isRemoteLocalDuck = true;
                     if (!NCSteam.NoDGRBroadcast) pProfile.netData.Set("REBUILT", true);
                     pProfile.netData.Set("rVer", Program.CURRENT_VERSION_ID);
+                    pProfile.netData.Set("linux", Program.isLinux || Program.IsLinuxD);
                 }
                 pProfile.flagIndex = Global.data.flag;
                 pProfile.inputProfile = pLocalInput;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace DuckGame
@@ -158,6 +159,12 @@ namespace DuckGame
                     Main.SpecialCode2 = "hyp 116";
                     field.SetValue(this, msg.ReadTeam());
                 }
+                else if (field.FieldType == typeof(object))
+                {
+                    Main.SpecialCode2 = "hyp HAH";
+                    Type typ = null;
+                    field.SetValue(this, msg.ReadObject(out typ));
+                }
                 else if (typeof(Thing).IsAssignableFrom(field.FieldType))
                 {
                     Main.SpecialCode2 = "hyp 1010";
@@ -240,6 +247,8 @@ namespace DuckGame
                     _serializedData.WriteProfile((Profile)field.GetValue(this));
                 else if (field.FieldType == typeof(Team))
                     _serializedData.WriteTeam((Team)field.GetValue(this));
+                else if (field.FieldType == typeof(object))
+                    _serializedData.WriteObject(field.GetValue(this));
                 else if (typeof(Thing).IsAssignableFrom(field.FieldType))
                     _serializedData.Write(field.GetValue(this) as Thing);
             }

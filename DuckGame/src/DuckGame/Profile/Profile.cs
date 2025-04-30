@@ -654,11 +654,11 @@ namespace DuckGame
                 {
                     string dgrMojiName = "DGR";
 
-                    if (!inSameRebuiltVersion)
-                        dgrMojiName += "DIM";
-
                     if (DGRDevs.Contributors.Any(x => x.SteamID == steamID))
                         dgrMojiName += $"_{steamID}";
+                    else if (!inSameRebuiltVersion)
+                        dgrMojiName += "DIM";
+
                     
                     nameUi += $"@{dgrMojiName}@";
                 }
@@ -680,11 +680,12 @@ namespace DuckGame
                 {
                     string dgrMojiName = "DGRBIG";
 
-                    if (!inSameRebuiltVersion)
-                        dgrMojiName += "DIM";
 
                     if (DGRDevs.Contributors.Any(x => x.SteamID == steamID))
                         dgrMojiName += $"_{steamID}";
+                    else if (!inSameRebuiltVersion)
+                        dgrMojiName += "DIM";
+
                     
                     nameUi += $"@{dgrMojiName}@";
                 }

@@ -343,23 +343,22 @@ namespace DuckGame
                 }
             }
         }
-        // public Dictionary<Vec2, List<Thing>> Buckets = new Dictionary<Vec2, List<Thing>>();
         public Dictionary<Vec2, Dictionary<int, List<Thing>>> Buckets = new Dictionary<Vec2, Dictionary<int, List<Thing>>>();
-        //private Vec2 TopLeftMost = new Vec2(0,0);
-        //private Vec2 BottomRightMost = new Vec2(0,0);
-        //private bool MostAssigned;
+        
         public static float Leniancy = 9f;
         public static int LineLeniancy = 0;
         public void UpdateObject(Thing thing)  //float size = Math.Max(Math.Max(thing.right - thing.left, thing.bottom - thing.top), 16);
         {
 
-            Leniancy = 9f;
-            if(thing is AutoBlock || thing is BlockGroup)
-            {
-                Leniancy = 0f;
-            }
+            float leniancy = Leniancy;
 
-            Vec2[] buckets = GetIdForObjThing(thing.topLeft - new Vec2(Leniancy), thing.bottomRight + new Vec2(Leniancy));//GetIdForObj(thing.position, thing.right - thing.left, thing.bottom - thing.top);
+            //Currently 'AutoBlock' and 'BlockGroup' have an overrideLeniancy of 22
+            //It makes a clip in space05 behave like it does in vanilla, they used to have a leniancy of 0 so i hope stuff doesn't break
+            //-NiK0 26/4/2025
+            if (thing.overrideLeniancy != -1) leniancy = thing.overrideLeniancy;
+
+
+            Vec2[] buckets = GetIdForObjThing(thing.topLeft - new Vec2(leniancy), thing.bottomRight + new Vec2(leniancy));//GetIdForObj(thing.position, thing.right - thing.left, thing.bottom - thing.top);
             
             if (thing.Buckets.SequenceEqual(buckets))
             {

@@ -610,7 +610,6 @@ namespace DuckGame
                     }
                     int placeIndex = 0;
                     int pedestalIndex = 0;
-                    string matchResult = "\u2b50 ";
                     for (int i = 0; i < positions.Count; i++)
                     {
                         List<Team> list = positions[i];
@@ -619,22 +618,9 @@ namespace DuckGame
                             Add(new Pedestal(center + pedestalIndex * (smallMode ? 24 : 42), 150f, t5, placeIndex,
                                 smallMode));
                             pedestalIndex++;
-                            foreach (Profile p in t5.activeProfiles)
-                            {
-                                matchResult += $"{p.nameUI.CleanFormatting()} ";
-                            }
-                            
-                            matchResult += t5.score.ToString();
                         }
 
                         placeIndex++;
-                        if (i != positions.Count - 1)
-                            matchResult += "\n";
-                    }
-
-                    if (DGRSettings.CopyMatchResults)
-                    {
-                        SDL2.SDL.SDL_SetClipboardText(matchResult);
                     }
 
                     if (_winningTeam.activeProfiles.Count > 1)

@@ -57,6 +57,7 @@ namespace DuckGame
                 align = UIAlign.Right,
                 visible = false
             };
+            _arrow._image.LerpState.CanLerp = false;
             leftSection.Add(_arrow, true);
             _action = action;
             align = al;

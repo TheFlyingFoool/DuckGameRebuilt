@@ -12,7 +12,6 @@ namespace DuckGame
         public TreeTop(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            sw = new SinWave(this, Rando.Float(0.05f, 0.15f), Rando.Float(-5, 5));
             graphic = new Sprite("treeTop");
             _treeInside = new Sprite("treeTopInside")
             {
@@ -26,11 +25,13 @@ namespace DuckGame
             depth = (Depth)0.9f;
             hugWalls = WallHug.Left | WallHug.Right | WallHug.Ceiling | WallHug.Floor;
             shouldbeinupdateloop = DGRSettings.AmbientParticles;
+            sw = new SinWaveManualUpdate(Rando.Float(0.05f, 0.15f), Rando.Float(-5, 5));
             timer = Rando.Float(2);
         }
         public float timer;
         public override void Update()
         {
+            sw.Update();
             timer += 0.01f * DGRSettings.ActualParticleMultiplier;
             if (timer >= 2)
             {
@@ -38,13 +39,14 @@ namespace DuckGame
                 Level.Add(TreeLeaf.New(x + Rando.Float(-16, 16), y + Rando.Float(-16, 16)));
             }
         }
-        public SinWave sw;
+        public SinWaveManualUpdate sw;
         public override void Draw()
         {
             graphic.flipH = offDir <= 0;
 
             if (DGRSettings.AmbientParticles)
             {
+
                 float pAng = angle;
                 angle += GameLevel.rainwind * sw * 0.02f;
                 base.Draw();

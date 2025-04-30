@@ -505,16 +505,16 @@ namespace DuckGame
             Vec2 hatOffset = _hatOffset;
             if (_team != null)
             {
-                if (_team.noCrouchOffset && duck != null && duck.crouch) ++_hatOffset.y;
+                if (_team.noCrouchOffset && duck != null && duck.crouch) _hatOffset.y++;
                 if (_team.metadata != null)
                 {
                     if (_team.metadata.HatNoFlip.value && this.offDir < 0) _hatOffset.x -= 4f;
-                    if (duck != null && duck.sliding) ++_hatOffset.y;
+                    if (duck != null && duck.sliding) _hatOffset.y++;
                     if (_quackWait > 0f) _sprite.frame = 0;
                     else if (_quackHold > 0f) _sprite.frame = 1;
                 }
             }
-            _wave.Update();
+            if (MonoMain.UpdateLerpState) _wave.Update();
             if (_isKatanaHat && !(Level.current is RockScoreboard))
             {
                 Graphics.material = _katanaMaterial;
@@ -565,13 +565,13 @@ namespace DuckGame
                         _specialSprite = new Sprite("hats/senpaiStar");
                         _specialSprite.CenterOrigin();
                     }
-                    _fade = Lerp.Float(_fade, this.frame == 1 ? 1f : 0f, 0.1f);
+                    if (MonoMain.UpdateLerpState) _fade = Lerp.Float(_fade, this.frame == 1 ? 1f : 0f, 0.1f);
                     if (_fade > 0.01f)
                     {
                         _specialSprite.alpha = alpha * 0.7f * (0.5f + _wave.normalized * 0.5f) * _fade;
                         _specialSprite.scale = scale;
                         _specialSprite.depth = depth - 10;
-                        _specialSprite.angle += 0.02f;
+                        if (MonoMain.UpdateLerpState) _specialSprite.angle += 0.02f;
                         float num = 0.8f + _wave.normalized * 0.2f;
                         _specialSprite.scale = new Vec2(num, num);
                         Vec2 vec2 = Offset(new Vec2(2f, 4f));
@@ -603,7 +603,7 @@ namespace DuckGame
                         Vec2 vec2_4 = Offset(new Vec2(4f, 2f));
                         Graphics.Draw(ref _specialSprite, vec2_4.x, vec2_4.y);
                     }
-                    if (glow > 0f) glow -= 0.02f;
+                    if (glow > 0f && MonoMain.UpdateLerpState) glow -= 0.02f;
                 }
             }
             if (_addedParticles != null)
@@ -721,7 +721,7 @@ namespace DuckGame
                     return;
                 _currentAnimationFrame = animationFrames.Count - 1;
             }
-
+            
             public override void Draw()
             {
                 if (_metadata.ParticleAnchor.value)

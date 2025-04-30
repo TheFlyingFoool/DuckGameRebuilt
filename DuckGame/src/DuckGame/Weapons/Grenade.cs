@@ -72,13 +72,6 @@ namespace DuckGame
                 gv.v = pos;
             }
 
-            if (DGRSettings.ExplosionDecals)
-            {
-                Level.Add(new ExplosionDecal(pos.x - 12, pos.y - 12));
-                Level.Add(new ExplosionDecal(pos.x + 12, pos.y - 12));
-                Level.Add(new ExplosionDecal(pos.x + 12, pos.y + 12));
-                Level.Add(new ExplosionDecal(pos.x - 12, pos.y + 12));
-            }
 
             float x = pos.x;
             float ypos = pos.y - 2f;

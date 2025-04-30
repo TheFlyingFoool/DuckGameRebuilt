@@ -774,7 +774,7 @@ namespace DuckGame
                         _profile.persona.sprite.color = Color.White;
                         _profile.persona.sprite.color = new Color(_profile.persona.sprite.color.r, _profile.persona.sprite.color.g, _profile.persona.sprite.color.b);
                         _profile.persona.sprite.depth = (Depth)0.9f;
-                        _profile.persona.sprite.scale = new Vec2(scaleMultiplier);
+                        _profile.persona.sprite.scale = Vec2.One;
                         Graphics.Draw(_profile.persona.sprite, x + 70f, y + 60f + num1, (Depth)0.9f);
                         short num2 = 0;
                         bool flag3 = false;
@@ -983,7 +983,7 @@ namespace DuckGame
             fakefade = false;
             if (Network.isActive && _box.profile != null && _box.profile.connection != DuckNetwork.localConnection)
             {
-                _blindLerp = Lerp.Float(_blindLerp, _editingRoom || _gettingXP ? 1f : 0f, 0.05f);
+                if (MonoMain.UpdateLerpState) _blindLerp = Lerp.Float(_blindLerp, _editingRoom || _gettingXP ? 1f : 0f, 0.05f);
                 if (_blindLerp > 0.01f)
                 {
                     for (int i = 0; i < 8; ++i)
@@ -1050,13 +1050,6 @@ namespace DuckGame
             }
         }
 
-        public float scaleMultiplier
-        {
-            get
-            {
-                return isServerForObject ? DGRSettings.ActualHatSelectorSize : 1;
-            }
-        }
         public void HatsDrawLogic()
         {
             float yAdd2 = -18f;
@@ -1069,25 +1062,6 @@ namespace DuckGame
             int loweryIndex = 0;
             int xIndex = 7;
             int yIndex = 5;
-            if (scaleMultiplier == 0.7f)
-            {
-                shineAdd = 0.2f;
-                dissen = 100;
-                xAdd2 = 29.85f;
-                yAdd2 += 30;
-                xIndex = 8;
-            }
-            else if (scaleMultiplier == 0.5f)
-            {
-                shineAdd = 0.2f;
-                xIndex = 9;
-                loweryIndex = -1;
-                yIndex = 6;
-                lowerxIndex = -3;
-                dissen = 140;
-                xAdd2 = 70;
-                yAdd2 += 60;
-            }
 
 
             indexedAllTeams = AllTeams();
@@ -1097,7 +1071,7 @@ namespace DuckGame
                 {
                     int plus = xPos - 3 + (yPos - 2) * 5;
                     float x = this.x + 2f + xPos * 22 + -_slide * 20f;
-                    float yAdd1 = (float)(y + 37f + -_upSlide * 20f) * scaleMultiplier;
+                    float yAdd1 = (float)(y + 37f + -_upSlide * 20f);
                     int index3 = TeamIndexAdd(_teamSelection, plus);
                     if (index3 == 3)
                         index3 = ControllerNumber();
@@ -1170,7 +1144,7 @@ namespace DuckGame
                         g.center = new Vec2(16f, 16f) + vec2;
                         if (index3 > DG.MaxPlayers - 1 && _fade > 0.01f)
                         {
-                            Vec2 pos = new Vec2(x + xAdd2, yAdd1 + yAdd2 + yPos * 20 - 20f) * scaleMultiplier;
+                            Vec2 pos = new Vec2(x + xAdd2, yAdd1 + yAdd2 + yPos * 20 - 20f);
                             Vec2 pixel = Maths.RoundToPixel(pos);
                             if (allTeam.shake > 0)
                             {
@@ -1182,16 +1156,16 @@ namespace DuckGame
                                 if (_outlineMaterial == null)
                                     _outlineMaterial = new MaterialSecretOutline();
                                 Graphics.material = _outlineMaterial;
-                                g.scale = new Vec2(scaleMultiplier);
+                                g.scale = Vec2.One;
                                 Graphics.Draw(g, pixel.x, pixel.y);
                                 g.scale = new Vec2(1);
                                 Graphics.material = null;
                             }
                             else
                             {
-                                if (allTeam.favorited) Graphics.DrawDottedRect(pixel - new Vec2(16 * scaleMultiplier), pixel + new Vec2(16 * scaleMultiplier), Color.White, 0.95f, 1, 6 * scaleMultiplier);
+                                if (allTeam.favorited) Graphics.DrawDottedRect(pixel - new Vec2(16), pixel + new Vec2(16), Color.White, 0.95f, 1, 6);
                                 if (allTeam.metadata != null && allTeam.metadata.UseDuckColor.value) Graphics.material = _profile.persona.material;
-                                g.scale = new Vec2(scaleMultiplier);
+                                g.scale = Vec2.One;
                                 Graphics.Draw(g, pixel.x, pixel.y);
                                 g.scale = new Vec2(1);
                                 Graphics.material = null;
@@ -1199,8 +1173,8 @@ namespace DuckGame
                         }
                         _profile.persona.sprite.color = Color.White;
                         g.color = Color.White;
-                        _profile.persona.sprite.scale = new Vec2(scaleMultiplier);
-                        g.scale = new Vec2(scaleMultiplier);
+                        _profile.persona.sprite.scale = Vec2.One;
+                        g.scale = Vec2.One;
                     }
                 }
             }

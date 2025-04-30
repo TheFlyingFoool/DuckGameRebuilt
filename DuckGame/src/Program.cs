@@ -36,7 +36,7 @@ namespace DuckGame
 #endif
 
         // this should be formatted like X.X.X where each X is a number
-        public const string CURRENT_VERSION_ID = "1.4.5.0";
+        public const string CURRENT_VERSION_ID = "1.4.5.1";
 
         // do change this you know what you're doing -NiK0
         public const string CURRENT_VERSION_ID_FORMATTED = "v" + CURRENT_VERSION_ID;
@@ -88,8 +88,6 @@ namespace DuckGame
         public static Assembly gameAssembly;
         public static string gameAssemblyName;
         public static bool doscreentileing; //just a fun showing off thing
-        public static bool gay; // sht about to get real colorful
-        public static bool nikogay; // sht about to get real colorful
         /// <summary>The main entry point for the application.</summary>\
         public static Vec2 StartPos = Vec2.Zero;
         public static Vec2 StartRes = Vec2.Zero;
@@ -525,13 +523,6 @@ namespace DuckGame
                     case "-updaterebuilt":
                         MonoMain.ForceDGRUpdate = true;
                         break;
-                    case "-gay":
-                        gay = true;
-                        break;
-                    case "-gay2":
-                        gay = true;
-                        nikogay = true;
-                        break;
                     case "-experimental":
                         MonoMain.experimental = true;
                         break;
@@ -638,6 +629,8 @@ namespace DuckGame
                         break;
                     case "-noRPC":
                     case "-noRP":
+                    case "-norpc":
+                    case "-norp":
                         DiscordRichPresence.noRPC = true;
                         break;
                     case "-logLoading":
@@ -732,15 +725,11 @@ namespace DuckGame
                     MonoMain.startInArcade = true;
                     break;
             }
-            // Program.main.TargetElapsedTime = TimeSpan.FromTicks(1000L);
             accumulatedElapsedTimefieldinfo = typeof(Game).GetField("accumulatedElapsedTime", BindingFlags.NonPublic | BindingFlags.Instance);
             SetAccumulatedElapsedTime(main, main.TargetElapsedTime);
             main.IsFixedTimeStep = false; // ZOOOM
-            //FirebreakReflectionsht = Task.Factory.StartNew(() => { MemberAttributePairHandler.Init(); });
             main.Run();
         }
-        public static List<string> words = new List<string>();
-        public static Task FirebreakReflectionsht;
         private static FieldInfo accumulatedElapsedTimefieldinfo;
         public static void SetAccumulatedElapsedTime(Game g, TimeSpan t)
         {

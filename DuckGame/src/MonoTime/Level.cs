@@ -1027,7 +1027,7 @@ namespace DuckGame
         {
             if (l != Layer.HUD || !_centeredView)
                 return;
-            float num = (float)(Resolution.size.x * Graphics.aspect - Resolution.size.x * (9f / 16f)); //for the love of jod keep the "f" on these otherwise reality breaks -NiK0
+            float num = (float)(Resolution.size.x * Graphics.aspect - Resolution.size.x * (9f / 16f)); //keep the "f" in these otherwise the math wont work out properly -NiK0
             if (num <= 0)
                 return;
             Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);

@@ -547,8 +547,11 @@ namespace DuckGame
             if (_part == 0 && _doll != null && _doll.captureDuck != null && (_doll.captureDuck.quack > 0 || doll != null && doll.tongueStuck != Vec2.Zero))
             {
                 Vec2 tounge = _doll.captureDuck.tounge;
-                _stickLerp = Lerp.Vec2Smooth(_stickLerp, tounge, 0.2f);
-                _stickSlowLerp = Lerp.Vec2Smooth(_stickSlowLerp, tounge, 0.1f);
+                if (MonoMain.UpdateLerpState)
+                {
+                    _stickLerp = Lerp.Vec2Smooth(_stickLerp, tounge, 0.2f);
+                    _stickSlowLerp = Lerp.Vec2Smooth(_stickSlowLerp, tounge, 0.1f);
+                }
                 Vec2 stickLerp = _stickLerp;
                 Vec2 vec = Maths.AngleToVec(angle);
                 Vec2 vec2_2 = offDir >= 0 ? stickLerp * Maths.Clamp(1f - (vec - stickLerp).length, 0f, 1f) : stickLerp * Maths.Clamp(1f - (vec - stickLerp * -1f).length, 0f, 1f);

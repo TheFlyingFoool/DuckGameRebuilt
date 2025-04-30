@@ -52,18 +52,13 @@ namespace DuckGame
                 || t == typeof(LavaBarrel)
                 || t == typeof(Grapple));
             _contains = physicsObjects[Rando.Int(physicsObjects.Count - 1)];
-            if (Rando.Int(2500) == 0 && Editor.clientonlycontent) //oopss
+            if (Editor.clientonlycontent && Rando.Int(2500) == 0) //oopss
             {
                 Type t = null;
-                if (Rando.Int(50) == 0)
-                    t = typeof(SohRock);
-                else
-                {
-                    t = DGRDevs.CoreTeam.ChooseRandom().DevItem;
+                t = DGRDevs.CoreTeam.ChooseRandom().DevItem;
 
-                    if (t == typeof(PositronShooter))
-                        t = typeof(DanGun);
-                }
+                if (t == typeof(PositronShooter))
+                    t = typeof(DanGun);
                 _contains = t;
             }
         }

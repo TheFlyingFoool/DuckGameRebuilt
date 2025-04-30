@@ -37,6 +37,7 @@ namespace DuckGame
         public BlockGroup()
           : base(0f, 0f, "")
         {
+            overrideLeniancy = 22;
             _isStatic = true;
         }
 

@@ -1070,19 +1070,6 @@ namespace DuckGame
             //{
             //    LangHandler.drawnstrings.Add(text);
             //}
-            if (Program.gay)
-            {
-                if (startingcoloroverride != -1)
-                {
-                    startingcolorindex = startingcoloroverride;
-                }
-                else
-                {
-                    Random t = new Random(text.Length + (int)ypos + (int)xpos);
-                    startingcolorindex = t.Next(0, Color.RainbowColors.Count);
-                }
-                charcolorindex = startingcolorindex;
-            }
             text = LangHandler.Convert(text);
             Color color2 = c;
             _previousColor = c;
@@ -1106,21 +1093,7 @@ namespace DuckGame
                         if (sprite1 != null)
                         {
                             float num4 = characterHeight / 2 - sprite1.height / 2 + symbolYOffset;
-                            if (Program.gay)
-                            {
-                                c = Colors.Rainbow[charcolorindex];
-                                charcolorindex += 1;
-                                if (charcolorindex >= Colors.Rainbow.Length)
-                                {
-                                    charcolorindex = 0;
-                                }
-                                sprite1.color = c;
-                            }
-                            else
-                            {
-                                if (colorSymbols)
-                                    sprite1.color = c;
-                            }
+                            if (colorSymbols) sprite1.color = c;
                             if (chatFont)
                             {
                                 Vec2 scale = sprite1.scale;
@@ -1233,15 +1206,6 @@ namespace DuckGame
                         }
                         else
                         {
-                            if (Program.gay)
-                            {
-                                c = Colors.Rainbow[charcolorindex];
-                                charcolorindex += 1;
-                                if (charcolorindex >= Colors.Rainbow.Length)
-                                {
-                                    charcolorindex = 0;
-                                }
-                            }
                             char index4 = text[_letterIndex];
                             if (index4 >= 'ぁ')
                             {
