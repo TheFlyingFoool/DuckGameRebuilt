@@ -1110,10 +1110,7 @@ namespace DuckGame
             {
                 return true;
             }
-            if (KillOverride != null && KillOverride(this))
-            {
-                return false;
-            }
+            if (KillOverride != null && KillOverride(this)) return false;
             forceDead = true;
             _killed = true;
             RumbleManager.AddRumbleEvent(profile, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Short, RumbleType.Gameplay));
@@ -1144,15 +1141,9 @@ namespace DuckGame
                 Party.AddRandomPerk(profile);
                 Party.AddDrink(profile, 1);
             }
-            if (Recorder.currentRecording != null)
-            {
-                Recorder.currentRecording.LogDeath();
-            }
+            if (Recorder.currentRecording != null) Recorder.currentRecording.LogDeath();
             _destroyed = true;
-            if (_isGhost)
-            {
-                return false;
-            }
+            if (_isGhost) return false;
             swinging = false;
             Holster h = GetEquipment(typeof(Holster)) as Holster;
             foreach (Equipment e in _equipment)
@@ -4370,8 +4361,6 @@ namespace DuckGame
                 holdObject.position = HoldOffset(holdObject.holdOffset);
                 if (!(holdObject is RagdollPart)) holdObject.angle = holdObject.handAngle + holdAngleOff;
             }
-            //why was this double ever assigned
-            //double y = this.holdObject.y;
         }
 
         public void UpdateHoldLerp(bool updateLerp = false, bool instant = false)
@@ -4752,26 +4741,18 @@ namespace DuckGame
 
         public void DrawIcon()
         {
-            if (dead || _iconCamera == null || _renderingDuck || !ShouldDrawIcon())
-                return;
+            if (dead || _iconCamera == null || _renderingDuck || !ShouldDrawIcon()) return;
             Vec2 position = this.position;
-            if (ragdoll != null)
-                position = ragdoll.part1.position;
-            else if (_trapped != null)
-                position = _trapped.position;
+            if (ragdoll != null) position = ragdoll.part1.position;
+            else if (_trapped != null) position = _trapped.position;
 
             if (DGRSettings.UncappedFPS)
             {
                 position = DuckLerp.Position;
-                if (ragdoll != null)
-                    position = ragdoll.part1.RagLerp.Position;
-                else if (_trapped != null)
-                    position = _trapped.TrappedLerp.Position;
+                if (ragdoll != null) position = ragdoll.part1.RagLerp.Position;
+                else if (_trapped != null) position = _trapped.TrappedLerp.Position;
             }
             Vec2 p2 = position;
-            //why?
-            //float num1 = (float)(Level.current.camera.width / 320f * 0.5);
-            //float num2 = 0.75f;
             float num3 = 16.5f;
             Vec2 vec2_1 = new Vec2(0f, 0f);
             float camLeft = Level.current.camera.left;
@@ -4868,18 +4849,13 @@ namespace DuckGame
             }
             else
             {
-                if (DevConsole.showCollision)
-                    Graphics.DrawRect(_featherVolume.rectangle, Color.LightGreen, (Depth)0.6f, false, 0.5f);
-                int num1 = _renderingDuck ? 1 : 0;
+                if (DevConsole.showCollision) Graphics.DrawRect(_featherVolume.rectangle, Color.LightGreen, (Depth)0.6f, false, 0.5f);
                 bool skipDraw = false;
                 if (Network.isActive)
                 {
-                    if (_trappedInstance != null && _trappedInstance.visible)
-                        skipDraw = true;
-                    if (_ragdollInstance != null && _ragdollInstance.visible)
-                        skipDraw = true;
-                    if (_cookedInstance != null && _cookedInstance.visible)
-                        skipDraw = true;
+                    if (_trappedInstance != null && _trappedInstance.visible) skipDraw = true;
+                    if (_ragdollInstance != null && _ragdollInstance.visible) skipDraw = true;
+                    if (_cookedInstance != null && _cookedInstance.visible) skipDraw = true;
                 }
                 Depth depth = this.depth;
                 if (!skipDraw)
@@ -4893,11 +4869,8 @@ namespace DuckGame
                         _updatedAnimation = false;
                         _sprite.UpdateFrame(false);
                     }
-                    _sprite.flipH = (offDir < 0);
-                    if (enteringWalldoor)
-                    {
-                        this.depth = -0.55f;
-                    }
+                    _sprite.flipH = offDir < 0;
+                    if (enteringWalldoor) this.depth = -0.55f;
                     _spriteArms.depth = this.depth + 11;
                     _bionicArm.depth = this.depth + 11;
                     _spriteQuack.alpha = (_spriteControlled.alpha = (_sprite.alpha = (_spriteArms.alpha = (_isGhost ? 0.5f : 1f) * alpha)));
@@ -4905,41 +4878,31 @@ namespace DuckGame
                     _spriteControlled.depth = this.depth;
                     _sprite.depth = this.depth;
                     _spriteQuack.depth = this.depth;
-                    _sprite.angle = (_spriteQuack.angle = (_spriteControlled.angle = angle));
-                    if (ragdoll != null && ragdoll.tongueStuck != Vec2.Zero)
-                        quack = 10;
+                    _sprite.angle = _spriteQuack.angle = (_spriteControlled.angle = angle);
+                    if (ragdoll != null && ragdoll.tongueStuck != Vec2.Zero) quack = 10;
                     if (IsQuacking())
                     {
                         Vec2 tounge = this.tounge;
                         if (sliding)
                         {
-                            if (tounge.y < 0f)
-                                tounge.y = 0f;
+                            if (tounge.y < 0f) tounge.y = 0f;
                             if (offDir > 0)
                             {
-                                if (tounge.x < -0.3f)
-                                    tounge.x = -0.3f;
-                                if (tounge.x > 0.4f)
-                                    tounge.x = 0.4f;
+                                if (tounge.x < -0.3f) tounge.x = -0.3f;
+                                if (tounge.x > 0.4f) tounge.x = 0.4f;
                             }
                             else
                             {
-                                if (tounge.x < -0.4f)
-                                    tounge.x = -0.4f;
-                                if (tounge.x > 0.3f)
-                                    tounge.x = 0.3f;
+                                if (tounge.x < -0.4f) tounge.x = -0.4f;
+                                if (tounge.x > 0.3f) tounge.x = 0.3f;
                             }
                         }
                         else
                         {
-                            if (offDir > 0 && tounge.x < 0f)
-                                tounge.x = 0f;
-                            if (offDir < 0 && tounge.x > 0f)
-                                tounge.x = 0f;
-                            if (tounge.y < -0.3f)
-                                tounge.y = -0.3f;
-                            if (tounge.y > 0.4f)
-                                tounge.y = 0.4f;
+                            if (offDir > 0 && tounge.x < 0f) tounge.x = 0f;
+                            if (offDir < 0 && tounge.x > 0f) tounge.x = 0f;
+                            if (tounge.y < -0.3f) tounge.y = -0.3f;
+                            if (tounge.y > 0.4f) tounge.y = 0.4f;
                         }
 
                         if (MonoMain.UpdateLerpState)
@@ -4951,12 +4914,12 @@ namespace DuckGame
                         stickLerp.y *= -1f;
                         Vec2 stickSlowLerp = _stickSlowLerp;
                         stickSlowLerp.y *= -1f;
-                        int num10 = 0;
+                        int frameAdd = 0;
                         double length = stickLerp.length;
                         if (length > 0.5)
-                            num10 = 72;
+                            frameAdd = 72;
                         SpriteMap spriteToDraw = _mindControl == null || !_derpMindControl ? _spriteQuack : _spriteControlled;
-                        Graphics.Draw(spriteToDraw, _sprite.imageIndex + num10, DuckLerp.x, DuckLerp.y + verticalOffset, xscale, yscale);
+                        Graphics.Draw(spriteToDraw, _sprite.imageIndex + frameAdd, DuckLerp.x, DuckLerp.y + verticalOffset, xscale, yscale);
                         if (length > 0.05f)
                         {
                             Vec2 vec2_1 = position + new Vec2(0f, 1f);
