@@ -340,7 +340,7 @@ namespace DuckGame
                 Vec2 vec2_2 = warpLine.end - warpLine.start;
                 Graphics.DrawTexturedLine(_warpLine.texture, warpLine.end, warpLine.end + vec2_1 * (1f - warpLine.lerp), color * 0.8f, warpLine.wide / 32f, (Depth)0.9f);
                 Graphics.DrawTexturedLine(_warpLine.texture, warpLine.start + vec2_2 * warpLine.lerp, warpLine.start, color * 0.8f, warpLine.wide / 32f, (Depth)0.9f);
-                warpLine.lerp += 0.1f;
+                if (MonoMain.UpdateLerpState) warpLine.lerp += 0.1f;
             }
             warpLines.RemoveAll(v => v.lerp >= 1);
         }
