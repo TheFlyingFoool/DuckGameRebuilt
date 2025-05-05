@@ -380,6 +380,7 @@ namespace DuckGame
             bool flag2 = _grabbed is MagnetGun && (_grabbed as MagnetGun)._grabbed == this;
             if (_grabbed != null && !flag2)
             {
+                _grabbed.SkipIntratick = SkipIntratick;
                 if (_grabbed is Duck)
                 {
                     _grabbed.position = Offset(barrelOffset + new Vec2(0f, -6f)) + barrelVector * _grabbed.halfWidth;
@@ -421,9 +422,13 @@ namespace DuckGame
         public override void Draw()
         {
             base.Draw();
+            _magnet.SkipIntraTick = SkipIntratick;
             Draw(ref _magnet, new Vec2(5f, (float)((float)_wave * _waveMult - 2)));
             foreach (Thing line in _lines)
+            {
+                line.SkipIntratick = SkipIntratick;
                 line.Draw();
+            }
         }
 
         public override void OnPressAction()

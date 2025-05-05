@@ -348,6 +348,7 @@ namespace DuckGame
                 Graphics.Draw(fingerPositionSprite, vec2_1.x, vec2_1.y);
                 Graphics.material = mat;
             }
+            _keybed.SkipIntraTick = SkipIntratick;
             _keybed.depth = depth + 2;
             _keybed.flipH = offDir <= 0;
             _keybed.angle = angle;
@@ -358,6 +359,7 @@ namespace DuckGame
             _settingStrip.flipH = offDir <= 0;
             _settingStrip.angle = angle;
             _settingStrip.frame = preset;
+            _settingStrip.SkipIntraTick = SkipIntratick;
             Vec2 vec2_3 = Offset(new Vec2(-1f, 3f));
             Graphics.Draw(ref _settingStrip, vec2_3.x, vec2_3.y);
             base.Draw();

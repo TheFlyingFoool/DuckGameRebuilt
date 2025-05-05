@@ -179,7 +179,7 @@ namespace DuckGame
             {
                 Random rnd = Rando.generator;
 
-                if (Network.isActive)
+                if (Network.isActive && !Network.lanMode)
                 {
                     int rand = DuckNetwork.levelIndex;
                     for (int i = 0; i < Profiles.active.Count; i++)
@@ -189,9 +189,9 @@ namespace DuckGame
                         rand += (int)(p.funslider * 100);
                         rand += p.customTeams.Count;
                         rand += p.preferredColor;
+                        if (p.team != null) rand += Teams.IndexOf(p.team);
                     }
                     Rando.generator = new Random(rand);
-                    DevConsole.Log(rand);
                 }
                 else Rando.generator = new Random(Rando.Int(int.MaxValue - 1));
 

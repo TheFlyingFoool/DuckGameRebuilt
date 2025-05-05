@@ -232,7 +232,7 @@ namespace DuckGame
             if (owner == null) _sprite.flipH = offDir < 0;
             base.Draw();
             _wheel.scale = scale;
-            CarLerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            CarLerp.UpdateLerpState(position, SkipIntratick > 0 ? 1 : MonoMain.IntraTick, MonoMain.UpdateLerpState);
             Graphics.Draw(_wheel, CarLerp.x - 7f * xscale, CarLerp.y + 9f * yscale);
             Graphics.Draw(_wheel, CarLerp.x + 7f * xscale, CarLerp.y + 9f * yscale);
             if (Editor.clientonlycontent && tapedIsGun1) offDir *= -1;

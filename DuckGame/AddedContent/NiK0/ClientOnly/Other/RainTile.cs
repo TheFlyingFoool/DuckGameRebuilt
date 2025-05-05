@@ -47,7 +47,7 @@ namespace DuckGame
 
                 if (rainSound._effect != null && rainSound._effect._instance != null && rainSound._effect._instance.Platform_GetProgress() > 0.5f) rainSound._effect._instance._position = 0;
             }
-            if (thunder > 0 && Rando.Int((int)(2400 / thunder)) == 0)
+            if (thunder > 0 && Rando.Int((int)(4000 / thunder)) == 0)
             {
                 rainDarken = 1.2f;
                 Level.Add(new BGLightning(Rando.Float(-30, 270), 0));

@@ -95,6 +95,8 @@ namespace DuckGame
             base.Draw();
             Vec2 vec2 = new Vec2(13f, -1f);
             float num = (float)Math.Sin(_loadProgress * 3.14f) * 3f;
+            _loaderSprite.SkipIntraTick = SkipIntratick;
+            _ammoSprite.SkipIntraTick = SkipIntratick;
             Draw(ref _loaderSprite, new Vec2(vec2.x - 12f - num, vec2.y + 4f));
             Draw(ref _ammoSprite, new Vec2(-3f, -2f), 2);
         }

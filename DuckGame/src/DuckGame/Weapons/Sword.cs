@@ -903,6 +903,7 @@ namespace DuckGame
                 _swordSwing.alpha = 0.4f;
                 _swordSwing.position = this.position;
                 _swordSwing.depth = this.depth + 1;
+                _swordSwing.SkipIntraTick = SkipIntratick;
                 _swordSwing.Draw();
             }
             Vec2 position = this.position;
@@ -921,7 +922,9 @@ namespace DuckGame
                     if (idx == 0)
                         base.Draw();
                     else
+                    {
                         base.DrawLerpLess();
+                    }
                     if (_lastSize > idx)
                     {
                         int index = historyIndex(idx);

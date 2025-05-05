@@ -46,7 +46,11 @@ namespace DuckGame
             editorTooltip = "Allows you to swing from platforms like some kind of loon.";
         }
 
-        public override void OnTeleport() => Degrapple();
+        public override void OnTeleport()
+        {
+            Degrapple();
+            base.OnTeleport();
+        }
 
         public override void OnPressAction()
         {

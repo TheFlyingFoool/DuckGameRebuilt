@@ -407,6 +407,7 @@ namespace DuckGame
                 _halo.alpha = (float)(_haloAlpha * 0.4f + (float)_haloWave * 0.1f);
                 _halo.depth = -0.2f;
                 _halo.xscale = _halo.yscale = (float)(0.95f + (float)_haloWave * 0.05f);
+                _halo.SkipIntraTick = SkipIntratick;
                 if (MonoMain.UpdateLerpState) _halo.angle += 0.01f;
                 Graphics.Draw(ref _halo, owner.x, owner.y);
                 if (_ringPulse > 0f)

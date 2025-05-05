@@ -69,8 +69,10 @@ namespace DuckGame
             if (_barrelSteam.speed > 0)
             {
                 _barrelSteam.alpha = 0.6f;
+                _barrelSteam.SkipIntraTick = SkipIntratick;
                 Draw(ref _barrelSteam, new Vec2(9f, 1f));
             }
+            _netGunGuage.SkipIntraTick = SkipIntratick;
             Draw(ref _netGunGuage, new Vec2(-4f, -4f));
         }
 

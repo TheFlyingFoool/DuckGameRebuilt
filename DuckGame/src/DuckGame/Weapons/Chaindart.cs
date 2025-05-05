@@ -81,7 +81,12 @@ namespace DuckGame
             _editorPreviewOffset.x = -5;
             _editorPreviewWidth = 38;
         }
-
+        public override void OnTeleport()
+        {
+            _bullets.OnTeleport();
+            _topBullet.OnTeleport();
+            base.OnTeleport();
+        }
         public override void Initialize()
         {
             _spinUp = SFX.Get("chaingunSpinUp");

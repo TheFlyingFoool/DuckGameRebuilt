@@ -232,6 +232,7 @@ namespace DuckGame
             Graphics.material = this.material;
             _tip.depth = depth + 1;
             _tip.alpha = _charge;
+            _tip.SkipIntraTick = SkipIntratick;
             if (_chargeAnim.currentAnimation == "charge")
                 _tip.alpha = _chargeAnim.frame / 24f;
             else if (_chargeAnim.currentAnimation == "uncharge")
@@ -243,6 +244,7 @@ namespace DuckGame
             _chargeAnim.depth = depth + 1;
             _chargeAnim.angle = angle;
             _chargeAnim.alpha = alpha;
+            _chargeAnim.SkipIntraTick = SkipIntratick;
             Graphics.Draw(ref _chargeAnim, x, y);
             Graphics.material = material;
             float num1 = Maths.NormalizeSection(_tip.alpha, 0f, 0.7f);

@@ -211,11 +211,12 @@ namespace DuckGame
 
         public override void Draw()
         {
-            BarrelLerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            BarrelLerp.UpdateLerpState(position, SkipIntratick > 0 ? 1 :MonoMain.IntraTick, MonoMain.UpdateLerpState);
 
             float level = 1f - _fluidLevel;
             float darken = 0.6f + (1f - burnt) * 0.4f;
             graphic.color = new Color((byte)(150f * darken), (byte)(150f * darken), (byte)(150f * darken));
+            graphic.SkipIntraTick = SkipIntratick;
             //base.Draw();
             Sprite g = graphic;
             g.center = center;

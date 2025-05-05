@@ -160,6 +160,14 @@ namespace DuckGame
             _dir = vec2_1;
         }
 
+        public void Shine()
+        {
+            if (DGRSettings.EnhancedTextures)
+            {
+                if (noduck) shine = 0.8f;
+                else shine = 1.2f;
+            }
+        }
         public override void Update()
         {
             _pulse.Update();
@@ -176,7 +184,7 @@ namespace DuckGame
                 ITeleport teleport = _teleported[index];
                 if (!source.Contains(teleport))
                 {
-                    shine = 1;
+                    Shine();
                     _teleported.RemoveAt(index);
                     --index;
                 }
@@ -199,7 +207,7 @@ namespace DuckGame
                     _teleporting.Add(teleport2);
             }
             int num1;
-            if (_teleporting.Count > 0) shine = 1;
+            if (_teleporting.Count > 0) Shine();
             for (int index1 = 0; index1 < _teleporting.Count; index1 = num1 + 1)
             {
                 Thing thing1 = _teleporting[index1] as Thing;

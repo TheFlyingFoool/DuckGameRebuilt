@@ -347,6 +347,8 @@ namespace DuckGame
                                         if (rng > 0f)
                                         {
                                             float dir1 = Maths.PointDirection(_actualStart, currentTravel);
+                                            t.Shine();
+                                            t.link.Shine();
                                             if ((int)_teleporter.teleHeight == 2 && (int)_teleporter._link.teleHeight == 2)
                                             {
                                                 Vec2 vec2 = _teleporter.position - currentTravel;

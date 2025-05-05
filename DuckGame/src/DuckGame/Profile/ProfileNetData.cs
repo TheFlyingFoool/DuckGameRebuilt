@@ -89,7 +89,9 @@ namespace DuckGame
             MappedNetdata.Add("spectatorBob", 100000011);
             MappedNetdata.Add("spectatorTilt", 100000012);
             MappedNetdata.Add("quack", 100000013);
+
             MappedNetdata.Add("linux", 100000014);
+            MappedNetdata.Add("midgameJoining", 100000015);
         }
         /// <summary>
         /// Set a property to a value. This property will be synchronized over the network

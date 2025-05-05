@@ -65,6 +65,7 @@
         public override void Draw()
         {
             base.Draw();
+            _guage.SkipIntraTick = SkipIntratick;
             _guage.flipH = graphic.flipH;
             _guage.alpha = graphic.alpha;
             _guage.depth = depth + 1;

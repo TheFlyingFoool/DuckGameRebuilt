@@ -4842,6 +4842,7 @@ namespace DuckGame
             DuckLerp.CanLerp = true;
             DuckLerp.UpdateLerpState(new Interp.InterpState(position, angle), SkipIntratick>0?1: MonoMain.IntraTick, MonoMain.UpdateLerpState);
             _spriteArms.SkipIntraTick = SkipIntratick;
+            _bionicArm.SkipIntraTick = SkipIntratick;
             DuckCamLerp.UpdateLerpState(cameraPosition, MonoMain.IntraTick, MonoMain.UpdateLerpState);
 
             if (inNet)

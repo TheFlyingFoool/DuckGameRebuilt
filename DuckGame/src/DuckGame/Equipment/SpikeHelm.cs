@@ -222,6 +222,7 @@ namespace DuckGame
             poked.position = Offset(new Vec2(1f, -9f));
             poked.depth = depth + 2;
             poked.angle = _sprite.angle;
+            poked.SkipIntratick = SkipIntratick;
             poked.Draw();
         }
     }

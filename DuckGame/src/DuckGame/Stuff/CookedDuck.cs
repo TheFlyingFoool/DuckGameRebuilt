@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -74,6 +75,7 @@ namespace DuckGame
                 num = -2f;
             for (int index = 0; index < 3; ++index)
             {
+                _flavourLines[index].SkipIntraTick = SkipIntratick;
                 _flavourLines[index].depth = depth;
                 _flavourLines[index].color = Color.White * _hotAlpha;
                 SpriteMap g = _flavourLines[index];

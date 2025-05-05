@@ -240,6 +240,9 @@ namespace DuckGame
             doll.part1.hSpeed = hSpeed;
             doll.part2.hSpeed = hSpeed;
             doll.part3.hSpeed = hSpeed;
+            doll.part1.SkipIntratick = 3;
+            doll.part2.SkipIntratick = 3;
+            doll.part3.SkipIntratick = 3;
         }
 
         public override bool Hit(Bullet bullet, Vec2 hitPos)

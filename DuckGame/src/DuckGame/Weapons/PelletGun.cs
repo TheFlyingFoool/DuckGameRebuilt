@@ -252,6 +252,7 @@ namespace DuckGame
             _sprite.angle = angle;
             _sprite.frame = 0;
             _sprite.alpha = alpha;
+            _sprite.SkipIntraTick = SkipIntratick;
             if (owner != null && owner.graphic != null && (duck == null || !(duck.holdObject is TapedGun)))
                 _sprite.flipH = owner.graphic.flipH;
             else
@@ -270,6 +271,7 @@ namespace DuckGame
             Graphics.Draw(ref _sprite, vec2.x, vec2.y);
             if (firesTillFail > 0)
                 return;
+            _spring.SkipIntraTick = SkipIntratick;
             _spring.depth = depth - 5;
             _spring.center = new Vec2(4f, 7f);
             _spring.angleDegrees = Maths.PointDirection(position + _posOffset, springPos) - 90f;

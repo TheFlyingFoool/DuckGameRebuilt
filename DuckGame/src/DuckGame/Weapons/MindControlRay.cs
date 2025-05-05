@@ -172,6 +172,7 @@
             _hat.alpha = owner._sprite.alpha;
             _hat.flipH = owner._sprite.flipH;
             _hat.depth = owner.depth + 1;
+            _hat.SkipIntraTick = SkipIntratick;
             if (owner._sprite.imageIndex > 11 && owner._sprite.imageIndex < 14)
                 _hat.angleDegrees = owner._sprite.flipH ? 90f : -90f;
             else

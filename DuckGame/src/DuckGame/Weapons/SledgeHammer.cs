@@ -270,6 +270,7 @@ namespace DuckGame
                 _offset = new Vec2((float)(offDir * -6 + _swing * 5 * offDir), (float)(_swing * 5 - 3));
                 graphic.position = position + _offset;
                 graphic.depth = depth;
+                graphic.SkipIntraTick = SkipIntratick;
                 graphic.Draw();
                 Duck owner = this.owner as Duck;
                 if (_sledgeSwing.speed <= 0)
@@ -278,6 +279,7 @@ namespace DuckGame
                     _sledgeSwing.flipH = owner.offDir <= 0;
                 _sledgeSwing.position = position;
                 _sledgeSwing.depth = depth + 1;
+                _sledgeSwing.SkipIntraTick = SkipIntratick;
                 _sledgeSwing.Draw();
             }
             else

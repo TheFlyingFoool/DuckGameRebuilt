@@ -41,7 +41,7 @@ namespace DuckGame
                 return;
             position = _attach.barrelPosition + _attach.barrelVector * _length;
             Vec2 vec2 = _attach.barrelVector.Rotate(Maths.DegToRad(90f), Vec2.Zero);
-            LineLerp.UpdateLerpState(position, MonoMain.IntraTick, MonoMain.UpdateLerpState);
+            LineLerp.UpdateLerpState(position, SkipIntratick > 0 ? 1:MonoMain.IntraTick, MonoMain.UpdateLerpState);
             Graphics.DrawLine(LineLerp.Position + vec2 * 7f, LineLerp.Position - vec2 * 7f, Color.Blue * alpha, (1f + (1f - _length / _startLength) * 4f), (Depth)0.9f);
         }
     }

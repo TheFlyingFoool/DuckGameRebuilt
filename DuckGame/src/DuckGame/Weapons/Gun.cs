@@ -589,6 +589,7 @@ namespace DuckGame
                 _clickPuff.alpha = 0.6f;
                 _clickPuff.angle = angle + _smokeAngle;
                 _clickPuff.flipH = offDir < 0;
+                _clickPuff.SkipIntraTick = SkipIntratick;
                 Draw(ref _clickPuff, barrelOffset);
             }
             if (!VirtualTransition.active && Graphics.material == null) Graphics.material = this.material;
@@ -600,6 +601,7 @@ namespace DuckGame
                 _barrelSmoke.alpha = 0.7f;
                 _barrelSmoke.angle = _smokeAngle;
                 _barrelSmoke.flipH = offDir < 0;
+                _barrelSmoke.SkipIntraTick = SkipIntratick;
                 if (offDir > 0 && angleDegrees > 90 && angleDegrees < 270) _barrelSmoke.flipH = true;
                 if (offDir < 0 && angleDegrees > 90 && angleDegrees < 270) _barrelSmoke.flipH = false;
                 _barrelSmoke.yscale = 1f - _smokeFlatten;
@@ -608,8 +610,6 @@ namespace DuckGame
             if (!Options.Data.fireGlow) DrawGlow();
 
             Graphics.material = material;
-            //why the fuck is this here anyways -NiK0
-            //int num = DevConsole.showCollision ? 1 : 0;
         }
 
         public override void DrawGlow()

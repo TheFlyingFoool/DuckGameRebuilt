@@ -81,6 +81,7 @@ namespace DuckGame
             base.Draw();
             if (childThing == null)
                 return;
+            childThing.SkipIntratick = SkipIntratick;
             childThing.depth = depth - 1;
             childThing.Draw();
         }

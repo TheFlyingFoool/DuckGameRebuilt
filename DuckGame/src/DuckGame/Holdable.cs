@@ -197,6 +197,7 @@ namespace DuckGame
 
         public virtual void UpdateTapedPositioning(TapedGun pTaped)
         {
+            SkipIntratick = pTaped.SkipIntratick;
         }
 
         /// <summary>

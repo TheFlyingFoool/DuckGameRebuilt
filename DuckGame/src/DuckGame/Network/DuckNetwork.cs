@@ -1138,10 +1138,14 @@ namespace DuckGame
                     _core._ducknetMenu.Add(new UIMenuItemToggle("MID GAME JOINING", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.MidGameJoining)), c: Colors.DGPink));
                     if (DGRSettings.MidGameJoining && Steam.user != null && Steam.lobby != null)
                     {
-                        
+
                         forceInv = true;
                     }
                 }
+            }
+            else if (DGRSettings.MidGameJoining && Steam.user != null && Steam.lobby != null)
+            {
+                forceInv = true;
             }
 
             Main.SpecialCode = "men7";
@@ -2047,73 +2051,89 @@ namespace DuckGame
         public static int cycle;
         public static void MidGameJoiningLogic()
         {
-            if (Network.isActive && Network.isServer)
+            if (Network.isActive)
             {
-                if (DGRSettings.MidGameJoining != prevMG)
+                if (Network.isServer)
                 {
-                    speedOpen = true;
-                    prevIndex = _core._ducknetMenu.section.selection;
-                    _core._ducknetMenu.reducedMovement = true;
-
-                    OpenMenu(_core._menuOpenProfile);
-                    speedOpen = false;
-                }
-                if (Level.current is GameLevel)
-                {
-                    if (DGRSettings.MidGameJoining)
+                    localProfile.netData.Set<bool>("midgameJoining", DGRSettings.MidGameJoining);
+                    if (DGRSettings.MidGameJoining != prevMG)
                     {
-                        TeamSelect2.eightPlayersActive = Profiles.activeNonSpectators.Count > 4;
-                        cycle++;
-                        if (cycle > 30 && Steam.lobby != null)
+                        speedOpen = true;
+                        prevIndex = _core._ducknetMenu.section.selection;
+                        _core._ducknetMenu.reducedMovement = true;
+
+                        OpenMenu(_core._menuOpenProfile);
+                        speedOpen = false;
+                    }
+                    if (Level.current is GameLevel)
+                    {
+                        if (DGRSettings.MidGameJoining)
                         {
-                            cycle = 0;
-                            Network.activeNetwork.core.ApplyLobbyData();
-                            Steam.lobby.SetLobbyData("maxplayers", DG.MaxPlayers.ToString());
-                            Steam.lobby.SetLobbyData("numSlots", DG.MaxPlayers.ToString());
-                            StringBuilder builder = new StringBuilder();
-
-                            foreach (Profile profile in Profiles.active)
+                            TeamSelect2.eightPlayersActive = Profiles.activeNonSpectators.Count > 4;
+                            cycle++;
+                            if (cycle > 30 && Steam.lobby != null)
                             {
-                                string name = profile.name.Replace("\n", "_");
+                                cycle = 0;
+                                Network.activeNetwork.core.ApplyLobbyData();
+                                Steam.lobby.SetLobbyData("maxplayers", DG.MaxPlayers.ToString());
+                                Steam.lobby.SetLobbyData("numSlots", DG.MaxPlayers.ToString());
+                                StringBuilder builder = new StringBuilder();
 
-                                builder.Append(name);
-                                builder.Append("\n");
+                                foreach (Profile profile in Profiles.active)
+                                {
+                                    string name = profile.name.Replace("\n", "_");
+
+                                    builder.Append(name);
+                                    builder.Append("\n");
+                                }
+                                Steam.lobby.SetLobbyData("players", builder.ToString());
                             }
-                            Steam.lobby.SetLobbyData("players", builder.ToString());
-                        }
 
-                        inGame = false;
-                        if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
-                        {
-                            Network.activeNetwork.core.lobby.joinable = true;
-                            // Network.activeNetwork.core.lobby.type = SteamLobbyType.Private;
-                            //if (ShowGameInBrowser)
-                            //{
-                            //set this to true for auhsduhasd -NiK0
-                            Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
-                                Network.activeNetwork.core.lobby.SetLobbyData("name", "|PINK|[MIDGAME] |PREV|" + Steam.user.name + "'s Lobby");
-                            /*}
-                            else
+                            inGame = false;
+                            if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
                             {
+                                Network.activeNetwork.core.lobby.joinable = true;
+                                // Network.activeNetwork.core.lobby.type = SteamLobbyType.Private;
+                                //if (ShowGameInBrowser)
+                                //{
+                                //set this to true for auhsduhasd -NiK0
+                                Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
+                                Network.activeNetwork.core.lobby.SetLobbyData("name", "|PINK|[MIDGAME] |PREV|" + Steam.user.name + "'s Lobby");
+                                /*}
+                                else
+                                {
+                                    Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
+                                    Network.activeNetwork.core.lobby.SetLobbyData("name", Steam.user.name + "'s Lobby");
+                                }*/
+                            }
+                        }
+                        else
+                        {
+                            inGame = true;
+                            if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
+                            {
+                                Network.activeNetwork.core.lobby.joinable = false;
                                 Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
                                 Network.activeNetwork.core.lobby.SetLobbyData("name", Steam.user.name + "'s Lobby");
-                            }*/
+                            }
                         }
                     }
-                    else
+                    else if (DGRSettings.MidGameJoining && Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null && Network.activeNetwork.core.lobby.GetLobbyData("name").StartsWith("|PINK|[MIDGAME]")) Network.activeNetwork.core.lobby.SetLobbyData("name", Steam.user.name + "'s Lobby");
+                    prevMG = DGRSettings.MidGameJoining;
+                }
+                else
+                {
+                    DGRSettings.MidGameJoining = hostProfile.netData.Get<bool>("midgameJoining", false);
+                    if (DGRSettings.MidGameJoining != prevMG && _core._ducknetMenu.open)
                     {
-                        inGame = true;
-                        if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
-                        {
-                            Network.activeNetwork.core.lobby.joinable = false;
-                            Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
-                            Network.activeNetwork.core.lobby.SetLobbyData("name", Steam.user.name + "'s Lobby");
-                        }
+                        speedOpen = true;
+                        prevIndex = _core._ducknetMenu.section.selection;
+                        _core._ducknetMenu.reducedMovement = true;
+
+                        OpenMenu(_core._menuOpenProfile);
+                        speedOpen = false;
                     }
                 }
-                else if (DGRSettings.MidGameJoining && Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null && Network.activeNetwork.core.lobby.GetLobbyData("name").StartsWith("|PINK|[MIDGAME]")) Network.activeNetwork.core.lobby.SetLobbyData("name", Steam.user.name + "'s Lobby");
-                prevMG = DGRSettings.MidGameJoining;
-
             }
         }
 

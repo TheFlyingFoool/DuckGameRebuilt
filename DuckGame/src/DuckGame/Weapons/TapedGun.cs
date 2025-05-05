@@ -473,6 +473,7 @@ namespace DuckGame
             _tape.depth = depth + 16;
             _tape.angleDegrees = angleDegrees;
             _tape.flipH = offDir < 0;
+            _tape.SkipIntraTick = SkipIntratick;
             //Vec2 vec2_1 = new Vec2(0f, bottom - top); what -NiK0
             if (gun2 != null)
             {
@@ -481,7 +482,11 @@ namespace DuckGame
             }
             else Graphics.Draw(ref _tape, position.x, position.y);
             if (level != null && !Duck.renderingIcon) return;
-            if (gun1 != null) gun1.Draw();
+
+            if (gun1 != null)
+            {
+                gun1.Draw();
+            }
             if (gun2 == null) return;
             gun2.Draw();
         }
