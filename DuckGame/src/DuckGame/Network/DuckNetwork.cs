@@ -2123,15 +2123,19 @@ namespace DuckGame
                 }
                 else
                 {
-                    DGRSettings.MidGameJoining = hostProfile.netData.Get<bool>("midgameJoining", false);
-                    if (DGRSettings.MidGameJoining != prevMG && _core._ducknetMenu.open)
+                    if (hostProfile != null)
                     {
-                        speedOpen = true;
-                        prevIndex = _core._ducknetMenu.section.selection;
-                        _core._ducknetMenu.reducedMovement = true;
+                        DGRSettings.MidGameJoining = hostProfile.netData.Get<bool>("midgameJoining"); 
+                        if (DGRSettings.MidGameJoining != prevMG && _core._ducknetMenu.open)
+                        {
+                            speedOpen = true;
+                            prevIndex = _core._ducknetMenu.section.selection;
+                            _core._ducknetMenu.reducedMovement = true;
 
-                        OpenMenu(_core._menuOpenProfile);
-                        speedOpen = false;
+                            OpenMenu(_core._menuOpenProfile);
+                            speedOpen = false;
+                        }
+                        prevMG = DGRSettings.MidGameJoining;
                     }
                 }
             }
