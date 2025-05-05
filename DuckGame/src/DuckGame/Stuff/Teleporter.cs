@@ -166,6 +166,11 @@ namespace DuckGame
             {
                 if (noduck) shine = 0.8f;
                 else shine = 1.2f;
+                if (_link != null)
+                {
+                    if (_link.noduck) _link.shine = 0.8f;
+                    else _link.shine = 1.2f;
+                }
             }
         }
         public override void Update()
@@ -184,7 +189,6 @@ namespace DuckGame
                 ITeleport teleport = _teleported[index];
                 if (!source.Contains(teleport))
                 {
-                    Shine();
                     _teleported.RemoveAt(index);
                     --index;
                 }
@@ -203,11 +207,13 @@ namespace DuckGame
                     }
                 }
                 ITeleport teleport2 = teleport1;
-                if ((teleport2 as Thing).owner == null && (teleport2 as Thing).isServerForObject && !_teleported.Contains(teleport2) && !_teleporting.Contains(teleport2))
-                    _teleporting.Add(teleport2);
+                if ((teleport2 as Thing).owner == null && !_teleported.Contains(teleport2) && !_teleporting.Contains(teleport2))
+                {
+                    Shine();
+                    if ((teleport2 as Thing).isServerForObject) _teleporting.Add(teleport2);
+                }
             }
             int num1;
-            if (_teleporting.Count > 0) Shine();
             for (int index1 = 0; index1 < _teleporting.Count; index1 = num1 + 1)
             {
                 Thing thing1 = _teleporting[index1] as Thing;

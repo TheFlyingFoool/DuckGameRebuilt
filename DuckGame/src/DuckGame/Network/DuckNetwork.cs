@@ -2126,7 +2126,7 @@ namespace DuckGame
                     if (hostProfile != null)
                     {
                         DGRSettings.MidGameJoining = hostProfile.netData.Get<bool>("midgameJoining"); 
-                        if (DGRSettings.MidGameJoining != prevMG && _core._ducknetMenu.open)
+                        if (DGRSettings.MidGameJoining != prevMG && _core != null && _core._ducknetMenu != null && _core._ducknetMenu.open)
                         {
                             speedOpen = true;
                             prevIndex = _core._ducknetMenu.section.selection;
