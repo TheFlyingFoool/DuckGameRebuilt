@@ -183,10 +183,12 @@ namespace DuckGame
             _frame.angle = _channels.angle = _tvNoise.angle = angle;
             _frame.flipH = _channels.flipH = _tvNoise.flipH = offDir < 0;
             _frame.depth = depth + 1;
+            _frame.SkipIntraTick = SkipIntratick;
             Graphics.Draw(ref _frame, x, y);
             _channels.alpha = Lerp.Float(_channels.alpha, owner != null ? 1f : 0f, 0.1f);
             _channels.depth = depth + 4;
             _channels.frame = channel ? (jumpReady ? 1 : 2) : 0;
+            _channels.SkipIntraTick = SkipIntratick;
             Vec2 vec2 = Offset(new Vec2(-4f, -4f));
             Graphics.Draw(ref _channels, vec2.x, vec2.y);
             if (owner != null)
@@ -207,6 +209,7 @@ namespace DuckGame
             else
                 _tvNoise.alpha = 0.2f;
             _tvNoise.depth = depth + 8;
+            _tvNoise.SkipIntraTick = SkipIntratick;
             Graphics.Draw(ref _tvNoise, vec2.x, vec2.y);
         }
     }

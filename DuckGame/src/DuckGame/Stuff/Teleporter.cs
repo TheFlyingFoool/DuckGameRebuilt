@@ -176,6 +176,7 @@ namespace DuckGame
                 ITeleport teleport = _teleported[index];
                 if (!source.Contains(teleport))
                 {
+                    shine = 1;
                     _teleported.RemoveAt(index);
                     --index;
                 }
@@ -198,6 +199,7 @@ namespace DuckGame
                     _teleporting.Add(teleport2);
             }
             int num1;
+            if (_teleporting.Count > 0) shine = 1;
             for (int index1 = 0; index1 < _teleporting.Count; index1 = num1 + 1)
             {
                 Thing thing1 = _teleporting[index1] as Thing;
@@ -349,16 +351,18 @@ namespace DuckGame
         {
             base.Draw();
         }
+        public float shine;
         public override void Draw()
         {
             base.Draw();
+            if (MonoMain.UpdateLerpState) shine = Lerp.Float(shine, 0, 0.05f);
             if ((bool)horizontal)
             {
                 Color purple = Color.Purple;
                 if ((bool)noduck)
-                    Graphics.DrawRect(new Vec2(x + ((int)teleHeight * 16 - 9), y - 2f), new Vec2(x - 5f, y + 2f), Color.Yellow * (float)(_pulse.normalized * 0.3f + 0.2f), depth);
+                    Graphics.DrawRect(new Vec2(x + ((int)teleHeight * 16 - 9), y - 2f), new Vec2(x - 5f, y + 2f), Color.Yellow * (float)(_pulse.normalized * 0.3f + 0.2f + shine), depth);
                 else
-                    Graphics.DrawRect(new Vec2(x + ((int)teleHeight * 16 - 9), y - 4f), new Vec2(x - 5f, y + 4f), purple * (float)(_pulse.normalized * 0.3f + 0.2f), depth);
+                    Graphics.DrawRect(new Vec2(x + ((int)teleHeight * 16 - 9), y - 4f), new Vec2(x - 5f, y + 4f), purple * (float)(_pulse.normalized * 0.3f + 0.2f + shine), depth);
                 _top.angleDegrees = 90f;
                 _bottom.angleDegrees = 90f;
                 _top.depth = depth + 1;
@@ -381,9 +385,9 @@ namespace DuckGame
             {
                 Color purple = Color.Purple;
                 if ((bool)noduck)
-                    Graphics.DrawRect(new Vec2(x - 2f, y - ((int)teleHeight * 16 - 9)), new Vec2(x + 2f, y + 5f), Color.Yellow * (float)(_pulse.normalized * 0.3f + 0.2f), depth);
+                    Graphics.DrawRect(new Vec2(x - 2f, y - ((int)teleHeight * 16 - 9)), new Vec2(x + 2f, y + 5f), Color.Yellow * (float)(_pulse.normalized * 0.3f + 0.2f + shine), depth);
                 else
-                    Graphics.DrawRect(new Vec2(x - 4f, y - ((int)teleHeight * 16 - 9)), new Vec2(x + 4f, y + 5f), purple * (float)(_pulse.normalized * 0.3f + 0.2f), depth);
+                    Graphics.DrawRect(new Vec2(x - 4f, y - ((int)teleHeight * 16 - 9)), new Vec2(x + 4f, y + 5f), purple * (float)(_pulse.normalized * 0.3f + 0.2f + shine), depth);
                 _top.angle = 0f;
                 _bottom.angle = 0f;
                 _top.depth = depth + 1;

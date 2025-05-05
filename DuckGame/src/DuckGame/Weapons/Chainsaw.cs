@@ -129,9 +129,12 @@ namespace DuckGame
 
         public override void Terminate()
         {
-            _sound.Kill();
-            _bladeSound.Kill();
-            _bladeSoundLow.Kill();
+            if (_sound != null)
+            {
+                _sound.Kill();
+                _bladeSound.Kill();
+                _bladeSoundLow.Kill();
+            }
         }
 
         public void Shing(Thing wall)

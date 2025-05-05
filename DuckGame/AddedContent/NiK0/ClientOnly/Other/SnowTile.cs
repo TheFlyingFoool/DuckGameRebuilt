@@ -24,7 +24,7 @@
                 Level.Remove(this);
                 return;
             }
-            snowTimer += 0.1f * DGRSettings.WeatherMultiplier * strength;
+            snowTimer += 0.1f * strength;
             if (snowTimer > 1)
             {
                 for (int i = 0; i < snowTimer; i++)

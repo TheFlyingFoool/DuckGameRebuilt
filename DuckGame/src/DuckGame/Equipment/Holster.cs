@@ -217,7 +217,6 @@ namespace DuckGame
         }
 
         protected override bool OnDestroy(DestroyType type = null) => owner == null && containedObject == null && base.OnDestroy(type);
-
         public override void Initialize()
         {
             if (!(Level.current is Editor) && GetContainedInstance(position) is Holdable containedInstance)
@@ -325,11 +324,13 @@ namespace DuckGame
             _overPart.alpha = alpha;
             _overPart.scale = scale;
             _overPart.depth = owner.depth + 5;
+            _overPart.SkipIntraTick = SkipIntratick;
             Graphics.Draw(ref _overPart, x, y);
             _underPart.flipH = owner.offDir <= 0;
             _underPart.angle = angle;
             _underPart.alpha = alpha;
             _underPart.scale = scale;
+            _underPart.SkipIntraTick = SkipIntratick;
             if (_equippedDuck.ragdoll != null && _equippedDuck.ragdoll.part2 != null)
                 _underPart.depth = _equippedDuck.ragdoll.part2.depth + -11;
             else
@@ -341,6 +342,7 @@ namespace DuckGame
         {
             if (_equippedDuck != null)
             {
+                _containedObject.SkipIntratick = SkipIntratick;
                 _containedObject.position = Offset(new Vec2(backOffset, -4f) + containedObject.holsterOffset);
                 _containedObject.depth = owner.depth + -14;
                 _containedObject.angleDegrees = (owner.offDir > 0 ? containedObject.holsterAngle : -containedObject.holsterAngle) + angleDegrees;
@@ -364,6 +366,7 @@ namespace DuckGame
             }
             else
             {
+                _containedObject.SkipIntratick = SkipIntratick;
                 _containedObject.position = Offset(new Vec2(backOffset + 6f, -2f) + containedObject.holsterOffset);
                 _containedObject.depth = depth + -14;
                 _containedObject.angleDegrees = (offDir > 0 ? containedObject.holsterAngle : -containedObject.holsterAngle) + angleDegrees;

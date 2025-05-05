@@ -72,7 +72,7 @@ namespace DuckGame
                 }
 
                 GameLevel.rainwind = currentStrength;
-                snowTimer += 0.1f * DGRSettings.WeatherMultiplier;
+                snowTimer += 0.1f;
                 if (snowTimer > 1)
                 {
                     for (int i = 0; i < snowTimer; i++)

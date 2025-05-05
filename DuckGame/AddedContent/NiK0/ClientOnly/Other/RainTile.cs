@@ -47,7 +47,7 @@ namespace DuckGame
 
                 if (rainSound._effect != null && rainSound._effect._instance != null && rainSound._effect._instance.Platform_GetProgress() > 0.5f) rainSound._effect._instance._position = 0;
             }
-            if (thunder > 0 && DGRSettings.WeatherLighting > 0 && (int)Math.Round(Rando.Int((int)(2400 / thunder)) / DGRSettings.WeatherLighting) == 0)
+            if (thunder > 0 && Rando.Int((int)(2400 / thunder)) == 0)
             {
                 rainDarken = 1.2f;
                 Level.Add(new BGLightning(Rando.Float(-30, 270), 0));
@@ -56,7 +56,7 @@ namespace DuckGame
             }
             rainDarken = Lerp.Float(rainDarken, dark?0.8f:1, 0.005f);
 
-            rainTimer += DGRSettings.WeatherMultiplier / (dark ? 2 : 1.5f) * strength;
+            rainTimer += (dark ? 2 : 1.5f) * strength;
             if (rainTimer > 1)
             {
                 for (int i = 0; i < rainTimer; i++)

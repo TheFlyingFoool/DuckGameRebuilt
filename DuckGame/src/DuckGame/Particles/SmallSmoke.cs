@@ -85,6 +85,7 @@ namespace DuckGame
 
         private void Init(float xpos, float ypos)
         {
+            SkipIntratick = 3;
             _orbitInc += 0.2f;
             _life = 1f;
             position.x = xpos;
@@ -138,12 +139,14 @@ namespace DuckGame
             _sprite.depth = depth;
             _sprite.scale = new Vec2(s1);
             _sprite.center = center;
+            _sprite.SkipIntraTick = SkipIntratick;
             Graphics.Draw(ref _sprite, x + num2, y + num3);
             _sprite2.imageIndex = _sprite.imageIndex;
             _sprite2.angle = _sprite.angle;
             _sprite2.depth = -0.5f;
             _sprite2.scale = _sprite.scale;
             _sprite2.center = center;
+            _sprite2.SkipIntraTick = SkipIntratick;
             float num4 = 0.6f - Rando.Float(0.2f);
             float num5 = 0.4f;
             _sprite2.color = new Color(num5, num5, num5);
@@ -153,6 +156,7 @@ namespace DuckGame
             _orbiter.depth = depth;
             _orbiter.scale = new Vec2(s2);
             _orbiter.center = center;
+            _orbiter.SkipIntraTick = SkipIntratick;
             Graphics.Draw(ref _orbiter, x - num2, y - num3);
             _sprite2.imageIndex = _orbiter.imageIndex;
             _sprite2.angle = _orbiter.angle;
@@ -160,6 +164,7 @@ namespace DuckGame
             _sprite2.scale = _orbiter.scale;
             _sprite2.center = center;
             _sprite2.color = new Color(num5, num5, num5);
+            _sprite2.SkipIntraTick = SkipIntratick;
             Graphics.Draw(_sprite2, x - num2, y - num3);
         }
     }

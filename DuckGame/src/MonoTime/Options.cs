@@ -540,24 +540,14 @@ namespace DuckGame
 
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemSlider("Weather Chance", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.RandomWeather), 0, 10, 1), step: 1f)
+            menu.Add(new UIMenuItemToggle("Random Weather", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.Weather)))
             {
-                dgrDescription = "Chance for random weather to occur in levels from 0% to 100%"
+                dgrDescription = "Cosmetic weather for levels; rain, snow, storms"
             });
-            menu.Add(new UIMenuItemSlider("Weather Particle Level", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.WeatherMultiplier), 0, 16, 1), step: 1f)
-            {
-                dgrDescription = "Particle multiplier for weather events"
-            });
-            menu.Add(new UIMenuItemSlider("Weather Thunder Chance", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.WeatherLighting), 0, 16, 1), step: 1f)
-            {
-                dgrDescription = "Chance for thunder to occur in weather"
-            });
-
-            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
             menu.Add(new UIMenuItemSlider("Heat Wave Strength", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HeatWaveMultiplier), 0, 1, 0.1f), step: 0.1f)
             {
-                dgrDescription = "The strength that the heat wave shader has on the enviroment around it"
+                dgrDescription = "The strength that the lava heat wave shader has on the enviroment around it"
             });
 
             menu.Add(new UIMenuItemToggle("Ambient Particles", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.AmbientParticles)))
@@ -567,16 +557,16 @@ namespace DuckGame
 
             menu.Add(new UIMenuItemToggle("Enhanced Textures", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.EnhancedTextures)))
             {
-                dgrDescription = "Adds more texture variants and details"
+                dgrDescription = "Adds more texture variance and details to funbeams teleporters and blown up blocks"
             });
 
-            menu.Add(new UIMenuItemNumber("Particle Level", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ParticleMultiplier), 0, 3, 1), valStrings: new List<string>()
+            menu.Add(new UIMenuItemNumber("Particle Level", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ParticleMultiplier), 0, 4, 1), valStrings: new List<string>()
             {
                 "None",
                 "Minimum",
                 "Low",
                 "Default",
-                //"Many     ",
+                "Many     ",
                 //"EXTREME     ",
                 //"WUMBO     ",
                 //"|RED|UNCOUNTABLE"

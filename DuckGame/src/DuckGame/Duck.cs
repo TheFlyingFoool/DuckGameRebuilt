@@ -1915,6 +1915,7 @@ namespace DuckGame
         {
             if (holdObject == h)
                 return;
+            h.SkipIntratick = 3;
             if (holdObject != null)
                 ThrowItem(false);
             if (h == null)

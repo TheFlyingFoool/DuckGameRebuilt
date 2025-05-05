@@ -371,7 +371,6 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool TemporaryUnlockAll = false;
 
-        [Marker.AutoConfig] public static float WeatherMultiplier = 1;
 
         [Marker.AutoConfig] public static float HeatWaveMultiplier = 0;
 
@@ -381,13 +380,11 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static int StartIn = 0;
 
-        [Marker.AutoConfig] public static float WeatherLighting = 1;
+        [Marker.AutoConfig] public static bool Weather = true;
 
         [Marker.AutoConfig] public static bool CameraUnfollow = false;
 
         [Marker.AutoConfig] public static bool dubberspeed = false;
-
-        [Marker.AutoConfig] public static float RandomWeather = 1;
 
         [Marker.AutoConfig] public static bool MenuMouse = false;
 

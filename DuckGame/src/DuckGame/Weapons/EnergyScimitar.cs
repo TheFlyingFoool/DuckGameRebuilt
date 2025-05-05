@@ -1259,6 +1259,7 @@ namespace DuckGame
             _whiteGlow.angle = angle;
             _whiteGlow.color = this.swordColor;
             _whiteGlow.alpha = _glow * 0.5f;
+            _whiteGlow.SkipIntraTick = SkipIntratick;
             Graphics.Draw(ref _whiteGlow, x, y, depth - 2);
             Color swordColor = this.swordColor;
             foreach (WarpLine warpLine in warpLines)
@@ -1301,6 +1302,7 @@ namespace DuckGame
             _bladeTrail.flipH = _blade.flipH;
             _blade.alpha = alpha;
             _blade.color = Color.Lerp(properBladeColor, Color.Red, heat);
+            _blade.SkipIntraTick = SkipIntratick;
             swordColor = Color.Lerp(properColor, Color.Red, heat);
             if (_glow > 1f)
                 _blade.scale = new Vec2((1f + (_glow - 1f) * 0.03f), 1f);

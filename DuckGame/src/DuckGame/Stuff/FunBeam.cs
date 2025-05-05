@@ -36,7 +36,7 @@ namespace DuckGame
         {
             if (!enabled || !(with is Gun gun))
                 return;
-            if (DGRSettings.AmbientParticles) gun.funTime = 0.7f;
+            if (DGRSettings.EnhancedTextures) gun.funTime = 0.7f;
             switch (gun)
             {
                 case Sword _:

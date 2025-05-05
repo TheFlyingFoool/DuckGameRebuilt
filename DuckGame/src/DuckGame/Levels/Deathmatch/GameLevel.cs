@@ -39,7 +39,6 @@ namespace DuckGame
         public bool cityRaining;
         public bool Raining;
         public bool heavyRain;
-        public float rainMulti = 1;
         public float rainDarken;
         public static float rainwind;
         public float rainwindto;
@@ -163,6 +162,8 @@ namespace DuckGame
             set => _numberOfDucksSpawned = value;
         }
 
+
+        public int acidity = -1;
         public override void Start()
         {
             _things.RefreshState();
@@ -174,10 +175,29 @@ namespace DuckGame
 
 
 
-            if (level != "RANDOM" && First<RainTile>() == null && First<SnowTile>() == null)
+            if (level != "RANDOM" && First<RainTile>() == null && First<SnowTile>() == null && DGRSettings.Weather)
             {
-                if (Rando.Float(10) <= DGRSettings.RandomWeather)
+                Random rnd = Rando.generator;
+
+                if (Network.isActive)
                 {
+                    int rand = DuckNetwork.levelIndex;
+                    for (int i = 0; i < Profiles.active.Count; i++)
+                    {
+                        Profile p = Profiles.active[i];
+                        rand += p.flagIndex;
+                        rand += (int)(p.funslider * 100);
+                        rand += p.customTeams.Count;
+                        rand += p.preferredColor;
+                    }
+                    Rando.generator = new Random(rand);
+                    DevConsole.Log(rand);
+                }
+                else Rando.generator = new Random(Rando.Int(int.MaxValue - 1));
+
+                if (Rando.Int(4) == 0) //20% chance
+                {
+                    acidity = -1;
                     if (Program.BirthdayDGR)
                     {
                         DGRBirthday = true;
@@ -211,13 +231,13 @@ namespace DuckGame
                             rainSound._effect.saveToRecording = false;
                             darkenRainer = 0.9f;
                             rainwind = Rando.Float(-2, 2);
-                            lightningRNG = Rando.Int(1200, 2400);
+                            lightningRNG = Rando.Int(4000, 6000);
                             if (Rando.Int(2) == 0)
                             {
                                 darkenRainer = 0.85f;
                                 rainSound.volume = 0.5f;
                                 rainwind = Rando.Float(4, 5) * Rando.ChooseInt(-1, 1);
-                                lightningRNG = (int)Math.Floor(0.2f * lightningRNG);
+                                lightningRNG = (int)Math.Floor(0.75f * lightningRNG);
                                 heavyRain = true;
                             }
                             rainDarken = darkenRainer;
@@ -233,13 +253,13 @@ namespace DuckGame
                             darkenRainer = 0.9f;
                             Raining = true;
                             rainwind = Rando.Float(-2, 2);
-                            lightningRNG = Rando.Int(2400, 4800);
+                            lightningRNG = Rando.Int(4000, 6000);
                             if (Rando.Int(2) == 0)
                             {
                                 darkenRainer = 0.85f;
                                 rainSound.volume = 0.5f;
                                 rainwind = Rando.Float(4, 5) * Rando.ChooseInt(-1, 1);
-                                lightningRNG = (int)Math.Floor(0.2f * lightningRNG);
+                                lightningRNG = (int)Math.Floor(0.75f * lightningRNG);
                                 heavyRain = true;
                             }
                             rainDarken = darkenRainer;
@@ -247,6 +267,10 @@ namespace DuckGame
                         }
                         else if (First<CityTileset>() != null)
                         {
+                            if (Rando.Int(15000) == 0) //ACIDD GRAHHH -NiK0
+                            {
+                                acidTimer = Rando.Int(1200, 3000);
+                            }
                             CityBackground cbg = First<CityBackground>();
                             string forecast = "RAINY";
                             if (Rando.Int(1) == 0)
@@ -259,17 +283,17 @@ namespace DuckGame
                                 darkenRainer = 0.9f;
                                 cityRaining = true;
                                 rainwind = Rando.Float(-2, 2);
-                                lightningRNG = Rando.Int(1200, 2400);
+                                lightningRNG = Rando.Int(4000, 6000);
                                 if (Rando.Int(2) == 0)
                                 {
                                     forecast = "HEAVY RAIN";
                                     darkenRainer = 0.85f;
                                     rainSound.volume = 0.5f;
                                     rainwind = Rando.Float(4, 5) * Rando.ChooseInt(-1, 1);
-                                    lightningRNG = (int)Math.Floor(0.4f * lightningRNG);
+                                    lightningRNG = (int)Math.Floor(0.7f * lightningRNG);
                                     if (Rando.Int(1) == 0)
                                     {
-                                        lightningRNG = (int)Math.Floor(0.5f * lightningRNG);
+                                        lightningRNG = (int)Math.Floor(0.7f * lightningRNG);
                                         forecast = "THUNDERSTORM";
                                         darkenRainer = 0.8f;
                                     }
@@ -302,6 +326,7 @@ namespace DuckGame
                     }
                     rainwindto = rainwind;
                 }
+                Rando.generator = rnd;
             }
         }
 
@@ -347,8 +372,7 @@ namespace DuckGame
         public float darkenRainer;
         public LoopingSound rainSound;
         public bool unrain;
-        public int acidTimer;
-        public bool acider;
+        public int acidTimer = -1;
         //DGR was made on the 3rd of august, if weather is enabled and its currently the date all weather will be replaced by
         //confetti falling from the sky -NiK0
         public bool DGRBirthday;
@@ -371,7 +395,7 @@ namespace DuckGame
             }
             if (DGRBirthday)
             {
-                rainTimer += DGRSettings.WeatherMultiplier / 8f;
+                rainTimer += 8f * DGRSettings.ActualParticleMultiplier;
                 if (rainTimer > 1)
                 {
                     for (int i = 0; i < rainTimer; i++)
@@ -391,35 +415,6 @@ namespace DuckGame
             }
             else if (Raining)
             {
-                if (Rando.Int(600000) == 0 && DGRSettings.RandomWeather < 0.49f)
-                {
-                    if (heavyRain && Rando.Int(4) != 4)
-                    {
-                        heavyRain = false;
-                        rainwindto /= 2;
-                        darkenRainer = 0.8f;
-                        lightningRNG *= 5;
-                    }
-                    else
-                    {
-                        Raining = false;
-                        unrain = true;
-                    }
-                }
-                rainwind = Lerp.Float(rainwind, rainwindto, 0.1f);
-                if (Rando.Int(60000) == 0)
-                {
-                    if (!heavyRain && Rando.Int(1) == 0)
-                    {
-                        rainwindto *= 2;
-                        darkenRainer = 0.8f;
-                        heavyRain = true;
-                        lightningRNG = (int)Math.Floor(0.2f * lightningRNG);
-                    }
-                    rainwindto *= -1;
-                }
-
-
 
                 if (rainSound != null)
                 {
@@ -431,9 +426,7 @@ namespace DuckGame
                     if (rainSound._effect != null && rainSound._effect._instance != null && rainSound._effect._instance.Platform_GetProgress() > 0.5f) rainSound._effect._instance._position = 0;
                 }
 
-                //ignore this mess im just quickly assembling this if you wanna make it better go ahead
-                //-NiK0
-                if (DGRSettings.WeatherLighting > 0 && (int)Math.Round(Rando.Int(lightningRNG) / DGRSettings.WeatherLighting) == 0)
+                if (Rando.Int(lightningRNG) == 0)
                 {
                     rainDarken = 1.2f;
                     Add(new BGLightning(Rando.Float(-30, 270), 0));
@@ -448,7 +441,7 @@ namespace DuckGame
                 Layer.Parallax.fade = rainDarken;
                 Layer.Foreground.fade = rainDarken;
                 Layer.Background.fade = rainDarken;
-                rainTimer += DGRSettings.WeatherMultiplier / (heavyRain ? 2 : 1.5f) * rainMulti;
+                rainTimer += (heavyRain ? 2 : 1.5f) * DGRSettings.ActualParticleMultiplier;
                 if (rainTimer > 1)
                 {
                     for (int i = 0; i < rainTimer; i++)
@@ -461,20 +454,19 @@ namespace DuckGame
             else if (cityRaining)
             {
                 rainwind = Lerp.Float(rainwind, rainwindto, 0.1f);
-                if (Rando.Int(10000000) == 0 && !acider)
-                {
-                    CityBackground cbg = First<CityBackground>();
-                    if (cbg != null)
-                    {
-                        acidTimer = 240;
-                        acider = true;
-                        cbg.SkySay("NOW INCOMING", new Vec2(-20, 60));
-                        cbg.SkySay("ACID RAIN", new Vec2(-20, 70));
-                    }
-                }
+
                 if (acidTimer > 0)
                 {
                     acidTimer--;
+                    if (acidTimer == 300)
+                    {
+                        CityBackground cbg = First<CityBackground>();
+                        if (cbg != null)
+                        {
+                            cbg.SkySay("NOW INCOMING", new Vec2(-20, 60));
+                            cbg.SkySay("ACID RAIN", new Vec2(-20, 70));
+                        }
+                    }
                     if (acidTimer < 60)
                     {
                         RainParticel.c = Lerp.Color(RainParticel.c, Color.Yellow, 0.1f);
@@ -506,7 +498,7 @@ namespace DuckGame
 
                 //ignore this mess im just quickly assembling this if you wanna make it better go ahead
                 //-NiK0
-                if (DGRSettings.WeatherLighting > 0 && (int)Math.Round(Rando.Int(lightningRNG) / DGRSettings.WeatherLighting) == 0)
+                if (Rando.Int(lightningRNG) == 0)
                 {
                     rainDarken = 1.2f;
                     Add(new BGLightning(Rando.Float(-30, 270), 0));
@@ -521,7 +513,7 @@ namespace DuckGame
                 Layer.Parallax.fade = rainDarken;
                 Layer.Foreground.fade = rainDarken;
                 Layer.Background.fade = rainDarken;
-                rainTimer += DGRSettings.WeatherMultiplier / (heavyRain ? 2 : 1.5f);
+                rainTimer += (heavyRain ? 2 : 1.5f) * DGRSettings.ActualParticleMultiplier;
                 if (rainTimer > 1)
                 {
                     for (int i = 0; i < rainTimer; i++)
@@ -545,21 +537,18 @@ namespace DuckGame
             }
             else if (Snowing)
             {
-                snowTimer += 0.1f * DGRSettings.WeatherMultiplier;
+                snowTimer += 0.1f * DGRSettings.ActualParticleMultiplier;
                 if (snowTimer > 1)//lol
                 {
-                    for (int i = 0; i < snowTimer; i++)
-                    {
-                        snowTimer -= 1;
-                        Vec2 v = new Vec2(Rando.Float(topLeft.x - 128, bottomRight.x + 128), topLeft.y - 100);
-                        SnowFallParticle sn = new SnowFallParticle(v.x, v.y, new Vec2(0, 1), Rando.Int(2) == 0);
-                        sn.life = Rando.Float(1, 2);
-                        //sn._size = Rando.Float(1, 2);
-                        Add(sn);
-                    }
+                    snowTimer = 0;
+                    Vec2 v = new Vec2(Rando.Float(topLeft.x - 128, bottomRight.x + 128), topLeft.y - 100);
+                    SnowFallParticle sn = new SnowFallParticle(v.x, v.y, new Vec2(0, 1), Rando.Int(2) == 0);
+                    sn.life = Rando.Float(1, 2);
+                    //sn._size = Rando.Float(1, 2);
+                    Add(sn);
                 }
             }
-            ++MonoMain.timeInMatches;
+            MonoMain.timeInMatches++;
             if (_mode != null)
                 _mode.DoUpdate();
             if (_level == "RANDOM")
