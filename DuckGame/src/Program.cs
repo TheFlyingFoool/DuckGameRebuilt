@@ -1,8 +1,6 @@
-﻿using AddedContent.Firebreak;
+﻿using System; 
 using DbMon.NET;
 using DGWindows;
-using Microsoft.Xna.Framework;
-using System; 
 using System.IO;
 using System.Net;
 using System.Linq;
@@ -17,11 +15,13 @@ using System.Collections;
 using System.Windows.Forms;
 using System.Globalization;
 using System.IO.Compression;
+using AddedContent.Firebreak;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
+using System.Runtime.ExceptionServices;
 
 namespace DuckGame
 {
@@ -36,7 +36,7 @@ namespace DuckGame
 #endif
 
         // this should be formatted like X.X.X where each X is a number
-        public const string CURRENT_VERSION_ID = "1.4.5.1";
+        public const string CURRENT_VERSION_ID = "1.4.5.2";
 
         // do change this you know what you're doing -NiK0
         public const string CURRENT_VERSION_ID_FORMATTED = "v" + CURRENT_VERSION_ID;
