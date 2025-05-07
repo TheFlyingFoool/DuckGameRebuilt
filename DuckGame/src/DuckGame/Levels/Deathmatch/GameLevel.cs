@@ -179,7 +179,7 @@ namespace DuckGame
             {
                 Random rnd = Rando.generator;
 
-                if (Network.isActive && !Network.lanMode)
+                if (Network.isActive)
                 {
                     int rand = DuckNetwork.levelIndex;
                     for (int i = 0; i < Profiles.active.Count; i++)
@@ -188,7 +188,7 @@ namespace DuckGame
                         rand += p.flagIndex;
                         rand += (int)(p.funslider * 100);
                         rand += p.customTeams.Count;
-                        rand += p.preferredColor;
+                        if (!Network.lanMode) rand += p.preferredColor;
                         if (p.team != null) rand += Teams.IndexOf(p.team);
                     }
                     Rando.generator = new Random(rand);
@@ -197,6 +197,7 @@ namespace DuckGame
 
                 if (Rando.Int(4) == 0) //20% chance
                 {
+                    rainRando = new Random(Rando.Int(int.MaxValue - 1));
                     acidity = -1;
                     if (Program.BirthdayDGR)
                     {
@@ -378,6 +379,7 @@ namespace DuckGame
         public bool DGRBirthday;
 
         public int toSendDelay;
+        public Random rainRando;
         public override void Update()
         {
             if (toSend.Count > 0)
@@ -393,6 +395,8 @@ namespace DuckGame
                     if (toSendDelay <= -20) toSend.Clear();
                 }
             }
+            Random realRando = Rando.generator;
+            Rando.generator = rainRando;
             if (DGRBirthday)
             {
                 rainTimer += 8f * DGRSettings.ActualParticleMultiplier;
@@ -548,6 +552,8 @@ namespace DuckGame
                     Add(sn);
                 }
             }
+            Rando.generator = realRando;
+
             MonoMain.timeInMatches++;
             if (_mode != null)
                 _mode.DoUpdate();

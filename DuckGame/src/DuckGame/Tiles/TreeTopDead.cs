@@ -9,7 +9,6 @@
         public TreeTopDead(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            sw = new SinWave(this, Rando.Float(0.05f, 0.15f), Rando.Float(-5, 5));
             graphic = new Sprite("treeTopDead");
             _treeInside = new Sprite("treeTopInsideDead")
             {
@@ -25,8 +24,15 @@
             shouldbeinupdateloop = DGRSettings.AmbientParticles;
         }
         public float timer;
+        public bool LateInitialize;
         public override void Update()
         {
+            if (!LateInitialize)
+            {
+                sw = new SinWave(this, Rando.Float(0.05f, 0.15f), Rando.Float(-5, 5));
+                timer = Rando.Float(2);
+                LateInitialize = true;
+            }
             timer += 0.01f * DGRSettings.ActualParticleMultiplier;
             if (timer >= 1)
             {
@@ -38,12 +44,15 @@
         public override void Draw()
         {
             graphic.flipH = offDir <= 0;
-            float myX = x;
 
-            angle += GameLevel.rainwind * sw * 0.025f;
-            base.Draw();
-            angle = 0;
-            x = myX;
+            if (DGRSettings.AmbientParticles && sw != null)
+            {
+                float pAng = angle;
+                angle += GameLevel.rainwind * sw * 0.02f;
+                base.Draw();
+                angle = pAng;
+            }
+            else base.Draw();
         }
     }
 }

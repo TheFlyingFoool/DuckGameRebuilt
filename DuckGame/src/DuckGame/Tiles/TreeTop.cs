@@ -25,12 +25,17 @@ namespace DuckGame
             depth = (Depth)0.9f;
             hugWalls = WallHug.Left | WallHug.Right | WallHug.Ceiling | WallHug.Floor;
             shouldbeinupdateloop = DGRSettings.AmbientParticles;
-            sw = new SinWaveManualUpdate(Rando.Float(0.05f, 0.15f), Rando.Float(-5, 5));
-            timer = Rando.Float(2);
         }
         public float timer;
+        public bool LateInitialize;
         public override void Update()
         {
+            if (!LateInitialize)
+            {
+                sw = new SinWaveManualUpdate(Rando.Float(0.05f, 0.15f), Rando.Float(-5, 5));
+                timer = Rando.Float(2);
+                LateInitialize = true;
+            }
             sw.Update();
             timer += 0.01f * DGRSettings.ActualParticleMultiplier;
             if (timer >= 2)
@@ -44,9 +49,8 @@ namespace DuckGame
         {
             graphic.flipH = offDir <= 0;
 
-            if (DGRSettings.AmbientParticles)
+            if (DGRSettings.AmbientParticles && sw != null)
             {
-
                 float pAng = angle;
                 angle += GameLevel.rainwind * sw * 0.02f;
                 base.Draw();

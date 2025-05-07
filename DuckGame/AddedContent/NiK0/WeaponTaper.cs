@@ -38,12 +38,12 @@
                     Holdable tms = tp.gun1.BecomeTapedMonster(tp);
                     if (h1 != null)
                     {
-                        ((Editor)Level.current).RemoveObject(h1);
+                        ((Editor)Level.current).levelThings.Remove(h1);
                         h1.tapeable = false;
                     }
                     if (h2 != null)
                     {
-                        ((Editor)Level.current).RemoveObject(h2);
+                        ((Editor)Level.current).levelThings.Remove(h2);
                         h2.tapeable = false;
                     }
                     if (tms != null)

@@ -95,6 +95,11 @@ namespace DuckGame
                 if (gun2 != null)
                     gun2.tape = this;
             }
+            if (Level.current is Editor e)
+            {
+                if (gun1 != null) e.AddThing(gun1);
+                if (gun2 != null) e.AddThing(gun2);
+            }
             return base.Deserialize(node);
         }
 

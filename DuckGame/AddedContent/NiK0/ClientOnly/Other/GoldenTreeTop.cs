@@ -9,7 +9,6 @@
         public GoldenTreeTop(float xpos, float ypos)
           : base(xpos, ypos)
         {
-            sw = new SinWave(this, Rando.Float(0.1f, 0.15f), Rando.Float(-5, 5));
             sprite = new SpriteMap("goldenTreeTop", 48, 48);
             graphic = sprite;
             center = new Vec2(24f, 24f);
@@ -18,13 +17,19 @@
             depth = (Depth)0.9f;
             hugWalls = WallHug.Left | WallHug.Right | WallHug.Ceiling | WallHug.Floor;
             shouldbeinupdateloop = DGRSettings.AmbientParticles;
-            timer = Rando.Float(2);
             editorTooltip = "So fancy! Almost like it came from a Kingdom!";
             _editorName = "Tree Top Gold";
         }
         public float timer;
+        public bool LateInitialize;
         public override void Update()
         {
+            if (!LateInitialize)
+            {
+                sw = new SinWave(this, Rando.Float(0.1f, 0.15f), Rando.Float(-5, 5));
+                timer = Rando.Float(2);
+                LateInitialize = true;
+            }
             timer += 0.01f * DGRSettings.ActualParticleMultiplier;
             if (timer >= 2)
             {
@@ -36,7 +41,7 @@
         public override void Draw()
         {
             graphic.flipH = offDir <= 0;
-            if (DGRSettings.AmbientParticles)
+            if (DGRSettings.AmbientParticles && sw != null)
             {
                 float pAng = angle;
                 angle += GameLevel.rainwind * sw * 0.03f;
