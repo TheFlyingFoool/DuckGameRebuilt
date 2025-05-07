@@ -338,9 +338,13 @@ namespace DuckGame
                 return;
             if (!(Level.current is GameLevel) || !(Level.current as GameLevel).isRandom)
             {
+                //top right clip in space01 launches you out to the right without this here
+                //in vanilla duck game it just sets you off the wall and you can jump onto the roof
+                QuadTreeObjectList.LineLeniancy = 2;
                 _duck.ReturnItemToWorld(_part1);
                 _duck.ReturnItemToWorld(_part2);
                 _duck.ReturnItemToWorld(_part3);
+                QuadTreeObjectList.LineLeniancy = 0;
             }
             _part3.depth = new Depth(_duck.depth.value);
             _part1.depth = _part3.depth - 1;
