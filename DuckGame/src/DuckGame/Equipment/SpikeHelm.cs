@@ -217,7 +217,7 @@ namespace DuckGame
             base.Draw();
             _sprite.frame = frame;
             (_pickupSprite as SpriteMap).frame = frame;
-            if (poked == null)
+            if (poked == null || poked == this)
                 return;
             poked.position = Offset(new Vec2(1f, -9f));
             poked.depth = depth + 2;
