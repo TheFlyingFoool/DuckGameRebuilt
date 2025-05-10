@@ -47,7 +47,6 @@ namespace DuckGame
 
         public override void OnSoftImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (Recorderator.Playing) return;
             if (Network.isActive && connection != DuckNetwork.localConnection || removeFromLevel)
                 return;
             switch (with)

@@ -46,13 +46,12 @@ namespace DuckGame
             base.Update();
             if (_loadAnimation == -1)
             {
-                SFX.DontSave = 1;
                 SFX.Play("shotgunLoad");
                 _loadAnimation = 0f;
             }
             if (_loadAnimation >= 0)
             {
-                if (_loadAnimation == 0.5 && ammo != 0 && !Recorderator.Playing)
+                if (_loadAnimation == 0.5 && ammo != 0)
                     PopShell();
                 if (_loadAnimation < 1)
                     _loadAnimation += 0.1f;

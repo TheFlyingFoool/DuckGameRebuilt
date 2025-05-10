@@ -69,7 +69,6 @@
 
         public override void OnImpact(MaterialThing with, ImpactedFrom from)
         {
-            if (Recorderator.Playing) return;
             if (_stuck || with is Gun || (with.weight < 5f && !(with is Dart) && !(with is RagdollPart)) || with is FeatherVolume || with is Teleporter || removeFromLevel || with is Spring || with is SpringUpLeft || with is SpringUpRight)
             {
                 if (with is EnergyBlocker && with.solid)
@@ -199,14 +198,9 @@
             base.Update();
             if (!destroyed && !_stuck)
             {
-                if (!burning && Level.CheckCircle<SmallFire>(position, 8f) != null)
-                    LightOnFire();
+                if (!burning && Level.CheckCircle<SmallFire>(position, 8f) != null) LightOnFire();
                 _sprite.frame = 0;
-                if (!Recorderator.Playing)
-                {
-
-                    angleDegrees = -Maths.PointDirection(Vec2.Zero, new Vec2(hSpeed, vSpeed));
-                }
+                angleDegrees = -Maths.PointDirection(Vec2.Zero, new Vec2(hSpeed, vSpeed));
             }
             if (_stuck)
             {
@@ -217,8 +211,7 @@
                 _stickTime -= 0.005f;
                 gravMultiplier = 0f;
             }
-            if (_stickTime > 0 || destroyed)
-                return;
+            if (_stickTime > 0 || destroyed) return;
             Destroy(new DTFade());
         }
     }

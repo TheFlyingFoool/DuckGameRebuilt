@@ -57,7 +57,7 @@
                 if (DGRSettings.ActualParticleMultiplier >= 1) for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++) Level.Add(Spark.New(vec2_1.x, vec2_1.y, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.1f));
                 else if (Rando.Float(1) < DGRSettings.ActualParticleMultiplier) Level.Add(Spark.New(vec2_1.x, vec2_1.y, new Vec2(Rando.Float(-1f, 1f), -0.5f), 0.1f));
             }
-            if (_lit && _litTimer != null && (bool)_litTimer && _litStartTimer != null && (bool)_litStartTimer && !Recorderator.Playing)
+            if (_lit && _litTimer != null && (bool)_litTimer && _litStartTimer != null && (bool)_litStartTimer)
             {
                 if (_sprite.frame == 0)
                     _sprite.frame = 1;

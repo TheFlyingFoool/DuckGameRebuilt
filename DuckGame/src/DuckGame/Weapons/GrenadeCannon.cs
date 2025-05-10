@@ -98,7 +98,7 @@ namespace DuckGame
                 _timer = 1.2f;
                 _doneLoad = false;
                 _doLoad = false;
-                if (isServerForObject && !Recorderator.Playing)
+                if (isServerForObject)
                 {
                     Vec2 vec2 = Offset(barrelOffset);
                     --ammo;

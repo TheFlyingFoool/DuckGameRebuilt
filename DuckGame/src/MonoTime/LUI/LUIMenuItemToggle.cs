@@ -125,7 +125,6 @@ namespace DuckGame
             }
             if (!flag)
                 return;
-            SFX.DontSave = 1;
             SFX.Play("textLetter", 0.7f);
             if (_action == null)
                 return;

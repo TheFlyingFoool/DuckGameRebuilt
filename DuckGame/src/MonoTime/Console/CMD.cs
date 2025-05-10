@@ -432,7 +432,6 @@ namespace DuckGame
                 // {"fbtest", () => new TestLev()}, // apparently someone booted up dg and got this level somehow
                 {"hatpreview", () => new HatPreviewLevel()},
                 {"ff", () => new FeatherFashion()},
-                {"cord", () => new RecorderationSelector()},
                 {"dev", () => new DevTestLev()},
                 {"title", () => new TitleScreen()},
                 {"rockintro", () => new RockIntro(new GameLevel(Deathmatch.RandomLevelString(GameMode.previousLevel)))},

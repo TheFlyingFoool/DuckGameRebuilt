@@ -126,7 +126,6 @@ namespace DuckGame
             //if has been opened by other client and sfx hasn't played play it on this side
             if (!localPlayedDeedle && didUnlock)
             {
-                SFX.DontSave = 1;
                 SFX.Play("deedleBeep");
                 localPlayedDeedle = true;
             }
@@ -221,7 +220,6 @@ namespace DuckGame
         public void DoUnlock(Vec2 keyPos)
         {
             ps = keyPos;
-            SFX.DontSave = 1;
             localPlayedDeedle = true;
             SFX.Play("deedleBeep");
             if (DGRSettings.S_ParticleMultiplier != 0)

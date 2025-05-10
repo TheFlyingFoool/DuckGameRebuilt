@@ -32,7 +32,7 @@
 
         public override void Update()
         {
-            if (isServerForObject && !Recorderator.Playing)
+            if (isServerForObject)
             {
                 if (_equippedDuck != null && _equippedDuck.inputProfile != null)
                     trigger = _equippedDuck.inputProfile.Down(Triggers.Quack);

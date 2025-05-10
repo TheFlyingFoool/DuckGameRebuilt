@@ -31,7 +31,6 @@ namespace DuckGame
             {
                 if (_receivingSignal != value && !destroyed)
                 {
-                    SFX.DontSave = 1;
                     if (value)
                         SFX.Play("rcConnect", 0.5f);
                     else
@@ -166,7 +165,7 @@ namespace DuckGame
         }
         public override void Update()
         {
-            if (_controller == null && !(Level.current is Editor) && isServerForObject && !Recorderator.Playing)
+            if (_controller == null && !(Level.current is Editor) && isServerForObject)
             {
                 _controller = new RCController(x, y, this);
                 Level.Add(_controller);

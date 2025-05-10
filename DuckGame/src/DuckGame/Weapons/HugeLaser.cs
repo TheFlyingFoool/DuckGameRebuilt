@@ -167,49 +167,46 @@ namespace DuckGame
             if (_chargeAnim.currentAnimation == "charge" && _chargeAnim.finished && isServerForObject)
             {
                 PostFireLogic();
-                if (!Recorderator.Playing)
+                if (this.owner is Duck owner)
                 {
-                    if (this.owner is Duck owner)
+                    RumbleManager.AddRumbleEvent(owner.profile, new RumbleEvent(RumbleIntensity.Medium, RumbleDuration.Pulse, RumbleFalloff.Short));
+                    owner.sliding = true;
+                    owner.crouch = true;
+                    Vec2 vec2 = barrelVector * 9f;
+                    if (owner.ragdoll != null && owner.ragdoll.part2 != null && owner.ragdoll.part1 != null && owner.ragdoll.part3 != null)
                     {
-                        RumbleManager.AddRumbleEvent(owner.profile, new RumbleEvent(RumbleIntensity.Medium, RumbleDuration.Pulse, RumbleFalloff.Short));
-                        owner.sliding = true;
-                        owner.crouch = true;
-                        Vec2 vec2 = barrelVector * 9f;
-                        if (owner.ragdoll != null && owner.ragdoll.part2 != null && owner.ragdoll.part1 != null && owner.ragdoll.part3 != null)
-                        {
-                            owner.ragdoll.part2.hSpeed -= vec2.x;
-                            owner.ragdoll.part2.vSpeed -= vec2.y;
-                            owner.ragdoll.part1.hSpeed -= vec2.x;
-                            owner.ragdoll.part1.vSpeed -= vec2.y;
-                            owner.ragdoll.part3.hSpeed -= vec2.x;
-                            owner.ragdoll.part3.vSpeed -= vec2.y;
-                        }
-                        else
-                        {
-                            owner.hSpeed -= vec2.x;
-                            owner.vSpeed -= vec2.y + 3f;
-                            owner.CancelFlapping();
-                        }
+                        owner.ragdoll.part2.hSpeed -= vec2.x;
+                        owner.ragdoll.part2.vSpeed -= vec2.y;
+                        owner.ragdoll.part1.hSpeed -= vec2.x;
+                        owner.ragdoll.part1.vSpeed -= vec2.y;
+                        owner.ragdoll.part3.hSpeed -= vec2.x;
+                        owner.ragdoll.part3.vSpeed -= vec2.y;
                     }
                     else
                     {
-                        Vec2 barrelVector = this.barrelVector;
-                        hSpeed -= barrelVector.x * 9f;
-                        vSpeed -= (float)(barrelVector.y * 9 + 3);
+                        owner.hSpeed -= vec2.x;
+                        owner.vSpeed -= vec2.y + 3f;
+                        owner.CancelFlapping();
                     }
-                    Vec2 vec2_1 = Offset(barrelOffset);
-                    Vec2 vec2_2 = Offset(barrelOffset + new Vec2(1200f, 0f)) - vec2_1;
-                    if (isServerForObject)
-                        ++Global.data.laserBulletsFired.valueInt;
-                    if (Network.isActive)
-                        Send.Message(new NMDeathBeam(this, vec2_1, vec2_2));
-                    DeathBeam deathBeam = new DeathBeam(vec2_1, vec2_2, this.owner)
-                    {
-                        isLocal = isServerForObject
-                    };
-                    Level.Add(deathBeam);
-                    doBlast = true;
                 }
+                else
+                {
+                    Vec2 barrelVector = this.barrelVector;
+                    hSpeed -= barrelVector.x * 9f;
+                    vSpeed -= (float)(barrelVector.y * 9 + 3);
+                }
+                Vec2 vec2_1 = Offset(barrelOffset);
+                Vec2 vec2_2 = Offset(barrelOffset + new Vec2(1200f, 0f)) - vec2_1;
+                if (isServerForObject)
+                    ++Global.data.laserBulletsFired.valueInt;
+                if (Network.isActive)
+                    Send.Message(new NMDeathBeam(this, vec2_1, vec2_2));
+                DeathBeam deathBeam = new DeathBeam(vec2_1, vec2_2, this.owner)
+                {
+                    isLocal = isServerForObject
+                };
+                Level.Add(deathBeam);
+                doBlast = true;
             }
             if (doBlast && isServerForObject)
             {

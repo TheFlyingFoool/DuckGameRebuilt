@@ -1279,8 +1279,7 @@ namespace DuckGame
                 Graphics.fade = Lerp.Float(Graphics.fade, 0f, 0.05f);
                 if (Graphics.fade < 0.01f)
                 {
-                    current.Clear();
-                    current = new RecorderationSelector();
+                    throw new Exception("IMPLEMENT RECORDERATOR DUMBASS");
                 }
             }
             else if (_enterFeatherFashion)

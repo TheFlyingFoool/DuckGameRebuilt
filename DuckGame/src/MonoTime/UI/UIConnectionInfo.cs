@@ -227,8 +227,7 @@ namespace DuckGame
                 {
                     if (_muteOptionIndex > 0)
                     {
-                        --_muteOptionIndex;
-                        SFX.DontSave = 1;
+                        _muteOptionIndex--;
                         SFX.Play("textLetter", 0.7f);
                     }
                 }
@@ -236,8 +235,7 @@ namespace DuckGame
                 {
                     if (_muteOptionIndex < _muteOptions.Count - 1)
                     {
-                        ++_muteOptionIndex;
-                        SFX.DontSave = 1;
+                        _muteOptionIndex++;
                         SFX.Play("textLetter", 0.7f);
                     }
                 }
@@ -252,7 +250,6 @@ namespace DuckGame
                     else if (_muteOptionIndex == 3)
                         _profile.muteName = !_profile.muteName;
                     _profile._blockStatusDirty = true;
-                    SFX.DontSave = 1;
                     SFX.Play("textLetter", 0.7f);
                 }
             }
@@ -316,14 +313,12 @@ namespace DuckGame
                     if (_additionalOptionIndex > 0)
                     {
                         --_additionalOptionIndex;
-                        SFX.DontSave = 1;
                         SFX.Play("textLetter", 0.7f);
                     }
                 }
                 else if (Input.Pressed(Triggers.Down) && _additionalOptionIndex < _additionalOptions.Count - 1)
                 {
                     ++_additionalOptionIndex;
-                    SFX.DontSave = 1;
                     SFX.Play("textLetter", 0.7f);
                 }
             }

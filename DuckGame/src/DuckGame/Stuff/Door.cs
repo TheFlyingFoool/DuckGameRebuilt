@@ -115,7 +115,7 @@ namespace DuckGame
 
         public override void Terminate()
         {
-            if (_hitPoints > 5 && !Network.isActive && !Recorderator.Playing)
+            if (_hitPoints > 5 && !Network.isActive)
             {
                 Level.Remove(_frame);
                 _frame = null;
@@ -135,7 +135,6 @@ namespace DuckGame
                 if (ChallengeLevel.running)
                     ++ChallengeLevel.goodiesGot;
             }
-            if (Recorderator.Playing) return true;
             DoorOffHinges t = null;
             if (Network.isActive)
             {
@@ -247,7 +246,6 @@ namespace DuckGame
         public void DoUnlock(Vec2 keyPos)
         {
             ps = keyPos;
-            SFX.DontSave = 1;
             SFX.Play("deedleBeep");
             if (DGRSettings.S_ParticleMultiplier != 0)
             {

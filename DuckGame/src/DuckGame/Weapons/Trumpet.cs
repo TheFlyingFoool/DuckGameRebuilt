@@ -53,7 +53,7 @@ namespace DuckGame
             if (this.owner is Duck owner && owner.inputProfile != null)
             {
                 hideLeftWing = ignoreHands = !raised;
-                if (isServerForObject && !Recorderator.Playing)
+                if (isServerForObject)
                 {
                     if (owner.inputProfile.Pressed(Triggers.Shoot))
                         currentPitch = 2;
@@ -91,10 +91,6 @@ namespace DuckGame
                     }
                     notePitch = currentPitch < 0 || _raised ? 0f : (float)(currentPitch / 3f + 0.01f);
                 }
-                if (Recorderator.Playing)
-                {
-                    notePitch = currentPitch < 0 || _raised ? 0f : (float)(currentPitch / 3f + 0.01f);
-                }
                 if (notePitch != prevNotePitch)
                 {
                     if (notePitch != 0)
@@ -112,7 +108,6 @@ namespace DuckGame
                         if (noteSound == null)
                         {
                             hitPitch = notePitch;
-                            SFX.DontSave = 1;
                             noteSound = SFX.Play("trumpet0" + Change.ToString(num + 1), 0.8f);
                             Level.Add(new MusicNote(barrelPosition.x, barrelPosition.y, barrelVector));
                         }

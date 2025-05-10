@@ -39,7 +39,7 @@
                     owner.ThrowItem();
                 Level.Remove(this);
             }
-            if (owner == null && ammo == 1 && !Recorderator.Playing)
+            if (owner == null && ammo == 1)
             {
                 Banana banana = new Banana(x, y)
                 {

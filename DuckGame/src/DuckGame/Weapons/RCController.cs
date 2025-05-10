@@ -45,7 +45,7 @@
 
         public override void Update()
         {
-            if (_car == null && !(Level.current is Editor) && isServerForObject && !Recorderator.Playing)
+            if (_car == null && !(Level.current is Editor) && isServerForObject)
             {
                 _car = new RCCar(x, y)
                 {
@@ -62,7 +62,7 @@
             }
             if (lockedOwner != owner)
                 Release(lockedOwner);
-            if (isServerForObject && !Recorderator.Playing)
+            if (isServerForObject)
             {
                 if (_burning && _burnLife > 0)
                 {
@@ -140,10 +140,7 @@
             lockedOwner = null;
             if (_car == null)
                 return;
-            if (!Recorderator.Playing)
-            {
-                _car.receivingSignal = false;
-            }
+            _car.receivingSignal = false;
             if (!(Level.current.camera is FollowCam camera))
                 return;
             camera.Remove(_car);

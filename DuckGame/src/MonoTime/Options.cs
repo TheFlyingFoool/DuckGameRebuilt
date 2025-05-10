@@ -810,9 +810,6 @@ namespace DuckGame
             tempDGREditorMenu = CreateDGREditorMenu(menu);
             menu.Add(new UIMenuItem("EDITOR", new UIMenuActionOpenMenu(menu, tempDGREditorMenu), backButton: true));
 
-            tempDGRRecorderatorMenu = Recorderator.CreateRecorderatorMenu(menu);
-            menu.Add(new UIMenuItem("RECORDERATOR", new UIMenuActionOpenMenu(menu, tempDGRRecorderatorMenu), backButton: true));
-
             tempDGRMiscMenu = CreateDGRMiscMenu(menu);
             menu.Add(new UIMenuItem("MISCELLANEOUS", new UIMenuActionOpenMenu(menu, tempDGRMiscMenu), backButton: true));
 

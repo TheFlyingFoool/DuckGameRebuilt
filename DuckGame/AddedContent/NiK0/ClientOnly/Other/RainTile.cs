@@ -31,7 +31,6 @@ namespace DuckGame
                 {
                     volume = 0.2f
                 };
-                rainSound._effect.saveToRecording = false;
                 rainDarken = dark ? 0.8f : 1;
             }
             base.Initialize();
@@ -51,7 +50,6 @@ namespace DuckGame
             {
                 rainDarken = 1.2f;
                 Level.Add(new BGLightning(Rando.Float(-30, 270), 0));
-                SFX.DontSave = 1;
                 SFX.Play("balloonPop", 1, Rando.Float(-3, -4));
             }
             rainDarken = Lerp.Float(rainDarken, dark?0.8f:1, 0.005f);

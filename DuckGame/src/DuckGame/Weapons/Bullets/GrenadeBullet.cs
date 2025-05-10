@@ -31,7 +31,6 @@ namespace DuckGame
                 explosionPart.yscale *= 0.7f;
                 Level.Add(explosionPart);
             }
-            if (Recorderator.Playing) return; //recorderator
             SFX.Play("explode");
             RumbleManager.AddRumbleEvent(position, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));
             foreach (MaterialThing materialThing in Level.CheckCircleAll<TV>(position, 20f))
@@ -49,7 +48,6 @@ namespace DuckGame
                 {
                     firedFrom = this
                 };
-                bullet.shouldhavevessel = false;
                 varBullets.Add(bullet);
                 Level.Add(bullet);
             }
@@ -67,7 +65,6 @@ namespace DuckGame
 
         protected override void Rebound(Vec2 pos, float dir, float rng)
         {
-            if (Recorderator.Playing) return;
             GrenadeBullet bullet = ammo.GetBullet(pos.x, pos.y, angle: (-dir), firedFrom: firedFrom, distance: rng, tracer: _tracer) as GrenadeBullet;
             bullet._teleporter = _teleporter;
             bullet._isVolatile = _isVolatile;

@@ -248,33 +248,29 @@ namespace DuckGame
                     Fondle(t);
                 }
             }
-            if (!Recorderator.Playing)
+            float x = position.x;
+            float y = position.y;
+            for (int index = 0; index < 20; ++index)
             {
-                float x = position.x;
-                float y = position.y;
-                for (int index = 0; index < 20; ++index)
+                float ang = (float)(index * 18 - 5) + Rando.Float(10f);
+                ATShrapnel type = new ATShrapnel
                 {
-                    float ang = (float)(index * 18 - 5) + Rando.Float(10f);
-                    ATShrapnel type = new ATShrapnel
-                    {
-                        range = 60f + Rando.Float(18f)
-                    };
-                    Bullet bullet = new Bullet(x, y, type, ang)
-                    {
-                        firedFrom = this
-                    };
-                    firedBullets.Add(bullet);
-                    Level.Add(bullet);
-                }
-                bulletFireIndex += 20;
-                if (Network.isActive && isServerForObject)
+                    range = 60f + Rando.Float(18f)
+                };
+                Bullet bullet = new Bullet(x, y, type, ang)
                 {
-                    Send.Message(new NMFireGun(this, firedBullets, bulletFireIndex, false), NetMessagePriority.ReliableOrdered);
-                    firedBullets.Clear();
-                }
-                if (Recorder.currentRecording != null)
-                    Recorder.currentRecording.LogBonus();
+                    firedFrom = this
+                };
+                firedBullets.Add(bullet);
+                Level.Add(bullet);
             }
+            bulletFireIndex += 20;
+            if (Network.isActive && isServerForObject)
+            {
+                Send.Message(new NMFireGun(this, firedBullets, bulletFireIndex, false), NetMessagePriority.ReliableOrdered);
+                firedBullets.Clear();
+            }
+            if (Recorder.currentRecording != null)  Recorder.currentRecording.LogBonus();
             Level.Remove(this);
         }
 
@@ -282,11 +278,6 @@ namespace DuckGame
         {
             if (blownUp)
                 return;
-            if (currentVessel != null && currentVessel is MineVessel mv && !Recorderator.Playing)
-            {
-                mv.explodeFrame = mv.exFrames;
-                mv.v = pos;
-            }
             blownUp = true;
             SFX.Play("explode");
             RumbleManager.AddRumbleEvent(pos, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));

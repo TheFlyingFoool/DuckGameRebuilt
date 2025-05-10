@@ -161,7 +161,6 @@ namespace DuckGame
         public void SwitchChannelEffect()
         {
             _switchFrames = 8;
-            SFX.DontSave = 1;
             SFX.Play("switchchannel", 0.7f, 0.5f);
         }
 

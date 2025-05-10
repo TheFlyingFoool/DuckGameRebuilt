@@ -64,7 +64,6 @@ namespace DuckGame
         public override void Initialize()
         {
             _sound = new ConstantSound(this, "flameThrowing");
-            _sound.effect.saveToRecording = false;
             base.Initialize();
         }
         public override void Update()
@@ -91,17 +90,13 @@ namespace DuckGame
                 _flameWait -= 0.25f;
                 if (_flameWait > 0)
                     return;
-                if (!Recorderator.Playing)
-                {
-                    Vec2 vec = Maths.AngleToVec(barrelAngle + Rando.Float(-0.5f, 0.5f));
-                    Vec2 vec2 = new Vec2(vec.x * Rando.Float(2f, 3.5f), vec.y * Rando.Float(2f, 3.5f));
-                    ammo -= 2;
-                    Level.Add(SmallFire.New(barrelPosition.x, barrelPosition.y, vec2.x, vec2.y, firedFrom: this));
-                }
+                Vec2 vec = Maths.AngleToVec(barrelAngle + Rando.Float(-0.5f, 0.5f));
+                Vec2 vec2 = new Vec2(vec.x * Rando.Float(2f, 3.5f), vec.y * Rando.Float(2f, 3.5f));
+                ammo -= 2;
+                Level.Add(SmallFire.New(barrelPosition.x, barrelPosition.y, vec2.x, vec2.y, firedFrom: this));
                 _flameWait = 1f;
             }
-            else
-                _flameWait = 0f;
+            else _flameWait = 0f;
         }
 
         public override void Draw()

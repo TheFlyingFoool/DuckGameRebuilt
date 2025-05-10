@@ -129,14 +129,6 @@ namespace DuckGame
 
         public static void Remove(Thing thing)
         {
-            if (Corderator.instance != null && !Recorderator.Playing && thing != null && thing.shouldhavevessel)
-            {
-                if (Corderator.instance.somethingMap.Contains(thing))
-                {
-                    int z = Corderator.instance.somethingMap[thing];
-                    Corderator.instance.somethingMapped[z].deleteTime = Corderator.instance.cFrame;
-                }
-            }
             if (_core.currentLevel == null || thing == null)
                 return;
             _core.currentLevel.RemoveThing(thing);
@@ -284,44 +276,6 @@ namespace DuckGame
 
         public virtual void AddThing(Thing t)
         {
-            if (Corderator.instance != null && !Recorderator.Playing && Corderator.instance.cFrame > 0 && t.shouldhavevessel)
-            {
-                Type typeoid = t.GetType();
-                //if (t is TeamHat) DevConsole.Log("what1");
-                if (SomethingSomethingVessel.tatchedVessels.ContainsKey(typeoid))
-                {
-                    //if (t is TeamHat) DevConsole.Log("what2");
-                    object[] args = new object[] { t };
-                    SomethingSomethingVessel vs = (SomethingSomethingVessel)Activator.CreateInstance(SomethingSomethingVessel.tatchedVessels[typeoid], args);
-                    vs.addTime = Corderator.instance.cFrame;
-                    Corderator.instance.MapSomeSomeVessel(vs);
-                    goto FF;
-                }
-                /*if (t is Bullet b)
-                {
-                    BulletVessel bv = new BulletVessel(b) { addTime = Corderator.instance.cFrame };
-                    Corderator.instance.MapSomeSomeVessel(bv);
-                }*/
-                if (t is Equipment e)
-                {
-                    EquipmentVessel ev = new EquipmentVessel(e) { addTime = Corderator.instance.cFrame };
-                    Corderator.instance.MapSomeSomeVessel(ev);
-                }
-                else if (t is Holdable h)
-                {
-                    if (t is IAmADuck || t is Equipment) goto FF;
-                    if (t is Gun)
-                    {
-                        GunVessel gv = new GunVessel(t) { addTime = Corderator.instance.cFrame };
-                        Corderator.instance.MapSomeSomeVessel(gv);
-                        goto FF;
-                    }
-                    HoldableVessel hv = new HoldableVessel(h) { addTime = Corderator.instance.cFrame };
-                    Corderator.instance.MapSomeSomeVessel(hv);
-                }
-            }
-            FF:
-
             Main.SpecialCode = "vay";
             if (Thread.CurrentThread == Content.previewThread && this != Content.previewLevel) Content.previewLevel.AddThing(t);
             else if (t is ThingContainer)
@@ -343,7 +297,7 @@ namespace DuckGame
             }
             else
             {
-            Main.SpecialCode = "lay";
+                Main.SpecialCode = "lay";
                 if (t.level != this)
                 {
                     _things.Add(t);

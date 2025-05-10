@@ -7,9 +7,6 @@ namespace DuckGame
 {
     public static class SFX
     {
-        //hi hello yes NiK0 here, this int is here so Recorderator can ignore certain SFX that dont need to be saved to the recorderator file
-        //to be played back since an item might handle them on their own or whatever the circumstances are -NiK0 
-        public static int DontSave = 0;
         private static Speech _speech;
         private static Dictionary<string, SoundEffect> _sounds = new Dictionary<string, SoundEffect>();
         private static Map<string, int> _soundHashmap = new Map<string, int>();
@@ -148,18 +145,6 @@ namespace DuckGame
 
         public static void Update()
         {
-            if (Corderator.instance != null && !Recorderator.Playing)
-            {
-                List<SoundData> ls = new List<SoundData>();
-                for (int i = 0; i < _playedThisFrame.Count; i++)
-                {
-                    Sound s = _playedThisFrame[i];
-                    if (s.saveToRecording) ls.Add(new SoundData(SoundHash(s.name), s.Volume, s.Pitch));
-                    s.saveToRecording = true;
-                }
-                if (Corderator.instance.toAddThisFrame.Count > 0) Corderator.instance.toAddThisFrame.AddRange(ls);
-                else Corderator.instance.toAddThisFrame = ls;
-            }
             _playedThisFrame.Clear();
             for (int index = 0; index < _soundPool.Count; ++index)
             {
@@ -224,14 +209,6 @@ namespace DuckGame
                     if (sound1 != null)
                     {
                         sound1.Play();
-                        if (!Recorderator.Playing)
-                        {
-                            if (!sound1.saveToRecording)
-                            {
-                                sound1.saveToRecording = DontSave == 0;
-                                if (DontSave > 0) DontSave--;
-                            }
-                        }
                         _playedThisFrame.Add(sound1);
                     }
                 }

@@ -53,7 +53,6 @@
             }
             if (num != (float)_field.value)
             {
-                SFX.DontSave = 1;
                 SFX.Play("textLetter", 0.7f);
             }
             _field.value = num;

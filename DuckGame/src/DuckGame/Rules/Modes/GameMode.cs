@@ -454,7 +454,6 @@ namespace DuckGame
                                 {
                                     dugg = pendingSpawn
                                 });
-                                SFX.DontSave = 1;
                                 SFX.Play("pullPin", 0.7f);
                                 if (pendingSpawn.isServerForObject && !_editorTestMode)
                                 {

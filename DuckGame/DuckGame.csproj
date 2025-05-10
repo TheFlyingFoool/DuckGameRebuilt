@@ -556,13 +556,6 @@
     <Compile Include="AddedContent\NiK0\RainbowConstant.cs" />
     <Compile Include="AddedContent\NiK0\RainParticel.cs" />
     <Compile Include="AddedContent\NiK0\WeaponTaper.cs" />
-    <Compile Include="Recorderator\RecorderationSelector\FolderInfo.cs" />
-    <Compile Include="Recorderator\RecorderationSelector\IRMenuItem.cs" />
-    <Compile Include="Recorderator\RecorderationSelector\NullRMenuItem.cs" />
-    <Compile Include="Recorderator\RecorderationSelector\ProfileInfo.cs" />
-    <Compile Include="Recorderator\RecorderationSelector\RecorderationSelector.cs" />
-    <Compile Include="Recorderator\RecorderationSelector\ReplayInfo.cs" />
-    <Compile Include="Recorderator\Recorderator.cs" />
     <Compile Include="AddedContent\NiK0\TreeLeaf.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\ClientOnlyAttribute.cs" />
     <Compile Include="AddedContent\YupDanielThatsMe\CodeButton.cs" />
@@ -591,98 +584,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Recorderator\OtherStuff\NilVessel.cs" />
-    <Compile Include="Recorderator\OtherStuff\ReplayLevel.cs" />
-    <Compile Include="Recorderator\OtherStuff\TheCorderator.cs" />
-    <Compile Include="Recorderator\Priority\BitCrusher.cs" />
-    <Compile Include="Recorderator\Priority\updateCorderator.cs" />
-    <Compile Include="Recorderator\SubClassed\SomethingSomethingVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\GrappleVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\KnightHelmetVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\JetpackVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\HelmetVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\HolsterVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\SpikeHelmVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\BootsVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\EquipmentVessel\ChestplateVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\DartGunVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\ChaindartVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\GoodBookVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\GrenadeCannonVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\ShotgunVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SuicidePistolVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SMGVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\RomanCandleVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\PelletGunVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\KeytarVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\ChaingunVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\MindControlRayVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\TrumpetVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SaxaphoneVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\TromboneVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\TapedGunVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\WAGNUSVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\FlamethrowerVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\CampingRifleVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\PositronShooterVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\ChainsawVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\BananaVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\EnergyscimitarVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\MagnetGunVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\MagBlasterVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SnubbyPistolVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\NetGunVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\GrenadeLauncherVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\GrenadeVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\GunVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\HugeLaserVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\MagnumVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\MineVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\PistolVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\OldPistolVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\PhaserVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\PlasmaBlasterVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SharpshotVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SledgeHammerVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SniperVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\SwordVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\GunVessels\TampingWeaponVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\FluidPuddleVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\DoorVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\IciclesVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\PinkBoxVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\ItemBoxVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\WireActivatorVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\WireButtonVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\WiremountVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\LevelVessels\WindowVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\DuckVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\EquipmentVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\ExtinguisherSmokeVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\DartVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\CandleBallVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\RagdollPartVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\RCCarVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\RCControllerVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\SmallFireVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\FlareVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\RagdollVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\TrappedDuckVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\ForceWaveVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\HoldableVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\ItemSpawnerVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\QuadLaserBulletVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\MiscVessels\TeamHatVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\OneTimeVessels\BulletVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\OneTimeVessels\DeathBeamVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\CampingBallVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\DeathCrateVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\DeskVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\DoorOffHingesVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\ItemCrateVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\NetVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\PresentVessel.cs" />
-    <Compile Include="Recorderator\SubClassed\Vessels\PropVessels\TVVessel.cs" />
     <Compile Include="src\DuckGame\DirectBitmap.cs" />
     <Compile Include="src\DuckGame\DuckPersonaColor.cs" />
     <Compile Include="src\DuckGame\Interp.cs" />
@@ -2476,9 +2377,7 @@
       <Name>Steam</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Recorderator\SubClassed\Vessels\a_OLD\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.4\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.3.4\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />

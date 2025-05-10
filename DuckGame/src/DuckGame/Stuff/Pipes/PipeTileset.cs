@@ -48,10 +48,6 @@ namespace DuckGame
 
         public bool IsBackground()
         {
-            if (Corderator.instance != null && Corderator.instance.PlayingThatShitBack)
-            {
-                return background.value;
-            }
             return connections.Count > 1 && background.value;
         }
 

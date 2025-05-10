@@ -30,7 +30,6 @@
         {
             if (sounded)
                 return;
-            SFX.DontSave = 1;
             SFX.Play("doorBreak");
             if (DGRSettings.S_ParticleMultiplier != 0)
             {

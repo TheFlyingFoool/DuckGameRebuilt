@@ -91,8 +91,6 @@ namespace DuckGame
         {
             _spinUp = SFX.Get("chaingunSpinUp");
             _spinDown = SFX.Get("chaingunSpinDown");
-            _spinUp.saveToRecording = false;
-            _spinDown.saveToRecording = false;
             base.Initialize();
             _bullets = new ChaingunBullet(x, y, true)
             {

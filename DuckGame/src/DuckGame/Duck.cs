@@ -30,18 +30,10 @@ namespace DuckGame
         public StateBinding _conversionResistanceBinding = new StateBinding(nameof(conversionResistance), 8);
         public bool forceDead;
         public bool afk;
-        public bool forcePaused;
-        public bool forceTabbed;
-        public bool forceLag;
-        public bool forceLoss;
 
         public float hAccMulti = 1;
         public float runmaxMulti = 1;
 
-        public bool forceDisconnection;
-        public bool forceConsole;
-        public bool forceChatting;
-        public bool forceAFK;
         public int coinTargetted; //hi whats good -NiK0
         private Vec2 spawnedposition = new Vec2(0f,0f);
         private byte _quackPitch;
@@ -365,7 +357,7 @@ namespace DuckGame
 
         public Vec2 tounge
         {
-            get => (!Network.isActive || isServerForObject) && inputProfile != null && !Recorderator.Playing ? inputProfile.rightStick : _tounge;
+            get => (!Network.isActive || isServerForObject) && inputProfile != null ? inputProfile.rightStick : _tounge;
             set => _tounge = value;
         }
 
@@ -2058,11 +2050,6 @@ namespace DuckGame
 
         private void UpdateCurrentAnimation()
         {
-            if (Recorderator.Playing)
-            {
-                _sprite.speed = 0;
-                return;
-            }
             if (dead && _eyesClosed)
                 _sprite.currentAnimation = "dead";
             else if (inNet)
@@ -2432,7 +2419,7 @@ namespace DuckGame
                 }
                 else if (from == ImpactedFrom.Top && with.y < y && with.vSpeed > 0f && with.impactPowerV > 2f && with.weight >= 5f)
                 {
-                    if (with is PhysicsObject && !Recorderator.Playing)
+                    if (with is PhysicsObject)
                     {
                         PhysicsObject wp = with as PhysicsObject;
                         if (wp.lastPosition.y + with.collisionOffset.y + with.collisionSize.y < top)
@@ -3483,23 +3470,6 @@ namespace DuckGame
                 }
                 disableCrouch = false;
             }
-            if (Recorderator.Playing)
-            {
-                if (spriteImageIndex == 11)
-                {
-                    crouch = true;
-                }
-                else if (spriteImageIndex == 12)
-                {
-                    crouch = true;
-                    sliding = true;
-                }
-                else
-                {
-                    crouch = false;
-                    sliding = false;
-                }
-            }
         }
 
         public override Vec2 cameraPosition
@@ -3656,7 +3626,6 @@ namespace DuckGame
                     }
                 }
             }
-            if (Recorderator.Playing) UpdateConnectionIndicators();
             if (Network.isActive)
             {
                 UpdateConnectionIndicators();
@@ -3955,7 +3924,7 @@ namespace DuckGame
             --listenTime;
             if (listenTime < 0)
                 listenTime = 0;
-            if (listening && listenTime <= 0 && !Recorderator.Playing)
+            if (listening && listenTime <= 0)
                 listening = false;
             if (isServerForObject && !listening)
             {
@@ -4073,7 +4042,7 @@ namespace DuckGame
                 centerOffset = 24f;
             if (ragdoll == null && isServerForObject)
                 base.Update();
-            if (ragdoll == null && _prevRagdoll != null && DGRSettings.S_ParticleMultiplier != 0 && !Recorderator.Playing)
+            if (ragdoll == null && _prevRagdoll != null && DGRSettings.S_ParticleMultiplier != 0)
             {
                 Level.Add(SmallSmoke.New(x - Rando.Float(2f, 5f), (float)(y + Rando.Float(-3f, 3f) + 16)));
                 Level.Add(SmallSmoke.New(x + Rando.Float(2f, 5f), (float)(y + Rando.Float(-3f, 3f) + 16)));
@@ -4366,126 +4335,6 @@ namespace DuckGame
 
         public void UpdateHoldLerp(bool updateLerp = false, bool instant = false)
         {
-            if (Recorderator.Playing)
-            {
-                float armOffY = 6;
-                float armOffX = -3f * offDir;
-                float holdOffX = 6;
-                float holdOffY = -3;
-                if (holdObject != null)
-                {
-                    armOffY = 6f;
-                    armOffX = -2f * offDir;
-                }
-                if (holdObject != null)
-                {
-                    holdObject._sleeping = false;
-                    if (holdObject.owner != this)
-                    {
-                        return;
-                    }
-                    if (spriteImageIndex == 1)
-                    {
-                        holdOffY += 1f;
-                    }
-                    else if (spriteImageIndex == 2)
-                    {
-                        holdOffY += 1f;
-                        holdOffX -= 1f;
-                    }
-                    else if (spriteImageIndex == 3)
-                    {
-                        holdOffY += 1f;
-                        holdOffX -= 2f;
-                    }
-                    else if (spriteImageIndex == 4)
-                    {
-                        holdOffY += 1f;
-                        holdOffX -= 1f;
-                    }
-                    else if (spriteImageIndex == 5)
-                    {
-                        holdOffY += 1f;
-                    }
-                    else if (spriteImageIndex == 7)
-                    {
-                        holdOffY += 1f;
-                    }
-                    else if (spriteImageIndex == 9)
-                    {
-                        holdOffY -= 1f;
-                    }
-                }
-
-                holdOffX *= offDir;
-                if (holdObject != null)
-                {
-                    _spriteArms.angle = holdAngle;
-                    if (holdObject is DrumSet)
-                    {
-                        position = holdObject.position + new Vec2(0f, -12f);
-                    }
-                    else
-                    {
-                        holdObject.position = armPositionNoKick +  holdObject.holdOffset + new Vec2(holdOffX, holdOffY) + new Vec2((float)(2 * offDir), 0f);
-                    }
-                    holdObject.CheckIfHoldObstructed();
-                    if (HasEquipment(typeof(Holster)))
-                    {
-                        Holster h = GetEquipment(typeof(Holster)) as Holster;
-                        if (!h.chained.value || h.containedObject == null)
-                        {
-                            if (!isServerForObject)
-                            {
-                                holdObstructed = h.netRaise;
-                            }
-                            else if (holdObject != null && inputProfile.Down("UP") && holdObject.holsterable)
-                            {
-                                holdObstructed = true;
-                            }
-                        }
-                    }
-                    if (!(holdObject is RagdollPart))
-                    {
-                        holdObject.offDir = offDir;
-                    }
-                    if (spriteImageIndex == 12 || spriteImageIndex == 13)
-                    {
-                        armOffY = 12;
-                        holdOffY = -3;
-                        holdOffX += 1f;
-                    }
-                    else if (spriteImageIndex == 11)
-                    {
-                        if (holdObject != null)
-                        {
-                            armOffY += 4f;
-                        }
-                    }
-                    else if ((spriteImageIndex == 12 || spriteImageIndex == 13) && holdObject != null)
-                    {
-                        armOffY += 6f;
-                    }
-                    if (!(holdObject is DrumSet))
-                    {
-                        holdObject.position = HoldOffset(holdObject.holdOffset);
-                        if (!(holdObject is RagdollPart))
-                        {
-                            holdObject.angle = holdObject.handAngle + holdAngleOff;
-                        }
-                    }
-                }
-                this.armOffX = armOffX;
-                this.armOffY = armOffY;
-                this.holdOffX = holdOffX;
-                this.holdOffY = holdOffY;
-                //Extensions.SetPrivateFieldValue(__instance, "armOffX", armOffX);
-                //Extensions.SetPrivateFieldValue(__instance, "armOffY", armOffY);
-
-                //Extensions.SetPrivateFieldValue(__instance, "holdOffX", holdOffX);
-                //Extensions.SetPrivateFieldValue(__instance, "holdOffY", holdOffY);
-                return;
-            }
             if (holdObject.canRaise && (_hovering && holdObject.hoverRaise || holdObstructed || holdObject.keepRaised))
             {
                 if (updateLerp)
@@ -4662,7 +4511,6 @@ namespace DuckGame
                 {
                     case GameLevel _:
                     case ChallengeLevel _:
-                    case ReplayLevel _://recorderator
                         if (Level.current.simulatePhysics)
                             return position.x < level.camera.left + num || position.x > level.camera.right - num || position.y < level.camera.top + num || position.y > level.camera.bottom - num;
                         break;
@@ -5072,7 +4920,7 @@ namespace DuckGame
                         }
                     }
                 }
-                if ((Network.isActive || Recorderator.Playing) && !_renderingDuck)
+                if (Network.isActive && !_renderingDuck)
                     DrawConnectionIndicators();
                 Sprite graphic = this.graphic;
                 this.graphic = null;
@@ -5276,24 +5124,6 @@ namespace DuckGame
                 {
                     get
                     {
-                        if (Recorderator.Playing)
-                        {
-                            if (problem == ConnectionTrouble.Chatting)
-                                return owner.duck.forceChatting;
-                            if (problem == ConnectionTrouble.AFK)
-                                return owner.duck.forceAFK;
-                            if (problem == ConnectionTrouble.Disconnection)
-                                return owner.duck.forceDisconnection;
-                            if (problem == ConnectionTrouble.Lag)
-                                return owner.duck.forceLag;
-                            if (problem == ConnectionTrouble.Loss)
-                                return owner.duck.forceLoss;
-                            if (problem == ConnectionTrouble.Minimized)
-                                return !owner.duck.forceTabbed;
-                            if (problem == ConnectionTrouble.Paused)
-                                return owner.duck.forcePaused;
-                            return problem == ConnectionTrouble.DevConsole && owner.duck.forceConsole;
-                        }
                         if (owner.duck.connection == null || owner.duck.profile == null)
                             return false;
                         if (problem == ConnectionTrouble.Chatting)
@@ -5332,7 +5162,6 @@ namespace DuckGame
                             or ConnectionTrouble.DevConsole
                             or ConnectionTrouble.AFK)
                         {
-                            SFX.DontSave = 1;
                             SFX.Play("rainpop", 0.65f, Rando.Float(-0.1f, 0.1f));
                         }
                     }

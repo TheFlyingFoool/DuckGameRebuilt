@@ -5,7 +5,6 @@ namespace DuckGame
 {
     public class Sound
     {
-        public bool saveToRecording;
         protected bool _killed;
         protected bool _cannotBeCancelled;
         public SoundEffectInstance _instance;

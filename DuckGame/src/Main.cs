@@ -89,7 +89,6 @@ namespace DuckGame
 
         protected override void OnStart()
         {
-            Recorderator.Initialize();
             Options.Initialize();
             Teams.PostInitialize();
             Unlocks.Initialize();

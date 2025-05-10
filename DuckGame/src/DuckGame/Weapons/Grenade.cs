@@ -66,11 +66,6 @@ namespace DuckGame
         {
             if (_explosionCreated)
                 return;
-            if (currentVessel != null && currentVessel is GrenadeVessel gv && !Recorderator.Playing)
-            {
-                gv.explodeFrame = gv.exFrames;
-                gv.v = pos;
-            }
 
 
             float x = pos.x;
@@ -86,7 +81,6 @@ namespace DuckGame
                 Level.Add(new ExplosionPart(x + (float)Math.Cos(Maths.DegToRad(deg)) * num2, ypos - (float)Math.Sin(Maths.DegToRad(deg)) * num2));
             }
             _explosionCreated = true;
-            SFX.DontSave = 1;
             SFX.Play("explode");
             RumbleManager.AddRumbleEvent(pos, new RumbleEvent(RumbleIntensity.Heavy, RumbleDuration.Short, RumbleFalloff.Medium));
         }
@@ -185,7 +179,6 @@ namespace DuckGame
             }
             if (duck != null)
                 RumbleManager.AddRumbleEvent(duck.profile, new RumbleEvent(_fireRumble, RumbleDuration.Pulse, RumbleFalloff.None));
-            SFX.DontSave = 1;
             SFX.Play("pullPin");
         }
     }

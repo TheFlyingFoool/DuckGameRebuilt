@@ -68,7 +68,6 @@
                 graphic = _pickupSprite;
                 solid = true;
                 _sprite.flipH = false;
-                if (!Recorderator.Playing) visible = true;
             }
             if (destroyed) alpha -= 0.05f;
             if (alpha < 0) Level.Remove(this);

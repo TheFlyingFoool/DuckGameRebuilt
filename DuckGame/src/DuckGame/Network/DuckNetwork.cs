@@ -431,7 +431,6 @@ namespace DuckGame
                 Options.Data.unblockedPlayers.Add(pProfile.steamID);
             Options.Data.muteSettings[pProfile.steamID] = "";
             pProfile._blockStatusDirty = true;
-            SFX.DontSave = 1;
             SFX.Play("textLetter", 0.7f);
         }
 
@@ -469,7 +468,6 @@ namespace DuckGame
             _core._noModsMenu.Open();
             MonoMain.pauseMenu = _core._noModsUIGroup;
             _core._pauseOpen = true;
-            SFX.DontSave = 1;
             SFX.Play("pause", 0.6f);
         }
 
@@ -874,7 +872,6 @@ namespace DuckGame
             _ducknetUIGroup.isPauseMenu = true;
             MonoMain.pauseMenu = _ducknetUIGroup;
             _core._pauseOpen = true;
-            SFX.DontSave = 1;
             SFX.Play("pause", 0.6f);
         }
 
@@ -1343,7 +1340,6 @@ namespace DuckGame
             if (speedOpen) _core._ducknetMenu.section.selection = prevIndex;
             else
             {
-                SFX.DontSave = 1;
                 SFX.Play("pause", 0.6f);
             }
         }
@@ -2601,10 +2597,6 @@ namespace DuckGame
         {
             if (message.profile == null)
                 return;
-            if (Corderator.instance != null)
-            {
-                Corderator.instance.receivedMessages.Add(new ChatMessage(message.profile, message.text, message.index));
-            }
 
             int num = FilterPlayer(message.profile);
             if (num > 0)
@@ -2615,7 +2607,6 @@ namespace DuckGame
                 realText = !(message is NMChatDisabledMessage) ? (num != 2 ? "@error@Chat |DGRED|disabled|PREV| in options. Ignoring messages..." : "@error@Player is |DGRED|muted|PREV|. Ignoring messages...") : message.text;
             }
             _core.AddChatMessage(new ChatMessage(message.profile, realText != null ? realText : message.text, message.index));
-            SFX.DontSave = 1;
             SFX.Play("chatmessage", 0.8f, Rando.Float(-0.15f, 0.15f));
         }
 
@@ -3506,7 +3497,7 @@ namespace DuckGame
 
         public static void Draw()
         {
-            if (localProfile == null && !Recorderator.Playing) return;
+            if (localProfile == null) return;
             Vec2 vec2_1 = new Vec2(Layer.Console.width, Layer.Console.height);
             float num1 = 0f;
             int MaxMessages = 8;

@@ -117,7 +117,6 @@ namespace DuckGame
                 _field.value = _multiToggle == null ? num3 != 0 : num3;
             }
             if (!flag) return;
-            SFX.DontSave = 1;
             SFX.Play("textLetter", 0.7f);
             if (_action == null)
                 return;

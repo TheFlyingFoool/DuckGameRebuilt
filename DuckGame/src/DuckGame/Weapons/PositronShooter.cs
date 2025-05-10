@@ -140,7 +140,7 @@ namespace DuckGame
                 {
                     if (_noteIndex < _notes.Count)
                     {
-                        if (_notes[_noteIndex] != "" && !Recorderator.Playing)
+                        if (_notes[_noteIndex] != "")
                         {
                             SFX.Play("musicBox" + _notes[_noteIndex]);
                         }

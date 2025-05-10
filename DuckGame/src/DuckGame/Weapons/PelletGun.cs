@@ -100,13 +100,11 @@ namespace DuckGame
                     {
                         if (isServerForObject)
                         {
-                            SFX.DontSave = 1;
                             NetSoundEffect.Play("pelletGunSwipe");
                         }
                     }
                     else
                     {
-                        SFX.DontSave = 1;
                         SFX.Play("swipe", 0.4f, 0.3f);
                     }
                     ++_loadState;
@@ -130,13 +128,11 @@ namespace DuckGame
                         {
                             if (isServerForObject)
                             {
-                                SFX.DontSave = 1;
                                 NetSoundEffect.Play("pelletGunLoad");
                             }
                         }
                         else
                         {
-                            SFX.DontSave = 1;
                             SFX.Play("loadLow", 0.7f, Rando.Float(-0.05f, 0.05f));
                         }
                     }
@@ -152,13 +148,11 @@ namespace DuckGame
                         {
                             if (isServerForObject)
                             {
-                                SFX.DontSave = 1;
                                 NetSoundEffect.Play("pelletGunSwipe2");
                             }
                         }
                         else
                         {
-                            SFX.DontSave = 1;
                             SFX.Play("swipe", 0.5f, 0.4f);
                         }
                     }
@@ -178,13 +172,11 @@ namespace DuckGame
                         {
                             if (isServerForObject)
                             {
-                                SFX.DontSave = 1;
                                 NetSoundEffect.Play("pelletGunClick");
                             }
                         }
                         else
                         {
-                            SFX.DontSave = 1;
                             SFX.Play("click", pitch: 0.5f);
                         }
                     }

@@ -205,7 +205,6 @@ namespace DuckGame
             _clickPuff.SetAnimation("puff");
             _barrelHeat = 0f;
             _barrelSmoke.SetAnimation("finish");
-            SFX.DontSave = 1;
             SFX.Play(_clickSound);
             for (int index = 0; index < DGRSettings.ActualParticleMultiplier * 2; ++index)
             {
@@ -287,7 +286,7 @@ namespace DuckGame
                 _framesSinceThrown++;
                 if (_framesSinceThrown > 25) _framesSinceThrown = 25;
             }
-            if (!(this is Sword) && owner == null && CanSpin() && Level.current.simulatePhysics && !Recorderator.Playing)
+            if (!(this is Sword) && owner == null && CanSpin() && Level.current.simulatePhysics)
             {
                 bool spinning = false;
                 bool agaisntWall = false;

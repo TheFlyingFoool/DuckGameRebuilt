@@ -229,7 +229,6 @@ namespace DuckGame
                             {
                                 volume = 0.2f
                             };
-                            rainSound._effect.saveToRecording = false;
                             darkenRainer = 0.9f;
                             rainwind = Rando.Float(-2, 2);
                             lightningRNG = Rando.Int(4000, 6000);
@@ -250,7 +249,6 @@ namespace DuckGame
                             {
                                 volume = 0.2f
                             };
-                            rainSound._effect.saveToRecording = false;
                             darkenRainer = 0.9f;
                             Raining = true;
                             rainwind = Rando.Float(-2, 2);
@@ -280,7 +278,6 @@ namespace DuckGame
                                 {
                                     volume = 0.2f
                                 };
-                                rainSound._effect.saveToRecording = false;
                                 darkenRainer = 0.9f;
                                 cityRaining = true;
                                 rainwind = Rando.Float(-2, 2);
@@ -434,7 +431,6 @@ namespace DuckGame
                 {
                     rainDarken = 1.2f;
                     Add(new BGLightning(Rando.Float(-30, 270), 0));
-                    SFX.DontSave = 1;
                     SFX.Play("balloonPop", 1, Rando.Float(-3, -4));
                 }
                 rainDarken = Lerp.Float(rainDarken, darkenRainer, 0.005f);
@@ -506,7 +502,6 @@ namespace DuckGame
                 {
                     rainDarken = 1.2f;
                     Add(new BGLightning(Rando.Float(-30, 270), 0));
-                    SFX.DontSave = 1;
                     SFX.Play("balloonPop", 1, Rando.Float(-3, -4));
                 }
                 rainDarken = Lerp.Float(rainDarken, darkenRainer, 0.005f);

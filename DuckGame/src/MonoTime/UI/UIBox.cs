@@ -202,7 +202,6 @@ namespace DuckGame
                     _selection = _currentMenuItemSelection.Count - 1;
             }
             while (_currentMenuItemSelection[_selection].mode != MenuItemMode.Normal && selection != _selection);
-            SFX.DontSave = 1;
             SFX.Play("textLetter", 0.7f);
         }
 
@@ -216,7 +215,6 @@ namespace DuckGame
                     _selection = 0;
             }
             while (_currentMenuItemSelection[_selection].mode != MenuItemMode.Normal && selection != _selection);
-            SFX.DontSave = 1;
             SFX.Play("textLetter", 0.7f);
         }
         public static Keys[] DubberKeys =
@@ -316,22 +314,15 @@ namespace DuckGame
                 {
                     if (DGRSettings.dubberspeed && _currentMenuItemSelection != null && !_animating)
                     {
-                        Main.SpecialCode = "DubberSpeed Logic I";
                         int c = _currentMenuItemSelection.Count;
                         int dubberOffset = -1;
                         if (Keyboard.Down(Keys.LeftShift)) dubberOffset = 0;
-                        Main.SpecialCode = "DubberSpeed Logic II";
                         for (int i = 0; i < DubberKeys.Length; i++)
                         {
-                            Main.SpecialCode = "DubberSpeed Logic III";
                             if (Keyboard.Pressed(DubberKeys[i]) && i < c)
                             {
-                                //optimal -NiK0
-                                Main.SpecialCode = "DubberSpeed Logic IV";
                                 if (dubberOffset == -1) dubberOffset = _currentMenuItemSelection.FindAll(ui => ui is UIConnectionInfo).Count;
-                                SFX.DontSave = 1;
                                 SFX.Play("rockHitGround");
-                                Main.SpecialCode = "DubberSpeed Logic V";
                                 if (i + dubberOffset < c)
                                 {
                                     _selection = i + dubberOffset;
@@ -340,7 +331,6 @@ namespace DuckGame
                                 }
                             }
                         }
-                        Main.SpecialCode = "DubberSpeed Logic VI";
                     }
 
                     _currentMenuItemSelection = _components.Where(val =>
@@ -376,7 +366,6 @@ namespace DuckGame
                                 if (!_animating && Input.Pressed(Triggers.Select))
                                 {
                                     uiMenuItem.Activate(Triggers.Select);
-                                    SFX.DontSave = 1;
                                     SFX.Play("rockHitGround", 0.7f);
                                 }
                                 else if (!_animating && Input.Pressed(Triggers.Menu1))

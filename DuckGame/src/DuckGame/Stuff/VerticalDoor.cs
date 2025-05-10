@@ -80,13 +80,11 @@
             if (_desiredOpen > 0.5 && !_opened)
             {
                 _opened = true;
-                SFX.DontSave = 1;
                 SFX.Play("slideDoorOpen", 0.6f);
             }
             if (_desiredOpen < 0.5 && _opened)
             {
                 _opened = false;
-                SFX.DontSave = 1;
                 SFX.Play("slideDoorClose", 0.6f);
             }
             graphic = _sprite;

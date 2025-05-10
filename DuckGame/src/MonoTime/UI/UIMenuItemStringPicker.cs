@@ -83,7 +83,6 @@ namespace DuckGame
                 int currentIndex2 = currentIndex;
                 if (currentIndex1 != currentIndex2)
                 {
-                    SFX.DontSave = 1;
                     SFX.Play("textLetter", 0.7f);
                 }
                 if (_textItem == null)

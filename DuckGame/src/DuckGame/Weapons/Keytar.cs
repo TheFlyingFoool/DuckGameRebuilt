@@ -169,7 +169,6 @@ namespace DuckGame
             _prevColorVariation = colorVariation;
             if (!_prevRuined && _ruined)
             {
-                SFX.DontSave = 1;
                 SFX.Play("smallElectronicBreak", 0.8f, Rando.Float(-0.1f, 0.1f));
                 for (int index = 0; index < 8f * DGRSettings.ActualParticleMultiplier; ++index)
                     Level.Add(Spark.New(x + Rando.Float(-8f, 8f), y + Rando.Float(-4f, 4f), new Vec2(Rando.Float(-1f, 1f), Rando.Float(-1f, 1f))));
@@ -179,7 +178,7 @@ namespace DuckGame
             _prevRuined = _ruined;
             if (this.owner is Duck owner)
             {
-                if (isServerForObject && owner.inputProfile != null && !Recorderator.Playing)
+                if (isServerForObject && owner.inputProfile != null)
                 {
                     if (_ruined && Rando.Int(20) == 0)
                         _benderOffset += Rando.Float(-0.05f, 0.05f);
@@ -239,7 +238,6 @@ namespace DuckGame
                             }
                             if (noteSound != null)
                                 _prevSounds.Add(noteSound);
-                            SFX.DontSave = 1;
                             noteSound = SFX.Play(presets[preset] + "-" + (num1 < 10 ? "0" : "") + Change.ToString(num1), vol, -1f);
                             playPitch = notePitch;
                             prevNote = num1;
@@ -296,7 +294,6 @@ namespace DuckGame
             }
             if (preset != _prevPreset)
             {
-                SFX.DontSave = 1;
                 SFX.Play("click");
             }
             _prevPreset = preset;

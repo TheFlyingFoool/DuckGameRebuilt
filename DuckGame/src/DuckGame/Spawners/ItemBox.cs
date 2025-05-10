@@ -146,15 +146,6 @@ namespace DuckGame
 
         public virtual void UpdateContainedObject()
         {
-            if (Recorderator.Playing)
-            {
-                if (containedObject == null)
-                    return;
-                containedObject.visible = false;
-                containedObject.active = false;
-                containedObject.position = position;
-                return;
-            }
             if (!Network.isActive || !isServerForObject && loadingLevel == null || containedObject != null)
                 return;
             containedObject = GetSpawnItem();

@@ -18,8 +18,6 @@ namespace DuckGame
         public bool SpawnCannonUpdate;
         public int SkipIntratick;
         public float overrideLeniancy = -1;
-        public SomethingSomethingVessel currentVessel;
-        public bool shouldhavevessel = true;
         public bool shouldbegraphicculled = true;
         public bool currentlyDrawing;
         public bool shouldbeinupdateloop = true;
