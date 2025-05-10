@@ -37,7 +37,6 @@
             if (doWait)
                 return;
             _wait = 0f;
-            position = new Vec2(9999f, 9999f);
         }
 
         public override void Initialize()
@@ -46,6 +45,7 @@
 
         public override void Update()
         {
+            if (_wait > 0) _wait -= 0.2f;
             if (!_created)
                 _created = true;
             if (_sprite.frame > _smokeFrame && !_smoked)
@@ -73,10 +73,7 @@
 
         public override void Draw()
         {
-            if (_wait > 0)
-                _wait -= 0.2f;
-            else
-                base.Draw();
+            if (_wait <= 0) base.Draw();
         }
     }
 }
