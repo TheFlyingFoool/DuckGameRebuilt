@@ -206,7 +206,7 @@ namespace DuckGame
             optionsMenu.Add(new UIMenuItem("USABILITY", new UIMenuActionOpenMenu(optionsMenu, _lastCreatedAccessibilityMenu), backButton: true), true);
             optionsMenu.SetBackFunction(new UIMenuActionCloseMenuCallFunction(optionsMenu, new UIMenuActionCloseMenuCallFunction.Function(OptionsMenuClosed)));
             optionsMenu.Close();
-
+            
             return optionsMenu;
         }
 
