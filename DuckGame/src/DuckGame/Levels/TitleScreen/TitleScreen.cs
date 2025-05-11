@@ -171,29 +171,6 @@ namespace DuckGame
         {
             creditsRoll.Add(new List<string>(line));
         }
-        public void PauseMenuOpenLogic() //Jank-ish fix for issues improve later
-        {
-            if (!Options.menuOpen)
-            {
-                _mainPauseMenu.Close();
-                _optionsGroup.Open();
-                _optionsMenu.Open();
-                prevbackFunction = _optionsMenu.backFunction;
-                _optionsMenu.SetBackFunction(new UIMenuActionCloseMenuCallFunction(_optionsMenu, new UIMenuActionCloseMenuCallFunction.Function(OptionsSaveAndCloseDan)));
-                MonoMain.pauseMenu = _optionsGroup;
-            }
-        }
-        private void OptionsSaveAndCloseDan()
-        {
-            Options.Save();
-            Options.SaveLocalData();
-            _optionsMenu.SetBackFunction(prevbackFunction); //reset backfunction 
-            _optionsGroup.Close();
-            _mainPauseMenu.Open();
-
-            MonoMain.pauseMenu = _mainPauseMenu;
-
-        }
         public static bool Checked;
         public override void Initialize()
         {
@@ -902,8 +879,7 @@ namespace DuckGame
             component41.rightSection.Add(new UIImage("pauseIcons", UIAlign.Right), true);
             _mainPauseMenu.Add(component41, true);
             component41.leftSection.Add(new UIMenuItem("RESUME", new UIMenuActionCloseMenu(_pauseGroup)), true);
-            //component41.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_mainPauseMenu, Options.optionsMenu), UIAlign.Left), true);
-            component41.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionCallFunction(new UIMenuActionCallFunction.Function(PauseMenuOpenLogic)), UIAlign.Left), true);
+            component41.leftSection.Add(new UIMenuItem("OPTIONS", new UIMenuActionOpenMenu(_mainPauseMenu, Options.optionsMenu), UIAlign.Left), true);
             component41.leftSection.Add(new UIMenuItem("CREDITS", new UIMenuActionCloseMenuSetBoolean(_pauseGroup, _enterCreditsMenuBool), UIAlign.Left), true);
             component41.leftSection.Add(new UIText("", Color.White), true);
             component41.leftSection.Add(new UIMenuItem("|DGRED|QUIT", new UIMenuActionOpenMenu(_mainPauseMenu, _quitMenu)), true);

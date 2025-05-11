@@ -419,14 +419,9 @@ namespace DuckGame
                 dgrDescription = "Uses DGR's custom DuckShell language to run commands in the console, which provides more power-user and automation features"
             });
 
-            menu.Add(new UIMenuItemToggle("Convert commands", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ConvertModdedCommands)))
+            menu.Add(new UIMenuItemToggle("Random Weather", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.Weather)))
             {
-                dgrDescription = "Game tries to add CMD commands from mods to DuckShell\n(REQUIRES RESTART)"
-            });
-
-            menu.Add(new UIMenuItemToggle("Use <Enabled>", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.UseEnabledModsConfig)))
-            {
-                dgrDescription = "Uses <Enabled> from mod's config\n instead of <Disabled>, which allows to have presets"
+                dgrDescription = "Cosmetic weather for levels; rain, snow, storms"
             });
 
             menu.Add(new UIText(" ", Color.White));
@@ -469,6 +464,16 @@ namespace DuckGame
             menu.Add(new UIMenuItemToggle("No Force Start Menu", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HideFS)))
             {
                 dgrDescription = "Disables the force start button from the pause menu while hosting."
+            });
+
+            menu.Add(new UIMenuItemToggle("Convert commands", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ConvertModdedCommands)))
+            {
+                dgrDescription = "Game tries to add CMD commands from mods to DuckShell\n(REQUIRES RESTART)"
+            });
+
+            menu.Add(new UIMenuItemToggle("Use <Enabled>", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.UseEnabledModsConfig)))
+            {
+                dgrDescription = "Uses <Enabled> from mod's config\n instead of <Disabled>, which allows to have presets"
             });
 
             menu.Add(new UIMenuItemNumber("Total Player Num", field: new FieldBinding(typeof(DG), nameof(DG.ExtraPlayerCount), 1, 300, 1), step: 1)
@@ -540,11 +545,6 @@ namespace DuckGame
 
             menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
 
-            menu.Add(new UIMenuItemToggle("Random Weather", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.Weather)))
-            {
-                dgrDescription = "Cosmetic weather for levels; rain, snow, storms"
-            });
-
             menu.Add(new UIMenuItemSlider("Heat Wave Strength", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HeatWaveMultiplier), 0, 1, 0.1f), step: 0.1f)
             {
                 dgrDescription = "The strength that the lava heat wave shader has on the enviroment around it"
@@ -555,9 +555,9 @@ namespace DuckGame
                 dgrDescription = "Extra cosmetic particles added by DGR, embers from lamps, leafs from trees, etc"
             });
 
-            menu.Add(new UIMenuItemToggle("Enhanced Textures", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.EnhancedTextures)))
+            menu.Add(new UIMenuItemToggle("Enhanced Visuals", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.EnhancedTextures)))
             {
-                dgrDescription = "Adds more texture variance and details to funbeams teleporters and blown up blocks"
+                dgrDescription = "Adds more texture variance and visual details to; funbeams, teleporters, broken blocks, etc"
             });
 
             menu.Add(new UIMenuItemNumber("Particle Level", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ParticleMultiplier), 0, 4, 1), valStrings: new List<string>()
