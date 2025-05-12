@@ -94,6 +94,7 @@ namespace DuckGame
         {
             if (Steam.IsInitialized())
             {
+                lastLoaded = null;
                 int num = Steam.friends.OrderBy(u => _sortDictionary[(int)u.state]).Count();
                 if (num > _maxShow)
                     num = _maxShow;
@@ -108,6 +109,12 @@ namespace DuckGame
             _menuAction = act;
         }
 
+        public IOrderedEnumerable<User> loading;
+
+        public int ic;
+        public static bool needToReset;
+        public static List<UIInviteUser> lastLoaded;
+
         public override void Open()
         {
             HUD.CloseAllCorners();
@@ -116,12 +123,36 @@ namespace DuckGame
             _users.Clear();
             if (Steam.IsInitialized())
             {
-                IOrderedEnumerable<User> source1 = Steam.friends.OrderBy(u => _sortDictionary[(int)u.state])
-                                                                .ThenBy(u => u.name);
-                int num = source1.Count();
-                for (int index = 0; index < num; ++index)
+                if (lastLoaded == null || lastLoaded.Count == 0)
                 {
-                    User u = source1.ElementAt(index);
+                    IOrderedEnumerable<User> source1 = Steam.friends.OrderBy(u => _sortDictionary[(int)u.state])
+                                                                .ThenBy(u => u.name);
+                    loading = source1;
+                    ic = 0;
+                    int num = source1.Count();
+                }
+                else
+                {
+                    loading = null;
+                    _users = lastLoaded.ToList();
+                }
+            }
+            base.Open();
+        }
+
+        public override void Close()
+        {
+            HUD.CloseAllCorners();
+            base.Close();
+        }
+
+        public override void Update()
+        {
+            if (open)
+            {
+                if (loading != null && ic < loading.Count())
+                {
+                    User u = loading.ElementAt(ic);
                     string source2 = u.name;
                     if (source2.Length > 17)
                         source2 = source2.Substring(0, 16) + ".";
@@ -137,22 +168,16 @@ namespace DuckGame
                             inDuckGame = info.inCurrentGame,
                             inMyLobby = info.inLobby
                         });
+                    _users = _users.OrderBy(h => h, new CompareUsers()).ToList();
+                    ic++;
+
+                    if (ic == loading.Count())
+                    {
+                        lastLoaded = _users.ToList();
+                        needToReset = false;
+                    }
                 }
-                _users = _users.OrderBy(h => h, new CompareUsers()).ToList();
-            }
-            base.Open();
-        }
 
-        public override void Close()
-        {
-            HUD.CloseAllCorners();
-            base.Close();
-        }
-
-        public override void Update()
-        {
-            if (open)
-            {
                 if (Input.Pressed(Triggers.MenuUp) && _selection > 0)
                 {
                     --_selection;
