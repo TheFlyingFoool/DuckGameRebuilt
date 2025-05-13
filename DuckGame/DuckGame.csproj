@@ -553,7 +553,6 @@
     <Compile Include="AddedContent\NiK0\MathParser.cs" />
     <Compile Include="AddedContent\NiK0\ModDebug.cs" />
     <Compile Include="AddedContent\NiK0\NMClientOnlyContent.cs" />
-    <Compile Include="AddedContent\NiK0\RainbowConstant.cs" />
     <Compile Include="AddedContent\NiK0\RainParticel.cs" />
     <Compile Include="AddedContent\NiK0\WeaponTaper.cs" />
     <Compile Include="Recorderator\RecorderationSelector\FolderInfo.cs" />

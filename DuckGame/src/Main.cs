@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace DuckGame
@@ -109,6 +110,7 @@ namespace DuckGame
             VirtualTransition.Initialize();
             Unlockables.Initialize();
             UIInviteMenu.Initialize();
+
             LevelGenerator.Initialize();
             DuckFile.InitializeMojis();
             ResetMatchStuff();
@@ -188,11 +190,13 @@ namespace DuckGame
                 }
             }
             _font = new BitmapFont("biosFont", 8);
-            DiscordRichPresence.whenGameStarted = DateTime.UtcNow;
-            if (!DiscordRichPresence.noRPC) DiscordRichPresence.Initialize();
+            if (!DiscordRichPresence.noRPC)
+            {
+                DiscordRichPresence.whenGameStarted = DateTime.UtcNow;
+                DiscordRichPresence.Initialize();
+            }
             ModLoader.Start();
         }
-        public RainbowConstant rbc = new RainbowConstant();
         protected override void OnUpdate()
         {
 

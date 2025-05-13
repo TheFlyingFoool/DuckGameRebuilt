@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.Threading;
 using System.Linq;
 
 namespace DuckGame
@@ -50,8 +51,7 @@ namespace DuckGame
 
         public static void Initialize()
         {
-            if (!Steam.IsInitialized())
-                return;
+            if (!Steam.IsInitialized()) return;
             foreach (User friend in Steam.friends)
                 avatars[friend.id] = PrepareSprite(friend);
         }
@@ -109,10 +109,6 @@ namespace DuckGame
             _menuAction = act;
         }
 
-        public IOrderedEnumerable<User> loading;
-
-        public int ic;
-        public static bool needToReset;
         public static List<UIInviteUser> lastLoaded;
 
         public override void Open()
@@ -125,15 +121,38 @@ namespace DuckGame
             {
                 if (lastLoaded == null || lastLoaded.Count == 0)
                 {
-                    IOrderedEnumerable<User> source1 = Steam.friends.OrderBy(u => _sortDictionary[(int)u.state])
-                                                                .ThenBy(u => u.name);
-                    loading = source1;
-                    ic = 0;
-                    int num = source1.Count();
+                    Thread loadThread = new Thread(delegate ()
+                    {
+                        IOrderedEnumerable<User> source1 = Steam.friends.OrderBy(u => _sortDictionary[(int)u.state])
+                                                                    .ThenBy(u => u.name);
+                        int num = source1.Count();
+                        for (int index = 0; index < num; ++index)
+                        {
+                            User u = source1.ElementAt(index);
+                            string source2 = u.name;
+                            if (source2.Length > 17) source2 = source2.Substring(0, 16) + ".";
+                            UserInfo info = u.info;
+                            if (info.relationship == FriendRelationship.Friend)
+                            {
+                                _users.Add(new UIInviteUser()
+                                {
+                                    user = u,
+                                    sprite = GetAvatar(u),
+                                    state = info.state,
+                                    name = source2,
+                                    inGame = info.inGame,
+                                    inDuckGame = info.inCurrentGame,
+                                    inMyLobby = info.inLobby
+                                });
+                            }
+                        }
+                        lastLoaded = _users.ToList();
+                    });
+                    loadThread.SetApartmentState(ApartmentState.STA);
+                    loadThread.Start();
                 }
                 else
                 {
-                    loading = null;
                     _users = lastLoaded.ToList();
                 }
             }
@@ -150,34 +169,6 @@ namespace DuckGame
         {
             if (open)
             {
-                if (loading != null && ic < loading.Count())
-                {
-                    User u = loading.ElementAt(ic);
-                    string source2 = u.name;
-                    if (source2.Length > 17)
-                        source2 = source2.Substring(0, 16) + ".";
-                    UserInfo info = u.info;
-                    if (info.relationship == FriendRelationship.Friend)
-                        _users.Add(new UIInviteUser()
-                        {
-                            user = u,
-                            sprite = GetAvatar(u),
-                            state = info.state,
-                            name = source2,
-                            inGame = info.inGame,
-                            inDuckGame = info.inCurrentGame,
-                            inMyLobby = info.inLobby
-                        });
-                    _users = _users.OrderBy(h => h, new CompareUsers()).ToList();
-                    ic++;
-
-                    if (ic == loading.Count())
-                    {
-                        lastLoaded = _users.ToList();
-                        needToReset = false;
-                    }
-                }
-
                 if (Input.Pressed(Triggers.MenuUp) && _selection > 0)
                 {
                     --_selection;
