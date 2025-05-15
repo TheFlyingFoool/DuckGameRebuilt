@@ -144,6 +144,7 @@ namespace DuckGame
                                     inDuckGame = info.inCurrentGame,
                                     inMyLobby = info.inLobby
                                 });
+                                _users = _users.OrderBy(h => h, new CompareUsers()).ToList();
                             }
                         }
                         lastLoaded = _users.ToList();
