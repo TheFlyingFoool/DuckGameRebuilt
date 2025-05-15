@@ -1260,9 +1260,29 @@ namespace DuckGame
             
             UpdateAutoUpdaterProgress(6);
             
-            using ZipArchive archive = new(dgrZipStream);
-            archive.ExtractToDirectory(parentDirectoryPath);
-            archive.Dispose();
+            if (!IsLinuxD)
+            {
+                using ZipArchive archive = new(dgrZipStream);
+                archive.ExtractToDirectory(parentDirectoryPath);
+                archive.Dispose();
+            }
+            else
+            {
+                if (File.Exists("/usr/bin/unzip"))
+                {
+                    Process.Start("/usr/bin/unzip", "-o " + zipPath);
+                }
+                else if (File.Exists("/bin/unzip"))
+                {
+                    Process.Start("/bin/unzip", "-o " + zipPath);
+                }
+                else
+                {
+                    Console.WriteLine("\nunzip not found! Please install unzip or extract DuckGameRebuilt.zip yourself.");
+                    Process.GetCurrentProcess().Kill();
+                }
+                
+            }
 
             UpdateAutoUpdaterProgress(7);
 
