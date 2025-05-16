@@ -660,6 +660,24 @@ namespace DuckGame
                     }
                     Level nextLevel = GetNextLevel();
                     previousLevel = nextLevel.level;
+
+                    if (!Network.isActive && DGRSettings.SkipExcessRounds)
+                    {
+                        int leadingScore = Teams.all.Where(t => t.activeProfiles.Count > 0).Max(t => t.score);
+                        List<Team> leaders = Teams.all.Where(t => t.activeProfiles.Count > 0 && t.score == leadingScore).ToList();
+                        if (leaders.Count == 1)
+                        {
+                            Team leader = leaders[0];
+                            int difference = roundsBetweenIntermission - numMatchesPlayed;
+                            bool canBeCaught = Teams.all.Any(t => t != leader && t.activeProfiles.Count > 0 && t.score + difference >= leader.score);
+                            if (!canBeCaught)
+                            {
+                                Level.current = new RockScoreboard(nextLevel, ScoreBoardMode.ShowScores);
+                                _switchedLevel = true;
+                                return;
+                            }
+                        }
+                    }
                     if (!skippedLevel)
                     {
                         if (Teams.active.Count > 1)
@@ -728,7 +746,7 @@ namespace DuckGame
                                     if (_roundHadWinner)
                                     {
                                         showdown = false;
-                                        Level.current = new RockScoreboard(nextLevel, ScoreBoardMode.ShowWinner);
+                                        Level.current = new RockScoreboard(nextLevel, ScoreBoardMode.ShowScores);
                                         if (!_editorTestMode)
                                             ++Global.data.drawsPlayed.valueInt;
                                         if (Network.isActive)
