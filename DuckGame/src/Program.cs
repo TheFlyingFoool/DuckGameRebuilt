@@ -636,6 +636,11 @@ namespace DuckGame
                     case "-logLoading":
                         MonoMain.logLoading = true;
                         break;
+                    case "-tournament":
+                        DGRSettings.TournamentMode = true;
+                        DGRSettings.SkipXP = true;
+                        DGRSettings.SkipExcessRounds = true;
+                        break;
                     default:
                         if (args[index] == "-nolaunch")
                         {

@@ -281,7 +281,8 @@ namespace DuckGame
                 };
             }
         }
-
+        // Intentionally not saved for now - Tater
+        public static bool TournamentMode = false;
 
         [Marker.AutoConfig] public static bool FixBulletPositions = false;
 

@@ -713,6 +713,32 @@ namespace DuckGame
 
         public override void Initialize()
         {
+            if(DGRSettings.TournamentMode)
+            {
+                GetMatchSetting("normalmaps").value = 100;
+                GetMatchSetting("randommaps").value = 0;
+            }
+            if (DGRSettings.TournamentMode && Network.isActive)
+            {
+                GetOnlineSetting("normalmaps").value = 100;
+                GetOnlineSetting("randommaps").value = 0;
+            }
+            if (DGRSettings.TournamentMode)
+            {
+                string mapsPath = DuckFile.levelDirectory + "CB2025/"; // I don't fucking care -Tater
+                if (Directory.Exists(mapsPath))
+                {
+                    List<string> levelFiles = DuckFile.ReGetFiles(mapsPath, "*.lev");
+                    foreach (string levelFile in levelFiles)
+                    {
+                        if (!Editor.activatedLevels.Contains(levelFile))
+                        {
+                            Editor.activatedLevels.Add(levelFile);
+                        }
+                    }
+                }
+            }
+
             Program.main.IsFixedTimeStep = true;
             if (Editor.clientonlycontent)
             {
