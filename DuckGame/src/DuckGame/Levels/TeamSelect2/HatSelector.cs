@@ -329,7 +329,8 @@ namespace DuckGame
             {
                 if (_box.duck != null)
                 {
-                    if (isArcadeHatSelector) DGRSettings.arcadeHat = team.name;
+                    if (isArcadeHatSelector)
+                        DGRSettings.arcadeHat = team.name;
                     Hat equipment = _box.duck.GetEquipment(typeof(Hat)) as Hat;
                     Hat hat = new TeamHat(0f, 0f, team, _box.duck.profile);
                     Level.Add(hat);
@@ -362,6 +363,8 @@ namespace DuckGame
                     if (Network.isActive)
                         Send.Message(new NMUnequip(_box.duck, equipment), NetMessagePriority.ReliableOrdered);
                 }
+                if (isArcadeHatSelector)
+                    DGRSettings.arcadeHat = "";
             }
             if (_desiredTeamSelection <= DG.MaxPlayers - 1 || _box.duck == null)
                 return;
