@@ -417,6 +417,7 @@ namespace DuckGame
         [Marker.AutoConfig] public static bool HSDHorizontal = false;
         [Marker.AutoConfig] public static bool HSDRightToLeft = false;
         [Marker.AutoConfig] public static bool HSDClearNames = true;
+        [Marker.AutoConfig] public static bool HSDStandardizeNames = false;
         [Marker.AutoConfig] public static bool HSDShowScore = true;
         [Marker.AutoConfig] public static bool HSDShowColors = true;
         [Marker.AutoConfig] public static bool HSDShowRoundsLeft = false;

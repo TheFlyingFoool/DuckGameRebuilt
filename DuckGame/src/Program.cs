@@ -640,6 +640,22 @@ namespace DuckGame
                         DGRSettings.TournamentMode = true;
                         DGRSettings.SkipXP = true;
                         DGRSettings.SkipExcessRounds = true;
+
+                        DGRSettings.HSDSpacing = 5;
+                        DGRSettings.HSDXoffset = 2;
+                        DGRSettings.HSDYoffset = 2;
+                        DGRSettings.HSDOpacity = 100;
+                        DGRSettings.HSDFontScale = 50;
+                        DGRSettings.HSDSorting = 0;
+                        DGRSettings.HSDHorizontal = false;
+                        DGRSettings.HSDRightToLeft = false;
+                        DGRSettings.HSDClearNames = true;
+                        DGRSettings.HSDStandardizeNames = true;
+                        DGRSettings.HSDShowScore = true;
+                        DGRSettings.HSDShowColors = true;
+                        DGRSettings.HSDShowRoundsLeft = false;
+                        DGRSettings.HSDBlackOutline = true;
+                        DGRSettings.HSDStarForHighestScore = true;
                         break;
                     default:
                         if (args[index] == "-nolaunch")

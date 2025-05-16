@@ -675,9 +675,13 @@ namespace DuckGame
             {
                 dgrDescription = "Whether or not to display how many rounds are left until the intermission"
             });
-            menu.Add(new UIMenuItemToggle("Clear Name", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDClearNames)))
+            menu.Add(new UIMenuItemToggle("Clean Names", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDClearNames)))
             {
                 dgrDescription = "Removes color tags and emojis from names"
+            });
+            menu.Add(new UIMenuItemToggle("Standardize Names", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDStandardizeNames)))
+            {
+                dgrDescription = "Replaces user names with Player 1-8"
             });
             menu.Add(new UIMenuItemToggle("Show Score", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.HSDShowScore)))
             {

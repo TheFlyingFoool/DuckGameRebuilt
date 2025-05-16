@@ -628,16 +628,17 @@ namespace DuckGame
                 int i = 0;
                 float xs = 0;
                 float ys = 0;
-                Vec2 vAlign = DGRSettings.HSDHorizontal? new Vec2(DGRSettings.HSDRightToLeft?-spacing:spacing, 0): new Vec2(0, spacing);
+                Vec2 vAlign = DGRSettings.HSDHorizontal ? new Vec2(DGRSettings.HSDRightToLeft ? -spacing : spacing, 0) : new Vec2(0, spacing);
 
                 Vec2 generalOffset = new Vec2(DGRSettings.HSDXoffset * 4, DGRSettings.HSDYoffset * 4);
 
                 foreach (Profile p in profileList)
                 {
-                    string s = DGRSettings.HSDRightToLeft?
-                        ((p.team.score == t?.score?"@STARGOODY@":"") + (DGRSettings.HSDShowScore ? p.team.score + " " : "") + (DGRSettings.HSDClearNames ? Extensions.CleanFormatting(p.name) : p.name)):
-                        ((DGRSettings.HSDClearNames ? Extensions.CleanFormatting(p.name) : p.name) + (DGRSettings.HSDShowScore ? " " + p.team.score : "") + (p.team.score == t?.score ? "@STARGOODY@" : ""));
-                    Color c = DGRSettings.HSDShowColors?p.persona.colorUsable:Color.White;
+                    string playerName = DGRSettings.HSDStandardizeNames ? "Player" + (p.currentColor + 1) : (DGRSettings.HSDClearNames ? Extensions.CleanFormatting(p.name) : p.name);
+                    string s = DGRSettings.HSDRightToLeft ?
+                        ((p.team.score == t?.score ? "@STARGOODY@" : "") + (DGRSettings.HSDShowScore ? p.team.score + " " : "") + playerName) :
+                        (playerName + (DGRSettings.HSDShowScore ? " " + p.team.score : "") + (p.team.score == t?.score ? "@STARGOODY@" : ""));
+                    Color c = DGRSettings.HSDShowColors ? p.persona.colorUsable : Color.White;
 
                     if (DGRSettings.HSDRightToLeft)
                     {
@@ -656,9 +657,9 @@ namespace DuckGame
                 }
                 if (DGRSettings.HSDShowRoundsLeft)
                 {
-                    i+= 2;
+                    i += 2;
                     int num = GameMode.roundsBetweenIntermission - GameMode.numMatchesPlayed;
-                    string s = DGRSettings.HSDRightToLeft?(num.ToString() + " :rounds left") :("rounds left: " + num.ToString());
+                    string s = DGRSettings.HSDRightToLeft ? (num.ToString() + " :rounds left") : ("rounds left: " + num.ToString());
                     Color c = Color.White;
                     if (DGRSettings.HSDRightToLeft)
                     {
