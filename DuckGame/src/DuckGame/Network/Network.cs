@@ -202,7 +202,7 @@ namespace DuckGame
         }
 
         public static bool isActive => activeNetwork._networkActive || isFakeActive;
-        public static bool isFakeActive => (Level.current is DuckGameTestArea || (Level.current is GameLevel gv && gv._editorTestMode)) && DGRSettings.EditorOnlinePhysics;
+        public static bool isFakeActive => DGRSettings.EditorOnlinePhysics && (Level.current is DuckGameTestArea || (Level.current is GameLevel gv && gv._editorTestMode));
 
         public static bool connected => connections.Count > 0;
 

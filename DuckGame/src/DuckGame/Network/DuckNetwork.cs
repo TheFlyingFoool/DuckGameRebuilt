@@ -2051,7 +2051,7 @@ namespace DuckGame
         public static int cycle;
         public static void MidGameJoiningLogic()
         {
-            if (Network.isActive)
+            if (Network.isActive && !Network.isFakeActive)
             {
                 if (Network.isServer)
                 {
