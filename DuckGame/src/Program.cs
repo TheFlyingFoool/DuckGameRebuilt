@@ -1292,13 +1292,14 @@ namespace DuckGame
             }
             else
             {
+                Process unzipProcess = null;
                 if (File.Exists("/usr/bin/unzip"))
                 {
-                    Process.Start("/usr/bin/unzip", "-o " + zipPath);
+                    unzipProcess = Process.Start("/usr/bin/unzip", $"-o -d {parentDirectoryPath} {zipPath}");
                 }
                 else if (File.Exists("/bin/unzip"))
                 {
-                    Process.Start("/bin/unzip", "-o " + zipPath);
+                    unzipProcess = Process.Start("/bin/unzip", $"-o -d {parentDirectoryPath} {zipPath}");
                 }
                 else
                 {
@@ -1306,6 +1307,7 @@ namespace DuckGame
                     Process.GetCurrentProcess().Kill();
                 }
                 
+                unzipProcess?.WaitForExit();
             }
 
             UpdateAutoUpdaterProgress(7);
