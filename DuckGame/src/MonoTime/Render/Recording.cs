@@ -84,6 +84,8 @@ namespace DuckGame
 
         public virtual void NextFrame()
         {
+            if (!MonoMain.UpdateLerpState)
+                return;
             ++_frame;
             if (_frame >= kNumFrames)
             {

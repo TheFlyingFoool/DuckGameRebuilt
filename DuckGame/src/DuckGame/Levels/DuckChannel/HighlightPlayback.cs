@@ -96,8 +96,12 @@ namespace DuckGame
             _highlights[_currentHighlight].RenderFrame();
             if (_keepPaused > 0f || _highlights[_currentHighlight].finished)
                 return;
-            _highlights[_currentHighlight].UpdateFrame();
-            _highlights[_currentHighlight].IncrementFrame();
+
+            if (MonoMain.UpdateLerpState)
+            {
+                _highlights[_currentHighlight].UpdateFrame();
+                _highlights[_currentHighlight].IncrementFrame();
+            }
         }
 
         public override void AfterDrawLayers()
