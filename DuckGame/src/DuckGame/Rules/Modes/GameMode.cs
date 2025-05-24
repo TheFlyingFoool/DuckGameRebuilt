@@ -663,19 +663,34 @@ namespace DuckGame
 
                     if (!Network.isActive && DGRSettings.SkipExcessRounds)
                     {
-                        int leadingScore = Teams.all.Where(t => t.activeProfiles.Count > 0).Max(t => t.score);
-                        List<Team> leaders = Teams.all.Where(t => t.activeProfiles.Count > 0 && t.score == leadingScore).ToList();
-                        if (leaders.Count == 1)
+                        bool teamWon = false;
+                        int winsPerS = winsPerSet;
+                        int difference = roundsBetweenIntermission - numMatchesPlayed;
+                        int teamsStillInTheHunt = 0;
+                        foreach (Team team in Teams.all)
                         {
-                            Team leader = leaders[0];
-                            int difference = roundsBetweenIntermission - numMatchesPlayed;
-                            bool canBeCaught = Teams.all.Any(t => t != leader && t.activeProfiles.Count > 0 && t.score + difference >= leader.score);
-                            if (!canBeCaught)
+                            if (team.activeProfiles.Count > 0 && team.score >= winsPerS)
                             {
-                                Level.current = new RockScoreboard(nextLevel, ScoreBoardMode.ShowScores);
-                                _switchedLevel = true;
-                                return;
+                                teamWon = true;
+                                winsPerS = team.score;                               
                             }
+                        }
+                        if (teamWon)
+                        {
+                            foreach (Team team in Teams.all)
+                            {
+                                if (team.activeProfiles.Count > 0 &&
+                                    team.score + difference >= winsPerS)            
+                                {
+                                    teamsStillInTheHunt++;
+                                }
+                            }
+                        }
+                        if (teamsStillInTheHunt == 1)
+                        {
+                            Level.current = new RockScoreboard(nextLevel, ScoreBoardMode.ShowScores);
+                            _switchedLevel = true;
+                            return;                                                   
                         }
                     }
                     if (!skippedLevel)
