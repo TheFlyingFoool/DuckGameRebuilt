@@ -718,7 +718,7 @@ namespace DuckGame
                 GetMatchSetting("normalmaps").value = 100;
                 GetMatchSetting("randommaps").value = 0;
             }
-            if (DGRSettings.TournamentMode && Network.isActive && GetMatchSetting("normalmaps") != null)
+            if (DGRSettings.TournamentMode && Network.isActive && GetOnlineSetting("normalmaps") != null)
             {
                 GetOnlineSetting("normalmaps").value = 100;
                 GetOnlineSetting("randommaps").value = 0;
