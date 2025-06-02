@@ -80,7 +80,7 @@ namespace DuckGame
             if (_beginCalled)
                 throw new InvalidOperationException("Begin cannot be called again until End has been successfully called.");
             base.Begin();
-            if (Recorder.currentRecording != null)
+            if (Recorder.currentRecording != null && MonoMain.UpdateLerpState)
                 Recorder.currentRecording.StateChange(sortMode, blendState, samplerState, depthStencilState, rasterizerState, Layer.IsBasicLayerEffect(effect) ? Layer.basicLayerEffect : effect, transformMatrix, (Rectangle)GraphicsDevice.ScissorRectangle);
             _sortMode = sortMode;
             _blendState = blendState ?? BlendState.AlphaBlend;
@@ -495,7 +495,7 @@ namespace DuckGame
                         depth = depth
                     };
                 }
-                if (!Graphics.skipReplayRender && Recorder.currentRecording != null && Graphics.currentRenderTarget == null)
+                if (!Graphics.skipReplayRender && Recorder.currentRecording != null && Graphics.currentRenderTarget == null && MonoMain.UpdateLerpState)
                     Recorder.currentRecording.LogDraw(Content.SpriteAtlasTex2D.textureIndex, new Vec2(batchItem.vertexTL.Position.X, batchItem.vertexTL.Position.Y), new Vec2(batchItem.vertexBR.Position.X, batchItem.vertexBR.Position.Y), rotation, color, (short)_tempRect.x, (short)_tempRect.y, (short)(_tempRect.width * ((effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1f : 1f)), (short)(_tempRect.height * ((effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1f : 1f)), depth);
                 if (!autoFlush)
                     return;
@@ -572,7 +572,7 @@ namespace DuckGame
                     depth = depth
                 };
             }
-            if (!Graphics.skipReplayRender && Recorder.currentRecording != null && Graphics.currentRenderTarget == null)
+            if (!Graphics.skipReplayRender && Recorder.currentRecording != null && Graphics.currentRenderTarget == null && MonoMain.UpdateLerpState)
                 Recorder.currentRecording.LogDraw(texture.textureIndex, new Vec2(batchItem.vertexTL.Position.X, batchItem.vertexTL.Position.Y), new Vec2(batchItem.vertexBR.Position.X, batchItem.vertexBR.Position.Y), rotation, color, (short)_tempRect.x, (short)_tempRect.y, (short)(_tempRect.width * ((effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1f : 1f)), (short)(_tempRect.height * ((effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1f : 1f)), depth);
             if (!autoFlush)
                 return;
@@ -604,7 +604,8 @@ namespace DuckGame
             //}
               if (Recorder.currentRecording == null || Graphics.skipReplayRender)
                   return;
-              Recorder.currentRecording.LogDraw(item.MetaData.texture.textureIndex, new Vec2(item.vertexTL.Position.X, item.vertexTL.Position.Y), new Vec2(item.vertexBR.Position.X, item.vertexBR.Position.Y), item.MetaData.rotation, item.MetaData.color, (short)item.MetaData.tempRect.x, (short)item.MetaData.tempRect.y, (short)(item.MetaData.tempRect.width * ((item.MetaData.effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1f : 1f)), (short)(item.MetaData.tempRect.height * ((item.MetaData.effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1f : 1f)), item.MetaData.depth);
+              if(MonoMain.UpdateLerpState)
+                Recorder.currentRecording.LogDraw(item.MetaData.texture.textureIndex, new Vec2(item.vertexTL.Position.X, item.vertexTL.Position.Y), new Vec2(item.vertexBR.Position.X, item.vertexBR.Position.Y), item.MetaData.rotation, item.MetaData.color, (short)item.MetaData.tempRect.x, (short)item.MetaData.tempRect.y, (short)(item.MetaData.tempRect.width * ((item.MetaData.effect & SpriteEffects.FlipHorizontally) != SpriteEffects.None ? -1f : 1f)), (short)(item.MetaData.tempRect.height * ((item.MetaData.effect & SpriteEffects.FlipVertically) != SpriteEffects.None ? -1f : 1f)), item.MetaData.depth);
         }
 
         public void DrawRecorderItem(ref RecorderFrameItem frame)
