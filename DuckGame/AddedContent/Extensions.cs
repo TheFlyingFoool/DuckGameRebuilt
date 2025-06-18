@@ -783,18 +783,6 @@ namespace DuckGame
             Width = Graphics.GetFancyStringWidth(text, false, fontSize), Height = Graphics.GetStringHeight(text) * fontSize
         };
 
-        public static bool MultiPlayerTeamsExist()
-        {
-            HashSet<int> hashedTeams = new();
 
-            foreach (Profile prof in Profiles.activeNonSpectators)
-            {
-                int hashCode = prof.team.GetHashCode();
-                if (!hashedTeams.Add(hashCode)) // hashsets return false if adding duplicates
-                    return true;
-            }
-
-            return false;
-        }
     }
 }
