@@ -341,9 +341,9 @@ namespace DuckGame
                 //top right clip in space01 launches you out to the right without this here
                 //in vanilla duck game it just sets you off the wall and you can jump onto the roof
                 QuadTreeObjectList.LineLeniancy = 2;
-                _duck.ReturnItemToWorld(_part1);
-                _duck.ReturnItemToWorld(_part2);
-                _duck.ReturnItemToWorld(_part3);
+                _duck.LegacyReturnItemToWorld(_part1);
+                _duck.LegacyReturnItemToWorld(_part2);
+                _duck.LegacyReturnItemToWorld(_part3);
                 QuadTreeObjectList.LineLeniancy = 0;
             }
             _part3.depth = new Depth(_duck.depth.value);
@@ -426,7 +426,7 @@ namespace DuckGame
 
             //this code has been re-optimized yay :DD -NiK0
             QuadTreeObjectList.LineLeniancy = 2; //changed the leniancy a bit because i saw people getting the wrong clip -NiK0
-            _part2.ReturnItemToWorld(_duck);
+            _part2.OldReturnItemToWorld(_duck);
             QuadTreeObjectList.LineLeniancy = 0;
             if (Network.isActive)
             {
