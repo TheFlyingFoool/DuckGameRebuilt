@@ -67,7 +67,17 @@ namespace DuckGame
         }
         public override void SetLightBar(Color color)
         {
-            GamePad.SetLightBarEXT(index, (Microsoft.Xna.Framework.Color)color);
+            float gamma = 2.2f;
+            float r = (float)Math.Pow((color.r / 255f), gamma);
+            float g = (float)Math.Pow(color.g / 255f, gamma);
+            float b = (float)Math.Pow(color.b / 255f, gamma);
+            var correctedColor = new Microsoft.Xna.Framework.Color(
+                r,
+                g,
+                b,
+                (float)(color.a / 255f)
+            );
+            GamePad.SetLightBarEXT(index, correctedColor);
         }
 
         private void RumbleNow(float pLeft, float pRight)

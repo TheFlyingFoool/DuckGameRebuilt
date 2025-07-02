@@ -3227,6 +3227,12 @@ namespace DuckGame
                     pProfile.PersonaRequestResult(NextFree(pProfile, pProfile.persona));
                 else
                     pProfile.PersonaRequestResult(pPersona);
+                
+                if (pProfile.inputProfile != null && pProfile.inputProfile.lastActiveDevice != null && pProfile.persona != null)
+                {
+                    pProfile.inputProfile.lastActiveDevice.SetLightBar(pProfile.persona.colorUsable);
+                }
+                
                 if (!pSendMessages)
                     return;
                 Send.Message(new NMSetPersona(pProfile, pProfile.persona));

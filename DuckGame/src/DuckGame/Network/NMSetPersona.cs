@@ -22,6 +22,10 @@ namespace DuckGame
             if (profile == null || persona < 0 || persona >= Persona.alllist.Count)
                 return;
             profile.persona = Persona.alllist[persona];
+            if (profile.inputProfile != null && profile.inputProfile.lastActiveDevice != null && profile.persona != null)
+            {
+                profile.inputProfile.lastActiveDevice.SetLightBar(profile.persona.colorUsable);
+            }
         }
     }
 }
