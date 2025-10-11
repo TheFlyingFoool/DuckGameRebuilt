@@ -354,7 +354,7 @@ namespace DuckGame
 
             //Currently 'AutoBlock' and 'BlockGroup' have an overrideLeniancy of 22
             //It makes a clip in space05 behave like it does in vanilla, they used to have a leniancy of 0 so i hope stuff doesn't break
-            //-NiK0 26/4/2025
+            //-Lucky 26/4/2025
             if (thing.overrideLeniancy != -1) leniancy = thing.overrideLeniancy;
 
 

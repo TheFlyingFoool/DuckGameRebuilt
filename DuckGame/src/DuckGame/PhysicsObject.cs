@@ -508,10 +508,10 @@ namespace DuckGame
                 else 
                     DGList.Sort(_hitThings, YVspeedNegative);
 
-                //double top = this.top; WHATS THE POINT OF THIS?????????? -NiK0
+                //double top = this.top; WHATS THE POINT OF THIS?????????? -Lucky
                 //double bottom = this.bottom;
 
-                //Whats the point of this?? -NiK0
+                //Whats the point of this?? -Lucky
                 //if (this is Duck duck)
                 //{
                 //    int num6 = !duck.inputProfile.Down(Triggers.Down) ? 0 : (duck._jumpValid > 0 ? 1 : 0);

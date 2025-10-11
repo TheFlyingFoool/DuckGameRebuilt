@@ -903,7 +903,7 @@ namespace DuckGame
                     IEnumerable<TeamHat> ths = Level.current.things[typeof(TeamHat)].Cast<TeamHat>();
                     foreach (TeamHat th in ths)
                     {
-                        //might be a bit unoptimal to do this but im going with it anyways -NiK0
+                        //might be a bit unoptimal to do this but im going with it anyways -Lucky
                         if (files.Contains(th.team.customHatPath))
                         {
                             th.team = tths[th.team.customHatPath];

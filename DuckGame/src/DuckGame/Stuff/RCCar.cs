@@ -76,7 +76,7 @@ namespace DuckGame
                     pTaped.offDir = offDir;
                     //offDir *= -1;
                 }
-                pTaped.gun2.enablePhysics = false;//jank -NiK0
+                pTaped.gun2.enablePhysics = false;//jank -Lucky
                 enablePhysics = true;
                 pTaped.angle = 0;
             }

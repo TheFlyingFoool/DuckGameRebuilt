@@ -26,7 +26,7 @@ namespace DuckGame
             _editorName = "Wall Door";
             _canFlip = false;
 
-            //a lot of stuff is tied to the sprite animation so this shall never be graphic culled -NiK0
+            //a lot of stuff is tied to the sprite animation so this shall never be graphic culled -Lucky
             shouldbegraphicculled = false;
         }
 

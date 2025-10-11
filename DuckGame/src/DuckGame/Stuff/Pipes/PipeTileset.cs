@@ -371,7 +371,7 @@ namespace DuckGame
             IEnumerable<PhysicsObject> physicsObjects = null;
 
             //TODO, using the DGR collision method breaks some very specific interactions. maybe figure out a way to make this
-            //use the better code rather than old DG's code in the future? -NiK0
+            //use the better code rather than old DG's code in the future? -Lucky
             if (Down() != null) physicsObjects = Level.OldCheckRectAll<PhysicsObject>(topLeft + new Vec2(1f, -32f), bottomRight + new Vec2(-1f, 4f));
             else if (Up() != null) physicsObjects = Level.OldCheckRectAll<PhysicsObject>(topLeft + new Vec2(1f, -4f), bottomRight + new Vec2(-1f, 32f));
             else if (Left() != null) physicsObjects = Level.OldCheckRectAll<PhysicsObject>(topLeft + new Vec2(-4f, 3f), bottomRight + new Vec2(32f, -3f));

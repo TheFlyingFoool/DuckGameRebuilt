@@ -505,7 +505,7 @@ namespace DuckGame
                         //yes this will make it so on the replay flipped springs will be replaced with their 
                         //other spring counterpart but honestly i could not care less since the gameplay aint
                         //gonna be affected its just some internal dumb shit, maybe it is affected because
-                        //the collision can change a bit, also i think im going crazy -NiK0
+                        //the collision can change a bit, also i think im going crazy -Lucky
                         if (s.flipHorizontal) levBuffer.Write((byte)5);
                         else levBuffer.Write((byte)4);
                         break;
@@ -811,7 +811,7 @@ namespace DuckGame
 
 
 
-            //HAHHAHAHHAHAHHAHAHHAHAHAHHAHHAHAHAHHAHAHHAHAHHAHAHHAHAHAHHAHAHHAHAHHAHAHHAHAH -NIK0!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //HAHHAHAHHAHAHHAHAHHAHAHAHHAHHAHAHAHHAHAHHAHAHHAHAHHAHAHAHHAHAHHAHAHHAHAHHAHAH -Lucky!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             List<byte> bf = buffer.buffer.ToList();
             if (buffer.position + 13 < buffer.buffer.Count())
             {
@@ -890,7 +890,7 @@ namespace DuckGame
                                     }
                                 }
 
-                                //save metadata last -NiK0
+                                //save metadata last -Lucky
                                 // Second entry from bf2 with the name "metadata.rmt" -ChatGPT
                                 ZipArchiveEntry entry2 = archive.CreateEntry("metadata.rmt");
                                 using (Stream entryStream2 = entry2.Open())
@@ -905,7 +905,7 @@ namespace DuckGame
                     }
                     catch
                     {
-                        //this should never happen anyways, im just putting this here because it happens when debugging with multiple LAN instances -NiK0
+                        //this should never happen anyways, im just putting this here because it happens when debugging with multiple LAN instances -Lucky
                     }
                 }
                 //File.WriteAllBytes(path, bf.ToArray());

@@ -79,7 +79,7 @@ namespace DuckGame
             get => _destroyedReal;
             set
             {
-                //int num = value ? 1 : 0; ??? -NiK0
+                //int num = value ? 1 : 0; ??? -Lucky
                 _destroyedReal = value;
             }
         }

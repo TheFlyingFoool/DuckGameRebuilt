@@ -26,7 +26,7 @@ namespace DuckGame
                 for (int index = 0; index < 18; ++index)
                 {
                     float deg = index * 22.5f;
-                    //double num3 = Rando.Float(8f, 14f); what -NiK0
+                    //double num3 = Rando.Float(8f, 14f); what -Lucky
                     Level.Add(new QuadLaserBullet(c.x, c.y, new Vec2((float)Math.Cos(Maths.DegToRad(deg)), (float)-Math.Sin(Maths.DegToRad(deg)))));
                 }
                 Level.Remove(c);

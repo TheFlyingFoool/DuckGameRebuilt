@@ -68,7 +68,7 @@ namespace DuckGame
                 _sprite.frame = 2;
                 weight = 0.1f;
             }
-            else if (_pin) _sprite.frame = 0; //Potential fix for bananas having the incorrect frame sometimes? -NiK0
+            else if (_pin) _sprite.frame = 0; //Potential fix for bananas having the incorrect frame sometimes? -Lucky
             if (_fade)
             {
                 alpha -= 0.1f;

@@ -113,7 +113,7 @@ namespace DuckGame
         //    new UIMenuActionOpenMenu((UIComponent)this._editModMenu, (UIComponent)this._yesNoMenu).Activate();
         //}
         
-        //maybe later -NiK0
+        //maybe later -Lucky
         public static void DownloadRequiredMods()
         {
             string modList = "";
@@ -157,7 +157,7 @@ namespace DuckGame
                 string lobbyData = ConnectionError.joinLobby.GetLobbyData("mods");
                 if (lobbyData != null && lobbyData != "")
                 {
-                    lobbyData = lobbyData.Replace("|3132351890,0", ""); //dumb but works -NiK0
+                    lobbyData = lobbyData.Replace("|3132351890,0", ""); //dumb but works -Lucky
                     lobbyData = lobbyData.Replace("3132351890,0", "");
                     string str1 = lobbyData;
                     char[] chArray = new char[1] { '|' };
@@ -438,7 +438,7 @@ namespace DuckGame
 
                             if (loadedMods != null && loadedMods != "")
                             {
-                                    loadedMods = loadedMods.Replace("|3132351890,0", ""); //dumb but works -NiK0
+                                    loadedMods = loadedMods.Replace("|3132351890,0", ""); //dumb but works -Lucky
                                     loadedMods = loadedMods.Replace("3132351890,0", "");
                                 string[] mods = loadedMods.Split('|');
 
@@ -759,7 +759,7 @@ namespace DuckGame
 
         public static string PreviewPathForWorkshopItem(ulong id) => DuckFile.workshopDirectory + "/modPreview" + id.ToString() + "preview.png";
 
-        //no longer needed -NiK0
+        //no longer needed -Lucky
         /*public void nikostuff(ref string str2, WorkshopItem workshopItem1, LobbyData lobby)
         {
             //str2 = !lobby.hasFirstMod ? "|RED|Requires " + workshopItem1.data.name : "|DGGREEN|Requires " + workshopItem1.data.name;

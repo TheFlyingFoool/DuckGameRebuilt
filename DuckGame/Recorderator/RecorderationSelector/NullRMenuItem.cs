@@ -16,7 +16,7 @@ namespace DuckGame
         {
             Rectangle bounds = new Rectangle(position.x, position.y, Graphics._biosFont.height * FONT_SIZE, Graphics._biosFont.height * FONT_SIZE);
             //Graphics.DrawRect(bounds, selected ? Color.Magenta : Color.Purple, 1f);
-            //WHY MR BREAK -NiK0
+            //WHY MR BREAK -Lucky
             return bounds;
         }
 

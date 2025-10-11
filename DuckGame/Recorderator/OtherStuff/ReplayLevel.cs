@@ -527,7 +527,7 @@ namespace DuckGame
                         Graphics.fade = Lerp.Float(Graphics.fade, 0, 0.05f);
                         if (Graphics.fade <= 0)
                         {
-                            //vs told me to use whatever this ?? function is dont scream at me im not firebreak i swear -NiK0
+                            //vs told me to use whatever this ?? function is dont scream at me im not firebreak i swear -Lucky
                             current.Clear();
                             current = prev ?? new RecorderationSelector();
                             return;

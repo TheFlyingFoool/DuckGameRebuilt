@@ -28,7 +28,7 @@ namespace DuckGame
             thickness = 4f;
             weight = 7f;
             flammable = 0.3f;
-            friction = 1000; //dont move :^) -NiK0
+            friction = 1000; //dont move :^) -Lucky
             collideSounds.Add("rockHitGround2");
             _editorName = "Elevator";
             _editorIcon = new Sprite("elevatorIcon");

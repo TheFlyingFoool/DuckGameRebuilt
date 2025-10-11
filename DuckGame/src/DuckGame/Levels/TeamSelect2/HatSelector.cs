@@ -748,7 +748,7 @@ namespace DuckGame
                                 //this if check is here because if the host has Custom Hat Teams enabled and this player is currently in a custom hat team then
                                 //they'll instantly crash because GetTeamIndex() cant find the index of their currently wore hat as for that hat doesnt belong to them
                                 //but it has been forcefully set to them by the host so teams can happen
-                                //-NiK0
+                                //-Lucky
                                 if (_startingTeam.defaultTeam || (_startingTeam.activeProfiles.Count == 1 && _startingTeam.activeProfiles.Contains(_box.duck.profile)))
                                 {
                                     _desiredTeamSelection = (short)GetTeamIndex(_startingTeam);

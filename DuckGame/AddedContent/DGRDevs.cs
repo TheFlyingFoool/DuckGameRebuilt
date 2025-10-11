@@ -24,14 +24,14 @@ namespace DuckGame
             Info = "YupDanielThatsMe. One of the two lead developers, Dan did all the major optimizations, QOL, ported DGR from XNA to FNA, made the AutoUpdater, many many rewrites, made DGR run native on Linux, made the Sprite Atlas system, made the Graphics Culling system, optimized networking, made the mod recompiler for DGR, and has guided the DGR team through, he did a lot ok?"
         };
 
-        public static DGRebuiltDeveloper NiK0 = new()
+        public static DGRebuiltDeveloper Lucky = new()
         {
-            DisplayName = "NiK0",
+            DisplayName = "Lucky",
             Color = new Color("#00FFFF"),
             DevRole = DGRebuiltDeveloper.Role.LeadDeveloper,
-            DevItem = typeof(NiK0Gun),
+            DevItem = typeof(LuckyGun),
             SteamID = 76561198806685720,
-            Info = "NiK0. One of the two lead developers, NiK0 made a lot of QOL additions and fixed most DGR specific issues, he made almost every single DGR specific item and all the dev weapons, the VGM Music system, the ambient particle system, the weather system, the Heat Wave effect on lava, along with several optimizations to the code all around."
+            Info = "Lucky. One of the two lead developers, Lucky made a lot of QOL additions and fixed most DGR specific issues, he made almost every single DGR specific item and all the dev weapons, the VGM Music system, the ambient particle system, the weather system, the Heat Wave effect on lava, along with several optimizations to the code all around."
         };
 
         public static DGRebuiltDeveloper Firebreak = new()
@@ -157,7 +157,7 @@ namespace DuckGame
         {
             Collin,
             Dan,
-            NiK0,
+            Lucky,
             Firebreak,
             Othello7,
             Tater,
@@ -178,7 +178,7 @@ namespace DuckGame
         {
             Collin,
             Dan,
-            NiK0,
+            Lucky,
             Firebreak,
             Othello7,
             Tater,

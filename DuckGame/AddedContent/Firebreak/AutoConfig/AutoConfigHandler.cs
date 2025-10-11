@@ -22,7 +22,7 @@ namespace DuckGame
             //hi hello yes, DecidedPath must be the proper one, if we force it to use the new save
             //then for people who played pre 1.5 and have their save in "Documents" this will create
             //a new save in appdata and DuckFile will try and fail to transfer the savefile making
-            //it so your savefile seemingly gets deleted so be careful with this ok? okay thanks -NiK0
+            //it so your savefile seemingly gets deleted so be careful with this ok? okay thanks -Lucky
 
             // called DuckFile.init sooner so could just use DuckFile.saveDirectory instead -Dan
             
@@ -107,7 +107,7 @@ namespace DuckGame
             }
             catch (IOException ex)
             {
-                //screw you firebreak -NiK0
+                //screw you firebreak -Lucky
             }
         }
         

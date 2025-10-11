@@ -117,7 +117,7 @@ namespace DuckGame
 
                 if (load < 0.3f)
                 {
-                    if (owner != null || tech) //putting this here for funsies :) -NiK0
+                    if (owner != null || tech) //putting this here for funsies :) -Lucky
                     {
                         rotAngle = Lerp.Float(rotAngle, 0, 4 * mult);
                     }

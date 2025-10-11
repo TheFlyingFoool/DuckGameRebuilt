@@ -1445,7 +1445,7 @@ namespace DuckGame
                 _enterCredits = true;
                 _duck.immobilized = true;
             }
-            if (ModLoader._modsByWorkshopID.ContainsKey(945664816)) //DWEP -NiK0
+            if (ModLoader._modsByWorkshopID.ContainsKey(945664816)) //DWEP -Lucky
             {
                 if (secondTitlescreen)
                 {

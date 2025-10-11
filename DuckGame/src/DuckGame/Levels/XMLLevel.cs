@@ -49,7 +49,7 @@ namespace DuckGame
 
         public XMLLevel(string level)
         {
-            InitializeSeed(); //added these special codes here becuase crashes happen often around here -NiK0
+            InitializeSeed(); //added these special codes here becuase crashes happen often around here -Lucky
             Main.SpecialCode = ".client";
             if (level.EndsWith(".client"))
             {
@@ -323,7 +323,7 @@ namespace DuckGame
             if (!bareInitialize && !isPreview)
                 GhostManager.context.ResetGhostIndex(networkIndex);
             Thing.loadingLevel = _data;
-            //int version = _data.metaData.version; useless code -NiK0
+            //int version = _data.metaData.version; useless code -Lucky
             onlineEnabled = _data.metaData.online;
             bool flag = true;
             int num = 0;

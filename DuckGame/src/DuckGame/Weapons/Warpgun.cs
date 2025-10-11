@@ -263,7 +263,7 @@ namespace DuckGame
             int num6 = 6;
             if (Math.Abs((int)angleDegrees) < 70f && Math.Abs((int)angleDegrees) > 65f)
                 num6 = 12;
-            //if (Math.Abs((int)angleDegrees) > -70f) what -NiK0
+            //if (Math.Abs((int)angleDegrees) > -70f) what -Lucky
             //{
             //    double num7 = Math.Abs((int)angleDegrees);
             //}
@@ -288,7 +288,7 @@ namespace DuckGame
                 if (thing != null)
                 {
                     Vec2 vec2_6 = start - (hitPos + vec2_5 * -num6);
-                    //Vec2 vec2_7 = vec2_1 = hitPos + vec2_5 * -num6; what -NiK0
+                    //Vec2 vec2_7 = vec2_1 = hitPos + vec2_5 * -num6; what -Lucky
                     if (index == 1)
                         num3 = vec2_6.length;
                     if (vec2_6.length < num2)
@@ -381,7 +381,7 @@ namespace DuckGame
 
                             //if the owner impacts with saws then they'll die and drop their currently held gun then making null OnSoftImpacts
                             //which serve no purpose and will more likely crash the game, this is vanilla issue which im fixing since afaik
-                            //null OnSoftImpacts are just useless and will probably crash -NiK0
+                            //null OnSoftImpacts are just useless and will probably crash -Lucky
                             if (owner == null) break; 
                         }
                     }

@@ -413,7 +413,7 @@ namespace DuckGame
                             string lobbyData2 = _lobby.GetLobbyData("mods");
                             if (lobbyData2 != null && lobbyData2 != "")
                             {
-                                lobbyData2 = lobbyData2.Replace("|3132351890,0", ""); //dumb but works -NiK0
+                                lobbyData2 = lobbyData2.Replace("|3132351890,0", ""); //dumb but works -Lucky
                                 lobbyData2 = lobbyData2.Replace("3132351890,0", "");
                                 string str2 = lobbyData2;
                                 char[] chArray = new char[1] { '|' };

@@ -20,7 +20,7 @@ namespace DuckGame
                 else if (value > MenuItems.Count - 1)
                     value = MenuItems.Count - 1;
                 else if (value > 23)
-                    value = 23;//firebreak you idiot -NiK0
+                    value = 23;//firebreak you idiot -Lucky
 
                 if (value != _selectedItemIndex)
                 {

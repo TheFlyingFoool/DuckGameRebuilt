@@ -326,7 +326,7 @@ namespace DuckGame
                             Main.SpecialCode = "DubberSpeed Logic III";
                             if (Keyboard.Pressed(DubberKeys[i]) && i < c)
                             {
-                                //optimal -NiK0
+                                //optimal -Lucky
                                 Main.SpecialCode = "DubberSpeed Logic IV";
                                 if (dubberOffset == -1) dubberOffset = _currentMenuItemSelection.FindAll(ui => ui is UIConnectionInfo).Count;
                                 SFX.DontSave = 1;

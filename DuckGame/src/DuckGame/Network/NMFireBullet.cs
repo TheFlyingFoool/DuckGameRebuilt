@@ -29,7 +29,7 @@ namespace DuckGame
             Bullet bullet = typeInstance.GetBullet(position.x, position.y, (owner != null) ? owner.duck : null, -angle, null, range, false, false);
             bullet.isLocal = false;
             bullet.connection = connection;
-            if (DGRSettings.FixBulletPositions && bullet != null && connection != null && connection.manager != null) //extra null checks for safety -NiK0
+            if (DGRSettings.FixBulletPositions && bullet != null && connection != null && connection.manager != null) //extra null checks for safety -Lucky
             {
                 bullet.BonusUpdateTicks = Math.Min((int)(connection.manager.ping*60.0), DGRSettings.MaximumCorrectionTicks);
                 //DevConsole.Log(((int)(connection.manager.ping * 60.0)).ToString());

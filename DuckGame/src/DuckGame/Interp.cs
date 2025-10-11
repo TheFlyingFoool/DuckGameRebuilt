@@ -59,7 +59,7 @@ namespace DuckGame
         protected TimeSpan CurrentStateUpdate = TimeSpan.Zero;
         private bool RecentLerp
         {
-            //LMAO -NiK0
+            //LMAO -Lucky
             get => Recorderator.Playing ? true : (CurrentStateUpdate - PreviousStateUpdate).TotalMilliseconds < 30;
         }
 

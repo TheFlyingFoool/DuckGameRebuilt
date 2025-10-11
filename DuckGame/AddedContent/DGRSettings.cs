@@ -6,7 +6,7 @@ namespace DuckGame
 {
     public static class DGRSettings
     {
-        /*[Marker.AutoConfig]//TODO: this eventually -NiK0
+        /*[Marker.AutoConfig]//TODO: this eventually -Lucky
         public static List<byte> room1 = new List<byte>();
         [Marker.AutoConfig]
         public static List<byte> room2 = new List<byte>();
@@ -17,7 +17,7 @@ namespace DuckGame
         public static BitBuffer MatchsettingsPreset1 = new BitBuffer();
 
         [Marker.AutoConfig]
-        public static byte[] MatchSetSave1 //scuffed i know, fuck you -NiK0
+        public static byte[] MatchSetSave1 //scuffed i know, fuck you -Lucky
         {
             get
             {
@@ -33,7 +33,7 @@ namespace DuckGame
         public static BitBuffer MatchsettingsPreset2 = new BitBuffer();
 
         [Marker.AutoConfig]
-        public static byte[] MatchSetSave2 //scuffed i know, fuck you -NiK0
+        public static byte[] MatchSetSave2 //scuffed i know, fuck you -Lucky
         {
             get
             {
@@ -49,7 +49,7 @@ namespace DuckGame
         public static BitBuffer MatchsettingsPreset3 = new BitBuffer();
 
         [Marker.AutoConfig]
-        public static byte[] MatchSetSave3 //scuffed i know, fuck you -NiK0
+        public static byte[] MatchSetSave3 //scuffed i know, fuck you -Lucky
         {
             get
             {
@@ -72,7 +72,7 @@ namespace DuckGame
         //this is ran everytime TeamSelect2.cs is initialized or hats are reloaded
         //it should probably be moved to be ran somewhere else but thats the solution i came up with ages ago and works
         //issue is people with insane amount of hats might suffer lag spikes every time teamselect2.cs is loaded even though
-        //this code doens't need to be run everytime -NiK0
+        //this code doens't need to be run everytime -Lucky
         public static void InitializeFavoritedHats()
         {
             List<string> rel = new List<string>();
@@ -152,7 +152,7 @@ namespace DuckGame
         {
             MonoMain.NloadMessage = "Pre-Loading Custom Levels";
 
-            //steal code? we would never do such a thing -NiK0
+            //steal code? we would never do such a thing -Lucky
             try
             {
                 HUD.hide = true;
@@ -196,7 +196,7 @@ namespace DuckGame
         
         [Marker.AutoConfig] public static bool SequenceCrateRetexture = false;
 
-        public static bool LoaderMusic; //this is so you wont crash immediately when changing the setting, only gets set on startup -NiK0
+        public static bool LoaderMusic; //this is so you wont crash immediately when changing the setting, only gets set on startup -Lucky
 
         public static bool DGRItems = false;
 
@@ -263,7 +263,7 @@ namespace DuckGame
         [Marker.AutoConfig] public static int S_ParticleMultiplier = 3;
 
         //listen if you wanna make better code go for it i cant bother to personally
-        //-NiK0
+        //-Lucky
         public static float ActualParticleMultiplier
         {
             get
@@ -366,7 +366,7 @@ namespace DuckGame
             Program.main.UseDrawRateLimiter = !UseVSync && UncappedFPS && TargetFrameRate >= 60;
 
 
-            Program.main.TargetElapsedTime = TimeSpan.FromTicks(163934); // Default to 61ups -NiK0
+            Program.main.TargetElapsedTime = TimeSpan.FromTicks(163934); // Default to 61ups -Lucky
             MonoMain.graphics.ApplyChanges();
         }
 
@@ -406,7 +406,7 @@ namespace DuckGame
         public static bool UseEnabledModsConfig { get => _useEnabledModsConfig; set {
                 if (value == true) { ModLoader.GenerateEnabledXml(); }; _useEnabledModsConfig = value; } }
 
-        [Marker.AutoConfig] public static bool QOLScoreThingButWithoutScore { get; set; } //why. -NiK0
+        [Marker.AutoConfig] public static bool QOLScoreThingButWithoutScore { get; set; } //why. -Lucky
 
         [Marker.AutoConfig] public static int HSDSpacing = 5;
         [Marker.AutoConfig] public static int HSDXoffset = 2;

@@ -7,12 +7,12 @@ namespace DuckGame
     [EditorGroup("Guns|DEV")]
     [BaggedProperty("canSpawn", false)]
     #endif
-    public class NiK0Gun : Gun
+    public class LuckyGun : Gun
     {
         public float load;
         public StateBinding _loadBinding = new StateBinding("load");
         public SpriteMap sprite;
-        public NiK0Gun(Vec2 pos) : base(pos.x, pos.y)
+        public LuckyGun(Vec2 pos) : base(pos.x, pos.y)
         {
             ammo = 2;
             _ammoType = new ATFailedPellet();

@@ -718,7 +718,7 @@ namespace DuckGame
                 _networkState = GetCurrentState();
                 _manager = manager;
                 //THIS IS A MASSIVE HACK IT MIGHT CAUSE A TON OF ISSUES WHEN USING ONLINE PHYSICS OFFLINE BUT I DONT CARE ! ! !
-                //-NiK0
+                //-Lucky
                 if (!Network.isFakeActive)
                 {
                     if (ghostIndex != -1)

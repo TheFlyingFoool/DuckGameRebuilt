@@ -96,7 +96,7 @@ namespace DuckGame
             }
             //hi hello yes, pExplode is used by the positron shooter afaik and it would sometimes not destroy certain blocks
             //so i made it use the old collision if pExplode is true to fix this for now, this is probably an issue for dan to fix
-            //with his collision system so its gonna stay like this for now prolly -NiK0
+            //with his collision system so its gonna stay like this for now prolly -Lucky
             if (pExplode)
             {
                 int num = 0;

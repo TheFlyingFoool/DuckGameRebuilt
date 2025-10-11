@@ -35,7 +35,7 @@
             if (ammo > 0 && _wait == 0)
             {
                 ApplyKick();
-                //my grasp on the strings of reality here is fuzzy so im putting this "isServerForObject" here just to be safe -NiK0
+                //my grasp on the strings of reality here is fuzzy so im putting this "isServerForObject" here just to be safe -Lucky
                 if (isServerForObject)
                 {
                     Level.Add(new BFGBall(barrelPosition.x, barrelPosition.y) { travel = barrelVector * 7 });

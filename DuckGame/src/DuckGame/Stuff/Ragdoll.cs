@@ -422,10 +422,10 @@ namespace DuckGame
 
             //TODO: Re-optimize this code
             //the collision code here was reverted because pyramid upclipping worked differently than in normal DG because of
-            //collision buckets or something -NiK0
+            //collision buckets or something -Lucky
 
-            //this code has been re-optimized yay :DD -NiK0
-            QuadTreeObjectList.LineLeniancy = 2; //changed the leniancy a bit because i saw people getting the wrong clip -NiK0
+            //this code has been re-optimized yay :DD -Lucky
+            QuadTreeObjectList.LineLeniancy = 2; //changed the leniancy a bit because i saw people getting the wrong clip -Lucky
             _part2.OldReturnItemToWorld(_duck);
             QuadTreeObjectList.LineLeniancy = 0;
             if (Network.isActive)
@@ -711,7 +711,7 @@ namespace DuckGame
             if (tongueStuck != Vec2.Zero && captureDuck != null)
             {
                 Vec2 vec2_5 = tongueStuck + new Vec2(captureDuck.offDir * -4, -6f);
-                if (_part1.owner is Duck)//this looks really weird but its probably needed so keep it -NiK0
+                if (_part1.owner is Duck)//this looks really weird but its probably needed so keep it -Lucky
                 {
                     double num3 = SpecialSolve(_part3, _part1.owner as Duck, 16f);
                     double num4 = SpecialSolve(_part1, vec2_5, 16f);

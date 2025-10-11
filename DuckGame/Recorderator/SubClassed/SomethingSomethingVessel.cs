@@ -73,7 +73,7 @@ namespace DuckGame
         public string destroyedReason = "NONE";
         public static string somethingCrash;
 
-        //this is for backwards compatability stuff -NiK0
+        //this is for backwards compatability stuff -Lucky
 
         //stuff with higher IndexPriority gets indexed later
         //theres like 50ish items at the time of writing this with IndxP 0 so if an item with IndxP 1 appears it'll

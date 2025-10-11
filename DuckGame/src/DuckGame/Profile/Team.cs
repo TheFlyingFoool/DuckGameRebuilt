@@ -897,7 +897,7 @@ namespace DuckGame
             public MDInt CapeLength = new MDInt
             {
                 range = 24,
-                value = -1, //its -1 by default because dg automatically assigns a cape length -NiK0
+                value = -1, //its -1 by default because dg automatically assigns a cape length -Lucky
                 allowNegative = false
             };
 

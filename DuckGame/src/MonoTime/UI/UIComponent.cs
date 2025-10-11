@@ -241,7 +241,7 @@ namespace DuckGame
                     position.y = Lerp.FloatSmooth(position.y, to, 0.2f, 1.05f);
                 bool flag = position.y != to;
                 //stuff might look weird but i have to introduce a 1 frame delay cuz otherwise the open menu input can go through
-                //multiple menus and do bad stuff -NiK0
+                //multiple menus and do bad stuff -Lucky
                 if (DGRSettings.ReducedMovement || reducedMovement) 
                 {
                     if (position.y == to) animating = false;

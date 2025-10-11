@@ -151,7 +151,7 @@ namespace DuckGame
             return vec2;
         }
 
-        public bool forceAction;//this is for recorderator -NiK0
+        public bool forceAction;//this is for recorderator -Lucky
         public override bool action => forceAction || ((_owner == null || _owner.owner == this || _owner is Duck && !(_owner as Duck).Held(this, true) ? 0 : (_owner.action ? 1 : 0)) != 0 || triggerAction);
 
         public Duck equippedDuck => _equippedDuck;

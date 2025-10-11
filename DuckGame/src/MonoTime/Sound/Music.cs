@@ -156,7 +156,7 @@ namespace DuckGame
                 {
                     str1 = stringList1[Rando.Int(stringList1.Count - 1)];
 
-                    //the "f_" is the marker for Firch's songs -NiK0
+                    //the "f_" is the marker for Firch's songs -Lucky
                     if ((str1 == ignore || (str1.Contains("f_") && !DGRSettings.ExtraMusic)) && stringList1.Count > 1)
                     {
                         //DevConsole.DebugLog("|RED|" + str1);
@@ -197,7 +197,7 @@ namespace DuckGame
         public static void Play(string music, bool looping = true, float crossFadeTime = 0f)
         {
             if (!DGRSettings.LoaderMusic) return;
-            //not great code also welcome to my hell for .vgz music loading -NiK0
+            //not great code also welcome to my hell for .vgz music loading -Lucky
             if (File.Exists("./Content/Audio/Music/InGame/" + music + ".vgz"))
             {
                 if (!LoadVGM("./Content/Audio/Music/InGame/" + music + ".vgz"))

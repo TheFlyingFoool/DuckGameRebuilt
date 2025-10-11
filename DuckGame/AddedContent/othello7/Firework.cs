@@ -1,7 +1,7 @@
 ﻿using System;
 namespace DuckGame
 {
-    //most of the comments here were made by othello7 im just here to fix stuff up and improve upon it -NiK0
+    //most of the comments here were made by othello7 im just here to fix stuff up and improve upon it -Lucky
     public class Firework : Thing
     {
         private Color _color; // watch?v=FZFZl0ZaFSU
@@ -104,7 +104,7 @@ namespace DuckGame
                             }
                         }
 
-                        // //i do not care. -NiK0 // I DO -firebreak // WHAT THE FUCK MR BREAK -NiK0
+                        // //i do not care. -Lucky // I DO -firebreak // WHAT THE FUCK MR BREAK -Lucky
                         // float tripleRadius = 3 * singleRadius;
                         // float doubleRadius = 2 * singleRadius;
                         //
@@ -134,7 +134,7 @@ namespace DuckGame
 
                         for (int l = 0; l < 12; l++)
                         { //add all the different FireworkCharms evenly spaced (magic)
-                            //othello for the love of god use fucking "for" statements not "while" -NiK0
+                            //othello for the love of god use fucking "for" statements not "while" -Lucky
                             float flyangle = (float)l / 12 * 6.28f + i;
                             Level.Add(new FireworkCharm(x, y, _color, flyangle, radius + Rando.Float(-0.05f, 0.1f)));
                         }

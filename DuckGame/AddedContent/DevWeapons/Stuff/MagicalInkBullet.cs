@@ -1,6 +1,6 @@
 namespace DuckGame
 {
-    [ClientOnly] //idk if this needs to be clientonly or not im just makin sure -NiK0
+    [ClientOnly] //idk if this needs to be clientonly or not im just makin sure -Lucky
     public class MagicalInkBullet : Bullet
     {
         public MagicalInkBullet(

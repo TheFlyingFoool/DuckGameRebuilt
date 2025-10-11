@@ -1233,7 +1233,7 @@ namespace DuckGame
             }
             bool open = _core.open;
 
-            //jank workaround -NiK0
+            //jank workaround -Lucky
 
             _core.open = false;
             bool pressedTrigger = Input.Pressed(Triggers.DevConsoleTrigger);

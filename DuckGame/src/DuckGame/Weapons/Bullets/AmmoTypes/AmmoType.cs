@@ -6,7 +6,7 @@ namespace DuckGame
 {
     public abstract class AmmoType
     {
-        public byte forcedIndex; //recorderator jank ignore it -NiK0 its just a terrible solution to a terrible problem
+        public byte forcedIndex; //recorderator jank ignore it -Lucky its just a terrible solution to a terrible problem
         public float accuracy;
         public float range;
         public float rangeVariation;

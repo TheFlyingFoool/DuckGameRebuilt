@@ -1200,7 +1200,7 @@ namespace DuckGame
         {
             //if we dont do this the player1 duck will get permastuck until a restart when using online physics offline
             //so we just automatically force the game to restart the editor, this might cause a softlock but idc
-            //-NiK0
+            //-Lucky
             if (needInputRefresh)
             {
                 needInputRefresh = false;

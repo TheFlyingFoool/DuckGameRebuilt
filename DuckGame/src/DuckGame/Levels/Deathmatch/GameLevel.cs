@@ -268,7 +268,7 @@ namespace DuckGame
                         }
                         else if (First<CityTileset>() != null)
                         {
-                            if (Rando.Int(15000) == 0) //ACIDD GRAHHH -NiK0
+                            if (Rando.Int(15000) == 0) //ACIDD GRAHHH -Lucky
                             {
                                 acidTimer = Rando.Int(1200, 3000);
                             }
@@ -375,7 +375,7 @@ namespace DuckGame
         public bool unrain;
         public int acidTimer = -1;
         //DGR was made on the 3rd of august, if weather is enabled and its currently the date all weather will be replaced by
-        //confetti falling from the sky -NiK0
+        //confetti falling from the sky -Lucky
         public bool DGRBirthday;
 
         public int toSendDelay;
@@ -501,7 +501,7 @@ namespace DuckGame
                 }
 
                 //ignore this mess im just quickly assembling this if you wanna make it better go ahead
-                //-NiK0
+                //-Lucky
                 if (Rando.Int(lightningRNG) == 0)
                 {
                     rainDarken = 1.2f;

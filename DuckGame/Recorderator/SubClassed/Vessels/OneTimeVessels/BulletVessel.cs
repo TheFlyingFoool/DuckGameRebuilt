@@ -59,7 +59,7 @@ namespace DuckGame
             Vec2 v = b.ReadVec2();
             byte ammotypeIndex = b.ReadByte();
             AmmoType at;
-            if (ammotypeIndex > 240) //AHHHHHHHHH -nIk0
+            if (ammotypeIndex > 240) //AHHHHHHHHH -Lucky
             {
                 switch (ammotypeIndex)
                 {

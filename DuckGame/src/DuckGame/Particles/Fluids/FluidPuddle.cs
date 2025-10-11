@@ -252,7 +252,7 @@ namespace DuckGame
             }
             if (DGRSettings.AmbientParticles)
             {
-                //1 ember particle per frame if 1000 (63 blocks) wide -NiK0
+                //1 ember particle per frame if 1000 (63 blocks) wide -Lucky
                 if (data.heat > 0)
                 {
                     timer += 0.001f * collisionSize.x * DGRSettings.ActualParticleMultiplier * data.heat;

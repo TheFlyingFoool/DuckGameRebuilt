@@ -64,7 +64,7 @@ namespace DuckGame
                 //Anticrash measure, since damagemultiplier is synced you can make it an insanely high number to spawn infinite particles on someone elses side
                 //this still doesn't completely solve the problem but its a good enough bandaid since the particles will remove themselves from the cap, making it
                 //only a lag exploit rather than a softlock/crash like it is in base dg
-                //-NiK0
+                //-Lucky
             }
             SFX.Play("glassHit", 0.5f);
             if (isServerForObject && bullet.isLocal)

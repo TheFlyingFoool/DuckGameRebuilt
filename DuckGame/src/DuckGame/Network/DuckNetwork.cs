@@ -2096,7 +2096,7 @@ namespace DuckGame
                                 // Network.activeNetwork.core.lobby.type = SteamLobbyType.Private;
                                 //if (ShowGameInBrowser)
                                 //{
-                                //set this to true for auhsduhasd -NiK0
+                                //set this to true for auhsduhasd -Lucky
                                 Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
                                 Network.activeNetwork.core.lobby.SetLobbyData("name", "|PINK|[MIDGAME] |PREV|" + Steam.user.name + "'s Lobby");
                                 /*}
@@ -2817,7 +2817,7 @@ namespace DuckGame
                             if (nmRequestJoin.names == null || nmRequestJoin.names.Count == 0)
                                 return new NMErrorEmptyJoinMessage();
                             DevConsole.Log(DCSection.DuckNet, "Join attempt from " + nmRequestJoin.names[0]);
-                            if (DG.FiftyPlayerMode && !nmRequestJoin.isRebuiltUser) //this filters out non rebuilt users trying to join somehow when 50p mode is enabled -NiK0
+                            if (DG.FiftyPlayerMode && !nmRequestJoin.isRebuiltUser) //this filters out non rebuilt users trying to join somehow when 50p mode is enabled -Lucky
                             {
                                 DevConsole.Log(DCSection.DuckNet, "@error " + nmRequestJoin.names[0] + " could not join, not a rebuilt user.@error");
                                 return new NMVersionMismatch(NMVersionMismatch.Type.Error, Program.CURRENT_VERSION_ID + "REBUILT");
@@ -3525,7 +3525,7 @@ namespace DuckGame
             //this includes the DuckNetwork.cs Draw function which draws the chat, usually this function draws outside and onto the black bars
             //if they're present but because it gets bundled in the render target its all drawn inside them making chat be squished
             //this fix just stretches the chat vertically so it looks normally but doesn't fix the underlying issue 
-            //maybe improve it later? this works for now though -NiK0
+            //maybe improve it later? this works for now though -Lucky
             float ratioFixMult = Level.current is RockScoreboard ? (1 / (Resolution.current.aspect / 1.777777778f))  : 1;
 
             if (_core._chatFont is RasterFont) _core._chatFont.scale = new Vec2(0.5f);

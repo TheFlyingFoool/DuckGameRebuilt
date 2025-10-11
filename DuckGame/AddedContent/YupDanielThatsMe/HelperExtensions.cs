@@ -11,7 +11,6 @@ namespace DuckGame
     {
         public static unsafe int FixedGetHashCode(this string str)
         {
-
             fixed (char* ptr = str)
             {
                 int num = 352654597;

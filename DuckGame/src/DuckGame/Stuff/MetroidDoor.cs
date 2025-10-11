@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace DuckGame
 {
-    //this probably shoudln't be visible on the editor lol -NiK0
+    //this probably shoudln't be visible on the editor lol -Lucky
     //[EditorGroup("Stuff|Doors", EditorItemType.Debug)]
     public class MetroidDoor : VerticalDoor
     {

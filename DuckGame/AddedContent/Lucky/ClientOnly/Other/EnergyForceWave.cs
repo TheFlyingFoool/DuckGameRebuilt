@@ -26,7 +26,7 @@ namespace DuckGame
           Duck own)
           : base(xpos, ypos)
         {
-            shouldbegraphicculled = false; //theres a glitch that makes these invisible adding this just incase? -NiK0
+            shouldbegraphicculled = false; //theres a glitch that makes these invisible adding this just incase? -Lucky
             offDir = (sbyte)dir;
             graphic = new Sprite("energyHammerWave");
             center = new Vec2(graphic.w, graphic.h);

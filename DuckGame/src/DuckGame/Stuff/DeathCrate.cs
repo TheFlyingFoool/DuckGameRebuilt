@@ -66,7 +66,7 @@ namespace DuckGame
             //this is here because the deathcrate timer is tied to the sprite animation and sprite animations
             //are executed in the draw cycle, so if the deathcrate is activated and goes offscreen it wont do draw calls
             //making the sprite animation freeze resulting in the deathcrate never exploding until being unculled
-            //which is fucking idiotic -NiK0
+            //which is fucking idiotic -Lucky
             shouldbegraphicculled = false;
         }
 

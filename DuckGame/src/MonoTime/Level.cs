@@ -990,7 +990,7 @@ namespace DuckGame
 #if DEBUG
                     if (!Network.isActive)
                     {
-                        Graphics.DrawString("this stuff only shows in debug builds and offline -NiK0", new Vec2(0, 0), Color.White, 1, null, 2);
+                        Graphics.DrawString("this stuff only shows in debug builds and offline -Lucky", new Vec2(0, 0), Color.White, 1, null, 2);
                         Graphics.DrawString(Resolution.size.ToString(), new Vec2(0, 16), Color.White, 1, null, 2);
                         Graphics.DrawString(Resolution.current.dimensions.ToString(), new Vec2(0, 32), Color.White, 1, null, 2);
                         if (Graphics._screenViewport != null) Graphics.DrawString(Graphics._screenViewport.Value.Bounds.ToString(), new Vec2(0, 48), Color.White, 1, null, 2);
@@ -1027,7 +1027,7 @@ namespace DuckGame
         {
             if (l != Layer.HUD || !_centeredView)
                 return;
-            float num = (float)(Resolution.size.x * Graphics.aspect - Resolution.size.x * (9f / 16f)); //keep the "f" in these otherwise the math wont work out properly -NiK0
+            float num = (float)(Resolution.size.x * Graphics.aspect - Resolution.size.x * (9f / 16f)); //keep the "f" in these otherwise the math wont work out properly -Lucky
             if (num <= 0)
                 return;
             Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
@@ -1709,7 +1709,7 @@ namespace DuckGame
             }
             return outList1;//nextCollisionList.AsEnumerable<object>().Cast<T>();
         }
-        public IEnumerable<T> CollisionCircleAllOld<T>(Vec2 p1, float radius) //old //brought it back to fix collision issue with the postitron shooter -NiK0
+        public IEnumerable<T> CollisionCircleAllOld<T>(Vec2 p1, float radius) //old //brought it back to fix collision issue with the postitron shooter -Lucky
         {
 
             List<object> nextCollisionList = GetNextCollisionList();
@@ -2202,7 +2202,7 @@ namespace DuckGame
         {
             //TODO: Re-optimize this code, this is currently DG's collision code because the code that uses the Bucket system makes certain bullet collisions
             //work differently from vanilla, this is unoptimal because as with normal DG it checks every thing in the entire map and not just a sector like
-            //what we do with buckets so if someone can figure out a way to make it use buckets and work in vanilla go for it -NiK0
+            //what we do with buckets so if someone can figure out a way to make it use buckets and work in vanilla go for it -Lucky
             /*foreach (Thing thing in things.CollisionPointAll(point, typeof(MaterialThing)))
             {
                 if (!thing.removeFromLevel && Collision.Point(point, thing))

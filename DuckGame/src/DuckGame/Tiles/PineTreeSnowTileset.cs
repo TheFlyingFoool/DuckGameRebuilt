@@ -64,11 +64,11 @@
                 snowWait -= 0.01f;
                 if (snowWait <= 0)
                 {
-                    //bad code lol but idc as of now -NiK0
+                    //bad code lol but idc as of now -Lucky
 
-                    //old bad code was changed for a better solution -NiK0 again
+                    //old bad code was changed for a better solution -Lucky again
 
-                    //the new code was also wrong -NiK0 yet again
+                    //the new code was also wrong -Lucky yet again
                     snowWait = Rando.Float(2f, 3f) / DGRSettings.ActualParticleMultiplier;
                     if (Rando.Float(1f) > 0.92f) Level.Add(new SnowFallParticle(x + Rando.Float(-4f, 4f), y + Rando.Float(-4f, 4f), new Vec2(0f, 0f)));
                 }

@@ -1840,7 +1840,7 @@ namespace DuckGame
                 num5 = DuckNetwork.GetLevel(_currentLevel).xpRequired;
 
             //keep these casts the same or else the math goes south and returns only 0
-            //-NiK0
+            //-Lucky
             int num6 = (int)Math.Round((double)(xpRequired1 * (_xpValue / (float)xpRequired1)));
             int xpRequired2 = DuckNetwork.GetLevel(9999).xpRequired;
             if (num6 > xpRequired2)

@@ -131,7 +131,7 @@
                 Graphics.Draw(_projector, x, y - 8f, -1);
             float num = (float)(_useWave ? _projectionWave : _projectionWave2);
 
-            //weird workaround so you cannot tape invis stuff because duct tape can still tape non active and non visible shit for some reason -NiK0
+            //weird workaround so you cannot tape invis stuff because duct tape can still tape non active and non visible shit for some reason -Lucky
             if (leftStore != null) leftStore.tapeable = false;
             if (rightStore != null) rightStore.tapeable = false;
 

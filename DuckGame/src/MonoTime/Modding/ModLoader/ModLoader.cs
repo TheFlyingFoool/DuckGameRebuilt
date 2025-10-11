@@ -164,7 +164,7 @@ namespace DuckGame
                 try 
                 //hi hello yes, this is a bandaid fix because reskin mods crash here for some reason
                 //as far as i know this is firebreak stuff and in testing everything seemed fine so /shrug/
-                //if any problems come up then oops -NiK0
+                //if any problems come up then oops -Lucky
                 {
                     MarkerAttribute.Initialize(mod.configuration.assembly);
                 }

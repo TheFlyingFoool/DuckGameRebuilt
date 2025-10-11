@@ -728,7 +728,7 @@ namespace DuckGame
                     }
                     if (_validityTest && _watch != null)
                     {
-                        //long elapsedMilliseconds = _watch.ElapsedMilliseconds; what -NiK0
+                        //long elapsedMilliseconds = _watch.ElapsedMilliseconds; what -Lucky
                         if (frames / (_watch.ElapsedMilliseconds / 1000) < 30)
                         {
                             DeathmatchTestDialogue.success = false;

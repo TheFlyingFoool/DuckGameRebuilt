@@ -63,7 +63,7 @@ namespace DuckGame
 
             if (skipAngles == 0 || exFrames == 0) addVal("angledeg", BitCrusher.FloatToUShort(t.angleDegrees % 360 + 360, 720));
             //if a class inherits this, solid ruined enablePhysics and destroyed arent truly necessary so infoed_h can be removed and replaced with other relevant data
-            //im just adding a few bools here to fill the bitarray and they might make some stuff work better idrk -NiK0
+            //im just adding a few bools here to fill the bitarray and they might make some stuff work better idrk -Lucky
             addVal("infoed_h", BitCrusher.BitArrayToByte(br));
             //bArray[7] = h.offDir > 0;
         }

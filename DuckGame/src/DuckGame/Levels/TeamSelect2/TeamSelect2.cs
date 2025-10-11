@@ -102,7 +102,7 @@ namespace DuckGame
         private float _waitToShow = 1f;
         private static bool _showedPS4Warning = false;
         private float _afkTimeout;
-        //keep this its important although it may not seem like it and may never be used -NiK0
+        //keep this its important although it may not seem like it and may never be used -Lucky
         private static bool _showedOnlineBumper = false; 
         private float _timeoutFade;
         private float _topScroll;
@@ -1294,7 +1294,7 @@ namespace DuckGame
             catch { }
             return false;
         }
-        //yes this logic is ran in draw calls which is inherently bad but i do not care anymore -NiK0
+        //yes this logic is ran in draw calls which is inherently bad but i do not care anymore -Lucky
         public void MatchsettingsPresetLogic()
         {
             BitBuffer bf = new BitBuffer();
@@ -1338,7 +1338,7 @@ namespace DuckGame
                     if (varWinsPerSet == 0)
                     {
                         DefaultSettings();
-                        return; //anti match setting destruction system -NiK0
+                        return; //anti match setting destruction system -Lucky
                     }
                     GetMatchSetting("requiredwins").value = varWinsPerSet;
                     int varRoundsPerIntermission = bf.ReadByte();
