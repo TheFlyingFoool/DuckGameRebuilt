@@ -565,8 +565,6 @@ namespace DuckGame
 
         public Vec2[] GetIdForLine(Vec2 p1, Vec2 p2)
         {
-            //Vec2[] Chunk = new Vec2[0];
-            List<Vec2> Chunks = new List<Vec2>();
             int y0 = (int)((p2.y + offset) / cellsize);
             int y1 = (int)((p1.y + offset) / cellsize);
             int x0 = (int)((p2.x + offset) / cellsize);
@@ -582,41 +580,19 @@ namespace DuckGame
                 left -= LineLeniancy;
                 right += LineLeniancy;
             }
-            foreach (Vec2 Bucket in Buckets.Keys)
+
+
+            Vec2[] Chunks = new Vec2[(right - left + 1) * (bottom - top + 1)];
+            int N = -1;
+            for (int x = left; x <= right; x++)
             {
-                if (left <= Bucket.x && right >= Bucket.x && top <= Bucket.y && bottom >= Bucket.y )
+                for (int y = top; y <= bottom; y++)
                 {
-                    Chunks.Add(Bucket);
+                    N += 1;
+                    Chunks[N] = new Vec2(x, y);
                 }
             }
-            return Chunks.ToArray();
-            //int y1 = (int)((p1.y + offset) / cellsize);
-            //int x0 = (int)((p2.x + offset) / cellsize);
-            //int x1 = (int)((p1.x + offset) / cellsize);
-            //int dx = Math.Abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
-            //int dy = Math.Abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
-            //int err = (dx > dy ? dx : -dy) / 2, e2;
-            //List<Vec2> Chunk = new List<Vec2>();
-            //for (; ; )
-            //{
-            //    Chunk.Add(new Vec2(x0, y0));
-            //    //bitmap.SetPixel(x0, y0, color);
-            //    if (x0 == x1 && y0 == y1) break;
-            //    e2 = err;
-            //    if (e2 > -dx) { err -= dy; x0 += sx; }
-            //    if (e2 < dy) { err += dx; y0 += sy; }
-            //}
-            ////Vec2[] Chunk = new Vec2[(right - left + 1) * (top - bottom + 1)];
-            ////int N = -1;
-            ////for (int x = left; x <= right; x++)
-            ////{
-            ////    for (int y = bottom; y <= top; y++)
-            ////    {
-            ////        N += 1;
-            ////        Chunk[N] = new Vec2(x, y);
-            ////    }
-            ////}
-            //return Chunk.ToArray();
+            return Chunks;
         }
         public IEnumerable<Thing> CollisionCircleAll(Vec2 position, float radius, Type t)
         {
