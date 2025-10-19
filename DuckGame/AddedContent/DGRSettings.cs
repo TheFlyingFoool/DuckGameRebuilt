@@ -68,7 +68,6 @@ namespace DuckGame
         [Marker.AutoConfig] public static string arcadeHat = "";
         [Marker.AutoConfig] public static int arcadeDuckColor = 0;
 
-
         //this is ran everytime TeamSelect2.cs is initialized or hats are reloaded
         //it should probably be moved to be ran somewhere else but thats the solution i came up with ages ago and works
         //issue is people with insane amount of hats might suffer lag spikes every time teamselect2.cs is loaded even though

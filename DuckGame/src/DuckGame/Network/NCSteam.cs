@@ -486,7 +486,11 @@ namespace DuckGame
                         _lobby.SetLobbyData("datahash", Network.gameDataHash.ToString());
                         _lobby.SetLobbyData("name", Steam.user.name + "'s Lobby");
                         _lobby.SetLobbyData("numSlots", DuckNetwork.numSlots.ToString());
-                        if (!NoDGRBroadcast) _lobby.SetLobbyData("DGR", "true");
+                        if (!NoDGRBroadcast)
+                        {
+                            _lobby.SetLobbyData("DGR", "true");
+                            _lobby.SetLobbyData("DGRVersion", Program.CURRENT_VERSION_ID);
+                        }
                         _lobby.name = _serverIdentifier;
                         if (_lobby.name != TeamSelect2.DefaultGameName())
                             _lobby.SetLobbyData("customName", "true");

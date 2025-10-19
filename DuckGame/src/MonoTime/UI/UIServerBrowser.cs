@@ -415,6 +415,11 @@ namespace DuckGame
                             d.dedicated = lobby.GetLobbyData("dedicated") == "true";
                             d.pingstring = lobby.GetLobbyData("pingstring");
                             d.DGR = lobby.GetLobbyData("DGR") == "true";
+
+                            if (d.DGR && lobby.GetLobbyData("DGRVersion") != Program.CURRENT_VERSION_ID)
+                            {
+                                continue;
+                            }
                             if (d.pingstring != "" && d.pingstring != null)
                                 d.estimatedPing = Steam.EstimatePing(d.pingstring);
                             try
