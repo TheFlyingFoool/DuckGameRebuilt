@@ -116,11 +116,18 @@ namespace DuckGame
             {
                 Namebase = "nikoextraButton"
             };
+            List<string> texstoload = new List<string>() { "arcade/lightCone", "arcade/biglightCone", "arcade/lights", "arcade/prizeLights", "yellowBarrelToreUp", "yellowBarrelMelting", "rainbowCarp" };
+            foreach (string texname in texstoload) {
+                Content.Load<Tex2D>(texname);
+            }
+
             Content.textures[extraButton.Namebase] = extraButton;
             foreach (Thing thing in Editor.thingMap.Values) // those texures get created on the fly so we just going to make them here to save
             {
                 thing.GeneratePreview(48, 48, true); // IceBlock
                 thing.GeneratePreview(32, 32, true); // ItemSpawner
+                thing.GeneratePreview(22, 22, true); // ItemFrame
+                thing.GeneratePreview(32, 16, true); // menus2?
                 thing.GeneratePreview(16, 16, true); // menus
             }
         }
@@ -432,9 +439,12 @@ namespace DuckGame
             if (Level.current is TeamSelect2)
             {
                 botPlayer = DuckNetwork.JoinLocalDuck(toAssignInput);
-                botPlayer.keepSetName = true;
-                botPlayer.name = "DeltaDuck" + (index + 1).ToString();
-                typeof(ProfileBox2).GetField("_inputProfile", BindingFlags.Instance | BindingFlags.NonPublic).SetValue((Level.current as TeamSelect2)._profiles[index], toAssignInput);
+                if (botPlayer != null)
+                {
+                    botPlayer.keepSetName = true;
+                    botPlayer.name = "DeltaDuck" + (index + 1).ToString();
+                    typeof(ProfileBox2).GetField("_inputProfile", BindingFlags.Instance | BindingFlags.NonPublic).SetValue((Level.current as TeamSelect2)._profiles[index], toAssignInput);
+                } 
             }
             Team t = null;
             foreach (Team team in Teams.all)
@@ -446,6 +456,15 @@ namespace DuckGame
                 }
             }
         }
+        [Marker.DevConsoleCommand(Name = "hashtest")]
+        public static void hashtest()
+        {
+            string test_str = "I'm a gay fag";
+            DevConsole.Log(test_str.GetHashCode());
+            DevConsole.Log(test_str.FixedGetHashCode());
+            DevConsole.Log(test_str.GetHashCode() == test_str.FixedGetHashCode());
+        }
+
         [Marker.DevConsoleCommand(Name = "localfill")]
         public static void localfill()
         {
@@ -633,8 +652,7 @@ namespace DuckGame
             //cityBackground.RandomSkySay();
             //DevConsole.Log("random test");
         }
-        [Marker.DevConsoleCommand(Name = "savegraphic",
-            To = ImplementTo.DuckHack)]
+        [Marker.DevConsoleCommand(Name = "savegraphic")]
         public static void seetheunseen()
         {
             SaveTextures();
