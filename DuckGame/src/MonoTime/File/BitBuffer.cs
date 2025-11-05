@@ -1156,6 +1156,10 @@ namespace DuckGame
 
         public void Write(string val)
         {
+            if (val == null) // weird crash .NetMessage.OnSerialize
+            {
+                val = "";
+            }
             if (TokenSerializer.instance != null)
                 WriteTokenizedString(val);
             else
