@@ -68,7 +68,7 @@ namespace XnaToFna
         public List<string> FixPathsFor;
         public ILPlatform PreferredPlatform;
         public static Assembly Aassembly;
-        public static int RemapVersion = 19;
+        public static int RemapVersion = 20;
         public void Stub(ModuleDefinition mod)
         {
             Log(string.Format("[Stub] Stubbing {0}", mod.Assembly.Name.Name));
@@ -199,6 +199,12 @@ namespace XnaToFna
             //Mod Stuff 
             Modder.RelinkMap["System.Void DuckGame.HaloWeapons.Resources::LoadShaders()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void DoNothing()");
 
+            Modder.TranspilerMap["System.Void DuckGame.HaloWeapons.Skins::AddCredits(System.Int32)"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(AddTryCatchPatch)));
+
+            Modder.TranspilerMap["System.Single DuckGame.ExtraStuff.EMusic::get_progress()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(AddTryCatchPatch)));
+            Modder.TranspilerMap["System.TimeSpan DuckGame.ExtraStuff.EMusic::get_length()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(AddTryCatchPatch)));
+            Modder.TranspilerMap["System.TimeSpan DuckGame.ExtraStuff.EMusic::get_position()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(AddTryCatchPatch)));
+
             //Modder.TranspilerMap["System.Void DuckGame.JamMod.AK47W::OnHoldAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod("JamTranspile")); example
 
             if (HookIsTrialMode)
@@ -301,7 +307,68 @@ namespace XnaToFna
                 PreProcessType(nestedType);
         }
 
-        public void PostProcessType(TypeDefinition type)
+    private static void AddTryCatchPatch(MethodDefinition m)
+    {
+        if (m.Body.ExceptionHandlers.Count != 0)  // check into if this a good idea to do?
+        { 
+            return;
+        }
+        var body = m.Body;
+        body.InitLocals = true;
+        var il = body.GetILProcessor();
+
+        /* ─── locals ────────────────────────────────────────────── */
+        var excType = m.Module.ImportReference(typeof(Exception)); // Exception ex
+        var exVar = new VariableDefinition(excType);
+        body.Variables.Add(exVar);
+
+        VariableDefinition retVar = null;
+        bool hasReturn = m.ReturnType.MetadataType != MetadataType.Void;
+        if (hasReturn)
+        {
+            retVar = new VariableDefinition(m.ReturnType);
+            body.Variables.Add(retVar);
+        }
+
+        /* ─── labels / scaffolding ──────────────────────────────── */
+        var epilogue = il.Create(OpCodes.Nop);          // unified return point
+        var fallThroughLeave = il.Create(OpCodes.Leave, epilogue);
+        il.Append(fallThroughLeave);                    // end-of-try sentinel
+
+        /* ─── rewrite existing “ret” instructions ───────────────── */
+        foreach (var ret in body.Instructions.Where(i => i.OpCode == OpCodes.Ret).ToList())
+        {
+            if (hasReturn)
+                il.InsertBefore(ret, il.Create(OpCodes.Stloc, retVar));
+
+            ret.OpCode = OpCodes.Leave;
+            ret.Operand = epilogue;
+        }
+
+        /* ─── catch block (store ex, ignore, continue) ──────────── */
+        var catchStart = il.Create(OpCodes.Stloc, exVar);    // catch(Exception ex)
+        il.Append(catchStart);
+        var catchEnd = il.Create(OpCodes.Leave, epilogue); // swallow & continue
+        il.Append(catchEnd);
+
+        /* ─── common epilogue ───────────────────────────────────── */
+        il.Append(epilogue);
+        if (hasReturn) il.Append(il.Create(OpCodes.Ldloc, retVar)); // default(T)
+        il.Append(il.Create(OpCodes.Ret));
+
+        /* ─── EH table entry ────────────────────────────────────── */
+        body.ExceptionHandlers.Add(new ExceptionHandler(ExceptionHandlerType.Catch)
+        {
+            CatchType = excType,
+            TryStart = body.Instructions.First(),
+            TryEnd = catchStart,   // first instr *after* try
+            HandlerStart = catchStart,
+            HandlerEnd = epilogue      // first instr *after* catch
+        });
+    }
+
+
+    public void PostProcessType(TypeDefinition type)
         {
             bool flag = false;
             if (type.BaseType?.FullName == "Microsoft.Xna.Framework.Game")
@@ -326,7 +393,12 @@ namespace XnaToFna
                     }
                     if (Modder.TranspilerMap.TryGetValue(methodId, out TranspilerMapEntry mapEntry))
                     {
-                        method.Body.Instructions = mapEntry.ProcessILCode(method.Body.Instructions.ToList(), method);
+                        InstructionCollection instructions = mapEntry.ProcessILCode(method.Body.Instructions.ToList(), method);
+                        if (instructions == null)
+                        {
+                            continue;
+                        }
+                        method.Body.Instructions = instructions;
                     }
                     for (int instri = 0; instri < method.Body.Instructions.Count; ++instri)
                     {

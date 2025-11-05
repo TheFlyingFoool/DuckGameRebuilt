@@ -23,17 +23,31 @@ namespace src.XnaToFna
                 throw new ArgumentException("the method must be static");
             parameters = _methodInfo.GetParameters();
             if (parameters.Length > 1)
+            {
                 throw new ArgumentException("the method cant have more than one parameters");
-            if (parameters.Length == 1 && parameters[0].ParameterType != typeof(List<>).MakeGenericType(typeof(Instruction)))
-                throw new ArgumentException("the method parameter must be List<Instruction>");
+            }
+            if (parameters.Length == 1 && parameters[0].ParameterType != typeof(List<>).MakeGenericType(typeof(Instruction)) && parameters[0].ParameterType != typeof(MethodDefinition))
+            {
+                throw new ArgumentException("the method parameter must be List<Instruction> or MethodDefinition");
+            }
             methodInfo = _methodInfo;
 
         }
 
         public InstructionCollection ProcessILCode(List<Instruction> instructions, MethodDefinition method)
         {
-            if (parameters.Length > 0)
-                instructions = (List<Instruction>)methodInfo.Invoke(null, new object[] { instructions });
+            if (parameters.Length == 1)
+            {
+                if (parameters[0].ParameterType == typeof(MethodDefinition))
+                {
+                    methodInfo.Invoke(null, new object[] { method });
+                    return null;
+                }
+                else
+                {
+                    instructions = (List<Instruction>)methodInfo.Invoke(null, new object[] { instructions });
+                }
+            }
             else
                 instructions = (List<Instruction>)methodInfo.Invoke(null, null);
             InstructionCollection returninstructions = new InstructionCollection(method);
