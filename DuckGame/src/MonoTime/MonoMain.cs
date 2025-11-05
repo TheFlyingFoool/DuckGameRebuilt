@@ -1878,6 +1878,7 @@ namespace DuckGame
                         if (_screenshotTarget == null)
                             _screenshotTarget = new RenderTarget2D(Graphics.width, Graphics.height, true);
                         Graphics.screenCapture = _screenshotTarget;
+                        _screenCapture.Namebase = "screenShot";
                         RunDraw(gameTime);
                         waitFrames = 60 + Rando.Int(60);
                         SFX.Play("ching");
@@ -1887,6 +1888,7 @@ namespace DuckGame
                 if (_pauseMenu != null && !NetworkDebugger.enabled && !_didPauseCapture)
                 {
                     Graphics.screenCapture = _screenCapture;
+                    _screenCapture.Namebase = "screenCapture_pause";
                     _didPauseCapture = true;
                 }
                 if (Graphics.screenCapture != null)
