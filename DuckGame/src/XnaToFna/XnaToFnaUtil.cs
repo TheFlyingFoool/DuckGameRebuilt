@@ -68,7 +68,7 @@ namespace XnaToFna
         public List<string> FixPathsFor;
         public ILPlatform PreferredPlatform;
         public static Assembly Aassembly;
-        public static int RemapVersion = 20;
+        public static int RemapVersion = 21;
         public void Stub(ModuleDefinition mod)
         {
             Log(string.Format("[Stub] Stubbing {0}", mod.Assembly.Name.Name));
@@ -199,11 +199,12 @@ namespace XnaToFna
             //Mod Stuff 
             Modder.RelinkMap["System.Void DuckGame.HaloWeapons.Resources::LoadShaders()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void DoNothing()");
 
-            Modder.TranspilerMap["System.Void DuckGame.HaloWeapons.Skins::AddCredits(System.Int32)"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(AddTryCatchPatch)));
+            MethodInfo TryCatchPatch = typeof(XnaToFnaUtil).GetMethod("AddTryCatchPatch", BindingFlags.NonPublic | BindingFlags.Static);
+            Modder.TranspilerMap["System.Void DuckGame.HaloWeapons.Skins::AddCredits(System.Int32)"] = new TranspilerMapEntry(TryCatchPatch);
 
-            Modder.TranspilerMap["System.Single DuckGame.ExtraStuff.EMusic::get_progress()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(AddTryCatchPatch)));
-            Modder.TranspilerMap["System.TimeSpan DuckGame.ExtraStuff.EMusic::get_length()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(AddTryCatchPatch)));
-            Modder.TranspilerMap["System.TimeSpan DuckGame.ExtraStuff.EMusic::get_position()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(AddTryCatchPatch)));
+            Modder.TranspilerMap["System.Single DuckGame.ExtraStuff.EMusic::get_progress()"] = new TranspilerMapEntry(TryCatchPatch);
+            Modder.TranspilerMap["System.TimeSpan DuckGame.ExtraStuff.EMusic::get_length()"] = new TranspilerMapEntry(TryCatchPatch);
+            Modder.TranspilerMap["System.TimeSpan DuckGame.ExtraStuff.EMusic::get_position()"] = new TranspilerMapEntry(TryCatchPatch);
 
             //Modder.TranspilerMap["System.Void DuckGame.JamMod.AK47W::OnHoldAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod("JamTranspile")); example
 
