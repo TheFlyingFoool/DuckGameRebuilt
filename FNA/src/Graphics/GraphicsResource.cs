@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Threading;
 #endregion
 
 namespace Microsoft.Xna.Framework.Graphics
@@ -178,8 +179,12 @@ namespace Microsoft.Xna.Framework.Graphics
 		/// Native resources should always be released regardless of the value of the
 		/// disposing parameter.
 		/// </remarks>
+
+		private int _freed;
 		protected virtual void Dispose(bool disposing)
 		{
+			if (Interlocked.Exchange(ref _freed, 1) != 0)
+				return;
 			if (!IsDisposed)
 			{
 				// Do not trigger the event if called from the finalizer

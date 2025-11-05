@@ -80,9 +80,24 @@ namespace DuckGame
                     return;
                 disposingObjects = true;
                 foreach (GraphicsResource graphicsResource in objectsToDispose)
-                    graphicsResource.Dispose();
+                    SafeDispose(graphicsResource);
                 objectsToDispose.Clear();
                 disposingObjects = false;
+            }
+        }
+        private static void SafeDispose(GraphicsResource res)
+        {
+            if (res == null || res.IsDisposed)
+                return;
+
+            try
+            {
+                res.Dispose();
+            }
+            catch (InvalidOperationException)
+            {
+                /* This is the “Handle is not initialized” path — another thread (or
+                   FNA itself) freed the GCHandle first.  Swallow and keep going. */
             }
         }
 
