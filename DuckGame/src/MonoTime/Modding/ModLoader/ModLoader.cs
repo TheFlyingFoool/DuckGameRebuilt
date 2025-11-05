@@ -161,7 +161,7 @@ namespace DuckGame
             _modAssemblies.Add(mod.configuration.assembly, mod);
             if (mod is not CoreMod)
             {
-                try 
+                try
                 //hi hello yes, this is a bandaid fix because reskin mods crash here for some reason
                 //as far as i know this is firebreak stuff and in testing everything seemed fine so /shrug/
                 //if any problems come up then oops -Lucky
@@ -178,6 +178,30 @@ namespace DuckGame
                 _modsByWorkshopID[mod.configuration.workshopID] = mod;
             _modTypes.Add(mod.GetType(), mod);
         }
+        internal static string[] GetAllTypeNames(string assemblyPath)
+        {
+            try
+            {
+                using var asm = AssemblyDefinition.ReadAssembly(
+                                    assemblyPath,
+                                    new ReaderParameters { ReadSymbols = false });
+
+                return asm.Modules
+                          // keep module order identical to reflection
+                          .SelectMany(m =>
+                              m.GetTypes()                         // all types, all depths
+                               .OrderBy(t => t.MetadataToken.RID)) // metadata-token order
+                          .Select(td => td.FullName.Replace('/', '+'))  // Cecil → refl
+                          .Where(n => n != "<Module>")
+                          .ToArray();
+            }
+            catch
+            {
+                // mirror SaferGetTypes(): swallow and return empty set on error
+                return Array.Empty<string>();
+            }
+        }
+
         public static void FixLoadAssembly(ModConfiguration modConfig, string path)
         {
             path = path.Replace("\\", "/");
@@ -192,8 +216,8 @@ namespace DuckGame
                 if (File.Exists(RebuiltAssemblyPath))
                 {
                     saveddata = File.ReadAllText(RebuiltDataPath);
-                    lines = saveddata.Split( new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (lines.Length  >  1)
+                    lines = saveddata.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (lines.Length > 1)
                     {
                         string saveinfo = lines[0];
                         if (saveinfo.Contains("|") && lines[1] == "Type Order")
@@ -224,27 +248,26 @@ namespace DuckGame
             {
                 File.Delete(RebuiltAssemblyPath);
             }
-            Assembly normalmodassembly = Assembly.Load(File.ReadAllBytes(path));
 
-            Type[] modtypes = normalmodassembly.SaferGetTypes();
-            modConfig.SortedTypeNames = new string[modtypes.Length];
+            //Assembly normalmodassembly = Assembly.Load(File.ReadAllBytes(path));
+
+            //Type[] modtypes = normalmodassembly.SaferGetTypes();
+            // modConfig.SortedTypeNames = new string[modtypes.Length];  modConfig.SortedTypeNames[i] = typename;
+            string[] typenames = GetAllTypeNames(path);
+            modConfig.SortedTypeNames = typenames;
             string typeorder = "\nType Order";
-            for (int i = 0; i < modtypes.Length; i++)
+            for (int i = 0; i < typenames.Length; i++)
             {
-                string typename = modtypes[i].FullName;
-                modConfig.SortedTypeNames[i] = typename;
-                typeorder += "\n" + typename;
+                typeorder += "\n" + typenames[i];
             }
-            normalmodassembly = null;
-            //(modificationdatetime + " | " + XnaToFnaUtil.RemapVersion.ToString())
             File.WriteAllText(RebuiltDataPath, (modificationdatetime + "|" + XnaToFnaUtil.RemapVersion.ToString()) + typeorder);
             MonoMain.NloadMessage = "REMAPPING/LOADING MOD " + currentModLoadString + " " + saveddata;
             string folderpath = Path.GetDirectoryName(path);
             xnaToFnaUtil = new XnaToFnaUtil(folderpath); //Path.GetDirectoryName(path);
-            //xnaToFnaUtil.ScanPath(Program.GameDirectory + "DGSteamref.dll");
+                                                         //xnaToFnaUtil.ScanPath(Program.GameDirectory + "DGSteamref.dll");
 
-        //    xnaToFnaUtil.ScanPath("D:\\Program Files (x86)\\Steam\\steamapps\\workshop\\content\\312530\\2674911202\\BrowseGamesPlus\\content\\0Harmony.dll");
-            
+            //    xnaToFnaUtil.ScanPath("D:\\Program Files (x86)\\Steam\\steamapps\\workshop\\content\\312530\\2674911202\\BrowseGamesPlus\\content\\0Harmony.dll");
+
             xnaToFnaUtil.ScanPath(Program.GameDirectory + "FNA.dll");
             xnaToFnaUtil.ScanPath(Program.FilePath);
             xnaToFnaUtil.RelinkAll();
@@ -374,7 +397,7 @@ namespace DuckGame
                     //    mod = new DisabledMod();
                     //}
                     if (modConfig.workshopID == 2480332949UL) //Delta Duck
-                    {                 
+                    {
                         modConfig.Disable();
                         modConfig.error = "!This mod does not currently work on Rebuilt, Just a Mess of Issues! @Tater";
                         mod = new DisabledMod();
@@ -406,11 +429,11 @@ namespace DuckGame
 
                     //Patchs in these mods Dont Like the Debugger or debug configuration
 #if DEBUG
-                        if (true)
-                        #else
+                    if (true)
+#else
                         if (Debugger.IsAttached)
 #endif
-                        {
+                    {
                         if (modConfig.name == "QOL")
                         {
                             modConfig.Disable();
@@ -709,7 +732,7 @@ namespace DuckGame
             }
             if (newChild["Enabled"] != null && DGRSettings.UseEnabledModsConfig)
             {
-                enabledMods = new HashSet<string>(newChild["Enabled"].InnerText.Split(new char[1] {'|'}, StringSplitOptions.RemoveEmptyEntries).Select(a => a.Trim()));
+                enabledMods = new HashSet<string>(newChild["Enabled"].InnerText.Split(new char[1] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(a => a.Trim()));
                 useEnabled = true;
             }
             if (newChild["Disabled"] != null)
@@ -963,7 +986,7 @@ namespace DuckGame
                 };
                 attemptLoadMods.label = "Loading Mod stuff to load mod stuff";
             }
-            MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => ReskinPack.InitializeReskins(),null, "Initialize Reskins"));
+            MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => ReskinPack.InitializeReskins(), null, "Initialize Reskins"));
             MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => MapPack.InitializeMapPacks(), null, "Initialize MapPacks"));
             GetOrLoadMods(true);
         }
@@ -1061,7 +1084,7 @@ namespace DuckGame
             {
                 foreach (Mod initializationFailure in initializationFailures)
                     _sortedAccessibleMods.Remove(initializationFailure);
-                
+
                 modHash = GetModHash();
                 foreach (Mod sortedAccessibleMod in (IEnumerable<Mod>)_sortedAccessibleMods)
                 {
