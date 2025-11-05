@@ -828,6 +828,7 @@ namespace DuckGame
             {
                 Add(new DistanceMarker(230 + l * 175, -25f, (int)Math.Round((double)(l * GameMode.winsPerSet / 2f)))
                 {
+                    shouldbegraphicculled = false,
                     z = 0f,
                     depth = 0.34f,
                     layer = Layer.Background
@@ -1261,6 +1262,7 @@ namespace DuckGame
                                         slot.showScore = true;
                                         Add(new PointBoard(slot.rock, slot.duck.profile.team)
                                         {
+                                            shouldbegraphicculled = false,
                                             depth = slot.rock.depth + 1,
                                             z = slot.rock.z
                                         });
@@ -1344,7 +1346,7 @@ namespace DuckGame
                                             slot.duck.ThrowItem(true);
                                             float dif = slot.duck.profile.team.rockScore;
                                             int total = GameMode.winsPerSet * 2;
-                                            if (dif > total - 2)
+                                            if (dif > total - 2 && GameMode.winsPerSet != 1)
                                             {
                                                 dif = total - 2 + Math.Min((slot.duck.profile.team.rockScore - GameMode.winsPerSet * 2) / 16f, 1f);
                                             }
@@ -1470,6 +1472,7 @@ namespace DuckGame
                                                 slot.showScore = true;
                                                 Add(new PointBoard(slot.rock, slot.duck.profile.team)
                                                 {
+                                                    shouldbegraphicculled = false,
                                                     depth = slot.rock.depth + 1,
                                                     z = slot.rock.z
                                                 });
@@ -1658,7 +1661,7 @@ namespace DuckGame
                                 {
                                     float dif3 = slot2.duck.profile.team.rockScore;
                                     int total3 = GameMode.winsPerSet * 2;
-                                    if (dif3 > total3 - 2)
+                                    if (dif3 > total3 - 2 && GameMode.winsPerSet != 1)
                                     {
                                         dif3 = total3 - 2 + Math.Min((slot2.duck.profile.team.rockScore - GameMode.winsPerSet * 2) / 16f, 1f);
                                     }
