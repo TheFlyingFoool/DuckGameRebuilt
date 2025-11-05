@@ -2,6 +2,7 @@
 using Microsoft.CSharp;
 using Mono.Cecil;
 using MonoMod.Utils;
+using SixLabors.ImageSharp;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections;
@@ -424,6 +425,12 @@ namespace DuckGame
                     {
                         modConfig.Disable();
                         modConfig.error = "!This mod does not currently work on Rebuilt!";
+                        mod = new DisabledMod();
+                    }
+                    else if (modConfig.workshopID == 2381384850UL && loadableModIds.Contains(2586315559))
+                    {
+                        modConfig.Disable();
+                        modConfig.error = "!This is Disabled mod is Disable, Because v2 is newer";
                         mod = new DisabledMod();
                     }
 
@@ -990,7 +997,7 @@ namespace DuckGame
             MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => MapPack.InitializeMapPacks(), null, "Initialize MapPacks"));
             GetOrLoadMods(true);
         }
-
+        private static ulong[] loadableModIds = new ulong[0];
         private static void GetOrLoadMods(bool pPreload)
         {
             Stack<string> modLoadStack = new Stack<string>();
@@ -1002,6 +1009,18 @@ namespace DuckGame
                 MonoMain.totalLoadyBits += loadableMods.Count * 2;
                 //int cluster = 0;
                 List<ReskinPack> active = ReskinPack.active;
+                loadableModIds = new ulong[loadableMods.Values.Count];
+                int index = 0;
+                foreach (ModConfiguration modConfiguration in loadableMods.Values)
+                {
+                    ulong id = 0;
+                    if (modConfiguration != null)
+                    {
+                        id = modConfiguration.assignedWorkshopID;
+                    }
+                    loadableModIds[index] = id;
+                    index += 1;
+                }
                 foreach (ModConfiguration modConfiguration in loadableMods.Values)
                 {
                     ModConfiguration loadable = modConfiguration;
