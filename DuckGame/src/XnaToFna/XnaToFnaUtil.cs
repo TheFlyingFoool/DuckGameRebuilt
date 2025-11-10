@@ -206,6 +206,11 @@ namespace XnaToFna
             Modder.TranspilerMap["System.TimeSpan DuckGame.ExtraStuff.EMusic::get_length()"] = new TranspilerMapEntry(TryCatchPatch);
             Modder.TranspilerMap["System.TimeSpan DuckGame.ExtraStuff.EMusic::get_position()"] = new TranspilerMapEntry(TryCatchPatch);
 
+            Modder.TranspilerMap["System.Void DuckGame.C44P.C4::Update()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod("C4PP_C4_Update", BindingFlags.NonPublic | BindingFlags.Static));
+            Modder.TranspilerMap["System.Void DuckGame.JamMod.Banjoo::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod("JamMod_Banjoo_OnPressAction", BindingFlags.NonPublic | BindingFlags.Static));
+            Modder.TranspilerMap["System.Void DuckGame.JamMod.Schnitzel::OnPressAction()"] = new TranspilerMapEntry(TryCatchPatch);
+
+            //JamMod_Schnitzel_OnPressAction
             //Modder.TranspilerMap["System.Void DuckGame.JamMod.AK47W::OnHoldAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod("JamTranspile")); example
 
             if (HookIsTrialMode)
@@ -368,8 +373,71 @@ namespace XnaToFna
         });
     }
 
+        private static List<Instruction> C4PP_C4_Update(List<Instruction> instructions) 
+        {
+            List<Instruction> new_instructions = new List<Instruction>();
+            object JumpLocation = null;
+            bool Packed = false;
+            for (int i = 0; i < instructions.Count; i++)
+            {
+                Instruction instruction = instructions[i];
+                if (instruction.OpCode == OpCodes.Ble_Un_S)
+                {
+                    JumpLocation = instruction.Operand;
+                }
+                if (i > 0 && !Packed)
+                {
+                    Instruction prev = instructions[i - 1];
 
-    public void PostProcessType(TypeDefinition type)
+                    if (prev.OpCode == OpCodes.Call &&
+                        prev.Operand != null &&
+                        prev.Operand.ToString() ==
+                        "!!0 DuckGame.Level::Nearest<DuckGame.C44P.GM_Fuse>(System.Single,System.Single)")
+                    {
+                        Packed = true;
+                        new_instructions.Add(new Instruction(OpCodes.Stloc_0, null));
+                        new_instructions.Add(new Instruction(OpCodes.Ldloc_0, null));
+                        new_instructions.Add(new Instruction(OpCodes.Brfalse_S, JumpLocation));
+                        continue;
+                    }
+                }
+                new_instructions.Add(instruction);
+            }
+
+            return new_instructions;
+
+        }
+
+        private static List<Instruction> JamMod_Banjoo_OnPressAction(List<Instruction> instructions)
+        {
+            List<Instruction> new_instructions = new List<Instruction>();
+            object JumpLocation = null;
+            bool Packed = false;
+            for (int i = 0; i < instructions.Count; i++)
+            {
+                Instruction instruction = instructions[i];
+                if (!Packed)
+                {
+                    if (instruction.OpCode == OpCodes.Stfld &&
+                        instruction.Operand != null && instruction.Operand.ToString() == "DuckGame.Duck DuckGame.JamMod.Banjoo::duc") 
+                    {
+                        Packed = true;
+                        new_instructions.Add(instruction);
+
+                        new_instructions.Add(new Instruction(OpCodes.Ldarg_0, null));
+                        new_instructions.Add(new Instruction(OpCodes.Ldfld, instruction.Operand));
+                        new_instructions.Add(new Instruction(OpCodes.Brfalse_S, instructions[i + 6]));
+                        continue;
+                    }
+                }
+                new_instructions.Add(instruction);
+            }
+
+            return new_instructions;
+
+        }
+       
+        public void PostProcessType(TypeDefinition type)
         {
             bool flag = false;
             if (type.BaseType?.FullName == "Microsoft.Xna.Framework.Game")
