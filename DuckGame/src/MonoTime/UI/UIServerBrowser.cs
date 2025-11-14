@@ -416,10 +416,10 @@ namespace DuckGame
                             d.pingstring = lobby.GetLobbyData("pingstring");
                             d.DGR = lobby.GetLobbyData("DGR") == "true";
 
-                            if (d.DGR && lobby.GetLobbyData("DGRVersion") != Program.CURRENT_VERSION_ID)
-                            {
-                                continue;
-                            }
+                            //if (d.DGR && lobby.GetLobbyData("DGRVersion") != Program.CURRENT_VERSION_ID)
+                            //{
+                            //    continue;
+                            //}
                             if (d.pingstring != "" && d.pingstring != null)
                                 d.estimatedPing = Steam.EstimatePing(d.pingstring);
                             try
@@ -1181,7 +1181,7 @@ namespace DuckGame
             {
                 get // removed AreParentalControlsActive
                 {
-                    return DG.version == version && (Network.gameDataHash == datahash || ModLoader.modHash != modHash) && started == "false" &&
+                    return DG.version == version && (Network.gameDataHash == datahash || ModLoader.modHash != modHash) && (started == "false" || (name != null && name.StartsWith("|PINK|[MIDGAME] |PREV|"))) &&
                         (!hasLocalMods || ModLoader.modHash == modHash) && _userCount < numSlots && (type == "2" || lobby == null);
                 }
             }

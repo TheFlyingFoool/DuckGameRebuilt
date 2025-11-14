@@ -132,7 +132,7 @@ namespace DuckGame
             }
             base.Hook_OnLobbyProcessed(pLobby);
         }
-
+        private static ulong[] lobbyBotIds = {109775242502588761, 109775242502636562 };
         public override void Platform_MatchmakerLogic()
         {
             if (_state == State.GetNumberOfLobbies)
@@ -195,6 +195,15 @@ namespace DuckGame
                     switch (DuckNetwork.CheckVersion(_processing.GetLobbyData("version")))
                     {
                         case NMVersionMismatch.Type.Match:
+                            if (_processing.GetLobbyData("dedicated") == "true" || lobbyBotIds.Contains(_processing.id))
+                            {
+                                messages.Add("|PURPLE|LOBBY |DGRED|Skipped Lobby (Dedicated Likley a lobby bot)...");
+                                TakeLobby();
+                                if (_directConnectLobby == null)
+                                    return;
+                                ChangeState(State.Failed);
+                                return;
+                            }
                             if (_processing.GetLobbyData("datahash").Trim() != Network.gameDataHash.ToString())
                             {
                                 messages.Add("|PURPLE|LOBBY |DGRED|Skipped Lobby (Incompatible)...");
