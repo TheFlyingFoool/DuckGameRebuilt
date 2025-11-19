@@ -341,6 +341,7 @@ namespace DuckGame
             {
                 Close();
                 _attemptConnection = UIMatchmakerMark2.Platform_GetMatchkmaker(pLobby, this);
+                _attemptConnection.directJoinAttempt = true;
                 _attemptConnection.SetPasswordAttempt(enteredPassword);
                 enteredPassword = "";
                 Level.Add(_attemptConnection);
