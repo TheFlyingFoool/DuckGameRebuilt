@@ -455,5 +455,7 @@ namespace DuckGame
         }
 
         [Marker.AutoConfig] public static bool NoConsoleLineLimit = false;
+
+        [Marker.AutoConfig] public static int ControllerCount = 8;
     }
 }

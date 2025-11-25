@@ -309,7 +309,6 @@ namespace DuckGame
             DuckFile.Initialize();
             MarkerAttribute.Initialize(gameAssembly);
             AutoConfigHandler.Initialize();
-            int Controllers = 8;
             bool flag = false;
             for (int index = 0; index < args.Length; ++index)
             {
@@ -348,7 +347,7 @@ namespace DuckGame
                         {
                             try
                             {
-                                Controllers = Convert.ToInt32(args[index]);
+                                DGRSettings.ControllerCount = Convert.ToInt32(args[index]);
                             }
                             catch
                             { }
@@ -720,9 +719,9 @@ namespace DuckGame
         label_109:
             DeviceChangeNotifier.Start();
             DevConsole.Log("Starting Duck Game (" + DG.platform + ")...");
-            if (Controllers > 4)
+            if (DGRSettings.ControllerCount > 4)
             {
-                string controllerstring = Controllers.ToString();
+                string controllerstring = DGRSettings.ControllerCount.ToString();
                 DevConsole.Log("Setting Max Controller Count " + controllerstring);
                 Environment.SetEnvironmentVariable("FNA_GAMEPAD_NUM_GAMEPADS", controllerstring);
             }
