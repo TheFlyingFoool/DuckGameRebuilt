@@ -5,8 +5,8 @@ using System.Runtime.ExceptionServices;
 
 public class User : IDisposable {
 
-    private static Dictionary<ulong, User> _users;
-
+    private static Dictionary<ulong, User> _users = new Dictionary<ulong, User>();
+    private static Dictionary<ulong, string> _usernames = new Dictionary<ulong, string>();
     internal static User GetUser(CSteamID id) {
         return GetUser(id.m_SteamID);
     }
@@ -14,9 +14,6 @@ public class User : IDisposable {
     public static User GetUser(ulong id) {
         if (id == 0) {
             return null;
-        }
-        if (_users == null) {
-            _users = new Dictionary<ulong, User>();
         }
         using (Lock _lock = new Lock(_users)) {
             User user;
@@ -34,9 +31,23 @@ public class User : IDisposable {
     public virtual unsafe string name {
         get
         {
-            if (id != 0 && Steam.initialized)
-                return SteamFriends.GetFriendPersonaName(_id);
-            return "";
+            if (id == 0 || !Steam.initialized)
+            {
+                return "";
+            }
+            using (Lock _lock = new Lock(_users))
+            {
+                string username;
+                if (!_usernames.TryGetValue(id, out username))
+                {
+                    username = SteamFriends.GetFriendPersonaName(_id);
+                    if (username != "[unknown]" && username != "")
+                    {
+                        _usernames[id] = username;
+                    }
+                }
+                return username;
+            }
         }
     }
 

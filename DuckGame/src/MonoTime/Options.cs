@@ -485,6 +485,11 @@ namespace DuckGame
                 dgrDescription = "Toggles 50p mode, will always reset to false after game restart"
             });
 
+            menu.Add(new UIMenuItemNumber("Controller Count", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ControllerCount), 4, 300, 1), step: 1)
+            {
+                dgrDescription = "Maximum number of controllers supported (requires restart)"
+            });
+
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
             return menu;

@@ -195,7 +195,7 @@ namespace DuckGame
                     switch (DuckNetwork.CheckVersion(_processing.GetLobbyData("version")))
                     {
                         case NMVersionMismatch.Type.Match:
-                            if (_processing.GetLobbyData("dedicated") == "true" || lobbyBotIds.Contains(_processing.id))
+                            if (!directJoinAttempt && (_processing.GetLobbyData("dedicated") == "true" || lobbyBotIds.Contains(_processing.id)))
                             {
                                 messages.Add("|PURPLE|LOBBY |DGRED|Skipped Lobby (Dedicated Likley a lobby bot)...");
                                 TakeLobby();
