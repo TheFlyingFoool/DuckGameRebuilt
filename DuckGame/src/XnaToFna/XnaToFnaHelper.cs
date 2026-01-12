@@ -169,7 +169,25 @@ namespace XnaToFna
                 path1 = path1.Replace("//", "/").Replace("\\", "/");
                 path2 = path2.Replace("//", "/").Replace("\\", "/");
             }
-            return Path.Combine(path1, path2);
+
+            string comp = Path.Combine(path1, path2);
+            if (DirectoryExists(comp))
+            {
+                return comp;
+            }
+            string basePath = @"C:\Program Files (x86)\Steam\steamapps\common\Duck Game\".Replace("//", "/").Replace("\\", "/"); // Path people are hard coding 
+            if (DirectoryExists(basePath))
+            {
+                return comp;
+            }
+            string fullPath = Path.GetFullPath(comp).Replace("//", "/").Replace("\\", "/");
+
+            bool isInside = fullPath.StartsWith(basePath, StringComparison.OrdinalIgnoreCase);
+            if (!isInside)
+            {
+                return comp;
+            }
+            return Path.Combine(Program.GameDirectory, fullPath.Substring(basePath.Length));
         }
         public static string FileReadAllText(string path)
         {
