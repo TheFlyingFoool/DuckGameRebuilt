@@ -1,4 +1,5 @@
-﻿using SDL2;
+﻿using Microsoft.Xna.Framework;
+using SDL2;
 using System;
 using System.Collections.Generic;
 namespace DuckGame
@@ -13,7 +14,7 @@ namespace DuckGame
                 return;
             }
 
-            SDL.SDL_OpenURL(URL);
+            FNAPlatform.OpenURL(URL);
             HUD.AddPlayerChangeDisplay("@CLIPCOPY@Browser Opened!");
         }
         public static T FirstOrNull<T>(this IEnumerable<T> sequence) where T : class

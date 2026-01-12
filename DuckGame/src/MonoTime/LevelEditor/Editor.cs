@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SDL2;
 //using System.Windows.Forms;
@@ -3806,7 +3807,7 @@ namespace DuckGame
                         {
                             if (Keyboard.Pressed(Keys.C))
                             {
-                                Thread thread = new(() => SDL.SDL_SetClipboardText(Keyboard.KeyString));
+                                Thread thread = new(() => FNAPlatform.SetClipboardText(Keyboard.KeyString));
                                 thread.SetApartmentState(ApartmentState.STA);
                                 thread.Start();
                                 thread.Join();
@@ -3814,7 +3815,7 @@ namespace DuckGame
                             else if (Keyboard.Pressed(Keys.V))
                             {
                                 string paste = "";
-                                Thread thread = new(() => paste = SDL.SDL_GetClipboardText());
+                                Thread thread = new(() => paste = FNAPlatform.GetClipboardText());
                                 thread.SetApartmentState(ApartmentState.STA);
                                 thread.Start();
                                 thread.Join();

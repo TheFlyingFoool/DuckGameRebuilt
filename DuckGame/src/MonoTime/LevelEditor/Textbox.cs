@@ -1,4 +1,5 @@
-﻿using SDL2;
+﻿using Microsoft.Xna.Framework;
+using SDL2;
 using System.Threading;
 
 namespace DuckGame
@@ -90,9 +91,9 @@ namespace DuckGame
         public void ReadClipboardText()
         {
             _clipboardText = "";
-            if (!(SDL.SDL_HasClipboardText() == SDL.SDL_bool.SDL_TRUE))
+            if (!FNAPlatform.HasClipboardText())
                 return;
-            _clipboardText = SDL.SDL_GetClipboardText();
+            _clipboardText = FNAPlatform.GetClipboardText();
         }
 
         public void LoseFocus()
@@ -155,7 +156,7 @@ namespace DuckGame
                         copyText = _font._highlightStart >= _font._highlightEnd ? text.Substring(_font._highlightEnd, _font._highlightStart - _font._highlightEnd) : text.Substring(_font._highlightStart, _font._highlightEnd - _font._highlightStart);
                         if (copyText != "")
                         {
-                            Thread thread = new Thread(() => SDL.SDL_SetClipboardText(copyText));
+                            Thread thread = new Thread(() => FNAPlatform.SetClipboardText(copyText));
                             thread.SetApartmentState(ApartmentState.STA);
                             thread.Start();
                             thread.Join();

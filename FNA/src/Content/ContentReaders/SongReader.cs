@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2023 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2024 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -39,15 +39,15 @@ namespace Microsoft.Xna.Framework.Content
 			/* The path string includes the ".wma" extension. Let's see if this
 			 * file exists in a format we actually support...
 			 */
-			path = Normalize(path.Substring(0, path.Length - 4));
-			if (String.IsNullOrEmpty(path))
+			string realPath = Normalize(path.Substring(0, path.Length - 4));
+			if (!String.IsNullOrEmpty(realPath))
 			{
-				throw new ContentLoadException();
+				path = realPath;
 			}
 
 			int durationMs = input.ReadInt32();
 
-			return new Song(path, durationMs);
+			return new Song(path, input.AssetName, durationMs);
 		}
 
 		#endregion

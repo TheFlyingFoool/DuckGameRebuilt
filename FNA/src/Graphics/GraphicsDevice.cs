@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2023 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2024 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -501,6 +501,8 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
 			if (!IsDisposed)
 			{
+				IsDisposed = true;
+
 				if (disposing)
 				{
 					// We're about to dispose, notify the application.
@@ -514,7 +516,15 @@ namespace Microsoft.Xna.Framework.Graphics
 					 */
 					lock (resourcesLock)
 					{
-						foreach (GCHandle resource in resources.ToArray())
+						/* NOTE: It is very important to make a copy of the resource handles and then clear
+						 *  the array. This enables RemoveResourceReference to identify whether the handle
+						 *  has already been disposed or not, to prevent us from freeing a given handle twice.
+						 * Freeing a GCHandle twice is very bad, and GCHandle.IsAllocated is not accurate once
+						 *  you make a copy of the handle.
+						 */
+						GCHandle[] resourceArray = resources.ToArray();
+						resources.Clear();
+						foreach (GCHandle resource in resourceArray)
 						{
 							object target = resource.Target;
 							if (target != null)
@@ -522,7 +532,6 @@ namespace Microsoft.Xna.Framework.Graphics
 								(target as IDisposable).Dispose();
 							}
 						}
-						resources.Clear();
 					}
 
 					if (userVertexBuffer != IntPtr.Zero)
@@ -545,8 +554,6 @@ namespace Microsoft.Xna.Framework.Graphics
 					// Dispose of the GL Device/Context
 					FNA3D.FNA3D_DestroyDevice(GLDevice);
 				}
-
-				IsDisposed = true;
 			}
 		}
 
@@ -562,7 +569,9 @@ namespace Microsoft.Xna.Framework.Graphics
 			}
 		}
 
-		internal void RemoveResourceReference(GCHandle resourceReference)
+		/// <param name="resourceReference">The GCHandle for your resource</param>
+		/// <returns>true if you should Free your GCHandle</returns>
+		internal bool RemoveResourceReference(GCHandle resourceReference)
 		{
 			lock (resourcesLock)
 			{
@@ -575,9 +584,32 @@ namespace Microsoft.Xna.Framework.Graphics
 					// Perform an unordered removal, the order of items in this list does not matter
 					resources[i] = resources[resources.Count - 1];
 					resources.RemoveAt(resources.Count - 1);
-					return;
+					return true;
 				}
 			}
+
+			// The GCHandle was already freed, most likely by GraphicsDevice.Dispose
+			return false;
+		}
+
+		#endregion
+
+		#region Internal Adapter Updates
+
+		/* This exists because display hotplugging is fragile and can
+		 * cause problems if we try to do a hard Reset(). Even after
+		 * refreshing the static Adapters list you find weird cases
+		 * where a reset on an unrelated display will insist on a 0x0
+		 * window size??? :psyduck:
+		 *
+		 * So instead, just quietly swap the Adapter so that the device
+		 * state is valid, and avoid messing with the window further.
+		 * -flibit
+		 */
+
+		internal void QuietlyUpdateAdapter(GraphicsAdapter adapter)
+		{
+			Adapter = adapter;
 		}
 
 		#endregion
@@ -586,6 +618,10 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void Present()
 		{
+			if (renderTargetCount > 0)
+			{
+				throw new InvalidOperationException("Cannot present while render targets are bound");
+			}
 			FNA3D.FNA3D_SwapBuffers(
 				GLDevice,
 				IntPtr.Zero,
@@ -599,6 +635,10 @@ namespace Microsoft.Xna.Framework.Graphics
 			Rectangle? destinationRectangle,
 			IntPtr overrideWindowHandle
 		) {
+			if (renderTargetCount > 0)
+			{
+				throw new InvalidOperationException("Cannot present while render targets are bound");
+			}
 			if (overrideWindowHandle == IntPtr.Zero)
 			{
 				overrideWindowHandle = PresentationParameters.DeviceWindowHandle;
@@ -889,6 +929,14 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetRenderTargets(params RenderTargetBinding[] renderTargets)
 		{
+			// Flush scissor state - using a rect outside of the viewport has been observed
+			// causing errors in Metal on iOS (via SDLGPU), for example when scissoring was just
+			// disabled and we're changing viewport size.
+			FNA3D.FNA3D_ApplyRasterizerState(
+				GLDevice,
+				ref RasterizerState.state
+			);
+
 			// D3D11 requires our sampler state to be valid (i.e. not point to any of our new RTs)
 			//  before we call SetRenderTargets. At this point FNA3D does not have a current copy
 			//  of the managed sampler state, so we need to apply our current state now instead of
@@ -1032,7 +1080,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			{
 				return renderTargetCount;
 			}
-			else if (output.Length != renderTargetCount)
+			else if (output.Length < renderTargetCount)
 			{
 				throw new ArgumentException("Output buffer size incorrect");
 			}

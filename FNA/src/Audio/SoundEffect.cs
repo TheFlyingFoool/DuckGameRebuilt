@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2023 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2024 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -289,7 +289,7 @@ namespace Microsoft.Xna.Framework.Audio
 
 		~SoundEffect()
 		{
-			if (Instances.Count > 0)
+			if (!FAudioContext.ProgramExiting && Instances.Count > 0)
 			{
 				// STOP LEAKING YOUR INSTANCES, ARGH
 				GC.ReRegisterForFinalize(this);
@@ -534,6 +534,7 @@ namespace Microsoft.Xna.Framework.Audio
 		internal class FAudioContext
 		{
 			public static FAudioContext Context = null;
+			public static bool ProgramExiting = false;
 
 			public readonly IntPtr Handle;
 			public readonly byte[] Handle3D;
@@ -619,7 +620,8 @@ namespace Microsoft.Xna.Framework.Audio
 				{
 					FAudio.FAudio_Release(Handle);
 				}
-				Context = null;
+				// FAudio_Release is refcounted, don't erase this yet
+				// Context = null;
 			}
 
 			public unsafe void AttachReverb(IntPtr voice)
@@ -758,6 +760,20 @@ namespace Microsoft.Xna.Framework.Audio
 				}
 
 				Context = context;
+
+				AppDomain.CurrentDomain.ProcessExit += ProgramExit;
+			}
+
+			private static void ProgramExit(object sender, EventArgs e)
+			{
+				ProgramExiting = true;
+
+				if (Context != null)
+				{
+					GC.Collect(); // Desperate last bid to collect SoundEffectInstances
+
+					Context.Dispose();
+				}
 			}
 		}
 

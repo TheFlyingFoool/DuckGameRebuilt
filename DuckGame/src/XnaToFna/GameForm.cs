@@ -42,8 +42,8 @@ namespace XnaToFna.ProxyForms
             set
             {
                 IntPtr handle = XnaToFnaHelper.Game.Window.Handle;
-                SDL.SDL_SetWindowSize(handle, value.Width, value.Height);
-                SDL.SDL_SetWindowPosition(handle, value.X, value.Y);
+                FNAPlatform.SetWindowSize(handle, value.Width, value.Height);
+                FNAPlatform.SetWindowPosition(handle, value.X, value.Y);
             }
         }
 
@@ -62,10 +62,10 @@ namespace XnaToFna.ProxyForms
             {
                 int x;
                 int y;
-                SDL.SDL_GetWindowPosition(XnaToFnaHelper.Game.Window.Handle, out x, out y);
+                FNAPlatform.GetWindowPosition(XnaToFnaHelper.Game.Window.Handle, out x, out y);
                 return new ProxyDrawing.Point(x, y);
             }
-            set => SDL.SDL_SetWindowPosition(XnaToFnaHelper.Game.Window.Handle, value.X, value.Y);
+            set => FNAPlatform.SetWindowPosition(XnaToFnaHelper.Game.Window.Handle, value.X, value.Y);
         }
 
         public override FormBorderStyle FormBorderStyle
@@ -91,10 +91,15 @@ namespace XnaToFna.ProxyForms
             {
                 if (Dirty)
                     return _WindowState;
-                uint windowFlags = SDL.SDL_GetWindowFlags(XnaToFnaHelper.Game.Window.Handle);
-                if (((int)windowFlags & 128) != 0 || FakeFullscreenWindow)
+                ulong windowFlags = FNAPlatform.GetWindowFlags(XnaToFnaHelper.Game.Window.Handle);
+
+                // Keep your existing flag checks intact
+                if (((long)windowFlags & 128L) != 0L || FakeFullscreenWindow)
                     return FormWindowState.Maximized;
-                return ((int)windowFlags & 64) != 0 ? FormWindowState.Minimized : FormWindowState.Normal;
+
+                return ((long)windowFlags & 64L) != 0L
+                    ? FormWindowState.Minimized
+                    : FormWindowState.Normal;
             }
             set
             {
@@ -108,17 +113,17 @@ namespace XnaToFna.ProxyForms
             get => _StartPosition;
             set
             {
-                //if (((int) SDL.SDL_GetWindowFlags(XnaToFnaHelper.Game.Window.Handle) & 8) != 8)// come back to later mabye idk man
+                //if (((int) FNAPlatform.GetWindowFlags(XnaToFnaHelper.Game.Window.Handle) & 8) != 8)// come back to later mabye idk man
                 //  return;
                 //switch (value)
                 //{
                 //  case FormStartPosition.CenterScreen:
                 //  case FormStartPosition.CenterParent:
-                //    SDL.SDL_SetWindowPosition(XnaToFnaHelper.Game.Window.Handle, 805240832, 805240832);
+                //    FNAPlatform.SetWindowPosition(XnaToFnaHelper.Game.Window.Handle, 805240832, 805240832);
                 //    break;
                 //  case FormStartPosition.WindowsDefaultLocation:
                 //  case FormStartPosition.WindowsDefaultBounds:
-                //    SDL.SDL_SetWindowPosition(XnaToFnaHelper.Game.Window.Handle, 805240832, 805240832);
+                //    FNAPlatform.SetWindowPosition(XnaToFnaHelper.Game.Window.Handle, 805240832, 805240832);
                 //    break;
                 //}
                 _StartPosition = value;
@@ -135,7 +140,8 @@ namespace XnaToFna.ProxyForms
         {
             Rectangle sdlBounds = SDLBounds;
             _Bounds = new Rectangle(sdlBounds.X, sdlBounds.Y, sdlBounds.Width, sdlBounds.Height);
-            if (((int)SDL.SDL_GetWindowFlags(XnaToFnaHelper.Game.Window.Handle) & 1) != 0 || FakeFullscreenWindow)
+            ulong flags = FNAPlatform.GetWindowFlags(XnaToFnaHelper.Game.Window.Handle);
+            if (((flags & 1UL) != 0UL) || FakeFullscreenWindow)
                 return;
             _WindowedBounds = _Bounds;
         }
@@ -190,12 +196,12 @@ namespace XnaToFna.ProxyForms
                 game.Window.IsBorderlessEXT = flag1;
                 if (flag2)
                 {
-                    SDL.SDL_MaximizeWindow(handle);
+                    FNAPlatform.MaximizeWindow(handle);
                     _Bounds = SDLBounds;
                 }
                 else
                 {
-                    SDL.SDL_RestoreWindow(handle);
+                    FNAPlatform.RestoreWindow(handle);
                     SDLBounds = _Bounds = _WindowedBounds;
                 }
                 XnaToFnaHelper.Log(string.Format("[ProxyForms] New window size: {0} x {1}", _Bounds.Width, _Bounds.Height));

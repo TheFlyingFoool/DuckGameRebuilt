@@ -315,15 +315,11 @@ namespace DuckGame
             if (pMode == "Fullscreen")
             {
                 // From dan Auto Resize Window in cases of fullscreening, as if not it uses incorrect res
-                int windowindex = SDL2.SDL.SDL_GetWindowDisplayIndex(MonoMain.instance.Window.Handle);
-                if (windowindex >= 0 && windowindex < GraphicsAdapter.Adapters.Count)
-                {
-                    GraphicsAdapter currentdisplay = GraphicsAdapter.Adapters[windowindex];
-                    LocalData.windowedFullscreenResolution.x = currentdisplay.CurrentDisplayMode.Width;
-                    LocalData.windowedFullscreenResolution.y = currentdisplay.CurrentDisplayMode.Height;
-                    LocalData.fullscreenResolution.x = currentdisplay.CurrentDisplayMode.Width;
-                    LocalData.fullscreenResolution.y = currentdisplay.CurrentDisplayMode.Height;
-                }
+                GraphicsAdapter currentdisplay = MonoMain.instance.GraphicsDevice.Adapter;
+                LocalData.windowedFullscreenResolution.x = currentdisplay.CurrentDisplayMode.Width;
+                LocalData.windowedFullscreenResolution.y = currentdisplay.CurrentDisplayMode.Height;
+                LocalData.fullscreenResolution.x = currentdisplay.CurrentDisplayMode.Width;
+                LocalData.fullscreenResolution.y = currentdisplay.CurrentDisplayMode.Height;
                 Resolution.Set(Data.windowedFullscreen ? LocalData.windowedFullscreenResolution : LocalData.fullscreenResolution);
             }
             else

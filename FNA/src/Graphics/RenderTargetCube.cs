@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2023 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2024 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -224,6 +224,14 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
 			if (!IsDisposed)
 			{
+				for (int i = 0; i < GraphicsDevice.renderTargetCount; i += 1)
+				{
+					if (GraphicsDevice.renderTargetBindings[i].RenderTarget == this)
+					{
+						throw new InvalidOperationException("Disposing target that is still bound");
+					}
+				}
+
 				IntPtr toDispose = Interlocked.Exchange(ref glColorBuffer, IntPtr.Zero);
 				if (toDispose != IntPtr.Zero)
 				{

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 
 namespace DuckGame
 {
@@ -117,9 +118,9 @@ namespace DuckGame
         public void ReadClipboardText()
         {
             _clipboardText = "";
-            if (!(SDL.SDL_HasClipboardText() == SDL.SDL_bool.SDL_TRUE))
+            if (!FNAPlatform.HasClipboardText())
                 return;
-            _clipboardText = SDL.SDL_GetClipboardText();
+            _clipboardText = FNAPlatform.GetClipboardText();
         }
 
         private void AddUndo(bool force = false)
@@ -177,7 +178,7 @@ namespace DuckGame
                     copyText = _font._highlightStart >= _font._highlightEnd ? this.text.Substring(_font._highlightEnd, _font._highlightStart - _font._highlightEnd) : this.text.Substring(_font._highlightStart, _font._highlightEnd - _font._highlightStart);
                     if (copyText != "")
                     {
-                        Thread thread = new Thread(() => SDL.SDL_SetClipboardText(copyText));
+                        Thread thread = new Thread(() => FNAPlatform.SetClipboardText(copyText));
                         thread.SetApartmentState(ApartmentState.STA);
                         thread.Start();
                         thread.Join();

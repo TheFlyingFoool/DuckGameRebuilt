@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using SDL2;
 using System;
 using System.Collections.Generic;
 
@@ -807,7 +806,7 @@ namespace DuckGame
           }
         };
         private bool _connectedState;
-        public SDL.SDL_GameControllerType SDLControllerType = SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_XBOX360;
+        public int ControllerType = 0;
         public override bool isConnected => _connectedState;
 
         public override bool allowStartRemap => true;
@@ -827,43 +826,77 @@ namespace DuckGame
             _productName = "XBOX GAMEPAD";
             _productGUID = "";
         }
-
+        
         public override Dictionary<int, string> GetTriggerNames()
         {
-            if (SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS3 || SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS4 || SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS5)
+            if (Program.SDL2)
             {
-                return _triggerNamesPS;
-            }
-            else if (SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_PRO)
-            {
-                return _triggerNamesSwitch;
-            }
-            else if (_productName == "Nintendo Wii Remote")
-            {
-                return _triggerNamesWii;
-            }
-            else if (_productName == "Nintendo 64 Controller")
-            {
-                return _triggerNamesN64;
+                SDL2.SDL.SDL_GameControllerType SDLControllerType = (SDL2.SDL.SDL_GameControllerType)ControllerType;
+                if (SDLControllerType == SDL2.SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS3 || SDLControllerType == SDL2.SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS4 || SDLControllerType == SDL2.SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS5)
+                {
+                    return _triggerNamesPS;
+                }
+                if (SDLControllerType == SDL2.SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_PRO)
+                {
+                    return _triggerNamesSwitch;
+                }
             }
             else
             {
-                return _triggerNames;
+                SDL3.SDL.SDL_GamepadType SDLControllerType = (SDL3.SDL.SDL_GamepadType)ControllerType;
+                if (SDLControllerType == SDL3.SDL.SDL_GamepadType.SDL_GAMEPAD_TYPE_PS3 || SDLControllerType == SDL3.SDL.SDL_GamepadType.SDL_GAMEPAD_TYPE_PS4 || SDLControllerType == SDL3.SDL.SDL_GamepadType.SDL_GAMEPAD_TYPE_PS5)
+                {
+                    return _triggerNamesPS;
+                }
+                if (SDLControllerType == SDL3.SDL.SDL_GamepadType.SDL_GAMEPAD_TYPE_NINTENDO_SWITCH_PRO)
+                {
+                    return _triggerNamesSwitch;
+                }
             }
+            if (_productName == "Nintendo Wii Remote")
+            {
+                return _triggerNamesWii;
+            }
+            if (_productName == "Nintendo 64 Controller")
+            {
+                return _triggerNamesN64;
+            }
+            return _triggerNames;
         }
 
         public override Sprite GetMapImage(int map)
         {
             Sprite mapImage;
-            if (SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS3 || SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS4 || SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS5)
+
+            if (Program.SDL2)
             {
-                _triggerImagesPS.TryGetValue(map, out mapImage);
+                SDL2.SDL.SDL_GameControllerType SDLControllerType = (SDL2.SDL.SDL_GameControllerType)ControllerType;
+                if (SDLControllerType == SDL2.SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS3 || SDLControllerType == SDL2.SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS4 || SDLControllerType == SDL2.SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS5)
+                {
+                    _triggerImagesPS.TryGetValue(map, out mapImage);
+                    return mapImage;
+                }
+                if (SDLControllerType == SDL2.SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_PRO)
+                {
+                    _triggerImagesSwitch.TryGetValue(map, out mapImage);
+                    return mapImage;
+                }
             }
-            else if (SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_PRO)
+            else
             {
-                _triggerImagesSwitch.TryGetValue(map, out mapImage);
+                SDL3.SDL.SDL_GamepadType SDLControllerType = (SDL3.SDL.SDL_GamepadType)ControllerType;
+                if (SDLControllerType == SDL3.SDL.SDL_GamepadType.SDL_GAMEPAD_TYPE_PS3 || SDLControllerType == SDL3.SDL.SDL_GamepadType.SDL_GAMEPAD_TYPE_PS4 || SDLControllerType == SDL3.SDL.SDL_GamepadType.SDL_GAMEPAD_TYPE_PS5)
+                {
+                    _triggerImagesPS.TryGetValue(map, out mapImage);
+                    return mapImage;
+                }
+                if (SDLControllerType == SDL3.SDL.SDL_GamepadType.SDL_GAMEPAD_TYPE_NINTENDO_SWITCH_PRO)
+                {
+                    _triggerImagesSwitch.TryGetValue(map, out mapImage);
+                    return mapImage;
+                }
             }
-            else if (_productName == "Nintendo Wii Remote")
+            if (_productName == "Nintendo Wii Remote")
             {
                 _triggerImagesWii.TryGetValue(map, out mapImage);
             }
@@ -886,13 +919,13 @@ namespace DuckGame
             GamePadState state1 = GamePad.GetState(index, GamePadDeadZone.Circular);
             if (_connectedState != state1.IsConnected && state1.IsConnected)
             {
-                string productname = SDL.SDL_GameControllerNameForIndex(index);
-                SDLControllerType = SDL.SDL_GameControllerTypeForIndex(index);
+                string productname = FNAPlatform.GameControllerNameForIndex(index);
+                ControllerType = (int)FNAPlatform.GameControllerTypeForIndex(index);
                 if (productname != null && productname != "")
                 {
                     _productName = productname;
                 }
-                else if (SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_UNKNOWN)
+                else if (ControllerType == 0) // TYPE_UNKNOWN
                 {
                     _productName = GamePad.GetControllerName(index);
                 }

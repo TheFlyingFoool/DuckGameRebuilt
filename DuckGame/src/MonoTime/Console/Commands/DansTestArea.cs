@@ -637,17 +637,17 @@ namespace DuckGame
         public static void windowtoggle()
         {
             windowed = !windowed;
-            SDL.SDL_SetWindowBordered(MonoMain.instance.Window.Handle, windowed ? SDL.SDL_bool.SDL_TRUE : SDL.SDL_bool.SDL_FALSE);
+            FNAPlatform.SetWindowBordered(MonoMain.instance.Window.Handle, windowed);
             DevConsole.Log("Windowed Mode is " + windowed.ToString());
         }
-        public static bool windowed = true;// SDL.SDL_SetWindowPosition(Resolution._window, 0, 0);
+        public static bool windowed = true;
 
 
         [Marker.DevConsoleCommand(Name = "windowpos",
             To = ImplementTo.DuckHack)]
         public static void windowtoggle(int x, int y)
         {
-            SDL.SDL_SetWindowPosition(MonoMain.instance.Window.Handle, x, y);
+            FNAPlatform.SetWindowPosition(MonoMain.instance.Window.Handle, x, y);
             DevConsole.Log("Set Window Pos is " + x.ToString() + " " + y.ToString());
         }
         [Marker.DevConsoleCommand(Name = "tilescreen")]
@@ -706,7 +706,6 @@ namespace DuckGame
         {
             DuckNetwork.CheckVersion(null);
         }
-        // SDL.SDL_SetWindowBordered(Resolution._window, true ? SDL.SDL_bool.SDL_FALSE : SDL.SDL_bool.SDL_TRUE); 
         [Marker.DevConsoleCommand(Name = "rlevel",
             To = ImplementTo.DuckHack)]
         public static void randomnesstest2()

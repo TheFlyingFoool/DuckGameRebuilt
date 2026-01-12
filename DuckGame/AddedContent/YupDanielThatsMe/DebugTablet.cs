@@ -10,6 +10,7 @@ using SDL2;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static DuckGame.CustomKeyBinds;
+using Microsoft.Xna.Framework;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
@@ -47,9 +48,10 @@ namespace DuckGame
 		public static void ReadClipboardText()
 		{
 		    _clipboardText = "";
-		    if (!(SDL.SDL_HasClipboardText() == SDL.SDL_bool.SDL_TRUE))
+          
+		    if (!FNAPlatform.HasClipboardText())
 		        return;
-		    _clipboardText = SDL.SDL_GetClipboardText();
+		    _clipboardText = FNAPlatform.GetClipboardText();
 		}
 		public static bool showcursor;
 		public static float cusorblink;
@@ -459,7 +461,7 @@ namespace DuckGame
 		            string copyText = tab.CopySelected();
 		            if (copyText != "")
 		            {
-		                SDL.SDL_SetClipboardText(copyText);
+		                FNAPlatform.SetClipboardText(copyText);
 		            }
 		            if (Keyboard.Pressed(Keys.X))
 		            {
