@@ -1,4 +1,5 @@
 ﻿using AddedContent.Firebreak;
+using Microsoft.Xna.Framework;
 using SDL2;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace DuckGame
                 // currentPart.Append('\n');
             }
 
-            Thread thread = new(() => SDL.SDL_SetClipboardText(currentPart.ToString()));
+            Thread thread = new(() => FNAPlatform.SetClipboardText(currentPart.ToString()));
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
             thread.Join();

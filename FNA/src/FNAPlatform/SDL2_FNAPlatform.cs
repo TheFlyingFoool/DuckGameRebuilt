@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2023 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2024 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -35,6 +35,8 @@ namespace Microsoft.Xna.Framework
 		) == "1";
 
 		private static bool SupportsGlobalMouse;
+
+		private static bool SupportsOrientations;
 
 		#endregion
 
@@ -235,6 +237,15 @@ namespace Microsoft.Xna.Framework
 			SupportsGlobalMouse = (	OSVersion.Equals("Windows") ||
 						OSVersion.Equals("Mac OS X") ||
 						videoDriver.Equals("x11")	);
+			if (Environment.GetEnvironmentVariable("FNA_MOUSE_DISABLE_GLOBAL_ACCESS") == "1")
+			{
+				// Ignore previous instructions
+				SupportsGlobalMouse = false;
+			}
+
+			// Only iOS and Android care about device orientation.
+			SupportsOrientations = ( OSVersion.Equals("iOS") ||
+						 OSVersion.Equals("Android")	);
 
 			/* High-DPI is really annoying and only some platforms
 			 * actually let you control the drawable surface.
@@ -299,7 +310,8 @@ namespace Microsoft.Xna.Framework
 				INTERNAL_AddInstance(evt[0].cdevice.which);
 			}
 
-			if (OSVersion.Equals("Windows"))
+			if (	OSVersion.Equals("Windows") &&
+				SDL.SDL_GetHint("FNA_WIN32_IGNORE_WM_PAINT") != "1"	)
 			{
 				/* Windows has terrible event pumping and doesn't give us
 				 * WM_PAINT events correctly. So we get to do this!
@@ -317,7 +329,7 @@ namespace Microsoft.Xna.Framework
 			}
 
 			/* Minimal, Portable, SDL-based Tesla Splash.
-			 * Copyright (c) 2022-2023 Ethan Lee
+			 * Copyright (c) 2022-2024 Ethan Lee
 			 * Released under the zlib license:
 			 * https://www.zlib.net/zlib_license.html
 			 *
@@ -369,16 +381,11 @@ namespace Microsoft.Xna.Framework
 
 		public static void ProgramExit(object sender, EventArgs e)
 		{
-			AudioEngine.ProgramExiting = true;
-
-			if (SoundEffect.FAudioContext.Context != null)
-			{
-				SoundEffect.FAudioContext.Context.Dispose();
-			}
-			Media.MediaPlayer.DisposeIfNecessary();
-
 			// This _should_ be the last SDL call we make...
-			SDL.SDL_Quit();
+			SDL.SDL_QuitSubSystem(
+				SDL.SDL_INIT_VIDEO |
+				SDL.SDL_INIT_GAMECONTROLLER
+			);
 		}
 
 		#endregion
@@ -527,6 +534,11 @@ namespace Microsoft.Xna.Framework
 			if (TouchPanel.WindowHandle == window.Handle)
 			{
 				TouchPanel.WindowHandle = IntPtr.Zero;
+			}
+
+			if (TextInputEXT.WindowHandle == window.Handle)
+			{
+				TextInputEXT.WindowHandle = IntPtr.Zero;
 			}
 
 			SDL.SDL_DestroyWindow(window.Handle);
@@ -846,7 +858,7 @@ namespace Microsoft.Xna.Framework
 			return stripChars;
 		}
 
-		public static void SetTextInputRectangle(Rectangle rectangle)
+		public static void SetTextInputRectangle(IntPtr window, Rectangle rectangle)
 		{
 			SDL.SDL_Rect rect = new SDL.SDL_Rect();
 			rect.x = rectangle.X;
@@ -871,6 +883,7 @@ namespace Microsoft.Xna.Framework
 					return DisplayOrientation.LandscapeRight;
 
 				case SDL.SDL_DisplayOrientation.SDL_ORIENTATION_PORTRAIT:
+				case SDL.SDL_DisplayOrientation.SDL_ORIENTATION_PORTRAIT_FLIPPED:
 					return DisplayOrientation.Portrait;
 
 				default:
@@ -914,7 +927,7 @@ namespace Microsoft.Xna.Framework
 
 		public static bool SupportsOrientationChanges()
 		{
-			return OSVersion.Equals("iOS") || OSVersion.Equals("Android");
+			return SupportsOrientations;
 		}
 
 		#endregion
@@ -1125,6 +1138,12 @@ namespace Microsoft.Xna.Framework
 						int newIndex = SDL.SDL_GetWindowDisplayIndex(
 							game.Window.Handle
 						);
+
+						if (newIndex >= GraphicsAdapter.Adapters.Count)
+						{
+							GraphicsAdapter.AdaptersChanged(); // quickfix for this event coming in before the display reattach event. (must be fixed in sdl)
+						}
+
 						if (GraphicsAdapter.Adapters[newIndex] != currentAdapter)
 						{
 							currentAdapter = GraphicsAdapter.Adapters[newIndex];
@@ -1159,22 +1178,24 @@ namespace Microsoft.Xna.Framework
 					// Orientation Change
 					if (evt.display.displayEvent == SDL.SDL_DisplayEventID.SDL_DISPLAYEVENT_ORIENTATION)
 					{
-						DisplayOrientation orientation = INTERNAL_ConvertOrientation(
-							(SDL.SDL_DisplayOrientation) evt.display.data1
-						);
+						if (SupportsOrientationChanges())
+						{
+							DisplayOrientation orientation = INTERNAL_ConvertOrientation(
+								(SDL.SDL_DisplayOrientation) evt.display.data1
+							);
 
-						INTERNAL_HandleOrientationChange(
-							orientation,
-							game.GraphicsDevice,
-							currentAdapter,
-							(FNAWindow) game.Window
-						);
+							INTERNAL_HandleOrientationChange(
+								orientation,
+								game.GraphicsDevice,
+								currentAdapter,
+								(FNAWindow) game.Window
+							);
+						}
 					}
 					else
 					{
-						// Just reset, this is probably a hotplug
-						game.GraphicsDevice.Reset(
-							game.GraphicsDevice.PresentationParameters,
+						// Quietly update, this is probably a hotplug
+						game.GraphicsDevice.QuietlyUpdateAdapter(
 							currentAdapter
 						);
 					}
@@ -1364,6 +1385,11 @@ namespace Microsoft.Xna.Framework
 			);
 		}
 
+		public static IntPtr GetMonitorHandle(int adapterIndex)
+		{
+			return new IntPtr(adapterIndex);
+		}
+
 		#endregion
 
 		#region Mouse Methods
@@ -1379,7 +1405,7 @@ namespace Microsoft.Xna.Framework
 			out ButtonState x2
 		) {
 			uint flags;
-			if (GetRelativeMouseMode())
+			if (GetRelativeMouseMode(window))
 			{
 				flags = SDL.SDL_GetRelativeMouseState(out x, out y);
 			}
@@ -1408,12 +1434,12 @@ namespace Microsoft.Xna.Framework
 			SDL.SDL_ShowCursor(visible ? 1 : 0);
 		}
 
-		public static bool GetRelativeMouseMode()
+		public static bool GetRelativeMouseMode(IntPtr window)
 		{
 			return SDL.SDL_GetRelativeMouseMode() == SDL.SDL_bool.SDL_TRUE;
 		}
 
-		public static void SetRelativeMouseMode(bool enable)
+		public static void SetRelativeMouseMode(IntPtr window, bool enable)
 		{
 			SDL.SDL_SetRelativeMouseMode(
 				enable ?
@@ -1434,7 +1460,7 @@ namespace Microsoft.Xna.Framework
 
 		private static string GetBaseDirectory()
 		{
-			if (Environment.GetEnvironmentVariable("FNA_SDL2_FORCE_BASE_PATH") != "1")
+			if (Environment.GetEnvironmentVariable("FNA_SDL_FORCE_BASE_PATH") != "1")
 			{
 				// If your platform uses a CLR, you want to be in this list!
 				if (	OSVersion.Equals("Windows") ||
@@ -2358,6 +2384,74 @@ namespace Microsoft.Xna.Framework
 			return result;
 		}
 
+		internal static bool OpenURL(string url)
+		{
+			return SDL.SDL_OpenURL(url) == 0;
+		}
+		internal static bool HasClipboardText()
+		{
+			return SDL.SDL_HasClipboardText() == SDL.SDL_bool.SDL_TRUE;
+		}
+
+		internal static string GetClipboardText()
+		{
+			return SDL.SDL_GetClipboardText();
+		}
+		internal static bool SetClipboardText(string text)
+		{
+			return SDL.SDL_SetClipboardText(text) == 0;
+		}
+
+		internal static void SetWindowBordered(IntPtr window, bool bordered)
+		{
+			SDL.SDL_SetWindowBordered(window, bordered ? SDL.SDL_bool.SDL_TRUE : SDL.SDL_bool.SDL_FALSE);
+		}
+
+		internal static void SetWindowPosition(IntPtr window, int x, int y)
+		{
+			SDL.SDL_SetWindowPosition(window, x, y);
+		}
+
+		internal static ulong GetWindowFlags(IntPtr window)
+		{
+			return (ulong) SDL.SDL_GetWindowFlags(window);
+		}
+
+
+		internal static void RaiseWindow(IntPtr window)
+		{
+			SDL.SDL_RaiseWindow(window);
+		}
+		internal static void MaximizeWindow(IntPtr window)
+		{
+			SDL.SDL_MaximizeWindow(window);
+		}
+		internal static void RestoreWindow(IntPtr window)
+		{
+			SDL.SDL_RestoreWindow(window);
+		}
+
+		internal static void SetWindowSize(IntPtr window, int w, int h)
+		{
+			SDL.SDL_SetWindowSize(window, w, h);
+		}
+		internal static void GetWindowPosition(IntPtr window, out int x, out int y)
+		{
+			SDL.SDL_GetWindowPosition(window, out x, out y);
+		}
+		internal static int SetWindowInputFocus(IntPtr window)
+		{
+			return SDL.SDL_SetWindowInputFocus(window);
+		}
+		internal static string GameControllerNameForIndex(int deviceIndex)
+		{
+			return SDL.SDL_GameControllerNameForIndex(deviceIndex);
+		}
+
+		internal static int GameControllerTypeForIndex(int deviceIndex)
+		{
+			return (int)SDL.SDL_GameControllerTypeForIndex(deviceIndex);
+		}
 		#endregion
 
 		#region Touch Methods
@@ -2414,9 +2508,20 @@ namespace Microsoft.Xna.Framework
 		#endregion
 
 		#region TextInput Methods
-		public static bool IsTextInputActive()
+
+		public static bool IsTextInputActive(IntPtr window)
 		{
 			return SDL.SDL_IsTextInputActive() != 0;
+		}
+
+		public static void StartTextInput(IntPtr window)
+		{
+			SDL.SDL_StartTextInput();
+		}
+
+		public static void StopTextInput(IntPtr window)
+		{
+			SDL.SDL_StopTextInput();
 		}
 
 		#endregion

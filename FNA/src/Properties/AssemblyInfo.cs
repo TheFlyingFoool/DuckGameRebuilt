@@ -16,7 +16,7 @@ using System.Resources;
 #endif
 [assembly: AssemblyCompany("Ethan \"flibitijibibo\" Lee")]
 [assembly: AssemblyProduct("FNA")]
-[assembly: AssemblyCopyright("Copyright (c) 2009-2023")]
+[assembly: AssemblyCopyright("Copyright (c) 2009-2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -39,4 +39,4 @@ using System.Resources;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("23.12.07.0")]
+[assembly: AssemblyVersion("26.01.0.0")]

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace DuckGame
 {
@@ -905,7 +906,7 @@ namespace DuckGame
                     _ => $"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}  https://dgr-join.github.io/?lobby={Steam.lobby.id}&user={Steam.user.id}"
                 };
 
-                SDL.SDL_SetClipboardText(inviteLink);
+                FNAPlatform.SetClipboardText(inviteLink);
                 HUD.AddPlayerChangeDisplay("@CLIPCOPY@Invite Link Copied!");
             });
             thread.SetApartmentState(ApartmentState.STA);
@@ -2374,8 +2375,8 @@ namespace DuckGame
                     if (_core.enteringText)
                     {
                         Input._imeAllowed = true;
-                        if (Keyboard.control && Keyboard.Pressed(Keys.V) && SDL.SDL_HasClipboardText() == SDL.SDL_bool.SDL_TRUE)
-                            Keyboard.KeyString += SDL.SDL_GetClipboardText();
+                        if (Keyboard.control && Keyboard.Pressed(Keys.V) && FNAPlatform.HasClipboardText())
+                            Keyboard.KeyString += FNAPlatform.GetClipboardText();
                         if (Keyboard.KeyString.Length > 90)
                             Keyboard.KeyString = Keyboard.KeyString.Substring(0, 90);
                         Keyboard.KeyString = Keyboard.KeyString.Replace("\n", "");

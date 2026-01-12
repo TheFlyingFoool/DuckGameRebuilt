@@ -107,8 +107,8 @@ namespace DuckGame
                     case ScreenMode.Windowed:
                         Graphics.mouseVisible = false;
                         Graphics._screenBufferTarget = null;
-                        SDL.SDL_SetWindowBordered(MonoMain.instance.Window.Handle, false ? SDL.SDL_bool.SDL_FALSE : SDL.SDL_bool.SDL_TRUE);// Resolution._window.FormBorderStyle = FormBorderStyle.FixedSingle;
-                        //SDL.SDL_SetWindowPosition(MonoMain.instance.Window.Handle, Resolution.adapterResolution.x / 2 - Options.LocalData.currentResolution.x / 2, Resolution.adapterResolution.y / 2 - Options.LocalData.currentResolution.y / 2 - 16);
+                        FNAPlatform.SetWindowBordered(MonoMain.instance.Window.Handle, true);// Resolution._window.FormBorderStyle = FormBorderStyle.FixedSingle;
+                        //FNAPlatform.SetWindowPosition(MonoMain.instance.Window.Handle, Resolution.adapterResolution.x / 2 - Options.LocalData.currentResolution.x / 2, Resolution.adapterResolution.y / 2 - Options.LocalData.currentResolution.y / 2 - 16);
                         // Resolution._window.Location = new System.Drawing.Point(Resolution.adapterResolution.x / 2 - Options.LocalData.currentResolution.x / 2, Resolution.adapterResolution.y / 2 - Options.LocalData.currentResolution.y / 2 - 16);
                         // removed window positioning as it seems to auto center on size change atm ¯\_(ツ)_/¯, Dan
                         break;
@@ -119,8 +119,8 @@ namespace DuckGame
                     case ScreenMode.Borderless:
                         Graphics.mouseVisible = false;
                         Graphics._screenBufferTarget = new RenderTarget2D(Options.LocalData.currentResolution.x, Options.LocalData.currentResolution.y, true, RenderTargetUsage.PreserveContents);
-                        SDL.SDL_SetWindowBordered(MonoMain.instance.Window.Handle, true ? SDL.SDL_bool.SDL_FALSE : SDL.SDL_bool.SDL_TRUE); //  Resolution._window.FormBorderStyle = FormBorderStyle.None;
-                        //SDL.SDL_SetWindowPosition(Resolution._window, (int)Options.LocalData.currentResolution.pos.x, (int)Options.LocalData.currentResolution.pos.y); //Resolution._window.Location = new System.Drawing.Point(0, 0);
+                        FNAPlatform.SetWindowBordered(MonoMain.instance.Window.Handle, false); //  Resolution._window.FormBorderStyle = FormBorderStyle.None;
+                        //FNAPlatform.SetWindowPosition(Resolution._window, (int)Options.LocalData.currentResolution.pos.x, (int)Options.LocalData.currentResolution.pos.y); //Resolution._window.Location = new System.Drawing.Point(0, 0);
                         // removed window positioning as it seems to auto center on size change atm ¯\_(ツ)_/¯, Dan
                         if (Graphics._screenBufferTarget.width < 400)
                         {
@@ -155,8 +155,8 @@ namespace DuckGame
             {
                 --_takeFocus;
                 if (_takeFocus == 0)
-                    SDL.SDL_RaiseWindow(MonoMain.instance.Window.Handle);
-                SDL.SDL_SetWindowInputFocus(MonoMain.instance.Window.Handle);
+                    FNAPlatform.RaiseWindow(MonoMain.instance.Window.Handle);
+                FNAPlatform.SetWindowInputFocus(MonoMain.instance.Window.Handle);
                 //Resolution._window.Focus();
             }
             if (_pendingResolution == null)

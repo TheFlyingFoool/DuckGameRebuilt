@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2023 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2024 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -59,7 +59,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
 			get
 			{
-				if ((elementCount > 0) && (elements == null))
+				if ((elements == null))
 				{
 					BuildElementList();
 				}
@@ -71,7 +71,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		{
 			get
 			{
-				if ((mojoType != IntPtr.Zero) && (members == null))
+				if (members == null)
 				{
 					BuildMemberList();
 				}
@@ -188,68 +188,65 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		internal void BuildElementList()
 		{
-			if (elementCount > 0)
+			int curOffset = 0;
+			List<EffectParameter> elements = new List<EffectParameter>(elementCount);
+			EffectParameterCollection structureMembers = StructureMembers;
+			for (int i = 0; i < elementCount; i += 1)
 			{
-				int curOffset = 0;
-				List<EffectParameter> elements = new List<EffectParameter>(elementCount);
-				EffectParameterCollection structureMembers = StructureMembers;
-				for (int i = 0; i < elementCount; i += 1)
+				EffectParameterCollection elementMembers = null;
+				if (structureMembers != null)
 				{
-					EffectParameterCollection elementMembers = null;
-					if (structureMembers != null)
+					List<EffectParameter> memList = new List<EffectParameter>();
+					for (int j = 0; j < structureMembers.Count; j += 1)
 					{
-						List<EffectParameter> memList = new List<EffectParameter>();
-						for (int j = 0; j < structureMembers.Count; j += 1)
+						int memElems = 0;
+						if (structureMembers[j].Elements != null)
 						{
-							int memElems = 0;
-							if (structureMembers[j].Elements != null)
-							{
-								memElems = structureMembers[j].Elements.Count;
-							}
-							int memSize = structureMembers[j].RowCount * 4;
-							if (memElems > 0)
-							{
-								memSize *= memElems;
-							}
-							memList.Add(new EffectParameter(
-								structureMembers[j].Name,
-								structureMembers[j].Semantic,
-								structureMembers[j].RowCount,
-								structureMembers[j].ColumnCount,
-								memElems,
-								structureMembers[j].ParameterClass,
-								structureMembers[j].ParameterType,
-								IntPtr.Zero, // FIXME: Nested structs! -flibit
-								structureMembers[j].Annotations,
-								new IntPtr(values.ToInt64() + curOffset),
-								(uint) memSize * 4,
-								outer
-							));
-							curOffset += memSize * 4;
+							memElems = structureMembers[j].Elements.Count;
 						}
-						elementMembers = new EffectParameterCollection(memList);
+						int memSize = structureMembers[j].RowCount * 4;
+						if (memElems > 0)
+						{
+							memSize *= memElems;
+						}
+						memList.Add(new EffectParameter(
+							structureMembers[j].Name,
+							structureMembers[j].Semantic,
+							structureMembers[j].RowCount,
+							structureMembers[j].ColumnCount,
+							memElems,
+							structureMembers[j].ParameterClass,
+							structureMembers[j].ParameterType,
+							IntPtr.Zero, // FIXME: Nested structs! -flibit
+							structureMembers[j].Annotations,
+							new IntPtr(values.ToInt64() + curOffset),
+							(uint) memSize * 4,
+							outer
+						));
+						curOffset += memSize * 4;
 					}
-					// FIXME: Probably incomplete? -flibit
-					elements.Add(new EffectParameter(
-						null,
-						null,
-						RowCount,
-						ColumnCount,
-						0,
-						ParameterClass,
-						ParameterType,
-						elementMembers,
-						null,
-						new IntPtr(
-							values.ToInt64() + (i * RowCount * 16)
-						),
-						// FIXME: Not obvious to me how to compute this -kg
-						0,
-						outer
-					));
+					elementMembers = new EffectParameterCollection(memList);
 				}
-				this.elements = new EffectParameterCollection(elements);
+				// FIXME: Probably incomplete? -flibit
+				elements.Add(new EffectParameter(
+					null,
+					null,
+					RowCount,
+					ColumnCount,
+					0,
+					ParameterClass,
+					ParameterType,
+					elementMembers,
+					null,
+					new IntPtr(
+						values.ToInt64() + (i * RowCount * 16)
+					),
+					// FIXME: Not obvious to me how to compute this -kg
+					0,
+					outer
+				));
 			}
+			this.elements = new EffectParameterCollection(elements);
 		}
 
 		#endregion
@@ -578,14 +575,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		#region Public Set Methods
 
-		internal void BoundsCheckArray(Array value)
-		{
-			if (value == null)
-				throw new ArgumentNullException("value");
-			else if (value.Length > elementCount)
-				throw new ArgumentOutOfRangeException("value.Length");
-		}
-
 		public void SetValue(bool value)
 		{
 			unsafe
@@ -598,8 +587,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(bool[] value)
 		{
-			BoundsCheckArray(value);
-
 			unsafe
 			{
 				int* dstPtr = (int*) values;
@@ -636,8 +623,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(int[] value)
 		{
-			BoundsCheckArray(value);
-
 			for (int i = 0, j = 0; i < value.Length; i += ColumnCount, j += 16)
 			{
 				Marshal.Copy(value, i, values + j, ColumnCount);
@@ -734,8 +719,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValueTranspose(Matrix[] value)
 		{
-			BoundsCheckArray(value);
-
 			// FIXME: All Matrix sizes... this will get ugly. -flibit
 			unsafe
 			{
@@ -939,8 +922,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(Matrix[] value)
 		{
-			BoundsCheckArray(value);
-
 			// FIXME: All Matrix sizes... this will get ugly. -flibit
 			unsafe
 			{
@@ -1071,8 +1052,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(Quaternion[] value)
 		{
-			BoundsCheckArray(value);
-
 			unsafe
 			{
 				float* dstPtr = (float*) values;
@@ -1106,8 +1085,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(float[] value)
 		{
-			BoundsCheckArray(value);
-
 #if DEBUG
 			foreach (float f in value)
 			{
@@ -1152,8 +1129,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(Vector2[] value)
 		{
-			BoundsCheckArray(value);
-
 			unsafe
 			{
 				float* dstPtr = (float*) values;
@@ -1184,8 +1159,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(Vector3[] value)
 		{
-			BoundsCheckArray(value);
-
 			unsafe
 			{
 				float* dstPtr = (float*) values;
@@ -1218,8 +1191,6 @@ namespace Microsoft.Xna.Framework.Graphics
 
 		public void SetValue(Vector4[] value)
 		{
-			BoundsCheckArray(value);
-
 			unsafe
 			{
 				float* dstPtr = (float*) values;

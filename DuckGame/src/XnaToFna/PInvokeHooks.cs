@@ -54,7 +54,7 @@ namespace XnaToFna
         {
             if (GameForm.Instance.Handle != hWnd)
                 return false;
-            SDL.SDL_RaiseWindow(XnaToFnaHelper.Game.Window.Handle);
+            FNAPlatform.RaiseWindow(XnaToFnaHelper.Game.Window.Handle);
             return true;
         }
 

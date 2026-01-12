@@ -9,6 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.Xna.Framework</RootNamespace>
     <AssemblyName>FNA</AssemblyName>
+    <LangVersion>4</LangVersion>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -24,6 +25,7 @@
     <ConsolePause>False</ConsolePause>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>none</DebugType>
@@ -35,6 +37,7 @@
     <ConsolePause>False</ConsolePause>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>True</DebugSymbols>
@@ -48,6 +51,7 @@
     <ConsolePause>False</ConsolePause>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <DebugType>none</DebugType>
@@ -59,6 +63,7 @@
     <ConsolePause>False</ConsolePause>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -72,6 +77,7 @@
     <ConsolePause>False</ConsolePause>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -83,6 +89,7 @@
     <ConsolePause>False</ConsolePause>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <FNASettingsPropsFilePath>$(SolutionDir)FNA.Settings.props</FNASettingsPropsFilePath>
@@ -215,6 +222,7 @@
     <Compile Include="src\FNAPlatform\FNAPlatform.cs" />
     <Compile Include="src\FNAPlatform\FNAWindow.cs" />
     <Compile Include="src\FNAPlatform\SDL2_FNAPlatform.cs" />
+    <Compile Include="src\FNAPlatform\SDL3_FNAPlatform.cs" />
     <Compile Include="src\FrameworkDispatcher.cs" />
     <Compile Include="src\Game.cs" />
     <Compile Include="src\GameComponent.cs" />
@@ -382,15 +390,33 @@
     <Compile Include="src\LaunchParameters.cs" />
     <Compile Include="src\MathHelper.cs" />
     <Compile Include="src\Matrix.cs" />
+    <Compile Include="src\Media\Album.cs" />
+    <Compile Include="src\Media\AlbumCollection.cs" />
+    <Compile Include="src\Media\Artist.cs" />
+    <Compile Include="src\Media\ArtistCollection.cs" />
+    <Compile Include="src\Media\Genre.cs" />
+    <Compile Include="src\Media\GenreCollection.cs" />
+    <Compile Include="src\Media\MediaLibrary.cs" />
     <Compile Include="src\Media\MediaPlayer.cs" />
     <Compile Include="src\Media\MediaQueue.cs" />
+    <Compile Include="src\Media\MediaSource.cs" />
+    <Compile Include="src\Media\MediaSourceType.cs" />
     <Compile Include="src\Media\MediaState.cs" />
+    <Compile Include="src\Media\Picture.cs" />
+    <Compile Include="src\Media\PictureAlbum.cs" />
+    <Compile Include="src\Media\PictureAlbumCollection.cs" />
+    <Compile Include="src\Media\PictureCollection.cs" />
+    <Compile Include="src\Media\Playlist.cs" />
+    <Compile Include="src\Media\PlaylistCollection.cs" />
     <Compile Include="src\Media\Song.cs" />
     <Compile Include="src\Media\SongCollection.cs" />
     <Compile Include="src\Media\VideoSoundtrackType.cs" />
     <Compile Include="src\Media\VisualizationData.cs" />
+    <Compile Include="src\Media\Xiph\BaseYUVPlayer.cs" />
+    <Compile Include="src\Media\Xiph\IVideoPlayerCodec.cs" />
     <Compile Include="src\Media\Xiph\Video.cs" />
     <Compile Include="src\Media\Xiph\VideoPlayer.cs" />
+    <Compile Include="src\Media\Xiph\VideoPlayerTheora.cs" />
     <Compile Include="src\NamespaceDocs.cs" />
     <Compile Include="src\Plane.cs" />
     <Compile Include="src\PlaneIntersectionType.cs" />
@@ -416,6 +442,7 @@
     <Compile Include="src\Vector3.cs" />
     <Compile Include="src\Vector4.cs" />
     <Compile Include="lib\SDL2-CS\src\SDL2.cs" />
+    <Compile Include="lib\SDL3-CS\SDL3\SDL3.Legacy.cs" />
     <Compile Include="lib\FAudio\csharp\FAudio.cs" />
     <Compile Include="lib\Theorafile\csharp\Theorafile.cs" />
   </ItemGroup>

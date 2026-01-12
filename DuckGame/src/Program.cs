@@ -34,7 +34,7 @@ namespace DuckGame
 #else
         public const bool IS_DEV_BUILD = false;
 #endif
-
+        public static bool SDL2 = false;
         // this should be formatted like X.X.X where each X is a number
         public const string CURRENT_VERSION_ID = "1.4.7";
 
@@ -729,6 +729,8 @@ namespace DuckGame
             string environmentVariable = Environment.GetEnvironmentVariable("FNA_GAMEPAD_NUM_GAMEPADS");
             if (string.IsNullOrEmpty(environmentVariable) || !int.TryParse(environmentVariable, out MonoMain.MaximumGamepadCount) || MonoMain.MaximumGamepadCount < 0)
                 MonoMain.MaximumGamepadCount = Enum.GetNames(typeof(PlayerIndex)).Length;
+
+            SDL2 = Environment.GetEnvironmentVariable("FNA_PLATFORM_BACKEND") == "SDL2";
 
             main = new Main();
             if (Debugger.IsAttached)

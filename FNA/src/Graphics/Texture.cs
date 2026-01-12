@@ -1,6 +1,6 @@
 #region License
 /* FNA - XNA4 Reimplementation for Desktop Platforms
- * Copyright 2009-2023 Ethan Lee and the MonoGame Team
+ * Copyright 2009-2024 Ethan Lee and the MonoGame Team
  *
  * Released under the Microsoft Public License.
  * See LICENSE for details.
@@ -130,6 +130,8 @@ namespace Microsoft.Xna.Framework.Graphics
 				case SurfaceFormat.Vector2:
 				case SurfaceFormat.HdrBlendable:
 				case SurfaceFormat.Vector4:
+				case SurfaceFormat.ByteEXT:
+				case SurfaceFormat.UShortEXT:
 					return 1;
 				default:
 					throw new ArgumentException("Should be a value defined in SurfaceFormat", "Format");
@@ -149,12 +151,14 @@ namespace Microsoft.Xna.Framework.Graphics
 				case SurfaceFormat.Bc7SrgbEXT:
 					return 16;
 				case SurfaceFormat.Alpha8:
+				case SurfaceFormat.ByteEXT:
 					return 1;
 				case SurfaceFormat.Bgr565:
 				case SurfaceFormat.Bgra4444:
 				case SurfaceFormat.Bgra5551:
 				case SurfaceFormat.HalfSingle:
 				case SurfaceFormat.NormalizedByte2:
+				case SurfaceFormat.UShortEXT:
 					return 2;
 				case SurfaceFormat.Color:
 				case SurfaceFormat.Single:
@@ -230,7 +234,7 @@ namespace Microsoft.Xna.Framework.Graphics
 			int height,
 			SurfaceFormat format
 		) {
-			if (format == SurfaceFormat.ColorBgraEXT)
+			if (format == SurfaceFormat.Color || format == SurfaceFormat.ColorBgraEXT)
 			{
 				return (((width * 32) + 7) / 8) * height;
 			}
@@ -478,18 +482,24 @@ namespace Microsoft.Xna.Framework.Graphics
 			}
 			else if ((formatFlags & DDPF_RGB) == DDPF_RGB)
 			{
-				if (	formatRGBBitCount != 32 ||
-					formatRBitMask != 0x00FF0000 ||
-					formatGBitMask != 0x0000FF00 ||
-					formatBBitMask != 0x000000FF ||
-					formatABitMask != 0xFF000000	)
-				{
-					throw new NotSupportedException(
-						"Unsupported DDS texture format"
-					);
-				}
+				if (formatRGBBitCount != 32)
+					throw new NotSupportedException("Unsupported DDS texture format: Alpha channel required");
 
-				format = SurfaceFormat.ColorBgraEXT;
+				bool isBgra = (formatRBitMask == 0x00FF0000 &&
+					formatGBitMask == 0x0000FF00 &&
+					formatBBitMask == 0x000000FF &&
+					formatABitMask == 0xFF000000);
+				bool isRgba = (formatRBitMask == 0x000000FF &&
+					formatGBitMask == 0x0000FF00 &&
+					formatBBitMask == 0x00FF0000 &&
+					formatABitMask == 0xFF000000);
+
+				if (isBgra)
+					format = SurfaceFormat.ColorBgraEXT;
+				else if (isRgba)
+					format = SurfaceFormat.Color;
+				else
+					throw new NotSupportedException("Unsupported DDS texture format: Only RGBA and BGRA are supported");
 			}
 			else
 			{
