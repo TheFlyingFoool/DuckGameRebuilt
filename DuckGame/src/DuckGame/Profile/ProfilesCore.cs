@@ -78,13 +78,16 @@ namespace DuckGame
         {
             get
             {
-                List<Profile> active = new List<Profile>();
-                foreach (Profile profile in Profiles.all)
+                List<Profile> _active = new List<Profile>();
+                List<Profile> profiles = Profiles.alllist;
+                for (int i = 0; i < profiles.Count; i++)
                 {
-                    if (profile.team != null)
-                        active.Add(profile);
+                    if (profiles[i].team != null)
+                    {
+                        _active.Add(profiles[i]);
+                    }
                 }
-                return active;
+                return _active;
             }
         }
 
