@@ -435,7 +435,7 @@ namespace DuckGame
             new Sprite("buttons/xbox/dPad")
           }
         };
-            private Dictionary<int, Sprite> _triggerImagesPS = new Dictionary<int, Sprite>()
+        private Dictionary<int, Sprite> _triggerImagesPS = new Dictionary<int, Sprite>()
         {
           {
             4096,
@@ -645,14 +645,15 @@ namespace DuckGame
             _productName = "XBOX GAMEPAD";
             _productGUID = "";
         }
-        public override Dictionary<int, string> GetTriggerNames()
+        public bool PlayStationController(int controllerType)
         {
+            bool isPlayStationController = false;
             if (Program.SDL2)
             {
                 SDL.SDL_GameControllerType SDLControllerType = (SDL.SDL_GameControllerType)ControllerType;
                 if (SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS3 || SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS4 || SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS5)
                 {
-                    return _triggerNamesPS;
+                    isPlayStationController = true;
                 }
             }
             else
@@ -660,11 +661,18 @@ namespace DuckGame
                 SDL3.SDL.SDL_GamepadType SDLControllerType = (SDL3.SDL.SDL_GamepadType)ControllerType;
                 if (SDLControllerType == SDL3.SDL.SDL_GamepadType.SDL_GAMEPAD_TYPE_PS3 || SDLControllerType == SDL3.SDL.SDL_GamepadType.SDL_GAMEPAD_TYPE_PS4 || SDLControllerType == SDL3.SDL.SDL_GamepadType.SDL_GAMEPAD_TYPE_PS5)
                 {
-                    return _triggerNamesPS;
+                    isPlayStationController = true;
                 }
             }
-       
-            if (_productName == "Nintendo Wii Remote")
+            return isPlayStationController;
+        }
+        public override Dictionary<int, string> GetTriggerNames()
+        {
+            if (PlayStationController(ControllerType))
+            {
+                return _triggerNamesPS;
+            }
+            else if (_productName == "Nintendo Wii Remote")
             {
                 return _triggerNamesWii;
             }
@@ -681,30 +689,15 @@ namespace DuckGame
         public override Sprite GetMapImage(int map)
         {
             Sprite mapImage;
-
-            if (Program.SDL2)
+            if (PlayStationController(ControllerType))
             {
-                SDL.SDL_GameControllerType SDLControllerType = (SDL.SDL_GameControllerType)ControllerType;
-                if (SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS3 || SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS4 || SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS5)
-                {
-                    _triggerImagesPS.TryGetValue(map, out mapImage);
-                    return mapImage;
-                }
+                _triggerImagesPS.TryGetValue(map, out mapImage);
             }
-            else
-            {
-                SDL3.SDL.SDL_GamepadType SDLControllerType = (SDL3.SDL.SDL_GamepadType)ControllerType;
-                if (SDLControllerType == SDL3.SDL.SDL_GamepadType.SDL_GAMEPAD_TYPE_PS3 || SDLControllerType == SDL3.SDL.SDL_GamepadType.SDL_GAMEPAD_TYPE_PS4 || SDLControllerType == SDL3.SDL.SDL_GamepadType.SDL_GAMEPAD_TYPE_PS5)
-                {
-                    _triggerImagesPS.TryGetValue(map, out mapImage);
-                    return mapImage;
-                }
-            }
-            /*if (SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_PRO) // 		SDL_GAMEPAD_TYPE_NINTENDO_SWITCH_PRO 
+            /* else if (SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_PRO) // 		SDL_GAMEPAD_TYPE_NINTENDO_SWITCH_PRO 
             {
                 //you should do things here
             }*/
-            if (_productName == "Nintendo Wii Remote")
+            else if (_productName == "Nintendo Wii Remote")
             {
                 _triggerImagesWii.TryGetValue(map, out mapImage);
             }
