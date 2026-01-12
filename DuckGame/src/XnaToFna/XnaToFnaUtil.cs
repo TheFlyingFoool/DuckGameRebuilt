@@ -68,7 +68,7 @@ namespace XnaToFna
         public List<string> FixPathsFor;
         public ILPlatform PreferredPlatform;
         public static Assembly Aassembly;
-        public static int RemapVersion = 22;
+        public static int RemapVersion = 23;
         public void Stub(ModuleDefinition mod)
         {
             Log(string.Format("[Stub] Stubbing {0}", mod.Assembly.Name.Name));
@@ -639,7 +639,8 @@ namespace XnaToFna
             new XnaToFnaMapping("System", new string[1] {
                 "System.Net"
           }),
-          new XnaToFnaMapping("FNA", new string[9] {
+          new XnaToFnaMapping("FNA", new string[10] {
+            "WineMono.FNA", // Added for a random mod crash seems to fix it
             "Microsoft.Xna.Framework",
             "Microsoft.Xna.Framework.Avatar",
             "Microsoft.Xna.Framework.Content.Pipeline",
