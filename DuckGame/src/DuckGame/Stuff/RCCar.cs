@@ -68,17 +68,31 @@ namespace DuckGame
         {
             if (Editor.clientonlycontent && receivingSignal)
             {
-                pTaped.velocity = velocity;
+                if (pTaped != null)
+                {
+                    pTaped.velocity = velocity;
+                }
+
 
                 if (Math.Abs(hSpeed) > 0.3f)
                 {
                     offDir = hSpeed > 0 ? (sbyte)1 : (sbyte)-1;
-                    pTaped.offDir = offDir;
+                    if (pTaped != null)
+                    {
+                        pTaped.offDir = offDir;
+                    }
                     //offDir *= -1;
                 }
-                pTaped.gun2.enablePhysics = false;//jank -Lucky
+                if (pTaped != null && pTaped.gun2 != null)
+                {
+                    pTaped.gun2.enablePhysics = false;//jank -Lucky
+                }
                 enablePhysics = true;
-                pTaped.angle = 0;
+                if (pTaped != null)
+                {
+                    pTaped.angle = 0;
+                }
+
             }
             base.PreUpdateTapedPositioning(pTaped);
         }
