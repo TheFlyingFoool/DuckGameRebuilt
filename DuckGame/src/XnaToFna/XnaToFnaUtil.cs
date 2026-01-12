@@ -68,7 +68,7 @@ namespace XnaToFna
         public List<string> FixPathsFor;
         public ILPlatform PreferredPlatform;
         public static Assembly Aassembly;
-        public static int RemapVersion = 21;
+        public static int RemapVersion = 22;
         public void Stub(ModuleDefinition mod)
         {
             Log(string.Format("[Stub] Stubbing {0}", mod.Assembly.Name.Name));
@@ -205,6 +205,15 @@ namespace XnaToFna
             Modder.TranspilerMap["System.Single DuckGame.ExtraStuff.EMusic::get_progress()"] = new TranspilerMapEntry(TryCatchPatch);
             Modder.TranspilerMap["System.TimeSpan DuckGame.ExtraStuff.EMusic::get_length()"] = new TranspilerMapEntry(TryCatchPatch);
             Modder.TranspilerMap["System.TimeSpan DuckGame.ExtraStuff.EMusic::get_position()"] = new TranspilerMapEntry(TryCatchPatch);
+
+
+            //Johns Weapon 1268274761
+            // Some kinda linux related crash something to do with System.UnauthorizedAccessException: Access to the path probly something wrong with doing
+            //public static string logPath = "C:\\Users\\" + Environment.UserName + "\\Documents\\DuckGame\\DuckDebug\\"; for pathing
+            // as logging isnt as imporant as any other function going to try catch it
+            Modder.TranspilerMap["System.Void DuckGame.DuckDebug.DuckDebug::Write(System.String)"] = new TranspilerMapEntry(TryCatchPatch);
+            Modder.TranspilerMap["System.Void DuckGame.DuckDebug.DuckDebug::clearLog()"] = new TranspilerMapEntry(TryCatchPatch);
+
 
             Modder.TranspilerMap["System.Void DuckGame.C44P.C4::Update()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod("C4PP_C4_Update", BindingFlags.NonPublic | BindingFlags.Static));
             Modder.TranspilerMap["System.Void DuckGame.JamMod.Banjoo::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod("JamMod_Banjoo_OnPressAction", BindingFlags.NonPublic | BindingFlags.Static));
