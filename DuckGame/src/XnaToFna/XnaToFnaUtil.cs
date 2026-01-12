@@ -68,7 +68,7 @@ namespace XnaToFna
         public List<string> FixPathsFor;
         public ILPlatform PreferredPlatform;
         public static Assembly Aassembly;
-        public static int RemapVersion = 23;
+        public static int RemapVersion = 24;
         public void Stub(ModuleDefinition mod)
         {
             Log(string.Format("[Stub] Stubbing {0}", mod.Assembly.Name.Name));
@@ -173,6 +173,9 @@ namespace XnaToFna
             Modder.RelinkMap["System.Boolean System.IO.Directory::Exists(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Boolean DirectoryExists(System.String)");
             Modder.RelinkMap["System.String[] System.IO.Directory::GetFiles(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String[] DirectoryGetFiles(System.String)");
             Modder.RelinkMap["System.Void System.IO.Directory::Delete(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void DirectoryDelete(System.String)");
+            Modder.RelinkMap["System.String System.IO.Directory::GetCurrentDirectory()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String GetCurrentDirectory()");
+            Modder.RelinkMap["System.String[] System.IO.Directory::GetFiles(System.String,System.String,System.IO.SearchOption)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String[] GetFiles(System.String,System.String,System.IO.SearchOption)");
+
 
             Modder.RelinkMap["System.Void System.IO.File::SetAttributes(System.String,System.IO.FileAttributes)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void FileSetAttributes(System.String,System.IO.FileAttributes)");
             Modder.RelinkMap["System.String System.IO.File::ReadAllText(System.String,System.Text.Encoding)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void FileReadAllText(System.String,System.Text.Encoding)");

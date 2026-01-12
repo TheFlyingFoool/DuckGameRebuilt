@@ -68,6 +68,27 @@ namespace XnaToFna
             }
             return Directory.GetFiles(path);
         }
+        public static string GetCurrentDirectory()
+        {
+            string path = Directory.GetCurrentDirectory();
+            if (Program.IsLinuxD || Program.isLinux)
+            {
+                path = path.Replace("//", "/").Replace("\\", "/");
+                //Console.WriteLine("DirectoryGetFiles:" + path);
+                path = FixPath(path);
+            }
+            return path;
+        }
+        public static string[] GetFiles(string path, string searchPattern, SearchOption searchOption)
+        {
+            if (Program.IsLinuxD || Program.isLinux)
+            {
+                path = path.Replace("//", "/").Replace("\\", "/");
+                //Console.WriteLine("DirectoryGetFiles:" + path);
+                path = FixPath(path);
+            }
+            return Directory.GetFiles(path, searchPattern, searchOption);
+        }
         public static bool DirectoryExists(string path)
         {
             if (Program.IsLinuxD || Program.isLinux)
