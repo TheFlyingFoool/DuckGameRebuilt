@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using Newtonsoft.Json.Linq;
 using RectpackSharp;
 using SDL2;
+//using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,6 +13,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DuckGame
@@ -261,6 +263,104 @@ namespace DuckGame
 
 
         }
+        //static Task<SteamUGCQueryCompleted_t> SendUGCQueryAsync(UGCQueryHandle_t handle)
+        //{
+        //    var tcs = new TaskCompletionSource<SteamUGCQueryCompleted_t>();
+
+        //    SteamAPICall_t apiCall = SteamUGC.SendQueryUGCRequest(handle);
+        //    var callResult = CallResult<SteamUGCQueryCompleted_t>.Create((data, failure) =>
+        //    {
+        //        if (failure)
+        //            tcs.TrySetException(new Exception("Steam UGC query failed (call failure)."));
+        //        else
+        //            tcs.TrySetResult(data);
+        //    });
+
+        //    callResult.Set(apiCall);
+
+        //    // Pump callbacks until the call completes
+        //    Task.Run(() =>
+        //    {
+        //        while (!tcs.Task.IsCompleted)
+        //        {
+        //            SteamAPI.RunCallbacks();
+        //            System.Threading.Thread.Sleep(10);
+        //        }
+        //    });
+
+        //    return tcs.Task;
+        //}
+
+        //static async Task<string[]> GetAllWorkshopModsAsync(AppId_t appId, string outputPath = "all_modids.txt")
+        //{
+        //    var allIds = new List<string>();
+        //    uint page = 1;
+
+        //    while (true)
+        //    {
+        //        // Query "all UGC" for this app, page by page
+        //        UGCQueryHandle_t handle = SteamUGC.CreateQueryAllUGCRequest(
+        //            EUGCQuery.k_EUGCQuery_RankedByVote,                  // sort mode; pick whatever you want
+        //            EUGCMatchingUGCType.k_EUGCMatchingUGCType_Items,     // normal items
+        //            appId,                                               // creator app
+        //            appId,                                               // consumer app
+        //            page                                                 // 1-based page index
+        //        );
+
+        //        var result = await SendUGCQueryAsync(handle);
+
+        //        if (result.m_unNumResultsReturned == 0 || result.m_eResult != EResult.k_EResultOK)
+        //        {
+        //            // No more items or error, stop
+        //            Console.WriteLine($"UGC query page {page} done. Returned={result.m_unNumResultsReturned}, Result={result.m_eResult}");
+        //            break;
+        //        }
+
+        //        Console.WriteLine($"UGC page {page}: {result.m_unNumResultsReturned} items");
+
+        //        for (uint i = 0; i < result.m_unNumResultsReturned; i++)
+        //        {
+        //            SteamUGCDetails_t details;
+        //            bool ok = SteamUGC.GetQueryUGCResult(result.m_handle, i, out details);
+        //            if (!ok) continue;
+
+        //            // details.m_nPublishedFileId is the workshop ID
+        //            allIds.Add(details.m_nPublishedFileId.m_PublishedFileId.ToString());
+        //        }
+
+        //        // Always release the query handle when done with that page
+        //        SteamUGC.ReleaseQueryUGCRequest(result.m_handle);
+
+        //        // Next page
+        //        page++;
+        //    }
+
+        //    // Deduplicate, just in case
+        //    var uniqueIds = allIds.Distinct().ToArray();
+
+        //    // Save to file
+        //    try
+        //    {
+        //        File.WriteAllLines(outputPath, uniqueIds);
+        //        Console.WriteLine($"Saved {uniqueIds.Length} workshop IDs to '{outputPath}'.");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Failed to write mod ID file '{outputPath}': {ex.Message}");
+        //    }
+
+        //    return uniqueIds;
+        //}
+        //[Marker.DevConsoleCommand(Name = "fetchmodids")]
+        //public static void fetchids()
+        //{
+        //    AppId_t appId = new AppId_t(312530);
+
+        //    // This blocks until the async method finishes
+        //    string[] allMods = GetAllWorkshopModsAsync(appId, "all_modids.txt")
+        //                           .GetAwaiter()
+        //                           .GetResult();
+        //}
         [Marker.DevConsoleCommand(Name = "buckettypes")]
         public static void buckettypes()
         {
@@ -514,7 +614,12 @@ namespace DuckGame
             DevConsole.Log("Trying to join " + id);
             Level.current = new JoinServer(id);
         }
-        
+        [Marker.DevConsoleCommand(Name = "os")]
+        public static void PrintOs()
+        {
+            DevConsole.Log("OS: " + DG.platform);
+        }
+
         [Marker.DevConsoleCommand]
         public static void Res(int width, int height, ScreenMode mode)
         {
