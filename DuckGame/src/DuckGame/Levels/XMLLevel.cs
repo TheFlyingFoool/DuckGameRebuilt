@@ -1,8 +1,12 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using static DuckGame.CMD;
+using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace DuckGame
 {
@@ -67,10 +71,25 @@ namespace DuckGame
                 _customLevel = true;
                 Main.SpecialCode2 = "020";
                 level = level.Substring(0, level.Length - 7);
-                if (Network.isActive)
+                if (Network.isActive) 
                 {
                     Main.SpecialCode2 = "021";
                     LevelData level1 = Content.GetLevel(level);
+                    Main.SpecialCode2 = "021.1";
+                    if (level1 == null) // Dans Attempt to fix some weird level loading issues?
+                    {
+                        LevelData dat = DuckFile.LoadLevel(level + ".custom");
+                        if (dat == null)
+                        {
+                            dat = DuckFile.LoadLevel(level);
+                        }
+                        if (dat != null)
+                        {
+                            if (Content.GetLevel(level, LevelLocation.Custom) == null)
+                                Content.MapLevel(level, dat, LevelLocation.Custom);
+                        }
+                        level1 = Content.GetLevel(level);
+                    }
                     Main.SpecialCode2 = "022";
                     _checksum = level1.GetChecksum();
                     Main.SpecialCode2 = "023";
