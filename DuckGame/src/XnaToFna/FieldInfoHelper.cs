@@ -28,9 +28,32 @@ namespace XnaToFna.ProxyReflection
         {
             try
             {
-                Dictionary<string, XnaToFnaFieldInfo> dictionary;
-                XnaToFnaFieldInfo xnaToFnaFieldInfo;
-                return Map.TryGetValue(self, out dictionary) && dictionary.TryGetValue(name, out xnaToFnaFieldInfo) ? xnaToFnaFieldInfo : self.GetField(name, bindingAttr);
+                // Dictionary<string, XnaToFnaFieldInfo> dictionary;
+                //XnaToFnaFieldInfo xnaToFnaFieldInfo;
+                if (Map.TryGetValue(self, out Dictionary<string, XnaToFnaFieldInfo> dictionary) && dictionary.TryGetValue(name, out XnaToFnaFieldInfo xnaToFnaFieldInfo))
+                {
+                    return xnaToFnaFieldInfo;
+                }
+                FieldInfo fieldInfo = self.GetField(name, bindingAttr);
+                if (fieldInfo != null)
+                {
+                    return fieldInfo;
+                }
+
+                // Retry with flipped visibility
+                BindingFlags visibility = bindingAttr & (BindingFlags.Public | BindingFlags.NonPublic);
+                if (visibility == BindingFlags.Public)
+                    bindingAttr = (bindingAttr & ~BindingFlags.Public) | BindingFlags.NonPublic;
+                else if (visibility == BindingFlags.NonPublic)
+                    bindingAttr = (bindingAttr & ~BindingFlags.NonPublic) | BindingFlags.Public;
+
+                fieldInfo = self.GetField(name, bindingAttr);
+                if (fieldInfo != null)
+                    return fieldInfo;
+
+                return null;
+
+                //return Map.TryGetValue(self, out dictionary) && dictionary.TryGetValue(name, out xnaToFnaFieldInfo) ? xnaToFnaFieldInfo : self.GetField(name, bindingAttr);
             }
             catch(Exception  e)
             {
@@ -55,7 +78,24 @@ namespace XnaToFna.ProxyReflection
                     return DrawSelectionHandler;
                 }
             }
-            return self.GetMethod(name, bindingAttr);
+            MethodInfo methodInfo = self.GetMethod(name, bindingAttr);
+            if (methodInfo != null)
+            {
+                return methodInfo;
+            }
+
+            // Retry with flipped visibility
+            BindingFlags visibility = bindingAttr & (BindingFlags.Public | BindingFlags.NonPublic);
+            if (visibility == BindingFlags.Public)
+                bindingAttr = (bindingAttr & ~BindingFlags.Public) | BindingFlags.NonPublic;
+            else if (visibility == BindingFlags.NonPublic)
+                bindingAttr = (bindingAttr & ~BindingFlags.NonPublic) | BindingFlags.Public;
+
+            methodInfo = self.GetMethod(name, bindingAttr);
+            if (methodInfo != null)
+                return methodInfo;
+
+            return null;
         }
         public static void DrawSelection(Vec2 messagePos) // for better chat
         {
