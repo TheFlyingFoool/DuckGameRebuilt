@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Documents;
 
 namespace DuckGame
 {
@@ -586,14 +587,15 @@ namespace DuckGame
                         if (_profiles.Count > 0)
                             SFX.Play("consoleTick");
                     }
-                    if (HoveredProfileIsCustom() && MonoMain.pauseMenu == null && _inputProfile.Pressed(Triggers.Menu2))
+                    if (_selectorPosition >= 0 && _selectorPosition < _profiles.Count && HoveredProfileIsCustom() && MonoMain.pauseMenu == null && _inputProfile.Pressed(Triggers.Menu2))
                     {
+
                         _deleteContext = _profiles[_selectorPosition];
                         MonoMain.pauseMenu = _confirmMenu;
                         _confirmMenu.Open();
                         SFX.Play("pause", 0.6f);
                     }
-                    if (_deleteProfile.value)
+                    if (_deleteProfile.value && _selectorPosition >= 0 && _selectorPosition < _profiles.Count)
                     {
                         _deleteProfile.value = false;
                         if (_deleteContext != null)
@@ -603,9 +605,11 @@ namespace DuckGame
                             RebuildProfileList();
                             _slide = _slideTo;
                             _deleteContext = null;
-
-                            _box.ChangeProfile(_profiles[_selectorPosition]);
-                            _profile = _profiles[_selectorPosition];
+                            if (_selectorPosition >= 0 && _selectorPosition < _profiles.Count)
+                            {
+                                _box.ChangeProfile(_profiles[_selectorPosition]);
+                                _profile = _profiles[_selectorPosition];
+                            }
                             _profile.inputProfile = null;
                             _profile.inputProfile = _inputProfile;
                             Input.ApplyDefaultMapping(_inputProfile, _profile);
@@ -644,13 +648,13 @@ namespace DuckGame
                             _name = GetMaskName(1);
                             SFX.Play("consoleSelect", 0.4f);
                         }
-                        else if (ProfileAlreadySelected(_profiles[_selectorPosition]))
+                        else if (_selectorPosition >= 0 && _selectorPosition < _profiles.Count && ProfileAlreadySelected(_profiles[_selectorPosition]))
                         {
                             SFX.Play("consoleError");
                         }
                         else
                         {
-                            if (_profiles[_selectorPosition].linkedProfile == null)
+                            if (_selectorPosition >= 0 && _selectorPosition < _profiles.Count && _profiles[_selectorPosition].linkedProfile == null)
                             {
                                 if (Network.isActive)
                                 {
@@ -1021,7 +1025,7 @@ namespace DuckGame
                 {
                     _slide = 0f;
                     _slideTo = 0f;
-                    if (_desiredSelectorPosition != -1 && ProfileAlreadySelected(_profiles[_desiredSelectorPosition]))
+                    if (_desiredSelectorPosition != -1 && _desiredSelectorPosition >= 0 && _desiredSelectorPosition < _profiles.Count &&  ProfileAlreadySelected(_profiles[_desiredSelectorPosition]))
                     {
                         _selectorPosition = _desiredSelectorPosition;
                         if (_wasDown)
@@ -1034,7 +1038,7 @@ namespace DuckGame
                         _selectorPosition = _desiredSelectorPosition;
                         if (!(Level.current is TeamSelect2))
                         {
-                            if (_selectorPosition != -1)
+                            if (_selectorPosition != -1 && _selectorPosition >= 0 && _selectorPosition < _profiles.Count)
                             {
                                 _box.ChangeProfile(_profiles[_selectorPosition]);
                                 _profile = _profiles[_selectorPosition];
@@ -1140,7 +1144,7 @@ namespace DuckGame
                         string text2 = "NEW PROFILE";
                         bool flag1 = true;
                         bool flag2 = false;
-                        if (index != -1)
+                        if (index != -1 && index >= 0 && index < _profiles.Count)
                         {
                             if (Profiles.IsDefault(_profiles[index]))
                             {
@@ -1165,7 +1169,7 @@ namespace DuckGame
                         float num5 = 0.2f;
                         float num6 = Maths.Clamp(num3 >= 0.3f ? (num3 >= 0.8f ? Maths.NormalizeSection(num3, 0.8f, 1f) + num5 : num5) : Maths.NormalizeSection(num3, 0f, 0.3f) * num5, 0f, 1f);
                         bool flag3 = false;
-                        if ((_selector == null || !_selector.isArcadeHatSelector) && index != -1 && (Profiles.active.Contains(_profiles[index]) || Profiles.active.FirstOrDefault(x => x.linkedProfile == _profiles[index]) != null))
+                        if ((_selector == null || !_selector.isArcadeHatSelector) && index != -1 && index >= 0 && index < _profiles.Count && (Profiles.active.Contains(_profiles[index]) || Profiles.active.FirstOrDefault(x => x.linkedProfile == _profiles[index]) != null))
                             flag3 = true;
                         if (flag3)
                             text2 = text2.Replace("|DGBLUE|", "");
