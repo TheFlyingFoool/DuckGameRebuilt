@@ -68,7 +68,7 @@ namespace XnaToFna
         public List<string> FixPathsFor;
         public ILPlatform PreferredPlatform;
         public static Assembly Aassembly;
-        public static int RemapVersion = 24;
+        public static int RemapVersion = 25;
         public void Stub(ModuleDefinition mod)
         {
             Log(string.Format("[Stub] Stubbing {0}", mod.Assembly.Name.Name));
@@ -218,7 +218,13 @@ namespace XnaToFna
             Modder.TranspilerMap["System.Void DuckGame.DuckDebug.DuckDebug::clearLog()"] = new TranspilerMapEntry(TryCatchPatch);
 
 
+
+
+            //Gatling Guns [2395356716]   Phasaber.OnPressAction
+            Modder.TranspilerMap["System.Void DuckGame.GatlingGuns.Phasaber::OnPressAction()"] = new TranspilerMapEntry(TryCatchPatch);
+
             Modder.TranspilerMap["System.Void DuckGame.C44P.C4::Update()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod("C4PP_C4_Update", BindingFlags.NonPublic | BindingFlags.Static));
+
             Modder.TranspilerMap["System.Void DuckGame.JamMod.Banjoo::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod("JamMod_Banjoo_OnPressAction", BindingFlags.NonPublic | BindingFlags.Static));
             Modder.TranspilerMap["System.Void DuckGame.JamMod.Schnitzel::OnPressAction()"] = new TranspilerMapEntry(TryCatchPatch);
 
