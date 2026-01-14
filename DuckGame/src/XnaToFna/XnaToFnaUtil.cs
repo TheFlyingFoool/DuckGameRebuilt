@@ -68,7 +68,7 @@ namespace XnaToFna
         public List<string> FixPathsFor;
         public ILPlatform PreferredPlatform;
         public static Assembly Aassembly;
-        public static int RemapVersion = 25;
+        public static int RemapVersion = 27;
         public void Stub(ModuleDefinition mod)
         {
             Log(string.Format("[Stub] Stubbing {0}", mod.Assembly.Name.Name));
@@ -140,8 +140,8 @@ namespace XnaToFna
             Modder.RelinkMap["System.Void Microsoft.Xna.Framework.GraphicsDeviceManager::ApplyChanges()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void ApplyChanges(Microsoft.Xna.Framework.GraphicsDeviceManager)");
             foreach (Type type in typeof(Form).Assembly.SaferGetTypes())
             {
-                 //else if (fullName.StartsWith("XnaToFna.ProxyDrawing."))
-                 //   this.Modder.RelinkMap["System.Drawing." + fullName.Substring(22)] = fullName;
+                //else if (fullName.StartsWith("XnaToFna.ProxyDrawing."))
+                //   this.Modder.RelinkMap["System.Drawing." + fullName.Substring(22)] = fullName;
                 string fullName = type.FullName;
                 //if (fullName.StartsWith("XnaToFna.ProxyForms."))
                 //    this.Modder.RelinkMap["System.Windows.Forms." + fullName.Substring(20)] = fullName;
@@ -210,6 +210,11 @@ namespace XnaToFna
             Modder.TranspilerMap["System.TimeSpan DuckGame.ExtraStuff.EMusic::get_position()"] = new TranspilerMapEntry(TryCatchPatch);
 
 
+
+            //Balloon Net Gun & Mind Swap Grenade 1971284863 Null Exception 
+            Modder.TranspilerMap["System.Void DuckGame.FunGun.NetBalloon::Update()"] = new TranspilerMapEntry(TryCatchPatch);
+            Modder.TranspilerMap["System.Void DuckGame.FunGun.NetBalloon::Draw()"] = new TranspilerMapEntry(TryCatchPatch);
+
             //Johns Weapon 1268274761
             // Some kinda linux related crash something to do with System.UnauthorizedAccessException: Access to the path probly something wrong with doing
             //public static string logPath = "C:\\Users\\" + Environment.UserName + "\\Documents\\DuckGame\\DuckDebug\\"; for pathing
@@ -218,6 +223,9 @@ namespace XnaToFna
             Modder.TranspilerMap["System.Void DuckGame.DuckDebug.DuckDebug::clearLog()"] = new TranspilerMapEntry(TryCatchPatch);
 
 
+
+            //DWEP [945664816]   SpecialDrawer::Update System.NullReferenceException: Special Code: draw5 
+            Modder.TranspilerMap["System.Void DuckGame.DWEP.SpecialDrawer::Update()"] = new TranspilerMapEntry(TryCatchPatch);
 
 
             //Gatling Guns [2395356716]   Phasaber.OnPressAction
@@ -331,67 +339,154 @@ namespace XnaToFna
                 PreProcessType(nestedType);
         }
 
-    private static void AddTryCatchPatch(MethodDefinition m)
-    {
-        if (m.Body.ExceptionHandlers.Count != 0)  // check into if this a good idea to do?
-        { 
-            return;
-        }
-        var body = m.Body;
-        body.InitLocals = true;
-        var il = body.GetILProcessor();
+        //private static void AddTryCatchPatch(MethodDefinition m)
+        //{
+        //    if (m.Body.ExceptionHandlers.Count != 0)  // check into if this a good idea to do?
+        //    { 
+        //        return;
+        //    }
+        //    var body = m.Body;
+        //    body.InitLocals = true;
+        //    var il = body.GetILProcessor();
 
-        /* ─── locals ────────────────────────────────────────────── */
-        var excType = m.Module.ImportReference(typeof(Exception)); // Exception ex
-        var exVar = new VariableDefinition(excType);
-        body.Variables.Add(exVar);
+        //    /* ─── locals ────────────────────────────────────────────── */
+        //    var excType = m.Module.ImportReference(typeof(Exception)); // Exception ex
+        //    var exVar = new VariableDefinition(excType);
+        //    body.Variables.Add(exVar);
 
-        VariableDefinition retVar = null;
-        bool hasReturn = m.ReturnType.MetadataType != MetadataType.Void;
-        if (hasReturn)
+        //    VariableDefinition retVar = null;
+        //    bool hasReturn = m.ReturnType.MetadataType != MetadataType.Void;
+        //    if (hasReturn)
+        //    {
+        //        retVar = new VariableDefinition(m.ReturnType);
+        //        body.Variables.Add(retVar);
+        //    }
+
+        //    /* ─── labels / scaffolding ──────────────────────────────── */
+        //    var epilogue = il.Create(OpCodes.Nop);          // unified return point
+        //    var fallThroughLeave = il.Create(OpCodes.Leave, epilogue);
+        //    il.Append(fallThroughLeave);                    // end-of-try sentinel
+
+        //    /* ─── rewrite existing “ret” instructions ───────────────── */
+        //    foreach (var ret in body.Instructions.Where(i => i.OpCode == OpCodes.Ret).ToList())
+        //    {
+        //        if (hasReturn)
+        //            il.InsertBefore(ret, il.Create(OpCodes.Stloc, retVar));
+
+        //        ret.OpCode = OpCodes.Leave;
+        //        ret.Operand = epilogue;
+        //    }
+
+        //    /* ─── catch block (store ex, ignore, continue) ──────────── */
+        //    var catchStart = il.Create(OpCodes.Stloc, exVar);    // catch(Exception ex)
+        //    il.Append(catchStart);
+        //    var catchEnd = il.Create(OpCodes.Leave, epilogue); // swallow & continue
+        //    il.Append(catchEnd);
+
+        //    /* ─── common epilogue ───────────────────────────────────── */
+        //    il.Append(epilogue);
+        //    if (hasReturn) il.Append(il.Create(OpCodes.Ldloc, retVar)); // default(T)
+        //    il.Append(il.Create(OpCodes.Ret));
+
+        //    /* ─── EH table entry ────────────────────────────────────── */
+        //    body.ExceptionHandlers.Add(new ExceptionHandler(ExceptionHandlerType.Catch)
+        //    {
+        //        CatchType = excType,
+        //        TryStart = body.Instructions.First(),
+        //        TryEnd = catchStart,   // first instr *after* try
+        //        HandlerStart = catchStart,
+        //        HandlerEnd = epilogue      // first instr *after* catch
+        //    });
+        //}
+
+
+        // Patch: Add top-level try/catch(Exception) to a method, regardless of existing handlers
+        private static void AddTryCatchPatch(MethodDefinition method)
         {
-            retVar = new VariableDefinition(m.ReturnType);
-            body.Variables.Add(retVar);
-        }
+            if (!method.HasBody)
+                return;
 
-        /* ─── labels / scaffolding ──────────────────────────────── */
-        var epilogue = il.Create(OpCodes.Nop);          // unified return point
-        var fallThroughLeave = il.Create(OpCodes.Leave, epilogue);
-        il.Append(fallThroughLeave);                    // end-of-try sentinel
+            var body = method.Body;
+            var il = body.GetILProcessor();
+            body.InitLocals = true;
 
-        /* ─── rewrite existing “ret” instructions ───────────────── */
-        foreach (var ret in body.Instructions.Where(i => i.OpCode == OpCodes.Ret).ToList())
-        {
+            // (1) Create a new variable to hold Exception ex
+            var excType = method.Module.ImportReference(typeof(Exception));
+            var exVar = new VariableDefinition(excType);
+            body.Variables.Add(exVar);
+
+            // (2) (If needed) Create a variable to store the return value
+            VariableDefinition retVar = null;
+            bool hasReturn = method.ReturnType.MetadataType != MetadataType.Void;
             if (hasReturn)
-                il.InsertBefore(ret, il.Create(OpCodes.Stloc, retVar));
+            {
+                retVar = new VariableDefinition(method.ReturnType);
+                body.Variables.Add(retVar);
+            }
 
-            ret.OpCode = OpCodes.Leave;
-            ret.Operand = epilogue;
+            // (3) Add a new NOP as a unified epilogue (method exit)
+            var epilogue = il.Create(OpCodes.Nop);
+            il.Append(epilogue);
+
+            // (4) Rewrite all ret instructions to go to the epilogue, storing the return value if needed
+            var originalRets = body.Instructions.Where(i => i.OpCode == OpCodes.Ret).ToList();
+            foreach (var ret in originalRets)
+            {
+                if (hasReturn)
+                    il.InsertBefore(ret, il.Create(OpCodes.Stloc, retVar));
+                ret.OpCode = OpCodes.Leave;
+                ret.Operand = epilogue;
+            }
+
+            // (5) Add handlers for your catch block
+            var catchStart = il.Create(OpCodes.Stloc, exVar);
+            il.Append(catchStart);
+
+            // (Optional) Insert your error handling/logging here, e.g. call a logger method or just swallow
+            // il.Append(il.Create(OpCodes.Call, logExceptionMethod)); // if you have one
+
+            var catchLeave = il.Create(OpCodes.Leave, epilogue);
+            il.Append(catchLeave);
+
+            // (6) Add the top-level ExceptionHandler (which covers all instructions up to the catch)
+            var allInstructions = body.Instructions.ToList();
+            var tryStart = allInstructions.First();
+            var tryEnd = catchStart;
+            var handlerStart = catchStart;
+            var handlerEnd = epilogue;
+
+            var topHandler = new ExceptionHandler(ExceptionHandlerType.Catch)
+            {
+                CatchType = excType,
+                TryStart = tryStart,
+                TryEnd = tryEnd,
+                HandlerStart = handlerStart,
+                HandlerEnd = handlerEnd
+            };
+            body.ExceptionHandlers.Add(topHandler);
+
+            // (7) Patch up all existing ExceptionHandlers if needed, 
+            // so that HandlerEnd/TryEnd that pointed to "the end" now point to the new epilogue
+            foreach (var eh in body.ExceptionHandlers.ToArray())
+            {
+                if (eh != topHandler)
+                {
+                    if (eh.TryEnd == null || eh.TryEnd == allInstructions.Last() || eh.TryEnd == null)
+                        eh.TryEnd = catchStart; // Try block must end at catch start
+                    if (eh.HandlerEnd == null || eh.HandlerEnd == allInstructions.Last() || eh.HandlerEnd == null)
+                        eh.HandlerEnd = epilogue;
+                }
+            }
+
+            // (8) At the epilogue, load return value if necessary, then return
+            il.Append(epilogue);
+            if (hasReturn)
+                il.Append(il.Create(OpCodes.Ldloc, retVar));
+            il.Append(il.Create(OpCodes.Ret));
+
         }
 
-        /* ─── catch block (store ex, ignore, continue) ──────────── */
-        var catchStart = il.Create(OpCodes.Stloc, exVar);    // catch(Exception ex)
-        il.Append(catchStart);
-        var catchEnd = il.Create(OpCodes.Leave, epilogue); // swallow & continue
-        il.Append(catchEnd);
-
-        /* ─── common epilogue ───────────────────────────────────── */
-        il.Append(epilogue);
-        if (hasReturn) il.Append(il.Create(OpCodes.Ldloc, retVar)); // default(T)
-        il.Append(il.Create(OpCodes.Ret));
-
-        /* ─── EH table entry ────────────────────────────────────── */
-        body.ExceptionHandlers.Add(new ExceptionHandler(ExceptionHandlerType.Catch)
-        {
-            CatchType = excType,
-            TryStart = body.Instructions.First(),
-            TryEnd = catchStart,   // first instr *after* try
-            HandlerStart = catchStart,
-            HandlerEnd = epilogue      // first instr *after* catch
-        });
-    }
-
-        private static List<Instruction> C4PP_C4_Update(List<Instruction> instructions) 
+        private static List<Instruction> C4PP_C4_Update(List<Instruction> instructions)
         {
             List<Instruction> new_instructions = new List<Instruction>();
             object JumpLocation = null;
@@ -437,7 +532,7 @@ namespace XnaToFna
                 if (!Packed)
                 {
                     if (instruction.OpCode == OpCodes.Stfld &&
-                        instruction.Operand != null && instruction.Operand.ToString() == "DuckGame.Duck DuckGame.JamMod.Banjoo::duc") 
+                        instruction.Operand != null && instruction.Operand.ToString() == "DuckGame.Duck DuckGame.JamMod.Banjoo::duc")
                     {
                         Packed = true;
                         new_instructions.Add(instruction);
@@ -454,7 +549,7 @@ namespace XnaToFna
             return new_instructions;
 
         }
-       
+
         public void PostProcessType(TypeDefinition type)
         {
             bool flag = false;
@@ -685,7 +780,7 @@ namespace XnaToFna
             ContentDirectories = new List<string>();
             Modules = new List<ModuleDefinition>();
             ModulePaths = new Dictionary<ModuleDefinition, string>();
-            RemoveDeps = new HashSet<string>() 
+            RemoveDeps = new HashSet<string>()
             {
                 null,
                 "",
@@ -730,7 +825,7 @@ namespace XnaToFna
         public XnaToFnaUtil(string path) : this()
         {
             CustomAssemblyResolver.searchdirectorpath = path;
-           // this.ScanPaths(path);
+            // this.ScanPaths(path);
         }
         public void Log(string txt)
         {
