@@ -118,10 +118,17 @@ namespace DuckGame
                     Type t = AmmoType.indexTypeMap[ammoType];
                     if (t != typeof(ATPortal))
                     {
-                        AmmoType instance = Activator.CreateInstance(t) as AmmoType;
-                        instance.ReadAdditionalData(d);
-                        nmFireBullet.typeInstance = instance;
-                        _fireEvents.Add(nmFireBullet);
+                        if (t != null && !t.IsAbstract && t.GetConstructor(Type.EmptyTypes) != null)
+                        {
+                            AmmoType instance = Activator.CreateInstance(t) as AmmoType;
+                            instance.ReadAdditionalData(d);
+                            nmFireBullet.typeInstance = instance;
+                            _fireEvents.Add(nmFireBullet);
+                        }
+                        else
+                        {
+                            DevConsole.Log($"|DGRED|[WARN] Unable to instantiate AmmoType: '{t?.FullName ?? "null"}' at index {ammoType}. IsAbstract={t?.IsAbstract}, HasDefaultCtor={t?.GetConstructor(Type.EmptyTypes) != null}");
+                        }
                     }
                 }
             }
