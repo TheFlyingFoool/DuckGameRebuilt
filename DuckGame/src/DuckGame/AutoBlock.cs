@@ -49,6 +49,7 @@ namespace DuckGame
         private AutoBlock bottombRight;
         public int brokenSptiteIndex = 0;
         private int hitboxFrame = 40;
+        private Color _prevcolor = Color.White;
 
         public override void SetTranslation(Vec2 translation)
         {
@@ -729,11 +730,12 @@ namespace DuckGame
                     Graphics.Draw(_brokenSprite, x, y + 16f);
                 }
             }
-            if (graphic.position != position)
+
+            if (graphic.position != position || _prevcolor != graphic.color)
             {
                 (graphic as SpriteMap).ClearCache();
             }
-
+            _prevcolor = graphic.color;
             graphic.position = position;
             graphic.scale = scale;
             graphic.center = center;

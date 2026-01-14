@@ -1,5 +1,4 @@
-﻿using System.Windows.Media.Media3D;
-
+﻿
 namespace DuckGame
 {
     public abstract class AutoPlatform :
@@ -31,6 +30,7 @@ namespace DuckGame
         public bool needsRefresh;
         public bool _hasLeftNub = true;
         public bool _hasRightNub = true;
+        private Color _prevcolor = Color.White;
 
         public AutoPlatform leftBlock => _leftBlock;
 
@@ -56,7 +56,7 @@ namespace DuckGame
             //    graphic.UltraCheapStaticDraw(flipHorizontal);
             //else
             //    base.Draw();
-            if (graphic.position != position)
+            if (graphic.position != position || _prevcolor != graphic.color)
             {
                 (graphic as SpriteMap).ClearCache();
             }
