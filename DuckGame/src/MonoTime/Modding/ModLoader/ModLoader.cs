@@ -16,6 +16,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using XnaToFna;
+using Harmony;
+using XnaToFna.ProxyReflection;
 using File = System.IO.File;
 
 namespace DuckGame
@@ -173,6 +175,10 @@ namespace DuckGame
                 {
 
                 }
+            }
+            else
+            {
+                _modAssemblies.Add(typeof(HarmonyInstance).Assembly, new DisabledMod());
             }
             _modsByHash.Add(mod.identifierHash, mod);
             if (mod.configuration.workshopID != 0UL)
