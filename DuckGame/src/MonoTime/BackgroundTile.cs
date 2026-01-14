@@ -8,6 +8,7 @@ namespace DuckGame
         public bool cheap;
         public bool isFlipped;
         public bool oppositeSymmetry;
+        private Color _prevcolor = Color.White;
 
         public override int frame
         {
@@ -94,7 +95,7 @@ namespace DuckGame
             //    graphic.UltraCheapStaticDraw(flipHorizontal);
             //else
             //    base.Draw();
-            if (graphic.position != position)
+            if (graphic.position != position || _prevcolor != graphic.color)
             {
                 (graphic as SpriteMap).ClearCache();
             }
