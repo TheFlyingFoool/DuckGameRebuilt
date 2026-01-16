@@ -24,7 +24,7 @@ namespace DuckGame
 
                 if (value != _selectedItemIndex)
                 {
-                    if (MenuItems.Count < _selectedItemIndex) 
+                    if (_selectedItemIndex < MenuItems.Count) 
                     { 
                         MenuItems[_selectedItemIndex].OnUnhover(); 
                     }
