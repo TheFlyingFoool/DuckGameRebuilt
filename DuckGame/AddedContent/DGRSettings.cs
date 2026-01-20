@@ -427,6 +427,10 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool LobbyNameOnPause = true;
 
+        [Marker.AutoConfig] public static bool ExtraLobbyData = false;
+
+        [Marker.AutoConfig] public static bool DisplayMidgameLobbies = false;
+
         [Marker.AutoConfig] public static bool EditorOnlinePhysics = false;
 
         [Marker.AutoConfig] public static bool DrawOffscreenArrowsOnEditor = false;

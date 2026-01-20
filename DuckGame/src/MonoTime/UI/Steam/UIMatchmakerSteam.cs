@@ -132,7 +132,7 @@ namespace DuckGame
             }
             base.Hook_OnLobbyProcessed(pLobby);
         }
-        private static ulong[] lobbyBotIds = {109775242502588761, 109775242502636562 };
+        public static ulong[] lobbyBotIds = {109775242502588761, 109775242502636562, 76561198775996054, 76561199819121522 };
         public override void Platform_MatchmakerLogic()
         {
             if (_state == State.GetNumberOfLobbies)

@@ -738,6 +738,16 @@ namespace DuckGame
                 dgrDescription = "Displays lobby name on pause screen (not supporting LAN lobbies)"
             });
 
+            menu.Add(new UIMenuItemToggle("Extra Lobby Data", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ExtraLobbyData)))
+            {
+                dgrDescription = "Displays players in a lobby and more info in general"
+            });
+
+            menu.Add(new UIMenuItemToggle("Show Midgame Lobbies", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DisplayMidgameLobbies)))
+            {
+                dgrDescription = "Whether or not to display lobbies which are mid gamae"
+            });
+
             menu.Add(new UIMenuItemToggle("Menu Mouse", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.MenuMouse)))
             {
                 dgrDescription = "Toggles the menu mouse"

@@ -421,6 +421,18 @@ namespace DuckGame
                             //{
                             //    continue;
                             //}
+                            try
+                            {
+                                if (!DGRSettings.DisplayMidgameLobbies && (lobby.GetLobbyData("midgame") == "true" || lobby.name.ToLower().Contains("midgame") || d.dedicated))
+                                {
+                                    continue;
+                                }
+                            }
+                            catch
+                            {
+
+                            }
+
                             if (d.pingstring != "" && d.pingstring != null)
                                 d.estimatedPing = Steam.EstimatePing(d.pingstring);
                             try
@@ -432,14 +444,23 @@ namespace DuckGame
                             }
                             d.isGlobalLobby = mode == SearchMode.Global;
                             d.hasFriends = false;
+
+                            bool kill = false;
                             foreach (User user in lobby.users)
                             {
+                                if (user != null && UIMatchmakerSteam.lobbyBotIds.Contains(user.id))
+                                {
+                                    kill = true;
+                                    break;
+                                }
                                 if (Steam.friends.Contains(user))
                                 {
                                     d.hasFriends = true;
                                     break;
                                 }
                             }
+                            if (kill) continue;
+
                             string loadedMods = lobby.GetLobbyData("mods");
 
                             if (loadedMods != null && loadedMods != "")
@@ -765,17 +786,6 @@ namespace DuckGame
 
         public static string PreviewPathForWorkshopItem(ulong id) => DuckFile.workshopDirectory + "/modPreview" + id.ToString() + "preview.png";
 
-        //no longer needed -Lucky
-        /*public void nikostuff(ref string str2, WorkshopItem workshopItem1, LobbyData lobby)
-        {
-            //str2 = !lobby.hasFirstMod ? "|RED|Requires " + workshopItem1.data.name : "|DGGREEN|Requires " + workshopItem1.data.name;
-
-            WorkshopItem itd2 = WorkshopItem.GetItem(workshopItem1.id);
-
-            
-
-            str2 = $"id:{workshopItem1.id} name:{workshopItem1.name} dataname:{workshopItem1.data.name} itdName:{itd2.name} itd2DataName:{itd2.data.name}";
-        }*/
         public override void Draw()
         {
             if (_downloadModsMenu.open)
@@ -884,10 +894,6 @@ namespace DuckGame
                                         lobby.downloadedWorkshopItems = true;
                                     }
                                     string str2 = !lobby.hasFirstMod ? "|RED|Requires " + workshopItem1.name : "|DGGREEN|Requires " + workshopItem1.name;
-                                    //if (Keyboard.Down(Keys.LeftControl) && Debugger.IsAttached)
-                                    //{
-                                    //    nikostuff(ref str2, workshopItem1, lobby);   
-                                    //}
                                     string str3 = lobby.hasRestOfMods ? "|DGGREEN|" : "|RED|";
                                     if (lobby.workshopItems.Count == 2)
                                         str2 = str2 + str3 + " +" + (lobby.workshopItems.Count - 1).ToString() + " other mod.";
@@ -1047,7 +1053,7 @@ namespace DuckGame
 
                             Lobby steamLobby = lobby.lobby;
 
-                            if (steamLobby is null)
+                            if (steamLobby is null || !DGRSettings.ExtraLobbyData)
                                 continue;
 
                             Vec2 position = new Vec2(x1, y);

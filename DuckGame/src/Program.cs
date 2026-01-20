@@ -670,6 +670,11 @@ namespace DuckGame
                         break;
                 }
             }
+            //surely i wont forget to remove this if i am to push something to the github right? 
+            //im still adding an #if debug just in case -Lucky
+#if DEBUG
+            DiscordRichPresence.noRPC = true;
+#endif
             try
             {
                 if (MonoMain.audioModeOverride == AudioMode.None)

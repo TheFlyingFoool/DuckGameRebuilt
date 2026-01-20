@@ -2055,6 +2055,8 @@ namespace DuckGame
             {
                 if (Network.isServer)
                 {
+                    Network.activeNetwork.core.lobby.SetLobbyData("midgame", DGRSettings.MidGameJoining?"true":"false");
+
                     localProfile.netData.Set<bool>("midgameJoining", DGRSettings.MidGameJoining);
                     if (DGRSettings.MidGameJoining != prevMG)
                     {
