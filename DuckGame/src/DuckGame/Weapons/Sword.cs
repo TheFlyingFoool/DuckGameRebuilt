@@ -904,6 +904,7 @@ namespace DuckGame
                 _swordSwing.position = this.position;
                 _swordSwing.depth = this.depth + 1;
                 _swordSwing.SkipIntraTick = SkipIntratick;
+                _swordSwing.LerpState.CanLerp = true;
                 _swordSwing.Draw();
             }
             Vec2 position = this.position;

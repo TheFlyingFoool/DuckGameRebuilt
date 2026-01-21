@@ -16,6 +16,7 @@ namespace DuckGame
         public int currentPitch = -1;
         private bool leftPressed;
         private bool rightPressed;
+        private SpriteMap _fingerSprite;
 
         public Trumpet(float xval, float yval)
           : base(xval, yval)
@@ -171,14 +172,19 @@ namespace DuckGame
             if (duck != null && !raised)
             {
                 SpriteMap fingerPositionSprite = duck.profile.persona.fingerPositionSprite;
-                fingerPositionSprite.frame = currentPitch + 1;
-                fingerPositionSprite.depth = depth - 100;
-                fingerPositionSprite.flipH = offDir <= 0;
-                fingerPositionSprite.angle = 0f;
+                if (_fingerSprite == null || _fingerSprite.texture != fingerPositionSprite.texture)
+                    _fingerSprite = fingerPositionSprite.CloneMap();
+                _fingerSprite.frame = currentPitch + 1;
+                _fingerSprite.depth = depth - 100;
+                _fingerSprite.flipH = offDir <= 0;
+                _fingerSprite.angle = 0f;
+                _fingerSprite.LerpState.CanLerp = true;
+                _fingerSprite.SkipIntraTick = duck.SkipIntratick;
                 Vec2 vec2 = Offset(new Vec2(-8f, -2f));
                 Material mat = Graphics.material;
                 Graphics.material = null;
-                Graphics.Draw(fingerPositionSprite, vec2.x, vec2.y);
+                _fingerSprite.position = vec2;
+                _fingerSprite.Draw();
                 Graphics.material = mat;
             }
             base.Draw();

@@ -950,6 +950,8 @@ namespace DuckGame
                 _swordSwing.alpha = 0.4f;
                 _swordSwing.position = position;
                 _swordSwing.depth = depth + 1;
+                _swordSwing.SkipIntraTick = SkipIntratick;
+                _swordSwing.LerpState.CanLerp = true;
                 _swordSwing.Draw();
             }
             if (duck != null && (_pullState == 1 || _pullState == 2))
