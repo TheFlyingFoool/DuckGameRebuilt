@@ -479,7 +479,13 @@ namespace DuckGame
                     //    modConfig.error = "!This mod does not currently work on Rebuilt, Patching Issues!";
                     //    mod = new DisabledMod();
                     //}
-                    if (modConfig.workshopID == 2480332949UL) //Delta Duck
+                    if (modConfig.workshopID == 3649111390UL) // My Harmony
+                    {
+                        modConfig.Disable();
+                        modConfig.error = "!Rebuilt Handles this issue, Please Do not put harmony into ur Assembly!";
+                        mod = new DisabledMod();
+                    }
+                    else if (modConfig.workshopID == 2480332949UL) //Delta Duck
                     {
                         modConfig.Disable();
                         modConfig.error = "!This mod does not currently work on Rebuilt, Just a Mess of Issues! @Tater";
