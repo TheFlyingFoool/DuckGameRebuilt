@@ -19,6 +19,7 @@ using XnaToFna;
 using Harmony;
 using XnaToFna.ProxyReflection;
 using File = System.IO.File;
+using HarmonyLoader;
 
 namespace DuckGame
 {
@@ -178,7 +179,8 @@ namespace DuckGame
             }
             else
             {
-                _modAssemblies.Add(typeof(HarmonyInstance).Assembly, new DisabledMod());
+                _modAssemblies.Add(typeof(HarmonyInstance).Assembly, new DisabledMod()); // HarmonyLoader
+                Loader.ShouldPatch = ModLoader.ShouldPatch;
             }
             _modsByHash.Add(mod.identifierHash, mod);
             if (mod.configuration.workshopID != 0UL)
@@ -208,6 +210,78 @@ namespace DuckGame
                 return Array.Empty<string>();
             }
         }
+        static int n = 0;
+        static bool ShouldPatch(MethodBase original, MethodInfo prefix, MethodInfo postfix, MethodInfo transpiler)
+        {
+            if (!Program.IS_DEV_BUILD && !Debugger.IsAttached)
+            {
+                return true; // So its only disabling when debugging needs more testing before Hard use
+            }
+            bool shouldpatch = true;
+            if (original == typeof(Level).GetMethod("PostDrawLayer"))
+            {
+                if (postfix != null)
+                {
+                    Level.PostfixPostDrawLayerMethods.Add(postfix);
+                }
+                if (prefix != null)
+                {
+                    Level.PrefixPostDrawLayerMethods.Add(prefix);
+                }
+                shouldpatch = false;
+            }
+            if (original == typeof(Duck).GetMethod("Hit"))
+            {
+                shouldpatch = false;
+            }
+            if (original == typeof(RagdollPart).GetMethod("Hit"))
+            {
+                shouldpatch = false;
+            }
+            if (original?.DeclaringType == typeof(Level)) // {Name = "Level" FullName = "DuckGame.Level"}
+            {
+                DevConsole.Log("hi");
+            }
+            if (original?.Name == "OnHit")
+            {
+                shouldpatch = false;
+            }
+            if (original?.Name == "Hit")
+            {
+                shouldpatch = false;
+            }
+            if (original == typeof(Gun).GetMethod("Draw", BindingFlags.Instance | BindingFlags.Public, binder: null, types: Type.EmptyTypes, modifiers: null))
+            {
+                shouldpatch = false; // To Implement
+            }
+            if (original?.DeclaringType == typeof(Gun) && original?.Name == "Fire")
+            {
+                shouldpatch = false; // To Implement
+            }
+            if (original?.DeclaringType == typeof(Bullet) && original?.Name == "OnCollide")
+            {
+                shouldpatch = false; // To Implement
+            }
+            if (original?.DeclaringType == typeof(UIControlConfig) && transpiler != null && transpiler?.DeclaringType?.Namespace == "DuckGame.KonamiKeybind")
+            {
+                shouldpatch = false;
+            }
+            if (prefix != null)
+            {
+                DevConsole.Log(prefix?.DeclaringType?.FullName + "::" + prefix?.Name + " is Prefix patching " + original?.DeclaringType?.FullName + "::" + original?.Name);
+            }
+            if (postfix != null)
+            {
+                DevConsole.Log(postfix?.DeclaringType?.FullName + "::" + postfix?.Name + " is Postfix patching " + original?.DeclaringType?.FullName + "::" + original?.Name);
+            }
+            if (transpiler != null)
+            {
+                DevConsole.Log(transpiler?.DeclaringType?.FullName + "::" + transpiler?.Name + " is Postfix patching " + original?.DeclaringType?.FullName + "::" + original?.Name);
+            }
+            shouldpatch = false;
+            return shouldpatch;
+        }
+
 
         public static void FixLoadAssembly(ModConfiguration modConfig, string path)
         {
@@ -276,6 +350,7 @@ namespace DuckGame
             //    xnaToFnaUtil.ScanPath("D:\\Program Files (x86)\\Steam\\steamapps\\workshop\\content\\312530\\2674911202\\BrowseGamesPlus\\content\\0Harmony.dll");
 
             xnaToFnaUtil.ScanPath(Program.GameDirectory + "FNA.dll");
+            xnaToFnaUtil.ScanPath(Program.GameDirectory + "HarmonyLoader.dll");
             xnaToFnaUtil.ScanPath(Program.FilePath);
             xnaToFnaUtil.RelinkAll();
 
@@ -355,6 +430,7 @@ namespace DuckGame
                         else if (modConfig.workshopID == 1820667892UL)
                         {
                             modConfig.Disable();
+
                             modConfig.error = "!This mod has been officially implemented, Thanks Yupdaniel!";
                             mod = new DisabledMod();
                         }
@@ -442,36 +518,39 @@ namespace DuckGame
 
                     //Patchs in these mods Dont Like the Debugger or debug configuration
 #if DEBUG
-                    if (true)
+                    //if (true)
 #else
                         if (Debugger.IsAttached)
 #endif
-                    {
-                        if (modConfig.name == "QOL")
+                    //{
+                        //if (modConfig.name == "QOL")
+                        //{
+                        //    modConfig.Disable();
+                        //    modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
+                        //    mod = new DisabledMod();
+                        //}
+                        //else
+                        //if (modConfig.workshopID == 2411996803UL) //CLIENT | Competitive Tools https://steamcommunity.com/sharedfiles/filedetails/?id=2411996803
+                        //{
+                        //    modConfig.Disable();
+                        //    modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
+                        //    mod = new DisabledMod();
+                        //}
+                        //else
+                        if (modConfig.workshopID == 2381384850UL) //Extrastuff https://steamcommunity.com/sharedfiles/filedetails/?id=2381384850
                         {
                             modConfig.Disable();
                             modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
                             mod = new DisabledMod();
                         }
-                        else if (modConfig.workshopID == 2411996803UL) //CLIENT | Competitive Tools https://steamcommunity.com/sharedfiles/filedetails/?id=2411996803
+                        else
+                        if (modConfig.workshopID == 2586315559) //Extrastuff v2 https://steamcommunity.com/sharedfiles/filedetails/?id=2586315559
                         {
                             modConfig.Disable();
                             modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
                             mod = new DisabledMod();
                         }
-                        else if (modConfig.workshopID == 2381384850UL) //Extrastuff https://steamcommunity.com/sharedfiles/filedetails/?id=2381384850
-                        {
-                            modConfig.Disable();
-                            modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
-                            mod = new DisabledMod();
-                        }
-                        else if (modConfig.workshopID == 2586315559) //Extrastuff v2 https://steamcommunity.com/sharedfiles/filedetails/?id=2586315559
-                        {
-                            modConfig.Disable();
-                            modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
-                            mod = new DisabledMod();
-                        }
-                    }
+                    //}
                 }
                 if (mod == null)
                 {
