@@ -24,7 +24,9 @@ namespace DuckGame
 
                 if (value != _selectedItemIndex)
                 {
-                    MenuItems[_selectedItemIndex].OnUnhover();
+                    if (_selectedItemIndex < MenuItems.Count)
+                        MenuItems[_selectedItemIndex].OnUnhover();
+
                     MenuItems[value].OnHover();
                 }
                 
@@ -118,6 +120,9 @@ namespace DuckGame
             }
 
             MenuItems.RemoveAll(x => x is null);
+
+            // Needs to be reclamped after deleting items
+            SelectedItemIndex = SelectedItemIndex;
         }
         
         public override void Update()
