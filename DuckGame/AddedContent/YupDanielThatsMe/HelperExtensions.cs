@@ -32,6 +32,18 @@ namespace DuckGame
                 return num + num2 * 1566083941;
             }
         }
+        private static readonly Dictionary<MethodInfo, ParameterInfo[]> _paramCache = new Dictionary<MethodInfo, ParameterInfo[]>();
+
+        public static ParameterInfo[] GetParamsCached(this MethodInfo m)
+        {
+            if (_paramCache.TryGetValue(m, out var ps))
+                return ps;
+
+            ps = m.GetParameters();
+            _paramCache[m] = ps;
+            return ps;
+        }
+
         public static Type[] SaferGetTypes(this Assembly assembly)
         {
             Module[] modules = assembly.GetModules(false);

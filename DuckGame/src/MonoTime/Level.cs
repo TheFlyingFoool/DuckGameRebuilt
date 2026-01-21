@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using AddedContent.Hyeve;
+using System.Reflection;
 
 namespace DuckGame
 {
@@ -12,6 +13,8 @@ namespace DuckGame
     {
         public List<NMLevel> levelMessages = new List<NMLevel>();
         public bool isCustomLevel;
+        public static List<MethodInfo> PrefixPostDrawLayerMethods = new List<MethodInfo>();
+        public static List<MethodInfo> PostfixPostDrawLayerMethods = new List<MethodInfo>();
         public static bool flipH = false;
         public static bool symmetry = false;
         public static bool leftSymmetry = true;
@@ -1054,6 +1057,7 @@ namespace DuckGame
 
         public virtual void PostDrawLayer(Layer layer)
         {
+            PrefixPostDrawLayer(layer);
             foreach (IEngineUpdatable engineUpdatable in MonoMain.core.engineUpdatables)
                 engineUpdatable.OnDrawLayer(layer);
             foreach (IDrawToDifferentLayers toDifferentLayers in things[typeof(IDrawToDifferentLayers)])
@@ -1074,19 +1078,28 @@ namespace DuckGame
             {
                 DevConsole.Draw();
                 if (!Network.isActive)
+                {
+                    PostfixPostDrawLayer(layer);
                     return;
+                }
                 DuckNetwork.Draw();
             }
             else if (layer == Layer.Foreground)
             {
                 if (layer.fade <= 0)
+                {
+                    PostfixPostDrawLayer(layer);
                     return;
+                }
                 HUD.DrawForeground();
             }
             else if (layer == Layer.HUD)
             {
                 if (layer.fade <= 0)
+                {
+                    PostfixPostDrawLayer(layer);
                     return;
+                }
                 Vote.Draw();
                 HUD.Draw();
                 ConnectionStatusUI.Draw();
@@ -1094,7 +1107,10 @@ namespace DuckGame
             else
             {
                 if (layer == Layer.Lighting)
+                {
+                    PostfixPostDrawLayer(layer);
                     return;
+                }
                 if (layer == Layer.Glow && Options.Data.fireGlow)
                 {
                     foreach (MaterialThing materialThing in things[typeof(MaterialThing)])
@@ -1177,11 +1193,70 @@ namespace DuckGame
                 else
                 {
                     if (layer != Layer.Game || !NetworkDebugger.enabled || VirtualTransition.active || this is NetworkDebugger)
+                    {
+                        PostfixPostDrawLayer(layer);
                         return;
+                    }
                     NetworkDebugger.DrawInstanceGameDebug();
                 }
             }
+            PostfixPostDrawLayer(layer);
         }
+        public void PrefixPostDrawLayer(Layer layer)
+        {
+            if (!MonoMain.UpdateLerpState)
+            {
+                return;
+            }
+            foreach (MethodInfo m in PrefixPostDrawLayerMethods)
+            {
+                ParameterInfo[] ps = m.GetParamsCached();
+                object[] args = ps.Length == 0 ? null : new object[ps.Length];
+
+                for (int i = 0; i < ps.Length; i++)
+                {
+                    var t = ps[i].ParameterType;
+
+                    if (t.IsInstanceOfType(layer))
+                        args![i] = layer;
+                    else if (t.IsInstanceOfType(this))
+                        args![i] = this;
+                    else if (ps[i].HasDefaultValue)
+                        args![i] = ps[i].DefaultValue;
+                }
+
+                m.Invoke(null, args);
+            }
+        }
+
+        public void PostfixPostDrawLayer(Layer layer)
+        {
+            if (!MonoMain.UpdateLerpState)
+            {
+                return;
+            }
+            foreach (MethodInfo m in PostfixPostDrawLayerMethods)
+            {
+                ParameterInfo[] ps = m.GetParamsCached();
+                object[] args = ps.Length == 0 ? null : new object[ps.Length];
+
+                for (int i = 0; i < ps.Length; i++)
+                {
+                    var t = ps[i].ParameterType;
+
+                    if (t.IsInstanceOfType(layer)) 
+                        args![i] = layer;
+                    else if (t.IsInstanceOfType(this)) 
+                        args![i] = this;
+                    else if (ps[i].HasDefaultValue) 
+                        args![i] = ps[i].DefaultValue;
+                }
+
+                m.Invoke(null, args);
+            }
+        }
+
+
 
         public static T Nearest<T>(float x, float y, Thing ignore, Layer layer) => current.NearestThing<T>(new Vec2(x, y), ignore, layer);
 
