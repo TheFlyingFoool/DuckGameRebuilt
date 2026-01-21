@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security;
+using System.Windows.Media;
 using System.Xml.Serialization;
 using XnaToFna.ProxyForms;
 //using XnaToFna.XEX;
@@ -25,15 +26,16 @@ namespace XnaToFna
         public static MethodInfo m_XnaToFnaHelper_PreUpdate = typeof(XnaToFnaHelper).GetMethod("PreUpdate");
         public static MethodInfo m_XnaToFnaHelper_MainHook = typeof(XnaToFnaHelper).GetMethod("MainHook");
         public static MethodInfo m_FileSystemHelper_FixPath = typeof(FileSystemHelper).GetMethod("FixPath");
-        public static readonly byte[] DotNetFrameworkKeyToken = new byte[8] {
-           183,
-           122,
-           92,
-           86,
-           25,
-           52,
-           224,
-           137
+        public static readonly byte[] DotNetFrameworkKeyToken = new byte[8]
+        {
+            183,
+            122,
+            92,
+            86,
+            25,
+            52,
+            224,
+            137
         };
         public static readonly Version DotNetFramework4Version = new Version(4, 0, 0, 0);
         public static readonly Version DotNetFramework2Version = new Version(2, 0, 0, 0);
@@ -262,6 +264,49 @@ namespace XnaToFna
                     mapping.Setup(this, mapping);
             }
         }
+        public static void SetupHarmonyRelinkMap(XnaToFnaUtil xtf, XnaToFnaMapping mapping)
+        {
+            TypeDefinition harmonyInstance =  mapping.Module.Types.FirstOrDefault(t => t.FullName == "Harmony.HarmonyInstance");
+
+            if (harmonyInstance != null)
+            {
+                xtf.Modder.RelinkMap["HarmonyLib.Harmony"] = harmonyInstance;
+            }
+            Dictionary<string, string> knownRelocations = new Dictionary<string, string>()
+            {
+                { "ByteBuffer", "Harmony.ILCopying" },
+                { "Emitter", "Harmony.ILCopying" },
+                { "ExceptionBlock", "Harmony.ILCopying" },
+                { "ExceptionBlockType", "Harmony.ILCopying" },
+                { "ILInstruction", "Harmony.ILCopying" },
+                { "LeaveTry", "Harmony.ILCopying" },
+                { "Memory", "Harmony.ILCopying" },
+                { "MethodBodyReader", "Harmony.ILCopying" },
+                { "MethodCopier", "Harmony.ILCopying" },
+    
+                { "SelfPatching", "Harmony.Tools" }
+            };
+
+            SetupDirectRelinkMap(xtf, mapping, (_, type) =>
+            {
+                if (!type.Namespace.StartsWith("Harmony"))
+                    return;
+
+                string shortTypeName = type.Name;
+
+                if (shortTypeName == "HarmonyInstance")
+                    return;
+
+                string oldNamespace = knownRelocations.TryGetValue(shortTypeName, out string relocatedNs)
+                    ? $"HarmonyLib.{relocatedNs.Split('.').Last()}" 
+                    : "HarmonyLib";
+
+                string fullOldTypeName = $"{oldNamespace}.{shortTypeName}";
+                xtf.Modder.RelinkMap[fullOldTypeName] = type;
+
+                xtf.Modder.RelinkMap[$"HarmonyLib.{shortTypeName}"] = type;
+            });
+        }
 
         public static void SetupGSRelinkMap(XnaToFnaUtil xtf, XnaToFnaMapping mapping) => SetupDirectRelinkMap(xtf, mapping, (_, type) =>
         {
@@ -281,18 +326,18 @@ namespace XnaToFna
         public static void SetupDirectRelinkMap(XnaToFnaUtil xtf, XnaToFnaMapping mapping) => SetupDirectRelinkMap(xtf, mapping, null);
 
         public static void SetupDirectRelinkMap(
-          XnaToFnaUtil xtf,
-          XnaToFnaMapping mapping,
-          Action<XnaToFnaUtil, TypeDefinition> action)
+            XnaToFnaUtil xtf,
+            XnaToFnaMapping mapping,
+            Action<XnaToFnaUtil, TypeDefinition> action)
         {
             foreach (TypeDefinition type in mapping.Module.Types)
                 SetupDirectRelinkMapType(xtf, type, action);
         }
 
         public static void SetupDirectRelinkMapType(
-          XnaToFnaUtil xtf,
-          TypeDefinition type,
-          Action<XnaToFnaUtil, TypeDefinition> action)
+            XnaToFnaUtil xtf,
+            TypeDefinition type,
+            Action<XnaToFnaUtil, TypeDefinition> action)
         {
             if (action != null)
                 action(xtf, type);
@@ -324,7 +369,8 @@ namespace XnaToFna
                 for (TypeDefinition typeDefinition = type.BaseType?.Resolve(); typeDefinition != null; typeDefinition = typeDefinition.BaseType?.Resolve())
                     source.Push(typeDefinition);
             }
-            catch { }
+            catch
+            { }
             foreach (FieldDefinition field in type.Fields)
             {
                 string name = field.Name;
@@ -712,8 +758,8 @@ namespace XnaToFna
                 ilProcessor.InsertBefore(instructions[instri], ilProcessor.Create(OpCodes.Call, new GenericInstanceMethod(method1)
                 {
                     GenericArguments = {
-            operand.Parameters[index].ParameterType
-          }
+                        operand.Parameters[index].ParameterType
+                    }
                 }));
                 ++instri;
             }
@@ -722,8 +768,8 @@ namespace XnaToFna
                 ilProcessor.InsertBefore(instructions[instri], ilProcessor.Create(OpCodes.Call, new GenericInstanceMethod(method2)
                 {
                     GenericArguments = {
-            operand.Parameters[index].ParameterType
-          }
+                        operand.Parameters[index].ParameterType
+                    }
                 }));
                 ++instri;
             }
@@ -739,42 +785,54 @@ namespace XnaToFna
 
         public XnaToFnaUtil()
         {
-            Mappings = new List<XnaToFnaMapping>() {
-            new XnaToFnaMapping("System", new string[1] {
-                "System.Net"
-          }),
-          new XnaToFnaMapping("FNA", new string[10] {
-            "WineMono.FNA", // Added for a random mod crash seems to fix it
-            "Microsoft.Xna.Framework",
-            "Microsoft.Xna.Framework.Avatar",
-            "Microsoft.Xna.Framework.Content.Pipeline",
-            "Microsoft.Xna.Framework.Game",
-            "Microsoft.Xna.Framework.Graphics",
-            "Microsoft.Xna.Framework.Input.Touch",
-            "Microsoft.Xna.Framework.Storage",
-            "Microsoft.Xna.Framework.Video",
-            "Microsoft.Xna.Framework.Xact"
-          }),
-          new XnaToFnaMapping("MonoGame.Framework.Net", new string[3] {
-            "Microsoft.Xna.Framework.GamerServices",
-            "Microsoft.Xna.Framework.Net",
-            "Microsoft.Xna.Framework.Xdk"
-          }, new XnaToFnaMapping.SetupDelegate(SetupGSRelinkMap)),
-          new XnaToFnaMapping("FNA.Steamworks", new string[4] {
-            "FNA.Steamworks",
-            "Microsoft.Xna.Framework.GamerServices",
-            "Microsoft.Xna.Framework.Net",
-            "Microsoft.Xna.Framework.Xdk"
-          }, new XnaToFnaMapping.SetupDelegate(SetupGSRelinkMap)),
-          new XnaToFnaMapping("Steam", new string[2] {
-            "Steam",
-            "DGSteam"
+            Mappings = new List<XnaToFnaMapping>
+            {
+                new XnaToFnaMapping("System", new string[1]
+                {
+                        "System.Net"
+                }),
+                new XnaToFnaMapping("FNA", new string[10]
+                {
+                    "WineMono.FNA", // Added for a random mod crash seems to fix it
+                    "Microsoft.Xna.Framework",
+                    "Microsoft.Xna.Framework.Avatar",
+                    "Microsoft.Xna.Framework.Content.Pipeline",
+                    "Microsoft.Xna.Framework.Game",
+                    "Microsoft.Xna.Framework.Graphics",
+                    "Microsoft.Xna.Framework.Input.Touch",
+                    "Microsoft.Xna.Framework.Storage",
+                    "Microsoft.Xna.Framework.Video",
+                    "Microsoft.Xna.Framework.Xact"
+                }),
+                new XnaToFnaMapping("MonoGame.Framework.Net", new string[3]
+                {
+                    "Microsoft.Xna.Framework.GamerServices",
+                    "Microsoft.Xna.Framework.Net",
+                    "Microsoft.Xna.Framework.Xdk"
+                },
+                new XnaToFnaMapping.SetupDelegate(SetupGSRelinkMap)),
+                new XnaToFnaMapping("FNA.Steamworks", new string[4]
+                    {
+                        "FNA.Steamworks",
+                        "Microsoft.Xna.Framework.GamerServices",
+                        "Microsoft.Xna.Framework.Net",
+                        "Microsoft.Xna.Framework.Xdk"
+                    },
+               new XnaToFnaMapping.SetupDelegate(SetupGSRelinkMap)),
+                new XnaToFnaMapping("Steam", new string[2]
+                    {
+                        "Steam",
+                        "DGSteam"
 
-          }, new XnaToFnaMapping.SetupDelegate(SetupGSRelinkMap2))
-      };
+                }, new XnaToFnaMapping.SetupDelegate(SetupGSRelinkMap2)),
+                new XnaToFnaMapping("HarmonyLoader", new[] { "0Harmony" },
+                new XnaToFnaMapping.SetupDelegate(SetupHarmonyRelinkMap))
+            };
+
             AssemblyResolver = new CustomAssemblyResolver();
             Directories = new List<string>();
-            ContentDirectoryNames = new List<string>() {
+            ContentDirectoryNames = new List<string>()
+            {
                 "Content"
             };
             ContentDirectories = new List<string>();
@@ -799,6 +857,7 @@ namespace XnaToFna
             HookReflection = true;
             DestroyPublicKeyTokens = new List<string>();
             FixPathsFor = new List<string>();
+            DestroyPublicKeyTokens.Add("0Harmony");
             PreferredPlatform = ILPlatform.AnyCPU;
             Modder = new XnaToFnaModder(this);
             string path = Program.FilePath;
@@ -834,10 +893,10 @@ namespace XnaToFna
         }
 
         public ModuleDefinition MissingDependencyResolver(
-          MonoModder modder,
-          ModuleDefinition main,
-          string name,
-          string fullName)
+            MonoModder modder,
+            ModuleDefinition main,
+            string name,
+            string fullName)
         {
             Modder.Log(string.Format("Cannot map dependency {0} -> (({1}), ({2})) - not found", main.Name, fullName, name));
             return null;
@@ -955,8 +1014,8 @@ namespace XnaToFna
                 if (!File.Exists(path + ".mdb") && !File.Exists(Path.ChangeExtension(path, "pdb")))
                     rp.ReadSymbols = false;
                 Log(string.Format("[ScanPath] Checking assembly {0} ({1})", name.Name, rp.ReadWrite ?
-                  "rw" : (object)
-                  "r-"));
+                    "rw" : (object)
+                    "r-"));
                 ModuleDefinition key;
                 try
                 {
@@ -966,6 +1025,12 @@ namespace XnaToFna
                 {
                     Log(string.Format("[ScanPath] WARNING: Cannot load assembly: {0}", ex));
                     return;
+                }
+                if (key.Assembly.Name.Name == "HarmonyLoader")
+                {
+                    Log("[ScanPath] Registering HarmonyLoader in DependencyCache");
+                    Modder.DependencyCache["HarmonyLoader"] = key;
+                    Modder.DependencyCache[key.Assembly.Name.FullName] = key;
                 }
                 bool flag = !rp.ReadWrite || name.Name == ThisAssemblyName;
                 if ((key.Attributes & ModuleAttributes.ILOnly) != ModuleAttributes.ILOnly)
@@ -1323,7 +1388,7 @@ namespace XnaToFna
             using (MemoryStream memStream = new MemoryStream())
             {
                 FieldInfo ImageField = typeof(ModuleDefinition).GetField("Image", BindingFlags.NonPublic | BindingFlags.Instance);
-                Modder.Module.Write(memStream, Modder.WriterParameters, Modder.Module.Image.Stream.value.GetFileName());//this.Modder.Module.Image.Stream.value.GetFileName()
+                Modder.Module.Write(memStream, Modder.WriterParameters, Modder.Module.Image.Stream.value.GetFileName()); //this.Modder.Module.Image.Stream.value.GetFileName()
                 //mod.Assembly.MainModule.Name
                 assemblybytes = memStream.ToArray();
             }
@@ -1370,7 +1435,7 @@ namespace XnaToFna
             using (FileStream fs = File.Create(path))
             {
                 //FieldInfo ImageField = typeof(ModuleDefinition).GetField("Image", BindingFlags.NonPublic | BindingFlags.Instance);
-                Modder.Module.Write(fs, Modder.WriterParameters);//this.Modder.Module.Image.Stream.value.GetFileName()
+                Modder.Module.Write(fs, Modder.WriterParameters); //this.Modder.Module.Image.Stream.value.GetFileName()
                 //mod.Assembly.MainModule.Name
                 //assemblybytes = memStream.ToArray();
             }
@@ -1396,13 +1461,15 @@ namespace XnaToFna
         //}
         private sealed class fuller
         {
-            public fuller() { }
+            public fuller()
+            { }
 
             public ModuleDefinition dep;
         }
         private sealed class filler2
         {
-            public filler2() { }
+            public filler2()
+            { }
 
             internal bool OrderModules(ModuleDefinition other)
             {
@@ -1416,7 +1483,8 @@ namespace XnaToFna
         }
         private sealed class thing
         {
-            public thing() { }
+            public thing()
+            { }
 
             internal Assembly TypeResolve(object sender, ResolveEventArgs args)
             {
@@ -1442,7 +1510,8 @@ namespace XnaToFna
         }
         private sealed class ugh
         {
-            public ugh() { }
+            public ugh()
+            { }
 
             internal bool ifnamenot(XnaToFnaMapping mappings)
             {
