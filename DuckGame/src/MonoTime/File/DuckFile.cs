@@ -232,35 +232,6 @@ namespace DuckGame
                 flag = false;
                 appdataSave = false;
             }
-            if (flag)
-            {
-                appdataSave = true;
-                try
-                {
-                    string str1 = oldSaveLocation + _saveDirectory;
-                    if (Program.alternateSaveLocation && DirectoryExists(str1) && !DirectoryExists(saveDirectory))
-                        DirectoryCopy(str1, saveDirectory, true);
-                    string path = str1 + "where_is_my_save.txt";
-                    if (!File.Exists(path))
-                    {
-                        CreatePath(str1);
-                        Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-                        using (StreamWriter streamWriter = new StreamWriter(str1 + "Save Data.url"))
-                        {
-                            string location = Assembly.GetExecutingAssembly().Location;
-                            streamWriter.WriteLine("[InternetShortcut]");
-                            streamWriter.WriteLine("URL=file:///" + saveDirectory);
-                            streamWriter.WriteLine("IconIndex=0");
-                            string str2 = location.Replace('\\', '/');
-                            streamWriter.WriteLine("IconFile=" + str2);
-                        }
-                        File.WriteAllText(path, "Hey! Keeping save data in the Documents folder was causing all kinds\nof issues for people, and it's with great sadness that I had to move your data.\nDon't worry, it still exists- your data is now located here:\n\n" + saveDirectory + "\n\nAny save data still located in this folder is for the old version (pre-2020) of Duck Game.");
-                    }
-                }
-                catch (Exception)
-                {
-                }
-            }
             DevConsole.Log(DCSection.General, "DuckFile.Initialize().. " + (_saveRoot.Contains("OneDrive/") ? "Ah, a |DGBLUE|OneDrive|WHITE| user, I see.." : ""));
             if (!DirectoryExists(saveDirectory))
                 freshInstall = true;
