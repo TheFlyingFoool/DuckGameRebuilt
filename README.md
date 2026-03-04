@@ -1,4 +1,4 @@
-# <img src="https://github.com/user-attachments/assets/1a6306e6-0fbb-4c3f-b1bd-1a96070efdd3" height="32"> Duck Game Rebuilt
+# <img src="icon.png" height="32"> Duck Game Rebuilt
 Duck Game Rebuilt is a decompilation of Duck Game with massive improvements to performance, compatibility, and quality of life features.
 
 Join [our Discord server](https://discord.gg/XkAjt744hz) if you have any questions, need help, or want to report bugs
