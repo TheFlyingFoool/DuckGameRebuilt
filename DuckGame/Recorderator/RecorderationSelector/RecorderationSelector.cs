@@ -130,7 +130,7 @@ namespace DuckGame
             Graphics.fade = 1;
             camera.position = Vec2.Zero;
             camera.size = new Vec2(320, 180);
-            if (Input.Pressed("QUACK"))
+            if (Input.Pressed(Triggers.Cancel))
             {
                 Level.current = new TitleScreen();
                 return;
@@ -138,7 +138,7 @@ namespace DuckGame
             if (MenuItems.Count == 0) return;
             if (ReplayToLoadPreview != null)
             {
-                ReplayToLoadPreview.LoadPreview();
+                var isPreviewOk = ReplayToLoadPreview.TryLoadPreview();
                 ReplayToLoadPreview = null;
                 Graphics.fade = 1;
             }

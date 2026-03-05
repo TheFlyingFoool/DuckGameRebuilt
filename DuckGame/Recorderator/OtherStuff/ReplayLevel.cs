@@ -9,6 +9,22 @@ namespace DuckGame
     public class ReplayLevel : Level, IHaveAVirtualTransition
     {
         public bool fake;
+
+        public bool TryDeserializeLevel(BitBuffer b)
+        {
+            try
+            {
+                DeserializeLevel(b);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                DevConsole.Log(DCSection.General, $"|RED|RECORDERATOR |WHITE|Failed to deserialize level");
+                DevConsole.Log(ex);
+                return false;
+            }
+        }
+
         public void DeserializeLevel(BitBuffer b)
         {
             //this is dumb
