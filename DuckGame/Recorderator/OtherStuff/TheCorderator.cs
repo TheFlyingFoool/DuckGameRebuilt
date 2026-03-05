@@ -187,12 +187,12 @@ namespace DuckGame
             if (!fake)
             {
                 Level.current = new ReplayLevel() { CCorderr = cd };
-                (Level.current as ReplayLevel).DeserializeLevel(new BitBuffer(levelData));
+                (Level.current as ReplayLevel).TryDeserializeLevel(new BitBuffer(levelData));
             }
             else
             {
                 outLev = new ReplayLevel() { CCorderr = cd };
-                outLev.DeserializeLevel(new BitBuffer(levelData));
+                outLev.TryDeserializeLevel(new BitBuffer(levelData));
             }
             if (!fake) DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Level size:" + levelData.Length);
 
@@ -302,6 +302,24 @@ namespace DuckGame
         public static string CordsPath => DuckFile.saveDirectory + "Recorderations/";
         public List<Profile> profiles = new List<Profile>();
         public List<Team> teams = new List<Team>();
+
+        public bool TrySaveToFile(Level lastLevel)
+        {
+            try
+            {
+                SaveToFile(lastLevel);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Saving to file can fail for various reasons,
+                // when the disk full, the file is being used, or missing write permissions for example.
+                DevConsole.Log(DCSection.General, "|RED|RECORDERATOR |WHITE|Failed to SaveToFile()");
+                DevConsole.Log(ex);
+                return false;
+            }
+        }
+
         public byte[] SaveToFile(Level lastLevel)
         {
             if (!Directory.Exists(CordsPath)) Directory.CreateDirectory(CordsPath);

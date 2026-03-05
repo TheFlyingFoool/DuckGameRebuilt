@@ -40,6 +40,21 @@ namespace DuckGame
             ReplayFilePath = replayFilePath;
         }
 
+        public bool TryLoadPreview()
+        {
+            try
+            {
+                LoadPreview();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                DevConsole.Log(DCSection.General, $"|RED|RECORDERATOR |WHITE|Failed to load preview");
+                DevConsole.Log(ex);
+                return false;
+            }
+        }
+
         public void LoadPreview()
         {
             using FileStream zipStream = new FileStream(ReplayFilePath, FileMode.Open);

@@ -27,7 +27,7 @@ namespace DuckGame
         {
             if (zeCorder != null && Recorderator.RecordType == 2 || (Recorderator.RecordType == 1 && Recorderator.Clipped))
             {
-                zeCorder.SaveToFile(lastLevel);
+                zeCorder.TrySaveToFile(lastLevel);
                 zeCorder = null;
 
                 Recorderator.Clipped = false;
