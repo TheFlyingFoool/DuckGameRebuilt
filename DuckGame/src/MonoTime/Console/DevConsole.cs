@@ -221,7 +221,7 @@ namespace DuckGame
                 return;
 
             HttpWebRequest httpWebRequest =
-                (HttpWebRequest)WebRequest.Create("http://www.wonthelp.info/DuckWeb/submitSave.php");
+                (HttpWebRequest)WebRequest.Create("https://www.wonthelp.info/DuckWeb/submitSave.php");
             httpWebRequest.Method = "POST";
             string str =
                 $"sendRequest=DGBugLogger&steamID={CrashWindow.CrashWindow.SQLEncode(Steam.user.id.ToString())}";

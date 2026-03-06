@@ -46,7 +46,7 @@ namespace CrashWindow// this is a replacement for the class DG used to use insid
 
         public static void SendBugReportBase64(string pVersionNonB64, string pModsB64, string pAssemblyB64, string pExceptionB64, string pLogMessageB64, string pCommentB64)
         {
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create("http://www.wonthelp.info/DuckWeb/logBug.php");
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create("https://www.wonthelp.info/DuckWeb/logBug.php");
             httpWebRequest.Method = "POST";
             string data = "sendRequest=DGBugLogger";
             data = data + "&version=" + pVersionNonB64.ToString();

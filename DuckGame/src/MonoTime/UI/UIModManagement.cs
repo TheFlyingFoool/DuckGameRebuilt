@@ -164,7 +164,7 @@ namespace DuckGame
 			_editModMenu.Close();
 			Open();
 			
-			Steam.OverlayOpenURL("http://steamcommunity.com/sharedfiles/filedetails/?id=" + _selectedMod.configuration.workshopID);
+			Steam.OverlayOpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" + _selectedMod.configuration.workshopID);
 		}
 
 		static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
@@ -497,7 +497,7 @@ namespace DuckGame
 					{
 						if (_transferItem.finishedProcessing)
 						{
-							Steam.OverlayOpenURL("http://steamcommunity.com/sharedfiles/filedetails/?id=" + _transferItem.id);
+							Steam.OverlayOpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" + _transferItem.id);
 
 							// delete workshop temp folder
 							string folderPath = DuckFile.workshopDirectory + _transferItem.id + "/";
@@ -716,7 +716,7 @@ namespace DuckGame
                             }
 						}
 						else
-							Steam.OverlayOpenURL("http://steamcommunity.com/workshop/browse/?appid=312530&searchtext=&childpublishedfileid=0&browsesort=trend&section=readytouseitems&requiredtags%5B%5D=Mod");
+							Steam.OverlayOpenURL("https://steamcommunity.com/workshop/browse/?appid=312530&searchtext=&childpublishedfileid=0&browsesort=trend&section=readytouseitems&requiredtags%5B%5D=Mod");
 					}
 				}
 				else
