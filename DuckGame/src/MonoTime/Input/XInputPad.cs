@@ -829,7 +829,8 @@ namespace DuckGame
         
         public override Dictionary<int, string> GetTriggerNames()
         {
-            if (Program.SDL2)
+            bool isPlayStationController = false;
+            if (Program.IS_SDL2)
             {
                 SDL2.SDL.SDL_GameControllerType SDLControllerType = (SDL2.SDL.SDL_GameControllerType)ControllerType;
                 if (SDLControllerType == SDL2.SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS3 || SDLControllerType == SDL2.SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS4 || SDLControllerType == SDL2.SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS5)
@@ -868,7 +869,7 @@ namespace DuckGame
         {
             Sprite mapImage;
 
-            if (Program.SDL2)
+            if (Program.IS_SDL2)
             {
                 SDL2.SDL.SDL_GameControllerType SDLControllerType = (SDL2.SDL.SDL_GameControllerType)ControllerType;
                 if (SDLControllerType == SDL2.SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS3 || SDLControllerType == SDL2.SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS4 || SDLControllerType == SDL2.SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS5)

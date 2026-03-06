@@ -34,7 +34,7 @@ namespace DuckGame
 #else
         public const bool IS_DEV_BUILD = false;
 #endif
-        public static bool SDL2 = false;
+        public static bool IS_SDL2 = false;
         // this should be formatted like X.X.X where each X is a number
         public const string CURRENT_VERSION_ID = "1.4.7";
 
@@ -735,8 +735,17 @@ namespace DuckGame
             if (string.IsNullOrEmpty(environmentVariable) || !int.TryParse(environmentVariable, out MonoMain.MaximumGamepadCount) || MonoMain.MaximumGamepadCount < 0)
                 MonoMain.MaximumGamepadCount = Enum.GetNames(typeof(PlayerIndex)).Length;
 
-            SDL2 = Environment.GetEnvironmentVariable("FNA_PLATFORM_BACKEND") == "SDL2";
-
+            IS_SDL2 = Environment.GetEnvironmentVariable("FNA_PLATFORM_BACKEND") == "SDL2";
+            // Sets name for Linux Volume Bar
+            if (IS_SDL2)
+            {
+                SDL2.SDL.SDL_SetHint(SDL3.SDL.SDL_HINT_APP_NAME, "Duck Game");
+            }
+            else
+            {
+                SDL3.SDL.SDL_SetAppMetadata("Duck Game", "1.0", "com.duckgame.game");
+                SDL3.SDL.SDL_SetHint(SDL3.SDL.SDL_HINT_APP_NAME, "Duck Game");
+            }
             main = new Main();
             if (Debugger.IsAttached)
             {
