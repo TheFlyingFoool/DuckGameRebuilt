@@ -648,7 +648,7 @@ namespace DuckGame
         public bool PlayStationController(int controllerType)
         {
             bool isPlayStationController = false;
-            if (Program.SDL2)
+            if (Program.IS_SDL2)
             {
                 SDL.SDL_GameControllerType SDLControllerType = (SDL.SDL_GameControllerType)ControllerType;
                 if (SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS3 || SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS4 || SDLControllerType == SDL.SDL_GameControllerType.SDL_CONTROLLER_TYPE_PS5)
