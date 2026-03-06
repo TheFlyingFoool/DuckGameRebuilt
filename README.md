@@ -42,3 +42,13 @@ Note: your IDE will scream at you with 200+ warnings when building, which is nor
   * `msbuild -m -p:Configuration=Debug`
 * Run the game (will crash unless Steam is currently running)
   * `mono ./bin/DuckGame.exe`
+
+### Building on macOS (Mono)
+
+* Install build dependencies with Homebrew
+  * `brew install mono mono-libgdiplus nuget cmake sdl2`
+* Build the game and native macOS libraries
+  * `./scripts/build-macos.sh Release`
+* Run the game from the build output
+  * `./bin/DuckGame.sh -nosteam`
+  * Omit `-nosteam` when Steam is running and `steam_api` is available
