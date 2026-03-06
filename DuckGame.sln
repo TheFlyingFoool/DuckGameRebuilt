@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.1.32319.34
+# Visual Studio Version 18
+VisualStudioVersion = 18.2.11430.68 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DuckGame", "DuckGame\DuckGame.csproj", "{A63C7222-EEE1-4BCD-844D-F6AC1501A655}"
 EndProject
@@ -16,6 +16,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrashWindow", "CrashWindow\CrashWindow.csproj", "{761C4668-CBBD-4C8F-BC40-742BD3103932}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rebuilder", "Rebuilder\build\Rebuilder.csproj", "{B07BDC3C-3770-4A07-90D8-5C2A68E2172B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{324DD262-7065-436E-9DFB-000AC7CEDD27}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "guides", "guides", "{AB6CF183-B837-45A4-AF17-DF12F9690692}"
+	ProjectSection(SolutionItems) = preProject
+		docs\guides\DuckGameModding.md = docs\guides\DuckGameModding.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -156,6 +163,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AB6CF183-B837-45A4-AF17-DF12F9690692} = {324DD262-7065-436E-9DFB-000AC7CEDD27}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A0614B9F-E344-4BD6-8253-67FB580317F7}
