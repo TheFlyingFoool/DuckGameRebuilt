@@ -311,11 +311,12 @@ SRC = \
 	src/Media/SongCollection.cs \
 	src/Media/VideoSoundtrackType.cs \
 	src/Media/VisualizationData.cs \
-	src/Media/Xiph/IVideoPlayerCodec.cs \
-	src/Media/Xiph/BaseYUVPlayer.cs \
-	src/Media/Xiph/Video.cs \
-	src/Media/Xiph/VideoPlayer.cs \
-	src/Media/Xiph/VideoPlayerTheora.cs \
+	src/Media/Video/IVideoPlayerCodec.cs \
+	src/Media/Video/BaseYUVPlayer.cs \
+	src/Media/Video/Video.cs \
+	src/Media/Video/VideoPlayer.cs \
+	src/Media/Video/VideoPlayerTheora.cs \
+	src/Media/Video/VideoPlayerAV1.cs \
 	src/NamespaceDocs.cs \
 	src/Plane.cs \
 	src/PlaneIntersectionType.cs \
@@ -342,7 +343,8 @@ SRC = \
 	lib/SDL2-CS/src/SDL2.cs \
 	lib/SDL3-CS/SDL3/SDL3.Legacy.cs \
 	lib/FAudio/csharp/FAudio.cs \
-	lib/Theorafile/csharp/Theorafile.cs
+	lib/Theorafile/csharp/Theorafile.cs \
+	lib/dav1dfile/csharp/dav1dfile.Legacy.cs
 
 RESDIR = src/Graphics/Effect/StockEffects/FXB
 RESNAME = Microsoft.Xna.Framework.Graphics.Effect.Resources
@@ -353,7 +355,8 @@ RES = \
 	-resource:$(RESDIR)/EnvironmentMapEffect.fxb,$(RESNAME).EnvironmentMapEffect.fxb \
 	-resource:$(RESDIR)/SkinnedEffect.fxb,$(RESNAME).SkinnedEffect.fxb \
 	-resource:$(RESDIR)/SpriteEffect.fxb,$(RESNAME).SpriteEffect.fxb \
-	-resource:src/Graphics/Effect/YUVToRGBA/YUVToRGBAEffect.fxb,$(RESNAME).YUVToRGBAEffect.fxb
+	-resource:src/Graphics/Effect/YUVToRGBA/YUVToRGBAEffect.fxb,$(RESNAME).YUVToRGBAEffect.fxb \
+	-resource:src/Graphics/Effect/YUVToRGBA/YUVToRGBAEffectR.fxb,$(RESNAME).YUVToRGBAEffectR.fxb
 
 # Targets
 

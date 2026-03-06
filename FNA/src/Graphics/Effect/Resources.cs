@@ -102,6 +102,19 @@ namespace Microsoft.Xna.Framework.Graphics
 			}
 		}
 
+		/* This Effect is used by the AV1 VideoPlayer. */
+		public static byte[] YUVToRGBAEffectR
+		{
+			get
+			{
+				if (yuvToRGBAEffectR == null)
+				{
+					yuvToRGBAEffectR = GetResource("YUVToRGBAEffectR");
+				}
+				return yuvToRGBAEffectR;
+			}
+		}
+
 		#endregion
 
 		#region Private Static Variables
@@ -113,6 +126,7 @@ namespace Microsoft.Xna.Framework.Graphics
 		private static byte[] skinnedEffect;
 		private static byte[] spriteEffect;
 		private static byte[] yuvToRGBAEffect;
+		private static byte[] yuvToRGBAEffectR;
 
 		#endregion
 
