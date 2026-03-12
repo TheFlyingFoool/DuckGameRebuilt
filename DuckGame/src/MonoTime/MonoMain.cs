@@ -747,13 +747,6 @@ namespace DuckGame
             }
             try
             {
-                DeviceChangeNotifier.Stop();
-            }
-            catch
-            {
-            }
-            try
-            {
                 while (Cloud.processing)
                     Cloud.Update();
                 Steam.Terminate();
@@ -1185,7 +1178,6 @@ namespace DuckGame
                 Graphics.mouseVisible = true;
                 int num = (int)saveTool.ShowDialog();
                 Program.crashed = true;
-                Application.Exit();
                 Program.main.KillEverything();
                 Program.main.Exit();
             }

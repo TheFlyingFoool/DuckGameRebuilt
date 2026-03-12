@@ -14,7 +14,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace DuckGame
 {
@@ -690,13 +689,12 @@ namespace DuckGame
             {
                 for (int y = 0; y < height; y += boxHeight)
                 {
-                    Process.Start(Application.ExecutablePath, Program.commandLine + "-nomusic -lanjoiner +screentile " + x.ToString() + " " + y.ToString() + " " + boxWidth.ToString() + " " + boxHeight.ToString());
+                    Process.Start(Assembly.GetEntryAssembly().Location, Program.commandLine + "-nomusic -lanjoiner +screentile " + x.ToString() + " " + y.ToString() + " " + boxWidth.ToString() + " " + boxHeight.ToString());
                 }
             }
-            //Process.Start(Application.ExecutablePath, Program.commandLine + " +screentile 0 0");
-            //Process.Start(Application.ExecutablePath, Program.commandLine + " +screentile 321 0"); //+screentile 0 0
+            //Process.Start(Assembly.GetEntryAssembly().Location, Program.commandLine + " +screentile 0 0");
+            //Process.Start(Assembly.GetEntryAssembly().Location, Program.commandLine + " +screentile 321 0"); //+screentile 0 0
             DevConsole.Log("Tiling with DGs" + GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width.ToString() + " " + GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height.ToString());
-           // Application.Exit();
          //   Program.main.KillEverything();
           //  Program.main.Exit();
         }
@@ -729,7 +727,7 @@ namespace DuckGame
         [Marker.DevConsoleCommand(Name = "testdg")]
         public static void starttestdg()
         {
-            Process.Start(Application.ExecutablePath, Program.commandLine + " -lanjoiner");
+            Process.Start(Assembly.GetEntryAssembly().Location, Program.commandLine + " -lanjoiner");
             DevConsole.Log("Starting Lan Test bud");
         }
         //RandomSkySay();

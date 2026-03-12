@@ -2343,9 +2343,6 @@
     <Compile Include="src\MonoTime\UI\UIText.cs" />
     <Compile Include="src\MonoTime\UI\UIUnlockBox.cs" />
     <Compile Include="src\MonoTime\UI\UIWillBox.cs" />
-    <Compile Include="src\MonoTime\Windows\DeviceChangeNotifier.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="src\Program.cs" />
     <Compile Include="src\MonoTime\UI\UIMenuCustomUpdate.cs" />
     <Compile Include="Properties\Resources.Designer.cs" />
