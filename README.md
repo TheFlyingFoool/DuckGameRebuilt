@@ -19,6 +19,13 @@ Welcome to the repo, enjoy your stay, please unfuck the code. thanks
 
 Note: your IDE will scream at you with 200+ warnings when building, which is normal
 
+### Cloning
+This repository uses git submodules, ensure you clone it using the `--recursive` flag,  
+or just run this command after cloning the repo:
+```cmd
+git submodule update --init --recursive
+```
+
 ### Building on Windows
 
 * Make sure you have [.NET Framework 4.8](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48) installed and have a functioning IDE (like [Visual Studio](https://docs.microsoft.com/en-us/visualstudio/install/install-visual-studio?view=vs-2022)) for C#
