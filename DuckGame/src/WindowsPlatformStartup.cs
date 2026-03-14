@@ -8,7 +8,6 @@ using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
-using System.Windows.Forms;
 
 namespace DGWindows
 {
@@ -256,7 +255,7 @@ namespace DGWindows
                 StreamWriter streamWriter = new StreamWriter("ducklog.txt", true);
                 streamWriter.WriteLine(pLogMessage);
                 streamWriter.Close();
-                Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -modName none -source " + (e.ExceptionObject as Exception).Source + " -commandLine \"none\" -executable \"" + Application.ExecutablePath + "\" " + GetCrashWindowString(ex, null, pLogMessage));
+                Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -modName none -source " + (e.ExceptionObject as Exception).Source + " -commandLine \"none\" -executable \"" + Assembly.GetEntryAssembly().Location + "\" " + GetCrashWindowString(ex, null, pLogMessage));
             }
         }
 
@@ -470,7 +469,6 @@ namespace DGWindows
             public int dmFields;
             public int dmPositionX;
             public int dmPositionY;
-            public ScreenOrientation dmDisplayOrientation;
             public int dmDisplayFixedOutput;
             public short dmColor;
             public short dmDuplex;

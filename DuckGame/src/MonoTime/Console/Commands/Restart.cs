@@ -1,6 +1,6 @@
 ﻿using AddedContent.Firebreak;
 using System.Diagnostics;
-using System.Windows.Forms;
+using System.Reflection;
 
 namespace DuckGame
 {
@@ -10,8 +10,7 @@ namespace DuckGame
         [Marker.DevConsoleCommand(Description = "Restarts the game")]
         public static void Restart(string launchArgs = "*")
         {
-            Process.Start(Application.ExecutablePath, launchArgs.Replace("*", Program.commandLine));
-            Application.Exit();
+            Process.Start(Assembly.GetEntryAssembly().Location, launchArgs.Replace("*", Program.commandLine));
             Program.main.KillEverything();
             Program.main.Exit();
         }

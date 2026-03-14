@@ -277,7 +277,7 @@ namespace DuckGame
                     StreamWriter streamWriter = new StreamWriter("ducklog.txt", true);
                     streamWriter.WriteLine(str);
                     streamWriter.Close();
-                    Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -exceptionString \"" + str.Replace("\n", "|NEWLINE|").Replace("\r", "|NEWLINE2|") + "\" -source Duck Game -commandLine \"\" -executable \"" + Application.ExecutablePath + "\"");
+                    Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -exceptionString \"" + str.Replace("\n", "|NEWLINE|").Replace("\r", "|NEWLINE2|") + "\" -source Duck Game -commandLine \"\" -executable \"" + Assembly.GetEntryAssembly().Location + "\"");
                 }
             }
             return null;
@@ -466,7 +466,7 @@ namespace DuckGame
                         }
                         for (int i = 0; i < amount; i++)
                         {
-                            Process.Start(Application.ExecutablePath, commandLine.Replace("-testserver", " -lanjoiner"));
+                            Process.Start(Assembly.GetEntryAssembly().Location, commandLine.Replace("-testserver", " -lanjoiner"));
                         }
                         testServer = true;
                         break;
@@ -474,7 +474,7 @@ namespace DuckGame
                         testServer = true;
                         break;
                     case "-testserverclient":
-                        Process.Start(Application.ExecutablePath, commandLine.Replace("-testserverclient", " -testserver2"));
+                        Process.Start(Assembly.GetEntryAssembly().Location, commandLine.Replace("-testserverclient", " -testserver2"));
                         Network.lanMode = true;
                         IsLanTestUser = true;
                         break;
@@ -722,8 +722,7 @@ namespace DuckGame
             }
             catch (Exception) { }
         label_109:
-            DeviceChangeNotifier.Start();
-            DevConsole.Log("Starting Duck Game (" + DG.platform + ")...");
+                        DevConsole.Log("Starting Duck Game (" + DG.platform + ")...");
             if (DGRSettings.ControllerCount > 4)
             {
                 string controllerstring = DGRSettings.ControllerCount.ToString();
@@ -828,7 +827,7 @@ namespace DuckGame
                 StreamWriter streamWriter = new StreamWriter("ducklog.txt", true);
                 streamWriter.WriteLine(pLogMessage);
                 streamWriter.Close();
-                Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -modName none -source " + e.Exception.Source + " -commandLine \"none\" -executable \"" + Application.ExecutablePath + "\" " + WindowsPlatformStartup.GetCrashWindowString(ex, null, pLogMessage));
+                Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -modName none -source " + e.Exception.Source + " -commandLine \"none\" -executable \"" + Assembly.GetEntryAssembly().Location + "\" " + WindowsPlatformStartup.GetCrashWindowString(ex, null, pLogMessage));
             }
         }
         public static string ProcessExceptionString(Exception e)
@@ -1096,10 +1095,10 @@ namespace DuckGame
                     {
                         if (pModConfig != null)
                             Process.Start("CrashWindow.exe", "-modResponsible " + (flag1 ? "1" : "0") + " -modDisabled " + (!gameLoadedSuccessfully || Options.Data.disableModOnCrash ? (flag2 ? "1" : "0") : "2")
-                                + " -modName " + str2 + " -source " + exception.Source + " -commandLine \"" + commandLine + "\" -executable \"" + Application.ExecutablePath + "\" " + DG.GetCrashWindowString(pException, pModConfig, str1));
+                                + " -modName " + str2 + " -source " + exception.Source + " -commandLine \"" + commandLine + "\" -executable \"" + Assembly.GetEntryAssembly().Location + "\" " + DG.GetCrashWindowString(pException, pModConfig, str1));
                         else
                             Process.Start("CrashWindow.exe", "-modResponsible " + (flag1 ? "1" : "0") + " -modDisabled " + (!gameLoadedSuccessfully || Options.Data.disableModOnCrash ? (flag2 ? "1" : "0") : "2")
-                                + " -modName " + str2 + " -source " + exception.Source + " -commandLine \"" + commandLine + "\" -executable \"" + Application.ExecutablePath + "\" " + DG.GetCrashWindowString(pException, pAssembly, str1));
+                                + " -modName " + str2 + " -source " + exception.Source + " -commandLine \"" + commandLine + "\" -executable \"" + Assembly.GetEntryAssembly().Location + "\" " + DG.GetCrashWindowString(pException, pAssembly, str1));
                     }
                     catch (Exception ex)
                     {

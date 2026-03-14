@@ -4,7 +4,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Web.UI.WebControls;
 using System.Web.Profile;
-using System.Windows.Forms;
 
 namespace DuckGame
 {

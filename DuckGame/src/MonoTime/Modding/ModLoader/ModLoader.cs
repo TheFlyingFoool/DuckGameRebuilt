@@ -2,7 +2,6 @@
 using Microsoft.CSharp;
 using Mono.Cecil;
 using MonoMod.Utils;
-using SixLabors.ImageSharp;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections;
@@ -13,7 +12,6 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-using System.Windows.Forms;
 using System.Xml;
 using XnaToFna;
 using Harmony;
@@ -147,9 +145,8 @@ namespace DuckGame
 
         public static void RestartGame()
         {
-            string executablePath = RestartToVanillaDg ? VanillaDgPath : Application.ExecutablePath;
+            string executablePath = RestartToVanillaDg ? VanillaDgPath : Assembly.GetEntryAssembly().Location;
             Process.Start(executablePath, Program.commandLine);
-            Application.Exit();
             Program.main.KillEverything();
             Program.main.Exit();
         }
