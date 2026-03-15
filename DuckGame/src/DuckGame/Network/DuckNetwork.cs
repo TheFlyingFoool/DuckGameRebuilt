@@ -2055,6 +2055,9 @@ namespace DuckGame
             {
                 if (Network.isServer)
                 {
+                    //TODO improve this bandaid fix for lan lobbies
+                    if(Network.lanMode)
+                        return;
                     Network.activeNetwork.core.lobby.SetLobbyData("midgame", DGRSettings.MidGameJoining?"true":"false");
 
                     localProfile.netData.Set<bool>("midgameJoining", DGRSettings.MidGameJoining);
