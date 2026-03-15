@@ -1,0 +1,27 @@
+name: Build
+
+on:
+  workflow_dispatch:
+  workflow_call:
+    outputs:
+      artifact-name:
+        value: DuckGameRebuilt
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - uses: ./.github/actions/build
+      
+      - name: Upload compiled artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: DuckGameRebuilt
+          path: DuckGameRebuilt.zip
