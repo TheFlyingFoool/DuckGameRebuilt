@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build_and_release:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+          fetch-depth: 1
+
+      - uses: ./.github/actions/build
+
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: DuckGameRebuilt.zip
+          overwrite: true
+
+      - name: Update DGR mod
+        uses: AnarkisGaming/workshop@v1
+        with:
+          appID: 312530
+          publishedFileID: ${{ vars.WORKSHOP_ID }}
+          path: ./steammod
+          changelog: ${{ github.event.release.body }}
+        env:
+          STEAM_ACCOUNT_NAME: "DuckGameRebuilt"
+          STEAM_PASSWORD: ${{ secrets.STEAM_PASS }}

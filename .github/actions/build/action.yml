@@ -1,0 +1,65 @@
+name: Build DuckGameRebuilt
+description: Build DuckGameRebuilt
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: Install MSBuild
+      shell: bash
+      run: |
+        echo "::group::== Install MSBuild =="
+        sudo apt-get update
+        sudo apt-get install -y msbuild zip
+        echo "::endgroup::"
+
+    - name: Restore NuGet packages
+      shell: bash
+      run: |
+        echo "::group::== Restore NuGet packages =="
+        nuget restore .
+        echo "::endgroup::"
+
+
+    - name: Add Project Dependencies [#1]
+      shell: bash
+      run: |
+        mkdir ./bin
+        cp ./DuckGame/lib/* ./bin
+
+    - name: Build with AutoUpdater
+      shell: bash
+      run: |
+        echo "::group::== Build with AutoUpdater =="
+        msbuild /m /p:Configuration=ReleaseAutoUpdater .
+        echo "::endgroup::"
+
+    - name: Zip binaries
+      shell: bash
+      run: |
+        echo "::group::== Zip binaries =="
+        mv ./bin ./DuckGameRebuilt
+        cd ./DuckGameRebuilt && zip -r ../DuckGameRebuilt.zip ./* && cd ..
+        echo "::endgroup::"
+
+    - name: Add Project Dependencies [#2]
+      shell: bash
+      run: |
+        mkdir ./bin
+        cp ./DuckGame/lib/* ./bin
+
+    - name: Build without AutoUpdater
+      shell: bash
+      run: |
+        echo "::group::== Build without AutoUpdater =="
+        msbuild /m /p:Configuration=Release .
+        echo "::endgroup::"
+
+    - name: Reorganize files for DGR mod
+      shell: bash
+      run: | 
+        mv ./bin ./Rebuilder/dgr
+        find ./Rebuilder -maxdepth 1 ! \( -name "mod.conf" -o -name "Rebuilder.dll" \) -type f -exec rm {} +
+        rm -r ./Rebuilder/build
+        mkdir ./steammod
+        mv ./Rebuilder ./steammod/Rebuilder

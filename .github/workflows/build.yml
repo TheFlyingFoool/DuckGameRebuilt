@@ -1,0 +1,38 @@
+name: Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      upload-artifact:
+        description: Upload compiled artifact
+        type: boolean
+        default: false
+
+  workflow_call:
+    inputs:
+      upload-artifact:
+        type: boolean
+        default: true
+    outputs:
+      artifact-name:
+        value: DuckGameRebuilt
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+          fetch-depth: 1
+
+      - uses: ./.github/actions/build
+      
+      - name: Upload compiled artifact
+        if: ${{ inputs.upload-artifact }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: DuckGameRebuilt
+          path: DuckGameRebuilt.zip
