@@ -7,24 +7,40 @@ namespace DuckGame
     /// </summary>
     public static class MathHelper
     {
-        /// <summary>Represents the mathematical constant e(2.71828175).</summary>
+        /// <summary>
+        /// Represents the mathematical constant e(2.71828175).
+        /// </summary>
         public const float E = (float)Math.E;
-        /// <summary>Represents the log base ten of e(0.4342945).</summary>
+
+        /// <summary>
+        /// Represents the log base ten of e(0.4342945).
+        /// </summary>
         public const float Log10E = 0.4342945f;
-        /// <summary>Represents the log base two of e(1.442695).</summary>
+
+        /// <summary>
+        /// Represents the log base two of e(1.442695).
+        /// </summary>
         public const float Log2E = 1.442695f;
-        /// <summary>Represents the value of pi(3.14159274).</summary>
+
+        /// <summary>
+        /// Represents the value of pi(3.14159274).
+        /// </summary>
         public const float Pi = (float)Math.PI;
+
         /// <summary>
         /// Represents the value of pi divided by two(1.57079637).
         /// </summary>
-        public const float PiOver2 = (float)(Math.PI / 2d);
+        public const float PiOver2 = (float)(Math.PI / 2.0);
+
         /// <summary>
         /// Represents the value of pi divided by four(0.7853982).
         /// </summary>
-        public const float PiOver4 = (float)(Math.PI / 4d);
-        /// <summary>Represents the value of pi times two(6.28318548).</summary>
-        public const float TwoPi = (float)(Math.PI * 2d);
+        public const float PiOver4 = (float)(Math.PI / 4.0);
+
+        /// <summary>
+        /// Represents the value of pi times two(6.28318548).
+        /// </summary>
+        public const float TwoPi = (float)(Math.PI * 2.0);
 
         /// <summary>
         /// Returns the Cartesian coordinate for one axis of a point that is defined by a given triangle and two normalized barycentric (areal) coordinates.
@@ -35,14 +51,9 @@ namespace DuckGame
         /// <param name="amount1">The normalized barycentric (areal) coordinate b2, equal to the weighting factor for vertex 2, the coordinate of which is specified in value2.</param>
         /// <param name="amount2">The normalized barycentric (areal) coordinate b3, equal to the weighting factor for vertex 3, the coordinate of which is specified in value3.</param>
         /// <returns>Cartesian coordinate of the specified point with respect to the axis being used.</returns>
-        public static float Barycentric(
-          float value1,
-          float value2,
-          float value3,
-          float amount1,
-          float amount2)
+        public static float Barycentric(float value1, float value2, float value3, float amount1, float amount2)
         {
-            return (float)(value1 + (value2 - value1) * amount1 + (value3 - value1) * amount2);
+            return value1 + (value2 - value1) * amount1 + (value3 - value1) * amount2;
         }
 
         /// <summary>
@@ -54,39 +65,48 @@ namespace DuckGame
         /// <param name="value4">The fourth position in the interpolation.</param>
         /// <param name="amount">Weighting factor.</param>
         /// <returns>A position that is the result of the Catmull-Rom interpolation.</returns>
-        public static float CatmullRom(
-          float value1,
-          float value2,
-          float value3,
-          float value4,
-          float amount)
+        public static float CatmullRom(float value1, float value2, float value3, float value4, float amount)
         {
-            double num1 = amount * amount;
-            double num2 = num1 * amount;
-            return (float)(0.5f * (2f * value2 + (value3 - value1) * amount + (2f * value1 - 5f * value2 + 4f * value3 - value4) * num1 + (3f * value2 - value1 - 3f * value3 + value4) * num2));
+            // Using formula from http://www.mvps.org/directx/articles/catmull/
+            // Internally using doubles not to lose precission
+            double amountSquared = amount * amount;
+            double amountCubed = amountSquared * amount;
+            return (float)(0.5 * (2.0 * value2 +
+                (value3 - value1) * amount +
+                (2.0 * value1 - 5.0 * value2 + 4.0 * value3 - value4) * amountSquared +
+                (3.0 * value2 - value1 - 3.0 * value3 + value4) * amountCubed));
         }
 
-        /// <summary>Restricts a value to be within a specified range.</summary>
+        /// <summary>
+        /// Restricts a value to be within a specified range.
+        /// </summary>
         /// <param name="value">The value to clamp.</param>
         /// <param name="min">The minimum value. If <c>value</c> is less than <c>min</c>, <c>min</c> will be returned.</param>
         /// <param name="max">The maximum value. If <c>value</c> is greater than <c>max</c>, <c>max</c> will be returned.</param>
         /// <returns>The clamped value.</returns>
         public static float Clamp(float value, float min, float max)
         {
-            value = value > max ? max : value;
-            value = value < min ? min : value;
+            // First we check to see if we're greater than the max
+            value = (value > max) ? max : value;
+
+            // Then we check to see if we're less than the min.
+            value = (value < min) ? min : value;
+
+            // There's no check to see if min > max.
             return value;
         }
 
-        /// <summary>Restricts a value to be within a specified range.</summary>
+        /// <summary>
+        /// Restricts a value to be within a specified range.
+        /// </summary>
         /// <param name="value">The value to clamp.</param>
         /// <param name="min">The minimum value. If <c>value</c> is less than <c>min</c>, <c>min</c> will be returned.</param>
         /// <param name="max">The maximum value. If <c>value</c> is greater than <c>max</c>, <c>max</c> will be returned.</param>
         /// <returns>The clamped value.</returns>
         public static int Clamp(int value, int min, int max)
         {
-            value = value > max ? max : value;
-            value = value < min ? min : value;
+            value = (value > max) ? max : value;
+            value = (value < min) ? min : value;
             return value;
         }
 
@@ -96,54 +116,81 @@ namespace DuckGame
         /// <param name="value1">Source value.</param>
         /// <param name="value2">Source value.</param>
         /// <returns>Distance between the two values.</returns>
-        public static float Distance(float value1, float value2) => Math.Abs(value1 - value2);
+        public static float Distance(float value1, float value2)
+        {
+            // The float cast is required for .NET Micro Framework (AGENT port)
+            return (float)Math.Abs(value1 - value2);
+        }
 
-        /// <summary>Performs a Hermite spline interpolation.</summary>
+        /// <summary>
+        /// Performs a Hermite spline interpolation.
+        /// </summary>
         /// <param name="value1">Source position.</param>
         /// <param name="tangent1">Source tangent.</param>
         /// <param name="value2">Source position.</param>
         /// <param name="tangent2">Source tangent.</param>
         /// <param name="amount">Weighting factor.</param>
         /// <returns>The result of the Hermite spline interpolation.</returns>
-        public static float Hermite(
-          float value1,
-          float tangent1,
-          float value2,
-          float tangent2,
-          float amount)
+        public static float Hermite(float value1, float tangent1, float value2, float tangent2, float amount)
         {
-            double num1 = value1;
-            double num2 = value2;
-            double num3 = tangent1;
-            double num4 = tangent2;
-            double num5 = amount;
-            double num6 = num5 * num5 * num5;
-            double num7 = num5 * num5;
-            return amount != 0f ? (amount != 1f ? (float)((2f * num1 - 2f * num2 + num4 + num3) * num6 + (3f * num2 - 3f * num1 - 2f * num3 - num4) * num7 + num3 * num5 + num1) : value2) : value1;
+            // All transformed to double not to lose precission
+            // Otherwise, for high numbers of param:amount the result is NaN instead of Infinity
+            double v1 = value1, v2 = value2, t1 = tangent1, t2 = tangent2, s = amount, result;
+            double sCubed = s * s * s;
+            double sSquared = s * s;
+
+            if (amount == 0f)
+                result = value1;
+            else if (amount == 1f)
+                result = value2;
+            else
+                result = (2 * v1 - 2 * v2 + t2 + t1) * sCubed +
+                    (3 * v2 - 3 * v1 - 2 * t1 - t2) * sSquared +
+                    t1 * s +
+                    v1;
+            return (float)result;
         }
 
-        /// <summary>Linearly interpolates between two values.</summary>
+
+        /// <summary>
+        /// Linearly interpolates between two values.
+        /// </summary>
         /// <param name="value1">Source value.</param>
         /// <param name="value2">Source value.</param>
         /// <param name="amount">Value between 0 and 1 indicating the weight of value2.</param>
-        /// <returns>Interpolated value.</returns>
+        /// <returns>Interpolated value.</returns> 
         /// <remarks>This method performs the linear interpolation based on the following formula.
         /// <c>value1 + (value2 - value1) * amount</c>
         /// Passing amount a value of 0 will cause value1 to be returned, a value of 1 will cause value2 to be returned.
         /// </remarks>
-        public static float Lerp(float value1, float value2, float amount) => value1 + (value2 - value1) * amount;
+        public static float Lerp(float value1, float value2, float amount)
+        {
+            return value1 + (value2 - value1) * amount;
+        }
 
-        /// <summary>Returns the greater of two values.</summary>
+        /// <summary>
+        /// Returns the greater of two values.
+        /// </summary>
         /// <param name="value1">Source value.</param>
         /// <param name="value2">Source value.</param>
         /// <returns>The greater value.</returns>
-        public static float Max(float value1, float value2) => Math.Max(value1, value2);
+        public static float Max(float value1, float value2)
+        {
+            // The float cast is required for .NET Micro Framework (AGENT port)
+            return (float)Math.Max(value1, value2);
+        }
 
-        /// <summary>Returns the lesser of two values.</summary>
+        /// <summary>
+        /// Returns the lesser of two values.
+        /// </summary>
         /// <param name="value1">Source value.</param>
         /// <param name="value2">Source value.</param>
         /// <returns>The lesser value.</returns>
-        public static float Min(float value1, float value2) => Math.Min(value1, value2);
+        public static float Min(float value1, float value2)
+        {
+            // The float cast is required for .NET Micro Framework (AGENT port)
+            return (float)Math.Min(value1, value2);
+        }
 
         /// <summary>
         /// Interpolates between two values using a cubic equation.
@@ -154,11 +201,18 @@ namespace DuckGame
         /// <returns>Interpolated value.</returns>
         public static float SmoothStep(float value1, float value2, float amount)
         {
-            float amount1 = Clamp(amount, 0f, 1f);
-            return Hermite(value1, 0f, value2, 0f, amount1);
+            // It is expected that 0 < amount < 1
+            // If amount < 0, return value1
+            // If amount > 1, return value2
+            float result = Clamp(amount, 0f, 1f);
+            result = Hermite(value1, 0f, value2, 0f, result);
+
+            return result;
         }
 
-        /// <summary>Converts radians to degrees.</summary>
+        /// <summary>
+        /// Converts radians to degrees.
+        /// </summary>
         /// <param name="radians">The angle in radians.</param>
         /// <returns>The angle in degrees.</returns>
         /// <remarks>
@@ -166,9 +220,14 @@ namespace DuckGame
         /// though it returns single float
         /// Factor = 180 / pi
         /// </remarks>
-        public static float ToDegrees(float radians) => radians * 57.29578f;
+        public static float ToDegrees(float radians)
+        {
+            return (float)(radians * 57.295779513082320876798154814105);
+        }
 
-        /// <summary>Converts degrees to radians.</summary>
+        /// <summary>
+        /// Converts degrees to radians.
+        /// </summary>
         /// <param name="degrees">The angle in degrees.</param>
         /// <returns>The angle in radians.</returns>
         /// <remarks>
@@ -176,24 +235,41 @@ namespace DuckGame
         /// though it returns single float
         /// Factor = pi / 180
         /// </remarks>
-        public static float ToRadians(float degrees) => degrees * ((float)Math.PI / 180f);
+        public static float ToRadians(float degrees)
+        {
+            return (float)(degrees * 0.017453292519943295769236907684886);
+        }
 
-        /// <summary>Reduces a given angle to a value between π and -π.</summary>
+        /// <summary>
+        /// Reduces a given angle to a value between π and -π.
+        /// </summary>
         /// <param name="angle">The angle to reduce, in radians.</param>
         /// <returns>The new angle, in radians.</returns>
         public static float WrapAngle(float angle)
         {
-            angle = (float)Math.IEEERemainder(angle, 6.28318548202515);
-            if (angle <= -3.14159274101257)
-                angle += 6.283185f;
-            else if (angle > 3.14159274101257)
-                angle -= 6.283185f;
+            angle = (float)Math.IEEERemainder((double)angle, 6.2831854820251465);
+            if (angle <= -3.14159274f)
+            {
+                angle += 6.28318548f;
+            }
+            else
+            {
+                if (angle > 3.14159274f)
+                {
+                    angle -= 6.28318548f;
+                }
+            }
             return angle;
         }
 
-        /// <summary>Determines if value is powered by two.</summary>
+        /// <summary>
+        /// Determines if value is powered by two.
+        /// </summary>
         /// <param name="value">A value.</param>
         /// <returns><c>true</c> if <c>value</c> is powered by two; otherwise <c>false</c>.</returns>
-        public static bool IsPowerOfTwo(int value) => value > 0 && (value & value - 1) == 0;
+        public static bool IsPowerOfTwo(int value)
+        {
+            return (value > 0) && ((value & (value - 1)) == 0);
+        }
     }
 }
