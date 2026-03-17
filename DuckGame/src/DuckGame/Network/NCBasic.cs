@@ -51,25 +51,41 @@ namespace DuckGame
 
         protected override object GetConnectionObject(string identifier) => MakeConnection(CreateIPEndPoint(identifier)).connection;
 
+        private const long kDuckGameLANHeader = 5892070176735;
+
         private void BroadcastServerHeader()
         {
             if (_socket == null)
                 return;
             BitBuffer bitBuffer = new BitBuffer();
-            bitBuffer.Write(5892070176735L);
+            bitBuffer.Write(kDuckGameLANHeader);
             bitBuffer.Write(DG.versionMajor);
             bitBuffer.Write(DG.versionHigh);
             bitBuffer.Write(DG.versionLow);
             bitBuffer.Write((byte)DuckNetwork.profiles.Where(x => x.connection != null).Count());
-            bitBuffer.Write(TeamSelect2.GetOnlineSetting("name").value);
+            if (DGRSettings.MidGameJoining)
+            {
+                bitBuffer.Write("|PINK|[MIDGAME] |PREV|" + TeamSelect2.GetOnlineSetting("name").value);
+            }
+            else
+            {
+                bitBuffer.Write(TeamSelect2.GetOnlineSetting("name").value);
+            }
             bitBuffer.Write(ModLoader.modHash);
             bitBuffer.Write((byte)TeamSelect2.GetSettingInt("requiredwins"));
             bitBuffer.Write((byte)TeamSelect2.GetSettingInt("restsevery"));
             bitBuffer.Write(TeamSelect2.GetSettingBool("wallmode"));
             bitBuffer.Write(Editor.customLevelCount);
-            bitBuffer.Write(!(Level.current is TeamSelect2));
+            bitBuffer.Write(!(Level.current is TeamSelect2)); // started
             bitBuffer.Write(TeamSelect2.UpdateModifierStatus());
-            bitBuffer.Write(DuckNetwork.numSlots);
+            if (DGRSettings.MidGameJoining)
+            {
+                bitBuffer.Write(DG.MaxPlayers); // alittle janker than i'd like, Unsure how you would determin how many they'd want?
+            }
+            else
+            {
+                bitBuffer.Write(DuckNetwork.numSlots);
+            }
             bitBuffer.Write((string)TeamSelect2.GetOnlineSetting("password").value != "");
             bitBuffer.Write((bool)TeamSelect2.GetOnlineSetting("dedicated").value);
             bitBuffer.Write(true);
@@ -441,46 +457,40 @@ namespace DuckGame
                         byte[] data = udpClient.Receive(ref remoteEP);
                         if (data != null)
                         {
-                            BitBuffer bitBuffer = new BitBuffer(data);
-                            long num1 = bitBuffer.ReadLong();
+                            BitBuffer b = new BitBuffer(data);
+                            long id = b.ReadLong();
                             string address = remoteEP.ToString();
-                            if (num1 == 5892070176735L)
+                            if (id == kDuckGameLANHeader)
                             {
                                 if (_threadLobbies.FirstOrDefault(x => x.lanAddress == address) == null)
                                 {
-                                    UIServerBrowser.LobbyData lobbyData1 = new UIServerBrowser.LobbyData
+                                    UIServerBrowser.LobbyData lobbyData = new UIServerBrowser.LobbyData();
+                                    lobbyData.lanAddress = address;
+                                    int pMajor = b.ReadInt();
+                                    int pHigh = b.ReadInt();
+                                    int pLow = b.ReadInt();
+                                    lobbyData.version = DG.MakeVersionString(pMajor, pHigh, pLow);
+                                    lobbyData._userCount = b.ReadByte();
+                                    lobbyData.name = b.ReadString();
+                                    lobbyData.modHash = b.ReadString();
+                                    lobbyData.requiredWins = b.ReadByte().ToString();
+                                    lobbyData.restsEvery = b.ReadByte().ToString();
+                                    lobbyData.wallMode = b.ReadBool() ? "true" : "false";
+
+                                    lobbyData.customLevels = b.ReadInt().ToString();
+
+                                    lobbyData.started = b.ReadBool() ? "true" : "false";
+                                    lobbyData.hasModifiers = b.ReadBool() ? "true" : "false";
+                                    lobbyData.numSlots = lobbyData.maxPlayers = b.ReadInt();
+                                    lobbyData.hasPassword = b.ReadBool();
+                                    lobbyData.dedicated = b.ReadBool();
+                                    if (b.positionInBits != b.lengthInBits && b.ReadBool())
+                                        lobbyData.datahash = b.ReadLong();
+                                    if (b.ReadInt() == 123456789) //the dgr number -niko
                                     {
-                                        lanAddress = address
-                                    };
-                                    int pMajor = bitBuffer.ReadInt();
-                                    int pHigh = bitBuffer.ReadInt();
-                                    int pLow = bitBuffer.ReadInt();
-                                    lobbyData1.version = DG.MakeVersionString(pMajor, pHigh, pLow);
-                                    lobbyData1._userCount = bitBuffer.ReadByte();
-                                    lobbyData1.name = bitBuffer.ReadString();
-                                    lobbyData1.modHash = bitBuffer.ReadString();
-                                    lobbyData1.requiredWins = bitBuffer.ReadByte().ToString();
-                                    lobbyData1.restsEvery = bitBuffer.ReadByte().ToString();
-                                    lobbyData1.wallMode = bitBuffer.ReadBool() ? "true" : "false";
-                                    UIServerBrowser.LobbyData lobbyData2 = lobbyData1;
-                                    int num2 = bitBuffer.ReadInt();
-                                    string str = num2.ToString();
-                                    lobbyData2.customLevels = str;
-                                    lobbyData1.started = bitBuffer.ReadBool() ? "true" : "false";
-                                    lobbyData1.hasModifiers = bitBuffer.ReadBool() ? "true" : "false";
-                                    UIServerBrowser.LobbyData lobbyData3 = lobbyData1;
-                                    lobbyData1.maxPlayers = num2 = bitBuffer.ReadInt();
-                                    int num3 = num2;
-                                    lobbyData3.numSlots = num3;
-                                    lobbyData1.hasPassword = bitBuffer.ReadBool();
-                                    lobbyData1.dedicated = bitBuffer.ReadBool();
-                                    if (bitBuffer.positionInBits != bitBuffer.lengthInBits && bitBuffer.ReadBool())
-                                        lobbyData1.datahash = bitBuffer.ReadLong();
-                                    if (bitBuffer.ReadInt() == 123456789) //the dgr number -niko
-                                    {
-                                        lobbyData1.DGR = true;
+                                        lobbyData.DGR = true;
                                     }
-                                    _threadLobbies.Add(lobbyData1);
+                                    _threadLobbies.Add(lobbyData);
                                     --index;
                                 }
                             }
