@@ -172,7 +172,7 @@ namespace DuckGame
             get => _internalStatus;
             set
             {
-                if (_internalStatus != value && Network.activeNetwork != null && Network.activeNetwork.core != null)
+                if (_internalStatus != value && Network.activeNetwork.core != null)
                     Network.activeNetwork.core._connectionsDirty = true;
                 _internalStatus = value;
             }

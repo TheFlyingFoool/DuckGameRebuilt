@@ -2056,9 +2056,12 @@ namespace DuckGame
                 if (Network.isServer)
                 {
                     //TODO improve this bandaid fix for lan lobbies
-                    if(Network.lanMode)
-                        return;
-                    Network.activeNetwork.core.lobby.SetLobbyData("midgame", DGRSettings.MidGameJoining?"true":"false");
+                    //if(Network.lanMode)
+                    //    return;
+                    if (Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
+                    {
+                        Network.activeNetwork.core.lobby.SetLobbyData("midgame", DGRSettings.MidGameJoining ? "true" : "false");
+                    }
 
                     localProfile.netData.Set<bool>("midgameJoining", DGRSettings.MidGameJoining);
                     if (DGRSettings.MidGameJoining != prevMG)
@@ -2095,7 +2098,7 @@ namespace DuckGame
                             }
 
                             inGame = false;
-                            if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
+                            if (Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
                             {
                                 Network.activeNetwork.core.lobby.joinable = true;
                                 // Network.activeNetwork.core.lobby.type = SteamLobbyType.Private;
@@ -2115,7 +2118,7 @@ namespace DuckGame
                         else
                         {
                             inGame = true;
-                            if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
+                            if (Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
                             {
                                 Network.activeNetwork.core.lobby.joinable = false;
                                 Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
@@ -2123,7 +2126,7 @@ namespace DuckGame
                             }
                         }
                     }
-                    else if (DGRSettings.MidGameJoining && Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null && Network.activeNetwork.core.lobby.GetLobbyData("name").StartsWith("|PINK|[MIDGAME]")) Network.activeNetwork.core.lobby.SetLobbyData("name", Steam.user.name + "'s Lobby");
+                    else if (DGRSettings.MidGameJoining  && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null && Network.activeNetwork.core.lobby.GetLobbyData("name").StartsWith("|PINK|[MIDGAME]")) Network.activeNetwork.core.lobby.SetLobbyData("name", Steam.user.name + "'s Lobby");
                     prevMG = DGRSettings.MidGameJoining;
                 }
                 else
@@ -2211,7 +2214,7 @@ namespace DuckGame
                     if (Network.isServer && DGRSettings.MidGameJoining)
                     {
                         inGame = true;
-                        if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
+                        if (Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
                         {
                             Network.activeNetwork.core.lobby.joinable = false;
                             Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
