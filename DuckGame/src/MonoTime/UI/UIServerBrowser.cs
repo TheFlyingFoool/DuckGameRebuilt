@@ -465,8 +465,8 @@ namespace DuckGame
 
                             if (loadedMods != null && loadedMods != "")
                             {
-                                    loadedMods = loadedMods.Replace("|3132351890,0", ""); //dumb but works -Lucky
-                                    loadedMods = loadedMods.Replace("3132351890,0", "");
+                                loadedMods = loadedMods.Replace("|3132351890,0", ""); //dumb but works -Lucky
+                                loadedMods = loadedMods.Replace("3132351890,0", "");
                                 string[] mods = loadedMods.Split('|');
 
                                 foreach (string s in mods)
@@ -494,7 +494,8 @@ namespace DuckGame
                                     }
                                     catch (Exception e)
                                     {
-                                        //how u doin daniel
+                                        //how u doin daniel. 
+                                        // Depends on the day :3
                                     }
                                 }
                             }
@@ -981,7 +982,7 @@ namespace DuckGame
                                     {
                                         titleString += "Their version is incompatible.";
                                     }
-                                    else if (lobby.started == "true")
+                                    else if (lobby.started == "true" && (lobby.name == null || !lobby.name.StartsWith("|PINK|[MIDGAME] |PREV|")))
                                     {
                                         titleString += "This game is in progress.";
                                     }
