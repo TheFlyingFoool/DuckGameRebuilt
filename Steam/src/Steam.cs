@@ -14,7 +14,11 @@ public class Steam : IDisposable {
     {
         get
         {
-            return Steamworks.CallbackDispatcher.IsInitialized; // _initialized
+            //This used to use _initialized and set it internally     
+            //Keep an eye on this to see if it causes issues this way should be better 
+            //as it whats steamworks actually uses to throw the error or not for if steam is accually setup properly to use commands
+            //and throws the errors if its not. SO THIS SHOULD BE BETTER. but can never be too sure with duck game.
+            return Steamworks.CallbackDispatcher.IsInitialized;
         }
     }
     private static bool _initialized;
