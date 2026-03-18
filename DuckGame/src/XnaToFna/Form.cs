@@ -45,11 +45,11 @@ namespace XnaToFna.ProxyForms
         {
             FormClosingEventArgs e1 = new FormClosingEventArgs(CloseReason.None, false);
             OnFormClosing(e1);
-            FormClosing(this, e1);
+            FormClosing?.Invoke(this, e1);
             _Close();
             FormClosedEventArgs e2 = new FormClosedEventArgs(CloseReason.None);
             OnFormClosed(e2);
-            FormClosed(this, e2);
+            FormClosed?.Invoke(this, e2);
         }
 
         protected override void WndProc(ref Message msg)
