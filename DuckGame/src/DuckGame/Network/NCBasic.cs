@@ -179,28 +179,28 @@ namespace DuckGame
                     _socket = new UdpClient();
                     _socket.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
                     _port = port;
-                    int port1 = 1336;
+                    //int port1 = 1336;
                     // checks all used udp ports and with 1336 skipping 1337 as servers use that and incrementing until found
-                    IPGlobalProperties ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
-                    IPEndPoint[] tcpConnInfoArray = ipGlobalProperties.GetActiveUdpListeners();
-                    int portoffset = 1337;
-                    List<int> usedPorts = new List<int>(tcpConnInfoArray.Length);
-                    foreach (IPEndPoint tcpi in tcpConnInfoArray)
-                    {
-                        usedPorts.Add(tcpi.Port);
-                    }
-                    while (usedPorts.Contains(port1))
-                    { 
-                        portoffset += 1;
-                        port1 = portoffset;
-                    }
+                    //IPGlobalProperties ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
+                    //IPEndPoint[] tcpConnInfoArray = ipGlobalProperties.GetActiveUdpListeners();
+                    //List<int> usedPorts = new List<int>(tcpConnInfoArray.Length);
+                    //foreach (IPEndPoint tcpi in tcpConnInfoArray)
+                    //{
+                    //    usedPorts.Add(tcpi.Port);
+                    //}
+                    //while (usedPorts.Contains(port1))
+                    //{ 
+                    //    port1++;
+                    //}
                     if (NetworkDebugger.enabled)
                     {
                         int port2 = 1330 + NetworkDebugger.currentIndex;
                         localEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port2);
                     }
                     else
-                        localEndPoint = new IPEndPoint(IPAddress.Any, port1);
+                    {
+                        localEndPoint = new IPEndPoint(IPAddress.Any, 0); // Using port 0 just has the OS choice one which is fine for the local bind
+                    }
                     _socket.Client.Bind(localEndPoint);
                     try
                     {
