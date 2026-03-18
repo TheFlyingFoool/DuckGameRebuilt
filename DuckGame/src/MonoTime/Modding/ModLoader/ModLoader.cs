@@ -482,6 +482,12 @@ namespace DuckGame
                         modConfig.error = "!Rebuilt Handles this issue, Please Do not put harmony into ur Assembly!";
                         mod = new DisabledMod();
                     }
+                    else if (modConfig.workshopID == 2209935223UL) // DuckAntiAliasing
+                    {
+                        modConfig.Disable();
+                        modConfig.error = "!This mod does not work with on Rebuilt FNA Render Engine";
+                        mod = new DisabledMod();
+                    }
                     else if (modConfig.workshopID == 2480332949UL) //Delta Duck
                     {
                         modConfig.Disable();
