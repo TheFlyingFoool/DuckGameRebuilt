@@ -572,7 +572,7 @@ namespace DuckGame
         {
             foreach (Profile profile in Profiles.all)
             {
-                if (profile.team == null)
+                if (profile == null || profile.team == null || profile.name == null)
                     continue;
 
                 string str = profile.name.ToLower();
@@ -905,7 +905,7 @@ namespace DuckGame
 
             if (Steam.user is null
                 || specialUsers.Contains(Steam.user.id)                   // landon exemption
-                || DGRDevs.CoreTeam.Any(x => x.SteamID == Steam.user.id)) // tater exemption
+                || DGRDevs.IsDGRebuiltDeveloper()) // DGRDev exemption
                 return false;
             
             return Network.isActive || Level.current is ChallengeLevel or ArcadeLevel;

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -188,6 +189,13 @@ namespace DuckGame
             Klof44,
             Moro,
         };
+        public static ulong[] DGRebuiltDeveloperSteamIds = CoreTeam.Select(x => x.SteamID).ToArray();
+        public static bool IsDGRebuiltDeveloper()
+        {
+            if (Steam.user is not null && DGRebuiltDeveloperSteamIds.Contains(Steam.user.id))
+                return true;
+            return false;
+        }
     }
 
     public struct DGRebuiltDeveloper

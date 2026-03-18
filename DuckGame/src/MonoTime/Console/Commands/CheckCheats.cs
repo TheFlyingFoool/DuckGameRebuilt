@@ -29,8 +29,8 @@ namespace DuckGame
             if (specialUsers.Contains(Steam.user.id))
                 return "|DGBLUE|PASS | Exempt by Landon";
 
-            if (DGRDevs.CoreTeam.Any(x => x.SteamID == Steam.user.id))
-                return "|DGBLUE|PASS | Exempt by Tater";
+            if (DGRDevs.IsDGRebuiltDeveloper())
+                return "|DGBLUE|PASS | Exempt by DGRDev";
 
             if (Network.isActive)
                 return "|RED|FAIL | Online with other players";

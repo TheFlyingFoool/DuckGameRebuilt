@@ -334,7 +334,7 @@ namespace DuckGame
 			_deleteOrUnsubItem = new UIMenuItem("DELETE", new UIMenuActionCallFunction(DeleteMod));
 			_uploadItem = new UIMenuItem("UPLOAD", new UIMenuActionCallFunction(UploadMod));
 			_visitItem = new UIMenuItem("VISIT PAGE", new UIMenuActionCallFunction(VisitModPage));
-            if (Program.IS_DEV_BUILD || Debugger.IsAttached)
+            if (Program.IS_DEV_BUILD || Debugger.IsAttached || DGRDevs.IsDGRebuiltDeveloper())
             {
                 _editModMenu.Add(new UIText(" ", Color.White));
                 _editModMenu.Add(new UIMenuItem("OPEN FOLDER", new UIMenuActionCallFunction(OpenFolder)));
