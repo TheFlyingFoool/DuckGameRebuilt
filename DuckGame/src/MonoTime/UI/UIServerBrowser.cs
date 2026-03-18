@@ -142,7 +142,7 @@ namespace DuckGame
         {
             foreach (Mod mod in ModLoader.allMods)
             {
-                if (mod.clientMod || mod.configuration.modType is ModConfiguration.Type.Reskin or ModConfiguration.Type.MapPack)
+                if (mod == null || mod.clientMod || mod.configuration == null || mod.configuration.modType is ModConfiguration.Type.Reskin or ModConfiguration.Type.MapPack)
                     continue;
                 
                 mod.configuration.disabled = true;
@@ -186,12 +186,27 @@ namespace DuckGame
             foreach (WorkshopItem workshopItem in _joiningLobby.workshopItems)
             {
                 WorkshopItem w = workshopItem;
-                Mod mod = ModLoader.allMods.FirstOrDefault(x => (long)x.configuration.workshopID == (long)w.id);
-                if (mod != null)
-                    mod.configuration.disabled = false;
-                Steam.WorkshopSubscribe(w.id);
+                foreach(Mod mod in ModLoader.allMods)
+                {
+                    if (w == null | mod == null || mod.configuration == null || mod.configuration.workshopID != w.id)
+                    {
+                        continue;
+                    }
+                    if (mod != null)
+                    {
+                        mod.configuration.disabled = false;
+                    }
+                }
+                if (w != null)
+                {
+                    Steam.WorkshopSubscribe(w.id);
+                }
             }
-            Program.commandLine = Program.commandLine + " -downloadmods +connect_lobby " + _joiningLobby.lobby.id.ToString();
+            Program.commandLine = Program.commandLine + " -downloadmods";
+            if (_joiningLobby.lobby != null)
+            {
+                Program.commandLine += " +connect_lobby " + _joiningLobby.lobby.id.ToString();
+            }
             if (MonoMain.lobbyPassword != "")
                 Program.commandLine = Program.commandLine + " +password " + MonoMain.lobbyPassword;
             ModLoader.DisabledModsChanged();
