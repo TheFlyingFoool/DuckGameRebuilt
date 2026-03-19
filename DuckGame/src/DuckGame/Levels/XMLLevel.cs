@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using static DuckGame.CMD;
-using System.Windows.Controls;
-using System.Windows.Documents;
 
 namespace DuckGame
 {

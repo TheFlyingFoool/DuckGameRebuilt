@@ -9,7 +9,7 @@ using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SDL2;
-//using System.Windows.Forms;
+
 namespace DuckGame
 {
     public class Editor : Level
