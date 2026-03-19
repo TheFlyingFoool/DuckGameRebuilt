@@ -776,6 +776,7 @@
     <Compile Include="src\MonoTime\LUI\LUIText.cs" />
     <Compile Include="src\MonoTime\Materials\FullscreenMaterial.cs" />
     <Compile Include="src\MonoTime\Materials\MaterialFunBeam.cs" />
+    <Compile Include="src\MonoTime\File\RtfWriter.cs" />
     <Compile Include="src\MonoTime\UI\UIDGRDescribe.cs" />
     <Compile Include="src\MonoTime\UI\UISideButton.cs" />
     <Compile Include="src\WindowsPlatformStartup.cs" />

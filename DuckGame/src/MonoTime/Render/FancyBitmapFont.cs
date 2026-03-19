@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace DuckGame
 {
@@ -1253,47 +1252,6 @@ namespace DuckGame
                     }
                 }
             }
-        }
-        public RichTextBox MakeRTF(string text)
-        {
-            RichTextBox richTextBox = new RichTextBox();
-            Color color2 = Color.Black;
-            string text1 = "";
-            richTextBox.SelectionColor = System.Drawing.Color.Black;
-            for (_letterIndex = 0; _letterIndex < text.Length; ++_letterIndex)
-            {
-                bool flag = false;
-                if (text[_letterIndex] == '|')
-                {
-                    int letterIndex = _letterIndex;
-                    if (color2 != Colors.Transparent)
-                    {
-                        _previousColor = color2;
-                    }
-                    color2 = ParseColor(text);
-                    if (color2 != Colors.Transparent)
-                    {
-                        if (color2 == Color.White)
-                            color2 = Color.Black;
-                        richTextBox.AppendText(text1);
-                        text1 = "";
-                        richTextBox.SelectionColor = System.Drawing.Color.FromArgb(color2.r, color2.g, color2.b);
-                        flag = true;
-                    }
-                    else
-                        _letterIndex = letterIndex;
-                }
-                if (text[_letterIndex] == '\n')
-                {
-                    richTextBox.AppendText(text1);
-                    text1 = "";
-                    richTextBox.SelectionColor = System.Drawing.Color.Black;
-                }
-                if (!flag)
-                    text1 += text[_letterIndex].ToString();
-            }
-            richTextBox.AppendText(text1);
-            return richTextBox;
         }
     }
 }
