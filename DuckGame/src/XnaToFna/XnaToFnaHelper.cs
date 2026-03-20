@@ -37,22 +37,13 @@ namespace XnaToFna
             Console.Write("[XnaToFnaHelper] ");
             Console.WriteLine(s);
         }
-        public static Form fillinform;
+
         public static IntPtr GetProxyFormHandle(this GameWindow window)
         {
-            if (fillinform == null)
-            {
-                fillinform = new Form();
-            }
-            return fillinform.Handle;
-            //if (GameForm.Instance == null)
-            //{
-            //    fillinform = new Form();
-            //    Log("[ProxyForms] Creating game ProxyForms.GameForm");
-            //    GameForm.Instance = new GameForm();
-            //}
-            //return fillinform.Handle;//GameForm.Instance.Handle;
+            return GameForm.GetInstance(MonoMain.instance).Handle;
+            // return GameFormForWinForms.GetHandle(MonoMain.instance); // Alternative that doesn't require relinking WinForms types.
         }
+
         public static DirectoryInfo DirectoryCreateDirectory(string path)
         {
             if (Program.IsLinuxD || Program.isLinux)

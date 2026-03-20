@@ -12,7 +12,6 @@ using System.Resources;
 using System.Reflection;
 using System.Diagnostics;
 using System.Collections;
-using System.Windows.Forms;
 using System.Globalization;
 using System.IO.Compression;
 using AddedContent.Firebreak;
@@ -160,7 +159,7 @@ namespace DuckGame
             }
             else
                 AppDomain.CurrentDomain.AssemblyLoad += new AssemblyLoadEventHandler(WindowsPlatformStartup.AssemblyLoad);
-            Application.ThreadException += new ThreadExceptionEventHandler(UnhandledThreadExceptionTrapper);
+
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(WindowsPlatformStartup.UnhandledExceptionTrapper);
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(Resolve);
             TaskScheduler.UnobservedTaskException += UnhandledExceptionUnobserved;
@@ -662,7 +661,7 @@ namespace DuckGame
                     default:
                         if (args[index] == "-nolaunch")
                         {
-                            int num = (int)MessageBox.Show("-nolaunch Command Line Option activated! Cancelling launch!");
+                            Console.WriteLine("-nolaunch Command Line Option activated! Cancelling launch!");
                             return;
                         }
                         if (args[index] == "-alternateSaveLocation")

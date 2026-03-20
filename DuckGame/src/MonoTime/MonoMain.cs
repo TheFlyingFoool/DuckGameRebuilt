@@ -16,7 +16,6 @@ using System.Security;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using AddedContent.Hyeve;
 using XnaToFna;
 
@@ -174,7 +173,7 @@ namespace DuckGame
         public int times;
         public static long framesBackInFocus = 0;
         public static bool showingSaveTool = false;
-        public static Form saveTool;
+        public static object saveTool;
         //private bool _checkedSave;
         //private bool _corruptSave;
         //private bool _didStartInit;
@@ -776,10 +775,7 @@ namespace DuckGame
 
         protected override void OnExiting(object sender, EventArgs args)
         {
-            if (XnaToFnaHelper.fillinform != null)
-            {
-                XnaToFnaHelper.fillinform.Close();
-            }
+            base.OnExiting(sender, args);
             InvokeOnGameExitEvent(false);
             KillEverything();
             Process.GetCurrentProcess().Kill();
@@ -1174,9 +1170,13 @@ namespace DuckGame
 
             if (showingSaveTool && saveTool == null && File.Exists("SaveTool.dll"))
             {
-                saveTool = Activator.CreateInstance(Assembly.Load(File.ReadAllBytes(Directory.GetCurrentDirectory() + "/SaveTool.dll")).GetType("SaveRecovery.SaveTool")) as Form;
+                saveTool = Activator.CreateInstance(Assembly.Load(File.ReadAllBytes(Directory.GetCurrentDirectory() + "/SaveTool.dll")).GetType("SaveRecovery.SaveTool"));
                 Graphics.mouseVisible = true;
-                int num = (int)saveTool.ShowDialog();
+                var saveToolType = saveTool.GetType();
+                var showDialogMethod = saveToolType.GetMethod("ShowDialog", Type.EmptyTypes);
+                if (showDialogMethod != null) {
+                    int result = (int)showDialogMethod.Invoke(saveTool, null);
+                }
                 Program.crashed = true;
                 Program.main.KillEverything();
                 Program.main.Exit();

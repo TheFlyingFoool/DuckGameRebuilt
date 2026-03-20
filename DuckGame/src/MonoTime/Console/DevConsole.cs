@@ -1,6 +1,8 @@
 ﻿using AddedContent.Firebreak;
 using AddedContent.Firebreak.DuckShell.Implementation;
 using DuckGame.ConsoleEngine;
+using Microsoft.Xna.Framework;
+using SDL2;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,14 +11,10 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading;
-using System.Windows.Forms;
-using SDL2;
-using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.Xna.Framework;
+using System.Threading;
 
 namespace DuckGame
 {
@@ -1087,26 +1085,29 @@ namespace DuckGame
             }
         }
 
+        public static string GetNetLogFileName(string username)
+        {
+            return $"{DateTime.Now.ToShortDateString().Replace('/', '_')}_{DateTime.Now.ToLongTimeString().Replace(':', '_')}_{username}_netlog.rtf";
+        }
+
         public static void SaveNetLog(string pName = null)
         {
             FlushPendingLines();
-            string text = "";
+            string netLog = "";
+            var logFileName = pName;
             for (int index = Math.Max(core.lines.Count - 1500, 0);
                  index < core.lines.Count;
                  ++index)
-                text += core.lines.ElementAt(index).ToSendString();
-            if (pName == null)
-                pName =
-                    $"{DateTime.Now.ToShortDateString().Replace('/', '_')}_{DateTime.Now.ToLongTimeString().Replace(':', '_')}_{Steam.user.name}_netlog.rtf";
-            else if (!pName.EndsWith(".rtf"))
-                pName += ".rtf";
-            string str = DuckFile.FixInvalidPath(DuckFile.logDirectory + pName);
-            if (File.Exists(str))
-                File.Delete(str);
-            RichTextBox richTextBox = new FancyBitmapFont().MakeRTF(text);
-            DuckFile.CreatePath(str);
-            string path = str;
-            richTextBox.SaveFile(path);
+                netLog += core.lines.ElementAt(index).ToSendString();
+            if (logFileName == null)
+                logFileName = GetNetLogFileName(Steam.user.name);
+            else if (!logFileName.EndsWith(".rtf"))
+                logFileName += ".rtf";
+            string logFilePath = DuckFile.FixInvalidPath(DuckFile.logDirectory + logFileName);
+            if (File.Exists(logFilePath))
+                File.Delete(logFilePath);
+
+            RtfWriter.SaveLog(logFilePath, netLog);
         }
 
         public static void LogTransferComplete(NetworkConnection pConnection)
@@ -1114,12 +1115,9 @@ namespace DuckGame
             string receivedLogData = core.GetReceivedLogData(pConnection);
             if (receivedLogData != null)
             {
-                string pathString = DuckFile.FixInvalidPath(
-                    $"{DuckFile.logDirectory}{DateTime.Now.ToShortDateString().Replace('/', '_')}_{DateTime.Now.ToLongTimeString().Replace(':', '_')}_{pConnection.name}_netlog.rtf");
-                RichTextBox richTextBox = new FancyBitmapFont().MakeRTF(receivedLogData);
-                DuckFile.CreatePath(pathString);
-                string path = pathString;
-                richTextBox.SaveFile(path);
+                string logFileName = GetNetLogFileName(pConnection.name);
+                string logFilePath = DuckFile.FixInvalidPath($"{DuckFile.logDirectory}{logFileName}");
+                RtfWriter.SaveLog(logFilePath, receivedLogData);
             }
 
             core.requestingLogs.Remove(pConnection);

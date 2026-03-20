@@ -12,7 +12,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security;
-using System.Windows.Media;
 using System.Xml.Serialization;
 using XnaToFna.ProxyForms;
 //using XnaToFna.XEX;
