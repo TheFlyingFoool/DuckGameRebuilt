@@ -8,6 +8,18 @@ namespace XnaToFna.ProxyForms
     public sealed class GameForm : Form
     {
         public static GameForm Instance;
+
+        public static GameForm GetInstance(Game game)
+        {
+            if (Instance == null)
+            {
+                XnaToFnaHelper.Log("[ProxyForms] Creating game ProxyForms.GameForm");
+                Instance = new GameForm();
+                Instance.HookFormToGameExit(game);
+            }
+            return Instance;
+        }
+
         private bool _Dirty;
         private bool FakeFullscreenWindow;
         private Rectangle _WindowedBounds;
@@ -15,6 +27,30 @@ namespace XnaToFna.ProxyForms
         private FormBorderStyle _FormBorderStyle = FormBorderStyle.FixedDialog;
         private FormWindowState _WindowState;
         private FormStartPosition _StartPosition = FormStartPosition.WindowsDefaultLocation;
+        private bool _isExiting = false;
+
+        public void HookFormToGameExit(Game game)
+        {
+            if (game == null) {
+                return;
+            }
+            game.Exiting += (s, e) => {
+                if (!_isExiting)
+                {
+                    _isExiting= true;
+                    Instance?.Close();
+                }
+            };
+        }
+
+        protected override void _Close()
+        {
+            if (!_isExiting)
+            {
+                _isExiting = true;
+                XnaToFnaHelper.Game?.Exit();
+            }
+        }
 
         private bool Dirty
         {
@@ -156,8 +192,6 @@ namespace XnaToFna.ProxyForms
         {
             SDLWindowSizeChanged(null, null);
         }
-
-        protected override void _Close() => XnaToFnaHelper.Game.Exit();
 
         public void ApplyChanges()
         {

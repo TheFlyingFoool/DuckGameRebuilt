@@ -775,10 +775,7 @@ namespace DuckGame
 
         protected override void OnExiting(object sender, EventArgs args)
         {
-            if (XnaToFnaHelper.fillinform != null)
-            {
-                XnaToFnaHelper.fillinform.Close();
-            }
+            base.OnExiting(sender, args);
             InvokeOnGameExitEvent(false);
             KillEverything();
             Process.GetCurrentProcess().Kill();

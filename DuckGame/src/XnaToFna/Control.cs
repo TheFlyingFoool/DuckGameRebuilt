@@ -52,8 +52,6 @@ namespace XnaToFna.ProxyForms
 
         public static Control FromHandle(IntPtr ptr)
         {
-            if (XnaToFnaHelper.fillinform != null)
-                return XnaToFnaHelper.fillinform;
             int index = (int)ptr - 1;
             if (index < 0 || AllControls.Count <= index)
                 return null;
