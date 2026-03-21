@@ -1,4 +1,5 @@
 ﻿using AddedContent.Firebreak;
+using Microsoft.Xna.Framework;
 using System.Diagnostics;
 
 namespace DuckGame
@@ -9,7 +10,7 @@ namespace DuckGame
         [Marker.DevConsoleCommand(Description = "Opens your game saves directory")]
         public static void SaveDir()
         {
-            Process.Start(DuckFile.saveDirectory);
+            FNAPlatform.OpenURL(DuckFile.saveDirectory); // Process.Start
             DevConsole.Log(new DCLine
             {
                 line = "Save directory was opened.",
