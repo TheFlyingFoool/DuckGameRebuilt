@@ -1977,7 +1977,7 @@ namespace DuckGame
                         _timeoutFade = Lerp.Float(_timeoutFade, 0f, 0.05f);
                     foreach (Profile profile in DuckNetwork.profiles)
                     {
-                        if (profile.reservedUser != null)
+                        if (profile != null && profile.reservedUser != null)
                         {
                             if (profile.slotType == SlotType.Reserved)
                                 break;
