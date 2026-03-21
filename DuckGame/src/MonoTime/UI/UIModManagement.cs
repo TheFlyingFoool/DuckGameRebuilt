@@ -43,16 +43,20 @@ namespace DuckGame
         }
         void OpenFolder()
         {
-            if (_selectedMod == null || _selectedMod.configuration == null) return;
-
-            string full = Path.GetFullPath(_selectedMod.configuration.directory);
-
-            if (!full.EndsWith(Path.DirectorySeparatorChar.ToString()) &&
-                !full.EndsWith(Path.AltDirectorySeparatorChar.ToString()))
+            string path = DuckFile.modsDirectory;
+            if (_selectedMod != null && _selectedMod.configuration != null)
             {
-                full += Path.DirectorySeparatorChar;
+                path = Path.GetFullPath(_selectedMod.configuration.directory);
             }
-            FNAPlatform.OpenURL(new Uri(full).AbsoluteUri);
+
+            path = Path.GetFullPath(path);
+
+            if (!path.EndsWith(Path.DirectorySeparatorChar.ToString()) &&
+                !path.EndsWith(Path.AltDirectorySeparatorChar.ToString()))
+            {
+                path += Path.DirectorySeparatorChar;
+            }
+            FNAPlatform.OpenURL(new Uri(path).AbsoluteUri);
 
         }
         private const int FO_DELETE = 0x0003;
@@ -334,12 +338,11 @@ namespace DuckGame
 			_deleteOrUnsubItem = new UIMenuItem("DELETE", new UIMenuActionCallFunction(DeleteMod));
 			_uploadItem = new UIMenuItem("UPLOAD", new UIMenuActionCallFunction(UploadMod));
 			_visitItem = new UIMenuItem("VISIT PAGE", new UIMenuActionCallFunction(VisitModPage));
-            if (Program.IS_DEV_BUILD || Debugger.IsAttached || DGRDevs.IsDGRebuiltDeveloper())
-            {
-                _editModMenu.Add(new UIText(" ", Color.White));
-                _editModMenu.Add(new UIMenuItem("OPEN FOLDER", new UIMenuActionCallFunction(OpenFolder)));
-            }
-			_editModMenu.Add(new UIText(" ", Color.White));
+
+            _editModMenu.Add(new UIText(" ", Color.White));
+            _editModMenu.Add(new UIMenuItem("OPEN FOLDER", new UIMenuActionCallFunction(OpenFolder)));
+
+            _editModMenu.Add(new UIText(" ", Color.White));
 			_editModMenu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(_editModMenu, this)));
 			_editModMenu.Close();
 
@@ -362,6 +365,9 @@ namespace DuckGame
             _modSettingsMenu.Add(new UIMenuItemToggle("CRASH DISABLE", null, new FieldBinding(Options.Data, "disableModOnCrash", 0.0f, 1.0f)));
             _modSettingsMenu.Add(new UIMenuItemToggle("LOAD FAILURE DISABLE", null, new FieldBinding(Options.Data, "disableModOnLoadFailure", 0.0f, 1.0f)));
             _modSettingsMenu.Add(new UIMenuItemToggle("SHOW NETWORK WARNING", null, new FieldBinding(Options.Data, "showNetworkModWarning", 0.0f, 1.0f)));
+
+            _modSettingsMenu.Add(new UIText(" ", Color.White));
+            _modSettingsMenu.Add(new UIMenuItem("OPEN FOLDER", new UIMenuActionCallFunction(OpenFolder)));
 
             _modSettingsMenu.Add(new UIText(" ", Colors.DGBlue));
             _modSettingsMenu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(_modSettingsMenu, this), UIAlign.Center, default(Color), true));
@@ -670,8 +676,8 @@ namespace DuckGame
                     {
 						string errorPath = DuckFile.saveDirectory + "error_info.txt";
 						File.WriteAllText(errorPath, _selectedMod.configuration.error);
-						Process.Start(errorPath);
-						//showingError = _selectedMod.configuration.error;
+                        FNAPlatform.OpenURL(errorPath);//Process.Start(errorPath);
+                        //showingError = _selectedMod.configuration.error;
                         SFX.Play("rockHitGround", 0.8f);
                         return;
                     }
