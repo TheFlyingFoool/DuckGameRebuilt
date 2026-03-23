@@ -2348,6 +2348,7 @@
     <Compile Include="src\MonoTime\UI\UIMenuCustomUpdate.cs" />
     <Compile Include="Properties\Resources.Designer.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="src\XnaToFna\AMStringHandler.cs" />
     <Compile Include="src\XnaToFna\Application.cs" />
     <Compile Include="src\XnaToFna\AvatarExpression.cs" />
     <Compile Include="src\XnaToFna\AvatarEye.cs" />

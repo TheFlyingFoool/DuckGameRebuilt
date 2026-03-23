@@ -87,7 +87,7 @@ namespace XnaToFna
             Modder.PatchRefs();
             Log("[Stub] Post-processing");
             foreach (TypeDefinition type in mod.Types)
-                PostProcessType(type);
+                PostProcessType(mod, type);
             Log("[Stub] Rewriting and disposing module\n");
             Modder.Module.Write(Modder.WriterParameters);
             Modder.Module.Dispose();
@@ -209,6 +209,22 @@ namespace XnaToFna
             Modder.TranspilerMap["System.Single DuckGame.ExtraStuff.EMusic::get_progress()"] = new TranspilerMapEntry(TryCatchPatch);
             Modder.TranspilerMap["System.TimeSpan DuckGame.ExtraStuff.EMusic::get_length()"] = new TranspilerMapEntry(TryCatchPatch);
             Modder.TranspilerMap["System.TimeSpan DuckGame.ExtraStuff.EMusic::get_position()"] = new TranspilerMapEntry(TryCatchPatch);
+
+
+
+            MethodInfo ReturnImmediatelyPatch = typeof(XnaToFnaUtil).GetMethod("ReturnImmediatelyPatch", BindingFlags.NonPublic | BindingFlags.Static);
+            MethodInfo ReturnDefaultTypePatch = typeof(XnaToFnaUtil).GetMethod("ReturnDefaultTypePatch", BindingFlags.NonPublic | BindingFlags.Static);
+
+            //Modder.RelinkMap["System.Void AncientMysteries.AncientMysteriesMod::<Hooks_OnUpdate>g__UpdateModDisplayName|17_0()"] = new RelinkMapEntry("XnaToFna.AncientMysteriesReplacements", "System.Void UpdateModDisplayName()");
+            Modder.RelinkMap["System.String AncientMysteries.Hook.Patches.LSItem_Draw::<Postfix>g__GetName|2_0(System.Single)"] = new RelinkMapEntry("XnaToFna.AncientMysteriesReplacements", "System.String GetName(System.Single)");
+
+            Modder.TranspilerMap["System.Void AncientMysteries.AncientMysteriesMod::<Hooks_OnUpdate>g__UpdateModDisplayName|17_0()"] = new TranspilerMapEntry(ReturnImmediatelyPatch);
+
+            //"System.String AncientMysteries.Hook.Patches.LSItem_Draw::<Postfix>g__GetName|2_0(System.Single)"
+            Modder.TranspilerMap["System.String AncientMysteries.Hook.Patches.LSItem_Draw::<Postfix>g__GetName|2_0(System.Single)"] = new TranspilerMapEntry(ReturnDefaultTypePatch);
+
+            Modder.TranspilerMap["System.Void AncientMysteries.Module::Initialize()"] = new TranspilerMapEntry(ReturnImmediatelyPatch);
+            Modder.TranspilerMap["System.Void AncientMysteries.AncientMysteriesMod::Hooks_OnUpdate()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod("AncientMysteries_Hooks_Update", BindingFlags.NonPublic | BindingFlags.Static));
 
 
 
@@ -383,6 +399,34 @@ namespace XnaToFna
             foreach (TypeDefinition nestedType in type.NestedTypes)
                 PreProcessType(nestedType);
         }
+        private static List<Instruction> ReturnImmediatelyPatch(List<Instruction> old)
+        {
+            return new List<Instruction> { Instruction.Create(OpCodes.Ret) };
+        }
+        private static List<Instruction> ReturnDefaultTypePatch(MethodDefinition originalMethod)
+        {
+            var il = new List<Instruction>();
+            var returnType = originalMethod.ReturnType;
+
+            if (returnType.IsValueType)
+            {
+                // For value types (structs, primitives), use Initobj to zero-initialize
+                VariableDefinition tempVar = new VariableDefinition(returnType);
+                originalMethod.Body.Variables.Add(tempVar);
+
+                il.Add(Instruction.Create(OpCodes.Ldloca, tempVar));
+                il.Add(Instruction.Create(OpCodes.Initobj, returnType));
+                il.Add(Instruction.Create(OpCodes.Ldloc, tempVar));
+            }
+            else
+            {
+                // For reference types (classes), simply load null
+                il.Add(Instruction.Create(OpCodes.Ldnull));
+            }
+
+            il.Add(Instruction.Create(OpCodes.Ret));
+            return il;
+        }
 
         //private static void AddTryCatchPatch(MethodDefinition m)
         //{
@@ -446,6 +490,7 @@ namespace XnaToFna
 
 
         // Patch: Add top-level try/catch(Exception) to a method, regardless of existing handlers
+    
         private static void AddTryCatchPatch(MethodDefinition method)
         {
             if (!method.HasBody)
@@ -530,7 +575,23 @@ namespace XnaToFna
             il.Append(il.Create(OpCodes.Ret));
 
         }
+        private static List<Instruction> AncientMysteries_Hooks_Update(MethodDefinition module)
+        {
+            var method = typeof(AncientMysteriesReplacements).GetMethod(
+                "UpdateModDisplayName",
+                BindingFlags.Public | BindingFlags.Static);
 
+            if (method == null)
+                throw new InvalidOperationException("Could not find AncientMysteriesReplacements.UpdateModDisplayName");
+  
+            MethodReference imported = module.Module.ImportReference(method);
+
+            return new List<Instruction>
+            {
+                Instruction.Create(OpCodes.Call, imported),
+                Instruction.Create(OpCodes.Ret)
+            };
+        }
         private static List<Instruction> C4PP_C4_Update(List<Instruction> instructions)
         {
             List<Instruction> new_instructions = new List<Instruction>();
@@ -594,9 +655,37 @@ namespace XnaToFna
             return new_instructions;
 
         }
-
-        public void PostProcessType(TypeDefinition type)
+        private void NukeAMStringHandler(ModuleDefinition module, TypeDefinition type)
         {
+            if (type.FullName != "AncientMysteries.Utilities.AMStringHandler")
+                return;
+
+            Log("[NUKE] Clearing AncientMysteries.Utilities.AMStringHandler");
+
+            // Make it as invisible / unusable as possible
+            type.IsPublic = false;
+            type.IsNotPublic = true;
+            type.IsAbstract = true;     // prevent instantiation
+            type.IsSealed = true;
+            type.IsBeforeFieldInit = true;
+
+            // Remove everything inside
+            type.Fields.Clear();
+            type.Methods.Clear();
+            type.Properties.Clear();
+            type.Events.Clear();
+            type.NestedTypes.Clear();
+            // If it's nested:
+            if (type.DeclaringType != null)
+                type.DeclaringType.NestedTypes.Remove(type);
+            else
+                module.Types.Remove(type);
+            // Optional: rename so even reflection by name fails
+            // type.Name = "Dead_AMStringHandler_Dead";
+        }
+        public void PostProcessType(ModuleDefinition module, TypeDefinition type)
+        {
+            NukeAMStringHandler(module, type);
             bool flag = false;
             if (type.BaseType?.FullName == "Microsoft.Xna.Framework.Game")
             {
@@ -656,7 +745,7 @@ namespace XnaToFna
                 }
             }
             foreach (TypeDefinition nestedType in type.NestedTypes)
-                PostProcessType(nestedType);
+                PostProcessType(module, nestedType);
         }
 
         public OpCode ShortToLongOp(OpCode op)
@@ -1175,7 +1264,7 @@ namespace XnaToFna
             Modder.PatchRefs();
             Log("[Relink] Post-processing");
             foreach (TypeDefinition type in mod.Types)
-                PostProcessType(type);
+                PostProcessType(mod, type);
             if (HookEntryPoint && mod.EntryPoint != null)
             {
                 Log("[Relink] Injecting XnaToFna entry point hook");
@@ -1354,8 +1443,275 @@ namespace XnaToFna
             ModulesToStub.Clear();
             Directories.Clear();
         }
+        private static readonly HashSet<string> DangerousAttributePrefixes = new()
+        {
+            "System.Runtime.CompilerServices.IsReadOnlyAttribute"
+        };
+     
+        static void ProcessCustomAttributes(Mono.Cecil.ICustomAttributeProvider provider, string context)
+        {
+            if (provider == null || !provider.HasCustomAttributes)
+                return;
 
-        public Assembly RelinkToAssemblyInMemory(ModuleDefinition mod)
+            var attrs = provider.CustomAttributes;
+
+            for (int i = attrs.Count - 1; i >= 0; i--)
+            {
+                var ca = attrs[i];
+                string attrName = ca.AttributeType?.FullName ?? "(unknown attribute type)";
+
+                bool remove = false; 
+
+                //if (attrName.Contains("Nullable") ||
+                //    attrName.Contains("CompilerGenerated") ||
+                //    attrName.Contains("Debugger") ||
+                //    attrName.Contains("TargetFramework") ||
+                //    attrName.StartsWith("System.Reflection.Assembly") ||
+                //    attrName.Contains("Harmony")) 
+                //{
+                //    remove = false;
+                //} AncientMysteries.MetaInfoAttribute System.
+
+
+                //"AncientMysteries.Hook.Attributes.HookAfterAttribute"
+                //"AncientMysteries.MetaTypeAttribute"
+                //"AncientMysteries.MetaImageAttribute"
+                //"DuckGame.BaggedPropertyAttribute"
+                //AncientMysteries.MetaOrderAttribute
+                // attrName.Contains("AncientMysteries.MetaInfoAttribute")
+
+
+
+                //attrName.Contains("DuckGame.BaggedPropertyAttribute")
+                //|| attrName.Contains("System.")
+                //DuckGame.EditorGroupAttribute
+                //if ((attrName.Contains("System.") && !attrName.Contains("System.Reflection") && !attrName.Contains("System.Runtime")) || attrName.Contains("HarmonyLib.HarmonyPatch"))
+                //{
+                //    remove = true;
+                //}
+                //else
+                //{
+                //    remove = false;
+                //}
+                //var attributes = new List<string>
+                //{
+                //    //"System.Runtime.Versioning.TargetFrameworkAttribute",
+                //    //"System.Runtime.CompilerServices.RuntimeCompatibilityAttribute",
+                //    //"System.Runtime.CompilerServices.CompilationRelaxationsAttribute",
+                //    //"System.Runtime.CompilerServices.ExtensionAttribute",
+                //    //"System.Runtime.CompilerServices.CompilerGeneratedAttribute",
+
+                //    //"System.Runtime.CompilerServices.NullableAttribute",
+                //    //"System.Runtime.CompilerServices.NullableContextAttribute",
+
+                //   // "System.Runtime.CompilerServices.ModuleInitializerAttribute",
+
+                //    "System.Runtime.CompilerServices.IsReadOnlyAttribute",// <----
+
+                //    //"System.Runtime.CompilerServices.IteratorStateMachineAttribute",
+                //    "HarmonyLib.HarmonyPatch"
+                //};
+                //foreach(string attr in attributes)
+                //{
+                //    if (attrName.Contains(attr))
+                //    {
+                //        remove = true;
+                //        break;
+                //    }
+                //}
+                //if (attrName.Contains("System.Runtime"))
+                //{
+                //    remove = true;
+                //}
+                //else
+                //{
+                //    remove = false;
+                //}
+
+                // AncientMysteries.MetaImageAttribute AncientMysteries.MetaInfoAttribute
+
+                // Or only remove specific ones (whitelist style):
+                // bool remove = attrName.Contains("AncientMysteries") ||
+                //               attrName.Contains("Obsolete") ||
+                //               attrName.Contains("EditorBrowsable");
+
+                bool shouldRemove = DangerousAttributePrefixes.Any(prefix => attrName.StartsWith(prefix));
+                if (shouldRemove)
+                {
+                    remove = true;
+                }
+                else
+                {
+                    remove = false;
+                }
+                if (remove)
+                {
+                    attrs.RemoveAt(i);
+                }
+                else
+                {
+                    // Console.WriteLine($"[KEPT]    {attrName}");
+                }
+            }
+        }
+        static void CleanReferencesToType(ModuleDefinition module, TypeDefinition deletedType)
+        {
+            var deletedRef = deletedType as TypeReference;
+
+            foreach (var type in module.Types)
+            {
+                for (int i = type.Fields.Count - 1; i >= 0; i--)
+                {
+                    if (type.Fields[i].FieldType.FullName == deletedRef.FullName)
+                    {
+                        type.Fields.RemoveAt(i);
+                        Console.WriteLine($"Removed field typed as {deletedRef.Name}");
+                    }
+                }
+
+                foreach (var method in type.Methods)
+                {
+                    if (method.HasBody)
+                    {
+                        var instructions = method.Body.Instructions;
+                        for (int i = instructions.Count - 1; i >= 0; i--)
+                        {
+                            var ins = instructions[i];
+                            if (ins.Operand is FieldReference fr && fr.FieldType.FullName == deletedRef.FullName)
+                                instructions.RemoveAt(i);
+                            else if (ins.Operand is TypeReference tr && tr.FullName == deletedRef.FullName)
+                                instructions.RemoveAt(i);
+                        }
+                    }
+
+                    if (method.ReturnType.FullName == deletedRef.FullName)
+                    {
+                        method.ReturnType = module.TypeSystem.Object;
+                        Console.WriteLine($"Changed return type of {method.Name} from deleted type to object");
+                    }
+
+                    for (int i = method.Parameters.Count - 1; i >= 0; i--)
+                    {
+                        if (method.Parameters[i].ParameterType.FullName == deletedRef.FullName)
+                        {
+                            method.Parameters.RemoveAt(i);
+                            Console.WriteLine($"Removed parameter typed as {deletedRef.Name} in {method.Name}");
+                        }
+                    }
+                }
+            }
+
+            Console.WriteLine("Reference cleanup pass finished. May still miss some (generics, locals, constraints).");
+        }
+        private static void StripDangerousAttributesOnWholeModule(ModuleDefinition module)
+        {
+            ProcessCustomAttributes(module.Assembly, "Assembly");
+
+            ProcessCustomAttributes(module, "Module");
+            foreach (var type in module.Types.ToArray())
+            {
+                // ────────────────────────────────────────────────
+                // Fully delete the struct if found (and clean refs)
+                // ────────────────────────────────────────────────
+
+                if (type.FullName == "AncientMysteries.Utilities.AMStringHandler")
+                {
+                    Console.WriteLine("Attempting full removal of struct: AncientMysteries.Utilities.AMStringHandler");
+
+                    bool removed = module.Types.Remove(type);
+                    if (!removed)
+                    {
+                        foreach (var t in module.Types)
+                            t.NestedTypes.Remove(type);
+                    }
+
+                    Console.WriteLine(removed ? "Type removed from collection." : "Type was nested or not found in top-level.");
+
+                    CleanReferencesToType(module, type);
+                    continue
+                    ;
+                }
+
+                // ────────────────────────────────────────────────
+                // Process attributes on remaining items
+                // ────────────────────────────────────────────────
+                ProcessCustomAttributes(type, $"Type: {type.FullName}");
+
+                foreach (var nested in type.NestedTypes)
+                    ProcessCustomAttributes(nested, $"Nested: {nested.FullName}");
+
+                foreach (var f in type.Fields)
+                    ProcessCustomAttributes(f, $"Field: {type.FullName}.{f.Name}");
+
+                foreach (var p in type.Properties)
+                    ProcessCustomAttributes(p, $"Property: {type.FullName}.{p.Name}");
+
+                foreach (var e in type.Events)
+                    ProcessCustomAttributes(e, $"Event: {type.FullName}.{e.Name}");
+
+                foreach (var method in type.Methods)
+                {
+                    //Messy but functional causes issue otherwise related to 'AncientMysteries.Utilities.AMStringHandler' is declared in another module and needs to be imported
+                    bool isTarget =
+                        (type.FullName == "AncientMysteries.AncientMysteriesMod" &&
+                         method.Name.Contains("g__UpdateModDisplayName|17_0")) ||
+
+                        (type.FullName == "AncientMysteries.Hook.Patches.LSItem_Draw" &&
+                         method.Name.Contains("g__GetName|2_0"));
+
+                    if (isTarget)
+                    {
+                        Console.WriteLine($"Emptying: {method.Name} ({type.FullName})");
+
+                        method.Body.Instructions.Clear();
+                        method.Body.Variables.Clear();
+                        method.Body.ExceptionHandlers.Clear();
+
+                        var il = method.Body.GetILProcessor();
+
+                        if (method.Name.Contains("g__GetName|2_0"))
+                        {
+                            il.Append(il.Create(OpCodes.Ldstr, ""));
+                            il.Append(il.Create(OpCodes.Ret));
+                        }
+                        else
+                        {
+                            il.Append(il.Create(OpCodes.Ret));
+                        }
+                    }
+
+                    //"AncientMysteries.Module.Initialize
+                    //FieldInfo field = typeof(AppDomain).GetField("_AssemblyResolve", BindingFlags.Instance | BindingFlags.NonPublic);
+                    //ResolveEventHandler handlers = (ResolveEventHandler)field.GetValue(AppDomain.CurrentDomain);
+                    //field.SetValue(AppDomain.CurrentDomain, Delegate.Combine(new ResolveEventHandler(Module.CurrentDomain_AssemblyResolve), handlers));
+                    if (method.DeclaringType.FullName == "AncientMysteries.Module" &&
+                        method.Name == "Initialize")
+                    {
+                        Console.WriteLine("Nopping AncientMysteries.Module.Initialize to avoid NRE");
+
+                        method.Body.Instructions.Clear();
+                        method.Body.Variables.Clear();
+                        method.Body.ExceptionHandlers.Clear();
+
+                        var il = method.Body.GetILProcessor();
+                        il.Append(il.Create(OpCodes.Ret));
+                    }
+
+                    // Process method attributes (after possible body changes)
+                    ProcessCustomAttributes(method, $"Method: {type.FullName}.{method.Name}");
+
+                    // ────────────────────────────────────────────────
+                    // Dangerous ones still commented out
+                    // ────────────────────────────────────────────────
+                    // ProcessCustomAttributes(method.MethodReturnType, $"Return: {method.Name}");
+                    // foreach (var param in method.Parameters)
+                    //     ProcessCustomAttributes(param, $"Param in {method.Name}");
+                    // foreach (var gp in method.GenericParameters)
+                    //     ProcessCustomAttributes(gp, $"Generic param in {method.Name}");
+                }
+            }
+        }
+        public Assembly RelinkToAssemblyInMemory(ModuleDefinition mod) //unused
         {
             if (Mappings.Exists(new Predicate<XnaToFnaMapping>(mappings => mod.Assembly.Name.Name == mappings.Target)))
                 return null;
@@ -1371,9 +1727,12 @@ namespace XnaToFna
                 PreProcessType(type);
             Log("[Relink] Relinking (MonoMod PatchRefs pass)");
             Modder.PatchRefs();
+
+            Log("[Relink] Stripping dangerous attributes");
+            StripDangerousAttributesOnWholeModule(mod);
             Log("[Relink] Post-processing");
             foreach (TypeDefinition type in mod.Types)
-                PostProcessType(type);
+                PostProcessType(mod,type);
             if (HookEntryPoint && mod.EntryPoint != null)
             {
                 Log("[Relink] Injecting XnaToFna entry point hook");
@@ -1418,9 +1777,11 @@ namespace XnaToFna
                 PreProcessType(type);
             Log("[Relink] Relinking (MonoMod PatchRefs pass)");
             Modder.PatchRefs();
+            Log("[Relink] Stripping dangerous attributes");
+            StripDangerousAttributesOnWholeModule(mod);
             Log("[Relink] Post-processing");
             foreach (TypeDefinition type in mod.Types)
-                PostProcessType(type);
+                PostProcessType(mod, type);
             if (HookEntryPoint && mod.EntryPoint != null)
             {
                 Log("[Relink] Injecting XnaToFna entry point hook");
