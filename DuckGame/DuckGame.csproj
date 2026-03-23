@@ -421,6 +421,8 @@
     <Compile Include="AddedContent\Firebreak\HatEditor\FFPreviewAnimations.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\FFPreviewPane.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\FFPromptMenu.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\MarshalHelper.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\FileDialogFna.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\HatPreviewLevel.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\MetapixelInfo.cs" />
     <Compile Include="AddedContent\Firebreak\HatEditor\SimRenderer.cs" />
@@ -465,6 +467,7 @@
     <Compile Include="AddedContent\Firebreak\Utilities\Markers\MarkerAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\Markers\PostInitializeAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\Markers\UpdateContextAttribute.cs" />
+    <Compile Include="AddedContent\Firebreak\Utilities\MessageBoxFna.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\SendToLevel.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\VanillaSyncedAttribute.cs" />
     <Compile Include="AddedContent\Firebreak\Utilities\WordBoundary.cs" />
