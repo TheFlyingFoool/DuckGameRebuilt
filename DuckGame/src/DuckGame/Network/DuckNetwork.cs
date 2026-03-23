@@ -1,10 +1,6 @@
-﻿using AddedContent.Firebreak;
-using SDL2;
-using SixLabors.ImageSharp;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
-using System.Drawing;
 using System.Threading;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
