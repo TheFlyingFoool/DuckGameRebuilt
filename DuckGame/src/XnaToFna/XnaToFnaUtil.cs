@@ -69,7 +69,7 @@ namespace XnaToFna
         public List<string> FixPathsFor;
         public ILPlatform PreferredPlatform;
         public static Assembly Aassembly;
-        public static int RemapVersion = 27;
+        public static int RemapVersion = 28;
         public void Stub(ModuleDefinition mod)
         {
             Log(string.Format("[Stub] Stubbing {0}", mod.Assembly.Name.Name));
