@@ -383,12 +383,18 @@ namespace DuckGame
                     return;
                 UpdateFrame();
                 Graphics.recordMetadata = true;
-                _texture.currentObjectIndex = _globalIndex;
-                Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, _depth);
+                if (_texture != null)
+                {
+                    _texture.currentObjectIndex = _globalIndex;
+                    Graphics.Draw(_texture, position, new Rectangle?(_spriteBox), _color, angle, center, scale, flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, _depth);
+                }
                 if (_waitFrames == 1)
                 {
-                    _batchItem = Graphics.screen.StealLastSpriteBatchItem();
-                    if (_batchItem.MetaData == null)
+                    if (Graphics.screen != null)
+                    {
+                        _batchItem = Graphics.screen.StealLastSpriteBatchItem();
+                    }
+                    if (_batchItem != null && _batchItem.MetaData == null)
                         _batchItem = null;
                 }
                 ++_waitFrames;
