@@ -36,20 +36,38 @@ namespace src.XnaToFna
 
         public InstructionCollection ProcessILCode(List<Instruction> instructions, MethodDefinition method)
         {
+            object return_val = null;
             if (parameters.Length == 1)
             {
                 if (parameters[0].ParameterType == typeof(MethodDefinition))
                 {
-                    methodInfo.Invoke(null, new object[] { method });
-                    return null;
+                    return_val = methodInfo.Invoke(null, new object[] { method });
+                    if (return_val == null)
+                    {
+                        return null;
+                    }
+                    instructions = (List<Instruction>)return_val;
                 }
                 else
                 {
-                    instructions = (List<Instruction>)methodInfo.Invoke(null, new object[] { instructions });
+                    return_val = methodInfo.Invoke(null, new object[] { instructions });
+                    if (return_val == null)
+                    {
+                        return null;
+                    }
+                    instructions = (List<Instruction>)return_val;
                 }
             }
             else
-                instructions = (List<Instruction>)methodInfo.Invoke(null, null);
+            {
+                return_val = methodInfo.Invoke(null, null);
+                if (return_val == null)
+                {
+                    return null;
+                }
+                instructions = (List<Instruction>)return_val;
+            }
+                
             InstructionCollection returninstructions = new InstructionCollection(method);
             foreach(Instruction instruction in instructions)
             {
