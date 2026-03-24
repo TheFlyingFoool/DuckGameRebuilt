@@ -178,6 +178,7 @@ namespace DuckGame
             {
                 _modAssemblies.Add(typeof(HarmonyLib.Harmony).Assembly, new DisabledMod()); // HarmonyLoader
                 Loader.ShouldPatch = ModLoader.ShouldPatch;
+                Loader.PatchCrash = ModLoader.PatchCrash;
             }
             _modsByHash.Add(mod.identifierHash, mod);
             if (mod.configuration.workshopID != 0UL)
@@ -208,6 +209,10 @@ namespace DuckGame
             }
         }
         static int n = 0;
+        static bool PatchCrash(Exception e, MethodBase original, MethodInfo prefix, MethodInfo postfix, MethodInfo transpiler) // True will see it crash
+        {
+            return false;
+        }
         static bool ShouldPatch(MethodBase original, MethodInfo prefix, MethodInfo postfix, MethodInfo transpiler)
         {
             return true;
