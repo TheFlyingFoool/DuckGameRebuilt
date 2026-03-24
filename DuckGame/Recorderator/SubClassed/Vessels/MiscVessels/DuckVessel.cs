@@ -40,6 +40,10 @@ namespace DuckGame
                 storedItem.serializedData = bChunk;
                 storedItem.thing = LoadThing(bChunk);
 
+                if (storedItem.thing != null)
+                {
+                    storedItem.type = storedItem.thing.GetType();
+                }
                 dv.changesInPB.Add(z, storedItem);
             }
             return dv;
