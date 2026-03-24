@@ -1,7 +1,5 @@
 ﻿using AddedContent.Firebreak;
 using DuckGame.ConsoleEngine;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Collections;
 using System.Linq;
@@ -10,10 +8,6 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Reflection.Emit;
-using System.Diagnostics;
-using System.Drawing;
-using System.Web.UI.WebControls;
-using Image = SixLabors.ImageSharp.Image;
 using SizeF = System.Drawing.SizeF;
 using System.IO;
 

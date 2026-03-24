@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -150,7 +149,7 @@ namespace DuckGame
         {
             try
             {
-                Texture2D texture2D1 = TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, new Bitmap(new MemoryStream(pData)), true);
+                Texture2D texture2D1 = TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, new System.Drawing.Bitmap(new MemoryStream(pData)), true);
                 double num = texture2D1.Width / 32f % 1f;
                 Team pTeam = deserializeInto;
                 if (pTeam == null)

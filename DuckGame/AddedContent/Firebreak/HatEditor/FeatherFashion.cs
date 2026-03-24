@@ -1,26 +1,31 @@
 using AddedContent.Firebreak;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security;
 using System.Threading;
-using System.Windows.Forms;
 
 namespace DuckGame
 {
     public partial class FeatherFashion : Level
     {
         public WorkMode CurrentWorkMode = WorkMode.Editor;
-        
         private static uint s_framesUntilTooltip;
         private static string s_toolTipMessage = string.Empty;
         private static bool s_iconBeingHovered;
         private static string s_iconHoveredID = string.Empty;
         private static string? s_filePath = null;
+        private static bool _isFileDialogOpen = false;
+        private static string _hatFileFilterExtension = "png";
+        private static string _hatFileFilterDescription = "PNG files (*.png)";
         private static FileSystemWatcher s_fileWatcher = new();
+        private static SDL3.SDL.SDL_DialogFileFilter[] _hatFileFilter 
+            => FileDialogFna.GetDialogFileFilters(_hatFileFilterDescription, _hatFileFilterExtension);
+
         public static string? HatName => Path.GetFileNameWithoutExtension(FilePath);
 
         public static string FilePath
@@ -36,7 +41,6 @@ namespace DuckGame
             }
         }
 
-        
         [Marker.PostInitialize]
         public static void StaticInitialize()
         {
@@ -355,101 +359,147 @@ namespace DuckGame
         {
             if (rightClick && FilePath is not null)
             {
-                Texture2D texture = TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, FilePath, true);
-                
-                if (texture is null)
-                    return;
-
-                if (texture.Width > 100 || texture.Height > 56)
-                    throw new Exception("Image file too big to be a vanilla hat");
-
-                LoadHat(texture);
+                LoadHatFile(FilePath);
                 return;
             }
-            
-            Thread t = new(() =>
+            //RunInMainThread(OpenHatFileDialog);
+            OpenHatFileDialog();
+        }
+
+        private static void LoadHatFile(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath)) {
+                return;
+            }
+            Texture2D texture = TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, filePath, true);
+            if (texture is null)
+                return;
+
+            if (texture.Width > 100 || texture.Height > 56)
+                throw new Exception("Image file too big to be a vanilla hat");
+
+            LoadHat(texture);
+        }
+
+        private static void OpenHatFileDialog()
+        {
+            if (_isFileDialogOpen) {
+                return;
+            }
+            _isFileDialogOpen = true;
+            try
             {
-                try
-                {
-                    OpenFileDialog dialog = new() {Filter = "PNG files (*.png)|*.png"};
-                    if (dialog.ShowDialog() == DialogResult.OK)
-                    {
-                        Texture2D texture = TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, dialog.FileName, true);
+                var openDialog = new FileDialogFna();
+                openDialog.ShowOpenFileDialog(OpenFileCallback, window: MonoMain.instance.Window.Handle, filters: _hatFileFilter);
+            }
+            catch (SecurityException ex)
+            {
+                MessageBoxFna.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
+                                   $"Details:\n\n{ex.StackTrace}", icon: MessageBoxFna.Icon.Warning);
+            }
+            catch (Exception e)
+            {
+                DevConsole.Log(e);
+            }
+        }
 
-                        if (texture.Width > 100 || texture.Height > 56)
-                            throw new Exception("Image file too big to be a vanilla hat");
+        private static void OpenFileCallback(List<string> fileNames)
+        {
+            _isFileDialogOpen = false;
+            var fileName = fileNames?.FirstOrDefault();
+            if (string.IsNullOrEmpty(fileName)) {
+                return; // Cancelled.
+            }
+            try
+            {
+                Console.WriteLine($"OpenFile from: {fileName}");
+                Texture2D texture = TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, fileName, true);
+                if (texture.Width > 100 || texture.Height > 56) {
+                    throw new Exception("Image file too big to be a vanilla hat");
+                }
+                LoadHat(texture);
+                FilePath = fileName;
+            } catch(Exception ex) {
+                Console.WriteLine("Error opening file: " + ex);
+                MessageBoxFna.Show($"Error opening file: {ex.Message}\n\nDetails:\n\n{ex.StackTrace}");
+            }
+        }
 
-                        LoadHat(texture);
-                        FilePath = dialog.FileName;
-                    }
-                }
-                catch (SecurityException ex)
-                {
-                    MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
-                                    $"Details:\n\n{ex.StackTrace}");
-                }
-                catch (Exception e)
-                {
-                    DevConsole.Log(e);
-                }
-            });
-            t.SetApartmentState(ApartmentState.STA);
-            t.Start();
+        private static void SaveFileCallback(string fileName)
+        {
+            _isFileDialogOpen = false;
+            if (string.IsNullOrEmpty(fileName)) {
+                return; // Cancelled
+            }
+            try
+            {
+                Console.WriteLine($"SaveFile to: {fileName}");
+                var fileNameWithExtension = FileDialogFna.EnsureFileExtension(fileName, ".png");
+                FilePath = fileNameWithExtension;
+                GlobalActionSave();
+            } catch (Exception ex) {
+                Console.WriteLine("Error saving file: " + ex);
+                MessageBoxFna.Show($"Error saving file: {ex.Message}\n\nDetails:\n\n{ex.StackTrace}");
+            }
         }
 
         private static void GlobalActionSave(bool alwaysNew = false)
         {
             if (FilePath is not null && !alwaysNew)
             {
-                try
-                {
-                    using FileStream stream = File.OpenWrite(FilePath);
-                    Tex2D fullHatTexture = FFEditorPane.FullHatTexture;
-                    fullHatTexture.SaveAsPng(stream, fullHatTexture.w, fullHatTexture.h);
-                    
-                    HUD.AddPlayerChangeDisplay($"{HatName} saved!", 1f);
-                }
-                catch (Exception e)
-                {
-                    DevConsole.Log(e);
-                    HUD.AddPlayerChangeDisplay("Save failed. Check console for error");
-                    throw;
-                }
+                SaveHatFile(FilePath);
                 return;
             }
             else
             {
-                Thread t = new(() =>
-                {
-                    try
-                    {
-                        SaveFileDialog dialog = new()
-                        {
-                            AddExtension = true,
-                            DefaultExt = "png",
-                            Filter = "PNG files (*.png)|*.png"
-                        };
-                        if (dialog.ShowDialog() == DialogResult.OK)
-                        {
-                            FilePath = dialog.FileName;
-                            GlobalActionSave();
-                        }
-                    }
-                    catch (SecurityException ex)
-                    {
-                        MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
-                                        $"Details:\n\n{ex.StackTrace}");
-                    }
-                    catch (Exception e)
-                    {
-                        DevConsole.Log(e);
-                    }
-                });
-                t.SetApartmentState(ApartmentState.STA);
-                t.Start();
+                //RunInMainThread(OpenSaveHatDialog);
+                OpenSaveHatDialog();
             }
         }
-        
+
+        private static void OpenSaveHatDialog()
+        {
+            if (_isFileDialogOpen) {
+                return;
+            }
+            _isFileDialogOpen = true;
+            try
+            {
+                var saveDialog = new FileDialogFna();
+                saveDialog.ShowSaveFileDialog(SaveFileCallback, null, window: MonoMain.instance.Window.Handle, _hatFileFilter);
+            }
+            catch (SecurityException ex)
+            {
+                MessageBoxFna.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
+                                    $"Details:\n\n{ex.StackTrace}");
+            }
+            catch (Exception e)
+            {
+                DevConsole.Log(e);
+            }
+        }
+
+        private static void SaveHatFile(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath)) {
+                return;
+            }
+            try
+            {
+                using FileStream stream = File.OpenWrite(filePath);
+                Tex2D fullHatTexture = FFEditorPane.FullHatTexture;
+                fullHatTexture.SaveAsPng(stream, fullHatTexture.w, fullHatTexture.h);
+
+                HUD.AddPlayerChangeDisplay($"{HatName} saved!", 1f);
+            }
+            catch (Exception e)
+            {
+                DevConsole.Log(e);
+                HUD.AddPlayerChangeDisplay("Save failed. Check console for error");
+                throw;
+            }
+        }
+
         private static void GlobalActionLeave(bool _)
         {
             current = new TitleScreen();
@@ -504,6 +554,17 @@ namespace DuckGame
                 s_iconHoveredID = "";
                 s_framesUntilTooltip = 0;
             }
+        }
+
+        private static Thread RunInMainThread(Action action)
+        {
+            Thread t = new(() =>
+            {
+                action.Invoke();
+            });
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
+            return t;
         }
     }
 }
