@@ -241,11 +241,59 @@ namespace DuckGame
             return true;
         }
         public static Assembly ModResolve(object sender, ResolveEventArgs args) => ManagedContent.ResolveModAssembly(sender, args);
-
+        private static Dictionary<string, Assembly> LoadedAssemblies = new Dictionary<string, Assembly>();
         public static Assembly Resolve(object sender, ResolveEventArgs args)
         {
             if (!enteredMain)
-                return null;
+                return null;//HarmonyLoader
+            if (args.Name.StartsWith("Mono.Cecil.Pdb,"))
+            {
+                if (LoadedAssemblies.TryGetValue("0Harmony.dll", out Assembly assembly))
+                {
+                    return assembly;
+                }
+                try
+                {
+                    assembly = Assembly.LoadFrom("0Harmony.dll");
+                    LoadedAssemblies.Add("0Harmony.dll", assembly);
+                    return assembly;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to load Mono.Cecil.Pdb.dll: {ex}");
+                }
+                //if (LoadedAssemblies.TryGetValue("Mono.Cecil.Pdb.dll", out Assembly assembly)){
+                //    return assembly;
+                //}
+                //try
+                //{
+                //    assembly = Assembly.LoadFrom("Mono.Cecil.Pdb.dll");
+                //    LoadedAssemblies.Add("Mono.Cecil.Pdb.dll", assembly);
+                //    return assembly;
+                //}
+                //catch (Exception ex)
+                //{
+                //    Console.WriteLine($"Failed to load Mono.Cecil.Pdb.dll: {ex}");
+                //}
+
+            }
+            if (args.Name.StartsWith("0Harmony,") || args.Name.StartsWith("HarmonyLoader,"))
+            {
+                if (LoadedAssemblies.TryGetValue("0Harmony.dll", out Assembly assembly))
+                {
+                    return assembly;
+                }
+                try
+                {
+                    assembly = Assembly.LoadFrom("0Harmony.dll");
+                    LoadedAssemblies.Add("0Harmony.dll", assembly);
+                    return assembly;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to load Mono.Cecil.Pdb.dll: {ex}");
+                }
+            }
             if (args.Name.StartsWith("Steam,"))
             {
                 return Assembly.GetAssembly(typeof(Steam));
