@@ -1922,6 +1922,11 @@ namespace DuckGame
 
         public T CollisionLine<T>(Vec2 p1, Vec2 p2)
         {
+            float dist = p1.Distance(p2);
+            if (dist > 100000 || float.IsNaN(dist))
+            {
+                return current.OldCollisionLine<T>(p1, p2);
+            }
             Type key = typeof(T);
             foreach (Thing thing in things.CollisionLineAll(p1, p2, key))
             {
