@@ -190,6 +190,7 @@ namespace DuckGame
             
             Vote.ClearVotes();
             Program.gameLoadedSuccessfully = true;
+            MonoMain.NloadMessage = "Global.Save Saving Info";
             Global.Save();
             HUD.ClearPlayerChangeDisplays();
             AddCreditLine("DUCK GAME");
