@@ -64,38 +64,45 @@ namespace XnaToFna.ProxyReflection
 
         public static MethodInfo GetMethod(Type self, string name, BindingFlags bindingAttr)
         {
-            XnaToFnaFieldInfo xnaToFnaFieldInfo;
-            DevConsole.Log("GetMethod " + name);
-            if (self.FullName == "DuckGame.BetterChat.HarmonyPatches")
+            try
             {
-                if (name == "DuckNetworkUpdate_Transpiler")
+                XnaToFnaFieldInfo xnaToFnaFieldInfo;
+                DevConsole.Log("GetMethod " + name);
+                if (self.FullName == "DuckGame.BetterChat.HarmonyPatches")
                 {
-                    return null;
+                    if (name == "DuckNetworkUpdate_Transpiler")
+                    {
+                        return null;
+                    }
+                    else if (name == "DrawSelection")
+                    {
+                        RealDrawSelection = self.GetMethod(name, bindingAttr);
+                        return DrawSelectionHandler;
+                    }
                 }
-                else if (name == "DrawSelection")
+                MethodInfo methodInfo = self.GetMethod(name, bindingAttr);
+                if (methodInfo != null)
                 {
-                    RealDrawSelection = self.GetMethod(name, bindingAttr);
-                    return DrawSelectionHandler;
+                    return methodInfo;
                 }
+
+                // Retry with flipped visibility
+                BindingFlags visibility = bindingAttr & (BindingFlags.Public | BindingFlags.NonPublic);
+                if (visibility == BindingFlags.Public)
+                    bindingAttr = (bindingAttr & ~BindingFlags.Public) | BindingFlags.NonPublic;
+                else if (visibility == BindingFlags.NonPublic)
+                    bindingAttr = (bindingAttr & ~BindingFlags.NonPublic) | BindingFlags.Public;
+
+                methodInfo = self.GetMethod(name, bindingAttr);
+                if (methodInfo != null)
+                    return methodInfo;
+
+                return null;
             }
-            MethodInfo methodInfo = self.GetMethod(name, bindingAttr);
-            if (methodInfo != null)
+            catch(Exception e)
             {
-                return methodInfo;
+                throw e; 
             }
-
-            // Retry with flipped visibility
-            BindingFlags visibility = bindingAttr & (BindingFlags.Public | BindingFlags.NonPublic);
-            if (visibility == BindingFlags.Public)
-                bindingAttr = (bindingAttr & ~BindingFlags.Public) | BindingFlags.NonPublic;
-            else if (visibility == BindingFlags.NonPublic)
-                bindingAttr = (bindingAttr & ~BindingFlags.NonPublic) | BindingFlags.Public;
-
-            methodInfo = self.GetMethod(name, bindingAttr);
-            if (methodInfo != null)
-                return methodInfo;
-
-            return null;
         }
         public static void DrawSelection(Vec2 messagePos) // for better chat
         {

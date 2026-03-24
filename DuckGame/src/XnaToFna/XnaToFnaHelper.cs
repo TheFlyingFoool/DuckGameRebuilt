@@ -1,12 +1,13 @@
 ﻿using DuckGame;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using RectpackSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using XnaToFna.ProxyForms;
 using System.Text;
+using XnaToFna.ProxyForms;
 
 namespace XnaToFna
 {
@@ -121,12 +122,27 @@ namespace XnaToFna
             }
             return File.Exists(path);
         }
+        //path == typeof(HarmonyLib.Harmony).Assembly.Location.Replace('\\', '/') possible cache bye[]
+        private static string HarmonyPath = typeof(HarmonyLib.Harmony).Assembly.Location.Replace('\\', '/');
+        private static Dictionary<string, byte[]> FileBytesCache = new Dictionary<string, byte[]>();
+        private static Dictionary<int, string> FileHashPath = new Dictionary<int, string>();
         public static byte[] FileReadAllBytes(string path)
         {
             if (Program.IsLinuxD || Program.isLinux)
             {
                 path = path.Replace("//", "/").Replace("\\", "/");
                 path = GetActualCaseForFileName(FixPath(path));
+            }
+            if (HarmonyPath == path)
+            {
+                if (FileBytesCache.TryGetValue(path, out byte[] bytes))
+                {
+                    return bytes;
+                }
+                bytes = File.ReadAllBytes(path);
+                FileHashPath[bytes.GetHashCode()] = path;
+                FileBytesCache[path] = bytes;
+                return bytes;
             }
             return File.ReadAllBytes(path);
         }
@@ -290,7 +306,40 @@ namespace XnaToFna
         public static void DoNothing()
         {
         }
+        //FileBytesCache
+        public static Assembly AssemblyLoad(byte[] rawAssembly)
+        {
+            int hashcode = rawAssembly.GetHashCode();
+            if (FileHashPath.TryGetValue(hashcode, out string path))
+            {
+                if (path == HarmonyPath)
+                {
+                    return typeof(HarmonyLib.Harmony).Assembly;
+                }
+            }
+            return Assembly.Load(rawAssembly);
+        }
+        public static Assembly AssemblyLoadFile(string path)
+        {
+            string test = path.ToLower();
+            if (test.Contains("0harmony.dll") || test.Contains("harmonyloader.dll"))
+            {
+                return typeof(HarmonyLib.Harmony).Assembly;
+            }
+            return Assembly.Load(path);
+        }
+        //public static int GetHashCode(byte[] data)
+        //{
+        //    if (data == null || data.Length == 0)
+        //    {
+        //        return 0;
+        //    }
 
+        //    System.HashCode hashCode = new System.HashCode();
+        //    hashCode.AddBytes(new ReadOnlySpan<byte>(data));
+
+        //    return hashCode.ToHashCode();
+        //}
         public static void ApplyChanges(GraphicsDeviceManager self)
         {
             string environmentVariable = Environment.GetEnvironmentVariable("XNATOFNA_DISPLAY_FULLSCREEN");

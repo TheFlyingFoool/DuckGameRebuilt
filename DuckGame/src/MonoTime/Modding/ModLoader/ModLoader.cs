@@ -14,7 +14,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
 using XnaToFna;
-using Harmony;
+using HarmonyLib;
 using XnaToFna.ProxyReflection;
 using File = System.IO.File;
 using HarmonyLoader;
@@ -176,7 +176,7 @@ namespace DuckGame
             }
             else
             {
-                _modAssemblies.Add(typeof(HarmonyInstance).Assembly, new DisabledMod()); // HarmonyLoader
+                _modAssemblies.Add(typeof(HarmonyLib.Harmony).Assembly, new DisabledMod()); // HarmonyLoader
                 Loader.ShouldPatch = ModLoader.ShouldPatch;
             }
             _modsByHash.Add(mod.identifierHash, mod);
@@ -210,6 +210,7 @@ namespace DuckGame
         static int n = 0;
         static bool ShouldPatch(MethodBase original, MethodInfo prefix, MethodInfo postfix, MethodInfo transpiler)
         {
+            return true;
             if (!Program.IS_DEV_BUILD && !Debugger.IsAttached)
             {
                 return true; // So its only disabling when debugging needs more testing before Hard use
@@ -347,7 +348,7 @@ namespace DuckGame
             //    xnaToFnaUtil.ScanPath("D:\\Program Files (x86)\\Steam\\steamapps\\workshop\\content\\312530\\2674911202\\BrowseGamesPlus\\content\\0Harmony.dll");
 
             xnaToFnaUtil.ScanPath(Program.GameDirectory + "FNA.dll");
-            xnaToFnaUtil.ScanPath(Program.GameDirectory + "HarmonyLoader.dll");
+            xnaToFnaUtil.ScanPath(Program.GameDirectory + "0Harmony.dll"); // HarmonyLoader
             xnaToFnaUtil.ScanPath(Program.FilePath);
             xnaToFnaUtil.RelinkAll();
 

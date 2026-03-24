@@ -69,7 +69,7 @@ namespace XnaToFna
         public List<string> FixPathsFor;
         public ILPlatform PreferredPlatform;
         public static Assembly Aassembly;
-        public static int RemapVersion = 28;
+        public static int RemapVersion = 31;
         public void Stub(ModuleDefinition mod)
         {
             Log(string.Format("[Stub] Stubbing {0}", mod.Assembly.Name.Name));
@@ -197,6 +197,10 @@ namespace XnaToFna
             Modder.RelinkMap["System.String System.IO.File::ReadAllText(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String FileReadAllText(System.String)");
 
 
+            Modder.RelinkMap["System.Reflection.Assembly System.Reflection.Assembly::Load(System.Byte[])"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Reflection.Assembly AssemblyLoad(System.Byte[])");
+            Modder.RelinkMap["System.Reflection.Assembly System.Reflection.Assembly::LoadFile(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Reflection.Assembly AssemblyLoadFile(System.String)");
+
+
             Modder.RelinkMap["System.Reflection.MethodInfo System.Type::GetMethod(System.String,System.Reflection.BindingFlags)"] = new RelinkMapEntry("XnaToFna.ProxyReflection.FieldInfoHelper", "System.Reflection.MethodInfo GetMethod(System.Type,System.String,System.Reflection.BindingFlags)");
 
             Modder.RelinkMap["System.Reflection.FieldInfo System.Type::GetField(System.String,System.Reflection.BindingFlags)"] = new RelinkMapEntry("XnaToFna.ProxyReflection.FieldInfoHelper", "System.Reflection.FieldInfo GetField(System.Type,System.String,System.Reflection.BindingFlags)");
@@ -280,6 +284,58 @@ namespace XnaToFna
             }
         }
         public static void SetupHarmonyRelinkMap(XnaToFnaUtil xtf, XnaToFnaMapping mapping)
+        {
+            // Map HarmonyInstance (Harmony 1) → HarmonyLib.Harmony (Harmony 2)
+            TypeDefinition harmonyLibHarmony = mapping.Module.Types
+                .FirstOrDefault(t => t.FullName == "HarmonyLib.Harmony");
+
+            if (harmonyLibHarmony != null)
+            {
+                xtf.Modder.RelinkMap["Harmony.HarmonyInstance"] = harmonyLibHarmony;
+            }
+
+            // Types in Harmony 1 that moved or got renamed in Harmony 2
+            var knownRelocations = new Dictionary<string, string>
+            {
+                { "ByteBuffer", "ILCopying" },
+                { "Emitter", "ILCopying" },
+                { "ExceptionBlock", "ILCopying" },
+                { "ExceptionBlockType", "ILCopying" },
+                { "ILInstruction", "ILCopying" },
+                { "LeaveTry", "ILCopying" },
+                { "Memory", "ILCopying" },
+                { "MethodBodyReader", "ILCopying" },
+                { "MethodCopier", "ILCopying" },
+                { "SelfPatching", "Tools" }
+            };
+
+            // Relink all Harmony types in the module
+            SetupDirectRelinkMap(xtf, mapping, (_, type) =>
+            {
+                if (!type.Namespace.StartsWith("HarmonyLib"))
+                    return;
+
+                string shortTypeName = type.Name;
+
+                // Skip Harmony itself; handled above
+                if (shortTypeName == "Harmony")
+                    return;
+
+                // Determine old Harmony 1 namespace
+                string oldNamespace = knownRelocations.TryGetValue(shortTypeName, out string relocatedNs)
+                    ? $"Harmony.{relocatedNs}"  // e.g., Harmony.ILCopying, Harmony.Tools
+                    : "Harmony";
+
+                string fullOldTypeName = $"{oldNamespace}.{shortTypeName}";
+
+                // Map old Harmony 1 references → Harmony 2 type
+                xtf.Modder.RelinkMap[fullOldTypeName] = type;
+
+                // Also shorthand mapping just by type name
+                xtf.Modder.RelinkMap[$"Harmony.{shortTypeName}"] = type;
+            });
+        }
+        public static void SetupHarmonyRelinkMap_old(XnaToFnaUtil xtf, XnaToFnaMapping mapping)
         {
             TypeDefinition harmonyInstance =  mapping.Module.Types.FirstOrDefault(t => t.FullName == "Harmony.HarmonyInstance");
 
@@ -913,7 +969,7 @@ namespace XnaToFna
                         "DGSteam"
 
                 }, new XnaToFnaMapping.SetupDelegate(SetupGSRelinkMap2)),
-                new XnaToFnaMapping("HarmonyLoader", new[] { "0Harmony" },
+                new XnaToFnaMapping("0Harmony", new[] { "HarmonyLoader" }, //HarmonyLoader 0Harmony
                 new XnaToFnaMapping.SetupDelegate(SetupHarmonyRelinkMap))
             };
 
@@ -1114,10 +1170,10 @@ namespace XnaToFna
                     Log(string.Format("[ScanPath] WARNING: Cannot load assembly: {0}", ex));
                     return;
                 }
-                if (key.Assembly.Name.Name == "HarmonyLoader")
+                if (key.Assembly.Name.Name == "0Harmony") // HarmonyLoader
                 {
                     Log("[ScanPath] Registering HarmonyLoader in DependencyCache");
-                    Modder.DependencyCache["HarmonyLoader"] = key;
+                    Modder.DependencyCache["0Harmony"] = key;
                     Modder.DependencyCache[key.Assembly.Name.FullName] = key;
                 }
                 bool flag = !rp.ReadWrite || name.Name == ThisAssemblyName;
