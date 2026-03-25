@@ -130,20 +130,7 @@ namespace DuckGame
 
         public static int Number(DuckPersona p)
         {
-            int index = _personas.IndexOf(p);
-            if (index == -1)
-            {
-                for (var i = 0; i < _personas.Count; i++)
-                {
-                    DuckPersona persona = _personas[i];
-                    if (p.color == persona.color && p.colorDark == persona.colorDark && p.colorLight == persona.colorLight)
-                    {
-                        index = i;
-                        break;
-                    }
-                }
-            }
-            return index;
+            return _personas.IndexOf(p);
         }
     }
 }

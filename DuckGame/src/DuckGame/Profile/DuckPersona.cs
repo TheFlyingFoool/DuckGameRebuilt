@@ -7,9 +7,9 @@ namespace DuckGame
     public class DuckPersona
     {
         private int _index = -1;
-        private Vec3 _color;
-        private Vec3 _colorDark;
-        private Vec3 _colorLight;
+        private Vec3 _color = Vec3.Zero;
+        private Vec3 _colorDark = Vec3.Zero;
+        private Vec3 _colorLight = Vec3.Zero;
         private SpriteMap _skipSprite;
         private SpriteMap _arrowSprite;
         private SpriteMap _fingerPositionSprite;
@@ -377,6 +377,24 @@ namespace DuckGame
             {
             }
         }
+        public override int GetHashCode()
+        {
+            unchecked // Overflow is fine, just wrap
+            {
+                int hash = 17;
+                hash = hash * 23 + color.GetHashCode();
+                hash = hash * 23 + colorDark.GetHashCode();
+                hash = hash * 23 + colorLight.GetHashCode();
+                return hash;
+            }
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj is DuckPersona other)
+                return GetHashCode() == other.GetHashCode();
+            return false;
+        }
+
         public void Recreate()
         {
         }
