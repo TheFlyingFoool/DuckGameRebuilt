@@ -173,7 +173,10 @@ namespace DuckGame
             public object data;
             public Dictionary<NetworkConnection, bool> dirtyConnections = new Dictionary<NetworkConnection, bool>();
 
-            public NetIndex16 GetLastSyncIndex(NetworkConnection pConnection) => !lastSyncIndex.ContainsKey(pConnection) ? (NetIndex16)0 : lastSyncIndex[pConnection];
+            public NetIndex16 GetLastSyncIndex(NetworkConnection pConnection)
+            {
+                return !lastSyncIndex.ContainsKey(pConnection) ? (NetIndex16)0 : lastSyncIndex[pConnection];
+            }
 
             public void SetConnectionDirty(NetworkConnection pConnection, bool pValue) => dirtyConnections[pConnection] = pValue;
 
@@ -181,9 +184,8 @@ namespace DuckGame
             {
                 if (filtered && pConnection.profile != null && pConnection.profile.muteChat)
                     return false;
-                bool flag = true;
-                if (dirtyConnections.ContainsKey(pConnection))
-                    flag = dirtyConnections[pConnection];
+                if (!dirtyConnections.TryGetValue(pConnection, out bool flag))
+                    flag = true;
                 return flag;
             }
 
@@ -197,9 +199,20 @@ namespace DuckGame
 
             public void Clean(NetworkConnection pConnection)
             {
-                dirtyConnections[pConnection] = true;
-                lastSyncIndex[pConnection] = (NetIndex16)0;
+                if (pConnection == null)
+                    return;
+
+                if (dirtyConnections != null)
+                {
+                    dirtyConnections[pConnection] = true;
+                }
+                if (lastSyncIndex != null)
+                {
+                    lastSyncIndex[pConnection] = (NetIndex16)0;
+
+                }
             }
+
         }
     }
 }
