@@ -578,6 +578,9 @@ namespace DuckGame
                     case "-moddebug":
                         MonoMain.modDebugging = true;
                         break;
+                    case "-monodebug":
+                        MonoMain.monoDebug = true;
+                        break;
                     case "-downloadmods":
                         MonoMain.downloadWorkshopMods = true;
                         break;
@@ -744,6 +747,13 @@ namespace DuckGame
                 }
             }
             enteredMain = true;
+            if (MonoMain.monoDebug)
+            {
+                while (!Debugger.IsAttached)
+                {
+                    Thread.Sleep(200);
+                }
+            }
             if (!MonoMain.disableSteam)
             {
                 if (MonoMain.breakSteam || !Steam.InitializeCore())

@@ -105,7 +105,7 @@ namespace DuckGame
             }
         }
 
-        {
+        
         public void Initialize()
         {
             if (_profiles != null && _profiles.Count > 0) // for when its called again by 50 player
