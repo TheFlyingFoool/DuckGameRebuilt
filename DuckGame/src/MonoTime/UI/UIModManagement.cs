@@ -56,7 +56,7 @@ namespace DuckGame
             {
                 path += Path.DirectorySeparatorChar;
             }
-            FNAPlatform.OpenURL(new Uri(path).AbsoluteUri);
+            FNAPlatform.OpenURL(path);
 
         }
         private const int FO_DELETE = 0x0003;
