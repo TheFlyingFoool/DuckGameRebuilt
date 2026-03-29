@@ -153,6 +153,7 @@ namespace DuckGame
         public static bool preloadModContent = true;
         public static bool breakSteam = false;
         public static bool modDebugging = false;
+        public static bool monoDebug = false;
         public static bool launchedFromSteam = false;
         public static bool steamConnectionCheckFail = false;
         public static AudioMode audioModeOverride = AudioMode.None;
