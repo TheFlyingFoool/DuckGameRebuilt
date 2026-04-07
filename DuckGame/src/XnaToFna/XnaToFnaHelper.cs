@@ -45,6 +45,32 @@ namespace XnaToFna
             // return GameFormForWinForms.GetHandle(MonoMain.instance); // Alternative that doesn't require relinking WinForms types.
         }
 
+        
+        
+        private static string FixDirectoryPath(string path) {
+            if (Program.IsLinuxD || Program.isLinux) {
+                path = path.Replace("//", "/").Replace("\\", "/"); 
+                path = GetPathAfterUserHome(path); //GetCleanedPath //GetPathAfterUserHome
+                path = FixPath(path); // Assuming FixPath is accessible here
+            }
+            return path;
+        }
+        
+        public static FileInfo[] DirectoryInfoGetFiles(DirectoryInfo info) {
+            string fixedPath = FixDirectoryPath(info.FullName);
+            // Create a new DirectoryInfo with the corrected path
+            return new DirectoryInfo(fixedPath).GetFiles();
+        }
+        
+        public static FileInfo[] DirectoryInfoGetFiles(DirectoryInfo info, string searchPattern) {
+            string fixedPath = FixDirectoryPath(info.FullName);
+            return new DirectoryInfo(fixedPath).GetFiles(searchPattern);
+        }
+        
+        public static FileInfo[] DirectoryInfoGetFiles(DirectoryInfo info, string searchPattern, SearchOption searchOption) {
+            string fixedPath = FixDirectoryPath(info.FullName);
+            return new DirectoryInfo(fixedPath).GetFiles(searchPattern, searchOption);
+        }
         public static DirectoryInfo DirectoryCreateDirectory(string path)
         {
             if (Program.IsLinuxD || Program.isLinux)
@@ -85,6 +111,16 @@ namespace XnaToFna
                 path = FixPath(path);
             }
             return Directory.GetFiles(path, searchPattern, searchOption);
+        }
+        public static string[] GetFiles(string path, SearchOption searchOption)
+        {
+            if (Program.IsLinuxD || Program.isLinux)
+            {
+                path = path.Replace("//", "/").Replace("\\", "/");
+                //Console.WriteLine("DirectoryGetFiles:" + path);
+                path = FixPath(path);
+            }
+            return Directory.GetFiles(path,"", searchOption);
         }
         public static bool DirectoryExists(string path)
         {
@@ -248,6 +284,83 @@ namespace XnaToFna
                 path = GetActualCaseForFileName(FixPath(path));
             }
             return File.ReadAllText(path, encoding);
+        }
+
+      
+
+       
+        private static string GetApplicationBaseDirectory()
+        {
+         
+            if (!string.IsNullOrEmpty(AppContext.BaseDirectory))
+                return AppContext.BaseDirectory;
+            
+            try
+            {
+                var entryAssembly = Assembly.GetEntryAssembly();
+                if (entryAssembly != null)
+                {
+                    string location = entryAssembly.Location;
+                    return Path.GetDirectoryName(location) ?? AppDomain.CurrentDomain.BaseDirectory;
+                }
+            }
+            catch { }
+            return AppDomain.CurrentDomain.BaseDirectory ?? Directory.GetCurrentDirectory();
+        }
+        public static string GetPathAfterUserHome(string fullPath)
+        {
+            if (string.IsNullOrWhiteSpace(fullPath))
+                return string.Empty;
+            if (Directory.Exists(fullPath))
+            {
+                return fullPath;
+            }
+
+            string normalized = fullPath.Replace('\\', '/').TrimEnd('/');
+            
+            string[] homeAnchors = new[]
+            {
+                "/home/",  
+                "/Users/",
+                "/root/",
+                "/run/media/",
+                "/media/",
+                "/mnt/",
+                "/opt/",
+                "/usr/local/"
+            };
+
+            int anchorIndex = -1;
+            string usedAnchor = "";
+
+            foreach (var anchor in homeAnchors)
+            {
+                int idx = normalized.LastIndexOf(anchor, StringComparison.OrdinalIgnoreCase);
+                if (idx != -1)
+                {
+                    anchorIndex = idx;
+                    usedAnchor = anchor;
+                    break;
+                }
+            }
+
+            if (anchorIndex == -1)
+            {
+                return fullPath;
+            }
+            
+            string afterAnchor = normalized.Substring(anchorIndex);
+            
+            string resultPath = afterAnchor.Replace('/', Path.DirectorySeparatorChar);
+            
+            if (Directory.Exists(resultPath))
+            {
+                return resultPath;
+            }
+            else
+            {
+                return fullPath;  
+            }
         }
         public static string FixPath(string path)
         {

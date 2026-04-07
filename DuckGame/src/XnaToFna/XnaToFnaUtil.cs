@@ -69,7 +69,7 @@ namespace XnaToFna
         public List<string> FixPathsFor;
         public ILPlatform PreferredPlatform;
         public static Assembly Aassembly;
-        public static int RemapVersion = 31;
+        public static int RemapVersion = 34;
         public void Stub(ModuleDefinition mod)
         {
             Log(string.Format("[Stub] Stubbing {0}", mod.Assembly.Name.Name));
@@ -176,6 +176,16 @@ namespace XnaToFna
             Modder.RelinkMap["System.Void System.IO.Directory::Delete(System.String)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void DirectoryDelete(System.String)");
             Modder.RelinkMap["System.String System.IO.Directory::GetCurrentDirectory()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String GetCurrentDirectory()");
             Modder.RelinkMap["System.String[] System.IO.Directory::GetFiles(System.String,System.String,System.IO.SearchOption)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.String[] GetFiles(System.String,System.String,System.IO.SearchOption)");
+    
+            Modder.RelinkMap["System.IO.FileInfo[] System.IO.DirectoryInfo::GetFiles()"] = 
+                new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.IO.FileInfo[] DirectoryInfoGetFiles(System.IO.DirectoryInfo)");
+
+            Modder.RelinkMap["System.IO.FileInfo[] System.IO.DirectoryInfo::GetFiles(System.String)"] = 
+                new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.IO.FileInfo[] DirectoryInfoGetFiles(System.IO.DirectoryInfo,System.String)");
+
+            Modder.RelinkMap["System.IO.FileInfo[] System.IO.DirectoryInfo::GetFiles(System.String,System.IO.SearchOption)"] = 
+                new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.IO.FileInfo[] DirectoryInfoGetFiles(System.IO.DirectoryInfo,System.String,System.IO.SearchOption)");
+
 
 
             Modder.RelinkMap["System.Void System.IO.File::SetAttributes(System.String,System.IO.FileAttributes)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void FileSetAttributes(System.String,System.IO.FileAttributes)");
@@ -779,6 +789,13 @@ namespace XnaToFna
                             instruction.OpCode = OpCodes.Call;
                         if (DestroyLocks)
                             CheckAndDestroyLock(method, instri);
+                        {
+                            try
+                            {
+                                CheckAndDestroyLock(method, instri);
+                            }
+                            catch{}
+                        }
                         if (FixPathsFor.Count != 0)
                             CheckAndInjectFixPath(method, ref instri);
                     }
@@ -818,6 +835,10 @@ namespace XnaToFna
 
         public void CheckAndDestroyLock(MethodDefinition method, int instri)
         {
+            if (method == null || method.Body == null || method.Body.Instructions == null)
+            {
+                return;
+            }
             Instruction instruction = method.Body.Instructions[instri];
             if (instri >= 1 && (instruction.OpCode == OpCodes.Brfalse || instruction.OpCode == OpCodes.Brfalse_S || instruction.OpCode == OpCodes.Brtrue || instruction.OpCode == OpCodes.Brtrue_S) && ((Instruction)instruction.Operand).Offset < instruction.Offset && instruction.Previous.Operand != null)
             {
