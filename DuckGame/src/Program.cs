@@ -246,6 +246,10 @@ namespace DuckGame
         {
             if (!enteredMain)
                 return null;//HarmonyLoader
+            if (args.Name.StartsWith("DuckGame,"))
+            {
+                return Assembly.GetExecutingAssembly();
+            }
             if (args.Name.StartsWith("Mono.Cecil.Pdb,"))
             {
                 if (LoadedAssemblies.TryGetValue("0Harmony.dll", out Assembly assembly))

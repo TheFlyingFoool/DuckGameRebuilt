@@ -240,7 +240,8 @@ namespace XnaToFna
             Modder.TranspilerMap["System.Void AncientMysteries.Module::Initialize()"] = new TranspilerMapEntry(ReturnImmediatelyPatch);
             Modder.TranspilerMap["System.Void AncientMysteries.AncientMysteriesMod::Hooks_OnUpdate()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod("AncientMysteries_Hooks_Update", BindingFlags.NonPublic | BindingFlags.Static));
 
-
+            // ExtraStuff2 2586315559 Reimplement patcher due to nasty dynamic link code eww
+            Modder.RelinkMap["System.Void DuckGame.ExtraStuff2.MAutoPatchHandler::Patch()"] = new RelinkMapEntry("XnaToFna.ExtraStuff2Replacements", "System.Void PatchReplacement()");
 
             //Balloon Net Gun & Mind Swap Grenade 1971284863 Null Exception 
             Modder.TranspilerMap["System.Void DuckGame.FunGun.NetBalloon::Update()"] = new TranspilerMapEntry(TryCatchPatch);

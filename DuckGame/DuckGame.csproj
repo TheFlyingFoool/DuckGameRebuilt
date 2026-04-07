@@ -201,6 +201,9 @@
     <CodeAnalysisRuleSet>emptyfind.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyName>xna</AssemblyName>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -2398,6 +2401,7 @@
     <Compile Include="src\XnaToFna\Messages.cs" />
     <Compile Include="src\XnaToFna\MethodInvoker.cs" />
     <Compile Include="src\XnaToFna\ModCompatibility\ConnectionIndicator.cs" />
+    <Compile Include="src\XnaToFna\ModCompatibility\ExtraStuff2Replacements.cs" />
     <Compile Include="src\XnaToFna\MouseButtons.cs" />
     <Compile Include="src\XnaToFna\MouseEventArgs.cs" />
     <Compile Include="src\XnaToFna\MouseEventHandler.cs" />
