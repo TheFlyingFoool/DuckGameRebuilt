@@ -196,6 +196,7 @@ namespace DuckGame
         public static int CurrentType;
         public static void Play(string music, bool looping = true, float crossFadeTime = 0f)
         {
+            if (SFX.NoSoundcard) return;
             if (!DGRSettings.LoaderMusic) return;
             //not great code also welcome to my hell for .vgz music loading -Lucky
             if (File.Exists("./Content/Audio/Music/InGame/" + music + ".vgz"))

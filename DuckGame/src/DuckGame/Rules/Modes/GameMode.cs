@@ -905,6 +905,7 @@ namespace DuckGame
 
         protected virtual void PlayMusic()
         {
+            if (SFX.NoSoundcard) return;
             if (_validityTest)
                 return;
             string music = Music.RandomTrack("InGame", _currentMusic);
