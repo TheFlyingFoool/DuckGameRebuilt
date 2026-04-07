@@ -14,10 +14,11 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Xml;
 using XnaToFna;
-using HarmonyLib;
-using XnaToFna.ProxyReflection;
 using File = System.IO.File;
 using HarmonyLoader;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Emit;
 
 namespace DuckGame
 {
@@ -189,7 +190,7 @@ namespace DuckGame
         {
             try
             {
-                using var asm = AssemblyDefinition.ReadAssembly(
+                using AssemblyDefinition asm = AssemblyDefinition.ReadAssembly(
                                     assemblyPath,
                                     new ReaderParameters { ReadSymbols = false });
 
@@ -694,6 +695,10 @@ namespace DuckGame
 
         private static bool AttemptCompile(ModConfiguration config)
         {
+            if (Program.IsLinuxD)
+            {
+                return LinuxAttemptCompile(config);
+            }
             _buildErrorText = null;
             _buildErrorFile = null;
             if (config.noCompilation)
@@ -733,7 +738,7 @@ namespace DuckGame
             {
                 _provider = new CSharpCodeProvider();
                 _parameters = new CompilerParameters(AppDomain.CurrentDomain.GetAssemblies().Select(assembly => assembly.Location).ToArray());
-                _parameters.CompilerOptions = "/define:DGR";
+                _parameters.CompilerOptions = "/define:DGR /define:WINDOWS";
                 _parameters.GenerateExecutable = _parameters.GenerateInMemory = false;
             }
             if (File.Exists(config.buildLogPath))
@@ -761,6 +766,157 @@ namespace DuckGame
                     return false;
             }
             return true;
+        }
+        private static bool LinuxAttemptCompile(ModConfiguration config)
+        {
+            _buildErrorText = null;
+            _buildErrorFile = null;
+
+            if (config.noCompilation)
+                return false;
+
+            List<string> allFiles = DuckFile.GetFilesNoCloud(config.directory, "*.cs", SearchOption.AllDirectories);
+            if (allFiles.Count == 0)
+                return false;
+            allFiles.Reverse();
+            config.isDynamic = true;
+            
+            CRC32 crC32 = new CRC32();
+            byte[] numArray = new byte[2048];
+            foreach (string path in allFiles)
+            {
+                using (FileStream fileStream = File.Open(path, FileMode.Open))
+                {
+                    while (fileStream.Position != fileStream.Length)
+                    {
+                        int blockLen = fileStream.Read(numArray, 0, numArray.Length);
+                        crC32.ProcessBlock(numArray, blockLen);
+                    }
+                }
+            }
+            uint num = crC32.Finalize();
+
+            if (!forceRecompilation && File.Exists(config.hashPath))
+            {
+                if (File.Exists(config.tempAssemblyPath))
+                {
+                    try
+                    {
+                        if (BitConverter.ToUInt32(File.ReadAllBytes(config.hashPath), 0) == num)
+                            return true;
+                    }
+                    catch { }
+                }
+            }
+
+            File.WriteAllBytes(config.hashPath, BitConverter.GetBytes(num));
+
+     
+
+            if (allFiles.Count == 0)
+            {
+                _buildErrorText = "No source files left after filtering AssemblyInfo.cs";
+                return false;
+            }
+
+            // === Roslyn Compilation ===
+            try
+            {
+                List<SyntaxTree> syntaxTrees = new List<SyntaxTree>();
+                bool hasAssemblyInfo = false;
+                CSharpParseOptions parseOptions = new CSharpParseOptions(
+                    preprocessorSymbols: new[] { "DGR", "LINUX" }
+                );
+
+                foreach (string file in allFiles)
+                {
+                    bool isAssemblyInfo = file.EndsWith("AssemblyInfo.cs", StringComparison.OrdinalIgnoreCase);
+                    if (hasAssemblyInfo && isAssemblyInfo)
+                    {
+                        continue;
+                    }
+                    if (isAssemblyInfo)
+                    {
+                        hasAssemblyInfo = true;
+                    }
+                    string sourceCode = File.ReadAllText(file);
+                    SyntaxTree tree = CSharpSyntaxTree.ParseText(
+                        sourceCode, 
+                        options: parseOptions, // This applies the /define:DGR
+                        path: file
+                    );
+                    syntaxTrees.Add(tree);
+                }
+
+                // References from loaded assemblies + explicit WinForms
+                List<PortableExecutableReference> references = AppDomain.CurrentDomain.GetAssemblies()
+                    .Where(a => !a.IsDynamic && !string.IsNullOrEmpty(a.Location))
+                    .Select(a => MetadataReference.CreateFromFile(a.Location))
+                    .ToList();
+
+                // Add System.Windows.Forms explicitly (helps on Mono/Linux)
+                try
+                {
+                    Assembly formsAsm = typeof(System.Windows.Forms.Form).Assembly;
+                    if (!string.IsNullOrEmpty(formsAsm.Location))
+                        references.Add(MetadataReference.CreateFromFile(formsAsm.Location));
+                }
+                catch { }
+
+                string assemblyName = config.name;
+                
+
+                CSharpCompilation compilation = CSharpCompilation.Create(
+                    assemblyName: assemblyName,
+                    syntaxTrees: syntaxTrees,
+                    references: references,
+                    options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
+                        .WithOptimizationLevel(OptimizationLevel.Debug)
+                        .WithPlatform(Microsoft.CodeAnalysis.Platform.AnyCpu)
+                        .WithAllowUnsafe(true));
+
+                // Delete old log
+                if (File.Exists(config.buildLogPath))
+                {
+                    File.SetAttributes(config.buildLogPath, FileAttributes.Normal);
+                    File.Delete(config.buildLogPath);
+                }
+
+                using (MemoryStream peStream = new MemoryStream())
+                {
+                    EmitResult result = compilation.Emit(peStream);
+
+                    if (!result.Success)
+                    {
+                        List<Diagnostic> errors = result.Diagnostics.Where(d => d.Severity == DiagnosticSeverity.Error).ToList();
+
+                        if (errors.Count > 0)
+                        {
+                            Diagnostic first = errors[0];
+                            _buildErrorText = first.GetMessage();
+
+                            if (first.Location != Location.None)
+                            {
+                                FileLinePositionSpan span = first.Location.GetLineSpan();
+                                _buildErrorFile = DuckFile.PreparePath(span.Path);
+                            }
+
+                            File.WriteAllLines(config.buildLogPath, result.Diagnostics.Select(d => d.ToString()));
+                            return false;
+                        }
+                    }
+                    
+                    File.WriteAllBytes(config.tempAssemblyPath, peStream.ToArray());
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                _buildErrorText = $"Compilation exception: {ex.Message}";
+                if (File.Exists(config.buildLogPath))
+                    File.WriteAllText(config.buildLogPath, ex.ToString());
+                return false;
+            }
         }
 
         private static ModConfiguration AttemptModLoad(string folder)
@@ -982,9 +1138,9 @@ namespace DuckGame
                 {
                     if ((item.stateFlags & WorkshopItemState.Installed) != 0 && Directory.Exists(item.path))
                     {
-                        foreach (var folder in DuckFile.GetDirectoriesNoCloud(item.path))
+                        foreach (string folder in DuckFile.GetDirectoriesNoCloud(item.path))
                         {
-                            var config = AttemptModLoad(folder);
+                            ModConfiguration config = AttemptModLoad(folder);
 
                             if (config != null)
                             {
