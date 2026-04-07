@@ -202,7 +202,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyName>xna</AssemblyName>
+    <AssemblyName>DuckGame</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL">
