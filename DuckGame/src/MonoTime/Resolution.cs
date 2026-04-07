@@ -220,11 +220,11 @@ namespace DuckGame
         {
             _window = (IntPtr)pWindow;
             _device = pDeviceManager;
-            if (_clientSizeChangedHandler == null)
-            {
-                _clientSizeChangedHandler = OnClientSizeChanged;
-                MonoMain.instance.Window.ClientSizeChanged += _clientSizeChangedHandler;
-            }
+            //if (_clientSizeChangedHandler == null)
+            //{
+            //    _clientSizeChangedHandler = OnClientSizeChanged;
+            //    MonoMain.instance.Window.ClientSizeChanged += _clientSizeChangedHandler;
+            //}
             supportedDisplaySizes = new Dictionary<ScreenMode, List<Resolution>>();
             DevConsole.Log(DCSection.General, "Enumerating display modes (" + GraphicsAdapter.DefaultAdapter.SupportedDisplayModes.Count().ToString() + " found...)");
             if (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode == null)
