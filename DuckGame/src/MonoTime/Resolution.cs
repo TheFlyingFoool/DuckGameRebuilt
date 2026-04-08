@@ -35,10 +35,12 @@ namespace DuckGame
 
         private static float GetScreenDPI()
         {
-            System.Drawing.Graphics graphics = System.Drawing.Graphics.FromHwnd(IntPtr.Zero);
-            float dpiX = graphics.DpiX;
-            graphics.Dispose();
-            return dpiX;
+            //System.Drawing.Graphics graphics = System.Drawing.Graphics.FromHwnd(IntPtr.Zero);
+            //float dpiX = graphics.DpiX;
+            //graphics.Dispose();
+            //return dpiX;
+            // if you wish to reimplement use  SDL_GetDisplayDPI and make it support sdl2 and sdl3
+            return _screenDPI;
         }
         public static GraphicsDeviceManager GetGraphics()
         {

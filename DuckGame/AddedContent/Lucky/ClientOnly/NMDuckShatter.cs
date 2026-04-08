@@ -1,6 +1,4 @@
-﻿using System.IO;
-using System.Drawing;
-using System.Drawing.Imaging;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace DuckGame
@@ -15,9 +13,9 @@ namespace DuckGame
             duck = d;
             imageIndex = i;
         }
-        public NMDuckShatter()
-        {
-        }
+
+        public NMDuckShatter() { }
+
         public Vec2 v;
         public Vec2 speed;
         public Duck duck;
@@ -28,7 +26,6 @@ namespace DuckGame
             SFX.Play("glassBreak");
 
             Sprite spr = duck.graphic.Clone();
-
             SpriteMap map = duck.graphic as SpriteMap;
 
             map.imageIndex = imageIndex;
@@ -37,31 +34,65 @@ namespace DuckGame
             Rectangle cutout = Extensions.GetPrivateFieldValue<Rectangle>(map, "_spriteBox");
 
 
-            Bitmap bm;
+            Texture2D baseTex = Extensions.GetPrivateFieldValue<Texture2D>(spr.texture, "_base");
 
-            using (MemoryStream ms = new MemoryStream())
+            int texWidth = baseTex.Width;
+            int texHeight = baseTex.Height;
+
+
+            Color[] fullData = new Color[texWidth * texHeight];
+            baseTex.GetData(fullData);
+
+            int cutX = (int)cutout.x;
+            int cutY = (int)cutout.y;
+            int cutW = (int)cutout.width;
+            int cutH = (int)cutout.height;
+
+            Color[] cutData = new Color[cutW * cutH];
+
+            for (int y = 0; y < cutH; y++)
             {
-                Texture2D bas = Extensions.GetPrivateFieldValue<Texture2D>(spr.texture, "_base");
-                bas.SaveAsPng(ms, bas.Width, bas.Height);
-                Bitmap m = new Bitmap(ms);
-                bm = m.Clone(new System.Drawing.Rectangle((int)cutout.x, (int)cutout.y, (int)cutout.width, (int)cutout.height), PixelFormat.DontCare);
+                for (int x = 0; x < cutW; x++)
+                {
+                    int srcIndex = (cutY + y) * texWidth + (cutX + x);
+                    int dstIndex = y * cutW + x;
+
+                    cutData[dstIndex] = fullData[srcIndex];
+                }
             }
 
-            int xM = bm.Width / 8;
-            int yM = bm.Height / 8;
-
+            int xM = cutW / 8;
+            int yM = cutH / 8;
             for (int y = 0; y < yM; y++)
             {
                 for (int x = 0; x < xM; x++)
                 {
-                    using (MemoryStream ms = new MemoryStream())
+                    Color[] chunkData = new Color[8 * 8];
+
+                    for (int cy = 0; cy < 8; cy++)
                     {
-                        Bitmap botmop = bm.Clone(new System.Drawing.Rectangle(8 * x, 8 * y, 8, 8), PixelFormat.DontCare);
-                        Sprite s = new Sprite(new Tex2D(TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, botmop, false), "shatter"));
-                        for (int i = 0; i < Maths.Clamp(DGRSettings.ActualParticleMultiplier, 1, 64); i++)
+                        for (int cx = 0; cx < 8; cx++)
                         {
-                            Level.Add(new ShatterDuck(v.x + 8 * x, v.y + 8 * y, s, speed * 0.5f));
+                            int srcIndex = (y * 8 + cy) * cutW + (x * 8 + cx);
+                            int dstIndex = cy * 8 + cx;
+
+                            chunkData[dstIndex] = cutData[srcIndex];
                         }
+                    }
+
+                    Texture2D chunkTex = new Texture2D(Graphics.device, 8, 8);
+                    chunkTex.SetData(chunkData);
+
+                    Sprite s = new Sprite(new Tex2D(chunkTex, "shatter"));
+
+                    for (int i = 0; i < Maths.Clamp(DGRSettings.ActualParticleMultiplier, 1, 64); i++)
+                    {
+                        Level.Add(new ShatterDuck(
+                            v.x + 8 * x,
+                            v.y + 8 * y,
+                            s,
+                            speed * 0.5f
+                        ));
                     }
                 }
             }

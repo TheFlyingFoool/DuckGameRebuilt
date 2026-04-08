@@ -244,6 +244,10 @@ namespace DuckGame
         private static Dictionary<string, Assembly> LoadedAssemblies = new Dictionary<string, Assembly>();
         public static Assembly Resolve(object sender, ResolveEventArgs args)
         {
+            if (args.Name.StartsWith("System.Drawing"))
+            {
+                return null;
+            }
             if (!enteredMain)
                 return null;//HarmonyLoader
             if (args.Name.StartsWith("DuckGame,"))
@@ -358,7 +362,7 @@ namespace DuckGame
             MonoMain.startTime = DateTime.Now;
             commandLine = string.Join(" ", args.Select(x => x.Contains(' ') ? $"\"{x}\"" : x));
             DuckFile.Initialize();
-            MarkerAttribute.Initialize(gameAssembly);
+            //MarkerAttribute.Initialize(gameAssembly);
             AutoConfigHandler.Initialize();
             bool flag = false;
             for (int index = 0; index < args.Length; ++index)

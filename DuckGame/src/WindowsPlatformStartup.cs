@@ -362,6 +362,10 @@ namespace DGWindows
 
         public static void AssemblyLoad(object sender, AssemblyLoadEventArgs args)
         {
+            if (args.LoadedAssembly.FullName.StartsWith("System.Drawing"))
+            {
+                return;
+            }
             assemblyLoadStrings.Add(args.LoadedAssembly.FullName + ": " + args.LoadedAssembly.GetName().ProcessorArchitecture.ToString());
             if (!args.LoadedAssembly.FullName.Contains("HarmonySharedState") && !args.LoadedAssembly.FullName.Contains("HarmonyLoader") || ModLoader.loadingOldMod == null)
                 return;
