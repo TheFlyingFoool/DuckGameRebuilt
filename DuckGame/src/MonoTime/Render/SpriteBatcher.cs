@@ -307,7 +307,14 @@ namespace DuckGame
         public MTSpriteBatchItem StealLastBatchItem()
         {
             MTSpriteBatchItem batchItem = LastSpriteBatchItem;//_batchItemList[_batchItemList.Count - 1];
-            batchItem.inPool = false;
+            if (batchItem != null)
+            {
+                batchItem.inPool = false;
+            }
+            else
+            {
+                batchItem = new MTSpriteBatchItem();
+            }
             return batchItem;
         }
 

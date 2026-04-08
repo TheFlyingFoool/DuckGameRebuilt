@@ -700,7 +700,7 @@ namespace DuckGame
             if (HandleInviteLinkCommand(command))
                 return;
 
-            if (DGRSettings.UseDuckShell)
+            if (DGRSettings.UseDuckShell && Commands.console != null)
             {
                 Commands.console.Run(command, RunAsUser);
                 RunAsUser = false;
