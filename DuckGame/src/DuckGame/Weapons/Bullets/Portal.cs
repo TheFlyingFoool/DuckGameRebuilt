@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame
@@ -70,7 +71,7 @@ namespace DuckGame
                 door.collision.Add(new Block(topLeft.x, topLeft.y, autoBlock1.width, hi));
             }
             AutoBlock autoBlock2 = Level.CheckLine<AutoBlock>(door.point1 + new Vec2(-8f, 0f), door.point1 + new Vec2(8f, 0f));
-            if (autoBlock2 != null)
+            if (autoBlock2 != null && autoBlock1 != null)
             {
                 Vec2 bottomLeft = autoBlock1.bottomLeft;
                 if (bottomLeft.y > door.top)

@@ -3303,6 +3303,10 @@ namespace DuckGame
                             }
                         case NMSpecialHat _:
                             NMSpecialHat nmSpecialHat = m as NMSpecialHat;
+                            if (nmSpecialHat.customTeamIndex == 65535) // for max value from null (ushort)-1
+                            {
+                                break;
+                            }
                             using (List<Profile>.Enumerator enumerator = profiles.GetEnumerator())
                             {
                                 while (enumerator.MoveNext())
