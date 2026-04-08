@@ -243,10 +243,10 @@ namespace XnaToFna
 
             //"System.String AncientMysteries.Hook.Patches.LSItem_Draw::<Postfix>g__GetName|2_0(System.Single)"
             // Patch CosmicDisruption_AmmoType constructor - change infinity to 1e20
-            Modder.TranspilerMap["System.Void AncientMysteries.Items.CosmicDisruption_AmmoType::.ctor()"] =
-                new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(
-                    nameof(PatchRemoveInfinity),
-                    BindingFlags.NonPublic | BindingFlags.Static));
+            //Modder.TranspilerMap["System.Void AncientMysteries.Items.CosmicDisruption_AmmoType::.ctor()"] =
+            //    new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(
+            //        nameof(PatchRemoveInfinity),
+            //        BindingFlags.NonPublic | BindingFlags.Static));
             Modder.TranspilerMap["System.String AncientMysteries.Hook.Patches.LSItem_Draw::<Postfix>g__GetName|2_0(System.Single)"] = new TranspilerMapEntry(ReturnDefaultTypePatch_);
 
             Modder.TranspilerMap["System.Void AncientMysteries.Module::Initialize()"] = new TranspilerMapEntry(ReturnImmediatelyPatch_);
