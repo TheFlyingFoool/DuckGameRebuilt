@@ -214,7 +214,14 @@ namespace DuckGame
                     if (configuration.loaded)
                     {
                         if (configuration.contentDirectory != null)
+                        {
                             _previewTexture = (Tex2D)ContentPack.LoadTexture2D(GetPath("preview") + ".png", false);
+                            if (_previewTexture == null)
+                            {
+                                _previewTexture = (Tex2D)ContentPack.LoadTexture2D(GetPath("screenshot") + ".png", false);
+                            }
+                        }
+
                         if (_previewTexture == null)
                             _previewTexture = Content.Load<Tex2D>("notexture");
                     }
