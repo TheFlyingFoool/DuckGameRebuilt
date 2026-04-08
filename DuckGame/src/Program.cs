@@ -362,7 +362,7 @@ namespace DuckGame
             MonoMain.startTime = DateTime.Now;
             commandLine = string.Join(" ", args.Select(x => x.Contains(' ') ? $"\"{x}\"" : x));
             DuckFile.Initialize();
-            //MarkerAttribute.Initialize(gameAssembly);
+            MarkerAttribute.Initialize(gameAssembly);
             AutoConfigHandler.Initialize();
             bool flag = false;
             for (int index = 0; index < args.Length; ++index)
