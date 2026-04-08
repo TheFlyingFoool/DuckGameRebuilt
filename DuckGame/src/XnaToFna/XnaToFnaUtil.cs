@@ -242,6 +242,11 @@ namespace XnaToFna
 );
 
             //"System.String AncientMysteries.Hook.Patches.LSItem_Draw::<Postfix>g__GetName|2_0(System.Single)"
+            // Patch CosmicDisruption_AmmoType constructor - change infinity to 1e20
+            Modder.TranspilerMap["System.Void AncientMysteries.Items.CosmicDisruption_AmmoType::.ctor()"] =
+                new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(
+                    nameof(PatchRemoveInfinity),
+                    BindingFlags.NonPublic | BindingFlags.Static));
             Modder.TranspilerMap["System.String AncientMysteries.Hook.Patches.LSItem_Draw::<Postfix>g__GetName|2_0(System.Single)"] = new TranspilerMapEntry(ReturnDefaultTypePatch_);
 
             Modder.TranspilerMap["System.Void AncientMysteries.Module::Initialize()"] = new TranspilerMapEntry(ReturnImmediatelyPatch_);
@@ -742,7 +747,48 @@ namespace XnaToFna
             return new_instructions;
 
         }
+        private static List<Instruction> PatchRemoveInfinity(MethodDefinition method)
+        {
+            var instructions = new List<Instruction>();
+            try
+            {
+                instructions = method.Body.Instructions.ToList();
+            }
+            catch
+            {
+            }
+            if (!method.HasBody)
+                return instructions;
+            StaticLog("[Transpiler] Patching " + method.FullName + " - replacing Infinity with 1e20");
 
+            for (int i = 0; i < instructions.Count; i++)
+            {
+                Instruction instr = instructions[i];
+                if (instr.Operand != null && instr.Operand is float)
+                {
+                    float value = (float)instr.Operand;
+
+                    // Check if it's positive infinity (the value that was (00 00 80 7F))
+                    // Then set it to 100000000000000000000f
+                    if (float.IsPositiveInfinity(value))
+                    {
+                        StaticLog($"[Transpiler] Replaced +Infinity with 1e20 at offset IL_{instr.Offset:X4}");
+
+                        // Replace with 1 × 10^20
+                        instr.Operand = 1e20f;        // or 100000000000000000000f
+                    }
+                    else if (float.IsNegativeInfinity(value))
+                    {
+                        StaticLog($"[Transpiler] Replaced -Infinity with 1e20 at offset IL_{instr.Offset:X4}");
+
+                        // Replace with 1 × 10^20
+                        instr.Operand = -1e20f;        // or 100000000000000000000f
+                    }
+                }
+            }
+
+            return instructions;
+        }
         private static List<Instruction> JamMod_Banjoo_OnPressAction(List<Instruction> instructions)
         {
             List<Instruction> new_instructions = new List<Instruction>();
