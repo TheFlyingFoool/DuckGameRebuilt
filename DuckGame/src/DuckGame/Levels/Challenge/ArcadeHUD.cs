@@ -31,7 +31,8 @@ namespace DuckGame
                 _cards.Clear();
                 foreach (string challenge in _activeChallengeGroup.challenges)
                 {
-                    ChallengeCard challengeCard = new ChallengeCard(0f, 0f, Challenges.GetChallenge(challenge));
+                    ChallengeData c = Challenges.GetChallenge(challenge);
+                    ChallengeCard challengeCard = new ChallengeCard(0f, 0f, c);
                     if (Level.current is ArcadeLevel && (Level.current as ArcadeLevel).customMachine != null)
                         challengeCard.testing = true;
                     _cards.Add(challengeCard);
@@ -122,7 +123,10 @@ namespace DuckGame
                     if (animate)
                         card.UnlockAnimation();
                 }
-                prevWon = Profiles.active[0].GetSaveData(card.challenge.levelID).trophy != 0;
+                if (card.challenge != null)
+                {
+                    prevWon = Profiles.active[0].GetSaveData(card.challenge.levelID).trophy != 0;
+                }
                 first = false;
             }
         }
@@ -234,7 +238,7 @@ namespace DuckGame
                     }
                     else if (Input.Pressed(Triggers.Select))
                     {
-                        if (!selected.unlocked)
+                        if (!selected.unlocked || selected.challenge == null)
                         {
                             SFX.Play("scanFail");
                         }
