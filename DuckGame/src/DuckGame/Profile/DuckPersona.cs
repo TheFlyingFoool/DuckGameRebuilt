@@ -1,10 +1,11 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame
 {
-    public class DuckPersona
+    public class DuckPersona : IEquatable<DuckPersona>
     {
         private int _index = -1;
         private Vec3 _color = Vec3.Zero;
@@ -391,12 +392,27 @@ namespace DuckGame
         public override bool Equals(object obj)
         {
             if (obj is DuckPersona other)
-                return GetHashCode() == other.GetHashCode();
+                return Equals(other);
             return false;
         }
-
-        public void Recreate()
+        public static bool operator ==(DuckPersona a, DuckPersona b)
         {
+            if (ReferenceEquals(a, b)) 
+                return true;
+            if (a is null || b is null) 
+                return false;
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(DuckPersona a, DuckPersona b)
+            => !(a == b);
+        public bool Equals(DuckPersona other)
+        {
+            if (ReferenceEquals(this, other))
+                return true;
+            if (other is null)
+                return false;
+            return GetHashCode() == other.GetHashCode();
         }
     }
 }

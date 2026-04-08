@@ -14,6 +14,8 @@ using System.Reflection;
 using System.Security;
 using System.Xml.Serialization;
 using XnaToFna.ProxyForms;
+using static System.Reflection.Metadata.Ecma335.MethodBodyStreamEncoder;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 //using XnaToFna.XEX;
 
 namespace XnaToFna
@@ -165,6 +167,9 @@ namespace XnaToFna
                     }
                 }
             }
+
+
+
             Modder.RelinkMap["System.Windows.Forms.FormClosingEventHandler"] = "XnaToFna.ProxyForms.FormClosingEventHandler";
             Modder.RelinkMap["System.Windows.Forms.Form"] = "XnaToFna.ProxyForms.Form";
             Modder.RelinkMap["System.Windows.Forms.Control"] = "XnaToFna.ProxyForms.Control";
@@ -217,7 +222,7 @@ namespace XnaToFna
             //Mod Stuff 
             Modder.RelinkMap["System.Void DuckGame.HaloWeapons.Resources::LoadShaders()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void DoNothing()");
 
-            MethodInfo TryCatchPatch = typeof(XnaToFnaUtil).GetMethod("AddTryCatchPatch", BindingFlags.NonPublic | BindingFlags.Static);
+            MethodInfo TryCatchPatch = typeof(XnaToFnaUtil).GetMethod(nameof(AddTryCatchPatch), BindingFlags.NonPublic | BindingFlags.Static);
             Modder.TranspilerMap["System.Void DuckGame.HaloWeapons.Skins::AddCredits(System.Int32)"] = new TranspilerMapEntry(TryCatchPatch);
 
             Modder.TranspilerMap["System.Single DuckGame.ExtraStuff.EMusic::get_progress()"] = new TranspilerMapEntry(TryCatchPatch);
@@ -226,19 +231,25 @@ namespace XnaToFna
 
 
 
-            MethodInfo ReturnImmediatelyPatch = typeof(XnaToFnaUtil).GetMethod("ReturnImmediatelyPatch", BindingFlags.NonPublic | BindingFlags.Static);
-            MethodInfo ReturnDefaultTypePatch = typeof(XnaToFnaUtil).GetMethod("ReturnDefaultTypePatch", BindingFlags.NonPublic | BindingFlags.Static);
+            MethodInfo ReturnImmediatelyPatch_ = typeof(XnaToFnaUtil).GetMethod(nameof(ReturnImmediatelyPatch), BindingFlags.NonPublic | BindingFlags.Static);
+            MethodInfo ReturnDefaultTypePatch_ = typeof(XnaToFnaUtil).GetMethod(nameof(ReturnDefaultTypePatch), BindingFlags.NonPublic | BindingFlags.Static);
 
             //Modder.RelinkMap["System.Void AncientMysteries.AncientMysteriesMod::<Hooks_OnUpdate>g__UpdateModDisplayName|17_0()"] = new RelinkMapEntry("XnaToFna.AncientMysteriesReplacements", "System.Void UpdateModDisplayName()");
             Modder.RelinkMap["System.String AncientMysteries.Hook.Patches.LSItem_Draw::<Postfix>g__GetName|2_0(System.Single)"] = new RelinkMapEntry("XnaToFna.AncientMysteriesReplacements", "System.String GetName(System.Single)");
 
-            Modder.TranspilerMap["System.Void AncientMysteries.AncientMysteriesMod::<Hooks_OnUpdate>g__UpdateModDisplayName|17_0()"] = new TranspilerMapEntry(ReturnImmediatelyPatch);
+            Modder.TranspilerMap["System.Void AncientMysteries.AncientMysteriesMod::<Hooks_OnUpdate>g__UpdateModDisplayName|17_0()"] = new TranspilerMapEntry(ReturnImmediatelyPatch_);
+
+            Modder.TranspilerMap[
+                "System.Boolean DuckGame.BrutalDG.DuckGib/<>c__DisplayClass0_0::<.ctor>b__0(System.Collections.Generic.KeyValuePair`2<DuckGame.DuckPersona,DuckGame.Tex2D>)"
+            ] = new TranspilerMapEntry(
+                typeof(XnaToFnaUtil).GetMethod(nameof(Fix_DuckPersona_Equality), BindingFlags.NonPublic | BindingFlags.Static)
+);
 
             //"System.String AncientMysteries.Hook.Patches.LSItem_Draw::<Postfix>g__GetName|2_0(System.Single)"
-            Modder.TranspilerMap["System.String AncientMysteries.Hook.Patches.LSItem_Draw::<Postfix>g__GetName|2_0(System.Single)"] = new TranspilerMapEntry(ReturnDefaultTypePatch);
+            Modder.TranspilerMap["System.String AncientMysteries.Hook.Patches.LSItem_Draw::<Postfix>g__GetName|2_0(System.Single)"] = new TranspilerMapEntry(ReturnDefaultTypePatch_);
 
-            Modder.TranspilerMap["System.Void AncientMysteries.Module::Initialize()"] = new TranspilerMapEntry(ReturnImmediatelyPatch);
-            Modder.TranspilerMap["System.Void AncientMysteries.AncientMysteriesMod::Hooks_OnUpdate()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod("AncientMysteries_Hooks_Update", BindingFlags.NonPublic | BindingFlags.Static));
+            Modder.TranspilerMap["System.Void AncientMysteries.Module::Initialize()"] = new TranspilerMapEntry(ReturnImmediatelyPatch_);
+            Modder.TranspilerMap["System.Void AncientMysteries.AncientMysteriesMod::Hooks_OnUpdate()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(AncientMysteries_Hooks_Update), BindingFlags.NonPublic | BindingFlags.Static));
 
             // ExtraStuff2 2586315559 Reimplement patcher due to nasty dynamic link code eww
             Modder.RelinkMap["System.Void DuckGame.ExtraStuff2.MAutoPatchHandler::Patch()"] = new RelinkMapEntry("XnaToFna.ExtraStuff2Replacements", "System.Void PatchReplacement()");
@@ -263,9 +274,9 @@ namespace XnaToFna
             //Gatling Guns [2395356716]   Phasaber.OnPressAction
             Modder.TranspilerMap["System.Void DuckGame.GatlingGuns.Phasaber::OnPressAction()"] = new TranspilerMapEntry(TryCatchPatch);
 
-            Modder.TranspilerMap["System.Void DuckGame.C44P.C4::Update()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod("C4PP_C4_Update", BindingFlags.NonPublic | BindingFlags.Static));
+            Modder.TranspilerMap["System.Void DuckGame.C44P.C4::Update()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(C4PP_C4_Update), BindingFlags.NonPublic | BindingFlags.Static));
 
-            Modder.TranspilerMap["System.Void DuckGame.JamMod.Banjoo::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod("JamMod_Banjoo_OnPressAction", BindingFlags.NonPublic | BindingFlags.Static));
+            Modder.TranspilerMap["System.Void DuckGame.JamMod.Banjoo::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(JamMod_Banjoo_OnPressAction), BindingFlags.NonPublic | BindingFlags.Static));
             Modder.TranspilerMap["System.Void DuckGame.JamMod.Schnitzel::OnPressAction()"] = new TranspilerMapEntry(TryCatchPatch);
 
             //JamMod_Schnitzel_OnPressAction
@@ -555,9 +566,51 @@ namespace XnaToFna
         //    });
         //}
 
+        private static List<Instruction> Fix_DuckPersona_Equality(MethodDefinition method)
+        {
+
+            var instructions = new List<Instruction>();
+            try
+            {
+                instructions = method.Body.Instructions.ToList();
+            }
+            catch { 
+            }
+            if (!method.HasBody)
+                return instructions;
+            var newInstructions = new List<Instruction>();
+            var opEquality = method.Module.ImportReference(
+                 typeof(DuckGame.DuckPersona).GetMethod(
+                     "op_Equality",
+                     BindingFlags.Public | BindingFlags.Static,
+                     null,
+                     new[] { typeof(DuckGame.DuckPersona), typeof(DuckGame.DuckPersona) },
+                     null
+                 )
+             );
+
+            for (int i = 0; i < instructions.Count; i++)
+            {
+                // Look for: ldfld DuckPersona persona + ceq
+                if (i >= 1 &&  instructions[i].OpCode == OpCodes.Ceq && instructions[i - 1].OpCode == OpCodes.Ldfld)
+                {
+                    var ldfld = instructions[i - 1].Operand as Mono.Cecil.FieldReference;
+
+                    if (ldfld != null && ldfld.FieldType.FullName == typeof(DuckGame.DuckPersona).FullName)
+                    {
+                        // Replace ceq with operator ==
+                        newInstructions.Add(new Instruction(OpCodes.Call, opEquality));
+                        continue;
+                    }
+                }
+
+                newInstructions.Add(instructions[i]);
+            }
+
+            return newInstructions;
+        }
 
         // Patch: Add top-level try/catch(Exception) to a method, regardless of existing handlers
-    
         private static void AddTryCatchPatch(MethodDefinition method)
         {
             if (!method.HasBody)
@@ -1053,6 +1106,11 @@ namespace XnaToFna
             // this.ScanPaths(path);
         }
         public void Log(string txt)
+        {
+            Console.Write("[XnaToFna] ");
+            Console.WriteLine(txt);
+        }
+        public static void StaticLog(string txt)
         {
             Console.Write("[XnaToFna] ");
             Console.WriteLine(txt);
