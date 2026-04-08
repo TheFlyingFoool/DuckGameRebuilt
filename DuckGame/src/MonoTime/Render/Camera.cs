@@ -21,8 +21,16 @@ namespace DuckGame
             get => _position;
             set
             {
+                if (float.IsNaN(value.x) || float.IsNaN(value.y)) // Mod Protection
+                {
+                    return;
+                }
                 if (!(_position != value))
                     return;
+                if (float.IsInfinity(value.x) || float.IsInfinity(value.y)) // Mod Protection
+                {
+                    return;
+                }
                 _position = value;
                 _dirty = true;
                 if (DGRSettings.UncappedFPS)
@@ -35,8 +43,16 @@ namespace DuckGame
             get => _position.x;
             set
             {
+                if (float.IsNaN(value)) // Mod Protection
+                {
+                    return;
+                }
                 if (_position.x == value)
                     return;
+                if (float.IsInfinity(value)) // Mod Protection
+                {
+                    return;
+                }
                 _position.x = value;
                 _dirty = true;
                 if (DGRSettings.UncappedFPS)
@@ -49,8 +65,16 @@ namespace DuckGame
             get => _position.y;
             set
             {
+                if (float.IsNaN(value)) // Mod Protection
+                {
+                    return;
+                }
                 if (_position.y == value)
                     return;
+                if (float.IsInfinity(value)) // Mod Protection
+                {
+                    return;
+                }
                 _position.y = value;
                 _dirty = true; 
                 if (DGRSettings.UncappedFPS)

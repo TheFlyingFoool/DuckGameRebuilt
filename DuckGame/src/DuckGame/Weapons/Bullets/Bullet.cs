@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -141,6 +141,11 @@ namespace DuckGame
             }
             this.x = xval;
             y = yval;
+            if (float.IsNaN(yval))
+            {
+                //DevConsole.Log("THE FUCK");
+                y = 0;
+            }
             ammo = type;
             rebound = rbound;
             _owner = owner;
@@ -486,7 +491,8 @@ namespace DuckGame
         private void TravelBullet()
         {
             travelDirNormalized = end - start;
-            if ( travelDirNormalized.x == double.NaN || travelDirNormalized.y == double.NaN)
+       
+            if (float.IsNaN(travelDirNormalized.x) || float.IsNaN(travelDirNormalized.y))
             {
                 travelDirNormalized = Vec2.One;
             }
@@ -679,7 +685,7 @@ namespace DuckGame
                 while (true)
                 {
                     bool bulletDrawn = false;
-                    if (dist + drawLength > length)
+                    if (dist + drawLength > length || float.IsNaN(length))
                     {
                         drawLength = length - Maths.Clamp(dist, 0f, 99f);
                         bulletDrawn = true;
