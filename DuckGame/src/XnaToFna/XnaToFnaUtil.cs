@@ -1,21 +1,17 @@
 ﻿using DuckGame;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
-using Mono.Collections.Generic;
 using MonoMod;
 using MonoMod.Utils;
 using src.XnaToFna;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security;
 using System.Xml.Serialization;
 using XnaToFna.ProxyForms;
-using static System.Reflection.Metadata.Ecma335.MethodBodyStreamEncoder;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 //using XnaToFna.XEX;
 
 namespace XnaToFna
@@ -71,7 +67,7 @@ namespace XnaToFna
         public List<string> FixPathsFor;
         public ILPlatform PreferredPlatform;
         public static Assembly Aassembly;
-        public static int RemapVersion = 34;
+        public static int RemapVersion = 35;
         public void Stub(ModuleDefinition mod)
         {
             Log(string.Format("[Stub] Stubbing {0}", mod.Assembly.Name.Name));
