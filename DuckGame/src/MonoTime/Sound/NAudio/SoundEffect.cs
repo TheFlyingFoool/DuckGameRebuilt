@@ -42,7 +42,7 @@ namespace DuckGame
 
         public TimeSpan Duration { get; }
 
-        public bool IsDisposed { get; }
+        public bool IsDisposed { get; set; }
 
         public string Name { get; set; }
 
@@ -159,6 +159,7 @@ namespace DuckGame
 
         public void Dispose()
         {
+            IsDisposed = true;
             if (_decoderReader == null)
                 return;
             lock (_decoderReader)
@@ -276,6 +277,11 @@ namespace DuckGame
 
         public void Platform_Construct(string pPath)
         {
+            if (!File.Exists(pPath)) // invalid file load attempt?
+            {
+                IsDisposed = true;
+                return;
+            }
             if (Program.IsLinuxD)
             {
                 int index = pPath.LastIndexOf(".");

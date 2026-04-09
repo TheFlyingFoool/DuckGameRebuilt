@@ -30,6 +30,10 @@ namespace DuckGame
         public SoundState _State = SoundState.Stopped;//dan
         public void SetData(SoundEffect pData)
         {
+            if (pData != null  && pData.IsDisposed)
+            {
+                return;
+            }
             if (Program.IsLinuxD)
             {
                 if (pData == null)
