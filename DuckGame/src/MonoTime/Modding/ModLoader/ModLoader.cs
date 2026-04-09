@@ -210,8 +210,21 @@ namespace DuckGame
             }
         }
         static int n = 0;
+
+        //Note 
+        //Online Arcade [2587468403]  Crashs there harmony everytime and that is just intended?
+        //as They are Crashing on They likly didnt understand or didnt care that it crashed on these defualt types when patching
+        //{Boolean Equals(System.Object)}
+        //{Int32 GetHashCode()}
+        //{System.Type GetType()}
+        //{System.String ToString()}
+        private static string[] ignorecrash = new string[] { "System.Object:Equals", "System.Object:GetHashCode", "System.Object:GetType", "System.Object:ToString" };
         static bool PatchCrash(Exception e, MethodBase original, MethodInfo prefix, MethodInfo postfix, MethodInfo transpiler) // True will see it crash
         {
+            if (prefix != null && prefix.GetFullName() == "DuckGame.OnlineArcades.OnlineArcades:ThingFondle" && original != null && ignorecrash.Contains(original.GetFullName())) // more for debugging than functional
+            {
+                return false;
+            }
             return false;
         }
         static bool ShouldPatch(MethodBase original, MethodInfo prefix, MethodInfo postfix, MethodInfo transpiler)
