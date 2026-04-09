@@ -325,7 +325,7 @@ namespace DuckGame
                 AddThing(pendingSpawn);
                 _pendingSpawns.RemoveAt(0);
                 _duck = pendingSpawn;
-                _arcade = things[typeof(ArcadeMode)].First() as ArcadeMode;
+                _arcade = things[typeof(ArcadeMode)].FirstOrDefault() as ArcadeMode;
                 if (!_enteringCameraUpdated)
                 {
                     _enteringCameraUpdated = true;

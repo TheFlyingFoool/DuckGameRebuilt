@@ -949,7 +949,7 @@ namespace DuckGame
             {
                 _talking = true;
                 _talkLine = "";
-                _feedLine = sayQueue.First();
+                _feedLine = sayQueue.FirstOrDefault();
                 sayQueue.RemoveAt(0);
                 _startFeedLine = _feedLine;
             }
