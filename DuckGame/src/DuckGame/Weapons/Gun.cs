@@ -458,58 +458,62 @@ namespace DuckGame
                 ApplyKick();
                 for (int index = 0; index < _numBulletsPerFire; ++index)
                 {
-                    float accuracy = _ammoType.accuracy;
-                    _ammoType.accuracy *= 1f - _accuracyLost;
-                    _ammoType.bulletColor = _bulletColor;
-                    float angleDegrees = this.angleDegrees;
-                    float angle = offDir >= 0 ? angleDegrees + _ammoType.barrelAngleDegrees : angleDegrees + 180f - _ammoType.barrelAngleDegrees;
-                    if (!receivingPress)
+                    if (_ammoType != null)
                     {
-                        if (_ammoType is ATDart)
+                        float accuracy = _ammoType.accuracy;
+                        _ammoType.accuracy *= 1f - _accuracyLost;
+                        _ammoType.bulletColor = _bulletColor;
+                        float angleDegrees = this.angleDegrees;
+                        float angle = offDir >= 0 ? angleDegrees + _ammoType.barrelAngleDegrees : angleDegrees + 180f - _ammoType.barrelAngleDegrees;
+                        if (!receivingPress)
                         {
-                            if (isServerForObject)
+                            if (_ammoType is ATDart)
                             {
-                                Vec2 vec2 = Offset(barrelOffset);
-                                Dart dart = new Dart(vec2.x, vec2.y, owner as Duck, -angle);
-                                Fondle(dart);
-                                if (onFire || _barrelHeat > 6f)
+                                if (isServerForObject)
                                 {
-                                    Level.Add(SmallFire.New(0f, 0f, 0f, 0f, stick: dart, firedFrom: this));
-                                    dart.burning = true;
-                                    dart.onFire = true;
-                                    Burn(position, this);
-                                }
-                                Vec2 vec = Maths.AngleToVec(Maths.DegToRad(-angle));
-                                dart.hSpeed = vec.x * 10f;
-                                dart.vSpeed = vec.y * 10f;
-                                dart.vSpeed -= Rando.Float(2f);
-                                Level.Add(dart);
-                            }
-                        }
-                        else
-                        {
-                            Bullet bullet = _ammoType.FireBullet(Offset(barrelOffset), owner, angle, this);
-                            if (Network.isActive && isServerForObject)
-                            {
-                                firedBullets.Add(bullet);
-                                if (duck != null && duck.profile.connection != null) bullet.connection = duck.profile.connection;
-                            }
-                            if (isServerForObject)
-                            {
-                                switch (this)
-                                {
-                                    case LaserRifle _:
-                                    case PewPewLaser _:
-                                    case Phaser _:
-                                        Global.data.laserBulletsFired.valueInt++;
-                                        break;
+                                    Vec2 vec2 = Offset(barrelOffset);
+                                    Dart dart = new Dart(vec2.x, vec2.y, owner as Duck, -angle);
+                                    Fondle(dart);
+                                    if (onFire || _barrelHeat > 6f)
+                                    {
+                                        Level.Add(SmallFire.New(0f, 0f, 0f, 0f, stick: dart, firedFrom: this));
+                                        dart.burning = true;
+                                        dart.onFire = true;
+                                        Burn(position, this);
+                                    }
+                                    Vec2 vec = Maths.AngleToVec(Maths.DegToRad(-angle));
+                                    dart.hSpeed = vec.x * 10f;
+                                    dart.vSpeed = vec.y * 10f;
+                                    dart.vSpeed -= Rando.Float(2f);
+                                    Level.Add(dart);
                                 }
                             }
+                            else
+                            {
+                                Bullet bullet = _ammoType.FireBullet(Offset(barrelOffset), owner, angle, this);
+                                if (Network.isActive && isServerForObject)
+                                {
+                                    firedBullets.Add(bullet);
+                                    if (duck != null && duck.profile.connection != null) bullet.connection = duck.profile.connection;
+                                }
+                                if (isServerForObject)
+                                {
+                                    switch (this)
+                                    {
+                                        case LaserRifle _:
+                                        case PewPewLaser _:
+                                        case Phaser _:
+                                            Global.data.laserBulletsFired.valueInt++;
+                                            break;
+                                    }
+                                }
+                            }
                         }
+                        bulletFireIndex++;
+                        _ammoType.accuracy = accuracy;
+                        _barrelHeat += 0.3f;
                     }
-                    bulletFireIndex++;
-                    _ammoType.accuracy = accuracy;
-                    _barrelHeat += 0.3f;
+                   
                 }
                 _smokeWait = 3f;
                 loaded = false;
