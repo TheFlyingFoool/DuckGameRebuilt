@@ -1,6 +1,7 @@
 ﻿using DuckGame;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
+using Mono.Collections.Generic;
 using MonoMod;
 using MonoMod.Utils;
 using src.XnaToFna;
@@ -67,7 +68,7 @@ namespace XnaToFna
         public List<string> FixPathsFor;
         public ILPlatform PreferredPlatform;
         public static Assembly Aassembly;
-        public static int RemapVersion = 35;
+        public static int RemapVersion = 37;
         public void Stub(ModuleDefinition mod)
         {
             Log(string.Format("[Stub] Stubbing {0}", mod.Assembly.Name.Name));
@@ -215,6 +216,10 @@ namespace XnaToFna
             Modder.RelinkMap["System.Reflection.MethodInfo System.Type::GetMethod(System.String,System.Reflection.BindingFlags)"] = new RelinkMapEntry("XnaToFna.ProxyReflection.FieldInfoHelper", "System.Reflection.MethodInfo GetMethod(System.Type,System.String,System.Reflection.BindingFlags)");
 
             Modder.RelinkMap["System.Reflection.FieldInfo System.Type::GetField(System.String,System.Reflection.BindingFlags)"] = new RelinkMapEntry("XnaToFna.ProxyReflection.FieldInfoHelper", "System.Reflection.FieldInfo GetField(System.Type,System.String,System.Reflection.BindingFlags)");
+            Modder.RelinkMap["System.Object System.Activator::CreateInstance(System.Type)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Object ActivatorCreateInstance(System.Type)");
+
+
+
             //Mod Stuff 
             Modder.RelinkMap["System.Void DuckGame.HaloWeapons.Resources::LoadShaders()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void DoNothing()");
 
@@ -273,12 +278,24 @@ namespace XnaToFna
 
 
             //Gatling Guns [2395356716]   Phasaber.OnPressAction
-            Modder.TranspilerMap["System.Void DuckGame.GatlingGuns.Phasaber::OnPressAction()"] = new TranspilerMapEntry(TryCatchPatch);
+            Modder.TranspilerMap["System.Void DuckGame.GatlingGuns.Phasaber::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerDuckCheck), BindingFlags.NonPublic | BindingFlags.Static));
 
             Modder.TranspilerMap["System.Void DuckGame.C44P.C4::Update()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(C4PP_C4_Update), BindingFlags.NonPublic | BindingFlags.Static));
 
+            //JamMod 898850588
             Modder.TranspilerMap["System.Void DuckGame.JamMod.Banjoo::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(JamMod_Banjoo_OnPressAction), BindingFlags.NonPublic | BindingFlags.Static));
-            Modder.TranspilerMap["System.Void DuckGame.JamMod.Schnitzel::OnPressAction()"] = new TranspilerMapEntry(TryCatchPatch);
+            Modder.TranspilerMap["System.Void DuckGame.JamMod.Schnitzel::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerDuckCheck), BindingFlags.NonPublic | BindingFlags.Static));
+
+
+
+            //OstrichMod [2956579195]
+            Modder.TranspilerMap["System.Void DuckGame.OstrichMod.Impacto::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerNullCheck), BindingFlags.NonPublic | BindingFlags.Static));
+            Modder.TranspilerMap["System.Void DuckGame.OstrichMod.Sonyblade::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerNullCheck), BindingFlags.NonPublic | BindingFlags.Static));
+
+            //IconicWeapons [1629158033]
+            Modder.TranspilerMap["System.Void DuckGame.IconicWeapons.Scar::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerDuckCheck), BindingFlags.NonPublic | BindingFlags.Static));
+            Modder.TranspilerMap["System.Void DuckGame.IconicWeapons.M16::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerDuckCheck), BindingFlags.NonPublic | BindingFlags.Static));
+
 
             //JamMod_Schnitzel_OnPressAction
             //Modder.TranspilerMap["System.Void DuckGame.JamMod.AK47W::OnHoldAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod("JamTranspile")); example
@@ -485,7 +502,7 @@ namespace XnaToFna
         private static List<Instruction> ReturnDefaultTypePatch(MethodDefinition originalMethod)
         {
             var il = new List<Instruction>();
-            var returnType = originalMethod.ReturnType;
+            TypeReference returnType = originalMethod.ReturnType;
 
             if (returnType.IsValueType)
             {
@@ -567,20 +584,81 @@ namespace XnaToFna
         //    });
         //}
 
-        private static List<Instruction> Fix_DuckPersona_Equality(MethodDefinition method)
+        private static List<Instruction> OwnerDuckCheck(MethodDefinition method, List<Instruction> instructions)
         {
-
-            var instructions = new List<Instruction>();
-            try
-            {
-                instructions = method.Body.Instructions.ToList();
-            }
-            catch { 
-            }
             if (!method.HasBody)
                 return instructions;
+            // Skip static methods and constructors
+            if (method.IsStatic || method.IsConstructor)
+                return instructions;
+
+            StaticLog($"[DuckCheck] Injecting 'if (!(this.owner is Duck)) return;' into {method.GetFindableID()}");
+
+            ILProcessor processor = method.Body.GetILProcessor();
+            List<Instruction> newInstructions = new List<Instruction>();
+
+            // Create continue label
+            Instruction continueLabel = processor.Create(OpCodes.Nop);
+
+            // Build: if (!(this.owner is Duck)) return;
+            newInstructions.Add(processor.Create(OpCodes.Ldarg_0));                    // this
+
+            MethodReference getOwnerMethod = method.Module.ImportReference(typeof(Thing).GetProperty(nameof(Thing.owner)).GetGetMethod());
+
+            newInstructions.Add(processor.Create(OpCodes.Callvirt, getOwnerMethod));       // this.owner (getter)
+
+            // Resolve the Duck type from the module
+            TypeReference duckType = method.Module.ImportReference(typeof(Duck));                // import Duck type
+
+            newInstructions.Add(processor.Create(OpCodes.Isinst, duckType));          // owner as Duck (null if not Duck)
+            newInstructions.Add(processor.Create(OpCodes.Brtrue_S, continueLabel));   // if Duck → continue
+            newInstructions.Add(processor.Create(OpCodes.Ret));                       // return early (not a Duck)
+            newInstructions.Add(continueLabel);                                       // original code continues
+
+            // Add original instructions
+            newInstructions.AddRange(instructions);
+
+            return newInstructions;
+        }
+        private static List<Instruction> OwnerNullCheck(MethodDefinition method, List<Instruction> instructions)
+        {
+            if (!method.HasBody)
+                return instructions;
+            // Skip static methods and constructors
+            if (method.IsStatic || method.IsConstructor)
+                return instructions;
+
+            StaticLog($"[NullCheck] Injecting 'if (this.owner == null) return;' into {method.GetFindableID()}");
+
+            ILProcessor processor = method.Body.GetILProcessor();
             var newInstructions = new List<Instruction>();
-            var opEquality = method.Module.ImportReference(
+
+            // Create continue label
+            Instruction continueLabel = processor.Create(OpCodes.Nop);
+
+            // Build: if (this.owner == null) return;
+            newInstructions.Add(processor.Create(OpCodes.Ldarg_0));                    // this
+
+            // Call the property getter: get_owner()
+            MethodReference getOwnerMethod = method.Module.ImportReference(typeof(Thing).GetProperty(nameof(Thing.owner)).GetGetMethod());
+
+            newInstructions.Add(processor.Create(OpCodes.Callvirt, getOwnerMethod));       // this.owner (getter)
+
+            newInstructions.Add(processor.Create(OpCodes.Brtrue_S, continueLabel));    // if not null → continue
+            newInstructions.Add(processor.Create(OpCodes.Ret));                        // return early
+            newInstructions.Add(continueLabel);                                        // original code
+
+            // Add original instructions
+            newInstructions.AddRange(instructions);
+
+            return newInstructions;
+        }
+        private static List<Instruction> Fix_DuckPersona_Equality(MethodDefinition method, List<Instruction> instructions)
+        {
+            if (!method.HasBody)
+                return instructions;
+            List<Instruction> newInstructions = new List<Instruction>();
+            MethodReference opEquality = method.Module.ImportReference(
                  typeof(DuckGame.DuckPersona).GetMethod(
                      "op_Equality",
                      BindingFlags.Public | BindingFlags.Static,
@@ -617,12 +695,12 @@ namespace XnaToFna
             if (!method.HasBody)
                 return;
 
-            var body = method.Body;
-            var il = body.GetILProcessor();
+            Mono.Cecil.Cil.MethodBody body = method.Body;
+            ILProcessor il = body.GetILProcessor();
             body.InitLocals = true;
 
             // (1) Create a new variable to hold Exception ex
-            var excType = method.Module.ImportReference(typeof(Exception));
+            TypeReference excType = method.Module.ImportReference(typeof(Exception));
             var exVar = new VariableDefinition(excType);
             body.Variables.Add(exVar);
 
@@ -636,12 +714,12 @@ namespace XnaToFna
             }
 
             // (3) Add a new NOP as a unified epilogue (method exit)
-            var epilogue = il.Create(OpCodes.Nop);
+            Instruction epilogue = il.Create(OpCodes.Nop);
             il.Append(epilogue);
 
             // (4) Rewrite all ret instructions to go to the epilogue, storing the return value if needed
             var originalRets = body.Instructions.Where(i => i.OpCode == OpCodes.Ret).ToList();
-            foreach (var ret in originalRets)
+            foreach (Instruction ret in originalRets)
             {
                 if (hasReturn)
                     il.InsertBefore(ret, il.Create(OpCodes.Stloc, retVar));
@@ -650,21 +728,21 @@ namespace XnaToFna
             }
 
             // (5) Add handlers for your catch block
-            var catchStart = il.Create(OpCodes.Stloc, exVar);
+            Instruction catchStart = il.Create(OpCodes.Stloc, exVar);
             il.Append(catchStart);
 
             // (Optional) Insert your error handling/logging here, e.g. call a logger method or just swallow
             // il.Append(il.Create(OpCodes.Call, logExceptionMethod)); // if you have one
 
-            var catchLeave = il.Create(OpCodes.Leave, epilogue);
+            Instruction catchLeave = il.Create(OpCodes.Leave, epilogue);
             il.Append(catchLeave);
 
             // (6) Add the top-level ExceptionHandler (which covers all instructions up to the catch)
             var allInstructions = body.Instructions.ToList();
-            var tryStart = allInstructions.First();
-            var tryEnd = catchStart;
-            var handlerStart = catchStart;
-            var handlerEnd = epilogue;
+            Instruction tryStart = allInstructions.First();
+            Instruction tryEnd = catchStart;
+            Instruction handlerStart = catchStart;
+            Instruction handlerEnd = epilogue;
 
             var topHandler = new ExceptionHandler(ExceptionHandlerType.Catch)
             {
@@ -678,7 +756,7 @@ namespace XnaToFna
 
             // (7) Patch up all existing ExceptionHandlers if needed, 
             // so that HandlerEnd/TryEnd that pointed to "the end" now point to the new epilogue
-            foreach (var eh in body.ExceptionHandlers.ToArray())
+            foreach (ExceptionHandler eh in body.ExceptionHandlers.ToArray())
             {
                 if (eh != topHandler)
                 {
@@ -698,7 +776,7 @@ namespace XnaToFna
         }
         private static List<Instruction> AncientMysteries_Hooks_Update(MethodDefinition module)
         {
-            var method = typeof(AncientMysteriesReplacements).GetMethod(
+            MethodInfo method = typeof(AncientMysteriesReplacements).GetMethod(
                 "UpdateModDisplayName",
                 BindingFlags.Public | BindingFlags.Static);
 
@@ -747,16 +825,8 @@ namespace XnaToFna
             return new_instructions;
 
         }
-        private static List<Instruction> PatchRemoveInfinity(MethodDefinition method)
+        private static List<Instruction> PatchRemoveInfinity(MethodDefinition method, List<Instruction> instructions)
         {
-            var instructions = new List<Instruction>();
-            try
-            {
-                instructions = method.Body.Instructions.ToList();
-            }
-            catch
-            {
-            }
             if (!method.HasBody)
                 return instructions;
             StaticLog("[Transpiler] Patching " + method.FullName + " - replacing Infinity with 1e20");
@@ -1631,11 +1701,11 @@ namespace XnaToFna
             if (provider == null || !provider.HasCustomAttributes)
                 return;
 
-            var attrs = provider.CustomAttributes;
+            Collection<CustomAttribute> attrs = provider.CustomAttributes;
 
             for (int i = attrs.Count - 1; i >= 0; i--)
             {
-                var ca = attrs[i];
+                CustomAttribute ca = attrs[i];
                 string attrName = ca.AttributeType?.FullName ?? "(unknown attribute type)";
 
                 bool remove = false; 
@@ -1736,7 +1806,7 @@ namespace XnaToFna
         {
             var deletedRef = deletedType as TypeReference;
 
-            foreach (var type in module.Types)
+            foreach (TypeDefinition type in module.Types)
             {
                 for (int i = type.Fields.Count - 1; i >= 0; i--)
                 {
@@ -1747,14 +1817,14 @@ namespace XnaToFna
                     }
                 }
 
-                foreach (var method in type.Methods)
+                foreach (MethodDefinition method in type.Methods)
                 {
                     if (method.HasBody)
                     {
-                        var instructions = method.Body.Instructions;
+                        Collection<Instruction> instructions = method.Body.Instructions;
                         for (int i = instructions.Count - 1; i >= 0; i--)
                         {
-                            var ins = instructions[i];
+                            Instruction ins = instructions[i];
                             if (ins.Operand is FieldReference fr && fr.FieldType.FullName == deletedRef.FullName)
                                 instructions.RemoveAt(i);
                             else if (ins.Operand is TypeReference tr && tr.FullName == deletedRef.FullName)
@@ -1786,7 +1856,7 @@ namespace XnaToFna
             ProcessCustomAttributes(module.Assembly, "Assembly");
 
             ProcessCustomAttributes(module, "Module");
-            foreach (var type in module.Types.ToArray())
+            foreach (TypeDefinition type in module.Types.ToArray())
             {
                 // ────────────────────────────────────────────────
                 // Fully delete the struct if found (and clean refs)
@@ -1799,7 +1869,7 @@ namespace XnaToFna
                     bool removed = module.Types.Remove(type);
                     if (!removed)
                     {
-                        foreach (var t in module.Types)
+                        foreach (TypeDefinition t in module.Types)
                             t.NestedTypes.Remove(type);
                     }
 
@@ -1815,19 +1885,19 @@ namespace XnaToFna
                 // ────────────────────────────────────────────────
                 ProcessCustomAttributes(type, $"Type: {type.FullName}");
 
-                foreach (var nested in type.NestedTypes)
+                foreach (TypeDefinition nested in type.NestedTypes)
                     ProcessCustomAttributes(nested, $"Nested: {nested.FullName}");
 
-                foreach (var f in type.Fields)
+                foreach (FieldDefinition f in type.Fields)
                     ProcessCustomAttributes(f, $"Field: {type.FullName}.{f.Name}");
 
-                foreach (var p in type.Properties)
+                foreach (PropertyDefinition p in type.Properties)
                     ProcessCustomAttributes(p, $"Property: {type.FullName}.{p.Name}");
 
-                foreach (var e in type.Events)
+                foreach (EventDefinition e in type.Events)
                     ProcessCustomAttributes(e, $"Event: {type.FullName}.{e.Name}");
 
-                foreach (var method in type.Methods)
+                foreach (MethodDefinition method in type.Methods)
                 {
                     //Messy but functional causes issue otherwise related to 'AncientMysteries.Utilities.AMStringHandler' is declared in another module and needs to be imported
                     bool isTarget =
@@ -1845,7 +1915,7 @@ namespace XnaToFna
                         method.Body.Variables.Clear();
                         method.Body.ExceptionHandlers.Clear();
 
-                        var il = method.Body.GetILProcessor();
+                        ILProcessor il = method.Body.GetILProcessor();
 
                         if (method.Name.Contains("g__GetName|2_0"))
                         {
@@ -1871,7 +1941,7 @@ namespace XnaToFna
                         method.Body.Variables.Clear();
                         method.Body.ExceptionHandlers.Clear();
 
-                        var il = method.Body.GetILProcessor();
+                        ILProcessor il = method.Body.GetILProcessor();
                         il.Append(il.Create(OpCodes.Ret));
                     }
 

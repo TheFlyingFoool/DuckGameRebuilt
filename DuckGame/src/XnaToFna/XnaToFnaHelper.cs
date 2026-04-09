@@ -44,7 +44,19 @@ namespace XnaToFna
             return GameForm.GetInstance(MonoMain.instance).Handle;
             // return GameFormForWinForms.GetHandle(MonoMain.instance); // Alternative that doesn't require relinking WinForms types.
         }
-
+        public static object ActivatorCreateInstance(Type type)
+        {
+            object obj = null;
+            try
+            {
+                obj = Activator.CreateInstance(type);
+            }
+            catch (Exception ex) {
+                DevConsole.Log(ex);
+                throw ex;
+            }
+            return obj;
+        }
         
         
         private static string FixDirectoryPath(string path) {
