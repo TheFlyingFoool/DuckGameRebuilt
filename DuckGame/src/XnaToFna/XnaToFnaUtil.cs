@@ -222,10 +222,12 @@ namespace XnaToFna
 
 
             //Mod Stuff 
+            //HaloWeapons [2863332635]
             Modder.RelinkMap["System.Void DuckGame.HaloWeapons.Resources::LoadShaders()"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Void DoNothing()");
 
             MethodInfo TryCatchPatch = typeof(XnaToFnaUtil).GetMethod(nameof(AddTryCatchPatch), BindingFlags.NonPublic | BindingFlags.Static);
             Modder.TranspilerMap["System.Void DuckGame.HaloWeapons.Skins::AddCredits(System.Int32)"] = new TranspilerMapEntry(TryCatchPatch);
+
 
             Modder.TranspilerMap["System.Single DuckGame.ExtraStuff.EMusic::get_progress()"] = new TranspilerMapEntry(TryCatchPatch);
             Modder.TranspilerMap["System.TimeSpan DuckGame.ExtraStuff.EMusic::get_length()"] = new TranspilerMapEntry(TryCatchPatch);
@@ -236,18 +238,20 @@ namespace XnaToFna
             MethodInfo ReturnImmediatelyPatch_ = typeof(XnaToFnaUtil).GetMethod(nameof(ReturnImmediatelyPatch), BindingFlags.NonPublic | BindingFlags.Static);
             MethodInfo ReturnDefaultTypePatch_ = typeof(XnaToFnaUtil).GetMethod(nameof(ReturnDefaultTypePatch), BindingFlags.NonPublic | BindingFlags.Static);
 
-            //Modder.RelinkMap["System.Void AncientMysteries.AncientMysteriesMod::<Hooks_OnUpdate>g__UpdateModDisplayName|17_0()"] = new RelinkMapEntry("XnaToFna.AncientMysteriesReplacements", "System.Void UpdateModDisplayName()");
-            Modder.RelinkMap["System.String AncientMysteries.Hook.Patches.LSItem_Draw::<Postfix>g__GetName|2_0(System.Single)"] = new RelinkMapEntry("XnaToFna.AncientMysteriesReplacements", "System.String GetName(System.Single)");
 
+
+            //brutaldg [2267628323] Note to Future Coding Overriding == or any other kinda of equality overriding for custom classes does not always change how it comparse them
+            // in some instances like the below unless the assembly is recompiled it will still use instance comparsions which can cause issues like this did.
+            Modder.TranspilerMap["System.Boolean DuckGame.BrutalDG.DuckGib/<>c__DisplayClass0_0::<.ctor>b__0(System.Collections.Generic.KeyValuePair`2<DuckGame.DuckPersona,DuckGame.Tex2D>)"] = new TranspilerMapEntry(
+                typeof(XnaToFnaUtil).GetMethod(nameof(Fix_DuckPersona_Equality), BindingFlags.NonPublic | BindingFlags.Static));
+
+
+            //AncientMysteries [2572800006]
+            Modder.RelinkMap["System.String AncientMysteries.Hook.Patches.LSItem_Draw::<Postfix>g__GetName|2_0(System.Single)"] = new RelinkMapEntry("XnaToFna.AncientMysteriesReplacements", "System.String GetName(System.Single)");
             Modder.TranspilerMap["System.Void AncientMysteries.AncientMysteriesMod::<Hooks_OnUpdate>g__UpdateModDisplayName|17_0()"] = new TranspilerMapEntry(ReturnImmediatelyPatch_);
 
-            Modder.TranspilerMap[
-                "System.Boolean DuckGame.BrutalDG.DuckGib/<>c__DisplayClass0_0::<.ctor>b__0(System.Collections.Generic.KeyValuePair`2<DuckGame.DuckPersona,DuckGame.Tex2D>)"
-            ] = new TranspilerMapEntry(
-                typeof(XnaToFnaUtil).GetMethod(nameof(Fix_DuckPersona_Equality), BindingFlags.NonPublic | BindingFlags.Static)
-);
 
-            //"System.String AncientMysteries.Hook.Patches.LSItem_Draw::<Postfix>g__GetName|2_0(System.Single)"
+
             // Patch CosmicDisruption_AmmoType constructor - change infinity to 1e20
             //Modder.TranspilerMap["System.Void AncientMysteries.Items.CosmicDisruption_AmmoType::.ctor()"] =
             //    new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(
@@ -258,14 +262,14 @@ namespace XnaToFna
             Modder.TranspilerMap["System.Void AncientMysteries.Module::Initialize()"] = new TranspilerMapEntry(ReturnImmediatelyPatch_);
             Modder.TranspilerMap["System.Void AncientMysteries.AncientMysteriesMod::Hooks_OnUpdate()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(AncientMysteries_Hooks_Update), BindingFlags.NonPublic | BindingFlags.Static));
 
-            // ExtraStuff2 2586315559 Reimplement patcher due to nasty dynamic link code eww
+            //ExtraStuff2 [2586315559] Reimplement patcher due to nasty dynamic link code eww
             Modder.RelinkMap["System.Void DuckGame.ExtraStuff2.MAutoPatchHandler::Patch()"] = new RelinkMapEntry("XnaToFna.ExtraStuff2Replacements", "System.Void PatchReplacement()");
 
-            //Balloon Net Gun & Mind Swap Grenade 1971284863 Null Exception 
+            //Balloon Net Gun & Mind Swap Grenade [1971284863] Null Exception 
             Modder.TranspilerMap["System.Void DuckGame.FunGun.NetBalloon::Update()"] = new TranspilerMapEntry(TryCatchPatch);
             Modder.TranspilerMap["System.Void DuckGame.FunGun.NetBalloon::Draw()"] = new TranspilerMapEntry(TryCatchPatch);
-
-            //Johns Weapon 1268274761
+            
+            //Johns Weapon [1268274761]
             // Some kinda linux related crash something to do with System.UnauthorizedAccessException: Access to the path probly something wrong with doing
             //public static string logPath = "C:\\Users\\" + Environment.UserName + "\\Documents\\DuckGame\\DuckDebug\\"; for pathing
             // as logging isnt as imporant as any other function going to try catch it
@@ -280,7 +284,13 @@ namespace XnaToFna
             Modder.TranspilerMap["System.Void DuckGame.DWEP.TripleHandler::PriorityUpdate()"] = new TranspilerMapEntry(TryCatchPatch);
 
 
+            //TBAMOT [1315708743]
+            Modder.TranspilerMap["System.Void DuckGame.TBAMOT.movingStaff::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerDuckCheck), BindingFlags.NonPublic | BindingFlags.Static));
 
+
+
+            //ExtraDuck_ModPack [911253113]
+            Modder.TranspilerMap["System.Void DuckGame.ExtraDuck_ModPack.Milojica::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerDuckCheck), BindingFlags.NonPublic | BindingFlags.Static));
 
 
             //Gatling Guns [2395356716]   Phasaber.OnPressAction
@@ -288,7 +298,7 @@ namespace XnaToFna
 
             Modder.TranspilerMap["System.Void DuckGame.C44P.C4::Update()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(C4PP_C4_Update), BindingFlags.NonPublic | BindingFlags.Static));
 
-            //JamMod 898850588
+            //JamMod [898850588]
             Modder.TranspilerMap["System.Void DuckGame.JamMod.Banjoo::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(JamMod_Banjoo_OnPressAction), BindingFlags.NonPublic | BindingFlags.Static));
             Modder.TranspilerMap["System.Void DuckGame.JamMod.Schnitzel::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerDuckCheck), BindingFlags.NonPublic | BindingFlags.Static));
 
