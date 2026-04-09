@@ -53,7 +53,7 @@ namespace XnaToFna
             }
             catch (Exception ex) {
                 Exception wrapped = new Exception($"ActivatorCreateInstance failed for type: {type.FullName}",ex);
-                DevConsole.Log(wrapped);
+                //DevConsole.Log(wrapped);
                 throw wrapped;
             }
             return obj;
