@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Security;
 using System.Xml.Serialization;
 using XnaToFna.ProxyForms;
+using Mono.Cecil.Rocks;
 //using XnaToFna.XEX;
 
 namespace XnaToFna
@@ -274,7 +275,12 @@ namespace XnaToFna
 
 
             //DWEP [945664816]   SpecialDrawer::Update System.NullReferenceException: Special Code: draw5 
-            Modder.TranspilerMap["System.Void DuckGame.DWEP.SpecialDrawer::Update()"] = new TranspilerMapEntry(TryCatchPatch);
+            Modder.TranspilerMap["System.Void DuckGame.DWEP.SpecialDrawer::Update()"] = new TranspilerMapEntry(TryCatchPatch); //WrappedActivatorCreateInstance
+            Modder.TranspilerMap["System.Void DuckGame.DWEP.WarpEnable::Update()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(WrappedActivatorCreateInstance), BindingFlags.NonPublic | BindingFlags.Static));
+            Modder.TranspilerMap["System.Void DuckGame.DWEP.TripleHandler::PriorityUpdate()"] = new TranspilerMapEntry(TryCatchPatch);
+
+
+
 
 
             //Gatling Guns [2395356716]   Phasaber.OnPressAction
@@ -291,6 +297,8 @@ namespace XnaToFna
             //OstrichMod [2956579195]
             Modder.TranspilerMap["System.Void DuckGame.OstrichMod.Impacto::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerNullCheck), BindingFlags.NonPublic | BindingFlags.Static));
             Modder.TranspilerMap["System.Void DuckGame.OstrichMod.Sonyblade::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerNullCheck), BindingFlags.NonPublic | BindingFlags.Static));
+            Modder.TranspilerMap["System.Void DuckGame.OstrichMod.Enderpearl::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerDuckCheck), BindingFlags.NonPublic | BindingFlags.Static));
+
 
             //IconicWeapons [1629158033]
             Modder.TranspilerMap["System.Void DuckGame.IconicWeapons.Scar::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerDuckCheck), BindingFlags.NonPublic | BindingFlags.Static));
@@ -583,7 +591,107 @@ namespace XnaToFna
         //        HandlerEnd = epilogue      // first instr *after* catch
         //    });
         //}
+        public static AmmoType SafeCreateAmmoType(Type type)
+        {
+            try
+            {
+                return (AmmoType)XnaToFnaHelper.ActivatorCreateInstance(type);
+            }
+            catch
+            {
+                return null;
+            }
+        }
 
+        private static List<Instruction> WrappedActivatorCreateInstance(MethodDefinition method, List<Instruction> instructions)
+        {
+            int callIndex = -1;
+            for (int i = 0; i < instructions.Count; i++)
+            {
+                if (instructions[i].OpCode == OpCodes.Call &&
+                    instructions[i].Operand is MethodReference mr &&
+                    mr.Name == "ActivatorCreateInstance")
+                {
+                    callIndex = i;
+                    break;
+                }
+            }
+
+            if (callIndex == -1)
+                return instructions;
+
+            var processor = method.Body.GetILProcessor();
+            var stlocAmmo = instructions[callIndex + 2];  // stloc.s V_20
+
+            // Find the MoveNext call AFTER callIndex, take the instruction before it as loopHead
+            Instruction loopHead = null;
+            for (int i = callIndex; i < instructions.Count; i++)
+            {
+                if (instructions[i].OpCode == OpCodes.Callvirt &&
+                    instructions[i].Operand is MethodReference mn &&
+                    mn.Name == "MoveNext")
+                {
+                    loopHead = instructions[i - 1];
+                    break;
+                }
+            }
+
+            if (loopHead == null)
+            {
+                StaticLog("[WrappedActivator] Could not find loop head, skipping patch");
+                return instructions;
+            }
+
+            // Import our safe wrapper method
+            MethodReference safeMethod = method.Module.ImportReference(
+                typeof(XnaToFnaUtil).GetMethod(nameof(SafeCreateAmmoType),
+                    System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static));
+
+            Instruction continueLabel = processor.Create(OpCodes.Nop);
+
+            // The ldloc.s V_19 is at callIndex - 1, call is at callIndex
+            // castclass is at callIndex + 1, stloc is at callIndex + 2
+            // Replace all 4 with:
+            // call SafeCreateAmmoType   (takes the type already on stack from ldloc.s V_19)
+            // stloc.s V_20
+            // ldloc.s V_20
+            // brfalse loopHead          (if null, continue)
+
+            var newInstructions = new List<Instruction>
+            {
+                // ldloc.s V_19 stays (callIndex - 1), we keep it
+                processor.Create(OpCodes.Call, safeMethod),                                     // replaces call + castclass
+                processor.Create(stlocAmmo.OpCode, (VariableDefinition)stlocAmmo.Operand),      // stloc.s V_20
+                processor.Create(stlocAmmo.OpCode == OpCodes.Stloc_S ? OpCodes.Ldloc_S : OpCodes.Ldloc,
+                    (VariableDefinition)stlocAmmo.Operand),                                     // ldloc.s V_20
+                processor.Create(OpCodes.Brfalse, loopHead),                                    // if null → continue
+            };
+
+            // Remove call, castclass, stloc (3 instructions at callIndex)
+            instructions.RemoveRange(callIndex, 3);
+            instructions.InsertRange(callIndex, newInstructions);
+
+            //// Expand all short branches
+            //foreach (var instr in instructions)
+            //{
+            //    if (instr.OpCode == OpCodes.Br_S) instr.OpCode = OpCodes.Br;
+            //    if (instr.OpCode == OpCodes.Brfalse_S) instr.OpCode = OpCodes.Brfalse;
+            //    if (instr.OpCode == OpCodes.Brtrue_S) instr.OpCode = OpCodes.Brtrue;
+            //    if (instr.OpCode == OpCodes.Leave_S) instr.OpCode = OpCodes.Leave;
+            //    if (instr.OpCode == OpCodes.Beq_S) instr.OpCode = OpCodes.Beq;
+            //    if (instr.OpCode == OpCodes.Bge_S) instr.OpCode = OpCodes.Bge;
+            //    if (instr.OpCode == OpCodes.Bgt_S) instr.OpCode = OpCodes.Bgt;
+            //    if (instr.OpCode == OpCodes.Ble_S) instr.OpCode = OpCodes.Ble;
+            //    if (instr.OpCode == OpCodes.Blt_S) instr.OpCode = OpCodes.Blt;
+            //    if (instr.OpCode == OpCodes.Bne_Un_S) instr.OpCode = OpCodes.Bne_Un;
+            //    if (instr.OpCode == OpCodes.Bge_Un_S) instr.OpCode = OpCodes.Bge_Un;
+            //    if (instr.OpCode == OpCodes.Bgt_Un_S) instr.OpCode = OpCodes.Bgt_Un;
+            //    if (instr.OpCode == OpCodes.Ble_Un_S) instr.OpCode = OpCodes.Ble_Un;
+            //    if (instr.OpCode == OpCodes.Blt_Un_S) instr.OpCode = OpCodes.Blt_Un;
+            //}
+
+            return instructions;
+        }
         private static List<Instruction> OwnerDuckCheck(MethodDefinition method, List<Instruction> instructions)
         {
             if (!method.HasBody)

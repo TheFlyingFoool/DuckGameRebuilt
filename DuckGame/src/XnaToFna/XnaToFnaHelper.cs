@@ -52,8 +52,9 @@ namespace XnaToFna
                 obj = Activator.CreateInstance(type);
             }
             catch (Exception ex) {
-                DevConsole.Log(ex);
-                throw ex;
+                Exception wrapped = new Exception($"ActivatorCreateInstance failed for type: {type.FullName}",ex);
+                DevConsole.Log(wrapped);
+                throw wrapped;
             }
             return obj;
         }
