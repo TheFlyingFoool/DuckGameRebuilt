@@ -1723,6 +1723,10 @@ namespace DuckGame
                             if (_singlePlayer && !forcestart)
                             {
                                 current.Clear();
+                                foreach (Profile profile in Profiles.all)
+                                {
+                                    profile.netData.ResetModNetData();
+                                }
                                 current = new ArcadeLevel(Content.GetLevelID("arcade"));
                             }
                             else

@@ -34,6 +34,25 @@ namespace DuckGame
             }
             return false;
         }
+        public void ResetModNetData() // If you need to get around this make a pull request.
+        {
+            foreach (KeyValuePair<int, NetDataPair> element in _elements)
+            {
+                NetDataPair netdatapair = element.Value;
+                if (netdatapair == null || !netdatapair.mod)
+                    continue;
+                if (netdatapair.data != null)
+                {
+                    Type type = netdatapair.data.GetType();
+                    try
+                    {
+                        netdatapair.data = type.IsValueType ? Activator.CreateInstance(type) : null;
+                    }
+                    catch { }
+                    netdatapair.MakeDirty();
+                }
+            }
+        }
 
         /// <summary>
         /// Returns a property value based on a string. These values are synchronized over the network!
@@ -88,6 +107,32 @@ namespace DuckGame
             _settingFiltered = true;
             Set(pKey, pValue);
             _settingFiltered = false;
+        }
+        public void ModSet<T>(string pKey, T pValue)
+        {
+            int hashCode = pKey.FixedGetHashCode();
+            NetDataPair netDataPair;
+            if (!_elements.TryGetValue(hashCode, out netDataPair))
+            {
+                _elements[hashCode] = netDataPair = new NetDataPair() { mod = true };
+                netDataPair.MakeDirty();
+                if (_settingFiltered)
+                    netDataPair.filtered = true;
+            }
+            Set<T>(pKey, pValue);
+        }
+        public void ModSetFiltered<T>(string pKey, T pValue)
+        {
+            int hashCode = pKey.FixedGetHashCode();
+            NetDataPair netDataPair;
+            if (!_elements.TryGetValue(hashCode, out netDataPair))
+            {
+                _elements[hashCode] = netDataPair = new NetDataPair() { mod = true };
+                netDataPair.MakeDirty();
+                if (_settingFiltered)
+                    netDataPair.filtered = true;
+            }
+            SetFiltered<T>(pKey, pValue);
         }
 
         public void MakeDirty(int pHash, NetworkConnection pConnection, NetIndex16 pSyncIndex)
@@ -165,6 +210,7 @@ namespace DuckGame
 
         public class NetDataPair
         {
+            public bool mod;
             public NetIndex16 lastReceivedIndex = (NetIndex16)1;
             public NetworkConnection activeControllingConnection;
             public Dictionary<NetworkConnection, NetIndex16> lastSyncIndex = new Dictionary<NetworkConnection, NetIndex16>();

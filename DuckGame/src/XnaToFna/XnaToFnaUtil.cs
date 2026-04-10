@@ -13,7 +13,6 @@ using System.Reflection;
 using System.Security;
 using System.Xml.Serialization;
 using XnaToFna.ProxyForms;
-using Mono.Cecil.Rocks;
 //using XnaToFna.XEX;
 
 namespace XnaToFna
@@ -69,7 +68,7 @@ namespace XnaToFna
         public List<string> FixPathsFor;
         public ILPlatform PreferredPlatform;
         public static Assembly Aassembly;
-        public static int RemapVersion = 37;
+        public static int RemapVersion = 38;
         public void Stub(ModuleDefinition mod)
         {
             Log(string.Format("[Stub] Stubbing {0}", mod.Assembly.Name.Name));
@@ -219,6 +218,8 @@ namespace XnaToFna
             Modder.RelinkMap["System.Reflection.FieldInfo System.Type::GetField(System.String,System.Reflection.BindingFlags)"] = new RelinkMapEntry("XnaToFna.ProxyReflection.FieldInfoHelper", "System.Reflection.FieldInfo GetField(System.Type,System.String,System.Reflection.BindingFlags)");
             Modder.RelinkMap["System.Object System.Activator::CreateInstance(System.Type)"] = new RelinkMapEntry("XnaToFna.XnaToFnaHelper", "System.Object ActivatorCreateInstance(System.Type)");
 
+            Modder.GenericRelinkMap["DuckGame.ProfileNetData::Set"] = new GenericRelinkEntry("DuckGame.ProfileNetData", "ModSet");
+            Modder.GenericRelinkMap["DuckGame.ProfileNetData::SetFiltered"] = new GenericRelinkEntry("DuckGame.ProfileNetData", "ModSetFiltered");
 
 
             //Mod Stuff 
@@ -237,7 +238,8 @@ namespace XnaToFna
 
             MethodInfo ReturnImmediatelyPatch_ = typeof(XnaToFnaUtil).GetMethod(nameof(ReturnImmediatelyPatch), BindingFlags.NonPublic | BindingFlags.Static);
             MethodInfo ReturnDefaultTypePatch_ = typeof(XnaToFnaUtil).GetMethod(nameof(ReturnDefaultTypePatch), BindingFlags.NonPublic | BindingFlags.Static);
-
+            MethodInfo OwnerDuckCheckMethod = typeof(XnaToFnaUtil).GetMethod(nameof(OwnerDuckCheck), BindingFlags.NonPublic | BindingFlags.Static);
+            MethodInfo OwnerNullCheckMethod = typeof(XnaToFnaUtil).GetMethod(nameof(OwnerNullCheck), BindingFlags.NonPublic | BindingFlags.Static);
 
 
             //brutaldg [2267628323] Note to Future Coding Overriding == or any other kinda of equality overriding for custom classes does not always change how it comparse them
@@ -285,34 +287,36 @@ namespace XnaToFna
 
 
             //TBAMOT [1315708743]
-            Modder.TranspilerMap["System.Void DuckGame.TBAMOT.movingStaff::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerDuckCheck), BindingFlags.NonPublic | BindingFlags.Static));
+            Modder.TranspilerMap["System.Void DuckGame.TBAMOT.movingStaff::OnPressAction()"] = new TranspilerMapEntry(OwnerDuckCheckMethod);
+            Modder.TranspilerMap["System.Void DuckGame.TBAMOT.Umbrella::Update()"] = new TranspilerMapEntry(OwnerDuckCheckMethod);
 
 
 
             //ExtraDuck_ModPack [911253113]
-            Modder.TranspilerMap["System.Void DuckGame.ExtraDuck_ModPack.Milojica::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerDuckCheck), BindingFlags.NonPublic | BindingFlags.Static));
+            Modder.TranspilerMap["System.Void DuckGame.ExtraDuck_ModPack.Milojica::OnPressAction()"] = new TranspilerMapEntry(OwnerDuckCheckMethod);
+            Modder.TranspilerMap["System.Void DuckGame.ExtraDuck_ModPack.FlameSword::Update()"] = new TranspilerMapEntry(TryCatchPatch);
 
 
             //Gatling Guns [2395356716]   Phasaber.OnPressAction
-            Modder.TranspilerMap["System.Void DuckGame.GatlingGuns.Phasaber::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerDuckCheck), BindingFlags.NonPublic | BindingFlags.Static));
+            Modder.TranspilerMap["System.Void DuckGame.GatlingGuns.Phasaber::OnPressAction()"] = new TranspilerMapEntry(OwnerDuckCheckMethod);
 
             Modder.TranspilerMap["System.Void DuckGame.C44P.C4::Update()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(C4PP_C4_Update), BindingFlags.NonPublic | BindingFlags.Static));
 
             //JamMod [898850588]
             Modder.TranspilerMap["System.Void DuckGame.JamMod.Banjoo::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(JamMod_Banjoo_OnPressAction), BindingFlags.NonPublic | BindingFlags.Static));
-            Modder.TranspilerMap["System.Void DuckGame.JamMod.Schnitzel::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerDuckCheck), BindingFlags.NonPublic | BindingFlags.Static));
+            Modder.TranspilerMap["System.Void DuckGame.JamMod.Schnitzel::OnPressAction()"] = new TranspilerMapEntry(OwnerDuckCheckMethod);
 
 
 
             //OstrichMod [2956579195]
-            Modder.TranspilerMap["System.Void DuckGame.OstrichMod.Impacto::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerNullCheck), BindingFlags.NonPublic | BindingFlags.Static));
-            Modder.TranspilerMap["System.Void DuckGame.OstrichMod.Sonyblade::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerNullCheck), BindingFlags.NonPublic | BindingFlags.Static));
-            Modder.TranspilerMap["System.Void DuckGame.OstrichMod.Enderpearl::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerDuckCheck), BindingFlags.NonPublic | BindingFlags.Static));
+            Modder.TranspilerMap["System.Void DuckGame.OstrichMod.Impacto::OnPressAction()"] = new TranspilerMapEntry(OwnerNullCheckMethod);
+            Modder.TranspilerMap["System.Void DuckGame.OstrichMod.Sonyblade::OnPressAction()"] = new TranspilerMapEntry(OwnerNullCheckMethod);
+            Modder.TranspilerMap["System.Void DuckGame.OstrichMod.Enderpearl::OnPressAction()"] = new TranspilerMapEntry(OwnerDuckCheckMethod);
 
 
             //IconicWeapons [1629158033]
-            Modder.TranspilerMap["System.Void DuckGame.IconicWeapons.Scar::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerDuckCheck), BindingFlags.NonPublic | BindingFlags.Static));
-            Modder.TranspilerMap["System.Void DuckGame.IconicWeapons.M16::OnPressAction()"] = new TranspilerMapEntry(typeof(XnaToFnaUtil).GetMethod(nameof(OwnerDuckCheck), BindingFlags.NonPublic | BindingFlags.Static));
+            Modder.TranspilerMap["System.Void DuckGame.IconicWeapons.Scar::OnPressAction()"] = new TranspilerMapEntry(OwnerDuckCheckMethod);
+            Modder.TranspilerMap["System.Void DuckGame.IconicWeapons.M16::OnPressAction()"] = new TranspilerMapEntry(OwnerDuckCheckMethod);
 
 
             //JamMod_Schnitzel_OnPressAction
@@ -1033,6 +1037,50 @@ namespace XnaToFna
             // Optional: rename so even reflection by name fails
             // type.Name = "Dead_AMStringHandler_Dead";
         }
+        public void CheckAndRemapGenericCall(MethodDefinition method, ref int instri)
+        {
+            Instruction instruction = method.Body.Instructions[instri];
+            if (instruction != null && instruction.Operand != null && instruction.Operand is float && float.IsPositiveInfinity((float)instruction.Operand) || float.IsNaN((float)instruction.Operand))
+            {
+                DevConsole.Log("THE FUCK");
+            }
+
+            if (instruction.OpCode != OpCodes.Call &&
+                instruction.OpCode != OpCodes.Callvirt)
+                return;
+
+            if (instruction.Operand is not GenericInstanceMethod gim)
+                return;
+
+            string key = $"{gim.DeclaringType.FullName}::{gim.Name}";
+
+            if (!Modder.GenericRelinkMap.TryGetValue(key, out GenericRelinkEntry remap))
+                return;
+
+            TypeDefinition targetType = Modder.FindTypeDeep(remap.TargetType)?.Resolve();
+            if (targetType == null)
+            {
+                StaticLog($"[GenericRemap] Could not find type {remap.TargetType}");
+                return;
+            }
+
+            MethodDefinition targetMethod = targetType.Methods
+                .FirstOrDefault(m => m.Name == remap.TargetMethod &&
+                                     m.Parameters.Count == gim.Parameters.Count);
+            if (targetMethod == null)
+            {
+                StaticLog($"[GenericRemap] Could not find {remap.TargetMethod} on {remap.TargetType}");
+                return;
+            }
+
+            GenericInstanceMethod newGim = new GenericInstanceMethod(
+                method.Module.ImportReference(targetMethod));
+            foreach (TypeReference arg in gim.GenericArguments)
+                newGim.GenericArguments.Add(arg);
+
+            instruction.Operand = newGim;
+            StaticLog($"[GenericRemap] Remapped {key} to {remap.TargetType}::{remap.TargetMethod}");
+        }
         public void PostProcessType(ModuleDefinition module, TypeDefinition type)
         {
             NukeAMStringHandler(module, type);
@@ -1082,6 +1130,8 @@ namespace XnaToFna
                         }
                         if (FixPathsFor.Count != 0)
                             CheckAndInjectFixPath(method, ref instri);
+
+                        CheckAndRemapGenericCall(method, ref instri);
                     }
                     int num1 = 0;
                     for (int index = 0; index < method.Body.Instructions.Count; ++index)

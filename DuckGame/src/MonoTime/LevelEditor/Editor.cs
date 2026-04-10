@@ -1536,6 +1536,10 @@ namespace DuckGame
                                 {
                                     _quitting = false;
                                     active = false;
+                                    foreach (Profile profile in Profiles.all)
+                                    {
+                                        profile.netData.ResetModNetData();
+                                    }
                                     current = new TitleScreen();
                                 }
 
@@ -4996,6 +5000,10 @@ namespace DuckGame
 
         public void Play()
         {
+            foreach (Profile profile in Profiles.all)
+            {
+                profile.netData.ResetModNetData();
+            }
             if (!_runLevelAnyway && !arcadeMachineMode && _levelThings.FirstOrDefault(x =>
                 {
                     switch (x)

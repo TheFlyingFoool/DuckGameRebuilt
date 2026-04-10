@@ -35,6 +35,10 @@ namespace DuckGame
 
         public static void ResetMatchStuff()
         {
+            foreach (Profile profile in Profiles.all)
+            {
+                profile.netData.ResetModNetData();
+            }
             DevConsole.Log(DCSection.General, "ResetMatchStuff()");
             DuckFile.BeginDataCommit();
             PurpleBlock.Reset();

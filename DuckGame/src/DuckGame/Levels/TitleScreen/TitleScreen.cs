@@ -1234,6 +1234,10 @@ namespace DuckGame
                 if (Graphics.fade < 0.01f)
                 {
                     current.Clear();
+                    foreach (Profile profile in Profiles.all)
+                    {
+                        profile.netData.ResetModNetData();
+                    }
                     current = new ArcadeLevel(Content.GetLevelID("arcade"));
                 }
             }

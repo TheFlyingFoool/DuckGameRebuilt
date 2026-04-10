@@ -392,6 +392,10 @@ namespace DuckGame
                 }
                 if (_quit.value)
                 {
+                    foreach (Profile profile in Profiles.all)
+                    {
+                        profile.netData.ResetModNetData();
+                    }
                     if (_editorTestMode)
                         Level.current = DuckGameTestArea.currentEditor;
                     else if (_validityTest)
