@@ -403,7 +403,10 @@ namespace DuckGame
             else
             {
                 _batchItem.Material = cheapmaterial;
-                _texture.currentObjectIndex = _globalIndex;
+                if (_texture != null)
+                {
+                    _texture.currentObjectIndex = _globalIndex;
+                }
                 Graphics.Draw(_batchItem);
             }
         }
