@@ -2391,6 +2391,7 @@
     <Compile Include="src\XnaToFna\GameForm.cs" />
     <Compile Include="src\XnaToFna\GamerExtensions.cs" />
     <Compile Include="src\XnaToFna\GamerPresenceExtensions.cs" />
+    <Compile Include="src\XnaToFna\GenericRelinkEntry.cs" />
     <Compile Include="src\XnaToFna\GuideExtensions.cs" />
     <Compile Include="src\XnaToFna\GZipContentReader`1.cs" />
     <Compile Include="src\XnaToFna\HookProc.cs" />
