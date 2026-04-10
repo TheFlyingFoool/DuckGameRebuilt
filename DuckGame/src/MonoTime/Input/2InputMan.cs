@@ -76,9 +76,6 @@ namespace Microsoft.Xna.Framework.Input
           IntPtr lParam);
 
         [DllImport("user32.dll")]
-        private static extern int SetWindowLongW(IntPtr hWnd, int nIndex, int dwNewLong);
-
-        [DllImport("user32.dll")]
         private static extern bool IsWindowUnicode(IntPtr hWnd);
 
         public static bool ShiftDown
@@ -107,16 +104,36 @@ namespace Microsoft.Xna.Framework.Input
                 return state.IsKeyDown(Keys.LeftAlt) || state.IsKeyDown(Keys.RightAlt);
             }
         }
+        [DllImport("user32.dll", EntryPoint = "SetWindowLongW")]
+        private static extern int SetWindowLong32(IntPtr hWnd, int nIndex, int dwNewLong);
 
+        [DllImport("user32.dll", EntryPoint = "SetWindowLongPtrW")]
+        private static extern IntPtr SetWindowLongPtr64(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
+        private static IntPtr SetWindowLongSafe(IntPtr hWnd, int nIndex, IntPtr dwNewLong)
+        {
+            if (Environment.Is64BitProcess)
+            {
+                return SetWindowLongPtr64(hWnd, nIndex, dwNewLong);
+            }
+            else
+            {
+                return new IntPtr(SetWindowLong32(hWnd, nIndex, dwNewLong.ToInt32()));
+            }
+        }
         /// <summary>Initialize the TextInput with the given GameWindow.</summary>
         /// <param name="window">The XNA window to which text input should be linked.</param>
         public static void Initialize(GameWindow window)
         {
             if (initialized)
                 throw new InvalidOperationException("TextInput.Initialize can only be called once!");
-            hookProcDelegate = new WndProc(HookProc);
-            prevWndProc = (IntPtr)SetWindowLongW(window.Handle, -4, (int)Marshal.GetFunctionPointerForDelegate(hookProcDelegate));
+
             hWND = window.Handle;
+
+            hookProcDelegate = new WndProc(HookProc);
+
+            IntPtr newWndProc = Marshal.GetFunctionPointerForDelegate(hookProcDelegate);
+            prevWndProc = SetWindowLongSafe(hWND, -4, newWndProc);
+            initialized = true;
         }
 
         public static void InitializeIme(GameWindow window)

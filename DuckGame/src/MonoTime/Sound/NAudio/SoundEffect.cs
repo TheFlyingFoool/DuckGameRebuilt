@@ -53,7 +53,7 @@ namespace DuckGame
         }
         public static SoundEffect FromStream(Stream stream, string extension)
         {
-            if (Program.IsLinuxD)
+            if (Program.IsLinuxD || Environment.Is64BitProcess)
             {
                 try
                 {
@@ -282,7 +282,7 @@ namespace DuckGame
                 IsDisposed = true;
                 return;
             }
-            if (Program.IsLinuxD)
+            if (Program.IsLinuxD || Environment.Is64BitProcess)
             {
                 int index = pPath.LastIndexOf(".");
                 byte[] data = File.ReadAllBytes(pPath);

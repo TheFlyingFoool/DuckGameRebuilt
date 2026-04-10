@@ -25,7 +25,7 @@ namespace DuckGame
 
         public void Platform_Initialize()
         {
-            if (Program.IsLinuxD)
+            if (Program.IsLinuxD || Environment.Is64BitProcess)
             {
                 try
                 {
@@ -57,7 +57,7 @@ namespace DuckGame
 
         public void Update()
         {
-            if (Program.IsLinuxD) // mabye come back to this later
+            if (Program.IsLinuxD || Environment.Is64BitProcess) // mabye come back to this later
             {
                 return;
             }
@@ -76,7 +76,7 @@ namespace DuckGame
 
         public void LoseDevice()
         {
-            if (Program.IsLinuxD) // mabye come back to this later
+            if (Program.IsLinuxD || Environment.Is64BitProcess) // mabye come back to this later
             {
                 return;
             }
@@ -92,7 +92,7 @@ namespace DuckGame
             set
             {
                 _forceMode = value;
-                if (Program.IsLinuxD) // mabye come back to this later
+                if (Program.IsLinuxD || Environment.Is64BitProcess) // mabye come back to this later
                 {
                     return;
                 }
@@ -105,7 +105,7 @@ namespace DuckGame
         public static void ResetDevice()
         {
             _mode = MonoMain.audioModeOverride == AudioMode.None ? (AudioMode)Options.Data.audioMode : MonoMain.audioModeOverride;
-            if (Program.IsLinuxD) // mabye come back to this later
+            if (Program.IsLinuxD || Environment.Is64BitProcess) // mabye come back to this later
             {
                 return;
             }
@@ -117,7 +117,7 @@ namespace DuckGame
 
         private void RecreateDevice()
         {
-            if (Program.IsLinuxD) // mabye come back to this later
+            if (Program.IsLinuxD || Environment.Is64BitProcess) // mabye come back to this later
             {
                 return;
             }
@@ -206,7 +206,7 @@ namespace DuckGame
 
         public static void AddSound(ISampleProvider pSound, bool pIsMusic)
         {
-            if (Program.IsLinuxD) // mabye come back to this later
+            if (Program.IsLinuxD || Environment.Is64BitProcess) // mabye come back to this later
             {
                 return;
             }
@@ -230,7 +230,7 @@ namespace DuckGame
 
         public static void RemoveSound(ISampleProvider pSound)
         {
-            if (Program.IsLinuxD) // mabye come back to this later
+            if (Program.IsLinuxD || Environment.Is64BitProcess) // mabye come back to this later
             {
                 return;
             }
@@ -241,7 +241,7 @@ namespace DuckGame
 
         public void Dispose()
         {
-            if (Program.IsLinuxD) // mabye come back to this later
+            if (Program.IsLinuxD || Environment.Is64BitProcess) // mabye come back to this later
             {
                 return;
             }
@@ -256,7 +256,7 @@ namespace DuckGame
         /// <returns></returns>
         public int RegisterEndpointNotificationCallback([MarshalAs(UnmanagedType.Interface), In] IMMNotificationClient client)
         {
-            if (Program.IsLinuxD) // mabye come back to this later
+            if (Program.IsLinuxD || Environment.Is64BitProcess) // mabye come back to this later
             {
                 return 0;
             }
@@ -270,7 +270,7 @@ namespace DuckGame
         /// <returns></returns>
         public int UnRegisterEndpointNotificationCallback([MarshalAs(UnmanagedType.Interface), In] IMMNotificationClient client)
         {
-            if (Program.IsLinuxD) // mabye come back to this later
+            if (Program.IsLinuxD || Environment.Is64BitProcess) // mabye come back to this later
             {
                 return 0;
             }

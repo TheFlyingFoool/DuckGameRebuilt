@@ -1,26 +1,27 @@
-﻿using System; 
+﻿using AddedContent.Firebreak;
 using DbMon.NET;
 using DGWindows;
-using System.IO;
-using System.Net;
-using System.Linq;
-using System.Text;
-using System.Net.Http;
-using System.Security;
-using System.Threading;
-using System.Resources;
-using System.Reflection;
-using System.Diagnostics;
-using System.Collections;
-using System.Globalization;
-using System.IO.Compression;
-using AddedContent.Firebreak;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using System; 
+using System.Collections;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.Runtime.InteropServices;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Reflection;
+using System.Resources;
 using System.Runtime.ExceptionServices;
+using System.Runtime.InteropServices;
+using System.Security;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DuckGame
 {
@@ -188,57 +189,105 @@ namespace DuckGame
         //}
         public static bool DirtyPreStart()
         {
-            int tries = 10;
             int p = (int)Environment.OSVersion.Platform;
             IsLinuxD = (p == 4) || (p == 6) || (p == 128);
-            // if (!IS_DEV_BUILD)
-            // {
-            //     AutoUpdaterNew();
-            // }
+
             if (fullstop)
-            {
                 return false;
-            }
-            try // IMPROVEME, i try catch this because when restarting with the ingame restarting thing, it would crash because this was still in use
-            {   // also this should really be doing some kind of like cache thing so it doesnt do this everytime
-                while (tries > 0)
-                {
-                    if (File.Exists(GameDirectory + "Steamworks.NET.dll"))
-                    {
-                        File.Delete(GameDirectory + "Steamworks.NET.dll");
-                        tries -= 1;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                if (IsLinuxD)
-                {
-                    DevConsole.Log("|PINK|DGR |WHITE|Setting dll to LinuxSteamworks");
-                    File.Copy(GameDirectory + "OSX-Linux-x64//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
-                }
-                else if (Environment.Is64BitProcess)
-                {
-                    DevConsole.Log("|PINK|DGR |WHITE|Setting dll to WindowsSteamx64"); //this is left over from me thinking about building for 64 bit, i dont want to build FNA my self so no
-                    File.Copy(GameDirectory + "Windows-x64//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
-                }
-                else
-                {
-                    DevConsole.Log("|PINK|DGR |WHITE|Setting dll to WindowsSteamx86");
-                    File.Copy(GameDirectory + "Windows-x86//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
-                }
-            }
-            catch
+
+           
+
+            string platformDir = IsLinuxD ? "OSX-Linux-x64"
+                : Environment.Is64BitProcess ? "Windows-x64"
+                : "Windows-x86";
+
+            string[] dlls = {
+                "Steamworks.NET.dll",
+                "SDL3.dll",
+                "FAudio.dll",
+                "FNA3D.dll",
+                "libtheorafile.dll"
+            };
+
+            foreach (string dll in dlls)
             {
+                string sourcePath = GameDirectory + platformDir + "/" + dll;
+                string destPath = GameDirectory + dll;
+
+                DevConsole.Log($"|PINK|DGR |WHITE|Checking {dll} for {platformDir}");
+                try
+                {
+                    if (!TryReplaceDllIfChanged(sourcePath, destPath))
+                        DevConsole.Log($"|PINK|DGR |WHITE|{dll} unchanged, skipping replace");
+                    else
+                        DevConsole.Log($"|PINK|DGR |WHITE|{dll} updated from {platformDir}");
+                }
+                catch (Exception ex)
+                {
+                    DevConsole.Log($"|PINK|DGR |WHITE|Failed to replace {dll}: {ex.Message}");
+                }
             }
-            DevConsole.Log("|PINK|DGR |WHITE|Is Linux " + IsLinuxD.ToString() + " PlatformID " + p.ToString());
+            DevConsole.Log($"|PINK|DGR |WHITE|Is Linux {IsLinuxD} PlatformID {p}");
             gameAssembly = Assembly.GetExecutingAssembly();
             gameAssemblyName = gameAssembly.GetName().Name;
             FilePath = gameAssembly.Location;
             FileName = Path.GetFileName(FilePath);
             GameDirectory = FilePath.Substring(0, FilePath.Length - FileName.Length);
+
+
             return true;
+        }
+        private static bool TryReplaceDllIfChanged(string sourcePath, string destPath, int timeoutMs = 5000, int pollIntervalMs = 200)
+        {
+            string sourceHash = ComputeMD5(sourcePath);
+
+            // If dest exists and already matches, nothing to do
+            if (File.Exists(destPath))
+            {
+                string destHash = ComputeMD5(destPath);
+                if (sourceHash == destHash)
+                    return false;
+
+                // Wait until the file can actually be deleted
+                if (!WaitForFileDeletable(destPath, timeoutMs, pollIntervalMs))
+                    throw new TimeoutException(
+                        $"Timed out after {timeoutMs}ms waiting to delete: {destPath}");
+
+                File.Delete(destPath);
+            }
+
+            File.Copy(sourcePath, destPath);
+            return true;
+        }
+
+
+
+        private static readonly Random _jitter = new Random(Guid.NewGuid().GetHashCode());
+        private static bool WaitForFileDeletable(string path, int timeoutMs, int pollIntervalMs)
+        {
+            var deadline = DateTime.UtcNow.AddMilliseconds(timeoutMs);
+            while (DateTime.UtcNow < deadline)
+            {
+                try
+                {
+                    using (File.Open(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+                        return true;
+                }
+                catch (IOException)
+                {
+                    int jitter = _jitter.Next(0, pollIntervalMs / 2);
+                    Thread.Sleep(pollIntervalMs + jitter);
+                }
+            }
+            return false;
+        }
+
+        private static string ComputeMD5(string filePath)
+        {
+            using var md5 = MD5.Create();
+            using var stream = File.OpenRead(filePath);
+            byte[] hash = md5.ComputeHash(stream);
+            return BitConverter.ToString(hash);
         }
         public static Assembly ModResolve(object sender, ResolveEventArgs args) => ManagedContent.ResolveModAssembly(sender, args);
         private static Dictionary<string, Assembly> LoadedAssemblies = new Dictionary<string, Assembly>();
