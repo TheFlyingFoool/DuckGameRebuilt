@@ -290,7 +290,14 @@ namespace DuckGame
                 {
                     IsOgg = true;
                     oggPlayer = new OggPlayer();
-                    oggPlayer.SetOgg(new MemoryStream(data));
+                    if (Environment.Is64BitProcess)
+                    {
+                        oggPlayer.SetOgg(new MemoryStream(data), pPath);
+                    }
+                    else
+                    {
+                        oggPlayer.SetOgg(new MemoryStream(data));
+                    }
                 }
                 else
                 {
