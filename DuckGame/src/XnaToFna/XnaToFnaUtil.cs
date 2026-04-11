@@ -1040,11 +1040,11 @@ namespace XnaToFna
         public void CheckAndRemapGenericCall(MethodDefinition method, ref int instri)
         {
             Instruction instruction = method.Body.Instructions[instri];
-            if (instruction != null && instruction.Operand != null && instruction.Operand is float && float.IsPositiveInfinity((float)instruction.Operand) || float.IsNaN((float)instruction.Operand))
-            {
-                DevConsole.Log("THE FUCK");
-            }
-
+       //     if (instruction != null && instruction.Operand != null && instruction.Operand is float &&
+       //(float.IsPositiveInfinity((float)instruction.Operand) || float.IsNaN((float)instruction.Operand)))
+       //     {
+       //         DevConsole.Log("THE FUCK");
+       //     }
             if (instruction.OpCode != OpCodes.Call &&
                 instruction.OpCode != OpCodes.Callvirt)
                 return;
