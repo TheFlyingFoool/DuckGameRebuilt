@@ -245,8 +245,8 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>lib\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NVorbis">
-      <HintPath>lib\NVorbis.dll</HintPath>
+    <Reference Include="NVorbis, Version=0.10.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NVorbis.0.10.5\lib\net45\NVorbis.dll</HintPath>
     </Reference>
     <Reference Include="NVorbis.NAudioSupport">
       <HintPath>lib\NVorbis.NAudioSupport.dll</HintPath>
