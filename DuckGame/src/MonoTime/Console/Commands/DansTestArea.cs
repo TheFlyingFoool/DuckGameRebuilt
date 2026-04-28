@@ -2,9 +2,7 @@ using AddedContent.Firebreak;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Newtonsoft.Json.Linq;
 using RectpackSharp;
-using SDL2;
 //using Steamworks;
 using System;
 using System.Collections.Generic;
@@ -13,7 +11,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace DuckGame
 {
@@ -179,6 +176,60 @@ namespace DuckGame
                 }
             }
 
+        }
+        [Marker.DevConsoleCommand(Name = "guntest")]
+        public static void guntest()
+        {
+   
+            List<Type> things = ItemBox.GetPhysicsObjects(Editor.Placeables);
+            foreach(Type type in things)
+            {
+                Thing thing = Editor.CreateThing(type);
+                if (thing is PhysicsObject)
+                {
+                    try
+                    {
+                        PhysicsObject physicsObject = thing as PhysicsObject;
+                        physicsObject.Initialize();
+                        physicsObject.Update();
+                        if (physicsObject is Gun)
+                        {
+                            Gun gun = (physicsObject as Gun);
+                            gun.OnPressAction();
+                            gun.OnPressAction();
+                            gun.OnPressAction();
+                            physicsObject.Update();
+                            gun.HoldAction();
+                            gun.HoldAction();
+                            gun.HoldAction();
+                            gun.HoldAction();
+                            gun.HoldAction();
+                            physicsObject.Update();
+                            physicsObject.Update();
+                            gun.Fire();
+                        }
+                        Block c = new Block(0f, 0f);
+                        Duck d = new Duck(0f, 0f, Profiles.DefaultPlayer1);
+                        physicsObject.OnImpact(c, ImpactedFrom.Top);
+                        physicsObject.OnImpact(d, ImpactedFrom.Top);
+                        physicsObject.OnImpact(c, ImpactedFrom.Bottom);
+                        physicsObject.OnImpact(d, ImpactedFrom.Bottom);
+                        physicsObject.OnImpact(c, ImpactedFrom.Left);
+                        physicsObject.OnImpact(d, ImpactedFrom.Left);
+                        physicsObject.OnImpact(c, ImpactedFrom.Right);
+                        physicsObject.OnImpact(d, ImpactedFrom.Right);
+                        physicsObject.Update();
+                        physicsObject.Draw();
+                        physicsObject.Draw();
+                        physicsObject.Draw();
+                    }
+                    catch(Exception e)
+                    {
+                        DevConsole.Log(type.FullName);
+                        DevConsole.Log(e);
+                    }
+                }
+            }
         }
         [Marker.DevConsoleCommand(Name = "bucketremove")]
         public static void bucketremove()
@@ -437,6 +488,17 @@ namespace DuckGame
             DevConsole.Log("Optimizations " + ModLoader.ShouldOptimizations.ToString());
 
         }
+
+        [Marker.DevConsoleCommand(Name = "steamcrack")]
+        public static void steamcrack(string appId = "480")
+        {
+            Steam.Terminate();
+            Environment.SetEnvironmentVariable("SteamAppId", appId);
+            Environment.SetEnvironmentVariable("SteamGameId", appId);
+            Steam.InitializeCore();
+            Steam.Initialize();
+        }
+
         public static bool looking;
         [Marker.DevConsoleCommand(Name = "search")]
         public static void Search()

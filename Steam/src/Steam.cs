@@ -6,6 +6,7 @@ using Steamworks;
 public class Steam : IDisposable {
     private static bool _textFilterEnabled = false;
     private static Dictionary<Type, object> _callResults = new Dictionary<Type, object>();
+    private static List<IDisposable> _callbacks = new List<IDisposable>();
 
     private static CallResult<T> GetCallResult<T>() => (CallResult<T>)_callResults[typeof(T)];
     private static void SetCallResult<T>(CallResult<T>.APIDispatchDelegate func) => _callResults.Add(typeof(T), new CallResult<T>(func));
@@ -193,15 +194,15 @@ public class Steam : IDisposable {
     public static unsafe void Initialize() {
 
         _currentTextboxLength = 0;
-        Callback<LobbyChatUpdate_t>.Create(OnLobbyMemberStatus);
-        Callback<P2PSessionRequest_t>.Create(OnConnectionRequest);
-        Callback<P2PSessionConnectFail_t>.Create(OnConnectionFail);
-        Callback<GameLobbyJoinRequested_t>.Create(OnInviteReceive);
-        Callback<DownloadItemResult_t>.Create(OnDownloadItemResult);
-        Callback<UserStatsReceived_t>.Create(OnRequestStats);
-        Callback<SteamRemotePlaySessionConnected_t>.Create(OnRemotePlayConnected);
-        Callback<GamepadTextInputDismissed_t>.Create(OnGamepadTextInputDismissed);
-        Callback<LobbyChatMsg_t>.Create(OnLobbyChatMessage);
+        _callbacks.Add(Callback<LobbyChatUpdate_t>.Create(OnLobbyMemberStatus));
+        _callbacks.Add(Callback<P2PSessionRequest_t>.Create(OnConnectionRequest));
+        _callbacks.Add(Callback<P2PSessionConnectFail_t>.Create(OnConnectionFail));
+        _callbacks.Add(Callback<GameLobbyJoinRequested_t>.Create(OnInviteReceive));
+        _callbacks.Add(Callback<DownloadItemResult_t>.Create(OnDownloadItemResult));
+        _callbacks.Add(Callback<UserStatsReceived_t>.Create(OnRequestStats));
+        _callbacks.Add(Callback<SteamRemotePlaySessionConnected_t>.Create(OnRemotePlayConnected));
+        _callbacks.Add(Callback<GamepadTextInputDismissed_t>.Create(OnGamepadTextInputDismissed));
+        _callbacks.Add(Callback<LobbyChatMsg_t>.Create(OnLobbyChatMessage));
 
         // Maintain CallResults which otherwise would be added, then removed behind the scenes:
         SetCallResult<GlobalStatsReceived_t>(OnRequestGlobalStats);
@@ -274,6 +275,23 @@ public class Steam : IDisposable {
             return;
         SteamAPI.Shutdown();
         _initialized = false;
+
+        user = null;
+        _runningInitializeProcedures = false;
+        foreach (IDisposable callback in _callbacks)
+        {
+            callback?.Dispose();
+        }
+        _callbacks.Clear();
+
+        foreach (KeyValuePair<Type, object> kvp in _callResults)
+        {
+            if (kvp.Value is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
+        }
+        _callResults.Clear();
     }
 
     public static void Update() {

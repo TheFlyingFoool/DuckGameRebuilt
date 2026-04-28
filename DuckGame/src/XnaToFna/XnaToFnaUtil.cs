@@ -14,6 +14,7 @@ using System.Security;
 using System.Xml.Serialization;
 using XnaToFna.ProxyForms;
 //using XnaToFna.XEX;
+using Mono.Cecil.Rocks;
 
 namespace XnaToFna
 {
@@ -68,7 +69,7 @@ namespace XnaToFna
         public List<string> FixPathsFor;
         public ILPlatform PreferredPlatform;
         public static Assembly Aassembly;
-        public static int RemapVersion = 38;
+        public static int RemapVersion = 39;
         public void Stub(ModuleDefinition mod)
         {
             Log(string.Format("[Stub] Stubbing {0}", mod.Assembly.Name.Name));
@@ -814,87 +815,107 @@ namespace XnaToFna
         // Patch: Add top-level try/catch(Exception) to a method, regardless of existing handlers
         private static void AddTryCatchPatch(MethodDefinition method)
         {
-            if (!method.HasBody)
-                return;
+            if (!method.HasBody) return;
 
-            Mono.Cecil.Cil.MethodBody body = method.Body;
-            ILProcessor il = body.GetILProcessor();
+            var body = method.Body;
+            var il = body.GetILProcessor();
             body.InitLocals = true;
 
-            // (1) Create a new variable to hold Exception ex
+            // Capture BEFORE any mutation
+            Instruction tryStart = body.Instructions.First();
+            Instruction originalLast = body.Instructions.Last();
+
             TypeReference excType = method.Module.ImportReference(typeof(Exception));
             var exVar = new VariableDefinition(excType);
             body.Variables.Add(exVar);
 
-            // (2) (If needed) Create a variable to store the return value
             VariableDefinition retVar = null;
             bool hasReturn = method.ReturnType.MetadataType != MetadataType.Void;
             if (hasReturn)
             {
-                retVar = new VariableDefinition(method.ReturnType);
+                // Import the return type to ensure it's valid in this module context
+                TypeReference returnType = method.Module.ImportReference(method.ReturnType);
+                retVar = new VariableDefinition(returnType);
                 body.Variables.Add(retVar);
             }
 
-            // (3) Add a new NOP as a unified epilogue (method exit)
-            Instruction epilogue = il.Create(OpCodes.Nop);
-            il.Append(epilogue);
+            // Create all new instructions up front
+            Instruction catchStart = il.Create(OpCodes.Stloc, exVar);
+            Instruction catchLeave = il.Create(OpCodes.Leave, catchStart); // operand fixed below
+            Instruction epilogueNop = il.Create(OpCodes.Nop);
+            Instruction retInstr = il.Create(OpCodes.Ret);
 
-            // (4) Rewrite all ret instructions to go to the epilogue, storing the return value if needed
-            var originalRets = body.Instructions.Where(i => i.OpCode == OpCodes.Ret).ToList();
-            foreach (Instruction ret in originalRets)
+            catchLeave.Operand = epilogueNop;
+
+            // Rewrite all existing Ret instructions to Leave → epilogue
+            foreach (Instruction ret in body.Instructions.Where(i => i.OpCode == OpCodes.Ret).ToList())
             {
                 if (hasReturn)
+                {
+                    // Use the correct Stloc for the type size — important for 64-bit
+                    // If the value on the stack is a native int or pointer, we need to
+                    // normalize it before storing, otherwise the 64-bit JIT rejects it
+                    TypeReference retType = method.ReturnType;
+                    bool isNativeInt = retType.MetadataType == MetadataType.IntPtr
+                                    || retType.MetadataType == MetadataType.UIntPtr
+                                    || retType.IsByReference
+                                    || retType.IsPointer;
+
+                    if (isNativeInt)
+                    {
+                        // conv.i ensures the value is treated as native int on both 32 and 64-bit
+                        il.InsertBefore(ret, il.Create(OpCodes.Conv_I));
+                    }
+
                     il.InsertBefore(ret, il.Create(OpCodes.Stloc, retVar));
+                }
                 ret.OpCode = OpCodes.Leave;
-                ret.Operand = epilogue;
+                ret.Operand = epilogueNop;
             }
 
-            // (5) Add handlers for your catch block
-            Instruction catchStart = il.Create(OpCodes.Stloc, exVar);
+            // Fix up existing EH regions that terminated at the original last instruction
+            foreach (ExceptionHandler eh in body.ExceptionHandlers)
+            {
+                if (eh.TryEnd == originalLast) eh.TryEnd = catchStart;
+                if (eh.HandlerEnd == originalLast) eh.HandlerEnd = epilogueNop;
+            }
+
+            // Append catch block + epilogue — each object appended exactly once
             il.Append(catchStart);
-
-            // (Optional) Insert your error handling/logging here, e.g. call a logger method or just swallow
-            // il.Append(il.Create(OpCodes.Call, logExceptionMethod)); // if you have one
-
-            Instruction catchLeave = il.Create(OpCodes.Leave, epilogue);
             il.Append(catchLeave);
+            il.Append(epilogueNop);
+            if (hasReturn)
+            {
+                // Mirror the conv.i on the load side for pointer types
+                TypeReference retType = method.ReturnType;
+                bool isNativeInt = retType.MetadataType == MetadataType.IntPtr
+                                || retType.MetadataType == MetadataType.UIntPtr
+                                || retType.IsByReference
+                                || retType.IsPointer;
 
-            // (6) Add the top-level ExceptionHandler (which covers all instructions up to the catch)
-            var allInstructions = body.Instructions.ToList();
-            Instruction tryStart = allInstructions.First();
-            Instruction tryEnd = catchStart;
-            Instruction handlerStart = catchStart;
-            Instruction handlerEnd = epilogue;
+                il.Append(il.Create(OpCodes.Ldloc, retVar));
+                if (isNativeInt)
+                    il.Append(il.Create(OpCodes.Conv_I));
+            }
+            il.Append(retInstr);
 
+            // Add the top-level try/catch handler
+            // TryEnd and HandlerEnd are EXCLUSIVE — they point to the first instruction AFTER the region
             var topHandler = new ExceptionHandler(ExceptionHandlerType.Catch)
             {
                 CatchType = excType,
                 TryStart = tryStart,
-                TryEnd = tryEnd,
-                HandlerStart = handlerStart,
-                HandlerEnd = handlerEnd
+                TryEnd = catchStart,   // exclusive: first instr of catch block
+                HandlerStart = catchStart,
+                HandlerEnd = epilogueNop   // exclusive: first instr after catch block
             };
             body.ExceptionHandlers.Add(topHandler);
 
-            // (7) Patch up all existing ExceptionHandlers if needed, 
-            // so that HandlerEnd/TryEnd that pointed to "the end" now point to the new epilogue
-            foreach (ExceptionHandler eh in body.ExceptionHandlers.ToArray())
-            {
-                if (eh != topHandler)
-                {
-                    if (eh.TryEnd == null || eh.TryEnd == allInstructions.Last() || eh.TryEnd == null)
-                        eh.TryEnd = catchStart; // Try block must end at catch start
-                    if (eh.HandlerEnd == null || eh.HandlerEnd == allInstructions.Last() || eh.HandlerEnd == null)
-                        eh.HandlerEnd = epilogue;
-                }
-            }
+            // Recompute offsets and validate — Cecil won't do this automatically
 
-            // (8) At the epilogue, load return value if necessary, then return
-            il.Append(epilogue);
-            if (hasReturn)
-                il.Append(il.Create(OpCodes.Ldloc, retVar));
-            il.Append(il.Create(OpCodes.Ret));
-
+            body.Optimize();
+           // body.OptimizeMacros();
+           // body.ComputeOffsets();
         }
         private static List<Instruction> AncientMysteries_Hooks_Update(MethodDefinition module)
         {
