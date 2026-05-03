@@ -306,7 +306,7 @@ namespace DuckGame
 
             if (Presence.Secrets != null)
             {
-                if (other.Secrets == null || other.Secrets.JoinSecret != Presence.Secrets.JoinSecret || other.Secrets.MatchSecret != Presence.Secrets.MatchSecret || other.Secrets.SpectateSecret != Presence.Secrets.SpectateSecret)
+                if (other.Secrets == null || other.Secrets.JoinSecret != Presence.Secrets.JoinSecret || other.Secrets.SpectateSecret != Presence.Secrets.SpectateSecret)
                 {
                     return false;
                 }
