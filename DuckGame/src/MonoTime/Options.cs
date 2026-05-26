@@ -534,7 +534,7 @@ namespace DuckGame
             });
             menu.Add(new UIMenuItemToggle("Use V-Sync", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.UseVSync)))
             {
-                dgrDescription = "Verticaly synced drawing, overrides FPS target (REQUIRES RESTART)"
+                dgrDescription = "Vertically synced drawing. Works alongside FPS Target as a cap (REQUIRES RESTART)"
             });
 
             menu.Add(new UIMenuItemNumber("FPS Target", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.TargetFrameRate), 0, 1000, 60), step: 60)
