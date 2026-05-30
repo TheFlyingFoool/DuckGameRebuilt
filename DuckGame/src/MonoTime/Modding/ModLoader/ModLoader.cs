@@ -1,4 +1,8 @@
 ﻿using AddedContent.Firebreak;
+using HarmonyLoader;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CSharp;
 using Mono.Cecil;
 using MonoMod.Utils;
@@ -15,10 +19,6 @@ using System.Text;
 using System.Xml;
 using XnaToFna;
 using File = System.IO.File;
-using HarmonyLoader;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Emit;
 
 namespace DuckGame
 {
@@ -50,18 +50,78 @@ namespace DuckGame
         internal static string _modString;
         private static List<ulong> brokenclientsidemods = new List<ulong>()
         {
-            2291455300UL,
-            2285058623UL,
-            1704010547UL,
-            1422187117UL,
-            1217536842UL,
-            1337905266UL,
-            1653126591UL,
-            1220996500UL,
-            804666647UL,
-            1198406315UL,
-            1356415641UL
+            ModWorkshopId.NetSkins,
+            ModWorkshopId.CopyCutPasteDuck,
+            ModWorkshopId.QOLMod,
+            ModWorkshopId.WorkshopArcades,
+            ModWorkshopId.ChatUtilities,
+            ModWorkshopId.NametagsAtMatchStart,
+            ModWorkshopId.UnlockModifiers,
+            ModWorkshopId.SkipShut,
+            ModWorkshopId.UnlockHats ,
+            ModWorkshopId.SteamProfiles,
+            ModWorkshopId.TalkingMan
         };
+
+        public static class ModDisabledReason
+        {
+            public static string AlreadyImplementedThanksTo(string modDeveloperName) => AlreadyImplemented + ", Thanks " + modDeveloperName;
+            public const string AlreadyImplemented = "!This mod has been officially implemented";
+            public const string DisabledWhenDebugging = "!This is Disabled mod is Disabled when Debugging!";
+            public static string DoesNotWorkInRebuiltDueTo(string details) => DoesNotWorkInRebuilt + ", " + details;
+            public const string DoesNotWorkInRebuilt = "!This mod does not currently work on Rebuilt!";
+        }
+        private static List<(ulong Id, string Reason)> ModsToDisableIfDgRevisionIsNot1 = new List<(ulong Id, string Reason)>
+        {
+            (ModWorkshopId.SteamProfiles, ModDisabledReason.AlreadyImplementedThanksTo("EIM64!")),
+            (ModWorkshopId.InviteLinks, ModDisabledReason.AlreadyImplementedThanksTo("EIM64!")),
+            (ModWorkshopId.Resolutions, ModDisabledReason.AlreadyImplementedThanksTo("EIM64 || Killer-Fackur!")),
+            (ModWorkshopId.TexturePackMod, ModDisabledReason.AlreadyImplementedThanksTo("Yupdaniel!")),
+            (ModWorkshopId.GlobalMatchingMod, ModDisabledReason.AlreadyImplementedThanksTo("Yupdaniel!")),
+            (ModWorkshopId.SpectatorMod, ModDisabledReason.AlreadyImplementedThanksTo("Yupdaniel || Mr. Potatooh!")),
+            (ModWorkshopId.EightPlayerDuckGame, ModDisabledReason.AlreadyImplementedThanksTo("TheSpicyChef!")),
+            (ModWorkshopId.QOLMod, "!Regrettably, this version of QOL is incompatible with Duck Game 2020!"),
+        };
+
+        private static List<(ulong Id, string Reason)> ModsToDisable = new List<(ulong Id, string Reason)>
+        {
+            // Rebuild mod issues
+            //(ModWorkshopId.CustomArcades, ModDisabledReason.DoesNotWorkInRebuilt),
+            //(ModWorkshopId.BetterChat, ModDisabledReason.DoesNotWorkInRebuiltDueTo("Patching Issues!")), // The issue with "Better Chat" mod was its transpiler of Devconsole.Update which we kill now
+            (ModWorkshopId.MyHarmony, "!Rebuilt Handles this issue, Please Do not put harmony into ur Assembly!"),
+            (ModWorkshopId.AntiAliasingMod, ModDisabledReason.DoesNotWorkInRebuiltDueTo("FNA Render Engine")),
+            (ModWorkshopId.DeltaDuckBot, ModDisabledReason.DoesNotWorkInRebuiltDueTo("Just a Mess of Issues! @Tater")),
+            (ModWorkshopId.BugFixes, ModDisabledReason.DoesNotWorkInRebuiltDueTo("Patching Issues!")), // Bug Fixes harmony issue patching menu elements stuff
+            (ModWorkshopId.BrowseGamesPlus, ModDisabledReason.DoesNotWorkInRebuiltDueTo("Patching Issues!")), // "BROWSE GAMES+" mod has a harmony resolve issue with remapper, but also scuffed issues that exist sepreatly
+            (ModWorkshopId.PublicMidGameLobbiesDGRFix, ModDisabledReason.DoesNotWorkInRebuilt),
+
+            // Also disabled but only under certain conditions:
+            //(ModWorkshopId.Reskins, "!This mod does not currently work on Linux!"),
+            //(ModWorkshopId.ExtraStuff, "!This is Disabled mod is Disable, Because v2 is newer"),
+        };
+
+        /// <summary>
+        /// Patchs in these mods Don't Like the Debugger or debug configuration
+        /// </summary>
+        private static List<(ulong Id, string Reason)> ModsToDisableDuringDebug = new List<(ulong Id, string Reason)>
+        {
+            //(ModWorkshopId.QOLMod, ModDisabledReason.DisabledWhenDebugging),
+            //(ModWorkshopId.CompetitiveTools, ModDisabledReason.DisabledWhenDebugging),
+            (ModWorkshopId.ExtraStuff, ModDisabledReason.DisabledWhenDebugging),
+            (ModWorkshopId.ExtraStuffv2, ModDisabledReason.DisabledWhenDebugging),
+        };
+
+        private static bool DisableModIfReasonFound(ModConfiguration modConfig, List<(ulong Id, string Reason)> modsToDisable)
+        {
+            var reasonToDisableMod = modsToDisable.FirstOrDefault(m => m.Id == modConfig.workshopID);
+            var reasonFound = reasonToDisableMod.Id != 0;
+            if (reasonFound) {
+                modConfig.Disable(reasonToDisableMod.Reason);
+                return true;
+            }
+            return false;
+        }
+
         private static CSharpCodeProvider _provider = null;
         private static CompilerParameters _parameters = null;
         private static string _buildErrorText = null;
@@ -438,110 +498,24 @@ namespace DuckGame
                     }
                     else if (modConfig.majorSupportedRevision != 1)
                     {
-                        if (modConfig.workshopID == 1198406315UL || modConfig.workshopID == 1354346379UL)
+                        if (DisableModIfReasonFound(modConfig, ModsToDisableIfDgRevisionIsNot1))
                         {
-                            modConfig.Disable();
-                            modConfig.error = "!This mod has been officially implemented, Thanks EIM64!";
                             mod = new DisabledMod();
                         }
-                        else if (modConfig.workshopID == 1820667892UL)
-                        {
-                            modConfig.Disable();
-
-                            modConfig.error = "!This mod has been officially implemented, Thanks Yupdaniel!";
-                            mod = new DisabledMod();
-                        }
-                        else if (modConfig.workshopID == 1603886916UL)
-                        {
-                            modConfig.Disable();
-                            modConfig.error = "!This mod has been officially implemented, Thanks Yupdaniel || Mr. Potatooh!";
-                            mod = new DisabledMod();
-                        }
-                        else if (modConfig.workshopID == 796033146UL)
-                        {
-                            modConfig.Disable();
-                            modConfig.error = "!This mod has been officially implemented, Thanks TheSpicyChef!";
-                            mod = new DisabledMod();
-                        }
-                        else if (modConfig.workshopID == 1425615438UL)
-                        {
-                            modConfig.Disable();
-                            modConfig.error = "!This mod has been officially implemented, Thanks EIM64 || Killer-Fackur!";
-                            mod = new DisabledMod();
-                        }
-                        else if (modConfig.workshopID == 1704010547UL)
-                        {
-                            modConfig.Disable();
-                            modConfig.error = "!Regrettably, this version of QOL is incompatible with Duck Game 2020!";
-                            mod = new DisabledMod();
-                        }
-                        else if (modConfig.workshopID == 1657985708UL)
-                        {
-                            modConfig.Disable();
-                            modConfig.error = "!This mod has been officially implemented, Thanks Yupdaniel!";
-                            mod = new DisabledMod();
-                        }
-
                     }
-                    /* rebuild mod issues */
-                    //if (modConfig.workshopID == 2548159573UL) // custom arcade
-                    //{
-                    //    modConfig.Disable();
-                    //    modConfig.error = "!This mod does not currently work on Rebuilt!";
-                    //    mod = new DisabledMod();
-                    //}
-                    //if (modConfig.workshopID == 2320709295UL) // Better Chat the issue with this mod was its transpiler of Devconsole.Update which we kill now
-                    //{
-                    //    modConfig.Disable();
-                    //    modConfig.error = "!This mod does not currently work on Rebuilt, Patching Issues!";
-                    //    mod = new DisabledMod();
-                    //}
-                    if (modConfig.workshopID == 3649111390UL) // My Harmony
+                    if (DisableModIfReasonFound(modConfig, ModsToDisable))
                     {
-                        modConfig.Disable();
-                        modConfig.error = "!Rebuilt Handles this issue, Please Do not put harmony into ur Assembly!";
                         mod = new DisabledMod();
                     }
-                    else if (modConfig.workshopID == 2209935223UL) // DuckAntiAliasing
+                    else if (modConfig.workshopID == ModWorkshopId.Reskins && Program.isLinux && !modConfig.linuxFix)
                     {
-                        modConfig.Disable();
-                        modConfig.error = "!This mod does not work with on Rebuilt FNA Render Engine";
+                        modConfig.Disable("!This mod does not currently work on Linux!");
                         mod = new DisabledMod();
                     }
-                    else if (modConfig.workshopID == 2480332949UL) //Delta Duck
+                    else if (modConfig.workshopID == ModWorkshopId.ExtraStuff
+                      && loadableModIds.Contains(ModWorkshopId.ExtraStuffv2))
                     {
-                        modConfig.Disable();
-                        modConfig.error = "!This mod does not currently work on Rebuilt, Just a Mess of Issues! @Tater";
-                        mod = new DisabledMod();
-                    }
-                    else if (modConfig.workshopID == 2758180905UL) // Bug Fixes harmony issue patching menu elements stuff
-                    {
-                        modConfig.Disable();
-                        modConfig.error = "!This mod does not currently work on Rebuilt, Patching Issues!";
-                        mod = new DisabledMod();
-                    }
-                    else if (modConfig.workshopID == 2674911202UL) // BROWSE GAMES+ has a harmony resolve issue with remapper, but also scuffed issues that exist sepreatly
-                    {
-                        modConfig.Disable();
-                        modConfig.error = "!This mod does not currently work on Rebuilt, Patching Issues!";
-                        mod = new DisabledMod();
-                    }
-                    else if (modConfig.workshopID == 1439906266UL && Program.isLinux && !modConfig.linuxFix) // Reskins
-                    {
-                        modConfig.Disable();
-                        modConfig.error = "!This mod does not currently work on Linux!";
-                        mod = new DisabledMod();
-                    }
-                    else if (modConfig.workshopID == 3386030767UL)
-                    {
-                        modConfig.Disable();
-                        modConfig.error = "!This mod does not currently work on Rebuilt!";
-                        mod = new DisabledMod();
-                    }
-                    else if (modConfig.workshopID == 2381384850UL && loadableModIds.Contains(2586315559))
-                    {
-                        modConfig.Disable();
-                        modConfig.error = "!This is Disabled mod is Disable, Because v2 is newer";
+                        modConfig.Disable("!This is Disabled mod is Disable, Because v2 is newer");
                         mod = new DisabledMod();
                     }
 
@@ -549,37 +523,13 @@ namespace DuckGame
 #if DEBUG
                     //if (true)
 #else
-                        if (Debugger.IsAttached)
+                    if (Debugger.IsAttached)
 #endif
-                    //{
-                        //if (modConfig.name == "QOL")
-                        //{
-                        //    modConfig.Disable();
-                        //    modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
-                        //    mod = new DisabledMod();
-                        //}
-                        //else
-                        //if (modConfig.workshopID == 2411996803UL) //CLIENT | Competitive Tools https://steamcommunity.com/sharedfiles/filedetails/?id=2411996803
-                        //{
-                        //    modConfig.Disable();
-                        //    modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
-                        //    mod = new DisabledMod();
-                        //}
-                        //else
-                        if (modConfig.workshopID == 2381384850UL) //Extrastuff https://steamcommunity.com/sharedfiles/filedetails/?id=2381384850
-                        {
-                            modConfig.Disable();
-                            modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
-                            mod = new DisabledMod();
-                        }
-                        else
-                        if (modConfig.workshopID == 2586315559) //Extrastuff v2 https://steamcommunity.com/sharedfiles/filedetails/?id=2586315559
-                        {
-                            modConfig.Disable();
-                            modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
-                            mod = new DisabledMod();
-                        }
-                    //}
+
+                    if (DisableModIfReasonFound(modConfig, ModsToDisableDuringDebug))
+                    {
+                        mod = new DisabledMod();
+                    }
                 }
                 if (mod == null)
                 {
@@ -1574,5 +1524,42 @@ namespace DuckGame
             _modsByWorkshopID.TryGetValue(pID, out modFromWorkshopId);
             return modFromWorkshopId;
         }
+    }
+
+    public static class ModWorkshopId
+    {
+        // To view the mod's steam workshop page, add the ID to this url:
+        // https://steamcommunity.com/sharedfiles/filedetails/?id=
+
+        public const ulong NetSkins = 2291455300;
+        public const ulong CopyCutPasteDuck = 2285058623;
+        public const ulong QOLMod = 1704010547;
+        public const ulong WorkshopArcades = 1422187117;
+        public const ulong ChatUtilities = 1217536842;
+        public const ulong NametagsAtMatchStart = 1337905266;
+        public const ulong UnlockModifiers = 1653126591;
+        public const ulong SkipShut = 1220996500;
+        public const ulong UnlockHats = 804666647;
+        public const ulong SteamProfiles = 1198406315;
+        public const ulong TalkingMan = 1356415641;
+
+        public const ulong InviteLinks = 1354346379;
+        public const ulong TexturePackMod = 1820667892;
+        public const ulong SpectatorMod = 1603886916;
+        public const ulong EightPlayerDuckGame = 796033146;
+        public const ulong Resolutions = 1425615438;
+        public const ulong GlobalMatchingMod = 1657985708;
+        public const ulong CustomArcades = 2548159573;
+        public const ulong BetterChat = 2320709295;
+        public const ulong MyHarmony = 3649111390;
+        public const ulong AntiAliasingMod = 2209935223;
+        public const ulong DeltaDuckBot = 2480332949;
+        public const ulong BugFixes = 2758180905;
+        public const ulong BrowseGamesPlus = 2674911202;
+        public const ulong Reskins = 1439906266;
+        public const ulong PublicMidGameLobbiesDGRFix = 3386030767;
+        public const ulong ExtraStuff = 2381384850;
+        public const ulong ExtraStuffv2 = 2586315559;
+        public const ulong CompetitiveTools = 2411996803;
     }
 }
