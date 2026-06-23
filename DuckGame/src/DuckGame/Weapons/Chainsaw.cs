@@ -728,7 +728,7 @@ namespace DuckGame
                                         {
                                             if (materialThing.physicsMaterial == PhysicsMaterial.Wood)
                                             {
-                                                for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++)//not a great fix but better on performance -NiK0 talking to older niko
+                                                for (int i = 0; i < DGRSettings.ActualParticleMultiplier; i++)//not a great fix but better on performance -Lucky talking to older niko
                                                 {
                                                     WoodDebris woodDebris = WoodDebris.New(vec2_2.x, vec2_2.y);
                                                     woodDebris.hSpeed = vec2_3.x * 3f;
@@ -950,6 +950,8 @@ namespace DuckGame
                 _swordSwing.alpha = 0.4f;
                 _swordSwing.position = position;
                 _swordSwing.depth = depth + 1;
+                _swordSwing.SkipIntraTick = SkipIntratick;
+                _swordSwing.LerpState.CanLerp = true;
                 _swordSwing.Draw();
             }
             if (duck != null && (_pullState == 1 || _pullState == 2))

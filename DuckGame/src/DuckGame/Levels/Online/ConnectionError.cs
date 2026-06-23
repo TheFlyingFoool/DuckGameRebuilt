@@ -33,7 +33,7 @@ namespace DuckGame
                 string loadedMods = joinLobby.GetLobbyData("mods");
                 if (loadedMods != null && loadedMods != "")
                 {
-                    loadedMods = loadedMods.Replace("|3132351890,0", ""); //dumb but works -NiK0
+                    loadedMods = loadedMods.Replace("|3132351890,0", ""); //dumb but works -Lucky
                     loadedMods = loadedMods.Replace("3132351890,0", "");
                 }
 

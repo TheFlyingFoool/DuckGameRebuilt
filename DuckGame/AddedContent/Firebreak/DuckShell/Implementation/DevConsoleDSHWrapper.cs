@@ -8,7 +8,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Windows.Forms;
 
 namespace AddedContent.Firebreak.DuckShell.Implementation
 {

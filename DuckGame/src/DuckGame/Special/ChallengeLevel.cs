@@ -538,7 +538,7 @@ namespace DuckGame
                             Add(new SpawnLine(pendingSpawn.x, pendingSpawn.y, 0, 4f, new Color((int)color.x, (int)color.y, (int)color.z), 4f));
                             SFX.Play("pullPin", 0.7f);
                             _duck = pendingSpawn;
-                            _challenge = things[typeof(ChallengeMode)].First() as ChallengeMode;
+                            _challenge = things[typeof(ChallengeMode)].FirstOrDefault() as ChallengeMode;
                             if (_challenge == null)
                                 return;
                             _challenge.PrepareCounts();

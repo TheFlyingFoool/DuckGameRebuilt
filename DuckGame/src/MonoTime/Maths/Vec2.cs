@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
-using System.Drawing;
 using System.Globalization;
 
 namespace DuckGame
@@ -517,8 +516,8 @@ namespace DuckGame
 
         public static implicit operator Vec2(Vector2 vec) => new Vec2(vec.X, vec.Y);
         
-        public static implicit operator SizeF(Vec2 vec) => new SizeF(vec.x, vec.y);
-        public static implicit operator Vec2(SizeF size) => new Vec2(size.Width, size.Height);
+        public static implicit operator DGSizeF(Vec2 vec) => new DGSizeF(vec.x, vec.y);
+        public static implicit operator Vec2(DGSizeF size) => new Vec2(size.Width, size.Height);
         public static implicit operator (float, float)(Vec2 vec) => (vec.x, vec.y);
         public static implicit operator Vec2((float, float) tuple) => new Vec2(tuple.Item1, tuple.Item2);
     }

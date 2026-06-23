@@ -1,7 +1,7 @@
 ﻿//namespace duk
 namespace DuckGame
 {
-    //straight up dont use this at all, its pretty much hardcoded to just work for the match setting presets and is useless otherwise -NiK0
+    //straight up dont use this at all, its pretty much hardcoded to just work for the match setting presets and is useless otherwise -Lucky
     public class UISideButton : UIComponent
     {
         public string text = "";
@@ -16,7 +16,7 @@ namespace DuckGame
         public override void Draw()
         {
             //DevConsole.Log("HELP");
-            //jank ui component but it'll do -NiK0
+            //jank ui component but it'll do -Lucky
             this.x = 52;
             collisionSize = new Vec2(width, 26);
             depth = -1;

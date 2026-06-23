@@ -389,7 +389,7 @@ namespace DuckGame
                 }
                 else _grabbed.position = Offset(barrelOffset) + barrelVector * _grabbed.halfWidth;
             }
-            //else ??? -NiK0
+            //else ??? -Lucky
             //{
             //    int num1 = flag2 ? 1 : 0;
             //}

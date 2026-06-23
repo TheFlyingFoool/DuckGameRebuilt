@@ -392,6 +392,10 @@ namespace DuckGame
                 }
                 if (_quit.value)
                 {
+                    foreach (Profile profile in Profiles.all)
+                    {
+                        profile.netData.ResetModNetData();
+                    }
                     if (_editorTestMode)
                         Level.current = DuckGameTestArea.currentEditor;
                     else if (_validityTest)
@@ -728,7 +732,7 @@ namespace DuckGame
                     }
                     if (_validityTest && _watch != null)
                     {
-                        //long elapsedMilliseconds = _watch.ElapsedMilliseconds; what -NiK0
+                        //long elapsedMilliseconds = _watch.ElapsedMilliseconds; what -Lucky
                         if (frames / (_watch.ElapsedMilliseconds / 1000) < 30)
                         {
                             DeathmatchTestDialogue.success = false;
@@ -905,6 +909,7 @@ namespace DuckGame
 
         protected virtual void PlayMusic()
         {
+            if (SFX.NoSoundcard) return;
             if (_validityTest)
                 return;
             string music = Music.RandomTrack("InGame", _currentMusic);

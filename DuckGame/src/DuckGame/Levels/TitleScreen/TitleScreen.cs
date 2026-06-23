@@ -190,6 +190,7 @@ namespace DuckGame
             
             Vote.ClearVotes();
             Program.gameLoadedSuccessfully = true;
+            MonoMain.NloadMessage = "Global.Save Saving Info";
             Global.Save();
             HUD.ClearPlayerChangeDisplays();
             AddCreditLine("DUCK GAME");
@@ -1233,6 +1234,10 @@ namespace DuckGame
                 if (Graphics.fade < 0.01f)
                 {
                     current.Clear();
+                    foreach (Profile profile in Profiles.all)
+                    {
+                        profile.netData.ResetModNetData();
+                    }
                     current = new ArcadeLevel(Content.GetLevelID("arcade"));
                 }
             }
@@ -1445,7 +1450,7 @@ namespace DuckGame
                 _enterCredits = true;
                 _duck.immobilized = true;
             }
-            if (ModLoader._modsByWorkshopID.ContainsKey(945664816)) //DWEP -NiK0
+            if (ModLoader._modsByWorkshopID.ContainsKey(945664816)) //DWEP -Lucky
             {
                 if (secondTitlescreen)
                 {

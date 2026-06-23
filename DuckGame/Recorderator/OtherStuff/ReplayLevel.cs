@@ -9,6 +9,22 @@ namespace DuckGame
     public class ReplayLevel : Level, IHaveAVirtualTransition
     {
         public bool fake;
+
+        public bool TryDeserializeLevel(BitBuffer b)
+        {
+            try
+            {
+                DeserializeLevel(b);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                DevConsole.Log(DCSection.General, $"|RED|RECORDERATOR |WHITE|Failed to deserialize level");
+                DevConsole.Log(ex);
+                return false;
+            }
+        }
+
         public void DeserializeLevel(BitBuffer b)
         {
             //this is dumb
@@ -527,7 +543,7 @@ namespace DuckGame
                         Graphics.fade = Lerp.Float(Graphics.fade, 0, 0.05f);
                         if (Graphics.fade <= 0)
                         {
-                            //vs told me to use whatever this ?? function is dont scream at me im not firebreak i swear -NiK0
+                            //vs told me to use whatever this ?? function is dont scream at me im not firebreak i swear -Lucky
                             current.Clear();
                             current = prev ?? new RecorderationSelector();
                             return;

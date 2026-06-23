@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DuckGame
 {
@@ -141,6 +141,11 @@ namespace DuckGame
             }
             this.x = xval;
             y = yval;
+            if (float.IsNaN(yval))
+            {
+                //DevConsole.Log("THE FUCK");
+                y = 0;
+            }
             ammo = type;
             rebound = rbound;
             _owner = owner;
@@ -486,7 +491,8 @@ namespace DuckGame
         private void TravelBullet()
         {
             travelDirNormalized = end - start;
-            if ( travelDirNormalized.x == double.NaN || travelDirNormalized.y == double.NaN)
+       
+            if (float.IsNaN(travelDirNormalized.x) || float.IsNaN(travelDirNormalized.y))
             {
                 travelDirNormalized = Vec2.One;
             }
@@ -636,7 +642,7 @@ namespace DuckGame
                     return;
 
                 //Fixed some shit here no touchy as for it is very fragile <3
-                //-NiK0
+                //-Lucky
                 float num = (int)Math.Ceiling((drawdist - startpoint) / 8f);
                 Vec2 p2 = prev.Last();
                 for (int index = 0; index < num; ++index)
@@ -654,7 +660,7 @@ namespace DuckGame
                         //very slight optimization here, before it was setting ammo.sprite.angleDegrees 
                         //to Maths.PointDirection making it do extra operations when it
                         //could just be setting the angle direction skipping two operations 
-                        //-NiK0
+                        //-Lucky
                         ammo.sprite.angle = -Maths.PointDirectionRad(Vec2.Zero, travelDirNormalized);
                         BulletLerp.UpdateLerpState(p2, MonoMain.IntraTick, MonoMain.UpdateLerpState);
                         Graphics.Draw(ammo.sprite, BulletLerp.x, BulletLerp.y);
@@ -679,7 +685,7 @@ namespace DuckGame
                 while (true)
                 {
                     bool bulletDrawn = false;
-                    if (dist + drawLength > length)
+                    if (dist + drawLength > length || float.IsNaN(length))
                     {
                         drawLength = length - Maths.Clamp(dist, 0f, 99f);
                         bulletDrawn = true;

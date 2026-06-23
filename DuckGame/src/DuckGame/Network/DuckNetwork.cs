@@ -1,15 +1,11 @@
-﻿using AddedContent.Firebreak;
-using SDL2;
-using SixLabors.ImageSharp;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
-using System.Drawing;
 using System.Threading;
-using System.Windows.Forms;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace DuckGame
 {
@@ -905,7 +901,7 @@ namespace DuckGame
                     _ => $"steam://joinlobby/312530/{Steam.lobby.id}/{Steam.user.id}  https://dgr-join.github.io/?lobby={Steam.lobby.id}&user={Steam.user.id}"
                 };
 
-                SDL.SDL_SetClipboardText(inviteLink);
+                FNAPlatform.SetClipboardText(inviteLink);
                 HUD.AddPlayerChangeDisplay("@CLIPCOPY@Invite Link Copied!");
             });
             thread.SetApartmentState(ApartmentState.STA);
@@ -2055,6 +2051,11 @@ namespace DuckGame
             {
                 if (Network.isServer)
                 {
+                    if (Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
+                    {
+                        Network.activeNetwork.core.lobby.SetLobbyData("midgame", DGRSettings.MidGameJoining ? "true" : "false");
+                    }
+
                     localProfile.netData.Set<bool>("midgameJoining", DGRSettings.MidGameJoining);
                     if (DGRSettings.MidGameJoining != prevMG)
                     {
@@ -2090,13 +2091,13 @@ namespace DuckGame
                             }
 
                             inGame = false;
-                            if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
+                            if (Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
                             {
                                 Network.activeNetwork.core.lobby.joinable = true;
                                 // Network.activeNetwork.core.lobby.type = SteamLobbyType.Private;
                                 //if (ShowGameInBrowser)
                                 //{
-                                //set this to true for auhsduhasd -NiK0
+                                //set this to true for auhsduhasd -Lucky
                                 Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
                                 Network.activeNetwork.core.lobby.SetLobbyData("name", "|PINK|[MIDGAME] |PREV|" + Steam.user.name + "'s Lobby");
                                 /*}
@@ -2110,7 +2111,7 @@ namespace DuckGame
                         else
                         {
                             inGame = true;
-                            if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
+                            if (Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
                             {
                                 Network.activeNetwork.core.lobby.joinable = false;
                                 Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
@@ -2118,7 +2119,7 @@ namespace DuckGame
                             }
                         }
                     }
-                    else if (DGRSettings.MidGameJoining && Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null && Network.activeNetwork.core.lobby.GetLobbyData("name").StartsWith("|PINK|[MIDGAME]")) Network.activeNetwork.core.lobby.SetLobbyData("name", Steam.user.name + "'s Lobby");
+                    else if (DGRSettings.MidGameJoining  && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null && Network.activeNetwork.core.lobby.GetLobbyData("name").StartsWith("|PINK|[MIDGAME]")) Network.activeNetwork.core.lobby.SetLobbyData("name", Steam.user.name + "'s Lobby");
                     prevMG = DGRSettings.MidGameJoining;
                 }
                 else
@@ -2206,7 +2207,7 @@ namespace DuckGame
                     if (Network.isServer && DGRSettings.MidGameJoining)
                     {
                         inGame = true;
-                        if (Network.activeNetwork != null && Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
+                        if (Network.activeNetwork.core != null && Network.activeNetwork.core.lobby != null)
                         {
                             Network.activeNetwork.core.lobby.joinable = false;
                             Network.activeNetwork.core.lobby.SetLobbyData("started", "true");
@@ -2374,8 +2375,8 @@ namespace DuckGame
                     if (_core.enteringText)
                     {
                         Input._imeAllowed = true;
-                        if (Keyboard.control && Keyboard.Pressed(Keys.V) && SDL.SDL_HasClipboardText() == SDL.SDL_bool.SDL_TRUE)
-                            Keyboard.KeyString += SDL.SDL_GetClipboardText();
+                        if (Keyboard.control && Keyboard.Pressed(Keys.V) && FNAPlatform.HasClipboardText())
+                            Keyboard.KeyString += FNAPlatform.GetClipboardText();
                         if (Keyboard.KeyString.Length > 90)
                             Keyboard.KeyString = Keyboard.KeyString.Substring(0, 90);
                         Keyboard.KeyString = Keyboard.KeyString.Replace("\n", "");
@@ -2817,7 +2818,7 @@ namespace DuckGame
                             if (nmRequestJoin.names == null || nmRequestJoin.names.Count == 0)
                                 return new NMErrorEmptyJoinMessage();
                             DevConsole.Log(DCSection.DuckNet, "Join attempt from " + nmRequestJoin.names[0]);
-                            if (DG.FiftyPlayerMode && !nmRequestJoin.isRebuiltUser) //this filters out non rebuilt users trying to join somehow when 50p mode is enabled -NiK0
+                            if (DG.FiftyPlayerMode && !nmRequestJoin.isRebuiltUser) //this filters out non rebuilt users trying to join somehow when 50p mode is enabled -Lucky
                             {
                                 DevConsole.Log(DCSection.DuckNet, "@error " + nmRequestJoin.names[0] + " could not join, not a rebuilt user.@error");
                                 return new NMVersionMismatch(NMVersionMismatch.Type.Error, Program.CURRENT_VERSION_ID + "REBUILT");
@@ -3299,6 +3300,10 @@ namespace DuckGame
                             }
                         case NMSpecialHat _:
                             NMSpecialHat nmSpecialHat = m as NMSpecialHat;
+                            if (nmSpecialHat.customTeamIndex == 65535) // for max value from null (ushort)-1
+                            {
+                                break;
+                            }
                             using (List<Profile>.Enumerator enumerator = profiles.GetEnumerator())
                             {
                                 while (enumerator.MoveNext())
@@ -3525,7 +3530,7 @@ namespace DuckGame
             //this includes the DuckNetwork.cs Draw function which draws the chat, usually this function draws outside and onto the black bars
             //if they're present but because it gets bundled in the render target its all drawn inside them making chat be squished
             //this fix just stretches the chat vertically so it looks normally but doesn't fix the underlying issue 
-            //maybe improve it later? this works for now though -NiK0
+            //maybe improve it later? this works for now though -Lucky
             float ratioFixMult = Level.current is RockScoreboard ? (1 / (Resolution.current.aspect / 1.777777778f))  : 1;
 
             if (_core._chatFont is RasterFont) _core._chatFont.scale = new Vec2(0.5f);

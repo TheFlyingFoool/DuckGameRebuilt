@@ -20,6 +20,8 @@ namespace DuckGame
         private Sprite _tampingHand;
         private bool _puffed;
         private Duck _prevDuckOwner;
+        private readonly Interp _tampArmLerp = new Interp();
+        private SpriteMap _armSprite;
 
         public override float angle
         {
@@ -160,14 +162,27 @@ namespace DuckGame
                     _tampingHand.flipH = false;
                 }
                 _tampingHand.depth = depth - 1;
-                float angle = duck._spriteArms.angle;
+                SpriteMap spriteArms = duck._spriteArms;
+                if (_armSprite == null || _armSprite.texture != spriteArms.texture)
+                    _armSprite = spriteArms.CloneMap();
+                _armSprite.SetFrameWithoutReset(spriteArms.frame);
+                _armSprite.UpdateSpriteBox();
+                _armSprite.flipH = spriteArms.flipH;
+                _armSprite.angle = spriteArms.angle;
+                _armSprite.alpha = spriteArms.alpha;
+                _armSprite.depth = depth - 1;
+                _armSprite.scale = spriteArms.scale;
+                _armSprite.center = spriteArms.center;
+                _armSprite.color = spriteArms.color;
                 Vec2 vec2 = Offset(barrelOffset);
                 Vec2 p2 = vec2 + barrelVector * (float)(tampPos * 2 + 3);
                 Graphics.DrawLine(vec2 - barrelVector * 6f, p2, Color.Gray, depth: (depth - 2));
-                duck._spriteArms.depth = depth - 1;
-                duck._spriteArms.LerpState.CanLerp = false;
-                Graphics.Draw(duck._spriteArms, p2.x, p2.y);
-                duck._spriteArms.angle = angle;
+                _tampArmLerp.CanLerp = true;
+                _tampArmLerp.UpdateLerpState(p2, duck.SkipIntratick > 0 ? 1 : MonoMain.IntraTick, MonoMain.UpdateLerpState);
+                _armSprite.position = _tampArmLerp.Position;
+                _armSprite.LerpState.CanLerp = false;
+                _armSprite.SkipIntraTick = duck.SkipIntratick;
+                _armSprite.DrawWithoutUpdate();
             }
             position = new Vec2(position.x, position.y - _offsetY);
         }

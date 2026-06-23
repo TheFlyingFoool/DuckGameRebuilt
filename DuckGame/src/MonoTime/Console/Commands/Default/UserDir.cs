@@ -1,4 +1,5 @@
 ﻿using AddedContent.Firebreak;
+using Microsoft.Xna.Framework;
 using System.Diagnostics;
 
 namespace DuckGame
@@ -9,7 +10,7 @@ namespace DuckGame
         [Marker.DevConsoleCommand(Description = "Opens your game user directory")]
         public static void UserDir()
         {
-            Process.Start(DuckFile.userDirectory);
+            FNAPlatform.OpenURL(DuckFile.userDirectory); // Process.Start
             DevConsole.Log(new DCLine
             {
                 line = "User directory was opened.",

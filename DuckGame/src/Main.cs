@@ -35,6 +35,10 @@ namespace DuckGame
 
         public static void ResetMatchStuff()
         {
+            foreach (Profile profile in Profiles.all)
+            {
+                profile.netData.ResetModNetData();
+            }
             DevConsole.Log(DCSection.General, "ResetMatchStuff()");
             DuckFile.BeginDataCommit();
             PurpleBlock.Reset();
@@ -90,13 +94,17 @@ namespace DuckGame
 
         protected override void OnStart()
         {
+            MonoMain.NloadMessage = "Initializing Recorderator";
             Recorderator.Initialize();
             Options.Initialize();
             Teams.PostInitialize();
+            MonoMain.NloadMessage = "Initializing Unlocks";
             Unlocks.Initialize();
             ConnectionStatusUI.Initialize();
             Unlocks.CalculateTreeValues();
+            MonoMain.NloadMessage = "Initializing Profiles";
             Profiles.Initialize();
+            MonoMain.NloadMessage = "Initializing Challenges";
             Challenges.InitializeChallengeData();
             ProfilesCore.TryAutomerge();
             Dialogue.Initialize();
@@ -108,6 +116,7 @@ namespace DuckGame
             AmmoType.InitializeTypes();
             DestroyType.InitializeTypes();
             VirtualTransition.Initialize();
+            MonoMain.NloadMessage = "Initializing Unlockables";
             Unlockables.Initialize();
             UIInviteMenu.Initialize();
 

@@ -27,6 +27,7 @@ namespace DuckGame
         protected UIServerBrowser.LobbyData _directConnectLobby;
         private int _timeOpen;
         private static Level _currentLevel;
+        public bool directJoinAttempt;
         public Lobby _hostedLobby;
         public Lobby _processing;
         public HashSet<ulong> blacklist = new HashSet<ulong>();

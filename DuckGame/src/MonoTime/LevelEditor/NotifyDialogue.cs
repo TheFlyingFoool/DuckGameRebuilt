@@ -64,7 +64,7 @@
             //Vec2 vec2_2 = new Vec2((float)(layer.width / 2f + num1 / 2f), (float)(layer.height / 2f + num2 / 2f));
             Vec2 vec2_3 = vec2_1 + new Vec2(18f, 28f);
             Vec2 vec2_4 = new Vec2(num1 - 40f, 40f);
-            //Vec2 vec2_5 = vec2_1 + new Vec2(160f, 28f); worthless -NiK0
+            //Vec2 vec2_5 = vec2_1 + new Vec2(160f, 28f); worthless -Lucky
             //Vec2 vec2_6 = new Vec2(120f, 40f);
             _hoverOk = Mouse.x > vec2_3.x && Mouse.x < vec2_3.x + vec2_4.x && Mouse.y > vec2_3.y && Mouse.y < vec2_3.y + vec2_4.y;
             if (!Editor.tookInput && Input.Pressed(Triggers.MenuLeft))

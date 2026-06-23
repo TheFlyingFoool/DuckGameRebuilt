@@ -42,7 +42,7 @@ namespace DuckGame
         public bool forceConsole;
         public bool forceChatting;
         public bool forceAFK;
-        public int coinTargetted; //hi whats good -NiK0
+        public int coinTargetted; //hi whats good -Lucky
         private Vec2 spawnedposition = new Vec2(0f,0f);
         private byte _quackPitch;
         public NetSoundEffect _netQuack = new NetSoundEffect(new string[1]
@@ -1836,7 +1836,7 @@ namespace DuckGame
             h.solid = true;
             h.ReturnToWorld();
             
-            //runs old collision code because otherwise clipping items into pyramid walls doesn't work -NiK0
+            //runs old collision code because otherwise clipping items into pyramid walls doesn't work -Lucky
             LegacyReturnItemToWorld(h);
         }
 
@@ -2169,7 +2169,7 @@ namespace DuckGame
 
         public void Ressurect()
         {
-            Main.SpecialCode = "CCC1"; //added these special codes here for now since Ressurect crashes are very common apparently -NiK0
+            Main.SpecialCode = "CCC1"; //added these special codes here for now since Ressurect crashes are very common apparently -Lucky
             dead = false;
             if (ragdoll != null) ragdoll.Unragdoll();
             ResetNonServerDeathState();
@@ -3965,7 +3965,7 @@ namespace DuckGame
             }
             //this._coolnessThisFrame = 0;
             UpdateBurning();
-            //this.UpdateGhostStatus(); -NiK0 Removed useless void
+            //this.UpdateGhostStatus(); -Lucky Removed useless void
             if (dead)
             {
                 immobilized = true;

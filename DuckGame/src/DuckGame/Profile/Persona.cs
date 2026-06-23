@@ -128,6 +128,9 @@ namespace DuckGame
             _personasShuffled = _personasOriginalOrder;
         }
 
-        public static int Number(DuckPersona p) => _personas.IndexOf(p);
+        public static int Number(DuckPersona p)
+        {
+            return _personas.IndexOf(p);
+        }
     }
 }

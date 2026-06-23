@@ -43,8 +43,15 @@ namespace DuckGame
             };
             _font = new BitmapFont("biosFont", 8);
             _medalNoRibbon = new SpriteMap("arcade/medalNoRibbon", 18, 18);
-            _realSave = Profiles.active[0].GetSaveData(_challenge.levelID);
-            _save = _realSave.Clone();
+            if (_challenge != null)
+            {
+                _realSave = Profiles.active[0].GetSaveData(_challenge.levelID);
+                _save = _realSave.Clone();
+            }
+            else
+            {
+                SFX.Play("consoleError");
+            }
             _medalRibbon = new SpriteMap("arcade/medalRibbon", 18, 27)
             {
                 center = new Vec2(6f, 3f)
@@ -54,7 +61,7 @@ namespace DuckGame
 
         public override void Update()
         {
-            if (_preview == null && _challenge.preview != null)
+            if (_preview == null && _challenge != null && _challenge.preview != null)
             {
                 Texture2D tex = Texture2D.FromStream(Graphics.device, new MemoryStream(Convert.FromBase64String(_challenge.preview)));
                 _preview = new SpriteMap((Tex2D)tex, tex.Width, tex.Height)
@@ -136,7 +143,7 @@ namespace DuckGame
             float num1 = alpha * (hover ? 1f : 0.6f) * _alphaMul;
             _font.alpha = num1;
             Graphics.DrawRect(position, position + new Vec2(258f, _size), Color.White * num1, (Depth)(0.8f + num1 * 0.04f), false);
-            if (_save.trophy != TrophyType.Baseline)
+            if (_save != null && _save.trophy != TrophyType.Baseline)
             {
                 _medalRibbon.depth = (Depth)(0.81f + num1 * 0.04f);
                 _medalRibbon.color = new Color(num1, num1, num1);
@@ -172,12 +179,20 @@ namespace DuckGame
             else
                 Graphics.Draw(_thumb, this.x + 2f, y + 2f);
             _font.maxWidth = 200;
-            string str1 = _challenge.GetNameForDisplay();
+            string str1 = "";
+            if (_challenge != null)
+            {
+                str1 = _challenge.GetNameForDisplay();
+            }
             if (!_unlocked)
                 str1 = MakeQuestionMarks(str1);
             _font.Draw(str1, this.x + 41f, y + 2f, Color.White * num1, (Depth)1f);
             Color c1 = new Color(247, 224, 89);
-            string str2 = _challenge.description;
+            string str2 = "";
+            if (_challenge != null)
+            {
+                str2 = _challenge.description;
+            }
             if (!_unlocked)
                 str2 = MakeQuestionMarks(str2);
             _fancyFont.maxWidth = 200;
@@ -215,18 +230,27 @@ namespace DuckGame
             _font.alpha = num2;
             Color color = new Color(245, 165, 36);
             Color c2 = Colors.DGRed;
-            if (_save.trophy == TrophyType.Bronze)
-                c2 = Colors.Bronze;
-            else if (_save.trophy == TrophyType.Silver)
-                c2 = Colors.Silver;
-            else if (_save.trophy == TrophyType.Gold)
-                c2 = Colors.Gold;
-            else if (_save.trophy == TrophyType.Platinum)
-                c2 = Colors.Platinum;
-            else if (_save.trophy == TrophyType.Developer)
-                c2 = Colors.Developer;
-            _fancyFont.Draw("|DGBLUE|" + _challenge.goal, this.x + 4f, y + 45f, Color.White, (Depth)0.9f);
-            _font.Draw(Chancy.GetChallengeBestString(_save, _challenge), this.x + 4f, (float)(y + 45f + 9f), c2, (Depth)1f);
+            if (_save != null)
+            {
+                if (_save.trophy == TrophyType.Bronze)
+                    c2 = Colors.Bronze;
+                else if (_save.trophy == TrophyType.Silver)
+                    c2 = Colors.Silver;
+                else if (_save.trophy == TrophyType.Gold)
+                    c2 = Colors.Gold;
+                else if (_save.trophy == TrophyType.Platinum)
+                    c2 = Colors.Platinum;
+                else if (_save.trophy == TrophyType.Developer)
+                    c2 = Colors.Developer;
+            }
+            if (_challenge != null)
+            {
+                _fancyFont.Draw("|DGBLUE|" + _challenge.goal, this.x + 4f, y + 45f, Color.White, (Depth)0.9f);
+                if (_save != null)
+                {
+                    _font.Draw(Chancy.GetChallengeBestString(_save, _challenge), this.x + 4f, (float)(y + 45f + 9f), c2, (Depth)1f);
+                }
+            }
             bool flag1 = false;
             _medalNoRibbon.depth = (Depth)(0.8f + num1 * 0.04f);
             _medalNoRibbon.alpha = num2;
@@ -236,10 +260,14 @@ namespace DuckGame
             Graphics.Draw(_medalNoRibbon, x, num3);
             Color c3 = new Color(245, 165, 36);
             _font.Draw("GOLD", x + 22f, num3, c3, (Depth)1f);
-            ChallengeTrophy challengeTrophy1 = _challenge.trophies.FirstOrDefault(val => val.type == TrophyType.Gold);
+            ChallengeTrophy challengeTrophy1 = null;
+            if (_challenge != null)
+            {
+                challengeTrophy1 = _challenge.trophies.FirstOrDefault(val => val.type == TrophyType.Gold);
+            }
             string text1 = "";
             bool flag2 = false;
-            if (challengeTrophy1.timeRequirement > 0)
+            if (challengeTrophy1 != null && challengeTrophy1.timeRequirement > 0)
             {
                 TimeSpan span = TimeSpan.FromSeconds(challengeTrophy1.timeRequirement);
                 text1 = text1 + MonoMain.TimeString(span, small: true) + " ";
@@ -247,7 +275,7 @@ namespace DuckGame
                 flag2 = true;
             }
             int num4;
-            if (challengeTrophy1.targets > 0)
+            if (challengeTrophy1 != null && challengeTrophy1.targets > 0)
             {
                 if (text1 != "")
                     text1 += ", ";
@@ -256,20 +284,20 @@ namespace DuckGame
                 string str4 = num4.ToString();
                 text1 = str3 + "|LIME|" + str4 + " TARGETS";
             }
-            if (challengeTrophy1.goodies > 0)
+            if (challengeTrophy1 != null && challengeTrophy1.goodies > 0)
             {
                 if (text1 != "")
                     text1 += ", ";
                 string str5 = "GOODIES";
-                if (_challenge.prefix != "")
+                if (_challenge != null && _challenge.prefix != "")
                     str5 = _challenge.prefix;
                 string[] strArray = new string[5]
                 {
-          text1,
-          "|ORANGE|",
-          null,
-          null,
-          null
+                  text1,
+                  "|ORANGE|",
+                  null,
+                  null,
+                  null
                 };
                 num4 = challengeTrophy1.goodies;
                 strArray[2] = num4.ToString();
@@ -284,20 +312,24 @@ namespace DuckGame
             Graphics.Draw(_medalNoRibbon, x, num5);
             c3 = new Color(173, 173, 173);
             _font.Draw("SILVER", x + 22f, num5, c3, (Depth)1f);
-            ChallengeTrophy challengeTrophy2 = _challenge.trophies.FirstOrDefault(val => val.type == TrophyType.Silver);
+            ChallengeTrophy challengeTrophy2 = null;
+            if (_challenge != null)
+            {
+                challengeTrophy2 = _challenge.trophies.FirstOrDefault(val => val.type == TrophyType.Silver);
+            }
             string text2 = "";
-            if (flag2 && challengeTrophy2.timeRequirement == 0 && _challenge.trophies[0].timeRequirement != 0)
+            if (flag2 && challengeTrophy2 != null && challengeTrophy2.timeRequirement == 0 && _challenge != null && _challenge.trophies[0].timeRequirement != 0)
                 challengeTrophy2.timeRequirement = _challenge.trophies[0].timeRequirement;
-            if (challengeTrophy2.timeRequirement > 0)
+            if (challengeTrophy2 != null && challengeTrophy2.timeRequirement > 0)
             {
                 TimeSpan span = TimeSpan.FromSeconds(challengeTrophy2.timeRequirement);
                 text2 = text2 + MonoMain.TimeString(span, small: true) + " ";
                 flag1 = true;
                 flag2 = true;
             }
-            else if (flag1 && _challenge.trophies[0].timeRequirement == 0)
+            else if (flag1 && _challenge != null && _challenge.trophies[0].timeRequirement == 0)
                 text2 = "ANY TIME ";
-            if (challengeTrophy2.targets > 0)
+            if (challengeTrophy2 != null && challengeTrophy2.targets > 0)
             {
                 if (text2 != "")
                     text2 += ", ";
@@ -306,20 +338,20 @@ namespace DuckGame
                 string str7 = num4.ToString();
                 text2 = str6 + "|LIME|" + str7 + " TARGETS";
             }
-            if (challengeTrophy2.goodies > 0)
+            if (challengeTrophy2 != null && challengeTrophy2.goodies > 0)
             {
                 if (text2 != "")
                     text2 += ", ";
                 string str8 = "GOODIES";
-                if (_challenge.prefix != "")
+                if (_challenge != null && _challenge.prefix != "")
                     str8 = _challenge.prefix;
                 string[] strArray = new string[5]
                 {
-          text2,
-          "|ORANGE|",
-          null,
-          null,
-          null
+                  text2,
+                  "|ORANGE|",
+                  null,
+                  null,
+                  null
                 };
                 num4 = challengeTrophy2.goodies;
                 strArray[2] = num4.ToString();
@@ -334,18 +366,22 @@ namespace DuckGame
             Graphics.Draw(_medalNoRibbon, x, num6);
             c3 = new Color(181, 86, 3);
             _font.Draw("BRONZE", x + 22f, num6, c3, (Depth)1f);
-            ChallengeTrophy challengeTrophy3 = _challenge.trophies.FirstOrDefault(val => val.type == TrophyType.Bronze);
+            ChallengeTrophy challengeTrophy3 = null;
+            if (_challenge != null)
+            {
+                challengeTrophy3 = _challenge.trophies.FirstOrDefault(val => val.type == TrophyType.Bronze);
+            }
             string text3 = "";
-            if (flag2 && challengeTrophy3.timeRequirement == 0 && _challenge.trophies[0].timeRequirement != 0)
+            if (flag2 && challengeTrophy3 != null && challengeTrophy3.timeRequirement == 0 && _challenge != null && _challenge.trophies[0].timeRequirement != 0)
                 challengeTrophy3.timeRequirement = _challenge.trophies[0].timeRequirement;
-            if (challengeTrophy3.timeRequirement > 0)
+            if (challengeTrophy3 != null && challengeTrophy3.timeRequirement > 0)
             {
                 TimeSpan span = TimeSpan.FromSeconds(challengeTrophy3.timeRequirement);
                 text3 = text3 + MonoMain.TimeString(span, small: true) + " ";
             }
-            else if (flag1 && _challenge.trophies[0].timeRequirement == 0)
+            else if (flag1 && _challenge != null && _challenge.trophies[0].timeRequirement == 0)
                 text3 = "ANY TIME ";
-            if (challengeTrophy3.targets > 0)
+            if (challengeTrophy3 != null && challengeTrophy3.targets > 0)
             {
                 if (text3 != "")
                     text3 += ", ";
@@ -354,20 +390,20 @@ namespace DuckGame
                 string str10 = num4.ToString();
                 text3 = str9 + "|LIME|" + str10 + " TARGETS";
             }
-            if (challengeTrophy3.goodies > 0)
+            if (challengeTrophy3 != null && challengeTrophy3.goodies > 0)
             {
                 if (text3 != "")
                     text3 += ", ";
                 string str11 = "GOODIES";
-                if (_challenge.prefix != "")
+                if (_challenge != null && _challenge.prefix != "")
                     str11 = _challenge.prefix;
                 string[] strArray = new string[5]
                 {
-          text3,
-          "|ORANGE|",
-          null,
-          null,
-          null
+                  text3,
+                  "|ORANGE|",
+                  null,
+                  null,
+                  null
                 };
                 num4 = challengeTrophy3.goodies;
                 strArray[2] = num4.ToString();

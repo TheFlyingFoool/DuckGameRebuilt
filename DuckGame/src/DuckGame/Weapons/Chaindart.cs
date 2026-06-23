@@ -83,8 +83,14 @@ namespace DuckGame
         }
         public override void OnTeleport()
         {
-            _bullets.OnTeleport();
-            _topBullet.OnTeleport();
+            if (_bullets != null)
+            {
+                _bullets.OnTeleport();
+            }
+            if (_topBullet != null)
+            {
+                _topBullet.OnTeleport();
+            }
             base.OnTeleport();
         }
         public override void Initialize()

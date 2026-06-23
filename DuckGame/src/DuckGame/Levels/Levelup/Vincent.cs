@@ -1327,7 +1327,7 @@ namespace DuckGame
 
         public static void Draw()
         {
-            //Vec2 vec2_1 = new Vec2((float)(_listLerp * 270f - 200f), 20f); what -NiK0
+            //Vec2 vec2_1 = new Vec2((float)(_listLerp * 270f - 200f), 20f); what -Lucky
             if (_challengeLerp < 0.01f && _chancyLerp < 0.01f)
                 return;
             Vec2 vec2_2 = new Vec2((float)(100f * (1f - _chancyLerp)), (float)(100f * (1f - _chancyLerp) - 4f));

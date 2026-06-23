@@ -118,6 +118,81 @@ namespace DuckGame
             //Console.WriteLine("6");
             //return pngData;
         }
+
+        internal static PNGData LoadPNGDataWithPinkAwesomeness(
+    Texture2D texture,
+    bool process)
+        {
+            lastLoadResultedInResize = false;
+
+            int width = texture.Width;
+            int height = texture.Height;
+
+            Color[] data = new Color[width * height];
+            texture.GetData(data);
+
+            // -----------------------------
+            // Resize (replacement for Bitmap scaling)
+            // -----------------------------
+            if (_maxDimensions != Vec2.Zero)
+            {
+                int maxW = (int)_maxDimensions.x;
+                int maxH = (int)_maxDimensions.y;
+
+                float scale = Math.Min((float)maxW / width, (float)maxH / height);
+
+                if (scale < 1f)
+                {
+                    lastLoadResultedInResize = true;
+
+                    int newW = (int)(width * scale);
+                    int newH = (int)(height * scale);
+
+                    data = ResizeBilinear(data, width, height, newW, newH);
+                    width = newW;
+                    height = newH;
+                }
+            }
+
+            // -----------------------------
+            // Process pixels (replaces unsafe block)
+            // -----------------------------
+            int[] destination = new int[width * height];
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                Color c = data[i];
+
+                // Magenta → transparent (same as *scan0 == -65281)
+                if (process && c.r == 255 && c.g == 0 && c.b == 255)
+                {
+                    destination[i] = 0;
+                    continue;
+                }
+
+                // Premultiply alpha
+                float a = c.a / 255f;
+
+                byte r = (byte)(c.r * a);
+                byte g = (byte)(c.g * a);
+                byte b = (byte)(c.b * a);
+
+                // Pack into int (same layout as original ARGB)
+                destination[i] =
+                    (c.a << 24) |
+                    (r << 16) |
+                    (g << 8) |
+                    b;
+            }
+
+            return new PNGData
+            {
+                data = destination,
+                width = width,
+                height = height
+            };
+        }
+
         internal static unsafe PNGData LoadPNGDataWithPinkAwesomeness(
           Bitmap bitmap,
           bool process)
@@ -186,6 +261,144 @@ namespace DuckGame
             return pngData;
         }
 
+
+
+        internal static Texture2D LoadPNGWithPinkAwesomeness(
+            GraphicsDevice device,
+            byte[] pData,
+            bool process)
+        {
+            using (MemoryStream ms = new MemoryStream(pData))
+            {
+                Texture2D tex = Texture2D.FromStream(device, ms);
+
+                return MemLoadPNGDataWithPinkAwesomeness(device, tex, process);
+            }
+        }
+        internal static Texture2D LoadPNGWithPinkAwesomenessNew(
+         GraphicsDevice device,
+         Stream stream,
+         bool process)
+        {
+            Texture2D tex = Texture2D.FromStream(device, stream);
+
+            return MemLoadPNGDataWithPinkAwesomeness(device, tex, process);
+        }
+        internal static Texture2D MemLoadPNGDataWithPinkAwesomeness(
+            GraphicsDevice device,
+            Texture2D tex,
+            bool process)
+        {
+            lastLoadResultedInResize = false;
+
+            int srcW = tex.Width;
+            int srcH = tex.Height;
+
+            Color[] src = new Color[srcW * srcH];
+            tex.GetData(src);
+            if (_maxDimensions != Vec2.Zero)
+            {
+                int maxW = (int)_maxDimensions.x;
+                int maxH = (int)_maxDimensions.y;
+
+                float scale = Math.Min((float)maxW / srcW, (float)maxH / srcH);
+
+                if (scale < 1f)
+                {
+                    lastLoadResultedInResize = true;
+
+                    int newW = (int)(srcW * scale);
+                    int newH = (int)(srcH * scale);
+
+                    src = ResizeBilinear(src, srcW, srcH, newW, newH);
+                    srcW = newW;
+                    srcH = newH;
+                }
+            }
+            if (process)
+            {
+                for (int i = 0; i < src.Length; i++)
+                {
+                    Color c = src[i];
+
+                    // match System.Drawing.Color.Magenta (255,0,255)
+                    if (c.r == 255 && c.g == 0 && c.b == 255)
+                        src[i] = Color.Transparent;
+                }
+            }
+            // Premultiplied alpha conversion (
+            //FromNonPremultiplied)
+            for (int i = 0; i < src.Length; i++)
+            {
+                Color c = src[i];
+
+                float a = c.a / 255f;
+
+                src[i] = new Color(
+                    (int)(c.r * a),
+                    (int)(c.g * a),
+                    (int)(c.b * a),
+                    c.a
+                );
+            }
+
+            Texture2D result = new Texture2D(device, srcW, srcH);
+            result.SetData(src);
+            return result;
+        }
+        private static Color[] ResizeBilinear(Color[] src, int srcW, int srcH, int dstW, int dstH)
+        {
+            Color[] dst = new Color[dstW * dstH];
+
+            float scaleX = (float)srcW / dstW;
+            float scaleY = (float)srcH / dstH;
+
+            for (int y = 0; y < dstH; y++)
+            {
+                for (int x = 0; x < dstW; x++)
+                {
+                    float gx = x * scaleX;
+                    float gy = y * scaleY;
+
+                    int x0 = (int)gx;
+                    int y0 = (int)gy;
+                    int x1 = Math.Min(x0 + 1, srcW - 1);
+                    int y1 = Math.Min(y0 + 1, srcH - 1);
+
+                    float tx = gx - x0;
+                    float ty = gy - y0;
+
+                    Color c00 = src[y0 * srcW + x0];
+                    Color c10 = src[y0 * srcW + x1];
+                    Color c01 = src[y1 * srcW + x0];
+                    Color c11 = src[y1 * srcW + x1];
+
+                    dst[y * dstW + x] = new Color(
+                        (byte)MathHelper.Lerp(
+                            MathHelper.Lerp(c00.r, c10.r, tx),
+                            MathHelper.Lerp(c01.r, c11.r, tx),
+                            ty),
+
+                        (byte)MathHelper.Lerp(
+                            MathHelper.Lerp(c00.g, c10.g, tx),
+                            MathHelper.Lerp(c01.g, c11.g, tx),
+                            ty),
+
+                        (byte)MathHelper.Lerp(
+                            MathHelper.Lerp(c00.b, c10.b, tx),
+                            MathHelper.Lerp(c01.b, c11.b, tx),
+                            ty),
+
+                        (byte)MathHelper.Lerp(
+                            MathHelper.Lerp(c00.a, c10.a, tx),
+                            MathHelper.Lerp(c01.a, c11.a, tx),
+                            ty)
+                    );
+                }
+            }
+
+            return dst;
+        }
         internal static Texture2D LoadPNGWithPinkAwesomeness(
           GraphicsDevice device,
           Bitmap bitmap,
@@ -197,6 +410,7 @@ namespace DuckGame
             Texture2D texture2D = MemLoadPNGDataWithPinkAwesomeness(device, bitmap, process);
             return texture2D;
         }
+
 
         internal static Texture2D LoadPNGWithPinkAwesomenessAndMaxDimensions(
           GraphicsDevice device,
@@ -218,14 +432,15 @@ namespace DuckGame
           Stream stream,
           bool process)
         {
-            using (Bitmap bitmap = new Bitmap(stream))
-                return LoadPNGWithPinkAwesomeness(device, bitmap, process);
+
+            return TextureConverter.LoadPNGWithPinkAwesomenessNew(device, stream, process);
         }
 
         internal static PNGData LoadPNGDataWithPinkAwesomeness(Stream stream, bool process)
         {
-            using (Bitmap bitmap = new Bitmap(stream))
-                return LoadPNGDataWithPinkAwesomeness(bitmap, process);
+            return LoadPNGDataWithPinkAwesomeness(Texture2D.FromStream(Graphics.device, stream), process);
+           // using (Bitmap bitmap = new Bitmap(stream))
+             //   return LoadPNGDataWithPinkAwesomeness(Graphics.device, stream, process);
         }
 
         internal static Texture2D LoadPNGWithPinkAwesomeness(
@@ -239,8 +454,10 @@ namespace DuckGame
             }
             try
             {
-                using (Bitmap bitmap = new Bitmap(fileName))
-                    return LoadPNGWithPinkAwesomeness(device, bitmap, process);
+                using var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+                return LoadPNGWithPinkAwesomeness(device, fs, process);
+                //using (Bitmap bitmap = new Bitmap(fileName))
+                //     return LoadPNGWithPinkAwesomeness(device, bitmap, process);
             }
             catch {
                 return null;
@@ -257,10 +474,26 @@ namespace DuckGame
             {
                 fileName = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(fileName), true);
             }
-            using (Bitmap bitmap = new Bitmap(fileName))
-                return LoadPNGWithPinkAwesomenessAndMaxDimensions(device, bitmap, process, maxDimensions);
+            return LoadPNGWithPinkAwesomenessAndMaxDimensions(device, File.OpenRead(fileName), process, maxDimensions);
+            //using (Bitmap bitmap = new Bitmap(fileName))
+            //    return LoadPNGWithPinkAwesomenessAndMaxDimensions(device, bitmap, process, maxDimensions);
         }
 
+        internal static Texture2D LoadPNGWithPinkAwesomenessAndMaxDimensions(
+         GraphicsDevice device,
+         Stream stream,
+         bool process,
+         Vec2 pMaxDimensions)
+        {
+            _maxDimensions = pMaxDimensions;
+            Texture2D texture2D = Texture2D.FromStream(device, stream);
+            texture2D = MemLoadPNGDataWithPinkAwesomeness(device, texture2D, process);
+            //PNGData pngData = TextureConverter.LoadPNGDataWithPinkAwesomeness(bitmap, process);
+            _maxDimensions = Vec2.Zero;
+            // Texture2D texture2D = new Texture2D(device, pngData.width, pngData.height);
+            // texture2D.SetData<int>(pngData.data);
+            return texture2D;
+        }
         internal static PNGData LoadPNGDataWithPinkAwesomeness(
           GraphicsDevice device,
           string fileName,
@@ -270,8 +503,9 @@ namespace DuckGame
             {
                 fileName = XnaToFnaHelper.GetActualCaseForFileName(XnaToFnaHelper.FixPath(fileName), true);
             }
-            using (Bitmap bitmap = new Bitmap(fileName))
-                return LoadPNGDataWithPinkAwesomeness(bitmap, process);
+            return LoadPNGDataWithPinkAwesomeness(Texture2D.FromStream(Graphics.device, File.OpenRead(fileName)), process);
+            //using (Bitmap bitmap = new Bitmap(fileName))
+            //    return LoadPNGDataWithPinkAwesomeness(bitmap, process);
         }
     }
 }

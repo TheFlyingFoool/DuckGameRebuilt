@@ -30,7 +30,11 @@ namespace DuckGame
         public SoundState _State = SoundState.Stopped;//dan
         public void SetData(SoundEffect pData)
         {
-            if (Program.IsLinuxD)
+            if (pData != null  && pData.IsDisposed)
+            {
+                return;
+            }
+            if (Program.IsLinuxD || Environment.Is64BitProcess)
             {
                 if (pData == null)
                 {
@@ -69,7 +73,7 @@ namespace DuckGame
 
         private void RebuildChain()
         {
-            if (Program.IsLinuxD)
+            if (Program.IsLinuxD || Environment.Is64BitProcess)
                 return;
             if (_chainEnd != null)
                 Windows_Audio.RemoveSound(_chainEnd);
@@ -103,7 +107,7 @@ namespace DuckGame
         {
             get
             {
-                if (!Program.IsLinuxD)
+                if (!Program.IsLinuxD && !Environment.Is64BitProcess)
                     return false;
                 if (soundEffectInstance == null && (ogg == null || ogg.instance != null))
                 {
@@ -135,7 +139,7 @@ namespace DuckGame
 
         public void Play()
         {
-            if (Program.IsLinuxD)
+            if (Program.IsLinuxD || Environment.Is64BitProcess)
             {
                 if (soundEffectInstance == null && ogg == null)
                 {
@@ -159,7 +163,7 @@ namespace DuckGame
 
         public void Resume()
         {
-            if (Program.IsLinuxD)
+            if (Program.IsLinuxD || Environment.Is64BitProcess)
             {
                 if (soundEffectInstance == null && ogg == null)
                 {
@@ -181,7 +185,7 @@ namespace DuckGame
 
         public void Stop()
         {
-            if (Program.IsLinuxD)
+            if (Program.IsLinuxD || Environment.Is64BitProcess)
             {
                 if (soundEffectInstance == null && ogg == null)
                 {
@@ -205,7 +209,7 @@ namespace DuckGame
 
         public void Pause()
         {
-            if (Program.IsLinuxD)
+            if (Program.IsLinuxD || Environment.Is64BitProcess)
             {
                 if (soundEffectInstance == null && ogg == null)
                 {
@@ -230,7 +234,7 @@ namespace DuckGame
             //set => this._loop = value;
             get
             {
-                if (!Program.IsLinuxD)
+                if (!Program.IsLinuxD && !Environment.Is64BitProcess)
                 {
                     return _loop;
                 }
@@ -247,7 +251,7 @@ namespace DuckGame
             set
             {
                 _loop = value;
-                if (!Program.IsLinuxD)
+                if (!Program.IsLinuxD && !Environment.Is64BitProcess)
                 {
                     return;
                 }
@@ -267,7 +271,7 @@ namespace DuckGame
         {
             get
             {
-                if (!Program.IsLinuxD)
+                if (!Program.IsLinuxD && !Environment.Is64BitProcess)
                 {
                     return _pitch;
                 }
@@ -285,7 +289,7 @@ namespace DuckGame
             {
 
                 _pitch = value;
-                if (!Program.IsLinuxD)
+                if (!Program.IsLinuxD && !Environment.Is64BitProcess)
                 {
                     _pitch = value;
                     if (_pitch != 0.0 && _pitchChain == null)
@@ -313,7 +317,7 @@ namespace DuckGame
 
             get
             {
-                if (!Program.IsLinuxD)
+                if (!Program.IsLinuxD && !Environment.Is64BitProcess)
                 {
                     return _volume;
                 }
@@ -330,7 +334,7 @@ namespace DuckGame
             set
             {
                 _volume = value;
-                if (!Program.IsLinuxD)
+                if (!Program.IsLinuxD && !Environment.Is64BitProcess)
                 {
                     if (_volume != 1.0f && _volumeChain == null)
                         RebuildChain();
@@ -355,7 +359,7 @@ namespace DuckGame
         {
             get
             {
-                if (!Program.IsLinuxD)
+                if (!Program.IsLinuxD && !Environment.Is64BitProcess)
                 {
                     return _pan;
                 }
@@ -372,7 +376,7 @@ namespace DuckGame
             set
             {
                 _pan = value;
-                if (!Program.IsLinuxD)
+                if (!Program.IsLinuxD && !Environment.Is64BitProcess)
                 {
                     if (_pan != 0.0 && _panChain == null)
                         RebuildChain();
@@ -397,7 +401,7 @@ namespace DuckGame
         {
             get
             {
-                if (!Program.IsLinuxD)
+                if (!Program.IsLinuxD && !Environment.Is64BitProcess)
                 {
                     return !_inMixer ? SoundState.Stopped : SoundState.Playing;
                 }
@@ -414,7 +418,7 @@ namespace DuckGame
         }
         public virtual int Read(float[] buffer, int offset, int count)
         {
-            if (Program.IsLinuxD || _data == null || !_inMixer)
+            if (Program.IsLinuxD || Environment.Is64BitProcess || _data == null || !_inMixer)
             {
                 return 0;
             }
@@ -466,7 +470,7 @@ namespace DuckGame
         }
         public void Platform_SetProgress(float pProgress)
         {
-            if (Program.IsLinuxD || _data == null)
+            if (Program.IsLinuxD|| Environment.Is64BitProcess || _data == null)
             {
                 return;
             }
@@ -475,7 +479,7 @@ namespace DuckGame
         }
         public float Platform_GetProgress()
         {
-            if (Program.IsLinuxD)
+            if (Program.IsLinuxD || Environment.Is64BitProcess)
             {
                 return 0f;
             }
@@ -487,7 +491,7 @@ namespace DuckGame
         }
         public int Platform_GetLengthInMilliseconds()
         {
-            if (Program.IsLinuxD || _data == null)
+            if (Program.IsLinuxD || Environment.Is64BitProcess || _data == null)
             {
                 return 0;
             }

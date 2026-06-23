@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,7 +8,6 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
-using System.Reflection;
 
 namespace DuckGame
 {
@@ -614,13 +614,13 @@ namespace DuckGame
                     {
                         try
                         {
-                            Process.Start(Path.GetFullPath(_currentDirectory));
+                            FNAPlatform.OpenURL(Path.GetFullPath(_currentDirectory)); // Process.Start
                         }
                         catch (Exception ex1)
                         {
                             try
                             {
-                                Process.Start(_currentDirectory);
+                                FNAPlatform.OpenURL(_currentDirectory); // Process.Start
                             }
                             catch (Exception)
                             {

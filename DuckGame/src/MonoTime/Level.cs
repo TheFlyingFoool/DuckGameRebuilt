@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using AddedContent.Hyeve;
+using System.Reflection;
 
 namespace DuckGame
 {
@@ -12,6 +13,8 @@ namespace DuckGame
     {
         public List<NMLevel> levelMessages = new List<NMLevel>();
         public bool isCustomLevel;
+        public static List<MethodInfo> PrefixPostDrawLayerMethods = new List<MethodInfo>();
+        public static List<MethodInfo> PostfixPostDrawLayerMethods = new List<MethodInfo>();
         public static bool flipH = false;
         public static bool symmetry = false;
         public static bool leftSymmetry = true;
@@ -990,7 +993,7 @@ namespace DuckGame
 #if DEBUG
                     if (!Network.isActive)
                     {
-                        Graphics.DrawString("this stuff only shows in debug builds and offline -NiK0", new Vec2(0, 0), Color.White, 1, null, 2);
+                        Graphics.DrawString("this stuff only shows in debug builds and offline -Lucky", new Vec2(0, 0), Color.White, 1, null, 2);
                         Graphics.DrawString(Resolution.size.ToString(), new Vec2(0, 16), Color.White, 1, null, 2);
                         Graphics.DrawString(Resolution.current.dimensions.ToString(), new Vec2(0, 32), Color.White, 1, null, 2);
                         if (Graphics._screenViewport != null) Graphics.DrawString(Graphics._screenViewport.Value.Bounds.ToString(), new Vec2(0, 48), Color.White, 1, null, 2);
@@ -1027,7 +1030,7 @@ namespace DuckGame
         {
             if (l != Layer.HUD || !_centeredView)
                 return;
-            float num = (float)(Resolution.size.x * Graphics.aspect - Resolution.size.x * (9f / 16f)); //keep the "f" in these otherwise the math wont work out properly -NiK0
+            float num = (float)(Resolution.size.x * Graphics.aspect - Resolution.size.x * (9f / 16f)); //keep the "f" in these otherwise the math wont work out properly -Lucky
             if (num <= 0)
                 return;
             Graphics.screen.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Matrix.Identity);
@@ -1054,6 +1057,7 @@ namespace DuckGame
 
         public virtual void PostDrawLayer(Layer layer)
         {
+            PrefixPostDrawLayer(layer);
             foreach (IEngineUpdatable engineUpdatable in MonoMain.core.engineUpdatables)
                 engineUpdatable.OnDrawLayer(layer);
             foreach (IDrawToDifferentLayers toDifferentLayers in things[typeof(IDrawToDifferentLayers)])
@@ -1074,19 +1078,28 @@ namespace DuckGame
             {
                 DevConsole.Draw();
                 if (!Network.isActive)
+                {
+                    PostfixPostDrawLayer(layer);
                     return;
+                }
                 DuckNetwork.Draw();
             }
             else if (layer == Layer.Foreground)
             {
                 if (layer.fade <= 0)
+                {
+                    PostfixPostDrawLayer(layer);
                     return;
+                }
                 HUD.DrawForeground();
             }
             else if (layer == Layer.HUD)
             {
                 if (layer.fade <= 0)
+                {
+                    PostfixPostDrawLayer(layer);
                     return;
+                }
                 Vote.Draw();
                 HUD.Draw();
                 ConnectionStatusUI.Draw();
@@ -1094,7 +1107,10 @@ namespace DuckGame
             else
             {
                 if (layer == Layer.Lighting)
+                {
+                    PostfixPostDrawLayer(layer);
                     return;
+                }
                 if (layer == Layer.Glow && Options.Data.fireGlow)
                 {
                     foreach (MaterialThing materialThing in things[typeof(MaterialThing)])
@@ -1177,11 +1193,70 @@ namespace DuckGame
                 else
                 {
                     if (layer != Layer.Game || !NetworkDebugger.enabled || VirtualTransition.active || this is NetworkDebugger)
+                    {
+                        PostfixPostDrawLayer(layer);
                         return;
+                    }
                     NetworkDebugger.DrawInstanceGameDebug();
                 }
             }
+            PostfixPostDrawLayer(layer);
         }
+        public void PrefixPostDrawLayer(Layer layer)
+        {
+            if (!MonoMain.UpdateLerpState)
+            {
+                return;
+            }
+            foreach (MethodInfo m in PrefixPostDrawLayerMethods)
+            {
+                ParameterInfo[] ps = m.GetParamsCached();
+                object[] args = ps.Length == 0 ? null : new object[ps.Length];
+
+                for (int i = 0; i < ps.Length; i++)
+                {
+                    var t = ps[i].ParameterType;
+
+                    if (t.IsInstanceOfType(layer))
+                        args![i] = layer;
+                    else if (t.IsInstanceOfType(this))
+                        args![i] = this;
+                    else if (ps[i].HasDefaultValue)
+                        args![i] = ps[i].DefaultValue;
+                }
+
+                m.Invoke(null, args);
+            }
+        }
+
+        public void PostfixPostDrawLayer(Layer layer)
+        {
+            if (!MonoMain.UpdateLerpState)
+            {
+                return;
+            }
+            foreach (MethodInfo m in PostfixPostDrawLayerMethods)
+            {
+                ParameterInfo[] ps = m.GetParamsCached();
+                object[] args = ps.Length == 0 ? null : new object[ps.Length];
+
+                for (int i = 0; i < ps.Length; i++)
+                {
+                    var t = ps[i].ParameterType;
+
+                    if (t.IsInstanceOfType(layer)) 
+                        args![i] = layer;
+                    else if (t.IsInstanceOfType(this)) 
+                        args![i] = this;
+                    else if (ps[i].HasDefaultValue) 
+                        args![i] = ps[i].DefaultValue;
+                }
+
+                m.Invoke(null, args);
+            }
+        }
+
+
 
         public static T Nearest<T>(float x, float y, Thing ignore, Layer layer) => current.NearestThing<T>(new Vec2(x, y), ignore, layer);
 
@@ -1709,7 +1784,7 @@ namespace DuckGame
             }
             return outList1;//nextCollisionList.AsEnumerable<object>().Cast<T>();
         }
-        public IEnumerable<T> CollisionCircleAllOld<T>(Vec2 p1, float radius) //old //brought it back to fix collision issue with the postitron shooter -NiK0
+        public IEnumerable<T> CollisionCircleAllOld<T>(Vec2 p1, float radius) //old //brought it back to fix collision issue with the postitron shooter -Lucky
         {
 
             List<object> nextCollisionList = GetNextCollisionList();
@@ -1847,6 +1922,11 @@ namespace DuckGame
 
         public T CollisionLine<T>(Vec2 p1, Vec2 p2)
         {
+            float dist = p1.Distance(p2);
+            if (dist > 100000 || float.IsNaN(dist))
+            {
+                return current.OldCollisionLine<T>(p1, p2);
+            }
             Type key = typeof(T);
             foreach (Thing thing in things.CollisionLineAll(p1, p2, key))
             {
@@ -2202,7 +2282,7 @@ namespace DuckGame
         {
             //TODO: Re-optimize this code, this is currently DG's collision code because the code that uses the Bucket system makes certain bullet collisions
             //work differently from vanilla, this is unoptimal because as with normal DG it checks every thing in the entire map and not just a sector like
-            //what we do with buckets so if someone can figure out a way to make it use buckets and work in vanilla go for it -NiK0
+            //what we do with buckets so if someone can figure out a way to make it use buckets and work in vanilla go for it -Lucky
             /*foreach (Thing thing in things.CollisionPointAll(point, typeof(MaterialThing)))
             {
                 if (!thing.removeFromLevel && Collision.Point(point, thing))

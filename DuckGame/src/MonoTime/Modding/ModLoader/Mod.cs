@@ -157,7 +157,14 @@ namespace DuckGame
         /// <summary>
         /// Returns a formatted path that leads to the "asset" parameter in a given mod.
         /// </summary>
-        public static string GetPath<T>(string asset) where T : Mod => ModLoader.GetMod<T>().configuration.contentDirectory + asset.Replace('\\', '/');
+        public static string GetPath<T>(string asset) where T : Mod
+        {
+            if (asset.ToLower().Contains("harmony")) // 		asset	"HarmonyLoader"	string
+            {
+                return typeof(HarmonyLib.Harmony).Assembly.Location.Replace('\\', '/').Replace(".dll", "");
+            }
+            return ModLoader.GetMod<T>().configuration.contentDirectory + asset.Replace('\\', '/');
+        }
 
         /// <summary>
         /// Returns a formatted path that leads to the "asset" parameter in this mod.
@@ -207,7 +214,14 @@ namespace DuckGame
                     if (configuration.loaded)
                     {
                         if (configuration.contentDirectory != null)
+                        {
                             _previewTexture = (Tex2D)ContentPack.LoadTexture2D(GetPath("preview") + ".png", false);
+                            if (_previewTexture == null)
+                            {
+                                _previewTexture = (Tex2D)ContentPack.LoadTexture2D(GetPath("screenshot") + ".png", false);
+                            }
+                        }
+
                         if (_previewTexture == null)
                             _previewTexture = Content.Load<Tex2D>("notexture");
                     }

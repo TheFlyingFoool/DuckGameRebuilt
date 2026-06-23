@@ -46,7 +46,7 @@ namespace CrashWindow
 
         public static void SendBugReportBase64(string pVersionNonB64, string pModsB64, string pAssemblyB64, string pExceptionB64, string pLogMessageB64, string pCommentB64)
         {
-            string sendString = "http://www.wonthelp.info/DuckWeb/logBug.php";
+            string sendString = "https://www.wonthelp.info/DuckWeb/logBug.php";
             HttpWebRequest sendRequest = (HttpWebRequest)WebRequest.Create(sendString);
             sendRequest.Method = "POST";
 

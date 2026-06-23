@@ -20,11 +20,13 @@ namespace DuckGame
                 else if (value > MenuItems.Count - 1)
                     value = MenuItems.Count - 1;
                 else if (value > 23)
-                    value = 23;//firebreak you idiot -NiK0
+                    value = 23;//firebreak you idiot -Lucky
 
                 if (value != _selectedItemIndex)
                 {
-                    MenuItems[_selectedItemIndex].OnUnhover();
+                    if (_selectedItemIndex < MenuItems.Count)
+                        MenuItems[_selectedItemIndex].OnUnhover();
+
                     MenuItems[value].OnHover();
                 }
                 
@@ -118,6 +120,9 @@ namespace DuckGame
             }
 
             MenuItems.RemoveAll(x => x is null);
+
+            // Needs to be reclamped after deleting items
+            SelectedItemIndex = SelectedItemIndex;
         }
         
         public override void Update()
@@ -125,7 +130,7 @@ namespace DuckGame
             Graphics.fade = 1;
             camera.position = Vec2.Zero;
             camera.size = new Vec2(320, 180);
-            if (Input.Pressed("QUACK"))
+            if (Input.Pressed(Triggers.Cancel))
             {
                 Level.current = new TitleScreen();
                 return;
@@ -133,7 +138,7 @@ namespace DuckGame
             if (MenuItems.Count == 0) return;
             if (ReplayToLoadPreview != null)
             {
-                ReplayToLoadPreview.LoadPreview();
+                var isPreviewOk = ReplayToLoadPreview.TryLoadPreview();
                 ReplayToLoadPreview = null;
                 Graphics.fade = 1;
             }

@@ -143,7 +143,7 @@ namespace DuckGame
             }
             return vgmHeader;
         }
-        //stuff -NiK0
+        //stuff -Lucky
         bool OpenVGMFile(string fileName)
         {
             bool zipped = fileName.Contains(".vgz");

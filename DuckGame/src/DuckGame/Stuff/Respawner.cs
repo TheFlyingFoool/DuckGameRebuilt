@@ -31,7 +31,7 @@ namespace DuckGame
             if (pLayer != Layer.Game)
                 return;
             _animate += 0.05f;
-            //double y = this.y; what -NiK0
+            //double y = this.y; what -Lucky
             int num1 = 6;
             for (int index = 0; index < num1; ++index)
             {

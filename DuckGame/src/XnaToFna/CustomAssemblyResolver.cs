@@ -21,12 +21,21 @@ namespace XnaToFna
         public AssemblyDefinition AssemblyResolveEventHandler(object sender, AssemblyNameReference reference)
         {
             string[] dllmatchs = Directory.GetFiles(searchdirectorpath, reference.Name + ".dll", SearchOption.AllDirectories);
-            if (reference != null && reference.FullName != null && reference.FullName.StartsWith("Steam,") || reference.FullName.StartsWith("Steam.Debug,"))
+            if (reference != null && reference.FullName != null)
             {
-                string path = DuckGame.Program.GameDirectory + "DGSteam.dll";
-                return GetAssembly(sender as IAssemblyResolver, path, new ReaderParameters()); //MonoModExt.ReadModule(path, (sender as DefaultAssemblyResolver).GetAssembly(path, new ReaderParameters()));
+                if (reference.FullName.StartsWith("Steam,") || reference.FullName.StartsWith("Steam.Debug,"))
+                {
+                    string path = DuckGame.Program.GameDirectory + "DGSteam.dll";
+                    return GetAssembly(sender as IAssemblyResolver, path, new ReaderParameters()); //MonoModExt.ReadModule(path, (sender as DefaultAssemblyResolver).GetAssembly(path, new ReaderParameters()));
+                }
+                if (reference.FullName.StartsWith("HarmonyLoader,") || reference.FullName.StartsWith("0Harmony,"))
+                {
+                    string path = DuckGame.Program.GameDirectory + "0Harmony.dll";
+                    return GetAssembly(sender as IAssemblyResolver, path, new ReaderParameters()); //MonoModExt.ReadModule(path, (sender as DefaultAssemblyResolver).GetAssembly(path, new ReaderParameters()));
+                }
+
             }
-            else if (dllmatchs.Length > 0)
+            if (dllmatchs.Length > 0)
             {
                 return GetAssembly(sender as IAssemblyResolver, dllmatchs[0], new ReaderParameters());
             }

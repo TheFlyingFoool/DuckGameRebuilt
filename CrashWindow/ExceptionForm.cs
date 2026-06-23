@@ -167,11 +167,26 @@ namespace DuckGame.src.MonoTime.Console
         private static string crashSettingsFile = "crash_settings.dat";
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            if (File.Exists(crashSettingsFile))
+            try
             {
-                File.Delete(crashSettingsFile);
+                if (File.Exists(crashSettingsFile))
+                {
+                    File.Delete(crashSettingsFile);
+                }
             }
-            File.WriteAllText(crashSettingsFile, checkBox1.Checked ? "true" : "false");
+            catch
+            {
+                
+            }
+
+            try
+            {
+                File.WriteAllText(crashSettingsFile, checkBox1.Checked ? "true" : "false");
+            }
+            catch
+            {
+                
+            }
         }
 
         private void richTextBox2_TextChanged(object sender, EventArgs e)

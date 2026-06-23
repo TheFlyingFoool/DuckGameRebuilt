@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace DuckGame
@@ -111,6 +112,15 @@ namespace DuckGame
 
         public override void Initialize()
         {
+            if (editor != null && editor.saveName != "") // Is in Editor
+            {
+                string[] levels = DuckFile.GetFiles(System.IO.Directory.GetParent(System.IO.Directory.GetParent(editor.saveName).FullName).FullName, "*.lev", System.IO.SearchOption.AllDirectories);
+                //File Path Goes up two directory to load all those levels as challenge levels. seemes to work to load custom arcade stuff? and arcade seems to just like load it correctly?
+                foreach(string level in levels)
+                {
+                    Challenges.GetChallenge(level);
+                }
+            }
             if (sign)
             {
                 Add(new VersionSign(-165, 256) { fadeTime = 300 });
@@ -315,7 +325,7 @@ namespace DuckGame
                 AddThing(pendingSpawn);
                 _pendingSpawns.RemoveAt(0);
                 _duck = pendingSpawn;
-                _arcade = things[typeof(ArcadeMode)].First() as ArcadeMode;
+                _arcade = things[typeof(ArcadeMode)].FirstOrDefault() as ArcadeMode;
                 if (!_enteringCameraUpdated)
                 {
                     _enteringCameraUpdated = true;

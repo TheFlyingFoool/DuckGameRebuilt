@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
+using Microsoft.Xna.Framework;
 
 namespace DuckGame
 {
@@ -40,8 +41,25 @@ namespace DuckGame
 			_editModMenu.Close();
 			Open();
         }
+        void OpenFolder()
+        {
+            string path = DuckFile.modsDirectory;
+            if (_selectedMod != null && _selectedMod.configuration != null)
+            {
+                path = Path.GetFullPath(_selectedMod.configuration.directory);
+            }
 
-		private const int FO_DELETE = 0x0003;
+            path = Path.GetFullPath(path);
+
+            if (!path.EndsWith(Path.DirectorySeparatorChar.ToString()) &&
+                !path.EndsWith(Path.AltDirectorySeparatorChar.ToString()))
+            {
+                path += Path.DirectorySeparatorChar;
+            }
+            FNAPlatform.OpenURL(path);
+
+        }
+        private const int FO_DELETE = 0x0003;
 		private const int FOF_ALLOWUNDO = 0x0040;           // Preserve undo information, if possible. 
 		private const int FOF_NOCONFIRMATION = 0x0010;      // Show no confirmation dialog box to the user
 
@@ -164,7 +182,7 @@ namespace DuckGame
 			_editModMenu.Close();
 			Open();
 			
-			Steam.OverlayOpenURL("http://steamcommunity.com/sharedfiles/filedetails/?id=" + _selectedMod.configuration.workshopID);
+			Steam.OverlayOpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" + _selectedMod.configuration.workshopID);
 		}
 
 		static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs)
@@ -320,7 +338,11 @@ namespace DuckGame
 			_deleteOrUnsubItem = new UIMenuItem("DELETE", new UIMenuActionCallFunction(DeleteMod));
 			_uploadItem = new UIMenuItem("UPLOAD", new UIMenuActionCallFunction(UploadMod));
 			_visitItem = new UIMenuItem("VISIT PAGE", new UIMenuActionCallFunction(VisitModPage));
-			_editModMenu.Add(new UIText(" ", Color.White));
+
+            _editModMenu.Add(new UIText(" ", Color.White));
+            _editModMenu.Add(new UIMenuItem("OPEN FOLDER", new UIMenuActionCallFunction(OpenFolder)));
+
+            _editModMenu.Add(new UIText(" ", Color.White));
 			_editModMenu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(_editModMenu, this)));
 			_editModMenu.Close();
 
@@ -343,6 +365,9 @@ namespace DuckGame
             _modSettingsMenu.Add(new UIMenuItemToggle("CRASH DISABLE", null, new FieldBinding(Options.Data, "disableModOnCrash", 0.0f, 1.0f)));
             _modSettingsMenu.Add(new UIMenuItemToggle("LOAD FAILURE DISABLE", null, new FieldBinding(Options.Data, "disableModOnLoadFailure", 0.0f, 1.0f)));
             _modSettingsMenu.Add(new UIMenuItemToggle("SHOW NETWORK WARNING", null, new FieldBinding(Options.Data, "showNetworkModWarning", 0.0f, 1.0f)));
+
+            _modSettingsMenu.Add(new UIText(" ", Color.White));
+            _modSettingsMenu.Add(new UIMenuItem("OPEN FOLDER", new UIMenuActionCallFunction(OpenFolder)));
 
             _modSettingsMenu.Add(new UIText(" ", Colors.DGBlue));
             _modSettingsMenu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(_modSettingsMenu, this), UIAlign.Center, default(Color), true));
@@ -497,7 +522,7 @@ namespace DuckGame
 					{
 						if (_transferItem.finishedProcessing)
 						{
-							Steam.OverlayOpenURL("http://steamcommunity.com/sharedfiles/filedetails/?id=" + _transferItem.id);
+							Steam.OverlayOpenURL("https://steamcommunity.com/sharedfiles/filedetails/?id=" + _transferItem.id);
 
 							// delete workshop temp folder
 							string folderPath = DuckFile.workshopDirectory + _transferItem.id + "/";
@@ -651,8 +676,8 @@ namespace DuckGame
                     {
 						string errorPath = DuckFile.saveDirectory + "error_info.txt";
 						File.WriteAllText(errorPath, _selectedMod.configuration.error);
-						Process.Start(errorPath);
-						//showingError = _selectedMod.configuration.error;
+                        FNAPlatform.OpenURL(errorPath);//Process.Start(errorPath);
+                        //showingError = _selectedMod.configuration.error;
                         SFX.Play("rockHitGround", 0.8f);
                         return;
                     }
@@ -716,7 +741,7 @@ namespace DuckGame
                             }
 						}
 						else
-							Steam.OverlayOpenURL("http://steamcommunity.com/workshop/browse/?appid=312530&searchtext=&childpublishedfileid=0&browsesort=trend&section=readytouseitems&requiredtags%5B%5D=Mod");
+							Steam.OverlayOpenURL("https://steamcommunity.com/workshop/browse/?appid=312530&searchtext=&childpublishedfileid=0&browsesort=trend&section=readytouseitems&requiredtags%5B%5D=Mod");
 					}
 				}
 				else

@@ -31,6 +31,8 @@ namespace DuckGame
         public float playPitch;
         public byte colorVariation = byte.MaxValue;
         private byte _prevColorVariation = byte.MaxValue;
+        private SpriteMap _fingerSprite;
+        private SpriteMap _fingerSpriteBend;
         public StateBinding _ruinedBinding = new StateBinding("_ruined");
         public StateBinding _benderBinding = new StateBinding(nameof(bender));
         public StateBinding _notePitchBinding = new StateBinding(nameof(notePitch));
@@ -324,28 +326,43 @@ namespace DuckGame
                 Material mat = Graphics.material;
                 Graphics.material = null;
                 SpriteMap fingerPositionSprite = duck.profile.persona.fingerPositionSprite;
+                if (_fingerSprite == null || _fingerSprite.texture != fingerPositionSprite.texture)
+                {
+                    _fingerSprite = fingerPositionSprite.CloneMap();
+                    _fingerSpriteBend = fingerPositionSprite.CloneMap();
+                }
+
                 if (!duck._hovering)
                 {
                     float x;
                     if (noteSound == null)
                     {
-                        fingerPositionSprite.frame = 5;
+                        _fingerSprite.frame = 5;
                         x = (int)(2f + (currentNote / 12f * 8f - 4f));
                     }
                     else
                     {
-                        fingerPositionSprite.frame = 6 + currentNote;
+                        _fingerSprite.frame = 6 + currentNote;
                         x = 2f;
                     }
-                    fingerPositionSprite.depth = depth + 4;
-                    fingerPositionSprite.flipH = offDir <= 0;
-                    fingerPositionSprite.angle = angle;
+                    _fingerSprite.depth = depth + 4;
+                    _fingerSprite.flipH = offDir <= 0;
+                    _fingerSprite.angle = angle;
+                    _fingerSprite.LerpState.CanLerp = true;
+                    _fingerSprite.SkipIntraTick = duck.SkipIntratick;
                     Vec2 vec2 = Offset(new Vec2(x, -3f));
-                    Graphics.Draw(fingerPositionSprite, vec2.x, vec2.y);
+                    _fingerSprite.position = vec2;
+                    _fingerSprite.Draw();
                 }
-                fingerPositionSprite.frame = 19;
+                _fingerSpriteBend.frame = 19;
+                _fingerSpriteBend.depth = depth + 4;
+                _fingerSpriteBend.flipH = offDir <= 0;
+                _fingerSpriteBend.angle = angle;
+                _fingerSpriteBend.LerpState.CanLerp = true;
+                _fingerSpriteBend.SkipIntraTick = duck.SkipIntratick;
                 Vec2 vec2_1 = Offset(new Vec2(-8f, (-bender * 1f)));
-                Graphics.Draw(fingerPositionSprite, vec2_1.x, vec2_1.y);
+                _fingerSpriteBend.position = vec2_1;
+                _fingerSpriteBend.Draw();
                 Graphics.material = mat;
             }
             _keybed.SkipIntraTick = SkipIntratick;

@@ -99,7 +99,7 @@ namespace DuckGame
                     p1.x += itemSize.x + 4f;
                     p1.y -= 2f;
                 }
-                //Vec2 vec2_1 = new Vec2(graphic.position); WHAT -NIK0
+                //Vec2 vec2_1 = new Vec2(graphic.position); WHAT -Lucky
                 _thing.x = (float)(p1.x + 1f + graphic.w / 2f);
                 _thing.y = (float)(p1.y + 1f + graphic.h / 2f);
                 _thing.depth = (Depth)0.7f;
@@ -110,7 +110,7 @@ namespace DuckGame
                 if (_root && _file != null)
                 {
                     Vec2 vec2_2 = new Vec2(p1 + new Vec2(x + 4f, 0f));
-                    //Vec2 vec2_3 = new Vec2(p1 + new Vec2(x + 97f, 12f)); what -NiK0
+                    //Vec2 vec2_3 = new Vec2(p1 + new Vec2(x + 97f, 12f)); what -Lucky
                     _file.position = vec2_2;
                     _file.Update();
                     _file.Draw();

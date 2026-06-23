@@ -78,13 +78,16 @@ namespace DuckGame
         {
             get
             {
-                List<Profile> active = new List<Profile>();
-                foreach (Profile profile in Profiles.all)
+                List<Profile> _active = new List<Profile>();
+                Profile[] profiles = Profiles.alllist.ToArray();
+                for (int i = 0; i < profiles.Length; i++)
                 {
-                    if (profile.team != null)
-                        active.Add(profile);
+                    if (profiles[i] != null && profiles[i].team != null)
+                    {
+                        _active.Add(profiles[i]);
+                    }
                 }
-                return active;
+                return _active;
             }
         }
 
@@ -102,6 +105,7 @@ namespace DuckGame
             }
         }
 
+        
         public void Initialize()
         {
             if (_profiles != null && _profiles.Count > 0) // for when its called again by 50 player

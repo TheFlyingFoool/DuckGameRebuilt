@@ -1,12 +1,13 @@
 ﻿using DuckGame;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using RectpackSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using XnaToFna.ProxyForms;
 using System.Text;
+using XnaToFna.ProxyForms;
 
 namespace XnaToFna
 {
@@ -37,16 +38,51 @@ namespace XnaToFna
             Console.Write("[XnaToFnaHelper] ");
             Console.WriteLine(s);
         }
-        public static System.Windows.Forms.Form fillinform;
+
         public static IntPtr GetProxyFormHandle(this GameWindow window)
         {
-            if (GameForm.Instance == null)
+            return GameForm.GetInstance(MonoMain.instance).Handle;
+            // return GameFormForWinForms.GetHandle(MonoMain.instance); // Alternative that doesn't require relinking WinForms types.
+        }
+        public static object ActivatorCreateInstance(Type type)
+        {
+            object obj = null;
+            try
             {
-                fillinform = new System.Windows.Forms.Form();
-                Log("[ProxyForms] Creating game ProxyForms.GameForm");
-                GameForm.Instance = new GameForm();
+                obj = Activator.CreateInstance(type);
             }
-            return fillinform.Handle;//GameForm.Instance.Handle;
+            catch (Exception ex) {
+                Exception wrapped = new Exception($"ActivatorCreateInstance failed for type: {type.FullName}",ex);
+                //DevConsole.Log(wrapped);
+                throw wrapped;
+            }
+            return obj;
+        }
+        
+        
+        private static string FixDirectoryPath(string path) {
+            if (Program.IsLinuxD || Program.isLinux) {
+                path = path.Replace("//", "/").Replace("\\", "/"); 
+                path = GetPathAfterUserHome(path); //GetCleanedPath //GetPathAfterUserHome
+                path = FixPath(path); // Assuming FixPath is accessible here
+            }
+            return path;
+        }
+        
+        public static FileInfo[] DirectoryInfoGetFiles(DirectoryInfo info) {
+            string fixedPath = FixDirectoryPath(info.FullName);
+            // Create a new DirectoryInfo with the corrected path
+            return new DirectoryInfo(fixedPath).GetFiles();
+        }
+        
+        public static FileInfo[] DirectoryInfoGetFiles(DirectoryInfo info, string searchPattern) {
+            string fixedPath = FixDirectoryPath(info.FullName);
+            return new DirectoryInfo(fixedPath).GetFiles(searchPattern);
+        }
+        
+        public static FileInfo[] DirectoryInfoGetFiles(DirectoryInfo info, string searchPattern, SearchOption searchOption) {
+            string fixedPath = FixDirectoryPath(info.FullName);
+            return new DirectoryInfo(fixedPath).GetFiles(searchPattern, searchOption);
         }
         public static DirectoryInfo DirectoryCreateDirectory(string path)
         {
@@ -67,6 +103,37 @@ namespace XnaToFna
                 path = FixPath(path);
             }
             return Directory.GetFiles(path);
+        }
+        public static string GetCurrentDirectory()
+        {
+            string path = Directory.GetCurrentDirectory();
+            if (Program.IsLinuxD || Program.isLinux)
+            {
+                path = path.Replace("//", "/").Replace("\\", "/");
+                //Console.WriteLine("DirectoryGetFiles:" + path);
+                path = FixPath(path);
+            }
+            return path;
+        }
+        public static string[] GetFiles(string path, string searchPattern, SearchOption searchOption)
+        {
+            if (Program.IsLinuxD || Program.isLinux)
+            {
+                path = path.Replace("//", "/").Replace("\\", "/");
+                //Console.WriteLine("DirectoryGetFiles:" + path);
+                path = FixPath(path);
+            }
+            return Directory.GetFiles(path, searchPattern, searchOption);
+        }
+        public static string[] GetFiles(string path, SearchOption searchOption)
+        {
+            if (Program.IsLinuxD || Program.isLinux)
+            {
+                path = path.Replace("//", "/").Replace("\\", "/");
+                //Console.WriteLine("DirectoryGetFiles:" + path);
+                path = FixPath(path);
+            }
+            return Directory.GetFiles(path,"", searchOption);
         }
         public static bool DirectoryExists(string path)
         {
@@ -104,12 +171,27 @@ namespace XnaToFna
             }
             return File.Exists(path);
         }
+        //path == typeof(HarmonyLib.Harmony).Assembly.Location.Replace('\\', '/') possible cache bye[]
+        private static string HarmonyPath = typeof(HarmonyLib.Harmony).Assembly.Location.Replace('\\', '/');
+        private static Dictionary<string, byte[]> FileBytesCache = new Dictionary<string, byte[]>();
+        private static Dictionary<int, string> FileHashPath = new Dictionary<int, string>();
         public static byte[] FileReadAllBytes(string path)
         {
             if (Program.IsLinuxD || Program.isLinux)
             {
                 path = path.Replace("//", "/").Replace("\\", "/");
                 path = GetActualCaseForFileName(FixPath(path));
+            }
+            if (HarmonyPath == path)
+            {
+                if (FileBytesCache.TryGetValue(path, out byte[] bytes))
+                {
+                    return bytes;
+                }
+                bytes = File.ReadAllBytes(path);
+                FileHashPath[bytes.GetHashCode()] = path;
+                FileBytesCache[path] = bytes;
+                return bytes;
             }
             return File.ReadAllBytes(path);
         }
@@ -169,7 +251,25 @@ namespace XnaToFna
                 path1 = path1.Replace("//", "/").Replace("\\", "/");
                 path2 = path2.Replace("//", "/").Replace("\\", "/");
             }
-            return Path.Combine(path1, path2);
+
+            string comp = Path.Combine(path1, path2);
+            if (DirectoryExists(comp))
+            {
+                return comp;
+            }
+            string basePath = @"C:\Program Files (x86)\Steam\steamapps\common\Duck Game\".Replace("//", "/").Replace("\\", "/"); // Path people are hard coding 
+            if (DirectoryExists(basePath))
+            {
+                return comp;
+            }
+            string fullPath = Path.GetFullPath(comp).Replace("//", "/").Replace("\\", "/");
+
+            bool isInside = fullPath.StartsWith(basePath, StringComparison.OrdinalIgnoreCase);
+            if (!isInside)
+            {
+                return comp;
+            }
+            return Path.Combine(Program.GameDirectory, fullPath.Substring(basePath.Length));
         }
         public static string FileReadAllText(string path)
         {
@@ -197,6 +297,83 @@ namespace XnaToFna
                 path = GetActualCaseForFileName(FixPath(path));
             }
             return File.ReadAllText(path, encoding);
+        }
+
+      
+
+       
+        private static string GetApplicationBaseDirectory()
+        {
+         
+            if (!string.IsNullOrEmpty(AppContext.BaseDirectory))
+                return AppContext.BaseDirectory;
+            
+            try
+            {
+                var entryAssembly = Assembly.GetEntryAssembly();
+                if (entryAssembly != null)
+                {
+                    string location = entryAssembly.Location;
+                    return Path.GetDirectoryName(location) ?? AppDomain.CurrentDomain.BaseDirectory;
+                }
+            }
+            catch { }
+            return AppDomain.CurrentDomain.BaseDirectory ?? Directory.GetCurrentDirectory();
+        }
+        public static string GetPathAfterUserHome(string fullPath)
+        {
+            if (string.IsNullOrWhiteSpace(fullPath))
+                return string.Empty;
+            if (Directory.Exists(fullPath))
+            {
+                return fullPath;
+            }
+
+            string normalized = fullPath.Replace('\\', '/').TrimEnd('/');
+            
+            string[] homeAnchors = new[]
+            {
+                "/home/",  
+                "/Users/",
+                "/root/",
+                "/run/media/",
+                "/media/",
+                "/mnt/",
+                "/opt/",
+                "/usr/local/"
+            };
+
+            int anchorIndex = -1;
+            string usedAnchor = "";
+
+            foreach (var anchor in homeAnchors)
+            {
+                int idx = normalized.LastIndexOf(anchor, StringComparison.OrdinalIgnoreCase);
+                if (idx != -1)
+                {
+                    anchorIndex = idx;
+                    usedAnchor = anchor;
+                    break;
+                }
+            }
+
+            if (anchorIndex == -1)
+            {
+                return fullPath;
+            }
+            
+            string afterAnchor = normalized.Substring(anchorIndex);
+            
+            string resultPath = afterAnchor.Replace('/', Path.DirectorySeparatorChar);
+            
+            if (Directory.Exists(resultPath))
+            {
+                return resultPath;
+            }
+            else
+            {
+                return fullPath;  
+            }
         }
         public static string FixPath(string path)
         {
@@ -255,7 +432,40 @@ namespace XnaToFna
         public static void DoNothing()
         {
         }
+        //FileBytesCache
+        public static Assembly AssemblyLoad(byte[] rawAssembly)
+        {
+            int hashcode = rawAssembly.GetHashCode();
+            if (FileHashPath.TryGetValue(hashcode, out string path))
+            {
+                if (path == HarmonyPath)
+                {
+                    return typeof(HarmonyLib.Harmony).Assembly;
+                }
+            }
+            return Assembly.Load(rawAssembly);
+        }
+        public static Assembly AssemblyLoadFile(string path)
+        {
+            string test = path.ToLower();
+            if (test.Contains("0harmony.dll") || test.Contains("harmonyloader.dll"))
+            {
+                return typeof(HarmonyLib.Harmony).Assembly;
+            }
+            return Assembly.Load(path);
+        }
+        //public static int GetHashCode(byte[] data)
+        //{
+        //    if (data == null || data.Length == 0)
+        //    {
+        //        return 0;
+        //    }
 
+        //    System.HashCode hashCode = new System.HashCode();
+        //    hashCode.AddBytes(new ReadOnlySpan<byte>(data));
+
+        //    return hashCode.ToHashCode();
+        //}
         public static void ApplyChanges(GraphicsDeviceManager self)
         {
             string environmentVariable = Environment.GetEnvironmentVariable("XNATOFNA_DISPLAY_FULLSCREEN");

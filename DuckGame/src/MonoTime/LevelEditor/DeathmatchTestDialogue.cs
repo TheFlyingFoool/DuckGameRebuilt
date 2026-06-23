@@ -26,7 +26,7 @@
             float num1 = 300f;
             float num2 = 40f;
             Vec2 vec2_1 = new Vec2((float)(layer.width / 2f - num1 / 2f), (float)(layer.height / 2f - num2 / 2f));
-            //Vec2 vec2_2 = new Vec2((float)(layer.width / 2f + num1 / 2f), (float)(layer.height / 2f + num2 / 2f)); what -NiK0
+            //Vec2 vec2_2 = new Vec2((float)(layer.width / 2f + num1 / 2f), (float)(layer.height / 2f + num2 / 2f)); what -Lucky
             position = vec2_1 + new Vec2(4f, 20f);
             itemSize = new Vec2(490f, 16f);
             _root = true;

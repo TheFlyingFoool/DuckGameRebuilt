@@ -682,7 +682,7 @@ namespace DuckGame
             Graphics.Draw(ref _blade, x, y, depth - 1);
             Graphics.material = null;
             alpha = 1f;
-            //Depth depth = this.depth; what -NiK0
+            //Depth depth = this.depth; what -Lucky
             _bladeTrail.color = swordColor;
             graphic.color = Color.White;
             if (_glow <= 0.5)

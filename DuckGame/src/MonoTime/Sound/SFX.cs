@@ -8,7 +8,7 @@ namespace DuckGame
     public static class SFX
     {
         //hi hello yes NiK0 here, this int is here so Recorderator can ignore certain SFX that dont need to be saved to the recorderator file
-        //to be played back since an item might handle them on their own or whatever the circumstances are -NiK0 
+        //to be played back since an item might handle them on their own or whatever the circumstances are -Lucky 
         public static int DontSave = 0;
         private static Speech _speech;
         private static Dictionary<string, SoundEffect> _sounds = new Dictionary<string, SoundEffect>();

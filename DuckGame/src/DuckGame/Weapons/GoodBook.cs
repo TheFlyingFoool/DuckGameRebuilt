@@ -41,6 +41,8 @@ namespace DuckGame
         private float _haloAlpha;
         private SinWave _haloWave;
         public float _ringPulse;
+        private readonly Interp _armLerp = new Interp();
+        private SpriteMap _armSprite;
 
         public Duck controlling1
         {
@@ -389,14 +391,24 @@ namespace DuckGame
                 Material mat = Graphics.material;
                 Graphics.material = null;
                 SpriteMap spriteArms = duck._spriteArms;
-                bool flipH = spriteArms.flipH;
-                float angle = spriteArms.angle;
-                spriteArms.flipH = offDir * -1 < 0;
-                spriteArms.angle = 0.7f * offDir;
-                spriteArms.LerpState.CanLerp = false;
-                Graphics.Draw(spriteArms, owner.x - 5 * offDir, (float)(owner.y + 3f + (duck.crouch ? 3f : 0f) + (duck.sliding ? 3f : 0f)));
-                spriteArms.angle = angle;
-                spriteArms.flipH = flipH;
+                if (_armSprite == null || _armSprite.texture != spriteArms.texture)
+                    _armSprite = spriteArms.CloneMap();
+                _armSprite.SetFrameWithoutReset(spriteArms.frame);
+                _armSprite.UpdateSpriteBox();
+                _armSprite.flipH = offDir * -1 < 0;
+                _armSprite.angle = 0.7f * offDir;
+                _armSprite.alpha = spriteArms.alpha;
+                _armSprite.depth = spriteArms.depth;
+                _armSprite.scale = spriteArms.scale;
+                _armSprite.center = spriteArms.center;
+                _armSprite.color = spriteArms.color;
+                Vec2 targetPos = new Vec2(owner.x - 5 * offDir, (float)(owner.y + 3f + (duck.crouch ? 3f : 0f) + (duck.sliding ? 3f : 0f)));
+                _armLerp.CanLerp = true;
+                _armLerp.UpdateLerpState(targetPos, duck.SkipIntratick > 0 ? 1 : MonoMain.IntraTick, MonoMain.UpdateLerpState);
+                _armSprite.position = _armLerp.Position;
+                _armSprite.LerpState.CanLerp = false;
+                _armSprite.SkipIntraTick = duck.SkipIntratick;
+                _armSprite.DrawWithoutUpdate();
                 handOffset = new Vec2(9999f, 9999f);
                 Graphics.material = mat;
             }

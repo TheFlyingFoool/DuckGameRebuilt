@@ -198,6 +198,10 @@ namespace DuckGame
             {
                 foreach (Profile profile in Profiles.active)
                     profile.team = null;
+                foreach (Profile profile in Profiles.all)
+                {
+                    profile.netData.ResetModNetData();
+                }
                 for (int i = 1; i < numPlayers; i++)
                 {
                     Profile profile = Profiles.GetProfile(i);
@@ -217,6 +221,10 @@ namespace DuckGame
             }
             else if (_restart.value)
             {
+                foreach (Profile profile in Profiles.all)
+                {
+                    profile.netData.ResetModNetData();
+                }
                 transitionSpeedMultiplier = 2f;
                 EditorTestLevel t = null;
                 if (things[typeof(EditorTestLevel)].Count() > 0)
@@ -257,7 +265,13 @@ namespace DuckGame
                 }
                 PauseLogic();
                 if (_quit.value)
+                {
+                    foreach (Profile profile in Profiles.all)
+                    {
+                        profile.netData.ResetModNetData();
+                    }
                     current = _editor;
+                }
                 base.Update();
             }
         }

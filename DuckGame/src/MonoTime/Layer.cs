@@ -171,7 +171,7 @@ namespace DuckGame
             set => _blurEffect = value;
         }
 
-        public float barSize => (float)((camera.width * Graphics.aspect - camera.width * (9f / 16f)) / 2f); //keep the f's here otherwise reality breaks -NiK0
+        public float barSize => (float)((camera.width * Graphics.aspect - camera.width * (9f / 16f)) / 2f); //keep the f's here otherwise reality breaks -Lucky
 
         public Matrix projection { get; set; }
 
@@ -683,7 +683,7 @@ namespace DuckGame
                                     thing.currentlyDrawing = false;
                                     if ((flag || thing.Buckets.Length == 0 || thing.owner != null || !thing.shouldbegraphicculled || thing.layer == Foreground) && thing.visible)
                                     {
-                                        thing.currentlyDrawing = true; //this implementation is a bit dumber but it works -NiK0
+                                        thing.currentlyDrawing = true; //this implementation is a bit dumber but it works -Lucky
                                         if (_perspective)
                                         {
                                             Vec2 position = thing.position;

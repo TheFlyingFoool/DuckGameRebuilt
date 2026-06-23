@@ -7,7 +7,7 @@ namespace DuckGame
     {
         public float FUCKINGYOFFSET;
         public Color color = Color.White;
-        public Sprite _sprite;
+        private Sprite _sprite; //private instance for reflection from Rude mod. if you want it public make a get set
         public Dictionary<int, ParallaxZone> _zones = new Dictionary<int, ParallaxZone>();
         private int _hRepeat = 1;
         public float xmove;

@@ -46,12 +46,25 @@ public class WorkshopItem : IDisposable {
     public SteamResult result { get; private set; }
     public SteamResult downloadResult { get; private set; }
 
-    public unsafe WorkshopItemState stateFlags => (WorkshopItemState) SteamUGC.GetItemState(_id);
+    public unsafe WorkshopItemState stateFlags { 
+        get 
+        { 
+            if (!Steam.initialized)
+            {
+                return WorkshopItemState.None;
+            }
+            return (WorkshopItemState)SteamUGC.GetItemState(_id); 
+        } 
+    }
 
     public bool needsLegal { get; private set; }
     public unsafe string path {
         get 
         {
+            if (!Steam.initialized)
+            {
+                return "";
+            }
             ulong SizeOnDisk;
             string Folder;
             uint punTimeStamp;
@@ -67,6 +80,10 @@ public class WorkshopItem : IDisposable {
     {
         get
         {
+            if (!Steam.initialized)
+            {
+                return 0;
+            }
             ulong SizeOnDisk;
             string Folder;
             uint punTimeStamp;
@@ -112,6 +129,10 @@ public class WorkshopItem : IDisposable {
     }
 
     public unsafe bool ApplyWorkshopData(WorkshopItemData data) {
+        if (!Steam.initialized)
+        {
+            return false;
+        }
         UGCUpdateHandle_t handle = SteamUGC.StartItemUpdate(SteamUtils.GetAppID(), _id);
         if (handle.m_UGCUpdateHandle == 0) {
             return false;

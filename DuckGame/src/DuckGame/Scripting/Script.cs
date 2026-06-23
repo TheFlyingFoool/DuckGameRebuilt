@@ -198,7 +198,7 @@ namespace DuckGame
 
         public static bool doesNotHavePurchaseInfo() => !Main.foundPurchaseInfo;
 
-        public static bool isDemo() => Main.isDemo; //keep these here they are needed even if it looks like they're not -NiK0
+        public static bool isDemo() => Main.isDemo; //keep these here they are needed even if it looks like they're not -Lucky
 
         public static bool isNotDemo() => !Main.isDemo;
 

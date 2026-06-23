@@ -479,7 +479,7 @@ namespace DuckGame
             _tape.angleDegrees = angleDegrees;
             _tape.flipH = offDir < 0;
             _tape.SkipIntraTick = SkipIntratick;
-            //Vec2 vec2_1 = new Vec2(0f, bottom - top); what -NiK0
+            //Vec2 vec2_1 = new Vec2(0f, bottom - top); what -Lucky
             if (gun2 != null)
             {
                 Vec2 vec2_2 = gun2.Offset(new Vec2(0f, (float)-(collisionOffset.y / 2f)));

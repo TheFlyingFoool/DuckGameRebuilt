@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -150,7 +149,8 @@ namespace DuckGame
         {
             try
             {
-                Texture2D texture2D1 = TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, new Bitmap(new MemoryStream(pData)), true);
+
+                Texture2D texture2D1 = TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, pData, true);//TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, new System.Drawing.Bitmap(new MemoryStream(pData)), true);
                 double num = texture2D1.Width / 32f % 1f;
                 Team pTeam = deserializeInto;
                 if (pTeam == null)
@@ -897,7 +897,7 @@ namespace DuckGame
             public MDInt CapeLength = new MDInt
             {
                 range = 24,
-                value = -1, //its -1 by default because dg automatically assigns a cape length -NiK0
+                value = -1, //its -1 by default because dg automatically assigns a cape length -Lucky
                 allowNegative = false
             };
 

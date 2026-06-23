@@ -153,7 +153,10 @@ namespace DuckGame
                     _swing = 1f;
                 if (_swing < 0)
                     _swing = 0f;
-                _sprite.flipH = false;
+                if (owner != null && owner.graphic != null)
+                    _sprite.flipH = owner.graphic.flipH;
+                else
+                    _sprite.flipH = offDir <= 0;
                 _sprite.flipV = false;
                 if (owner != null && held)
                 {
@@ -268,9 +271,17 @@ namespace DuckGame
             else if (owner != null && _drawOnce)
             {
                 _offset = new Vec2((float)(offDir * -6 + _swing * 5 * offDir), (float)(_swing * 5 - 3));
+                if (graphic != null)
+                {
+                    if (this.owner != null && this.owner.graphic != null)
+                        graphic.flipH = this.owner.graphic.flipH;
+                    else
+                        graphic.flipH = offDir <= 0;
+                }
                 graphic.position = position + _offset;
                 graphic.depth = depth;
                 graphic.SkipIntraTick = SkipIntratick;
+                graphic.LerpState.CanLerp = true;
                 graphic.Draw();
                 Duck owner = this.owner as Duck;
                 if (_sledgeSwing.speed <= 0)
@@ -280,6 +291,7 @@ namespace DuckGame
                 _sledgeSwing.position = position;
                 _sledgeSwing.depth = depth + 1;
                 _sledgeSwing.SkipIntraTick = SkipIntratick;
+                _sledgeSwing.LerpState.CanLerp = true;
                 _sledgeSwing.Draw();
             }
             else

@@ -123,7 +123,7 @@ namespace DuckGame
             Duck d = First<Duck>();
             if (d != null && d.holdObject != null)
             {
-                if (d.holdObject is NiK0Gun) currentDev = DGRDevs.NiK0;
+                if (d.holdObject is LuckyGun) currentDev = DGRDevs.Lucky;
                 else if (d.holdObject is CollinGun) currentDev = DGRDevs.Collin;
                 else if (d.holdObject is DanGun) currentDev = DGRDevs.Dan;
                 else if (d.holdObject is FirebreakGun) currentDev = DGRDevs.Firebreak;

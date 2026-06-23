@@ -306,7 +306,11 @@ namespace DuckGame
                 _graphic.scale = scale;
                 _graphic.center = center;
                 int y2 = (int)((1 - _hitPoints) * 12);
-                Graphics.Draw(_graphic.texture, position + new Vec2(0f, y2), new Rectangle?(new Rectangle(0f, 0f, 16f, 24 - y2)), Color.White, angle, _graphic.center, scale, graphic.flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth);
+                Vec2 drawPos = position + new Vec2(0f, y2);
+                _graphic.LerpState.CanLerp = true;
+                _graphic.SkipIntraTick = SkipIntratick;
+                _graphic.LerpState.UpdateLerpState(new Interp.InterpState(drawPos, angle), SkipIntratick > 0 ? 1 : MonoMain.IntraTick, MonoMain.UpdateLerpState);
+                Graphics.Draw(_graphic.texture, _graphic.LerpState.Position, new Rectangle?(new Rectangle(0f, 0f, 16f, 24 - y2)), Color.White, _graphic.LerpState.Angle, _graphic.center, scale, graphic.flipH ? SpriteEffects.FlipHorizontally : SpriteEffects.None, depth);
                 y = y1;
             }
             else

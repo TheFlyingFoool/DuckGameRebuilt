@@ -187,12 +187,12 @@ namespace DuckGame
             if (!fake)
             {
                 Level.current = new ReplayLevel() { CCorderr = cd };
-                (Level.current as ReplayLevel).DeserializeLevel(new BitBuffer(levelData));
+                (Level.current as ReplayLevel).TryDeserializeLevel(new BitBuffer(levelData));
             }
             else
             {
                 outLev = new ReplayLevel() { CCorderr = cd };
-                outLev.DeserializeLevel(new BitBuffer(levelData));
+                outLev.TryDeserializeLevel(new BitBuffer(levelData));
             }
             if (!fake) DevConsole.DebugLog("|RED|RECORDERATOR |WHITE|Level size:" + levelData.Length);
 
@@ -302,6 +302,24 @@ namespace DuckGame
         public static string CordsPath => DuckFile.saveDirectory + "Recorderations/";
         public List<Profile> profiles = new List<Profile>();
         public List<Team> teams = new List<Team>();
+
+        public bool TrySaveToFile(Level lastLevel)
+        {
+            try
+            {
+                SaveToFile(lastLevel);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Saving to file can fail for various reasons,
+                // when the disk full, the file is being used, or missing write permissions for example.
+                DevConsole.Log(DCSection.General, "|RED|RECORDERATOR |WHITE|Failed to SaveToFile()");
+                DevConsole.Log(ex);
+                return false;
+            }
+        }
+
         public byte[] SaveToFile(Level lastLevel)
         {
             if (!Directory.Exists(CordsPath)) Directory.CreateDirectory(CordsPath);
@@ -505,7 +523,7 @@ namespace DuckGame
                         //yes this will make it so on the replay flipped springs will be replaced with their 
                         //other spring counterpart but honestly i could not care less since the gameplay aint
                         //gonna be affected its just some internal dumb shit, maybe it is affected because
-                        //the collision can change a bit, also i think im going crazy -NiK0
+                        //the collision can change a bit, also i think im going crazy -Lucky
                         if (s.flipHorizontal) levBuffer.Write((byte)5);
                         else levBuffer.Write((byte)4);
                         break;
@@ -811,7 +829,7 @@ namespace DuckGame
 
 
 
-            //HAHHAHAHHAHAHHAHAHHAHAHAHHAHHAHAHAHHAHAHHAHAHHAHAHHAHAHAHHAHAHHAHAHHAHAHHAHAH -NIK0!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //HAHHAHAHHAHAHHAHAHHAHAHAHHAHHAHAHAHHAHAHHAHAHHAHAHHAHAHAHHAHAHHAHAHHAHAHHAHAH -Lucky!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             List<byte> bf = buffer.buffer.ToList();
             if (buffer.position + 13 < buffer.buffer.Count())
             {
@@ -890,7 +908,7 @@ namespace DuckGame
                                     }
                                 }
 
-                                //save metadata last -NiK0
+                                //save metadata last -Lucky
                                 // Second entry from bf2 with the name "metadata.rmt" -ChatGPT
                                 ZipArchiveEntry entry2 = archive.CreateEntry("metadata.rmt");
                                 using (Stream entryStream2 = entry2.Open())
@@ -905,7 +923,7 @@ namespace DuckGame
                     }
                     catch
                     {
-                        //this should never happen anyways, im just putting this here because it happens when debugging with multiple LAN instances -NiK0
+                        //this should never happen anyways, im just putting this here because it happens when debugging with multiple LAN instances -Lucky
                     }
                 }
                 //File.WriteAllBytes(path, bf.ToArray());

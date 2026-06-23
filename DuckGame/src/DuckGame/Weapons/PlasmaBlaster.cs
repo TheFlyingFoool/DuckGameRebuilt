@@ -34,7 +34,7 @@
 
             //this is here because an omega edge case where a plasmablaster can fire at lightning speed if being graphic culled
             //because there is functionality in the draw function. i could of moved that into update but it might change the way
-            //it works ever so slightly so just gotta deal with the mess that is duck game by duct taping stuff on top -NiK0
+            //it works ever so slightly so just gotta deal with the mess that is duck game by duct taping stuff on top -Lucky
             shouldbegraphicculled = false;
         }
 

@@ -32,7 +32,7 @@ namespace DuckGame
                 string str = path.Substring(0, path.Length - 4);
                 if (path.EndsWith(".png"))
                 {
-                    Texture2D texture2D = TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, new Bitmap(new MemoryStream(data)), true);
+                    Texture2D texture2D = TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, data, true); //TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, new Bitmap(new MemoryStream(data)), true);
                     _textures[str] = texture2D;
                     Content.textures[str] = (Tex2D)texture2D;
                 }
@@ -115,7 +115,7 @@ namespace DuckGame
         {
             try
             {
-                return TextureConverter.LoadPNGWithPinkAwesomeness(Graphics.device, data, processPink);
+                return TextureConverter.LoadPNGWithPinkAwesomenessNew(Graphics.device, data, processPink);
             }
             catch (Exception ex)
             {

@@ -1,15 +1,16 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DuckGame
 {
-    public class DuckPersona
+    public class DuckPersona : IEquatable<DuckPersona>
     {
         private int _index = -1;
-        private Vec3 _color;
-        private Vec3 _colorDark;
-        private Vec3 _colorLight;
+        private Vec3 _color = Vec3.Zero;
+        private Vec3 _colorDark = Vec3.Zero;
+        private Vec3 _colorLight = Vec3.Zero;
         private SpriteMap _skipSprite;
         private SpriteMap _arrowSprite;
         private SpriteMap _fingerPositionSprite;
@@ -377,8 +378,41 @@ namespace DuckGame
             {
             }
         }
-        public void Recreate()
+        public override int GetHashCode()
         {
+            unchecked // Overflow is fine, just wrap
+            {
+                int hash = 17;
+                hash = hash * 23 + color.GetHashCode();
+                hash = hash * 23 + colorDark.GetHashCode();
+                hash = hash * 23 + colorLight.GetHashCode();
+                return hash;
+            }
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj is DuckPersona other)
+                return Equals(other);
+            return false;
+        }
+        public static bool operator ==(DuckPersona a, DuckPersona b)
+        {
+            if (ReferenceEquals(a, b)) 
+                return true;
+            if (a is null || b is null) 
+                return false;
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(DuckPersona a, DuckPersona b)
+            => !(a == b);
+        public bool Equals(DuckPersona other)
+        {
+            if (ReferenceEquals(this, other))
+                return true;
+            if (other is null)
+                return false;
+            return GetHashCode() == other.GetHashCode();
         }
     }
 }

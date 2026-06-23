@@ -2,9 +2,8 @@ using AddedContent.Firebreak;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Newtonsoft.Json.Linq;
 using RectpackSharp;
-using SDL2;
+//using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,7 +11,6 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Windows.Forms;
 
 namespace DuckGame
 {
@@ -116,11 +114,18 @@ namespace DuckGame
             {
                 Namebase = "nikoextraButton"
             };
+            List<string> texstoload = new List<string>() { "arcade/lightCone", "arcade/biglightCone", "arcade/lights", "arcade/prizeLights", "yellowBarrelToreUp", "yellowBarrelMelting", "rainbowCarp" };
+            foreach (string texname in texstoload) {
+                Content.Load<Tex2D>(texname);
+            }
+
             Content.textures[extraButton.Namebase] = extraButton;
             foreach (Thing thing in Editor.thingMap.Values) // those texures get created on the fly so we just going to make them here to save
             {
                 thing.GeneratePreview(48, 48, true); // IceBlock
                 thing.GeneratePreview(32, 32, true); // ItemSpawner
+                thing.GeneratePreview(22, 22, true); // ItemFrame
+                thing.GeneratePreview(32, 16, true); // menus2?
                 thing.GeneratePreview(16, 16, true); // menus
             }
         }
@@ -171,6 +176,60 @@ namespace DuckGame
                 }
             }
 
+        }
+        [Marker.DevConsoleCommand(Name = "guntest")]
+        public static void guntest()
+        {
+   
+            List<Type> things = ItemBox.GetPhysicsObjects(Editor.Placeables);
+            foreach(Type type in things)
+            {
+                Thing thing = Editor.CreateThing(type);
+                if (thing is PhysicsObject)
+                {
+                    try
+                    {
+                        PhysicsObject physicsObject = thing as PhysicsObject;
+                        physicsObject.Initialize();
+                        physicsObject.Update();
+                        if (physicsObject is Gun)
+                        {
+                            Gun gun = (physicsObject as Gun);
+                            gun.OnPressAction();
+                            gun.OnPressAction();
+                            gun.OnPressAction();
+                            physicsObject.Update();
+                            gun.HoldAction();
+                            gun.HoldAction();
+                            gun.HoldAction();
+                            gun.HoldAction();
+                            gun.HoldAction();
+                            physicsObject.Update();
+                            physicsObject.Update();
+                            gun.Fire();
+                        }
+                        Block c = new Block(0f, 0f);
+                        Duck d = new Duck(0f, 0f, Profiles.DefaultPlayer1);
+                        physicsObject.OnImpact(c, ImpactedFrom.Top);
+                        physicsObject.OnImpact(d, ImpactedFrom.Top);
+                        physicsObject.OnImpact(c, ImpactedFrom.Bottom);
+                        physicsObject.OnImpact(d, ImpactedFrom.Bottom);
+                        physicsObject.OnImpact(c, ImpactedFrom.Left);
+                        physicsObject.OnImpact(d, ImpactedFrom.Left);
+                        physicsObject.OnImpact(c, ImpactedFrom.Right);
+                        physicsObject.OnImpact(d, ImpactedFrom.Right);
+                        physicsObject.Update();
+                        physicsObject.Draw();
+                        physicsObject.Draw();
+                        physicsObject.Draw();
+                    }
+                    catch(Exception e)
+                    {
+                        DevConsole.Log(type.FullName);
+                        DevConsole.Log(e);
+                    }
+                }
+            }
         }
         [Marker.DevConsoleCommand(Name = "bucketremove")]
         public static void bucketremove()
@@ -254,6 +313,104 @@ namespace DuckGame
 
 
         }
+        //static Task<SteamUGCQueryCompleted_t> SendUGCQueryAsync(UGCQueryHandle_t handle)
+        //{
+        //    var tcs = new TaskCompletionSource<SteamUGCQueryCompleted_t>();
+
+        //    SteamAPICall_t apiCall = SteamUGC.SendQueryUGCRequest(handle);
+        //    var callResult = CallResult<SteamUGCQueryCompleted_t>.Create((data, failure) =>
+        //    {
+        //        if (failure)
+        //            tcs.TrySetException(new Exception("Steam UGC query failed (call failure)."));
+        //        else
+        //            tcs.TrySetResult(data);
+        //    });
+
+        //    callResult.Set(apiCall);
+
+        //    // Pump callbacks until the call completes
+        //    Task.Run(() =>
+        //    {
+        //        while (!tcs.Task.IsCompleted)
+        //        {
+        //            SteamAPI.RunCallbacks();
+        //            System.Threading.Thread.Sleep(10);
+        //        }
+        //    });
+
+        //    return tcs.Task;
+        //}
+
+        //static async Task<string[]> GetAllWorkshopModsAsync(AppId_t appId, string outputPath = "all_modids.txt")
+        //{
+        //    var allIds = new List<string>();
+        //    uint page = 1;
+
+        //    while (true)
+        //    {
+        //        // Query "all UGC" for this app, page by page
+        //        UGCQueryHandle_t handle = SteamUGC.CreateQueryAllUGCRequest(
+        //            EUGCQuery.k_EUGCQuery_RankedByVote,                  // sort mode; pick whatever you want
+        //            EUGCMatchingUGCType.k_EUGCMatchingUGCType_Items,     // normal items
+        //            appId,                                               // creator app
+        //            appId,                                               // consumer app
+        //            page                                                 // 1-based page index
+        //        );
+
+        //        var result = await SendUGCQueryAsync(handle);
+
+        //        if (result.m_unNumResultsReturned == 0 || result.m_eResult != EResult.k_EResultOK)
+        //        {
+        //            // No more items or error, stop
+        //            Console.WriteLine($"UGC query page {page} done. Returned={result.m_unNumResultsReturned}, Result={result.m_eResult}");
+        //            break;
+        //        }
+
+        //        Console.WriteLine($"UGC page {page}: {result.m_unNumResultsReturned} items");
+
+        //        for (uint i = 0; i < result.m_unNumResultsReturned; i++)
+        //        {
+        //            SteamUGCDetails_t details;
+        //            bool ok = SteamUGC.GetQueryUGCResult(result.m_handle, i, out details);
+        //            if (!ok) continue;
+
+        //            // details.m_nPublishedFileId is the workshop ID
+        //            allIds.Add(details.m_nPublishedFileId.m_PublishedFileId.ToString());
+        //        }
+
+        //        // Always release the query handle when done with that page
+        //        SteamUGC.ReleaseQueryUGCRequest(result.m_handle);
+
+        //        // Next page
+        //        page++;
+        //    }
+
+        //    // Deduplicate, just in case
+        //    var uniqueIds = allIds.Distinct().ToArray();
+
+        //    // Save to file
+        //    try
+        //    {
+        //        File.WriteAllLines(outputPath, uniqueIds);
+        //        Console.WriteLine($"Saved {uniqueIds.Length} workshop IDs to '{outputPath}'.");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Failed to write mod ID file '{outputPath}': {ex.Message}");
+        //    }
+
+        //    return uniqueIds;
+        //}
+        //[Marker.DevConsoleCommand(Name = "fetchmodids")]
+        //public static void fetchids()
+        //{
+        //    AppId_t appId = new AppId_t(312530);
+
+        //    // This blocks until the async method finishes
+        //    string[] allMods = GetAllWorkshopModsAsync(appId, "all_modids.txt")
+        //                           .GetAwaiter()
+        //                           .GetResult();
+        //}
         [Marker.DevConsoleCommand(Name = "buckettypes")]
         public static void buckettypes()
         {
@@ -331,6 +488,17 @@ namespace DuckGame
             DevConsole.Log("Optimizations " + ModLoader.ShouldOptimizations.ToString());
 
         }
+
+        [Marker.DevConsoleCommand(Name = "steamcrack")]
+        public static void steamcrack(string appId = "480")
+        {
+            Steam.Terminate();
+            Environment.SetEnvironmentVariable("SteamAppId", appId);
+            Environment.SetEnvironmentVariable("SteamGameId", appId);
+            Steam.InitializeCore();
+            Steam.Initialize();
+        }
+
         public static bool looking;
         [Marker.DevConsoleCommand(Name = "search")]
         public static void Search()
@@ -432,9 +600,12 @@ namespace DuckGame
             if (Level.current is TeamSelect2)
             {
                 botPlayer = DuckNetwork.JoinLocalDuck(toAssignInput);
-                botPlayer.keepSetName = true;
-                botPlayer.name = "DeltaDuck" + (index + 1).ToString();
-                typeof(ProfileBox2).GetField("_inputProfile", BindingFlags.Instance | BindingFlags.NonPublic).SetValue((Level.current as TeamSelect2)._profiles[index], toAssignInput);
+                if (botPlayer != null)
+                {
+                    botPlayer.keepSetName = true;
+                    botPlayer.name = "DeltaDuck" + (index + 1).ToString();
+                    typeof(ProfileBox2).GetField("_inputProfile", BindingFlags.Instance | BindingFlags.NonPublic).SetValue((Level.current as TeamSelect2)._profiles[index], toAssignInput);
+                } 
             }
             Team t = null;
             foreach (Team team in Teams.all)
@@ -446,6 +617,15 @@ namespace DuckGame
                 }
             }
         }
+        [Marker.DevConsoleCommand(Name = "hashtest")]
+        public static void hashtest()
+        {
+            string test_str = "I'm a gay fag";
+            DevConsole.Log(test_str.GetHashCode());
+            DevConsole.Log(test_str.FixedGetHashCode());
+            DevConsole.Log(test_str.GetHashCode() == test_str.FixedGetHashCode());
+        }
+
         [Marker.DevConsoleCommand(Name = "localfill")]
         public static void localfill()
         {
@@ -495,7 +675,12 @@ namespace DuckGame
             DevConsole.Log("Trying to join " + id);
             Level.current = new JoinServer(id);
         }
-        
+        [Marker.DevConsoleCommand(Name = "os")]
+        public static void PrintOs()
+        {
+            DevConsole.Log("OS: " + DG.platform);
+        }
+
         [Marker.DevConsoleCommand]
         public static void Res(int width, int height, ScreenMode mode)
         {
@@ -513,17 +698,17 @@ namespace DuckGame
         public static void windowtoggle()
         {
             windowed = !windowed;
-            SDL.SDL_SetWindowBordered(MonoMain.instance.Window.Handle, windowed ? SDL.SDL_bool.SDL_TRUE : SDL.SDL_bool.SDL_FALSE);
+            FNAPlatform.SetWindowBordered(MonoMain.instance.Window.Handle, windowed);
             DevConsole.Log("Windowed Mode is " + windowed.ToString());
         }
-        public static bool windowed = true;// SDL.SDL_SetWindowPosition(Resolution._window, 0, 0);
+        public static bool windowed = true;
 
 
         [Marker.DevConsoleCommand(Name = "windowpos",
             To = ImplementTo.DuckHack)]
         public static void windowtoggle(int x, int y)
         {
-            SDL.SDL_SetWindowPosition(MonoMain.instance.Window.Handle, x, y);
+            FNAPlatform.SetWindowPosition(MonoMain.instance.Window.Handle, x, y);
             DevConsole.Log("Set Window Pos is " + x.ToString() + " " + y.ToString());
         }
         [Marker.DevConsoleCommand(Name = "tilescreen")]
@@ -566,13 +751,12 @@ namespace DuckGame
             {
                 for (int y = 0; y < height; y += boxHeight)
                 {
-                    Process.Start(Application.ExecutablePath, Program.commandLine + "-nomusic -lanjoiner +screentile " + x.ToString() + " " + y.ToString() + " " + boxWidth.ToString() + " " + boxHeight.ToString());
+                    Process.Start(Assembly.GetEntryAssembly().Location, Program.commandLine + "-nomusic -lanjoiner +screentile " + x.ToString() + " " + y.ToString() + " " + boxWidth.ToString() + " " + boxHeight.ToString());
                 }
             }
-            //Process.Start(Application.ExecutablePath, Program.commandLine + " +screentile 0 0");
-            //Process.Start(Application.ExecutablePath, Program.commandLine + " +screentile 321 0"); //+screentile 0 0
+            //Process.Start(Assembly.GetEntryAssembly().Location, Program.commandLine + " +screentile 0 0");
+            //Process.Start(Assembly.GetEntryAssembly().Location, Program.commandLine + " +screentile 321 0"); //+screentile 0 0
             DevConsole.Log("Tiling with DGs" + GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width.ToString() + " " + GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height.ToString());
-           // Application.Exit();
          //   Program.main.KillEverything();
           //  Program.main.Exit();
         }
@@ -582,7 +766,6 @@ namespace DuckGame
         {
             DuckNetwork.CheckVersion(null);
         }
-        // SDL.SDL_SetWindowBordered(Resolution._window, true ? SDL.SDL_bool.SDL_FALSE : SDL.SDL_bool.SDL_TRUE); 
         [Marker.DevConsoleCommand(Name = "rlevel",
             To = ImplementTo.DuckHack)]
         public static void randomnesstest2()
@@ -606,7 +789,7 @@ namespace DuckGame
         [Marker.DevConsoleCommand(Name = "testdg")]
         public static void starttestdg()
         {
-            Process.Start(Application.ExecutablePath, Program.commandLine + " -lanjoiner");
+            Process.Start(Assembly.GetEntryAssembly().Location, Program.commandLine + " -lanjoiner");
             DevConsole.Log("Starting Lan Test bud");
         }
         //RandomSkySay();
@@ -633,8 +816,7 @@ namespace DuckGame
             //cityBackground.RandomSkySay();
             //DevConsole.Log("random test");
         }
-        [Marker.DevConsoleCommand(Name = "savegraphic",
-            To = ImplementTo.DuckHack)]
+        [Marker.DevConsoleCommand(Name = "savegraphic")]
         public static void seetheunseen()
         {
             SaveTextures();

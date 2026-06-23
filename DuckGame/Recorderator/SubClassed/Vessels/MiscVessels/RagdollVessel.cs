@@ -22,7 +22,7 @@ namespace DuckGame
             byte persona = b.ReadByte();
             if (persona == 199)
             {
-                //error handling stuff here prolly -NiK0
+                //error handling stuff here prolly -Lucky
                 persona = 0;
             }
             RagdollVessel v = new RagdollVessel(new Ragdoll(0, -2000, null, false, 0, 0, Vec2.Zero, Persona.all.ElementAt(persona)));

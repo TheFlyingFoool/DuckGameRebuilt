@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
-using System.Windows.Forms;
-using System.Windows.Media.Animation;
 
 namespace DuckGame
 {
@@ -315,15 +313,11 @@ namespace DuckGame
             if (pMode == "Fullscreen")
             {
                 // From dan Auto Resize Window in cases of fullscreening, as if not it uses incorrect res
-                int windowindex = SDL2.SDL.SDL_GetWindowDisplayIndex(MonoMain.instance.Window.Handle);
-                if (windowindex >= 0 && windowindex < GraphicsAdapter.Adapters.Count)
-                {
-                    GraphicsAdapter currentdisplay = GraphicsAdapter.Adapters[windowindex];
-                    LocalData.windowedFullscreenResolution.x = currentdisplay.CurrentDisplayMode.Width;
-                    LocalData.windowedFullscreenResolution.y = currentdisplay.CurrentDisplayMode.Height;
-                    LocalData.fullscreenResolution.x = currentdisplay.CurrentDisplayMode.Width;
-                    LocalData.fullscreenResolution.y = currentdisplay.CurrentDisplayMode.Height;
-                }
+                GraphicsAdapter currentdisplay = MonoMain.instance.GraphicsDevice.Adapter;
+                LocalData.windowedFullscreenResolution.x = currentdisplay.CurrentDisplayMode.Width;
+                LocalData.windowedFullscreenResolution.y = currentdisplay.CurrentDisplayMode.Height;
+                LocalData.fullscreenResolution.x = currentdisplay.CurrentDisplayMode.Width;
+                LocalData.fullscreenResolution.y = currentdisplay.CurrentDisplayMode.Height;
                 Resolution.Set(Data.windowedFullscreen ? LocalData.windowedFullscreenResolution : LocalData.fullscreenResolution);
             }
             else
@@ -483,6 +477,11 @@ namespace DuckGame
             menu.Add(new UIMenuItemToggle("50p Mode", field: new FieldBinding(typeof(DG), nameof(DG.FiftyPlayerMode)))
             {
                 dgrDescription = "Toggles 50p mode, will always reset to false after game restart"
+            });
+
+            menu.Add(new UIMenuItemNumber("Controller Count", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ControllerCount), 4, 300, 1), step: 1)
+            {
+                dgrDescription = "Maximum number of controllers supported (requires restart)"
             });
 
             menu.Add(new UIText(" ", Color.White));
@@ -733,6 +732,16 @@ namespace DuckGame
                 dgrDescription = "Displays lobby name on pause screen (not supporting LAN lobbies)"
             });
 
+            menu.Add(new UIMenuItemToggle("Extra Lobby Data", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ExtraLobbyData)))
+            {
+                dgrDescription = "Displays players in a lobby and more info in general"
+            });
+
+            menu.Add(new UIMenuItemToggle("Show Midgame Lobbies", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.DisplayMidgameLobbies)))
+            {
+                dgrDescription = "Whether or not to display lobbies which are mid gamae"
+            });
+
             menu.Add(new UIMenuItemToggle("Menu Mouse", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.MenuMouse)))
             {
                 dgrDescription = "Toggles the menu mouse"
@@ -903,7 +912,7 @@ namespace DuckGame
                     IEnumerable<TeamHat> ths = Level.current.things[typeof(TeamHat)].Cast<TeamHat>();
                     foreach (TeamHat th in ths)
                     {
-                        //might be a bit unoptimal to do this but im going with it anyways -NiK0
+                        //might be a bit unoptimal to do this but im going with it anyways -Lucky
                         if (files.Contains(th.team.customHatPath))
                         {
                             th.team = tths[th.team.customHatPath];

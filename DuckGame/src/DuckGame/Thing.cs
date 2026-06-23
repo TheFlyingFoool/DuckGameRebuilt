@@ -1360,7 +1360,7 @@ namespace DuckGame
                 return;
             t.bottom = block4.top;
         }
-        //useless now -NiK0
+        //useless now -Lucky
         public void OldReturnItemToWorld(Thing t)
         {
             Block block1 = Level.OldCheckLine<Block>(position, position + new Vec2(16f, 0f));
@@ -1870,7 +1870,7 @@ namespace DuckGame
         public virtual void OnTeleport()
         {
             SkipIntratick = 3;
-            //need to update cells here because teleporters teleport wrongly otherwise -NiK0
+            //need to update cells here because teleporters teleport wrongly otherwise -Lucky
             Level.current.things.UpdateObject(this);
         }
 

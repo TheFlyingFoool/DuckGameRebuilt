@@ -42,7 +42,7 @@ namespace DuckGame
 
         public TimeSpan Duration { get; }
 
-        public bool IsDisposed { get; }
+        public bool IsDisposed { get; set; }
 
         public string Name { get; set; }
 
@@ -53,7 +53,7 @@ namespace DuckGame
         }
         public static SoundEffect FromStream(Stream stream, string extension)
         {
-            if (Program.IsLinuxD)
+            if (Program.IsLinuxD || Environment.Is64BitProcess)
             {
                 try
                 {
@@ -159,6 +159,7 @@ namespace DuckGame
 
         public void Dispose()
         {
+            IsDisposed = true;
             if (_decoderReader == null)
                 return;
             lock (_decoderReader)
@@ -276,7 +277,12 @@ namespace DuckGame
 
         public void Platform_Construct(string pPath)
         {
-            if (Program.IsLinuxD)
+            if (!File.Exists(pPath)) // invalid file load attempt?
+            {
+                IsDisposed = true;
+                return;
+            }
+            if (Program.IsLinuxD || Environment.Is64BitProcess)
             {
                 int index = pPath.LastIndexOf(".");
                 byte[] data = File.ReadAllBytes(pPath);
@@ -284,7 +290,14 @@ namespace DuckGame
                 {
                     IsOgg = true;
                     oggPlayer = new OggPlayer();
-                    oggPlayer.SetOgg(new MemoryStream(data));
+                    if (Environment.Is64BitProcess)
+                    {
+                        oggPlayer.SetOgg(new MemoryStream(data), pPath);
+                    }
+                    else
+                    {
+                        oggPlayer.SetOgg(new MemoryStream(data));
+                    }
                 }
                 else
                 {

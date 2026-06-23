@@ -12,10 +12,13 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-using System.Windows.Forms;
 using System.Xml;
 using XnaToFna;
 using File = System.IO.File;
+using HarmonyLoader;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Emit;
 
 namespace DuckGame
 {
@@ -143,9 +146,8 @@ namespace DuckGame
 
         public static void RestartGame()
         {
-            string executablePath = RestartToVanillaDg ? VanillaDgPath : Application.ExecutablePath;
+            string executablePath = RestartToVanillaDg ? VanillaDgPath : Assembly.GetEntryAssembly().Location;
             Process.Start(executablePath, Program.commandLine);
-            Application.Exit();
             Program.main.KillEverything();
             Program.main.Exit();
         }
@@ -161,10 +163,10 @@ namespace DuckGame
             _modAssemblies.Add(mod.configuration.assembly, mod);
             if (mod is not CoreMod)
             {
-                try 
+                try
                 //hi hello yes, this is a bandaid fix because reskin mods crash here for some reason
                 //as far as i know this is firebreak stuff and in testing everything seemed fine so /shrug/
-                //if any problems come up then oops -NiK0
+                //if any problems come up then oops -Lucky
                 {
                     MarkerAttribute.Initialize(mod.configuration.assembly);
                 }
@@ -173,11 +175,131 @@ namespace DuckGame
 
                 }
             }
+            else
+            {
+                _modAssemblies.Add(typeof(HarmonyLib.Harmony).Assembly, new DisabledMod()); // HarmonyLoader
+                Loader.ShouldPatch = ModLoader.ShouldPatch;
+                Loader.PatchCrash = ModLoader.PatchCrash;
+            }
             _modsByHash.Add(mod.identifierHash, mod);
             if (mod.configuration.workshopID != 0UL)
                 _modsByWorkshopID[mod.configuration.workshopID] = mod;
             _modTypes.Add(mod.GetType(), mod);
         }
+        internal static string[] GetAllTypeNames(string assemblyPath)
+        {
+            try
+            {
+                using AssemblyDefinition asm = AssemblyDefinition.ReadAssembly(
+                                    assemblyPath,
+                                    new ReaderParameters { ReadSymbols = false });
+
+                return asm.Modules
+                          // keep module order identical to reflection
+                          .SelectMany(m =>
+                              m.GetTypes()                         // all types, all depths
+                               .OrderBy(t => t.MetadataToken.RID)) // metadata-token order
+                          .Select(td => td.FullName.Replace('/', '+'))  // Cecil → refl
+                          .Where(n => n != "<Module>")
+                          .ToArray();
+            }
+            catch
+            {
+                // mirror SaferGetTypes(): swallow and return empty set on error
+                return Array.Empty<string>();
+            }
+        }
+        static int n = 0;
+
+        //Note 
+        //Online Arcade [2587468403]  Crashs there harmony everytime and that is just intended?
+        //as They are Crashing on They likly didnt understand or didnt care that it crashed on these defualt types when patching
+        //{Boolean Equals(System.Object)}
+        //{Int32 GetHashCode()}
+        //{System.Type GetType()}
+        //{System.String ToString()}
+        private static string[] ignorecrash = new string[] { "System.Object:Equals", "System.Object:GetHashCode", "System.Object:GetType", "System.Object:ToString" };
+        static bool PatchCrash(Exception e, MethodBase original, MethodInfo prefix, MethodInfo postfix, MethodInfo transpiler) // True will see it crash
+        {
+            if (prefix != null && prefix.GetFullName() == "DuckGame.OnlineArcades.OnlineArcades:ThingFondle" && original != null && ignorecrash.Contains(original.GetFullName())) // more for debugging than functional
+            {
+                return false;
+            }
+            return false;
+        }
+        static bool ShouldPatch(MethodBase original, MethodInfo prefix, MethodInfo postfix, MethodInfo transpiler)
+        {
+            return true;
+            if (!Program.IS_DEV_BUILD && !Debugger.IsAttached)
+            {
+                return true; // So its only disabling when debugging needs more testing before Hard use
+            }
+            bool shouldpatch = true;
+            if (original == typeof(Level).GetMethod("PostDrawLayer"))
+            {
+                if (postfix != null)
+                {
+                    Level.PostfixPostDrawLayerMethods.Add(postfix);
+                }
+                if (prefix != null)
+                {
+                    Level.PrefixPostDrawLayerMethods.Add(prefix);
+                }
+                shouldpatch = false;
+            }
+            if (original == typeof(Duck).GetMethod("Hit"))
+            {
+                shouldpatch = false;
+            }
+            if (original == typeof(RagdollPart).GetMethod("Hit"))
+            {
+                shouldpatch = false;
+            }
+            if (original?.DeclaringType == typeof(Level)) // {Name = "Level" FullName = "DuckGame.Level"}
+            {
+                DevConsole.Log("hi");
+            }
+            if (original?.Name == "OnHit")
+            {
+                shouldpatch = false;
+            }
+            if (original?.Name == "Hit")
+            {
+                shouldpatch = false;
+            }
+            if (original == typeof(Gun).GetMethod("Draw", BindingFlags.Instance | BindingFlags.Public, binder: null, types: Type.EmptyTypes, modifiers: null))
+            {
+                shouldpatch = false; // To Implement
+            }
+            if (original?.DeclaringType == typeof(Gun) && original?.Name == "Fire")
+            {
+                shouldpatch = false; // To Implement
+            }
+            if (original?.DeclaringType == typeof(Bullet) && original?.Name == "OnCollide")
+            {
+                shouldpatch = false; // To Implement
+            }
+            if (original?.DeclaringType == typeof(UIControlConfig) && transpiler != null && transpiler?.DeclaringType?.Namespace == "DuckGame.KonamiKeybind")
+            {
+                shouldpatch = false;
+            }
+            if (prefix != null)
+            {
+                DevConsole.Log(prefix?.DeclaringType?.FullName + "::" + prefix?.Name + " is Prefix patching " + original?.DeclaringType?.FullName + "::" + original?.Name);
+            }
+            if (postfix != null)
+            {
+                DevConsole.Log(postfix?.DeclaringType?.FullName + "::" + postfix?.Name + " is Postfix patching " + original?.DeclaringType?.FullName + "::" + original?.Name);
+            }
+            if (transpiler != null)
+            {
+                DevConsole.Log(transpiler?.DeclaringType?.FullName + "::" + transpiler?.Name + " is Postfix patching " + original?.DeclaringType?.FullName + "::" + original?.Name);
+            }
+            shouldpatch = false;
+            return shouldpatch;
+        }
+
+
         public static void FixLoadAssembly(ModConfiguration modConfig, string path)
         {
             path = path.Replace("\\", "/");
@@ -192,8 +314,8 @@ namespace DuckGame
                 if (File.Exists(RebuiltAssemblyPath))
                 {
                     saveddata = File.ReadAllText(RebuiltDataPath);
-                    lines = saveddata.Split( new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (lines.Length  >  1)
+                    lines = saveddata.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (lines.Length > 1)
                     {
                         string saveinfo = lines[0];
                         if (saveinfo.Contains("|") && lines[1] == "Type Order")
@@ -224,28 +346,28 @@ namespace DuckGame
             {
                 File.Delete(RebuiltAssemblyPath);
             }
-            Assembly normalmodassembly = Assembly.Load(File.ReadAllBytes(path));
 
-            Type[] modtypes = normalmodassembly.SaferGetTypes();
-            modConfig.SortedTypeNames = new string[modtypes.Length];
+            //Assembly normalmodassembly = Assembly.Load(File.ReadAllBytes(path));
+
+            //Type[] modtypes = normalmodassembly.SaferGetTypes();
+            // modConfig.SortedTypeNames = new string[modtypes.Length];  modConfig.SortedTypeNames[i] = typename;
+            string[] typenames = GetAllTypeNames(path);
+            modConfig.SortedTypeNames = typenames;
             string typeorder = "\nType Order";
-            for (int i = 0; i < modtypes.Length; i++)
+            for (int i = 0; i < typenames.Length; i++)
             {
-                string typename = modtypes[i].FullName;
-                modConfig.SortedTypeNames[i] = typename;
-                typeorder += "\n" + typename;
+                typeorder += "\n" + typenames[i];
             }
-            normalmodassembly = null;
-            //(modificationdatetime + " | " + XnaToFnaUtil.RemapVersion.ToString())
             File.WriteAllText(RebuiltDataPath, (modificationdatetime + "|" + XnaToFnaUtil.RemapVersion.ToString()) + typeorder);
             MonoMain.NloadMessage = "REMAPPING/LOADING MOD " + currentModLoadString + " " + saveddata;
             string folderpath = Path.GetDirectoryName(path);
             xnaToFnaUtil = new XnaToFnaUtil(folderpath); //Path.GetDirectoryName(path);
-            //xnaToFnaUtil.ScanPath(Program.GameDirectory + "DGSteamref.dll");
+                                                         //xnaToFnaUtil.ScanPath(Program.GameDirectory + "DGSteamref.dll");
 
-        //    xnaToFnaUtil.ScanPath("D:\\Program Files (x86)\\Steam\\steamapps\\workshop\\content\\312530\\2674911202\\BrowseGamesPlus\\content\\0Harmony.dll");
-            
+            //    xnaToFnaUtil.ScanPath("D:\\Program Files (x86)\\Steam\\steamapps\\workshop\\content\\312530\\2674911202\\BrowseGamesPlus\\content\\0Harmony.dll");
+
             xnaToFnaUtil.ScanPath(Program.GameDirectory + "FNA.dll");
+            xnaToFnaUtil.ScanPath(Program.GameDirectory + "0Harmony.dll"); // HarmonyLoader
             xnaToFnaUtil.ScanPath(Program.FilePath);
             xnaToFnaUtil.RelinkAll();
 
@@ -325,6 +447,7 @@ namespace DuckGame
                         else if (modConfig.workshopID == 1820667892UL)
                         {
                             modConfig.Disable();
+
                             modConfig.error = "!This mod has been officially implemented, Thanks Yupdaniel!";
                             mod = new DisabledMod();
                         }
@@ -373,8 +496,20 @@ namespace DuckGame
                     //    modConfig.error = "!This mod does not currently work on Rebuilt, Patching Issues!";
                     //    mod = new DisabledMod();
                     //}
-                    if (modConfig.workshopID == 2480332949UL) //Delta Duck
-                    {                 
+                    if (modConfig.workshopID == 3649111390UL) // My Harmony
+                    {
+                        modConfig.Disable();
+                        modConfig.error = "!Rebuilt Handles this issue, Please Do not put harmony into ur Assembly!";
+                        mod = new DisabledMod();
+                    }
+                    else if (modConfig.workshopID == 2209935223UL) // DuckAntiAliasing
+                    {
+                        modConfig.Disable();
+                        modConfig.error = "!This mod does not work with on Rebuilt FNA Render Engine";
+                        mod = new DisabledMod();
+                    }
+                    else if (modConfig.workshopID == 2480332949UL) //Delta Duck
+                    {
                         modConfig.Disable();
                         modConfig.error = "!This mod does not currently work on Rebuilt, Just a Mess of Issues! @Tater";
                         mod = new DisabledMod();
@@ -403,39 +538,48 @@ namespace DuckGame
                         modConfig.error = "!This mod does not currently work on Rebuilt!";
                         mod = new DisabledMod();
                     }
+                    else if (modConfig.workshopID == 2381384850UL && loadableModIds.Contains(2586315559))
+                    {
+                        modConfig.Disable();
+                        modConfig.error = "!This is Disabled mod is Disable, Because v2 is newer";
+                        mod = new DisabledMod();
+                    }
 
                     //Patchs in these mods Dont Like the Debugger or debug configuration
 #if DEBUG
-                        if (true)
-                        #else
+                    //if (true)
+#else
                         if (Debugger.IsAttached)
 #endif
-                        {
-                        if (modConfig.name == "QOL")
-                        {
-                            modConfig.Disable();
-                            modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
-                            mod = new DisabledMod();
-                        }
-                        else if (modConfig.workshopID == 2411996803UL) //CLIENT | Competitive Tools https://steamcommunity.com/sharedfiles/filedetails/?id=2411996803
-                        {
-                            modConfig.Disable();
-                            modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
-                            mod = new DisabledMod();
-                        }
-                        else if (modConfig.workshopID == 2381384850UL) //Extrastuff https://steamcommunity.com/sharedfiles/filedetails/?id=2381384850
-                        {
-                            modConfig.Disable();
-                            modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
-                            mod = new DisabledMod();
-                        }
-                        else if (modConfig.workshopID == 2586315559) //Extrastuff v2 https://steamcommunity.com/sharedfiles/filedetails/?id=2586315559
+                    //{
+                        //if (modConfig.name == "QOL")
+                        //{
+                        //    modConfig.Disable();
+                        //    modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
+                        //    mod = new DisabledMod();
+                        //}
+                        //else
+                        //if (modConfig.workshopID == 2411996803UL) //CLIENT | Competitive Tools https://steamcommunity.com/sharedfiles/filedetails/?id=2411996803
+                        //{
+                        //    modConfig.Disable();
+                        //    modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
+                        //    mod = new DisabledMod();
+                        //}
+                        //else
+                        if (modConfig.workshopID == 2381384850UL) //Extrastuff https://steamcommunity.com/sharedfiles/filedetails/?id=2381384850
                         {
                             modConfig.Disable();
                             modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
                             mod = new DisabledMod();
                         }
-                    }
+                        else
+                        if (modConfig.workshopID == 2586315559) //Extrastuff v2 https://steamcommunity.com/sharedfiles/filedetails/?id=2586315559
+                        {
+                            modConfig.Disable();
+                            modConfig.error = "!This is Disabled mod is Disabled when Debugging!";
+                            mod = new DisabledMod();
+                        }
+                    //}
                 }
                 if (mod == null)
                 {
@@ -564,6 +708,10 @@ namespace DuckGame
 
         private static bool AttemptCompile(ModConfiguration config)
         {
+            if (Program.IsLinuxD)
+            {
+                return LinuxAttemptCompile(config);
+            }
             _buildErrorText = null;
             _buildErrorFile = null;
             if (config.noCompilation)
@@ -603,7 +751,7 @@ namespace DuckGame
             {
                 _provider = new CSharpCodeProvider();
                 _parameters = new CompilerParameters(AppDomain.CurrentDomain.GetAssemblies().Select(assembly => assembly.Location).ToArray());
-                _parameters.CompilerOptions = "/define:DGR";
+                _parameters.CompilerOptions = "/define:DGR /define:WINDOWS";
                 _parameters.GenerateExecutable = _parameters.GenerateInMemory = false;
             }
             if (File.Exists(config.buildLogPath))
@@ -631,6 +779,157 @@ namespace DuckGame
                     return false;
             }
             return true;
+        }
+        private static bool LinuxAttemptCompile(ModConfiguration config)
+        {
+            _buildErrorText = null;
+            _buildErrorFile = null;
+
+            if (config.noCompilation)
+                return false;
+
+            List<string> allFiles = DuckFile.GetFilesNoCloud(config.directory, "*.cs", SearchOption.AllDirectories);
+            if (allFiles.Count == 0)
+                return false;
+            allFiles.Reverse();
+            config.isDynamic = true;
+            
+            CRC32 crC32 = new CRC32();
+            byte[] numArray = new byte[2048];
+            foreach (string path in allFiles)
+            {
+                using (FileStream fileStream = File.Open(path, FileMode.Open))
+                {
+                    while (fileStream.Position != fileStream.Length)
+                    {
+                        int blockLen = fileStream.Read(numArray, 0, numArray.Length);
+                        crC32.ProcessBlock(numArray, blockLen);
+                    }
+                }
+            }
+            uint num = crC32.Finalize();
+
+            if (!forceRecompilation && File.Exists(config.hashPath))
+            {
+                if (File.Exists(config.tempAssemblyPath))
+                {
+                    try
+                    {
+                        if (BitConverter.ToUInt32(File.ReadAllBytes(config.hashPath), 0) == num)
+                            return true;
+                    }
+                    catch { }
+                }
+            }
+
+            File.WriteAllBytes(config.hashPath, BitConverter.GetBytes(num));
+
+     
+
+            if (allFiles.Count == 0)
+            {
+                _buildErrorText = "No source files left after filtering AssemblyInfo.cs";
+                return false;
+            }
+
+            // === Roslyn Compilation ===
+            try
+            {
+                List<SyntaxTree> syntaxTrees = new List<SyntaxTree>();
+                bool hasAssemblyInfo = false;
+                CSharpParseOptions parseOptions = new CSharpParseOptions(
+                    preprocessorSymbols: new[] { "DGR", "LINUX" }
+                );
+
+                foreach (string file in allFiles)
+                {
+                    bool isAssemblyInfo = file.EndsWith("AssemblyInfo.cs", StringComparison.OrdinalIgnoreCase);
+                    if (hasAssemblyInfo && isAssemblyInfo)
+                    {
+                        continue;
+                    }
+                    if (isAssemblyInfo)
+                    {
+                        hasAssemblyInfo = true;
+                    }
+                    string sourceCode = File.ReadAllText(file);
+                    SyntaxTree tree = CSharpSyntaxTree.ParseText(
+                        sourceCode, 
+                        options: parseOptions, // This applies the /define:DGR
+                        path: file
+                    );
+                    syntaxTrees.Add(tree);
+                }
+
+                // References from loaded assemblies + explicit WinForms
+                List<PortableExecutableReference> references = AppDomain.CurrentDomain.GetAssemblies()
+                    .Where(a => !a.IsDynamic && !string.IsNullOrEmpty(a.Location))
+                    .Select(a => MetadataReference.CreateFromFile(a.Location))
+                    .ToList();
+
+                // Add System.Windows.Forms explicitly (helps on Mono/Linux)
+                try
+                {
+                    Assembly formsAsm = typeof(System.Windows.Forms.Form).Assembly;
+                    if (!string.IsNullOrEmpty(formsAsm.Location))
+                        references.Add(MetadataReference.CreateFromFile(formsAsm.Location));
+                }
+                catch { }
+
+                string assemblyName = config.name;
+                
+
+                CSharpCompilation compilation = CSharpCompilation.Create(
+                    assemblyName: assemblyName,
+                    syntaxTrees: syntaxTrees,
+                    references: references,
+                    options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
+                        .WithOptimizationLevel(OptimizationLevel.Debug)
+                        .WithPlatform(Microsoft.CodeAnalysis.Platform.AnyCpu)
+                        .WithAllowUnsafe(true));
+
+                // Delete old log
+                if (File.Exists(config.buildLogPath))
+                {
+                    File.SetAttributes(config.buildLogPath, FileAttributes.Normal);
+                    File.Delete(config.buildLogPath);
+                }
+
+                using (MemoryStream peStream = new MemoryStream())
+                {
+                    EmitResult result = compilation.Emit(peStream);
+
+                    if (!result.Success)
+                    {
+                        List<Diagnostic> errors = result.Diagnostics.Where(d => d.Severity == DiagnosticSeverity.Error).ToList();
+
+                        if (errors.Count > 0)
+                        {
+                            Diagnostic first = errors[0];
+                            _buildErrorText = first.GetMessage();
+
+                            if (first.Location != Location.None)
+                            {
+                                FileLinePositionSpan span = first.Location.GetLineSpan();
+                                _buildErrorFile = DuckFile.PreparePath(span.Path);
+                            }
+
+                            File.WriteAllLines(config.buildLogPath, result.Diagnostics.Select(d => d.ToString()));
+                            return false;
+                        }
+                    }
+                    
+                    File.WriteAllBytes(config.tempAssemblyPath, peStream.ToArray());
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                _buildErrorText = $"Compilation exception: {ex.Message}";
+                if (File.Exists(config.buildLogPath))
+                    File.WriteAllText(config.buildLogPath, ex.ToString());
+                return false;
+            }
         }
 
         private static ModConfiguration AttemptModLoad(string folder)
@@ -709,7 +1008,7 @@ namespace DuckGame
             }
             if (newChild["Enabled"] != null && DGRSettings.UseEnabledModsConfig)
             {
-                enabledMods = new HashSet<string>(newChild["Enabled"].InnerText.Split(new char[1] {'|'}, StringSplitOptions.RemoveEmptyEntries).Select(a => a.Trim()));
+                enabledMods = new HashSet<string>(newChild["Enabled"].InnerText.Split(new char[1] { '|' }, StringSplitOptions.RemoveEmptyEntries).Select(a => a.Trim()));
                 useEnabled = true;
             }
             if (newChild["Disabled"] != null)
@@ -852,9 +1151,9 @@ namespace DuckGame
                 {
                     if ((item.stateFlags & WorkshopItemState.Installed) != 0 && Directory.Exists(item.path))
                     {
-                        foreach (var folder in DuckFile.GetDirectoriesNoCloud(item.path))
+                        foreach (string folder in DuckFile.GetDirectoriesNoCloud(item.path))
                         {
-                            var config = AttemptModLoad(folder);
+                            ModConfiguration config = AttemptModLoad(folder);
 
                             if (config != null)
                             {
@@ -963,11 +1262,11 @@ namespace DuckGame
                 };
                 attemptLoadMods.label = "Loading Mod stuff to load mod stuff";
             }
-            MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => ReskinPack.InitializeReskins(),null, "Initialize Reskins"));
+            MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => ReskinPack.InitializeReskins(), null, "Initialize Reskins"));
             MonoMain.currentActionQueue.Enqueue(new LoadingAction(() => MapPack.InitializeMapPacks(), null, "Initialize MapPacks"));
             GetOrLoadMods(true);
         }
-
+        private static ulong[] loadableModIds = new ulong[0];
         private static void GetOrLoadMods(bool pPreload)
         {
             Stack<string> modLoadStack = new Stack<string>();
@@ -979,6 +1278,18 @@ namespace DuckGame
                 MonoMain.totalLoadyBits += loadableMods.Count * 2;
                 //int cluster = 0;
                 List<ReskinPack> active = ReskinPack.active;
+                loadableModIds = new ulong[loadableMods.Values.Count];
+                int index = 0;
+                foreach (ModConfiguration modConfiguration in loadableMods.Values)
+                {
+                    ulong id = 0;
+                    if (modConfiguration != null)
+                    {
+                        id = modConfiguration.assignedWorkshopID;
+                    }
+                    loadableModIds[index] = id;
+                    index += 1;
+                }
                 foreach (ModConfiguration modConfiguration in loadableMods.Values)
                 {
                     ModConfiguration loadable = modConfiguration;
@@ -1061,7 +1372,7 @@ namespace DuckGame
             {
                 foreach (Mod initializationFailure in initializationFailures)
                     _sortedAccessibleMods.Remove(initializationFailure);
-                
+
                 modHash = GetModHash();
                 foreach (Mod sortedAccessibleMod in (IEnumerable<Mod>)_sortedAccessibleMods)
                 {

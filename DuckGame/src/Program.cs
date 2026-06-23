@@ -1,27 +1,27 @@
-﻿using System; 
+﻿using AddedContent.Firebreak;
 using DbMon.NET;
 using DGWindows;
-using System.IO;
-using System.Net;
-using System.Linq;
-using System.Text;
-using System.Net.Http;
-using System.Security;
-using System.Threading;
-using System.Resources;
-using System.Reflection;
-using System.Diagnostics;
-using System.Collections;
-using System.Windows.Forms;
-using System.Globalization;
-using System.IO.Compression;
-using AddedContent.Firebreak;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using System; 
+using System.Collections;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.Runtime.InteropServices;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Reflection;
+using System.Resources;
 using System.Runtime.ExceptionServices;
+using System.Runtime.InteropServices;
+using System.Security;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DuckGame
 {
@@ -34,11 +34,11 @@ namespace DuckGame
 #else
         public const bool IS_DEV_BUILD = false;
 #endif
-
+        public static bool IS_SDL2 = false;
         // this should be formatted like X.X.X where each X is a number
-        public const string CURRENT_VERSION_ID = "1.4.6.1";
+        public const string CURRENT_VERSION_ID = "1.4.7";
 
-        // do change this you know what you're doing -NiK0
+        // do change this you know what you're doing -Lucky
         public const string CURRENT_VERSION_ID_FORMATTED = "v" + CURRENT_VERSION_ID;
 
         public static bool Prestart = DirtyPreStart();
@@ -160,7 +160,7 @@ namespace DuckGame
             }
             else
                 AppDomain.CurrentDomain.AssemblyLoad += new AssemblyLoadEventHandler(WindowsPlatformStartup.AssemblyLoad);
-            Application.ThreadException += new ThreadExceptionEventHandler(UnhandledThreadExceptionTrapper);
+
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(WindowsPlatformStartup.UnhandledExceptionTrapper);
             AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(Resolve);
             TaskScheduler.UnobservedTaskException += UnhandledExceptionUnobserved;
@@ -189,64 +189,168 @@ namespace DuckGame
         //}
         public static bool DirtyPreStart()
         {
-            int tries = 10;
             int p = (int)Environment.OSVersion.Platform;
             IsLinuxD = (p == 4) || (p == 6) || (p == 128);
-            // if (!IS_DEV_BUILD)
-            // {
-            //     AutoUpdaterNew();
-            // }
+
             if (fullstop)
-            {
                 return false;
-            }
-            try // IMPROVEME, i try catch this because when restarting with the ingame restarting thing, it would crash because this was still in use
-            {   // also this should really be doing some kind of like cache thing so it doesnt do this everytime
-                while (tries > 0)
-                {
-                    if (File.Exists(GameDirectory + "Steamworks.NET.dll"))
-                    {
-                        File.Delete(GameDirectory + "Steamworks.NET.dll");
-                        tries -= 1;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                if (IsLinuxD)
-                {
-                    DevConsole.Log("|PINK|DGR |WHITE|Setting dll to LinuxSteamworks");
-                    File.Copy(GameDirectory + "OSX-Linux-x64//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
-                }
-                else if (Environment.Is64BitProcess)
-                {
-                    DevConsole.Log("|PINK|DGR |WHITE|Setting dll to WindowsSteamx64"); //this is left over from me thinking about building for 64 bit, i dont want to build FNA my self so no
-                    File.Copy(GameDirectory + "Windows-x64//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
-                }
-                else
-                {
-                    DevConsole.Log("|PINK|DGR |WHITE|Setting dll to WindowsSteamx86");
-                    File.Copy(GameDirectory + "Windows-x86//Steamworks.NET.dll", GameDirectory + "Steamworks.NET.dll");
-                }
-            }
-            catch
+
+           
+
+            string platformDir = IsLinuxD ? "OSX-Linux-x64"
+                : Environment.Is64BitProcess ? "Windows-x64"
+                : "Windows-x86";
+
+            string[] dlls = {
+                "Steamworks.NET.dll",
+                "SDL3.dll",
+                "FAudio.dll",
+                "FNA3D.dll",
+                "libtheorafile.dll"
+            };
+
+            foreach (string dll in dlls)
             {
+                string sourcePath = GameDirectory + platformDir + "/" + dll;
+                string destPath = GameDirectory + dll;
+
+                DevConsole.Log($"|PINK|DGR |WHITE|Checking {dll} for {platformDir}");
+                try
+                {
+                    if (!TryReplaceDllIfChanged(sourcePath, destPath))
+                        DevConsole.Log($"|PINK|DGR |WHITE|{dll} unchanged, skipping replace");
+                    else
+                        DevConsole.Log($"|PINK|DGR |WHITE|{dll} updated from {platformDir}");
+                }
+                catch (Exception ex)
+                {
+                    DevConsole.Log($"|PINK|DGR |WHITE|Failed to replace {dll}: {ex.Message}");
+                }
             }
-            DevConsole.Log("|PINK|DGR |WHITE|Is Linux " + IsLinuxD.ToString() + " PlatformID " + p.ToString());
+            DevConsole.Log($"|PINK|DGR |WHITE|Is Linux {IsLinuxD} PlatformID {p}");
             gameAssembly = Assembly.GetExecutingAssembly();
             gameAssemblyName = gameAssembly.GetName().Name;
             FilePath = gameAssembly.Location;
             FileName = Path.GetFileName(FilePath);
             GameDirectory = FilePath.Substring(0, FilePath.Length - FileName.Length);
+
+
             return true;
         }
-        public static Assembly ModResolve(object sender, ResolveEventArgs args) => ManagedContent.ResolveModAssembly(sender, args);
+        private static bool TryReplaceDllIfChanged(string sourcePath, string destPath, int timeoutMs = 5000, int pollIntervalMs = 200)
+        {
+            string sourceHash = ComputeMD5(sourcePath);
 
+            // If dest exists and already matches, nothing to do
+            if (File.Exists(destPath))
+            {
+                string destHash = ComputeMD5(destPath);
+                if (sourceHash == destHash)
+                    return false;
+
+                // Wait until the file can actually be deleted
+                if (!WaitForFileDeletable(destPath, timeoutMs, pollIntervalMs))
+                    throw new TimeoutException(
+                        $"Timed out after {timeoutMs}ms waiting to delete: {destPath}");
+
+                File.Delete(destPath);
+            }
+
+            File.Copy(sourcePath, destPath);
+            return true;
+        }
+
+
+
+        private static readonly Random _jitter = new Random(Guid.NewGuid().GetHashCode());
+        private static bool WaitForFileDeletable(string path, int timeoutMs, int pollIntervalMs)
+        {
+            var deadline = DateTime.UtcNow.AddMilliseconds(timeoutMs);
+            while (DateTime.UtcNow < deadline)
+            {
+                try
+                {
+                    using (File.Open(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+                        return true;
+                }
+                catch (IOException)
+                {
+                    int jitter = _jitter.Next(0, pollIntervalMs / 2);
+                    Thread.Sleep(pollIntervalMs + jitter);
+                }
+            }
+            return false;
+        }
+
+        private static string ComputeMD5(string filePath)
+        {
+            using var md5 = MD5.Create();
+            using var stream = File.OpenRead(filePath);
+            byte[] hash = md5.ComputeHash(stream);
+            return BitConverter.ToString(hash);
+        }
+        public static Assembly ModResolve(object sender, ResolveEventArgs args) => ManagedContent.ResolveModAssembly(sender, args);
+        private static Dictionary<string, Assembly> LoadedAssemblies = new Dictionary<string, Assembly>();
         public static Assembly Resolve(object sender, ResolveEventArgs args)
         {
-            if (!enteredMain)
+            if (args.Name.StartsWith("System.Drawing"))
+            {
                 return null;
+            }
+            if (!enteredMain)
+                return null;//HarmonyLoader
+            if (args.Name.StartsWith("DuckGame,"))
+            {
+                return Assembly.GetExecutingAssembly();
+            }
+            if (args.Name.StartsWith("Mono.Cecil.Pdb,"))
+            {
+                if (LoadedAssemblies.TryGetValue("0Harmony.dll", out Assembly assembly))
+                {
+                    return assembly;
+                }
+                try
+                {
+                    assembly = Assembly.LoadFrom("0Harmony.dll");
+                    LoadedAssemblies.Add("0Harmony.dll", assembly);
+                    return assembly;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to load Mono.Cecil.Pdb.dll: {ex}");
+                }
+                //if (LoadedAssemblies.TryGetValue("Mono.Cecil.Pdb.dll", out Assembly assembly)){
+                //    return assembly;
+                //}
+                //try
+                //{
+                //    assembly = Assembly.LoadFrom("Mono.Cecil.Pdb.dll");
+                //    LoadedAssemblies.Add("Mono.Cecil.Pdb.dll", assembly);
+                //    return assembly;
+                //}
+                //catch (Exception ex)
+                //{
+                //    Console.WriteLine($"Failed to load Mono.Cecil.Pdb.dll: {ex}");
+                //}
+
+            }
+            if (args.Name.StartsWith("0Harmony,") || args.Name.StartsWith("HarmonyLoader,"))
+            {
+                if (LoadedAssemblies.TryGetValue("0Harmony.dll", out Assembly assembly))
+                {
+                    return assembly;
+                }
+                try
+                {
+                    assembly = Assembly.LoadFrom("0Harmony.dll");
+                    LoadedAssemblies.Add("0Harmony.dll", assembly);
+                    return assembly;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to load Mono.Cecil.Pdb.dll: {ex}");
+                }
+            }
             if (args.Name.StartsWith("Steam,"))
             {
                 return Assembly.GetAssembly(typeof(Steam));
@@ -277,7 +381,7 @@ namespace DuckGame
                     StreamWriter streamWriter = new StreamWriter("ducklog.txt", true);
                     streamWriter.WriteLine(str);
                     streamWriter.Close();
-                    Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -exceptionString \"" + str.Replace("\n", "|NEWLINE|").Replace("\r", "|NEWLINE2|") + "\" -source Duck Game -commandLine \"\" -executable \"" + Application.ExecutablePath + "\"");
+                    Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -exceptionString \"" + str.Replace("\n", "|NEWLINE|").Replace("\r", "|NEWLINE2|") + "\" -source Duck Game -commandLine \"\" -executable \"" + Assembly.GetEntryAssembly().Location + "\"");
                 }
             }
             return null;
@@ -309,7 +413,6 @@ namespace DuckGame
             DuckFile.Initialize();
             MarkerAttribute.Initialize(gameAssembly);
             AutoConfigHandler.Initialize();
-            int Controllers = 8;
             bool flag = false;
             for (int index = 0; index < args.Length; ++index)
             {
@@ -348,7 +451,7 @@ namespace DuckGame
                         {
                             try
                             {
-                                Controllers = Convert.ToInt32(args[index]);
+                                DGRSettings.ControllerCount = Convert.ToInt32(args[index]);
                             }
                             catch
                             { }
@@ -467,7 +570,7 @@ namespace DuckGame
                         }
                         for (int i = 0; i < amount; i++)
                         {
-                            Process.Start(Application.ExecutablePath, commandLine.Replace("-testserver", " -lanjoiner"));
+                            Process.Start(Assembly.GetEntryAssembly().Location, commandLine.Replace("-testserver", " -lanjoiner"));
                         }
                         testServer = true;
                         break;
@@ -475,7 +578,7 @@ namespace DuckGame
                         testServer = true;
                         break;
                     case "-testserverclient":
-                        Process.Start(Application.ExecutablePath, commandLine.Replace("-testserverclient", " -testserver2"));
+                        Process.Start(Assembly.GetEntryAssembly().Location, commandLine.Replace("-testserverclient", " -testserver2"));
                         Network.lanMode = true;
                         IsLanTestUser = true;
                         break;
@@ -531,6 +634,9 @@ namespace DuckGame
                         break;
                     case "-moddebug":
                         MonoMain.modDebugging = true;
+                        break;
+                    case "-monodebug":
+                        MonoMain.monoDebug = true;
                         break;
                     case "-downloadmods":
                         MonoMain.downloadWorkshopMods = true;
@@ -663,7 +769,7 @@ namespace DuckGame
                     default:
                         if (args[index] == "-nolaunch")
                         {
-                            int num = (int)MessageBox.Show("-nolaunch Command Line Option activated! Cancelling launch!");
+                            Console.WriteLine("-nolaunch Command Line Option activated! Cancelling launch!");
                             return;
                         }
                         if (args[index] == "-alternateSaveLocation")
@@ -671,6 +777,11 @@ namespace DuckGame
                         break;
                 }
             }
+            //surely i wont forget to remove this if i am to push something to the github right? 
+            //im still adding an #if debug just in case -Lucky
+#if DEBUG
+            DiscordRichPresence.noRPC = true;
+#endif
             try
             {
                 if (MonoMain.audioModeOverride == AudioMode.None)
@@ -693,6 +804,13 @@ namespace DuckGame
                 }
             }
             enteredMain = true;
+            if (MonoMain.monoDebug)
+            {
+                while (!Debugger.IsAttached)
+                {
+                    Thread.Sleep(200);
+                }
+            }
             if (!MonoMain.disableSteam)
             {
                 if (MonoMain.breakSteam || !Steam.InitializeCore())
@@ -718,11 +836,10 @@ namespace DuckGame
             }
             catch (Exception) { }
         label_109:
-            DeviceChangeNotifier.Start();
-            DevConsole.Log("Starting Duck Game (" + DG.platform + ")...");
-            if (Controllers > 4)
+                        DevConsole.Log("Starting Duck Game (" + DG.platform + ")...");
+            if (DGRSettings.ControllerCount > 4)
             {
-                string controllerstring = Controllers.ToString();
+                string controllerstring = DGRSettings.ControllerCount.ToString();
                 DevConsole.Log("Setting Max Controller Count " + controllerstring);
                 Environment.SetEnvironmentVariable("FNA_GAMEPAD_NUM_GAMEPADS", controllerstring);
             }
@@ -731,6 +848,17 @@ namespace DuckGame
             if (string.IsNullOrEmpty(environmentVariable) || !int.TryParse(environmentVariable, out MonoMain.MaximumGamepadCount) || MonoMain.MaximumGamepadCount < 0)
                 MonoMain.MaximumGamepadCount = Enum.GetNames(typeof(PlayerIndex)).Length;
 
+            IS_SDL2 = Environment.GetEnvironmentVariable("FNA_PLATFORM_BACKEND") == "SDL2";
+            // Sets name for Linux Volume Bar
+            if (IS_SDL2)
+            {
+                SDL2.SDL.SDL_SetHint(SDL3.SDL.SDL_HINT_APP_NAME, "Duck Game");
+            }
+            else
+            {
+                SDL3.SDL.SDL_SetAppMetadata("Duck Game", "1.0", "com.duckgame.game");
+                SDL3.SDL.SDL_SetHint(SDL3.SDL.SDL_HINT_APP_NAME, "Duck Game");
+            }
             main = new Main();
             if (Debugger.IsAttached)
             {
@@ -813,7 +941,7 @@ namespace DuckGame
                 StreamWriter streamWriter = new StreamWriter("ducklog.txt", true);
                 streamWriter.WriteLine(pLogMessage);
                 streamWriter.Close();
-                Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -modName none -source " + e.Exception.Source + " -commandLine \"none\" -executable \"" + Application.ExecutablePath + "\" " + WindowsPlatformStartup.GetCrashWindowString(ex, null, pLogMessage));
+                Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -modName none -source " + e.Exception.Source + " -commandLine \"none\" -executable \"" + Assembly.GetEntryAssembly().Location + "\" " + WindowsPlatformStartup.GetCrashWindowString(ex, null, pLogMessage));
             }
         }
         public static string ProcessExceptionString(Exception e)
@@ -1081,10 +1209,10 @@ namespace DuckGame
                     {
                         if (pModConfig != null)
                             Process.Start("CrashWindow.exe", "-modResponsible " + (flag1 ? "1" : "0") + " -modDisabled " + (!gameLoadedSuccessfully || Options.Data.disableModOnCrash ? (flag2 ? "1" : "0") : "2")
-                                + " -modName " + str2 + " -source " + exception.Source + " -commandLine \"" + commandLine + "\" -executable \"" + Application.ExecutablePath + "\" " + DG.GetCrashWindowString(pException, pModConfig, str1));
+                                + " -modName " + str2 + " -source " + exception.Source + " -commandLine \"" + commandLine + "\" -executable \"" + Assembly.GetEntryAssembly().Location + "\" " + DG.GetCrashWindowString(pException, pModConfig, str1));
                         else
                             Process.Start("CrashWindow.exe", "-modResponsible " + (flag1 ? "1" : "0") + " -modDisabled " + (!gameLoadedSuccessfully || Options.Data.disableModOnCrash ? (flag2 ? "1" : "0") : "2")
-                                + " -modName " + str2 + " -source " + exception.Source + " -commandLine \"" + commandLine + "\" -executable \"" + Application.ExecutablePath + "\" " + DG.GetCrashWindowString(pException, pAssembly, str1));
+                                + " -modName " + str2 + " -source " + exception.Source + " -commandLine \"" + commandLine + "\" -executable \"" + Assembly.GetEntryAssembly().Location + "\" " + DG.GetCrashWindowString(pException, pAssembly, str1));
                     }
                     catch (Exception ex)
                     {

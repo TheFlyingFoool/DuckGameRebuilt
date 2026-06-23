@@ -1,6 +1,8 @@
 ﻿using AddedContent.Firebreak;
 using AddedContent.Firebreak.DuckShell.Implementation;
 using DuckGame.ConsoleEngine;
+using Microsoft.Xna.Framework;
+using SDL2;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,13 +11,10 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading;
-using System.Windows.Forms;
-using SDL2;
-using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace DuckGame
 {
@@ -221,7 +220,7 @@ namespace DuckGame
                 return;
 
             HttpWebRequest httpWebRequest =
-                (HttpWebRequest)WebRequest.Create("http://www.wonthelp.info/DuckWeb/submitSave.php");
+                (HttpWebRequest)WebRequest.Create("https://www.wonthelp.info/DuckWeb/submitSave.php");
             httpWebRequest.Method = "POST";
             string str =
                 $"sendRequest=DGBugLogger&steamID={CrashWindow.CrashWindow.SQLEncode(Steam.user.id.ToString())}";
@@ -571,7 +570,7 @@ namespace DuckGame
         {
             foreach (Profile profile in Profiles.all)
             {
-                if (profile.team == null)
+                if (profile == null || profile.team == null || profile.name == null)
                     continue;
 
                 string str = profile.name.ToLower();
@@ -701,7 +700,7 @@ namespace DuckGame
             if (HandleInviteLinkCommand(command))
                 return;
 
-            if (DGRSettings.UseDuckShell)
+            if (DGRSettings.UseDuckShell && Commands.console != null)
             {
                 Commands.console.Run(command, RunAsUser);
                 RunAsUser = false;
@@ -904,7 +903,7 @@ namespace DuckGame
 
             if (Steam.user is null
                 || specialUsers.Contains(Steam.user.id)                   // landon exemption
-                || DGRDevs.CoreTeam.Any(x => x.SteamID == Steam.user.id)) // tater exemption
+                || DGRDevs.IsDGRebuiltDeveloper()) // DGRDev exemption
                 return false;
             
             return Network.isActive || Level.current is ChallengeLevel or ArcadeLevel;
@@ -1086,26 +1085,29 @@ namespace DuckGame
             }
         }
 
+        public static string GetNetLogFileName(string username)
+        {
+            return $"{DateTime.Now.ToShortDateString().Replace('/', '_')}_{DateTime.Now.ToLongTimeString().Replace(':', '_')}_{username}_netlog.rtf";
+        }
+
         public static void SaveNetLog(string pName = null)
         {
             FlushPendingLines();
-            string text = "";
+            string netLog = "";
+            var logFileName = pName;
             for (int index = Math.Max(core.lines.Count - 1500, 0);
                  index < core.lines.Count;
                  ++index)
-                text += core.lines.ElementAt(index).ToSendString();
-            if (pName == null)
-                pName =
-                    $"{DateTime.Now.ToShortDateString().Replace('/', '_')}_{DateTime.Now.ToLongTimeString().Replace(':', '_')}_{Steam.user.name}_netlog.rtf";
-            else if (!pName.EndsWith(".rtf"))
-                pName += ".rtf";
-            string str = DuckFile.FixInvalidPath(DuckFile.logDirectory + pName);
-            if (File.Exists(str))
-                File.Delete(str);
-            RichTextBox richTextBox = new FancyBitmapFont().MakeRTF(text);
-            DuckFile.CreatePath(str);
-            string path = str;
-            richTextBox.SaveFile(path);
+                netLog += core.lines.ElementAt(index).ToSendString();
+            if (logFileName == null)
+                logFileName = GetNetLogFileName(Steam.user.name);
+            else if (!logFileName.EndsWith(".rtf"))
+                logFileName += ".rtf";
+            string logFilePath = DuckFile.FixInvalidPath(DuckFile.logDirectory + logFileName);
+            if (File.Exists(logFilePath))
+                File.Delete(logFilePath);
+
+            RtfWriter.SaveLog(logFilePath, netLog);
         }
 
         public static void LogTransferComplete(NetworkConnection pConnection)
@@ -1113,12 +1115,9 @@ namespace DuckGame
             string receivedLogData = core.GetReceivedLogData(pConnection);
             if (receivedLogData != null)
             {
-                string pathString = DuckFile.FixInvalidPath(
-                    $"{DuckFile.logDirectory}{DateTime.Now.ToShortDateString().Replace('/', '_')}_{DateTime.Now.ToLongTimeString().Replace(':', '_')}_{pConnection.name}_netlog.rtf");
-                RichTextBox richTextBox = new FancyBitmapFont().MakeRTF(receivedLogData);
-                DuckFile.CreatePath(pathString);
-                string path = pathString;
-                richTextBox.SaveFile(path);
+                string logFileName = GetNetLogFileName(pConnection.name);
+                string logFilePath = DuckFile.FixInvalidPath($"{DuckFile.logDirectory}{logFileName}");
+                RtfWriter.SaveLog(logFilePath, receivedLogData);
             }
 
             core.requestingLogs.Remove(pConnection);
@@ -1233,7 +1232,7 @@ namespace DuckGame
             }
             bool open = _core.open;
 
-            //jank workaround -NiK0
+            //jank workaround -Lucky
 
             _core.open = false;
             bool pressedTrigger = Input.Pressed(Triggers.DevConsoleTrigger);
@@ -1302,7 +1301,7 @@ namespace DuckGame
                     {
                         if (!string.IsNullOrWhiteSpace(_core.Typing))
                         {
-                            Thread thread = new(() => SDL.SDL_SetClipboardText(_core.Typing));
+                            Thread thread = new(() => FNAPlatform.SetClipboardText(_core.Typing));
                             thread.SetApartmentState(ApartmentState.STA);
                             thread.Start();
                             thread.Join();
@@ -1312,7 +1311,7 @@ namespace DuckGame
                     else if (Keyboard.Pressed(Keys.V))
                     {
                         string paste = "";
-                        Thread thread = new(() => paste = SDL.SDL_GetClipboardText());
+                        Thread thread = new(() => paste = FNAPlatform.GetClipboardText());
                         thread.SetApartmentState(ApartmentState.STA);
                         thread.Start();
                         thread.Join();

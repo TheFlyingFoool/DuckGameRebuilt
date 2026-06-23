@@ -12,7 +12,7 @@ namespace DuckGame
         public bool recommended;
         private static Resolution _lastApplied;
         private static IntPtr _window;
-        private static float _screenDPI;
+        private static float _screenDPI = 120f; // This isnt used but if we need to later use  SDL_GetDisplayDPI
         private static int _takeFocus;
         public static GraphicsDeviceManager _device;
         private static Resolution _pendingResolution;
@@ -35,10 +35,12 @@ namespace DuckGame
 
         private static float GetScreenDPI()
         {
-            System.Drawing.Graphics graphics = System.Drawing.Graphics.FromHwnd(IntPtr.Zero);
-            float dpiX = graphics.DpiX;
-            graphics.Dispose();
-            return dpiX;
+            //System.Drawing.Graphics graphics = System.Drawing.Graphics.FromHwnd(IntPtr.Zero);
+            //float dpiX = graphics.DpiX;
+            //graphics.Dispose();
+            //return dpiX;
+            // if you wish to reimplement use  SDL_GetDisplayDPI and make it support sdl2 and sdl3
+            return _screenDPI;
         }
         public static GraphicsDeviceManager GetGraphics()
         {
@@ -52,6 +54,38 @@ namespace DuckGame
         {
             _pendingResolution = pResolution;
         }
+        // private static EventHandler<EventArgs> _clientSizeChangedHandler;
+        // private static DateTime _lastResizeTime = DateTime.MinValue;
+        // private static readonly TimeSpan _resizeDebounce = TimeSpan.FromMilliseconds(100); // prevent spam during drag
+        // private static void OnClientSizeChanged(object sender, EventArgs e)
+        // {
+        //     if (Options.LocalData.currentResolution.mode != ScreenMode.Windowed)
+        //         return; // Only handle manual resize in windowed mode
+
+        //     if (DateTime.UtcNow - _lastResizeTime < _resizeDebounce)
+        //         return; // debounce
+
+        //     _lastResizeTime = DateTime.UtcNow;
+
+        //     var window = MonoMain.instance.Window;
+        //     int newWidth = window.ClientBounds.Width;
+        //     int newHeight = window.ClientBounds.Height;
+
+        //     if (newWidth < 320 || newHeight < 180) // reasonable minimum
+        //         return;
+
+        //     DevConsole.Log(DCSection.General, $"ClientSizeChanged: User resized window to {newWidth}x{newHeight}");
+
+        //     // Find nearest supported windowed resolution
+        //     Resolution nearest = FindNearest(ScreenMode.Windowed, newWidth, newHeight);
+
+        //     if (nearest != null && (nearest.x != Options.LocalData.currentResolution.x || nearest.y != Options.LocalData.currentResolution.y))
+        //     {
+        //         DevConsole.Log(DCSection.General, $"Applying new windowed resolution: {nearest.ToShortString()}");
+        //         Set(nearest);
+        //         // Apply will be called next frame via Update(), or you can call Apply() directly if you're sure it's safe
+        //     }
+        // }
         public static void Apply()
         {
             Graphics.snap = 4f;
@@ -107,8 +141,8 @@ namespace DuckGame
                     case ScreenMode.Windowed:
                         Graphics.mouseVisible = false;
                         Graphics._screenBufferTarget = null;
-                        SDL.SDL_SetWindowBordered(MonoMain.instance.Window.Handle, false ? SDL.SDL_bool.SDL_FALSE : SDL.SDL_bool.SDL_TRUE);// Resolution._window.FormBorderStyle = FormBorderStyle.FixedSingle;
-                        //SDL.SDL_SetWindowPosition(MonoMain.instance.Window.Handle, Resolution.adapterResolution.x / 2 - Options.LocalData.currentResolution.x / 2, Resolution.adapterResolution.y / 2 - Options.LocalData.currentResolution.y / 2 - 16);
+                        FNAPlatform.SetWindowBordered(MonoMain.instance.Window.Handle, true);// Resolution._window.FormBorderStyle = FormBorderStyle.FixedSingle;
+                        //FNAPlatform.SetWindowPosition(MonoMain.instance.Window.Handle, Resolution.adapterResolution.x / 2 - Options.LocalData.currentResolution.x / 2, Resolution.adapterResolution.y / 2 - Options.LocalData.currentResolution.y / 2 - 16);
                         // Resolution._window.Location = new System.Drawing.Point(Resolution.adapterResolution.x / 2 - Options.LocalData.currentResolution.x / 2, Resolution.adapterResolution.y / 2 - Options.LocalData.currentResolution.y / 2 - 16);
                         // removed window positioning as it seems to auto center on size change atm ¯\_(ツ)_/¯, Dan
                         break;
@@ -119,8 +153,8 @@ namespace DuckGame
                     case ScreenMode.Borderless:
                         Graphics.mouseVisible = false;
                         Graphics._screenBufferTarget = new RenderTarget2D(Options.LocalData.currentResolution.x, Options.LocalData.currentResolution.y, true, RenderTargetUsage.PreserveContents);
-                        SDL.SDL_SetWindowBordered(MonoMain.instance.Window.Handle, true ? SDL.SDL_bool.SDL_FALSE : SDL.SDL_bool.SDL_TRUE); //  Resolution._window.FormBorderStyle = FormBorderStyle.None;
-                        //SDL.SDL_SetWindowPosition(Resolution._window, (int)Options.LocalData.currentResolution.pos.x, (int)Options.LocalData.currentResolution.pos.y); //Resolution._window.Location = new System.Drawing.Point(0, 0);
+                        FNAPlatform.SetWindowBordered(MonoMain.instance.Window.Handle, false); //  Resolution._window.FormBorderStyle = FormBorderStyle.None;
+                        //FNAPlatform.SetWindowPosition(Resolution._window, (int)Options.LocalData.currentResolution.pos.x, (int)Options.LocalData.currentResolution.pos.y); //Resolution._window.Location = new System.Drawing.Point(0, 0);
                         // removed window positioning as it seems to auto center on size change atm ¯\_(ツ)_/¯, Dan
                         if (Graphics._screenBufferTarget.width < 400)
                         {
@@ -155,8 +189,8 @@ namespace DuckGame
             {
                 --_takeFocus;
                 if (_takeFocus == 0)
-                    SDL.SDL_RaiseWindow(MonoMain.instance.Window.Handle);
-                SDL.SDL_SetWindowInputFocus(MonoMain.instance.Window.Handle);
+                    FNAPlatform.RaiseWindow(MonoMain.instance.Window.Handle);
+                FNAPlatform.SetWindowInputFocus(MonoMain.instance.Window.Handle);
                 //Resolution._window.Focus();
             }
             if (_pendingResolution == null)
@@ -188,6 +222,11 @@ namespace DuckGame
         {
             _window = (IntPtr)pWindow;
             _device = pDeviceManager;
+            //if (_clientSizeChangedHandler == null)
+            //{
+            //    _clientSizeChangedHandler = OnClientSizeChanged;
+            //    MonoMain.instance.Window.ClientSizeChanged += _clientSizeChangedHandler;
+            //}
             supportedDisplaySizes = new Dictionary<ScreenMode, List<Resolution>>();
             DevConsole.Log(DCSection.General, "Enumerating display modes (" + GraphicsAdapter.DefaultAdapter.SupportedDisplayModes.Count().ToString() + " found...)");
             if (GraphicsAdapter.DefaultAdapter.CurrentDisplayMode == null)
@@ -283,14 +322,14 @@ namespace DuckGame
             FindNearest(ScreenMode.Windowed, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height, 1.7777f, true).isDefault = true;
             FindNearest(ScreenMode.Borderless, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height).isDefault = true;
             RestoreDefaults();
-            try
-            {
-                _screenDPI = GetScreenDPI();
-            }
-            catch (Exception)
-            {
-                _screenDPI = 120f;
-            }
+            //try
+            //{
+            //    _screenDPI = GetScreenDPI();
+            //}
+            //catch (Exception)
+            //{
+            //    _screenDPI = 120f;
+            //}
         }
 
         public static void RestoreDefaults()
@@ -364,6 +403,23 @@ namespace DuckGame
             return nearestInternal;
         }
 
+        // private static Resolution FindNearest_Internal(
+        //             ScreenMode pMode,
+        //             int pX,
+        //             int pY,
+        //             float pAspect = -1f,
+        //             bool pRecommended = false)
+        //         {
+        //             Resolution result = new Resolution
+        //             {
+        //                 dimensions = new Vec2(pX, pY),
+        //                 mode = pMode,
+        //                 recommended = pRecommended,
+        //                 isDefault = false
+        //             };
+
+        //             return result;
+        //         }
         private static Resolution FindNearest_Internal(
           ScreenMode pMode,
           int pX,

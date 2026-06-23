@@ -33,7 +33,7 @@
             timeAlive += 0.016f;
             position += _travel * 0.5f;
             //QuadLasers dont get removed off the top or bottom of the level so any quadlasers that go straight vertical never get deleted
-            //currently i made it so they can get deleted off the bottom and hopefully this shoudln't create any issues, if it does then FUCK -NiK0
+            //currently i made it so they can get deleted off the bottom and hopefully this shoudln't create any issues, if it does then FUCK -Lucky
             if (isServerForObject && !invincible && (x > Level.current.ExtendedRight || x < Level.current.ExtendedLeft || y > Level.current.ExtendedBottom)) Level.Remove(this);
             foreach (MaterialThing materialThing in Level.CheckRectAll<MaterialThing>(topLeft, bottomRight))
             {

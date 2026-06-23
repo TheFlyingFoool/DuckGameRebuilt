@@ -9,7 +9,7 @@ using System.IO.Compression;
 
 namespace DuckGame
 {
-    //Welcome to my hell, recorderator -NiK0
+    //Welcome to my hell, recorderator -Lucky
     //This used to be a mod i worked on ages ago that i never finished due to burn out and it being more than i could chew
     //Now im here to give it another shot and implement it into DGR with the finished functionality and promises that i made for the original mod.
     //

@@ -16,7 +16,6 @@ using System.Security;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using AddedContent.Hyeve;
 using XnaToFna;
 
@@ -154,6 +153,7 @@ namespace DuckGame
         public static bool preloadModContent = true;
         public static bool breakSteam = false;
         public static bool modDebugging = false;
+        public static bool monoDebug = false;
         public static bool launchedFromSteam = false;
         public static bool steamConnectionCheckFail = false;
         public static AudioMode audioModeOverride = AudioMode.None;
@@ -174,7 +174,7 @@ namespace DuckGame
         public int times;
         public static long framesBackInFocus = 0;
         public static bool showingSaveTool = false;
-        public static Form saveTool;
+        public static object saveTool;
         //private bool _checkedSave;
         //private bool _corruptSave;
         //private bool _didStartInit;
@@ -358,7 +358,7 @@ namespace DuckGame
         {
             try
             {
-                HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(string.Format("http://www.wonthelp.info/DuckWeb/getCape.php?sendRequest=IWannaUseADangOlCape&id=" + data));
+                HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(string.Format("https://www.wonthelp.info/DuckWeb/getCape.php?sendRequest=IWannaUseADangOlCape&id=" + data));
                 httpWebRequest.Credentials = CredentialCache.DefaultCredentials;
                 HttpWebResponse response = (HttpWebResponse)httpWebRequest.GetResponse();
                 string str = "";
@@ -399,7 +399,7 @@ namespace DuckGame
         {
             try
             {
-                HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(string.Format("http://www.wonthelp.info/crappydoodle/getTotallyRandomImage2.php?sendRequest=crappyDoodles&id=" + Rando.Int(112215).ToString()));
+                HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(string.Format("https://www.wonthelp.info/crappydoodle/getTotallyRandomImage2.php?sendRequest=crappyDoodles&id=" + Rando.Int(112215).ToString()));
                 httpWebRequest.Credentials = CredentialCache.DefaultCredentials;
                 HttpWebResponse response = (HttpWebResponse)httpWebRequest.GetResponse();
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -431,7 +431,7 @@ namespace DuckGame
         {
             try
             {
-                HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(string.Format("http://www.wonthelp.info/mangaka/getTotallyRandomCharacter.php?sendRequest=charzone&id=" + Rando.Int(464).ToString()));
+                HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(string.Format("https://www.wonthelp.info/mangaka/getTotallyRandomCharacter.php?sendRequest=charzone&id=" + Rando.Int(464).ToString()));
                 httpWebRequest.Credentials = CredentialCache.DefaultCredentials;
                 HttpWebResponse response = (HttpWebResponse)httpWebRequest.GetResponse();
                 if (response.StatusCode == HttpStatusCode.OK)
@@ -649,8 +649,8 @@ namespace DuckGame
                 };
                 Resolution.Set(r);
                 Resolution.Apply();
-                SDL.SDL_SetWindowBordered(instance.Window.Handle, SDL.SDL_bool.SDL_FALSE);
-                SDL.SDL_SetWindowPosition(instance.Window.Handle, (int)Program.StartPos.x, (int)Program.StartPos.y);
+                FNAPlatform.SetWindowBordered(instance.Window.Handle, false);
+                FNAPlatform.SetWindowPosition(instance.Window.Handle, (int)Program.StartPos.x, (int)Program.StartPos.y);
             }
             _screenCapture = new RenderTarget2D(Resolution.current.x, Resolution.current.y, true);
             _duckRun = new SpriteMap("duck", 32, 32);
@@ -747,13 +747,6 @@ namespace DuckGame
             }
             try
             {
-                DeviceChangeNotifier.Stop();
-            }
-            catch
-            {
-            }
-            try
-            {
                 while (Cloud.processing)
                     Cloud.Update();
                 Steam.Terminate();
@@ -783,10 +776,7 @@ namespace DuckGame
 
         protected override void OnExiting(object sender, EventArgs args)
         {
-            if (XnaToFnaHelper.fillinform != null)
-            {
-                XnaToFnaHelper.fillinform.Close();
-            }
+            base.OnExiting(sender, args);
             InvokeOnGameExitEvent(false);
             KillEverything();
             Process.GetCurrentProcess().Kill();
@@ -1155,7 +1145,17 @@ namespace DuckGame
         }
         public bool IsFocused
         {
-            get => (SDL.SDL_GetWindowFlags(Window.Handle) & (uint)SDL.SDL_WindowFlags.SDL_WINDOW_INPUT_FOCUS) > 0;
+
+            get
+            {
+                ulong flags = FNAPlatform.GetWindowFlags(Window.Handle);
+
+                // Check the input focus bit
+                return (flags & (ulong)SDL.SDL_WindowFlags.SDL_WINDOW_INPUT_FOCUS) != 0; // SDL.SDL_WindowFlags.SDL_WINDOW_INPUT_FOCUS is the same as the SDL3 version
+
+                // ulong b = FNAPlatform.GetWindowFlags(Window.Handle);
+                // return  (SDL.SDL_GetWindowFlags(Window.Handle) & (uint)SDL.SDL_WindowFlags.SDL_WINDOW_INPUT_FOCUS) > 0;
+            }
         }
         public bool initializedFPS;
 
@@ -1171,11 +1171,14 @@ namespace DuckGame
 
             if (showingSaveTool && saveTool == null && File.Exists("SaveTool.dll"))
             {
-                saveTool = Activator.CreateInstance(Assembly.Load(File.ReadAllBytes(Directory.GetCurrentDirectory() + "/SaveTool.dll")).GetType("SaveRecovery.SaveTool")) as Form;
+                saveTool = Activator.CreateInstance(Assembly.Load(File.ReadAllBytes(Directory.GetCurrentDirectory() + "/SaveTool.dll")).GetType("SaveRecovery.SaveTool"));
                 Graphics.mouseVisible = true;
-                int num = (int)saveTool.ShowDialog();
+                var saveToolType = saveTool.GetType();
+                var showDialogMethod = saveToolType.GetMethod("ShowDialog", Type.EmptyTypes);
+                if (showDialogMethod != null) {
+                    int result = (int)showDialogMethod.Invoke(saveTool, null);
+                }
                 Program.crashed = true;
-                Application.Exit();
                 Program.main.KillEverything();
                 Program.main.Exit();
             }
@@ -1878,6 +1881,7 @@ namespace DuckGame
                         if (_screenshotTarget == null)
                             _screenshotTarget = new RenderTarget2D(Graphics.width, Graphics.height, true);
                         Graphics.screenCapture = _screenshotTarget;
+                        _screenCapture.Namebase = "screenShot";
                         RunDraw(gameTime);
                         waitFrames = 60 + Rando.Int(60);
                         SFX.Play("ching");
@@ -1887,6 +1891,7 @@ namespace DuckGame
                 if (_pauseMenu != null && !NetworkDebugger.enabled && !_didPauseCapture)
                 {
                     Graphics.screenCapture = _screenCapture;
+                    _screenCapture.Namebase = "screenCapture_pause";
                     _didPauseCapture = true;
                 }
                 if (Graphics.screenCapture != null)

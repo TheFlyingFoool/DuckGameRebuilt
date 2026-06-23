@@ -518,7 +518,7 @@ namespace DuckGame
         }
         public override void Initialize()
         {
-            //No -NiK0
+            //No -Lucky
             /*if (material is MaterialGold)
             {
                 // _blade.color = Color.Lerp(properBladeColor, Color.Red, heat);

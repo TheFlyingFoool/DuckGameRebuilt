@@ -6,9 +6,10 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SDL2;
-//using System.Windows.Forms;
+
 namespace DuckGame
 {
     public class Editor : Level
@@ -1200,7 +1201,7 @@ namespace DuckGame
         {
             //if we dont do this the player1 duck will get permastuck until a restart when using online physics offline
             //so we just automatically force the game to restart the editor, this might cause a softlock but idc
-            //-NiK0
+            //-Lucky
             if (needInputRefresh)
             {
                 needInputRefresh = false;
@@ -1535,6 +1536,10 @@ namespace DuckGame
                                 {
                                     _quitting = false;
                                     active = false;
+                                    foreach (Profile profile in Profiles.all)
+                                    {
+                                        profile.netData.ResetModNetData();
+                                    }
                                     current = new TitleScreen();
                                 }
 
@@ -3806,7 +3811,7 @@ namespace DuckGame
                         {
                             if (Keyboard.Pressed(Keys.C))
                             {
-                                Thread thread = new(() => SDL.SDL_SetClipboardText(Keyboard.KeyString));
+                                Thread thread = new(() => FNAPlatform.SetClipboardText(Keyboard.KeyString));
                                 thread.SetApartmentState(ApartmentState.STA);
                                 thread.Start();
                                 thread.Join();
@@ -3814,7 +3819,7 @@ namespace DuckGame
                             else if (Keyboard.Pressed(Keys.V))
                             {
                                 string paste = "";
-                                Thread thread = new(() => paste = SDL.SDL_GetClipboardText());
+                                Thread thread = new(() => paste = FNAPlatform.GetClipboardText());
                                 thread.SetApartmentState(ApartmentState.STA);
                                 thread.Start();
                                 thread.Join();
@@ -4995,6 +5000,10 @@ namespace DuckGame
 
         public void Play()
         {
+            foreach (Profile profile in Profiles.all)
+            {
+                profile.netData.ResetModNetData();
+            }
             if (!_runLevelAnyway && !arcadeMachineMode && _levelThings.FirstOrDefault(x =>
                 {
                     switch (x)

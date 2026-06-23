@@ -113,7 +113,7 @@ namespace DuckGame
         //    new UIMenuActionOpenMenu((UIComponent)this._editModMenu, (UIComponent)this._yesNoMenu).Activate();
         //}
         
-        //maybe later -NiK0
+        //maybe later -Lucky
         public static void DownloadRequiredMods()
         {
             string modList = "";
@@ -142,7 +142,7 @@ namespace DuckGame
         {
             foreach (Mod mod in ModLoader.allMods)
             {
-                if (mod.clientMod || mod.configuration.modType is ModConfiguration.Type.Reskin or ModConfiguration.Type.MapPack)
+                if (mod == null || mod.clientMod || mod.configuration == null || mod.configuration.modType is ModConfiguration.Type.Reskin or ModConfiguration.Type.MapPack)
                     continue;
                 
                 mod.configuration.disabled = true;
@@ -157,7 +157,7 @@ namespace DuckGame
                 string lobbyData = ConnectionError.joinLobby.GetLobbyData("mods");
                 if (lobbyData != null && lobbyData != "")
                 {
-                    lobbyData = lobbyData.Replace("|3132351890,0", ""); //dumb but works -NiK0
+                    lobbyData = lobbyData.Replace("|3132351890,0", ""); //dumb but works -Lucky
                     lobbyData = lobbyData.Replace("3132351890,0", "");
                     string str1 = lobbyData;
                     char[] chArray = new char[1] { '|' };
@@ -186,12 +186,27 @@ namespace DuckGame
             foreach (WorkshopItem workshopItem in _joiningLobby.workshopItems)
             {
                 WorkshopItem w = workshopItem;
-                Mod mod = ModLoader.allMods.FirstOrDefault(x => (long)x.configuration.workshopID == (long)w.id);
-                if (mod != null)
-                    mod.configuration.disabled = false;
-                Steam.WorkshopSubscribe(w.id);
+                foreach(Mod mod in ModLoader.allMods)
+                {
+                    if (w == null | mod == null || mod.configuration == null || mod.configuration.workshopID != w.id)
+                    {
+                        continue;
+                    }
+                    if (mod != null)
+                    {
+                        mod.configuration.disabled = false;
+                    }
+                }
+                if (w != null)
+                {
+                    Steam.WorkshopSubscribe(w.id);
+                }
             }
-            Program.commandLine = Program.commandLine + " -downloadmods +connect_lobby " + _joiningLobby.lobby.id.ToString();
+            Program.commandLine = Program.commandLine + " -downloadmods";
+            if (_joiningLobby.lobby != null)
+            {
+                Program.commandLine += " +connect_lobby " + _joiningLobby.lobby.id.ToString();
+            }
             if (MonoMain.lobbyPassword != "")
                 Program.commandLine = Program.commandLine + " +password " + MonoMain.lobbyPassword;
             ModLoader.DisabledModsChanged();
@@ -341,6 +356,7 @@ namespace DuckGame
             {
                 Close();
                 _attemptConnection = UIMatchmakerMark2.Platform_GetMatchkmaker(pLobby, this);
+                _attemptConnection.directJoinAttempt = true;
                 _attemptConnection.SetPasswordAttempt(enteredPassword);
                 enteredPassword = "";
                 Level.Add(_attemptConnection);
@@ -415,6 +431,23 @@ namespace DuckGame
                             d.dedicated = lobby.GetLobbyData("dedicated") == "true";
                             d.pingstring = lobby.GetLobbyData("pingstring");
                             d.DGR = lobby.GetLobbyData("DGR") == "true";
+
+                            //if (d.DGR && lobby.GetLobbyData("DGRVersion") != Program.CURRENT_VERSION_ID)
+                            //{
+                            //    continue;
+                            //}
+                            try
+                            {
+                                if (!DGRSettings.DisplayMidgameLobbies && (lobby.GetLobbyData("midgame") == "true" || lobby.name.ToLower().Contains("midgame") || d.dedicated))
+                                {
+                                    continue;
+                                }
+                            }
+                            catch
+                            {
+
+                            }
+
                             if (d.pingstring != "" && d.pingstring != null)
                                 d.estimatedPing = Steam.EstimatePing(d.pingstring);
                             try
@@ -426,20 +459,29 @@ namespace DuckGame
                             }
                             d.isGlobalLobby = mode == SearchMode.Global;
                             d.hasFriends = false;
+
+                            bool kill = false;
                             foreach (User user in lobby.users)
                             {
+                                if (user != null && UIMatchmakerSteam.lobbyBotIds.Contains(user.id))
+                                {
+                                    kill = true;
+                                    break;
+                                }
                                 if (Steam.friends.Contains(user))
                                 {
                                     d.hasFriends = true;
                                     break;
                                 }
                             }
+                            if (kill) continue;
+
                             string loadedMods = lobby.GetLobbyData("mods");
 
                             if (loadedMods != null && loadedMods != "")
                             {
-                                    loadedMods = loadedMods.Replace("|3132351890,0", ""); //dumb but works -NiK0
-                                    loadedMods = loadedMods.Replace("3132351890,0", "");
+                                loadedMods = loadedMods.Replace("|3132351890,0", ""); //dumb but works -Lucky
+                                loadedMods = loadedMods.Replace("3132351890,0", "");
                                 string[] mods = loadedMods.Split('|');
 
                                 foreach (string s in mods)
@@ -467,7 +509,8 @@ namespace DuckGame
                                     }
                                     catch (Exception e)
                                     {
-                                        //how u doin daniel
+                                        //how u doin daniel. 
+                                        // Depends on the day :3
                                     }
                                 }
                             }
@@ -759,17 +802,6 @@ namespace DuckGame
 
         public static string PreviewPathForWorkshopItem(ulong id) => DuckFile.workshopDirectory + "/modPreview" + id.ToString() + "preview.png";
 
-        //no longer needed -NiK0
-        /*public void nikostuff(ref string str2, WorkshopItem workshopItem1, LobbyData lobby)
-        {
-            //str2 = !lobby.hasFirstMod ? "|RED|Requires " + workshopItem1.data.name : "|DGGREEN|Requires " + workshopItem1.data.name;
-
-            WorkshopItem itd2 = WorkshopItem.GetItem(workshopItem1.id);
-
-            
-
-            str2 = $"id:{workshopItem1.id} name:{workshopItem1.name} dataname:{workshopItem1.data.name} itdName:{itd2.name} itd2DataName:{itd2.data.name}";
-        }*/
         public override void Draw()
         {
             if (_downloadModsMenu.open)
@@ -878,10 +910,6 @@ namespace DuckGame
                                         lobby.downloadedWorkshopItems = true;
                                     }
                                     string str2 = !lobby.hasFirstMod ? "|RED|Requires " + workshopItem1.name : "|DGGREEN|Requires " + workshopItem1.name;
-                                    //if (Keyboard.Down(Keys.LeftControl) && Debugger.IsAttached)
-                                    //{
-                                    //    nikostuff(ref str2, workshopItem1, lobby);   
-                                    //}
                                     string str3 = lobby.hasRestOfMods ? "|DGGREEN|" : "|RED|";
                                     if (lobby.workshopItems.Count == 2)
                                         str2 = str2 + str3 + " +" + (lobby.workshopItems.Count - 1).ToString() + " other mod.";
@@ -969,7 +997,7 @@ namespace DuckGame
                                     {
                                         titleString += "Their version is incompatible.";
                                     }
-                                    else if (lobby.started == "true")
+                                    else if (lobby.started == "true" && (lobby.name == null || !lobby.name.StartsWith("|PINK|[MIDGAME] |PREV|")))
                                     {
                                         titleString += "This game is in progress.";
                                     }
@@ -1041,7 +1069,7 @@ namespace DuckGame
 
                             Lobby steamLobby = lobby.lobby;
 
-                            if (steamLobby is null)
+                            if (steamLobby is null || !DGRSettings.ExtraLobbyData)
                                 continue;
 
                             Vec2 position = new Vec2(x1, y);
@@ -1176,7 +1204,7 @@ namespace DuckGame
             {
                 get // removed AreParentalControlsActive
                 {
-                    return DG.version == version && (Network.gameDataHash == datahash || ModLoader.modHash != modHash) && started == "false" &&
+                    return DG.version == version && (Network.gameDataHash == datahash || ModLoader.modHash != modHash) && (started == "false" || (name != null && name.StartsWith("|PINK|[MIDGAME] |PREV|"))) &&
                         (!hasLocalMods || ModLoader.modHash == modHash) && _userCount < numSlots && (type == "2" || lobby == null);
                 }
             }

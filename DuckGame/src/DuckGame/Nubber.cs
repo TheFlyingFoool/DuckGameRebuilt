@@ -5,6 +5,7 @@
         private SpriteMap _sprite;
         public string tileset;
         public bool cheap;
+        private Color _prevcolor = Color.White;
 
         public void UpdateCustomTileset()
         {
@@ -100,7 +101,7 @@
             {
                 layer.RemoveSoon(this);
             }
-            if (graphic.position != position)
+            if (graphic.position != position || _prevcolor != graphic.color)
             {
                 (graphic as SpriteMap).ClearCache();
             }

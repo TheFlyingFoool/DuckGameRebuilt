@@ -32,7 +32,17 @@ namespace DuckGame
         {
             TList list;
             if (!_map.TryGetValue(key, out list))
-                _map.Add(key, list = new TList());
+            {
+                list = new TList();
+                try
+                {
+                    _map.Add(key, list);
+                }
+                catch (ArgumentException) 
+                {
+                    list = _map[key];
+                }
+            }
             list.Add(element);
         }
 

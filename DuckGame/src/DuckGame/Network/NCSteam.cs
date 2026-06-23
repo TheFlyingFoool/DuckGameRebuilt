@@ -413,7 +413,7 @@ namespace DuckGame
                             string lobbyData2 = _lobby.GetLobbyData("mods");
                             if (lobbyData2 != null && lobbyData2 != "")
                             {
-                                lobbyData2 = lobbyData2.Replace("|3132351890,0", ""); //dumb but works -NiK0
+                                lobbyData2 = lobbyData2.Replace("|3132351890,0", ""); //dumb but works -Lucky
                                 lobbyData2 = lobbyData2.Replace("3132351890,0", "");
                                 string str2 = lobbyData2;
                                 char[] chArray = new char[1] { '|' };
@@ -486,7 +486,11 @@ namespace DuckGame
                         _lobby.SetLobbyData("datahash", Network.gameDataHash.ToString());
                         _lobby.SetLobbyData("name", Steam.user.name + "'s Lobby");
                         _lobby.SetLobbyData("numSlots", DuckNetwork.numSlots.ToString());
-                        if (!NoDGRBroadcast) _lobby.SetLobbyData("DGR", "true");
+                        if (!NoDGRBroadcast)
+                        {
+                            _lobby.SetLobbyData("DGR", "true");
+                            _lobby.SetLobbyData("DGRVersion", Program.CURRENT_VERSION_ID);
+                        }
                         _lobby.name = _serverIdentifier;
                         if (_lobby.name != TeamSelect2.DefaultGameName())
                             _lobby.SetLobbyData("customName", "true");

@@ -348,7 +348,7 @@ namespace DuckGame
                     {
                         float rad = Maths.DegToRad(team.metadata.ParticleEmitShape.value.y == 2f ? index1 * (360f / particleCount) : Rando.Float(360f));
                         Vec2 vec2_5 = new Vec2((float)Math.Cos(rad) * 100f, (float)-Math.Sin(rad) * 100f);
-                        //Vec2 zero = Vec2.Zero; what -NiK0
+                        //Vec2 zero = Vec2.Zero; what -Lucky
                         for (int index2 = 0; index2 < 4; ++index2)
                         {
                             Vec2 vec2_6 = Vec2.Zero;

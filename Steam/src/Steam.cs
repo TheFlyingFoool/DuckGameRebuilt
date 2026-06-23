@@ -6,6 +6,7 @@ using Steamworks;
 public class Steam : IDisposable {
     private static bool _textFilterEnabled = false;
     private static Dictionary<Type, object> _callResults = new Dictionary<Type, object>();
+    private static List<IDisposable> _callbacks = new List<IDisposable>();
 
     private static CallResult<T> GetCallResult<T>() => (CallResult<T>)_callResults[typeof(T)];
     private static void SetCallResult<T>(CallResult<T>.APIDispatchDelegate func) => _callResults.Add(typeof(T), new CallResult<T>(func));
@@ -14,7 +15,11 @@ public class Steam : IDisposable {
     {
         get
         {
-            return _initialized;
+            //This used to use _initialized and set it internally     
+            //Keep an eye on this to see if it causes issues this way should be better 
+            //as it whats steamworks actually uses to throw the error or not for if steam is accually setup properly to use commands
+            //and throws the errors if its not. SO THIS SHOULD BE BETTER. but can never be too sure with duck game.
+            return Steamworks.CallbackDispatcher.IsInitialized;
         }
     }
     private static bool _initialized;
@@ -77,24 +82,23 @@ public class Steam : IDisposable {
         return SteamAPI.RestartAppIfNecessary(SteamUtils.GetAppID());
     }
     public static unsafe bool Authorize() {
-        if (!_initialized)
+        if (!initialized)
             return false;
-        // TODO: SteamApps.RequestAppProofOfPurchaseKey? SteamApps.BIsAppInstalled? SteamApps.BIsSubscribedApp?
         return SteamApps.BIsSubscribedApp(SteamUtils.GetAppID());
     }
     public static bool CloudEnabled()
     {
-        if (!_initialized)
+        if (!initialized)
             return false;
         return SteamRemoteStorage.IsCloudEnabledForAccount() && SteamRemoteStorage.IsCloudEnabledForApp();
     }
     public static bool InitializeCore() {
         _initialized = SteamAPI.Init();
-        return _initialized;
+        return initialized;
     }
     public static unsafe bool IsLoggedIn()
     {
-        if (!_initialized)
+        if (!initialized)
         {
             return false;
         }
@@ -115,7 +119,7 @@ public class Steam : IDisposable {
     public static unsafe void SendLobbyMessage(Lobby pLobby, byte[] pData, uint pSize)
     {
         
-        if (_initialized && pLobby != null && pData != null)
+        if (initialized && pLobby != null && pData != null)
         {
             SteamMatchmaking.SendLobbyChatMsg(new CSteamID(pLobby.id), pData, (int)pSize);
         }
@@ -142,7 +146,7 @@ public class Steam : IDisposable {
     private static int _currentTextboxLength;
     public static unsafe bool ShowOnscreenKeyboard([MarshalAs(UnmanagedType.U1)] bool multiline, string description, string existingText, int maxChars)
     {
-        if (!_initialized)
+        if (!initialized)
         {
             return false;
         }
@@ -188,15 +192,17 @@ public class Steam : IDisposable {
 
 
     public static unsafe void Initialize() {
-        Callback<LobbyChatUpdate_t>.Create(OnLobbyMemberStatus);
-        Callback<P2PSessionRequest_t>.Create(OnConnectionRequest);
-        Callback<P2PSessionConnectFail_t>.Create(OnConnectionFail);
-        Callback<GameLobbyJoinRequested_t>.Create(OnInviteReceive);
-        Callback<DownloadItemResult_t>.Create(OnDownloadItemResult);
-        Callback<UserStatsReceived_t>.Create(OnRequestStats);
-        Callback<SteamRemotePlaySessionConnected_t>.Create(OnRemotePlayConnected);
-        Callback<GamepadTextInputDismissed_t>.Create(OnGamepadTextInputDismissed);
-        Callback<LobbyChatMsg_t>.Create(OnLobbyChatMessage);
+
+        _currentTextboxLength = 0;
+        _callbacks.Add(Callback<LobbyChatUpdate_t>.Create(OnLobbyMemberStatus));
+        _callbacks.Add(Callback<P2PSessionRequest_t>.Create(OnConnectionRequest));
+        _callbacks.Add(Callback<P2PSessionConnectFail_t>.Create(OnConnectionFail));
+        _callbacks.Add(Callback<GameLobbyJoinRequested_t>.Create(OnInviteReceive));
+        _callbacks.Add(Callback<DownloadItemResult_t>.Create(OnDownloadItemResult));
+        _callbacks.Add(Callback<UserStatsReceived_t>.Create(OnRequestStats));
+        _callbacks.Add(Callback<SteamRemotePlaySessionConnected_t>.Create(OnRemotePlayConnected));
+        _callbacks.Add(Callback<GamepadTextInputDismissed_t>.Create(OnGamepadTextInputDismissed));
+        _callbacks.Add(Callback<LobbyChatMsg_t>.Create(OnLobbyChatMessage));
 
         // Maintain CallResults which otherwise would be added, then removed behind the scenes:
         SetCallResult<GlobalStatsReceived_t>(OnRequestGlobalStats);
@@ -208,30 +214,27 @@ public class Steam : IDisposable {
         SetCallResult<LobbyMatchList_t>(OnSearchForLobby);
         _runningInitializeProcedures = true;
         _packetData = new byte[kPacketBufferSize];
-        _currentTextboxLength = 0;
+
         // THIS IS A HORRIBLE HACK to get this to comply when using a stubbed Steamworks.NET.dll.
-        if (_initialized)
+        if (initialized)
             _initialized = SteamUser.GetSteamID().m_SteamID != 0;
 
-        if (_initialized) 
+        if (initialized) 
         {
 
             user = User.GetUser(SteamUser.GetSteamID());
             //  Steam._runningInitializeProcedures = true;
             // TODO: The original Steam.dll would call something now, but I can't identify what.
-        } else {
-            // THIS IS A HORRIBLE HACK TO GET DUCK GAME TO SHUT UP WHEN "OFFLINE".
-            _offline = true;
-            user = new OfflineSelfUser();
+            SteamNetworkingUtils.InitRelayNetworkAccess();
         }
-
         lobbySearchComplete = true;
         lobbySearchResult = null;
+
     }
    
     public static unsafe int EstimatePing(string pingstring)
     {
-        if (!_initialized)
+        if (!initialized)
         {
             return 0;
         }
@@ -240,7 +243,7 @@ public class Steam : IDisposable {
     }
     public static unsafe string GetLocalPingString()
     {
-        if (!_initialized)
+        if (!initialized)
         {
             return "";
         }
@@ -250,7 +253,7 @@ public class Steam : IDisposable {
     }
     public static unsafe string FilterText(string pText, User pUser)
     {
-        if (_initialized && _textFilterEnabled)
+        if (initialized && _textFilterEnabled)
         {
             //idk man that code is odd
         }
@@ -258,42 +261,59 @@ public class Steam : IDisposable {
     }
     public static bool GetAchievement(string id)
     {
-        if (!_initialized)
+        if (!initialized)
             return false;
         SteamUserStats.GetAchievement(id, out bool hasAchievement);
         return hasAchievement;
     }
     public static bool IsInitialized() {
-        return _initialized|| _offline;
+        return initialized;
     }
 
     public static unsafe void Terminate() {
-        if (!_initialized)
+        if (!initialized)
             return;
         SteamAPI.Shutdown();
         _initialized = false;
+
+        user = null;
+        _runningInitializeProcedures = false;
+        foreach (IDisposable callback in _callbacks)
+        {
+            callback?.Dispose();
+        }
+        _callbacks.Clear();
+
+        foreach (KeyValuePair<Type, object> kvp in _callResults)
+        {
+            if (kvp.Value is IDisposable disposable)
+            {
+                disposable.Dispose();
+            }
+        }
+        _callResults.Clear();
     }
 
     public static void Update() {
-        if (!_initialized)
+        if (!initialized)
             return;
         SteamAPI.RunCallbacks();
     }
 
     public static unsafe void OverlayOpenURL(string url) {
-        if (!_initialized)
+        if (!initialized)
             return;
         SteamFriends.ActivateGameOverlayToWebPage(url);
     }
 
     public static unsafe void SetAchievement(string id) {
-        if (!_initialized)
+        if (!initialized)
             return;
         SteamUserStats.SetAchievement(id);
     }
 
     public static unsafe float GetStat(string id) {
-        if (!_initialized)
+        if (!initialized)
             return 0f;
         float val;
         if (SteamUserStats.GetStat(id, out val))
@@ -304,32 +324,32 @@ public class Steam : IDisposable {
     }
 
     public static unsafe void SetStat(string id, float val) {
-        if (!_initialized)
+        if (!initialized)
             return;
         SteamUserStats.SetStat(id, val);
     }
 
     public static unsafe void SetStat(string id, int val) {
-        if (!_initialized)
+        if (!initialized)
             return;
         SteamUserStats.SetStat(id, val);
     }
 
     public static unsafe void StoreStats() {
-        if (!_initialized)
+        if (!initialized)
             return;
         SteamUserStats.StoreStats();
     }
 
     public static void RequestGlobalStats() {
-        if (!_initialized)
+        if (!initialized)
             return;
         waitingForGlobalStats = true;
         SetCallResult<GlobalStatsReceived_t>(SteamUserStats.RequestGlobalStats(1)); // TODO: How many days for RequestGlobalStats?
     }
 
     public static unsafe double GetGlobalStat(string id) {
-        if (!_initialized)
+        if (!initialized)
             return 0D;
         double val;
         SteamUserStats.GetGlobalStat(id, out val);
@@ -337,7 +357,7 @@ public class Steam : IDisposable {
     }
 
     public static unsafe double GetDailyGlobalStat(string id) {
-        if (!_initialized)
+        if (!initialized)
             return 0D;
         long[] data = { 0 };
         if (SteamUserStats.GetGlobalStatHistory(id, data, 8) == 1) //Mabye this is right ill find out later
@@ -350,7 +370,7 @@ public class Steam : IDisposable {
     }
 
     public static WorkshopItem CreateItem() {
-        if (!_initialized)
+        if (!initialized)
             return null;
         _pendingItem = new WorkshopItem();
         SetCallResult<CreateItemResult_t>(SteamUGC.CreateItem(SteamUtils.GetAppID(), EWorkshopFileType.k_EWorkshopFileTypeFirst));
@@ -358,12 +378,12 @@ public class Steam : IDisposable {
     }
 
     public static unsafe void ShowWorkshopLegalAgreement(string id) {
-        if (_initialized)
+        if (initialized)
             SteamFriends.ActivateGameOverlayToWebPage("steam://url/CommunityFilePage/" + id);
     }
 
     public static unsafe void StartUpload(WorkshopItem item) {
-        if (!_initialized)
+        if (!initialized)
             return;
         _pendingItem = item;
         SetCallResult<SubmitItemUpdateResult_t>(SteamUGC.SubmitItemUpdate(new UGCUpdateHandle_t(item.updateHandle), item.data.changeNotes));
@@ -372,7 +392,7 @@ public class Steam : IDisposable {
     public static unsafe List<WorkshopItem> GetAllWorkshopItems() 
     {
         List<WorkshopItem> items = new List<WorkshopItem>();
-        if (!_initialized)
+        if (!initialized)
             return items;
         PublishedFileId_t[] tmp = new PublishedFileId_t[GetNumWorkshopItems()];
         int numReturned = (int)SteamUGC.GetSubscribedItems(tmp, (uint) tmp.Length);
@@ -390,26 +410,26 @@ public class Steam : IDisposable {
     }
 
     public static unsafe int GetNumWorkshopItems() {
-        if (!_initialized)
+        if (!initialized)
             return 0;
         return (int) SteamUGC.GetNumSubscribedItems();
     }
 
     public static unsafe void RequestWorkshopInfo(List<WorkshopItem> items) {
-        if (!_initialized)
+        if (!initialized)
             return;
         UGCQueryHandle_t query = SteamUGC.CreateQueryUGCDetailsRequest(SteamHelper.GetArray(items, item => new PublishedFileId_t(item.id)), (uint) items.Count);
         SetCallResult<SteamUGCQueryCompleted_t>(SteamUGC.SendQueryUGCRequest(query));
     }
 
     public static unsafe void WorkshopUnsubscribe(ulong id) {
-        if (!_initialized)
+        if (!initialized)
             return;
         SteamUGC.UnsubscribeItem(new PublishedFileId_t(id));
     }
 
     public static unsafe void WorkshopSubscribe(ulong id) {
-        if (!_initialized)
+        if (!initialized)
             return;
         SteamUGC.SubscribeItem(new PublishedFileId_t(id));
     }
@@ -434,7 +454,7 @@ public class Steam : IDisposable {
     }
 
     public static unsafe byte[] FileRead(string name) {
-        if (!_initialized)
+        if (!initialized)
             return null;
         int size = SteamRemoteStorage.GetFileSize(name);
         byte[] data = new byte[size];
@@ -447,38 +467,38 @@ public class Steam : IDisposable {
     }
 
     public static unsafe bool FileExists(string name) {
-        if (!_initialized)
+        if (!initialized)
             return false;
         return SteamRemoteStorage.FileExists(name);
     }
 
     public static unsafe bool FileWrite(string name, byte[] data, int length) {
-        if (!_initialized)
+        if (!initialized)
             return false;
         return data != null && data.Length != 0 && SteamRemoteStorage.FileWrite(name, data, length);
     }
 
     public static unsafe bool FileDelete(string name) {
-        if (!_initialized)
+        if (!initialized)
             return false;
         return SteamRemoteStorage.FileDelete(name);
     }
 
     public static unsafe int FileGetCount() {
-        if (!_initialized)
+        if (!initialized)
             return 0;
         return SteamRemoteStorage.GetFileCount();
     }
 
     public static unsafe string FileGetName(int file) {
-        if (!_initialized)
+        if (!initialized)
             return null;
         int size;
         return SteamRemoteStorage.GetFileNameAndSize(file, out size);
     }
 
     public static unsafe int FileGetSize(int file) {
-        if (!_initialized)
+        if (!initialized)
             return 0;
         int size;
         SteamRemoteStorage.GetFileNameAndSize(file, out size);
@@ -490,7 +510,7 @@ public class Steam : IDisposable {
     }
     //GetAppBuildId
     public static Lobby CreateLobby(SteamLobbyType lobbyType, int maxMembers) {
-        if (!_initialized)
+        if (!initialized)
             return null;
         if (lobby != null)
             LeaveLobby(lobby);
@@ -500,7 +520,7 @@ public class Steam : IDisposable {
     }
 
     public static Lobby JoinLobby(ulong lobbyID) {
-        if (!_initialized)
+        if (!initialized)
             return null;
         if (lobby == null || lobbyID != lobby.id) {
             if (lobby != null)
@@ -512,7 +532,7 @@ public class Steam : IDisposable {
     }
 
     public static unsafe void LeaveLobby(Lobby which) {
-        if (!_initialized)
+        if (!initialized)
             return;
         if (which != null)
             SteamMatchmaking.LeaveLobby(new CSteamID(which.id));
@@ -521,20 +541,21 @@ public class Steam : IDisposable {
     }
 
     public static unsafe void SearchForLobby(User who) {
-        if (!_initialized)
+        if (!initialized)
             return;
         lobbySearchResult = null;
         lobbySearchComplete = false;
         lobbiesFound = 0;
+
+        SteamMatchmaking.AddRequestLobbyListDistanceFilter(ELobbyDistanceFilter.k_ELobbyDistanceFilterFar);
         if (who != null) {
-            // TODO: What does the original Steam.dll do? Filter by user?
-            // This isn't critical, but only used when Duck Game's Program.testServer == true and superjoebob is your steam friend.
+            SteamMatchmaking.AddRequestLobbyListCompatibleMembersFilter(new CSteamID(who.id)); 
         }
         SetCallResult<LobbyMatchList_t>(SteamMatchmaking.RequestLobbyList());
     }
 
     public static unsafe void SearchForLobbyWorldwide() {
-        if (!_initialized)
+        if (!initialized)
             return;
         lobbySearchResult = null;
         lobbySearchComplete = false;
@@ -544,75 +565,75 @@ public class Steam : IDisposable {
     }
 
     public static unsafe int GetNumLobbyMembers(Lobby which) {
-        if (!_initialized)
+        if (!initialized)
             return 0;
         return which != null ? 0 :
             SteamMatchmaking.GetNumLobbyMembers(new CSteamID(which.id));
     }
 
     public static unsafe User GetLobbyMemberAtIndex(Lobby which, int member) {
-        if (!_initialized)
+        if (!initialized)
             return null;
         return which != null && member < GetNumLobbyMembers(which) ? null :
             User.GetUser(SteamMatchmaking.GetLobbyMemberByIndex(new CSteamID(which.id), member));
     }
 
     public static unsafe void AddLobbyStringFilter(string key, string value, SteamLobbyComparison compareType) {
-        if (!_initialized)
+        if (!initialized)
             return;
         SteamMatchmaking.AddRequestLobbyListStringFilter(key, value, (ELobbyComparison) compareType);
     }
 
     public static unsafe void AddLobbyNumericalFilter(string key, int value, SteamLobbyComparison compareType) {
-        if (!_initialized)
+        if (!initialized)
             return;
         SteamMatchmaking.AddRequestLobbyListNumericalFilter(key, value, (ELobbyComparison) compareType);
     }
 
     public static unsafe void AddLobbySlotsAvailableFilter(int slots) {
-        if (!_initialized)
+        if (!initialized)
             return;
         SteamMatchmaking.AddRequestLobbyListFilterSlotsAvailable(slots);
     }
 
     public static unsafe void AddLobbyMaxResultsFilter(int max) {
-        if (!_initialized)
+        if (!initialized)
             return;
         SteamMatchmaking.AddRequestLobbyListResultCountFilter(max);
     }
 
     public static unsafe void AddLobbyNearFilter(string key, int filt) {
-        if (!_initialized)
+        if (!initialized)
             return;
         SteamMatchmaking.AddRequestLobbyListNearValueFilter(key, filt);
     }
 
     public static unsafe Lobby GetSearchLobbyAtIndex(int index) {
-        if (!_initialized)
+        if (!initialized)
             return null;
         return new Lobby(SteamMatchmaking.GetLobbyByIndex(index));
     }
 
     public static unsafe bool AcceptConnection(User who) {
-        if (!_initialized)
+        if (!initialized)
             return false;
         return SteamNetworking.AcceptP2PSessionWithUser(new CSteamID(who.id));
     }
 
     public static unsafe void SendPacket(User who, byte[] data, uint size, P2PDataSendType type) {
-        if (!_initialized)
+        if (!initialized)
             return;
         SteamNetworking.SendP2PPacket(new CSteamID(who.id), data, size, (EP2PSend) type);
     }
 
     public static unsafe void CloseConnection(User who) {
-        if (!_initialized)
+        if (!initialized)
             return;
         SteamNetworking.CloseP2PSessionWithUser(new CSteamID(who.id));
     }
 
     public static unsafe SteamPacket ReadPacket() {
-        if (!_initialized)
+        if (!initialized)
             return null;
         uint size;
         if (SteamNetworking.IsP2PPacketAvailable(out size)) {
@@ -637,7 +658,7 @@ public class Steam : IDisposable {
     }
 
     public static unsafe bool InviteUser(User userVal, Lobby lobbyVal) {
-        if (!_initialized)
+        if (!initialized)
             return false;
         if (lobbyVal == null) {
             lobbyVal = lobby;
@@ -648,7 +669,7 @@ public class Steam : IDisposable {
     }
 
     public static unsafe void OpenInviteDialogue() {
-        if (!_initialized)
+        if (!initialized)
             return;
         if (lobby == null)
             return;
@@ -662,7 +683,7 @@ public class Steam : IDisposable {
         return _runningInitializeProcedures;
     }
     private static unsafe void OnCreateLobby(LobbyCreated_t result, bool ioFailure) {
-        if (!_initialized)
+        if (!initialized)
             return;
         if (lobby == null)
             return;
@@ -673,13 +694,13 @@ public class Steam : IDisposable {
     }
 
     private static unsafe void OnJoinLobby(LobbyEnter_t result, bool ioFailure) {
-        if (!_initialized)
+        if (!initialized)
             return;
         lobby?.OnProcessingComplete(result.m_ulSteamIDLobby, (SteamLobbyJoinResult) result.m_EChatRoomEnterResponse);
     }
 
     private static unsafe void OnSearchForLobby(LobbyMatchList_t result, bool ioFailure) {
-        if (!_initialized)
+        if (!initialized)
             return;
         if (result.m_nLobbiesMatching != 0) {
             lobbySearchResult = new Lobby(SteamMatchmaking.GetLobbyByIndex(0));
@@ -693,25 +714,25 @@ public class Steam : IDisposable {
     }
 
     private static unsafe void OnRequestGlobalStats(GlobalStatsReceived_t result, bool ioFailure) {
-        if (!_initialized)
+        if (!initialized)
             return;
         waitingForGlobalStats = false;
     }
 
     private static unsafe void OnCreateItem(CreateItemResult_t result, bool ioFailure) {
-        if (!_initialized)
+        if (!initialized)
             return;
         _pendingItem?.ApplyResult((SteamResult) result.m_eResult, result.m_bUserNeedsToAcceptWorkshopLegalAgreement, result.m_nPublishedFileId.m_PublishedFileId);
     }
 
     private static unsafe void OnSubmitItemUpdate(SubmitItemUpdateResult_t result, bool ioFailure) {
-        if (!_initialized)
+        if (!initialized)
             return;
         _pendingItem?.ApplyResult((SteamResult) result.m_eResult, result.m_bUserNeedsToAcceptWorkshopLegalAgreement, _pendingItem.id);
     }
 
     private static unsafe void OnSendQueryUGCRequest(SteamUGCQueryCompleted_t result, bool ioFailure) {
-        if (!_initialized)
+        if (!initialized)
             return;
         for (uint i = 0; i < result.m_unNumResultsReturned; i++) {
             SteamUGCDetails_t details;

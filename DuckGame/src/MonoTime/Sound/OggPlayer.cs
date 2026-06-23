@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 using NVorbis;
 using System;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading;
 
@@ -32,23 +32,41 @@ namespace DuckGame
         private int _samplesDecoded;
         private int _totalSamplesToDecode;
         private int _decodedSamplePosition;
-        //private const int kDecoderChunkSize = 176400;
 
-        private float _pitch; //dan
-        private float _pan; //dan
+        private Microsoft.Xna.Framework.Media.Song _song; // 64-bit only
 
-        public SoundState state => _instance == null || !_valid || _iSaidStop ? SoundState.Stopped : _instance.State;
+        private float _pitch;
+        private float _pan;
+
+        public SoundState state
+        {
+            get
+            {
+                if (Environment.Is64BitProcess)
+                    return MediaPlayer.State == MediaState.Playing ? SoundState.Playing
+                        : MediaPlayer.State == MediaState.Paused ? SoundState.Paused
+                        : SoundState.Stopped;
+                return _instance == null || !_valid || _iSaidStop ? SoundState.Stopped : _instance.State;
+            }
+        }
+
         public DynamicSoundEffectInstance instance
         {
             get { return _instance; }
             set { _instance = value; }
         }
+
         public float volume
         {
             get => _volume;
             set
             {
                 _volume = value;
+                if (Environment.Is64BitProcess)
+                {
+                    MediaPlayer.Volume = MathHelper.Clamp(_volume, 0f, 1f) * _replaygainModifier;
+                    return;
+                }
                 if (_instance == null)
                     return;
                 lock (_instance)
@@ -63,26 +81,29 @@ namespace DuckGame
             _instance.Volume = MathHelper.Clamp(_volume, 0f, 1f) * _replaygainModifier;
         }
 
-
-        private void ApplyPitch() //dan
+        private void ApplyPitch()
         {
             if (!_valid || _instance == null || _instance.State != SoundState.Playing)
                 return;
             _instance.Pitch = _pitch;
         }
-        private void ApplyPan() //dan
+
+        private void ApplyPan()
         {
             if (!_valid || _instance == null || _instance.State != SoundState.Playing)
                 return;
             _instance.Pan = _pan;
         }
-        public float pitch //dan
+
+        public float pitch
         {
             get => _pitch;
             set
             {
                 bool changed = _pitch != value;
                 _pitch = value;
+                if (Environment.Is64BitProcess)
+                    return; // MediaPlayer has no pitch support
                 if (_instance == null)
                     return;
                 if (changed)
@@ -90,16 +111,18 @@ namespace DuckGame
                     lock (_instance)
                         ApplyPitch();
                 }
-
             }
         }
-        public float pan //dan
+
+        public float pan
         {
             get => _pan;
             set
             {
                 bool changed = _pan != value;
                 _pan = value;
+                if (Environment.Is64BitProcess)
+                    return; // MediaPlayer has no pan support
                 if (_instance == null)
                     return;
                 if (changed)
@@ -113,13 +136,35 @@ namespace DuckGame
         public bool looped
         {
             get => _shouldLoop;
-            set => _shouldLoop = value;
+            set
+            {
+                _shouldLoop = value;
+                if (Environment.Is64BitProcess)
+                    MediaPlayer.IsRepeating = value;
+            }
         }
 
-        public TimeSpan position => _activeSong != null && _valid && _totalSamplesToDecode > 0 && _decodedSamplePosition < _totalSamplesToDecode ? new TimeSpan(0, 0, 0, 0, (int)(_decodedSamplePosition / _totalSamplesToDecode / 44100.0) * 500) : new TimeSpan();
+        public TimeSpan position
+        {
+            get
+            {
+                if (Environment.Is64BitProcess)
+                    return MediaPlayer.PlayPosition;
+                return _activeSong != null && _valid && _totalSamplesToDecode > 0 && _decodedSamplePosition < _totalSamplesToDecode
+                    ? new TimeSpan(0, 0, 0, 0, (int)(_decodedSamplePosition / _totalSamplesToDecode / 44100.0) * 500)
+                    : new TimeSpan();
+            }
+        }
 
         public void Terminate()
         {
+            if (Environment.Is64BitProcess)
+            {
+                MediaPlayer.Stop();
+                if (_song != null)
+                    _song.Dispose();
+                return;
+            }
             if (_valid)
                 _instance.Dispose();
             try
@@ -137,6 +182,11 @@ namespace DuckGame
         {
             if (_initialized)
                 return;
+            if (Environment.Is64BitProcess)
+            {
+                _initialized = true;
+                return;
+            }
             try
             {
                 _instance = new DynamicSoundEffectInstance(44100, AudioChannels.Stereo);
@@ -216,8 +266,53 @@ namespace DuckGame
             }
         }
 
-        public void SetOgg(MemoryStream ogg)
+        public void SetOgg(MemoryStream ogg, string path = null)
         {
+            if (Environment.Is64BitProcess)
+            {
+                try
+                {
+                    MediaPlayer.Stop();
+                    if (_song != null)
+                        _song.Dispose();
+                    float num = 0f;
+                    try
+                    {
+                        byte[] numArray = new byte[1000];
+                        ogg.Position = 0L;
+                        ogg.Read(numArray, 0, 1000);
+                        string str1 = Encoding.ASCII.GetString(numArray);
+                        int index1 = str1.IndexOf("replaygain_track_gain");
+                        if (index1 >= 0)
+                        {
+                            while (str1[index1] != '=' && index1 < str1.Length)
+                                ++index1;
+                            int index2 = index1 + 1;
+                            string str2 = "";
+                            for (; str1[index2] != 'd' && index2 < str1.Length; ++index2)
+                                str2 += str1[index2].ToString();
+                            num = Convert.ToSingle(str2);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        num = 0f;
+                    }
+                    _replaygainModifier = Math.Max(0f, Math.Min(1f, (float)((100f * (float)Math.Pow(10.0, num / 20.0)) / 100.0 * 1.9f)));
+                    _song = Microsoft.Xna.Framework.Media.Song.FromUri(path, new Uri(path, UriKind.RelativeOrAbsolute));
+                    MediaPlayer.IsRepeating = _shouldLoop;
+                    MediaPlayer.Volume = MathHelper.Clamp(_volume, 0f, 1f) * _replaygainModifier;
+                }
+                catch (Exception ex)
+                {
+                    DevConsole.Log(DCSection.General, "OggPlayer.SetOgg failed with exception:");
+                    DevConsole.Log(DCSection.General, ex.Message);
+                    _song = null;
+                }
+                return;
+            }
+
+            // 32-bit path, original logic unchanged
             if (!_valid)
                 return;
             try
@@ -264,6 +359,15 @@ namespace DuckGame
 
         public void Play()
         {
+            if (Environment.Is64BitProcess)
+            {
+                if (_song == null)
+                    return;
+                MediaPlayer.Play(_song);
+                MediaPlayer.Volume = MathHelper.Clamp(_volume, 0f, 1f) * _replaygainModifier;
+                _iSaidStop = false;
+                return;
+            }
             if (_instance == null)
                 return;
             lock (_instance)
@@ -278,6 +382,11 @@ namespace DuckGame
 
         public void Pause()
         {
+            if (Environment.Is64BitProcess)
+            {
+                MediaPlayer.Pause();
+                return;
+            }
             if (_instance == null)
                 return;
             lock (_instance)
@@ -290,6 +399,13 @@ namespace DuckGame
 
         public void Resume()
         {
+            if (Environment.Is64BitProcess)
+            {
+                MediaPlayer.Resume();
+                MediaPlayer.Volume = MathHelper.Clamp(_volume, 0f, 1f) * _replaygainModifier;
+                _iSaidStop = false;
+                return;
+            }
             if (_instance == null)
                 return;
             lock (_instance)
@@ -304,6 +420,12 @@ namespace DuckGame
 
         public void Stop()
         {
+            if (Environment.Is64BitProcess)
+            {
+                MediaPlayer.Stop();
+                _iSaidStop = true;
+                return;
+            }
             if (_instance == null)
                 return;
             lock (_instance)

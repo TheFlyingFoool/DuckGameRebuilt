@@ -841,7 +841,7 @@ namespace DuckGame
             }
             return stringList.ToArray();
         }
-        //hi -NiK0
+        //hi -Lucky
         public static List<string> ReGetFiles(string path, string filter = "*.*")
         {
             path = path.Replace('\\', '/');
@@ -1120,7 +1120,7 @@ namespace DuckGame
                     _sounds.TryGetValue(name, out soundEffect);
                 if (soundEffect == null)
                 {
-                    //TODO this eventually -NiK0
+                    //TODO this eventually -Lucky
                     /*if (File.Exists("./" + DuckFile.contentDirectory + name + ".qoa"))
                     {
                         byte[] bb = File.ReadAllBytes("./" + DuckFile.contentDirectory + name + ".qoa");

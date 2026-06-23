@@ -11,6 +11,7 @@ namespace XnaToFna
     public class XnaToFnaModder : MonoModder
     {
         public Dictionary<string, TranspilerMapEntry> TranspilerMap = new Dictionary<string, TranspilerMapEntry>();
+        public Dictionary<string, GenericRelinkEntry> GenericRelinkMap = new Dictionary<string, GenericRelinkEntry>();
 
         public XnaToFnaUtil XTF;
 

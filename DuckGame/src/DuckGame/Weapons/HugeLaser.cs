@@ -109,16 +109,31 @@ namespace DuckGame
         {
             if (isServerForObject)
             {
-                _unchargeSound.Stop();
-                _unchargeSound.Volume = 0f;
-                _unchargeSoundShort.Stop();
-                _unchargeSoundShort.Volume = 0f;
-                _chargeSound.Stop();
-                _chargeSound.Volume = 0f;
-                _chargeSoundShort.Stop();
-                _chargeSoundShort.Volume = 0f;
+                if (_unchargeSound != null)
+                {
+                    _unchargeSound.Stop();
+                    _unchargeSound.Volume = 0f;
+                }
+                if (_unchargeSound != null)
+                {
+                    _unchargeSoundShort.Stop();
+                    _unchargeSoundShort.Volume = 0f;
+                }
+                if (_chargeSound != null)
+                {
+                    _chargeSound.Stop();
+                    _chargeSound.Volume = 0f;
+                }
+                if (_chargeSoundShort != null)
+                {
+                    _chargeSoundShort.Stop();
+                    _chargeSoundShort.Volume = 0f;
+                }
             }
-            _chargeAnim.SetAnimation("drain");
+            if (_chargeAnim != null)
+            {
+                _chargeAnim.SetAnimation("drain");
+            }
             SFX.Play("laserBlast");
         }
 

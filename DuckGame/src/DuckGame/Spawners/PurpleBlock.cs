@@ -81,7 +81,11 @@ namespace DuckGame
         {
             StoredItem storedItem;
             if (!_storedItems.TryGetValue(p, out storedItem))
-                storedItem = _storedItems[p] = new StoredItem();
+            {
+                storedItem = new StoredItem();
+                _storedItems[p] = storedItem;
+            }
+               
             return storedItem;
         }
 
@@ -108,6 +112,10 @@ namespace DuckGame
             {
                 storedItem.serializedData = t.Serialize();
                 storedItem.thing = LoadThing(storedItem.serializedData);
+                if (storedItem.thing != null)
+                {
+                    storedItem.type = storedItem.thing.GetType();
+                }
             }
             catch (Exception)
             {
@@ -328,6 +336,10 @@ namespace DuckGame
                     {
                         containContext = storedItem.thing as PhysicsObject;
                         storedItem.thing = LoadThing(storedItem.serializedData);
+                        if (storedItem.thing != null)
+                        {
+                            storedItem.type = storedItem.thing.GetType();
+                        }
                         _hit = false;
                         Pop();
                         _served.Add(pDuck.profile);

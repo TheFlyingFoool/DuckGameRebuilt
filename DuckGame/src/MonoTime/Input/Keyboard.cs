@@ -715,13 +715,13 @@ namespace DuckGame
                 ignoreEnter = 0;
             if (!Graphics.inFocus)
                 return;
-            if (_usingVoiceRegister == 0)
-            {
-                if (Pressed(Keys.D8) && index == 0)
-                    _fakeDisconnect = !_fakeDisconnect;
-                if (Pressed(Keys.D9) && index == 1)
-                    _fakeDisconnect = !_fakeDisconnect;
-            }
+            //if (_usingVoiceRegister == 0)
+            //{
+            //    if (Pressed(Keys.D8) && index == 0)
+            //        _fakeDisconnect = !_fakeDisconnect;
+            //    if (Pressed(Keys.D9) && index == 1)
+            //        _fakeDisconnect = !_fakeDisconnect;
+            //}
             if (_flipper == 0)
             {
                 _keyStatePrev = _keyState;

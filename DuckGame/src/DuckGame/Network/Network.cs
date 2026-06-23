@@ -13,7 +13,7 @@ namespace DuckGame
         private NCNetworkImplementation _core;
         private NCNetworkImplementation _lanCore;
         public static bool lanMode = false;
-        private static Network _activeNetwork;
+        private static Network _activeNetwork = new Network();
         private NetIndex16 _tickSync = new NetIndex16(1, true);
 
         public NetIndex16 _lastReceivedTime = new NetIndex16(1, true);
