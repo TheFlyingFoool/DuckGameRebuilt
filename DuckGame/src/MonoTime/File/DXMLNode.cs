@@ -69,7 +69,7 @@ namespace DuckGame
             _name = varName;
             if (varValue == null)
                 return;
-            _value = varValue.ToString();
+            _value = Change.ToString(varValue);
         }
 
         protected static DXMLNode ReadNode(string text, ref int index)
