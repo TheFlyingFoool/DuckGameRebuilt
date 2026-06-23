@@ -141,14 +141,14 @@ namespace DuckGame
         public static DGRebuiltDeveloper Firch = new()
         {
             DisplayName = "Firch",
-            Color = new Color("#232d3f"),
+            Color = new Color("#E0FF00"),
             DevRole = DGRebuiltDeveloper.Role.MinorContributor,
             SteamID = 76561198420901896,
         };
-        public static DGRebuiltDeveloper Biverom = new()
+        public static DGRebuiltDeveloper Violunae = new()
         {
-            DisplayName = "Biverom",
-            Color = new Color("#600F25"),
+            DisplayName = "Violunae",
+            Color = new Color("#9326FF"),
             DevRole = DGRebuiltDeveloper.Role.MinorContributor,
             SteamID = 76561198849781683,
         };
@@ -171,7 +171,7 @@ namespace DuckGame
             TheKingOfCringe11,
             Dzhake,
             Firch,
-            Biverom
+            Violunae
         };
         
         //NiK0 stuff

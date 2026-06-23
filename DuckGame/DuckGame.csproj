@@ -303,11 +303,11 @@
     <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddedContent\Biverom\Tape\Guns\Propaganda.cs" />
-    <Compile Include="AddedContent\Biverom\TreeSawing\FallingTree.cs" />
-    <Compile Include="AddedContent\Biverom\TreeSawing\NMSawTree.cs" />
-    <Compile Include="AddedContent\Biverom\TreeSawing\TreeEnd.cs" />
-    <Compile Include="AddedContent\Biverom\TreeSawing\TreeStump.cs" />
+    <Compile Include="AddedContent\Violunae\Tape\Guns\Propaganda.cs" />
+    <Compile Include="AddedContent\Violunae\TreeSawing\FallingTree.cs" />
+    <Compile Include="AddedContent\Violunae\TreeSawing\NMSawTree.cs" />
+    <Compile Include="AddedContent\Violunae\TreeSawing\TreeEnd.cs" />
+    <Compile Include="AddedContent\Violunae\TreeSawing\TreeStump.cs" />
     <Compile Include="AddedContent\CorinthianPillar.cs" />
     <Compile Include="AddedContent\DevWeapons\FirebreakGun.cs" />
     <Compile Include="AddedContent\DevWeapons\KlofGun.cs" />
