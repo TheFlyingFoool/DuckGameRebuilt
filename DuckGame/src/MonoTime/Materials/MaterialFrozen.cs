@@ -18,11 +18,19 @@ namespace DuckGame
 
         public override void Apply()
         {
-            if (Graphics.device.Textures[0] != null)
+            Tex2D tex;
+            if (_thing.graphic != null)
             {
-                Tex2D texture = (Tex2D)(Graphics.device.Textures[0] as Texture2D);
-                SetValue("width", _thing.graphic.texture.frameWidth / (_thing.graphic.texture.width * 0.75f));
-                SetValue("height", _thing.graphic.texture.frameHeight / (_thing.graphic.texture.height * 0.75f));
+                tex = _thing.graphic.texture;
+            }
+            else
+            {
+                tex = Graphics.device.Textures[0] as Texture2D;
+            }
+            if (tex != null)
+            {
+                SetValue("width", tex.frameWidth / (tex.width * 0.75f));
+                SetValue("height", tex.frameHeight / (tex.height * 0.75f));
                 SetValue("xpos", _thing.x);
                 SetValue("ypos", _thing.y);
                 SetValue("intensity", intensity);
