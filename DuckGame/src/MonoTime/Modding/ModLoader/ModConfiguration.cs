@@ -288,7 +288,13 @@ namespace DuckGame
                 configDocument.Save(configFilePath);
             }
         }
-        
+
+        internal void Disable(string reason)
+        {
+            Disable();
+            error = reason;
+        }
+
         internal void Disable()
         {
             if (disabled)
