@@ -232,6 +232,10 @@ namespace DuckGame
                 flag = false;
                 appdataSave = false;
             }
+            if (File.Exists(Path.Combine(newSaveLocation, _saveDirectory, "my_save_is_here")))
+            {
+                flag = false;
+            }
             if (flag)
             {
                 appdataSave = true;
