@@ -84,6 +84,16 @@ namespace DuckGame
 
 		static void DeleteFileOrFolder(string path)
 		{
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+            {
+                // ponytail: no Trash integration on Unix; add platform trash only if users ask.
+                if (Directory.Exists(path))
+                    Directory.Delete(path, true);
+                else if (File.Exists(path))
+                    File.Delete(path);
+                return;
+            }
+
 			SHFILEOPSTRUCT fileop = new SHFILEOPSTRUCT();
 			fileop.wFunc = FO_DELETE;
 			fileop.pFrom = path + '\0' + '\0';

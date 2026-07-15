@@ -80,6 +80,7 @@ namespace DuckGame
         private static string kCleanupString = "C:\\gamedev\\duckgame_try2\\duckgame\\DuckGame\\src\\";
         public static bool crashed = false;
         public static Assembly crashAssembly;
+        private static bool CanLaunchCrashWindow => Environment.OSVersion.Platform == PlatformID.Win32NT && File.Exists("CrashWindow.exe");
         public static bool gameLoadedSuccessfully = false;
 
         public static bool shouldusespriteatlas = true;
@@ -381,7 +382,8 @@ namespace DuckGame
                     StreamWriter streamWriter = new StreamWriter("ducklog.txt", true);
                     streamWriter.WriteLine(str);
                     streamWriter.Close();
-                    Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -exceptionString \"" + str.Replace("\n", "|NEWLINE|").Replace("\r", "|NEWLINE2|") + "\" -source Duck Game -commandLine \"\" -executable \"" + Assembly.GetEntryAssembly().Location + "\"");
+                    if (CanLaunchCrashWindow)
+                        Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -exceptionString \"" + str.Replace("\n", "|NEWLINE|").Replace("\r", "|NEWLINE2|") + "\" -source Duck Game -commandLine \"\" -executable \"" + Assembly.GetEntryAssembly().Location + "\"");
                 }
             }
             return null;
@@ -941,7 +943,8 @@ namespace DuckGame
                 StreamWriter streamWriter = new StreamWriter("ducklog.txt", true);
                 streamWriter.WriteLine(pLogMessage);
                 streamWriter.Close();
-                Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -modName none -source " + e.Exception.Source + " -commandLine \"none\" -executable \"" + Assembly.GetEntryAssembly().Location + "\" " + WindowsPlatformStartup.GetCrashWindowString(ex, null, pLogMessage));
+                if (CanLaunchCrashWindow)
+                    Process.Start("CrashWindow.exe", "-modResponsible 0 -modDisabled 0 -modName none -source " + e.Exception.Source + " -commandLine \"none\" -executable \"" + Assembly.GetEntryAssembly().Location + "\" " + WindowsPlatformStartup.GetCrashWindowString(ex, null, pLogMessage));
             }
         }
         public static string ProcessExceptionString(Exception e)
@@ -1203,7 +1206,7 @@ namespace DuckGame
                 }
                 catch (Exception) { }
                 num = 6;
-                if (File.Exists("CrashWindow.exe"))
+                if (CanLaunchCrashWindow)
                 {
                     try
                     {

@@ -15,6 +15,7 @@ Notable wiki pages:
 
 - **Windows** — subscribe to [the Steam Workshop mod](https://steamcommunity.com/sharedfiles/filedetails/?id=3132351890).
 - **Linux** — follow the [Linux Installation Guide](https://github.com/TheFlyingFoool/DuckGameRebuilt/wiki/Linux-Installation-Guide).
+- **macOS** — experimental developer builds work through Mono/FNA; no packaged app yet.
 
 ## For Developers 🚧
 
@@ -29,6 +30,7 @@ Welcome to the repo, enjoy your stay, please unfuck the code. thanks
 |---|---|
 | Windows | [Visual Studio 2022](https://visualstudio.microsoft.com/vs/community/) with the **".NET desktop development"** workload (includes MSBuild, NuGet, and the [.NET Framework 4.8 targeting pack](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48)) |
 | Linux | `mono-complete` from the [official mono repos](https://www.mono-project.com/download/stable/), plus the `nuget` CLI |
+| macOS | [Mono](https://www.mono-project.com/download/stable/), `nuget`, Xcode command line tools, and macOS FNA native libraries in `deps/osx/` |
 | All | [Steam](https://store.steampowered.com/) running at launch time; clone with `--recursive` for submodules |
 
 ### Cloning
@@ -65,15 +67,28 @@ git submodule update --init --recursive
    msbuild -m -p:Configuration=Debug
    ```
 
+### Building on macOS
+
+1. Install Mono and NuGet.
+2. The macOS FNA native libraries live in `./deps/osx/`. Clear quarantine if needed:
+   ```bash
+   xattr -c ./deps/osx/*.dylib
+   ```
+3. Restore and build:
+   ```bash
+   nuget restore .
+   msbuild -m -p:Configuration=Debug
+   ```
+
 ### Running
 
 > [!IMPORTANT]
 > Steam must be running before launching the game, or it will crash on startup.
 
 - **Windows** — press `F5` in Visual Studio to launch in Debug mode.
-- **Linux** — run the built executable under mono:
+- **Linux/macOS** — run the built executable under mono:
   ```bash
-  mono ./bin/DuckGame.exe
+  ./bin/DuckGame.sh
   ```
 
 ## Contributing

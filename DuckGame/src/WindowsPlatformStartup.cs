@@ -243,7 +243,7 @@ namespace DGWindows
         [HandleProcessCorruptedStateExceptions, SecurityCritical]
         public static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e)
         {
-            if (!File.Exists("CrashWindow.exe"))
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT || !File.Exists("CrashWindow.exe"))
                 return;
             try
             {
