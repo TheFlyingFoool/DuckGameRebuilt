@@ -449,45 +449,55 @@ namespace DuckGame
             ChatMessage chatMessage = null;
             if (chatMessages.Count > 0)
                 chatMessage = chatMessages[0];
-            pMessage.text = FilterText(pMessage.text, null);
+            string filteredText = FilterText(pMessage.text ?? "", null);
             if (Options.Data.textToSpeech)
             {
+                string speech = ChatFormatting.StripAllTags(filteredSpeech);
                 if (Options.Data.textToSpeechReadNames)
-                    SFX.Say(pMessage.who.nameUI + " says " + filteredSpeech);
+                    SFX.Say(pMessage.who.nameUI + " says " + speech);
                 else
-                    SFX.Say(filteredSpeech);
+                    SFX.Say(speech);
             }
-            float chatScale = DuckNetwork.chatScale;
-            _chatFont.scale = new Vec2(2f * pMessage.scale * chatScale);
-            if (_chatFont is RasterFont)
+            ChatEntry entry = new ChatEntry
             {
-                FancyBitmapFont chatFont = _chatFont;
-                chatFont.scale *= 0.5f;
-            }
+                who = pMessage.who,
+                text = filteredText,
+                image = pMessage.image,
+            };
+            string plainText = ChatFormatting.StripForVanilla(filteredText);
+            if (entry.image != null)
+                plainText += plainText.Length > 0 ? " [image]" : "[image]";
+
+            int entryLines = 1;
+            int previousLines = 99;
             try
             {
-                pMessage.text = _chatFont.FormatWithNewlines(pMessage.text, 800f);
+                entryLines = ChatBox.CountLines(new List<ChatEntry> { entry });
+                if (chatMessage != null)
+                    previousLines = ChatBox.CountLines(chatMessage.entries);
             }
             catch (Exception)
             {
-                pMessage.text = "??????";
+                entryLines = 99;
             }
-            int num = pMessage.text.Count(x => x == '\n');
-            if (chatMessage != null && num == 0 && chatMessage.newlines < 3 && chatMessage.timeout > 2 && chatMessage.who == pMessage.who)
+
+            if (chatMessage != null && entryLines == 1 && previousLines < 3 && chatMessage.timeout > 2 && chatMessage.who == pMessage.who && ChatBox.CanMergeInto(chatMessage, entry))
             {
-                pMessage.text = "|GRAY|" + pMessage.who.nameUIBodge + $": |BLACK|" + pMessage.text;
+                chatMessage.entries.Add(entry);
+                chatMessage.text += "\n|GRAY|" + pMessage.who.nameUIBodge + ": |BLACK|" + plainText;
                 chatMessage.timeout = 10f;
-                chatMessage.text += "\n";
-                chatMessage.text += pMessage.text;
                 chatMessage.index = pMessage.index;
                 chatMessage.slide = 0.5f;
-
+                chatMessage.InvalidateLayout();
                 ++chatMessage.newlines;
             }
             else
             {
-                pMessage.newlines = num + 1;
-                pMessage.text = "|WHITE|" + pMessage.who.nameUIBodge + $": |BLACK|" + pMessage.text;
+                pMessage.entries.Clear();
+                pMessage.entries.Add(entry);
+                pMessage.newlines = entryLines;
+                pMessage.text = "|WHITE|" + pMessage.who.nameUIBodge + ": |BLACK|" + plainText;
+                pMessage.InvalidateLayout();
                 chatMessages.Add(pMessage);
             }
             chatMessages = chatMessages.OrderBy(x => -x.index).ToList();

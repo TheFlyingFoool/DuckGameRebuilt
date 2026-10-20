@@ -500,8 +500,10 @@ namespace DuckGame
             if (sprite == null && Options.Data.mojiFilter != 0)
             {
                 sprite = DuckFile.GetMoji(trigger, _currentConnection);
+                // Unknown "!" mojis show as a blank face. This used to return the shared sprite itself instead of a copy,
+                // so anything that scaled the returned sprite (the chat does) changed it for good.
                 if (sprite == null && trigger.Contains("!"))
-                    return Input.GetTriggerSprite("blankface");
+                    sprite = Input.GetTriggerSprite("blankface");
             }
 
             Sprite spriteClone = null;
@@ -1253,5 +1255,134 @@ namespace DuckGame
                 }
             }
         }
+
+        #region Per-glyph helpers (used by the DGR chat renderer, see ChatTextLayout)
+
+        private int SafeCharacterIndex(char ch)
+        {
+            int index = ch < _characterMap.Length ? _characterMap[ch] : 91;
+            if (index >= _widths.Count)
+                index = _widths.Count - 1;
+            return index;
+        }
+
+        /// <summary>
+        /// How far the pen moves after drawing <paramref name="ch"/>, in scaled units. Matches <see cref="Draw(string, float, float, Color, Depth, bool)"/>.
+        /// </summary>
+        public float GetGlyphAdvance(char ch)
+        {
+            if (ch >= 'ぁ')
+                return 8f * scale.x;
+            int index = SafeCharacterIndex(ch);
+            if (index < 0)
+                return 0f;
+            if (_characterInfos != null)
+            {
+                if (index >= _characterInfos.Count)
+                    return 0f;
+                BitmapFont_CharacterInfo info = _characterInfos[index];
+                return (info.width + info.trailing + info.leading) * scale.x;
+            }
+            return (_widths[index].width - 1f) * scale.x;
+        }
+
+        /// <summary>
+        /// Horizontal offset used to fake bold text (the glyph is drawn twice, this far apart), in scaled units.
+        /// </summary>
+        public float boldOffset => (_characterInfos != null ? Math.Max(1f, (float)Math.Round(_charHeight / 14f)) : 1f) * scale.x;
+
+        /// <summary>
+        /// Thickness used for underline/strikethrough lines, in scaled units.
+        /// </summary>
+        public float decorationThickness => (_characterInfos != null ? Math.Max(1f, (float)Math.Round(_charHeight / 14f)) : 1f) * scale.y;
+
+        /// <summary>
+        /// Draws a single character at the given position. Supports a faked italic (shear) and bold (double draw).
+        /// </summary>
+        /// <param name="xScale">Extra horizontal squish/stretch, used to fit wide characters into monospace cells.</param>
+        public void DrawGlyph(char ch, float x, float y, Color c, Depth deep, float italicShear = 0f, bool bold = false, float xScale = 1f)
+        {
+            Vec2 glyphScale = new Vec2(scale.x * xScale, scale.y);
+            if (ch >= 'ぁ')
+            {
+                if (_kanjiMap == null || ch >= _kanjiMap.Length)
+                    return;
+                _kanjiSprite.frame = _kanjiMap[ch];
+                _kanjiSprite.scale = glyphScale;
+                _kanjiSprite.color = c;
+                _kanjiSprite.alpha = alpha;
+                Graphics.Draw(_kanjiSprite, x + 1f, y + 1f, deep);
+                if (bold)
+                    Graphics.Draw(_kanjiSprite, x + 1f + boldOffset * xScale, y + 1f, deep);
+                return;
+            }
+            int index = SafeCharacterIndex(ch);
+            if (index < 0)
+                return;
+            float drawX = x;
+            if (_characterInfos != null)
+            {
+                if (index >= _characterInfos.Count)
+                    return;
+                drawX += _characterInfos[index].leading * glyphScale.x;
+            }
+            Rectangle source = _widths[index];
+            _texture.scale = glyphScale;
+            _texture.color = c;
+            _texture.alpha = alpha;
+            DrawGlyphRect(source, drawX, y, deep, italicShear);
+            if (bold)
+                DrawGlyphRect(source, drawX + boldOffset * xScale, y, deep, italicShear);
+        }
+
+        private void DrawGlyphRect(Rectangle source, float x, float y, Depth deep, float shear)
+        {
+            if (shear == 0f)
+            {
+                Graphics.Draw(_texture, x, y, source, deep);
+                return;
+            }
+            // No skew support in the sprite batch, so the glyph is drawn as horizontal strips that get pushed
+            // further right the higher up they are.
+            int rows = (int)source.height;
+            int step = Math.Max(1, rows / 8);
+            float half = rows * 0.5f;
+            for (int row = 0; row < rows; row += step)
+            {
+                int height = Math.Min(step, rows - row);
+                float offset = (half - (row + height * 0.5f)) * scale.y * shear;
+                Graphics.Draw(_texture, x + offset, y + row * scale.y, new Rectangle(source.x, source.y + row, source.width, height), deep);
+            }
+        }
+
+        /// <summary>
+        /// Tries to parse an @SPRITE@ (or :moji: for chat fonts) starting at <paramref name="index"/>.
+        /// </summary>
+        /// <param name="nextIndex">Index of the first character after the sprite tag.</param>
+        public Sprite TryParseSpriteAt(string text, int index, out int nextIndex)
+        {
+            _letterIndex = index;
+            Sprite sprite = ParseSprite(text, null);
+            nextIndex = Math.Min(_letterIndex + 1, text.Length);
+            if (sprite == null)
+                nextIndex = index + 1;
+            return sprite;
+        }
+
+        /// <summary>
+        /// The extra scale applied to sprites (button icons, mojis) when drawn with a chat font.
+        /// </summary>
+        public float chatSpriteScale
+        {
+            get
+            {
+                float spriteScale = scale.x / 2f;
+                if (this is RasterFont rasterFont)
+                    spriteScale *= rasterFont.data.fontSize * RasterFont.fontScaleFactor / 10f;
+                return spriteScale;
+            }
+        }
+
+        #endregion
     }
 }

@@ -621,6 +621,15 @@ namespace DuckGame
                 dgrDescription = "STEAM    - Regular steam link\nDGR      - Custom DGR link (https protocol)\nBOTH (D) - Both in one link, clickable on Discord\nBOTH (G) - Both copied but as seperate links",
                 manualFormatting = true
             });
+            menu.Add(new UIMenuItemNumber("Chat Images", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ChatImageMode), 0, 2), valStrings: new List<string>
+            {
+                "OFF",
+                "CLICK",
+                "AUTO"
+            })
+            {
+                dgrDescription = "Images sent in chat by other DGR players. CLICK only downloads an image when you click it, to save bandwidth. Images also need custom MOJIs to be enabled"
+            });
             
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));

@@ -344,6 +344,16 @@
     <Compile Include="AddedContent\DevWeapons\Stuff\NMCrashPopup.cs" />
     <Compile Include="AddedContent\DGRDevs.cs" />
     <Compile Include="AddedContent\DGRSettings.cs" />
+    <Compile Include="AddedContent\Firebreak\Chat\ChatBox.cs" />
+    <Compile Include="AddedContent\Firebreak\Chat\ChatBoxMojis.cs" />
+    <Compile Include="AddedContent\Firebreak\Chat\ChatCommands.cs" />
+    <Compile Include="AddedContent\Firebreak\Chat\ChatFormatting.cs" />
+    <Compile Include="AddedContent\Firebreak\Chat\ChatImages.cs" />
+    <Compile Include="AddedContent\Firebreak\Chat\ChatImagePreview.cs" />
+    <Compile Include="AddedContent\Firebreak\Chat\ChatTextLayout.cs" />
+    <Compile Include="AddedContent\Firebreak\Chat\Network\NMChatImageChunk.cs" />
+    <Compile Include="AddedContent\Firebreak\Chat\Network\NMChatImageOffer.cs" />
+    <Compile Include="AddedContent\Firebreak\Chat\Network\NMChatImageRequest.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\NameDisplayConfig.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\FireSerializer.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\IFireSerializerModule.cs" />

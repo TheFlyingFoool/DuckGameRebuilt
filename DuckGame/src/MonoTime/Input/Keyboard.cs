@@ -917,8 +917,16 @@ namespace DuckGame
                 KeyString += e.Character.ToString();
         }
         public static List<char> TextInputCharacters = new List<char>(TextInputEXT.TextInputCharacters);
+        /// <summary>
+        /// When set, every character from the text input event (including control characters like backspace, delete and paste)
+        /// is offered here first, returning true keeps it out of <see cref="KeyString"/>. Used by the chat box so it can edit at a caret.
+        /// </summary>
+        public static Func<char, bool> TextInputOverride;
+
         public static void FNACharEnteredHandler(char c) // FNA SDL call back for key char pressed sht
         {
+            if (TextInputOverride != null && TextInputOverride(c))
+                return;
             if (TextInputCharacters.Contains(c)) // Not Chars
             {
                 if (c == '\b') // Keys.Back

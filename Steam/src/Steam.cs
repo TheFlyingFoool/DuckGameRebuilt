@@ -306,6 +306,21 @@ public class Steam : IDisposable {
         SteamFriends.ActivateGameOverlayToWebPage(url);
     }
 
+    /// <summary>
+    /// Whether the Steam overlay can be used right now: Steam is running and the overlay is turned on
+    /// (otherwise <see cref="OverlayOpenURL"/> silently does nothing).
+    /// </summary>
+    public static bool IsOverlayEnabled() {
+        if (!initialized)
+            return false;
+        try {
+            return SteamUtils.IsOverlayEnabled();
+        }
+        catch (Exception) {
+            return false;
+        }
+    }
+
     public static unsafe void SetAchievement(string id) {
         if (!initialized)
             return;

@@ -358,6 +358,12 @@ namespace DuckGame
 
         public static Dictionary<string, Sprite> mojis => _mojis;
 
+        /// <summary>The custom mojis other players sent us, by their connection's identifier (only read this).</summary>
+        public static Dictionary<string, Dictionary<string, Sprite>> profileMojis => _profileMojis;
+
+        /// <summary>Goes up every time a moji gets registered (loaded, received from someone, stolen), so the chat knows to redraw them.</summary>
+        public static int mojiVersion;
+
         public static Sprite GetMoji(string moji, NetworkConnection pConnection = null)
         {
             if (!mojimode)
@@ -511,6 +517,7 @@ namespace DuckGame
             if (s.width > 28 || s.height > 28)
                 return;
             s.moji = true;
+            mojiVersion++;
             if (pConnection != null)
             {
                 Dictionary<string, Sprite> dictionary;

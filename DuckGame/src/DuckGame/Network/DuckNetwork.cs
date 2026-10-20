@@ -2164,7 +2164,7 @@ namespace DuckGame
                     _core.chatMessageOffset = 0;
             }
 
-            if (Mouse.isScrolling)
+            if (Mouse.isScrolling && !ChatBox.capturesMouseWheel) // the image preview (zoom) and moji picker (scroll) use the wheel
             {
                 _core.chatMessageOffset -= (Keyboard.shift ? 4 : 1) * (int)(Mouse.scroll / 120f);
                 if (_core.chatMessageOffset < 0) 
@@ -2176,6 +2176,7 @@ namespace DuckGame
         public static void Update()
         {
             ChatMessageOffset();
+            ChatBox.Update();
             //stuff'sn
             MidGameJoiningLogic();
             if (MonoMain.pauseMenu == null && _core._pauseOpen)
@@ -2315,10 +2316,15 @@ namespace DuckGame
                                 _core.enteringText = true;
                                 _core.currentEnterText = "";
                                 Keyboard.KeyString = "";
+                                ChatBox.OnOpen();
+                            }
+                            else if (ChatBox.HandleChatKeyWhileTyping())
+                            {
+                                // shift+enter, new line
                             }
                             else
                             {
-                                if (_core.currentEnterText != "")
+                                if (ChatBox.hasSomethingToSend)
                                 {
                                     string currentEnterText = _core.currentEnterText;
                                     if (currentEnterText.StartsWith("/steal"))
@@ -2356,31 +2362,25 @@ namespace DuckGame
                                         catch (Exception)
                                         {
                                         }
-                                        NMChatMessage nmChatMessage = new NMChatMessage(_core.localProfile, currentEnterText, _core.chatIndex);
-                                        ++_core.chatIndex;
-                                        SendToEveryoneFiltered(nmChatMessage);
-                                        ChatMessageReceived(nmChatMessage, _core.currentEnterText);
+                                        SendChatMessage(currentEnterText, ChatImages.pendingAttachment);
                                     }
                                     _core.currentEnterText = "";
+                                    ChatBox.OnSent();
                                 }
                                 _core.stopEnteringText = true;
                             }
                         }
                         else if (_core.enteringText && Keyboard.Pressed(Keys.Escape))
                         {
-                            _core.stopEnteringText = true;
+                            if (!ChatBox.HandleEscape())
+                                _core.stopEnteringText = true;
                             flag2 = true;
                         }
                     }
                     if (_core.enteringText)
                     {
+                        // typing, pasting, the caret and the length cap are handled by ChatBox.Update
                         Input._imeAllowed = true;
-                        if (Keyboard.control && Keyboard.Pressed(Keys.V) && FNAPlatform.HasClipboardText())
-                            Keyboard.KeyString += FNAPlatform.GetClipboardText();
-                        if (Keyboard.KeyString.Length > 90)
-                            Keyboard.KeyString = Keyboard.KeyString.Substring(0, 90);
-                        Keyboard.KeyString = Keyboard.KeyString.Replace("\n", "");
-                        _core.currentEnterText = Keyboard.KeyString;
                     }
                 }
                 bool flag3 = false;
@@ -2461,7 +2461,7 @@ namespace DuckGame
                         }
                         profile2.netData.Set("gamePaused", MonoMain.pauseMenu != null); 
                         profile2.netData.Set("gameInFocus", Graphics.inFocus);
-                        profile2.netData.SetFiltered("chatting", _core.enteringText);
+                        profile2.netData.SetFiltered("chatting", ChatBox.isTyping); // only once something has been typed
                         profile2.netData.Set("consoleOpen", DevConsole.open);
                         if (MonoMain.pauseMenu == null && (_ducknetUIGroup == null || !_ducknetUIGroup.open) && profile2.inputProfile.Pressed(Triggers.Start) && !flag2 && !flag3 && (Network.inLobby || Network.inGameLevel) && (!(Level.current is TeamSelect2) || !(Level.current as TeamSelect2).HasBoxOpen(profile2)))
                         {
@@ -2598,10 +2598,49 @@ namespace DuckGame
             return 0;
         }
 
-        public static void ChatMessageReceived(NMChatMessage message, string realText)
+        public static void ChatMessageReceived(NMChatMessage message, string realText) => ChatMessageReceived(message, realText, null);
+
+        /// <summary>
+        /// Sends a chat message to everyone. DGR players that understand chat formatting get the text as written,
+        /// everyone else gets it with the formatting tags stripped (and a placeholder instead of the image).
+        /// </summary>
+        public static void SendChatMessage(string text, ChatImageAttachment image)
+        {
+            text = text ?? "";
+            NMChatMessage localMessage = new NMChatMessage(_core.localProfile, text, _core.chatIndex);
+            ++_core.chatIndex;
+            string vanillaText = ChatFormatting.StripForVanilla(text);
+            List<NetworkConnection> handled = new List<NetworkConnection>();
+            Dictionary<string, List<NetworkConnection>> groups = new Dictionary<string, List<NetworkConnection>>();
+            foreach (Profile profile in profiles)
+            {
+                if (FilterPlayer(profile) != 0 || profile.connection == null || profile.connection == localConnection || (profile.isHost && profile != hostProfile) || handled.Contains(profile.connection))
+                    continue;
+                handled.Add(profile.connection);
+                bool sendImage = image != null && ChatImages.CanSendTo(profile);
+                string outText = ChatFormatting.SupportsFormatting(profile) ? text : vanillaText;
+                if (image != null && !sendImage)
+                    outText = outText.Length > 0 ? outText + " <sent an image>" : "<sent an image>";
+                if (outText.Length == 0 && !sendImage)
+                    continue;
+                if (sendImage)
+                    ChatImages.SendOffer(image, profile.connection);
+                if (!groups.TryGetValue(outText, out List<NetworkConnection> connections))
+                    groups[outText] = connections = new List<NetworkConnection>();
+                connections.Add(profile.connection);
+            }
+            foreach (KeyValuePair<string, List<NetworkConnection>> group in groups)
+                Send.Message(new NMChatMessage(_core.localProfile, group.Key, localMessage.index), NetMessagePriority.ReliableOrdered, group.Value);
+            ChatImages.OnSentLocal(image);
+            ChatMessageReceived(localMessage, text, image);
+        }
+
+        public static void ChatMessageReceived(NMChatMessage message, string realText, ChatImageAttachment localImage)
         {
             if (message.profile == null)
                 return;
+            // Images from other players arrive right before their chat message
+            ChatImageAttachment image = localImage ?? (message.connection != null && message.profile.connection != localConnection ? ChatImages.TakePendingOffer(message.profile) : null);
             if (Corderator.instance != null)
             {
                 Corderator.instance.receivedMessages.Add(new ChatMessage(message.profile, message.text, message.index));
@@ -2610,12 +2649,14 @@ namespace DuckGame
             int num = FilterPlayer(message.profile);
             if (num > 0)
             {
+                image = null;
                 if (message.connection.sentFilterMessage)
                     return;
                 message.connection.sentFilterMessage = true;
                 realText = !(message is NMChatDisabledMessage) ? (num != 2 ? "@error@Chat |DGRED|disabled|PREV| in options. Ignoring messages..." : "@error@Player is |DGRED|muted|PREV|. Ignoring messages...") : message.text;
             }
-            _core.AddChatMessage(new ChatMessage(message.profile, realText != null ? realText : message.text, message.index));
+            _core.AddChatMessage(new ChatMessage(message.profile, realText != null ? realText : message.text, message.index) { image = image });
+            ChatImages.OnAttached(image);
             SFX.DontSave = 1;
             SFX.Play("chatmessage", 0.8f, Rando.Float(-0.15f, 0.15f));
         }
@@ -3518,151 +3559,7 @@ namespace DuckGame
         public static void Draw()
         {
             if (localProfile == null && !Recorderator.Playing) return;
-            Vec2 vec2_1 = new Vec2(Layer.Console.width, Layer.Console.height);
-            float num1 = 0f;
-            int MaxMessages = 8;
-            float chatScale = DuckNetwork.chatScale;
-            float num3 = Resolution.current.x > 1920 ? 2f : 1f;
-
-
-            //hi hello yes, this is a somewhat messy fix but TLDR
-            //'RockScoreBoard' puts everything in a massive render target then draws it to the screen adding black bars to the top and bottom
-            //this includes the DuckNetwork.cs Draw function which draws the chat, usually this function draws outside and onto the black bars
-            //if they're present but because it gets bundled in the render target its all drawn inside them making chat be squished
-            //this fix just stretches the chat vertically so it looks normally but doesn't fix the underlying issue 
-            //maybe improve it later? this works for now though -Lucky
-            float ratioFixMult = Level.current is RockScoreboard ? (1 / (Resolution.current.aspect / 1.777777778f))  : 1;
-
-            if (_core._chatFont is RasterFont) _core._chatFont.scale = new Vec2(0.5f);
-            else _core._chatFont.scale = new Vec2(num3);
-
-            _core._chatFont.scale *= new Vec2(1, ratioFixMult);
-
-            float alpha = Options.Data.chatOpacity / 100f;
-            if (_core.enteringText && !_core.stopEnteringText)
-            {
-                if(MonoMain.UpdateLerpState) _core.cursorFlash++;
-
-                if (_core.cursorFlash > 30) _core.cursorFlash = 0;
-
-                Profile localProfile = DuckNetwork.localProfile;
-                string currentEnterText = _core.currentEnterText;
-                string text = localProfile.name + ": " + currentEnterText;
-                string str = text;
-                if ((_core.cursorFlash >= 15 ? 1 : 0) != 0) text += "_";
-
-                float x = _core._chatFont.GetWidth(str + "_") + 8f * chatScale;
-                float y = (_core._chatFont.characterHeight + 2) * _core._chatFont.scale.y;
-                Vec2 p1 = new Vec2(14f, num1 + (vec2_1.y - (_core._chatFont.characterHeight + 10) * _core._chatFont.scale.y));
-                Graphics.DrawRect(p1 + new Vec2(-1f, -1f), p1 + new Vec2(x, y) + new Vec2(1f, 1f), Color.Black * alpha, (Depth)0.7f, false, 1f * chatScale);
-                Color color = Color.White;
-                if (localProfile.persona != null) color = localProfile.persona.colorUsable;
-                if (localProfile.slotType == SlotType.Spectator) color = Colors.DGPurple;
-                Graphics.DrawRect(p1, p1 + new Vec2(x, y), color * 0.85f * alpha, (Depth)0.8f);
-                _core._chatFont.symbolYOffset = 4f;
-                _core._chatFont.Draw(text, p1 + new Vec2(2f, 2f), Color.Black * alpha, (Depth)1f);
-                num1 -= y + 4f * _core._chatFont.scale.y;
-            }
-            float num6 = 0.1f;
-            int Index = -1;
-            foreach (ChatMessage chatMessage in _core.chatMessages)
-            {
-                Index++;
-                // Show chat if we are typing or dev console is open
-                if (_core.enteringText || DevConsole.core.open)
-                {
-                    chatMessage.alpha = 1.0f;
-                    if (_core.chatMessageOffset > Index)
-                        continue;
-                }
-                else if (chatMessage.alpha < 0)
-                    continue;
-                
-
-                float num7 = 10 * (Options.Data.chatHeadScale + 1) * num3;
-                _core._chatFont._currentConnection = chatMessage.who.connection == localConnection ? null : chatMessage.who.connection;
-                if (_core._chatFont is RasterFont) _core._chatFont.scale = new Vec2(0.5f);
-                else _core._chatFont.scale = new Vec2(num3, num3) * chatMessage.scale;
-                _core._chatFont.scale *= new Vec2(1, ratioFixMult);
-                float x = (float)(_core._chatFont.GetWidth(chatMessage.text) + num7 + 8 * chatScale);
-                if (chatMessage.who.slotType == SlotType.Spectator)
-                {
-                    if (_core._chatFont is RasterFont)
-                    {
-                        float num8 = (float)((_core._chatFont as RasterFont).data.fontSize * RasterFont.fontScaleFactor / 10);
-                        x += 6f * num8;
-                    }
-                    else x += 8f * _core._chatFont.scale.x;
-                }
-                float y = chatMessage.newlines * (_core._chatFont.characterHeight + 2) * _core._chatFont.scale.y;
-                Vec2 p1 = new Vec2(14f, num1 + (vec2_1.y - (y + 10f)));
-                Vec2 p2 = p1 + new Vec2(x, y);
-                Graphics.DrawRect(p1 + new Vec2(-1f, -1f), p2 + new Vec2(1f, 1f), Color.Black * 0.8f * chatMessage.alpha * alpha, (Depth)(num6 - 0.0015f), false, 1f * chatScale);
-                float num9 = 0.3f + chatMessage.text.Length * 0.007f;
-                if (num9 > 0.5f) num9 = 0.5f;
-                if (MonoMain.UpdateLerpState)
-                {
-                    if (chatMessage.slide > 0.8f)
-                        chatMessage.scale = Lerp.FloatSmooth(chatMessage.scale, 1f, 0.1f, 1.1f);
-                    else if (chatMessage.slide > 0.5f)
-                        chatMessage.scale = Lerp.FloatSmooth(chatMessage.scale, 1f + num9, 0.1f, 1.1f);
-                    chatMessage.slide = Lerp.FloatSmooth(chatMessage.slide, 1f, 0.1f, 1.1f);
-                }
-                Color color = Color.White;
-                Color black = Color.Black;
-                if (chatMessage.who.persona != null)
-                {
-                    color = chatMessage.who.persona.colorUsable;
-                    if (chatMessage.who.persona == Persona.Duck2)
-                    {
-                        color.r += 30;
-                        color.g += 30;
-                        color.b += 30;
-                    }
-                    if (chatMessage.who.slotType == SlotType.Spectator) color = Colors.DGPurple;
-                    SpriteMap g = null;
-                    SpriteMap chatBust = chatMessage.who.persona.chatBust;
-                    Vec2 vec2_2 = Vec2.Zero;
-                    if (chatMessage.who.team != null && chatMessage.who.team.hasHat && (chatMessage.who.connection != localConnection || !chatMessage.who.team.locked))
-                    {
-                        vec2_2 = chatMessage.who.team.hatOffset * num3 * (Options.Data.chatHeadScale + 1);
-                        g = chatMessage.who.team.GetHat(chatMessage.who.persona);
-                    }
-                    bool flag = chatMessage.who.netData.Get<bool>("quack");
-                    if (chatMessage.who.duck != null && !chatMessage.who.duck.dead && !chatMessage.who.duck.removeFromLevel) flag = chatMessage.who.duck.quack > 0;
-                    Vec2 vec2_3 = new Vec2(p1.x, p1.y + -2 * (Options.Data.chatHeadScale + 1));
-                    if (g != null)
-                    {
-                        g.CenterOrigin();
-                        g.depth = (Depth)(num6 - 1f / 1000f);
-                        g.alpha = chatMessage.alpha * alpha;
-                        g.frame = !flag || g.texture == null || g.texture.width <= 32 ? 0 : 1;
-                        g.scale = new Vec2(num3, num3) * (Options.Data.chatHeadScale + 1);
-                        g.scale *= new Vec2(1, ratioFixMult);
-                        Graphics.Draw(g, vec2_3.x - vec2_2.x, vec2_3.y - vec2_2.y);
-                        g.scale = new Vec2(1f, 1f);
-                        g.alpha = 1f;
-                    }
-                    chatBust.frame = !flag ? 0 : 1;
-                    chatBust.depth = (Depth)(num6 - 0.0015f);
-                    chatBust.alpha = chatMessage.alpha * alpha;
-                    chatBust.scale = new Vec2(num3, num3) * (Options.Data.chatHeadScale + 1);
-                    chatBust.scale *= new Vec2(1, ratioFixMult);
-                    Graphics.Draw(chatBust, vec2_3.x + 2f * chatBust.scale.x, vec2_3.y + 5f * chatBust.scale.y);
-                    color *= 0.85f;
-                    color.a = byte.MaxValue;
-                }
-                Graphics.DrawRect(p1, p2, color * 0.85f * chatMessage.alpha * alpha, (Depth)(num6 - 1f / 500f));
-                _core._chatFont.symbolYOffset = 4f;
-                _core._chatFont.lineGap = 2f;
-                if (chatMessage.who.slotType == SlotType.Spectator) _core._chatFont.Draw("@SPECTATORBIG@" + chatMessage.text, p1 + new Vec2(2f + num7, 1f * _core._chatFont.scale.y), black * chatMessage.alpha * alpha, (Depth)1f);
-                else _core._chatFont.Draw(chatMessage.text, p1 + new Vec2(2f + num7, 1f * _core._chatFont.scale.y), black * chatMessage.alpha * alpha, (Depth)1f);
-                _core._chatFont._currentConnection = null;
-                num1 -= y + 4f;
-                num6 -= 0.01f;
-                if (MaxMessages == 0) break;
-                MaxMessages--;
-            }
+            ChatBox.Draw();
         }
 
         public enum LobbyType

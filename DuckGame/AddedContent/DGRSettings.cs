@@ -439,6 +439,18 @@ namespace DuckGame
 
         [Marker.AutoConfig] public static bool OpenURLsInBrowser = false;
 
+        /// <summary>
+        /// How images sent in chat are handled. 0 = off (not shown, can't send), 1 = click to load, 2 = load automatically.
+        /// Images are also hidden when custom mojis are turned off.
+        /// </summary>
+        [Marker.AutoConfig] public static int ChatImageMode = 2;
+
+        /// <summary>
+        /// Mojis favorited in chat (alt+click one), in the order they were added. They're shown first in the moji picker
+        /// and come first in the moji suggestions.
+        /// </summary>
+        [Marker.AutoConfig] public static List<string> ChatFavoriteMojis = new List<string>();
+
         [Marker.AutoConfig] public static int DGRJoinLink = 0;
 
         [Marker.AutoConfig] public static bool UseDuckShell = true;
