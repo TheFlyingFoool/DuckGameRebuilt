@@ -501,6 +501,7 @@ namespace DuckGame
                 chatMessages.Add(pMessage);
             }
             chatMessages = chatMessages.OrderBy(x => -x.index).ToList();
+            ChatBox.OnMessageAdded(pMessage.who);
         }
     }
 }

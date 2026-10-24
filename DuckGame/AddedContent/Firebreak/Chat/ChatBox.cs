@@ -536,6 +536,7 @@ namespace DuckGame
             s_mouseOpenPosition = Mouse.positionConsole;
             s_wasOpen = true;
             ResetMojiUI();
+            MarkAllRead();
         }
 
         private static void OnClose()
@@ -564,6 +565,8 @@ namespace DuckGame
         {
             int count = core.chatMessages.Count;
             core.chatMessages.Clear();
+            s_testQueue.Clear();
+            MarkAllRead();
             core.chatMessageOffset = 0;
             ClearHistorySelection();
             s_drawnBubbles.Clear();
@@ -649,6 +652,7 @@ namespace DuckGame
         {
             s_frame++;
             ChatImages.Update();
+            UpdateTestMessages();
             if (s_copiedFrames > 0)
                 s_copiedFrames--;
             if (s_copiedLinkFrames > 0)
@@ -1456,6 +1460,13 @@ namespace DuckGame
             if (open)
                 offsetY = DrawInput(screen, alpha);
 
+            // Minimal Chat: just unread counters until the chat is opened
+            if (!core.enteringText && minimalChat)
+            {
+                DrawUnreadCounters(screen, alpha);
+                return;
+            }
+
             float bubbleDepth = 0.1f;
             int index = -1;
             int drawn = 0;
@@ -1505,7 +1516,7 @@ namespace DuckGame
                     chatMessage.slide = Lerp.FloatSmooth(chatMessage.slide, 1f, 0.1f, 1.1f);
                 }
 
-                Color color = DrawChatHead(chatMessage, p1, messageAlpha, bubbleDepth, out bool hasPersona);
+                Color color = DrawChatHead(chatMessage.who, p1, messageAlpha, bubbleDepth, out bool hasPersona);
                 if (hasPersona)
                 {
                     color *= 0.85f;
@@ -1634,11 +1645,10 @@ namespace DuckGame
             font.Draw(footer, position.x + padding, y, new Color(170, 170, 170), D(OverlayDepth + 0.05f));
         }
 
-        private static Color DrawChatHead(ChatMessage chatMessage, Vec2 p1, float alpha, float depth, out bool hasPersona)
+        private static Color DrawChatHead(Profile who, Vec2 p1, float alpha, float depth, out bool hasPersona)
         {
             Color color = Color.White;
             hasPersona = false;
-            Profile who = chatMessage.who;
             if (who.persona == null)
                 return color;
             hasPersona = true;

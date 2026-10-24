@@ -451,6 +451,12 @@ namespace DuckGame
         /// </summary>
         [Marker.AutoConfig] public static List<string> ChatFavoriteMojis = new List<string>();
 
+        /// <summary>
+        /// While the chat is closed, only show how many unread messages each player sent instead of the messages themselves,
+        /// so long messages and images don't cover the game. Opening the chat shows everything and marks it as read.
+        /// </summary>
+        [Marker.AutoConfig] public static bool MinimalChat = false;
+
         [Marker.AutoConfig] public static int DGRJoinLink = 0;
 
         [Marker.AutoConfig] public static bool UseDuckShell = true;

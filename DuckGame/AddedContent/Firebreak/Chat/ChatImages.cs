@@ -965,7 +965,7 @@ namespace DuckGame
                     return attachment.isLocal ? "This image isn't available anymore" : "Couldn't load the image, click to retry";
                 case ChatImageState.Hidden:
                     if (mode == ModeOff)
-                        return "Turn on Chat Images (Options > Rebuilt > QOL) to see images";
+                        return "Turn on Chat Images (Options > Rebuilt > Chat) to see images";
                     if (Options.Data.mojiFilter == 0)
                         return "Enable custom MOJIs (Options > Usability) to receive images";
                     if (Options.Data.mojiFilter == 1)
