@@ -1808,6 +1808,9 @@ namespace DuckGame
             if (p.persona != null)
                 p.reservedSpectatorPersona = reserve ? (sbyte)p.persona.index : (sbyte)-1;
             p.netData = new ProfileNetData();
+            // Whoever gets this slot next (or the same player after restarting their game) doesn't have our moji pictures,
+            // they have to be sent again. Keeping this made custom mojis show as plain text for players who rejoined.
+            p.sentMojis.Clear();
             p.removedGhosts.Clear();
             p.spectatorChangeIndex = p.remoteSpectatorChangeIndex = 0;
             p.connection = null;

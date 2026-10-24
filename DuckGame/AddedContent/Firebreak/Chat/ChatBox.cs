@@ -163,10 +163,11 @@ namespace DuckGame
         {
             string current = text;
             // Rechecked now and then too, a moji file can show up while typing
-            if (!ReferenceEquals(current, s_spriteText) && current != s_spriteText || s_spriteMojiVersion != DuckFile.mojiVersion || s_frame - s_spriteRefreshFrame > 60)
+            int spriteKey = DuckFile.mojiVersion * 4 + Options.Data.mojiFilter;
+            if (!ReferenceEquals(current, s_spriteText) && current != s_spriteText || s_spriteMojiVersion != spriteKey || s_frame - s_spriteRefreshFrame > 60)
             {
                 s_spriteText = current;
-                s_spriteMojiVersion = DuckFile.mojiVersion;
+                s_spriteMojiVersion = spriteKey;
                 s_spriteRefreshFrame = s_frame;
                 s_spriteSpans = core._chatFont == null ? new List<ChatSpriteSpan>() : ChatTextLayoutBuilder.FindSprites(core._chatFont, current, null);
             }
@@ -1368,7 +1369,7 @@ namespace DuckGame
         private static ChatTextLayout EnsureLayout(ChatMessage message, FancyBitmapFont font, float wrapWidth, bool collapsed)
         {
             StringBuilder key = new StringBuilder();
-            key.Append(collapsed ? 'c' : 'f').Append(DuckFile.mojiVersion).Append('|').Append(font.GetHashCode()).Append('|').Append(font.scale.x).Append('|').Append(font.scale.y).Append('|').Append(wrapWidth).Append('|').Append(message.entries.Count);
+            key.Append(collapsed ? 'c' : 'f').Append(DuckFile.mojiVersion).Append('|').Append(Options.Data.mojiFilter).Append('|').Append(font.GetHashCode()).Append('|').Append(font.scale.x).Append('|').Append(font.scale.y).Append('|').Append(wrapWidth).Append('|').Append(message.entries.Count);
             foreach (ChatEntry entry in message.entries)
             {
                 if (entry.image != null)
