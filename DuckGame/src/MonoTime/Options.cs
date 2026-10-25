@@ -33,6 +33,7 @@ namespace DuckGame
         private static UIMenu _dgrRecorderatorMenu;
         private static UIMenu _dgrMiscMenu;
         private static UIMenu _dgrDevMenu;
+        private static UIMenu _dgrChangelogMenu;
         public static UIMenu _lastCreatedAudioMenu;
         public static UIMenu _lastCreatedGraphicsMenu;
         public static UIMenu _lastCreatedAccessibilityMenu;
@@ -52,6 +53,7 @@ namespace DuckGame
         public static UIMenu _lastCreatedDGRRecorderatorMenu;
         public static UIMenu _lastCreatedDGRMiscMenu;
         public static UIMenu _lastCreatedDGRDevMenu;
+        public static UIMenu _lastCreatedDGRChangelogMenu;
 
         public static int flagForSave = 0;
         private static bool _doingResolutionRestart = false;
@@ -128,6 +130,7 @@ namespace DuckGame
         public static UIMenu DGRRecorderatorMenu => _dgrRecorderatorMenu;
         public static UIMenu DGRMiscMenu => _dgrMiscMenu;
         public static UIMenu DGRDevMenu => _dgrDevMenu;
+        public static UIMenu DGRChangelogMenu => _dgrChangelogMenu;
 
         public static UIMenu blockMenu => _blockMenu;
 
@@ -152,6 +155,7 @@ namespace DuckGame
             to.Add(DGRRecorderatorMenu, false);
             to.Add(DGRMiscMenu, false);
             if (Program.IS_DEV_BUILD) to.Add(DGRDevMenu, false);
+            to.Add(DGRChangelogMenu, false);
 
 
             if (accessibilityMenu != null)
@@ -196,6 +200,7 @@ namespace DuckGame
             _lastCreatedDGRRecorderatorMenu = tempDGRRecorderatorMenu;
             _lastCreatedDGRMiscMenu = tempDGRMiscMenu;
             if (Program.IS_DEV_BUILD) _lastCreatedDGRDevMenu = tempDGRDevMenu;
+            _lastCreatedDGRChangelogMenu = tempDGRChangelogMenu;
 
             _lastCreatedControlsMenu = CreateControlsMenu(optionsMenu);
             _lastCreatedGraphicsMenu = CreateGraphicsMenu(optionsMenu);
@@ -240,6 +245,7 @@ namespace DuckGame
             _dgrRecorderatorMenu = _lastCreatedDGRRecorderatorMenu;
             _dgrMiscMenu = _lastCreatedDGRMiscMenu;
             if (Program.IS_DEV_BUILD) _dgrDevMenu = _lastCreatedDGRDevMenu;
+            _dgrChangelogMenu = _lastCreatedDGRChangelogMenu;
             _blockMenu = _lastCreatedBlockMenu;
         }
 
@@ -923,10 +929,13 @@ namespace DuckGame
             tempDGRMiscMenu = CreateDGRMiscMenu(menu);
             menu.Add(new UIMenuItem("MISCELLANEOUS", new UIMenuActionOpenMenu(menu, tempDGRMiscMenu), backButton: true));
 
+            tempDGRChangelogMenu = new UIChangelogMenu(menu, Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f);
+            menu.Add(new UIText(" ", Color.White));
+            menu.Add(new UIMenuItem(() => UIChangelogMenu.buttonText, new UIMenuActionOpenMenu(menu, tempDGRChangelogMenu), backButton: true));
+
             if (Program.IS_DEV_BUILD)
             {
                 tempDGRDevMenu = CreateDGRDeveloperMenu(menu);
-                menu.Add(new UIText(" ", Color.White));
                 menu.Add(new UIMenuItem("|PINK|DEVELOPER", new UIMenuActionOpenMenu(menu, tempDGRDevMenu), backButton: true));
             }
 
@@ -948,6 +957,7 @@ namespace DuckGame
             ui.Add(tempDGRRecorderatorMenu, false);
             ui.Add(tempDGRMiscMenu, false);
             if (Program.IS_DEV_BUILD) ui.Add(tempDGRDevMenu, false);
+            ui.Add(tempDGRChangelogMenu, false);
         }
         public static void AddLastDGRToUIComp(UIComponent ui)
         {
@@ -963,6 +973,7 @@ namespace DuckGame
             ui.Add(_lastCreatedDGRRecorderatorMenu, false);
             ui.Add(_lastCreatedDGRMiscMenu, false);
             if (Program.IS_DEV_BUILD) ui.Add(_lastCreatedDGRDevMenu, false);
+            ui.Add(_lastCreatedDGRChangelogMenu, false);
         }
         #endregion
         public static void ReloadHats()
@@ -1064,6 +1075,7 @@ namespace DuckGame
         public static UIMenu tempDGRRecorderatorMenu;
         public static UIMenu tempDGRMiscMenu;
         public static UIMenu tempDGRDevMenu;
+        public static UIMenu tempDGRChangelogMenu;
         public static UIMenu CreateControlsMenu(UIMenu pOptionsMenu)
         {
             UIMenu menu = new UIControlConfig(pOptionsMenu, "@WRENCH@DEVICE DEFAULTS@SCREWDRIVER@", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 194f, conString: "@WASD@@SELECT@ADJUST @CANCEL@BACK");

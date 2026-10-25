@@ -481,6 +481,10 @@ namespace DuckGame
         /// <summary>When others see the typing bubble over your duck. 0 = once you've typed something, 1 = whenever your chat is open.</summary>
         [Marker.AutoConfig] public static int ChatTypingBubble = 0;
 
+        /// <summary>The version the changelog (Options > Rebuilt > What's New) was last opened on. The WHAT'S NEW button is
+        /// pink until it's been opened on the current version.</summary>
+        [Marker.AutoConfig] public static string ChangelogSeenVersion = "";
+
         // For the toggles in the Chat Rendering menu
         public static bool ChatRenderFormatting
         {

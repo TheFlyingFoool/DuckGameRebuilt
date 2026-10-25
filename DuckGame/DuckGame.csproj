@@ -358,6 +358,9 @@
     <Compile Include="AddedContent\Firebreak\Chat\Network\NMChatImageChunk.cs" />
     <Compile Include="AddedContent\Firebreak\Chat\Network\NMChatImageOffer.cs" />
     <Compile Include="AddedContent\Firebreak\Chat\Network\NMChatImageRequest.cs" />
+    <Compile Include="AddedContent\Firebreak\WhatsNew\Changelog.cs" />
+    <Compile Include="AddedContent\Firebreak\WhatsNew\MarkdownView.cs" />
+    <Compile Include="AddedContent\Firebreak\WhatsNew\UIChangelogMenu.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\AdvancedConfig\NameDisplayConfig.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\FireSerializer.cs" />
     <Compile Include="AddedContent\Firebreak\AutoConfig\Serialization\IFireSerializerModule.cs" />

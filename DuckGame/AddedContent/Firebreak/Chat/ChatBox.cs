@@ -448,7 +448,7 @@ namespace DuckGame
         /// Opens an http(s) link. Follows the Open URLs in Browser option like the rest of DGR: off means the Steam overlay,
         /// but if the overlay can't be used (Steam isn't running or the overlay is turned off) the browser is used instead.
         /// </summary>
-        private static void OpenLink(string url)
+        internal static void OpenLink(string url)
         {
             if (!Uri.TryCreate(url, UriKind.Absolute, out Uri uri) || uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)
                 return;
