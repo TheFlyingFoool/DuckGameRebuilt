@@ -346,6 +346,7 @@
     <Compile Include="AddedContent\DGRSettings.cs" />
     <Compile Include="AddedContent\Firebreak\Chat\ChatBox.cs" />
     <Compile Include="AddedContent\Firebreak\Chat\ChatBoxDrop.cs" />
+    <Compile Include="AddedContent\Firebreak\Chat\ChatBoxLinkPopup.cs" />
     <Compile Include="AddedContent\Firebreak\Chat\ChatBoxMojis.cs" />
     <Compile Include="AddedContent\Firebreak\Chat\ChatBoxTest.cs" />
     <Compile Include="AddedContent\Firebreak\Chat\ChatBoxUnread.cs" />
@@ -2350,6 +2351,7 @@
     <Compile Include="src\MonoTime\UI\UIMenuItem.cs" />
     <Compile Include="src\MonoTime\UI\UIMenuItemNumber.cs" />
     <Compile Include="src\MonoTime\UI\UIMenuItemSlider.cs" />
+    <Compile Include="src\MonoTime\UI\UIMenuItemStepSlider.cs" />
     <Compile Include="src\MonoTime\UI\UIMenuItemString.cs" />
     <Compile Include="src\MonoTime\UI\UIMenuItemToggle.cs" />
     <Compile Include="src\MonoTime\UI\UIModifierMenuItem.cs" />

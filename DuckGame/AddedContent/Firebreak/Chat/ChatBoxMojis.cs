@@ -252,7 +252,7 @@ namespace DuckGame
             bool steal = start >= 0;
             if (!steal)
             {
-                start = FindAutocompleteStart(out query);
+                start = DGRSettings.ChatMojiSuggestions ? FindAutocompleteStart(out query) : -1;
                 replaceEnd = -1;
             }
             if (start < 0)

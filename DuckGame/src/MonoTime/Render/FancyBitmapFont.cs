@@ -1286,6 +1286,55 @@ namespace DuckGame
             return (_widths[index].width - 1f) * scale.x;
         }
 
+        private Rectangle[] _glyphInk;
+        private bool[] _glyphInkDone;
+
+        /// <summary>
+        /// Where <paramref name="ch"/> actually has pixels, relative to the x, y given to <see cref="DrawGlyph"/>, in scaled units.
+        /// System fonts (RasterFont) put each glyph at a slightly different spot in its cell, the built-in fonts fill the whole cell.
+        /// Empty for glyphs with no pixels.
+        /// </summary>
+        public Rectangle GetGlyphInk(char ch)
+        {
+            Rectangle cell = new Rectangle(0f, 0f, GetGlyphAdvance(ch), _charHeight * scale.y);
+            if (_characterInfos == null || _rasterData?.colors == null || ch >= 'ぁ')
+                return cell;
+            int index = SafeCharacterIndex(ch);
+            if (index < 0 || index >= _characterInfos.Count)
+                return cell;
+            if (_glyphInk == null || _glyphInk.Length != _characterInfos.Count)
+            {
+                _glyphInk = new Rectangle[_characterInfos.Count];
+                _glyphInkDone = new bool[_characterInfos.Count];
+            }
+            if (!_glyphInkDone[index])
+            {
+                _glyphInkDone[index] = true;
+                BitmapFont_CharacterInfo info = _characterInfos[index];
+                int width = _rasterData.colorsWidth;
+                int x0 = Math.Max(0, (int)info.area.x), x1 = Math.Min(width, (int)(info.area.x + info.area.width));
+                int y0 = Math.Max(0, (int)info.area.y), y1 = Math.Min(_rasterData.colorsHeight, (int)(info.area.y + info.area.height));
+                int minX = int.MaxValue, minY = int.MaxValue, maxX = -1, maxY = -1;
+                for (int y = y0; y < y1; y++)
+                {
+                    for (int x = x0; x < x1; x++)
+                    {
+                        // Faint antialiasing at the edges doesn't count
+                        if ((_rasterData.colors[y * width + x] & 0xFF) < 64)
+                            continue;
+                        minX = Math.Min(minX, x);
+                        maxX = Math.Max(maxX, x);
+                        minY = Math.Min(minY, y);
+                        maxY = Math.Max(maxY, y);
+                    }
+                }
+                if (maxX >= 0)
+                    _glyphInk[index] = new Rectangle(info.leading + minX - info.area.x, minY - info.area.y, maxX - minX + 1, maxY - minY + 1);
+            }
+            Rectangle ink = _glyphInk[index];
+            return new Rectangle(ink.x * scale.x, ink.y * scale.y, ink.width * scale.x, ink.height * scale.y);
+        }
+
         /// <summary>
         /// Horizontal offset used to fake bold text (the glyph is drawn twice, this far apart), in scaled units.
         /// </summary>

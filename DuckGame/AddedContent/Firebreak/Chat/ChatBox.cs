@@ -130,7 +130,7 @@ namespace DuckGame
         public static bool previewOpen => ChatImagePreview.isOpen;
 
         /// <summary>Whether the mouse wheel is being used by the chat (image preview zoom, scrolling the moji picker) instead of scrolling the history.</summary>
-        public static bool capturesMouseWheel => ChatImagePreview.isOpen || s_pickerOpen && s_pickerRect.Contains(s_mousePosition);
+        public static bool capturesMouseWheel => ChatImagePreview.isOpen || linkPopupOpen || s_pickerOpen && s_pickerRect.Contains(s_mousePosition);
 
         #endregion
 
@@ -537,6 +537,7 @@ namespace DuckGame
             s_mouseOpenPosition = Mouse.positionConsole;
             s_wasOpen = true;
             ResetMojiUI();
+            CloseLinkPopup();
             MarkAllRead();
         }
 
@@ -552,6 +553,7 @@ namespace DuckGame
             s_hoveredLink = null;
             s_pressedLink = null;
             ResetMojiUI();
+            CloseLinkPopup();
             ChatImages.DiscardPendingAttachment();
             if (Keyboard.TextInputOverride == s_textInputHandler)
                 Keyboard.TextInputOverride = null;
@@ -594,8 +596,8 @@ namespace DuckGame
 
         public static bool hasSomethingToSend => text.Length > 0 || ChatImages.pendingAttachment != null;
 
-        /// <summary>Whether the "typing" bubble should show over our duck: only once something has actually been typed.</summary>
-        public static bool isTyping => core.enteringText && !core.stopEnteringText && (text.Trim().Length > 0 || ChatImages.pendingAttachment != null);
+        /// <summary>Whether the "typing" bubble should show over our duck: once something has actually been typed, or whenever the chat is open (Typing Bubble option).</summary>
+        public static bool isTyping => core.enteringText && !core.stopEnteringText && (DGRSettings.ChatTypingBubble == 1 || text.Trim().Length > 0 || ChatImages.pendingAttachment != null);
 
         public static void OnAttachmentChanged()
         {
@@ -608,6 +610,11 @@ namespace DuckGame
         /// <returns>True if escape was used up (closing the image preview).</returns>
         public static bool HandleEscape()
         {
+            if (linkPopupOpen)
+            {
+                CloseLinkPopup();
+                return true;
+            }
             if (s_pickerOpen)
             {
                 s_pickerOpen = false;
@@ -628,6 +635,12 @@ namespace DuckGame
         /// <returns>True if the key press was used to add a new line instead of sending.</returns>
         public static bool HandleChatKeyWhileTyping()
         {
+            // Enter opens the link in the link popup
+            if (linkPopupOpen)
+            {
+                ActivateLinkPopup(s_linkPopupSelection);
+                return true;
+            }
             // Enter picks the highlighted moji suggestion, like tab
             if (autocompleteVisible && !Keyboard.shift)
             {
@@ -688,6 +701,11 @@ namespace DuckGame
 
         private static void UpdateTyping()
         {
+            if (linkPopupOpen)
+            {
+                UpdateLinkPopupKeys();
+                return;
+            }
             ClampCaret();
             bool control = Keyboard.control;
             bool shift = Keyboard.shift;
@@ -867,6 +885,18 @@ namespace DuckGame
             bool pressed = Mouse.left == InputState.Pressed;
             bool down = Mouse.left == InputState.Down || pressed;
 
+            // The link popup takes over the mouse while it's up
+            if (linkPopupOpen)
+            {
+                s_drag = DragMode.None;
+                hoveredImage = null;
+                s_hoveredLink = null;
+                s_tooltip = null;
+                s_guideHovered = false;
+                UpdateLinkPopupMouse(mouse, pressed);
+                return;
+            }
+
             // The image preview takes over the mouse while it's open
             if (ChatImagePreview.isOpen)
             {
@@ -896,7 +926,7 @@ namespace DuckGame
                     if (s_pressedLink != null && (mouse - s_pressedLinkPosition).lengthSq < 9f)
                     {
                         ClearHistorySelection();
-                        OpenLink(s_pressedLink.url);
+                        RequestOpenLink(s_pressedLink);
                     }
                     s_pressedLink = null;
                 }
@@ -1325,8 +1355,12 @@ namespace DuckGame
             return font;
         }
 
-        /// <summary>How wide chat messages can get before they wrap, about half the screen.</summary>
-        private static float messageWrapWidth => Math.Max(160f, Layer.Console.width * 0.5f - headOffset - 8f * DuckNetwork.chatScale);
+        /// <summary>How much of the screen the chat (messages and the typing box) can take up, a quarter up to all of it (Chat Width option).
+        /// They start 14 in from the left, at full width they stop as far in from the right.</summary>
+        private static float chatAreaWidth => Math.Min(Layer.Console.width * (Maths.Clamp(DGRSettings.ChatMaxWidth, 1, 4) / 4f), Layer.Console.width - 28f);
+
+        /// <summary>How wide chat messages can get before they wrap.</summary>
+        private static float messageWrapWidth => Math.Max(160f, chatAreaWidth - headOffset - 8f * DuckNetwork.chatScale);
 
         private static float imageMaxWidth => Math.Min(messageWrapWidth, Layer.Console.width * 0.35f);
 
@@ -1589,7 +1623,9 @@ namespace DuckGame
 
             if (open)
             {
-                if (s_guideHovered && s_inputDrawn)
+                if (linkPopupOpen)
+                    DrawLinkPopup();
+                else if (s_guideHovered && s_inputDrawn)
                     DrawFormatGuide();
                 else
                 {
@@ -1767,7 +1803,7 @@ namespace DuckGame
             int buttonsMode = chatButtonsMode;
             bool buttonsOut = buttonsMode == ChatButtonsShow || buttonsMode == ChatButtonsHover && (s_toolsWanted || s_toolFade > 0.01f);
             float reservedWidth = (buttonsOut ? buttonsWidth : 0f) + counterWidth + 4f * font.scale.x;
-            float wrapWidth = Math.Max(120f, Layer.Console.width * 0.5f - 8f * chatScale - toolsWidth);
+            float wrapWidth = Math.Max(120f, chatAreaWidth - 8f * chatScale - toolsWidth);
 
             string prefix = localProfile.name + ": ";
             ChatTextLayoutBuilder builder = new ChatTextLayoutBuilder(font, wrapWidth) { trailingEmptyLine = true };

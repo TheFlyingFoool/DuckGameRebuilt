@@ -469,6 +469,18 @@ namespace DuckGame
         /// </summary>
         [Marker.AutoConfig] public static int ChatRendering = 3;
 
+        /// <summary>Clicking a link in chat first shows where it goes and asks before opening it.</summary>
+        [Marker.AutoConfig] public static bool ChatLinkPopup = true;
+
+        /// <summary>Typing ":name" in chat suggests mojis that match. (/steal still lists what you can steal.)</summary>
+        [Marker.AutoConfig] public static bool ChatMojiSuggestions = true;
+
+        /// <summary>How far across the screen chat messages go before they wrap, in quarters of the screen (1 to 4, 4 = the full screen).</summary>
+        [Marker.AutoConfig] public static int ChatMaxWidth = 2;
+
+        /// <summary>When others see the typing bubble over your duck. 0 = once you've typed something, 1 = whenever your chat is open.</summary>
+        [Marker.AutoConfig] public static int ChatTypingBubble = 0;
+
         // For the toggles in the Chat Rendering menu
         public static bool ChatRenderFormatting
         {

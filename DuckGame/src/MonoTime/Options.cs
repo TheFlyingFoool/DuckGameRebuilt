@@ -667,6 +667,26 @@ namespace DuckGame
             {
                 dgrDescription = "The image, MOJI and formatting buttons in the chat box. HOVER only shows them when the mouse is near the chat box. Pasting and dropping images still work when they're hidden"
             });
+            menu.Add(new UIMenuItemToggle("Link Popup", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ChatLinkPopup)))
+            {
+                dgrDescription = "Clicking a link in chat shows where it goes first and asks before opening it. OFF opens links right away"
+            });
+            menu.Add(new UIMenuItemToggle("MOJI Suggestions", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ChatMojiSuggestions)))
+            {
+                dgrDescription = "Typing :name in chat lists the MOJIs that match, Tab or Enter picks one"
+            });
+            menu.Add(new UIMenuItemStepSlider("Chat Width", new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ChatMaxWidth), 1, 4), 4)
+            {
+                dgrDescription = "How far across the screen chat messages go before wrapping to a new line: 1/4, 1/2, 3/4 or the full screen, like the lit part of the bar"
+            });
+            menu.Add(new UIMenuItemNumber("Typing Bubble", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ChatTypingBubble), 0, 1), valStrings: new List<string>
+            {
+                "TYPING",
+                "ALWAYS"
+            })
+            {
+                dgrDescription = "When others see the typing bubble over your duck. TYPING shows it once you've typed something, ALWAYS shows it as soon as you open the chat"
+            });
             tempDGRChatRenderingMenu = CreateDGRChatRenderingMenu(menu);
             menu.Add(new UIMenuItem("Chat Rendering", new UIMenuActionOpenMenu(menu, tempDGRChatRenderingMenu), backButton: true)
             {
