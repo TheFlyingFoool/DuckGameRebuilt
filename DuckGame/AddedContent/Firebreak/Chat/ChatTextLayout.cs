@@ -436,6 +436,10 @@ namespace DuckGame
         private Color _previousColor;
 
         public NetworkConnection mojiConnection;
+        /// <summary>If false, color tags are left out without coloring anything (the Chat Rendering option).</summary>
+        public bool colors = true;
+        /// <summary>If false, http(s) links are plain text (used for player names).</summary>
+        public bool links = true;
         public bool trailingEmptyLine;
 
         // Collapsing long messages
@@ -700,6 +704,12 @@ namespace DuckGame
                     }
                     if (ChatFormatting.TryMatchColorTag(text, i, out Color color, out bool isPrevious, out int colorEnd))
                     {
+                        // Colors turned off: the tag is just left out, whatever color was already going stays
+                        if (!colors)
+                        {
+                            i = colorEnd;
+                            continue;
+                        }
                         if (isPrevious)
                         {
                             bool hadColor = _hasColor;
@@ -717,7 +727,7 @@ namespace DuckGame
                 }
 
                 // http(s) links, everything up to the next space is shown as-is (no mojis or tags inside)
-                if (formattingTags && (c == 'h' || c == 'H'))
+                if (links && (c == 'h' || c == 'H'))
                 {
                     int urlEnd = MatchUrl(text, i);
                     if (urlEnd > i)

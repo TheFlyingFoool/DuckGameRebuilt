@@ -457,6 +457,31 @@ namespace DuckGame
         /// </summary>
         [Marker.AutoConfig] public static bool MinimalChat = false;
 
+        /// <summary>
+        /// The image, moji and formatting buttons in the chat box. 0 = hidden, 1 = only when the mouse is near the chat box, 2 = always shown.
+        /// </summary>
+        [Marker.AutoConfig] public static int ChatButtons = 2;
+
+        /// <summary>
+        /// Which special parts of chat text are drawn, as flags: 1 = formatting (|B|, |I|...), 2 = colors players wrote
+        /// (in their names and messages). Anything turned off is left out of the text instead, like a vanilla player would see it.
+        /// Only affects the chat. (MOJIs already have their own option in Usability.)
+        /// </summary>
+        [Marker.AutoConfig] public static int ChatRendering = 3;
+
+        // For the toggles in the Chat Rendering menu
+        public static bool ChatRenderFormatting
+        {
+            get => (ChatRendering & 1) != 0;
+            set => ChatRendering = value ? ChatRendering | 1 : ChatRendering & ~1;
+        }
+
+        public static bool ChatRenderColors
+        {
+            get => (ChatRendering & 2) != 0;
+            set => ChatRendering = value ? ChatRendering | 2 : ChatRendering & ~2;
+        }
+
         [Marker.AutoConfig] public static int DGRJoinLink = 0;
 
         [Marker.AutoConfig] public static bool UseDuckShell = true;

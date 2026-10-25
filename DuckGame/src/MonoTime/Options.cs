@@ -27,6 +27,7 @@ namespace DuckGame
         private static UIMenu _dgrQOLMenu;
         private static UIMenu _dgrHUDMenu;
         private static UIMenu _dgrChatMenu;
+        private static UIMenu _dgrChatRenderingMenu;
         private static UIMenu _dgrNameDisplayMenu;
         private static UIMenu _dgrEditorMenu;
         private static UIMenu _dgrRecorderatorMenu;
@@ -45,6 +46,7 @@ namespace DuckGame
         public static UIMenu _lastCreatedDGRQOLMenu;
         public static UIMenu _lastCreatedDGRHUDMenu;
         public static UIMenu _lastCreatedDGRChatMenu;
+        public static UIMenu _lastCreatedDGRChatRenderingMenu;
         public static UIMenu _lastCreatedDGRGUINameDisplayMenu;
         public static UIMenu _lastCreatedDGREditorMenu;
         public static UIMenu _lastCreatedDGRRecorderatorMenu;
@@ -120,6 +122,7 @@ namespace DuckGame
         public static UIMenu DGRQOLMenu => _dgrQOLMenu;
         public static UIMenu DGRHUDMenu => _dgrHUDMenu;
         public static UIMenu DGRChatMenu => _dgrChatMenu;
+        public static UIMenu DGRChatRenderingMenu => _dgrChatRenderingMenu;
         public static UIMenu DGRNameDisplayMenu => _dgrNameDisplayMenu;
         public static UIMenu DGREditorMenu => _dgrEditorMenu;
         public static UIMenu DGRRecorderatorMenu => _dgrRecorderatorMenu;
@@ -143,6 +146,7 @@ namespace DuckGame
             to.Add(DGRQOLMenu, false);
             to.Add(DGRHUDMenu, false);
             to.Add(DGRChatMenu, false);
+            to.Add(DGRChatRenderingMenu, false);
             to.Add(DGRNameDisplayMenu, false);
             to.Add(DGREditorMenu, false);
             to.Add(DGRRecorderatorMenu, false);
@@ -187,6 +191,7 @@ namespace DuckGame
             _lastCreatedDGRGUINameDisplayMenu = tempDGRGUINameDisplayMenu;
             _lastCreatedDGRHUDMenu = tempDGRHUDMenu;
             _lastCreatedDGRChatMenu = tempDGRChatMenu;
+            _lastCreatedDGRChatRenderingMenu = tempDGRChatRenderingMenu;
             _lastCreatedDGREditorMenu = tempDGREditorMenu;
             _lastCreatedDGRRecorderatorMenu = tempDGRRecorderatorMenu;
             _lastCreatedDGRMiscMenu = tempDGRMiscMenu;
@@ -229,6 +234,7 @@ namespace DuckGame
             _dgrQOLMenu = _lastCreatedDGRQOLMenu;
             _dgrHUDMenu = _lastCreatedDGRHUDMenu;
             _dgrChatMenu = _lastCreatedDGRChatMenu;
+            _dgrChatRenderingMenu = _lastCreatedDGRChatRenderingMenu;
             _dgrNameDisplayMenu = _lastCreatedDGRGUINameDisplayMenu;
             _dgrEditorMenu = _lastCreatedDGREditorMenu;
             _dgrRecorderatorMenu = _lastCreatedDGRRecorderatorMenu;
@@ -652,6 +658,40 @@ namespace DuckGame
             {
                 dgrDescription = "While the chat is closed, only shows how many unread messages each player sent. Open the chat to read them"
             });
+            menu.Add(new UIMenuItemNumber("Chat Buttons", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ChatButtons), 0, 2), valStrings: new List<string>
+            {
+                "HIDE",
+                "HOVER",
+                "SHOW"
+            })
+            {
+                dgrDescription = "The image, MOJI and formatting buttons in the chat box. HOVER only shows them when the mouse is near the chat box. Pasting and dropping images still work when they're hidden"
+            });
+            tempDGRChatRenderingMenu = CreateDGRChatRenderingMenu(menu);
+            menu.Add(new UIMenuItem("Chat Rendering", new UIMenuActionOpenMenu(menu, tempDGRChatRenderingMenu), backButton: true)
+            {
+                dgrDescription = "Choose which special parts of chat text are drawn: formatting and colors"
+            });
+
+            menu.Add(new UIText(" ", Color.White));
+            menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
+            return menu;
+        }
+        public static UIMenu CreateDGRChatRenderingMenu(UIMenu pPrev)
+        {
+            UIMenu menu = new UIMenu("|PINK|♥|WHITE|CHAT RENDERING|PINK|♥", Layer.HUD.camera.width / 2f, Layer.HUD.camera.height / 2f, 240f, conString: "@CANCEL@BACK @SELECT@SELECT");
+
+            menu.Add(new UIDGRDescribe(Colors.DGPink) { scale = new Vec2(0.5f) }, true);
+            menu.Add(new UIText(" ", Colors.DGPink) { scale = new Vec2(0.5f) });
+
+            menu.Add(new UIMenuItemToggle("Formatting", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ChatRenderFormatting)))
+            {
+                dgrDescription = "Bold, italic, underline, strikethrough and code in chat. When OFF the formatting tags are left out and the text shows plain"
+            });
+            menu.Add(new UIMenuItemToggle("Colors", field: new FieldBinding(typeof(DGRSettings), nameof(DGRSettings.ChatRenderColors)))
+            {
+                dgrDescription = "Colors players put in their names and chat messages. When OFF the color tags are left out. Only affects the chat"
+            });
 
             menu.Add(new UIText(" ", Color.White));
             menu.Add(new UIMenuItem("BACK", new UIMenuActionOpenMenu(menu, pPrev), backButton: true));
@@ -883,6 +923,7 @@ namespace DuckGame
             ui.Add(tempDGRQOLMenu, false);
             ui.Add(tempDGRHUDMenu, false);
             ui.Add(tempDGRChatMenu, false);
+            ui.Add(tempDGRChatRenderingMenu, false);
             ui.Add(tempDGREditorMenu, false);
             ui.Add(tempDGRRecorderatorMenu, false);
             ui.Add(tempDGRMiscMenu, false);
@@ -896,6 +937,7 @@ namespace DuckGame
             ui.Add(_lastCreatedDGRQOLMenu, false);
             ui.Add(_lastCreatedDGRHUDMenu, false);
             ui.Add(_lastCreatedDGRChatMenu, false);
+            ui.Add(_lastCreatedDGRChatRenderingMenu, false);
             ui.Add(_lastCreatedDGRGUINameDisplayMenu, false);
             ui.Add(_lastCreatedDGREditorMenu, false);
             ui.Add(_lastCreatedDGRRecorderatorMenu, false);
@@ -996,6 +1038,7 @@ namespace DuckGame
         public static UIMenu tempDGRQOLMenu;
         public static UIMenu tempDGRHUDMenu;
         public static UIMenu tempDGRChatMenu;
+        public static UIMenu tempDGRChatRenderingMenu;
         public static UIMenu tempDGRGUINameDisplayMenu;
         public static UIMenu tempDGREditorMenu;
         public static UIMenu tempDGRRecorderatorMenu;

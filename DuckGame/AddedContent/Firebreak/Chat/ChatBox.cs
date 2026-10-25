@@ -654,6 +654,7 @@ namespace DuckGame
             s_frame++;
             ChatImages.Update();
             UpdateTestMessages();
+            UpdateFileDrops(core.enteringText && !core.stopEnteringText);
             if (s_copiedFrames > 0)
                 s_copiedFrames--;
             if (s_copiedLinkFrames > 0)
@@ -1335,6 +1336,30 @@ namespace DuckGame
         public const int CollapsedLength = 100;
         private const int CollapsedLines = 3;
 
+        // The Chat Rendering option, which special parts of chat text get drawn
+        private const int RenderFormattingFlag = 1;
+        private const int RenderColorsFlag = 2;
+        private static int chatRendering => DGRSettings.ChatRendering & (RenderFormattingFlag | RenderColorsFlag);
+        private static bool renderFormatting => (chatRendering & RenderFormattingFlag) != 0;
+        private static bool renderColors => (chatRendering & RenderColorsFlag) != 0;
+
+        /// <summary>Splits the DGR badge (@DGRBIG...@) off the end of a display name, it's the game's and not part of what the player wrote.</summary>
+        private static void SplitNameBadge(string full, out string name, out string badge)
+        {
+            full = full ?? "";
+            int at = full.LastIndexOf("@DGRBIG", StringComparison.Ordinal);
+            if (at >= 0 && full.EndsWith("@"))
+            {
+                name = full.Substring(0, at);
+                badge = full.Substring(at);
+            }
+            else
+            {
+                name = full;
+                badge = "";
+            }
+        }
+
         private static ChatTextLayout BuildMessageLayout(List<ChatEntry> entries, FancyBitmapFont font, float wrapWidth, bool collapsed = false)
         {
             ChatTextLayoutBuilder builder = new ChatTextLayoutBuilder(font, wrapWidth);
@@ -1347,16 +1372,29 @@ namespace DuckGame
                 if (builder.count > 0)
                     builder.AppendBreak();
                 builder.ResetStyle();
-                string prefix = (i == 0 ? "|WHITE|" : "|GRAY|") + entry.who.nameUIBodge + ": ";
-                if (i == 0 && entry.who.slotType == SlotType.Spectator)
-                    prefix = "@SPECTATORBIG@" + prefix;
-                builder.AppendFormatted(prefix, false, false);
+
+                // Name: the color and badges come from the game, the name itself follows the Chat Rendering option
+                SplitNameBadge(entry.who.nameUIBodge, out string name, out string badge);
+                builder.links = false;
+                builder.AppendFormatted((i == 0 && entry.who.slotType == SlotType.Spectator ? "@SPECTATORBIG@" : "") + (i == 0 ? "|WHITE|" : "|GRAY|"), false, false);
+                builder.colors = renderColors;
+                builder.AppendFormatted(name, false, false);
+                builder.colors = true;
+                builder.AppendFormatted(badge + ": ", false, false);
                 builder.ResetStyle();
+
+                // Message: anything turned off is left out, like a vanilla player would see it
+                builder.links = true;
+                builder.colors = renderColors;
                 if (collapsed)
                     builder.BeginLimit(CollapsedLength, CollapsedLines);
-                builder.AppendFormatted(entry.text);
+                if (renderFormatting)
+                    builder.AppendFormatted(entry.text);
+                else
+                    builder.AppendFormatted(ChatFormatting.StripForVanilla(entry.text), true, false);
                 if (collapsed)
                     builder.EndLimit();
+                builder.colors = true;
                 if (entry.image != null)
                 {
                     Vec2 size = ChatImages.GetDisplaySize(entry.image, font, Math.Min(imageMaxWidth, wrapWidth), imageMaxHeight);
@@ -1369,7 +1407,7 @@ namespace DuckGame
         private static ChatTextLayout EnsureLayout(ChatMessage message, FancyBitmapFont font, float wrapWidth, bool collapsed)
         {
             StringBuilder key = new StringBuilder();
-            key.Append(collapsed ? 'c' : 'f').Append(DuckFile.mojiVersion).Append('|').Append(Options.Data.mojiFilter).Append('|').Append(font.GetHashCode()).Append('|').Append(font.scale.x).Append('|').Append(font.scale.y).Append('|').Append(wrapWidth).Append('|').Append(message.entries.Count);
+            key.Append(collapsed ? 'c' : 'f').Append(DuckFile.mojiVersion).Append('|').Append(Options.Data.mojiFilter).Append('|').Append(chatRendering).Append('|').Append(font.GetHashCode()).Append('|').Append(font.scale.x).Append('|').Append(font.scale.y).Append('|').Append(wrapWidth).Append('|').Append(message.entries.Count);
             foreach (ChatEntry entry in message.entries)
             {
                 if (entry.image != null)
@@ -1717,10 +1755,18 @@ namespace DuckGame
             float toolSize = lineHeight;
             float toolGap = Math.Max(1f, (float)Math.Round(font.scale.x));
             bool imageTool = ChatImages.sendingEnabled;
-            int toolCount = imageTool ? 3 : 2;
+            // The Chat Buttons option can hide them completely, then they don't take up any room either
+            int toolCount = chatButtonsMode == ChatButtonsHide ? 0 : imageTool ? 3 : 2;
             string counter = text.Length >= MaxMessageLength - 100 ? text.Length + "/" + MaxMessageLength : null;
             float counterWidth = counter == null ? 0f : font.GetWidth(counter) + 4f * font.scale.x;
-            float toolsWidth = toolCount * toolSize + (toolCount - 1) * toolGap + counterWidth + 4f * font.scale.x;
+            float buttonsWidth = toolCount > 0 ? toolCount * toolSize + (toolCount - 1) * toolGap : 0f;
+            // Text always wraps as if the buttons were there, so it doesn't jump around when they come and go
+            float toolsWidth = buttonsWidth + counterWidth + 4f * font.scale.x;
+            // HOVER: the box is its normal size while the buttons are hidden. It widens as soon as the mouse comes near,
+            // and shrinks back once they've faded out (so they never draw over the text)
+            int buttonsMode = chatButtonsMode;
+            bool buttonsOut = buttonsMode == ChatButtonsShow || buttonsMode == ChatButtonsHover && (s_toolsWanted || s_toolFade > 0.01f);
+            float reservedWidth = (buttonsOut ? buttonsWidth : 0f) + counterWidth + 4f * font.scale.x;
             float wrapWidth = Math.Max(120f, Layer.Console.width * 0.5f - 8f * chatScale - toolsWidth);
 
             string prefix = localProfile.name + ": ";
@@ -1755,7 +1801,9 @@ namespace DuckGame
 
             float caretWidth = font.GetGlyphAdvance('_');
             float attachmentWidth = attachmentLabel == null ? 0f : thumbnailSize.x + font.GetWidth(attachmentLabel) + 12f + lineHeight;
-            float width = Math.Max(layout.width + caretWidth + toolsWidth, attachmentWidth) + 4f * chatScale;
+            float width = Math.Max(layout.width + caretWidth + reservedWidth, attachmentWidth) + 4f * chatScale;
+            // Where the box ends with the buttons out, the mouse coming near there brings them back
+            float fullRight = 14f + Math.Max(layout.width + caretWidth + toolsWidth, attachmentWidth) + 4f * chatScale;
             float textHeight = layout.height;
             float height = textHeight + attachmentHeight;
             float bottom = screen.y - (font.characterHeight + 10) * font.scale.y + lineHeight;
@@ -1818,7 +1866,7 @@ namespace DuckGame
                 font.DrawGlyph('_', textOrigin.x + caret.x, textOrigin.y + caret.y, Color.Black * alpha, D(1f));
             }
 
-            DrawInputTools(font, p1, p2, toolSize, toolGap, imageTool, counter, alpha);
+            DrawInputTools(font, p1, p2, toolSize, toolGap, imageTool, counter, alpha, buttonsOut, fullRight);
             s_inputTop = p1.y;
             s_inputRight = p2.x;
             s_inputDrawn = true;
@@ -1829,15 +1877,39 @@ namespace DuckGame
         /// The image, moji and formatting buttons (and the character counter) at the right end of the chat box's last line.
         /// They stay faint until the mouse comes near, so they don't clutter the box while typing.
         /// </summary>
-        private static void DrawInputTools(FancyBitmapFont font, Vec2 p1, Vec2 p2, float size, float gap, bool imageTool, string counter, float alpha)
+        private const int ChatButtonsHide = 0;
+        private const int ChatButtonsHover = 1;
+        private const int ChatButtonsShow = 2;
+
+        private static int chatButtonsMode => Maths.Clamp(DGRSettings.ChatButtons, ChatButtonsHide, ChatButtonsShow);
+
+        /// <summary>Whether the mouse was near the chat box last frame, for the HOVER option.</summary>
+        private static bool s_toolsWanted;
+
+        /// <param name="buttonsOut">False while HOVER has the buttons put away (the box is its normal size then).</param>
+        /// <param name="fullRight">Where the box's right edge is with the buttons out.</param>
+        private static void DrawInputTools(FancyBitmapFont font, Vec2 p1, Vec2 p2, float size, float gap, bool imageTool, string counter, float alpha, bool buttonsOut, float fullRight)
         {
-            Rectangle near = new Rectangle(p1.x - 24f, p1.y - 24f, p2.x - p1.x + 48f, p2.y - p1.y + 48f);
+            int mode = chatButtonsMode;
+            Rectangle near = new Rectangle(p1.x - 24f, p1.y - 24f, Math.Max(p2.x, fullRight) - p1.x + 48f, p2.y - p1.y + 48f);
             bool mouseNear = s_showCursor && near.Contains(s_mousePosition) || s_pickerOpen;
+            s_toolsWanted = mouseNear;
+            // SHOW: always there. HOVER: fades in when the mouse comes near the box and out again when it leaves
+            float target = mode == ChatButtonsShow || mouseNear ? 0.9f : 0f;
             if (MonoMain.UpdateLerpState)
-                s_toolFade = Lerp.Float(s_toolFade, mouseNear ? 0.9f : 0.35f, 0.06f);
+                s_toolFade = Lerp.Float(s_toolFade, target, 0.08f);
 
             float right = p2.x - 1f;
             float y = p2.y - size;
+            if (mode == ChatButtonsHide || !buttonsOut)
+            {
+                s_guideButton = s_mojiButton = s_imageButton = new Rectangle(-100f, -100f, 0f, 0f);
+                s_guideHovered = false;
+                if (mode == ChatButtonsHide)
+                    s_pickerOpen = false;
+                DrawCharacterCounter(font, counter, right, y, alpha);
+                return;
+            }
             Rectangle Next()
             {
                 Rectangle rect = new Rectangle(right - size, y, size, size);
@@ -1887,13 +1959,17 @@ namespace DuckGame
                 DrawImageIcon(new Vec2(s_imageButton.x, s_imageButton.y), size, (ChatImages.preparingAttachment ? Color.Gray : Color.Black) * imageAlpha, pixel);
             }
 
-            // Character counter, shows up when getting close to the limit
-            if (counter != null)
-            {
-                bool full = text.Length >= MaxMessageLength;
-                float counterWidth = font.GetWidth(counter);
-                font.Draw(counter, right - counterWidth - font.scale.x, y + 2f, (full ? Colors.DGRed : Color.Black * 0.75f) * alpha, D(1f));
-            }
+            DrawCharacterCounter(font, counter, right, y, alpha);
+        }
+
+        /// <summary>The character counter, shows up when getting close to the limit (left of the buttons, or at the end of the box without them).</summary>
+        private static void DrawCharacterCounter(FancyBitmapFont font, string counter, float right, float y, float alpha)
+        {
+            if (counter == null)
+                return;
+            bool full = text.Length >= MaxMessageLength;
+            float counterWidth = font.GetWidth(counter);
+            font.Draw(counter, right - counterWidth - font.scale.x, y + 2f, (full ? Colors.DGRed : Color.Black * 0.75f) * alpha, D(1f));
         }
 
         private static void DrawImageIcon(Vec2 position, float size, Color color, float pixel)

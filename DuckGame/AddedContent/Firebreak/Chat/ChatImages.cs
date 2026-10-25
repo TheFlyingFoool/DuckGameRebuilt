@@ -366,6 +366,9 @@ namespace DuckGame
             return "png";
         }
 
+        /// <summary>Shows a short error where the attached image would be (like when a dropped file can't be used).</summary>
+        public static void ShowAttachmentError(string message) => SetAttachmentError(message);
+
         private static void SetAttachmentError(string message)
         {
             attachmentError = message;

@@ -345,6 +345,7 @@
     <Compile Include="AddedContent\DGRDevs.cs" />
     <Compile Include="AddedContent\DGRSettings.cs" />
     <Compile Include="AddedContent\Firebreak\Chat\ChatBox.cs" />
+    <Compile Include="AddedContent\Firebreak\Chat\ChatBoxDrop.cs" />
     <Compile Include="AddedContent\Firebreak\Chat\ChatBoxMojis.cs" />
     <Compile Include="AddedContent\Firebreak\Chat\ChatBoxTest.cs" />
     <Compile Include="AddedContent\Firebreak\Chat\ChatBoxUnread.cs" />
