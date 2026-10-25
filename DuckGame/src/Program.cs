@@ -36,9 +36,9 @@ namespace DuckGame
 #endif
         public static bool IS_SDL2 = false;
         // this should be formatted like X.X.X where each X is a number
-        public const string CURRENT_VERSION_ID = "1.4.7";
+        public const string CURRENT_VERSION_ID = "1.4.8";
 
-        // do change this you know what you're doing -Lucky
+        // do NOT change this you DO NOT know what you're doing -/L/u/c/k/y/ FIREBREAK
         public const string CURRENT_VERSION_ID_FORMATTED = "v" + CURRENT_VERSION_ID;
 
         public static bool Prestart = DirtyPreStart();
