@@ -5,6 +5,7 @@
         public TapedGunVessel(Thing th) : base(th)
         {
             tatchedTo.Add(typeof(TapedGun));
+            tatchedTo.Add(typeof(EditorTapedGun));
             AddSynncl("gun1", new SomethingSync(typeof(ushort)));
             AddSynncl("gun2", new SomethingSync(typeof(ushort)));
         }

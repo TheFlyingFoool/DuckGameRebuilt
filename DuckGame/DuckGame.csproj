@@ -585,6 +585,7 @@
     <Compile Include="AddedContent\Lucky\ModDebug.cs" />
     <Compile Include="AddedContent\Lucky\NMClientOnlyContent.cs" />
     <Compile Include="AddedContent\Lucky\RainParticel.cs" />
+    <Compile Include="AddedContent\Lucky\EditorTapedGun.cs" />
     <Compile Include="AddedContent\Lucky\WeaponTaper.cs" />
     <Compile Include="Recorderator\RecorderationSelector\FolderInfo.cs" />
     <Compile Include="Recorderator\RecorderationSelector\IRMenuItem.cs" />

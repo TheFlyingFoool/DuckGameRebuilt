@@ -368,6 +368,16 @@ namespace DuckGame
                                 foreach (Thing thing2 in (thing1 as ThingContainer).things)
                                     NetPrepare(thing2);
                             }
+                            if (Editor.clientonlycontent && thing1 is EditorTapedGun tapedGun)
+                            {
+                                // TapedGun.Initialize adds these to the level later, prepare them now
+                                // so every client agrees on their ghost ids. Only in DGR lobbies, vanilla
+                                // doesn't do this so mixed lobbies have to keep the vanilla ghost ids
+                                if (tapedGun.gun1 != null)
+                                    NetPrepare(tapedGun.gun1);
+                                if (tapedGun.gun2 != null)
+                                    NetPrepare(tapedGun.gun2);
+                            }
                             NetPrepare(thing1);
                         }
                         AddThing(thing1);

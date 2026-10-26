@@ -32,7 +32,7 @@
                 {
                     Holdable h2 = Level.CheckRect<Holdable>(position - new Vec2(32), position + new Vec2(32), h1);
                     if (h2 is TapedGun || (h2 != null && !h2.tapeable)) h2 = null;
-                    TapedGun tp = new TapedGun(x, y);
+                    TapedGun tp = new EditorTapedGun(x, y);
                     tp.gun1 = h1;
                     tp.gun2 = h2;
                     Holdable tms = tp.gun1.BecomeTapedMonster(tp);
