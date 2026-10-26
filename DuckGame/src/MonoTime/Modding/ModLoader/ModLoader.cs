@@ -838,6 +838,8 @@ namespace DuckGame
                 List<SyntaxTree> syntaxTrees = new List<SyntaxTree>();
                 bool hasAssemblyInfo = false;
                 CSharpParseOptions parseOptions = new CSharpParseOptions(
+                    // pinned so Roslyn updates don't silently change the language mods are compiled as
+                    languageVersion: LanguageVersion.CSharp12,
                     preprocessorSymbols: new[] { "DGR", "LINUX" }
                 );
 
