@@ -63,13 +63,30 @@ jobs:
           mkdir ./steammod
           mv ./Rebuilder ./steammod/Rebuilder
 
+      # The workshop action pastes the changelog straight into item.vdf as
+      # "changenote" "<text>", so any double quote in the release notes ends the
+      # string early and steamcmd fails to parse the file. Swap out the characters
+      # that VDF treats specially before handing the notes over.
+      - name: Sanitize release notes for Steam changenote
+        id: changenote
+        env:
+          RELEASE_BODY: ${{ github.event.release.body }}
+        run: |
+          python3 - <<'EOF'
+          import os
+          note = os.environ.get("RELEASE_BODY", "")
+          note = note.replace("\\", "/").replace('"', "'")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as out:
+              out.write("text<<CHANGENOTE_EOF\n" + note + "\nCHANGENOTE_EOF\n")
+          EOF
+
       - name: Update DGR mod
         uses: AnarkisGaming/workshop@v1
         with:
           appID: 312530
           publishedFileID: ${{ vars.WORKSHOP_ID }}
           path: ./steammod
-          changelog: ${{ github.event.release.body }}
+          changelog: ${{ steps.changenote.outputs.text }}
         env:
           STEAM_ACCOUNT_NAME: "DuckGameRebuilt"
           STEAM_PASSWORD: ${{ secrets.STEAM_PASS }}
