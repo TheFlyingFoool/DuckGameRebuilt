@@ -1,6 +1,11 @@
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Bmp;
 using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Formats.Pbm;
 using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.Formats.Tga;
+using SixLabors.ImageSharp.Formats.Tiff;
+using SixLabors.ImageSharp.Formats.Webp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using System;
@@ -430,19 +435,35 @@ namespace DuckGame
 
         #region Encoding / decoding
 
+        // GIF decoding is left out on purpose, ImageSharp 2.x has unpatched GIF decoder vulnerabilities and
+        // only the first frame would be sent anyway
+        private static readonly SixLabors.ImageSharp.Configuration s_sendConfiguration = new SixLabors.ImageSharp.Configuration(
+            new PngConfigurationModule(),
+            new JpegConfigurationModule(),
+            new BmpConfigurationModule(),
+            new WebpConfigurationModule(),
+            new TgaConfigurationModule(),
+            new TiffConfigurationModule(),
+            new PbmConfigurationModule());
+
+        // Received images come from other players, and EncodeForSending only ever produces PNG or JPEG
+        private static readonly SixLabors.ImageSharp.Configuration s_receiveConfiguration = new SixLabors.ImageSharp.Configuration(
+            new PngConfigurationModule(),
+            new JpegConfigurationModule());
+
         /// <summary>
         /// Loads any supported image, keeps only the first frame, shrinks it until it fits the size limits and
         /// re-encodes it as PNG (or JPEG for big opaque images like photos).
         /// </summary>
         public static byte[] EncodeForSending(byte[] input, out int width, out int height)
         {
-            IImageInfo info = Image.Identify(input);
+            IImageInfo info = Image.Identify(s_sendConfiguration, input, out _);
             if (info == null)
                 throw new Exception("Not a supported image file");
             if ((long)info.Width * info.Height > 64L * 1024 * 1024)
                 throw new Exception("That image is way too big");
 
-            using (Image<Rgba32> loaded = Image.Load<Rgba32>(input))
+            using (Image<Rgba32> loaded = Image.Load<Rgba32>(s_sendConfiguration, input))
             using (Image<Rgba32> image = loaded.Frames.Count > 1 ? loaded.Frames.CloneFrame(0) : loaded.Clone())
             {
                 int maxDimension = MaxSendDimension;
@@ -508,12 +529,12 @@ namespace DuckGame
         /// </summary>
         public static Color[] DecodePixels(byte[] data, int maxDimension, out int width, out int height)
         {
-            IImageInfo info = Image.Identify(data);
+            IImageInfo info = Image.Identify(s_receiveConfiguration, data, out _);
             if (info == null)
                 throw new Exception("Not a supported image file");
             if (info.Width <= 0 || info.Height <= 0 || info.Width > maxDimension || info.Height > maxDimension)
                 throw new Exception("Image dimensions out of range");
-            using (Image<Rgba32> image = Image.Load<Rgba32>(data))
+            using (Image<Rgba32> image = Image.Load<Rgba32>(s_receiveConfiguration, data))
             {
                 width = image.Width;
                 height = image.Height;
