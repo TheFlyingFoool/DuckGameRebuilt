@@ -690,7 +690,8 @@ namespace DuckGame
                 header = "NOTHING TO STEAL MATCHING :" + s_acQuery;
                 emptyHint = "Delete some letters to see the rest";
             }
-            const string hint = "TAB";
+            // With TAB bound to CHAT it sends instead, ENTER still picks
+            string hint = IsChatKey(Keys.Tab) ? "ENTER" : "TAB";
             float hintWidth = MeasurePlain(font, hint);
             float width = MeasurePlain(font, header);
             if (emptyHint != null)

@@ -72,7 +72,7 @@ namespace DuckGame
             CloseLinkPopup();
         }
 
-        /// <summary>While the popup is up typing goes nowhere, Enter opens the link (see <see cref="HandleChatKeyWhileTyping"/>).</summary>
+        /// <summary>While the popup is up typing goes nowhere, Enter opens the link (see <see cref="HandleEnterWhileTyping"/>).</summary>
         private static void UpdateLinkPopupKeys()
         {
             s_inputQueue.Clear();

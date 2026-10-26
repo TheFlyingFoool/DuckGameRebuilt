@@ -635,6 +635,24 @@ namespace DuckGame
         /// <returns>True if the key press was used to add a new line instead of sending.</returns>
         public static bool HandleChatKeyWhileTyping()
         {
+            // CHAT bound to a mouse button: clicking the chat's own buttons, links and text isn't a send
+            if (chatPressedByMouseOnly && (linkPopupOpen || s_cursorKind != CursorKind.Arrow))
+                return true;
+            // CHAT bound to some other key just sends, like vanilla. What Enter does in the chat stays on Enter (see UpdateEnterKey)
+            if (!Keyboard.Pressed(Keys.Enter))
+            {
+                CloseLinkPopup();
+                return false;
+            }
+            return HandleEnterWhileTyping();
+        }
+
+        /// <summary>
+        /// Enter in the chat: opens the link in the link popup, picks the highlighted moji suggestion, shift+enter starts a new line.
+        /// </summary>
+        /// <returns>True if Enter was used up, otherwise it sends the message (only when Enter is bound to CHAT).</returns>
+        private static bool HandleEnterWhileTyping()
+        {
             // Enter opens the link in the link popup
             if (linkPopupOpen)
             {
@@ -653,6 +671,85 @@ namespace DuckGame
                 return true;
             }
             return false;
+        }
+
+        private static readonly List<int> s_chatKeys = new List<int>();
+
+        /// <summary>The keyboard keys bound to CHAT, in any input profile.</summary>
+        private static List<int> GetChatKeys()
+        {
+            s_chatKeys.Clear();
+            foreach (InputProfile profile in InputProfile.profiles.Values)
+            {
+                MultiMap<string, int> mappings = profile.GetMappings(typeof(Keyboard));
+                if (mappings != null && mappings.TryGetValue(Triggers.Chat, out List<int> keys))
+                    s_chatKeys.AddRange(keys);
+            }
+            return s_chatKeys;
+        }
+
+        /// <summary>
+        /// Whether a key is bound to CHAT. Then it only opens and sends (like vanilla), so whatever else the chat would
+        /// use it for is skipped. Enter's own jobs move to Enter when CHAT is bound to something else.
+        /// </summary>
+        private static bool IsChatKey(Keys key) => GetChatKeys().Contains((int)key);
+
+        /// <summary>CHAT was just pressed with a mouse button bound to it, and none of its keyboard keys.</summary>
+        private static bool chatPressedByMouseOnly
+        {
+            get
+            {
+                bool mouse = false;
+                foreach (int key in GetChatKeys())
+                {
+                    if (!Keyboard.Pressed((Keys)key))
+                        continue;
+                    if (key < (int)Keys.MouseKeys)
+                        return false;
+                    mouse = true;
+                }
+                return mouse;
+            }
+        }
+
+        /// <summary>When CHAT isn't bound to Enter, Enter still does its chat jobs (new line, picking a moji...) but never sends.</summary>
+        private static void UpdateEnterKey()
+        {
+            if (Keyboard.Pressed(Keys.Enter) && !Keyboard.alt && LockMovementQueue.Empty && !IsChatKey(Keys.Enter))
+                HandleEnterWhileTyping();
+        }
+
+        /// <summary>
+        /// A letter, number, space, backspace or delete bound to CHAT sends instead of being typed, like vanilla. The text
+        /// input still sends the character, so it's taken back out here.
+        /// </summary>
+        private static void DropTypedChatKey()
+        {
+            if (s_inputQueue.Count == 0)
+                return;
+            foreach (int key in GetChatKeys())
+            {
+                if (key >= (int)Keys.MouseKeys || !Keyboard.Pressed((Keys)key))
+                    continue;
+                char typed;
+                if (key >= (int)Keys.A && key <= (int)Keys.Z)
+                    typed = (char)('a' + (key - (int)Keys.A));
+                else if (key >= (int)Keys.D0 && key <= (int)Keys.D9)
+                    typed = (char)('0' + (key - (int)Keys.D0));
+                else if (key >= (int)Keys.NumPad0 && key <= (int)Keys.NumPad9)
+                    typed = (char)('0' + (key - (int)Keys.NumPad0));
+                else if (key == (int)Keys.Space)
+                    typed = ' ';
+                else if (key == (int)Keys.Back)
+                    typed = (char)8;
+                else if (key == (int)Keys.Delete)
+                    typed = (char)127;
+                else
+                    continue;
+                int index = s_inputQueue.FindLastIndex(x => char.ToLowerInvariant(x) == typed);
+                if (index >= 0)
+                    s_inputQueue.RemoveAt(index);
+            }
         }
 
         #endregion
@@ -701,6 +798,7 @@ namespace DuckGame
 
         private static void UpdateTyping()
         {
+            UpdateEnterKey();
             if (linkPopupOpen)
             {
                 UpdateLinkPopupKeys();
@@ -709,6 +807,7 @@ namespace DuckGame
             ClampCaret();
             bool control = Keyboard.control;
             bool shift = Keyboard.shift;
+            DropTypedChatKey();
 
             // Characters (and control characters) from the text input event, in the order they were typed
             if (s_inputQueue.Count > 0)
@@ -782,29 +881,31 @@ namespace DuckGame
                 Keyboard.KeyString = "";
             }
 
-            if (Keyboard.Pressed(Keys.Left))
+            if (Keyboard.Pressed(Keys.Left) && !IsChatKey(Keys.Left))
             {
                 if (hasInputSelection && !shift)
                     MoveCaret(control ? WordLeft(selectionStart) : selectionStart, false);
                 else
                     MoveCaret(control ? WordLeft(s_caret) : s_caret - 1, shift);
             }
-            if (Keyboard.Pressed(Keys.Right))
+            if (Keyboard.Pressed(Keys.Right) && !IsChatKey(Keys.Right))
             {
                 if (hasInputSelection && !shift)
                     MoveCaret(control ? WordRight(selectionEnd) : selectionEnd, false);
                 else
                     MoveCaret(control ? WordRight(s_caret) : s_caret + 1, shift);
             }
-            if (Keyboard.Pressed(Keys.Up) || Keyboard.Pressed(Keys.Down))
+            bool up = Keyboard.Pressed(Keys.Up) && !IsChatKey(Keys.Up);
+            bool down = Keyboard.Pressed(Keys.Down) && !IsChatKey(Keys.Down);
+            if (up || down)
             {
-                int direction = Keyboard.Pressed(Keys.Up) ? -1 : 1;
+                int direction = up ? -1 : 1;
                 if (autocompleteVisible)
                     MoveAutocompleteSelection(direction);
                 else
                     MoveCaretVertically(direction, shift);
             }
-            if (Keyboard.Pressed(Keys.Tab) && autocompleteVisible)
+            if (Keyboard.Pressed(Keys.Tab) && autocompleteVisible && !IsChatKey(Keys.Tab))
                 AcceptAutocomplete();
 
             // AltGr shows up as ctrl+alt on Windows, don't eat characters typed with it
