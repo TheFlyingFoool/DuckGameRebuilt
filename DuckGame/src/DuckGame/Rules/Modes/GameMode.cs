@@ -765,7 +765,7 @@ namespace DuckGame
                                     if (_roundHadWinner)
                                     {
                                         showdown = false;
-                                        Level.current = new RockScoreboard(nextLevel, ScoreBoardMode.ShowScores);
+                                        Level.current = new RockScoreboard(nextLevel, ScoreBoardMode.ShowWinner);
                                         if (!_editorTestMode)
                                             ++Global.data.drawsPlayed.valueInt;
                                         if (Network.isActive)
