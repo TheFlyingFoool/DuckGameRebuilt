@@ -635,6 +635,10 @@ namespace DuckGame
         /// <returns>True if the key press was used to add a new line instead of sending.</returns>
         public static bool HandleChatKeyWhileTyping()
         {
+            // The image viewer is mostly used with the mouse, CHAT does nothing until it's closed (escape, the menu key or its close button).
+            // Also checked from the start of the frame, so the click that closes it doesn't send either
+            if (s_previewOpenThisFrame || ChatImagePreview.isOpen)
+                return true;
             // CHAT bound to a mouse button: clicking the chat's own buttons, links and text isn't a send
             if (chatPressedByMouseOnly && (linkPopupOpen || s_cursorKind != CursorKind.Arrow))
                 return true;
@@ -674,6 +678,7 @@ namespace DuckGame
         }
 
         private static readonly List<int> s_chatKeys = new List<int>();
+        private static bool s_previewOpenThisFrame;
 
         /// <summary>The keyboard keys bound to CHAT, in any input profile.</summary>
         private static List<int> GetChatKeys()
@@ -762,6 +767,7 @@ namespace DuckGame
         public static void Update()
         {
             s_frame++;
+            s_previewOpenThisFrame = ChatImagePreview.isOpen;
             ChatImages.Update();
             UpdateTestMessages();
             UpdateFileDrops(core.enteringText && !core.stopEnteringText);
