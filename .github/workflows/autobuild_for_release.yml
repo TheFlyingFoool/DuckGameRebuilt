@@ -62,6 +62,10 @@ jobs:
           rm -r ./Rebuilder/build
           mkdir ./steammod
           mv ./Rebuilder ./steammod/Rebuilder
+          # deps/ has Linux .so symlinks (libFAudio.so -> libFAudio.so.0 -> ...).
+          # Steam uploads them as symlinks, and Windows clients can't create them
+          # ("Disk write failure"), so replace each one with a copy of its target.
+          find ./steammod -type l -exec sh -c 'cp --remove-destination "$(readlink -f "$1")" "$1"' _ {} \;
 
       # The workshop action pastes the changelog straight into item.vdf as
       # "changenote" "<text>", so any double quote in the release notes ends the
